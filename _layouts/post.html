@@ -232,13 +232,37 @@ the coverage above is narrower than the rule set.</em></p>
   }, { passive: true });
 
   // --- Estimated read time ---
-  var words   = content.textContent.trim().split(/\s+/).length;
-  var minutes = Math.max(1, Math.round(words / 200));
+  // content.textContent counts every word regardless of CSS visibility, so a collapsed
+  // <details class="hl-teardown"> block was counted as though the reader had to read it
+  // on load. Roughly true while 6 reports used collapse; wrong once the rollout reached
+  // 21, where the longest report's advertised time ran to roughly double its actual
+  // on-load length. Two numbers instead: what loads visible, and the full report if
+  // everything is opened. An open (or already-expanded) teardown is not subtracted, and
+  // a nested teardown is counted once, by whichever closed ancestor already covers it.
+  var totalWords  = content.textContent.trim().split(/\s+/).filter(Boolean).length;
+  var hiddenWords = 0;
+  var teardowns   = content.querySelectorAll('details.hl-teardown');
+  for (var ti = 0; ti < teardowns.length; ti++) {
+    var td = teardowns[ti];
+    if (td.open) continue;
+    var ancestor = td.parentElement, nested = false;
+    while (ancestor) {
+      if (ancestor.tagName === 'DETAILS' && ancestor.classList.contains('hl-teardown')) { nested = true; break; }
+      ancestor = ancestor.parentElement;
+    }
+    if (nested) continue;
+    hiddenWords += td.textContent.trim().split(/\s+/).filter(Boolean).length;
+  }
+  var visibleWords   = Math.max(0, totalWords - hiddenWords);
+  var totalMinutes   = Math.max(1, Math.round(totalWords / 200));
+  var visibleMinutes = Math.max(1, Math.round(visibleWords / 200));
   var eyebrow = document.querySelector('.hl-post-header__eyebrow');
   if (eyebrow) {
     var rt = document.createElement('span');
     rt.className = 'hl-read-time';
-    rt.textContent = minutes + ' min read';
+    rt.textContent = (visibleMinutes === totalMinutes)
+      ? (visibleMinutes + ' min read')
+      : (visibleMinutes + ' min read, ' + totalMinutes + ' min in full');
     eyebrow.appendChild(rt);
   }
 

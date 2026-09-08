@@ -54,6 +54,11 @@
     "scheduled_tasks": [],
     "service_names": []
   },
+  "behavioral_indicators": {
+    "defense_evasion_patterns": [
+      {"pattern": "Read of the sample's own :Zone.Identifier alternate data stream immediately followed by deletion of that stream, at approximately T+2.4 seconds after launch", "confidence": "DEFINITE", "context": "Mark-of-the-Web self-deletion (MITRE ATT&CK T1553.005). Suppresses Windows SmartScreen re-checks on subsequent launches. Runs on every execution, independent of command-and-control state, the most reliable early behavioral tell for this RAT. Detection anchor: a file-delete of a :Zone.Identifier stream by the sample within seconds of launch (Sysmon Event ID 23)."}
+    ]
+  },
   "detection_anchor_strings": {
     "kaido_rat": [
       {"value": "Kaido.Common.Messages", "confidence": "HIGH", "context": "Namespace root, survives obfuscation"},

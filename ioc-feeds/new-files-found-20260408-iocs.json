@@ -402,6 +402,13 @@
         "confidence": "HIGH",
         "context": "Artifact Kit default named pipe pattern, MSSE = Microsoft Security Service Extension masquerade. GetTickCount() % 9898 determines pipe number."
       }
+    ],
+    "network_patterns": [
+      {
+        "pattern": "ICMP echo request/reply payload exceeding 128 bytes carrying byte marker 0xDD (data frame) or 0xCC (keepalive heartbeat) at payload offset 4-5",
+        "confidence": "HIGH",
+        "context": "CovertVPN Layer 2 bridge ICMP covert channel, the module's highest-priority transport since ICMP traverses most network perimeters uninspected at payload depth. Bidirectional, both client-to-server echo requests and server-to-client echo replies carry data or keepalive frames. Maps to MITRE ATT&CK T1095 (Non-Application Layer Protocol)."
+      }
     ]
   },
   "cryptographic_indicators": {
