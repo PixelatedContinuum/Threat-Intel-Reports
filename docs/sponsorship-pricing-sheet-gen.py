@@ -79,7 +79,7 @@ story += bullets([
     "<b>10K+</b> site views in a peak month, and climbing",
     "<b>3,500+</b> LinkedIn followers: detection engineers, TI analysts, and security leaders",
     "<b>~400</b> LinkedIn profile views per day, where every report is posted and discussed",
-    "Every detection rule is published to the public <b>Sigma and YARA repositories</b> the community pulls from, deployed in SOCs, labs, and hunt platforms worldwide, beyond direct readers",
+    "Every campaign also ships as <b>machine-readable intelligence</b>: a consolidated Suricata feed (112 rules, 35 campaigns), 58 IOC feeds in JSON, and 41 STIX bundles for OpenCTI and MISP, all public and ready to pull straight into a detection stack",
 ])
 
 # ---- Tiers (two cards side by side) ----
@@ -90,34 +90,36 @@ monthly = [
     Paragraph("$500 <font size=9 color='#6B7280'>/ month</font>", tprice),
     Paragraph("Or $5,000 / year", tann),
     Paragraph("Two months free, a $1,000 saving (17% off), and your rate is locked for the term.", tannsub),
-    Paragraph("New sponsors: first 3 months $300/mo", tnote),
+    Paragraph("New sponsors: first 3 months $300/mo, or a first full year at $4,400", tnote),
     Paragraph("Always-on, site-wide brand presence, the strongest value per dollar.", tsub),
 ] + bullets([
     "Logo + tagline in the left-margin Sponsors panel on every page and report",
-    "Logo + dofollow link in the site footer, across every page",
-    "Featured in the Sponsors section of the site",
-    "Early access to upcoming reports, plus first option to sponsor any one exclusively before anyone else",
-    "A welcome announcement post + a monthly sponsor spotlight post",
+    "Logo + dofollow link in the site footer on every page, plus a featured slot in the Sponsors section",
+    "Early access to the whole package before it goes public: the report, its detection rules, its IOC feed",
+    "First option to sponsor any upcoming report exclusively, before anyone else",
+    "A welcome announcement post + a quarterly sponsor spotlight post, extras at the add-on rate",
     "A one-time feature in a single report during your first month",
     "Your logo in the subscriber email newsletter",
-    "One sponsor-suggested research topic per year: a threat relevant to your space, researched and published",
+    "One threat question answered a year. Bring an indicator, a domain or a threat you are unsure about, and I go and look. A clean result is an answer too",
+    "Your rate is locked for as long as you keep sponsoring, with no break",
+    "An Official Sponsor badge for your own site and marketing",
 ])
 
 report = [
     Paragraph("Report Sponsor", tname),
     Paragraph("$150 <font size=9 color='#6B7280'>/ new report</font>", tpriceb),
-    Paragraph("Or $1,300 / year", tannb),
-    Paragraph("A full year of 12 new reports, a $500 saving (28% off the new-report rate).", tannsub),
-    Paragraph("$115 from the catalog (23% off) &nbsp;&middot;&nbsp; new sponsors: first report $100", tnoteb),
+    Paragraph("Or $1,170 / year", tannb),
+    Paragraph("A full year of 12 new reports, a $630 saving (35% off the new-report rate).", tannsub),
+    Paragraph("$100 from the catalog (33% off) &nbsp;&middot;&nbsp; new sponsors: first new report $100", tnoteb),
     Paragraph("Exclusive placement on a specific report, one sponsor per report.", tsub),
 ] + bullets([
     "Sole Sponsored-by banner at the top of the report, no competing logos",
     "Logo + dofollow link to your site or chosen landing page",
     "Permanent for the report's life. Never expires, keeps surfacing in search and hunts",
     "The report's launch post credits you (LinkedIn, X, and subscriber email)",
-    "Early access to your report before it goes public",
-    "Topic alignment, choose a report on a threat relevant to you",
-    "<b>Bundle &amp; save on new reports:</b> 3 for $375 &middot; 6 for $675 &middot; 12 for $1,300 across a year. Catalog reports stay $115 each, bundled or not",
+    "Early access before it goes public, and not just the report: the detection rules and IOC feed come with it",
+    "You pick which report you sponsor, from anything published or on the schedule",
+    "<b>Bundle &amp; save on new reports:</b> 3 for $335 &middot; 6 for $630 &middot; 12 for $1,170 across a year. Catalog reports stay $100 each, bundled or not",
 ])
 
 tiers = Table([[monthly, report]], colWidths=[3.55*inch, 3.55*inch])
@@ -136,23 +138,23 @@ tiers.setStyle(TableStyle([
 ]))
 story.append(tiers)
 story.append(Spacer(1, 2))
-story.append(Paragraph("<b>First-time sponsor?</b> Your first run is discounted. First report $100 (vs $150), or your first 3 months of Monthly at $300/mo (vs $500). A low-risk way to try before committing.", small))
+story.append(Paragraph("<b>First-time sponsor?</b> Your first run is discounted. First new report $100 (vs $150), or your first 3 months of Monthly at $300/mo (vs $500). Going annual from the start keeps the same discount: a first full year at $4,400.", small))
 
 # ---- Monthly or annual ----
 story.append(Paragraph("Monthly or Annual", h2))
-story.append(Paragraph("Both work, and either is equally welcome. Take whichever suits your budget cycle. Annual prepay is cheaper because planning a year ahead is worth something to me, so that saving is passed straight back rather than held as a negotiating chip. An annual term also <b>locks your rate for its full length</b>, so a published price rise cannot reach you mid term, and it carries first right of renewal at the locked rate. Monthly stays flexible and can be stopped at the end of any billing month. The placements, the benefits, and the editorial independence are identical either way.", body))
+story.append(Paragraph("Both work, and either is equally welcome. Take whichever suits your budget cycle. Annual prepay is cheaper because planning a year ahead is worth something to me, so that saving is passed straight back rather than held as a negotiating chip. An annual term also <b>locks your rate for its full length</b>, so a published price rise cannot reach you mid term, and the lock holds through renewal: keep sponsoring without a break and you keep the rate you started at. Monthly stays flexible and can be stopped at the end of any billing month. The placements, the benefits, and the editorial independence are identical either way.", body))
 
 def _c(t, sty=cell):
     return Paragraph(t, sty)
 
 pay_rows = [
     [_c("How you pay", cellh), _c("Monthly Sponsor", cellh), _c("Report Sponsor", cellh)],
-    [_c("As you go", cellb), _c("$500 per month"), _c("$150 per new report, or $115 from the catalog")],
-    [_c("Bundled", cellb), _c("Not applicable"), _c("3 new reports $375 (17% off) &nbsp;&middot;&nbsp; 6 for $675 (25% off)")],
+    [_c("As you go", cellb), _c("$500 per month"), _c("$150 per new report, or $100 from the catalog")],
+    [_c("Bundled", cellb), _c("Not applicable"), _c("3 new reports $335 (26% off) &nbsp;&middot;&nbsp; 6 for $630 (30% off)")],
     [_c("Annual", cellb),
      _c("<b>$5,000 per year.</b> Two months free, a $1,000 saving, 17% off"),
-     _c("<b>$1,300 for 12 new reports.</b> A $500 saving, 28% off")],
-    [_c("First time", cellb), _c("First 3 months at $300 per month"), _c("First report $100")],
+     _c("<b>$1,170 for 12 new reports.</b> A $630 saving, 35% off")],
+    [_c("First time", cellb), _c("First 3 months at $300, or a first year at $4,400"), _c("First new report $100")],
 ]
 # repeatRows=1 so the header follows the table across a page break. Without it the
 # Annual and First-time rows landed on page 2 with no column labels at all, in a PDF

@@ -1,5 +1,6 @@
 ---
 title: Sponsorship
+description: "Sponsorship placements on an independent threat intelligence publication read by detection engineers, analysts and security leadership."
 layout: page
 permalink: /sponsor/
 thumbnail: /assets/images/cards/sponsor.png
@@ -64,7 +65,7 @@ hide: true
   </div>
 </div>
 
-<p style="color: var(--hl-text-secondary); font-size: 0.9em; line-height: 1.6; margin: 14px 2px 2px;">And the reach compounds beyond the site: every detection rule is submitted to the public <strong>Sigma and YARA rule repositories</strong> the community pulls from, so the research gets deployed in SOCs, labs, and hunt platforms used by defenders worldwide, well beyond direct readers.</p>
+<p style="color: var(--hl-text-secondary); font-size: 0.9em; line-height: 1.6; margin: 14px 2px 2px;">And the reach compounds beyond the site. Every campaign also ships as <strong>machine-readable intelligence</strong>, a consolidated Suricata feed currently carrying 112 rules across 35 campaigns, 58 IOC feeds in JSON, and 41 STIX bundles built for OpenCTI and MISP. All of it is public and machine-readable, so it can go straight into a detection stack without anyone loading a page here. That is reach that does not depend on a visit to the site.</p>
 
 {% include section-header.html label="Sponsorship Tiers" accent="#b8902f" %}
 
@@ -144,14 +145,14 @@ hide: true
       <tr><th>How you pay</th><th>Monthly Sponsor</th><th>Report Sponsor</th></tr>
     </thead>
     <tbody>
-      <tr><td>As you go</td><td>$500 per month</td><td>$150 per new report, $115 from the catalog (any age, bundled or not)</td></tr>
-      <tr><td>Bundled</td><td>Not applicable</td><td>3 new reports $375 (17% off), 6 for $675 (25% off)</td></tr>
-      <tr><td><strong>Annual</strong></td><td><strong>$5,000 per year.</strong> Two months free, a $1,000 saving, 17% off</td><td><strong>$1,300 for 12 new reports</strong> across the year, a $500 saving, 28% off</td></tr>
-      <tr><td>First time</td><td>First 3 months at $300 per month</td><td>First report $100</td></tr>
+      <tr><td>As you go</td><td>$500 per month</td><td>$150 per new report, $100 from the catalog (any age, bundled or not)</td></tr>
+      <tr><td>Bundled</td><td>Not applicable</td><td>3 new reports $335 (26% off), 6 for $630 (30% off)</td></tr>
+      <tr><td><strong>Annual</strong></td><td><strong>$5,000 per year.</strong> Two months free, a $1,000 saving, 17% off</td><td><strong>$1,170 for 12 new reports</strong> across the year, a $630 saving, 35% off</td></tr>
+      <tr><td>First time</td><td>First 3 months at $300 per month, or a first full year at $4,400</td><td>First new report $100</td></tr>
     </tbody>
   </table>
 
-  <p class="hl-panel__body" style="margin-top: 14px; margin-bottom: 0;">Two things worth knowing before you choose. An annual commitment <strong>locks your rate for the full term</strong>, so a published price rise cannot reach you mid term, and it carries first right of renewal at that locked rate. Monthly stays flexible and can be stopped at the end of any billing month. Either way the placements, the benefits, and the editorial independence below are identical, and the intro rate can be combined with a move to annual once it ends.</p>
+  <p class="hl-panel__body" style="margin-top: 14px; margin-bottom: 0;">Two things worth knowing before you choose. An annual commitment <strong>locks your rate for the full term</strong>, so a published price rise cannot reach you mid term, and the lock holds through renewal. Keep sponsoring without a break and you keep the rate you started at, whatever the list price does later. Monthly stays flexible and can be stopped at the end of any billing month. Either way the placements, the benefits, and the editorial independence below are identical. If you are new and want to go annual straight away, you do not lose the intro rate: the first year is $4,400, which is the same discount the three intro months would have given you, applied to the annual price. The one benefit that does depend on how you pay is the threat question, which opens immediately on an annual prepay and at twelve months on monthly, because it is a real piece of work and a full year is what earns it.</p>
 </div>
 
 {% include section-header.html label="Editorial Independence" accent="#58a6ff" %}
@@ -161,7 +162,7 @@ hide: true
   <ul class="hl-panel__body" style="margin: 0; padding-left: 18px; line-height: 1.7;">
     <li>Sponsors do not review reports before publication.</li>
     <li>Sponsors do not influence findings, attribution claims, or recommendations.</li>
-    <li>Sponsor-requested research topics are accepted as suggestions, not directed by sponsors.</li>
+    <li>Sponsors can name a subject, whether as the threat question included with a Monthly sponsorship or as a suggestion for what gets published next. What the evidence then says is never negotiable.</li>
     <li>Sponsors are never named as analysts or contributors.</li>
     <li>Sponsored placement is always clearly disclosed. This is not native advertising.</li>
   </ul>
@@ -180,7 +181,7 @@ hide: true
 {% include section-header.html label="Commissioned Research" accent="#c084fc" %}
 
 <div class="hl-panel" style="--acc: #c084fc;">
-  <p class="hl-panel__body" style="margin-bottom: 12px;">Name a threat your organization needs intelligence on and I will go and get it: original investigation, full technical analysis, working detections, and a published report, held to exactly the same evidence standards and the same editorial independence as everything else here. This is a new investigation commissioned by you, distinct from the topic alignment already included with a Report sponsorship.</p>
+  <p class="hl-panel__body" style="margin-bottom: 12px;">Name a threat your organization needs intelligence on and I will go and get it, with original investigation, full technical analysis, working detections and a published report at the end, held to exactly the same evidence standards and the same editorial independence as everything else here. This is a new investigation commissioned by you. It is a different thing from picking which existing report you sponsor, and a much deeper one than the single threat question included with a Monthly sponsorship.</p>
   <p class="hl-panel__body" style="margin-bottom: 0;">Priced on scope, because scope varies enormously. A single host or one open directory is a very different piece of work from a fifty-address infrastructure cluster with a malware family sitting behind it. Tell me what you want to know and I will come back with a defined scope and a fixed price before any work starts, so there are no surprises in either direction.</p>
 </div>
 
@@ -188,7 +189,7 @@ hide: true
 
 <div class="hl-panel" style="--acc: #b8902f;">
   <p class="hl-panel__body" style="margin-bottom: 14px;">The full sponsorship pricing sheet is available as a printable PDF for circulation within your team or procurement process.</p>
-  <a href="/assets/files/Hunters-Ledger-Sponsorship-Pricing.pdf?v=20260907" class="hl-cta hl-cta--ghost" style="--acc: #b8902f;" target="_blank" rel="noopener noreferrer">
+  <a href="/assets/files/Hunters-Ledger-Sponsorship-Pricing.pdf?v=20260907b" class="hl-cta hl-cta--ghost" style="--acc: #b8902f;" target="_blank" rel="noopener noreferrer">
     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
     Download Pricing Sheet (PDF)
   </a>

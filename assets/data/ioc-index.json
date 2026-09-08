@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-07T16:27:15Z",
+ "generated_at": "2026-09-08T14:12:15Z",
  "counts": {
   "indicators": 2225,
   "reports": 57,
@@ -66,9 +66,7 @@
    "webserver-compromise-kit-91-236-230-250-iocs.json",
    "webshells-to-the-cloud.json"
   ],
-  "embargoed": [
-   "opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-iocs.json"
-  ],
+  "embargoed": [],
   "unknown": [],
   "empty": []
  },
