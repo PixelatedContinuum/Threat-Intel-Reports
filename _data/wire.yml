@@ -3,17 +3,17 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-08T14:02:37Z
+generated_at: 2026-09-08T16:02:27Z
 window_days: 30
 counts:
-  total: 525
+  total: 527
   research: 184
-  news: 341
+  news: 343
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 71
+    count: 72
     color: 1
   - label: "cybercrime"
     count: 54
@@ -278,6 +278,7 @@ label_colors:
   "cve-2025-49113": 3
   "cve-2026-19949": 8
   "cve-2026-20354": 12
+  "cve-2026-44756": 12
   "cve-2026-59346": 5
   "cve-2026-6471": 10
   "cve-2026-68820": 2
@@ -444,6 +445,18 @@ label_colors:
   "zero-day": 8
   "zoom": 7
 items:
+  - title: "SAP warns of maximum severity 'OVERPASS' kernel vulnerability"
+    url: "https://www.bleepingcomputer.com/news/security/sap-warns-of-maximum-severity-overpass-kernel-vulnerability/"
+    source: "BleepingComputer"
+    date: 2026-09-08T14:55:20Z
+    kind: news
+    labels: []
+  - title: "SAP Patches Critical Extended Passport Processing Vulnerability"
+    url: "https://www.securityweek.com/sap-patches-critical-extended-passport-processing-vulnerability/"
+    source: "SecurityWeek"
+    date: 2026-09-08T14:55:06Z
+    kind: news
+    labels: ["cve-2026-44756", "sap", "vulnerabilities"]
   - title: "GTIG AI Threat Tracker: From Prompting to Autonomy – The Evolution of Adversarial AI"
     url: "https://cloud.google.com/blog/topics/threat-intelligence/from-prompting-to-autonomy-the-evolution-of-adversarial-ai/"
     source: "Google"
