@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — BellaMain Turkish PhaaS Panel"
+description: "Detection rules for BellaMain Turkish phishing panel and brand kits. Three YARA, five Sigma and one Suricata rule for server-side artifacts."
 date: '2026-05-16'
 layout: post
 permalink: /hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/

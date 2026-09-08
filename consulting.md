@@ -1,5 +1,6 @@
 ---
 title: Consulting & Advisory
+description: "Independent security consulting: malware analysis, incident response advisory, detection engineering and AI workflow engineering."
 nav_title: Need Help?
 layout: page
 permalink: /consulting/

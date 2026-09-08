@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — lpe.exe (Arsenal-237 LPE Module)"
+description: "Detection rules for lpe.exe, an Arsenal-237 privilege escalation wrapper reaching SYSTEM. Six YARA and five Sigma rules for escalation methods."
 date: '2026-01-25'
 layout: post
 permalink: /hunting-detections/arsenal-237-lpe-exe-detections/

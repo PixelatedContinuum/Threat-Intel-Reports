@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — AI-Agent Framework Abuse Campaign (Multi-Actor, 2026-05-23)"
+description: "Detection rules for multi-actor AI-agent framework abuse across 8 operators. Eight YARA, fourteen Sigma and eight Suricata rules for broad coverage."
 date: '2026-05-25'
 layout: post
 permalink: /hunting-detections/ai-agent-frameworks-2026-05-23-detections/

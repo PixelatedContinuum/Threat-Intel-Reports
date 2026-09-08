@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — Turkish ARPA Operator / AI-Augmented State-Insurer Observability Compromise + Insider Recruitment (UTA-2026-013)"
+description: "Hunting and detection rules for the Turkish ARPA state-insurer observability compromise (209.38.205.158). 8 YARA, 11 Sigma, 2 Suricata rules."
 date: '2026-05-26'
 layout: post
 permalink: /hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/

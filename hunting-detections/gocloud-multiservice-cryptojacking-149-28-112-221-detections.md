@@ -1,8 +1,10 @@
 ---
 title: "Detection Rules — GOCLOUD Multi-Service Cryptojacking"
+description: "Detection rules for GOCLOUD two-node cryptojacking operation and orchestrator. Seven YARA, eleven Sigma and five Suricata behavior rules."
 date: '2026-07-26'
 layout: post
 permalink: /hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/
+thumbnail: /assets/images/cards/gocloud-multiservice-cryptojacking-149-28-112-221.png
 hide: true
 ---
 

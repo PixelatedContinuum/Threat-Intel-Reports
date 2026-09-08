@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — chromelevator.exe (Arsenal-237)"
+description: "Detection rules for chromelevator.exe, an Arsenal-237 browser credential extractor. Three YARA and four Sigma rules for injection and theft."
 date: '2026-01-27'
 layout: post
 permalink: /hunting-detections/arsenal-237-chromelevator-exe-detections/

@@ -1,8 +1,10 @@
 ---
 title: "Detection Rules: MultiVector Grey-Market PII Harvesting Operation (192.3.1.116)"
+description: "Hunting and detection rules for the MultiVector ecommerce RCE toolkit operator (192.3.1.116). 5 YARA, 12 Sigma and 13 Suricata rules."
 date: '2026-07-21'
 layout: post
 permalink: /hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/
+thumbnail: /assets/images/cards/multivector-ecommerce-rce-toolkit-192-3-1-116.png
 hide: true
 ---
 

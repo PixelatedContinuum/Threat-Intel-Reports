@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — QuasarRAT / Xworm / PowerShell Loader"
+description: "Hunting and detection rules for a VBScript and PowerShell loader chain dropping Quasar and XWorm. Two hunting rules plus IOC coverage."
 date: '2025-10-17'
 layout: post
 permalink: /hunting-detections/quasar-xworm-powershell-detections/

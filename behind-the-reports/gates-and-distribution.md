@@ -95,11 +95,11 @@ Publication defaults to an unlisted preview. The pages are live and reachable by
 
 A single catalog entry drives everything. One record per campaign produces the report card, the detection page listing, the IOC feed listing, and the home page block, so the three deliverables cannot drift apart or go live half-listed.
 
-Publishing also regenerates the consolidated public Suricata feed, currently 98 rules, and revalidates the whole thing against a live engine before staging it. That is a deliberate backstop. If a rule ever slipped past authoring, because the sensor was down or because I hand-edited something, it gets caught before it reaches anyone pointing an IDS at the feed. When the engine rejects the batch it suppresses per-rule errors, so the validator bisects the file to name exactly which rule failed rather than reporting that something, somewhere, is broken.
+Publishing also regenerates the consolidated public Suricata feed, currently 112 rules, and revalidates the whole thing against a live engine before staging it. That is a deliberate backstop. If a rule ever slipped past authoring, because the sensor was down or because I hand-edited something, it gets caught before it reaches anyone pointing an IDS at the feed. When the engine rejects the batch it suppresses per-rule errors, so the validator bisects the file to name exactly which rule failed rather than reporting that something, somewhere, is broken.
 
 ### Machine-readable, for the platforms that want it
 
-Every published campaign also becomes a STIX 2.1 bundle, 38 of them so far, modelling the report as a linked graph of indicators, malware, tools, infrastructure, techniques, vulnerabilities, and the actor where one can be named. They import into OpenCTI, MISP, or anything else that speaks STIX.
+Every published campaign also becomes a STIX 2.1 bundle, 41 of them so far, modelling the report as a linked graph of indicators, malware, tools, infrastructure, techniques, vulnerabilities, and the actor where one can be named. They import into OpenCTI, MISP, or anything else that speaks STIX.
 
 Two design decisions in there matter more than the format. Object IDs are deterministic, so re-importing an updated bundle upserts rather than duplicating, and shared entities resolve to a single node across every campaign. That means a platform can answer "show me every report touching this technique, this address, this actor" instead of holding thirty-eight disconnected islands.
 
@@ -107,7 +107,9 @@ The second is a filter on what gets modelled as an indicator at all. Public and 
 
 ### Upstream, and into a real stack
 
-Detection rules that hold up go upstream to the public repositories the community actually pulls from, which is where they get used by people who will never read this site.
+Detection rules that hold up are submitted upstream to the public repositories. Where that stands is worth saying plainly. Four batches have gone out, two to SigmaHQ and two to signature-base, and none of them has been merged. The maintainer feedback from those rounds is a large part of why the false-positive discipline above exists at all, and going back with a smaller and better batch is work I owe.
+
+What does reach defenders without waiting on anyone's review queue is the machine-readable side. The consolidated Suricata feed, the IOC feeds and the STIX bundles are public and machine-readable, so anyone can pull them straight into a stack without ever reading this site.
 
 They also go into my own detection stack, Sigma rules into the SIEM and YARA rules into the endpoint tooling as on-demand hunts. That is not a victory lap, it is the feedback loop. When one of my own rules generates a false positive during live triage, the first question is not how to tune it locally. It is whether the rule itself is defective, because if it is, every defender who deployed it has the same problem and cannot see it. A defective rule gets fixed at the source, revalidated, redeployed, and republished. Only a false positive that is genuinely specific to my network gets handled as a local exception.
 

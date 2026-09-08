@@ -1,5 +1,6 @@
 ---
 title: PGP Key
+description: "PGP public key for The Hunter's Ledger, for sending sensitive material such as victim detail, credentials or pre-publication findings securely."
 nav_title: PGP Key
 layout: page
 permalink: /pgp/

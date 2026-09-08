@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — new_enc.exe (Arsenal-237 Ransomware)"
+description: "Detection rules for new_enc.exe, Arsenal-237 ransomware hitting backups and databases. Seven YARA and four Sigma rules for pre-encryption acts."
 date: '2026-01-27'
 layout: post
 permalink: /hunting-detections/arsenal-237-new_enc-exe-detections/

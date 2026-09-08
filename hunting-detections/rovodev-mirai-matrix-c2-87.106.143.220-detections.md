@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — Rovodev AI Co-Authored Pandora-Mirai Variant + Matrix C2 Framework"
+description: "Hunting and detection rules for a Rovodev AI-built Mirai variant with Matrix C2. 10 YARA, 10 Sigma and 10 Suricata rules on bots."
 date: '2026-05-26'
 layout: post
 permalink: /hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/

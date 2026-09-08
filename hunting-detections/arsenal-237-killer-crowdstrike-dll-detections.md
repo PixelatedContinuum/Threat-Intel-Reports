@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — killer_crowdstrike.dll (CrowdStrike Variant)"
+description: "Detection rules for killer_crowdstrike.dll, an Arsenal-237 BYOVD module killing CrowdStrike processes. Four Sigma rules for driver abuse."
 date: '2026-01-25'
 layout: post
 permalink: /hunting-detections/arsenal-237-killer-crowdstrike-dll-detections/

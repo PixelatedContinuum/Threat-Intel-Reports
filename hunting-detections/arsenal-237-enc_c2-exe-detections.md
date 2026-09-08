@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — enc_c2.exe (Arsenal-237 Ransomware)"
+description: "Detection rules for enc_c2.exe, Arsenal-237 Rust ransomware with Tor C2 beaconing. Four YARA, five Sigma and one Suricata rule included."
 date: '2026-01-27'
 layout: post
 permalink: /hunting-detections/arsenal-237-enc_c2-exe-detections/

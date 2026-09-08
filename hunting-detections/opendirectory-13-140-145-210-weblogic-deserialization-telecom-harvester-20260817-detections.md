@@ -1,8 +1,10 @@
 ---
 title: "Detection Rules: WebLogic Deserialization and Telecom Credential Harvesting, 13.140.145.210"
+description: "Hunting and detection rules for a WebLogic deserialization telecom harvester toolkit (13.140.145.210). 8 YARA, 11 Sigma, 12 Suricata rules."
 date: '2026-08-18'
 layout: post
 permalink: /hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/
+thumbnail: /assets/images/cards/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817.png
 hide: true
 ---
 **Campaign:** WebLogicDeserialization-TelecomHarvester-13.140.145.210

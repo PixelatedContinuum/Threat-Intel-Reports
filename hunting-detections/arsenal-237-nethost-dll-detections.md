@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — nethost.dll (Arsenal-237 DLL Hijacking Persistence)"
+description: "Detection rules for nethost.dll, an Arsenal-237 C2 module with a 14-command protocol. Two YARA and one Sigma rule for command artifacts."
 date: '2026-01-27'
 layout: post
 permalink: /hunting-detections/arsenal-237-nethost-dll-detections/

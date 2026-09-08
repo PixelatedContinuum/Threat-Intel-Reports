@@ -1,8 +1,10 @@
 ---
 title: "Detection Rules — SSH Interception and Parasitic Credential Theft, 157.180.101.47"
+description: "Hunting and detection rules for an SSH interception credential-theft platform (157.180.101.47). 6 YARA, 15 Sigma, 3 Suricata rules."
 date: '2026-08-12'
 layout: post
 permalink: /hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/
+thumbnail: /assets/images/cards/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812.png
 hide: true
 unlisted: true
 ---

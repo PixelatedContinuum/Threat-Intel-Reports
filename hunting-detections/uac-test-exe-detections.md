@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — uac_test.exe (UAC Bypass PoC)"
+description: "Detection rules for uac_test.exe, a Rust UAC-bypass tool from the Arsenal-237 repository. 3 YARA and 4 Sigma rules on COM abuse."
 date: '2026-01-12'
 layout: post
 permalink: /hunting-detections/uac-test-exe-detections/

@@ -1,5 +1,6 @@
 ---
 title: The Hunter's Ledger
+description: "Original threat intelligence research: malware analysis, detection rules and indicator feeds published free by a solo analyst."
 layout: page
 permalink: /
 position: 1

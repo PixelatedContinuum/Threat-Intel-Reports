@@ -1,5 +1,6 @@
 ---
 title: Detection Library
+description: "Sigma, YARA and Suricata detection rules from original research, mapped to MITRE ATT&CK and licensed CC BY 4.0, plus a live Suricata rule feed."
 layout: page
 permalink: /hunting-detections/
 thumbnail: /assets/images/cards/hunting-detections.png

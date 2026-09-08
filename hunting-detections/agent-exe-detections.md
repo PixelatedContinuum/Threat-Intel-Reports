@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — agent.exe (PoetRAT)"
+description: "Detection rules for agent.exe, a Golang RAT tied to PoetRAT from the Arsenal-237 repository. Three YARA and three Sigma hunting rules for host artifacts."
 date: '2026-01-12'
 layout: post
 permalink: /hunting-detections/agent-exe-detections/

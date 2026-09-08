@@ -1,8 +1,10 @@
 ---
 title: "Detection Rules — Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17"
+description: "Hunting and detection rules for Sliver C2 Windows post-exploitation staging (193.233.202.17). 4 YARA, 12 Sigma and 2 Suricata rules."
 date: '2026-09-06'
 layout: post
 permalink: /hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/
+thumbnail: /assets/images/cards/sliver-c2-windows-postex-staging-193-233-202-17.png
 hide: true
 ---
 

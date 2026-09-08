@@ -1,8 +1,10 @@
 ---
 title: "Detection Rules — Dual-RAT Campaign: Quasar RAT vs. NjRAT/XWorm"
+description: "Detection rules for Quasar RAT and NjRAT XWorm on shared infrastructure. Three YARA, eleven Sigma and two Suricata rules after retiering."
 date: '2025-12-06'
 layout: post
 permalink: /hunting-detections/dual-rat-analysis-detections/
+thumbnail: /assets/images/cards/dual-rat-analysis.png
 hide: true
 ---
 

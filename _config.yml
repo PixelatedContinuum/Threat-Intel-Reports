@@ -26,6 +26,23 @@ mermaid: default
 google_analytics:
 cookie_consent: false
 
+# Cloudflare Web Analytics. Snippet install, not "Automatic setup": the apex is grey-clouded
+# so Cloudflare never sees a request to inject into. Token is public by design (it ships in
+# the page source) and identifies the site, it grants nothing.
+cloudflare_analytics_token: "d2247d7d41d343ae8916378d68d0da25"
+
+# Search engine verification, meta-tag method. jekyll-seo-tag emits these itself when set, so do
+# NOT hand-write them in head.liquid as well or the page carries duplicates. Paste the token value
+# only, not the whole <meta> tag.
+#
+# Google is ALREADY VERIFIED and needs nothing here. It was verified 2026-09-08 by the DNS route
+# (Search Console's Cloudflare integration wrote a google-site-verification TXT at the apex), which
+# creates a Domain property covering every subdomain and both protocols. That is the stronger
+# property type, and it survives any change to this file or the theme. Leaving the key empty is
+# correct, not an oversight. Do not add a meta tag as well.
+google_site_verification: ""
+bing_site_verification: ""
+
 # PAGINATION
 paginate: 5
 #paginate_path: "/blog/page:num"
@@ -40,6 +57,7 @@ plugins:
   - jekyll-seo-tag
   - jekyll-paginate
   - jekyll-redirect-from
+  - jekyll-sitemap
 
 # Serve /.well-known/ (RFC 9116 security.txt). Jekyll drops dot-directories
 # from the build unless they are explicitly included.
@@ -68,3 +86,18 @@ defaults:
       path: "behind-the-reports"
     values:
       thumbnail: /assets/images/cards/behind-the-reports.png
+  # jekyll-sitemap has no awareness of this theme's `unlisted:` front matter (that key
+  # only adds a noindex meta tag at render time, see _layouts/default.html). Left alone,
+  # the plugin would still list these two embargoed pages' URLs in the public sitemap.xml,
+  # which defeats unlisted-by-URL: a sitemap is a directory, unlike a robots.txt Disallow
+  # that at least maps 1:1 to a path you chose to name. Excluding by config path here
+  # (jekyll-sitemap's documented `sitemap: false` mechanism, set via defaults scope so no
+  # page front matter has to change) keeps this fix inside the _config.yml lane.
+  - scope:
+      path: "reports/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812"
+    values:
+      sitemap: false
+  - scope:
+      path: "hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections.md"
+    values:
+      sitemap: false

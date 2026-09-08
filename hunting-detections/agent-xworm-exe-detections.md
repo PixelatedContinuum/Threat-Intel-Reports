@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — agent_xworm.exe (XWorm RAT)"
+description: "Detection rules for agent_xworm.exe, an XWorm RAT build from the Arsenal-237 repository. Three YARA, two Sigma and one Suricata rule for C2 traits."
 date: '2026-01-12'
 layout: post
 permalink: /hunting-detections/agent-xworm-exe-detections/

@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — dec_fixed.exe (Arsenal-237 Ransomware Decryptor)"
+description: "Detection rules for dec_fixed.exe, an Arsenal-237 Rust ransomware decryptor. Two YARA and two Sigma rules for victim identification and forensics."
 date: '2026-01-27'
 layout: post
 permalink: /hunting-detections/arsenal-237-dec_fixed-exe-detections/

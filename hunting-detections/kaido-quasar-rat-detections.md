@@ -1,8 +1,10 @@
 ---
 title: "Detection Rules — KAIDO Quasar-Fork RAT"
+description: "Detection rules for KAIDO, a Quasar RAT fork with hidden desktop browser theft. Three YARA, three Sigma and two Suricata rules included."
 date: '2026-07-03'
 layout: post
 permalink: /hunting-detections/kaido-quasar-rat-detections/
+thumbnail: /assets/images/cards/kaido-quasar-rat-144-172-109-203.png
 hide: true
 ---
 

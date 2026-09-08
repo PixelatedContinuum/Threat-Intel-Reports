@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — Russian Gemini Credential Mill (213.165.51.115)"
+description: "Hunting and detection rules for a Gemini-augmented credential mill with custom Python A2A C2. 8 YARA, 10 Sigma and 2 Suricata rules."
 date: '2026-05-25'
 layout: post
 permalink: /hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/

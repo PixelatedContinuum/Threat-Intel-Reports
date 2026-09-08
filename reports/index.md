@@ -1,5 +1,6 @@
 ---
 title: Reports
+description: "Original malware analysis and reverse engineering reports, each shipped with detection rules and machine-readable indicators."
 layout: page
 permalink: /reports/
 thumbnail: /assets/images/cards/reports.png

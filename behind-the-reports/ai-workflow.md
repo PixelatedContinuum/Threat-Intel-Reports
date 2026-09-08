@@ -1,5 +1,6 @@
 ---
 title: "Step 2: Turning the Analysis Into a Report"
+description: "How raw malware analysis becomes a published report: a multi-agent workflow built on written standards, with human judgment at every checkpoint."
 date: '2026-08-20'
 layout: page
 permalink: /behind-the-reports/ai-workflow/
@@ -54,7 +55,7 @@ Every run targets the same three files, no matter how much or how little goes in
   </div>
   <div class="hl-feat">
     <div class="hl-feat__title">The detection rules</div>
-    <div class="hl-feat__desc">YARA for files, Sigma for logs, and Suricata for network traffic, at <code>/hunting-detections/[slug]-detections/</code>, written to the submission standards of the public repositories that share them.</div>
+    <div class="hl-feat__desc">YARA for files, Sigma for logs, and Suricata for network traffic, at <code>/hunting-detections/[slug]-detections/</code>, written to the submission standards of the public rule repositories.</div>
   </div>
 </div>
 
@@ -94,7 +95,7 @@ Each agent works against a skill framework, a body of domain knowledge, methodol
 
 Skills are not prompts. They are reference documents that encode how the work should be done, built from real submission requirements and real methodology. Instructions tell an agent *what to do*. Skills tell it *how to do it correctly*. The difference shows up in the output.
 
-A detection engineer without a skill framework writes a functional YARA rule. A detection engineer working against the YARA formatting standard writes one that meets the exact submission requirements of the repository it will be shared through: correct metadata fields, properly scoped conditions, no redundant strings, author set to The Hunters Ledger. Without the standard, those details get guessed at.
+A detection engineer without a skill framework writes a functional YARA rule. A detection engineer working against the YARA formatting standard writes one that meets the exact submission requirements of the public repository it is written for: correct metadata fields, properly scoped conditions, no redundant strings, author set to The Hunters Ledger. Without the standard, those details get guessed at.
 
 The same pattern runs across the workflow. Every technique maps to the correct ATT&CK ID with the right evidence level rather than the nearest guess. Every source carries a credibility tier, so a reader knows whether a claim came from a government advisory or an unverified blog. Every attribution claim goes through structured evidence weighting before an actor gets named, which is what stops the overconfident calls that damage a publication's credibility faster than anything else.
 

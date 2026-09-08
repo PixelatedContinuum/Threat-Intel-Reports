@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — FleetAgentAdvanced.exe (Multi-Layer Persistence Trojan)"
+description: "Detection rules for FleetAgentAdvanced.exe, a .NET dropper with layered persistence. Two YARA and six Sigma rules for installer artifacts."
 date: '2026-01-12'
 layout: post
 permalink: /hunting-detections/fleetagentadvanced-exe-detections/

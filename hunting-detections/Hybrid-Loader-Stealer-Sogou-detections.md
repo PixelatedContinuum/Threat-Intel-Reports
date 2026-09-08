@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — Hybrid Loader/Stealer Ecosystem Masquerading as Sogou"
+description: "Detection rules for a fake Sogou installer loader and stealer ecosystem. Three YARA, three Sigma and one Suricata rule for host behaviors."
 date: '2025-11-21'
 layout: post
 permalink: /hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/

@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — GHOST Cryptojacker Kit Family (Vova75Rus / 77.110.96.200)"
+description: "Detection rules for GHOST cryptojacker kits by Vova75Rus with rootkit and tunnel parts. Nine YARA, ten Sigma, three Suricata rules."
 date: '2026-05-25'
 layout: post
 permalink: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/

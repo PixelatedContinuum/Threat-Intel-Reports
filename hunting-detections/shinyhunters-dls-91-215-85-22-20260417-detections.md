@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — ShinyHunters Data Leak Site (91.215.85.22)"
+description: "Detection rules for the ShinyHunters data leak site and extortion infrastructure. 4 YARA, 4 Sigma hunting and 3 Suricata rules on notes."
 date: '2026-04-17'
 layout: post
 permalink: /hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/

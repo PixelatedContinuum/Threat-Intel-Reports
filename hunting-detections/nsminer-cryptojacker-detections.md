@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — NsMiner Cryptojacker"
+description: "Detection rules for NsMiner, a multi-stage cryptojacking operation using a trojanized NSIS installer. Two YARA and two Sigma rules."
 date: '2026-02-02'
 layout: post
 permalink: /hunting-detections/nsminer-cryptojacker-detections/

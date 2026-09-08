@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — PULSAR RAT (server.exe)"
+description: "Detection rules for Pulsar RAT, a Quasar fork with hidden-VNC and WinRE persistence. 1 YARA and 5 Sigma rules on install behavior."
 date: '2025-12-01'
 layout: post
 permalink: /hunting-detections/PULSAR-RAT-detections/

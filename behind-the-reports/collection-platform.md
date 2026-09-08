@@ -1,5 +1,6 @@
 ---
 title: "Step 1: Finding the Threat and Choosing the Target"
+description: "Vantage, the self-hosted platform that scans bulletproof-hosting infrastructure for malware nightly, and how candidates get chosen for investigation."
 date: '2026-04-12'
 layout: page
 permalink: /behind-the-reports/collection-platform/

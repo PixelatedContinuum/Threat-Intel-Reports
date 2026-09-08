@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — Inkognito Russian VPN Phishing & Brand-Impersonation Infrastructure"
+description: "Detection rules for Inkognito VPN phishing and brand impersonation sites. Two YARA, one Sigma and two Suricata rules for web assets."
 date: '2026-05-16'
 layout: post
 permalink: /hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/

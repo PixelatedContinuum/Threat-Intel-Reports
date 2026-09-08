@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — Chaos Ransomware (TorBrowserTor) Multi-Stage Loader — Open Directory 94.103.1.13"
+description: "Hunting and detection rules for Chaos ransomware delivery via batch crypter loaders (94.103.1.13). 8 YARA, 11 Sigma, 1 Suricata rule."
 date: '2026-04-23'
 layout: post
 permalink: /hunting-detections/open-directory-94-103-1-13-20260423-detections/

@@ -1,5 +1,6 @@
 ---
 title: Support
+description: "Ways to support independent threat intelligence research: consulting, sponsorship, GitHub Sponsors and PayPal, funding the work behind each report."
 layout: page
 permalink: /support/
 thumbnail: /assets/images/cards/support.png

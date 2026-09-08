@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — AdvancedRouterScanner Campaign"
+description: "Detection rules for AdvancedRouterScanner, an exploitation framework hitting router and IoT web interfaces. Two Sigma hunting rules plus IOC coverage."
 date: '2025-10-25'
 layout: post
 permalink: /hunting-detections/AdvancedRouterScanner-detections/

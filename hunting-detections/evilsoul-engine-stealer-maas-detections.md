@@ -1,8 +1,10 @@
 ---
 title: "Detection Rules — EvilSoul-Engine Stealer-Builder MaaS"
+description: "Detection rules for EvilSoul-Engine stealer-builder kits and panels. Five YARA, six Sigma and one Suricata rule for builder constants."
 date: '2026-07-03'
 layout: post
 permalink: /hunting-detections/evilsoul-engine-stealer-maas-detections/
+thumbnail: /assets/images/cards/evilsoul-engine-stealer-maas-144-172-103-98.png
 hide: true
 ---
 

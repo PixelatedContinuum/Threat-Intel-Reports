@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — full_test_enc.exe (Arsenal-237 Ransomware)"
+description: "Detection rules for full_test_enc.exe, an offline Arsenal-237 Rust ransomware module. Five YARA and three Sigma rules for encryption behaviors."
 date: '2026-01-27'
 layout: post
 permalink: /hunting-detections/arsenal-237-full_test_enc-exe-detections/

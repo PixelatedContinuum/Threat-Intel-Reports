@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — Korean Claude Code Allowlist + OpenClaw Operator (221.150.15.104)"
+description: "Detection rules for Korean Claude Code OpenClaw operator config abuse (221.150.15.104). Two YARA and four Sigma rules on allowlist behavior."
 date: '2026-05-27'
 layout: post
 permalink: /hunting-detections/korean-claude-openclaw-221.150.15.104-detections/

@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — From Webshells to the Cloud"
+description: "Hunting and detection rules for PHP webshell intrusions pivoting to cloud C2 and exfiltration. 8 Sigma hunting and 1 Suricata rule."
 date: '2025-10-20'
 layout: post
 permalink: /hunting-detections/webshells-to-the-cloud-detections/

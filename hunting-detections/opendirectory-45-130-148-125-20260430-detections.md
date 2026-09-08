@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — AdaptixC2 Open Directory Exposure (45.130.148.125)"
+description: "Hunting and detection rules for AdaptixC2 post-exploitation framework use (45.130.148.125). 4 YARA, 9 Sigma and 5 Suricata rules."
 date: '2026-04-30'
 layout: post
 permalink: /hunting-detections/opendirectory-45-130-148-125-20260430-detections/

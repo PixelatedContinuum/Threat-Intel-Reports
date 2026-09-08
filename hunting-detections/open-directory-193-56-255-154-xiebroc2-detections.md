@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — Open Directory at 193.56.255.154 (XiebroC2 v3.1 and Covenant C2)"
+description: "Detection rules for XiebroC2 v3.1 and Covenant C2 stagers on open directory 193.56.255.154. 4 YARA, 4 Sigma and 2 Suricata rules."
 date: '2026-04-03'
 layout: post
 permalink: /hunting-detections/open-directory-193-56-255-154-xiebroc2-detections/

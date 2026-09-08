@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — FleetAgentFUD.exe (WebSocket RAT with FUD Evasion)"
+description: "Detection rules for FleetAgentFUD.exe, a WebSocket RAT with header authenticated C2. Four YARA, eight Sigma and two Suricata rules included."
 date: '2026-01-12'
 layout: post
 permalink: /hunting-detections/fleetagentfud-exe-detections/

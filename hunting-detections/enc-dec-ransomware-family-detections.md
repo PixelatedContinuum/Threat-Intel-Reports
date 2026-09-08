@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — enc/dec Ransomware Family"
+description: "Detection rules for the enc dec Rust ransomware family with ChaCha20 and RSA-2048. Three YARA and one Sigma rule for encryption steps."
 date: '2026-01-18'
 layout: post
 permalink: /hunting-detections/enc-dec-ransomware-family-detections/

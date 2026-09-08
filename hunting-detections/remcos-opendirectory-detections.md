@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — Remcos RAT OpenDirectory Campaign"
+description: "Detection rules for Remcos RAT staged by a VB6 dropper with Winlogon persistence. 7 YARA and 8 Sigma rules on mutex and hijack artifacts."
 date: '2026-02-04'
 layout: post
 permalink: /hunting-detections/remcos-opendirectory-detections/

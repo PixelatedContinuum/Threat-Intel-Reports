@@ -1,5 +1,6 @@
 ---
 title: Detection Rules - Sliver C2 / ScareCrow Loader Open Directory Kit
+description: "Detection rules for a Sliver C2 implant build escorted by a ScareCrow loader (45.94.31.220). 5 YARA and 6 Sigma rules on binaries."
 date: '2026-03-01'
 layout: post
 permalink: /hunting-detections/sliver-open-directory-detections/

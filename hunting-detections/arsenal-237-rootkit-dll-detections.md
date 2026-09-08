@@ -1,8 +1,10 @@
 ---
 title: "Detection Rules — rootkit.dll (Arsenal-237 Defense Evasion Framework)"
+description: "Detection rules for rootkit.dll, an Arsenal-237 defense evasion framework with BYOVD. Four YARA and three Sigma rules for evasion acts."
 date: '2026-01-27'
 layout: post
 permalink: /hunting-detections/arsenal-237-rootkit-dll-detections/
+thumbnail: /assets/images/cards/arsenal-237-new-files.png
 hide: true
 ---
 

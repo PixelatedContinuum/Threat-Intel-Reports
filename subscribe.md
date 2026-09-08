@@ -1,5 +1,6 @@
 ---
 title: Subscribe
+description: "How to follow The Hunter's Ledger: RSS feed, email newsletter, LinkedIn and X, for new reports, detections and IOC feeds on publication."
 layout: page
 permalink: /subscribe/
 thumbnail: /assets/images/cards/subscribe.png

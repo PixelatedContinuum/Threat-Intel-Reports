@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — BdApiUtil64.sys (Arsenal-237 BYOVD Component)"
+description: "Detection rules for BdApiUtil64.sys, a signed Baidu driver abused for BYOVD defense evasion. Four YARA and two Sigma rules for driver abuse."
 date: '2026-01-26'
 layout: post
 permalink: /hunting-detections/arsenal-237-BdApiUtil64-sys-detections/

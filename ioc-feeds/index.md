@@ -1,5 +1,6 @@
 ---
 title: IOC Feeds
+description: "Structured indicator of compromise feeds from original research, ready for SIEM, EDR or CTI ingestion, licensed CC BY 4.0 and searchable by indicator."
 layout: page
 permalink: /ioc-feeds/
 thumbnail: /assets/images/cards/ioc-feeds.png

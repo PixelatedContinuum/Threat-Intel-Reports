@@ -1,5 +1,6 @@
 ---
 title: 'Detection Rules - WebServer Compromise Kit'
+description: "Detection rules for a staged web-server intrusion with ASP.NET shell and PrintSpoofer escalation. 3 YARA, 3 Sigma and 2 Suricata rules."
 date: '2026-02-08'
 layout: post
 permalink: /hunting-detections/webserver-compromise-kit-91-236-230-250-detections/

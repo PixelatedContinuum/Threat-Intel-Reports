@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — agent_xworm_v2.exe (XWorm RAT v2.4.0)"
+description: "Detection rules for agent_xworm_v2.exe, XWorm RAT v2.4.0 with WebSocket C2. Four YARA, two Sigma and one Suricata rule cover recon artifacts."
 date: '2026-01-12'
 layout: post
 permalink: /hunting-detections/agent-xworm-v2-exe-detections/

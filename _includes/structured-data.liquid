@@ -1,4 +1,8 @@
-{%- comment -%} TechArticle JSON-LD for report pages. Included from default/head.liquid for reports only. {%- endcomment -%}
+{%- comment -%} TechArticle JSON-LD for report and detection pages. Included from
+default/head.liquid for /reports/ and /hunting-detections/ post-layout pages only.
+Detection pages have no `category`, so articleSection is simply omitted for them
+(guarded below); description/thumbnail fall back to the site-wide defaults the same
+way a report page without one already does. {%- endcomment -%}
 {%- assign _img = page.thumbnail | default: page["feature-img"] | default: site.header_feature_image -%}
 <script type="application/ld+json">
 {

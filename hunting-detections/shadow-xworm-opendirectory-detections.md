@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — Shadow RAT & XWorm Open Directory Campaign"
+description: "Hunting and detection rules for Shadow RAT and XWorm dual-family MaaS hosting (151.245.112.70). 7 YARA, 10 Sigma, 1 Suricata rule."
 date: '2026-04-04'
 layout: post
 permalink: /hunting-detections/shadow-xworm-opendirectory-detections/

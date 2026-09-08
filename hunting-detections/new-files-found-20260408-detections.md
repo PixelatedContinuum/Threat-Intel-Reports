@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — OpenStrike Expanded Toolkit (New Files 2026-04-08)"
+description: "Detection rules for OpenStrike, a bespoke Cobalt Strike-derivative beacon toolkit. 5 YARA, 8 Sigma and 5 Suricata rules on beacons."
 date: '2026-04-08'
 layout: post
 permalink: /hunting-detections/new-files-found-20260408-detections/

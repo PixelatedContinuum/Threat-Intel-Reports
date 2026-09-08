@@ -78,7 +78,7 @@
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:alt" content="{{ page.title | default: site.title }}">
     {% seo %}
-    {% if page.layout == "post" and page.url contains "/reports/" %}{% include structured-data.liquid %}{% endif %}
+    {% if page.layout == "post" %}{% if page.url contains "/reports/" or page.url contains "/hunting-detections/" %}{% include structured-data.liquid %}{% endif %}{% endif %}
 
     <!-- RSS -->
     <link rel="alternate" type="application/atom+xml" title="{{ site.title | default: 'Title' }}" href="{{ 'feed.xml' | absolute_url }}"/>
@@ -103,4 +103,14 @@
     <!-- Local override: project design system -->
     <link rel="stylesheet" href="{{ '/assets/css/custom.css' | relative_url }}">
     <link rel="preload" href="{{ '/assets/fonts/space-grotesk.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
+
+    {%- comment -%} Cloudflare Web Analytics, JS-snippet install. This site is deliberately
+    DNS-only (grey cloud) so that requests go browser -> GitHub Pages and never traverse
+    Cloudflare. That means Cloudflare's "Automatic setup" option, which injects this beacon
+    at the edge, can never fire here and will report zero forever. The snippet install is the
+    correct mechanism for an unproxied origin. No cookies, no client-side state, so no consent
+    banner is required. {%- endcomment -%}
+    {% if site.cloudflare_analytics_token and site.cloudflare_analytics_token != "" %}
+    <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "{{ site.cloudflare_analytics_token }}"}'></script>
+    {% endif %}
 </head>

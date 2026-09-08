@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — Multi-Cluster Open-Directory 79.137.192.3 (Rhadamanthys MaaS / BellaMain PhaaS / Inkognito)"
+description: "Detection rules for Rhadamanthys, BellaMain PhaaS and Inkognito clusters on 79.137.192.3. 8 YARA, 3 Sigma and 1 Suricata rule."
 date: '2026-05-15'
 layout: post
 permalink: /hunting-detections/opendirectory-79-137-192-3-20260515-detections/

@@ -1,8 +1,10 @@
 ---
 title: "Detection Rules — killer.dll (BYOVD Defense Evasion)"
+description: "Detection rules for killer.dll, an Arsenal-237 BYOVD defense evasion module. Three YARA and seven Sigma rules for driver service abuse."
 date: '2026-01-25'
 layout: post
 permalink: /hunting-detections/arsenal-237-killer-dll-detections/
+thumbnail: /assets/images/cards/arsenal-237-new-files.png
 hide: true
 ---
 

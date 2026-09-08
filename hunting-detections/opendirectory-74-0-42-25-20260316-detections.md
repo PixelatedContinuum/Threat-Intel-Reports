@@ -1,5 +1,6 @@
 ---
 title: "Detection Rules — ZeroTrace Multi-Family MaaS Operation (Open Directory 74.0.42.25)"
+description: "Detection rules for ZeroTrace, a seven-family MaaS toolkit running XWorm and PureRAT loaders. 6 YARA, 5 Sigma and 1 Suricata rule."
 date: '2026-03-17'
 layout: post
 permalink: /hunting-detections/opendirectory-74-0-42-25-20260316-detections/

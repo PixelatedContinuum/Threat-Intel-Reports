@@ -1,8 +1,10 @@
 ---
 title: "Detection Rules: CloudSync Assembler Toolkit"
+description: "Detection rules for the CloudSync assembler toolkit, a five-part intrusion set. Seven YARA, eighteen Sigma and four Suricata rules by component."
 date: '2026-08-03'
 layout: post
 permalink: /hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/
+thumbnail: /assets/images/cards/cloudsync-assembler-toolkit-91-197-98-188.png
 hide: true
 ---
 
