@@ -240,3 +240,17 @@ test('a page with no declaration is PASS on the DOM path too', function () {
   assert.strictEqual(r.status, 'PASS');
   assert.match(r.reason, /no figure_nav/);
 });
+
+/* The markdown path has to see the same key the runtime does, or a component
+   figure would pass in the browser and fail before commit. */
+test('figureImages reads data-figure-image from a figure with no image', function () {
+  var md = '<figure class="hl-ptree-fig" data-figure-image="tree.svg">' +
+    '{% include process-tree.html %}<figcaption>cap</figcaption></figure>';
+  assert.deepStrictEqual(CFN.figureImages(md), ['tree.svg']);
+});
+
+test('an image path still wins over the data attribute in the same block', function () {
+  var md = '<figure data-figure-image="tree.svg">' +
+    '<img src="/assets/images/s/a.svg"><figcaption>cap</figcaption></figure>';
+  assert.deepStrictEqual(CFN.figureImages(md), ['a.svg']);
+});

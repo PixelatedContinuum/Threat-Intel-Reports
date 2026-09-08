@@ -1,0 +1,94 @@
+{%- comment -%}
+  PROCESS TREE COMPONENT
+
+  Renders a report's `process_tree` front matter as a nested list of native
+  <details> nodes. Pairs with assets/css/custom.css (PROCESS TREE COMPONENT
+  block) and assets/js/hl-process-tree.js.
+
+  WHY HTML AND NOT AN SVG. The literals a defender wants (paths, hashes,
+  addresses) have to be selectable, findable with the browser's find, and
+  reflowable on a phone. Typeset inside an SVG they are none of those, and the
+  same facts then have to be maintained a second time in a 300-word alt
+  attribute. Here the markup IS the content, so there is nothing to keep in sync.
+
+  The nesting is a real <ul>/<li> tree, so a screen reader gets the parent and
+  child relationship without any ARIA. No role="tree": that role commits to a
+  full arrow-key contract, and a half-implemented one is worse than none.
+
+  USAGE, from a report's markdown. Wrap it in the report's own <figure> so the
+  caption and figure number stay where every other figure keeps them:
+
+    <figure class="hl-ptree-fig" data-figure-image="my-tree.svg">
+    {% include process-tree.html %}
+    <figcaption><em>Figure N: what it shows and why it matters.</em></figcaption>
+    </figure>
+
+  `data-figure-image` is how figure-nav.js attaches the chip row to a figure
+  that carries no <img>. Keep it equal to the `image:` key the report's
+  figure_nav entry declares.
+
+  Do not leave a blank line inside that block. Kramdown re-enters markdown mode
+  at a blank line inside raw HTML, and the rest of the page pays for it.
+
+  FRONT MATTER SHAPE
+
+    process_tree:
+      title: "On-host process tree"      # small caps label in the header bar
+      meta: "6 processes, 2 artifacts"   # right-hand header text, optional
+      foot: "..."                        # footer sentence, optional, allows inline HTML
+      legend:                            # optional
+        - kind: dropper                  # dropper | operator | endgame | artifact
+          label: "dropper"
+      nodes:
+        - id: pt-carriers-exe            # becomes the deep-link target, must be unique
+          name: "Carriers.exe"           # monospace, escaped
+          pid: "PID 1908"                # optional
+          time: "T+0.00s"                # optional
+          at: 0                          # optional, 0-100, position on the timing spine
+          kind: dropper
+          kind_label: "endgame, C2"      # optional, defaults to `kind`
+          emphasis: true                 # optional, draws a stronger border
+          what: "The delivery binary runs"        # one line, shown collapsed, escaped
+          why: "Longer explanation."              # shown expanded, allows inline HTML
+          tactic: "Execution"                     # optional
+          attack: "T1204.002"                     # optional, linked to attack.mitre.org
+          caveat: "Only flag when ..."            # optional, allows inline HTML
+          facts:                                  # optional
+            - key: "SHA-256"
+              value: "1afbe5..."                  # escaped, so paths and globs are safe
+          children: [ ... same shape ... ]
+
+  ANGLE BRACKETS. `name`, `what` and every fact value are escaped, so a literal
+  like <pid> is safe in those. `why`, `caveat` and `foot` are NOT escaped so they
+  can carry <code>; write &lt;pid&gt; by hand there.
+{%- endcomment -%}
+{%- assign pt = include.tree | default: page.process_tree -%}
+{%- if pt and pt.nodes -%}
+<div class="hl-ptree" data-hl-ptree>
+  <div class="hl-ptree-head">
+    <span class="hl-ptree-title">{{ pt.title | default: 'Process tree' | escape }}</span>
+    {%- if pt.meta %}<span class="hl-ptree-meta">{{ pt.meta | escape }}</span>{% endif %}
+    <div class="hl-ptree-tools js-only">
+      <button type="button" data-pt="expand">Expand all</button>
+      <button type="button" data-pt="collapse">Collapse all</button>
+    </div>
+  </div>
+  <ul class="hl-ptree-root">
+    {%- for node in pt.nodes %}
+    {% include process-tree-node.html node=node %}
+    {%- endfor %}
+  </ul>
+  {%- if pt.foot or pt.legend %}
+  <p class="hl-ptree-foot">
+    {{ pt.foot }}
+    {%- if pt.legend %}
+    <span class="hl-ptree-legend">
+      {%- for k in pt.legend %}
+      <span><i style="background:var(--pt-{{ k.kind }})"></i> {{ k.label | escape }}</span>
+      {%- endfor %}
+    </span>
+    {%- endif %}
+  </p>
+  {%- endif %}
+</div>
+{%- endif -%}

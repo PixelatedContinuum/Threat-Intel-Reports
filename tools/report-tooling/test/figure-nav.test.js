@@ -127,3 +127,27 @@ test('an anchor with a percent-encoded id still resolves', function () {
     new d.defaultView.MouseEvent('click', { bubbles: true }));
   assert.ok(d.getElementById('caf\u00e9').classList.contains('hl-fignav-target'));
 });
+
+/* A figure built from markup rather than from an image, such as the process-tree
+   component, carries no <img> and names its figure_nav key with
+   data-figure-image instead. Without this path its chips would silently never
+   render, which is the failure this whole module already refuses elsewhere. */
+test('a figure with no img matches on data-figure-image', function () {
+  var d = docWith('<figure data-figure-image="tree.svg"><div>markup, not an image</div>' +
+    '<figcaption>cap</figcaption></figure>');
+  var body = d.querySelector('.hl-post-content');
+  assert.strictEqual(FN.figuresFor(body, 'tree.svg').length, 1);
+  assert.strictEqual(FN.figuresFor(body, 'other.svg').length, 0);
+  assert.strictEqual(FN.render(body, [{ image: 'tree.svg', parts: PARTS }], d), 1);
+  assert.strictEqual(body.querySelectorAll('.hl-fignav__chip').length, 2);
+});
+
+test('an img still wins over the data attribute on the same figure', function () {
+  var d = docWith('<figure data-figure-image="tree.svg">' +
+    '<img src="/assets/images/slug/a.svg"><figcaption>cap</figcaption></figure>');
+  var body = d.querySelector('.hl-post-content');
+  // one hit for the image name, and the figure is not double-counted for its own
+  // data attribute, which would make every such entry look ambiguous
+  assert.strictEqual(FN.figuresFor(body, 'a.svg').length, 1);
+  assert.strictEqual(FN.figuresFor(body, 'tree.svg').length, 0);
+});

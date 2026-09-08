@@ -26,12 +26,28 @@
      independent of the Liquid `| relative_url` wrapper and of any future baseurl
      change. Every hit is returned so the caller can refuse an ambiguous one
      instead of silently picking the first. */
+  /* A figure need not be an image. The process-tree component renders a figure
+     built from markup, so there is no <img> to match on, and without a second
+     way in its chips would silently never render. `data-figure-image` is that
+     way: the figure names the same key the report's figure_nav entry declares.
+
+     Additive on purpose. Every existing figure carries an <img> and no
+     data attribute, so the first branch decides all 43 of them exactly as
+     before and this cannot change what any published page does today. */
   function figuresFor(root, image) {
     var figs = root.querySelectorAll('figure');
     var hits = [];
     for (var i = 0; i < figs.length; i++) {
       var img = figs[i].querySelector('img[src]');
-      if (img && basename(img.getAttribute('src')) === image) hits.push(figs[i]);
+      /* An image, if there is one, is the only key. Letting a figure answer to
+         both its image and its data attribute would let one figure hold two
+         names, which is the ambiguity the caller below already refuses. The
+         markdown gate resolves it the same way, so the two cannot drift. */
+      if (img) {
+        if (basename(img.getAttribute('src')) === image) hits.push(figs[i]);
+        continue;
+      }
+      if (figs[i].getAttribute('data-figure-image') === image) hits.push(figs[i]);
     }
     return hits;
   }

@@ -90,7 +90,13 @@ function figureImages(md) {
   var out = [];
   String(md).replace(/<figure[\s\S]*?<\/figure>/g, function (block) {
     var m = block.match(/\/assets\/images\/[^"'\s)]*?\/([^/"'\s)]+\.svg)/);
-    if (m) out.push(m[1]);
+    if (m) { out.push(m[1]); return block; }
+    /* A figure built from markup rather than from an image carries no asset
+       path, so it names its figure_nav key with data-figure-image instead. The
+       process-tree component is the first of these. Checked only when there is
+       no image path, so a real figure still resolves exactly as before. */
+    var d = block.match(/\bdata-figure-image\s*=\s*"([^"]+)"/);
+    if (d) out.push(d[1]);
     return block;
   });
   return out;

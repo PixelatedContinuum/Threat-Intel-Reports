@@ -632,6 +632,13 @@ the coverage above is narrower than the rule set.</em></p>
 })();
 </script>
 <script src="{{ '/assets/js/attack-coverage.js' | relative_url }}" defer></script>
+{%- comment -%}
+  After attack-coverage on purpose, and both deferred, so they run in order: this
+  reads HLAttackCoverage for the parser and hooks the strip that one has already
+  built. It no-ops on a page with no mapping table, which is why it needs no
+  front-matter guard. Versioned as a pair with the toolbar markup it inserts.
+{%- endcomment -%}
+<script src="{{ '/assets/js/hl-attack-table.js' | relative_url }}?v=1" defer></script>
 {% unless page.glossary == false %}
 <script type="application/json" id="hl-glossary-data">{{ site.data.glossary | jsonify }}</script>
 <script src="{{ '/assets/js/glossary.js' | relative_url }}" defer></script>
@@ -639,6 +646,18 @@ the coverage above is narrower than the rule set.</em></p>
 {% if page.figure_nav %}
 <script type="application/json" id="hl-figure-nav">{{ page.figure_nav | jsonify }}</script>
 <script src="{{ '/assets/js/figure-nav.js' | relative_url }}" defer></script>
+{% endif %}
+{%- comment -%}
+  Only for a report that declares a process_tree, so no other page pays for it.
+  Carries ?v= because the module and the markup it enhances ship together: the
+  include can change in the same push as the script, and a returning reader with
+  the old file cached would get new markup driven by old behaviour. Most scripts
+  in this layout carry no ?v=; this one and the two that already do are the cases
+  where markup and script are versioned as a pair. Bump it whenever
+  hl-process-tree.js changes.
+{%- endcomment -%}
+{% if page.process_tree %}
+<script src="{{ '/assets/js/hl-process-tree.js' | relative_url }}?v=1" defer></script>
 {% endif %}
 {%- comment -%}
   After figure-nav on purpose: the switch binds a capture-phase handler that

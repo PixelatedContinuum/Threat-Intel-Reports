@@ -4107,3 +4107,524 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   .hl-ioctable__table th:first-child,
   .hl-ioctable__table td:first-child { width: 5.5em; }
 }
+
+/* ============================================================
+   PROCESS TREE COMPONENT
+   Paired with assets/js/hl-process-tree.js and
+   _includes/process-tree.html. Every selector is scoped under
+   .hl-ptree so it outranks .hl-post-content <element> rules, which
+   otherwise win at 0,1,1 and repaint the component. Sizes are px and
+   em on purpose: the theme sets body { font-size: 1.25em } while rem
+   resolves against the 16px root, so a rem here renders 22% small.
+   ============================================================ */
+/* ============================================================
+   hl-process-tree
+   An interactive, accessible, HTML process tree for Hunters Ledger reports.
+   No build step, no framework, no dependency. Drop this file in
+   assets/css/ (or paste into custom.css) and pair it with
+   hl-process-tree.js.
+
+   Design rules this file obeys:
+   - Colour is never the only channel. Every node also carries a word.
+   - Nothing below 15px, body copy at 17px, generous line height.
+   - Works with scripting off. The .js-only controls stay hidden.
+   - Theme aware. Dark is the base because the site pins dark today;
+     light is defined for both the data-theme switch and the OS setting.
+   ============================================================ */
+
+.hl-ptree-fig { margin: 2.25em 0; }
+.hl-ptree-fig > figcaption {
+  margin-top: 12px;
+  font-size: 0.82em;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--pt-ink-2);
+  text-align: center;
+}
+
+/* --- Tokens: dark (base) ------------------------------------ */
+.hl-ptree {
+  --pt-surface:    #1a1a1a;
+  --pt-surface-2:  #161616;
+  --pt-surface-3:  #202020;
+  --pt-line:       #2a2a2a;
+  --pt-line-soft:  #242424;
+  --pt-ink:        #eeeeee;
+  --pt-ink-2:      #c6c6c6;
+  --pt-ink-3:      #8d8d8d;
+  --pt-code-bg:    #0e0e0e;
+  --pt-link:       #58a6ff;
+  --pt-focus:      #58a6ff;
+
+  /* rails keep the house palette from report-infographics */
+  --pt-dropper:    #eab308;
+  --pt-operator:   #dc2626;
+  --pt-endgame:    #7f1d1d;
+  --pt-artifact:   #6b7280;
+
+  /* chip text needs contrast, so it uses the lighter label variants */
+  --pt-dropper-lbl:  #facc15;
+  --pt-operator-lbl: #ef4444;
+  --pt-endgame-lbl:  #fb7185;
+  --pt-artifact-lbl: #a1a1aa;
+
+  position: relative;
+  border: 1px solid var(--pt-line);
+  border-radius: 8px;
+  background: var(--pt-surface);
+  color: var(--pt-ink);
+  overflow: hidden;
+  font-size: 17px;
+  line-height: 1.65;
+  text-align: left;
+}
+
+/* --- Tokens: light ------------------------------------------ */
+:root[data-theme="light"] .hl-ptree,
+.hl-ptree[data-pt-theme="light"] {
+  --pt-surface:    #ffffff;
+  --pt-surface-2:  #f4f4f5;
+  --pt-surface-3:  #ebebed;
+  --pt-line:       #d4d4d8;
+  --pt-line-soft:  #e4e4e7;
+  --pt-ink:        #18181b;
+  --pt-ink-2:      #3f3f46;
+  --pt-ink-3:      #5f5f68;
+  --pt-code-bg:    #f4f4f5;
+  --pt-link:       #1857b8;
+  --pt-focus:      #1857b8;
+
+  --pt-dropper:    #a16207;
+  --pt-operator:   #b91c1c;
+  --pt-endgame:    #7f1d1d;
+  --pt-artifact:   #52525b;
+
+  --pt-dropper-lbl:  #854d0e;
+  --pt-operator-lbl: #a51b1b;
+  --pt-endgame-lbl:  #7f1d1d;
+  --pt-artifact-lbl: #52525b;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .hl-ptree {
+    --pt-surface:    #ffffff;
+    --pt-surface-2:  #f4f4f5;
+    --pt-surface-3:  #ebebed;
+    --pt-line:       #d4d4d8;
+    --pt-line-soft:  #e4e4e7;
+    --pt-ink:        #18181b;
+    --pt-ink-2:      #3f3f46;
+    --pt-ink-3:      #5f5f68;
+    --pt-code-bg:    #f4f4f5;
+    --pt-link:       #1857b8;
+    --pt-focus:      #1857b8;
+    --pt-dropper:    #a16207;
+    --pt-operator:   #b91c1c;
+    --pt-endgame:    #7f1d1d;
+    --pt-artifact:   #52525b;
+    --pt-dropper-lbl:  #854d0e;
+    --pt-operator-lbl: #a51b1b;
+    --pt-endgame-lbl:  #7f1d1d;
+    --pt-artifact-lbl: #52525b;
+  }
+}
+
+/* --- Header bar --------------------------------------------- */
+.hl-ptree .hl-ptree-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px 16px;
+  flex-wrap: wrap;
+  padding: 13px 18px;
+  background: var(--pt-surface-2);
+  border-bottom: 1px solid var(--pt-line);
+}
+.hl-ptree .hl-ptree-title {
+  font-size: 0.76em;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--pt-ink);
+}
+.hl-ptree .hl-ptree-meta {
+  font-family: ui-monospace, 'Cascadia Mono', Menlo, monospace;
+  font-size: 0.74em;
+  color: var(--pt-ink-3);
+}
+.hl-ptree .hl-ptree-tools { margin-left: auto; display: flex; gap: 8px; }
+
+.hl-ptree button {
+  font: inherit;
+  font-size: 0.74em;
+  padding: 3px 11px;
+  border-radius: 4px;
+  border: 1px solid var(--pt-line);
+  background: var(--pt-surface-3);
+  color: var(--pt-ink-2);
+  cursor: pointer;
+}
+.hl-ptree button:hover { color: var(--pt-ink); border-color: var(--pt-ink-3); }
+.hl-ptree :focus-visible {
+  outline: 3px solid var(--pt-focus);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* --- Tree structure ----------------------------------------- */
+.hl-ptree ul { list-style: none; margin: 0; padding: 0; }
+.hl-ptree .hl-ptree-root { padding: 6px 18px 10px; }
+
+/* Nested levels indent modestly and draw their own parentage rail. */
+.hl-ptree .hl-ptree-root ul {
+  margin-left: 13px;
+  padding-left: 17px;
+  border-left: 2px solid var(--pt-line);
+}
+.hl-ptree .hl-ptree-item { position: relative; }
+
+/* the elbow from the parent rail into this node */
+.hl-ptree .hl-ptree-root ul > .hl-ptree-item::before {
+  content: "";
+  position: absolute;
+  left: -17px;
+  top: 26px;
+  width: 13px;
+  height: 2px;
+  background: var(--pt-line);
+}
+
+/* --- A node ------------------------------------------------- */
+.hl-ptree .hl-ptree-node {
+  margin: 7px 0;
+  border: 1px solid var(--pt-line);
+  border-radius: 7px;
+  background: var(--pt-surface-2);
+  overflow: hidden;
+}
+.hl-ptree .hl-ptree-node[open] { background: var(--pt-surface-3); }
+.hl-ptree .hl-ptree-item[data-emphasis="yes"] > .hl-ptree-node { border-color: var(--pt-ink-3); }
+
+.hl-ptree .hl-ptree-node > summary {
+  display: grid;
+  grid-template-columns: 5px 18px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0 12px;
+  padding: 11px 14px 11px 0;
+  cursor: pointer;
+  list-style: none;
+}
+.hl-ptree .hl-ptree-node > summary::-webkit-details-marker { display: none; }
+.hl-ptree .hl-ptree-node > summary:hover { background: var(--pt-surface-3); }
+
+/* the coloured kind rail, one channel of two */
+.hl-ptree .pt-rail { grid-row: 1 / -1; align-self: stretch; margin: -11px 0; background: var(--pt-artifact); }
+.hl-ptree [data-kind="dropper"]  > .hl-ptree-node .pt-rail { background: var(--pt-dropper); }
+.hl-ptree [data-kind="operator"] > .hl-ptree-node .pt-rail { background: var(--pt-operator); }
+.hl-ptree [data-kind="endgame"]  > .hl-ptree-node .pt-rail { background: var(--pt-endgame); }
+.hl-ptree [data-kind="artifact"] > .hl-ptree-node .pt-rail { background: var(--pt-artifact); }
+
+.hl-ptree .pt-chevron {
+  width: 18px; height: 18px;
+  color: var(--pt-ink-3);
+  transition: transform 0.12s ease;
+}
+.hl-ptree .hl-ptree-node[open] > summary .pt-chevron { transform: rotate(90deg); }
+@media (prefers-reduced-motion: reduce) { .pt-chevron { transition: none; } }
+
+.hl-ptree .pt-headline { min-width: 0; }
+.hl-ptree .pt-line1 { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.hl-ptree .pt-name {
+  font-family: ui-monospace, 'Cascadia Mono', Menlo, monospace;
+  font-size: 0.98em;
+  font-weight: 600;
+  color: var(--pt-ink);
+  overflow-wrap: anywhere;
+}
+.hl-ptree .pt-pid, .hl-ptree .pt-time {
+  font-family: ui-monospace, 'Cascadia Mono', Menlo, monospace;
+  font-size: 0.76em;
+  color: var(--pt-ink-3);
+}
+.hl-ptree .pt-time { color: var(--pt-ink-2); }
+.hl-ptree .pt-what { display: block; font-size: 0.88em; color: var(--pt-ink-2); margin-top: 1px; }
+
+/* the kind word, so colour is never carrying meaning alone */
+.hl-ptree .pt-kind {
+  justify-self: end;
+  align-self: center;
+  padding: 1px 9px;
+  border-radius: 3px;
+  border: 1px solid currentColor;
+  font-size: 0.66em;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--pt-artifact-lbl);
+}
+.hl-ptree [data-kind="dropper"]  > .hl-ptree-node .pt-kind { color: var(--pt-dropper-lbl); }
+.hl-ptree [data-kind="operator"] > .hl-ptree-node .pt-kind { color: var(--pt-operator-lbl); }
+.hl-ptree [data-kind="endgame"]  > .hl-ptree-node .pt-kind { color: var(--pt-endgame-lbl); }
+
+/* --- Timing spine (decorative, the T+ text carries the fact) - */
+.hl-ptree .pt-track {
+  grid-column: 3 / 5;
+  position: relative;
+  height: 3px;
+  margin-top: 9px;
+  border-radius: 2px;
+  background: var(--pt-line);
+}
+.hl-ptree .pt-track > i {
+  position: absolute;
+  top: -2px;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--pt-ink-3);
+  transform: translateX(-50%);
+}
+.hl-ptree [data-kind="operator"] > .hl-ptree-node .pt-track > i { background: var(--pt-operator-lbl); }
+.hl-ptree [data-kind="endgame"]  > .hl-ptree-node .pt-track > i { background: var(--pt-endgame-lbl); }
+.hl-ptree [data-kind="dropper"]  > .hl-ptree-node .pt-track > i { background: var(--pt-dropper-lbl); }
+
+/* --- Detail panel ------------------------------------------- */
+.hl-ptree .pt-detail {
+  padding: 4px 16px 16px 22px;
+  border-top: 1px solid var(--pt-line-soft);
+}
+.hl-ptree .pt-why { margin: 12px 0 0; font-size: 0.9em; color: var(--pt-ink); max-width: 62ch; }
+.hl-ptree .pt-tags { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+.hl-ptree .pt-tactic {
+  padding: 1px 9px;
+  border-radius: 3px;
+  border: 1px solid var(--pt-line);
+  background: var(--pt-surface-2);
+  font-size: 0.7em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pt-ink-3);
+}
+.hl-ptree .pt-attck {
+  font-family: ui-monospace, 'Cascadia Mono', Menlo, monospace;
+  font-size: 0.74em;
+  color: var(--pt-link);
+  text-decoration: none;
+  border-bottom: 1px dotted currentColor;
+}
+.hl-ptree .pt-attck:hover { border-bottom-style: solid; }
+
+.hl-ptree .pt-caveat {
+  margin: 12px 0 0;
+  padding: 9px 13px;
+  border-left: 3px solid var(--pt-dropper);
+  border-radius: 0 4px 4px 0;
+  background: var(--pt-surface);
+  font-size: 0.84em;
+  color: var(--pt-ink-2);
+  max-width: 62ch;
+}
+
+/* --- Literal rows, each independently copyable --------------- */
+.hl-ptree .pt-facts { margin: 14px 0 0; }
+.hl-ptree .pt-fact {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 4px 12px;
+  padding: 6px 0;
+  border-top: 1px solid var(--pt-line-soft);
+}
+.hl-ptree .pt-fact:first-child { border-top: 0; }
+.hl-ptree .pt-fact-key {
+  font-size: 0.72em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pt-ink-3);
+  padding-top: 5px;
+}
+.hl-ptree .pt-fact-val {
+  display: block;
+  margin: 0;
+  padding: 5px 10px !important;
+  background: var(--pt-code-bg) !important;
+  border: 1px solid var(--pt-line) !important;
+  border-radius: 4px;
+  font-family: ui-monospace, 'Cascadia Mono', Menlo, monospace;
+  font-size: 0.78em !important;
+  line-height: 1.6;
+  color: var(--pt-ink) !important;
+  /* wrap rather than scroll: a 64-character hash does not fit this column and a
+     value hidden behind a scrollbar is worse than one on two lines */
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.hl-ptree .pt-copy {
+  align-self: start;
+  margin-top: 3px;
+  min-width: 62px;
+}
+
+/* --- Footer + legend ---------------------------------------- */
+.hl-ptree .hl-ptree-foot {
+  margin: 0;
+  padding: 12px 18px;
+  border-top: 1px solid var(--pt-line);
+  background: var(--pt-surface-2);
+  font-size: 0.8em;
+  color: var(--pt-ink-2);
+}
+.hl-ptree .hl-ptree-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-top: 9px;
+  font-size: 0.92em;
+  color: var(--pt-ink-3);
+}
+.hl-ptree .hl-ptree-legend span { display: inline-flex; align-items: center; gap: 7px; }
+.hl-ptree .hl-ptree-legend i { width: 13px; height: 13px; border-radius: 3px; display: inline-block; }
+
+/* --- Progressive enhancement -------------------------------- */
+.hl-ptree .js-only { display: none; }
+.hl-ptree.pt-has-js .js-only { display: revert; }
+.hl-ptree.pt-has-js .hl-ptree-tools.js-only { display: flex; }
+.hl-ptree .pt-status {
+  position: absolute; width: 1px; height: 1px;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+}
+
+/* --- Deep-link target --------------------------------------- */
+.hl-ptree-node:target,
+.hl-ptree .hl-ptree-node.is-linked {
+  outline: 2px solid var(--pt-focus);
+  outline-offset: 1px;
+}
+
+.hl-ptree .pt-anchor {
+  color: var(--pt-ink-3) !important;
+  font-family: ui-monospace, 'Cascadia Mono', Menlo, monospace;
+  font-size: 0.72em;
+  color: var(--pt-ink-3);
+  text-decoration: none;
+  padding: 0 4px;
+}
+.hl-ptree .pt-anchor:hover { color: var(--pt-link) !important; }
+
+/* --- Narrow viewports --------------------------------------- */
+@media (max-width: 720px) {
+  .hl-ptree { font-size: 16px; }
+  .hl-ptree .hl-ptree-root { padding: 4px 11px 8px; }
+  .hl-ptree .hl-ptree-root ul { margin-left: 7px; padding-left: 11px; }
+  .hl-ptree .hl-ptree-root ul > .hl-ptree-item::before { left: -11px; width: 8px; }
+  /* A 5-deep chain on a phone runs out of horizontal room, so stop adding
+     indent past level three. The parentage rail still shows the nesting. */
+  .hl-ptree .hl-ptree-root ul ul ul { margin-left: 0; padding-left: 9px; }
+  .hl-ptree .hl-ptree-root ul ul ul > .hl-ptree-item::before { left: -9px; width: 6px; }
+  .hl-ptree .hl-ptree-node > summary {
+    grid-template-columns: 5px 18px minmax(0, 1fr);
+    padding-right: 11px;
+  }
+  .hl-ptree .pt-kind { grid-column: 3; justify-self: start; margin-top: 6px; }
+  .hl-ptree .pt-track { grid-column: 3; }
+  .hl-ptree .pt-detail { padding: 4px 11px 14px 13px; }
+  .hl-ptree .pt-fact { grid-template-columns: minmax(0, 1fr) auto; }
+  .hl-ptree .pt-fact-key { grid-column: 1 / -1; padding-top: 0; }
+  .hl-ptree .hl-ptree-tools { margin-left: 0; }
+}
+
+/* --- Print --------------------------------------------------- */
+@media print {
+  .hl-ptree .hl-ptree-tools, .hl-ptree .pt-copy, .hl-ptree .pt-anchor, .hl-ptree .pt-chevron { display: none !important; }
+  .hl-ptree .hl-ptree-node > summary { cursor: default; }
+  .hl-ptree .pt-detail { display: block !important; }
+}
+
+/* --- Winning against the post stylesheet ---------------------
+   `.hl-post-content a` and `.hl-post-content code` both set colour with
+   !important, and !important ties are broken by specificity, so these have to
+   carry it too. Measured on the real report page before this was added: the
+   fact values rendered at 1.03:1 in the light theme, because
+   `.hl-post-content pre` (0,1,1) beat `.pt-fact-val` (0,1,0) and forced a
+   near-black background under near-black text. */
+.hl-ptree .pt-attck { color: var(--pt-link) !important; }
+.hl-ptree .pt-why code,
+.hl-ptree .pt-caveat code,
+.hl-ptree .hl-ptree-foot code {
+  background: var(--pt-code-bg) !important;
+  border: 1px solid var(--pt-line) !important;
+  color: var(--pt-ink) !important;
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-size: 0.9em;
+}
+
+/* ============================================================
+   ATT&CK MAPPING TABLE, INTERACTIVE
+   Paired with assets/js/hl-attack-table.js. The table itself is
+   untouched markup; everything here styles the toolbar the script
+   inserts above it and the capped state it puts the rows in.
+   px and em only, never rem: the theme sets body { font-size:
+   1.25em } while rem resolves against the 16px root.
+   ============================================================ */
+.hl-atk-tools {
+  display: flex;
+  align-items: center;
+  gap: 10px 14px;
+  flex-wrap: wrap;
+  margin: 1.4em 0 0.7em;
+  padding: 10px 14px;
+  border: 1px solid var(--hl-border-card);
+  border-radius: 7px;
+  background: var(--hl-bg-row);
+  font-size: 0.8em;
+}
+.hl-atk-search {
+  flex: 1 1 260px;
+  min-width: 180px;
+  font: inherit;
+  padding: 6px 11px;
+  border-radius: 5px;
+  border: 1px solid var(--hl-border-card);
+  background: var(--hl-bg-page);
+  color: var(--hl-text-primary);
+}
+.hl-atk-search::placeholder { color: var(--hl-text-muted); }
+.hl-atk-search:focus-visible,
+.hl-atk-tools button:focus-visible {
+  outline: 3px solid var(--hl-accent-blue);
+  outline-offset: 2px;
+}
+.hl-atk-count {
+  font-family: ui-monospace, 'Cascadia Mono', Menlo, monospace;
+  font-size: 0.92em;
+  color: var(--hl-text-muted);
+  white-space: nowrap;
+}
+.hl-atk-filter {
+  font-size: 0.92em;
+  padding: 2px 9px;
+  border-radius: 4px;
+  border: 1px solid var(--hl-sev-high);
+  background: transparent;
+  color: var(--hl-sev-high-lbl);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.hl-atk-tools button.hl-atk-more {
+  font: inherit;
+  font-size: 0.92em;
+  padding: 5px 12px;
+  border-radius: 5px;
+  border: 1px solid var(--hl-border-card);
+  background: var(--hl-bg-card);
+  color: var(--hl-text-primary);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.hl-atk-tools button.hl-atk-more:hover { border-color: var(--hl-text-muted); }
+.hl-atk-table tr[hidden] { display: none; }
+
+@media (max-width: 640px) {
+  .hl-atk-tools { font-size: 0.75em; }
+  .hl-atk-count { white-space: normal; }
+}

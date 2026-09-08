@@ -1,0 +1,55 @@
+{%- comment -%}
+  One node of the process tree, and its children. Included by
+  _includes/process-tree.html and BY ITSELF, once per level of nesting.
+
+  Takes `node`. Deliberately contains no {% assign %}: Liquid assigns leak into
+  the enclosing scope, so an assign here would be overwritten by the deeper call
+  and every node above it would render the wrong data on the way back up. Only
+  `include.node` and `for` variables, which Liquid does scope correctly.
+
+  See process-tree.html for the front matter shape and the escaping rules.
+{%- endcomment -%}
+<li class="hl-ptree-item" data-kind="{{ include.node.kind | default: 'artifact' }}"{% if include.node.emphasis %} data-emphasis="yes"{% endif %}>
+  <details class="hl-ptree-node"{% if include.node.id %} id="{{ include.node.id }}"{% endif %}>
+    <summary>
+      <span class="pt-rail" aria-hidden="true"></span>
+      <svg class="pt-chevron" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+      <span class="pt-headline">
+        <span class="pt-line1">
+          <span class="pt-name">{{ include.node.name | escape }}</span>
+          {%- if include.node.pid %}<span class="pt-pid">{{ include.node.pid | escape }}</span>{% endif %}
+          {%- if include.node.time %}<span class="pt-time">{{ include.node.time | escape }}</span>{% endif %}
+          {%- if include.node.id %}<a class="pt-anchor js-only" href="#{{ include.node.id }}" aria-label="Link to {{ include.node.name | escape }}">#</a>{% endif %}
+        </span>
+        {%- if include.node.what %}<span class="pt-what">{{ include.node.what | escape }}</span>{% endif %}
+      </span>
+      <span class="pt-kind">{{ include.node.kind_label | default: include.node.kind | escape }}</span>
+      {%- if include.node.at %}<span class="pt-track" aria-hidden="true"><i style="left:{{ include.node.at }}%"></i></span>
+      {%- elsif include.node.at == 0 %}<span class="pt-track" aria-hidden="true"><i style="left:0%"></i></span>{% endif %}
+    </summary>
+    <div class="pt-detail">
+      {%- if include.node.why %}<p class="pt-why">{{ include.node.why }}</p>{% endif %}
+      {%- if include.node.tactic or include.node.attack %}
+      <p class="pt-tags">
+        {%- if include.node.tactic %}<span class="pt-tactic">{{ include.node.tactic | escape }}</span>{% endif %}
+        {%- if include.node.attack %}<a class="pt-attck" href="https://attack.mitre.org/techniques/{{ include.node.attack | replace: '.', '/' }}/">{{ include.node.attack | escape }}</a>{% endif %}
+      </p>
+      {%- endif %}
+      {%- if include.node.caveat %}<p class="pt-caveat">{{ include.node.caveat }}</p>{% endif %}
+      {%- if include.node.facts %}
+      <div class="pt-facts">
+        {%- for f in include.node.facts %}
+        <div class="pt-fact"><span class="pt-fact-key">{{ f.key | escape }}</span><code class="pt-fact-val">{{ f.value | escape }}</code></div>
+        {%- endfor %}
+      </div>
+      {%- endif %}
+    </div>
+  </details>
+  {%- if include.node.children %}
+  <ul>
+    {%- for child in include.node.children %}
+    {% include process-tree-node.html node=child %}
+    {%- endfor %}
+  </ul>
+  {%- endif %}
+</li>
