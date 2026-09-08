@@ -388,7 +388,7 @@ level: medium
 
 **Tier:** Hunting
 **Robustness:** 2
-**ATT&CK Coverage:** T1059.001 (PowerShell), T1685 (Impair Defenses)
+**ATT&CK Coverage:** T1059.001 (PowerShell), T1685 (Disable or Modify Tools)
 **Confidence:** MODERATE for the shape; HIGH that the shape is present in this loader
 **Rationale:** The companion rule above matches this loader's AMSI bypass by its literal concatenation `amsi'+'Con'+'text`, which the operator controls in their own source — a rebuild that re-splits the string as `'am'+'siCon'+'text'` evades it entirely. This rule instead matches the structural shape: enumerate assembly types, filter with a wildcard, write into a NonPublic Static field. That survives both a rename of the target field and a re-split of the concatenation. It also covers the wider family of AMSI bypasses built the same way, which is why it earns a place despite the noisier profile.
 **False Positives:** Development, debugging and unit-test tooling that reflects over private static members. Some administrative modules and application shims legitimately patch private static fields at runtime. Baseline the calling script path and its signer before promoting a hit.

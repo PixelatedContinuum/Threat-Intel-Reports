@@ -117,7 +117,7 @@ rule FleetAgentFUD_WebSocket_C2_Pattern {
 
 **Tier:** Hunting
 **Robustness:** 2
-**ATT&CK Coverage:** T1685 (Impair Defenses), T1059.001 (PowerShell)
+**ATT&CK Coverage:** T1685 (Disable or Modify Tools), T1059.001 (PowerShell)
 **Confidence:** MODERATE
 **Rationale:** The two exact-literal branches (`$ps1`, `$ps2`) are distinctive, low-FP command-line templates. The third branch (`$ps3 and ($ps5 or $ps6) and $ps7`) combines three individually common tokens — bare `powershell` (nocase), a bypass flag, and `-W Hidden` — and a YARA `or` condition's overall precision is bounded by its weakest branch. Legitimate software installers and silent-update mechanisms are documented (by this same file's own Sigma rule 1 false-positives list) to launch PowerShell hidden with an execution-policy bypass for routine background tasks, and would embed the identical command-line string as a literal in their own binary.
 **False Positives:** Legitimate installers/updaters that silently invoke `powershell -ExecutionPolicy Bypass -WindowStyle Hidden` for background maintenance tasks — a documented, non-trivial population in enterprise Windows environments.
@@ -232,7 +232,7 @@ rule FleetAgentFUD_FUD_RAT_Behavioral_Pattern {
 
 **Tier:** Hunting
 **Robustness:** 1
-**ATT&CK Coverage:** T1036.005 (Masquerading), T1129 (Shared Modules)
+**ATT&CK Coverage:** T1036.005 (Match Legitimate Resource Name or Location), T1129 (Shared Modules)
 **Confidence:** LOW
 **Rationale:** The primary branch (`any of $name*`) keys on the malware's own developer-chosen family/namespace name — a coined term with no plausible reason to appear in unrelated software, but (unlike a live C2 protocol field the operator must keep to stay functional) a .NET namespace or assembly name is trivially renamed on the next build compile, which caps this at Robustness 1 rather than 2. The second branch (`2 of $cfg* and any of $ver*`) is meaningfully weaker: `"3.0.0"` is a bare semver string that appears in a large number of unrelated .NET assemblies, and pairing it with generic config-field names (`hostname`, `agent_ver`) does not meaningfully narrow the match. The third branch (masquerade string + 2 generic WinAPI strings) is the most defensible but still relies on common APIs (`VirtualProtect`, `GetProcAddress`) shared by countless legitimate applications.
 **False Positives:** The `"3.0.0"` + generic config-field branch risks matching unrelated .NET software using that version string; the masquerade-name branches are lower-risk but evade entirely on a rebrand.
@@ -298,7 +298,7 @@ rule FleetAgent_Family_General {
 
 **Tier:** Hunting
 **Robustness:** 2
-**ATT&CK Coverage:** T1059.001 (PowerShell), T1685 (Impair Defenses)
+**ATT&CK Coverage:** T1059.001 (PowerShell), T1685 (Disable or Modify Tools)
 **Confidence:** LOW
 **Rationale:** Requires four conditions together — `powershell.exe` process creation, a parent rooted in `\AppData\`, an execution-policy bypass flag, and a hidden-window flag. The original assessment held that legitimate AppData-rooted software rarely combines a bypass flag with a deliberately hidden window, and scored the rule Detection tier at HIGH confidence on that basis.
 
@@ -459,7 +459,7 @@ tags:
 
 **Tier:** Hunting
 **Robustness:** 2
-**ATT&CK Coverage:** T1105 (Ingress Tool Transfer), T1204.002 (User Execution: Malicious File)
+**ATT&CK Coverage:** T1105 (Ingress Tool Transfer), T1204.002 (Malicious File)
 **Confidence:** MODERATE
 **Rationale:** The combination (executable file creation in Public/Temp, from a process rooted in AppData) is a real, durable technique pairing — but AppData is also where a large share of legitimate consumer software (Chrome, Discord, Slack, and most other per-user auto-updating desktop applications) installs and self-updates without admin rights, and many of those updaters legitimately drop new executables/DLLs to Temp during a self-update cycle. This is a common, not rare, false-positive category in real enterprise environments.
 **False Positives:** Legitimate AppData-rooted application auto-updaters extracting or staging executables in Temp/Public during a self-update — a common occurrence, not an edge case.

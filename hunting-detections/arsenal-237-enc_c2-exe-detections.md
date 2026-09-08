@@ -232,7 +232,7 @@ tags:
 
 **Tier:** Hunting
 **Robustness:** 1
-**ATT&CK Coverage:** T1204.002 (User Execution)
+**ATT&CK Coverage:** T1204.002 (Malicious File)
 **Confidence:** MODERATE
 **Rationale:** Filename/`OriginalFileName`-anchored only — defeated by renaming the binary in a rebuild. The original also OR'd in a standalone command-line branch matching generic flags (`--folder`, `--c2`, `--bid`) independent of the filename match; those flag names are usable by unrelated software, so that branch has been dropped and only the filename anchor retained.
 **False Positives:** Unrelated software coincidentally named or renamed to enc_c2.exe.

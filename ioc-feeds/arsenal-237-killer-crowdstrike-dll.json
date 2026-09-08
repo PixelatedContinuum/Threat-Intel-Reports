@@ -224,7 +224,7 @@
   },
   "mitre_attack_techniques": {
     "defense_evasion": [
-      "T1562.001 - Impair Defenses: Disable or Modify Tools (CrowdStrike-specific)",
+      "T1685 - Disable or Modify Tools (CrowdStrike-specific)",
       "T1140 - Deobfuscate/Decode Files or Information",
       "T1027.009 - Obfuscated Files or Information: Embedded Payloads",
       "T1070.004 - Indicator Removal: File Deletion",

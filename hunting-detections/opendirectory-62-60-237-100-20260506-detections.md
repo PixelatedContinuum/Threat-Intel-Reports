@@ -45,7 +45,7 @@ Multi-stage commodity loader chain (HijackLoader / Penguish / Rugmi) delivering 
 
 **Tier:** Detection
 **Robustness:** 2
-**ATT&CK Coverage:** T1574.001 (DLL Side-Loading), T1055.012 (Process Hollowing), T1027 (Obfuscated Files)
+**ATT&CK Coverage:** T1574.001 (DLL), T1055.012 (Process Hollowing), T1027 (Obfuscated Files)
 **Confidence:** HIGH
 **Rationale:** Anchored on the operator's own PDB path (`I:\CompanySource\Plowshare\...`) — a build-toolchain artifact that persists across the same developer's build iterations, unlike a per-wave config value. A PDB path is a canonical Detection-tier YARA anchor. Two bespoke dropped-payload filenames and a covert-IPC pipe name serve as independent corroborating anchors, so no single string alone carries the rule.
 **False Positives:** None known — the drive-letter-rooted PDB path, the bespoke filenames (`networkspec17.log`, `shadermgr93.rc`), and the pipe name (`WondershareCrashServices`) have no plausible legitimate collision.
@@ -387,7 +387,7 @@ level: high
 
 **Tier:** Hunting
 **Robustness:** 1
-**ATT&CK Coverage:** T1036.005 (Match Legitimate Name or Location), T1574.001 (DLL Side-Loading)
+**ATT&CK Coverage:** T1036.005 (Match Legitimate Name or Location), T1574.001 (DLL)
 **Confidence:** HIGH (for this build wave)
 **Rationale:** All three selectors hinge entirely on `Image|endswith` matching this wave's operator-renamed filenames (`CrystSupervisor32.exe`, `WVault.exe`) — precisely the pattern the tiering standard names as disqualifying for Detection ("does not hinge on `Image|endswith: \Client.exe`"). The `is-*.tmp\` Inno Setup extraction path is common to every Inno Setup installer, legitimate or malicious, and adds no discrimination on its own. Demoted from the original Detection classification for this reason.
 **False Positives:** Reused only if an unrelated benign actor coincidentally adopts these exact renamed filenames (very unlikely); genuine Wondershare/Qihoo software runs under the original filenames (`SlideShowEditor.exe` / `PromoUtil.exe`), not these renamed ones.

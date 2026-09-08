@@ -438,7 +438,7 @@
       "description": "PEB CommandLine spoofing string; declared parent process command line",
       "context": "Hardcoded in arg_spoof.C module; overwrites PEB->ProcessParameters->CommandLine to hide true command line. When process explorer queries parent process details, reports this benign-looking Edge update command instead of beacon execution parameters. Presence of this exact string in process memory or captured command line is strong indicator of arg_spoof.C usage.",
       "source": "arg_spoof.C source code",
-      "technique": "T1036.004 (Masquerading: Match Legitimate Process Name/Location)",
+      "technique": "T1036.004 (Masquerade Task or Service)",
       "hunting_value": "HIGH",
       "detection_action": "Hunt for: (1) Process CommandLine queries that return exactly this string; (2) arg_spoof.C usage detection via static analysis; (3) PEB manipulation artifacts",
       "tags": [
@@ -454,7 +454,7 @@
       "description": "AMSI bypass reflection variable; PowerShell Script Block Logging indicator",
       "context": "stager.ps1 uses reflection to bypass AMSI by setting amsiInitFailed = true via $PSClass.fields. When AMSI checks if initialization failed, it returns true, causing AMSI to disable itself for that PowerShell session. String 'amsiInitFailed' will appear in PowerShell Script Block Logging (Event ID 4104) if captured.",
       "source": "stager.ps1 PowerShell script",
-      "technique": "T1562.001 (Impair Defenses: Disable or Modify Tools, AMSI Bypass)",
+      "technique": "T1685 (Disable or Modify Tools, AMSI Bypass)",
       "hunting_value": "HIGH",
       "detection_action": "Hunt PowerShell logs for: (1) Script Block Logging EID 4104 containing 'amsiInitFailed'; (2) Reflection patterns setting AMSI fields; (3) Subsequent PowerShell commands executed after AMSI bypass",
       "tags": [
@@ -470,7 +470,7 @@
       "description": "Windows Defender real-time monitoring disable command; present in stager.ps1",
       "context": "stager.ps1 executes this PowerShell cmdlet to disable Defender real-time protection if running with admin privileges. Command is plaintext in stager script. If execution succeeds, generates Windows Defender Operational Event ID 5001 (real-time protection disabled).",
       "source": "stager.ps1 PowerShell script (line ~35)",
-      "technique": "T1562.001 (Impair Defenses: Disable or Modify Tools, Defender Disable)",
+      "technique": "T1685 (Disable or Modify Tools, Defender Disable)",
       "hunting_value": "CRITICAL",
       "detection_action": "Hunt for: (1) PowerShell execution of this cmdlet; (2) Windows Defender Event ID 5001 (real-time protection disabled); (3) Combination: Stager script + Defender disable + beacon execution",
       "tags": [

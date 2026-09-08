@@ -146,7 +146,7 @@ rule SUSP_Windows_KillerDLL_Single_Vulnerable_Driver_Embedded
 
 **Tier:** Hunting
 **Robustness:** 2
-**ATT&CK Coverage:** T1685 (Impair Defenses), T1068 (Exploitation for Privilege Escalation)
+**ATT&CK Coverage:** T1685 (Disable or Modify Tools), T1068 (Exploitation for Privilege Escalation)
 **Confidence:** LOW
 **Rationale:** Carried forward from the source file's "behavioral pattern" branch of `Killer_DLL_BYOVD_Comprehensive`. Requires 3 of 5 targeted security-product filenames, 2 of 4 service-manipulation API strings, one driver-specific IOCTL byte code, and one driver-family reference. The IOCTL requirement gives this real discriminating power beyond generic AV-compatibility tooling, but the driver-family requirement can be satisfied by the bare "Baidu, Inc." or "Sysinternals - www.sysinternals.com" company-name strings alone, which a multi-vendor AV-management or compatibility utility could plausibly contain alongside common service-management API imports. That combination of generic elements keeps this at Hunting rather than Detection.
 **False Positives:** Plausible against IT/security-compatibility tooling that legitimately enumerates multiple AV vendor process names and uses standard service-management APIs (uninstaller utilities, endpoint migration tools, asset-management scripts).
@@ -201,7 +201,7 @@ rule SUSP_Windows_KillerDLL_SecurityProduct_Termination_IOCTL_Combo
 
 **Tier:** Detection
 **Robustness:** 3
-**ATT&CK Coverage:** T1685 (Impair Defenses), T1068 (Exploitation for Privilege Escalation)
+**ATT&CK Coverage:** T1685 (Disable or Modify Tools), T1068 (Exploitation for Privilege Escalation)
 **Confidence:** HIGH
 **Rationale:** `rundll32.exe` registering a `SERVICE_KERNEL_DRIVER`-type service is a rare, technique-level chokepoint for the BYOVD install step — legitimate driver installation goes through Plug-and-Play/INF-based setup or a dedicated installer executable, essentially never through `rundll32.exe`. Durable: keys on the parent-process/service-type pairing, not on killer.dll's name or hash. *Retiering note:* demoted from the source's `level: critical` to `high` — the rule's own documented false positives ("administrative scripts using rundll32 for driver deployment") mean this isn't strictly never-FP, and the project convention caps most Detection-tier rules at `high`.
 **False Positives:** Legitimate software installation via rundll32 (extremely rare for kernel drivers); administrative scripts using rundll32 for driver deployment (should be reviewed).
@@ -250,7 +250,7 @@ level: high
 
 **Tier:** Detection (correlation rule) — bundled below with its 1 required Hunting-grade base rule, which does not alert on its own
 **Robustness:** 3 (correlation) / 1 (base rule individually)
-**ATT&CK Coverage:** T1685 (Impair Defenses)
+**ATT&CK Coverage:** T1685 (Disable or Modify Tools)
 **Confidence:** HIGH (correlation) / LOW (base rule alone)
 **Rationale:** *Retiering note:* the source rule's own description explains that its intended volumetric threshold — 3 or more distinct security processes terminating within 60 seconds — could not be expressed as a single-event Sigma rule and was dropped, leaving a single-event selector that "should be correlated... at review time." Sigma's `value_count` correlation type expresses exactly this threshold natively: this rule counts distinct `Image` values matching the base selector, grouped by host, within a 60-second window, and fires only at 3 or more. This operationalizes the malware-analyst's own documented detection strategy ("Alert on simultaneous termination of 3+ security products within 60-second window") as a real correlation instead of a single-event selector with a manual-review caveat. A lone security-product termination (the base rule) is common and unremarkable; 3+ distinct vendors dying together in 60 seconds is not.
 **False Positives:** A coordinated, scripted replacement or migration of multiple third-party security products within one maintenance window — uncommon outside a planned AV/EDR migration.

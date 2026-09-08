@@ -2414,8 +2414,8 @@
       rules: "Rhadamanthys .frontb Stage-2 Section Marker (YARA, Detection); Rhadamanthys Stage-2 Minimal Import Surface (YARA, Hunting); Rhadamanthys Customer-Specific Stage-2 CBC-XOR IV (YARA, Hunting); Rhadamanthys Customer-Specific Loader RC4 Key (YARA, Hunting)"
       count: 4
     - tactic: "Stealth"
-      id: "T1218.008"
-      name: "Odbcconf"
+      id: "T1218.004"
+      name: "InstallUtil"
       rules: "Rhadamanthys EAX-Redirect Process Hollowing Into InstallUtil.exe (SIGMA, Detection)"
       count: 1
     - tactic: "Stealth"

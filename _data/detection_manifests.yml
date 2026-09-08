@@ -4469,7 +4469,7 @@ opendirectory-79-137-192-3-20260515-detections:
     head: "title: Rhadamanthys EAX-Redirect Process Hollowi"
     robustness: 3
     confidence: "HIGH"
-    attack: [T1218.008, T1055.012]
+    attack: [T1218.004, T1055.012]
   - name: "BellaMain PhaaS Panel HTTP Request Patterns"
     engine: sigma
     tier: Detection

@@ -96,7 +96,7 @@ rule MAL_FleetAgentAdvanced_Dropper_Hash_Function_Combo {
 
 **Tier:** Hunting
 **Robustness:** 1
-**ATT&CK Coverage:** T1036.005 (Masquerading), T1055 (Process Injection)
+**ATT&CK Coverage:** T1036.005 (Match Legitimate Resource Name or Location), T1055 (Process Injection)
 **Confidence:** LOW
 **Rationale:** Fires when 2 of 7 operator-coined configuration-variable names (`EMBEDDED_AGENT`, `INSTALL_NAME`, `STARTUP_NAME`, `WATCHDOG_MUTEX`, `MUTEX_NAME`, `SERVER_HOST`, `AGENT_SECRET`) co-occur with any of the "Microsoft .NET Runtime Optimization" masquerade strings, or when any generic process-injection API string co-occurs with the same masquerade family. Both branches depend entirely on that masquerade-string family for their false-positive control — a naming-convention rebrand defeats both. "Microsoft .NET Runtime Optimization" impersonates a real, common product/vendor name rather than coining a bespoke marker, which is the rubric's own disqualifying case for Detection regardless of what else the branch requires alongside it. *Retiering note:* this is the source rule's two weaker OR-branches, split out from the hash/function-name branches above (which do not depend on this masquerade family and are Detection-eligible on their own).
 **False Positives:** Unlikely for the exact two-literal pairing, but not zero — the API-string branch in particular reduces almost entirely to "any of 5 common Windows API names," which is close to universal among binaries that touch process memory; the masquerade-string requirement is doing essentially all of the real filtering in both branches.
@@ -203,7 +203,7 @@ level: high
 
 **Tier:** Hunting
 **Robustness:** 1
-**ATT&CK Coverage:** T1547.001 (Registry Run Keys / Startup Folder), T1036.005 (Masquerading)
+**ATT&CK Coverage:** T1547.001 (Registry Run Keys / Startup Folder), T1036.005 (Match Legitimate Resource Name or Location)
 **Confidence:** LOW
 **Rationale:** Requires a Registry Run-key value whose data references "Microsoft", ".NET", and "Runtime" together while also pointing at an AppData path — a combination that does not occur in a legitimate Microsoft .NET Runtime install (those run from Program Files / `Windows\Microsoft.NET\Framework\`, never AppData). *Retiering fix applied:* demoted from the source's Detection-equivalent `level: high` to Hunting/`level: medium`. Requiring an AppData-location anomaly alongside the masquerade words looks like it should raise the bar above a bare masquerade-string selector, but on inspection the AppData-location half is, by itself, extremely common in legitimate consumer software (Dropbox, Discord, Slack, and many other mainstream apps auto-start from AppData via this exact Run-key mechanism) — so the rule's real precision still derives almost entirely from the renameable "Microsoft"/".NET"/"Runtime" branding, not from the location check. See "A Genuinely Close Call" in Coverage Gaps for the full reasoning.
 **False Positives:** Unsigned .NET development tools using Microsoft/.NET/Runtime naming in AppData (verify legitimacy); any legitimate AppData-resident auto-start application whose display strings happen to reference all three words.

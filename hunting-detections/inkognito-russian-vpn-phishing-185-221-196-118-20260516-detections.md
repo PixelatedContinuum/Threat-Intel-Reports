@@ -148,7 +148,7 @@ rule MALW_Inkognito_Favicon_SVG
 
 **Tier:** Detection
 **Robustness:** 3
-**ATT&CK Coverage:** T1566.002 (Phishing: Spearphishing Link), T1684.001 (Impersonation), T1036.005 (Masquerading)
+**ATT&CK Coverage:** T1566.002 (Phishing: Spearphishing Link), T1684.001 (Impersonation), T1036.005 (Match Legitimate Resource Name or Location)
 **Confidence:** HIGH
 **Rationale:** The original rule enumerated 25 specific brand-impersonation subdomains via `QueryName|contains` — a static list that could never catch the remaining 440+ subdomains in the operator's inventory, let alone future additions (Robustness 1). Re-anchored to a wildcard on the parent zone (`QueryName|endswith: '.inklens.ru'`) with a filter excluding the operator's own enumerated DevOps subdomains, so the rule now covers the entire brand-impersonation platform regardless of which specific brand name is queried — a technique-level chokepoint (the platform itself), not an enumerated list.
 **False Positives:** Security researchers or threat hunters explicitly querying inklens.ru subdomains for investigation purposes; automated scanner infrastructure probing known-bad domain lists.

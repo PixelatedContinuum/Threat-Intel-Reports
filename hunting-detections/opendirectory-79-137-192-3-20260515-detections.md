@@ -463,7 +463,7 @@ level: high
 
 **Tier:** Detection
 **Robustness:** 3
-**ATT&CK Coverage:** T1218.008 (System Binary Proxy Execution: InstallUtil), T1055.012 (Process Hollowing)
+**ATT&CK Coverage:** T1218.004 (InstallUtil), T1055.012 (Process Hollowing)
 **Confidence:** HIGH
 **Rationale:** The LOLBin-abuse pattern (InstallUtil.exe spawned from a suspicious user-writable parent path) is a durable technique signal independent of any specific sample — it survives recompiles since it describes how the malware launches, not a malware-specific string. The explicit filter for common legitimate developer/installer parents (msiexec, devenv, MSBuild) keeps precision high.
 **False Positives:** Legitimate developer or installer workflows that invoke InstallUtil.exe from temp directories.

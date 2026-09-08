@@ -67,8 +67,8 @@
     },
     "process_termination": {
       "description": "Terminates 20+ security products and analysis tools",
-      "technique": "Impair Defenses: Disable or Modify Tools",
-      "mitre_attack": "T1562.001",
+      "technique": "Disable or Modify Tools",
+      "mitre_attack": "T1685",
       "confidence": "high",
       "target_processes": {
         "microsoft_defender": [
@@ -263,8 +263,8 @@
       "evidence": "Registry modifications to disable security features and establish persistence"
     },
     {
-      "technique_id": "T1562.001",
-      "technique_name": "Impair Defenses: Disable or Modify Tools",
+      "technique_id": "T1685",
+      "technique_name": "Disable or Modify Tools",
       "tactic": "Defense Evasion",
       "confidence": "high",
       "evidence": "Terminates 20+ security products including Microsoft Defender, CrowdStrike, ESET, Kaspersky, analysis tools"
@@ -284,8 +284,8 @@
       "evidence": "Driver installation as Windows service for persistence"
     },
     {
-      "technique_id": "T1089",
-      "technique_name": "Disabling Security Tools",
+      "technique_id": "T1685",
+      "technique_name": "Disable or Modify Tools",
       "tactic": "Defense Evasion",
       "confidence": "high",
       "evidence": "Comprehensive security product neutralization targeting 20+ vendors"

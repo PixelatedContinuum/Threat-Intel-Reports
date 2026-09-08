@@ -73,7 +73,7 @@
   },
   "behavioral_indicators": {
     "powershell_execution_policy_bypass": {
-      "technique": "T1562.001 - Impair Defenses: Disable or Modify Tools + T1059.001 - PowerShell",
+      "technique": "T1685 - Disable or Modify Tools + T1059.001 - PowerShell",
       "command_line_patterns": [
         "-NoP -NonI -W Hidden -Exec Bypass -C ",
         "-NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass",
@@ -427,7 +427,7 @@
       "T1140 - Deobfuscate/Decode Files or Information (Base64 - CAPABLE)",
       "T1027 - Obfuscated Files or Information (CONFIRMED - .NET IL, FUD design)",
       "T1564.003 - Hide Artifacts: Hidden Window (CONFIRMED)",
-      "T1562.001 - Impair Defenses: Disable or Modify Tools (CONFIRMED - PowerShell Execution Policy Bypass)",
+      "T1685 - Disable or Modify Tools (CONFIRMED - PowerShell Execution Policy Bypass)",
       "T1055 - Process Injection (CAPABLE - not confirmed)",
       "T1129 - Shared Modules (CAPABLE - GetProcAddress runtime linking)"
     ],

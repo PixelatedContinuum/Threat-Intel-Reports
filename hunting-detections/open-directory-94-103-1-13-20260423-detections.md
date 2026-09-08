@@ -545,7 +545,7 @@ level: high
 
 **Tier:** Hunting
 **Robustness:** 1
-**ATT&CK Coverage:** T1053.005 (Scheduled Task), T1036.005 (Masquerading)
+**ATT&CK Coverage:** T1053.005 (Scheduled Task), T1036.005 (Match Legitimate Resource Name or Location)
 **Confidence:** DEFINITE (for this build) / build-specific (durability)
 **Rationale:** "Microsoft Defender" is an attacker-chosen masquerade name picked purely for stealth — the operator has no functional reason to keep it stable, and a future build could trivially rename it to any other plausible system-component name. Durability governs over today's clean precision (no legitimate root-path task uses this exact name), so this is Hunting rather than Detection. No Sysmon/Security-log field reliably exposes the task's RunLevel or trigger type as a separate queryable field, so a name-independent technique-level rewrite (root-path + elevated + boot-trigger) was not attempted — it would require guessing at field availability rather than working from confirmed telemetry.
 **False Positives:** No known legitimate software creates a root-path scheduled task named "Microsoft Defender" — but the anchor is a renameable literal, not a technique invariant.
@@ -600,7 +600,7 @@ level: medium
 
 **Tier:** Hunting
 **Robustness:** 1
-**ATT&CK Coverage:** T1027.011 (Fileless Storage), T1112 (Modify Registry), T1036.005 (Masquerading)
+**ATT&CK Coverage:** T1027.011 (Fileless Storage), T1112 (Modify Registry), T1036.005 (Match Legitimate Resource Name or Location)
 **Confidence:** DEFINITE (for this build) / build-specific (durability)
 **Rationale:** Same durability caveat as the scheduled-task rule above — `Microsoft Defender\Payload` is an attacker-chosen masquerade path with no functional reason to stay stable across builds. No reliable Sigma field exposes registry value *size*, which is the actual invariant of this technique (Stage-4 always writes a large blob for the boot re-loader to consume); a size-based rewrite could not be built from confirmed field availability.
 **False Positives:** No known legitimate software writes to this exact registry path for THIS build; the masquerade path is structurally distinct from the legitimate Defender key.
@@ -708,7 +708,7 @@ level: medium
 
 **Tier:** Hunting
 **Robustness:** 1
-**ATT&CK Coverage:** T1547.001 (Registry Run Keys), T1036.005 (Masquerading)
+**ATT&CK Coverage:** T1547.001 (Registry Run Keys), T1036.005 (Match Legitimate Resource Name or Location)
 **Confidence:** HIGH (for these builds) / build-specific (durability)
 **Rationale:** Both the Run-key value name ("Microsoft Store") and the self-copy filenames (`svchost.exe`, `projectxx.exe`) are choices specific to these two observed builds — a third build could rename either or both independently. No name-independent technique-level rewrite was attempted: `svchost.exe` masquerading outside `System32` is a durable general pattern, but `projectxx.exe` does not fit any system-process masquerade pattern, so a rewrite would only cover half the family.
 **False Positives:** No known legitimate software creates a Run key named "Microsoft Store" pointing to `svchost.exe` or `projectxx.exe` in `%APPDATA%` for these builds; a future build renaming either value would evade this rule.

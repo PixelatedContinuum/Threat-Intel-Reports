@@ -98,5 +98,9 @@ module.exports = {
   FILE: FILE,
   load: load,
   compareId: compareId,
-  tacticsNotIn: tacticsNotIn
+  tacticsNotIn: tacticsNotIn,
+  // Exported so a caller can recognise a bare technique-ID-shaped string without a
+  // second copy of this pattern. check-ioc-feeds-attack.js is the first consumer:
+  // it walks ioc-feeds/*.json for bare IDs the way this loader validates the TSV.
+  ID_RE: ID_RE
 };

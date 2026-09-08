@@ -194,7 +194,7 @@
       "techniques": [
         "T1564.003",
         "T1027",
-        "T1562.001"
+        "T1685"
       ],
       "confirmed_in_v2_4_0": [
         "Hidden console window (ShowWindow API)",
@@ -222,7 +222,7 @@
     "defense_evasion": [
       "T1564.003 - Hide Artifacts: Hidden Window",
       "T1027 - Obfuscated Files or Information",
-      "T1562.001 - Impair Defenses: Disable or Modify Tools (v6.0 only, NOT in v2.4.0)"
+      "T1685 - Disable or Modify Tools (v6.0 only, NOT in v2.4.0)"
     ],
     "credential_access": [
       "T1056.001 - Input Capture: Keylogging"

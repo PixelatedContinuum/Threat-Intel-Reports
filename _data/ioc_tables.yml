@@ -8990,7 +8990,7 @@
   report_url: "/reports/sliver-open-directory/"
   detection_url: "/hunting-detections/sliver-open-directory-detections"
   total: 19
-  untyped: 187
+  untyped: 186
   counts:
     domain: 3
     filename: 2

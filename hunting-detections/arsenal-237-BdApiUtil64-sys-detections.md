@@ -90,7 +90,7 @@ rule TOOLKIT_BdApiUtil64_Baidu_Driver_Identity {
 
 **Tier:** Detection
 **Robustness:** 2
-**ATT&CK Coverage:** T1685 (Impair Defenses), T1068 (Exploitation for Privilege Escalation — BYOVD)
+**ATT&CK Coverage:** T1685 (Disable or Modify Tools), T1068 (Exploitation for Privilege Escalation — BYOVD)
 **Confidence:** HIGH
 **Rationale:** This rule targets any tooling that abuses BdApiUtil64.sys's documented capabilities via DeviceIoControl, keyed on the driver's own device object name (`\.\BdApiUtil`, fixed by the driver's own code, not chosen by the calling malware's author) plus 2-of-5 of the driver's documented IOCTL codes as raw byte patterns. The IOCTL surface a vulnerable driver exposes is a durable anchor: a caller wanting to abuse this specific driver's kernel-termination, SSDT-bypass, service-manipulation, or file-access primitives must reference this exact device path and these exact codes — properties of the target driver, not choices the calling malware's operator can rename away.
 **False Positives:** None known outside genuine Baidu Antivirus operations referencing their own device object — rare in enterprise environments per the driver vendor's general rarity.
@@ -176,7 +176,7 @@ rule SUSP_Kernel_SSDT_Bypass_Pattern {
 
 **Tier:** Hunting
 **Robustness:** 2
-**ATT&CK Coverage:** T1685 (Impair Defenses)
+**ATT&CK Coverage:** T1685 (Disable or Modify Tools)
 **Confidence:** LOW
 **Rationale:** This rule targets the process-management API combination (`PsLookupProcessByProcessId`, `ZwTerminateProcess`, `ObOpenObjectByPointer`, `ObDereferenceObject`) BdApiUtil64.sys uses to terminate security products from kernel mode, paired with named AV/EDR process strings. It is not specific to this campaign's driver, and the same four APIs are routinely imported by legitimate AV/EDR kernel components themselves for their own process-monitoring and competitor-compatibility logic — an EDR driver enumerating and inspecting process objects, including competitor products by name, is standard behavior for that product category, not a malicious tell on its own.
 **False Positives:** Expected against legitimate AV/EDR kernel components, which routinely import all four process-management APIs for their own process-monitoring logic and may reference competitor product names for compatibility or conflict-detection purposes.
@@ -223,7 +223,7 @@ rule SUSP_Kernel_Driver_Security_Process_Termination {
 
 **Tier:** Detection (correlation rule) — bundled below with its 2 required non-alerting base rules
 **Robustness:** 2 (correlation) — 2 for the driver-load base rule (anchored on signature identity), 1 for the termination base rule individually (anchored on a renameable process-name list)
-**ATT&CK Coverage:** T1068 (Exploitation for Privilege Escalation — BYOVD), T1685 (Impair Defenses)
+**ATT&CK Coverage:** T1068 (Exploitation for Privilege Escalation — BYOVD), T1685 (Disable or Modify Tools)
 **Confidence:** HIGH
 **Rationale:** Neither base signal is reliable alone — a Baidu-signed driver load can, rarely, reflect a genuine Baidu Antivirus install, and named security-product terminations happen during routine updates and uninstalls. But this driver's documented capability neutralizes a full security suite within 60 seconds of load, so the two events occurring on the same host inside that window is a BYOVD kill-chain signal a coincidental unrelated pairing would not produce. This operationalizes a correlation the source draft's own equivalent rule explicitly could not express in a single Sigma condition and left as a manual-correlation instruction to the analyst ("must manually correlate against a preceding BdApiUtil/Baidu driver load... within a short window"). *Retiering fixes applied:* the source draft's driver-load selector included a bare hash-match OR-branch (three hashes, already present in the IOC feed) that would trigger the rule alone with no behavioral corroboration — removed, since it added nothing beyond the feed entry. The same selector also carried a `selection_expired` branch that, despite its name, never actually tested certificate expiration (it checked `SignatureStatus: Valid`, not a date) and was otherwise a strictly broader, weaker duplicate of the signature-identity branch (`ImageLoaded endswith '.sys'` is true of every driver-load event) — merged away. See Coverage Gaps for full detail.
 **False Positives:** A coincidental Baidu Antivirus install combined with an unrelated security-product restart in the same 60-second window is possible but highly unlikely — review the specific driver file hash and signature timestamp before dismissing a hit.

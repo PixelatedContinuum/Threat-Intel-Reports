@@ -57,7 +57,7 @@ All node-1 samples are plain-text scripts, so these rules carry no PE or ELF mag
 
 **Tier:** Detection
 **Robustness:** 2
-**ATT&CK Coverage:** T1036.005 (Masquerading), T1053.005 (Scheduled Task), T1021.002 (SMB Admin Shares), T1496.001 (Compute Hijacking)
+**ATT&CK Coverage:** T1036.005 (Match Legitimate Resource Name or Location), T1053.005 (Scheduled Task), T1021.002 (SMB Admin Shares), T1496.001 (Compute Hijacking)
 **Confidence:** HIGH
 **False Positives:** None known. The combination of the operator's mining-estate brand, the TimeService masquerade path, and the checksum-invalid typo wallet is unique to this toolkit.
 **Blind Spots:** Misses variants that rebrand the estate name and change all three scheduled-task names; a fully rewritten deployer with a different wallet would not match.
