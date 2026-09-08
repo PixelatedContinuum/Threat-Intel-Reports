@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-08T12:00:16Z
+generated_at: 2026-09-08T14:02:37Z
 window_days: 30
 counts:
-  total: 520
-  research: 183
-  news: 337
+  total: 525
+  research: 184
+  news: 341
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -16,7 +16,7 @@ topics:
     count: 71
     color: 1
   - label: "cybercrime"
-    count: 52
+    count: 54
     color: 2
   - label: "government"
     count: 28
@@ -31,7 +31,7 @@ topics:
     count: 22
     color: 6
   - label: "artificial intelligence"
-    count: 18
+    count: 19
     color: 7
   - label: "zero-day"
     count: 16
@@ -341,6 +341,7 @@ label_colors:
   "github-actions": 9
   "gitlab": 3
   "gms": 3
+  "google": 7
   "google cloud": 8
   "google infrastructure abuse": 8
   "google sheets c2": 12
@@ -443,6 +444,36 @@ label_colors:
   "zero-day": 8
   "zoom": 7
 items:
+  - title: "GTIG AI Threat Tracker: From Prompting to Autonomy – The Evolution of Adversarial AI"
+    url: "https://cloud.google.com/blog/topics/threat-intelligence/from-prompting-to-autonomy-the-evolution-of-adversarial-ai/"
+    source: "Google"
+    date: 2026-09-08T14:00:00Z
+    kind: research
+    labels: ["threat intelligence"]
+  - title: "Adobe fixes critical Magento zero-day exploited to backdoor servers"
+    url: "https://www.bleepingcomputer.com/news/security/adobe-fixes-critical-magento-zero-day-exploited-to-backdoor-servers/"
+    source: "BleepingComputer"
+    date: 2026-09-08T13:34:47Z
+    kind: news
+    labels: []
+  - title: "Party’s Over for Crypto Scammers Who Went on a Spending Spree After a $240 Million Bitcoin Theft"
+    url: "https://www.securityweek.com/partys-over-for-crypto-scammers-who-went-on-a-spending-spree-after-a-240-million-bitcoin-theft/"
+    source: "SecurityWeek"
+    date: 2026-09-08T13:00:00Z
+    kind: news
+    labels: ["bitcoin", "cybercrime"]
+  - title: "French prosecutors confirm arrest of suspected ZeroBytes hacker behind tax cyberattack"
+    url: "https://therecord.media/france-hacker-arrest-zerobytes"
+    source: "Recorded Future"
+    date: 2026-09-08T12:30:00Z
+    kind: news
+    labels: ["cybercrime"]
+  - title: "Hackers build AI frameworks for widescale credential theft"
+    url: "https://www.bleepingcomputer.com/news/security/hackers-build-ai-frameworks-for-widescale-credential-theft/"
+    source: "BleepingComputer"
+    date: 2026-09-08T12:03:03Z
+    kind: news
+    labels: ["artificial intelligence", "google"]
   - title: "MikroTik Patches Critical Flaws Chained to Hack Routers"
     url: "https://www.securityweek.com/mikrotik-patches-critical-flaws-chained-to-hack-routers/"
     source: "SecurityWeek"
