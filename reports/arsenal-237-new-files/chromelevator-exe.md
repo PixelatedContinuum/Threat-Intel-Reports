@@ -1162,7 +1162,7 @@ An actor like this does not disappear after one infection. Multiple intrusion at
 
 ## Confidence Levels Summary
 
-This report uses evidence-based confidence levels for analytical transparency:
+I use evidence-based confidence levels throughout for analytical transparency:
 
 ### CONFIRMED (Highest Confidence)
 Direct observation through static code analysis. These findings are verified:

@@ -670,7 +670,7 @@ The deliberate provider segmentation is the inverse of single-provider concentra
 
 ### 6.8 Cluster boundary — what this report deliberately does NOT cover
 
-This report covers **only Cluster B (Inkognito)** of the OpenDirectory 79.137.192.3 three-cluster investigation. The two adjacent clusters are out of scope, with full coverage in the parent publication at [`/reports/opendirectory-79-137-192-3-20260515/`](/reports/opendirectory-79-137-192-3-20260515/):
+I cover **only Cluster B (Inkognito)** of the OpenDirectory 79.137.192.3 three-cluster investigation here. The two adjacent clusters are out of scope, with full coverage in the parent publication at [`/reports/opendirectory-79-137-192-3-20260515/`](/reports/opendirectory-79-137-192-3-20260515/):
 
 - **Cluster A: BellaMain Turkish PhaaS** (`@AresRS34`, `Wadanz` developer alias, PHP/MySQL panel, 7 Turkish marketplace phishing kits, Telegram bot `6797512084`). Co-tenant on `79.137.192.3` (Aeza RU) but operationally separate. Cross-cluster linkage downgraded to LOW per the parent investigation's §22.9.1 / §23.12.7 reassessment.
 - **Cluster C: Rhadamanthys MaaS customer** (`79.133.180.168:3394` C2 on Hostkey NL, customer panel `e6d92c6b5b2a03bee7fbab40`, `staticlittlesource.exe` loader, canonical Rhadamanthys Stage-2 binary, InstallUtil.exe LOLBin hollowing). Operationally separate from Cluster B at HIGH confidence, different hosting (Hostkey NL vs Aeza/Timeweb), different toolchain (compiled C++ loader vs Vite/React SPA), no operator-pseudonym overlap, no Telegram overlap.

@@ -1269,7 +1269,7 @@ Detection without automation buys nothing here, because the process is gone befo
 
 ## 12. Confidence Levels Summary
 
-This report uses the following confidence levels for all major findings:
+I use the following confidence levels for all major findings:
 
 ### CONFIRMED (Highest Confidence)
 These findings are directly observed in malware analysis:

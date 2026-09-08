@@ -212,7 +212,7 @@ Three structural features mark this operator's arsenal as distinct from the comm
 - **AI-augmented orchestration.** The three AI Operator Handoff Documents represent a state-of-art tradecraft pattern where the operator uses Gemini CLI as an active operational assistant, with structured handoff documents that re-prime new AI sessions with prior session state. This is a level above the documented `GEMINI.md` jailbreak-persistence pattern (which is content-level persistence inside a single file the AI auto-loads): the operator's three documents are operational-state-bearing handoffs with explicit AI-to-AI headers.
 - **Persistent victim-side remote access via legitimate-provider tunneling.** Cloudflare Tunnel over operator-owned custom domain provides persistence beyond the documented `trycloudflare.com` quick-tunnel abuse pattern (Proofpoint 2024-08-01 RAT coverage). The custom-domain Tunnel survives quick-tunnel teardown and enables post-migration agent reconnection.
 
-The combination of these three features defines the operator's class: **AI-augmented mid-tier solo cybercrime operator**, a class that Trend Micro's "One Man, One AI, One Fake Persona" framing captures, and that this report further documents at artifact level.
+The combination of these three features defines the operator's class: **AI-augmented mid-tier solo cybercrime operator**, a class that Trend Micro's "One Man, One AI, One Fake Persona" framing captures, and that I further document here at artifact level.
 
 ---
 

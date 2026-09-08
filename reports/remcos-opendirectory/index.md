@@ -227,7 +227,7 @@ Remcos RAT remains a critical and actively exploited threat in 2025-2026. Securi
 
 **MITRE ATT&CK:**
 - T1027 (Obfuscated Files or Information): Heavy string obfuscation
-- T1204.002 (User Execution: Malicious File): Requires user to execute dropper
+- T1204.002 (Malicious File): Requires user to execute dropper
 
 
 <figure style="text-align: center; margin: 2em 0;">

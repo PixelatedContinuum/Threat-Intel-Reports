@@ -86,6 +86,218 @@ figure_nav:
         anchor: "#410-pe_08--genuine-qihoo-360-promoutilexe-becomes-wvaultexe-at-runtime"
       - label: "The full tree"
         anchor: "#61-process-tree"
+process_tree:
+  title: "On-host process tree"
+  meta: "6 processes, 2 artifacts, T+0.00s to T+58.31s"
+  foot: >-
+    Six processes and two artifacts, the complete observed chain. Times are offsets from first
+    execution of the sample. Detection anchor: an orphaned <code>WVault.exe</code> carrying .NET
+    CLR threads and beaconing TLSv1 outbound to a non standard high port, with no live parent.
+    The dot on each row marks where that step falls across the 58 second window, so the long
+    pause before the C2 process starts is visible rather than only stated.
+  legend:
+    - kind: dropper
+      label: "dropper"
+    - kind: operator
+      label: "operator code"
+    - kind: endgame
+      label: "endgame"
+    - kind: artifact
+      label: "artifact"
+  nodes:
+    - id: pt-carriers-exe
+      name: "Carriers.exe"
+      pid: "PID 1908"
+      time: "T+0.00s"
+      at: 0
+      kind: dropper
+      what: "The delivery binary runs"
+      why: >-
+        An Inno Setup 6.5+ package, the sample exactly as delivered. Everything at this level is
+        a commodity installer behaving like an installer, which is the point of choosing it.
+      tactic: "Execution"
+      attack: "T1204.002"
+      facts:
+        - key: "SHA-256"
+          value: '1afbe5d960af45832539b11e92a09b808f0c3868ab437a7ef1b5d1bd5e16d0c3'
+        - key: "MD5"
+          value: '1a8abfce832bdbfe1c3ba9a134948e63'
+        - key: "Imphash"
+          value: 'e8ac1646024d52d1534a88da2e8037cd'
+      children:
+        - id: pt-carriers-tmp
+          name: "Carriers.tmp"
+          pid: "PID 4416"
+          time: "T+0.73s"
+          at: 1.3
+          kind: dropper
+          what: "The Inno runtime unpacks itself"
+          why: >-
+            The <code>/SL5=</code> flag is the Inno extractor handing control to its own runtime,
+            0.73 seconds after launch. Still commodity behaviour.
+          tactic: "Defense Evasion"
+          attack: "T1027.002"
+          facts:
+            - key: "SHA-256"
+              value: '3666f859cc9f49957a150b6fed225dc8226160ef173161edccd15dd68fffef88'
+            - key: "MD5"
+              value: '8a331882e1fcfed10f2664231c7ce1af'
+            - key: "Imphash"
+              value: 'adcd9682585d11d95f17bb6ffa76f15e'
+          children:
+            - id: pt-crystsupervisor-3640
+              name: "CrystSupervisor32.exe"
+              pid: "PID 3640"
+              time: "T+2.42s"
+              at: 4.2
+              kind: operator
+              kind_label: "operator code"
+              what: "A signed vendor binary side-loads the operator's DLL"
+              why: >-
+                This is the first operator-authored code on the box. The host executable is a
+                genuine, signed Wondershare SlideShowEditor.exe that has simply been renamed, and
+                the malicious half is the DLL beside it.
+              tactic: "Defense Evasion"
+              attack: "T1574.001"
+              caveat: >-
+                The host binary's SHA-256 and imphash both match the legitimate Wondershare
+                product. Hunt on the path and the pairing, not on the hash alone.
+              facts:
+                - key: "Path"
+                  value: 'C:\Users\*\AppData\Local\Temp\is-*.tmp\CrystSupervisor32.exe'
+                - key: "Side-load"
+                  value: 'C:\Users\*\AppData\Local\Temp\is-*.tmp\ExceptionHandler.dll'
+                - key: "SHA-256"
+                  value: '44f009ca786bc541cda11c61bab7b272e96ce9e3d656c10bdac2e126f3a9cc35'
+                - key: "DLL SHA-256"
+                  value: 'a3d0a9c71be732cdaafc7c1a9ef00c2a5a01e93b4a29c8944f8ea14a79f52ce0'
+                - key: "MD5"
+                  value: 'a4b240cce6e3da6e959f33bd82394034'
+                - key: "Imphash"
+                  value: '051ba42fa7a26bf65df9922daa07c458'
+              children:
+                - id: pt-crystsupervisor-9840
+                  name: "CrystSupervisor32.exe"
+                  pid: "PID 9840"
+                  time: "T+3.77s"
+                  at: 6.5
+                  kind: operator
+                  kind_label: "operator code"
+                  emphasis: true
+                  what: "The spawner. It launches both children below, then exits"
+                  why: >-
+                    A second copy installs itself outside TEMP and becomes the spawner. Its exit
+                    is the mechanism worth remembering, because it leaves both children running
+                    with no live parent. That orphaning is the hunt signal, and it recurs across
+                    campaigns.
+                  tactic: "Defense Evasion"
+                  attack: "T1036.005"
+                  caveat: >-
+                    Same binary as PID 3640, so the hashes are identical. The name appears three
+                    times in the chain, for temp extraction, the persistent copy, then the
+                    spawner itself.
+                  facts:
+                    - key: "Path"
+                      value: 'C:\ProgramData\adv_ctrl\CrystSupervisor32.exe'
+                    - key: "Drop dir"
+                      value: 'C:\ProgramData\adv_ctrl\'
+                    - key: "SHA-256"
+                      value: '44f009ca786bc541cda11c61bab7b272e96ce9e3d656c10bdac2e126f3a9cc35'
+                  children:
+                    - id: pt-wvault
+                      name: "WVault.exe"
+                      pid: "PID 2596"
+                      time: "T+14.47s"
+                      at: 24.8
+                      kind: endgame
+                      kind_label: "endgame, C2"
+                      emphasis: true
+                      what: "The C2 process, wearing a signed vendor name"
+                      why: >-
+                        A renamed Qihoo 360 PromoUtil.exe, used as a hollow host for .NET RAT
+                        injection. It is the network-bearing endpoint of the whole chain, and
+                        after the spawner exits it is running parentless.
+                      tactic: "Command and Control"
+                      attack: "T1071.001"
+                      caveat: >-
+                        The SHA-256 is a legitimate Qihoo 360 product. Only flag it when it is
+                        dropped to a non standard path such as <code>C:\ProgramData\WVault.exe</code>,
+                        otherwise this hash is a false-positive generator.
+                      facts:
+                        - key: "Path"
+                          value: 'C:\ProgramData\WVault.exe'
+                        - key: "SHA-256"
+                          value: 'c085a724a067eec46d9a2c1eeae3cc04db33b9840f5c33eb87cc3027e12a6bcd'
+                        - key: "MD5"
+                          value: '9fe84f7e1a8efc69d6169f47f9b67257'
+                        - key: "Imphash"
+                          value: '921f3ea587ffbd647ff4d520165ecd50'
+                      children:
+                        - id: pt-first-beacon
+                          name: "first C2 beacon"
+                          time: "T+42.88s"
+                          at: 73.5
+                          kind: artifact
+                          kind_label: "network artifact"
+                          what: "Outbound TLSv1 to a non standard high port"
+                          why: >-
+                            42.88 seconds from the sample first running to the first packet
+                            leaving. That is the whole window a defender has.
+                          facts:
+                            - key: "Endpoint"
+                              value: '185.241.208[.]129:56167'
+                            - key: "Transport"
+                              value: 'TLSv1'
+                            - key: "Network"
+                              value: 'AS210558, 1337 Services GmbH, Poland, Spamhaus DROP listed'
+                    - id: pt-crisp
+                      name: "Crisp.exe"
+                      pid: "PID 10072"
+                      time: "T+45.07s to T+58.31s"
+                      at: 77.3
+                      kind: endgame
+                      kind_label: "endgame, persistence"
+                      emphasis: true
+                      what: "A helper that writes the scheduled task and exits"
+                      why: >-
+                        A genuine Crisp Squirrel StubExecutable, repurposed. It lives about 13
+                        seconds, does one job, and exits. A short-lived single-purpose process is
+                        easy to miss on a host and easy to spot in telemetry.
+                      tactic: "Persistence"
+                      attack: "T1053.005"
+                      facts:
+                        - key: "Path"
+                          value: 'C:\Users\*\AppData\Roaming\adv_ctrl\Crisp.exe'
+                        - key: "SHA-256"
+                          value: 'c2e62475768c9546efe1da92a55f3bb2a55350eed83241139917aabd1ad25f8a'
+                        - key: "MD5"
+                          value: '5f9f88c9a16b62dc38504549e93d3667'
+                        - key: "Imphash"
+                          value: 'ab9e4224c1ccf1355ae462a22ff3253e'
+                      children:
+                        - id: pt-watchermgmt-job
+                          name: "watchermgmt.job"
+                          time: "T+58.19s"
+                          at: 99.8
+                          kind: artifact
+                          kind_label: "file artifact"
+                          what: "Legacy scheduled task, 262 bytes"
+                          why: >-
+                            The legacy <code>.job</code> format is the point of it. It survives
+                            reboot and common autorun enumeration does not list it. The scheduler
+                            auto-generates an XML counterpart, which is the copy most tools will
+                            show you.
+                          tactic: "Persistence"
+                          attack: "T1053.005"
+                          facts:
+                            - key: "Path"
+                              value: 'C:\Windows\Tasks\watchermgmt.job'
+                            - key: "XML copy"
+                              value: 'C:\Windows\System32\Tasks\watchermgmt'
+                            - key: "SHA-256"
+                              value: '30200bcf6fab87862f9348cac03f97a3d8d735040314163dda173635291087dc'
+                            - key: "MD5"
+                              value: '1730e17c2277c47cd6c40037d2f12133'
 ---
 
 **Campaign Identifier:** HijackLoader-Penguish-MultiVector-62.60.237.100<br>
@@ -883,28 +1095,13 @@ These tools are genuine and signed (where applicable). They are not malicious in
 
 ### 6.1 Process Tree
 
-<figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/opendirectory-62-60-237-100-20260506/hijackloader-process-tree.svg" | relative_url }}" alt="Process tree infographic for the Carriers.exe dynamic detonation. A 5-deep vertical chain of process boxes branches at the bottom into two side-by-side endgame children. Top of chain: python.exe PID 3576 in grey (analyst harness, not malicious). Below it: Carriers.exe PID 1908 in yellow (Inno Setup 6.5+ installer, original sample, started 07:26:26.43). Below: Carriers.tmp PID 4416 in yellow (Inno runtime extractor with /SL5= flag, started 07:26:27.16, +0.7s gap). Below: CrystSupervisor32.exe PID 3640 in red (side-load host, TEMP extraction, loads operator ExceptionHandler.dll from %LocalAppData%\\Temp\\is-EPKFU.tmp\\, started 07:26:28.85, +1.7s gap). Below: CrystSupervisor32.exe PID 9840 in red (PERSISTENT spawner, drops both children below, %AllUsersProfile%\\adv_ctrl\\, started 07:26:30.20, +1.4s gap). Y-branch splits into two children: Left branch (deep red, highlighted): WVault.exe PID 2596, THE C2 PROCESS, renamed Qihoo PromoUtil.exe with .NET CLR threads inside (operator-injected), %AllUsersProfile%\\WVault.exe, started 07:26:40.90, +10.7s gap. Below WVault: leaf showing first C2 beacon to 185.241.208[.]129:56167 over TLSv1, AS210558 1337 Services Spamhaus DROP, fired at 07:27:09.31 which is 43.0 seconds after sample launch. Right branch (deep red): Crisp.exe PID 10072, PERSISTENCE HELPER, single-purpose, lifespan ~13 seconds, creates the scheduled-task .job file then exits. %AppData%\\adv_ctrl\\Crisp.exe, started 07:27:11.50 and exited 07:27:24.74. Below Crisp: leaf showing persistence artifact C:\\Windows\\Tasks\\watchermgmt.job, legacy .job format 262 bytes, autorunsc enumeration blind spot. Footer: detection signal, orphaned WVault.exe with .NET CLR threads + outbound TLSv1 to non-standard high port. CrystSupervisor32.exe PID 9840 is the spawner; its exit leaves WVault.exe orphaned, the cross-campaign hollow-host signature.">
-  <figcaption><em>Figure 13: Carriers.exe process tree from the dynamic detonation. The chain runs 5 processes deep before branching at <code>CrystSupervisor32.exe (PID 9840)</code> (the persistent spawner) into the two endgame children: <code>WVault.exe</code> (the C2 process) and <code>Crisp.exe</code> (the persistence helper). Color stripe: <span style="color:#6b7280">grey</span> analyst harness · <span style="color:#eab308">yellow</span> dropper · <span style="color:#dc2626">red</span> operator code · <span style="color:#7f1d1d">deep red</span> endgame (C2 + persistence). Total elapsed launch-to-first-beacon: ~43 seconds.</em></figcaption>
+<figure class="hl-ptree-fig" data-figure-image="hijackloader-process-tree.svg">
+{% include process-tree.html %}
+<figcaption><em>Figure 13: Carriers.exe process tree. The chain runs five processes deep before it branches at <code>CrystSupervisor32.exe (PID 9840)</code>, the persistent spawner, into the C2 process <code>WVault.exe</code> and the persistence helper <code>Crisp.exe</code>. Launch to first beacon is about 43 seconds.</em></figcaption>
 </figure>
 
-**Process timing chain (DEFINITE, process-start event timing):**
 
-```
-07:26:26.43  Carriers.exe (PID 1908)         - original sample launches
-07:26:27.16  Carriers.tmp (PID 4416)         - Inno Setup runtime extracts (0.7s gap)
-07:26:28.85  CrystSupervisor32.exe (PID 3640) - temp extraction (1.7s gap)
-07:26:30.20  CrystSupervisor32.exe (PID 9840) - persistent copy (1.4s gap)
-07:26:40.90  WVault.exe (PID 2596)            - C2-bearing process (10.7s gap)
-07:27:09.31  TCP Connect to 185.241.208.129:56167  - first beacon (28.4s after launch)
-07:27:11.50  Crisp.exe (PID 10072)            - persistence-establishing process
-07:27:24.62  C:\Windows\Tasks\watchermgmt.job created (262 bytes)
-07:27:24.74  Crisp.exe exits                   - Crisp lifespan: 13 seconds
-```
-
-**Total time from sample launch to first C2 beacon: ~43 seconds.**
-
-`CrystSupervisor32.exe` is launched THREE times: temp extraction, persistent dir, then final injected version. The persistent copy (PID 9840) is the spawner that drops both `WVault.exe` and `Crisp.exe`. `WVault.exe` is the network-bearing endpoint. `Crisp.exe` is the persistence-establishing binary (creates the scheduled task) and exits 13 seconds later, short-lived, single-purpose helper.
+`CrystSupervisor32.exe` is launched THREE times, for temp extraction, the persistent directory, then the final injected version, which is why one binary name appears twice in the tree above.
 
 ### 6.2 Stage-by-Stage File Drop Sequence
 

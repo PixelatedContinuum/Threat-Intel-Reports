@@ -124,9 +124,9 @@ No immediate incident response is required. This toolkit is assessed as pre-oper
 ## 2. Relationship to April 6 Report
 {: .hl-tier-2}
 
-> **Analyst note:** This report is a continuation of the original OpenStrike analysis published April 6, 2026. Readers unfamiliar with the original report are strongly encouraged to read it first, it establishes the OpenStrike family name, the Trinity Protocol cryptographic architecture, and the initial infrastructure profile for 172.105.0.126. This report documents only what was new in the expanded file set.
+> **Analyst note:** This is a continuation of the original OpenStrike analysis I published April 6, 2026. Readers unfamiliar with that report are strongly encouraged to read it first, it establishes the OpenStrike family name, the Trinity Protocol cryptographic architecture, and the initial infrastructure profile for 172.105.0.126. Here I cover only what was new in the expanded file set.
 
-The April 6 report ([/reports/open-directory-172-105-0-126-20260406/](/reports/open-directory-172-105-0-126-20260406/)) documented 7 custom samples recovered from an open directory at `172.105.0.126:8888`. The investigation used an infrastructure-first discovery method that identified the toolkit before any victim could be confirmed. That report covered:
+In the April 6 report ([/reports/open-directory-172-105-0-126-20260406/](/reports/open-directory-172-105-0-126-20260406/)) I documented 7 custom samples recovered from an open directory at `172.105.0.126:8888`, using an infrastructure-first discovery method that identified the toolkit before any victim could be confirmed. There I covered:
 
 - OpenStrike gen-3 beacon (`beacon.exe`, 299KB, 11 commands, RSA-2048 Trinity Protocol)
 - 5 shellcode loader variants from a shared GCC 15 codebase

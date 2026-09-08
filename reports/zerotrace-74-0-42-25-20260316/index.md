@@ -1011,7 +1011,7 @@ Key factors: (1) ScreenConnect is a legitimate application. Most security tools 
 **Q7: "Should we report this to law enforcement?"**
 Short answer: That is an organizational decision outside the scope of this third-party report.
 
-This report documents confirmed malicious infrastructure and provides IOCs for defensive action. Decisions about law enforcement reporting involve legal, jurisdictional, and organizational considerations that are organization-specific. The evidence quality in this report (particularly the digital identity artifacts and infrastructure documentation) may be of investigative value.
+I document confirmed malicious infrastructure here and provide IOCs for defensive action. Decisions about law enforcement reporting involve legal, jurisdictional, and organizational considerations that are organization-specific. The evidence quality in this report (particularly the digital identity artifacts and infrastructure documentation) may be of investigative value.
 
 ---
 

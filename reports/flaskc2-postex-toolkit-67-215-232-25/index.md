@@ -312,7 +312,7 @@ To frame this honestly, and I maintain the framing, I do **not** claim the opera
 ## 7. The Public Post-Exploitation Toolkit
 {: .hl-tier-3}
 
-The bulk of the staged toolkit is public, commodity tooling, six SeImpersonate "Potato" escalators, the GhostPack Rubeus Kerberos toolkit, SharpSuccessor for dMSA abuse, and Netcat. This report documents each at the depth needed to detect and contextualize it within the operator's chain, without re-deriving the well-published research behind each tool. The honest-framing distinction from Section 2.2 carries throughout: five of these are operator-recompiled .NET builds identified by signature, and the native tools are prebuilt public binaries identified by hash.
+The bulk of the staged toolkit is public, commodity tooling, six SeImpersonate "Potato" escalators, the GhostPack Rubeus Kerberos toolkit, SharpSuccessor for dMSA abuse, and Netcat. I document each at the depth needed to detect and contextualize it within the operator's chain, without re-deriving the well-published research behind each tool. The honest-framing distinction from Section 2.2 carries throughout: five of these are operator-recompiled .NET builds identified by signature, and the native tools are prebuilt public binaries identified by hash.
 
 ### 7.1 The SeImpersonate "Potato" suite (six tools)
 
