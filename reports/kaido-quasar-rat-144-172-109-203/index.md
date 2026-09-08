@@ -308,27 +308,9 @@ Reading this table, the DEFINITE rows are the ones a defender can act on today w
 ## 8. Indicators of Compromise
 {: .hl-tier-2}
 
-The complete, machine-readable indicator set is published as a separate JSON feed for direct ingestion into SIEM and EDR platforms: **[`/ioc-feeds/kaido-quasar-rat-iocs.json`](/ioc-feeds/kaido-quasar-rat-iocs.json)**. Indicators are defanged in the prose below for safe reading; the JSON feed carries them in un-defanged, ingestion-ready form. The KAIDO indicator set comprises 5 file hashes, 4 command-and-control network indicators, and a set of host and TLS-certificate anchors.
+The complete, machine-readable indicator set is published as a separate JSON feed for direct ingestion into SIEM and EDR platforms: **[`/ioc-feeds/kaido-quasar-rat-iocs.json`](/ioc-feeds/kaido-quasar-rat-iocs.json)**. I do not repeat that feed here. The KAIDO indicator set comprises 5 file hashes (all three RAT builds, packed differently, plus the primary build's MD5 and SHA1, though a signature scan of the full recovered toolkit produced zero hits, so the hashes confirm known samples without catching new ones), 4 command-and-control network indicators (the live C2 IP, its two C2 domains, and the TCP 4782 Quasar channel), and the live-host TLS certificate whose `TeamKAIDO` issuer organization and JA4X fingerprint are a fleet-enumeration-grade pivot.
 
-The three anchors below are the ones to deploy first. They are DEFINITE or HIGH confidence and are the least likely to be evaded by per-build repacking.
-
-| Type | Indicator | Confidence | Context |
-|---|---|---|---|
-| IPv4 | `144.172.109[.]203` | DEFINITE | Live KAIDO Quasar C2; AS14956 RouterHosting (US); ~10-month continuity |
-| Domain | `kaidoo[.]com[.]br` | DEFINITE | Primary C2 (port 4782); DNS confirmed in detonation |
-| Domain | `c2.kaidoo[.]com[.]br` | DEFINITE | Secondary C2 (port 443); operator-labeled "c2" subdomain |
-| Port | TCP 4782 | DEFINITE | Quasar binary-protocol C2 channel (non-HTTP) |
-| TLS cert | Issuer Org `TeamKAIDO`, CN `kaido-c2`; JA4X `bbd6cc0fca29_bbd6cc0fca29_795797892f9c` | HIGH | Live-host C2 certificate on `144.172.109[.]203:8443`, fleet-enumeration-grade pivot |
-
-All three RAT builds plus the primary build's MD5 and SHA1 are in the feed. The three builds are packed differently and a signature scan of the full recovered toolkit produced zero hits, so hashes confirm known samples but will not catch new builds.
-
-| SHA256 | Context | Confidence |
-|---|---|---|
-| `c7542e8265f70d6c1dbf2e3cf6e81a90198cd157d3d6693c6d2a8a49d99a5b8d` | KAIDO RAT, tag `breach`, richest build | DEFINITE |
-| `385d20ca574976e3ba3f4f3079420f8a1c3935c0ab4a3f87063beea27d41e254` | KAIDO RAT, live-C2 sibling | DEFINITE |
-| `022944768c4326d611fa3edb100eb8277228717a220580e7ffce143341aa39fa` | KAIDO RAT, low-detection sibling | DEFINITE |
-
-Host and behavioral anchors.
+Host and behavioral anchors. I keep this table rather than folding it into the feed pointer above: the Mark-of-the-Web bypass behavior (deleting the file's own `:Zone.Identifier` stream within 2-3 seconds of launch, Sysmon Event ID 23) is not in the feed, and it is the one row here that is not an atomic value the feed already carries.
 
 | Type | Indicator | Confidence | Context |
 |---|---|---|---|

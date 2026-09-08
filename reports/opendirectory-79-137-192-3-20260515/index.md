@@ -35,29 +35,29 @@ figure_nav:
   - image: rhadamanthys-cluster-c-kill-chain.svg
     parts:
       - label: "14-second sleep gauntlet"
-        anchor: "#63-14-second-anti-analysis-sleep--runtime-mechanics"
+        anchor: "#second-anti-analysis-sleep--runtime-mechanics"
       - label: "RC4 decrypt of Stage 2"
-        anchor: "#51-loader-rc4-decryption-of-the-embedded-stage-2"
+        anchor: "#loader-rc4-decryption-of-the-embedded-stage-2"
       - label: "EAX-redirect hollowing"
-        anchor: "#62-eax-redirect-process-hollowing--runtime-mechanics"
+        anchor: "#eax-redirect-process-hollowing--runtime-mechanics"
       - label: "Registry write"
-        anchor: "#64-stage-2-registry-write-to-sibcodesn"
+        anchor: "#stage-2-registry-write-to-sibcodesn"
       - label: "C2 beacon"
-        anchor: "#65-c2-beacon--first-request-structure"
+        anchor: "#c2-beacon--first-request-structure"
       - label: "The full chain"
-        anchor: "#61-cluster-c-kill-chain-overview"
+        anchor: "#cluster-c-kill-chain-overview"
   - image: rhadamanthys-stage2-three-layer-synthesis.svg
     parts:
       - label: "The three-layer synthesis"
-        anchor: "#53-stage-2-3-layer-encrypted-blob-synthesis-novel-finding"
+        anchor: "#stage-2-3-layer-encrypted-blob-synthesis-novel-finding"
       - label: "Import-surface camouflage"
-        anchor: "#52-stage-2-import-surface-camouflage"
+        anchor: "#stage-2-import-surface-camouflage"
       - label: "CBC-XOR and the per-customer IV"
-        anchor: "#54-stage-2-cbc-xor-cipher-with-per-customer-iv"
+        anchor: "#stage-2-cbc-xor-cipher-with-per-customer-iv"
       - label: "The FS container"
-        anchor: "#55-stage-2-fs-container-with-5-type-tagged-entries"
+        anchor: "#stage-2-fs-container-with-5-type-tagged-entries"
       - label: "The bytecode VM it feeds"
-        anchor: "#56-stage-2-q3vm-derivative-bytecode-vm-novel-finding"
+        anchor: "#stage-2-q3vm-derivative-bytecode-vm-novel-finding"
       - label: "Why this is canonical Rhadamanthys"
         anchor: "#why-this-stage-2-is-canonical-rhadamanthys-definite-97"
   - image: rhadamanthys-maas-vendor-customer-architecture.svg
@@ -65,9 +65,9 @@ figure_nav:
       - label: "Vendor vs customer"
         anchor: "#vendor-versus-customer--a-critical-distinction"
       - label: "Vendor Stage-2"
-        anchor: "#43-stage-2-capabilities-vendor--canonical-rhadamanthys"
+        anchor: "#stage-2-capabilities-vendor--canonical-rhadamanthys"
       - label: "Customer loader"
-        anchor: "#42-loader-side-capabilities-customer"
+        anchor: "#loader-side-capabilities-customer"
       - label: "UTA-2026-010"
         anchor: "#93-uta-2026-010--rhadamanthys-maas-customer-cluster-c-primary"
   - image: opendirectory-79-137-192-3-three-cluster-cotenancy.svg
@@ -240,6 +240,9 @@ This distinction is operationally important because the customer's loader and pe
 
 The Cluster C deployment is a two-layer system. The customer-built loader (`staticlittlesource.exe`) handles delivery, decryption of the embedded payload, and process hollowing into a signed Microsoft LOLBin (Living Off the Land Binary). The Rhadamanthys Stage-2 (`embedded_payload.bin`, MD5 `0e07ccda...`) is the canonical commodity infostealer that performs all credential theft, host enumeration, C2 communication, and plugin orchestration. Each layer has a separate threat profile.
 
+<details markdown="1" class="hl-teardown">
+<summary>The capability matrix and per-cluster capability breakdowns for Clusters A, B and C, in full. Click to expand.</summary>
+
 ### 4.1 Capability Matrix — Cluster C (primary)
 
 | Capability | Layer | Confidence | Operational Impact |
@@ -367,6 +370,8 @@ The hardcoded Telegram bot token was REVOKED on 2026-05-07, returning HTTP 401 o
 
 The operational model is provide-then-phish. The legitimate VPN service builds operator-customer trust, then the same operator delivers targeted credential theft via the brand-impersonation INK Lens platform. The operation has run continuously for roughly 2.5 years, with the earliest BEC burn-domain `vetcorbeanca.eu` dating to 2023-06-08, across multi-tier provider segmentation, Aeza for back-office, Cloudflare for production fronts, Stark Industries for BEC burn domains, and Timeweb for some VPN edge nodes.
 
+</details>
+
 ---
 
 ## 5. Static Analysis
@@ -375,6 +380,9 @@ The operational model is provide-then-phish. The legitimate VPN service builds o
 > **Analyst note:** This section walks through the static reverse-engineering work that produced the technical findings underpinning the report. The novel material (the 3-layer encrypted-blob synthesis, the Q3VM-derivative bytecode VM, the per-customer cipher fingerprints) is concentrated here. Defenders who only need detection content can skip to Section 8 (IOCs) and Section 10 (Detection Coverage); analysts and researchers who want to reproduce the analysis or extend it to sibling samples should read this section carefully.
 
 Three previously-undocumented findings emerge from the Cluster C static analysis: a 3-layer encrypted-blob synthesis architecture (§5.3), an operator-modified Q3VM-derivative bytecode VM (§5.6), and per-customer cipher fingerprints that differentiate this MaaS customer from sibling deployments (§5.4). Analysis used a disassembler and supporting Python scripts against `staticlittlesource.exe` (the loader, MD5 `ae9991a02aa20ebbc2cc3c0f40924442`) and the extracted `embedded_payload.bin` (the Stage-2, MD5 `0e07ccda99c1cd80a2fd92e02b75d9a0`). The Stage-2 was extracted by following the loader's RC4 decryption path with the recovered key, then reconstructing the Stage-2's encrypted-blob synthesis by simulating the byte-emitter functions and bit-packed stream.
+
+<details markdown="1" class="hl-teardown">
+<summary>The RC4 decryption, import camouflage, blob synthesis, cipher, FS container, bytecode VM and Cluster A/B static notes, in full. Click to expand.</summary>
 
 ### 5.1 Loader: RC4 decryption of the embedded Stage-2
 
@@ -587,12 +595,17 @@ For Cluster A, BellaMain, static analysis of `BellaMain.zip` (SHA256 `f791fae41c
 
 For Cluster B, Inkognito, no PE samples were recovered, because the operation is a web application plus VPN service rather than malware. Static analysis was limited to the production HTML, JavaScript and HTTP response patterns. The operator-controlled accounts identified are Google Search Console verifications `_Lq_FX-CDt3OmZqq5PNFfmQTZtLSHTNsVkViLTzpTwk` on `inkconnect.ru` and `xskfj4k4tX_-enfPvu9WrUiWauHFlbuVmyV7thcjwds` on `inklens.ru`, plus Yandex Webmaster verification `98466329` in the `inklens.ru` HTML meta tags. The `kittenx-404` decommission tombstone HTTP response, with a `kittenx` Server header and content-length 148, does appear on multiple retired Inkognito-controlled domains, but it was withdrawn as an operator fingerprint on 2026-08-21. `kittenx` is VKontakte's web server banner, so the response is a hosting-platform default that two Russian-hosted domains inherited rather than anything the operator deployed. See Section 9.2 for the measurement.
 
+</details>
+
 ---
 
 ## 6. Dynamic Analysis
 {: .hl-tier-3}
 
 > **Analyst note:** This section covers the runtime behavior observed during sandbox execution and reconstruction from static analysis. The Cluster C loader's execution path is the primary focus, from the lure file landing on disk through the EAX-redirect process hollowing into `InstallUtil.exe` to the first C2 beacon. Clusters A and B are not covered in this section because their operational model is web-application based and does not have a meaningful "dynamic execution" surface to instrument.
+
+<details markdown="1" class="hl-teardown">
+<summary>The kill chain overview, the process-hollowing and anti-analysis mechanics, the registry write, the C2 beacon and Cluster A/B dynamic notes, in full. Click to expand.</summary>
 
 ### 6.1 Cluster C: kill chain overview
 
@@ -727,6 +740,8 @@ The rotation matters for detection because JARM is not stable across certificate
 For Cluster A, BellaMain, there is no malware execution surface. The dynamic behavior of interest is HTTP traffic to the kit URIs (`*/girislog.php`, `*/kartlaodeme.php`, `*/tgdekont.php`, `*/cekimbot.php`) and the Telegram bot exfil traffic to `api.telegram.org` carrying bot ID `6797512084`, which is revoked but still pivot-valuable. Web proxy and Suricata detection content covers these patterns, see the separate detection file.
 
 For Cluster B, Inkognito, there is likewise no malware execution surface. The dynamic indicators are HTTP requests carrying the `X-Admin-Token` custom auth header on `api.inkconnect.ru` and DNS queries for the brand-impersonation subdomain patterns under `*.inklens.ru` and `*.inklens.co.uk`. Detection content covers both of these in the separate detection file. A third indicator listed here originally, HTTP responses carrying the `Server: kittenx` decommission tombstone, was withdrawn on 2026-08-21 together with the two detection rules built on it. See Section 9.2.
+
+</details>
 
 ---
 

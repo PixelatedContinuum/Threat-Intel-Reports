@@ -442,21 +442,7 @@ Prior art is credited to Breakglass Intelligence, who first documented the C2 pa
 ## 10. Indicators of Compromise
 {: .hl-tier-2}
 
-The complete, validated, machine-readable IOC feed is published separately at the **[IOC feed]({{ page.ioc_feed }})** (JSON, no defanging, SIEM/EDR-ingestible). This section summarizes the highest-value indicators and the exclusion rationale; it is not the full feed, and IOCs are not embedded in this report.
-
-The indicator counts run to 15 SHA256 file hashes, 1 DEFINITE bespoke backdoor and 14 HIGH, 6 native-tool imphashes that resist renaming, 1 IPv4, 5 URLs, 1 host file path, and 6 string indicators. The feed groups indicators by family so each maps to the correct detection rule.
-
-**Highest-value anchors (defanged here; the feed is not defanged):**
-
-| Type | Indicator | Confidence | Note |
-|---|---|---|---|
-| SHA256 | `a7029ef2…a25262` | DEFINITE | `cmd_exec.dll`, bespoke MSSQL CLR backdoor (specific operator build) |
-| String | `[*] Connected to SQL Server CLR backdoor` | HIGH | Backdoor banner, strongest, operator-specific YARA anchor |
-| String/key | `ca63457538b9b1e0` | HIGH | AES-128 key=IV in the `NPCInfoList1.aspx` loader |
-| IPv4 | `67.215.232[.]25` | HIGH | Single staging host (AS36352); 15/91 VT malicious; IP-only |
-| URL | `http://67.215.232[.]25:8080/health` | HIGH | Flask C2 unauthenticated status route (distinctive JSON field-combo) |
-| URL | `http://67.215.232[.]25:8080/api/report` · `…/api/heartbeat` | HIGH | Flask C2 POST-only beacon endpoints |
-| imphash | `f9a28c45…`, `545a8124…`, `959a8304…`, `576d6e02…`, `567531f0…` | HIGH | JuicyPotato / PrintSpoofer / RoguePotato / RogueOxidResolver / nc64, survive renaming |
+The complete, validated, machine-readable IOC feed is published separately at the **[IOC feed]({{ page.ioc_feed }})** (JSON, no defanging, SIEM/EDR-ingestible), so I do not repeat it here. It runs to 15 SHA256 file hashes (1 DEFINITE bespoke backdoor, 14 HIGH), 6 native-tool imphashes that resist renaming, 1 IPv4, 5 URLs, 1 host file path, and 6 string indicators, grouped by family so each maps to the correct detection rule. The strongest anchors are the bespoke `cmd_exec.dll` MSSQL CLR backdoor hash, its `[*] Connected to SQL Server CLR backdoor` banner string, and the AES key/IV `ca63457538b9b1e0` in the `NPCInfoList1.aspx` loader.
 
 **Deliberately excluded from the feed** (documented so the exclusion is auditable): the proxy-era ports 5222-5455 on this IP (Nov-Dec 2025 tenancy, different-tenant/reallocation risk); two benign VirusTotal downloaded files (`autodiscover.xml` and the `:1337` directory-index page); `inostage.ru` / `panel.inostage.ru` (public-tool co-host noise); and the generic .NET runtime imphashes (`f34d5f2d…`, `dae02f32…`, non-discriminating managed-PE stubs). The `Aatrox` and `Ghost小组` strings are included as detection anchors but carry an explicit note that they are commodity-reuse signals, not operator identity.
 

@@ -914,20 +914,7 @@ The complete, validated, machine-readable indicator set lives in the companion f
 
 **[Download the IOC feed](/ioc-feeds/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-iocs.json)**
 
-It carries operator infrastructure, the full SHA256 set for the corpus, host-based artifacts across Linux and Windows, credential material observed in use, and network signatures, with per-indicator confidence and context. Indicators in the prose below are defanged. Indicators in the feed are not, because a parser needs the real value.
-
-### 13.1 Operator infrastructure
-
-| Type | Indicator | Confidence | Note |
-|---|---|---|---|
-| IPv4 | `13.140.145[.]210` | DEFINITE | Operator server, Contabo AS51167. Open directory closed 2026-08-04, host still answering on SSH 2026-08-16 |
-| IPv4 | `95.214.114[.]37` | HIGH | Attack-source VPN exit, PacketHub AS136787. Attribution rests on the double-encoded path appearing byte-identically in the victim's own log |
-| Domain | `radius-sync[.]com` | HIGH | Operator-registered 2026-07-11, Cloudflare-fronted, origin unmasked from the operator's own capture log, paid to 2029 |
-| Port set | 22, 53, 80, 443, 1389, 4445, 8080, 8443, 8888 on the operator server | DEFINITE | Port 53 first seen 2026-08-10, purpose undetermined |
-| Loopback service | `127.0.0.1:19999` | HIGH | Custom multi-session console, server side never archived |
-| TLS certificate | Self-signed, subject and issuer naming the server's own address | DEFINITE | Generated 2026-07-24 12:50:23 UTC. Full SHA-256, SHA-1, serial and public-key hash in the feed |
-| Tunnel keys | Four distinct server key fingerprints | DEFINITE | Pivot material rather than rule content, since they are not visible on the wire without interception |
-| API key | Truncated to `H3yv3vx…bAvs` | DEFINITE present, MODERATE ownership | Live third-party scanning-service key. Do not use it. Report it |
+It carries operator infrastructure, the full SHA256 set for the corpus, host-based artifacts across Linux and Windows, credential material observed in use, and network signatures, with per-indicator confidence and context, so I do not repeat that inventory here. It covers the operator server IP and its attack-source VPN exit, the operator-registered domain, the nine-port set on the operator server, the custom loopback console, the self-signed TLS certificate, four distinct tunnel key fingerprints, and the live third-party scanning-service key found hardcoded in the tooling, which I flag there as a credential to report rather than use.
 
 ### 13.2 The highest-value network signatures
 

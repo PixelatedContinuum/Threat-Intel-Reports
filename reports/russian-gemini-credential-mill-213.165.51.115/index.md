@@ -245,6 +245,9 @@ Every link in the operator's chain (credential acquisition, LLM personalization,
 | Co-located Telegram disinfo operation (`@americanpatriotus`) | HIGH, cross-domain operator signal | LOW, Telegram channel + Quantum Patriot branding | DEFINITE |
 | Commodity service procurement (AntiPublic.one + nuclei + stealer logs) | MEDIUM, commercial-tier operator affiliation | MEDIUM, egress to `antipublic.one/api/v2/search` | DEFINITE |
 
+<details markdown="1" class="hl-teardown">
+<summary>All nine capabilities in full, from the LLM-mutation pipeline through the commodity procurement layer. Click to expand.</summary>
+
 ### 4.1 LLM-Personalized Credential Mutation Pipeline (`ai_sniper_brute.py`)
 
 > **Analyst note:** This subsection documents the operator's source code for the per-target password mutation script that uses Google's Gemini 2.5 Flash to generate 20 likely current passwords per target from email + domain + a known prior password. The detection logic is in the verbatim role-priming prompt: the phrase `"Act as an expert red-team password analyst"` combined with Gemini API import and the operator's bespoke output filename `AI_SNIPER_GOODS.txt` has negligible legitimate-software overlap and is the highest-signal single-artifact YARA detection in the campaign. This is the first source-code analysis with verbatim prompt reproduction of this technique class.
@@ -498,12 +501,17 @@ The third commodity service is downstream stealer logs. Operator scripts referen
 
 The hybrid resource model matters because it yields measurably higher throughput per operator-hour than either a pure-custom or a pure-commodity baseline, pairing custom C2 and LLM personalization with commodity breach data and commodity scanning. Building everything from scratch would be slow and expensive for a solo operator, and relying entirely on commodity tooling would cap throughput at the commodity-stuffing baseline. This is the AI-augmented mid-tier operator class in action, extracting disproportionate leverage from frontier-LLM compute, currently the cheapest unit of intelligence they can buy or steal.
 
+</details>
+
 ---
 
 ## 5. Static Analysis
 {: .hl-tier-3}
 
 > **Analyst note:** This section walks the operator's Python source and Markdown handoff documents at the structural level. The captured arsenal is operator-built Python. There is no compiled binary stage for the credential mill components themselves (the only binary stage, the PowerShell beacon `agent_final.ps1`, was referenced in handoff documents but not extracted; lineage caveat in §5.4). The high-signal findings: (1) the verbatim Gemini role-priming prompt in `ai_sniper_brute.py`; (2) the three AI Operator Handoff Document structural patterns; (3) the `c2_server.py` endpoint family and the `/api/v1/get_results` mismatch; (4) the operator's Russian-language source comments.
+
+<details markdown="1" class="hl-teardown">
+<summary>The credential mutator, the C2 backend, the AI handoff documents, the PowerShell beacon and the persona-string inventory, in full. Click to expand.</summary>
 
 ### 5.1 `ai_sniper_brute.py` — LLM-Personalized Credential Mutator
 
@@ -655,12 +663,17 @@ The operator's informal Russian idiom registers across handoff documents, source
 
 These strings do not Google-Translate cleanly. The idiom register is consistent with a native Russian speaker rather than translated content. This is the basis for the DEFINITE confidence on the Russian-native attribution dimension (Section 9).
 
+</details>
+
 ---
 
 ## 6. Dynamic / Behavioral Analysis
 {: .hl-tier-3}
 
 > **Analyst note:** This section covers the operator's runtime behavior captured across 122 Gemini CLI session JSONs (Phase 11 analysis), open-directory observation of `213.165.51.115` (Hunt.io platform first-seen 2026-03-30; cleaned by 2026-05-23), and network behavior inferred from the captured operator tooling and victim-side artifacts. The operator's behavioral patterns are: (1) Gemini CLI session-driven workflows with handoff documents between sessions, (2) multi-hour mass-WP-validation runs against ~30,000 sites, (3) live posting to `@americanpatriotus` Telegram channel via Gemini-drafted content, (4) cloudflared tunnel registration and victim-side persistent access establishment, and (5) detection-aware open-directory cleanup within days of exposure.
+
+<details markdown="1" class="hl-teardown">
+<summary>The session workflow pattern, the mass validation run, the disinformation posting workflow, the tunnel registration and the cleanup, in full. Click to expand.</summary>
 
 ### 6.1 Gemini CLI Session Workflow Pattern
 
@@ -738,6 +751,8 @@ The operator detected the public exposure and wiped the open directory within da
 | Gemini API (operator → Google) | Operator-side (AEZA or GCP proxy) | `generativelanguage.googleapis.com` | HTTPS | High key-diversity (`?key=AIzaSy*`); 40+ keys cycled |
 | AntiPublic search (operator → service) | Operator-side | `antipublic.one/api/v2/search` | HTTPS | JWT-authenticated (operator JWT `sub:31703`) |
 | Ephemeral bootstrap (one-time) | Operator-side | `tenant-upcoming-great-descending.trycloudflare.com` | HTTPS | `.tar.gz` payload bundle delivery |
+
+</details>
 
 ---
 

@@ -191,6 +191,9 @@ Across all 21 recovered files, no existing YARA signature produced a single hit,
 
 The EvilSoul-Engine stealer harvests a consumer's full credential footprint (Discord accounts, browser secrets, cryptocurrency wallets, and gaming accounts) and defeats the newest browser protection (Chrome App-Bound Encryption) to do it. This section walks each capability class with the specific evidence recovered from `stealer.js` and its sibling builds, then translates what each means for defenders. The capabilities are stated at the level of *what the malware does and how it is detected*; the offensive code paths are described at capability altitude, not reproduced.
 
+<details markdown="1" class="hl-teardown">
+<summary>Full per-capability evidence: Discord takeover, browser theft, crypto/gaming theft, evasion, persistence, exfiltration (5.1-5.6)</summary>
+
 ### 5.1 Discord account takeover
 
 > **Analyst note:** Discord tokens are stored client-side in the app's local database. A stealer that lifts a token can impersonate the account without the password, and with the enrichment steps below, can also lift the account-recovery codes that would let a victim (or an attacker) restore access. This section explains how the theft works and why it amounts to full account takeover rather than a nuisance.
@@ -324,6 +327,8 @@ To detect it, the network signatures are strong precisely because they are hardc
   <figcaption><em>Figure 6: Exfiltration and operator-branding evidence from the recovered web-panel <code>/send-*</code> log. Each harvest is POSTed to the panel's <code>/send-data</code> and <code>/send-embed</code> endpoints under a <code>KAIDO-DAY-*</code> customer license key, wrapped in a Discord embed self-branded <code>0xK41 ~ BrowserData</code>. The repeated "Failed to send data to webhook" / "Unknown Webhook" errors are the dead-channel state described in Section 3. The staging box's webhooks were already torn down. The <code>0xK41</code> embed branding and the <code>KAIDO-DAY</code> key are attribution anchors tying this exfiltration path to the named operator (Section 10); the <code>/send-*</code> endpoints are durable, operator-provisioned network indicators.</em></figcaption>
 </figure>
 
+</details>
+
 ---
 
 ## 6. The 299a2e7f Socket.IO Variant — Stealer Plus Remote Access Trojan
@@ -332,6 +337,9 @@ To detect it, the network signatures are strong precisely because they are hardc
 > **Analyst note:** This is a distinct EvilSoul-Engine product tier, not just a fire-and-forget stealer, but a stealer with a full real-time remote access trojan bolted on, driven over a persistent Socket.IO channel. Its payload was V8 bytecode, so static analysis was unable to read it; its decrypted source was recovered from process memory during observed execution. This section describes what the tier can do to an infected host and how each capability is detected. The remote-control internals are summarized at capability altitude.
 
 The `299a2e7f` build (a single 81.9 MB pkg-Node executable) carries all the stealer capabilities of Section 5 and adds a full interactive remote access trojan over a persistent real-time channel to `http://evilsoul[.]cc:80` (Socket.IO version 4, opening with a `?EIO=4&transport=polling` handshake before upgrading to a WebSocket). Once connected, the operator issues named events and the infected client executes them and returns results.
+
+<details markdown="1" class="hl-teardown">
+<summary>Full remote-control, webhook-resolution, ABE-bypass, and build-identity detail for the Socket.IO variant (6.1-6.4)</summary>
 
 ### 6.1 Remote-control capability
 
@@ -364,6 +372,8 @@ A supporting identity detail: the build references a custom Discord emoji (`evil
 
 Because this tier's payload is V8 bytecode, static analysis was insufficient and the findings above come from process-memory recovery during observed execution (chronological detail in Section 9). Some session-theft function bodies were not fully recovered, and the absence of a hardware-ID blocklist in the examined memory snapshot does not prove one is absent elsewhere in the binary. These are honest gaps, not negative findings.
 
+</details>
+
 ---
 
 ## 7. The Maploot and Tinarox Electron Twins — One Exfiltration Stack, Two Builds
@@ -372,6 +382,9 @@ Because this tier's payload is V8 bytecode, static analysis was insufficient and
 > **Analyst note:** Maploot and Tinarox are two EvilSoul-Engine Electron builds that masquerade as free games and are delivered as MSI installers. Their significance is evidentiary: they prove, at the byte level, that the same operator produced both, and they let defenders watch the factory's packer *evolve* between two builds. This section explains the shared capabilities, the decisive same-operator finding, and what the twins reveal about the builder.
 
 Both Maploot and Tinarox present as free games. The `package.json` author reads `"Unreal Game Inc."`, with Maploot named `maploot` and Tinarox `tinaroxgamesfree`, and are delivered as MSI droppers with low detection (2 of 62 engines) that stage an Electron payload. Their capabilities mirror Section 5: Discord theft (tokens, billing, recovery and 2FA), browser credential theft (DPAPI plus SQLite across roughly ten Chromium forks plus Firefox), Steam, Minecraft, and Exodus wallet theft.
+
+<details markdown="1" class="hl-teardown">
+<summary>Full same-operator evidence and packer-evolution detail for the Maploot/Tinarox twins (7.1-7.3)</summary>
 
 ### 7.1 The decisive same-operator finding
 
@@ -397,6 +410,8 @@ The twins are a snapshot of the builder mid-evolution. The operator is actively 
 
 Maploot's backend serves its own copy of the Chrome App-Bound-Encryption injector at `evilsoul[.]xyz/download/decrypter/chrome_inject.exe`. This is the `evilsoul.xyz` analog of the `299a2e7f` tier's GitHub-hosted `chromelevator.exe`, the same App-Bound-Encryption bypass mechanism, delivered from the operator's own backend rather than from GitHub. It ties the twins' credential-decryption capability to the same commodity tool the Socket.IO tier fetches, analyzed next.
 
+</details>
+
 ---
 
 ## 8. The Commodity App-Bound-Encryption Bypass Tool (Supply-Chain Reuse)
@@ -405,6 +420,9 @@ Maploot's backend serves its own copy of the Chrome App-Bound-Encryption injecto
 > **Analyst note:** The Chrome credential-decryption tool that multiple EvilSoul-Engine tiers fetch at runtime is not the operator's own invention. It is a public, well-documented red-team tool that the operation adopted. This distinction matters for accurate reporting: it is a supply-chain-adoption story, not a novel-tradecraft story. This section covers what the tool does (at capability altitude), how it is family-named by antivirus vendors, and why its provenance is intel-relevant.
 
 The `chromelevator.exe` and `chrome_decrypt.dll` pair fetched by the `299a2e7f` tier (and mirrored on `evilsoul.xyz`) is the public red-team tool xaitax "Chrome-App-Bound-Encryption-Decryption" (also called "ChromElevator"), authored by security researcher Alexander Hagenah. This is well-documented public prior art, not novel tradecraft invented by this operator. The upstream repository (`github.com/xaitax/Chrome-App-Bound-Encryption-Decryption`) was confirmed accessible and current during the investigation. Antivirus vendors already family-name it on related samples, Kaspersky as `HEUR:HackTool.Win64.ChromElevator.gen`, Microsoft as `HackTool:Win64/PSWDump.MY!MTB`.
+
+<details markdown="1" class="hl-teardown">
+<summary>Full capability breakdown, operator fork evidence, and provenance reasoning for the ABE bypass tool (8.1-8.3)</summary>
 
 ### 8.1 What the tool does, at capability altitude
 
@@ -427,6 +445,8 @@ Two points for defenders:
 
 **Build-specific detection anchors** (from the companion detection file): the fork carries distinctive banner strings, a `PAYLOAD_DLL` embedded resource, a named-pipe completion signal, and a fixed drop path (`%TEMP%\executor\`) and output layout (`output\<Browser>\<Profile>\`). These are stable across the fork and give a durable file-based signature for the ABE tool specifically.
 
+</details>
+
 ---
 
 ## 9. Dynamic Analysis — The 299a2e7f Execution Behavior
@@ -435,6 +455,9 @@ Two points for defenders:
 > **Analyst note:** The `299a2e7f` Socket.IO variant ships as V8 bytecode, which static tooling cannot read as source. Its behavior and its decrypted JavaScript source were instead recovered from observed execution, the malware's own process memory exposed the source it was running, described in Section 6. This section presents what the sample did, in the order it did it.
 
 The findings below come from observing `EvilSoul-299a2e7f.exe` run and from recovering its process memory during that run, which surfaced the decrypted JavaScript source in two overlapping regions of the process heap, the evidentiary basis for the capability findings in Section 6.
+
+<details markdown="1" class="hl-teardown">
+<summary>Full execution timeline and what was confirmed vs. code-only (9.1-9.2)</summary>
 
 ### 9.1 Chronological timeline
 
@@ -455,6 +478,8 @@ All times are relative to process launch (T+00:00).
 Confirmed by direct observation: the native-module unpack sequence, the machine-ID registry query, the live DNS resolution and connection attempt to `evilsoul[.]cc`, and the presence of the complete decrypted JavaScript source in process memory (the source that Section 6's capability findings are built on).
 
 Not triggered during this execution, a run-specific gap, not a negative finding. No credential-theft file writes were observed on disk, and no exfiltration traffic reached the operator's real infrastructure. Both gaps have a specific explanation rather than indicating the sample lacks the capability: the operator's own server never issued the `browserData` command that triggers local credential harvesting, and the webhook-resolution relay was unreachable, so no exfiltration destination was ever obtained. The credential-theft and exfiltration capabilities analyzed in Section 6 are established from the recovered source code itself, not from watching them execute. This execution's contribution is confirming the sample's network behavior and recovering that source, not exercising every code path.
+
+</details>
 
 ---
 

@@ -35,37 +35,37 @@ figure_nav:
       - label: "Eight delivery vectors"
         anchor: "#31-the-eight-delivery-vectors"
       - label: "Carriers.exe wrapper"
-        anchor: "#41-carriersexe--inno-setup-pascal-script-anti-triage-wrapper"
+        anchor: "#carriersexe--inno-setup-pascal-script-anti-triage-wrapper"
       - label: "Stage-2 shellcode"
-        anchor: "#44-stage-2-shellcode-5808-bytes"
+        anchor: "#stage-2-shellcode-5808-bytes"
       - label: "Encrypted stage-3 carrier"
-        anchor: "#45-networkspec17log--encrypted-stage-3-carrier"
+        anchor: "#networkspec17log--encrypted-stage-3-carrier"
       - label: "Stage-3 PE bundle"
-        anchor: "#46-stage-3-pe-bundle--multi-vendor-camouflage"
+        anchor: "#stage-3-pe-bundle--multi-vendor-camouflage"
       - label: "HijackLoader proper"
-        anchor: "#47-pe_03--hijackloader--penguish--rugmi-proper"
+        anchor: "#pe_03--hijackloader--penguish--rugmi-proper"
       - label: ".NET injection"
-        anchor: "#63-net-injection-into-renamed-qihoo-promoutilexe-wvaultexe"
+        anchor: "#net-injection-into-renamed-qihoo-promoutilexe-wvaultexe"
       - label: "Persistence"
-        anchor: "#64-persistence-legacy-job--defender-exclusion--cert-install"
+        anchor: "#persistence-legacy-job--defender-exclusion--cert-install"
       - label: "C2 beacon"
-        anchor: "#67-c2-beacon-definite--three-independent-capture-sources"
+        anchor: "#c2-beacon-definite--three-independent-capture-sources"
   - image: hijackloader-stage2-eight-phase-architecture.svg
     parts:
       - label: "The 5,808-byte shellcode"
-        anchor: "#44-stage-2-shellcode-5808-bytes"
+        anchor: "#stage-2-shellcode-5808-bytes"
       - label: "The encrypted carrier"
-        anchor: "#45-networkspec17log--encrypted-stage-3-carrier"
+        anchor: "#networkspec17log--encrypted-stage-3-carrier"
       - label: "The stage-3 PE bundle"
-        anchor: "#46-stage-3-pe-bundle--multi-vendor-camouflage"
+        anchor: "#stage-3-pe-bundle--multi-vendor-camouflage"
       - label: "HijackLoader proper"
-        anchor: "#47-pe_03--hijackloader--penguish--rugmi-proper"
+        anchor: "#pe_03--hijackloader--penguish--rugmi-proper"
       - label: "The cipher gap"
-        anchor: "#66-cipher-gap-on-the-encrypted-payload"
+        anchor: "#cipher-gap-on-the-encrypted-payload"
   - image: hijackloader-msc-tier1-chain.svg
     parts:
       - label: "The GrimResource trigger"
-        anchor: "#56-msc-grimresource-t1218014-mmc"
+        anchor: "#msc-grimresource-t1218014-mmc"
       - label: "One vector among eight"
         anchor: "#31-the-eight-delivery-vectors"
       - label: "The MEGA payload fetch"
@@ -77,13 +77,13 @@ figure_nav:
   - image: hijackloader-process-tree.svg
     parts:
       - label: "Carriers.exe"
-        anchor: "#41-carriersexe--inno-setup-pascal-script-anti-triage-wrapper"
+        anchor: "#carriersexe--inno-setup-pascal-script-anti-triage-wrapper"
       - label: "CrystSupervisor32.exe"
-        anchor: "#42-crystsupervisor32exe--renamed-wondershare-slideshoweditorexe"
+        anchor: "#crystsupervisor32exe--renamed-wondershare-slideshoweditorexe"
       - label: "ExceptionHandler.dll"
-        anchor: "#43-exceptionhandlerdll--operator-modified-wondershare-plowshare-crash-reporter"
+        anchor: "#exceptionhandlerdll--operator-modified-wondershare-plowshare-crash-reporter"
       - label: "WVault.exe"
-        anchor: "#410-pe_08--genuine-qihoo-360-promoutilexe-becomes-wvaultexe-at-runtime"
+        anchor: "#pe_08--genuine-qihoo-360-promoutilexe-becomes-wvaultexe-at-runtime"
       - label: "The full tree"
         anchor: "#61-process-tree"
 process_tree:
@@ -516,6 +516,9 @@ Both themes target B2B business workflows, consistent with broad opportunistic c
 {: .hl-tier-3}
 
 Three distribution-layer components carry the loader chain: `Carriers.exe` (the Inno Setup wrapper a triage pipeline encounters first), `CrystSupervisor32.exe` (the genuine signed side-load host), and `ExceptionHandler.dll` (the operator's modified DLL that drives the chain). All three are analyzed below.
+
+<details markdown="1" class="hl-teardown">
+<summary>File facts, hashes and the anti-triage or side-load mechanics for all ten distribution-layer components. Click to expand.</summary>
 
 ### 4.1 Carriers.exe — Inno Setup Pascal-Script Anti-Triage Wrapper
 
@@ -968,12 +971,17 @@ The runtime drop hash differs from the bundle hash (`c085a724…` vs `ca9f859f�
   <figcaption><em>Figure 11: Process properties for <code>WVault.exe</code> at runtime. The properties confirm the file is the genuine Qihoo 360 "Promotion Utility Application" (v8.6.0.1311, Mar 2025 build), not operator-built. The current directory <code>%APPDATA%\adv_ctrl\</code> reveals the operator's persistence directory codename <code>adv_ctrl</code>, and the parent process listing as <code>&lt;Non-existent Process&gt;</code> indicates the launching parent already exited (consistent with the <code>WinExec</code> fire-and-forget pattern from <code>InitializeSetup()</code>).</em></figcaption>
 </figure>
 
+</details>
+
 ---
 
 ## 5. Static Analysis — The Eight Delivery Vectors
 {: .hl-tier-3}
 
 All eight initial-access vectors converge on the same loader chain. Each was extracted from the open directory and analyzed independently at the static-artifact level.
+
+<details markdown="1" class="hl-teardown">
+<summary>Every delivery vector in full, from the NTLM-leaking .url shortcut to the bundled RMM toolkit. Click to expand.</summary>
 
 ### 5.1 `.url` Internet Shortcuts (NTLM hash leak + WebDAV fetch)
 
@@ -1086,6 +1094,8 @@ This is a standard Russian-affiliate accessory toolkit. AnyDesk is a legitimate 
 
 These tools are genuine and signed (where applicable). They are not malicious in themselves, but their co-location in an attacker-staging directory alongside operator-controlled malware is a strong attribution signal for the operator's intended use.
 
+</details>
+
 ---
 
 ## 6. Dynamic / Behavioral Analysis
@@ -1102,6 +1112,9 @@ These tools are genuine and signed (where applicable). They are not malicious in
 
 
 `CrystSupervisor32.exe` is launched THREE times, for temp extraction, the persistent directory, then the final injected version, which is why one binary name appears twice in the tree above.
+
+<details markdown="1" class="hl-teardown">
+<summary>The file drop sequence, the .NET injection, persistence, the cipher gap, the C2 beacon, DNS and Suricata findings, in full. Click to expand.</summary>
 
 ### 6.2 Stage-by-Stage File Drop Sequence
 
@@ -1351,6 +1364,8 @@ Of the 49 unique DNS A queries during the session, **NONE point to operator-cont
 | 3 | `SURICATA STREAM Packet with invalid ack` | Same |
 
 No AsyncRAT/zgRAT/DCRat SSL-certificate detections fired, because the TLS handshake never completed and the server certificate was never sent. The pre-existing VT IDS hits on `Carriers.exe` (HIGH confidence, three independent rules: AsyncRAT JA3, AsyncRAT/zgRAT SSL cert pattern, DCRat C&C SSL cert) provide the family-attribution signal that this run did not directly observe.
+
+</details>
 
 ---
 

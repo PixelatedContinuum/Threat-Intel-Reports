@@ -369,6 +369,9 @@ The extraction workflow produced the material everything else rests on. Running 
 
 ---
 
+<details markdown="1" class="hl-teardown">
+<summary>The AMSI/ETW bypass, config encryption, persistence, C2 architecture, surveillance and evasion capabilities, in full. Click to expand.</summary>
+
 ### 5.2 AMSI + ETW Bypass Chain
 
 > **Analyst note:** This section describes how Shadow RAT disables two of Windows' primary malware detection mechanisms before running its main features. AMSI (Antimalware Scan Interface) is the Windows system that allows security software to scan code running in memory. ETW (Event Tracing for Windows) is the telemetry infrastructure that security tools use to log and monitor process activity. Disabling both effectively creates a blind spot in the security tooling of the compromised system.
@@ -604,6 +607,8 @@ Config fields `UseRunPE`, `RunPETarget`, and `ExecuteInMemoryDotNet` indicate pr
 **FunStuff/Harassment module (LOW impact, confirmed present):**
 A `FunStuff` namespace in `Shadow.Common.Messages` contains non-destructive harassment commands: ransomware-style message display (visual overlay only, no file encryption), screen rotation, GDI graphical effects, jump scare, sound mute/unmute, and forced Windows Update trigger. These are operator-controlled troll/harassment tools and do not represent a serious impact capability.
 
+</details>
+
 ---
 
 ## 6. Technical Analysis — XWorm 3.0-5.0
@@ -618,6 +623,9 @@ The binary structure consists of three sections: `.text` (high entropy, obfuscat
 **Two builds, same configuration, different keys:** Both XWorm builds share identical C2 configuration (host `151.245.112.70`, port `7007`, group `<Xwormmm>`, USB spread filename `USB.exe`) but use different builder-generated AES encryption keys (`PdqPY2fw6ffCVLQ8` for build #1, `ZdoNsjYfT6begqDl` for build #2). The two mutexes (`PdqPY2fw6ffCVLQ8` and `ZdoNsjYfT6begqDl`; the AES keys double as mutex names in XWorm) confirm they cannot run simultaneously on the same host.
 
 ---
+
+<details markdown="1" class="hl-teardown">
+<summary>The anti-analysis gauntlet, triple-redundant persistence, config encryption and C2 mechanics, in full. Click to expand.</summary>
 
 ### 6.2 Anti-Analysis Gauntlet
 
@@ -715,6 +723,8 @@ The config field `USB.exe` specifies the filename used when spreading to removab
 
 **Keylogger (DEFINITE):**
 XWorm writes keystrokes to `%TEMP%\Log.tmp`. This fixed output path is a reliable host-based indicator.
+
+</details>
 
 ---
 
@@ -976,6 +986,9 @@ There is a supply chain risk too. The open-source Quasar and Pulsar lineage plus
 > **Analyst note:** MITRE ATT&CK is a publicly available framework that categorizes the tactics and techniques used by attackers. This table maps observed Shadow RAT and XWorm behaviors to ATT&CK identifiers, enabling security teams to hunt for these techniques using ATT&CK-based detection tools and threat intelligence platforms.
 
 *Table shows only HIGH/MODERATE confidence mappings. Low-confidence techniques omitted pending deeper analysis.*
+
+<details markdown="1" class="hl-teardown">
+<summary>The full technique mapping for both Shadow RAT v2.6.4.0 and XWorm 3.0-5.0. Click to expand.</summary>
 
 ### Shadow RAT v2.6.4.0
 
@@ -1281,6 +1294,8 @@ There is a supply chain risk too. The open-source Quasar and Pulsar lineage plus
     </tr>
   </tbody>
 </table>
+
+</details>
 
 ---
 

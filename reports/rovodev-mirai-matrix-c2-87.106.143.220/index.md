@@ -183,6 +183,9 @@ Phase 11 REFUTED the MaaS hypothesis. The operator is a **downstream adopter** o
 
 The campaign couples a Pandora-Mirai 11-architecture IoT bot suite with an AI-co-authored Matrix C2 framework, productized as a tiered DDoS-as-a-Service. Nine subsections document each component at the depth required for defender reproduction, validation, and detection authoring: the bot suite, the Matrix C2 Python framework, the DDoS-as-a-Service tier model, the Rovodev AI co-authoring evidence chain, the cross-3-operator universal-subset structural signature, the dual-channel build/deploy tradecraft, the operator-OPSEC split-architecture pattern, the Naku.arm static reverse engineering findings, and the escalated-prompt `stealth_agent.py` capability set.
 
+<details markdown="1" class="hl-teardown">
+<summary>All nine capability sections in full, from the bot suite through the escalated-prompt stealth_agent.py evidence chain. Click to expand.</summary>
+
 ### 4.1 Pandora-Mirai 11-Architecture IoT Botnet
 
 > **Analyst note:** This section documents how an operator-bespoke layer of obfuscation and protocol modifications is layered on top of an inherited Sora-fork Mirai-family source tree. The four bespoke modifications (triple-XOR-key obfuscation, 22-character custom charset, double Huawei scanner, length-prefixed-string CNC option keys) are byte-level diagnostic of this operator and not observed elsewhere in Hunt.io's 365-day index. The defender-relevance is that defender signatures pattern-matching on stock Mirai or stock Sora-fork constants will miss this variant.
@@ -706,12 +709,17 @@ The escalated-prompt capability set:
 
 This is DIRECT AI-PROMPTED anti-analysis, the operator's prompt to Rovodev escalated from "write me a stealth agent" baseline to include all eight of the above capabilities. The captured `session_context.json` shows the file was created via `file_write` tool call with full `initial_content` payload including the anti-analysis content. The lesson for the field: vendor T&S programs need prompt-pattern policy detection at the prompt-content level (the operator's prompts for `stealth_agent.py` are unmistakably malware-development specifications), and defender-side detections cannot rely on absence of evasion as an AI-authorship signal.
 
+</details>
+
 ---
 
 ## 5. Static Analysis Findings
 {: .hl-tier-3}
 
 > **Analyst note:** Static analysis depth is split across two distinct artifact classes for this case, the Naku/Pandora 11-architecture ELF binaries (compiled C code requiring strings analysis + cross-architecture comparison + targeted ARM ELF disassembly to extract operator-bespoke modifications) and the Matrix C2 Python framework + AI-authored standalone scripts (AI-authored source code that can be read directly). Where the artifact is operator-authored source captured intact, capability extraction is DEFINITE; where it is a compiled binary the extraction is HIGH from VirusTotal family-rule consensus + cross-arch operator-permanent indicator confirmation + ARM-disassembly-recovered hardcoded constants.
+
+<details markdown="1" class="hl-teardown">
+<summary>The Python framework, bash dropper, ELF binary walkthrough and credential brute-list, in full. Click to expand.</summary>
 
 ### 5.1 Python Framework Static Analysis Approach
 
@@ -823,12 +831,17 @@ ROOT            (commodity)
 
 Regardless of which read is correct for this operator, the cross-case Turkey signal is independently confirmed: Sub-report 3 (UTA-2026-013, the Turkish ARPA operator) confirmed Turkey as an active target sector via five-axis convergence (language, handle, self-branding, explicit target references, and residential ISP signals). That confirmation is independent of this operator's Sora-fork inheritance question.
 
+</details>
+
 ---
 
 ## 6. Dynamic / Behavioral Analysis
 {: .hl-tier-3}
 
 > **Analyst note:** Behavioral observations in this case come primarily from operator-side captured infrastructure (filesystem inventory, configuration files, Rovodev session JSONs, runtime log files, deployed scripts captured intact) plus VirusTotal sandbox detonation data on three of the eleven Naku binaries (arm5/arm7/x86) and direct ARM ELF disassembly of Naku.arm. This is appropriate for the case. The artifacts captured ARE the behavioral evidence (operator's own deployed persistence scripts, AI-tool session transcripts, embedded CNC constants, plaintext exploit payloads). No workstation-side dynamic detonation was performed (operator's binaries are sample files; lab-VM dynamic analysis is downstream work).
+
+<details markdown="1" class="hl-teardown">
+<summary>The dropper execution behavior, wire formats, persistence, watchdog disable, scanner threads and anti-forensics cleanup, in full. Click to expand.</summary>
 
 ### 6.1 Multi-Architecture Dropper Execution Behavior
 
@@ -915,6 +928,8 @@ After init and before CNC connection, the bot launches four parallel scanner thr
 The operator's `whatineed.txt` prompt explicitly requests: *"...and after everything is live, clean files not needed."* The matrix/ depth-1 inventory shows the operator did NOT carry through with this cleanup, 22-plus handoff documents, debug-symbol arm7 build, `.rovodev/sessions/` JSONs, `.rovodev/logs/rovodev.log` (8.5 MB), `setup_database.sql`, `bot_simulator.py` test rig, nine-variant scanner iteration chain, multiple `bot.js` variants with backups (`.backup` + `_old.js` + slash variants) ALL remain on the open-directory host. The cleanup-request was generated by the operator-prompt but never executed.
 
 This is a defender-relevant operator-class signal. The operator demonstrably knows cleanup is important (they explicitly told the AI to do it) but did not carry it out (they retain everything, including iteration history). The combination of "explicit OPSEC awareness" + "failure-to-execute-OPSEC" pattern is characteristic of mid-tier solo operators using AI as force-multiplier, they understand what should be done at the conceptual level but lack the discipline to execute consistently.
+
+</details>
 
 ---
 

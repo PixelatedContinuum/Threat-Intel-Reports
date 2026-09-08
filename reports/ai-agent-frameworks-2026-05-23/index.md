@@ -37,7 +37,7 @@ figure_nav:
       - label: "Class 2 · second exemplar"
         anchor: "#43-case-3--rovodevpandora-mirai-botnet-operator"
       - label: "The taxonomy itself"
-        anchor: "#410-three-class-ai-threat-actor-taxonomy"
+        anchor: "#three-class-ai-threat-actor-taxonomy"
 ---
 
 **Campaign Identifier:** AI-Agent-Frameworks-MultiActor-2026-05-23<br>
@@ -311,6 +311,9 @@ The operator hosts on 5.230.201.54 (AS200051, Netherlands), registered to an ind
 
 For defenders, block `5.230.201.54`, combine JARM matches with other Sliver signals, and baseline `%TEMP%\svchost_upd.exe` across the Windows estate. This one stays at capsule depth, with no sub-report planned.
 
+<details markdown="1" class="hl-teardown">
+<summary>The five novel cross-case TTPs, the three-class taxonomy and the false-positive discrimination, in full. Click to expand.</summary>
+
 ### 4.9 Five Novel TTPs (Cross-Case)
 
 > **Analyst note:** This sub-section documents five TTPs that prior-art search across 8+ major vendor AI-misuse reports (Google GTIG, Anthropic Misuse Reports, Censys ARC, Proofpoint, IBM X-Force, Kaspersky, Doctor Web, Hunt.io) did **not** surface as previously-documented. Each TTP is presented with: (a) what it is, (b) the campaign exemplars, (c) the prior-art assessment honestly characterized (DEFINITE vs MODERATE vs MODERATE-HIGH novelty per the prior-art gap assessment), (d) the defender detection strategy. Three of the five (Sections 4.9.1, 4.9.3, 4.9.4) carry MODERATE or MODERATE-HIGH novelty rather than DEFINITE because the prior-art search did not exhaust academic conference proceedings (Black Hat, USENIX, IEEE S&P, DEF CON 2024-2026) or underground forum monitoring (Exploit.in, XSS.is). These TTPs are documented as **first-public-documentation candidates** pending deeper prior-art search.
@@ -465,6 +468,8 @@ To detect it, write a network-layer rule for HTTP traffic carrying `User-Agent: 
 Two further hosts flagged by Hunt.io heuristics during Phase 11 mirror-and-demote analysis were similarly demoted. Both showed surface-level AI-tool presence (Claude session metadata) without offensive operator artifacts. Both demonstrate the same point as Cases 5 and 6.
 
 The combined lesson for defenders is about false-positive rate. My hunting heuristics produced 4 false positives among 12 initially-flagged hosts (8 confirmed, 2 demoted via Cases 5 and 6, 2 demoted via Hunt). That 33% initial-flag false-positive rate is honest characterization, and defenders deploying AI-tool-presence heuristics should expect similar rates and design their hunting workflows around fast-discriminator review (target-list presence, victim-context references, exfil infrastructure) rather than treating AI-tool presence as a high-fidelity indicator.
+
+</details>
 
 ---
 

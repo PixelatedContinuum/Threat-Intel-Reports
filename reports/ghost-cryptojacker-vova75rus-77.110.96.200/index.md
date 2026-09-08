@@ -264,6 +264,9 @@ The capabilities below build the hidden, persistent cryptojacking outcome summar
 | Self-hosted XMR/CFX pool proxies (Operator-A only) | MEDIUM, wallet-layer attribution break | EASY (port signature) | DEFINITE |
 | Multi-cloud target enumeration via bgpview.io | MEDIUM, campaign scaling | EASY (network signature) | DEFINITE |
 
+<details markdown="1" class="hl-teardown">
+<summary>Full per-capability detail: rootkit, shell suite, exploitation framework, container escape, backdoor, enumeration, supply chain (4.1-4.7)</summary>
+
 ### 4.1 libpam_cache.so LD_PRELOAD Rootkit
 
 > **Analyst note:** This subsection covers the kit's userland rootkit, a small shared library (~14 KB) that, when loaded into every process on the system via the LD_PRELOAD mechanism, intercepts standard C library calls so that certain processes, files, and network ports become invisible to common diagnostic tools (`ps`, `ls`, `ss`, `netstat`). It is **not** a kernel-mode rootkit and **not** a PAM authentication backdoor despite the misleading filename. The hide-list (27 strings + 9 ports) is the structural fingerprint of the kit family.
@@ -427,12 +430,17 @@ Operationally it matters too. The OWNER bot is the kit-author-owned channel, so 
 
 The single highest-value detection signature in this campaign is an HTTPS request to `api.telegram.org/bot8415540095:*` from any host, covered by Suricata rule MAL_GHOST_OWNER_Telegram_Bot_Indicator in Section 10. A YARA byte-string match for `8415540095` in any binary or script catches deployments at rest, and a Sigma rule for bash history matching the bot token regex catches operator-OPSEC failures across many cryptojacker families, not just GHOST.
 
+
+</details>
 ---
 
 ## 5. Static Analysis Findings
 {: .hl-tier-3}
 
 > **Analyst note:** This section documents the static (file-on-disk, no execution) analysis of the kit's two most important artifacts, the libpam_cache.so ELF binary and the ghost.sh installer script. Static analysis here refers to file structure dissection, string extraction, and source-code review of the captured artifacts; no malware was executed on production infrastructure to produce these findings.
+
+<details markdown="1" class="hl-teardown">
+<summary>Full static dissection: libpam_cache.so ELF breakdown and ghost.sh function walkthrough (5.1-5.2)</summary>
 
 ### 5.1 libpam_cache.so ELF Dissection
 
@@ -529,12 +537,17 @@ The first line self-identifies. Line 1 reads `# GHOST v5.1 (Anti-Hisana + Resurr
 
 The upstream OSS attribution survives intact. Files written by the kit's UnamWebPanel component carry the comment `/* Made by Unam Sanctam https://github.com/UnamSanctam */`, which comes from the UnamWebPanel codebase (UnamSanctam is the GitHub identity of the upstream OSS author, and the comment is in the original source). Its presence in deployed PHP files anchors the UnamSanctam to Vova75Rus supply-chain relationship, because Vova75Rus bundles UnamWebPanel without modifying the upstream attribution.
 
+
+</details>
 ---
 
 ## 6. Dynamic / Behavioral Analysis
 {: .hl-tier-3}
 
 > **Analyst note:** This section documents the operator's actual hands-on-keyboard activity on Operator-A's host (77.110.96.200), reconstructed from a 1,472-line bash history file recovered from the open directory. The bash history is the most direct evidence of operator tradecraft, OPSEC posture, and operational iteration tempo available in this investigation. No malware was detonated by The Hunters Ledger to produce this section; the dynamic analysis is reconstructed from operator-side artifacts left in the open directory.
+
+<details markdown="1" class="hl-teardown">
+<summary>Full operator forensics: bash history, operational reconstruction, live iteration, network behavior (6.1-6.4)</summary>
 
 ### 6.1 Operator Bash History Forensics (Operator-A, 77.110.96.200)
 
@@ -601,6 +614,8 @@ The patterns below reconstruct GHOST's network behavior from the kit's static co
 
 **Detection patterns derived from this network behavior are encoded in the Suricata rules in the Section 10 detection file.** These Suricata rules are derived from static kit configuration, not from observed PCAP capture. Defenders should treat them as configuration-derived signatures, higher-yield in controlled environments but potentially carrying elevated false-positive risk in noisy environments where the individual protocol patterns (Telegram API egress, GitHub HTTPS, bgpview.io DNS) overlap with legitimate traffic. The highest-confidence Suricata rule remains the OWNER Telegram bot ID prefix (`8415540095:`) because that specific string has no legitimate use case outside this kit's supply-chain monitoring channel.
 
+
+</details>
 ---
 
 ## 7. MITRE ATT&CK Mapping

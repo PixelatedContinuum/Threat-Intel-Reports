@@ -37,39 +37,39 @@ figure_nav:
   - image: bellamain-single-tenant-database.svg
     parts:
       - label: "The shared schema"
-        anchor: "#62-mysql-schema-inferred"
+        anchor: "#mysql-schema-inferred"
       - label: "Seven brand kits"
-        anchor: "#58-seven-named-turkish-brand-impersonations--the-target-surface"
+        anchor: "#seven-named-turkish-brand-impersonations--the-target-surface"
       - label: "The panel source"
-        anchor: "#51-full-php-source-recovery--what-it-unlocks"
+        anchor: "#full-php-source-recovery--what-it-unlocks"
       - label: "Hardcoded credentials"
-        anchor: "#63-notable-strings--operator-identity-and-anti-researcher-canary"
+        anchor: "#notable-strings--operator-identity-and-anti-researcher-canary"
   - image: bellamain-four-bot-telegram-c2.svg
     parts:
       - label: "The four bots and role separation"
-        anchor: "#53-four-bot-telegram-c2-with-role-separation"
+        anchor: "#four-bot-telegram-c2-with-role-separation"
       - label: "adminbot's wipe commands"
-        anchor: "#54-truncate-evidence-destruction-on-demand--anti-forensics"
+        anchor: "#truncate-evidence-destruction-on-demand--anti-forensics"
       - label: "/yedek backup-as-exfil"
-        anchor: "#55-yedek-mysql-backup-as-exfil--telegram-as-cloud-storage"
+        anchor: "#yedek-mysql-backup-as-exfil--telegram-as-cloud-storage"
       - label: "/usom blocklist self-monitoring"
-        anchor: "#52-usom-blocklist-self-monitoring--the-distinctive-turkish-targeting-tradecraft"
+        anchor: "#usom-blocklist-self-monitoring--the-distinctive-turkish-targeting-tradecraft"
       - label: "cekimbot and the TRX payout"
-        anchor: "#56-7030-trxtron-payout-flow-via-live-binance-trxtry-rate"
+        anchor: "#trxtron-payout-flow-via-live-binance-trxtry-rate"
       - label: "The canary bot"
-        anchor: "#63-notable-strings--operator-identity-and-anti-researcher-canary"
+        anchor: "#notable-strings--operator-identity-and-anti-researcher-canary"
   - image: bellamain-victim-funnel-chronology.svg
     parts:
       - label: "Kit page render"
-        anchor: "#58-seven-named-turkish-brand-impersonations--the-target-surface"
+        anchor: "#seven-named-turkish-brand-impersonations--the-target-surface"
       - label: "Identity and card capture"
-        anchor: "#53-four-bot-telegram-c2-with-role-separation"
+        anchor: "#four-bot-telegram-c2-with-role-separation"
       - label: "Payout"
-        anchor: "#56-7030-trxtron-payout-flow-via-live-binance-trxtry-rate"
+        anchor: "#trxtron-payout-flow-via-live-binance-trxtry-rate"
       - label: "Evidence destruction"
-        anchor: "#54-truncate-evidence-destruction-on-demand--anti-forensics"
+        anchor: "#truncate-evidence-destruction-on-demand--anti-forensics"
       - label: "The full chronology"
-        anchor: "#71-operator-workflow-reconstruction-chronological"
+        anchor: "#operator-workflow-reconstruction-chronological"
 ---
 
 **Campaign Identifier:** BellaMain-Turkish-PhaaS-79.137.192.3<br>
@@ -286,6 +286,9 @@ PHP code quality itself is unremarkable: linear procedural style, plaintext hard
 {: .hl-tier-3}
 
 BellaMain's nine capabilities reveal operator-grade tradecraft concentrated at the operations and anti-takedown layer, not at the code layer. Each subsection below leads with an analyst-note conclusion, then provides Evidence, Why This Matters, and Detection guidance, in order of distinctiveness.
+
+<details markdown="1" class="hl-teardown">
+<summary>All nine capabilities in full, from the PHP-source recovery through the invite-only operator gating. Click to expand.</summary>
 
 ### 5.1 Full PHP-Source Recovery — What It Unlocks
 
@@ -504,6 +507,8 @@ Three implications follow:
 
 A PHP file containing `DELETE FROM refkodlari` next to a `SELECT * FROM refkodlari WHERE ref_code` is the BellaMain `signup.php` signature. The full referral-system code, signup.php plus the manager.php `/refkod` and `/reflist` handlers, is the strongest source-level evidence that a discovered PHP panel implements an invite-only multi-operator licensing model rather than a single-tenant kit.
 
+</details>
+
 ---
 
 ## 6. Static Analysis Findings
@@ -561,6 +566,9 @@ All seven kits share the same first-VT-seen date (2024-04-18), consistent with a
 *See [Section 10](#10-indicators-of-compromise-reference) and the [machine-readable IOC feed](/ioc-feeds/bellamain-turkish-phaas-79-137-192-3-20260516-iocs.json) for the canonical IOC inventory.*
 
 One entropy observation is worth noting. The ZIP archive's overall entropy of 7.9998 across 4699 chunks, 4696 of them high-entropy, is the standard signature of compressed PHP source, DEFLATE compression of plain text, rather than packed or encrypted malware. The PHP source files inside are uncompressed and carry normal entropy.
+
+<details markdown="1" class="hl-teardown">
+<summary>The MySQL schema, the notable strings, admin-path obfuscation and the session/object-injection surface, in full. Click to expand.</summary>
 
 ### 6.2 MySQL Schema (inferred)
 
@@ -621,12 +629,17 @@ The 12-character random admin directory name `V5VgjLU0jsDe` is non-guessable via
 
 The panel and all seven kits share a single session cookie name `2tUgyO@H9E!4CuQ` set with a 365-day lifetime (`time() + 60 * 60 * 24 * 365`). Once an operator logs into the panel, the same cookie is honored by all kits' AJAX endpoints, which means an operator authenticated to the panel can also write to kit-side endpoints from the same browser session. The cookie value is `sifreleWadanz()`-encoded but **also unserialize()'d on read** (`sifrecozWadanz()` calls `unserialize(gzuncompress(base64_decode($data)))`). This is a **PHP object injection surface**: an attacker who can supply an arbitrary cookie value can potentially achieve PHP-level RCE on the panel host via `__wakeup()` or `__destruct()` magic methods if any class in the panel exposes a suitable gadget chain. We did not weaponize this, but it is a defensive opportunity if any defender obtains panel-host access lawfully (e.g., during incident response with hosting-provider cooperation).
 
+</details>
+
 ---
 
 ## 7. Dynamic Findings — Behavioral Analysis
 {: .hl-tier-3}
 
 > **Analyst note on "dynamic" analysis here.** BellaMain is server-side PHP source, not a PE binary, so there is no malware-detonation sandbox to run. "Dynamic" findings below are reconstructed from the source code's execution paths, the behaviors that *will* execute when the panel is deployed and a victim hits a kit page. Where direct external observation was possible (Telegram bot status, live URL endpoints on `79.137.192.3`), those are noted. We did not stand up a live MySQL + PHP instance of the panel.
+
+<details markdown="1" class="hl-teardown">
+<summary>The operator-workflow reconstruction, outbound network activity, filesystem and process activity, persistence and current status, in full. Click to expand.</summary>
 
 ### 7.1 Operator-Workflow Reconstruction (Chronological)
 
@@ -717,6 +730,8 @@ BellaMain has no host-malware persistence. It is a server-side PHP application i
 | Operator-configured per-deployment Telegram bots (`adminbot`/`dekontbot`/`cekimbot`/`vergibot`) | Unknown, not externally testable without operator token values |
 | Operator Telegram alias `@AresRS34` | **ACTIVE** Telegram user (privacy-restricted preview) |
 | HTTP port 80 on `79.137.192.3` | **Newly opened** in the 2026-05-07 re-triage (previously HTTPS-only), indicates ongoing operator development |
+
+</details>
 
 ---
 
@@ -867,43 +882,7 @@ What would increase confidence:
 ## 10. Indicators of Compromise (Reference)
 {: .hl-tier-2}
 
-The complete machine-readable IOC inventory is published as a separate JSON feed at [`/ioc-feeds/bellamain-turkish-phaas-79-137-192-3-20260516-iocs.json`](/ioc-feeds/bellamain-turkish-phaas-79-137-192-3-20260516-iocs.json). The IOC feed is **not** defanged, values are in canonical RFC-shaped form for direct ingestion into SIEM / EDR / proxy platforms.
-
-This section provides a representative subset and references the feed for the complete inventory. **Do not** treat this section as the authoritative source. The JSON feed is canonical.
-
-### 10.1 Representative IOCs
-
-| Type | Indicator | Confidence | Context |
-|---|---|---|---|
-| IP | `79.137.192.3` | DEFINITE | BellaMain panel + 7 kits + CryptOne staging, direct observation, current 2026-05-07 |
-| ASN | AS216246, Aeza Group LLC | DEFINITE | Current announcement; bulletproof hoster; OFAC-sanctioned 2025-07-01 |
-| ASN | AS204603, Aeza Group Ltd | HIGH | Historical announcement, 2023 |
-| JARM | `2ad2ad0002ad2ad00042d42d00000000f78d2dc0ce6e5bbc5b8149a4872356` | DEFINITE | TLS fingerprint for `79.137.192.3:443` |
-| URL | `https://79.137.192.3/BellaMain/` | DEFINITE | Panel directory listing |
-| URL | `https://79.137.192.3/cryptone/` | DEFINITE | CryptOne fake-exchange staging path |
-| URL | `https://79.137.192.3/no/` | DEFINITE | Card phishing lure |
-| Domain | `cryptone.bot` | HIGH | CryptOne production (Cloudflare-fronted, 0/92 VT) |
-| Domain | `evotoptan.com` | MODERATE | 22-min DNS test to 79.137.192.3 on 2026-03-31; now Namecheap shared, FP risk |
-| SHA256 | `f791fae41cdd3f141221d1783ed4779c839de7fc834ff4fc80a5d7f74b11ff88` | DEFINITE | `BellaMain.zip`, panel ZIP (first public disclosure) |
-| SHA256 | `2c656360c4e58854dca35ff21b3fc62db41155ca76f8568ecc18fa52aa38fb31` | DEFINITE | `Dolap.rar` |
-| SHA256 | `705793c011fdfe17941700a3bf42eee0ba2ebdc04870ce19779ea528b3565fac` | DEFINITE | `Kargo.rar` (Yurtiçi Kargo) |
-| SHA256 | `e21fb63a3b4d65a3d48dec1bf17a84a414482f819b93cb8d77a81852dc34c95f` | DEFINITE | `Letgo.rar` |
-| SHA256 | `ee9d4fccebbf73fb33980da15142bc71e5d9661d1bc583c2b09b77490065efd9` | DEFINITE | `Pttavm.rar` |
-| SHA256 | `b2f4f1617577d14612b30a54a733b15af809c399f325717b4329c13aaa4c915c` | DEFINITE | `sahibinden.rar` |
-| SHA256 | `504b1a30ce7060eafa7b2a3f6249c954a0be6ce1d2930e03b030434cb232600a` | DEFINITE | `shopier.rar` |
-| SHA256 | `219cd4f6177a2358ec7f06b230d611f47e1049fcb3e2b44d06ec410b336382b0` | DEFINITE | `turkcell.rar` |
-| Telegram bot token | `6797512084:AAGbJVoC0zcKWYPbFG8oc_bACPn6gUEye_E` | DEFINITE | Hardcoded canary, REVOKED; useful for hunting on stored kit copies |
-| Telegram group ID | `-1002104835510` | DEFINITE | Canary exfil group/channel |
-| Telegram group ID | `-1001817323952` | DEFINITE | Operator announcement group |
-| Telegram user ID | `5606327063` | DEFINITE | Authorized withdrawal approver #1 |
-| Telegram user ID | `6594066326` | DEFINITE | Authorized withdrawal approver #2 |
-| Telegram alias | `@AresRS34` | HIGH | Operator alias; real privacy-restricted account |
-| Code-author pseudonym | `Wadanz` | HIGH | Function-name suffix in `sifreleWadanz` / `sifrecozWadanz`, cross-sample author pivot |
-| File path | `BellaMain/V5VgjLU0jsDe/manager.php` | DEFINITE | Admin Telegram bot file |
-| Admin path | `V5VgjLU0jsDe` | DEFINITE | Obfuscated 12-char admin directory inside panel |
-| Cookie name | `2tUgyO@H9E!4CuQ` | DEFINITE | Session-persistence cookie set on operator login |
-| Hardcoded DB credential | `jakartaxdw` / `dbjakartaxdw` / `W!@25#8Tb2gxq15` | DEFINITE | MySQL triple across panel and all 7 kits |
-| GTM container | `GTM-K7F5T5N` | HIGH | Google Tag Manager container embedded in all kit pages |
+I publish the complete, un-defanged indicator inventory as a separate JSON feed, canonical-form for direct SIEM, EDR and proxy ingestion, rather than repeat it here: 26 indicators spanning the panel IP and its ASN history, a JARM fingerprint, kit-staging URLs and domains, eight sample hashes, and the operator's own Telegram, code-author and credential fingerprints. See the IOC feed panel for the link.
 
 ### 10.2 IOC Counts (per IOC Feed)
 

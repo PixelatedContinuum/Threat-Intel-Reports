@@ -31,15 +31,15 @@ figure_nav:
   - image: arpa-observability-reverse-pipeline.svg
     parts:
       - label: "The stolen Instana JWT"
-        anchor: "#51-powershell-collector-script-turkish-instana_local_collectorps1"
+        anchor: "#powershell-collector-script-turkish-instana_local_collectorps1"
       - label: "The reverse pipeline"
-        anchor: "#42-observability-tool-reverse-pipeline--novel-ttp-at-maximalist-scale"
+        anchor: "#observability-tool-reverse-pipeline--novel-ttp-at-maximalist-scale"
       - label: "Cross-source ETL"
-        anchor: "#45-cross-source-etl--7552-element-unified-topology"
+        anchor: "#cross-source-etl--7552-element-unified-topology"
       - label: "AI-augmented recon"
-        anchor: "#46-ai-augmented-infrastructure-reconnaissance-using-stolen-apm-credentials-candidate-novel-ttp-n1"
+        anchor: "#ai-augmented-infrastructure-reconnaissance-using-stolen-apm-credentials-candidate-novel-ttp-n1"
       - label: "The ARPA platform"
-        anchor: "#41-arpa-korelasyon-motoru-platform-architecture"
+        anchor: "#arpa-korelasyon-motoru-platform-architecture"
 ---
 
 **Campaign Identifier:** Turkish-ARPA-OpenClaw-State-Insurer-UTA-2026-013-209.38.205.158<br>
@@ -232,6 +232,9 @@ The net classification is **Advanced operator with selectively sophisticated pla
 {: .hl-tier-3}
 
 > **Executive Impact Summary:** The ARPA platform's eight capability surfaces (4.1-4.8) function together as an integrated intelligence-analyst pipeline over stolen victim telemetry. Three are the defender priorities: 4.2 (4-source Observability-Tool Reverse Pipeline novel TTP), 4.4 (insider-recruitment artifact), and 4.6 (AI-Augmented Infrastructure Reconnaissance, CANDIDATE novel TTP). Subsections 4.1, 4.3, 4.5, 4.7, and 4.8 provide architectural context for those three.
+
+<details markdown="1" class="hl-teardown">
+<summary>All eight capability surfaces in full, from the platform architecture through the reconnaissance pipeline. Click to expand.</summary>
 
 ### 4.1 ARPA Korelasyon Motoru Platform Architecture
 
@@ -513,12 +516,17 @@ The operator's infrastructure choices reveal a deliberate pattern, production cl
 
 For cloud-provider abuse coordination, the defender takeaway is that the operator's VPS sits with a legitimate cooperative provider, so takedown is administratively feasible. For attribution, their source IP, ISP and GitHub footprint together provide multiple identity-anchor paths for law-enforcement engagement.
 
+</details>
+
 ---
 
 ## 5. Static Analysis
 {: .hl-tier-3}
 
 > **Analyst note:** This section walks through the static code analysis of the three artifact classes recovered from the operator's open directory: the victim-side PowerShell collector script (designed for insider deployment on a victim-organization workstation), the ARPA platform Python source code (the operator's analytics platform), and the Turkish-language Markdown operator notes (the insider-recruitment documentation). Static analysis means examining the code without running it. The goal is to extract the operator's intent and architectural decisions from what they wrote, not from what the code does at runtime.
+
+<details markdown="1" class="hl-teardown">
+<summary>The PowerShell collector, the ARPA platform source and the operator notes, in full. Click to expand.</summary>
 
 ### 5.1 PowerShell Collector Script (`turkish-instana_local_collector.ps1`)
 
@@ -633,12 +641,17 @@ The `SSH_KEY_COZUM.md` ("SSH Key Solution") document walks through SSH key troub
 
 The eight documents follow a Turkish-language uppercase naming convention (`PUTTY_TUNNEL_DETAY.md`, `TUNNEL_RESTART.md`, `WINDOWS_VPN_TUNNEL.md`, `SSH_KEY_COZUM.md`, plus four more). To hunt for it, Markdown file creation in user-profile directories matching the Turkish-language uppercase pattern `(GERCEK|PUTTY|SSH|TUNNEL|WINDOWS)_*.md` is a hunt-purposes signature, with the Sigma rule in the linked detection file.
 
+</details>
+
 ---
 
 ## 6. Dynamic / Behavioral Analysis
 {: .hl-tier-3}
 
 > **Analyst note:** This section presents the chronological behavior of the ARPA platform during a single 5-minute polling cycle, plus the insider-deployment behavior and the AI-augmented query interface behavior. Dynamic analysis is normally a sandbox-based observation of a malware sample at runtime; in this case, the platform is operator-hosted (not victim-side) so the "dynamic" view is reconstructed from observed operator filesystem state, captured HTTP service responses on the open directory, and the daily-topology log that the operator generated.
+
+<details markdown="1" class="hl-teardown">
+<summary>The polling-cycle chronology, the insider-deployment behavior and the AI-augmented query interface, in full. Click to expand.</summary>
 
 ### 6.1 ARPA Platform 5-Minute Polling Cycle (Chronological)
 
@@ -710,6 +723,8 @@ The operator's HTTP services on the open directory were observed externally duri
 The operator's interactive source IP was captured from ARPA server logs on 2026-05-20 between 21:22 and 21:30 UTC. The capture window represents the operator actively connecting to and interacting with the ARPA dashboard during a normal operational session. The captured source IP resolves to **TurkNet AS12735** (Turkish residential / SMB ISP, Istanbul area). No VPN, Tor, or commercial proxy layer was interposed between operator and operator VPS during this session.
 
 Local Turkish time for the 21:22-21:30 UTC capture window is 00:22-00:30 (UTC+3 Turkish time). Late-evening / very-early-morning local working hours are consistent with non-professional individual operator pattern. They are inconsistent with the disciplined business-hours operational pattern of a professional state-intelligence unit.
+
+</details>
 
 ---
 

@@ -258,6 +258,9 @@ Both Stage-1 batch files were pulled from the `94.103.1.13` open directory on 20
 
 *Hashes above are truncated to the first 16 characters for readability. Full SHA256 values for every entry, plus secondary GodPotato variants, Mimikatz suite hashes, Chisel/Plink binaries, and all observed strings, are delivered in [open-directory-94-103-1-13-20260423-iocs.json](/ioc-feeds/open-directory-94-103-1-13-20260423-iocs.json). VT detection counts for the Stage-4/5a/5b rows are from a 2026-04-23 lookup; `mymain.bat` count was captured at submission time.*
 
+<details markdown="1" class="hl-teardown">
+<summary>Full stage-by-stage chain walkthrough: batch dropper through Orcus RAT toolkit and novelty assessment (5.2-5.9)</summary>
+
 ### 5.2 Stage 1 — Batch Dropper: The `mymain.bat` / `myfile.bat` Chain
 
 > **Analyst note:** Stage 1 is a heavily obfuscated Windows batch file that looks like random text to a casual viewer. What it actually does is force-launch 32-bit PowerShell with a command line over 10,000 characters long, carrying an encrypted .NET payload inline. The two sibling files (`mymain.bat` and `myfile.bat`) come from the same builder but use different encryption keys, a tell that this is a re-runnable crypter, not a one-off weapon.
@@ -595,6 +598,8 @@ Interpreting that ranking, the two DISTINCTIVE entries at the top, the Console.T
 
 Documenting only the commodity layer (Chaos ransomware, UACME #41, Perun's Fart, Defender masquerade) would add little beyond what WatchGuard, Malpedia, and hfiref0x have already published. The defender-actionable novelty of this publication is concentrated in the two DISTINCTIVE rows, covered in dedicated subsections (§5.4.1, §5.5.1) rather than folded into general narrative.
 
+
+</details>
 ---
 
 ## 6. MITRE ATT&CK Mapping

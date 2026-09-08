@@ -31,19 +31,19 @@ figure_nav:
   - image: adaptixc2-kill-chain-overview.svg
     parts:
       - label: "PowerShell loader chain"
-        anchor: "#43-operator-written-powershell--net-injector-the-only-custom-code"
+        anchor: "#operator-written-powershell--net-injector-the-only-custom-code"
       - label: "Beacon in explorer.exe"
-        anchor: "#41-adaptixc2-framework-attribution-and-beacon-cluster"
+        anchor: "#adaptixc2-framework-attribution-and-beacon-cluster"
       - label: "RC4 beacon config"
-        anchor: "#42-rc4-encrypted-beacon-configuration-recovered-key--parsed-config--layout-matches-stock-adaptixc2-framework-source"
+        anchor: "#rc4-encrypted-beacon-configuration-recovered-key--parsed-config--layout-matches-stock-adaptixc2-framework-source"
       - label: "C2 traffic"
-        anchor: "#52-c2-communication-detail"
+        anchor: "#c2-communication-detail"
       - label: "Post-exploitation toolkit"
-        anchor: "#46-commodity-post-exploitation-toolkit-brief-inventory"
+        anchor: "#commodity-post-exploitation-toolkit-brief-inventory"
       - label: "Linux pivot"
-        anchor: "#44-linux-and-go-agent-components"
+        anchor: "#linux-and-go-agent-components"
       - label: "The full chain"
-        anchor: "#51-anticipated-kill-chain-sequential-chronological"
+        anchor: "#anticipated-kill-chain-sequential-chronological"
 ---
 
 **Campaign Identifier:** AdaptixC2-OpenDirectory-Toolkit-45.130.148.125<br>
@@ -263,6 +263,9 @@ Time-to-impact was NOT MEASURED, because no live victim traffic was captured. St
 {: .hl-tier-3}
 
 > **Analysis tools referenced in this section.** The figures and screenshots throughout this section come from static reverse-engineering: a disassembler/decompiler for the C++ AdaptixC2 beacon, a .NET decompiler for the operator's `injector.dll`, PE-format inspection for compile-timestamp and export-table comparisons, and Go-symbol recovery for the Linux ELF agent. Mentions throughout use the general category term only.
+
+<details markdown="1" class="hl-teardown">
+<summary>The beacon cluster, the RC4 config, the PowerShell injector, the Linux/Go agent and the commodity toolkit, in full. Click to expand.</summary>
 
 ### 4.1 AdaptixC2 framework attribution and beacon cluster
 
@@ -579,6 +582,8 @@ The kit's commodity component is hash-confirmed against public releases and trig
 
 The full IOC list with hashes, sizes, contexts, and confidence levels is documented in the [linked IOC feed](/ioc-feeds/opendirectory-45-130-148-125-20260430-iocs.json).
 
+</details>
+
 ---
 
 ## 5. Technical Analysis — Behavioral / Anticipated Kill Chain
@@ -587,6 +592,9 @@ The full IOC list with hashes, sizes, contexts, and confidence levels is documen
 > **Analyst note:** This section walks through the operator's kill chain from initial victim execution through Linux-host pivoting. Steps 2 through 7, covering the loader chain and the beacon's command-and-control behaviour, are confirmed by controlled execution of the recovered samples. Steps 1, 8 and 9, covering delivery, interactive operator activity and persistence, stay inferred from what the toolkit contains, because they depend on operator choices I have not seen exercised. Each step names the telemetry source that catches it.
 
 > **Important context (revised August 2026):** I hold no victim telemetry from this campaign, and the 45.130.148.125 endpoint was a static distribution point, unchanged across 80+ hours of observation. What I can now state about the loader chain and the beacon's network behaviour comes from running the recovered samples under control, which confirms the decoded PowerShell logic, the decompiled .NET injector, and the decrypted beacon configuration. What the operator actually did once inside a victim network is a separate question, and I cannot answer it from this evidence.
+
+<details markdown="1" class="hl-teardown">
+<summary>The anticipated kill chain, the C2 communication detail and the defense evasion observations, in full. Click to expand.</summary>
 
 ### 5.1 Anticipated kill chain (sequential, chronological)
 
@@ -703,6 +711,8 @@ The consequence is that a rule written against either literal will not fire on t
 The combination (reflection-based AMSI bypass and W^X-aware injection alongside `PROCESS_ALL_ACCESS` and unobfuscated .NET P/Invoke declarations in the injector's `ImplMap` metadata) is consistent with an operator who has read modern injection tradecraft writeups, applied the headline lessons, but never wrote anti-detection code from scratch.
 
 (Terminology note for defenders: a .NET assembly's Win32 imports do not appear in the PE Import Address Table the way a native-language binary's do. They are listed in the .NET metadata's `ImplMap` table, a managed-code abstraction visible in a .NET decompiler. Hunting for `OpenProcess`/`VirtualAllocEx`/`CreateRemoteThread` in a .NET injector's PE IAT will therefore not find them; the lookups happen at JIT time via P/Invoke marshalling.)
+
+</details>
 
 ---
 
