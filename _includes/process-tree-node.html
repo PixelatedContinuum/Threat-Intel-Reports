@@ -2,8 +2,8 @@
   One node of the process tree, and its children. Included by
   _includes/process-tree.html and BY ITSELF, once per level of nesting.
 
-  Takes `node`. Deliberately contains no {% assign %}: Liquid assigns leak into
-  the enclosing scope, so an assign here would be overwritten by the deeper call
+  Takes `node`. Deliberately contains no assign tag, because Liquid assigns leak
+  into the enclosing scope, so an assign here would be overwritten by the deeper call
   and every node above it would render the wrong data on the way back up. Only
   `include.node` and `for` variables, which Liquid does scope correctly.
 

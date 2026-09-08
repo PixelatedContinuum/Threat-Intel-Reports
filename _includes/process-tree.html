@@ -19,7 +19,9 @@
   caption and figure number stay where every other figure keeps them:
 
     <figure class="hl-ptree-fig" data-figure-image="my-tree.svg">
-    {% include process-tree.html %}
+    include process-tree.html   (written without the tag braces on purpose: a
+    literal Liquid tag inside a comment block is still tokenised, and this file
+    failed its first real Jekyll build because a neighbouring comment did exactly that)
     <figcaption><em>Figure N: what it shows and why it matters.</em></figcaption>
     </figure>
 
