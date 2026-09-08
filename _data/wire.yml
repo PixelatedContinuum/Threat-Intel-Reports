@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-08T08:01:06Z
+generated_at: 2026-09-08T10:02:57Z
 window_days: 30
 counts:
-  total: 515
-  research: 181
+  total: 516
+  research: 182
   news: 334
 unclassified_sources:
   - "The DFIR Report"
@@ -228,6 +228,7 @@ label_colors:
   "cisco": 9
   "cisco talos antivirus": 7
   "cisco talos dns security": 7
+  "cisco talos web filtering": 12
   "citrix": 11
   "cl0p": 3
   "clamav": 8
@@ -437,6 +438,12 @@ label_colors:
   "zero-day": 9
   "zoom": 7
 items:
+  - title: "ClickFix moves into the browser: Cryptocurrency theft with Google-hosted C2"
+    url: "https://blog.talosintelligence.com/clickfix-moves-into-the-browser/"
+    source: "Cisco Talos"
+    date: 2026-09-08T10:00:38Z
+    kind: research
+    labels: ["cisco talos web filtering", "threat spotlight"]
   - title: "220 million traveler records exposed in Vietnam-linked APIS leak"
     url: "https://www.bleepingcomputer.com/news/security/220-million-traveler-records-exposed-in-vietnam-linked-apis-leak/"
     source: "BleepingComputer"
