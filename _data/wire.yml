@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-09T06:00:07Z
+generated_at: 2026-09-09T08:02:46Z
 window_days: 30
 counts:
-  total: 540
-  research: 187
-  news: 353
+  total: 543
+  research: 188
+  news: 355
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -34,13 +34,13 @@ topics:
     count: 19
     color: 7
   - label: "microsoft"
-    count: 16
+    count: 17
     color: 8
-  - label: "zero-day"
+  - label: "credential theft"
     count: 16
     color: 9
-  - label: "credential theft"
-    count: 15
+  - label: "zero-day"
+    count: 16
     color: 10
   - label: "ransomware"
     count: 14
@@ -150,6 +150,7 @@ label_colors:
   "azure": 1
   "azure infrastructure": 4
   "azure table storage": 2
+  "azure tokens": 3
   "babadeda": 2
   "babadedaloader": 11
   "babuk": 7
@@ -253,7 +254,7 @@ label_colors:
   "credential exfiltration": 4
   "credential harvesting": 4
   "credential phishing": 9
-  "credential theft": 10
+  "credential theft": 9
   "credential-based attacks": 12
   "credential-harvesting": 1
   "credential-theft": 5
@@ -444,9 +445,27 @@ label_colors:
   "uncategorized": 10
   "vmware": 2
   "vulnerabilities": 1
-  "zero-day": 9
+  "zero-day": 10
   "zoom": 7
 items:
+  - title: "New Microsoft Defender 'ShieldCrash' zero-day grants SYSTEM access"
+    url: "https://www.bleepingcomputer.com/news/security/new-microsoft-defender-shieldcrash-zero-day-grants-system-access/"
+    source: "BleepingComputer"
+    date: 2026-09-09T07:30:15Z
+    kind: news
+    labels: ["microsoft"]
+  - title: "Peeling Back the Layers: Inside Vidar - From Virtualized Code to Stolen Credentials"
+    url: "https://www.splunk.com/en_us/blog/security/inside-vidar-from-virtualized-code-to-stolen-credentials.html"
+    source: "AlienVault"
+    date: 2026-09-09T06:38:56Z
+    kind: research
+    labels: ["anti-analysis", "azure tokens", "browser data exfiltration", "credential theft", "information stealer", "telegram c2", "vidar", "virtualization obfuscation"]
+  - title: "Google warns of new Chrome zero-day bug exploited in attacks"
+    url: "https://www.bleepingcomputer.com/news/security/google-patches-seventh-chrome-zero-day-exploited-in-attacks-this-year/"
+    source: "BleepingComputer"
+    date: 2026-09-09T06:25:48Z
+    kind: news
+    labels: ["google"]
   - title: "Microsoft posts nearly 1,000 bugs for Patch Tuesday as CISA warns two being exploited"
     url: "https://therecord.media/microsoft-patch-tuesday-september-2026"
     source: "Recorded Future"
