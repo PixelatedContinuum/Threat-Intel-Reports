@@ -655,7 +655,8 @@ level: medium
 
 **Tier:** Hunting
 **Robustness:** 2
-**ATT&CK Coverage:** T1685 (Disable or Modify Tools). ATT&CK v19.2 revoked and restructured T1562 (Impair Defenses): T1562.001 was promoted to this top-level technique under a new Defense Impairment tactic rather than staying a Defense Evasion sub-technique, which is why this rule tags `attack.defense-impairment` and `attack.t1685` below, not the retired ID.
+**ATT&CK Coverage:** T1685 (Disable or Modify Tools)
+**ATT&CK Note:** ATT&CK v19.2 revoked and restructured T1562 (Impair Defenses): T1562.001 was promoted to this top-level technique under a new Defense Impairment tactic rather than staying a Defense Evasion sub-technique, which is why this rule tags `attack.defense-impairment` and `attack.t1685` below, not the retired ID.
 **Confidence:** MODERATE
 **False Positives:** Legitimate endpoint-product uninstall, upgrade, or maintenance windows stop and briefly disable these same services; a single stopped service is common during patching. Tiered Hunting because a per-event Sigma selection cannot see the burst-of-eight pattern that makes this campaign's version distinctive; the true signal is several of these stopping together within minutes.
 **Blind Spots:** Misses a different AV/EDR product's service names entirely, and misses the burst timing this rule cannot correlate on its own.

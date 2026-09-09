@@ -2951,7 +2951,7 @@
 "sliver-c2-windows-postex-staging-193-233-202-17-detections":
   total: 19
   tactics: 8
-  unresolved: ["T1562", "T1562.001"]
+  unresolved: []
   rows:
     - tactic: "Execution"
       id: "T1053.005"

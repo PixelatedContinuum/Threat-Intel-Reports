@@ -54,7 +54,8 @@ This campaign spans 8 operator cases rather than distinct malware families, so r
 
 **Tier:** Detection
 **Robustness:** 2
-**ATT&CK Coverage:** T1587 (Develop Capabilities), T1059.006 (Python) — novel TTP, no dedicated MITRE sub-technique
+**ATT&CK Coverage:** T1587 (Develop Capabilities), T1059.006 (Python)
+**ATT&CK Note:** Novel TTP; no dedicated MITRE sub-technique exists for this specific behavior.
 **Confidence:** HIGH
 **Rationale:** First-documented artifact class — operator-authored Markdown files written FOR AI agent consumption to re-prime new sessions (Case 1 Russian Gemini operator: `C2_MIGRATION_GUIDE.md`; Case 3 Rovodev operator: 22+ documents at `/root/matrix/`). *Fix applied during retiering:* the original condition let the bare domain string `tralalarkefe.com` ($i4) trigger the rule alone, an atomic-only path; it now requires the domain to co-occur with an AI-addressing header, session-priming directive, or infrastructure marker — the domain itself is already in the IOC feed.
 **False Positives:** None known — the combination of AI-tool-addressed headers ("To: Gemini CLI", "To: Claude Code") with session-priming directives is not present in legitimate documentation workflows.
@@ -113,7 +114,8 @@ rule TOOLKIT_AI_Operator_Handoff_Document {
 
 **Tier:** Detection
 **Robustness:** 3
-**ATT&CK Coverage:** T1110.003 (Password Spraying), T1059.006 (Python), T1552.001 (Credentials in Files) — novel TTP
+**ATT&CK Coverage:** T1110.003 (Password Spraying), T1059.006 (Python), T1552.001 (Credentials in Files)
+**ATT&CK Note:** Novel TTP.
 **Confidence:** HIGH
 **Rationale:** First qualitative change in credential-mutation tradecraft since the hashcat-rules era (~2015). `russian-ai_sniper_brute.py` invokes Gemini 2.5 Flash with a red-team password analyst prompt to generate 20 per-target mutations from email+domain+last-known-password — the prompt fragments and operator output filenames are distinctive and require no single renameable literal alone.
 **False Positives:** None known — the combination of LLM API invocation, password-mutation prompt language, and the "Output ONLY the 20 passwords" output-format constraint is not present in legitimate penetration-testing frameworks.
@@ -357,7 +359,8 @@ rule MAL_Linux_Pandora_Mirai_Naku_Suite {
 
 **Tier:** Detection
 **Robustness:** 3
-**ATT&CK Coverage:** T1059.006 (Python), T1071.001 (Web Protocols), T1132.001 (Standard Encoding) — novel TTP, Operator-Built Unauthenticated Python-stdlib C2
+**ATT&CK Coverage:** T1059.006 (Python), T1071.001 (Web Protocols), T1132.001 (Standard Encoding)
+**ATT&CK Note:** Novel TTP: operator-built, unauthenticated Python-stdlib C2.
 **Confidence:** HIGH
 **Rationale:** `c2_server.py` uses Python stdlib `BaseHTTPRequestHandler` with zero authentication across 5 endpoints, the operator banner "A2A C2 MULTI-AGENT CONSOLE", and an `X-Agent-ID` self-assertion header. *Fix applied during retiering:* the original condition let a bare match on either C2 domain (`c2.tralalarkefe.com` / `payloads.tralalarkefe.com` — both already in the IOC feed) trigger the rule alone; the domain-only path now requires co-occurrence with at least one API endpoint string.
 **False Positives:** None known — the "A2A C2 MULTI-AGENT CONSOLE" banner is operator-bespoke, and the combination of `BaseHTTPRequestHandler` + unauthenticated `/api/v1/` endpoints + `X-Agent-ID` header + base64/UTF-16LE encoding is not present in legitimate server-management frameworks.
@@ -408,7 +411,8 @@ rule MAL_Python_Russian_A2A_C2_BaseHTTPServer {
 
 **Tier:** Hunting
 **Robustness:** 2
-**ATT&CK Coverage:** T1587 (Develop Capabilities), T1059.006 (Python) — novel TTP, AI-Generated Code Structural Signature
+**ATT&CK Coverage:** T1587 (Develop Capabilities), T1059.006 (Python)
+**ATT&CK Note:** Novel TTP: AI-generated code structural signature.
 **Confidence:** MODERATE (each criterion alone is low-confidence; the combination is higher)
 **Rationale:** Cross-operator validated across three independent operators' Python attack code (Case 1, Case 2, Case 3). The co-occurrence of verbose docstrings + bare-except + defensive try/except + educational variable names + zero anti-analysis is common in benign, actively-developed Python, so this is explicitly not suitable for automated alerting alone.
 **False Positives:** Legitimate Python developers routinely write verbose docstrings and defensive error handling; the FP rate increases meaningfully in active development environments.

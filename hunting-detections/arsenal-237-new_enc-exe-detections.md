@@ -280,7 +280,8 @@ rule TOOLKIT_Arsenal237_Analysis_Tool_Process_Awareness {
 
 **Tier:** Hunting
 **Robustness:** 1
-**ATT&CK Coverage:** No dedicated ATT&CK technique — compiled-language/family classification signal, not an attacker technique.
+**ATT&CK Coverage:** None
+**ATT&CK Note:** No dedicated ATT&CK technique: this is a compiled-language/family classification signal, not an attacker technique.
 **Confidence:** LOW
 **Rationale:** *Fix applied during retiering:* the source condition ("2 of them") let the two universal Rust-compilation markers ("core::panicking" and "cargo") alone satisfy the rule with no ChaCha-specific evidence at all — that combination is present in effectively any Rust-compiled executable, malicious or not, since both strings are routine artifacts of the Rust standard library and build toolchain. Rewritten to mandate the ChaCha implementation-specific constant name plus at least one generic marker, so the rule can no longer fire on a Rust binary that lacks the ChaCha-specific string.
 **False Positives:** Not characterized against a goodware corpus. "Chacha_256_constant" has not been confirmed absent from unrelated software built on the same or a similar ChaCha20 crate implementation (e.g., Rust's widely-used `rand_chacha` crate, used far beyond ransomware for general-purpose seeded randomness).

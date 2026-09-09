@@ -60,6 +60,58 @@ function normaliseTier(raw) {
   return null;
 }
 
+/* ATT&CK Coverage is a MACHINE field: this generator's sole source for a
+   rule's `attack:` IDs, read nowhere else. It must parse as a strict list of
+   IDs, nothing else. Explanation belongs in the sibling `**ATT&CK Note:**`
+   field, which nothing here ever reads.
+
+   The regex-scrape this replaced (`match(/T\d{4}(?:\.\d{3})?/g)` against the
+   raw field text) silently absorbed prose. A rule whose Coverage line
+   explained that T1562/T1562.001 were revoked in favour of T1685 had both
+   retired IDs scraped out of the explanatory sentence and reported two
+   fences downstream as "not in ATT&CK 19.2" — the empty-result shape again,
+   the warning appearing two tools away from its cause. This parser refuses
+   instead: anything it cannot read as ID (or ID/ID.../ID) plus an optional
+   parenthetical is a FAIL naming the exact text, not a partial scrape. */
+var ATTACK_ID_SRC = 'T\\d{4}(?:\\.\\d{3})?';
+var ATTACK_ID_RE = new RegExp(ATTACK_ID_SRC, 'g');
+var ATTACK_ENTRY_RE = new RegExp(
+  '^\\s*' + ATTACK_ID_SRC + '(?:\\s*/\\s*' + ATTACK_ID_SRC + ')*(?:\\s*\\([^()]*\\))?\\s*$'
+);
+
+/* Splits on top-level commas only, so a name legitimately holding its own
+   comma inside parens ("T1102.001 (Dead Drop Resolver, campaign-level)")
+   is not split in half. */
+function splitCoverageEntries(value) {
+  var parts = [], depth = 0, cur = '';
+  for (var i = 0; i < value.length; i++) {
+    var ch = value[i];
+    if (ch === '(') { depth++; cur += ch; }
+    else if (ch === ')') { depth--; cur += ch; }
+    else if (ch === ',' && depth === 0) { parts.push(cur); cur = ''; }
+    else cur += ch;
+  }
+  parts.push(cur);
+  return parts;
+}
+
+/* Returns { ok, ids }. ok false means the field could not be read as a
+   strict ID list; ids is then [] rather than a best-effort partial scrape,
+   because a partial result reads as a clean pass to everything downstream. */
+function parseCoverage(raw) {
+  var value = String(raw == null ? '' : raw).trim();
+  if (value === '' || /^none$/i.test(value)) return { ok: true, ids: [] };
+  var entries = splitCoverageEntries(value);
+  var ok = entries.every(function (e) { return ATTACK_ENTRY_RE.test(e); });
+  if (!ok) return { ok: false, ids: [] };
+  var ids = [];
+  entries.forEach(function (e) {
+    var m = e.match(ATTACK_ID_RE);
+    if (m) m.forEach(function (id) { if (ids.indexOf(id) === -1) ids.push(id); });
+  });
+  return { ok: true, ids: ids };
+}
+
 function fieldsNamed(lines, name) {
   var re = new RegExp('^\\*\\*' + name + ':\\*\\*\\s*(.*)$');
   var out = [];
@@ -110,7 +162,7 @@ function scan(src) {
 
 function parse(src, slug) {
   var events = scan(src);
-  var rules = [], unresolved = [];
+  var rules = [], unresolved = [], attackProblems = [];
   var engine = null, pending = null, meta = [];
 
   function close(fenceEvent) {
@@ -141,7 +193,17 @@ function parse(src, slug) {
       return TIER_RANK[t] > TIER_RANK[best] ? t : best;
     }, normalised[0]);
 
-    var attack = (firstField(meta, 'ATT&CK Coverage') || '').match(/T\d{4}(?:\.\d{3})?/g) || [];
+    var coverageRaw = firstField(meta, 'ATT&CK Coverage');
+    var coverage = parseCoverage(coverageRaw);
+    if (!coverage.ok) {
+      attackProblems.push({
+        name: name, engine: engine, line: pending.line,
+        value: coverageRaw,
+        reason: 'is not a strict ID list (ID, ID (Name), or ID/ID (Name), comma-separated) ' +
+                '- move any explanation to a sibling **ATT&CK Note:** line'
+      });
+    }
+    var attack = coverage.ids;
     var rob = firstField(meta, 'Robustness');
     var entry = {
       slug: slug,
@@ -181,13 +243,14 @@ function parse(src, slug) {
   }
   close(null);
 
-  return { slug: slug, rules: rules, unresolved: unresolved };
+  return { slug: slug, rules: rules, unresolved: unresolved, attackProblems: attackProblems };
 }
 
 module.exports = {
   parse: parse,
   hash: H.ruleHash,
   normaliseTier: normaliseTier,
+  parseCoverage: parseCoverage,
   ENGINES: ENGINES,
   HEAD_LEN: HEAD_LEN
 };

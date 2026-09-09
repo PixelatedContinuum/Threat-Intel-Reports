@@ -93,6 +93,15 @@ function run(opts) {
       problems.push(f + ' line ' + u.line + ': "' + u.name + '" ' + u.reason);
     });
 
+    /* ATT&CK Coverage is a machine field; anything the strict parser cannot
+       read as an ID list is a FAIL with the offending text quoted, never a
+       silent partial scrape. The rule itself still counts (its Tier is
+       fine) — only its `attack:` list comes back empty until fixed. */
+    r.attackProblems.forEach(function (u) {
+      problems.push(f + ' line ' + u.line + ': "' + u.name + '" ATT&CK Coverage "' +
+        u.value + '" ' + u.reason);
+    });
+
     /* The invariant with teeth. Every **Tier:** line in the file must be
        accounted for by exactly one entry, and an entry may consume several when
        its fence bundles a correlation rule with its base rules. Counting

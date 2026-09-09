@@ -45,7 +45,8 @@ Remcos is a commercially-sold remote access trojan (Breaking-Security.Net) widel
 
 **Tier:** Detection
 **Robustness:** 2
-**ATT&CK Coverage:** T1219 (Remote Access Software), with secondary coverage of T1056.001 (Keylogging), T1555.003 (Web Browsers), T1113 (Screen Capture)
+**ATT&CK Coverage:** T1219 (Remote Access Software), T1056.001 (Keylogging), T1555.003 (Web Browsers), T1113 (Screen Capture)
+**ATT&CK Note:** T1219 is the primary mapping; T1056.001, T1555.003, and T1113 are secondary coverage.
 **Confidence:** HIGH
 **False Positives:** None known — every OR-branch requires either the family mutex, the paired product banner + developer string, or a multi-string combination from the RAT's internal C2/keylogging/credential-theft protocol vocabulary; the loosest branch (`8 of them`) still requires at least 3 distinctive Remcos-specific tokens given only 5 of the 22 declared strings are generic Windows terms.
 **Blind Spots:** A fully re-branded fork that strips the banner/developer strings, randomizes the mutex, and reworks the internal log/command vocabulary would evade this rule; targets on-disk/in-memory binaries, not network traffic.

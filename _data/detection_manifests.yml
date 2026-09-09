@@ -5737,7 +5737,7 @@ sliver-c2-windows-postex-staging-193-233-202-17-detections:
     head: "title: Endpoint Protection Service Stopped Or Di"
     robustness: 2
     confidence: "MODERATE"
-    attack: [T1685, T1562, T1562.001]
+    attack: [T1685]
   - name: "Node.js Runtime Fetched And Extracted On A Host With No Development Toolchain"
     engine: sigma
     tier: Hunting

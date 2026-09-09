@@ -276,7 +276,8 @@ level: medium
 
 **Tier:** Hunting
 **Robustness:** 2
-**ATT&CK Coverage:** T1505.003 (Server Software Component: Web Shell) — mapped as originally authored; more precisely this describes the operator standing up new attacker-controlled web application infrastructure on already-compromised hosting rather than a webshell backdoor specifically (see Coverage Gaps).
+**ATT&CK Coverage:** T1505.003 (Server Software Component: Web Shell)
+**ATT&CK Note:** Mapped as originally authored; more precisely this describes the operator standing up new attacker-controlled web application infrastructure on already-compromised hosting rather than a webshell backdoor specifically (see Coverage Gaps).
 **Confidence:** MODERATE
 **Rationale:** `/wp-admin/install.php` is a fixed WordPress core path — durable, since the operator cannot rename WordPress's own installer script — but whether a POST to it is rare enough to alert on depends entirely on whether the monitored hosting environment routinely provisions fresh WordPress sites (shared hosting does; a narrowly-scoped application server should not). Without that environment context, "rare FP" cannot be confidently claimed, so this stays Hunting.
 **False Positives:**

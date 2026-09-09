@@ -250,3 +250,76 @@ test('a cross-referenced rule has no hash, because it has no body of its own', (
   assert.strictEqual(r.rules[0].hash, null);
   assert.match(r.rules[1].hash, /^[0-9a-f]{8}$/);
 });
+
+/* ATT&CK Coverage is a machine field. This is the split enforced: an
+   explanation belongs on its own **ATT&CK Note:** line, which the parser
+   never reads, and the Coverage line itself must be a strict ID list. */
+test('parseCoverage accepts a bare ID, ID(Name) pairs, and a shared-name ID group', () => {
+  assert.deepStrictEqual(P.parseCoverage('T1190'), { ok: true, ids: ['T1190'] });
+  assert.deepStrictEqual(
+    P.parseCoverage('T1071.001 (Web Protocols), T1102.001 (Dead Drop Resolver, campaign-level)'),
+    { ok: true, ids: ['T1071.001', 'T1102.001'] }
+  );
+  assert.deepStrictEqual(
+    P.parseCoverage('T1055.012 / T1055 (RunPE injection error strings)'),
+    { ok: true, ids: ['T1055.012', 'T1055'] }
+  );
+});
+
+test('parseCoverage treats an empty field or the literal "None" as zero techniques, not a failure', () => {
+  assert.deepStrictEqual(P.parseCoverage(''), { ok: true, ids: [] });
+  assert.deepStrictEqual(P.parseCoverage(null), { ok: true, ids: [] });
+  assert.deepStrictEqual(P.parseCoverage('None'), { ok: true, ids: [] });
+  assert.deepStrictEqual(P.parseCoverage('none'), { ok: true, ids: [] });
+});
+
+test('parseCoverage rejects explanatory prose rather than scraping IDs out of it', () => {
+  // The exact Sliver defect: revoked IDs named only to explain why they are
+  // NOT the coverage must not be scraped into the ids list.
+  const r = P.parseCoverage(
+    'T1685 (Disable or Modify Tools). ATT&CK v19.2 revoked and restructured T1562 ' +
+    '(Impair Defenses): T1562.001 was promoted to this top-level technique, not the retired ID.'
+  );
+  assert.strictEqual(r.ok, false);
+  assert.deepStrictEqual(r.ids, [], 'a failed parse yields no IDs, never a partial scrape');
+});
+
+test('parseCoverage rejects a connector phrase between entries', () => {
+  const r = P.parseCoverage('T1219 (Remote Access Software), with secondary coverage of T1056.001 (Keylogging)');
+  assert.strictEqual(r.ok, false);
+});
+
+test('a malformed ATT&CK Coverage line is reported by name, line and exact text, and the rule still keeps its Tier', () => {
+  const src = [
+    '## Sigma Rules',
+    '#### Bad Coverage Rule',
+    '**Tier:** Detection',
+    '**ATT&CK Coverage:** T1685 (Disable or Modify Tools). Explanatory sentence with T1562 inside it.',
+    '```yaml',
+    'title: x',
+    '```'
+  ].join('\n');
+  const r = P.parse(src, 'demo');
+  assert.strictEqual(r.rules.length, 1, 'the rule is still emitted; only its ATT&CK Coverage is rejected');
+  assert.strictEqual(r.rules[0].tier, 'Detection');
+  assert.deepStrictEqual(r.rules[0].attack, [], 'no partial scrape on a failed parse');
+  assert.strictEqual(r.attackProblems.length, 1);
+  assert.strictEqual(r.attackProblems[0].name, 'Bad Coverage Rule');
+  assert.match(r.attackProblems[0].value, /T1562/);
+});
+
+test('an **ATT&CK Note:** line beside a clean Coverage line is never read as coverage', () => {
+  const src = [
+    '## Sigma Rules',
+    '#### Noted Rule',
+    '**Tier:** Detection',
+    '**ATT&CK Coverage:** T1685 (Disable or Modify Tools)',
+    '**ATT&CK Note:** T1562 was revoked in favour of T1685; see the drift note.',
+    '```yaml',
+    'title: x',
+    '```'
+  ].join('\n');
+  const r = P.parse(src, 'demo');
+  assert.deepStrictEqual(r.rules[0].attack, ['T1685']);
+  assert.strictEqual(r.attackProblems.length, 0);
+});
