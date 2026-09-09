@@ -3,35 +3,35 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-09T16:01:56Z
+generated_at: 2026-09-09T18:02:57Z
 window_days: 30
 counts:
-  total: 542
-  research: 190
-  news: 352
+  total: 547
+  research: 191
+  news: 356
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 75
+    count: 77
     color: 1
   - label: "cybercrime"
-    count: 56
+    count: 57
     color: 2
   - label: "government"
     count: 29
     color: 3
+  - label: "malware"
+    count: 26
+    color: 4
   - label: "exploited"
     count: 25
-    color: 4
-  - label: "malware"
-    count: 24
     color: 5
   - label: "data breaches"
     count: 21
     color: 6
   - label: "artificial intelligence"
-    count: 18
+    count: 19
     color: 7
   - label: "microsoft"
     count: 17
@@ -128,6 +128,7 @@ label_colors:
   "arcbridge": 7
   "architectural vulnerability": 5
   "arktunnel": 6
+  "arm": 10
   "armenia": 5
   "arrayref": 8
   "arrested": 2
@@ -327,7 +328,7 @@ label_colors:
   "ethereum": 5
   "ethereum c2": 6
   "exploit": 9
-  "exploited": 4
+  "exploited": 5
   "exposure management": 4
   "extortion": 12
   "fake job interview": 1
@@ -385,7 +386,7 @@ label_colors:
   "litellm": 9
   "living-off-the-land": 1
   "macos": 11
-  "malware": 5
+  "malware": 4
   "mathspace": 4
   "metabase": 6
   "microsoft": 8
@@ -450,6 +451,42 @@ label_colors:
   "zero-day": 10
   "zoom": 7
 items:
+  - title: "Electronic health record company says customer data stolen in breach"
+    url: "https://therecord.media/electronic-health-record-company-says-customer-data-stolen-in-breach"
+    source: "Recorded Future"
+    date: 2026-09-09T17:03:00Z
+    kind: news
+    labels: ["cybercrime", "privacy"]
+  - title: "AI Is Giving Lesser-Resourced Attackers Nation-State-Level Reach, Google Warns"
+    url: "https://www.securityweek.com/ai-is-giving-lesser-resourced-attackers-nation-state-level-reach-google-warns/"
+    source: "SecurityWeek"
+    date: 2026-09-09T16:56:25Z
+    kind: news
+    labels: ["artificial intelligence", "google", "gtig", "nation state", "nation-state"]
+  - title: "Android’s September 2026 Updates Patch 180 Vulnerabilities"
+    url: "https://www.securityweek.com/androids-september-2026-updates-patch-180-vulnerabilities/"
+    source: "SecurityWeek"
+    date: 2026-09-09T16:30:40Z
+    kind: news
+    labels: ["android", "mobile & wireless", "vulnerabilities"]
+  - title: "Multiple Chinese hacking groups seen using identical Chrome zero-day exploit"
+    url: "https://therecord.media/china-hackers-chrome-browser-zero-day-multiple-groups"
+    source: "Recorded Future"
+    date: 2026-09-09T16:30:00Z
+    kind: news
+    labels: ["china", "malware", "nation-state"]
+  - title: "Chipmaker Patch Tuesday: Nvidia, AMD, Arm Issue Security Advisories"
+    url: "https://www.securityweek.com/chipmaker-patch-tuesday-nvidia-amd-arm-issue-security-advisories/"
+    source: "SecurityWeek"
+    date: 2026-09-09T16:22:54Z
+    kind: news
+    labels: ["amd", "arm", "nvidia", "patch tuesady", "vulnerabilities"]
+  - title: "Active exploitation of Cisco Secure Firewall Management Center vulnerabilities"
+    url: "https://blog.talosintelligence.com/fmc-ongoing-exploitation/"
+    source: "Cisco Talos"
+    date: 2026-09-09T16:08:59Z
+    kind: research
+    labels: ["cisco talos antivirus", "cisco talos malware protection", "cisco talos network intrusion prevention", "landing page top story", "malware", "threat advisory"]
   - title: "FBI puts its cyber strategy on paper"
     url: "https://therecord.media/fbi-releases-first-public-cybersecurity-strategy"
     source: "Recorded Future"
@@ -3696,9 +3733,3 @@ items:
     date: 2026-08-10T18:05:06Z
     kind: research
     labels: ["blockchain infrastructure", "deadlock", "decentralized communications", "lynx", "polygon", "ransomware"]
-  - title: "New StormEncryptor ransomware used by former Medusa affiliate"
-    url: "https://www.bleepingcomputer.com/news/security/new-stormencryptor-ransomware-used-by-former-medusa-affiliate/"
-    source: "BleepingComputer"
-    date: 2026-08-10T17:42:00Z
-    kind: news
-    labels: []
