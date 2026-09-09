@@ -28,7 +28,8 @@ var CANDIDATES = [
   'C:/Users/josep/AppData/Local/ms-playwright/chromium_headless_shell-1217/chrome-headless-shell-win64/chrome-headless-shell.exe',
   'C:/Program Files/Google/Chrome/Application/chrome.exe',
   '/usr/bin/chromium',
-  '/usr/bin/google-chrome'
+  '/usr/bin/google-chrome',
+  '/usr/bin/brave'
 ];
 
 /* Returns { path } or { error }.
@@ -243,18 +244,55 @@ async function open(url, opts) {
        silent: the event goes somewhere, some handler may run, and the check
        reports on an element nobody meant to touch. */
     click: async function (selector) {
-      var pt = await this.json('(function(){var e=document.querySelector(' +
+      var scrollExpr = '(function(){var e=document.querySelector(' +
         JSON.stringify(selector) + ');if(!e)return null;' +
-        'e.scrollIntoView({block:"center",behavior:"instant"});return null;})()');
-      // Re-read after the scroll has been applied, never in the same expression.
-      await sleep(120);
-      pt = await this.json('(function(){var e=document.querySelector(' +
+        'e.scrollIntoView({block:"center",behavior:"instant"});return null;})()';
+      var measureExpr = '(function(){var e=document.querySelector(' +
         JSON.stringify(selector) + ');if(!e)return null;' +
         'var r=e.getBoundingClientRect();var x=r.x+r.width/2,y=r.y+r.height/2;' +
         'var hit=document.elementFromPoint(x,y);' +
         'return {x:x,y:y,onTarget:!!hit&&(hit===e||e.contains(hit)||hit.contains(e)),' +
-        'hit:hit?(hit.tagName+"."+(hit.className||"").toString().split(" ")[0]):null};})()');
+        'hit:hit?(hit.tagName+"."+(hit.className||"").toString().split(" ")[0]):null};})()';
+
+      await this.json(scrollExpr);
+      // Re-read after the scroll has been applied, never in the same expression.
+      await sleep(120);
+      var pt = await this.json(measureExpr);
       if (!pt) throw new Error('click target not present: ' + selector);
+
+      /* A layout shift AFTER the scroll moves the target without moving the
+         viewport: a lazy `<img>` with no reserved width/height claims its real
+         size the moment scrollIntoView brings the viewport near it, and
+         everything below it, including the target just centred, slides down
+         and off-screen. Measured 2026-09-08: one such image settling after one
+         scrollIntoView call moved a real target 699px in under 30ms and left
+         it there; waiting longer without re-scrolling never recovered it,
+         because the shift is a one-time event, not an animation to sit out.
+
+         A real reader never sees this. `loading="lazy"` fetches with a
+         lookahead margin well before the image reaches the fold, so during an
+         ordinary scroll the shift resolves while the image is still below the
+         visible area. This helper reproduces the failure because it
+         TELEPORTS to the target in one jump, landing at the exact moment the
+         browser decides the image is now worth fetching, instead of passing
+         near it first the way a scrolling reader does.
+
+         So: settle, and if the target has moved, scroll again to correct for
+         the drift, before trusting the landing check that follows. Bounded at
+         5 rounds (~1s worst case) rather than open-ended, and it gives up as
+         soon as position stops changing — a target that has stopped moving
+         but is still off-target is genuinely covered or off-screen, not
+         mid-settle, and no amount of re-scrolling will fix that. */
+      for (var round = 0; round < 5 && !pt.onTarget; round++) {
+        var before = pt;
+        await this.json(scrollExpr);
+        await sleep(200);
+        pt = await this.json(measureExpr);
+        if (!pt) throw new Error('click target not present: ' + selector);
+        if (pt.onTarget) break;
+        if (Math.abs(pt.x - before.x) < 2 && Math.abs(pt.y - before.y) < 2) break;
+      }
+
       if (!pt.onTarget) {
         throw new Error('click for "' + selector + '" would land on ' + pt.hit +
           ' at (' + Math.round(pt.x) + ',' + Math.round(pt.y) + '); the target is ' +
