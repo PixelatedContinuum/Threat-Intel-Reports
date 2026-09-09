@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-09T14:01:56Z
+generated_at: 2026-09-09T16:01:56Z
 window_days: 30
 counts:
   total: 542
-  research: 191
-  news: 351
+  research: 190
+  news: 352
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -33,11 +33,11 @@ topics:
   - label: "artificial intelligence"
     count: 18
     color: 7
-  - label: "credential theft"
-    count: 17
-    color: 8
   - label: "microsoft"
     count: 17
+    color: 8
+  - label: "credential theft"
+    count: 16
     color: 9
   - label: "zero-day"
     count: 15
@@ -167,7 +167,6 @@ label_colors:
   "bandook": 10
   "banking software": 7
   "banking trojan": 4
-  "base64": 3
   "beacon": 6
   "behavior-based-detection": 12
   "beijing institute of technology": 12
@@ -182,6 +181,7 @@ label_colors:
   "blockchain": 8
   "blockchain abuse": 2
   "blockchain c2": 1
+  "blockchain infrastructure": 11
   "blog post": 6
   "bloodalchemy": 3
   "bluemoon": 5
@@ -239,7 +239,6 @@ label_colors:
   "cisco talos web filtering": 12
   "citrix": 11
   "cl0p": 3
-  "clamav": 8
   "claude desktop": 12
   "cleo": 7
   "clickfix": 12
@@ -260,7 +259,7 @@ label_colors:
   "credential exfiltration": 4
   "credential harvesting": 4
   "credential phishing": 9
-  "credential theft": 8
+  "credential theft": 9
   "credential-based attacks": 12
   "credential-harvesting": 1
   "credential-theft": 5
@@ -306,6 +305,7 @@ label_colors:
   "dcrat": 12
   "ddos engine": 12
   "dead drop resolver": 7
+  "deadlock": 1
   "defender exclusions": 12
   "defense sector": 12
   "desktop capture": 2
@@ -360,7 +360,6 @@ label_colors:
   "head mare": 3
   "healthcare": 11
   "heights financial": 1
-  "hidden execution": 12
   "high profile threats": 2
   "honeymyte": 10
   "hugging face": 6
@@ -389,7 +388,7 @@ label_colors:
   "malware": 5
   "mathspace": 4
   "metabase": 6
-  "microsoft": 9
+  "microsoft": 8
   "microsoft teams": 10
   "mikrotik": 2
   "miniorange": 5
@@ -451,6 +450,30 @@ label_colors:
   "zero-day": 10
   "zoom": 7
 items:
+  - title: "FBI puts its cyber strategy on paper"
+    url: "https://therecord.media/fbi-releases-first-public-cybersecurity-strategy"
+    source: "Recorded Future"
+    date: 2026-09-09T15:37:00Z
+    kind: news
+    labels: ["cybercrime", "government", "nation-state"]
+  - title: "Veradigm warns of patient data breach after ransomware gang claims attack"
+    url: "https://www.bleepingcomputer.com/news/security/veradigm-discloses-patient-data-breach-after-gentlemen-gang-claims-attack/"
+    source: "BleepingComputer"
+    date: 2026-09-09T15:31:23Z
+    kind: news
+    labels: ["healthcare"]
+  - title: "Fortinet Patches Critical Vulnerabilities in FortiMonitorOnSight, Chrome Extension"
+    url: "https://www.securityweek.com/fortinet-patches-critical-vulnerabilities-in-fortimonitoronsight-chrome-extension/"
+    source: "SecurityWeek"
+    date: 2026-09-09T14:33:52Z
+    kind: news
+    labels: ["fortinet", "network security", "vulnerabilities"]
+  - title: "MFA's Weakest Link: Account Recovery Is the New Attack Path"
+    url: "https://www.bleepingcomputer.com/news/security/mfas-weakest-link-account-recovery-is-the-new-attack-path/"
+    source: "BleepingComputer"
+    date: 2026-09-09T14:01:11Z
+    kind: news
+    labels: []
   - title: "Ukraine prosecutor general steps down amid scam call center bribery probe"
     url: "https://therecord.media/ukraine-prosecutor-general-scam-center"
     source: "Recorded Future"
@@ -3667,39 +3690,15 @@ items:
     date: 2026-08-10T18:05:07Z
     kind: research
     labels: ["abyssos", "custom tcp protocol", "llvm obfuscation", "vnc remote access"]
+  - title: "DeadLock ransomware: Breaking down a Rust-based encryptor with decentralized recovery infrastructure"
+    url: "https://www.microsoft.com/en-us/security/blog/2026/08/10/deadlock-ransomware-breaking-down-a-rust-based-encryptor-with-decentralized-recovery-infrastructure/"
+    source: "AlienVault"
+    date: 2026-08-10T18:05:06Z
+    kind: research
+    labels: ["blockchain infrastructure", "deadlock", "decentralized communications", "lynx", "polygon", "ransomware"]
   - title: "New StormEncryptor ransomware used by former Medusa affiliate"
     url: "https://www.bleepingcomputer.com/news/security/new-stormencryptor-ransomware-used-by-former-medusa-affiliate/"
     source: "BleepingComputer"
     date: 2026-08-10T17:42:00Z
     kind: news
     labels: []
-  - title: "Russian military hackers pose as recruiters to target Ukrainian IT workers"
-    url: "https://therecord.media/russian-military-hackers-pose-as-recruiters-ukraine-it-workers"
-    source: "Recorded Future"
-    date: 2026-08-10T15:21:00Z
-    kind: news
-    labels: ["cybercrime", "government"]
-  - title: "DeadLock ransomware: Breaking down a Rust-based encryptor with decentralized recovery infrastructure"
-    url: "https://www.microsoft.com/en-us/security/blog/2026/08/10/deadlock-ransomware-breaking-down-a-rust-based-encryptor-with-decentralized-recovery-infrastructure/"
-    source: "Microsoft"
-    date: 2026-08-10T15:00:00Z
-    kind: research
-    labels: ["credential theft", "extortion", "ransomware", "windows"]
-  - title: "CISA: SonicWall SMA1000 flaws now exploited by ransomware gangs"
-    url: "https://www.bleepingcomputer.com/news/security/cisa-sonicwall-sma1000-flaws-now-exploited-by-ransomware-gangs/"
-    source: "BleepingComputer"
-    date: 2026-08-10T14:34:32Z
-    kind: news
-    labels: []
-  - title: "Investigating a Multi-Stage PowerShell Loader"
-    url: "https://otx.alienvault.com/pulse/6a79de355f436f32f159929b"
-    source: "AlienVault"
-    date: 2026-08-10T14:20:36Z
-    kind: research
-    labels: ["base64", "hidden execution", "multi-stage loader", "obfuscation", "payload delivery", "powershell", "vercel infrastructure", "xor encoding"]
-  - title: "Cisco Warns of High-Severity ClamAV Vulnerabilities With Public PoC"
-    url: "https://www.securityweek.com/cisco-warns-of-high-severity-clamav-vulnerabilities-with-public-poc/"
-    source: "SecurityWeek"
-    date: 2026-08-10T14:07:48Z
-    kind: news
-    labels: ["cisco", "clamav", "dos", "patch", "poc", "public poc", "vulnerabilities"]
