@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-09T20:00:32Z
+generated_at: 2026-09-09T22:02:57Z
 window_days: 30
 counts:
-  total: 545
-  research: 190
-  news: 355
+  total: 546
+  research: 189
+  news: 357
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -16,15 +16,15 @@ topics:
     count: 77
     color: 1
   - label: "cybercrime"
-    count: 56
+    count: 57
     color: 2
   - label: "government"
-    count: 28
+    count: 30
     color: 3
-  - label: "malware"
-    count: 26
-    color: 4
   - label: "exploited"
+    count: 25
+    color: 4
+  - label: "malware"
     count: 25
     color: 5
   - label: "data breaches"
@@ -324,7 +324,7 @@ label_colors:
   "ethereum": 5
   "ethereum c2": 6
   "exploit": 9
-  "exploited": 5
+  "exploited": 4
   "exposure management": 4
   "extortion": 12
   "fake job interview": 1
@@ -367,7 +367,6 @@ label_colors:
   "in other news": 8
   "incident response": 7
   "industry": 8
-  "infection chain": 8
   "information stealer": 6
   "inside google cloud": 2
   "insights": 5
@@ -382,7 +381,7 @@ label_colors:
   "litellm": 9
   "living-off-the-land": 1
   "macos": 11
-  "malware": 4
+  "malware": 5
   "mathspace": 4
   "metabase": 6
   "microsoft": 8
@@ -446,6 +445,24 @@ label_colors:
   "zero-day": 10
   "zoom": 7
 items:
+  - title: "Cisco confirms CVE-2026-20079 Secure FMC flaw exploited in attacks"
+    url: "https://www.bleepingcomputer.com/news/security/cisco-confirms-cve-2026-20079-secure-fmc-flaw-exploited-in-attacks/"
+    source: "BleepingComputer"
+    date: 2026-09-09T21:40:44Z
+    kind: news
+    labels: []
+  - title: "CISA head says agency must change quickly to prevent the 'worst that could happen'"
+    url: "https://therecord.media/cisa-hiring-nick-andersen-warning"
+    source: "Recorded Future"
+    date: 2026-09-09T21:25:00Z
+    kind: news
+    labels: ["government"]
+  - title: "US disrupts Xinbi Guarantee marketplace fueling the cyber scam economy"
+    url: "https://therecord.media/us-disrupts-xinbi-guarantee-marketplace-cybercrime"
+    source: "Recorded Future"
+    date: 2026-09-09T19:54:00Z
+    kind: news
+    labels: ["cybercrime", "government"]
   - title: "Passkey-themed social engineering leads to identity and cloud compromise"
     url: "https://www.microsoft.com/en-us/security/blog/2026/09/09/passkey-themed-social-engineering-leads-identity-cloud-compromise/"
     source: "Microsoft"
@@ -3702,17 +3719,5 @@ items:
     url: "https://www.bleepingcomputer.com/news/security/hackers-breached-a-small-polish-energy-plant-via-private-apn-last-year/"
     source: "BleepingComputer"
     date: 2026-08-10T23:07:21Z
-    kind: news
-    labels: []
-  - title: "The Permanent Threat: Analyzing Aeternum’s Blockchain-Based C2 Operations and Communications"
-    url: "https://unit42.paloaltonetworks.com/aeternum-blockchain-c2-analysis/"
-    source: "Palo Alto Networks"
-    date: 2026-08-10T22:00:02Z
-    kind: research
-    labels: ["aeternum", "infection chain", "json", "malware", "python", "rpc", "telegram", "threat research", "xmrig", "xor"]
-  - title: "BdThemes plugins supply-chain hack creates rogue WordPress admins"
-    url: "https://www.bleepingcomputer.com/news/security/bdthemes-plugins-supply-chain-hack-creates-rogue-wordpress-admins/"
-    source: "BleepingComputer"
-    date: 2026-08-10T21:12:10Z
     kind: news
     labels: []
