@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-09T08:02:46Z
+generated_at: 2026-09-09T10:00:26Z
 window_days: 30
 counts:
-  total: 543
-  research: 188
-  news: 355
+  total: 544
+  research: 191
+  news: 353
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -22,22 +22,22 @@ topics:
     count: 29
     color: 3
   - label: "exploited"
-    count: 27
+    count: 26
     color: 4
   - label: "malware"
     count: 24
     color: 5
   - label: "data breaches"
-    count: 22
+    count: 21
     color: 6
   - label: "artificial intelligence"
     count: 19
     color: 7
-  - label: "microsoft"
+  - label: "credential theft"
     count: 17
     color: 8
-  - label: "credential theft"
-    count: 16
+  - label: "microsoft"
+    count: 17
     color: 9
   - label: "zero-day"
     count: 16
@@ -46,7 +46,7 @@ topics:
     count: 14
     color: 11
   - label: "clickfix"
-    count: 12
+    count: 13
     color: 12
 label_colors:
   ".net loader": 4
@@ -61,6 +61,7 @@ label_colors:
   "active directory compromise": 7
   "active directory reconnaissance": 1
   "adaptixc2": 8
+  "adb propagation": 1
   "adblocker": 3
   "adcs exploitation": 11
   "adobe": 1
@@ -119,6 +120,7 @@ label_colors:
   "app-bound-encryption": 6
   "apple": 12
   "apple activation lock": 5
+  "applescript": 5
   "application security": 6
   "apt": 5
   "apt28": 3
@@ -254,12 +256,13 @@ label_colors:
   "credential exfiltration": 4
   "credential harvesting": 4
   "credential phishing": 9
-  "credential theft": 9
+  "credential theft": 8
   "credential-based attacks": 12
   "credential-harvesting": 1
   "credential-theft": 5
   "critical infrastructure": 4
   "critical infrastructure targeting": 5
+  "cron-injection": 10
   "crowdstrike": 1
   "crypto scam": 9
   "cryptocurrency": 12
@@ -378,7 +381,6 @@ label_colors:
   "landing page top story": 2
   "leadership": 11
   "legal": 7
-  "levi strauss": 5
   "linux": 2
   "litellm": 9
   "living-off-the-land": 1
@@ -386,7 +388,7 @@ label_colors:
   "malware": 5
   "mathspace": 4
   "metabase": 6
-  "microsoft": 8
+  "microsoft": 9
   "microsoft teams": 10
   "mikrotik": 2
   "miniorange": 5
@@ -448,6 +450,12 @@ label_colors:
   "zero-day": 10
   "zoom": 7
 items:
+  - title: "Chrome 153 Patches Seventh Zero-Day of 2026"
+    url: "https://www.securityweek.com/chrome-153-patches-seventh-zero-day-of-2026/"
+    source: "SecurityWeek"
+    date: 2026-09-09T09:45:00Z
+    kind: news
+    labels: ["chrome", "vulnerabilities"]
   - title: "New Microsoft Defender 'ShieldCrash' zero-day grants SYSTEM access"
     url: "https://www.bleepingcomputer.com/news/security/new-microsoft-defender-shieldcrash-zero-day-grants-system-access/"
     source: "BleepingComputer"
@@ -526,6 +534,18 @@ items:
     date: 2026-09-08T17:00:00Z
     kind: news
     labels: ["cybercrime"]
+  - title: "Redis Cryptomining Botnet Compromised 3,562 Servers, Exposed by the Operator's Own Files"
+    url: "https://otx.alienvault.com/pulse/6aa03edde73b7cd2b94b199e"
+    source: "AlienVault"
+    date: 2026-09-08T16:59:09Z
+    kind: research
+    labels: ["botnet", "cron-injection", "cryptomining", "meterpreter", "misconfiguration", "monero", "redis", "rogue-replication", "xmrig"]
+  - title: "Inside a Packed Android RAT Loader"
+    url: "https://darkatlas.io/blog/hagaseca-inside-a-packed-android-rat-loader"
+    source: "AlienVault"
+    date: 2026-09-08T16:59:09Z
+    kind: research
+    labels: ["accessibility abuse", "adb propagation", "android rat", "hagaseca", "redroid", "tc9", "tc9.dex", "thost4", "thost9", "worm behavior"]
   - title: "Hackers Return $263 Million Stolen From Liquid Network"
     url: "https://www.securityweek.com/hackers-return-263-million-stolen-from-liquid-network/"
     source: "SecurityWeek"
@@ -574,6 +594,12 @@ items:
     date: 2026-09-08T12:30:00Z
     kind: news
     labels: ["cybercrime"]
+  - title: "MacSync: The Evasive macOS Stealer Exploiting ClickFix Lures"
+    url: "https://otx.alienvault.com/pulse/6a9fff8d4e576223ee6f9b4e"
+    source: "AlienVault"
+    date: 2026-09-08T12:29:01Z
+    kind: research
+    labels: ["applescript", "clickfix", "credential theft", "cryptocurrency wallets", "lummac2", "maas", "macos stealer", "macsync", "obfuscation", "social engineering", "stealc", "vidar"]
   - title: "Hackers build AI frameworks for widescale credential theft"
     url: "https://www.bleepingcomputer.com/news/security/hackers-build-ai-frameworks-for-widescale-credential-theft/"
     source: "BleepingComputer"
@@ -3688,21 +3714,3 @@ items:
     date: 2026-08-10T10:01:52Z
     kind: news
     labels: ["energy", "ics", "ics/ot", "malware", "ot", "plc", "poland", "power grid", "scada"]
-  - title: "Critical Progress LoadMaster flaw now actively exploited in attacks"
-    url: "https://www.bleepingcomputer.com/news/security/cisa-warns-of-critical-progress-loadmaster-flaw-exploited-in-attacks/"
-    source: "BleepingComputer"
-    date: 2026-08-10T09:49:37Z
-    kind: news
-    labels: []
-  - title: "CISA Urges Immediate Patching of Exploited Progress LoadMaster Vulnerability"
-    url: "https://www.securityweek.com/cisa-urges-immediate-patching-of-exploited-progress-loadmaster-vulnerability/"
-    source: "SecurityWeek"
-    date: 2026-08-10T09:31:51Z
-    kind: news
-    labels: ["cisa kev", "exploited", "kemp loadmaster", "progress software", "vulnerabilities"]
-  - title: "Corporate Data Stolen in Levi Strauss Cyberattack"
-    url: "https://www.securityweek.com/corporate-data-stolen-in-levi-strauss-cyberattack/"
-    source: "SecurityWeek"
-    date: 2026-08-10T08:55:44Z
-    kind: news
-    labels: ["data breaches", "levi strauss"]
