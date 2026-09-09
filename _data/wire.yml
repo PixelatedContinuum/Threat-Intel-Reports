@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-09T12:01:36Z
+generated_at: 2026-09-09T14:01:56Z
 window_days: 30
 counts:
-  total: 546
-  research: 192
-  news: 354
+  total: 542
+  research: 191
+  news: 351
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -16,7 +16,7 @@ topics:
     count: 75
     color: 1
   - label: "cybercrime"
-    count: 57
+    count: 56
     color: 2
   - label: "government"
     count: 29
@@ -31,7 +31,7 @@ topics:
     count: 21
     color: 6
   - label: "artificial intelligence"
-    count: 19
+    count: 18
     color: 7
   - label: "credential theft"
     count: 17
@@ -78,7 +78,6 @@ label_colors:
   "ai guardrails": 8
   "ai infrastructure": 11
   "ai infrastructure targeting": 6
-  "ai integration": 10
   "ai malware": 9
   "ai testing": 12
   "ai vishing": 6
@@ -185,6 +184,7 @@ label_colors:
   "blockchain c2": 1
   "blog post": 6
   "bloodalchemy": 3
+  "bluemoon": 5
   "botnet": 6
   "botnet takedown": 5
   "brand impersonation": 7
@@ -196,6 +196,7 @@ label_colors:
   "browser hijacking": 12
   "browser theft": 3
   "browser-credentials": 9
+  "browser-extension": 12
   "browser-in-browser": 9
   "build path attribution": 4
   "build-time execution": 10
@@ -311,7 +312,6 @@ label_colors:
   "device code phishing": 5
   "dgfip": 12
   "diplomatic targeting": 1
-  "discord hijacking": 12
   "disrupted": 8
   "dll sideloading": 11
   "domain controller": 4
@@ -344,7 +344,6 @@ label_colors:
   "gentlemen": 1
   "geoserver": 2
   "ghostdesk": 6
-  "ghostjacking": 2
   "github actions": 6
   "github-actions": 9
   "gitlab": 3
@@ -452,6 +451,18 @@ label_colors:
   "zero-day": 10
   "zoom": 7
 items:
+  - title: "Ukraine prosecutor general steps down amid scam call center bribery probe"
+    url: "https://therecord.media/ukraine-prosecutor-general-scam-center"
+    source: "Recorded Future"
+    date: 2026-09-09T12:15:00Z
+    kind: news
+    labels: ["cybercrime", "government"]
+  - title: "Once in a BlueMoon: Multiple State-Aligned Threat Actors Rapidly Adopt Novel Exploit Chain Using Chrome and Windows Zero-Days"
+    url: "https://otx.alienvault.com/pulse/6aa13f23b5ab6aa77a03e1e3"
+    source: "AlienVault"
+    date: 2026-09-09T11:12:35Z
+    kind: research
+    labels: ["bluemoon", "browser-extension", "gemstone", "shadowpad"]
   - title: "ICS Patch Tuesday: Schneider Electric, Siemens Fix Critical Flaws"
     url: "https://www.securityweek.com/ics-patch-tuesday-schneider-electric-siemens-fix-critical-flaws/"
     source: "SecurityWeek"
@@ -3692,39 +3703,3 @@ items:
     date: 2026-08-10T14:07:48Z
     kind: news
     labels: ["cisco", "clamav", "dos", "patch", "poc", "public poc", "vulnerabilities"]
-  - title: "When Credentials Are No Longer Enough: Device Trust in the AI Era"
-    url: "https://www.bleepingcomputer.com/news/security/when-credentials-are-no-longer-enough-device-trust-in-the-ai-era/"
-    source: "BleepingComputer"
-    date: 2026-08-10T14:01:11Z
-    kind: news
-    labels: []
-  - title: "Integrating AI into Attack Operations, From AI-Generated Decoy Documents to a Local LLM"
-    url: "https://www.genians.co.kr/en/blog/threat_intelligence/kimsuky_ai_llm"
-    source: "AlienVault"
-    date: 2026-08-10T13:45:54Z
-    kind: research
-    labels: ["ai integration", "apt", "asyncrat", "git-based c2", "kimsuky", "lnk files", "local llm", "north korea", "powershell", "spear phishing"]
-  - title: "Powercat malware campaign: Fake game cheats deliver infostealer"
-    url: "https://otx.alienvault.com/pulse/6a79d611fbc9cb6fa6102a8b"
-    source: "AlienVault"
-    date: 2026-08-10T13:45:53Z
-    kind: research
-    labels: ["cryptocurrency theft", "discord hijacking", "gaming", "infostealer", "java loader", "powercat", "session hijacking", "surveillance capabilities"]
-  - title: "China-linked hackers turning popular cybersecurity tool into ransomware launchpad, Microsoft warns"
-    url: "https://therecord.media/china-hackers-ransomware-microsoft"
-    source: "Recorded Future"
-    date: 2026-08-10T13:15:00Z
-    kind: news
-    labels: ["china", "cybercrime"]
-  - title: "‘Ghostjacking’ Attack Uses Poisoned Logs to Turn AI Agents Bad"
-    url: "https://www.securityweek.com/ghostjacking-attack-uses-poisoned-logs-to-turn-ai-agents-bad/"
-    source: "SecurityWeek"
-    date: 2026-08-10T12:59:34Z
-    kind: news
-    labels: ["artificial intelligence", "ghostjacking"]
-  - title: "New Zealand sanctions Russian hackers, propaganda groups over Ukraine war"
-    url: "https://therecord.media/new-zealand-russian-hackers-sanctions"
-    source: "Recorded Future"
-    date: 2026-08-10T12:30:00Z
-    kind: news
-    labels: ["cybercrime", "government", "influence operations"]
