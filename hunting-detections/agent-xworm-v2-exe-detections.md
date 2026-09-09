@@ -29,7 +29,7 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 | Sigma | 1 | 1 | T1059.001, T1082, T1057, T1007, T1482 | 1 |
 | Suricata | 0 | 1 | T1071.001 | 2 |
 
-> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
+> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient — safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting — expect to review the hits.
 
 **Atomics routed to the IOC feed:** the distribution/C2 IP (`109.230.231.37`), the sample's file hashes (SHA256/SHA1/MD5), and the literal authentication-secret instance (`AgentSec_8hJ3kL6mN9pQ2rS5tU8vW1xY4zA7bC0d`) were already present in [`agent-xworm-v2-exe.json`](/ioc-feeds/agent-xworm-v2-exe.json) before this retiering pass. The single-sample hash-equivalent YARA rule, the pure IP-match Sigma selector, and two of the four original Suricata signatures added no detection value beyond those feed entries and have been retired. See Coverage Gaps for the full reasoning on every retired rule.
 
@@ -241,34 +241,34 @@ id: 6fd742c2-b2cd-4c83-be66-06dd562e200d
 name: xworm_v2_recon_getprocess
 status: experimental
 description: >-
-  Base rule (not alerting on its own): PowerShell process launched with the
-  -NoP -C Get-Process|Sort CPU command-line fragment. Paired with two other
-  base rules via the correlation rule below, which flags all three of XWorm
-  RAT v2.x's embedded reconnaissance commands launching on the same host in
-  a short window.
+    Base rule (not alerting on its own): PowerShell process launched with the
+    -NoP -C Get-Process|Sort CPU command-line fragment. Paired with two other
+    base rules via the correlation rule below, which flags all three of XWorm
+    RAT v2.x's embedded reconnaissance commands launching on the same host in
+    a short window.
 references:
-  - https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/
+    - https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/
 author: The Hunters Ledger
 date: '2026-01-12'
 tags:
-  - attack.execution
-  - attack.t1059.001
-  - attack.discovery
-  - attack.t1057
-  - detection.emerging-threats
+    - attack.execution
+    - attack.t1059.001
+    - attack.discovery
+    - attack.t1057
+    - detection.emerging-threats
 logsource:
-  product: windows
-  category: process_creation
+    product: windows
+    category: process_creation
 detection:
-  selection:
-    Image|endswith: '\powershell.exe'
-    CommandLine|contains: '-NoP -C Get-Process|Sort CPU'
-  condition: selection
+    selection:
+        Image|endswith: '\powershell.exe'
+        CommandLine|contains: '-NoP -C Get-Process|Sort CPU'
+    condition: selection
 falsepositives:
-  - >-
-    Legitimate inventory or RMM scripting using this exact literal command
-    fragment is uncommon but not impossible. Not alerting on its own; reviewed
-    only in combination with the two paired base rules.
+    - >-
+        Legitimate inventory or RMM scripting using this exact literal command
+        fragment is uncommon but not impossible. Not alerting on its own; reviewed
+        only in combination with the two paired base rules.
 level: informational
 ---
 title: XWorm RAT v2.x PowerShell Reconnaissance Process Launch - Get-Service Enumeration (Base Rule)
@@ -276,32 +276,32 @@ id: 7632ad33-882e-4595-8bf6-42cfbeeef52c
 name: xworm_v2_recon_getservice
 status: experimental
 description: >-
-  Base rule (not alerting on its own): PowerShell process launched with the
-  -NoP -C Get-Service command-line fragment. Paired with two other base rules
-  via the correlation rule below.
+    Base rule (not alerting on its own): PowerShell process launched with the
+    -NoP -C Get-Service command-line fragment. Paired with two other base rules
+    via the correlation rule below.
 references:
-  - https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/
+    - https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/
 author: The Hunters Ledger
 date: '2026-01-12'
 tags:
-  - attack.execution
-  - attack.t1059.001
-  - attack.discovery
-  - attack.t1007
-  - detection.emerging-threats
+    - attack.execution
+    - attack.t1059.001
+    - attack.discovery
+    - attack.t1007
+    - detection.emerging-threats
 logsource:
-  product: windows
-  category: process_creation
+    product: windows
+    category: process_creation
 detection:
-  selection:
-    Image|endswith: '\powershell.exe'
-    CommandLine|contains: '-NoP -C Get-Service|?{$_.Status -eq'
-  condition: selection
+    selection:
+        Image|endswith: '\powershell.exe'
+        CommandLine|contains: '-NoP -C Get-Service|?{$_.Status -eq'
+    condition: selection
 falsepositives:
-  - >-
-    Legitimate inventory or RMM scripting using this exact literal command
-    fragment is uncommon but not impossible. Not alerting on its own; reviewed
-    only in combination with the two paired base rules.
+    - >-
+        Legitimate inventory or RMM scripting using this exact literal command
+        fragment is uncommon but not impossible. Not alerting on its own; reviewed
+        only in combination with the two paired base rules.
 level: informational
 ---
 title: XWorm RAT v2.x PowerShell Reconnaissance Process Launch - Domain Role Enumeration (Base Rule)
@@ -309,70 +309,70 @@ id: 7540e848-d3a6-43de-90b7-f55c30b3ffc8
 name: xworm_v2_recon_domainrole
 status: experimental
 description: >-
-  Base rule (not alerting on its own): PowerShell process launched with the
-  -NoP -C Get-WmiObject Win32_ComputerSystem command-line fragment. Paired
-  with two other base rules via the correlation rule below.
+    Base rule (not alerting on its own): PowerShell process launched with the
+    -NoP -C Get-WmiObject Win32_ComputerSystem command-line fragment. Paired
+    with two other base rules via the correlation rule below.
 references:
-  - https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/
+    - https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/
 author: The Hunters Ledger
 date: '2026-01-12'
 tags:
-  - attack.execution
-  - attack.t1059.001
-  - attack.discovery
-  - attack.t1482
-  - detection.emerging-threats
+    - attack.execution
+    - attack.t1059.001
+    - attack.discovery
+    - attack.t1482
+    - detection.emerging-threats
 logsource:
-  product: windows
-  category: process_creation
+    product: windows
+    category: process_creation
 detection:
-  selection:
-    Image|endswith: '\powershell.exe'
-    CommandLine|contains: '-NoP -C Get-WmiObject Win32_ComputerSystem'
-  condition: selection
+    selection:
+        Image|endswith: '\powershell.exe'
+        CommandLine|contains: '-NoP -C Get-WmiObject Win32_ComputerSystem'
+    condition: selection
 falsepositives:
-  - >-
-    Legitimate inventory or RMM scripting using this exact literal command
-    fragment is uncommon but not impossible. Not alerting on its own; reviewed
-    only in combination with the two paired base rules.
+    - >-
+        Legitimate inventory or RMM scripting using this exact literal command
+        fragment is uncommon but not impossible. Not alerting on its own; reviewed
+        only in combination with the two paired base rules.
 level: informational
 ---
 title: XWorm RAT v2.x Full PowerShell Reconnaissance Sequence on Same Host
 id: 4b27faae-f708-4555-930c-c2054c9f060b
 status: experimental
 description: >-
-  Fires when all three of XWorm RAT v2.x's embedded PowerShell reconnaissance
-  commands (process enumeration, service enumeration, and domain-role
-  discovery via WMI) launch as separate processes on the same host within a
-  short window. Each command is a distinct powershell.exe invocation using
-  the abbreviated -NoP -C flag combination, matching the malware's documented
-  embedded reconnaissance templates. No individual command is alerting-grade
-  alone, but a legitimate administrative workflow launching all three of
-  these exact literal one-liners together within 5 minutes is implausible.
+    Fires when all three of XWorm RAT v2.x's embedded PowerShell reconnaissance
+    commands (process enumeration, service enumeration, and domain-role
+    discovery via WMI) launch as separate processes on the same host within a
+    short window. Each command is a distinct powershell.exe invocation using
+    the abbreviated -NoP -C flag combination, matching the malware's documented
+    embedded reconnaissance templates. No individual command is alerting-grade
+    alone, but a legitimate administrative workflow launching all three of
+    these exact literal one-liners together within 5 minutes is implausible.
 references:
-  - https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/
+    - https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/
 author: The Hunters Ledger
 date: '2026-01-12'
 tags:
-  - attack.execution
-  - attack.t1059.001
-  - attack.discovery
-  - attack.t1082
-  - detection.emerging-threats
+    - attack.execution
+    - attack.t1059.001
+    - attack.discovery
+    - attack.t1082
+    - detection.emerging-threats
 correlation:
-  type: temporal
-  rules:
-    - xworm_v2_recon_getprocess
-    - xworm_v2_recon_getservice
-    - xworm_v2_recon_domainrole
-  group-by:
-    - host.name
-  timespan: 5m
+    type: temporal
+    rules:
+        - xworm_v2_recon_getprocess
+        - xworm_v2_recon_getservice
+        - xworm_v2_recon_domainrole
+    group-by:
+        - host.name
+    timespan: 5m
 falsepositives:
-  - >-
-    A coordinated administrative script deliberately running all three
-    literal one-liners together within 5 minutes is implausible outside
-    this malware's embedded reconnaissance routine.
+    - >-
+        A coordinated administrative script deliberately running all three
+        literal one-liners together within 5 minutes is implausible outside
+        this malware's embedded reconnaissance routine.
 level: high
 ```
 
@@ -468,15 +468,15 @@ alert tcp $HOME_NET any -> any any (msg:"THL HUNT XWormV2-109.230.231.37 AgentSe
 
 ### Cut Rules (genuine noise or single-sample fingerprints)
 
-- **YARA "Agent_Xworm_V2_Specific_Hash"**. See Retiering Fixes above. All four underlying literals (C2 IP, authentication-secret instance, version string, internal filename) were already present in the IOC feed.
-- **Sigma "XWorm RAT v2.4.0 WebSocket C2 Connection to Known Infrastructure"** (id `f8e7e73b-f2b2-6635-800a-042e7890a35f` in the source file), a pure `DestinationIp: '109.230.231.37'` selector, structurally identical to the project's canonical Sigma Cut example. The IP is already present in `agent-xworm-v2-exe.json` under `network_indicators.c2_infrastructure.ip`. A prior coverage pass on 2026-07-06, noted in the source file, had already removed a second generic-path/ubiquitous-behavior Sigma rule from this file before this retiering; no recovery of that already-removed rule was attempted.
-- **Suricata "Connection to XWorm C2 Server"** (sids `1000020` and `1000021`, an inbound/outbound pair), pure IP-match rules (`alert tcp $HOME_NET any -> 109.230.231.37 any`, no content or protocol anchor). Textbook Suricata Cut. The IP is already present in the IOC feed.
-- **Suricata "WebSocket Upgrade with Suspicious Characteristics"** (sid `1000022`). No atomic to route; cut for precision failure (fires on any WebSocket handshake to any destination).
-- **Suricata "Base64 Encoded WebSocket Payload"** (sid `1000024`). No atomic to route; cut for precision failure (the "Agent" content anchor is a substring of the near-universal User-Agent HTTP header).
+- **YARA "Agent_Xworm_V2_Specific_Hash"** — see Retiering Fixes above. All four underlying literals (C2 IP, authentication-secret instance, version string, internal filename) were already present in the IOC feed.
+- **Sigma "XWorm RAT v2.4.0 WebSocket C2 Connection to Known Infrastructure"** (id `f8e7e73b-f2b2-6635-800a-042e7890a35f` in the source file) — a pure `DestinationIp: '109.230.231.37'` selector, structurally identical to the project's canonical Sigma Cut example. The IP is already present in `agent-xworm-v2-exe.json` under `network_indicators.c2_infrastructure.ip`. A prior coverage pass on 2026-07-06, noted in the source file, had already removed a second generic-path/ubiquitous-behavior Sigma rule from this file before this retiering; no recovery of that already-removed rule was attempted.
+- **Suricata "Connection to XWorm C2 Server"** (sids `1000020` and `1000021`, an inbound/outbound pair) — pure IP-match rules (`alert tcp $HOME_NET any -> 109.230.231.37 any`, no content or protocol anchor). Textbook Suricata Cut. The IP is already present in the IOC feed.
+- **Suricata "WebSocket Upgrade with Suspicious Characteristics"** (sid `1000022`) — no atomic to route; cut for precision failure (fires on any WebSocket handshake to any destination).
+- **Suricata "Base64 Encoded WebSocket Payload"** (sid `1000024`) — no atomic to route; cut for precision failure (the "Agent" content anchor is a substring of the near-universal User-Agent HTTP header).
 
 ### Atomics Routed to the IOC Feed
 
-- **C2/distribution IP (`109.230.231.37`), file hashes (SHA256, SHA1, MD5), and the literal authentication-secret instance (`AgentSec_8hJ3kL6mN9pQ2rS5tU8vW1xY4zA7bC0d`)**, all already present in [`agent-xworm-v2-exe.json`](/ioc-feeds/agent-xworm-v2-exe.json) under `file_hashes`, `network_indicators.c2_infrastructure.ip`, and `network_indicators.c2_infrastructure.authentication_secret` respectively. No JSON edits were made as part of this migration; presence was verified, not created.
+- **C2/distribution IP (`109.230.231.37`), file hashes (SHA256, SHA1, MD5), and the literal authentication-secret instance (`AgentSec_8hJ3kL6mN9pQ2rS5tU8vW1xY4zA7bC0d`)** — all already present in [`agent-xworm-v2-exe.json`](/ioc-feeds/agent-xworm-v2-exe.json) under `file_hashes`, `network_indicators.c2_infrastructure.ip`, and `network_indicators.c2_infrastructure.authentication_secret` respectively. No JSON edits were made as part of this migration; presence was verified, not created.
 
 ### Unconfirmed C2 Wire Format: Why Network Coverage Stays Thin
 
@@ -484,9 +484,9 @@ The sample's C2 channel was offline when the sample was recovered, and no live s
 
 ### What Would Enable Stronger Coverage
 
-- **A captured live C2 session**, confirming the actual wire format of the WebSocket handshake and authentication exchange would resolve whether the AgentSec_ Suricata rule fires against real traffic, and would enable a genuine protocol-level Detection signature in place of the current Hunting-only payload-pattern rule.
-- **Goodware-corpus validation**. None of the surviving YARA Hunting rules (Family Combination, WebSocket Generic Combination) have been run against a broad clean-software corpus. A documented zero-FP result is the explicit precondition for reconsidering Detection tier on the family-combination rule's AgentSec_/WebSocket branch.
-- **A second XWorm v2.x sample sharing the AgentSec_ naming convention** would confirm whether this is an operator-specific convention (as currently assumed) or a broader XWorm builder-tool convention, sharpening the durability assessment for both the YARA regex rule and the Suricata payload-pattern rule.
+- **A captured live C2 session** — confirming the actual wire format of the WebSocket handshake and authentication exchange would resolve whether the AgentSec_ Suricata rule fires against real traffic, and would enable a genuine protocol-level Detection signature in place of the current Hunting-only payload-pattern rule.
+- **Goodware-corpus validation** — none of the surviving YARA Hunting rules (Family Combination, WebSocket Generic Combination) have been run against a broad clean-software corpus. A documented zero-FP result is the explicit precondition for reconsidering Detection tier on the family-combination rule's AgentSec_/WebSocket branch.
+- **A second XWorm v2.x sample sharing the AgentSec_ naming convention** — would confirm whether this is an operator-specific convention (as currently assumed) or a broader XWorm builder-tool convention, sharpening the durability assessment for both the YARA regex rule and the Suricata payload-pattern rule.
 
 ---
 

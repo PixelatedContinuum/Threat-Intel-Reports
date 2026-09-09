@@ -7,6 +7,19 @@
 #     Hunting rules are BROAD by design - triage them, do not alert blind.
 #   rate-limited / inline note, when the rule carries one
 #   FP: the authoring false-positive note, where one was recorded
+# Every rule's own metadata: clause carries its authoring date (date YYYY-MM-DD),
+# already in the raw rule text above. That date is a fact and never goes stale; it
+# is a DIFFERENT axis from TIER above, not a restatement of it. A fingerprint rule
+# keeps matching its own sample indefinitely regardless of age, even once the family
+# ships a new build; what has aged is the intel behind the match, not whether it
+# still fires. Your own tolerance decides what counts as too old for your use case,
+# not ours: a SOC hunting historical infections has a different bar than one triaging
+# live alerts. If it helps as a starting point, here is the schedule we use internally
+# for our own triage: under 6 months CURRENT, 6 to 12 AGING, 12 to 24 STALE, over 24
+# HISTORICAL. This schedule is a proxy, not a measurement: a family shipping monthly
+# builds ages faster than a tool unchanged for years, and no fixed cutoff can know
+# that. Nothing here regenerates this schedule on a timer, and no refresh cadence is
+# promised.
 
 # Hybrid-Loader-Stealer-Sogou (orig sid:1000001)
 #   TIER: Hunting  |  robustness 1  |  confidence MODERATE  |  BROAD - triage before alerting
@@ -474,19 +487,19 @@ alert tls $HOME_NET any -> any any (msg:"THL HUNT GSocket-THC-Deploy gsocket.io 
 #   rate-limited
 #   FP: Legitimate applications, scripts, or monitoring dashboards using ip-api.com for IP geolocation or network diagnostics — this is a widely-used free...
 alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL TROJAN XWorm Anti-Analysis Hosting Check via ip-api.com"; flow:established,to_server; http.host; content:"ip-api.com"; http.uri; content:"/line/"; content:"fields=hosting"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:3500099; rev:2; metadata:author The_Hunters_Ledger, date 2026-04-04, reference https://the-hunters-ledger.com/hunting-detections/shadow-xworm-opendirectory-detections/;)
-# shinyhunters-dls-91-215-85-22-20260417 (orig sid:9001001)
-#   TIER: Detection  |  robustness 2  |  confidence HIGH
-#   FP: None known — the domain is actor-exclusive. Suppress by source IP for known threat-intel platform egress ranges.
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL ShinyHunters DLS - HTTP Host Header shinyhunte.rs"; flow:established,to_server; http.host; content:"shinyhunte.rs"; endswith; classtype:trojan-activity; sid:3500103; rev:1; metadata:author The_Hunters_Ledger, date 2026-04-17, reference https://the-hunters-ledger.com/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/, attack_target Client_Endpoint, mitre_tactic_id TA0011, mitre_technique_id T1583.001;)
-# shinyhunters-dls-91-215-85-22-20260417 (orig sid:9001002)
-#   TIER: Detection  |  robustness 2  |  confidence HIGH
-#   FP: None known — the domain is actor-exclusive. Suppress by source IP for known threat-intel platform egress ranges.
-alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"THL ShinyHunters DLS - TLS SNI shinyhunte.rs"; flow:established,to_server; tls.sni; content:"shinyhunte.rs"; endswith; nocase; classtype:trojan-activity; sid:3500104; rev:1; metadata:author The_Hunters_Ledger, date 2026-04-17, reference https://the-hunters-ledger.com/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/, attack_target Client_Endpoint, mitre_tactic_id TA0011, mitre_technique_id T1583.001;)
 # shinyhunters-dls-91-215-85-22-20260417 (orig sid:9001003)
 #   TIER: Detection  |  robustness 2  |  confidence HIGH
 #   rate-limited
 #   FP: None known — the path token is a distinctive multi-word string; coincidental collision with unrelated infrastructure is extremely unlikely.
 alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL ShinyHunters DLS - HTTP Request to DLS Content Path pay_or_leak"; flow:established,to_server; http.uri; content:"/pay_or_leak/"; classtype:trojan-activity; threshold:type limit,track by_src,count 1,seconds 300; sid:3500105; rev:2; metadata:author The_Hunters_Ledger, date 2026-04-17, reference https://the-hunters-ledger.com/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/, attack_target Client_Endpoint, mitre_tactic_id TA0040, mitre_technique_id T1657;)
+# shinyhunters-dls-91-215-85-22-20260417 (orig sid:9001001)
+#   TIER: Hunting  |  robustness 1  |  confidence HIGH  |  BROAD - triage before alerting
+#   FP: None known — the domain is actor-exclusive. Suppress by source IP for known threat-intel platform egress ranges.
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL ShinyHunters DLS - HTTP Host Header shinyhunte.rs"; flow:established,to_server; http.host; content:"shinyhunte.rs"; endswith; classtype:trojan-activity; sid:3500103; rev:1; metadata:author The_Hunters_Ledger, date 2026-04-17, reference https://the-hunters-ledger.com/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/, attack_target Client_Endpoint, mitre_tactic_id TA0011, mitre_technique_id T1583.001;)
+# shinyhunters-dls-91-215-85-22-20260417 (orig sid:9001002)
+#   TIER: Hunting  |  robustness 1  |  confidence HIGH  |  BROAD - triage before alerting
+#   FP: None known — the domain is actor-exclusive. Suppress by source IP for known threat-intel platform egress ranges.
+alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"THL ShinyHunters DLS - TLS SNI shinyhunte.rs"; flow:established,to_server; tls.sni; content:"shinyhunte.rs"; endswith; nocase; classtype:trojan-activity; sid:3500104; rev:1; metadata:author The_Hunters_Ledger, date 2026-04-17, reference https://the-hunters-ledger.com/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/, attack_target Client_Endpoint, mitre_tactic_id TA0011, mitre_technique_id T1583.001;)
 # sliver-c2-windows-postex-staging-193-233-202-17 (orig sid:1000001)
 #   TIER: Detection  |  robustness 3  |  confidence HIGH
 #   rate-limited

@@ -18,17 +18,17 @@ hide: true
 
 ## Detection Coverage Summary
 
-This is a Data Leak Site / extortion infrastructure investigation. There are no malware binaries, process trees, or behavioral PCAPs. Detection content targets the artifacts a defender actually encounters: the ransom note and actor-branded taunt filenames appearing on internal file shares, web-proxy hits on the DLS's own content-directory path, PROSPERO bulletproof-hosting range enrichment, and the upstream cloud-identity compromise TTPs (Salesforce OAuth abuse, Okta MFA reset exploitation) that enabled exfiltration across 28+ confirmed victims. Coverage is scoped to indicators that retain analyst value independent of the DLS's current hosting IP or domain; the campaign's bare domain and IP atomics are carried in the IOC feed rather than as standalone signatures.
+This is a Data Leak Site / extortion infrastructure investigation — there are no malware binaries, process trees, or behavioral PCAPs. Detection content targets the artifacts a defender actually encounters: the ransom note and actor-branded taunt filenames appearing on internal file shares, web-proxy hits on the DLS's own content-directory path, PROSPERO bulletproof-hosting range enrichment, and the upstream cloud-identity compromise TTPs (Salesforce OAuth abuse, Okta MFA reset exploitation) that enabled exfiltration across 28+ confirmed victims. Coverage is scoped to indicators that retain analyst value independent of the DLS's current hosting IP or domain; the campaign's bare domain and IP atomics are carried in the IOC feed rather than as standalone signatures.
 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 2 | 2 | T1657, T1583.001, T1485 | 0 |
 | Sigma | 0 | 4 | T1657, T1485, T1528, T1213, T1566.004, T1098, T1583.003, T1090.003 | 2 |
-| Suricata | 3 | 0 | T1583.001, T1657 | 0 |
+| Suricata | 1 | 2 | T1583.001, T1657 | 0 |
 
-> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
+> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient — safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting — expect to review the hits.
 
-**Atomics routed to the IOC feed:** the actor-identity domains `shinyhunte.rs` and `pro-spero.ru`, and the DLS host IPs `91.215.85.22` and `91.215.43.200`, are transient infrastructure indicators. Both pairs are already carried in [`shinyhunters-dls-91-215-85-22-20260417-iocs.json`](/ioc-feeds/shinyhunters-dls-91-215-85-22-20260417-iocs.json) rather than as standalone DNS-query or network-connection signatures (each original rule keyed solely on the bare domain or IP, and removing the literal left no behavior to detect). Block them via the feed. See Coverage Gaps for the salvage rewrites that replaced non-durable IP/domain anchors with durable content anchors instead of cutting the rules outright.
+**Atomics routed to the IOC feed:** the actor-identity domains `shinyhunte.rs` and `pro-spero.ru`, and the DLS host IPs `91.215.85.22` and `91.215.43.200`, are transient infrastructure indicators — both pairs are already carried in [`shinyhunters-dls-91-215-85-22-20260417-iocs.json`](/ioc-feeds/shinyhunters-dls-91-215-85-22-20260417-iocs.json) rather than as standalone DNS-query or network-connection signatures (each original rule keyed solely on the bare domain or IP, and removing the literal left no behavior to detect). Block them via the feed. See Coverage Gaps for the salvage rewrites that replaced non-durable IP/domain anchors with durable content anchors instead of cutting the rules outright.
 
 ---
 
@@ -122,7 +122,7 @@ rule MALW_ShinyHunters_TauntFilename {
 
 ### Hunting Rules
 
-#### ShinyHunters Actor Identity: Domain + Collective Name
+#### ShinyHunters Actor Identity — Domain + Collective Name
 
 **Tier:** Hunting
 **Robustness:** 2
@@ -194,7 +194,7 @@ rule MALW_ShinyHunters_DLS_HTML {
 
 ### Hunting Rules
 
-#### ShinyHunters DLS: Web Proxy Hit on DLS Content Path
+#### ShinyHunters DLS — Web Proxy Hit on DLS Content Path
 
 **Tier:** Hunting
 **Robustness:** 2
@@ -245,7 +245,7 @@ falsepositives:
 level: medium
 ```
 
-#### ShinyHunters DLS: Salesforce Bulk Export OAuth App Authorization
+#### ShinyHunters DLS — Salesforce Bulk Export OAuth App Authorization
 
 **Tier:** Hunting
 **Robustness:** 2
@@ -301,7 +301,7 @@ falsepositives:
 level: medium
 ```
 
-#### ShinyHunters DLS: Okta MFA Factor Deactivation or Unexpected Enrollment
+#### ShinyHunters DLS — Okta MFA Factor Deactivation or Unexpected Enrollment
 
 **Tier:** Hunting
 **Robustness:** 1
@@ -358,7 +358,7 @@ falsepositives:
 level: medium
 ```
 
-#### ShinyHunters DLS: PROSPERO Bulletproof Hosting CIDR Range Access
+#### ShinyHunters DLS — PROSPERO Bulletproof Hosting CIDR Range Access
 
 **Tier:** Hunting
 **Robustness:** 1
@@ -366,7 +366,7 @@ level: medium
 **Confidence:** MODERATE — range-level indicator; specificity is lower than IP or domain indicators.
 **Rationale:** PROSPERO AS200593 CIDR ranges are shared bulletproof-hosting infrastructure — the DLS sits on 91.215.85.22 within the first prefix, but other threat actors and unrelated services may co-tenant these ranges. This is a context-enrichment indicator for elevating alert priority when combined with other ShinyHunters IOCs, not a standalone actionable alert; `level` stays `low` as originally assessed.
 **False Positives:**
-- Legitimate services co-hosted on PROSPERO AS200593, shared bulletproof hosting environment where other tenants may include unrelated or lower-risk operations
+- Legitimate services co-hosted on PROSPERO AS200593 — shared bulletproof hosting environment where other tenants may include unrelated or lower-risk operations
 - Threat intelligence platform automated scanning of known malicious ranges
 **Deployment:** Perimeter firewall / NGFW logs; network flow data (NetFlow/IPFIX); SIEM enrichment pipeline for alert triage.
 
@@ -413,39 +413,7 @@ level: low
 
 ### Detection Rules
 
-#### ShinyHunters DLS: HTTP Host Header shinyhunte.rs
-
-**Tier:** Detection
-**Robustness:** 2
-**ATT&CK Coverage:** T1583.001 (Acquire Infrastructure: Domains), T1657 (Financial Theft / Extortion)
-**Confidence:** HIGH
-**Rationale:** Host-header content match in the `http.host` sticky buffer with `endswith` is a durable content anchor — it is independent of the current origin IP and continues to fire if the CDN backend rotates, unlike a destination-IP match. No legitimate enterprise service uses this actor-branded identity domain.
-**False Positives:** None known — the domain is actor-exclusive. Suppress by source IP for known threat-intel platform egress ranges.
-**Blind Spots:** Evaded if the operator migrates off the shinyhunte.rs domain entirely; misses HTTPS traffic where only the TLS SNI is visible (covered by the companion TLS SNI rule below).
-**Validation:** Replay a PCAP of an HTTP request with Host header `shinyhunte.rs` — must alert; ordinary HTTP traffic to unrelated hosts must NOT.
-**Deployment:** Network IDS/IPS at perimeter (Suricata/Snort); TLS-inspection proxy with Suricata integration; NDR platforms.
-
-```suricata
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL ShinyHunters DLS - HTTP Host Header shinyhunte.rs"; flow:established,to_server; http.host; content:"shinyhunte.rs"; endswith; classtype:trojan-activity; sid:9001001; rev:1; metadata:author The_Hunters_Ledger, date 2026-04-17, reference https://the-hunters-ledger.com/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/, attack_target Client_Endpoint, mitre_tactic_id TA0011, mitre_technique_id T1583.001;)
-```
-
-#### ShinyHunters DLS: TLS SNI shinyhunte.rs
-
-**Tier:** Detection
-**Robustness:** 2
-**ATT&CK Coverage:** T1583.001 (Acquire Infrastructure: Domains), T1657 (Financial Theft / Extortion)
-**Confidence:** HIGH
-**Rationale:** TLS SNI content match captures HTTPS connections to the same actor-identity domain where the HTTP Host header is encrypted and unavailable to the sensor. Same durability profile as the HTTP Host rule above — content-anchored, independent of origin IP.
-**False Positives:** None known — the domain is actor-exclusive. Suppress by source IP for known threat-intel platform egress ranges.
-**Blind Spots:** Evaded if the operator migrates off the shinyhunte.rs domain entirely; encrypted-SNI (ECH) deployments would hide the SNI value from inspection.
-**Validation:** Replay a PCAP of a TLS ClientHello with SNI `shinyhunte.rs` — must alert; ordinary TLS handshakes to unrelated domains must NOT.
-**Deployment:** Network IDS/IPS at perimeter (Suricata/Snort); TLS-inspection proxy with Suricata integration; NDR platforms.
-
-```suricata
-alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"THL ShinyHunters DLS - TLS SNI shinyhunte.rs"; flow:established,to_server; tls.sni; content:"shinyhunte.rs"; endswith; nocase; classtype:trojan-activity; sid:9001002; rev:1; metadata:author The_Hunters_Ledger, date 2026-04-17, reference https://the-hunters-ledger.com/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/, attack_target Client_Endpoint, mitre_tactic_id TA0011, mitre_technique_id T1583.001;)
-```
-
-#### ShinyHunters DLS: HTTP Request to DLS Content Path (pay_or_leak)
+#### ShinyHunters DLS — HTTP Request to DLS Content Path (pay_or_leak)
 
 **Tier:** Detection
 **Robustness:** 2
@@ -461,7 +429,41 @@ alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"THL ShinyHunters DLS - TLS SN
 alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL ShinyHunters DLS - HTTP Request to DLS Content Path pay_or_leak"; flow:established,to_server; http.uri; content:"/pay_or_leak/"; classtype:trojan-activity; threshold:type limit,track by_src,count 1,seconds 300; sid:9001003; rev:2; metadata:author The_Hunters_Ledger, date 2026-04-17, reference https://the-hunters-ledger.com/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/, attack_target Client_Endpoint, mitre_tactic_id TA0040, mitre_technique_id T1657;)
 ```
 
-> **Community contribution:** The `any` destination port on this rule set was suggested by [Anthony Vigil](https://www.linkedin.com/in/anthony-vigil/), who noted that because app-layer protocol keywords (`http`, `tls`) invoke Suricata's parser by protocol recognition rather than by port, pinning to `80`/`443` adds no fidelity, `any` preserves coverage if the operator migrates the DLS to a non-standard port.
+### Hunting Rules
+
+#### ShinyHunters DLS — HTTP Host Header shinyhunte.rs
+
+**Tier:** Hunting
+**Robustness:** 1
+**ATT&CK Coverage:** T1583.001 (Acquire Infrastructure: Domains), T1657 (Financial Theft / Extortion)
+**Confidence:** HIGH
+**Rationale:** Host-header content match in the `http.host` sticky buffer with `endswith` is a durable content anchor — it is independent of the current origin IP and continues to fire if the CDN backend rotates, unlike a destination-IP match. No legitimate enterprise service uses this actor-branded identity domain.
+**False Positives:** None known — the domain is actor-exclusive. Suppress by source IP for known threat-intel platform egress ranges.
+**Blind Spots:** Evaded if the operator migrates off the shinyhunte.rs domain entirely; misses HTTPS traffic where only the TLS SNI is visible (covered by the companion TLS SNI rule below).
+**Validation:** Replay a PCAP of an HTTP request with Host header `shinyhunte.rs` — must alert; ordinary HTTP traffic to unrelated hosts must NOT.
+**Deployment:** Network IDS/IPS at perimeter (Suricata/Snort); TLS-inspection proxy with Suricata integration; NDR platforms.
+
+```suricata
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL ShinyHunters DLS - HTTP Host Header shinyhunte.rs"; flow:established,to_server; http.host; content:"shinyhunte.rs"; endswith; classtype:trojan-activity; sid:9001001; rev:1; metadata:author The_Hunters_Ledger, date 2026-04-17, reference https://the-hunters-ledger.com/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/, attack_target Client_Endpoint, mitre_tactic_id TA0011, mitre_technique_id T1583.001;)
+```
+
+#### ShinyHunters DLS — TLS SNI shinyhunte.rs
+
+**Tier:** Hunting
+**Robustness:** 1
+**ATT&CK Coverage:** T1583.001 (Acquire Infrastructure: Domains), T1657 (Financial Theft / Extortion)
+**Confidence:** HIGH
+**Rationale:** TLS SNI content match captures HTTPS connections to the same actor-identity domain where the HTTP Host header is encrypted and unavailable to the sensor. Same durability profile as the HTTP Host rule above — content-anchored, independent of origin IP.
+**False Positives:** None known — the domain is actor-exclusive. Suppress by source IP for known threat-intel platform egress ranges.
+**Blind Spots:** Evaded if the operator migrates off the shinyhunte.rs domain entirely; encrypted-SNI (ECH) deployments would hide the SNI value from inspection.
+**Validation:** Replay a PCAP of a TLS ClientHello with SNI `shinyhunte.rs` — must alert; ordinary TLS handshakes to unrelated domains must NOT.
+**Deployment:** Network IDS/IPS at perimeter (Suricata/Snort); TLS-inspection proxy with Suricata integration; NDR platforms.
+
+```suricata
+alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"THL ShinyHunters DLS - TLS SNI shinyhunte.rs"; flow:established,to_server; tls.sni; content:"shinyhunte.rs"; endswith; nocase; classtype:trojan-activity; sid:9001002; rev:1; metadata:author The_Hunters_Ledger, date 2026-04-17, reference https://the-hunters-ledger.com/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/, attack_target Client_Endpoint, mitre_tactic_id TA0011, mitre_technique_id T1583.001;)
+```
+
+> **Community contribution:** The `any` destination port on this rule set was suggested by [Anthony Vigil](https://www.linkedin.com/in/anthony-vigil/), who noted that because app-layer protocol keywords (`http`, `tls`) invoke Suricata's parser by protocol recognition rather than by port, pinning to `80`/`443` adds no fidelity — `any` preserves coverage if the operator migrates the DLS to a non-standard port.
 
 ---
 
@@ -475,13 +477,13 @@ ShinyHunters operates three .onion mirrors for the DLS:
 | `shinypogk4jjniry5qi7247tznop6mxdrdte2k6pdu5cyo43vdzmrwid.onion` | Active (redirector) |
 | `toolatedhs5dtr2pv6h5kdraneak5gs3sxrecqhoufc5e45edior7mqd.onion` | Decommissioned (referenced in stale ransom notes) |
 
-**Practical detection limitations:** Standard network telemetry does not expose .onion hostnames, Tor traffic is encrypted before it leaves the client, and the .onion address is resolved inside the Tor network, not via corporate DNS. As a result:
+**Practical detection limitations:** Standard network telemetry does not expose .onion hostnames — Tor traffic is encrypted before it leaves the client, and the .onion address is resolved inside the Tor network, not via corporate DNS. As a result:
 
 - DNS query rules will NOT fire for .onion access; the `QueryName` field will contain the Tor guard-node domain or nothing, not the .onion address.
 - Network flow data will show connections to Tor guard nodes (port 9001/9030/443), not to the .onion addresses themselves.
 - Detection of Tor client activity is more reliable via process-based rules (Tor Browser, `tor.exe` execution) than via network-layer .onion matching.
 
-The .onion addresses are included in the YARA `MALW_ShinyHunters_RansomNote` rule because they appear as plaintext strings within the INFORMATION.txt ransom note. A defender finding that file on a file share will match those strings even without Tor network visibility.
+The .onion addresses are included in the YARA `MALW_ShinyHunters_RansomNote` rule because they appear as plaintext strings within the INFORMATION.txt ransom note — a defender finding that file on a file share will match those strings even without Tor network visibility.
 
 For environments where Tor client execution is prohibited, consider adding a separate Sigma rule targeting `tor.exe` or Tor Browser process creation under `category: process_creation` / `product: windows`.
 
@@ -489,14 +491,14 @@ For environments where Tor client execution is prohibited, consider adding a sep
 
 ## Coverage Gaps
 
-**Tiering backfill: atomics routed to the IOC feed, salvage rewrites applied.** This file was re-tiered against the project's Detection/Hunting/Cut rubric. Two Sigma rules were retired as standalone detections because they matched only a bare, hardcoded domain or IP with no behavioral context. Both indicators are already present in [`shinyhunters-dls-91-215-85-22-20260417-iocs.json`](/ioc-feeds/shinyhunters-dls-91-215-85-22-20260417-iocs.json) and should be blocked via the feed rather than alerted on as a standalone rule:
+**Tiering backfill — atomics routed to the IOC feed, salvage rewrites applied.** This file was re-tiered against the project's Detection/Hunting/Cut rubric. Two Sigma rules were retired as standalone detections because they matched only a bare, hardcoded domain or IP with no behavioral context — both indicators are already present in [`shinyhunters-dls-91-215-85-22-20260417-iocs.json`](/ioc-feeds/shinyhunters-dls-91-215-85-22-20260417-iocs.json) and should be blocked via the feed rather than alerted on as a standalone rule:
 
-- **DNS Query for Actor-Controlled Domains** matched only `QueryName|endswith` for `shinyhunte.rs` / `pro-spero.ru`, a bare-domain selector with no additional log-source context. Already carried in the feed (`network_indicators.domains`).
-- **Outbound Connection to DLS IP Infrastructure** matched only `DestinationIp` for `91.215.85.22` / `91.215.43.200`, a bare-IP selector. Already carried in the feed (`network_indicators.ipv4`).
+- **DNS Query for Actor-Controlled Domains** — matched only `QueryName|endswith` for `shinyhunte.rs` / `pro-spero.ru`, a bare-domain selector with no additional log-source context. Already carried in the feed (`network_indicators.domains`).
+- **Outbound Connection to DLS IP Infrastructure** — matched only `DestinationIp` for `91.215.85.22` / `91.215.43.200`, a bare-IP selector. Already carried in the feed (`network_indicators.ipv4`).
 
 Three rules were salvaged rather than cut, re-anchoring away from a non-durable atomic onto a durable, campaign-specific artifact:
 
-- **YARA `MALW_ShinyHunters_PGP_Identity`** originally matched on any single one of four PGP fingerprints alone (a hash-style atomic, each fingerprint invalidates on the actor's next key rotation, and 2 of the 4 are already marked revoked). The fingerprint-alone branch was removed; the fingerprints remain available for exact-match lookups in the feed (`identity_artifacts.pgp_fingerprints`). The rule now requires the `shinyhunte.rs` domain AND the `Scattered LAPSUS$ Hunters` collective name to co-occur, a durable content combination, moving from a mixed-confidence rule to a clean Hunting-tier signal.
+- **YARA `MALW_ShinyHunters_PGP_Identity`** originally matched on any single one of four PGP fingerprints alone (a hash-style atomic — each fingerprint invalidates on the actor's next key rotation, and 2 of the 4 are already marked revoked). The fingerprint-alone branch was removed; the fingerprints remain available for exact-match lookups in the feed (`identity_artifacts.pgp_fingerprints`). The rule now requires the `shinyhunte.rs` domain AND the `Scattered LAPSUS$ Hunters` collective name to co-occur — a durable content combination — moving from a mixed-confidence rule to a clean Hunting-tier signal.
 - **Sigma "Web Proxy Hit on DLS Content Path"** originally OR'd a durable URI-path selection (`/pay_or_leak/`, `INFORMATION.txt`) with a bare-host selection (`91.215.85.22`, `shinyhunte.rs`) that duplicated the two retired atomic rules above. The host branch was removed; the rule now fires on the path tokens alone, which remain valid even if the DLS migrates to new hosting infrastructure.
 - **Suricata sid:9001003** originally keyed on destination IP `91.215.85.22` with an `http.method; content:"GET"` check that added no real filtering (nearly all HTTP requests are GET). Re-anchored to the `/pay_or_leak/` URI path in the `http.uri` buffer, which survives IP and domain rotation. `rev` bumped to `2` to reflect the content change; `sid` preserved for feed-map continuity.
 

@@ -585,40 +585,40 @@ title: GHOST Kit ComfyUI Fake Custom Node PerformanceMonitor Registration (Case 
 id: 3f6f8f15-2716-4cc1-8eb6-12b9c3bf2c60
 status: experimental
 description: >-
-  Detects registration of the GHOST cryptojacker kit's fake ComfyUI custom node
-  "PerformanceMonitor" (display name "GPU Performance Monitor") used to establish
-  persistence on ComfyUI-hosting AI inference servers. The fake node is installed via
-  pip from the kit-author's GitHub repos. Detection via file creation under ComfyUI's
-  custom_nodes directory matching the PerformanceMonitor pattern, or process creation
-  showing pip installing from the kit-author repos.
+    Detects registration of the GHOST cryptojacker kit's fake ComfyUI custom node
+    "PerformanceMonitor" (display name "GPU Performance Monitor") used to establish
+    persistence on ComfyUI-hosting AI inference servers. The fake node is installed via
+    pip from the kit-author's GitHub repos. Detection via file creation under ComfyUI's
+    custom_nodes directory matching the PerformanceMonitor pattern, or process creation
+    showing pip installing from the kit-author repos.
 references:
-  - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/
+    - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/
 author: The Hunters Ledger
 date: '2026-05-25'
 tags:
-  - attack.persistence
-  - attack.impact
-  - attack.t1496.001
-  - detection.emerging-threats
+    - attack.persistence
+    - attack.impact
+    - attack.t1496.001
+    - detection.emerging-threats
 logsource:
-  category: file_event
-  product: linux
+    category: file_event
+    product: linux
 detection:
-  selection_node:
-    TargetFilename|contains:
-      - /ComfyUI/custom_nodes/PerformanceMonitor
-      - /ComfyUI/custom_nodes/ComfyUI-Shell-Executor
-      - /ComfyUI/custom_nodes/ComfyUI-Shell-Plugin
-  selection_pip:
-    TargetFilename|contains:
-      - Vova75Rus/ComfyUI-Shell-Executor
-      - jamestechdev-oss/ComfyUI-Shell-Plugin
-  condition: selection_node or selection_pip
+    selection_node:
+        TargetFilename|contains:
+            - /ComfyUI/custom_nodes/PerformanceMonitor
+            - /ComfyUI/custom_nodes/ComfyUI-Shell-Executor
+            - /ComfyUI/custom_nodes/ComfyUI-Shell-Plugin
+    selection_pip:
+        TargetFilename|contains:
+            - Vova75Rus/ComfyUI-Shell-Executor
+            - jamestechdev-oss/ComfyUI-Shell-Plugin
+    condition: selection_node or selection_pip
 falsepositives:
-  - >-
-    No known legitimate ComfyUI custom node uses the PerformanceMonitor node name.
-    The kit-author GitHub repos were suspended by GitHub T&S, so new pip install
-    attempts from those URLs will now fail — but locally cached copies may persist.
+    - >-
+        No known legitimate ComfyUI custom node uses the PerformanceMonitor node name.
+        The kit-author GitHub repos were suspended by GitHub T&S, so new pip install
+        attempts from those URLs will now fail — but locally cached copies may persist.
 level: high
 ```
 
@@ -641,40 +641,40 @@ title: Cloudflared Access TCP Tunnel Registration to Non-Allowlisted Hostname
 id: 0d88f829-c8e3-42e5-a3c3-34cb8a5fec1a
 status: experimental
 description: >-
-  Detects execution of 'cloudflared access tcp' with the --hostname flag, indicating
-  an operator is activating a Cloudflare tunnel to proxy TCP traffic (RDP, SSH, WinRM)
-  through Cloudflare infrastructure. Observed in Case 1 (Russian Gemini operator)
-  maintaining persistent RDP access via windows_server.tralalarkefe.com and SSH access
-  via gil_dr1.tralalarkefe.com. Legitimate usage requires a formally managed Cloudflare
-  Zero Trust account configuration — ad-hoc usage with operator-bespoke domains
-  indicates tunneled lateral movement or a C2 channel.
+    Detects execution of 'cloudflared access tcp' with the --hostname flag, indicating
+    an operator is activating a Cloudflare tunnel to proxy TCP traffic (RDP, SSH, WinRM)
+    through Cloudflare infrastructure. Observed in Case 1 (Russian Gemini operator)
+    maintaining persistent RDP access via windows_server.tralalarkefe.com and SSH access
+    via gil_dr1.tralalarkefe.com. Legitimate usage requires a formally managed Cloudflare
+    Zero Trust account configuration — ad-hoc usage with operator-bespoke domains
+    indicates tunneled lateral movement or a C2 channel.
 references:
-  - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/
+    - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/
 author: The Hunters Ledger
 date: '2026-05-25'
 tags:
-  - attack.command-and-control
-  - attack.lateral-movement
-  - attack.t1090.004
-  - detection.emerging-threats
+    - attack.command-and-control
+    - attack.lateral-movement
+    - attack.t1090.004
+    - detection.emerging-threats
 logsource:
-  category: process_creation
-  product: linux
+    category: process_creation
+    product: linux
 detection:
-  selection:
-    Image|endswith:
-      - /cloudflared
-      - /cloudflared.exe
-    CommandLine|contains|all:
-      - access
-      - tcp
-      - --hostname
-  condition: selection
+    selection:
+        Image|endswith:
+            - /cloudflared
+            - /cloudflared.exe
+        CommandLine|contains|all:
+            - access
+            - tcp
+            - --hostname
+    condition: selection
 falsepositives:
-  - >-
-    Legitimate Cloudflare Zero Trust TCP application proxies configured by network
-    administrators. Allowlist known Cloudflare Access deployment hostnames — attacker-
-    controlled hostnames will not match corporate Zero Trust domains.
+    - >-
+        Legitimate Cloudflare Zero Trust TCP application proxies configured by network
+        administrators. Allowlist known Cloudflare Access deployment hostnames — attacker-
+        controlled hostnames will not match corporate Zero Trust domains.
 level: high
 ```
 
@@ -692,42 +692,42 @@ level: high
 
 ```yaml
 title: >-
-  Instana API Enumeration via Stolen JWT from Non-Management-Platform Source
-  (ARPA Observability Harvester)
+    Instana API Enumeration via Stolen JWT from Non-Management-Platform Source
+    (ARPA Observability Harvester)
 id: f9c5ebeb-d6b8-4425-bb85-bfa4d30e28ac
 status: experimental
 description: >-
-  Detects PowerShell execution of Instana API enumeration scripts using the -SkipCertificateCheck
-  flag alongside references to the ocpinstana endpoint pattern, characteristic of the
-  Turkish ARPA operator's instana_local_collector.ps1 script. The script makes sliding
-  10-minute-window GET /api/events requests with a stolen 10-year Instana JWT to
-  exfiltrate observability telemetry to the attacker's ARPA platform. Detection from
-  PowerShell Script Block Logging is highly reliable when -SkipCertificateCheck appears
-  alongside Instana endpoint strings.
+    Detects PowerShell execution of Instana API enumeration scripts using the -SkipCertificateCheck
+    flag alongside references to the ocpinstana endpoint pattern, characteristic of the
+    Turkish ARPA operator's instana_local_collector.ps1 script. The script makes sliding
+    10-minute-window GET /api/events requests with a stolen 10-year Instana JWT to
+    exfiltrate observability telemetry to the attacker's ARPA platform. Detection from
+    PowerShell Script Block Logging is highly reliable when -SkipCertificateCheck appears
+    alongside Instana endpoint strings.
 references:
-  - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/
+    - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/
 author: The Hunters Ledger
 date: '2026-05-25'
 tags:
-  - attack.collection
-  - attack.exfiltration
-  - attack.t1119
-  - detection.emerging-threats
+    - attack.collection
+    - attack.exfiltration
+    - attack.t1119
+    - detection.emerging-threats
 logsource:
-  product: windows
-  category: ps_script
-  definition: Script Block Logging must be enabled (reg key HKLM\Software\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging\EnableScriptBlockLogging=1)
+    product: windows
+    category: ps_script
+    definition: Script Block Logging must be enabled (reg key HKLM\Software\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging\EnableScriptBlockLogging=1)
 detection:
-  selection:
-    ScriptBlockText|contains|all:
-      - SkipCertificateCheck
-      - ocpinstana
-  condition: selection
+    selection:
+        ScriptBlockText|contains|all:
+            - SkipCertificateCheck
+            - ocpinstana
+    condition: selection
 falsepositives:
-  - >-
-    Legitimate Instana API clients that use -SkipCertificateCheck for internal OCP
-    self-signed certificates. Narrow by source host — the attacker's exfiltration
-    target is not a legitimate Instana destination.
+    - >-
+        Legitimate Instana API clients that use -SkipCertificateCheck for internal OCP
+        self-signed certificates. Narrow by source host — the attacker's exfiltration
+        target is not a legitimate Instana destination.
 level: high
 ```
 

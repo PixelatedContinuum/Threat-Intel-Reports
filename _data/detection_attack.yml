@@ -521,7 +521,7 @@
     - tactic: "Defense Impairment"
       id: "T1685"
       name: "Disable or Modify Tools"
-      rules: "Security-Product Termination + IOCTL Behavioral Combination (YARA, Hunting); Kernel Driver Service Creation by Rundll32 (Registry) (SIGMA, Detection); Mass Security-Product Termination: 3+ Distinct Products Within 60 Seconds (Correlation) (SIGMA, Detection)"
+      rules: "Security-Product Termination + IOCTL Behavioral Combination (YARA, Hunting); Kernel Driver Service Creation by Rundll32 (Registry) (SIGMA, Detection); Mass Security-Product Termination — 3+ Distinct Products Within 60 Seconds (Correlation) (SIGMA, Detection)"
       count: 3
 "arsenal-237-lpe-exe-detections":
   total: 4
@@ -1381,17 +1381,17 @@
     - tactic: "Initial Access"
       id: "T1566.002"
       name: "Spearphishing Link"
-      rules: "Inkognito Brand-Impersonation Subdomain DNS Query (Wildcard) (SIGMA, Detection)"
+      rules: "Inkognito Brand-Impersonation Subdomain DNS Query (Wildcard) (SIGMA, Hunting)"
       count: 1
     - tactic: "Stealth"
       id: "T1036.005"
       name: "Match Legitimate Resource Name or Location"
-      rules: "Inkognito INK VPN JS Bundle (Brand/API String Combination) (YARA, Detection); Inkognito INK VPN Favicon SVG (Hash-or-Brand-String) (YARA, Detection); Inkognito Brand-Impersonation Subdomain DNS Query (Wildcard) (SIGMA, Detection)"
+      rules: "Inkognito INK VPN JS Bundle (Brand/API String Combination) (YARA, Detection); Inkognito INK VPN Favicon SVG (Hash-or-Brand-String) (YARA, Detection); Inkognito Brand-Impersonation Subdomain DNS Query (Wildcard) (SIGMA, Hunting)"
       count: 3
     - tactic: "Stealth"
       id: "T1684.001"
       name: "Impersonation"
-      rules: "Inkognito Brand-Impersonation Subdomain DNS Query (Wildcard) (SIGMA, Detection)"
+      rules: "Inkognito Brand-Impersonation Subdomain DNS Query (Wildcard) (SIGMA, Hunting)"
       count: 1
     - tactic: "Command and Control"
       id: "T1071.001"
@@ -2761,7 +2761,7 @@
     - tactic: "Execution"
       id: "T1053.003"
       name: "Cron"
-      rules: "GSocket/THC Backdoor Installer Script: cat.sh (mal_gsocket_catsh_installer_script) (YARA, Detection); Cron-Triggered Base64-Indirected Shell Execution With Output Suppression (SIGMA, Detection)"
+      rules: "GSocket/THC Backdoor Installer Script: cat.sh (mal_gsocket_catsh_installer_script) (YARA, Hunting); Cron-Triggered Base64-Indirected Shell Execution With Output Suppression (SIGMA, Detection)"
       count: 2
     - tactic: "Persistence"
       id: "T1098.004"
@@ -2781,7 +2781,7 @@
     - tactic: "Stealth"
       id: "T1036.004"
       name: "Masquerade Task or Service"
-      rules: "GSocket/THC Backdoor Installer Script: cat.sh (mal_gsocket_catsh_installer_script) (YARA, Detection); Known Second-Actor Daemon-Masquerade Implant Names Executing From User Home Directory (SIGMA, Detection); Executable With System-Daemon-Style Name Running From User Home Directory (SIGMA, Hunting)"
+      rules: "GSocket/THC Backdoor Installer Script: cat.sh (mal_gsocket_catsh_installer_script) (YARA, Hunting); Known Second-Actor Daemon-Masquerade Implant Names Executing From User Home Directory (SIGMA, Detection); Executable With System-Daemon-Style Name Running From User Home Directory (SIGMA, Hunting)"
       count: 3
     - tactic: "Credential Access"
       id: "T1110.001"
@@ -2806,7 +2806,7 @@
     - tactic: "Command and Control"
       id: "T1102"
       name: "Web Service"
-      rules: "GSocket/THC Backdoor Installer Script: cat.sh (mal_gsocket_catsh_installer_script) (YARA, Detection); Second-Actor localroot.sbs Loader Domain DNS Query (SURICATA, Detection); Second-Actor cat.sh Loader Payload Retrieval (SURICATA, Detection); GSocket/THC Relay gsocket.io Domain Query (SURICATA, Hunting)"
+      rules: "GSocket/THC Backdoor Installer Script: cat.sh (mal_gsocket_catsh_installer_script) (YARA, Hunting); Second-Actor localroot.sbs Loader Domain DNS Query (SURICATA, Detection); Second-Actor cat.sh Loader Payload Retrieval (SURICATA, Detection); GSocket/THC Relay gsocket.io Domain Query (SURICATA, Hunting)"
       count: 4
     - tactic: "Command and Control"
       id: "T1105"
@@ -2906,47 +2906,47 @@
     - tactic: "Resource Development"
       id: "T1583.001"
       name: "Domains"
-      rules: "ShinyHunters DLS Ransom Note (INFORMATION.txt) (YARA, Detection); ShinyHunters Actor Identity: Domain + Collective Name (YARA, Hunting); ShinyHunters Clearnet Identity Page (shinyhunte.rs HTML) (YARA, Hunting); ShinyHunters DLS: HTTP Host Header shinyhunte.rs (SURICATA, Detection); ShinyHunters DLS: TLS SNI shinyhunte.rs (SURICATA, Detection)"
+      rules: "ShinyHunters DLS Ransom Note (INFORMATION.txt) (YARA, Detection); ShinyHunters Actor Identity — Domain + Collective Name (YARA, Hunting); ShinyHunters Clearnet Identity Page (shinyhunte.rs HTML) (YARA, Hunting); ShinyHunters DLS — HTTP Host Header shinyhunte.rs (SURICATA, Hunting); ShinyHunters DLS — TLS SNI shinyhunte.rs (SURICATA, Hunting)"
       count: 5
     - tactic: "Resource Development"
       id: "T1583.003"
       name: "Virtual Private Server"
-      rules: "ShinyHunters DLS: PROSPERO Bulletproof Hosting CIDR Range Access (SIGMA, Hunting)"
+      rules: "ShinyHunters DLS — PROSPERO Bulletproof Hosting CIDR Range Access (SIGMA, Hunting)"
       count: 1
     - tactic: "Initial Access"
       id: "T1566.004"
       name: "Spearphishing Voice"
-      rules: "ShinyHunters DLS: Okta MFA Factor Deactivation or Unexpected Enrollment (SIGMA, Hunting)"
+      rules: "ShinyHunters DLS — Okta MFA Factor Deactivation or Unexpected Enrollment (SIGMA, Hunting)"
       count: 1
     - tactic: "Persistence"
       id: "T1098"
       name: "Account Manipulation"
-      rules: "ShinyHunters DLS: Okta MFA Factor Deactivation or Unexpected Enrollment (SIGMA, Hunting)"
+      rules: "ShinyHunters DLS — Okta MFA Factor Deactivation or Unexpected Enrollment (SIGMA, Hunting)"
       count: 1
     - tactic: "Credential Access"
       id: "T1528"
       name: "Steal Application Access Token"
-      rules: "ShinyHunters DLS: Salesforce Bulk Export OAuth App Authorization (SIGMA, Hunting); ShinyHunters DLS: Okta MFA Factor Deactivation or Unexpected Enrollment (SIGMA, Hunting)"
+      rules: "ShinyHunters DLS — Salesforce Bulk Export OAuth App Authorization (SIGMA, Hunting); ShinyHunters DLS — Okta MFA Factor Deactivation or Unexpected Enrollment (SIGMA, Hunting)"
       count: 2
     - tactic: "Collection"
       id: "T1213"
       name: "Data from Information Repositories"
-      rules: "ShinyHunters DLS: Salesforce Bulk Export OAuth App Authorization (SIGMA, Hunting)"
+      rules: "ShinyHunters DLS — Salesforce Bulk Export OAuth App Authorization (SIGMA, Hunting)"
       count: 1
     - tactic: "Command and Control"
       id: "T1090.003"
       name: "Multi-hop Proxy"
-      rules: "ShinyHunters DLS: PROSPERO Bulletproof Hosting CIDR Range Access (SIGMA, Hunting)"
+      rules: "ShinyHunters DLS — PROSPERO Bulletproof Hosting CIDR Range Access (SIGMA, Hunting)"
       count: 1
     - tactic: "Impact"
       id: "T1485"
       name: "Data Destruction"
-      rules: "ShinyHunters Taunt-Filename Naming Convention (YARA, Detection); ShinyHunters DLS: Web Proxy Hit on DLS Content Path (SIGMA, Hunting)"
+      rules: "ShinyHunters Taunt-Filename Naming Convention (YARA, Detection); ShinyHunters DLS — Web Proxy Hit on DLS Content Path (SIGMA, Hunting)"
       count: 2
     - tactic: "Impact"
       id: "T1657"
       name: "Financial Theft"
-      rules: "ShinyHunters DLS Ransom Note (INFORMATION.txt) (YARA, Detection); ShinyHunters Taunt-Filename Naming Convention (YARA, Detection); ShinyHunters Actor Identity: Domain + Collective Name (YARA, Hunting); ShinyHunters DLS: Web Proxy Hit on DLS Content Path (SIGMA, Hunting); ShinyHunters DLS: HTTP Host Header shinyhunte.rs (SURICATA, Detection); ShinyHunters DLS: TLS SNI shinyhunte.rs (SURICATA, Detection); ShinyHunters DLS: HTTP Request to DLS Content Path (pay_or_leak) (SURICATA, Detection)"
+      rules: "ShinyHunters DLS Ransom Note (INFORMATION.txt) (YARA, Detection); ShinyHunters Taunt-Filename Naming Convention (YARA, Detection); ShinyHunters Actor Identity — Domain + Collective Name (YARA, Hunting); ShinyHunters DLS — Web Proxy Hit on DLS Content Path (SIGMA, Hunting); ShinyHunters DLS — HTTP Request to DLS Content Path (pay_or_leak) (SURICATA, Detection); ShinyHunters DLS — HTTP Host Header shinyhunte.rs (SURICATA, Hunting); ShinyHunters DLS — TLS SNI shinyhunte.rs (SURICATA, Hunting)"
       count: 7
 "sliver-c2-windows-postex-staging-193-233-202-17-detections":
   total: 19

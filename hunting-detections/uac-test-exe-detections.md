@@ -29,7 +29,7 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 | Sigma | 3 | 1 | T1548.002 | 0 |
 | Suricata | 0 | 0 | — | 2 |
 
-> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
+> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient — safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting — expect to review the hits.
 
 **Atomics routed to the IOC feed:** the distribution IP (`109.230.231.37`) and the sample's SHA-256/MD5/SHA-1 hashes were already present in [`uac-test-exe.json`](/ioc-feeds/uac-test-exe.json) before this retiering pass. The two IP-match Suricata signatures added no detection value beyond the feed's IP entry and have been retired; the file hash remains available as a fast-path exact-match branch inside the YARA multi-signal combination rule below, alongside its behavioral logic. See Coverage Gaps for the full reasoning on every retired rule.
 
@@ -264,35 +264,35 @@ title: UAC Bypass via Fodhelper Registry Hijacking
 id: 9a2c5b8f-3d1e-4f5a-8c9b-1a2d3e4f5a6b
 status: experimental
 description: >-
-  Detects creation of registry keys under HKCU\Software\Classes\ms-settings\shell\open\command,
-  the exact key the Fodhelper UAC bypass technique hijacks. fodhelper.exe reads this key on
-  launch and executes its DelegateExecute/default value at the caller's already-elevated
-  integrity level, without a UAC prompt. A write to this key from any process other than
-  fodhelper.exe or the Settings app itself is a strong indicator of this technique in use.
+    Detects creation of registry keys under HKCU\Software\Classes\ms-settings\shell\open\command,
+    the exact key the Fodhelper UAC bypass technique hijacks. fodhelper.exe reads this key on
+    launch and executes its DelegateExecute/default value at the caller's already-elevated
+    integrity level, without a UAC prompt. A write to this key from any process other than
+    fodhelper.exe or the Settings app itself is a strong indicator of this technique in use.
 references:
-  - https://the-hunters-ledger.com/hunting-detections/uac-test-exe-detections/
+    - https://the-hunters-ledger.com/hunting-detections/uac-test-exe-detections/
 author: The Hunters Ledger
 date: '2026-01-12'
 tags:
-  - attack.privilege-escalation
-  - attack.stealth
-  - attack.t1548.002
-  - detection.emerging-threats
+    - attack.privilege-escalation
+    - attack.stealth
+    - attack.t1548.002
+    - detection.emerging-threats
 logsource:
-  category: registry_event
-  product: windows
-  definition: 'Sysmon Event ID 13 (Registry Value Set)'
+    category: registry_event
+    product: windows
+    definition: 'Sysmon Event ID 13 (Registry Value Set)'
 detection:
-  selection:
-    TargetObject|contains: '\Software\Classes\ms-settings\shell\open\command'
-  filter_legitimate:
-    Image|endswith:
-      - '\fodhelper.exe'
-      - '\SystemSettings.exe'
-  condition: selection and not filter_legitimate
+    selection:
+        TargetObject|contains: '\Software\Classes\ms-settings\shell\open\command'
+    filter_legitimate:
+        Image|endswith:
+            - '\fodhelper.exe'
+            - '\SystemSettings.exe'
+    condition: selection and not filter_legitimate
 falsepositives:
-  - Legitimate system administration or registry cleanup tools (extremely rare)
-  - Windows Settings application legitimate use
+    - Legitimate system administration or registry cleanup tools (extremely rare)
+    - Windows Settings application legitimate use
 level: high
 ```
 
@@ -313,29 +313,29 @@ title: UAC Bypass via CMSTPLUA COM Interface CLSID in Process Command Line
 id: 7b3c6d9e-4f2a-5e8b-9c1d-2a3e4f5a6b7c
 status: experimental
 description: >-
-  Detects the CMSTPLUA/ICMLuaUtil interface CLSID ({6EDD6D74-C007-4E75-B76A-E5740995E24C})
-  appearing literally in a process command line, characteristic of script- or one-liner-based
-  invocations of the CMSTPLUA UAC bypass technique. Split from the source rule's broader
-  DllHost.exe/IntegrityLevel selector, which is retiered separately as a Hunting rule; see
-  Coverage Gaps.
+    Detects the CMSTPLUA/ICMLuaUtil interface CLSID ({6EDD6D74-C007-4E75-B76A-E5740995E24C})
+    appearing literally in a process command line, characteristic of script- or one-liner-based
+    invocations of the CMSTPLUA UAC bypass technique. Split from the source rule's broader
+    DllHost.exe/IntegrityLevel selector, which is retiered separately as a Hunting rule; see
+    Coverage Gaps.
 references:
-  - https://the-hunters-ledger.com/hunting-detections/uac-test-exe-detections/
+    - https://the-hunters-ledger.com/hunting-detections/uac-test-exe-detections/
 author: The Hunters Ledger
 date: '2026-01-12'
 tags:
-  - attack.privilege-escalation
-  - attack.stealth
-  - attack.t1548.002
-  - detection.emerging-threats
+    - attack.privilege-escalation
+    - attack.stealth
+    - attack.t1548.002
+    - detection.emerging-threats
 logsource:
-  category: process_creation
-  product: windows
+    category: process_creation
+    product: windows
 detection:
-  selection_clsid:
-    CommandLine|contains: '{6EDD6D74-C007-4E75-B76A-E5740995E24C}'
-  condition: selection_clsid
+    selection_clsid:
+        CommandLine|contains: '{6EDD6D74-C007-4E75-B76A-E5740995E24C}'
+    condition: selection_clsid
 falsepositives:
-  - Legitimate COM-based elevation by trusted Windows components is not expected to pass this CLSID as literal command-line text (extremely rare).
+    - Legitimate COM-based elevation by trusted Windows components is not expected to pass this CLSID as literal command-line text (extremely rare).
 level: high
 ```
 
@@ -356,32 +356,32 @@ title: Suspicious Child Process Spawned by fodhelper.exe
 id: 2a3b4c5d-6e7f-8a9b-0c1d-2e3f4a5b6c7d
 status: experimental
 description: >-
-  Detects fodhelper.exe spawning a child process other than the Settings host binaries it
-  normally launches. fodhelper.exe reads HKCU\Software\Classes\ms-settings\shell\open\command
-  and executes whatever it finds there at its own already-elevated integrity level; an
-  unexpected child process is the execution-time signature of the Fodhelper UAC bypass.
+    Detects fodhelper.exe spawning a child process other than the Settings host binaries it
+    normally launches. fodhelper.exe reads HKCU\Software\Classes\ms-settings\shell\open\command
+    and executes whatever it finds there at its own already-elevated integrity level; an
+    unexpected child process is the execution-time signature of the Fodhelper UAC bypass.
 references:
-  - https://the-hunters-ledger.com/hunting-detections/uac-test-exe-detections/
+    - https://the-hunters-ledger.com/hunting-detections/uac-test-exe-detections/
 author: The Hunters Ledger
 date: '2026-01-12'
 tags:
-  - attack.privilege-escalation
-  - attack.stealth
-  - attack.t1548.002
-  - detection.emerging-threats
+    - attack.privilege-escalation
+    - attack.stealth
+    - attack.t1548.002
+    - detection.emerging-threats
 logsource:
-  category: process_creation
-  product: windows
+    category: process_creation
+    product: windows
 detection:
-  selection:
-    ParentImage|endswith: '\fodhelper.exe'
-  filter_legitimate:
-    Image|endswith:
-      - '\SystemSettings.exe'
-      - '\SettingsPageHost.exe'
-  condition: selection and not filter_legitimate
+    selection:
+        ParentImage|endswith: '\fodhelper.exe'
+    filter_legitimate:
+        Image|endswith:
+            - '\SystemSettings.exe'
+            - '\SettingsPageHost.exe'
+    condition: selection and not filter_legitimate
 falsepositives:
-  - Windows Settings application launching legitimate components
+    - Windows Settings application launching legitimate components
 level: high
 ```
 

@@ -608,7 +608,7 @@ arsenal-237-chromelevator-exe-detections:
     engine: sigma
     tier: Detection
     fence: 3
-    hash: "5b9a9f0c"
+    hash: "1beab844"
     head: "title: Suspicious Process Injection - Memory All"
     robustness: 2
     confidence: "HIGH"
@@ -617,7 +617,7 @@ arsenal-237-chromelevator-exe-detections:
     engine: sigma
     tier: Detection
     fence: 4
-    hash: "d0541e99"
+    hash: "250f0979"
     head: "title: Suspicious Browser Credential Database Ac"
     robustness: 2
     confidence: "HIGH"
@@ -718,7 +718,7 @@ arsenal-237-enc_c2-exe-detections:
     engine: sigma
     tier: Detection
     fence: 5
-    hash: "bbc1108f"
+    hash: "f52935a5"
     head: "title: Network - HTTP POST to Tor Hidden-Service"
     robustness: 2
     confidence: "HIGH"
@@ -879,7 +879,7 @@ arsenal-237-killer-dll-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1685, T1068]
-  - name: "Mass Security-Product Termination: 3+ Distinct Products Within 60 Seconds (Correlation)"
+  - name: "Mass Security-Product Termination — 3+ Distinct Products Within 60 Seconds (Correlation)"
     engine: sigma
     tier: Detection
     fence: 4
@@ -2018,7 +2018,7 @@ fleetagentfud-exe-detections:
     engine: sigma
     tier: Detection
     fence: 5
-    hash: "7924cd8f"
+    hash: "847640af"
     head: "title: PowerShell Get-Clipboard Script Block Exe"
     robustness: 2
     confidence: "HIGH"
@@ -2505,11 +2505,11 @@ inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections:
     attack: [T1036.005]
   - name: "Inkognito Brand-Impersonation Subdomain DNS Query (Wildcard)"
     engine: sigma
-    tier: Detection
+    tier: Hunting
     fence: 2
-    hash: "600f4795"
+    hash: "838e8ec6"
     head: "title: Inkognito Brand-Impersonation Subdomain D"
-    robustness: 3
+    robustness: 1
     confidence: "HIGH"
     attack: [T1566.002, T1684.001, T1036.005]
   - name: "Inkognito Custom X-Admin-Token Header in HTTP Request"
@@ -5134,11 +5134,11 @@ seasia-gov-exploitation-toolkit-144-172-106-236-detections:
     attack: [T1098.004, T1133]
   - name: "GSocket/THC Backdoor Installer Script: cat.sh (mal_gsocket_catsh_installer_script)"
     engine: yara
-    tier: Detection
+    tier: Hunting
     fence: 5
     hash: "e40a3cf3"
     head: "/* Yara Rule Set Identifier: SE-Asia Gov Exploit"
-    robustness: 2
+    robustness: 1
     confidence: "HIGH"
     attack: [T1102, T1053.003, T1036.004]
   - name: "Ivanti Connect Secure Auth-Bypass Path Traversal to System Information"
@@ -5530,7 +5530,7 @@ shinyhunters-dls-91-215-85-22-20260417-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1657, T1485]
-  - name: "ShinyHunters Actor Identity: Domain + Collective Name"
+  - name: "ShinyHunters Actor Identity — Domain + Collective Name"
     engine: yara
     tier: Hunting
     fence: 2
@@ -5548,7 +5548,7 @@ shinyhunters-dls-91-215-85-22-20260417-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1583.001]
-  - name: "ShinyHunters DLS: Web Proxy Hit on DLS Content Path"
+  - name: "ShinyHunters DLS — Web Proxy Hit on DLS Content Path"
     engine: sigma
     tier: Hunting
     fence: 4
@@ -5557,7 +5557,7 @@ shinyhunters-dls-91-215-85-22-20260417-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1657, T1485]
-  - name: "ShinyHunters DLS: Salesforce Bulk Export OAuth App Authorization"
+  - name: "ShinyHunters DLS — Salesforce Bulk Export OAuth App Authorization"
     engine: sigma
     tier: Hunting
     fence: 5
@@ -5566,7 +5566,7 @@ shinyhunters-dls-91-215-85-22-20260417-detections:
     robustness: 2
     confidence: "MODERATE — requires Salesforce Shield / Event Monitoring to be enabled; app-name matching depends on how third-party OAuth clients are registered."
     attack: [T1528, T1213]
-  - name: "ShinyHunters DLS: Okta MFA Factor Deactivation or Unexpected Enrollment"
+  - name: "ShinyHunters DLS — Okta MFA Factor Deactivation or Unexpected Enrollment"
     engine: sigma
     tier: Hunting
     fence: 6
@@ -5575,7 +5575,7 @@ shinyhunters-dls-91-215-85-22-20260417-detections:
     robustness: 1
     confidence: "MODERATE — the individual events are common in legitimate IT operations; the detection value comes from correlating the two events by user within a time window, which standard Sigma syntax cannot express in one rule (see Coverage Gaps)."
     attack: [T1566.004, T1528, T1098]
-  - name: "ShinyHunters DLS: PROSPERO Bulletproof Hosting CIDR Range Access"
+  - name: "ShinyHunters DLS — PROSPERO Bulletproof Hosting CIDR Range Access"
     engine: sigma
     tier: Hunting
     fence: 7
@@ -5584,33 +5584,33 @@ shinyhunters-dls-91-215-85-22-20260417-detections:
     robustness: 1
     confidence: "MODERATE — range-level indicator; specificity is lower than IP or domain indicators."
     attack: [T1583.003, T1090.003]
-  - name: "ShinyHunters DLS: HTTP Host Header shinyhunte.rs"
+  - name: "ShinyHunters DLS — HTTP Request to DLS Content Path (pay_or_leak)"
     engine: suricata
     tier: Detection
     fence: 8
-    hash: "79d968f2"
-    head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
-    robustness: 2
-    confidence: "HIGH"
-    attack: [T1583.001, T1657]
-  - name: "ShinyHunters DLS: TLS SNI shinyhunte.rs"
-    engine: suricata
-    tier: Detection
-    fence: 9
-    hash: "0caff699"
-    head: "alert tls $HOME_NET any -> $EXTERNAL_NET any (ms"
-    robustness: 2
-    confidence: "HIGH"
-    attack: [T1583.001, T1657]
-  - name: "ShinyHunters DLS: HTTP Request to DLS Content Path (pay_or_leak)"
-    engine: suricata
-    tier: Detection
-    fence: 10
     hash: "4c3e0849"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 2
     confidence: "HIGH"
     attack: [T1657]
+  - name: "ShinyHunters DLS — HTTP Host Header shinyhunte.rs"
+    engine: suricata
+    tier: Hunting
+    fence: 9
+    hash: "79d968f2"
+    head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
+    robustness: 1
+    confidence: "HIGH"
+    attack: [T1583.001, T1657]
+  - name: "ShinyHunters DLS — TLS SNI shinyhunte.rs"
+    engine: suricata
+    tier: Hunting
+    fence: 10
+    hash: "0caff699"
+    head: "alert tls $HOME_NET any -> $EXTERNAL_NET any (ms"
+    robustness: 1
+    confidence: "HIGH"
+    attack: [T1583.001, T1657]
 sliver-c2-windows-postex-staging-193-233-202-17-detections:
   - name: "Sliver Beacon Canonical Import Path In Process Memory"
     engine: yara

@@ -29,7 +29,7 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 | Sigma | 2 | 2 | T1555.003, T1055.001, T1106 | 0 |
 | Suricata | 0 | 0 | — | 0 |
 
-> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
+> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient — safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting — expect to review the hits.
 
 **Atomics routed to the IOC feed:** the sample's SHA256/SHA1/MD5 hashes, the `chromelevator.exe` filename, its staging paths, and the browser credential-database file paths it targets were already present in [`arsenal-237-chromelevator-exe.json`](/ioc-feeds/arsenal-237-chromelevator-exe.json) before this retiering pass. No rule was demoted to a new feed entry: the two named-pipe and HTTP-POST network signatures in the original draft were cut outright rather than routed, since the campaign has no confirmed network indicator (IP, domain, or URI) to route, only local named-pipe IPC, per the IOC feed's own empty `network_indicators.domains`/`ips` arrays.
 
@@ -251,47 +251,47 @@ rule Chromelevator_Browser_Credential_Extraction {
 ```yaml
 title: Suspicious Process Injection - Memory Allocation Pattern
 id: 4e8f2b71-9a3c-4d6e-8b1f-2e7a9c3d5f04
-description: >-
-    Detects process injection through a memory allocation, write, protection-change, and
-    remote-thread-creation API sequence targeting a browser process. Consolidated to a
-    single process_access selection using CallTrace (the original rule mixed a
-    non-Sysmon EventType field alongside API and TargetImage across what would have been
-    two different, incompatible event sources; the CallTrace-based selection below is the
-    coherent, reliably-mappable subset that preserves the same detection intent).
-references:
-  - https://the-hunters-ledger.com/hunting-detections/arsenal-237-chromelevator-exe-detections/
 status: experimental
+description: >-
+        Detects process injection through a memory allocation, write, protection-change, and
+        remote-thread-creation API sequence targeting a browser process. Consolidated to a
+        single process_access selection using CallTrace (the original rule mixed a
+        non-Sysmon EventType field alongside API and TargetImage across what would have been
+        two different, incompatible event sources; the CallTrace-based selection below is the
+        coherent, reliably-mappable subset that preserves the same detection intent).
+references:
+    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-chromelevator-exe-detections/
 author: The Hunters Ledger
 date: '2026-01-26'
 tags:
-  - attack.execution
-  - attack.stealth
-  - attack.privilege-escalation
-  - attack.t1055.001
+    - attack.execution
+    - attack.stealth
+    - attack.privilege-escalation
+    - attack.t1055.001
 
 logsource:
-  product: windows
-  category: process_access
+    product: windows
+    category: process_access
 
 detection:
-  selection_target_processes:
-    TargetImage|endswith:
-      - 'chrome.exe'
-      - 'brave.exe'
-      - 'msedge.exe'
-      - 'firefox.exe'
+    selection_target_processes:
+        TargetImage|endswith:
+            - 'chrome.exe'
+            - 'brave.exe'
+            - 'msedge.exe'
+            - 'firefox.exe'
 
-  selection_sequence:
-    CallTrace|contains|all:
-      - 'AllocateVirtualMemory'
-      - 'WriteVirtualMemory'
-      - 'ProtectVirtualMemory'
-      - 'CreateThreadEx'
+    selection_sequence:
+        CallTrace|contains|all:
+            - 'AllocateVirtualMemory'
+            - 'WriteVirtualMemory'
+            - 'ProtectVirtualMemory'
+            - 'CreateThreadEx'
 
-  condition: selection_target_processes and selection_sequence
+    condition: selection_target_processes and selection_sequence
 
 falsepositives:
-  - Legitimate software using process injection (installers, debuggers)
+    - Legitimate software using process injection (installers, debuggers)
 
 level: high
 ```
@@ -310,57 +310,57 @@ level: high
 ```yaml
 title: Suspicious Browser Credential Database Access
 id: 6c9e1d83-4b7f-4a2e-9c5d-3f8b2e6a1c05
-description: >-
-    Detects access to Chrome/Brave/Edge credential databases by non-browser processes.
-    Restructured the original selection's invalid literal OR: subkey (not valid Sigma
-    syntax) into two named selections combined via the condition string; detection intent
-    is unchanged. The specific-path selector's TargetFilename patterns were also corrected
-    from double-escaped to single backslashes — the doubled backslashes, valid only inside
-    double-quoted YAML, could never match a real single-backslash Windows path when written
-    inside single-quoted scalars, which perform no escape processing at all.
-references:
-  - https://the-hunters-ledger.com/hunting-detections/arsenal-237-chromelevator-exe-detections/
 status: experimental
+description: >-
+        Detects access to Chrome/Brave/Edge credential databases by non-browser processes.
+        Restructured the original selection's invalid literal OR: subkey (not valid Sigma
+        syntax) into two named selections combined via the condition string; detection intent
+        is unchanged. The specific-path selector's TargetFilename patterns were also corrected
+        from double-escaped to single backslashes — the doubled backslashes, valid only inside
+        double-quoted YAML, could never match a real single-backslash Windows path when written
+        inside single-quoted scalars, which perform no escape processing at all.
+references:
+    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-chromelevator-exe-detections/
 author: The Hunters Ledger
 date: '2026-01-26'
 tags:
-  - attack.credential-access
-  - attack.t1555.003
-  - detection.emerging-threats
+    - attack.credential-access
+    - attack.t1555.003
+    - detection.emerging-threats
 
 logsource:
-  product: windows
-  category: file_event
+    product: windows
+    category: file_event
 
 detection:
-  selection_browser_db_generic:
-    TargetFilename|contains|all:
-      - 'User Data'
-      - 'Login Data'
+    selection_browser_db_generic:
+        TargetFilename|contains|all:
+            - 'User Data'
+            - 'Login Data'
 
-  selection_browser_db_specific:
-    TargetFilename|contains:
-      - 'Chrome\User Data\Default\Cookies'
-      - 'Brave-Browser\User Data\Default\Cookies'
-      - 'Edge\User Data\Default\Cookies'
-      - 'Google\Chrome\User Data\Default\Web Data'
+    selection_browser_db_specific:
+        TargetFilename|contains:
+            - 'Chrome\User Data\Default\Cookies'
+            - 'Brave-Browser\User Data\Default\Cookies'
+            - 'Edge\User Data\Default\Cookies'
+            - 'Google\Chrome\User Data\Default\Web Data'
 
-  selection_process_exclusion:
-    Image|endswith:
-      - 'chrome.exe'
-      - 'brave.exe'
-      - 'msedge.exe'
-      - 'firefox.exe'
+    selection_process_exclusion:
+        Image|endswith:
+            - 'chrome.exe'
+            - 'brave.exe'
+            - 'msedge.exe'
+            - 'firefox.exe'
 
-  filter_system_process:
-    User|contains: 'SYSTEM'
+    filter_system_process:
+        User|contains: 'SYSTEM'
 
-  condition: (selection_browser_db_generic or selection_browser_db_specific) and not (selection_process_exclusion or filter_system_process)
+    condition: (selection_browser_db_generic or selection_browser_db_specific) and not (selection_process_exclusion or filter_system_process)
 
 falsepositives:
-  - Browser backup/sync tools
-  - Password managers accessing browser data
-  - System recovery tools
+    - Browser backup/sync tools
+    - Password managers accessing browser data
+    - System recovery tools
 
 level: high
 ```
@@ -476,7 +476,7 @@ level: medium
 
 ## Suricata Signatures
 
-No Detection or Hunting Suricata coverage is published for this campaign. chromelevator.exe has no confirmed network command-and-control channel; the injected payload DLL communicates with the parent process over a local named pipe, not over the network. The two network signatures in the original draft (a TCP content match on the literal string "VERBOSE_", and a generic HTTP POST URI substring match on "credentials") were not grounded in any observed network behavior and have been cut rather than retiered. See Coverage Gaps.
+No Detection or Hunting Suricata coverage is published for this campaign. chromelevator.exe has no confirmed network command-and-control channel; the injected payload DLL communicates with the parent process over a local named pipe, not over the network. The two network signatures in the original draft (a TCP content match on the literal string "VERBOSE_", and a generic HTTP POST URI substring match on "credentials") were not grounded in any observed network behavior and have been cut rather than retiered — see Coverage Gaps.
 
 ---
 
@@ -484,7 +484,7 @@ No Detection or Hunting Suricata coverage is published for this campaign. chrome
 
 No network-based detection exists for this campaign because no network C2 channel has been observed; all inter-process communication runs over a local named pipe between chromelevator.exe and its injected payload. If a future Arsenal-237 component is confirmed to exfiltrate the extracted credentials over the network, network coverage should be revisited against that component's actual traffic rather than against chromelevator.exe itself.
 
-Rule conservation: the original draft contained 3 YARA, 5 Sigma, and 2 Suricata rules (10 total). This pass produced 4 Detection (2 YARA, 2 Sigma), 3 Hunting (1 YARA, 2 Sigma), and 3 Cut (1 Sigma, 2 Suricata), with 0 rules demoted to new IOC-feed atomics: 4 + 3 + 3 = 10.
+Rule conservation: the original draft contained 3 YARA, 5 Sigma, and 2 Suricata rules (10 total). This pass produced 4 Detection (2 YARA, 2 Sigma), 3 Hunting (1 YARA, 2 Sigma), and 3 Cut (1 Sigma, 2 Suricata), with 0 rules demoted to new IOC-feed atomics — 4 + 3 + 3 = 10.
 
 ### Retiering Fixes Applied
 
