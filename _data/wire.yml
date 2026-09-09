@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-09T04:01:46Z
+generated_at: 2026-09-09T06:00:07Z
 window_days: 30
 counts:
-  total: 539
-  research: 186
+  total: 540
+  research: 187
   news: 353
 unclassified_sources:
   - "The DFIR Report"
@@ -597,6 +597,12 @@ items:
     date: 2026-09-08T07:35:50Z
     kind: news
     labels: []
+  - title: "September 2026 Patch Tuesday: Two Exploited Zero-Days and 113 Critical Vulnerabilities Among 972 CVEs"
+    url: "https://www.crowdstrike.com/en-us/blog/patch-tuesday-analysis-september-2026/"
+    source: "Crowdstrike"
+    date: 2026-09-08T05:00:00Z
+    kind: research
+    labels: ["exposure management"]
   - title: "Bypassing the Gatekeepers: How a Global Phishing Campaign Turns Google's Infrastructure into a Trust Proxy"
     url: "https://blog.knowbe4.com/bypassing-the-gatekeepers-how-a-global-phishing-campaign-turns-googles-infrastructure-into-a-trust-proxy"
     source: "AlienVault"
