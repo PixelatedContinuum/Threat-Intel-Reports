@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-09T18:02:57Z
+generated_at: 2026-09-09T20:00:32Z
 window_days: 30
 counts:
-  total: 547
-  research: 191
-  news: 356
+  total: 545
+  research: 190
+  news: 355
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -16,10 +16,10 @@ topics:
     count: 77
     color: 1
   - label: "cybercrime"
-    count: 57
+    count: 56
     color: 2
   - label: "government"
-    count: 29
+    count: 28
     color: 3
   - label: "malware"
     count: 26
@@ -42,10 +42,10 @@ topics:
   - label: "zero-day"
     count: 15
     color: 10
-  - label: "ransomware"
-    count: 14
-    color: 11
   - label: "clickfix"
+    count: 13
+    color: 11
+  - label: "patches"
     count: 13
     color: 12
 label_colors:
@@ -53,7 +53,6 @@ label_colors:
   "2fa bypass": 1
   "3snake": 7
   "a little sunshine": 6
-  "abyssos": 10
   "academic lure": 1
   "accessibility abuse": 6
   "accessibility services": 10
@@ -182,7 +181,6 @@ label_colors:
   "blockchain": 8
   "blockchain abuse": 2
   "blockchain c2": 1
-  "blockchain infrastructure": 11
   "blog post": 6
   "bloodalchemy": 3
   "bluemoon": 5
@@ -242,7 +240,7 @@ label_colors:
   "cl0p": 3
   "claude desktop": 12
   "cleo": 7
-  "clickfix": 12
+  "clickfix": 11
   "clipper": 3
   "cloaked ursa": 2
   "cloud": 7
@@ -276,7 +274,6 @@ label_colors:
   "cryptocurrency theft": 3
   "cryptocurrency-stealer": 7
   "curlrat": 3
-  "custom tcp protocol": 8
   "cve-2007-3010": 7
   "cve-2016-6277": 9
   "cve-2017-7921": 7
@@ -306,7 +303,6 @@ label_colors:
   "dcrat": 12
   "ddos engine": 12
   "dead drop resolver": 7
-  "deadlock": 1
   "defender exclusions": 12
   "defense sector": 12
   "desktop capture": 2
@@ -411,7 +407,7 @@ label_colors:
   "patch tuesady": 5
   "patch tuesday": 11
   "patched": 1
-  "patches": 2
+  "patches": 12
   "pdf attachment": 7
   "phishing": 10
   "phishing kit": 6
@@ -422,7 +418,6 @@ label_colors:
   "privacy": 12
   "proxy abuse": 6
   "qilin": 11
-  "ransomware": 11
   "rce": 10
   "rmm abuse": 2
   "ruby on rails": 12
@@ -451,6 +446,12 @@ label_colors:
   "zero-day": 10
   "zoom": 7
 items:
+  - title: "Passkey-themed social engineering leads to identity and cloud compromise"
+    url: "https://www.microsoft.com/en-us/security/blog/2026/09/09/passkey-themed-social-engineering-leads-identity-cloud-compromise/"
+    source: "Microsoft"
+    date: 2026-09-09T17:41:18Z
+    kind: research
+    labels: ["social engineering"]
   - title: "Electronic health record company says customer data stolen in breach"
     url: "https://therecord.media/electronic-health-record-company-says-customer-data-stolen-in-breach"
     source: "Recorded Future"
@@ -3715,21 +3716,3 @@ items:
     date: 2026-08-10T21:12:10Z
     kind: news
     labels: []
-  - title: "FBI, South Korea warn of Gunra ransomware gang targeting critical infrastructure"
-    url: "https://therecord.media/ransomware-south-korea-fbi-gunra"
-    source: "Recorded Future"
-    date: 2026-08-10T19:30:00Z
-    kind: news
-    labels: ["cybercrime", "government"]
-  - title: "Abyssos: Technical Analysis of a New Modular RAT"
-    url: "https://www.zscaler.com/blogs/security-research/abyssos-technical-analysis-new-modular-rat"
-    source: "AlienVault"
-    date: 2026-08-10T18:05:07Z
-    kind: research
-    labels: ["abyssos", "custom tcp protocol", "llvm obfuscation", "vnc remote access"]
-  - title: "DeadLock ransomware: Breaking down a Rust-based encryptor with decentralized recovery infrastructure"
-    url: "https://www.microsoft.com/en-us/security/blog/2026/08/10/deadlock-ransomware-breaking-down-a-rust-based-encryptor-with-decentralized-recovery-infrastructure/"
-    source: "AlienVault"
-    date: 2026-08-10T18:05:06Z
-    kind: research
-    labels: ["blockchain infrastructure", "deadlock", "decentralized communications", "lynx", "polygon", "ransomware"]
