@@ -3,17 +3,17 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-10T10:02:07Z
+generated_at: 2026-09-10T12:00:32Z
 window_days: 30
 counts:
-  total: 550
-  research: 192
-  news: 358
+  total: 552
+  research: 193
+  news: 359
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 79
+    count: 80
     color: 1
   - label: "cybercrime"
     count: 57
@@ -22,13 +22,13 @@ topics:
     count: 30
     color: 3
   - label: "exploited"
-    count: 26
+    count: 27
     color: 4
   - label: "malware"
-    count: 25
+    count: 26
     color: 5
   - label: "data breaches"
-    count: 21
+    count: 22
     color: 6
   - label: "artificial intelligence"
     count: 19
@@ -59,6 +59,7 @@ label_colors:
   "account-enumeration": 7
   "active directory compromise": 7
   "active directory reconnaissance": 1
+  "adapthealth": 2
   "adaptixc2": 8
   "adb propagation": 1
   "adblocker": 3
@@ -112,6 +113,7 @@ label_colors:
   "antivirus removal": 7
   "anydesk": 9
   "apac attacks": 2
+  "api": 12
   "apollo": 11
   "app password phishing": 8
   "app-bound-encryption": 6
@@ -202,8 +204,8 @@ label_colors:
   "build-time execution": 10
   "byovd": 12
   "c2": 9
+  "c2 channel": 12
   "c2 infrastructure": 12
-  "c2 relay": 2
   "c2looper": 2
   "camera": 3
   "camview": 6
@@ -211,6 +213,7 @@ label_colors:
   "captive portal compromise": 6
   "card-skimming": 8
   "carecloud": 10
+  "cav3rn": 7
   "central asia": 5
   "chacha20 encryption": 1
   "chaindrop": 8
@@ -253,7 +256,6 @@ label_colors:
   "cloudflare captcha": 5
   "cloudflare tunnels": 6
   "cloudflare workers": 6
-  "communicationuxtheme.dll": 10
   "compile-time execution": 3
   "contactless payment fraud": 3
   "control-flow flattening": 10
@@ -276,6 +278,7 @@ label_colors:
   "cryptocurrency stealer": 4
   "cryptocurrency theft": 3
   "cryptocurrency-stealer": 7
+  "cryptographic": 9
   "curlrat": 3
   "cve-2007-3010": 7
   "cve-2016-6277": 9
@@ -334,6 +337,7 @@ label_colors:
   "fake lock screen": 6
   "fake security scan": 12
   "fake tax documents": 4
+  "fake websites": 11
   "fengtai government": 3
   "firebase c2": 6
   "firefox": 3
@@ -453,6 +457,24 @@ label_colors:
   "zero-day": 10
   "zoom": 7
 items:
+  - title: "4.1 Million Impacted by AdaptHealth Data Breach"
+    url: "https://www.securityweek.com/4-1-million-impacted-by-adapthealth-data-breach/"
+    source: "SecurityWeek"
+    date: 2026-09-10T11:20:43Z
+    kind: news
+    labels: ["adapthealth", "data breaches", "healthcare"]
+  - title: "Organizations Warned of Cisco Secure FMC Exploitation"
+    url: "https://www.securityweek.com/organizations-warned-of-cisco-secure-fmc-exploitation/"
+    source: "SecurityWeek"
+    date: 2026-09-10T10:06:20Z
+    kind: news
+    labels: ["cisco", "exploited", "firewall", "fmc", "vulnerabilities"]
+  - title: "The Machine With Many Faces: Post-Exploitation Identity Misuse in SPIFFE/SPIRE"
+    url: "https://unit42.paloaltonetworks.com/kubernetes-spiffe-spire-identity-spoofing/"
+    source: "Palo Alto Networks"
+    date: 2026-09-10T10:00:43Z
+    kind: research
+    labels: ["api", "cryptographic", "json", "linux", "malware", "node", "spiffe", "spire", "spoofing", "threat research"]
   - title: "CISA: WatchGuard RCE flaw now exploited in ransomware attacks"
     url: "https://www.bleepingcomputer.com/news/security/cisa-watchguard-rce-flaw-now-exploited-in-ransomware-attacks/"
     source: "BleepingComputer"
@@ -3405,6 +3427,12 @@ items:
     date: 2026-08-13T09:23:55Z
     kind: research
     labels: ["camview", "cve-2017-7921", "cve-2020-25078", "cve-2020-25169", "cve-2021-33044", "cve-2021-33045", "cve-2021-36260", "cve-2024-53375", "cve-2024-57049", "dahua", "edge device exploitation", "government targeting", "hikvision", "ingram scanner", "ip cameras", "proxy infrastructure", "russian operator", "ukrainian targeting"]
+  - title: "Project CAV3RN uses Google Apps Script for stealthy C2 in Israel"
+    url: "https://securelist.com/project-cav3rn-continues/120991/"
+    source: "AlienVault"
+    date: 2026-08-13T09:22:10Z
+    kind: research
+    labels: ["c2 channel", "cav3rn", "communicationuxtheme.dll", "dns tunneling", "dynamic relay", "espionage framework", "google apps script", "googleservice.dll", "israel targeting", "modular architecture", "net.dll", "rnp.dll", "texture.dll"]
   - title: "State Sponsored Hackers Use Fake Job Offers to Deliver New Zero Day Exploit"
     url: "https://blog.checkpoint.com/research/state-sponsored-hackers-use-fake-job-offers-to-deliver-new-zero-day-exploit/"
     source: "AlienVault"
@@ -3567,6 +3595,12 @@ items:
     date: 2026-08-12T08:14:46Z
     kind: news
     labels: ["ivanti", "patch", "vulnerabilities"]
+  - title: "Fake popular sites offer a free app, instead take over PCs"
+    url: "https://otx.alienvault.com/pulse/6a7c2827f67f1ff14996237e"
+    source: "AlienVault"
+    date: 2026-08-12T08:00:39Z
+    kind: research
+    labels: ["cryptocurrency lure", "fake websites", "impersonation campaign", "lookalike domains", "o&o syspectr", "remote access tool", "social engineering", "windows targeting"]
   - title: "ICS Patch Tuesday: Vulnerabilities Fixed by Siemens, Schneider, Phoenix Contact"
     url: "https://www.securityweek.com/ics-patch-tuesday-vulnerabilities-fixed-by-siemens-schneider-phoenix-contact-2/"
     source: "SecurityWeek"
@@ -3735,21 +3769,3 @@ items:
     date: 2026-08-11T12:12:16Z
     kind: news
     labels: ["microsoft"]
-  - title: "Project CAV3RN uses Google Apps Script for stealthy C2 in Israel"
-    url: "https://securelist.com/project-cav3rn-continues/120991"
-    source: "AlienVault"
-    date: 2026-08-11T11:06:23Z
-    kind: research
-    labels: ["c2 relay", "communicationuxtheme.dll", "dll components", "dns-based c2", "espionage", "google apps script", "googleservice.dll", "israel", "modular framework", "net.dll", "project cav3rn", "rnp.dll", "texture.dll"]
-  - title: "Fake popular sites offer a free app, instead take over PCs"
-    url: "https://otx.alienvault.com/pulse/6a7b022f777f143eca0c8ee5"
-    source: "AlienVault"
-    date: 2026-08-11T11:06:23Z
-    kind: research
-    labels: ["brand impersonation", "cryptocurrency lure", "fake installers", "lookalike websites", "o&o syspectr abuse", "remote access tool", "social engineering", "windows targeting"]
-  - title: "Cisco warns of high-severity ClamAV flaws with public exploits"
-    url: "https://www.bleepingcomputer.com/news/security/cisco-warns-of-high-severity-clamav-flaws-with-public-exploits/"
-    source: "BleepingComputer"
-    date: 2026-08-11T11:03:01Z
-    kind: news
-    labels: []
