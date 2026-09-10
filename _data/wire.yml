@@ -3,17 +3,17 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-10T14:01:57Z
+generated_at: 2026-09-10T16:00:32Z
 window_days: 30
 counts:
   total: 553
-  research: 193
-  news: 360
+  research: 192
+  news: 361
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 81
+    count: 79
     color: 1
   - label: "cybercrime"
     count: 58
@@ -42,10 +42,10 @@ topics:
   - label: "zero-day"
     count: 16
     color: 10
-  - label: "phishing"
-    count: 14
+  - label: "social engineering"
+    count: 15
     color: 11
-  - label: "ransomware"
+  - label: "phishing"
     count: 14
     color: 12
 label_colors:
@@ -84,13 +84,13 @@ label_colors:
   "ai-assisted intrusions": 3
   "ai-assisted malware": 8
   "ai-assisted-development": 9
+  "ai-driven-campaign": 10
   "ai-generated decoys": 1
   "ai-generated personas": 9
   "ai-orchestrated campaign": 1
   "ai-powered cybercrime": 12
   "aikido security": 1
   "airport": 9
-  "aisuru": 7
   "aitm": 5
   "akira": 2
   "alphaagent": 1
@@ -105,7 +105,6 @@ label_colors:
   "android malware": 4
   "android rat": 12
   "android trojan": 5
-  "android tv boxes": 12
   "anthropic": 8
   "anti-analysis": 11
   "antino": 3
@@ -125,7 +124,6 @@ label_colors:
   "apt28": 3
   "apt29": 2
   "aquilarat": 10
-  "arcbridge": 7
   "architectural vulnerability": 5
   "arktunnel": 6
   "arm": 10
@@ -149,6 +147,7 @@ label_colors:
   "australia": 10
   "authentication": 6
   "autoit": 8
+  "automated-exploitation": 9
   "aveva": 1
   "aviation sector": 9
   "azure": 1
@@ -156,12 +155,10 @@ label_colors:
   "azure table storage": 2
   "azure tokens": 3
   "babadeda": 2
-  "babadedaloader": 11
   "babuk": 7
   "back-to-school": 4
   "backconnect infrastructure": 12
   "backdoor": 11
-  "backdoor deployment": 10
   "badbox": 10
   "badiis": 8
   "bait-and-switch": 5
@@ -179,7 +176,6 @@ label_colors:
   "bitcoin": 2
   "black hat seo": 5
   "blackrock": 2
-  "blockchain": 8
   "blockchain abuse": 2
   "blockchain c2": 1
   "blog post": 6
@@ -233,7 +229,6 @@ label_colors:
   "chrome extension": 7
   "chrome extensions": 8
   "chrome rat": 5
-  "ci/cd compromise": 6
   "ci/cd pipeline exploitation": 4
   "cisa": 6
   "cisa kev": 12
@@ -270,6 +265,7 @@ label_colors:
   "critical infrastructure": 4
   "critical infrastructure targeting": 5
   "cron-injection": 10
+  "cross-platform": 10
   "crowdstrike": 1
   "crypto scam": 9
   "cryptocurrency": 12
@@ -305,6 +301,7 @@ label_colors:
   "darkhotel": 10
   "darklantern": 4
   "data breaches": 6
+  "data exfiltration": 9
   "data leak": 9
   "data-exfiltration": 12
   "dcrat": 12
@@ -333,6 +330,7 @@ label_colors:
   "exploited": 4
   "exposure management": 4
   "extortion": 12
+  "extortionware": 11
   "fake job interview": 1
   "fake lock screen": 6
   "fake security scan": 12
@@ -362,6 +360,8 @@ label_colors:
   "google sheets c2": 12
   "government": 3
   "gta6": 6
+  "hacker": 8
+  "hacker conversations": 8
   "hardware": 6
   "hasbro": 1
   "head mare": 3
@@ -419,7 +419,7 @@ label_colors:
   "patched": 1
   "patches": 2
   "pdf attachment": 7
-  "phishing": 11
+  "phishing": 12
   "phishing kit": 6
   "plugin": 7
   "poc": 2
@@ -428,7 +428,6 @@ label_colors:
   "privacy": 12
   "proxy abuse": 6
   "qilin": 11
-  "ransomware": 12
   "rce": 10
   "rmm abuse": 2
   "ruby on rails": 12
@@ -442,7 +441,7 @@ label_colors:
   "servicenow": 1
   "sma1000": 2
   "soc": 9
-  "social engineering": 10
+  "social engineering": 11
   "sonicwall": 8
   "spring": 5
   "supply chain": 8
@@ -455,8 +454,31 @@ label_colors:
   "vmware": 2
   "vulnerabilities": 1
   "zero-day": 10
-  "zoom": 7
 items:
+  - title: "Cisco FMC flaws exploited by ransomware gang, state-sponsored hackers"
+    url: "https://www.bleepingcomputer.com/news/security/cisco-fmc-flaws-exploited-by-ransomware-gang-state-sponsored-hackers/"
+    source: "BleepingComputer"
+    date: 2026-09-10T15:43:58Z
+    kind: news
+    labels: []
+  - title: "IDScan confirms breach tied to 153 million stolen driver’s licenses"
+    url: "https://www.bleepingcomputer.com/news/security/idscan-confirms-breach-tied-to-153-million-stolen-drivers-licenses/"
+    source: "BleepingComputer"
+    date: 2026-09-10T14:55:33Z
+    kind: news
+    labels: []
+  - title: "Hacker Conversations: Vinnie Liu, Performer Turned Ringmaster"
+    url: "https://www.securityweek.com/hacker-conversations-vinnie-liu-performer-turned-ringmaster/"
+    source: "SecurityWeek"
+    date: 2026-09-10T14:30:00Z
+    kind: news
+    labels: ["hacker", "hacker conversations"]
+  - title: "New 'BlueMoon' kit exploited Windows and Chrome zero-day flaws"
+    url: "https://www.bleepingcomputer.com/news/security/new-bluemoon-kit-exploited-windows-and-chrome-zero-day-flaws/"
+    source: "BleepingComputer"
+    date: 2026-09-10T14:11:34Z
+    kind: news
+    labels: []
   - title: "Deceptive Android Apps Exploit Google Play Early Access to Evade Reviews"
     url: "https://www.securityweek.com/deceptive-android-apps-exploit-google-play-early-access-to-evade-reviews/"
     source: "SecurityWeek"
@@ -469,6 +491,18 @@ items:
     date: 2026-09-10T13:31:00Z
     kind: news
     labels: ["cybercrime"]
+  - title: "Active Cloud Data Theft and Extortion Campaign Targeting Microsoft 365 and SaaS Platforms"
+    url: "https://arcticwolf.com/resources/blog/security-bulletin-active-cloud-data-theft-and-extortion-campaign-targeting-microsoft-365-and-saas-platforms/"
+    source: "AlienVault"
+    date: 2026-09-10T13:26:22Z
+    kind: research
+    labels: ["data exfiltration", "extortionware", "mfa bypass", "microsoft 365", "nodemaven", "residential proxies", "saas platforms", "social engineering", "tox messaging", "vishing"]
+  - title: "Threat Snapshot: Djinn Stealer"
+    url: "https://otx.alienvault.com/pulse/6aa2a776820639d68513f654"
+    source: "AlienVault"
+    date: 2026-09-10T12:49:58Z
+    kind: research
+    labels: ["credential theft", "cross-platform", "cve-2026-48558", "data exfiltration", "djinn stealer", "information stealer", "node.js loader", "simplehelp exploitation", "taskweaver"]
   - title: "Critical NetScaler Vulnerability Exploited in Attacks"
     url: "https://www.securityweek.com/critical-netscaler-vulnerability-exploited-in-attacks/"
     source: "SecurityWeek"
@@ -529,6 +563,12 @@ items:
     date: 2026-09-10T02:31:34Z
     kind: research
     labels: ["browser extension malware", "chrome extensions", "cryptocurrency theft", "firefox extensions", "j7tracker", "vreo"]
+  - title: "Death by a Thousand PaperCuts: AI-Driven Exploitation at Scale"
+    url: "https://otx.alienvault.com/pulse/6aa21686f83243c07ec7426f"
+    source: "AlienVault"
+    date: 2026-09-10T02:31:34Z
+    kind: research
+    labels: ["ai-driven-campaign", "automated-exploitation", "campaign-automation", "credential-harvesting", "cve-2026-81578", "cve-2026-82078", "papercut-exploitation", "reverse-shell", "socks-proxy", "target-filtering"]
   - title: "Cisco confirms CVE-2026-20079 Secure FMC flaw exploited in attacks"
     url: "https://www.bleepingcomputer.com/news/security/cisco-confirms-cve-2026-20079-secure-fmc-flaw-exploited-in-attacks/"
     source: "BleepingComputer"
@@ -3733,45 +3773,3 @@ items:
     date: 2026-08-11T16:14:21Z
     kind: research
     labels: ["babadeda", "clickfix", "cncmachinerms", "custom scripting language"]
-  - title: "Wesco confirms security incident after ExfilSquad claims data theft"
-    url: "https://www.bleepingcomputer.com/news/security/wesco-confirms-security-incident-after-exfilsquad-claims-data-theft/"
-    source: "BleepingComputer"
-    date: 2026-08-11T15:59:35Z
-    kind: news
-    labels: []
-  - title: "Zoom Patches Zero-Click Code Execution Vulnerability"
-    url: "https://www.securityweek.com/zoom-patches-zero-click-code-execution-vulnerability/"
-    source: "SecurityWeek"
-    date: 2026-08-11T15:49:53Z
-    kind: news
-    labels: ["vulnerabilities", "zoom", "zoomsday"]
-  - title: "How the ErrTraffic Malware Campaign Uses ClickFix and EtherHiding"
-    url: "https://otx.alienvault.com/pulse/6a7b3ff969397d537e5d24fa"
-    source: "AlienVault"
-    date: 2026-08-11T15:30:01Z
-    kind: research
-    labels: ["babadedaloader", "blockchain", "clickfix", "clipbanker", "cve-2026-48294", "dll side-loading", "errtraffic", "etherhiding", "infostealer", "legionloader", "okobot", "oniondrop", "polygon smart contracts", "telepuz", "vidar", "wordpress compromise"]
-  - title: "PhantomCore and PhantomGraph backdoors delivered via an unpatched TrueConf server"
-    url: "https://otx.alienvault.com/pulse/6a7b3ea2ac324259cbd21dc6"
-    source: "AlienVault"
-    date: 2026-08-11T15:24:17Z
-    kind: research
-    labels: ["arcbridge", "backdoor deployment", "bridgehead", "head mare", "nightledger", "phantomcore", "phantomgraph", "supply chain attack", "trueconf", "video conferencing", "zero-day exploitation"]
-  - title: "An Evolution of the Botnet"
-    url: "https://otx.alienvault.com/pulse/6a7b3ea11dca2e714d4bff8d"
-    source: "AlienVault"
-    date: 2026-08-11T15:24:17Z
-    kind: research
-    labels: ["aisuru", "android tv boxes", "blockchain c2", "ddos attacks", "ethereum name service", "http/2 flood", "iot botnet", "kimwolf", "kimwolf v7", "tor infrastructure"]
-  - title: "Self-Propagating ChainDrop Worm Infects More Than 400 npm Packages in Major Software Supply Chain Attack"
-    url: "https://blog.polyswarm.io/self-propagating-chaindrop-worm-infects-more-than-400-npm-packages-in-major-software-supply-chain-attack"
-    source: "AlienVault"
-    date: 2026-08-11T15:03:12Z
-    kind: research
-    labels: ["chaindrop", "ci/cd compromise", "credential theft", "developer workstation", "github actions oidc", "mini shai-hulud", "npm supply chain", "worm propagation"]
-  - title: "SAP Patches Critical Code Injection, Memory Corruption Vulnerabilities"
-    url: "https://www.securityweek.com/sap-patches-critical-code-injection-memory-corruption-vulnerabilities/"
-    source: "SecurityWeek"
-    date: 2026-08-11T14:14:32Z
-    kind: news
-    labels: ["patch tuesday", "patches", "sap", "vulnerabilities"]
