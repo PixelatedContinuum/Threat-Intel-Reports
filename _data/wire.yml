@@ -3,17 +3,17 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-10T16:00:32Z
+generated_at: 2026-09-10T18:00:16Z
 window_days: 30
 counts:
-  total: 553
-  research: 192
+  total: 551
+  research: 190
   news: 361
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 79
+    count: 78
     color: 1
   - label: "cybercrime"
     count: 58
@@ -31,7 +31,7 @@ topics:
     count: 22
     color: 6
   - label: "artificial intelligence"
-    count: 19
+    count: 20
     color: 7
   - label: "credential theft"
     count: 16
@@ -154,7 +154,6 @@ label_colors:
   "azure infrastructure": 4
   "azure table storage": 2
   "azure tokens": 3
-  "babadeda": 2
   "babuk": 7
   "back-to-school": 4
   "backconnect infrastructure": 12
@@ -320,6 +319,7 @@ label_colors:
   "dprk-linked": 1
   "dropcatch": 4
   "edge device exploitation": 7
+  "education": 10
   "electron framework": 12
   "encrypted payload": 10
   "endpoint security": 11
@@ -455,6 +455,12 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 10
 items:
+  - title: "AI-powered attack exploited PaperCut flaws to hack 395 organizations"
+    url: "https://www.bleepingcomputer.com/news/security/ai-powered-attack-exploited-papercut-flaws-to-hack-395-organizations/"
+    source: "BleepingComputer"
+    date: 2026-09-10T15:55:56Z
+    kind: news
+    labels: ["artificial intelligence", "education"]
   - title: "Cisco FMC flaws exploited by ransomware gang, state-sponsored hackers"
     url: "https://www.bleepingcomputer.com/news/security/cisco-fmc-flaws-exploited-by-ransomware-gang-state-sponsored-hackers/"
     source: "BleepingComputer"
@@ -3755,21 +3761,3 @@ items:
     date: 2026-08-11T18:08:50Z
     kind: news
     labels: ["microsoft"]
-  - title: "The August 2026 Security Update Review"
-    url: "https://www.thezdi.com/blog/2026/8/11/the-august-2026-security-update-review"
-    source: "Zero Day Initiative"
-    date: 2026-08-11T17:56:34Z
-    kind: research
-    labels: ["blog post"]
-  - title: "Adobe Urges Immediate Patching of Critical ColdFusion, Campaign Classic Flaws"
-    url: "https://www.securityweek.com/adobe-urges-immediate-patching-of-critical-coldfusion-campaign-classic-flaws/"
-    source: "SecurityWeek"
-    date: 2026-08-11T16:50:19Z
-    kind: news
-    labels: ["adobe", "patch tuesday", "patches", "vulnerabilities"]
-  - title: "CNCMachineRMS: The Undocumented RAT At the End of a BabaDeda Chain"
-    url: "https://www.levelblue.com/blogs/spiderlabs-blog/cncmachinerms-the-undocumented-rat-at-the-end-of-a-babadeda-chain"
-    source: "AlienVault"
-    date: 2026-08-11T16:14:21Z
-    kind: research
-    labels: ["babadeda", "clickfix", "cncmachinerms", "custom scripting language"]
