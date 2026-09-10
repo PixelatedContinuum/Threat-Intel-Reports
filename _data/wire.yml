@@ -3,17 +3,17 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-10T06:00:16Z
+generated_at: 2026-09-10T08:02:26Z
 window_days: 30
 counts:
-  total: 546
+  total: 549
   research: 190
-  news: 356
+  news: 359
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 77
+    count: 79
     color: 1
   - label: "cybercrime"
     count: 57
@@ -22,10 +22,10 @@ topics:
     count: 30
     color: 3
   - label: "exploited"
-    count: 25
+    count: 26
     color: 4
   - label: "malware"
-    count: 25
+    count: 26
     color: 5
   - label: "data breaches"
     count: 21
@@ -335,6 +335,7 @@ label_colors:
   "fake tax documents": 4
   "fengtai government": 3
   "firefox": 3
+  "fortigate": 1
   "fortinet": 7
   "fraud & identity theft": 11
   "frontier ai": 3
@@ -451,6 +452,24 @@ label_colors:
   "zero-day": 10
   "zoom": 7
 items:
+  - title: "New ‘ShieldCrash’ Zero-Day Exploit Targets Microsoft Defender"
+    url: "https://www.securityweek.com/new-shieldcrash-zero-day-exploit-targets-microsoft-defender/"
+    source: "SecurityWeek"
+    date: 2026-09-10T07:09:36Z
+    kind: news
+    labels: ["chaotic eclipse", "endpoint security", "exploit", "microsoft defender", "vulnerabilities"]
+  - title: "Trezor warns users of email provider breach, phishing attacks"
+    url: "https://www.bleepingcomputer.com/news/security/trezor-warns-users-of-email-provider-breach-phishing-attacks/"
+    source: "BleepingComputer"
+    date: 2026-09-10T06:56:33Z
+    kind: news
+    labels: []
+  - title: "Fortinet Code Execution Flaw Exploited in PivotC2 RAT Attacks"
+    url: "https://www.securityweek.com/fortinet-code-execution-flaw-exploited-in-pivotc2-rat-attacks/"
+    source: "SecurityWeek"
+    date: 2026-09-10T06:33:36Z
+    kind: news
+    labels: ["exploited", "fortigate", "fortinet", "malware", "pivotc2", "rat", "vulnerabilities"]
   - title: "Cisco confirms CVE-2026-20079 Secure FMC flaw exploited in attacks"
     url: "https://www.bleepingcomputer.com/news/security/cisco-confirms-cve-2026-20079-secure-fmc-flaw-exploited-in-attacks/"
     source: "BleepingComputer"
