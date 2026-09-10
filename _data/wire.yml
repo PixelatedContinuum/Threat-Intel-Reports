@@ -3,17 +3,17 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-10T18:00:16Z
+generated_at: 2026-09-10T20:00:32Z
 window_days: 30
 counts:
-  total: 551
-  research: 190
-  news: 361
+  total: 550
+  research: 192
+  news: 358
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 78
+    count: 77
     color: 1
   - label: "cybercrime"
     count: 58
@@ -22,7 +22,7 @@ topics:
     count: 30
     color: 3
   - label: "exploited"
-    count: 28
+    count: 27
     color: 4
   - label: "malware"
     count: 26
@@ -36,14 +36,14 @@ topics:
   - label: "credential theft"
     count: 16
     color: 8
-  - label: "microsoft"
+  - label: "social engineering"
     count: 16
     color: 9
   - label: "zero-day"
-    count: 16
-    color: 10
-  - label: "social engineering"
     count: 15
+    color: 10
+  - label: "microsoft"
+    count: 14
     color: 11
   - label: "phishing"
     count: 14
@@ -395,7 +395,7 @@ label_colors:
   "malware": 5
   "mathspace": 4
   "metabase": 6
-  "microsoft": 9
+  "microsoft": 11
   "microsoft teams": 10
   "mikrotik": 2
   "miniorange": 5
@@ -441,7 +441,8 @@ label_colors:
   "servicenow": 1
   "sma1000": 2
   "soc": 9
-  "social engineering": 11
+  "social engineering": 9
+  "software": 5
   "sonicwall": 8
   "spring": 5
   "supply chain": 8
@@ -455,6 +456,30 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 10
 items:
+  - title: "Surfshark VPN says hackers breached internal testing, proxy servers"
+    url: "https://www.bleepingcomputer.com/news/security/surfshark-vpn-says-hackers-breached-internal-testing-proxy-servers/"
+    source: "BleepingComputer"
+    date: 2026-09-10T19:15:07Z
+    kind: news
+    labels: ["software"]
+  - title: "IDScan confirms breach after hackers offer 153 million driver’s license scans for sale"
+    url: "https://therecord.media/idscan-data-breach-notice-drivers-licenses"
+    source: "Recorded Future"
+    date: 2026-09-10T18:55:00Z
+    kind: news
+    labels: ["cybercrime", "privacy"]
+  - title: "We've got one word for it, and it's usually the wrong one"
+    url: "https://blog.talosintelligence.com/weve-got-one-word-for-it-and-its-usually-the-wrong-one/"
+    source: "Cisco Talos"
+    date: 2026-09-10T18:00:15Z
+    kind: research
+    labels: ["threat source newsletter"]
+  - title: "Protecting organizations from AI-assisted executive impersonation and invoice fraud"
+    url: "https://www.microsoft.com/en-us/security/blog/2026/09/10/protecting-organizations-ai-assisted-executive-impersonation-invoice-fraud/"
+    source: "Microsoft"
+    date: 2026-09-10T17:23:05Z
+    kind: research
+    labels: ["social engineering"]
   - title: "AI-powered attack exploited PaperCut flaws to hack 395 organizations"
     url: "https://www.bleepingcomputer.com/news/security/ai-powered-attack-exploited-papercut-flaws-to-hack-395-organizations/"
     source: "BleepingComputer"
@@ -3731,33 +3756,3 @@ items:
     date: 2026-08-11T20:52:10Z
     kind: research
     labels: ["cve-2026-68820", "dprk-linked", "lazarus group", "mistpen", "operation dream job", "troy"]
-  - title: "Cisco warns of ASA and FTD VPN flaw exploited to crash devices"
-    url: "https://www.bleepingcomputer.com/news/security/cisco-warns-of-asa-and-ftd-vpn-flaw-exploited-to-crash-devices/"
-    source: "BleepingComputer"
-    date: 2026-08-11T19:45:31Z
-    kind: news
-    labels: []
-  - title: "Ransomware group hijacks hospital system’s Facebook page amid ongoing cyberattack fallout"
-    url: "https://therecord.media/ransomware-group-hijacks-hospital-facebook-amid-cyberattack-response"
-    source: "Recorded Future"
-    date: 2026-08-11T19:15:00Z
-    kind: news
-    labels: ["cybercrime"]
-  - title: "August 2026 Patch Tuesday: Microsoft Fixes 421 CVEs, One Exploited Zero-Day"
-    url: "https://www.securityweek.com/august-2026-patch-tuesday-microsoft-fixes-421-cves-one-exploited-zero-day/"
-    source: "SecurityWeek"
-    date: 2026-08-11T18:46:07Z
-    kind: news
-    labels: ["exploited", "microsoft", "patch tuesday", "patches", "vulnerabilities", "zero-day"]
-  - title: "Delta probes Wi-Fi deauth attack on flight carrying DEF CON attendees"
-    url: "https://www.bleepingcomputer.com/news/security/delta-probes-wi-fi-deauth-attack-on-flight-carrying-def-con-attendees/"
-    source: "BleepingComputer"
-    date: 2026-08-11T18:34:23Z
-    kind: news
-    labels: []
-  - title: "Microsoft August 2026 Patch Tuesday fixes 400 flaws, 3 zero-days"
-    url: "https://www.bleepingcomputer.com/news/microsoft/microsoft-august-2026-patch-tuesday-fixes-400-flaws-3-zero-days/"
-    source: "BleepingComputer"
-    date: 2026-08-11T18:08:50Z
-    kind: news
-    labels: ["microsoft"]
