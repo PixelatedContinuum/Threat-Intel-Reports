@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-10T04:01:57Z
+generated_at: 2026-09-10T06:00:16Z
 window_days: 30
 counts:
-  total: 543
-  research: 187
+  total: 546
+  research: 190
   news: 356
 unclassified_sources:
   - "The DFIR Report"
@@ -42,11 +42,11 @@ topics:
   - label: "zero-day"
     count: 15
     color: 10
-  - label: "clickfix"
-    count: 13
+  - label: "phishing"
+    count: 14
     color: 11
-  - label: "patches"
-    count: 13
+  - label: "social engineering"
+    count: 14
     color: 12
 label_colors:
   ".net loader": 4
@@ -85,6 +85,7 @@ label_colors:
   "ai-assisted-development": 9
   "ai-generated decoys": 1
   "ai-generated personas": 9
+  "ai-orchestrated campaign": 1
   "ai-powered cybercrime": 12
   "aikido security": 1
   "airport": 9
@@ -196,6 +197,7 @@ label_colors:
   "browser-credentials": 9
   "browser-extension": 12
   "browser-in-browser": 9
+  "browser-in-the-browser": 7
   "build path attribution": 4
   "build-time execution": 10
   "byovd": 12
@@ -239,7 +241,7 @@ label_colors:
   "cl0p": 3
   "claude desktop": 12
   "cleo": 7
-  "clickfix": 11
+  "clickfix": 3
   "clipper": 3
   "cloaked ursa": 2
   "cloud": 7
@@ -287,6 +289,7 @@ label_colors:
   "cve-2026-6471": 10
   "cve-2026-68820": 2
   "cve-2026-75650": 3
+  "cve-2026-81578": 1
   "cve-2026-86218": 9
   "cyber-espionage": 3
   "cybera": 2
@@ -335,11 +338,13 @@ label_colors:
   "fortinet": 7
   "fraud & identity theft": 11
   "frontier ai": 3
+  "gaming": 5
   "garage2global": 10
   "gatesentinel": 7
   "gentlemen": 1
   "geoserver": 2
   "ghostdesk": 6
+  "gigabud": 9
   "github actions": 6
   "github-actions": 9
   "gitlab": 3
@@ -349,6 +354,7 @@ label_colors:
   "google infrastructure abuse": 8
   "google sheets c2": 12
   "government": 3
+  "gta6": 6
   "hacker": 8
   "hacker conversations": 8
   "hardware": 6
@@ -356,6 +362,7 @@ label_colors:
   "head mare": 3
   "healthcare": 11
   "heights financial": 1
+  "hideul.exe": 7
   "high profile threats": 2
   "honeymyte": 10
   "hugging face": 6
@@ -405,9 +412,9 @@ label_colors:
   "patch tuesady": 5
   "patch tuesday": 11
   "patched": 1
-  "patches": 12
+  "patches": 2
   "pdf attachment": 7
-  "phishing": 10
+  "phishing": 11
   "phishing kit": 6
   "plugin": 7
   "poc": 2
@@ -429,7 +436,7 @@ label_colors:
   "servicenow": 1
   "sma1000": 2
   "soc": 9
-  "social engineering": 10
+  "social engineering": 12
   "sonicwall": 8
   "spring": 5
   "supply chain": 8
@@ -504,12 +511,36 @@ items:
     date: 2026-09-09T16:08:59Z
     kind: research
     labels: ["cisco talos antivirus", "cisco talos malware protection", "cisco talos network intrusion prevention", "landing page top story", "malware", "threat advisory"]
+  - title: "Vwork: Weaponized Open-source Software as an Addon for Gigabud"
+    url: "https://otx.alienvault.com/pulse/6aa1817931ae64493d38a05f"
+    source: "AlienVault"
+    date: 2026-09-09T15:55:37Z
+    kind: research
+    labels: ["android banking trojan", "gigabud", "vwork", "work profile evasion"]
+  - title: "Grand Theft Auto VI hype leads to malware"
+    url: "https://otx.alienvault.com/pulse/6aa18179c7eb1a5f0426ed7a"
+    source: "AlienVault"
+    date: 2026-09-09T15:55:37Z
+    kind: research
+    labels: ["gaming", "gta6", "infostealer", "mercurial grabber", "njrat", "seo poisoning", "social engineering"]
+  - title: "Phishing Attacks Serve Browser-in-the-Browser Pages, Rogue RMM Persistence"
+    url: "https://otx.alienvault.com/pulse/6aa181782eb83db70c28a2a7"
+    source: "AlienVault"
+    date: 2026-09-09T15:55:36Z
+    kind: research
+    labels: ["browser-in-the-browser", "hideul.exe", "phishing", "rmm", "screenconnect", "social-engineering"]
   - title: "FBI puts its cyber strategy on paper"
     url: "https://therecord.media/fbi-releases-first-public-cybersecurity-strategy"
     source: "Recorded Future"
     date: 2026-09-09T15:37:00Z
     kind: news
     labels: ["cybercrime", "government", "nation-state"]
+  - title: "Agents Gone Wild: An AI-Orchestrated Global Campaign Against PaperCut NG/MF"
+    url: "https://www.greynoise.io/blog/ai-orchestrated-campaign-against-papercut-ng-mf"
+    source: "AlienVault"
+    date: 2026-09-09T15:36:35Z
+    kind: research
+    labels: ["ai-orchestrated campaign", "cve-2026-81578", "cve-2026-82078", "deepseek models", "global intrusion", "papercut exploitation"]
   - title: "Veradigm warns of patient data breach after ransomware gang claims attack"
     url: "https://www.bleepingcomputer.com/news/security/veradigm-discloses-patient-data-breach-after-gentlemen-gang-claims-attack/"
     source: "BleepingComputer"
@@ -3696,9 +3727,3 @@ items:
     date: 2026-08-11T09:47:06Z
     kind: news
     labels: []
-  - title: "August 2026 Patch Tuesday: One Exploited Zero-Day and 62 Critical Vulnerabilities Among 415 CVEs"
-    url: "https://www.crowdstrike.com/en-us/blog/patch-tuesday-analysis-august-2026/"
-    source: "Crowdstrike"
-    date: 2026-08-11T05:00:00Z
-    kind: research
-    labels: ["exposure management"]
