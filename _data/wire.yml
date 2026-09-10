@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-10T20:00:32Z
+generated_at: 2026-09-10T22:01:02Z
 window_days: 30
 counts:
-  total: 550
-  research: 192
-  news: 358
+  total: 549
+  research: 190
+  news: 359
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -16,10 +16,10 @@ topics:
     count: 77
     color: 1
   - label: "cybercrime"
-    count: 58
+    count: 59
     color: 2
   - label: "government"
-    count: 30
+    count: 31
     color: 3
   - label: "exploited"
     count: 27
@@ -287,7 +287,6 @@ label_colors:
   "cve-2026-44756": 12
   "cve-2026-59346": 5
   "cve-2026-6471": 10
-  "cve-2026-68820": 2
   "cve-2026-75650": 3
   "cve-2026-81578": 1
   "cve-2026-86218": 9
@@ -316,7 +315,6 @@ label_colors:
   "dll sideloading": 11
   "domain controller": 4
   "dprk apt": 2
-  "dprk-linked": 1
   "dropcatch": 4
   "edge device exploitation": 7
   "education": 10
@@ -348,7 +346,6 @@ label_colors:
   "gatesentinel": 7
   "gentlemen": 1
   "geoserver": 2
-  "ghostdesk": 6
   "gigabud": 9
   "github actions": 6
   "github-actions": 9
@@ -456,6 +453,18 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 10
 items:
+  - title: "New Android malware encrypts files, steals data, and harasses victims"
+    url: "https://www.bleepingcomputer.com/news/security/new-android-malware-encrypts-files-steals-data-and-harasses-victims/"
+    source: "BleepingComputer"
+    date: 2026-09-10T21:40:43Z
+    kind: news
+    labels: ["mobile"]
+  - title: "Treasury urges banks to file cyber scam reports, noting nearly $13 billion in losses since 2023"
+    url: "https://therecord.media/treasury-urges-banks-report-cyber-scams"
+    source: "Recorded Future"
+    date: 2026-09-10T21:15:00Z
+    kind: news
+    labels: ["cybercrime", "government"]
   - title: "Surfshark VPN says hackers breached internal testing, proxy servers"
     url: "https://www.bleepingcomputer.com/news/security/surfshark-vpn-says-hackers-breached-internal-testing-proxy-servers/"
     source: "BleepingComputer"
@@ -3738,21 +3747,3 @@ items:
     date: 2026-08-11T22:15:22Z
     kind: news
     labels: []
-  - title: "Sandworm hackers target IT pros with trojanized WireGuard VPN client"
-    url: "https://www.bleepingcomputer.com/news/security/sandworm-hackers-target-it-pros-with-trojanized-wireguard-vpn-client/"
-    source: "BleepingComputer"
-    date: 2026-08-11T21:07:24Z
-    kind: news
-    labels: []
-  - title: "Fake CCleaner installs GhostDesk Chrome spyware"
-    url: "https://otx.alienvault.com/pulse/6a7b8dab529ad28b12d29796"
-    source: "AlienVault"
-    date: 2026-08-11T21:01:31Z
-    kind: research
-    labels: ["chrome extension", "ghostdesk", "keylogger", "spyware", "trojan dropper"]
-  - title: "Shattering the Dream - When a Job Offer Becomes a Zero-Day Attack"
-    url: "https://otx.alienvault.com/pulse/6a7b8b7a783979ea34063bad"
-    source: "AlienVault"
-    date: 2026-08-11T20:52:10Z
-    kind: research
-    labels: ["cve-2026-68820", "dprk-linked", "lazarus group", "mistpen", "operation dream job", "troy"]
