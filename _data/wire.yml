@@ -3,7 +3,7 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-11T10:02:46Z
+generated_at: 2026-09-11T12:00:47Z
 window_days: 30
 counts:
   total: 545
@@ -16,7 +16,7 @@ topics:
     count: 74
     color: 1
   - label: "cybercrime"
-    count: 59
+    count: 60
     color: 2
   - label: "government"
     count: 31
@@ -36,17 +36,17 @@ topics:
   - label: "credential theft"
     count: 17
     color: 8
-  - label: "phishing"
-    count: 15
-    color: 9
   - label: "ransomware"
+    count: 16
+    color: 9
+  - label: "phishing"
     count: 15
     color: 10
   - label: "social engineering"
     count: 15
     color: 11
-  - label: "microsoft"
-    count: 14
+  - label: "healthcare"
+    count: 13
     color: 12
 label_colors:
   ".net loader": 4
@@ -219,12 +219,12 @@ label_colors:
   "charity": 12
   "chatgpt": 1
   "chatgpt abuse": 3
+  "check point": 6
   "china": 5
   "china apt": 12
   "china-nexus": 11
   "chinese threat cluster": 7
   "chinese-speaking operator": 4
-  "chipmaker patch tuesday": 5
   "chrome": 12
   "chrome exploitation": 6
   "chrome extension": 7
@@ -254,6 +254,7 @@ label_colors:
   "cloudflare workers": 6
   "compile-time execution": 3
   "contactless payment fraud": 3
+  "conti": 1
   "control-flow flattening": 10
   "coolclient": 8
   "credential exfiltration": 4
@@ -360,7 +361,7 @@ label_colors:
   "hardware": 6
   "hasbro": 1
   "head mare": 3
-  "healthcare": 11
+  "healthcare": 12
   "heights financial": 1
   "hideul.exe": 7
   "high profile threats": 2
@@ -389,7 +390,7 @@ label_colors:
   "malware": 5
   "mathspace": 4
   "metabase": 6
-  "microsoft": 12
+  "microsoft": 4
   "microsoft teams": 10
   "mikrotik": 2
   "miniorange": 5
@@ -413,7 +414,7 @@ label_colors:
   "patched": 1
   "patches": 2
   "pdf attachment": 7
-  "phishing": 9
+  "phishing": 10
   "phishing kit": 6
   "plugin": 7
   "poc": 2
@@ -422,7 +423,7 @@ label_colors:
   "privacy": 12
   "proxy abuse": 6
   "qilin": 11
-  "ransomware": 10
+  "ransomware": 9
   "rce": 10
   "rmm abuse": 2
   "ruby on rails": 12
@@ -447,8 +448,27 @@ label_colors:
   "tool talk": 4
   "uncategorized": 10
   "vmware": 2
+  "vpn": 8
   "vulnerabilities": 1
 items:
+  - title: "Ukrainian Conti Ransomware Developer Sentenced to 4 Years in US Prison"
+    url: "https://www.securityweek.com/ukrainian-conti-ransomware-developer-sentenced-to-4-years-in-us-prison/"
+    source: "SecurityWeek"
+    date: 2026-09-11T11:29:09Z
+    kind: news
+    labels: ["conti", "cybercrime", "hacker", "ransomware", "sentenced"]
+  - title: "GitLab urges users to patch max severity path traversal flaw"
+    url: "https://www.bleepingcomputer.com/news/security/gitlab-urges-users-to-patch-max-severity-path-traversal-flaw/"
+    source: "BleepingComputer"
+    date: 2026-09-11T11:15:22Z
+    kind: news
+    labels: []
+  - title: "Check Point Patches Critical VPN Vulnerabilities"
+    url: "https://www.securityweek.com/check-point-patches-critical-vpn-vulnerabilities/"
+    source: "SecurityWeek"
+    date: 2026-09-11T11:10:02Z
+    kind: news
+    labels: ["check point", "vpn", "vulnerabilities"]
   - title: "Surfshark Systems Targeted by Hackers"
     url: "https://www.securityweek.com/surfshark-systems-targeted-by-hackers/"
     source: "SecurityWeek"
@@ -3701,21 +3721,3 @@ items:
     date: 2026-08-12T12:06:00Z
     kind: news
     labels: ["cybercrime", "government"]
-  - title: "Signal adds new security feature to thwart man-in-the-middle attacks"
-    url: "https://www.bleepingcomputer.com/news/security/signal-adds-new-security-feature-to-thwart-man-in-the-middle-attacks/"
-    source: "BleepingComputer"
-    date: 2026-08-12T11:21:42Z
-    kind: news
-    labels: []
-  - title: "Chipmaker Patch Tuesday: Intel, AMD Fix Over 80 Vulnerabilities Combined"
-    url: "https://www.securityweek.com/chipmaker-patch-tuesday-intel-amd-fix-over-80-vulnerabilities-combined/"
-    source: "SecurityWeek"
-    date: 2026-08-12T10:55:04Z
-    kind: news
-    labels: ["amd", "chipmaker patch tuesday", "intel", "patch tuesday", "vulnerabilities"]
-  - title: "New Microsoft Defender 'ShieldBreak' zero-day grants SYSTEM privileges"
-    url: "https://www.bleepingcomputer.com/news/security/new-microsoft-defender-shieldbreak-zero-day-grants-system-privileges/"
-    source: "BleepingComputer"
-    date: 2026-08-12T10:15:22Z
-    kind: news
-    labels: ["microsoft"]
