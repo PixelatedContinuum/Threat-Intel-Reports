@@ -298,6 +298,7 @@ tags:
     - attack.credential-access
     - attack.collection
     - attack.t1557
+    - stp.3
 logsource:
     product: linux
     service: auditd
@@ -342,6 +343,7 @@ date: 2026-08-12
 tags:
     - attack.stealth
     - attack.t1480
+    - stp.3
 logsource:
     product: linux
     service: auditd
@@ -446,6 +448,7 @@ tags:
     - attack.credential-access
     - attack.collection
     - attack.t1557
+    - stp.3
 logsource:
     category: process_creation
     product: linux
@@ -495,6 +498,7 @@ date: 2026-08-12
 tags:
     - attack.stealth
     - attack.t1564.001
+    - stp.3
 logsource:
     category: file_event
     product: linux

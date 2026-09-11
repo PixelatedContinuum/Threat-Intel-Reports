@@ -52,7 +52,7 @@ Hybrid-Loader-Stealer-Sogou-detections:
     engine: sigma
     tier: Detection
     fence: 3
-    hash: "5262bf15"
+    hash: "3b92a0a0"
     head: "title: SogouStealer Persistence via Run Keys and"
     robustness: 2
     confidence: "HIGH"
@@ -61,7 +61,7 @@ Hybrid-Loader-Stealer-Sogou-detections:
     engine: sigma
     tier: Detection
     fence: 4
-    hash: "a33b7bb5"
+    hash: "3d98d728"
     head: "title: SogouStealer Artifact Drop and Staging id"
     robustness: 2
     confidence: "HIGH"
@@ -381,7 +381,7 @@ ai-agent-frameworks-2026-05-23-detections:
     engine: sigma
     tier: Detection
     fence: 9
-    hash: "b48e15c1"
+    hash: "1dd21bee"
     head: "title: Cryptojacker LD_PRELOAD Rootkit Drop to /"
     robustness: 2
     confidence: "HIGH"
@@ -390,7 +390,7 @@ ai-agent-frameworks-2026-05-23-detections:
     engine: sigma
     tier: Detection
     fence: 10
-    hash: "946a95ef"
+    hash: "9068cda4"
     head: "title: GHOST Kit ComfyUI Fake Custom Node Perfor"
     robustness: 2
     confidence: "HIGH"
@@ -399,7 +399,7 @@ ai-agent-frameworks-2026-05-23-detections:
     engine: sigma
     tier: Detection
     fence: 11
-    hash: "e99a71c8"
+    hash: "f4df5937"
     head: "title: Cloudflared Access TCP Tunnel Registratio"
     robustness: 2
     confidence: "HIGH"
@@ -408,7 +408,7 @@ ai-agent-frameworks-2026-05-23-detections:
     engine: sigma
     tier: Detection
     fence: 12
-    hash: "d86b5885"
+    hash: "fceb16e0"
     head: "title: >- Instana API Enumeration via Stolen JWT"
     robustness: 2
     confidence: "HIGH (PowerShell Script Block Logging detection); MODERATE (network-side proxy detection)"
@@ -608,7 +608,7 @@ arsenal-237-chromelevator-exe-detections:
     engine: sigma
     tier: Detection
     fence: 3
-    hash: "1beab844"
+    hash: "6d8fc9b9"
     head: "title: Suspicious Process Injection - Memory All"
     robustness: 2
     confidence: "HIGH"
@@ -617,7 +617,7 @@ arsenal-237-chromelevator-exe-detections:
     engine: sigma
     tier: Detection
     fence: 4
-    hash: "250f0979"
+    hash: "480812bc"
     head: "title: Suspicious Browser Credential Database Ac"
     robustness: 2
     confidence: "HIGH"
@@ -718,7 +718,7 @@ arsenal-237-enc_c2-exe-detections:
     engine: sigma
     tier: Detection
     fence: 5
-    hash: "f52935a5"
+    hash: "1300f7a6"
     head: "title: Network - HTTP POST to Tor Hidden-Service"
     robustness: 2
     confidence: "HIGH"
@@ -837,7 +837,7 @@ arsenal-237-killer-crowdstrike-dll-detections:
     engine: sigma
     tier: Detection
     fence: 1
-    hash: "18f66659"
+    hash: "6f54407a"
     head: "title: Known-Vulnerable Driver Loaded from Tempo"
     robustness: 2
     confidence: "HIGH"
@@ -892,7 +892,7 @@ arsenal-237-killer-dll-detections:
     engine: sigma
     tier: Detection
     fence: 5
-    hash: "4d31a533"
+    hash: "a6bf507c"
     head: "title: Baidu BdApiUtil Vulnerable Driver Load id"
     robustness: 2
     confidence: "HIGH"
@@ -992,7 +992,7 @@ arsenal-237-lpe-exe-detections:
     engine: sigma
     tier: Detection
     fence: 7
-    hash: "25815511"
+    hash: "f19eadae"
     head: "title: UAC Bypass via Ms-Settings Registry Hijac"
     robustness: 2
     confidence: "HIGH"
@@ -1047,7 +1047,7 @@ arsenal-237-nethost-dll-detections:
     engine: sigma
     tier: Detection
     fence: 2
-    hash: "9a2614b4"
+    hash: "5d0a936d"
     head: "title: Arsenal-237 nethost.dll PowerShell Templa"
     robustness: 2
     confidence: "HIGH"
@@ -1455,7 +1455,7 @@ cloudsync-assembler-toolkit-91-197-98-188-detections:
     engine: sigma
     tier: Detection
     fence: 20
-    hash: "f27c17b1"
+    hash: "f7ffc91c"
     head: "title: AnyDesk Unattended Password Piped Over St"
     robustness: 2
     confidence: "HIGH"
@@ -1473,7 +1473,7 @@ cloudsync-assembler-toolkit-91-197-98-188-detections:
     engine: sigma
     tier: Detection
     fence: 22
-    hash: "237a73ea"
+    hash: "c1aefe7f"
     head: "title: AMSI Bypass Via AmsiUtils AmsiInitFailed "
     robustness: 2
     confidence: "HIGH"
@@ -1564,7 +1564,7 @@ dual-rat-analysis-detections:
     engine: sigma
     tier: Detection
     fence: 3
-    hash: "071fa364"
+    hash: "32fc9a33"
     head: "title: Quasar RAT Scheduled Task Persistence via"
     robustness: 2
     confidence: "HIGH"
@@ -1573,7 +1573,7 @@ dual-rat-analysis-detections:
     engine: sigma
     tier: Detection
     fence: 4
-    hash: "f0a89384"
+    hash: "0c762aa3"
     head: "title: Quasar RAT Remote Thread Creation Into Sy"
     robustness: 2
     confidence: "HIGH"
@@ -1582,7 +1582,7 @@ dual-rat-analysis-detections:
     engine: sigma
     tier: Detection
     fence: 5
-    hash: "7ddfa46a"
+    hash: "c54f1997"
     head: "title: Quasar RAT Mark of the Web Removal id: 46"
     robustness: 2
     confidence: "HIGH"
@@ -1591,7 +1591,7 @@ dual-rat-analysis-detections:
     engine: sigma
     tier: Detection
     fence: 6
-    hash: "3acb599e"
+    hash: "1b27d815"
     head: "title: Quasar RAT C2 Connection on TCP 4782 id: "
     robustness: 2
     confidence: "HIGH"
@@ -1600,7 +1600,7 @@ dual-rat-analysis-detections:
     engine: sigma
     tier: Detection
     fence: 7
-    hash: "d1c0a6e8"
+    hash: "7ba77ee5"
     head: "title: NjRAT/XWorm Pastebin Dead-Drop C2 Resolut"
     robustness: 2
     confidence: "HIGH"
@@ -1845,7 +1845,7 @@ flaskc2-postex-toolkit-67-215-232-25-detections:
     engine: sigma
     tier: Detection
     fence: 5
-    hash: "4b3aa233"
+    hash: "e4d5f2fa"
     head: "title: MSSQL CLR Backdoor Installation via CREAT"
     robustness: 2
     confidence: "HIGH"
@@ -2190,7 +2190,7 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
     engine: sigma
     tier: Detection
     fence: 13
-    hash: "3f758e11"
+    hash: "9b8a5be0"
     head: "title: GHOST ComfyUI Fake PerformanceMonitor Cus"
     robustness: 2
     confidence: "HIGH"
@@ -2199,7 +2199,7 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
     engine: sigma
     tier: Detection
     fence: 14
-    hash: "414bb7ce"
+    hash: "d7446929"
     head: "title: GHOST Kit Systemd Camouflage Service Unit"
     robustness: 2
     confidence: "HIGH"
@@ -2380,7 +2380,7 @@ gocloud-multiservice-cryptojacking-149-28-112-221-detections:
     engine: sigma
     tier: Detection
     fence: 11
-    hash: "ff47164c"
+    hash: "511e8c09"
     head: "title: Scheduled Task Registering SYSTEM Action "
     robustness: 2
     confidence: "HIGH"
@@ -2389,7 +2389,7 @@ gocloud-multiservice-cryptojacking-149-28-112-221-detections:
     engine: sigma
     tier: Detection
     fence: 12
-    hash: "40a541c4"
+    hash: "da2d6a79"
     head: "title: Process Executed From X11-Socket-Lookalik"
     robustness: 2
     confidence: "HIGH"
@@ -2763,7 +2763,7 @@ multivector-ecommerce-rce-toolkit-192-3-1-116-detections:
     engine: sigma
     tier: Detection
     fence: 6
-    hash: "091531aa"
+    hash: "9300f4fd"
     head: "title: Unauthenticated External Access to an Ali"
     robustness: 2
     confidence: "HIGH"
@@ -2772,7 +2772,7 @@ multivector-ecommerce-rce-toolkit-192-3-1-116-detections:
     engine: sigma
     tier: Detection
     fence: 7
-    hash: "cf8c5b4d"
+    hash: "dd72df04"
     head: "title: Successful External Retrieval of a Spring"
     robustness: 2
     confidence: "HIGH"
@@ -3144,7 +3144,7 @@ open-directory-172-105-0-126-20260406-detections:
     engine: sigma
     tier: Detection
     fence: 4
-    hash: "430e94d4"
+    hash: "98a9f405"
     head: "title: Cobalt Strike Malleable C2 Profile MALC U"
     robustness: 2
     confidence: "HIGH"
@@ -3217,7 +3217,7 @@ open-directory-193-56-255-154-xiebroc2-detections:
     engine: sigma
     tier: Detection
     fence: 6
-    hash: "482ec60f"
+    hash: "27fca674"
     head: "title: Covenant C2 GruntStager HTTP Beacon — Cam"
     robustness: 2
     confidence: "HIGH"
@@ -3514,7 +3514,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
     engine: sigma
     tier: Detection
     fence: 9
-    hash: "c60457a5"
+    hash: "56dbb2fc"
     head: "title: Chisel Client Establishing a Reverse SOCK"
     robustness: 2
     confidence: "HIGH"
@@ -3541,7 +3541,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
     engine: sigma
     tier: Detection
     fence: 12
-    hash: "5fc230ba"
+    hash: "2807734d"
     head: "title: PowerShell Remoting Session Establishment"
     robustness: 2
     confidence: "HIGH"
@@ -3550,7 +3550,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
     engine: sigma
     tier: Detection
     fence: 13
-    hash: "bfd360c7"
+    hash: "6ce3b432"
     head: "title: Net Use Command Targeting an Administrati"
     robustness: 2
     confidence: "HIGH"
@@ -3767,7 +3767,7 @@ opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detect
     engine: sigma
     tier: Detection
     fence: 6
-    hash: "58751be0"
+    hash: "3d40cdaf"
     head: "title: Netfilter Loop-Prevention Mark Consistent"
     robustness: 2
     confidence: "HIGH"
@@ -3776,7 +3776,7 @@ opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detect
     engine: sigma
     tier: Detection
     fence: 7
-    hash: "321dd509"
+    hash: "b6bf58ba"
     head: "title: Ipset Exclusion Set Named mitm_exclude Cr"
     robustness: 2
     confidence: "HIGH"
@@ -3794,7 +3794,7 @@ opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detect
     engine: sigma
     tier: Detection
     fence: 9
-    hash: "27942131"
+    hash: "e505edbe"
     head: "title: Command Line Consistent With SSH Intercep"
     robustness: 2
     confidence: "HIGH"
@@ -3803,7 +3803,7 @@ opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detect
     engine: sigma
     tier: Detection
     fence: 10
-    hash: "6169aa4a"
+    hash: "2d223529"
     head: "title: Distinctive Dot-Prefixed Artifacts Writte"
     robustness: 2
     confidence: "HIGH"
@@ -4021,7 +4021,7 @@ opendirectory-45-130-148-125-20260430-detections:
     engine: sigma
     tier: Detection
     fence: 4
-    hash: "d237ba8d"
+    hash: "3f68e78a"
     head: "title: Ligolo-ng Reverse Tunnel Agent Execution "
     robustness: 2
     confidence: "HIGH"
@@ -4329,7 +4329,7 @@ opendirectory-74-0-42-25-20260316-detections:
     engine: sigma
     tier: Detection
     fence: 7
-    hash: "0f25a32b"
+    hash: "5f7c5582"
     head: "title: XWorm V5.6 Operator Configuration Registr"
     robustness: 2
     confidence: "HIGH"
@@ -4338,7 +4338,7 @@ opendirectory-74-0-42-25-20260316-detections:
     engine: sigma
     tier: Detection
     fence: 8
-    hash: "f1eeb118"
+    hash: "edbbda8f"
     head: "title: vlc_boxed.exe DGA Malware Run Key Persist"
     robustness: 2
     confidence: "HIGH"
@@ -4347,7 +4347,7 @@ opendirectory-74-0-42-25-20260316-detections:
     engine: sigma
     tier: Detection
     fence: 9
-    hash: "f94d51d9"
+    hash: "fa9c38d4"
     head: "title: ScreenConnect Phishing VBScript Dropper S"
     robustness: 2
     confidence: "HIGH"
@@ -4474,7 +4474,7 @@ opendirectory-79-137-192-3-20260515-detections:
     engine: sigma
     tier: Detection
     fence: 10
-    hash: "04ad0055"
+    hash: "50c1738e"
     head: "title: BellaMain PhaaS Panel HTTP Request Patter"
     robustness: 2
     confidence: "HIGH"
@@ -4602,7 +4602,7 @@ remcos-opendirectory-detections:
     engine: sigma
     tier: Detection
     fence: 10
-    hash: "18b7081b"
+    hash: "f9ab65fe"
     head: "title: Remcos RAT File Melting Behavior via inst"
     robustness: 2
     confidence: "HIGH"
@@ -4738,7 +4738,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
     engine: sigma
     tier: Detection
     fence: 10
-    hash: "c250cead"
+    hash: "b1d821c0"
     head: "title: ELF IoT Arch-Tagged Filename Execution on"
     robustness: 2
     confidence: "HIGH"
@@ -4756,7 +4756,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
     engine: sigma
     tier: Detection
     fence: 12
-    hash: "e64a3bd8"
+    hash: "cec3f141"
     head: "title: Pandora-Mirai Persistence Pattern — Multi"
     robustness: 2
     confidence: "HIGH"
@@ -4765,7 +4765,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
     engine: sigma
     tier: Detection
     fence: 13
-    hash: "d8d17de3"
+    hash: "dc3e9756"
     head: "title: BusyBox SORA Marker Execution — Sora-Deri"
     robustness: 2
     confidence: "HIGH"
@@ -4991,7 +4991,7 @@ russian-gemini-credential-mill-213.165.51.115-detections:
     engine: sigma
     tier: Detection
     fence: 8
-    hash: "136927af"
+    hash: "5d4246ec"
     head: "title: 1Password Vault Export File Created or Ac"
     robustness: 2
     confidence: "HIGH"
@@ -5000,7 +5000,7 @@ russian-gemini-credential-mill-213.165.51.115-detections:
     engine: sigma
     tier: Detection
     fence: 9
-    hash: "5270319c"
+    hash: "7aa2fd47"
     head: "title: Suspicious LSASS Process Access via High-"
     robustness: 2
     confidence: "MODERATE"
@@ -5009,7 +5009,7 @@ russian-gemini-credential-mill-213.165.51.115-detections:
     engine: sigma
     tier: Detection
     fence: 10
-    hash: "047ad8f5"
+    hash: "f7779934"
     head: "title: AI Operator Handoff Document Bespoke File"
     robustness: 2
     confidence: "HIGH"
@@ -5163,7 +5163,7 @@ seasia-gov-exploitation-toolkit-144-172-106-236-detections:
     engine: sigma
     tier: Detection
     fence: 8
-    hash: "461490aa"
+    hash: "cb81b11f"
     head: "title: Tableau Server Vizportal SSRF via getView"
     robustness: 2
     confidence: "HIGH"
@@ -5181,7 +5181,7 @@ seasia-gov-exploitation-toolkit-144-172-106-236-detections:
     engine: sigma
     tier: Detection
     fence: 10
-    hash: "c6dddcb1"
+    hash: "c8fd8790"
     head: "title: Moodle Managefiles Plugin Local File Incl"
     robustness: 2
     confidence: "MODERATE"
@@ -5208,7 +5208,7 @@ seasia-gov-exploitation-toolkit-144-172-106-236-detections:
     engine: sigma
     tier: Detection
     fence: 13
-    hash: "5821c4db"
+    hash: "25e79e10"
     head: "title: Cron-Triggered Base64-Indirected Shell Ex"
     robustness: 2
     confidence: "HIGH"
@@ -5217,7 +5217,7 @@ seasia-gov-exploitation-toolkit-144-172-106-236-detections:
     engine: sigma
     tier: Detection
     fence: 14
-    hash: "265ecf7b"
+    hash: "1ea096ce"
     head: "title: Known Second-Actor Daemon-Masquerade Impl"
     robustness: 2
     confidence: "HIGH"
@@ -5652,7 +5652,7 @@ sliver-c2-windows-postex-staging-193-233-202-17-detections:
     engine: sigma
     tier: Detection
     fence: 4
-    hash: "10b26819"
+    hash: "59c6dff6"
     head: "title: Scheduled PowerShell Re-Pull Of Remote Sc"
     robustness: 2
     confidence: "HIGH"
@@ -5670,7 +5670,7 @@ sliver-c2-windows-postex-staging-193-233-202-17-detections:
     engine: sigma
     tier: Detection
     fence: 6
-    hash: "3a7f5944"
+    hash: "0403b6a3"
     head: "title: Process Access To LSASS With A Dump-Capab"
     robustness: 2
     confidence: "HIGH"
@@ -5679,7 +5679,7 @@ sliver-c2-windows-postex-staging-193-233-202-17-detections:
     engine: sigma
     tier: Detection
     fence: 7
-    hash: "ddc63ca7"
+    hash: "03ab6e8c"
     head: "title: Account Added To The Domain Admins Group "
     robustness: 2
     confidence: "HIGH"
@@ -5697,7 +5697,7 @@ sliver-c2-windows-postex-staging-193-233-202-17-detections:
     engine: sigma
     tier: Detection
     fence: 9
-    hash: "47a7b00b"
+    hash: "95cdaf7a"
     head: "title: File Named svchost.log Created In Roaming"
     robustness: 2
     confidence: "HIGH"
@@ -5706,7 +5706,7 @@ sliver-c2-windows-postex-staging-193-233-202-17-detections:
     engine: sigma
     tier: Detection
     fence: 10
-    hash: "6284fea0"
+    hash: "dbc92bf1"
     head: "title: node.exe Executing From A Vendor-Masquera"
     robustness: 2
     confidence: "HIGH"
@@ -5715,7 +5715,7 @@ sliver-c2-windows-postex-staging-193-233-202-17-detections:
     engine: sigma
     tier: Detection
     fence: 11
-    hash: "e7bf887e"
+    hash: "65b6600f"
     head: "title: Certutil URLCache Download Or Remote WMIC"
     robustness: 2
     confidence: "HIGH"
@@ -5951,7 +5951,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     engine: sigma
     tier: Detection
     fence: 8
-    hash: "11d99c05"
+    hash: "b8127a1c"
     head: "title: PowerShell Instana API Call with Stored J"
     robustness: 2
     confidence: "HIGH"
@@ -5987,7 +5987,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     engine: sigma
     tier: Detection
     fence: 12
-    hash: "6e752b04"
+    hash: "ab554a27"
     head: "title: Instana Stolen JWT or Long-Lived API Toke"
     robustness: 2
     confidence: "HIGH (for the specific stolen JWT); MODERATE (for the generic long-lived-token governance branch)"
@@ -5996,7 +5996,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     engine: sigma
     tier: Detection
     fence: 13
-    hash: "adde525d"
+    hash: "5994ec3c"
     head: "title: Operator-Supplied SSH Key File Created in"
     robustness: 2
     confidence: "HIGH"
@@ -6105,7 +6105,7 @@ uac-test-exe-detections:
     engine: sigma
     tier: Detection
     fence: 4
-    hash: "589eb74b"
+    hash: "07d4dcee"
     head: "title: UAC Bypass via CMSTPLUA COM Interface CLS"
     robustness: 2
     confidence: "HIGH"
@@ -6178,7 +6178,7 @@ webserver-compromise-kit-91-236-230-250-detections:
     engine: sigma
     tier: Detection
     fence: 5
-    hash: "22344c2b"
+    hash: "a9b9332e"
     head: "title: Reverse SOCKS Proxy Execution via Revsock"
     robustness: 2
     confidence: "HIGH"

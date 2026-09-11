@@ -727,6 +727,7 @@ tags:
     - attack.persistence
     - attack.t1554
     - detection.emerging-threats
+    - stp.3
 logsource:
     category: file_event
     product: linux
@@ -779,6 +780,7 @@ tags:
     - attack.t1543.002
     - attack.t1036.005
     - detection.emerging-threats
+    - stp.3
 logsource:
     category: file_event
     product: linux

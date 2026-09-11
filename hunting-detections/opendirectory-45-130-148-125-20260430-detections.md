@@ -270,6 +270,7 @@ tags:
     - attack.command-and-control
     - attack.t1572
     - detection.emerging-threats
+    - stp.3
 logsource:
     product: windows
     category: process_creation

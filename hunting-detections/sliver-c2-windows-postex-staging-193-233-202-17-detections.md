@@ -248,6 +248,7 @@ tags:
     - attack.persistence
     - attack.privilege-escalation
     - attack.t1053.005
+    - stp.3
 logsource:
     category: process_creation
     product: windows
@@ -340,6 +341,7 @@ date: '2026-09-06'
 tags:
     - attack.credential-access
     - attack.t1003.001
+    - stp.3
 logsource:
     category: process_access
     product: windows
@@ -389,6 +391,7 @@ tags:
     - attack.privilege-escalation
     - attack.t1098
     - attack.t1136.002
+    - stp.3
 logsource:
     product: windows
     service: security
@@ -476,6 +479,7 @@ date: '2026-09-06'
 tags:
     - attack.stealth
     - attack.t1036.005
+    - stp.3
 logsource:
     category: file_event
     product: windows
@@ -516,6 +520,7 @@ date: '2026-09-06'
 tags:
     - attack.stealth
     - attack.t1036.005
+    - stp.3
 logsource:
     category: process_creation
     product: windows
@@ -571,6 +576,7 @@ tags:
     - attack.t1105
     - attack.lateral-movement
     - attack.t1570
+    - stp.3
 logsource:
     category: process_creation
     product: windows

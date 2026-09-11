@@ -205,6 +205,7 @@ tags:
     - attack.privilege-escalation
     - attack.t1068
     - detection.emerging-threats
+    - stp.3
 logsource:
     category: driver_load
     product: windows

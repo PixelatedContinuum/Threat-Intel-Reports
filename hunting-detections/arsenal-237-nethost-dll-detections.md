@@ -155,6 +155,7 @@ tags:
     - attack.execution
     - attack.t1059.001
     - detection.emerging-threats
+    - stp.3
 logsource:
     category: process_creation
     product: windows

@@ -433,6 +433,7 @@ tags:
     - attack.command-and-control
     - attack.t1071.001
     - detection.emerging-threats
+    - stp.3
 logsource:
     category: process_creation
     product: windows
@@ -647,6 +648,7 @@ tags:
     - attack.t1078
     - attack.t1552.001
     - detection.emerging-threats
+    - stp.3
 logsource:
     product: ibm_instana
     service: audit_log
@@ -702,6 +704,7 @@ tags:
     - attack.command-and-control
     - attack.t1572
     - detection.emerging-threats
+    - stp.3
 logsource:
     category: file_event
     product: windows

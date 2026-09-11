@@ -548,6 +548,7 @@ tags:
     - attack.stealth
     - attack.t1053.005
     - attack.t1036.005
+    - stp.3
 logsource:
     category: process_creation
     product: windows
@@ -599,6 +600,7 @@ tags:
     - attack.impact
     - attack.t1564.001
     - attack.t1496.001
+    - stp.3
 logsource:
     category: process_creation
     product: linux

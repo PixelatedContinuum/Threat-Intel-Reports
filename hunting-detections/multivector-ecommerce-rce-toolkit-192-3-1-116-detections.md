@@ -406,6 +406,7 @@ date: '2026-07-21'
 tags:
     - attack.reconnaissance
     - attack.t1596.005
+    - stp.3
 logsource:
     category: webserver
 detection:
@@ -459,6 +460,7 @@ tags:
     - attack.t1005
     - attack.credential-access
     - attack.t1552.001
+    - stp.3
 logsource:
     category: webserver
 detection:

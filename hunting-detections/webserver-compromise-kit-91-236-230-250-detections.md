@@ -421,6 +421,7 @@ tags:
     - attack.command-and-control
     - attack.t1090.001
     - detection.emerging-threats
+    - stp.3
 logsource:
     category: process_creation
     product: windows

@@ -256,6 +256,7 @@ tags:
     - attack.command-and-control
     - attack.t1071.001
     - detection.emerging-threats
+    - stp.3
 logsource:
     category: proxy
 detection:

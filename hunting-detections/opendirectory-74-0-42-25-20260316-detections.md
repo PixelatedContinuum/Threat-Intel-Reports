@@ -365,6 +365,7 @@ tags:
     - attack.persistence
     - attack.t1112
     - detection.emerging-threats
+    - stp.3
 logsource:
     category: registry_set
     product: windows
@@ -412,6 +413,7 @@ tags:
     - attack.t1547.001
     - attack.t1036.005
     - detection.emerging-threats
+    - stp.3
 logsource:
     category: registry_set
     product: windows
@@ -459,6 +461,7 @@ tags:
     - attack.t1059.005
     - attack.t1218.007
     - detection.emerging-threats
+    - stp.3
 logsource:
     category: process_creation
     product: windows

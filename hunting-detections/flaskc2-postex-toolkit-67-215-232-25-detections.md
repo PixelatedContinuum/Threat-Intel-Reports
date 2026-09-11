@@ -291,6 +291,7 @@ tags:
     - attack.persistence
     - attack.t1505.001
     - detection.emerging-threats
+    - stp.3
 logsource:
     product: windows
     service: application

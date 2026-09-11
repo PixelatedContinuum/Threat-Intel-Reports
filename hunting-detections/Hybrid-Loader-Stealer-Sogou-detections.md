@@ -232,6 +232,7 @@ tags:
     - attack.privilege-escalation
     - attack.t1547.001
     - detection.emerging-threats
+    - stp.3
 logsource:
     product: windows
     category: registry_set
@@ -275,6 +276,7 @@ tags:
     - attack.command-and-control
     - attack.t1105
     - detection.emerging-threats
+    - stp.3
 logsource:
     product: windows
     category: file_create

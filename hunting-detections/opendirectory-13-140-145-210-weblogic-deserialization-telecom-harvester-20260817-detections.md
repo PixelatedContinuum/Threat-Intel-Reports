@@ -444,6 +444,7 @@ date: 2026-08-17
 tags:
     - attack.command-and-control
     - attack.t1572
+    - stp.3
 logsource:
     category: process_creation
     product: windows
@@ -588,6 +589,7 @@ date: 2026-08-17
 tags:
     - attack.lateral-movement
     - attack.t1021.006
+    - stp.3
 logsource:
     category: process_creation
     product: windows
@@ -633,6 +635,7 @@ date: 2026-08-17
 tags:
     - attack.lateral-movement
     - attack.t1021.002
+    - stp.3
 logsource:
     category: process_creation
     product: windows

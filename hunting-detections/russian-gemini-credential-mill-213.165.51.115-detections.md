@@ -422,6 +422,7 @@ tags:
     - attack.collection
     - attack.t1005
     - detection.emerging-threats
+    - stp.3
 logsource:
     category: file_event
     product: windows
@@ -477,6 +478,7 @@ tags:
     - attack.t1003.001
     - attack.t1003.002
     - detection.emerging-threats
+    - stp.3
 logsource:
     category: process_access
     product: windows
@@ -527,6 +529,7 @@ tags:
     - attack.resource-development
     - attack.t1587
     - detection.emerging-threats
+    - stp.3
 logsource:
     category: file_event
     product: linux

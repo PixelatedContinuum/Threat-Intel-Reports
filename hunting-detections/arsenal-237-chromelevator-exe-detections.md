@@ -268,6 +268,7 @@ tags:
     - attack.stealth
     - attack.privilege-escalation
     - attack.t1055.001
+    - stp.3
 
 logsource:
     product: windows
@@ -327,6 +328,7 @@ tags:
     - attack.credential-access
     - attack.t1555.003
     - detection.emerging-threats
+    - stp.3
 
 logsource:
     product: windows

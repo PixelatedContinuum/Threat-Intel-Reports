@@ -210,6 +210,7 @@ tags:
     - attack.command-and-control
     - attack.t1071.001
     - attack.t1090.003
+    - stp.3
 logsource:
     product: firewall
     category: http_request

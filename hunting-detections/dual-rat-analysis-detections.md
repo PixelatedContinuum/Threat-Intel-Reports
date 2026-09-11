@@ -235,6 +235,7 @@ tags:
     - attack.privilege-escalation
     - attack.t1053.005
     - detection.emerging-threats
+    - stp.3
 logsource:
     category: process_creation
     product: windows
@@ -288,6 +289,7 @@ tags:
     - attack.privilege-escalation
     - attack.t1055.003
     - detection.emerging-threats
+    - stp.3
 logsource:
     category: create_remote_thread
     product: windows
@@ -332,6 +334,7 @@ tags:
     - attack.stealth
     - attack.t1070.004
     - detection.emerging-threats
+    - stp.3
 logsource:
     product: windows
     category: file_delete
@@ -378,6 +381,7 @@ tags:
     - attack.t1071.001
     - attack.t1573
     - detection.emerging-threats
+    - stp.3
 logsource:
     product: windows
     category: network_connection
@@ -431,6 +435,7 @@ tags:
     - attack.t1102.001
     - attack.t1071.001
     - detection.emerging-threats
+    - stp.3
 logsource:
     product: windows
     category: network_connection

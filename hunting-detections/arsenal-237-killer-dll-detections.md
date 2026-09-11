@@ -371,6 +371,7 @@ date: '2026-01-25'
 tags:
     - attack.privilege-escalation
     - attack.t1068
+    - stp.3
 logsource:
     product: windows
     category: driver_load

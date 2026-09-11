@@ -598,6 +598,7 @@ tags:
     - attack.t1190
     - attack.command-and-control
     - detection.emerging-threats
+    - stp.3
 logsource:
     category: process_creation
     product: linux
@@ -707,6 +708,7 @@ tags:
     - attack.t1053.003
     - attack.t1543.002
     - detection.emerging-threats
+    - stp.3
 logsource:
     category: file_event
     product: linux
@@ -755,6 +757,7 @@ tags:
     - attack.command-and-control
     - attack.t1095
     - detection.emerging-threats
+    - stp.3
 logsource:
     category: process_creation
     product: linux

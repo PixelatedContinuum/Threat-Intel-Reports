@@ -327,6 +327,7 @@ tags:
     - attack.stealth
     - attack.t1548.002
     - detection.emerging-threats
+    - stp.3
 logsource:
     category: process_creation
     product: windows

@@ -981,6 +981,7 @@ date: 2026-08-03
 tags:
     - attack.command-and-control
     - attack.t1219.002
+    - stp.3
 logsource:
     category: process_creation
     product: windows
@@ -1073,6 +1074,7 @@ date: 2026-08-03
 tags:
     - attack.defense-impairment
     - attack.t1685
+    - stp.3
 logsource:
     category: process_creation
     product: windows

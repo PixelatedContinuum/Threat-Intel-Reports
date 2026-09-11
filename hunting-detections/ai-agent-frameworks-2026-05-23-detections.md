@@ -551,6 +551,7 @@ tags:
     - attack.execution
     - attack.t1574.006
     - detection.emerging-threats
+    - stp.3
 logsource:
     product: linux
     category: file_event
@@ -604,6 +605,7 @@ tags:
     - attack.impact
     - attack.t1496.001
     - detection.emerging-threats
+    - stp.3
 logsource:
     category: file_event
     product: linux
@@ -661,6 +663,7 @@ tags:
     - attack.lateral-movement
     - attack.t1090.004
     - detection.emerging-threats
+    - stp.3
 logsource:
     category: process_creation
     product: linux
@@ -717,6 +720,7 @@ tags:
     - attack.exfiltration
     - attack.t1119
     - detection.emerging-threats
+    - stp.3
 logsource:
     product: windows
     category: ps_script
