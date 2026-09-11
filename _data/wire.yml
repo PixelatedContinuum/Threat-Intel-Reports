@@ -3,17 +3,17 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-11T06:01:06Z
+generated_at: 2026-09-11T08:02:37Z
 window_days: 30
 counts:
-  total: 544
-  research: 187
-  news: 357
+  total: 541
+  research: 185
+  news: 356
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 76
+    count: 75
     color: 1
   - label: "cybercrime"
     count: 59
@@ -37,7 +37,7 @@ topics:
     count: 16
     color: 8
   - label: "social engineering"
-    count: 16
+    count: 15
     color: 9
   - label: "microsoft"
     count: 14
@@ -188,7 +188,6 @@ label_colors:
   "browser extension campaign": 9
   "browser extension malware": 6
   "browser extensions": 4
-  "browser hijacking": 12
   "browser theft": 3
   "browser-credentials": 9
   "browser-extension": 12
@@ -266,7 +265,6 @@ label_colors:
   "crowdstrike": 1
   "crypto scam": 9
   "cryptocurrency": 12
-  "cryptocurrency lure": 4
   "cryptocurrency miner": 1
   "cryptocurrency stealer": 4
   "cryptocurrency theft": 3
@@ -330,7 +328,6 @@ label_colors:
   "fake lock screen": 6
   "fake security scan": 12
   "fake tax documents": 4
-  "fake websites": 11
   "fengtai government": 3
   "firebase c2": 6
   "firefox": 3
@@ -347,7 +344,6 @@ label_colors:
   "github actions": 6
   "github-actions": 9
   "gitlab": 3
-  "gms": 3
   "google": 7
   "google cloud": 8
   "google infrastructure abuse": 8
@@ -366,7 +362,6 @@ label_colors:
   "honeymyte": 10
   "hugging face": 6
   "ics": 3
-  "ics patch tuesday": 12
   "ics/ot": 1
   "identity theft": 7
   "in other news": 8
@@ -438,7 +433,6 @@ label_colors:
   "soc": 9
   "social engineering": 9
   "software": 5
-  "sonicwall": 8
   "spring": 5
   "supply chain": 8
   "supply chain attack": 6
@@ -450,6 +444,12 @@ label_colors:
   "vmware": 2
   "vulnerabilities": 1
 items:
+  - title: "Conti ransomware gang member sentenced to 4 years in prison"
+    url: "https://www.bleepingcomputer.com/news/security/conti-ransomware-gang-member-sentenced-to-four-years-in-prison/"
+    source: "BleepingComputer"
+    date: 2026-09-11T06:48:37Z
+    kind: news
+    labels: []
   - title: "New Android malware encrypts files, steals data, and harasses victims"
     url: "https://www.bleepingcomputer.com/news/security/new-android-malware-encrypts-files-steals-data-and-harasses-victims/"
     source: "BleepingComputer"
@@ -3690,27 +3690,3 @@ items:
     date: 2026-08-12T08:14:46Z
     kind: news
     labels: ["ivanti", "patch", "vulnerabilities"]
-  - title: "Fake popular sites offer a free app, instead take over PCs"
-    url: "https://otx.alienvault.com/pulse/6a7c2827f67f1ff14996237e"
-    source: "AlienVault"
-    date: 2026-08-12T08:00:39Z
-    kind: research
-    labels: ["cryptocurrency lure", "fake websites", "impersonation campaign", "lookalike domains", "o&o syspectr", "remote access tool", "social engineering", "windows targeting"]
-  - title: "ICS Patch Tuesday: Vulnerabilities Fixed by Siemens, Schneider, Phoenix Contact"
-    url: "https://www.securityweek.com/ics-patch-tuesday-vulnerabilities-fixed-by-siemens-schneider-phoenix-contact-2/"
-    source: "SecurityWeek"
-    date: 2026-08-12T07:51:55Z
-    kind: news
-    labels: ["ics", "ics patch tuesday", "ics/ot"]
-  - title: "SonicWall Patches Critical Vulnerabilities in Discontinued GMS Platform"
-    url: "https://www.securityweek.com/sonicwall-patches-critical-vulnerabilities-in-discontinued-gms-platform/"
-    source: "SecurityWeek"
-    date: 2026-08-12T07:31:11Z
-    kind: news
-    labels: ["gms", "sonicwall", "vulnerabilities"]
-  - title: "737 Chrome VPN Extensions Linked to Brand Impersonation and Browser Traffic Redirection"
-    url: "https://socket.dev/blog/chrome-vpn-extension-impersonation"
-    source: "AlienVault"
-    date: 2026-08-12T06:52:44Z
-    kind: research
-    labels: ["brand impersonation", "browser hijacking", "chrome extensions", "dns-over-https evasion", "proxy redirection", "socks5", "vpn fraud"]
