@@ -810,7 +810,7 @@ level: low
 **Deployment:** Network IDS at the network egress point (Suricata sensor).
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL Sliver-C2-WinPostEx-193-233-202-17 POST To Minified-Asset-Shaped Path With Single-Letter Query Parameter (C2 Beacon Check-in)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"="; pcre:"/^\/(?:script|scripts|bundle|bundles|javascript|javascripts|route|array)(?:\/[a-z]+){0,3}(?:\.(?:min\.js|min\.php|js|php))?\?[a-z]=[A-Za-z0-9]+$/"; threshold:type limit,track by_src,count 1,seconds 60; classtype:trojan-activity; sid:1000001; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-06, reference https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT Sliver-C2-WinPostEx-193-233-202-17 POST To Minified-Asset-Shaped Path With Single-Letter Query Parameter (C2 Beacon Check-in)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"="; pcre:"/^\/(?:script|scripts|bundle|bundles|javascript|javascripts|route|array)(?:\/[a-z]+){0,3}(?:\.(?:min\.js|min\.php|js|php))?\?[a-z]=[A-Za-z0-9]+$/"; threshold:type limit,track by_src,count 1,seconds 60; classtype:trojan-activity; sid:1000001; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-06, reference https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/;)
 ```
 
 #### HTTP Client Claims A Non-Existent Chrome 108 Build
@@ -825,7 +825,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL Sliver-C2-WinPostEx-193-
 **Deployment:** Network IDS at the network egress point (Suricata sensor).
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL Sliver-C2-WinPostEx-193-233-202-17 HTTP Client Claims Non-Existent Chrome 108 Build (Beacon User-Agent)"; flow:established,to_server; http.user_agent; content:"Chrome/108.0.6602.492"; classtype:trojan-activity; sid:1000002; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-06, reference https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT Sliver-C2-WinPostEx-193-233-202-17 HTTP Client Claims Non-Existent Chrome 108 Build (Beacon User-Agent)"; flow:established,to_server; http.user_agent; content:"Chrome/108.0.6602.492"; classtype:trojan-activity; sid:1000002; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-06, reference https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/;)
 ```
 
 ---

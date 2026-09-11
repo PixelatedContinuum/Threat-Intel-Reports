@@ -545,7 +545,7 @@ level: low
 **Deployment:** Network IDS/IPS, perimeter firewall with DPI capability, SIEM with network flow data.
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL FlaskC2-PostEx C2 Health Endpoint Response - Bespoke Flask C2 Active"; flow:established,to_client; file_data; content:"active_servers"; nocase; content:"pending_commands"; nocase; distance:0; content:"completed_commands"; nocase; distance:0; content:"status"; nocase; distance:0; content:"timestamp"; nocase; distance:0; classtype:trojan-activity; sid:9001001; rev:2; metadata:author The_Hunters_Ledger, date 2026-06-12, reference https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT FlaskC2-PostEx C2 Health Endpoint Response - Bespoke Flask C2 Active"; flow:established,to_client; file_data; content:"active_servers"; nocase; content:"pending_commands"; nocase; distance:0; content:"completed_commands"; nocase; distance:0; content:"status"; nocase; distance:0; content:"timestamp"; nocase; distance:0; classtype:trojan-activity; sid:9001001; rev:2; metadata:author The_Hunters_Ledger, date 2026-06-12, reference https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/;)
 ```
 
 ### Hunting Rules
@@ -561,7 +561,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL FlaskC2-PostEx C2 Health
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points; hunt-tune before alerting.
 
 ```
-alert http $HOME_NET any -> any any (msg:"THL FlaskC2-PostEx C2 Beacon POST to /api/report"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/api/report"; nocase; classtype:trojan-activity; sid:9001002; rev:2; metadata:author The_Hunters_Ledger, date 2026-06-12, reference https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/;)
+alert http $HOME_NET any -> any any (msg:"THL HUNT FlaskC2-PostEx C2 Beacon POST to /api/report"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/api/report"; nocase; classtype:trojan-activity; sid:9001002; rev:2; metadata:author The_Hunters_Ledger, date 2026-06-12, reference https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/;)
 ```
 
 #### Flask C2 Beacon Endpoint: POST to /api/heartbeat
@@ -575,7 +575,7 @@ alert http $HOME_NET any -> any any (msg:"THL FlaskC2-PostEx C2 Beacon POST to /
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points; hunt-tune before alerting.
 
 ```
-alert http $HOME_NET any -> any any (msg:"THL FlaskC2-PostEx C2 Beacon POST to /api/heartbeat"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/api/heartbeat"; nocase; classtype:trojan-activity; sid:9001003; rev:2; metadata:author The_Hunters_Ledger, date 2026-06-12, reference https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/;)
+alert http $HOME_NET any -> any any (msg:"THL HUNT FlaskC2-PostEx C2 Beacon POST to /api/heartbeat"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/api/heartbeat"; nocase; classtype:trojan-activity; sid:9001003; rev:2; metadata:author The_Hunters_Ledger, date 2026-06-12, reference https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/;)
 ```
 
 ---

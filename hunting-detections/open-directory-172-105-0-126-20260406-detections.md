@@ -344,7 +344,7 @@ level: medium
 **Deployment:** Perimeter IDS/IPS, proxy with HTTP user-agent logging.
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL Cobalt Strike Malleable C2 MALC User-Agent Detected"; flow:established,to_server; http.user_agent; content:"MALC)"; endswith; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:9001003; rev:3; metadata:author The_Hunters_Ledger, date 2026-04-06, reference https://the-hunters-ledger.com/hunting-detections/open-directory-172-105-0-126-20260406-detections/;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT Cobalt Strike Malleable C2 MALC User-Agent Detected"; flow:established,to_server; http.user_agent; content:"MALC)"; endswith; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:9001003; rev:3; metadata:author The_Hunters_Ledger, date 2026-04-06, reference https://the-hunters-ledger.com/hunting-detections/open-directory-172-105-0-126-20260406-detections/;)
 ```
 
 > **Community contribution:** The `endswith` anchor on this rule was suggested by [Anthony Vigil](https://www.linkedin.com/in/anthony-vigil/), who noted that anchoring the content match to the tail of the UA buffer improves targeted fidelity and engine efficiency over a bare substring match.

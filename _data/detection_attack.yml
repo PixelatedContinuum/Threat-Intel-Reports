@@ -826,7 +826,7 @@
     - tactic: "Command and Control"
       id: "T1071.001"
       name: "Web Protocols"
-      rules: "SentinelStealer c3lestial.fun TLS SNI (SURICATA, Detection); SentinelStealer c3lestial.fun DNS Query (SURICATA, Detection)"
+      rules: "SentinelStealer c3lestial.fun TLS SNI (SURICATA, Hunting); SentinelStealer c3lestial.fun DNS Query (SURICATA, Hunting)"
       count: 2
     - tactic: "Command and Control"
       id: "T1090"
@@ -1936,7 +1936,7 @@
     - tactic: "Persistence"
       id: "T1505.003"
       name: "Web Shell"
-      rules: "Webshell_PHP_XCMD_Header_Dispatcher (YARA, Detection); Non-Standard X-CMD Webshell Dispatch Header (SURICATA, Detection)"
+      rules: "Webshell_PHP_XCMD_Header_Dispatcher (YARA, Detection); Non-Standard X-CMD Webshell Dispatch Header (SURICATA, Hunting)"
       count: 2
     - tactic: "Persistence"
       id: "T1543"

@@ -790,7 +790,7 @@ level: medium
 **Deployment:** Network IDS on internal LAN segments, perimeter TAP; complements the destination-IP indicator carried in the IOC feed.
 
 ```suricata
-alert tls $HOME_NET any -> any any (msg:"THL HijackLoader-Penguish-Rugmi AsyncRAT SSL JA3 Fingerprint 07af4aa9e4d215a5ee63f9a0a277fbe3 (RAT C2 Fleet Indicator)"; flow:established,to_server; ja3.hash; content:"07af4aa9e4d215a5ee63f9a0a277fbe3"; endswith; threshold:type limit,track by_src,count 3,seconds 300; classtype:trojan-activity; sid:1000001; rev:1; metadata:author The_Hunters_Ledger, date 2026-05-06, reference https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/;)
+alert tls $HOME_NET any -> any any (msg:"THL DETECT HijackLoader-Penguish-Rugmi AsyncRAT SSL JA3 Fingerprint 07af4aa9e4d215a5ee63f9a0a277fbe3 (RAT C2 Fleet Indicator)"; flow:established,to_server; ja3.hash; content:"07af4aa9e4d215a5ee63f9a0a277fbe3"; endswith; threshold:type limit,track by_src,count 3,seconds 300; classtype:trojan-activity; sid:1000001; rev:1; metadata:author The_Hunters_Ledger, date 2026-05-06, reference https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/;)
 ```
 
 ---

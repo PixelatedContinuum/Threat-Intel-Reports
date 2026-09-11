@@ -958,7 +958,7 @@ level: medium
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points; hunt-tune before alerting.
 
 ```suricata
-alert http $HOME_NET any -> any any (msg:"THL OpenDirectory-94.103.1.13 XOR-Encoded Payload Staging Download via .xor URI Suffix (Loader Staging Indicator)"; flow:established,to_server; http.method; content:"GET"; http.uri; content:".xor"; endswith; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000001; rev:1; metadata:author The_Hunters_Ledger, date 2026-04-23, reference https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/;)
+alert http $HOME_NET any -> any any (msg:"THL HUNT OpenDirectory-94.103.1.13 XOR-Encoded Payload Staging Download via .xor URI Suffix (Loader Staging Indicator)"; flow:established,to_server; http.method; content:"GET"; http.uri; content:".xor"; endswith; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000001; rev:1; metadata:author The_Hunters_Ledger, date 2026-04-23, reference https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/;)
 ```
 
 > **Cut: pure IP-match rule retired.** The original file also carried a Suricata signature keyed solely on the operator staging IP `94.103.1.13` (with only a bare `http.method; content:"GET"` alongside it, which matches essentially all HTTP GET traffic and adds no discriminating power). Per the routing test, a rule that detects nothing once its single hard-coded IP is removed is an IOC-feed entry, not a signature, `94.103.1.13` is already carried with full context in the campaign's IOC feed. See Coverage Gaps.

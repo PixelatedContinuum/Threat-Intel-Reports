@@ -403,7 +403,7 @@ tags:
 **Validation:** Verified against the confirmed C2 beacon's HTTP method, URI, and Content-Type header as documented in static analysis.
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"RANSOMWARE enc_c2.exe Tor C2 Beacon - POST /c2/beacon.php"; flow:to_server,established; http.method; content:"POST"; http.uri; content:"/c2/beacon.php"; http.header; content:"Content-Type: application/json"; classtype:trojan-activity; metadata:author The_Hunters_Ledger, date 2026-01-26, reference https://the-hunters-ledger.com/hunting-detections/arsenal-237-enc_c2-exe-detections/; sid:1000001; rev:2;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT RANSOMWARE enc_c2.exe Tor C2 Beacon - POST /c2/beacon.php"; flow:to_server,established; http.method; content:"POST"; http.uri; content:"/c2/beacon.php"; http.header; content:"Content-Type: application/json"; classtype:trojan-activity; metadata:author The_Hunters_Ledger, date 2026-01-26, reference https://the-hunters-ledger.com/hunting-detections/arsenal-237-enc_c2-exe-detections/; sid:1000001; rev:2;)
 ```
 
 ---

@@ -537,7 +537,7 @@ I have to be careful about what that means. An open directory caught mid-operati
 ## 9. Detection and Response Guidance
 {: .hl-tier-2}
 
-Detection content for this campaign lives in the companion file. Thirty rules ship there across three languages, twenty-three of them Detection-tier and seven Hunting-tier, organised by capability cluster rather than by family because there is no family to organise by, plus five atomic indicators routed to the machine-readable feed instead of being forced into rules that would detect nothing without their hard-coded literal.
+Detection content for this campaign lives in the companion file. Thirty-one rules ship there across three languages, twenty-three of them Detection-tier and eight Hunting-tier, organised by capability cluster rather than by family because there is no family to organise by, plus five atomic indicators routed to the machine-readable feed instead of being forced into rules that would detect nothing without their hard-coded literal.
 
 **[Detection rules: YARA, Sigma, Suricata, and coverage gaps](/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/)**
 **[Machine-readable IOC feed](/ioc-feeds/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-iocs.json)**
@@ -545,8 +545,8 @@ Detection content for this campaign lives in the companion file. Thirty rules sh
 | Rule type | Detection tier | Hunting tier |
 |---|---|---|
 | YARA | 6 | 2 |
-| Sigma | 7 | 3 |
-| Suricata | 10 | 2 |
+| Sigma | 8 | 3 |
+| Suricata | 9 | 3 |
 
 Detection-tier rules are high-fidelity and evasion-resilient, meaning they are safe to alert on. Hunting-tier rules are broader, built for scoping, and will return hits that need review.
 

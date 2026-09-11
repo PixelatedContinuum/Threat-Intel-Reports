@@ -426,7 +426,7 @@ level: low
 **Deployment:** Perimeter IDS/IPS; network tap on internet egress; NDR platform.
 
 ```suricata
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL ShinyHunters DLS - HTTP Request to DLS Content Path pay_or_leak"; flow:established,to_server; http.uri; content:"/pay_or_leak/"; classtype:trojan-activity; threshold:type limit,track by_src,count 1,seconds 300; sid:9001003; rev:2; metadata:author The_Hunters_Ledger, date 2026-04-17, reference https://the-hunters-ledger.com/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/, attack_target Client_Endpoint, mitre_tactic_id TA0040, mitre_technique_id T1657;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT ShinyHunters DLS - HTTP Request to DLS Content Path pay_or_leak"; flow:established,to_server; http.uri; content:"/pay_or_leak/"; classtype:trojan-activity; threshold:type limit,track by_src,count 1,seconds 300; sid:9001003; rev:2; metadata:author The_Hunters_Ledger, date 2026-04-17, reference https://the-hunters-ledger.com/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/, attack_target Client_Endpoint, mitre_tactic_id TA0040, mitre_technique_id T1657;)
 ```
 
 ### Hunting Rules
@@ -444,7 +444,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL ShinyHunters DLS - HTTP 
 **Deployment:** Network IDS/IPS at perimeter (Suricata/Snort); TLS-inspection proxy with Suricata integration; NDR platforms.
 
 ```suricata
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL ShinyHunters DLS - HTTP Host Header shinyhunte.rs"; flow:established,to_server; http.host; content:"shinyhunte.rs"; endswith; classtype:trojan-activity; sid:9001001; rev:1; metadata:author The_Hunters_Ledger, date 2026-04-17, reference https://the-hunters-ledger.com/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/, attack_target Client_Endpoint, mitre_tactic_id TA0011, mitre_technique_id T1583.001;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT ShinyHunters DLS - HTTP Host Header shinyhunte.rs"; flow:established,to_server; http.host; content:"shinyhunte.rs"; endswith; classtype:trojan-activity; sid:9001001; rev:1; metadata:author The_Hunters_Ledger, date 2026-04-17, reference https://the-hunters-ledger.com/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/, attack_target Client_Endpoint, mitre_tactic_id TA0011, mitre_technique_id T1583.001;)
 ```
 
 #### ShinyHunters DLS — TLS SNI shinyhunte.rs
@@ -460,7 +460,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL ShinyHunters DLS - HTTP 
 **Deployment:** Network IDS/IPS at perimeter (Suricata/Snort); TLS-inspection proxy with Suricata integration; NDR platforms.
 
 ```suricata
-alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"THL ShinyHunters DLS - TLS SNI shinyhunte.rs"; flow:established,to_server; tls.sni; content:"shinyhunte.rs"; endswith; nocase; classtype:trojan-activity; sid:9001002; rev:1; metadata:author The_Hunters_Ledger, date 2026-04-17, reference https://the-hunters-ledger.com/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/, attack_target Client_Endpoint, mitre_tactic_id TA0011, mitre_technique_id T1583.001;)
+alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT ShinyHunters DLS - TLS SNI shinyhunte.rs"; flow:established,to_server; tls.sni; content:"shinyhunte.rs"; endswith; nocase; classtype:trojan-activity; sid:9001002; rev:1; metadata:author The_Hunters_Ledger, date 2026-04-17, reference https://the-hunters-ledger.com/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/, attack_target Client_Endpoint, mitre_tactic_id TA0011, mitre_technique_id T1583.001;)
 ```
 
 > **Community contribution:** The `any` destination port on this rule set was suggested by [Anthony Vigil](https://www.linkedin.com/in/anthony-vigil/), who noted that because app-layer protocol keywords (`http`, `tls`) invoke Suricata's parser by protocol recognition rather than by port, pinning to `80`/`443` adds no fidelity — `any` preserves coverage if the operator migrates the DLS to a non-standard port.

@@ -1050,7 +1050,7 @@ level: low
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points.
 
 ```suricata
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL UTA-2026-014 Pandora-Mirai Naku Binary Distribution URI Path (IoT Botnet Payload Delivery)"; flow:established,to_server; http.uri; content:"/bins/Naku."; startswith; classtype:trojan-activity; sid:9001003; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT UTA-2026-014 Pandora-Mirai Naku Binary Distribution URI Path (IoT Botnet Payload Delivery)"; flow:established,to_server; http.uri; content:"/bins/Naku."; startswith; classtype:trojan-activity; sid:9001003; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/;)
 ```
 
 #### Pandora-Mirai Pandoras-Box Binary Distribution URI Path
@@ -1066,7 +1066,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL UTA-2026-014 Pandora-Mir
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points.
 
 ```suricata
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL UTA-2026-014 Pandora-Mirai Pandoras-Box Binary Distribution URI Path (IoT Botnet Payload Delivery)"; flow:established,to_server; http.uri; content:"/Pandoras_Box/Pandora."; startswith; classtype:trojan-activity; sid:9001005; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT UTA-2026-014 Pandora-Mirai Pandoras-Box Binary Distribution URI Path (IoT Botnet Payload Delivery)"; flow:established,to_server; http.uri; content:"/Pandoras_Box/Pandora."; startswith; classtype:trojan-activity; sid:9001005; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/;)
 ```
 
 ### Hunting Rules
@@ -1084,7 +1084,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL UTA-2026-014 Pandora-Mir
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points; hunt-tune before alerting.
 
 ```suricata
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL UTA-2026-014 Pandora-Mirai bot.sh Reseed Download URI Pattern (IoT Botnet Reseed Channel)"; flow:established,to_server; http.uri; content:"/bot.sh"; endswith; classtype:trojan-activity; sid:9001004; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT UTA-2026-014 Pandora-Mirai bot.sh Reseed Download URI Pattern (IoT Botnet Reseed Channel)"; flow:established,to_server; http.uri; content:"/bot.sh"; endswith; classtype:trojan-activity; sid:9001004; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/;)
 ```
 
 #### Naku Binary Reference in HTTP URI (Bare Substring)
@@ -1098,7 +1098,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL UTA-2026-014 Pandora-Mir
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points; hunt-tune before alerting.
 
 ```suricata
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL UTA-2026-014 Naku Binary Reference in HTTP URI - Backup Channel Convention (Bare Substring Anchor)"; flow:established,to_server; http.uri; content:"Naku."; nocase; classtype:trojan-activity; sid:9001006; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT UTA-2026-014 Naku Binary Reference in HTTP URI - Backup Channel Convention (Bare Substring Anchor)"; flow:established,to_server; http.uri; content:"Naku."; nocase; classtype:trojan-activity; sid:9001006; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/;)
 ```
 
 **Rovodev Operator Artifacts**
@@ -1114,7 +1114,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL UTA-2026-014 Naku Binary
 **Deployment:** Network IDS/IPS at perimeter; primarily useful with TLS interception or proxy logging capability.
 
 ```suricata
-alert http $HOME_NET any -> any any (msg:"THL UTA-2026-014 keyosbuff C2-Leak Repository Reference in HTTP URI (Operator OPSEC Artifact)"; flow:established,to_server; http.uri; content:"keyosbuff"; nocase; classtype:trojan-activity; sid:9001002; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/;)
+alert http $HOME_NET any -> any any (msg:"THL HUNT UTA-2026-014 keyosbuff C2-Leak Repository Reference in HTTP URI (Operator OPSEC Artifact)"; flow:established,to_server; http.uri; content:"keyosbuff"; nocase; classtype:trojan-activity; sid:9001002; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/;)
 ```
 
 **Campaign-Level**
@@ -1130,7 +1130,7 @@ alert http $HOME_NET any -> any any (msg:"THL UTA-2026-014 keyosbuff C2-Leak Rep
 **Deployment:** Network IDS/IPS at perimeter; hunt-tune before alerting.
 
 ```suricata
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL UTA-2026-014 Naku Binary Fetch URI Pattern - Historical Aruba Primary Distribution Convention (Bare Substring Anchor)"; flow:established,to_server; http.uri; content:"Naku."; nocase; classtype:trojan-activity; sid:9001008; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT UTA-2026-014 Naku Binary Fetch URI Pattern - Historical Aruba Primary Distribution Convention (Bare Substring Anchor)"; flow:established,to_server; http.uri; content:"Naku."; nocase; classtype:trojan-activity; sid:9001008; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/;)
 ```
 
 #### Naku Binary Fetch URI Pattern: Historical Aruba Backup Distribution Convention
@@ -1144,7 +1144,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL UTA-2026-014 Naku Binary
 **Deployment:** Network IDS/IPS at perimeter; hunt-tune before alerting.
 
 ```suricata
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL UTA-2026-014 Naku Binary Fetch URI Pattern - Historical Aruba Backup Distribution Convention (Bare Substring Anchor)"; flow:established,to_server; http.uri; content:"Naku."; nocase; classtype:trojan-activity; sid:9001009; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT UTA-2026-014 Naku Binary Fetch URI Pattern - Historical Aruba Backup Distribution Convention (Bare Substring Anchor)"; flow:established,to_server; http.uri; content:"Naku."; nocase; classtype:trojan-activity; sid:9001009; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/;)
 ```
 
 #### Naku-Pandora Mirai Operator-Bespoke CNC Protocol (Length-Prefixed String Option Keys)
@@ -1158,7 +1158,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL UTA-2026-014 Naku Binary
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points; alert-only until validated against live traffic.
 
 ```suricata
-alert tcp $HOME_NET any -> $EXTERNAL_NET 23 (msg:"THL UTA-2026-014 Naku-Pandora Mirai Operator-Bespoke CNC Protocol - Length-Prefixed String Option Keys (Defeats Stock Mirai IDS Rules, Unvalidated Heuristic)"; flow:established,to_server; dsize:>8; content:"|00 00|"; depth:2; offset:0; pcre:"/^.{4}.[\x01-\x14][A-Za-z0-9_]/"; classtype:trojan-activity; sid:9001010; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/;)
+alert tcp $HOME_NET any -> $EXTERNAL_NET 23 (msg:"THL HUNT UTA-2026-014 Naku-Pandora Mirai Operator-Bespoke CNC Protocol - Length-Prefixed String Option Keys (Defeats Stock Mirai IDS Rules, Unvalidated Heuristic)"; flow:established,to_server; dsize:>8; content:"|00 00|"; depth:2; offset:0; pcre:"/^.{4}.[\x01-\x14][A-Za-z0-9_]/"; classtype:trojan-activity; sid:9001010; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/;)
 ```
 
 **Matrix C2 Framework**
@@ -1174,7 +1174,7 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET 23 (msg:"THL UTA-2026-014 Naku-Pandora 
 **Deployment:** Network IDS/IPS with TLS interception or proxy logging capability; not effective against opaque HTTPS without interception.
 
 ```suricata
-alert http $HOME_NET any -> any any (msg:"THL UTA-2026-014 Matrix C2 Discord Bot Attack-Method Dispatch ovh-nuke (DDoS-as-a-Service Customer Interface, Requires TLS Interception)"; flow:established,to_server; http.host; content:"discord.com"; http.request_body; content:"ovh-nuke"; nocase; classtype:trojan-activity; sid:9001011; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/;)
+alert http $HOME_NET any -> any any (msg:"THL HUNT UTA-2026-014 Matrix C2 Discord Bot Attack-Method Dispatch ovh-nuke (DDoS-as-a-Service Customer Interface, Requires TLS Interception)"; flow:established,to_server; http.host; content:"discord.com"; http.request_body; content:"ovh-nuke"; nocase; classtype:trojan-activity; sid:9001011; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/;)
 ```
 
 #### Matrix C2 Discord Bot Attack-Method Dispatch: syn-storm/frag-storm/udp-bypass/icmp-hell
@@ -1188,7 +1188,7 @@ alert http $HOME_NET any -> any any (msg:"THL UTA-2026-014 Matrix C2 Discord Bot
 **Deployment:** Network IDS/IPS with TLS interception or proxy logging capability; not effective against opaque HTTPS without interception.
 
 ```suricata
-alert http $HOME_NET any -> any any (msg:"THL UTA-2026-014 Matrix C2 Discord Bot Attack-Method Dispatch syn-storm-frag-storm (DDoS-as-a-Service Customer Interface, Requires TLS Interception)"; flow:established,to_server; http.host; content:"discord.com"; http.request_body; pcre:"/(?:syn-storm|frag-storm|udp-bypass|icmp-hell)/i"; classtype:trojan-activity; sid:9001012; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/;)
+alert http $HOME_NET any -> any any (msg:"THL HUNT UTA-2026-014 Matrix C2 Discord Bot Attack-Method Dispatch syn-storm-frag-storm (DDoS-as-a-Service Customer Interface, Requires TLS Interception)"; flow:established,to_server; http.host; content:"discord.com"; http.request_body; pcre:"/(?:syn-storm|frag-storm|udp-bypass|icmp-hell)/i"; classtype:trojan-activity; sid:9001012; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/;)
 ```
 
 ---

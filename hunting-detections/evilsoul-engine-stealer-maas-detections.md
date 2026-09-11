@@ -654,7 +654,7 @@ level: medium
 **Deployment:** Network IDS/IPS at network egress.
 
 ```
-alert http $HOME_NET any -> any any (msg:"THL EvilSoul-Engine Webhook-Resolution Relay POST /tralalero (299a2e7f License-Gated C2)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/tralalero"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000002; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-03, reference https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/;)
+alert http $HOME_NET any -> any any (msg:"THL DETECT EvilSoul-Engine Webhook-Resolution Relay POST /tralalero (299a2e7f License-Gated C2)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/tralalero"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000002; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-03, reference https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/;)
 ```
 
 ---

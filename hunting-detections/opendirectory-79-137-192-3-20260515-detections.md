@@ -585,7 +585,7 @@ level: high
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points.
 
 ```suricata
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL OpenDirectory-79.137.192.3 Rhadamanthys MaaS-Customer Panel ID URL Pattern (C2 Transport Indicator)"; flow:established,to_server; http.uri; content:"/e6d92c6b5b2a03bee7fbab40/"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000003; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-15, reference https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT OpenDirectory-79.137.192.3 Rhadamanthys MaaS-Customer Panel ID URL Pattern (C2 Transport Indicator)"; flow:established,to_server; http.uri; content:"/e6d92c6b5b2a03bee7fbab40/"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000003; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-15, reference https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/;)
 ```
 
 **JARM detection note:** JARM fingerprint `2ad2ad0002ad2ad00042d42d00000007e6e35b6c9fce6eec13762f8506fe09` (current 79.133.180.168:3394 Samsung-cert period) and `2ad2ad0002ad2ad00042d42d00000000f78d2dc0ce6e5bbc5b8149a4872356` (79.137.192.3 Apache-on-Win64 stack) are useful for broader Rhadamanthys-customer C2 fingerprinting and BellaMain-style staging server identification respectively. JARM matching is best implemented at the network-monitoring layer (Zeek, Arkime, custom JARM scanners) rather than as a Suricata rule.

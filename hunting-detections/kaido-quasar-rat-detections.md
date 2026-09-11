@@ -343,7 +343,7 @@ level: medium
 **Deployment:** Network IDS/IPS with TLS certificate inspection (JA3/JA4 fingerprinting recommended as a complementary passive pivot).
 
 ```suricata
-alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"THL KAIDO-EvilSoul-MaaS TeamKAIDO C2 TLS Certificate Issuer (RAT C2 Fleet Indicator)"; flow:established,to_server; tls.cert_issuer; content:"TeamKAIDO"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000002; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-03, reference https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/;)
+alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT KAIDO-EvilSoul-MaaS TeamKAIDO C2 TLS Certificate Issuer (RAT C2 Fleet Indicator)"; flow:established,to_server; tls.cert_issuer; content:"TeamKAIDO"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000002; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-03, reference https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/;)
 ```
 
 ### Hunting Rules
@@ -359,7 +359,7 @@ alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"THL KAIDO-EvilSoul-MaaS TeamK
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points; hunt-tune before alerting.
 
 ```suricata
-alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:"THL KAIDO-EvilSoul-MaaS Quasar Binary Protocol C2 on TCP 4782 (RAT C2 Channel)"; flow:established,to_server; dsize:>0; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000001; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-03, reference https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/;)
+alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:"THL HUNT KAIDO-EvilSoul-MaaS Quasar Binary Protocol C2 on TCP 4782 (RAT C2 Channel)"; flow:established,to_server; dsize:>0; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000001; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-03, reference https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/;)
 ```
 
 ---

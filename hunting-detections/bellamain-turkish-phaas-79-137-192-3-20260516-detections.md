@@ -412,7 +412,7 @@ level: medium
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points; correlate hits with Telegram Bot API traffic from the same source within roughly 5 minutes (see the paired Sigma correlation rule) before treating as a high-confidence lead.
 
 ```suricata
-alert http $HOME_NET any -> any any (msg:"THL BellaMain-PhaaS USOM Blocklist Poll from Web Server (Security Tool Discovery Indicator)"; flow:established,to_server; http.host; content:"usom.gov.tr"; endswith; http.uri; content:"url-list.txt"; nocase; threshold:type limit,track by_src,count 1,seconds 300; classtype:policy-violation; sid:9001004; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-16, reference https://the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/;)
+alert http $HOME_NET any -> any any (msg:"THL HUNT BellaMain-PhaaS USOM Blocklist Poll from Web Server (Security Tool Discovery Indicator)"; flow:established,to_server; http.host; content:"usom.gov.tr"; endswith; http.uri; content:"url-list.txt"; nocase; threshold:type limit,track by_src,count 1,seconds 300; classtype:policy-violation; sid:9001004; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-16, reference https://the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/;)
 ```
 
 ---

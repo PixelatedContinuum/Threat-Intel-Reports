@@ -911,7 +911,7 @@ level: medium
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points; hunt-tune before alerting.
 
 ```suricata
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL TROJAN XWorm Anti-Analysis Hosting Check via ip-api.com"; flow:established,to_server; http.host; content:"ip-api.com"; http.uri; content:"/line/"; content:"fields=hosting"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:2026040403; rev:2; metadata:author The_Hunters_Ledger, date 2026-04-04, reference https://the-hunters-ledger.com/hunting-detections/shadow-xworm-opendirectory-detections/;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT TROJAN XWorm Anti-Analysis Hosting Check via ip-api.com"; flow:established,to_server; http.host; content:"ip-api.com"; http.uri; content:"/line/"; content:"fields=hosting"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:2026040403; rev:2; metadata:author The_Hunters_Ledger, date 2026-04-04, reference https://the-hunters-ledger.com/hunting-detections/shadow-xworm-opendirectory-detections/;)
 ```
 
 ---

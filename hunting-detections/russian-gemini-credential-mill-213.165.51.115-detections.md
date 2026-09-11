@@ -911,7 +911,7 @@ level: medium
 **Deployment:** Inline or passive HTTP inspection, Zeek http.log, WAF/proxy with content inspection.
 
 ```suricata
-alert http $HOME_NET any -> any any (msg:"THL - A2A C2 Beacon POST to Operator C2 Endpoint with X-Agent-ID Header"; flow:established,to_server; http.method; content:"POST"; http.header_names; content:"X-Agent-ID"; nocase; http.uri; content:"/api/v1/"; pcre:"/\/api\/v1\/(update|interact|telemetry|get_results)/"; classtype:trojan-activity; sid:9000003; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-25, reference https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/;)
+alert http $HOME_NET any -> any any (msg:"THL DETECT - A2A C2 Beacon POST to Operator C2 Endpoint with X-Agent-ID Header"; flow:established,to_server; http.method; content:"POST"; http.header_names; content:"X-Agent-ID"; nocase; http.uri; content:"/api/v1/"; pcre:"/\/api\/v1\/(update|interact|telemetry|get_results)/"; classtype:trojan-activity; sid:9000003; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-25, reference https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/;)
 ```
 
 ### Hunting Rules
@@ -927,7 +927,7 @@ alert http $HOME_NET any -> any any (msg:"THL - A2A C2 Beacon POST to Operator C
 **Deployment:** Network flow telemetry / IDS on egress; Zeek conn.log with a UDP/7844 filter. Corroborate with DNS visibility for `*.tralalarkefe.com` and the campaign's Cloudflare quick-tunnel subdomain (both carried in the IOC feed) and/or scope the source to segments where Cloudflare Tunnel is not expected.
 
 ```suricata
-alert udp $HOME_NET any -> $EXTERNAL_NET 7844 (msg:"THL - cloudflared Tunnel QUIC Egress to Cloudflare Edge (UDP 7844 Hunting)"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:policy-violation; sid:9000006; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-25, reference https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/;)
+alert udp $HOME_NET any -> $EXTERNAL_NET 7844 (msg:"THL HUNT - cloudflared Tunnel QUIC Egress to Cloudflare Edge (UDP 7844 Hunting)"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:policy-violation; sid:9000006; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-25, reference https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/;)
 ```
 
 ---

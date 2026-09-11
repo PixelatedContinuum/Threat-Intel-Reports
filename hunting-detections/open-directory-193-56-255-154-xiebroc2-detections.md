@@ -489,7 +489,7 @@ level: medium
 Corrected from the original: the `http` app-layer rule pinned destination port `443`. Suricata selects the HTTP parser by protocol recognition, not port, so pinning blind-spots any future port migration by the operator; changed to `any`. The old `reference:url,pixelatedcontinuum.github.io/...` line and the non-standard `metadata` schema (`affected_product`, `attack_target`, `created_at`, ...) are replaced with the required `metadata:author The_Hunters_Ledger, date, reference` schema pointing at the current site domain. A `threshold` was added for beacon noise control. `sid` is preserved unchanged from the original publication; `rev` bumped to reflect the logic/metadata change.
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL OpenDirectory-XiebroC2-Covenant Covenant GruntStager HTTP C2 Beacon (Campaign Session Token in POST Body)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/en-us/"; startswith; http.request_body; content:"session=75db-99b1-25fe4e9afbe58696-320bea73"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:9000101; rev:2; metadata:author The_Hunters_Ledger, date 2026-04-03, reference https://the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT OpenDirectory-XiebroC2-Covenant Covenant GruntStager HTTP C2 Beacon (Campaign Session Token in POST Body)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/en-us/"; startswith; http.request_body; content:"session=75db-99b1-25fe4e9afbe58696-320bea73"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:9000101; rev:2; metadata:author The_Hunters_Ledger, date 2026-04-03, reference https://the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/;)
 ```
 
 #### Covenant GruntStager Masquerade: Chrome 41 Windows 7 UA on Port 443
@@ -506,7 +506,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL OpenDirectory-XiebroC2-C
 Same port and metadata-schema corrections as the rule above.
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL OpenDirectory-XiebroC2-Covenant Covenant GruntStager Chrome-41-Windows-7 UA Masquerade on Port 443 (Cleartext HTTP C2 Indicator)"; flow:established,to_server; http.user_agent; content:"Chrome/41.0.2228.0"; nocase; http.uri; content:"/en-us/"; startswith; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:9000102; rev:2; metadata:author The_Hunters_Ledger, date 2026-04-03, reference https://the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT OpenDirectory-XiebroC2-Covenant Covenant GruntStager Chrome-41-Windows-7 UA Masquerade on Port 443 (Cleartext HTTP C2 Indicator)"; flow:established,to_server; http.user_agent; content:"Chrome/41.0.2228.0"; nocase; http.uri; content:"/en-us/"; startswith; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:9000102; rev:2; metadata:author The_Hunters_Ledger, date 2026-04-03, reference https://the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/;)
 ```
 
 ---

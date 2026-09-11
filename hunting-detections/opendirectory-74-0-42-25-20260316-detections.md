@@ -620,7 +620,7 @@ level: medium
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points.
 
 ```suricata
-alert tcp $HOME_NET any -> $EXTERNAL_NET [56001,56002,56003] (msg:"THL MaaS Toolkit PureRAT v4.1.9 Protocol Preamble Before TLS to Confirmed C2 Ports"; flow:established,to_server; content:"|04 00 00 00|"; depth:4; threshold:type limit,track by_src,count 1,seconds 300; classtype:trojan-activity; sid:9001002; rev:2; metadata:author The_Hunters_Ledger, date 2026-03-17, reference https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/;)
+alert tcp $HOME_NET any -> $EXTERNAL_NET [56001,56002,56003] (msg:"THL DETECT MaaS Toolkit PureRAT v4.1.9 Protocol Preamble Before TLS to Confirmed C2 Ports"; flow:established,to_server; content:"|04 00 00 00|"; depth:4; threshold:type limit,track by_src,count 1,seconds 300; classtype:trojan-activity; sid:9001002; rev:2; metadata:author The_Hunters_Ledger, date 2026-03-17, reference https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/;)
 ```
 
 ---

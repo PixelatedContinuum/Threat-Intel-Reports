@@ -741,7 +741,7 @@ level: medium
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points; hunt-tune before alerting.
 
 ```
-alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:"THL Dual-RAT-Quasar-NjRAT Quasar Binary Protocol C2 on TCP 4782 (RAT C2 Channel)"; flow:established,to_server; dsize:>0; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:2100001; rev:2; metadata:author The_Hunters_Ledger, date 2025-12-06, reference https://the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/;)
+alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:"THL HUNT Dual-RAT-Quasar-NjRAT Quasar Binary Protocol C2 on TCP 4782 (RAT C2 Channel)"; flow:established,to_server; dsize:>0; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:2100001; rev:2; metadata:author The_Hunters_Ledger, date 2025-12-06, reference https://the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/;)
 ```
 
 **NjRAT/XWorm**
@@ -757,7 +757,7 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:"THL Dual-RAT-Quasar-NjRAT Qu
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points; hunt-tune before alerting.
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL Dual-RAT-Quasar-NjRAT NjRAT-XWorm Spoofed Mobile Safari User-Agent (Dead-Drop C2 Resolution Indicator)"; flow:established,to_server; http.user_agent; content:"iPhone OS 11_4_1 like Mac OS X"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:2100004; rev:2; metadata:author The_Hunters_Ledger, date 2025-12-06, reference https://the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT Dual-RAT-Quasar-NjRAT NjRAT-XWorm Spoofed Mobile Safari User-Agent (Dead-Drop C2 Resolution Indicator)"; flow:established,to_server; http.user_agent; content:"iPhone OS 11_4_1 like Mac OS X"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:2100004; rev:2; metadata:author The_Hunters_Ledger, date 2025-12-06, reference https://the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/;)
 ```
 
 ---

@@ -460,7 +460,7 @@ level: high
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points.
 
 ```suricata
-alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL WebServer-Compromise-Kit ASP.NET Reverse Shell Spawn-Shell Banner (C2 Session Establishment)"; flow:to_server,established; content:"Spawn Shell"; depth:20; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000001; rev:2; metadata:author The_Hunters_Ledger, date 2026-02-08, reference https://the-hunters-ledger.com/hunting-detections/webserver-compromise-kit-91-236-230-250-detections/;)
+alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT WebServer-Compromise-Kit ASP.NET Reverse Shell Spawn-Shell Banner (C2 Session Establishment)"; flow:to_server,established; content:"Spawn Shell"; depth:20; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000001; rev:2; metadata:author The_Hunters_Ledger, date 2026-02-08, reference https://the-hunters-ledger.com/hunting-detections/webserver-compromise-kit-91-236-230-250-detections/;)
 ```
 
 ### Hunting Rules
@@ -476,7 +476,7 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL WebServer-Compromise-Kit 
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points; correlate hits with the revsocks YARA/Sigma indicators above before treating as high-confidence.
 
 ```suricata
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL WebServer-Compromise-Kit Anachronistic IE11/Win7 User-Agent (Possible revsocks Proxy Traffic)"; flow:to_server,established; http.user_agent; content:"Windows NT 6.1|3b| Trident/7.0"; nocase; threshold:type limit,track by_src,count 5,seconds 300; classtype:policy-violation; sid:1000003; rev:2; metadata:author The_Hunters_Ledger, date 2026-02-08, reference https://the-hunters-ledger.com/hunting-detections/webserver-compromise-kit-91-236-230-250-detections/;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT WebServer-Compromise-Kit Anachronistic IE11/Win7 User-Agent (Possible revsocks Proxy Traffic)"; flow:to_server,established; http.user_agent; content:"Windows NT 6.1|3b| Trident/7.0"; nocase; threshold:type limit,track by_src,count 5,seconds 300; classtype:policy-violation; sid:1000003; rev:2; metadata:author The_Hunters_Ledger, date 2026-02-08, reference https://the-hunters-ledger.com/hunting-detections/webserver-compromise-kit-91-236-230-250-detections/;)
 ```
 
 ---

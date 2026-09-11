@@ -1098,7 +1098,7 @@ level: medium
 **Deployment:** Network IDS/IPS at perimeter, HTTP proxy inspection.
 
 ```suricata
-alert http $HOME_NET any -> 77.110.0.0/16 any (msg:"THL GHOST Cryptojacker Kit Distribution File Download from AEZA Hosting Range"; flow:established,to_server; http.uri; pcre:"/\/(libpam_cache\.so|ghost\.sh|hyst\.sh|min1\.sh|libpam_cache\.c)$/"; classtype:trojan-activity; sid:9100104; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-25, reference https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/, tag Dropper, tag GHOST_kit;)
+alert http $HOME_NET any -> 77.110.0.0/16 any (msg:"THL DETECT GHOST Cryptojacker Kit Distribution File Download from AEZA Hosting Range"; flow:established,to_server; http.uri; pcre:"/\/(libpam_cache\.so|ghost\.sh|hyst\.sh|min1\.sh|libpam_cache\.c)$/"; classtype:trojan-activity; sid:9100104; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-25, reference https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/, tag Dropper, tag GHOST_kit;)
 ```
 
 ### Hunting Rules
@@ -1128,7 +1128,7 @@ A `flow:established` gate was tested as a possible content-free anchor, since th
 The sensor's own `HOME_NET`/`EXTERNAL_NET` variables were checked directly on the live sensor rather than assumed. `HOME_NET` is `[10.0.0.0/8]` and `EXTERNAL_NET` is `!$HOME_NET`, the correct standard convention, not the literal `any` warned about in the Deployment line above. The apparent paradox of a subscriber's own WAN address reading as EXTERNAL_NET is not a sensor misconfiguration. It is hairpin NAT meeting an address-group model that has no vocabulary for an address's identity, only its topology. No change to the rule's match logic follows from any of this; the port range and the `$HOME_NET any -> $EXTERNAL_NET` scoping below are unchanged from rev 3.
 
 ```suricata
-alert udp $HOME_NET any -> $EXTERNAL_NET 14433:14444 (msg:"THL GHOST Cryptojacker Kit Hysteria v2 QUIC Backdoor Egress Candidate - Known Operator Ports (Hunt Lead, Corroborate Before Escalating)"; threshold:type threshold,track by_src,count 5,seconds 60; classtype:policy-violation; sid:9100103; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-25, modified 2026-08-20, reference https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/, signature_severity Minor, tag Backdoor, tag GHOST_kit, tag Hysteria_v2;)
+alert udp $HOME_NET any -> $EXTERNAL_NET 14433:14444 (msg:"THL HUNT GHOST Cryptojacker Kit Hysteria v2 QUIC Backdoor Egress Candidate - Known Operator Ports (Hunt Lead, Corroborate Before Escalating)"; threshold:type threshold,track by_src,count 5,seconds 60; classtype:policy-violation; sid:9100103; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-25, modified 2026-08-20, reference https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/, signature_severity Minor, tag Backdoor, tag GHOST_kit, tag Hysteria_v2;)
 ```
 
 #### GHOST Cryptojacker Kit Telegram API Egress from Production Server — Covert Mining Report
@@ -1142,7 +1142,7 @@ alert udp $HOME_NET any -> $EXTERNAL_NET 14433:14444 (msg:"THL GHOST Cryptojacke
 **Deployment:** TLS-decryption-capable inline IDS/IPS or proxy with DLP inspection for genuine bot-token-level specificity; this SNI-only fallback should be scoped to production server IP ranges with no expected Telegram use and treated as a hunting lead, not an alert.
 
 ```suricata
-alert tls $HOME_NET any -> any any (msg:"THL GHOST Cryptojacker Kit Telegram API Egress from Production Server - Covert Mining Report"; tls.sni; content:"api.telegram.org"; endswith; nocase; threshold:type threshold,track by_src,count 5,seconds 300; classtype:policy-violation; sid:9100108; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-25, reference https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/, tag GHOST_kit, tag Telegram_reporting;)
+alert tls $HOME_NET any -> any any (msg:"THL HUNT GHOST Cryptojacker Kit Telegram API Egress from Production Server - Covert Mining Report"; tls.sni; content:"api.telegram.org"; endswith; nocase; threshold:type threshold,track by_src,count 5,seconds 300; classtype:policy-violation; sid:9100108; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-25, reference https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/, tag GHOST_kit, tag Telegram_reporting;)
 ```
 
 ---

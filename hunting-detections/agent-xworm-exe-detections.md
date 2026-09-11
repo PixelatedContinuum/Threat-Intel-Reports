@@ -296,7 +296,7 @@ level: medium
 **Deployment:** Network IDS/IPS at the perimeter and server-segment egress.
 
 ```
-alert tcp $HOME_NET any -> any any (msg:"THL Arsenal-237 XWorm AgentSec Authentication Secret Pattern (C2 Handshake Indicator)"; flow:to_server,established; content:"AgentSec_"; nocase; pcre:"/AgentSec_[0-9A-Za-z]{40,50}/i"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000013; rev:1; metadata:author The_Hunters_Ledger, date 2026-01-12, reference https://the-hunters-ledger.com/hunting-detections/agent-xworm-exe-detections/;)
+alert tcp $HOME_NET any -> any any (msg:"THL DETECT Arsenal-237 XWorm AgentSec Authentication Secret Pattern (C2 Handshake Indicator)"; flow:to_server,established; content:"AgentSec_"; nocase; pcre:"/AgentSec_[0-9A-Za-z]{40,50}/i"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000013; rev:1; metadata:author The_Hunters_Ledger, date 2026-01-12, reference https://the-hunters-ledger.com/hunting-detections/agent-xworm-exe-detections/;)
 ```
 
 ---

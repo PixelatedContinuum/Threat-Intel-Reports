@@ -392,7 +392,7 @@ level: medium
 **Deployment:** Network IDS/IPS inspecting HTTP POST bodies at the perimeter or reverse-proxy tier.
 
 ```suricata
-alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL Webshells-To-Cloud-Modular-Intrusion Suspicious mxx POST Parameter (Webshell Command Parameter Indicator)"; flow:established,to_server; http.request_body; content:"mxx="; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:web-application-attack; sid:100002; rev:2; metadata:author The_Hunters_Ledger, date 2025-10-20, reference https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/;)
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT Webshells-To-Cloud-Modular-Intrusion Suspicious mxx POST Parameter (Webshell Command Parameter Indicator)"; flow:established,to_server; http.request_body; content:"mxx="; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:web-application-attack; sid:100002; rev:2; metadata:author The_Hunters_Ledger, date 2025-10-20, reference https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/;)
 ```
 
 ---

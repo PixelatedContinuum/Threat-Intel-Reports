@@ -1034,7 +1034,7 @@ level: medium
 **Deployment:** Suricata on egress HTTP traffic; proxy with TLS inspection for encrypted variants.
 
 ```suricata
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL Turkish-ARPA-State-Insurer HTTP POST to ARPA Instana Ingestion Endpoint (Observability Data Exfiltration)"; http.method; content:"POST"; http.uri; content:"/api/ingest/instana"; startswith; flow:to_server,established; classtype:trojan-activity; sid:9001005; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT Turkish-ARPA-State-Insurer HTTP POST to ARPA Instana Ingestion Endpoint (Observability Data Exfiltration)"; http.method; content:"POST"; http.uri; content:"/api/ingest/instana"; startswith; flow:to_server,established; classtype:trojan-activity; sid:9001005; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/;)
 ```
 
 ### Hunting Rules
@@ -1050,7 +1050,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL Turkish-ARPA-State-Insur
 **Deployment:** DNS resolver logging; network-level DNS capture; Suricata on egress DNS traffic. Deploy only within the victim organization's own environment.
 
 ```suricata
-alert dns $HOME_NET any -> any any (msg:"THL Turkish-ARPA-State-Insurer DNS Query to Victim Instana OCP Tenant (Potential Unauthorized Collector Activity)"; dns.query; content:"ocpinstana.[victim-domain].com.tr"; nocase; threshold:type limit,track by_src,count 1,seconds 300; classtype:policy-violation; sid:9001001; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/;)
+alert dns $HOME_NET any -> any any (msg:"THL HUNT Turkish-ARPA-State-Insurer DNS Query to Victim Instana OCP Tenant (Potential Unauthorized Collector Activity)"; dns.query; content:"ocpinstana.[victim-domain].com.tr"; nocase; threshold:type limit,track by_src,count 1,seconds 300; classtype:policy-violation; sid:9001001; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/;)
 ```
 
 ---

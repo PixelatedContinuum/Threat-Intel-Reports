@@ -684,7 +684,7 @@ level: medium
 **Deployment:** Perimeter IDS/IPS, network TAP; correlate with the companion `/submit` signature before escalating.
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL OpenStrike Gen4 Beacon Task Poll GET /updates?id=[hex8]"; flow:established,to_server; http.method; content:"GET"; http.uri; content:"/updates?id="; pcre:"/\/updates\?id=[0-9a-f]{8}$/U"; threshold:type limit,track by_src,count 1,seconds 30; classtype:trojan-activity; sid:9002001; rev:1; metadata:author The_Hunters_Ledger, date 2026-04-08, reference https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT OpenStrike Gen4 Beacon Task Poll GET /updates?id=[hex8]"; flow:established,to_server; http.method; content:"GET"; http.uri; content:"/updates?id="; pcre:"/\/updates\?id=[0-9a-f]{8}$/U"; threshold:type limit,track by_src,count 1,seconds 30; classtype:trojan-activity; sid:9002001; rev:1; metadata:author The_Hunters_Ledger, date 2026-04-08, reference https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/;)
 ```
 
 #### OpenStrike Gen-4 Beacon Output Submission (POST /submit)
@@ -698,7 +698,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL OpenStrike Gen4 Beacon T
 **Deployment:** Perimeter IDS/IPS, network TAP; correlate with the companion `/updates` signature.
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL OpenStrike Gen4 Beacon Output Submission POST /submit?id=[hex8]"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/submit?id="; pcre:"/\/submit\?id=[0-9a-f]{8}$/U"; threshold:type limit,track by_src,count 1,seconds 60; classtype:trojan-activity; sid:9002002; rev:1; metadata:author The_Hunters_Ledger, date 2026-04-08, reference https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT OpenStrike Gen4 Beacon Output Submission POST /submit?id=[hex8]"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/submit?id="; pcre:"/\/submit\?id=[0-9a-f]{8}$/U"; threshold:type limit,track by_src,count 1,seconds 60; classtype:trojan-activity; sid:9002002; rev:1; metadata:author The_Hunters_Ledger, date 2026-04-08, reference https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/;)
 ```
 
 #### Cobalt Strike Malleable C2 BOIE9 IE9 User-Agent Detected
@@ -712,7 +712,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL OpenStrike Gen4 Beacon O
 **Deployment:** Perimeter IDS/IPS, proxy with HTTP user-agent logging.
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL Cobalt Strike Malleable C2 BOIE9 IE9 User-Agent Detected"; flow:established,to_server; http.user_agent; content:"BOIE9|3B|ENUSSEM)"; endswith; nocase; classtype:trojan-activity; sid:9002003; rev:1; metadata:author The_Hunters_Ledger, date 2026-04-08, reference https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT Cobalt Strike Malleable C2 BOIE9 IE9 User-Agent Detected"; flow:established,to_server; http.user_agent; content:"BOIE9|3B|ENUSSEM)"; endswith; nocase; classtype:trojan-activity; sid:9002003; rev:1; metadata:author The_Hunters_Ledger, date 2026-04-08, reference https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/;)
 ```
 
 #### CovertVPN HTTP Data Channel GET /receive Endpoint
@@ -726,7 +726,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL Cobalt Strike Malleable 
 **Deployment:** Perimeter IDS/IPS, network TAP with HTTP inspection; hunt-tune before alerting, and correlate with other CovertVPN indicators (npf.sys load, ICMP anomalies).
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL CovertVPN HTTP Data Channel GET /receive Endpoint"; flow:established,to_server; http.method; content:"GET"; http.uri; content:"/receive"; startswith; threshold:type limit,track by_src,count 3,seconds 60; classtype:trojan-activity; sid:9002005; rev:1; metadata:author The_Hunters_Ledger, date 2026-04-08, reference https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT CovertVPN HTTP Data Channel GET /receive Endpoint"; flow:established,to_server; http.method; content:"GET"; http.uri; content:"/receive"; startswith; threshold:type limit,track by_src,count 3,seconds 60; classtype:trojan-activity; sid:9002005; rev:1; metadata:author The_Hunters_Ledger, date 2026-04-08, reference https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/;)
 ```
 
 #### CovertVPN ICMP Tunnel Oversized Payload with Data or Keepalive Marker
@@ -740,7 +740,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL CovertVPN HTTP Data Chan
 **Deployment:** Perimeter IDS/IPS, network TAP (requires ICMP inspection capability).
 
 ```
-alert icmp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL CovertVPN ICMP Tunnel Oversized Payload with Data or Keepalive Marker"; itype:8; dsize:>128; byte_test:1,=,0xDD,4; threshold:type limit,track by_src,count 5,seconds 60; classtype:trojan-activity; sid:9002006; rev:1; metadata:author The_Hunters_Ledger, date 2026-04-08, reference https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/;)
+alert icmp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT CovertVPN ICMP Tunnel Oversized Payload with Data or Keepalive Marker"; itype:8; dsize:>128; byte_test:1,=,0xDD,4; threshold:type limit,track by_src,count 5,seconds 60; classtype:trojan-activity; sid:9002006; rev:1; metadata:author The_Hunters_Ledger, date 2026-04-08, reference https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/;)
 ```
 
 > **Deployment note:** A companion signature covering the ICMP keepalive marker (`byte_test:1,=,0xCC,4` in place of `0xDD`) was proposed in the original analysis but never authored as a standalone rule. The data marker (0xDD) and keepalive marker (0xCC) are mutually exclusive per packet, so full coverage requires both. This remains an open item; see Coverage Gaps.

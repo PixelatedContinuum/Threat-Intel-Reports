@@ -700,7 +700,7 @@ tags:
 **Deployment:** Network IDS/IPS on egress with HTTP header inspection enabled (TLS decryption required for `wss://` sessions).
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL FleetAgentFUD X-Agent-Secret WebSocket Authentication Header (Custom C2 Protocol Indicator)"; flow:established,to_server; http.header_names; content:"X-Agent-Secret"; classtype:trojan-activity; sid:2100022; rev:1; metadata:author The_Hunters_Ledger, date 2026-01-12, reference https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT FleetAgentFUD X-Agent-Secret WebSocket Authentication Header (Custom C2 Protocol Indicator)"; flow:established,to_server; http.header_names; content:"X-Agent-Secret"; classtype:trojan-activity; sid:2100022; rev:1; metadata:author The_Hunters_Ledger, date 2026-01-12, reference https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/;)
 ```
 
 ### Hunting Rules

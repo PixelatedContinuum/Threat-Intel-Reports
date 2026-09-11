@@ -22,7 +22,7 @@ hide: true
 |---|---|---|---|---|
 | YARA | 6 | 1 | T1046, T1055, T1620, T1027, T1140, T1136.002, T1098, T1105, T1091, T1071, T1571, T1090.003, T1036.005 | 14 |
 | Sigma | 17 | 1 | T1136.001, T1543.003, T1090.003, T1036.005, T1127.001, T1055, T1685, T1053.005, T1070.004, T1136.002, T1098.007, T1564.002, T1505.003, T1059.001, T1219.002, T1090, T1547.001 | 3 |
-| Suricata | 4 | 0 | T1071, T1571, T1071.001 | 2 |
+| Suricata | 2 | 2 | T1071, T1571, T1071.001 | 2 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, so they are safe to alert on. *Hunting rules* are broader, intended for scoping and threat-hunting, so expect to review the hits.
 
@@ -1198,7 +1198,7 @@ level: medium
 **Deployment:** Network IDS/IPS at the perimeter or internal segmentation boundary; deliberately not IP/port-pinned so the rule survives infrastructure rotation
 
 ```
-alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT CloudSync-Assembler-Toolkit AUTO UPDATE C2 Registration Marker (C2 Registration)"; flow:established,to_server; content:"=== AUTO UPDATE ==="; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000001; rev:1; metadata:author The_Hunters_Ledger, date 2026-08-03, reference https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/;)
+alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT CloudSync-Assembler-Toolkit AUTO UPDATE C2 Registration Marker (C2 Registration)"; flow:established,to_server; content:"=== AUTO UPDATE ==="; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000001; rev:1; metadata:author The_Hunters_Ledger, date 2026-08-03, reference https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/;)
 ```
 
 #### CloudSync C2 Heartbeat And Terminator Marker
@@ -1213,14 +1213,14 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT CloudSync-Assembler-
 **Deployment:** Network IDS/IPS at the perimeter or internal segmentation boundary
 
 ```
-alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT CloudSync-Assembler-Toolkit Shares Heartbeat Terminator Marker (C2 Heartbeat)"; flow:established,to_server; content:"[Shares]"; pcre:"/\[(C2_END|END)\]/"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000002; rev:1; metadata:author The_Hunters_Ledger, date 2026-08-03, reference https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/;)
+alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT CloudSync-Assembler-Toolkit Shares Heartbeat Terminator Marker (C2 Heartbeat)"; flow:established,to_server; content:"[Shares]"; pcre:"/\[(C2_END|END)\]/"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000002; rev:1; metadata:author The_Hunters_Ledger, date 2026-08-03, reference https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/;)
 ```
 
 **SentinelStealer (Sourced, Separate Tier)**
 
 #### SentinelStealer c3lestial.fun TLS SNI
 
-**Tier:** Detection
+**Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
 **Confidence:** MODERATE
@@ -1235,7 +1235,7 @@ alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT CloudSync-Assembler-
 
 #### SentinelStealer c3lestial.fun DNS Query
 
-**Tier:** Detection
+**Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
 **Confidence:** MODERATE
