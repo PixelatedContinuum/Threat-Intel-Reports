@@ -25,7 +25,7 @@ This campaign spans 8 active operator cases plus 5 novel AI-abuse TTPs first doc
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 7 | 1 | T1574.006, T1014, T1587, T1059.006, T1543.002, T1498, T1071.001 | 0 |
-| Sigma | 6 | 6 | T1574.006, T1090.004, T1587, T1685, T1496.001, T1119, T1657 | 0 |
+| Sigma | 6 | 8 | T1574.006, T1090.004, T1587, T1685, T1496.001, T1119, T1657 | 0 |
 | Suricata | 1 | 4 | T1090.004, T1496.001, T1071.001, T1665 | 1 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient — safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting — expect to review the hits.

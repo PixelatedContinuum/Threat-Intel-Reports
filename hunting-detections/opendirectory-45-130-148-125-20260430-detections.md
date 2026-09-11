@@ -23,7 +23,7 @@ This detection package targets the **AdaptixC2** open-source post-exploitation f
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 2 | 2 | T1055, T1055.002, T1059.001, T1071.001, T1090.001, T1572, T1620, T1685 | 1 |
-| Sigma | 2 | 6 | T1055, T1055.002, T1059.001, T1069.002, T1071.001, T1087.002, T1090.001, T1482, T1572, T1573.001, T1620, T1685 | 0 |
+| Sigma | 2 | 7 | T1055, T1055.002, T1059.001, T1069.002, T1071.001, T1087.002, T1090.001, T1482, T1572, T1573.001, T1620, T1685 | 0 |
 | Suricata | 2 | 3 | T1071.001, T1573.001 | 2 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
