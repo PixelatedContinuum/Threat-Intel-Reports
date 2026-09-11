@@ -3,29 +3,29 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-11T14:00:17Z
+generated_at: 2026-09-11T16:01:32Z
 window_days: 30
 counts:
-  total: 541
-  research: 186
-  news: 355
+  total: 545
+  research: 191
+  news: 354
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 74
+    count: 73
     color: 1
   - label: "cybercrime"
-    count: 60
+    count: 61
     color: 2
   - label: "government"
     count: 30
     color: 3
-  - label: "exploited"
-    count: 26
-    color: 4
   - label: "malware"
     count: 26
+    color: 4
+  - label: "exploited"
+    count: 25
     color: 5
   - label: "data breaches"
     count: 24
@@ -43,9 +43,9 @@ topics:
     count: 16
     color: 10
   - label: "social engineering"
-    count: 14
+    count: 15
     color: 11
-  - label: "healthcare"
+  - label: "clickfix"
     count: 13
     color: 12
 label_colors:
@@ -230,6 +230,7 @@ label_colors:
   "chrome extension": 7
   "chrome extensions": 8
   "chrome rat": 5
+  "chromium vulnerability": 4
   "ci/cd pipeline exploitation": 4
   "cisa": 6
   "cisa kev": 12
@@ -242,7 +243,7 @@ label_colors:
   "cl0p": 3
   "claude desktop": 12
   "cleo": 7
-  "clickfix": 3
+  "clickfix": 12
   "clipper": 3
   "cloaked ursa": 2
   "cloud": 7
@@ -252,6 +253,7 @@ label_colors:
   "cloudflare captcha": 5
   "cloudflare tunnels": 6
   "cloudflare workers": 6
+  "cobalt strike": 5
   "compile-time execution": 3
   "conti": 1
   "control-flow flattening": 10
@@ -267,6 +269,7 @@ label_colors:
   "critical infrastructure targeting": 5
   "cron-injection": 10
   "cross-platform": 10
+  "crowdoor": 11
   "crowdstrike": 1
   "crypto scam": 9
   "cryptocurrency": 12
@@ -280,6 +283,7 @@ label_colors:
   "cve-2016-6277": 9
   "cve-2017-7921": 7
   "cve-2021-27101": 2
+  "cve-2021-38003": 1
   "cve-2023-34362": 11
   "cve-2023-49105": 4
   "cve-2025-49113": 3
@@ -309,11 +313,13 @@ label_colors:
   "defender exclusions": 12
   "defense sector": 12
   "desktop capture": 2
+  "detection engineering": 12
   "device code phishing": 5
   "dgfip": 12
   "diplomatic targeting": 1
   "disrupted": 8
   "dll sideloading": 11
+  "docusign impersonation": 2
   "domain controller": 4
   "dprk apt": 2
   "dropcatch": 4
@@ -325,10 +331,11 @@ label_colors:
   "endpoint security & xdr": 11
   "entra id": 5
   "exploit": 9
-  "exploited": 4
+  "exploited": 5
   "exposure management": 4
   "extortion": 12
   "extortionware": 11
+  "fake captcha": 11
   "fake job interview": 1
   "fake lock screen": 6
   "fake security scan": 12
@@ -360,7 +367,7 @@ label_colors:
   "hardware": 6
   "hasbro": 1
   "head mare": 3
-  "healthcare": 12
+  "healthcare": 11
   "heights financial": 1
   "hideul.exe": 7
   "high profile threats": 2
@@ -386,7 +393,7 @@ label_colors:
   "litellm": 9
   "living-off-the-land": 1
   "macos": 11
-  "malware": 5
+  "malware": 4
   "mathspace": 4
   "metabase": 6
   "microsoft": 4
@@ -416,7 +423,6 @@ label_colors:
   "phishing": 9
   "phishing kit": 6
   "plugin": 7
-  "poc": 2
   "poc exploit": 3
   "postgresql": 12
   "privacy": 12
@@ -428,6 +434,7 @@ label_colors:
   "ruby on rails": 12
   "sap": 8
   "screenconnect": 2
+  "screenconnect deployment": 5
   "securing ai": 4
   "security operations": 4
   "security-labs": 3
@@ -448,6 +455,24 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
 items:
+  - title: "In Other News: InjectEave Attack, SIM Swapper Sentenced, Glasswing Findings Review"
+    url: "https://www.securityweek.com/in-other-news-injecteave-attack-sim-swapper-sentenced-glasswing-findings-review/"
+    source: "SecurityWeek"
+    date: 2026-09-11T14:19:18Z
+    kind: news
+    labels: ["cybercrime", "in other news"]
+  - title: "How Threat Actors Are Turning Trusted AI Platforms Into an Attack Surface"
+    url: "https://www.bleepingcomputer.com/news/security/how-threat-actors-are-turning-trusted-ai-platforms-into-an-attack-surface/"
+    source: "BleepingComputer"
+    date: 2026-09-11T14:01:11Z
+    kind: news
+    labels: []
+  - title: "Beware of the LegionLoader malware being distributed via the ClickFix method"
+    url: "https://asec.ahnlab.com/en/95374/"
+    source: "AlienVault"
+    date: 2026-09-11T13:15:36Z
+    kind: research
+    labels: ["clickfix", "fake captcha", "legionloader", "spear phishing"]
   - title: "Trezor Says 347,000 Users Received Phishing Emails After Brevo Hack"
     url: "https://www.securityweek.com/trezor-says-347000-users-received-phishing-emails-after-brevo-hack/"
     source: "SecurityWeek"
@@ -490,6 +515,12 @@ items:
     date: 2026-09-11T09:41:03Z
     kind: news
     labels: ["data breaches", "surfshark", "vpn"]
+  - title: "Gray Rabbits and the Tale of a One-Click Backdoor"
+    url: "https://www.gendigital.com/blog/insights/research/one-click-backdoor-sogou"
+    source: "AlienVault"
+    date: 2026-09-11T09:00:36Z
+    kind: research
+    labels: ["chromium vulnerability", "cve-2021-38003", "cve-2026-51990", "grayrabbit", "rabbitfur"]
   - title: "Anthropic Says Russian Hackers Used Claude AI to Automate Malware Evasion"
     url: "https://www.securityweek.com/anthropic-says-russian-hackers-used-claude-ai-to-automate-malware-evasion/"
     source: "SecurityWeek"
@@ -520,6 +551,24 @@ items:
     date: 2026-09-11T06:48:37Z
     kind: news
     labels: []
+  - title: "From Fake DocuSign to ScreenConnect: Attack Blocked"
+    url: "https://otx.alienvault.com/pulse/6aa374470d15d76b861b2f68"
+    source: "AlienVault"
+    date: 2026-09-11T03:23:51Z
+    kind: research
+    labels: ["docusign impersonation", "screenconnect deployment", "social engineering"]
+  - title: "Linux Detection Engineering - Local Privilege Escalation"
+    url: "https://www.elastic.co/security-labs/threat-command/linux-privilege-escalation-detection-framework"
+    source: "Elastic"
+    date: 2026-09-11T00:00:00Z
+    kind: research
+    labels: ["detection engineering"]
+  - title: "Melofee: a look back at a Linux implant and its new variants"
+    url: "https://www.stormshield.com/news/cti-melofee-linux-implant-and-new-variants/"
+    source: "AlienVault"
+    date: 2026-09-10T22:17:12Z
+    kind: research
+    labels: ["cobalt strike", "crowdoor", "hellobot", "hemigate", "linux implant", "melofee", "plugx", "ratels", "reptile", "shadowpad", "spark", "stowaway", "terndoor"]
   - title: "New Android malware encrypts files, steals data, and harasses victims"
     url: "https://www.bleepingcomputer.com/news/security/new-android-malware-encrypts-files-steals-data-and-harasses-victims/"
     source: "BleepingComputer"
@@ -3676,21 +3725,3 @@ items:
     date: 2026-08-12T16:05:12Z
     kind: news
     labels: ["microsoft"]
-  - title: "Lazarus hackers exploited Windows zero-day to target defense firms"
-    url: "https://www.bleepingcomputer.com/news/security/lazarus-hackers-exploited-windows-zero-day-to-target-defense-firms/"
-    source: "BleepingComputer"
-    date: 2026-08-12T15:38:08Z
-    kind: news
-    labels: []
-  - title: "SharePoint Vulnerability Exploited Shortly After PoC Release"
-    url: "https://www.securityweek.com/sharepoint-vulnerability-exploited-shortly-after-poc-release/"
-    source: "SecurityWeek"
-    date: 2026-08-12T14:47:01Z
-    kind: news
-    labels: ["exploited", "poc", "sharepoint", "vulnerabilities"]
-  - title: "FBI: Hackers target online accounts to steal nude photos"
-    url: "https://www.bleepingcomputer.com/news/security/fbi-warns-of-hackers-targeting-online-accounts-to-steal-explicit-photos/"
-    source: "BleepingComputer"
-    date: 2026-08-12T14:15:09Z
-    kind: news
-    labels: []
