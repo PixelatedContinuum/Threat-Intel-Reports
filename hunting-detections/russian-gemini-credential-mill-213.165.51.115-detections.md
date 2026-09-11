@@ -25,7 +25,7 @@ This operator runs a custom Python A2A ("agent-to-agent") C2 stack combined with
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 7 | 1 | T1110.003, T1059.006, T1587, T1078, T1552.001, T1071.001, T1132.001, T1087, T1547.001, T1036 | 0 |
-| Sigma | 4 | 6 | T1555.005, T1005, T1003.001, T1003.002, T1587, T1071.001, T1090.004, T1572, T1036.005, T1547.001, T1059.001, T1110.003 | 3 |
+| Sigma | 4 | 5 | T1555.005, T1005, T1003.001, T1003.002, T1587, T1071.001, T1090.004, T1572, T1036.005, T1547.001, T1059.001, T1110.003 | 3 |
 | Suricata | 1 | 1 | T1071.001, T1132.001, T1041, T1090.004, T1572 | 4 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient — safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting — expect to review the hits.

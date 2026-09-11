@@ -681,7 +681,7 @@ The full detection content (YARA rules, Sigma rules, and Suricata signatures) is
 
 The detection rules are at [`/hunting-detections/evilsoul-engine-stealer-maas-detections/`](/hunting-detections/evilsoul-engine-stealer-maas-detections/)
 
-That file provides 5 YARA rules (targeting the operator-signature packer constant, the built-tier anchors, and the ABE tool pair), 6 Sigma rules (targeting the CDP cookie-theft relaunch, the process-token-impersonation decryptor, the Defender-suppression chain, and the Microsoft-masquerade scheduled task), and 6 Suricata signatures (Socket.IO handshake, relay endpoint, Discord webhook exfiltration). This section explains *what to hunt and why* at the analytical level; the rule syntax lives in the detection file.
+That file provides 5 YARA rules (targeting the operator-signature packer constant, the built-tier anchors, and the ABE tool pair), 6 Sigma rules (targeting the CDP cookie-theft relaunch, the process-token-impersonation decryptor, the Defender-suppression chain, and the Microsoft-masquerade scheduled task), and 1 Suricata signature (Socket.IO handshake, relay endpoint, Discord webhook exfiltration). This section explains *what to hunt and why* at the analytical level; the rule syntax lives in the detection file.
 
 ### 14.1 The infection lifecycle
 
@@ -732,7 +732,7 @@ For teams deciding where to invest first, the report's five highest-value, most-
 4. **Microsoft-masquerade hidden scheduled task**: task authored as `Microsoft Corporation`, hidden, created by a non-system process (Windows EID 4698).
 5. **Operator-signature and relay network anchors**: the packer XOR constant in staged files (YARA); the `198.1.195[.]210:3000/tralalero` relay and `evilsoul[.]cc` Socket.IO handshake (network).
 
-The detection file's 6 Sigma rules and 6 Suricata signatures back these five priorities directly: Sigma covers hunts 2-4 (Defender/AV suppression, the LSASS-impersonation decryptor, and the Microsoft-masquerade scheduled task), and Suricata covers hunt 5's network anchors (the relay endpoint and the Socket.IO handshake).
+The detection file's 6 Sigma rules and 1 Suricata signature back these five priorities directly: Sigma covers hunts 2-4 (Defender/AV suppression, the LSASS-impersonation decryptor, and the Microsoft-masquerade scheduled task), and Suricata covers hunt 5's network anchors (the relay endpoint and the Socket.IO handshake).
 
 ### 14.3 Confidence Summary
 

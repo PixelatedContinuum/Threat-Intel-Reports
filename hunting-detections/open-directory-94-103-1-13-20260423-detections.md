@@ -23,7 +23,7 @@ This campaign delivers Chaos ransomware (TorBrowserTor variant) through a privat
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 6 | 2 | T1027, T1027.011, T1053.005, T1056.001, T1059.001, T1059.003, T1071.001, T1112, T1113, T1134.004, T1140, T1486, T1490, T1491.001, T1547.001, T1548.002, T1573, T1620, T1657 | 0 |
-| Sigma | 3 | 8 | T1027.011, T1036.005, T1053.005, T1071.001, T1078.003, T1090.001, T1112, T1134.004, T1136.001, T1486, T1490, T1497, T1547.001, T1548.002, T1685 | 0 |
+| Sigma | 2 | 8 | T1027.011, T1036.005, T1053.005, T1071.001, T1078.003, T1090.001, T1112, T1134.004, T1136.001, T1486, T1490, T1497, T1547.001, T1548.002, T1685 | 0 |
 | Suricata | 0 | 1 | T1071.001, T1105 | 1 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.

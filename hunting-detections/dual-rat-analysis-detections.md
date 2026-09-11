@@ -23,7 +23,7 @@ This campaign covers two distinct .NET RAT families recovered from the same infr
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 1 | 2 | T1053.005, T1547.001, T1547.009, T1070.004, T1125, T1653, T1102.001 | 0 |
-| Sigma | 6 | 5 | T1053.005, T1055.003, T1070.004, T1071.001, T1573, T1547.001, T1547.009, T1102.001 | 0 |
+| Sigma | 5 | 3 | T1053.005, T1055.003, T1070.004, T1071.001, T1573, T1547.001, T1547.009, T1102.001 | 0 |
 | Suricata | 0 | 2 | T1095, T1573, T1071.001 | 2 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.

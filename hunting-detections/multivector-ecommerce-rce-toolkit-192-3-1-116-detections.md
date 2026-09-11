@@ -23,8 +23,8 @@ hide: true
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 5 | 0 | T1190, T1505.003, T1552.005 | 0 (all atomics already carried in the campaign IOC feed) |
-| Sigma | 5 | 7 | T1190, T1213, T1596.005, T1005, T1552.001, T1110.001, T1078, T1585, T1046 | 0 (all atomics already carried in the campaign IOC feed) |
-| Suricata | 11 | 2 | T1190, T1552.005, T1098.004, T1105, T1606.001, T1596.005, T1110.001 | 0 (all atomics already carried in the campaign IOC feed) |
+| Sigma | 5 | 1 | T1190, T1213, T1596.005, T1005, T1552.001, T1110.001, T1078, T1585, T1046 | 0 (all atomics already carried in the campaign IOC feed) |
+| Suricata | 9 | 2 | T1190, T1552.005, T1098.004, T1105, T1606.001, T1596.005, T1110.001 | 0 (all atomics already carried in the campaign IOC feed) |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting: expect to review the hits. Several Sigma rules below are **base rules that do not alert on their own**; they exist to feed a correlation rule that fires on the sequence or volume of events, and are explicitly labeled Hunting/informational in isolation. The correlation built from them is the alerting-grade Detection rule.
 

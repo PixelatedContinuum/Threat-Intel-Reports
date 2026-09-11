@@ -361,7 +361,7 @@ The threat actor is **UTA-2026-007**, tracked at three confidence levels, with t
 **For technical teams (operational hooks complementing the Key Takeaways above):**
 - Hunt for any `*.job` file creation in `C:\Windows\Tasks\` from non-system-installer parents. The legacy `.job` format is an autorunsc enumeration blind spot and is the campaign's primary persistence mechanism (Section 6.4).
 - Investigate any orphaned `WVault.exe` or `PromoUtil.exe` with `clr.dll!CreateAssemblyNameObject` thread start addresses + outbound TLSv1 traffic on non-standard high ports. This catches the cross-campaign hollow-host TTP cluster (Section 6.3).
-- Detection content (six YARA rules, eight Sigma rules, four Suricata signatures) is published separately at `/hunting-detections/opendirectory-62-60-237-100-20260506-detections/` (raw file: `opendirectory-62-60-237-100-20260506-detections.md`).
+- Detection content (five YARA rules, nine Sigma rules, one Suricata signature) is published separately at `/hunting-detections/opendirectory-62-60-237-100-20260506-detections/` (raw file: `opendirectory-62-60-237-100-20260506-detections.md`).
 
 The remainder of this report walks the kill chain end-to-end (Section 3), documents the static and dynamic technical analysis (Sections 4-6), maps observed behaviors to MITRE ATT&CK (Section 7), summarizes the threat-actor assessment and the UTA-2026-007 designation (Section 11), and closes with the consolidated Detection & Response section (Section 10) and gap-and-assumption catalog (Section 15).
 
@@ -1563,7 +1563,7 @@ The gap itself is a positive finding. The operator's per-host KDF exceeds commod
 ## 10. Detection & Response
 {: .hl-tier-2}
 
-> **Analyst note:** This section consolidates detection coverage and response orientation into a single operational reference. The detection content (six YARA rules, eight Sigma rules, four Suricata signatures) is published as a separate file (link below) so defenders can pull rules into their detection stack without parsing the report. The response orientation block at the end (Section 10.4) is a brief operational reference. It lists detection priorities, persistence targets, and containment categories. This is not a step-by-step incident-response procedure; readers with confirmed compromises should engage their internal IR teams or dedicated playbooks for sequencing and execution.
+> **Analyst note:** This section consolidates detection coverage and response orientation into a single operational reference. The detection content (five YARA rules, nine Sigma rules, one Suricata signature) is published as a separate file (link below) so defenders can pull rules into their detection stack without parsing the report. The response orientation block at the end (Section 10.4) is a brief operational reference. It lists detection priorities, persistence targets, and containment categories. This is not a step-by-step incident-response procedure; readers with confirmed compromises should engage their internal IR teams or dedicated playbooks for sequencing and execution.
 
 The detection content for this campaign is published at:
 
@@ -1573,9 +1573,9 @@ The detection content for this campaign is published at:
 
 | Rule Type | Count | Key MITRE Techniques Covered | False-Positive Risk |
 |---|---|---|---|
-| YARA | 6 | T1027.009, T1027.013, T1204.002, T1574.001, T1055.012, T1055.002, T1620, T1480, T1036.005, T1218.014, T1059.005, T1105 | LOW-MEDIUM |
-| Sigma | 8 | T1204.002, T1036.005, T1055.012, T1055.002, T1574.001, T1053.005, T1059.005, T1112, T1685, T1218.014, T1480 | LOW-MEDIUM |
-| Suricata | 4 | T1071.001, T1573.001, T1571, T1105, T1090.002 | LOW |
+| YARA | 5 | T1027.009, T1027.013, T1204.002, T1574.001, T1055.012, T1055.002, T1620, T1480, T1036.005, T1218.014, T1059.005, T1105 | LOW-MEDIUM |
+| Sigma | 9 | T1204.002, T1036.005, T1055.012, T1055.002, T1574.001, T1053.005, T1059.005, T1112, T1685, T1218.014, T1480 | LOW-MEDIUM |
+| Suricata | 1 | T1071.001, T1573.001, T1571, T1105, T1090.002 | LOW |
 
 ### 10.2 Priority deployment targets
 
@@ -1812,7 +1812,7 @@ Two companion files ship with this report: a machine-readable IOC feed and the d
 - **Detection rules (YARA, Sigma, Suricata):**
   - Deployed URL: `/hunting-detections/opendirectory-62-60-237-100-20260506-detections/`
   - Raw filename: `opendirectory-62-60-237-100-20260506-detections.md`
-  - Contents: 6 YARA rules + 8 Sigma rules + 4 Suricata signatures (18 rules across three detection layers)
+  - Contents: 5 YARA rules + 9 Sigma rules + 1 Suricata signature (15 rules across three detection layers)
   - Use case: deploy YARA in endpoint memory scanners and gateway AV; Sigma in SIEM/EDR via siegma converters; Suricata in network IDS/IPS
 
 Both files are licensed under Creative Commons Attribution 4.0 (CC BY 4.0). The IOC `iocs.json` feed is intended for direct ingestion by SIEM/EDR pipelines without further parsing; the detection `detections.md` file requires platform-specific deployment (siegma converters for Sigma, etc.).

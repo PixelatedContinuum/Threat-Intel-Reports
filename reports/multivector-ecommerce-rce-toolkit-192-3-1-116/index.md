@@ -1078,8 +1078,8 @@ Coverage is behavioural and payload-class based, because there is no malware fam
 | Rule type | Detection tier | Hunting tier | Focus |
 |---|---|---|---|
 | YARA | 5 | 0 | Exploitation payload files recoverable from an upload directory, temp path or incident |
-| Sigma | 5 | 7 | Behaviour visible in web access logs: management-interface abuse, unauthenticated console access, heap-dump retrieval, registration-then-probe, code brute force, scan profile |
-| Suricata | 11 | 2 | Network traffic: JNDI callbacks, gadget chains and SSRF payloads in transit, forged tokens, registry poisoning |
+| Sigma | 5 | 1 | Behaviour visible in web access logs: management-interface abuse, unauthenticated console access, heap-dump retrieval, registration-then-probe, code brute force, scan profile |
+| Suricata | 9 | 2 | Network traffic: JNDI callbacks, gadget chains and SSRF payloads in transit, forged tokens, registry poisoning |
 
 ### 13.1 The highest-value hunting targets
 

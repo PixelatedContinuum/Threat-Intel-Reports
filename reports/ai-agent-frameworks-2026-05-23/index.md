@@ -118,7 +118,7 @@ Cases 7, 8, 10 are **INSUFFICIENT** for attribution at capsule depth. **No Tier-
 
 ### For Technical Teams
 
-The campaign-wide detection content (26 rules: 8 YARA, 12 Sigma, 6 Suricata) is in the linked detection file; per-case rules live in each sub-report's detection deliverable (§10.2).
+The campaign-wide detection content (25 rules: 8 YARA, 12 Sigma, 5 Suricata) is in the linked detection file; per-case rules live in each sub-report's detection deliverable (§10.2).
 
 - **Detect first:** AI Operator Handoff Documents (§4.9.1), LLM-Personalized Credential Mutation prompts (§4.9.2), operator-built unauthenticated Python-stdlib C2 endpoints (§4.9.5).
 - **Hunt first:** `/etc/ld.so.preload` modifications (Case 9), `~/.gemini/` / `~/.rovodev/` / `~/.claude/settings.local.json` artifacts (Cases 1, 3, 4), `tralalarkefe.com` subdomain DNS queries (Case 1).
@@ -144,7 +144,7 @@ The eight operators below weaponize AI-agent CLIs for offense; this investigatio
 This campaign matters to security leadership for three reasons a single-operator view misses:
 
 1. **AI-augmented tradecraft is ecosystem-wide, not single-actor.** Eight independent operators, five AI tools, four motivations (financial cybercrime, state-aligned espionage, DDoS-for-hire, operator productivity): the threat is **diffuse**, so no single vendor block or IOC sweep addresses it.
-2. **Detection coverage has a gap at the operator-side workflow layer.** Public reporting is well-supplied with AI-generated-content signatures (phishing tone, code style) but poorly supplied with operator-side artifacts (handoff documents, weaponized configs, AI permission allowlists). The 26 linked detection rules target that undersupplied layer.
+2. **Detection coverage has a gap at the operator-side workflow layer.** Public reporting is well-supplied with AI-generated-content signatures (phishing tone, code style) but poorly supplied with operator-side artifacts (handoff documents, weaponized configs, AI permission allowlists). The 25 linked detection rules target that undersupplied layer.
 3. **Named-victim impact is concrete.** Two confirmed victims (a US healthcare provider and a state-affiliated Turkish financial-sector organization) plus that organization's regulated-sector partner ecosystem are confirmed compromise outcomes, not hypothetical exposure.
 
 ### Impact Scenarios
@@ -712,7 +712,7 @@ The investigation's attribution findings have two Tier-2 vendor corroborations:
 ## 10. Risk & Detection Posture
 {: .hl-tier-2}
 
-> **Analyst note:** This section describes the campaign-wide risk posture and the detection-engineering posture across the linked detection file (26 rules: 8 YARA, 12 Sigma, 6 Suricata). For per-case operator-specific detection content, see the companion sub-reports' detection deliverables (linked in Section 14.2).
+> **Analyst note:** This section describes the campaign-wide risk posture and the detection-engineering posture across the linked detection file (25 rules: 8 YARA, 12 Sigma, 5 Suricata). For per-case operator-specific detection content, see the companion sub-reports' detection deliverables (linked in Section 14.2).
 
 ### 10.1 Risk Reassessment Triggers
 
@@ -740,8 +740,8 @@ Operator-specific coverage lives in each sub-report's own detection deliverable:
 |---|---|---|---|
 | YARA | 8 rules | T1574.006, T1014, T1564.001, T1587, T1059.006, T1027, T1498 | LOW-MEDIUM |
 | Sigma | 12 rules | T1574.006, T1014, T1059.006, T1583.006, T1102, T1496.001, T1685, T1071.001, T1027 | LOW-HIGH (per rule) |
-| Suricata | 6 rules | T1583.006, T1102, T1496.001, T1071.001, T1573.001, T1090.004 | LOW-MEDIUM |
-| **Total** | **26 rules** | **Across 3 detection layers** | |
+| Suricata | 5 rules | T1583.006, T1102, T1496.001, T1071.001, T1573.001, T1090.004 | LOW-MEDIUM |
+| **Total** | **25 rules** | **Across 3 detection layers** | |
 
 **Priority breakdown:**
 
@@ -855,7 +855,7 @@ The investigation identifies these detection gaps not currently covered by the l
 - **Block C2 infrastructure at perimeter**: apply IOC-based blocks from Section 8; prioritize `tralalarkefe.com` (Case 1), `77.110.96.200`+`77.110.125.145` (Case 9), `87.106.143.220:1337` (Case 3).
 - **Rotate observability platform tokens**: IBM Instana, SolarWinds, Zabbix, VMware Aria; treat as Tier-1 secrets equivalent to cloud IAM credentials.
 - **Rotate LLM API credentials**: Gemini, Claude, OpenAI keys exposed on affected hosts; assume harvested.
-- **Network-wide hunt for lateral movement and persistence indicators**: deploy the linked detection file's 26 rules.
+- **Network-wide hunt for lateral movement and persistence indicators**: deploy the linked detection file's 25 rules.
 
 ---
 
@@ -1007,7 +1007,7 @@ That foundation, Hunt.io MCP metadata plus VirusTotal MCP content plus out-of-ba
 ### 14.1 Linked Project Files
 
 - **IOC Feed (machine-readable JSON):** [`/ioc-feeds/ai-agent-frameworks-2026-05-23-iocs.json`](https://the-hunters-ledger.com/ioc-feeds/ai-agent-frameworks-2026-05-23-iocs.json), Full IOC inventory for SIEM/EDR ingestion. No defanging applied.
-- **Detection Rules (YARA + Sigma + Suricata):** [`/hunting-detections/ai-agent-frameworks-2026-05-23-detections.md`](https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/), 26 rules across 3 detection layers. Author: The Hunters Ledger. License: CC BY 4.0.
+- **Detection Rules (YARA + Sigma + Suricata):** [`/hunting-detections/ai-agent-frameworks-2026-05-23-detections.md`](https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/), 25 rules across 3 detection layers. Author: The Hunters Ledger. License: CC BY 4.0.
 
 ### 14.2 Sub-Reports (Series)
 

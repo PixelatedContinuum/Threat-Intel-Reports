@@ -329,7 +329,7 @@ A dedicated certificate and fingerprint fleet-sweep across three independent int
 ## 9. Detection and Response Guidance
 {: .hl-tier-2}
 
-Full detection content (YARA rules, Sigma rules, and Suricata signatures) is published in a separate file for direct deployment: **[`/hunting-detections/kaido-quasar-rat-detections/`](/hunting-detections/kaido-quasar-rat-detections/)**. That file contains three YARA rules, three Sigma rules, and three Suricata signatures, all derived from the static and dynamic evidence in this report. This section summarizes the detection strategy and its known limits; it does not restate the rules.
+Full detection content (YARA rules, Sigma rules, and Suricata signatures) is published in a separate file for direct deployment: **[`/hunting-detections/kaido-quasar-rat-detections/`](/hunting-detections/kaido-quasar-rat-detections/)**. That file contains three YARA rules, three Sigma rules, and two Suricata signatures, all derived from the static and dynamic evidence in this report. This section summarizes the detection strategy and its known limits; it does not restate the rules.
 
 ### 9.1 Detection strategy — behavior and network over hashes
 
