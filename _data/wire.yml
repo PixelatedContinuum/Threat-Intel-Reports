@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-11T18:01:57Z
+generated_at: 2026-09-11T20:00:12Z
 window_days: 30
 counts:
-  total: 546
+  total: 547
   research: 189
-  news: 357
+  news: 358
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -453,6 +453,12 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
 items:
+  - title: "Florida confirms DMV database breached via stolen police account"
+    url: "https://www.bleepingcomputer.com/news/security/florida-confirms-dmv-database-breached-via-stolen-police-account/"
+    source: "BleepingComputer"
+    date: 2026-09-11T19:00:29Z
+    kind: news
+    labels: []
   - title: "Microsoft sees some new wrinkles in invoice-scam emails"
     url: "https://therecord.media/invoice-scam-emails-new-features-microsoft-researchers"
     source: "Recorded Future"
