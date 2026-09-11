@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-11T12:00:47Z
+generated_at: 2026-09-11T14:00:17Z
 window_days: 30
 counts:
-  total: 545
-  research: 188
-  news: 357
+  total: 541
+  research: 186
+  news: 355
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -19,7 +19,7 @@ topics:
     count: 60
     color: 2
   - label: "government"
-    count: 31
+    count: 30
     color: 3
   - label: "exploited"
     count: 26
@@ -28,7 +28,7 @@ topics:
     count: 26
     color: 5
   - label: "data breaches"
-    count: 23
+    count: 24
     color: 6
   - label: "artificial intelligence"
     count: 21
@@ -36,14 +36,14 @@ topics:
   - label: "credential theft"
     count: 17
     color: 8
-  - label: "ransomware"
+  - label: "phishing"
     count: 16
     color: 9
-  - label: "phishing"
-    count: 15
+  - label: "ransomware"
+    count: 16
     color: 10
   - label: "social engineering"
-    count: 15
+    count: 14
     color: 11
   - label: "healthcare"
     count: 13
@@ -105,7 +105,6 @@ label_colors:
   "android banking trojan": 11
   "android malware": 4
   "android rat": 12
-  "android trojan": 5
   "anthropic": 8
   "anti-analysis": 11
   "antino": 3
@@ -186,6 +185,7 @@ label_colors:
   "botnet takedown": 5
   "brand impersonation": 7
   "breadcrumbs": 10
+  "brevo": 8
   "browser data theft": 1
   "browser extension": 11
   "browser extension campaign": 9
@@ -253,7 +253,6 @@ label_colors:
   "cloudflare tunnels": 6
   "cloudflare workers": 6
   "compile-time execution": 3
-  "contactless payment fraud": 3
   "conti": 1
   "control-flow flattening": 10
   "coolclient": 8
@@ -414,7 +413,7 @@ label_colors:
   "patched": 1
   "patches": 2
   "pdf attachment": 7
-  "phishing": 10
+  "phishing": 9
   "phishing kit": 6
   "plugin": 7
   "poc": 2
@@ -423,13 +422,11 @@ label_colors:
   "privacy": 12
   "proxy abuse": 6
   "qilin": 11
-  "ransomware": 9
+  "ransomware": 10
   "rce": 10
   "rmm abuse": 2
   "ruby on rails": 12
-  "salesforce": 3
   "sap": 8
-  "scam": 10
   "screenconnect": 2
   "securing ai": 4
   "security operations": 4
@@ -451,6 +448,24 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
 items:
+  - title: "Trezor Says 347,000 Users Received Phishing Emails After Brevo Hack"
+    url: "https://www.securityweek.com/trezor-says-347000-users-received-phishing-emails-after-brevo-hack/"
+    source: "SecurityWeek"
+    date: 2026-09-11T12:48:04Z
+    kind: news
+    labels: ["brevo", "cryptocurrency", "data breaches", "email security", "phishing", "trezor"]
+  - title: "Anthropic caught Russia-linked spies using Claude in hacking operations"
+    url: "https://therecord.media/anthropic-russia-hackers-claude"
+    source: "Recorded Future"
+    date: 2026-09-11T12:45:00Z
+    kind: news
+    labels: ["cybercrime"]
+  - title: "Ukrainian hacker gets four years in US prison over Conti ransomware attacks"
+    url: "https://therecord.media/conti-ransomware-ukraine-hacker"
+    source: "Recorded Future"
+    date: 2026-09-11T12:00:00Z
+    kind: news
+    labels: ["cybercrime", "malware"]
   - title: "Ukrainian Conti Ransomware Developer Sentenced to 4 Years in US Prison"
     url: "https://www.securityweek.com/ukrainian-conti-ransomware-developer-sentenced-to-4-years-in-us-prison/"
     source: "SecurityWeek"
@@ -3679,45 +3694,3 @@ items:
     date: 2026-08-12T14:15:09Z
     kind: news
     labels: []
-  - title: "Striking gold: Inside the GoldDigger Android malware"
-    url: "https://www.ibm.com/think/security/golddigger-android-malware-analysis"
-    source: "AlienVault"
-    date: 2026-08-12T13:20:44Z
-    kind: research
-    labels: ["accessibility abuse", "android trojan", "godfather", "golddigger", "mobile banking", "overlay attack", "packer evasion", "south africa", "virtual environment"]
-  - title: "WhatsApp Unveils New Scam Alert Feature"
-    url: "https://www.securityweek.com/whatsapp-unveils-new-scam-alert-feature/"
-    source: "SecurityWeek"
-    date: 2026-08-12T13:00:00Z
-    kind: news
-    labels: ["fraud & identity theft", "scam", "scam alert", "whatsapp"]
-  - title: "Stealthy ‘City-Forum’ Attacks Target Salesforce and ServiceNow With Custom Toolset"
-    url: "https://www.securityweek.com/stealthy-city-forum-attacks-target-salesforce-and-servicenow-with-custom-toolset/"
-    source: "SecurityWeek"
-    date: 2026-08-12T13:00:00Z
-    kind: news
-    labels: ["malware", "salesforce", "servicenow"]
-  - title: "Microsoft’s massive Patch Tuesday releases continue as AI reshapes bug discovery"
-    url: "https://therecord.media/microsoft-massive-patch-tuesday-releases-continue-ai"
-    source: "Recorded Future"
-    date: 2026-08-12T12:38:00Z
-    kind: news
-    labels: ["cybercrime"]
-  - title: "Hackers leverage new Microsoft SharePoint exploit in attacks"
-    url: "https://www.bleepingcomputer.com/news/microsoft/hackers-leverage-new-microsoft-sharepoint-exploit-in-attacks/"
-    source: "BleepingComputer"
-    date: 2026-08-12T12:25:37Z
-    kind: news
-    labels: ["microsoft"]
-  - title: "Gone with the WindRelay: A New Malware Combo Behind a Growing Fraud Scheme"
-    url: "https://www.group-ib.com/blog/windrelay-nfc-spynote-rat-combo-fraud/"
-    source: "AlienVault"
-    date: 2026-08-12T12:12:48Z
-    kind: research
-    labels: ["android banking trojan", "contactless payment fraud", "ghost tapping", "live-call fraud", "nfc relay", "nfcgate", "social engineering", "spynote", "windrelay"]
-  - title: "CISA gives federal agencies two weeks to patch Microsoft bug exploited in DPRK campaign"
-    url: "https://therecord.media/cisa-gives-federal-agencies-two-weeks-to-patch-dprk-microsoft-bug"
-    source: "Recorded Future"
-    date: 2026-08-12T12:06:00Z
-    kind: news
-    labels: ["cybercrime", "government"]
