@@ -3,29 +3,29 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-11T16:01:32Z
+generated_at: 2026-09-11T18:01:57Z
 window_days: 30
 counts:
-  total: 545
-  research: 191
-  news: 354
+  total: 546
+  research: 189
+  news: 357
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 73
+    count: 74
     color: 1
   - label: "cybercrime"
     count: 61
     color: 2
   - label: "government"
-    count: 30
+    count: 29
     color: 3
-  - label: "malware"
+  - label: "exploited"
     count: 26
     color: 4
-  - label: "exploited"
-    count: 25
+  - label: "malware"
+    count: 26
     color: 5
   - label: "data breaches"
     count: 24
@@ -37,13 +37,13 @@ topics:
     count: 17
     color: 8
   - label: "phishing"
-    count: 16
+    count: 17
     color: 9
-  - label: "ransomware"
-    count: 16
-    color: 10
   - label: "social engineering"
     count: 15
+    color: 10
+  - label: "ransomware"
+    count: 14
     color: 11
   - label: "clickfix"
     count: 13
@@ -93,7 +93,6 @@ label_colors:
   "aikido security": 1
   "airport": 9
   "aitm": 5
-  "akira": 2
   "alphaagent": 1
   "amatera stealer": 1
   "amd": 6
@@ -123,7 +122,6 @@ label_colors:
   "apt": 5
   "apt28": 3
   "aquilarat": 10
-  "architectural vulnerability": 5
   "arktunnel": 6
   "arm": 10
   "armenia": 5
@@ -151,6 +149,7 @@ label_colors:
   "automated-exploitation": 9
   "aveva": 1
   "aviation sector": 9
+  "awareness training": 1
   "azure": 1
   "azure infrastructure": 4
   "azure table storage": 2
@@ -284,7 +283,6 @@ label_colors:
   "cve-2017-7921": 7
   "cve-2021-27101": 2
   "cve-2021-38003": 1
-  "cve-2023-34362": 11
   "cve-2023-49105": 4
   "cve-2025-49113": 3
   "cve-2026-19949": 8
@@ -331,7 +329,7 @@ label_colors:
   "endpoint security & xdr": 11
   "entra id": 5
   "exploit": 9
-  "exploited": 5
+  "exploited": 4
   "exposure management": 4
   "extortion": 12
   "extortionware": 11
@@ -393,7 +391,7 @@ label_colors:
   "litellm": 9
   "living-off-the-land": 1
   "macos": 11
-  "malware": 4
+  "malware": 5
   "mathspace": 4
   "metabase": 6
   "microsoft": 4
@@ -428,7 +426,7 @@ label_colors:
   "privacy": 12
   "proxy abuse": 6
   "qilin": 11
-  "ransomware": 10
+  "ransomware": 11
   "rce": 10
   "rmm abuse": 2
   "ruby on rails": 12
@@ -441,7 +439,7 @@ label_colors:
   "servicenow": 1
   "sma1000": 2
   "soc": 9
-  "social engineering": 11
+  "social engineering": 10
   "software": 5
   "spring": 5
   "supply chain": 8
@@ -455,6 +453,36 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
 items:
+  - title: "Microsoft sees some new wrinkles in invoice-scam emails"
+    url: "https://therecord.media/invoice-scam-emails-new-features-microsoft-researchers"
+    source: "Recorded Future"
+    date: 2026-09-11T18:40:00Z
+    kind: news
+    labels: ["cybercrime", "industry"]
+  - title: "Passkey-themed phishing attacks lead to Microsoft 365 data theft"
+    url: "https://www.bleepingcomputer.com/news/security/passkey-themed-phishing-attacks-lead-to-microsoft-365-data-theft/"
+    source: "BleepingComputer"
+    date: 2026-09-11T17:26:50Z
+    kind: news
+    labels: []
+  - title: "Phishing Research Challenges Conventional Security Awareness Testing"
+    url: "https://www.securityweek.com/phishing-research-challenges-conventional-security-awareness-testing/"
+    source: "SecurityWeek"
+    date: 2026-09-11T17:23:36Z
+    kind: news
+    labels: ["awareness training", "phishing"]
+  - title: "Artifactory flaws chained in attacks deploying backdoor malware"
+    url: "https://www.bleepingcomputer.com/news/security/artifactory-flaws-chained-in-attacks-deploying-backdoor-malware/"
+    source: "BleepingComputer"
+    date: 2026-09-11T16:29:44Z
+    kind: news
+    labels: []
+  - title: "GitLab Vulnerability Exploited One Day After Disclosure"
+    url: "https://www.securityweek.com/gitlab-vulnerability-exploited-one-day-after-disclosure/"
+    source: "SecurityWeek"
+    date: 2026-09-11T16:11:08Z
+    kind: news
+    labels: ["exploited", "gitlab", "vulnerabilities"]
   - title: "In Other News: InjectEave Attack, SIM Swapper Sentenced, Glasswing Findings Review"
     url: "https://www.securityweek.com/in-other-news-injecteave-attack-sim-swapper-sentenced-glasswing-findings-review/"
     source: "SecurityWeek"
@@ -3701,27 +3729,3 @@ items:
     date: 2026-08-12T20:54:59Z
     kind: news
     labels: []
-  - title: "FBI: Hackers using social engineering to breach accounts and steal explicit content"
-    url: "https://therecord.media/social-engineering-hackers-explicit-photos-fbi-alert"
-    source: "Recorded Future"
-    date: 2026-08-12T17:28:00Z
-    kind: news
-    labels: ["cybercrime", "government"]
-  - title: "Cl0p Ransomware: Attack Pattern in Threat Intelligence"
-    url: "https://otx.alienvault.com/pulse/6a7ca263ee7777102409724c"
-    source: "AlienVault"
-    date: 2026-08-12T16:42:11Z
-    kind: research
-    labels: ["architectural vulnerability", "cve-2023-34362", "infrastructure diversification", "lemurloot", "managed file transfer", "mft targeting", "q4 seasonal pattern", "ransomware", "reconnaissance", "zero-day exploitation"]
-  - title: "Hits Safe Mode: Ransomware Rebooting Around EDR"
-    url: "https://www.huntress.com/blog/akira-hits-safe-mode-ransomware-rebooting-around-edr"
-    source: "AlienVault"
-    date: 2026-08-12T16:42:10Z
-    kind: research
-    labels: ["akira", "anydesk", "credential spraying", "double extortion", "edr evasion", "ransomware", "safe mode", "sonicwall vpn"]
-  - title: "Plug and Pwn attack uses fake USB devices for Windows SYSTEM access"
-    url: "https://www.bleepingcomputer.com/news/security/plug-and-pwn-attack-uses-fake-usb-devices-for-windows-system-access/"
-    source: "BleepingComputer"
-    date: 2026-08-12T16:05:12Z
-    kind: news
-    labels: ["microsoft"]
