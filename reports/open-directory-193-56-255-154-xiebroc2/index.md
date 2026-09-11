@@ -1154,8 +1154,8 @@ Complete detection rules are available in the dedicated detection file:
 
 Detection coverage includes:
 - **4 YARA rules:** XiebroC2 v3.1 static detection (AES key, typo strings, RunPE error strings); Covenant GruntStager static detection; PowerShell fileless loader detection
-- **5 Sigma rules:** ETW AssemblyLoad in non-.NET processes; process hollowing API sequence; CreateRemoteThread injection sequence; Covenant HTTP POST pattern; PowerShell Base64+Deflate pattern
-- **3 Suricata rules:** XiebroC2 TCP C2 traffic; Covenant HTTP POST pattern; HTTP on port 443 (cleartext anomaly)
+- **4 Sigma rules:** ETW AssemblyLoad in non-.NET processes; process hollowing API sequence; CreateRemoteThread injection sequence; Covenant HTTP POST pattern; PowerShell Base64+Deflate pattern
+- **2 Suricata rules:** XiebroC2 TCP C2 traffic; Covenant HTTP POST pattern; HTTP on port 443 (cleartext anomaly)
 
 MITRE ATT&CK techniques covered: T1055.012, T1055, T1620, T1059.001, T1059.003, T1071.001, T1573.001, T1036, T1106, T1140, T1027, T1571, T1070.004
 
