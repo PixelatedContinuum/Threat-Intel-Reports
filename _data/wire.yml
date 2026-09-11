@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-11T02:02:37Z
+generated_at: 2026-09-11T04:01:17Z
 window_days: 30
 counts:
-  total: 547
-  research: 189
+  total: 545
+  research: 187
   news: 358
 unclassified_sources:
   - "The DFIR Report"
@@ -122,7 +122,6 @@ label_colors:
   "application security": 6
   "apt": 5
   "apt28": 3
-  "apt29": 2
   "aquilarat": 10
   "architectural vulnerability": 5
   "arktunnel": 6
@@ -205,7 +204,6 @@ label_colors:
   "camera": 3
   "camview": 6
   "canada revenue agency": 3
-  "captive portal compromise": 6
   "card-skimming": 8
   "carecloud": 10
   "cav3rn": 7
@@ -323,7 +321,6 @@ label_colors:
   "endpoint security": 11
   "endpoint security & xdr": 11
   "entra id": 5
-  "ethereum c2": 6
   "exploit": 9
   "exploited": 4
   "exposure management": 4
@@ -3723,15 +3720,3 @@ items:
     date: 2026-08-12T05:10:47Z
     kind: news
     labels: ["cisco", "exploited", "firewall", "vulnerabilities", "zero-day"]
-  - title: "Tracking Shai-Hulud: Inside the ChainDrop NPM Worm"
-    url: "https://www.zscaler.com/blogs/security-research/tracking-shai-hulud-inside-chaindrop-npm-worm"
-    source: "AlienVault"
-    date: 2026-08-12T02:32:33Z
-    kind: research
-    labels: ["chaindrop", "ethereum c2", "etherhiding", "miasma", "self-propagating worm", "shai-hulud", "slsa provenance", "supply chain attack"]
-  - title: "CaptiveCrunch: Midnight Blizzard Weaponizes Hotel Wi-Fi Captive Portals to Steal Microsoft 365 Credentials"
-    url: "https://otx.alienvault.com/pulse/6a7bdb051d6a41c7ea440061"
-    source: "AlienVault"
-    date: 2026-08-12T02:31:33Z
-    kind: research
-    labels: ["apt29", "captive portal compromise", "chocoshell", "cornflake", "cozy bear", "device code phishing", "hotel wi-fi", "microsoft 365", "storm-2945"]
