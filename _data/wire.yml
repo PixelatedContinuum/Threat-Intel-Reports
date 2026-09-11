@@ -3,17 +3,17 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-11T08:02:37Z
+generated_at: 2026-09-11T10:02:46Z
 window_days: 30
 counts:
-  total: 541
-  research: 185
-  news: 356
+  total: 545
+  research: 188
+  news: 357
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 75
+    count: 74
     color: 1
   - label: "cybercrime"
     count: 59
@@ -28,24 +28,24 @@ topics:
     count: 26
     color: 5
   - label: "data breaches"
-    count: 22
+    count: 23
     color: 6
   - label: "artificial intelligence"
-    count: 20
+    count: 21
     color: 7
   - label: "credential theft"
-    count: 16
+    count: 17
     color: 8
-  - label: "social engineering"
+  - label: "phishing"
     count: 15
     color: 9
-  - label: "microsoft"
-    count: 14
-    color: 10
-  - label: "phishing"
-    count: 14
-    color: 11
   - label: "ransomware"
+    count: 15
+    color: 10
+  - label: "social engineering"
+    count: 15
+    color: 11
+  - label: "microsoft"
     count: 14
     color: 12
 label_colors:
@@ -64,6 +64,7 @@ label_colors:
   "adb propagation": 1
   "adblocker": 3
   "adcs exploitation": 11
+  "administrative compromise": 8
   "adobe": 1
   "adobe commerce": 12
   "adversary-in-the-middle": 9
@@ -145,7 +146,9 @@ label_colors:
   "audio surveillance": 7
   "australia": 10
   "authentication": 6
+  "authentication bypass": 4
   "autoit": 8
+  "autoit loader": 11
   "automated-exploitation": 9
   "aveva": 1
   "aviation sector": 9
@@ -205,6 +208,8 @@ label_colors:
   "canada revenue agency": 3
   "card-skimming": 8
   "carecloud": 10
+  "castleloader": 11
+  "castlerat": 9
   "cav3rn": 7
   "central asia": 5
   "chacha20 encryption": 1
@@ -384,7 +389,7 @@ label_colors:
   "malware": 5
   "mathspace": 4
   "metabase": 6
-  "microsoft": 10
+  "microsoft": 12
   "microsoft teams": 10
   "mikrotik": 2
   "miniorange": 5
@@ -408,7 +413,7 @@ label_colors:
   "patched": 1
   "patches": 2
   "pdf attachment": 7
-  "phishing": 11
+  "phishing": 9
   "phishing kit": 6
   "plugin": 7
   "poc": 2
@@ -417,7 +422,7 @@ label_colors:
   "privacy": 12
   "proxy abuse": 6
   "qilin": 11
-  "ransomware": 12
+  "ransomware": 10
   "rce": 10
   "rmm abuse": 2
   "ruby on rails": 12
@@ -431,11 +436,11 @@ label_colors:
   "servicenow": 1
   "sma1000": 2
   "soc": 9
-  "social engineering": 9
+  "social engineering": 11
   "software": 5
   "spring": 5
   "supply chain": 8
-  "supply chain attack": 6
+  "surfshark": 11
   "threat intelligence": 9
   "threat source newsletter": 6
   "threat spotlight": 2
@@ -444,6 +449,36 @@ label_colors:
   "vmware": 2
   "vulnerabilities": 1
 items:
+  - title: "Surfshark Systems Targeted by Hackers"
+    url: "https://www.securityweek.com/surfshark-systems-targeted-by-hackers/"
+    source: "SecurityWeek"
+    date: 2026-09-11T09:41:03Z
+    kind: news
+    labels: ["data breaches", "surfshark", "vpn"]
+  - title: "Anthropic Says Russian Hackers Used Claude AI to Automate Malware Evasion"
+    url: "https://www.securityweek.com/anthropic-says-russian-hackers-used-claude-ai-to-automate-malware-evasion/"
+    source: "SecurityWeek"
+    date: 2026-09-11T08:47:07Z
+    kind: news
+    labels: ["artificial intelligence", "anthropic", "claude", "cyberespionage", "espionage", "midnight blizzard", "nation-state", "russia"]
+  - title: "PaperCut Flaws Exploited in AI-Powered Attacks"
+    url: "https://www.securityweek.com/papercut-flaws-exploited-in-ai-powered-attacks/"
+    source: "SecurityWeek"
+    date: 2026-09-11T08:18:23Z
+    kind: news
+    labels: ["exploited", "papercut", "vulnerabilities"]
+  - title: "Trezor: 347,000 users targeted in phishing attacks after Brevo breach"
+    url: "https://www.bleepingcomputer.com/news/security/trezor-347-000-users-targeted-in-phishing-attacks-after-brevo-breach/"
+    source: "BleepingComputer"
+    date: 2026-09-11T07:55:15Z
+    kind: news
+    labels: []
+  - title: "Artifactory Under Attack: In-the-Wild Exploitation of CVE-2026-42016, CVE-2026-42018 & CVE-2026-82329"
+    url: "https://www.wiz.io/blog/artifactory-under-attack-in-the-wild-exploitation-of-cve-2026-42016-cve-2026-4201"
+    source: "AlienVault"
+    date: 2026-09-11T07:05:53Z
+    kind: research
+    labels: ["administrative compromise", "authentication bypass", "cve-2026-42016", "cve-2026-42018", "cve-2026-82329", "groovy plugin", "in-the-wild exploitation", "jfrog artifactory", "privilege escalation", "rust backdoor", "vulnerability chaining"]
   - title: "Conti ransomware gang member sentenced to 4 years in prison"
     url: "https://www.bleepingcomputer.com/news/security/conti-ransomware-gang-member-sentenced-to-four-years-in-prison/"
     source: "BleepingComputer"
@@ -480,6 +515,18 @@ items:
     date: 2026-09-10T18:00:15Z
     kind: research
     labels: ["threat source newsletter"]
+  - title: "SloppyRAT: A New Tool For Ransomware Attacks"
+    url: "https://www.zscaler.com/blogs/security-research/sloppyrat-new-tool-ransomware-attacks"
+    source: "AlienVault"
+    date: 2026-09-10T17:35:27Z
+    kind: research
+    labels: ["castleloader", "castlerat", "certificate pinning", "clickfix", "etherhiding", "indirect syscalls", "polygon", "powershell", "ransomware", "sloppyrat"]
+  - title: "Casbaneiro: A Banking Trojan with Distributed Data-Receiving Servers"
+    url: "https://www.fortinet.com/blog/threat-research/casbaneiro-a-banking-trojan-with-distributed-data-receiving-servers"
+    source: "AlienVault"
+    date: 2026-09-10T17:27:46Z
+    kind: research
+    labels: ["autoit loader", "banking trojan", "casbaneiro", "credential theft", "distributed servers", "geofencing", "latin america", "ousaban", "phishing"]
   - title: "Protecting organizations from AI-assisted executive impersonation and invoice fraud"
     url: "https://www.microsoft.com/en-us/security/blog/2026/09/10/protecting-organizations-ai-assisted-executive-impersonation-invoice-fraud/"
     source: "Microsoft"
@@ -3672,21 +3719,3 @@ items:
     date: 2026-08-12T10:15:22Z
     kind: news
     labels: ["microsoft"]
-  - title: "Over 2,500 Organizations Impacted by LiteLLM Supply Chain Attack"
-    url: "https://www.securityweek.com/over-2500-organizations-impacted-by-litellm-supply-chain-attack/"
-    source: "SecurityWeek"
-    date: 2026-08-12T09:55:45Z
-    kind: news
-    labels: ["litellm", "supply chain attack", "supply chain security"]
-  - title: "Fresh Windows Zero-Day Exploited in North Korean Cyberattacks"
-    url: "https://www.securityweek.com/fresh-windows-zero-day-exploited-in-north-korean-cyberattacks/"
-    source: "SecurityWeek"
-    date: 2026-08-12T08:45:53Z
-    kind: news
-    labels: ["apt", "exploited", "lazarus", "north korea", "vulnerabilities", "windows", "zero-day"]
-  - title: "Ivanti EPM Update Patches Remotely Exploitable Flaws"
-    url: "https://www.securityweek.com/ivanti-epm-update-patches-remotely-exploitable-flaws/"
-    source: "SecurityWeek"
-    date: 2026-08-12T08:14:46Z
-    kind: news
-    labels: ["ivanti", "patch", "vulnerabilities"]
