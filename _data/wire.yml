@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-11T22:01:27Z
+generated_at: 2026-09-12T00:02:57Z
 window_days: 30
 counts:
-  total: 547
+  total: 545
   research: 188
-  news: 359
+  news: 357
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -3722,15 +3722,3 @@ items:
     date: 2026-08-13T08:38:03Z
     kind: news
     labels: ["chaotic eclipse", "exploit", "microsoft defender", "shieldbreak", "vulnerabilities", "windows", "zero-day"]
-  - title: "\"City-Forum\" data-theft attacks target Salesforce, ServiceNow portals"
-    url: "https://www.bleepingcomputer.com/news/security/city-forum-data-theft-attacks-target-salesforce-servicenow-portals/"
-    source: "BleepingComputer"
-    date: 2026-08-12T23:07:23Z
-    kind: news
-    labels: []
-  - title: "Android malware combo takes out loans and relays victims' credit cards"
-    url: "https://www.bleepingcomputer.com/news/security/android-malware-combo-takes-out-loans-and-relays-victims-credit-cards/"
-    source: "BleepingComputer"
-    date: 2026-08-12T22:22:57Z
-    kind: news
-    labels: ["mobile"]
