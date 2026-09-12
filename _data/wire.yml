@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-12T20:02:54Z
+generated_at: 2026-09-12T22:00:37Z
 window_days: 30
 counts:
-  total: 525
-  research: 177
-  news: 348
+  total: 522
+  research: 176
+  news: 346
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -293,7 +293,6 @@ label_colors:
   "data exfiltration": 9
   "data leak": 9
   "data-exfiltration": 12
-  "ddos engine": 12
   "dead drop resolver": 7
   "defender exclusions": 12
   "defense sector": 12
@@ -308,7 +307,6 @@ label_colors:
   "domain controller": 4
   "dprk apt": 2
   "dropcatch": 4
-  "edge device exploitation": 7
   "education": 10
   "electron framework": 12
   "encrypted payload": 10
@@ -3570,21 +3568,3 @@ items:
     date: 2026-08-14T01:19:12Z
     kind: news
     labels: ["apple"]
-  - title: "Ukraine shuts down 94 fraudulent call centers, seize millions in cash"
-    url: "https://www.bleepingcomputer.com/news/security/ukraine-shuts-down-94-fraudulent-call-centers-seize-millions-in-cash/"
-    source: "BleepingComputer"
-    date: 2026-08-13T21:12:47Z
-    kind: news
-    labels: []
-  - title: "Akira hackers disable EDR with Safe Mode, steal data but fail to encrypt"
-    url: "https://www.bleepingcomputer.com/news/security/akira-hackers-disable-edr-with-safe-mode-steal-data-but-fail-to-encrypt/"
-    source: "BleepingComputer"
-    date: 2026-08-13T20:47:02Z
-    kind: news
-    labels: []
-  - title: "Multi-Functional Linux Botnet \"Evooo1Bot\""
-    url: "https://otx.alienvault.com/pulse/6a7e2be6ba37cc87ae552659"
-    source: "AlienVault"
-    date: 2026-08-13T20:41:10Z
-    kind: research
-    labels: ["ddos engine", "edge device exploitation", "evooo1bot", "iot targeting", "linux botnet", "mirai variant", "socks proxy"]
