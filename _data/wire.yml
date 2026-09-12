@@ -3,17 +3,17 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-12T08:01:38Z
+generated_at: 2026-09-12T10:01:16Z
 window_days: 30
 counts:
-  total: 545
-  research: 188
-  news: 357
+  total: 539
+  research: 184
+  news: 355
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 74
+    count: 72
     color: 1
   - label: "cybercrime"
     count: 62
@@ -21,11 +21,11 @@ topics:
   - label: "government"
     count: 29
     color: 3
-  - label: "exploited"
-    count: 26
-    color: 4
   - label: "malware"
     count: 26
+    color: 4
+  - label: "exploited"
+    count: 25
     color: 5
   - label: "data breaches"
     count: 24
@@ -37,7 +37,7 @@ topics:
     count: 17
     color: 8
   - label: "phishing"
-    count: 16
+    count: 15
     color: 9
   - label: "social engineering"
     count: 15
@@ -69,7 +69,6 @@ label_colors:
   "adobe commerce": 12
   "adversary-in-the-middle": 9
   "adware disguise": 5
-  "aerospace targeting": 10
   "aesto health": 6
   "affiliate fraud": 7
   "agentev2": 6
@@ -198,17 +197,14 @@ label_colors:
   "build-time execution": 10
   "byovd": 12
   "c2": 9
-  "c2 channel": 12
   "c2 infrastructure": 12
   "c2looper": 2
   "camera": 3
-  "camview": 6
   "canada revenue agency": 3
   "card-skimming": 8
   "carecloud": 10
   "castleloader": 11
   "castlerat": 9
-  "cav3rn": 7
   "central asia": 5
   "chacha20 encryption": 1
   "chaindrop": 8
@@ -234,7 +230,6 @@ label_colors:
   "cisa kev": 12
   "cisco": 9
   "cisco talos antivirus": 7
-  "cisco talos dns security": 7
   "cisco talos malware protection": 8
   "cisco talos web filtering": 12
   "citrix": 11
@@ -279,11 +274,9 @@ label_colors:
   "curlrat": 3
   "cve-2007-3010": 7
   "cve-2016-6277": 9
-  "cve-2017-7921": 7
   "cve-2021-27101": 2
   "cve-2021-38003": 1
   "cve-2023-49105": 4
-  "cve-2025-49113": 3
   "cve-2026-19949": 8
   "cve-2026-20354": 12
   "cve-2026-44756": 12
@@ -328,7 +321,7 @@ label_colors:
   "endpoint security & xdr": 11
   "entra id": 5
   "exploit": 9
-  "exploited": 4
+  "exploited": 5
   "exposure management": 4
   "extortion": 12
   "extortionware": 11
@@ -390,7 +383,7 @@ label_colors:
   "litellm": 9
   "living-off-the-land": 1
   "macos": 11
-  "malware": 5
+  "malware": 4
   "mathspace": 4
   "metabase": 6
   "microsoft": 4
@@ -3686,39 +3679,3 @@ items:
     date: 2026-08-13T10:40:57Z
     kind: news
     labels: ["fortinet", "patches", "vulnerabilities"]
-  - title: "Dissecting the JWR phishing framework"
-    url: "https://blog.talosintelligence.com/dissecting-the-jwr-phishing-framework/"
-    source: "Cisco Talos"
-    date: 2026-08-13T10:00:35Z
-    kind: research
-    labels: ["cisco talos antivirus", "cisco talos dns security", "cisco talos email filtering", "cisco talos malware protection", "cisco talos network intrusion prevention", "phishing", "threat spotlight"]
-  - title: "Inside a Ukrainian IP Camera Toolkit"
-    url: "https://otx.alienvault.com/pulse/6a7d8d2b3a8a65f2b1dc0cda"
-    source: "AlienVault"
-    date: 2026-08-13T09:23:55Z
-    kind: research
-    labels: ["camview", "cve-2017-7921", "cve-2020-25078", "cve-2020-25169", "cve-2021-33044", "cve-2021-33045", "cve-2021-36260", "cve-2024-53375", "cve-2024-57049", "dahua", "edge device exploitation", "government targeting", "hikvision", "ingram scanner", "ip cameras", "proxy infrastructure", "russian operator", "ukrainian targeting"]
-  - title: "Project CAV3RN uses Google Apps Script for stealthy C2 in Israel"
-    url: "https://securelist.com/project-cav3rn-continues/120991/"
-    source: "AlienVault"
-    date: 2026-08-13T09:22:10Z
-    kind: research
-    labels: ["c2 channel", "cav3rn", "communicationuxtheme.dll", "dns tunneling", "dynamic relay", "espionage framework", "google apps script", "googleservice.dll", "israel targeting", "modular architecture", "net.dll", "rnp.dll", "texture.dll"]
-  - title: "State Sponsored Hackers Use Fake Job Offers to Deliver New Zero Day Exploit"
-    url: "https://blog.checkpoint.com/research/state-sponsored-hackers-use-fake-job-offers-to-deliver-new-zero-day-exploit/"
-    source: "AlienVault"
-    date: 2026-08-13T09:16:05Z
-    kind: research
-    labels: ["aerospace targeting", "cve-2025-49113", "cve-2025-60719", "cve-2026-68820", "defense sector", "foresttiger", "mistpen", "north korea", "operation dream job", "privilege escalation", "relayshell", "securitypdf", "trojanized pdf", "troy", "troy backdoor", "zero-day"]
-  - title: "Critical VMware vCenter Vulnerability in Attackers’ Crosshairs"
-    url: "https://www.securityweek.com/critical-vmware-vcenter-vulnerability-in-attackers-crosshairs/"
-    source: "SecurityWeek"
-    date: 2026-08-13T09:06:40Z
-    kind: news
-    labels: ["exploited", "vmware", "vulnerabilities"]
-  - title: "Nightmare Eclipse Drops Windows Zero-Day Exploit ‘ShieldBreak’"
-    url: "https://www.securityweek.com/nightmare-eclipse-drops-windows-zero-day-exploit-shieldbreak/"
-    source: "SecurityWeek"
-    date: 2026-08-13T08:38:03Z
-    kind: news
-    labels: ["chaotic eclipse", "exploit", "microsoft defender", "shieldbreak", "vulnerabilities", "windows", "zero-day"]
