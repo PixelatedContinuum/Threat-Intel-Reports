@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-12T16:01:27Z
+generated_at: 2026-09-12T18:00:32Z
 window_days: 30
 counts:
-  total: 531
-  research: 180
-  news: 351
+  total: 526
+  research: 177
+  news: 349
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -293,7 +293,6 @@ label_colors:
   "data exfiltration": 9
   "data leak": 9
   "data-exfiltration": 12
-  "dcrat": 12
   "ddos engine": 12
   "dead drop resolver": 7
   "defender exclusions": 12
@@ -335,7 +334,6 @@ label_colors:
   "frontier ai": 3
   "gaming": 5
   "garage2global": 10
-  "gatesentinel": 7
   "gentlemen": 1
   "geoserver": 2
   "gigabud": 9
@@ -345,7 +343,6 @@ label_colors:
   "google": 7
   "google cloud": 8
   "google infrastructure abuse": 8
-  "google sheets c2": 12
   "government": 3
   "gta6": 6
   "hacker": 8
@@ -3597,33 +3594,3 @@ items:
     date: 2026-08-13T18:15:19Z
     kind: news
     labels: []
-  - title: "Curiouser and Curiouser"
-    url: "https://blog.talosintelligence.com/curiouser-and-curiouser/"
-    source: "Cisco Talos"
-    date: 2026-08-13T18:00:18Z
-    kind: research
-    labels: ["threat source newsletter"]
-  - title: "Microsoft patches LegacyHive Windows zero-day vulnerability"
-    url: "https://www.bleepingcomputer.com/news/microsoft/microsoft-patches-legacyhive-windows-zero-day-vulnerability/"
-    source: "BleepingComputer"
-    date: 2026-08-13T17:46:20Z
-    kind: news
-    labels: ["microsoft"]
-  - title: "Critical VMware vCenter RCE flaw exploited for reverse SSH access"
-    url: "https://www.bleepingcomputer.com/news/security/critical-vmware-vcenter-rce-flaw-exploited-for-reverse-ssh-access/"
-    source: "BleepingComputer"
-    date: 2026-08-13T16:40:23Z
-    kind: news
-    labels: []
-  - title: "PATCHCORD: New malware cluster targets Afghan telecom and South Asian critical infrastructure"
-    url: "https://otx.alienvault.com/pulse/6a7deb5e9423f6d0a5c5166d"
-    source: "AlienVault"
-    date: 2026-08-13T16:05:50Z
-    kind: research
-    labels: ["gatesentinel", "google sheets c2", "hackerai", "patchcord", "sheetcord", "sheetcreep", "supershell", "valleyrat"]
-  - title: "Illegal Streaming Fronts a $7M Dropcatch Domain Operation"
-    url: "https://www.infoblox.com/blog/threat-intelligence/7-million-in-expired-domains-fuel-a-streaming-empire-with-a-malware-secret/"
-    source: "AlienVault"
-    date: 2026-08-13T16:05:49Z
-    kind: research
-    labels: ["asyncrat", "dcrat", "dropcatch", "illegal-streaming", "nanocore", "njrat", "quasar rat", "remcos", "sports-piracy"]
