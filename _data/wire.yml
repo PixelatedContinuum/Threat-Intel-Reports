@@ -3,23 +3,23 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-12T12:00:36Z
+generated_at: 2026-09-12T14:02:10Z
 window_days: 30
 counts:
-  total: 536
-  research: 181
-  news: 355
+  total: 532
+  research: 180
+  news: 352
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 72
+    count: 71
     color: 1
   - label: "cybercrime"
-    count: 62
+    count: 61
     color: 2
   - label: "government"
-    count: 29
+    count: 28
     color: 3
   - label: "exploited"
     count: 26
@@ -204,7 +204,6 @@ label_colors:
   "castleloader": 11
   "castlerat": 9
   "central asia": 5
-  "chacha20 encryption": 1
   "chaindrop": 8
   "chaotic eclipse": 12
   "charged": 4
@@ -289,7 +288,6 @@ label_colors:
   "cybercrime": 2
   "cyberwarfare": 9
   "dahua": 9
-  "darkhotel": 10
   "darklantern": 4
   "data breaches": 6
   "data exfiltration": 9
@@ -3635,27 +3633,3 @@ items:
     date: 2026-08-13T15:13:19Z
     kind: news
     labels: []
-  - title: "White House taps security firms for offensive hack-back operations"
-    url: "https://www.bleepingcomputer.com/news/security/white-house-taps-security-firms-for-offensive-hack-back-operations/"
-    source: "BleepingComputer"
-    date: 2026-08-13T13:30:53Z
-    kind: news
-    labels: []
-  - title: "Recent Attack Activity Analysis Using North Korea-Related Lures"
-    url: "https://otx.alienvault.com/pulse/6a7dc1fd395815126acd4647"
-    source: "AlienVault"
-    date: 2026-08-13T13:09:17Z
-    kind: research
-    labels: ["chacha20 encryption", "darkhotel", "msi installer", "north korea lure", "phishing campaign", "powershell attack", "scheduled tasks", "shellcode deployment"]
-  - title: "WordPress 7.0.4 Patches Remote Code Execution Vulnerability"
-    url: "https://www.securityweek.com/wordpress-7-0-4-patches-remote-code-execution-vulnerability/"
-    source: "SecurityWeek"
-    date: 2026-08-13T12:53:56Z
-    kind: news
-    labels: ["rce", "vulnerabilities", "wordpress"]
-  - title: "Germany moves to give spy agencies hacking and sabotage powers"
-    url: "https://therecord.media/germany-spy-agency-powers"
-    source: "Recorded Future"
-    date: 2026-08-13T12:45:00Z
-    kind: news
-    labels: ["cybercrime", "government"]
