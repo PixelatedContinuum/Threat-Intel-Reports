@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-12T14:02:10Z
+generated_at: 2026-09-12T16:01:27Z
 window_days: 30
 counts:
-  total: 532
+  total: 531
   research: 180
-  news: 352
+  news: 351
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -16,10 +16,10 @@ topics:
     count: 71
     color: 1
   - label: "cybercrime"
-    count: 61
+    count: 60
     color: 2
   - label: "government"
-    count: 28
+    count: 29
     color: 3
   - label: "exploited"
     count: 26
@@ -441,6 +441,12 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
 items:
+  - title: "Dutch NCSC: Critical Check Point VPN flaws exploitation is imminent"
+    url: "https://www.bleepingcomputer.com/news/security/dutch-ncsc-critical-check-point-vpn-flaws-exploitation-is-imminent/"
+    source: "BleepingComputer"
+    date: 2026-09-12T14:14:32Z
+    kind: news
+    labels: ["government"]
   - title: "BlueMoon Exploit Kit Chains Recent Chrome, Windows Zero-Days"
     url: "https://www.securityweek.com/bluemoon-exploit-kit-chains-recent-chrome-windows-zero-days/"
     source: "SecurityWeek"
@@ -3621,15 +3627,3 @@ items:
     date: 2026-08-13T16:05:49Z
     kind: research
     labels: ["asyncrat", "dcrat", "dropcatch", "illegal-streaming", "nanocore", "njrat", "quasar rat", "remcos", "sports-piracy"]
-  - title: "New Mirai variant adds stealth capabilities to notorious botnet code"
-    url: "https://therecord.media/new-mirai-variant-adds-stealth-to-botnet-code"
-    source: "Recorded Future"
-    date: 2026-08-13T15:52:00Z
-    kind: news
-    labels: ["cybercrime"]
-  - title: "Trezor discloses data breach affecting nearly 14,000 customers"
-    url: "https://www.bleepingcomputer.com/news/security/trezor-discloses-data-breach-affecting-nearly-14-000-customers/"
-    source: "BleepingComputer"
-    date: 2026-08-13T15:13:19Z
-    kind: news
-    labels: []
