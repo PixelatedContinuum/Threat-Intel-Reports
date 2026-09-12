@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-12T10:01:16Z
+generated_at: 2026-09-12T12:00:36Z
 window_days: 30
 counts:
-  total: 539
-  research: 184
+  total: 536
+  research: 181
   news: 355
 unclassified_sources:
   - "The DFIR Report"
@@ -21,11 +21,11 @@ topics:
   - label: "government"
     count: 29
     color: 3
-  - label: "malware"
+  - label: "exploited"
     count: 26
     color: 4
-  - label: "exploited"
-    count: 25
+  - label: "malware"
+    count: 26
     color: 5
   - label: "data breaches"
     count: 24
@@ -105,8 +105,6 @@ label_colors:
   "android rat": 12
   "anthropic": 8
   "anti-analysis": 11
-  "antino": 3
-  "antino backdoor": 10
   "antivirus removal": 7
   "anydesk": 9
   "apac attacks": 2
@@ -124,6 +122,7 @@ label_colors:
   "arktunnel": 6
   "arm": 10
   "armenia": 5
+  "armored likho": 9
   "arrayref": 8
   "arrested": 2
   "artificial intelligence": 7
@@ -139,7 +138,6 @@ label_colors:
   "atomic": 1
   "atomic macos stealer": 10
   "attacks": 7
-  "audio surveillance": 7
   "australia": 10
   "authentication": 6
   "authentication bypass": 4
@@ -321,7 +319,7 @@ label_colors:
   "endpoint security & xdr": 11
   "entra id": 5
   "exploit": 9
-  "exploited": 5
+  "exploited": 4
   "exposure management": 4
   "extortion": 12
   "extortionware": 11
@@ -383,7 +381,7 @@ label_colors:
   "litellm": 9
   "living-off-the-land": 1
   "macos": 11
-  "malware": 4
+  "malware": 5
   "mathspace": 4
   "metabase": 6
   "microsoft": 4
@@ -445,6 +443,12 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
 items:
+  - title: "BlueMoon Exploit Kit Chains Recent Chrome, Windows Zero-Days"
+    url: "https://www.securityweek.com/bluemoon-exploit-kit-chains-recent-chrome-windows-zero-days/"
+    source: "SecurityWeek"
+    date: 2026-09-12T11:10:00Z
+    kind: news
+    labels: ["bluemoon", "chrome", "exploit kit", "exploited", "vulnerabilities", "windows", "zero-day"]
   - title: "Hackers abused Claude to extract secrets from 1.8M Android apps"
     url: "https://www.bleepingcomputer.com/news/security/hackers-abused-claude-to-extract-secrets-from-18m-android-apps/"
     source: "BleepingComputer"
@@ -3517,6 +3521,12 @@ items:
     date: 2026-08-14T10:50:02Z
     kind: research
     labels: ["coolclient", "honeymyte", "mustang panda", "plugx", "toneshell"]
+  - title: "New Armored Likho tools target Telegram and eavesdropping"
+    url: "https://otx.alienvault.com/pulse/6a7eef664b5b3aa69c6a38b3"
+    source: "AlienVault"
+    date: 2026-08-14T10:35:18Z
+    kind: research
+    labels: ["aquilarat", "armored likho", "eagle werewolf", "still toolkit", "telegram stealer"]
   - title: "1.6 Million Likely Impacted by RingCentral Data Breach"
     url: "https://www.securityweek.com/1-6-million-likely-impacted-by-ringcentral-data-breach/"
     source: "SecurityWeek"
@@ -3649,33 +3659,3 @@ items:
     date: 2026-08-13T12:45:00Z
     kind: news
     labels: ["cybercrime", "government"]
-  - title: "Jewelbug: APT Group Runs Espionage and Crypto Fraud Operations Side by Side"
-    url: "https://www.security.com/blog-post/jewelbug-crypto-fraud-espionage"
-    source: "AlienVault"
-    date: 2026-08-13T11:29:32Z
-    kind: research
-    labels: ["antino", "apt", "browser hijacking", "china", "clientking", "cryptocurrency fraud", "espionage", "government targeting", "pdf viewer", "watering-hole", "xg-web"]
-  - title: "APT Group Runs Espionage and Crypto Fraud Operations Side by Side"
-    url: "https://www.security.com/blog-post/jewelbug-crypto-fraud-espionage"
-    source: "AlienVault"
-    date: 2026-08-13T11:29:32Z
-    kind: research
-    labels: ["antino", "apt", "browser hijacking", "china", "clientking", "cryptocurrency fraud", "espionage", "government targeting", "pdf viewer", "watering-hole", "xg-web"]
-  - title: "New Armored Likho tools target Telegram and eavesdropping"
-    url: "https://otx.alienvault.com/pulse/6a7da6ccbbdd8552713c76a1"
-    source: "AlienVault"
-    date: 2026-08-13T11:13:16Z
-    kind: research
-    labels: ["aquilarat", "audio surveillance", "cyber-espionage", "eagle werewolf", "russia targeting", "rust malware", "still audio", "still sync", "still toolkit", "telegram stealer"]
-  - title: "China-based hackers-for-hire group staging espionage attacks alongside a cryptocurrency fraud business"
-    url: "https://otx.alienvault.com/pulse/6a7da6cbe879002fadce7e53"
-    source: "AlienVault"
-    date: 2026-08-13T11:13:15Z
-    kind: research
-    labels: ["antino", "antino backdoor", "browser hijacking", "china-based", "clientking", "cryptocurrency fraud", "government espionage", "hackers-for-hire", "jewelbug", "pdf viewer", "pdf viewer extension", "rekoobe", "tinyshell", "xg-web"]
-  - title: "Fortinet Patches Authentication Flaws in FortiWeb and FortiManager"
-    url: "https://www.securityweek.com/fortinet-patches-authentication-flaws-in-fortiweb-and-fortimanager/"
-    source: "SecurityWeek"
-    date: 2026-08-13T10:40:57Z
-    kind: news
-    labels: ["fortinet", "patches", "vulnerabilities"]
