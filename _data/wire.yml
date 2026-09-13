@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-13T12:02:06Z
+generated_at: 2026-09-13T14:02:57Z
 window_days: 30
 counts:
-  total: 509
+  total: 506
   research: 173
-  news: 336
+  news: 333
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -16,10 +16,10 @@ topics:
     count: 69
     color: 1
   - label: "cybercrime"
-    count: 60
+    count: 59
     color: 2
   - label: "government"
-    count: 29
+    count: 28
     color: 3
   - label: "exploited"
     count: 25
@@ -3458,21 +3458,3 @@ items:
     date: 2026-08-14T14:59:55Z
     kind: news
     labels: ["apple"]
-  - title: "The Modern Attack Chain: Rethinking Google Workspace Security in the Age of AI"
-    url: "https://www.bleepingcomputer.com/news/security/the-modern-attack-chain-rethinking-google-workspace-security-in-the-age-of-ai/"
-    source: "BleepingComputer"
-    date: 2026-08-14T14:00:10Z
-    kind: news
-    labels: []
-  - title: "Max severity SAP Commerce Cloud flaw now targeted in attacks"
-    url: "https://www.bleepingcomputer.com/news/security/max-severity-sap-commerce-cloud-flaw-now-targeted-in-attacks/"
-    source: "BleepingComputer"
-    date: 2026-08-14T13:45:18Z
-    kind: news
-    labels: []
-  - title: "France investigates tax authority breach after hacker claims 600,000 victims"
-    url: "https://therecord.media/french-tax-authority-dgfip-confirms-data-breach"
-    source: "Recorded Future"
-    date: 2026-08-14T13:14:15Z
-    kind: news
-    labels: ["cybercrime", "government"]
