@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-13T18:02:06Z
+generated_at: 2026-09-13T20:00:56Z
 window_days: 30
 counts:
-  total: 505
+  total: 504
   research: 172
-  news: 333
+  news: 332
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -3444,9 +3444,3 @@ items:
     date: 2026-08-14T20:31:00Z
     kind: news
     labels: ["cybercrime", "government"]
-  - title: "Hackers arrested over €30M bank fraud exploiting service provider flaw"
-    url: "https://www.bleepingcomputer.com/news/security/hackers-arrested-over-30m-bank-fraud-exploiting-service-provider-flaw/"
-    source: "BleepingComputer"
-    date: 2026-08-14T18:04:26Z
-    kind: news
-    labels: ["legal"]
