@@ -3,17 +3,17 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-13T06:00:27Z
+generated_at: 2026-09-13T08:01:06Z
 window_days: 30
 counts:
-  total: 521
-  research: 176
-  news: 345
+  total: 518
+  research: 175
+  news: 343
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 71
+    count: 70
     color: 1
   - label: "cybercrime"
     count: 60
@@ -22,10 +22,10 @@ topics:
     count: 29
     color: 3
   - label: "exploited"
-    count: 26
+    count: 25
     color: 4
   - label: "malware"
-    count: 26
+    count: 25
     color: 5
   - label: "data breaches"
     count: 24
@@ -95,7 +95,6 @@ label_colors:
   "alphaagent": 1
   "amatera stealer": 1
   "amd": 6
-  "amnesiastealer": 8
   "amos": 6
   "amos stealer": 2
   "amsi evasion": 1
@@ -306,7 +305,6 @@ label_colors:
   "docusign impersonation": 2
   "domain controller": 4
   "dprk apt": 2
-  "dropcatch": 4
   "education": 10
   "electron framework": 12
   "encrypted payload": 10
@@ -333,7 +331,6 @@ label_colors:
   "gaming": 5
   "garage2global": 10
   "gentlemen": 1
-  "geoserver": 2
   "gigabud": 9
   "github actions": 6
   "github-actions": 9
@@ -360,7 +357,6 @@ label_colors:
   "in other news": 8
   "incident response": 7
   "industry": 8
-  "information stealer": 6
   "inside google cloud": 2
   "insights": 5
   "isolated-vm": 5
@@ -3544,21 +3540,3 @@ items:
     date: 2026-08-14T08:16:00Z
     kind: news
     labels: ["data breaches", "metabase", "shipmonk", "trezor"]
-  - title: "Dropcatch Scavengers: Expired Malicious Domains Become Cash Cows"
-    url: "https://otx.alienvault.com/pulse/6a7ec3107e8b34f88b5d610e"
-    source: "AlienVault"
-    date: 2026-08-14T07:26:08Z
-    kind: research
-    labels: ["affiliate fraud", "dropcatch", "expired domains", "keitaro", "malvertising", "socgholish", "tech support scam"]
-  - title: "Hackers Exploiting Unpatched GeoServer Zero-Day"
-    url: "https://www.securityweek.com/hackers-exploiting-unpatched-geoserver-zero-day/"
-    source: "SecurityWeek"
-    date: 2026-08-14T07:01:56Z
-    kind: news
-    labels: ["exploited", "geoserver", "vulnerabilities", "zero-day"]
-  - title: "AmnesiaStealer macOS Malware Steals Data, Controls Browser Sessions"
-    url: "https://www.securityweek.com/amnesiastealer-macos-malware-steals-data-controls-browser-sessions/"
-    source: "SecurityWeek"
-    date: 2026-08-14T06:41:43Z
-    kind: news
-    labels: ["amnesiastealer", "information stealer", "macos malware", "malware"]
