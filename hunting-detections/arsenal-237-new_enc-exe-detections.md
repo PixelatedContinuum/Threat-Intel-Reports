@@ -414,7 +414,7 @@ level: medium
 **ATT&CK Coverage:** T1489 (Service Stop)
 **Confidence:** MODERATE
 **Rationale:** The source rule's own description stated an unrealizable intent — "3+ distinct backup services to stop within 5 minutes" — that a single-event Sigma selection cannot express, and had been silently downgraded to fire on any single matching service stop. Rebuilt here as a genuine Sigma `value_count` correlation: a base rule (not alerting alone) matching any backup-related service-stop event, paired with a correlation counting distinct `param1` service names per host within a 5-minute window, restoring the originally intended multi-service threshold instead of the silent single-event downgrade. Capped at Hunting rather than Detection: a single product's own coordinated restart (a Backup Exec agent update or reinstall cycling several of its own Gx-prefixed sub-services together) can plausibly satisfy this threshold without any malicious action, and this false-positive rate has not been characterized against real telemetry.
-**False Positives:** A legitimate, coordinated backup-infrastructure maintenance window that restarts 3 or more backup-related services within 5 minutes (e.g. a scheduled patch or reinstall cycle touching multiple Veritas Backup Exec Agent sub-services, or a Veeam/VSS component update).
+**False Positives:** A legitimate, coordinated backup-infrastructure maintenance window that restarts 3 or more backup-related services within 5 minutes (e.g. a scheduled patch or reinstall cycle touching multiple Commvault agent sub-services, or a Veeam/VSS component update).
 **Deployment:** SIEM correlation engine with Windows System-log Service Control Manager telemetry (EventID 7036) ingested (5-minute temporal join on `host.name`).
 
 ```yaml
@@ -424,7 +424,7 @@ name: arsenal237_backup_service_stop
 status: experimental
 description: >-
   Base rule (not alerting on its own): a Service Control Manager event
-  recording that a backup-related service (Veritas Backup Exec agents, Veeam,
+  recording that a backup-related service (Commvault agents, Veeam,
   or the Windows Volume Shadow Copy service) has stopped. Paired with the
   value-count correlation rule below, which flags 3 or more distinct
   backup-related services stopping on the same host within a short window --
@@ -466,8 +466,8 @@ title: 3+ Distinct Backup Services Stopped on Same Host Within 5 Minutes
 id: d0d88f82-c8e3-42e5-a3c3-34cb8a5fec1b
 status: experimental
 description: >-
-  Fires when 3 or more distinct backup-related services (Veritas Backup Exec
-  agents, Veeam, or VSS) stop on the same host within 5 minutes.
+  Fires when 3 or more distinct backup-related services (Commvault agents,
+  Veeam, or VSS) stop on the same host within 5 minutes.
   Operationalizes this ransomware's own documented multi-stage
   service-termination sequence -- a single service stop is common maintenance
   noise, but 3 or more distinct backup services stopping together in a tight
@@ -494,7 +494,7 @@ falsepositives:
   - >-
     A coordinated, legitimate backup-infrastructure maintenance window that
     restarts 3 or more backup-related services within 5 minutes (e.g. a
-    scheduled patch cycle across Veritas/Veeam/VSS components).
+    scheduled patch cycle across Commvault/Veeam/VSS components).
 level: medium
 ```
 

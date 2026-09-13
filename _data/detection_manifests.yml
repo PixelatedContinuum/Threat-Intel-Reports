@@ -1137,7 +1137,7 @@ arsenal-237-new_enc-exe-detections:
     engine: sigma
     tier: Hunting
     fence: 9
-    hash: "881b21a9"
+    hash: "90a3009f"
     head: "title: Backup-Related Windows Service Stop Event"
     robustness: 2
     confidence: "MODERATE"
