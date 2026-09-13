@@ -1,0 +1,24 @@
+{%- comment -%}
+  Renders at the FOOT of a sponsored report only. The sponsor banner at the top says
+  who paid; this says what that did and did not buy, in the one place a reader who has
+  just finished the report will weigh it.
+
+  Resolution mirrors sponsor-banner.html deliberately: the same normalize-to-array
+  trick and the same lookup against site.data.sponsors.sponsors, so a page carrying a
+  sponsored_by id that resolves to nothing renders neither the banner nor this line,
+  rather than the two disagreeing about whether the report is sponsored.
+{%- endcomment -%}
+{% if page.sponsored_by %}
+{%- assign _ind_ids = page.sponsored_by | join: "|;sep;|" | split: "|;sep;|" -%}
+{%- assign _ind_resolved = false -%}
+{%- for _sid in _ind_ids -%}
+  {%- assign _s = site.data.sponsors.sponsors | where: "id", _sid | first -%}
+  {%- if _s -%}{%- assign _ind_resolved = true -%}{%- endif -%}
+{%- endfor -%}
+{% if _ind_resolved %}
+<aside class="hl-sponsor-independence" aria-label="Editorial independence statement">
+  <span class="hl-sponsor-independence__mark" aria-hidden="true"></span>
+  <p class="hl-sponsor-independence__body">I researched, wrote and published this independently. Sponsorship buys placement, never influence: the sponsor did not see this report before it went live, and had no say in its findings, its attribution or its conclusions.</p>
+</aside>
+{% endif %}
+{% endif %}

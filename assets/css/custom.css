@@ -4702,3 +4702,42 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   /* No hover to reveal on, so the permalink stays visible and touchable. */
   .hl-facts .hl-facts-anchor { opacity: 0.55; padding: 4px 6px; }
 }
+
+/* Editorial independence line at the foot of a sponsored report.
+   Deliberately quieter than the sponsor banner at the top: the banner is a
+   placement the sponsor paid for, this is a statement to the reader, and it
+   should not read as more sponsor furniture. Gold rule on the left ties it to
+   the site's accent system without competing with the banner's row styling. */
+.hl-sponsor-independence {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 2.25rem 0 1.25rem;
+  padding: 12px 16px 12px 0;
+  border-top: 1px solid var(--hl-border-row);
+}
+
+.hl-sponsor-independence__mark {
+  flex: 0 0 auto;
+  width: 3px;
+  align-self: stretch;
+  min-height: 2.2em;
+  border-radius: 2px;
+  background: var(--hl-accent-gold);
+  opacity: 0.75;
+}
+
+.hl-sponsor-independence__body {
+  margin: 0;
+  color: var(--hl-text-muted);
+  font-size: 0.83em;
+  line-height: 1.65;
+}
+
+@media (max-width: 640px) {
+  .hl-sponsor-independence {
+    gap: 10px;
+    padding-right: 0;
+  }
+  .hl-sponsor-independence__body { font-size: 0.8em; }
+}
