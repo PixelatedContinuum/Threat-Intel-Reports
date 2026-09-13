@@ -983,7 +983,7 @@ arsenal-237-lpe-exe-detections:
     engine: sigma
     tier: Detection
     fence: 6
-    hash: "0f2f624d"
+    hash: "f30a7c4d"
     head: "title: Privilege Escalation via Token Impersonat"
     robustness: 3
     confidence: "HIGH"
@@ -1001,8 +1001,8 @@ arsenal-237-lpe-exe-detections:
     engine: sigma
     tier: Detection
     fence: 8
-    hash: "bea8963f"
-    head: "title: Scheduled Task Created as SYSTEM (lpe.exe"
+    hash: "f072f5cf"
+    head: "title: Scheduled Task Created as SYSTEM id: 19fb"
     robustness: 3
     confidence: "HIGH"
     attack: [T1053.005]

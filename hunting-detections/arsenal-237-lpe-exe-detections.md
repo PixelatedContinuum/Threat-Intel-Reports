@@ -295,14 +295,14 @@ rule Arsenal237_LPE_WMIC {
 **Deployment:** Sysmon Event ID 10 (Process Access) telemetry, EDR process-access monitoring.
 
 ```yaml
-title: Privilege Escalation via Token Impersonation (lpe.exe)
+title: Privilege Escalation via Token Impersonation
 id: 41794664-1101-4fbf-a117-c8c1a1f7f473
 status: experimental
 description: >-
   Detects a token-impersonation privilege-escalation sequence: process-access
   events targeting a SYSTEM-privileged process (winlogon.exe, lsass.exe,
   services.exe, csrss.exe) paired with the OpenProcessToken, DuplicateTokenEx,
-  and ImpersonateLoggedOnUser API call trace, characteristic of lpe.exe-class
+  and ImpersonateLoggedOnUser API call trace, characteristic of
   Arsenal-237 privilege-escalation wrappers.
 references:
     - https://the-hunters-ledger.com/hunting-detections/arsenal-237-lpe-exe-detections/
@@ -343,7 +343,7 @@ level: high
 **Robustness:** 2
 **ATT&CK Coverage:** T1548.002 (Bypass User Account Control)
 **Confidence:** HIGH
-**Rationale:** `fodhelper.exe` spawned directly by `reg.exe` is the process-creation signature of the ms-settings registry-hijack UAC bypass and is inherently rare regardless of what invoked `reg.exe`; that branch alone survives a rename of the malware binary. The paired `ParentImage|endswith '\lpe.exe'` branch is a renameable literal specific to this sample, but it rides alongside the durable `reg.exe` branch rather than standing alone, so the rule as a whole still clears the durability litmus. The rule's own description already documents that the companion registry-write event was dropped as a separate, uncorrelatable event under a different logsource; this rule detects the `fodhelper.exe` launch alone, which is independently a strong indicator.
+**Rationale:** `fodhelper.exe` spawned directly by `reg.exe` is the process-creation signature of the ms-settings registry-hijack UAC bypass and is inherently rare regardless of what invoked `reg.exe`; that branch alone survives a rename of the malware binary. The paired `ParentImage|endswith '\lpe.exe'` branch is a renameable literal specific to this sample, but it rides alongside the durable `reg.exe` branch rather than standing alone, so the rule as a whole still clears the durability litmus. The rule's own description already documents that the companion registry-write event was dropped as a separate, uncorrelatable event under a different logsource; this rule detects the `fodhelper.exe` launch alone, which is independently a strong indicator. **Reviewed 2026-09-12 and deliberately kept:** the `\lpe.exe` branch was a candidate for removal as a campaign-specific literal, but the two parents are an OR, so dropping it would lose the case where `lpe.exe` spawns `fodhelper.exe` directly with no `reg.exe` in between. It stays on the site for that coverage. Strip it in the extracted copy if this rule is ever submitted upstream, where a campaign binary name in a generic technique rule is a defect.
 **False Positives:** Legitimate software installation (extremely rare).
 **Blind Spots:** A build that launches `fodhelper.exe` through an intermediary process other than `reg.exe` (for example a renamed copy of `lpe.exe` invoked through `cmd.exe`) evades the durable branch and falls back to the renameable `lpe.exe` literal only.
 **Validation:** Launch `fodhelper.exe` with `reg.exe` as its immediate parent; must fire. A normal user-initiated `fodhelper.exe` launch from `explorer.exe` must NOT fire.
@@ -396,7 +396,7 @@ level: high
 **Deployment:** Sysmon Event ID 1 (Process Creation) telemetry, EDR process-creation monitoring, Windows Security Event ID 4698.
 
 ```yaml
-title: Scheduled Task Created as SYSTEM (lpe.exe)
+title: Scheduled Task Created as SYSTEM
 id: 19fbc402-5876-4f9b-905b-b5452dc7d634
 status: experimental
 description: >-
