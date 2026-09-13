@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-13T14:02:57Z
+generated_at: 2026-09-13T16:00:47Z
 window_days: 30
 counts:
-  total: 506
-  research: 173
+  total: 505
+  research: 172
   news: 333
 unclassified_sources:
   - "The DFIR Report"
@@ -263,8 +263,6 @@ label_colors:
   "cryptocurrency-stealer": 7
   "cryptographic": 9
   "curlrat": 3
-  "cve-2007-3010": 7
-  "cve-2016-6277": 9
   "cve-2021-27101": 2
   "cve-2021-38003": 1
   "cve-2023-49105": 4
@@ -422,6 +420,12 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
 items:
+  - title: "Hackers exploit Tencent app flaw to deploy GrayRabbit malware"
+    url: "https://www.bleepingcomputer.com/news/security/hackers-exploit-tencent-app-flaw-to-deploy-grayrabbit-malware/"
+    source: "BleepingComputer"
+    date: 2026-09-13T14:26:32Z
+    kind: news
+    labels: []
   - title: "Dutch NCSC: Critical Check Point VPN flaws exploitation is imminent"
     url: "https://www.bleepingcomputer.com/news/security/dutch-ncsc-critical-check-point-vpn-flaws-exploitation-is-imminent/"
     source: "BleepingComputer"
@@ -3446,15 +3450,3 @@ items:
     date: 2026-08-14T18:04:26Z
     kind: news
     labels: ["legal"]
-  - title: "New Mirai-Based Linux Botnet 'Evooo1Bot' Turns Victims Into Proxies"
-    url: "https://otx.alienvault.com/pulse/6a7f349eb2e90e5a682c7e6f"
-    source: "AlienVault"
-    date: 2026-08-14T15:30:38Z
-    kind: research
-    labels: ["cve-2007-3010", "cve-2016-6277", "cve-2018-14558", "cve-2019-14931", "cve-2020-10987", "cve-2021-46422", "cve-2022-37055", "cve-2024-29269", "cve-2025-10123", "cve-2025-55583", "ddos attacks", "edge devices", "encrypted c2", "evooo1bot", "iot exploitation", "linux botnet", "mirai", "mirai variant", "socks proxy"]
-  - title: "Hackers exploit macOS Screen Sharing flaw to deploy Monero miner"
-    url: "https://www.bleepingcomputer.com/news/security/hackers-exploit-macos-screen-sharing-flaw-to-deploy-monero-miner/"
-    source: "BleepingComputer"
-    date: 2026-08-14T14:59:55Z
-    kind: news
-    labels: ["apple"]
