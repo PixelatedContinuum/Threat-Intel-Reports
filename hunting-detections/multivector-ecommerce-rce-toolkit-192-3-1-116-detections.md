@@ -22,7 +22,7 @@ hide: true
 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
-| YARA | 5 | 0 | T1190, T1505.003, T1552.005 | 0 (all atomics already carried in the campaign IOC feed) |
+| YARA | 4 | 1 | T1190, T1505.003, T1552.005 | 0 (all atomics already carried in the campaign IOC feed) |
 | Sigma | 5 | 7 | T1190, T1213, T1596.005, T1005, T1552.001, T1110.001, T1078, T1585, T1046 | 0 (all atomics already carried in the campaign IOC feed) |
 | Suricata | 9 | 2 | T1190, T1552.005, T1098.004, T1105, T1606.001, T1596.005, T1110.001 | 0 (all atomics already carried in the campaign IOC feed) |
 
@@ -37,48 +37,6 @@ hide: true
 All five rules below target the **payload class**, not this operator's specific file: each is anchored on the exploitation technique's structural markers so it fires against any instance of the same CVE/gadget/web-shell pattern, not just the copy recovered from this operator's directory. None reference this operator's IP, hostnames, or account names.
 
 ### Detection Rules
-
-#### Logback insertFromJNDI RCE (CVE-2021-42550)
-
-**Tier:** Detection
-**Robustness:** 3
-**ATT&CK Coverage:** T1190 (Exploit Public-Facing Application)
-**Confidence:** HIGH
-**False Positives:** None known. `insertFromJNDI` combined with a `ldap://`/`rmi://` scheme inside a Logback `<configuration>` element is not a pattern that occurs in legitimate logging configuration; the JNDI lookup feature exists specifically to be pointed at a directory service, and pointing it at an attacker-controlled scheme is the exploit itself.
-**Blind Spots:** Misses payloads that use a different JNDI scheme unlikely to be blocked by allowlists (e.g. `dns://`, `corba://`), and misses the exploit entirely if delivered as a compiled/serialized configuration rather than the plaintext XML form matched here.
-**Validation:** Scan the `logback-rce.xml`-style payload (an XML file containing an `<insertFromJNDI env-entry-name="ldap://...">` element) and confirm a match; a stock, unmodified Logback `logback.xml` with no JNDI lookups must NOT fire.
-**Deployment:** File/attachment scanning, upload-directory sweeps, incident-response triage of recovered configuration files.
-
-```yara
-/*
-   Yara Rule Set
-   Identifier: Logback insertFromJNDI RCE (CVE-2021-42550)
-   Author: The Hunters Ledger
-   Source: https://the-hunters-ledger.com/
-   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/
-*/
-
-rule EXPL_Logback_InsertFromJNDI_CVE_2021_42550 {
-   meta:
-      description = "Detects a Logback XML configuration using insertFromJNDI to trigger a JNDI lookup against an attacker-controlled ldap:// or rmi:// URI, the mechanism behind CVE-2021-42550. The insertFromJNDI element paired with a JNDI scheme in an env-entry-name attribute is not a pattern seen in legitimate logging configuration."
-      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
-      author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/"
-      date = "2026-07-21"
-      family = "Logback insertFromJNDI RCE (CVE-2021-42550)"
-      malware_type = "Exploitation payload -- Java logging-framework RCE"
-      id = "ace3c6c6-23e3-500a-8ade-a75d8209a06b"
-   strings:
-      $config = "<configuration" ascii
-      $jndi = "insertFromJNDI" ascii
-      $ldap = "env-entry-name=\"ldap://" ascii
-      $rmi = "env-entry-name=\"rmi://" ascii
-   condition:
-      filesize < 50KB and
-      $config and $jndi and
-      1 of ($ldap, $rmi)
-}
-```
 
 #### Logback FileAppender Arbitrary File Write to JSP
 
@@ -247,7 +205,41 @@ rule EXPL_XXE_SSRF_Cloud_Metadata_Internal_Service_Probe {
 
 ### Hunting Rules
 
-_None. All five YARA rules authored for this campaign cleared the Detection bar (Robustness ≥ 2, zero or near-zero characterized false-positive scenarios); no YARA candidate was demoted to Hunting._
+_Corrected 2026-09-13: one rule, below. Previously stated "None" here; that was true when written and is no longer true after this correction._
+
+#### Logback insertFromJNDI RCE (CVE-2021-42550)
+
+**Tier:** Hunting (re-tiered from Detection 2026-09-13, see note below)
+**Robustness:** 2 (downgraded from 3 2026-09-13)
+**ATT&CK Coverage:** T1190 (Exploit Public-Facing Application)
+**Confidence:** MODERATE (downgraded from HIGH 2026-09-13)
+**False Positives:** Confirmed, not merely absent. A realistic, legitimate Logback config was built and tested: an enterprise application using `insertFromJNDI` exactly as Logback documents the feature, to pull shared logging configuration from its own internal, benign `ldap://` directory server. It fires. The rule's original claim ("not a pattern that occurs in legitimate logging configuration") was wrong: `insertFromJNDI` paired with an `ldap://`/`rmi://` scheme is Logback's own documented, intended use of the JNDI lookup feature. The actual exploit (CVE-2021-42550) is about an attacker controlling the *target* of that lookup, which static file content cannot distinguish from a legitimate internal target, so there is no content-only tightening available for the same reason the Rootkit_Userland tar rule in a different campaign has none: the malicious and benign cases are byte-identical
+**Blind Spots:** Misses payloads that use a different JNDI scheme unlikely to be blocked by allowlists (e.g. `dns://`, `corba://`), and misses the exploit entirely if delivered as a compiled/serialized configuration rather than the plaintext XML form matched here. Cannot distinguish an attacker-controlled JNDI target from a legitimate internal one from file content alone, which is the reason for the re-tier
+**Validation:** Scan the `logback-rce.xml`-style payload (an XML file containing an `<insertFromJNDI env-entry-name="ldap://...">` element), it fires. A legitimate enterprise Logback config pointing the same feature at an internal directory server also fires, confirmed by direct testing, which is why this needs analyst review rather than automatic action
+**Deployment:** File/attachment scanning, upload-directory sweeps, incident-response triage of recovered configuration files, with analyst triage on every hit
+
+```yara
+rule EXPL_Logback_InsertFromJNDI_CVE_2021_42550 {
+   meta:
+      description = "Detects a Logback XML configuration using insertFromJNDI to trigger a JNDI lookup against an ldap:// or rmi:// URI, the mechanism behind CVE-2021-42550. Corrected 2026-09-13: insertFromJNDI paired with a JNDI scheme in an env-entry-name attribute IS a pattern seen in legitimate Logback configuration (it is the feature's documented use); this rule cannot distinguish an attacker-controlled JNDI target from a legitimate internal one from file content alone, hence Hunting tier."
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
+      author = "The Hunters Ledger"
+      reference = "https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/"
+      date = "2026-07-21"
+      family = "Logback insertFromJNDI RCE (CVE-2021-42550)"
+      malware_type = "Exploitation payload -- Java logging-framework RCE"
+      id = "ace3c6c6-23e3-500a-8ade-a75d8209a06b"
+   strings:
+      $config = "<configuration" ascii
+      $jndi = "insertFromJNDI" ascii
+      $ldap = "env-entry-name=\"ldap://" ascii
+      $rmi = "env-entry-name=\"rmi://" ascii
+   condition:
+      filesize < 50KB and
+      $config and $jndi and
+      1 of ($ldap, $rmi)
+}
+```
 
 ---
 

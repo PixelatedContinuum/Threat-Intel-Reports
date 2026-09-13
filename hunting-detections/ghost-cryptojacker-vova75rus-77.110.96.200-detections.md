@@ -36,7 +36,7 @@ GHOST is a commodity Linux cryptojacker kit distributed by kit-author Vova75Rus 
 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
-| YARA | 5 | 4 | T1014, T1574.006, T1564.001, T1059.004, T1611, T1480.002, T1102.002, T1496.001, T1059.006, T1595.002, T1554, T1543.002 | 1 |
+| YARA | 4 | 5 | T1014, T1574.006, T1564.001, T1059.004, T1611, T1480.002, T1102.002, T1496.001, T1059.006, T1595.002, T1554, T1543.002 | 1 |
 | Sigma | 6 | 4 | T1574.006, T1027, T1014, T1554, T1571, T1059.004, T1543.002, T1036.005, T1222.002, T1620, T1572 | 1 |
 | Suricata | 1 | 2 | T1059.004, T1574.006, T1105, T1572, T1571, T1102.002, T1496.001 | 3 |
 
@@ -292,15 +292,17 @@ rule MAL_Linux_GHOST_ComfyUI_Python_Kit {
 }
 ```
 
+### Hunting Rules
+
 #### MAL_Linux_GHOST_ComfyUI_Fake_PerformanceMonitor_Node
 
-**Tier:** Detection
+**Tier:** Hunting (re-tiered from Detection 2026-09-13, see note below)
 **Robustness:** 2
 **ATT&CK Coverage:** T1554 (Compromise Host Software Binary), T1059.006 (Python), T1574.006 (Dynamic Linker Hijacking analog for Python runtime)
-**Confidence:** HIGH
-**Rationale:** Narrow detection on the malicious "PerformanceMonitor" custom node registered into ComfyUI's `NODE_CLASS_MAPPINGS`. This fires on post-compromise persistence regardless of delivery mechanism — it catches the installed artifact, not just the dropper. The mandatory combination of an actual class *definition* (`class PerformanceMonitor`) plus the registration-dict literal is more specific than a bare filename or import match.
-**False Positives:** Low — "PerformanceMonitor" is a generic name in isolation, but its appearance as a class definition registered into `NODE_CLASS_MAPPINGS` is specific; legitimate ComfyUI custom-node developers follow community naming conventions with more-specific identifiers (e.g. "ImageMonitor", "GPUMonitor").
-**Blind Spots:** A legitimately-named "PerformanceMonitor" custom node from an unrelated, unvetted developer would still fire — treat a hit as a compromise indicator requiring publisher/source verification, not an automatic block.
+**Confidence:** MODERATE (downgraded from HIGH 2026-09-13)
+**Rationale:** Narrow detection on the malicious "PerformanceMonitor" custom node registered into ComfyUI's `NODE_CLASS_MAPPINGS`. This fires on post-compromise persistence regardless of delivery mechanism, it catches the installed artifact, not just the dropper. The mandatory combination of an actual class *definition* (`class PerformanceMonitor`) plus the registration-dict literal is more specific than a bare filename or import match. **Re-tiering note, 2026-09-13:** confirmed by direct testing, not just reasoning, that a genuinely benign ComfyUI custom node (a real profiling extension named PerformanceMonitor, using the exact NODE_CLASS_MAPPINGS/NODE_DISPLAY_NAME_MAPPINGS boilerplate every legitimate ComfyUI extension must use) fires this rule with zero malicious content present. `NODE_CLASS_MAPPINGS` and `NODE_DISPLAY_NAME_MAPPINGS` are mandatory ComfyUI registration boilerplate, not something specific to this malware
+**False Positives:** Confirmed, not merely Low. A synthetic benign ComfyUI custom node built specifically to test this (a real profiling class named PerformanceMonitor with no backdoor content) fires the rule. The rule's own prior Blind Spots field already predicted this exact scenario; the tier and confidence now match that prediction instead of overriding it
+**Blind Spots:** A legitimately-named "PerformanceMonitor" custom node from an unrelated, unvetted developer would still fire, treat a hit as a compromise indicator requiring publisher/source verification, not an automatic block
 **Validation:** Scan a ComfyUI installation with the planted node present — must match; a stock ComfyUI installation with only official custom nodes must NOT fire.
 **Deployment:** ComfyUI `custom_nodes` directory file scan (scheduled or on-write), Linux endpoint EDR.
 
@@ -330,8 +332,6 @@ rule MAL_Linux_GHOST_ComfyUI_Fake_PerformanceMonitor_Node {
       ($node_display_reg or $fn_plant)
 }
 ```
-
-### Hunting Rules
 
 #### MAL_Linux_GHOST_Hysteria_Operator_Wrapper
 

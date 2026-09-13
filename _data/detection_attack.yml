@@ -621,12 +621,12 @@
     - tactic: "Impact"
       id: "T1489"
       name: "Service Stop"
-      rules: "Veritas Backup Exec Multi-Service Targeting (YARA, Detection); Veeam Backup Software Bareword Reference (YARA, Hunting); Arsenal-237 Backup Service Multi-Termination (Correlation) (SIGMA, Hunting); Arsenal-237 Database Service Multi-Termination (Correlation) (SIGMA, Hunting)"
+      rules: "Commvault Backup Service Targeting (misattributed as Veritas at authoring) (YARA, Hunting); Veeam Backup Software Bareword Reference (YARA, Hunting); Arsenal-237 Backup Service Multi-Termination (Correlation) (SIGMA, Hunting); Arsenal-237 Database Service Multi-Termination (Correlation) (SIGMA, Hunting)"
       count: 4
     - tactic: "Impact"
       id: "T1490"
       name: "Inhibit System Recovery"
-      rules: "Veritas Backup Exec Multi-Service Targeting (YARA, Detection); Volume Shadow Copy Deletion Command (YARA, Detection); Volume Shadow Copy Deletion via Vssadmin (SIGMA, Detection)"
+      rules: "Volume Shadow Copy Deletion Command (YARA, Detection); Commvault Backup Service Targeting (misattributed as Veritas at authoring) (YARA, Hunting); Volume Shadow Copy Deletion via Vssadmin (SIGMA, Detection)"
       count: 3
 "arsenal-237-rootkit-dll-detections":
   total: 6
@@ -1181,7 +1181,7 @@
     - tactic: "Execution"
       id: "T1059.006"
       name: "Python"
-      rules: "MAL_Linux_GHOST_ComfyUI_Python_Kit (YARA, Detection); MAL_Linux_GHOST_ComfyUI_Fake_PerformanceMonitor_Node (YARA, Detection)"
+      rules: "MAL_Linux_GHOST_ComfyUI_Python_Kit (YARA, Detection); MAL_Linux_GHOST_ComfyUI_Fake_PerformanceMonitor_Node (YARA, Hunting)"
       count: 2
     - tactic: "Persistence"
       id: "T1543.002"
@@ -1191,7 +1191,7 @@
     - tactic: "Persistence"
       id: "T1554"
       name: "Compromise Host Software Binary"
-      rules: "MAL_Linux_GHOST_ComfyUI_Python_Kit (YARA, Detection); MAL_Linux_GHOST_ComfyUI_Fake_PerformanceMonitor_Node (YARA, Detection); GHOST ComfyUI Fake PerformanceMonitor Custom Node Planted (SIGMA, Detection)"
+      rules: "MAL_Linux_GHOST_ComfyUI_Python_Kit (YARA, Detection); MAL_Linux_GHOST_ComfyUI_Fake_PerformanceMonitor_Node (YARA, Hunting); GHOST ComfyUI Fake PerformanceMonitor Custom Node Planted (SIGMA, Detection)"
       count: 3
     - tactic: "Privilege Escalation"
       id: "T1611"
@@ -1226,7 +1226,7 @@
     - tactic: "Stealth"
       id: "T1574.006"
       name: "Dynamic Linker Hijacking"
-      rules: "MAL_Linux_GHOST_libpam_cache_Rootkit_Family (YARA, Detection); MAL_Linux_GHOST_libpam_cache_Source (YARA, Detection); MAL_Linux_GHOST_Kit_Shell_Installer (YARA, Detection); MAL_Linux_GHOST_ComfyUI_Fake_PerformanceMonitor_Node (YARA, Detection); Linux LD_PRELOAD Persistence File Modification (SIGMA, Detection); Suspicious Shared Library Created in PAM Security Directory (SIGMA, Detection); Auditd - PAM Security Library Directory Write by Non-Package-Manager (SIGMA, Detection); Chattr Immutable Bit Set on Linux Persistence Target Paths (SIGMA, Detection); Suspicious LD_PRELOAD Set to Non-Standard Library Path (SIGMA, Hunting); GHOST Kit Distribution File Download from AEZA Hosting Range (SURICATA, Detection)"
+      rules: "MAL_Linux_GHOST_libpam_cache_Rootkit_Family (YARA, Detection); MAL_Linux_GHOST_libpam_cache_Source (YARA, Detection); MAL_Linux_GHOST_Kit_Shell_Installer (YARA, Detection); MAL_Linux_GHOST_ComfyUI_Fake_PerformanceMonitor_Node (YARA, Hunting); Linux LD_PRELOAD Persistence File Modification (SIGMA, Detection); Suspicious Shared Library Created in PAM Security Directory (SIGMA, Detection); Auditd - PAM Security Library Directory Write by Non-Package-Manager (SIGMA, Detection); Chattr Immutable Bit Set on Linux Persistence Target Paths (SIGMA, Detection); Suspicious LD_PRELOAD Set to Non-Standard Library Path (SIGMA, Hunting); GHOST Kit Distribution File Download from AEZA Hosting Range (SURICATA, Detection)"
       count: 10
     - tactic: "Stealth"
       id: "T1620"
@@ -1516,7 +1516,7 @@
     - tactic: "Initial Access"
       id: "T1190"
       name: "Exploit Public-Facing Application"
-      rules: "Logback insertFromJNDI RCE (CVE-2021-42550) (YARA, Detection); Logback FileAppender Arbitrary File Write to JSP (YARA, Detection); SnakeYAML Deserialization Gadget (CVE-2022-1471 Family) (YARA, Detection); XXE-to-SSRF Internal/Cloud-Metadata Probe (YARA, Detection); Manufactured Log-Data Harvesting via Jolokia Logger Manipulation Then Actuator Logfile Read (Correlation) (SIGMA, Detection); LDAP Anonymous BindRequest to a Non-Standard Directory Port (SURICATA, Detection); SnakeYAML Gadget Chain in HTTP Request Body (SURICATA, Detection); XXE Entity Declaration Targeting Cloud Metadata in Upload (SURICATA, Detection); Gopher-Scheme SSRF Protocol Smuggling in HTTP URI (SURICATA, Detection); Gopher-Scheme SSRF Protocol Smuggling in HTTP Request Body (SURICATA, Detection); SSRF-to-Redis CONFIG/BGSAVE Command Sequence via HTTP (SURICATA, Detection); Eureka Apps-Delta Response Containing XStream Gadget Markers (Flowbits Pair) (SURICATA, Detection)"
+      rules: "Logback FileAppender Arbitrary File Write to JSP (YARA, Detection); SnakeYAML Deserialization Gadget (CVE-2022-1471 Family) (YARA, Detection); XXE-to-SSRF Internal/Cloud-Metadata Probe (YARA, Detection); Logback insertFromJNDI RCE (CVE-2021-42550) (YARA, Hunting); Manufactured Log-Data Harvesting via Jolokia Logger Manipulation Then Actuator Logfile Read (Correlation) (SIGMA, Detection); LDAP Anonymous BindRequest to a Non-Standard Directory Port (SURICATA, Detection); SnakeYAML Gadget Chain in HTTP Request Body (SURICATA, Detection); XXE Entity Declaration Targeting Cloud Metadata in Upload (SURICATA, Detection); Gopher-Scheme SSRF Protocol Smuggling in HTTP URI (SURICATA, Detection); Gopher-Scheme SSRF Protocol Smuggling in HTTP Request Body (SURICATA, Detection); SSRF-to-Redis CONFIG/BGSAVE Command Sequence via HTTP (SURICATA, Detection); Eureka Apps-Delta Response Containing XStream Gadget Markers (Flowbits Pair) (SURICATA, Detection)"
       count: 12
     - tactic: "Persistence"
       id: "T1098.004"
@@ -1786,7 +1786,7 @@
     - tactic: "Privilege Escalation"
       id: "T1548.002"
       name: "Bypass User Account Control"
-      rules: "Stage-5b UAC Bypass PE (Cross-Build Invariant) (YARA, Detection); Stage-5b UAC Bypass via PPID Spoof: Conhost Child of Taskmgr (SIGMA, Detection)"
+      rules: "Stage-5b UAC Bypass PE (Cross-Build Invariant) (YARA, Hunting); Stage-5b UAC Bypass via PPID Spoof: Conhost Child of Taskmgr (SIGMA, Detection)"
       count: 2
     - tactic: "Stealth"
       id: "T1027"
@@ -1816,7 +1816,7 @@
     - tactic: "Stealth"
       id: "T1134.004"
       name: "Parent PID Spoofing"
-      rules: "Stage-5b UAC Bypass PE (Cross-Build Invariant) (YARA, Detection); Stage-5b UAC Bypass via PPID Spoof: Conhost Child of Taskmgr (SIGMA, Detection)"
+      rules: "Stage-5b UAC Bypass PE (Cross-Build Invariant) (YARA, Hunting); Stage-5b UAC Bypass via PPID Spoof: Conhost Child of Taskmgr (SIGMA, Detection)"
       count: 2
     - tactic: "Stealth"
       id: "T1140"
@@ -1946,7 +1946,7 @@
     - tactic: "Persistence"
       id: "T1554"
       name: "Compromise Host Software Binary"
-      rules: "Rootkit_Userland_OriginalsBackup_TarSet (YARA, Detection)"
+      rules: "Rootkit_Userland_OriginalsBackup_TarSet (YARA, Hunting)"
       count: 1
     - tactic: "Privilege Escalation"
       id: "T1068"
@@ -1956,7 +1956,7 @@
     - tactic: "Stealth"
       id: "T1014"
       name: "Rootkit"
-      rules: "Rootkit_Userland_OriginalsBackup_TarSet (YARA, Detection); Content Change to a Core Process or Network Inspection Utility (SIGMA, Hunting)"
+      rules: "Rootkit_Userland_OriginalsBackup_TarSet (YARA, Hunting); Content Change to a Core Process or Network Inspection Utility (SIGMA, Hunting)"
       count: 2
     - tactic: "Stealth"
       id: "T1070.006"

@@ -21,7 +21,7 @@ This campaign is a single operator's bespoke intrusion toolkit, not a commodity 
 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
-| YARA | 6 | 2 | T1190, T1048.003, T1132.001, T1554, T1014, T1505.003, T1068, T1588.005 | 2 |
+| YARA | 5 | 3 | T1190, T1048.003, T1132.001, T1554, T1014, T1505.003, T1068, T1588.005 | 2 |
 | Sigma | 8 | 3 | T1059.001, T1059.004, T1003.002, T1021.002, T1021.006, T1014, T1543, T1098, T1136.001, T1222.002, T1572, T1105 | 2 |
 | Suricata | 9 | 3 | T1190, T1048.003, T1041, T1210, T1572, T1505.003, T1555 | 1 |
 
@@ -160,47 +160,6 @@ rule WebLogic_JNDI_HelloFromLdap_CallbackMarker {
 ```
 **File name:** `crime_weblogic_telecom_ldap_callback_marker.yar`
 
-**Userland Rootkit & AAA-Host Anti-Forensics**
-
-#### Rootkit_Userland_OriginalsBackup_TarSet
-
-**Tier:** Detection
-**Robustness:** 3
-**ATT&CK Coverage:** T1554 (Compromise Host Software Binary), T1014 (Rootkit)
-**Confidence:** HIGH
-**False Positives:** None known in an uncompressed tar containing exactly these seven members; a partial overlap (for example a legitimate `procps` source tarball) would not present all seven paths as a top-level manifest in this exact combination
-**Blind Spots:** Matches only an *uncompressed* tar archive. This specific artifact (`orig_bins.tgz`) is gzip-compressed, and gzip compression destroys the plaintext string patterns this rule keys on, so deploy alongside a scanning pipeline that decompresses archives before scanning, or against extracted/forensic copies. The trojanized replacement binaries themselves were never recovered in either capture and cannot be detected by content; see Coverage Gaps
-**Validation:** Decompress `orig_bins.tgz` to a raw `.tar` and scan it; a tar archive containing an unrelated set of Linux binaries, or fewer than all seven of this set, must NOT fire
-**Deployment:** Forensic archive scanning, EDR file-content inspection pipelines that decompress common archive formats before scanning
-
-```yara
-rule Rootkit_Userland_OriginalsBackup_TarSet {
-   meta:
-      description = "Detects a tar archive whose member manifest is exactly the canonical userland-rootkit target set (ps, top, pstree, netstat, lsof, find, rpm), consistent with an operator staging pristine originals before trojanizing a Linux host's process, network, filesystem and package-integrity inspection tools"
-      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
-      author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/"
-      date = "2026-08-17"
-      hash1 = "daee2d57566c88374b5de65ecc04e1321da4d5dc35b84a0eb98893afad9e2664"
-      family = "Unknown - bespoke single-operator WebLogic/telecom intrusion toolkit"
-      campaign = "WebLogicDeserialization-TelecomHarvester-13.140.145.210"
-      id = "ba89babd-e197-5073-9656-9654215ab3a1"
-   strings:
-      $ustar = "ustar" ascii
-      $m1 = "bin/ps" ascii
-      $m2 = "usr/bin/top" ascii
-      $m3 = "usr/bin/pstree" ascii
-      $m4 = "bin/netstat" ascii
-      $m5 = "usr/sbin/lsof" ascii
-      $m6 = "usr/bin/find" ascii
-      $m7 = "bin/rpm" ascii
-   condition:
-      filesize < 5MB and
-      $ustar and all of ($m1, $m2, $m3, $m4, $m5, $m6, $m7)
-}
-```
-**File name:** `gen_userland_rootkit_originals_backup_archive.yar`
-
 **Internal Windows Post-Exploitation**
 
 #### Webshell_PHP_XCMD_Header_Dispatcher
@@ -276,6 +235,47 @@ rule GeoServer_CVE_2024_36401_ValueReference_Exec {
 **File name:** `vuln_cve_2024_36401_geoserver_valuereference_exec.yar`
 
 ### Hunting Rules
+
+**Userland Rootkit & AAA-Host Anti-Forensics**
+
+#### Rootkit_Userland_OriginalsBackup_TarSet
+
+**Tier:** Hunting (re-tiered from Detection 2026-09-13, see note below)
+**Robustness:** 1
+**ATT&CK Coverage:** T1554 (Compromise Host Software Binary), T1014 (Rootkit)
+**Confidence:** MODERATE
+**False Positives:** Confirmed, not merely possible. A plain, uncompressed tar of these seven common Linux administration binaries, carrying nothing but placeholder content and no malware at all, matches this rule. This was reproduced independently twice, once by hand, once by an automated benign-corpus harness (`.claude/scripts/yara_fp_check.py`) built specifically to test it. The rule's original False Positives field ("None known... would not present all seven paths as a top-level manifest in this exact combination") was wrong: an ordinary sysadmin backup that happens to bundle exactly these seven tools presents exactly that manifest, and there is nothing else in the condition to tell the two apart. A hit needs analyst review before any conclusion is drawn, which is why this is Hunting rather than Detection
+**Blind Spots:** Matches only an *uncompressed* tar archive. This specific artifact (`orig_bins.tgz`) is gzip-compressed, and gzip compression destroys the plaintext string patterns this rule keys on, so deploy alongside a scanning pipeline that decompresses archives before scanning, or against extracted/forensic copies. The trojanized replacement binaries themselves were never recovered in either capture and cannot be detected by content; see Coverage Gaps. A tightening was attempted (excluding tars that also carry common non-target binaries such as `bash`, `sh`, `ls`) and it did suppress a realistic broader-backup fixture while still firing on the narrow seven-member shape, but it could only be tested against a synthetic reconstruction of the real evidence, not the actual captured `orig_bins.tgz` (hash `daee2d57...`), so it is not shipped as a claimed fix. Re-tiering to Hunting was chosen instead because it needs no unverified claim and matches `detection-rule-tiering` Gate 2's own routing ("high-value but meaningfully noisy" to Hunting)
+**Validation:** Decompress `orig_bins.tgz` to a raw `.tar` and scan it, it fires. Scan a plain administrative backup tar containing exactly these seven paths and nothing else, it also fires, which is the point: this is now documented as an analyst-triage lead, not an alerting-grade signal
+**Deployment:** Forensic archive scanning, EDR file-content inspection pipelines that decompress common archive formats before scanning, with analyst triage on every hit
+
+```yara
+rule Rootkit_Userland_OriginalsBackup_TarSet {
+   meta:
+      description = "Detects a tar archive whose member manifest is exactly the canonical userland-rootkit target set (ps, top, pstree, netstat, lsof, find, rpm), consistent with an operator staging pristine originals before trojanizing a Linux host's process, network, filesystem and package-integrity inspection tools. Hunting-tier: this exact manifest also matches an ordinary sysadmin backup with no malware present, confirmed by direct testing, so every hit needs analyst review"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
+      author = "The Hunters Ledger"
+      reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/"
+      date = "2026-08-17"
+      hash1 = "daee2d57566c88374b5de65ecc04e1321da4d5dc35b84a0eb98893afad9e2664"
+      family = "Unknown - bespoke single-operator WebLogic/telecom intrusion toolkit"
+      campaign = "WebLogicDeserialization-TelecomHarvester-13.140.145.210"
+      id = "ba89babd-e197-5073-9656-9654215ab3a1"
+   strings:
+      $ustar = "ustar" ascii
+      $m1 = "bin/ps" ascii
+      $m2 = "usr/bin/top" ascii
+      $m3 = "usr/bin/pstree" ascii
+      $m4 = "bin/netstat" ascii
+      $m5 = "usr/sbin/lsof" ascii
+      $m6 = "usr/bin/find" ascii
+      $m7 = "bin/rpm" ascii
+   condition:
+      filesize < 5MB and
+      $ustar and all of ($m1, $m2, $m3, $m4, $m5, $m6, $m7)
+}
+```
+**File name:** `gen_userland_rootkit_originals_backup_archive.yar`
 
 **Linux Kernel LPE (Public Dirty Frag)**
 
@@ -1192,7 +1192,7 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT WebLogicTelecomHarv
 ### Artifacts absent from the corpus: no rule is possible
 
 - **The custom multi-session C2 console (`console.py`) was never archived.** Only its client side is known: a TCP service on `127.0.0.1:19999` presenting a JSON banner and accepting `sessions` / `use <cid>` verbs. Nothing is known about its wire format, so no Suricata signature can be built, and the console binds to localhost only, which puts it outside any Sigma network-connection rule's reach as well.
-- **The trojanized userland-rootkit replacement binaries are unrecoverable.** Both source captures were searched exhaustively; the replacements for `ps`, `top`, `pstree`, `netstat`, `lsof`, `find`, and `rpm` were never exposed in the open directory. No hash-based or content-based YARA rule is possible for them, so the Detection-tier coverage in this file (`Rootkit_Userland_OriginalsBackup_TarSet`) targets the originals-backup staging pattern instead, which is the closest observable proxy.
+- **The trojanized userland-rootkit replacement binaries are unrecoverable.** Both source captures were searched exhaustively; the replacements for `ps`, `top`, `pstree`, `netstat`, `lsof`, `find`, and `rpm` were never exposed in the open directory. No hash-based or content-based YARA rule is possible for them, so the Hunting-tier coverage in this file (`Rootkit_Userland_OriginalsBackup_TarSet`) targets the originals-backup staging pattern instead, which is the closest observable proxy and, confirmed by direct testing, also matches an ordinary backup with no malware present, hence the Hunting tier rather than Detection.
 - **`andinet.sh` is known only by name and a single error line** (`/tmp/andinet.sh: line 122: timeout: command not found`). At least 122 lines of a carrier-targeting script exist that were never captured. No content-based detection is possible from one error line.
 - **`evil.dtd` is absent from the corpus.** Its purpose, out-of-band XXE parameter-entity exfiltration, is known from context elsewhere in the recovered corpus, but the specific template was never recovered, so no signature can be built from its content.
 - **No packet capture exists for this campaign.** Every network-layer detail in this file is reconstructed from the operator's own logs and captured HTTP responses. Byte-level protocol nuances beyond what those logs record (for example, the exact framing of the chisel WebSocket handshake) cannot be confirmed, which is why the chisel-handshake Suricata rule is a broad Hunting-tier heuristic rather than a protocol-specific Detection signature.

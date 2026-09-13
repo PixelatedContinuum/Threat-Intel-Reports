@@ -22,14 +22,14 @@ This campaign delivers Chaos ransomware (TorBrowserTor variant) through a privat
 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
-| YARA | 6 | 2 | T1027, T1027.011, T1053.005, T1056.001, T1059.001, T1059.003, T1071.001, T1112, T1113, T1134.004, T1140, T1486, T1490, T1491.001, T1547.001, T1548.002, T1573, T1620, T1657 | 0 |
+| YARA | 5 | 3 | T1027, T1027.011, T1053.005, T1056.001, T1059.001, T1059.003, T1071.001, T1112, T1113, T1134.004, T1140, T1486, T1490, T1491.001, T1547.001, T1548.002, T1573, T1620, T1657 | 0 |
 | Sigma | 3 | 8 | T1027.011, T1036.005, T1053.005, T1071.001, T1078.003, T1090.001, T1112, T1134.004, T1136.001, T1486, T1490, T1497, T1547.001, T1548.002, T1685 | 0 |
 | Suricata | 0 | 1 | T1071.001, T1105 | 1 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
 
 **Highest-confidence anchors:**
-- Stage-4 mutex GUID `9f67b5ed-6c10-4c53-818b-8d26be0d1339` and Stage-5b UAC-bypass PE hash `da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8`, byte-identical across both observed builds, zero public prior hits (YARA Detection).
+- Stage-4 mutex GUID `9f67b5ed-6c10-4c53-818b-8d26be0d1339`, byte-identical across both observed builds, zero public prior hits (YARA Detection). The Stage-5b UAC-bypass PE hash `da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8` is likewise byte-identical across both builds, but its own YARA rule was re-tiered to Hunting 2026-09-13: every one of its mandatory strings is a public Windows RPC interface or a public open-source library, not an operator-specific artifact.
 - Stage-5b UAC-bypass process ancestry `taskmgr.exe` → `conhost.exe --headless`, a PPID-spoofing technique chokepoint that survives any future rebuild (Sigma Detection).
 - `CrackedByWardow` AES key and fixed IV, hardcoded crack-tool-wide constants shared by every Orcus instance patched with this specific crack, not unique to this operator (YARA Detection).
 
@@ -53,52 +53,6 @@ Rules are grouped by family within each Detection/Hunting subsection (this repla
 ### Detection Rules
 
 **Custom Crypter / Builder**
-
-#### Stage-5b UAC Bypass PE (Cross-Build Invariant)
-
-**Tier:** Detection
-**Robustness:** 2
-**ATT&CK Coverage:** T1548.002 (Bypass UAC), T1134.004 (Parent PID Spoofing)
-**Confidence:** DEFINITE
-**Rationale:** The AppInfo RPC interface GUID and `AiEnableDesktopRpcInterface` name are the fixed Windows chokepoint UACME technique #41 must call — an attacker cannot rename them without abandoning the technique. The rule additionally requires 2 of 3 corroborating strings ($ppid_anchor, $conhost_arg, $ntapi) tied to this specific loader's implementation choices (the NtApiDotNet library, the `--headless` conhost invocation, and the `IColorDataProxy` interface name), which is why this sits at Robustness 2 rather than 3: the technique-level anchor is durable, but the required corroboration is implementation-specific. This exact PE is byte-identical across both observed builds (mymain and myfile) with only 8/77 VT detections.
-**False Positives:** Low — legitimate red-team or research tooling built on NtApiDotNet that implements the same UACME #41 technique with the same conhost `--headless` invocation would also match; no known legitimate production software does.
-**Blind Spots:** A rebuild that drops NtApiDotNet in favor of raw RPC calls, or renames the `IColorDataProxy` interface and changes the conhost launch flag, would evade the corroborating-string requirement even though the core AppInfo GUID/RPC-name anchor remains.
-**Validation:** Scan the Stage-5b PE (`hash1` below) or a memory dump containing it — must match; a benign NtApiDotNet-based admin utility that never calls `AiEnableDesktopRpcInterface` must NOT fire.
-**Deployment:** Endpoint AV/EDR file scan, memory scanner (Stage-5b is delivered encrypted and only exists in cleartext post-decryption).
-
-```yara
-/*
-   Yara Rule Set
-   Identifier: Chaos TorBrowserTor Multi-Stage Loader — Open Directory 94.103.1.13
-   Author: The Hunters Ledger
-   Source: https://the-hunters-ledger.com/
-   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/
-*/
-
-rule MALW_ChaosLoader_Stage5b_UACBypass_CrossBuildInvariant {
-   meta:
-      description = "Detects the Stage-5b UAC bypass PE used by the Chaos/TorBrowserTor private crypter. This 986 KB .NET binary is byte-identical across both observed builds (mymain and myfile), implements UACME technique #41 via AppInfo RPC AiEnableDesktopRpcInterface with PPID spoofing off elevated taskmgr.exe, and has only 8/77 VT detections as of 2026-04-23"
-      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
-      author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/"
-      date = "2026-04-23"
-      hash1 = "da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8"
-      family = "Chaos-TorBrowserTor-Crypter"
-      id = "c285c670-de23-5ad9-b45b-3939751f50c2"
-   strings:
-      $appinfo_guid = "201ef99a-7fa0-444c-9399-19ba84f12a1a" ascii wide
-      $rpc_iface    = "AiEnableDesktopRpcInterface" ascii wide
-      $ppid_anchor  = "IColorDataProxy" ascii wide
-      $conhost_arg  = "--headless" ascii wide
-      $ntapi        = "NtApiDotNet" ascii wide
-   condition:
-      uint16(0) == 0x5A4D and
-      filesize < 2MB and
-      $appinfo_guid and
-      $rpc_iface and
-      2 of ($ppid_anchor, $conhost_arg, $ntapi)
-}
-```
 
 #### Stage-4 Mutex GUID (Cross-Build Invariant)
 
@@ -295,6 +249,44 @@ rule RAT_OrcusRAT_v7_WardowCrack {
 ### Hunting Rules
 
 **Custom Crypter / Builder: Build-Specific Anchors**
+
+#### Stage-5b UAC Bypass PE (Cross-Build Invariant)
+
+**Tier:** Hunting (re-tiered from Detection 2026-09-13, see note below)
+**Robustness:** 2
+**ATT&CK Coverage:** T1548.002 (Bypass UAC), T1134.004 (Parent PID Spoofing)
+**Confidence:** MODERATE (downgraded from DEFINITE 2026-09-13)
+**Rationale:** The AppInfo RPC interface GUID and `AiEnableDesktopRpcInterface` name are the fixed Windows chokepoint UACME technique #41 must call, an attacker cannot rename them without abandoning the technique. The rule additionally requires 2 of 3 corroborating strings ($ppid_anchor, $conhost_arg, $ntapi) tied to this specific loader's implementation choices (the NtApiDotNet library, the `--headless` conhost invocation, and the `IColorDataProxy` interface name), which is why this sits at Robustness 2 rather than 3: the technique-level anchor is durable, but the required corroboration is implementation-specific. This exact PE is byte-identical across both observed builds (mymain and myfile) with only 8/77 VT detections. **Re-tiering note, 2026-09-13:** every one of this rule's four mandatory-or-corroborating strings is a publicly documented Windows interface or a public open-source library, not something coined by this operator. Confirmed by primary and near-primary sources: the AppInfo interface GUID and `AiEnableDesktopRpcInterface` name are documented in Google Project Zero's "Calling Local Windows RPC Servers from .NET" and in independent security research (Tyranid's Lair) as the real, standard Windows AppInfo/UAC service RPC interface, version 1.0. `NtApiDotNet` is James Forshaw's widely used, actively maintained open-source .NET library for exactly this kind of Windows RPC and NT API research. UACME technique #41 itself is a public, named technique in the widely used `hfiref0x/UACME` open-source catalog. This is the same shape as the PublicTool_DirtyFrag_LinuxKernel_LPE and PublicTool_CVE_2023_21839_WebLogic_GoExploit rules elsewhere in this campaign's WebLogic detection file, both correctly tiered Hunting because they detect a public tool or technique broadly rather than an operator-specific artifact. The rule's own original False Positives field already said as much ("legitimate red-team or research tooling built on NtApiDotNet that implements the same UACME #41 technique... would also match") but that assessment was rated Low with Confidence DEFINITE regardless; the corrected tier and confidence reflect that acknowledgment being taken seriously rather than overridden by it
+**False Positives:** Real, not merely Low. Any research or red-team tool combining NtApiDotNet with the AppInfo RPC interface to exercise UACME technique #41, a public, actively studied technique, would satisfy this rule's mandatory anchors regardless of authorship. Not empirically fixture-tested against an actual NtApiDotNet-based tool (none was built here; doing so would require compiling a working .NET RPC client against the real AppInfo interface), so this is a corrected, evidence-backed judgment call rather than a demonstrated hit
+**Blind Spots:** A rebuild that drops NtApiDotNet in favor of raw RPC calls, or renames the `IColorDataProxy` interface and changes the conhost launch flag, would evade the corroborating-string requirement even though the core AppInfo GUID/RPC-name anchor remains
+**Validation:** Scan the Stage-5b PE (`hash1` below) or a memory dump containing it, it fires. Untested: an actual NtApiDotNet-based research tool exercising the same public interface, which is the carrier that would confirm the false-positive risk empirically
+**Deployment:** Endpoint AV/EDR file scan, memory scanner (Stage-5b is delivered encrypted and only exists in cleartext post-decryption), with analyst triage on every hit
+
+```yara
+rule MALW_ChaosLoader_Stage5b_UACBypass_CrossBuildInvariant {
+   meta:
+      description = "Detects the Stage-5b UAC bypass PE used by the Chaos/TorBrowserTor private crypter. This 986 KB .NET binary is byte-identical across both observed builds (mymain and myfile), implements UACME technique #41 via AppInfo RPC AiEnableDesktopRpcInterface with PPID spoofing off elevated taskmgr.exe, and has only 8/77 VT detections as of 2026-04-23"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
+      author = "The Hunters Ledger"
+      reference = "https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/"
+      date = "2026-04-23"
+      hash1 = "da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8"
+      family = "Chaos-TorBrowserTor-Crypter"
+      id = "c285c670-de23-5ad9-b45b-3939751f50c2"
+   strings:
+      $appinfo_guid = "201ef99a-7fa0-444c-9399-19ba84f12a1a" ascii wide
+      $rpc_iface    = "AiEnableDesktopRpcInterface" ascii wide
+      $ppid_anchor  = "IColorDataProxy" ascii wide
+      $conhost_arg  = "--headless" ascii wide
+      $ntapi        = "NtApiDotNet" ascii wide
+   condition:
+      uint16(0) == 0x5A4D and
+      filesize < 2MB and
+      $appinfo_guid and
+      $rpc_iface and
+      2 of ($ppid_anchor, $conhost_arg, $ntapi)
+}
+```
 
 #### mymain Build In-Memory Crypter Keys
 

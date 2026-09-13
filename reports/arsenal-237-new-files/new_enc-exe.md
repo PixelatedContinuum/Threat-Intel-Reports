@@ -43,7 +43,7 @@ new_enc.exe is a CRITICAL-severity Rust-based ransomware deployed manually by sk
 |------------|-------|-----------------|
 | **Data Encryption Capability** | 9.8/10 | CRITICAL - All targeted files permanently encrypted without key recovery |
 | **Anti-Recovery Mechanisms** | 9.9/10 | CRITICAL - VSS deletion + backup agent termination eliminate standard recovery paths |
-| **Enterprise Backup Targeting** | 9.5/10 | CRITICAL - Specific Veritas Backup Exec agent termination (5 services) demonstrates sophisticated enterprise awareness |
+| **Enterprise Backup Targeting** | 9.5/10 | CRITICAL - Specific Commvault agent termination (5 services) demonstrates sophisticated enterprise awareness |
 | **Anti-Analysis Sophistication** | 8.7/10 | HIGH - Multi-layer VM/sandbox/debugger detection complicates incident response analysis |
 | **Operational Persistence** | 6.2/10 | MEDIUM - Scheduled task for ransom note display; no traditional remote-access persistence |
 | **Overall Risk Score** | **9.2/10** | **CRITICAL** - Immediate executive attention and incident response required |
@@ -78,7 +78,7 @@ This malware represents an extreme threat to organizational data security and re
 
 1. **Incident Response Activation** - Activate your incident response plan for potential ransomware infection. Ensure external cybersecurity consultants are on standby.
 
-2. **Backup Infrastructure Verification** - Confirm status of Veritas Backup Exec, Veeam, and offline backup systems. Verify that backup systems are functioning and immutable backups exist.
+2. **Backup Infrastructure Verification** - Confirm status of Commvault, Veeam, and offline backup systems. Verify that backup systems are functioning and immutable backups exist.
 
 3. **System Isolation Assessment** - Evaluate which systems may have been compromised. Determine if new_enc.exe has been discovered on any infrastructure.
 
@@ -89,7 +89,7 @@ This malware represents an extreme threat to organizational data security and re
 ### For Technical Teams
 
 **Defensive Actions (Reference Detailed Sections)**
-- **Immediate:** Monitor for VSS deletion commands, Veritas agent termination, and RustRansomNoteTask scheduled task creation (See Section: Detection & Response Guidance)
+- **Immediate:** Monitor for VSS deletion commands, Commvault agent termination, and RustRansomNoteTask scheduled task creation (See Section: Detection & Response Guidance)
 - **Priority 1:** Deploy file integrity monitoring on critical backup infrastructure
 - **Priority 1:** Implement network detection for ChaCha20-encrypted traffic patterns
 - **Priority 2:** Activate threat hunting queries for Arsenal-237 indicators (Section: Hunting Detection Rules)
@@ -115,7 +115,7 @@ new_enc.exe is deployed **manually by threat actors** following successful syste
 2. **Privilege Escalation** - Lateral movement and privilege elevation to domain admin or SYSTEM context
 3. **Reconnaissance** - Threat actor identifies and maps critical systems, backup infrastructure, and high-value data locations
 4. **Ransomware Deployment** - new_enc.exe is manually executed on target systems with specific command-line arguments (--pass, --folder, --file) allowing targeted encryption
-5. **Backup Destruction** - Malware terminates Veritas, Veeam, and VSS services; deletes VSS snapshots
+5. **Backup Destruction** - Malware terminates Commvault, Veeam, and VSS services; deletes VSS snapshots
 6. **Data Encryption** - Files are encrypted with hardcoded ChaCha20 key; ransom note displayed
 7. **Ransom Demand** - Victims directed to make cryptocurrency payment
 
@@ -192,7 +192,7 @@ new_enc.exe is ransomware, mapping to Data Encrypted for Impact, and it is human
 I rate its sophistication HIGH:
 - Modern Rust implementation (memory-safe language choice)
 - Multi-layer anti-analysis system (5 distinct evasion layers)
-- Enterprise-specific service targeting (Veritas Backup Exec with 5 specific agent names)
+- Enterprise-specific service targeting (Commvault with 5 specific agent names)
 - Strategic anti-recovery sequencing (backup disruption before encryption)
 
 The version string v0.5-beta puts it in active development, ahead of any 1.0 release.
@@ -236,21 +236,23 @@ A manual CLI marks this as human-operated ransomware that needs a skilled operat
 
 ## Section 3: Enterprise Infrastructure Targeting
 
-### Veritas Backup Exec Agent Targeting (CRITICAL)
+### Commvault Agent Targeting (CRITICAL)
 
-The most significant finding in new_enc.exe's service termination list is **specific targeting of five Veritas Backup Exec agents:**
+*Corrected 2026-09-13: this section originally attributed these five service names to Veritas Backup Exec. They are Commvault's own product-internal service short-names, confirmed against Commvault's published "Descriptions of Services" documentation. The per-service functions below are quoted from that documentation where an exact match exists; the two that do not exactly match a documented Commvault service name are marked as such rather than given an invented function.*
+
+The most significant finding in new_enc.exe's service termination list is **specific targeting of five Commvault agents:**
 
 ```
-GxVss       - Veritas VSS provider (Volume Shadow Copy integration)
-GxBlr       - Veritas Backup Exec remote agent (network backup capability)
-GxFWD       - Veritas media server agent (media library management)
-GxCVD       - Veritas client service (client-side backup)
-GxCIMgr     - Veritas management service (centralized management)
+GxVss       - Commvault VSS integration (closely related to Commvault's documented GxVssProv, "makes use of the Volume Shadow Copy Service feature of the Windows operating system")
+GxBlr       - Commvault internal service; exact function not found in the Commvault documentation consulted
+GxFWD       - Commvault Communications Service: "responsible for tunneling Commvault connections across firewalls" (quoted from Commvault's documentation)
+GxCVD       - Commvault Communications Service: "provides the ability to fetch or save metadata on the CommServe server when backup or restore are in progress" (quoted from Commvault's documentation)
+GxCIMgr     - Commvault cluster coordination (closely related to Commvault's documented GxClMgrS, "running and controlling recall jobs and failover operations on clusters")
 ```
 
-Targeting this specific means the operator ran pre-attack reconnaissance and identified the backup infrastructure before deploying anything. Killing these five services removes Veritas backup capability completely, taking down backup execution, remote agent communication, media server functionality, client operations and management coordination together.
+Targeting this specific means the operator ran pre-attack reconnaissance and identified the backup infrastructure before deploying anything. Killing these five services removes Commvault backup capability completely, taking down backup execution, remote agent communication, media server functionality, client operations and management coordination together.
 
-Anywhere Veritas Backup Exec is the backup, that backup fails completely. Every incremental mechanism stops, and recovery from the encryption becomes impossible without an offline copy.
+Anywhere Commvault is the backup, that backup fails completely. Every incremental mechanism stops, and recovery from the encryption becomes impossible without an offline copy.
 
 ### Comprehensive Anti-Recovery Mechanisms
 
@@ -452,7 +454,7 @@ None of that makes analysis impossible. Isolation, spoofing and tool obfuscation
                              |                                            |
                     +----------------------------------+                  |
                     |  Anti-Recovery Phase (CRITICAL)  |                  |
-                    |  [x] Terminate Veritas agents     |                  |
+                    |  [x] Terminate Commvault agents     |                  |
                     |  [x] Terminate Veeam backups      |                  |
                     |  [x] Terminate database services  |                  |
                     |  [x] Terminate Office apps        |                  |
@@ -522,7 +524,7 @@ Time 3s:     Database services stopped
              +- Release file locks on database files
 
 Time 4s:     Backup services stopped
-             +- Veritas Backup Exec agents (GxVss, GxBlr, GxFWD, GxCVD, GxCIMgr)
+             +- Commvault agents (GxVss, GxBlr, GxFWD, GxCVD, GxCIMgr)
              +- Veeam backup agents
              +- VSS service
 
@@ -697,7 +699,7 @@ CommandLine contains: "vssadmin" AND "delete shadows"
 AlertSeverity: CRITICAL
 ```
 
-*Veritas Backup Exec Service Termination (CRITICAL):*
+*Commvault Service Termination (CRITICAL):*
 ```
 Event IDs: 7000-7009 (System - Service events)
 ServiceName IN: GxVss, GxBlr, GxFWD, GxCVD, GxCIMgr
@@ -739,7 +741,7 @@ DeviceProcessEvents
 | order by Timestamp desc
 ```
 
-**KQL - Veritas Service Termination Hunt:**
+**KQL - Commvault Service Termination Hunt:**
 ```kql
 DeviceProcessEvents
 | where ProcessCommandLine contains "GxVss" or ProcessCommandLine contains "GxBlr" or ProcessCommandLine contains "GxCIMgr"
@@ -810,13 +812,13 @@ Organizations with offline backups face significantly better recovery prospects:
 
 **Best Case - Offline Backups Unaffected:**
 - Backups stored on physically disconnected or air-gapped systems
-- No Veritas/Veeam network access
+- No Commvault/Veeam network access
 - Recovery directly from backup media
 - **Timeline:** Hours-to-days depending on data volume
 - **Cost:** Incident response + backup restoration labor
 
 **Worst Case - Online Backups Compromised:**
-- Veritas/Veeam systems accessible during attack
+- Commvault/Veeam systems accessible during attack
 - New_enc.exe terminates backup services
 - VSS snapshots deleted
 - Online backups inaccessible
@@ -835,7 +837,7 @@ Organizations with offline backups face significantly better recovery prospects:
 |-----------|-----------|
 | **Language Choice** | Rust - Modern memory-safe language indicating advanced development team |
 | **Anti-Analysis Layers** | 5 distinct evasion techniques (TEB, registry, strings, sandbox, processes) |
-| **Enterprise Awareness** | Specific Veritas agent naming (GxVss, GxBlr, GxFWD, GxCVD, GxCIMgr) |
+| **Enterprise Awareness** | Specific Commvault agent naming (GxVss, GxBlr, GxFWD, GxCVD, GxCIMgr) |
 | **Code Organization** | ~2000-line orchestration function suggests modular architecture |
 | **Version Tracking** | "v0.5-beta" indicates professional version control |
 | **Campaign Management** | Builder ID (ICIIXGD1X8ZJ4T1MTQ6TLQIDJEMDE7U4) implies centralized tracking system |
@@ -861,7 +863,7 @@ The related sample is enc_c2.exe, the C2-enabled variant.
 | **Builder ID** | TEST_BUILD_001 | ICIIXGD1X8ZJ4T1MTQ6TLQIDJEMDE7U4 |
 | **Version** | [Unknown] | v0.5-beta |
 | **Anti-Analysis Sophistication** | Standard | Enhanced (5-layer system) |
-| **Backup Targeting** | Standard termination list | Specific Veritas agents (5 named) |
+| **Backup Targeting** | Standard termination list | Specific Commvault agents (5 named) |
 
 **Attribution Confidence: HIGH (85%)**
 
@@ -891,7 +893,7 @@ The presence of a hardcoded ChaCha20 key (67e6096a85ae67bb72f36e3c3af54fa57f520e
 
 ### 2. Enterprise Backup Targeting Demonstrates Sophisticated Threat Actors
 
-Specific identification and termination of five Veritas Backup Exec services (GxVss, GxBlr, GxFWD, GxCVD, GxCIMgr) indicates threat actors conducted pre-attack reconnaissance identifying backup infrastructure. This level of targeting precision demonstrates significant operational planning and enterprise environment knowledge. Organizations relying on Veritas backup face complete backup failure if infected.
+Specific identification and termination of five Commvault services (GxVss, GxBlr, GxFWD, GxCVD, GxCIMgr) indicates threat actors conducted pre-attack reconnaissance identifying backup infrastructure. This level of targeting precision demonstrates significant operational planning and enterprise environment knowledge. Organizations relying on Commvault backup face complete backup failure if infected.
 
 ### 3. Multi-Layer Anti-Analysis System Impedes Incident Response
 

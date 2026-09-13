@@ -40,7 +40,7 @@ In Phase 1 the operator escalates privilege and disables the defenses. lpe.exe r
 
 In Phase 2 they move to persistence and credential access. nethost.dll establishes persistence via DLL hijacking, beacons to hardcoded TCP targets (8.8.8.8:53 and 127.0.0.1:53), and supports PowerShell execution, system enumeration, and Base64-encoded exfiltration. chromelevator.exe uses reflective DLL injection and direct syscalls to extract cookies, passwords, and payment data from Chrome, Brave, and Edge credential stores.
 
-In Phase 3 they deploy the ransomware. new_enc.exe targets Veritas Backup Exec agents and VSS snapshots using a hardcoded ChaCha20 key (67e6096a...), a test-variant operational security lapse. full_test_enc.exe deploys multi-threaded hybrid encryption (RSA-OAEP plus ChaCha20) across all accessible drives and network shares without C2 dependence, which makes decryption impossible without the operator's RSA private key. dec_fixed.exe, a victim-specific decryptor carrying a distinct hardcoded key (1e0d8597...), confirms per-victim key management and an active RaaS model (CONFIRMED).
+In Phase 3 they deploy the ransomware. new_enc.exe targets Commvault agents (misidentified as Veritas Backup Exec at authoring and corrected 2026-09-13, once the referenced service short-names were confirmed against Commvault's own published documentation) and VSS snapshots using a hardcoded ChaCha20 key (67e6096a...), a test-variant operational security lapse. full_test_enc.exe deploys multi-threaded hybrid encryption (RSA-OAEP plus ChaCha20) across all accessible drives and network shares without C2 dependence, which makes decryption impossible without the operator's RSA private key. dec_fixed.exe, a victim-specific decryptor carrying a distinct hardcoded key (1e0d8597...), confirms per-victim key management and an active RaaS model (CONFIRMED).
 
 ### The Organizational Threat in Plain Terms
 
@@ -316,7 +316,7 @@ The full report is at [./enc_c2-exe.md](./enc_c2-exe.md).
 
 This component is an advanced ransomware encryptor.
 
-It is Rust ransomware (v0.5-beta) targeting Veritas Backup Exec agents and VSS snapshots with a hardcoded ChaCha20 key (67e6096a...). That hardcoded key is an operational security lapse, because files encrypted by this test variant are potentially decryptable without ransom payment. The v0.5-beta designation and the backup-targeting logic confirm a development iteration rather than a deployment-ready build, and operational deployments use enc_c2.exe or full_test_enc.exe instead.
+It is Rust ransomware (v0.5-beta) targeting Commvault agents and VSS snapshots with a hardcoded ChaCha20 key (67e6096a...). That hardcoded key is an operational security lapse, because files encrypted by this test variant are potentially decryptable without ransom payment. The v0.5-beta designation and the backup-targeting logic confirm a development iteration rather than a deployment-ready build, and operational deployments use enc_c2.exe or full_test_enc.exe instead.
 
 **File Identifiers:**
 - MD5: `a16ba61114fa5a40afce54459bbff21e`
@@ -633,7 +633,7 @@ Recovery time depends on backup strategy and ransomware variant. With validated 
 
 **Q9: "What is 'offline backup' and how do we implement it?"**
 
-Offline backup means storage that is not accessible from the production network and therefore cannot be encrypted by ransomware. Arsenal-237's new_enc.exe specifically targets Veritas Backup Exec agents and VSS snapshots, confirming that network-connected backup infrastructure is within the attack scope.
+Offline backup means storage that is not accessible from the production network and therefore cannot be encrypted by ransomware. Arsenal-237's new_enc.exe specifically targets Commvault agents and VSS snapshots, confirming that network-connected backup infrastructure is within the attack scope.
 
 Two categories of offline backup offer protection:
 
@@ -687,7 +687,7 @@ Arsenal-237 exposes observable indicators at every phase. BYOVD exploitation, ke
 ---
 
 **4. Targeted industries face elevated risk.**
-Enterprise backup targeting (new_enc.exe hitting Veritas Backup Exec and VSS), a CrowdStrike-specific EDR terminator, and per-victim key management all indicate Arsenal-237 is designed for environments where ransomware disruption translates to maximum leverage: healthcare, financial services, manufacturing, and large enterprises. Organizations in these sectors should prioritize Arsenal-237 in their threat models.
+Enterprise backup targeting (new_enc.exe hitting Commvault and VSS), a CrowdStrike-specific EDR terminator, and per-victim key management all indicate Arsenal-237 is designed for environments where ransomware disruption translates to maximum leverage: healthcare, financial services, manufacturing, and large enterprises. Organizations in these sectors should prioritize Arsenal-237 in their threat models.
 
 ---
 

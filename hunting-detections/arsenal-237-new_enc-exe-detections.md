@@ -19,13 +19,13 @@ thumbnail: /assets/images/cards/arsenal-237-new-files.png
 
 ## Detection Coverage Summary
 
-new_enc.exe is a 64-bit, Rust-compiled ransomware sample from the Arsenal-237 toolkit, deployed manually via command-line arguments (`--pass`, `--folder`, `--file`) rather than through automated propagation. It encrypts files with a hardcoded ChaCha20 key, deletes Volume Shadow Copies to block recovery, and runs a multi-stage service-termination sequence targeting enterprise backup infrastructure (Veritas Backup Exec agents, Veeam, Windows VSS) and database services (SQL Server, Oracle) ahead of encryption. A scheduled task re-displays the ransom note across logons. No command-and-control channel was identified — this build operates offline; a related, C2-enabled sibling build (`enc_c2.exe`) with Tor-based infrastructure is tracked separately.
+new_enc.exe is a 64-bit, Rust-compiled ransomware sample from the Arsenal-237 toolkit, deployed manually via command-line arguments (`--pass`, `--folder`, `--file`) rather than through automated propagation. It encrypts files with a hardcoded ChaCha20 key, deletes Volume Shadow Copies to block recovery, and runs a multi-stage service-termination sequence targeting enterprise backup infrastructure (Commvault agents, misidentified as Veritas Backup Exec at authoring and corrected 2026-09-13, plus Veeam and Windows VSS) and database services (SQL Server, Oracle) ahead of encryption. A scheduled task re-displays the ransom note across logons. No command-and-control channel was identified — this build operates offline; a related, C2-enabled sibling build (`enc_c2.exe`) with Tor-based infrastructure is tracked separately.
 
-Coverage below is retiered from the original draft: every rule was re-scored for durability (does it survive infrastructure rotation and renaming?), precision (documented false-positive profile), and level discipline, per the project's Detection/Hunting split. The Volume Shadow Copy deletion command and the Veritas Backup Exec service-name combination anchor the strongest signatures; several single-build atomics (the campaign tracking ID, the version string, the hardcoded encryption key, the file hashes) were already captured in the IOC feed rather than published as standalone rules, and two speculative network signatures with no supporting evidence in this sample's documented behavior were retired.
+Coverage below is retiered from the original draft: every rule was re-scored for durability (does it survive infrastructure rotation and renaming?), precision (documented false-positive profile), and level discipline, per the project's Detection/Hunting split. The Volume Shadow Copy deletion command anchors the strongest signature. The backup-service-name combination, originally published as a second Detection-tier rule under the wrong vendor's name (Veritas, corrected 2026-09-13 to Commvault), was re-tiered to Hunting on 2026-09-13 once real-world false-positive risk against genuine backup software was confirmed against the vendor's own documentation. Several single-build atomics (the campaign tracking ID, the version string, the hardcoded encryption key, the file hashes) were already captured in the IOC feed rather than published as standalone rules, and two speculative network signatures with no supporting evidence in this sample's documented behavior were retired.
 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
-| YARA | 2 | 5 | T1489, T1490, T1053.005, T1497.001, T1622, T1518.001 | 5 |
+| YARA | 1 | 6 | T1489, T1490, T1053.005, T1497.001, T1622, T1518.001 | 5 |
 | Sigma | 1 | 3 | T1490, T1489, T1053.005 | 0 |
 | Suricata | 0 | 0 | — | 0 |
 
@@ -38,52 +38,6 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 ## YARA Rules
 
 ### Detection Rules
-
-#### Veritas Backup Exec Multi-Service Targeting
-
-**Tier:** Detection
-**Robustness:** 2
-**ATT&CK Coverage:** T1489 (Service Stop), T1490 (Inhibit System Recovery — GxVss specifically integrates with Volume Shadow Copy)
-**Confidence:** HIGH
-**Rationale:** Requires 3 of 5 distinct Veritas Backup Exec internal service short-names (GxVss, GxBlr, GxFWD, GxCVD, GxCIMgr) to co-occur. These are Veritas's own product-internal names, not this campaign's chosen literals — a tool-family artifact that would recur across any ransomware build targeting this specific enterprise backup product, not merely a rename-away-from campaign marker. *Fix applied during retiering:* split from a source rule whose condition let a bare, un-fullword'd match on the single word "veeam" satisfy the same rule alone; that weaker branch is demoted to its own Hunting rule below so it no longer governs this rule's overall precision.
-**False Positives:** None known — unrelated software is not expected to reference 3 or more of these specific Veritas internal service short-names together; a Veritas-aware backup-monitoring dashboard mentioning one or two agents by name would not meet the 3-of-5 threshold.
-**Blind Spots:** A rebuild that drops or renames 3 or more of the five Gx short-names (e.g., a shift to Veritas's newer product-line naming) evades this rule; targets on-disk string references, not live Service Control Manager activity.
-**Validation:** Scan new_enc.exe (hash below) — must match; software referencing only one or two of the five short-names must NOT fire.
-**Deployment:** Endpoint AV/EDR file scanning, email gateway attachment scanning, retroactive scan of file shares, IR artifact triage.
-
-```yara
-/*
-   Yara Rule Set
-   Identifier: Arsenal-237-Backup-Targeting-Ransomware
-   Author: The Hunters Ledger
-   Source: https://the-hunters-ledger.com/
-   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/
-*/
-
-rule TOOLKIT_Arsenal237_Veritas_BackupExec_Multi_Service_Targeting {
-   meta:
-      description = "Detects Arsenal-237 ransomware's targeting of Veritas Backup Exec agent services via co-occurrence of at least 3 of 5 distinct Veritas internal service short-names (GxVss, GxBlr, GxFWD, GxCVD, GxCIMgr), referenced ahead of service termination to disable enterprise backup and recovery capability before encryption."
-      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
-      author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/arsenal-237-new_enc-exe-detections/"
-      date = "2026-01-27"
-      family = "Arsenal-237"
-      malware_type = "Ransomware"
-      campaign = "Arsenal-237-Backup-Targeting-Ransomware"
-      id = "a3f81c2e-4b6d-4a91-8c73-1e5f8a2b6c90"
-      hash1 = "90d223b70448d68f7f48397df6a9e57de3a6b389d5d8dc0896be633ca95720f2"
-   strings:
-      $gx1 = "GxVss" ascii wide
-      $gx2 = "GxBlr" ascii wide
-      $gx3 = "GxFWD" ascii wide
-      $gx4 = "GxCVD" ascii wide
-      $gx5 = "GxCIMgr" ascii wide
-   condition:
-      uint16(0) == 0x5A4D and
-      filesize < 5MB and
-      3 of ($gx*)
-}
-```
 
 #### Volume Shadow Copy Deletion Command
 
@@ -122,6 +76,44 @@ rule TOOLKIT_Arsenal237_VSS_Shadow_Copy_Deletion_Command {
 ```
 
 ### Hunting Rules
+
+#### Commvault Backup Service Targeting (misattributed as Veritas at authoring)
+
+**Tier:** Hunting (re-tiered from Detection 2026-09-13; see note below)
+**Robustness:** 2
+**ATT&CK Coverage:** T1489 (Service Stop), T1490 (Inhibit System Recovery, GxVss integrates with Volume Shadow Copy)
+**Confidence:** MODERATE
+**Rationale:** Requires 3 of 5 distinct backup-software internal service short-names (GxVss, GxBlr, GxFWD, GxCVD, GxCIMgr) to co-occur. **Correction, 2026-09-13: these are Commvault's own product-internal service names, not Veritas's.** Confirmed against Commvault's own published documentation (`documentation.commvault.com`, "Descriptions of Services"), which lists `GxCVD` ("fetch or save metadata on the CommServe server") and `GxFWD` ("tunneling Commvault connections across firewalls") verbatim, plus the closely related `GxVssProv` and `GxClMgrS` for the remaining two. The rule was published under the wrong vendor's name. That the strings are a real vendor's product-internal names rather than this campaign's own chosen literals is still true, and is still why this is a tool-family artifact rather than a pure campaign marker; the vendor identity in every other field was simply wrong. *Fix applied during an earlier retiering:* split from a source rule whose condition let a bare, un-fullword'd match on the single word "veeam" satisfy the same rule alone; that weaker branch is demoted to its own Hunting rule below so it no longer governs this rule's overall precision, and sits right beside this one now that both are Hunting. That earlier pass mentioned a third vendor (Veeam) without resolving which of the three (Veritas, Veeam, Commvault) the strings actually belonged to; they belong to none of the first two
+**False Positives:** Real, not merely possible, once the vendor is identified correctly. Any genuine Commvault backup agent installation, which is a common enterprise deployment, can be expected to reference 3 or more of these documented internal service names together. This was previously assessed as "none known" on the mistaken assumption that a niche competitor's product was this specific to any single deployment. Not empirically fixture-tested against a real Commvault binary (none was available), so this is a corrected, primary-source-backed judgment call, not a demonstrated hit; a hit against real software needs analyst confirmation before any conclusion, which is why this is Hunting rather than Detection
+**Blind Spots:** A rebuild that drops or renames 3 or more of the five Gx short-names evades this rule; targets on-disk string references, not live Service Control Manager activity. Whether the malware sample's actual purpose (targeting a legitimate enterprise backup agent to disable it pre-encryption) is genuinely Commvault-specific, or whether the operator's own code merely references these Commvault names generically, was not re-examined here; only the vendor-attribution text was corrected
+**Validation:** Scan new_enc.exe (hash below), must match; software referencing only one or two of the five short-names must NOT fire. Untested: an actual Commvault agent installer or binary, which is the carrier that would confirm the false-positive risk empirically
+**Deployment:** Endpoint AV/EDR file scanning, email gateway attachment scanning, retroactive scan of file shares, IR artifact triage, with analyst triage on every hit
+
+```yara
+rule TOOLKIT_Arsenal237_Veritas_BackupExec_Multi_Service_Targeting {
+   meta:
+      description = "Detects Arsenal-237 ransomware's targeting of a backup product's agent services via co-occurrence of at least 3 of 5 distinct internal service short-names (GxVss, GxBlr, GxFWD, GxCVD, GxCIMgr), referenced ahead of service termination to disable enterprise backup and recovery capability before encryption. Corrected 2026-09-13: these are Commvault's own product-internal service names (confirmed against Commvault's own documentation), not Veritas's as originally published; the rule name is kept for now to avoid breaking existing references, but the vendor named in the rule's own identifier is wrong."
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
+      author = "The Hunters Ledger"
+      reference = "https://the-hunters-ledger.com/hunting-detections/arsenal-237-new_enc-exe-detections/"
+      date = "2026-01-27"
+      family = "Arsenal-237"
+      malware_type = "Ransomware"
+      campaign = "Arsenal-237-Backup-Targeting-Ransomware"
+      id = "a3f81c2e-4b6d-4a91-8c73-1e5f8a2b6c90"
+      hash1 = "90d223b70448d68f7f48397df6a9e57de3a6b389d5d8dc0896be633ca95720f2"
+   strings:
+      $gx1 = "GxVss" ascii wide
+      $gx2 = "GxBlr" ascii wide
+      $gx3 = "GxFWD" ascii wide
+      $gx4 = "GxCVD" ascii wide
+      $gx5 = "GxCIMgr" ascii wide
+   condition:
+      uint16(0) == 0x5A4D and
+      filesize < 5MB and
+      3 of ($gx*)
+}
+```
 
 #### Veeam Backup Software Bareword Reference
 
@@ -610,6 +602,7 @@ level: medium
 - **Sigma VSS-deletion rule: fabricated filter removed, level demoted.** The source `filter` block excluded command lines containing the literal string `VSSADMIN_DELETE_SHADOWS` — a value with no correspondence to any real `vssadmin` command-line syntax; it could never have suppressed a real event. Removed for clarity. `level: critical` has been demoted to `level: high` per the project's level-discipline gate (a rare-but-real legitimate FP population exists).
 - **Sigma backup-service and database-service rules rebuilt as correlations.** Both source rules' own descriptions stated an unrealizable multi-event intent (3+ distinct backup services within 5 minutes; 2+ distinct database services within 10 minutes) that a single-event Sigma selection cannot express, and had been silently downgraded to fire on any single matching service stop. Both have been rebuilt as genuine Sigma `value_count` correlations, restoring the originally intended detection logic. Both land at Hunting rather than Detection given the realistic single-product-restart false-positive path described in each rule's Rationale above. The redundant `sqlservr` substring was also dropped from the database rule's service list — it is already a substring of `sql` and added no new matching capability.
 - **Sigma RustRansomNoteTask rule demoted.** `level: high` was inflated for a single, fully attacker-renameable literal; demoted to `level: medium`, the Hunting-appropriate level for a suspicious-but-brittle single-artifact selector.
+- **YARA backup-service rule vendor corrected and re-tiered, 2026-09-13.** The Gx-service-name combination rule was published as "Veritas Backup Exec," and it is not: the five service short-names (`GxVss`, `GxBlr`, `GxFWD`, `GxCVD`, `GxCIMgr`) are Commvault's own product-internal service names, confirmed against Commvault's published "Descriptions of Services" documentation. The rule is re-tiered from Detection to Hunting, since a real vendor's real product is now confirmed (not merely assumed) to plausibly carry these strings, and its False Positives field is corrected from "none known" to reflect that. See the rule's own entry under Hunting Rules for the full correction.
 
 ### Cut Rules (genuine noise — not routed to the feed)
 

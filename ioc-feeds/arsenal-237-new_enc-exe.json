@@ -125,49 +125,52 @@
     ]
   },
   "service_termination_indicators": {
-    "veritas_backup_exec_agents": [
+    "commvault_backup_agents": [
+      {
+        "_correction_2026_09_13": "This block was published as veritas_backup_exec_agents with per-service descriptions attributed to Veritas. Corrected: these are Commvault's own product-internal service names, confirmed against Commvault's published 'Descriptions of Services' documentation. Confidence is downgraded from CONFIRMED to MODERATE on services where the exact string in this malware sample does not exactly match Commvault's documented service short-name (GxVss vs documented GxVssProv; GxCIMgr vs documented GxClMgrS), and to NOT VERIFIED on GxBlr, which was not found in the Commvault documentation page consulted."
+      },
       {
         "service_name": "GxVss",
-        "description": "Veritas VSS provider",
+        "description": "Commvault VSS provider (closely related to Commvault's documented GxVssProv)",
         "purpose": "Volume Shadow Copy integration",
         "impact": "Backup capability disabled",
-        "confidence": "CONFIRMED",
+        "confidence": "MODERATE",
         "ioc_type": "service_termination",
         "severity": "CRITICAL"
       },
       {
         "service_name": "GxBlr",
-        "description": "Veritas Backup Exec remote agent",
-        "purpose": "Network backup and restore",
-        "impact": "Remote backup disabled",
-        "confidence": "CONFIRMED",
+        "description": "Commvault internal service, exact function not verified against Commvault's own documentation (not found on the documentation page consulted 2026-09-13)",
+        "purpose": "Not verified",
+        "impact": "Not verified",
+        "confidence": "NOT VERIFIED",
         "ioc_type": "service_termination",
         "severity": "CRITICAL"
       },
       {
         "service_name": "GxFWD",
-        "description": "Veritas media server agent",
-        "purpose": "Media library and storage management",
-        "impact": "Media server disabled",
+        "description": "Commvault Communications Service component: 'Responsible for tunneling Commvault connections across firewalls' (quoted from Commvault's own documentation)",
+        "purpose": "Firewall tunneling for Commvault connections",
+        "impact": "Firewall-tunneled backup communication disabled",
         "confidence": "CONFIRMED",
         "ioc_type": "service_termination",
         "severity": "CRITICAL"
       },
       {
         "service_name": "GxCVD",
-        "description": "Veritas client service",
-        "purpose": "Client-side backup operations",
-        "impact": "Client backup disabled",
+        "description": "Commvault Communications Service: 'Provides the ability to fetch or save metadata on the CommServe server when backup or restore are in progress' (quoted from Commvault's own documentation)",
+        "purpose": "Metadata fetch/save with the CommServe server during backup or restore",
+        "impact": "Backup/restore metadata communication disabled",
         "confidence": "CONFIRMED",
         "ioc_type": "service_termination",
         "severity": "CRITICAL"
       },
       {
         "service_name": "GxCIMgr",
-        "description": "Veritas management service",
-        "purpose": "Centralized backup management",
+        "description": "Commvault internal service (closely related to Commvault's documented GxClMgrS: 'running and controlling recall jobs and failover operations on clusters')",
+        "purpose": "Cluster recall/failover coordination",
         "impact": "Management and coordination disabled",
-        "confidence": "CONFIRMED",
+        "confidence": "MODERATE",
         "ioc_type": "service_termination",
         "severity": "CRITICAL"
       }
@@ -571,7 +574,7 @@
         "behavior": "Multi-stage service termination sequence",
         "stages": [
           "Database service termination (SQL, Oracle)",
-          "Backup service termination (Veritas, Veeam, VSS)",
+          "Backup service termination (Commvault, Veeam, VSS)",
           "Security service termination (Sophos, McAfee)",
           "Application termination (Office, email clients)"
         ],

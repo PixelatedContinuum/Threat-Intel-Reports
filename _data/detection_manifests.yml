@@ -1053,24 +1053,24 @@ arsenal-237-nethost-dll-detections:
     confidence: "HIGH"
     attack: [T1059.001]
 arsenal-237-new_enc-exe-detections:
-  - name: "Veritas Backup Exec Multi-Service Targeting"
-    engine: yara
-    tier: Detection
-    fence: 0
-    hash: "92f7d099"
-    head: "/* Yara Rule Set Identifier: Arsenal-237-Backup-"
-    robustness: 2
-    confidence: "HIGH"
-    attack: [T1489, T1490]
   - name: "Volume Shadow Copy Deletion Command"
     engine: yara
     tier: Detection
-    fence: 1
+    fence: 0
     hash: "2a522fe1"
     head: "rule TOOLKIT_Arsenal237_VSS_Shadow_Copy_Deletion"
     robustness: 3
     confidence: "HIGH"
     attack: [T1490]
+  - name: "Commvault Backup Service Targeting (misattributed as Veritas at authoring)"
+    engine: yara
+    tier: Hunting
+    fence: 1
+    hash: "115b1d37"
+    head: "rule TOOLKIT_Arsenal237_Veritas_BackupExec_Multi"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1489, T1490]
   - name: "Veeam Backup Software Bareword Reference"
     engine: yara
     tier: Hunting
@@ -2116,12 +2116,12 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
     attack: [T1059.006, T1595.002, T1554]
   - name: "MAL_Linux_GHOST_ComfyUI_Fake_PerformanceMonitor_Node"
     engine: yara
-    tier: Detection
+    tier: Hunting
     fence: 5
     hash: "84cce691"
     head: "rule MAL_Linux_GHOST_ComfyUI_Fake_PerformanceMon"
     robustness: 2
-    confidence: "HIGH"
+    confidence: "MODERATE (downgraded from HIGH 2026-09-13)"
     attack: [T1554, T1059.006, T1574.006]
   - name: "MAL_Linux_GHOST_Hysteria_Operator_Wrapper"
     engine: yara
@@ -2705,19 +2705,10 @@ malware-analysis-houselet-detections:
     confidence: "MODERATE"
     attack: [T1497.001]
 multivector-ecommerce-rce-toolkit-192-3-1-116-detections:
-  - name: "Logback insertFromJNDI RCE (CVE-2021-42550)"
-    engine: yara
-    tier: Detection
-    fence: 0
-    hash: "c8c8d8fc"
-    head: "/* Yara Rule Set Identifier: Logback insertFromJ"
-    robustness: 3
-    confidence: "HIGH"
-    attack: [T1190]
   - name: "Logback FileAppender Arbitrary File Write to JSP"
     engine: yara
     tier: Detection
-    fence: 1
+    fence: 0
     hash: "11a1611c"
     head: "/* Yara Rule Set Identifier: Logback FileAppende"
     robustness: 3
@@ -2726,7 +2717,7 @@ multivector-ecommerce-rce-toolkit-192-3-1-116-detections:
   - name: "SnakeYAML Deserialization Gadget (CVE-2022-1471 Family)"
     engine: yara
     tier: Detection
-    fence: 2
+    fence: 1
     hash: "f0a1ce0c"
     head: "/* Yara Rule Set Identifier: SnakeYAML Deseriali"
     robustness: 3
@@ -2735,7 +2726,7 @@ multivector-ecommerce-rce-toolkit-192-3-1-116-detections:
   - name: "Generic JSP Web Shell (Bash-Exec via HTTP Parameter)"
     engine: yara
     tier: Detection
-    fence: 3
+    fence: 2
     hash: "93a1918e"
     head: "/* Yara Rule Set Identifier: Generic JSP Web She"
     robustness: 2
@@ -2744,12 +2735,21 @@ multivector-ecommerce-rce-toolkit-192-3-1-116-detections:
   - name: "XXE-to-SSRF Internal/Cloud-Metadata Probe"
     engine: yara
     tier: Detection
-    fence: 4
+    fence: 3
     hash: "c4377df5"
     head: "/* Yara Rule Set Identifier: XXE-to-SSRF Interna"
     robustness: 3
     confidence: "HIGH"
     attack: [T1190, T1552.005]
+  - name: "Logback insertFromJNDI RCE (CVE-2021-42550)"
+    engine: yara
+    tier: Hunting
+    fence: 4
+    hash: "10316b61"
+    head: "rule EXPL_Logback_InsertFromJNDI_CVE_2021_42550 "
+    robustness: 2
+    confidence: "MODERATE (downgraded from HIGH 2026-09-13)"
+    attack: [T1190]
   - name: "Manufactured Log-Data Harvesting via Jolokia Logger Manipulation Then Actuator Logfile Read (Correlation)"
     engine: sigma
     tier: Detection
@@ -3259,19 +3259,10 @@ open-directory-193-56-255-154-xiebroc2-detections:
     confidence: "HIGH"
     attack: [T1071.001, T1036, T1571]
 open-directory-94-103-1-13-20260423-detections:
-  - name: "Stage-5b UAC Bypass PE (Cross-Build Invariant)"
-    engine: yara
-    tier: Detection
-    fence: 0
-    hash: "1a2ebe0a"
-    head: "/* Yara Rule Set Identifier: Chaos TorBrowserTor"
-    robustness: 2
-    confidence: "DEFINITE"
-    attack: [T1548.002, T1134.004]
   - name: "Stage-4 Mutex GUID (Cross-Build Invariant)"
     engine: yara
     tier: Detection
-    fence: 1
+    fence: 0
     hash: "e123dbd7"
     head: "rule MALW_ChaosLoader_Stage4_MutexGUID_CrossBuil"
     robustness: 2
@@ -3280,7 +3271,7 @@ open-directory-94-103-1-13-20260423-detections:
   - name: "Batch Dropper Structural Anchors"
     engine: yara
     tier: Detection
-    fence: 2
+    fence: 1
     hash: "862d4eef"
     head: "rule MALW_ChaosLoader_BatchDropper_StructuralAnc"
     robustness: 2
@@ -3289,7 +3280,7 @@ open-directory-94-103-1-13-20260423-detections:
   - name: "Stage-5a Ransomware Payload"
     engine: yara
     tier: Detection
-    fence: 3
+    fence: 2
     hash: "a37b3210"
     head: "rule RANSOM_ChaosBuilder_TorBrowserTor_Stage5a {"
     robustness: 2
@@ -3298,7 +3289,7 @@ open-directory-94-103-1-13-20260423-detections:
   - name: "Filesystem Artefacts (Post-Encryption)"
     engine: yara
     tier: Detection
-    fence: 4
+    fence: 3
     hash: "5021bd88"
     head: "rule RANSOM_ChaosBuilder_TorBrowserTor_Filesyste"
     robustness: 2
@@ -3307,12 +3298,21 @@ open-directory-94-103-1-13-20260423-detections:
   - name: "Orcus RAT v7 Wardow Crack"
     engine: yara
     tier: Detection
-    fence: 5
+    fence: 4
     hash: "4f57dd16"
     head: "rule RAT_OrcusRAT_v7_WardowCrack { meta: descrip"
     robustness: 3
     confidence: "DEFINITE"
     attack: [T1573, T1056.001, T1113, T1071.001]
+  - name: "Stage-5b UAC Bypass PE (Cross-Build Invariant)"
+    engine: yara
+    tier: Hunting
+    fence: 5
+    hash: "82fc4925"
+    head: "rule MALW_ChaosLoader_Stage5b_UACBypass_CrossBui"
+    robustness: 2
+    confidence: "MODERATE (downgraded from DEFINITE 2026-09-13)"
+    attack: [T1548.002, T1134.004]
   - name: "mymain Build In-Memory Crypter Keys"
     engine: yara
     tier: Hunting
@@ -3456,19 +3456,10 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
     robustness: 2
     confidence: "HIGH"
     attack: [T1132.001]
-  - name: "Rootkit_Userland_OriginalsBackup_TarSet"
-    engine: yara
-    tier: Detection
-    fence: 3
-    hash: "db6f1bea"
-    head: "rule Rootkit_Userland_OriginalsBackup_TarSet { m"
-    robustness: 3
-    confidence: "HIGH"
-    attack: [T1554, T1014]
   - name: "Webshell_PHP_XCMD_Header_Dispatcher"
     engine: yara
     tier: Detection
-    fence: 4
+    fence: 3
     hash: "0a9e60b8"
     head: "rule Webshell_PHP_XCMD_Header_Dispatcher { meta:"
     robustness: 2
@@ -3477,12 +3468,21 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
   - name: "GeoServer_CVE_2024_36401_ValueReference_Exec"
     engine: yara
     tier: Detection
-    fence: 5
+    fence: 4
     hash: "50798ff0"
     head: "rule GeoServer_CVE_2024_36401_ValueReference_Exe"
     robustness: 3
     confidence: "HIGH"
     attack: [T1190]
+  - name: "Rootkit_Userland_OriginalsBackup_TarSet"
+    engine: yara
+    tier: Hunting
+    fence: 5
+    hash: "633c9720"
+    head: "rule Rootkit_Userland_OriginalsBackup_TarSet { m"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1554, T1014]
   - name: "PublicTool_DirtyFrag_LinuxKernel_LPE"
     engine: yara
     tier: Hunting

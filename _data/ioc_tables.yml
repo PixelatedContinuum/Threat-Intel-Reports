@@ -1162,7 +1162,7 @@
   report_url: null
   detection_url: "/hunting-detections/arsenal-237-new_enc-exe-detections"
   total: 8
-  untyped: 151
+  untyped: 152
   counts:
     filename: 3
     md5: 1
