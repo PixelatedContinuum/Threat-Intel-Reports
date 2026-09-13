@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-13T00:00:16Z
+generated_at: 2026-09-13T02:02:37Z
 window_days: 30
 counts:
-  total: 522
+  total: 521
   research: 176
-  news: 346
+  news: 345
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -3562,9 +3562,3 @@ items:
     date: 2026-08-14T06:41:43Z
     kind: news
     labels: ["amnesiastealer", "information stealer", "macos malware", "malware"]
-  - title: "Apple sends new ‘Threat Notification’ alerts over mercenary spyware attacks"
-    url: "https://www.bleepingcomputer.com/news/apple/apple-sends-new-threat-notification-alerts-over-mercenary-spyware-attacks/"
-    source: "BleepingComputer"
-    date: 2026-08-14T01:19:12Z
-    kind: news
-    labels: ["apple"]
