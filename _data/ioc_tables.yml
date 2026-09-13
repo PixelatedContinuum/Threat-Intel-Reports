@@ -7358,7 +7358,7 @@
   report_url: "/reports/seasia-gov-exploitation-toolkit-144-172-106-236/"
   detection_url: "/hunting-detections/seasia-gov-exploitation-toolkit-144-172-106-236-detections"
   total: 54
-  untyped: 42
+  untyped: 39
   counts:
     domain: 15
     email: 1

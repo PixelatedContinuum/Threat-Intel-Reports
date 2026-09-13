@@ -5163,7 +5163,7 @@ seasia-gov-exploitation-toolkit-144-172-106-236-detections:
     engine: sigma
     tier: Detection
     fence: 8
-    hash: "cb81b11f"
+    hash: "4f298be4"
     head: "title: Tableau Server Vizportal SSRF via getView"
     robustness: 2
     confidence: "HIGH"
