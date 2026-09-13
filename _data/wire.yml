@@ -3,17 +3,17 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-13T10:00:36Z
+generated_at: 2026-09-13T12:02:06Z
 window_days: 30
 counts:
-  total: 516
-  research: 175
-  news: 341
+  total: 509
+  research: 173
+  news: 336
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 70
+    count: 69
     color: 1
   - label: "cybercrime"
     count: 60
@@ -31,7 +31,7 @@ topics:
     count: 22
     color: 6
   - label: "data breaches"
-    count: 22
+    count: 21
     color: 7
   - label: "credential theft"
     count: 17
@@ -117,11 +117,9 @@ label_colors:
   "application security": 6
   "apt": 5
   "apt28": 3
-  "aquilarat": 10
   "arktunnel": 6
   "arm": 10
   "armenia": 5
-  "armored likho": 9
   "arrayref": 8
   "arrested": 2
   "artificial intelligence": 6
@@ -244,7 +242,6 @@ label_colors:
   "compile-time execution": 3
   "conti": 1
   "control-flow flattening": 10
-  "coolclient": 8
   "credential exfiltration": 4
   "credential harvesting": 4
   "credential phishing": 9
@@ -288,7 +285,6 @@ label_colors:
   "darklantern": 4
   "data breaches": 7
   "data exfiltration": 9
-  "data leak": 9
   "data-exfiltration": 12
   "dead drop resolver": 7
   "defender exclusions": 12
@@ -347,7 +343,6 @@ label_colors:
   "heights financial": 1
   "hideul.exe": 7
   "high profile threats": 2
-  "honeymyte": 10
   "hugging face": 6
   "ics": 3
   "ics/ot": 1
@@ -365,7 +360,6 @@ label_colors:
   "leadership": 11
   "legal": 7
   "linux": 2
-  "litellm": 9
   "living-off-the-land": 1
   "macos": 11
   "malware": 5
@@ -418,7 +412,6 @@ label_colors:
   "social engineering": 10
   "software": 5
   "spring": 5
-  "supply chain": 8
   "surfshark": 11
   "threat intelligence": 9
   "threat source newsletter": 6
@@ -3483,45 +3476,3 @@ items:
     date: 2026-08-14T13:14:15Z
     kind: news
     labels: ["cybercrime", "government"]
-  - title: "In Other News: Rapid7 Layoffs, Hacking a Boeing 737, Refrigeration System Vulnerabilities"
-    url: "https://www.securityweek.com/in-other-news-rapid7-layoffs-hacking-a-boeing-737-refrigeration-system-vulnerabilities/"
-    source: "SecurityWeek"
-    date: 2026-08-14T11:57:51Z
-    kind: news
-    labels: ["in other news", "vulnerabilities"]
-  - title: "Shell investigates 'potential incident' after Clop data theft claims"
-    url: "https://www.bleepingcomputer.com/news/security/shell-investigates-potential-incident-after-clop-data-theft-claims/"
-    source: "BleepingComputer"
-    date: 2026-08-14T11:55:45Z
-    kind: news
-    labels: []
-  - title: "Trivy, Not LiteLLM Behind the 2,500 Org Compromise"
-    url: "https://www.securityweek.com/trivy-not-litellm-behind-the-2500-org-compromise/"
-    source: "SecurityWeek"
-    date: 2026-08-14T11:35:23Z
-    kind: news
-    labels: ["litellm", "supply chain", "supply chain attack", "supply chain security", "trivy"]
-  - title: "RingCentral data breach exposed info of 1.6 million accounts"
-    url: "https://www.bleepingcomputer.com/news/security/ringcentral-data-breach-exposed-info-of-16-million-accounts/"
-    source: "BleepingComputer"
-    date: 2026-08-14T10:52:05Z
-    kind: news
-    labels: []
-  - title: "CoolClient backdoor goes deeper: Windows kernel rootkit added"
-    url: "https://otx.alienvault.com/pulse/6a7ef2da146fb06724520eb4"
-    source: "AlienVault"
-    date: 2026-08-14T10:50:02Z
-    kind: research
-    labels: ["coolclient", "honeymyte", "mustang panda", "plugx", "toneshell"]
-  - title: "New Armored Likho tools target Telegram and eavesdropping"
-    url: "https://otx.alienvault.com/pulse/6a7eef664b5b3aa69c6a38b3"
-    source: "AlienVault"
-    date: 2026-08-14T10:35:18Z
-    kind: research
-    labels: ["aquilarat", "armored likho", "eagle werewolf", "still toolkit", "telegram stealer"]
-  - title: "1.6 Million Likely Impacted by RingCentral Data Breach"
-    url: "https://www.securityweek.com/1-6-million-likely-impacted-by-ringcentral-data-breach/"
-    source: "SecurityWeek"
-    date: 2026-08-14T10:24:03Z
-    kind: news
-    labels: ["data breaches", "data leak", "ringcentral", "shinyhunters"]
