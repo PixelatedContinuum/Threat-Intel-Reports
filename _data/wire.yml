@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-13T20:00:56Z
+generated_at: 2026-09-13T22:01:16Z
 window_days: 30
 counts:
-  total: 504
+  total: 503
   research: 172
-  news: 332
+  news: 331
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -16,10 +16,10 @@ topics:
     count: 69
     color: 1
   - label: "cybercrime"
-    count: 59
+    count: 58
     color: 2
   - label: "government"
-    count: 28
+    count: 27
     color: 3
   - label: "exploited"
     count: 25
@@ -3438,9 +3438,3 @@ items:
     date: 2026-08-15T14:14:38Z
     kind: news
     labels: []
-  - title: "Investigation of banking hack leads to arrests in Germany, Brazil"
-    url: "https://therecord.media/investigation-into-banking-hack-leads-to-arrests-germany-brazil"
-    source: "Recorded Future"
-    date: 2026-08-14T20:31:00Z
-    kind: news
-    labels: ["cybercrime", "government"]
