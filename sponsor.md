@@ -50,8 +50,8 @@ hide: true
 <div class="hl-feat-grid">
   <div class="hl-feat" style="--fa: #58a6ff;">
     <div class="hl-feat__dot"></div>
-    <div class="hl-feat__stat">10K+ views</div>
-    <p class="hl-feat__desc">In a peak month and climbing, readers who come for working detection content, not general traffic.</p>
+    <div class="hl-feat__stat">112 Suricata rules</div>
+    <p class="hl-feat__desc">In a consolidated feed registered for suricata-update, running in stacks whose operators have never opened this site.</p>
   </div>
   <div class="hl-feat" style="--fa: #4ade80;">
     <div class="hl-feat__dot"></div>
@@ -65,7 +65,7 @@ hide: true
   </div>
 </div>
 
-<p style="color: var(--hl-text-secondary); font-size: 0.9em; line-height: 1.6; margin: 14px 2px 2px;">And the reach compounds beyond the site. Every campaign also ships as <strong>machine-readable intelligence</strong>, a consolidated Suricata feed currently carrying 112 rules across 35 campaigns, 58 IOC feeds in JSON, and 41 STIX bundles built for OpenCTI and MISP. All of it is public and machine-readable, so it can go straight into a detection stack without anyone loading a page here. That is reach that does not depend on a visit to the site.</p>
+<p style="color: var(--hl-text-secondary); font-size: 0.9em; line-height: 1.6; margin: 14px 2px 2px;">And the reach compounds beyond the site. Every campaign also ships as <strong>machine-readable intelligence</strong>, a consolidated Suricata feed currently carrying 112 rules across 35 campaigns, 57 IOC feeds in JSON, and 41 STIX bundles built for OpenCTI and MISP. All of it is public and machine-readable, so it can go straight into a detection stack without anyone loading a page here. That is reach that does not depend on a visit to the site.</p>
 
 {% include section-header.html label="Sponsorship Tiers" accent="#b8902f" %}
 
@@ -152,7 +152,7 @@ hide: true
     </tbody>
   </table>
 
-  <p class="hl-panel__body" style="margin-top: 14px; margin-bottom: 0;">Two things worth knowing before you choose. An annual commitment <strong>locks your rate for the full term</strong>, so a published price rise cannot reach you mid term, and the lock holds through renewal. Keep sponsoring without a break and you keep the rate you started at, whatever the list price does later. Monthly stays flexible and can be stopped at the end of any billing month. Either way the placements, the benefits, and the editorial independence below are identical. If you are new and want to go annual straight away, you do not lose the intro rate: the first year is $4,400, which is the same discount the three intro months would have given you, applied to the annual price. The one benefit that does depend on how you pay is the threat question, which opens immediately on an annual prepay and at twelve months on monthly, because it is a real piece of work and a full year is what earns it.</p>
+  <p class="hl-panel__body" style="margin-top: 14px; margin-bottom: 0;">Two things worth knowing before you choose. An annual commitment <strong>locks your rate for the full term</strong>, so a published price rise cannot reach you mid term, and the lock holds through renewal. Keep sponsoring without a break and you keep the rate you started at, whatever the list price does later. Monthly stays flexible and can be stopped at the end of any billing month. Either way the placements, the benefits, and the editorial independence below are identical. If you are new and want to go annual straight away, you do not lose the intro rate: the first year is $4,400, which is the same discount the three intro months would have given you, applied to the annual price. The one benefit that does depend on how you pay is the research credits. An annual prepay opens all four on payment. On monthly you earn one after each completed quarter, because each credit is a real piece of work and a quarter of sponsorship is what earns it.</p>
 </div>
 
 {% include section-header.html label="Editorial Independence" accent="#58a6ff" %}
@@ -162,7 +162,7 @@ hide: true
   <ul class="hl-panel__body" style="margin: 0; padding-left: 18px; line-height: 1.7;">
     <li>Sponsors do not review reports before publication.</li>
     <li>Sponsors do not influence findings, attribution claims, or recommendations.</li>
-    <li>Sponsors can name a subject, whether as the threat question included with a Monthly sponsorship or as a suggestion for what gets published next. What the evidence then says is never negotiable.</li>
+    <li>Sponsors can name a subject, whether as a research credit included with a Monthly sponsorship or as a suggestion for what gets published next. What the evidence then says is never negotiable.</li>
     <li>Sponsors are never named as analysts or contributors.</li>
     <li>Sponsored placement is always clearly disclosed. This is not native advertising.</li>
   </ul>
@@ -181,7 +181,7 @@ hide: true
 {% include section-header.html label="Commissioned Research" accent="#c084fc" %}
 
 <div class="hl-panel" style="--acc: #c084fc;">
-  <p class="hl-panel__body" style="margin-bottom: 12px;">Name a threat your organization needs intelligence on and I will go and get it, with original investigation, full technical analysis, working detections and a published report at the end, held to exactly the same evidence standards and the same editorial independence as everything else here. This is a new investigation commissioned by you. It is a different thing from picking which existing report you sponsor, and a much deeper one than the single threat question included with a Monthly sponsorship.</p>
+  <p class="hl-panel__body" style="margin-bottom: 12px;">Name a threat your organization needs intelligence on and I will go and get it, with original investigation, full technical analysis, working detections and a published report at the end, held to exactly the same evidence standards and the same editorial independence as everything else here. This is a new investigation commissioned by you. It is a different thing from picking which existing report you sponsor, and a much deeper one than the research credits included with a Monthly sponsorship.</p>
   <p class="hl-panel__body" style="margin-bottom: 0;">Priced on scope, because scope varies enormously. A single host or one open directory is a very different piece of work from a fifty-address infrastructure cluster with a malware family sitting behind it. Tell me what you want to know and I will come back with a defined scope and a fixed price before any work starts, so there are no surprises in either direction.</p>
 </div>
 
