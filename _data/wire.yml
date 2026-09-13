@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-13T08:01:06Z
+generated_at: 2026-09-13T10:00:36Z
 window_days: 30
 counts:
-  total: 518
+  total: 516
   research: 175
-  news: 343
+  news: 341
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -27,10 +27,10 @@ topics:
   - label: "malware"
     count: 25
     color: 5
-  - label: "data breaches"
-    count: 24
-    color: 6
   - label: "artificial intelligence"
+    count: 22
+    color: 6
+  - label: "data breaches"
     count: 22
     color: 7
   - label: "credential theft"
@@ -124,7 +124,7 @@ label_colors:
   "armored likho": 9
   "arrayref": 8
   "arrested": 2
-  "artificial intelligence": 7
+  "artificial intelligence": 6
   "asia-pacific": 6
   "asiogate": 3
   "astral-pe": 3
@@ -160,7 +160,6 @@ label_colors:
   "bandook": 10
   "banking software": 7
   "banking trojan": 4
-  "beacon": 6
   "behavior-based-detection": 12
   "beijing institute of technology": 12
   "berlin": 6
@@ -206,7 +205,6 @@ label_colors:
   "chaindrop": 8
   "chaotic eclipse": 12
   "charged": 4
-  "charity": 12
   "chatgpt": 1
   "chatgpt abuse": 3
   "check point": 6
@@ -288,7 +286,7 @@ label_colors:
   "cyberwarfare": 9
   "dahua": 9
   "darklantern": 4
-  "data breaches": 6
+  "data breaches": 7
   "data exfiltration": 9
   "data leak": 9
   "data-exfiltration": 12
@@ -372,7 +370,6 @@ label_colors:
   "macos": 11
   "malware": 5
   "mathspace": 4
-  "metabase": 6
   "microsoft": 4
   "microsoft teams": 10
   "mikrotik": 2
@@ -3528,15 +3525,3 @@ items:
     date: 2026-08-14T10:24:03Z
     kind: news
     labels: ["data breaches", "data leak", "ringcentral", "shinyhunters"]
-  - title: "Over 1,000 Charities Hit by Beacon CRM Data Breach"
-    url: "https://www.securityweek.com/over-1000-charities-hit-by-beacon-crm-data-breach/"
-    source: "SecurityWeek"
-    date: 2026-08-14T09:20:28Z
-    kind: news
-    labels: ["beacon", "charity", "crm", "data breaches", "uk"]
-  - title: "14,000 Trezor Customers Impacted by Data Breach at ShipMonk"
-    url: "https://www.securityweek.com/14000-trezor-customers-impacted-by-data-breach-at-shipmonk/"
-    source: "SecurityWeek"
-    date: 2026-08-14T08:16:00Z
-    kind: news
-    labels: ["data breaches", "metabase", "shipmonk", "trezor"]
