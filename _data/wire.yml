@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-14T18:02:16Z
+generated_at: 2026-09-14T20:00:37Z
 window_days: 30
 counts:
-  total: 516
+  total: 518
   research: 175
-  news: 341
+  news: 343
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -16,7 +16,7 @@ topics:
     count: 72
     color: 1
   - label: "cybercrime"
-    count: 60
+    count: 61
     color: 2
   - label: "exploited"
     count: 28
@@ -428,6 +428,18 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
 items:
+  - title: "Members of ‘Black Axe’ cybercriminal group extradited from South Africa"
+    url: "https://therecord.media/members-of-black-axe-cybercrime-group-extradited-south-africa"
+    source: "Recorded Future"
+    date: 2026-09-14T19:40:00Z
+    kind: news
+    labels: ["cybercrime"]
+  - title: "Hackers hijack HBO Max Reddit account to push malware in ClickFix ads"
+    url: "https://www.bleepingcomputer.com/news/security/hackers-hijack-hbo-max-reddit-account-to-push-malware-in-clickfix-ads/"
+    source: "BleepingComputer"
+    date: 2026-09-14T18:34:16Z
+    kind: news
+    labels: []
   - title: "Hackers target exposed Vite dev servers to steal AWS, Azure secrets"
     url: "https://www.bleepingcomputer.com/news/security/hackers-target-exposed-vite-dev-servers-to-steal-aws-azure-secrets/"
     source: "BleepingComputer"
