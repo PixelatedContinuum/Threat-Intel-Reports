@@ -33,6 +33,55 @@ function isExemptPath(path) {
   return !!EXEMPT_TOP[String(path).split('.')[0]];
 }
 
+/* Approved exceptions to the strict target-or-victim tier: specific values a human has
+   reviewed, in a diff, and confirmed do not identify anyone, despite sitting under an
+   entry the author marked `role: TARGET...` or `role: VICTIM...`.
+
+   A PER-ENTRY MARKER WAS THE FIRST DESIGN AND WAS REJECTED. The proposal (gate-mechanics.md,
+   2026-09-13) was a boolean field an analyst sets once on the entry itself, honoured wherever
+   `classify()` returns no type for the value, on the theory that the untyped space is a safe
+   place to allow an override because it can never contain an IP, domain, URL, email or hash.
+   staff1 tested that theory against the real module and the real corpus and broke it
+   (`break-constraint-2.md`): the untyped space is exactly where stolen-credential identifiers
+   live. Two are published in this corpus today: `022a1b74-2332-4df5-a76b-60225ffa7ae3`, a
+   stolen victim JWT token id, and `XRAOLK4ZIZHJPDWPVEMGPRDXBE`, a stolen 1Password vault id
+   the feed's own text calls resolvable for victim identification. A per-entry marker would
+   have let an analyst wave either of those through with the same one-line trust the cisco-IOS
+   case deserves, and nothing in the design would have told them apart.
+
+   The list here is a curated, reviewed-once record of approved exceptions, the same pattern
+   `unblockable.js` already uses (`SERVICES`, `TENANT_NAMESPACES`, `SUFFIXES`) for the same
+   shape of problem: a small number of specific values a human has looked at, not a rule that
+   tries to characterise a whole class of safe strings. The "not enumerable" objection to this
+   approach conflated two different things: enumerating the CLASS of every non-identifying
+   string in the world is genuinely unbounded and was never the ask; recording each APPROVED
+   EXCEPTION as it is reviewed is exactly what this object does, one entry at a time, and it
+   is no more open-ended than `unblockable.js`'s own lists already are.
+
+   Every entry needs a reason and a date. An entry with neither is not acceptable, because the
+   reason is the only thing standing between "reviewed" and "guessed", and there is no
+   automated check that can tell those apart after the fact. */
+var NON_IDENTIFYING = {
+  'cisco-IOS': 'Generic Cisco IOS user-agent string. Identifies a device class shared by ' +
+    'millions of routers, not a device, a network or an owner. The opendirectory-13-140-145-210 ' +
+    'feed\'s own role text calls it "VICTIM-generated" because the string was pulled from a ' +
+    'victim device\'s outbound traffic, but the string itself carries nothing specific to that ' +
+    'victim; it would read identically off any Cisco box anywhere. Approved 2026-09-13.'
+};
+
+/* SECOND, INDEPENDENT GUARD, NOT THE SAFETY ARGUMENT: a value is only ever read from this
+   list when `classify()` also returns no type for it (checked at the call site below via
+   `candidate.type === null`). This exists so a later edit that adds a domain, IP, URL, email
+   or hash to `NON_IDENTIFYING` above is inert rather than a live hole; it stops that class of
+   mistake, it does not justify the list. Do NOT read "untyped" as a proxy for
+   "non-identifying" anywhere in this file: the whole reason the per-entry marker design was
+   rejected is that untyped values include real victim credential identifiers (the JWT jti and
+   the 1Password vault id named above), so an untyped value earns nothing by being untyped. The
+   only reason this design is safe is that every entry in `NON_IDENTIFYING` is put there by a
+   human, reviewed, in a diff, one at a time. The type check just keeps the blast radius of a
+   future mistake to values that were already off-limits to the loose tier for an unrelated
+   reason. */
+
 /* THE AUTHOR'S OWN MARKING IS AUTHORITATIVE, and it predates this module.
 
    The 13.140.145.210 feed already carried, per entry:
@@ -53,7 +102,7 @@ function isExemptPath(path) {
    analyst can. Reading the marking they already write captures exactly the cases a
    list cannot, and it means the standard extends their work rather than replacing
    it. */
-function authorMarkedHuntOnly(obj) {
+function authorMarkedHuntOnly(obj, exemptions, path) {
   if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return null;
 
   /* `action: "HUNT"` is NOT one of these signals, and assuming it was matched 169
@@ -64,7 +113,24 @@ function authorMarkedHuntOnly(obj) {
      decision. Only two markings actually mean "this is not the operator's". */
 
   var role = typeof obj.role === 'string' ? obj.role.trim().toUpperCase() : '';
-  if (/^(TARGET|VICTIM)\b/.test(role)) return 'author-marked target or victim';
+  if (/^(TARGET|VICTIM)\b/.test(role)) {
+    /* Consulted here, at the single choke point both scan() and migrate() already route
+       through, so one check covers both consumers the way the header comment on this file
+       requires. `firstIndicator` is the same lookup scan()/migrate() use a few lines below
+       this function to find the value they would report or relocate; asking it here means
+       the allowlist is checked against the exact value that would otherwise surface, not
+       against the object's other fields. */
+    var candidate = firstIndicator(obj);
+    if (candidate && candidate.type === null &&
+        Object.prototype.hasOwnProperty.call(NON_IDENTIFYING, candidate.value)) {
+      if (exemptions) {
+        exemptions.push({ value: candidate.value, path: path,
+                           reason: NON_IDENTIFYING[candidate.value] });
+      }
+      return null;
+    }
+    return 'author-marked target or victim';
+  }
 
   /* An explicit action: BLOCK outranks a prose never-block phrase, for the LOOSE
      tier only. The red team's 2026-09-13 review of the widening above found two
@@ -156,8 +222,15 @@ function firstIndicator(obj) {
 }
 
 /* Walks a parsed feed and returns every unblockable value sitting somewhere an
-   automated consumer would read it. */
-function scan(feed) {
+   automated consumer would read it.
+
+   `exemptions`, when passed, is an array this function pushes an entry onto every time the
+   allowlist above suppresses what would otherwise be a strict-tier finding, so a caller can
+   report what was actually exempted in a run rather than the exemption happening silently.
+   Existing single-argument callers are unaffected: `exemptions` defaults to undefined, and
+   `authorMarkedHuntOnly` only records into it when it is given. The return value is
+   unchanged either way, still the plain array of findings it always was. */
+function scan(feed, exemptions) {
   var found = [];
 
   function walk(node, path, parent, key) {
@@ -187,7 +260,7 @@ function scan(feed) {
        not care whether the value looks like a network indicator: a victim-marked
        entry is reported regardless of type, which is what makes a value like
        "cisco-IOS" under a `role: "VICTIM..."` marking visible at all. */
-    var marked = authorMarkedHuntOnly(node);
+    var marked = authorMarkedHuntOnly(node, exemptions, path);
     if (marked && !isExemptPath(path)) {
       var v = firstIndicator(node);
       var isVictim = marked === 'author-marked target or victim';
@@ -268,6 +341,11 @@ function migrate(feed) {
 
     if (typeof node !== 'object') return node;
 
+    // No `exemptions` array passed here: the allowlist still suppresses a matching entry
+    // (that check has no dependency on this argument), only the recording of WHICH value
+    // was exempted is skipped. migrate() is the --fix path; the run-level "what was
+    // exempted" report belongs to check-ioc-feeds.js's plain scan() pass, which does pass
+    // one, not to a run that is already rewriting the feed.
     var marked = authorMarkedHuntOnly(node);
     if (marked && !isExemptPath(path)) {
       var mv = firstIndicator(node);
@@ -367,5 +445,9 @@ function migrate(feed) {
   return { feed: out, moved: moved, removed: removed };
 }
 
+// NON_IDENTIFYING is exported for the same reason EXEMPT_TOP already was: check-ioc-feeds.js
+// reads its size to report how many approved exceptions are in force, and the test suite
+// needs to add a throwaway entry to prove the secondary type guard actually holds.
 module.exports = { scan: scan, migrate: migrate, EXEMPT_TOP: EXEMPT_TOP,
-                   authorMarkedHuntOnly: authorMarkedHuntOnly };
+                   authorMarkedHuntOnly: authorMarkedHuntOnly,
+                   NON_IDENTIFYING: NON_IDENTIFYING };

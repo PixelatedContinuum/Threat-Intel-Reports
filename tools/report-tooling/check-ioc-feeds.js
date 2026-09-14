@@ -42,7 +42,7 @@ if (!files.length) {
   process.exit(2);
 }
 
-var problems = [], changed = [], scanned = 0, unreadable = [];
+var problems = [], changed = [], scanned = 0, unreadable = [], exemptions = [];
 
 files.forEach(function (f) {
   var raw, doc;
@@ -50,7 +50,15 @@ files.forEach(function (f) {
   catch (e) { unreadable.push(f + ': ' + e.message); return; }
   scanned++;
 
-  var hits = H.scan(doc);
+  // A second array per feed, not a shared one: H.scan() only ever pushes onto what it is
+  // given, but keeping the accumulation per-file and merging here (rather than passing the
+  // same array into every call) keeps this loop's shape identical to how `problems` already
+  // works, and means a future per-feed exemption count costs nothing to add.
+  var fileExemptions = [];
+  var hits = H.scan(doc, fileExemptions);
+  fileExemptions.forEach(function (x) {
+    exemptions.push({ file: f, value: x.value, path: x.path, reason: x.reason });
+  });
   if (!hits.length) return;
 
   if (FIX) {
@@ -73,6 +81,18 @@ if (unreadable.length) {
   unreadable.forEach(function (u) { console.log('   ' + u); });
   process.exit(2);
 }
+
+/* The allowlist is silent by construction (a suppressed finding never reaches `problems`),
+   so a count nobody sees is not a control, it is an unmonitored exception mechanism that
+   happens to be well-intentioned today. This prints on every run, PASS, FAIL or --fix, not
+   only when something is actually exempted, so "0 exempted" is as visible as "1 exempted". */
+var allowlistSize = Object.keys(H.NON_IDENTIFYING).length;
+console.log('allowlist  ' + allowlistSize + ' approved non-identifying value(s) in force, ' +
+  exemptions.length + ' exempted this run' + (exemptions.length ? ':' : ''));
+exemptions.forEach(function (x) {
+  console.log('   exempt   ' + x.value + '  at ' + x.file + ' :: ' + x.path +
+    '  (' + x.reason + ')');
+});
 
 if (FIX) {
   var total = changed.reduce(function (n, c) { return n + c.moved.length; }, 0);

@@ -172,26 +172,129 @@ test('migrating twice changes nothing the second time', function () {
 
 test('a role:VICTIM value that is not a network type is still found and removed',
   function () {
-    // "cisco-IOS" does not classify as anything: not a hash, url, ipv4, email,
-    // filename or domain. Before the fix this whole entry was invisible to both
-    // scan() and migrate(), even though role:VICTIM is the STRICT marking.
+    // "juniper-JunOS" does not classify as anything: not a hash, url, ipv4, email,
+    // filename or domain, and it is not on the NON_IDENTIFYING allowlist either.
+    // Before the original fix this whole entry was invisible to both scan() and
+    // migrate(), even though role:VICTIM is the STRICT marking. Deliberately NOT
+    // "cisco-IOS" here (see the two tests below): this one exists to prove the
+    // general untyped-victim-value mechanism still works for anything the
+    // allowlist has not specifically approved.
     var f = feed({ network_indicators: { user_agents: [
-      { value: 'cisco-IOS', role: 'VICTIM-generated user agent on all exfil PUTs',
+      { value: 'juniper-JunOS', role: 'VICTIM-generated user agent on all exfil PUTs',
         context: 'the highest-fidelity signal in the case' }
     ] } });
 
     var hits = H.scan(f);
     assert.equal(hits.length, 1, 'the victim-marked non-network value was not found');
-    assert.equal(hits[0].host, 'cisco-IOS');
+    assert.equal(hits[0].host, 'juniper-JunOS');
     assert.equal(hits[0].category, 'author-marked target or victim');
 
     var r = H.migrate(f);
     assert.equal(r.removed.length, 1, 'it must be REMOVED, not moved');
-    assert.equal(r.removed[0].host, 'cisco-IOS');
+    assert.equal(r.removed[0].host, 'juniper-JunOS');
     assert.equal(r.moved.length, 0, 'a victim value must never land in hunt_only_never_block');
     assert.equal(r.feed[U.BUCKET], undefined,
       'removing the only value in this feed should leave no bucket behind');
     assert.equal(H.scan(r.feed).length, 0, 'a scan of the migrated feed must be clean');
+  });
+
+/* --- NON_IDENTIFYING allowlist: the reviewed-exception mechanism that replaced the
+   per-entry marker design ------------------------------------------------------------ */
+
+test('the real cisco-IOS shape is exempted by the allowlist: no finding, nothing moved',
+  function () {
+    // The exact fixture (value, role text, context) as it sits in
+    // opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-iocs.json.
+    // This is the entry the strict tier used to flag before the allowlist, and the case
+    // the whole allowlist mechanism was built to answer without touching the source data.
+    var f = feed({ network_indicators: { user_agents: [
+      { value: 'cisco-IOS', role: 'VICTIM-generated user agent on all 100 exfiltration PUTs',
+        confidence: 'DEFINITE', action: 'HUNT',
+        notes: 'This is the victim device\'s own user agent, not the operator\'s.' }
+    ] } });
+
+    assert.equal(H.scan(f).length, 0,
+      'an allowlisted, untyped, role:VICTIM value must not be a finding');
+
+    var r = H.migrate(f);
+    assert.equal(r.removed.length, 0, 'an exempted value must not be removed');
+    assert.equal(r.moved.length, 0, 'an exempted value must not be moved either');
+    assert.deepEqual(r.feed.network_indicators.user_agents[0].value, 'cisco-IOS',
+      'the entry must stay exactly where it was, with every field intact');
+    assert.equal(r.feed.network_indicators.user_agents[0].role,
+      'VICTIM-generated user agent on all 100 exfiltration PUTs', 'the role text is unchanged');
+  });
+
+test('scan() records the exemption when given an array to record into', function () {
+  var f = feed({ network_indicators: { user_agents: [
+    { value: 'cisco-IOS', role: 'VICTIM-generated user agent on all 100 exfiltration PUTs' }
+  ] } });
+  var exemptions = [];
+  var hits = H.scan(f, exemptions);
+  assert.equal(hits.length, 0);
+  assert.equal(exemptions.length, 1, 'the exemption must be recorded when an array is passed');
+  assert.equal(exemptions[0].value, 'cisco-IOS');
+  assert.ok(exemptions[0].reason && exemptions[0].reason.length > 0,
+    'every allowlist entry must carry a reason, and it must reach the caller');
+
+  // Backward compatibility: the single-argument form (every existing caller) must still
+  // work identically and must not throw for lack of an array to push into.
+  assert.equal(H.scan(f).length, 0);
+});
+
+test('a typed value that is somehow on the allowlist is still removed: the secondary guard',
+  function () {
+    // NON_IDENTIFYING is exported for exactly this: prove that if a future edit ever adds
+    // a domain, IP, URL, email or hash to the list, the entry stays blockable-tier eligible
+    // anyway, because the allowlist is only ever consulted when classify() also finds no
+    // type. A throwaway key is added and removed so this test cannot leak state into any
+    // other test in this file.
+    H.NON_IDENTIFYING['8.8.8.8'] = 'TEST ONLY: proves a typed value on the list is not honoured';
+    try {
+      var f = feed({ network_indicators: { ips: [
+        { value: '8.8.8.8', role: 'VICTIM internal resolver, somehow on the allowlist' }
+      ] } });
+      var hits = H.scan(f);
+      assert.equal(hits.length, 1,
+        'a typed value must be found even if it is present in NON_IDENTIFYING');
+      assert.equal(hits[0].host, '8.8.8.8');
+      var r = H.migrate(f);
+      assert.equal(r.removed.length, 1, 'a typed value on the list must still be removed');
+    } finally {
+      delete H.NON_IDENTIFYING['8.8.8.8'];
+    }
+    assert.equal(Object.prototype.hasOwnProperty.call(H.NON_IDENTIFYING, '8.8.8.8'), false,
+      'cleanup must actually have run, or every test after this one is compromised');
+  });
+
+test('the two real untyped victim identifiers that broke the marker design are still removed',
+  function () {
+    // This is the test that encodes WHY the per-entry marker design was rejected in favour
+    // of the allowlist. Both values are untyped (classify() returns null for each, per
+    // break-constraint-2.md's own measurement) and neither is on NON_IDENTIFYING. A
+    // role:VICTIM marking on either must still remove it, exactly as it does today, or this
+    // change would have silently reopened the hole staff1 found.
+    // network_indicators is overridden to {} in both fixtures, the same guard the
+    // "loose never-block tier is UNCHANGED" test above uses: the base fixture's own
+    // api.telegram.org bare-match would otherwise add a second, unrelated hit and make
+    // this assertion pass or fail for the wrong reason.
+    var jwt = feed({ network_indicators: {}, host_indicators: { victim_indicators: [
+      { value: '022a1b74-2332-4df5-a76b-60225ffa7ae3', role: 'VICTIM organization API token',
+        type: 'stolen_jwt_jti', confidence: 'DEFINITE' }
+    ] } });
+    var jwtHits = H.scan(jwt);
+    assert.equal(jwtHits.length, 1, 'the stolen JWT jti must still be found');
+    assert.equal(jwtHits[0].host, '022a1b74-2332-4df5-a76b-60225ffa7ae3');
+    assert.equal(H.migrate(jwt).removed.length, 1, 'and still removed');
+
+    var vault = feed({ network_indicators: {}, host_indicators: { victim_indicators: [
+      { value: 'XRAOLK4ZIZHJPDWPVEMGPRDXBE', role: 'VICTIM 1Password vault id',
+        type: 'stolen_1password_vault_id', confidence: 'DEFINITE' }
+    ] } });
+    var vaultHits = H.scan(vault);
+    assert.equal(vaultHits.length, 1, 'the stolen 1Password vault id must still be found');
+    assert.equal(vaultHits[0].host, 'XRAOLK4ZIZHJPDWPVEMGPRDXBE');
+    assert.equal(H.migrate(vault).removed.length, 1, 'and still removed');
   });
 
 test('the loose never-block tier is UNCHANGED: a non-network value stays invisible',
@@ -318,8 +421,10 @@ test('a moved author-marked object keeps every field, not just value/category/co
 
 test('a removed victim object also keeps every field, in the return value',
   function () {
+    // "juniper-JunOS", not "cisco-IOS": this fixture is testing full-field preservation
+    // on a REMOVED entry, which requires a value the allowlist does NOT exempt.
     var f = feed({ network_indicators: { user_agents: [
-      { value: 'cisco-IOS', role: 'VICTIM-generated user agent on all exfil PUTs',
+      { value: 'juniper-JunOS', role: 'VICTIM-generated user agent on all exfil PUTs',
         confidence: 'DEFINITE', notes: 'highest-fidelity signal in the case' }
     ] } });
     var r = H.migrate(f);
