@@ -10,12 +10,11 @@ tiers:
     billing_note: "Monthly or annual, whichever suits your budget cycle. Annual prepay is 17% cheaper and opens all four research credits on payment; on monthly you earn one credit after each completed quarter. Your rate is locked for as long as you keep sponsoring: renew without a break and a published price rise never reaches you."
     description: "Flagship, always-on presence, and the strongest value per dollar. Standing brand presence across the whole site, for as long as you sponsor."
     benefits:
-      - "Logo and tagline in the left-margin Sponsors panel on every page and report, a standing, high-visibility placement"
-      - "Logo and a link in the site footer on every page, plus a featured slot in the Sponsors section"
+      - "Logo and tagline site-wide: the left-margin Sponsors panel on every page and report, the footer, and a featured Sponsors slot"
       - "Early access to the whole package before it goes public, the report and its detection rules and its IOC feed, plus first option to sponsor any upcoming report exclusively"
       - "A welcome announcement post when you join, with extra posts any time at the add-on rate"
       - "One Report sponsorship included free in your first month. You pick the report, and it carries the full Report Sponsor treatment: sole banner, no competing logos, permanent for that report's life"
-      - "Four research credits a year, one a quarter. Spend one on an indicator, a domain, or a threat you are unsure about. I go and look, then send you the answer privately, with the evidence behind it. A clean result is an answer too"
+      - "Four research credits a year, one a quarter. Bring an indicator, a domain or a threat you are unsure about and get a private written answer with the evidence behind it"
       - "Or spend two credits on a written read of the threats your organization should be watching for. I draw on what I see across investigations as well as the broader threat landscape"
     best_fit: "Sponsors who want ongoing, site-wide brand association with the publication, visible to every reader, for as long as you sponsor."
     slots: 3
@@ -37,7 +36,7 @@ tiers:
       - "Permanent for the life of the report. It never expires"
       - "You pick which report you sponsor, from anything already published or on the schedule"
       - "I tell you when the case moves. If the infrastructure goes down, the operator resurfaces, or the report gets a substantive update, you hear from me"
-      - "A threat brief built from your report, designed and yours to share. Not a copy of the report: the key points, what to do now, the five detections and five indicators worth acting on today, and a breakdown of only the parts that genuinely stand out"
+      - "A threat brief built from your report, designed and yours to share. Not a copy of it: the key points, what to act on today, and the parts that genuinely stand out"
       - "The report's launch post credits you (LinkedIn, X, and the subscriber email that goes out with every new report). New reports only"
       - "Early access before it goes public, and not just the report. The detection rules and the IOC feed come with it. New reports only"
     best_fit: "Sponsors who want exclusive association with a specific report or threat, with sole placement, permanent for its life."
