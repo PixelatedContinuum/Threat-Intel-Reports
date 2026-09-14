@@ -1,7 +1,7 @@
 {
- "generated_at": "2026-09-14T03:22:30Z",
+ "generated_at": "2026-09-14T11:22:58Z",
  "counts": {
-  "indicators": 2166,
+  "indicators": 2141,
   "reports": 57,
   "multi_report": 147,
   "suppressed_benign": 129,
@@ -10287,131 +10287,6 @@
    {
     "report": "russian-gemini-credential-mill-213.165.51.115",
     "role": "Operator's GCP service account for project elated-gizmo-491112-k0"
-   }
-  ],
-  "domain:doyoof.com": [
-   {
-    "report": "russian-gemini-credential-mill-213.165.51.115"
-   }
-  ],
-  "domain:mendozatechnologies.com": [
-   {
-    "report": "russian-gemini-credential-mill-213.165.51.115"
-   }
-  ],
-  "domain:parkesweatshirtshop.com": [
-   {
-    "report": "russian-gemini-credential-mill-213.165.51.115"
-   }
-  ],
-  "domain:allkitchensurfaces.com": [
-   {
-    "report": "russian-gemini-credential-mill-213.165.51.115"
-   }
-  ],
-  "domain:indiemotionstudio.com": [
-   {
-    "report": "russian-gemini-credential-mill-213.165.51.115"
-   }
-  ],
-  "domain:prixship.com": [
-   {
-    "report": "russian-gemini-credential-mill-213.165.51.115"
-   }
-  ],
-  "domain:rawnlaw.com": [
-   {
-    "report": "russian-gemini-credential-mill-213.165.51.115"
-   }
-  ],
-  "domain:plaoncorp.com": [
-   {
-    "report": "russian-gemini-credential-mill-213.165.51.115"
-   }
-  ],
-  "domain:roanokeweaponry.com": [
-   {
-    "report": "russian-gemini-credential-mill-213.165.51.115"
-   }
-  ],
-  "domain:katiemorton.com": [
-   {
-    "report": "russian-gemini-credential-mill-213.165.51.115"
-   }
-  ],
-  "domain:musicanet.org": [
-   {
-    "report": "russian-gemini-credential-mill-213.165.51.115"
-   }
-  ],
-  "domain:videocartonline.com": [
-   {
-    "report": "russian-gemini-credential-mill-213.165.51.115"
-   }
-  ],
-  "domain:annisatravel.com": [
-   {
-    "report": "russian-gemini-credential-mill-213.165.51.115"
-   }
-  ],
-  "domain:realwealthmanagement.com": [
-   {
-    "report": "russian-gemini-credential-mill-213.165.51.115"
-   }
-  ],
-  "domain:spliceengineering.com": [
-   {
-    "report": "russian-gemini-credential-mill-213.165.51.115"
-   }
-  ],
-  "domain:iron-bay.com": [
-   {
-    "report": "russian-gemini-credential-mill-213.165.51.115"
-   }
-  ],
-  "domain:designz.com": [
-   {
-    "report": "russian-gemini-credential-mill-213.165.51.115"
-   }
-  ],
-  "domain:goodwinboys.com": [
-   {
-    "report": "russian-gemini-credential-mill-213.165.51.115"
-   }
-  ],
-  "domain:vakhitova.com": [
-   {
-    "report": "russian-gemini-credential-mill-213.165.51.115"
-   }
-  ],
-  "domain:wholesomeharvestfarm.com": [
-   {
-    "report": "russian-gemini-credential-mill-213.165.51.115"
-   }
-  ],
-  "domain:youthhockeytraining.com": [
-   {
-    "report": "russian-gemini-credential-mill-213.165.51.115"
-   }
-  ],
-  "domain:profotofix.com": [
-   {
-    "report": "russian-gemini-credential-mill-213.165.51.115"
-   }
-  ],
-  "domain:ea-ky.com": [
-   {
-    "report": "russian-gemini-credential-mill-213.165.51.115"
-   }
-  ],
-  "domain:joelandjess.com": [
-   {
-    "report": "russian-gemini-credential-mill-213.165.51.115"
-   }
-  ],
-  "domain:goldxstar.com": [
-   {
-    "report": "russian-gemini-credential-mill-213.165.51.115"
    }
   ],
   "sha256:981036cec38c6fd9796fc64a102100b97983f56b3482cc3e1f1610e14a1fae58": [

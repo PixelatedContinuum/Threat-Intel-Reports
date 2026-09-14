@@ -7256,10 +7256,10 @@
   feed_url: "/ioc-feeds/russian-gemini-credential-mill-213.165.51.115-iocs.json"
   report_url: "/reports/russian-gemini-credential-mill-213.165.51.115/"
   detection_url: "/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections"
-  total: 60
-  untyped: 143
+  total: 35
+  untyped: 162
   counts:
-    domain: 32
+    domain: 7
     email: 1
     filename: 5
     ipv4: 6
@@ -7291,12 +7291,6 @@
       value: "10101.tralalarkefe.com"
       context: "Tunnel alias for payload server at 127.0.0.1:10101"
     - type: "domain"
-      value: "allkitchensurfaces.com"
-      context: null
-    - type: "domain"
-      value: "annisatravel.com"
-      context: null
-    - type: "domain"
       value: "antipublic.one"
       context: null
     - type: "domain"
@@ -7306,64 +7300,7 @@
       value: "catchall1.tralalarkefe.com"
       context: null
     - type: "domain"
-      value: "designz.com"
-      context: null
-    - type: "domain"
-      value: "doyoof.com"
-      context: null
-    - type: "domain"
-      value: "ea-ky.com"
-      context: null
-    - type: "domain"
-      value: "goldxstar.com"
-      context: null
-    - type: "domain"
-      value: "goodwinboys.com"
-      context: null
-    - type: "domain"
-      value: "indiemotionstudio.com"
-      context: null
-    - type: "domain"
-      value: "iron-bay.com"
-      context: null
-    - type: "domain"
-      value: "joelandjess.com"
-      context: null
-    - type: "domain"
-      value: "katiemorton.com"
-      context: null
-    - type: "domain"
-      value: "mendozatechnologies.com"
-      context: null
-    - type: "domain"
-      value: "musicanet.org"
-      context: null
-    - type: "domain"
-      value: "parkesweatshirtshop.com"
-      context: null
-    - type: "domain"
       value: "payloads.tralalarkefe.com"
-      context: null
-    - type: "domain"
-      value: "plaoncorp.com"
-      context: null
-    - type: "domain"
-      value: "prixship.com"
-      context: null
-    - type: "domain"
-      value: "profotofix.com"
-      context: null
-    - type: "domain"
-      value: "rawnlaw.com"
-      context: null
-    - type: "domain"
-      value: "realwealthmanagement.com"
-      context: null
-    - type: "domain"
-      value: "roanokeweaponry.com"
-      context: null
-    - type: "domain"
-      value: "spliceengineering.com"
       context: null
     - type: "domain"
       value: "tenant-upcoming-great-descending.trycloudflare.com"
@@ -7371,18 +7308,6 @@
     - type: "domain"
       value: "tralalarkefe.com"
       context: "Operator-controlled root domain; all subdomains operator-bound"
-    - type: "domain"
-      value: "vakhitova.com"
-      context: null
-    - type: "domain"
-      value: "videocartonline.com"
-      context: null
-    - type: "domain"
-      value: "wholesomeharvestfarm.com"
-      context: null
-    - type: "domain"
-      value: "youthhockeytraining.com"
-      context: null
     - type: "url"
       value: "https://antipublic.one/api/v2/search"
       context: "Operator's mass_wp_mutator.py AntiPublic credential-DB lookup endpoint"
