@@ -66,6 +66,41 @@ function authorMarkedHuntOnly(obj) {
   var role = typeof obj.role === 'string' ? obj.role.trim().toUpperCase() : '';
   if (/^(TARGET|VICTIM)\b/.test(role)) return 'author-marked target or victim';
 
+  /* An explicit action: BLOCK outranks a prose never-block phrase, for the LOOSE
+     tier only. The red team's 2026-09-13 review of the widening above found two
+     misreadings, both the same shape: the author set `action: "BLOCK"` at
+     `confidence: "DEFINITE"` or `"HIGH"` on a real operator asset, and the prose
+     phrase test fired anyway because it cannot tell a prohibition from a sequencing
+     instruction.
+
+       165.227.175.161: `false_positive_risk: "Underlying VPS host belongs to
+       GetYourGroup GmbH legitimate tourism platform - notify victim before
+       blocking"`, on a CNC listener the author separately marked `action: BLOCK`.
+       "Notify victim before blocking" is sequencing (notify, THEN block), not a
+       prohibition, and the widened phrase list's `\bnotify victim before
+       blocking\b` term read it as one.
+
+       mail.hcjs2.jlengineering.se: `notes: "Do NOT blocklist apex
+       jlengineering.se - it is a multi-tenant donor domain"`, on the operator's
+       own tenant hostname, `action: BLOCK`. The warning is about the shared APEX
+       domain, not this value: exactly the tenant-hostname-stays-blockable carve-out
+       `unblockable.js` and `.claude/memory/feedback_ioc_feeds_blocklist_safety.md`
+       already document, misapplied to the wrong host by a phrase match with no
+       concept of which domain a caveat is actually about.
+
+     The author wrote both fields. The action field is the decision; the prose is a
+     caveat about HOW to act on it, not whether to. Trusting the decision field over
+     the caveat is not a heuristic that happens to fix two rows: it is what the
+     fields mean.
+
+     This check does NOT apply to the strict role: TARGET|VICTIM tier above, which
+     already returned by this point. A victim identity is a disclosure question, not
+     a blocklist one, and the author may have written `action: BLOCK` before
+     realising what the value actually was; the strict tier fires regardless of
+     action on purpose. */
+  var action = typeof obj.action === 'string' ? obj.action.trim().toUpperCase() : '';
+  if (/^BLOCK\b/.test(action)) return null;
+
   /* The key list matters more than the phrase list, and it was the actual hole.
      Measured across the 57 published feeds on 2026-09-13: `false_positive_risk`
      appears 281 times and was never read, `false_positive_notes` (PLURAL) 5 times,
@@ -91,7 +126,18 @@ function authorMarkedHuntOnly(obj) {
   return null;
 }
 
-/* The first indicator-shaped string an object directly holds, if any. */
+/* The first indicator-shaped string an object directly holds, if any, classified when
+   classify() recognises it.
+
+   When nothing classifies, this ALSO returns the first single-token string the object
+   holds (no internal whitespace, so prose fields like `context` or `role` are excluded
+   by the same test classify() itself applies), with `type: null`. That fallback exists
+   for the strict target-or-victim tier below: a value marked as identifying a victim can
+   still be a disclosure risk even when it is not shaped like a network indicator at all,
+   for example a bare device string such as "cisco-IOS" lifted from a user agent. The
+   loose never-block tier does not use the fallback for its own decision, because it still
+   gates on `type` being a NETWORK_TYPES member, and `NETWORK_TYPES[null]` is always
+   false, so this change is inert for that tier. */
 function firstIndicator(obj) {
   var keys = Object.keys(obj);
   for (var i = 0; i < keys.length; i++) {
@@ -99,6 +145,12 @@ function firstIndicator(obj) {
     if (typeof v !== 'string') continue;
     var r = C.classify(v);
     if (r) return { raw: v, value: r.value, type: r.type };
+  }
+  for (var j = 0; j < keys.length; j++) {
+    var v2 = obj[keys[j]];
+    if (typeof v2 !== 'string') continue;
+    var t = v2.trim();
+    if (t && !/\s/.test(t)) return { raw: v2, value: t, type: null };
   }
   return null;
 }
@@ -125,13 +177,21 @@ function scan(feed) {
     if (typeof node !== 'object') return;
 
     /* An object the author marked hunt-only is reported whole, whatever its value
-       is, because the judgement is about the entry rather than about the host. */
+       is, because the judgement is about the entry rather than about the host.
+
+       The two tiers ask different questions and are gated differently on purpose.
+       The loose never-block tier is a BLOCKLIST question: a hash, a filename, a
+       registry path or an ASN cannot be blocked by a network control in a way that
+       harms a bystander, so that tier only ever fires for a NETWORK_TYPES value.
+       The strict target-or-victim tier is a DISCLOSURE question, and disclosure does
+       not care whether the value looks like a network indicator: a victim-marked
+       entry is reported regardless of type, which is what makes a value like
+       "cisco-IOS" under a `role: "VICTIM..."` marking visible at all. */
     var marked = authorMarkedHuntOnly(node);
     if (marked && !isExemptPath(path)) {
       var v = firstIndicator(node);
-      // A hash cannot be blocked in a way that harms anyone, so the marking only
-      // matters for values a network control would act on.
-      if (v && NETWORK_TYPES[v.type]) {
+      var isVictim = marked === 'author-marked target or victim';
+      if (v && (isVictim || NETWORK_TYPES[v.type])) {
         found.push({ path: path, value: v.raw, host: v.value, category: marked });
         return;
       }
@@ -211,7 +271,11 @@ function migrate(feed) {
     var marked = authorMarkedHuntOnly(node);
     if (marked && !isExemptPath(path)) {
       var mv = firstIndicator(node);
-      if (mv && NETWORK_TYPES[mv.type]) {
+      // Same split as scan(): the strict target-or-victim tier runs regardless of
+      // type, because it is a disclosure question rather than a blocklist one; the
+      // loose never-block tier stays gated on NETWORK_TYPES exactly as before.
+      var mvIsVictim = marked === 'author-marked target or victim';
+      if (mv && (mvIsVictim || NETWORK_TYPES[mv.type])) {
         if (!seen[mv.value]) {
           seen[mv.value] = true;
           /* A victim's own address space is not intelligence about the actor, it is
@@ -221,9 +285,20 @@ function migrate(feed) {
              those anywhere in a machine-readable feed is a disclosure question
              before it is ever a blocklist one; the finding belongs in the report
              prose, where it has the surrounding context that makes it meaningful.
-             Everything else keeps its fact and just changes bucket. */
+             Everything else keeps its fact and just changes bucket.
+
+             `full: node` carries the ENTIRE original object, not a {value, category,
+             context} projection. All eight of the 2026-09-13 relocations dropped
+             every other field: 165.227.175.161 lost `port: 23` and `protocol: "TCP"`,
+             its whole value as a control, and 23.106.161.1 landed in
+             hunt_only_never_block with no context at all. A value that survives
+             without its port is not intelligence that survived. `node` here is
+             already a clone (prune() operates on the top-level
+             JSON.parse(JSON.stringify(feed)) copy), so storing the reference directly
+             is safe: nothing downstream mutates this subtree again after the
+             `return undefined` below. */
           var rec = { value: mv.raw, host: mv.value, category: marked,
-                      context: contextOf(node), was: path };
+                      context: contextOf(node), was: path, full: node };
           if (marked === 'author-marked target or victim') removed.push(rec);
           else moved.push(rec);
         }
@@ -271,8 +346,19 @@ function migrate(feed) {
     else if (typeof existing === 'string') entries = [existing];
 
     moved.forEach(function (m) {
-      var e = { value: m.host, category: m.category };
-      if (m.context) e.context = m.context;
+      /* `m.full` is set only by the author-marked-object path (the bare-string
+         path below it in this file has no whole object to carry, just the string
+         and its sibling context, so it keeps the {value, category, context} form
+         it always had). When present, carry every original field forward and only
+         add `category`, rather than reducing to three keys and losing the rest. */
+      var e;
+      if (m.full) {
+        e = Object.assign({}, m.full);
+        e.category = m.category;
+      } else {
+        e = { value: m.host, category: m.category };
+        if (m.context) e.context = m.context;
+      }
       entries.push(e);
     });
     out[U.BUCKET] = entries;

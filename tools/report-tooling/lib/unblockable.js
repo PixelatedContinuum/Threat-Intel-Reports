@@ -235,7 +235,24 @@ function serviceOf(host) {
    URL costs nobody anything.
 
    So a path-bearing URL stays where it is. What moves is the bare host and the bare
-   root, which are the forms that get ingested as a domain block. */
+   root, which are the forms that get ingested as a domain block.
+
+   NAMED EXCEPTION, so it is not re-derived and re-argued the next time someone reads
+   this rule: `http://ip-api.com/line/?fields=hosting` (shadow-xworm feed, author-
+   marked never-block via its own `note` field) was relocated to
+   `hunt_only_never_block` even though it carries a path. A 2026-09-13 red-team review
+   called that relocation wrong under this exact rule. The Manager's call: the rule's
+   test is whether the path names an OPERATOR-UNIQUE resource
+   (`/Vova75Rus/miner`, a bot token) versus a GENERIC query against a bystander
+   service's own API (`/line/?fields=hosting`, a parameter every caller of ip-api.com's
+   free tier can pass). `ip-api.com` is the bystander here, not the operator's own
+   infrastructure with a path attached, so the path adds no precision the way a
+   repository name or a bot token does, and the relocation stands. This did not go
+   through this file's own `unblockable()` path-check at all: the entry was caught by
+   `feed-hygiene.js`'s author-marked-object path (its own `note` field said "do not
+   block"), which classifies the whole URL as a `url`-type value without applying the
+   path-bearing carve-out coded below. The two mechanisms can disagree on a case like
+   this one, and this comment is the record of which reading won and why. */
 function pathOf(url) {
   var m = /^[a-z]+:\/\/[^\/?#]+([^?#]*)/i.exec(String(url));
   return m ? m[1] : '';

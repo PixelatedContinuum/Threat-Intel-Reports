@@ -167,3 +167,175 @@ test('migrating twice changes nothing the second time', function () {
   assert.equal(twice.moved.length, 0);
   assert.deepEqual(twice.feed, once);
 });
+
+/* --- the strict target-or-victim tier runs regardless of type ----------- */
+
+test('a role:VICTIM value that is not a network type is still found and removed',
+  function () {
+    // "cisco-IOS" does not classify as anything: not a hash, url, ipv4, email,
+    // filename or domain. Before the fix this whole entry was invisible to both
+    // scan() and migrate(), even though role:VICTIM is the STRICT marking.
+    var f = feed({ network_indicators: { user_agents: [
+      { value: 'cisco-IOS', role: 'VICTIM-generated user agent on all exfil PUTs',
+        context: 'the highest-fidelity signal in the case' }
+    ] } });
+
+    var hits = H.scan(f);
+    assert.equal(hits.length, 1, 'the victim-marked non-network value was not found');
+    assert.equal(hits[0].host, 'cisco-IOS');
+    assert.equal(hits[0].category, 'author-marked target or victim');
+
+    var r = H.migrate(f);
+    assert.equal(r.removed.length, 1, 'it must be REMOVED, not moved');
+    assert.equal(r.removed[0].host, 'cisco-IOS');
+    assert.equal(r.moved.length, 0, 'a victim value must never land in hunt_only_never_block');
+    assert.equal(r.feed[U.BUCKET], undefined,
+      'removing the only value in this feed should leave no bucket behind');
+    assert.equal(H.scan(r.feed).length, 0, 'a scan of the migrated feed must be clean');
+  });
+
+test('the loose never-block tier is UNCHANGED: a non-network value stays invisible',
+  function () {
+    // Same shape as the residual-feed-gaps findings (a hash, a registry path, an
+    // ASN): marked never-block, but not a domain/url/ipv4, so it correctly stays
+    // out of scope for a BLOCKLIST gate. This is the regression test that the fix
+    // did not widen the loose tier along with the strict one.
+    // network_indicators is overridden (not just added to) so the base fixture's
+    // own api.telegram.org bare-match cannot contaminate this assertion.
+    var f = feed({ network_indicators: {}, host_indicators: { registry_keys: [
+      { value: 'HKCU\\Software\\Run\\WindowsUpdateManager',
+        false_positive_risk: 'low, do not block, operator-documented victim-side path' }
+    ] } });
+    assert.equal(H.scan(f).length, 0, 'a non-network never-block value must stay unflagged');
+    var r = H.migrate(f);
+    assert.equal(r.moved.length, 0);
+    assert.equal(r.removed.length, 0);
+  });
+
+test('a role:VICTIM value that IS a network type still works exactly as before',
+  function () {
+    // Regression check: the fix must not change behaviour for the case that
+    // already worked (a victim-marked ipv4), only add coverage for the case that
+    // did not.
+    var f = feed({ network_indicators: { ips: [
+      { value: '10.0.0.9', role: 'TARGET internal address' }
+    ] } });
+    var r = H.migrate(f);
+    assert.equal(r.removed.length, 1);
+    assert.equal(r.removed[0].host, '10.0.0.9');
+  });
+
+/* --- action: BLOCK outranks a prose never-block phrase, loose tier only ---------- */
+
+test('action: BLOCK stops the loose tier firing, even with a never-block phrase present',
+  function () {
+    // Real shape from the 2026-09-13 red-team review: an operator CNC listener,
+    // action BLOCK, confidence DEFINITE, but a false_positive_risk field that reads
+    // "notify victim before blocking" (sequencing, not a prohibition) about the
+    // underlying VPS owner, not the malicious value itself.
+    var f = feed({ network_indicators: { ips: [
+      { value: '165.227.175.161', port: 23, protocol: 'TCP',
+        context: 'Naku.arm CNC, parasitic listener on a compromised tourism VPS',
+        confidence: 'DEFINITE', action: 'BLOCK',
+        false_positive_risk: 'Underlying VPS host belongs to a legitimate tourism '
+          + 'platform, notify victim before blocking' }
+    ] } });
+    assert.equal(H.scan(f).length, 0, 'action: BLOCK must stop the loose tier');
+    var r = H.migrate(f);
+    assert.equal(r.moved.length, 0);
+    assert.equal(r.removed.length, 0);
+    assert.deepEqual(r.feed.network_indicators.ips[0].value, '165.227.175.161',
+      'the value must stay exactly where it was, with every field intact');
+    assert.equal(r.feed.network_indicators.ips[0].port, 23, 'port must survive');
+  });
+
+test('action: BLOCK on the apex-domain-caveat shape also stays put',
+  function () {
+    // Real shape: an operator-created tenant hostname, action BLOCK, confidence
+    // HIGH, whose notes warn about the shared APEX domain rather than this value,
+    // the exact tenant-hostname-stays-blockable carve-out.
+    var f = feed({ network_indicators: { domains: [
+      { value: 'mail.evil-tenant.donor-domain.se',
+        purpose: 'Operator-created FreeDNS abuse subdomain',
+        confidence: 'HIGH', action: 'BLOCK',
+        notes: 'Do NOT blocklist apex donor-domain.se, it is a multi-tenant donor domain' }
+    ] } });
+    assert.equal(H.scan(f).length, 0);
+    var r = H.migrate(f);
+    assert.equal(r.moved.length + r.removed.length, 0);
+  });
+
+test('action: BLOCK does NOT stop the strict role:VICTIM tier',
+  function () {
+    // The strict tier fires regardless of action on purpose: a victim identity is
+    // a disclosure question, and the author may have written BLOCK before
+    // realising what the value was.
+    var f = feed({ network_indicators: { ips: [
+      { value: '10.0.0.9', role: 'VICTIM internal address', action: 'BLOCK' }
+    ] } });
+    var r = H.migrate(f);
+    assert.equal(r.removed.length, 1, 'role:VICTIM must still remove regardless of action');
+  });
+
+test('action: MONITOR (or no action) still relocates exactly as before',
+  function () {
+    // Regression: the override must be specific to BLOCK. MONITOR and "no action
+    // field at all" are the shape of every correct move in the red-team's table.
+    var f = feed({ network_indicators: { ips: [
+      { value: '172.237.149.231', purpose: 'Parklogic shared TDS landing infrastructure',
+        confidence: 'MODERATE', action: 'MONITOR',
+        false_positive_risk: 'HIGH, shared by all Parklogic customers, do not blocklist '
+          + 'the IP without context' },
+      { value: '23.106.161.1', confidence: 'LOW',
+        false_positive_risk: 'Likely victim/3rd-party. DO NOT block at perimeter '
+          + 'without further verification' }
+    ] } });
+    var hits = H.scan(f).map(function (x) { return x.host; });
+    assert.ok(hits.indexOf('172.237.149.231') > -1, 'MONITOR must still relocate');
+    assert.ok(hits.indexOf('23.106.161.1') > -1, 'no action field must still relocate');
+  });
+
+/* --- migrate() carries the whole original object, not a reduced projection ------ */
+
+test('a moved author-marked object keeps every field, not just value/category/context',
+  function () {
+    var f = feed({ network_indicators: { ips: [
+      { value: '172.237.149.231', purpose: 'Parklogic shared TDS landing infrastructure',
+        asn: 'AS63949 Akamai/Linode', confidence: 'MODERATE', action: 'MONITOR',
+        false_positive_risk: 'HIGH, shared by all Parklogic customers, do not blocklist '
+          + 'the IP without context' }
+    ] } });
+    var r = H.migrate(f);
+    assert.equal(r.feed[U.BUCKET].length, 1);
+    var e = r.feed[U.BUCKET][0];
+    assert.equal(e.value, '172.237.149.231');
+    assert.equal(e.purpose, 'Parklogic shared TDS landing infrastructure', 'purpose was dropped');
+    assert.equal(e.asn, 'AS63949 Akamai/Linode', 'asn was dropped');
+    assert.equal(e.confidence, 'MODERATE', 'confidence was dropped');
+    assert.equal(e.action, 'MONITOR', 'action was dropped');
+    assert.equal(e.category, 'author-marked never-block');
+  });
+
+test('a removed victim object also keeps every field, in the return value',
+  function () {
+    var f = feed({ network_indicators: { user_agents: [
+      { value: 'cisco-IOS', role: 'VICTIM-generated user agent on all exfil PUTs',
+        confidence: 'DEFINITE', notes: 'highest-fidelity signal in the case' }
+    ] } });
+    var r = H.migrate(f);
+    assert.equal(r.removed.length, 1);
+    assert.equal(r.removed[0].full.confidence, 'DEFINITE', 'confidence was dropped');
+    assert.equal(r.removed[0].full.notes, 'highest-fidelity signal in the case',
+      'notes was dropped');
+  });
+
+test('the bare-string migration path (unrelated to author-marked objects) is unchanged',
+  function () {
+    // Regression guard: the full-object carry only applies to the author-marked
+    // path. api.telegram.org here is caught via the plain SERVICES list on a bare
+    // string, and must keep its old {value, category, context} shape exactly.
+    var r = H.migrate(feed());
+    assert.deepEqual(r.feed[U.BUCKET][0],
+      { value: 'api.telegram.org', category: 'messaging platform',
+        context: 'exfiltration channel' });
+  });

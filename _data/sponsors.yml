@@ -37,6 +37,7 @@ tiers:
       - "Permanent for the life of the report. It never expires"
       - "You pick which report you sponsor, from anything already published or on the schedule"
       - "I tell you when the case moves. If the infrastructure goes down, the operator resurfaces, or the report gets a substantive update, you hear from me"
+      - "A threat brief built from your report, designed and yours to share. Not a copy of the report: the key points, what to do now, the five detections and five indicators worth acting on today, and a breakdown of only the parts that genuinely stand out"
       - "The report's launch post credits you (LinkedIn, X, and the subscriber email that goes out with every new report). New reports only"
       - "Early access before it goes public, and not just the report. The detection rules and the IOC feed come with it. New reports only"
     best_fit: "Sponsors who want exclusive association with a specific report or threat, with sole placement, permanent for its life."
