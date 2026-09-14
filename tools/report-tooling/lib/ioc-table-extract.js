@@ -46,6 +46,22 @@ var PROSE_KEYS = ('context confidence notes evidence description rationale summa
 // Fields that carry a human label for the value beside them.
 var ROLE_KEYS = ['context', 'description', 'role', 'note'];
 
+/* The never-block bucket is read a second time, separately, with its own role
+   preference (2026-09-13 fix: see the run's surface-fix-plan.md). It is exempt
+   from the ordinary walk below, mirroring lib/feed-hygiene.js's own
+   `EXEMPT_TOP`, so a value inside it is never also counted as an ordinary row. */
+var EXEMPT_TOP = { hunt_only_never_block: true };
+
+/* Preference order for the never-block section's visible reason column.
+   `false_positive_risk` first, because where present it is the most direct
+   statement of why the value must not be blocked. Unlike ROLE_KEYS above, this
+   list has no length cap on the field it picks (see NB_ROLE_MAXLEN): a reason
+   explaining why a value cannot be blocked is meant to be read in full, not
+   trimmed to fit as a hover label the way an ordinary indicator's context is. */
+var NB_ROLE_KEYS = ['false_positive_risk', 'purpose', 'context', 'notes', 'note',
+                     'description', 'role'];
+var NB_ROLE_MAXLEN = Infinity;
+
 var RX_REGISTRY = /^HK(LM|CU|CR|U|CC|EY_[A-Z_]+)\\/i;
 var RX_WIN_PATH = /^(?:[A-Za-z]:\\|%[A-Za-z_][A-Za-z_0-9()]*%|\\\\[^\\])/;
 var RX_NIX_PATH = /^\/(etc|usr|tmp|var|opt|home|root|dev|proc|bin|sbin|lib|srv|boot|mnt)\//;
@@ -70,9 +86,24 @@ function typeRank(t) {
   return i === -1 ? TYPE_ORDER.length : i;
 }
 
-/* Returns { rows, untyped }. `untyped` counts values that looked like they could
-   have been an indicator and were not typed, so the page can state the omission. */
-function summarise(feed) {
+/* Runs the walk once against one root node, with its own role-label preference
+   and length cap, honouring `exempt` for a top-level key the caller does not
+   want descended into. Returns { rows, untyped, keys }; `keys` is the same
+   `type:value` set `rows` was built from, exposed so a caller comparing two
+   runs (the ordinary walk and the never-block walk) can dedupe between them
+   without re-deriving the key format.
+
+   `suppressBenign` gates the benign-value filter (8.8.8.8, github.com, and
+   friends). It is correct for the ordinary walk, whose job is a searchable
+   index that should not be noisy with values every network sees. It is wrong
+   for the never-block walk: a value like `github.com` sitting in
+   `hunt_only_never_block` is there because an analyst recorded a specific
+   reason not to block it, and the whole point of the never-block section is
+   to show that reason, not to re-apply the noise filter and make the value
+   disappear a second time, through a different mechanism, from the one place
+   meant to explain it. `summarise()` below calls this twice, with the flag
+   set only for the ordinary pass. */
+function runWalk(root, roleKeys, roleMaxLen, exempt, suppressBenign) {
   var byKey = {}, order = [], untyped = 0;
 
   function take(raw, role) {
@@ -82,7 +113,7 @@ function summarise(feed) {
 
     var atomic = C.classify(s);
     if (atomic) {
-      if (B.isBenign(atomic.type, atomic.value)) return;   // 8.8.8.8 and friends
+      if (suppressBenign && B.isBenign(atomic.type, atomic.value)) return;   // 8.8.8.8 and friends
       return push(atomic.type, atomic.value, role);
     }
 
@@ -119,17 +150,20 @@ function summarise(feed) {
        that is prose rather than an indicator, so `context: "C2 server"` becomes the
        label and `context: "1.2.3.4"` does not. */
     var myRole = role;
-    for (var i = 0; i < ROLE_KEYS.length; i++) {
-      var rv = node[ROLE_KEYS[i]];
-      if (typeof rv === 'string' && rv.trim() && rv.length < 90 && !C.classify(rv)) {
+    for (var i = 0; i < roleKeys.length; i++) {
+      var rv = node[roleKeys[i]];
+      if (typeof rv === 'string' && rv.trim() && rv.length < roleMaxLen && !C.classify(rv)) {
         myRole = rv.trim();
         break;
       }
     }
-    Object.keys(node).forEach(function (k) { walk(node[k], k, myRole); });
+    Object.keys(node).forEach(function (k) {
+      if (exempt && exempt[k]) return;
+      walk(node[k], k, myRole);
+    });
   }
 
-  walk(feed, null, null);
+  walk(root, null, null);
 
   var rows = order.map(function (k) { return byKey[k]; });
   // Stable order, so a regenerated page diffs cleanly rather than reshuffling.
@@ -137,12 +171,53 @@ function summarise(feed) {
     var d = typeRank(a.type) - typeRank(b.type);
     return d !== 0 ? d : (a.value < b.value ? -1 : a.value > b.value ? 1 : 0);
   });
-  return { rows: rows, untyped: untyped };
+  return { rows: rows, untyped: untyped, keys: order.slice() };
+}
+
+/* Returns { rows, untyped, neverBlockRows }. `untyped` counts values that
+   looked like they could have been an indicator and were not typed, so the
+   page can state the omission.
+
+   `neverBlockRows` is the feed's `hunt_only_never_block` bucket, walked
+   separately with its own role preference (NB_ROLE_KEYS) so its reason text
+   survives regardless of shape: a flat `{value, category, context}` object,
+   a value nested inside a sub-array under a group-level `note` (the
+   seasia-gov-exploitation-toolkit shape, which carries no `value` field of
+   its own at all), or the fuller `{value, purpose, notes, ...}` shape a more
+   careful relocation can leave behind. `EXEMPT_TOP` keeps this bucket out of
+   the ordinary walk entirely, so a never-block value is never also an
+   ordinary row by default.
+
+   A value that still ends up in both sets (an incomplete migration, not a
+   theoretical case: see revert-bad-relocations.md) is resolved toward safety:
+   it is dropped from `rows` and kept in `neverBlockRows` only. A row with no
+   reason text in any of NB_ROLE_KEYS renders the literal string 'No reason
+   recorded in the feed' rather than a blank context, so the gap is visible
+   rather than looking like a rendering bug. */
+function summarise(feed) {
+  var ordinary = runWalk(feed, ROLE_KEYS, 90, EXEMPT_TOP, true);
+
+  var nbRoot = (feed && typeof feed === 'object') ? feed.hunt_only_never_block : null;
+  var nb = (nbRoot != null)
+    ? runWalk(nbRoot, NB_ROLE_KEYS, NB_ROLE_MAXLEN, null, false)
+    : { rows: [], untyped: 0, keys: [] };
+
+  var nbKeySet = {};
+  nb.keys.forEach(function (k) { nbKeySet[k] = true; });
+  var rows = ordinary.rows.filter(function (r) { return !nbKeySet[r.type + ':' + r.value]; });
+
+  var neverBlockRows = nb.rows.map(function (r) {
+    return { type: r.type, value: r.value,
+             context: r.context || 'No reason recorded in the feed' };
+  });
+
+  return { rows: rows, untyped: ordinary.untyped, neverBlockRows: neverBlockRows };
 }
 
 function extract(feed) { return summarise(feed).rows; }
 
 module.exports = {
   extract: extract, summarise: summarise, hostType: hostType,
-  TYPE_ORDER: TYPE_ORDER
+  TYPE_ORDER: TYPE_ORDER, EXEMPT_TOP: EXEMPT_TOP,
+  NB_ROLE_KEYS: NB_ROLE_KEYS
 };

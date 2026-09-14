@@ -139,3 +139,54 @@ test('output is stable across runs, so a regeneration diffs cleanly', function (
   assert.equal(T.toYaml(T.build(feeds(), STATUS, META).tables),
                T.toYaml(T.build(feeds(), STATUS, META).tables));
 });
+
+/* --- the never-block bucket carried into the manifest, 2026-09-13 ---------- */
+
+test('never_block_rows and never_block_total are carried onto the table, separate from rows', function () {
+  var feed = { network_indicators: ['evil.test'],
+               hunt_only_never_block: [{ value: 'api.telegram.org', category: 'messaging platform' }] };
+  var r = T.build({ 'x-iocs.json': feed }, { 'x-iocs.json': 'published' }, {});
+  assert.deepEqual(r.tables.x.rows.map(function (row) { return row.value; }), ['evil.test']);
+  assert.equal(r.tables.x.never_block_total, 1);
+  assert.equal(r.tables.x.never_block_rows[0].value, 'api.telegram.org');
+});
+
+test('the per-type counts (the filter chips) do not include never-block values', function () {
+  var feed = { network_indicators: ['evil.test'],
+               hunt_only_never_block: [{ value: 'api.telegram.org', category: 'messaging platform' }] };
+  var r = T.build({ 'x-iocs.json': feed }, { 'x-iocs.json': 'published' }, {});
+  assert.deepEqual(r.tables.x.counts, { domain: 1 },
+    'a never-block domain must not inflate the domain chip count');
+});
+
+test('a feed with never-block rows but zero ordinary rows still gets a page, not "empty"', function () {
+  var feed = { hunt_only_never_block: [{ value: 'api.telegram.org', category: 'messaging platform' }] };
+  var r = T.build({ 'x-iocs.json': feed }, { 'x-iocs.json': 'published' }, {});
+  assert.ok(r.tables.x, 'expected a table entry even with zero ordinary rows');
+  assert.equal(r.tables.x.total, 0);
+  assert.equal(r.tables.x.never_block_total, 1);
+  assert.equal(r.skipped.empty, 0);
+});
+
+test('a feed with neither ordinary nor never-block rows is still counted as empty', function () {
+  var r = T.build({ 'prose-iocs.json': { notes: ['nothing indicator-shaped here at all'] } },
+                  { 'prose-iocs.json': 'published' }, {});
+  assert.deepEqual(Object.keys(r.tables), []);
+  assert.equal(r.skipped.empty, 1);
+});
+
+test('never_block_rows round-trips through YAML, including the explicit no-reason string', function () {
+  var yaml = require('js-yaml');
+  var feed = { hunt_only_never_block: [
+    { value: 'api.telegram.org', context: 'Shared platform, do not block' },
+    { value: '23.106.161.1', category: 'author-marked never-block' }
+  ] };
+  var r = T.build({ 'x-iocs.json': feed }, { 'x-iocs.json': 'published' }, {});
+  var doc = yaml.load(T.toYaml(r.tables));
+  assert.equal(doc.x.never_block_total, 2);
+  var byValue = {};
+  doc.x.never_block_rows.forEach(function (row) { byValue[row.value] = row.context; });
+  assert.equal(byValue['api.telegram.org'], 'Shared platform, do not block');
+  assert.equal(byValue['23.106.161.1'], 'No reason recorded in the feed',
+    'a genuinely reasonless entry must render the explicit string, never null or empty');
+});

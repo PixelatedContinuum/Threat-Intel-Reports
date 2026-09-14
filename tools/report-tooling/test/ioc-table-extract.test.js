@@ -131,3 +131,84 @@ test('rows sort by type then value, so a page diff is stable across runs', funct
   var b = X.extract({ n: ['aaa.test', 'evil.test', '1.2.3.4'] });
   assert.deepEqual(a, b);
 });
+
+/* --- the never-block bucket: 2026-09-13, closing the leak -------------------
+
+   hunt_only_never_block is real intelligence that must never enter the
+   ordinary, exportable row set. The three shapes below are all present in the
+   live corpus (see returns/measure-leak.md and returns/surface-fix-plan.md
+   from this run): the common reduced object, a group-level note with values
+   nested in a sub-array and no `value` field on the object itself (the
+   seasia-gov-exploitation-toolkit shape, and the one carrying api.telegram.org
+   in production), and a value that also sits in an ordinary bucket, which the
+   dedupe rule below must resolve toward safety. */
+
+test('a never-block value is excluded from the ordinary rows entirely', function () {
+  var r = X.summarise({ network_indicators: { domains: ['evil.test'] },
+                        hunt_only_never_block: [{ value: 'api.telegram.org',
+                                                  category: 'messaging platform',
+                                                  context: 'Shared platform, do not block' }] });
+  assert.deepEqual(values(r.rows), ['evil.test']);
+  assert.deepEqual(values(r.neverBlockRows), ['api.telegram.org']);
+});
+
+test('a never-block value nested in a sub-array with no value field on its own object is still found', function () {
+  // The seasia-gov-exploitation-toolkit shape: a group note plus a bare array
+  // of domains, none of which carry their own { value } wrapper.
+  var r = X.summarise({
+    hunt_only_never_block: [{
+      note: 'Shared public infrastructure, never block or ship as campaign IOCs',
+      domains: ['gsocket.io', 'api.telegram.org', 'discord.com']
+    }]
+  });
+  assert.deepEqual(values(r.rows), []);
+  assert.deepEqual(values(r.neverBlockRows).sort(),
+    ['api.telegram.org', 'discord.com', 'gsocket.io']);
+  r.neverBlockRows.forEach(function (row) {
+    assert.match(row.context, /never block/i);
+  });
+});
+
+test('a value in BOTH an ordinary bucket and the never-block bucket resolves toward safety', function () {
+  var r = X.summarise({
+    network_indicators: { ipv4: ['172.237.149.231'] },
+    hunt_only_never_block: [{ value: '172.237.149.231', category: 'shared TDS landing' }]
+  });
+  assert.deepEqual(values(r.rows), [], 'the ordinary row must be dropped, not duplicated');
+  assert.deepEqual(values(r.neverBlockRows), ['172.237.149.231']);
+});
+
+test('the never-block reason preference order matches the approved list, false_positive_risk first', function () {
+  var r = X.summarise({ hunt_only_never_block: [{
+    value: '1.2.3.4', context: 'a weaker label', purpose: 'a middling label',
+    false_positive_risk: 'the strongest label, chosen over the others'
+  }] });
+  assert.equal(r.neverBlockRows[0].context, 'the strongest label, chosen over the others');
+});
+
+test('a never-block reason is not truncated at the 90-char cap the ordinary role label uses', function () {
+  var long = 'This reason is deliberately written to run past ninety characters so the ' +
+    'cap that applies to an ordinary indicator label does not apply here.';
+  assert.ok(long.length > 90);
+  var r = X.summarise({ hunt_only_never_block: [{ value: '1.2.3.4', context: long }] });
+  assert.equal(r.neverBlockRows[0].context, long);
+});
+
+test('a never-block value with no reason in any preferred field renders the explicit gap string', function () {
+  var r = X.summarise({ hunt_only_never_block: [{ value: '1.2.3.4', category: 'author-marked never-block' }] });
+  assert.equal(r.neverBlockRows[0].context, 'No reason recorded in the feed');
+});
+
+test('the benign-value filter does not apply inside the never-block walk', function () {
+  // github.com is in BENIGN_DOMAINS and would be suppressed entirely from the
+  // ordinary walk. Inside hunt_only_never_block it must still render, with
+  // its recorded reason, because the whole point of this section is to show
+  // it, not filter it a second time through an unrelated mechanism.
+  var r = X.summarise({ hunt_only_never_block: [{ value: 'github.com', category: 'vendor download' }] });
+  assert.deepEqual(values(r.neverBlockRows), ['github.com']);
+});
+
+test('a feed with no hunt_only_never_block bucket yields an empty neverBlockRows, not an error', function () {
+  var r = X.summarise({ network_indicators: ['1.2.3.4'] });
+  assert.deepEqual(r.neverBlockRows, []);
+});

@@ -93,6 +93,41 @@ layout: page
     {%- endif -%}
   </p>
 
+  {%- comment -%}
+    Values the investigation recorded but that must never reach a blocklist:
+    a shared service, a bystander's infrastructure, the victim's own equipment.
+    A DIFFERENT table (hl-ioctable__nbtable, not hl-ioctable__table), so
+    assets/js/ioc-table.js's row selector never finds these rows at all. That
+    is a structural guarantee, not a flag a future edit could drop: making
+    export impossible by accident, not merely absent today. No filter chips,
+    no copy or download controls, by design (surface-fix-plan.md C.5-C.6).
+  {%- endcomment -%}
+  {%- if t.never_block_total > 0 -%}
+  <div class="hl-ioctable__nb">
+    <h2 class="hl-ioctable__nbtitle">Do not block</h2>
+    <p class="hl-ioctable__nbdesc">
+      These values came out of this investigation, but blocking them would break something
+      legitimate, whether a shared service, a bystander's infrastructure, or the victim's own
+      equipment. They are listed here because they still matter for hunting, and they are
+      deliberately excluded from the copy and download buttons above.
+    </p>
+    <div class="hl-ioctable__scroll">
+      <table class="hl-ioctable__nbtable">
+        <thead><tr><th>Type</th><th>Indicator</th><th>Why it stays off a blocklist</th></tr></thead>
+        <tbody>
+        {%- for r in t.never_block_rows -%}
+          <tr>
+            <td><span class="hl-ioctable__type">{{ r.type }}</span></td>
+            <td><code>{{ r.value }}</code></td>
+            <td>{{ r.context }}</td>
+          </tr>
+        {%- endfor -%}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {%- endif -%}
+
   <p class="hl-ioctable__licence">
     Licensed <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>, free to use
     commercially with attribution to The Hunters Ledger.

@@ -4126,6 +4126,54 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   .hl-ioctable__table td:first-child { width: 5.5em; }
 }
 
+/* --- "Do not block": 2026-09-13, closing the never-block leak -------------
+
+   A structurally SEPARATE table, .hl-ioctable__nbtable rather than
+   .hl-ioctable__table, so assets/js/ioc-table.js's row selector cannot find
+   these rows at all (surface-fix-plan.md C.5): the exclusion from copy and
+   download is a fact about the markup, not about this stylesheet. What this
+   block owns is only making the section visibly a different kind of thing:
+   no type-colour chips, because it carries no filter; an amber accent,
+   because that hue is not spoken for by any --ioct-type mapping above and
+   reads as caution on this theme's dark background; sizes in em and px only,
+   per the rem lesson pinned in ioc-table-css.test.js. */
+.hl-ioctable__nb {
+  margin-top: 1.6em;
+  padding: 1em 1.2em;
+  border: 1px solid color-mix(in srgb, #f59e0b 40%, var(--ioct-border));
+  border-left: 3px solid #f59e0b;
+  border-radius: 6px;
+  background: color-mix(in srgb, #f59e0b 7%, transparent);
+}
+.hl-ioctable__nbtitle {
+  font-size: 0.95em;
+  margin: 0 0 0.5em;
+  color: #f59e0b;
+}
+.hl-ioctable__nbdesc {
+  font-size: 0.85em;
+  margin: 0 0 1em;
+}
+.hl-ioctable__nbtable {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+  font-size: 0.86em;
+}
+.hl-ioctable__nbtable th:first-child,
+.hl-ioctable__nbtable td:first-child { width: 6em; }
+.hl-ioctable__nbtable th:nth-child(2),
+.hl-ioctable__nbtable td:nth-child(2) { width: 14em; }
+.hl-ioctable__nbtable td { vertical-align: top; padding: 3px 10px 3px 0; }
+.hl-ioctable__nbtable code { font-size: 0.84em; }
+
+@media (max-width: 640px) {
+  .hl-ioctable__nbtable th:first-child,
+  .hl-ioctable__nbtable td:first-child,
+  .hl-ioctable__nbtable th:nth-child(2),
+  .hl-ioctable__nbtable td:nth-child(2) { width: auto; }
+}
+
 /* ============================================================
    PROCESS TREE COMPONENT
    Paired with assets/js/hl-process-tree.js and

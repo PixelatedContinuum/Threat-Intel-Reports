@@ -56,6 +56,8 @@
     - type: "filename"
       value: "boatnet.x86"
       context: null
+  never_block_total: 0
+  never_block_rows:
 "Hybrid-Loader-Stealer-Sogou.json":
   slug: "Hybrid-Loader-Stealer-Sogou"
   page_url: "/ioc-feeds/Hybrid-Loader-Stealer-Sogou/"
@@ -126,6 +128,8 @@
     - type: "filename"
       value: "s0.ndf"
       context: null
+  never_block_total: 0
+  never_block_rows:
 "PULSAR-RAT.json":
   slug: "PULSAR-RAT"
   page_url: "/ioc-feeds/PULSAR-RAT/"
@@ -135,27 +139,20 @@
   feed_url: "/ioc-feeds/PULSAR-RAT.json"
   report_url: "/reports/PULSAR-RAT/"
   detection_url: "/hunting-detections/PULSAR-RAT-detections"
-  total: 11
+  total: 9
   untyped: 15
   counts:
-    domain: 1
     ipv4: 1
     md5: 1
     path: 1
     registry: 3
     sha1: 1
     sha256: 1
-    url: 2
+    url: 1
   rows:
     - type: "ipv4"
       value: "185.208.159.182"
       context: null
-    - type: "domain"
-      value: "pastebin.com"
-      context: "Also includes variants like paste.ee, hastebin.com"
-    - type: "url"
-      value: "https://ipwho.is/"
-      context: "Low business impact to block"
     - type: "url"
       value: "https://www.amyuni.com/downloads/usbmmidd_v2.zip"
       context: null
@@ -180,6 +177,14 @@
     - type: "registry"
       value: "HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\...\\RunOnce"
       context: null
+  never_block_total: 2
+  never_block_rows:
+    - type: "domain"
+      value: "pastebin.com"
+      context: "Also includes variants like paste.ee, hastebin.com"
+    - type: "url"
+      value: "https://ipwho.is/"
+      context: "Low business impact to block"
 "agent-exe.json":
   slug: "agent-exe"
   page_url: "/ioc-feeds/agent-exe/"
@@ -236,6 +241,8 @@
     - type: "filename"
       value: "windefendersvc.exe"
       context: null
+  never_block_total: 0
+  never_block_rows:
 "agent-xworm-exe.json":
   slug: "agent-xworm-exe"
   page_url: "/ioc-feeds/agent-xworm-exe/"
@@ -269,6 +276,8 @@
     - type: "filename"
       value: "agent_xworm.exe"
       context: null
+  never_block_total: 0
+  never_block_rows:
 "agent-xworm-v2-exe.json":
   slug: "agent-xworm-v2-exe"
   page_url: "/ioc-feeds/agent-xworm-v2-exe/"
@@ -302,6 +311,8 @@
     - type: "filename"
       value: "agent_xworm_v2.exe"
       context: null
+  never_block_total: 0
+  never_block_rows:
 "ai-agent-frameworks-2026-05-23":
   slug: "ai-agent-frameworks-2026-05-23"
   page_url: "/ioc-feeds/ai-agent-frameworks-2026-05-23/"
@@ -311,13 +322,13 @@
   feed_url: "/ioc-feeds/ai-agent-frameworks-2026-05-23-iocs.json"
   report_url: "/reports/ai-agent-frameworks-2026-05-23/"
   detection_url: "/hunting-detections/ai-agent-frameworks-2026-05-23-detections"
-  total: 103
+  total: 99
   untyped: 297
   counts:
-    domain: 25
+    domain: 23
     email: 1
     filename: 7
-    ipv4: 24
+    ipv4: 22
     md5: 2
     path: 16
     sha256: 20
@@ -328,9 +339,6 @@
       context: "Weevely + Claude AI compromised DigitalOcean VPS"
     - type: "ipv4"
       value: "158.178.214.94"
-      context: null
-    - type: "ipv4"
-      value: "165.227.175.161"
       context: null
     - type: "ipv4"
       value: "173.249.2.23"
@@ -346,9 +354,6 @@
       context: null
     - type: "ipv4"
       value: "221.150.15.104"
-      context: null
-    - type: "ipv4"
-      value: "31.223.97.87"
       context: null
     - type: "ipv4"
       value: "34.34.57.141"
@@ -400,9 +405,6 @@
       context: null
     - type: "domain"
       value: "arpa-autolearn.service"
-      context: null
-    - type: "domain"
-      value: "arpa-continuous.service"
       context: null
     - type: "domain"
       value: "arpa-daemon.service"
@@ -461,9 +463,6 @@
     - type: "domain"
       value: "soul.md"
       context: "Default Hermes/OpenClaw persona template"
-    - type: "domain"
-      value: "system-update.service"
-      context: null
     - type: "domain"
       value: "tenant-upcoming-great-descending.trycloudflare.com"
       context: "One-time C2-bundle bootstrap tunnel (Phase 8)"
@@ -632,6 +631,20 @@
     - type: "filename"
       value: "stealth.ps1"
       context: null
+  never_block_total: 4
+  never_block_rows:
+    - type: "ipv4"
+      value: "165.227.175.161"
+      context: "Naku.arm CNC - parasitic listener on compromised GetYourGroup tourism VPS (DigitalOcean); port 23 disguises CNC as innocuous Telnet traffic"
+    - type: "ipv4"
+      value: "31.223.97.87"
+      context: "Turkish ARPA operator residential IP via TurkNet ASN 12735 (operator-from-own-ISP, late-evening Turkish working hours, observed 2026-05-20 21:22-21:30 UTC)"
+    - type: "domain"
+      value: "arpa-continuous.service"
+      context: "Turkish ARPA operator systemd unit - continuous collection daemon for victim-side observability harvest"
+    - type: "domain"
+      value: "system-update.service"
+      context: "Rovodev/Pandora victim-side systemd unit using legitimate-name camouflage; part of 5-vector persistence sequence on compromised hosts"
 "arsenal-237-BdApiUtil64-sys.json":
   slug: "arsenal-237-BdApiUtil64-sys"
   page_url: "/ioc-feeds/arsenal-237-BdApiUtil64-sys/"
@@ -739,6 +752,8 @@
     - type: "filename"
       value: "bdapiutil64.sys"
       context: null
+  never_block_total: 0
+  never_block_rows:
 "arsenal-237-chromelevator-exe.json":
   slug: "arsenal-237-chromelevator-exe"
   page_url: "/ioc-feeds/arsenal-237-chromelevator-exe/"
@@ -819,6 +834,8 @@
     - type: "filename"
       value: "chromelevator.exe"
       context: null
+  never_block_total: 0
+  never_block_rows:
 "arsenal-237-dec_fixed-exe.json":
   slug: "arsenal-237-dec_fixed-exe"
   page_url: "/ioc-feeds/arsenal-237-dec_fixed-exe/"
@@ -863,6 +880,8 @@
     - type: "filename"
       value: "readme.txt"
       context: "Target for automatic deletion after successful decryption"
+  never_block_total: 0
+  never_block_rows:
 "arsenal-237-enc_c2-exe.json":
   slug: "arsenal-237-enc_c2-exe"
   page_url: "/ioc-feeds/arsenal-237-enc_c2-exe/"
@@ -917,6 +936,8 @@
     - type: "filename"
       value: "readme.txt"
       context: null
+  never_block_total: 0
+  never_block_rows:
 "arsenal-237-full_test_enc-exe.json":
   slug: "arsenal-237-full_test_enc-exe"
   page_url: "/ioc-feeds/arsenal-237-full_test_enc-exe/"
@@ -950,6 +971,8 @@
     - type: "filename"
       value: "full_test_enc.exe"
       context: null
+  never_block_total: 0
+  never_block_rows:
 "arsenal-237-killer-crowdstrike-dll.json":
   slug: "arsenal-237-killer-crowdstrike-dll"
   page_url: "/ioc-feeds/arsenal-237-killer-crowdstrike-dll/"
@@ -1003,6 +1026,8 @@
     - type: "filename"
       value: "lpe.exe"
       context: null
+  never_block_total: 0
+  never_block_rows:
 "arsenal-237-killer-dll.json":
   slug: "arsenal-237-killer-dll"
   page_url: "/ioc-feeds/arsenal-237-killer-dll/"
@@ -1053,6 +1078,8 @@
     - type: "filename"
       value: "lpe.exe"
       context: null
+  never_block_total: 0
+  never_block_rows:
 "arsenal-237-lpe-exe.json":
   slug: "arsenal-237-lpe-exe"
   page_url: "/ioc-feeds/arsenal-237-lpe-exe/"
@@ -1097,6 +1124,8 @@
     - type: "filename"
       value: "lpe.exe"
       context: null
+  never_block_total: 0
+  never_block_rows:
 "arsenal-237-nethost-dll.json":
   slug: "arsenal-237-nethost-dll"
   page_url: "/ioc-feeds/arsenal-237-nethost-dll/"
@@ -1152,6 +1181,8 @@
     - type: "filename"
       value: "nethost.dll"
       context: null
+  never_block_total: 0
+  never_block_rows:
 "arsenal-237-new_enc-exe.json":
   slug: "arsenal-237-new_enc-exe"
   page_url: "/ioc-feeds/arsenal-237-new_enc-exe/"
@@ -1194,6 +1225,8 @@
     - type: "filename"
       value: "windows.old"
       context: null
+  never_block_total: 0
+  never_block_rows:
 "arsenal-237-rootkit-dll.json":
   slug: "arsenal-237-rootkit-dll"
   page_url: "/ioc-feeds/arsenal-237-rootkit-dll/"
@@ -1270,6 +1303,8 @@
     - type: "filename"
       value: "rootkit.dll"
       context: null
+  never_block_total: 0
+  never_block_rows:
 "bellamain-turkish-phaas-79-137-192-3-20260516":
   slug: "bellamain-turkish-phaas-79-137-192-3-20260516"
   page_url: "/ioc-feeds/bellamain-turkish-phaas-79-137-192-3-20260516/"
@@ -1396,6 +1431,8 @@
     - type: "filename"
       value: "turkcell.rar"
       context: null
+  never_block_total: 0
+  never_block_rows:
 "cloudsync-assembler-toolkit-91-197-98-188":
   slug: "cloudsync-assembler-toolkit-91-197-98-188"
   page_url: "/ioc-feeds/cloudsync-assembler-toolkit-91-197-98-188/"
@@ -1405,10 +1442,10 @@
   feed_url: "/ioc-feeds/cloudsync-assembler-toolkit-91-197-98-188-iocs.json"
   report_url: "/reports/cloudsync-assembler-toolkit-91-197-98-188/"
   detection_url: "/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections"
-  total: 65
+  total: 61
   untyped: 39
   counts:
-    domain: 9
+    domain: 5
     filename: 12
     ipv4: 5
     md5: 6
@@ -1437,19 +1474,7 @@
       value: "aka1.hopto.org"
       context: null
     - type: "domain"
-      value: "api.telegram.org"
-      context: null
-    - type: "domain"
       value: "c3lestial.fun"
-      context: null
-    - type: "domain"
-      value: "download.anydesk.com"
-      context: null
-    - type: "domain"
-      value: "hopto.org"
-      context: null
-    - type: "domain"
-      value: "ip-api.com"
       context: null
     - type: "domain"
       value: "johnathon-yerrow.sahs.ac.zw"
@@ -1613,6 +1638,20 @@
     - type: "filename"
       value: "v.exe"
       context: null
+  never_block_total: 4
+  never_block_rows:
+    - type: "domain"
+      value: "api.telegram.org"
+      context: "Legitimate Telegram API domain used by many benign apps. Only suspicious paired with a workstation running Tor / the CloudSync working directory. Do not block outright."
+    - type: "domain"
+      value: "download.anydesk.com"
+      context: "Legitimate AnyDesk CDN - NOT malicious infrastructure. The signal is the sequence (a non-AnyDesk binary fetching it, then silent-install + password over stdin), not the domain."
+    - type: "domain"
+      value: "hopto.org"
+      context: "No reason recorded in the feed"
+    - type: "domain"
+      value: "ip-api.com"
+      context: "Legitimate geolocation service, heavily used by benign software. Only a co-signal when paired with an unrelated TLS SNI within seconds."
 "dual-rat-analysis.json":
   slug: "dual-rat-analysis"
   page_url: "/ioc-feeds/dual-rat-analysis/"
@@ -1622,10 +1661,9 @@
   feed_url: "/ioc-feeds/dual-rat-analysis.json"
   report_url: "/reports/dual-rat-analysis/"
   detection_url: "/hunting-detections/dual-rat-analysis-detections"
-  total: 16
+  total: 14
   untyped: 19
   counts:
-    domain: 2
     filename: 1
     ipv4: 1
     md5: 2
@@ -1638,12 +1676,6 @@
     - type: "ipv4"
       value: "185.208.159.182"
       context: "Direct C2 connection to fixed infrastructure"
-    - type: "domain"
-      value: "api.ipify.org"
-      context: null
-    - type: "domain"
-      value: "ipwho.is"
-      context: null
     - type: "url"
       value: "https://pastebin.com/raw/bzg5zj8n"
       context: "Pastebin dead-drop resolver for flexible C2 infrastructure"
@@ -1683,6 +1715,14 @@
     - type: "filename"
       value: "client.exe"
       context: null
+  never_block_total: 2
+  never_block_rows:
+    - type: "domain"
+      value: "api.ipify.org"
+      context: "No reason recorded in the feed"
+    - type: "domain"
+      value: "ipwho.is"
+      context: "No reason recorded in the feed"
 "enc-dec-ransomware-family.json":
   slug: "enc-dec-ransomware-family"
   page_url: "/ioc-feeds/enc-dec-ransomware-family/"
@@ -1833,6 +1873,8 @@
     - type: "filename"
       value: "updated_enc.exe"
       context: null
+  never_block_total: 0
+  never_block_rows:
 "evilsoul-engine-stealer-maas":
   slug: "evilsoul-engine-stealer-maas"
   page_url: "/ioc-feeds/evilsoul-engine-stealer-maas/"
@@ -2077,6 +2119,8 @@
     - type: "filename"
       value: "kaido_debug.txt"
       context: "Operator-tagged debug artifact"
+  never_block_total: 0
+  never_block_rows:
 "flaskc2-postex-toolkit-67-215-232-25":
   slug: "flaskc2-postex-toolkit-67-215-232-25"
   page_url: "/ioc-feeds/flaskc2-postex-toolkit-67-215-232-25/"
@@ -2222,6 +2266,8 @@
     - type: "filename"
       value: "sweetpotato.exe"
       context: null
+  never_block_total: 0
+  never_block_rows:
 "fleetagentadvanced-exe.json":
   slug: "fleetagentadvanced-exe"
   page_url: "/ioc-feeds/fleetagentadvanced-exe/"
@@ -2287,6 +2333,8 @@
     - type: "filename"
       value: "runtimeoptimization.exe"
       context: null
+  never_block_total: 0
+  never_block_rows:
 "fleetagentfud-exe.json":
   slug: "fleetagentfud-exe"
   page_url: "/ioc-feeds/fleetagentfud-exe/"
@@ -2320,6 +2368,8 @@
     - type: "filename"
       value: "fleetagentfud.exe"
       context: "RAT with FUD evasion"
+  never_block_total: 0
+  never_block_rows:
 "ghost-cryptojacker-vova75rus-77.110.96.200":
   slug: "ghost-cryptojacker-vova75rus-77.110.96.200"
   page_url: "/ioc-feeds/ghost-cryptojacker-vova75rus-77.110.96.200/"
@@ -2329,10 +2379,10 @@
   feed_url: "/ioc-feeds/ghost-cryptojacker-vova75rus-77.110.96.200-iocs.json"
   report_url: "/reports/ghost-cryptojacker-vova75rus-77.110.96.200/"
   detection_url: "/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections"
-  total: 51
+  total: 48
   untyped: 141
   counts:
-    domain: 14
+    domain: 11
     filename: 1
     ipv4: 2
     md5: 1
@@ -2373,15 +2423,6 @@
     - type: "domain"
       value: "hysteria-server.service"
       context: "Operator-A Hysteria v2 backdoor systemd unit"
-    - type: "domain"
-      value: "icanhazip.com"
-      context: "Used by both operator and Hysteria installer for victim IP detection"
-    - type: "domain"
-      value: "ifconfig.me"
-      context: "Same role as icanhazip.com"
-    - type: "domain"
-      value: "ip.sb"
-      context: "Same role as icanhazip.com"
     - type: "domain"
       value: "min1.sh"
       context: null
@@ -2493,6 +2534,20 @@
     - type: "filename"
       value: "op_bash_history.txt"
       context: null
+  never_block_total: 4
+  never_block_rows:
+    - type: "domain"
+      value: "bing.com"
+      context: "NOT a malicious destination - SNI cover only; Hysteria QUIC packets to operator's :14433/:14444 ports include bing.com SNI to appear as legitimate TLS to bing.com"
+    - type: "domain"
+      value: "icanhazip.com"
+      context: "Used by both operator and Hysteria installer for victim IP detection"
+    - type: "domain"
+      value: "ifconfig.me"
+      context: "Same role as icanhazip.com"
+    - type: "domain"
+      value: "ip.sb"
+      context: "Same role as icanhazip.com"
 "gocloud-multiservice-cryptojacking-149-28-112-221":
   slug: "gocloud-multiservice-cryptojacking-149-28-112-221"
   page_url: "/ioc-feeds/gocloud-multiservice-cryptojacking-149-28-112-221/"
@@ -2968,6 +3023,8 @@
     - type: "filename"
       value: "xmrig.exe"
       context: "Stock XMRig Windows miner (node 2)"
+  never_block_total: 0
+  never_block_rows:
 "inkognito-russian-vpn-phishing-185-221-196-118-20260516":
   slug: "inkognito-russian-vpn-phishing-185-221-196-118-20260516"
   page_url: "/ioc-feeds/inkognito-russian-vpn-phishing-185-221-196-118-20260516/"
@@ -3225,6 +3282,8 @@
     - type: "sha256"
       value: "d1ae63c928fd07d51cf79c5165e4431765201ca04a2bee3c309dc00092c4de7c"
       context: null
+  never_block_total: 0
+  never_block_rows:
 "kaido-quasar-rat":
   slug: "kaido-quasar-rat"
   page_url: "/ioc-feeds/kaido-quasar-rat/"
@@ -3299,6 +3358,8 @@
     - type: "filename"
       value: "costura.kaido.common.dll"
       context: "Costura embedded asset name"
+  never_block_total: 0
+  never_block_rows:
 "korean-claude-openclaw-221.150.15.104":
   slug: "korean-claude-openclaw-221.150.15.104"
   page_url: "/ioc-feeds/korean-claude-openclaw-221.150.15.104/"
@@ -3333,6 +3394,8 @@
     - type: "url"
       value: "https://openclaw.ai/install.sh"
       context: null
+  never_block_total: 0
+  never_block_rows:
 "malware-analysis-houselet.json":
   slug: "malware-analysis-houselet"
   page_url: "/ioc-feeds/malware-analysis-houselet/"
@@ -3381,6 +3444,8 @@
     - type: "filename"
       value: "houselet.exe"
       context: null
+  never_block_total: 0
+  never_block_rows:
 "multivector-ecommerce-rce-toolkit-192-3-1-116":
   slug: "multivector-ecommerce-rce-toolkit-192-3-1-116"
   page_url: "/ioc-feeds/multivector-ecommerce-rce-toolkit-192-3-1-116/"
@@ -3390,12 +3455,12 @@
   feed_url: "/ioc-feeds/multivector-ecommerce-rce-toolkit-192-3-1-116-iocs.json"
   report_url: "/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/"
   detection_url: "/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections"
-  total: 72
+  total: 69
   untyped: 50
   counts:
-    domain: 36
+    domain: 34
     filename: 5
-    ipv4: 20
+    ipv4: 19
     path: 6
     sha256: 1
     url: 4
@@ -3415,9 +3480,6 @@
     - type: "ipv4"
       value: "21.0.8.191"
       context: null
-    - type: "ipv4"
-      value: "31.22.111.190"
-      context: "Operator control-source address"
     - type: "ipv4"
       value: "34.210.36.7"
       context: null
@@ -3494,9 +3556,6 @@
       value: "chengjiastore.cn"
       context: null
     - type: "domain"
-      value: "cs-pgcwufmiws.cn-hangzhou.fcapp.run"
-      context: "Attack-traffic relay"
-    - type: "domain"
       value: "h5.njmaixi.cn"
       context: null
     - type: "domain"
@@ -3534,9 +3593,6 @@
       context: null
     - type: "domain"
       value: "njmaixi.cn"
-      context: null
-    - type: "domain"
-      value: "open.oppomobile.com"
       context: null
     - type: "domain"
       value: "poc.yml"
@@ -3616,6 +3672,17 @@
     - type: "filename"
       value: "phish.svg"
       context: null
+  never_block_total: 3
+  never_block_rows:
+    - type: "ipv4"
+      value: "31.22.111.190"
+      context: "Operator control-source address"
+    - type: "domain"
+      value: "cs-pgcwufmiws.cn-hangzhou.fcapp.run"
+      context: "Attack-traffic relay"
+    - type: "domain"
+      value: "open.oppomobile.com"
+      context: "No reason recorded in the feed"
 "new-files-found-20260408":
   slug: "new-files-found-20260408"
   page_url: "/ioc-feeds/new-files-found-20260408/"
@@ -3828,6 +3895,8 @@
     - type: "filename"
       value: "stager_http_x64.ps1"
       context: "PS1 stager wrapper, port 80, URI /msI4"
+  never_block_total: 0
+  never_block_rows:
 "nsminer-cryptojacker.json":
   slug: "nsminer-cryptojacker"
   page_url: "/ioc-feeds/nsminer-cryptojacker/"
@@ -3930,6 +3999,8 @@
     - type: "path"
       value: "C:\\Users\\<user>\\AppData\\Roaming\\NsMiner\\"
       context: null
+  never_block_total: 0
+  never_block_rows:
 "open-directory-172-105-0-126-20260406":
   slug: "open-directory-172-105-0-126-20260406"
   page_url: "/ioc-feeds/open-directory-172-105-0-126-20260406/"
@@ -4130,6 +4201,8 @@
     - type: "filename"
       value: "veh_loader.exe"
       context: "VEH test harness - reads C:\\cs_final.dat, 30s timeout (original)"
+  never_block_total: 0
+  never_block_rows:
 "open-directory-94-103-1-13-20260423":
   slug: "open-directory-94-103-1-13-20260423"
   page_url: "/ioc-feeds/open-directory-94-103-1-13-20260423/"
@@ -4139,48 +4212,27 @@
   feed_url: "/ioc-feeds/open-directory-94-103-1-13-20260423-iocs.json"
   report_url: "/reports/open-directory-94-103-1-13-20260423/"
   detection_url: "/hunting-detections/open-directory-94-103-1-13-20260423-detections"
-  total: 99
+  total: 91
   untyped: 111
   counts:
-    domain: 9
+    domain: 8
     filename: 23
-    ipv4: 8
+    ipv4: 2
     md5: 5
     path: 10
     registry: 7
     sha1: 1
     sha256: 34
-    url: 2
+    url: 1
   rows:
     - type: "ipv4"
-      value: "172.86.76.198"
-      context: null
-    - type: "ipv4"
-      value: "178.20.159.99"
-      context: null
-    - type: "ipv4"
-      value: "185.237.218.100"
-      context: null
-    - type: "ipv4"
       value: "192.227.108.142"
-      context: null
-    - type: "ipv4"
-      value: "192.227.113.124"
-      context: null
-    - type: "ipv4"
-      value: "37.17.245.209"
-      context: null
-    - type: "ipv4"
-      value: "85.238.98.37"
       context: null
     - type: "ipv4"
       value: "94.103.1.13"
       context: null
     - type: "domain"
       value: "bulgainme.pro"
-      context: null
-    - type: "domain"
-      value: "dhost.su"
       context: null
     - type: "domain"
       value: "forumrutor24.com"
@@ -4203,9 +4255,6 @@
     - type: "domain"
       value: "www.forumrutor24.com"
       context: "WWW subdomain of forumrutor24.com co-tenant (see parent entry)."
-    - type: "url"
-      value: "http://172.86.76.198:3000/api/auth/verify-otp"
-      context: "Node.js OTP verification endpoint targeted by otp2.py / otp_brute.py (brute-force script)"
     - type: "url"
       value: "http://94.103.1.13/gp.xor"
       context: null
@@ -4449,6 +4498,32 @@
     - type: "filename"
       value: "uacbypass.exe"
       context: "Generic operator filename seen on VT for Stage-5b"
+  never_block_total: 8
+  never_block_rows:
+    - type: "ipv4"
+      value: "172.86.76.198"
+      context: "No reason recorded in the feed"
+    - type: "ipv4"
+      value: "178.20.159.99"
+      context: "No reason recorded in the feed"
+    - type: "ipv4"
+      value: "185.237.218.100"
+      context: "No reason recorded in the feed"
+    - type: "ipv4"
+      value: "192.227.113.124"
+      context: "No reason recorded in the feed"
+    - type: "ipv4"
+      value: "37.17.245.209"
+      context: "Ukrainian host (AS43361 LUMINA LLC [UA]), no PTR, VT 0/94. Target type unknown, probed by port_check.py. Do not block."
+    - type: "ipv4"
+      value: "85.238.98.37"
+      context: "No reason recorded in the feed"
+    - type: "domain"
+      value: "dhost.su"
+      context: "No reason recorded in the feed"
+    - type: "url"
+      value: "http://172.86.76.198:3000/api/auth/verify-otp"
+      context: "Node.js OTP verification endpoint targeted by otp2.py / otp_brute.py (brute-force script)"
 "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817":
   slug: "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817"
   page_url: "/ioc-feeds/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/"
@@ -4458,20 +4533,17 @@
   feed_url: "/ioc-feeds/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-iocs.json"
   report_url: "/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/"
   detection_url: "/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections"
-  total: 137
+  total: 135
   untyped: 88
   counts:
     domain: 13
     filename: 28
-    ipv4: 10
+    ipv4: 8
     path: 11
     sha1: 2
     sha256: 70
     url: 3
   rows:
-    - type: "ipv4"
-      value: "104.21.41.159"
-      context: "Cloudflare proxy A record for radius-sync.com"
     - type: "ipv4"
       value: "13.140.145.210"
       context: "Operator VPS and collection point"
@@ -4484,9 +4556,6 @@
     - type: "ipv4"
       value: "147.124.203.51"
       context: null
-    - type: "ipv4"
-      value: "172.67.148.55"
-      context: "Cloudflare proxy A record for radius-sync.com"
     - type: "ipv4"
       value: "2.57.91.91"
       context: null
@@ -4880,6 +4949,20 @@
     - type: "filename"
       value: "wl_t3.txt"
       context: null
+  never_block_total: 4
+  never_block_rows:
+    - type: "ipv4"
+      value: "104.21.41.159"
+      context: "Cloudflare proxy A record for radius-sync.com"
+    - type: "ipv4"
+      value: "172.67.148.55"
+      context: "Cloudflare proxy A record for radius-sync.com"
+    - type: "domain"
+      value: "paloma.ns.cloudflare.com"
+      context: "Operator-owned domain"
+    - type: "domain"
+      value: "peyton.ns.cloudflare.com"
+      context: "Operator-owned domain"
 "opendirectory-193-56-255-154-20260403":
   slug: "opendirectory-193-56-255-154-20260403"
   page_url: "/ioc-feeds/opendirectory-193-56-255-154-20260403/"
@@ -4959,6 +5042,8 @@
     - type: "filename"
       value: "main.exe"
       context: "XiebroC2 v3.1 Go TCP implant, original filename from open directory at 193.56.255.154"
+  never_block_total: 0
+  never_block_rows:
 "opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517":
   slug: "opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517"
   page_url: "/ioc-feeds/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/"
@@ -4968,12 +5053,12 @@
   feed_url: "/ioc-feeds/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-iocs.json"
   report_url: "/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/"
   detection_url: "/hunting-detections/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections"
-  total: 111
+  total: 108
   untyped: 71
   counts:
-    domain: 47
+    domain: 45
     filename: 2
-    ipv4: 12
+    ipv4: 11
     md5: 1
     sha256: 43
     url: 6
@@ -4995,9 +5080,6 @@
       context: null
     - type: "ipv4"
       value: "172.234.24.120"
-      context: null
-    - type: "ipv4"
-      value: "172.237.149.231"
       context: null
     - type: "ipv4"
       value: "216.126.224.181"
@@ -5069,9 +5151,6 @@
       value: "ltamaeropromoweb-ecuador-travel.shop"
       context: null
     - type: "domain"
-      value: "mail.hcjs2.jlengineering.se"
-      context: "Do NOT blocklist apex jlengineering.se - it is a multi-tenant donor domain"
-    - type: "domain"
       value: "mailmanagement.cfd"
       context: null
     - type: "domain"
@@ -5109,9 +5188,6 @@
       context: null
     - type: "domain"
       value: "quick-barber.com"
-      context: null
-    - type: "domain"
-      value: "rebel.com"
       context: null
     - type: "domain"
       value: "receita-federal.com"
@@ -5311,6 +5387,17 @@
     - type: "filename"
       value: "lgt81941.xls"
       context: "Alien InfoStealer via CVE-2017-0199 on .181. LOW-MODERATE operator-attribution."
+  never_block_total: 3
+  never_block_rows:
+    - type: "ipv4"
+      value: "172.237.149.231"
+      context: "Parklogic shared TDS landing infrastructure - operator parks 11 TDS landing domains here via customer account pkAId=2143526812"
+    - type: "domain"
+      value: "mail.hcjs2.jlengineering.se"
+      context: "Do NOT blocklist apex jlengineering.se - it is a multi-tenant donor domain"
+    - type: "domain"
+      value: "rebel.com"
+      context: "Yahoo support spoof (HIGH-MONETIZED, ownership ambiguous - full operator infra pattern but Rebel org-hash differs)"
 "opendirectory-45-130-148-125-20260430":
   slug: "opendirectory-45-130-148-125-20260430"
   page_url: "/ioc-feeds/opendirectory-45-130-148-125-20260430/"
@@ -5550,6 +5637,8 @@
     - type: "filename"
       value: "winpeas.exe"
       context: "Commodity Windows enumeration / privilege escalation discovery tool."
+  never_block_total: 0
+  never_block_rows:
 "opendirectory-62-60-237-100-20260506":
   slug: "opendirectory-62-60-237-100-20260506"
   page_url: "/ioc-feeds/opendirectory-62-60-237-100-20260506/"
@@ -5559,12 +5648,12 @@
   feed_url: "/ioc-feeds/opendirectory-62-60-237-100-20260506-iocs.json"
   report_url: "/reports/opendirectory-62-60-237-100-20260506/"
   detection_url: "/hunting-detections/opendirectory-62-60-237-100-20260506-detections"
-  total: 175
+  total: 171
   untyped: 84
   counts:
-    domain: 9
+    domain: 6
     filename: 43
-    ipv4: 5
+    ipv4: 4
     md5: 15
     path: 19
     registry: 5
@@ -5579,19 +5668,10 @@
       value: "185.241.208.129"
       context: null
     - type: "ipv4"
-      value: "23.106.161.1"
-      context: null
-    - type: "ipv4"
       value: "62.60.237.100"
       context: null
     - type: "ipv4"
       value: "80.253.249.186"
-      context: null
-    - type: "domain"
-      value: "g.s4.mega.io"
-      context: "Mega.io subdomain; VT 1/58 malicious"
-    - type: "domain"
-      value: "goproxy.github.io"
       context: null
     - type: "domain"
       value: "microsoft.com-app.cc"
@@ -5608,9 +5688,6 @@
     - type: "domain"
       value: "price2026.zip"
       context: "Sibling zip variant"
-    - type: "domain"
-      value: "s3.g.s4.mega.io"
-      context: null
     - type: "domain"
       value: "www-microsoft.live"
       context: null
@@ -6097,6 +6174,20 @@
     - type: "filename"
       value: "xxx.lnk"
       context: "LNK shortcut targeting explorer.exe + UNC argument"
+  never_block_total: 4
+  never_block_rows:
+    - type: "ipv4"
+      value: "23.106.161.1"
+      context: "No reason recorded in the feed"
+    - type: "domain"
+      value: "g.s4.mega.io"
+      context: "Mega.io subdomain; VT 1/58 malicious"
+    - type: "domain"
+      value: "goproxy.github.io"
+      context: "Open-source GoProxy MITM proxy project; appears as CN in CA cert installed by pe_06 for HTTPS interception; the project itself is legitimate but cert install in user trust store is malicious"
+    - type: "domain"
+      value: "s3.g.s4.mega.io"
+      context: "Mega.io abuse, operator bucket aileqac3yep7oqdhygjpberqqnk2zrnhck2lx; subdir 'busket' (typo); hosts putty.exe, putty2.exe, Bravo/vida/NGZTDICF.exe; VT 13/60 malicious"
 "opendirectory-74-0-42-25-20260316":
   slug: "opendirectory-74-0-42-25-20260316"
   page_url: "/ioc-feeds/opendirectory-74-0-42-25-20260316/"
@@ -6548,6 +6639,8 @@
     - type: "filename"
       value: "zvafsyattl.exe"
       context: "Stage 2 inner loader, extracted via ExtremeDumper; TEA cipher; .NET Reactor; 325120 bytes"
+  never_block_total: 0
+  never_block_rows:
 "opendirectory-79-137-192-3-20260515":
   slug: "opendirectory-79-137-192-3-20260515"
   page_url: "/ioc-feeds/opendirectory-79-137-192-3-20260515/"
@@ -6822,6 +6915,8 @@
     - type: "filename"
       value: "turkcell.rar"
       context: null
+  never_block_total: 0
+  never_block_rows:
 "quasar-xworm-powershell.json":
   slug: "quasar-xworm-powershell"
   page_url: "/ioc-feeds/quasar-xworm-powershell/"
@@ -6877,6 +6972,8 @@
     - type: "sha256"
       value: "dd000e90853f1a78b47e080439588eead0e4cf7c1bb274cd20af626160df1249"
       context: null
+  never_block_total: 0
+  never_block_rows:
 "remcos-opendirectory-campaign.json":
   slug: "remcos-opendirectory-campaign"
   page_url: "/ioc-feeds/remcos-opendirectory-campaign/"
@@ -6970,6 +7067,8 @@
     - type: "filename"
       value: "payload.exe"
       context: "VB6 Dropper"
+  never_block_total: 0
+  never_block_rows:
 "rovodev-mirai-matrix-c2-87.106.143.220":
   slug: "rovodev-mirai-matrix-c2-87.106.143.220"
   page_url: "/ioc-feeds/rovodev-mirai-matrix-c2-87.106.143.220/"
@@ -7146,6 +7245,8 @@
     - type: "path"
       value: "/tmp/pandora_bot"
       context: null
+  never_block_total: 0
+  never_block_rows:
 "russian-gemini-credential-mill-213.165.51.115":
   slug: "russian-gemini-credential-mill-213.165.51.115"
   page_url: "/ioc-feeds/russian-gemini-credential-mill-213.165.51.115/"
@@ -7348,6 +7449,11 @@
     - type: "filename"
       value: "ultra_gold_targets.txt"
       context: "Operator's curated target list input to ai_sniper_brute.py. Operator-bespoke filename."
+  never_block_total: 1
+  never_block_rows:
+    - type: "domain"
+      value: "generativelanguage.googleapis.com"
+      context: "No reason recorded in the feed"
 "seasia-gov-exploitation-toolkit-144-172-106-236":
   slug: "seasia-gov-exploitation-toolkit-144-172-106-236"
   page_url: "/ioc-feeds/seasia-gov-exploitation-toolkit-144-172-106-236/"
@@ -7357,13 +7463,13 @@
   feed_url: "/ioc-feeds/seasia-gov-exploitation-toolkit-144-172-106-236-iocs.json"
   report_url: "/reports/seasia-gov-exploitation-toolkit-144-172-106-236/"
   detection_url: "/hunting-detections/seasia-gov-exploitation-toolkit-144-172-106-236-detections"
-  total: 54
+  total: 41
   untyped: 39
   counts:
-    domain: 15
+    domain: 3
     email: 1
     filename: 1
-    ipv4: 8
+    ipv4: 7
     md5: 4
     path: 16
     sha1: 4
@@ -7390,12 +7496,6 @@
     - type: "ipv4"
       value: "43.208.251.115"
       context: null
-    - type: "ipv4"
-      value: "87.106.101.131"
-      context: "GSRN public relay node (gs18.thc.org), seen embedded in the second-actor cat.sh loader"
-    - type: "domain"
-      value: "api.telegram.org"
-      context: null
     - type: "domain"
       value: "bootyreader.com"
       context: null
@@ -7403,40 +7503,7 @@
       value: "cat.sh"
       context: null
     - type: "domain"
-      value: "cdn.gsocket.io"
-      context: null
-    - type: "domain"
-      value: "discord.com"
-      context: null
-    - type: "domain"
-      value: "g.gs.thc.org"
-      context: null
-    - type: "domain"
-      value: "gsocket.io"
-      context: null
-    - type: "domain"
-      value: "localroot.sbs"
-      context: "Second-actor loader / staging domain"
-    - type: "domain"
-      value: "master.gs.thc.org"
-      context: null
-    - type: "domain"
-      value: "p.gs.thc.org"
-      context: null
-    - type: "domain"
-      value: "serveo.net"
-      context: null
-    - type: "domain"
       value: "ulm.ac.id"
-      context: null
-    - type: "domain"
-      value: "utah01-maas.cloudzy.com"
-      context: null
-    - type: "domain"
-      value: "webhook.site"
-      context: null
-    - type: "domain"
-      value: "z.gs.thc.org"
       context: null
     - type: "sha256"
       value: "23560e13d06d8153e0e7566d153ffe9eec79e08eb1ed18f8cd1417728e7dbdd6"
@@ -7531,6 +7598,53 @@
     - type: "filename"
       value: "chisel.exe"
       context: null
+  never_block_total: 15
+  never_block_rows:
+    - type: "ipv4"
+      value: "87.106.101.131"
+      context: "GSRN public relay node (gs18.thc.org), seen embedded in the second-actor cat.sh loader"
+    - type: "domain"
+      value: "api.telegram.org"
+      context: "Shared public infrastructure with vast legitimate use. Presence of a GSocket relay connection FROM a server-class host with no interactive user is the signal. The domains themselves are not. NEVER place these on a block list or ship as campaign IOCs. Second-actor (GSocket/THC kit) context only."
+    - type: "domain"
+      value: "cdn.gsocket.io"
+      context: "Shared public infrastructure with vast legitimate use. Presence of a GSocket relay connection FROM a server-class host with no interactive user is the signal. The domains themselves are not. NEVER place these on a block list or ship as campaign IOCs. Second-actor (GSocket/THC kit) context only."
+    - type: "domain"
+      value: "discord.com"
+      context: "Shared public infrastructure with vast legitimate use. Presence of a GSocket relay connection FROM a server-class host with no interactive user is the signal. The domains themselves are not. NEVER place these on a block list or ship as campaign IOCs. Second-actor (GSocket/THC kit) context only."
+    - type: "domain"
+      value: "g.gs.thc.org"
+      context: "Shared public infrastructure with vast legitimate use. Presence of a GSocket relay connection FROM a server-class host with no interactive user is the signal. The domains themselves are not. NEVER place these on a block list or ship as campaign IOCs. Second-actor (GSocket/THC kit) context only."
+    - type: "domain"
+      value: "github.com"
+      context: "Shared public infrastructure with vast legitimate use. Presence of a GSocket relay connection FROM a server-class host with no interactive user is the signal. The domains themselves are not. NEVER place these on a block list or ship as campaign IOCs. Second-actor (GSocket/THC kit) context only."
+    - type: "domain"
+      value: "gsocket.io"
+      context: "Shared public infrastructure with vast legitimate use. Presence of a GSocket relay connection FROM a server-class host with no interactive user is the signal. The domains themselves are not. NEVER place these on a block list or ship as campaign IOCs. Second-actor (GSocket/THC kit) context only."
+    - type: "domain"
+      value: "localroot.sbs"
+      context: "Second-actor loader / staging domain"
+    - type: "domain"
+      value: "master.gs.thc.org"
+      context: "Shared public infrastructure with vast legitimate use. Presence of a GSocket relay connection FROM a server-class host with no interactive user is the signal. The domains themselves are not. NEVER place these on a block list or ship as campaign IOCs. Second-actor (GSocket/THC kit) context only."
+    - type: "domain"
+      value: "p.gs.thc.org"
+      context: "Shared public infrastructure with vast legitimate use. Presence of a GSocket relay connection FROM a server-class host with no interactive user is the signal. The domains themselves are not. NEVER place these on a block list or ship as campaign IOCs. Second-actor (GSocket/THC kit) context only."
+    - type: "domain"
+      value: "raw.githubusercontent.com"
+      context: "Shared public infrastructure with vast legitimate use. Presence of a GSocket relay connection FROM a server-class host with no interactive user is the signal. The domains themselves are not. NEVER place these on a block list or ship as campaign IOCs. Second-actor (GSocket/THC kit) context only."
+    - type: "domain"
+      value: "serveo.net"
+      context: "No reason recorded in the feed"
+    - type: "domain"
+      value: "utah01-maas.cloudzy.com"
+      context: "Resolves to 144.172.106.236 itself (288 self-lookups in the operator's localhost DNS log). Cloudzy provider infrastructure hostname, not a C2 domain, context/hunt only, do not block."
+    - type: "domain"
+      value: "webhook.site"
+      context: "Shared public infrastructure with vast legitimate use. Presence of a GSocket relay connection FROM a server-class host with no interactive user is the signal. The domains themselves are not. NEVER place these on a block list or ship as campaign IOCs. Second-actor (GSocket/THC kit) context only."
+    - type: "domain"
+      value: "z.gs.thc.org"
+      context: "Shared public infrastructure with vast legitimate use. Presence of a GSocket relay connection FROM a server-class host with no interactive user is the signal. The domains themselves are not. NEVER place these on a block list or ship as campaign IOCs. Second-actor (GSocket/THC kit) context only."
 "shadow-xworm-opendirectory":
   slug: "shadow-xworm-opendirectory"
   page_url: "/ioc-feeds/shadow-xworm-opendirectory/"
@@ -7540,7 +7654,7 @@
   feed_url: "/ioc-feeds/shadow-xworm-opendirectory-iocs.json"
   report_url: "/reports/shadow-xworm-opendirectory/"
   detection_url: "/hunting-detections/shadow-xworm-opendirectory-detections"
-  total: 48
+  total: 47
   untyped: 33
   counts:
     domain: 8
@@ -7551,7 +7665,6 @@
     registry: 1
     sha1: 8
     sha256: 8
-    url: 1
   rows:
     - type: "ipv4"
       value: "151.245.112.70"
@@ -7589,9 +7702,6 @@
     - type: "domain"
       value: "ns2.latssko.com"
       context: "Self-hosted nameserver for previous operational domain, same self-hosting pattern"
-    - type: "url"
-      value: "http://ip-api.com/line/?fields=hosting"
-      context: null
     - type: "sha256"
       value: "0eb87ee4523f90210730ac6040ee9c5551408a93bb3a1454cd79aaf26a7744ed"
       context: null
@@ -7697,6 +7807,11 @@
     - type: "filename"
       value: "xwormclient2.exe"
       context: "XWorm 3.0-5.0 builder output #2 (63,488 bytes, .NET/VB.NET)"
+  never_block_total: 1
+  never_block_rows:
+    - type: "url"
+      value: "http://ip-api.com/line/?fields=hosting"
+      context: "XWorm anti-analysis callback, queries legitimate API to detect hosting/datacenter IPs. If response is 'true', malware exits silently."
 "shinyhunters-dls-91-215-85-22-20260417":
   slug: "shinyhunters-dls-91-215-85-22-20260417"
   page_url: "/ioc-feeds/shinyhunters-dls-91-215-85-22-20260417/"
@@ -7706,10 +7821,10 @@
   feed_url: "/ioc-feeds/shinyhunters-dls-91-215-85-22-20260417-iocs.json"
   report_url: "/reports/shinyhunters-dls-91-215-85-22-20260417/"
   detection_url: "/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections"
-  total: 27
+  total: 25
   untyped: 108
   counts:
-    domain: 8
+    domain: 6
     email: 2
     filename: 1
     ipv4: 2
@@ -7725,12 +7840,6 @@
     - type: "domain"
       value: "europa.zip"
       context: null
-    - type: "domain"
-      value: "ns1.ddos-guard.net"
-      context: "DDoS-Guard authoritative NS for shinyhunte.rs"
-    - type: "domain"
-      value: "ns2.ddos-guard.net"
-      context: "DDoS-Guard authoritative NS for shinyhunte.rs"
     - type: "domain"
       value: "pro-spero.ru"
       context: "PROSPERO OOO operator domain; RIPE abuse-contact root"
@@ -7797,6 +7906,14 @@
     - type: "filename"
       value: "information.txt"
       context: "Actor-authored ransom note served at every path on the DLS"
+  never_block_total: 2
+  never_block_rows:
+    - type: "domain"
+      value: "ns1.ddos-guard.net"
+      context: "DDoS-Guard authoritative NS for shinyhunte.rs"
+    - type: "domain"
+      value: "ns2.ddos-guard.net"
+      context: "DDoS-Guard authoritative NS for shinyhunte.rs"
 "sliver-c2-windows-postex-staging-193-233-202-17":
   slug: "sliver-c2-windows-postex-staging-193-233-202-17"
   page_url: "/ioc-feeds/sliver-c2-windows-postex-staging-193-233-202-17/"
@@ -7806,34 +7923,28 @@
   feed_url: "/ioc-feeds/sliver-c2-windows-postex-staging-193-233-202-17-iocs.json"
   report_url: "/reports/sliver-c2-windows-postex-staging-193-233-202-17/"
   detection_url: "/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections"
-  total: 387
-  untyped: 147
+  total: 376
+  untyped: 145
   counts:
-    domain: 18
+    domain: 10
     filename: 80
-    ipv4: 5
+    ipv4: 3
     md5: 80
     path: 22
     registry: 6
     sha1: 77
     sha256: 84
-    url: 15
+    url: 14
   rows:
     - type: "ipv4"
       value: "146.103.127.44"
       context: null
-    - type: "ipv4"
-      value: "147.135.84.14"
-      context: "SHARED HOSTING"
     - type: "ipv4"
       value: "193.233.202.17"
       context: null
     - type: "ipv4"
       value: "38.110.228.125"
       context: "Resolved destination of the blockchain-resolved C2 domain"
-    - type: "ipv4"
-      value: "77.110.126.46"
-      context: "OPERATOR FALLBACK C2, UNDERLYING HOST OWNERSHIP NOT ESTABLISHED"
     - type: "domain"
       value: "bdqbs2lz6u.bak"
       context: "Node.js bot main script, launched from the Run key"
@@ -7841,44 +7952,20 @@
       value: "dcdivas.com"
       context: null
     - type: "domain"
-      value: "eth-mainnet.public.blastapi.io"
-      context: "PUBLIC ETHEREUM RPC"
-    - type: "domain"
-      value: "eth.drpc.org"
-      context: "PUBLIC ETHEREUM RPC"
-    - type: "domain"
-      value: "eth.merkle.io"
-      context: "PUBLIC ETHEREUM RPC"
-    - type: "domain"
-      value: "ethereum-rpc.publicnode.com"
-      context: "PUBLIC ETHEREUM RPC"
-    - type: "domain"
       value: "gorus.space"
       context: null
     - type: "domain"
       value: "itemrange.com"
       context: null
     - type: "domain"
-      value: "mainnet.gateway.tenderly.co"
-      context: "PUBLIC ETHEREUM RPC"
-    - type: "domain"
       value: "n8n-nether.nafer.ru"
       context: null
-    - type: "domain"
-      value: "nodejs.org"
-      context: "LEGITIMATE VENDOR"
     - type: "domain"
       value: "publisherresolution.com"
       context: null
     - type: "domain"
       value: "resumeacceptable.com"
       context: "Contract C2 value set at block 24980089. 17 of 90 malicious"
-    - type: "domain"
-      value: "rpc.flashbots.net"
-      context: "PUBLIC ETHEREUM RPC"
-    - type: "domain"
-      value: "rpc.mevblocker.io"
-      context: "PUBLIC ETHEREUM RPC"
     - type: "domain"
       value: "simultaneouslypower.com"
       context: "Contract C2 value set at block 25302771. 18 of 90 malicious, reputation -11"
@@ -7918,9 +8005,6 @@
     - type: "url"
       value: "https://itemrange.com"
       context: null
-    - type: "url"
-      value: "https://nodejs.org/dist/v18.17.0/node-v18.17.0-win-x64.zip"
-      context: "LEGITIMATE VENDOR DOWNLOAD"
     - type: "url"
       value: "https://publisherresolution.com"
       context: null
@@ -8980,6 +9064,41 @@
     - type: "filename"
       value: "yugkag9mvnkwylo.bin"
       context: "JavaScript decryptor and installer from the MSI cabinet"
+  never_block_total: 11
+  never_block_rows:
+    - type: "ipv4"
+      value: "147.135.84.14"
+      context: "SHARED HOSTING"
+    - type: "ipv4"
+      value: "77.110.126.46"
+      context: "OPERATOR FALLBACK C2, UNDERLYING HOST OWNERSHIP NOT ESTABLISHED"
+    - type: "domain"
+      value: "eth-mainnet.public.blastapi.io"
+      context: "PUBLIC ETHEREUM RPC"
+    - type: "domain"
+      value: "eth.drpc.org"
+      context: "PUBLIC ETHEREUM RPC"
+    - type: "domain"
+      value: "eth.merkle.io"
+      context: "PUBLIC ETHEREUM RPC"
+    - type: "domain"
+      value: "ethereum-rpc.publicnode.com"
+      context: "PUBLIC ETHEREUM RPC"
+    - type: "domain"
+      value: "mainnet.gateway.tenderly.co"
+      context: "PUBLIC ETHEREUM RPC"
+    - type: "domain"
+      value: "nodejs.org"
+      context: "LEGITIMATE VENDOR"
+    - type: "domain"
+      value: "rpc.flashbots.net"
+      context: "PUBLIC ETHEREUM RPC"
+    - type: "domain"
+      value: "rpc.mevblocker.io"
+      context: "PUBLIC ETHEREUM RPC"
+    - type: "url"
+      value: "https://nodejs.org/dist/v18.17.0/node-v18.17.0-win-x64.zip"
+      context: "LEGITIMATE VENDOR DOWNLOAD"
 "sliver-open-directory":
   slug: "sliver-open-directory"
   page_url: "/ioc-feeds/sliver-open-directory/"
@@ -8989,10 +9108,10 @@
   feed_url: "/ioc-feeds/sliver-open-directory-iocs.json"
   report_url: "/reports/sliver-open-directory/"
   detection_url: "/hunting-detections/sliver-open-directory-detections"
-  total: 19
+  total: 18
   untyped: 186
   counts:
-    domain: 3
+    domain: 2
     filename: 2
     ipv4: 1
     md5: 3
@@ -9004,9 +9123,6 @@
     - type: "ipv4"
       value: "45.94.31.220"
       context: "C2 server, payload delivery server, attacker build workspace"
-    - type: "domain"
-      value: "intezer.com"
-      context: "Sandbox detection canary domain, used to detect analysis environment"
     - type: "domain"
       value: "mailmassange.duckdns.org"
       context: "Backup/fallback Sliver C2 domain (DuckDNS dynamic DNS service)"
@@ -9058,6 +9174,11 @@
     - type: "filename"
       value: "onedrivesync.exe"
       context: null
+  never_block_total: 1
+  never_block_rows:
+    - type: "domain"
+      value: "intezer.com"
+      context: "Sandbox detection canary domain, used to detect analysis environment"
 "turkish-arpa-openclaw-state-insurer-209.38.205.158":
   slug: "turkish-arpa-openclaw-state-insurer-209.38.205.158"
   page_url: "/ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.205.158/"
@@ -9067,21 +9188,18 @@
   feed_url: "/ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json"
   report_url: "/reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/"
   detection_url: "/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections"
-  total: 43
+  total: 42
   untyped: 212
   counts:
     domain: 12
     filename: 1
-    ipv4: 2
+    ipv4: 1
     path: 12
     sha256: 13
     url: 3
   rows:
     - type: "ipv4"
       value: "209.38.205.158"
-      context: null
-    - type: "ipv4"
-      value: "31.223.97.87"
       context: null
     - type: "domain"
       value: "agents.md"
@@ -9206,6 +9324,11 @@
     - type: "filename"
       value: "instana_local_collector.ps1"
       context: null
+  never_block_total: 1
+  never_block_rows:
+    - type: "ipv4"
+      value: "31.223.97.87"
+      context: "Operator interactive source IP, TurkNet AS12735 residential/SMB Turkish ISP; captured 2026-05-20 21:22-21:30 UTC = 00:22-00:30 local Turkish time; 0/91 VT clean"
 "uac-test-exe.json":
   slug: "uac-test-exe"
   page_url: "/ioc-feeds/uac-test-exe/"
@@ -9262,6 +9385,8 @@
     - type: "filename"
       value: "uac_test.exe"
       context: null
+  never_block_total: 0
+  never_block_rows:
 "webserver-compromise-kit-91-236-230-250":
   slug: "webserver-compromise-kit-91-236-230-250"
   page_url: "/ioc-feeds/webserver-compromise-kit-91-236-230-250/"
@@ -9336,6 +9461,8 @@
     - type: "filename"
       value: "rev.exe"
       context: null
+  never_block_total: 0
+  never_block_rows:
 "webshells-to-the-cloud.json":
   slug: "webshells-to-the-cloud"
   page_url: "/ioc-feeds/webshells-to-the-cloud/"
@@ -9404,3 +9531,5 @@
     - type: "filename"
       value: "wordpressinstaller.php"
       context: null
+  never_block_total: 0
+  never_block_rows:

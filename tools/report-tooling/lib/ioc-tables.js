@@ -79,8 +79,13 @@ function build(feeds, status, meta) {
     bySlug[slug] = file;
 
     var s = X.summarise(feeds[file]);
-    if (!s.rows.length) { skipped.empty++; return; }
+    var nbRows = s.neverBlockRows || [];
+    if (!s.rows.length && !nbRows.length) { skipped.empty++; return; }
 
+    /* Counts drive the type-filter chips on the ordinary table only. The
+       never-block section is not filterable by them; see surface-fix-plan.md
+       C.2 for why (small, and a second filter affordance re-creates the
+       hazard this fix exists to remove). */
     var counts = {};
     s.rows.forEach(function (r) { counts[r.type] = (counts[r.type] || 0) + 1; });
 
@@ -97,7 +102,9 @@ function build(feeds, status, meta) {
       total: s.rows.length,
       untyped: s.untyped,
       counts: counts,
-      rows: s.rows
+      rows: s.rows,
+      never_block_total: nbRows.length,
+      never_block_rows: nbRows
     };
   });
 
@@ -131,6 +138,17 @@ function toYaml(tables) {
       lines.push('    - type: ' + esc(r.type));
       lines.push('      value: ' + esc(r.value));
       lines.push('      context: ' + (r.context ? esc(r.context) : 'null'));
+    });
+    lines.push('  never_block_total: ' + (t.never_block_total || 0));
+    lines.push('  never_block_rows:');
+    (t.never_block_rows || []).forEach(function (r) {
+      lines.push('    - type: ' + esc(r.type));
+      lines.push('      value: ' + esc(r.value));
+      // Never null here: summarise() already substitutes the explicit
+      // 'No reason recorded in the feed' string when a row has no reason
+      // text, so a missing reason renders visibly rather than as an
+      // empty cell that reads like a bug.
+      lines.push('      context: ' + esc(r.context));
     });
   });
   return lines.join('\n') + '\n';

@@ -36,7 +36,8 @@ function attr(s) {
     .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
-function page(rows) {
+function page(rows, nbRows) {
+  nbRows = nbRows || [];
   var counts = {};
   rows.forEach(function (r) { counts[r.type] = (counts[r.type] || 0) + 1; });
   var chips = Object.keys(counts).map(function (t) {
@@ -53,6 +54,20 @@ function page(rows) {
       '<td><code>' + r.value + '</code></td></tr>';
   }).join('');
 
+  // The never-block section, structurally separate: a DIFFERENT table class
+  // (hl-ioctable__nbtable, not hl-ioctable__table), exactly as _layouts/
+  // ioc-table.html renders it. This fixture exists to prove the exclusion is
+  // structural: ioc-table.js is unchanged, and its row selector must simply
+  // never find these <tr>s.
+  var nbTrs = nbRows.map(function (r) {
+    return '<tr><td><span class="hl-ioctable__type">' + r.type + '</span></td>' +
+      '<td><code>' + r.value + '</code></td><td>' + (r.context || '') + '</td></tr>';
+  }).join('');
+  var nbSection = nbRows.length
+    ? '<div class="hl-ioctable__nb"><h2>Do not block</h2>' +
+      '<table class="hl-ioctable__nbtable"><tbody>' + nbTrs + '</tbody></table></div>'
+    : '';
+
   var dom = new JSDOM(
     '<!doctype html><html><body>' +
     '<div class="hl-ioctable" data-slug="demo" data-title="Demo Campaign">' +
@@ -64,6 +79,7 @@ function page(rows) {
     '<button class="hl-ioctable__btn" data-act="csv">Download .csv</button>' +
     '<span class="hl-ioctable__count"></span></div>' +
     '<table class="hl-ioctable__table"><tbody>' + trs + '</tbody></table>' +
+    nbSection +
     '</div></body></html>',
     { runScripts: 'outside-only', url: 'https://example.test/ioc-feeds/demo/' });
 
@@ -269,4 +285,70 @@ test('COPY AFTER CLEARING TAKES EVERYTHING, not the filter that was just dropped
   click(p.doc, '.hl-ioctable__clear');
   click(p.doc, '.hl-ioctable__btn[data-act="copy"]');
   assert.equal(p.cap.clipboard.split('\n').length, ROWS.length);
+});
+
+/* --- the never-block section, 2026-09-13: excluded by construction --------
+
+   ioc-table.js is UNCHANGED for this fix. The exclusion is structural: the
+   never-block rows live in a table with a different class
+   (hl-ioctable__nbtable), so the row selector at the top of this file
+   (.hl-ioctable__table tbody tr) never finds them, in the same way it never
+   finds a row from some other page's table. These tests assert on LITERAL
+   CONTENT, by substring search, not only on counts: a count-only assertion
+   would still pass if a never-block value silently replaced an ordinary one. */
+
+var NB_ROWS = [
+  { type: 'domain', value: 'api.telegram.org', context: 'Shared platform, do not block' },
+  { type: 'ipv4', value: '165.227.175.161', context: 'Naku.arm CNC, notify victim before blocking' }
+];
+
+test('the never-block section renders, but contributes zero rows to the exportable table', function () {
+  var p = page(ROWS, NB_ROWS);
+  assert.equal(visibleValues(p.doc).length, ROWS.length,
+    'the never-block rows must not be counted among the shown ordinary rows');
+  assert.equal(p.doc.querySelectorAll('.hl-ioctable__nbtable tbody tr').length, NB_ROWS.length,
+    'the never-block table itself must still render, with its own row count');
+});
+
+test('COPY WITH NO FILTER NEVER CONTAINS A NEVER-BLOCK VALUE', function () {
+  var p = page(ROWS, NB_ROWS);
+  click(p.doc, '.hl-ioctable__btn[data-act="copy"]');
+  var copied = p.cap.clipboard;
+  assert.equal(copied.split('\n').length, ROWS.length,
+    'copy must still take exactly the ordinary rows, unchanged in count');
+  NB_ROWS.forEach(function (nb) {
+    assert.equal(copied.indexOf(nb.value), -1,
+      nb.value + ' leaked into the clipboard: ' + copied);
+  });
+});
+
+test('the .txt DOWNLOAD NEVER CONTAINS A NEVER-BLOCK VALUE', function () {
+  var p = page(ROWS, NB_ROWS);
+  click(p.doc, '.hl-ioctable__btn[data-act="txt"]');
+  var txt = p.dom.window.__lastDownloadText;
+  NB_ROWS.forEach(function (nb) {
+    assert.equal(txt.indexOf(nb.value), -1, nb.value + ' leaked into the .txt download: ' + txt);
+  });
+});
+
+test('the .csv DOWNLOAD NEVER CONTAINS A NEVER-BLOCK VALUE OR ITS REASON TEXT', function () {
+  var p = page(ROWS, NB_ROWS);
+  click(p.doc, '.hl-ioctable__btn[data-act="csv"]');
+  var csv = p.dom.window.__lastDownloadText;
+  NB_ROWS.forEach(function (nb) {
+    assert.equal(csv.indexOf(nb.value), -1, nb.value + ' leaked into the .csv download: ' + csv);
+    assert.equal(csv.indexOf(nb.context), -1,
+      'the never-block reason text leaked into the .csv download: ' + csv);
+  });
+  // And the ordinary rows are exactly as unaffected as the count-only tests above assert.
+  assert.equal(csv.split('\n').length, ROWS.length + 1, 'header row plus every ordinary row');
+});
+
+test('filtering to one type still excludes the never-block section, which has no type filter', function () {
+  var p = page(ROWS, NB_ROWS);
+  click(p.doc, '.hl-ioctable__chip[data-type="ipv4"]');
+  click(p.doc, '.hl-ioctable__btn[data-act="copy"]');
+  assert.deepEqual(p.cap.clipboard.split('\n'), ['185.49.126.140', '91.197.98.188']);
+  assert.equal(p.doc.querySelectorAll('.hl-ioctable__nbtable tbody tr').length, NB_ROWS.length,
+    'the never-block table is untouched by the ordinary-table filter chips');
 });
