@@ -1,13 +1,13 @@
 {
     "type": "bundle",
-    "id": "bundle--baf5ec91-f760-4de3-9e05-60419f667147",
+    "id": "bundle--49c6a55a-1fd8-483f-8d06-0ad6924ff2b4",
     "objects": [
         {
             "type": "identity",
             "spec_version": "2.1",
             "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.166398Z",
-            "modified": "2026-08-22T14:23:12.166398Z",
+            "created": "2026-09-14T13:43:42.705715Z",
+            "modified": "2026-09-14T13:43:42.705715Z",
             "name": "The Hunters Ledger",
             "identity_class": "organization"
         },
@@ -33,8 +33,8 @@
             "spec_version": "2.1",
             "id": "indicator--82b5c9d2-fdd7-58a9-836c-e5018dc631a0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.167745Z",
-            "modified": "2026-08-22T14:23:12.167745Z",
+            "created": "2026-09-14T13:43:42.706704Z",
+            "modified": "2026-09-14T13:43:42.706704Z",
             "name": "ipv4: 192.3.1.116",
             "description": "Primary operator infrastructure. Port 7777 is a plain Python static HTTP server serving the working directory; it does NOT execute the JSP web shell it hosts. Still live and growing as of 2026-07-21. A hosting-provider takedown request has been filed.",
             "indicator_types": [
@@ -62,8 +62,8 @@
             "spec_version": "2.1",
             "id": "indicator--06d5107f-750d-5ce8-8cd0-4e5d5d8416dc",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.171389Z",
-            "modified": "2026-08-22T14:23:12.171389Z",
+            "created": "2026-09-14T13:43:42.711266Z",
+            "modified": "2026-09-14T13:43:42.711266Z",
             "name": "url: http://192.3.1.116:7777/cmd.jsp",
             "description": "A functional generic bash-exec JSP web shell (reads a 'c' HTTP parameter, runs it via /bin/bash -c). DEFINITE that the file exists in the operator's own directory and is downloadable. UNCONFIRMED that it was ever deployed to any victim host. Port 7777 serves this file's source and does not execute it.",
             "indicator_types": [
@@ -91,8 +91,8 @@
             "spec_version": "2.1",
             "id": "indicator--56414e6a-3317-5fcc-b961-973e3dabdf2f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.172273Z",
-            "modified": "2026-08-22T14:23:12.172273Z",
+            "created": "2026-09-14T13:43:42.712331Z",
+            "modified": "2026-09-14T13:43:42.712331Z",
             "name": "url: http://192.3.1.116:7777/xstream_rce_success",
             "description": "Never observed hit across approximately 17,000 lines of the operator's own port-7777 access log. MODERATE confidence the callback did not fire; the log window begins roughly 68-76 minutes after the engagement concluded, so an earlier hit cannot be ruled out.",
             "indicator_types": [
@@ -120,8 +120,8 @@
             "spec_version": "2.1",
             "id": "indicator--2e5b54f3-d71f-5fbf-a04b-8fe7045049ed",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.172883Z",
-            "modified": "2026-08-22T14:23:12.172883Z",
+            "created": "2026-09-14T13:43:42.71307Z",
+            "modified": "2026-09-14T13:43:42.71307Z",
             "name": "url: http://192.3.1.116:9876/rce_confirmed",
             "description": "No comprehensive port-9876 access log exists in the reviewed corpus, so this callback's outcome is fully open. Both logged LDAP engagements stalled at BindResponse without a SearchRequest.",
             "indicator_types": [
@@ -149,8 +149,8 @@
             "spec_version": "2.1",
             "id": "indicator--46efe1f1-e9f8-5c7b-ad24-8a7c707dff63",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.173482Z",
-            "modified": "2026-08-22T14:23:12.173482Z",
+            "created": "2026-09-14T13:43:42.713917Z",
+            "modified": "2026-09-14T13:43:42.713917Z",
             "name": "url: http://192.3.1.116:9876/yaml_rce_proof",
             "description": "Embedded in poc.yml, a textbook ScriptEngineManager + URLClassLoader gadget chain of the CVE-2022-1471 family.",
             "indicator_types": [
@@ -178,8 +178,8 @@
             "spec_version": "2.1",
             "id": "indicator--62043009-8e87-55d8-8f03-789ef22953e2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.173987Z",
-            "modified": "2026-08-22T14:23:12.173987Z",
+            "created": "2026-09-14T13:43:42.714444Z",
+            "modified": "2026-09-14T13:43:42.714444Z",
             "name": "url: ldap://192.3.1.116:1389/cn=exploit",
             "description": "The callback target of the crafted Logback insertFromJNDI payload (CVE-2021-42550). Backed by ldap_server.py, ldap_server_v2.py and setup_jndi.sh in the operator's directory.",
             "indicator_types": [
@@ -207,8 +207,8 @@
             "spec_version": "2.1",
             "id": "indicator--a649bf3e-3a5a-581a-afae-d6dfa51eba87",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.17463Z",
-            "modified": "2026-08-22T14:23:12.17463Z",
+            "created": "2026-09-14T13:43:42.714979Z",
+            "modified": "2026-09-14T13:43:42.714979Z",
             "name": "domain: vpn932081317.softether.net",
             "description": "SoftEther DDNS name for a VPN the operator self-hosts on 192.3.1.116; still resolves to that address. Operator OPSEC infrastructure. Note the parent domain softether.net is a legitimate DDNS service - only this specific hostname is the indicator.",
             "indicator_types": [
@@ -226,33 +226,30 @@
             "x_opencti_score": 80
         },
         {
-            "type": "indicator",
+            "type": "domain-name",
             "spec_version": "2.1",
-            "id": "indicator--a8ff77ad-5847-5fb0-8b5e-bca5765b43b7",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.175829Z",
-            "modified": "2026-08-22T14:23:12.175829Z",
-            "name": "EXPL_Logback_InsertFromJNDI_CVE_2021_42550",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "/*\n   Yara Rule Set\n   Identifier: Logback insertFromJNDI RCE (CVE-2021-42550)\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule EXPL_Logback_InsertFromJNDI_CVE_2021_42550 {\n   meta:\n      description = \"Detects a Logback XML configuration using insertFromJNDI to trigger a JNDI lookup against an attacker-controlled ldap:// or rmi:// URI, the mechanism behind CVE-2021-42550. The insertFromJNDI element paired with a JNDI scheme in an env-entry-name attribute is not a pattern seen in legitimate logging configuration.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\"\n      date = \"2026-07-21\"\n      family = \"Logback insertFromJNDI RCE (CVE-2021-42550)\"\n      malware_type = \"Exploitation payload -- Java logging-framework RCE\"\n      id = \"ace3c6c6-23e3-500a-8ade-a75d8209a06b\"\n   strings:\n      $config = \"<configuration\" ascii\n      $jndi = \"insertFromJNDI\" ascii\n      $ldap = \"env-entry-name=\\\"ldap://\" ascii\n      $rmi = \"env-entry-name=\\\"rmi://\" ascii\n   condition:\n      filesize < 50KB and\n      $config and $jndi and\n      1 of ($ldap, $rmi)\n}",
-            "pattern_type": "yara",
-            "valid_from": "2026-07-21T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
+            "id": "domain-name--812d8fe1-db0d-50e9-a6db-28d90aee78a2",
+            "value": "open.oppomobile.com"
+        },
+        {
+            "type": "ipv4-addr",
+            "spec_version": "2.1",
+            "id": "ipv4-addr--3a3c2d7f-c217-54b7-9cb8-04b6327e574a",
+            "value": "31.22.111.190"
+        },
+        {
+            "type": "domain-name",
+            "spec_version": "2.1",
+            "id": "domain-name--a9e5cfd9-3aba-58d4-904c-76f9631be3a4",
+            "value": "cs-pgcwufmiws.cn-hangzhou.fcapp.run"
         },
         {
             "type": "indicator",
             "spec_version": "2.1",
             "id": "indicator--89c7d7bb-1271-57bc-a25a-1e811fab2190",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.175978Z",
-            "modified": "2026-08-22T14:23:12.175978Z",
+            "created": "2026-09-14T13:43:42.716625Z",
+            "modified": "2026-09-14T13:43:42.716625Z",
             "name": "EXPL_Logback_FileAppender_JSP_ArbitraryWrite",
             "indicator_types": [
                 "malicious-activity"
@@ -272,8 +269,8 @@
             "spec_version": "2.1",
             "id": "indicator--b20fbc46-118a-5cbc-b033-443b3f439bf3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.176106Z",
-            "modified": "2026-08-22T14:23:12.176106Z",
+            "created": "2026-09-14T13:43:42.71679Z",
+            "modified": "2026-09-14T13:43:42.71679Z",
             "name": "EXPL_SnakeYAML_ScriptEngineManager_Gadget_CVE_2022_1471_Family",
             "indicator_types": [
                 "malicious-activity"
@@ -293,8 +290,8 @@
             "spec_version": "2.1",
             "id": "indicator--bea9eb10-5d1d-5d01-a246-3d6595a4858c",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.176225Z",
-            "modified": "2026-08-22T14:23:12.176225Z",
+            "created": "2026-09-14T13:43:42.716902Z",
+            "modified": "2026-09-14T13:43:42.716902Z",
             "name": "WEBSHELL_Generic_JSP_Bash_Exec_Parameter",
             "indicator_types": [
                 "malicious-activity"
@@ -314,8 +311,8 @@
             "spec_version": "2.1",
             "id": "indicator--ad3e7db8-c7d3-5139-9439-d8a7483d40ae",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.176343Z",
-            "modified": "2026-08-22T14:23:12.176343Z",
+            "created": "2026-09-14T13:43:42.717007Z",
+            "modified": "2026-09-14T13:43:42.717007Z",
             "name": "EXPL_XXE_SSRF_Cloud_Metadata_Internal_Service_Probe",
             "indicator_types": [
                 "malicious-activity"
@@ -333,10 +330,31 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
+            "id": "indicator--a8ff77ad-5847-5fb0-8b5e-bca5765b43b7",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-14T13:43:42.717104Z",
+            "modified": "2026-09-14T13:43:42.717104Z",
+            "name": "EXPL_Logback_InsertFromJNDI_CVE_2021_42550",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule EXPL_Logback_InsertFromJNDI_CVE_2021_42550 {\n   meta:\n      description = \"Detects a Logback XML configuration using insertFromJNDI to trigger a JNDI lookup against an ldap:// or rmi:// URI, the mechanism behind CVE-2021-42550. Corrected 2026-09-13: insertFromJNDI paired with a JNDI scheme in an env-entry-name attribute IS a pattern seen in legitimate Logback configuration (it is the feature's documented use); this rule cannot distinguish an attacker-controlled JNDI target from a legitimate internal one from file content alone, hence Hunting tier.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\"\n      date = \"2026-07-21\"\n      family = \"Logback insertFromJNDI RCE (CVE-2021-42550)\"\n      malware_type = \"Exploitation payload -- Java logging-framework RCE\"\n      id = \"ace3c6c6-23e3-500a-8ade-a75d8209a06b\"\n   strings:\n      $config = \"<configuration\" ascii\n      $jndi = \"insertFromJNDI\" ascii\n      $ldap = \"env-entry-name=\\\"ldap://\" ascii\n      $rmi = \"env-entry-name=\\\"rmi://\" ascii\n   condition:\n      filesize < 50KB and\n      $config and $jndi and\n      1 of ($ldap, $rmi)\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-07-21T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
             "id": "indicator--9f555ca7-066b-538e-b83e-ad9276e68633",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.176456Z",
-            "modified": "2026-08-22T14:23:12.176456Z",
+            "created": "2026-09-14T13:43:42.717199Z",
+            "modified": "2026-09-14T13:43:42.717199Z",
             "name": "External HTTP Request to Jolokia JMX Write Endpoint Targeting Logging Configuration",
             "indicator_types": [
                 "malicious-activity"
@@ -356,13 +374,13 @@
             "spec_version": "2.1",
             "id": "indicator--1d1e7db6-307d-5838-ab0b-48cda954f1cc",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.176567Z",
-            "modified": "2026-08-22T14:23:12.176567Z",
+            "created": "2026-09-14T13:43:42.717287Z",
+            "modified": "2026-09-14T13:43:42.717287Z",
             "name": "Unauthenticated External Access to an Alibaba Druid Monitoring Console",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Unauthenticated External Access to an Alibaba Druid Monitoring Console\nid: b2857306-3872-446e-a6cf-f093e48e3252\nstatus: experimental\ndescription: >-\n    Detects a successful external request to an Alibaba Druid StatViewServlet\n    monitoring path. An unauthenticated Druid console exposes the production\n    JDBC connection string, full database schema and executed SQL statement\n    history to anyone who can reach it; a single request returning 200 on\n    these paths from outside the management network is a real\n    information-disclosure event regardless of who sent it. Frequently served\n    on a non-standard port, so this rule does not restrict to 80 or 443.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-21'\ntags:\n    - attack.reconnaissance\n    - attack.t1596.005\nlogsource:\n    category: webserver\ndetection:\n    selection_path:\n        cs-uri-stem|contains:\n            - '/druid/index.html'\n            - '/druid/basic.json'\n            - '/druid/sql.json'\n            - '/druid/weburi.json'\n            - '/druid/datasource.json'\n    selection_success:\n        sc-status: 200\n    condition: selection_path and selection_success\nfalsepositives:\n    - >-\n        Authorized internal monitoring dashboards or an approved\n        attack-surface-management scan intentionally checking for this\n        exposure. Any external hit on these paths still warrants confirming\n        the console is properly restricted.\nlevel: high",
+            "pattern": "title: Unauthenticated External Access to an Alibaba Druid Monitoring Console\nid: b2857306-3872-446e-a6cf-f093e48e3252\nstatus: experimental\ndescription: >-\n    Detects a successful external request to an Alibaba Druid StatViewServlet\n    monitoring path. An unauthenticated Druid console exposes the production\n    JDBC connection string, full database schema and executed SQL statement\n    history to anyone who can reach it; a single request returning 200 on\n    these paths from outside the management network is a real\n    information-disclosure event regardless of who sent it. Frequently served\n    on a non-standard port, so this rule does not restrict to 80 or 443.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-21'\ntags:\n    - attack.reconnaissance\n    - attack.t1596.005\n    - stp.3\nlogsource:\n    category: webserver\ndetection:\n    selection_path:\n        cs-uri-stem|contains:\n            - '/druid/index.html'\n            - '/druid/basic.json'\n            - '/druid/sql.json'\n            - '/druid/weburi.json'\n            - '/druid/datasource.json'\n    selection_success:\n        sc-status: 200\n    condition: selection_path and selection_success\nfalsepositives:\n    - >-\n        Authorized internal monitoring dashboards or an approved\n        attack-surface-management scan intentionally checking for this\n        exposure. Any external hit on these paths still warrants confirming\n        the console is properly restricted.\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-07-21T00:00:00Z",
             "labels": [
@@ -377,13 +395,13 @@
             "spec_version": "2.1",
             "id": "indicator--6ea2f760-5ad4-5e90-b7f8-2c2adf34e3d9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.176676Z",
-            "modified": "2026-08-22T14:23:12.176676Z",
+            "created": "2026-09-14T13:43:42.717381Z",
+            "modified": "2026-09-14T13:43:42.717381Z",
             "name": "Successful External Retrieval of a Spring Boot Actuator Heap Dump",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Successful External Retrieval of a Spring Boot Actuator Heap Dump\nid: f872347d-00cd-463e-9817-96d4ef96f205\nstatus: experimental\ndescription: >-\n    Detects a successful, large-bodied external response from the Spring Boot\n    Actuator heapdump endpoint, or a Jolokia HotSpotDiagnostic dumpHeap\n    invocation. A heap dump commonly contains in-memory credentials, session\n    tokens and business data; this rule keys on confirmed success, a 200\n    status with a large response body, rather than the request alone, since\n    the request is trivially made and often blocked by an auth filter.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-21'\ntags:\n    - attack.collection\n    - attack.t1005\n    - attack.credential-access\n    - attack.t1552.001\nlogsource:\n    category: webserver\ndetection:\n    selection_path:\n        cs-uri-stem|contains:\n            - '/actuator/heapdump'\n            - '/heapdump'\n    selection_jolokia_dumpheap:\n        cs-uri|contains: 'HotSpotDiagnostic'\n    selection_success:\n        sc-status: 200\n    selection_large_body:\n        sc-bytes|gte: 1000000\n    condition: (selection_path or selection_jolokia_dumpheap) and selection_success and selection_large_body\nfalsepositives:\n    - >-\n        Authorized developer or support engineer pulling a heap dump for\n        legitimate memory-leak diagnosis from an approved internal source.\nlevel: high",
+            "pattern": "title: Successful External Retrieval of a Spring Boot Actuator Heap Dump\nid: f872347d-00cd-463e-9817-96d4ef96f205\nstatus: experimental\ndescription: >-\n    Detects a successful, large-bodied external response from the Spring Boot\n    Actuator heapdump endpoint, or a Jolokia HotSpotDiagnostic dumpHeap\n    invocation. A heap dump commonly contains in-memory credentials, session\n    tokens and business data; this rule keys on confirmed success, a 200\n    status with a large response body, rather than the request alone, since\n    the request is trivially made and often blocked by an auth filter.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-21'\ntags:\n    - attack.collection\n    - attack.t1005\n    - attack.credential-access\n    - attack.t1552.001\n    - stp.3\nlogsource:\n    category: webserver\ndetection:\n    selection_path:\n        cs-uri-stem|contains:\n            - '/actuator/heapdump'\n            - '/heapdump'\n    selection_jolokia_dumpheap:\n        cs-uri|contains: 'HotSpotDiagnostic'\n    selection_success:\n        sc-status: 200\n    selection_large_body:\n        sc-bytes|gte: 1000000\n    condition: (selection_path or selection_jolokia_dumpheap) and selection_success and selection_large_body\nfalsepositives:\n    - >-\n        Authorized developer or support engineer pulling a heap dump for\n        legitimate memory-leak diagnosis from an approved internal source.\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-07-21T00:00:00Z",
             "labels": [
@@ -398,8 +416,8 @@
             "spec_version": "2.1",
             "id": "indicator--7e7b9e6a-3a9f-5dcf-9c50-3b50c0b4ef02",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.176783Z",
-            "modified": "2026-08-22T14:23:12.176783Z",
+            "created": "2026-09-14T13:43:42.717491Z",
+            "modified": "2026-09-14T13:43:42.717491Z",
             "name": "HTTP POST to a Password-Reset or Verification-Code Endpoint",
             "indicator_types": [
                 "malicious-activity"
@@ -419,8 +437,8 @@
             "spec_version": "2.1",
             "id": "indicator--b3aec269-52f3-5ee8-942d-e4b192b09d13",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.176892Z",
-            "modified": "2026-08-22T14:23:12.176892Z",
+            "created": "2026-09-14T13:43:42.717595Z",
+            "modified": "2026-09-14T13:43:42.717595Z",
             "name": "Application Account Registration Request",
             "indicator_types": [
                 "malicious-activity"
@@ -440,8 +458,8 @@
             "spec_version": "2.1",
             "id": "indicator--9a3ae82d-cc2e-5ad1-b262-d82e29430aae",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.177Z",
-            "modified": "2026-08-22T14:23:12.177Z",
+            "created": "2026-09-14T13:43:42.717683Z",
+            "modified": "2026-09-14T13:43:42.717683Z",
             "name": "External Connection Attempt to a Service-Discovery-Profile Port",
             "indicator_types": [
                 "malicious-activity"
@@ -461,8 +479,8 @@
             "spec_version": "2.1",
             "id": "indicator--9373b70c-898e-5411-96d7-554bd657351e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.177109Z",
-            "modified": "2026-08-22T14:23:12.177109Z",
+            "created": "2026-09-14T13:43:42.717785Z",
+            "modified": "2026-09-14T13:43:42.717785Z",
             "name": "THL DETECT MultiVector-192.3.1.116 LDAP Anonymous BindRequest to Non-Standard Directory Port (JNDI Callback Indicator)",
             "indicator_types": [
                 "malicious-activity"
@@ -482,8 +500,8 @@
             "spec_version": "2.1",
             "id": "indicator--abd8d89c-1f8c-5744-897b-031fdf9f3bc9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.177219Z",
-            "modified": "2026-08-22T14:23:12.177219Z",
+            "created": "2026-09-14T13:43:42.717897Z",
+            "modified": "2026-09-14T13:43:42.717897Z",
             "name": "THL DETECT MultiVector-192.3.1.116 SnakeYAML ScriptEngineManager Gadget Chain in HTTP Request Body (CVE-2022-1471 Family)",
             "indicator_types": [
                 "malicious-activity"
@@ -503,8 +521,8 @@
             "spec_version": "2.1",
             "id": "indicator--7dc25ed0-4849-59a7-9adc-f9d42edc2938",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.177331Z",
-            "modified": "2026-08-22T14:23:12.177331Z",
+            "created": "2026-09-14T13:43:42.718013Z",
+            "modified": "2026-09-14T13:43:42.718013Z",
             "name": "THL DETECT MultiVector-192.3.1.116 XXE Entity Declaration Targeting Cloud Metadata in Upload",
             "indicator_types": [
                 "malicious-activity"
@@ -524,8 +542,8 @@
             "spec_version": "2.1",
             "id": "indicator--2fc688ab-36d0-5473-90c7-653371dcbc65",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.177441Z",
-            "modified": "2026-08-22T14:23:12.177441Z",
+            "created": "2026-09-14T13:43:42.718123Z",
+            "modified": "2026-09-14T13:43:42.718123Z",
             "name": "THL DETECT MultiVector-192.3.1.116 Gopher-Scheme SSRF Protocol Smuggling in HTTP URI",
             "indicator_types": [
                 "malicious-activity"
@@ -545,8 +563,8 @@
             "spec_version": "2.1",
             "id": "indicator--8f3b5bd9-4f47-5cab-b3f0-af4cfeda6be3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.177549Z",
-            "modified": "2026-08-22T14:23:12.177549Z",
+            "created": "2026-09-14T13:43:42.718247Z",
+            "modified": "2026-09-14T13:43:42.718247Z",
             "name": "THL DETECT MultiVector-192.3.1.116 Gopher-Scheme SSRF Protocol Smuggling in HTTP Request Body",
             "indicator_types": [
                 "malicious-activity"
@@ -566,8 +584,8 @@
             "spec_version": "2.1",
             "id": "indicator--4c6596a7-a60a-5e48-b037-96280be453ee",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.177658Z",
-            "modified": "2026-08-22T14:23:12.177658Z",
+            "created": "2026-09-14T13:43:42.71835Z",
+            "modified": "2026-09-14T13:43:42.71835Z",
             "name": "THL DETECT MultiVector-192.3.1.116 SSRF-to-Redis CONFIG/BGSAVE Command Sequence via HTTP (SSH Key Write Chain)",
             "indicator_types": [
                 "malicious-activity"
@@ -587,8 +605,8 @@
             "spec_version": "2.1",
             "id": "indicator--2766abc4-d6b2-5ea7-a1d7-74a33cdfd757",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.177766Z",
-            "modified": "2026-08-22T14:23:12.177766Z",
+            "created": "2026-09-14T13:43:42.718449Z",
+            "modified": "2026-09-14T13:43:42.718449Z",
             "name": "THL DETECT MultiVector-192.3.1.116 Eureka Apps-Delta Request (Flowbits Setter -- pairs with sid:1000008)",
             "indicator_types": [
                 "malicious-activity"
@@ -608,8 +626,8 @@
             "spec_version": "2.1",
             "id": "indicator--0bd7d402-4d92-5ea3-a40e-93158c5f5690",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.177874Z",
-            "modified": "2026-08-22T14:23:12.177874Z",
+            "created": "2026-09-14T13:43:42.718582Z",
+            "modified": "2026-09-14T13:43:42.718582Z",
             "name": "THL DETECT MultiVector-192.3.1.116 JWT alg-none Authentication Bypass Attempt (Forged Token Header)",
             "indicator_types": [
                 "malicious-activity"
@@ -629,8 +647,8 @@
             "spec_version": "2.1",
             "id": "indicator--9a79af54-9680-506d-9693-c2a35c86bc5a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.177981Z",
-            "modified": "2026-08-22T14:23:12.177981Z",
+            "created": "2026-09-14T13:43:42.718724Z",
+            "modified": "2026-09-14T13:43:42.718724Z",
             "name": "THL DETECT MultiVector-192.3.1.116 Alibaba Druid Console Path Request (Flowbits Setter -- pairs with sid:1000011)",
             "indicator_types": [
                 "malicious-activity"
@@ -650,8 +668,8 @@
             "spec_version": "2.1",
             "id": "indicator--18ec5594-a2ee-512b-a1bc-62fa09d75cd4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.178089Z",
-            "modified": "2026-08-22T14:23:12.178089Z",
+            "created": "2026-09-14T13:43:42.718858Z",
+            "modified": "2026-09-14T13:43:42.718858Z",
             "name": "THL HUNT MultiVector-192.3.1.116 Password-Reset Endpoint POST Burst (restPassword Verification-Code Brute-Force Indicator)",
             "indicator_types": [
                 "malicious-activity"
@@ -671,8 +689,8 @@
             "spec_version": "2.1",
             "id": "indicator--ece15069-8cc4-5ec6-b3b1-49e6460e72c8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.178196Z",
-            "modified": "2026-08-22T14:23:12.178196Z",
+            "created": "2026-09-14T13:43:42.71899Z",
+            "modified": "2026-09-14T13:43:42.71899Z",
             "name": "THL HUNT MultiVector-192.3.1.116 Password-Reset Endpoint POST Burst (forgetPwd Verification-Code Brute-Force Indicator)",
             "indicator_types": [
                 "malicious-activity"
@@ -692,8 +710,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--4f83db55-e9f1-5071-aef3-ab98216b533a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.178322Z",
-            "modified": "2026-08-22T14:23:12.178322Z",
+            "created": "2026-09-14T13:43:42.719184Z",
+            "modified": "2026-09-14T13:43:42.719184Z",
             "name": "Vulnerability Scanning",
             "external_references": [
                 {
@@ -711,8 +729,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--7117772d-e0a9-526c-9a08-e1392a460b46",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.178471Z",
-            "modified": "2026-08-22T14:23:12.178471Z",
+            "created": "2026-09-14T13:43:42.719421Z",
+            "modified": "2026-09-14T13:43:42.719421Z",
             "name": "Scan Databases",
             "external_references": [
                 {
@@ -730,8 +748,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--68bc088a-0332-5331-b5b5-fc091f7b4673",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.178593Z",
-            "modified": "2026-08-22T14:23:12.178593Z",
+            "created": "2026-09-14T13:43:42.719618Z",
+            "modified": "2026-09-14T13:43:42.719618Z",
             "name": "Search Victim-Owned Websites",
             "external_references": [
                 {
@@ -749,8 +767,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--5b7a06ed-32c6-5260-95a8-8e82d3f41f1f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.178711Z",
-            "modified": "2026-08-22T14:23:12.178711Z",
+            "created": "2026-09-14T13:43:42.719792Z",
+            "modified": "2026-09-14T13:43:42.719792Z",
             "name": "Virtual Private Server",
             "external_references": [
                 {
@@ -768,8 +786,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--0876da5f-998d-56c9-bcbe-39e02e92a674",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.178825Z",
-            "modified": "2026-08-22T14:23:12.178825Z",
+            "created": "2026-09-14T13:43:42.719941Z",
+            "modified": "2026-09-14T13:43:42.719941Z",
             "name": "Web Services",
             "external_references": [
                 {
@@ -787,8 +805,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--4c5b0524-2a19-5f54-8fae-3dbc26269ae0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.178937Z",
-            "modified": "2026-08-22T14:23:12.178937Z",
+            "created": "2026-09-14T13:43:42.720085Z",
+            "modified": "2026-09-14T13:43:42.720085Z",
             "name": "Establish Accounts",
             "external_references": [
                 {
@@ -806,8 +824,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--39531dba-2ec0-5d58-b6b9-b3d2ae9ea5dd",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.179047Z",
-            "modified": "2026-08-22T14:23:12.179047Z",
+            "created": "2026-09-14T13:43:42.72023Z",
+            "modified": "2026-09-14T13:43:42.72023Z",
             "name": "Upload Malware",
             "external_references": [
                 {
@@ -825,8 +843,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--6214841b-936d-5da2-b5c8-4bed4cf9aee0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.17916Z",
-            "modified": "2026-08-22T14:23:12.17916Z",
+            "created": "2026-09-14T13:43:42.720374Z",
+            "modified": "2026-09-14T13:43:42.720374Z",
             "name": "Exploit Public-Facing Application",
             "external_references": [
                 {
@@ -844,8 +862,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--856a360d-8aca-55ff-949d-fee64905d0a8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.179272Z",
-            "modified": "2026-08-22T14:23:12.179272Z",
+            "created": "2026-09-14T13:43:42.720536Z",
+            "modified": "2026-09-14T13:43:42.720536Z",
             "name": "Valid Accounts",
             "external_references": [
                 {
@@ -863,8 +881,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--89e07510-9fa4-50e5-96f7-ecd69827cb4d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.179388Z",
-            "modified": "2026-08-22T14:23:12.179388Z",
+            "created": "2026-09-14T13:43:42.720645Z",
+            "modified": "2026-09-14T13:43:42.720645Z",
             "name": "Phishing",
             "external_references": [
                 {
@@ -882,8 +900,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--73364e03-8914-541e-a33c-877b656c37e4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.179496Z",
-            "modified": "2026-08-22T14:23:12.179496Z",
+            "created": "2026-09-14T13:43:42.720741Z",
+            "modified": "2026-09-14T13:43:42.720741Z",
             "name": "Unix Shell",
             "external_references": [
                 {
@@ -901,8 +919,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--99faa775-7366-5b35-9527-17f7643bc506",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.179606Z",
-            "modified": "2026-08-22T14:23:12.179606Z",
+            "created": "2026-09-14T13:43:42.720876Z",
+            "modified": "2026-09-14T13:43:42.720876Z",
             "name": "Python",
             "external_references": [
                 {
@@ -920,8 +938,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--fd8dd968-9ef8-5d44-9278-54e070789645",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.179716Z",
-            "modified": "2026-08-22T14:23:12.179716Z",
+            "created": "2026-09-14T13:43:42.721056Z",
+            "modified": "2026-09-14T13:43:42.721056Z",
             "name": "Web Shell",
             "external_references": [
                 {
@@ -939,8 +957,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--0d14abc8-552e-578f-b93a-7fddab296376",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.179826Z",
-            "modified": "2026-08-22T14:23:12.179826Z",
+            "created": "2026-09-14T13:43:42.721169Z",
+            "modified": "2026-09-14T13:43:42.721169Z",
             "name": "SSH Authorized Keys",
             "external_references": [
                 {
@@ -958,8 +976,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--655489a2-5d78-575d-adcf-cc303e355763",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.179936Z",
-            "modified": "2026-08-22T14:23:12.179936Z",
+            "created": "2026-09-14T13:43:42.721315Z",
+            "modified": "2026-09-14T13:43:42.721315Z",
             "name": "External Proxy",
             "external_references": [
                 {
@@ -977,8 +995,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--81ac1dd0-a8ac-50ba-bd1a-cec2886340d5",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.180047Z",
-            "modified": "2026-08-22T14:23:12.180047Z",
+            "created": "2026-09-14T13:43:42.721417Z",
+            "modified": "2026-09-14T13:43:42.721417Z",
             "name": "Protocol Tunneling",
             "external_references": [
                 {
@@ -996,8 +1014,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--27b5f1a3-b9bd-5402-b20a-e08c9893f21f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.180158Z",
-            "modified": "2026-08-22T14:23:12.180158Z",
+            "created": "2026-09-14T13:43:42.721536Z",
+            "modified": "2026-09-14T13:43:42.721536Z",
             "name": "Masquerading",
             "external_references": [
                 {
@@ -1015,8 +1033,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--e143cf40-c9b0-5118-8096-34d60698c27b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.180268Z",
-            "modified": "2026-08-22T14:23:12.180268Z",
+            "created": "2026-09-14T13:43:42.721636Z",
+            "modified": "2026-09-14T13:43:42.721636Z",
             "name": "Password Guessing",
             "external_references": [
                 {
@@ -1034,8 +1052,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--dbdc0ff5-a0c3-52de-8a5b-d39dc834a1f9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.180387Z",
-            "modified": "2026-08-22T14:23:12.180387Z",
+            "created": "2026-09-14T13:43:42.72173Z",
+            "modified": "2026-09-14T13:43:42.72173Z",
             "name": "Password Spraying",
             "external_references": [
                 {
@@ -1053,8 +1071,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--1076c468-8982-548b-9292-726a22f83ecb",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.180496Z",
-            "modified": "2026-08-22T14:23:12.180496Z",
+            "created": "2026-09-14T13:43:42.721827Z",
+            "modified": "2026-09-14T13:43:42.721827Z",
             "name": "Credentials In Files",
             "external_references": [
                 {
@@ -1072,8 +1090,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--ab051490-2415-5435-8760-f0735c0314bc",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.180605Z",
-            "modified": "2026-08-22T14:23:12.180605Z",
+            "created": "2026-09-14T13:43:42.721923Z",
+            "modified": "2026-09-14T13:43:42.721923Z",
             "name": "Private Keys",
             "external_references": [
                 {
@@ -1091,8 +1109,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--be0beb0c-2499-5178-a012-309e486ef121",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.180713Z",
-            "modified": "2026-08-22T14:23:12.180713Z",
+            "created": "2026-09-14T13:43:42.722022Z",
+            "modified": "2026-09-14T13:43:42.722022Z",
             "name": "Cloud Instance Metadata API",
             "external_references": [
                 {
@@ -1110,8 +1128,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--cf58aebb-15dc-5973-bd33-f2dc67782e5b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.180823Z",
-            "modified": "2026-08-22T14:23:12.180823Z",
+            "created": "2026-09-14T13:43:42.722137Z",
+            "modified": "2026-09-14T13:43:42.722137Z",
             "name": "Web Cookies",
             "external_references": [
                 {
@@ -1129,8 +1147,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--4cbca60b-20d4-5fd7-8e70-29e9475fa89f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.180931Z",
-            "modified": "2026-08-22T14:23:12.180931Z",
+            "created": "2026-09-14T13:43:42.722308Z",
+            "modified": "2026-09-14T13:43:42.722308Z",
             "name": "Network Service Discovery",
             "external_references": [
                 {
@@ -1148,8 +1166,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--4305a0dc-35c1-52ba-9aa7-6d520eda0927",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.18104Z",
-            "modified": "2026-08-22T14:23:12.18104Z",
+            "created": "2026-09-14T13:43:42.722416Z",
+            "modified": "2026-09-14T13:43:42.722416Z",
             "name": "Software Discovery",
             "external_references": [
                 {
@@ -1167,8 +1185,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--e42939d6-6332-5a6c-8dac-6195c79081bc",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.181148Z",
-            "modified": "2026-08-22T14:23:12.181148Z",
+            "created": "2026-09-14T13:43:42.722519Z",
+            "modified": "2026-09-14T13:43:42.722519Z",
             "name": "Data from Information Repositories",
             "external_references": [
                 {
@@ -1186,8 +1204,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--d6b8aa8c-cfd9-5f42-a8ac-2573005abb2f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.181259Z",
-            "modified": "2026-08-22T14:23:12.181259Z",
+            "created": "2026-09-14T13:43:42.722645Z",
+            "modified": "2026-09-14T13:43:42.722645Z",
             "name": "Automated Collection",
             "external_references": [
                 {
@@ -1205,8 +1223,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--85a49140-85ae-5130-8b39-bf9a5e79df72",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.181379Z",
-            "modified": "2026-08-22T14:23:12.181379Z",
+            "created": "2026-09-14T13:43:42.723109Z",
+            "modified": "2026-09-14T13:43:42.723109Z",
             "name": "Data from Local System",
             "external_references": [
                 {
@@ -1224,8 +1242,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--b1f2e4be-8bd7-50f4-9b12-8ff5a814d239",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.181525Z",
-            "modified": "2026-08-22T14:23:12.181525Z",
+            "created": "2026-09-14T13:43:42.723252Z",
+            "modified": "2026-09-14T13:43:42.723252Z",
             "name": "Web Protocols",
             "external_references": [
                 {
@@ -1243,8 +1261,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--5f44eb71-9380-5f9d-9c56-245d2f120e5b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.181636Z",
-            "modified": "2026-08-22T14:23:12.181636Z",
+            "created": "2026-09-14T13:43:42.72335Z",
+            "modified": "2026-09-14T13:43:42.72335Z",
             "name": "Bidirectional Communication",
             "external_references": [
                 {
@@ -1262,8 +1280,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--44bf0bb6-4445-5791-9daa-2c0a12978bf7",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.181748Z",
-            "modified": "2026-08-22T14:23:12.181748Z",
+            "created": "2026-09-14T13:43:42.723471Z",
+            "modified": "2026-09-14T13:43:42.723471Z",
             "name": "Ingress Tool Transfer",
             "external_references": [
                 {
@@ -1281,8 +1299,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--f1cba010-705c-5d02-ab4f-54903c50ea4d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.181858Z",
-            "modified": "2026-08-22T14:23:12.181858Z",
+            "created": "2026-09-14T13:43:42.72364Z",
+            "modified": "2026-09-14T13:43:42.72364Z",
             "name": "Account Access Removal",
             "external_references": [
                 {
@@ -1300,8 +1318,8 @@
             "spec_version": "2.1",
             "id": "infrastructure--1f73626a-7098-5a44-83d7-5b6ad96a1950",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.181973Z",
-            "modified": "2026-08-22T14:23:12.181973Z",
+            "created": "2026-09-14T13:43:42.723793Z",
+            "modified": "2026-09-14T13:43:42.723793Z",
             "name": "multivector-ecommerce-rce-toolkit-192-3-1-116 infrastructure",
             "infrastructure_types": [
                 "command-and-control",
@@ -1316,8 +1334,8 @@
             "spec_version": "2.1",
             "id": "vulnerability--02fc8cc4-fdab-517d-88b4-f6bff7ebf1bc",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.182423Z",
-            "modified": "2026-08-22T14:23:12.182423Z",
+            "created": "2026-09-14T13:43:42.724349Z",
+            "modified": "2026-09-14T13:43:42.724349Z",
             "name": "CVE-2021-42550",
             "external_references": [
                 {
@@ -1335,8 +1353,8 @@
             "spec_version": "2.1",
             "id": "vulnerability--111a765f-c6d4-50fb-b906-5e44fa392aa4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.182563Z",
-            "modified": "2026-08-22T14:23:12.182563Z",
+            "created": "2026-09-14T13:43:42.724484Z",
+            "modified": "2026-09-14T13:43:42.724484Z",
             "name": "CVE-2022-1471",
             "external_references": [
                 {
@@ -1354,8 +1372,8 @@
             "spec_version": "2.1",
             "id": "report--d2cbc7b4-0c74-5743-bbb9-91e98e6c514c",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-08-22T14:23:12.182868Z",
-            "modified": "2026-08-22T14:23:12.182868Z",
+            "created": "2026-09-14T13:43:42.724782Z",
+            "modified": "2026-09-14T13:43:42.724782Z",
             "name": "Enough to Be Dangerous: The Mechanics of an LLM-Assisted Intrusion Campaign",
             "description": "Exposed operator open directory holding a multi-vector offensive toolkit. There is no malware sample, no implant and no malware family, so this feed carries no file_hashes. Four categories are deliberately excluded: believed-real victim credentials, the operator's live reconnaissance-API subscription key, all raw JWTs, and all victim personal data. Post-discovery crawler and scanner addresses are listed under non_indicators. See threat-intel-vault/research/multivector-ecommerce-rce-toolkit-192-3-1-116/stage1-malware-analyst.md.",
             "report_types": [
@@ -1377,11 +1395,14 @@
                 "indicator--62043009-8e87-55d8-8f03-789ef22953e2",
                 "domain-name--86c6a01d-539d-5373-af78-e53a2aba528a",
                 "indicator--a649bf3e-3a5a-581a-afae-d6dfa51eba87",
-                "indicator--a8ff77ad-5847-5fb0-8b5e-bca5765b43b7",
+                "domain-name--812d8fe1-db0d-50e9-a6db-28d90aee78a2",
+                "ipv4-addr--3a3c2d7f-c217-54b7-9cb8-04b6327e574a",
+                "domain-name--a9e5cfd9-3aba-58d4-904c-76f9631be3a4",
                 "indicator--89c7d7bb-1271-57bc-a25a-1e811fab2190",
                 "indicator--b20fbc46-118a-5cbc-b033-443b3f439bf3",
                 "indicator--bea9eb10-5d1d-5d01-a246-3d6595a4858c",
                 "indicator--ad3e7db8-c7d3-5139-9439-d8a7483d40ae",
+                "indicator--a8ff77ad-5847-5fb0-8b5e-bca5765b43b7",
                 "indicator--9f555ca7-066b-538e-b83e-ad9276e68633",
                 "indicator--1d1e7db6-307d-5838-ab0b-48cda954f1cc",
                 "indicator--6ea2f760-5ad4-5e90-b7f8-2c2adf34e3d9",
@@ -1434,13 +1455,6 @@
                 "infrastructure--1f73626a-7098-5a44-83d7-5b6ad96a1950",
                 "vulnerability--02fc8cc4-fdab-517d-88b4-f6bff7ebf1bc",
                 "vulnerability--111a765f-c6d4-50fb-b906-5e44fa392aa4"
-            ],
-            "labels": [
-                "AI Abuse",
-                "OpenDirectory",
-                "DataTheft",
-                "E-Commerce",
-                "China"
             ],
             "external_references": [
                 {
