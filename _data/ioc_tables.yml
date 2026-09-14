@@ -322,13 +322,13 @@
   feed_url: "/ioc-feeds/ai-agent-frameworks-2026-05-23-iocs.json"
   report_url: "/reports/ai-agent-frameworks-2026-05-23/"
   detection_url: "/hunting-detections/ai-agent-frameworks-2026-05-23-detections"
-  total: 99
-  untyped: 297
+  total: 100
+  untyped: 298
   counts:
     domain: 23
     email: 1
     filename: 7
-    ipv4: 22
+    ipv4: 23
     md5: 2
     path: 16
     sha256: 20
@@ -339,6 +339,9 @@
       context: "Weevely + Claude AI compromised DigitalOcean VPS"
     - type: "ipv4"
       value: "158.178.214.94"
+      context: null
+    - type: "ipv4"
+      value: "165.227.175.161"
       context: null
     - type: "ipv4"
       value: "173.249.2.23"
@@ -631,11 +634,8 @@
     - type: "filename"
       value: "stealth.ps1"
       context: null
-  never_block_total: 4
+  never_block_total: 3
   never_block_rows:
-    - type: "ipv4"
-      value: "165.227.175.161"
-      context: "Naku.arm CNC - parasitic listener on compromised GetYourGroup tourism VPS (DigitalOcean); port 23 disguises CNC as innocuous Telnet traffic"
     - type: "ipv4"
       value: "31.223.97.87"
       context: "Turkish ARPA operator residential IP via TurkNet ASN 12735 (operator-from-own-ISP, late-evening Turkish working hours, observed 2026-05-20 21:22-21:30 UTC)"
@@ -5053,10 +5053,10 @@
   feed_url: "/ioc-feeds/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-iocs.json"
   report_url: "/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/"
   detection_url: "/hunting-detections/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections"
-  total: 108
+  total: 109
   untyped: 71
   counts:
-    domain: 45
+    domain: 46
     filename: 2
     ipv4: 11
     md5: 1
@@ -5149,6 +5149,9 @@
       context: "Operator main Flask C2 dashboard (matches live port-8888 service)"
     - type: "domain"
       value: "ltamaeropromoweb-ecuador-travel.shop"
+      context: null
+    - type: "domain"
+      value: "mail.hcjs2.jlengineering.se"
       context: null
     - type: "domain"
       value: "mailmanagement.cfd"
@@ -5387,14 +5390,11 @@
     - type: "filename"
       value: "lgt81941.xls"
       context: "Alien InfoStealer via CVE-2017-0199 on .181. LOW-MODERATE operator-attribution."
-  never_block_total: 3
+  never_block_total: 2
   never_block_rows:
     - type: "ipv4"
       value: "172.237.149.231"
       context: "Parklogic shared TDS landing infrastructure - operator parks 11 TDS landing domains here via customer account pkAId=2143526812"
-    - type: "domain"
-      value: "mail.hcjs2.jlengineering.se"
-      context: "Do NOT blocklist apex jlengineering.se - it is a multi-tenant donor domain"
     - type: "domain"
       value: "rebel.com"
       context: "Yahoo support spoof (HIGH-MONETIZED, ownership ambiguous - full operator infra pattern but Rebel org-hash differs)"

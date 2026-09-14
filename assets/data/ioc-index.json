@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-14T00:09:05Z",
+ "generated_at": "2026-09-14T03:10:42Z",
  "counts": {
   "indicators": 2225,
   "reports": 57,
@@ -1143,6 +1143,15 @@
     "role": "ipv4"
    }
   ],
+  "ipv4:165.227.175.161": [
+   {
+    "report": "ai-agent-frameworks-2026-05-23"
+   },
+   {
+    "report": "rovodev-mirai-matrix-c2-87.106.143.220",
+    "role": "ipv4"
+   }
+  ],
   "ipv4:188.166.194.243": [
    {
     "report": "ai-agent-frameworks-2026-05-23"
@@ -1523,15 +1532,6 @@
    },
    {
     "report": "turkish-arpa-openclaw-state-insurer-209.38.205.158"
-   }
-  ],
-  "ipv4:165.227.175.161": [
-   {
-    "report": "ai-agent-frameworks-2026-05-23"
-   },
-   {
-    "report": "rovodev-mirai-matrix-c2-87.106.143.220",
-    "role": "ipv4"
    }
   ],
   "sha256:47ec51b5f0ede1e70bd66f3f0152f9eb536d534565dbb7fcc3a05f542dbe4428": [
@@ -7865,6 +7865,11 @@
     "report": "opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517"
    }
   ],
+  "domain:mail.hcjs2.jlengineering.se": [
+   {
+    "report": "opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517"
+   }
+  ],
   "url:https://officebyt.e56sutx.eps-soltec.cloud/f/d6aba322369c": [
    {
     "report": "opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517"
@@ -7909,12 +7914,6 @@
   "ipv4:172.237.149.231": [
    {
     "report": "opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517"
-   }
-  ],
-  "domain:mail.hcjs2.jlengineering.se": [
-   {
-    "report": "opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517",
-    "role": "Do NOT blocklist apex jlengineering.se - it is a multi-tenant donor domain"
    }
   ],
   "ipv4:45.130.148.125": [

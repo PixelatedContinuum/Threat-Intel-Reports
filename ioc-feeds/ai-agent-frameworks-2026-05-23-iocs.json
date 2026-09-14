@@ -259,6 +259,16 @@
         "action": "BLOCK"
       },
       {
+        "value": "165.227.175.161",
+        "case": "3",
+        "port": 23,
+        "protocol": "TCP",
+        "context": "Naku.arm CNC - parasitic listener on compromised GetYourGroup tourism VPS (DigitalOcean); port 23 disguises CNC as innocuous Telnet traffic",
+        "confidence": "DEFINITE",
+        "action": "BLOCK",
+        "false_positive_risk": "Underlying VPS host belongs to GetYourGroup GmbH legitimate tourism platform - notify victim before blocking"
+      },
+      {
         "value": "188.166.194.243",
         "case": "3",
         "context": "Sibling of GetYourGroup CNC (28 GetYourGroup tourism domains hosted); RunCloud SaaS snapshot-deploy artifact",
@@ -1240,11 +1250,6 @@
       "value": "31.223.97.87",
       "category": "author-marked never-block",
       "context": "Turkish ARPA operator residential IP via TurkNet ASN 12735 (operator-from-own-ISP, late-evening Turkish working hours, observed 2026-05-20 21:22-21:30 UTC)"
-    },
-    {
-      "value": "165.227.175.161",
-      "category": "author-marked never-block",
-      "context": "Naku.arm CNC - parasitic listener on compromised GetYourGroup tourism VPS (DigitalOcean); port 23 disguises CNC as innocuous Telnet traffic"
     }
   ]
 }
