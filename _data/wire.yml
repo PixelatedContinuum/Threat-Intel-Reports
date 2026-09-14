@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-14T10:00:57Z
+generated_at: 2026-09-14T12:01:57Z
 window_days: 30
 counts:
-  total: 507
-  research: 172
-  news: 335
+  total: 511
+  research: 175
+  news: 336
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -31,7 +31,7 @@ topics:
     count: 22
     color: 6
   - label: "data breaches"
-    count: 21
+    count: 22
     color: 7
   - label: "credential theft"
     count: 17
@@ -56,6 +56,7 @@ label_colors:
   "academic lure": 1
   "accessibility abuse": 6
   "accessibility services": 10
+  "account takeover": 2
   "account-enumeration": 7
   "active directory compromise": 7
   "active directory reconnaissance": 1
@@ -144,6 +145,7 @@ label_colors:
   "aveva": 1
   "aviation sector": 9
   "awareness training": 1
+  "aws cloudtrail": 6
   "azure": 1
   "azure infrastructure": 4
   "azure table storage": 2
@@ -194,6 +196,7 @@ label_colors:
   "c2 infrastructure": 12
   "c2looper": 2
   "camera": 3
+  "canada": 4
   "canada revenue agency": 3
   "card-skimming": 8
   "carecloud": 10
@@ -233,6 +236,7 @@ label_colors:
   "cloaked ursa": 2
   "cloud": 7
   "cloud & application security": 1
+  "cloud cybersecurity research": 3
   "cloud security": 9
   "cloudflare": 11
   "cloudflare captcha": 5
@@ -268,6 +272,8 @@ label_colors:
   "cve-2023-49105": 4
   "cve-2026-19949": 8
   "cve-2026-20354": 12
+  "cve-2026-31431": 6
+  "cve-2026-43284": 5
   "cve-2026-44756": 12
   "cve-2026-59346": 5
   "cve-2026-6471": 10
@@ -376,6 +382,7 @@ label_colors:
   "network security": 6
   "next-gen identity security": 12
   "nvidia": 3
+  "oauth token theft": 5
   "on the radar": 4
   "oracle": 12
   "oracle cspu": 1
@@ -420,6 +427,18 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
 items:
+  - title: "Unmasking Cloud Identities: From Behavioral Clustering to Automated Detection"
+    url: "https://unit42.paloaltonetworks.com/behavioral-clustering-map-to-cloud-identities/"
+    source: "Palo Alto Networks"
+    date: 2026-09-14T10:00:01Z
+    kind: research
+    labels: ["aws cloudtrail", "cloud cybersecurity research", "cloud detection", "devops", "iam", "sql", "threat research"]
+  - title: "Telus Warns Customers of Account Breaches"
+    url: "https://www.securityweek.com/telus-warns-customers-of-account-breaches/"
+    source: "SecurityWeek"
+    date: 2026-09-14T09:56:57Z
+    kind: news
+    labels: ["account takeover", "canada", "data breaches", "telecom", "telus"]
   - title: "Three JFrog Artifactory Flaws Exploited for Backdoor Deployment"
     url: "https://www.securityweek.com/three-jfrog-artifactory-flaws-exploited-for-backdoor-deployment/"
     source: "SecurityWeek"
@@ -486,6 +505,18 @@ items:
     date: 2026-09-11T18:40:00Z
     kind: news
     labels: ["cybercrime", "industry"]
+  - title: "Malicious Twitch Browser Extension Exposes 30,000 Users' OAuth Tokens to Russian Bot Service"
+    url: "https://otx.alienvault.com/pulse/6aa4432cfc2e960cdf6ac1e0"
+    source: "AlienVault"
+    date: 2026-09-11T18:06:36Z
+    kind: research
+    labels: ["browser extension", "oauth token theft", "proxy infrastructure", "twitch"]
+  - title: "KATARU: IoT Malware Adopts Public LPE Exploits"
+    url: "https://otx.alienvault.com/pulse/6aa4409a4290cc035d81500c"
+    source: "AlienVault"
+    date: 2026-09-11T17:55:38Z
+    kind: research
+    labels: ["cve-2026-31431", "cve-2026-43284", "cve-2026-46300", "ddos", "iot botnet", "kataru", "telnet brute-force"]
   - title: "Passkey-themed phishing attacks lead to Microsoft 365 data theft"
     url: "https://www.bleepingcomputer.com/news/security/passkey-themed-phishing-attacks-lead-to-microsoft-365-data-theft/"
     source: "BleepingComputer"
