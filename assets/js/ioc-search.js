@@ -74,8 +74,15 @@
   }
 
   /* Per-indicator breakdown, shown only for a list. For one indicator the card
-     narrowing already says everything. */
-  function renderDetail(matched, missed, idx) {
+     narrowing already says everything.
+
+     `withheld` (2026-09-13): indicators that ARE recorded against a feed but sit
+     in that feed's `hunt_only_never_block` bucket, so this index deliberately
+     does not carry them as an ordinary key. Without this bucket a withheld
+     value would silently join `missed` and read as "we have no data", which is
+     the exact "empty result is not an absence" failure this project keeps
+     writing down: the reader cannot tell absence from a deliberate exclusion. */
+  function renderDetail(matched, withheld, missed, idx) {
     var rows = matched.slice(0, DETAIL_CAP).map(function (m) {
       var feeds = idx.indicators[m.type + ':' + m.value].map(function (h) {
         return esc((idx.reports[h.report] || {}).title || h.report);
@@ -84,14 +91,26 @@
         '<code>' + esc(m.value) + '</code>' +
         '<span class="hl-iocsearch__in-feed">' + feeds.join(', ') + '</span></li>';
     });
+    var withheldRows = withheld.slice(0, DETAIL_CAP).map(function (w) {
+      var feeds = ((idx.never_block || {})[w.type + ':' + w.value] || []).map(function (h) {
+        return esc((idx.reports[h.report] || {}).title || h.report);
+      });
+      return '<li class="hl-iocsearch__row hl-iocsearch__row--withheld">' +
+        '<code>' + esc(w.value) + '</code>' +
+        '<span class="hl-iocsearch__in-feed">intentionally excluded, see ' +
+        feeds.join(', ') + '</span></li>';
+    });
     var more = matched.length > DETAIL_CAP
       ? '<li class="hl-iocsearch__row hl-iocsearch__more">and ' +
         (matched.length - DETAIL_CAP) + ' more matched</li>' : '';
+    var moreW = withheld.length > DETAIL_CAP
+      ? '<li class="hl-iocsearch__row hl-iocsearch__more">and ' +
+        (withheld.length - DETAIL_CAP) + ' more intentionally excluded</li>' : '';
     var none = missed.length
       ? '<li class="hl-iocsearch__row hl-iocsearch__row--miss">' + missed.length +
         ' of your indicators are not in any published feed</li>' : '';
     detail.innerHTML = '<ul class="hl-iocsearch__list">' +
-      rows.join('') + more + none + '</ul>';
+      rows.join('') + more + withheldRows.join('') + moreW + none + '</ul>';
   }
 
   function run() {
@@ -110,15 +129,29 @@
         return;
       }
 
-      var slugs = {}, matched = [], missed = [];
+      /* `withheld`: recorded against a feed, but sitting in that feed's
+         hunt_only_never_block bucket (2026-09-13). Kept apart from `missed` so
+         "not in any feed" and "deliberately not listed" never look the same;
+         see the header comment on renderDetail(). */
+      var slugs = {}, matched = [], withheld = [], missed = [];
       found.forEach(function (f) {
-        var hits = idx.indicators[f.type + ':' + f.value];
-        if (!hits) { missed.push(f); return; }
-        matched.push(f);
-        hits.forEach(function (h) { slugs[h.report] = 1; });
+        var key = f.type + ':' + f.value;
+        var hits = idx.indicators[key];
+        if (hits) {
+          matched.push(f);
+          hits.forEach(function (h) { slugs[h.report] = 1; });
+          return;
+        }
+        var nb = idx.never_block && idx.never_block[key];
+        if (nb) {
+          withheld.push(f);
+          nb.forEach(function (h) { slugs[h.report] = 1; });
+          return;
+        }
+        missed.push(f);
       });
 
-      if (!matched.length) {
+      if (!matched.length && !withheld.length) {
         cards.forEach(function (c) { c.removeAttribute('data-veto'); });
         say(found.length === 1
           ? '<strong>' + esc(found[0].value) + '</strong> does not appear in any published feed.'
@@ -135,14 +168,33 @@
       });
 
       if (found.length === 1) {
-        say('<strong>' + esc(matched[0].value) + '</strong> appears in ' + n +
-            (n === 1 ? ' feed' : ' feeds') + ' below. Open the card to see the full ' +
-            'feed and what else it contains.', 'hit');
+        if (matched.length) {
+          say('<strong>' + esc(matched[0].value) + '</strong> appears in ' + n +
+              (n === 1 ? ' feed' : ' feeds') + ' below. Open the card to see the full ' +
+              'feed and what else it contains.', 'hit');
+        } else {
+          say('<strong>' + esc(withheld[0].value) + '</strong> is recorded in ' + n +
+              (n === 1 ? ' feed' : ' feeds') + ' below, but is deliberately left out ' +
+              'of this index, because blocking it would affect something legitimate. ' +
+              'Open the card to see why.', 'withheld');
+        }
       } else {
-        say('<strong>' + matched.length + ' of your ' + found.length +
+        var bits = [];
+        if (matched.length) {
+          bits.push('<strong>' + matched.length + ' of your ' + found.length +
             '</strong> indicators appear in ' + n + (n === 1 ? ' feed' : ' feeds') +
-            ' below.', 'hit');
-        renderDetail(matched, missed, idx);
+            ' below.');
+        } else {
+          bits.push('None of your ' + found.length + ' indicators appear as an ' +
+            'ordinary indicator in any published feed.');
+        }
+        if (withheld.length) {
+          bits.push(withheld.length + ' ' + (withheld.length === 1 ? 'is' : 'are') +
+            ' intentionally left out of this index (blocking would affect ' +
+            'something legitimate) but still shown below.');
+        }
+        say(bits.join(' '), (withheld.length && !matched.length) ? 'withheld' : 'hit');
+        renderDetail(matched, withheld, missed, idx);
       }
       refilter();
     })['catch'](function (e) {

@@ -31,20 +31,38 @@ var ROLE_KEYS = ['context', 'description', 'role', 'note', 'type'];
 var VALUE_KEYS = ['value', 'indicator', 'ip', 'domain', 'url', 'hash',
                   'sha256', 'sha1', 'md5', 'name'];
 
-/* Index-side only. The PAGE still extracts these from pasted text so they
-   count toward "N indicators checked"; they simply never match. See lib/benign.js. */
-function keep(r) { return r && !B.isBenign(r.type, r.value); }
+/* The never-block bucket is exempt from the ordinary walk, mirroring
+   lib/feed-hygiene.js's own EXEMPT_TOP and the same fix already applied to
+   tools/report-tooling/lib/ioc-table-extract.js (2026-09-13). Removal, not
+   marking: this project's public search index must not carry these values as
+   typed keys at all, because a script reading `Object.keys(idx.indicators)`
+   gets the value regardless of any warning text sitting beside it. See
+   returns/other-surfaces.md #2 in the ioc-never-block-leak-closure run. */
+var EXEMPT_TOP = { hunt_only_never_block: true };
 
-function collect(node, out, role) {
+/* Index-side only. The PAGE still extracts these from pasted text so they
+   count toward "N indicators checked"; they simply never match. See lib/benign.js.
+
+   `suppressBenign` gates this. It is correct for the ordinary walk (a public
+   search index should not be noisy with values every network contains) and
+   wrong for the never-block walk: a value like `github.com` sitting in
+   `hunt_only_never_block` is there for a specific recorded reason, and this
+   collector's job for that walk is only to name it so it can be REMOVED from
+   the ordinary index, not to decide a second time whether it is interesting. */
+function keep(r, suppressBenign) {
+  return r && (!suppressBenign || !B.isBenign(r.type, r.value));
+}
+
+function collect(node, out, role, exempt, suppressBenign) {
   if (node == null) return;
   if (typeof node === 'string') {
     var r = C.classify(node);
-    if (keep(r)) out.push({ key: r.type + ':' + r.value, role: role || null });
+    if (keep(r, suppressBenign)) out.push({ key: r.type + ':' + r.value, role: role || null });
     else if (r) out.suppressed = (out.suppressed || 0) + 1;
     return;
   }
   if (Array.isArray(node)) {
-    for (var i = 0; i < node.length; i++) collect(node[i], out, role);
+    for (var i = 0; i < node.length; i++) collect(node[i], out, role, exempt, suppressBenign);
     return;
   }
   if (typeof node !== 'object') return;
@@ -63,13 +81,15 @@ function collect(node, out, role) {
     var val = node[VALUE_KEYS[v]];
     if (typeof val === 'string') {
       var res = C.classify(val);
-      if (keep(res)) { out.push({ key: res.type + ':' + res.value, role: myRole || null }); tookValue = true; }
-      else if (res) { out.suppressed = (out.suppressed || 0) + 1; tookValue = true; }
+      if (keep(res, suppressBenign)) {
+        out.push({ key: res.type + ':' + res.value, role: myRole || null }); tookValue = true;
+      } else if (res) { out.suppressed = (out.suppressed || 0) + 1; tookValue = true; }
     }
   }
   Object.keys(node).forEach(function (key) {
     if (tookValue && VALUE_KEYS.indexOf(key) > -1) return;
-    collect(node[key], out, myRole);
+    if (exempt && exempt[key]) return;
+    collect(node[key], out, myRole, exempt, suppressBenign);
   });
 }
 
@@ -77,7 +97,7 @@ function collect(node, out, role) {
    unlistedBySlug: { slug: true } for reports carrying `unlisted: true`. */
 function build(feeds, catalogText, unlistedBySlug) {
   var cat = CS.resolve(catalogText, unlistedBySlug || {});
-  var indicators = {}, reports = {};
+  var indicators = {}, neverBlock = {}, reports = {};
   var suppressed = 0;
   var coverage = { indexed: [], embargoed: [], unknown: [], empty: [] };
 
@@ -87,23 +107,45 @@ function build(feeds, catalogText, unlistedBySlug) {
     if (state === 'unknown')   { coverage.unknown.push(file); return; }
 
     var found = [];
-    collect(feeds[file], found, null);
+    collect(feeds[file], found, null, EXEMPT_TOP, true);
     if (found.suppressed) suppressed += found.suppressed;
-    if (!found.length) { coverage.empty.push(file); return; }
+
+    var feed = feeds[file];
+    var nbRoot = (feed && typeof feed === 'object') ? feed.hunt_only_never_block : null;
+    var foundNB = [];
+    if (nbRoot != null) collect(nbRoot, foundNB, null, null, false);
+
+    if (!found.length && !foundNB.length) { coverage.empty.push(file); return; }
 
     var slug = CS.slugOf(file);
     var m = cat.meta[file] || {};
-    reports[slug] = {
-      title: m.title, date: m.date, severity: m.severity,
-      report_url: m.report_url, detection_url: m.detection_url, ioc_url: m.ioc_url
-    };
+
+    var seenNB = {};
+    foundNB.forEach(function (f) {
+      if (seenNB[f.key]) return;
+      seenNB[f.key] = 1;
+      (neverBlock[f.key] = neverBlock[f.key] || []).push(
+        f.role ? { report: slug, role: f.role } : { report: slug });
+    });
+
     var seenHere = {};
     found.forEach(function (f) {
+      // Dedupe toward safety: a value present in both an ordinary bucket and
+      // hunt_only_never_block (an incomplete migration, not a theoretical
+      // case, see returns/revert-bad-relocations.md from this run) is
+      // never-block only, never also an ordinary indexed key.
+      if (seenNB[f.key]) return;
       if (seenHere[f.key]) return;
       seenHere[f.key] = 1;
       (indicators[f.key] = indicators[f.key] || []).push(
         f.role ? { report: slug, role: f.role } : { report: slug });
     });
+
+    // Reached only when found.length || foundNB.length, per the early return above.
+    reports[slug] = {
+      title: m.title, date: m.date, severity: m.severity,
+      report_url: m.report_url, detection_url: m.detection_url, ioc_url: m.ioc_url
+    };
     coverage.indexed.push(file);
   });
 
@@ -116,12 +158,14 @@ function build(feeds, catalogText, unlistedBySlug) {
       indicators: Object.keys(indicators).length,
       reports: Object.keys(reports).length,
       multi_report: multi,
-      suppressed_benign: suppressed
+      suppressed_benign: suppressed,
+      never_block: Object.keys(neverBlock).length
     },
     coverage: coverage,
     conflicts: cat.conflicts || [],
     reports: reports,
-    indicators: indicators
+    indicators: indicators,
+    never_block: neverBlock
   };
 }
 
@@ -160,7 +204,7 @@ function render(idx, generatedAt) {
 
 module.exports = {
   build: build, collect: collect, readFeeds: readFeeds,
-  readUnlisted: readUnlisted, render: render
+  readUnlisted: readUnlisted, render: render, EXEMPT_TOP: EXEMPT_TOP
 };
 
 if (require.main === module) {
@@ -175,6 +219,10 @@ if (require.main === module) {
   if (idx.counts.suppressed_benign) {
     console.log('  ' + idx.counts.suppressed_benign + ' benign value(s) suppressed ' +
       '(public resolvers, RFC1918, major platforms) so the page does not cry wolf');
+  }
+  if (idx.counts.never_block) {
+    console.log('  ' + idx.counts.never_block + ' never-block value(s) held out of the ' +
+      'index entirely (hunt_only_never_block), never a typed key a search can return');
   }
   console.log('  indexed ' + c.indexed.length + ', embargoed ' + c.embargoed.length +
     ', unknown ' + c.unknown.length + ', empty ' + c.empty.length);

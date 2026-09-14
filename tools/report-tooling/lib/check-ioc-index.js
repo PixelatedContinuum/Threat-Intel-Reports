@@ -124,18 +124,25 @@ function check(doc, status, fresh) {
   // --- counts -----------------------------------------------------------
   var multi = Object.keys(inds).filter(function (k) { return inds[k].length > 1; }).length;
   var c = doc.counts || {};
+  var nb = doc.never_block || {};
   if (Number(c.indicators) !== Object.keys(inds).length ||
       Number(c.reports) !== Object.keys(reports).length ||
-      Number(c.multi_report) !== multi) {
+      Number(c.multi_report) !== multi ||
+      Number(c.never_block || 0) !== Object.keys(nb).length) {
     problems.push('counts disagree: declared indicators=' + c.indicators + ' reports=' +
-      c.reports + ' multi=' + c.multi_report + ', actual ' + Object.keys(inds).length +
-      '/' + Object.keys(reports).length + '/' + multi);
+      c.reports + ' multi=' + c.multi_report + ' never_block=' + c.never_block +
+      ', actual ' + Object.keys(inds).length + '/' + Object.keys(reports).length + '/' +
+      multi + '/' + Object.keys(nb).length);
   }
 
   // --- staleness --------------------------------------------------------
+  // `never_block` is included (2026-09-13): it is the field this exact check
+  // exists to keep honest for the never-block leak fix, and a drift there
+  // (a feed's bucket edited with no regeneration) is exactly the staleness
+  // this gate is meant to catch, not a lesser field that can be left out.
   if (fresh) {
-    var a = JSON.stringify({ i: doc.indicators, r: doc.reports, c: doc.coverage });
-    var b = JSON.stringify({ i: fresh.indicators, r: fresh.reports, c: fresh.coverage });
+    var a = JSON.stringify({ i: doc.indicators, r: doc.reports, c: doc.coverage, n: doc.never_block });
+    var b = JSON.stringify({ i: fresh.indicators, r: fresh.reports, c: fresh.coverage, n: fresh.never_block });
     if (a !== b) {
       problems.push('stale: regenerating the index produces different content. ' +
         'Run `node generate-ioc-index.js` and commit the result.');

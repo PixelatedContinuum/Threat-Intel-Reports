@@ -3908,6 +3908,14 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   border-left: 3px solid var(--hl-border-card);
   padding-left: 0.8em;
 }
+/* A value the index deliberately withholds (hunt_only_never_block), never a
+   value we have no data on. Same amber used for the "Do not block" table
+   section, so the two surfaces read as one convention. */
+.hl-iocsearch__result--withheld {
+  color: var(--hl-text-primary);
+  border-left: 3px solid #f59e0b;
+  padding-left: 0.8em;
+}
 .hl-iocsearch__result strong {
   font-family: ui-monospace, Menlo, Consolas, monospace;
   font-size: 0.94em;
@@ -3939,6 +3947,7 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   word-break: break-all;
 }
 .hl-iocsearch__row--hit code { color: var(--hl-accent-green, #4ade80); }
+.hl-iocsearch__row--withheld code { color: #f59e0b; }
 .hl-iocsearch__in-feed { color: var(--hl-text-muted); }
 .hl-iocsearch__row--miss, .hl-iocsearch__more {
   color: var(--hl-text-muted);

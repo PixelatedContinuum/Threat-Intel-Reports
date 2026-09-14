@@ -116,6 +116,52 @@ test('a stale index fails, by regenerate-and-diff', function () {
   assert.match(r.problems.join(' '), /stale/i);
 });
 
+/* --- never_block: 2026-09-13, the second consumer of this same field ------ */
+
+test('a well-formed index carrying never_block still passes', function () {
+  var d = doc({
+    counts: { indicators: 1, reports: 1, multi_report: 0, suppressed_benign: 2, never_block: 1 },
+    never_block: { 'domain:api.telegram.org': [{ report: 'live' }] }
+  });
+  var r = CK.check(d, STATUS, d);
+  assert.equal(r.status, 'PASS');
+});
+
+test('a stale index fails when ONLY never_block drifts, not indicators/reports/coverage', function () {
+  // The field this exact check exists to keep honest for the leak fix. A feed
+  // edit to hunt_only_never_block with no regeneration must not slip past as
+  // "nothing else changed".
+  var base = doc({
+    counts: { indicators: 1, reports: 1, multi_report: 0, never_block: 1 },
+    never_block: { 'domain:api.telegram.org': [{ report: 'live' }] }
+  });
+  var fresh = doc({
+    counts: { indicators: 1, reports: 1, multi_report: 0, never_block: 2 },
+    never_block: {
+      'domain:api.telegram.org': [{ report: 'live' }],
+      'domain:discord.com': [{ report: 'live' }]
+    }
+  });
+  var r = CK.check(base, STATUS, fresh);
+  assert.equal(r.status, 'FAIL');
+  assert.match(r.problems.join(' '), /stale/i);
+});
+
+test('a declared never_block count disagreeing with the data fails', function () {
+  var d = doc({
+    counts: { indicators: 1, reports: 1, multi_report: 0, never_block: 5 },
+    never_block: { 'domain:api.telegram.org': [{ report: 'live' }] }
+  });
+  var r = CK.check(d, STATUS, d);
+  assert.equal(r.status, 'FAIL');
+  assert.match(r.problems.join(' '), /counts disagree/);
+});
+
+test('an index with no never_block field at all is unaffected (backward compatible)', function () {
+  var r = CK.check(doc(), STATUS, doc());
+  assert.equal(r.status, 'PASS', 'a pre-existing index with no concept of never_block must still pass');
+});
+
 test('a filename where the Liquid and JS slug rules disagree fails', function () {
   // The card slug is derived in Liquid on the page and in JS here. Liquid's
   // `remove:` strips EVERY occurrence; the JS regex is end-anchored. A filename

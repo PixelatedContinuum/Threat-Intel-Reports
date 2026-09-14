@@ -232,3 +232,83 @@ test('the breakdown caps rather than building unbounded DOM', async function () 
   assert.ok(w.document.querySelectorAll('.hl-iocsearch__row').length <= 202,
     'the breakdown is bounded');
 });
+
+/* --- withheld: never-block values, 2026-09-13 -----------------------------
+
+   idx.never_block mirrors idx.indicators, but for values a feed marks
+   hunt_only_never_block. Without this bucket a withheld value would silently
+   join `missed` and read as "we have no data on this", the exact "empty
+   result is not an absence" failure this project keeps writing down. These
+   fixtures add a never_block map only; every test above still runs against
+   the original INDEX with no such map, proving the addition is additive. */
+
+var INDEX_NB = Object.assign({}, INDEX, {
+  never_block: {
+    'domain:api.telegram.org': [{ report: 'alpha', role: 'Shared platform, do not block' }]
+  }
+});
+
+function buildWith(index) {
+  var dom = new JSDOM('<body>' + PAGE + '</body>', { runScripts: 'outside-only' });
+  var w = dom.window;
+  w.fetch = function () {
+    return Promise.resolve({ ok: true, json: function () { return Promise.resolve(index); } });
+  };
+  w.eval(CLASSIFY);
+  w.eval(FILTER);
+  w.eval(SEARCH);
+  return w;
+}
+
+test('a withheld value narrows to its feed and says it is intentionally excluded, not "no data"', async function () {
+  var w = buildWith(INDEX_NB);
+  await type(w, 'api.telegram.org');
+  assert.deepEqual(visible(w), ['alpha'], 'the card still narrows so the reader can read why');
+  assert.match(resultText(w), /deliberately left out of this index/);
+  assert.doesNotMatch(resultText(w), /does not appear in any published feed/,
+    'a withheld value must never read the same as a genuine miss');
+});
+
+test('a withheld value gets its own result class, not --hit or --none', async function () {
+  var w = buildWith(INDEX_NB);
+  await type(w, 'api.telegram.org');
+  var result = w.document.querySelector('.hl-iocsearch__result');
+  assert.ok(result.className.indexOf('--withheld') > -1, result.className);
+});
+
+test('a value with no data at all is still a genuine miss, unaffected by never_block existing', async function () {
+  var w = buildWith(INDEX_NB);
+  await type(w, '203.0.113.99');
+  assert.deepEqual(visible(w), ['alpha', 'beta', 'gamma']);
+  assert.match(resultText(w), /does not appear in any published feed/);
+});
+
+test('a list mixing a real hit, a withheld value and a genuine miss reports all three', async function () {
+  var w = buildWith(INDEX_NB);
+  await type(w, '185.38.150.7' + NL + 'api.telegram.org' + NL + '203.0.113.99');
+  assert.deepEqual(visible(w), ['alpha']);
+  var text = resultText(w);
+  assert.match(text, /1 of your 3/, 'the matched count still counts only real hits');
+  assert.match(text, /1 is intentionally left out/);
+  var detail = detailText(w);
+  assert.match(detail, /api\.telegram\.org/);
+  assert.match(detail, /intentionally excluded/);
+  assert.match(detail, /1 of your indicators are not in any published feed/);
+});
+
+test('a list of ONLY withheld values still narrows the grid and never says "none appear"', async function () {
+  var w = buildWith(INDEX_NB);
+  await type(w, 'api.telegram.org');
+  assert.deepEqual(visible(w), ['alpha']);
+});
+
+test('WHAT THE READER SEES WITHOUT THIS FIX: a plain miss is indistinguishable from a withheld value', function () {
+  // Documents the failure mode being closed, using the ORIGINAL two-bucket
+  // logic directly rather than the shipped code, so this test cannot pass by
+  // accident if the withheld branch is ever deleted.
+  var idx = INDEX_NB;
+  var hits = idx.indicators['domain:api.telegram.org'];
+  var nb = idx.never_block['domain:api.telegram.org'];
+  assert.equal(hits, undefined, 'api.telegram.org has no ordinary indicators entry');
+  assert.ok(nb, 'but it does have a recorded reason not to block it');
+});
