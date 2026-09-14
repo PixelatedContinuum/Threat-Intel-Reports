@@ -87,7 +87,7 @@ function plan(paths, opts) {
   if (opts.existing) opts.existing.map(norm).forEach(function (p) { existing[p] = true; });
   function onDisk(p) { return present === true ? true : !!existing[p]; }
 
-  var want = {}, reports = {}, owed = [];
+  var want = {}, reports = {}, owed = [], wantBundleSafety = false;
 
   list.forEach(function (p) {
     if (/^hunting-detections\/.+\.md$/.test(p) || p === '_data/detection_manifests.yml') {
@@ -139,6 +139,26 @@ function plan(paths, opts) {
     if (p === '_data/wire.yml' || p === 'wire/index.md') want.wire = true;
     if (p === '_data/glossary.yml' && owed.indexOf(OWED_GLOSSARY) === -1) owed.push(OWED_GLOSSARY);
 
+    /* STIX bundle safety (2026-09-14): no value a feed marks unblockable may sit
+       in a live Indicator SDO in a published bundle. This gate is NOT a `CHECKS`
+       entry, unlike everything else routed here: it is a Python script living
+       outside this repo entirely (Projects/report-to-stix/check_bundle_safety.py),
+       so `runCheck()`, which spawns `node <cmd>` from inside tools/report-tooling,
+       cannot run it. It is executed in precommit.js the way `checkVictimNaming`
+       already runs its own cross-repo Python gate; this flag is only the trigger.
+
+       BOTH `ioc-feeds/` and `stix/` route here, deliberately, not either alone.
+       A `stix/*.json` edit is the direct case (a bundle was touched). But the
+       live failure this gate exists for was `ioc-feeds/` alone: a marking change
+       (db7c2aa) moved values into `hunt_only_never_block` in the FEED with no
+       bundle ever touched, and the bundles went stale silently. Routing on
+       `stix/` only would have missed the exact sequence that produced 9 unsafe
+       indicator objects sitting in published bundles for weeks. See
+       returns/gate-wiring.md from the ioc-never-block-leak-closure run. */
+    if (/^ioc-feeds\/.+\.json$/.test(p) || /^stix\/.+\.json$/.test(p)) {
+      wantBundleSafety = true;
+    }
+
     // Only the report body carries the machinery. A figure beside it does not.
     var m = /^reports\/[^/]+\/index\.md$/.exec(p);
     if (m && onDisk(p)) reports[p] = true;
@@ -148,7 +168,8 @@ function plan(paths, opts) {
     .filter(function (k) { return want[k]; })
     .map(function (k) { return CHECKS[k]; });
 
-  return { checks: checks, reports: Object.keys(reports), owed: owed };
+  return { checks: checks, reports: Object.keys(reports), owed: owed,
+           wantBundleSafety: wantBundleSafety };
 }
 
 module.exports = { plan: plan, CHECKS: CHECKS };

@@ -93,6 +93,20 @@ function stagedSlugs(paths) {
 // an absent script is reported NOT CHECKED rather than passing quietly.
 var VICTIM_GATE = '/home/jharrison/ai-workflows/.claude/scripts/check_victim_naming.py';
 
+// The STIX bundle safety gate (2026-09-14): no value a feed marks unblockable may sit in a
+// live Indicator SDO in a published bundle. Same shape as VICTIM_GATE above and NOT a `CHECKS`
+// entry for the identical reason: it is a Python script living outside this repo entirely
+// (Projects/report-to-stix/), spawned directly rather than through runCheck(), which only
+// knows how to run a node script from inside tools/report-tooling.
+//
+// It has no `stix2` dependency itself (the bundle GENERATOR does, and needs the mise-managed
+// python3 for it), so it runs on the plain system interpreter. Per this project's standing
+// rule to call a mise-managed tool at its absolute path rather than through a shim in a
+// spawned context, this is pinned to the absolute system path rather than trusting whatever
+// `python3` resolves to for the process running this hook.
+var BUNDLE_GATE = '/home/jharrison/ai-workflows/Projects/report-to-stix/check_bundle_safety.py';
+var BUNDLE_PYTHON = '/usr/bin/python3';
+
 // Tokens a staged diff ADDS to a campaign's files, minus the ones it removes.
 //
 // The victim gate answers "does any published artifact contain a name this campaign declared
@@ -151,6 +165,41 @@ function checkVictimNaming(slugs) {
     return { label: 'victim naming: ' + slug,
       status: r.status === 0 ? 'PASS' : 'FAIL', text: text };
   });
+}
+
+// `wanted` is `plan().wantBundleSafety`: true when `ioc-feeds/*.json` or `stix/*.json` was
+// staged. Absent gate or absent interpreter is NOT CHECKED, never a silent pass, matching
+// checkVictimNaming above. `--bundles`/`--feeds` are passed explicitly rather than left to
+// the gate's own defaults: its default `--feeds` resolves to threat-intel-vault/ioc-feeds
+// (the source tree the generator reads), not this repo's own ioc-feeds/, which would check
+// the wrong feed against this repo's bundles entirely. Built from ROOT rather than CWD for
+// the same reason `--site` exists on the victim gate: a worktree publish (Step 5) must be
+// judged against ITS OWN stix/ and ioc-feeds/, not the main tree's.
+function checkBundleSafety(wanted) {
+  if (!wanted) return [];
+  if (!fs.existsSync(BUNDLE_GATE)) {
+    return [{ label: 'stix bundle safety', status: 'NOT CHECKED',
+      text: BUNDLE_GATE + ' not found; no bundle was checked for an unblockable value.' }];
+  }
+  if (!fs.existsSync(BUNDLE_PYTHON)) {
+    return [{ label: 'stix bundle safety', status: 'NOT CHECKED',
+      text: BUNDLE_PYTHON + ' not found; the gate needs this interpreter specifically ' +
+        '(it has no stix2 dependency, unlike the bundle generator), and no bundle was checked.' }];
+  }
+  var r = cp.spawnSync(BUNDLE_PYTHON, [BUNDLE_GATE,
+    '--bundles', path.join(ROOT, 'stix'),
+    '--feeds', path.join(ROOT, 'ioc-feeds')
+  ], { encoding: 'utf8' });
+  if (r.error) {
+    return [{ label: 'stix bundle safety', status: 'NOT CHECKED',
+      text: 'could not run the gate: ' + r.error.message }];
+  }
+  var text = ((r.stdout || '') + (r.stderr || '')).trim();
+  // 0 PASS, 1 FAIL, 2 NOT CHECKED: the gate's own contract (its docstring states it
+  // explicitly), same three-state convention runCheck() already applies to every CHECKS
+  // entry, so no special-casing is needed here beyond reading it out.
+  var status = r.status === 0 ? 'PASS' : (r.status === 2 ? 'NOT CHECKED' : 'FAIL');
+  return [{ label: 'stix bundle safety', status: status, text: text }];
 }
 
 function checkReports(files) {
@@ -235,7 +284,8 @@ function checkReports(files) {
 
   var p = SG.plan(staged.all, { existing: staged.existing });
 
-  if (!p.checks.length && !p.reports.length && !p.owed.length && !stagedSlugs(staged.all).length) {
+  if (!p.checks.length && !p.reports.length && !p.owed.length && !p.wantBundleSafety &&
+      !stagedSlugs(staged.all).length) {
     say('machinery gate  nothing staged that carries machinery (' +
       staged.all.length + ' path(s) checked against the routing rules)');
     process.exit(0);
@@ -248,6 +298,7 @@ function checkReports(files) {
   });
   if (p.reports.length) results = results.concat(checkReports(p.reports));
   results = results.concat(checkVictimNaming(stagedSlugs(staged.all)));
+  results = results.concat(checkBundleSafety(p.wantBundleSafety));
 
   var fails = results.filter(function (r) { return r.status === 'FAIL'; });
   var unk = results.filter(function (r) { return r.status === 'NOT CHECKED'; });

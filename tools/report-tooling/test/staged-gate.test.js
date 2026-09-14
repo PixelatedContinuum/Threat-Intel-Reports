@@ -151,3 +151,46 @@ test('backslash paths are accepted, since git on Windows can hand them over', fu
   var p = SG.plan(['hunting-detections\\acme-detections.md']);
   assert.deepEqual(ids(p), ['detection-attack', 'manifest']);
 });
+
+/* --- STIX bundle safety trigger, 2026-09-14 ---------------------------------
+
+   Not a CHECKS entry: the gate is a cross-repo Python script, executed in
+   precommit.js the way checkVictimNaming runs its own. This only tests the
+   ROUTING flag; the execution is proven end to end with a real git commit,
+   not here (see returns/wire-the-gate.md). */
+
+test('an ioc-feeds edit wants the bundle-safety gate', function () {
+  var p = SG.plan(['ioc-feeds/acme-iocs.json']);
+  assert.equal(p.wantBundleSafety, true);
+});
+
+test('a stix bundle edit wants the bundle-safety gate too, not either alone', function () {
+  var p = SG.plan(['stix/acme.json']);
+  assert.equal(p.wantBundleSafety, true);
+  // stix/ alone triggers NOTHING else: none of the eight CHECKS regexes name it.
+  assert.deepEqual(ids(p), []);
+});
+
+test('a staged path that is neither ioc-feeds nor stix does not want it', function () {
+  var p = SG.plan(['README.md', '_data/catalog.yml', 'reports/acme/index.md'],
+                   { existing: ['reports/acme/index.md'] });
+  assert.equal(p.wantBundleSafety, false);
+});
+
+test('a non-json file under stix/ does not want it, matching the other json-only routes', function () {
+  var p = SG.plan(['stix/README.md']);
+  assert.equal(p.wantBundleSafety, false);
+});
+
+test('a mixed commit still wants it exactly once, alongside everything else', function () {
+  var p = SG.plan([
+    'hunting-detections/a-detections.md',
+    'ioc-feeds/a-iocs.json',
+    'stix/a.json',
+    '_data/wire.yml'
+  ]);
+  assert.equal(p.wantBundleSafety, true);
+  assert.deepEqual(ids(p),
+    ['detection-attack', 'embargo-artifacts', 'feed-attack', 'feed-hygiene', 'ioc-index',
+     'ioc-tables', 'manifest', 'wire']);
+});
