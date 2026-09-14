@@ -3,7 +3,7 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-14T14:01:33Z
+generated_at: 2026-09-14T16:01:47Z
 window_days: 30
 counts:
   total: 514
@@ -428,6 +428,12 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
 items:
+  - title: "Why Patch Automation Needs Brakes, Not Just an Accelerator"
+    url: "https://www.bleepingcomputer.com/news/security/why-patch-automation-needs-brakes-not-just-an-accelerator/"
+    source: "BleepingComputer"
+    date: 2026-09-14T14:01:11Z
+    kind: news
+    labels: []
   - title: "Personal, Financial Info Exposed in Revolut Data Breach"
     url: "https://www.securityweek.com/personal-financial-info-exposed-in-revolut-data-breach/"
     source: "SecurityWeek"
@@ -3504,11 +3510,5 @@ items:
     url: "https://www.bleepingcomputer.com/news/security/new-amnesiastealer-macos-malware-hijacks-browser-sessions-via-remote-control/"
     source: "BleepingComputer"
     date: 2026-08-16T15:07:44Z
-    kind: news
-    labels: []
-  - title: "New Evooo1Bot Linux botnet turns routers into traffic relay nodes"
-    url: "https://www.bleepingcomputer.com/news/security/new-evooo1bot-linux-botnet-turns-routers-into-traffic-relay-nodes/"
-    source: "BleepingComputer"
-    date: 2026-08-15T14:14:38Z
     kind: news
     labels: []
