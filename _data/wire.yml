@@ -3,23 +3,23 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-14T12:01:57Z
+generated_at: 2026-09-14T14:01:33Z
 window_days: 30
 counts:
-  total: 511
+  total: 514
   research: 175
-  news: 336
+  news: 339
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 71
+    count: 72
     color: 1
   - label: "cybercrime"
-    count: 58
+    count: 59
     color: 2
   - label: "exploited"
-    count: 27
+    count: 28
     color: 3
   - label: "government"
     count: 27
@@ -27,10 +27,10 @@ topics:
   - label: "malware"
     count: 25
     color: 5
-  - label: "artificial intelligence"
-    count: 22
-    color: 6
   - label: "data breaches"
+    count: 23
+    color: 6
+  - label: "artificial intelligence"
     count: 22
     color: 7
   - label: "credential theft"
@@ -123,7 +123,7 @@ label_colors:
   "armenia": 5
   "arrayref": 8
   "arrested": 2
-  "artificial intelligence": 6
+  "artificial intelligence": 7
   "asia-pacific": 6
   "asiogate": 3
   "astral-pe": 3
@@ -287,7 +287,7 @@ label_colors:
   "cyberwarfare": 9
   "dahua": 9
   "darklantern": 4
-  "data breaches": 7
+  "data breaches": 6
   "data exfiltration": 9
   "data-exfiltration": 12
   "dead drop resolver": 7
@@ -403,6 +403,7 @@ label_colors:
   "qilin": 11
   "ransomware": 11
   "rce": 10
+  "revolut": 5
   "rmm abuse": 2
   "ruby on rails": 12
   "sap": 8
@@ -427,6 +428,24 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
 items:
+  - title: "Personal, Financial Info Exposed in Revolut Data Breach"
+    url: "https://www.securityweek.com/personal-financial-info-exposed-in-revolut-data-breach/"
+    source: "SecurityWeek"
+    date: 2026-09-14T13:03:35Z
+    kind: news
+    labels: ["data breaches", "revolut"]
+  - title: "Revolut handed customer data to fraudsters using government email account"
+    url: "https://therecord.media/revolut-scam-crypto-impersonation"
+    source: "Recorded Future"
+    date: 2026-09-14T12:00:00Z
+    kind: news
+    labels: ["cybercrime", "privacy"]
+  - title: "Chinese Hackers Exploit Critical Tencent Software Flaw for One-Click Code Execution"
+    url: "https://www.securityweek.com/chinese-hackers-exploit-critical-tencent-software-flaw-for-one-click-code-execution/"
+    source: "SecurityWeek"
+    date: 2026-09-14T11:51:29Z
+    kind: news
+    labels: ["china", "china apt", "exploit", "exploited", "nation-state", "sogou", "tencent", "vulnerabilities"]
   - title: "Unmasking Cloud Identities: From Behavioral Clustering to Automated Detection"
     url: "https://unit42.paloaltonetworks.com/behavioral-clustering-map-to-cloud-identities/"
     source: "Palo Alto Networks"
