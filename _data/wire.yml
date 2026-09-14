@@ -3,26 +3,26 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-14T08:02:36Z
+generated_at: 2026-09-14T10:00:57Z
 window_days: 30
 counts:
-  total: 504
+  total: 507
   research: 172
-  news: 332
+  news: 335
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 69
+    count: 71
     color: 1
   - label: "cybercrime"
     count: 58
     color: 2
-  - label: "government"
+  - label: "exploited"
     count: 27
     color: 3
-  - label: "exploited"
-    count: 25
+  - label: "government"
+    count: 27
     color: 4
   - label: "malware"
     count: 25
@@ -304,7 +304,7 @@ label_colors:
   "endpoint security & xdr": 11
   "entra id": 5
   "exploit": 9
-  "exploited": 4
+  "exploited": 3
   "exposure management": 4
   "extortion": 12
   "extortionware": 11
@@ -330,7 +330,7 @@ label_colors:
   "google": 7
   "google cloud": 8
   "google infrastructure abuse": 8
-  "government": 3
+  "government": 4
   "gta6": 6
   "hacker": 8
   "hacker conversations": 8
@@ -420,6 +420,24 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
 items:
+  - title: "Three JFrog Artifactory Flaws Exploited for Backdoor Deployment"
+    url: "https://www.securityweek.com/three-jfrog-artifactory-flaws-exploited-for-backdoor-deployment/"
+    source: "SecurityWeek"
+    date: 2026-09-14T09:27:29Z
+    kind: news
+    labels: ["backdoor", "exploited", "jfrog artifactory", "vulnerabilities"]
+  - title: "Revolut discloses data breach exposing financial info, passports"
+    url: "https://www.bleepingcomputer.com/news/security/revolut-discloses-data-breach-exposing-financial-info-passports/"
+    source: "BleepingComputer"
+    date: 2026-09-14T08:48:24Z
+    kind: news
+    labels: []
+  - title: "ConnectWise Patches ScreenConnect Vulnerability Exploited in Worm-Like Attacks"
+    url: "https://www.securityweek.com/connectwise-patches-screenconnect-vulnerability-exploited-in-worm-like-attacks/"
+    source: "SecurityWeek"
+    date: 2026-09-14T08:25:14Z
+    kind: news
+    labels: ["exploited", "patch", "screenconnect", "vulnerabilities", "worm"]
   - title: "CISA: Hackers now exploit max severity GitLab flaw in attacks"
     url: "https://www.bleepingcomputer.com/news/security/cisa-hackers-now-exploit-max-severity-gitlab-flaw-in-attacks/"
     source: "BleepingComputer"
