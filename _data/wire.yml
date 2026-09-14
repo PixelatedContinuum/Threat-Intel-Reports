@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-14T06:02:17Z
+generated_at: 2026-09-14T08:02:36Z
 window_days: 30
 counts:
-  total: 503
+  total: 504
   research: 172
-  news: 331
+  news: 332
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -420,6 +420,12 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
 items:
+  - title: "CISA: Hackers now exploit max severity GitLab flaw in attacks"
+    url: "https://www.bleepingcomputer.com/news/security/cisa-hackers-now-exploit-max-severity-gitlab-flaw-in-attacks/"
+    source: "BleepingComputer"
+    date: 2026-09-14T07:06:27Z
+    kind: news
+    labels: []
   - title: "Hackers exploit Tencent app flaw to deploy GrayRabbit malware"
     url: "https://www.bleepingcomputer.com/news/security/hackers-exploit-tencent-app-flaw-to-deploy-grayrabbit-malware/"
     source: "BleepingComputer"
