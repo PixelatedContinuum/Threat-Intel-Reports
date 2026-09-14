@@ -1,0 +1,33 @@
+# Sponsor threat brief content for ghost-cryptojacker-vova75rus-77.110.96.200.
+#
+# The generated half (severity, ATT&CK, detections, indicators) is NOT in this
+# file. It is read live from _data/ and the IOC feed at render time, so it can
+# never drift from what the site publishes.
+#
+# What is here is the half that takes judgement. Most of it can be lifted from
+# the report itself and tightened; that is the intended workflow, not writing
+# from scratch.
+#
+# Render with:  python3 docs/report-brief-gen.py --slug ghost-cryptojacker-vova75rus-77.110.96.200
+slug: ghost-cryptojacker-vova75rus-77.110.96.200
+title: GHOST Cryptojacker Kit — Vova75Rus Supply Chain (77.110.96.200)
+summary: End-to-end technical analysis of the GHOST cryptojacker kit, a 4-tier supply chain
+  operation authored by Vova75Rus targeting exposed ComfyUI/GPU-cloud hosts with a userland
+  LD_PRELOAD rootkit, dual-Telegram supply-chain monitoring, and a GitHub Trust & Safety Tier-0
+  disposition outcome.
+what_it_means: PLACEHOLDER FOR LAYOUT REVIEW. Two or three sentences on what this threat means
+  for an organisation, in plain language, written for someone who will not read the full report.
+do_now:
+- 'PLACEHOLDER: the first action worth taking today.'
+- 'PLACEHOLDER: the second.'
+- 'PLACEHOLDER: the third.'
+standout:
+- heading: 'PLACEHOLDER: the first thing that actually stands out'
+  body: 'PLACEHOLDER. The technical breakdown of one notable element, at the depth a peer
+    would want.
+
+
+    A second paragraph, to show multi-paragraph handling.'
+- heading: 'PLACEHOLDER: the second'
+  body: PLACEHOLDER. Routine tradecraft stays in the full report; only what is genuinely unusual
+    earns a section here.
