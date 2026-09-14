@@ -548,17 +548,6 @@
         "context": "Shared malware-staging infrastructure; serves the legit Wondershare DLL pack (BugSplat.dll, COMSupport.dll, etc.); QWINS LTD Germany; VT 11/47 malicious; useful pivot for tracking other operators using the same side-loading template",
         "asn_org": "QWINS LTD",
         "country": "DE"
-      },
-      {
-        "ip": "23.106.161.1",
-        "port": "0",
-        "protocol": "N/A",
-        "confidence": "LOW",
-        "context": "Embedded in CAB filename '1468_US_23.106.161.1_28-01-26.cab'; Synology QuickConnect / Leaseweb VPN; possibly victim/3rd-party IP rather than attacker infrastructure; UNC5267 cluster overlap is incidental",
-        "asn": "AS7203",
-        "asn_org": "Leaseweb USA",
-        "country": "US",
-        "false_positive_risk": "Likely victim/3rd-party. DO NOT block at perimeter without further verification"
       }
     ],
     "domains": [
@@ -1103,6 +1092,10 @@
       "value": "goproxy.github.io",
       "category": "paste or code sharing",
       "context": "Open-source GoProxy MITM proxy project; appears as CN in CA cert installed by pe_06 for HTTPS interception; the project itself is legitimate but cert install in user trust store is malicious"
+    },
+    {
+      "value": "23.106.161.1",
+      "category": "author-marked never-block"
     }
   ]
 }

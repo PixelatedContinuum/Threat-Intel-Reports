@@ -66,10 +66,26 @@ function authorMarkedHuntOnly(obj) {
   var role = typeof obj.role === 'string' ? obj.role.trim().toUpperCase() : '';
   if (/^(TARGET|VICTIM)\b/.test(role)) return 'author-marked target or victim';
 
-  var prose = ['false_positive_note', 'notes', 'context', 'description']
+  /* The key list matters more than the phrase list, and it was the actual hole.
+     Measured across the 57 published feeds on 2026-09-13: `false_positive_risk`
+     appears 281 times and was never read, `false_positive_notes` (PLURAL) 5 times,
+     and `note` (SINGULAR) 46 times. Only the singular `false_positive_note` and the
+     plural `notes` were in this list, so an analyst who wrote "do not block" in any
+     of the other three spellings was writing into a field nothing consulted.
+
+     That left 14 values across 5 feeds sitting in blockable buckets carrying their
+     author's own do-not-block marking, including bing.com, a victim subdomain URL,
+     and AS12735 marked "legitimate Turkish consumer ISP serving millions".
+
+     Reading `false_positive_risk` does NOT reintroduce the bare-`true` failure the
+     comment above warns about: it is joined into the prose string and matched for
+     phrases, so `false_positive_risk: true` still matches nothing, and the mining
+     pools it sits on stay blockable. */
+  var prose = ['false_positive_note', 'false_positive_notes', 'false_positive_risk',
+               'notes', 'note', 'context', 'description']
     .map(function (k) { return typeof obj[k] === 'string' ? obj[k].toLowerCase() : ''; })
     .join(' ');
-  if (/\bnever block\b|\bdo not block\b|\bdon't block\b|\bvictim-side\b/.test(prose)) {
+  if (/\bnever block\b|\bdo not block\b|\bdon't block\b|\bvictim-side\b|\bnot for blocking\b|\bdo not use for blocking\b|\bdo not blocklist\b|\bdo not preemptively block\b|\bnotify victim before blocking\b|\bnot a malicious destination\b/.test(prose)) {
     return 'author-marked never-block';
   }
   return null;

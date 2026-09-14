@@ -132,16 +132,6 @@
         "last_seen": "2026-05-24",
         "action": "BLOCK",
         "false_positive_risk": "NONE, confirmed operator-owned infrastructure"
-      },
-      {
-        "value": "31.223.97.87",
-        "type": "ipv4",
-        "confidence": "HIGH",
-        "context": "Operator interactive source IP, TurkNet AS12735 residential/SMB Turkish ISP; captured 2026-05-20 21:22-21:30 UTC = 00:22-00:30 local Turkish time; 0/91 VT clean",
-        "first_seen": "2026-05-20",
-        "last_seen": "2026-05-20",
-        "action": "MONITOR (attribution)",
-        "false_positive_risk": "MEDIUM, TurkNet residential / SMB IPs can be NAT-shared; do NOT preemptively block, attribution-only context; Turkish law enforcement subpoena target for subscriber identification"
       }
     ],
     "domains": [
@@ -682,5 +672,12 @@
         "false_positive_risk": "N/A, temporal attribution context"
       }
     ]
-  }
+  },
+  "hunt_only_never_block": [
+    {
+      "value": "31.223.97.87",
+      "category": "author-marked never-block",
+      "context": "Operator interactive source IP, TurkNet AS12735 residential/SMB Turkish ISP; captured 2026-05-20 21:22-21:30 UTC = 00:22-00:30 local Turkish time; 0/91 VT clean"
+    }
+  ]
 }

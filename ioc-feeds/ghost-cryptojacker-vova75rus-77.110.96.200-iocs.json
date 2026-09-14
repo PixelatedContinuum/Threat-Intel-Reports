@@ -157,15 +157,6 @@
         "false_positive_notes": "nanopool is a legitimate public mining pool; same FP rationale as c3pool"
       },
       {
-        "value": "bing.com",
-        "type": "domain",
-        "role": "Hysteria v2 SNI masquerade",
-        "confidence": "MODERATE",
-        "context": "NOT a malicious destination - SNI cover only; Hysteria QUIC packets to operator's :14433/:14444 ports include bing.com SNI to appear as legitimate TLS to bing.com",
-        "false_positive_risk": "high",
-        "false_positive_notes": "bing.com is a major search engine with extremely high legitimate traffic volume; DO NOT BLOCK; use as SNI-vs-destination-IP correlation signal only"
-      },
-      {
         "value": "get.hy2.sh",
         "type": "domain",
         "role": "Hysteria v2 installer source (legitimate)",
@@ -714,6 +705,11 @@
       "value": "ip.sb",
       "category": "ip lookup service",
       "context": "Same role as icanhazip.com"
+    },
+    {
+      "value": "bing.com",
+      "category": "author-marked never-block",
+      "context": "NOT a malicious destination - SNI cover only; Hysteria QUIC packets to operator's :14433/:14444 ports include bing.com SNI to appear as legitimate TLS to bing.com"
     }
   ]
 }

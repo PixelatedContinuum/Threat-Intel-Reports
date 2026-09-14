@@ -327,7 +327,10 @@ def render(slug, content, entry, fm, sponsors):
             story.append(Spacer(1, 4))
         rows = [[Paragraph("Detection", S["cell_h"]), Paragraph("Engine", S["cell_h"]),
                  Paragraph("Robustness", S["cell_h"]), Paragraph("ATT&amp;CK", S["cell_h"])]]
-        for r in det[:14]:
+        # Five, not fourteen. This is the list a reader acts on while the brief is
+        # still open, so it has to be short enough to actually do today. The full
+        # set is in the published detection package and the brief says so.
+        for r in det[:5]:
             rows.append([Paragraph(xesc(r.get("name", "")), S["cell"]),
                          Paragraph(xesc(str(r.get("engine", "")).upper()), S["cell"]),
                          Paragraph("&#9679;" * (r.get("robustness") or 0), S["cell"]),
@@ -335,11 +338,11 @@ def render(slug, content, entry, fm, sponsors):
         story.append(dark_table(rows, [CONTENT_W * .42, CONTENT_W * .13,
                                        CONTENT_W * .15, CONTENT_W * .30],
                                 header_fill=sev_col))
-        if len(det) > 14:
+        if len(det) > 5:
             story.append(Spacer(1, 4))
             story.append(Paragraph(
-                f"Showing 14 of {len(det)}. The full set ships in the published detection "
-                "package.", S["small"]))
+                f"The five worth deploying first, of {len(det)} published. The full set ships "
+                "in the detection package.", S["small"]))
     else:
         story.append(Paragraph("No detection rules were published for this campaign.",
                                S["body"]))
@@ -347,18 +350,20 @@ def render(slug, content, entry, fm, sponsors):
     story.append(Paragraph("Indicators safe to block", S["h2"]))
     if block:
         story.append(Paragraph(
-            f"{len(block)} indicator(s) whose only cost to block is to the operator.",
+            "Blocking any of these costs the operator and nobody else.",
             S["small"]))
         story.append(Spacer(1, 4))
         rows = [[Paragraph("Indicator", S["cell_h"]), Paragraph("Context", S["cell_h"])]]
-        for b in block[:22]:
+        # Same reasoning: five to block today, not twenty-two to triage later.
+        for b in block[:5]:
             rows.append([Paragraph(xesc(b["value"]), S["mono"]),
                          Paragraph(xesc(b["context"])[:120], S["cell"])])
         story.append(dark_table(rows, [CONTENT_W * .46, CONTENT_W * .54], header_fill=BLUE))
-        if len(block) > 22:
+        if len(block) > 5:
             story.append(Spacer(1, 4))
-            story.append(Paragraph(f"Showing 22 of {len(block)}. The full feed is published "
-                                   "as machine-readable JSON.", S["small"]))
+            story.append(Paragraph(
+                f"The five highest-value of {len(block)} published. The full feed is "
+                "machine-readable JSON, ready to ingest whole.", S["small"]))
     else:
         story.append(Paragraph("No blockable indicators in the published feed.", S["body"]))
 
@@ -370,7 +375,7 @@ def render(slug, content, entry, fm, sponsors):
                 "Blocking any of them harms bystanders rather than the operator. Hunt on them; "
                 "never put them in a blocklist.", S["body"]),
             Paragraph(" &nbsp;&middot;&nbsp; ".join(
-                xesc(h["value"]) for h in hunt[:14]), S["mono"]),
+                xesc(h["value"]) for h in hunt[:10]), S["mono"]),
         ], accent=RED, width=CONTENT_W))
 
     # -------- standout

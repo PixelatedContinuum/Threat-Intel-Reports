@@ -268,15 +268,7 @@
         "context": "Brief single-day resolution to C2 IP (Jan 16, 2026). Likely testing or staging. Minimal passive DNS footprint."
       }
     ],
-    "urls": [
-      {
-        "url": "http://ip-api.com/line/?fields=hosting",
-        "confidence": "HIGH",
-        "context": "XWorm anti-analysis callback, queries legitimate API to detect hosting/datacenter IPs. If response is 'true', malware exits silently.",
-        "false_positive_risk": "HIGH",
-        "note": "Legitimate service abused for sandbox evasion. Do not block this URL as it will cause false positives"
-      }
-    ],
+    "urls": [],
     "user_agents": []
   },
   "host_indicators": {
@@ -444,5 +436,12 @@
       "cipher": "Rijndael-256-ECB with PKCS7 padding",
       "key_derivation": "Non-standard overlapping MD5: MD5(key) copied to 32-byte array at offset 0 and offset 15 (overlap at byte 15), byte 31 = 0x00"
     }
-  }
+  },
+  "hunt_only_never_block": [
+    {
+      "value": "http://ip-api.com/line/?fields=hosting",
+      "category": "author-marked never-block",
+      "context": "XWorm anti-analysis callback, queries legitimate API to detect hosting/datacenter IPs. If response is 'true', malware exits silently."
+    }
+  ]
 }

@@ -312,7 +312,7 @@
   report_url: "/reports/ai-agent-frameworks-2026-05-23/"
   detection_url: "/hunting-detections/ai-agent-frameworks-2026-05-23-detections"
   total: 103
-  untyped: 299
+  untyped: 297
   counts:
     domain: 25
     email: 1
@@ -2330,7 +2330,7 @@
   report_url: "/reports/ghost-cryptojacker-vova75rus-77.110.96.200/"
   detection_url: "/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections"
   total: 51
-  untyped: 143
+  untyped: 141
   counts:
     domain: 14
     filename: 1
@@ -4969,7 +4969,7 @@
   report_url: "/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/"
   detection_url: "/hunting-detections/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections"
   total: 111
-  untyped: 72
+  untyped: 71
   counts:
     domain: 47
     filename: 2
@@ -5070,7 +5070,7 @@
       context: null
     - type: "domain"
       value: "mail.hcjs2.jlengineering.se"
-      context: null
+      context: "Do NOT blocklist apex jlengineering.se - it is a multi-tenant donor domain"
     - type: "domain"
       value: "mailmanagement.cfd"
       context: null
@@ -5560,7 +5560,7 @@
   report_url: "/reports/opendirectory-62-60-237-100-20260506/"
   detection_url: "/hunting-detections/opendirectory-62-60-237-100-20260506-detections"
   total: 175
-  untyped: 88
+  untyped: 84
   counts:
     domain: 9
     filename: 43
@@ -7541,7 +7541,7 @@
   report_url: "/reports/shadow-xworm-opendirectory/"
   detection_url: "/hunting-detections/shadow-xworm-opendirectory-detections"
   total: 48
-  untyped: 34
+  untyped: 33
   counts:
     domain: 8
     filename: 7
@@ -9068,7 +9068,7 @@
   report_url: "/reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/"
   detection_url: "/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections"
   total: 43
-  untyped: 215
+  untyped: 212
   counts:
     domain: 12
     filename: 1
