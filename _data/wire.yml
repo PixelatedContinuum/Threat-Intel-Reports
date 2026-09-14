@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-14T16:01:47Z
+generated_at: 2026-09-14T18:02:16Z
 window_days: 30
 counts:
-  total: 514
+  total: 516
   research: 175
-  news: 339
+  news: 341
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -16,7 +16,7 @@ topics:
     count: 72
     color: 1
   - label: "cybercrime"
-    count: 59
+    count: 60
     color: 2
   - label: "exploited"
     count: 28
@@ -428,6 +428,18 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
 items:
+  - title: "Hackers target exposed Vite dev servers to steal AWS, Azure secrets"
+    url: "https://www.bleepingcomputer.com/news/security/hackers-target-exposed-vite-dev-servers-to-steal-aws-azure-secrets/"
+    source: "BleepingComputer"
+    date: 2026-09-14T16:15:58Z
+    kind: news
+    labels: []
+  - title: "Pro-Ukraine Hacking Cat group deploying new malware against Russian targets"
+    url: "https://therecord.media/ukraine-malware-russia-ransomware"
+    source: "Recorded Future"
+    date: 2026-09-14T16:15:00Z
+    kind: news
+    labels: ["cybercrime", "nation-state"]
   - title: "Why Patch Automation Needs Brakes, Not Just an Accelerator"
     url: "https://www.bleepingcomputer.com/news/security/why-patch-automation-needs-brakes-not-just-an-accelerator/"
     source: "BleepingComputer"
