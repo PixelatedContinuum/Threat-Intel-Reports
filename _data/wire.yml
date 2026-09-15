@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-15T14:00:27Z
+generated_at: 2026-09-15T16:02:16Z
 window_days: 30
 counts:
-  total: 529
-  research: 178
-  news: 351
+  total: 535
+  research: 180
+  news: 355
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -16,7 +16,7 @@ topics:
     count: 74
     color: 1
   - label: "cybercrime"
-    count: 61
+    count: 62
     color: 2
   - label: "exploited"
     count: 30
@@ -28,7 +28,7 @@ topics:
     count: 27
     color: 5
   - label: "data breaches"
-    count: 24
+    count: 25
     color: 6
   - label: "artificial intelligence"
     count: 23
@@ -203,6 +203,7 @@ label_colors:
   "carecloud": 10
   "castleloader": 11
   "castlerat": 9
+  "centerpoint energy": 7
   "central asia": 5
   "chaindrop": 8
   "chaotic eclipse": 12
@@ -278,6 +279,7 @@ label_colors:
   "cve-2026-43284": 5
   "cve-2026-44756": 12
   "cve-2026-59346": 5
+  "cve-2026-60004": 4
   "cve-2026-6471": 10
   "cve-2026-75650": 3
   "cve-2026-81578": 1
@@ -307,6 +309,7 @@ label_colors:
   "dprk apt": 2
   "e-commerce attacks": 10
   "education": 10
+  "elections targeting": 5
   "electron framework": 12
   "email security": 12
   "encrypted payload": 10
@@ -374,6 +377,7 @@ label_colors:
   "mac malware": 8
   "macos": 11
   "malware": 5
+  "malware analysis": 7
   "mathspace": 4
   "microsoft": 4
   "microsoft teams": 10
@@ -437,12 +441,48 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
 items:
+  - title: "Texas Utility CenterPoint Energy Confirms Breach After Hacker Leaks Data"
+    url: "https://www.securityweek.com/texas-utility-centerpoint-energy-confirms-breach-after-hacker-leaks-data/"
+    source: "SecurityWeek"
+    date: 2026-09-15T15:30:24Z
+    kind: news
+    labels: ["centerpoint energy", "data breaches", "data leak", "utility"]
+  - title: "BambooToken malware controls Windows and Linux systems via MQTT"
+    url: "https://www.bleepingcomputer.com/news/security/bambootoken-malware-controls-windows-and-linux-systems-via-mqtt/"
+    source: "BleepingComputer"
+    date: 2026-09-15T15:00:00Z
+    kind: news
+    labels: []
+  - title: "Hackers target WordPress sites via third-party WooCommerce plugin"
+    url: "https://www.bleepingcomputer.com/news/security/hackers-target-wordpress-sites-via-third-party-woocommerce-plugin/"
+    source: "BleepingComputer"
+    date: 2026-09-15T14:45:10Z
+    kind: news
+    labels: []
+  - title: "Electric and gas utility CenterPoint Energy warns of data breach after dark web post"
+    url: "https://therecord.media/centerpoint-energy-data-breach"
+    source: "Recorded Future"
+    date: 2026-09-15T14:22:00Z
+    kind: news
+    labels: ["cybercrime", "industry"]
+  - title: "What Zero-Day Response Should Be in the Post-Mythos Era"
+    url: "https://www.bleepingcomputer.com/news/security/what-zero-day-response-should-be-in-the-post-mythos-era/"
+    source: "BleepingComputer"
+    date: 2026-09-15T13:45:54Z
+    kind: news
+    labels: []
   - title: "Thai Broadband Provider Hacked via Fortinet Vulnerability"
     url: "https://www.securityweek.com/thai-broadband-provider-hacked-via-fortinet-vulnerability/"
     source: "SecurityWeek"
     date: 2026-09-15T13:33:58Z
     kind: news
     labels: ["3bb", "exploited", "fortinet", "malware", "thailand"]
+  - title: "Red Heron exploits Gitea n-day flaw in multinational campaign, exposing new Linux rootkit"
+    url: "https://www.acronis.com/en/tru/posts/red-heron-exploits-gitea-n-day-flaw-in-multinational-campaign-exposing-new-linux-rootkit/"
+    source: "AlienVault"
+    date: 2026-09-15T13:05:50Z
+    kind: research
+    labels: ["cve-2026-60004", "elections targeting", "gitea", "jitterly", "rootkit", "sixzut"]
   - title: "Search results are sending people to fake Bitrefill checkouts"
     url: "https://www.malwarebytes.com/blog/threat-intel/2026/09/search-results-are-sending-people-to-fake-bitrefill-checkouts"
     source: "AlienVault"
@@ -587,6 +627,12 @@ items:
     date: 2026-09-14T07:06:27Z
     kind: news
     labels: []
+  - title: "The extension you never installed: KREMLIN forges Chrome's own integrity checks to steal banking sessions"
+    url: "https://www.elastic.co/security-labs/threat-command/malicious-browser-extension-kremlin-banking-malware"
+    source: "Elastic"
+    date: 2026-09-14T00:00:00Z
+    kind: research
+    labels: ["malware analysis", "threat intelligence"]
   - title: "Hackers exploit Tencent app flaw to deploy GrayRabbit malware"
     url: "https://www.bleepingcomputer.com/news/security/hackers-exploit-tencent-app-flaw-to-deploy-grayrabbit-malware/"
     source: "BleepingComputer"
@@ -3603,11 +3649,5 @@ items:
     url: "https://www.bleepingcomputer.com/news/security/large-scale-ddos-attacks-disrupted-threema-secure-messaging-service/"
     source: "BleepingComputer"
     date: 2026-08-16T17:29:52Z
-    kind: news
-    labels: []
-  - title: "New AmnesiaStealer macOS malware hijacks browser sessions via remote control"
-    url: "https://www.bleepingcomputer.com/news/security/new-amnesiastealer-macos-malware-hijacks-browser-sessions-via-remote-control/"
-    source: "BleepingComputer"
-    date: 2026-08-16T15:07:44Z
     kind: news
     labels: []
