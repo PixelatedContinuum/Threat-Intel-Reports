@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-15T06:01:16Z
+generated_at: 2026-09-15T08:01:47Z
 window_days: 30
 counts:
-  total: 519
+  total: 520
   research: 175
-  news: 344
+  news: 345
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -429,6 +429,12 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
 items:
+  - title: "Cisco patches Secure Email Gateway zero-day exploited in attacks"
+    url: "https://www.bleepingcomputer.com/news/security/new-cisco-secure-email-zero-day-exploited-to-execute-commands-as-root/"
+    source: "BleepingComputer"
+    date: 2026-09-15T07:31:09Z
+    kind: news
+    labels: []
   - title: "Root RCE Zero-Day in Cisco Secure Email Gateway Under Active Exploitation"
     url: "https://www.securityweek.com/root-rce-zero-day-in-cisco-secure-email-gateway-under-active-exploitation/"
     source: "SecurityWeek"
