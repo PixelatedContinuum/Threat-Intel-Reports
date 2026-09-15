@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-15T20:00:56Z
+generated_at: 2026-09-15T22:01:06Z
 window_days: 30
 counts:
-  total: 536
+  total: 537
   research: 180
-  news: 356
+  news: 357
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -441,6 +441,12 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
 items:
+  - title: "Acronis warns of actively exploited flaw in its cPanel backup plugin"
+    url: "https://www.bleepingcomputer.com/news/security/acronis-warns-of-actively-exploited-flaw-in-its-cpanel-backup-plugin/"
+    source: "BleepingComputer"
+    date: 2026-09-15T21:37:35Z
+    kind: news
+    labels: []
   - title: "CenterPoint Energy confirms customer data stolen in cyberattack"
     url: "https://www.bleepingcomputer.com/news/security/centerpoint-energy-confirms-customer-data-stolen-in-cyberattack/"
     source: "BleepingComputer"
