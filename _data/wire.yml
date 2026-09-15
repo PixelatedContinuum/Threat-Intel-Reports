@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-15T12:00:09Z
+generated_at: 2026-09-15T14:00:27Z
 window_days: 30
 counts:
-  total: 524
-  research: 177
-  news: 347
+  total: 529
+  research: 178
+  news: 351
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -19,25 +19,25 @@ topics:
     count: 61
     color: 2
   - label: "exploited"
-    count: 29
+    count: 30
     color: 3
   - label: "government"
-    count: 27
+    count: 28
     color: 4
   - label: "malware"
-    count: 26
+    count: 27
     color: 5
   - label: "data breaches"
-    count: 23
+    count: 24
     color: 6
   - label: "artificial intelligence"
-    count: 22
+    count: 23
     color: 7
   - label: "credential theft"
     count: 17
     color: 8
   - label: "phishing"
-    count: 15
+    count: 16
     color: 9
   - label: "social engineering"
     count: 15
@@ -51,6 +51,7 @@ topics:
 label_colors:
   ".net loader": 4
   "2fa bypass": 1
+  "3bb": 7
   "3snake": 7
   "a little sunshine": 6
   "academic lure": 1
@@ -390,6 +391,7 @@ label_colors:
   "nvidia": 3
   "oauth token theft": 5
   "on the radar": 4
+  "openai": 4
   "oracle": 12
   "oracle cspu": 1
   "papercut": 8
@@ -398,6 +400,7 @@ label_colors:
   "patch tuesday": 11
   "patched": 1
   "patches": 2
+  "payment fraud": 12
   "pdf attachment": 7
   "phishing": 9
   "phishing kit": 6
@@ -434,6 +437,36 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
 items:
+  - title: "Thai Broadband Provider Hacked via Fortinet Vulnerability"
+    url: "https://www.securityweek.com/thai-broadband-provider-hacked-via-fortinet-vulnerability/"
+    source: "SecurityWeek"
+    date: 2026-09-15T13:33:58Z
+    kind: news
+    labels: ["3bb", "exploited", "fortinet", "malware", "thailand"]
+  - title: "Search results are sending people to fake Bitrefill checkouts"
+    url: "https://www.malwarebytes.com/blog/threat-intel/2026/09/search-results-are-sending-people-to-fake-bitrefill-checkouts"
+    source: "AlienVault"
+    date: 2026-09-15T12:44:15Z
+    kind: research
+    labels: ["payment fraud", "phishing", "search engine manipulation", "typosquatting"]
+  - title: "OpenAI Investigates Report Linking AI Agents to RubyGems Attack"
+    url: "https://www.securityweek.com/openai-investigates-report-linking-ai-agents-to-rubygems-attack/"
+    source: "SecurityWeek"
+    date: 2026-09-15T12:42:32Z
+    kind: news
+    labels: ["artificial intelligence", "openai", "rubygems"]
+  - title: "CISA: Critical VMware RCE flaw now exploited by ransomware gangs"
+    url: "https://www.bleepingcomputer.com/news/security/cisa-critical-vmware-vcenter-rce-flaw-now-exploited-by-ransomware-gangs/"
+    source: "BleepingComputer"
+    date: 2026-09-15T12:16:32Z
+    kind: news
+    labels: []
+  - title: "240,000 Hit by Data Breach at Japan’s Digital Agency"
+    url: "https://www.securityweek.com/240000-hit-by-data-breach-at-japans-digital-agency/"
+    source: "SecurityWeek"
+    date: 2026-09-15T11:45:31Z
+    kind: news
+    labels: ["data breaches", "government", "japan", "vpn"]
   - title: "Apple Patches 200 Vulnerabilities With New iOS 27, macOS Golden Gate 27 Releases"
     url: "https://www.securityweek.com/apple-patches-200-vulnerabilities-with-new-ios-27-macos-golden-gate-27-releases/"
     source: "SecurityWeek"
