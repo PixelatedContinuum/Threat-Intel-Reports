@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-15T08:01:47Z
+generated_at: 2026-09-15T10:01:37Z
 window_days: 30
 counts:
-  total: 520
+  total: 521
   research: 175
-  news: 345
+  news: 346
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -25,7 +25,7 @@ topics:
     count: 27
     color: 4
   - label: "malware"
-    count: 25
+    count: 26
     color: 5
   - label: "data breaches"
     count: 23
@@ -42,11 +42,11 @@ topics:
   - label: "social engineering"
     count: 15
     color: 10
-  - label: "ransomware"
+  - label: "clickfix"
     count: 14
     color: 11
-  - label: "clickfix"
-    count: 13
+  - label: "ransomware"
+    count: 14
     color: 12
 label_colors:
   ".net loader": 4
@@ -231,7 +231,7 @@ label_colors:
   "cl0p": 3
   "claude desktop": 12
   "cleo": 7
-  "clickfix": 12
+  "clickfix": 11
   "clipper": 3
   "cloaked ursa": 2
   "cloud": 7
@@ -366,6 +366,7 @@ label_colors:
   "legal": 7
   "linux": 2
   "living-off-the-land": 1
+  "mac malware": 8
   "macos": 11
   "malware": 5
   "mathspace": 4
@@ -402,7 +403,7 @@ label_colors:
   "privacy": 12
   "proxy abuse": 6
   "qilin": 11
-  "ransomware": 11
+  "ransomware": 12
   "rce": 10
   "revolut": 5
   "rmm abuse": 2
@@ -429,6 +430,12 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
 items:
+  - title: "Hacked HBO Max Reddit Account Used for Malware Delivery via ClickFix Attack"
+    url: "https://www.securityweek.com/hacked-hbo-reddit-account-used-for-malware-delivery-via-clickfix-attack/"
+    source: "SecurityWeek"
+    date: 2026-09-15T09:09:00Z
+    kind: news
+    labels: ["clickfix", "mac malware", "malvertising", "malware", "reddit"]
   - title: "Cisco patches Secure Email Gateway zero-day exploited in attacks"
     url: "https://www.bleepingcomputer.com/news/security/new-cisco-secure-email-zero-day-exploited-to-execute-commands-as-root/"
     source: "BleepingComputer"
