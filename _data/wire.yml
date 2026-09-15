@@ -3,17 +3,17 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-15T10:01:37Z
+generated_at: 2026-09-15T12:00:09Z
 window_days: 30
 counts:
-  total: 521
-  research: 175
-  news: 346
+  total: 524
+  research: 177
+  news: 347
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 73
+    count: 74
     color: 1
   - label: "cybercrime"
     count: 61
@@ -270,6 +270,7 @@ label_colors:
   "cve-2021-27101": 2
   "cve-2021-38003": 1
   "cve-2023-49105": 4
+  "cve-2024-21762": 6
   "cve-2026-19949": 8
   "cve-2026-20354": 12
   "cve-2026-31431": 6
@@ -303,6 +304,7 @@ label_colors:
   "docusign impersonation": 2
   "domain controller": 4
   "dprk apt": 2
+  "e-commerce attacks": 10
   "education": 10
   "electron framework": 12
   "email security": 12
@@ -337,6 +339,7 @@ label_colors:
   "google": 7
   "google cloud": 8
   "google infrastructure abuse": 8
+  "google tag manager abuse": 4
   "government": 4
   "gta6": 6
   "hacker": 8
@@ -357,6 +360,7 @@ label_colors:
   "industry": 8
   "inside google cloud": 2
   "insights": 5
+  "ios": 11
   "isolated-vm": 5
   "ivanti": 7
   "jfrog": 8
@@ -430,12 +434,24 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
 items:
+  - title: "Apple Patches 200 Vulnerabilities With New iOS 27, macOS Golden Gate 27 Releases"
+    url: "https://www.securityweek.com/apple-patches-200-vulnerabilities-with-new-ios-27-macos-golden-gate-27-releases/"
+    source: "SecurityWeek"
+    date: 2026-09-15T11:06:11Z
+    kind: news
+    labels: ["apple", "ios", "ios 27", "macos", "macos golden gate 27", "patches", "vulnerabilities"]
   - title: "Hacked HBO Max Reddit Account Used for Malware Delivery via ClickFix Attack"
     url: "https://www.securityweek.com/hacked-hbo-reddit-account-used-for-malware-delivery-via-clickfix-attack/"
     source: "SecurityWeek"
     date: 2026-09-15T09:09:00Z
     kind: news
     labels: ["clickfix", "mac malware", "malvertising", "malware", "reddit"]
+  - title: "GrelosGTM group abuses Google Tag Manager to attack e-commerce websites"
+    url: "https://otx.alienvault.com/pulse/6aa8feaea12952dc69b265df"
+    source: "AlienVault"
+    date: 2026-09-15T08:15:42Z
+    kind: research
+    labels: ["e-commerce attacks", "google tag manager abuse", "javascript sniffer", "magento cms", "web skimming", "websocket injector"]
   - title: "Cisco patches Secure Email Gateway zero-day exploited in attacks"
     url: "https://www.bleepingcomputer.com/news/security/new-cisco-secure-email-zero-day-exploited-to-execute-commands-as-root/"
     source: "BleepingComputer"
@@ -448,6 +464,12 @@ items:
     date: 2026-09-15T05:18:51Z
     kind: news
     labels: ["cisco", "email security", "exploited", "secure email gateway", "vulnerabilities", "zero-day"]
+  - title: "Thai Broadband Provider Targeted via FortiGate SSL-VPN and MeshCentral Persistence"
+    url: "https://hunt.io/blog/thai-broadband-fortigate-sslvpn-meshcentral-intrusion"
+    source: "AlienVault"
+    date: 2026-09-14T19:47:14Z
+    kind: research
+    labels: ["cve-2024-21762", "fortigate", "fortigate ssl-vpn", "meshcentral"]
   - title: "Members of ‘Black Axe’ cybercriminal group extradited from South Africa"
     url: "https://therecord.media/members-of-black-axe-cybercrime-group-extradited-south-africa"
     source: "Recorded Future"
