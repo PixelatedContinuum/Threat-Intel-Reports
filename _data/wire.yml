@@ -3,7 +3,7 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-16T16:02:18Z
+generated_at: 2026-09-16T18:02:29Z
 window_days: 30
 counts:
   total: 546
@@ -16,7 +16,7 @@ topics:
     count: 78
     color: 1
   - label: "cybercrime"
-    count: 65
+    count: 64
     color: 2
   - label: "exploited"
     count: 31
@@ -27,11 +27,11 @@ topics:
   - label: "malware"
     count: 30
     color: 5
-  - label: "data breaches"
-    count: 23
-    color: 6
   - label: "artificial intelligence"
-    count: 22
+    count: 24
+    color: 6
+  - label: "data breaches"
+    count: 24
     color: 7
   - label: "credential theft"
     count: 17
@@ -127,7 +127,7 @@ label_colors:
   "armenia": 5
   "arrayref": 8
   "arrested": 2
-  "artificial intelligence": 7
+  "artificial intelligence": 6
   "asia-pacific": 6
   "asiogate": 3
   "astral-pe": 3
@@ -301,7 +301,7 @@ label_colors:
   "cyberwarfare": 9
   "dahua": 9
   "darklantern": 4
-  "data breaches": 6
+  "data breaches": 7
   "data exfiltration": 9
   "data security": 10
   "data-exfiltration": 12
@@ -454,6 +454,18 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
 items:
+  - title: "Spain's data agency gets first report of AI-powered data breach"
+    url: "https://www.bleepingcomputer.com/news/security/spains-data-agency-gets-first-report-of-ai-powered-data-breach/"
+    source: "BleepingComputer"
+    date: 2026-09-16T17:26:41Z
+    kind: news
+    labels: ["artificial intelligence"]
+  - title: "First Agentic AI Data Breach Reported to Spanish Regulator"
+    url: "https://www.securityweek.com/first-agentic-ai-data-breach-reported-to-spanish-regulator/"
+    source: "SecurityWeek"
+    date: 2026-09-16T16:39:19Z
+    kind: news
+    labels: ["artificial intelligence", "data breaches"]
   - title: "Three Ukrainians to face charges for alleged hack of 610,000 Roblox accounts"
     url: "https://therecord.media/ukraine-roblox-hacker-arrested"
     source: "Recorded Future"
@@ -3718,15 +3730,3 @@ items:
     date: 2026-08-17T19:12:39Z
     kind: news
     labels: []
-  - title: "SafePal latest crypto hardware wallet maker affected by breach, with nearly 40,000 impacted"
-    url: "https://therecord.media/safepal-crypto-hardware-breach"
-    source: "Recorded Future"
-    date: 2026-08-17T17:00:00Z
-    kind: news
-    labels: ["cybercrime", "privacy"]
-  - title: "Irregular faces criticism over ‘spin’ in AI hacking postmortem"
-    url: "https://therecord.media/irregular-ai-hacking-model-blog"
-    source: "Recorded Future"
-    date: 2026-08-17T16:15:00Z
-    kind: news
-    labels: ["industry"]
