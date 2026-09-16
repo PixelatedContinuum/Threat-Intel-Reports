@@ -3,35 +3,35 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-16T10:02:04Z
+generated_at: 2026-09-16T12:02:28Z
 window_days: 30
 counts:
-  total: 534
-  research: 180
-  news: 354
+  total: 539
+  research: 183
+  news: 356
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 74
+    count: 77
     color: 1
   - label: "cybercrime"
     count: 63
     color: 2
   - label: "exploited"
-    count: 29
+    count: 30
     color: 3
   - label: "government"
     count: 29
     color: 4
   - label: "malware"
-    count: 27
+    count: 28
     color: 5
-  - label: "artificial intelligence"
-    count: 23
-    color: 6
   - label: "data breaches"
-    count: 23
+    count: 24
+    color: 6
+  - label: "artificial intelligence"
+    count: 22
     color: 7
   - label: "credential theft"
     count: 17
@@ -45,7 +45,7 @@ topics:
   - label: "clickfix"
     count: 14
     color: 11
-  - label: "ransomware"
+  - label: "healthcare"
     count: 14
     color: 12
 label_colors:
@@ -59,6 +59,7 @@ label_colors:
   "accessibility services": 10
   "account takeover": 2
   "account-enumeration": 7
+  "acronis": 1
   "active directory compromise": 7
   "active directory reconnaissance": 1
   "adapthealth": 2
@@ -69,6 +70,7 @@ label_colors:
   "administrative compromise": 8
   "adobe": 1
   "adobe commerce": 12
+  "adversary infrastructure": 12
   "adversary-in-the-middle": 9
   "adware disguise": 5
   "aesto health": 6
@@ -124,7 +126,7 @@ label_colors:
   "armenia": 5
   "arrayref": 8
   "arrested": 2
-  "artificial intelligence": 6
+  "artificial intelligence": 7
   "asia-pacific": 6
   "asiogate": 3
   "astral-pe": 3
@@ -195,6 +197,7 @@ label_colors:
   "c2": 9
   "c2 infrastructure": 12
   "c2looper": 2
+  "calendar": 8
   "camera": 3
   "canada": 4
   "canada revenue agency": 3
@@ -246,6 +249,7 @@ label_colors:
   "compile-time execution": 3
   "conti": 1
   "control-flow flattening": 10
+  "cpanel": 1
   "credential exfiltration": 4
   "credential harvesting": 4
   "credential phishing": 9
@@ -290,7 +294,7 @@ label_colors:
   "cyberwarfare": 9
   "dahua": 9
   "darklantern": 4
-  "data breaches": 7
+  "data breaches": 6
   "data exfiltration": 9
   "data-exfiltration": 12
   "dead drop resolver": 7
@@ -350,7 +354,7 @@ label_colors:
   "hardware": 6
   "hasbro": 1
   "head mare": 3
-  "healthcare": 11
+  "healthcare": 12
   "heights financial": 1
   "hideul.exe": 7
   "high profile threats": 2
@@ -408,12 +412,12 @@ label_colors:
   "phishing": 9
   "phishing kit": 6
   "plugin": 7
+  "plugin vulnerability": 1
   "poc exploit": 3
   "postgresql": 12
   "privacy": 12
   "proxy abuse": 6
   "qilin": 11
-  "ransomware": 12
   "rce": 10
   "revolut": 5
   "rmm abuse": 2
@@ -441,6 +445,48 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
 items:
+  - title: "Unauthenticated RCE Flaws Could Expose 200,000+ WordPress Sites to Takeover"
+    url: "https://www.securityweek.com/unauthenticated-rce-flaws-could-expose-200000-wordpress-sites-to-takeover/"
+    source: "SecurityWeek"
+    date: 2026-09-16T11:32:53Z
+    kind: news
+    labels: ["calendar", "plugin vulnerability", "vulnerabilities", "wordpress"]
+  - title: "Critical ScreenConnect flaw now actively exploited in attacks"
+    url: "https://www.bleepingcomputer.com/news/security/cisa-warns-of-hackers-exploiting-critical-screenconnect-flaw/"
+    source: "BleepingComputer"
+    date: 2026-09-16T11:14:28Z
+    kind: news
+    labels: []
+  - title: "280,000 Impacted by Premier Medical Group Data Breach"
+    url: "https://www.securityweek.com/280000-impacted-by-premier-medical-group-data-breach/"
+    source: "SecurityWeek"
+    date: 2026-09-16T10:47:18Z
+    kind: news
+    labels: ["data breaches", "healthcare", "premier medical group"]
+  - title: "Chrome, Firefox Updates Patch 115 Vulnerabilities"
+    url: "https://www.securityweek.com/chrome-firefox-updates-patch-115-vulnerabilities/"
+    source: "SecurityWeek"
+    date: 2026-09-16T10:28:36Z
+    kind: news
+    labels: ["chrome", "firefox", "patch", "vulnerabilities"]
+  - title: "Securing the unpatchable in an age of AI-driven vulnerabilities"
+    url: "https://blog.talosintelligence.com/securing-the-unpatchable-in-an-age-of-ai-driven-vulnerabilities/"
+    source: "Cisco Talos"
+    date: 2026-09-16T10:00:36Z
+    kind: research
+    labels: ["on the radar"]
+  - title: "Atomic macOS (AMOS) Stealer Activity"
+    url: "https://unit42.paloaltonetworks.com/atomic-macos-amos-stealer-activity/"
+    source: "Palo Alto Networks"
+    date: 2026-09-16T10:00:06Z
+    kind: research
+    labels: ["insights", "macos", "malware", "threat intelligence"]
+  - title: "Acronis Patches Exploited Vulnerability in cPanel Backup Plugin"
+    url: "https://www.securityweek.com/acronis-patches-exploited-vulnerability-in-cpanel-backup-plugin/"
+    source: "SecurityWeek"
+    date: 2026-09-16T09:52:31Z
+    kind: news
+    labels: ["acronis", "cpanel", "exploited", "vulnerabilities"]
   - title: "Enterprises Warned of Attacks Exploiting WSO2 Vulnerability"
     url: "https://www.securityweek.com/enterprises-warned-of-attacks-exploiting-wso2-vulnerability/"
     source: "SecurityWeek"
@@ -453,6 +499,12 @@ items:
     date: 2026-09-16T08:06:33Z
     kind: news
     labels: ["cspu", "oracle", "patches", "vulnerabilities"]
+  - title: "Mythic C2 Activity at Internet Scale"
+    url: "https://otx.alienvault.com/pulse/6aaa401dbc68ca971dbb0508"
+    source: "AlienVault"
+    date: 2026-09-16T07:07:09Z
+    kind: research
+    labels: ["adversary infrastructure", "apollo", "c2 framework", "command-and-control", "fys2", "mythic", "network detection", "nyx", "open-source tools", "red team", "threat infrastructure"]
   - title: "Google fixes actively exploited Android zero-day on Pixel devices"
     url: "https://www.bleepingcomputer.com/news/security/google-fixes-actively-exploited-android-zero-day-on-pixel-devices/"
     source: "BleepingComputer"
@@ -3627,21 +3679,3 @@ items:
     date: 2026-08-17T12:11:00Z
     kind: news
     labels: ["artificial intelligence", "ai testing", "anthropic", "irregular"]
-  - title: "Philips and GE investigating Clop ransomware data theft claims"
-    url: "https://www.bleepingcomputer.com/news/security/philips-and-ge-investigating-clop-ransomware-data-theft-claims/"
-    source: "BleepingComputer"
-    date: 2026-08-17T11:25:02Z
-    kind: news
-    labels: []
-  - title: "Conflicting Test Goals Pushed Claude Agents to Deploy Self-Replicating Malware"
-    url: "https://www.securityweek.com/conflicting-test-goals-pushed-claude-agents-to-deploy-self-replicating-malware/"
-    source: "SecurityWeek"
-    date: 2026-08-17T11:09:57Z
-    kind: news
-    labels: ["artificial intelligence", "anthropic", "claude"]
-  - title: "French tax authority data breach affects 678,000 individuals"
-    url: "https://www.bleepingcomputer.com/news/security/french-tax-authority-data-breach-affects-678-000-individuals/"
-    source: "BleepingComputer"
-    date: 2026-08-17T10:09:48Z
-    kind: news
-    labels: []
