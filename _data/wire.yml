@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-16T08:02:28Z
+generated_at: 2026-09-16T10:02:04Z
 window_days: 30
 counts:
-  total: 536
+  total: 534
   research: 180
-  news: 356
+  news: 354
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -19,7 +19,7 @@ topics:
     count: 63
     color: 2
   - label: "exploited"
-    count: 30
+    count: 29
     color: 3
   - label: "government"
     count: 29
@@ -27,10 +27,10 @@ topics:
   - label: "malware"
     count: 27
     color: 5
-  - label: "data breaches"
-    count: 24
-    color: 6
   - label: "artificial intelligence"
+    count: 23
+    color: 6
+  - label: "data breaches"
     count: 23
     color: 7
   - label: "credential theft"
@@ -124,7 +124,7 @@ label_colors:
   "armenia": 5
   "arrayref": 8
   "arrested": 2
-  "artificial intelligence": 7
+  "artificial intelligence": 6
   "asia-pacific": 6
   "asiogate": 3
   "astral-pe": 3
@@ -266,6 +266,7 @@ label_colors:
   "cryptocurrency theft": 3
   "cryptocurrency-stealer": 7
   "cryptographic": 9
+  "cspu": 1
   "curlrat": 3
   "cve-2021-27101": 2
   "cve-2021-38003": 1
@@ -289,7 +290,7 @@ label_colors:
   "cyberwarfare": 9
   "dahua": 9
   "darklantern": 4
-  "data breaches": 6
+  "data breaches": 7
   "data exfiltration": 9
   "data-exfiltration": 12
   "dead drop resolver": 7
@@ -440,6 +441,18 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
 items:
+  - title: "Enterprises Warned of Attacks Exploiting WSO2 Vulnerability"
+    url: "https://www.securityweek.com/enterprises-warned-of-attacks-exploiting-wso2-vulnerability/"
+    source: "SecurityWeek"
+    date: 2026-09-16T08:39:05Z
+    kind: news
+    labels: ["exploited", "vulnerabilities", "wso2"]
+  - title: "Oracle Patches 800+ Vulnerabilities in September 2026 Security Update"
+    url: "https://www.securityweek.com/oracle-patches-800-vulnerabilities-in-september-2026-security-update/"
+    source: "SecurityWeek"
+    date: 2026-09-16T08:06:33Z
+    kind: news
+    labels: ["cspu", "oracle", "patches", "vulnerabilities"]
   - title: "Google fixes actively exploited Android zero-day on Pixel devices"
     url: "https://www.bleepingcomputer.com/news/security/google-fixes-actively-exploited-android-zero-day-on-pixel-devices/"
     source: "BleepingComputer"
@@ -3632,27 +3645,3 @@ items:
     date: 2026-08-17T10:09:48Z
     kind: news
     labels: []
-  - title: "40,000 Impacted by SafePal Data Breach"
-    url: "https://www.securityweek.com/40000-impacted-by-safepal-data-breach/"
-    source: "SecurityWeek"
-    date: 2026-08-17T09:37:06Z
-    kind: news
-    labels: ["cryptocurrency", "data breaches", "safepal"]
-  - title: "Microsoft working on Defender patch for ShieldBreak zero-day"
-    url: "https://www.bleepingcomputer.com/news/security/microsoft-working-on-defender-patch-for-shieldbreak-zero-day/"
-    source: "BleepingComputer"
-    date: 2026-08-17T09:05:33Z
-    kind: news
-    labels: ["microsoft"]
-  - title: "Recent macOS Screen Sharing Vulnerability Exploited in Attacks"
-    url: "https://www.securityweek.com/recent-macos-screen-sharing-vulnerability-exploited-in-attacks/"
-    source: "SecurityWeek"
-    date: 2026-08-17T08:47:38Z
-    kind: news
-    labels: ["exploited", "macos", "screen sharing", "vulnerabilities"]
-  - title: "Critical SAP Commerce Cloud Vulnerability Exploited 3 Days After Disclosure"
-    url: "https://www.securityweek.com/critical-sap-commerce-cloud-vulnerability-exploited-3-days-after-disclosure/"
-    source: "SecurityWeek"
-    date: 2026-08-17T08:13:07Z
-    kind: news
-    labels: ["exploited", "sap", "vulnerabilities"]
