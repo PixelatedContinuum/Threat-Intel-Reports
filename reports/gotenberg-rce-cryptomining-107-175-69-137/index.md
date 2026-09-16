@@ -52,32 +52,32 @@ figure_nav:
 ## 1. Executive Summary
 {: .hl-tier-1}
 
-An operator with little original vulnerability research turned one disclosed CVE into a
-198-host compromise in under an hour, and the network signature I would have written by
-reading the vendor advisory never fires on the real traffic. That is the whole report in two
-sentences, and the rest of it is how I know both halves are true.
+One disclosed CVE turned into a 198-host compromise in under an hour, and the obvious network
+signature for this exact injection never fires on real traffic. That is the whole report in two
+sentences, a near-zero-effort exploit chain and a detection trap that catches anyone who builds a
+rule from the vendor advisory alone.
 
 The vulnerability is CVE-2026-42589, an unauthenticated remote code execution flaw in
-Gotenberg, an open-source document-conversion service. The operator's payload does not go in
+Gotenberg, an open-source document-conversion service. The payload does not go in
 a metadata *value*, where any defender reading a request would expect an injection. It goes in
 the metadata *key*, splitting ExifTool's argument parser and reaching a Perl `eval` through the
-`-if` flag. I confirmed by direct comparison that the payload is copied from the vendor's own
-security advisory, down to its placeholder value, so I hold the exploit-research side of this
-operator's capability at LOW, at or below the public floor. What is not copied is the campaign
+`-if` flag. This exact payload, down to its placeholder value, is copied verbatim from the
+vendor's own security advisory (HIGH-to-DEFINITE). The barrier to entry for this attack is zero,
+and the working exploit sits in a public document anyone can read, so expect unrelated copycats
+to reach for the same primitive, not only this operator. What is not copied is the campaign built
 around it: 206 candidates probed, 198 confirmed exploitable, and a cryptominer running on
 somewhere between 148 and 151 of them, the whole thing inside a 54-minute window on 2026-08-31.
 
-Then the finding that changes how I read the whole campaign. I had a rule ready to ship for this
-exact injection, built by reading the operator's own source: a regex on the raw newline bytes
-that split the metadata key. I fired the operator's actual proof-of-concept against a real
-Gotenberg instance in a lab and captured the wire traffic, and the rule I would have shipped
-does not match a single request. The metadata field travels as JSON, so the injected newline
-never reaches the network as a raw newline byte. It reaches the wire as the two-byte escape
-sequence backslash-then-`n`, and Gotenberg only converts it back to a real newline after its own
-server has already parsed it, which is after any network sensor has already seen and passed
-the packet. Read the source, write the obvious rule, ship a detection that parses cleanly and
-never once fires: that is the trap, and it only showed itself once I stopped reading and started
-capturing.
+Then the finding that matters most for anyone defending against this exact CVE. The obvious
+detection signature for this injection, a regex on the raw newline bytes that split the metadata
+key, does not fire on a single real request. The metadata field travels as JSON, so the injected
+newline never reaches the network as a raw newline byte. It reaches the wire as the two-byte
+escape sequence backslash-then-`n`, and Gotenberg only converts it back to a real newline after
+its own server has already parsed it, which is after any network sensor has already seen and
+passed the packet. Anyone who writes a rule for this CVE straight from the advisory will build
+one that parses cleanly, loads without error, and never once matches. Section 3 gives the rule
+that actually works, and warns why the escaped bytes must never be "corrected" back to a literal
+newline.
 
 This campaign is also not the operator's main business. The exploit chain and the
 cryptominer are the smallest, most fully automated line inside a larger criminal enterprise that
@@ -92,8 +92,8 @@ If your organization ran an internet-facing Gotenberg instance inside the affect
 during the campaign window, the operator gained:
 
 - **Unauthenticated remote code execution** through the metadata-write endpoint, with no
-  authentication and no user interaction required (DEFINITE, exploit chain reproduced against a
-  lab instance and measured against captured traffic).
+  authentication and no user interaction required (DEFINITE, the exploit chain reproduces cleanly
+  and is measured against captured traffic).
 - **A cryptominer install**, in one of two modes: an ephemeral drop that a reboot clears, or a
   persistent root-owned systemd service that does not (DEFINITE, both variants recovered from the
   operator's own staged payload).
@@ -136,9 +136,9 @@ DEFINITE conclusion rather than a risk to model.
 </table>
 
 > This assessment rests on the operator's own recovered scripts and configuration files, a
-> reproduction of the exploit chain against a lab Gotenberg instance with packet capture, and
-> passive infrastructure enrichment. Confidence levels are stated throughout to separate what was
-> directly observed from what I am inferring.
+> reproduction of the exploit chain verified against captured traffic, and passive infrastructure
+> enrichment. Confidence levels are stated throughout to separate what was directly observed from
+> what I am inferring.
 
 > The investigation that produced this report is closed and the disclosure round to affected
 > providers is complete. Two things remain genuinely open at publication: whether the persistent
@@ -254,44 +254,33 @@ two axes separate: the vulnerability-research side of this operation is copied, 
 public floor. What is not copied is everything built around it, which is the subject of the rest
 of this report.
 
-### The detection anchor I would have shipped, and why it never fires
+### Why the obvious detection signature never fires
 
-Reading the operator's own scripts, the obvious detection signature is a regex on the raw
-injection bytes: `\n-if\n[^\n]*system\s*\(`. I built exactly this rule from source. Then, rather
-than ship it, I stood up a real Gotenberg 8.20.0 instance in a lab, fired the operator's own
-proof-of-concept against it, and captured the wire traffic to check the rule against reality.
+The obvious detection signature, built straight from the operator's own scripts, is a regex on
+the raw injection bytes: `\n-if\n[^\n]*system\s*\(`. Against real traffic, it does not match a
+single request.
 
-It does not match a single request. The reason is structural rather than a typo in the regex.
+The reason is structural rather than a typo in the regex.
 The `metadata` field travels as a JSON string, so before it ever leaves the client, JSON encoding
 escapes the embedded newline to the two-byte ASCII sequence backslash and `n` (hex `5c 6e`).
 Gotenberg's server only converts that escape sequence back into a real newline character *after*
 its own HTTP layer has already parsed the request body, which is after any network sensor sitting
 in front of it has already seen and passed the packet unmodified. A rule written against a literal
 `0x0A` newline byte, whether as a raw Suricata `content` match or a PCRE `\n`, will parse cleanly,
-load without error, and never once fire on real traffic. I confirmed this against a captured pcap
-using both natural readings of the regex, and both returned zero matches on the operator's own
-real request.
+load without error, and never once fire on real traffic. Both natural readings of the regex return
+zero matches against the operator's own real request, measured directly against captured traffic
+rather than inferred from the source alone.
 
 <details markdown="1" class="hl-teardown">
-<summary>The controls that proved it, including one that initially looked like it failed for the wrong reason</summary>
+<summary>The controls that proved it</summary>
 
-I fired two controls before trusting either the negative on the naive rule or the positive on the
-corrected one.
-
-Six legitimate metadata-write requests should never match, and none of them did. I sent a single-key
-write, a multi-key write, a value containing a literal embedded newline, a key containing the word
-"system" with no `-if` shape at all, and two fields exercising unicode and heavy punctuation. None
-matched the corrected anchor below. One of the six, a metadata *value* carrying embedded newlines,
-triggered an unrelated HTTP 500 from Gotenberg's own ExifTool wrapper. That failure is real and
-reproducible, but it carries neither `-if` nor `system(`, so it is not a detection false positive,
-just a separate, unrelated bug in how Gotenberg handles that specific input shape.
-
-The pcap initially appeared to contain no matching traffic. That was an artifact of how the
-capture was parsed rather than a real absence. After correcting the parsing, both the baseline and
-injected requests were present. Trusting the empty result would have meant reporting "no traffic
-captured" as if it were a finding, which is exactly the kind of empty result that gets mistaken for
-an absence rather than a broken assumption. I am recording the mistake because it is the more
-instructive of the two controls, not because it reflects well on the first attempt.
+Six legitimate metadata-write requests should never match this signature, and none of them did: a
+single-key write, a multi-key write, a value containing a literal embedded newline, a key
+containing the word "system" with no `-if` shape at all, and two fields exercising unicode and
+heavy punctuation. One of the six, a metadata *value* carrying embedded newlines, triggers an
+unrelated HTTP 500 from Gotenberg's own ExifTool wrapper. That failure is real and reproducible,
+but it carries neither `-if` nor `system(`, so it is a separate, unrelated bug in how Gotenberg
+handles that specific input shape, not a detection false positive.
 
 </details>
 
@@ -302,11 +291,10 @@ content:"|5c 6e 2d 69 66 5c 6e 73 79 73 74 65 6d 28|"
 ```
 
 This is the literal hex-escaped form of `\n-if\nsystem(`, matched against the HTTP request body on
-POSTs to `/forms/pdfengines/metadata/write`. It survives every transport variant I could reproduce
-in the lab: a different sleep duration, and the base64-transported deploy shape the operator uses
-for the actual miner drop. The three-transport retry ladder's exact command shape broke my own SSH
-tooling across three hops before I could capture it cleanly, so that specific variant is not
-byte-confirmed, though every script that builds this key produces the same invariant
+POSTs to `/forms/pdfengines/metadata/write`. It survives every transport variant that could be
+reproduced: a different sleep duration, and the base64-transported deploy shape the operator uses
+for the actual miner drop. The three-transport retry ladder's exact command shape is not
+byte-confirmed on the wire, though every script that builds this key produces the same invariant
 `\n-if\nsystem(` prefix regardless of what the command inside it does, so I expect the anchor holds
 there too (MODERATE on that one variant specifically, HIGH on the anchor generally).
 
@@ -328,13 +316,11 @@ as valid JSON, so content-based detection is not possible from Gotenberg's own l
 requires visibility at the network or reverse-proxy layer, wherever the raw request body is
 actually captured.
 
-I want to be direct about why this finding changes how I think about the rest of this workflow,
-not just this one rule. A signature derived by reading source code and never checked against real
-traffic looks finished. It passed every syntax validator I ran against it. The only thing that
-caught the defect was firing the actual exploit and capturing the actual bytes, which is a more
-expensive step than reading code, and it is the step I would have skipped if this campaign had
-looked routine. It did not, and I did not skip it, and that is the only reason this report is not
-shipping a rule that would have looked correct and done nothing.
+A signature derived by reading source code, and never checked against real traffic, looks
+finished. It parses cleanly and passes every syntax check. Only a test against real captured
+bytes catches that it never fires. The only version of this signature worth deploying is the one
+measured in this section against actual wire traffic, not one built from the advisory or the
+operator's own scripts alone.
 
 ---
 
@@ -1465,17 +1451,7 @@ considered and deliberately cut, with the reasoning recorded there: a writabilit
 ubiquitous to carry signal, a payload-fetch pair whose only anchors are atomic indicators already in
 the feed, and a watchdog script seen on a single host whose behaviour was never captured.
 
-### Appendix C: Analysis Methodology
-
-The exploitation chain and the detection-anchor failure in Section 3 were confirmed by reproducing
-the operator's own proof-of-concept against a lab instance of the vulnerable software and
-capturing the resulting network traffic; every other finding in this report was established through
-direct recovery and reading of the operator's own scripts, configuration files, and logs, plus
-passive third-party enrichment for the infrastructure section. Where a finding rests on a
-third-party service's own internal data rather than something independently reproduced, Section 7
-says so explicitly rather than presenting it as equally strong.
-
-### Appendix D: Glossary
+### Appendix C: Glossary
 
 | Term | Definition |
 |---|---|
