@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-16T06:01:18Z
+generated_at: 2026-09-16T08:02:28Z
 window_days: 30
 counts:
-  total: 535
-  research: 179
+  total: 536
+  research: 180
   news: 356
 unclassified_sources:
   - "The DFIR Report"
@@ -28,7 +28,7 @@ topics:
     count: 27
     color: 5
   - label: "data breaches"
-    count: 25
+    count: 24
     color: 6
   - label: "artificial intelligence"
     count: 23
@@ -147,7 +147,6 @@ label_colors:
   "aviation sector": 9
   "awareness training": 1
   "aws cloudtrail": 6
-  "azure": 1
   "azure infrastructure": 4
   "azure table storage": 2
   "azure tokens": 3
@@ -239,7 +238,6 @@ label_colors:
   "cloud": 7
   "cloud & application security": 1
   "cloud cybersecurity research": 3
-  "cloud security": 9
   "cloudflare": 11
   "cloudflare captcha": 5
   "cloudflare tunnels": 6
@@ -432,6 +430,7 @@ label_colors:
   "software": 5
   "spring": 5
   "surfshark": 11
+  "threat hunting & intel": 9
   "threat intelligence": 9
   "threat source newsletter": 6
   "threat spotlight": 2
@@ -441,6 +440,12 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
 items:
+  - title: "Google fixes actively exploited Android zero-day on Pixel devices"
+    url: "https://www.bleepingcomputer.com/news/security/google-fixes-actively-exploited-android-zero-day-on-pixel-devices/"
+    source: "BleepingComputer"
+    date: 2026-09-16T07:00:19Z
+    kind: news
+    labels: ["google"]
   - title: "Acronis warns of actively exploited flaw in its cPanel backup plugin"
     url: "https://www.bleepingcomputer.com/news/security/acronis-warns-of-actively-exploited-flaw-in-its-cpanel-backup-plugin/"
     source: "BleepingComputer"
@@ -555,6 +560,12 @@ items:
     date: 2026-09-15T05:18:51Z
     kind: news
     labels: ["cisco", "email security", "exploited", "secure email gateway", "vulnerabilities", "zero-day"]
+  - title: "PhantomRaven: An LLM-Generated Information Stealer Developed for Bug Bounty Hunting"
+    url: "https://www.crowdstrike.com/en-us/blog/phantomraven-llm-generated-information-stealer-for-bug-bounty-hunting/"
+    source: "Crowdstrike"
+    date: 2026-09-15T05:00:00Z
+    kind: research
+    labels: ["threat hunting & intel"]
   - title: "Thai Broadband Provider Targeted via FortiGate SSL-VPN and MeshCentral Persistence"
     url: "https://hunt.io/blog/thai-broadband-fortigate-sslvpn-meshcentral-intrusion"
     source: "AlienVault"
@@ -3645,9 +3656,3 @@ items:
     date: 2026-08-17T08:13:07Z
     kind: news
     labels: ["exploited", "sap", "vulnerabilities"]
-  - title: "Fortune 500 Companies Hit in Azure Data Theft Campaign"
-    url: "https://www.securityweek.com/fortune-500-companies-hit-in-azure-data-theft-campaign/"
-    source: "SecurityWeek"
-    date: 2026-08-17T06:51:08Z
-    kind: news
-    labels: ["azure", "cloud security", "data breaches", "data leak", "data theft", "infostealer"]
