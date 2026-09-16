@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-16T18:02:29Z
+generated_at: 2026-09-16T20:00:18Z
 window_days: 30
 counts:
-  total: 546
+  total: 547
   research: 186
-  news: 360
+  news: 361
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -16,12 +16,12 @@ topics:
     count: 78
     color: 1
   - label: "cybercrime"
-    count: 64
+    count: 65
     color: 2
-  - label: "exploited"
-    count: 31
-    color: 3
   - label: "government"
+    count: 33
+    color: 3
+  - label: "exploited"
     count: 31
     color: 4
   - label: "malware"
@@ -327,7 +327,7 @@ label_colors:
   "espionage": 11
   "eu": 12
   "exploit": 9
-  "exploited": 3
+  "exploited": 4
   "exposure management": 4
   "extortion": 12
   "extortionware": 11
@@ -355,7 +355,7 @@ label_colors:
   "google cloud": 8
   "google infrastructure abuse": 8
   "google tag manager abuse": 4
-  "government": 4
+  "government": 3
   "gta6": 6
   "hacker": 8
   "hacker conversations": 8
@@ -454,6 +454,24 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
 items:
+  - title: "Malware bypasses browser checks to force install Chrome, Edge extensions"
+    url: "https://www.bleepingcomputer.com/news/security/malware-bypasses-browser-checks-to-force-install-chrome-edge-extensions/"
+    source: "BleepingComputer"
+    date: 2026-09-16T18:50:53Z
+    kind: news
+    labels: []
+  - title: "Coast Guard, FBI boarded tanker after attack by ‘foreign cyber actors’"
+    url: "https://therecord.media/oil-tanker-cyberattack-coast-guard-fbi"
+    source: "Recorded Future"
+    date: 2026-09-16T18:46:00Z
+    kind: news
+    labels: ["government", "industry"]
+  - title: "House passes bill to equip local law enforcement with scam-fighting tools"
+    url: "https://therecord.media/house-passes-bill-to-equip-local-law-enforcement-scams"
+    source: "Recorded Future"
+    date: 2026-09-16T18:28:00Z
+    kind: news
+    labels: ["cybercrime", "government"]
   - title: "Spain's data agency gets first report of AI-powered data breach"
     url: "https://www.bleepingcomputer.com/news/security/spains-data-agency-gets-first-report-of-ai-powered-data-breach/"
     source: "BleepingComputer"
@@ -3718,15 +3736,3 @@ items:
     date: 2026-08-17T20:05:00Z
     kind: news
     labels: ["cybercrime"]
-  - title: "Hacker claims 3.6 million Azure account records stolen from major companies"
-    url: "https://www.bleepingcomputer.com/news/security/hacker-claims-36-million-azure-account-records-stolen-from-major-companies/"
-    source: "BleepingComputer"
-    date: 2026-08-17T19:35:01Z
-    kind: news
-    labels: []
-  - title: "Pokémon Center data breach exposes customer info, cancels some orders"
-    url: "https://www.bleepingcomputer.com/news/security/pokemon-center-data-breach-exposes-customer-info-cancels-some-orders/"
-    source: "BleepingComputer"
-    date: 2026-08-17T19:12:39Z
-    kind: news
-    labels: []
