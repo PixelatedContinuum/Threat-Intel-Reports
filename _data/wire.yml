@@ -3,35 +3,35 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-16T12:02:28Z
+generated_at: 2026-09-16T14:02:28Z
 window_days: 30
 counts:
-  total: 539
-  research: 183
-  news: 356
+  total: 545
+  research: 188
+  news: 357
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 77
+    count: 78
     color: 1
   - label: "cybercrime"
-    count: 63
+    count: 64
     color: 2
   - label: "exploited"
-    count: 30
+    count: 31
     color: 3
   - label: "government"
-    count: 29
+    count: 30
     color: 4
   - label: "malware"
-    count: 28
+    count: 29
     color: 5
   - label: "data breaches"
-    count: 24
+    count: 23
     color: 6
   - label: "artificial intelligence"
-    count: 22
+    count: 21
     color: 7
   - label: "credential theft"
     count: 17
@@ -60,6 +60,7 @@ label_colors:
   "account takeover": 2
   "account-enumeration": 7
   "acronis": 1
+  "active directory": 5
   "active directory compromise": 7
   "active directory reconnaissance": 1
   "adapthealth": 2
@@ -82,7 +83,6 @@ label_colors:
   "ai infrastructure": 11
   "ai infrastructure targeting": 6
   "ai malware": 9
-  "ai testing": 12
   "ai vishing": 6
   "ai voice phishing": 4
   "ai-assisted intrusions": 3
@@ -120,6 +120,7 @@ label_colors:
   "applescript": 5
   "application security": 6
   "apt": 5
+  "apt-q-95": 4
   "apt28": 3
   "arktunnel": 6
   "arm": 10
@@ -159,9 +160,11 @@ label_colors:
   "badbox": 10
   "badiis": 8
   "bait-and-switch": 5
+  "bambootoken": 7
   "bandook": 10
   "banking software": 7
   "banking trojan": 4
+  "beacon": 6
   "behavior-based-detection": 12
   "beijing institute of technology": 12
   "berlin": 6
@@ -193,8 +196,11 @@ label_colors:
   "browser-in-the-browser": 7
   "build path attribution": 4
   "build-time execution": 10
+  "bulletproof hosting": 12
+  "business email compromise": 8
   "byovd": 12
   "c2": 9
+  "c2 framework": 5
   "c2 infrastructure": 12
   "c2looper": 2
   "calendar": 8
@@ -203,6 +209,7 @@ label_colors:
   "canada revenue agency": 3
   "card-skimming": 8
   "carecloud": 10
+  "casino domains": 4
   "castleloader": 11
   "castlerat": 9
   "centerpoint energy": 7
@@ -218,6 +225,7 @@ label_colors:
   "china-nexus": 11
   "chinese threat cluster": 7
   "chinese-speaking operator": 4
+  "chosen brick": 7
   "chrome": 12
   "chrome exploitation": 6
   "chrome extension": 7
@@ -303,7 +311,6 @@ label_colors:
   "desktop capture": 2
   "detection engineering": 12
   "device code phishing": 5
-  "dgfip": 12
   "diplomatic targeting": 1
   "disrupted": 8
   "dll sideloading": 11
@@ -319,6 +326,7 @@ label_colors:
   "endpoint security": 11
   "endpoint security & xdr": 11
   "entra id": 5
+  "espionage": 11
   "exploit": 9
   "exploited": 3
   "exposure management": 4
@@ -339,6 +347,7 @@ label_colors:
   "gaming": 5
   "garage2global": 10
   "gentlemen": 1
+  "ghostcode": 6
   "gigabud": 9
   "github actions": 6
   "github-actions": 9
@@ -367,6 +376,7 @@ label_colors:
   "industry": 8
   "inside google cloud": 2
   "insights": 5
+  "iocontrol": 7
   "ios": 11
   "isolated-vm": 5
   "ivanti": 7
@@ -445,6 +455,42 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
 items:
+  - title: "Pixel Modem Zero-Day Exploited in Targeted Attacks"
+    url: "https://www.securityweek.com/pixel-modem-zero-day-exploited-in-targeted-attacks/"
+    source: "SecurityWeek"
+    date: 2026-09-16T13:10:54Z
+    kind: news
+    labels: ["android", "exploited", "mobile & wireless", "pixel", "vulnerabilities", "zero-day"]
+  - title: "GhostCode: Dissecting a Novel Device Code Phishing Kit"
+    url: "https://otx.alienvault.com/pulse/6aaa90c15b4a1ac8bce6ff83"
+    source: "AlienVault"
+    date: 2026-09-16T12:51:13Z
+    kind: research
+    labels: ["business email compromise", "ghostcode", "phishing kit", "residential proxy"]
+  - title: "Ukraine moves to crack down on scam call centers after corruption scandal"
+    url: "https://therecord.media/ukraine-call-center-scam-crackdown"
+    source: "Recorded Future"
+    date: 2026-09-16T12:45:00Z
+    kind: news
+    labels: ["cybercrime", "government"]
+  - title: "NightEagle targets Russian companies"
+    url: "https://otx.alienvault.com/pulse/6aaa8c12baf8c0157f30d354"
+    source: "AlienVault"
+    date: 2026-09-16T12:31:14Z
+    kind: research
+    labels: ["active directory", "apt-q-95", "bluekeep", "ghostcontainer", "microsoft exchange", "nighteagle", "vpn compromise"]
+  - title: "How Money Laundering, Scams, and Espionage Hide in a Web Full of Casino Garbage"
+    url: "https://www.infoblox.com/blog/threat-intelligence/how-money-laundering-scams-and-espionage-hide-in-a-web-full-of-casino-garbage"
+    source: "AlienVault"
+    date: 2026-09-16T12:31:13Z
+    kind: research
+    labels: ["bulletproof hosting", "casino domains", "illegal gambling", "money laundering", "peckbirdy", "scambling"]
+  - title: "US, UK, Dutch Agencies Expose Iranian ‘Chosen Brick’ Surveillance Malware"
+    url: "https://www.securityweek.com/us-uk-dutch-agencies-expose-iranian-chosen-brick-surveillance-malware/"
+    source: "SecurityWeek"
+    date: 2026-09-16T12:00:14Z
+    kind: news
+    labels: ["chosen brick", "espionage", "government", "iran", "malware", "spyware", "surveillance"]
   - title: "Unauthenticated RCE Flaws Could Expose 200,000+ WordPress Sites to Takeover"
     url: "https://www.securityweek.com/unauthenticated-rce-flaws-could-expose-200000-wordpress-sites-to-takeover/"
     source: "SecurityWeek"
@@ -487,6 +533,12 @@ items:
     date: 2026-09-16T09:52:31Z
     kind: news
     labels: ["acronis", "cpanel", "exploited", "vulnerabilities"]
+  - title: "The banana stand: brokering and managing infections across Asia using MQTT"
+    url: "https://www.lumen.com/blog/en-us/the-banana-stand-brokering-and-managing-infections-across-asia-using-mqtt"
+    source: "AlienVault"
+    date: 2026-09-16T09:45:38Z
+    kind: research
+    labels: ["bambootoken", "iocontrol", "korplug", "mqtt", "plugx", "sideloading", "supply chain", "tendyron onkey", "wailingcrab"]
   - title: "Enterprises Warned of Attacks Exploiting WSO2 Vulnerability"
     url: "https://www.securityweek.com/enterprises-warned-of-attacks-exploiting-wso2-vulnerability/"
     source: "SecurityWeek"
@@ -499,6 +551,12 @@ items:
     date: 2026-09-16T08:06:33Z
     kind: news
     labels: ["cspu", "oracle", "patches", "vulnerabilities"]
+  - title: "PIVOTPIPE: A New .NET-based Unofficial Beacon Payload"
+    url: "https://sect.iij.ad.jp/blog/2026/09/pivotpipe/"
+    source: "AlienVault"
+    date: 2026-09-16T07:16:35Z
+    kind: research
+    labels: ["beacon", "c2 framework", "cobalt strike", "edr evasion", "pivotpipe"]
   - title: "Mythic C2 Activity at Internet Scale"
     url: "https://otx.alienvault.com/pulse/6aaa401dbc68ca971dbb0508"
     source: "AlienVault"
@@ -3667,15 +3725,3 @@ items:
     date: 2026-08-17T15:03:53Z
     kind: research
     labels: ["china-nexus", "cloudflare workers", "go backdoor", "myanmar diplomats", "operation quicsilver", "quic protocol", "quicagent", "vhd file"]
-  - title: "680,000 Impacted by French Tax Authority Data Breach"
-    url: "https://www.securityweek.com/680000-impacted-by-french-tax-authority-data-breach/"
-    source: "SecurityWeek"
-    date: 2026-08-17T13:53:55Z
-    kind: news
-    labels: ["data breaches", "dgfip", "france", "government"]
-  - title: "Irregular Details How a Naming Error Let AI Models Attack a Real Company"
-    url: "https://www.securityweek.com/irregular-details-how-a-naming-error-let-ai-models-attack-a-real-company/"
-    source: "SecurityWeek"
-    date: 2026-08-17T12:11:00Z
-    kind: news
-    labels: ["artificial intelligence", "ai testing", "anthropic", "irregular"]
