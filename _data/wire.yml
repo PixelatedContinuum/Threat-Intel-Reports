@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-16T20:00:18Z
+generated_at: 2026-09-16T22:02:38Z
 window_days: 30
 counts:
-  total: 547
-  research: 186
+  total: 548
+  research: 187
   news: 361
 unclassified_sources:
   - "The DFIR Report"
@@ -16,7 +16,7 @@ topics:
     count: 78
     color: 1
   - label: "cybercrime"
-    count: 65
+    count: 64
     color: 2
   - label: "government"
     count: 33
@@ -454,6 +454,18 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
 items:
+  - title: "Iranian hackers use CHOSEN BRICK Windows malware to spy on targets"
+    url: "https://www.bleepingcomputer.com/news/security/iranian-hackers-use-chosen-brick-windows-malware-to-spy-on-targets/"
+    source: "BleepingComputer"
+    date: 2026-09-16T20:24:55Z
+    kind: news
+    labels: []
+  - title: "The Apple Security Update Review for September 2026"
+    url: "https://www.thezdi.com/blog/2026/9/16/the-apple-security-update-review-for-september-2026"
+    source: "Zero Day Initiative"
+    date: 2026-09-16T19:58:14Z
+    kind: research
+    labels: ["blog post"]
   - title: "Malware bypasses browser checks to force install Chrome, Edge extensions"
     url: "https://www.bleepingcomputer.com/news/security/malware-bypasses-browser-checks-to-force-install-chrome-edge-extensions/"
     source: "BleepingComputer"
@@ -3728,11 +3740,5 @@ items:
     url: "https://therecord.media/ukrainian-software-developer-court-switzerland"
     source: "Recorded Future"
     date: 2026-08-17T23:00:00Z
-    kind: news
-    labels: ["cybercrime"]
-  - title: "Nearly 750k had financial info, SSNs leaked in South Carolina loan company breach"
-    url: "https://therecord.media/financial-info-leak-debt-consolidator"
-    source: "Recorded Future"
-    date: 2026-08-17T20:05:00Z
     kind: news
     labels: ["cybercrime"]
