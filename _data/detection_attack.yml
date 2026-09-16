@@ -1363,6 +1363,16 @@
       name: "Compute Hijacking"
       rules: "GOCLOUD_Windows_Deploy_Worm_Lingkai (YARA, Detection); GOCLOUD_Windows_Miner_WinJenkins (YARA, Detection); GOCLOUD_Linux_Miner_v7 (YARA, Detection); Process Executed From X11-Socket-Lookalike Temp Directory (SIGMA, Detection); Systemd Or Cron Executing Binary From Tmp (SIGMA, Hunting)"
       count: 5
+"gotenberg-rce-cryptomining-107-175-69-137-detections":
+  total: 1
+  tactics: 1
+  unresolved: []
+  rows:
+    - tactic: "Initial Access"
+      id: "T1190"
+      name: "Exploit Public-Facing Application"
+      rules: "Gotenberg ExifTool Metadata Key CVE-2026-42589 Injection Attempt (SIGMA, Detection); Gotenberg Metadata-Write Endpoint Anomalous Latency (Possible CVE-2026-42589) (SIGMA, Hunting); Gotenberg ExifTool Metadata Key Injection over HTTP (CVE-2026-42589) (SURICATA, Detection)"
+      count: 3
 "inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections":
   total: 6
   tactics: 4

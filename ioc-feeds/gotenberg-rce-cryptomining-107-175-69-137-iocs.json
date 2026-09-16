@@ -1,0 +1,279 @@
+{
+  "metadata": {
+    "campaign_slug": "gotenberg-rce-cryptomining-107-175-69-137",
+    "campaign_title": "Gotenberg CVE-2026-42589 Mass Exploitation and Cryptomining, 107.175.69.137",
+    "uta_designation": null,
+    "report_date": "2026-09-16",
+    "first_seen": "2026-07-24",
+    "last_active_evidence": "2026-09-15",
+    "analyst": "The Hunters Ledger",
+    "confidence": "HIGH",
+    "tlp": "CLEAR",
+    "primary_family": "XMRig",
+    "threat_level": "HIGH",
+    "license": "CC BY 4.0",
+    "reference": "https://the-hunters-ledger.com/reports/gotenberg-rce-cryptomining-107-175-69-137/",
+    "cve": "CVE-2026-42589",
+    "cve_note": "Metadata KEY injection reaching ExifTool's -if, which evaluates Perl. Distinct from CVE-2026-40281, which is metadata VALUE injection reaching ExifTool pseudo-tags. Both advisories fetched and retained as primary sources 2026-09-16; this campaign is 42589."
+  },
+  "network_indicators": {
+    "ips": [
+      {
+        "value": "107.175.69.137",
+        "type": "ipv4",
+        "confidence": "DEFINITE",
+        "context": "The operator's own host. Served the open directory on :8080, the Gotenberg toolkit and miner payload on :19999, the out-of-band callback listener on :18888, and an unauthenticated reverse-shell collector on :13337. AS36352, registered as AS-COLOCROSSING / HostPapa; re-verified live 2026-09-16.",
+        "action": "BLOCK",
+        "false_positive_risk": "low"
+      }
+    ],
+    "ports_on_operator_host": [
+      {
+        "value": "8080",
+        "type": "port",
+        "confidence": "DEFINITE",
+        "context": "Served open directory holding roughly 34 product-specific attack workspaces. Last seen 2026-09-09.",
+        "action": "MONITOR",
+        "false_positive_risk": "low"
+      },
+      {
+        "value": "19999",
+        "type": "port",
+        "confidence": "DEFINITE",
+        "context": "Gotenberg campaign toolkit and miner payload staging.",
+        "action": "MONITOR",
+        "false_positive_risk": "low"
+      },
+      {
+        "value": "18888",
+        "type": "port",
+        "confidence": "DEFINITE",
+        "context": "Out-of-band callback listener. Victim callbacks arrived here tagged with the victim's own hostname and uid.",
+        "action": "MONITOR",
+        "false_positive_risk": "low"
+      },
+      {
+        "value": "13337",
+        "type": "port",
+        "confidence": "DEFINITE",
+        "context": "Reverse-shell collector, unauthenticated and internet-reachable throughout the campaign.",
+        "action": "MONITOR",
+        "false_positive_risk": "low"
+      }
+    ],
+    "crypto_wallets": [
+      {
+        "value": "456UWvWXto1PacXMu689Mghh2QWQg2amvapezv3HWucT2KiKz86VQYJZ9cHGha6NbuTyqrrRDrJKSPB2eS7BNwkhSuw5QQU",
+        "type": "monero_address",
+        "confidence": "DEFINITE",
+        "context": "Identical across both dropped miner configs. THIS is the operator-specific pivot, and the only genuinely operator-unique identifier in the case. As of 2026-09-15 it returns a controlled zero across VirusTotal and Hunt.io, so it is clean but unfollowed elsewhere.",
+        "action": "MONITOR",
+        "false_positive_risk": "low",
+        "operator_specific": true,
+        "note": "THIS is the operator-specific pivot and the only genuinely operator-unique identifier in the case. The miner binary hash is NOT: it is a commodity indicator shared across 107 unrelated sources."
+      }
+    ]
+  },
+  "host_indicators": {
+    "filesystem_paths": [
+      {
+        "value": "/tmp/polkitd/",
+        "type": "path",
+        "confidence": "DEFINITE",
+        "context": "Ephemeral miner drop, the only mode the observed campaign's deploy script installs. Cleared by reboot. Config sets donate-level 1.",
+        "action": "HUNT",
+        "false_positive_risk": "low"
+      },
+      {
+        "value": "/usr/bin/polkitd.d/",
+        "type": "path",
+        "confidence": "DEFINITE",
+        "context": "PERSISTENT miner install directory. Survives reboot. Config sets donate-level 0. Nothing in the observed campaign installs this mode, and nothing rules it out per host: the split is NOT CHECKED.",
+        "action": "HUNT",
+        "false_positive_risk": "low"
+      },
+      {
+        "value": "/home/gotenberg/.local/share/watchdog.sh",
+        "type": "path",
+        "confidence": "DEFINITE",
+        "context": "Watchdog script OBSERVED on a single victim host; remove during remediation. Observed once, so treat prevalence as unknown.",
+        "action": "HUNT",
+        "false_positive_risk": "low"
+      }
+    ],
+    "persistence": [
+      {
+        "value": "systemd-polkitd.service",
+        "type": "systemd_unit",
+        "confidence": "DEFINITE",
+        "context": "Root unit, Restart=always, RestartSec=10s, ExecStart pivots into /usr/bin/polkitd.d and runs 'polkitd'. This is why 'reboot and it is gone' is wrong advice for the persistent mode.",
+        "action": "HUNT",
+        "false_positive_risk": "low"
+      },
+      {
+        "value": "systemd-vconsole-setup.service",
+        "type": "systemd_unit",
+        "confidence": "DEFINITE",
+        "context": "Second unit shipped in the same miner package.",
+        "action": "HUNT",
+        "false_positive_risk": "medium",
+        "note": "A legitimate systemd unit of this exact name exists. Verify the ExecStart target before acting."
+      }
+    ],
+    "process_masquerade": [
+      {
+        "value": "polkitd",
+        "type": "process_name",
+        "confidence": "DEFINITE",
+        "context": "The miner masquerades as the legitimate polkitd daemon. NOTE: the operator's own kill list also targets a process named polkitd, so the presence of a polkitd process is not by itself evidence of THIS operator's miner.",
+        "action": "HUNT",
+        "false_positive_risk": "high"
+      },
+      {
+        "value": "systemd-logind",
+        "type": "process_name",
+        "confidence": "INSUFFICIENT",
+        "context": "A second masquerade name VirusTotal records for the same binary hash. Zero observed ties to this host, wallet or corpus; leaning toward a different actor. Watchlist only.",
+        "action": "HUNT",
+        "false_positive_risk": "high"
+      }
+    ],
+    "miner_config": [
+      {
+        "value": "worker-01",
+        "type": "xmrig_rig_id",
+        "confidence": "DEFINITE",
+        "context": "The same rig-id on every deployment, so the operator's own pool dashboard cannot tell its infected hosts apart. Low-fidelity on its own.",
+        "action": "HUNT",
+        "false_positive_risk": "high"
+      }
+    ]
+  },
+  "behavioral_indicators": [
+    {
+      "value": "POST /forms/pdfengines/metadata/write with a JSON metadata KEY containing the wire-escaped sequence \\n-if\\nsystem(",
+      "type": "http_request",
+      "confidence": "DEFINITE",
+      "context": "The exploitation signature, MEASURED against captured traffic. On the wire the newlines are JSON-escaped to the two bytes 0x5C 0x6E; the server un-escapes them only after any sensor has seen the packet. A rule keyed on a raw 0x0A newline parses cleanly and NEVER FIRES.",
+      "action": "ALERT",
+      "false_positive_risk": "low"
+    },
+    {
+      "value": "OOB callback path scheme /{PREFIX}{index}_{hostname}_{uid}",
+      "type": "http_request",
+      "confidence": "DEFINITE",
+      "context": "Prefixes observed: T (initial curl), W/C/N (retry transports wget/curl/nc), PPROBE (recon), D (deploy). The per-host tag is what made 198 simultaneous callbacks individually attributable.",
+      "action": "ALERT",
+      "false_positive_risk": "low"
+    },
+    {
+      "value": "Latency anomaly on /forms/pdfengines/metadata/write",
+      "type": "timing",
+      "confidence": "HIGH",
+      "context": "Baseline is roughly 250-650ms; a confirmed sleep-based injection runs multi-second. HTTP status never distinguishes the two, both return 200. This is the only signal available from Gotenberg's own log, which never records the metadata payload on a well-formed request.",
+      "action": "HUNT",
+      "false_positive_risk": "high"
+    },
+    {
+      "value": "pkill -9 -f against a named rival-miner list before install",
+      "type": "process",
+      "confidence": "DEFINITE",
+      "context": "Kill list observed: xmrig, systemd-devd, polkitd, kworker/u4, kworker/u16, khovr, kdevtmpfsi, kswapd0, libgcrypt, systemd-d. Two kills are OBSERVED in real deploy output, so at least one target was already compromised by someone else.",
+      "action": "HUNT",
+      "false_positive_risk": "medium"
+    }
+  ],
+  "file_indicators": {
+    "hashes": [
+      {
+        "value": "b20f39fc00d242e706b6c30367ad811c676e0575050a4ec2f30104b696944b49",
+        "type": "sha256",
+        "confidence": "DEFINITE",
+        "context": "Stock, unmodified XMRig 6.26.0, Alpine-compiled ELF, 8,350,992 bytes. COMMODITY INDICATOR, NOT AN ATTRIBUTION: 133 VirusTotal submissions from 107 unique sources, first seen 2026-04-01, and VirusTotal's related_threat_actors is empty (re-verified live 2026-09-16). VirusTotal's own recorded filename for it is /root/.kd/k, a different masquerade. Do NOT use this hash to tie a host or campaign to this operator.",
+        "action": "ALERT",
+        "false_positive_risk": "low",
+        "attribution_value": "NONE. Commodity indicator."
+      }
+    ]
+  },
+  "hunt_only_never_block": [
+    {
+      "value": "gulf.moneroocean.stream:10032",
+      "category": "shared mining-pool infrastructure",
+      "reason": "MoneroOcean is a public mining pool used by unrelated operators and by legitimate miners. Graded Class E shared ecosystem infrastructure, INSUFFICIENT alone for attribution, and corroborated in unrelated published campaigns back to 2024. Hunt for it; do not blocklist it as operator infrastructure."
+    },
+    {
+      "value": "ca.moneroocean.stream:10032",
+      "category": "shared mining-pool infrastructure",
+      "reason": "Same as above. The pool endpoints live only in the dropped config, not in the binary."
+    },
+    {
+      "value": "vibecoders.vip",
+      "category": "shared cryptojacking-kit drop layer",
+      "reason": "Carries this campaign's exact miner hash in its VirusTotal downloaded_files, but the serving check*.sh installer family has multiple independent unrelated submitters. Graded LOW under the Supplier Test: shared, not operator-exclusive, and shared is not the same as paid."
+    },
+    {
+      "value": "dohwawazs.pro",
+      "category": "shared cryptojacking-kit drop layer",
+      "reason": "Identical pattern to the above."
+    }
+  ],
+  "non_indicators": [
+    {
+      "value": "nanachiapproved.cfd",
+      "reason": "UNRELATED. Its only tie is to masscan, a generic scanner."
+    },
+    {
+      "value": "Cobalt Strike",
+      "reason": "FALSE POSITIVE. The PreProcess 'CS beacons found: 1' hit is a dissect.cobaltstrike match on binary data inside a Linux ELF miner, with a hollow config: empty domains and URIs, null for every scalar field, port as raw bytes. There is no Cobalt Strike in this case."
+    },
+    {
+      "value": "1.3.101.110 through 1.3.101.113",
+      "reason": "polkitd's X25519/RandomX curve constants, string-matched as IP addresses. Excluded, along with 0.0.0.0, 1.2.3.4 (a docstring example) and RFC1918 noise."
+    },
+    {
+      "value": "xmr-ru.kryptex.network:7029, 46.21.245.211:7029, and three rival wallets",
+      "reason": "A RIVAL operator's infrastructure, recovered from on-victim configs this operator dumped. Never merge into this operator's IOC set."
+    },
+    {
+      "value": "185.132.53.158:81/lol (BoatNet dropper)",
+      "reason": "A THIRD, separate operation observed on the same victim. Not this operator's infrastructure."
+    }
+  ],
+  "victim_inventory": {
+    "policy": "Victim addresses are deliberately EXCLUDED from this feed and are never published.",
+    "excluded": "The 198 RCE-confirmed victim hosts, the egress donor gateway IPs, the filename-embedded probe targets, and every address inside the target-list and results files in the :8080 corpus.",
+    "counts_only": {
+      "targets_listed": 206,
+      "targets_probed": 205,
+      "rce_confirmed": 198,
+      "distinct_confirmed_ips": 196,
+      "called_back_total": 184,
+      "called_back_observed_own_ip": 167,
+      "called_back_inferred_shared_egress": 17,
+      "never_called_back": 14,
+      "miner_install_verified_range": [
+        148,
+        151
+      ],
+      "permanently_unattributable": 28,
+      "note": "Never write 184 alone. The honest sentence names both populations: 167 confirmed from the host's own address, and a further 17 inferred through shared provider egress."
+    }
+  },
+  "credentials_withheld": {
+    "policy": "A live third-party API key recovered from the operator's own sweep tooling is held for vendor disclosure only and never appears on any published surface. It is referenced by description, never by value.",
+    "victim_credential_surface": "A measured count and shape only. Victim scope is permanently unknowable from this corpus: the bytes were fetched and hashed once during a 2026-09-09 crawl and never retained, and the directory has been closed since. Verified absent three ways, with a control."
+  },
+  "coverage": {
+    "corpus_rows": 1428,
+    "buckets": {
+      "content_held_and_triaged": 72,
+      "held_not_triaged": 0,
+      "hashed_content_not_held": 648,
+      "filename_only": 708
+    },
+    "reconciles": "72 + 0 + 648 + 708 = 1428",
+    "framing": "This was a COLLECTION failure, not a triage failure. Everything ever held was triaged; most of what the crawler saw was never held.",
+    "triage_denominator": "102 files hashed and triaged plus 3 named exceptions, against 105 unique sha256 on disk."
+  }
+}

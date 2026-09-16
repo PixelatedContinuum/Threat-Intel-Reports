@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-14T12:33:10Z",
+ "generated_at": "2026-09-16T16:33:32Z",
  "counts": {
   "indicators": 2141,
   "reports": 57,
@@ -67,7 +67,9 @@
    "webserver-compromise-kit-91-236-230-250-iocs.json",
    "webshells-to-the-cloud.json"
   ],
-  "embargoed": [],
+  "embargoed": [
+   "gotenberg-rce-cryptomining-107-175-69-137-iocs.json"
+  ],
   "unknown": [],
   "empty": []
  },

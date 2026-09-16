@@ -2484,6 +2484,34 @@ gocloud-multiservice-cryptojacking-149-28-112-221-detections:
     robustness: 2
     confidence: "MODERATE"
     attack: [T1105]
+gotenberg-rce-cryptomining-107-175-69-137-detections:
+  - name: "Gotenberg ExifTool Metadata Key CVE-2026-42589 Injection Attempt"
+    engine: sigma
+    tier: Detection
+    fence: 0
+    hash: "638dd805"
+    head: "title: Gotenberg ExifTool Metadata Key CVE-2026-"
+    robustness: 3
+    confidence: "HIGH"
+    attack: [T1190]
+  - name: "Gotenberg Metadata-Write Endpoint Anomalous Latency (Possible CVE-2026-42589)"
+    engine: sigma
+    tier: Hunting
+    fence: 1
+    hash: "f75631fb"
+    head: "title: Gotenberg Metadata-Write Endpoint Anomalo"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1190]
+  - name: "Gotenberg ExifTool Metadata Key Injection over HTTP (CVE-2026-42589)"
+    engine: suricata
+    tier: Detection
+    fence: 2
+    hash: "4105ab3f"
+    head: "# LOAD-BEARING: the bytes |5c 6e| in the content"
+    robustness: 3
+    confidence: "HIGH"
+    attack: [T1190]
 inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections:
   - name: "Inkognito INK VPN JS Bundle (Brand/API String Combination)"
     engine: yara

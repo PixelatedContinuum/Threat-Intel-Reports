@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 2150" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#cccccc"/>
+    </marker>
+    <filter id="cardShadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <rect width="1000" height="2150" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="2149" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- TITLE -->
+  <text x="500" y="62" text-anchor="middle" font-size="40" font-weight="700" fill="#ffffff">The confirmation funnel</text>
+  <text x="500" y="106" text-anchor="middle" font-size="24" fill="#f5f5f5">Every number below is the corrected value</text>
+  <text x="500" y="140" text-anchor="middle" font-size="18" fill="#cccccc">How 206 candidates narrowed to a confirmed miner install</text>
+  <line x1="60" y1="166" x2="940" y2="166" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- STEP 1 orange -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="196" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="196" width="880" height="46" rx="8" fill="#f97316"/>
+    <rect x="60" y="229" width="880" height="13" fill="#f97316"/>
+    <text x="80" y="227" font-size="17" font-weight="700" fill="#111111" letter-spacing="0.5">STEP 1</text>
+    <text x="200" y="227" font-size="23" font-weight="600" fill="#111111">206 targets listed</text>
+    <text x="80" y="282" font-size="21" fill="#ffffff">Every host in the operator's own target list, verified byte for byte</text>
+    <text x="80" y="316" font-size="18" fill="#e5e5e5">Version band: Gotenberg 8.17.0 through 8.30.1</text>
+  </g>
+  <line x1="500" y1="416" x2="500" y2="456" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- STEP 2 orange -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="462" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="462" width="880" height="46" rx="8" fill="#f97316"/>
+    <rect x="60" y="495" width="880" height="13" fill="#f97316"/>
+    <text x="80" y="493" font-size="17" font-weight="700" fill="#111111" letter-spacing="0.5">STEP 2</text>
+    <text x="200" y="493" font-size="23" font-weight="600" fill="#111111">205 probed and fingerprinted</text>
+    <text x="80" y="548" font-size="21" fill="#ffffff">One listed target was already dead at probe time</text>
+    <text x="80" y="582" font-size="18" fill="#e5e5e5">Liveness and fingerprinting ran through a local SOCKS5 proxy</text>
+  </g>
+  <line x1="500" y1="682" x2="500" y2="722" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- STEP 3 red -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="728" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="728" width="880" height="46" rx="8" fill="#dc2626"/>
+    <rect x="60" y="761" width="880" height="13" fill="#dc2626"/>
+    <text x="80" y="759" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">STEP 3</text>
+    <text x="200" y="759" font-size="23" font-weight="600" fill="#ffffff">198 RCE confirmed (96.6% of probed)</text>
+    <text x="80" y="814" font-size="21" fill="#ffffff">Timing side-channel verdict, matched against the out-of-band sweep results</text>
+    <text x="80" y="848" font-size="18" fill="#e5e5e5">196 distinct IPs; two hosts each contributed two vulnerable ports</text>
+  </g>
+  <line x1="500" y1="948" x2="500" y2="988" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- STEP 4 red, the split -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="994" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="994" width="880" height="46" rx="8" fill="#dc2626"/>
+    <rect x="60" y="1027" width="880" height="13" fill="#dc2626"/>
+    <text x="80" y="1025" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">STEP 4</text>
+    <text x="200" y="1025" font-size="23" font-weight="600" fill="#ffffff">184 called back, never a single number</text>
+    <text x="80" y="1080" font-size="21" fill="#ffffff">167 OBSERVED: callback arrived from the host's own IP address</text>
+    <text x="80" y="1114" font-size="18" fill="#e5e5e5">17 INFERRED: tag matched, but from a shared gateway or NAT address</text>
+    <text x="80" y="1148" font-size="18" fill="#fb923c" font-weight="600">Two grades of evidence: collapsing them overstates the weaker one</text>
+  </g>
+  <line x1="500" y1="1214" x2="500" y2="1254" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- STEP 5 grey -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="1260" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="1260" width="880" height="46" rx="8" fill="#6b7280"/>
+    <rect x="60" y="1293" width="880" height="13" fill="#6b7280"/>
+    <text x="80" y="1291" font-size="17" font-weight="700" fill="#cccccc" letter-spacing="0.5">STEP 5</text>
+    <text x="200" y="1291" font-size="23" font-weight="600" fill="#cccccc">14 never called back</text>
+    <text x="80" y="1346" font-size="21" fill="#ffffff">Absent under every callback channel the operator built</text>
+    <text x="80" y="1380" font-size="18" fill="#e5e5e5">Includes three retry transports: wget, curl, and nc</text>
+  </g>
+  <line x1="500" y1="1480" x2="500" y2="1520" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- STEP 6 deep red -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="1526" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="1526" width="880" height="46" rx="8" fill="#7f1d1d"/>
+    <rect x="60" y="1559" width="880" height="13" fill="#7f1d1d"/>
+    <text x="80" y="1557" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">STEP 6</text>
+    <text x="200" y="1557" font-size="23" font-weight="600" fill="#ffffff">148 to 151 miner installs verified</text>
+    <text x="80" y="1612" font-size="21" fill="#ffffff">148 is the floor, 151 the ceiling once two ambiguous hosts are credited</text>
+    <text x="80" y="1646" font-size="18" fill="#e5e5e5">A further 15-host suggestive bucket is deliberately not credited</text>
+  </g>
+  <line x1="500" y1="1746" x2="500" y2="1786" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- STEP 7 grey -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="1792" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="1792" width="880" height="46" rx="8" fill="#6b7280"/>
+    <rect x="60" y="1825" width="880" height="13" fill="#6b7280"/>
+    <text x="80" y="1823" font-size="17" font-weight="700" fill="#cccccc" letter-spacing="0.5">STEP 7</text>
+    <text x="200" y="1823" font-size="23" font-weight="600" fill="#cccccc">28 permanently unattributable</text>
+    <text x="80" y="1878" font-size="21" fill="#ffffff">14 with no callback, plus 14 more with execution but no deploy record</text>
+    <text x="80" y="1912" font-size="18" fill="#e5e5e5">The main deploy wave's target-list ordering was never preserved on disk</text>
+  </g>
+
+  <!-- FOOTER -->
+  <line x1="60" y1="2056" x2="940" y2="2056" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="2096" text-anchor="middle" font-size="15" fill="#cccccc">Full derivation and the two figures that moved during the investigation: Section 4</text>
+  <text x="500" y="2126" text-anchor="middle" font-size="14" fill="#888888">Legend: orange = scoping · red = exploitation · grey = excluded · deep red = confirmed install</text>
+</svg>

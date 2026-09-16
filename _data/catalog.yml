@@ -5,6 +5,21 @@
 # Publishing a campaign = add one entry here (no more editing four files).
 
 entries:
+  # ===== PREVIEW, NOT PUBLIC — Gotenberg CVE-2026-42589 Mass Exploitation and Cryptomining =====
+  # PREVIEW MODE, 2026-09-16. Reachable by exact URL only, withheld from every listing, the Atom
+  # feed, the home Latest block and search. Parked here rather than omitted so this campaign's state
+  # is DECLARED: an absent entry is indistinguishable from an oversight, which is why
+  # check-ioc-index.js fails a feed that has no entry at all.
+  # Uncomment this block at go-live, then drop `unlisted: true` from the report + detection front
+  # matter, refresh metrics and the Suricata feed, and surface the STIX bundle.
+  #  - title: "Gotenberg CVE-2026-42589 Mass Exploitation and Cryptomining"
+  #    date: 2026-09-16
+  #    severity: high
+  #    tags: [Cryptomining, Mass Exploitation, CVE-2026-42589, XMRig]
+  #    report_url: /reports/gotenberg-rce-cryptomining-107-175-69-137/
+  #    detection_url: /hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections
+  #    ioc_url: /ioc-feeds/gotenberg-rce-cryptomining-107-175-69-137-iocs.json
+  # ============================================================================================
   - title: "Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17"
     date: 2026-09-07
     severity: high
