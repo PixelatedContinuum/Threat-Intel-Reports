@@ -580,6 +580,47 @@ main.content {
   color: var(--hl-text-primary) !important;
 }
 
+/* --- Table flare ---------------------------------------------
+   GLOBAL: applies to .hl-post-content table across all published
+   reports, so it is deliberately restrained. Everything below is
+   additive on top of the rules just above (header treatment,
+   zebra, hover already existed and are untouched) rather than a
+   replacement, and every new colour is the same --hl-accent-blue
+   token already used site-wide, never a new hardcoded value.
+
+   Two additions, chosen from the candidates that were not already
+   covered: a header treatment, zebra striping and a monospace/
+   tinted look for indicator cells (via the site's existing
+   `.hl-post-content code` box style, which already applies inside
+   table cells) were already in place before this block. What was
+   missing was anything tying a table to the site's own "console
+   panel" identity, so:
+
+   1. A thin accent bar along the table's top edge, so a table
+      reads as a panel rather than a plain HTML grid.
+   2. A left-edge accent rail on the hovered row, matching the
+      same rail motif .hl-ptree and .hl-imodes already use, rather
+      than inventing a second visual vocabulary for the same idea.
+      Hover-only, so no table's resting appearance changes and
+      there is nothing to look wrong on a report that never gets a
+      mouseover (a printed page, a screen reader, a touch device
+      that does not hover). */
+/* NOT a border-top on the <table> itself: with border-collapse:
+   collapse, the conflict-resolution order for shared edges puts
+   cell-level borders ahead of table-level ones, and every `th`
+   below already sets its own 1px border on all four sides. A
+   table-level border-top would lose that conflict silently and
+   render as nothing. Setting it on the header cells' own top edge
+   is what actually reaches the painted pixel, and border-collapse
+   still merges the per-cell edges into one continuous line. */
+.hl-post-content thead th {
+  border-top: 2px solid var(--hl-accent-blue) !important;
+}
+
+.hl-post-content tr:hover td:first-child {
+  border-left: 3px solid var(--hl-accent-blue) !important;
+}
+
 /* --- Blockquotes -------------------------------------------- */
 /* Standard blockquotes: blue accent (callouts, quoted text) */
 .hl-post-content blockquote {
@@ -4991,12 +5032,46 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 .hl-imodes .im-quick-key { color: var(--im-ink-3); }
 .hl-imodes .im-quick-val { color: var(--im-ink); font-weight: 600; text-align: right; }
 
-.hl-imodes .im-chevron {
-  position: absolute;
-  right: 14px;
-  top: 14px;
-  width: 16px; height: 16px;
+/* --- Open/close affordance -------------------------------------
+   Words AND a chevron, together: words alone are easy to miss, a
+   chevron alone does not tell a reader there is more content
+   underneath. Real text (not an icon font), aria-hidden on the
+   whole group because <details>/<summary> already announces its
+   own expanded/collapsed state to assistive tech; this is a purely
+   visual reinforcement for sighted mouse/touch readers.
+   Deliberately NOT position:absolute in a corner: the name/badge
+   row and the quick-facts row already reach close to both edges,
+   and a floated overlay risks sitting on top of that text. This is
+   its own row, last in the summary's normal flow, right-aligned,
+   with the same top-border treatment .im-quick already uses. */
+.hl-imodes .im-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--im-line-soft);
   color: var(--im-ink-3);
+}
+.hl-imodes .im-toggle-text {
+  font-size: 0.68em;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.hl-imodes .im-toggle-text--open { display: none; }
+.hl-imodes .hl-imodes-card[open] .im-toggle-text--closed { display: none; }
+.hl-imodes .hl-imodes-card[open] .im-toggle-text--open { display: inline; }
+/* Open state also swaps the accent colour in, so the whole toggle
+   group (not just the chevron) visibly changes state. */
+.hl-imodes .hl-imodes-card[open] .im-toggle { color: var(--im-cleared-lbl); }
+.hl-imodes .hl-imodes-card[open][data-kind="persists"] .im-toggle { color: var(--im-persists-lbl); }
+
+.hl-imodes .im-chevron {
+  width: 16px; height: 16px;
+  flex: none;
   transition: transform 0.12s ease;
 }
 .hl-imodes .hl-imodes-card[open] .im-chevron { transform: rotate(90deg); }
@@ -5074,7 +5149,7 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
    A printed page cannot click a <details> open, so force every card
    open and hide the chevron that implies interactivity. */
 @media print {
-  .hl-imodes .im-chevron { display: none !important; }
+  .hl-imodes .im-toggle { display: none !important; }
   .hl-imodes .hl-imodes-card > summary { cursor: default; }
   .hl-imodes .im-detail { display: block !important; }
 }
