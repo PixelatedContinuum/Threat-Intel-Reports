@@ -1451,10 +1451,19 @@ Machine-readable indicators are maintained separately for ingestion:
 Detection rules are maintained separately:
 `hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections.md`
 
-Includes one Sigma Detection rule, one Sigma Hunting rule, and one Suricata signature. No YARA
-rule is shipped for the miner binary; the coverage gap is explained in that file rather than left
-silent, since the miner is a commodity payload that a byte-pattern rule would only ever match
-across an unrelated population, not this operator specifically.
+Includes eleven rules: four Sigma Detection rules, three Sigma Hunting rules, one Suricata
+Detection signature and three Suricata Hunting signatures. The Sigma rules cover the exploit itself
+at the ExifTool argv-split, the daemon-name-versus-location mismatch that both miner install modes
+produce, the systemd wrapper shape behind the persistent install, the rival-miner kill sweep and the
+base64-staged deploy. The Suricata rules cover the wire signature plus the operator's own callback
+lane.
+
+No YARA rule is shipped for the miner binary; the coverage gap is explained in that file rather than
+left silent, since the miner is a commodity payload that a byte-pattern rule would only ever match
+across an unrelated population, not this operator specifically. Three further candidates were
+considered and deliberately cut, with the reasoning recorded there: a writability probe too
+ubiquitous to carry signal, a payload-fetch pair whose only anchors are atomic indicators already in
+the feed, and a watchdog script seen on a single host whose behaviour was never captured.
 
 ### Appendix C: Analysis Methodology
 

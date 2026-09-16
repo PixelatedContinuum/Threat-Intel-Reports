@@ -1364,15 +1364,45 @@
       rules: "GOCLOUD_Windows_Deploy_Worm_Lingkai (YARA, Detection); GOCLOUD_Windows_Miner_WinJenkins (YARA, Detection); GOCLOUD_Linux_Miner_v7 (YARA, Detection); Process Executed From X11-Socket-Lookalike Temp Directory (SIGMA, Detection); Systemd Or Cron Executing Binary From Tmp (SIGMA, Hunting)"
       count: 5
 "gotenberg-rce-cryptomining-107-175-69-137-detections":
-  total: 1
-  tactics: 1
+  total: 7
+  tactics: 6
   unresolved: []
   rows:
     - tactic: "Initial Access"
       id: "T1190"
       name: "Exploit Public-Facing Application"
-      rules: "Gotenberg ExifTool Metadata Key CVE-2026-42589 Injection Attempt (SIGMA, Detection); Gotenberg Metadata-Write Endpoint Anomalous Latency (Possible CVE-2026-42589) (SIGMA, Hunting); Gotenberg ExifTool Metadata Key Injection over HTTP (CVE-2026-42589) (SURICATA, Detection)"
+      rules: "Gotenberg ExifTool Metadata Key CVE-2026-42589 Injection Attempt (SIGMA, Detection); ExifTool Invoked With Condition Option Executing Shell Commands (SIGMA, Detection); Gotenberg Metadata-Write Endpoint Anomalous Latency (Possible CVE-2026-42589) (SIGMA, Hunting); Gotenberg ExifTool Metadata Key Injection over HTTP (CVE-2026-42589) (SURICATA, Detection)"
+      count: 4
+    - tactic: "Execution"
+      id: "T1059.004"
+      name: "Unix Shell"
+      rules: "ExifTool Invoked With Condition Option Executing Shell Commands (SIGMA, Detection); Pkill Kill Sweep Against Rival Cryptominer Process Names (SIGMA, Hunting); Base64 Decoded Script Written to Tmp and Executed by Bash (SIGMA, Hunting)"
       count: 3
+    - tactic: "Persistence"
+      id: "T1543.002"
+      name: "Systemd Service"
+      rules: "Shell Spawned by Systemd Executes Binary After Path Export and Directory Change (SIGMA, Detection)"
+      count: 1
+    - tactic: "Stealth"
+      id: "T1036.005"
+      name: "Match Legitimate Resource Name or Location"
+      rules: "Polkitd Daemon Executed From a Non-Standard Directory (SIGMA, Detection)"
+      count: 1
+    - tactic: "Stealth"
+      id: "T1140"
+      name: "Deobfuscate/Decode Files or Information"
+      rules: "Base64 Decoded Script Written to Tmp and Executed by Bash (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Command and Control"
+      id: "T1071.001"
+      name: "Web Protocols"
+      rules: "Out-of-Band Tagged Callback URI Shape (SURICATA, Hunting); Out-of-Band Deploy Verdict Body (MINER_OK) (SURICATA, Hunting)"
+      count: 2
+    - tactic: "Exfiltration"
+      id: "T1041"
+      name: "Exfiltration Over C2 Channel"
+      rules: "Out-of-Band Command Output Body Markers (START/END Brackets) (SURICATA, Hunting)"
+      count: 1
 "inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections":
   total: 6
   tactics: 4
