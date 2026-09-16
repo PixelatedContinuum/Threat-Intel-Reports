@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-16T04:02:28Z
+generated_at: 2026-09-16T06:01:18Z
 window_days: 30
 counts:
-  total: 536
-  research: 180
+  total: 535
+  research: 179
   news: 356
 unclassified_sources:
   - "The DFIR Report"
@@ -3651,9 +3651,3 @@ items:
     date: 2026-08-17T06:51:08Z
     kind: news
     labels: ["azure", "cloud security", "data breaches", "data leak", "data theft", "infostealer"]
-  - title: "Teaching AI to Reason Through Detection Triage"
-    url: "https://www.crowdstrike.com/en-us/blog/teaching-ai-to-reason-through-detection-triage/"
-    source: "Crowdstrike"
-    date: 2026-08-17T05:00:00Z
-    kind: research
-    labels: ["securing ai"]
