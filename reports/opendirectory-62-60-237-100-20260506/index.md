@@ -1387,7 +1387,7 @@ No AsyncRAT/zgRAT/DCRat SSL-certificate detections fired, because the TLS handsh
 | Execution / T1218.005 | Mshta | `mshta.exe \\<webdav>\file.hta` POC artifacts (`hta.hta`, `mht.mht`, `mhtml.mhtml`) |
 | Execution / T1053.005 | Scheduled Task | `watchermgmt.job` runs `CrystSupervisor32.exe` hourly via Task Scheduler |
 | Persistence / T1053.005 | Scheduled Task | Legacy `.job` at `C:\Windows\Tasks\watchermgmt.job` + auto-migrated XML at `C:\Windows\System32\Tasks\watchermgmt`; 1-hour heartbeat, daily recurrence |
-| Privilege Escalation / T1134 | Access Token Manipulation | `AdjustTokenPrivileges` + `OpenProcessToken` imports observed; YARA `escalate_priv` capa hit on Carriers.exe, usage may be stock Inno UAC self-elevation (MODERATE) |
+| Privilege Escalation / T1134 | Access Token Manipulation | `AdjustTokenPrivileges` + `OpenProcessToken` imports observed; a YARA `escalate_priv` match plus a capability-signature hit on Carriers.exe, usage may be stock Inno UAC self-elevation (MODERATE) |
 | Defense Evasion / T1574.001 | DLL | Genuine signed `SlideShowEditor.exe` (renamed `CrystSupervisor32.exe`) loads operator-modified `ExceptionHandler.dll` from `%TEMP%\is-*.tmp\` |
 | Defense Evasion / T1055.012 | Process Hollowing | Stage-1 hollows `tapisrv.dll`; stage-2 hollows `input.dll`; runtime hollows `WVault.exe` (renamed Qihoo PromoUtil.exe) for .NET injection |
 | Defense Evasion / T1055.002 | Portable Executable Injection | Stage-2 shellcode (5,808 bytes) injected into `tapisrv.dll!.text` via `VirtualProtect(PAGE_EXECUTE_READWRITE)` + `memcpy` |
@@ -1407,11 +1407,11 @@ No AsyncRAT/zgRAT/DCRat SSL-certificate detections fired, because the TLS handsh
 | Defense Evasion / T1112 | Modify Registry | Multiple registry writes, Defender exclusion, GoProxy cert blob, Inno AppId GUID Uninstall key |
 | Defense Evasion / T1497.003 | Time-Based Evasion | Stage-2 anti-sandbox `ZwDelayExecution × 9 × 5000ms` (45-second sleep) gated by `FUN_000002c0` |
 | Defense Evasion / T1497.001 | System Checks | Stage-2 anti-sandbox quadruple, `ZwQueryInformationProcess` + `QueryPerformanceCounter` + `ZwQuerySystemInformation` for sandbox detection |
-| Credential Access / T1056.001 | Keylogging | `CrystSupervisor32.exe` YARA `keylogger` capa hit (legit Wondershare SlideShowEditor's full feature surface OR operator-modified internals, uncertain) (MODERATE) |
+| Credential Access / T1056.001 | Keylogging | `CrystSupervisor32.exe` YARA `keylogger` match plus a capability-signature hit (legit Wondershare SlideShowEditor's full feature surface OR operator-modified internals, uncertain) (MODERATE) |
 | Discovery / T1082 | System Information Discovery | `GetComputerNameW` (pe_03 hash `0xCBB35ABB`); used as per-host seed for crypto |
 | Discovery / T1083 | File and Directory Discovery | `GetEnvironmentVariableW` resolution of `%TEMP%`/`%APPDATA%`/`%PROGRAMDATA%`; `GetFileSize` + `ReadFile` on encrypted payloads |
-| Discovery / T1057 | Process Discovery | Stage-2 `ZwQuerySystemInformation` (anti-sandbox process enum); CrystSupervisor32 capa surface includes process enumeration (MODERATE) |
-| Collection / T1113 | Screen Capture | `CrystSupervisor32.exe` YARA `screenshot` capa hit; pe_08 imports `BitBlt` + `GetDC` + `CreateCompatibleBitmap` (MODERATE) |
+| Discovery / T1057 | Process Discovery | Stage-2 `ZwQuerySystemInformation` (anti-sandbox process enum); CrystSupervisor32's capability signatures include process enumeration (MODERATE) |
+| Collection / T1113 | Screen Capture | `CrystSupervisor32.exe` YARA `screenshot` match plus a capability-signature hit; pe_08 imports `BitBlt` + `GetDC` + `CreateCompatibleBitmap` (MODERATE) |
 | Command and Control / T1071.001 | Application Layer Protocol: Web Protocols | TLSv1.0 to `185.241.208.129:56167` from `WVault.exe`; 17 connections over 33 min 21s; pe_08 imports `WININET` (DEFINITE) |
 | Command and Control / T1573.001 | Encrypted Channel: Symmetric Cryptography | TLSv1 ClientHello cipher list `49162-49161-49172-49171-53-47`; injected .NET RAT inside WVault.exe handles encryption |
 | Command and Control / T1571 | Non-Standard Port | TCP/56167 (not 443/80) for C2 (DEFINITE) |
