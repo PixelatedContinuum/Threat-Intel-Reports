@@ -4798,3 +4798,302 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   }
   .hl-sponsor-independence__body { font-size: 0.8em; }
 }
+
+/* ============================================================
+   INSTALL MODES COMPONENT
+   Paired with _includes/install-modes.html. A two-item, side-by-side
+   expandable comparison for a finding that IS a contrast (two states
+   of one thing), so the summary row carries the contrast and a native
+   <details> holds the deeper mechanism per side. No JS, no framework.
+   Sizes are px and em on purpose: the theme sets body { font-size:
+   1.25em } while rem resolves against the 16px root, so a rem here
+   renders 22% small. Token names deliberately parallel .hl-ptree's
+   (--pt-*) rather than reusing them, so the two components can change
+   independently.
+   ============================================================ */
+
+.hl-imodes-fig { margin: 2.25em 0; }
+.hl-imodes-fig > figcaption {
+  margin-top: 12px;
+  font-size: 0.82em;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--im-ink-2);
+  text-align: center;
+}
+
+/* --- Tokens: dark (base) ------------------------------------ */
+.hl-imodes {
+  --im-surface:    #1a1a1a;
+  --im-surface-2:  #161616;
+  --im-surface-3:  #202020;
+  --im-line:       #2a2a2a;
+  --im-line-soft:  #242424;
+  --im-ink:        #eeeeee;
+  --im-ink-2:      #c6c6c6;
+  --im-ink-3:      #8d8d8d;
+  --im-code-bg:    #0e0e0e;
+  --im-focus:      #58a6ff;
+
+  /* two semantic accents: the mode that clears vs. the mode that persists */
+  --im-cleared:      #2563eb;
+  --im-cleared-lbl:  #93c5fd;
+  --im-persists:     #dc2626;
+  --im-persists-lbl: #fb7185;
+
+  border: 1px solid var(--im-line);
+  border-radius: 8px;
+  background: var(--im-surface);
+  color: var(--im-ink);
+  overflow: hidden;
+  font-size: 17px;
+  line-height: 1.65;
+  text-align: left;
+}
+
+/* --- Tokens: light ------------------------------------------ */
+:root[data-theme="light"] .hl-imodes,
+.hl-imodes[data-im-theme="light"] {
+  --im-surface:    #ffffff;
+  --im-surface-2:  #f4f4f5;
+  --im-surface-3:  #ebebed;
+  --im-line:       #d4d4d8;
+  --im-line-soft:  #e4e4e7;
+  --im-ink:        #18181b;
+  --im-ink-2:      #3f3f46;
+  --im-ink-3:      #5f5f68;
+  --im-code-bg:    #f4f4f5;
+  --im-focus:      #1857b8;
+  --im-cleared:      #1d4ed8;
+  --im-cleared-lbl:  #1e40af;
+  --im-persists:     #b91c1c;
+  --im-persists-lbl: #a51b1b;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .hl-imodes {
+    --im-surface:    #ffffff;
+    --im-surface-2:  #f4f4f5;
+    --im-surface-3:  #ebebed;
+    --im-line:       #d4d4d8;
+    --im-line-soft:  #e4e4e7;
+    --im-ink:        #18181b;
+    --im-ink-2:      #3f3f46;
+    --im-ink-3:      #5f5f68;
+    --im-code-bg:    #f4f4f5;
+    --im-focus:      #1857b8;
+    --im-cleared:      #1d4ed8;
+    --im-cleared-lbl:  #1e40af;
+    --im-persists:     #b91c1c;
+    --im-persists-lbl: #a51b1b;
+  }
+}
+
+/* --- Header bar (optional meta line) -------------------------- */
+.hl-imodes .hl-imodes-head {
+  padding: 11px 18px;
+  background: var(--im-surface-2);
+  border-bottom: 1px solid var(--im-line);
+  font-family: ui-monospace, 'Cascadia Mono', Menlo, monospace;
+  font-size: 0.78em;
+  color: var(--im-ink-3);
+}
+
+/* --- Grid: two columns, one on narrow viewports ---------------- */
+.hl-imodes .hl-imodes-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--im-line);
+}
+.hl-imodes .hl-imodes-card {
+  background: var(--im-surface);
+  overflow: hidden;
+}
+.hl-imodes .hl-imodes-card[open] { background: var(--im-surface-3); }
+
+.hl-imodes .hl-imodes-card > summary {
+  position: relative;
+  display: block;
+  padding: 14px 16px 14px 20px;
+  cursor: pointer;
+  list-style: none;
+}
+.hl-imodes .hl-imodes-card > summary::-webkit-details-marker { display: none; }
+.hl-imodes .hl-imodes-card > summary:hover { background: var(--im-surface-2); }
+.hl-imodes :focus-visible {
+  outline: 3px solid var(--im-focus);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* the coloured accent rail, one channel of two: colour never carries
+   meaning alone, the badge text is the other channel */
+.hl-imodes .im-rail {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: var(--im-cleared);
+}
+.hl-imodes [data-kind="persists"] .im-rail { background: var(--im-persists); }
+
+.hl-imodes .im-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.hl-imodes .im-name {
+  font-weight: 700;
+  font-size: 1.02em;
+  color: var(--im-ink);
+}
+.hl-imodes .im-badge {
+  padding: 1px 9px;
+  border-radius: 3px;
+  border: 1px solid currentColor;
+  font-size: 0.66em;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--im-cleared-lbl);
+}
+.hl-imodes [data-kind="persists"] .im-badge { color: var(--im-persists-lbl); }
+
+.hl-imodes .im-path {
+  display: block;
+  margin-top: 4px;
+  font-family: ui-monospace, 'Cascadia Mono', Menlo, monospace;
+  font-size: 0.86em !important;
+  color: var(--im-ink-2) !important;
+  background: none !important;
+  border: 0 !important;
+  padding: 0 !important;
+  overflow-wrap: anywhere;
+}
+
+/* the always-visible contrast: no click required to see this much */
+.hl-imodes .im-quick {
+  display: block;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--im-line-soft);
+}
+.hl-imodes .im-quick-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 0.86em;
+  padding: 2px 0;
+}
+.hl-imodes .im-quick-key { color: var(--im-ink-3); }
+.hl-imodes .im-quick-val { color: var(--im-ink); font-weight: 600; text-align: right; }
+
+.hl-imodes .im-chevron {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  width: 16px; height: 16px;
+  color: var(--im-ink-3);
+  transition: transform 0.12s ease;
+}
+.hl-imodes .hl-imodes-card[open] .im-chevron { transform: rotate(90deg); }
+@media (prefers-reduced-motion: reduce) { .hl-imodes .im-chevron { transition: none; } }
+
+/* --- Detail panel (only on expand) ----------------------------- */
+.hl-imodes .im-detail {
+  padding: 2px 16px 16px 20px;
+  border-top: 1px solid var(--im-line-soft);
+}
+.hl-imodes .im-why { margin: 12px 0 0; font-size: 0.9em; color: var(--im-ink); }
+
+.hl-imodes .im-facts { margin: 12px 0 0; }
+.hl-imodes .im-fact {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  align-items: start;
+  gap: 4px 12px;
+  padding: 6px 0;
+  border-top: 1px solid var(--im-line-soft);
+}
+.hl-imodes .im-fact:first-child { border-top: 0; }
+.hl-imodes .im-fact-key {
+  font-size: 0.72em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--im-ink-3);
+  padding-top: 5px;
+}
+.hl-imodes .im-fact-val {
+  display: block;
+  margin: 0;
+  padding: 5px 10px !important;
+  background: var(--im-code-bg) !important;
+  border: 1px solid var(--im-line) !important;
+  border-radius: 4px;
+  font-family: ui-monospace, 'Cascadia Mono', Menlo, monospace;
+  font-size: 0.78em !important;
+  line-height: 1.6;
+  color: var(--im-ink) !important;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* --- Footer ----------------------------------------------------- */
+.hl-imodes .hl-imodes-foot {
+  margin: 0;
+  padding: 12px 18px;
+  border-top: 1px solid var(--im-line);
+  background: var(--im-surface-2);
+  font-size: 0.8em;
+  color: var(--im-ink-2);
+}
+.hl-imodes .hl-imodes-foot code {
+  background: var(--im-code-bg) !important;
+  border: 1px solid var(--im-line) !important;
+  color: var(--im-ink) !important;
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-size: 0.9em;
+}
+
+/* --- Narrow viewports -------------------------------------------
+   Stack to one column rather than shrinking two columns to the point
+   the path strings wrap on every line. */
+@media (max-width: 720px) {
+  .hl-imodes { font-size: 16px; }
+  .hl-imodes .hl-imodes-grid { grid-template-columns: 1fr; }
+  .hl-imodes .im-quick-val { text-align: left; }
+  .hl-imodes .im-fact { grid-template-columns: minmax(0, 1fr); }
+  .hl-imodes .im-fact-key { padding-top: 0; }
+}
+
+/* --- Print -------------------------------------------------------
+   A printed page cannot click a <details> open, so force every card
+   open and hide the chevron that implies interactivity. */
+@media print {
+  .hl-imodes .im-chevron { display: none !important; }
+  .hl-imodes .hl-imodes-card > summary { cursor: default; }
+  .hl-imodes .im-detail { display: block !important; }
+}
+
+/* --- Winning against the post stylesheet ------------------------
+   Same fix .hl-ptree needed: `.hl-post-content code` sets colour with
+   !important at (0,1,1), which otherwise beats these selectors and
+   forces a near-black background under near-black text. `.im-path` is
+   deliberately boxless (it is a plain inline path, not a fact value),
+   so it gets the opposite override: strip the post stylesheet's box
+   rather than match it. */
+.hl-imodes .im-fact-val,
+.hl-imodes .hl-imodes-foot code {
+  background: var(--im-code-bg) !important;
+  border: 1px solid var(--im-line) !important;
+  color: var(--im-ink) !important;
+}
+.hl-imodes .im-path {
+  background: none !important;
+  border: 0 !important;
+  color: var(--im-ink-2) !important;
+}

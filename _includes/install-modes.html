@@ -1,0 +1,94 @@
+{%- comment -%}
+  INSTALL MODES COMPONENT
+
+  Renders a report's `install_modes` front matter as a two-item, side-by-side
+  expandable comparison. Built for the case where a finding is fundamentally a
+  CONTRAST between exactly two states (here: which of two install modes survives
+  a reboot), so the contrast itself has to be visible before a reader opens
+  anything, and the deeper mechanism sits behind a native <details> per side.
+
+  WHY HTML AND NOT AN IMAGE. The literals a defender wants (paths, a systemd
+  unit name, an exact confirmed-install count) have to be selectable, findable
+  with the browser's find, and reflowable on a phone. Pairs with
+  assets/css/custom.css (INSTALL MODES COMPONENT block). No JS: two <details>
+  elements need no script to work, keyboard-navigate, or degrade on a printed
+  page or in the Atom feed.
+
+  USAGE, from a report's markdown. Wrap it in the report's own <figure> so any
+  figure-nav chip row and caption stay where every other figure keeps them:
+
+    <figure class="hl-imodes-fig">
+    include install-modes.html   (written without the tag braces on purpose: a
+    literal Liquid tag inside a comment block is still tokenised)
+    <figcaption><em>Figure N: what it shows and why it matters.</em></figcaption>
+    </figure>
+
+  Do not leave a blank line inside that block. Kramdown re-enters markdown mode
+  at a blank line inside raw HTML, and the rest of the page pays for it.
+
+  FRONT MATTER SHAPE
+
+    install_modes:
+      meta: "148 to 151 confirmed; only one mode survives a reboot"   # optional, header-bar text
+      modes:
+        - id: im-ephemeral                # becomes the deep-link target, must be unique
+          name: "Ephemeral drop"          # monospace-adjacent heading, escaped
+          path: "/tmp/polkitd/"           # monospace, escaped
+          kind: cleared | persists        # controls the accent colour (a reboot clears it, or it persists)
+          kind_label: "confirmed this campaign"   # short badge text, escaped
+          quick:                          # ALWAYS VISIBLE, shown in the closed summary
+            - key: "Runs as"
+              value: "whoever got code execution"
+          detail: "Longer explanation."   # shown only when expanded, allows inline HTML
+          facts:                          # shown only when expanded, each independently selectable
+            - key: "Confirmed installs"
+              value: "148 to 151 of 198"
+      foot: "..."                         # optional, footer sentence below both cards, allows inline HTML
+
+  ESCAPING. `name`, `path`, `kind_label` and every `quick`/`facts` key and value
+  are escaped, so a literal like <pid> is safe in those. `detail` and `foot` are
+  NOT escaped so they can carry <code>; write &lt;pid&gt; by hand there.
+{%- endcomment -%}
+{%- assign im = include.data | default: page.install_modes -%}
+{%- if im and im.modes -%}
+<div class="hl-imodes" data-hl-imodes>
+  {%- if im.meta %}
+  <div class="hl-imodes-head">
+    <span class="hl-imodes-meta">{{ im.meta | escape }}</span>
+  </div>
+  {%- endif %}
+  <div class="hl-imodes-grid">
+    {%- for m in im.modes %}
+    <details class="hl-imodes-card" data-kind="{{ m.kind | default: 'cleared' }}"{% if m.id %} id="{{ m.id }}"{% endif %}>
+      <summary>
+        <span class="im-rail" aria-hidden="true"></span>
+        <span class="im-head">
+          <span class="im-name">{{ m.name | escape }}</span>
+          <span class="im-badge">{{ m.kind_label | escape }}</span>
+        </span>
+        <code class="im-path">{{ m.path | escape }}</code>
+        {%- if m.quick %}
+        <span class="im-quick">
+          {%- for q in m.quick %}
+          <span class="im-quick-row"><span class="im-quick-key">{{ q.key | escape }}</span><span class="im-quick-val">{{ q.value | escape }}</span></span>
+          {%- endfor %}
+        </span>
+        {%- endif %}
+        <svg class="im-chevron" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+      </summary>
+      <div class="im-detail">
+        {%- if m.detail %}<p class="im-why">{{ m.detail }}</p>{% endif %}
+        {%- if m.facts %}
+        <div class="im-facts">
+          {%- for f in m.facts %}
+          <div class="im-fact"><span class="im-fact-key">{{ f.key | escape }}</span><code class="im-fact-val">{{ f.value | escape }}</code></div>
+          {%- endfor %}
+        </div>
+        {%- endif %}
+      </div>
+    </details>
+    {%- endfor %}
+  </div>
+  {%- if im.foot %}<p class="hl-imodes-foot">{{ im.foot }}</p>{% endif %}
+</div>
+{%- endif -%}
