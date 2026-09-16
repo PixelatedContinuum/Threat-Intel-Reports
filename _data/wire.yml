@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-15T22:01:06Z
+generated_at: 2026-09-16T00:02:48Z
 window_days: 30
 counts:
-  total: 537
+  total: 536
   research: 180
-  news: 357
+  news: 356
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -3657,9 +3657,3 @@ items:
     date: 2026-08-17T05:00:00Z
     kind: research
     labels: ["securing ai"]
-  - title: "SafePal data breach impacts 39,798 customers, stolen info for sale"
-    url: "https://www.bleepingcomputer.com/news/security/safepal-data-breach-impacts-39-798-customers-stolen-info-for-sale/"
-    source: "BleepingComputer"
-    date: 2026-08-16T23:47:06Z
-    kind: news
-    labels: []
