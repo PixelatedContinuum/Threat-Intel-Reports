@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-16T14:02:28Z
+generated_at: 2026-09-16T16:02:18Z
 window_days: 30
 counts:
-  total: 545
-  research: 188
-  news: 357
+  total: 546
+  research: 186
+  news: 360
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -16,22 +16,22 @@ topics:
     count: 78
     color: 1
   - label: "cybercrime"
-    count: 64
+    count: 65
     color: 2
   - label: "exploited"
     count: 31
     color: 3
   - label: "government"
-    count: 30
+    count: 31
     color: 4
   - label: "malware"
-    count: 29
+    count: 30
     color: 5
   - label: "data breaches"
     count: 23
     color: 6
   - label: "artificial intelligence"
-    count: 21
+    count: 22
     color: 7
   - label: "credential theft"
     count: 17
@@ -42,11 +42,11 @@ topics:
   - label: "social engineering"
     count: 15
     color: 10
-  - label: "clickfix"
-    count: 14
-    color: 11
   - label: "healthcare"
     count: 14
+    color: 11
+  - label: "clickfix"
+    count: 13
     color: 12
 label_colors:
   ".net loader": 4
@@ -202,7 +202,6 @@ label_colors:
   "c2": 9
   "c2 framework": 5
   "c2 infrastructure": 12
-  "c2looper": 2
   "calendar": 8
   "camera": 3
   "canada": 4
@@ -243,7 +242,7 @@ label_colors:
   "cl0p": 3
   "claude desktop": 12
   "cleo": 7
-  "clickfix": 11
+  "clickfix": 12
   "clipper": 3
   "cloaked ursa": 2
   "cloud": 7
@@ -304,11 +303,11 @@ label_colors:
   "darklantern": 4
   "data breaches": 6
   "data exfiltration": 9
+  "data security": 10
   "data-exfiltration": 12
   "dead drop resolver": 7
   "defender exclusions": 12
   "defense sector": 12
-  "desktop capture": 2
   "detection engineering": 12
   "device code phishing": 5
   "diplomatic targeting": 1
@@ -320,13 +319,13 @@ label_colors:
   "e-commerce attacks": 10
   "education": 10
   "elections targeting": 5
-  "electron framework": 12
   "email security": 12
   "encrypted payload": 10
   "endpoint security": 11
   "endpoint security & xdr": 11
   "entra id": 5
   "espionage": 11
+  "eu": 12
   "exploit": 9
   "exploited": 3
   "exposure management": 4
@@ -363,7 +362,7 @@ label_colors:
   "hardware": 6
   "hasbro": 1
   "head mare": 3
-  "healthcare": 12
+  "healthcare": 11
   "heights financial": 1
   "hideul.exe": 7
   "high profile threats": 2
@@ -455,6 +454,24 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
 items:
+  - title: "Three Ukrainians to face charges for alleged hack of 610,000 Roblox accounts"
+    url: "https://therecord.media/ukraine-roblox-hacker-arrested"
+    source: "Recorded Future"
+    date: 2026-09-16T14:30:00Z
+    kind: news
+    labels: ["cybercrime", "malware"]
+  - title: "EU Chief Warns of AI-Powered Hacking, Moves to Rein In Social Media"
+    url: "https://www.securityweek.com/eu-chief-warns-of-ai-powered-hacking-moves-to-rein-in-social-media/"
+    source: "SecurityWeek"
+    date: 2026-09-16T14:15:18Z
+    kind: news
+    labels: ["artificial intelligence", "eu", "government"]
+  - title: "The true cost of a ransomware attack, with and without BCDR"
+    url: "https://www.bleepingcomputer.com/news/security/the-true-cost-of-a-ransomware-attack-with-and-without-bcdr/"
+    source: "BleepingComputer"
+    date: 2026-09-16T14:00:10Z
+    kind: news
+    labels: []
   - title: "Pixel Modem Zero-Day Exploited in Targeted Attacks"
     url: "https://www.securityweek.com/pixel-modem-zero-day-exploited-in-targeted-attacks/"
     source: "SecurityWeek"
@@ -569,6 +586,12 @@ items:
     date: 2026-09-16T07:00:19Z
     kind: news
     labels: ["google"]
+  - title: "CrowdStrike Accelerates Real-Time Data Classification with On-Device AI"
+    url: "https://www.crowdstrike.com/en-us/blog/crowdstrike-accelerates-real-time-data-classification-with-on-device-ai/"
+    source: "Crowdstrike"
+    date: 2026-09-16T05:00:00Z
+    kind: research
+    labels: ["data security"]
   - title: "Acronis warns of actively exploited flaw in its cPanel backup plugin"
     url: "https://www.bleepingcomputer.com/news/security/acronis-warns-of-actively-exploited-flaw-in-its-cpanel-backup-plugin/"
     source: "BleepingComputer"
@@ -3707,21 +3730,3 @@ items:
     date: 2026-08-17T16:15:00Z
     kind: news
     labels: ["industry"]
-  - title: "Projextor: Abusing Electron in Trojanized Productivity Applications"
-    url: "https://otx.alienvault.com/pulse/6a8325c63ec6c1f8d93275f6"
-    source: "AlienVault"
-    date: 2026-08-17T15:16:22Z
-    kind: research
-    labels: ["desktop capture", "electron framework", "impersonation websites", "javascript execution", "productivity applications", "projextor", "tamperedchef", "trojanized software"]
-  - title: "C2Looper: A New Backdoor Likely Tied To Ransomware With GitHub C2"
-    url: "https://www.zscaler.com/blogs/security-research/c2looper-new-backdoor-likely-tied-ransomware-github-c2"
-    source: "AlienVault"
-    date: 2026-08-17T15:03:54Z
-    kind: research
-    labels: ["backdoor", "c2looper", "clickfix", "dll sideloading", "github c2", "initial access broker", "lactrodectus", "oyster", "ransomware", "rust-based"]
-  - title: "Operation QUICSILVER: China-Nexus Actor Targets Myanmar Diplomats via VHD-Delivered Go Backdoor"
-    url: "https://www.seqrite.com/blog/operation-quicsilver-china-nexus-actor-targets-myanmar-diplomats-via-vhd-delivered-go-backdoor/"
-    source: "AlienVault"
-    date: 2026-08-17T15:03:53Z
-    kind: research
-    labels: ["china-nexus", "cloudflare workers", "go backdoor", "myanmar diplomats", "operation quicsilver", "quic protocol", "quicagent", "vhd file"]
