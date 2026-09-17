@@ -1062,7 +1062,7 @@ These are the assumptions whose change would materially alter the conclusion:
 
 - Database `jakartaxdw` and user `dbjakartaxdw` on any operator-side MySQL instance.
 - Admin directory `V5VgjLU0jsDe/` and its files (`backup.php`, `cekimbot.php`, `manager.php`, `usmcheck.php`) on any web root.
-- Any deployed kit RAR/PHP-source matching the eight SHA256 hashes in [Section 10](#101-representative-iocs).
+- Any deployed kit RAR/PHP-source matching the eight SHA256 hashes in [Section 10](#10-indicators-of-compromise-reference).
 - Telegram bot webhooks pointing to operator-controlled panel URLs (`post.php` sets them; revoking the bots clears them).
 
 **Containment categories.**
