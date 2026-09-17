@@ -1213,6 +1213,18 @@ main.content {
   display: none;
   flex-direction: column;
   gap: 1px;
+  /* Same theme leak the parent list resets, and it has to be reset here too:
+     this is a <ul> inside <nav>, so `nav ul { text-align: right; float: right }`
+     in main.css matches it directly rather than being inherited, and a reset on
+     .hl-toc__list cannot reach it. The float is the visible half -- it makes the
+     sublist shrink-to-fit and sit against the right edge, so an expanded chapter
+     showed its subsections shunted right under left-aligned chapter headings.
+     Missed on the first pass because the corpus check measured `text-align` on
+     the ANCHORS, which compute `left` correctly from `.hl-toc__item a`; the
+     defect was `float` on their parent. The check was looking at the wrong
+     property, so 2315 entries reported clean while the page was visibly wrong. */
+  text-align: left;
+  float: none;
 }
 .hl-toc__item--open > .hl-toc__sublist {
   display: flex;
@@ -2143,6 +2155,14 @@ button,
     display: flex;
     flex-direction: column;
     gap: 1px;
+    /* Third instance of the same theme leak, reset for the same reason as
+       .hl-toc__list and .hl-toc__sublist: this is a <ul> inside <nav>, so
+       main.css's `nav ul { text-align: right; float: right }` matches it
+       directly. Reset here rather than waiting to find out, because the desktop
+       sublist proved the leak reaches every list in the component and a TOC is
+       never right-aligned. */
+    text-align: left;
+    float: none;
   }
 
   .hl-post-toc-mobile li a {
