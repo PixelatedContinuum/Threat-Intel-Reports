@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-17T16:01:57Z
+generated_at: 2026-09-17T18:00:05Z
 window_days: 30
 counts:
-  total: 551
+  total: 552
   research: 187
-  news: 364
+  news: 365
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -16,16 +16,16 @@ topics:
     count: 77
     color: 1
   - label: "cybercrime"
-    count: 63
+    count: 62
     color: 2
   - label: "government"
-    count: 35
+    count: 34
     color: 3
   - label: "exploited"
     count: 32
     color: 4
   - label: "malware"
-    count: 30
+    count: 31
     color: 5
   - label: "artificial intelligence"
     count: 25
@@ -36,17 +36,17 @@ topics:
   - label: "credential theft"
     count: 17
     color: 8
-  - label: "phishing"
+  - label: "nation-state"
     count: 15
     color: 9
-  - label: "ransomware"
+  - label: "phishing"
     count: 15
     color: 10
-  - label: "social engineering"
+  - label: "ransomware"
     count: 15
     color: 11
-  - label: "clickfix"
-    count: 14
+  - label: "social engineering"
+    count: 15
     color: 12
 label_colors:
   ".net loader": 4
@@ -246,7 +246,7 @@ label_colors:
   "cl0p": 3
   "claude desktop": 12
   "cleo": 7
-  "clickfix": 12
+  "clickfix": 3
   "clipper": 3
   "cloaked ursa": 2
   "cloud": 7
@@ -256,6 +256,7 @@ label_colors:
   "cloudflare captcha": 5
   "cloudflare tunnels": 6
   "cloudflare workers": 6
+  "coast guard": 1
   "cobalt strike": 5
   "compile-time execution": 3
   "conti": 1
@@ -405,7 +406,7 @@ label_colors:
   "mobile": 4
   "mobile & wireless": 4
   "n-central": 6
-  "nation-state": 11
+  "nation-state": 9
   "netch-gateway": 5
   "netscaler": 5
   "network security": 6
@@ -424,7 +425,7 @@ label_colors:
   "patched": 1
   "patches": 2
   "payment fraud": 12
-  "phishing": 9
+  "phishing": 10
   "phishing kit": 6
   "plugin vulnerability": 1
   "poc exploit": 3
@@ -432,7 +433,7 @@ label_colors:
   "privacy": 12
   "proxy abuse": 6
   "qilin": 11
-  "ransomware": 10
+  "ransomware": 11
   "rce": 10
   "revolut": 5
   "rmm abuse": 2
@@ -446,7 +447,7 @@ label_colors:
   "servicenow": 1
   "sma1000": 2
   "soc": 9
-  "social engineering": 11
+  "social engineering": 12
   "software": 5
   "spring": 5
   "surfshark": 11
@@ -460,6 +461,24 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
 items:
+  - title: "Brevo supply-chain attack injected ClickFix scripts on customer sites"
+    url: "https://www.bleepingcomputer.com/news/security/brevo-supply-chain-attack-injected-clickfix-scripts-on-customer-sites/"
+    source: "BleepingComputer"
+    date: 2026-09-17T17:11:34Z
+    kind: news
+    labels: []
+  - title: "Cyberattacks on Two Oil Tankers Prompt Coast Guard, FBI to Board Vessels"
+    url: "https://www.securityweek.com/cyberattacks-on-two-oil-tankers-prompt-coast-guard-fbi-to-board-vessels/"
+    source: "SecurityWeek"
+    date: 2026-09-17T17:09:40Z
+    kind: news
+    labels: ["coast guard", "cyberattacks", "fbi", "ics/ot", "maritime", "nation-state", "shipmonk", "tanker"]
+  - title: "China’s FamousSparrow hackers target Latin America with new backdoor"
+    url: "https://therecord.media/china-hackers-latin-america-espionage"
+    source: "Recorded Future"
+    date: 2026-09-17T16:30:00Z
+    kind: news
+    labels: ["malware", "nation-state"]
   - title: "OpenAI Says Its Models Searched GitHub for Leaked API Keys During Training"
     url: "https://www.securityweek.com/openai-says-its-models-hunted-github-for-leaked-api-keys-during-training/"
     source: "SecurityWeek"
@@ -3752,17 +3771,5 @@ items:
     url: "https://therecord.media/more-than-200-medusa-ransomware-victims-in-last-year-cisa"
     source: "Recorded Future"
     date: 2026-08-18T18:05:00Z
-    kind: news
-    labels: ["cybercrime", "government"]
-  - title: "Clop created custom web shell for Windchill data theft attacks"
-    url: "https://www.bleepingcomputer.com/news/security/clop-created-custom-web-shell-for-windchill-data-theft-attacks/"
-    source: "BleepingComputer"
-    date: 2026-08-18T17:29:51Z
-    kind: news
-    labels: []
-  - title: "Berlin cuts two state ministries off government network after security breach"
-    url: "https://therecord.media/berlin-cuts-two-state-ministries-off-government-breach"
-    source: "Recorded Future"
-    date: 2026-08-18T16:40:00Z
     kind: news
     labels: ["cybercrime", "government"]
