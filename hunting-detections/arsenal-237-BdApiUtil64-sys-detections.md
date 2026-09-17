@@ -1,6 +1,6 @@
 ---
 title: "Detection Rules — BdApiUtil64.sys (Arsenal-237 BYOVD Component)"
-description: "Detection rules for BdApiUtil64.sys, a signed Baidu driver abused for BYOVD defense evasion. Four YARA and two Sigma rules for driver abuse."
+description: "Detection rules for BdApiUtil64.sys, a signed Baidu driver abused for BYOVD defense evasion. Four YARA and four Sigma rules for driver abuse."
 date: '2026-01-26'
 layout: post
 permalink: /hunting-detections/arsenal-237-BdApiUtil64-sys-detections/
@@ -26,7 +26,7 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 2 | 2 | T1068, T1685, T1014 | 0 |
-| Sigma | 1 | 1 | T1068, T1685, T1547.006 | 1 |
+| Sigma | 3 documents (1 bundle) | 1 | T1068, T1685, T1547.006 | 1 |
 | Suricata | 0 | 0 | — | 0 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.

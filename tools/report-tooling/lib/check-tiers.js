@@ -33,15 +33,62 @@ var SAME_LINE_FIX = 'the marker must sit on the FOLLOWING line, on its own. ' +
   'class and slugs the brace text into the anchor, which breaks every link to that ' +
   'section.';
 
-function verdict(status, reason, problems, marked, byTier, unmarked) {
+function verdict(status, reason, problems, marked, byTier, unmarked, sequence, advisories) {
   return {
     status: status,
     reason: reason || null,
     problems: problems || [],
     marked: marked || 0,
     unmarked: unmarked || 0,
-    byTier: byTier || { 1: 0, 2: 0, 3: 0 }
+    byTier: byTier || { 1: 0, 2: 0, 3: 0 },
+    // The tier sequence in document order, as [{tier, text}], and advisory notes that
+    // never affect `status`. Both were added 2026-09-17: the gate checked that markers
+    // existed, were valid, included a Tier 1 and used two tiers, but never looked at the
+    // SEQUENCE, so INV-2026-063 ran `1,2,3,3,1,2,...` (a byte-level exploitation teardown
+    // third, ahead of campaign scale and the payload) and passed.
+    sequence: sequence || [],
+    advisories: advisories || []
   };
+}
+
+/* The shape worth a second look: deep teardown material placed early. This is ADVISORY and
+   deliberately NOT a rule. The tier marker does two jobs at once, setting the register AND
+   selecting what the Brief view renders, so a late Tier 1 is legitimate (Recommendations
+   belongs in Brief and sits at the end). Where a section SITS relative to its neighbours is
+   an editorial call, so the gate prints the shape and flags one pattern rather than failing
+   it. A monotonic rule would fire on correct reports, which is how a gate teaches people to
+   ignore it.
+
+   Two triggers, because the note named one shape and the real case is a slightly different
+   one. The note says "a Tier 3 before any Tier 2". INV-2026-063 actually ran
+   `1, 2, 3, 3, 1, 2, 2, 2, 2, 2, 2, 1, 2, 3`, which has a Tier 2 at position 2 and its first
+   Tier 3 at position 3, so the named trigger does NOT fire on it. The second trigger does:
+   the first Tier 3 falls in the first third of the report (position 3 of 14), which is the
+   "byte-level exploitation teardown third, ahead of campaign scale and the payload" the note
+   describes. Measured against that sequence in the tests. */
+function shapeAdvisories(sequence) {
+  var advisories = [];
+  var first3 = -1;
+  var first2 = -1;
+  for (var i = 0; i < sequence.length; i++) {
+    if (first3 === -1 && sequence[i].tier === '3') first3 = i;
+    if (first2 === -1 && sequence[i].tier === '2') first2 = i;
+  }
+  if (first3 === -1) return advisories;
+
+  if (first2 === -1 || first3 < first2) {
+    advisories.push('Tier 3 section "' + sequence[first3].text + '" appears before any Tier 2 ' +
+      'section. Deep teardown material placed early puts the densest register in front of a ' +
+      'reader before the tradecraft it builds on. Not a failure: check the reading order.');
+    return advisories;
+  }
+
+  if (sequence.length >= 6 && first3 < Math.ceil(sequence.length / 3)) {
+    advisories.push('Tier 3 section "' + sequence[first3].text + '" appears at position ' +
+      (first3 + 1) + ' of ' + sequence.length + ', in the first third of the report, ahead of ' +
+      'most of the Tier 2 tradecraft. Not a failure: check the reading order.');
+  }
+  return advisories;
 }
 
 /* Every h2 in source order with the tier its following line declares, plus any
@@ -87,6 +134,7 @@ function validate(headings) {
   var byTier = { 1: 0, 2: 0, 3: 0 };
   var marked = 0;
   var unmarked = [];
+  var sequence = [];
 
   headings.forEach(function (h) {
     if (h.sameLine) {
@@ -101,14 +149,20 @@ function validate(headings) {
     }
     byTier[h.tier]++;
     marked++;
+    sequence.push({ tier: h.tier, text: h.text });
   });
+
+  // Sequence advisories are computed for every path, including the unmarked one, so a
+  // caller can always read the shape.
+  var advisories = shapeAdvisories(sequence);
 
   var total = headings.length;
 
   // Nothing marked at all is not a defect, it is a report without the switch.
   if (!marked && !problems.length) {
     return { status: 'PASS', reason: 'no tier markers declared', problems: [],
-             marked: 0, unmarked: unmarked.length, byTier: byTier };
+             marked: 0, unmarked: unmarked.length, byTier: byTier,
+             sequence: sequence, advisories: advisories };
   }
 
   /* All or nothing. A partly marked report is the likely output of an
@@ -135,7 +189,8 @@ function validate(headings) {
   return {
     status: problems.length ? 'FAIL' : 'PASS',
     reason: null, problems: problems,
-    marked: marked, unmarked: unmarked.length, byTier: byTier
+    marked: marked, unmarked: unmarked.length, byTier: byTier,
+    sequence: sequence, advisories: advisories
   };
 }
 
@@ -151,7 +206,8 @@ function checkMarkdown(src, label) {
       String(e.message).split('\n')[0]);
   }
   var r = validate(scan.headings);
-  return verdict(r.status, r.reason, r.problems, r.marked, r.byTier, r.unmarked);
+  return verdict(r.status, r.reason, r.problems, r.marked, r.byTier, r.unmarked,
+                 r.sequence, r.advisories);
 }
 
 function checkDom(doc, label) {
@@ -170,12 +226,14 @@ function checkDom(doc, label) {
     });
   }
   var r = validate(headings);
-  return verdict(r.status, r.reason, r.problems, r.marked, r.byTier, r.unmarked);
+  return verdict(r.status, r.reason, r.problems, r.marked, r.byTier, r.unmarked,
+                 r.sequence, r.advisories);
 }
 
 module.exports = {
   scanMarkdown: scanMarkdown,
   validate: validate,
+  shapeAdvisories: shapeAdvisories,
   checkMarkdown: checkMarkdown,
   checkDom: checkDom,
   TIER_RE: TIER_RE
@@ -242,6 +300,14 @@ if (require.main === module) {
          ', T2 ' + r.byTier[2] + ', T3 ' + r.byTier[3] + ')')
       : r.status === 'NOT CHECKED' ? r.reason : r.problems.join('; ');
     console.log(r.status.padEnd(12) + ' ' + target + '   ' + tail);
+    // Print the SHAPE, not only the verdict. The gate can say the markers are all present
+    // and still not tell you that a teardown sits third; the sequence is what a human reads.
+    if (r.sequence && r.sequence.length) {
+      console.log('  tier sequence (document order): ' + r.sequence.map(function (s) {
+        return s.tier + ' ' + s.text;
+      }).join(' | '));
+    }
+    (r.advisories || []).forEach(function (a) { console.log('  ADVISORY: ' + a); });
     process.exit(r.status === 'PASS' ? 0 : r.status === 'FAIL' ? 1 : 2);
   })();
 }

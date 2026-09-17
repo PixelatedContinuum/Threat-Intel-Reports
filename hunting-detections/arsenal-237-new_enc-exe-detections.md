@@ -1,6 +1,6 @@
 ---
 title: "Detection Rules — new_enc.exe (Arsenal-237 Ransomware)"
-description: "Detection rules for new_enc.exe, Arsenal-237 ransomware hitting backups and databases. Seven YARA and four Sigma rules for pre-encryption acts."
+description: "Detection rules for new_enc.exe, Arsenal-237 ransomware hitting backups and databases. Seven YARA and six Sigma rules for pre-encryption acts."
 date: '2026-01-27'
 layout: post
 permalink: /hunting-detections/arsenal-237-new_enc-exe-detections/
@@ -26,7 +26,7 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 1 | 6 | T1489, T1490, T1053.005, T1497.001, T1622, T1518.001 | 5 |
-| Sigma | 1 | 3 | T1490, T1489, T1053.005 | 0 |
+| Sigma | 1 | 5 documents (2 bundles) | T1490, T1489, T1053.005 | 0 |
 | Suricata | 0 | 0 | — | 0 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.

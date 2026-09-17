@@ -441,6 +441,16 @@ if (require.main === module) {
         : r.problems.join('; ');
       console.log(r.status.padEnd(12) + r.path + '   ' + tail);
       if (verbose && r.problems.length) r.problems.forEach(function (p) { console.log('    ' + p); });
+      // D24 item 2: the tier SHAPE, not just the verdict. The gate can say every marker is
+      // present and still not tell you that a teardown sits third. The sequence prints in
+      // verbose; the shape advisories print always because they are rare and load-bearing.
+      var tiers = r.tiers || {};
+      if (verbose && tiers.sequence && tiers.sequence.length) {
+        console.log('    tier sequence: ' + tiers.sequence.map(function (s) {
+          return s.tier + ' ' + s.text;
+        }).join(' | '));
+      }
+      (tiers.advisories || []).forEach(function (a) { console.log('    ADVISORY: ' + a); });
     }
     process.exit(r.status === 'PASS' ? 0 : r.status === 'FAIL' ? 1 : 2);
   })();

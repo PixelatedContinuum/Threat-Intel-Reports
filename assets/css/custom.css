@@ -4894,7 +4894,7 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  margin: 2.25rem 0 1.25rem;
+  margin: 2.25em 0 1.25em;
   padding: 12px 16px 12px 0;
   border-top: 1px solid var(--hl-border-row);
 }

@@ -24,7 +24,7 @@ unlisted: true
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 6 | 0 | T1557, T1071.001, T1021.004, T1552.004, T1686, T1056 | 9 |
-| Sigma | 7 | 8 | T1557, T1686, T1480, T1059.006, T1105, T1082, T1059, T1021.004, T1564.001, T1071.001, T1571 | 0 |
+| Sigma | 7 documents (2 bundles) | 8 documents (2 bundles) | T1557, T1686, T1480, T1059.006, T1105, T1082, T1059, T1021.004, T1564.001, T1071.001, T1571 | 0 |
 | Suricata | 2 | 1 | T1557, T1071.001 | 11 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting, and the hits need review.
@@ -965,7 +965,7 @@ level: low
 
 ## Suricata Signatures
 
-The interception itself happens over an unmodified, fully encrypted SSH session, so it is not a Suricata-visible event. The tractable network surface here is narrower than it first appears, since the relay-to-receiver reporting channel is also TLS with certificate verification disabled, which hides the `X-Token` header, the request bodies, and the endpoint paths from passive inspection just as effectively as if it were configured correctly. What remains observable without decryption is the TLS handshake metadata (the certificate itself) and, on the interception side, the SSH banner a connecting client actually receives. Both rules below were validated against the real engine before publication; none were authored from documentation alone.
+The interception itself happens over an unmodified, fully encrypted SSH session, so it is not a Suricata-visible event. The tractable network surface here is narrower than it first appears, since the relay-to-receiver reporting channel is also TLS with certificate verification disabled, which hides the `X-Token` header, the request bodies, and the endpoint paths from passive inspection just as effectively as if it were configured correctly. What remains observable without decryption is the TLS handshake metadata (the certificate itself) and, on the interception side, the SSH banner a connecting client actually receives. Both rules below compile against Suricata 8.0.5.
 
 ### Detection Rules
 
@@ -977,7 +977,7 @@ The interception itself happens over an unmodified, fully encrypted SSH session,
 **Confidence:** HIGH
 **False Positives:** Security-research honeypots and red-team engagement infrastructure deliberately impersonating SSH on port 22 using paramiko, and rare CI or embedded systems running a paramiko-based mock SSH server on the standard port for testing. Every one of these is also worth an analyst's attention regardless of whether it turns out to be this specific platform.
 **Blind Spots:** Only fires on traffic actually reaching a redirected port 22, so it requires the monitoring point to sit on the path between a client and the compromised relay (at the relay's own network edge, or upstream of it). Says nothing about relays whose interception a monitored client never happens to traverse.
-**Validation:** Confirmed against the real engine (`suricata -T`, version 8.0.5) before publication. To functionally validate, connect an SSH client to a paramiko-based server bound to port 22 in a lab and confirm the rule fires on the server's banner; connect to an ordinary OpenSSH server on port 22 and confirm it does not.
+**Validation:** To functionally validate, connect an SSH client to a paramiko-based server bound to port 22 in a lab and confirm the rule fires on the server's banner; connect to an ordinary OpenSSH server on port 22 and confirm it does not.
 **Deployment:** Network sensor positioned at the boundary of a network whose hosts might be, or might connect through, a compromised relay; this is the deployment point that gives a hosting provider or sysadmin the best chance of finding the interceptor from outside the box itself, as a complement to the host-side Sigma rules above.
 
 ```
@@ -994,7 +994,7 @@ alert ssh $EXTERNAL_NET any -> $HOME_NET 22 (msg:"THL DETECT SSH-MITM-ParasiticC
 **Confidence:** HIGH
 **False Positives:** None known. A self-signed certificate whose subject and issuer are both the literal string `CN=receiver` is not a pattern seen in legitimate infrastructure.
 **Blind Spots:** This is the single most fragile Detection-tier rule in the set. The report on this campaign explicitly notes that no successor has been found in a year of public certificate-transparency data, but a successor deployed with a regenerated certificate under a different common name would not appear here at all. Treat a lack of hits as inconclusive, not as evidence of no successor infrastructure.
-**Validation:** Confirmed against the real engine (`suricata -T`, version 8.0.5) before publication. To functionally validate, present a self-signed certificate with subject and issuer both set to `CN=receiver` during a TLS handshake in a lab and confirm the rule fires; present any other self-signed certificate and confirm it does not.
+**Validation:** To functionally validate, present a self-signed certificate with subject and issuer both set to `CN=receiver` during a TLS handshake in a lab and confirm the rule fires; present any other self-signed certificate and confirm it does not.
 **Deployment:** Network sensor with TLS certificate inspection at any network egress point; most useful for a hosting provider scanning its own address space for a redeployed or successor receiver, since the certificate structure (unlike the specific hash, which is in the IOC feed instead) survives a same-configuration redeploy.
 
 ```

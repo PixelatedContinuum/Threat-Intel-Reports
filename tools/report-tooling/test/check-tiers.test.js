@@ -96,3 +96,51 @@ test('an unmarked page is PASS on the DOM path too', function () {
   assert.strictEqual(r.status, 'PASS');
   assert.match(r.reason, /no tier markers/);
 });
+
+// --- tier SEQUENCE visibility (D24 item 2, added 2026-09-17) ---------------------------
+// The gate used to check marker presence, validity, a Tier 1 and two tiers, and never the
+// ORDER. INV-2026-063 ran `1,2,3,3,1,2,2,2,2,2,2,1,2,3` and passed. The sequence is now
+// printed and a shape advisory is attached; neither ever changes the verdict.
+
+var INV_SEQ = ['1', '2', '3', '3', '1', '2', '2', '2', '2', '2', '2', '1', '2', '3'];
+function seqDoc(seq) {
+  return seq.map(function (t, i) {
+    return '## ' + (i + 1) + '. Section ' + (i + 1) + '\n{: .hl-tier-' + t + '}\n\ntext\n';
+  }).join('\n');
+}
+
+test('the sequence is exposed in document order with titles', function () {
+  var r = CT.checkMarkdown(doc('## A\n{: .hl-tier-1}\n\nx\n\n## B\n{: .hl-tier-2}\n\nx\n\n## C\n{: .hl-tier-3}\n\nx\n'));
+  assert.strictEqual(r.status, 'PASS', JSON.stringify(r.problems));
+  assert.strictEqual(r.sequence.length, 3);
+  assert.deepStrictEqual(r.sequence.map(function (s) { return s.tier; }), ['1', '2', '3']);
+  assert.strictEqual(r.sequence[0].text, 'A');
+});
+
+test('the INV-2026-063 sequence still PASSES but raises the early-teardown advisory', function () {
+  var r = CT.checkMarkdown(doc(seqDoc(INV_SEQ)));
+  assert.strictEqual(r.status, 'PASS', JSON.stringify(r.problems));
+  assert.strictEqual(r.sequence.length, 14);
+  assert.strictEqual(r.advisories.length, 1);
+  assert.match(r.advisories[0], /first third/);
+  assert.match(r.advisories[0], /Section 3/);
+});
+
+test('a Tier 3 before any Tier 2 raises the named advisory, and never a failure', function () {
+  var r = CT.checkMarkdown(doc('## A\n{: .hl-tier-1}\n\nx\n\n## B\n{: .hl-tier-3}\n\nx\n\n## C\n{: .hl-tier-2}\n\nx\n'));
+  assert.strictEqual(r.status, 'PASS', JSON.stringify(r.problems));
+  assert.match(r.advisories.join(' '), /before any Tier 2/);
+});
+
+test('a well-ordered report carries no sequence advisory', function () {
+  var r = CT.checkMarkdown(doc('## A\n{: .hl-tier-1}\n\nx\n\n## B\n{: .hl-tier-2}\n\nx\n\n## C\n{: .hl-tier-2}\n\nx\n\n## D\n{: .hl-tier-3}\n\nx\n'));
+  assert.strictEqual(r.status, 'PASS', JSON.stringify(r.problems));
+  assert.deepStrictEqual(r.advisories, []);
+});
+
+test('an unmarked report carries an empty sequence and no advisory', function () {
+  var r = CT.checkMarkdown(doc('## A\n\nx\n\n## B\n\nx\n'));
+  assert.strictEqual(r.status, 'PASS');
+  assert.deepStrictEqual(r.sequence, []);
+  assert.deepStrictEqual(r.advisories, []);
+});

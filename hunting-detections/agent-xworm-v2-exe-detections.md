@@ -1,6 +1,6 @@
 ---
 title: "Detection Rules — agent_xworm_v2.exe (XWorm RAT v2.4.0)"
-description: "Detection rules for agent_xworm_v2.exe, XWorm RAT v2.4.0 with WebSocket C2. Four YARA, two Sigma and one Suricata rule cover recon artifacts."
+description: "Detection rules for agent_xworm_v2.exe, XWorm RAT v2.4.0 with WebSocket C2. Four YARA, five Sigma and one Suricata rule cover recon artifacts."
 date: '2026-01-12'
 layout: post
 permalink: /hunting-detections/agent-xworm-v2-exe-detections/
@@ -26,7 +26,7 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 1 | 3 | T1059.001, T1082, T1482, T1057, T1007, T1071.001, T1564.003, T1132.001 | 1 |
-| Sigma | 1 | 1 | T1059.001, T1082, T1057, T1007, T1482 | 1 |
+| Sigma | 4 documents (1 bundle) | 1 | T1059.001, T1082, T1057, T1007, T1482 | 1 |
 | Suricata | 0 | 1 | T1071.001 | 2 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.

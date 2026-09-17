@@ -26,7 +26,7 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 1 | 1 | T1027, T1547.001, T1053.005, T1055, T1036.005 | 0 |
-| Sigma | 1 | 5 | T1055, T1547.001, T1036.005, T1053.005, T1070.004, T1027 | 2 |
+| Sigma | 1 | 5 documents (1 bundle) | T1055, T1547.001, T1036.005, T1053.005, T1070.004, T1027 | 2 |
 | Suricata | 0 | 0 | — | 1 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.

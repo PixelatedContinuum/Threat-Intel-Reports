@@ -1,5 +1,5 @@
 ---
-title: "Detection Rules — FlaskC2-PostEx-Toolkit-67.215.232.25"
+title: "Detection Rules: FlaskC2-PostEx-Toolkit-67.215.232.25"
 description: "Detection rules for a Flask C2 panel, SQL-CLR backdoor and webshells. Four YARA, six Sigma and three Suricata rules for staged tools."
 date: '2026-06-12'
 layout: post

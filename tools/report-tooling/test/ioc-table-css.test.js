@@ -42,11 +42,25 @@ var X = require('../lib/ioc-table-extract.js');
 var CSS = fs.readFileSync(
   path.join(__dirname, '..', '..', '..', 'assets', 'css', 'custom.css'), 'utf8');
 
-// The stretch of stylesheet this component owns.
+// The stretch of stylesheet this component owns, and ONLY that stretch.
+//
+// 2026-09-17: this used to be `CSS.slice(i)` with no end boundary, so it ran
+// from `.hl-ioctable {` to the END OF THE FILE -- every component after this
+// one in custom.css, not just this one. It still caught a real bug (a `rem`
+// in .hl-sponsor-independence, ~600 lines and one whole unrelated component
+// later, fixed alongside this), but under the wrong name: a failure here
+// read as "the ioc-table component regressed" when the ioc-table component
+// itself was untouched. Bounded to the next top-level selector that is NOT
+// `.hl-ioctable*`, matching the real end of this component's own rules
+// (confirmed against custom.css: the last real `.hl-ioctable*` selector is
+// followed by an unrelated component's block comment, not by more of this
+// one).
 var BLOCK = (function () {
   var i = CSS.indexOf('.hl-ioctable {');
   assert.ok(i > -1, 'the ioctable block is missing from custom.css entirely');
-  return CSS.slice(i);
+  var rest = CSS.slice(i);
+  var boundary = /\n\.(?!hl-ioctable)/.exec(rest);
+  return boundary ? rest.slice(0, boundary.index) : rest;
 }());
 
 function hueFor(type) {

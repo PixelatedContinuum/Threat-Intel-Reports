@@ -1,5 +1,5 @@
 ---
-title: "Detection Rules — HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campaign"
+title: "Detection Rules: HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campaign"
 description: "Detection rules for a HijackLoader/Penguish/Rugmi loader chain delivering AsyncRAT. 5 YARA, 9 Sigma and 1 Suricata rule on loaders."
 date: '2026-05-06'
 layout: post
