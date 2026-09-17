@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-17T06:02:05Z
+generated_at: 2026-09-17T08:00:48Z
 window_days: 30
 counts:
-  total: 547
-  research: 187
-  news: 360
+  total: 549
+  research: 186
+  news: 363
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -19,16 +19,16 @@ topics:
     count: 63
     color: 2
   - label: "government"
-    count: 33
+    count: 34
     color: 3
   - label: "exploited"
-    count: 31
+    count: 32
     color: 4
   - label: "malware"
     count: 30
     color: 5
   - label: "artificial intelligence"
-    count: 24
+    count: 25
     color: 6
   - label: "data breaches"
     count: 24
@@ -37,7 +37,7 @@ topics:
     count: 17
     color: 8
   - label: "phishing"
-    count: 16
+    count: 15
     color: 9
   - label: "social engineering"
     count: 15
@@ -45,8 +45,8 @@ topics:
   - label: "healthcare"
     count: 14
     color: 11
-  - label: "clickfix"
-    count: 13
+  - label: "zero-day"
+    count: 14
     color: 12
 label_colors:
   ".net loader": 4
@@ -58,7 +58,6 @@ label_colors:
   "accessibility abuse": 6
   "accessibility services": 10
   "account takeover": 2
-  "account-enumeration": 7
   "acronis": 1
   "active directory": 5
   "active directory compromise": 7
@@ -83,6 +82,7 @@ label_colors:
   "ai infrastructure": 11
   "ai infrastructure targeting": 6
   "ai malware": 9
+  "ai training": 8
   "ai vishing": 6
   "ai voice phishing": 4
   "ai-assisted intrusions": 3
@@ -235,6 +235,7 @@ label_colors:
   "cisa": 6
   "cisa kev": 12
   "cisco": 9
+  "cisco ise": 8
   "cisco talos antivirus": 7
   "cisco talos malware protection": 8
   "cisco talos web filtering": 12
@@ -242,7 +243,7 @@ label_colors:
   "cl0p": 3
   "claude desktop": 12
   "cleo": 7
-  "clickfix": 12
+  "clickfix": 3
   "clipper": 3
   "cloaked ursa": 2
   "cloud": 7
@@ -306,6 +307,7 @@ label_colors:
   "data security": 10
   "data-exfiltration": 12
   "dead drop resolver": 7
+  "decoys": 1
   "defender exclusions": 12
   "defense sector": 12
   "detection engineering": 12
@@ -453,7 +455,32 @@ label_colors:
   "vmware": 2
   "vpn": 8
   "vulnerabilities": 1
+  "zero-day": 12
 items:
+  - title: "CISA Releases Guidance on Deploying Cyber Decoys"
+    url: "https://www.securityweek.com/cisa-releases-guidance-on-deploying-cyber-decoys/"
+    source: "SecurityWeek"
+    date: 2026-09-17T07:53:43Z
+    kind: news
+    labels: ["cisa", "decoys", "government", "guidance"]
+  - title: "AI Agents Can Retrain Own Models Mid-Task, Leaking Secrets and Erasing Refusals"
+    url: "https://www.securityweek.com/ai-agents-can-retrain-own-models-mid-task-leaking-secrets-and-erasing-refusals/"
+    source: "SecurityWeek"
+    date: 2026-09-17T07:41:29Z
+    kind: news
+    labels: ["artificial intelligence", "ai training", "irregular", "rogue ai"]
+  - title: "Cisco warns of max severity ISE zero-day exploited in attacks"
+    url: "https://www.bleepingcomputer.com/news/security/cisco-warns-of-identity-service-engine-zero-day-exploited-in-attacks/"
+    source: "BleepingComputer"
+    date: 2026-09-17T07:20:54Z
+    kind: news
+    labels: []
+  - title: "Active Exploitation Triggers Emergency Patch for Cisco ISE Zero-Day"
+    url: "https://www.securityweek.com/active-exploitation-triggers-emergency-patch-for-cisco-ise-zero-day/"
+    source: "SecurityWeek"
+    date: 2026-09-17T06:19:52Z
+    kind: news
+    labels: ["cisco", "cisco ise", "exploited", "vulnerabilities", "zero-day"]
   - title: "Iranian hackers use CHOSEN BRICK Windows malware to spy on targets"
     url: "https://www.bleepingcomputer.com/news/security/iranian-hackers-use-chosen-brick-windows-malware-to-spy-on-targets/"
     source: "BleepingComputer"
@@ -3724,15 +3751,3 @@ items:
     date: 2026-08-18T08:12:08Z
     kind: news
     labels: ["microsoft"]
-  - title: "Operation ASTERIX: Anatomy of a Crypto Fraud Pipeline"
-    url: "https://otx.alienvault.com/pulse/6a840692bd27524cbf560e2d"
-    source: "AlienVault"
-    date: 2026-08-18T07:15:30Z
-    kind: research
-    labels: ["account-enumeration", "ai-assisted-development", "cryptocurrency", "electron-malware", "jailbreak-prompt", "phishing", "seed-phrase-exfiltration", "telegram-exfiltration", "vishing", "wallet-theft"]
-  - title: "Dozens of WebKit Vulnerabilities Patched With Fresh macOS, iOS Security Updates"
-    url: "https://www.securityweek.com/dozens-of-webkit-vulnerabilities-patched-with-fresh-macos-ios-security-updates/"
-    source: "SecurityWeek"
-    date: 2026-08-18T06:46:22Z
-    kind: news
-    labels: ["apple", "mobile & wireless", "patches", "vulnerabilities", "webkit"]
