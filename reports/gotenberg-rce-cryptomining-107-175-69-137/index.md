@@ -28,6 +28,8 @@ ioc_highlights:
     note: "Root systemd unit, Restart=always, that makes the persistent mode survive"
 hide: true
 unlisted: true
+analysis_scope_exempt: "Capabilities Deep-Dive, Dynamic Analysis"
+analysis_scope_exempt_reason: "Commodity, unmodified XMRig payload with no custom implant; the campaign's substance is the exploitation mechanism and the operator's wider enterprise, not the miner's runtime behavior."
 figure_nav:
   - image: gotenberg-confirmation-funnel.svg
     parts:
@@ -996,6 +998,10 @@ The AI-premise refutation in Section 5 governs how this assessment should be rea
 ordinary, competently engineered, scripted mass exploitation of one disclosed vulnerability, not
 anything agent-orchestrated. I hold "one operator" at MODERATE confidence.
 
+<details markdown="1" class="hl-teardown">
+<summary>Two style-based arguments for one author, and why neither can carry the verdict: an
+unmeasured drift pattern, and a language symmetry that fits two operators as well as one</summary>
+
 The strongest style-based argument for a single author was a shared helper function that drifted
 inconsistently across every Gotenberg-specific script, which reads as one person iterating solo
 rather than a team coordinating changes. That reading is plausible, but the underlying pattern,
@@ -1009,6 +1015,8 @@ matching levels of formality and that the operator code-switches naturally betwe
 equally consistent with one bilingual person and with two closely collaborating, comparably fluent
 operators splitting the work by language. Neither observation can discriminate between those two
 possibilities, and I should not have let it carry the weight it originally did.
+
+</details>
 
 **What actually holds the verdict is structural rather than stylistic, and it is the one piece of
 evidence in this section that does not depend on a judgment call about writing style.** The
@@ -1025,6 +1033,10 @@ measured over a meaningful sample rather than a couple of lines: does either the
 tooling read as more formal, more textbook, or less naturally fluent than the other, in a way that
 would suggest LLM generation or a non-native writer? It does not.
 
+<details markdown="1" class="hl-teardown">
+<summary>The English and Chinese comparison this HIGH rests on, and why matching casualness in
+both languages is itself the finding</summary>
+
 The English scripts are uniformly terse and casually slang-inflected, with the kind of mid-thought,
 self-questioning code comments a formal or generated writer would be unlikely to produce. The
 Chinese material, checked with a round-trip encoding verification to rule out corruption, shows the
@@ -1033,6 +1045,8 @@ the formal written equivalent, and native-typist punctuation inconsistencies. Ne
 more polished than the other. Both read as native, casual, first-draft developer prose, and that
 symmetry is itself the answer. This is the one finding I would call least likely to move with more
 evidence.
+
+</details>
 
 ### Capability: two axes, never averaged into one adjective
 
