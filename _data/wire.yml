@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-16T22:02:38Z
+generated_at: 2026-09-17T00:01:16Z
 window_days: 30
 counts:
-  total: 548
+  total: 547
   research: 187
-  news: 361
+  news: 360
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -16,7 +16,7 @@ topics:
     count: 78
     color: 1
   - label: "cybercrime"
-    count: 64
+    count: 63
     color: 2
   - label: "government"
     count: 33
@@ -3736,9 +3736,3 @@ items:
     date: 2026-08-18T06:46:22Z
     kind: news
     labels: ["apple", "mobile & wireless", "patches", "vulnerabilities", "webkit"]
-  - title: "Ukrainian software developer faces 12 years in Swiss ransomware trial"
-    url: "https://therecord.media/ukrainian-software-developer-court-switzerland"
-    source: "Recorded Future"
-    date: 2026-08-17T23:00:00Z
-    kind: news
-    labels: ["cybercrime"]
