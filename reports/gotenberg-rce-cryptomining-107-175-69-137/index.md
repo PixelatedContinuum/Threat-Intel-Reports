@@ -236,7 +236,8 @@ A second CVE identifier exists for a related bug, and this campaign is not that 
 CVE-2026-40281 also targets Gotenberg's ExifTool integration, but it injects into the metadata
 **value**, reaching ExifTool pseudo-tags like `-FileName` and `-SymLink` for arbitrary file
 rename, overwrite, and symlink creation (CVSS 10.0, fixed in 8.31.0). I fetched both advisories
-directly rather than trust a secondary summary, because the two bugs are frequently discussed
+directly (GitHub Security Advisory GHSA-rqgh-gxv4-6657 for CVE-2026-42589, and GHSA-q7r4-hc83-hf2q
+for CVE-2026-40281) rather than trust a secondary summary, because the two bugs are frequently discussed
 together and conflating them would misdirect a defender's patching priority. This campaign's
 injection is in the metadata **key**, reaches ExifTool's `-if` flag, and evaluates arbitrary Perl.
 Every detection in this report and its companion detection file cites CVE-2026-42589, and that
@@ -497,8 +498,10 @@ Reading the operator's full
 working directory rather than just the Gotenberg-specific files, the cryptomining campaign this
 report is named for occupies roughly 3% of the recovered file inventory. The larger share belongs
 to a shared mass web-application exploitation engine targeting other named commercial platforms,
-and a separately branded, commercially structured account-management and OTP-resale product running on
-Telegram. I am naming no platform, no domain, and no organization in this report. What follows
+and a separately branded, commercially structured account-management and OTP-resale product running
+on Telegram, a market structure that closely matches USENIX Security 2025's peer-reviewed *DarkGram*
+study of Telegram-based account and OTP markets. I am naming no platform, no domain, and no
+organization in this report. What follows
 is shape and count, because that is what the evidence actually supports publishing, and because a
 count is more honest than a name I cannot back with content-level proof.
 
@@ -533,10 +536,13 @@ who typed which script.
 
 The clearest evidence of real investment in this case sits outside the cryptomining campaign
 entirely. The operator's own account-management panel software describes a managed inventory
-business, not a dump-and-sell operation, and I hold that at HIGH confidence from the route names
-alone; whether the underlying accounts are farmed from compromised sources or legitimately
-provisioned is a separate, unresolved question. A separate Android device-farm control panel exists
-in the same directory: its existence is OBSERVED, its function UNRESOLVED, and I found no
+business, not a dump-and-sell operation, a structure consistent with Group-IB's *Anatomy of a Fraud
+Operation* and Europol's *Internet Organised Crime Threat Assessment 2023*, and I hold that at HIGH
+confidence from the route names alone; whether the underlying accounts are farmed from compromised
+sources or legitimately provisioned is a separate, unresolved question. A separate Android
+device-farm control panel exists in the same directory, the shape Group-IB's *Cloud Phones: The
+Invisible Threat* documents in this same criminal niche: its existence is OBSERVED, its function
+UNRESOLVED, and I found no
 connection between it and the account-management product.
 
 <details markdown="1" class="hl-teardown">
@@ -546,8 +552,11 @@ I extracted 136 distinct routes from the operator's own account-management panel
 describe a managed inventory business rather than a dump-and-sell operation: bulk session-file
 import, batch identity manipulation across accounts (avatar, profile, recovery email, forced device
 removal), a commercial OTP inventory system with sold and out-of-stock states and bulk export, and a
-separate monetization suite for paid channel promotion and username brokering. A dump-and-sell model
-does not need lifecycle management this thorough; retaining and operating inventory does.
+separate monetization suite for paid channel promotion and username brokering, mechanics documented
+in Telegram's own official platform materials on channel monetization and collectible usernames. A
+dump-and-sell model does not need lifecycle management this thorough; retaining and operating
+inventory does, and compromised or resold social-platform accounts of this kind are commonly
+funneled into malvertising and further phishing, per Push Security and Check Point Research.
 
 **I am holding two claims about this product apart on purpose, because collapsing them would
 overstate what I actually know.** The commercial-inventory shape of the API is directly observed
@@ -865,8 +874,9 @@ it is not operator engineering. The operator times a baseline
 metadata write against an injected one and calls the target confirmed when the delta is at least
 70% of the injected sleep duration, so a five-second sleep needs a 3.5-second delay to count. I
 found the identical sleep-based blind-timing confirmation technique, with a duration-threshold
-verdict, published in a public proof-of-concept repository's own detection template, created and
-last pushed roughly three months before the operator staged this campaign's payload. The operator
+verdict, published in a public proof-of-concept repository's own Nuclei detection template, dated
+via its own repository metadata to roughly three months before the operator staged this campaign's
+payload. The operator
 did not invent a stealthier way to confirm remote code execution. They read one that was already
 public, indexed, and three months old, and used it as written.
 
@@ -1144,10 +1154,10 @@ actually distinguishes this operator from the surrounding commodity noise.
 ### Full Feed Location
 
 Complete machine-readable indicators, including the hunt-only shared infrastructure and every
-excluded victim address, are maintained separately:
-`ioc-feeds/gotenberg-rce-cryptomining-107-175-69-137-iocs.json`. No indicators are embedded
-directly in this report body beyond the highlights above; the JSON feed is canonical, and it
-excludes every victim address by design.
+excluded victim address, are maintained separately in
+[the full IOC feed]({{ "/ioc-feeds/gotenberg-rce-cryptomining-107-175-69-137/" | relative_url }}).
+No indicators are embedded directly in this report body beyond the highlights above; the feed is
+canonical, and it excludes every victim address by design.
 
 ---
 
@@ -1157,8 +1167,10 @@ excludes every victim address by design.
 ### Network-based detection
 
 The only reliable signature keys on the wire-escaped injection bytes, not on a raw newline. Full
-Suricata and Sigma rules are in the companion detection file, and both carry the same load-bearing
-warning this report does: the hex byte sequence in the rule is the intentional JSON-escaped form of
+Suricata and Sigma rules are in
+[the companion detection file]({{ "/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/" | relative_url }}),
+and both carry the same load-bearing warning this report does: the hex byte sequence in the rule is
+the intentional JSON-escaped form of
 `\n-if\nsystem(`, and correcting it to a literal newline produces a rule that parses cleanly and
 never fires. Where request-body visibility is unavailable, a secondary hunting rule watches for
 latency spikes on Gotenberg's metadata-write endpoint against its own established baseline, at the
@@ -1175,6 +1187,24 @@ also kills a rival using that same name, and separately for the `systemd-polkitd
 the `/usr/bin/polkitd.d/` directory specifically. A single confirmed `MINER_OK`-style ephemeral
 drop does not rule out the persistent mode also being present on the same host, since nothing in
 the observed campaign's own telemetry can distinguish the two per host.
+
+### The full rule set, and the one gap left open
+
+The complete rule set lives in
+[the companion detection file]({{ "/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/" | relative_url }}):
+eleven rules in total, four Sigma Detection rules, three Sigma Hunting rules, one Suricata
+Detection signature, and three Suricata Hunting signatures. The Sigma rules cover the exploit
+itself at the ExifTool argv-split, the daemon-name-versus-location mismatch that both miner install
+modes produce, the systemd wrapper shape behind the persistent install, the rival-miner kill sweep,
+and the base64-staged deploy. The Suricata rules cover the wire signature plus the operator's own
+callback lane.
+
+No YARA rule is shipped for the miner binary: the coverage gap is explained in that file rather
+than left silent, since the miner is a commodity payload that a byte-pattern rule would only ever
+match across an unrelated population, not this operator specifically. Three further candidates
+were considered and deliberately cut, with the reasoning recorded there: a writability probe too
+ubiquitous to carry signal, a payload-fetch pair whose only anchors are atomic indicators already
+in the feed, and a watchdog script seen on a single host whose behavior was never captured.
 
 ### Threat hunting approaches
 
@@ -1342,60 +1372,8 @@ through rather than around it.
 
 ---
 
-## 14. References
+## Glossary
 {: .hl-tier-3}
-
-### Primary sources
-
-- GitHub Security Advisory GHSA-rqgh-gxv4-6657, CVE-2026-42589, fetched and retained directly
-- GitHub Security Advisory GHSA-q7r4-hc83-hf2q, CVE-2026-40281, fetched and retained directly, to
-  confirm the two vulnerabilities are distinct
-- A public proof-of-concept repository's own Nuclei detection template, dated via its own
-  repository metadata
-
-### Threat intelligence sources on account and device farms
-
-- Group-IB, *Cloud Phones: The Invisible Threat*
-- Group-IB, *Anatomy of a Fraud Operation*
-- Europol, *Internet Organised Crime Threat Assessment 2023*
-- USENIX Security 2025, *DarkGram* (academic, peer-reviewed)
-- Push Security and Check Point Research, on compromised social-platform accounts used for
-  malvertising and further phishing
-- Telegram's own official platform documentation, on channel monetization and collectible-asset
-  mechanics
-
-### Standards and frameworks
-
-- MITRE ATT&CK Enterprise: https://attack.mitre.org/
-
-## Appendices
-{: .hl-tier-3}
-
-### Appendix A: Complete IOC List
-
-Machine-readable indicators are maintained separately for ingestion:
-`ioc-feeds/gotenberg-rce-cryptomining-107-175-69-137-iocs.json`
-
-### Appendix B: Detection Rules
-
-Detection rules are maintained separately:
-`hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections.md`
-
-Includes eleven rules: four Sigma Detection rules, three Sigma Hunting rules, one Suricata
-Detection signature and three Suricata Hunting signatures. The Sigma rules cover the exploit itself
-at the ExifTool argv-split, the daemon-name-versus-location mismatch that both miner install modes
-produce, the systemd wrapper shape behind the persistent install, the rival-miner kill sweep and the
-base64-staged deploy. The Suricata rules cover the wire signature plus the operator's own callback
-lane.
-
-No YARA rule is shipped for the miner binary; the coverage gap is explained in that file rather than
-left silent, since the miner is a commodity payload that a byte-pattern rule would only ever match
-across an unrelated population, not this operator specifically. Three further candidates were
-considered and deliberately cut, with the reasoning recorded there: a writability probe too
-ubiquitous to carry signal, a payload-fetch pair whose only anchors are atomic indicators already in
-the feed, and a watchdog script seen on a single host whose behaviour was never captured.
-
-### Appendix C: Glossary
 
 | Term | Definition |
 |---|---|
