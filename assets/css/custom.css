@@ -4978,28 +4978,58 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 }
 .hl-imodes [data-kind="persists"] .im-rail { background: var(--im-persists); }
 
-.hl-imodes .im-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 10px;
-  flex-wrap: wrap;
+/* --- Title and badge: always two separate rows, never one -----
+   The live defect this replaces: title and badge used to share one
+   flex row (justify-content: space-between). A badge too long to
+   fit beside the title wrapped onto its own line ONLY in whichever
+   card had the longer title, so the two cards' badge/path/quick/
+   toggle rows ended up at different vertical offsets from each
+   other. Putting the badge on its own row, always, in both cards,
+   removes the conditional: there is no "sometimes shares a line"
+   state left to trigger the bug.
+
+   That alone is not a proof against every future case, so both rows
+   also reserve a MINIMUM height for up to two lines, derived from
+   each row's own line-height rather than a guessed pixel value. As
+   long as a mode name or a badge does not exceed two lines, both
+   cards' title-row height and badge-row height are floored to the
+   same value regardless of how much shorter one side's actual text
+   is, so path/quick/toggle start at the same offset in both cards
+   even when one title wraps and the other does not, or one badge is
+   much longer than the other. Beyond two lines the floor stops
+   applying and the two cards can drift again; that residual limit
+   is real and is stated in the return, not hidden. */
+.hl-imodes .im-title-row {
+  display: block;
+  font-size: 1.02em;
+  line-height: 1.3;
+  min-height: calc(1.3em * 2);
 }
 .hl-imodes .im-name {
   font-weight: 700;
-  font-size: 1.02em;
   color: var(--im-ink);
+}
+.hl-imodes .im-badge-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  margin-top: 6px;
+  font-size: 0.66em;
+  line-height: 1.3;
+  min-height: calc(1.3em * 2);
 }
 .hl-imodes .im-badge {
   padding: 1px 9px;
   border-radius: 3px;
   border: 1px solid currentColor;
-  font-size: 0.66em;
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  white-space: nowrap;
   color: var(--im-cleared-lbl);
+  /* No white-space: nowrap. A badge long enough to need two lines
+     should wrap inside its own pill rather than overflow the card
+     horizontally; the min-height above is what keeps the cards
+     aligned either way, not the badge staying on one line. */
 }
 .hl-imodes [data-kind="persists"] .im-badge { color: var(--im-persists-lbl); }
 
@@ -5172,3 +5202,441 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   border: 0 !important;
   color: var(--im-ink-2) !important;
 }
+
+/* ============================================================
+   CAPABILITY AXES COMPONENT
+   Two-column expandable comparison for a finding that is a contrast
+   between two axes that must never be averaged into one adjective
+   (Section 9's vulnerability-research vs. operational-engineering
+   assessment). A sibling of the INSTALL MODES COMPONENT above, not a
+   reuse of it: cleared/persists is a persistence-specific colour
+   pairing and would be a category error here, where neither axis is
+   "good" or "bad", only different, so this component's two accents
+   (--cx-axis-a / --cx-axis-b) carry no good/bad meaning at all, only
+   differentiation. Token names deliberately parallel the --im- and --pt- families
+   rather than reusing them, so all three components can change
+   independently.
+   ============================================================ */
+
+.hl-capaxes-fig { margin: 2.25em 0; }
+.hl-capaxes-fig > figcaption {
+  margin-top: 12px;
+  font-size: 0.82em;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--cx-ink-2);
+  text-align: center;
+}
+
+/* --- Tokens: dark (base) ------------------------------------ */
+.hl-capaxes {
+  --cx-surface:    #1a1a1a;
+  --cx-surface-2:  #161616;
+  --cx-surface-3:  #202020;
+  --cx-line:       #2a2a2a;
+  --cx-line-soft:  #242424;
+  --cx-ink:        #eeeeee;
+  --cx-ink-2:      #c6c6c6;
+  --cx-ink-3:      #8d8d8d;
+  --cx-code-bg:    #0e0e0e;
+  --cx-focus:      #58a6ff;
+
+  /* two differentiating accents, deliberately equal in weight: neither
+     axis outranks the other, so neither gets a "warning" colour */
+  --cx-axis-a:      #38bdf8;
+  --cx-axis-a-lbl:  #7dd3fc;
+  --cx-axis-b:      #a78bfa;
+  --cx-axis-b-lbl:  #c4b5fd;
+  --cx-note:        #f4c86b;
+
+  border: 1px solid var(--cx-line);
+  border-radius: 8px;
+  background: var(--cx-surface);
+  color: var(--cx-ink);
+  overflow: hidden;
+  font-size: 17px;
+  line-height: 1.65;
+  text-align: left;
+}
+
+/* --- Tokens: light ------------------------------------------ */
+:root[data-theme="light"] .hl-capaxes,
+.hl-capaxes[data-cx-theme="light"] {
+  --cx-surface:    #ffffff;
+  --cx-surface-2:  #f4f4f5;
+  --cx-surface-3:  #ebebed;
+  --cx-line:       #d4d4d8;
+  --cx-line-soft:  #e4e4e7;
+  --cx-ink:        #18181b;
+  --cx-ink-2:      #3f3f46;
+  --cx-ink-3:      #5f5f68;
+  --cx-code-bg:    #f4f4f5;
+  --cx-focus:      #1857b8;
+  --cx-axis-a:      #0369a1;
+  --cx-axis-a-lbl:  #075985;
+  --cx-axis-b:      #6d28d9;
+  --cx-axis-b-lbl:  #5b21b6;
+  --cx-note:        #92620a;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .hl-capaxes {
+    --cx-surface:    #ffffff;
+    --cx-surface-2:  #f4f4f5;
+    --cx-surface-3:  #ebebed;
+    --cx-line:       #d4d4d8;
+    --cx-line-soft:  #e4e4e7;
+    --cx-ink:        #18181b;
+    --cx-ink-2:      #3f3f46;
+    --cx-ink-3:      #5f5f68;
+    --cx-code-bg:    #f4f4f5;
+    --cx-focus:      #1857b8;
+    --cx-axis-a:      #0369a1;
+    --cx-axis-a-lbl:  #075985;
+    --cx-axis-b:      #6d28d9;
+    --cx-axis-b-lbl:  #5b21b6;
+    --cx-note:        #92620a;
+  }
+}
+
+/* --- Header bar: the "do not average" instruction, always visible --- */
+.hl-capaxes .hl-capaxes-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  padding: 11px 18px;
+  background: var(--cx-surface-2);
+  border-bottom: 1px solid var(--cx-line);
+}
+.hl-capaxes .cx-head-label {
+  font-family: ui-monospace, 'Cascadia Mono', Menlo, monospace;
+  font-size: 0.78em;
+  color: var(--cx-ink-3);
+}
+.hl-capaxes .cx-head-note {
+  font-size: 0.78em;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--cx-note);
+}
+
+/* --- Grid: two columns, one on narrow viewports ---------------- */
+.hl-capaxes .hl-capaxes-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--cx-line);
+}
+.hl-capaxes .hl-capaxes-card {
+  background: var(--cx-surface);
+  overflow: hidden;
+}
+.hl-capaxes .hl-capaxes-card[open] { background: var(--cx-surface-3); }
+
+.hl-capaxes .hl-capaxes-card > summary {
+  position: relative;
+  display: block;
+  padding: 14px 16px 14px 20px;
+  cursor: pointer;
+  list-style: none;
+}
+.hl-capaxes .hl-capaxes-card > summary::-webkit-details-marker { display: none; }
+.hl-capaxes .hl-capaxes-card > summary:hover { background: var(--cx-surface-2); }
+.hl-capaxes :focus-visible {
+  outline: 3px solid var(--cx-focus);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* the coloured accent rail: differentiates the two cards, carries no
+   good/bad meaning, and is never the only channel (name text differs too) */
+.hl-capaxes .cx-rail {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: var(--cx-axis-a);
+}
+.hl-capaxes [data-axis="1"] .cx-rail { background: var(--cx-axis-b); }
+
+.hl-capaxes .cx-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.hl-capaxes .cx-name {
+  font-weight: 700;
+  font-size: 1.02em;
+  color: var(--cx-ink);
+}
+.hl-capaxes .cx-rating {
+  padding: 1px 9px;
+  border-radius: 3px;
+  border: 1px solid currentColor;
+  font-size: 0.78em;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--cx-axis-a-lbl);
+}
+.hl-capaxes [data-axis="1"] .cx-rating { color: var(--cx-axis-b-lbl); }
+
+.hl-capaxes .cx-confidence {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.8em;
+  color: var(--cx-ink-3);
+}
+
+.hl-capaxes .cx-headline {
+  display: block;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--cx-line-soft);
+  font-size: 0.9em;
+  color: var(--cx-ink-2);
+}
+
+/* --- Open/close affordance: words AND a chevron, same accessible
+   pattern as the install-modes component (aria-hidden on the whole
+   group; <details>/<summary> already announces state natively). --- */
+.hl-capaxes .cx-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--cx-line-soft);
+  color: var(--cx-ink-3);
+}
+.hl-capaxes .cx-toggle-text {
+  font-size: 0.68em;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.hl-capaxes .cx-toggle-text--open { display: none; }
+.hl-capaxes .hl-capaxes-card[open] .cx-toggle-text--closed { display: none; }
+.hl-capaxes .hl-capaxes-card[open] .cx-toggle-text--open { display: inline; }
+.hl-capaxes .hl-capaxes-card[open] .cx-toggle { color: var(--cx-axis-a-lbl); }
+.hl-capaxes .hl-capaxes-card[open][data-axis="1"] .cx-toggle { color: var(--cx-axis-b-lbl); }
+
+.hl-capaxes .cx-chevron {
+  width: 16px; height: 16px;
+  flex: none;
+  transition: transform 0.12s ease;
+}
+.hl-capaxes .hl-capaxes-card[open] .cx-chevron { transform: rotate(90deg); }
+@media (prefers-reduced-motion: reduce) { .hl-capaxes .cx-chevron { transition: none; } }
+
+/* --- Detail panel (only on expand) ----------------------------- */
+.hl-capaxes .cx-detail {
+  padding: 2px 16px 16px 20px;
+  border-top: 1px solid var(--cx-line-soft);
+}
+.hl-capaxes .cx-block { margin-top: 12px; }
+.hl-capaxes .cx-block-key {
+  display: block;
+  font-size: 0.72em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cx-ink-3);
+}
+.hl-capaxes .cx-block-val {
+  margin: 4px 0 0;
+  font-size: 0.9em;
+  color: var(--cx-ink);
+}
+
+/* --- Footer ----------------------------------------------------- */
+.hl-capaxes .hl-capaxes-foot {
+  margin: 0;
+  padding: 12px 18px;
+  border-top: 1px solid var(--cx-line);
+  background: var(--cx-surface-2);
+  font-size: 0.8em;
+  color: var(--cx-ink-2);
+}
+
+/* --- Narrow viewports -------------------------------------------
+   Stack to one column, same 720px break the install-modes and
+   process-tree components already use for this site. */
+@media (max-width: 720px) {
+  .hl-capaxes { font-size: 16px; }
+  .hl-capaxes .hl-capaxes-grid { grid-template-columns: 1fr; }
+}
+
+/* --- Print -------------------------------------------------------
+   A printed page cannot click a <details> open, so force every card
+   open and hide the chevron/text that implies interactivity. */
+@media print {
+  .hl-capaxes .cx-toggle { display: none !important; }
+  .hl-capaxes .hl-capaxes-card > summary { cursor: default; }
+  .hl-capaxes .cx-detail { display: block !important; }
+}
+
+/* --- Winning against the post stylesheet ------------------------
+   Same fix the install-modes and process-tree components need:
+   `.hl-post-content` rules otherwise beat these selectors. Nothing
+   in this component uses a boxed <code> value, so there is no
+   `!important` fight to win here beyond the ones already covered by
+   the component's own selectors above; left as an explicit comment
+   rather than a silent omission, since every sibling component
+   documents this same check. */
+
+/* ============================================================
+   PROVIDER CONCENTRATION COMPONENT
+   A static, semantic, CSS-drawn cumulative-concentration strip
+   (Section 6's provider-hosting distribution). No JavaScript, no
+   image, no charting library: every number is real HTML text, and
+   the bar length only supplies the at-a-glance shape. Token names
+   deliberately parallel the --im-, --cx- and --pt- families rather than reusing
+   them, so all four components can change independently.
+   ============================================================ */
+
+.hl-concentration-fig { margin: 2.25em 0; }
+.hl-concentration-fig > figcaption {
+  margin-top: 12px;
+  font-size: 0.82em;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--pc-ink-2);
+  text-align: center;
+}
+
+/* --- Tokens: dark (base) ------------------------------------ */
+.hl-concentration {
+  --pc-surface:    #1a1a1a;
+  --pc-surface-2:  #161616;
+  --pc-line:       #2a2a2a;
+  --pc-line-soft:  #242424;
+  --pc-ink:        #eeeeee;
+  --pc-ink-2:      #c6c6c6;
+  --pc-ink-3:      #8d8d8d;
+  --pc-track:      #242424;
+  --pc-fill:       #58a6ff;
+
+  border: 1px solid var(--pc-line);
+  border-radius: 8px;
+  background: var(--pc-surface);
+  color: var(--pc-ink);
+  overflow: hidden;
+  font-size: 17px;
+  line-height: 1.65;
+  text-align: left;
+}
+
+/* --- Tokens: light ------------------------------------------ */
+:root[data-theme="light"] .hl-concentration,
+.hl-concentration[data-pc-theme="light"] {
+  --pc-surface:    #ffffff;
+  --pc-surface-2:  #f4f4f5;
+  --pc-line:       #d4d4d8;
+  --pc-line-soft:  #e4e4e7;
+  --pc-ink:        #18181b;
+  --pc-ink-2:      #3f3f46;
+  --pc-ink-3:      #5f5f68;
+  --pc-track:      #e4e4e7;
+  --pc-fill:       #1857b8;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .hl-concentration {
+    --pc-surface:    #ffffff;
+    --pc-surface-2:  #f4f4f5;
+    --pc-line:       #d4d4d8;
+    --pc-line-soft:  #e4e4e7;
+    --pc-ink:        #18181b;
+    --pc-ink-2:      #3f3f46;
+    --pc-ink-3:      #5f5f68;
+    --pc-track:      #e4e4e7;
+    --pc-fill:       #1857b8;
+  }
+}
+
+/* --- Header line: the two headline counts, always visible ------ */
+.hl-concentration .hl-concentration-head {
+  padding: 12px 18px;
+  background: var(--pc-surface-2);
+  border-bottom: 1px solid var(--pc-line);
+  font-size: 0.95em;
+  color: var(--pc-ink-2);
+}
+.hl-concentration .pc-head-figure {
+  font-weight: 700;
+  color: var(--pc-ink);
+}
+
+/* --- The 47/17 split, always visible ---------------------------- */
+.hl-concentration .pc-split {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 24px;
+  padding: 10px 18px;
+  border-bottom: 1px solid var(--pc-line-soft);
+  font-size: 0.86em;
+  color: var(--pc-ink-3);
+}
+.hl-concentration .pc-split-item strong { color: var(--pc-ink); }
+
+/* --- The three cumulative rows ----------------------------------
+   Text carries every figure; the bar only supplies the shape, so
+   the row still reads correctly with `.pc-track` hidden entirely
+   (images off, an Atom feed reader, a screen reader). */
+.hl-concentration .pc-bars {
+  padding: 14px 18px 16px;
+}
+.hl-concentration .pc-row + .pc-row { margin-top: 12px; }
+.hl-concentration .pc-row-label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 0.9em;
+  margin-bottom: 5px;
+}
+.hl-concentration .pc-row-name { color: var(--pc-ink-2); }
+.hl-concentration .pc-row-val { font-weight: 700; color: var(--pc-ink); }
+.hl-concentration .pc-track {
+  height: 10px;
+  border-radius: 5px;
+  background: var(--pc-track);
+  overflow: hidden;
+}
+.hl-concentration .pc-fill {
+  height: 100%;
+  border-radius: 5px;
+  background: var(--pc-fill);
+}
+
+/* --- Footer ------------------------------------------------------ */
+.hl-concentration .hl-concentration-foot {
+  margin: 0;
+  padding: 12px 18px;
+  border-top: 1px solid var(--pc-line);
+  background: var(--pc-surface-2);
+  font-size: 0.8em;
+  color: var(--pc-ink-2);
+}
+
+/* --- Narrow viewports --------------------------------------------
+   Rows already stack full-width by default (no grid columns to
+   collapse); only the head/split lines need to wrap rather than
+   truncate, which `flex-wrap: wrap` above already provides. Font
+   size drops to match the other three components at this break. */
+@media (max-width: 720px) {
+  .hl-concentration { font-size: 16px; }
+}
+
+/* --- Print ---------------------------------------------------------
+   Nothing to force open (there is no <details> in this component),
+   but the fill colour must still read in grayscale: --pc-fill and
+   --pc-track are chosen at different lightness values in both
+   themes specifically so the bar remains visible with color stripped. */
+

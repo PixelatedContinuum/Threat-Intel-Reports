@@ -62,8 +62,10 @@
     <details class="hl-imodes-card" data-kind="{{ m.kind | default: 'cleared' }}"{% if m.id %} id="{{ m.id }}"{% endif %}>
       <summary>
         <span class="im-rail" aria-hidden="true"></span>
-        <span class="im-head">
+        <span class="im-title-row">
           <span class="im-name">{{ m.name | escape }}</span>
+        </span>
+        <span class="im-badge-row">
           <span class="im-badge">{{ m.kind_label | escape }}</span>
         </span>
         <code class="im-path">{{ m.path | escape }}</code>

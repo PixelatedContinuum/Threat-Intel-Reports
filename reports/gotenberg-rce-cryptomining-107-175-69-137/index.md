@@ -69,7 +69,7 @@ install_modes:
       name: "Persistent systemd install"
       path: "/usr/bin/polkitd.d/"
       kind: persists
-      kind_label: "shipped; per-host reach not measurable"
+      kind_label: "shipped, reach not measured"
       quick:
         - key: "Runs as"
           value: "root"
@@ -91,6 +91,32 @@ install_modes:
   foot: >-
     One recovered host also carried a watchdog script that should be removed alongside either
     mode.
+capability_axes:
+  note: "Do not average these axes"
+  axes:
+    - id: cx-vuln-research
+      name: "Vulnerability research"
+      rating: "LOW"
+      confidence: "HIGH-to-DEFINITE"
+      headline: "The exploit primitive is copied from the public advisory, not discovered."
+      detail: "The injection shape, the truthiness suffix, the trailing dummy key and the vendor advisory's own placeholder value all match verbatim. The timing-confirmation method is separately traceable to a public proof-of-concept published three months before the campaign. This operator did not discover anything."
+      limit: "Held just short of flat DEFINITE only because a single comparison point cannot formally exclude every implausible coincidence."
+    - id: cx-op-eng
+      name: "Operational engineering"
+      rating: "MODERATE-HIGH"
+      confidence: ""
+      headline: "Three of four originally claimed elements survive a working prior-art search."
+      detail: "The writability probe, a relative rather than fixed timing threshold, and a three-transport retry ladder survive. A dedicated Chinese-language security search, run with working controls proving it could surface real content, removed the fourth: per-host callback tagging built from shell command substitution is foundational, widely taught technique in that literature, not an operator contribution."
+      limit: "Held at MODERATE-HIGH rather than higher because three-of-four standing against a working search is evidence of absence, not a positive discovery. Recovery of the operator's own reconnaissance notes, or a private or paywalled writeup covering the writability check or the retry ladder, would lower this toward the copied-technique reading already applied to callback tagging."
+  foot: "The fuller reasoning, the one alternative excluded, and what would move either rating are in the surrounding text."
+provider_concentration:
+  total: "196"
+  total_label: "confirmed IPs"
+  groups: "64"
+  groups_label: "provider groups"
+  split: [{value: "47", label: "groups: 1 IP each"}, {value: "17", label: "groups: the other 149 IPs"}]
+  rows: [{label: "Top 5 groups", percent: 51.5}, {label: "Top 10 groups", percent: 65.8}, {label: "Top 25 groups", percent: 80.1}]
+  foot: "That concentration is why a disclosure program built on this campaign needs only a small number of provider-level reports, not 196 individual ones."
 ---
 
 **Campaign Identifier:** Gotenberg-RCE-Cryptomining-107.175.69.137<br>
@@ -759,13 +785,14 @@ recovered corpus at all.
 
 ### Where the 196 confirmed victim hosts are hosted, by provider only
 
-Hosting for the 196 distinct confirmed IPs resolves into 64 provider groups. Forty-seven of those
-groups are single-IP; the remaining seventeen account for the other 149 addresses. The top 25
-provider groups alone cover 80.1% of every confirmed IP, and the concentration sharpens fast at the
-top. The five largest providers together account for 51.5% of the confirmed population, and the
-ten largest account for 65.8%. That concentration is the practical reason a disclosure
-program built on this campaign needs only a small number of provider-level reports rather than 196
-individual ones.
+Hosting for the 196 distinct confirmed IPs concentrates fast: a small number of provider groups
+cover most of the confirmed population, which is the practical reason a disclosure program built
+on this campaign needs only a handful of provider-level reports rather than 196 individual ones.
+
+<figure class="hl-concentration-fig">
+{% include provider-concentration.html %}
+<figcaption><em>Figure 6: Provider concentration among the 196 confirmed IPs. The bar length shows the shape; every count and percentage is also stated as text.</em></figcaption>
+</figure>
 
 A small number of confirmed hosts, fewer than five, carry no usable abuse-role contact anywhere in
 public registry data at all. They sit on a major cloud provider and a national telecom's network in
@@ -1055,31 +1082,14 @@ to move with more evidence.
 
 ### Capability: two axes, never averaged into one adjective
 
-An earlier pass on this case collapsed these into "medium sophistication." That collapse is wrong,
-and I am keeping the two axes separate here on purpose, because they point in genuinely different
-directions and averaging them would misrepresent both.
+An earlier pass on this case collapsed these into "medium sophistication." That collapse is wrong.
+Vulnerability research and operational engineering point in genuinely different directions here,
+with distinct evidence and distinct confidence, and averaging them would misrepresent both.
 
-On vulnerability research I hold this operator at **LOW**, at or below the public floor, at
-HIGH-to-DEFINITE confidence. Section 7 already walks through the direct comparison: the injection shape, the truthiness suffix,
-the trailing dummy key, and the vendor advisory's own placeholder value all match verbatim, and the
-timing-confirmation method is separately traceable to a public proof-of-concept published three
-months before the campaign. This operator did not discover anything. I hold this just short of flat
-DEFINITE only because a single comparison point cannot formally exclude every implausible
-coincidence.
-
-On operational engineering I hold this operator at **MODERATE-HIGH**, on what actually survives
-scrutiny, which is three elements rather than the four I originally credited as evidence this
-operator's real skill sits in campaign engineering rather than exploit research: the writability
-probe, a relative rather than fixed timing threshold, a three-transport retry ladder, and
-per-host callback tagging built from shell command substitution. A dedicated search of
-Chinese-language security material, run with working controls proving the search itself could
-surface real content, removed one of the four: per-host callback tagging this way is foundational,
-widely taught technique in that literature, not an operator contribution. The other three survive
-against that same working search, in either language, which is real evidence of absence rather than
-an unchecked gap. Three of four elements standing against a search that demonstrably works is what
-keeps this axis at MODERATE-HIGH rather than collapsing it to "they used someone else's tooling
-end to end," which would be overclaiming in the opposite direction from the one this correction
-exists to fix.
+<figure class="hl-capaxes-fig">
+{% include capability-axes.html %}
+<figcaption><em>Figure 7: The two capability axes, held apart on purpose. Section 7 carries the full exploit-provenance comparison behind the vulnerability-research rating.</em></figcaption>
+</figure>
 
 The honest, non-averaged statement is this: this operator did not need to be, and was not, a
 vulnerability researcher for this campaign. They read a disclosed advisory closely, picked up a

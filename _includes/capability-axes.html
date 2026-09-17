@@ -1,0 +1,102 @@
+{%- comment -%}
+  CAPABILITY AXES COMPONENT
+
+  Renders a report's `capability_axes` front matter as a two-item, side-by-side
+  expandable comparison. Built for the case where a finding is fundamentally a
+  CONTRAST between two independent assessment axes that must never be
+  collapsed into one adjective (here: vulnerability-research skill vs.
+  operational-engineering skill), so the "do not average" instruction has to
+  be visible before anyone opens anything, and the reasoning behind each axis
+  sits behind a native <details> per side.
+
+  A sibling of install-modes.html, not a reuse of it: that component's
+  cleared/persists colouring is persistence-specific and would be a category
+  error here, where neither axis is "good" or "bad", only different. This
+  component carries its own token namespace (--cx-*) and its own two
+  differentiating accents, chosen with no good/bad connotation.
+
+  WHY HTML AND NOT AN IMAGE. The rating words, the confidence label and the
+  evidence a reader would want to quote back have to be selectable, findable
+  with the browser's find, and reflowable on a phone. Pairs with
+  assets/css/custom.css (CAPABILITY AXES COMPONENT block). No JS: two
+  <details> elements need no script to work, keyboard-navigate, or degrade on
+  a printed page or in the Atom feed.
+
+  USAGE, from a report's markdown. Wrap it in the report's own <figure> so any
+  figure-nav chip row and caption stay where every other figure keeps them:
+
+    <figure class="hl-capaxes-fig">
+    include capability-axes.html   (written without the tag braces on purpose:
+    a literal Liquid tag inside a comment block is still tokenised)
+    <figcaption><em>Figure N: what it shows and why it matters.</em></figcaption>
+    </figure>
+
+  Do not leave a blank line inside that block. Kramdown re-enters markdown mode
+  at a blank line inside raw HTML, and the rest of the page pays for it.
+
+  FRONT MATTER SHAPE
+
+    capability_axes:
+      note: "Do not average these axes"        # required, always-visible header line
+      axes:
+        - id: cx-vuln-research                 # becomes the deep-link target, must be unique
+          name: "Vulnerability research"       # heading, escaped
+          rating: "LOW"                        # always-visible badge text, escaped
+          confidence: "HIGH-to-DEFINITE"        # optional; omit if the axis carries no separate confidence word
+          headline: "Short always-visible line."  # shown before opening, escaped
+          detail: "Longer evidence paragraph."  # shown only when expanded, allows inline HTML
+          limit: "The explicit boundary on this rating."  # shown only when expanded, allows inline HTML
+      foot: "..."                              # optional, footer sentence below both cards, allows inline HTML
+
+  ESCAPING. `name`, `rating`, `confidence` and `headline` are escaped, so a
+  literal like <pid> is safe in those. `detail`, `limit` and `foot` are NOT
+  escaped so they can carry <code>; write &lt;pid&gt; by hand there.
+{%- endcomment -%}
+{%- assign cx = include.data | default: page.capability_axes -%}
+{%- if cx and cx.axes -%}
+<div class="hl-capaxes" data-hl-capaxes>
+  <div class="hl-capaxes-head">
+    <span class="cx-head-label">Capability assessment</span>
+    <span class="cx-head-note">{{ cx.note | default: "Do not average these axes" | escape }}</span>
+  </div>
+  <div class="hl-capaxes-grid">
+    {%- for a in cx.axes %}
+    <details class="hl-capaxes-card" data-axis="{{ forloop.index0 }}"{% if a.id %} id="{{ a.id }}"{% endif %}>
+      <summary>
+        <span class="cx-rail" aria-hidden="true"></span>
+        <span class="cx-head">
+          <span class="cx-name">{{ a.name | escape }}</span>
+          <span class="cx-rating">{{ a.rating | escape }}</span>
+        </span>
+        {%- if a.confidence and a.confidence != "" %}
+        <span class="cx-confidence">Confidence: {{ a.confidence | escape }}</span>
+        {%- endif %}
+        {%- if a.headline %}
+        <span class="cx-headline">{{ a.headline | escape }}</span>
+        {%- endif %}
+        <span class="cx-toggle" aria-hidden="true">
+          <span class="cx-toggle-text cx-toggle-text--closed">Open for evidence and limit</span>
+          <span class="cx-toggle-text cx-toggle-text--open">Close</span>
+          <svg class="cx-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+        </span>
+      </summary>
+      <div class="cx-detail">
+        {%- if a.detail %}
+        <div class="cx-block">
+          <span class="cx-block-key">Evidence</span>
+          <p class="cx-block-val">{{ a.detail }}</p>
+        </div>
+        {%- endif %}
+        {%- if a.limit %}
+        <div class="cx-block">
+          <span class="cx-block-key">Explicit limit</span>
+          <p class="cx-block-val">{{ a.limit }}</p>
+        </div>
+        {%- endif %}
+      </div>
+    </details>
+    {%- endfor %}
+  </div>
+  {%- if cx.foot %}<p class="hl-capaxes-foot">{{ cx.foot }}</p>{% endif %}
+</div>
+{%- endif -%}
