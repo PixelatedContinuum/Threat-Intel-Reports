@@ -3,17 +3,17 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-17T10:02:58Z
+generated_at: 2026-09-17T12:02:38Z
 window_days: 30
 counts:
-  total: 547
-  research: 186
-  news: 361
+  total: 550
+  research: 190
+  news: 360
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 77
+    count: 76
     color: 1
   - label: "cybercrime"
     count: 63
@@ -42,10 +42,10 @@ topics:
   - label: "social engineering"
     count: 15
     color: 10
-  - label: "healthcare"
+  - label: "clickfix"
     count: 14
     color: 11
-  - label: "zero-day"
+  - label: "healthcare"
     count: 14
     color: 12
 label_colors:
@@ -97,6 +97,7 @@ label_colors:
   "airport": 9
   "aitm": 5
   "alphaagent": 1
+  "amadey": 5
   "amatera stealer": 1
   "amd": 6
   "amos": 6
@@ -106,6 +107,7 @@ label_colors:
   "android banking trojan": 11
   "android malware": 4
   "android rat": 12
+  "angryrebel": 7
   "anthropic": 8
   "anti-analysis": 11
   "antivirus removal": 7
@@ -122,6 +124,7 @@ label_colors:
   "apt": 5
   "apt-q-95": 4
   "apt28": 3
+  "apt36": 10
   "arktunnel": 6
   "arm": 10
   "armenia": 5
@@ -164,6 +167,7 @@ label_colors:
   "bandook": 10
   "banking software": 7
   "banking trojan": 4
+  "bashnatch": 10
   "beacon": 6
   "behavior-based-detection": 12
   "beijing institute of technology": 12
@@ -238,12 +242,13 @@ label_colors:
   "cisco ise": 8
   "cisco talos antivirus": 7
   "cisco talos malware protection": 8
+  "cisco talos network intrusion prevention": 9
   "cisco talos web filtering": 12
   "citrix": 11
   "cl0p": 3
   "claude desktop": 12
   "cleo": 7
-  "clickfix": 3
+  "clickfix": 11
   "clipper": 3
   "cloaked ursa": 2
   "cloud": 7
@@ -348,6 +353,7 @@ label_colors:
   "gaming": 5
   "garage2global": 10
   "gentlemen": 1
+  "gh0st rat": 11
   "ghostcode": 6
   "gigabud": 9
   "github actions": 6
@@ -358,13 +364,14 @@ label_colors:
   "google infrastructure abuse": 8
   "google tag manager abuse": 4
   "government": 3
+  "government impersonation": 7
   "gta6": 6
   "hacker": 8
   "hacker conversations": 8
   "hardware": 6
   "hasbro": 1
   "head mare": 3
-  "healthcare": 11
+  "healthcare": 12
   "hideul.exe": 7
   "high profile threats": 2
   "hugging face": 6
@@ -386,7 +393,6 @@ label_colors:
   "leadership": 11
   "legal": 7
   "linux": 2
-  "living-off-the-land": 1
   "mac malware": 8
   "macos": 11
   "malware": 5
@@ -418,10 +424,8 @@ label_colors:
   "patched": 1
   "patches": 2
   "payment fraud": 12
-  "pdf attachment": 7
   "phishing": 9
   "phishing kit": 6
-  "plugin": 7
   "plugin vulnerability": 1
   "poc exploit": 3
   "postgresql": 12
@@ -454,8 +458,19 @@ label_colors:
   "vmware": 2
   "vpn": 8
   "vulnerabilities": 1
-  "zero-day": 12
 items:
+  - title: "US takes down NightmareStresser DDoS-for-hire platform"
+    url: "https://www.bleepingcomputer.com/news/security/fbi-seizes-nightmarestresser-service-linked-to-thousands-of-ddos-attacks/"
+    source: "BleepingComputer"
+    date: 2026-09-17T11:33:35Z
+    kind: news
+    labels: []
+  - title: "Ransomware incidents in Japan in the first half of 2026: Investigation of The Gentlemen’s infrastructure and evidence of Qilin's AI use"
+    url: "https://blog.talosintelligence.com/ransomware-incidents-in-japan-in-the-first-half-of-2026/"
+    source: "Cisco Talos"
+    date: 2026-09-17T10:00:43Z
+    kind: research
+    labels: ["cisco talos malware protection", "cisco talos network intrusion prevention", "ransomware", "threat spotlight"]
   - title: "Chinese hackers use SparroWocky malware in govt espionage attacks"
     url: "https://www.bleepingcomputer.com/news/security/chinese-hackers-use-sparrowocky-malware-in-govt-espionage-attacks/"
     source: "BleepingComputer"
@@ -522,6 +537,30 @@ items:
     date: 2026-09-16T17:26:41Z
     kind: news
     labels: ["artificial intelligence"]
+  - title: "SilkParasite Infrastructure: SpiceRAT Servers Tied to Energy and Government Targets Across Central Asia"
+    url: "https://hunt.io/blog/silkparasite-spicerat-central-asia-infrastructure"
+    source: "AlienVault"
+    date: 2026-09-16T17:20:48Z
+    kind: research
+    labels: ["bloodalchemy", "government impersonation", "nodeedgerat", "nomadrat", "silkparasite", "spicerat"]
+  - title: "VectraRAT: An Undocumented Full-Stack MaaS Built From Scratch"
+    url: "https://socradar.io/blog/vectrarat-undocumented-stack-maas"
+    source: "AlienVault"
+    date: 2026-09-16T17:03:00Z
+    kind: research
+    labels: ["amadey", "clickfix", "maas platform", "netsupport rat", "nyxel", "uac bypass", "vectrarat", "vidar"]
+  - title: "Noodle RAT: A Recipe for Cross Platform Espionage"
+    url: "https://otx.alienvault.com/pulse/6aaacbc380f9fb21de37cdd2"
+    source: "AlienVault"
+    date: 2026-09-16T17:02:59Z
+    kind: research
+    labels: ["angryrebel", "gh0st rat", "microload", "multidrop", "noodle rat", "rekoobe", "tiny shell"]
+  - title: "Operation RapidRust: APT36 Deploys RUSTYSHADE, RUSTYMOVE, PSNATCH, and BASHNATCH"
+    url: "https://otx.alienvault.com/pulse/6aaaca963a639dd0475e8462"
+    source: "AlienVault"
+    date: 2026-09-16T16:57:58Z
+    kind: research
+    labels: ["apt36", "bashnatch", "gitshellpad", "operation rapidrust", "psnatch", "rustyshade"]
   - title: "First Agentic AI Data Breach Reported to Spanish Regulator"
     url: "https://www.securityweek.com/first-agentic-ai-data-breach-reported-to-spanish-regulator/"
     source: "SecurityWeek"
@@ -3720,21 +3759,3 @@ items:
     date: 2026-08-18T13:00:00Z
     kind: news
     labels: ["artificial intelligence", "patch", "vulnerabilities"]
-  - title: "300,000 WordPress Sites Potentially Exposed to Hacking Due to Form Plugin Flaw"
-    url: "https://www.securityweek.com/300000-wordpress-sites-potentially-exposed-to-hacking-due-to-form-plugin-flaw/"
-    source: "SecurityWeek"
-    date: 2026-08-18T10:48:23Z
-    kind: news
-    labels: ["plugin", "vulnerabilities", "wordpress"]
-  - title: "CISA: Windows Task Host flaw now exploited by ransomware gangs"
-    url: "https://www.bleepingcomputer.com/news/security/cisa-windows-task-host-flaw-now-exploited-by-ransomware-gangs/"
-    source: "BleepingComputer"
-    date: 2026-08-18T10:32:16Z
-    kind: news
-    labels: ["microsoft"]
-  - title: "Beware of Phishing Emails Disguised as Transaction Receipts"
-    url: "https://otx.alienvault.com/pulse/6a8431e74688d3e47ef55014"
-    source: "AlienVault"
-    date: 2026-08-18T10:20:23Z
-    kind: research
-    labels: ["living-off-the-land", "pdf attachment", "phishing campaign", "remote access", "screenconnect", "screenconnect abuse", "transaction receipt lure", "vbs script"]
