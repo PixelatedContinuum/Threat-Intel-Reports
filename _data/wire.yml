@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-17T12:02:38Z
+generated_at: 2026-09-17T14:02:29Z
 window_days: 30
 counts:
   total: 550
-  research: 190
-  news: 360
+  research: 189
+  news: 361
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -28,10 +28,10 @@ topics:
     count: 30
     color: 5
   - label: "artificial intelligence"
-    count: 25
+    count: 24
     color: 6
   - label: "data breaches"
-    count: 23
+    count: 24
     color: 7
   - label: "credential theft"
     count: 17
@@ -39,13 +39,13 @@ topics:
   - label: "phishing"
     count: 15
     color: 9
-  - label: "social engineering"
+  - label: "ransomware"
     count: 15
     color: 10
-  - label: "clickfix"
-    count: 14
+  - label: "social engineering"
+    count: 15
     color: 11
-  - label: "healthcare"
+  - label: "clickfix"
     count: 14
     color: 12
 label_colors:
@@ -175,6 +175,7 @@ label_colors:
   "bigbear": 8
   "bigbear 2.0": 8
   "binary ninja": 5
+  "bind": 7
   "binding.gyp": 1
   "bitcoin": 2
   "black hat seo": 5
@@ -248,7 +249,7 @@ label_colors:
   "cl0p": 3
   "claude desktop": 12
   "cleo": 7
-  "clickfix": 11
+  "clickfix": 12
   "clipper": 3
   "cloaked ursa": 2
   "cloud": 7
@@ -309,6 +310,7 @@ label_colors:
   "darklantern": 4
   "data breaches": 7
   "data exfiltration": 9
+  "data leak": 9
   "data security": 10
   "data-exfiltration": 12
   "dead drop resolver": 7
@@ -320,6 +322,7 @@ label_colors:
   "diplomatic targeting": 1
   "disrupted": 8
   "dll sideloading": 11
+  "dns": 1
   "docusign impersonation": 2
   "domain controller": 4
   "dprk apt": 2
@@ -371,7 +374,7 @@ label_colors:
   "hardware": 6
   "hasbro": 1
   "head mare": 3
-  "healthcare": 12
+  "healthcare": 11
   "hideul.exe": 7
   "high profile threats": 2
   "hugging face": 6
@@ -417,6 +420,7 @@ label_colors:
   "openai": 4
   "oracle": 12
   "oracle cspu": 1
+  "ot": 3
   "papercut": 8
   "patch": 10
   "patch tuesady": 5
@@ -432,6 +436,7 @@ label_colors:
   "privacy": 12
   "proxy abuse": 6
   "qilin": 11
+  "ransomware": 10
   "rce": 10
   "revolut": 5
   "rmm abuse": 2
@@ -445,7 +450,7 @@ label_colors:
   "servicenow": 1
   "sma1000": 2
   "soc": 9
-  "social engineering": 10
+  "social engineering": 11
   "software": 5
   "spring": 5
   "surfshark": 11
@@ -459,6 +464,24 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
 items:
+  - title: "Revolut Data Breach: 5 Months, 680 High-Profile Accounts, $3M Ransom"
+    url: "https://www.securityweek.com/revolut-data-breach-5-months-680-high-profile-accounts-3m-ransom/"
+    source: "SecurityWeek"
+    date: 2026-09-17T13:57:41Z
+    kind: news
+    labels: ["data breaches", "data leak", "revolut"]
+  - title: "ISC Patches 14 Vulnerabilities in BIND 9 Security Update"
+    url: "https://www.securityweek.com/isc-patches-14-vulnerabilities-in-bind-9-security-update/"
+    source: "SecurityWeek"
+    date: 2026-09-17T12:39:28Z
+    kind: news
+    labels: ["bind", "dns", "patch", "vulnerabilities"]
+  - title: "Ransomware Attacks on Manufacturers Surge as Supply Chain Risk Grows"
+    url: "https://www.securityweek.com/ransomware-attacks-on-manufacturers-surge-as-supply-chain-risk-grows/"
+    source: "SecurityWeek"
+    date: 2026-09-17T12:29:53Z
+    kind: news
+    labels: ["ics/ot", "ot", "ransomware"]
   - title: "US takes down NightmareStresser DDoS-for-hire platform"
     url: "https://www.bleepingcomputer.com/news/security/fbi-seizes-nightmarestresser-service-linked-to-thousands-of-ddos-attacks/"
     source: "BleepingComputer"
@@ -3741,21 +3764,3 @@ items:
     date: 2026-08-18T14:45:00Z
     kind: news
     labels: ["cybercrime", "government"]
-  - title: "Your Controls Block Known Attacks. What About the Behavior?"
-    url: "https://www.bleepingcomputer.com/news/security/your-controls-block-known-attacks-what-about-the-behavior/"
-    source: "BleepingComputer"
-    date: 2026-08-18T14:01:11Z
-    kind: news
-    labels: []
-  - title: "Staying Ahead of Adversarial AI Through Agentic Source Code Review"
-    url: "https://cloud.google.com/blog/topics/threat-intelligence/staying-ahead-of-adversarial-ai-through-agentic-source-code-review/"
-    source: "Google"
-    date: 2026-08-18T14:00:00Z
-    kind: research
-    labels: ["threat intelligence"]
-  - title: "AI-Driven Vulnerability Surge Breaks the Traditional Patching Model"
-    url: "https://www.securityweek.com/ai-driven-vulnerability-surge-breaks-the-traditional-patching-model/"
-    source: "SecurityWeek"
-    date: 2026-08-18T13:00:00Z
-    kind: news
-    labels: ["artificial intelligence", "patch", "vulnerabilities"]
