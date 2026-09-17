@@ -323,9 +323,8 @@ credit an install either way. A further group of 15 hosts shows a statistically 
 push the range toward 163 to 166 if credited. I am deliberately not crediting it: suggestive is not
 verified, and this case has already had one number published on weaker grounds than that.
 
-The callback total moved for a related reason. An earlier pass recorded 178, then 179, then a run
-of intermediate values, before a full recount against the raw log settled on 184, split as stated
-above.
+The callback total moved for a related reason: a full recount against the raw log settled on 184,
+split as stated above.
 
 </details>
 
@@ -385,17 +384,11 @@ to connect during the window could have watched the operator's own interactive s
 about targeting, careless about their own exposure. Section 9 carries that same split forward as
 two separate capability axes rather than averaging it into one adjective.
 
-I want to close the recon-host question I raised, and how the evidence actually settled it.
-Given that 205 targets were fingerprinted, timed, and had a version band selected before this 54-minute window
-even started, my working assumption going in was that a serious recon phase must have happened
-somewhere else, most likely on a separate host stood up for exactly that purpose, because 54
-minutes of automated execution plainly could not have also produced that reconnaissance. The
-infrastructure work in Section 6 answers this directly, and the answer reframes the question rather
-than confirming my assumption: the operator's own box shows an unbroken tenancy record stretching
-back roughly eleven weeks before the campaign, which is easily enough time to have run that
-reconnaissance quietly, on this same host, with nothing surviving to prove it either way. I do not
-have a separate recon host to report. What I have is evidence that I never needed one to explain
-what I saw.
+205 targets were fingerprinted, timed, and had a version band selected before this 54-minute window
+even started, and that reconnaissance did not require a separate host. The operator's own box shows
+an unbroken tenancy record stretching back roughly eleven weeks before the campaign, easily enough
+time to have run that reconnaissance quietly on this same host, with nothing surviving to prove it
+either way. No separate recon host is evidenced.
 
 ### What the version band does and does not tell me
 
@@ -444,16 +437,13 @@ operator-specific pivot in this entire case**, and as of this investigation it i
 everywhere I can search it: no VirusTotal object and no Hunt.io indexed post references it. It is
 clean, not because nobody has looked, but because nobody else appears to be using it.
 
-I initially read the reliance on a stock, freely available miner as evidence this operator "rents
-rather than builds," implying a supplier relationship for the payload itself. I am withdrawing that
-framing. XMRig is free software used by the large majority of Linux cryptojacking activity
-industry-wide; running it unmodified is not a purchase, it is a default choice, and it sits oddly
-against the withdrawal to also call it evidence of low investment. The more accurate reading is
-that this operator takes a widely available commodity payload and
-invests their engineering effort in the delivery pipeline around it, which the escalation ladder in
-Section 3 already demonstrates in detail. A drop layer serving this exact payload also appears
-shared across multiple unrelated cryptojacking operators pulling from the same installer family,
-which is consistent with that reading: shared infrastructure, not a paid or exclusive one.
+XMRig is free software used by the large majority of Linux cryptojacking activity industry-wide;
+running it unmodified is a default choice, not evidence of a supplier relationship for the payload
+itself. This operator takes a widely available commodity payload and invests their engineering
+effort in the delivery pipeline around it, which the escalation ladder in Section 3 already
+demonstrates in detail. A drop layer serving this exact payload also appears shared across multiple
+unrelated cryptojacking operators pulling from the same installer family, consistent with that
+reading: shared infrastructure, not a paid or exclusive one.
 
 ### Two install modes, and the one that gets missed matters more
 
@@ -500,8 +490,7 @@ operations present simultaneously: a distinct miner paying three different walle
 pool, and an unrelated multi-architecture dropper fetching payloads with no connection to this
 operator's own infrastructure. At least three separate operations were active on that single
 machine at once, which is a reasonable expectation for any internet-facing host that stayed
-vulnerable long enough, and it means a victim notification for this campaign may legitimately need
-to mention that more than one actor was present.
+vulnerable long enough; a responder on such a host should expect more than one actor's activity.
 
 ---
 
@@ -562,16 +551,14 @@ underlying accounts are farmed from compromised sources or legitimately provisio
 SIM registration is a separate question that the intake tooling alone cannot answer, because legal
 SMS-verification services run structurally identical sold and out-of-stock inventory models over
 properly registered numbers. I found nothing in the recovered evidence that resolves this either
-way, and I am stating that plainly rather than assuming the less charitable reading because it fits
-the rest of the case.
+way.
 
 A separate Android device-farm control panel exists in the same operator's directory, with its own
 UI referencing device counts, online status, and accessibility permissions on managed devices. I
 looked for a direct connection between this and the Telegram account farm, since the two would
 naturally complement each other, and found none: no shared API endpoint, no shared data format,
 nothing beyond both existing on the same box. I am reporting the device farm as a real, separate
-capability whose actual purpose I cannot currently determine, rather than assuming it feeds the
-account operation just because that would make a tidier story.
+capability whose actual purpose I cannot currently determine.
 
 ### The named platforms were targeted, not compromised
 
@@ -598,17 +585,15 @@ suggested, which is the opposite of the direction these corrections usually run.
 
 ### The AI angle, and why it points the opposite way from where the case started
 
-This investigation originally opened on the premise that an AI agent framework drove the
-exploitation. That premise is refuted, not merely unconfirmed, on three independent checks.
-The file the claim rested on was never actually fetched or read by anyone at any point in this
-investigation's own history; the specific popularity figure cited for the framework in question is
-off by roughly a factor of ten against the framework's own real numbers; and a full keyword sweep
-of every script that actually produced the 198 confirmed exploits found zero model API calls, zero
-API keys, and zero prompt or chat artifacts of any kind. I am treating this as a genuine finding
-rather than an embarrassment: two independent checks, one on code structure and one testing the
-framework claim directly against a primary source, reached the same conclusion from different
-evidence. This is ordinary, competently engineered scripted exploitation of one vulnerability, not
-anything agent-orchestrated.
+An AI agent framework driving this exploitation is refuted, not merely unconfirmed, on three
+independent checks. The file the claim rested on was never fetched or read at all; the specific
+popularity figure cited for the framework in question is off by roughly a factor of ten against the
+framework's own real numbers; and a full keyword sweep of every script that actually produced the
+198 confirmed exploits found zero model API calls, zero API keys, and zero prompt or chat artifacts
+of any kind. Two independent checks, one on code structure and one testing the framework claim
+directly against a primary source, reached the same conclusion from different evidence: this is
+ordinary, competently engineered scripted exploitation of one vulnerability, not anything
+agent-orchestrated.
 
 What I found instead is more interesting, and it points the opposite direction. The operator does
 not appear to use AI tooling to attack; the operator **attacks** AI infrastructure. One victim's
@@ -634,18 +619,11 @@ The operator's own infrastructure sits at `107.175.69.137`, in AS36352, register
 AS-COLOCROSSING, under HostPapa. I re-verified the ASN and current owner live against VirusTotal at
 publication and it matches exactly what passive registry data showed during the investigation.
 
-I want to correct something in how I had been describing this host's provider. I had associated
-the IP's retail brand with RackNerd, a separate company that leases capacity inside ColoCrossing's
-data centers. It does not hold its own ASN, which is why a
-RackNerd-sold instance shows ColoCrossing as the network owner in registry data. That distinction
-matters operationally: ColoCrossing's own abuse desk carries a documented, multi-source pattern of
-slow-to-unresponsive handling, while RackNerd's own separate abuse channel has a real,
-publicly documented escalation process with actual instances of enforcement. These are two
-different organizations with two different track records, reachable through two different
-addresses, and I had been treating them as one. Whether this specific instance is RackNerd-sold
-rather than sold by another reseller on the same ColoCrossing infrastructure is not something I
-independently confirmed, so I am flagging the distinction rather than asserting the better channel
-with certainty.
+The IP's retail brand is commonly associated with RackNerd, a separate company that leases capacity
+inside ColoCrossing's data centers and does not hold its own ASN, which is why a RackNerd-sold
+instance shows ColoCrossing as the network owner in registry data. Whether this specific instance is
+RackNerd-sold rather than sold by another reseller on the same ColoCrossing infrastructure is not
+independently confirmed.
 
 ### What is actually running on the host, port by port
 
@@ -692,24 +670,19 @@ window and was torn down afterward.
 
 ### The host was declared dark, and that was wrong in an instructive way
 
-An earlier check in this investigation concluded the operator's host had gone fully dark, all six
-ports it tested closed or filtered, with a working control confirming the test path itself was
-functional. That conclusion does not hold up, and I want to walk through why, because the failure
-mode is more valuable than the correction itself.
+An earlier check concluded the operator's host had gone fully dark, all six ports it tested closed
+or filtered, with a working control confirming the test path itself was functional. That conclusion
+does not hold up.
 
-The evidence that the host is actually live and administered is a set of captured application-layer
-banners, an SSH version string, an HTTP error response, all genuine service replies, not bare
-timestamps claiming a port was "last seen" at some point. A scanner cannot fabricate a banner. The
-tool that originally reported the host dark carries two separate fields both labeled something like
-"last seen," one built from real captured service responses and one from scan-attempt telemetry
-alone, and on this exact host and port those two fields disagreed by two and a half hours. The
-earlier dark-check's own control was real, and it still produced the wrong conclusion, because it
-tested reachability to a hyperscale, universally-peered target rather than to a target that shares
-the operator's own hosting class: a cheap, single-tenant VPS on a provider with every incentive to
-treat automated crawler traffic differently from ordinary internet traffic. A control has to vary
-the same property the measurement actually depends on. Proving a path reaches the easiest possible
-target on the internet proves nothing about whether it reaches the hardest one, and that is the
-generalizable lesson I am carrying out of this specific mistake.
+The host is actually live and administered: captured application-layer banners, an SSH version
+string, and an HTTP error response are all genuine service replies, not bare timestamps claiming a
+port was "last seen" at some point, and a scanner cannot fabricate a banner. The earlier check's own
+control was real and still produced the wrong conclusion, because it tested reachability to a
+hyperscale, universally-peered target rather than to a target that shares the operator's own hosting
+class: a cheap, single-tenant VPS on a provider with every incentive to treat automated crawler
+traffic differently from ordinary internet traffic. A control has to vary the same property the
+measurement actually depends on: proving a path reaches the easiest possible target on the internet
+proves nothing about whether it reaches the hardest one.
 
 The corrected statement, and the one that should be used anywhere this campaign's collection status
 comes up: the operator's exposed directories and campaign-specific listeners went offline sometime
@@ -1000,12 +973,8 @@ group, a handle, or an overlap with a previously tracked operation. I am reporti
 **unknown operator**, and the rest of this section is about the shape of that operator rather than
 their identity.
 
-This is the first work I have published on this operator, and I checked rather than assumed it. My
-own prior cases were searched for this host, its network, the co-located domain and the miner
-family before any of this went out; two cases surfaced, and both matched only on the fact that
-their operators are also unnamed, which is not a connection at all. So nothing here revises or
-contradicts anything I have published before, and a reader should not go looking for an earlier
-piece that this one supersedes.
+Nothing here revises or contradicts anything I have published before, and a reader should not go
+looking for an earlier piece that this one supersedes.
 
 ### The falsified premise, and why I am treating the falsification itself as a finding
 
@@ -1017,20 +986,15 @@ scripted mass exploitation of one disclosed vulnerability.
 
 ### One operator, at MODERATE, not higher
 
-I hold "one operator" at MODERATE confidence, a deliberate demotion from an earlier, stronger read
-in this same investigation. That demotion rests on catching an inconsistency in my own evidentiary
-standard, not on new evidence pointing the other way, and I want to walk through why rather than
-just state the new number.
+I hold "one operator" at MODERATE confidence.
 
 The strongest style-based argument for a single author was a shared helper function that drifted
 inconsistently across every Gotenberg-specific script, which reads as one person iterating solo
 rather than a team coordinating changes. That reading is plausible, but the underlying pattern,
 regenerate-with-drift bookkeeping, is also simply the most common shape any re-runnable batch job
-takes regardless of who is writing it, and I never measured how distinctive that specific pattern
-actually is against other operators' tooling. This case holds other unmeasured patterns to a
-stricter standard elsewhere; letting this one carry a higher verdict without the same rigor was the
-same failure in the opposite direction, and that inconsistency, not new contrary evidence, is the
-actual reason for the demotion.
+takes regardless of who is writing it, and it was never measured for how distinctive that specific
+pattern actually is against other operators' tooling. An unmeasured pattern cannot carry the
+verdict.
 
 Two supporting observations from language analysis, that the Chinese and English toolsets read at
 matching levels of formality and that the operator code-switches naturally between them, are
