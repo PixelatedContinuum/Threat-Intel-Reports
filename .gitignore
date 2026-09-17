@@ -4,3 +4,7 @@
 
 # Rolling backups created by the pre-write-backup hook
 *.bak
+
+# Headless-render screenshots from check-browser-report.js --shots. Measurement
+# artifacts, regenerable, and 6.6MB a run.
+tools/report-tooling/shots/

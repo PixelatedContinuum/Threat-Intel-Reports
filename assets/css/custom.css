@@ -1002,12 +1002,28 @@ main.content {
 /* --- Sticky TOC sidebar ------------------------------------ */
 /* Positioned in the right margin outside the content column.
    calc: 50vw = center of viewport, +422px = right edge of content
-   inner area (900px max - 56px padding = 844px / 2 = 422px), +24px gap */
+   inner area (900px max - 56px padding = 844px / 2 = 422px). */
 .hl-post-toc {
   position: fixed;
-  left: calc(75vw + 135px);
+  /* Width and position are solved together, because a fixed width cannot keep
+     its distance from both the content and the window. The panel sits 16px to
+     the right of the content column (right edge at 50vw + 422px) and keeps at
+     least 24px to the viewport edge, so its width is whatever is left over,
+     capped so it stays a sidebar rather than a second column. At 1281px, where
+     the right margin is only ~218px, that yields 178.5px; at 1600px it yields
+     338px. The old fixed 180px ran to within 5px of the window edge at 1281px.
+
+     The cap is 420px, raised from 340px on 2026-09-17 at Joseph's direction:
+     the cap only binds from about 1604px up, and above that the old value left
+     the right margin visibly unused (182px spare at 1920px, 502px at 2560px).
+     420px spends that space on the reader and still leaves a 102px gutter at
+     1920px (measured, not computed: an earlier note here said 74px and was
+     wrong arithmetic). Below 1604px the cap is not the constraint and this changes
+     nothing -- a 43-report audit measured every report clean at 1600px, so the
+     narrow end is limited by the content column, not by this number. */
+  left: calc(50vw + 438px);
+  width: clamp(160px, calc(50vw - 462px), 420px);
   top: 116px;
-  width: 180px;
   background: var(--hl-bg-row);
   border: 1px solid var(--hl-border-row);
   border-radius: 6px;
@@ -1055,10 +1071,22 @@ main.content {
   display: flex;
   flex-direction: column;
   gap: 1px;
+  /* The theme's `nav ul { text-align: right; float: right }` also matches this
+     list (it is inside <nav>). Reset it here explicitly rather than relying on
+     the flex column to mask the float; left alignment is the whole point of a
+     table of contents and it was inheriting `right` down to every entry. */
+  text-align: left;
+  float: none;
 }
 
 .hl-toc__item {
   position: relative;
+  /* The theme's `nav li { display: inline; float: left; margin-right: .4em }`
+     matches these items too. Neutralise it explicitly. */
+  display: block;
+  text-align: left;
+  float: none;
+  margin-right: 0;
 }
 
 .hl-toc__item a {
@@ -1069,7 +1097,39 @@ main.content {
   border-radius: 4px;
   border-left: 2px solid transparent;
   line-height: 1.4;
-  word-break: break-word;
+  /* Wrap on word boundaries, and break a word ONLY when it cannot fit its line
+     at all. The old `word-break: break-word` split words whenever they were
+     wider than the column, which at 180px was constantly ("Recommendati /
+     ons"). A first pass replaced it with `overflow-wrap: normal`, which forbids
+     the break entirely -- and a 43-report audit found the cost: at 1281px, where
+     the column is at its narrowest ~178px (116.5px of text), an unbreakable
+     token now OVERFLOWS its box instead. Measured on
+     open-directory-193-56-255-154-xiebroc2, where "CreateRemoteThread" and
+     "Dual Build Compartmentalization" both ran outside the panel.
+     `break-word` is the correct middle: at 1600px every entry fits, so nothing
+     breaks (0 splits measured across all 43 reports at that width), while at
+     1281px the few over-long tokens break rather than escape the panel. An
+     overflow is worse than a hyphen-less split, because it leaves the sidebar
+     visibly broken with no way for the reader to read the word at all.
+
+     The residual cost, measured across all 43 reports: 10 entries across 9
+     reports break mid-word at 1281px (five of them the same word,
+     "Recommendations"), and zero at 1600px and above. That is accepted rather
+     than fixed, and the fix that looked obvious was TRIED AND REVERTED, so the
+     next person does not spend the same hour on it:
+
+     `hyphens: auto` does NOT help here. Measured 2026-09-17: it fixed 0 of the
+     10 and ADDED 244 new breaks at 1281px, 68 at 1600px and 28 at 1920px, the
+     last two on widths that were previously clean. The reason is that the two
+     mechanisms do not overlap. A word WIDER than its line takes the
+     `overflow-wrap: break-word` path, which breaks arbitrarily and adds no
+     hyphen, and all 10 residuals are that shape. `hyphens` only acts on words
+     that would FIT their own line, hyphenating them to fill the current line
+     instead of wrapping whole -- so it cannot reach the residuals and creates
+     breaks everywhere else. It was reverted the same day it was tried. */
+  word-break: normal;
+  overflow-wrap: break-word;
+  text-align: left;
   transition: color 0.1s, background 0.1s, border-color 0.1s;
 }
 

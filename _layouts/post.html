@@ -462,27 +462,42 @@ the coverage above is narrower than the rule set.</em></p>
     if (c) c.setAttribute('aria-expanded', open ? 'true' : 'false');
   }
 
+  // Mark one entry active: clear the others, open only its chapter, keep it in
+  // the panel's view. Extracted so the load-time fallback below and the
+  // scroll-spy share one implementation.
+  function setActiveTocEntry(active) {
+    tocList.querySelectorAll('a').forEach(function (a) { a.classList.remove('hl-toc__active'); });
+    if (!active) return;
+    active.classList.add('hl-toc__active');
+    var subEl = active.closest('.hl-toc__sublist');
+    var chapter = subEl ? subEl.parentElement : active.closest('.hl-toc__item');
+    // accordion: keep only the active chapter open, collapse the rest
+    tocList.querySelectorAll('.hl-toc__item--open').forEach(function (openLi) {
+      if (openLi !== chapter) setChapterOpen(openLi, false);
+    });
+    if (chapter && chapter.querySelector(':scope > .hl-toc__sublist')) {
+      setChapterOpen(chapter, true);
+    }
+    active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+
   var observer = new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
       if (!entry.isIntersecting) return;
-      tocList.querySelectorAll('a').forEach(function (a) { a.classList.remove('hl-toc__active'); });
-      var active = tocList.querySelector('a[href="#' + entry.target.id + '"]');
-      if (!active) return;
-      active.classList.add('hl-toc__active');
-      var subEl = active.closest('.hl-toc__sublist');
-      var chapter = subEl ? subEl.parentElement : active.closest('.hl-toc__item');
-      // accordion: keep only the active chapter open, collapse the rest
-      tocList.querySelectorAll('.hl-toc__item--open').forEach(function (openLi) {
-        if (openLi !== chapter) setChapterOpen(openLi, false);
-      });
-      if (chapter && chapter.querySelector(':scope > .hl-toc__sublist')) {
-        setChapterOpen(chapter, true);
-      }
-      active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      setActiveTocEntry(tocList.querySelector('a[href="#' + entry.target.id + '"]'));
     });
   }, { rootMargin: '-8% 0% -80% 0%' });
 
   headings.forEach(function (h) { observer.observe(h); });
+
+  // The observer band starts 8% down the viewport, so on load the first heading
+  // (well below that on a long report) never intersects and NOTHING is
+  // highlighted until the reader has scrolled a full screen. Mark the first
+  // section active instead, so the TOC answers "where am I" from the top of the
+  // page. This runs once; the observer takes over on the first scroll.
+  if (headings.length && !tocList.querySelector('a.hl-toc__active')) {
+    setActiveTocEntry(tocList.querySelector('a[href="#' + headings[0].id + '"]'));
+  }
 
   // --- Pin mobile TOC just below the navbar ---
   // position:sticky fails due to ancestor overflow in the theme (same reason
