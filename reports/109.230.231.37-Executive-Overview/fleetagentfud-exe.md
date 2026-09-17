@@ -560,7 +560,7 @@ The reconnaissance is what turns one host into the whole estate.
 
 #### VirtualProtect Capability
 
-**CAPA Detection:**
+**Static capability detection:**
 ```
 Capabilities:
 - "allocate or change RWX memory" → VirtualProtect
@@ -590,7 +590,7 @@ Malware RWX Memory:
 
 1. **Shellcode Execution**: Allocate RWX memory → Download shellcode from C2 → Write to RWX memory → Execute shellcode (reverse shell, credential dumper, exploit). Benefits: Fileless attack, signature-based AV cannot scan in-memory code.
 
-2. **Process Injection Preparation**: NOTE - FleetAgentFUD.exe has VirtualProtect but CAPA did NOT detect VirtualAllocEx or CreateRemoteThread. Assessment: Process injection POSSIBLE but NOT confirmed; likely use is local shellcode execution.
+2. **Process Injection Preparation**: NOTE - FleetAgentFUD.exe has VirtualProtect but static capability analysis did not detect VirtualAllocEx or CreateRemoteThread. Assessment: Process injection POSSIBLE but NOT confirmed; likely use is local shellcode execution.
 
 3. **Runtime Code Unpacking**: Malware contains encrypted code → Allocates RWX memory → Decrypts code into RWX → Executes unpacked code. FleetAgentFUD.exe entropy 5.2171 suggests NOT heavily packed, but may decrypt config/shellcode at runtime.
 
@@ -760,7 +760,7 @@ PowerShell execution is CONFIRMED.
 
 **Evidence:**
 - String: `"powershell"`, `"-NoP -NonI -W Hidden -Exec Bypass -C "`
-- CAPA: "create a process with modified I/O handles and window"
+- Static capability analysis: "create a process with modified I/O handles and window"
 - Command types: "powershell", "sysinfo", "processes", "disk", "network", "users", "clipboard", "firewall"
 
 **Implementation:**
@@ -840,7 +840,7 @@ The WebSocket channel is CONFIRMED.
 
 **Evidence:**
 - Strings: `"Connection: Upgrade"`, `"Sec-WebSocket-Key: "`, `"Sec-WebSocket-Version: 13"`, `"X-Agent-Secret: "`
-- CAPA: "act as TCP client" (TcpClient, NetworkStream)
+- Static capability analysis: "act as TCP client" (TcpClient, NetworkStream)
 - Registration, heartbeat, command message structure
 
 **Implementation:**
@@ -893,7 +893,7 @@ Protocol: TCP
 The Base64 obfuscation is CONFIRMED.
 
 **Evidence:**
-- CAPA: "encode data using Base64" (ToBase64String)
+- Static capability analysis: "encode data using Base64" (ToBase64String)
 - .NET compilation (IL obfuscation)
 - String: "contains_base64" (YARA detection)
 - FUD design (minimal static signatures)

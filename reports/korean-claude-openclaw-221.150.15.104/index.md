@@ -547,11 +547,11 @@ Defenders building hunt and detection logic should anchor on the DEFINITE artifa
 - **OpenClaw documentation**: `https://docs.openclaw.ai/`. The documentation host referenced in the operator's `WebFetch(domain:docs.openclaw.ai)` allowlist entry.
 - **MITRE ATT&CK T1685**: `https://attack.mitre.org/techniques/T1685/`. Reference for the Disable or Modify Tools technique that captures the allowlist-tampering pattern documented in this case.
 
-### Appendix A — The Hunters Ledger UTA Designation System
+### Appendix A: The Hunters Ledger UTA Designation System
 
 UTA designations (Unattributed Threat Actor) are internal tracking labels used by The Hunters Ledger to track threat actors observed in analysis that cannot yet be linked to a publicly named threat group. UTAs are numbered sequentially per calendar year. UTA-2026-015 is the fifteenth UTA designation assigned in 2026 by The Hunters Ledger. The designation is internal: it will not appear in external threat-intelligence feeds, vendor reports, or government attribution statements. If future evidence ties UTA-2026-015 activity to a publicly named actor, the designation will be retired and the relevant The Hunters Ledger publications updated to reference the named actor instead. Defenders consuming The Hunters Ledger reports should treat UTA designations as a stable internal-tracking pointer, not as an external identifier.
 
-### Appendix B — Why This Report Is Capsule-Depth Rather Than Full-Length
+### Appendix B: Why This Report Is Capsule-Depth Rather Than Full-Length
 
 Standard Hunters Ledger reports follow a multi-stage pipeline (malware analysis → research → infrastructure → attribution → detection engineering → report writing). For this case, Stages 1, 2-research, 2-infrastructure, and 3 were intentionally compressed:
 

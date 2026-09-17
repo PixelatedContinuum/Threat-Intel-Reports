@@ -28,7 +28,7 @@ No malware binary exists in this campaign. The primary evidence is the operator'
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
 
-**Highest-confidence anchor:** the 3-of-7 OpenClaw-specific allowlist string combination (YARA Detection rule below) is the campaign's one Detection-tier rule — no known legitimate Claude Code workflow pre-approves the full curl|bash-installer-through-gateway-launch chain in a single `settings.local.json`, and the combination requirement makes single-string FP collision negligible.
+**Highest-confidence anchor:** the 3-of-7 OpenClaw-specific allowlist string combination (YARA Detection rule below) is the campaign's one Detection-tier rule: no known legitimate Claude Code workflow pre-approves the full curl|bash-installer-through-gateway-launch chain in a single `settings.local.json`, and the combination requirement makes single-string FP collision negligible.
 
 **Atomics routed to the IOC feed:** the OpenClaw distribution/documentation domains (`openclaw.ai`, `docs.openclaw.ai`), the adjacent-infrastructure domain (`lightmake.site`), and the operator's open-directory IP (`221.150.15.104`) each anchored a rule with no other discriminator, removing the domain or IP left nothing behavioral to detect. All four indicators were already present in [`korean-claude-openclaw-221.150.15.104-iocs.json`](/ioc-feeds/korean-claude-openclaw-221.150.15.104-iocs.json) prior to this pass; no feed edits were required. See Coverage Gaps for the full per-rule accounting.
 

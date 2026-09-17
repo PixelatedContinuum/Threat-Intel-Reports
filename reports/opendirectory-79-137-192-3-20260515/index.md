@@ -35,15 +35,15 @@ figure_nav:
   - image: rhadamanthys-cluster-c-kill-chain.svg
     parts:
       - label: "14-second sleep gauntlet"
-        anchor: "#second-anti-analysis-sleep--runtime-mechanics"
+        anchor: "#second-anti-analysis-sleep-runtime-mechanics"
       - label: "RC4 decrypt of Stage 2"
         anchor: "#loader-rc4-decryption-of-the-embedded-stage-2"
       - label: "EAX-redirect hollowing"
-        anchor: "#eax-redirect-process-hollowing--runtime-mechanics"
+        anchor: "#eax-redirect-process-hollowing-runtime-mechanics"
       - label: "Registry write"
         anchor: "#stage-2-registry-write-to-sibcodesn"
       - label: "C2 beacon"
-        anchor: "#c2-beacon--first-request-structure"
+        anchor: "#c2-beacon-first-request-structure"
       - label: "The full chain"
         anchor: "#cluster-c-kill-chain-overview"
   - image: rhadamanthys-stage2-three-layer-synthesis.svg
@@ -63,21 +63,21 @@ figure_nav:
   - image: rhadamanthys-maas-vendor-customer-architecture.svg
     parts:
       - label: "Vendor vs customer"
-        anchor: "#vendor-versus-customer--a-critical-distinction"
+        anchor: "#vendor-versus-customer-a-critical-distinction"
       - label: "Vendor Stage-2"
-        anchor: "#stage-2-capabilities-vendor--canonical-rhadamanthys"
+        anchor: "#stage-2-capabilities-vendor-canonical-rhadamanthys"
       - label: "Customer loader"
         anchor: "#loader-side-capabilities-customer"
       - label: "UTA-2026-010"
-        anchor: "#93-uta-2026-010--rhadamanthys-maas-customer-cluster-c-primary"
+        anchor: "#93-uta-2026-010-rhadamanthys-maas-customer-cluster-c-primary"
   - image: opendirectory-79-137-192-3-three-cluster-cotenancy.svg
     parts:
       - label: "Cluster A, BellaMain"
-        anchor: "#91-uta-2026-008--bellamain-turkish-phaas-operator-cluster-a"
+        anchor: "#91-uta-2026-008-bellamain-turkish-phaas-operator-cluster-a"
       - label: "Cluster B, Inkognito"
-        anchor: "#92-uta-2026-009--inkognito-russian-vpnphishing-operator-cluster-b"
+        anchor: "#92-uta-2026-009-inkognito-russian-vpnphishing-operator-cluster-b"
       - label: "Cluster C, Rhadamanthys"
-        anchor: "#93-uta-2026-010--rhadamanthys-maas-customer-cluster-c-primary"
+        anchor: "#93-uta-2026-010-rhadamanthys-maas-customer-cluster-c-primary"
       - label: "Are they linked?"
         anchor: "#94-cross-cluster-linkage-assessment"
 ---
@@ -128,7 +128,7 @@ Because named-actor attribution is INSUFFICIENT for all three operators, the rec
 - **UTA-2026-008: BellaMain Turkish PhaaS operator (Cluster A).** Single Turkish-speaking PhaaS operator/developer. Operator alias `@AresRS34`, developer alias `Wadanz`. Distinct-actor confidence MODERATE (75%); named-actor attribution INSUFFICIENT.
 - **UTA-2026-009: Inkognito Russian VPN/phishing operator (Cluster B).** Single Russian-speaking multi-product fraud operator. Self-identified parent brand "Inkognito" via `@inkconnectvpn` Telegram channel. Distinct-actor confidence MODERATE (78%); named-actor attribution INSUFFICIENT.
 
-### For Technical Teams — Immediate Priorities
+### For Technical Teams: Immediate Priorities
 
 - **Hunt: `InstallUtil.exe` initiating outbound TLS to non-Microsoft endpoints.** This single behavioral pattern is the highest-fidelity Cluster C detection across the entire Rhadamanthys MaaS ecosystem (any customer, any C2). See Section 9 for kill chain context and the separate detection file for the Sigma/Suricata implementation.
 - **Hunt: Registry write to `HKU\<SID>\Software\SibCode\sn`.** Rhadamanthys family marker (pre-v0.9.1 builds, which include the Stage-2 analyzed here per Check Point's documented changelog removal in v0.9.1). No known benign software writes this key.
@@ -220,7 +220,7 @@ Multiple independent confirmations converge:
 - **SibCode VCL artifacts** in the binary: consistent with documented Rhadamanthys vendor toolchain.
 - **VS2003 toolchain** (22 years old): consistent with mature MaaS operations maintaining a stable legacy Stage-2 build while vendor layers evolve around it (per Check Point v0.9.x walkthrough).
 
-### Vendor versus customer — a critical distinction
+### Vendor versus customer: a critical distinction
 
 Rhadamanthys is a Malware-as-a-Service product. The **vendor** (the threat-intel target documented in Check Point Research v0.5.0/v0.7.0/v0.9.x, Outpost24, Zscaler, Recorded Future, and other public reporting) builds and sells the canonical Stage-2 to multiple **customers**, who each build their own loaders and operate their own C2 infrastructure. UTA-2026-010 in this report tracks the **customer-side operator only**, the LLM-augmented amateur who built `staticlittlesource.exe`, deployed it via cracked-software/game-cheat lures, and operates the Hostkey NL C2 at `79.133.180.168:3394`. The vendor is out of scope for this investigation and is not covered by UTA-2026-010.
 
@@ -243,7 +243,7 @@ The Cluster C deployment is a two-layer system. The customer-built loader (`stat
 <details markdown="1" class="hl-teardown">
 <summary>The capability matrix and per-cluster capability breakdowns for Clusters A, B and C, in full. Click to expand.</summary>
 
-### 4.1 Capability Matrix — Cluster C (primary)
+### 4.1 Capability Matrix: Cluster C (primary)
 
 | Capability | Layer | Confidence | Operational Impact |
 |---|---|---|---|
@@ -310,7 +310,7 @@ The implementation includes a **denormal-sentinel verification**. A floating-poi
 
 This matters because simple sleep-skipping, where a sandbox replaces `Sleep(N)` with a no-op or `Sleep(0)`, does not advance the FPU state correctly and produces a different denormal result than native execution. That defeats the most common automated sandbox-evasion bypass.
 
-### 4.3 Stage-2 capabilities (vendor — canonical Rhadamanthys)
+### 4.3 Stage-2 capabilities (vendor: canonical Rhadamanthys)
 
 The Stage-2 capabilities are documented in detail across the Tier-2 Rhadamanthys public reporting (Check Point Research v0.5.0, v0.7.0, v0.9.x; Outpost24; Zscaler ThreatLabz; Recorded Future Insikt Group; Binary Defense; Proofpoint). This report does not duplicate that documentation in depth, it summarizes the capabilities that are observable in this specific customer's Stage-2 (MD5 `0e07ccda99c1cd80a2fd92e02b75d9a0`) and notes the family-signature artifacts that defenders can use.
 
@@ -341,7 +341,7 @@ The detection value here is high. The `HKU\<SID>\Software\SibCode\sn` registry w
 
 Once installed, the Stage-2 contacts the C2 to download additional capability modules in the XS1/XS2 format. These modules expand the credential-theft surface, add screen-capture or keylogging capability, deploy follow-on payloads (downloader functionality), or load specialized targets (the Bitcoin OCR module). This is a standard MaaS architecture, the vendor maintains the module catalog and customers receive updates without redeploying their loaders.
 
-### 4.4 Cluster A (BellaMain) — condensed capability summary
+### 4.4 Cluster A (BellaMain): condensed capability summary
 
 > **Analyst note:** Cluster A is a Phishing-as-a-Service panel and is included for narrative completeness. It is operationally separate from Cluster C and uses a categorically different attack model (credential-harvesting via spoofed marketplace login pages, not malware execution).
 
@@ -354,7 +354,7 @@ Once installed, the Stage-2 contacts the C2 to download additional capability mo
 
 The hardcoded Telegram bot token was REVOKED on 2026-05-07, returning HTTP 401 on `getMe`, but the bot ID retains pivot value for retroactive analysis. The kits remain on the staging IP.
 
-### 4.5 Cluster B (Inkognito) — condensed capability summary
+### 4.5 Cluster B (Inkognito): condensed capability summary
 
 > **Analyst note:** Cluster B is a multi-product fraud operation combining a legitimate-looking VPN front with a brand-impersonation phishing infrastructure. Like Cluster A, it is included for narrative completeness; it is operationally separate from Cluster C.
 
@@ -447,7 +447,7 @@ This Rhadamanthys Stage-2 does **not** store its encrypted FS container contiguo
   <figcaption><em>Figure 15: The complete 3-layer synthesis pipeline. The three red cards (Layers 1-3) each scatter ciphertext into a different program region using a different camouflage technique; the deep-red OUTPUT card is what the synthesis actually produces, the decrypted FS container that drives the rest of the Stage-2's behavior. The diagram makes clear why static analysis sees nothing: the FS container does not exist on disk, only in the heap after all three synthesis layers and the cipher have run.</em></figcaption>
 </figure>
 
-#### Layer 1 — Per-record byte-emitter functions
+#### Layer 1: Per-record byte-emitter functions
 
 There are 8,800+ small functions (each 200-300 bytes) at the start of `.text`. Each function does one thing: it writes a small fixed sequence of bytes to a heap location with offset-stride arithmetic. Example shape:
 
@@ -472,7 +472,7 @@ This defeats entropy detection because each emitter function is normal-entropy `
   <figcaption><em>Figure 5: One of the 8,800+ Layer-1 byte-emitter functions inside the Stage-2. Each emitter writes ~16-32 contiguous ciphertext bytes at sequential offsets into the synthesis buffer using nothing more exotic than `mov`-immediate instructions. Running entropy analysis on the binary returns boring `.text`-normal entropy because the ciphertext lives as scattered `imm8` operands across thousands of functions; the high-entropy encrypted region only exists in the heap after these emitters have all executed.</em></figcaption>
 </figure>
 
-#### Layer 2 — 7,979 fake-GUID-shaped ASCII-hex strings
+#### Layer 2: 7,979 fake-GUID-shaped ASCII-hex strings
 
 A `.rdata` region contains 7,979 contiguous ASCII strings of the form `{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}`, the standard Microsoft GUID literal format. Each string is 38 characters (36 hex digits + 2 brace characters).
 
@@ -481,11 +481,11 @@ Static analysis tools and human analysts both interpret these as a list of GUIDs
 This defeats string-based detection because a YARA rule looking for blocks of high-entropy bytes in `.rdata` will not trip, since the bytes are valid ASCII hex with low byte-entropy and high character-class regularity. A defender skimming strings sees 7,979 GUIDs and skips past them. The encrypted content is camouflaged inside a data shape, GUID arrays, that is normal in legitimate Windows software.
 
 <figure style="text-align: center; margin: 2em 0;">
- <img loading="lazy" src="{{ "/assets/images/opendirectory-79-137-192-3-20260515/stage2-layer2-fake-guid-rdata.png" | relative_url }}" alt="Data-section view at address 0x0041cb74 showing a single brace byte 0x7B followed at address 0x0041cb75 by an ASCII-hex string starting with c6127d52-4f9a-afef-d139-283878 — a fake GUID literal pointing to xref FUN_00402690.">
+ <img loading="lazy" src="{{ "/assets/images/opendirectory-79-137-192-3-20260515/stage2-layer2-fake-guid-rdata.png" | relative_url }}" alt="Data-section view at address 0x0041cb74 showing a single brace byte 0x7B followed at address 0x0041cb75 by an ASCII-hex string starting with c6127d52-4f9a-afef-d139-283878, a fake GUID literal pointing to xref FUN_00402690.">
   <figcaption><em>Figure 6: One of 7,979 fake-GUID-shaped ASCII-hex strings in the Stage-2's `.rdata` section. Each 38-character pseudo-GUID looks like a standard Microsoft CLSID or COM identifier (the kind of constant a defender skimming strings would skip past) but the hex content is actually a 16-byte block of ciphertext encoded as ASCII. The byte-emitters from Layer 1 reach into these strings using offset-stride arithmetic to assemble the encrypted FS container in the heap.</em></figcaption>
 </figure>
 
-#### Layer 3 — 14-bit Huffman-like bit-packed stream
+#### Layer 3: 14-bit Huffman-like bit-packed stream
 
 A third region contributes the remaining ciphertext bytes via a custom 14-bit-symbol bit-packed encoding (similar to a non-Huffman fixed-width packing). The Stage-2 includes a small unpacker that reads the bit stream 14 bits at a time and emits decoded bytes into the heap buffer.
 
@@ -518,7 +518,7 @@ The per-customer IV is an open question. The 16-byte IV `f6358d79df69c577d9dce6b
 
 > **Validation status note:** The cipher analysis in this section is **static-only** (recovered from disassembly of `FUN_00402790` and offset `0x0041c434`). A ciphertext-plaintext round-trip has not been performed to confirm the implementation behaves as modeled under all input lengths. Per project memory (`feedback_static_cipher_dynamic_validation`): cipher claims should not be elevated to DEFINITE until dynamic ciphertext-plaintext validation confirms the static model. The per-customer-IV claim remains HIGH confidence pending cross-sample validation.
 
-If the IV turns out to be vendor-shared rather than per-customer, the customer-specificity claim on this primitive is downgraded. The IV would then be a vendor-side family marker (still useful for detection, but less specific). The detection content in the separate file flags the IV as `(customer-specific — pending cross-validation)` and the Sigma/YARA rules treat it as one of multiple possible cipher fingerprints.
+If the IV turns out to be vendor-shared rather than per-customer, the customer-specificity claim on this primitive is downgraded. The IV would then be a vendor-side family marker (still useful for detection, but less specific). The detection content in the separate file flags the IV as `(customer-specific, pending cross-validation)` and the Sigma/YARA rules treat it as one of multiple possible cipher fingerprints.
 
 <figure style="text-align: center; margin: 2em 0;">
  <img loading="lazy" src="{{ "/assets/images/opendirectory-79-137-192-3-20260515/stage2-cbc-xor-cipher.png" | relative_url }}" alt="Decompiler view of FUN_00402790 showing the inner CBC-XOR decryption loop with a do-while structure, four uVar1 through uVar4 unrolled register reads from the in_EAX key material, and XOR operations against pbVar5 ciphertext bytes feeding into pbVar6 plaintext output across a 16-byte block stride.">
@@ -640,7 +640,7 @@ The 17-stage kill chain is densely concentrated: stages 1-9 (loader-side) execut
   <figcaption><em>Figure 16: The full 10-grouping kill chain (condensing the 17 stages from the table above). The diagram makes the high-value detection window obvious: stages 1-6 unfold in the first 14 seconds, stages 7-8 in the next ~3 seconds, and the first C2 beacon (stage 9) occurs at ~T+17s. After stage 9 defenders are reacting rather than preventing. The orange-and-red phases are where prevention is feasible.</em></figcaption>
 </figure>
 
-### 6.2 EAX-redirect process hollowing — runtime mechanics
+### 6.2 EAX-redirect process hollowing: runtime mechanics
 
 > **Analyst note:** This subsection re-explains the EAX-redirect hollowing variant from a runtime perspective (Section 4.2.2 covered it from the static analysis perspective). Understanding this technique is important for defenders because most EDR detection rules for process hollowing key on the classic `SetThreadContext`-with-modified-`Eip` pattern, which this variant deliberately avoids.
 
@@ -666,7 +666,7 @@ Defenders detect this most effectively by layering behavioral rules that look at
 
 The detection file (separate Sigma rules) implements all four of these patterns. See Section 10 for the detection coverage summary.
 
-### 6.3 14-second anti-analysis sleep — runtime mechanics
+### 6.3 14-second anti-analysis sleep: runtime mechanics
 
 > **Analyst note:** The loader stalls for 14 seconds before doing anything malicious. Hidden inside that wait are floating-point math checks that fail when a sandbox is fast-forwarding the timers, a common sandbox shortcut that this loader specifically detects and exits to defeat. The 14-second number is calibrated to outlast most automated sandbox budgets.
 
@@ -704,7 +704,7 @@ The Stage-2's registry write to `HKU\<SID>\Software\SibCode\sn` was confirmed vi
 
 To restate the detection value, no known benign software writes to `Software\SibCode\sn`. SibCode is a defunct VCL component vendor, and Rhadamanthys borrows its branding from that developer. Any registry-set telemetry on this key path is a presumptive Rhadamanthys infection. See the separate detection file for the Sigma rule `Rhadamanthys_SibCode_sn_Registry_Write`.
 
-### 6.5 C2 beacon — first request structure
+### 6.5 C2 beacon: first request structure
 
 > **Analyst note:** This section breaks down the very first message the malware sends back to the attacker's server after a successful infection. The structure of that message (the URL path, the random-looking filename, the non-standard port number) is what defenders can use to write network-detection rules that catch this specific attacker's deployments without firing on legitimate web traffic.
 
@@ -880,7 +880,7 @@ For the complete validated indicator set with confidence levels and contextual m
 
 This investigation surfaced **three operationally separate threat clusters** that share infrastructure (multi-tenant Aeza staging IP `79.137.192.3`) but exhibit **zero operator-level overlap** across seven dimensions tested (Telegram, pseudonyms, DNS/SOA, language, payments, malware family, production-C2 provider). Each cluster receives its own UTA designation. Cross-cluster linkage is rated **LOW (actively rebutted, not absent)**, anchored on Tier-1 OFAC documentation that the same Aeza infrastructure simultaneously hosts multiple unrelated actor ecosystems.
 
-### 9.1 UTA-2026-008 — BellaMain Turkish PhaaS operator (Cluster A)
+### 9.1 UTA-2026-008: BellaMain Turkish PhaaS operator (Cluster A)
 
 I hold distinct-actor confidence at MODERATE, 75 percent, and named-actor attribution at INSUFFICIENT, 30 percent.
 
@@ -897,7 +897,7 @@ The runner-up, a shared or leaked PhaaS template, is RULED OUT, eliminated by th
 
 Named-actor attribution stays INSUFFICIENT because there is no prior public TI on BellaMain as a panel name, and neither `@AresRS34` nor `Wadanz` is attested in any Tier-1 or Tier-2 source I reviewed. This is first-capture documentation, and resolution would need paid TI services (Flashpoint, Intel 471, KELA) for an underground-forum cross-reference.
 
-### 9.2 UTA-2026-009 — Inkognito Russian VPN/phishing operator (Cluster B)
+### 9.2 UTA-2026-009: Inkognito Russian VPN/phishing operator (Cluster B)
 
 I hold distinct-actor confidence at MODERATE, 78 percent, and named-actor attribution at INSUFFICIENT, 30 percent.
 
@@ -931,7 +931,7 @@ The runner-up, a white-labeled VPN reseller, is RULED OUT, eliminated by the Esp
 
 Named-actor attribution stays INSUFFICIENT because there is no prior public TI on the Inkognito brand portfolio. This is first-capture documentation of a 3-year-old operation, and resolution would need Russian underground forum investigation via paid TI, while an SBP or T-Pay merchant ID lookup would resolve the legal entity.
 
-### 9.3 UTA-2026-010 — Rhadamanthys MaaS customer (Cluster C, primary)
+### 9.3 UTA-2026-010: Rhadamanthys MaaS customer (Cluster C, primary)
 
 > **Critical framing note:** UTA-2026-010 tracks the **customer-side operator only**, the LLM-augmented amateur who built `staticlittlesource.exe`, deployed it via cracked-software/game-cheat lures, and operates the Hostkey NL C2 at `79.133.180.168:3394`. The Rhadamanthys MaaS **vendor** is a separate threat-intel target with its own published profile in public Tier-2 reporting (Check Point Research, Outpost24, Recorded Future Insikt Group, etc.) and is **NOT** covered by UTA-2026-010. Conflating customer with vendor is a common error in MaaS attribution that this designation explicitly avoids.
 
@@ -953,7 +953,7 @@ The runner-up, vendor-shared infrastructure, is RULED OUT, eliminated by per-cus
 Named-actor attribution stays INSUFFICIENT because no prior public TI matches this customer's loader strings or per-customer cipher fingerprints. The ceiling cannot exceed LOW for this customer without government attribution, independent corroboration from two or more Tier-2 vendors, or 70 percent-plus code similarity to a documented named-actor toolchain, and none of those is present.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/opendirectory-79-137-192-3-20260515/rhadamanthys-maas-vendor-customer-architecture.svg" | relative_url }}" alt="Process-tree infographic of the Rhadamanthys MaaS vendor-customer architecture. Top center red side-rail card: Rhadamanthys MaaS Vendor — develops and sells canonical Stage-2 to multiple customers, VS2003 toolchain with Q3VM-derivative VM magic 0x14744214 and 3-layer encrypted-blob synthesis, marked as a SEPARATE threat-intel target tracked in Check Point, Outpost24, Recorded Future, and Operation Endgame Phase 3. Below the vendor a 3-way fanout splits into three customer cards. Left card red side-rail: Customer A (sibling Stage-2 bc9fe5e9...) — different loader build, different operator strings, different RC4 key, different LOLBin choice, leading to a different C2 endpoint at 45.81.39.169 OCULUS US AS. Middle card highlighted with deep-red border and side-rail plus a star: UTA-2026-010, THIS REPORT — Cluster C, the staticlittlesource.exe loader (sha256 prefix 5c38a5dd, 1.39 MB) with operator strings BombAUb23456, DubzAias932, Ahuh783bh..., InstallUtil.exe LOLBin choice, leading to this customer's C2 at 79.133.180.168:3394 on Hostkey NL AS57043. Right card red side-rail: Customer B (sibling Stage-2 e827d13c... or 457aecd8...) — different loader build, different operator strings, different RC4 key, different LOLBin choice, leading to a different C2 endpoint that was not extractable because VirusTotal sandbox emulation systematically fails across all sibling samples. At the bottom a grey side-rail band shows what all customers share: vendor-side .frontb section, Q3VM derivative VM magic 0x14744214, 3-layer synthesis, CBC-XOR cipher, FS container, XS1/XS2 plugins. Footer detection scope: this report's customer-side fingerprints catch this operator only; vendor-side fingerprints catch the entire Rhadamanthys customer population.">
+  <img loading="lazy" src="{{ "/assets/images/opendirectory-79-137-192-3-20260515/rhadamanthys-maas-vendor-customer-architecture.svg" | relative_url }}" alt="Process-tree infographic of the Rhadamanthys MaaS vendor-customer architecture. Top center red side-rail card: Rhadamanthys MaaS Vendor: develops and sells canonical Stage-2 to multiple customers, VS2003 toolchain with Q3VM-derivative VM magic 0x14744214 and 3-layer encrypted-blob synthesis, marked as a SEPARATE threat-intel target tracked in Check Point, Outpost24, Recorded Future, and Operation Endgame Phase 3. Below the vendor a 3-way fanout splits into three customer cards. Left card red side-rail: Customer A (sibling Stage-2 bc9fe5e9...): different loader build, different operator strings, different RC4 key, different LOLBin choice, leading to a different C2 endpoint at 45.81.39.169 OCULUS US AS. Middle card highlighted with deep-red border and side-rail plus a star: UTA-2026-010, THIS REPORT: Cluster C, the staticlittlesource.exe loader (sha256 prefix 5c38a5dd, 1.39 MB) with operator strings BombAUb23456, DubzAias932, Ahuh783bh..., InstallUtil.exe LOLBin choice, leading to this customer's C2 at 79.133.180.168:3394 on Hostkey NL AS57043. Right card red side-rail: Customer B (sibling Stage-2 e827d13c... or 457aecd8...): different loader build, different operator strings, different RC4 key, different LOLBin choice, leading to a different C2 endpoint that was not extractable because VirusTotal sandbox emulation systematically fails across all sibling samples. At the bottom a grey side-rail band shows what all customers share: vendor-side .frontb section, Q3VM derivative VM magic 0x14744214, 3-layer synthesis, CBC-XOR cipher, FS container, XS1/XS2 plugins. Footer detection scope: this report's customer-side fingerprints catch this operator only; vendor-side fingerprints catch the entire Rhadamanthys customer population.">
   <figcaption><em>Figure 17: The Rhadamanthys MaaS architecture and the per-customer separation that drives the UTA framing. UTA-2026-010 (highlighted center) is the customer-side operator The Hunters Ledger newly contributes to the public record; the vendor (top) is well-documented elsewhere and is explicitly out of scope for this UTA. The grey common-element band at the bottom shows what cross-customer detection content (Q3VM magic, .frontb, SibCode\sn) covers, versus the per-customer fingerprints (RC4 key, IV, panel ID, LOLBin, C2 IP) that are unique to this operator.</em></figcaption>
 </figure>
 
@@ -980,7 +980,7 @@ The runner-up, three clusters operating as one entity, is RULED OUT, eliminated 
 The 7-dimension test produces zero matches. Co-tenancy on `79.137.192.3` is therefore best explained as three customers of the same hosting service, not as one actor running three operations. The OFAC Aeza Tier-1 anchor confirms this is the typical pattern for bulletproof hosting infrastructure: BPH providers host many unrelated actors simultaneously, and co-residency is not operationally diagnostic.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/opendirectory-79-137-192-3-20260515/opendirectory-79-137-192-3-three-cluster-cotenancy.svg" | relative_url }}" alt="Process-tree infographic of the three-cluster co-tenancy on 79.137.192.3. Top center yellow side-rail card: the IP 79.137.192.3 on AS216246 Aeza Group LLC RU, multi-tenant bulletproof staging server with Apache 2.4.58 Win64 PHP 8.2.12, OFAC SDN Aeza Group sanction July 2025 documents 5 unrelated actor ecosystems co-resident on Aeza. Below the IP a 3-way fanout splits into three cluster cards. Left card yellow side-rail: Cluster A, UTA-2026-008, BellaMain Turkish PhaaS, operator @AresRS34, developer Wadanz, PHP/MySQL panel plus 7 Turkish marketplace kits, payout TRX TRON, Turkish language, brand cryptone.bot fake exchange, distinct-actor MODERATE 75% and named-actor INSUFFICIENT. Middle card red side-rail: Cluster B, UTA-2026-009, Inkognito Russian VPN/phishing, parent brand Inkognito with sub-brands INK VPN INK Lens CryptOne, React/Vite SPA plus EspoCRM stack, payment SBP T-Pay card RU, Russian language, operator alias @inkconnectvpn, 2.5+ year continuous operation, distinct-actor MODERATE 78% and named-actor INSUFFICIENT. Right card highlighted with deep-red border and side-rail plus a star: Cluster C — PRIMARY, UTA-2026-010, Rhadamanthys MaaS customer, loader staticlittlesource.exe, canonical Stage-2, operator strings BombAUb23456 and others, InstallUtil.exe LOLBin, C2 79.133.180.168:3394 on Hostkey NL, English language, survived Operation Endgame November 2025, distinct-actor MODERATE 72% and named-actor INSUFFICIENT. Below the three clusters a grey side-rail band lists the 7 dimensions tested for cross-cluster operator overlap with zero overlap on any: Telegram identifiers, operator pseudonyms, registrar/DNS/SOA pattern, language artifacts, payment processors, malware family, production-C2 hosting provider; cross-cluster operational linkage rated LOW (actively rebutted, not absent). Footer cites the Tier-1 anchor that Aeza simultaneously hosted BianLian, RedLine, Lumma, Meduza, and BlackSprut as 5 unrelated actor ecosystems, and notes that the same exclusion logic applied to BriansClub and CRD Club and elon-merge.com on this same IP also returned separate-actor verdicts.">
+  <img loading="lazy" src="{{ "/assets/images/opendirectory-79-137-192-3-20260515/opendirectory-79-137-192-3-three-cluster-cotenancy.svg" | relative_url }}" alt="Process-tree infographic of the three-cluster co-tenancy on 79.137.192.3. Top center yellow side-rail card: the IP 79.137.192.3 on AS216246 Aeza Group LLC RU, multi-tenant bulletproof staging server with Apache 2.4.58 Win64 PHP 8.2.12, OFAC SDN Aeza Group sanction July 2025 documents 5 unrelated actor ecosystems co-resident on Aeza. Below the IP a 3-way fanout splits into three cluster cards. Left card yellow side-rail: Cluster A, UTA-2026-008, BellaMain Turkish PhaaS, operator @AresRS34, developer Wadanz, PHP/MySQL panel plus 7 Turkish marketplace kits, payout TRX TRON, Turkish language, brand cryptone.bot fake exchange, distinct-actor MODERATE 75% and named-actor INSUFFICIENT. Middle card red side-rail: Cluster B, UTA-2026-009, Inkognito Russian VPN/phishing, parent brand Inkognito with sub-brands INK VPN INK Lens CryptOne, React/Vite SPA plus EspoCRM stack, payment SBP T-Pay card RU, Russian language, operator alias @inkconnectvpn, 2.5+ year continuous operation, distinct-actor MODERATE 78% and named-actor INSUFFICIENT. Right card highlighted with deep-red border and side-rail plus a star: Cluster C, PRIMARY, UTA-2026-010, Rhadamanthys MaaS customer, loader staticlittlesource.exe, canonical Stage-2, operator strings BombAUb23456 and others, InstallUtil.exe LOLBin, C2 79.133.180.168:3394 on Hostkey NL, English language, survived Operation Endgame November 2025, distinct-actor MODERATE 72% and named-actor INSUFFICIENT. Below the three clusters a grey side-rail band lists the 7 dimensions tested for cross-cluster operator overlap with zero overlap on any: Telegram identifiers, operator pseudonyms, registrar/DNS/SOA pattern, language artifacts, payment processors, malware family, production-C2 hosting provider; cross-cluster operational linkage rated LOW (actively rebutted, not absent). Footer cites the Tier-1 anchor that Aeza simultaneously hosted BianLian, RedLine, Lumma, Meduza, and BlackSprut as 5 unrelated actor ecosystems, and notes that the same exclusion logic applied to BriansClub and CRD Club and elon-merge.com on this same IP also returned separate-actor verdicts.">
   <figcaption><em>Figure 18: The three-cluster co-tenancy that defines this report's analytical contribution. The visual makes the headline argument scannable: the three operators share one IP (top yellow box) and nothing else (grey overlap-failure band). The OFAC Aeza Tier-1 anchor in the footer is what makes the LOW cross-cluster linkage a defensible position rather than an absence of evidence.</em></figcaption>
 </figure>
 
@@ -1059,7 +1059,7 @@ This is a brief response orientation, not an incident-response playbook. Confirm
 
 This section organizes the report's findings by confidence level for the higher-level view. Confidence levels follow the project-wide CLAUDE.md scale (DEFINITE / HIGH / MODERATE / LOW / INSUFFICIENT).
 
-### DEFINITE (95–100%) — Direct evidence, no ambiguity
+### DEFINITE (95–100%): Direct evidence, no ambiguity
 
 - **Cluster C Stage-2 family classification as Rhadamanthys** (97%): Microsoft `Trojan:Win32/Rhadamanthys!ic` + CAPE `Rhadamanthys` + 48/63 VirusTotal vendors converge + `.frontb` PE section + SibCode VCL artifacts + `HKU\<SID>\Software\SibCode\sn` registry write confirmed during detonation
 - **Cluster C loader file identifiers**: SHA256 `5c38a5dd...`, MD5 `ae9991a0...`, imphash `1e5efd48...`, compile timestamp 2023-06-25 23:01:08 UTC, VS2022 v17.4 toolchain
@@ -1068,7 +1068,7 @@ This section organizes the report's findings by confidence level for the higher-
 - **Cluster B Inkognito brand identification**: operator self-identifies "Inkognito" as parent brand via `@inkconnectvpn` Telegram channel description
 - **Cross-cluster zero-overlap test**: 7 dimensions tested, 0 dimensions with operator-level overlap
 
-### HIGH (85–95%) — Strong evidence, minor gaps
+### HIGH (85–95%): Strong evidence, minor gaps
 
 - **Cluster C C2 at `79.133.180.168:3394` is the active customer C2**: VirusTotal MCP confirms communicating files; URL pattern with panel ID `e6d92c6b5b2a03bee7fbab40` observed across multiple beacons
 - **EAX-redirect process hollowing variant**: static analysis of loader confirms `SetThreadContext` modifies only `Eax` field; W^X transitions observed (PAGE_READWRITE → PAGE_EXECUTE_READ via VirtualProtectEx)
@@ -1085,7 +1085,7 @@ This section organizes the report's findings by confidence level for the higher-
 - **Operation Endgame Phase 3 disrupted Rhadamanthys**: Tier-1 Europol press release November 2025, 1,025+ servers seized, 525,000+ infections in 226 countries
 - **The Cluster C C2 survived Operation Endgame**: VirusTotal MCP shows continued communicating files post-November 2025
 
-### MODERATE (70–85%) — Reasonable evidence, notable gaps
+### MODERATE (70–85%): Reasonable evidence, notable gaps
 
 - **Per-customer specificity of CBC-XOR IV `f6358d79df69c577d9dce6bb77fa4fa7`**: indirect inference only; sibling Stage-2 cross-validation deferred (VT sandbox emulation systematically fails on cohort)
 - **Per-customer specificity of panel ID `e6d92c6b5b2a03bee7fbab40`**: indirect inference only; SibCode\sn per-build Unix-timestamp variation supports per-customer framing
@@ -1096,13 +1096,13 @@ This section organizes the report's findings by confidence level for the higher-
 - **Cluster C delivery via cracked-software/game-cheat lure**: inferred from filename pattern (`staticlittlesource.exe`) and LLM-amateur tradecraft profile; not directly observed
 - **Cluster C plugin module loading**: capability documented in family but specific plugin loading not observed in this analyzed run; Stage-2 has the loading capability code present
 
-### LOW (50–70%) — Weak or circumstantial evidence
+### LOW (50–70%): Weak or circumstantial evidence
 
 - **Specific Q3VM lineage attribution**: magic-constant + opcode-pattern similarity HIGH, but direct binary comparison with stock Q3VM (jnz/q3vm) and Outpost24 IDA Pro QVM modules deferred work that would elevate to DEFINITE
 - **Specific named-actor attribution for any cluster**: INSUFFICIENT to LOW for all three; first-capture documentation across Clusters A, B, and C
 - **Customer's geographic location**: no direct evidence; LLM-augmented amateur profile is geographically agnostic
 
-### INSUFFICIENT (<50%) — Cannot assess
+### INSUFFICIENT (<50%): Cannot assess
 
 - **Real-world identity of any of the three operators**: no government attribution, no 2+ Tier-2 vendor independent corroboration; resolution requires paid TI or law enforcement access
 - **Total victim count for Cluster C customer**: Operation Endgame statistics cover the entire Rhadamanthys MaaS ecosystem (525,000+ infections), not this specific customer
@@ -1115,7 +1115,7 @@ This section organizes the report's findings by confidence level for the higher-
 
 This section documents what was not concluded in this investigation. The deferred work, the indirect inferences awaiting cross-validation, and the named-actor attribution ceiling. Surfacing gaps explicitly is part of the threat-intelligence rigor the project applies (CLAUDE.md → CONFIDENCE LEVELS).
 
-### 12.1 Cluster C — deferred technical work
+### 12.1 Cluster C: deferred technical work
 
 **1. Per-customer CBC-XOR IV cross-validation (HIGH priority).** The 16-byte IV `f6358d79df69c577d9dce6bb77fa4fa7` is treated as customer-specific in the report based on indirect inference. Direct validation requires extracting the IV from sibling Stage-2 samples (`bc9fe5e9e8e60511242afb24df276681bc92ae97e89b95ad2b7fe4fe56744447`, `e827d13c394d096d1e13f6860e4da75e506b3d935a480b087833485127b954e1`, `457aecd836dbc6038d81c22daa0fc5dbc42f0f0c6d09a97f73b48db264b2e8dd`) and comparing. **Blocker:** VirusTotal sandbox emulation systematically fails across all sibling samples (zero `contacted_urls` / zero `embedded_urls` cohort-wide). Resolution path: manual extraction via track E.2 of each sibling sample, replicating the 3-layer FS synthesis and CBC-XOR decrypt.
 
@@ -1137,7 +1137,7 @@ Resolution paths require paid threat intelligence (Flashpoint, Intel 471, KELA) 
 - `@inkconnectvpn` / Inkognito brand (Cluster B)
 - `BombAUb23456` / `DubzAias932` / 45-char operator credential (Cluster C)
 
-### 12.3 Cluster B — infrastructure gaps
+### 12.3 Cluster B: infrastructure gaps
 
 - Historical WHOIS for expired `.eu` BEC burn domains not queried (resolution: paid historical WHOIS service)
 - akredup.ru role confirmation incomplete
@@ -1146,7 +1146,7 @@ Resolution paths require paid threat intelligence (Flashpoint, Intel 471, KELA) 
 - Inkognito subdomain full enumeration incomplete (180+ verified floor; 467+ estimated)
 - SBP/T-Pay merchant ID lookup would resolve the legal entity behind the Inkognito brand portfolio
 
-### 12.4 Cluster C — Operation Endgame status monitoring
+### 12.4 Cluster C: Operation Endgame status monitoring
 
 Whether `79.133.180.168:3394` will remain active through the end of 2026 requires ongoing monitoring. The C2 survived the November 2025 Operation Endgame Phase 3 takedown (per VirusTotal MCP communicating-files data through 2026-05-13), but follow-up enforcement actions or Hostkey NL provider response could change this. Recommend periodic VirusTotal IP report re-checks and JARM monitoring on the Samsung-impersonation cert period.
 
@@ -1161,14 +1161,14 @@ No confirmed reporting on the Rhadamanthys vendor's arrest or resumed operations
 
 This report draws on Tier-1 (government / authoritative), Tier-2 (major-vendor research), and Tier-3 (reputable security journalism) sources. Each cited claim ties back to one or more entries below. Citations follow the Admiralty Code (reliability × information-quality) per CLAUDE.md SOURCE CREDIBILITY TIERS.
 
-### Tier 1 — Government / authoritative
+### Tier 1: Government / authoritative
 
 - **U.S. Treasury OFAC** (July 1, 2025): "Treasury Sanctions Aeza Group, Russia-Based Bulletproof Hosting Service Provider", sanctions designation documenting Aeza simultaneously hosting BianLian, RedLine, Lumma, Meduza, BlackSprut. Admiralty A1.
 - **Europol** (November 2025): Operation Endgame Phase 3 press release, disruption of 1,025+ Rhadamanthys vendor servers covering 525,000+ infections in 226 countries. Admiralty A1.
 - **Shadowserver Foundation** (November-December 2025): "Rhadamanthys Historical Bot Infections" Special Report, distributed victim notifications to 201 National CSIRTs across 175 countries. Admiralty A2.
 - **VirusTotal MCP**: IP report `79.133.180.168` with communicating files and SSL certificate history; IP report `79.137.192.3` with 135 DNS resolutions and communicating files. Admiralty A1.
 
-### Tier 2 — Major-vendor research
+### Tier 2: Major-vendor research
 
 - **Check Point Research** (2023): "Rhadamanthys v0.5.0, A Deep Dive into the Stealer's Components." Admiralty B1.
 - **Check Point Research** (November 2024): "CopyRh(ight)adamantys Campaign, Rhadamanthys v0.7." Admiralty B2.
@@ -1183,7 +1183,7 @@ This report draws on Tier-1 (government / authoritative), Tier-2 (major-vendor r
 - **Censys**: "Hiding in Plain Sight, Tracking Bulletproof Hosting and Abused RDP Infrastructure." Admiralty B2.
 - **Intel 471**: "Bulletproof Hosting, A Critical Cybercriminal Service." Admiralty B2.
 
-### Tier 3 — Reputable security journalism
+### Tier 3: Reputable security journalism
 
 - **The Record (Recorded Future News)**: Aeza Group OFAC sanctions reporting. Admiralty C1.
 - **BleepingComputer**: "Rhadamanthys Infostealer Disrupted as Cybercriminals Lose Server Access." Admiralty C1.

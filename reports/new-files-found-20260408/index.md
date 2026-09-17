@@ -785,7 +785,7 @@ Two distinct RSA key ecosystems co-exist across 10 recovered beacon DLLs:
 
 The operator extracted RSA keys from existing beacon DLLs and embedded them in custom implant code, then migrated from Key B → Key A → no RSA across the custom beacon generations. This demonstrates active tracking of and engagement with CS's internal key architecture.
 
-### 5.3 Auth/JAR Keypair Mismatch — OPSEC Finding
+### 5.3 Auth/JAR Keypair Mismatch: OPSEC Finding
 
 The `.auth` file on the open directory does not match the private key corresponding to the CS 4.9.1 JAR's `authkey.pub` (RSA-2048, MD5: `8bb4df00c120881a1945a43e2bb2379e`). This mismatch prevents decryption of all 56 encrypted sleeve DLLs. The full Java key derivation chain (`Authorization`, `AuthCrypto`, `SleeveSecurity` classes) was reverse-engineered to confirm the mismatch mechanism.
 
@@ -808,7 +808,7 @@ The mismatch is evidence of toolkit assembly from at least two different cracked
 
 The infrastructure pivot closed empty. The specific SSL cert SHA256 `6e8efd85...` returned no hits in either open-source or paid threat intelligence platforms, with Shodan and Censys paid queries both yielding zero results. That confirms the team server was either not indexed by internet scanners before the April 6 discovery, actively blocked scan traffic, or the cert is unique to this single deployment. The pivot is closed, and no additional infrastructure was identified through certificate correlation.
 
-### 6.2 CS Watermark 987654321 — Distribution-Level Indicator
+### 6.2 CS Watermark 987654321: Distribution-Level Indicator
 
 **Confidence: HIGH (88%), distribution association, NOT operator identity**
 

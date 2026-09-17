@@ -35,31 +35,31 @@ figure_nav:
       - label: "Eight delivery vectors"
         anchor: "#31-the-eight-delivery-vectors"
       - label: "Carriers.exe wrapper"
-        anchor: "#carriersexe--inno-setup-pascal-script-anti-triage-wrapper"
+        anchor: "#carriersexe-inno-setup-pascal-script-anti-triage-wrapper"
       - label: "Stage-2 shellcode"
         anchor: "#stage-2-shellcode-5808-bytes"
       - label: "Encrypted stage-3 carrier"
-        anchor: "#networkspec17log--encrypted-stage-3-carrier"
+        anchor: "#networkspec17log-encrypted-stage-3-carrier"
       - label: "Stage-3 PE bundle"
-        anchor: "#stage-3-pe-bundle--multi-vendor-camouflage"
+        anchor: "#stage-3-pe-bundle-multi-vendor-camouflage"
       - label: "HijackLoader proper"
-        anchor: "#pe_03--hijackloader--penguish--rugmi-proper"
+        anchor: "#pe_03-hijackloader--penguish--rugmi-proper"
       - label: ".NET injection"
         anchor: "#net-injection-into-renamed-qihoo-promoutilexe-wvaultexe"
       - label: "Persistence"
         anchor: "#persistence-legacy-job--defender-exclusion--cert-install"
       - label: "C2 beacon"
-        anchor: "#c2-beacon-definite--three-independent-capture-sources"
+        anchor: "#c2-beacon-definite-three-independent-capture-sources"
   - image: hijackloader-stage2-eight-phase-architecture.svg
     parts:
       - label: "The 5,808-byte shellcode"
         anchor: "#stage-2-shellcode-5808-bytes"
       - label: "The encrypted carrier"
-        anchor: "#networkspec17log--encrypted-stage-3-carrier"
+        anchor: "#networkspec17log-encrypted-stage-3-carrier"
       - label: "The stage-3 PE bundle"
-        anchor: "#stage-3-pe-bundle--multi-vendor-camouflage"
+        anchor: "#stage-3-pe-bundle-multi-vendor-camouflage"
       - label: "HijackLoader proper"
-        anchor: "#pe_03--hijackloader--penguish--rugmi-proper"
+        anchor: "#pe_03-hijackloader--penguish--rugmi-proper"
       - label: "The cipher gap"
         anchor: "#cipher-gap-on-the-encrypted-payload"
   - image: hijackloader-msc-tier1-chain.svg
@@ -77,13 +77,13 @@ figure_nav:
   - image: hijackloader-process-tree.svg
     parts:
       - label: "Carriers.exe"
-        anchor: "#carriersexe--inno-setup-pascal-script-anti-triage-wrapper"
+        anchor: "#carriersexe-inno-setup-pascal-script-anti-triage-wrapper"
       - label: "CrystSupervisor32.exe"
-        anchor: "#crystsupervisor32exe--renamed-wondershare-slideshoweditorexe"
+        anchor: "#crystsupervisor32exe-renamed-wondershare-slideshoweditorexe"
       - label: "ExceptionHandler.dll"
-        anchor: "#exceptionhandlerdll--operator-modified-wondershare-plowshare-crash-reporter"
+        anchor: "#exceptionhandlerdll-operator-modified-wondershare-plowshare-crash-reporter"
       - label: "WVault.exe"
-        anchor: "#pe_08--genuine-qihoo-360-promoutilexe-becomes-wvaultexe-at-runtime"
+        anchor: "#pe_08-genuine-qihoo-360-promoutilexe-becomes-wvaultexe-at-runtime"
       - label: "The full tree"
         anchor: "#61-process-tree"
 process_tree:
@@ -378,7 +378,7 @@ Public reporting matches and gaps are inventoried in Section 2.2; the threat-act
 
 ---
 
-## 2. Threat Intelligence Summary — HijackLoader Family Background and Evolution
+## 2. Threat Intelligence Summary: HijackLoader Family Background and Evolution
 {: .hl-tier-2}
 
 The primary loader family in this campaign is HijackLoader, a modular commodity loader that is tracked under at least six aliases across vendor reporting:
@@ -512,7 +512,7 @@ Both themes target B2B business workflows, consistent with broad opportunistic c
 
 ---
 
-## 4. Static Analysis — Distribution Layer
+## 4. Static Analysis: Distribution Layer
 {: .hl-tier-3}
 
 Three distribution-layer components carry the loader chain: `Carriers.exe` (the Inno Setup wrapper a triage pipeline encounters first), `CrystSupervisor32.exe` (the genuine signed side-load host), and `ExceptionHandler.dll` (the operator's modified DLL that drives the chain). All three are analyzed below.
@@ -520,7 +520,7 @@ Three distribution-layer components carry the loader chain: `Carriers.exe` (the 
 <details markdown="1" class="hl-teardown">
 <summary>File facts, hashes and the anti-triage or side-load mechanics for all ten distribution-layer components. Click to expand.</summary>
 
-### 4.1 Carriers.exe — Inno Setup Pascal-Script Anti-Triage Wrapper
+### 4.1 Carriers.exe: Inno Setup Pascal-Script Anti-Triage Wrapper
 
 **File facts:**
 
@@ -577,7 +577,7 @@ Setting `Result := False` makes the installer exit immediately. There is no wiza
   <figcaption><em>Figure 3: Carriers.exe entry-point password gate. The wrapper accepts an optional <code>/PASSWORD=</code> command-line argument; if a defender extracts the binary and runs it without one, this dialog appears. Most analysts hit this and assume the sample requires an unknown password to detonate, yet the Pascal Script's <code>InitializeSetup()</code> path runs <em>before</em> this gate, so the payload has already executed.</em></figcaption>
 </figure>
 
-#### 4.1.2 The 17 dropped files — multi-vendor camouflage bundle
+#### 4.1.2 The 17 dropped files: multi-vendor camouflage bundle
 
 The 17 files dropped by the Pascal Script into `%TEMP%\is-XXXXX.tmp\` form a multi-vendor camouflage bundle. The compile-timestamp distribution is the single discriminating diagnostic: 12 of the DLLs have 2005-2019 compile timestamps (genuine Wondershare / Microsoft camouflage); only `CrystSupervisor32.exe` (2025-02-25) and the operator artifacts (`networkspec17.log`, `shadermgr93.rc`) are 2025-built.
 
@@ -602,7 +602,7 @@ The 17 files dropped by the Pascal Script into `%TEMP%\is-XXXXX.tmp\` form a mul
 
 Of the 17 files, only 3 are operator-controlled: `ExceptionHandler.dll` (the modified crash reporter that drives the loader chain), `networkspec17.log` (the encrypted Stage-3 payload), and `shadermgr93.rc` (the Stage-1 loader input config). The remaining 14 files are either genuine signed vendor binaries (camouflage) or operator-rebuilt-but-content-equivalent decoys.
 
-### 4.2 CrystSupervisor32.exe — Renamed Wondershare SlideShowEditor.exe
+### 4.2 CrystSupervisor32.exe: Renamed Wondershare SlideShowEditor.exe
 
 **File facts:**
 
@@ -629,7 +629,7 @@ The operator does NOT modify the EXE itself. Only two side-loaded DLLs are tampe
 
 > **Note (capability surface):** static YARA analysis on `CrystSupervisor32.exe` identifies keylogger, screenshot, TLS-ClientHello-generator, escalate-priv, and TCP-socket capabilities. Whether those capabilities reflect the genuine SlideShowEditor's full feature surface or operator-modified internals cannot be determined from YARA hits alone. Confirmed at MODERATE confidence: the binary participates in the chain at runtime as a multi-purpose payload, not just a passive host.
 
-### 4.3 ExceptionHandler.dll — Operator-Modified Wondershare Plowshare Crash Reporter
+### 4.3 ExceptionHandler.dll: Operator-Modified Wondershare Plowshare Crash Reporter
 
 > **Analyst note:** This DLL is the engine of the loader chain. The operator started with the open-source Wondershare Plowshare (a crash-reporting library, similar to Google Breakpad), preserved the legitimate Wondershare branding, and added three small functions that turn the legitimate crash-report IPC channel into a covert dispatcher between operator stages. The function `FUN_100024B0` is the actual loader entry point. It walks the Process Environment Block, resolves Windows API addresses by hash, reads a small config file from disk, and uses it to hollow a Windows DLL with stage-2 shellcode. Defenders inspecting the DLL's strings see only Plowshare and Wondershare names; the operator added nothing visibly malicious to the strings table.
 
@@ -728,7 +728,7 @@ The **anti-sandbox quadruple** (`ZwQueryInformationProcess` + `ZwDelayExecution`
   <figcaption><em>Figure 5: Stage-2 string-handling helper pair, an inline ASCII-to-UTF-16 widener (left) and a wcslen-equivalent (right). Both are needed because the API hash table targets <code>ntdll</code> exports (which use <code>UNICODE_STRING</code>) while the shellcode itself works in narrow ASCII. Their presence is a YARA-anchorable signal that the binary builds Unicode strings on the fly rather than carrying them as compile-time constants.</em></figcaption>
 </figure>
 
-### 4.5 networkspec17.log — Encrypted Stage-3 Carrier
+### 4.5 networkspec17.log: Encrypted Stage-3 Carrier
 
 > **Analyst note:** This is the 2.6 MB file that contains the bulk of the loader chain. It gets decoded in three layers and unpacks into 3.75 MB of stage-3 content (eight embedded PE files, the path string for the next hollow target, and persistence-path strings). The first ~16 KB of the file is camouflaged to look like English text. That is a deliberate trick to make a defender opening the file in a text editor or `strings` dump dismiss it as benign log content. The body of the file is wrapped in fake PNG-IDAT chunks, then XOR'd with a 4-byte key that is stored in plaintext at file offset 4-7 of the file itself, then LZNT1-compressed in chunks. None of this is sophisticated cryptography. It's deliberate format-level camouflage at a level that automated triage and casual hex-editor inspection both miss.
 
@@ -771,7 +771,7 @@ Where `c6 a5 79 ea` is the operator's first-chunk-type marker, `e1 d5 b4 a2` is 
   <figcaption><em>Figure 6: Hex view of <code>networkspec17.log</code> after the layered decoding (IDAT framing → XOR → LZNT1) is reversed. The MZ-DOS header surfacing at offset 0x0100 confirms that the recovered 3.75 MB blob carries an embedded PE bundle: the eight stage-3 PEs (HijackLoader proper, GoProxy CA installer, multi-vendor camouflage binaries) sit in this exposed payload.</em></figcaption>
 </figure>
 
-### 4.6 Stage-3 PE Bundle — Multi-Vendor Camouflage
+### 4.6 Stage-3 PE Bundle: Multi-Vendor Camouflage
 
 The 3.75 MB Layer-3 buffer contains 8 embedded PE files. After VT cross-checking, only **3 of 8** are operator-controlled:
 
@@ -795,7 +795,7 @@ This is **multi-vendor camouflage at the bundle layer**: 4 genuine vendor binari
 
 This is operator-clever, because defenders scanning hashes get matches against a Crisp install, a Google Updater, Qihoo 360 and a zip utility, which looks like normal install-dropper output. The malicious PEs, `pe_03`, `pe_06` and `pe_07`, are 3 of 8 and tightly buried.
 
-### 4.7 pe_03 — HijackLoader / Penguish / Rugmi Proper
+### 4.7 pe_03: HijackLoader / Penguish / Rugmi Proper
 
 > **Analyst note:** This is the actual HijackLoader binary inside the bundle, the publicly documented commodity loader. What's worth noting in this build is that it resolves Windows APIs using the `RtlHashUnicodeString` function from `ntdll` rather than implementing its own custom hash. That sounds dry but is operator-clever. It means the binary contains no readable hash function (because the function lives in `ntdll`, not in the binary), making static analysis of the API resolution layer slower than for the more typical inline-hash-function approach. It also derives a per-host key from the computer name using the same hash, which is what gates decryption of the final payload.
 
@@ -894,7 +894,7 @@ One honest caveat belongs here, from the Round 13 retraction. The static reverse
   <figcaption><em>Figure 10: pe_03 per-host env-var name generator (function <code>FUN_1400001bc0</code>). The function reads the local hostname via <code>GetComputerNameW</code>, hashes it with the resolved <code>RtlHashUnicodeString</code> wrapper, XORs the hash with the magic constant <code>0xa1b2d3b4</code> to produce a deterministic per-host seed, seeds <code>srand</code> with it, and emits a hostname-deterministic uppercase-A-Z env-var name. The same seed is also exported via <code>*param_3</code> as the decryption key for the loaded payload, one secret serving as both env-var name source and decryption key.</em></figcaption>
 </figure>
 
-### 4.8 pe_06 — Rugmi.HP GoProxy MITM CA Cert Installer
+### 4.8 pe_06: Rugmi.HP GoProxy MITM CA Cert Installer
 
 **File facts:**
 
@@ -921,7 +921,7 @@ The DLL has an empty import table (`ImportTableIsBad` YARA), APIs resolved at ru
 
 > **Caveat:** the cert install was not directly observed behaviourally; the process and registry telemetry lack the cert-blob write. PE_06 is in the malware (VT confirms) but is conditionally loaded: either the loader didn't reach pe_06 in 5 minutes, or its invocation depends on a host-fingerprint check that didn't match the analysis environment.
 
-### 4.9 pe_07 — Operator-Bespoke Bundle-Cleanup Helper (Campaign-Unique)
+### 4.9 pe_07: Operator-Bespoke Bundle-Cleanup Helper (Campaign-Unique)
 
 **File facts:**
 
@@ -945,7 +945,7 @@ State-machine prefixes in the manifest strings:
 
 This is the operator's bundle-cleanup helper. It iterates through the manifest and erases (or modifies) the operator's drop artifacts after execution. **Never seen on VT**, campaign-unique to this operation.
 
-### 4.10 pe_08 — Genuine Qihoo 360 PromoUtil.exe (Becomes WVault.exe at Runtime)
+### 4.10 pe_08: Genuine Qihoo 360 PromoUtil.exe (Becomes WVault.exe at Runtime)
 
 **File facts:**
 
@@ -975,7 +975,7 @@ The runtime drop hash differs from the bundle hash (`c085a724…` vs `ca9f859f�
 
 ---
 
-## 5. Static Analysis — The Eight Delivery Vectors
+## 5. Static Analysis: The Eight Delivery Vectors
 {: .hl-tier-3}
 
 All eight initial-access vectors converge on the same loader chain. Each was extracted from the open directory and analyzed independently at the static-artifact level.
@@ -1251,7 +1251,7 @@ The task is COMPLETE, VALID, and ACTIVE. Persistence runs `CrystSupervisor32.exe
 
 The setvalue is from `MsMpEng.exe` (Defender itself), HIGH confidence that it was added by Defender, not written directly by the malware process. The invocation mechanism (`Set-MpPreference -ExclusionPath` vs WMI AddPath vs direct API call) is INSUFFICIENT confidence. Regardless of mechanism, this prevents future Defender scans from touching the persistence directory.
 
-#### 6.4.3 GoProxy MITM CA cert (HIGH confidence — VT C2AE confirmed)
+#### 6.4.3 GoProxy MITM CA cert (HIGH confidence: VT C2AE confirmed)
 
 > **Analyst note:** This sub-section documents the MITM certificate-install layer of the persistence model. By installing a GoProxy root certificate into the Trusted Root Certification Authorities store, the operator establishes the cryptographic foundation for transparent HTTPS interception. Any subsequent traffic the malware (or a co-resident proxy) routes can be intercepted without browser warnings. The certificate's SHA1 thumbprint is a durable hunt indicator that survives every other rotation the operator might do, because rotating the cert would force re-installation across every infected host. The behavioral observation in this run is partial (the cert install was not directly captured in the 5-minute window), but VT C2AE sandbox executions confirm the technique is in pe_06.
 
@@ -1307,7 +1307,7 @@ This delete-then-rewrite pattern is unusual, possibly anti-forensics (wipe + res
 2. Memory-dump `WVault.exe` specifically (not full system); search post-decryption process memory for `4D 5A 90 00`
 3. External long-running sandbox (20+ minutes) with memory dump capability
 
-### 6.7 C2 Beacon (DEFINITE — three independent capture sources)
+### 6.7 C2 Beacon (DEFINITE: three independent capture sources)
 
 > **Analyst note:** This is the C2 connection itself, captured by three independent network sensors (Suricata, behavioral sandbox TCP log, and netstat samples). The high-value durable signal here is the JA3 hash, which fingerprints the malware's TLS client behavior independently of the C2 IP. Rotating IPs cannot defeat JA3 detection. The ClientHello length of 93 bytes and the fixed cipher list are equally durable signals at the network layer. Defenders should treat these as the priority detections: an IP block alone is defeated by IP rotation, but the JA3+ClientHello fingerprint persists across rotations.
 
@@ -1338,7 +1338,7 @@ This delete-then-rewrite pattern is unusual, possibly anti-forensics (wipe + res
 
 The TLS handshake did not complete past the ClientHello, so the server certificate fingerprint and HTTP/HTTPS payloads are unavailable. The JA3 hash is high-value for detection: fingerprints the malware's TLS client behavior independently of the C2 IP.
 
-### 6.8 DNS Activity (49 unique queries — none point to C2)
+### 6.8 DNS Activity (49 unique queries: none point to C2)
 
 > **Analyst note:** This sub-section documents the DNS-resolution behavior, or rather the absence of it for C2 traffic. The 49 DNS A queries during the run all resolve legitimate Microsoft, update-service, CRL, and analytics endpoints. None of them resolve operator-controlled C2 infrastructure. The C2 IP `185.241.208.129` is hardcoded in the loader/payload and reached via direct TCP connect, never via DNS. The implication for defenders is operationally significant: DNS-based detection (RPZ, sinkholes, DGA detection) WILL NOT catch this campaign. Detection must be IP-based, JA3-based, or behavioral.
 
@@ -1425,7 +1425,7 @@ No AsyncRAT/zgRAT/DCRat SSL-certificate detections fired, because the TLS handsh
 
 > **Analyst note:** The campaign uses three different hosting providers for three different purposes, a primary staging server on a Russian-jurisdiction bulletproof host that has been formally sanctioned by the US Treasury, a C2 server on a Spamhaus DROP-listed bulletproof host in Poland, and a second-stage payload host in Germany. The deliberate dual-bulletproof-hosting selection, sanctioned AS210644 plus DROP-listed AS210558, is itself a signal about the operator's risk tolerance. They are willing to operate on infrastructure that the US Treasury and Spamhaus have publicly flagged. This rules out cautious operators or low-skill operators who would have moved to less-marked hosting after sanction announcements; it does not, by itself, attribute the campaign to any specific named actor.
 
-### 8.1 Staging Server: 62.60.237.100 (AEZA — OFAC sanctioned)
+### 8.1 Staging Server: 62.60.237.100 (AEZA: OFAC sanctioned)
 
 > **Analyst note:** This is the open directory that hosts the campaign's distribution kit (32+ artifacts, 8 delivery vectors). What's worth understanding for a defender is that the hosting AS (AS210644, AEZA Group LLC) was formally sanctioned by the US Treasury in July 2025 with a concurrent Five Eyes joint advisory. The Stage 1 sample first appeared on VirusTotal eight months *after* that sanctions designation, which means the operator stages on this infrastructure with full awareness of the OFAC designation. Routine network-perimeter rules at most defenders' organizations would already be blocking traffic to this AS by reputation policy; an explicit IP block on `62.60.237.100` is the operational backstop.
 
@@ -1446,7 +1446,7 @@ The directory `/Documents/` (mirrored at `/download/Documents/`) is open and ind
 
 The sanctions context matters. AS210644 was sanctioned by the US Treasury Office of Foreign Assets Control on 1 July 2025, with a concurrent Five Eyes joint designation. Per Recorded Future Insikt Group, AS210644 carried 7.5% of Tier-1 C2 servers between July 2024 and July 2025. The Stage 1 sample first appeared on VirusTotal on 22 March 2026, eight months after the designation, so the operator is running on sanctioned infrastructure with full awareness of it.
 
-### 8.2 C2 Server: 185.241.208.129 (1337 Services — Spamhaus DROP)
+### 8.2 C2 Server: 185.241.208.129 (1337 Services: Spamhaus DROP)
 
 > **Analyst note:** This is the active C2 endpoint. Every infected host beacons here over TLSv1 on a non-standard high port (TCP/56167). The hosting AS, AS210558 (1337 Services GmbH, Poland), is on the Spamhaus DROP list of presumed-malicious infrastructure that legitimate networks publish-and-block by policy. VirusTotal also lists five sister sample binaries communicating with this same IP: `Gdkmos.exe`, `KioskWindows_1.04.zip`, `detectrdps.exe`, `SSA-Statement.exe`, `Rjdfz.exe`. Hunt teams should add these as additional hash-based searches in their EDR telemetry; co-resident operator infrastructure on AS210558 is a useful pivot point even when the specific campaign attribution is uncertain.
 
@@ -1639,7 +1639,7 @@ The language I use here (`weak indicators suggest`) reflects the LOW confidence 
 | **TAG-150 / GrayBravo** (Recorded Future) | INSUFFICIENT | Zero Castle-family components in any sample; zero infrastructure overlap with documented TAG-150 IPs. TAG-150 operators are specifically characterized by Castle-family components (CastleLoader, CastleBot, CastleRAT). |
 | **TA544 / Narwhal Spider** (Proofpoint) | INSUFFICIENT | Final stage is AsyncRAT-class .NET RAT, not Remcos+SystemBC (TA544's documented downstream). Structural difference rules out. |
 
-### 11.3 Russian-speaking operator language attribution (HIGH confidence — 90%)
+### 11.3 Russian-speaking operator language attribution (HIGH confidence: 90%)
 
 Four independent Russian-language artifacts converge:
 
@@ -1650,7 +1650,7 @@ Four independent Russian-language artifacts converge:
 
 These signals are independent and converge. Operator language attribution holds at HIGH confidence (90%) even where actor-identity attribution is LOW.
 
-### 11.4 Distinct-operator evidence (MODERATE — 75%)
+### 11.4 Distinct-operator evidence (MODERATE: 75%)
 
 Four cross-vector fingerprints collectively rule out the H4 alternative hypothesis (coincidental shared bulletproof tenancy of unrelated actors):
 

@@ -35,7 +35,7 @@ figure_nav:
       - label: "Beacon in explorer.exe"
         anchor: "#adaptixc2-framework-attribution-and-beacon-cluster"
       - label: "RC4 beacon config"
-        anchor: "#rc4-encrypted-beacon-configuration-recovered-key--parsed-config--layout-matches-stock-adaptixc2-framework-source"
+        anchor: "#rc4-encrypted-beacon-configuration-recovered-key--parsed-config-layout-matches-stock-adaptixc2-framework-source"
       - label: "C2 traffic"
         anchor: "#c2-communication-detail"
       - label: "Post-exploitation toolkit"
@@ -259,7 +259,7 @@ Time-to-impact was NOT MEASURED, because no live victim traffic was captured. St
 
 ---
 
-## 4. Technical Analysis — Static Findings
+## 4. Technical Analysis: Static Findings
 {: .hl-tier-3}
 
 > **Analysis tools referenced in this section.** The figures and screenshots throughout this section come from static reverse-engineering: a disassembler/decompiler for the C++ AdaptixC2 beacon, a .NET decompiler for the operator's `injector.dll`, PE-format inspection for compile-timestamp and export-table comparisons, and Go-symbol recovery for the Linux ELF agent. Mentions throughout use the general category term only.
@@ -296,7 +296,7 @@ Family attribution is DEFINITE at 98 percent or better. Three independent vendor
 That four formats with three distinct imphashes all collapse to one source illustrates AdaptixC2's documented multi-format build pipeline. The same beacon source produces `.dll`, `.exe`, raw shellcode, and a sideload-renamed `.dll` from a single build session.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/opendirectory-45-130-148-125-20260430/adaptixc2-cluster-compile-timestamps.png" | relative_url }}" alt="pefile inspection output showing compile timestamps for embedded_dll.bin (UTC 2026-04-23 07:39:46) and the cluster sample agent.x64.dll (UTC 2026-04-23 20:34:32) — same date, ~13 hours apart, demonstrating the same-day dev-to-prod build cadence">
+  <img loading="lazy" src="{{ "/assets/images/opendirectory-45-130-148-125-20260430/adaptixc2-cluster-compile-timestamps.png" | relative_url }}" alt="pefile inspection output showing compile timestamps for embedded_dll.bin (UTC 2026-04-23 07:39:46) and the cluster sample agent.x64.dll (UTC 2026-04-23 20:34:32): same date, ~13 hours apart, demonstrating the same-day dev-to-prod build cadence">
   <figcaption><em>Figure 1: Compile timestamps recovered from the dev build (`embedded_dll.bin`, 07:39:46 UTC) and the production build (`agent.x64.dll`, 20:34:32 UTC) place the operator's full dev-to-prod cycle inside a single day on 2026-04-23, a sub-mature build cadence consistent with the operator's other OpSec failures (PDB path, dev-leftover proxy port).</em></figcaption>
 </figure>
 
@@ -315,7 +315,7 @@ That four formats with three distinct imphashes all collapse to one source illus
 - **Export name:** `GetVersions`, verified STOCK AdaptixC2 RDI (Reflective DLL Injection) loader entry-point name (defined in `src_beacon/beacon/main.cpp` for both BUILD_DLL and BUILD_SHELLCODE configs)
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/opendirectory-45-130-148-125-20260430/adaptixc2-mingw-runtime-strings.png" | relative_url }}" alt="Strings extracted from the beacon shellcode showing GCC/MinGW-w64 runtime error messages including 'Mingw-w64 runtime failure:', 'VirtualQuery failed for %d bytes at address %p', 'VirtualProtect failed with code 0x%x', and `__gnu_cxx::__concurrence_unlock_error` — all distinctive of the MinGW-w64 GCC C++ runtime">
+  <img loading="lazy" src="{{ "/assets/images/opendirectory-45-130-148-125-20260430/adaptixc2-mingw-runtime-strings.png" | relative_url }}" alt="Strings extracted from the beacon shellcode showing GCC/MinGW-w64 runtime error messages including 'Mingw-w64 runtime failure:', 'VirtualQuery failed for %d bytes at address %p', 'VirtualProtect failed with code 0x%x', and `__gnu_cxx::__concurrence_unlock_error`, all distinctive of the MinGW-w64 GCC C++ runtime">
   <figcaption><em>Figure 3: GCC and MinGW-w64 runtime strings recovered from the beacon shellcode confirm the Linux-cross-compiled MinGW-w64 toolchain. Combined with the GNU ld 2.35 linker version stamp and the standard MinGW-w64 PE section layout, this rules out the alternative hypothesis that the beacon was built with MSVC (which would imply a different operator profile).</em></figcaption>
 </figure>
 
@@ -323,7 +323,7 @@ The beacon resolves all network APIs at runtime via `LoadLibrary` + `GetProcAddr
 
 > **Analyst note, what "RDI bootstrap" means:** Reflective DLL Injection is a technique where instead of writing a DLL to disk and using `LoadLibrary`, the malware embeds a small bootstrap routine that walks the PE headers of an in-memory DLL and maps it manually into a process. The benefit to the attacker: no on-disk DLL artifact, no `LoadLibrary` event for EDRs to log. AdaptixC2 ships this RDI bootstrap as part of the framework. It is NOT operator-written here.
 
-### 4.2 RC4-encrypted beacon configuration (recovered key + parsed config — layout matches stock AdaptixC2 framework source)
+### 4.2 RC4-encrypted beacon configuration (recovered key + parsed config: layout matches stock AdaptixC2 framework source)
 
 > **Analyst note:** AdaptixC2 stores its per-listener configuration (C2 IP/port/URIs/User-Agent/sleep timing/etc.) as an RC4-encrypted blob inside the beacon binary's `.rdata` section. The 16-byte RC4 key is stored adjacent to the ciphertext **in plaintext** inside the same blob. This is by design. The framework lets defenders recover the configuration from any sample with no key cracking required, but in exchange the operator gets a self-contained beacon that doesn't need a secondary key delivery step. Below is the recovered layout.
 
@@ -340,17 +340,17 @@ Total: 303 bytes (= 0x12f) at .rdata offset 0
 ```
 
 <figure style="text-align: center; margin: 2em 0;">
- <img loading="lazy" src="{{ "/assets/images/opendirectory-45-130-148-125-20260430/adaptixc2-rc4-blob-getter-pair-decompiled.png" | relative_url }}" alt="Disassembly of two paired getter functions FUN_618c13a0 and FUN_618c13ad, each consisting of LEA RAX into the .rdata data segment followed by RET — these accessor pair functions return the encrypted blob's base address and its length to the AdaptixC2 RC4 decryptor">
+ <img loading="lazy" src="{{ "/assets/images/opendirectory-45-130-148-125-20260430/adaptixc2-rc4-blob-getter-pair-decompiled.png" | relative_url }}" alt="Disassembly of two paired getter functions FUN_618c13a0 and FUN_618c13ad, each consisting of LEA RAX into the .rdata data segment followed by RET: these accessor pair functions return the encrypted blob's base address and its length to the AdaptixC2 RC4 decryptor">
   <figcaption><em>Figure 4: The encrypted blob's storage location is reachable through a pair of accessor functions `FUN_618c13a0` (returns blob base address) and `FUN_618c13ad` (returns blob length). Locating these getter functions is the first step in recovering the configuration: their cross-references identify the deserializer and the RC4 routine downstream.</em></figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/opendirectory-45-130-148-125-20260430/adaptixc2-rc4-blob-303bytes-hex.png" | relative_url }}" alt="Hex dump of the 303-byte encrypted configuration blob showing the 4-byte length prefix at offset 0x000, 283 bytes of high-entropy ciphertext, and the 16-byte plaintext RC4 key adjacent to the ciphertext at offset 0x11F — visible printable strings near the bottom suggest sample text values 'pure virtual met...', 'api-ms-win-..ext-...', 'method called', 'deleted virtual'">
+  <img loading="lazy" src="{{ "/assets/images/opendirectory-45-130-148-125-20260430/adaptixc2-rc4-blob-303bytes-hex.png" | relative_url }}" alt="Hex dump of the 303-byte encrypted configuration blob showing the 4-byte length prefix at offset 0x000, 283 bytes of high-entropy ciphertext, and the 16-byte plaintext RC4 key adjacent to the ciphertext at offset 0x11F, visible printable strings near the bottom suggest sample text values 'pure virtual met...', 'api-ms-win-..ext-...', 'method called', 'deleted virtual'">
   <figcaption><em>Figure 5: The 303-byte encrypted-config blob in `.rdata`. The plaintext 16-byte RC4 key sits immediately after the ciphertext, by AdaptixC2 framework design, not by operator error. This storage layout is what makes RC4 recovery deterministic for any AdaptixC2 sample without key cracking.</em></figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
- <img loading="lazy" src="{{ "/assets/images/opendirectory-45-130-148-125-20260430/adaptixc2-rc4-decrypt-function.png" | relative_url }}" alt="Decompiler view of FUN_618ccf39 with parameters (longlong param_1, int param_2, longlong param_3, int param_4) and a 256-byte local stack buffer 'local_108[256]' that calls FUN_618ccd40 (RC4 KSA — key scheduling) and FUN_618cce2a (RC4 PRGA — pseudo-random generator) — the canonical RC4 init+decrypt structure">
+ <img loading="lazy" src="{{ "/assets/images/opendirectory-45-130-148-125-20260430/adaptixc2-rc4-decrypt-function.png" | relative_url }}" alt="Decompiler view of FUN_618ccf39 with parameters (longlong param_1, int param_2, longlong param_3, int param_4) and a 256-byte local stack buffer 'local_108[256]' that calls FUN_618ccd40 (RC4 KSA, key scheduling) and FUN_618cce2a (RC4 PRGA, pseudo-random generator): the canonical RC4 init+decrypt structure">
   <figcaption><em>Figure 6: The AdaptixC2 RC4 decrypt routine `FUN_618ccf39`. The 256-byte stack buffer is the RC4 S-box; the two helper calls are the RC4 key-scheduling and pseudo-random-generator stages. Identifying this pair confirms RC4-128 is the framework's symmetric algorithm and allows offline decryption with the recovered key.</em></figcaption>
 </figure>
 
@@ -382,7 +382,7 @@ The encrypted blob is byte-identical between the dev (07:39 UTC) and production 
 The stock Firefox 20 User-Agent is a 13-year-old fingerprint that no real browser sends in 2026. It is one of the most reliable anomalies for hunting stock-AdaptixC2 deployments. The leftover `proxy_port = 3128` dev artifact is an operator-distinctive OpSec failure: it indicates the operator iteratively tested the listener through a local Squid/Burp/mitmproxy instance during development, and inadvertently shipped that artifact into the staging endpoint.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/opendirectory-45-130-148-125-20260430/adaptixc2-rc4-decrypted-config.png" | relative_url }}" alt="RC4-decrypted configuration recovered from both embedded_dll.bin (dev build) and agent.x64.dll (production build) — terminal output showing identical config blobs in both samples: .rdata offset 0x27a00, length prefix 0x11b (283 bytes), RC4 key f443b9ce7e0658900f6a7ff0991cdee6, and printable strings revealing C2 IP 45.130.148.125, HTTP method POST, four URI paths /api/v1/status, /updates/check.php, /content.html, /jquery-3.3.1.min.js, X-Beacon-Id header, Firefox 20 User-Agent string">
+  <img loading="lazy" src="{{ "/assets/images/opendirectory-45-130-148-125-20260430/adaptixc2-rc4-decrypted-config.png" | relative_url }}" alt="RC4-decrypted configuration recovered from both embedded_dll.bin (dev build) and agent.x64.dll (production build): terminal output showing identical config blobs in both samples: .rdata offset 0x27a00, length prefix 0x11b (283 bytes), RC4 key f443b9ce7e0658900f6a7ff0991cdee6, and printable strings revealing C2 IP 45.130.148.125, HTTP method POST, four URI paths /api/v1/status, /updates/check.php, /content.html, /jquery-3.3.1.min.js, X-Beacon-Id header, Firefox 20 User-Agent string">
   <figcaption><em>Figure 7: Decrypted-configuration output from both the dev build (`embedded_dll.bin`) and the production build (`agent.x64.dll`). The two configurations are byte-identical for every field except `sleep_delay`. The operator did not regenerate the listener key between iterations. This is the headline evidence: a single AdaptixC2 listener instance on the operator's TeamServer produced both builds, and every recovered indicator (C2 IP, RC4 key, listener type IDs, URI set) traces back to that same listener.</em></figcaption>
 </figure>
 
@@ -397,7 +397,7 @@ These RTTI strings (combined with `GetVersions`, `Mingw-w64 runtime failure:`, a
 
 > **Analyst note:** This is the operator's hand-written delivery layer. AdaptixC2's official framework templates support Go, C++, and Rust implants, but no .NET / C# templates exist. That makes the `injector.dll` here unambiguously operator-authored. The `beacon.ps1` PowerShell loader and the `injector.dll` are a matched pair: the loader invokes a `[SI]::Inject()` method that exists only inside the operator's injector. Together they are the highest-fidelity actor fingerprint in the kit.
 
-#### 4.3.1 `beacon.ps1` — 5-block PowerShell loader
+#### 4.3.1 `beacon.ps1`: 5-block PowerShell loader
 
 | Field | Value |
 |---|---|
@@ -423,7 +423,7 @@ These RTTI strings (combined with `GetVersions`, `Mingw-w64 runtime failure:`, a
   <figcaption><em>Figure 8: The operator's `beacon.ps1` 5-stage loader chain. The reflective `[SI]::Inject(...)` call near the bottom is the matched pair to the operator's `injector.dll`. The method exists nowhere else in the public AdaptixC2 framework. Together with the AMSI-bypass-then-reflection-load-then-XOR-then-inject sequencing, this loader is one of the strongest UTA-2026-006 fingerprints.</em></figcaption>
 </figure>
 
-#### 4.3.2 `injector.dll` — `SI.Inject` .NET v4.7.2 process injector
+#### 4.3.2 `injector.dll`: `SI.Inject` .NET v4.7.2 process injector
 
 | Field | Value |
 |---|---|
@@ -439,7 +439,7 @@ These RTTI strings (combined with `GetVersions`, `Mingw-w64 runtime failure:`, a
 `OpenProcess` → `VirtualAllocEx` → `VirtualProtectEx` → `WriteProcessMemory` → `CreateRemoteThread` → `WaitForSingleObject` → `CloseHandle` → `FlushInstructionCache`
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/opendirectory-45-130-148-125-20260430/adaptixc2-uta2026-006-si-inject-dnspy.png" | relative_url }}" alt="Decompilation of the public static bool Inject(uint pid, byte[] sc) method on class SI showing the cross-process injection chain — OpenProcess(0x1FFFFF, false, pid), VirtualAllocEx(IntPtr, IntPtr.Zero, (UIntPtr)((ulong)sc.Length), 12288u, 4u), VirtualProtectEx(IntPtr, IntPtr, (UIntPtr)((ulong)sc.Length), 32u), WriteProcessMemory(IntPtr, IntPtr, sc, (UIntPtr)((ulong)sc.Length), ref zero), CreateRemoteThread(IntPtr, IntPtr.Zero, 32u, IntPtr, IntPtr.Zero, 0u, ref num), WaitForSingleObject(IntPtr2, 3000u), FlushInstructionCache, CloseHandle">
+  <img loading="lazy" src="{{ "/assets/images/opendirectory-45-130-148-125-20260430/adaptixc2-uta2026-006-si-inject-decompiled.png" | relative_url }}" alt="Decompilation of the public static bool Inject(uint pid, byte[] sc) method on class SI showing the cross-process injection chain: OpenProcess(0x1FFFFF, false, pid), VirtualAllocEx(IntPtr, IntPtr.Zero, (UIntPtr)((ulong)sc.Length), 12288u, 4u), VirtualProtectEx(IntPtr, IntPtr, (UIntPtr)((ulong)sc.Length), 32u), WriteProcessMemory(IntPtr, IntPtr, sc, (UIntPtr)((ulong)sc.Length), ref zero), CreateRemoteThread(IntPtr, IntPtr.Zero, 32u, IntPtr, IntPtr.Zero, 0u, ref num), WaitForSingleObject(IntPtr2, 3000u), FlushInstructionCache, CloseHandle">
   <figcaption><em>Figure 9: Decompilation of the operator's `SI.Inject(uint pid, byte[] sc)` method. The numeric magic constants visible in the declaration (`0x1FFFFF` (PROCESS_ALL_ACCESS), `12288` = `0x3000` (MEM_COMMIT \| MEM_RESERVE), `4` (PAGE_READWRITE), `32` = `0x20` (PAGE_EXECUTE_READ)) encode the W^X-aware allocation pattern (RW alloc → write → flip to RX) discussed in this section. The decompilation output also confirms the operator did not obfuscate parameter names or use D/Invoke. The `OpenProcess`/`VirtualAllocEx`/etc. P/Invoke declarations are visible in the assembly's `ImplMap` metadata for any defender to enumerate.</em></figcaption>
 </figure>
 
@@ -472,7 +472,7 @@ The XOR-decoded `$sr` shellcode (~185 KB) decomposes as:
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/opendirectory-45-130-148-125-20260430/adaptixc2-rdi-bootstrap-prologue-hex.png" | relative_url }}" alt="Hex dump of the first 32 bytes of the beacon shellcode showing the GCC x64 register-save prologue: 56 48 89 E6 (PUSH RSI; MOV RSI, RSP), 48 83 E4 F0 (AND RSP, -16 stack alignment), 48 83 EC 20 (SUB RSP, 0x20), E8 1C 01 00 00 (CALL relative 0x11C) — followed by additional GCC-style instructions consistent with an inline PE-mapping routine">
+  <img loading="lazy" src="{{ "/assets/images/opendirectory-45-130-148-125-20260430/adaptixc2-rdi-bootstrap-prologue-hex.png" | relative_url }}" alt="Hex dump of the first 32 bytes of the beacon shellcode showing the GCC x64 register-save prologue: 56 48 89 E6 (PUSH RSI; MOV RSI, RSP), 48 83 E4 F0 (AND RSP, -16 stack alignment), 48 83 EC 20 (SUB RSP, 0x20), E8 1C 01 00 00 (CALL relative 0x11C): followed by additional GCC-style instructions consistent with an inline PE-mapping routine">
   <figcaption><em>Figure 11: First 32 bytes of the beacon shellcode showing the GCC x64 prologue. The sequence is consistent with a MinGW-w64-compiled Reflective DLL Injection bootstrap rather than Donut's MSVC-compiled prologue (the toolchain mismatch is one of the reasons Donut was excluded as the wrapper origin in this section).</em></figcaption>
 </figure>
 
@@ -480,7 +480,7 @@ This is **not Donut** (the open-source PE-to-shellcode converter). The MinGW-w64
 
 ### 4.4 Linux and Go agent components
 
-#### 4.4.1 AdaptixC2 Linux ELF agent — `agent.bin` (Gopher Linux variant)
+#### 4.4.1 AdaptixC2 Linux ELF agent: `agent.bin` (Gopher Linux variant)
 
 > **Analyst note:** This subsection covers the Linux-side beacon shipped in the open directory. Most defenders will not be familiar with Linux-host post-exploitation telemetry (no Sysmon for Linux, EDR coverage uneven on Linux servers); the takeaway is that the operator anticipated a Windows-foothold-to-Linux-pivot kill chain and brought a fully-fledged Linux beacon to do it. Detection requires Linux-side process / network telemetry, not Windows EDR.
 
@@ -500,7 +500,7 @@ This binary confirms the operator anticipated and deployed Linux post-exploitati
   <figcaption><em>Figure 12: GoReSym extraction of the Linux ELF agent's Go package imports reveals tightly-integrated `nicocha30/ligolo-ng` packages (agent / neterror / protocol / relay / utils) alongside the AdaptixC2 Gopher framework's `shamaton/msgpack/v2` and `coder/websocket` dependencies. The presence of the Ligolo-ng package set inside the same binary as the AdaptixC2 Linux beacon (rather than as a separate tool) confirms the Linux pivot path is a first-class capability of the operator's deployed kit.</em></figcaption>
 </figure>
 
-#### 4.4.2 AdaptixC2 Gopher Go agent (Windows variant) — `gopher.x64.exe`
+#### 4.4.2 AdaptixC2 Gopher Go agent (Windows variant): `gopher.x64.exe`
 
 > **Analyst note:** "Gopher" is AdaptixC2's Go-language agent variant, a separate beacon implementation written in Go rather than the C++ default. It exists for portability (single binary, no Windows runtime dependency) and to defeat detection that keys on the C++ beacon's RTTI strings or section layout. From a defender perspective, Gopher beacons in the wild require Go-aware static analysis (function naming patterns differ from C++ binaries) and may evade YARA rules tuned to the C++ variant.
 
@@ -515,7 +515,7 @@ This binary confirms the operator anticipated and deployed Linux post-exploitati
 
 Capabilities visible from package list: full **Cobalt Strike Beacon Object File (BOF) execution runtime in pure Go** (`gopher/bof/{binutil,boffer,coffer,defwin,memory}` package set, matches AdaptixC2's stock Gopher structure, NOT operator-custom; confirmed by Kaspersky labeling the Linux sibling `AdaptixGopher`); screen capture (`kbinani/screenshot`); pseudoterminal access (`gabemarshall/pty`); Windows API access (`lxn/win`); and a **MessagePack-encoded C2 protocol** (`vmihailenco/msgpack/v5`).
 
-#### 4.4.3 Ligolo-ng v0.8.3 stock — `agent.exe`
+#### 4.4.3 Ligolo-ng v0.8.3 stock: `agent.exe`
 
 | Field | Value |
 |---|---|
@@ -586,7 +586,7 @@ The full IOC list with hashes, sizes, contexts, and confidence levels is documen
 
 ---
 
-## 5. Technical Analysis — Behavioral / Anticipated Kill Chain
+## 5. Technical Analysis: Behavioral / Anticipated Kill Chain
 {: .hl-tier-3}
 
 > **Analyst note:** This section walks through the operator's kill chain from initial victim execution through Linux-host pivoting. Steps 2 through 7, covering the loader chain and the beacon's command-and-control behaviour, are confirmed by controlled execution of the recovered samples. Steps 1, 8 and 9, covering delivery, interactive operator activity and persistence, stay inferred from what the toolkit contains, because they depend on operator choices I have not seen exercised. Each step names the telemetry source that catches it.

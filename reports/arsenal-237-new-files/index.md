@@ -76,10 +76,10 @@ When Arsenal-237 reaches a target environment, attackers gain the ability to:
 
 ---
 
-## Analysis Components — New Files
+## Analysis Components: New Files
 {: .hl-tier-2}
 
-### Arsenal-237 New Files — Recently Added Malware
+### Arsenal-237 New Files: Recently Added Malware
 
 Each sample has three companion resources: a technical report with behavioral analysis and response guidance, a detection package with YARA/Sigma rules, and a machine-readable IOC feed for SIEM/EDR ingestion.
 

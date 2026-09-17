@@ -139,7 +139,7 @@ Quasar RAT is the **higher risk** of the two. Its professional development and A
 
 > **Analyst note:** This section covers Quasar RAT's internal code structure and anti-analysis design. Understanding the architecture explains why traditional detection methods fail and which behavioral signals remain reliable.
 
-Quasar RAT compiles as a C# .NET assembly with a modular architecture: dedicated namespaces handle core functionality, surveillance, system control, and network operations. Capability analysis (CAPA) detected 134 distinct functions, including process injection, privilege escalation, keylogging, screenshot capture, and browser credential harvesting. Anti-analysis features span VM detection for VirtualBox, VMware, and QEMU environments; debugger evasion; and sandbox detection.
+Quasar RAT compiles as a C# .NET assembly with a modular architecture: dedicated namespaces handle core functionality, surveillance, system control, and network operations. Static capability analysis detected 134 distinct functions, including process injection, privilege escalation, keylogging, screenshot capture, and browser credential harvesting. Anti-analysis features span VM detection for VirtualBox, VMware, and QEMU environments; debugger evasion; and sandbox detection.
 
 #### Executive Technical Context
 Quasar's modular C# architecture lets the operator customize capabilities per target. Its 134 detected functions represent a feature set comparable to commercial remote access software.
@@ -674,7 +674,7 @@ Commodity RAT development is trending toward enhanced evasion, expanded surveill
       <td><strong>Defense Evasion</strong></td>
       <td>T1055.003</td>
       <td>Process Injection: Thread Execution Hijacking</td>
-      <td>inject_thread capability detected (CAPA)</td>
+      <td>inject_thread capability detected</td>
       <td class="confirmed">CONFIRMED</td>
     </tr>
     <tr>
@@ -688,7 +688,7 @@ Commodity RAT development is trending toward enhanced evasion, expanded surveill
       <td><strong>Defense Evasion</strong></td>
       <td>T1622</td>
       <td>Debugger Evasion</td>
-      <td>hide thread from debugger (CAPA)</td>
+      <td>hide thread from debugger</td>
       <td class="confirmed">CONFIRMED</td>
     </tr>
     <tr>
@@ -781,7 +781,7 @@ Commodity RAT development is trending toward enhanced evasion, expanded surveill
       <td><strong>Defense Evasion</strong></td>
       <td>T1070.004</td>
       <td>Indicator Removal: File Deletion</td>
-      <td>self delete capability (CAPA)</td>
+      <td>self delete capability</td>
       <td class="confirmed">CONFIRMED</td>
     </tr>
     <tr>

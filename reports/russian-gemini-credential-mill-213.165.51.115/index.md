@@ -55,7 +55,7 @@ Attribution holds at **MODERATE 83%** (top of the MODERATE band 70-85%, with Tre
 Each finding below names its home section, where the evidence and confidence label live in full.
 
 - **A multi-component AI-augmented credential mill** built and operated by one Russian-native actor: the LLM password mutator, stolen-key validation pipeline, unauthenticated stdlib C2, paid breach-data integration, and Telegram IO bot are dissected in §4.
-- **A four-node GCP cloud overlay tied to a victim-named project.** Operator-owned project `[victim-named GCP project — redacted]` (named after the victim, a low-OPSEC tell of dedicated focus), three instances, and one service account linking them (§4.7).
+- **A four-node GCP cloud overlay tied to a victim-named project.** Operator-owned project `[victim-named GCP project, redacted]` (named after the victim, a low-OPSEC tell of dedicated focus), three instances, and one service account linking them (§4.7).
 - **A Cloudflare Tunnel topology under operator-owned `tralalarkefe.com`**: operator-owned zone, captured full-admin API token, and six tunnel subdomains (two of them victim-side RDP/SSH) plus one ephemeral bootstrap tunnel (§4.5).
 - **Three AI Operator Handoff Documents**: operator-authored Markdown addressed to a Gemini CLI consumer, structurally distinct from the `GEMINI.md` jailbreak-persistence class Trend Micro documented (§4.2, §5.3).
 - **An active HIPAA-regulated US healthcare compromise** (US dental practice) with full local NTLM hash inventory, OpenDental MySQL root hash, and operator-controlled RDP+SSH tunnels operational at capture time (§4.6). HC3 plus direct practice notification is the Tier-0 disclosure path.
@@ -108,7 +108,7 @@ Five immediate priorities for SOC analysts, threat hunters, and healthcare-secto
 
 1. **Block egress to `*.tralalarkefe.com` and the operator IP inventory.** TLS SNI block + DNS block + IP block (`213.165.51.115`, `34.34.81.129`, `34.34.57.141`, `35.192.41.201`). Egress hunt for `User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) + X-Agent-ID header + /api/v1/* URI` regardless of domain, the `X-Agent-ID` header format (`HOSTNAME_user`, e.g., `HOSTNAME_staff`) is bespoke to this operator and is the highest-signal single network detection string. Detection rules in Section 10.
 2. **Audit HKCU Run-key + `%LOCALAPPDATA%\Microsoft\WindowsUpdateManager.ps1`.** Any presence of either is HIGH-confidence indication of this operator on the host. Cross-check for PowerShell process with `SecurityProtocol = Tls12` precondition before `Invoke-RestMethod -Uri https://payloads.tralalarkefe.com/*.ps1`.
-3. **Audit US healthcare and dental practices for `[victim AD domain — redacted]` AD artifacts and OpenDental installations.** This is the primary victim, but the TTP set applies directly to any small US healthcare practice with a similar attack surface, under-resourced security posture, commodity AD environment, and OpenDental or comparable vertical practice-management software.
+3. **Audit US healthcare and dental practices for `[victim AD domain, redacted]` AD artifacts and OpenDental installations.** This is the primary victim, but the TTP set applies directly to any small US healthcare practice with a similar attack surface, under-resourced security posture, commodity AD environment, and OpenDental or comparable vertical practice-management software.
 4. **Hunt for the LLM credential mutation YARA signature.** YARA rule covers the `"Act as an expert red-team password analyst"` + Gemini API import + `AI_SNIPER_GOODS.txt` / `AI_ADMIN_MUTANTS.txt` output filename pattern. Endpoint AV/EDR file scan plus git-hook pre-commit scan on internal CI/CD pipelines (in case this tooling spreads).
 5. **Hunt for AI Operator Handoff Document YARA signature on developer workstations and server-class hosts.** YARA rule covers Markdown files with session-start load directive co-occurring with C2 endpoint references or credential-table indicators. Higher-risk locations: `~/.gemini/`, `~/.claude/`, `~/.codex/` directories on server-class Linux hosts.
 
@@ -141,7 +141,7 @@ The following scenarios are derived from observed operator capabilities and infr
 | Operator-initiated ransomware deployment | MODERATE | Persistent RDP+SSH access plus full credential inventory plus the operator's evident familiarity with WordPress mass-validation tradecraft are consistent with a ransomware-prep operator profile. No ransomware payload was captured in the open directory; this is a capability assessment, not an observation. |
 | LLM-Personalized Credential Mutation tradecraft diffuses to other operators | HIGH | The verbatim prompt template in `ai_sniper_brute.py` is approximately 8 lines of straightforward natural-language instructions. Trend Micro's independent confirmation of the operational pattern in the same week as this report suggests the technique is already in early diffusion across the Russian-speaking cybercrime ecosystem. Defender preparation for the broader class of LLM-augmented credential attacks is warranted. |
 | `@americanpatriotus` posts amplify into broader Russian-disinfo Telegram network | MODERATE | DFRLab and OpenMinds document 52-channel Russian-operated US-targeted Telegram conduit networks; whether `@americanpatriotus` feeds into those networks is unknown without DFRLab-methodology content analysis. The 17,000-subscriber base (per Trend Micro) and the 5-year operational history (since 2021) place the channel within plausible amplification range. |
-| GCP project `[victim-named GCP project — redacted]` provides law enforcement attribution anchor | HIGH | Operator-named GCP project carries the victim's name; the GCP service account email (`geminicli@elated-gizmo-491112-k0...`) is billing-account-associated. This is the cleanest subpoena-grade identity path for US law enforcement engagement. |
+| GCP project `[victim-named GCP project, redacted]` provides law enforcement attribution anchor | HIGH | Operator-named GCP project carries the victim's name; the GCP service account email (`geminicli@elated-gizmo-491112-k0...`) is billing-account-associated. This is the cleanest subpoena-grade identity path for US law enforcement engagement. |
 | AntiPublic.one paid subscription (JWT `sub:31703`) provides operator-account identity path | MODERATE | AntiPublic.one is a commercial breach-data service with operator-bound account records. JWT `sub:31703` is the operator's user identifier. Whether AntiPublic.one will cooperate with disclosure is unknown, the service operates in a grey-area jurisdiction. |
 
 ### Operational Impact Timeline (If Your Organization Is the Victim)
@@ -402,23 +402,23 @@ To detect it, one Sigma rule watches outbound HTTPS to the `*.tralalarkefe.com` 
 
 ### 4.6 Healthcare Victim Compromise (HIPAA-Regulated Active Breach)
 
-> **Analyst note:** This subsection documents the primary victim of the operator's credential mill: a US dental practice. The compromise is active at capture time with operator-controlled Cloudflare Tunnel persistent access into the victim's internal environment. The Active Directory domain is `[victim AD domain — redacted]`, two internal subnets are compromised, full local NTLM hash inventory is captured (6 hashes), and the OpenDental MySQL root password hash is captured. Patient Health Information governed by HIPAA is at material risk pending tunnel teardown by Cloudflare PSIRT and direct notification to the practice. The disclosure coordination path is HC3 (HHS Health Sector Cybersecurity Coordination Center).
+> **Analyst note:** This subsection documents the primary victim of the operator's credential mill: a US dental practice. The compromise is active at capture time with operator-controlled Cloudflare Tunnel persistent access into the victim's internal environment. The Active Directory domain is `[victim AD domain, redacted]`, two internal subnets are compromised, full local NTLM hash inventory is captured (6 hashes), and the OpenDental MySQL root password hash is captured. Patient Health Information governed by HIPAA is at material risk pending tunnel teardown by Cloudflare PSIRT and direct notification to the practice. The disclosure coordination path is HC3 (HHS Health Sector Cybersecurity Coordination Center).
 
 I hold this DEFINITE, because operator-side artifacts capture the full victim environment inventory, and the GCP project `[victim-named GCP project, redacted]` carries the operator's own naming-after-the-victim signal.
 
 **Identifying the healthcare victim from operator-side artifacts:** Three converging anchors identify the victim:
 
-1. **GCP project `[victim-named GCP project — redacted]`**, operator named a Google Cloud Platform project after the victim. This is a low-OPSEC tell that signals dedicated focus on this specific victim rather than opportunistic compromise.
-2. **AD domain `[victim AD domain — redacted]`**, captured from operator-side credential dumps and tunnel configurations.
-3. **OpenDental MySQL root password hash**: OpenDental is a specific dental-practice management software product; its presence in the captured credential inventory plus the `[victim AD domain — redacted]` AD domain plus the GCP project name converge on a US dental practice victim.
+1. **GCP project `[victim-named GCP project, redacted]`**, operator named a Google Cloud Platform project after the victim. This is a low-OPSEC tell that signals dedicated focus on this specific victim rather than opportunistic compromise.
+2. **AD domain `[victim AD domain, redacted]`**, captured from operator-side credential dumps and tunnel configurations.
+3. **OpenDental MySQL root password hash**: OpenDental is a specific dental-practice management software product; its presence in the captured credential inventory plus the `[victim AD domain, redacted]` AD domain plus the GCP project name converge on a US dental practice victim.
 
 The specific practice name is not published in this report body; The Hunters Ledger coordination with HC3 and direct practice notification is the appropriate disclosure path. Defenders in the US dental / small healthcare sector should treat this operator's TTPs as directly relevant to their environment regardless.
 
 **Victim environment inventory (from operator-side artifacts):**
 
-- **Active Directory domain:** `[victim AD domain — redacted]`
-- **Primary server internal IP:** `[victim internal host — redacted]` (Windows server, RDP/WinRM access via `windows_server.tralalarkefe.com`)
-- **Secondary host internal IP:** `[victim internal host — redacted]` (designated `FRONT2` in operator notes)
+- **Active Directory domain:** `[victim AD domain, redacted]`
+- **Primary server internal IP:** `[victim internal host, redacted]` (Windows server, RDP/WinRM access via `windows_server.tralalarkefe.com`)
+- **Secondary host internal IP:** `[victim internal host, redacted]` (designated `FRONT2` in operator notes)
 - **Subnets compromised:** two internal subnets
 - **Local NTLM hashes captured (6 accounts):**
   - `31d6cfe0...089c0`: **Empty-password Administrator account** (this is the well-known NTLM hash of the empty string; the operator's initial-access vector is plausibly a Windows machine with an empty Administrator password)
@@ -443,7 +443,7 @@ The HIPAA Breach Notification Rule sets specific timelines and notification requ
 
 ### 4.7 Multi-Platform Operator Infrastructure (AEZA + GCP + Cloudflare)
 
-> **Analyst note:** This subsection documents the operator's sovereignty-diversified infrastructure stack: AEZA AS210644 (OFAC-sanctioned Russian-corporate bulletproof-adjacent hosting) for the operator workstation, Google Cloud Platform (legitimate cloud provider) for operator C2 / proxy / mail-test instances, and Cloudflare (legitimate edge provider) for the victim-facing C2 transport layer. The three-platform stack provides operator-side OPSEC layering: victim-side defenders see only Cloudflare and GCP traffic; AEZA hosting is operator-side only. The single largest OPSEC failure is the operator-named GCP project `[victim-named GCP project — redacted]` carrying the victim's name into a billing-account-associated identity surface.
+> **Analyst note:** This subsection documents the operator's sovereignty-diversified infrastructure stack: AEZA AS210644 (OFAC-sanctioned Russian-corporate bulletproof-adjacent hosting) for the operator workstation, Google Cloud Platform (legitimate cloud provider) for operator C2 / proxy / mail-test instances, and Cloudflare (legitimate edge provider) for the victim-facing C2 transport layer. The three-platform stack provides operator-side OPSEC layering: victim-side defenders see only Cloudflare and GCP traffic; AEZA hosting is operator-side only. The single largest OPSEC failure is the operator-named GCP project `[victim-named GCP project, redacted]` carrying the victim's name into a billing-account-associated identity surface.
 
 I hold this DEFINITE, with all three platforms captured alongside operator-side metadata.
 
@@ -451,7 +451,7 @@ The first platform is AEZA AS210644 at `213.165.51.115`, hosting the operator wo
 
 **Platform 2, Google Cloud Platform (three instances + two projects):**
 
-- **Project `[victim-named GCP project — redacted]`**: operator-named-after-victim. Operator-controlled. The project name is the single largest OPSEC failure in the campaign, it ties the operator's GCP account directly to the specific victim.
+- **Project `[victim-named GCP project, redacted]`**: operator-named-after-victim. Operator-controlled. The project name is the single largest OPSEC failure in the campaign, it ties the operator's GCP account directly to the specific victim.
 - **Project `elated-gizmo-491112-k0`**: operator's existing GCP project. The service account `geminicli@elated-gizmo-491112-k0.iam.gserviceaccount.com` is billing-account-associated and is the law enforcement attribution path via Google Cloud Trust & Safety.
 - **Instance `34.34.57.141` (NL, Ghost Proxy)**: Operator proxy. All GCP logging on this instance is explicitly disabled, deliberate OPSEC investment on a cloud instance, demonstrating operator awareness of cloud-provider telemetry as a defender resource.
 - **Instance `35.192.41.201` (US, Mailpit)**: Mail test instance.
@@ -513,7 +513,7 @@ The hybrid resource model matters because it yields measurably higher throughput
 <details markdown="1" class="hl-teardown">
 <summary>The credential mutator, the C2 backend, the AI handoff documents, the PowerShell beacon and the persona-string inventory, in full. Click to expand.</summary>
 
-### 5.1 `ai_sniper_brute.py` — LLM-Personalized Credential Mutator
+### 5.1 `ai_sniper_brute.py`: LLM-Personalized Credential Mutator
 
 This is Python source captured from the operator's open directory, and I hold it DEFINITE from direct inspection of that source.
 
@@ -543,7 +543,7 @@ This is Python source captured from the operator's open directory, and I hold it
 
 These strings combine into Rule 1 in the linked detection file (Section 10).
 
-### 5.2 `c2_server.py` and `console.py` — Custom Python-stdlib C2
+### 5.2 `c2_server.py` and `console.py`: Custom Python-stdlib C2
 
 > **Analyst note:** This section walks through the operator's hand-built C2 backend, which is a Python standard-library HTTP server with no authentication on any endpoint. The architecture is unsophisticated by C2-framework standards but actively operated against real victims, and the source code captures direct evidence of in-place iterative development (one endpoint is called by the client but not yet implemented by the server). Defenders should treat this class of operator-built tooling as a recognizable pattern, not an exotic outlier.
 
@@ -630,7 +630,7 @@ These are Markdown files captured from the operator's open directory. I hold the
 
 These strings combine into Rule 2 in the linked detection file (Section 10).
 
-### 5.4 PowerShell Beacon (`agent_final.ps1`) — Inferred Quasar-Fork Lineage
+### 5.4 PowerShell Beacon (`agent_final.ps1`): Inferred Quasar-Fork Lineage
 
 > **Analyst note:** This subsection covers a PowerShell beacon referenced in operator handoff documents but not directly extracted in this investigation. The "Quasar-class" framing is based on operator-side text references to a "Quasar fork"; the public Quasar RAT family is .NET-based, so this is at most a rewritten-in-PowerShell variant, not a Quasar binary in the canonical sense. Treat the lineage as inferred and tied specifically to the operator's own naming, not as a settled malware-family classification.
 
@@ -774,7 +774,7 @@ The full IOC feed is at [`/ioc-feeds/russian-gemini-credential-mill-213.165.51.1
 
 ---
 
-## 9. Threat Actor Assessment — UTA-2026-012
+## 9. Threat Actor Assessment: UTA-2026-012
 {: .hl-tier-2}
 
 > **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-012 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports. It is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly. UTA-2026-012 has DEFINITE cross-identification with the Trend Micro vendor catalog handle **"bandcampro"** (Trend Micro "Patriot Bait" publication 2026-05-22); both refer to the same operator.
@@ -924,8 +924,8 @@ This section organizes the report's findings by confidence level per CLAUDE.md C
 - **Operator-built tooling source code**: `c2_server.py`, `console.py`, `ai_sniper_brute.py`, `check_keys.py`, `mass_wp_mutator.py`, `quantum_patriot.py`
 - **Three AI Operator Handoff Documents on disk**: `C2_INFRA_TRANSFER.md`, `DEPLOYED_TOOLS.md`, `C2_MIGRATION_GUIDE.md`
 - **`/api/v1/get_results` server-side non-implementation** (iterative-development evidence)
-- **The healthcare-victim environment inventory**: AD domain `[victim AD domain — redacted]`, 2 subnets, 6 local NTLM hashes, OpenDental MySQL root hash, 2 active Cloudflare Tunnel access subdomains
-- **GCP project `[victim-named GCP project — redacted]` operator-named-after-victim**
+- **The healthcare-victim environment inventory**: AD domain `[victim AD domain, redacted]`, 2 subnets, 6 local NTLM hashes, OpenDental MySQL root hash, 2 active Cloudflare Tunnel access subdomains
+- **GCP project `[victim-named GCP project, redacted]` operator-named-after-victim**
 - **Multi-source operator identification**: UTA-2026-012 = Trend Micro `bandcampro` cross-identification via 5-point IOC match (4-of-4 IPs + `@americanpatriotus` channel)
 - **Russian-native operator linguistic register** (Phase 11 analysis of 122 Gemini CLI session JSONs; informal idiom register; Cyrillic-English technical bilingualism)
 - **`@americanpatriotus` Telegram channel operator co-location** (same operator infrastructure)
@@ -994,7 +994,7 @@ The following gaps represent uncertainty in the current analysis and require add
 
 This section documents analytical corrections, prior-art reframings, and scope adjustments made during the investigation. Transparency about investigative iteration is a credibility-preservation requirement of this report's project standards.
 
-### Calibration 1 — Trend Micro Prior-Art Reframing (LLM Credential Mutation Novelty)
+### Calibration 1: Trend Micro Prior-Art Reframing (LLM Credential Mutation Novelty)
 
 I originally framed this, in the parent campaign analysis, as the "first ever documentation of LLM-Personalized Credential Mutation in the wild."
 
@@ -1002,33 +1002,33 @@ I originally framed this, in the parent campaign analysis, as the "first ever do
 
 I reframed it because Trend Micro independently surfaced this operator three days before the investigation window closed. Cross-identification is DEFINITE via the 5-point IOC match, and maintaining the original "first ever documentation" claim would have been a credibility-damaging accuracy failure. The reframed novelty claim, first source-code analysis with a verbatim prompt, is independently defensible from the captured `ai_sniper_brute.py` source and is unaffected by Trend Micro's coverage.
 
-### Calibration 2 — AI Operator Handoff Documents Novelty Claim MAINTAINED
+### Calibration 2: AI Operator Handoff Documents Novelty Claim MAINTAINED
 
 I maintain the AI Operator Handoff Document novelty claim at HIGH confidence. Trend Micro covers the `GEMINI.md` jailbreak-persistence pattern, which is content-level persistence inside a single file the AI auto-loads. What we cover is three operator-authored Markdown documents (`C2_INFRA_TRANSFER.md`, `DEPLOYED_TOOLS.md`, `C2_MIGRATION_GUIDE.md`) that carry operational session state with explicit AI-to-AI headers and session-start load directives. These are architecturally distinct artifact classes.
 
-### Calibration 3 — Operator-Built Unauthenticated Python-stdlib C2 Novelty Claim MAINTAINED
+### Calibration 3: Operator-Built Unauthenticated Python-stdlib C2 Novelty Claim MAINTAINED
 
 > **Analyst note:** This calibration section explains where our reporting overlaps with Trend Micro's prior coverage and where it goes deeper. The headline: our source-code-level analysis of the operator-built C2 backend (including the endpoint-mismatch evidence of in-place iterative development) is net-new to public reporting.
 
 The operator-built C2 source-code analysis is net-new to public reporting. Trend Micro provided a high-level C2 mention without source-code analysis, and the source-code-level analysis here, with the `/api/v1/get_results` iterative-dev evidence, is net-new.
 
-### Calibration 4 — `web_scraper_bot.py` Dead-Code Finding
+### Calibration 4: `web_scraper_bot.py` Dead-Code Finding
 
 `web_scraper_bot.py` is present in the operator's open directory but is dead code, referenced in older versions of the operator's notes and no longer integrated into the active credential mill pipeline. The active pipeline uses `mass_wp_mutator.py`, `nuclei` and the AntiPublic.one integration. The dead-code presence is a development-iteration artifact rather than active operational tooling. My initial-phase analysis included it in the active arsenal, and subsequent phases corrected that to dead-code classification.
 
-### Calibration 5 — `@americanpatriotus` Channel Scope Narrowed
+### Calibration 5: `@americanpatriotus` Channel Scope Narrowed
 
 I originally framed this as an operator-only inventory of disinformation operations.
 
 **Narrowed (after Phase 11 122-session analysis):** Specifically `@americanpatriotus` "Quantum Patriot" Telegram channel, confirmed via session captures and Trend Micro independent reporting. Additional operator-run channels are not ruled out by the evidence base; current evidence supports only `@americanpatriotus`. Future investigation would broaden the channel inventory if additional Telegram automation scripts or session captures surface.
 
-### Calibration 6 — the healthcare victim Victim Scope Narrowed
+### Calibration 6: the healthcare victim Victim Scope Narrowed
 
 I originally inferred, in the parent campaign analysis, a broad Russian-operator victim scope from the credential capture.
 
 **Narrowed (after Phase 11 122-session analysis):** **the healthcare victim is the only victim in the 122-session Gemini CLI corpus.** Zero references to the Case 2 Turkish ARPA campaign victim appear in the Russian operator's sessions. The Case 2 victim is exclusively a Turkish ARPA campaign target and does not overlap with this operator's scope. The narrowing is important for disclosure scope: this operator's victim-disclosure scope is the healthcare victim only.
 
-### Calibration 7 — Attribution Confidence Band Normalization
+### Calibration 7: Attribution Confidence Band Normalization
 
 The original output used a "MODERATE-HIGH 83%" hybrid band.
 
@@ -1044,7 +1044,7 @@ This section provides the prioritized hunt activities for defenders preparing to
 ### For US Healthcare and Dental Practice Defenders
 
 1. **Audit ComfyUI-class attack surface**: N/A (the Case 1 / Case 9 cross-vector finding is documented in the parent report; this operator's primary attack vector is WordPress validation + LLM-personalized credential reuse, not ComfyUI exploitation)
-2. **Audit `[victim AD domain — redacted]` and OpenDental installations**, The primary-victim profile (US dental practice with a `.local` AD domain and OpenDental practice-management software) defines the directly-similar target class. Even environments outside the named practice should treat this operator's TTPs as directly relevant.
+2. **Audit `[victim AD domain, redacted]` and OpenDental installations**, The primary-victim profile (US dental practice with a `.local` AD domain and OpenDental practice-management software) defines the directly-similar target class. Even environments outside the named practice should treat this operator's TTPs as directly relevant.
 3. **Engage HC3** for sector-CERT threat intelligence dissemination on this operator's profile
 
 ### For Cloudflare-Tunnel-Using Organizations (Detection Hunts)

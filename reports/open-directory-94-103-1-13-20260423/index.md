@@ -132,7 +132,7 @@ The Stage-5a sample is a **TorBrowserTor variant** of a Chaos v4/v5-era build. C
 
 All 14 canonical Chaos v4/v5 feature markers were confirmed across both builds, basis for DEFINITE (97%) family identification.
 
-### Wallets & Telegram — Builder Defaults, LOW Operator Attribution
+### Wallets & Telegram: Builder Defaults, LOW Operator Attribution
 
 > **Analyst note:** The bitcoin wallets and Telegram handle printed in the ransom note look like they should identify the actor. They don't. All three are **Chaos builder defaults**, hard-coded into the builder template and reused verbatim across many unrelated Chaos-family campaigns predating this investigation. Defenders should treat them as family-level indicators, not as operator fingerprints.
 
@@ -144,11 +144,11 @@ Infrastructure analysis (via WalletExplorer clustering) confirms:
 
 **Attribution value: ZERO** for operator identity. Family-level indicator strength: HIGH (reliably flags Chaos-family activity).
 
-### Chaos Builder vs Chaos RaaS Group (2025) — Disambiguation
+### Chaos Builder vs Chaos RaaS Group (2025): Disambiguation
 
 See Section 7 for the mandatory reader-facing disambiguation blockquote. Short version: Cisco Talos reported a named "Chaos RaaS group" active from February 2025; that group is a **distinct actor** operating a **distinct codebase** with distinct TTPs. The sample analyzed here is a **build of the 2021-origin Chaos builder**, not an artifact of the Talos-named RaaS actor. Talos's own reporting makes this distinction explicit.
 
-### Orcus RAT v7 — Wardow Crack Ecosystem
+### Orcus RAT v7: Wardow Crack Ecosystem
 
 The `myfile.exe` sample (SHA256 `f7a4fe18…`, 865 KB .NET assembly) is Orcus RAT v7 carrying three Wardow-crack family-wide signatures:
 
@@ -160,7 +160,7 @@ The `myfile.exe` sample (SHA256 `f7a4fe18…`, 865 KB .NET assembly) is Orcus RA
 
 Fody/Costura repository (B1), Microsoft .NET single-file-deployment documentation (A1), and hfiref0x UACME repository (B1) back the Costura identification. Wardow-crack attribution relies on community-known identifier framing. No Tier-1/Tier-2 vendor writeup has been located specifically on the Wardow-Orcus crack, so this is presented as a community-known identifier, not a vendor-sourced fact.
 
-### Infrastructure Context — AS209207 Staging Server
+### Infrastructure Context: AS209207 Staging Server
 
 > **Analyst note:** This subsection explains what is unusual about the VPS hosting the open directory. The ASN is only three months old, its upstream is a single Albanian transit provider that has a history of announcing bogon networks, and the operator chose it specifically for abuse tolerance. AbuseIPDB shows 0 reports. The operator is under the community-reporting radar despite being flagged by a handful of security vendors. Passive DNS shows the host is **multi-tenant**: the same IP that hosts the Chaos distribution also hosts at least three concurrent parasitic campaigns with deliberate tradecraft (Cloudflare fronting, mixed registrars, aged-domain purchases). None of this proves "bulletproof hosting" in the formal sense, but it is consistent with operator intent to resist takedown and run parallel infrastructure.
 
@@ -171,7 +171,7 @@ Fody/Costura repository (B1), Microsoft .NET single-file-deployment documentatio
 - **Bulletproof classification: SUSPECTED, not CONFIRMED.** The ASN is too new for a meaningful Spamhaus DROP/SBL listing history. No named-BPH-database entry was located. Threat intelligence feeds flag the upstream pattern as presumptively abuse-tolerant; no named institution is cited without a live source.
 - **Explicit retraction:** An earlier working hypothesis linked this server to Proton66 / "TheGentlemen" toolkit. This hypothesis is **retracted**, 94.103.1.13 is on AS209207, not AS198953; the Hunt.io "TheGentlemen" toolkit was observed on 176.120.22.127, a completely different IP and ASN.
 
-#### Multi-Tenant Operator Host — Co-Tenancy Pattern
+#### Multi-Tenant Operator Host: Co-Tenancy Pattern
 
 Passive DNS (DomainTools Iris, 2026-04-23) confirms 94.103.1.13 is not a single-purpose Chaos staging server. The IP concurrently hosts at least three parallel operator campaigns alongside the Chaos distribution:
 
@@ -207,7 +207,7 @@ The detection picture across this cluster is a clean demonstration of how Cloudf
 
 The analytical takeaway is that this is not coincidence. Blocking the domains downstream of the CDN is ineffective, because 0/94 means they look clean to most security tooling, so blocking the IP, or hunting the cross-build structural IOCs, the mutex GUID, the Stage-5b hash and the cross-layer key-reuse anchors, is the effective posture. The operator's infrastructure choices are deliberate, since Cloudflare fronting plus mixed registrars plus aged-domain purchases combine into a cluster that evades all three common defensive triggers, domain reputation, CDN reputation and registrar reputation. The only layer where detection has broken through is the backing IP itself at 5/94, and the AS209207 ASN profile.
 
-### Victim vs Operator Infrastructure — Critical Distinction
+### Victim vs Operator Infrastructure: Critical Distinction
 
 The parallel pre-production campaign staged on 94.103.1.13 contains exploit scripts targeting seven IP addresses. **These are victim / target IPs, not operator C2.** Do not block them as malicious infrastructure, hunt them for signs of compromise.
 
@@ -261,7 +261,7 @@ Both Stage-1 batch files were pulled from the `94.103.1.13` open directory on 20
 <details markdown="1" class="hl-teardown">
 <summary>Full stage-by-stage chain walkthrough: batch dropper through Orcus RAT toolkit and novelty assessment (5.2-5.9)</summary>
 
-### 5.2 Stage 1 — Batch Dropper: The `mymain.bat` / `myfile.bat` Chain
+### 5.2 Stage 1: Batch Dropper: The `mymain.bat` / `myfile.bat` Chain
 
 > **Analyst note:** Stage 1 is a heavily obfuscated Windows batch file that looks like random text to a casual viewer. What it actually does is force-launch 32-bit PowerShell with a command line over 10,000 characters long, carrying an encrypted .NET payload inline. The two sibling files (`mymain.bat` and `myfile.bat`) come from the same builder but use different encryption keys, a tell that this is a re-runnable crypter, not a one-off weapon.
 
@@ -289,7 +289,7 @@ This matters for defenders because static signature-based AV does not detect the
   <figcaption><em>Figure 1: Character frequency analysis of the 1.48 MB chunk-1 payload blob confirms the `A↔@` and `/↔#` substitution by statistics alone. All 60 unique characters appear at the rate expected for uniform Base64 (~21,900 per character), except `A` and `/` are absent while `@` and `#` appear with exactly the counts they would have if substituted in. This is what lets the PS1 loader's `.Replace('@','A').Replace('#','/')` restore valid Base64.</em></figcaption>
 </figure>
 
-### 5.3 Stage 2 — PS1 Loader: AES-ECB + SHA256-Derived Key
+### 5.3 Stage 2: PS1 Loader: AES-ECB + SHA256-Derived Key
 
 > **Analyst note:** Stage 2 takes the two Base64-encoded chunks from the batch file, reverses the alphabet substitution, strips a 32-character "magic marker" prefix from each, then AES-decrypts using a key derived from a SHA256 hash of a builder-chosen passphrase. Each chunk decrypts to a GZip-compressed .NET assembly which is then loaded directly into memory via `[System.Reflection.Assembly]::Load`. No payload ever touches disk in this stage.
 
@@ -314,7 +314,7 @@ This matters for defenders because the plaintext key strings (`qDqHmNfeSyWJoyxDz
   <figcaption><em>Figure 2: Stage-3 chunk decryption pipeline. AES-ECB decrypt, PKCS7 unpad, GZip decompress, then a MZ-magic check and SHA256 fingerprint on each chunk. The final comparison to myfile.exe's SHA256 is what disproved the early working hypothesis that chunk 1 was Orcus, chunk 1 is a nested crypter (Stage-4), not the final RAT. This established the multi-stage nature of the loader.</em></figcaption>
 </figure>
 
-### 5.4 Stage 3 — Chunk 0: Anti-Sandbox Unhook Stub
+### 5.4 Stage 3: Chunk 0: Anti-Sandbox Unhook Stub
 
 > **Analyst note:** Once chunk 0 loads into memory, it spends its first 200 milliseconds checking whether the host is a sandbox or analyst VM. It does so by testing twelve specific DLLs (from the public al-khaser anti-sandbox project), then performing a "Perun's Fart" ntdll unhook to defeat AMSI and ETW instrumentation. Only after passing these checks does it hand control to chunk 1.
 
@@ -343,7 +343,7 @@ This matters for defenders because none of these three artifacts should ever be 
 
 The inversion is the distinctive part. The conventional anti-VM and anti-sandbox idiom for two decades has been to exit if any of N analysis-tool artifacts are present, a straightforward short-circuit on a match. This builder does the opposite, exiting only when *all three* artifacts are simultaneously present and continuing happily if any one is missing. That conjunction requirement is what makes the specific triple act as an operator-identity fingerprint rather than a generic VM check. Most public analyses of sandbox-detection logic assume the conventional exit-on-match, single-artifact OR shape, so an analyst reading this gate through that lens will invert their interpretation of what it is trying to accomplish. That inversion, together with the very specific triple it keys on, is the combination not located in prior public reporting, and it is the second-most distinctive technique in the kit after the Console.Title trick (see §5.9 novelty ranking).
 
-### 5.5 Stage 4 — Console.Title-Based Dropper and Registry-Blob Persistence
+### 5.5 Stage 4: Console.Title-Based Dropper and Registry-Blob Persistence
 
 > **Analyst note:** Stage 4 is where the loader writes itself to disk for the first time (in an encoded blob under a Windows Defender-masquerading registry path) and installs a scheduled task that re-runs the entire chain at boot. It also uses an unusual trick to find itself on disk: it reads the cmd.exe window title to recover the path of the batch file it launched from. No prior public reporting describing this exact combination has been located.
 
@@ -379,7 +379,7 @@ The Defender masquerade matters most of all. The dual anchor, a task named `\Mic
   <figcaption><em>Figure 5: The Stage-4 arg-blob reloader, deobfuscated from its outer Replace-chain DOSfuscation. Visible in plaintext: the Defender-masquerade persistence path `HKLM:\Software\Microsoft Defender` with value name `Payload`, and the reloader's debug-output file `C:\cmd_log.txt`. The reloader reads the registry blob on every boot, decodes it, and re-executes the full loader chain, the fileless persistence mechanism documented in this section.</em></figcaption>
 </figure>
 
-#### 5.5.1 The Console.Title Trick — Why It Is Distinctive
+#### 5.5.1 The Console.Title Trick: Why It Is Distinctive
 
 > **Analyst note:** This subsection is the single most important technical passage in the report for defenders. It explains how Stage 4 recovers the path of its own dropper without ever storing that path in a string, how the same read doubles as an anti-analysis guard, and why this specific technique is invisible to the detection tooling most environments rely on. If a reader only internalizes one finding from this investigation, this should be it.
 
@@ -434,7 +434,7 @@ This matters beyond this specific kit. The value of documenting the technique is
 
 Each of those three hunts catches the Console.Title persistence loop from a different angle. No single rule defeats it, but any one of the three will.
 
-### 5.6 Stage 5a — Chaos/TorBrowserTor Ransomware Payload
+### 5.6 Stage 5a: Chaos/TorBrowserTor Ransomware Payload
 
 > **Analyst note:** Stage 5a is the commodity Chaos/TorBrowserTor ransomware. It encrypts files with **Rijndael (256-bit key, CFB mode, denoted `Rijndael-256` throughout this report; refers to the 256-bit key size, not a 256-bit block size)**, wraps the per-file key with RSA-2048 OAEP, appends `.torbrowsertor` to every encrypted filename, drops `READ ME PLEASE.txt` as the ransom note, deletes shadow copies and backups, installs clipboard-hijacking for bech32 and P2PKH Bitcoin addresses, and spreads to any attached USB drive. This section documents behaviors defenders should detect in memory or at runtime, not in the `.bat` file on disk.
 
@@ -484,7 +484,7 @@ Per-build variation (useful for hunting):
 | Stage-4 Stage-5a resource | `IazvXcueDgcoXWWL…` | `WxFRcVUEXpXaqKtl…` |
 | Stage-4 Stage-5b resource | `HxBTHTPGSMVbIZYM…` | `YEfOdElqPaWtqico…` |
 
-### 5.7 Stage 5b — UACME #41 AppInfo RPC UAC Bypass
+### 5.7 Stage 5b: UACME #41 AppInfo RPC UAC Bypass
 
 > **Analyst note:** Stage 5b is the step that turns a regular user session into a full Administrator session without triggering the UAC consent dialog. It uses technique #41 from the open-source UACME catalogue, a specific RPC call against Windows's AppInfo service (`AiEnableDesktopRpcInterface`) combined with a trick called "parent-PID spoofing" that makes the newly elevated process appear to be a child of an already-elevated `taskmgr.exe`. The specific compiled PE this operator ships is byte-identical across both builds and has an 8/77 VT detection gap.
 
@@ -539,7 +539,7 @@ The 8/77 VT detection gap matters. Most vendors detect the generic AppInfo RPC b
 The config can be decrypted offline. The Wardow-crack key leak combines with three inherent weaknesses in the Orcus config-encryption routine, a shared single-key symmetric mode, a deterministic KDF and a hard-coded IV, to enable fully offline recovery of the configuration without ever detonating the sample.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/open-directory-94-103-1-13-20260423/orcus-rijndael-cbc-crypto-class.png" | relative_url }}" alt="Decompiled Orcus EncryptToBytes method source showing construction of a RijndaelManaged instance with CipherMode.CBC, a call to new PasswordDeriveBytes(passPhrase, null).GetBytes(32) for key derivation, and rijndaelManaged.CreateEncryptor(bytes2, AES.initVectorBytes) for the encryptor — passing a hardcoded IV from AES.initVectorBytes.">
+  <img loading="lazy" src="{{ "/assets/images/open-directory-94-103-1-13-20260423/orcus-rijndael-cbc-crypto-class.png" | relative_url }}" alt="Decompiled Orcus EncryptToBytes method source showing construction of a RijndaelManaged instance with CipherMode.CBC, a call to new PasswordDeriveBytes(passPhrase, null).GetBytes(32) for key derivation, and rijndaelManaged.CreateEncryptor(bytes2, AES.initVectorBytes) for the encryptor, passing a hardcoded IV from AES.initVectorBytes.">
   <figcaption><em>Figure 13: Orcus config-encryption routine. Three weaknesses chained together enable offline decryption of any Orcus-Wardow config: (a) `RijndaelManaged` with `CipherMode.CBC` (single-key symmetric, recoverable from sample), (b) `PasswordDeriveBytes(passPhrase, null)`. The `null` salt parameter is the decisive flaw, reducing the KDF to a deterministic function of the passphrase alone, and (c) a hard-coded IV from `AES.initVectorBytes`. Combined with the Wardow-leaked key (Figure 12) these three let an analyst produce `myfile_decrypted_config.txt` without detonating the sample.</em></figcaption>
 </figure>
 
@@ -662,7 +662,7 @@ Family-level identification is DEFINITE at 97 percent. This is the Chaos ransomw
 
 At operator level I track this as UTA-2026-005, a distinctive trackable cluster resting on a private five-stage crypter with cross-layer key reuse, a cross-build mutex GUID invariant, a byte-identical Stage-5b UAC bypass PE, and a tri-artifact anti-sandbox gate. See [UTA-2026-005.md](/threat-actors/UTA-2026-005/) for the full fingerprint record.
 
-### 7.2 Chaos Builder vs Chaos RaaS Group (2025) — Mandatory Disambiguation
+### 7.2 Chaos Builder vs Chaos RaaS Group (2025): Mandatory Disambiguation
 
 > **Critical distinction, do not conflate these two:** The 2021-origin Chaos ransomware *builder* (from which this sample was built) is **distinct** from the 2025 Cisco Talos-reported "Chaos RaaS group." The builder is an open-source tool that has been used by many unrelated operators since 2021. The "Chaos RaaS group" is a specific named actor Talos reported as active from February 2025 onward, operating a *distinct codebase* with distinct TTPs. Talos explicitly distinguishes the two in its reporting. The analyzed sample is a build of the 2021-origin builder (configured as the TorBrowserTor variant). It is NOT an artifact of the Talos-named RaaS actor. Readers searching for "Chaos ransomware" will surface Talos's RaaS reporting and may conflate the two; they should not.
 
@@ -914,12 +914,12 @@ The two most consequential gaps in this investigation are the unknown Orcus C2 u
 
 ---
 
-## 12. Addendum — 2026-05-02 Follow-up
+## 12. Addendum: 2026-05-02 Follow-up
 {: .hl-tier-2}
 
 > **Analyst note:** This section was appended on 2026-05-02 to capture two developments since the original 2026-04-23 publication: (1) the staging server `94.103.1.13:7777` went globally offline, consistent with operator takedown after sustained external probing; (2) deeper analysis of `interact.py` (referenced but not fully decomposed in the original) yielded one new sample-level IOC (its SHA256), one new host-side persistence IOC (a hardcoded backdoor account credential pair), and one detection-relevant detail (the XOR key used to obfuscate the staged GodPotato payload). All three are now reflected in the IOC feed and detection content.
 
-### 12.1 Staging Infrastructure Status — Server Globally Offline
+### 12.1 Staging Infrastructure Status: Server Globally Offline
 
 The open directory at `http://94.103.1.13:7777/` was last successfully reached by The Hunters Ledger recrawl service at **2026-05-02 16:44 UTC**. From that point onward, all access attempts return TCP connection refused. To rule out a routing or proxy issue local to The Hunters Ledger, the host was probed externally from **eight independent network locations** (Spain, France, India ×2, Singapore, UK, US, Vietnam, all on different ASNs) via `check-host.net`. Every probe returned `Connection refused`. The IP itself remains advertised (the host is not null-routed) but no service is listening on port 7777.
 
@@ -932,7 +932,7 @@ Some material was lost. The sample expansion observed between 2026-04-13 and 202
 
 What was preserved is all 50 unique sample hashes captured during the active observation window between 2026-04-13 and 2026-04-20, which are present on VirusTotal and remain retrievable for analyst use. The `interact.py` analysis below is the highest-value finding in that group not fully covered in the original publication.
 
-### 12.2 `interact.py` — Stage-2 Operator Controller (full breakdown)
+### 12.2 `interact.py`: Stage-2 Operator Controller (full breakdown)
 
 **Sample data:**
 

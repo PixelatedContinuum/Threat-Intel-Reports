@@ -184,7 +184,7 @@ There is a third-party signing risk here. Anyone who downloaded `key.pem` from t
 
 The kill chain runs through four stages from delivery to C2 establishment. Because the C2 infrastructure was offline during dynamic analysis, Stages 5-6 are reconstructed from build artifacts and behavioral analysis rather than live observation. Each stage is presented chronologically with available defender telemetry.
 
-### Stage 0 — Attacker Build Pipeline (Pre-Victim)
+### Stage 0: Attacker Build Pipeline (Pre-Victim)
 
 On 2026-02-14 at 15:01:23 UTC, the attacker's automated build pipeline executed on `45.94.31.220` in the working directory `/var/tmp/.cache-1f6a38a2-1771081283`. Five sequential phases ran over approximately eight minutes:
 
@@ -213,7 +213,7 @@ The defender opportunity is that the single-server architecture concentrates bui
 
 ---
 
-### Stage 1 — Initial Access: stager.ps1
+### Stage 1: Initial Access: stager.ps1
 
 > **Plain language:** The attacker's first move is to run a short script on the victim's computer that disables Windows security tools, downloads the main malicious program from the attacker's server, and quietly launches it. This script is the "delivery mechanism", it prepares the ground before the real malware runs.
 
@@ -259,7 +259,7 @@ Downloads `OneDriveSync.exe` over unencrypted HTTP from port 8000. Writes to `%T
 
 ---
 
-### Stage 2 — Pre-Execution Checks: vm_checks.C
+### Stage 2: Pre-Execution Checks: vm_checks.C
 
 > **Plain language:** Once running, the loader program begins building the final malicious payload in memory, assembling thousands of small pieces into a complete program without ever writing it to the hard drive. This is specifically designed to avoid antivirus and security tools that look for suspicious files on disk.
 
@@ -275,7 +275,7 @@ The third check is the canary domain. The embedded Sliver canary `intezer.com` p
 
 ---
 
-### Stage 3 — Runtime String Decoding: string_obf.C
+### Stage 3: Runtime String Decoding: string_obf.C
 
 > **Plain language:** Throughout execution, the loader decodes hidden text strings on the fly using a simple scrambling technique. This keeps C2 server addresses, file paths, API names, and the injection target name invisible to security tools that scan programs for suspicious text. The strings only exist in readable form for a fraction of a second during execution.
 
@@ -292,11 +292,11 @@ char* DecodeString(const char* enc, size_t len) {
 
 Key `0x42` (ASCII 'B'). Decoded buffers are stack-allocated via `_alloca()`, automatic cleanup on function return, no heap artifacts. This keeps C2 domain names, registry paths, API names, and the injection target (`sihost.exe`) out of static string analysis tools.
 
-The XOR key `0x42` is trivially reversible by any analyst or automated tool such as FLOSS or CAPA. Its value is against automated pipeline scanners, not against dedicated analysts. The `_alloca` stack allocation is the more deliberate forensic-evasion choice, because heap-based memory forensics will not recover decoded strings, only stack-based forensics during active function execution will.
+The XOR key `0x42` is trivially reversible by any analyst or by automated string extraction. Its value is against automated pipeline scanners, not against dedicated analysts. The `_alloca` stack allocation is the more deliberate forensic-evasion choice, because heap-based memory forensics will not recover decoded strings, only stack-based forensics during active function execution will.
 
 ---
 
-### Stage 4 — Process Masquerading
+### Stage 4: Process Masquerading
 
 > **Plain language:** The implant hides inside a legitimate Windows process so it appears to belong there.
 
@@ -318,7 +318,7 @@ The hardcoded string `MicrosoftEdgeUpdate.exe --update-check --silent` is a fixe
 
 ---
 
-### Stage 5 — Shellcode Staging and Injection (ScareCrow Loader Core)
+### Stage 5: Shellcode Staging and Injection (ScareCrow Loader Core)
 
 > **Plain language:** An open-source tool bridges the loader to the final implant, running it entirely in memory without touching the hard drive.
 
@@ -399,7 +399,7 @@ The three-layer injection, ScareCrow to Donut to Sliver, means defenders face th
 
 ---
 
-### Stage 6 — C2 Beacon Operation (Sliver Implant in sihost.exe)
+### Stage 6: C2 Beacon Operation (Sliver Implant in sihost.exe)
 
 > **Plain language:** Once established, the Sliver implant "phones home" to the attacker's server at regular intervals to receive instructions. The communication is encrypted and timed to look like normal background network traffic, making it difficult to distinguish from legitimate activity without specific behavioral detection.
 
@@ -518,7 +518,7 @@ Implemented in `string_obf.C`, scoring 4 out of 10, and I hold it DEFINITE.
 
 
 
-XOR key `0x42` applied byte-by-byte. Stack-allocated decode buffer (`_alloca`), no heap artifacts. Defeats static string scanners and YARA rules targeting plaintext IOC strings (C2 domains, API names, the sihost.exe injection target). Trivially reversible by any analyst using FLOSS or manual XOR. The `_alloca` choice is the only technically notable element, deliberate forensic-evasion: heap-based memory forensics will not recover decoded strings.
+XOR key `0x42` applied byte-by-byte. Stack-allocated decode buffer (`_alloca`), no heap artifacts. Defeats static string scanners and YARA rules targeting plaintext IOC strings (C2 domains, API names, the sihost.exe injection target). Trivially reversible by any analyst using automated string extraction or manual XOR. The `_alloca` choice is the only technically notable element, deliberate forensic-evasion: heap-based memory forensics will not recover decoded strings.
 
 ---
 
@@ -820,7 +820,7 @@ Confidence: INSUFFICIENT for named attribution
 
 Gate 2 is the B2 Admiralty threshold, and it passes. Source reliability is B, first-hand analysis of recovered attacker artifacts, and claim credibility is 2, with evidence consistent across build.log, source code, dynamic analysis, the certificate, and the directory listing. Combined that is B2, so both gates pass.
 
-### Threat Category: Cybercrime (HIGH — 80%)
+### Threat Category: Cybercrime (HIGH: 80%)
 
 The toolchain characteristics, infrastructure choices, and operational behaviors are most consistent with a cybercrime operation, likely an access broker or post-access monetization model:
 
@@ -1113,7 +1113,7 @@ The rules target architectural constants that survive polymorphic regeneration, 
 - Recorded Future 2024 Malicious Infrastructure Report: [https://www.recordedfuture.com/research/2024-malicious-infrastructure-report](https://www.recordedfuture.com/research/2024-malicious-infrastructure-report)
 - Optiv "ScareCrow Payload Creation Framework": [https://www.optiv.com/insights/source-zero/tools/scarecrow](https://www.optiv.com/insights/source-zero/tools/scarecrow)
 
-### Tier 3 Sources (Community — Corroborated)
+### Tier 3 Sources (Community: Corroborated)
 
 - Krebs on Security "Who's Behind the Seized Forums 'Cracked' & 'Nulled'?" (Feb 2025), [https://krebsonsecurity.com/2025/02/whos-behind-the-seized-forums-cracked-nulled/](https://krebsonsecurity.com/2025/02/whos-behind-the-seized-forums-cracked-nulled/)
 - [Hunt.io](https://hunt.io/) "Pentester or Threat Actor?": [https://hunt.io/blog/pentester-or-threat-actor-open-directory-exposes-test-results-and-possible-targeting-of-government-organizations](https://hunt.io/blog/pentester-or-threat-actor-open-directory-exposes-test-results-and-possible-targeting-of-government-organizations)

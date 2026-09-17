@@ -33,7 +33,7 @@ figure_nav:
       - label: "The stolen Instana JWT"
         anchor: "#powershell-collector-script-turkish-instana_local_collectorps1"
       - label: "The reverse pipeline"
-        anchor: "#observability-tool-reverse-pipeline--novel-ttp-at-maximalist-scale"
+        anchor: "#observability-tool-reverse-pipeline-novel-ttp-at-maximalist-scale"
       - label: "Cross-source ETL"
         anchor: "#cross-source-etl--7552-element-unified-topology"
       - label: "AI-augmented recon"
@@ -277,7 +277,7 @@ Traditional antivirus and endpoint detection cannot see this campaign on victim 
 
 To detect it, see `Sigma rule 7` and `Suricata rule 2` in the linked detection file. The diagnostic signature is one source IP authenticating against two or more of Instana, SolarWinds, Zabbix, Datadog, NewRelic, VMware Aria, Dynatrace or Prometheus inside a short window, and I would start the threshold at 10 minutes.
 
-### 4.2 Observability-Tool Reverse Pipeline — Novel TTP at Maximalist Scale
+### 4.2 Observability-Tool Reverse Pipeline: Novel TTP at Maximalist Scale
 
 > **Analyst note:** This subsection covers the campaign's headline novel TTP. The operator did not steal one observability credential, the operator stole **four**, all from the same victim, and built a sustained ETL pipeline cross-correlating data across all four. The closest documented adjacent case (UNC6395 OAuth-based CRM breach against Salesforce in 2025) is structurally distinct: that case was one-time exfiltration affecting many tenants; this case is sustained ETL against a single named tenant. The SolarWinds Sunburst case is **not** comparable. Sunburst was a supply-chain compromise against the vendor's update infrastructure, not a stolen-credential reverse pipeline against the vendor's customer. After full prior-art review (Tier-1 vendor reports + Tier-2 vendor catalogs through 2024-2026), novelty is maintained at the top of the MODERATE band.
 
@@ -990,7 +990,7 @@ Operator account bindings for Moonshot AI / Kimi and for OpenClaw remain unknown
 
 This section documents analytical retractions, novelty-claim calibration after full prior-art review, and framing decisions that affect downstream interpretation.
 
-### Observability-Tool Reverse Pipeline TTP Novelty — MAINTAINED at top of MODERATE band
+### Observability-Tool Reverse Pipeline TTP Novelty: MAINTAINED at top of MODERATE band
 
 I initially claimed the Observability-Tool Reverse Pipeline was a novel TTP with no documented prior art.
 
@@ -1002,25 +1002,25 @@ After a full prior-art review I maintain that at high-MODERATE, the top of the 7
 
 One qualifier remains, that I cannot exclude classified or paid-corpus prior art. Recorded Future Intelligence, Mandiant Advantage and Intel471 were not reviewed during prior-art research, so the claim cannot rise to HIGH or DEFINITE until absence of prior art in those corpora is confirmed.
 
-### AI-Augmented Infrastructure Reconnaissance TTP — CANDIDATE STATUS MAINTAINED at N=1
+### AI-Augmented Infrastructure Reconnaissance TTP: CANDIDATE STATUS MAINTAINED at N=1
 
 I initially claimed AI-Augmented Infrastructure Reconnaissance Using Stolen APM Credentials as a CANDIDATE novel TTP.
 
 After full review I maintain it at CANDIDATE status, N=1. The architectural pattern is documented in the operator's filesystem (`ai_service.py`, `ai_assistant.db`, `data_retrieval.py`), but cross-operator validation at N of 2 or more is needed before promoting it to confirmed-novel. The pattern is straightforward to replicate, so I expect cross-operator confirmation on a months-to-quarters horizon once it enters public threat-intel awareness, and I hold that timeline projection at MODERATE on the replicability of the LLM-over-stolen-telemetry architecture.
 
-### 10-Year Instana JWT — GOVERNANCE DEFECT, NOT IBM PRODUCT CVE
+### 10-Year Instana JWT: GOVERNANCE DEFECT, NOT IBM PRODUCT CVE
 
 There is a framing risk on the captured 10-year JWT, that it gets miscovered as an "IBM Instana vulnerability". That is a recurring framing error in prior third-party reporting on Instana token-lifetime defects, and I hold the risk HIGH based on observed mischaracterization patterns in coverage of similar customer-side JWT defects across 2024-2025.
 
 The correct framing is that the JWT lifetime is set by the customer in their Instana token-provisioning configuration. IBM Instana does not enforce a maximum token lifetime by default, and the customer is responsible for setting rotation policy. The captured JWT represents a victim-organization-side credential governance failure, NOT an IBM Instana product CVE. The IBM PSIRT notification framing is a customer-hardening advisory rather than a CVE disclosure.
 
-### Attribution Coverage Status — CONFIRMED
+### Attribution Coverage Status: CONFIRMED
 
 I initially claimed UTA-2026-013 had zero prior public attribution across Trend Micro, Mandiant, CrowdStrike, Kaspersky, the Hunt.io threat-actor catalog, MITRE ATT&CK groups, and VirusTotal threat-actor associations.
 
 After a full cross-vendor naming check that claim is CONFIRMED. Zero prior coverage exists across every reviewed source, and the cross-vendor naming table in Section 9 carries the detail. The absence of prior coverage is a publication-significance signal, **not** a confidence reduction.
 
-### Insider-Recruitment Third-Party-Detection Structural Rarity — CONFIRMED
+### Insider-Recruitment Third-Party-Detection Structural Rarity: CONFIRMED
 
 I initially claimed that no 2024-2026 published case combines all four structural factors of this finding, third-party detection preceding victim detection, a single specific state-affiliated corporate victim, a named individual insider identifiable from operator artifacts, and a 70+ day gap before presumed victim awareness.
 

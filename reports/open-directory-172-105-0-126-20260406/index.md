@@ -214,7 +214,7 @@ Five of the six EXEs carry PE overlays, 43 to 62 KB appended after the legitimat
 
 ### 2.2 Beacon Implant Analysis
 
-#### 2.2.1 beacon_patched.x64.dll — Cracked Cobalt Strike 3.x DLL Beacon
+#### 2.2.1 beacon_patched.x64.dll: Cracked Cobalt Strike 3.x DLL Beacon
 
 > **Analyst note:** This section covers the Cobalt Strike DLL component, a pre-existing cracked implant that the OpenStrike operator sourced and then modified. Cobalt Strike is a legitimate commercial penetration testing framework (sold by Fortra) that is widely abused by cybercriminals and nation-state actors. Two critical structural modifications were made to this specific DLL: a tripwired export that crashes analysis tools, and a Malleable C2 bytecode interpreter that routes command output through HTTP GET rather than POST.
 
@@ -249,7 +249,7 @@ The config is trimmed. With only 10 config fields against the standard 25 to 40-
   <figcaption><em>Figure 2: The XOR 0x2E configuration decoding loop inside the CS DLL. Each config field is XOR-decoded from the embedded blob at DLL initialization. This is the mechanism that produces the configuration values shown in Figure 1. The 0x2E key is a reliable CS 3.x version fingerprint.</em></figcaption>
 </figure>
 
-#### The Tripwired ReflectiveLoader — DEFINITE
+#### The Tripwired ReflectiveLoader: DEFINITE
 
 > **Analyst note:** The ReflectiveLoader is a function exported from every Cobalt Strike DLL. Its purpose is to load the DLL's code directly into memory, bypassing the operating system's normal DLL loading mechanism. Dozens of security tools and attack frameworks automatically call this export when loading CS beacons. The OpenStrike operator replaced the export's target with three bytes that cause an immediate crash, trapping any tool that tries to use it.
 
@@ -282,7 +282,7 @@ On novelty, redirecting the export directory RVA to existing NOP and INT3 paddin
  <figcaption><em>Figure 4: The tripwired ReflectiveLoader, disassembly showing the 3-byte sequence (66 90 CC) at the export target address. The decompiled swi(3) call confirms the INT3 breakpoint that crashes any standard reflective injection tool attempting to load this DLL.</em></figcaption>
 </figure>
 
-#### Malleable C2 Transform VM — DEFINITE
+#### Malleable C2 Transform VM: DEFINITE
 
 > **Analyst note:** Cobalt Strike allows operators to customize their network traffic's appearance using a feature called Malleable C2. Operators write a "profile" describing how traffic should be formatted, which headers to include, how data should be encoded, whether to use GET or POST. This profile is compiled into a small bytecode program that runs inside the beacon. The beacon executes this program before sending any network request. Stage 1 analysis fully reversed this bytecode interpreter.
 
@@ -311,7 +311,7 @@ Output accumulator ptr: image_base + 0x3F480  (pointer to 2 MB plaintext buffer)
 
 ---
 
-#### 2.2.2 beacon.exe — Custom C OpenStrike Beacon
+#### 2.2.2 beacon.exe: Custom C OpenStrike Beacon
 
 > **Analyst note:** Unlike the Cobalt Strike DLL, beacon.exe is entirely custom-written in C by the OpenStrike operator. It implements the same cryptographic protocol as the DLL but uses a simpler 11-command set. It is best understood as a lightweight reconnaissance and file transfer tool. It can run shell commands, list files and processes, and transfer files, but lacks the advanced post-exploitation capabilities of the full CS toolkit.
 
@@ -371,7 +371,7 @@ These gaps suggest `beacon.exe` is a development-phase artifact. The DLL beacon 
 
 ---
 
-#### 2.2.3 beacon_universal.py — Cross-Platform Python Implant
+#### 2.2.3 beacon_universal.py: Cross-Platform Python Implant
 
 > **Analyst note:** This Python script implements a full beacon that runs on Windows, Linux, and macOS without recompilation. It implements 23 commands, a superset of beacon.exe's capabilities, including a SOCKS4a proxy that enables network pivoting (routing the attacker's traffic through the compromised host to reach other internal systems) and a BOF executor that compiles C code on the target at runtime using the system's installed GCC compiler.
 
@@ -407,7 +407,7 @@ The crypto backend is dual. It supports both the `cryptography` and `pycryptodom
 
 ---
 
-### 2.3 Trinity Protocol — Single-Operator Cryptographic Proof
+### 2.3 Trinity Protocol: Single-Operator Cryptographic Proof
 
 > **Analyst note:** RSA-2048 is a type of asymmetric encryption using paired keys: the public key (embedded in the beacon) encrypts data, and only the matching private key (on the C2 server) can decrypt it. Finding the identical public key embedded in three different beacon types (written in different programming languages with different compilers) is definitive evidence that a single entity operates all three.
 
@@ -469,7 +469,7 @@ VEH registration followed by RWX shellcode execution is a detectable behavioral 
   <figcaption><em>Figure 8: veh_loader.exe, the VEH registration call and hardcoded payload path "C:\\cs_final.dat". The default path reveals the operator's local development convention: shellcode payloads are staged at the filesystem root with a descriptive name indicating Cobalt Strike final-stage shellcode.</em></figcaption>
 </figure>
 
-#### Entry-Point Discovery via CALL RAX Patching — `dbg_loader.exe`
+#### Entry-Point Discovery via CALL RAX Patching: `dbg_loader.exe`
 
 > **Analyst note:** When a DLL beacon is converted to shellcode for delivery, it loses the named exports that normally indicate where to start execution. dbg_loader.exe solves this problem automatically by scanning shellcode for the CPU instruction "call rax" (which jumps to the address stored in the RAX register), replacing it with a breakpoint instruction, running the shellcode, and then reading the RAX value from the resulting crash, revealing the actual beacon entry point.
 
@@ -494,7 +494,7 @@ This automation combines VEH crash handling, INT3 breakpoint injection, and regi
   <figcaption><em>Figure 9: dbg_loader.exe INT3 patching logic. The code scans loaded shellcode for the CALL RAX (FF D0) opcode, patches it to INT3 (CC), and reads the RAX value from the resulting VEH crash record. This automated entry-point discovery solves the problem of locating the beacon's start address in position-independent shellcode without requiring an attached debugger.</em></figcaption>
 </figure>
 
-#### Network Stager — `stager.exe` (Production Delivery)
+#### Network Stager: `stager.exe` (Production Delivery)
 
 > **Analyst note:** stager.exe is the "production" loader, the one that would be deployed to a real target. Instead of reading a shellcode file from disk, it downloads the beacon payload over an encrypted HTTPS connection from the C2 server. The /qz99 URI it requests is the single most distinctive network indicator in the entire toolkit.
 
@@ -519,7 +519,7 @@ The `/qz99` URI is the highest-priority network IOC in the toolkit, short, non-s
 
 > **Analyst note:** Beyond the beacons and loaders, the open directory contained a complete operator toolbox. The most security-significant of these is check_ntdll.py, a pre-deployment reconnaissance script that checks whether the target system's security software has modified Windows system libraries to intercept API calls. An operator who uses this script before deploying the main beacon gains intelligence about what security monitoring is in place.
 
-#### check_ntdll.py — EDR Hook Detection
+#### check_ntdll.py: EDR Hook Detection
 
 **HIGH confidence (code analysis)**
 
@@ -815,7 +815,7 @@ The GET-based exfiltration from the DLL beacon is the critical detection gap: co
 ## 5. Threat Intelligence Context
 {: .hl-tier-2}
 
-### 5.1 OpenStrike — Novel Toolkit, Zero Prior Coverage
+### 5.1 OpenStrike: Novel Toolkit, Zero Prior Coverage
 
 The name comes from the toolkit author. "OpenStrike" is their self-chosen name, embedded in the source code rather than a designation this publication assigned, and it appears in two distinct locations within the recovered Python source files:
 
@@ -834,7 +834,7 @@ For defenders, that means standard threat intelligence platforms and AV signatur
 
 ---
 
-### 5.2 Cracked Cobalt Strike 3.x — Context
+### 5.2 Cracked Cobalt Strike 3.x: Context
 
 The DLL beacon component is a cracked Cobalt Strike 3.x artifact. Cobalt Strike is a commercially licensed penetration testing framework first released in 2012. Cracked versions have circulated continuously since early CS releases.
 
@@ -968,7 +968,7 @@ In report language, the threat actor behind this toolkit cannot be attributed to
 ## 8. Confidence Levels Summary & Gaps
 {: .hl-tier-2}
 
-### DEFINITE (Direct Evidence — No Ambiguity)
+### DEFINITE (Direct Evidence: No Ambiguity)
 
 - All three beacon variants share RSA-2048 public key modulus `9f12c9cb6582f379...` (static analysis, cross-sample)
 - AES-128-CBC with hardcoded IV `abcdefghijklmnop` present in all three beacon variants (static analysis)

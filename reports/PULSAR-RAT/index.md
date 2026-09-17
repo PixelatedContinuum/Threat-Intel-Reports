@@ -1192,7 +1192,7 @@ Standard registry monitoring will catch this, and any competent EDR or endpoint 
 
 ---
 
-### 6.3 SURVEILLANCE & DATA THEFT CAPABILITIES — Hidden Virtual Network Computing (HVNC)
+### 6.3 SURVEILLANCE & DATA THEFT CAPABILITIES: Hidden Virtual Network Computing (HVNC)
 
 > **Analyst note:** HVNC creates an invisible second desktop session that the attacker controls while the user sees their normal screen. Unlike standard remote desktop tools, there are no visible indicators, no cursor movement, no window flicker. This subsection covers what HVNC is, why it matters for detection, and what limitations affect its real-world effectiveness.
 
@@ -1273,7 +1273,7 @@ Even with password managers, users often:
 
 ---
 
-### Browser Password Theft — Automated Extraction
+### Browser Password Theft: Automated Extraction
 
 **CONFIDENCE LEVEL: CONFIRMED** (code modules present)
 
@@ -1307,7 +1307,7 @@ Even with password managers, users often:
 
 ---
 
-### Clipboard Hijacking — Cryptocurrency Theft
+### Clipboard Hijacking: Cryptocurrency Theft
 
 **CONFIDENCE LEVEL: CONFIRMED** (clipboard monitoring code present)
 
@@ -2222,23 +2222,23 @@ Published incident response reports consistently show median dwell times measure
 
 ### 10. KEY TAKEAWAYS - WHAT MATTERS MOST
 
-### 1. Complete System Compromise — Understand the Scope
+### 1. Complete System Compromise: Understand the Scope
 
 Pulsar RAT is not ransomware with a specific destructive purpose, nor spyware with a single objective. It is a universal remote control tool, attackers can do anything a user can do, plus administrative actions. Any infected system should be treated as if an attacker is at the keyboard.
 
 Practically, every credential used on the infected system is exposed, every data asset accessible to the compromised account is exposed, and every system reachable from that network location is at risk. Active MFA sessions during the compromise window may also have been bypassed.
 
-### 2. Persistence — Understanding the Real Risk
+### 2. Persistence: Understanding the Real Risk
 
 Registry RunOnce persistence (CONFIRMED) survives reboots but not OS reinstallation and is detectable by EDR.
 
 WinRE persistence (HIGH confidence, code present) may survive standard OS reinstallation in some scenarios. It does not survive a complete disk wipe or full repartitioning. Effectiveness depends on the specific recovery procedures used. Assume the capability is present; verify on specific systems; default to rebuild where forensic exclusion is not possible. This technique is serious but not undefeatable with proper remediation. See Section 6.1 for the full scenario matrix.
 
-### 3. Professional Development — Not Casual Malware
+### 3. Professional Development: Not Casual Malware
 
 Pulsar's modular architecture, async/await patterns, Windows CNG cryptography, and HVNC implementation reflect organized development effort, not commodity assembly. The Quasar RAT open-source base means wide availability, professional build quality does not automatically imply APT attribution. Financial motivation aligns with the credential harvesting and clipboard hijacking capabilities observed (MODERATE confidence).
 
-### 4. Detection — Hard, But Not Impossible
+### 4. Detection: Hard, But Not Impossible
 
 Encrypted C2, dynamic infrastructure, anti-analysis checks, and legitimate signed drivers make detection harder than commodity malware. Behavioral EDR, comprehensive SIEM logging, paste-site egress monitoring, and memory forensics can all detect this family. Hard to detect is not the same as undetectable. See the sidebar for specific YARA and Sigma rules.
 
@@ -2250,7 +2250,7 @@ Indirect costs cover productivity loss, regulatory notification obligations wher
 
 ---
 
-### 11. Response Timeline — Recommended Actions
+### 11. Response Timeline: Recommended Actions
 
 ### Confirmed Infection
 

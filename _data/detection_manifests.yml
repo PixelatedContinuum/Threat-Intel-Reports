@@ -879,7 +879,7 @@ arsenal-237-killer-dll-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1685, T1068]
-  - name: "Mass Security-Product Termination — 3+ Distinct Products Within 60 Seconds (Correlation)"
+  - name: "Mass Security-Product Termination: 3+ Distinct Products Within 60 Seconds (Correlation)"
     engine: sigma
     tier: Detection
     fence: 4
@@ -2258,7 +2258,7 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1059.004, T1574.006, T1105]
-  - name: "GHOST Cryptojacker Kit Hysteria v2 QUIC Backdoor Egress — Known Operator Ports"
+  - name: "GHOST Cryptojacker Kit Hysteria v2 QUIC Backdoor Egress: Known Operator Ports"
     engine: suricata
     tier: Hunting
     fence: 21
@@ -2267,7 +2267,7 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
     robustness: 2
     confidence: "MODERATE"
     attack: [T1572, T1571]
-  - name: "GHOST Cryptojacker Kit Telegram API Egress from Production Server — Covert Mining Report"
+  - name: "GHOST Cryptojacker Kit Telegram API Egress from Production Server: Covert Mining Report"
     engine: suricata
     tier: Hunting
     fence: 22
@@ -5630,7 +5630,7 @@ shinyhunters-dls-91-215-85-22-20260417-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1657, T1485]
-  - name: "ShinyHunters Actor Identity — Domain + Collective Name"
+  - name: "ShinyHunters Actor Identity: Domain + Collective Name"
     engine: yara
     tier: Hunting
     fence: 2
@@ -5648,7 +5648,7 @@ shinyhunters-dls-91-215-85-22-20260417-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1583.001]
-  - name: "ShinyHunters DLS — Web Proxy Hit on DLS Content Path"
+  - name: "ShinyHunters DLS: Web Proxy Hit on DLS Content Path"
     engine: sigma
     tier: Hunting
     fence: 4
@@ -5657,7 +5657,7 @@ shinyhunters-dls-91-215-85-22-20260417-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1657, T1485]
-  - name: "ShinyHunters DLS — Salesforce Bulk Export OAuth App Authorization"
+  - name: "ShinyHunters DLS: Salesforce Bulk Export OAuth App Authorization"
     engine: sigma
     tier: Hunting
     fence: 5
@@ -5666,7 +5666,7 @@ shinyhunters-dls-91-215-85-22-20260417-detections:
     robustness: 2
     confidence: "MODERATE — requires Salesforce Shield / Event Monitoring to be enabled; app-name matching depends on how third-party OAuth clients are registered."
     attack: [T1528, T1213]
-  - name: "ShinyHunters DLS — Okta MFA Factor Deactivation or Unexpected Enrollment"
+  - name: "ShinyHunters DLS: Okta MFA Factor Deactivation or Unexpected Enrollment"
     engine: sigma
     tier: Hunting
     fence: 6
@@ -5675,7 +5675,7 @@ shinyhunters-dls-91-215-85-22-20260417-detections:
     robustness: 1
     confidence: "MODERATE — the individual events are common in legitimate IT operations; the detection value comes from correlating the two events by user within a time window, which standard Sigma syntax cannot express in one rule (see Coverage Gaps)."
     attack: [T1566.004, T1528, T1098]
-  - name: "ShinyHunters DLS — PROSPERO Bulletproof Hosting CIDR Range Access"
+  - name: "ShinyHunters DLS: PROSPERO Bulletproof Hosting CIDR Range Access"
     engine: sigma
     tier: Hunting
     fence: 7
@@ -5684,7 +5684,7 @@ shinyhunters-dls-91-215-85-22-20260417-detections:
     robustness: 1
     confidence: "MODERATE — range-level indicator; specificity is lower than IP or domain indicators."
     attack: [T1583.003, T1090.003]
-  - name: "ShinyHunters DLS — HTTP Request to DLS Content Path (pay_or_leak)"
+  - name: "ShinyHunters DLS: HTTP Request to DLS Content Path (pay_or_leak)"
     engine: suricata
     tier: Detection
     fence: 8
@@ -5693,7 +5693,7 @@ shinyhunters-dls-91-215-85-22-20260417-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1657]
-  - name: "ShinyHunters DLS — HTTP Host Header shinyhunte.rs"
+  - name: "ShinyHunters DLS: HTTP Host Header shinyhunte.rs"
     engine: suricata
     tier: Hunting
     fence: 9
@@ -5702,7 +5702,7 @@ shinyhunters-dls-91-215-85-22-20260417-detections:
     robustness: 1
     confidence: "HIGH"
     attack: [T1583.001, T1657]
-  - name: "ShinyHunters DLS — TLS SNI shinyhunte.rs"
+  - name: "ShinyHunters DLS: TLS SNI shinyhunte.rs"
     engine: suricata
     tier: Hunting
     fence: 10
@@ -5975,7 +5975,7 @@ sliver-open-directory-detections:
     confidence: "MODERATE"
     attack: [T1036, T1036.005]
 turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
-  - name: "Rule 1 — PowerShell Instana Local Collector"
+  - name: "Rule 1: PowerShell Instana Local Collector"
     engine: yara
     tier: Detection
     fence: 0
@@ -5984,7 +5984,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1059.001, T1552.001, T1020, T1071.001]
-  - name: "Rule 2 — ARPA Observability Harvester Platform"
+  - name: "Rule 2: ARPA Observability Harvester Platform"
     engine: yara
     tier: Detection
     fence: 1
@@ -5993,7 +5993,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1059.006, T1119, T1543.002, T1071.001]
-  - name: "Rule 3 — Insider Tunnel-Setup Turkish-Language Operator Document"
+  - name: "Rule 3: Insider Tunnel-Setup Turkish-Language Operator Document"
     engine: yara
     tier: Detection
     fence: 2
@@ -6002,7 +6002,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1572, T1098.004, T1021.004]
-  - name: "Rule 4 — Multi-Source Observability Polling Python Script"
+  - name: "Rule 4: Multi-Source Observability Polling Python Script"
     engine: yara
     tier: Detection
     fence: 3
@@ -6011,7 +6011,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1059.006, T1046, T1119, T1078]
-  - name: "Rule 6 — ARPA Cross-Source Correlation ETL Engine"
+  - name: "Rule 6: ARPA Cross-Source Correlation ETL Engine"
     engine: yara
     tier: Detection
     fence: 4
@@ -6020,7 +6020,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1059.006, T1119, T1005]
-  - name: "Rule 7 — ARPA Operator Ops Notes Markdown Family"
+  - name: "Rule 7: ARPA Operator Ops Notes Markdown Family"
     engine: yara
     tier: Detection
     fence: 5
@@ -6029,7 +6029,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1587, T1552.001]
-  - name: "Rule 8 — ARPA Platform Systemd Service Units"
+  - name: "Rule 8: ARPA Platform Systemd Service Units"
     engine: yara
     tier: Detection
     fence: 6
@@ -6038,7 +6038,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1543.002, T1569.002]
-  - name: "Rule 5 — ARPA AI Service Natural-Language Query Interface"
+  - name: "Rule 5: ARPA AI Service Natural-Language Query Interface"
     engine: yara
     tier: Hunting
     fence: 7
@@ -6047,7 +6047,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 2
     confidence: "MODERATE — the AI service was observed in a broken/dev state on the single analyzed host; the pattern may not have replicated to other deployments."
     attack: [T1059.006, T1213]
-  - name: "Sigma Rule 1 — PowerShell Process Invoking Instana API with Stored JWT Bearer Token"
+  - name: "Sigma Rule 1: PowerShell Process Invoking Instana API with Stored JWT Bearer Token"
     engine: sigma
     tier: Detection
     fence: 8
@@ -6056,7 +6056,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1059.001, T1552.001, T1071.001]
-  - name: "Sigma Rule 3 — Systemd Unit Creation Matching `arpa-*` Naming Pattern"
+  - name: "Sigma Rule 3: Systemd Unit Creation Matching `arpa-*` Naming Pattern"
     engine: sigma
     tier: Detection
     fence: 9
@@ -6065,7 +6065,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1543.002, T1569.002]
-  - name: "Sigma Rule 4 — Reverse SSH Tunnel Registration from Windows AD User Host to Operator IP"
+  - name: "Sigma Rule 4: Reverse SSH Tunnel Registration from Windows AD User Host to Operator IP"
     engine: sigma
     tier: Detection
     fence: 10
@@ -6074,7 +6074,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1572, T1021.004, T1098.004]
-  - name: "Sigma Rule 5 — PuTTY Saved Session Created with Tunnel or ARPA Name"
+  - name: "Sigma Rule 5: PuTTY Saved Session Created with Tunnel or ARPA Name"
     engine: sigma
     tier: Detection
     fence: 11
@@ -6083,7 +6083,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1572, T1021.004]
-  - name: "Sigma Rule 6 — Long-Lived Instana JWT Detected in Audit Logs (Governance Baseline)"
+  - name: "Sigma Rule 6: Long-Lived Instana JWT Detected in Audit Logs (Governance Baseline)"
     engine: sigma
     tier: Detection
     fence: 12
@@ -6092,7 +6092,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 2
     confidence: "HIGH (for the specific stolen JWT); MODERATE (for the generic long-lived-token governance branch)"
     attack: [T1078, T1552.001]
-  - name: "Sigma Rule 9 — Operator-Supplied SSH Key File in User `.ssh` Directory"
+  - name: "Sigma Rule 9: Operator-Supplied SSH Key File in User `.ssh` Directory"
     engine: sigma
     tier: Detection
     fence: 13
@@ -6101,7 +6101,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1098.004, T1572]
-  - name: "Sigma Rule 2 — Outbound HTTPS to the Victim Organization Instana Tenant"
+  - name: "Sigma Rule 2: Outbound HTTPS to the Victim Organization Instana Tenant"
     engine: sigma
     tier: Hunting
     fence: 14
@@ -6110,7 +6110,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 1
     confidence: "MODERATE"
     attack: [T1071.001, T1078]
-  - name: "Sigma Rule 7 — Observability Platform Authentication Event (Cross-Source Burst Indicator)"
+  - name: "Sigma Rule 7: Observability Platform Authentication Event (Cross-Source Burst Indicator)"
     engine: sigma
     tier: Hunting
     fence: 15
@@ -6119,7 +6119,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 1
     confidence: "MODERATE — requires SIEM correlation across multiple observability platform audit feeds to realize the full novel-TTP detection value."
     attack: [T1078, T1119, T1046]
-  - name: "Sigma Rule 8 — Rapid Instana Topology API Enumeration from Single Source"
+  - name: "Sigma Rule 8: Rapid Instana Topology API Enumeration from Single Source"
     engine: sigma
     tier: Hunting
     fence: 16
@@ -6128,7 +6128,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 1
     confidence: "MODERATE — a single request is not by itself anomalous."
     attack: [T1046, T1213, T1119]
-  - name: "Sigma Rule 10 — Non-Splunk Process Connecting to Localhost Port 8089"
+  - name: "Sigma Rule 10: Non-Splunk Process Connecting to Localhost Port 8089"
     engine: sigma
     tier: Hunting
     fence: 17
@@ -6137,7 +6137,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 1
     confidence: "MODERATE — port 8089 is not uniquely operator-specific."
     attack: [T1572, T1021.004]
-  - name: "Sigma Rule 12 — Insider Deploying Outbound SSH Tunnel from Enterprise AD-Joined Workstation"
+  - name: "Sigma Rule 12: Insider Deploying Outbound SSH Tunnel from Enterprise AD-Joined Workstation"
     engine: sigma
     tier: Hunting
     fence: 18

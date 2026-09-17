@@ -161,7 +161,7 @@ FleetAgentAdvanced.exe is compiled as a 32-bit .NET Framework executable (PE32 G
 - **Easy recompilation** - Threat actors can rapidly modify signatures to evade detection
 - **Reduced development complexity** - High-level language enables faster malware iteration
 
-**Confirmed Capabilities (CAPA Detection)**:
+**Confirmed capabilities**:
 Based on static analysis, FleetAgentAdvanced.exe contains 47 distinct capabilities organized across execution, persistence, defense evasion, and privilege escalation functions:
 
 **Execution Capabilities**:
@@ -503,7 +503,7 @@ The complete absence of network activity in the half hour after execution sugges
 
 ### Capabilities Deep-Dive
 
-Based on static analysis (CAPA), YARA signature matching, and dynamic behavior observation, FleetAgentAdvanced.exe contains the following capabilities:
+Based on static capability analysis, YARA signature matching, and dynamic behavior observation, FleetAgentAdvanced.exe contains the following capabilities:
 
 #### Thread Injection Capabilities
 
@@ -717,7 +717,7 @@ The autostart persistence is CONFIRMED.
 
 **Evidence:**
 1. Created Startup folder shortcut(s): `Microsoft .NET Runtime Optimization.lnk` (×2 for redundancy)
-2. Likely created registry Run key (inferred from CAPA capabilities detecting registry Run key persistence)
+2. Likely created registry Run key (inferred from static capability analysis detecting registry Run key persistence)
 
 MITRE describes the technique as achieving persistence by adding a program to a startup folder or referencing it with a Registry run key.
 
@@ -907,7 +907,7 @@ The hidden window is CONFIRMED.
 **Evidence:**
 1. FleetAgentAdvanced.exe is PE32 GUI application (subsystem: Windows GUI)
 2. No visible window appeared during execution despite GUI subsystem
-3. CAPA detected "hide graphical window" capability
+3. Static capability analysis detected "hide graphical window" capability
 
 MITRE describes the technique as using hidden windows to keep malicious activity out of a user's plain sight.
 
@@ -944,7 +944,7 @@ The sample is capable of this, with the APIs present, though it was never seen d
 
 **Evidence:**
 1. Static analysis confirms presence of: `VirtualAllocEx`, `WriteProcessMemory`
-2. CAPA detected "write process memory" and "allocate memory" capabilities
+2. Static capability analysis detected "write process memory" and "allocate memory" capabilities
 
 MITRE describes the technique as injecting code into processes to evade process-based defenses and possibly elevate privileges.
 

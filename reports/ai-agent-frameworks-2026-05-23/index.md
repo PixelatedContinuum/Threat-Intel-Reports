@@ -31,11 +31,11 @@ figure_nav:
   - image: ai-threat-actor-3class-taxonomy.svg
     parts:
       - label: "Class 1 · AI-integrated"
-        anchor: "#41-case-1--russian-gemini-credential-mill-operator"
+        anchor: "#41-case-1-russian-gemini-credential-mill-operator"
       - label: "Class 2 · Hybrid augmented"
-        anchor: "#42-case-2--turkish-arpa-observability-harvester-operator"
+        anchor: "#42-case-2-turkish-arpa-observability-harvester-operator"
       - label: "Class 2 · second exemplar"
-        anchor: "#43-case-3--rovodevpandora-mirai-botnet-operator"
+        anchor: "#43-case-3-rovodevpandora-mirai-botnet-operator"
       - label: "The taxonomy itself"
         anchor: "#three-class-ai-threat-actor-taxonomy"
 ---
@@ -129,7 +129,7 @@ The Vova75Rus disposition (GitHub T&S 2026-05-25) is the headline disruption, an
 
 ---
 
-## The Defender's Mirror — Running This Investigation with AI
+## The Defender's Mirror: Running This Investigation with AI
 {: .hl-tier-2}
 
 The eight operators below weaponize AI-agent CLIs for offense; this investigation ran on the mirror image of that pattern. An analyst directing an AI agent (Claude), paired with the Hunt.io platform, surfaced and triaged every case across multiple exposed hosts and produced this six-report series, a scope not normally tractable for a solo analyst, made tractable by the same AI-augmentation I document here. The takeaway for defenders is the symmetry itself: the tooling that lowers the barrier for attackers lowers it just as far for the people hunting them. The full per-endpoint methodology, sponsorship disclosure, and candid account of what worked and failed are in **[§13](#methodology)** (and openly: **[how the reports are made](/behind-the-reports/ai-workflow/)**, **[how the threats are found](/behind-the-reports/collection-platform/)**).
@@ -258,44 +258,44 @@ Four of eight cases (2, 3, 9-A, 10) were active during the investigation window.
 
 ---
 
-## 4. Technical Capabilities Deep-Dive — Per Case
+## 4. Technical Capabilities Deep-Dive: Per Case
 {: .hl-tier-3}
 
 > **Analyst note:** This section is the technical heart of the report, but it is a *synthesis* volume: cases with their own sub-report (1, 2, 3, 4, 9) appear here as one-paragraph capsules, what the case is, why it matters, primary indicator, with the full forensic depth in the linked sub-report (§14.2). Cases 7, 8, 10 have no sub-report and are documented at capsule depth here. The parent's core value follows the capsules: §4.9 five novel TTPs, §4.10 the three-class taxonomy, §4.11 false-positive discrimination. All cross-case synthesis. Each capsule is self-contained.
 
-### 4.1 Case 1 — Russian Gemini Credential-Mill Operator
+### 4.1 Case 1: Russian Gemini Credential-Mill Operator
 
 Case 1 is the campaign's most technically integrated AI-augmented operator and the source of two of the five novel TTPs, LLM-Personalized Credential Mutation (§4.9.2) and AI Operator Handoff Documents (§4.9.1). On AEZA host `213.165.51.115` (OFAC-sanctioned July 2025, 4/5 bulletproof indicators), the operator runs a self-built unauthenticated Python-stdlib C2 (§4.9.5), an `ai_sniper_brute.py` pipeline that calls Gemini 2.5 Flash for per-target password mutations (5.5 MB `AI_ADMIN_MUTANTS.txt` on disk), and a Cloudflare-Tunnel C2 topology under operator-owned domain `tralalarkefe.com` whose `windows_server`/`gil_dr1` subdomains route persistent RDP+SSH into the confirmed US healthcare victim. A more durable model than ephemeral `*.trycloudflare.com` abuse (Proofpoint Aug 2024; Securonix SERPENTINE#CLOUD) because the operator owns the domain. A co-located disinformation operation (`@americanpatriotus`, `quantum_patriot.py`) uses the same Gemini key, rare cross-operation attribution evidence. Primary indicator: `tralalarkefe.com` (+ 5 named subdomains). Attribution UTA-2026-012 (MODERATE-HIGH 83%, cross-identified with Trend Micro's `bandcampro`). **Full analysis, full indicator table, and Phase 11 idiom analysis: [Case 1 sub-report](/reports/russian-gemini-credential-mill-213.165.51.115/).**
 
-### 4.2 Case 2 — Turkish ARPA Observability-Harvester Operator
+### 4.2 Case 2: Turkish ARPA Observability-Harvester Operator
 
 Case 2 is the campaign's only operator with a confirmed state-aligned-target profile and confirmed insider recruitment. From DigitalOcean host `209.38.205.158`, accessed directly from TurkNet residential ISP `31.223.97.87` without VPN/Tor. The operator runs a production-grade `ARPA Korelasyon Motoru` reverse-pipeline platform (TimescaleDB+Neo4j+Redis) that ingests four stolen observability sources (IBM Instana 10-year JWT, SolarWinds Orion 784 nodes, Zabbix 100 hosts, VMware Aria) and cross-correlates them against a single confirmed state-affiliated Turkish financial-sector victim, flipping the defender threat model that treats observability tools as data destinations, not sources to protect (§4.9.4). Operator-authored Turkish-language tunnel-setup docs direct an insider AD user ([employee ID, suppressed]) to open a reverse tunnel from the victim network, documentary insider-recruitment evidence uncommon outside state-attribution contexts. GitHub T&S suspended handle MehmetARPA on 2026-05-25. Primary indicator: `209.38.205.158` / `/api/ingest/instana`. Attribution UTA-2026-013 (high-MODERATE 78%). **Full analysis and full indicator table: [Case 2 sub-report](/reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/).**
 
-### 4.3 Case 3 — Rovodev/Pandora Mirai Botnet Operator
+### 4.3 Case 3: Rovodev/Pandora Mirai Botnet Operator
 
 Case 3 is the campaign's exemplar of the Hybrid AI-augmented operator class, classic Mirai-family tradecraft (lineage to 2016 source releases, downstream of Doctor Web's 2023 Android.Pandora disclosure) plus Atlassian Rovodev for capability extension. From IONOS host `87.106.143.220:1337`, the operator runs an 11-architecture Mirai botnet over a dual HTTP/HTTPS distribution channel (Aruba Italy `80.211.94.16` for delivery; IONOS for build/test), a DDoS-for-hire model with 13 named attack methods. The `~/.rovodev/sessions/` JSONs are the campaign's most direct primary-source evidence of AI authoring offensive code: readers see the operator's natural-language prompts and the AI's `file_write` calls building the framework, file-by-file. A 5-vector persistence chain (crontab + rc.local + init.d + systemd + bashrc/profile) fires within seconds from one parent process, conventional Mirai tradecraft AI did not author, requiring correlated detection. Naku.arm VT consensus is 43/66 (Mirai); the embedded URL `http://80.211.94.16/Naku.mips` links operator to distribution cluster. Primary indicator: `87.106.143.220:1337` / `165.227.175.161:23`. Attribution UTA-2026-014 (LOW 60%). **Full analysis and full indicator table: [Case 3 sub-report](/reports/rovodev-mirai-matrix-c2-87.106.143.220/).**
 
-### 4.4 Case 4 — Korean Claude+OpenClaw Operator (Capsule)
+### 4.4 Case 4: Korean Claude+OpenClaw Operator (Capsule)
 
 **Capsule.** Capsule-depth capture on Korea Telecom host `221.150.15.104` (direct residential exposure); no filesystem extraction beyond the smoking-gun artifact. That artifact, `~/.claude/settings.local.json`, is the campaign's first DEFINITE evidence of an attacker-customized AI-tool installation chain: the operator pre-approved, in the Claude Code permission allowlist, `Bash(curl -fsSL https://openclaw.ai/install.sh | bash)`, `Bash(npm i -g openclaw)`, `Bash(openclaw onboard)`, and `Bash(openclaw gateway --port 18789)`, authorizing a `curl ... | bash` OpenClaw install without per-execution prompts, with the gateway opening listening port 18789 on the internal host. Primary indicator: `~/.claude/settings.local.json` with pre-approved `Bash(curl ... | bash)` entries; block `openclaw.ai`/`docs.openclaw.ai` from non-developer hosts and inventory port 18789. Attribution UTA-2026-015 (LOW 55%). **Sub-report: [Case 4 sub-report](/reports/korean-claude-openclaw-221.150.15.104/).**
 
-### 4.5 Case 9 — GHOST Cryptojacker Kit + 4-Tier Supply Chain
+### 4.5 Case 9: GHOST Cryptojacker Kit + 4-Tier Supply Chain
 
 Case 9 is the campaign's only named-actor HIGH attribution (kit author Vova75Rus 88%) and only Tier-0 disposition outcome (GitHub T&S account-level action 2026-05-25, all 9 repos HTTP 404). On two AEZA hosts (`77.110.96.200` Operator-A, `77.110.125.145` Operator-B), the **byte-identical `libpam_cache.so`** (MD5 `296a800564111b0bad9fe63faf4e63ba`) is the DEFINITE supply-chain root, an LD_PRELOAD libc-hook rootkit that hides processes/files via `dlsym(RTLD_NEXT,...)` and calls `unsetenv("LD_PRELOAD")` to defeat forensic enumeration. The kit ships a 4-variant container-escape suite (Docker/k8s/LXC), ComfyUI fake-node persistence (`PerformanceMonitor`) that survives reimaging, a Hysteria v2 backdoor with `bing.com` SNI masquerade (UDP 14433/14444), and in-kit `_anti_hisana` counter-tooling indicating a commercial-grade author. The 4-tier chain runs UnamSanctam (Tier-0 OSS supplier, PUBLIC PERSONA, outside T&S scope) → Vova75Rus (Tier-1 kit author, OWNER Telegram bot 8415540095 baked into every build) → two customer operators (Tier-2) → a 4,573-entry ComfyUI victim scan list (Tier-3, ~78 high-confidence victim IPs flagged to cloud providers). Primary indicator: `cfx.kryptex.network` / `/etc/ld.so.preload` modifications. Attribution Vova75Rus (HIGH 88%) + UTA-2026-016 / UTA-2026-017. **Full analysis, full indicator table, ELF internals, and Tier-0 timeline: [Case 9 sub-report](/reports/ghost-cryptojacker-vova75rus-77.110.96.200/).**
 
-### 4.6 Case 7 — Productivity-AI Stack (Capsule)
+### 4.6 Case 7: Productivity-AI Stack (Capsule)
 
 Case 7 is the campaign's most representative **AI-integrated mature operator** (§4.10), a post-compromise productivity stack pairing classic operator tools (Weevely PHP backdoor, frp reverse proxy) with Claude Code for workflow assistance, planning, documentation, scripting. Claude improves the operator's productivity, not capability. The operator does not need it to operate, so there is no novel TTP at the AI layer, and no case-specific perimeter or hunt rule is published beyond the generic Weevely/frp signatures already in public catalogs.
 
 The operator hosts on 139.59.239.112 (DigitalOcean AS14061) and their AI tool is Claude Code, inferred from co-located session artifacts. This one stays at capsule depth, with no filesystem extraction beyond a surface artifact inventory.
 
-### 4.7 Case 8 — AI-Orchestrated 60-Second Payment-API Attack (Capsule)
+### 4.7 Case 8: AI-Orchestrated 60-Second Payment-API Attack (Capsule)
 
 Case 8 is the campaign's most novel-on-its-face TTP. An LLM orchestrating a 4-stage attack chain (recon → enumerate → exploit → exfiltrate) against a payment API within a 60-second window, but vendor identification is **INSUFFICIENT** (Gemini, Claude, GPT, and self-hosted models all remain candidates), so it stays at capsule depth. For defenders, treat any sub-minute multi-stage authenticated-API chain as a candidate for AI-orchestrated tradecraft, and baseline API traffic for "burst" patterns (4+ distinct API surfaces from one source IP within 60 seconds) that human-paced tradecraft would not produce.
 
 The operator hosts on 68.183.92.28 (DigitalOcean AS14061), and the AI tool is an unspecified LLM with an unknown mechanism. This one stays at capsule depth, with insufficient artifacts to identify the vendor or the orchestration mechanism.
 
-### 4.8 Case 10 — Sliver-Derivative C2 Staging (Capsule)
+### 4.8 Case 10: Sliver-Derivative C2 Staging (Capsule)
 
 > **Analyst note:** Case 10 captures an operator at the *pre-victim staging phase*, Sliver C2 deployed with crypter tooling and iterative loader development, but zero victim beacons in the database at capture. This is rare visibility: most reporting catches Sliver-derivative operators post-compromise. The artifacts document tradecraft choices defenders can hunt for *before* victim impact.
 
@@ -318,7 +318,7 @@ For defenders, block `5.230.201.54`, combine JARM matches with other Sliver sign
 
 > **Analyst note:** This sub-section documents five TTPs that prior-art search across 8+ major vendor AI-misuse reports (Google GTIG, Anthropic Misuse Reports, Censys ARC, Proofpoint, IBM X-Force, Kaspersky, Doctor Web, Hunt.io) did **not** surface as previously-documented. Each TTP is presented with: (a) what it is, (b) the campaign exemplars, (c) the prior-art assessment honestly characterized (DEFINITE vs MODERATE vs MODERATE-HIGH novelty per the prior-art gap assessment), (d) the defender detection strategy. Three of the five (Sections 4.9.1, 4.9.3, 4.9.4) carry MODERATE or MODERATE-HIGH novelty rather than DEFINITE because the prior-art search did not exhaust academic conference proceedings (Black Hat, USENIX, IEEE S&P, DEF CON 2024-2026) or underground forum monitoring (Exploit.in, XSS.is). These TTPs are documented as **first-public-documentation candidates** pending deeper prior-art search.
 
-#### 4.9.1 AI Operator Handoff Documents — MODERATE Novelty
+#### 4.9.1 AI Operator Handoff Documents: MODERATE Novelty
 
 > **Analyst note:** This is the publication's headline novel TTP. The artifact class is operator-authored documents intended for AI consumption (inverse data flow from AI-generated content). Existing AI-misuse reporting comprehensively covers AI-generated content; this covers AI-consumed operator documentation. Defenders' threat models do not currently treat operator handoff documents as a distinctive artifact class.
 
@@ -338,7 +338,7 @@ These are Markdown or plain-text documents written by the operator with the expl
 
 To detect it, run a file-creation hunt for Markdown documents in operator-likely paths (`/root/`, `~/`, `/opt/`) containing trigger strings like "To: Gemini", "To: Claude", "Atlassian Rovodev session" or "AI agent", combined with goal-statement section headers. The YARA rule `AIOperatorHandoffDoc` in the linked detection file targets this artifact class with case-insensitive matching across those triggers.
 
-#### 4.9.2 LLM-Personalized Credential Mutation — DEFINITE Novelty
+#### 4.9.2 LLM-Personalized Credential Mutation: DEFINITE Novelty
 
 > **Analyst note:** This is the campaign's most cleanly-DEFINITE novel TTP. The artifact is a direct primary-source: a Python script that calls Gemini 2.5 Flash with a specific prompt and generates per-target password mutations from victim context. The mutation output file `AI_ADMIN_MUTANTS.txt` is 5.5 MB on operator disk, demonstrating at-scale active use.
 
@@ -358,7 +358,7 @@ This is a pipeline that takes per-target context (email, domain and last-known p
 
 To detect it, monitor outbound HTTPS at the network layer to `generativelanguage.googleapis.com` for bodies carrying prompt-template fragments such as "red-team password analyst", "Output ONLY the 20 passwords" and "generate 20 password mutations". That needs DLP or a proxy with body inspection. Also run a file-creation hunt for the filenames `AI_SNIPER_GOODS.txt`, `AI_ADMIN_MUTANTS.txt` and `ULTRA_GOLD_TARGETS.txt`, which are operator-specific but representative of the class.
 
-#### 4.9.3 AI-Generated Offensive Code Structural Signature — HIGH Novelty (Cross-Operator)
+#### 4.9.3 AI-Generated Offensive Code Structural Signature: HIGH Novelty (Cross-Operator)
 
 > **Analyst note:** This is not novel as a concept (AI-generated code structural signatures have been hypothesized in academic and vendor research). It is novel as an **artifact-level diagnostic checklist with cross-operator validation** across three independent operators (Cases 1, 2, 3) using three different AI tools (Gemini CLI, OpenClaw, Atlassian Rovodev). Defenders gain a multi-criteria heuristic that is more durable than vendor-specific watermarking.
 
@@ -390,7 +390,7 @@ One refinement matters here. The Phase 5 analysis included "zero anti-analysis" 
 
 To detect it, the YARA rule `AIGenCodeStructural` in the linked detection file scores Python files against the 13-criteria checklist, firing at MODERATE confidence on 8 or more matches and at HIGH confidence on 10 or more.
 
-#### 4.9.4 Observability-Tool Reverse Pipeline — MODERATE-HIGH Novelty
+#### 4.9.4 Observability-Tool Reverse Pipeline: MODERATE-HIGH Novelty
 
 > **Analyst note:** This TTP inverts the defender threat model. Observability tools (Instana, SolarWinds, Zabbix, VMware Aria) are typically treated as data destinations, defenders worry about exposing tokens that grant write access to observability platforms. This TTP demonstrates that **read access** to observability data is itself high-value because it enables an attacker to build a reverse pipeline against the victim's production environment. Defenders should treat observability tokens as Tier-1 secrets equivalent to cloud-provider IAM credentials.
 
@@ -410,7 +410,7 @@ This is an attacker-built reverse-pipeline analytics platform that harvests stol
 
 To detect it, treat observability tokens as Tier-1 secrets. Rotate any JWTs older than 1 year. Monitor for `Authorization: apiToken ey*` patterns in PowerShell Script Block Logging Event 4104. Inventory and rotate IBM Instana, SolarWinds, Zabbix and VMware Aria tokens at the same cadence as cloud-provider IAM credentials. At the network layer, alert on outbound HTTP POST to the `/api/ingest/instana`, `/api/ingest/solarwinds` and `/api/ingest/zabbix` URI patterns from any host.
 
-#### 4.9.5 Operator-Built Unauthenticated Python-stdlib C2 — HIGH Novelty
+#### 4.9.5 Operator-Built Unauthenticated Python-stdlib C2: HIGH Novelty
 
 > **Analyst note:** Custom unsigned C2 servers have been reported in many published incidents (operator-built C2 is a known pattern). The novel artifact here is the combination of **(a) Python stdlib BaseHTTPServer with literally zero authentication, (b) used in active operations against named victims, and (c) shipped with path-traversal vulnerability and incomplete backend implementation**. This is rare in published reporting, operators typically use commodity C2 frameworks (Sliver, Cobalt Strike, Havoc) or carefully-built custom C2 with at least token-based authentication.
 
@@ -431,7 +431,7 @@ To detect it, write a network-layer rule for HTTP traffic carrying `User-Agent: 
 > **Analyst note:** This taxonomy was refined during analysis (Phase 7). The original Phase 5 framing posited four classes including a pure "AI-democratized script-kiddie" class. The refined publication taxonomy reduces to three classes because no pure exemplar of the script-kiddie class exists in the dataset, every observed operator retains baseline capability without AI (HIGH confidence; established by reviewing each operator's non-AI tooling and observed manual tradecraft). This refinement is published honestly rather than hidden, because the defender implications differ by class.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/ai-agent-frameworks-2026-05-23/ai-threat-actor-3class-taxonomy.svg" | relative_url }}" alt="Three-column comparison infographic of the three-class AI threat-actor taxonomy. Left column (deep-red side-rail, labeled Class 1): AI-integrated mature operator. Exemplar: Russian Gemini operator (Case 1 / UTA-2026-012). AI relationship: integrated across 3+ workflow stages with the operator authoring handoff documents specifically for AI session priming. Baseline without AI: operates without AI at HIGH confidence (handwritten C2, Cloudflare topology, custom credential-mill arsenal observed); loses efficiency without AI but retains capability. Defender response: disrupt AI integration points — revoke stolen LLM API keys, monitor server-host LLM egress traffic, hunt for AI Operator Handoff Documents during incident response. Flagged as the hardest class to defend against because removing AI does not remove operator capability. Middle column (red side-rail, labeled Class 2, MOST COMMON): Hybrid AI-augmented operator. Exemplars: Rovodev/Pandora Case 3 and Turkish ARPA Case 2 (UTA-2026-013, UTA-2026-014). AI relationship: classic operator tradecraft AND AI used for capability extension (Python scrapers, analytics platforms, etc.). Baseline without AI: operates basic stack at HIGH confidence (Mirai-family C binaries, production ARPA platform, manual tradecraft observed). Defender response: detect BOTH layers — conventional artifacts (Mirai-family C binaries, ET HUNTING Suricata rules) AND AI-augmentation layer (.rovodev/, .openclaw/, AI Handoff Documents). Right column (grey side-rail, labeled Class 3, THEORETICAL): AI-democratized script-kiddie. Exemplar: none in this dataset; class refined out of the original Phase 5 four-class framing during Phase 7. AI relationship: AI is initial-development-only, with the operator writing a natural-language spec and AI producing all code. Baseline without AI: cannot operate without AI by definition (no in-dataset exemplar). Defender response if the class exists in the wild: vendor coordination at LLM-provider signup time plus structural code-signature detection (AIGenCodeStructural YARA family rule). Footer detection takeaway: AI-tool presence is NOT a malicious indicator by itself; class determines defender response; every observed operator retains capability without AI; the Hybrid class is most common.">
+  <img src="{{ "/assets/images/ai-agent-frameworks-2026-05-23/ai-threat-actor-3class-taxonomy.svg" | relative_url }}" alt="Three-column comparison infographic of the three-class AI threat-actor taxonomy. Left column (deep-red side-rail, labeled Class 1): AI-integrated mature operator. Exemplar: Russian Gemini operator (Case 1 / UTA-2026-012). AI relationship: integrated across 3+ workflow stages with the operator authoring handoff documents specifically for AI session priming. Baseline without AI: operates without AI at HIGH confidence (handwritten C2, Cloudflare topology, custom credential-mill arsenal observed); loses efficiency without AI but retains capability. Defender response: disrupt AI integration points: revoke stolen LLM API keys, monitor server-host LLM egress traffic, hunt for AI Operator Handoff Documents during incident response. Flagged as the hardest class to defend against because removing AI does not remove operator capability. Middle column (red side-rail, labeled Class 2, MOST COMMON): Hybrid AI-augmented operator. Exemplars: Rovodev/Pandora Case 3 and Turkish ARPA Case 2 (UTA-2026-013, UTA-2026-014). AI relationship: classic operator tradecraft AND AI used for capability extension (Python scrapers, analytics platforms, etc.). Baseline without AI: operates basic stack at HIGH confidence (Mirai-family C binaries, production ARPA platform, manual tradecraft observed). Defender response: detect BOTH layers: conventional artifacts (Mirai-family C binaries, ET HUNTING Suricata rules) AND AI-augmentation layer (.rovodev/, .openclaw/, AI Handoff Documents). Right column (grey side-rail, labeled Class 3, THEORETICAL): AI-democratized script-kiddie. Exemplar: none in this dataset; class refined out of the original Phase 5 four-class framing during Phase 7. AI relationship: AI is initial-development-only, with the operator writing a natural-language spec and AI producing all code. Baseline without AI: cannot operate without AI by definition (no in-dataset exemplar). Defender response if the class exists in the wild: vendor coordination at LLM-provider signup time plus structural code-signature detection (AIGenCodeStructural YARA family rule). Footer detection takeaway: AI-tool presence is NOT a malicious indicator by itself; class determines defender response; every observed operator retains capability without AI; the Hybrid class is most common.">
   <figcaption><em>Figure 1: Three-class AI threat-actor taxonomy visualized. Each class has a distinct defender response: the AI-integrated mature class requires disrupting AI integration points, the Hybrid class requires detecting both conventional tradecraft and AI-augmentation layers, and the theoretical AI-democratized script-kiddie class (no exemplar in this dataset) would require vendor coordination at signup time. The refinement from Phase 5's original four-class framing to three published classes is documented honestly rather than hidden, because the defender implications differ materially by class.</em></figcaption>
 </figure>
 
@@ -447,7 +447,7 @@ To detect it, write a network-layer rule for HTTP traffic carrying `User-Agent: 
 - The **Hybrid AI-augmented** class is the *most common* in this dataset (Cases 2, 3). Defenders detect both layers (conventional tradecraft + AI augmentation) because either alone misses the operator.
 - The **AI-democratized script-kiddie** class is *theoretical* in this dataset. If it exists in the wild, vendor coordination at LLM-provider signup time + structural code-signature detection are the primary defensive controls.
 
-### 4.11 False-Positive Discrimination — Cases 5, 6, and Demoted Hosts
+### 4.11 False-Positive Discrimination: Cases 5, 6, and Demoted Hosts
 
 > **Analyst note:** This sub-section honestly characterizes two hosts (Cases 5, 6) initially flagged by the investigation's open-directory hunting heuristics but **demoted during analysis** because the AI-tool presence was benign. The single most important defender lesson from this campaign is: **AI tool presence on a host is not, by itself, a malicious indicator.** Two false-positive hosts and two additional Hunt.io-flagged demoted hosts make this point at four data points.
 
@@ -535,7 +535,7 @@ The full IOC feed is at [`/ioc-feeds/ai-agent-frameworks-2026-05-23-iocs.json`](
 
 This is a **multi-actor** campaign. Alternative Competing Hypotheses (ACH) analysis ruled for the **multi-actor unrelated** hypothesis, with **campaign coordination explicitly REFUTED** by distinct IOCs, wallets, language, geography, targets, motivations, AI tools, and infrastructure across all 8 cases. Attribution spans one named actor (Vova75Rus) and six UTAs; Cases 7, 8, 10 are INSUFFICIENT at capsule depth. **No Tier-1 government attribution** applies to any operator.
 
-### 9.1 Vova75Rus — Named Actor (HIGH 88%)
+### 9.1 Vova75Rus: Named Actor (HIGH 88%)
 
 Vova75Rus is the campaign's only named-actor HIGH attribution, the Case 9 GHOST cryptojacker kit author and a separate identity from the kit's customer operators. I place them in Zabaykalsky Krai, Russia, and I hold the attribution at HIGH confidence, 88 percent.
 
@@ -564,7 +564,7 @@ The language is Russian, evidenced by a personal-dedication page carrying a Russ
 
 The Tier-0 disposition landed. GitHub Trust & Safety took account-level action against Vova75Rus on 2026-05-25 and all 9 repositories now return HTTP 404, which is the strongest possible Tier-0 outcome for an upstream supply-chain actor. Wayback Machine snapshots at `web.archive.org/web/20260525020*/` are the canonical pre-takedown evidence record. Defenders should expect re-hosting attempts and monitor for new accounts matching the Vova75Rus naming and style patterns.
 
-### 9.2 UTA-2026-012 — Case 1 Russian Gemini Operator (MODERATE-HIGH 83%)
+### 9.2 UTA-2026-012: Case 1 Russian Gemini Operator (MODERATE-HIGH 83%)
 
 The profile is a Russian-native individual, an AI-augmented mid-tier criminal operator targeting the healthcare victim alongside the co-located @americanpatriotus disinformation channel.
 
@@ -587,7 +587,7 @@ Since this report was published, Trend Micro has independently documented the sa
 
 The UTA-2026-012 per-case attribution, with the full Phase 11 idiom analysis and the cross-vendor reconciliation, is in the [Case 1 sub-report](/reports/russian-gemini-credential-mill-213.165.51.115/).
 
-### 9.3 UTA-2026-013 — Case 2 Turkish ARPA Operator (high-MODERATE 78%)
+### 9.3 UTA-2026-013: Case 2 Turkish ARPA Operator (high-MODERATE 78%)
 
 The profile is a Turkish-speaking, Turkish-located, intra-Turkey single-thread operator with state-relevant interest in financial-sector intelligence, an espionage tradecraft sub-type of either (a) state-aligned-loose or (c) political/factional, at high-MODERATE.
 
@@ -603,13 +603,13 @@ The language is Turkish, evidenced by operator-authored Turkish-language insider
 - Self-branding: `ARPA Korelasyon Motoru` ("ARPA Correlation Engine")
 - In-platform footer: `ARPA © 2026 the victim organization`
 - Operator-authored Turkish-language insider docs: `GERCEK_API_BULUNDU.md`, `PUTTY_TUNNEL_DETAY.md`, `SSH_KEY_COZUM.md`, `TUNNEL_KONTROL.md`, `WINDOWS_VPN_TUNNEL.md`
-- Insider recruit: Windows AD user `[employee ID — suppressed]`
+- Insider recruit: Windows AD user `[employee ID, suppressed]`
 
 One gap stays open on sub-type. Discriminating state-aligned-loose (a) from political/factional (c) is INSUFFICIENT pending a full read of the Turkish-language documents, an OSINT pivot, and correlation against Turkish political events. I flag that as a publication-acknowledged gap rather than claiming it resolved.
 
 The UTA-2026-013 per-case attribution and the insider-recruitment TTP framing are in the [Case 2 sub-report](/reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/).
 
-### 9.4 UTA-2026-014 — Case 3 Rovodev/Pandora Operator (LOW 60%)
+### 9.4 UTA-2026-014: Case 3 Rovodev/Pandora Operator (LOW 60%)
 
 The profile is an English-speaking HYBRID AI-augmented solo-or-small-team operator running DDoS-for-hire alongside a downstream Pandora-Mirai variant.
 
@@ -628,7 +628,7 @@ Whether this is solo or a small team stays UNRESOLVED, and it is not publication
 
 The UTA-2026-014 per-case attribution is in the [Case 3 sub-report](/reports/rovodev-mirai-matrix-c2-87.106.143.220/).
 
-### 9.5 UTA-2026-015 — Case 4 Korean Claude+OpenClaw Operator (LOW 55%)
+### 9.5 UTA-2026-015: Case 4 Korean Claude+OpenClaw Operator (LOW 55%)
 
 The profile is a Korean-located operator with a smoking-gun Claude Code permission-allowlist artifact, at capsule depth only.
 
@@ -642,7 +642,7 @@ The language is Korean, inferred from hosting alone.
 
 - `~/.claude/settings.local.json` pre-approving `openclaw.ai` installer + OpenClaw command set
 
-### 9.6 UTA-2026-016 — Case 9 Operator-A (LOW 60%)
+### 9.6 UTA-2026-016: Case 9 Operator-A (LOW 60%)
 
 The profile is a Russian-speaking GHOST kit customer at the higher-OPSEC tier, running self-hosted XMR and CFX pool proxies. This is a **separate identity from Vova75Rus**, who authored the kit; Operator-A is one of at least two customer operators.
 
@@ -658,7 +658,7 @@ The language is Russian, with Cyrillic in the operator-side wrapper scripts.
 - XMR wallet prefix: `4BBj3gj4...`
 - CFX wallet prefix: `cfx:aaj5xb...`
 
-### 9.7 UTA-2026-017 — Case 9 Operator-B (LOW 55%)
+### 9.7 UTA-2026-017: Case 9 Operator-B (LOW 55%)
 
 The profile is a Russian-speaking GHOST kit customer at the lower-OPSEC tier, using public pools on a since-abandoned host. This is a **separate identity from Vova75Rus and Operator-A**.
 
@@ -859,7 +859,7 @@ The investigation identifies these detection gaps not currently covered by the l
 
 ---
 
-## 13. Investigation Methodology — Hunt.io Platform (MCP + V3 API) in the Defender Workflow {#methodology}
+## 13. Investigation Methodology: Hunt.io Platform (MCP + V3 API) in the Defender Workflow {#methodology}
 {: .hl-tier-2}
 
 > **Analyst note:** I document here how attackers integrate AI-agent CLIs into offensive workflows. For this investigation I integrated an AI-agent CLI (Claude Code) with the **Hunt.io Model Context Protocol (MCP) server** to surface, triage, and analyze every one of the 9 cases above. Below I cover that defender-side AI integration in detail, what worked, what did not, the specific findings the MCP enabled, and the workarounds I used when MCP endpoints failed. The symmetry is intentional: AI-augmented tradecraft is now mainstream on both sides of the security line, and defenders evaluating MCP-augmented investigation workflows benefit from a concrete artifact to compare against.
@@ -872,7 +872,7 @@ On sponsorship, I should disclose that Hunt.io sponsors this report series and p
 
 > **Early-access status:** The Hunt.io V3 API and MCP server described in this section were used under early access during this investigation. At the time of publication they are a pre-release build, **not yet generally available**, so endpoint names, tool coverage, and behavior documented here may differ from Hunt.io's eventual public release. (The AttackCapture open-directory dataset that surfaced all nine cases is part of Hunt.io's current, generally-available platform.)
 
-### 13.2 Model Context Protocol (MCP) — A Brief Primer
+### 13.2 Model Context Protocol (MCP): A Brief Primer
 
 The **Model Context Protocol** is an Anthropic-published open standard (announced November 2024) for exposing external data sources and tools to AI clients via a uniform JSON-RPC interface. An MCP **server** publishes tool definitions and schemas; an MCP **client** (Claude Code, Cursor IDE, custom AI agents) calls those tools as part of its reasoning loop. The pattern decouples AI tooling from any specific vendor, once a server is published, any compatible client can use it.
 
@@ -882,7 +882,7 @@ Hunt.io's MCP server is itself a client-facing layer over the platform's **V3 AP
 
 This is the architectural symmetry: **the attackers in this report use AI agents to compose offensive workflows; the defender used an AI agent to compose investigative workflows**. The MCP layer is the abstraction that makes both possible.
 
-### 13.3 Discovery Layer — All Nine Cases Surfaced Through Hunt.io AttackCapture
+### 13.3 Discovery Layer: All Nine Cases Surfaced Through Hunt.io AttackCapture
 
 Every one of the 9 cases documented in this report originated from Hunt.io's open-directory dataset. The platform crawls exposed open directories at scale and applies classifier-derived framings, short threat-class summaries that orient the investigator before any deeper pull. In this investigation, Hunt.io's curated framings were accurate in all 9 cases reviewed, and the dataset's signal-to-noise was high enough that 25 candidate hosts surfaced for review narrowed to 9 publishable cases without significant manual filtering.
 
@@ -900,7 +900,7 @@ Every one of the 9 cases documented in this report originated from Hunt.io's ope
 
 The implication for defenders is that an open-directory crawl-and-classify capability, Hunt.io being the platform used here and others existing in the same category, is the discovery layer upstream of any investigation like this one. Without a curated dataset of exposed operator directories, this investigation would not have started. Teams considering investment in that capability should treat the discovery layer as the gating dependency for everything downstream.
 
-### 13.4 Metadata Layer — Per-File MITRE TTP Tags Drove Two Major Findings
+### 13.4 Metadata Layer: Per-File MITRE TTP Tags Drove Two Major Findings
 
 The single most operationally-useful Hunt.io MCP capability for this investigation was the per-file `malwareTags` array returned by `attackcapture-host-files`. Each file in an indexed open directory is annotated with: (a) MITRE ATT&CK technique identifiers derived from file content, and (b) sandbox-family classification tags (the platform integrates with [tria.ge](https://tria.ge/) for sandbox detonation). The combination orients a defender to *what kind of platform this host is* before any file content is pulled.
 
@@ -967,7 +967,7 @@ The pattern I observed is that metadata-grade endpoints work reliably while cont
 4. **SHA256 hashes in `host-files` enable cross-platform pivots.** With a hash in hand, a defender can immediately pivot to VirusTotal for detection-rate, sandbox-report, and family-attribution context. This makes Hunt.io + VirusTotal complementary rather than redundant.
 5. **AttackCapture as a discovery upstream.** No other platform evaluated during this investigation surfaces exposed-operator open directories at comparable scale and curation quality.
 
-### 13.7 What Did Not Work — Workarounds Used
+### 13.7 What Did Not Work: Workarounds Used
 
 1. **Content endpoints failed at our tier.** `attackcapture-file-preview`, `attackcapture-file-ai-brief`, and `attackcapture-search-code` returned generic "not found" or "tool execution failed" errors universally. **Workaround:** out-of-band file content access via the Hunt.io web UI (browser-side, not MCP). All file content used in this report was retrieved this way for hosts where the MCP refused to surface preview content.
 2. **Token-cap on rich-host listings.** The 77.110.96.200 `host-files` response (~65,000 characters) exceeded the MCP harness token cap. **Workaround:** the AI client saved the full response to a file, and `Grep` extracted just the filenames and TTP tags needed for the analysis. This worked, but a `minimal: true` parameter on the endpoint would be cleaner.
@@ -986,7 +986,7 @@ For Case 3's Pandora dropper script (SHA256 `d3fd9994b16dc9b14c29f7faf7b5f6c84f4
 
 Defender teams evaluating MCP-augmented investigation should expect to wire **at least two** MCP servers. One open-directory / infrastructure-fingerprint platform (Hunt.io being one option) and one consolidated malware-intel platform (VirusTotal being the most common). Single-platform MCP integration leaves substantial pivot coverage on the table.
 
-### 13.9 Defender Takeaway — Evaluating MCP-Augmented Investigation
+### 13.9 Defender Takeaway: Evaluating MCP-Augmented Investigation
 
 For security teams considering investment in MCP-augmented threat-intel workflows, the operational lessons from this investigation are:
 
@@ -1041,7 +1041,7 @@ Each sub-report cross-references this parent report for cross-case context.
 - **The Hacker News**: GHOST/ComfyUI syndication (April 2026). Tier 3 / Admiralty C2.
 - **BleepingComputer**: Pandora-Mirai 2023 coverage. Tier 3 / Admiralty C2.
 
-### 14.4 Appendix A — Identity Artifacts Inventory
+### 14.4 Appendix A: Identity Artifacts Inventory
 
 The following identity artifacts were captured during the investigation. Each is documented for cross-reference with future investigations.
 
@@ -1062,7 +1062,7 @@ The following identity artifacts were captured during the investigation. Each is
 | Forum URL | `duty-free.cc` | Case 1 Russian carding forum activity |
 | Personal dedication | (March 8th / Women's Day greeting) | Case 9 Vova75Rus personal-dedication page |
 
-### 14.5 Appendix B — Research Gaps (Acknowledged for Future Work)
+### 14.5 Appendix B: Research Gaps (Acknowledged for Future Work)
 
 The investigation acknowledges these gaps as publication-honest characterization rather than hidden uncertainty:
 
@@ -1079,7 +1079,7 @@ The investigation acknowledges these gaps as publication-honest characterization
 - Solo vs. small-team discrimination for Case 1 UNRESOLVED.
 - Operator-A vs. Operator-B same-individual question UNRESOLVED.
 
-### 14.6 Appendix C — Key Analytic Conclusions (KAC Documentation)
+### 14.6 Appendix C: Key Analytic Conclusions (KAC Documentation)
 
 The campaign's headline analytical claims are surfaced here with their underlying assumptions explicit, so that defenders or downstream analysts can evaluate the inferential chain rather than accept the conclusion at face value. This format applies the Structured Analytic Technique discipline of separating evidence from assumption from conclusion.
 

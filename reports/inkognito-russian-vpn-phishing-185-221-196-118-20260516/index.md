@@ -37,39 +37,39 @@ figure_nav:
   - image: inkognito-brand-portfolio.svg
     parts:
       - label: "INK VPN"
-        anchor: "#commercial-vpn-backend--ink-vpn"
+        anchor: "#commercial-vpn-backend-ink-vpn"
       - label: "INK Lens"
-        anchor: "#brand-impersonation-phishing-library--ink-lens"
+        anchor: "#brand-impersonation-phishing-library-ink-lens"
       - label: "BEC burn domains"
-        anchor: "#bec-burn-domain-infrastructure--three-june-2023-eu-domains"
+        anchor: "#bec-burn-domain-infrastructure-three-june-2023-eu-domains"
       - label: "CryptOne"
-        anchor: "#fake-crypto-exchange--cryptone"
+        anchor: "#fake-crypto-exchange-cryptone"
       - label: "unloki, Outline, regional fronts"
-        anchor: "#centralized-vpnproxy-fleet--marzban--outline--regional-brand-fronts"
+        anchor: "#centralized-vpnproxy-fleet-marzban--outline--regional-brand-fronts"
   - image: inkognito-operator-timeline.svg
     parts:
       - label: "2023 BEC burn domains"
-        anchor: "#bec-burn-domain-infrastructure--three-june-2023-eu-domains"
+        anchor: "#bec-burn-domain-infrastructure-three-june-2023-eu-domains"
       - label: "unloki, the long anchor"
-        anchor: "#centralized-vpnproxy-fleet--marzban--outline--regional-brand-fronts"
+        anchor: "#centralized-vpnproxy-fleet-marzban--outline--regional-brand-fronts"
       - label: "EspoCRM back office"
-        anchor: "#back-office-stack--espocrm-single-instance-deployment"
+        anchor: "#back-office-stack-espocrm-single-instance-deployment"
       - label: "11-minute deploy"
-        anchor: "#build--deployment-automation-fingerprint--11-minute-domain-to-live"
+        anchor: "#build--deployment-automation-fingerprint-11-minute-domain-to-live"
       - label: "Full timeline"
-        anchor: "#61-sustained-operation-timeline--2-years-11-months-of-continuous-presence"
+        anchor: "#61-sustained-operation-timeline-2-years-11-months-of-continuous-presence"
   - image: inkognito-hosting-segmentation.svg
     parts:
       - label: "Aeza and the back-office CRM"
-        anchor: "#back-office-stack--espocrm-single-instance-deployment"
+        anchor: "#back-office-stack-espocrm-single-instance-deployment"
       - label: "Timeweb, the production host"
-        anchor: "#production-stack--inkconnectru-and-apiinkconnectru"
+        anchor: "#production-stack-inkconnectru-and-apiinkconnectru"
       - label: "U1host and the phishing library"
-        anchor: "#brand-impersonation-phishing-library--ink-lens"
+        anchor: "#brand-impersonation-phishing-library-ink-lens"
       - label: "Cloudflare fronting CryptOne"
-        anchor: "#fake-crypto-exchange--cryptone"
+        anchor: "#fake-crypto-exchange-cryptone"
       - label: "The GitHub Pages chameleon decoy"
-        anchor: "#apex-chameleon-decoy-tradecraft--inklenscouk"
+        anchor: "#apex-chameleon-decoy-tradecraft-inklenscouk"
       - label: "Sanctioned-provider posture"
         anchor: "#bulletproof-hoster-portfolio-and-sanctioned-provider-posture"
 ---
@@ -134,7 +134,7 @@ The risk is not a single act of intrusion. It is the **infrastructure surface** 
 
 - **UTA-2026-009: Inkognito Russian VPN/phishing operator.** Single Russian-speaking multi-product fraud operator. Self-identified parent brand "Inkognito" via the `@inkconnectvpn` Telegram channel (797 subscribers, first post 2026-03-18). Distinct-actor confidence **MODERATE (78%)**. Named-actor attribution **INSUFFICIENT (<50%)**, first public capture; no prior Tier-1/2/3 TI; resolution would require Russian payment-processor merchant ID lookup, paid Russian underground forum investigation, or Russian regulator action. This report **extends** the existing UTA-2026-009 file's Activity Log; it does not replace the originating characterization from the 2026-05-15 multi-cluster investigation. Net executive implication: Inkognito is a stable, professionally-operated commercial fraud business that should be tracked as a persistent infrastructure risk rather than as a discrete incident.
 
-### For Technical Teams — Immediate Priorities
+### For Technical Teams: Immediate Priorities
 
 - **Hunt DNS for brand-impersonation subdomains under `*.inklens.ru` and `*.inklens.co.uk`.** These subdomains exist only for fraudulent use; any DNS query from an enterprise endpoint is high-fidelity. The Section 4 deep-dive enumerates 25+ specific impersonation targets including `wellsfargo.inklens.ru`, `anydesk.inklens.ru`, `owa2013.inklens.ru`, `development-jenkins.inklens.ru`, and `swdcdownloads.inklens.ru`. See the [separate detection file](/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/) for the Sigma DNS rule.
 - **Hunt for the `X-Admin-Token` header** in HTTP requests, responses, or CORS preflight `Access-Control-Allow-Headers` lists: operator's custom admin auth primitive, pivots cluster expansion to any other operator-controlled API surface.
@@ -215,7 +215,7 @@ Three findings from the parent investigation made Inkognito worth promoting to a
 The five active VPN brand fronts (INK VPN, unloki, `bigass.monster`, Marzban-managed regional nodes) are all orchestrated through the same Marzban Xray/V2Ray panel, they share the operator's backend node fleet, not just brand identity.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/inkognito-russian-vpn-phishing-185-221-196-118-20260516/inkognito-brand-portfolio.svg" | relative_url }}" alt="2-column-by-3-row infographic of the Inkognito brand portfolio. Top row (red flagship bands): INK VPN — commercial VPN at inkconnect.ru running Vite/React SPA with 18 API endpoints and Russian SBP/T-Pay/card payment integration, hosted on Timeweb RU 176.124.211.174, registered 2026-04-17 with 11-minute deploy; INK Lens — 467+ brand-impersonation subdomains under inklens.ru and inklens.co.uk targeting Wells Fargo, AnyDesk, OWA 2013, Jenkins, Tencent, and 18+ verticals, with the apex chameleon-decoy on GitHub-then-S3, inklens.ru registered 2026-03-18. Middle row (yellow supporting bands): CryptOne — Cloudflare-fronted fake crypto exchange at cryptone.bot with origin hidden, staging path on 79.137.192.3, live since 2026-03-05; unloki plus Outline — Outline-protocol VPN for Iran/RU/CN censorship circumvention at unloki.ru and users.outline.unloki.ru, hosted Stark TR 193.46.56.182, earliest 2023-11-17, the longest-running portfolio asset. Bottom row: bigass.monster (yellow) — regional VPN brand front with German and Nordic exit nodes, Cloudflare apex with Aeza sub-host, drop-caught and re-acquired 2025-10-21; Bikaf VPN (grey) — earlier minimalist Google-OAuth-only consumer VPN at bikaf.ru, retired April 2026 after about 2 months of operation. Bottom band summary: parent brand Inkognito, Telegram @inkconnectvpn 797 subs first post 2026-03-18, cross-brand operator fingerprints X-Admin-Token HTTP header and Yandex Webmaster ID 98466329. Each brand sits on different infrastructure showing deliberate provider segmentation. Detection anchors footer: X-Admin-Token, Yandex 98466329, Google SC TXTs, INK VPN asset SHA256s (8a69fe67, d1ae63c9, 53b3515f).">
+  <img loading="lazy" src="{{ "/assets/images/inkognito-russian-vpn-phishing-185-221-196-118-20260516/inkognito-brand-portfolio.svg" | relative_url }}" alt="2-column-by-3-row infographic of the Inkognito brand portfolio. Top row (red flagship bands): INK VPN: commercial VPN at inkconnect.ru running Vite/React SPA with 18 API endpoints and Russian SBP/T-Pay/card payment integration, hosted on Timeweb RU 176.124.211.174, registered 2026-04-17 with 11-minute deploy; INK Lens: 467+ brand-impersonation subdomains under inklens.ru and inklens.co.uk targeting Wells Fargo, AnyDesk, OWA 2013, Jenkins, Tencent, and 18+ verticals, with the apex chameleon-decoy on GitHub-then-S3, inklens.ru registered 2026-03-18. Middle row (yellow supporting bands): CryptOne: Cloudflare-fronted fake crypto exchange at cryptone.bot with origin hidden, staging path on 79.137.192.3, live since 2026-03-05; unloki plus Outline: Outline-protocol VPN for Iran/RU/CN censorship circumvention at unloki.ru and users.outline.unloki.ru, hosted Stark TR 193.46.56.182, earliest 2023-11-17, the longest-running portfolio asset. Bottom row: bigass.monster (yellow): regional VPN brand front with German and Nordic exit nodes, Cloudflare apex with Aeza sub-host, drop-caught and re-acquired 2025-10-21; Bikaf VPN (grey): earlier minimalist Google-OAuth-only consumer VPN at bikaf.ru, retired April 2026 after about 2 months of operation. Bottom band summary: parent brand Inkognito, Telegram @inkconnectvpn 797 subs first post 2026-03-18, cross-brand operator fingerprints X-Admin-Token HTTP header and Yandex Webmaster ID 98466329. Each brand sits on different infrastructure showing deliberate provider segmentation. Detection anchors footer: X-Admin-Token, Yandex 98466329, Google SC TXTs, INK VPN asset SHA256s (8a69fe67, d1ae63c9, 53b3515f).">
   <figcaption><em>Figure 1: The Inkognito brand portfolio at a glance, one operator, six brands, three functional roles. The visual demonstrates why this is a unified operator rather than six independent fraud operations: the cross-brand operator fingerprints (X-Admin-Token, Yandex 98466329) appear consistently across the live brands despite each brand running on different infrastructure. The decommissioned Bikaf VPN (bottom-right) shows the operator's brand-rotation pattern, retire the MVP, launch the flagship, preserve the operational identity.</em></figcaption>
 </figure>
 
@@ -238,7 +238,7 @@ To set correct defender expectations, several things this operation is **not**:
 <details markdown="1" class="hl-teardown">
 <summary>Full subsection detail: all six capability areas, VPN backend, phishing library, BEC domains, fake exchange, proxy fleet, operator fingerprints (4.1-4.6)</summary>
 
-### 4.1 Commercial VPN backend — INK VPN
+### 4.1 Commercial VPN backend: INK VPN
 
 #### Deep Technical Analysis
 
@@ -300,7 +300,7 @@ To detect it, hunt for the `X-Admin-Token` header in HTTP request headers, respo
 
 **Russian payment integration, operator legal-entity surface:** The INK VPN site visibly advertises payment via **SBP** (Russia's Faster Payments System), **T-Pay** (Tinkoff Bank's payment system), and standard card payments. Russian payment integration of this kind requires the operator to have a Russian payment-processor merchant account, typically requires a registered Russian legal entity (an OOO or IP). This is an attribution lead: the INK VPN operator is operating openly in the Russian payment system, which means they are either operating as a Russian-registered business OR they have laundered the merchant account through a front company. Either reading provides downstream investigative surface (SBP / T-Pay merchant ID lookup would resolve the legal entity).
 
-### 4.2 Brand-impersonation phishing library — INK Lens
+### 4.2 Brand-impersonation phishing library: INK Lens
 
 > **Analyst note:** This is the highest-impact capability for enterprise defenders. The operator maintains 467+ pre-positioned subdomains under `inklens.ru`, each one set up to impersonate a specific enterprise brand. None of them currently host an active phishing page. They all return HTTP 404. But the infrastructure is staged: DNS records pointed, Let's Encrypt certs issued, naming chosen to match real brands. Activating one is a configuration change that takes seconds.
 
@@ -369,7 +369,7 @@ A brand-impersonation phishing subdomain library is not a library in the literal
 
 To detect it, run DNS-resolver hunts for any query to `*.inklens.ru`, `*.inklens.co.uk`, `*.inkconnect.ru`, `*.bikaf.ru`, `*.bigass.monster` or `*.unloki.ru` from any enterprise endpoint. Even a single DNS query to one of these subdomains is high-fidelity, because they do not appear in legitimate browsing patterns. See the [separate detection file](/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/) for the Sigma rule `sigma_inkognito_dns_brand_impersonation`. Defenders should also identify which subdomain matches their brand, `<company-name>.inklens.ru` if any, and add a brand-monitoring alert.
 
-### 4.3 BEC burn-domain infrastructure — three June-2023 `.eu` domains
+### 4.3 BEC burn-domain infrastructure: three June-2023 `.eu` domains
 
 > **Analyst note:** This subsection covers the operator's earliest documented activity, a tightly-batched 2023 spear-phishing operation using three throwaway `.eu` domains. The pattern is the most reproducible WHOIS-level operator fingerprint in the entire investigation, and it lets defenders hunt for additional operator-controlled burn domains via Reverse-SOA queries.
 
@@ -406,7 +406,7 @@ Business Email Compromise is a category of fraud where an attacker sends emails 
 
 Finance and legal teams are the primary BEC targets. An email from `someone@petkovalegal.eu` to a finance team member requesting a wire transfer or document review would pass standard email-authentication checks, and modern email security still leans heavily on sender domain reputation, so a domain quietly active for 9 to 12 months passes most reputation gates. The defensive response is finance-and-legal-team training to verify any wire-transfer change via voice callback, DMARC enforcement on defender-owned domains so attackers cannot spoof that brand to its customers, and Reverse-SOA monitoring for the `admin@<domain>.eu` pattern on Stark Industries TR ASNs (AS44477, AS209847) to surface additional operator-controlled burn domains as they emerge.
 
-### 4.4 Fake crypto exchange — CryptOne
+### 4.4 Fake crypto exchange: CryptOne
 
 #### Deep Technical Analysis
 
@@ -420,7 +420,7 @@ CryptOne sits in the brand portfolio as a high-conversion monetization vector. W
 
 To detect it, treat DNS queries to `cryptone.bot` from any enterprise endpoint as a high-priority alert. Crypto exchange sites are an unusual destination for enterprise traffic, and `cryptone.bot` specifically is operator-controlled with no legitimate use case. That rule belongs in the same DNS hunt-list as the INK Lens brand-impersonation subdomains.
 
-### 4.5 Centralized VPN/proxy fleet — Marzban + Outline + regional brand fronts
+### 4.5 Centralized VPN/proxy fleet: Marzban + Outline + regional brand fronts
 
 > **Analyst note:** This subsection covers the operator's VPN-relay backbone. Multiple consumer brands (INK VPN, unloki, Bikaf, `bigass.monster`) and one censorship-circumvention front (Outline at `users.outline.unloki.ru`) all share a single backend orchestrated through a Marzban admin panel, meaning every subscriber, across every brand, has their traffic relayed through operator-controlled nodes whose configuration the operator manages centrally.
 
@@ -444,7 +444,7 @@ VPN providers, legitimate or otherwise, have **total visibility** into the traff
 
 Any enterprise employee who connects a personal device through INK VPN, Bikaf VPN, `bigass.monster` or the unloki Outline server while accessing enterprise resources is exposing destination metadata to the operator. That is a known general risk with criminal VPN providers, and the Inkognito-specific finding is that this operator runs multiple brand fronts orchestrated through a single Marzban panel, so blocking one brand domain at the perimeter does not address the parallel fronts. The defensive response is to block all five active VPN brand fronts together, `inkconnect.ru`, `bikaf.ru`, `bigass.monster`, `unloki.ru`, and the regional VPN node subdomains under `inklens.co.uk`.
 
-### 4.6 Operator-fingerprint signatures — Yandex/Google account control, asset hashes (and one retraction)
+### 4.6 Operator-fingerprint signatures: Yandex/Google account control, asset hashes (and one retraction)
 
 > **Analyst note:** This subsection enumerates the cross-domain signatures that tie the operator's brand portfolio together as a single actor, and that let defenders surface additional operator infrastructure not yet linked to the INK brand portfolio. These fingerprints are the operator's "permanent ink", features they cannot easily change without breaking their own brand or DevOps.
 
@@ -510,7 +510,7 @@ These matter as detection content. The detection file at [`/hunting-detections/i
 <details markdown="1" class="hl-teardown">
 <summary>Full subsection detail: production stack, brand-identity assets, back-office, VPN fleet management, deployment fingerprint (5.1-5.5)</summary>
 
-### 5.1 Production stack — `inkconnect.ru` and `api.inkconnect.ru`
+### 5.1 Production stack: `inkconnect.ru` and `api.inkconnect.ru`
 
 `inkconnect.ru` runs nginx 1.29.8 behind a Caddy reverse proxy, serving a Vite/React SPA whose full application code, branding, and API client live in a single JS bundle at `/assets/index-CoeWw2zM.js` (see §4.1). The 770-byte HTML root template mounts to `<div id="root">`; HTTP response headers confirm the stack:
 
@@ -528,17 +528,17 @@ Three production-served assets, all operator-controlled, none on VirusTotal as o
 - `favicon.svg`: SHA256 `53b3515fda56dbbd1f8071a9ef3dc3be80cb7994df22ce8afc2e79147e899b70`, browser-tab favicon.
 - `assets/index-CoeWw2zM.js`: SHA256 `8a69fe67a7e9908aa1248c632ffd784033fc4dc613d0b5589279ccc62f717978`, 261,587-byte Vite/React production bundle.
 
-### 5.3 Back-office stack — EspoCRM single-instance deployment
+### 5.3 Back-office stack: EspoCRM single-instance deployment
 
 The operator's back-office runs on the dedicated Aeza Italy IP `185.221.196.118` (AS210644). From May 2025 through April 2026, the back-office hostname was `00000xtrading.ru`; on 2026-04-06 the operator brought up `fi1.inklens.co.uk` (resolving to the same IP) and on 2026-04-07 the old hostname was decommissioned. The 30-hour overlap is the textbook pattern of a planned operational migration: bring up the new back-office, validate it works, point operator dashboards at the new endpoint, then let the old domain decay.
 
 The back-office identifies itself as **EspoCRM** in the HTTP response title. EspoCRM is an open-source customer relationship management platform commonly used by small-to-medium businesses. The operator runs a **single-instance** EspoCRM deployment as the unified back-office for the entire brand portfolio (subscription management, customer support tickets, phishing campaign tracking, and so on, exact internal data model is not recoverable without a credential).
 
-### 5.4 VPN/proxy fleet management — Marzban panel
+### 5.4 VPN/proxy fleet management: Marzban panel
 
 The operator runs a Marzban panel (https://github.com/Gozargah/Marzban) at `marzban.inklens.co.uk` for centralized Xray-core/V2Ray-core fleet management, the same platform described in §4.5. Marzban is a legitimate open-source VPN/proxy orchestration tool; no prior Tier-1 or Tier-2 reporting documents its abuse in criminal proxy networks, making the operator's deployment a gap in the public record and a new defender pivot.
 
-### 5.5 Build / deployment-automation fingerprint — 11-minute domain-to-live
+### 5.5 Build / deployment-automation fingerprint: 11-minute domain-to-live
 
 Domain registration to fully-operational live deployment for `inkconnect.ru` (the flagship INK VPN brand):
 
@@ -564,7 +564,7 @@ That has a detection implication. Certificate Transparency monitoring on REGRU-R
 
 > **Analyst note:** With no malware binary in scope, "dynamic analysis" for Inkognito means observing the operator's web infrastructure as it serves requests, mutates over time, and responds to real-world events. Sources for the observations below are DomainTools passive DNS (registration, hosting, and apex/subdomain timelines across all operator domains), WHOIS history (registrar, NS, SOA, registrant fields), reverse-IP enumeration on operator-controlled IPs, and direct WARP-routed HTTP probing of live operator front-ends. None of the observations required code execution.
 
-### 6.1 Sustained-operation timeline — 2 years 11 months of continuous presence
+### 6.1 Sustained-operation timeline: 2 years 11 months of continuous presence
 
 The operator's confirmed continuous infrastructure presence runs **2023-06-08 → 2026-05-07** (~2 years 11 months / nearly 3 years). Key milestones:
 
@@ -602,7 +602,7 @@ The progression (2023 BEC burn domains → 2023 loader distribution → 2024 Out
 <details markdown="1" class="hl-teardown">
 <summary>Full subsection detail: apex chameleon decoy through hoster-portfolio sanctions posture (6.2-6.8)</summary>
 
-### 6.2 Apex chameleon-decoy tradecraft — `inklens.co.uk`
+### 6.2 Apex chameleon-decoy tradecraft: `inklens.co.uk`
 
 > **Analyst note:** This is the most technically distinctive tradecraft observation in the operator's toolkit. The apex domain `inklens.co.uk` deliberately serves benign cover content while the operational subdomains under it (`fi1.`, `de1.`, `marzban.`, `api.`) host the actual back-office, VPN nodes, and admin panels. This subsection explains the mechanism and why it defeats standard researcher triage workflows.
 
@@ -622,7 +622,7 @@ The `inklens.co.uk` apex chameleon-decoy lifecycle:
 This matters because a typical first step in domain triage is to load the apex URL in a browser and screenshot it. With this setup, a researcher loading `https://inklens.co.uk` on 2026-04-06 saw github.com, marked the domain benign, and moved on. Meanwhile `fi1.inklens.co.uk` resolves directly to the operator's Aeza Italy IP (`185.221.196.118`) and serves the actual EspoCRM back-office. The TLD, registrar and hosting choices are also deliberate **jurisdiction-laundering**, a `.co.uk` UK ccTLD, Gandi as a French registrar, then U1host in Germany to GitHub in the US to S3 in the US, with no Russian fingerprint anywhere on the apex paper trail. Combined with the absence of operator domains on VirusTotal at 0/92 detection, that is sustained anti-attribution discipline.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/inkognito-russian-vpn-phishing-185-221-196-118-20260516/inklens-couk-apex-github-decoy.jpg" | relative_url }}" alt="DomainTools-captured screenshot of inklens.co.uk apex on 2026-04-06 rendering the legitimate github.com homepage in full — including GitHub's blue branded background, the headline The future of building happens together, GitHub Copilot marketing copy, a GitHub Copilot product screenshot, code/plan/collaborate/automate/secure feature navigation, and the standard GitHub footer. There is nothing on the rendered page that suggests the domain is operator-controlled.">
+  <img loading="lazy" src="{{ "/assets/images/inkognito-russian-vpn-phishing-185-221-196-118-20260516/inklens-couk-apex-github-decoy.jpg" | relative_url }}" alt="DomainTools-captured screenshot of inklens.co.uk apex on 2026-04-06 rendering the legitimate github.com homepage in full, including GitHub's blue branded background, the headline The future of building happens together, GitHub Copilot marketing copy, a GitHub Copilot product screenshot, code/plan/collaborate/automate/secure feature navigation, and the standard GitHub footer. There is nothing on the rendered page that suggests the domain is operator-controlled.">
   <figcaption><em>Figure 4: The apex chameleon decoy in action. A researcher loading <code>https://inklens.co.uk</code> on 2026-04-06 saw the full legitimate github.com homepage, no operator-controlled content, no Russian-language artifacts, no indication of malicious tenancy. Meanwhile <code>fi1.inklens.co.uk</code> resolved to <code>185.221.196.118</code> (operator's Aeza Italy EspoCRM back-office). This is the precise tradecraft that produces the persistent 0/92 VirusTotal detection across the operator's domain portfolio: standard apex-screenshot triage workflows produce false-negative verdicts.</em></figcaption>
 </figure>
 
@@ -630,11 +630,11 @@ This pattern is documented as **a novel technique variant** in the threat-intel 
 
 To detect it, monitor DNS for apex-versus-subdomain divergence. If an apex domain consistently resolves to GitHub Pages (`140.82.x.x` ranges) or Amazon S3 (`s3.amazonaws.com` IPs) while subdomains under that apex resolve to a different provider entirely, especially a bulletproof hoster like Aeza or Stark, the apex is potentially a chameleon decoy.
 
-### 6.3 Decommission behaviour — brand rotation, not a fingerprint
+### 6.3 Decommission behaviour: brand rotation, not a fingerprint
 
 The brand-rotation pattern itself still reads as planned, professional replacement (Bikaf VPN → INK VPN with overlap; `00000xtrading.ru` → `fi1.inklens.co.uk` with 30-hour overlap) rather than panicked teardown after exposure, and the overlap windows are what carry that. The 404 response the retired domains served was originally presented here as a cross-domain operator fingerprint; it is a VK platform default and has been retracted. See §4.6.
 
-### 6.4 TLS posture — non-browser-client rejection on `inklens.ru`
+### 6.4 TLS posture: non-browser-client rejection on `inklens.ru`
 
 `inklens.ru` deliberately rejects non-browser TLS clients. A vanilla `curl` request returns `tlsv1 alert internal error` during the TLS handshake. The operator has cipher restrictions or TLS-fingerprinting controls that allow real browsers but reject automated scrapers. This is **a mature anti-reconnaissance posture** on the primary phishing infrastructure. It does not affect detection (DNS queries for the brand-impersonation subdomains remain visible at the resolver layer), but it does mean automated security crawlers won't successfully fetch the served content for classification. A clean reason why VirusTotal's 0/92 detection persists despite the obvious phishing topology.
 
@@ -677,11 +677,11 @@ The deliberate provider segmentation is the inverse of single-provider concentra
 > **Sanctions implication:** For US-regulated entities, outbound connections to Aeza Group ASNs (AS210644, AS216246) constitute engagement with OFAC-designated SDN infrastructure as of 2025-07-01 and are potentially OFAC-reportable. For EU entities, outbound connections to Stark Industries AS44477 / Worktitans AS209847 constitute engagement with EU-sanctioned infrastructure per EU Council Decision (CFSP) 2025/972. The Sep 2025 KrebsOnSecurity reporting (Tier-3) and Recorded Future Insikt Group reporting (Tier-2) document the Stark Industries sanctions-evasion rebrand to Worktitans, the operator's continued tenancy on AS209847 post-rebrand evidences awareness of the sanctions-evasion channel. Compliance teams should treat outbound connections to Aeza ASNs as engagement with OFAC-designated infrastructure (potentially reportable) and to Stark/Worktitans ASNs as engagement with EU-sanctioned infrastructure.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/inkognito-russian-vpn-phishing-185-221-196-118-20260516/inkognito-hosting-segmentation.svg" | relative_url }}" alt="2-column-by-3-row infographic of the operator's provider segmentation map. Top row (deep red sanctioned bands): Aeza IT — back-office host on AS210644 IP 185.221.196.118 running EspoCRM single-tenant CRM (00000xtrading.ru then fi1.inklens.co.uk), OFAC SDN designation 2025-07-01, operator did NOT migrate off post-sanction, engagement is OFAC-reportable for US entities. Stark Industries to Worktitans B.V. — long-term anchor on AS44477 then AS209847 IP 193.46.56.182 hosting unloki.ru VPN endpoint plus three BEC burn domain mail infrastructure, stable since 2023-11-17 over 2.5+ years, EU sanctioned 2025-05-20 under CFSP 2025/972, rebranded as Worktitans 12 days pre-sanction as sanctions-evasion vehicle per Tier-2 sourcing. Middle row: Timeweb (red current-phishing band) — JSC Timeweb AS9123 IP 176.124.211.174, primary phishing plus INK VPN production host, holds 165 plus 95 inklens.ru subdomains post-migration, hosts inkconnect.ru and api endpoint, not currently sanctioned RU commercial. U1host Ltd DE (yellow previous-phishing band) — AS213877 IP 77.239.101.23 German commercial, hosted decommissioned Bikaf VPN and earlier inklens.ru, 468 inklens.ru rrnames recovered via reverse-IP, operator-active March to April 2026, historical subdomain inventory pivot source. Bottom row (grey abused-legitimate bands): Cloudflare AS13335 — public front for cryptone.bot and inkconnect.ru, hides origin IPs, free-tier DDoS plus SSL termination plus Turnstile bot-challenge, US commercial not sanctioned, legitimate provider whose policy permits abuse. GitHub Pages then Amazon S3 AS36459 — apex chameleon decoy for inklens.co.uk renders github.com homepage while subdomains hide on Aeza IT origin, active since 2026-04-06 with S3 move 2026-05-04, novel chameleon-decoy tradecraft variant. Summary band: two state-sanctioned providers plus four functional roles segregated across six hosters; operator paid for premium takedown-resistant hosting specifically on the most enforcement-resistant providers; continued post-sanction tenancy on both Aeza and Stark equals informed sanctions-evasion posture. Footer detection anchors: AS210644 plus AS216246 Aeza OFAC SDN, AS44477 plus AS209847 Stark/Worktitans EU sanctioned, IPs 185.221.196.118, 193.46.56.182, 176.124.211.174, 77.239.101.23.">
+  <img loading="lazy" src="{{ "/assets/images/inkognito-russian-vpn-phishing-185-221-196-118-20260516/inkognito-hosting-segmentation.svg" | relative_url }}" alt="2-column-by-3-row infographic of the operator's provider segmentation map. Top row (deep red sanctioned bands): Aeza IT: back-office host on AS210644 IP 185.221.196.118 running EspoCRM single-tenant CRM (00000xtrading.ru then fi1.inklens.co.uk), OFAC SDN designation 2025-07-01, operator did NOT migrate off post-sanction, engagement is OFAC-reportable for US entities. Stark Industries to Worktitans B.V.: long-term anchor on AS44477 then AS209847 IP 193.46.56.182 hosting unloki.ru VPN endpoint plus three BEC burn domain mail infrastructure, stable since 2023-11-17 over 2.5+ years, EU sanctioned 2025-05-20 under CFSP 2025/972, rebranded as Worktitans 12 days pre-sanction as sanctions-evasion vehicle per Tier-2 sourcing. Middle row: Timeweb (red current-phishing band): JSC Timeweb AS9123 IP 176.124.211.174, primary phishing plus INK VPN production host, holds 165 plus 95 inklens.ru subdomains post-migration, hosts inkconnect.ru and api endpoint, not currently sanctioned RU commercial. U1host Ltd DE (yellow previous-phishing band): AS213877 IP 77.239.101.23 German commercial, hosted decommissioned Bikaf VPN and earlier inklens.ru, 468 inklens.ru rrnames recovered via reverse-IP, operator-active March to April 2026, historical subdomain inventory pivot source. Bottom row (grey abused-legitimate bands): Cloudflare AS13335: public front for cryptone.bot and inkconnect.ru, hides origin IPs, free-tier DDoS plus SSL termination plus Turnstile bot-challenge, US commercial not sanctioned, legitimate provider whose policy permits abuse. GitHub Pages then Amazon S3 AS36459: apex chameleon decoy for inklens.co.uk renders github.com homepage while subdomains hide on Aeza IT origin, active since 2026-04-06 with S3 move 2026-05-04, novel chameleon-decoy tradecraft variant. Summary band: two state-sanctioned providers plus four functional roles segregated across six hosters; operator paid for premium takedown-resistant hosting specifically on the most enforcement-resistant providers; continued post-sanction tenancy on both Aeza and Stark equals informed sanctions-evasion posture. Footer detection anchors: AS210644 plus AS216246 Aeza OFAC SDN, AS44477 plus AS209847 Stark/Worktitans EU sanctioned, IPs 185.221.196.118, 193.46.56.182, 176.124.211.174, 77.239.101.23.">
   <figcaption><em>Figure 5: The operator's six-hoster provider-segmentation map. Two sanctioned providers (deep red, top row), two current-or-historical operator-rented hosts (middle row), and two abused-legitimate cloud providers (grey, bottom row). The visual makes the operator's "functional role separation" thesis directly readable, back-office on one provider, long-term anchor on another, current phishing on a third, public fronts on US legitimate cloud. This is deliberate planning, not infrastructure-chasing.</em></figcaption>
 </figure>
 
-### 6.8 Cluster boundary — what this report deliberately does NOT cover
+### 6.8 Cluster boundary: what this report deliberately does NOT cover
 
 I cover **only Cluster B (Inkognito)** of the OpenDirectory 79.137.192.3 three-cluster investigation here. The two adjacent clusters are out of scope, with full coverage in the parent publication at [`/reports/opendirectory-79-137-192-3-20260515/`](/reports/opendirectory-79-137-192-3-20260515/):
 

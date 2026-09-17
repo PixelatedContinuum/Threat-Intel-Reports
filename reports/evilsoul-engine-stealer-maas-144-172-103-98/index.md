@@ -32,15 +32,15 @@ figure_nav:
       - label: "The two actors"
         anchor: "#101-the-two-actors"
       - label: "The retracted equation"
-        anchor: "#102-the-retracted-equation--do-not-reintroduce"
+        anchor: "#102-the-retracted-equation-do-not-reintroduce"
   - image: vt-corpus-map.svg
     parts:
       - label: "The factory"
         anchor: "#the-server-side-factory"
       - label: "Maploot and Tinarox"
-        anchor: "#7-the-maploot-and-tinarox-electron-twins--one-exfiltration-stack-two-builds"
+        anchor: "#7-the-maploot-and-tinarox-electron-twins-one-exfiltration-stack-two-builds"
       - label: "The Socket.IO variant"
-        anchor: "#6-the-299a2e7f-socketio-variant--stealer-plus-remote-access-trojan"
+        anchor: "#6-the-299a2e7f-socketio-variant-stealer-plus-remote-access-trojan"
       - label: "Who owns which"
         anchor: "#101-the-two-actors"
 ---
@@ -119,7 +119,7 @@ Hold two truths at once: the recovered infrastructure is a dead staging box, and
 
 The practical consequence: killing the recovered infrastructure does not remove the threat. This is a vendor node in a supply chain, not the end of a campaign. Each customer build is uniquely repacked, and those builds persist in customers' hands independent of the origin server's status. The takeaway for defenders is the one this report returns to repeatedly, detect behaviors, not hashes.
 
-### Victimology — no confirmed victims, one unresolved host
+### Victimology: no confirmed victims, one unresolved host
 
 The recovered operational logs support an honest, deliberately conservative victim assessment. There are no confirmed victims in the captured data.
 
@@ -186,7 +186,7 @@ Across all 21 recovered files, no existing YARA signature produced a single hit,
 
 ---
 
-## 5. Technical Capabilities — The Built Stealer Payload
+## 5. Technical Capabilities: The Built Stealer Payload
 {: .hl-tier-3}
 
 The EvilSoul-Engine stealer harvests a consumer's full credential footprint (Discord accounts, browser secrets, cryptocurrency wallets, and gaming accounts) and defeats the newest browser protection (Chrome App-Bound Encryption) to do it. This section walks each capability class with the specific evidence recovered from `stealer.js` and its sibling builds, then translates what each means for defenders. The capabilities are stated at the level of *what the malware does and how it is detected*; the offensive code paths are described at capability altitude, not reproduced.
@@ -214,19 +214,19 @@ For consumers the security impact is loss of a primary social and, increasingly,
 
 To detect it, the enrichment traffic is the tell, a burst of requests to `discord.com/api/v9/` endpoints (`/users/@me`, billing, relationships) from a non-browser process shortly after execution, and it survives repacking. Exfiltration of the harvest lands on Discord webhooks (Section 5.6).
 
-### 5.2 Browser credential and cookie theft — three mechanisms
+### 5.2 Browser credential and cookie theft: three mechanisms
 
 > **Analyst note:** This is the operation's center of gravity and its most technically serious capability. Modern Chrome protects saved cookies with "App-Bound Encryption" (ABE), a scheme meant to stop exactly this kind of theft by tying the decryption key to the browser's own process identity. EvilSoul-Engine builds defeat it three different ways, one commodity, two advanced. This section explains each at capability altitude and, for each, the behavioral signature a defender can hunt.
 
 The stealer reads passwords, cookies, autofill data, browsing history, and saved payment cards across roughly 25 Chromium-based browsers (all profiles) plus Firefox. It reaches that data through three distinct mechanisms of escalating sophistication.
 
-#### Mechanism 1 — DPAPI and SQLite (the commodity path)
+#### Mechanism 1: DPAPI and SQLite (the commodity path)
 
 The baseline path is the long-standing commodity technique: copy the browser's `Local State` file to obtain the master key, decrypt that key using the Windows Data Protection API (DPAPI, via `ProtectedData.Unprotect`), then read the `Login Data`, `Cookies`, `Web Data`, and `History` SQLite databases directly. This yields passwords, cookies, autofills, and credit cards on older browser versions and remains the fallback everywhere.
 
 This path is well-understood and broadly detected, but it still works against any browser that has not moved sensitive data behind App-Bound Encryption. It is the floor of the operation's capability, not the ceiling.
 
-#### Mechanism 2 — Chrome DevTools Protocol cookie theft (App-Bound-Encryption bypass, advanced)
+#### Mechanism 2: Chrome DevTools Protocol cookie theft (App-Bound-Encryption bypass, advanced)
 
 The advanced cookie-theft path sidesteps App-Bound Encryption entirely by making the browser decrypt its own cookies. The stealer relaunches the victim's own browser in headless mode, pointed at the victim's real profile directory, with a remote-debugging port enabled, then connects to that port over the Chrome DevTools Protocol (CDP) and calls `Network.getAllCookies`, which returns the cookies already decrypted by the browser itself. No administrator rights are required, and App-Bound Encryption is never confronted because the browser is doing the decryption in its normal course of operation.
 
@@ -244,7 +244,7 @@ From the recovered cookies, the stealer additionally lifts platform session toke
 
 A stolen live session cookie is worse than a stolen password: it represents an already-authenticated session, so it skips both the password prompt and the second factor. This is the single most valuable thing the operation steals, and its behavioral signature is unusually clean, a browser binary spawned with `--remote-debugging-port`, `--headless`, and `--user-data-dir` pointing at the real profile, by a parent process that is not itself a browser or a developer tool. That pattern is the highest-value hunt in this report (Section 10) and does not vary between builds.
 
-#### Mechanism 3 — process-token-impersonation decryptor (App-Bound-Encryption v20, the one genuinely advanced component)
+#### Mechanism 3: process-token-impersonation decryptor (App-Bound-Encryption v20, the one genuinely advanced component)
 
 The `stealer.js` build carries a second, distinct App-Bound-Encryption bypass, the operation's most sophisticated single component. *(App-Bound Encryption is Chrome's cookie- and credential-protection scheme, introduced in Chrome 127; "v20" denotes the specific key-blob generation this decryptor targets.)* It downloads a portable Python runtime from the operator's server, pipes a decryptor script to it over standard input (so no `.py` file is ever written to disk), elevates its own privileges, impersonates the security context of the Windows `lsass.exe` process, and uses that borrowed context with a Windows cryptographic provider to unwrap the app-bound key and decrypt the stored blobs.
 
@@ -331,7 +331,7 @@ To detect it, the network signatures are strong precisely because they are hardc
 
 ---
 
-## 6. The 299a2e7f Socket.IO Variant — Stealer Plus Remote Access Trojan
+## 6. The 299a2e7f Socket.IO Variant: Stealer Plus Remote Access Trojan
 {: .hl-tier-3}
 
 > **Analyst note:** This is a distinct EvilSoul-Engine product tier, not just a fire-and-forget stealer, but a stealer with a full real-time remote access trojan bolted on, driven over a persistent Socket.IO channel. Its payload was V8 bytecode, so static analysis was unable to read it; its decrypted source was recovered from process memory during observed execution. This section describes what the tier can do to an infected host and how each capability is detected. The remote-control internals are summarized at capability altitude.
@@ -352,7 +352,7 @@ At capability altitude, the tier exposes the infected host to the operator acros
 
 This tier crosses the line from data theft to hands-on host control. The operator is not just harvesting credentials. They are watching the screen in real time, moving the cursor, and able to brick the machine on command. For a victim, that is the difference between a stolen password and a stranger operating their computer.
 
-### 6.2 Runtime webhook resolution — a detection-relevant design choice
+### 6.2 Runtime webhook resolution: a detection-relevant design choice
 
 Unlike the Maploot and Tinarox builds (which hardcode their Discord webhooks), the `299a2e7f` build hardcodes no exfiltration webhook at all. Instead, at runtime it POSTs its license key to a relay endpoint, `http://198.1.195[.]210:3000/tralalero`, and receives the current Discord webhook URL in the response. A fallback key (`6D479A7E665F`) is sent in every call.
 
@@ -376,7 +376,7 @@ Because this tier's payload is V8 bytecode, static analysis was insufficient and
 
 ---
 
-## 7. The Maploot and Tinarox Electron Twins — One Exfiltration Stack, Two Builds
+## 7. The Maploot and Tinarox Electron Twins: One Exfiltration Stack, Two Builds
 {: .hl-tier-3}
 
 > **Analyst note:** Maploot and Tinarox are two EvilSoul-Engine Electron builds that masquerade as free games and are delivered as MSI installers. Their significance is evidentiary: they prove, at the byte level, that the same operator produced both, and they let defenders watch the factory's packer *evolve* between two builds. This section explains the shared capabilities, the decisive same-operator finding, and what the twins reveal about the builder.
@@ -432,7 +432,7 @@ The tool loads its own payload DLL via direct-syscall reflective process hollowi
 
 The report deliberately does not reproduce the tool's injection or key-extraction internals; they are public in the upstream project, and the intel value here is *adoption*, not mechanism.
 
-### 8.2 Operator modification — a fork, not pristine upstream
+### 8.2 Operator modification: a fork, not pristine upstream
 
 The recovered binaries are an operator-modified fork (HIGH confidence), not the pristine upstream tool. The executable's banner reads verbatim `" by @xaitax / @breakingupslow"` (co-crediting the EvilSoul-Engine developer) and the DLL embeds a copyright line referencing `t.me/evilsoulstealer` after the original author's credit. This is independent, code-level confirmation of the tool's tie to the EvilSoul (`@breakingupslow`) cluster, and it is one of the threads that separates the tooling-lineage actor from the kit operator (Section 9).
 
@@ -449,7 +449,7 @@ Two points for defenders:
 
 ---
 
-## 9. Dynamic Analysis — The 299a2e7f Execution Behavior
+## 9. Dynamic Analysis: The 299a2e7f Execution Behavior
 {: .hl-tier-3}
 
 > **Analyst note:** The `299a2e7f` Socket.IO variant ships as V8 bytecode, which static tooling cannot read as source. Its behavior and its decrypted JavaScript source were instead recovered from observed execution, the malware's own process memory exposed the source it was running, described in Section 6. This section presents what the sample did, in the order it did it.
@@ -496,7 +496,7 @@ The primary attribution is to the kit operator, `n_3_xl` / `@govbrasil` / KAIDO 
 
 The tooling lineage runs to the EvilSoul-Engine MaaS, developer `@breakingupslow` in Brazil, which I hold DEFINITE on lineage and MODERATE on relationship. The recovered kit *is built on* that MaaS, since the npm project is literally named `EvilSoul-Engine`, the build configuration carries `EVIL-DAY-*` license keys, and the kit sits on the same Brazilian hosting ecosystem as the reported EvilSoul cluster. That lineage is DEFINITE. The EvilSoul developer is a separate named actor, `@breakingupslow` (Telegram ID `5834325304`), documented in public reporting as the author of the EvilSoul Discord infostealer. I assess `n_3_xl`'s relationship to that operation, as customer, reseller or affiliate, at MODERATE, enough evidence to assert a licensing or affiliate tie but not enough to specify its exact commercial form.
 
-### 10.2 The retracted equation — do not reintroduce
+### 10.2 The retracted equation: do not reintroduce
 
 An earlier working hypothesis held that `0xK41` / `n_3_xl` is `@breakingupslow` (the same person). That equation is RETRACTED and assessed UNSUPPORTED / LOW (<50%). An Analysis of Competing Hypotheses resolved it as the losing hypothesis with five inconsistencies against zero for the "distinct individuals" model. The decisive disconfirming evidence:
 
@@ -653,7 +653,7 @@ The feed is formatted for direct ingestion into SIEM and EDR tooling (no defangi
 | Host / behavioral IOCs | 12+ | Drop paths, registry keys, scheduled task, license keys, operator-signature constants |
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/evilsoul-engine-stealer-maas-144-172-103-98/vt-corpus-map.svg" | relative_url }}" alt="Sample corpus map. The dead factory at 144.172.103.98:8888 sits at the top; below it two product families branch out — EvilSoul stealer builds (Maploot, Tinarox, and the 299a2e7f pkg-Node variant) sharing one exfiltration backend, and KAIDO Quasar RAT builds (c7542e82, 385d20ca, 022944768) pointing at the live c2.kaidoo.com.br C2 — each sample annotated with its recovery method and key detection anchors.">
+  <img loading="lazy" src="{{ "/assets/images/evilsoul-engine-stealer-maas-144-172-103-98/vt-corpus-map.svg" | relative_url }}" alt="Sample corpus map. The dead factory at 144.172.103.98:8888 sits at the top; below it two product families branch out: EvilSoul stealer builds (Maploot, Tinarox, and the 299a2e7f pkg-Node variant) sharing one exfiltration backend, and KAIDO Quasar RAT builds (c7542e82, 385d20ca, 022944768) pointing at the live c2.kaidoo.com.br C2, each sample annotated with its recovery method and key detection anchors.">
   <figcaption><em>Figure 8: The VirusTotal sample corpus mapped to the torn-down factory. Because the four native factory-output <code>static/*.exe</code> files were never recovered as binaries, VirusTotal samples fill the gap and show what the factory produced: the EvilSoul-Engine stealer builds (Maploot and Tinarox Electron twins plus the <code>299a2e7f</code> pkg-Node Socket.IO variant), which share one byte-for-byte exfiltration stack, and (for cross-campaign context) the operator's separate, live KAIDO Quasar-fork RAT builds. The map orients the reader to how the tiers relate and which are recovered versus inferred; per-indicator confidence and recommended <code>BLOCK</code>/<code>HUNT</code> actions live in the IOC feed. The RAT builds are the subject of the companion report, not this one.</em></figcaption>
 </figure>
 
@@ -687,19 +687,19 @@ That file provides 5 YARA rules (targeting the operator-signature packer constan
 
 The stages below trace a typical EvilSoul-Engine built payload from delivery through exfiltration. Each stage carries the highest-value detection signal for that point in the lifecycle.
 
-#### Stage 1 — Delivery and execution
+#### Stage 1: Delivery and execution
 
 > **Analyst note:** This is where the payload lands and starts running, typically as an Electron game installer (Maploot/Tinarox) or a packed Node executable delivered through Discord lures or cracked-software bait. There is no exploit here; the victim runs the file. Detection at this stage is weak because the payload is uniquely packed, so the strongest early signal is the file itself matching a durable string anchor if it is scanned before execution.
 
 Delivery is social-engineering-driven, a game download, a cracked application, a Discord attachment. The built payload executes as a Node/Electron process or an MSI dropper that stages an Electron payload. The durable detection here is a **YARA scan of the staged file** for the operator-signature packer constant, which survives the js-confuser layer because it lives in the loader. Because every build is repacked, pre-execution file scanning is a confirming layer, not a reliable gate. The behavioral stages below are where detection is strongest.
 
-#### Stage 2 — Anti-analysis and defense suppression
+#### Stage 2: Anti-analysis and defense suppression
 
 > **Analyst note:** Before doing anything noisy, the payload checks whether it is being watched (sandbox and analysis-VM checks) and, in some tiers, disables the host's defenses outright, turning off Microsoft Defender, the firewall, and installed antivirus. This is the single best centralized-log detection opportunity in the whole lifecycle, because the disabling commands are logged even after the defenses are gone.
 
 Two behaviors define this stage. First, the hardware-UUID and username checks against a sandbox blocklist (a clean exit on a match). Second, and far more detectable, the **Defender-suppression chain**: a whole-drive Defender exclusion (`Add-MpPreference -ExclusionPath 'C:\'`), real-time monitoring off (`Set-MpPreference -DisableRealtimeMonitoring $true`), firewall off (`netsh advfirewall set allprofiles state off`), and antivirus process termination. These land in **PowerShell script-block logging (Windows Event ID 4104)** regardless of the endpoint agent's health, making this the highest-signal, lowest-false-positive hunt in the report. The `stealer.js` timing evasion (a 7-10 minute sleep before noisy operations) sits at this stage too, detection should target the noisy operations that follow the sleep, not the sleep itself.
 
-#### Stage 3 — Credential access (the objective)
+#### Stage 3: Credential access (the objective)
 
 > **Analyst note:** This is what the malware is for, harvesting Discord accounts, browser passwords and cookies, crypto wallets, and gaming accounts, and defeating Chrome's App-Bound Encryption to reach the cookies. Two behaviors here are unusually clean detection signals that hold regardless of how the payload was packed, because they involve spawning other processes in distinctive ways.
 
@@ -710,13 +710,13 @@ The two anchor behaviors, both build-independent:
 
 Discord account theft produces a burst of `discord.com/api/v9/` enrichment requests from a non-browser process; browser theft produces direct reads of `Login Data`, `Cookies`, `Web Data`, and LevelDB stores (Sysmon Event ID 11 / file-access telemetry).
 
-#### Stage 4 — Persistence
+#### Stage 4: Persistence
 
 > **Analyst note:** The payload plants mechanisms to survive reboot, registry keys, Startup scripts, and a scheduled task disguised as a legitimate Microsoft component. The disguise is also the detection anchor: a runtime-created task claiming to be Microsoft is a contradiction, because real Microsoft tasks are installed by the operating system, not created on the fly by a user process.
 
 Persistence is redundant (Section 5.5). The standout detection is the hidden scheduled task authored as `Microsoft Corporation`, a scheduled-task creation event (Windows Event ID 4698) with that author on a task written by a non-system process. Supporting anchors: hidden `.lnk` and `.cmd` files in `%TEMP%` and Startup written by a non-system process, and the `watcher.vbs` watchdog chain in the `299a2e7f` tier.
 
-#### Stage 5 — Command-and-control and exfiltration
+#### Stage 5: Command-and-control and exfiltration
 
 > **Analyst note:** The harvested data leaves the host, over hardcoded Discord webhooks, cloud file-host uploads, or a persistent real-time channel in the interactive tier. Because the destinations are hardcoded, this stage produces the strongest network signatures, and the interactive tier's persistent channel is itself a distinctive protocol pattern.
 

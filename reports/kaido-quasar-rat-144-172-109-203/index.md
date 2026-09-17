@@ -127,7 +127,7 @@ Calling it a Quasar fork tells a defender two useful things immediately. First, 
 ## 4. Technical Capabilities Deep-Dive
 {: .hl-tier-3}
 
-### 4.1 Hidden-desktop session hijacking (HVNC) — the capability that sets this apart
+### 4.1 Hidden-desktop session hijacking (HVNC): the capability that sets this apart
 
 > **Analyst note:** This is the capability that makes KAIDO dangerous beyond a normal RAT. HVNC ("Hidden Virtual Network Computing") lets an operator run and control programs on a second, invisible desktop that never appears on the victim's monitor. KAIDO uses it to hijack the victim's *already-logged-in* browser session. The subsection below describes what the capability does and why it defeats common defenses; it does not reproduce the offensive code.
 
@@ -180,7 +180,7 @@ KAIDO ships with fourteen third-party helper libraries bundled inside the assemb
 
 The screen-capture channel is directly evidenced, because the SharpDX and DXGI stack pairs with the HVNC capture strings recovered from the binary, so screen surveillance is HIGH confidence. Audio and webcam capture are inferred from the dependency stack, since the sample bundles the exact libraries used to record a microphone (NAudio) and a webcam (AForge/DirectShow), but neither channel fires without a live operator connection because all such behavior is command-and-control-gated. The honest read is that KAIDO is *built to* record audio and webcam and carries the libraries to do it, which I hold MODERATE, while screen capture and HVNC are directly confirmed. Taken together, a fully activated KAIDO implant can watch the screen, listen through the microphone, see through the webcam, and log every keystroke, which is a complete surveillance capability rather than merely a data thief.
 
-### 4.3 Command-and-control-gated staging — why sandboxes miss it
+### 4.3 Command-and-control-gated staging: why sandboxes miss it
 
 > **Analyst note:** This subsection explains the behavior that most affects day-to-day triage: KAIDO does nothing until it reaches its operator. Understanding this prevents a dangerous mistake, trusting a "clean" automated sandbox report on a real KAIDO sample.
 
@@ -255,19 +255,19 @@ What did not happen matters just as much. Absent a live command-and-control conn
 
 The observed and statically-recovered behavior maps to the following stages. Each stage is annotated with the confidence of the underlying evidence.
 
-#### Stage 1 — Delivery and initial execution
+#### Stage 1: Delivery and initial execution
 
 > **Analyst note:** How the RAT arrives and first runs. KAIDO is distributed through social lures rather than exploits, so the first defensive opportunity is at the point a user is convinced to run a disguised file.
 
 KAIDO is distributed via consumer-focused social engineering (Discord lures and cracked-software bait) as a file masquerading as a legitimate `svchost.exe`. On first execution it immediately removes its own internet-origin marker (the Mark-of-the-Web self-deletion at T+2.4s) to suppress SmartScreen warnings on later launches. No exploit or vulnerability is involved; delivery depends on user action.
 
-#### Stage 2 — Command-and-control and staging gate
+#### Stage 2: Command-and-control and staging gate
 
 > **Analyst note:** KAIDO's defining stage. Rather than acting immediately, the RAT phones home and waits. All further behavior is unlocked only after it reaches its operator.
 
 The RAT resolves its command-and-control domain and beacons over raw TCP on port 4782 using the Quasar binary protocol. Until a valid handshake completes, it stays dormant, no persistence, no payloads, no surveillance. This gate (mapped to Execution Guardrails, T1480) is what makes KAIDO look benign in a commodity sandbox and is the reason detection leans on the network beacon and static anchors rather than post-infection behavior.
 
-#### Stage 3 — Remote control, session hijacking, and surveillance (command-and-control-gated)
+#### Stage 3: Remote control, session hijacking, and surveillance (command-and-control-gated)
 
 > **Analyst note:** What the operator can do once the implant is live. This stage was recovered statically, not directly triggered during observation, because it unlocks only after the command-and-control handshake.
 
@@ -331,7 +331,7 @@ A dedicated certificate and fingerprint fleet-sweep across three independent int
 
 Full detection content (YARA rules, Sigma rules, and Suricata signatures) is published in a separate file for direct deployment: **[`/hunting-detections/kaido-quasar-rat-detections/`](/hunting-detections/kaido-quasar-rat-detections/)**. That file contains three YARA rules, three Sigma rules, and two Suricata signatures, all derived from the static and dynamic evidence in this report. This section summarizes the detection strategy and its known limits; it does not restate the rules.
 
-### 9.1 Detection strategy — behavior and network over hashes
+### 9.1 Detection strategy: behavior and network over hashes
 
 Because each KAIDO build is separately packed and hash blocking is low-yield, detection should be layered across three evidence types, in priority order:
 

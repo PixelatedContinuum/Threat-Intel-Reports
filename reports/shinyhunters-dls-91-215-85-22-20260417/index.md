@@ -286,7 +286,7 @@ As of **2026-04-20** (post-outreach window close):
 
 At the time of analysis (2026-04-16), ransomware.live tracked 28 of 29 victims on this DLS, leaving Alert360 as the sole novel entry. ransomware.live's subsequent 2026-04-19 listing of Alert360 closes that public-reporting gap.
 
-### 4.3 Alert360 — the previously-unacknowledged victim (key finding)
+### 4.3 Alert360: the previously-unacknowledged victim (key finding)
 
 **What is Alert360?** A US home and small-business alarm-monitoring provider. The data class implied by its business model, home addresses, alarm-system configurations, disarm PINs, account-holder identity, and (potentially) absence patterns inferable from arming history, is among the most operationally dangerous on the DLS. Unlike the financial-services victims, the harm vector here is not identity theft or wire fraud; it is **direct kinetic enablement** (burglary, stalking, targeted physical entry). When overlaid with travel-window data inferable from the Amtrak archive (also on this DLS), the cross-victim aggregation risk is unusually high.
 
@@ -350,7 +350,7 @@ The upload-window pattern shows a bulk drop on 21 April. Five of the seven, Cana
 
 **Marcus & Millichap: uploaded during the re-scan window.** The Marcus & Millichap archive was uploaded at 2026-04-24 13:54 UTC, approximately 46 minutes before the re-scan's live HEAD at 14:40 UTC. The operation is publishing actively and continuously.
 
-#### 4.7.2 Confirmed add-then-remove event — Medtronic
+#### 4.7.2 Confirmed add-then-remove event: Medtronic
 
 An independent Cybernews report published 2026-04-23 (and republished by TechRadar the same day) identified Medtronic as a DLS victim with approximately **9 million records of personally identifiable information plus internal corporate data**. Cybernews further reported that Medtronic's listing has been **removed from the DLS in the interim**, "suggesting that the company either paid the ransom, or is currently negotiating the release of the files."
 
@@ -361,7 +361,7 @@ Independent verification from this investigation:
 
 This is the **first documented add-then-remove event** on this DLS. It establishes empirically that the operators are willing to withdraw listings (whether as negotiation pressure, post-payment compliance, or operational re-packaging) and that absence of a victim from the clearnet DLS at a single point in time does **not** constitute evidence of non-compromise. Defenders investigating rumours that an organization "was on the DLS and is now gone" should treat the rumour as credible.
 
-#### 4.7.3 Additional victim named by Cybernews but not observed on the clearnet DLS — Aman Resorts
+#### 4.7.3 Additional victim named by Cybernews but not observed on the clearnet DLS: Aman Resorts
 
 Cybernews' 2026-04-23 report names **Aman Resorts** as one of the ~40 victim organizations in the current DLS cluster. Aman Resorts is not present on the clearnet DLS at the 2026-04-24 14:40 UTC live listing and was not observed during this investigation's 2026-04-16 crawl.
 
@@ -373,7 +373,7 @@ Three non-exclusive hypotheses, ordered by plausibility:
 
 Aman Resorts is **not** added to §4.1's 29-victim roster on the strength of Cybernews' naming alone. It is recorded here as **public-reported, not directly observed**; a direct DLS observation or primary-source screenshot would be required to promote it to DEFINITE.
 
-#### 4.7.4 Retroactive correction — Odido subdirectory was not actually empty
+#### 4.7.4 Retroactive correction: Odido subdirectory was not actually empty
 
 §4.1's roster records `/pay_or_leak/odido/` as "(subfolder empty)" with a note that "archive withdrawn after victim refused ransom per public statement." The 2026-04-24 live listing shows the subdirectory contains two files:
 
@@ -386,7 +386,7 @@ Both file `Last-Modified` timestamps *precede* the original investigation's 2026
 
 The corresponding "no archive present" claim for Odido in §2.1's subdirectory list should be similarly treated. The archive is present and has been present since at least 2026-03-05.
 
-#### 4.7.5 Public reporting corroboration — Cybernews and TechRadar
+#### 4.7.5 Public reporting corroboration: Cybernews and TechRadar
 
 Independent mainstream coverage by Cybernews (2026-04-23, primary) and TechRadar (2026-04-23, secondary citing Cybernews) has named the DLS and the following victims overlapping with §4.1 and §4.7.1 of this report: Mytheresa, Zara, Carnival, 7-Eleven, Pitney Bowes, Canada Life, Hallmark, Medtronic, Aman Resorts, Marcus & Millichap, and "others" (Cybernews' language). Cybernews' summary (via TechRadar):
 
@@ -465,7 +465,7 @@ On net assessment, the campaign cluster is *expanding* rather than contracting, 
 
 > **Analyst note:** This section assesses the two hosting providers underlying the operation. The takeaway is that PROSPERO is a confirmed Russian bulletproof host with extensive prior abuse documentation, DDoS-Guard is a structurally-abused commercial DDoS-mitigation service, and the operator's choice to split across both is a deliberate OPSEC decision. A neighbor-scan of the entire PROSPERO footprint found no additional ShinyHunters infrastructure.
 
-### 6.1 PROSPERO OOO (AS200593) — DLS host
+### 6.1 PROSPERO OOO (AS200593): DLS host
 
 PROSPERO is a Russia-based hosting provider repeatedly documented in mainstream security reporting as a bulletproof host. Krebs on Security (2025-02-28) identified PROSPERO as a notorious malware and spam host and reported its upstream routing through Kaspersky Lab networks (AS209030) since December 2024. Intrinsec (Tier-2) has linked PROSPERO infrastructure to the SecureHost and BEARHOST bulletproof brands marketed on Russian-language criminal forums and documented hosting of SocGholish, GootLoader, FakeBat, SpyNote, and multiple ransomware operations. Resecurity (Tier-2) has identified PROSPERO and its peer Proton66 as likely destinations for displaced tenants after the BEARHOST exit.
 
@@ -490,7 +490,7 @@ This investigation scanned 512 IPs across the two PROSPERO neighbor prefixes (`9
 
 Co-tenancy is not collaboration. Unrelated criminal tenants on the same AS are an artifact of bulletproof-hosting market dynamics, not evidence that ShinyHunters is operationally linked to PLAY, Qilin, RansomHub, or the other malware families AlienVault OTX correlates with `91.215.85.22`. Those correlations should not be propagated as ShinyHunters attribution.
 
-### 6.3 DDoS-Guard (AS57724) — identity-page host
+### 6.3 DDoS-Guard (AS57724): identity-page host
 
 DDoS-Guard is a Russia-based DDoS-protection and hosting provider operating approximately 803,874 domains across approximately 3,046 IPs per public BGP data. It is a legitimate commercial service (not a purpose-built criminal hosting provider in the PROSPERO sense), but its product model (origin-IP masking via DDoS-mitigation fronting) provides equivalent functional protection against Western takedown efforts and is widely abused by threat actors. ThreatSTOP documented historical abuse patterns in 2021. No Tier-2 2025-2026 primary research on DDoS-Guard was identified during this investigation; this is a documented research gap.
 

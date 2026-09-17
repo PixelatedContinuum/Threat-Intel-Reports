@@ -342,7 +342,7 @@ The production build enables 8 boolean feature flags (obfuscated names: `bool_2`
 
 ---
 
-## 5. Technical Analysis — Shadow RAT v2.6.4.0
+## 5. Technical Analysis: Shadow RAT v2.6.4.0
 {: .hl-tier-3}
 
 ### 5.1 Static Analysis: File Characteristics
@@ -611,7 +611,7 @@ A `FunStuff` namespace in `Shadow.Common.Messages` contains non-destructive hara
 
 ---
 
-## 6. Technical Analysis — XWorm 3.0-5.0
+## 6. Technical Analysis: XWorm 3.0-5.0
 {: .hl-tier-3}
 
 ### 6.1 Static Analysis: File Characteristics
@@ -1362,7 +1362,7 @@ If an endpoint compromise is confirmed, the following response phases apply:
 - Single operator (shared C2 IP across all four builds)
 - Financial motivation (crypto clipper, credential stealer, Steam theft, DEFINITE)
 
-### HIGH (Strong evidence — code confirmed, or multiple corroborating sources)
+### HIGH (Strong evidence: code confirmed, or multiple corroborating sources)
 - Shadow RAT is a private fork of Pulsar RAT (namespace/capability overlay, developer link via KDot227)
 - WinRE persistence capability (DoAddWinREPersistence code confirmed; activation is operator-initiated)
 - Firewall disable, AV/Defender disruption (code confirmed)
@@ -1374,7 +1374,7 @@ If an endpoint compromise is confirmed, the following response phases apply:
 - ScreenConnect deployment on C2 server (March 2026)
 - Poor operator OPSEC (exposed ports, stable IP, CVE-2020-0796)
 
-### MODERATE (Reasonable evidence — code present but activation conditions unclear, or single source)
+### MODERATE (Reasonable evidence: code present but activation conditions unclear, or single source)
 - Pastebin dead drop C2 resolver (boolean disabled; code functional)
 - Ngrok tunneling (config fields present; operator-initiated)
 - Process hollowing/RunPE (config fields present; trigger conditions not confirmed)

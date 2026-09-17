@@ -661,7 +661,7 @@ From the 38 executables in the open directory, **16 samples were selected for an
 
 **Multi-Stage Validation:**
 - Static analysis → Dynamic analysis → Memory forensics (three independent methodologies)
-- Cross-tool verification: IOCs validated across YARA, CAPA, memory forensics, autostart-persistence baselining, PE static analysis
+- Cross-tool verification: IOCs validated across YARA, static capability analysis, memory forensics, autostart-persistence baselining, PE static analysis
 - Behavioral timeline verification: Process trees from memory forensics tool matched against process monitoring tool execution logs
 - Detection signature testing: YARA rules tested against samples (100% detection) + clean systems (zero false positives)
 

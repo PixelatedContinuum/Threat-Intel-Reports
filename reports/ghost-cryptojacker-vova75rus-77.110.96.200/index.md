@@ -31,13 +31,13 @@ figure_nav:
   - image: ghost-kit-4tier-supply-chain.svg
     parts:
       - label: "Tier 1 · UnamSanctam"
-        anchor: "#95-unamsanctam--high-confidence-90-on-passive-oss-role-not-a-case-9-threat-actor"
+        anchor: "#95-unamsanctam-high-confidence-90-on-passive-oss-role-not-a-case-9-threat-actor"
       - label: "Tier 2 · Vova75Rus"
-        anchor: "#92-vova75rus--high-confidence-88-named-actor"
+        anchor: "#92-vova75rus-high-confidence-88-named-actor"
       - label: "Tier 3 · Operator A"
-        anchor: "#93-uta-2026-016-operator-a-7711096200--low-confidence-65-top-of-the-low-band-50-70"
+        anchor: "#93-uta-2026-016-operator-a-7711096200-low-confidence-65-top-of-the-low-band-50-70"
       - label: "Tier 4 · Operator B"
-        anchor: "#94-uta-2026-017-operator-b-77110125145--low-confidence-60-within-the-low-band-50-70"
+        anchor: "#94-uta-2026-017-operator-b-77110125145-low-confidence-60-within-the-low-band-50-70"
       - label: "The model itself"
         anchor: "#91-the-4-tier-supply-chain-model-central-attribution-finding"
 ---
@@ -669,7 +669,7 @@ This 4-tier model is the **ruling result** of the Analysis of Competing Hypothes
 - **Byte-identical kit binary across customers:** Single-operator scenarios compile per-target; commodity kits ship pre-built artifacts. GHOST is the latter.
 - **Per-customer 17-byte config delta:** The ghost.sh delta is exactly the wallet addresses + pool URLs + PIP_PAYLOAD_REPO URL. This is the signature of config-substitution distribution, not source-modification.
 
-### 9.2 Vova75Rus — HIGH Confidence (88%), NAMED Actor
+### 9.2 Vova75Rus: HIGH Confidence (88%), NAMED Actor
 
 The identity anchors on GitHub UID 73169104, handle `Vova75Rus`. The account was created 2020-10-20 and suspended by GitHub Trust & Safety on 2026-05-25.
 
@@ -692,7 +692,7 @@ The identity anchors on GitHub UID 73169104, handle `Vova75Rus`. The account was
 
 **Language precision per attribution confidence scale.** HIGH 88% maps to language like "highly likely", "strong indicators suggest", "probable attribution to". The report avoids "attributed to" (DEFINITE language) for Vova75Rus because the real-world identity remains unverified beyond the GitHub handle.
 
-### 9.3 UTA-2026-016 (Operator-A, 77.110.96.200) — LOW Confidence (65%, top of the LOW band 50-70%)
+### 9.3 UTA-2026-016 (Operator-A, 77.110.96.200): LOW Confidence (65%, top of the LOW band 50-70%)
 
 **Confidence statement.**
 - **Confidence:** LOW (65%, top of the LOW band 50-70%), upgraded from LOW (60%) in the parent campaign via four net-new evidence elements added in this sub-report.
@@ -723,7 +723,7 @@ cfx:aasktcha7r... → same consolidator → same off-ramp
 
 The historical wallet cfx:aasktcha7r... drains to the same consolidator as the current wallet, proving 6-month continuous single-operator campaign and providing a wallet-rotation forensic anchor.
 
-### 9.4 UTA-2026-017 (Operator-B, 77.110.125.145) — LOW Confidence (60%, within the LOW band 50-70%)
+### 9.4 UTA-2026-017 (Operator-B, 77.110.125.145): LOW Confidence (60%, within the LOW band 50-70%)
 
 **Confidence statement.**
 - **Confidence:** LOW (60%, within the LOW band 50-70%), upgraded from LOW (55%) via the DEFINITE 183-Cyrillic-word finding in `New_scanner.py`.
@@ -737,7 +737,7 @@ The historical wallet cfx:aasktcha7r... drains to the same consolidator as the c
 3. **Host abandoned ~5 days post-Censys** (last activity 2026-04-12). Reason for abandonment: 4 alternatives (operator-quit / detection / kit-author intervention / pool-side payout failure), unresolved.
 4. **Operator-B "Asia-based" hypothesis EXPLICITLY RETRACTED.** The earlier inference that Operator-B was Asia-based (based on `cfx-asia1.nanopool.org` pool config) was wrong: pool routing region is operational convenience, not geographic indicator.
 
-### 9.5 UnamSanctam — HIGH Confidence (90%) on Passive OSS Role, NOT a Case 9 Threat Actor
+### 9.5 UnamSanctam: HIGH Confidence (90%) on Passive OSS Role, NOT a Case 9 Threat Actor
 
 UnamSanctam is included in this section for **supply-chain context only**. UnamSanctam is **not** a Case 9 threat actor.
 
@@ -749,7 +749,7 @@ UnamSanctam's involvement in GHOST is passive. The upstream attribution comment 
 
 **Why UnamSanctam is included in this section despite not being a Case 9 threat actor.** The 4-tier supply chain model is incoherent without naming the upstream OSS tier. Defenders evaluating their exposure to the GHOST kit family need to understand that UnamWebPanel components in deployed PHP files do not implicate UnamSanctam, they implicate the downstream kit author who bundled the upstream OSS.
 
-### 9.6 Hisana — INSUFFICIENT (Ecosystem Context Only, Not Case 9 Attribution)
+### 9.6 Hisana: INSUFFICIENT (Ecosystem Context Only, Not Case 9 Attribution)
 
 Hisana exists in the public threat-intelligence record only via GHOST kit artifact references, `_anti_hisana` function name, `kill_list.patterns` regex entry, port 10808 C2 port. Zero independent public threat intelligence on Hisana's developer identity, infrastructure, or victim scope. This is a documented intelligence gap.
 
@@ -806,7 +806,7 @@ The first layer is file-based at-rest detection with YARA. Scan endpoint filesys
 
 The 6-week post-Censys VT detection landscape snapshot confirms **zero AV vendor has shipped GHOST family signatures** as of 2026-05-25. This is a structural gap: custom kits with low telemetry volume operate below AV vendor automated analysis pipeline triggers. The rules in the Section 10 detection file fill that gap for the YARA/Sigma/Suricata-capable defender. Defenders who encounter `libpam_cache.so` or `min1.sh` in their environment are strongly encouraged to submit those samples to VirusTotal, community sample submission is the mechanism that closes the detection gap for the broader defender ecosystem, not just the submitting organization.
 
-### Response Orientation (Brief — Not a Step-by-Step IR Guide)
+### Response Orientation (Brief: Not a Step-by-Step IR Guide)
 
 This is a third-party intelligence publication, not an incident response playbook. Readers with confirmed-compromise scenarios should engage their internal IR team or a dedicated playbook for execution-level detail. The following orientation covers what to address, not how.
 

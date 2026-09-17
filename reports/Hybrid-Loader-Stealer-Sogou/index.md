@@ -206,7 +206,7 @@ Command-and-control relies on disposable ccTLD domains and cloud IPs (6[.]ar →
 > **Analyst note:** This section details the specific technical capabilities identified through static analysis tools. Each capability was confirmed by observed API calls, function signatures, or behavioral patterns, not inferred from the filename or metadata alone. Understanding these capabilities helps defenders know what to look for in endpoint telemetry.
 
 ### File System Manipulation
-- **Evidence:** Capability analysis tool (Capa) flagged capabilities to create, delete, copy, and move files and directories, as well as read/write operations and recursive enumeration. It also detected the ability to read .ini files.  
+- **Evidence:** Static capability analysis flagged the ability to create, delete, copy, and move files and directories, as well as read/write operations and recursive enumeration. It also detected the ability to read .ini files.  
 - **Reasoning:** .ini files often store application settings, credentials, or environment details. Reading them can allow malware to harvest sensitive information or hijack application behavior.  
 - **Impact:**  
   - Enables the attacker to drop payloads, delete evidence, and search for sensitive files.  

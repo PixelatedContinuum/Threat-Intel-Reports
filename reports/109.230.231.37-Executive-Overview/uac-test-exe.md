@@ -355,13 +355,13 @@ The tool implements minimal anti-analysis techniques consistent with Rust compil
 - **Bypass**: Modern debuggers handle SEH correctly
 
 **Memory Protection (VirtualProtect):**
-- **Detection**: CAPA identified `VirtualProtect` API calls
+- **Detection**: Static capability analysis identified `VirtualProtect` API calls
 - **Purpose**: Modify memory page permissions (mark code sections executable)
 - **Impact**: LOW - Normal behavior for Rust binaries, not malicious obfuscation
 - **Characteristics**: Used to allocate RW and RWX memory regions
 
 **Compilation Language (Rust):**
-- **Detection**: FLOSS identified language as Rust with library paths
+- **Detection**: Automated string extraction identified language as Rust with library paths
 - **Evidence**:
   ```
   library\alloc\src\string.rs

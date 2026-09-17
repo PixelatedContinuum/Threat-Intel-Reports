@@ -93,7 +93,7 @@ The OPSEC failures (open directory, exposed C2 panel, debug logs in droppers) in
 | **Data exfiltration and credential resale**      | HIGH       | The operator's possession of 5.85M likely-valid credential pairs, sourced from a named Telegram data broker, indicates an established pipeline for credential monetization. Credentials harvested from new victims feed the same pipeline.                                                           |
 
 
-### Operational Impact — If Infection Is Confirmed
+### Operational Impact: If Infection Is Confirmed
 
 For immediate containment, isolate affected systems, block the confirmed C2 IPs, audit and revoke ScreenConnect sessions connected to `adminxyzhosting[.]com:8041`, and rotate credentials for privileged and service accounts reachable from those systems.
 
@@ -242,7 +242,7 @@ This matters because the automated ransomware plugin is not a standard feature o
 
 ---
 
-### 5b. XwormLoader — 11-Stage Reflective PE Loader 
+### 5b. XwormLoader: 11-Stage Reflective PE Loader 
 
 > **Analyst note:** XwormLoader is a native C++ binary that injects XWorm into memory without writing it to disk, then spoofs its own identity in the Windows process list to resemble a legitimate .NET Framework component, defeating both file-based antivirus and process-enumeration forensics.
 
@@ -401,7 +401,7 @@ This matters because the TLS certificate `NotBefore` date of 2024-11-21 establis
 
 ---
 
-### 5d. PureHVNC — Hidden Desktop Control 
+### 5d. PureHVNC: Hidden Desktop Control 
 
 > **Analyst note:** HVNC (Hidden Virtual Network Computing) creates an invisible second desktop on the victim's machine. The attacker logs into banking, cryptocurrency, and email accounts in this hidden session while the victim's visible screen remains undisturbed. No alert fires because the hidden desktop is a legitimate Windows component.
 
@@ -423,7 +423,7 @@ This matters because the same IP (`185.49.126.140`) appears hardcoded across thr
 
 ---
 
-### 5e. Raven RAT — Custom Delphi C2 
+### 5e. Raven RAT: Custom Delphi C2 
 
 > **Analyst note:** Raven RAT is a custom C2 tool built by the operator in Delphi, approximately 60% complete. Despite its unfinished state it already implements keylogging, hidden desktop control, cryptocurrency wallet theft, and remote shell, alongside the operator's own C2 panel accidentally uploaded to the same server.
 
@@ -614,7 +614,7 @@ The size correlates with the Aspdkzb cluster. The decoded PE size of roughly 310
 
 ---
 
-### 5j. vlc_boxed.exe — DGA-Capable Unknown Family
+### 5j. vlc_boxed.exe: DGA-Capable Unknown Family
 
 > **Analyst note:** `vlc_boxed.exe` masquerades as a VLC media player component and uses a domain generation algorithm (DGA) to contact C2, automatically generating new domain names at runtime, making IP or domain blacklisting ineffective. The inner payload family remains unidentified because Enigma Virtual Box protection blocks static analysis.
 
@@ -637,12 +637,12 @@ Enigma Virtual Box is a commercial application virtualization tool.
 
 ---
 
-## 6. Attack Chain Reconstruction — Kill Chain
+## 6. Attack Chain Reconstruction: Kill Chain
 {: .hl-tier-2}
 
 > **Analyst note:** This section reconstructs the full attack chain from initial access through persistence and fraud. Three parallel delivery vectors are documented; most victim encounters begin with Vector A (phishing email).
 
-### Phase 1: Initial Access — Three Parallel Vectors
+### Phase 1: Initial Access: Three Parallel Vectors
 
 > **Analyst note:** Three concurrent access vectors operate simultaneously: phishing email (VBScript dropper), bulk ScreenConnect link distribution, and a targeted server-side exploit (CVE-2025-30406). All three are documented with full technical evidence.
 
@@ -728,7 +728,7 @@ ScreenConnect emerged as a frequently abused legitimate remote access tool in 20
 ScreenConnect version 23.2.9 predates the February 2024 "SlashAndGrab" vulnerabilities (CVE-2024-1709 authentication bypass and CVE-2024-1708 path traversal RCE). These vulnerabilities are separate from the abuse pattern here. The actor is abusing ScreenConnect for legitimate remote access, not exploiting ScreenConnect server-side.
 (Confidence: HIGH, Tier 2: CyberProof; Tier 1 for CVE-2024-1709/1708)
 
-### CVE-2025-30406 — Contextual Note
+### CVE-2025-30406: Contextual Note
 
 CVE-2025-30406 (CVSS 9.0) was added to the CISA Known Exploited Vulnerabilities catalog in April 2025 (Tier 1). Huntress researchers documented at least seven distinct organization compromises via this vulnerability. The CL0P ransomware group exploited it in mass campaigns against Gladinet CentreStack. The exploit kit in this campaign is a different, targeted adaptation against a non-Gladinet ASP.NET application, confirmed by the custom `generator` value `3FE2630A`, which is path-derived and unique to a single application instance. No CL0P infrastructure or TTP overlap was identified.
 (Confidence: HIGH, Tier 1: CISA KEV; Tier 2: Huntress; HIGH for differentiation from CL0P)
@@ -740,7 +740,7 @@ CYFIRMA (Tier 2) independently documented the ZeroTrace Team in 2025, confirming
 
 ---
 
-## 8. Threat Actor Assessment — ZeroTrace
+## 8. Threat Actor Assessment: ZeroTrace
 {: .hl-tier-2}
 
 The threat actor is ZeroTrace. I hold the operating identity at HIGH, 88 percent, and the full campaign scope at MODERATE, 72 percent.
@@ -1056,7 +1056,7 @@ The complete machine-readable IOC feed is available in the structured JSON forma
 
 ---
 
-## 16. Appendix A — MITRE ATT&CK Mapping
+## 16. Appendix A: MITRE ATT&CK Mapping
 {: .hl-tier-2}
 
 
@@ -1100,7 +1100,7 @@ The complete machine-readable IOC feed is available in the structured JSON forma
 
 ---
 
-## 17. Appendix B — Research References
+## 17. Appendix B: Research References
 {: .hl-tier-2}
 
 **XWorm V5.6:**

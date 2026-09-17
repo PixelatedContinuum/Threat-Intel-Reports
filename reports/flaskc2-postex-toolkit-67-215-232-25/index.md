@@ -28,11 +28,11 @@ figure_nav:
       - label: "MSSQL CLR backdoor"
         anchor: "#4-the-mssql-clr-reverse-shell-backdoor-cmd_execdll"
       - label: "IIS webshell"
-        anchor: "#61-npcinfolist1aspx--aes-in-memory-net-loader-webshell"
+        anchor: "#61-npcinfolist1aspx-aes-in-memory-net-loader-webshell"
       - label: "Potato suite to SYSTEM"
         anchor: "#71-the-seimpersonate-potato-suite-six-tools"
       - label: "Kerberos abuse"
-        anchor: "#72-rubeus--ghostpack-kerberos-abuse"
+        anchor: "#72-rubeus-ghostpack-kerberos-abuse"
       - label: "The Flask C2"
         anchor: "#5-the-bespoke-flask-c2-beacon-api"
 ---
@@ -170,7 +170,7 @@ Two characteristics matter for defenders. First, there is **no hardcoded C2**. T
 
 > **Reproduction note:** an earlier working hypothesis during reverse engineering held that `cmd_exec.dll` might be the in-memory payload (`class K`) delivered by the `NPCInfoList1.aspx` webshell. Direct decompilation disproved it: the exposed class is `StoredProcedures` (a SQL-CLR component), not `K`, and the webshell's `class K` assembly is delivered at runtime and is not staged in the open directory. The decompilation overrode the circumstantial build-cluster inference, a useful reminder that artifact identity is settled by the bytes, not by co-location.
 
-### 4.3 The sandbox and AV blind spot — the key detection finding
+### 4.3 The sandbox and AV blind spot: the key detection finding
 
 > **Analyst note:** "Sandbox" here means an automated system that runs an unknown file in isolation and watches what it does. These systems decide a file is malicious by observing bad behavior. This backdoor does nothing observable unless it is loaded into a real SQL Server (which a sandbox never does) so it looks completely harmless to automated analysis. This is not a flaw in any one product; it is a structural gap that applies to every backdoor of this class.
 
@@ -191,7 +191,7 @@ The DLL's static profile is clean and fully telegraphs its function. There is no
 
 The capability profile reads: "act as TCP client," "create a process with modified I/O handles and window," "create process on Windows," and "terminate process", a precise static description of a reverse-shell-to-`cmd` loop.
 
-### 4.5 Prior art — a known technique, not a novel one
+### 4.5 Prior art: a known technique, not a novel one
 
 The MSSQL SQL-CLR command-execution and reverse-shell technique is public and well documented; `cmd_exec.dll` is a custom *build* of it, not a new capability. The lineage is explicit in the public record:
 
@@ -211,7 +211,7 @@ The report's position, stated plainly: this component is **detection-valuable, n
 
 The Flask C2 is the second of the report's two original-contribution pillars. The C2 *panel* was first documented publicly by Breakglass Intelligence on 2026-04-09, that disclosure is credited here, and it covered the panel's existence, its `Werkzeug/3.1.6 Python/3.12.3` stack, and its unauthenticated `/health` route [Source: intel.breakglass.tech post #158873]. What this investigation adds is the **complete beacon route surface**, the **authentication model**, the **operator vocabulary**, and the **shared-host link to the toolkit**, none of which appeared in the prior reference.
 
-### 5.1 The complete route surface — only three routes
+### 5.1 The complete route surface: only three routes
 
 A 38-path sweep of the `:8080` listener confirmed that the C2 exposes only **three routes**, with no hidden web UI:
 
@@ -223,11 +223,11 @@ A 38-path sweep of the `:8080` listener confirmed that the C2 exposes only **thr
 
 There is no `/login`, `/dashboard`, `/admin`, or `/panel`. This is a minimal, headless beacon API. There is no operator-facing web interface on this port at all. The operator interacts with the panel some other way; the public surface exists only for beacons to talk to.
 
-### 5.2 The authentication model — in-handler, not route-level
+### 5.2 The authentication model: in-handler, not route-level
 
 A defender-relevant subtlety distinguishes this C2 from a framework built on a web-auth middleware. Authentication is enforced **inside each POST handler's body, not at the route level**. The evidence is in the HTTP responses: `GET /api/heartbeat` returns `405 Method Not Allowed` (standard Werkzeug method routing), not `401` or `403`. If the application used a `@before_request` hook or an authentication decorator, an unauthenticated request would be rejected with `401`/`403` regardless of method. Instead, the method router answers first (rejecting the wrong verb with `405`), and only a correctly-formed POST reaches the handler body where the credential check lives and returns `401` when it fails [the unauthenticated-POST→`401` behavior is corroborated by the Breakglass reference]. This is the signature of hand-rolled, per-handler auth logic rather than a framework-level gate.
 
-### 5.3 The vocabulary fingerprint — beacons are "servers"
+### 5.3 The vocabulary fingerprint: beacons are "servers"
 
 The `/health` JSON exposes the operator's internal naming, and it is distinctive. Active beacons are labeled **`active_servers`**; queued work is tracked as **`pending_commands`** and **`completed_commands`**. Calling the beacons "servers" is unusual (most frameworks call them agents, implants, bots, sessions, or beacons) and this naming, combined with the three-route structure and the in-handler auth pattern, does not appear in any known public framework fingerprint.
 
@@ -243,7 +243,7 @@ It is important to mark the confidence boundary here: the three-route surface, t
 
 A second Flask listener runs on port 5000 with the **identical** `Werkzeug/3.1.6 Python/3.12.3` stack as the C2 panel, but every one of the 38 probed paths returns `404`. Its role is undetermined. The most plausible reading is an operator control-plane, the interface through which commands are enqueued for beacons to pick up via `:8080`, but with no observable route this is a candidate, not a conclusion. It is carried as a MODERATE-confidence IOC (the `:5000` listener exists and is part of the operator's stack) with its function flagged as an open question.
 
-### 5.6 The toolkit-to-C2 linkage — and its honest limit
+### 5.6 The toolkit-to-C2 linkage: and its honest limit
 
 The fourth original contribution is the link between the reverse-engineered kit and the live panel. The open-directory toolkit (`:1337`), the C2 panel (`:8080`), and the opaque listener (`:5000`) **co-reside on one host under one operator**. The prior public reference documented the panel in isolation; this investigation ties it to the staged tooling.
 
@@ -256,7 +256,7 @@ The linkage must be stated with its precise strength: it is **shared-host only**
 
 This section covers the operation's two webshell footholds and the carried CVE proof-of-concept. The webshells are the IIS half of the dual-foothold model (the MSSQL half, `cmd_exec.dll`, is covered in Section 4); the CVE PoC is a patch callout rather than a live threat.
 
-### 6.1 NPCInfoList1.aspx — AES in-memory .NET loader webshell
+### 6.1 NPCInfoList1.aspx: AES in-memory .NET loader webshell
 
 > **Analyst note:** This is a small web page planted on an IIS server that acts as a loader: when the operator sends it an encrypted command, it decrypts the payload and runs it entirely in memory, writing nothing to disk. In-memory execution is a deliberate evasion. There is no file for a disk scanner to find. The decryption key is hardcoded in the page, which is what makes the loader itself detectable even though its payloads are not.
 
@@ -269,7 +269,7 @@ The reused-key configuration is both a behavioral tell and a detection gift. Can
   <figcaption><em>Figure 3: NPCInfoList1.aspx, the Godzilla-style AES in-memory .NET loader. The hardcoded 16-byte value <code>ca63457538b9b1e0</code> is reused as <em>both</em> AES key and IV (CBC/PKCS7); the decrypted POST body is passed to <code>Assembly.Load</code> and run via <code>CreateInstance("K")</code>. A request with no cookie returns a bare <code>"OK"</code>, a crawler/sandbox evasion. The reused key=IV is the loader's low-false-positive detection anchor.</em></figcaption>
 </figure>
 
-### 6.2 miss.asp — Ghost小组 full-feature ASP webshell
+### 6.2 miss.asp: Ghost小组 full-feature ASP webshell
 
 `miss.asp` is a 128,193-byte VBScript.Encode-obfuscated ASP webshell that decodes to 2,295 lines (decoded with the Didier Stevens `decode-vbe.py` table). Its cleartext configuration exposes the password `UserPass="Aatrox"` and a green-on-black operator interface. The gb2312-encoded title `Ghost小组最新过防火墙马` identifies it as a member of the public Chinese **Ghost小组** ASP webshell family.
 
@@ -279,7 +279,7 @@ This shell is **commodity, reused as-is**. The `Ghost小组` family is globally 
 
 > **No-attribution guard:** the gb2312 Chinese-language title and the `Aatrox` password are **commodity signals, not operator identity, and they do not indicate a Chinese or any named-actor nexus.** Ghost小组 webshells are reused worldwide; `Aatrox` is the name of a *League of Legends* champion in broad popular use. Both are logged as detection anchors and explicitly ruled out as attribution leads (see Section 9).
 
-### 6.3 CVE-2026-20817_PoC.exe — non-weaponized WER ALPC LPE demonstration
+### 6.3 CVE-2026-20817_PoC.exe: non-weaponized WER ALPC LPE demonstration
 
 > **Analyst note:** This is a proof-of-concept program for a Windows privilege-escalation bug in the Windows Error Reporting service. Two facts make it a low-priority item despite its alarming filename: Microsoft fixed the underlying bug in January 2026, and reverse engineering shows this particular build does not actually carry out the attack, it only demonstrates the surrounding scaffolding. The correct response is to confirm the January 2026 patch is applied, not to treat the operator as holding a working exploit.
 
@@ -333,11 +333,11 @@ The operator also staged the RoguePotato OXID-resolver helper (`RogueOxidResolve
 
 To detect it, the five operator-recompiled .NET tools are already covered by existing public YARA rules, `HKTL_NET_GUID_SweetPotato`, which is type-library-GUID based from the Neo23x0 signature-base, `tool_efspotato` and `tool_sharpefspotato_strings`, and Elastic's `Windows_Exploit_FakePipe`, all confirmed firing on the operator builds via VirusTotal. Those rules are referenced rather than re-authored. The native tools carry stable import-table hashes that survive file renaming and are the durable host indicators for the prebuilt binaries, listed in the [IOC feed]({{ page.ioc_feed }}) and built into a Sigma imphash rule in the detection package. Behaviorally, the whole class surfaces as a service-account process, `w3wp.exe` or `sqlservr.exe`, spawning a child that then runs at SYSTEM integrity, plus named-pipe creation for the spooler-based tools.
 
-### 7.2 Rubeus — GhostPack Kerberos abuse
+### 7.2 Rubeus: GhostPack Kerberos abuse
 
 `Rubeus.exe` (515,584 bytes, operator-recompiled, compile timestamp 2026-03-23) is the open-source GhostPack Kerberos toolkit by Will Schroeder (harmj0y), identified here by HKTL-GUID YARA signatures and VirusTotal rather than by public-release hash. It provides the full range of Kerberos abuse, Kerberoasting, AS-REP roasting, Pass-the-Ticket, Overpass-the-Hash, Golden and Silver ticket forging, S4U delegation abuse, and Kerberos event monitoring. In the operator's chain it is the Active Directory lateral-movement layer reached after SYSTEM is achieved via the Potato suite. The operator's recompilation defeats hash-based detection of the public release, but signature-based file detection remains available, and behavioral detection is well established: Windows Security Event ID 4769 (service-ticket requests with RC4-HMAC, the Kerberoasting signal), Event ID 4768 (TGT-request anomalies), and command-line parameters (`kerberoast`, `asktgt`, `asreproast`, `s4u`, `tgtdeleg`) covered by existing SigmaHQ rules and Splunk Security Content [Source: GhostPack/Rubeus README; Splunk Security Content]. The toolkit also staged `NtApiDotNet.dll`, a public library bundled as a Rubeus dependency.
 
-### 7.3 SharpSuccessor — BadSuccessor / dMSA abuse
+### 7.3 SharpSuccessor: BadSuccessor / dMSA abuse
 
 `SharpSuccessor.exe` (13,312 bytes, operator-recompiled) automates the "BadSuccessor" technique discovered by Yuval Gordon of Akamai Security Research in 2025 [Source: Akamai Security Research, "Abusing dMSA for Privilege Escalation in Active Directory"]. It is the most narrowly-targeted tool in the kit, it exploits the delegated Managed Service Account (dMSA) feature introduced in Windows Server 2025. The attack abuses how dMSAs inherit privileges during migration: an attacker with `CreateChild` rights on an Organizational Unit creates a dMSA object, sets `msDS-ManagedAccountPrecededByLink` to point at a target privileged account and `msDS-DelegatedMSAState` to 2 (signaling completed migration), and when a Kerberos ticket is requested for the malicious dMSA, the Key Distribution Center builds the PAC using the target account's SIDs, granting the dMSA the target's full permissions. The attack does not require the organization to actually use dMSAs; any domain with at least one Windows Server 2025 domain controller is exposed.
 
@@ -421,7 +421,7 @@ The evidence offers no overlap surface and no actor-distinctive technique:
 
 The best-supported intelligence statement about *what kind* of operator this is, distinct from named attribution, is **MODERATE** confidence: the operation is **most consistent with a financially-motivated individual or small-group cybercrime operator**. An Analysis of Competing Hypotheses found this hypothesis carries zero inconsistencies. The named-APT hypothesis is rejected with six: zero corpus overlap, budget shared hosting rather than bulletproof or compromised infrastructure, no infrastructure depth, commodity tooling, public webshells, and no opsec reaction to the public disclosure, collectively the opposite of a typical state-nexus signature. A red-team/penetration-tester hypothesis is the runner-up but carries two inconsistencies: a sanctioned engagement would be unlikely to leave a live C2 panel and open tool directory exposed for roughly three months, nor to ignore a public disclosure. This is operator profiling. It resolves "what kind of operator," not "which operator", and is kept strictly distinct from named attribution.
 
-### 9.3 The three identity-adjacent signals — ruled out, on the record
+### 9.3 The three identity-adjacent signals: ruled out, on the record
 
 Three artifacts in the toolkit could be mistaken for identity leads. None is, and each is ruled out explicitly so a reader who notices it sees immediately why it is not a lead:
 

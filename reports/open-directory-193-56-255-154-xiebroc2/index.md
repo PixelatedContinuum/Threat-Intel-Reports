@@ -273,12 +273,12 @@ Structured IOCs in machine-readable format: [ioc-feeds/opendirectory-193-56-255-
 
 ---
 
-## 4. Technical Capabilities — XiebroC2 v3.1 Deep-Dive
+## 4. Technical Capabilities: XiebroC2 v3.1 Deep-Dive
 {: .hl-tier-3}
 
 > **Analyst note:** This section explains how the main attack tool on this server works, from the moment it runs on a victim's computer to the full set of actions the attacker can remotely direct it to perform. XiebroC2 is a Chinese-developed, open-source remote access toolkit that gives an attacker complete control over a compromised Windows machine through an encrypted internet connection.
 
-## 4.1 Family Identity — XiebroC2 v3.1
+## 4.1 Family Identity: XiebroC2 v3.1
 {: .hl-tier-3}
 
 XiebroC2 (repository: `INotGreen/XiebroC2`) is a lightweight, cross-platform C2 framework developed by GitHub user INotGreen, positioned as a lower-resource-footprint alternative to commercial C2 platforms. The framework is Chinese in origin and written in Go, producing native Windows binaries as implants. Version 3.1, released in early 2024, introduced WebSocket transport, SOCKS5 reverse proxy, macOS client support, and screen capture capability.
@@ -400,7 +400,7 @@ Operationally the operator receives a full host profile on first connection, OS 
 
 The GBK encoding is an artifact worth noting. All shell output handlers call `ConvertGBKToUTF8()` before returning results to the C2, which is a runtime artifact of the operator's Windows system locale being set to Chinese-language character sets, GBK being Windows code page 936, Simplified Chinese, and a direct operator environment indicator.
 
-## 4.6 Command Set — 36 Post-Exploitation Capabilities
+## 4.6 Command Set: 36 Post-Exploitation Capabilities
 {: .hl-tier-3}
 
 The `HandlePacket/tcp.Read` function dispatches 36 confirmed commands. Commands are organized into functional categories:
@@ -507,7 +507,7 @@ ETW gives another path. The `Microsoft-Windows-DotNETRuntime` provider fires `As
 
 The full import path `github.com/Ne0nd0g/go-clr` is embedded in any Go binary using this library via the pclntab symbol table, providing a static YARA detection target.
 
-## 4.8 Process Hollowing — Entry Point Patching
+## 4.8 Process Hollowing: Entry Point Patching
 {: .hl-tier-3}
 
 > **Analyst note:** This technique lets the implant hide inside a legitimate Windows program. The attacker's code starts a normal Windows application (such as notepad.exe), pauses it before it runs, secretly replaces its program code with malicious code, then lets it start. From the outside, it looks like a legitimate program is running.
@@ -605,7 +605,7 @@ The `ReverseProxy` command invokes `Helper/proxy.ReverseSocksAgent`, which estab
 
 ---
 
-## 5. Technical Capabilities — Covenant C2 Stagers
+## 5. Technical Capabilities: Covenant C2 Stagers
 {: .hl-tier-3}
 
 > **Analyst note:** The two Covenant files on this staging server are lightweight connection tools. When executed, they reach out to the attacker's server, complete a security handshake, and then download and run a full-featured implant entirely in memory, nothing is saved to the hard drive. Two delivery methods were prepared (an executable file and a PowerShell command) so the attacker had options for how to deliver it to victims.
@@ -705,7 +705,7 @@ Interpreting that intelligence, the matching `session=` token and `i=` parameter
 
 That has a detection consequence. The shared `session=` token `75db-99b1-25fe4e9afbe58696-320bea73` appears in every HTTP POST from every host running either stager build, so a single network detection rule targeting that string catches both delivery mechanisms at once.
 
-## 5.4 Default HTTP Profile — High-Value Fingerprinting
+## 5.4 Default HTTP Profile: High-Value Fingerprinting
 {: .hl-tier-3}
 
 > **Analyst note:** The Covenant traffic from this investigation uses all the default settings that come with the Covenant framework out of the box. These default values have been publicly documented and are highly detectable on a network that inspects HTTP traffic content.
@@ -726,7 +726,7 @@ One anomaly is notable. The Chrome 41 User-Agent corresponds to a browser versio
 
 Port 443 is anomalous too. The Covenant listener runs cleartext HTTP on port 443, conventionally HTTPS and TLS, which bypasses controls that allow outbound 443 without protocol inspection while avoiding TLS certificate overhead. Network sensors capable of protocol inspection detect HTTP on port 443 as an immediate anomaly.
 
-## 5.5 GruntHTTP.ps1 — PowerShell Fileless Delivery
+## 5.5 GruntHTTP.ps1: PowerShell Fileless Delivery
 {: .hl-tier-3}
 
 > **Analyst note:** The PowerShell file is a one-line script that contains the entire second stager hidden inside it as compressed, encoded data. When run, it unpacks and executes the stager entirely in computer memory, nothing is saved to disk. This bypasses file-scanning antivirus because there is no file to scan.
@@ -908,7 +908,7 @@ A secondary pivot from the historical phishing activity on `193.56.255.154` iden
 
 There is historical context on this IP. It hosted Canadian financial sector phishing, Desjardins and BMO impersonation domains, in 2023, confirmed by a Desjardins impersonation TLS certificate (SHA-1 `3a8c1f5edecf8c69df88d655d87dbc6d6decf258`) issued 2023-04-14. Whether the 2023 phishing operator and the 2026 C2 operator are the same entity stays unresolved. Passive DNS records show 27 total resolutions to this IP, including 13+ BMO and Desjardins phishing domains that expired through March 2026.
 
-## 7.2 Secondary Server: 92.60.75.103 (MODERATE confidence — same operator)
+## 7.2 Secondary Server: 92.60.75.103 (MODERATE confidence: same operator)
 {: .hl-tier-2}
 
 A second server (AS49791 / Newserverlife LLC, Kazakhstan) shows an identical operational pattern within the same two-week window:
@@ -934,7 +934,7 @@ M247 Europe SRL is a legitimate commercial hosting and connectivity provider, no
 
 No prior open-source campaign attributions were found for `193.56.255.154` specifically. This IP appears newly deployed for this campaign.
 
-## 7.4 Ecosystem Exposure — XiebroC2 and Covenant Threat Actor Adoption
+## 7.4 Ecosystem Exposure: XiebroC2 and Covenant Threat Actor Adoption
 {: .hl-tier-2}
 
 **Confidence: INSUFFICIENT for named APT-level actor attribution; MODERATE for crimeware ecosystem characterization**
@@ -1230,7 +1230,7 @@ This section is a brief orientation for readers who need to understand what to a
 ## 11. Confidence Levels Summary
 {: .hl-tier-2}
 
-### DEFINITE (Direct Evidence — No Ambiguity)
+### DEFINITE (Direct Evidence: No Ambiguity)
 - XiebroC2 v3.1 family identification (compile path in pclntab)
 - AES-128-ECB key `QWERt_CSDMAHUATW` (extracted from binary static data)
 - Covenant framework identification (GruntStager namespace and class names)
@@ -1272,19 +1272,19 @@ This section is a brief orientation for readers who need to understand what to a
 ## 12. Appendices
 {: .hl-tier-2}
 
-## Appendix A — Evidence Data Gap Note
+## Appendix A: Evidence Data Gap Note
 {: .hl-tier-2}
 
 The `main.exe` SHA256 is a gap. The triage preprocessing log was confirmed to have been run against `s.d` only, with the SHA256 match confirmed in `hashes.txt`, and the SHA256 for `main.exe`, the XiebroC2 implant, was not captured in the triage artifacts available here. I document that hash as absent from the IOC feed with a data gap note, and organizations retrieving the file should compute its SHA256 independently. The space-padded C2 config strings and the pclntab typo `WindosVersion` are together sufficient for YARA-based identification without it.
 
-## Appendix B — XiebroC2 v3.1 AES Key: Framework Default Confirmation
+## Appendix B: XiebroC2 v3.1 AES Key: Framework Default Confirmation
 {: .hl-tier-2}
 
 The AES-128-ECB key `QWERt_CSDMAHUATW` was independently documented by AhnLab ASEC in their September 2025 analysis of XiebroC2 campaigns targeting exposed MS-SQL servers [AhnLab ASEC, Tier 2: https://asec.ahnlab.com/en/90369/]. The ASEC sample connected to a different IP (`1.94.185.235:8433`) using WebSocket transport, while this investigation's sample uses `193.56.255.154:4444` with TCP transport, confirming these are different deployments using the same framework default key.
 
 For threat hunting, the key `QWERt_CSDMAHUATW` can serve as a detection string for any XiebroC2 deployment using the default key configuration, not just this campaign. The AhnLab ASEC Q4 2025 MS-SQL statistics report confirms XiebroC2 remained active through the end of 2025 [https://asec.ahnlab.com/en/92003/].
 
-## Appendix C — Covenant Framework Historical Adoption Context
+## Appendix C: Covenant Framework Historical Adoption Context
 {: .hl-tier-2}
 
 Covenant's archived status (original repository archived 2021/2022) did not reduce its threat actor adoption. Key documented actor usage:
@@ -1293,7 +1293,7 @@ Covenant's archived status (original repository archived 2021/2022) did not redu
 - **XiebroC2 crimeware campaigns (documented):** AhnLab ASEC documented XiebroC2 in credential brute-force campaigns against exposed MS-SQL servers [Source: ASEC, https://asec.ahnlab.com/en/90369/; https://asec.ahnlab.com/en/90572/].
 - **go-clr library:** The `github.com/Ne0nd0g/go-clr` library vendored in `main.exe` was developed by security researcher Russel Van Tuyl (Ne0nd0g) and is documented at [https://github.com/Ne0nd0g/go-clr].
 
-## Appendix D — Research References
+## Appendix D: Research References
 {: .hl-tier-2}
 
 **XiebroC2:**
