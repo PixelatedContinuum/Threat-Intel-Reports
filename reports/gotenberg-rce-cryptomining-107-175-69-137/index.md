@@ -778,18 +778,15 @@ recovered corpus at all.
 
 ### Where the 196 confirmed victim hosts are hosted, by provider only
 
-Hosting for the 196 distinct confirmed IPs concentrates fast: a small number of provider groups
-cover most of the confirmed population, which is the practical reason a disclosure program built
-on this campaign needs only a handful of provider-level reports rather than 196 individual ones.
+The confirmed victims sit on mainstream, responsive cloud and telecom providers, and hosting
+concentrates fast across a small number of provider groups. Nothing in that pattern suggests a
+bulletproof-hosting relationship: this operator took whatever was vulnerable and reachable rather
+than selecting targets by where they were hosted. The victim population is a function of who
+exposed a vulnerable Gotenberg instance to the internet, not of who they bought hosting from.
 
-A small number of confirmed hosts, fewer than five, carry no usable abuse-role contact anywhere in
-public registry data at all. They sit on a major cloud provider and a national telecom's network in
-two different countries, and both require a direct CERT-style routing path rather than a standard
-provider abuse address; I am describing them by shape only, since the addresses themselves belong
-in an operational routing document, not this report. Every mainstream provider I reviewed among the
-larger groups is a well-documented, responsive company with no history in bulletproof-hosting
-literature, so nothing in this concentration argues against a routine disclosure to any of them; the
-smaller single-IP tail was not individually reviewed and I am not implying it is clear by omission.
+I reviewed the larger provider groups and found none with a history in bulletproof-hosting
+literature. The smaller single-IP tail was not individually reviewed, so treat that as unchecked
+rather than clear.
 
 ### What the shared miner infrastructure does and does not establish
 
@@ -1016,10 +1013,7 @@ This case opened on the hypothesis that an autonomous AI-agent framework drove t
 Section 5 already covers why that premise does not survive, on three independent measurements
 against primary sources rather than on impression. I am restating the conclusion here because it
 governs how the rest of this assessment should be read: this is ordinary, competently engineered,
-scripted mass exploitation of one disclosed vulnerability. The correction of the case's own
-starting premise is, in my judgment, the most defensible single claim in this entire assessment,
-precisely because it required admitting the original framing was wrong rather than quietly
-narrowing it.
+scripted mass exploitation of one disclosed vulnerability.
 
 ### One operator, at MODERATE, not higher
 
@@ -1254,8 +1248,6 @@ compromised machines.
 
 ### Response action categories
 
-*(Counts against the shared 30-line response cap with Section 12's Immediate Actions.)*
-
 As a third-party intelligence provider, I am naming action categories here, not procedures
 specific to any organization's tooling, and I am ordering them by what this specific threat
 actually requires rather than by a generic incident-response template.
@@ -1274,8 +1266,6 @@ than merely at risk, since the operator had unauthenticated code execution as th
 {: .hl-tier-1}
 
 ### Immediate actions
-
-*(Counts against the same 30-line cap as Section 11's Response Action Categories.)*
 
 If infection is confirmed, isolate the host, patch or take the Gotenberg instance offline until
 patched, and check for the persistent systemd install specifically rather than assuming a reboot
@@ -1365,11 +1355,9 @@ lost data under load and the main deployment's target ordering was never preserv
 genuine evidentiary limit, not a rounding choice, and I would rather publish an honest range with
 its derivation than a single confident number I cannot actually defend.
 
-The second gap is the co-located domain. I want to be direct that pulling a HIGH grade back to NOT
-CHECKED, on a finding I originally found persuasive, is the correct outcome of applying this
-publication's own evidence framework consistently, not a hedge. Where a judgment rests on
-withdrawing a claim rather than merely declining to make one, that is often the stronger, more
-defensible position, even though it reads as less satisfying than a confident answer would.
+The second gap is the co-located domain, graded NOT CHECKED rather than HIGH for the four reasons
+given in Section 6. That is a deliberate withdrawal of a grade I originally found persuasive, not
+a hedge.
 
 ### What is missing
 
