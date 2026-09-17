@@ -43,7 +43,7 @@ figure_nav:
       - label: "Stage-3 PE bundle"
         anchor: "#stage-3-pe-bundle-multi-vendor-camouflage"
       - label: "HijackLoader proper"
-        anchor: "#pe_03-hijackloader--penguish--rugmi-proper"
+        anchor: "#pe03-hijackloader--penguish--rugmi-proper"
       - label: ".NET injection"
         anchor: "#net-injection-into-renamed-qihoo-promoutilexe-wvaultexe"
       - label: "Persistence"
@@ -59,7 +59,7 @@ figure_nav:
       - label: "The stage-3 PE bundle"
         anchor: "#stage-3-pe-bundle-multi-vendor-camouflage"
       - label: "HijackLoader proper"
-        anchor: "#pe_03-hijackloader--penguish--rugmi-proper"
+        anchor: "#pe03-hijackloader--penguish--rugmi-proper"
       - label: "The cipher gap"
         anchor: "#cipher-gap-on-the-encrypted-payload"
   - image: hijackloader-msc-tier1-chain.svg
@@ -83,7 +83,7 @@ figure_nav:
       - label: "ExceptionHandler.dll"
         anchor: "#exceptionhandlerdll-operator-modified-wondershare-plowshare-crash-reporter"
       - label: "WVault.exe"
-        anchor: "#pe_08-genuine-qihoo-360-promoutilexe-becomes-wvaultexe-at-runtime"
+        anchor: "#pe08-genuine-qihoo-360-promoutilexe-becomes-wvaultexe-at-runtime"
       - label: "The full tree"
         anchor: "#61-process-tree"
 process_tree:

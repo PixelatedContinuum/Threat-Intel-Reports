@@ -20,8 +20,18 @@
       inside a teardown is wrong on every one of them, and applying rule 2
       outside is wrong on 796.
 
-   3. Underscores SURVIVE both rules. "4.7 pe_03 — HijackLoader" keeps its
-      underscore as "47-pe_03--hijackloader".
+   3. Underscores survive rule 1 but NOT rule 2. OUTSIDE a teardown, "4.7 pe_03 —
+      HijackLoader" keeps its underscore as "47-pe_03--hijackloader". INSIDE one,
+      kramdown's real generate_id also strips underscores along with the leading
+      digits, so the same heading text loses both: "4.7 pe_03: HijackLoader /
+      Penguish / Rugmi Proper" renders as "pe03-hijackloader--penguish--rugmi-proper",
+      and "5.1 PowerShell Collector Script (`turkish-instana_local_collector.ps1`)"
+      renders as "powershell-collector-script-turkish-instanalocalcollectorps1",
+      confirmed against the live page 2026-09-17. The original empirical pass
+      behind rule 3 never happened to hit an underscored heading inside a
+      teardown, so it generalized a same-outside/inside claim that was only ever
+      tested outside; `lib/check-figure-nav.js` shares this module, so it agreed
+      with its own wrong answer on both of those pages until fixed.
 
    4. Letters outside ASCII survive too. "6.2 miss.asp — Ghost小组 full-feature"
       keeps the CJK, so the character class must be Unicode-aware.
@@ -46,8 +56,11 @@ function kramdownSlug(text, inDetails) {
     .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1') // links render as their label
     .replace(/<[^>]+>/g, '');                // inline HTML is stripped
 
-  // Rule 2. Only inside a teardown, and this is the whole difference.
-  if (inDetails) s = s.replace(/^[^\p{L}]+/u, '');
+  // Rule 2. Only inside a teardown: strip the leading non-letter prefix (the
+  // "N.M " numbering) AND underscores, matching kramdown's real generate_id.
+  // Confirmed against the live page 2026-09-17 on two headings, both losing
+  // their underscore only when they sit inside a <details> block.
+  if (inDetails) s = s.replace(/^[^\p{L}]+/u, '').replace(/_/g, '');
 
   s = s.trim()
     .toLowerCase()

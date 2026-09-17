@@ -31,7 +31,7 @@ figure_nav:
   - image: arpa-observability-reverse-pipeline.svg
     parts:
       - label: "The stolen Instana JWT"
-        anchor: "#powershell-collector-script-turkish-instana_local_collectorps1"
+        anchor: "#powershell-collector-script-turkish-instanalocalcollectorps1"
       - label: "The reverse pipeline"
         anchor: "#observability-tool-reverse-pipeline-novel-ttp-at-maximalist-scale"
       - label: "Cross-source ETL"
