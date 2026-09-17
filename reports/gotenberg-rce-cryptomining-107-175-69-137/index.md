@@ -283,15 +283,14 @@ citation is correct.
 </tbody>
 </table>
 
-I am stating this plainly rather than softening it into a hedge: **never write the callback total
-as 184 alone.** The honest sentence names both populations, 167 confirmed from the host's own
-address and a further 17 inferred through shared provider egress, because the two are different
-grades of evidence and collapsing them into one number overstates the weaker of the two.
+The callback total should never be written as 184 alone: the honest sentence names both
+populations, 167 confirmed from the host's own address and a further 17 inferred through shared
+provider egress, because the two are different grades of evidence and collapsing them into one
+number overstates the weaker of the two.
 
 These are not estimates. Every count above is a row count from a surviving artifact whose parse I
 verified byte-for-byte, not a figure someone remembered. That distinction matters here specifically
-because two of these numbers moved during this investigation, and I want the record to show the
-moves rather than hide them.
+because two of these numbers moved during this investigation.
 
 <details markdown="1" class="hl-teardown">
 <summary>Two figures that changed during the investigation, and why the current ones are trustworthy</summary>
@@ -365,7 +364,7 @@ The stages ran in a fixed, escalating order, and each one gates the next:
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/gotenberg-rce-cryptomining-107-175-69-137/gotenberg-escalation-ladder.svg" | relative_url }}" alt="Vertical six-step infographic titled The escalation ladder. Step 1, orange band: liveness and fingerprinting, all 206 candidates probed through a local SOCKS5 proxy, confirming the host is up and selecting the Gotenberg version band. Step 2, red band: timing-based RCE confirmation, a baseline write timed against an injected one where 70 percent of the delay counts, the blind-timing method itself copied from a public proof-of-concept. Step 3, red band: out-of-band callback, the command curls back with a tag from the host's own hostname and user ID, which is what makes 198 simultaneous callbacks individually attributable. Step 4, red band: three-transport retry, wget then curl then nc for any host that missed the first callback, each transport tagging its own callback to record which binary existed. Step 5, yellow band: pre-deployment recon, checking for rival miners, free space in slash tmp, and actually touching slash tmp slash dot wt to confirm writability, noting one host returned permission denied and the operator logged it and moved on. Step 6, deep red band: deployment, only after every prior gate passed, yielding 148 to 151 confirmed installs. Footer reads skip any gate and the operator wastes a deploy slot, so none were skipped, with a legend mapping orange to scoping, red to confirmation, yellow to staging, and deep red to deployment.">
-  <figcaption><em>Figure 2: The six-stage escalation ladder, each stage a precondition for the next. The discipline of gating every stage, including a live writability check before spending a payload, is itself one of this report's findings about the operator's capability.</em></figcaption>
+  <figcaption><em>Figure 2: The six-stage escalation ladder, each stage a precondition for the next. The discipline of gating every stage, including a live writability check before spending a payload, is itself a finding about the operator's capability.</em></figcaption>
 </figure>
 
 The writability probe is the detail that tells me this operator does not waste effort. I found
@@ -392,12 +391,11 @@ either way. No separate recon host is evidenced.
 
 ### What the version band does and does not tell me
 
-The target list spans Gotenberg 8.17.0 through 8.30.1. I want to correct a reading I initially
-found tempting: the lower bound is not a deliberate choice. Exactly one target sits at 8.17.0, with
-the population rising smoothly from there; a single host at the floor is the signature of "this is
-simply the oldest version still running in the population that was scanned," not evidence the
-operator tested compatibility down to that exact release. There is nothing here to read as
-operator skill, and I am not reading it that way.
+The target list spans Gotenberg 8.17.0 through 8.30.1. The lower bound is not a deliberate choice:
+exactly one target sits at 8.17.0, with the population rising smoothly from there, and a single
+host at the floor is the signature of "this is simply the oldest version still running in the
+population that was scanned," not evidence the operator tested compatibility down to that exact
+release. There is nothing here to read as operator skill.
 
 The upper bound is more interesting, and I am leaving it as an open question rather than forcing an
 answer the evidence does not support. CVE-2026-40281's own advisory states that the key-sanitization
@@ -428,8 +426,8 @@ pool, and both carry the identical rig identifier `worker-01` on every single de
 a real operational weakness on the operator's own side: their pool dashboard cannot distinguish one
 infected host from another.
 
-**The binary hash attributes nothing, and I want to be direct about why that matters for how this
-report's indicators should be used.** The exact sha256 has 133 submissions from 107 independent,
+**The binary hash attributes nothing, which matters for how this report's indicators should be
+used.** The exact sha256 has 133 submissions from 107 independent,
 unrelated sources on VirusTotal, re-verified live at publication. XMRig is free, open-source
 software, and running the stock binary unmodified commits the operator to no supplier relationship
 and provides no distinguishing fingerprint. **The Monero wallet is the one genuinely
@@ -572,16 +570,14 @@ specifically against them, and one of those three includes several megabytes of 
 extraction outputs. None of that tooling's actual output survives; the files were catalogued by a
 crawler and their content is gone.
 
-The honest sentence for any of the seven, and the one this report actually supports, is that a
-public frontend was found in the operator's own directory, and for three of them, that attack
-tooling referencing the platform also existed. Neither is proof that any data was actually taken,
-and I am not implying otherwise anywhere in this report. I also want to flag a correction that
-narrowed rather than widened my own read: several of what I initially counted as separate victim
+The honest sentence for any of the seven is that a public frontend was found in the operator's own
+directory, and for three of them, that attack tooling referencing the platform also existed.
+Neither is proof that any data was actually taken, and I am not implying otherwise. Several of what
+I initially counted as separate victim
 platforms turned out to be the same site, scraped multiple times under different internal labels,
 based on matching file sizes and build signatures. I did not independently verify that with a
-direct byte comparison, so I am holding it as an inference rather than a confirmed fact, but it
-means the true count of distinct named platforms is smaller than the raw file count first
-suggested, which is the opposite of the direction these corrections usually run.
+direct byte comparison, so I am holding it as an inference rather than a confirmed fact; the true
+count of distinct named platforms is smaller than the raw file count first suggested.
 
 ### The AI angle, and why it points the opposite way from where the case started
 
@@ -613,7 +609,7 @@ them individually.
 ## 6. Infrastructure
 {: .hl-tier-2}
 
-### The operator's host, and a channel this case had been collapsing into one
+### The operator's host, and the ColoCrossing/RackNerd distinction
 
 The operator's own infrastructure sits at `107.175.69.137`, in AS36352, registered today as
 AS-COLOCROSSING, under HostPapa. I re-verified the ASN and current owner live against VirusTotal at
@@ -713,32 +709,29 @@ A hostname resolving exclusively to this IP surfaced during the investigation, s
 payment or identity-verification page, with a currently valid certificate and an empty default
 response on every path tried. An earlier pass in this investigation graded this domain's connection
 to the operator at HIGH confidence, reasoning that the domain's presence sat inside an otherwise
-unbroken tenancy window. **I am overturning that grade to NOT CHECKED, and I want to walk through
-all four reasons rather than assert the downgrade, because each one independently would have been
-enough on its own.**
+unbroken tenancy window. **I am grading that connection NOT CHECKED, for four reasons, each of which independently would
+have been enough on its own.**
 
 First, the domain's own DNS record first appeared two days after the campaign ended, not during it
 and not before it. What spans the campaign continuously is the host's tenancy, not this specific
-domain, and I had let those two separate facts blur into one sentence in earlier drafts of this
-finding. A domain created two days after a campaign ends, on a box whose tenant did not change, is
+domain. A domain created two days after a campaign ends, on a box whose tenant did not change, is
 evidence about who held the box at two points in time. It is not, by itself, evidence that the same
 person created the campaign and chose this domain name.
 
-Second, the underlying evidence framework this case applies grades a shared hosting artifact by how
-common the naming pattern is among unrelated users of the same free dynamic-DNS service, and I
-never actually measured that narrower rate. An unmeasured denominator produces a NOT CHECKED
-grade under this framework's own rule, not a default HIGH.
+Second, grading a shared hosting artifact this way depends on how common the naming pattern is
+among unrelated users of the same free dynamic-DNS service, and that narrower rate was never
+measured. An unmeasured denominator produces a NOT CHECKED grade, not a default HIGH.
 
-Third, the HIGH grade as originally written was already conditional on the same tenancy-continuity
-claim the prior section just flagged as independently unverified. A conditional grade resting on an
-unclosed condition was never a settled HIGH to begin with.
+Third, the HIGH grade was conditional on the same tenancy-continuity claim already flagged above as
+independently unverified. A conditional grade resting on an unclosed condition was never a settled
+HIGH to begin with.
 
-Fourth, and this is the mechanism I had not considered when the grade was first assigned: the
-software serving this domain, Caddy, has a feature that will automatically issue a valid
-certificate for any hostname pointed at it, with zero configuration from whoever runs the box. If
-that feature is active here, and I could not test it without sending an unauthorized request to a
-live host, a valid certificate for this domain would prove only that someone, anyone, pointed DNS
-at this IP. It would not prove the box's own controller chose or even knows this name exists.
+Fourth, the software serving this domain, Caddy, has a feature that will automatically issue a
+valid certificate for any hostname pointed at it, with zero configuration from whoever runs the
+box. If that feature is active here, and I could not test it without sending an unauthorized
+request to a live host, a valid certificate for this domain would prove only that someone, anyone,
+pointed DNS at this IP. It would not prove the box's own controller chose or even knows this name
+exists.
 
 I found one additional related domain during this same pass, sitting behind a different provider's
 proxy rather than resolving to this IP directly, managed inside the same DNS account as the first.
@@ -856,8 +849,8 @@ upstream source for both.
 
 ### The confirmation method is also not the operator's own idea
 
-Confirming the injection worked without leaving a payload behind is a genuinely elegant choice,
-and I initially read it as operator engineering. It is not. The operator times a baseline
+Confirming the injection worked without leaving a payload behind is a genuinely elegant choice, but
+it is not operator engineering. The operator times a baseline
 metadata write against an injected one and calls the target confirmed when the delta is at least
 70% of the injected sleep duration, so a five-second sleep needs a 3.5-second delay to count. I
 found the identical sleep-based blind-timing confirmation technique, with a duration-threshold
@@ -1023,13 +1016,13 @@ Chinese material, checked with a round-trip encoding verification to rule out co
 identical profile: colloquial gray-market slang, a contracted spoken-register phrasing rather than
 the formal written equivalent, and native-typist punctuation inconsistencies. Neither language is
 more polished than the other. Both read as native, casual, first-draft developer prose, and that
-symmetry is itself the answer. This is the one finding in this assessment I would call least likely
-to move with more evidence.
+symmetry is itself the answer. This is the one finding I would call least likely to move with more
+evidence.
 
 ### Capability: two axes, never averaged into one adjective
 
-An earlier pass on this case collapsed these into "medium sophistication." That collapse is wrong.
-Vulnerability research and operational engineering point in genuinely different directions here,
+Averaging these into "medium sophistication" would be wrong. Vulnerability research and
+operational engineering point in genuinely different directions here,
 with distinct evidence and distinct confidence, and averaging them would misrepresent both.
 
 <figure class="hl-capaxes-fig">
@@ -1106,7 +1099,7 @@ future, different campaign be recognized as the same actor than a positive, uniq
 be. Second, the confidence underlying "one operator," the premise a tracking designation exists to
 follow, sits at MODERATE here for reasons of evidentiary rigor rather than new contrary evidence,
 and building a designation on top of a MODERATE cluster-consistency judgment invites exactly the
-kind of drift this publication's own retirement discipline exists to catch. Third, the strongest
+kind of drift that later forces a tracking designation to be retired. Third, the strongest
 genuinely distinctive fact in this case, three business lines sharing one directory footprint, is a
 fact about this specific, now-dark box. It would not by itself let a future campaign on different
 infrastructure be recognized as the same operator without another full capture, and a tracking
@@ -1260,9 +1253,9 @@ historical logs for the latency pattern in Section 11's second hunt.
 - Treat any internet-facing document, image, or media-processing service as a high-value target
   for this same injection-and-timing-confirmation pattern, since the technique itself is generic
   and not specific to Gotenberg
-- Build detection validation into any workflow that derives a signature from source code alone;
-  this report's own central finding is that such a signature failed silently until it was tested
-  against real captured traffic
+- Build detection validation into any workflow that derives a signature from source code alone:
+  exactly that kind of signature failed silently here until it was tested against real captured
+  traffic
 
 ### Control effectiveness against this threat
 
@@ -1320,8 +1313,7 @@ genuine evidentiary limit, not a rounding choice, and I would rather publish an 
 its derivation than a single confident number I cannot actually defend.
 
 The second gap is the co-located domain, graded NOT CHECKED rather than HIGH for the four reasons
-given in Section 6. That is a deliberate withdrawal of a grade I originally found persuasive, not
-a hedge.
+given in Section 6. That is a deliberate withdrawal, not a hedge.
 
 ### What is missing
 
