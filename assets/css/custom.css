@@ -5011,7 +5011,7 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 }
 .hl-imodes .im-badge-row {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   align-items: flex-start;
   margin-top: 6px;
   font-size: 0.66em;
@@ -5322,6 +5322,22 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   color: var(--cx-note);
 }
 
+/* --- Lede: one plain-language sentence, before the two columns --
+   Ordinary readable body text, not a caption (no italics, no small
+   size) and not a badge (no border, no pill, no uppercase): a reader
+   gets the point without opening anything, in the same voice as the
+   report's own prose. Optional; the component renders correctly
+   without it since other reports using this include may not set it. */
+.hl-capaxes .cx-lede {
+  margin: 0;
+  padding: 12px 18px;
+  font-size: 0.95em;
+  line-height: 1.55;
+  color: var(--cx-ink);
+  background: var(--cx-surface);
+  border-bottom: 1px solid var(--cx-line);
+}
+
 /* --- Grid: two columns, one on narrow viewports ---------------- */
 .hl-capaxes .hl-capaxes-grid {
   display: grid;
@@ -5489,154 +5505,4 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
    the component's own selectors above; left as an explicit comment
    rather than a silent omission, since every sibling component
    documents this same check. */
-
-/* ============================================================
-   PROVIDER CONCENTRATION COMPONENT
-   A static, semantic, CSS-drawn cumulative-concentration strip
-   (Section 6's provider-hosting distribution). No JavaScript, no
-   image, no charting library: every number is real HTML text, and
-   the bar length only supplies the at-a-glance shape. Token names
-   deliberately parallel the --im-, --cx- and --pt- families rather than reusing
-   them, so all four components can change independently.
-   ============================================================ */
-
-.hl-concentration-fig { margin: 2.25em 0; }
-.hl-concentration-fig > figcaption {
-  margin-top: 12px;
-  font-size: 0.82em;
-  font-style: italic;
-  line-height: 1.6;
-  color: var(--pc-ink-2);
-  text-align: center;
-}
-
-/* --- Tokens: dark (base) ------------------------------------ */
-.hl-concentration {
-  --pc-surface:    #1a1a1a;
-  --pc-surface-2:  #161616;
-  --pc-line:       #2a2a2a;
-  --pc-line-soft:  #242424;
-  --pc-ink:        #eeeeee;
-  --pc-ink-2:      #c6c6c6;
-  --pc-ink-3:      #8d8d8d;
-  --pc-track:      #242424;
-  --pc-fill:       #58a6ff;
-
-  border: 1px solid var(--pc-line);
-  border-radius: 8px;
-  background: var(--pc-surface);
-  color: var(--pc-ink);
-  overflow: hidden;
-  font-size: 17px;
-  line-height: 1.65;
-  text-align: left;
-}
-
-/* --- Tokens: light ------------------------------------------ */
-:root[data-theme="light"] .hl-concentration,
-.hl-concentration[data-pc-theme="light"] {
-  --pc-surface:    #ffffff;
-  --pc-surface-2:  #f4f4f5;
-  --pc-line:       #d4d4d8;
-  --pc-line-soft:  #e4e4e7;
-  --pc-ink:        #18181b;
-  --pc-ink-2:      #3f3f46;
-  --pc-ink-3:      #5f5f68;
-  --pc-track:      #e4e4e7;
-  --pc-fill:       #1857b8;
-}
-
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) .hl-concentration {
-    --pc-surface:    #ffffff;
-    --pc-surface-2:  #f4f4f5;
-    --pc-line:       #d4d4d8;
-    --pc-line-soft:  #e4e4e7;
-    --pc-ink:        #18181b;
-    --pc-ink-2:      #3f3f46;
-    --pc-ink-3:      #5f5f68;
-    --pc-track:      #e4e4e7;
-    --pc-fill:       #1857b8;
-  }
-}
-
-/* --- Header line: the two headline counts, always visible ------ */
-.hl-concentration .hl-concentration-head {
-  padding: 12px 18px;
-  background: var(--pc-surface-2);
-  border-bottom: 1px solid var(--pc-line);
-  font-size: 0.95em;
-  color: var(--pc-ink-2);
-}
-.hl-concentration .pc-head-figure {
-  font-weight: 700;
-  color: var(--pc-ink);
-}
-
-/* --- The 47/17 split, always visible ---------------------------- */
-.hl-concentration .pc-split {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 24px;
-  padding: 10px 18px;
-  border-bottom: 1px solid var(--pc-line-soft);
-  font-size: 0.86em;
-  color: var(--pc-ink-3);
-}
-.hl-concentration .pc-split-item strong { color: var(--pc-ink); }
-
-/* --- The three cumulative rows ----------------------------------
-   Text carries every figure; the bar only supplies the shape, so
-   the row still reads correctly with `.pc-track` hidden entirely
-   (images off, an Atom feed reader, a screen reader). */
-.hl-concentration .pc-bars {
-  padding: 14px 18px 16px;
-}
-.hl-concentration .pc-row + .pc-row { margin-top: 12px; }
-.hl-concentration .pc-row-label {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 10px;
-  font-size: 0.9em;
-  margin-bottom: 5px;
-}
-.hl-concentration .pc-row-name { color: var(--pc-ink-2); }
-.hl-concentration .pc-row-val { font-weight: 700; color: var(--pc-ink); }
-.hl-concentration .pc-track {
-  height: 10px;
-  border-radius: 5px;
-  background: var(--pc-track);
-  overflow: hidden;
-}
-.hl-concentration .pc-fill {
-  height: 100%;
-  border-radius: 5px;
-  background: var(--pc-fill);
-}
-
-/* --- Footer ------------------------------------------------------ */
-.hl-concentration .hl-concentration-foot {
-  margin: 0;
-  padding: 12px 18px;
-  border-top: 1px solid var(--pc-line);
-  background: var(--pc-surface-2);
-  font-size: 0.8em;
-  color: var(--pc-ink-2);
-}
-
-/* --- Narrow viewports --------------------------------------------
-   Rows already stack full-width by default (no grid columns to
-   collapse); only the head/split lines need to wrap rather than
-   truncate, which `flex-wrap: wrap` above already provides. Font
-   size drops to match the other three components at this break. */
-@media (max-width: 720px) {
-  .hl-concentration { font-size: 16px; }
-}
-
-/* --- Print ---------------------------------------------------------
-   Nothing to force open (there is no <details> in this component),
-   but the fill colour must still read in grayscale: --pc-fill and
-   --pc-track are chosen at different lightness values in both
-   themes specifically so the bar remains visible with color stripped. */
 

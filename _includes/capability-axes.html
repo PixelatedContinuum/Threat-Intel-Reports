@@ -38,6 +38,8 @@
 
     capability_axes:
       note: "Do not average these axes"        # required, always-visible header line
+      lede: "One sentence a reader takes away without opening anything."  # optional; renders
+                                                # above the two columns as body text, absent is fine
       axes:
         - id: cx-vuln-research                 # becomes the deep-link target, must be unique
           name: "Vulnerability research"       # heading, escaped
@@ -48,17 +50,20 @@
           limit: "The explicit boundary on this rating."  # shown only when expanded, allows inline HTML
       foot: "..."                              # optional, footer sentence below both cards, allows inline HTML
 
-  ESCAPING. `name`, `rating`, `confidence` and `headline` are escaped, so a
-  literal like <pid> is safe in those. `detail`, `limit` and `foot` are NOT
-  escaped so they can carry <code>; write &lt;pid&gt; by hand there.
+  ESCAPING. `name`, `rating`, `confidence`, `headline` and `lede` are escaped,
+  so a literal like <pid> is safe in those. `detail`, `limit` and `foot` are
+  NOT escaped so they can carry <code>; write &lt;pid&gt; by hand there.
 {%- endcomment -%}
 {%- assign cx = include.data | default: page.capability_axes -%}
 {%- if cx and cx.axes -%}
 <div class="hl-capaxes" data-hl-capaxes>
   <div class="hl-capaxes-head">
-    <span class="cx-head-label">Capability assessment</span>
+    <span class="cx-head-label">What this operator is good and bad at</span>
     <span class="cx-head-note">{{ cx.note | default: "Do not average these axes" | escape }}</span>
   </div>
+  {%- if cx.lede %}
+  <p class="cx-lede">{{ cx.lede | escape }}</p>
+  {%- endif %}
   <div class="hl-capaxes-grid">
     {%- for a in cx.axes %}
     <details class="hl-capaxes-card" data-axis="{{ forloop.index0 }}"{% if a.id %} id="{{ a.id }}"{% endif %}>

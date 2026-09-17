@@ -92,7 +92,8 @@ install_modes:
     One recovered host also carried a watchdog script that should be removed alongside either
     mode.
 capability_axes:
-  note: "Do not average these axes"
+  note: "Two different skills, and this operator is not the same at both"
+  lede: "Weak at finding vulnerabilities, strong at running the operation. Expect a copied public exploit rather than a novel one, and expect the compromise itself to be careful, staged and thorough."
   axes:
     - id: cx-vuln-research
       name: "Vulnerability research"
@@ -109,14 +110,6 @@ capability_axes:
       detail: "The writability probe, a relative rather than fixed timing threshold, and a three-transport retry ladder survive. A dedicated Chinese-language security search, run with working controls proving it could surface real content, removed the fourth: per-host callback tagging built from shell command substitution is foundational, widely taught technique in that literature, not an operator contribution."
       limit: "Held at MODERATE-HIGH rather than higher because three-of-four standing against a working search is evidence of absence, not a positive discovery. Recovery of the operator's own reconnaissance notes, or a private or paywalled writeup covering the writability check or the retry ladder, would lower this toward the copied-technique reading already applied to callback tagging."
   foot: "The fuller reasoning, the one alternative excluded, and what would move either rating are in the surrounding text."
-provider_concentration:
-  total: "196"
-  total_label: "confirmed IPs"
-  groups: "64"
-  groups_label: "provider groups"
-  split: [{value: "47", label: "groups: 1 IP each"}, {value: "17", label: "groups: the other 149 IPs"}]
-  rows: [{label: "Top 5 groups", percent: 51.5}, {label: "Top 10 groups", percent: 65.8}, {label: "Top 25 groups", percent: 80.1}]
-  foot: "That concentration is why a disclosure program built on this campaign needs only a small number of provider-level reports, not 196 individual ones."
 ---
 
 **Campaign Identifier:** Gotenberg-RCE-Cryptomining-107.175.69.137<br>
@@ -338,7 +331,7 @@ above.
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/gotenberg-rce-cryptomining-107-175-69-137/gotenberg-confirmation-funnel.svg" | relative_url }}" alt="Vertical seven-step infographic titled The confirmation funnel. Step 1, orange band: 206 targets listed, every host in the operator's own target list, verified byte for byte, version band Gotenberg 8.17.0 through 8.30.1. Step 2, orange band: 205 probed and fingerprinted, one listed target was already dead at probe time, liveness and fingerprinting ran through a local SOCKS5 proxy. Step 3, red band: 198 RCE confirmed, 96.6 percent of probed, timing side-channel verdict matched against the out-of-band sweep results, 196 distinct IPs with two hosts each contributing two vulnerable ports. Step 4, red band: 184 called back, never a single number, 167 OBSERVED meaning the callback arrived from the host's own IP address, 17 INFERRED meaning the tag matched but from a shared gateway or NAT address, with an orange emphasis line reading two grades of evidence, collapsing them overstates the weaker one. Step 5, grey band: 14 never called back, absent under every callback channel the operator built, including three retry transports, wget, curl, and nc. Step 6, deep red band: 148 to 151 miner installs verified, 148 is the floor and 151 the ceiling once two ambiguous hosts are credited, a further 15-host suggestive bucket is deliberately not credited. Step 7, grey band: 28 permanently unattributable, 14 with no callback plus 14 more with execution but no deploy record, because the main deploy wave's target-list ordering was never preserved on disk. Footer states never publish 158, 179, 178, 177 or 21, all are superseded above, with a legend mapping orange to target scoping, red to exploitation confirmed, grey to excluded from the count, and deep red to confirmed miner install.">
-  <figcaption><em>Figure 2: The confirmation funnel from target list to verified miner install, using only the corrected figures from the table above. The 184 callback figure is deliberately shown split rather than as one number, because the 167 OBSERVED and 17 INFERRED hosts rest on different grades of evidence.</em></figcaption>
+  <figcaption><em>Figure 1: The confirmation funnel from target list to verified miner install, using only the corrected figures from the table above. The 184 callback figure is deliberately shown split rather than as one number, because the 167 OBSERVED and 17 INFERRED hosts rest on different grades of evidence.</em></figcaption>
 </figure>
 
 ### The window: 54 minutes, and the deliberate ordering around it
@@ -373,7 +366,7 @@ The stages ran in a fixed, escalating order, and each one gates the next:
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/gotenberg-rce-cryptomining-107-175-69-137/gotenberg-escalation-ladder.svg" | relative_url }}" alt="Vertical six-step infographic titled The escalation ladder. Step 1, orange band: liveness and fingerprinting, all 206 candidates probed through a local SOCKS5 proxy, confirming the host is up and selecting the Gotenberg version band. Step 2, red band: timing-based RCE confirmation, a baseline write timed against an injected one where 70 percent of the delay counts, the blind-timing method itself copied from a public proof-of-concept. Step 3, red band: out-of-band callback, the command curls back with a tag from the host's own hostname and user ID, which is what makes 198 simultaneous callbacks individually attributable. Step 4, red band: three-transport retry, wget then curl then nc for any host that missed the first callback, each transport tagging its own callback to record which binary existed. Step 5, yellow band: pre-deployment recon, checking for rival miners, free space in slash tmp, and actually touching slash tmp slash dot wt to confirm writability, noting one host returned permission denied and the operator logged it and moved on. Step 6, deep red band: deployment, only after every prior gate passed, yielding 148 to 151 confirmed installs. Footer reads skip any gate and the operator wastes a deploy slot, so none were skipped, with a legend mapping orange to scoping, red to confirmation, yellow to staging, and deep red to deployment.">
-  <figcaption><em>Figure 3: The six-stage escalation ladder, each stage a precondition for the next. The discipline of gating every stage, including a live writability check before spending a payload, is itself one of this report's findings about the operator's capability.</em></figcaption>
+  <figcaption><em>Figure 2: The six-stage escalation ladder, each stage a precondition for the next. The discipline of gating every stage, including a live writability check before spending a payload, is itself one of this report's findings about the operator's capability.</em></figcaption>
 </figure>
 
 The writability probe is the detail that tells me this operator does not waste effort. I found
@@ -472,7 +465,7 @@ specifically needs.
 
 <figure class="hl-imodes-fig">
 {% include install-modes.html %}
-<figcaption><em>Figure 4: The two install modes side by side. A reboot clears the ephemeral drop but leaves the persistent, root-owned systemd install running.</em></figcaption>
+<figcaption><em>Figure 3: The two install modes side by side. A reboot clears the ephemeral drop but leaves the persistent, root-owned systemd install running.</em></figcaption>
 </figure>
 
 The recovered package contains only Linux ELF binaries. That follows directly from the target
@@ -499,7 +492,7 @@ to find and remove from someone else.
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/gotenberg-rce-cryptomining-107-175-69-137/gotenberg-rival-miner-displacement.png" | relative_url }}" alt="Excerpt of the deploy script's kill list, showing a sequence of pkill commands targeting xmrig, systemd-devd, polkitd, kworker, khovr, kdevtmpfsi, kswapd0, libgcrypt and systemd-d before the script downloads and installs its own miner.">
-  <figcaption><em>Figure 5: The rival-miner kill list run before this operator's own install. The list includes &quot;polkitd&quot;, the exact process name this operator's own miner masquerades as, so its presence on a host does not by itself distinguish this operator's compromise from a prior one it displaced.</em></figcaption>
+  <figcaption><em>Figure 4: The rival-miner kill list run before this operator's own install. The list includes &quot;polkitd&quot;, the exact process name this operator's own miner masquerades as, so its presence on a host does not by itself distinguish this operator's compromise from a prior one it displaced.</em></figcaption>
 </figure>
 
 Separately, on the one host where the operator worked interactively, I found two other criminal
@@ -789,11 +782,6 @@ Hosting for the 196 distinct confirmed IPs concentrates fast: a small number of 
 cover most of the confirmed population, which is the practical reason a disclosure program built
 on this campaign needs only a handful of provider-level reports rather than 196 individual ones.
 
-<figure class="hl-concentration-fig">
-{% include provider-concentration.html %}
-<figcaption><em>Figure 6: Provider concentration among the 196 confirmed IPs. The bar length shows the shape; every count and percentage is also stated as text.</em></figcaption>
-</figure>
-
 A small number of confirmed hosts, fewer than five, carry no usable abuse-role contact anywhere in
 public registry data at all. They sit on a major cloud provider and a national telecom's network in
 two different countries, and both require a direct CERT-style routing path rather than a standard
@@ -893,7 +881,7 @@ upstream source for both.
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/gotenberg-rce-cryptomining-107-175-69-137/gotenberg-injection-metadata-key.png" | relative_url }}" alt="A test script builds an ExifTool metadata key containing embedded newlines, an -if flag, and a system() call wrapped in a sleep-based timing check, illustrating how the newlines split ExifTool's argument parser so -if evaluates arbitrary Perl.">
-  <figcaption><em>Figure 1: The injection mechanism, shown as a standalone test script used to develop and confirm the technique. This is not the tool that drove the campaign itself; a separate, curl-based script issued all 198 confirmed requests. What matters here is the key construction: embedded newlines turn a metadata field name into an ExifTool command-line flag.</em></figcaption>
+  <figcaption><em>Figure 5: The injection mechanism, shown as a standalone test script used to develop and confirm the technique. This is not the tool that drove the campaign itself; a separate, curl-based script issued all 198 confirmed requests. What matters here is the key construction: embedded newlines turn a metadata field name into an ExifTool command-line flag.</em></figcaption>
 </figure>
 
 ### The confirmation method is also not the operator's own idea
@@ -1088,7 +1076,7 @@ with distinct evidence and distinct confidence, and averaging them would misrepr
 
 <figure class="hl-capaxes-fig">
 {% include capability-axes.html %}
-<figcaption><em>Figure 7: The two capability axes, held apart on purpose. Section 7 carries the full exploit-provenance comparison behind the vulnerability-research rating.</em></figcaption>
+<figcaption><em>Figure 6: The two capability axes, held apart on purpose. Section 7 carries the full exploit-provenance comparison behind the vulnerability-research rating.</em></figcaption>
 </figure>
 
 The honest, non-averaged statement is this: this operator did not need to be, and was not, a
