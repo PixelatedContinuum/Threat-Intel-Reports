@@ -3598,12 +3598,16 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   box-shadow: inset 0 -1px 0 0 var(--ph-accent, var(--hl-text-primary));
   border-radius: 0;
 }
-/* The count is the compare-at-a-glance number, so it stays legible but never
-   competes with the name it follows. */
-.hl-viewswitch__btn-count {
+/* The time is the compare-at-a-glance number a reader actually decides on,
+   so it stays legible but never competes with the name it follows. Replaced
+   the old bare section count (a number with no unit next to a button name
+   read as almost anything); the count itself moved to the aria-label and
+   the status strip, where a sentence explains what it counts. */
+.hl-viewswitch__btn-time {
   font-size: 0.82rem;
   opacity: 0.6;
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 .hl-viewswitch__status {
   font-size: 0.85rem;

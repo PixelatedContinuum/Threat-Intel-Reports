@@ -125,7 +125,79 @@
 
   function plural(n) { return n + ' section' + (n === 1 ? '' : 's'); }
 
-  function buildControl(doc, view, counts) {
+  function wordCount(text) {
+    return String(text || '').trim().split(/\s+/).filter(Boolean).length;
+  }
+
+  /* Same rule the page header's own reading-time script uses (the inline
+     script in _layouts/post.html): a collapsed, non-nested
+     details.hl-teardown does not count toward the time, and a teardown
+     nested inside another already-closed one is never subtracted twice.
+     Replicated here rather than imported, since the two live in separate
+     script files, but the FORMULA (this function, plus the 200-words-per-
+     minute / Math.round/ floor-of-1 arithmetic below) is identical on
+     purpose. The Full button below does not even call this: it takes the
+     header's own already-computed number verbatim, which is what actually
+     guarantees Full can never show a different figure than the header. */
+  function isHiddenTopLevelTeardown(td) {
+    if (td.open) return false;
+    var ancestor = td.parentElement, nested = false;
+    while (ancestor) {
+      if (ancestor.tagName === 'DETAILS' && ancestor.classList.contains('hl-teardown')) { nested = true; break; }
+      ancestor = ancestor.parentElement;
+    }
+    return !nested;
+  }
+
+  function visibleWordsIn(nodes) {
+    var total = 0, hidden = 0;
+    for (var i = 0; i < nodes.length; i++) {
+      var el = nodes[i];
+      total += wordCount(el.textContent);
+      var candidates = [];
+      if (el.matches && el.matches('details.hl-teardown')) candidates.push(el);
+      if (el.querySelectorAll) {
+        var found = el.querySelectorAll('details.hl-teardown');
+        for (var j = 0; j < found.length; j++) candidates.push(found[j]);
+      }
+      for (var k = 0; k < candidates.length; k++) {
+        if (isHiddenTopLevelTeardown(candidates[k])) hidden += wordCount(candidates[k].textContent);
+      }
+    }
+    return Math.max(0, total - hidden);
+  }
+
+  /* Minutes per view, on the page header's own word-count basis. Brief and
+     Analyst are new figures the header does not show, built from the
+     identical formula over exactly the sections that view would display.
+     Full is not re-estimated at all: window.HLReadTime.visibleMinutes IS the
+     header's number (post.html sets it right after computing it), read
+     verbatim. If that global is ever missing (a template change, a page
+     that loads this script without the reading-time script), Full falls
+     back to the same section-based estimate as the other two rather than
+     showing nothing, and callers can tell the difference from the returned
+     `fullIsExact` flag if they need to. */
+  function readingMinutes(body) {
+    var rt = (typeof window !== 'undefined') ? window.HLReadTime : undefined;
+    var wpm = (rt && rt.wordsPerMinute) || 200;
+    var buckets = { 1: [], 2: [], 3: [] };
+    sectionsFor(body).forEach(function (sec) {
+      var t = sec.tier || 1;
+      buckets[t] = buckets[t].concat(sec.nodes);
+    });
+    var briefNodes   = buckets[1];
+    var analystNodes = buckets[1].concat(buckets[2]);
+    var fullNodes    = analystNodes.concat(buckets[3]);
+    var haveHeader = !!(rt && typeof rt.visibleMinutes === 'number');
+    return {
+      brief:   Math.max(1, Math.round(visibleWordsIn(briefNodes) / wpm)),
+      analyst: Math.max(1, Math.round(visibleWordsIn(analystNodes) / wpm)),
+      full:    haveHeader ? rt.visibleMinutes : Math.max(1, Math.round(visibleWordsIn(fullNodes) / wpm)),
+      fullIsExact: haveHeader
+    };
+  }
+
+  function buildControl(doc, view, counts, minutes) {
     var wrap = doc.createElement('div');
     wrap.className = 'hl-viewswitch';
     wrap.id = 'hl-viewswitch';
@@ -143,22 +215,35 @@
       b.setAttribute('aria-pressed', spec[0] === view ? 'true' : 'false');
 
       var n = counts ? counts[spec[0]] : null;
+      var m = minutes ? minutes[spec[0]] : null;
 
       var name = doc.createElement('span');
       name.className = 'hl-viewswitch__btn-name';
       name.textContent = spec[1];
       b.appendChild(name);
 
-      if (n !== null) {
-        var cnt = doc.createElement('span');
-        cnt.className = 'hl-viewswitch__btn-count';
-        cnt.textContent = String(n);
-        b.appendChild(cnt);
+      // The time, not the section count, is what a reader actually decides
+      // on: "3 sections" says nothing about the cost of picking a view, and
+      // sat on the button with no unit it could be mistaken for almost
+      // anything. A section count with no time attached is exactly the
+      // defect this task exists to fix, so the count no longer appears on
+      // the button face at all; it still reaches the reader through the
+      // aria-label and the status strip below, where it has a sentence
+      // around it to explain what it is.
+      if (m !== null) {
+        var time = doc.createElement('span');
+        time.className = 'hl-viewswitch__btn-time';
+        time.textContent = '· ' + m + ' min';
+        b.appendChild(time);
       }
 
       // One readable name for assistive tech instead of separate fragments.
+      // The time is spoken out ("about 8 min"), not left to the visual-only
+      // middle dot, so a screen reader gets the same information a sighted
+      // reader does.
       b.setAttribute('aria-label', spec[1] + ': ' + spec[2] +
-        (n === null ? '' : ', ' + plural(n)));
+        (n === null ? '' : ', ' + plural(n)) +
+        (m === null ? '' : ', about ' + m + ' min'));
       group.appendChild(b);
     });
     wrap.appendChild(group);
@@ -230,7 +315,7 @@
 
     var view = viewFromHash(location.hash) || 'full';
     var currentView = view;
-    var control = buildControl(doc, view, sectionCounts(body));
+    var control = buildControl(doc, view, sectionCounts(body), readingMinutes(body));
     body.insertBefore(control, body.firstChild);
     // Populate the status immediately, so the strip is never blank on load.
     apply(doc, view);
@@ -301,6 +386,7 @@
     distinctTiers: distinctTiers,
     buildControl: buildControl,
     sectionCounts: sectionCounts,
+    readingMinutes: readingMinutes,
     setStatus: setStatus,
     apply: apply,
     revealFor: revealFor,

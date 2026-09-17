@@ -140,29 +140,93 @@ test('an unmarked section counts toward brief, matching how apply treats it', fu
   assert.deepStrictEqual(RS.sectionCounts(body), { brief: 2, analyst: 2, full: 3 });
 });
 
-test('each button shows its name and its count on one line', function () {
+test('each button shows its name and its reading time on one line, not a bare count', function () {
   var d = build([1, 2, 3]);
-  var c = RS.buildControl(d, 'full', RS.sectionCounts(d.querySelector('.hl-post-content')));
+  var body = d.querySelector('.hl-post-content');
+  var c = RS.buildControl(d, 'full', RS.sectionCounts(body), RS.readingMinutes(body));
   var btns = c.querySelectorAll('button');
   assert.strictEqual(btns[0].querySelector('.hl-viewswitch__btn-name').textContent, 'Executive Brief');
-  assert.strictEqual(btns[0].querySelector('.hl-viewswitch__btn-count').textContent, '1');
-  assert.strictEqual(btns[2].querySelector('.hl-viewswitch__btn-count').textContent, '3');
+  // The old bare section count is gone from the button face entirely.
+  assert.strictEqual(btns[0].querySelector('.hl-viewswitch__btn-count'), null);
+  var t0 = btns[0].querySelector('.hl-viewswitch__btn-time').textContent;
+  var t2 = btns[2].querySelector('.hl-viewswitch__btn-time').textContent;
+  assert.match(t0, /^· \d+ min$/);
+  assert.match(t2, /^· \d+ min$/);
   // The sentence is NOT in the button; it belongs to the status strip.
   assert.strictEqual(btns[0].querySelector('.hl-viewswitch__btn-desc'), null);
 });
 
-test('the accessible name still carries the explanation the button no longer shows', function () {
+test('the accessible name still carries the explanation the button no longer shows, plus the time', function () {
   var d = build([1, 2, 3]);
-  var c = RS.buildControl(d, 'full', RS.sectionCounts(d.querySelector('.hl-post-content')));
-  assert.strictEqual(c.querySelector('button').getAttribute('aria-label'),
-    'Executive Brief: the bottom line and what to do, 1 section');
+  var body = d.querySelector('.hl-post-content');
+  var c = RS.buildControl(d, 'full', RS.sectionCounts(body), RS.readingMinutes(body));
+  assert.match(c.querySelector('button').getAttribute('aria-label'),
+    /^Executive Brief: the bottom line and what to do, 1 section, about \d+ min$/);
 });
 
-test('buildControl still works with no counts, so the signature stays additive', function () {
+test('buildControl still works with no counts or minutes, so the signature stays additive', function () {
   var d = build([1, 2, 3]);
   var c = RS.buildControl(d, 'full');
   assert.strictEqual(c.querySelectorAll('button').length, 3);
   assert.strictEqual(c.querySelector('.hl-viewswitch__btn-count'), null);
+  assert.strictEqual(c.querySelector('.hl-viewswitch__btn-time'), null);
+  assert.strictEqual(c.querySelector('button').getAttribute('aria-label'),
+    'Executive Brief: the bottom line and what to do');
+});
+
+test('readingMinutes gives each view a positive, non-decreasing minute count', function () {
+  var body = build([1, 2, 3]).querySelector('.hl-post-content');
+  var m = RS.readingMinutes(body);
+  assert.ok(m.brief >= 1);
+  assert.ok(m.analyst >= m.brief);
+  assert.ok(m.full >= m.analyst);
+});
+
+test('readingMinutes counts tier 1 sections only for brief, tier 1+2 for analyst', function () {
+  // 200 words per tier-1 section, 1 tier-1 section: brief should land at 1 min
+  // for a small page and grow once tier 2 content is added.
+  var doc = new (require('jsdom').JSDOM)(
+    '<body><div class="hl-post-content">' +
+    '<h2 class="hl-tier-1">S0</h2><p>' + new Array(201).join('w ') + '</p>' +
+    '<h2 class="hl-tier-2">S1</h2><p>' + new Array(201).join('w ') + '</p>' +
+    '</div></body>').window.document;
+  var body = doc.querySelector('.hl-post-content');
+  var m = RS.readingMinutes(body);
+  assert.strictEqual(m.brief, 1);
+  assert.strictEqual(m.analyst, 2);
+});
+
+test('readingMinutes excludes a collapsed teardown from the tier that owns it', function () {
+  var doc = new (require('jsdom').JSDOM)(
+    '<body><div class="hl-post-content">' +
+    '<h2 class="hl-tier-1">S0</h2><p>' + new Array(201).join('w ') + '</p>' +
+    '<details class="hl-teardown"><summary>more</summary><p>' + new Array(2001).join('w ') + '</p></details>' +
+    '</div></body>').window.document;
+  var body = doc.querySelector('.hl-post-content');
+  var collapsed = RS.readingMinutes(body);
+  doc.querySelector('details.hl-teardown').open = true;
+  var opened = RS.readingMinutes(body);
+  assert.strictEqual(collapsed.brief, 1);
+  assert.ok(opened.brief > collapsed.brief);
+});
+
+test('readingMinutes.full takes window.HLReadTime.visibleMinutes verbatim when present, so it can never disagree with the header', function () {
+  var body = build([1, 2, 3]).querySelector('.hl-post-content');
+  global.window = global.window || {};
+  window.HLReadTime = { visibleMinutes: 61, totalMinutes: 64, wordsPerMinute: 200 };
+  var m = RS.readingMinutes(body);
+  assert.strictEqual(m.full, 61);
+  assert.strictEqual(m.fullIsExact, true);
+  delete window.HLReadTime;
+});
+
+test('readingMinutes.full falls back to its own estimate when window.HLReadTime is missing', function () {
+  var body = build([1, 2, 3]).querySelector('.hl-post-content');
+  global.window = global.window || {};
+  delete window.HLReadTime;
+  var m = RS.readingMinutes(body);
+  assert.strictEqual(m.fullIsExact, false);
+  assert.ok(m.full >= 1);
 });
 
 function withControl(tiers, view) {

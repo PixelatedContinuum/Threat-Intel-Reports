@@ -258,6 +258,17 @@ the coverage above is narrower than the rule set.</em></p>
   var visibleWords   = Math.max(0, totalWords - hiddenWords);
   var totalMinutes   = Math.max(1, Math.round(totalWords / 200));
   var visibleMinutes = Math.max(1, Math.round(visibleWords / 200));
+  // Exposed so the view switcher (register-switch.js, loaded after this script)
+  // can show the Full button's own time as the exact figure already computed
+  // here, rather than re-deriving it and risking a second number that could
+  // ever drift from the one printed in the header above.
+  window.HLReadTime = {
+    visibleWords: visibleWords,
+    totalWords: totalWords,
+    visibleMinutes: visibleMinutes,
+    totalMinutes: totalMinutes,
+    wordsPerMinute: 200
+  };
   var eyebrow = document.querySelector('.hl-post-header__eyebrow');
   if (eyebrow) {
     var rt = document.createElement('span');

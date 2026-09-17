@@ -137,16 +137,14 @@ to reach for the same primitive, not only this operator. What is not copied is t
 around it: 206 candidates probed, 198 confirmed exploitable, and a cryptominer running on
 somewhere between 148 and 151 of them, the whole thing inside a 54-minute window on 2026-08-31.
 
-Then the finding that matters most for anyone defending against this exact CVE. The obvious
-detection signature for this injection, a regex on the raw newline bytes that split the metadata
-key, does not fire on a single real request. The metadata field travels as JSON, so the injected
-newline never reaches the network as a raw newline byte. It reaches the wire as the two-byte
-escape sequence backslash-then-`n`, and Gotenberg only converts it back to a real newline after
-its own server has already parsed it, which is after any network sensor has already seen and
-passed the packet. Anyone who writes a rule for this CVE straight from the advisory will build
-one that parses cleanly, loads without error, and never once matches. Section 7 gives the rule
-that actually works, and warns why the escaped bytes must never be "corrected" back to a literal
-newline.
+Then the finding that matters most for a defender: the obvious detection signature for this
+injection never fires on a real request. The metadata field travels as JSON, so the injected
+newline reaches the wire as the two-byte escape sequence backslash-then-`n`, and Gotenberg converts
+it back to a real newline only after its own server has parsed it, after any network sensor has
+already seen and passed the packet. Anyone who writes a rule for this CVE straight from the
+advisory will build one that parses cleanly, loads without error, and never once matches. Section 7
+gives the rule that actually works, and warns why the escaped bytes must never be "corrected" back
+to a literal newline.
 
 This campaign is also not the operator's main business. The exploit chain and the
 cryptominer are the smallest, most fully automated line inside a larger criminal enterprise that
@@ -288,9 +286,8 @@ populations, 167 confirmed from the host's own address and a further 17 inferred
 provider egress, because the two are different grades of evidence and collapsing them into one
 number overstates the weaker of the two.
 
-These are not estimates. Every count above is a row count from a surviving artifact whose parse I
-verified byte-for-byte, not a figure someone remembered. That distinction matters here specifically
-because two of these numbers moved during this investigation.
+These are not estimates: every count above is a row count from a surviving artifact whose parse I
+verified byte-for-byte, and two of these numbers moved during this investigation.
 
 <details markdown="1" class="hl-teardown">
 <summary>Two figures that changed during the investigation, and why the current ones are trustworthy</summary>
@@ -439,9 +436,8 @@ XMRig is free software used by the large majority of Linux cryptojacking activit
 running it unmodified is a default choice, not evidence of a supplier relationship for the payload
 itself. This operator takes a widely available commodity payload and invests their engineering
 effort in the delivery pipeline around it, which the escalation ladder in Section 3 already
-demonstrates in detail. A drop layer serving this exact payload also appears shared across multiple
-unrelated cryptojacking operators pulling from the same installer family, consistent with that
-reading: shared infrastructure, not a paid or exclusive one.
+demonstrates in detail, and which Section 6 shows running through shared, not exclusive,
+infrastructure.
 
 ### Two install modes, and the one that gets missed matters more
 
@@ -497,7 +493,7 @@ vulnerable long enough; a responder on such a host should expect more than one a
 
 ### This campaign is the smallest thing this operator does
 
-I want to lead with the finding that reframes everything above it. Reading the operator's full
+Reading the operator's full
 working directory rather than just the Gotenberg-specific files, the cryptomining campaign this
 report is named for occupies roughly 3% of the recovered file inventory. The larger share belongs
 to a shared mass web-application exploitation engine targeting other named commercial platforms,
@@ -526,21 +522,32 @@ count is more honest than a name I cannot back with content-level proof.
 </table>
 
 **One operator, or one enterprise, is the better-supported reading, and I hold that at MODERATE,
-not higher.** Section 9 carries the full reasoning; the short version is that the strongest
-evidence is structural rather than stylistic: the cryptomining campaign's own working files sit
-physically inside the same directory tree as the Telegram service and card-shop toolchains, which ties
-them to one point of control regardless of who typed which script.
+not higher.** Nothing in this investigation reaches even MODERATE confidence on a named threat
+actor; this is an unknown operator. Section 9 carries the full reasoning behind the one-operator
+read; the short version is that the strongest evidence is structural rather than stylistic: the
+cryptomining campaign's own working files sit physically inside the same directory tree as the
+Telegram service and card-shop toolchains, which ties them to one point of control regardless of
+who typed which script.
 
 ### The account farm is a commercial product, not a script someone left running
 
 The clearest evidence of real investment in this case sits outside the cryptomining campaign
-entirely. I extracted 136 distinct routes from the operator's own account-management panel
-software, and they describe a managed inventory business rather than a dump-and-sell operation:
-bulk session-file import, batch identity manipulation across accounts (avatar, profile, recovery
-email, forced device removal), a commercial OTP inventory system with sold and out-of-stock states
-and bulk export, and a separate monetization suite for paid channel promotion and username
-brokering. A dump-and-sell model does not need lifecycle management this thorough; retaining and
-operating inventory does.
+entirely. The operator's own account-management panel software describes a managed inventory
+business, not a dump-and-sell operation, and I hold that at HIGH confidence from the route names
+alone; whether the underlying accounts are farmed from compromised sources or legitimately
+provisioned is a separate, unresolved question. A separate Android device-farm control panel exists
+in the same directory: its existence is OBSERVED, its function UNRESOLVED, and I found no
+connection between it and the account-management product.
+
+<details markdown="1" class="hl-teardown">
+<summary>The 136 extracted routes behind the commercial-product reading</summary>
+
+I extracted 136 distinct routes from the operator's own account-management panel software, and they
+describe a managed inventory business rather than a dump-and-sell operation: bulk session-file
+import, batch identity manipulation across accounts (avatar, profile, recovery email, forced device
+removal), a commercial OTP inventory system with sold and out-of-stock states and bulk export, and a
+separate monetization suite for paid channel promotion and username brokering. A dump-and-sell model
+does not need lifecycle management this thorough; retaining and operating inventory does.
 
 **I am holding two claims about this product apart on purpose, because collapsing them would
 overstate what I actually know.** The commercial-inventory shape of the API is directly observed
@@ -557,6 +564,8 @@ looked for a direct connection between this and the Telegram account farm, since
 naturally complement each other, and found none: no shared API endpoint, no shared data format,
 nothing beyond both existing on the same box. I am reporting the device farm as a real, separate
 capability whose actual purpose I cannot currently determine.
+
+</details>
 
 ### The named platforms were targeted, not compromised
 
@@ -607,7 +616,7 @@ them individually.
 ---
 
 ## 6. Infrastructure
-{: .hl-tier-2}
+{: .hl-tier-3}
 
 ### The operator's host, and the ColoCrossing/RackNerd distinction
 
@@ -667,23 +676,26 @@ window and was torn down afterward.
 ### The host was declared dark, and that was wrong in an instructive way
 
 An earlier check concluded the operator's host had gone fully dark, all six ports it tested closed
-or filtered, with a working control confirming the test path itself was functional. That conclusion
-does not hold up.
+or filtered. That conclusion does not hold up: the host is live and administered, and the corrected
+statement, the one that should be used anywhere this campaign's collection status comes up, is that
+the operator's exposed directories and campaign-specific listeners went offline sometime between the
+end of the campaign and roughly a week later. The underlying machine did not, and it remains live
+and actively administered as of this report.
 
-The host is actually live and administered: captured application-layer banners, an SSH version
-string, and an HTTP error response are all genuine service replies, not bare timestamps claiming a
-port was "last seen" at some point, and a scanner cannot fabricate a banner. The earlier check's own
-control was real and still produced the wrong conclusion, because it tested reachability to a
-hyperscale, universally-peered target rather than to a target that shares the operator's own hosting
-class: a cheap, single-tenant VPS on a provider with every incentive to treat automated crawler
-traffic differently from ordinary internet traffic. A control has to vary the same property the
-measurement actually depends on: proving a path reaches the easiest possible target on the internet
-proves nothing about whether it reaches the hardest one.
+<details markdown="1" class="hl-teardown">
+<summary>Why a real control produced a wrong dark-check, and the one-line rule it teaches</summary>
 
-The corrected statement, and the one that should be used anywhere this campaign's collection status
-comes up: the operator's exposed directories and campaign-specific listeners went offline sometime
-between the end of the campaign and roughly a week later. The underlying machine did not, and it
-remains live and actively administered as of this report.
+The evidence that the host is live: captured application-layer banners, an SSH version string, and
+an HTTP error response are all genuine service replies, not bare timestamps claiming a port was
+"last seen" at some point, and a scanner cannot fabricate a banner. The earlier check's own control
+was real and still produced the wrong conclusion, because it tested reachability to a hyperscale,
+universally-peered target rather than to a target that shares the operator's own hosting class: a
+cheap, single-tenant VPS on a provider with every incentive to treat automated crawler traffic
+differently from ordinary internet traffic. A control has to vary the same property the measurement
+actually depends on: proving a path reaches the easiest possible target on the internet proves
+nothing about whether it reaches the hardest one.
+
+</details>
 
 ### Tenancy history, and what it does and does not tell me
 
@@ -707,10 +719,21 @@ lean on.
 
 A hostname resolving exclusively to this IP surfaced during the investigation, styled like a
 payment or identity-verification page, with a currently valid certificate and an empty default
-response on every path tried. An earlier pass in this investigation graded this domain's connection
-to the operator at HIGH confidence, reasoning that the domain's presence sat inside an otherwise
-unbroken tenancy window. **I am grading that connection NOT CHECKED, for four reasons, each of which independently would
-have been enough on its own.**
+response on every path tried. An earlier pass graded this domain's connection to the operator at
+HIGH confidence, reasoning that the domain's presence sat inside an otherwise unbroken tenancy
+window.
+
+**I am grading that connection NOT CHECKED, not HIGH, for four reasons, each of which independently
+would have been enough on its own.** The domain's DNS record first appeared two days after the
+campaign ended, the dynamic-DNS naming-pattern base rate behind the earlier grade was never
+measured, and the earlier HIGH grade was conditional on a tenancy-continuity claim already flagged
+above as unverified. Caddy, the software serving this domain, can also issue a valid certificate for
+any hostname pointed at the box with zero configuration, so a valid certificate alone does not tie
+the domain to the operator.
+
+<details markdown="1" class="hl-teardown">
+<summary>Four reasons the co-located domain is NOT CHECKED, not HIGH: post-campaign DNS birth,
+unmeasured base rate, an unclosed conditional, and Caddy on-demand TLS</summary>
 
 First, the domain's own DNS record first appeared two days after the campaign ended, not during it
 and not before it. What spans the campaign continuously is the host's tenancy, not this specific
@@ -741,6 +764,8 @@ purpose. It does not raise my confidence that this zone's owner is the Gotenberg
 specifically, because the entire link back to this operator still runs through the same unverified
 tenancy claim, and the second domain never touches this operator's IP, ASN, or anything else in the
 recovered corpus at all.
+
+</details>
 
 ### Where the 196 confirmed victim hosts are hosted, by provider only
 
@@ -781,23 +806,9 @@ link.
 
 ### Live re-verification at publication
 
-<table>
-<colgroup>
-<col style="width: 34%;">
-<col style="width: 33%;">
-<col style="width: 33%;">
-</colgroup>
-<thead>
-<tr><th>Claim</th><th>Live query result</th><th>Outcome</th></tr>
-</thead>
-<tbody>
-<tr><td>Operator IP's ASN and current owner</td><td>AS36352, HostPapa, unchanged</td><td>Match</td></tr>
-<tr><td>Co-located domain still resolves to the operator's host</td><td>Same single A record, no reputation signal either way</td><td>Match</td></tr>
-</tbody>
-</table>
-
-I did not re-check whether the host still answers on the same live ports as of publication, so
-every port and banner below is dated to the observation window rather than to the publication date.
+The co-located domain still resolves to the operator's host as of publication, with no reputation
+signal either way. I did not re-check whether the host still answers on the same live ports, so
+every port and banner above is dated to the observation window rather than to the publication date.
 The two-path, twice-controlled results in this section rest on direct, dated observation rather
 than on a third party's report.
 
@@ -957,7 +968,7 @@ operator's own scripts alone.
 ---
 
 ## 9. Threat Actor Assessment
-{: .hl-tier-2}
+{: .hl-tier-3}
 
 ### No named actor, and that is the honest answer
 
@@ -969,17 +980,11 @@ their identity.
 Nothing here revises or contradicts anything I have published before, and a reader should not go
 looking for an earlier piece that this one supersedes.
 
-### The falsified premise, and why I am treating the falsification itself as a finding
-
-This case opened on the hypothesis that an autonomous AI-agent framework drove the exploitation.
-Section 5 already covers why that premise does not survive, on three independent measurements
-against primary sources rather than on impression. I am restating the conclusion here because it
-governs how the rest of this assessment should be read: this is ordinary, competently engineered,
-scripted mass exploitation of one disclosed vulnerability.
-
 ### One operator, at MODERATE, not higher
 
-I hold "one operator" at MODERATE confidence.
+The AI-premise refutation in Section 5 governs how this assessment should be read: this is
+ordinary, competently engineered, scripted mass exploitation of one disclosed vulnerability, not
+anything agent-orchestrated. I hold "one operator" at MODERATE confidence.
 
 The strongest style-based argument for a single author was a shared helper function that drifted
 inconsistently across every Gotenberg-specific script, which reads as one person iterating solo
@@ -1085,25 +1090,14 @@ Three alternatives I could not kill, and I am naming them rather than smoothing 
 
 ### Why I am not designating a new tracking identifier for this operator
 
-This case's own designation gates, at least three distinctive characteristics with at least two
-technical or infrastructure-based, and supporting evidence strong enough to trust, pass on a
-literal count: the callback-tagging choice, the writability probe, the retry ladder, and the
-structural co-location of three separate toolchains inside one directory all qualify, and the
-supporting evidence is our own direct reading of the operator's recovered material rather than
-secondhand reporting.
-
-**I am recommending against creating one anyway, for three reasons that outweigh a literal pass on
-the gates.** First, three of the four candidate characteristics are absence-of-evidence findings,
-real evidence of no public match today, but a weaker foundation for a designation meant to let a
-future, different campaign be recognized as the same actor than a positive, unique signature would
-be. Second, the confidence underlying "one operator," the premise a tracking designation exists to
-follow, sits at MODERATE here for reasons of evidentiary rigor rather than new contrary evidence,
-and building a designation on top of a MODERATE cluster-consistency judgment invites exactly the
-kind of drift that later forces a tracking designation to be retired. Third, the strongest
-genuinely distinctive fact in this case, three business lines sharing one directory footprint, is a
-fact about this specific, now-dark box. It would not by itself let a future campaign on different
-infrastructure be recognized as the same operator without another full capture, and a tracking
-designation that cannot travel is not doing the job a designation is for.
+I am not assigning a tracking identifier for this operator, even though the case technically
+clears the designation gates on a literal count. Most of the qualifying characteristics are
+absence-of-evidence findings rather than a positive, unique signature. The "one operator" premise
+a designation would follow sits at MODERATE for reasons of evidentiary rigor, not new contrary
+evidence, and building on it invites exactly the kind of drift that later forces a designation to
+be retired. The strongest distinctive fact, three business lines sharing one directory footprint,
+is tied to this specific, now-dark box, and would not by itself let a future campaign on different
+infrastructure be recognized as the same operator.
 
 ---
 
