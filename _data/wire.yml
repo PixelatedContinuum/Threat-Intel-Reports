@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-17T20:00:09Z
+generated_at: 2026-09-17T22:00:28Z
 window_days: 30
 counts:
-  total: 551
-  research: 187
+  total: 548
+  research: 184
   news: 364
 unclassified_sources:
   - "The DFIR Report"
@@ -34,7 +34,7 @@ topics:
     count: 24
     color: 7
   - label: "credential theft"
-    count: 17
+    count: 15
     color: 8
   - label: "nation-state"
     count: 15
@@ -50,7 +50,6 @@ topics:
     color: 12
 label_colors:
   ".net loader": 4
-  "2fa bypass": 1
   "3bb": 7
   "3snake": 7
   "a little sunshine": 6
@@ -71,7 +70,6 @@ label_colors:
   "adobe": 1
   "adobe commerce": 12
   "adversary infrastructure": 12
-  "adversary-in-the-middle": 9
   "adware disguise": 5
   "aesto health": 6
   "affiliate fraud": 7
@@ -126,7 +124,6 @@ label_colors:
   "apt36": 10
   "arktunnel": 6
   "arm": 10
-  "armenia": 5
   "arrayref": 8
   "arrested": 2
   "artificial intelligence": 6
@@ -3747,21 +3744,3 @@ items:
     date: 2026-08-19T05:00:00Z
     kind: research
     labels: ["securing ai"]
-  - title: "CopyCop Targets AI Investment in Armenia"
-    url: "https://otx.alienvault.com/pulse/6a84c51cdd3d70b59b0d8f38"
-    source: "AlienVault"
-    date: 2026-08-18T20:48:28Z
-    kind: research
-    labels: ["ai infrastructure", "armenia", "copycop", "disinformation", "geopolitical realignment", "influence operations", "media impersonation", "storm-1516"]
-  - title: "Mirage2FA Hijacks Companies’ Microsoft 365 Sessions, with Over 4K Victims in the US"
-    url: "https://any.run/cybersecurity-blog/mirage2fa-phishing-targets-us-companies/"
-    source: "AlienVault"
-    date: 2026-08-18T20:48:20Z
-    kind: research
-    labels: ["2fa bypass", "adversary-in-the-middle", "credential theft", "html smuggling", "microsoft 365", "phishing-as-a-service", "session hijacking", "websocket"]
-  - title: "MacSync Stealer: C2 Infrastructure Rotation"
-    url: "https://otx.alienvault.com/pulse/6a84bafb3c129cc2f9de2762"
-    source: "AlienVault"
-    date: 2026-08-18T20:05:15Z
-    kind: research
-    labels: ["c2 infrastructure", "clickfix", "credential theft", "cryptocurrency wallet", "infostealer", "mac.c", "macos", "macsync", "macsync stealer", "malware-as-a-service"]
