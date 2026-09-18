@@ -3,26 +3,26 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-18T08:02:28Z
+generated_at: 2026-09-18T10:02:18Z
 window_days: 30
 counts:
-  total: 546
-  research: 182
+  total: 553
+  research: 189
   news: 364
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 78
+    count: 77
     color: 1
   - label: "cybercrime"
     count: 61
     color: 2
-  - label: "government"
+  - label: "exploited"
     count: 33
     color: 3
-  - label: "exploited"
-    count: 32
+  - label: "government"
+    count: 33
     color: 4
   - label: "malware"
     count: 31
@@ -33,19 +33,19 @@ topics:
   - label: "data breaches"
     count: 23
     color: 7
+  - label: "social engineering"
+    count: 17
+    color: 8
+  - label: "ransomware"
+    count: 16
+    color: 9
   - label: "nation-state"
     count: 15
-    color: 8
+    color: 10
   - label: "phishing"
     count: 15
-    color: 9
-  - label: "ransomware"
-    count: 15
-    color: 10
-  - label: "social engineering"
-    count: 15
     color: 11
-  - label: "zero-day"
+  - label: "clickfix"
     count: 14
     color: 12
 label_colors:
@@ -83,11 +83,13 @@ label_colors:
   "ai training": 8
   "ai vishing": 6
   "ai voice phishing": 4
+  "ai-agent": 12
   "ai-assisted intrusions": 3
   "ai-assisted malware": 8
   "ai-assisted-development": 9
   "ai-driven-campaign": 10
   "ai-generated decoys": 1
+  "ai-generated-content": 4
   "ai-orchestrated campaign": 1
   "ai-powered cybercrime": 12
   "aikido security": 1
@@ -185,6 +187,7 @@ label_colors:
   "botnet takedown": 5
   "breadcrumbs": 10
   "brevo": 8
+  "brevo compromise": 8
   "browser data theft": 1
   "browser extension": 11
   "browser extension campaign": 9
@@ -211,6 +214,7 @@ label_colors:
   "casino domains": 4
   "castleloader": 11
   "castlerat": 9
+  "cdn poisoning": 9
   "centerpoint energy": 7
   "central asia": 5
   "chaindrop": 8
@@ -243,12 +247,13 @@ label_colors:
   "cl0p": 3
   "claude desktop": 12
   "cleo": 7
-  "clickfix": 3
+  "clickfix": 12
   "clipper": 3
   "cloaked ursa": 2
   "cloud": 7
   "cloud & application security": 1
   "cloud cybersecurity research": 3
+  "cloud-storage-exploitation": 2
   "cloudflare": 11
   "cloudflare captcha": 5
   "cloudflare tunnels": 6
@@ -258,6 +263,7 @@ label_colors:
   "compile-time execution": 3
   "conti": 1
   "control-flow flattening": 10
+  "coordinated-inauthentic-behavior": 12
   "cpanel": 1
   "credential exfiltration": 4
   "credential harvesting": 4
@@ -271,6 +277,7 @@ label_colors:
   "cross-platform": 10
   "crowdoor": 11
   "crowdstrike": 1
+  "crudeexclude": 7
   "crypto scam": 9
   "cryptocurrency": 12
   "cryptocurrency miner": 1
@@ -298,6 +305,7 @@ label_colors:
   "cybera": 2
   "cyberattacks": 8
   "cybercrime": 2
+  "cyberespionage": 8
   "cyberwarfare": 9
   "dahua": 9
   "darklantern": 4
@@ -319,6 +327,7 @@ label_colors:
   "domain controller": 4
   "dprk apt": 2
   "e-commerce attacks": 10
+  "earth estries": 3
   "education": 10
   "elections targeting": 5
   "email security": 12
@@ -329,7 +338,7 @@ label_colors:
   "espionage": 11
   "eu": 12
   "exploit": 9
-  "exploited": 4
+  "exploited": 3
   "exposure management": 4
   "extortion": 12
   "extortionware": 11
@@ -358,11 +367,12 @@ label_colors:
   "google cloud": 8
   "google infrastructure abuse": 8
   "google tag manager abuse": 4
-  "government": 3
+  "government": 4
   "government impersonation": 7
   "gta6": 6
   "hacker": 8
   "hacker conversations": 8
+  "handala hack": 2
   "hardware": 6
   "hasbro": 1
   "head mare": 3
@@ -380,6 +390,7 @@ label_colors:
   "iocontrol": 7
   "ios": 11
   "isolated-vm": 5
+  "itorrents compromise": 8
   "ivanti": 7
   "jfrog": 8
   "kimsuky": 1
@@ -392,6 +403,7 @@ label_colors:
   "malware": 5
   "malware analysis": 7
   "mathspace": 4
+  "meshagent": 2
   "microsoft": 4
   "microsoft teams": 10
   "mikrotik": 2
@@ -400,7 +412,7 @@ label_colors:
   "mobile": 4
   "mobile & wireless": 4
   "n-central": 6
-  "nation-state": 8
+  "nation-state": 10
   "netch-gateway": 5
   "netscaler": 5
   "network security": 6
@@ -410,7 +422,7 @@ label_colors:
   "on the radar": 4
   "openai": 4
   "oracle": 12
-  "oracle cspu": 1
+  "orkes": 6
   "ot": 3
   "papercut": 8
   "patch": 10
@@ -419,7 +431,8 @@ label_colors:
   "patched": 1
   "patches": 2
   "payment fraud": 12
-  "phishing": 9
+  "phishing": 11
+  "phishing campaign": 6
   "phishing kit": 6
   "plugin vulnerability": 1
   "poc exploit": 3
@@ -427,9 +440,10 @@ label_colors:
   "privacy": 12
   "proxy abuse": 6
   "qilin": 11
-  "ransomware": 10
+  "ransomware": 9
   "rce": 10
   "revolut": 5
+  "rewards points scam": 3
   "rmm abuse": 2
   "ruby on rails": 12
   "sap": 8
@@ -441,7 +455,7 @@ label_colors:
   "servicenow": 1
   "sma1000": 2
   "soc": 9
-  "social engineering": 11
+  "social engineering": 8
   "software": 5
   "spring": 5
   "surfshark": 11
@@ -454,8 +468,19 @@ label_colors:
   "vmware": 2
   "vpn": 8
   "vulnerabilities": 1
-  "zero-day": 12
 items:
+  - title: "New Check Point flaw lets hackers execute code with root privileges"
+    url: "https://www.bleepingcomputer.com/news/security/check-point-warns-critical-flaw-lets-hackers-execute-code-as-root/"
+    source: "BleepingComputer"
+    date: 2026-09-18T09:34:33Z
+    kind: news
+    labels: []
+  - title: "Critical Orkes Conductor Vulnerability Exploited in Attacks"
+    url: "https://www.securityweek.com/critical-orkes-conductor-vulnerability-exploited-in-attacks/"
+    source: "SecurityWeek"
+    date: 2026-09-18T08:42:18Z
+    kind: news
+    labels: ["exploited", "orkes", "vulnerabilities"]
   - title: "Check Point, Kaspersky, Tanium Patch Product Vulnerabilities"
     url: "https://www.securityweek.com/check-point-kaspersky-tanium-patch-product-vulnerabilities/"
     source: "SecurityWeek"
@@ -474,6 +499,24 @@ items:
     date: 2026-09-17T21:50:26Z
     kind: news
     labels: ["artificial intelligence", "mobile"]
+  - title: "BlackCore’s Influence Operations for Hire"
+    url: "https://citizenlab.ca/research/blackcores-influence-operations-for-hire/"
+    source: "AlienVault"
+    date: 2026-09-17T21:02:33Z
+    kind: research
+    labels: ["ai-generated-content", "coordinated-inauthentic-behavior", "fake-personas", "influence-for-hire", "social-media-manipulation"]
+  - title: "HEAVYGRAM: A Telegram-based Surveillance Backdoor Linked to Handala Hack"
+    url: "https://www.group-ib.com/blog/heavygram-handala-hack-telegram-c2/"
+    source: "AlienVault"
+    date: 2026-09-17T21:02:31Z
+    kind: research
+    labels: ["crudeexclude", "handala hack", "heavygram", "social engineering", "surveillance backdoor", "telegram c2"]
+  - title: "Brevo supply chain attack hits 100k+ sites with Wordpress backdoors and Clickfix malware"
+    url: "https://otx.alienvault.com/pulse/6aac5377abf1f1d1674825a9"
+    source: "AlienVault"
+    date: 2026-09-17T20:54:15Z
+    kind: research
+    labels: ["brevo compromise", "cdn poisoning", "clickfix", "supply-chain-attack", "wordpress backdoor"]
   - title: "Should you care about an “AI slowdown?”"
     url: "https://blog.talosintelligence.com/should-you-care-about-an-ai-slowdown/"
     source: "Cisco Talos"
@@ -498,6 +541,30 @@ items:
     date: 2026-09-17T16:30:00Z
     kind: news
     labels: ["malware", "nation-state"]
+  - title: "T-Mobile rewards points expiry texts are a phishing scam"
+    url: "https://otx.alienvault.com/pulse/6aac141e2773119436b98523"
+    source: "AlienVault"
+    date: 2026-09-17T16:23:58Z
+    kind: research
+    labels: ["phishing campaign", "rewards points scam", "smishing", "sms phishing", "social engineering"]
+  - title: "The Odyssey and trojans again: MovieReaper attacks users in multiple countries via compromised torrents"
+    url: "https://otx.alienvault.com/pulse/6aac13f8b67f38a3496d4d1d"
+    source: "AlienVault"
+    date: 2026-09-17T16:23:20Z
+    kind: research
+    labels: ["blockchain c2", "itorrents compromise", "moviereaper", "solana", "uac bypass"]
+  - title: "Beware the SparroWock: The backdoor that bites, the commands that catch"
+    url: "https://www.welivesecurity.com/en/eset-research/beware-sparrowock-backdoor-bites-commands-catch/"
+    source: "AlienVault"
+    date: 2026-09-17T16:19:02Z
+    kind: research
+    labels: ["cyberespionage", "earth estries", "sparrowdoor", "sparrowocky"]
+  - title: "Ready, Settra, Go: New Settra Ransomware Variant Deploys MeshAgent RMM"
+    url: "https://www.huntress.com/blog/new-settra-ransomware-variant"
+    source: "AlienVault"
+    date: 2026-09-17T16:19:01Z
+    kind: research
+    labels: ["byovd", "meshagent", "ransomware", "recovery inhibition", "rmm", "settra"]
   - title: "OpenAI Says Its Models Searched GitHub for Leaked API Keys During Training"
     url: "https://www.securityweek.com/openai-says-its-models-hunted-github-for-leaked-api-keys-during-training/"
     source: "SecurityWeek"
@@ -540,6 +607,12 @@ items:
     date: 2026-09-17T12:29:53Z
     kind: news
     labels: ["ics/ot", "ot", "ransomware"]
+  - title: "Discernment Deleted: Inside the Operation Server of BlackHatSect0r && DXQRTXX"
+    url: "https://otx.alienvault.com/pulse/6aabd1f78ff5217e83133504"
+    source: "AlienVault"
+    date: 2026-09-17T11:41:43Z
+    kind: research
+    labels: ["ai-agent", "cloud-storage-exploitation", "dxscan", "extortion", "vishing"]
   - title: "US takes down NightmareStresser DDoS-for-hire platform"
     url: "https://www.bleepingcomputer.com/news/security/fbi-seizes-nightmarestresser-service-linked-to-thousands-of-ddos-attacks/"
     source: "BleepingComputer"
@@ -3714,21 +3787,3 @@ items:
     date: 2026-08-19T10:12:24Z
     kind: news
     labels: ["microsoft"]
-  - title: "Describing attacks with crime script analysis"
-    url: "https://blog.talosintelligence.com/describing-attacks-with-crime-script-analysis/"
-    source: "Cisco Talos"
-    date: 2026-08-19T10:00:52Z
-    kind: research
-    labels: ["on the radar"]
-  - title: "943 Patches Rolled Out With Oracle’s August 2026 Security Update"
-    url: "https://www.securityweek.com/943-patches-rolled-out-with-oracles-august-2026-security-update/"
-    source: "SecurityWeek"
-    date: 2026-08-19T09:14:51Z
-    kind: news
-    labels: ["oracle", "oracle cspu", "patches", "vulnerabilities"]
-  - title: "Chrome, Firefox Updates Patch Dozens of Vulnerabilities"
-    url: "https://www.securityweek.com/chrome-firefox-updates-patch-dozens-of-vulnerabilities/"
-    source: "SecurityWeek"
-    date: 2026-08-19T08:19:09Z
-    kind: news
-    labels: ["chrome", "firefox", "patches", "vulnerabilities"]
