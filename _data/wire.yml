@@ -3,20 +3,20 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-18T14:02:32Z
+generated_at: 2026-09-18T16:00:18Z
 window_days: 30
 counts:
-  total: 552
-  research: 188
-  news: 364
+  total: 556
+  research: 191
+  news: 365
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 78
+    count: 79
     color: 1
   - label: "cybercrime"
-    count: 62
+    count: 63
     color: 2
   - label: "exploited"
     count: 32
@@ -28,24 +28,24 @@ topics:
     count: 32
     color: 5
   - label: "artificial intelligence"
-    count: 29
+    count: 30
     color: 6
   - label: "data breaches"
     count: 23
     color: 7
-  - label: "social engineering"
-    count: 17
-    color: 8
-  - label: "phishing"
-    count: 15
-    color: 9
   - label: "ransomware"
-    count: 15
-    color: 10
+    count: 16
+    color: 8
+  - label: "social engineering"
+    count: 16
+    color: 9
   - label: "clickfix"
     count: 14
-    color: 11
+    color: 10
   - label: "nation-state"
+    count: 14
+    color: 11
+  - label: "phishing"
     count: 14
     color: 12
 label_colors:
@@ -82,7 +82,6 @@ label_colors:
   "ai infrastructure targeting": 6
   "ai malware": 9
   "ai training": 8
-  "ai vishing": 6
   "ai voice phishing": 4
   "ai-agent": 12
   "ai-assisted intrusions": 3
@@ -106,7 +105,6 @@ label_colors:
   "android": 9
   "android banking trojan": 11
   "android malware": 4
-  "android rat": 12
   "angryrebel": 7
   "anthropic": 8
   "anti-analysis": 11
@@ -139,7 +137,6 @@ label_colors:
   "atf": 7
   "atlassian": 8
   "atomic": 1
-  "atomic macos stealer": 10
   "attack surface": 11
   "attacks": 7
   "australia": 10
@@ -169,6 +166,7 @@ label_colors:
   "banking trojan": 4
   "bashnatch": 10
   "beacon": 6
+  "beavertail": 7
   "behavior-based-detection": 12
   "beijing institute of technology": 12
   "berlin": 6
@@ -232,6 +230,7 @@ label_colors:
   "chrome": 12
   "chrome exploitation": 6
   "chrome extension": 7
+  "chrome extension theft": 4
   "chrome extensions": 8
   "chrome rat": 5
   "chromium vulnerability": 4
@@ -247,7 +246,7 @@ label_colors:
   "citrix": 11
   "claude desktop": 12
   "cleo": 7
-  "clickfix": 11
+  "clickfix": 10
   "clipper": 3
   "cloaked ursa": 2
   "cloud": 7
@@ -278,7 +277,6 @@ label_colors:
   "crowdoor": 11
   "crowdstrike": 1
   "crudeexclude": 7
-  "crypto scam": 9
   "cryptocurrency": 12
   "cryptocurrency miner": 1
   "cryptocurrency stealer": 4
@@ -349,6 +347,7 @@ label_colors:
   "fake security scan": 12
   "fake tax documents": 4
   "fengtai government": 3
+  "financial scam": 1
   "firebase c2": 6
   "firefox": 3
   "fortigate": 1
@@ -380,6 +379,7 @@ label_colors:
   "head mare": 3
   "healthcare": 11
   "hideul.exe": 7
+  "hts": 11
   "hugging face": 6
   "ics": 3
   "ics/ot": 1
@@ -387,6 +387,7 @@ label_colors:
   "in other news": 8
   "incident response": 7
   "industry": 8
+  "infostealer": 8
   "inside google cloud": 2
   "insights": 5
   "iocontrol": 7
@@ -396,10 +397,12 @@ label_colors:
   "ivanti": 7
   "jfrog": 8
   "kimsuky": 1
+  "labubarat": 10
   "landing page top story": 2
   "leadership": 11
   "legal": 7
   "linux": 2
+  "maas framework": 12
   "mac malware": 8
   "macos": 11
   "malware": 5
@@ -414,7 +417,7 @@ label_colors:
   "mobile": 4
   "mobile & wireless": 4
   "n-central": 6
-  "nation-state": 12
+  "nation-state": 11
   "netch-gateway": 5
   "netscaler": 5
   "network security": 6
@@ -433,16 +436,17 @@ label_colors:
   "patched": 1
   "patches": 2
   "payment fraud": 12
-  "phishing": 9
+  "phishing": 12
   "phishing campaign": 6
   "phishing kit": 6
   "plugin vulnerability": 1
   "poc exploit": 3
+  "polinrider": 2
   "postgresql": 12
   "privacy": 12
   "proxy abuse": 6
   "qilin": 11
-  "ransomware": 10
+  "ransomware": 8
   "rce": 10
   "revolut": 5
   "rewards points scam": 3
@@ -457,7 +461,7 @@ label_colors:
   "servicenow": 1
   "sma1000": 2
   "soc": 9
-  "social engineering": 8
+  "social engineering": 9
   "software": 5
   "spring": 5
   "surfshark": 11
@@ -471,12 +475,54 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
 items:
+  - title: "Fake LastPass Authenticator GitHub repos push new Rapuncel infostealer"
+    url: "https://www.bleepingcomputer.com/news/security/fake-lastpass-authenticator-github-repos-push-new-rapuncel-infostealer/"
+    source: "BleepingComputer"
+    date: 2026-09-18T15:19:06Z
+    kind: news
+    labels: []
+  - title: "In Other News: Ransomware Developer Sentenced, Plugin4Shell AI Attack, Critical SAP Flaw"
+    url: "https://www.securityweek.com/in-other-news-ransomware-developer-sentenced-plugin4shell-ai-attack-critical-sap-flaw/"
+    source: "SecurityWeek"
+    date: 2026-09-18T14:25:00Z
+    kind: news
+    labels: ["artificial intelligence", "cybercrime", "in other news", "vulnerabilities"]
+  - title: "WeaselBiscuit Strips BeaverTail and OtterCookie Down to Essentials"
+    url: "https://otx.alienvault.com/pulse/6aad3e7f8cc155ff864b444b"
+    source: "AlienVault"
+    date: 2026-09-18T13:37:03Z
+    kind: research
+    labels: ["beavertail", "chrome extension theft", "invisibleferret", "npm supply chain", "ottercookie", "weaselbiscuit"]
   - title: "Hacking group ‘NightEagle’ targeting China’s high-tech sector expands operations to Russia"
     url: "https://therecord.media/hacking-group-nighteagle-expands-russia-china"
     source: "Recorded Future"
     date: 2026-09-18T13:24:00Z
     kind: news
     labels: ["cybercrime"]
+  - title: "Private HTS programs that spread ransomware"
+    url: "https://otx.alienvault.com/pulse/6aad3a912f6a15e61e12e20f"
+    source: "AlienVault"
+    date: 2026-09-18T13:20:16Z
+    kind: research
+    labels: ["financial scam", "hts", "quasar rat", "ransomware"]
+  - title: "EtherHiding Exposed: Inside a Blockchain-powered Malware Campaign Hiding in Plain Sight"
+    url: "https://otx.alienvault.com/pulse/6aad397e9cc5cdabaa878d5b"
+    source: "AlienVault"
+    date: 2026-09-18T13:15:42Z
+    kind: research
+    labels: ["banking trojan", "blockchain c2", "clickfix", "compromised websites", "etherhiding", "fakecaptcha", "polygon smart contracts"]
+  - title: "PolinRider Spreads Through Compromised GitHub Accounts and Packagist"
+    url: "https://socket.dev/blog/polinrider-github-packagist"
+    source: "AlienVault"
+    date: 2026-09-18T12:51:25Z
+    kind: research
+    labels: ["infostealer", "polinrider", "supply chain"]
+  - title: "LabubaRAT Threat Snapshot"
+    url: "https://blackpointcyber.com/blog/threat-snapshot-labubarat/"
+    source: "AlienVault"
+    date: 2026-09-18T12:51:24Z
+    kind: research
+    labels: ["labubarat", "maas framework", "rust-based rat"]
   - title: "AI-Built Exploit and Sign-In Flaw Opened Path to Internal OpenAI Code"
     url: "https://www.securityweek.com/ai-built-exploit-and-sign-in-flaw-opened-path-to-internal-openai-code/"
     source: "SecurityWeek"
@@ -531,6 +577,12 @@ items:
     date: 2026-09-18T07:14:04Z
     kind: news
     labels: ["check point", "endpoint security", "kaspersky", "patch", "security product vulnerability", "tanium", "vulnerabilities"]
+  - title: "One SOC, 100 projects: running centralized alert triage on Elastic Security Serverless"
+    url: "https://www.elastic.co/security-labs/blog/centralized-alert-triage-cross-project-search"
+    source: "Elastic"
+    date: 2026-09-18T00:00:00Z
+    kind: research
+    labels: ["security operations", "soc", "threat hunting"]
   - title: "Inside the Modern SOC: Defending the Cross-Environment Pivot"
     url: "https://unit42.paloaltonetworks.com/soc-cross-environment-pivot/"
     source: "Palo Alto Networks"
@@ -3759,27 +3811,3 @@ items:
     date: 2026-08-19T17:50:01Z
     kind: news
     labels: []
-  - title: "Post-DEF CON Phishing Uses Malicious Google Doc to Deliver Malware"
-    url: "https://www.huntress.com/blog/defcon-phishing-google-doc-malware"
-    source: "AlienVault"
-    date: 2026-08-19T15:56:58Z
-    kind: research
-    labels: ["amos", "atomic macos stealer", "black hat", "clickfix", "conference phishing", "cryptocurrency theft", "def con", "google apps script", "netsupport manager", "netsupport rat"]
-  - title: "US charges Iranian hackers over $3.4 billion intellectual property theft"
-    url: "https://www.bleepingcomputer.com/news/security/us-charges-iranian-hackers-over-34-billion-intellectual-property-theft/"
-    source: "BleepingComputer"
-    date: 2026-08-19T15:56:09Z
-    kind: news
-    labels: ["legal"]
-  - title: "Scammers are using fake crypto AML checkers to drain your wallet"
-    url: "https://otx.alienvault.com/pulse/6a85ce6de0b7994ff427898e"
-    source: "AlienVault"
-    date: 2026-08-19T15:40:29Z
-    kind: research
-    labels: ["crypto scam", "cryptocurrency", "fake aml checker", "fraudulent website", "ghostdesk", "phishing", "social engineering", "token theft", "wallet draining"]
-  - title: "Balonx Sistema: The Face Behind the PhaaS Affecting Mexican Banking"
-    url: "https://otx.alienvault.com/pulse/6a85ce6194c0be6ceb256c93"
-    source: "AlienVault"
-    date: 2026-08-19T15:40:17Z
-    kind: research
-    labels: ["ai vishing", "android rat", "callflow", "cryptocurrency payments", "mexican banking fraud", "phaas", "spyroid", "websocket hijacking"]
