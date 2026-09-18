@@ -3,17 +3,17 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-18T06:02:04Z
+generated_at: 2026-09-18T08:02:28Z
 window_days: 30
 counts:
-  total: 549
-  research: 184
-  news: 365
+  total: 546
+  research: 182
+  news: 364
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 77
+    count: 78
     color: 1
   - label: "cybercrime"
     count: 61
@@ -31,22 +31,22 @@ topics:
     count: 27
     color: 6
   - label: "data breaches"
-    count: 24
+    count: 23
     color: 7
-  - label: "credential theft"
-    count: 15
-    color: 8
   - label: "nation-state"
     count: 15
-    color: 9
+    color: 8
   - label: "phishing"
     count: 15
-    color: 10
+    color: 9
   - label: "ransomware"
     count: 15
-    color: 11
+    color: 10
   - label: "social engineering"
     count: 15
+    color: 11
+  - label: "zero-day"
+    count: 14
     color: 12
 label_colors:
   ".net loader": 4
@@ -208,7 +208,6 @@ label_colors:
   "canada": 4
   "canada revenue agency": 3
   "card-skimming": 8
-  "carecloud": 10
   "casino domains": 4
   "castleloader": 11
   "castlerat": 9
@@ -263,7 +262,7 @@ label_colors:
   "credential exfiltration": 4
   "credential harvesting": 4
   "credential phishing": 9
-  "credential theft": 8
+  "credential theft": 6
   "credential-harvesting": 1
   "credential-theft": 5
   "critical infrastructure": 4
@@ -281,7 +280,6 @@ label_colors:
   "cryptographic": 9
   "cspu": 1
   "curlrat": 3
-  "cve-2021-27101": 2
   "cve-2021-38003": 1
   "cve-2023-49105": 4
   "cve-2024-21762": 6
@@ -402,7 +400,7 @@ label_colors:
   "mobile": 4
   "mobile & wireless": 4
   "n-central": 6
-  "nation-state": 9
+  "nation-state": 8
   "netch-gateway": 5
   "netscaler": 5
   "network security": 6
@@ -421,7 +419,7 @@ label_colors:
   "patched": 1
   "patches": 2
   "payment fraud": 12
-  "phishing": 10
+  "phishing": 9
   "phishing kit": 6
   "plugin vulnerability": 1
   "poc exploit": 3
@@ -429,7 +427,7 @@ label_colors:
   "privacy": 12
   "proxy abuse": 6
   "qilin": 11
-  "ransomware": 11
+  "ransomware": 10
   "rce": 10
   "revolut": 5
   "rmm abuse": 2
@@ -443,7 +441,7 @@ label_colors:
   "servicenow": 1
   "sma1000": 2
   "soc": 9
-  "social engineering": 12
+  "social engineering": 11
   "software": 5
   "spring": 5
   "surfshark": 11
@@ -456,7 +454,14 @@ label_colors:
   "vmware": 2
   "vpn": 8
   "vulnerabilities": 1
+  "zero-day": 12
 items:
+  - title: "Check Point, Kaspersky, Tanium Patch Product Vulnerabilities"
+    url: "https://www.securityweek.com/check-point-kaspersky-tanium-patch-product-vulnerabilities/"
+    source: "SecurityWeek"
+    date: 2026-09-18T07:14:04Z
+    kind: news
+    labels: ["check point", "endpoint security", "kaspersky", "patch", "security product vulnerability", "tanium", "vulnerabilities"]
   - title: "Inside the Modern SOC: Defending the Cross-Environment Pivot"
     url: "https://unit42.paloaltonetworks.com/soc-cross-environment-pivot/"
     source: "Palo Alto Networks"
@@ -3727,27 +3732,3 @@ items:
     date: 2026-08-19T08:19:09Z
     kind: news
     labels: ["chrome", "firefox", "patches", "vulnerabilities"]
-  - title: "CISA: Medusa ransomware hit over 500 critical infrastructure orgs"
-    url: "https://www.bleepingcomputer.com/news/security/cisa-medusa-ransomware-hit-over-500-critical-infrastructure-orgs/"
-    source: "BleepingComputer"
-    date: 2026-08-19T08:00:48Z
-    kind: news
-    labels: []
-  - title: "Beware of Phishing Emails Disguised as Quote Confirmation Requests (PhantomStealer)"
-    url: "https://otx.alienvault.com/pulse/6a855b37f82f7d0075b2f111"
-    source: "AlienVault"
-    date: 2026-08-19T07:28:55Z
-    kind: research
-    labels: ["byovd", "clipper", "credential theft", "cryptocurrency stealer", "injector", "phantomstealer", "process hollowing", "uac bypass"]
-  - title: "CareCloud Data Breach Impact Grows to 3.7 Million Individuals"
-    url: "https://www.securityweek.com/carecloud-data-breach-impact-grows-to-3-7-million-individuals/"
-    source: "SecurityWeek"
-    date: 2026-08-19T06:56:43Z
-    kind: news
-    labels: ["carecloud", "data breaches", "healthcare"]
-  - title: "Clop Returns with Custom Implant in Mass-Extortion Campaign"
-    url: "https://reliaquest.com/blog/clop-returns-with-custom-implant-in-mass-extortion-campaign"
-    source: "AlienVault"
-    date: 2026-08-19T06:54:05Z
-    kind: research
-    labels: ["credential theft", "cve-2021-27101", "cve-2023-34362", "cve-2026-12569", "data exfiltration", "dewmode", "extortion", "lemurloot", "manufacturing", "mass exploitation", "ptc windchill", "web shell"]
