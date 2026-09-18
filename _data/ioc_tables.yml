@@ -140,7 +140,7 @@
   report_url: "/reports/PULSAR-RAT/"
   detection_url: "/hunting-detections/PULSAR-RAT-detections"
   total: 9
-  untyped: 15
+  untyped: 8
   counts:
     ipv4: 1
     md5: 1
@@ -323,7 +323,7 @@
   report_url: "/reports/ai-agent-frameworks-2026-05-23/"
   detection_url: "/hunting-detections/ai-agent-frameworks-2026-05-23-detections"
   total: 100
-  untyped: 298
+  untyped: 296
   counts:
     domain: 23
     email: 1
@@ -342,7 +342,7 @@
       context: null
     - type: "ipv4"
       value: "165.227.175.161"
-      context: null
+      context: "Underlying VPS host belongs to GetYourGroup GmbH legitimate tourism platform - notify victim before blocking"
     - type: "ipv4"
       value: "173.249.2.23"
       context: null
@@ -1457,7 +1457,7 @@
   rows:
     - type: "ipv4"
       value: "2.27.248.138"
-      context: null
+      context: "Raw-IP TCP, no domain. :8443 = Express/socket.io operator panel (cert CN=localhost); :1337 = operator RDP (cert CN=DESKTOP-KHCG4S8)"
     - type: "ipv4"
       value: "46.36.217.3"
       context: null
@@ -1466,10 +1466,10 @@
       context: null
     - type: "ipv4"
       value: "91.197.98.188"
-      context: null
+      context: "Also serves CloudSync C2 on :5555 (bk dropped implant) and :7777 (svhost4), both cleartext TCP, wait-then-speak, no banner | Cleartext TCP, [END] terminator; continuously open in passive scan history | Cleartext TCP, [C2_END] terminator; confirmed on the wire (Sysmon EID 3 + PCAP)"
     - type: "ipv4"
       value: "91.92.43.221"
-      context: null
+      context: "Ports 5000-5003 serve identical CloudSync-Dashboard panel; client->5000, s->5001, q->5002; 5003 live with no build in hand. Aeza OFAC-designated 2025; DEDIK-inside-designation unproven."
     - type: "domain"
       value: "aka1.hopto.org"
       context: null
@@ -1487,7 +1487,7 @@
       context: null
     - type: "url"
       value: "http://91.197.98.188:8000/client.exe"
-      context: null
+      context: "Fetched with a spoofed browser User-Agent and proxy-credential inheritance"
     - type: "sha256"
       value: "0ba14e1443c155a0e644b0d83d5f89c2c188556367d15ccd86f0b6787cfac4d7"
       context: "CloudSync config-only variant of client.exe; C2 91.92.43.221:5002"
@@ -2142,67 +2142,67 @@
   rows:
     - type: "ipv4"
       value: "67.215.232.25"
-      context: null
+      context: "VT 15/91 malicious, reputation -1. communicating_files=0 (beacon implant unrecovered). IP-only (no domain), fully blockable at the IP. No sibling C2 found (5 convergent negative pivots)."
     - type: "url"
       value: "http://67.215.232.25:1337/"
-      context: null
+      context: "Stages the 17-file post-exploitation toolkit for retrieval onto victims (T1105)."
     - type: "url"
       value: "http://67.215.232.25:5000/"
-      context: null
+      context: "Same Werkzeug stack as :8080; all 38 probed routes 404 (non-guessable routing). Role undetermined."
     - type: "url"
       value: "http://67.215.232.25:8080/api/heartbeat"
-      context: null
+      context: "One of only 3 routes on the C2."
     - type: "url"
       value: "http://67.215.232.25:8080/api/report"
-      context: null
+      context: "One of only 3 routes on the C2. Beacons termed 'servers'."
     - type: "url"
       value: "http://67.215.232.25:8080/health"
-      context: null
+      context: "Returns JSON field-combo active_servers/pending_commands/completed_commands/status/timestamp on Werkzeug/3.1.6 Python/3.12.3. Idle: all counters 0."
     - type: "sha256"
       value: "30a11ac0b6828fd1c808c46d1c5ae9a4050b48a2fa7e860d146d871bc7c9bb98"
-      context: null
+      context: "Commodity Ghost小组 (gb2312 Chinese) full-feature ASP webshell, VBScript.Encode. Password UserPass=Aatrox; stored eval gadget Execute Session('Aatrox'). Neo23x0 WEBSHELL_ASP_Encoded fires on the wrapper."
     - type: "sha256"
       value: "3e59379f585ebf0becb6b4e06d0fbbf806de28a4bb256e837b4555f1b4245571"
-      context: null
+      context: "Netcat (nc64.exe), public tool. HackTool:Win32/NetCat. 7KB overlay stripped by PreProcess."
     - type: "sha256"
       value: "596778a449881a64c08e6f152b8966c1b7a2c9096071662708ccb54f4b7f129c"
       context: null
     - type: "sha256"
       value: "602dbcf4008c585582d5e5d5c8ddb1932fdee07a14308e9cbf937904f31df1f7"
-      context: null
+      context: "JuicyPotato(NG), public native tool (prebuilt, hash-match). SeImpersonate DCOM privesc."
     - type: "sha256"
       value: "6e592a38f93f7119e4b28214ef90bd74bc602a411099454329be4a0c3b482245"
-      context: null
+      context: "Non-weaponized demonstration PoC for the WER ALPC LPE (CVE-2026-20817, patched Jan 2026). Scaffolds the technique but does NOT elevate (TOKEN_QUERY only; no ALPC/DuplicateTokenEx/CreateProcess*). ITW IP 67.215.232.25. 13 VT submissions (rare)."
     - type: "sha256"
       value: "8524fbc0d73e711e69d60c64f1f1b7bef35c986705880643dd4d5e17779e586d"
-      context: null
+      context: "PrintSpoofer64, public native tool (prebuilt, hash-match). Spooler named-pipe SeImpersonate privesc. p.exe and P64.exe are byte-identical."
     - type: "sha256"
       value: "8a48236180c30d5ba4b44faae8abf906ad9937192e8ff85136da659de111b920"
-      context: null
+      context: "SharpSuccessor (BadSuccessor / dMSA AD privesc), operator-recompiled .NET. Identified as public tool via signature, not hash identity."
     - type: "sha256"
       value: "9a8e9d587b570d4074f1c8317b163aa8d0c566efd88f294d9d85bc7776352a28"
-      context: null
+      context: "GodPotato (operator-recompiled .NET). Universal DCOM/RPC SeImpersonate Potato. g.exe and gp.exe are byte-identical. Identified as public tool via signature, not hash identity."
     - type: "sha256"
       value: "9c5d53208d324f6f14e3417fe072be9b0f29aa35299f99c30bbaf602790b7480"
-      context: null
+      context: "RoguePotato OXID-resolver helper, public native tool (prebuilt, hash-match)."
     - type: "sha256"
       value: "a4778d50307de4ab13e48de90d72b7c5e19b4f9356a611a9faf95cfda0523c46"
-      context: null
+      context: "RoguePotato, public native tool (prebuilt, hash-match). SeImpersonate privesc (itm4n)."
     - type: "sha256"
       value: "a7029ef2b6a541ef2b7508e1316d3c2efd3493108975ee457bcdb73043a25262"
-      context: null
+      context: "BESPOKE MSSQL SQL-CLR reverse-shell backdoor; [SqlProcedure] reverse_shell(ip,port) -> cmd.exe /c. Specific operator build (compile 2026-03-21). VT 32 malicious; Zenbox harmless 98% (sandbox-resistant), Microsoft+Kaspersky clean."
     - type: "sha256"
       value: "c13bb6f7898423ad218937be8aeb400f41db857ac350093e837a5eed06ae31dc"
-      context: null
+      context: "SweetPotato (combined Potato), operator-recompiled .NET. YARA HKTL_NET_GUID_SweetPotato (typelibguid, Neo23x0) + tool_sharpefspotato_strings. Identified as public tool via HKTL-GUID, not hash identity. ITW IP 67.215.232.25."
     - type: "sha256"
       value: "cac1bda7429c3b6320af4638b9dd367aaca3815877a1bb96b17f1ab769c9c7f6"
-      context: null
+      context: "EfsPotato (operator-recompiled .NET, compile 2026-03-20). MS-EFSR coercion + SeImpersonate. YARA tool_efspotato + Windows_Exploit_FakePipe; Zenbox=EfsPotato/PetitPotam. Identified as public tool via signature, not hash identity."
     - type: "sha256"
       value: "db36351b2a948bda4eb5fb6ed40d850d70a9d149380ad6a12869c36beb9f042c"
-      context: null
+      context: "Rubeus (GhostPack), operator-recompiled .NET (compile 2026-03-23). Kerberos abuse (kerberoast/asktgt/s4u). Identified as public tool via signature, not hash identity."
     - type: "sha256"
       value: "eb689aea9673cc025f91d8376da07e849519d19071609a60c193776d8eca8b54"
-      context: null
+      context: "AES in-memory .NET assembly loader webshell (Godzilla-style). RijndaelManaged CBC/PKCS7, key=IV ca63457538b9b1e0; POST body -> Assembly.Load -> CreateInstance('K'). Class-K payload runtime-delivered, not staged."
     - type: "md5"
       value: "545a81240793f9ca97306fa5b3ad76df"
       context: null
@@ -2229,43 +2229,43 @@
       context: null
     - type: "filename"
       value: "cmd_exece.dll"
-      context: null
+      context: "BESPOKE MSSQL SQL-CLR reverse-shell backdoor; [SqlProcedure] reverse_shell(ip,port) -> cmd.exe /c. Specific operator build (compile 2026-03-21). VT 32 malicious; Zenbox harmless 98% (sandbox-resistant), Microsoft+Kaspersky clean."
     - type: "filename"
       value: "cve-2026-20817_poc.exe"
-      context: null
+      context: "Non-weaponized demonstration PoC for the WER ALPC LPE (CVE-2026-20817, patched Jan 2026). Scaffolds the technique but does NOT elevate (TOKEN_QUERY only; no ALPC/DuplicateTokenEx/CreateProcess*). ITW IP 67.215.232.25. 13 VT submissions (rare)."
     - type: "filename"
       value: "e.exe"
-      context: null
+      context: "Netcat (nc64.exe), public tool. HackTool:Win32/NetCat. 7KB overlay stripped by PreProcess."
     - type: "filename"
       value: "ep.exe"
-      context: null
+      context: "EfsPotato (operator-recompiled .NET, compile 2026-03-20). MS-EFSR coercion + SeImpersonate. YARA tool_efspotato + Windows_Exploit_FakePipe; Zenbox=EfsPotato/PetitPotam. Identified as public tool via signature, not hash identity."
     - type: "filename"
       value: "jp.exe"
-      context: null
+      context: "JuicyPotato(NG), public native tool (prebuilt, hash-match). SeImpersonate DCOM privesc."
     - type: "filename"
       value: "miss.asp"
-      context: null
+      context: "Commodity Ghost小组 (gb2312 Chinese) full-feature ASP webshell, VBScript.Encode. Password UserPass=Aatrox; stored eval gadget Execute Session('Aatrox'). Neo23x0 WEBSHELL_ASP_Encoded fires on the wrapper."
     - type: "filename"
       value: "npcinfolist1.aspx"
-      context: null
+      context: "AES in-memory .NET assembly loader webshell (Godzilla-style). RijndaelManaged CBC/PKCS7, key=IV ca63457538b9b1e0; POST body -> Assembly.Load -> CreateInstance('K'). Class-K payload runtime-delivered, not staged."
     - type: "filename"
       value: "ntapidotnet.dll"
       context: null
     - type: "filename"
       value: "rogueoxidresolver.exe"
-      context: null
+      context: "RoguePotato OXID-resolver helper, public native tool (prebuilt, hash-match)."
     - type: "filename"
       value: "roguepotato.exe"
-      context: null
+      context: "RoguePotato, public native tool (prebuilt, hash-match). SeImpersonate privesc (itm4n)."
     - type: "filename"
       value: "rubeus.exe"
-      context: null
+      context: "Rubeus (GhostPack), operator-recompiled .NET (compile 2026-03-23). Kerberos abuse (kerberoast/asktgt/s4u). Identified as public tool via signature, not hash identity."
     - type: "filename"
       value: "sharpsuccessor.exe"
-      context: null
+      context: "SharpSuccessor (BadSuccessor / dMSA AD privesc), operator-recompiled .NET. Identified as public tool via signature, not hash identity."
     - type: "filename"
       value: "sweetpotato.exe"
-      context: null
+      context: "SweetPotato (combined Potato), operator-recompiled .NET. YARA HKTL_NET_GUID_SweetPotato (typelibguid, Neo23x0) + tool_sharpefspotato_strings. Identified as public tool via HKTL-GUID, not hash identity. ITW IP 67.215.232.25."
   never_block_total: 0
   never_block_rows:
 "fleetagentadvanced-exe.json":
@@ -2380,7 +2380,7 @@
   report_url: "/reports/ghost-cryptojacker-vova75rus-77.110.96.200/"
   detection_url: "/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections"
   total: 48
-  untyped: 141
+  untyped: 135
   counts:
     domain: 11
     filename: 1
@@ -2572,10 +2572,10 @@
   rows:
     - type: "ipv4"
       value: "122.51.91.77"
-      context: null
+      context: "AS45090 Tencent Cloud (Shenzhen, CN). Ports :9998 payload/open-dir, :4444 C2 callback, :9997 unauthenticated control plane, :8081 xmrig dir. Fully unreachable since mid-June."
     - type: "ipv4"
       value: "149.28.112.221"
-      context: null
+      context: "AS20473 Vultr, US. Ports :80 bootstrap payloads, :1389 LDAP/JNDI, :8080 miner hosting + heartbeat, :8081 telemetry, :8888 C2 dashboard, :9999 Log4Shell stub. Mature-generation ports unreachable since mid-June."
     - type: "domain"
       value: "a.py"
       context: "LAN lateral-movement probe (canary payloads, not a worm)"
@@ -3050,10 +3050,10 @@
       context: null
     - type: "ipv4"
       value: "185.221.196.118"
-      context: null
+      context: "Single-tenant operator IP per DomainTools reverse-PDNS; 9 historical resolutions are all operator-controlled domains. 0/92 VirusTotal detection."
     - type: "ipv4"
       value: "193.46.56.182"
-      context: null
+      context: "Stark Industries Solutions is a UK/EU-sanctioned bulletproof hosting provider per joint Five Eyes action against Russian-aligned bulletproof hosters."
     - type: "ipv4"
       value: "77.239.101.23"
       context: null
@@ -3107,7 +3107,7 @@
       context: null
     - type: "domain"
       value: "bigass.monster"
-      context: null
+      context: "Drop-and-recapture tradecraft; post-2025-10-21 registrant 'REDACTED FOR PRIVACY' could plausibly be a different actor. Treat as probable-operator, not confirmed."
     - type: "domain"
       value: "bikaf.ru"
       context: null
@@ -4546,7 +4546,7 @@
   rows:
     - type: "ipv4"
       value: "13.140.145.210"
-      context: "Operator VPS and collection point"
+      context: "Operator VPS and collection point | VT 0/91. Shodan geolocation for this address is wrong (reports US/Dallas/SoftLayer from a stale legacy registration on the 13.x block); VT, Censys and rDNS agree on Contabo France"
     - type: "ipv4"
       value: "140.99.223.46"
       context: null
@@ -4591,7 +4591,7 @@
       context: "Public houqe CVE-2023-21839 proof of concept, downloaded by tmp_jndi_rce.sh"
     - type: "domain"
       value: "radius-sync.com"
-      context: "Operator-owned domain"
+      context: "Operator-owned domain | Origin 13.140.145.210 unmasked from the operator's own capture log, which records Cloudflare edge addresses delivering Host: radius-sync.com and cf-ray headers to the VPS. VT 0/91. Named to impersonate telecom AAA infrastructure. WHOIS privacy applied approximately four minutes after registration"
     - type: "domain"
       value: "so.sh"
       context: null
@@ -4600,7 +4600,7 @@
       context: null
     - type: "domain"
       value: "vmi3432966.contaboserver.net"
-      context: "Operator VPS and collection point"
+      context: "Operator VPS and collection point | VT 0/91. Shodan geolocation for this address is wrong (reports US/Dallas/SoftLayer from a stale legacy registration on the 13.x block); VT, Censys and rDNS agree on Contabo France"
     - type: "domain"
       value: "xds.java"
       context: null
@@ -4612,10 +4612,10 @@
       context: "Exfiltration destination in the WSMA fileCopy dstURL"
     - type: "url"
       value: "http://13.140.145.210:4445/"
-      context: "Beacon and reverse-shell callback endpoint"
+      context: "Beacon and reverse-shell callback endpoint | Beacon path form is /CLASS-RCE-$(whoami)"
     - type: "url"
       value: "http://13.140.145.210:8888/"
-      context: "Open directory and javaCodeBase staging URL for JNDI reference payloads"
+      context: "Open directory and javaCodeBase staging URL for JNDI reference payloads | Directory listing closed 2026-08-04"
     - type: "sha256"
       value: "04dbe46cf060c2de75ff04a13b0f2b48253c1b03a638a2afdae3cccdeeae500c"
       context: "Additional chisel sessions, source of two of the four server key fingerprints"
@@ -5054,7 +5054,7 @@
   report_url: "/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/"
   detection_url: "/hunting-detections/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections"
   total: 109
-  untyped: 71
+  untyped: 70
   counts:
     domain: 46
     filename: 2
@@ -5089,10 +5089,10 @@
       context: null
     - type: "ipv4"
       value: "216.126.227.49"
-      context: null
+      context: "Active C2; also TCP/22 SSH open"
     - type: "ipv4"
       value: "38.143.66.193"
-      context: null
+      context: "Treat any inbound email originating from this MX as high-risk"
     - type: "ipv4"
       value: "45.61.128.128"
       context: null
@@ -5152,7 +5152,7 @@
       context: null
     - type: "domain"
       value: "mail.hcjs2.jlengineering.se"
-      context: null
+      context: "Do NOT blocklist apex jlengineering.se - it is a multi-tenant donor domain"
     - type: "domain"
       value: "mailmanagement.cfd"
       context: null
@@ -5408,7 +5408,7 @@
   report_url: "/reports/opendirectory-45-130-148-125-20260430/"
   detection_url: "/hunting-detections/opendirectory-45-130-148-125-20260430-detections"
   total: 73
-  untyped: 57
+  untyped: 56
   counts:
     filename: 30
     ipv4: 1
@@ -5649,7 +5649,7 @@
   report_url: "/reports/opendirectory-62-60-237-100-20260506/"
   detection_url: "/hunting-detections/opendirectory-62-60-237-100-20260506-detections"
   total: 171
-  untyped: 84
+  untyped: 83
   counts:
     domain: 6
     filename: 43
@@ -6683,7 +6683,7 @@
       context: null
     - type: "ipv4"
       value: "79.137.192.3"
-      context: null
+      context: "Multi-tenant IP, connection alone is not cluster-attributable; cross-evidence with operator IOCs required"
     - type: "ipv4"
       value: "79.137.203.87"
       context: null
@@ -6984,7 +6984,7 @@
   report_url: "/reports/remcos-opendirectory/"
   detection_url: "/hunting-detections/remcos-opendirectory-detections"
   total: 24
-  untyped: 84
+  untyped: 79
   counts:
     filename: 3
     ipv4: 1
@@ -7257,7 +7257,7 @@
   report_url: "/reports/russian-gemini-credential-mill-213.165.51.115/"
   detection_url: "/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections"
   total: 35
-  untyped: 162
+  untyped: 115
   counts:
     domain: 7
     email: 1
@@ -7580,7 +7580,7 @@
   report_url: "/reports/shadow-xworm-opendirectory/"
   detection_url: "/hunting-detections/shadow-xworm-opendirectory-detections"
   total: 47
-  untyped: 33
+  untyped: 29
   counts:
     domain: 8
     filename: 7
@@ -9034,7 +9034,7 @@
   report_url: "/reports/sliver-open-directory/"
   detection_url: "/hunting-detections/sliver-open-directory-detections"
   total: 18
-  untyped: 186
+  untyped: 175
   counts:
     domain: 2
     filename: 2
@@ -9114,7 +9114,7 @@
   report_url: "/reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/"
   detection_url: "/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections"
   total: 42
-  untyped: 212
+  untyped: 137
   counts:
     domain: 12
     filename: 1
@@ -9334,7 +9334,7 @@
   rows:
     - type: "ipv4"
       value: "91.236.230.250"
-      context: null
+      context: "Hardcoded in a.png reverse shell, hosts open directory with malware toolkit"
     - type: "url"
       value: "http://91.236.230.250/"
       context: null

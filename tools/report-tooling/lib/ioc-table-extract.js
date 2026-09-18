@@ -40,11 +40,84 @@ var B = require('./benign.js');
 var PROSE_KEYS = ('context confidence notes evidence description rationale summary ' +
   'tactic technique_name technique_id log_source analyst license severity ' +
   'confidence_level campaign title purpose recommendation action priority ' +
-  'direction protocol role tlp pattern query').split(' ')
+  'direction protocol role tlp pattern query false_positive_risk').split(' ')
   .reduce(function (a, k) { a[k] = 1; return a; }, {});
 
-// Fields that carry a human label for the value beside them.
-var ROLE_KEYS = ['context', 'description', 'role', 'note'];
+/* Fields that carry a human label for the value beside them. `context`, `description`,
+   `role` and `note` are unchanged from before this fix and keep first priority: an
+   existing, genuinely descriptive label must not be displaced by a routine field.
+   `false_positive_risk` and plural `notes` are appended as a FALLBACK, consulted only
+   when none of the first four matched (absent, too long for the ordinary cap, or itself
+   indicator-shaped) -- see CAVEAT_ROLE_KEYS and isBlockCaveatObject below for why. */
+var ROLE_KEYS = ['context', 'description', 'role', 'note', 'false_positive_risk', 'notes'];
+
+/* Subset of ROLE_KEYS treated as a BLOCK caveat, not an ordinary label: exempt from the
+   90-char cap (mirroring NB_ROLE_MAXLEN's Infinity, so the reason is read in full rather
+   than trimmed to fit a hover label) and, unlike the other ROLE_KEYS, only consulted on an
+   object the author marked `action: BLOCK` (see isBlockCaveatObject below).
+
+   Both keys are corpus-wide overloaded for purposes that have nothing to do with a
+   blockable indicator's caveat. `false_positive_risk` also rates a DETECTION method's own
+   noise (253 occurrences corpus-wide, only 26 of them beside a value AND an
+   `action: BLOCK`) and, even restricted to that 26, is sometimes just a routine risk
+   rating with no bearing on this specific value (`"false_positive_risk": "low"` on every
+   entry of one feed, russian-gemini-credential-mill, where a real `context` already says
+   more). Plural `notes` is widely used as an ordinary indicator description with no
+   relation to blocking at all (181 occurrences, only 39 beside a value AND
+   `action: BLOCK`; see e.g. ioc-feeds/PULSAR-RAT.json's `"notes": "Server hosting the
+   PULSAR RAT open directory..."`, which has no `action` field at all).
+
+   Two measured false starts, kept here as the reason for both design choices: putting
+   the caveat keys FIRST and gating only on presence changed 242 rows in
+   `_data/ioc_tables.yml` against an expected ~51 (the overload above); putting them
+   first but action-gated still let a routine "low" rating overwrite a genuinely useful
+   existing `context` on 10 rows (the shadowing above). Appending them as a low-priority
+   fallback, gated on `action: BLOCK`, fixes both: the two worked examples for this task
+   (165.227.175.161's `context` is 139 chars, over the ordinary cap, so it still falls
+   through to `false_positive_risk`; mail.hcjs2.jlengineering.se has none of the first
+   four fields at all, so it falls through to `notes`) keep working, and an existing
+   short, useful label is never displaced by a routine rating. */
+var CAVEAT_ROLE_KEYS = { false_positive_risk: true, notes: true };
+
+function isBlockCaveatObject(node) {
+  var action = typeof node.action === 'string' ? node.action.trim().toUpperCase() : '';
+  return /^BLOCK\b/.test(action);
+}
+
+/* A bare risk rating (`low`, `NONE`, `LOW (specific operator-controlled domain)`) is a
+   detection-noise score, not a defender warning, however it is spelled: `false_positive_risk`
+   is corpus-authored as a rating field first, a caveat second, and reviewed evidence (2026-09-17
+   independent review of this fix's first draft) showed a bare or rating-PREFIXED value teaches a
+   reader nothing -- `context: low` reads as broken, not as safe-to-ignore. Tested against every
+   `action: BLOCK` occurrence of `false_positive_risk`/`notes` in the corpus (65 raw hits, 24
+   rating-shaped): none of the 24 carries genuine caveat text after the rating word, so excluding
+   the whole value on a rating-word PREFIX match (not just an exact "low"/"none"/etc.) loses
+   nothing observed. The one corpus case that does mix a rating with a real caveat --
+   `"HIGH, legitimate Turkish consumer ISP serving millions; do NOT use for blocking"` -- sits on
+   an object marked `action: "MONITOR (attribution only)"`, so isBlockCaveatObject already
+   excludes it before this test ever runs; this function is never even reached for it. Anchored
+   at the start of the (trimmed) string, not `word-boundary anywhere`, so a caveat that happens to
+   mention "low" or "high" mid-sentence is untouched.
+
+   NARROWED 2026-09-17, second independent review. A prefix match alone is too broad: it also
+   matches a genuine warning that happens to open with a rating word, e.g. `"LOW confidence this
+   is a shared victim VPS; notify victim before blocking"` or `"HIGH, shared hosting, notify the
+   owner before blocking"` -- both constructed by the reviewer, neither present in the corpus
+   today, both real defender warnings a prefix-only test would silently drop. So a rating-word
+   PREFIX is necessary but not sufficient: the remainder of the string, once past the rating
+   word, must ALSO contain no directive language naming an action for the reader to take.
+   DIRECTIVE_RX is that check. Re-verified against all 24 corpus rating occurrences: zero contain
+   any of these words, so this narrowing changes no existing output; it only stops a FUTURE
+   rating-prefixed genuine caveat from being silently dropped. See
+   test/ioc-table-extract.test.js's "a rating-prefixed GENUINE caveat survives" case, built from
+   the reviewer's own two constructed examples. */
+var RATING_RX = /^(none|negligible|low|medium|moderate|high|critical)\b/i;
+var DIRECTIVE_RX = /\b(notify|do\s*not|don't|never\s+block|before\s+blocking|coordinate)\b/i;
+
+function isRatingShaped(s) {
+  var t = s.trim();
+  return RATING_RX.test(t) && !DIRECTIVE_RX.test(t);
+}
 
 /* The never-block bucket is read a second time, separately, with its own role
    preference (2026-09-13 fix: see the run's surface-fix-plan.md). It is exempt
@@ -106,7 +179,7 @@ function typeRank(t) {
 function runWalk(root, roleKeys, roleMaxLen, exempt, suppressBenign) {
   var byKey = {}, order = [], untyped = 0;
 
-  function take(raw, role) {
+  function take(raw, role, roleIsCaveat) {
     if (typeof raw !== 'string') return;
     var s = raw.trim();
     if (!s || s.length > 300) return;
@@ -114,11 +187,11 @@ function runWalk(root, roleKeys, roleMaxLen, exempt, suppressBenign) {
     var atomic = C.classify(s);
     if (atomic) {
       if (suppressBenign && B.isBenign(atomic.type, atomic.value)) return;   // 8.8.8.8 and friends
-      return push(atomic.type, atomic.value, role);
+      return push(atomic.type, atomic.value, role, roleIsCaveat);
     }
 
     var h = hostType(s);
-    if (h) return push(h, s, role);
+    if (h) return push(h, s, role, roleIsCaveat);
 
     /* Not typed. Only count values that plausibly wanted to be an indicator:
        a short, space-free token, or something path- or hash-shaped. Prose, which
@@ -127,21 +200,39 @@ function runWalk(root, roleKeys, roleMaxLen, exempt, suppressBenign) {
     if (s.length <= 120 && (s.indexOf(' ') === -1 || /[\\/]/.test(s))) untyped++;
   }
 
-  function push(type, value, role) {
+  /* The SAME value (type:value key) can appear as more than one raw JSON object -- the
+     same IP on three different ports, each with its own `notes` -- and `action: BLOCK`
+     plus a caveat field can be repeated on every one of them. First-wins on `byKey[k]`
+     would silently drop every caveat but the first author happened to write earliest in
+     the array (measured: CloudSync's 91.197.98.188 carries three distinct `notes`, one
+     per port, and the pre-fix code kept only the first). So a caveat push (`roleIsCaveat`
+     true) for an EXISTING key accumulates into `caveats` instead of being dropped, and
+     row assembly below joins every distinct one collected, in encounter order. A
+     non-caveat push for an existing key is unchanged: first wins, as before this fix. */
+  function push(type, value, role, roleIsCaveat) {
     var k = type + ':' + value;
-    if (byKey[k]) return;
-    byKey[k] = { type: type, value: value, context: role || null };
-    order.push(k);
+    var existing = byKey[k];
+    if (!existing) {
+      byKey[k] = {
+        type: type, value: value, context: role || null,
+        caveats: (roleIsCaveat && role) ? [role] : []
+      };
+      order.push(k);
+      return;
+    }
+    if (roleIsCaveat && role && existing.caveats.indexOf(role) === -1) {
+      existing.caveats.push(role);
+    }
   }
 
-  function walk(node, key, role) {
+  function walk(node, key, role, roleIsCaveat) {
     if (node == null) return;
     if (typeof node === 'string') {
       if (PROSE_KEYS[key]) return;
-      return take(node, role);
+      return take(node, role, roleIsCaveat);
     }
     if (Array.isArray(node)) {
-      node.forEach(function (x) { walk(x, key, role); });
+      node.forEach(function (x) { walk(x, key, role, roleIsCaveat); });
       return;
     }
     if (typeof node !== 'object') return;
@@ -150,22 +241,82 @@ function runWalk(root, roleKeys, roleMaxLen, exempt, suppressBenign) {
        that is prose rather than an indicator, so `context: "C2 server"` becomes the
        label and `context: "1.2.3.4"` does not. */
     var myRole = role;
-    for (var i = 0; i < roleKeys.length; i++) {
-      var rv = node[roleKeys[i]];
-      if (typeof rv === 'string' && rv.trim() && rv.length < roleMaxLen && !C.classify(rv)) {
-        myRole = rv.trim();
-        break;
+    var myRoleIsCaveat = roleIsCaveat;
+    if (roleMaxLen === Infinity) {
+      /* Never-block walk (NB_ROLE_KEYS/NB_ROLE_MAXLEN): the ORIGINAL single-preference
+         loop, completely unmodified by anything below. An entry that legitimately lives
+         in hunt_only_never_block never carries `action: BLOCK` (feed-hygiene.js keeps a
+         BLOCK-marked value OUT of that bucket, corpus-verified: 0 of the never-block
+         bucket's objects anywhere carry that action), so the ordinary-walk logic in the
+         other branch could never fire here regardless; kept as a fully separate branch
+         so the never-block path is provably untouched code, not just untouched by luck. */
+      for (var i = 0; i < roleKeys.length; i++) {
+        var rv0 = node[roleKeys[i]];
+        if (typeof rv0 === 'string' && rv0.trim() && rv0.length < roleMaxLen && !C.classify(rv0)) {
+          myRole = rv0.trim();
+          break;
+        }
+      }
+    } else {
+      /* Ordinary walk: a plain label (context/description/role/note, same priority and
+         90-char cap as always) and a BLOCK caveat (false_positive_risk/notes, gated on
+         `action: BLOCK`, exempt from the cap, excluding a rating-shaped value) are found
+         INDEPENDENTLY and combined, rather than one replacing the other. Fixes the
+         under-coverage a fallback-only design left behind (2026-09-17 review): an object
+         commonly carries both a short `role` label AND a substantive `notes` caveat (see
+         e.g. radius-sync.com in opendirectory-13-140-145-210-weblogic-...json, `role:
+         "Operator-owned domain"` beside `notes: "Origin 13.140.145.210 unmasked from the
+         operator's own capture log..."`), and a fallback that only fires when the plain
+         label is ABSENT lost the caveat on every one of those. */
+      var plainRole = null;
+      for (var p = 0; p < roleKeys.length; p++) {
+        var pk = roleKeys[p];
+        if (CAVEAT_ROLE_KEYS[pk]) continue;                 // caveat keys: see below, separately
+        var pv = node[pk];
+        if (typeof pv === 'string' && pv.trim() && pv.length < roleMaxLen && !C.classify(pv)) {
+          plainRole = pv.trim();
+          break;
+        }
+      }
+
+      var caveatText = null;
+      if (isBlockCaveatObject(node)) {
+        for (var c = 0; c < roleKeys.length; c++) {
+          var ck = roleKeys[c];
+          if (!CAVEAT_ROLE_KEYS[ck]) continue;
+          var cv = node[ck];
+          if (typeof cv === 'string' && cv.trim() && !C.classify(cv) && !isRatingShaped(cv)) {
+            caveatText = cv.trim();
+            break;
+          }
+        }
+      }
+
+      if (caveatText) {
+        myRole = plainRole ? (plainRole + ' | ' + caveatText) : caveatText;
+        myRoleIsCaveat = true;
+      } else if (plainRole) {
+        myRole = plainRole;
+        myRoleIsCaveat = false;
       }
     }
     Object.keys(node).forEach(function (k) {
       if (exempt && exempt[k]) return;
-      walk(node[k], k, myRole);
+      walk(node[k], k, myRole, myRoleIsCaveat);
     });
   }
 
-  walk(root, null, null);
+  walk(root, null, null, false);
 
-  var rows = order.map(function (k) { return byKey[k]; });
+  var rows = order.map(function (k) {
+    var r = byKey[k];
+    /* A caveat, if any was collected, always wins over whatever plain (non-caveat)
+       context this key's context field holds -- the same priority already established
+       within one object, extended across every occurrence of this value. Joined with
+       " | " so multiple distinct reasons read as separate sentences, not one run-on. */
+    var context = r.caveats.length ? r.caveats.join(' | ') : r.context;
+    return { type: r.type, value: r.value, context: context };
+  });
   // Stable order, so a regenerated page diffs cleanly rather than reshuffling.
   rows.sort(function (a, b) {
     var d = typeRank(a.type) - typeRank(b.type);

@@ -225,3 +225,22 @@ test('a feed with neither ordinary nor never-block content is still counted as e
   var idx = build({ 'live-one-iocs.json': { notes: ['nothing indicator-shaped here'] } });
   assert.deepEqual(idx.coverage.empty, ['live-one-iocs.json']);
 });
+
+test('a bare BLOCK caveat rating is excluded from the index role', function () {
+  var idx = build({ 'live-one-iocs.json': { network_indicators: { ipv4: [
+    { value: '198.51.100.1', action: 'BLOCK', false_positive_risk: 'low' }
+  ] } } });
+  assert.deepEqual(idx.indicators['ipv4:198.51.100.1'], [{ report: 'live-one' }]);
+});
+
+test('a rating-prefixed GENUINE caveat survives in the index role, not mistaken for a bare rating', function () {
+  // 2026-09-17 second independent review: same narrowing and the same two reviewer-constructed
+  // fixtures as test/ioc-table-extract.test.js's matching test, so the search index cannot
+  // regress independently of the feed-page table.
+  var idx = build({ 'live-one-iocs.json': { network_indicators: { ipv4: [{
+    value: '203.0.113.10', action: 'BLOCK',
+    notes: 'LOW confidence this is a shared victim VPS; notify victim before blocking'
+  }] } } });
+  assert.equal(idx.indicators['ipv4:203.0.113.10'][0].role,
+    'LOW confidence this is a shared victim VPS; notify victim before blocking');
+});

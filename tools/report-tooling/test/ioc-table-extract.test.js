@@ -212,3 +212,31 @@ test('a feed with no hunt_only_never_block bucket yields an empty neverBlockRows
   var r = X.summarise({ network_indicators: ['1.2.3.4'] });
   assert.deepEqual(r.neverBlockRows, []);
 });
+
+test('a bare BLOCK caveat rating is excluded from the ordinary context', function () {
+  // Pins the boundary the next two tests exist to widen: a rating with nothing else is
+  // still correctly dropped, so the directive check below narrows the filter without
+  // reopening the over-inclusion defect it was built to close.
+  var r = X.summarise({ network_indicators: { ipv4: [
+    { value: '198.51.100.1', action: 'BLOCK', false_positive_risk: 'low' }
+  ] } });
+  assert.equal(r.rows[0].context, null);
+});
+
+test('a rating-prefixed GENUINE caveat survives, and is not mistaken for a bare rating', function () {
+  // 2026-09-17 second independent review: a rating-word PREFIX match alone would have
+  // silently dropped a real defender warning that happens to open with a rating word.
+  // Both fixtures are the reviewer's own constructed examples, reproduced verbatim.
+  var r1 = X.summarise({ network_indicators: { ipv4: [{
+    value: '203.0.113.10', action: 'BLOCK',
+    notes: 'LOW confidence this is a shared victim VPS; notify victim before blocking'
+  }] } });
+  assert.equal(r1.rows[0].context,
+    'LOW confidence this is a shared victim VPS; notify victim before blocking');
+
+  var r2 = X.summarise({ network_indicators: { domains: [{
+    value: 'example-shared-host.test', action: 'BLOCK',
+    false_positive_risk: 'HIGH, shared hosting, notify the owner before blocking'
+  }] } });
+  assert.equal(r2.rows[0].context, 'HIGH, shared hosting, notify the owner before blocking');
+});

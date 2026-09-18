@@ -27,7 +27,45 @@ var REPORT_DIR = path.join(ROOT, 'reports');
 var CATALOG = path.join(ROOT, '_data', 'catalog.yml');
 var OUT = path.join(ROOT, 'assets', 'data', 'ioc-index.json');
 
-var ROLE_KEYS = ['context', 'description', 'role', 'note', 'type'];
+/* `false_positive_risk` and plural `notes` are appended as a FALLBACK after the original
+   four (context, description, role, note), consulted only when none of those matched, and
+   exempt from the 90-char cap below (see CAVEAT_ROLE_KEYS) so a caveat is read in full
+   rather than trimmed to fit. Both keys are corpus-wide overloaded for purposes unrelated
+   to a blockable indicator's caveat (a detection method's own noise rating -- including a
+   routine "low" that would otherwise displace a genuinely useful existing `context` -- or
+   a plain descriptive note with no `action` field at all; see the fuller measurement in
+   lib/ioc-table-extract.js's comment on the same constant), so isBlockCaveatObject() below
+   also restricts them to an object the author marked `action: BLOCK`, matching that
+   file's fix exactly. */
+var ROLE_KEYS = ['context', 'description', 'role', 'note', 'false_positive_risk', 'notes', 'type'];
+var CAVEAT_ROLE_KEYS = { false_positive_risk: true, notes: true };
+
+function isBlockCaveatObject(node) {
+  var action = typeof node.action === 'string' ? node.action.trim().toUpperCase() : '';
+  return /^BLOCK\b/.test(action);
+}
+
+/* A bare risk rating (`low`, `NONE`, `LOW (specific operator-controlled domain)`) is a
+   detection-noise score, not a defender warning. See the fuller measurement and the one
+   checked "rating prefix beside a real caveat" case in lib/ioc-table-extract.js's comment
+   on the same constant; that case sits on an object whose `action` is not BLOCK, so
+   isBlockCaveatObject already excludes it before this test runs.
+
+   NARROWED 2026-09-17, second independent review, matching the identical fix and reasoning
+   in lib/ioc-table-extract.js: a rating-word PREFIX alone also matches a genuine warning that
+   happens to open with a rating word (e.g. "LOW confidence this is a shared victim VPS;
+   notify victim before blocking"), so DIRECTIVE_RX requires the remainder to carry no
+   directive language before the value counts as rating-shaped. Zero effect on the current
+   corpus (all 24 rating occurrences re-verified clean of directive language); it only stops a
+   future rating-prefixed genuine caveat from being silently dropped. */
+var RATING_RX = /^(none|negligible|low|medium|moderate|high|critical)\b/i;
+var DIRECTIVE_RX = /\b(notify|do\s*not|don't|never\s+block|before\s+blocking|coordinate)\b/i;
+
+function isRatingShaped(s) {
+  var t = s.trim();
+  return RATING_RX.test(t) && !DIRECTIVE_RX.test(t);
+}
+
 var VALUE_KEYS = ['value', 'indicator', 'ip', 'domain', 'url', 'hash',
                   'sha256', 'sha1', 'md5', 'name'];
 
@@ -53,27 +91,63 @@ function keep(r, suppressBenign) {
   return r && (!suppressBenign || !B.isBenign(r.type, r.value));
 }
 
-function collect(node, out, role, exempt, suppressBenign) {
+function collect(node, out, role, roleIsCaveat, exempt, suppressBenign) {
   if (node == null) return;
   if (typeof node === 'string') {
     var r = C.classify(node);
-    if (keep(r, suppressBenign)) out.push({ key: r.type + ':' + r.value, role: role || null });
-    else if (r) out.suppressed = (out.suppressed || 0) + 1;
+    if (keep(r, suppressBenign)) {
+      out.push({ key: r.type + ':' + r.value, role: role || null, isCaveat: !!roleIsCaveat });
+    } else if (r) out.suppressed = (out.suppressed || 0) + 1;
     return;
   }
   if (Array.isArray(node)) {
-    for (var i = 0; i < node.length; i++) collect(node[i], out, role, exempt, suppressBenign);
+    for (var i = 0; i < node.length; i++) collect(node[i], out, role, roleIsCaveat, exempt, suppressBenign);
     return;
   }
   if (typeof node !== 'object') return;
 
+  /* Plain label and BLOCK caveat found independently and combined, not one replacing
+     the other -- matching the fix in lib/ioc-table-extract.js's runWalk and its comment
+     there for why: an object commonly carries both a short `role` label and a
+     substantive `notes` caveat, and a fallback-only design (this file's first draft)
+     loses the caveat whenever the plain label is present. This file has no separate
+     never-block role list to protect (unlike NB_ROLE_KEYS/NB_ROLE_MAXLEN in the other
+     file): the never-block walk here reuses this same ROLE_KEYS/collect(), and no
+     never-block bucket entry anywhere in the corpus carries `action: BLOCK`
+     (corpus-verified), so `blockCaveatOk` is always false for it and this combination
+     logic is a no-op there regardless. */
   var myRole = role;
-  for (var k = 0; k < ROLE_KEYS.length; k++) {
-    var rv = node[ROLE_KEYS[k]];
-    if (typeof rv === 'string' && rv.trim() && rv.length < 90 && !C.classify(rv)) {
-      myRole = rv.trim();
+  var myRoleIsCaveat = roleIsCaveat;
+  var plainRole = null;
+  for (var p = 0; p < ROLE_KEYS.length; p++) {
+    var pk = ROLE_KEYS[p];
+    if (CAVEAT_ROLE_KEYS[pk]) continue;
+    var pv = node[pk];
+    if (typeof pv === 'string' && pv.trim() && pv.length < 90 && !C.classify(pv)) {
+      plainRole = pv.trim();
       break;
     }
+  }
+
+  var caveatText = null;
+  if (isBlockCaveatObject(node)) {
+    for (var c = 0; c < ROLE_KEYS.length; c++) {
+      var ck = ROLE_KEYS[c];
+      if (!CAVEAT_ROLE_KEYS[ck]) continue;
+      var cv = node[ck];
+      if (typeof cv === 'string' && cv.trim() && !C.classify(cv) && !isRatingShaped(cv)) {
+        caveatText = cv.trim();
+        break;
+      }
+    }
+  }
+
+  if (caveatText) {
+    myRole = plainRole ? (plainRole + ' | ' + caveatText) : caveatText;
+    myRoleIsCaveat = true;
+  } else if (plainRole) {
+    myRole = plainRole;
+    myRoleIsCaveat = false;
   }
 
   var tookValue = false;
@@ -82,14 +156,15 @@ function collect(node, out, role, exempt, suppressBenign) {
     if (typeof val === 'string') {
       var res = C.classify(val);
       if (keep(res, suppressBenign)) {
-        out.push({ key: res.type + ':' + res.value, role: myRole || null }); tookValue = true;
+        out.push({ key: res.type + ':' + res.value, role: myRole || null, isCaveat: !!myRoleIsCaveat });
+        tookValue = true;
       } else if (res) { out.suppressed = (out.suppressed || 0) + 1; tookValue = true; }
     }
   }
   Object.keys(node).forEach(function (key) {
     if (tookValue && VALUE_KEYS.indexOf(key) > -1) return;
     if (exempt && exempt[key]) return;
-    collect(node[key], out, myRole, exempt, suppressBenign);
+    collect(node[key], out, myRole, myRoleIsCaveat, exempt, suppressBenign);
   });
 }
 
@@ -107,13 +182,13 @@ function build(feeds, catalogText, unlistedBySlug) {
     if (state === 'unknown')   { coverage.unknown.push(file); return; }
 
     var found = [];
-    collect(feeds[file], found, null, EXEMPT_TOP, true);
+    collect(feeds[file], found, null, false, EXEMPT_TOP, true);
     if (found.suppressed) suppressed += found.suppressed;
 
     var feed = feeds[file];
     var nbRoot = (feed && typeof feed === 'object') ? feed.hunt_only_never_block : null;
     var foundNB = [];
-    if (nbRoot != null) collect(nbRoot, foundNB, null, null, false);
+    if (nbRoot != null) collect(nbRoot, foundNB, null, false, null, false);
 
     if (!found.length && !foundNB.length) { coverage.empty.push(file); return; }
 
@@ -128,6 +203,12 @@ function build(feeds, catalogText, unlistedBySlug) {
         f.role ? { report: slug, role: f.role } : { report: slug });
     });
 
+    /* The SAME value can appear as more than one raw object within one feed -- the
+       CloudSync 91.197.98.188 shape, one object per port, each with its own `notes` --
+       so a caveat role (isCaveat true) for a key already seen in THIS report is
+       accumulated rather than dropped; see the matching fix and its reasoning in
+       lib/ioc-table-extract.js's runWalk/push. A non-caveat role is unchanged:
+       first occurrence in this report wins, exactly as before this fix. */
     var seenHere = {};
     found.forEach(function (f) {
       // Dedupe toward safety: a value present in both an ordinary bucket and
@@ -135,10 +216,17 @@ function build(feeds, catalogText, unlistedBySlug) {
       // case, see returns/revert-bad-relocations.md from this run) is
       // never-block only, never also an ordinary indexed key.
       if (seenNB[f.key]) return;
-      if (seenHere[f.key]) return;
-      seenHere[f.key] = 1;
-      (indicators[f.key] = indicators[f.key] || []).push(
-        f.role ? { report: slug, role: f.role } : { report: slug });
+      var entry = seenHere[f.key];
+      if (!entry) entry = seenHere[f.key] = { role: f.role || null, caveats: [] };
+      if (f.isCaveat && f.role && entry.caveats.indexOf(f.role) === -1) {
+        entry.caveats.push(f.role);
+      }
+    });
+    Object.keys(seenHere).forEach(function (key) {
+      var entry = seenHere[key];
+      var role = entry.caveats.length ? entry.caveats.join(' | ') : entry.role;
+      (indicators[key] = indicators[key] || []).push(
+        role ? { report: slug, role: role } : { report: slug });
     });
 
     // Reached only when found.length || foundNB.length, per the early return above.

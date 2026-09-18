@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-16T16:33:32Z",
+ "generated_at": "2026-09-18T00:36:20Z",
  "counts": {
   "indicators": 2141,
   "reports": 57,
@@ -1136,7 +1136,8 @@
   ],
   "ipv4:165.227.175.161": [
    {
-    "report": "ai-agent-frameworks-2026-05-23"
+    "report": "ai-agent-frameworks-2026-05-23",
+    "role": "Underlying VPS host belongs to GetYourGroup GmbH legitimate tourism platform - notify victim before blocking"
    },
    {
     "report": "rovodev-mirai-matrix-c2-87.106.143.220",
@@ -2058,7 +2059,8 @@
     "report": "bellamain-turkish-phaas-79-137-192-3-20260516"
    },
    {
-    "report": "opendirectory-79-137-192-3-20260515"
+    "report": "opendirectory-79-137-192-3-20260515",
+    "role": "Multi-tenant IP, connection alone is not cluster-attributable; cross-evidence with operator IOCs required"
    }
   ],
   "domain:cryptone.bot": [
@@ -2338,22 +2340,26 @@
   ],
   "ipv4:91.197.98.188": [
    {
-    "report": "cloudsync-assembler-toolkit-91-197-98-188"
+    "report": "cloudsync-assembler-toolkit-91-197-98-188",
+    "role": "Also serves CloudSync C2 on :5555 (bk dropped implant) and :7777 (svhost4), both cleartext TCP, wait-then-speak, no banner | Cleartext TCP, [END] terminator; continuously open in passive scan history | Cleartext TCP, [C2_END] terminator; confirmed on the wire (Sysmon EID 3 + PCAP)"
    }
   ],
   "ipv4:91.92.43.221": [
    {
-    "report": "cloudsync-assembler-toolkit-91-197-98-188"
+    "report": "cloudsync-assembler-toolkit-91-197-98-188",
+    "role": "Ports 5000-5003 serve identical CloudSync-Dashboard panel; client->5000, s->5001, q->5002; 5003 live with no build in hand. Aeza OFAC-designated 2025; DEDIK-inside-designation unproven."
    }
   ],
   "ipv4:2.27.248.138": [
    {
-    "report": "cloudsync-assembler-toolkit-91-197-98-188"
+    "report": "cloudsync-assembler-toolkit-91-197-98-188",
+    "role": "Raw-IP TCP, no domain. :8443 = Express/socket.io operator panel (cert CN=localhost); :1337 = operator RDP (cert CN=DESKTOP-KHCG4S8)"
    }
   ],
   "url:http://91.197.98.188:8000/client.exe": [
    {
-    "report": "cloudsync-assembler-toolkit-91-197-98-188"
+    "report": "cloudsync-assembler-toolkit-91-197-98-188",
+    "role": "Fetched with a spoofed browser User-Agent and proxy-credential inheritance"
    }
   ],
   "domain:c3lestial.fun": [
@@ -3043,67 +3049,80 @@
   ],
   "sha256:a7029ef2b6a541ef2b7508e1316d3c2efd3493108975ee457bcdb73043a25262": [
    {
-    "report": "flaskc2-postex-toolkit-67-215-232-25"
+    "report": "flaskc2-postex-toolkit-67-215-232-25",
+    "role": "BESPOKE MSSQL SQL-CLR reverse-shell backdoor; [SqlProcedure] reverse_shell(ip,port) -> cmd.exe /c. Specific operator build (compile 2026-03-21). VT 32 malicious; Zenbox harmless 98% (sandbox-resistant), Microsoft+Kaspersky clean."
    }
   ],
   "filename:cmd_exece.dll": [
    {
-    "report": "flaskc2-postex-toolkit-67-215-232-25"
+    "report": "flaskc2-postex-toolkit-67-215-232-25",
+    "role": "BESPOKE MSSQL SQL-CLR reverse-shell backdoor; [SqlProcedure] reverse_shell(ip,port) -> cmd.exe /c. Specific operator build (compile 2026-03-21). VT 32 malicious; Zenbox harmless 98% (sandbox-resistant), Microsoft+Kaspersky clean."
    }
   ],
   "sha256:6e592a38f93f7119e4b28214ef90bd74bc602a411099454329be4a0c3b482245": [
    {
-    "report": "flaskc2-postex-toolkit-67-215-232-25"
+    "report": "flaskc2-postex-toolkit-67-215-232-25",
+    "role": "Non-weaponized demonstration PoC for the WER ALPC LPE (CVE-2026-20817, patched Jan 2026). Scaffolds the technique but does NOT elevate (TOKEN_QUERY only; no ALPC/DuplicateTokenEx/CreateProcess*). ITW IP 67.215.232.25. 13 VT submissions (rare)."
    }
   ],
   "filename:cve-2026-20817_poc.exe": [
    {
-    "report": "flaskc2-postex-toolkit-67-215-232-25"
+    "report": "flaskc2-postex-toolkit-67-215-232-25",
+    "role": "Non-weaponized demonstration PoC for the WER ALPC LPE (CVE-2026-20817, patched Jan 2026). Scaffolds the technique but does NOT elevate (TOKEN_QUERY only; no ALPC/DuplicateTokenEx/CreateProcess*). ITW IP 67.215.232.25. 13 VT submissions (rare)."
    }
   ],
   "sha256:eb689aea9673cc025f91d8376da07e849519d19071609a60c193776d8eca8b54": [
    {
-    "report": "flaskc2-postex-toolkit-67-215-232-25"
+    "report": "flaskc2-postex-toolkit-67-215-232-25",
+    "role": "AES in-memory .NET assembly loader webshell (Godzilla-style). RijndaelManaged CBC/PKCS7, key=IV ca63457538b9b1e0; POST body -> Assembly.Load -> CreateInstance('K'). Class-K payload runtime-delivered, not staged."
    }
   ],
   "filename:npcinfolist1.aspx": [
    {
-    "report": "flaskc2-postex-toolkit-67-215-232-25"
+    "report": "flaskc2-postex-toolkit-67-215-232-25",
+    "role": "AES in-memory .NET assembly loader webshell (Godzilla-style). RijndaelManaged CBC/PKCS7, key=IV ca63457538b9b1e0; POST body -> Assembly.Load -> CreateInstance('K'). Class-K payload runtime-delivered, not staged."
    }
   ],
   "sha256:30a11ac0b6828fd1c808c46d1c5ae9a4050b48a2fa7e860d146d871bc7c9bb98": [
    {
-    "report": "flaskc2-postex-toolkit-67-215-232-25"
+    "report": "flaskc2-postex-toolkit-67-215-232-25",
+    "role": "Commodity Ghost小组 (gb2312 Chinese) full-feature ASP webshell, VBScript.Encode. Password UserPass=Aatrox; stored eval gadget Execute Session('Aatrox'). Neo23x0 WEBSHELL_ASP_Encoded fires on the wrapper."
    }
   ],
   "filename:miss.asp": [
    {
-    "report": "flaskc2-postex-toolkit-67-215-232-25"
+    "report": "flaskc2-postex-toolkit-67-215-232-25",
+    "role": "Commodity Ghost小组 (gb2312 Chinese) full-feature ASP webshell, VBScript.Encode. Password UserPass=Aatrox; stored eval gadget Execute Session('Aatrox'). Neo23x0 WEBSHELL_ASP_Encoded fires on the wrapper."
    }
   ],
   "sha256:3e59379f585ebf0becb6b4e06d0fbbf806de28a4bb256e837b4555f1b4245571": [
    {
-    "report": "flaskc2-postex-toolkit-67-215-232-25"
+    "report": "flaskc2-postex-toolkit-67-215-232-25",
+    "role": "Netcat (nc64.exe), public tool. HackTool:Win32/NetCat. 7KB overlay stripped by PreProcess."
    }
   ],
   "filename:e.exe": [
    {
-    "report": "flaskc2-postex-toolkit-67-215-232-25"
+    "report": "flaskc2-postex-toolkit-67-215-232-25",
+    "role": "Netcat (nc64.exe), public tool. HackTool:Win32/NetCat. 7KB overlay stripped by PreProcess."
    }
   ],
   "sha256:cac1bda7429c3b6320af4638b9dd367aaca3815877a1bb96b17f1ab769c9c7f6": [
    {
-    "report": "flaskc2-postex-toolkit-67-215-232-25"
+    "report": "flaskc2-postex-toolkit-67-215-232-25",
+    "role": "EfsPotato (operator-recompiled .NET, compile 2026-03-20). MS-EFSR coercion + SeImpersonate. YARA tool_efspotato + Windows_Exploit_FakePipe; Zenbox=EfsPotato/PetitPotam. Identified as public tool via signature, not hash identity."
    }
   ],
   "filename:ep.exe": [
    {
-    "report": "flaskc2-postex-toolkit-67-215-232-25"
+    "report": "flaskc2-postex-toolkit-67-215-232-25",
+    "role": "EfsPotato (operator-recompiled .NET, compile 2026-03-20). MS-EFSR coercion + SeImpersonate. YARA tool_efspotato + Windows_Exploit_FakePipe; Zenbox=EfsPotato/PetitPotam. Identified as public tool via signature, not hash identity."
    }
   ],
   "sha256:9a8e9d587b570d4074f1c8317b163aa8d0c566efd88f294d9d85bc7776352a28": [
    {
-    "report": "flaskc2-postex-toolkit-67-215-232-25"
+    "report": "flaskc2-postex-toolkit-67-215-232-25",
+    "role": "GodPotato (operator-recompiled .NET). Universal DCOM/RPC SeImpersonate Potato. g.exe and gp.exe are byte-identical. Identified as public tool via signature, not hash identity."
    },
    {
     "report": "open-directory-94-103-1-13-20260423",
@@ -3120,12 +3139,14 @@
   ],
   "sha256:602dbcf4008c585582d5e5d5c8ddb1932fdee07a14308e9cbf937904f31df1f7": [
    {
-    "report": "flaskc2-postex-toolkit-67-215-232-25"
+    "report": "flaskc2-postex-toolkit-67-215-232-25",
+    "role": "JuicyPotato(NG), public native tool (prebuilt, hash-match). SeImpersonate DCOM privesc."
    }
   ],
   "filename:jp.exe": [
    {
-    "report": "flaskc2-postex-toolkit-67-215-232-25"
+    "report": "flaskc2-postex-toolkit-67-215-232-25",
+    "role": "JuicyPotato(NG), public native tool (prebuilt, hash-match). SeImpersonate DCOM privesc."
    },
    {
     "report": "sliver-c2-windows-postex-staging-193-233-202-17",
@@ -3134,7 +3155,8 @@
   ],
   "sha256:8524fbc0d73e711e69d60c64f1f1b7bef35c986705880643dd4d5e17779e586d": [
    {
-    "report": "flaskc2-postex-toolkit-67-215-232-25"
+    "report": "flaskc2-postex-toolkit-67-215-232-25",
+    "role": "PrintSpoofer64, public native tool (prebuilt, hash-match). Spooler named-pipe SeImpersonate privesc. p.exe and P64.exe are byte-identical."
    },
    {
     "report": "open-directory-94-103-1-13-20260423",
@@ -3154,32 +3176,38 @@
   ],
   "sha256:9c5d53208d324f6f14e3417fe072be9b0f29aa35299f99c30bbaf602790b7480": [
    {
-    "report": "flaskc2-postex-toolkit-67-215-232-25"
+    "report": "flaskc2-postex-toolkit-67-215-232-25",
+    "role": "RoguePotato OXID-resolver helper, public native tool (prebuilt, hash-match)."
    }
   ],
   "filename:rogueoxidresolver.exe": [
    {
-    "report": "flaskc2-postex-toolkit-67-215-232-25"
+    "report": "flaskc2-postex-toolkit-67-215-232-25",
+    "role": "RoguePotato OXID-resolver helper, public native tool (prebuilt, hash-match)."
    }
   ],
   "sha256:a4778d50307de4ab13e48de90d72b7c5e19b4f9356a611a9faf95cfda0523c46": [
    {
-    "report": "flaskc2-postex-toolkit-67-215-232-25"
+    "report": "flaskc2-postex-toolkit-67-215-232-25",
+    "role": "RoguePotato, public native tool (prebuilt, hash-match). SeImpersonate privesc (itm4n)."
    }
   ],
   "filename:roguepotato.exe": [
    {
-    "report": "flaskc2-postex-toolkit-67-215-232-25"
+    "report": "flaskc2-postex-toolkit-67-215-232-25",
+    "role": "RoguePotato, public native tool (prebuilt, hash-match). SeImpersonate privesc (itm4n)."
    }
   ],
   "sha256:db36351b2a948bda4eb5fb6ed40d850d70a9d149380ad6a12869c36beb9f042c": [
    {
-    "report": "flaskc2-postex-toolkit-67-215-232-25"
+    "report": "flaskc2-postex-toolkit-67-215-232-25",
+    "role": "Rubeus (GhostPack), operator-recompiled .NET (compile 2026-03-23). Kerberos abuse (kerberoast/asktgt/s4u). Identified as public tool via signature, not hash identity."
    }
   ],
   "filename:rubeus.exe": [
    {
-    "report": "flaskc2-postex-toolkit-67-215-232-25"
+    "report": "flaskc2-postex-toolkit-67-215-232-25",
+    "role": "Rubeus (GhostPack), operator-recompiled .NET (compile 2026-03-23). Kerberos abuse (kerberoast/asktgt/s4u). Identified as public tool via signature, not hash identity."
    },
    {
     "report": "opendirectory-45-130-148-125-20260430",
@@ -3188,22 +3216,26 @@
   ],
   "sha256:8a48236180c30d5ba4b44faae8abf906ad9937192e8ff85136da659de111b920": [
    {
-    "report": "flaskc2-postex-toolkit-67-215-232-25"
+    "report": "flaskc2-postex-toolkit-67-215-232-25",
+    "role": "SharpSuccessor (BadSuccessor / dMSA AD privesc), operator-recompiled .NET. Identified as public tool via signature, not hash identity."
    }
   ],
   "filename:sharpsuccessor.exe": [
    {
-    "report": "flaskc2-postex-toolkit-67-215-232-25"
+    "report": "flaskc2-postex-toolkit-67-215-232-25",
+    "role": "SharpSuccessor (BadSuccessor / dMSA AD privesc), operator-recompiled .NET. Identified as public tool via signature, not hash identity."
    }
   ],
   "sha256:c13bb6f7898423ad218937be8aeb400f41db857ac350093e837a5eed06ae31dc": [
    {
-    "report": "flaskc2-postex-toolkit-67-215-232-25"
+    "report": "flaskc2-postex-toolkit-67-215-232-25",
+    "role": "SweetPotato (combined Potato), operator-recompiled .NET. YARA HKTL_NET_GUID_SweetPotato (typelibguid, Neo23x0) + tool_sharpefspotato_strings. Identified as public tool via HKTL-GUID, not hash identity. ITW IP 67.215.232.25."
    }
   ],
   "filename:sweetpotato.exe": [
    {
-    "report": "flaskc2-postex-toolkit-67-215-232-25"
+    "report": "flaskc2-postex-toolkit-67-215-232-25",
+    "role": "SweetPotato (combined Potato), operator-recompiled .NET. YARA HKTL_NET_GUID_SweetPotato (typelibguid, Neo23x0) + tool_sharpefspotato_strings. Identified as public tool via HKTL-GUID, not hash identity. ITW IP 67.215.232.25."
    }
   ],
   "sha256:596778a449881a64c08e6f152b8966c1b7a2c9096071662708ccb54f4b7f129c": [
@@ -3248,32 +3280,38 @@
   ],
   "ipv4:67.215.232.25": [
    {
-    "report": "flaskc2-postex-toolkit-67-215-232-25"
+    "report": "flaskc2-postex-toolkit-67-215-232-25",
+    "role": "VT 15/91 malicious, reputation -1. communicating_files=0 (beacon implant unrecovered). IP-only (no domain), fully blockable at the IP. No sibling C2 found (5 convergent negative pivots)."
    }
   ],
   "url:http://67.215.232.25:1337/": [
    {
-    "report": "flaskc2-postex-toolkit-67-215-232-25"
+    "report": "flaskc2-postex-toolkit-67-215-232-25",
+    "role": "Stages the 17-file post-exploitation toolkit for retrieval onto victims (T1105)."
    }
   ],
   "url:http://67.215.232.25:8080/health": [
    {
-    "report": "flaskc2-postex-toolkit-67-215-232-25"
+    "report": "flaskc2-postex-toolkit-67-215-232-25",
+    "role": "Returns JSON field-combo active_servers/pending_commands/completed_commands/status/timestamp on Werkzeug/3.1.6 Python/3.12.3. Idle: all counters 0."
    }
   ],
   "url:http://67.215.232.25:8080/api/report": [
    {
-    "report": "flaskc2-postex-toolkit-67-215-232-25"
+    "report": "flaskc2-postex-toolkit-67-215-232-25",
+    "role": "One of only 3 routes on the C2. Beacons termed 'servers'."
    }
   ],
   "url:http://67.215.232.25:8080/api/heartbeat": [
    {
-    "report": "flaskc2-postex-toolkit-67-215-232-25"
+    "report": "flaskc2-postex-toolkit-67-215-232-25",
+    "role": "One of only 3 routes on the C2."
    }
   ],
   "url:http://67.215.232.25:5000/": [
    {
-    "report": "flaskc2-postex-toolkit-67-215-232-25"
+    "report": "flaskc2-postex-toolkit-67-215-232-25",
+    "role": "Same Werkzeug stack as :8080; all 38 probed routes 404 (non-guessable routing). Role undetermined."
    }
   ],
   "filename:cmd_exec.dll": [
@@ -4170,12 +4208,14 @@
   ],
   "ipv4:149.28.112.221": [
    {
-    "report": "gocloud-multiservice-cryptojacking-149-28-112-221"
+    "report": "gocloud-multiservice-cryptojacking-149-28-112-221",
+    "role": "AS20473 Vultr, US. Ports :80 bootstrap payloads, :1389 LDAP/JNDI, :8080 miner hosting + heartbeat, :8081 telemetry, :8888 C2 dashboard, :9999 Log4Shell stub. Mature-generation ports unreachable since mid-June."
    }
   ],
   "ipv4:122.51.91.77": [
    {
-    "report": "gocloud-multiservice-cryptojacking-149-28-112-221"
+    "report": "gocloud-multiservice-cryptojacking-149-28-112-221",
+    "role": "AS45090 Tencent Cloud (Shenzhen, CN). Ports :9998 payload/open-dir, :4444 C2 callback, :9997 unauthenticated control plane, :8081 xmrig dir. Fully unreachable since mid-June."
    }
   ],
   "domain:pool.supportxmr.com": [
@@ -4286,7 +4326,8 @@
   ],
   "ipv4:185.221.196.118": [
    {
-    "report": "inkognito-russian-vpn-phishing-185-221-196-118-20260516"
+    "report": "inkognito-russian-vpn-phishing-185-221-196-118-20260516",
+    "role": "Single-tenant operator IP per DomainTools reverse-PDNS; 9 historical resolutions are all operator-controlled domains. 0/92 VirusTotal detection."
    },
    {
     "report": "opendirectory-79-137-192-3-20260515"
@@ -4310,7 +4351,8 @@
   ],
   "ipv4:193.46.56.182": [
    {
-    "report": "inkognito-russian-vpn-phishing-185-221-196-118-20260516"
+    "report": "inkognito-russian-vpn-phishing-185-221-196-118-20260516",
+    "role": "Stark Industries Solutions is a UK/EU-sanctioned bulletproof hosting provider per joint Five Eyes action against Russian-aligned bulletproof hosters."
    },
    {
     "report": "opendirectory-79-137-192-3-20260515"
@@ -4504,7 +4546,8 @@
   ],
   "domain:bigass.monster": [
    {
-    "report": "inkognito-russian-vpn-phishing-185-221-196-118-20260516"
+    "report": "inkognito-russian-vpn-phishing-185-221-196-118-20260516",
+    "role": "Drop-and-recapture tradecraft; post-2025-10-21 registrant 'REDACTED FOR PRIVACY' could plausibly be a different actor. Treat as probable-operator, not confirmed."
    },
    {
     "report": "opendirectory-79-137-192-3-20260515"
@@ -6955,13 +6998,13 @@
   "ipv4:13.140.145.210": [
    {
     "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
-    "role": "Operator VPS and collection point"
+    "role": "Operator VPS and collection point | VT 0/91. Shodan geolocation for this address is wrong (reports US/Dallas/SoftLayer from a stale legacy registration on the 13.x block); VT, Censys and rDNS agree on Contabo France"
    }
   ],
   "domain:vmi3432966.contaboserver.net": [
    {
     "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
-    "role": "Operator VPS and collection point"
+    "role": "Operator VPS and collection point | VT 0/91. Shodan geolocation for this address is wrong (reports US/Dallas/SoftLayer from a stale legacy registration on the 13.x block); VT, Censys and rDNS agree on Contabo France"
    }
   ],
   "ipv4:95.214.114.37": [
@@ -6973,7 +7016,7 @@
   "domain:radius-sync.com": [
    {
     "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
-    "role": "Operator-owned domain"
+    "role": "Operator-owned domain | Origin 13.140.145.210 unmasked from the operator's own capture log, which records Cloudflare edge addresses delivering Host: radius-sync.com and cf-ray headers to the VPS. VT 0/91. Named to impersonate telecom AAA infrastructure. WHOIS privacy applied approximately four minutes after registration"
    }
   ],
   "url:http://13.140.145.210/": [
@@ -6985,13 +7028,13 @@
   "url:http://13.140.145.210:4445/": [
    {
     "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
-    "role": "Beacon and reverse-shell callback endpoint"
+    "role": "Beacon and reverse-shell callback endpoint | Beacon path form is /CLASS-RCE-$(whoami)"
    }
   ],
   "url:http://13.140.145.210:8888/": [
    {
     "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
-    "role": "Open directory and javaCodeBase staging URL for JNDI reference payloads"
+    "role": "Open directory and javaCodeBase staging URL for JNDI reference payloads | Directory listing closed 2026-08-04"
    }
   ],
   "sha256:3797dddabdef5e9607c9c0bde108922467adf15d5e29cd6c6319df91b334a0c9": [
@@ -7519,7 +7562,8 @@
   ],
   "ipv4:216.126.227.49": [
    {
-    "report": "opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517"
+    "report": "opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517",
+    "role": "Active C2; also TCP/22 SSH open"
    }
   ],
   "ipv4:144.172.103.253": [
@@ -7564,7 +7608,8 @@
   ],
   "ipv4:38.143.66.193": [
    {
-    "report": "opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517"
+    "report": "opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517",
+    "role": "Treat any inbound email originating from this MX as high-risk"
    }
   ],
   "ipv4:172.234.24.120": [
@@ -7719,7 +7764,8 @@
   ],
   "domain:mail.hcjs2.jlengineering.se": [
    {
-    "report": "opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517"
+    "report": "opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517",
+    "role": "Do NOT blocklist apex jlengineering.se - it is a multi-tenant donor domain"
    }
   ],
   "url:https://officebyt.e56sutx.eps-soltec.cloud/f/d6aba322369c": [
@@ -12921,7 +12967,8 @@
   ],
   "ipv4:91.236.230.250": [
    {
-    "report": "webserver-compromise-kit-91-236-230-250"
+    "report": "webserver-compromise-kit-91-236-230-250",
+    "role": "Hardcoded in a.png reverse shell, hosts open directory with malware toolkit"
    }
   ],
   "url:http://91.236.230.250/": [
