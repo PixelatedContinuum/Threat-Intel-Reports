@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-18T04:02:57Z
+generated_at: 2026-09-18T06:02:04Z
 window_days: 30
 counts:
-  total: 550
-  research: 185
+  total: 549
+  research: 184
   news: 365
 unclassified_sources:
   - "The DFIR Report"
@@ -3751,9 +3751,3 @@ items:
     date: 2026-08-19T06:54:05Z
     kind: research
     labels: ["credential theft", "cve-2021-27101", "cve-2023-34362", "cve-2026-12569", "data exfiltration", "dewmode", "extortion", "lemurloot", "manufacturing", "mass exploitation", "ptc windchill", "web shell"]
-  - title: "Benchmaxxing: When the Benchmark Becomes the Target"
-    url: "https://www.crowdstrike.com/en-us/blog/benchmaxxing-when-benchmark-becomes-the-target/"
-    source: "Crowdstrike"
-    date: 2026-08-19T05:00:00Z
-    kind: research
-    labels: ["securing ai"]
