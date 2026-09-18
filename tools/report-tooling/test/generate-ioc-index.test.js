@@ -244,3 +244,61 @@ test('a rating-prefixed GENUINE caveat survives in the index role, not mistaken 
   assert.equal(idx.indicators['ipv4:203.0.113.10'][0].role,
     'LOW confidence this is a shared victim VPS; notify victim before blocking');
 });
+
+test('a rating-prefixed GENUINE caveat survives in the index role even with NO directive word on the list', function () {
+  // 2026-09-18 third independent review: mirrors the identical fixtures added to
+  // test/ioc-table-extract.test.js, so the search index cannot regress independently.
+  var idx1 = build({ 'live-one-iocs.json': { network_indicators: { ipv4: [{
+    value: '203.0.113.11', action: 'BLOCK',
+    notes: 'LOW confidence this is a shared victim VPS; operator owns the host'
+  }] } } });
+  assert.equal(idx1.indicators['ipv4:203.0.113.11'][0].role,
+    'LOW confidence this is a shared victim VPS; operator owns the host');
+
+  var idx2 = build({ 'live-one-iocs.json': { network_indicators: { domains: [{
+    value: 'example2.test', action: 'BLOCK',
+    false_positive_risk: 'HIGH, shared hosting, escalate to the abuse desk first'
+  }] } } });
+  assert.equal(idx2.indicators['domain:example2.test'][0].role,
+    'HIGH, shared hosting, escalate to the abuse desk first');
+});
+
+test('all 24 real corpus rating-only shapes stay excluded from the index role', function () {
+  var bareLow = build({ 'live-one-iocs.json': { network_indicators: { ipv4: [{
+    value: '198.51.100.2', action: 'BLOCK', false_positive_risk: 'low'
+  }] } } });
+  assert.deepEqual(bareLow.indicators['ipv4:198.51.100.2'], [{ report: 'live-one' }]);
+
+  var bareNone = build({ 'live-one-iocs.json': { network_indicators: { ipv4: [{
+    value: '198.51.100.3', action: 'BLOCK', false_positive_risk: 'NONE'
+  }] } } });
+  assert.deepEqual(bareNone.indicators['ipv4:198.51.100.3'], [{ report: 'live-one' }]);
+
+  var parenQualifier = build({ 'live-one-iocs.json': { network_indicators: { domains: [{
+    value: 'd1.test', action: 'BLOCK', false_positive_risk: 'LOW (specific operator-controlled domain)'
+  }] } } });
+  assert.deepEqual(parenQualifier.indicators['domain:d1.test'], [{ report: 'live-one' }]);
+
+  var commaQualifier = build({ 'live-one-iocs.json': { network_indicators: { ipv4: [{
+    value: '198.51.100.4', action: 'BLOCK', false_positive_risk: 'NONE, confirmed operator-owned infrastructure'
+  }] } } });
+  assert.deepEqual(commaQualifier.indicators['ipv4:198.51.100.4'], [{ report: 'live-one' }]);
+});
+
+test('a descriptive, directive-free genuine caveat with no rating prefix survives in the index role', function () {
+  var idx = build({ 'live-one-iocs.json': { network_indicators: { ipv4: [{
+    value: '198.51.100.5', action: 'BLOCK',
+    notes: 'Underlying host is a hospital patient portal; the vendor asked us to hold before any takedown'
+  }] } } });
+  assert.equal(idx.indicators['ipv4:198.51.100.5'][0].role,
+    'Underlying host is a hospital patient portal; the vendor asked us to hold before any takedown');
+});
+
+test('FAIL-DIRECTION: a value the index cannot classify is carried, never dropped', function () {
+  var idx = build({ 'live-one-iocs.json': { network_indicators: { ipv4: [{
+    value: '198.51.100.6', action: 'BLOCK',
+    false_positive_risk: 'LOW: shared with three other tenants, treat with care'
+  }] } } });
+  assert.equal(idx.indicators['ipv4:198.51.100.6'][0].role,
+    'LOW: shared with three other tenants, treat with care');
+});

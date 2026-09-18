@@ -240,3 +240,70 @@ test('a rating-prefixed GENUINE caveat survives, and is not mistaken for a bare 
   }] } });
   assert.equal(r2.rows[0].context, 'HIGH, shared hosting, notify the owner before blocking');
 });
+
+test('a rating-prefixed GENUINE caveat survives even with NO directive word on the list', function () {
+  // 2026-09-18 third independent review: the directive-word list itself is the failure mode
+  // CLAUDE.md names ("a check built from an enumeration finds what is on the enumeration and
+  // reports clean on everything else"). Both fixtures are the reviewer's own constructed
+  // examples from that round, reproduced verbatim: neither contains a word from DIRECTIVE_RX.
+  var r1 = X.summarise({ network_indicators: { ipv4: [{
+    value: '203.0.113.11', action: 'BLOCK',
+    notes: 'LOW confidence this is a shared victim VPS; operator owns the host'
+  }] } });
+  assert.equal(r1.rows[0].context,
+    'LOW confidence this is a shared victim VPS; operator owns the host');
+
+  var r2 = X.summarise({ network_indicators: { domains: [{
+    value: 'example2.test', action: 'BLOCK',
+    false_positive_risk: 'HIGH, shared hosting, escalate to the abuse desk first'
+  }] } });
+  assert.equal(r2.rows[0].context, 'HIGH, shared hosting, escalate to the abuse desk first');
+});
+
+test('all 24 real corpus rating-only shapes stay excluded under the inverted (fail-toward-carrying) rule', function () {
+  // The corpus has exactly two shapes beyond a bare word: a single wrapping parenthetical and a
+  // single leading comma with one plain fragment. Both are named boundary cases for
+  // isRatingOnly(), not incidental examples.
+  var bareLow = X.summarise({ network_indicators: { ipv4: [{
+    value: '198.51.100.2', action: 'BLOCK', false_positive_risk: 'low'
+  }] } });
+  assert.equal(bareLow.rows[0].context, null);
+
+  var bareNone = X.summarise({ network_indicators: { ipv4: [{
+    value: '198.51.100.3', action: 'BLOCK', false_positive_risk: 'NONE'
+  }] } });
+  assert.equal(bareNone.rows[0].context, null);
+
+  var parenQualifier = X.summarise({ network_indicators: { domains: [{
+    value: 'd1.test', action: 'BLOCK',
+    false_positive_risk: 'LOW (specific operator-controlled domain)'
+  }] } });
+  assert.equal(parenQualifier.rows[0].context, null);
+
+  var commaQualifier = X.summarise({ network_indicators: { ipv4: [{
+    value: '198.51.100.4', action: 'BLOCK',
+    false_positive_risk: 'NONE, confirmed operator-owned infrastructure'
+  }] } });
+  assert.equal(commaQualifier.rows[0].context, null);
+});
+
+test('a descriptive, directive-free genuine caveat with no rating prefix at all is carried', function () {
+  var r = X.summarise({ network_indicators: { ipv4: [{
+    value: '198.51.100.5', action: 'BLOCK',
+    notes: 'Underlying host is a hospital patient portal; the vendor asked us to hold before any takedown'
+  }] } });
+  assert.equal(r.rows[0].context,
+    'Underlying host is a hospital patient portal; the vendor asked us to hold before any takedown');
+});
+
+test('FAIL-DIRECTION: a value isRatingOnly() cannot classify is carried, never dropped', function () {
+  // Pins the design intent directly, not just its consequences: the function is a positive
+  // test for rating-ONLY, and anything it does not recognise falls through to "not rating-only"
+  // rather than "assume rating and drop". This fixture has a rating-word prefix but an
+  // unrecognised separator (a colon) and a second comma, so it fits none of the three shapes.
+  var r = X.summarise({ network_indicators: { ipv4: [{
+    value: '198.51.100.6', action: 'BLOCK',
+    false_positive_risk: 'LOW: shared with three other tenants, treat with care'
+  }] } });
+  assert.equal(r.rows[0].context, 'LOW: shared with three other tenants, treat with care');
+});

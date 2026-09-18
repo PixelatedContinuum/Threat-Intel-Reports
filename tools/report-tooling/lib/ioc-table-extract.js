@@ -86,37 +86,79 @@ function isBlockCaveatObject(node) {
 
 /* A bare risk rating (`low`, `NONE`, `LOW (specific operator-controlled domain)`) is a
    detection-noise score, not a defender warning, however it is spelled: `false_positive_risk`
-   is corpus-authored as a rating field first, a caveat second, and reviewed evidence (2026-09-17
-   independent review of this fix's first draft) showed a bare or rating-PREFIXED value teaches a
-   reader nothing -- `context: low` reads as broken, not as safe-to-ignore. Tested against every
-   `action: BLOCK` occurrence of `false_positive_risk`/`notes` in the corpus (65 raw hits, 24
-   rating-shaped): none of the 24 carries genuine caveat text after the rating word, so excluding
-   the whole value on a rating-word PREFIX match (not just an exact "low"/"none"/etc.) loses
-   nothing observed. The one corpus case that does mix a rating with a real caveat --
-   `"HIGH, legitimate Turkish consumer ISP serving millions; do NOT use for blocking"` -- sits on
-   an object marked `action: "MONITOR (attribution only)"`, so isBlockCaveatObject already
-   excludes it before this test ever runs; this function is never even reached for it. Anchored
-   at the start of the (trimmed) string, not `word-boundary anywhere`, so a caveat that happens to
-   mention "low" or "high" mid-sentence is untouched.
+   is corpus-authored as a rating field first, a caveat second, and a bare or rating-prefixed
+   value teaches a reader nothing -- `context: low` reads as broken, not as safe-to-ignore.
 
-   NARROWED 2026-09-17, second independent review. A prefix match alone is too broad: it also
-   matches a genuine warning that happens to open with a rating word, e.g. `"LOW confidence this
-   is a shared victim VPS; notify victim before blocking"` or `"HIGH, shared hosting, notify the
-   owner before blocking"` -- both constructed by the reviewer, neither present in the corpus
-   today, both real defender warnings a prefix-only test would silently drop. So a rating-word
-   PREFIX is necessary but not sufficient: the remainder of the string, once past the rating
-   word, must ALSO contain no directive language naming an action for the reader to take.
-   DIRECTIVE_RX is that check. Re-verified against all 24 corpus rating occurrences: zero contain
-   any of these words, so this narrowing changes no existing output; it only stops a FUTURE
-   rating-prefixed genuine caveat from being silently dropped. See
-   test/ioc-table-extract.test.js's "a rating-prefixed GENUINE caveat survives" case, built from
-   the reviewer's own two constructed examples. */
+   HISTORY, kept because it explains why this is shaped the way it is. The first version
+   (2026-09-17) excluded any value STARTING with a rating word. Too broad: it also excluded a
+   genuine warning that happens to open with one. Independent review then added a six-word
+   directive list (DIRECTIVE_RX below) requiring the remainder to name an action before it would
+   survive. Also too narrow, and a SECOND independent review proved it the same day: a directive
+   list is exactly the failure mode CLAUDE.md names -- "a check built from an enumeration finds
+   what is on the enumeration and reports clean on everything else" -- and two genuine warnings
+   using words absent from the six ("...operator owns the host", "...escalate to the abuse desk
+   first") were silently dropped.
+
+   INVERTED 2026-09-18, because the two failure directions are not equally bad. Carrying a bare
+   rating as if it were a caveat is cosmetic noise: a reader sees `low` and learns nothing new.
+   Dropping a genuine caveat is a victim harmed, the exact outcome this whole feature exists to
+   prevent. So the rule now fails toward CARRYING: `isRatingOnly()` recognises exactly three
+   narrow, testable SHAPES as rating-only, and anything else -- including anything this function
+   cannot classify -- is carried, never dropped. This is a shape test, not a widened word list,
+   which is the actual fix for the failure mode CLAUDE.md names; DIRECTIVE_RX survives only as a
+   narrower, secondary net for phrasing already seen to slip past the shape test (see below).
+
+   The three shapes, verified against every one of the 24 real corpus occurrences (22 bare "low"
+   or "NONE", one parenthetical, one comma-qualifier -- see
+   test/ioc-table-extract.test.js's "isRatingOnly" tests for the exact list):
+     1. Bare: the rating word and nothing else ("low", "NONE").
+     2. A single parenthetical immediately after the rating word, its interior one plain,
+        unpunctuated fragment under 80 characters: "LOW (specific operator-controlled domain)".
+     3. A single comma immediately after the rating word, followed by ONE unpunctuated fragment
+        under 80 characters: "NONE, confirmed operator-owned infrastructure".
+   A second comma, a semicolon, a period, a `!`/`?`, or any separator other than a lone leading
+   comma or a single wrapping parenthetical disqualifies the value from shapes 2 and 3, so it
+   falls through to "not rating-only" and is carried. Verified against all four of the reviewer's
+   constructed genuine warnings across both review rounds: none fits any of the three shapes
+   (each either has no comma/paren separator at all, or has more than one clause-boundary mark),
+   so all four are now carried.
+
+   WHAT THIS CANNOT COVER, stated because a list-shaped check must say so (CLAUDE.md, "a
+   list-shaped check is only as wide as its list"). A genuine directive using an action word
+   absent from DIRECTIVE_RX, phrased as a SINGLE comma-led fragment with no further
+   clause-boundary punctuation -- e.g. "LOW, escalate to the abuse desk" (one comma, one clean
+   fragment, no listed directive word) -- fits shape 3 and would be wrongly excluded. Closing
+   that without either a directive word list (the defect this rewrite fixes) or an actual parser
+   is not possible with a regex. It is a stated residual risk, not a gap this rule claims to
+   close, and it does not exist in the corpus today (checked: none of the 24 real occurrences is
+   a single-comma directive fragment). */
 var RATING_RX = /^(none|negligible|low|medium|moderate|high|critical)\b/i;
 var DIRECTIVE_RX = /\b(notify|do\s*not|don't|never\s+block|before\s+blocking|coordinate)\b/i;
 
+function isRatingOnly(t) {
+  var m = RATING_RX.exec(t);
+  if (!m) return false;
+  var rest = t.slice(m[0].length).trim();
+  if (rest === '') return true;                                    // bare: "low", "NONE"
+
+  var paren = /^\(([^()]*)\)$/.exec(rest);
+  if (paren) {
+    var inner = paren[1];
+    return inner.length > 0 && inner.length <= 80 && !/[,;.!?()]/.test(inner);
+  }
+
+  if (rest.charAt(0) === ',') {
+    var frag = rest.slice(1).trim();
+    return frag.length > 0 && frag.length <= 80 && !/[,;.!?()]/.test(frag);
+  }
+
+  return false;   // no bounded qualifier shape recognised -> not rating-only -> carry
+}
+
 function isRatingShaped(s) {
   var t = s.trim();
-  return RATING_RX.test(t) && !DIRECTIVE_RX.test(t);
+  if (DIRECTIVE_RX.test(t)) return false;   // known instruction phrasing always survives
+  return isRatingOnly(t);
 }
 
 /* The never-block bucket is read a second time, separately, with its own role

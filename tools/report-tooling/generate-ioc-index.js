@@ -45,25 +45,42 @@ function isBlockCaveatObject(node) {
   return /^BLOCK\b/.test(action);
 }
 
-/* A bare risk rating (`low`, `NONE`, `LOW (specific operator-controlled domain)`) is a
-   detection-noise score, not a defender warning. See the fuller measurement and the one
-   checked "rating prefix beside a real caveat" case in lib/ioc-table-extract.js's comment
-   on the same constant; that case sits on an object whose `action` is not BLOCK, so
-   isBlockCaveatObject already excludes it before this test runs.
-
-   NARROWED 2026-09-17, second independent review, matching the identical fix and reasoning
-   in lib/ioc-table-extract.js: a rating-word PREFIX alone also matches a genuine warning that
-   happens to open with a rating word (e.g. "LOW confidence this is a shared victim VPS;
-   notify victim before blocking"), so DIRECTIVE_RX requires the remainder to carry no
-   directive language before the value counts as rating-shaped. Zero effect on the current
-   corpus (all 24 rating occurrences re-verified clean of directive language); it only stops a
-   future rating-prefixed genuine caveat from being silently dropped. */
+/* A bare risk rating is a detection-noise score, not a defender warning. INVERTED 2026-09-18,
+   matching the identical fix and full reasoning in lib/ioc-table-extract.js's comment on the
+   same constants (history: prefix-only, then a directive word list, both proven too broad or
+   too narrow by two independent reviews). The rule now fails toward CARRYING: `isRatingOnly()`
+   recognises three narrow shapes (bare; a single wrapping parenthetical; a single leading comma
+   plus one unpunctuated fragment, both under 80 chars), and anything else -- including anything
+   this cannot classify -- is carried, never dropped. DIRECTIVE_RX survives only as a narrower,
+   secondary net. See the other file's comment for the full history, the corpus verification, and
+   the stated residual risk this shape test cannot cover. */
 var RATING_RX = /^(none|negligible|low|medium|moderate|high|critical)\b/i;
 var DIRECTIVE_RX = /\b(notify|do\s*not|don't|never\s+block|before\s+blocking|coordinate)\b/i;
 
+function isRatingOnly(t) {
+  var m = RATING_RX.exec(t);
+  if (!m) return false;
+  var rest = t.slice(m[0].length).trim();
+  if (rest === '') return true;
+
+  var paren = /^\(([^()]*)\)$/.exec(rest);
+  if (paren) {
+    var inner = paren[1];
+    return inner.length > 0 && inner.length <= 80 && !/[,;.!?()]/.test(inner);
+  }
+
+  if (rest.charAt(0) === ',') {
+    var frag = rest.slice(1).trim();
+    return frag.length > 0 && frag.length <= 80 && !/[,;.!?()]/.test(frag);
+  }
+
+  return false;
+}
+
 function isRatingShaped(s) {
   var t = s.trim();
-  return RATING_RX.test(t) && !DIRECTIVE_RX.test(t);
+  if (DIRECTIVE_RX.test(t)) return false;
+  return isRatingOnly(t);
 }
 
 var VALUE_KEYS = ['value', 'indicator', 'ip', 'domain', 'url', 'hash',
