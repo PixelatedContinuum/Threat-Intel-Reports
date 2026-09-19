@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-19T16:00:18Z
+generated_at: 2026-09-19T18:01:28Z
 window_days: 30
 counts:
-  total: 525
-  research: 178
-  news: 347
+  total: 518
+  research: 172
+  news: 346
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -77,7 +77,6 @@ label_colors:
   "agentic soc": 2
   "ai guardrails": 8
   "ai infrastructure": 11
-  "ai infrastructure targeting": 6
   "ai malware": 9
   "ai training": 8
   "ai voice phishing": 4
@@ -107,10 +106,8 @@ label_colors:
   "anthropic": 8
   "anti-analysis": 11
   "antivirus removal": 7
-  "anydesk": 9
   "api": 12
   "apollo": 11
-  "app password phishing": 8
   "app-bound-encryption": 6
   "apple": 12
   "apple activation lock": 5
@@ -127,12 +124,10 @@ label_colors:
   "artificial intelligence": 6
   "asia-pacific": 6
   "asiogate": 3
-  "astroproxy": 1
   "asukastealer": 5
   "asyncapi": 2
   "asyncrat": 11
   "atf": 7
-  "atomic": 1
   "attack surface": 11
   "attacks": 7
   "australia": 10
@@ -149,7 +144,6 @@ label_colors:
   "azure table storage": 2
   "azure tokens": 3
   "babuk": 7
-  "backconnect infrastructure": 12
   "backdoor": 11
   "badbox": 10
   "bambootoken": 7
@@ -185,7 +179,6 @@ label_colors:
   "browser extension malware": 6
   "browser extensions": 4
   "browser theft": 3
-  "browser-credentials": 9
   "browser-extension": 12
   "browser-in-browser": 9
   "browser-in-the-browser": 7
@@ -218,7 +211,6 @@ label_colors:
   "chosen brick": 7
   "chrome": 12
   "chrome exploitation": 6
-  "chrome extension": 7
   "chrome extension theft": 4
   "chrome extensions": 8
   "chrome rat": 5
@@ -243,7 +235,6 @@ label_colors:
   "cloud-storage-exploitation": 2
   "cloudflare": 11
   "cloudflare captcha": 5
-  "cloudflare tunnels": 6
   "coast guard": 1
   "cobalt strike": 5
   "compile-time execution": 3
@@ -268,7 +259,6 @@ label_colors:
   "cryptocurrency miner": 1
   "cryptocurrency stealer": 4
   "cryptocurrency theft": 3
-  "cryptocurrency-stealer": 7
   "cryptographic": 9
   "cspu": 1
   "curlrat": 3
@@ -3567,45 +3557,3 @@ items:
     date: 2026-08-20T19:30:00Z
     kind: news
     labels: ["cybercrime", "nation-state"]
-  - title: "Is Cyber missing the Marque?"
-    url: "https://blog.talosintelligence.com/is-cyber-missing-the-marque/"
-    source: "Cisco Talos"
-    date: 2026-08-20T18:00:18Z
-    kind: research
-    labels: ["threat source newsletter"]
-  - title: "Hackers poison arrayref Rust crate to push infostealer malware"
-    url: "https://www.bleepingcomputer.com/news/security/hackers-poison-arrayref-rust-crate-to-push-infostealer-malware/"
-    source: "BleepingComputer"
-    date: 2026-08-20T17:53:52Z
-    kind: news
-    labels: []
-  - title: "How Peer2Profit and Astroproxy Turn Your Bandwidth Into Someone Else's Product"
-    url: "https://www.silentpush.com/blog/peer2profit-astroproxy/"
-    source: "AlienVault"
-    date: 2026-08-20T17:09:15Z
-    kind: research
-    labels: ["astroproxy", "backconnect infrastructure", "bandwidth-sharing", "internal network exposure", "peer2profit", "privateloader", "proxy enumeration", "residential proxies", "sdk analysis"]
-  - title: "Distinct Clusters Target Individuals of Interest to Russia"
-    url: "https://otx.alienvault.com/pulse/6a8734bac622f3c7b2d9a633"
-    source: "AlienVault"
-    date: 2026-08-20T17:09:14Z
-    kind: research
-    labels: ["app password phishing", "atomic", "authentication abuse", "cherrypie", "device code phishing", "enginelight", "headrush", "hospitality captive portal", "oauth phishing", "russian cyber espionage", "unc5976", "unc6293", "unc7005", "vidar", "whatsapp device linking"]
-  - title: "N4D Mesh Controller: New infrastructure, a UPX-packed agent labeled \"go-titan,\" and how to hunt for it"
-    url: "https://securitylabs.datadoghq.com/articles/n4d-mesh-controller-go-titan-new-infrastructure-hunting/"
-    source: "AlienVault"
-    date: 2026-08-20T17:08:38Z
-    kind: research
-    labels: ["ai infrastructure targeting", "cloudflare tunnels", "credential theft", "cve-2023-48022", "cve-2026-26220", "cve-2026-27944", "cve-2026-33032", "cve-2026-39987", "go-titan", "lateral movement", "lightllm", "linux malware", "mcp exploitation", "n4d", "n4d mesh controller", "ray dashboard"]
-  - title: "Inside Kimsuky's Abuse of Legitimate Remote Control Tools Across Northeast Asia"
-    url: "https://www.enki.co.kr/en/media-center/blog/inside-kimsuky-s-abuse-of-legitimate-remote-control-tools-across-northeast-asia"
-    source: "AlienVault"
-    date: 2026-08-20T17:08:37Z
-    kind: research
-    labels: ["anydesk", "chrome extension", "chrome remote desktop", "gmail exfiltration", "keylogger", "lnk malware", "northeast asia", "onedrive", "powershell", "spear phishing"]
-  - title: "BRIDGEHEAD: An npm typosquatting campaign that crosses from WSL into Windows to plant a crypto-wallet stealer"
-    url: "https://otx.alienvault.com/pulse/6a8734846b4cc1afd4bde567"
-    source: "AlienVault"
-    date: 2026-08-20T17:08:20Z
-    kind: research
-    labels: ["browser-credentials", "cryptocurrency-stealer", "github-hosted-payload", "in-memory-execution", "npm", "rust", "supply-chain", "telegram", "typosquatting", "wsl"]
