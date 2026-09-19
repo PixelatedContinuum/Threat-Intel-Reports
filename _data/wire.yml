@@ -3,29 +3,29 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-19T12:01:18Z
+generated_at: 2026-09-19T14:02:48Z
 window_days: 30
 counts:
-  total: 530
-  research: 179
-  news: 351
+  total: 524
+  research: 178
+  news: 346
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 76
+    count: 74
     color: 1
   - label: "cybercrime"
     count: 61
     color: 2
-  - label: "exploited"
-    count: 31
-    color: 3
   - label: "government"
     count: 31
-    color: 4
+    color: 3
   - label: "malware"
     count: 31
+    color: 4
+  - label: "exploited"
+    count: 30
     color: 5
   - label: "artificial intelligence"
     count: 28
@@ -132,7 +132,6 @@ label_colors:
   "asyncapi": 2
   "asyncrat": 11
   "atf": 7
-  "atlassian": 8
   "atomic": 1
   "attack surface": 11
   "attacks": 7
@@ -199,7 +198,6 @@ label_colors:
   "c2 framework": 5
   "c2 infrastructure": 12
   "calendar": 8
-  "camera": 3
   "canada": 4
   "canada revenue agency": 3
   "card-skimming": 8
@@ -294,7 +292,6 @@ label_colors:
   "cybercrime": 2
   "cyberespionage": 8
   "cyberwarfare": 9
-  "dahua": 9
   "darklantern": 4
   "data breaches": 7
   "data exfiltration": 9
@@ -326,7 +323,7 @@ label_colors:
   "espionage": 11
   "eu": 12
   "exploit": 9
-  "exploited": 3
+  "exploited": 5
   "exposure management": 4
   "extortion": 12
   "extortionware": 11
@@ -356,7 +353,7 @@ label_colors:
   "google cloud": 8
   "google infrastructure abuse": 8
   "google tag manager abuse": 4
-  "government": 4
+  "government": 3
   "government impersonation": 7
   "gta6": 6
   "gyazo": 8
@@ -393,7 +390,7 @@ label_colors:
   "maas framework": 12
   "mac malware": 8
   "macos": 11
-  "malware": 5
+  "malware": 4
   "malware analysis": 7
   "mathspace": 4
   "meshagent": 2
@@ -401,7 +398,6 @@ label_colors:
   "microsoft teams": 10
   "mikrotik": 2
   "miniorange": 5
-  "mlflow": 1
   "mobile": 4
   "mobile & wireless": 4
   "n-central": 6
@@ -3607,39 +3603,3 @@ items:
     date: 2026-08-20T14:39:48Z
     kind: news
     labels: []
-  - title: "How MSPs can catch phishing attacks email filters miss"
-    url: "https://www.bleepingcomputer.com/news/security/how-msps-can-catch-phishing-attacks-email-filters-miss/"
-    source: "BleepingComputer"
-    date: 2026-08-20T14:01:11Z
-    kind: news
-    labels: []
-  - title: "Going with the Flow(s): Distinct Clusters Target Individuals of Interest to Russia"
-    url: "https://cloud.google.com/blog/topics/threat-intelligence/distinct-clusters-target-individuals-of-interest-to-russia/"
-    source: "Google"
-    date: 2026-08-20T14:00:00Z
-    kind: research
-    labels: ["threat intelligence"]
-  - title: "Threat Actor Hacks 14,000 IP Cameras in Ukraine and Russia"
-    url: "https://www.securityweek.com/threat-actor-hacks-14000-ip-cameras-in-ukraine-and-russia/"
-    source: "SecurityWeek"
-    date: 2026-08-20T13:16:35Z
-    kind: news
-    labels: ["camera", "dahua", "iot security", "russia", "ukraine"]
-  - title: "Atlassian, Splunk Patch Dozens of Critical, High-Severity Vulnerabilities"
-    url: "https://www.securityweek.com/atlassian-splunk-patch-dozens-of-critical-high-severity-vulnerabilities/"
-    source: "SecurityWeek"
-    date: 2026-08-20T12:24:53Z
-    kind: news
-    labels: ["atlassian", "patches", "splunk", "vulnerabilities"]
-  - title: "Citrix urges admins to patch new NetScaler flaws as soon as possible"
-    url: "https://www.bleepingcomputer.com/news/security/citrix-urges-admins-to-patch-new-netscaler-flaws-as-soon-as-possible/"
-    source: "BleepingComputer"
-    date: 2026-08-20T12:14:38Z
-    kind: news
-    labels: []
-  - title: "MLflow Vulnerability Exploited for Cloud Credential Theft"
-    url: "https://www.securityweek.com/mlflow-vulnerability-exploited-for-cloud-credential-theft/"
-    source: "SecurityWeek"
-    date: 2026-08-20T12:05:55Z
-    kind: news
-    labels: ["exploited", "mlflow", "vulnerabilities"]
