@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-19T18:01:28Z
+generated_at: 2026-09-19T20:01:28Z
 window_days: 30
 counts:
-  total: 518
+  total: 517
   research: 172
-  news: 346
+  news: 345
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -16,7 +16,7 @@ topics:
     count: 73
     color: 1
   - label: "cybercrime"
-    count: 61
+    count: 60
     color: 2
   - label: "government"
     count: 31
@@ -42,11 +42,11 @@ topics:
   - label: "clickfix"
     count: 14
     color: 10
-  - label: "nation-state"
-    count: 14
-    color: 11
   - label: "zero-day"
     count: 14
+    color: 11
+  - label: "nation-state"
+    count: 13
     color: 12
 label_colors:
   ".net loader": 4
@@ -391,7 +391,7 @@ label_colors:
   "mobile": 4
   "mobile & wireless": 4
   "n-central": 6
-  "nation-state": 11
+  "nation-state": 12
   "netch-gateway": 5
   "network security": 6
   "next-gen identity security": 12
@@ -447,7 +447,7 @@ label_colors:
   "vmware": 2
   "vpn": 8
   "vulnerabilities": 1
-  "zero-day": 12
+  "zero-day": 11
 items:
   - title: "BragJack attacks hijack AI browser agents through malicious extensions"
     url: "https://www.bleepingcomputer.com/news/security/bragjack-attacks-hijack-ai-browser-agents-through-malicious-extensions/"
@@ -3551,9 +3551,3 @@ items:
     date: 2026-08-20T21:47:20Z
     kind: research
     labels: ["backdoor", "build-time execution", "ci/cd compromise", "credential theft", "proc-macro-en", "proc-macro1", "rust", "supply chain attack", "typosquatting"]
-  - title: "China’s ‘SilkParasite’ espionage operation targeting Central Asia with AI-assisted malware"
-    url: "https://therecord.media/china-cyber-espionage-central-asia"
-    source: "Recorded Future"
-    date: 2026-08-20T19:30:00Z
-    kind: news
-    labels: ["cybercrime", "nation-state"]
