@@ -3,17 +3,17 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-19T08:01:18Z
+generated_at: 2026-09-19T10:00:18Z
 window_days: 30
 counts:
-  total: 542
+  total: 540
   research: 185
-  news: 357
+  news: 355
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 78
+    count: 77
     color: 1
   - label: "cybercrime"
     count: 61
@@ -412,7 +412,6 @@ label_colors:
   "n-central": 6
   "nation-state": 11
   "netch-gateway": 5
-  "netscaler": 5
   "network security": 6
   "next-gen identity security": 12
   "nvidia": 3
@@ -3709,15 +3708,3 @@ items:
     date: 2026-08-20T10:00:25Z
     kind: research
     labels: ["authentication", "identity theft", "malware", "mfa", "remote access software", "social engineering", "threat research"]
-  - title: "Critical Zimbra RCE flaw now actively exploited in attacks"
-    url: "https://www.bleepingcomputer.com/news/security/critical-zimbra-rce-flaw-now-actively-exploited-in-attacks/"
-    source: "BleepingComputer"
-    date: 2026-08-20T09:46:54Z
-    kind: news
-    labels: []
-  - title: "Exploitation Expected for Critical Authentication Bypass Patched in Citrix NetScaler"
-    url: "https://www.securityweek.com/exploitation-expected-for-critical-authentication-bypass-patched-in-citrix-netscaler/"
-    source: "SecurityWeek"
-    date: 2026-08-20T08:33:25Z
-    kind: news
-    labels: ["citrix", "netscaler", "vulnerabilities"]
