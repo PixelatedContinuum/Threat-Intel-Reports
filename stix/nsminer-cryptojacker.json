@@ -1,13 +1,13 @@
 {
     "type": "bundle",
-    "id": "bundle--d0a06a1e-d2d3-47e4-9d07-20ce6e8e1643",
+    "id": "bundle--3cd61a58-4dff-4888-a56f-c3af4f2f82c8",
     "objects": [
         {
             "type": "identity",
             "spec_version": "2.1",
             "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:51.222503Z",
-            "modified": "2026-07-30T01:35:51.222503Z",
+            "created": "2026-09-19T20:27:57.510806Z",
+            "modified": "2026-09-19T20:27:57.510806Z",
             "name": "The Hunters Ledger",
             "identity_class": "organization"
         },
@@ -23,23 +23,23 @@
             }
         },
         {
-            "type": "url",
+            "type": "domain-name",
             "spec_version": "2.1",
-            "id": "url--b6577111-43b5-5142-8fa5-b8d914c03364",
-            "value": "http://hrtests.ru/S.php"
+            "id": "domain-name--17cf3ecf-5349-5cb8-9221-d0b8b944255c",
+            "value": "hrtests.ru"
         },
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--c0a3c761-1047-54a2-997e-ed2bc05378c4",
+            "id": "indicator--372252b6-c79c-570f-aa94-dd698fd7fed3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:51.223943Z",
-            "modified": "2026-07-30T01:35:51.223943Z",
-            "name": "url: http://hrtests.ru/S.php",
+            "created": "2026-09-19T20:27:57.511085Z",
+            "modified": "2026-09-19T20:27:57.511085Z",
+            "name": "domain: hrtests.ru",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "[url:value = 'http://hrtests.ru/S.php']",
+            "pattern": "[domain-name:value = 'hrtests.ru']",
             "pattern_type": "stix",
             "pattern_version": "2.1",
             "valid_from": "2026-02-02T00:00:00Z",
@@ -51,23 +51,23 @@
             "x_opencti_score": 60
         },
         {
-            "type": "domain-name",
+            "type": "url",
             "spec_version": "2.1",
-            "id": "domain-name--17cf3ecf-5349-5cb8-9221-d0b8b944255c",
-            "value": "hrtests.ru"
+            "id": "url--b6577111-43b5-5142-8fa5-b8d914c03364",
+            "value": "http://hrtests.ru/S.php"
         },
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--372252b6-c79c-570f-aa94-dd698fd7fed3",
+            "id": "indicator--c0a3c761-1047-54a2-997e-ed2bc05378c4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:51.228475Z",
-            "modified": "2026-07-30T01:35:51.228475Z",
-            "name": "domain: hrtests.ru",
+            "created": "2026-09-19T20:27:57.511706Z",
+            "modified": "2026-09-19T20:27:57.511706Z",
+            "name": "url: http://hrtests.ru/S.php",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "[domain-name:value = 'hrtests.ru']",
+            "pattern": "[url:value = 'http://hrtests.ru/S.php']",
             "pattern_type": "stix",
             "pattern_version": "2.1",
             "valid_from": "2026-02-02T00:00:00Z",
@@ -89,8 +89,8 @@
             "spec_version": "2.1",
             "id": "indicator--74bb5087-b725-5b31-8ab8-3341c5410653",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:51.229439Z",
-            "modified": "2026-07-30T01:35:51.229439Z",
+            "created": "2026-09-19T20:27:57.512336Z",
+            "modified": "2026-09-19T20:27:57.512336Z",
             "name": "domain: testswork.ru",
             "indicator_types": [
                 "malicious-activity"
@@ -109,17 +109,33 @@
         {
             "type": "file",
             "spec_version": "2.1",
-            "id": "file--f199c9b3-65ac-5f6a-bc0c-018928fe7dce",
+            "id": "file--2f5c5bd0-a07f-58f6-995c-71fdc53d6b41",
             "hashes": {
-                "SHA-256": "e06aa8ce984b22dd80a60c1f818b781b05d1c07facc91fec8637b312a728c145"
+                "SHA-256": "40fe74d3a1116ed8ca64c62feb694327a414059eeaef62c28bc5917e2e991b3d"
             }
         },
         {
             "type": "file",
             "spec_version": "2.1",
-            "id": "file--2f5c5bd0-a07f-58f6-995c-71fdc53d6b41",
+            "id": "file--cccebe62-ab42-5dcb-b172-61d9d4d03a64",
             "hashes": {
-                "SHA-256": "40fe74d3a1116ed8ca64c62feb694327a414059eeaef62c28bc5917e2e991b3d"
+                "SHA-256": "42422d912b9c626ad93eb8c036ad82ee67cfa48cf75259c20c327eddd4cc376f"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--bb50d6ab-9d29-50cc-9971-f400508e4333",
+            "hashes": {
+                "SHA-256": "572a6f9cb5b37b6eec13b578d346c2568ce3ec88bb711d75dac9e82fc01c8860"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--e318f773-93ab-5e07-8f70-fcd368be0646",
+            "hashes": {
+                "SHA-256": "67eff17c53a78c8ec9a28f392b9bb93df3e74f96f6ecd87a333a482c36546b3e"
             }
         },
         {
@@ -141,25 +157,9 @@
         {
             "type": "file",
             "spec_version": "2.1",
-            "id": "file--cccebe62-ab42-5dcb-b172-61d9d4d03a64",
+            "id": "file--f199c9b3-65ac-5f6a-bc0c-018928fe7dce",
             "hashes": {
-                "SHA-256": "42422d912b9c626ad93eb8c036ad82ee67cfa48cf75259c20c327eddd4cc376f"
-            }
-        },
-        {
-            "type": "file",
-            "spec_version": "2.1",
-            "id": "file--e318f773-93ab-5e07-8f70-fcd368be0646",
-            "hashes": {
-                "SHA-256": "67eff17c53a78c8ec9a28f392b9bb93df3e74f96f6ecd87a333a482c36546b3e"
-            }
-        },
-        {
-            "type": "file",
-            "spec_version": "2.1",
-            "id": "file--bb50d6ab-9d29-50cc-9971-f400508e4333",
-            "hashes": {
-                "SHA-256": "572a6f9cb5b37b6eec13b578d346c2568ce3ec88bb711d75dac9e82fc01c8860"
+                "SHA-256": "e06aa8ce984b22dd80a60c1f818b781b05d1c07facc91fec8637b312a728c145"
             }
         },
         {
@@ -167,8 +167,8 @@
             "spec_version": "2.1",
             "id": "indicator--0d90fcbd-64f5-5bf7-98dc-a5d220dcece8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:51.231112Z",
-            "modified": "2026-07-30T01:35:51.231112Z",
+            "created": "2026-09-19T20:27:57.515509Z",
+            "modified": "2026-09-19T20:27:57.515509Z",
             "name": "NsMiner_Dropper_Downloader",
             "indicator_types": [
                 "malicious-activity"
@@ -188,8 +188,8 @@
             "spec_version": "2.1",
             "id": "indicator--9f8f5298-1b3e-5592-8917-f152639ae10d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:51.231262Z",
-            "modified": "2026-07-30T01:35:51.231262Z",
+            "created": "2026-09-19T20:27:57.515832Z",
+            "modified": "2026-09-19T20:27:57.515832Z",
             "name": "NsMiner_Persistence_Directory",
             "indicator_types": [
                 "malicious-activity"
@@ -209,13 +209,13 @@
             "spec_version": "2.1",
             "id": "indicator--c7c5b82e-bda5-577c-b902-503115857c5d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:51.231393Z",
-            "modified": "2026-07-30T01:35:51.231393Z",
+            "created": "2026-09-19T20:27:57.515963Z",
+            "modified": "2026-09-19T20:27:57.515963Z",
             "name": "NsMiner Persistence Directory Creation",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: NsMiner Persistence Directory Creation\nid: 4ecdd6e1-c381-4c53-a92f-a1e688accdfb\nstatus: experimental\ndescription: >-\n  Detects creation of a file within the NsMiner cryptojacker's persistence\n  directory in %AppData%\\Roaming. The directory name is derived from the\n  malware family's own branding and is not a location used by legitimate\n  software.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/nsminer-cryptojacker-detections/\nauthor: The Hunters Ledger\ndate: 2026-02-02\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1547.001\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: file_event\ndetection:\n    selection:\n        TargetFilename|contains: '\\AppData\\Roaming\\NsMiner\\'\n    condition: selection\nfalsepositives:\n    - >-\n      Unlikely \u2014 no legitimate software has been observed creating a\n      directory literally named NsMiner under %AppData%\\Roaming\nlevel: medium",
+            "pattern": "title: NsMiner Persistence Directory Creation\nid: 4ecdd6e1-c381-4c53-a92f-a1e688accdfb\nstatus: experimental\ndescription: >-\n  Detects creation of a file within the NsMiner cryptojacker's persistence\n  directory in %AppData%\\Roaming. The directory name is derived from the\n  malware family's own branding and is not a location used by legitimate\n  software.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/nsminer-cryptojacker-detections/\nauthor: The Hunters Ledger\ndate: 2026-02-02\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1547.001\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: file_event\ndetection:\n    selection:\n        TargetFilename|contains: '\\AppData\\Roaming\\NsMiner\\'\n    condition: selection\nfalsepositives:\n    - >-\n      Unlikely — no legitimate software has been observed creating a\n      directory literally named NsMiner under %AppData%\\Roaming\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-02-02T00:00:00Z",
             "labels": [
@@ -230,8 +230,8 @@
             "spec_version": "2.1",
             "id": "indicator--8d303952-9238-52e1-8b6d-7da8b941d291",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:51.231541Z",
-            "modified": "2026-07-30T01:35:51.231541Z",
+            "created": "2026-09-19T20:27:57.516067Z",
+            "modified": "2026-09-19T20:27:57.516067Z",
             "name": "Suspicious FTP Connection from Non-Standard Application",
             "indicator_types": [
                 "malicious-activity"
@@ -249,11 +249,11 @@
         {
             "type": "tool",
             "spec_version": "2.1",
-            "id": "tool--2f9c4fe7-7b38-590d-a8b4-346525113a4e",
+            "id": "tool--1f42c527-18cf-50bd-9821-b753e1ff3707",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:51.231768Z",
-            "modified": "2026-07-30T01:35:51.231768Z",
-            "name": "e06aa8ce984b",
+            "created": "2026-09-19T20:27:57.51623Z",
+            "modified": "2026-09-19T20:27:57.51623Z",
+            "name": "40fe74d3a111",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ]
@@ -261,11 +261,35 @@
         {
             "type": "tool",
             "spec_version": "2.1",
-            "id": "tool--1f42c527-18cf-50bd-9821-b753e1ff3707",
+            "id": "tool--87b20cd8-dff5-59fd-ba83-2a42c50c5140",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:51.232315Z",
-            "modified": "2026-07-30T01:35:51.232315Z",
-            "name": "40fe74d3a111",
+            "created": "2026-09-19T20:27:57.51633Z",
+            "modified": "2026-09-19T20:27:57.51633Z",
+            "name": "42422d912b9c",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--acd6fa25-74fc-5e4a-bb5c-6a93c72300b0",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-19T20:27:57.516414Z",
+            "modified": "2026-09-19T20:27:57.516414Z",
+            "name": "572a6f9cb5b3",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--bc7b78e9-4bd9-53d0-92c6-dc2d6db92079",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-19T20:27:57.516491Z",
+            "modified": "2026-09-19T20:27:57.516491Z",
+            "name": "67eff17c53a7",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ]
@@ -275,8 +299,8 @@
             "spec_version": "2.1",
             "id": "tool--4b7e4c71-29fb-5a13-90f2-ea55e3ec9110",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:51.232473Z",
-            "modified": "2026-07-30T01:35:51.232473Z",
+            "created": "2026-09-19T20:27:57.516567Z",
+            "modified": "2026-09-19T20:27:57.516567Z",
             "name": "a0eba3fda0d7",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -287,8 +311,8 @@
             "spec_version": "2.1",
             "id": "tool--e29963a1-fe96-5c6a-a3da-2a12b3653301",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:51.232585Z",
-            "modified": "2026-07-30T01:35:51.232585Z",
+            "created": "2026-09-19T20:27:57.516702Z",
+            "modified": "2026-09-19T20:27:57.516702Z",
             "name": "d0326f0ddce4",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -297,35 +321,11 @@
         {
             "type": "tool",
             "spec_version": "2.1",
-            "id": "tool--87b20cd8-dff5-59fd-ba83-2a42c50c5140",
+            "id": "tool--2f9c4fe7-7b38-590d-a8b4-346525113a4e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:51.232714Z",
-            "modified": "2026-07-30T01:35:51.232714Z",
-            "name": "42422d912b9c",
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "tool",
-            "spec_version": "2.1",
-            "id": "tool--bc7b78e9-4bd9-53d0-92c6-dc2d6db92079",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:51.232845Z",
-            "modified": "2026-07-30T01:35:51.232845Z",
-            "name": "67eff17c53a7",
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "tool",
-            "spec_version": "2.1",
-            "id": "tool--acd6fa25-74fc-5e4a-bb5c-6a93c72300b0",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:51.232974Z",
-            "modified": "2026-07-30T01:35:51.232974Z",
-            "name": "572a6f9cb5b3",
+            "created": "2026-09-19T20:27:57.516837Z",
+            "modified": "2026-09-19T20:27:57.516837Z",
+            "name": "e06aa8ce984b",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ]
@@ -335,8 +335,8 @@
             "spec_version": "2.1",
             "id": "infrastructure--d9b882ee-1e8d-56f0-9646-12417ee055a0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:51.233095Z",
-            "modified": "2026-07-30T01:35:51.233095Z",
+            "created": "2026-09-19T20:27:57.516987Z",
+            "modified": "2026-09-19T20:27:57.516987Z",
             "name": "nsminer-cryptojacker infrastructure",
             "infrastructure_types": [
                 "command-and-control",
@@ -351,38 +351,38 @@
             "spec_version": "2.1",
             "id": "report--f5cf2d3d-4ab7-5767-8849-d0cbf388e3c2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:51.23339Z",
-            "modified": "2026-07-30T01:35:51.23339Z",
+            "created": "2026-09-19T20:27:57.517409Z",
+            "modified": "2026-09-19T20:27:57.517409Z",
             "name": "NsMiner: Multi-Stage Operation",
             "report_types": [
                 "threat-report"
             ],
             "published": "2026-02-02T00:00:00Z",
             "object_refs": [
-                "url--b6577111-43b5-5142-8fa5-b8d914c03364",
-                "indicator--c0a3c761-1047-54a2-997e-ed2bc05378c4",
                 "domain-name--17cf3ecf-5349-5cb8-9221-d0b8b944255c",
                 "indicator--372252b6-c79c-570f-aa94-dd698fd7fed3",
+                "url--b6577111-43b5-5142-8fa5-b8d914c03364",
+                "indicator--c0a3c761-1047-54a2-997e-ed2bc05378c4",
                 "domain-name--0344692b-476c-55c1-9580-ee89e7366b34",
                 "indicator--74bb5087-b725-5b31-8ab8-3341c5410653",
-                "file--f199c9b3-65ac-5f6a-bc0c-018928fe7dce",
                 "file--2f5c5bd0-a07f-58f6-995c-71fdc53d6b41",
+                "file--cccebe62-ab42-5dcb-b172-61d9d4d03a64",
+                "file--bb50d6ab-9d29-50cc-9971-f400508e4333",
+                "file--e318f773-93ab-5e07-8f70-fcd368be0646",
                 "file--c93f1775-7bdc-571b-b7bc-d637b9735a63",
                 "file--b41dfe76-e100-533d-984d-79f045b0ddca",
-                "file--cccebe62-ab42-5dcb-b172-61d9d4d03a64",
-                "file--e318f773-93ab-5e07-8f70-fcd368be0646",
-                "file--bb50d6ab-9d29-50cc-9971-f400508e4333",
+                "file--f199c9b3-65ac-5f6a-bc0c-018928fe7dce",
                 "indicator--0d90fcbd-64f5-5bf7-98dc-a5d220dcece8",
                 "indicator--9f8f5298-1b3e-5592-8917-f152639ae10d",
                 "indicator--c7c5b82e-bda5-577c-b902-503115857c5d",
                 "indicator--8d303952-9238-52e1-8b6d-7da8b941d291",
-                "tool--2f9c4fe7-7b38-590d-a8b4-346525113a4e",
                 "tool--1f42c527-18cf-50bd-9821-b753e1ff3707",
+                "tool--87b20cd8-dff5-59fd-ba83-2a42c50c5140",
+                "tool--acd6fa25-74fc-5e4a-bb5c-6a93c72300b0",
+                "tool--bc7b78e9-4bd9-53d0-92c6-dc2d6db92079",
                 "tool--4b7e4c71-29fb-5a13-90f2-ea55e3ec9110",
                 "tool--e29963a1-fe96-5c6a-a3da-2a12b3653301",
-                "tool--87b20cd8-dff5-59fd-ba83-2a42c50c5140",
-                "tool--bc7b78e9-4bd9-53d0-92c6-dc2d6db92079",
-                "tool--acd6fa25-74fc-5e4a-bb5c-6a93c72300b0",
+                "tool--2f9c4fe7-7b38-590d-a8b4-346525113a4e",
                 "infrastructure--d9b882ee-1e8d-56f0-9646-12417ee055a0"
             ],
             "labels": [

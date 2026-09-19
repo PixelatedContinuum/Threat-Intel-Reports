@@ -1,13 +1,13 @@
 {
     "type": "bundle",
-    "id": "bundle--87e825e8-fa0c-411f-b2e6-b86bdff1fd42",
+    "id": "bundle--7e0082a5-c9b6-4fe9-ac18-573217be61ef",
     "objects": [
         {
             "type": "identity",
             "spec_version": "2.1",
             "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:28.572135Z",
-            "modified": "2026-07-30T01:37:28.572135Z",
+            "created": "2026-09-19T20:28:04.977435Z",
+            "modified": "2026-09-19T20:28:04.977435Z",
             "name": "The Hunters Ledger",
             "identity_class": "organization"
         },
@@ -25,17 +25,17 @@
         {
             "type": "file",
             "spec_version": "2.1",
-            "id": "file--817b337b-91c5-511f-ac1c-f7d14476f911",
+            "id": "file--1670ccb4-631d-5119-8a4c-6a89dfa91492",
             "hashes": {
-                "SHA-256": "1b62bd9aef9d0a881a9fba620bc62d9934bc098657c7d03c67593a27c7070642"
+                "SHA-256": "02ed1649179ffd6136c2e5d6e48556255644aba38f03589e7b1c98ce66de8297"
             }
         },
         {
             "type": "file",
             "spec_version": "2.1",
-            "id": "file--b03d8f64-f3cb-5c43-9499-6ee84c74fcfb",
+            "id": "file--817b337b-91c5-511f-ac1c-f7d14476f911",
             "hashes": {
-                "SHA-256": "f75f22a3828a995759c3aeb21db02ccbb16362b68bd65e2005eae7ee819a5136"
+                "SHA-256": "1b62bd9aef9d0a881a9fba620bc62d9934bc098657c7d03c67593a27c7070642"
             }
         },
         {
@@ -65,14 +65,6 @@
         {
             "type": "file",
             "spec_version": "2.1",
-            "id": "file--466d810c-48ce-5aaf-80b8-e1e9079784e6",
-            "hashes": {
-                "SHA-256": "d98c2874389934881b1ae0162c7b11e7bd01535b7c46e3f873168fca2021deda"
-            }
-        },
-        {
-            "type": "file",
-            "spec_version": "2.1",
             "id": "file--07fb05e8-f2d2-529c-9514-a45e651bd560",
             "hashes": {
                 "SHA-256": "c0f67589eea4e605a31975b5c469e57c024576282a96d010a7dc4b1ecc339005"
@@ -81,9 +73,17 @@
         {
             "type": "file",
             "spec_version": "2.1",
-            "id": "file--1670ccb4-631d-5119-8a4c-6a89dfa91492",
+            "id": "file--466d810c-48ce-5aaf-80b8-e1e9079784e6",
             "hashes": {
-                "SHA-256": "02ed1649179ffd6136c2e5d6e48556255644aba38f03589e7b1c98ce66de8297"
+                "SHA-256": "d98c2874389934881b1ae0162c7b11e7bd01535b7c46e3f873168fca2021deda"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--b03d8f64-f3cb-5c43-9499-6ee84c74fcfb",
+            "hashes": {
+                "SHA-256": "f75f22a3828a995759c3aeb21db02ccbb16362b68bd65e2005eae7ee819a5136"
             }
         },
         {
@@ -91,8 +91,8 @@
             "spec_version": "2.1",
             "id": "indicator--c7864546-6dc9-5a7e-b56c-964de02692dd",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:28.574632Z",
-            "modified": "2026-07-30T01:37:28.574632Z",
+            "created": "2026-09-19T20:28:04.986793Z",
+            "modified": "2026-09-19T20:28:04.986793Z",
             "name": "Suspicious File Manager Access",
             "indicator_types": [
                 "malicious-activity"
@@ -112,13 +112,13 @@
             "spec_version": "2.1",
             "id": "indicator--bd2e0bc7-9d5d-5952-a719-d9202a07271a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:28.575319Z",
-            "modified": "2026-07-30T01:37:28.575319Z",
+            "created": "2026-09-19T20:28:04.987037Z",
+            "modified": "2026-09-19T20:28:04.987037Z",
             "name": "Suspicious Clp-Fm Cookie",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Suspicious Clp-Fm Cookie\nid: f3f41eba-22fa-464d-bbce-47ca27ce5a34\nstatus: experimental\ndescription: Detects the operator-distinctive clp-fm session cookie used by the file-manager webshell component of the Webshells-to-the-Cloud campaign to maintain authenticated access to the compromised backend.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/\nauthor: The Hunters Ledger\ndate: '2025-10-20'\ntags:\n    - attack.persistence\n    - attack.t1505.003\n    - detection.emerging-threats\nlogsource:\n    category: webserver\ndetection:\n    selection:\n        cs-cookie|contains: 'clp-fm='\n    condition: selection\nfalsepositives:\n    - Possible collision if CloudPanel's own File Manager feature uses a similarly-named session cookie on an unexploited instance\n    - Unlikely otherwise \u2014 this cookie name is not known to be used by other software\nlevel: medium",
+            "pattern": "title: Suspicious Clp-Fm Cookie\nid: f3f41eba-22fa-464d-bbce-47ca27ce5a34\nstatus: experimental\ndescription: Detects the operator-distinctive clp-fm session cookie used by the file-manager webshell component of the Webshells-to-the-Cloud campaign to maintain authenticated access to the compromised backend.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/\nauthor: The Hunters Ledger\ndate: '2025-10-20'\ntags:\n    - attack.persistence\n    - attack.t1505.003\n    - detection.emerging-threats\nlogsource:\n    category: webserver\ndetection:\n    selection:\n        cs-cookie|contains: 'clp-fm='\n    condition: selection\nfalsepositives:\n    - Possible collision if CloudPanel's own File Manager feature uses a similarly-named session cookie on an unexploited instance\n    - Unlikely otherwise — this cookie name is not known to be used by other software\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2025-10-20T00:00:00Z",
             "labels": [
@@ -133,8 +133,8 @@
             "spec_version": "2.1",
             "id": "indicator--7450b221-9394-5c63-95c2-efc4d3a2103e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:28.575475Z",
-            "modified": "2026-07-30T01:37:28.575475Z",
+            "created": "2026-09-19T20:28:04.987169Z",
+            "modified": "2026-09-19T20:28:04.987169Z",
             "name": "Suspicious User Creation",
             "indicator_types": [
                 "malicious-activity"
@@ -154,13 +154,13 @@
             "spec_version": "2.1",
             "id": "indicator--53f2b4e9-2432-58f0-b442-2a57d90393d2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:28.575609Z",
-            "modified": "2026-07-30T01:37:28.575609Z",
+            "created": "2026-09-19T20:28:04.987271Z",
+            "modified": "2026-09-19T20:28:04.987271Z",
             "name": "Webshell File Creation",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Webshell File Creation\nid: 3e0b3119-6680-4972-bf69-9461c9eff56b\nstatus: experimental\ndescription: Detects creation of the operator-distinctive webshell file at the compromised application's public files directory, observed in the Webshells-to-the-Cloud campaign.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/\nauthor: The Hunters Ledger\ndate: '2025-10-20'\ntags:\n    - attack.persistence\n    - attack.t1505.003\n    - detection.emerging-threats\nlogsource:\n    product: linux\n    category: file_event\ndetection:\n    selection:\n        TargetFilename|endswith: '/htdocs/app/files/public/shell.php'\n    condition: selection\nfalsepositives:\n    - Unlikely \u2014 this exact file path is specific to the compromised application instance observed in this campaign\nlevel: medium",
+            "pattern": "title: Webshell File Creation\nid: 3e0b3119-6680-4972-bf69-9461c9eff56b\nstatus: experimental\ndescription: Detects creation of the operator-distinctive webshell file at the compromised application's public files directory, observed in the Webshells-to-the-Cloud campaign.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/\nauthor: The Hunters Ledger\ndate: '2025-10-20'\ntags:\n    - attack.persistence\n    - attack.t1505.003\n    - detection.emerging-threats\nlogsource:\n    product: linux\n    category: file_event\ndetection:\n    selection:\n        TargetFilename|endswith: '/htdocs/app/files/public/shell.php'\n    condition: selection\nfalsepositives:\n    - Unlikely — this exact file path is specific to the compromised application instance observed in this campaign\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2025-10-20T00:00:00Z",
             "labels": [
@@ -175,8 +175,8 @@
             "spec_version": "2.1",
             "id": "indicator--353d5f0f-9e8e-5633-97c0-adfa4b1a5395",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:28.575738Z",
-            "modified": "2026-07-30T01:37:28.575738Z",
+            "created": "2026-09-19T20:28:04.987389Z",
+            "modified": "2026-09-19T20:28:04.987389Z",
             "name": "Rclone Execution",
             "indicator_types": [
                 "malicious-activity"
@@ -196,8 +196,8 @@
             "spec_version": "2.1",
             "id": "indicator--8bb6005c-d5c6-5f82-b0b2-e3b6407ceccd",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:28.575873Z",
-            "modified": "2026-07-30T01:37:28.575873Z",
+            "created": "2026-09-19T20:28:04.98748Z",
+            "modified": "2026-09-19T20:28:04.98748Z",
             "name": "Dropbox API Traffic",
             "indicator_types": [
                 "malicious-activity"
@@ -217,8 +217,8 @@
             "spec_version": "2.1",
             "id": "indicator--5e808de1-0cc7-5b98-b1fb-a25c9d7ff191",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:28.575997Z",
-            "modified": "2026-07-30T01:37:28.575997Z",
+            "created": "2026-09-19T20:28:04.987584Z",
+            "modified": "2026-09-19T20:28:04.987584Z",
             "name": "Suspicious WordPress Install",
             "indicator_types": [
                 "malicious-activity"
@@ -238,13 +238,13 @@
             "spec_version": "2.1",
             "id": "indicator--d6cde6d3-77ba-5e19-95ed-9eed221e07fb",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:28.576116Z",
-            "modified": "2026-07-30T01:37:28.576116Z",
+            "created": "2026-09-19T20:28:04.987703Z",
+            "modified": "2026-09-19T20:28:04.987703Z",
             "name": "Nginx Configuration File Modified",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Nginx Configuration File Modified\nid: 4de0ab63-3b37-4203-ba70-721af47514f4\nstatus: experimental\ndescription: >-\n  Detects file writes under /etc/nginx/. A malicious outbound reverse-proxy relay requires\n  a proxy_pass directive to an external host, which file-event telemetry cannot inspect -\n  treat this as a hunting lead requiring a content diff of the changed config.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/\nauthor: The Hunters Ledger\ndate: '2025-10-20'\ntags:\n    - attack.command-and-control\n    - attack.t1090\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: linux\ndetection:\n    selection:\n        TargetFilename|contains: '/etc/nginx/'\n    condition: selection\nfalsepositives:\n    - Legitimate infrastructure changes adding a proxy upstream to an external, authorized destination\n    - Certbot/TLS certificate renewals\n    - Configuration-management pushes\n    - Legitimate administrator edits to nginx config\nlevel: medium",
+            "pattern": "title: Nginx Configuration File Modified\nid: 4de0ab63-3b37-4203-ba70-721af47514f4\nstatus: experimental\ndescription: >-\n  Detects file writes under /etc/nginx/ made by a process in the web-server runtime\n  (nginx, php/php-fpm, httpd or apache2), consistent with a webshell rewriting its own\n  host's nginx config to add a malicious proxy_pass upstream. Writes by shells, package\n  managers and configuration-management agents run outside the web-server process context\n  and are not matched. A proxy_pass directive to an external host still requires a manual\n  content diff of the changed file to confirm intent.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/\nauthor: The Hunters Ledger\ndate: '2025-10-20'\nmodified: '2026-08-20'\ntags:\n    - attack.command-and-control\n    - attack.t1090\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: linux\ndetection:\n    selection_path:\n        TargetFilename|contains: '/etc/nginx/'\n    selection_web_runtime:\n        Image|contains:\n            - 'nginx'\n            - 'php'\n            - 'httpd'\n            - 'apache2'\n    condition: selection_path and selection_web_runtime\nfalsepositives:\n    - >-\n        Web-hosting control-panel software whose PHP backend legitimately writes nginx vhost\n        configuration in response to an administrator action, for example CloudPanel and similar\n        nginx plus PHP-FPM panels.\n    - >-\n        An nginx module or embedded scripting engine such as njs deliberately configured to rewrite\n        its own configuration.\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2025-10-20T00:00:00Z",
             "labels": [
@@ -257,15 +257,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--d7e06505-c2e0-5fc1-849f-a3b84ad1dbd1",
+            "id": "indicator--327d1be6-b9ac-5773-9326-f8891a70d539",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:28.576235Z",
-            "modified": "2026-07-30T01:37:28.576235Z",
-            "name": "THL Webshells-To-Cloud-Modular-Intrusion Suspicious mxx POST Parameter (Webshell Command Parameter Indicator)",
+            "created": "2026-09-19T20:28:04.987818Z",
+            "modified": "2026-09-19T20:28:04.987818Z",
+            "name": "THL HUNT Webshells-To-Cloud-Modular-Intrusion Suspicious mxx POST Parameter (Webshell Command Parameter Indicator)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL Webshells-To-Cloud-Modular-Intrusion Suspicious mxx POST Parameter (Webshell Command Parameter Indicator)\"; flow:established,to_server; http.request_body; content:\"mxx=\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:web-application-attack; sid:100002; rev:2; metadata:author The_Hunters_Ledger, date 2025-10-20, reference https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/;)",
+            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL HUNT Webshells-To-Cloud-Modular-Intrusion Suspicious mxx POST Parameter (Webshell Command Parameter Indicator)\"; flow:established,to_server; http.request_body; content:\"mxx=\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:web-application-attack; sid:100002; rev:2; metadata:author The_Hunters_Ledger, date 2025-10-20, reference https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/;)",
             "pattern_type": "suricata",
             "valid_from": "2025-10-20T00:00:00Z",
             "labels": [
@@ -278,11 +278,11 @@
         {
             "type": "tool",
             "spec_version": "2.1",
-            "id": "tool--4b06d06e-a674-544a-ad20-493183fcffea",
+            "id": "tool--cdf837e6-0c29-55ee-ae22-d8d711b1465d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:28.576395Z",
-            "modified": "2026-07-30T01:37:28.576395Z",
-            "name": "1b62bd9aef9d",
+            "created": "2026-09-19T20:28:04.987975Z",
+            "modified": "2026-09-19T20:28:04.987975Z",
+            "name": "02ed1649179f",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ]
@@ -290,11 +290,11 @@
         {
             "type": "tool",
             "spec_version": "2.1",
-            "id": "tool--621fcde9-4c6e-5f78-a20a-21bc20731afe",
+            "id": "tool--4b06d06e-a674-544a-ad20-493183fcffea",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:28.576513Z",
-            "modified": "2026-07-30T01:37:28.576513Z",
-            "name": "f75f22a3828a",
+            "created": "2026-09-19T20:28:04.988101Z",
+            "modified": "2026-09-19T20:28:04.988101Z",
+            "name": "1b62bd9aef9d",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ]
@@ -304,8 +304,8 @@
             "spec_version": "2.1",
             "id": "tool--6831f1d1-8dac-5738-a658-f86b0203d35e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:28.576614Z",
-            "modified": "2026-07-30T01:37:28.576614Z",
+            "created": "2026-09-19T20:28:04.988234Z",
+            "modified": "2026-09-19T20:28:04.988234Z",
             "name": "4213d1a76437",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -316,8 +316,8 @@
             "spec_version": "2.1",
             "id": "tool--531596a9-ebdc-53a4-b8f4-aa9b7bc40912",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:28.576709Z",
-            "modified": "2026-07-30T01:37:28.576709Z",
+            "created": "2026-09-19T20:28:04.988359Z",
+            "modified": "2026-09-19T20:28:04.988359Z",
             "name": "4f4fad2fd314",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -328,21 +328,9 @@
             "spec_version": "2.1",
             "id": "tool--676180f8-f1c4-55fc-afcb-20afa0a16225",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:28.576818Z",
-            "modified": "2026-07-30T01:37:28.576818Z",
+            "created": "2026-09-19T20:28:04.98848Z",
+            "modified": "2026-09-19T20:28:04.98848Z",
             "name": "83c29e70cd7f",
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "tool",
-            "spec_version": "2.1",
-            "id": "tool--08c09e5b-4cad-541c-9071-40676297193c",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:28.576914Z",
-            "modified": "2026-07-30T01:37:28.576914Z",
-            "name": "d98c28743899",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ]
@@ -352,8 +340,8 @@
             "spec_version": "2.1",
             "id": "tool--e543ae5b-3eb8-55c1-a1b9-468df4df2ca8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:28.577006Z",
-            "modified": "2026-07-30T01:37:28.577006Z",
+            "created": "2026-09-19T20:28:04.988607Z",
+            "modified": "2026-09-19T20:28:04.988607Z",
             "name": "c0f67589eea4",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -362,11 +350,23 @@
         {
             "type": "tool",
             "spec_version": "2.1",
-            "id": "tool--cdf837e6-0c29-55ee-ae22-d8d711b1465d",
+            "id": "tool--08c09e5b-4cad-541c-9071-40676297193c",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:28.577097Z",
-            "modified": "2026-07-30T01:37:28.577097Z",
-            "name": "02ed1649179f",
+            "created": "2026-09-19T20:28:04.988725Z",
+            "modified": "2026-09-19T20:28:04.988725Z",
+            "name": "d98c28743899",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--621fcde9-4c6e-5f78-a20a-21bc20731afe",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-19T20:28:04.988844Z",
+            "modified": "2026-09-19T20:28:04.988844Z",
+            "name": "f75f22a3828a",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ]
@@ -376,22 +376,22 @@
             "spec_version": "2.1",
             "id": "report--3a042466-61a6-5b3e-a1f9-5c5412cffba2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:28.577315Z",
-            "modified": "2026-07-30T01:37:28.577315Z",
+            "created": "2026-09-19T20:28:04.989171Z",
+            "modified": "2026-09-19T20:28:04.989171Z",
             "name": "From Webshells to the Cloud",
             "report_types": [
                 "threat-report"
             ],
             "published": "2025-10-20T00:00:00Z",
             "object_refs": [
+                "file--1670ccb4-631d-5119-8a4c-6a89dfa91492",
                 "file--817b337b-91c5-511f-ac1c-f7d14476f911",
-                "file--b03d8f64-f3cb-5c43-9499-6ee84c74fcfb",
                 "file--90a4c27a-1eb7-506b-8d0c-e92c145d4538",
                 "file--08ea2395-351a-5f1d-ab6e-43870cd71b70",
                 "file--5c9bb6e6-0e91-5583-9960-23098c15eec0",
-                "file--466d810c-48ce-5aaf-80b8-e1e9079784e6",
                 "file--07fb05e8-f2d2-529c-9514-a45e651bd560",
-                "file--1670ccb4-631d-5119-8a4c-6a89dfa91492",
+                "file--466d810c-48ce-5aaf-80b8-e1e9079784e6",
+                "file--b03d8f64-f3cb-5c43-9499-6ee84c74fcfb",
                 "indicator--c7864546-6dc9-5a7e-b56c-964de02692dd",
                 "indicator--bd2e0bc7-9d5d-5952-a719-d9202a07271a",
                 "indicator--7450b221-9394-5c63-95c2-efc4d3a2103e",
@@ -400,15 +400,15 @@
                 "indicator--8bb6005c-d5c6-5f82-b0b2-e3b6407ceccd",
                 "indicator--5e808de1-0cc7-5b98-b1fb-a25c9d7ff191",
                 "indicator--d6cde6d3-77ba-5e19-95ed-9eed221e07fb",
-                "indicator--d7e06505-c2e0-5fc1-849f-a3b84ad1dbd1",
+                "indicator--327d1be6-b9ac-5773-9326-f8891a70d539",
+                "tool--cdf837e6-0c29-55ee-ae22-d8d711b1465d",
                 "tool--4b06d06e-a674-544a-ad20-493183fcffea",
-                "tool--621fcde9-4c6e-5f78-a20a-21bc20731afe",
                 "tool--6831f1d1-8dac-5738-a658-f86b0203d35e",
                 "tool--531596a9-ebdc-53a4-b8f4-aa9b7bc40912",
                 "tool--676180f8-f1c4-55fc-afcb-20afa0a16225",
-                "tool--08c09e5b-4cad-541c-9071-40676297193c",
                 "tool--e543ae5b-3eb8-55c1-a1b9-468df4df2ca8",
-                "tool--cdf837e6-0c29-55ee-ae22-d8d711b1465d"
+                "tool--08c09e5b-4cad-541c-9071-40676297193c",
+                "tool--621fcde9-4c6e-5f78-a20a-21bc20731afe"
             ],
             "labels": [
                 "Webshell",

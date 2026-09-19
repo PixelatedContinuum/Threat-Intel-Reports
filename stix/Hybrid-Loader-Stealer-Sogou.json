@@ -1,13 +1,13 @@
 {
     "type": "bundle",
-    "id": "bundle--2679fb62-cfd3-4c24-82d5-953020497092",
+    "id": "bundle--0ee98509-dfcd-47e6-bea8-b59690d3e733",
     "objects": [
         {
             "type": "identity",
             "spec_version": "2.1",
             "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:34:07.106079Z",
-            "modified": "2026-07-30T01:34:07.106079Z",
+            "created": "2026-09-19T20:27:54.259472Z",
+            "modified": "2026-09-19T20:27:54.259472Z",
             "name": "The Hunters Ledger",
             "identity_class": "organization"
         },
@@ -35,8 +35,8 @@
             "spec_version": "2.1",
             "id": "indicator--ed0dac53-9969-5480-a878-8f56a11c5d05",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:34:07.107842Z",
-            "modified": "2026-07-30T01:34:07.107842Z",
+            "created": "2026-09-19T20:27:54.264127Z",
+            "modified": "2026-09-19T20:27:54.264127Z",
             "name": "SogouStealer_Ecosystem_Indicators",
             "indicator_types": [
                 "malicious-activity"
@@ -56,8 +56,8 @@
             "spec_version": "2.1",
             "id": "indicator--f982d887-c5c8-574e-b7e0-d3f07e012866",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:34:07.108585Z",
-            "modified": "2026-07-30T01:34:07.108585Z",
+            "created": "2026-09-19T20:27:54.26435Z",
+            "modified": "2026-09-19T20:27:54.26435Z",
             "name": "SogouStealer_C2_Scheduler_SignatureDB",
             "indicator_types": [
                 "malicious-activity"
@@ -77,8 +77,8 @@
             "spec_version": "2.1",
             "id": "indicator--9aa75bc9-fb08-5da9-a63f-922bed543b59",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:34:07.108743Z",
-            "modified": "2026-07-30T01:34:07.108743Z",
+            "created": "2026-09-19T20:27:54.264475Z",
+            "modified": "2026-09-19T20:27:54.264475Z",
             "name": "SogouStealer_Loader_Downloader",
             "indicator_types": [
                 "malicious-activity"
@@ -98,13 +98,13 @@
             "spec_version": "2.1",
             "id": "indicator--d8674b18-4fc4-5df6-8caa-5b3ed2301cec",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:34:07.108893Z",
-            "modified": "2026-07-30T01:34:07.108893Z",
+            "created": "2026-09-19T20:27:54.264585Z",
+            "modified": "2026-09-19T20:27:54.264585Z",
             "name": "SogouStealer Persistence via Run Keys and LNK Modification",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: SogouStealer Persistence via Run Keys and LNK Modification\nid: 190b57f6-a8c3-4f45-a39d-ed7340d66b9a\nstatus: experimental\ndescription: Detects registry Run key entries referencing the SogouStealer ecosystem's own component filenames (beacon_sdk.dll, SGDownload.exe, userNetSchedule.exe)\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/\nauthor: The Hunters Ledger\ndate: '2025-11-21'\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1547.001\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: registry_set\ndetection:\n    selection_run:\n        TargetObject|contains:\n            - '\\Software\\Microsoft\\Windows\\CurrentVersion\\Run'\n            - '\\Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce'\n        Details|contains:\n            - 'beacon_sdk.dll'\n            - 'SGDownload.exe'\n            - 'userNetSchedule.exe'\n    condition: selection_run\nfalsepositives:\n    - Unlikely; these filenames are specific to this malware ecosystem\nlevel: high",
+            "pattern": "title: SogouStealer Persistence via Run Keys and LNK Modification\nid: 190b57f6-a8c3-4f45-a39d-ed7340d66b9a\nstatus: experimental\ndescription: Detects registry Run key entries referencing the SogouStealer ecosystem's own component filenames (beacon_sdk.dll, SGDownload.exe, userNetSchedule.exe)\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/\nauthor: The Hunters Ledger\ndate: '2025-11-21'\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1547.001\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    product: windows\n    category: registry_set\ndetection:\n    selection_run:\n        TargetObject|contains:\n            - '\\Software\\Microsoft\\Windows\\CurrentVersion\\Run'\n            - '\\Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce'\n        Details|contains:\n            - 'beacon_sdk.dll'\n            - 'SGDownload.exe'\n            - 'userNetSchedule.exe'\n    condition: selection_run\nfalsepositives:\n    - Unlikely; these filenames are specific to this malware ecosystem\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2025-11-21T00:00:00Z",
             "labels": [
@@ -119,13 +119,13 @@
             "spec_version": "2.1",
             "id": "indicator--6c41931f-ffdb-58f2-9549-9202740d2cf1",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:34:07.109035Z",
-            "modified": "2026-07-30T01:34:07.109035Z",
+            "created": "2026-09-19T20:27:54.264714Z",
+            "modified": "2026-09-19T20:27:54.264714Z",
             "name": "SogouStealer Artifact Drop and Staging",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: SogouStealer Artifact Drop and Staging\nid: 1d3185d1-08ce-4956-91bd-f4ce70d10a46\nstatus: experimental\ndescription: Detects creation of known component files (loaders, downloaders, network helpers, signature databases) staged to disk by the SogouStealer ecosystem\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/\nauthor: The Hunters Ledger\ndate: '2025-11-21'\ntags:\n    - attack.command-and-control\n    - attack.t1105\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: file_create\ndetection:\n    selection_names:\n        TargetFilename|endswith:\n            - '\\beacon_sdk.dll'\n            - '\\SGDownload.exe'\n            - '\\SGCurlHelper.dll'\n            - '\\userNetSchedule.exe'\n            - '\\UserExportDll.dll'\n            - '\\UrlSignatureV.dat'\n            - '\\pandorabox.cupf'\n            - '\\PersonalCenter.cupf'\n    condition: selection_names\nfalsepositives:\n    - Unlikely; these filenames are specific to this malware ecosystem\nlevel: high",
+            "pattern": "title: SogouStealer Artifact Drop and Staging\nid: 1d3185d1-08ce-4956-91bd-f4ce70d10a46\nstatus: experimental\ndescription: Detects creation of known component files (loaders, downloaders, network helpers, signature databases) staged to disk by the SogouStealer ecosystem\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/\nauthor: The Hunters Ledger\ndate: '2025-11-21'\ntags:\n    - attack.command-and-control\n    - attack.t1105\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    product: windows\n    category: file_create\ndetection:\n    selection_names:\n        TargetFilename|endswith:\n            - '\\beacon_sdk.dll'\n            - '\\SGDownload.exe'\n            - '\\SGCurlHelper.dll'\n            - '\\userNetSchedule.exe'\n            - '\\UserExportDll.dll'\n            - '\\UrlSignatureV.dat'\n            - '\\pandorabox.cupf'\n            - '\\PersonalCenter.cupf'\n    condition: selection_names\nfalsepositives:\n    - Unlikely; these filenames are specific to this malware ecosystem\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2025-11-21T00:00:00Z",
             "labels": [
@@ -140,13 +140,13 @@
             "spec_version": "2.1",
             "id": "indicator--c724046d-cdce-5ef1-80b7-ed844b92dd93",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:34:07.109164Z",
-            "modified": "2026-07-30T01:34:07.109164Z",
+            "created": "2026-09-19T20:27:54.264824Z",
+            "modified": "2026-09-19T20:27:54.264824Z",
             "name": "SogouStealer Masquerading NSIS Installer Execution",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: SogouStealer Masquerading NSIS Installer Execution\nid: a078683b-110a-4973-86bb-1666dba668bf\nstatus: experimental\ndescription: Detects execution of suspected NSIS-based fake Sogou installers with cracked-build markers\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/\nauthor: The Hunters Ledger\ndate: '2025-11-21'\ntags:\n    - attack.stealth\n    - attack.t1036.005\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection_image:\n        Image|endswith:\n            - '\\installer.exe'\n            - '\\setup.exe'\n            - '\\install.exe'\n    selection_cmdline:\n        CommandLine|contains:\n            - 'NSIS'\n            - 'Nullsoft'\n            - 'Sogou'\n            - '\u62fc\u97f3'\n            - '\u543e\u7231\u7834\u89e3'\n            - 'v15.1.0.1570'\n    condition: selection_image and selection_cmdline\nfalsepositives:\n    - Legitimate NSIS-based installers whose command line coincidentally references the generic NSIS/Nullsoft build-tool strings\n    - Unlikely for the Chinese-language cracked-build markers or the specific version string, which are not generic NSIS artifacts\nlevel: medium",
+            "pattern": "title: SogouStealer Masquerading NSIS Installer Execution\nid: a078683b-110a-4973-86bb-1666dba668bf\nstatus: experimental\ndescription: Detects execution of suspected NSIS-based fake Sogou installers with cracked-build markers\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/\nauthor: The Hunters Ledger\ndate: '2025-11-21'\ntags:\n    - attack.stealth\n    - attack.t1036.005\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection_image:\n        Image|endswith:\n            - '\\installer.exe'\n            - '\\setup.exe'\n            - '\\install.exe'\n    selection_cmdline:\n        CommandLine|contains:\n            - 'NSIS'\n            - 'Nullsoft'\n            - 'Sogou'\n            - '拼音'\n            - '吾爱破解'\n            - 'v15.1.0.1570'\n    condition: selection_image and selection_cmdline\nfalsepositives:\n    - Legitimate NSIS-based installers whose command line coincidentally references the generic NSIS/Nullsoft build-tool strings\n    - Unlikely for the Chinese-language cracked-build markers or the specific version string, which are not generic NSIS artifacts\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2025-11-21T00:00:00Z",
             "labels": [
@@ -159,15 +159,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--c469cca7-82a2-5d4a-8888-79ed86352d62",
+            "id": "indicator--b90594fd-c0c9-508a-9bc6-deac801bc21b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:34:07.109294Z",
-            "modified": "2026-07-30T01:34:07.109294Z",
-            "name": "THL SogouStealer-HybridLoader CGI1 C2 URI Pattern (C2 Transport Indicator)",
+            "created": "2026-09-19T20:27:54.264923Z",
+            "modified": "2026-09-19T20:27:54.264923Z",
+            "name": "THL HUNT SogouStealer-HybridLoader CGI1 C2 URI Pattern (C2 Transport Indicator)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL SogouStealer-HybridLoader CGI1 C2 URI Pattern (C2 Transport Indicator)\"; flow:established,to_server; http.uri; content:\"/cgi1\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000001; rev:1; metadata:author The_Hunters_Ledger, date 2025-11-21, reference https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/;)",
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT SogouStealer-HybridLoader CGI1 C2 URI Pattern (C2 Transport Indicator)\"; flow:established,to_server; http.uri; content:\"/cgi1\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000001; rev:1; metadata:author The_Hunters_Ledger, date 2025-11-21, reference https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/;)",
             "pattern_type": "suricata",
             "valid_from": "2025-11-21T00:00:00Z",
             "labels": [
@@ -182,8 +182,8 @@
             "spec_version": "2.1",
             "id": "tool--2ae33423-5b4c-5513-8490-952253498e3e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:34:07.109523Z",
-            "modified": "2026-07-30T01:34:07.109523Z",
+            "created": "2026-09-19T20:27:54.265052Z",
+            "modified": "2026-09-19T20:27:54.265052Z",
             "name": "Installer",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -194,8 +194,8 @@
             "spec_version": "2.1",
             "id": "report--60de42bf-6fb0-59f8-8f0b-67e8bf184aaf",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:34:07.109755Z",
-            "modified": "2026-07-30T01:34:07.109755Z",
+            "created": "2026-09-19T20:27:54.265243Z",
+            "modified": "2026-09-19T20:27:54.265243Z",
             "name": "Hybrid Ecosystem Masquerading as Sogou",
             "report_types": [
                 "threat-report"
@@ -209,7 +209,7 @@
                 "indicator--d8674b18-4fc4-5df6-8caa-5b3ed2301cec",
                 "indicator--6c41931f-ffdb-58f2-9549-9202740d2cf1",
                 "indicator--c724046d-cdce-5ef1-80b7-ed844b92dd93",
-                "indicator--c469cca7-82a2-5d4a-8888-79ed86352d62",
+                "indicator--b90594fd-c0c9-508a-9bc6-deac801bc21b",
                 "tool--2ae33423-5b4c-5513-8490-952253498e3e"
             ],
             "labels": [

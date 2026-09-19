@@ -5394,7 +5394,7 @@
   never_block_rows:
     - type: "ipv4"
       value: "172.237.149.231"
-      context: "Parklogic shared TDS landing infrastructure - operator parks 11 TDS landing domains here via customer account pkAId=2143526812"
+      context: "Parklogic shared TDS landing infrastructure - operator parks 11 TDS landing domains here via customer account pkAId=2143526812. Shared by all Parklogic customers, so do not blocklist the IP without context"
     - type: "domain"
       value: "rebel.com"
       context: "Yahoo support spoof (HIGH-MONETIZED, ownership ambiguous - full operator infra pattern but Rebel org-hash differs)"

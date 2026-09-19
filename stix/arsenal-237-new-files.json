@@ -1,13 +1,13 @@
 {
     "type": "bundle",
-    "id": "bundle--a134d9ce-43d8-4be2-9f8b-b0e3160dcf17",
+    "id": "bundle--b8d3110b-4139-4579-8f0c-89bd7ef922a8",
     "objects": [
         {
             "type": "identity",
             "spec_version": "2.1",
             "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:20.866866Z",
-            "modified": "2026-07-30T01:35:20.866866Z",
+            "created": "2026-09-19T20:27:55.347119Z",
+            "modified": "2026-09-19T20:27:55.347119Z",
             "name": "The Hunters Ledger",
             "identity_class": "organization"
         },
@@ -25,17 +25,17 @@
         {
             "type": "file",
             "spec_version": "2.1",
-            "id": "file--aed218eb-1892-54b0-b0d8-bf7fdd269864",
+            "id": "file--ba6bed9f-017c-5023-91e8-de00432f8faa",
             "hashes": {
-                "SHA-256": "4d1fe7b54a0ce9ce2082c167b662ec138b890e3f305e67bdc13a5e9a24708518"
+                "SHA-256": "158f61b6d10ea2ce78769703a2ffbba9c08f0172e37013de960d9efe5e9fde14"
             }
         },
         {
             "type": "file",
             "spec_version": "2.1",
-            "id": "file--4808afb2-9fb4-551e-89e6-e1f8b9f11cf5",
+            "id": "file--aed218eb-1892-54b0-b0d8-bf7fdd269864",
             "hashes": {
-                "SHA-256": "d73c4f127c5c0a7f9bf0f398e95dd55c7e8f6f6a5783c8cb314bd99c2d1c9802"
+                "SHA-256": "4d1fe7b54a0ce9ce2082c167b662ec138b890e3f305e67bdc13a5e9a24708518"
             }
         },
         {
@@ -49,19 +49,19 @@
         {
             "type": "file",
             "spec_version": "2.1",
-            "id": "file--ba6bed9f-017c-5023-91e8-de00432f8faa",
+            "id": "file--4808afb2-9fb4-551e-89e6-e1f8b9f11cf5",
             "hashes": {
-                "SHA-256": "158f61b6d10ea2ce78769703a2ffbba9c08f0172e37013de960d9efe5e9fde14"
+                "SHA-256": "d73c4f127c5c0a7f9bf0f398e95dd55c7e8f6f6a5783c8cb314bd99c2d1c9802"
             }
         },
         {
             "type": "tool",
             "spec_version": "2.1",
-            "id": "tool--8e7e93f7-4b77-5666-a76a-48d2a887d83a",
+            "id": "tool--98ecf30e-cc99-599b-a4c5-bd66ff291681",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:20.868815Z",
-            "modified": "2026-07-30T01:35:20.868815Z",
-            "name": "full_test_enc.exe",
+            "created": "2026-09-19T20:27:55.347873Z",
+            "modified": "2026-09-19T20:27:55.347873Z",
+            "name": "nethost.dll",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ]
@@ -69,11 +69,11 @@
         {
             "type": "tool",
             "spec_version": "2.1",
-            "id": "tool--560920b7-b2dd-5da2-bb40-e6ef07c83fd2",
+            "id": "tool--8e7e93f7-4b77-5666-a76a-48d2a887d83a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:20.869264Z",
-            "modified": "2026-07-30T01:35:20.869264Z",
-            "name": "dec_fixed.exe",
+            "created": "2026-09-19T20:27:55.34799Z",
+            "modified": "2026-09-19T20:27:55.34799Z",
+            "name": "full_test_enc.exe",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ]
@@ -83,8 +83,8 @@
             "spec_version": "2.1",
             "id": "tool--726e1b7b-edd1-5445-8162-6b96b801e80d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:20.869415Z",
-            "modified": "2026-07-30T01:35:20.869415Z",
+            "created": "2026-09-19T20:27:55.348075Z",
+            "modified": "2026-09-19T20:27:55.348075Z",
             "name": "Browser credential extraction tool from Arsenal-237 campaign",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -93,11 +93,11 @@
         {
             "type": "tool",
             "spec_version": "2.1",
-            "id": "tool--98ecf30e-cc99-599b-a4c5-bd66ff291681",
+            "id": "tool--560920b7-b2dd-5da2-bb40-e6ef07c83fd2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:20.869521Z",
-            "modified": "2026-07-30T01:35:20.869521Z",
-            "name": "nethost.dll",
+            "created": "2026-09-19T20:27:55.348157Z",
+            "modified": "2026-09-19T20:27:55.348157Z",
+            "name": "dec_fixed.exe",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ]
@@ -107,25 +107,22 @@
             "spec_version": "2.1",
             "id": "report--8f9bc8c6-2c90-58f4-be2e-d7b64faec4ab",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:20.869693Z",
-            "modified": "2026-07-30T01:35:20.869693Z",
+            "created": "2026-09-19T20:27:55.348312Z",
+            "modified": "2026-09-19T20:27:55.348312Z",
             "name": "Arsenal-237 New Files Analysis",
             "report_types": [
                 "threat-report"
             ],
             "published": "2026-01-27T00:00:00Z",
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ],
             "object_refs": [
-                "file--aed218eb-1892-54b0-b0d8-bf7fdd269864",
-                "file--4808afb2-9fb4-551e-89e6-e1f8b9f11cf5",
-                "file--2dd75871-9b15-5a7e-b515-2f94534ca27c",
                 "file--ba6bed9f-017c-5023-91e8-de00432f8faa",
+                "file--aed218eb-1892-54b0-b0d8-bf7fdd269864",
+                "file--2dd75871-9b15-5a7e-b515-2f94534ca27c",
+                "file--4808afb2-9fb4-551e-89e6-e1f8b9f11cf5",
+                "tool--98ecf30e-cc99-599b-a4c5-bd66ff291681",
                 "tool--8e7e93f7-4b77-5666-a76a-48d2a887d83a",
-                "tool--560920b7-b2dd-5da2-bb40-e6ef07c83fd2",
                 "tool--726e1b7b-edd1-5445-8162-6b96b801e80d",
-                "tool--98ecf30e-cc99-599b-a4c5-bd66ff291681"
+                "tool--560920b7-b2dd-5da2-bb40-e6ef07c83fd2"
             ],
             "labels": [
                 "Ransomware",
@@ -138,6 +135,9 @@
                     "source_name": "The Hunters Ledger",
                     "url": "https://the-hunters-ledger.com/reports/arsenal-237-new-files/"
                 }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ]
         }
     ]

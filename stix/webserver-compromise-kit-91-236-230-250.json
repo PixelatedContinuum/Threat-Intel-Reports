@@ -1,13 +1,13 @@
 {
     "type": "bundle",
-    "id": "bundle--7e482cc8-12f8-4b85-b377-5e5888884e70",
+    "id": "bundle--3273b6df-b169-4f61-9488-6008fa41a6e0",
     "objects": [
         {
             "type": "identity",
             "spec_version": "2.1",
             "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:27.955204Z",
-            "modified": "2026-07-30T01:37:27.955204Z",
+            "created": "2026-09-19T20:28:04.923639Z",
+            "modified": "2026-09-19T20:28:04.923639Z",
             "name": "The Hunters Ledger",
             "identity_class": "organization"
         },
@@ -33,9 +33,10 @@
             "spec_version": "2.1",
             "id": "indicator--0c0f10d3-c985-5380-a23b-951f0c37f71d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:27.956808Z",
-            "modified": "2026-07-30T01:37:27.956808Z",
+            "created": "2026-09-19T20:28:04.924142Z",
+            "modified": "2026-09-19T20:28:04.924142Z",
             "name": "ipv4: 91.236.230.250",
+            "description": "Hardcoded in a.png reverse shell, hosts open directory with malware toolkit",
             "indicator_types": [
                 "malicious-activity"
             ],
@@ -61,9 +62,10 @@
             "spec_version": "2.1",
             "id": "indicator--002e3f87-aa8e-5cdd-a0c1-ffe0710ae632",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:27.961282Z",
-            "modified": "2026-07-30T01:37:27.961282Z",
+            "created": "2026-09-19T20:28:04.925124Z",
+            "modified": "2026-09-19T20:28:04.925124Z",
             "name": "url: http://91.236.230.250/",
+            "description": "Hosts PrintSpoofer.exe, rev.exe, a.png reverse shell",
             "indicator_types": [
                 "malicious-activity"
             ],
@@ -77,6 +79,14 @@
             ],
             "x_opencti_detection": false,
             "x_opencti_score": 80
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--b7e4a8c2-bf9a-55c5-bbfa-6f7053b1611c",
+            "hashes": {
+                "SHA-256": "238a9850787c9336ec56114f346e39088ad63de1c6a1d7d798292a7fb4577738"
+            }
         },
         {
             "type": "file",
@@ -95,20 +105,12 @@
             }
         },
         {
-            "type": "file",
-            "spec_version": "2.1",
-            "id": "file--b7e4a8c2-bf9a-55c5-bbfa-6f7053b1611c",
-            "hashes": {
-                "SHA-256": "238a9850787c9336ec56114f346e39088ad63de1c6a1d7d798292a7fb4577738"
-            }
-        },
-        {
             "type": "indicator",
             "spec_version": "2.1",
             "id": "indicator--8577bdc0-1c6b-54fe-aabf-41dc2f30b861",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:27.963098Z",
-            "modified": "2026-07-30T01:37:27.963098Z",
+            "created": "2026-09-19T20:28:04.92948Z",
+            "modified": "2026-09-19T20:28:04.92948Z",
             "name": "Webshell_ASPNET_InsomniaShell_Reverse",
             "indicator_types": [
                 "malicious-activity"
@@ -128,8 +130,8 @@
             "spec_version": "2.1",
             "id": "indicator--01c9af33-d1f9-5b3b-9f2c-b3dbedb63174",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:27.963303Z",
-            "modified": "2026-07-30T01:37:27.963303Z",
+            "created": "2026-09-19T20:28:04.929817Z",
+            "modified": "2026-09-19T20:28:04.929817Z",
             "name": "PrivEsc_PrintSpoofer_SeImpersonate",
             "indicator_types": [
                 "malicious-activity"
@@ -149,8 +151,8 @@
             "spec_version": "2.1",
             "id": "indicator--a2cbb2b4-6631-56f0-a700-83cd2b8d435d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:27.963458Z",
-            "modified": "2026-07-30T01:37:27.963458Z",
+            "created": "2026-09-19T20:28:04.929967Z",
+            "modified": "2026-09-19T20:28:04.929967Z",
             "name": "Proxy_Revsocks_Go_Binary",
             "indicator_types": [
                 "malicious-activity"
@@ -170,8 +172,8 @@
             "spec_version": "2.1",
             "id": "indicator--0de18797-59e3-5974-9581-ee7db55a274a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:27.963599Z",
-            "modified": "2026-07-30T01:37:27.963599Z",
+            "created": "2026-09-19T20:28:04.930079Z",
+            "modified": "2026-09-19T20:28:04.930079Z",
             "name": "IIS Worker Process Spawns Interactive Shell",
             "indicator_types": [
                 "malicious-activity"
@@ -191,13 +193,13 @@
             "spec_version": "2.1",
             "id": "indicator--0f86dc83-7400-5aec-a821-71089ed46a33",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:27.963731Z",
-            "modified": "2026-07-30T01:37:27.963731Z",
+            "created": "2026-09-19T20:28:04.930171Z",
+            "modified": "2026-09-19T20:28:04.930171Z",
             "name": "Named Pipe Created Matching Print Spooler RPC Impersonation Pattern",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Named Pipe Created Matching Print Spooler RPC Impersonation Pattern\nid: 3e096e9e-0f1a-4f5c-b7c3-2d4a55b3792f\nstatus: experimental\ndescription: >-\n  Detects creation of a named pipe ending in 'spoolss' by a process\n  other than the legitimate Print Spooler service, the named-pipe\n  impersonation trigger used by PrintSpoofer and related \"Potato\"-family\n  SeImpersonate privilege-escalation tools.\nreferences:\n    - https://github.com/itm4n/PrintSpoofer\n    - https://the-hunters-ledger.com/hunting-detections/webserver-compromise-kit-91-236-230-250-detections/\nauthor: The Hunters Ledger\ndate: 2026-02-08\ntags:\n    - attack.stealth\n    - attack.privilege-escalation\n    - attack.t1134.001\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: pipe_created\n    definition: 'Requires Sysmon Event ID 17 (Pipe Created)'\ndetection:\n    selection:\n        PipeName|endswith: '\\spoolss'\n    filter:\n        Image|endswith: '\\spoolsv.exe'\n    condition: selection and not filter\nfalsepositives:\n    - >-\n      Unlikely \u2014 this is a highly specific pattern with no known\n      legitimate cause outside the Print Spooler service itself,\n      which is explicitly excluded by the filter\nlevel: high",
+            "pattern": "title: Named Pipe Created Matching Print Spooler RPC Impersonation Pattern\nid: 3e096e9e-0f1a-4f5c-b7c3-2d4a55b3792f\nstatus: experimental\ndescription: >-\n  Detects creation of a named pipe ending in 'spoolss' by a process\n  other than the legitimate Print Spooler service, the named-pipe\n  impersonation trigger used by PrintSpoofer and related \"Potato\"-family\n  SeImpersonate privilege-escalation tools.\nreferences:\n    - https://github.com/itm4n/PrintSpoofer\n    - https://the-hunters-ledger.com/hunting-detections/webserver-compromise-kit-91-236-230-250-detections/\nauthor: The Hunters Ledger\ndate: 2026-02-08\ntags:\n    - attack.stealth\n    - attack.privilege-escalation\n    - attack.t1134.001\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: pipe_created\n    definition: 'Requires Sysmon Event ID 17 (Pipe Created)'\ndetection:\n    selection:\n        PipeName|endswith: '\\spoolss'\n    filter:\n        Image|endswith: '\\spoolsv.exe'\n    condition: selection and not filter\nfalsepositives:\n    - >-\n      Unlikely — this is a highly specific pattern with no known\n      legitimate cause outside the Print Spooler service itself,\n      which is explicitly excluded by the filter\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-02-08T00:00:00Z",
             "labels": [
@@ -212,13 +214,13 @@
             "spec_version": "2.1",
             "id": "indicator--f4598c5a-0ff3-50da-a3e6-801ffe167e16",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:27.963863Z",
-            "modified": "2026-07-30T01:37:27.963863Z",
+            "created": "2026-09-19T20:28:04.930268Z",
+            "modified": "2026-09-19T20:28:04.930268Z",
             "name": "Reverse SOCKS Proxy Execution via Revsocks Command-Line Flags",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Reverse SOCKS Proxy Execution via Revsocks Command-Line Flags\nid: 58c6a530-eeea-47e4-98f6-c16d4911b54a\nstatus: experimental\ndescription: >-\n  Detects execution of revsocks or a tool sharing its reverse-proxy\n  command-line flag conventions, based on the co-occurrence of\n  connect+socks or dns+listen flag pairs.\nreferences:\n    - https://github.com/kost/revsocks\n    - https://the-hunters-ledger.com/hunting-detections/webserver-compromise-kit-91-236-230-250-detections/\nauthor: The Hunters Ledger\ndate: 2026-02-08\ntags:\n    - attack.command-and-control\n    - attack.t1090.001\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_flags:\n        CommandLine|contains|all:\n            - '-connect'\n            - '-socks'\n    selection_dns:\n        CommandLine|contains|all:\n            - '-dns'\n            - '-listen'\n    condition: selection_flags or selection_dns\nfalsepositives:\n    - Legitimate authorized red team or offensive-security exercises using revsocks under change control\n    - Authorized offensive-security assessments (verify against the engagement's rules of engagement)\nlevel: high",
+            "pattern": "title: Reverse SOCKS Proxy Execution via Revsocks Command-Line Flags\nid: 58c6a530-eeea-47e4-98f6-c16d4911b54a\nstatus: experimental\ndescription: >-\n  Detects execution of revsocks or a tool sharing its reverse-proxy\n  command-line flag conventions, based on the co-occurrence of\n  connect+socks or dns+listen flag pairs.\nreferences:\n    - https://github.com/kost/revsocks\n    - https://the-hunters-ledger.com/hunting-detections/webserver-compromise-kit-91-236-230-250-detections/\nauthor: The Hunters Ledger\ndate: 2026-02-08\ntags:\n    - attack.command-and-control\n    - attack.t1090.001\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_flags:\n        CommandLine|contains|all:\n            - '-connect'\n            - '-socks'\n    selection_dns:\n        CommandLine|contains|all:\n            - '-dns'\n            - '-listen'\n    condition: selection_flags or selection_dns\nfalsepositives:\n    - Legitimate authorized red team or offensive-security exercises using revsocks under change control\n    - Authorized offensive-security assessments (verify against the engagement's rules of engagement)\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-02-08T00:00:00Z",
             "labels": [
@@ -231,15 +233,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--5d0a07e7-f7cf-50ee-94bf-aafdb2ec9651",
+            "id": "indicator--be2d8fae-7f80-5f03-808c-401cd90b363e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:27.963999Z",
-            "modified": "2026-07-30T01:37:27.963999Z",
-            "name": "THL WebServer-Compromise-Kit ASP.NET Reverse Shell Spawn-Shell Banner (C2 Session Establishment)",
+            "created": "2026-09-19T20:28:04.930353Z",
+            "modified": "2026-09-19T20:28:04.930353Z",
+            "name": "THL DETECT WebServer-Compromise-Kit ASP.NET Reverse Shell Spawn-Shell Banner (C2 Session Establishment)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL WebServer-Compromise-Kit ASP.NET Reverse Shell Spawn-Shell Banner (C2 Session Establishment)\"; flow:to_server,established; content:\"Spawn Shell\"; depth:20; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000001; rev:2; metadata:author The_Hunters_Ledger, date 2026-02-08, reference https://the-hunters-ledger.com/hunting-detections/webserver-compromise-kit-91-236-230-250-detections/;)",
+            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT WebServer-Compromise-Kit ASP.NET Reverse Shell Spawn-Shell Banner (C2 Session Establishment)\"; flow:to_server,established; content:\"Spawn Shell\"; depth:20; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000001; rev:2; metadata:author The_Hunters_Ledger, date 2026-02-08, reference https://the-hunters-ledger.com/hunting-detections/webserver-compromise-kit-91-236-230-250-detections/;)",
             "pattern_type": "suricata",
             "valid_from": "2026-02-08T00:00:00Z",
             "labels": [
@@ -252,15 +254,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--4862e28e-120e-5d9d-a78e-cfcee99533ef",
+            "id": "indicator--54ee39ee-3eeb-5d69-b249-54aa7310d00c",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:27.964127Z",
-            "modified": "2026-07-30T01:37:27.964127Z",
-            "name": "THL WebServer-Compromise-Kit Anachronistic IE11/Win7 User-Agent (Possible revsocks Proxy Traffic)",
+            "created": "2026-09-19T20:28:04.930438Z",
+            "modified": "2026-09-19T20:28:04.930438Z",
+            "name": "THL HUNT WebServer-Compromise-Kit Anachronistic IE11/Win7 User-Agent (Possible revsocks Proxy Traffic)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL WebServer-Compromise-Kit Anachronistic IE11/Win7 User-Agent (Possible revsocks Proxy Traffic)\"; flow:to_server,established; http.user_agent; content:\"Windows NT 6.1|3b| Trident/7.0\"; nocase; threshold:type limit,track by_src,count 5,seconds 300; classtype:policy-violation; sid:1000003; rev:2; metadata:author The_Hunters_Ledger, date 2026-02-08, reference https://the-hunters-ledger.com/hunting-detections/webserver-compromise-kit-91-236-230-250-detections/;)",
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT WebServer-Compromise-Kit Anachronistic IE11/Win7 User-Agent (Possible revsocks Proxy Traffic)\"; flow:to_server,established; http.user_agent; content:\"Windows NT 6.1|3b| Trident/7.0\"; nocase; threshold:type limit,track by_src,count 5,seconds 300; classtype:policy-violation; sid:1000003; rev:2; metadata:author The_Hunters_Ledger, date 2026-02-08, reference https://the-hunters-ledger.com/hunting-detections/webserver-compromise-kit-91-236-230-250-detections/;)",
             "pattern_type": "suricata",
             "valid_from": "2026-02-08T00:00:00Z",
             "labels": [
@@ -273,10 +275,22 @@
         {
             "type": "tool",
             "spec_version": "2.1",
+            "id": "tool--12d59d2f-e631-5640-9709-6fed0159a514",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-19T20:28:04.930562Z",
+            "modified": "2026-09-19T20:28:04.930562Z",
+            "name": "238a9850787c",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
             "id": "tool--a1df9986-77f1-526f-afaf-269fca449408",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:27.9643Z",
-            "modified": "2026-07-30T01:37:27.9643Z",
+            "created": "2026-09-19T20:28:04.930651Z",
+            "modified": "2026-09-19T20:28:04.930651Z",
             "name": "8524fbc0d73e",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -287,21 +301,9 @@
             "spec_version": "2.1",
             "id": "tool--1ca95fcc-4b7d-5ef6-baf3-4e0512f5e521",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:27.96442Z",
-            "modified": "2026-07-30T01:37:27.96442Z",
+            "created": "2026-09-19T20:28:04.930725Z",
+            "modified": "2026-09-19T20:28:04.930725Z",
             "name": "ffc6662c5d68",
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "tool",
-            "spec_version": "2.1",
-            "id": "tool--12d59d2f-e631-5640-9709-6fed0159a514",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:27.964524Z",
-            "modified": "2026-07-30T01:37:27.964524Z",
-            "name": "238a9850787c",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ]
@@ -311,8 +313,8 @@
             "spec_version": "2.1",
             "id": "infrastructure--bdaef570-a2af-55b3-aa02-f487f4318ad6",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:27.964626Z",
-            "modified": "2026-07-30T01:37:27.964626Z",
+            "created": "2026-09-19T20:28:04.930796Z",
+            "modified": "2026-09-19T20:28:04.930796Z",
             "name": "webserver-compromise-kit-91-236-230-250 infrastructure",
             "infrastructure_types": [
                 "command-and-control",
@@ -327,9 +329,9 @@
             "spec_version": "2.1",
             "id": "report--174f1d73-3bf5-57a8-be0f-c94576ac3b35",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:27.964918Z",
-            "modified": "2026-07-30T01:37:27.964918Z",
-            "name": "WebServer Compromise Kit \u2014 91.236.230.250",
+            "created": "2026-09-19T20:28:04.931086Z",
+            "modified": "2026-09-19T20:28:04.931086Z",
+            "name": "WebServer Compromise Kit — 91.236.230.250",
             "report_types": [
                 "threat-report"
             ],
@@ -339,20 +341,20 @@
                 "indicator--0c0f10d3-c985-5380-a23b-951f0c37f71d",
                 "url--93a286e1-0b78-5a97-965c-0d276e02c100",
                 "indicator--002e3f87-aa8e-5cdd-a0c1-ffe0710ae632",
+                "file--b7e4a8c2-bf9a-55c5-bbfa-6f7053b1611c",
                 "file--c823cb52-ddab-5978-a468-70e1b590a30e",
                 "file--18e126c4-c8dd-562e-80fc-d54bec870cbf",
-                "file--b7e4a8c2-bf9a-55c5-bbfa-6f7053b1611c",
                 "indicator--8577bdc0-1c6b-54fe-aabf-41dc2f30b861",
                 "indicator--01c9af33-d1f9-5b3b-9f2c-b3dbedb63174",
                 "indicator--a2cbb2b4-6631-56f0-a700-83cd2b8d435d",
                 "indicator--0de18797-59e3-5974-9581-ee7db55a274a",
                 "indicator--0f86dc83-7400-5aec-a821-71089ed46a33",
                 "indicator--f4598c5a-0ff3-50da-a3e6-801ffe167e16",
-                "indicator--5d0a07e7-f7cf-50ee-94bf-aafdb2ec9651",
-                "indicator--4862e28e-120e-5d9d-a78e-cfcee99533ef",
+                "indicator--be2d8fae-7f80-5f03-808c-401cd90b363e",
+                "indicator--54ee39ee-3eeb-5d69-b249-54aa7310d00c",
+                "tool--12d59d2f-e631-5640-9709-6fed0159a514",
                 "tool--a1df9986-77f1-526f-afaf-269fca449408",
                 "tool--1ca95fcc-4b7d-5ef6-baf3-4e0512f5e521",
-                "tool--12d59d2f-e631-5640-9709-6fed0159a514",
                 "infrastructure--bdaef570-a2af-55b3-aa02-f487f4318ad6"
             ],
             "labels": [

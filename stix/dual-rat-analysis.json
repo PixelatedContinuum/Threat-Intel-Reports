@@ -1,13 +1,13 @@
 {
     "type": "bundle",
-    "id": "bundle--d3e18201-7d65-41c3-9809-f7d8a644c8ab",
+    "id": "bundle--b55f54d4-e14e-4738-939b-854899367f5d",
     "objects": [
         {
             "type": "identity",
             "spec_version": "2.1",
             "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:24.785297Z",
-            "modified": "2026-07-30T01:35:24.785297Z",
+            "created": "2026-09-19T20:27:55.74414Z",
+            "modified": "2026-09-19T20:27:55.74414Z",
             "name": "The Hunters Ledger",
             "identity_class": "organization"
         },
@@ -43,8 +43,8 @@
             "spec_version": "2.1",
             "id": "indicator--c7e3581a-628b-5aa6-9d16-94157b9fd440",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:24.787247Z",
-            "modified": "2026-07-30T01:35:24.787247Z",
+            "created": "2026-09-19T20:27:55.753932Z",
+            "modified": "2026-09-19T20:27:55.753932Z",
             "name": "NjRAT_XWorm_Triple_Persistence",
             "indicator_types": [
                 "malicious-activity"
@@ -64,8 +64,8 @@
             "spec_version": "2.1",
             "id": "indicator--21ef97e8-dd1b-552d-ba7b-5f99cdee238e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:24.788003Z",
-            "modified": "2026-07-30T01:35:24.788003Z",
+            "created": "2026-09-19T20:27:55.754204Z",
+            "modified": "2026-09-19T20:27:55.754204Z",
             "name": "Quasar_RAT_MarkOfWeb_Removal",
             "indicator_types": [
                 "malicious-activity"
@@ -85,8 +85,8 @@
             "spec_version": "2.1",
             "id": "indicator--141ae941-1766-5d02-91e1-2935af10abb0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:24.788231Z",
-            "modified": "2026-07-30T01:35:24.788231Z",
+            "created": "2026-09-19T20:27:55.754323Z",
+            "modified": "2026-09-19T20:27:55.754323Z",
             "name": "NjRAT_XWorm_Core_Detection",
             "indicator_types": [
                 "malicious-activity"
@@ -106,13 +106,13 @@
             "spec_version": "2.1",
             "id": "indicator--ed0a0fbb-467d-567e-af09-59fa7bac51d1",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:24.788392Z",
-            "modified": "2026-07-30T01:35:24.788392Z",
+            "created": "2026-09-19T20:27:55.754444Z",
+            "modified": "2026-09-19T20:27:55.754444Z",
             "name": "Quasar RAT Scheduled Task Persistence via schtasks.exe",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Quasar RAT Scheduled Task Persistence via schtasks.exe\nid: 06347ef1-4a96-4d80-ba7b-d54d5148ced9\nstatus: experimental\ndescription: >-\n  Detects the Quasar RAT client's persistence-establishment routine -\n  a scheduled task named \"RuntimeBroker\" (masquerading as the\n  legitimate Windows process) created via schtasks.exe with an ONLOGON\n  trigger pointing at Client.exe. Corrected from the original rule,\n  which declared an invalid Security-log/EventID 106 combination with\n  a CommandLine field that log source does not carry; re-anchored on\n  the schtasks.exe process-creation event that actually contains this\n  command line.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/\nauthor: The Hunters Ledger\ndate: '2025-12-06'\ntags:\n    - attack.persistence\n    - attack.execution\n    - attack.privilege-escalation\n    - attack.t1053.005\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        Image|endswith: '\\schtasks.exe'\n        CommandLine|contains|all:\n            - '/tn \"RuntimeBroker\"'\n            - '/sc ONLOGON'\n            - 'Client.exe'\n    condition: selection\nfalsepositives:\n    - >-\n      Legitimate system administration scripts that create a scheduled\n      task literally named \"RuntimeBroker\" with an ONLOGON trigger\n      pointing at a file named Client.exe (unlikely combination)\nlevel: high",
+            "pattern": "title: Quasar RAT Scheduled Task Persistence via schtasks.exe\nid: 06347ef1-4a96-4d80-ba7b-d54d5148ced9\nstatus: experimental\ndescription: >-\n  Detects the Quasar RAT client's persistence-establishment routine -\n  a scheduled task named \"RuntimeBroker\" (masquerading as the\n  legitimate Windows process) created via schtasks.exe with an ONLOGON\n  trigger pointing at Client.exe. Corrected from the original rule,\n  which declared an invalid Security-log/EventID 106 combination with\n  a CommandLine field that log source does not carry; re-anchored on\n  the schtasks.exe process-creation event that actually contains this\n  command line.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/\nauthor: The Hunters Ledger\ndate: '2025-12-06'\ntags:\n    - attack.persistence\n    - attack.execution\n    - attack.privilege-escalation\n    - attack.t1053.005\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        Image|endswith: '\\schtasks.exe'\n        CommandLine|contains|all:\n            - '/tn \"RuntimeBroker\"'\n            - '/sc ONLOGON'\n            - 'Client.exe'\n    condition: selection\nfalsepositives:\n    - >-\n      Legitimate system administration scripts that create a scheduled\n      task literally named \"RuntimeBroker\" with an ONLOGON trigger\n      pointing at a file named Client.exe (unlikely combination)\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2025-12-06T00:00:00Z",
             "labels": [
@@ -127,13 +127,13 @@
             "spec_version": "2.1",
             "id": "indicator--9d7c72ef-c9f1-5fec-a74c-8a34f76d17b0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:24.788525Z",
-            "modified": "2026-07-30T01:35:24.788525Z",
+            "created": "2026-09-19T20:27:55.754545Z",
+            "modified": "2026-09-19T20:27:55.754545Z",
             "name": "Quasar RAT Remote Thread Creation Into System Processes",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Quasar RAT Remote Thread Creation Into System Processes\nid: 6e1ad431-a53d-49ab-b6b0-0f6fb647d3a1\nstatus: experimental\ndescription: >-\n  Detects Client.exe (the Quasar RAT sample analyzed in this campaign)\n  creating a remote thread in explorer.exe, svchost.exe, or dllhost.exe\n  for process-injection-based defense evasion. Corrected from the\n  original rule, which selected on the process_creation category with\n  a CommandLine \"inject\" filter - a combination that does not\n  correspond to how thread-injection APIs actually generate telemetry;\n  re-anchored on the create_remote_thread category (Sysmon Event ID 8),\n  which is what genuinely captures this technique.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/\nauthor: The Hunters Ledger\ndate: '2025-12-06'\ntags:\n    - attack.stealth\n    - attack.privilege-escalation\n    - attack.t1055.003\n    - detection.emerging-threats\nlogsource:\n    category: create_remote_thread\n    product: windows\ndetection:\n    selection:\n        SourceImage|endswith: '\\Client.exe'\n        TargetImage|endswith:\n            - '\\explorer.exe'\n            - '\\svchost.exe'\n            - '\\dllhost.exe'\n    condition: selection\nfalsepositives:\n    - >-\n      Legitimate software coincidentally named Client.exe that\n      legitimately injects into explorer.exe, svchost.exe, or\n      dllhost.exe (not observed, but architecturally possible)\nlevel: high",
+            "pattern": "title: Quasar RAT Remote Thread Creation Into System Processes\nid: 6e1ad431-a53d-49ab-b6b0-0f6fb647d3a1\nstatus: experimental\ndescription: >-\n  Detects Client.exe (the Quasar RAT sample analyzed in this campaign)\n  creating a remote thread in explorer.exe, svchost.exe, or dllhost.exe\n  for process-injection-based defense evasion. Corrected from the\n  original rule, which selected on the process_creation category with\n  a CommandLine \"inject\" filter - a combination that does not\n  correspond to how thread-injection APIs actually generate telemetry;\n  re-anchored on the create_remote_thread category (Sysmon Event ID 8),\n  which is what genuinely captures this technique.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/\nauthor: The Hunters Ledger\ndate: '2025-12-06'\ntags:\n    - attack.stealth\n    - attack.privilege-escalation\n    - attack.t1055.003\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: create_remote_thread\n    product: windows\ndetection:\n    selection:\n        SourceImage|endswith: '\\Client.exe'\n        TargetImage|endswith:\n            - '\\explorer.exe'\n            - '\\svchost.exe'\n            - '\\dllhost.exe'\n    condition: selection\nfalsepositives:\n    - >-\n      Legitimate software coincidentally named Client.exe that\n      legitimately injects into explorer.exe, svchost.exe, or\n      dllhost.exe (not observed, but architecturally possible)\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2025-12-06T00:00:00Z",
             "labels": [
@@ -148,13 +148,13 @@
             "spec_version": "2.1",
             "id": "indicator--ae6086da-0c55-53e2-816c-d282684d1da8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:24.788656Z",
-            "modified": "2026-07-30T01:35:24.788656Z",
+            "created": "2026-09-19T20:27:55.754644Z",
+            "modified": "2026-09-19T20:27:55.754644Z",
             "name": "Quasar RAT Mark of the Web Removal",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Quasar RAT Mark of the Web Removal\nid: 469751f1-91ad-4b17-8c14-491a019f1f44\nstatus: experimental\ndescription: Detects Zone.Identifier alternate data stream deletion by Client.exe, the Quasar RAT sample analyzed in this campaign, characteristic of Mark-of-the-Web suppression to avoid re-triggering SmartScreen on subsequent executions\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/\nauthor: The Hunters Ledger\ndate: '2025-12-06'\ntags:\n    - attack.stealth\n    - attack.t1070.004\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: file_delete\ndetection:\n    selection:\n        TargetFilename|contains: ':Zone.Identifier'\n        Image|endswith: '\\Client.exe'\n    condition: selection\nfalsepositives:\n    - Legitimate file management tools coincidentally named Client.exe\nlevel: high",
+            "pattern": "title: Quasar RAT Mark of the Web Removal\nid: 469751f1-91ad-4b17-8c14-491a019f1f44\nstatus: experimental\ndescription: Detects Zone.Identifier alternate data stream deletion by Client.exe, the Quasar RAT sample analyzed in this campaign, characteristic of Mark-of-the-Web suppression to avoid re-triggering SmartScreen on subsequent executions\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/\nauthor: The Hunters Ledger\ndate: '2025-12-06'\ntags:\n    - attack.stealth\n    - attack.t1070.004\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    product: windows\n    category: file_delete\ndetection:\n    selection:\n        TargetFilename|contains: ':Zone.Identifier'\n        Image|endswith: '\\Client.exe'\n    condition: selection\nfalsepositives:\n    - Legitimate file management tools coincidentally named Client.exe\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2025-12-06T00:00:00Z",
             "labels": [
@@ -169,13 +169,13 @@
             "spec_version": "2.1",
             "id": "indicator--1b6c7586-d46c-508f-a896-9793b391a0b4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:24.788777Z",
-            "modified": "2026-07-30T01:35:24.788777Z",
+            "created": "2026-09-19T20:27:55.754743Z",
+            "modified": "2026-09-19T20:27:55.754743Z",
             "name": "Quasar RAT C2 Connection on TCP 4782",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Quasar RAT C2 Connection on TCP 4782\nid: 6e5cd22d-2176-4069-85e6-0fe1075ebf2c\nstatus: experimental\ndescription: >-\n  Detects Client.exe, the Quasar RAT sample analyzed in this campaign,\n  establishing an outbound connection on TCP port 4782 - this build's\n  custom-encrypted C2 channel. Corrected from the original rule, which\n  required the specific C2 IP 185.208.159.182 as an AND condition; that\n  atomic is carried in the IOC feed for blocking, while this rule keeps\n  only the durable Image+port combination so it still fires if the\n  operator rotates C2 infrastructure.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/\nauthor: The Hunters Ledger\ndate: '2025-12-06'\ntags:\n    - attack.command-and-control\n    - attack.t1071.001\n    - attack.t1573\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: network_connection\ndetection:\n    selection:\n        Image|endswith: '\\Client.exe'\n        DestinationPort: 4782\n        Initiated: 'true'\n    condition: selection\nfalsepositives:\n    - >-\n      Legitimate applications coincidentally named Client.exe using\n      TCP port 4782\nlevel: high",
+            "pattern": "title: Quasar RAT C2 Connection on TCP 4782\nid: 6e5cd22d-2176-4069-85e6-0fe1075ebf2c\nstatus: experimental\ndescription: >-\n  Detects Client.exe, the Quasar RAT sample analyzed in this campaign,\n  establishing an outbound connection on TCP port 4782 - this build's\n  custom-encrypted C2 channel. Corrected from the original rule, which\n  required the specific C2 IP 185.208.159.182 as an AND condition; that\n  atomic is carried in the IOC feed for blocking, while this rule keeps\n  only the durable Image+port combination so it still fires if the\n  operator rotates C2 infrastructure.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/\nauthor: The Hunters Ledger\ndate: '2025-12-06'\ntags:\n    - attack.command-and-control\n    - attack.t1071.001\n    - attack.t1573\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    product: windows\n    category: network_connection\ndetection:\n    selection:\n        Image|endswith: '\\Client.exe'\n        DestinationPort: 4782\n        Initiated: 'true'\n    condition: selection\nfalsepositives:\n    - >-\n      Legitimate applications coincidentally named Client.exe using\n      TCP port 4782\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2025-12-06T00:00:00Z",
             "labels": [
@@ -190,13 +190,13 @@
             "spec_version": "2.1",
             "id": "indicator--48ebbe76-3452-5c05-be8b-5455c38a4077",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:24.788901Z",
-            "modified": "2026-07-30T01:35:24.788901Z",
+            "created": "2026-09-19T20:27:55.754836Z",
+            "modified": "2026-09-19T20:27:55.754836Z",
             "name": "NjRAT/XWorm Pastebin Dead-Drop C2 Resolution",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: NjRAT/XWorm Pastebin Dead-Drop C2 Resolution\nid: fa059bb8-a203-4528-a3ae-2b4f67b74576\nstatus: experimental\ndescription: >-\n  Detects a process named conhost.exe (the NjRAT/XWorm sample's\n  installed persistence name in this campaign) making an outbound\n  HTTPS connection to pastebin.com to resolve its dead-drop C2\n  endpoint. The legitimate Windows conhost.exe process does not\n  originate outbound network connections, so this name+destination\n  combination is a strong anomaly. Corrected from the original rule,\n  which also matched the literal filename \"server (1).exe\" - an\n  artifact of this analysis's own download/deduplication naming, not a\n  name the malware itself uses, and dropped here as non-durable.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/\nauthor: The Hunters Ledger\ndate: '2025-12-06'\ntags:\n    - attack.command-and-control\n    - attack.t1102.001\n    - attack.t1071.001\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: network_connection\ndetection:\n    selection:\n        Image|endswith: '\\conhost.exe'\n        DestinationPort: 443\n        DestinationHostname|contains: 'pastebin.com'\n        Initiated: 'true'\n    condition: selection\nfalsepositives:\n    - >-\n      Unlikely; the legitimate Windows conhost.exe process does not\n      make outbound network connections in normal operation\nlevel: high",
+            "pattern": "title: NjRAT/XWorm Pastebin Dead-Drop C2 Resolution\nid: fa059bb8-a203-4528-a3ae-2b4f67b74576\nstatus: experimental\ndescription: >-\n  Detects a process named conhost.exe (the NjRAT/XWorm sample's\n  installed persistence name in this campaign) making an outbound\n  HTTPS connection to pastebin.com to resolve its dead-drop C2\n  endpoint. The legitimate Windows conhost.exe process does not\n  originate outbound network connections, so this name+destination\n  combination is a strong anomaly. Corrected from the original rule,\n  which also matched the literal filename \"server (1).exe\" - an\n  artifact of this analysis's own download/deduplication naming, not a\n  name the malware itself uses, and dropped here as non-durable.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/\nauthor: The Hunters Ledger\ndate: '2025-12-06'\ntags:\n    - attack.command-and-control\n    - attack.t1102.001\n    - attack.t1071.001\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    product: windows\n    category: network_connection\ndetection:\n    selection:\n        Image|endswith: '\\conhost.exe'\n        DestinationPort: 443\n        DestinationHostname|contains: 'pastebin.com'\n        Initiated: 'true'\n    condition: selection\nfalsepositives:\n    - >-\n      Unlikely; the legitimate Windows conhost.exe process does not\n      make outbound network connections in normal operation\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2025-12-06T00:00:00Z",
             "labels": [
@@ -211,8 +211,8 @@
             "spec_version": "2.1",
             "id": "indicator--5d202fff-0854-5b04-9617-a2df6b9e675b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:24.78902Z",
-            "modified": "2026-07-30T01:35:24.78902Z",
+            "created": "2026-09-19T20:27:55.754923Z",
+            "modified": "2026-09-19T20:27:55.754923Z",
             "name": "NjRAT/XWorm Persistence - Scheduled Task (Conhost, 1-Minute Interval)",
             "indicator_types": [
                 "malicious-activity"
@@ -232,8 +232,8 @@
             "spec_version": "2.1",
             "id": "indicator--c932922c-b9f8-5841-b17a-fe1852217002",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:24.789137Z",
-            "modified": "2026-07-30T01:35:24.789137Z",
+            "created": "2026-09-19T20:27:55.755007Z",
+            "modified": "2026-09-19T20:27:55.755007Z",
             "name": "Suspicious Access to Dead-Drop Services",
             "indicator_types": [
                 "malicious-activity"
@@ -251,15 +251,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--44864394-b9da-59e9-9cb5-98a5912f15a8",
+            "id": "indicator--b307f73c-c810-50b1-a785-0879c634231c",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:24.789253Z",
-            "modified": "2026-07-30T01:35:24.789253Z",
-            "name": "NjRAT/XWorm AppData-Resident Process Remote Thread Creation",
+            "created": "2026-09-19T20:27:55.755108Z",
+            "modified": "2026-09-19T20:27:55.755108Z",
+            "name": "Remote Thread Created by a Process Resident in AppData Roaming or Temp",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: NjRAT/XWorm AppData-Resident Process Remote Thread Creation\nid: a1ea23fd-ff54-4115-bb49-89b7fa7b9cd4\nstatus: experimental\ndescription: >-\n  Detects a process running from an AppData path creating a remote\n  thread in another process, a generic process-injection technique\n  step observed as part of the malware's surveillance/persistence\n  chain in this campaign. Corrected from the original rule, which\n  declared a non-existent \"api_call\" logsource category with a\n  CallTrace field searched for the literal string \"CreateRemoteThread\"\n  - standard Windows telemetry does not expose API calls this way;\n  re-anchored on the create_remote_thread category (Sysmon Event ID 8),\n  which is the real source for this event.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/\nauthor: The Hunters Ledger\ndate: '2025-12-06'\ntags:\n    - attack.stealth\n    - attack.privilege-escalation\n    - attack.t1055.003\n    - detection.emerging-threats\nlogsource:\n    category: create_remote_thread\n    product: windows\ndetection:\n    selection:\n        SourceImage|contains: '\\AppData\\'\n    condition: selection\nfalsepositives:\n    - >-\n      Legitimate AppData-installed software (auto-updaters, some\n      games, hardware-control utilities) that performs remote thread\n      injection for benign reasons\nlevel: medium",
+            "pattern": "title: Remote Thread Created by a Process Resident in AppData Roaming or Temp\nid: a1ea23fd-ff54-4115-bb49-89b7fa7b9cd4\nstatus: experimental\ndescription: >-\n  Detects a process running from a user's AppData Roaming or Local Temp\n  directory creating a remote thread in another process, a generic\n  process-injection step observed as part of the malware's\n  surveillance/persistence chain in this campaign. Two prior corrections\n  are folded in. The original rule declared a non-existent \"api_call\"\n  logsource category with a CallTrace field searched for the literal string\n  CreateRemoteThread; standard Windows telemetry does not expose API calls\n  that way, so it was re-anchored on the create_remote_thread category\n  (Sysmon Event ID 8). The selector was then narrowed from the whole\n  AppData tree to Roaming and Local Temp only, because AppData\\Local\\Programs\n  is the canonical per-user install root for a large population of ordinary\n  signed applications whose updaters legitimately inject remote threads;\n  matching all of AppData produced overwhelming false-positive volume in\n  any environment that allows per-user application installs.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/\nauthor: The Hunters Ledger\ndate: '2025-12-06'\nmodified: '2026-07-30'\ntags:\n    - attack.stealth\n    - attack.privilege-escalation\n    - attack.t1055.003\n    - detection.emerging-threats\nlogsource:\n    category: create_remote_thread\n    product: windows\ndetection:\n    selection:\n        SourceImage|contains:\n            - '\\AppData\\Roaming\\'\n            - '\\AppData\\Local\\Temp\\'\n    condition: selection\nfalsepositives:\n    - >-\n      Legitimate AppData-installed software (auto-updaters, some\n      games, hardware-control utilities) that performs remote thread\n      injection for benign reasons\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2025-12-06T00:00:00Z",
             "labels": [
@@ -272,15 +272,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--f9bb0c8a-5d80-512d-ad29-7b294769a688",
+            "id": "indicator--130a0d8f-a2ce-52cf-8879-7c3d7d80480b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:24.789372Z",
-            "modified": "2026-07-30T01:35:24.789372Z",
-            "name": "THL Dual-RAT-Quasar-NjRAT Quasar Binary Protocol C2 on TCP 4782 (RAT C2 Channel)",
+            "created": "2026-09-19T20:27:55.755229Z",
+            "modified": "2026-09-19T20:27:55.755229Z",
+            "name": "THL HUNT Dual-RAT-Quasar-NjRAT Quasar Binary Protocol C2 on TCP 4782 (RAT C2 Channel)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:\"THL Dual-RAT-Quasar-NjRAT Quasar Binary Protocol C2 on TCP 4782 (RAT C2 Channel)\"; flow:established,to_server; dsize:>0; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:2100001; rev:2; metadata:author The_Hunters_Ledger, date 2025-12-06, reference https://the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/;)",
+            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:\"THL HUNT Dual-RAT-Quasar-NjRAT Quasar Binary Protocol C2 on TCP 4782 (RAT C2 Channel)\"; flow:established,to_server; dsize:>0; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:2100001; rev:2; metadata:author The_Hunters_Ledger, date 2025-12-06, reference https://the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/;)",
             "pattern_type": "suricata",
             "valid_from": "2025-12-06T00:00:00Z",
             "labels": [
@@ -293,15 +293,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--f62cb4fa-6e38-50cd-85f1-dab46abeae31",
+            "id": "indicator--69042fde-9e20-5282-aea8-5c39fe036dd3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:24.789488Z",
-            "modified": "2026-07-30T01:35:24.789488Z",
-            "name": "THL Dual-RAT-Quasar-NjRAT NjRAT-XWorm Spoofed Mobile Safari User-Agent (Dead-Drop C2 Resolution Indicator)",
+            "created": "2026-09-19T20:27:55.755347Z",
+            "modified": "2026-09-19T20:27:55.755347Z",
+            "name": "THL HUNT Dual-RAT-Quasar-NjRAT NjRAT-XWorm Spoofed Mobile Safari User-Agent (Dead-Drop C2 Resolution Indicator)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL Dual-RAT-Quasar-NjRAT NjRAT-XWorm Spoofed Mobile Safari User-Agent (Dead-Drop C2 Resolution Indicator)\"; flow:established,to_server; http.user_agent; content:\"iPhone OS 11_4_1 like Mac OS X\"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:2100004; rev:2; metadata:author The_Hunters_Ledger, date 2025-12-06, reference https://the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/;)",
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT Dual-RAT-Quasar-NjRAT NjRAT-XWorm Spoofed Mobile Safari User-Agent (Dead-Drop C2 Resolution Indicator)\"; flow:established,to_server; http.user_agent; content:\"iPhone OS 11_4_1 like Mac OS X\"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:2100004; rev:2; metadata:author The_Hunters_Ledger, date 2025-12-06, reference https://the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/;)",
             "pattern_type": "suricata",
             "valid_from": "2025-12-06T00:00:00Z",
             "labels": [
@@ -316,8 +316,8 @@
             "spec_version": "2.1",
             "id": "tool--4634c541-7106-53c9-b6f3-c0bdd766cdea",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:24.789648Z",
-            "modified": "2026-07-30T01:35:24.789648Z",
+            "created": "2026-09-19T20:27:55.755495Z",
+            "modified": "2026-09-19T20:27:55.755495Z",
             "name": "client.exe",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -328,8 +328,8 @@
             "spec_version": "2.1",
             "id": "tool--553392d6-b994-5723-b71b-c97f7431e5ff",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:24.789756Z",
-            "modified": "2026-07-30T01:35:24.789756Z",
+            "created": "2026-09-19T20:27:55.7556Z",
+            "modified": "2026-09-19T20:27:55.7556Z",
             "name": "server (1).exe",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -340,9 +340,9 @@
             "spec_version": "2.1",
             "id": "report--5d4d9a1b-5e15-5ad5-9783-ae7ec6901915",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:35:24.789982Z",
-            "modified": "2026-07-30T01:35:24.789982Z",
-            "name": "Quasar RAT vs. NjRAT/XWorm \u2014 Technical Deep-Dive",
+            "created": "2026-09-19T20:27:55.75587Z",
+            "modified": "2026-09-19T20:27:55.75587Z",
+            "name": "Quasar RAT vs. NjRAT/XWorm — Technical Deep-Dive",
             "report_types": [
                 "threat-report"
             ],
@@ -360,9 +360,9 @@
                 "indicator--48ebbe76-3452-5c05-be8b-5455c38a4077",
                 "indicator--5d202fff-0854-5b04-9617-a2df6b9e675b",
                 "indicator--c932922c-b9f8-5841-b17a-fe1852217002",
-                "indicator--44864394-b9da-59e9-9cb5-98a5912f15a8",
-                "indicator--f9bb0c8a-5d80-512d-ad29-7b294769a688",
-                "indicator--f62cb4fa-6e38-50cd-85f1-dab46abeae31",
+                "indicator--b307f73c-c810-50b1-a785-0879c634231c",
+                "indicator--130a0d8f-a2ce-52cf-8879-7c3d7d80480b",
+                "indicator--69042fde-9e20-5282-aea8-5c39fe036dd3",
                 "tool--4634c541-7106-53c9-b6f3-c0bdd766cdea",
                 "tool--553392d6-b994-5723-b71b-c97f7431e5ff"
             ],
