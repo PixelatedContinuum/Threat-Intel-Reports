@@ -3,32 +3,32 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-19T06:02:18Z
+generated_at: 2026-09-19T08:01:18Z
 window_days: 30
 counts:
-  total: 546
-  research: 187
-  news: 359
+  total: 542
+  research: 185
+  news: 357
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 79
+    count: 78
     color: 1
   - label: "cybercrime"
     count: 61
     color: 2
-  - label: "exploited"
-    count: 32
-    color: 3
   - label: "malware"
     count: 32
+    color: 3
+  - label: "exploited"
+    count: 31
     color: 4
   - label: "government"
     count: 31
     color: 5
   - label: "artificial intelligence"
-    count: 30
+    count: 29
     color: 6
   - label: "data breaches"
     count: 23
@@ -71,7 +71,6 @@ label_colors:
   "adversary infrastructure": 12
   "adware disguise": 5
   "aesto health": 6
-  "affiliate fraud": 7
   "agentcore runtime": 2
   "agentev2": 6
   "agentic ai": 9
@@ -158,7 +157,6 @@ label_colors:
   "backdoor": 11
   "badbox": 10
   "badiis": 8
-  "bait-and-switch": 5
   "bambootoken": 7
   "bandook": 10
   "banking software": 7
@@ -214,7 +212,6 @@ label_colors:
   "castlerat": 9
   "cdn poisoning": 9
   "centerpoint energy": 7
-  "central asia": 5
   "chaindrop": 8
   "chaotic eclipse": 12
   "chatgpt": 1
@@ -333,7 +330,7 @@ label_colors:
   "espionage": 11
   "eu": 12
   "exploit": 9
-  "exploited": 3
+  "exploited": 4
   "exposure management": 4
   "extortion": 12
   "extortionware": 11
@@ -401,7 +398,7 @@ label_colors:
   "maas framework": 12
   "mac malware": 8
   "macos": 11
-  "malware": 4
+  "malware": 3
   "malware analysis": 7
   "mathspace": 4
   "meshagent": 2
@@ -3724,27 +3721,3 @@ items:
     date: 2026-08-20T08:33:25Z
     kind: news
     labels: ["citrix", "netscaler", "vulnerabilities"]
-  - title: "Critical GitLab Flaw Exploited Shortly After Disclosure"
-    url: "https://www.securityweek.com/critical-gitlab-flaw-exploited-shortly-after-disclosure/"
-    source: "SecurityWeek"
-    date: 2026-08-20T07:48:24Z
-    kind: news
-    labels: ["exploited", "gitlab", "vulnerabilities"]
-  - title: "41 deceptive download sites show a real link, then send you somewhere else"
-    url: "https://www.malwarebytes.com/blog/threat-intel/2026/08/41-deceptive-download-sites-show-a-real-link-then-send-you-somewhere-else"
-    source: "AlienVault"
-    date: 2026-08-20T07:25:38Z
-    kind: research
-    labels: ["affiliate fraud", "bait-and-switch", "deceptive downloads", "download studio", "fake software sites", "fakembam", "grand media", "javascript redirection"]
-  - title: "SilkParasite: Tracking a China-Nexus APT Across Central Asia"
-    url: "https://otx.alienvault.com/pulse/6a86a70eb8b57f155e62d4f7"
-    source: "AlienVault"
-    date: 2026-08-20T07:04:46Z
-    kind: research
-    labels: ["bloodalchemy", "central asia", "china-nexus apt", "cookietagrat", "cyberespionage", "deed rat", "dll sideloading", "drivesilkrat", "goginrat", "google drive c2", "government targeting", "nodeedgerat", "nomadrat", "shadowpad", "silkparasite", "spicerat"]
-  - title: "Hackers Using AI to Target Siemens PLCs in Critical US Sectors"
-    url: "https://www.securityweek.com/hackers-using-ai-to-target-siemens-plcs-in-critical-us-sectors/"
-    source: "SecurityWeek"
-    date: 2026-08-20T07:02:02Z
-    kind: news
-    labels: ["artificial intelligence", "ics", "ics/ot", "plc", "siemens"]
