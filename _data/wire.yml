@@ -3,17 +3,17 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-20T06:00:08Z
+generated_at: 2026-09-20T08:00:29Z
 window_days: 30
 counts:
-  total: 514
-  research: 169
-  news: 345
+  total: 512
+  research: 168
+  news: 344
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 73
+    count: 72
     color: 1
   - label: "cybercrime"
     count: 60
@@ -24,10 +24,10 @@ topics:
   - label: "malware"
     count: 31
     color: 4
-  - label: "exploited"
-    count: 29
-    color: 5
   - label: "artificial intelligence"
+    count: 28
+    color: 5
+  - label: "exploited"
     count: 28
     color: 6
   - label: "data breaches"
@@ -121,7 +121,7 @@ label_colors:
   "arm": 10
   "arrayref": 8
   "arrested": 2
-  "artificial intelligence": 6
+  "artificial intelligence": 5
   "asia-pacific": 6
   "asiogate": 3
   "asukastealer": 5
@@ -310,7 +310,7 @@ label_colors:
   "espionage": 11
   "eu": 12
   "exploit": 9
-  "exploited": 5
+  "exploited": 6
   "exposure management": 4
   "extortion": 12
   "extortionware": 11
@@ -348,7 +348,6 @@ label_colors:
   "handala hack": 2
   "hardware": 6
   "hasbro": 1
-  "head mare": 3
   "healthcare": 11
   "hideul.exe": 7
   "hts": 11
@@ -3517,15 +3516,3 @@ items:
     date: 2026-08-21T09:23:18Z
     kind: news
     labels: ["arrayref", "malware", "north korea", "rust", "supply chain attack", "supply chain security"]
-  - title: "Head Mare APT Group exploits vulnerabilities in unpatched TrueConf server to deliver PhantomCore malware to conference participants"
-    url: "https://otx.alienvault.com/pulse/6a87ffab05b89766cd6c1700"
-    source: "AlienVault"
-    date: 2026-08-21T07:35:07Z
-    kind: research
-    labels: ["backdoor", "head mare", "phantomcore", "phantomgraph", "supply chain attack", "trueconf", "video conferencing", "web shell", "zero-day exploitation"]
-  - title: "CISA Urges Immediate Patching of Exploited TrueConf Vulnerabilities"
-    url: "https://www.securityweek.com/cisa-urges-immediate-patching-of-exploited-trueconf-vulnerabilities/"
-    source: "SecurityWeek"
-    date: 2026-08-21T07:25:50Z
-    kind: news
-    labels: ["cisa kev", "exploited", "trueconf", "vulnerabilities"]
