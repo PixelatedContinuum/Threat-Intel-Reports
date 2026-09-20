@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-20T18:02:57Z
+generated_at: 2026-09-20T20:02:32Z
 window_days: 30
 counts:
-  total: 498
+  total: 497
   research: 168
-  news: 330
+  news: 329
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -19,7 +19,7 @@ topics:
     count: 57
     color: 2
   - label: "government"
-    count: 31
+    count: 30
     color: 3
   - label: "malware"
     count: 30
@@ -3422,9 +3422,3 @@ items:
     date: 2026-08-21T23:00:21Z
     kind: research
     labels: ["chaindrop", "insights", "npm packages", "software supply-chain attack", "supply chain"]
-  - title: "Lawmakers call for investigation into impact of CISA staffing cuts"
-    url: "https://therecord.media/lawmakers-call-for-investigation-into-impact-of-cisa-cuts"
-    source: "Recorded Future"
-    date: 2026-08-21T19:56:00Z
-    kind: news
-    labels: ["government", "leadership"]
