@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-20T08:00:29Z
+generated_at: 2026-09-20T10:01:57Z
 window_days: 30
 counts:
-  total: 512
+  total: 511
   research: 168
-  news: 344
+  news: 343
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -22,7 +22,7 @@ topics:
     count: 31
     color: 3
   - label: "malware"
-    count: 31
+    count: 30
     color: 4
   - label: "artificial intelligence"
     count: 28
@@ -119,7 +119,6 @@ label_colors:
   "apt36": 10
   "arktunnel": 6
   "arm": 10
-  "arrayref": 8
   "arrested": 2
   "artificial intelligence": 5
   "asia-pacific": 6
@@ -3510,9 +3509,3 @@ items:
     date: 2026-08-21T10:10:42Z
     kind: news
     labels: []
-  - title: "Rust Supply Chain Attack Linked to North Korean Hackers"
-    url: "https://www.securityweek.com/rust-supply-chain-attack-linked-to-north-korean-hackers/"
-    source: "SecurityWeek"
-    date: 2026-08-21T09:23:18Z
-    kind: news
-    labels: ["arrayref", "malware", "north korea", "rust", "supply chain attack", "supply chain security"]
