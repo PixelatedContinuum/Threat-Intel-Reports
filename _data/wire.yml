@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-20T02:01:08Z
+generated_at: 2026-09-20T04:00:57Z
 window_days: 30
 counts:
-  total: 515
-  research: 170
+  total: 514
+  research: 169
   news: 345
 unclassified_sources:
   - "The DFIR Report"
@@ -242,7 +242,6 @@ label_colors:
   "cpanel": 1
   "credential exfiltration": 4
   "credential harvesting": 4
-  "credential phishing": 9
   "credential theft": 6
   "credential-harvesting": 1
   "credential-theft": 5
@@ -317,7 +316,6 @@ label_colors:
   "extortionware": 11
   "fake captcha": 11
   "fake job interview": 1
-  "fake lock screen": 6
   "fake security scan": 12
   "fake tax documents": 4
   "fengtai government": 3
@@ -3531,9 +3529,3 @@ items:
     date: 2026-08-21T07:25:50Z
     kind: news
     labels: ["cisa kev", "exploited", "trueconf", "vulnerabilities"]
-  - title: "SynkLoader: when you throw in everything but the kitchen sink"
-    url: "https://otx.alienvault.com/pulse/6a87b22b1fbf04df7046d537"
-    source: "AlienVault"
-    date: 2026-08-21T02:04:26Z
-    kind: research
-    labels: ["credential phishing", "fake lock screen", "microsoft teams phishing", "modular loader", "multi-language evasion", "python loader", "reverse proxy", "synkloader"]
