@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-20T16:00:48Z
+generated_at: 2026-09-20T18:02:57Z
 window_days: 30
 counts:
-  total: 501
+  total: 498
   research: 168
-  news: 333
+  news: 330
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -16,7 +16,7 @@ topics:
     count: 70
     color: 1
   - label: "cybercrime"
-    count: 58
+    count: 57
     color: 2
   - label: "government"
     count: 31
@@ -435,7 +435,6 @@ label_colors:
   "threat source newsletter": 6
   "threat spotlight": 2
   "tool talk": 4
-  "uncategorized": 10
   "vmware": 2
   "vpn": 8
   "vulnerabilities": 1
@@ -3429,21 +3428,3 @@ items:
     date: 2026-08-21T19:56:00Z
     kind: news
     labels: ["government", "leadership"]
-  - title: "New SynkLoader malware pushed in Microsoft Teams phishing campaign"
-    url: "https://www.bleepingcomputer.com/news/security/new-synkloader-malware-pushed-in-microsoft-teams-phishing-campaign/"
-    source: "BleepingComputer"
-    date: 2026-08-21T18:01:30Z
-    kind: news
-    labels: []
-  - title: "Former NSA Director Paul Nakasone Launches National Security Advisory Firm"
-    url: "https://www.securityweek.com/former-nsa-director-paul-nakasone-launches-national-security-advisory-firm/"
-    source: "SecurityWeek"
-    date: 2026-08-21T16:27:52Z
-    kind: news
-    labels: ["uncategorized"]
-  - title: "U.S. Bank says breach claims related to fourth-party incident"
-    url: "https://therecord.media/us-bank-says-breach-claims-related-to-fourth-party-incident"
-    source: "Recorded Future"
-    date: 2026-08-21T16:16:00Z
-    kind: news
-    labels: ["cybercrime"]
