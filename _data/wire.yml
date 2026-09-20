@@ -3,20 +3,20 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-20T12:00:58Z
+generated_at: 2026-09-20T14:00:28Z
 window_days: 30
 counts:
-  total: 508
+  total: 505
   research: 168
-  news: 340
+  news: 337
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 72
+    count: 71
     color: 1
   - label: "cybercrime"
-    count: 60
+    count: 59
     color: 2
   - label: "government"
     count: 31
@@ -361,7 +361,6 @@ label_colors:
   "insights": 5
   "iocontrol": 7
   "ios": 11
-  "isolated-vm": 5
   "itorrents compromise": 8
   "ivanti": 7
   "jfrog": 8
@@ -3473,21 +3472,3 @@ items:
     date: 2026-08-21T14:22:06Z
     kind: news
     labels: ["phishing", "phishing kit"]
-  - title: "Russian network monitoring firm confirms cyberattack claimed by pro-Ukraine hackers"
-    url: "https://therecord.media/russian-network-monitoring-firm-confirms-cyberattack-claimed-by-pro-ukraine-group"
-    source: "Recorded Future"
-    date: 2026-08-21T13:55:00Z
-    kind: news
-    labels: ["cybercrime"]
-  - title: "Critical Isolated-vm Vulnerability Leads to RCE on Host"
-    url: "https://www.securityweek.com/critical-isolated-vm-vulnerability-leads-to-rce-on-host/"
-    source: "SecurityWeek"
-    date: 2026-08-21T12:26:07Z
-    kind: news
-    labels: ["isolated-vm", "vulnerabilities"]
-  - title: "CISA orders feds to patch actively exploited TrueConf Server flaws"
-    url: "https://www.bleepingcomputer.com/news/security/cisa-orders-feds-to-patch-actively-exploited-trueconf-server-flaws/"
-    source: "BleepingComputer"
-    date: 2026-08-21T12:25:33Z
-    kind: news
-    labels: []
