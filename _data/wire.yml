@@ -3,20 +3,20 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-20T14:00:28Z
+generated_at: 2026-09-20T16:00:48Z
 window_days: 30
 counts:
-  total: 505
+  total: 501
   research: 168
-  news: 337
+  news: 333
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 71
+    count: 70
     color: 1
   - label: "cybercrime"
-    count: 59
+    count: 58
     color: 2
   - label: "government"
     count: 31
@@ -404,7 +404,6 @@ label_colors:
   "payment fraud": 12
   "phishing": 10
   "phishing campaign": 6
-  "phishing kit": 6
   "plugin vulnerability": 1
   "poc exploit": 3
   "polinrider": 2
@@ -3448,27 +3447,3 @@ items:
     date: 2026-08-21T16:16:00Z
     kind: news
     labels: ["cybercrime"]
-  - title: "Hundreds of leaked AWS keys give full control over corporate accounts"
-    url: "https://www.bleepingcomputer.com/news/security/hundreds-of-leaked-aws-keys-give-full-control-over-corporate-accounts/"
-    source: "BleepingComputer"
-    date: 2026-08-21T15:55:15Z
-    kind: news
-    labels: ["cloud"]
-  - title: "In Other News: Zombie Card Attack, T-Mobile Cut Cable to Stop Hackers, GitHub Denies AI Caused Bug"
-    url: "https://www.securityweek.com/in-other-news-zombie-card-attack-t-mobile-cut-cable-to-stop-hackers-github-denies-ai-caused-bug/"
-    source: "SecurityWeek"
-    date: 2026-08-21T15:11:16Z
-    kind: news
-    labels: ["in other news", "vulnerabilities"]
-  - title: "Canada’s Hospital for Sick Children attacked by cybercriminals again as employee data stolen"
-    url: "https://therecord.media/canada-hospital-for-sick-children-attacked-again-employee-data"
-    source: "Recorded Future"
-    date: 2026-08-21T15:00:00Z
-    kind: news
-    labels: ["cybercrime", "privacy"]
-  - title: "New Phishing Toolkit Uses Passkeys to Maintain Access After Password Resets"
-    url: "https://www.securityweek.com/new-phishing-toolkit-uses-passkeys-to-maintain-access-after-password-resets/"
-    source: "SecurityWeek"
-    date: 2026-08-21T14:22:06Z
-    kind: news
-    labels: ["phishing", "phishing kit"]
