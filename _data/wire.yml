@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-20T10:01:57Z
+generated_at: 2026-09-20T12:00:58Z
 window_days: 30
 counts:
-  total: 511
+  total: 508
   research: 168
-  news: 343
+  news: 340
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -3489,23 +3489,5 @@ items:
     url: "https://www.bleepingcomputer.com/news/security/cisa-orders-feds-to-patch-actively-exploited-trueconf-server-flaws/"
     source: "BleepingComputer"
     date: 2026-08-21T12:25:33Z
-    kind: news
-    labels: []
-  - title: "Microsoft warns of max severity Entra ID flaw exploited in attacks"
-    url: "https://www.bleepingcomputer.com/news/microsoft/microsoft-warns-of-max-severity-entra-id-flaw-exploited-in-attacks/"
-    source: "BleepingComputer"
-    date: 2026-08-21T11:04:10Z
-    kind: news
-    labels: ["microsoft"]
-  - title: "Hackers abuse FTP server banners to deliver new Windows malware"
-    url: "https://www.bleepingcomputer.com/news/security/hackers-abuse-ftp-server-banners-to-deliver-new-windows-malware/"
-    source: "BleepingComputer"
-    date: 2026-08-21T11:00:00Z
-    kind: news
-    labels: []
-  - title: "SickKids data breach exposes employee and job applicant info"
-    url: "https://www.bleepingcomputer.com/news/security/sickkids-data-breach-exposes-employee-and-job-applicant-info/"
-    source: "BleepingComputer"
-    date: 2026-08-21T10:10:42Z
     kind: news
     labels: []
