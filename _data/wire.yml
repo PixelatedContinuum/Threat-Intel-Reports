@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-21T10:00:18Z
+generated_at: 2026-09-21T12:02:38Z
 window_days: 30
 counts:
-  total: 501
-  research: 170
-  news: 331
+  total: 503
+  research: 171
+  news: 332
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -31,7 +31,7 @@ topics:
     count: 29
     color: 6
   - label: "data breaches"
-    count: 23
+    count: 24
     color: 7
   - label: "ransomware"
     count: 16
@@ -138,6 +138,7 @@ label_colors:
   "aveva": 1
   "aviation sector": 9
   "awareness training": 1
+  "aws": 7
   "aws cloudtrail": 6
   "azure": 1
   "azure infrastructure": 4
@@ -251,6 +252,7 @@ label_colors:
   "cron-injection": 10
   "cross-platform": 10
   "crowdoor": 11
+  "crowdsec": 12
   "crowdstrike": 1
   "crudeexclude": 7
   "cryptocurrency": 12
@@ -444,6 +446,18 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 11
 items:
+  - title: "CrowdSec Confirms Source Code Stolen in Supply Chain Attack"
+    url: "https://www.securityweek.com/crowdsec-confirms-source-code-stolen-in-supply-chain-attack/"
+    source: "SecurityWeek"
+    date: 2026-09-21T10:55:46Z
+    kind: news
+    labels: ["crowdsec", "data breaches", "source code", "supply chain attack", "supply chain security"]
+  - title: "From Exposure to Lockdown: How AWS Neutralizes Compromised IAM Credentials through Managed Policies"
+    url: "https://unit42.paloaltonetworks.com/detecting-exposed-aws-iam-credentials/"
+    source: "Palo Alto Networks"
+    date: 2026-09-21T10:00:13Z
+    kind: research
+    labels: ["aws", "aws cloudtrail", "bedrock", "cloud compute", "cloud cybersecurity research", "github", "json", "logging", "threat research"]
   - title: "Organizations Warned of 3 Exploited Linux Kernel Vulnerabilities"
     url: "https://www.securityweek.com/organizations-warned-of-3-exploited-linux-kernel-vulnerabilities/"
     source: "SecurityWeek"
