@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-20T22:00:52Z
+generated_at: 2026-09-21T00:00:58Z
 window_days: 30
 counts:
-  total: 497
-  research: 168
+  total: 496
+  research: 167
   news: 329
 unclassified_sources:
   - "The DFIR Report"
@@ -197,7 +197,6 @@ label_colors:
   "castlerat": 9
   "cdn poisoning": 9
   "centerpoint energy": 7
-  "chaindrop": 8
   "chaotic eclipse": 12
   "chatgpt": 1
   "check point": 6
@@ -3416,9 +3415,3 @@ items:
     date: 2026-08-22T13:00:09Z
     kind: news
     labels: []
-  - title: "Connecting the Dots: Securing the Overlooked Corners of the Software Development Lifecycle (SDLC) Supply Chain"
-    url: "https://unit42.paloaltonetworks.com/sdlc-supply-chain/"
-    source: "Palo Alto Networks"
-    date: 2026-08-21T23:00:21Z
-    kind: research
-    labels: ["chaindrop", "insights", "npm packages", "software supply-chain attack", "supply chain"]
