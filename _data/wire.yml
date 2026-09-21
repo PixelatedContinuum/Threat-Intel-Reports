@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-21T14:02:18Z
+generated_at: 2026-09-21T16:01:48Z
 window_days: 30
 counts:
-  total: 504
-  research: 171
-  news: 333
+  total: 508
+  research: 174
+  news: 334
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -16,7 +16,7 @@ topics:
     count: 71
     color: 1
   - label: "cybercrime"
-    count: 57
+    count: 58
     color: 2
   - label: "malware"
     count: 31
@@ -257,6 +257,7 @@ label_colors:
   "crudeexclude": 7
   "cryptocurrency": 12
   "cryptocurrency miner": 1
+  "cryptocurrency mining": 6
   "cryptocurrency stealer": 4
   "cryptocurrency theft": 3
   "cryptographic": 9
@@ -299,6 +300,7 @@ label_colors:
   "diplomatic targeting": 1
   "disrupted": 8
   "dns": 1
+  "dns txt records": 3
   "docusign impersonation": 2
   "domain controller": 4
   "dprk apt": 2
@@ -446,6 +448,24 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 11
 items:
+  - title: "From Registry-Stored PowerShell to In-Memory Cryptocurrency Mining: A Multi-Stage Infection Chain"
+    url: "https://labs.k7computing.com/index.php/from-registry-stored-powershell-to-in-memory-cryptocurrency-mining-a-multi-stage-infection-chain/"
+    source: "AlienVault"
+    date: 2026-09-21T15:16:13Z
+    kind: research
+    labels: ["cryptocurrency mining", "dns txt records", "in-memory execution", "obfuscation", "powershell", "registry persistence", "steganography", "wav files"]
+  - title: "FBI's CJIS v6.1: What Security Teams Need to Know."
+    url: "https://www.bleepingcomputer.com/news/security/fbis-cjis-v61-what-security-teams-need-to-know/"
+    source: "BleepingComputer"
+    date: 2026-09-21T14:02:12Z
+    kind: news
+    labels: []
+  - title: "ShinyHunters cybercrime gang takes over Cl0p ransomware site, demands extortion payment"
+    url: "https://therecord.media/shinyhunters-clop-cyberattack-website"
+    source: "Recorded Future"
+    date: 2026-09-21T14:00:00Z
+    kind: news
+    labels: ["cybercrime"]
   - title: "RatHat Android Trojan Uses AI for Automation"
     url: "https://www.securityweek.com/rathat-android-trojan-uses-ai-for-automation/"
     source: "SecurityWeek"
@@ -458,6 +478,12 @@ items:
     date: 2026-09-21T12:30:00Z
     kind: news
     labels: ["industry"]
+  - title: "PAYLOAD ransomware attacks through Active Directory GPO"
+    url: "https://securelist.com/tr/payload-ransomware-via-group-policy/121335/"
+    source: "AlienVault"
+    date: 2026-09-21T11:54:10Z
+    kind: research
+    labels: ["active directory", "data exfiltration", "domain controller", "encryptionless extortion", "esxi targeting", "gpo abuse", "group policy object", "payload", "sysvol abuse", "vpn compromise"]
   - title: "CrowdSec Confirms Source Code Stolen in Supply Chain Attack"
     url: "https://www.securityweek.com/crowdsec-confirms-source-code-stolen-in-supply-chain-attack/"
     source: "SecurityWeek"
@@ -482,6 +508,12 @@ items:
     date: 2026-09-21T07:20:46Z
     kind: news
     labels: ["artificial intelligence", "gemini", "google", "irregular", "rogue ai"]
+  - title: "Cloud Threat Emulation on Autopilot: Context is Everything"
+    url: "https://www.elastic.co/security-labs/threat-command/cloud-threat-emulation-methodology"
+    source: "Elastic"
+    date: 2026-09-21T00:00:00Z
+    kind: research
+    labels: ["detection engineering"]
   - title: "BragJack attacks hijack AI browser agents through malicious extensions"
     url: "https://www.bleepingcomputer.com/news/security/bragjack-attacks-hijack-ai-browser-agents-through-malicious-extensions/"
     source: "BleepingComputer"
@@ -3464,9 +3496,3 @@ items:
     date: 2026-08-23T14:23:46Z
     kind: news
     labels: ["mobile"]
-  - title: "Hackers infect Android car head units with proxy botnet malware"
-    url: "https://www.bleepingcomputer.com/news/security/hackers-infect-android-car-head-units-with-proxy-botnet-malware/"
-    source: "BleepingComputer"
-    date: 2026-08-22T14:14:24Z
-    kind: news
-    labels: ["hardware"]
