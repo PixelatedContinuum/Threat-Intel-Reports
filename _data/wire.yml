@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-21T20:01:32Z
+generated_at: 2026-09-21T22:01:57Z
 window_days: 30
 counts:
-  total: 511
+  total: 513
   research: 174
-  news: 337
+  news: 339
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -451,6 +451,18 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 11
 items:
+  - title: "BigCommerce alerts merchants of data breach linked to Ribon apps"
+    url: "https://www.bleepingcomputer.com/news/security/bigcommerce-alerts-merchants-of-data-breach-linked-to-ribon-apps/"
+    source: "BleepingComputer"
+    date: 2026-09-21T21:18:49Z
+    kind: news
+    labels: []
+  - title: "CISA alerts of active exploitation of three Linux kernel flaws"
+    url: "https://www.bleepingcomputer.com/news/security/cisa-alerts-of-active-exploitation-of-three-linux-kernel-flaws/"
+    source: "BleepingComputer"
+    date: 2026-09-21T20:12:17Z
+    kind: news
+    labels: ["linux"]
   - title: "WordPress Click2Shell flaw lets hackers execute PHP on the server"
     url: "https://www.bleepingcomputer.com/news/security/wordpress-click2shell-flaw-lets-hackers-execute-php-on-the-server/"
     source: "BleepingComputer"
