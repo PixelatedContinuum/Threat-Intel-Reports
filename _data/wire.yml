@@ -3,17 +3,17 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-21T08:01:04Z
+generated_at: 2026-09-21T10:00:18Z
 window_days: 30
 counts:
-  total: 497
-  research: 167
-  news: 330
+  total: 501
+  research: 170
+  news: 331
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 70
+    count: 71
     color: 1
   - label: "cybercrime"
     count: 57
@@ -28,7 +28,7 @@ topics:
     count: 29
     color: 5
   - label: "exploited"
-    count: 28
+    count: 29
     color: 6
   - label: "data breaches"
     count: 23
@@ -37,10 +37,10 @@ topics:
     count: 16
     color: 8
   - label: "social engineering"
-    count: 15
+    count: 16
     color: 9
   - label: "clickfix"
-    count: 14
+    count: 15
     color: 10
   - label: "zero-day"
     count: 14
@@ -70,6 +70,7 @@ label_colors:
   "adobe commerce": 12
   "adversary infrastructure": 12
   "adware disguise": 5
+  "aerospace": 7
   "aesto health": 6
   "agentcore runtime": 2
   "agentev2": 6
@@ -163,6 +164,7 @@ label_colors:
   "bitcoin": 2
   "black hat seo": 5
   "blackrock": 2
+  "blindingcan": 11
   "blockchain abuse": 2
   "blockchain c2": 1
   "blog post": 6
@@ -197,6 +199,7 @@ label_colors:
   "castlerat": 9
   "cdn poisoning": 9
   "centerpoint energy": 7
+  "chainscript": 2
   "chaotic eclipse": 12
   "chatgpt": 1
   "check point": 6
@@ -290,6 +293,7 @@ label_colors:
   "defense sector": 12
   "detection engineering": 12
   "device code phishing": 5
+  "devops targeting": 8
   "diplomatic targeting": 1
   "disrupted": 8
   "dns": 1
@@ -440,6 +444,12 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 11
 items:
+  - title: "Organizations Warned of 3 Exploited Linux Kernel Vulnerabilities"
+    url: "https://www.securityweek.com/organizations-warned-of-3-exploited-linux-kernel-vulnerabilities/"
+    source: "SecurityWeek"
+    date: 2026-09-21T09:31:12Z
+    kind: news
+    labels: ["cisa kev", "exploited", "linux", "linux kernel", "vulnerabilities"]
   - title: "Google Confirms Gemini AI Breached Three Firms"
     url: "https://www.securityweek.com/google-confirms-gemini-ai-breached-three-firms/"
     source: "SecurityWeek"
@@ -464,6 +474,24 @@ items:
     date: 2026-09-19T13:48:32Z
     kind: news
     labels: []
+  - title: "Don't Call Us, We'll Call Your APIs | TraderTraitor Backdoors Resurface on Victim With No Crypto Ties"
+    url: "https://www.sentinelone.com/labs/dont-call-us-well-call-your-apis-tradertraitor-backdoors-resurface-on-victim-with-no-crypto-ties/"
+    source: "AlienVault"
+    date: 2026-09-19T08:44:15Z
+    kind: research
+    labels: ["cryptocurrency theft", "devops targeting", "dprk", "fake job interviews", "flatroof", "lazarus", "macos backdoors", "macos.gaslight", "north korea", "roofdeck", "social engineering", "supply chain", "terraform weaponization"]
+  - title: "ChainScript: Tracing a Node.js RAT Through the Blockchain"
+    url: "https://blackpointcyber.com/blog/chainscript-tracing-a-nodejs-rat-across-the-blockchain/"
+    source: "AlienVault"
+    date: 2026-09-18T21:49:13Z
+    kind: research
+    labels: ["chainscript", "clickfix", "cryptocurrency wallet theft", "etherhiding", "etherrat", "msi installer", "node.js rat", "polygon blockchain", "tsundere", "websocket c2"]
+  - title: "Lazarus luring employees with trojanized coding challenges: The case of a Spanish aerospace company"
+    url: "https://otx.alienvault.com/pulse/6aadad46b23f435094676848"
+    source: "AlienVault"
+    date: 2026-09-18T21:29:42Z
+    kind: research
+    labels: ["aerospace", "blindingcan", "cyberespionage", "dll side-loading", "dreamjob", "lazarus", "lightlesscan", "linkedin", "miniblindingcan", "nickelloader", "spain"]
   - title: "Gyazo server flaw exploited to steal 23.6 million user records"
     url: "https://www.bleepingcomputer.com/news/security/gyazo-server-flaw-exploited-to-steal-236-million-user-records/"
     source: "BleepingComputer"
