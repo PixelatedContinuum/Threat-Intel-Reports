@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-21T18:03:04Z
+generated_at: 2026-09-21T20:01:32Z
 window_days: 30
 counts:
-  total: 510
+  total: 511
   research: 174
-  news: 336
+  news: 337
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -451,6 +451,12 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 11
 items:
+  - title: "WordPress Click2Shell flaw lets hackers execute PHP on the server"
+    url: "https://www.bleepingcomputer.com/news/security/wordpress-click2shell-flaw-lets-hackers-execute-php-on-the-server/"
+    source: "BleepingComputer"
+    date: 2026-09-21T18:23:11Z
+    kind: news
+    labels: []
   - title: "Google Hit With $463 Million Fine for EU Location Data Rule Breach"
     url: "https://www.securityweek.com/google-hit-with-463-million-fine-for-eu-location-data-rule-breach/"
     source: "SecurityWeek"
