@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-22T16:00:57Z
+generated_at: 2026-09-22T18:02:28Z
 window_days: 30
 counts:
-  total: 529
+  total: 531
   research: 182
-  news: 347
+  news: 349
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -16,16 +16,16 @@ topics:
     count: 74
     color: 1
   - label: "cybercrime"
-    count: 59
+    count: 60
     color: 2
   - label: "artificial intelligence"
     count: 32
     color: 3
-  - label: "malware"
+  - label: "government"
     count: 32
     color: 4
-  - label: "government"
-    count: 31
+  - label: "malware"
+    count: 32
     color: 5
   - label: "exploited"
     count: 30
@@ -361,7 +361,7 @@ label_colors:
   "google cloud": 8
   "google infrastructure abuse": 8
   "google tag manager abuse": 4
-  "government": 5
+  "government": 4
   "government impersonation": 7
   "gta6": 6
   "gyazo": 8
@@ -396,7 +396,7 @@ label_colors:
   "maas framework": 12
   "mac malware": 8
   "macos": 11
-  "malware": 4
+  "malware": 5
   "malware analysis": 7
   "mathspace": 4
   "meshagent": 2
@@ -464,6 +464,18 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 11
 items:
+  - title: "Check Point warns of Management Server zero-day exploited in attacks"
+    url: "https://www.bleepingcomputer.com/news/security/check-point-patches-management-server-zero-day-exploited-in-attacks/"
+    source: "BleepingComputer"
+    date: 2026-09-22T16:32:47Z
+    kind: news
+    labels: []
+  - title: "Two arrested in UK after Microsoft takedown of ‘Eviltokens’ AI-chatbot for cybercriminals"
+    url: "https://therecord.media/two-arrested-in-uk-after-microsoft-takedown-eviltokens"
+    source: "Recorded Future"
+    date: 2026-09-22T15:51:00Z
+    kind: news
+    labels: ["cybercrime", "government"]
   - title: "Unmasking EvilTokens: Getting to the root of device code phishing"
     url: "https://www.microsoft.com/en-us/security/blog/2026/09/22/unmasking-eviltokens-getting-to-the-root-of-device-code-phishing/"
     source: "Microsoft"
