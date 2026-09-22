@@ -3,20 +3,20 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-22T12:02:39Z
+generated_at: 2026-09-22T14:01:32Z
 window_days: 30
 counts:
-  total: 524
+  total: 528
   research: 181
-  news: 343
+  news: 347
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 72
+    count: 74
     color: 1
   - label: "cybercrime"
-    count: 58
+    count: 59
     color: 2
   - label: "artificial intelligence"
     count: 32
@@ -28,7 +28,7 @@ topics:
     count: 31
     color: 5
   - label: "exploited"
-    count: 29
+    count: 30
     color: 6
   - label: "data breaches"
     count: 24
@@ -162,6 +162,7 @@ label_colors:
   "berlin": 6
   "bigbear": 8
   "bigbear 2.0": 8
+  "bigdiskbuster": 2
   "binary ninja": 5
   "bind": 7
   "binding.gyp": 1
@@ -451,6 +452,7 @@ label_colors:
   "software": 5
   "spring": 5
   "surfshark": 11
+  "switch": 10
   "threat hunting & intel": 9
   "threat intelligence": 9
   "threat source newsletter": 6
@@ -461,6 +463,30 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 11
 items:
+  - title: "Nightmare Eclipse Drops New Microsoft Defender Exploit After Revealing Identity"
+    url: "https://www.securityweek.com/nightmare-eclipse-drops-new-microsoft-defender-exploit-after-revealing-identity/"
+    source: "SecurityWeek"
+    date: 2026-09-22T13:26:51Z
+    kind: news
+    labels: ["bigdiskbuster", "chaotic eclipse", "controversy", "poc exploit", "unmasked", "vulnerabilities"]
+  - title: "AI is set to help cyber attackers much more than defenders, says UK official"
+    url: "https://therecord.media/ai-set-to-help-attackers-more-than-defenders"
+    source: "Recorded Future"
+    date: 2026-09-22T13:05:00Z
+    kind: news
+    labels: ["cybercrime"]
+  - title: "D-Link warns of max severity zero-day bug in DIR-822A routers"
+    url: "https://www.bleepingcomputer.com/news/security/d-link-warns-of-max-severity-zero-day-bug-in-dir-822a-routers/"
+    source: "BleepingComputer"
+    date: 2026-09-22T12:48:06Z
+    kind: news
+    labels: []
+  - title: "Recent ZyXEL Switch Vulnerability Exploited by Chinese Hackers"
+    url: "https://www.securityweek.com/recent-zyxel-switch-vulnerability-exploited-by-chinese-hackers/"
+    source: "SecurityWeek"
+    date: 2026-09-22T11:55:20Z
+    kind: news
+    labels: ["exploited", "switch", "vulnerabilities", "zyxel"]
   - title: "WordPress Patches ‘Click2Shell’ Vulnerability"
     url: "https://www.securityweek.com/wordpress-patches-click2shell-vulnerability/"
     source: "SecurityWeek"
