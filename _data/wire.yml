@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-22T18:02:28Z
+generated_at: 2026-09-22T20:02:41Z
 window_days: 30
 counts:
-  total: 531
+  total: 534
   research: 182
-  news: 349
+  news: 352
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -19,7 +19,7 @@ topics:
     count: 60
     color: 2
   - label: "artificial intelligence"
-    count: 32
+    count: 33
     color: 3
   - label: "government"
     count: 32
@@ -31,7 +31,7 @@ topics:
     count: 30
     color: 6
   - label: "data breaches"
-    count: 24
+    count: 25
     color: 7
   - label: "ransomware"
     count: 16
@@ -163,6 +163,7 @@ label_colors:
   "berlin": 6
   "bigbear": 8
   "bigbear 2.0": 8
+  "bigcommerce": 3
   "bigdiskbuster": 2
   "binary ninja": 5
   "bind": 7
@@ -464,6 +465,24 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 11
 items:
+  - title: "ShinyHunters claims FBI hack, data theft in PeopleSoft zero-day breach"
+    url: "https://www.bleepingcomputer.com/news/security/shinyhunters-claims-fbi-hack-data-theft-in-peoplesoft-zero-day-breach/"
+    source: "BleepingComputer"
+    date: 2026-09-22T19:13:29Z
+    kind: news
+    labels: []
+  - title: "New ClosedQuorum Windows malware uses AI for attack decisions"
+    url: "https://www.bleepingcomputer.com/news/security/new-closedquorum-windows-malware-uses-ai-for-attack-decisions/"
+    source: "BleepingComputer"
+    date: 2026-09-22T18:04:39Z
+    kind: news
+    labels: ["artificial intelligence"]
+  - title: "BigCommerce Data Stolen via Ribon Apps Hack"
+    url: "https://www.securityweek.com/bigcommerce-data-stolen-via-ribon-apps-hack/"
+    source: "SecurityWeek"
+    date: 2026-09-22T17:58:00Z
+    kind: news
+    labels: ["bigcommerce", "data breaches", "ribon", "supply chain attack", "supply chain security"]
   - title: "Check Point warns of Management Server zero-day exploited in attacks"
     url: "https://www.bleepingcomputer.com/news/security/check-point-patches-management-server-zero-day-exploited-in-attacks/"
     source: "BleepingComputer"
