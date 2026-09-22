@@ -3,17 +3,17 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-22T10:02:08Z
+generated_at: 2026-09-22T12:02:39Z
 window_days: 30
 counts:
-  total: 521
+  total: 524
   research: 181
-  news: 340
+  news: 343
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 71
+    count: 72
     color: 1
   - label: "cybercrime"
     count: 58
@@ -25,7 +25,7 @@ topics:
     count: 32
     color: 4
   - label: "government"
-    count: 30
+    count: 31
     color: 5
   - label: "exploited"
     count: 29
@@ -235,6 +235,7 @@ label_colors:
   "citrix": 11
   "claude desktop": 12
   "cleo": 7
+  "click2shell": 4
   "clickfix": 10
   "clipper": 3
   "cloaked ursa": 2
@@ -460,6 +461,12 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 11
 items:
+  - title: "WordPress Patches ‘Click2Shell’ Vulnerability"
+    url: "https://www.securityweek.com/wordpress-patches-click2shell-vulnerability/"
+    source: "SecurityWeek"
+    date: 2026-09-22T10:22:27Z
+    kind: news
+    labels: ["click2shell", "patch", "vulnerabilities", "wordpress"]
   - title: "The Closed Quorum: Inside the first reported autonomous AI C2 implant"
     url: "https://blog.talosintelligence.com/the-closed-quorum-inside-the-first-reported-autonomous-ai-c2-implant/"
     source: "Cisco Talos"
@@ -472,6 +479,12 @@ items:
     date: 2026-09-22T10:00:25Z
     kind: research
     labels: ["artificial intelligence", "landing page top story", "tool talk", "top story"]
+  - title: "New Windows Defender zero-day blocks Microsoft antivirus updates"
+    url: "https://www.bleepingcomputer.com/news/security/new-windows-defender-zero-day-blocks-microsoft-antivirus-updates/"
+    source: "BleepingComputer"
+    date: 2026-09-22T09:55:11Z
+    kind: news
+    labels: ["microsoft"]
   - title: "CISA orders feds to patch Zyxel flaw exploited for data theft"
     url: "https://www.bleepingcomputer.com/news/security/cisa-orders-feds-to-patch-actively-exploited-zyxel-flaw-by-thursday/"
     source: "BleepingComputer"
@@ -490,6 +503,12 @@ items:
     date: 2026-09-22T07:27:17Z
     kind: research
     labels: ["attack-campaigns", "credential-harvesting", "cybersecurity", "data-exfiltration", "lateral-movement", "supply-chain", "threat-intelligence", "vulnerability-exploitation"]
+  - title: "Russia's internet shutdowns disrupt warnings about incoming drone attacks"
+    url: "https://therecord.media/russia-internet-shutdowns-disrupt-warnings-about-drone-attacks"
+    source: "Recorded Future"
+    date: 2026-09-21T23:00:00Z
+    kind: news
+    labels: ["government"]
   - title: "BigCommerce alerts merchants of data breach linked to Ribon apps"
     url: "https://www.bleepingcomputer.com/news/security/bigcommerce-alerts-merchants-of-data-breach-linked-to-ribon-apps/"
     source: "BleepingComputer"
