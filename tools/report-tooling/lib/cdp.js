@@ -18,6 +18,7 @@
 
 var http = require('node:http');
 var fs = require('node:fs');
+var os = require('node:os');
 var path = require('node:path');
 var childProcess = require('node:child_process');
 
@@ -56,6 +57,126 @@ function findBrowser(env, exists) {
 
 function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
 
+/* A blocking sleep with no event-loop yield and no subprocess, used only to
+   pace the polling loop below. `Atomics.wait` blocks the calling thread on a
+   value that never arrives, so it always times out after `ms`; nothing here
+   depends on it interacting with libuv, since removeProfileDirWhenSafe()
+   below deliberately never asks OUR OWN process about the browser's state
+   (see that function's comment for why). */
+function sleepSyncMs(ms) {
+  var ia = new Int32Array(new SharedArrayBuffer(4));
+  Atomics.wait(ia, 0, 0, ms);
+}
+
+/* Best-effort, but no longer silent, removal of a launch's --user-data-dir.
+
+   MEASURED 2026-09-22. Before this, close() called `proc.kill()` and then
+   immediately `fs.rmSync(profileDir, ...)` inside a try/catch that swallowed
+   everything. That leaked one directory per gate run -- 109 of them, 119 MB,
+   in under an hour -- and the catch being silent meant nobody could tell
+   whether rmSync was failing or something else was going on.
+
+   It is not failing. `rmSync` returns cleanly and the directory is genuinely
+   gone the instant it runs. The leak is a RACE: `proc.kill()` sends SIGTERM
+   and returns immediately, but the browser is not one process, it is a tree
+   (measured: 10, for a single `about:blank` launch -- renderer, GPU,
+   network service, zygote, crashpad handler and the rest), and killing the
+   main one does not make the tree stop executing in the same tick. One of
+   those processes is still tearing down in the few milliseconds after
+   rmSync runs, and it recreates a `Default/` subdirectory as part of that
+   shutdown. A controlled probe confirms the mechanism directly: rmSync
+   fired immediately after `proc.kill()` left a recreated directory in 1/1
+   trials; the identical rmSync, fired only once every process matching this
+   profile had actually stopped running, left nothing behind in 12/12 trials
+   across three different kill strategies (SIGTERM to the main process alone,
+   SIGKILL to the process group, SIGTERM to the process group) -- so this is
+   a timing defect, not a signal-choice defect, and `proc.kill()` did not
+   need to change.
+
+   The obvious way to wait -- poll `process.kill(pid, 0)` on our own child
+   until it throws ESRCH -- was tried and measured to NOT work from here.
+   Node only reaps its own child (clears the zombie so the PID stops
+   existing) when its event loop gets to run the SIGCHLD-driven callback,
+   and close() is called synchronously by every caller with no `await`; a
+   busy-wait that never yields never gives Node that chance. Measured
+   directly: a plain child process left in that state read as "alive" for a
+   full 2-second test window with zero yields, and only transitioned the
+   instant a `setTimeout` let the event loop run. Driving OTHER synchronous
+   child_process calls (`spawnSync`) in the busy-wait loop was tried too and
+   made no difference -- `spawnSync` does not pump the calling process's own
+   event loop either.
+
+   So the check below asks the KERNEL directly, from a freshly spawned,
+   unrelated process (`pgrep -f <profileDir>`), rather than asking Node
+   about a PID Node itself is responsible for reaping. That sidesteps the
+   zombie question entirely: a process's own command line (what `pgrep -f`
+   matches against) clears the moment it stops running, whether or not its
+   exit status has been collected by a parent, so "no match" is a genuine,
+   external signal that nothing tied to this profile is still executing --
+   never a signal that depends on this process's own bookkeeping. Measured:
+   this check converges in a single ~30ms poll in every trial run, so the
+   added wall-clock cost is negligible next to the multi-second settle times
+   already elsewhere in this file.
+
+   Three failure shapes, all handled, all visible instead of silent:
+   - `pgrep` finds a match: keep polling, bounded by DEADLINE_MS.
+   - the deadline passes with a match still present: log it and leave the
+     directory in place. Removing it anyway is exactly the race being fixed.
+   - `pgrep` itself cannot answer (missing binary, permission error, or
+     anything other than its own "no match" exit code of 1): verification is
+     not possible on this host, so fall back to one short fixed grace delay
+     and then remove anyway, logging that the wait was skipped rather than
+     pretending it happened. This is the one path that can still race in
+     principle; it only runs on a platform or environment where the
+     kernel-level check itself is unavailable. */
+var PROFILE_WAIT_DEADLINE_MS = 2000;
+var PROFILE_WAIT_POLL_MS = 20;
+var PROFILE_WAIT_FALLBACK_GRACE_MS = 250;
+
+function anyProcessMatches(profileDir) {
+  try {
+    childProcess.execFileSync('pgrep', ['-f', profileDir], { stdio: ['ignore', 'ignore', 'ignore'] });
+    return true; // exit 0: pgrep found at least one still-running match
+  } catch (e) {
+    if (e.status === 1) return false; // pgrep's own "no match" exit code
+    return null; // pgrep could not answer at all (missing, EPERM, ...)
+  }
+}
+
+function removeProfileDirWhenSafe(profileDir, opts) {
+  // opts is test-only (mirrors findBrowser's injectable env/exists above): real
+  // callers never pass it, so PROFILE_WAIT_DEADLINE_MS stays the effective value
+  // in production. It exists so the give-up-and-leave-it-in-place branch can be
+  // exercised in a test without an actual 2-second wait.
+  opts = opts || {};
+  var deadline = Date.now() + (opts.deadlineMs || PROFILE_WAIT_DEADLINE_MS);
+  for (;;) {
+    var stillRunning = anyProcessMatches(profileDir);
+    if (stillRunning === false) break;
+    if (stillRunning === null) {
+      console.error('hl-cdp: could not verify the browser process had exited ' +
+        '(`pgrep` unavailable or unreadable); waiting ' + PROFILE_WAIT_FALLBACK_GRACE_MS +
+        'ms as a fallback before removing ' + profileDir);
+      sleepSyncMs(PROFILE_WAIT_FALLBACK_GRACE_MS);
+      break;
+    }
+    if (Date.now() > deadline) {
+      console.error('hl-cdp: a process still matches ' + profileDir + ' after ' +
+        PROFILE_WAIT_DEADLINE_MS + 'ms; leaving the profile directory in place ' +
+        'rather than risk removing it out from under a process that has not exited.');
+      return;
+    }
+    sleepSyncMs(PROFILE_WAIT_POLL_MS);
+  }
+  try {
+    fs.rmSync(profileDir, { recursive: true, force: true });
+  } catch (e) {
+    // Best-effort in EFFECT (never throws past the caller), but no longer
+    // silent: a removal that genuinely fails here is worth knowing about.
+    console.error('hl-cdp: could not remove ' + profileDir + ': ' + e.message);
+  }
+}
+
 function getJSON(url) {
   return new Promise(function (resolve, reject) {
     http.get(url, function (res) {
@@ -66,6 +187,142 @@ function getJSON(url) {
       });
     }).on('error', reject);
   });
+}
+
+/* ---- brand identification -------------------------------------------------
+
+   Measured 2026-09-22 via CDP against the binary this workstation actually
+   runs (`/usr/bin/brave`, backed by `/opt/brave-bin/brave`): `/json/version`
+   reports `Browser: Chrome/153.0.8010.48`. That is the CHROMIUM ENGINE
+   version. It is not a lie exactly, Brave IS a Chromium build, but every check
+   in this repo prints that field verbatim, so every run of this gate has
+   LOOKED like it exercised Chrome when the workstation has never had Chrome,
+   Chromium or google-chrome installed at all: `command -v` finds none of
+   them. `page.version` stays exactly as it is below (three other checks print
+   it and one lane depends on the raw string), and this section exists to give
+   every caller an HONEST name to print alongside it instead.
+
+   Two independent signals exist and neither is trustworthy alone:
+
+   - The BINARY PATH. Decisive, because it names the executable that is
+     actually running, but only as good as the candidate list in CANDIDATES.
+   - `navigator.userAgentData.brands`. Populated by the engine itself
+     (measured: `[{brand:"Brave",version:"153"},{brand:"Not_A Brand",
+     version:"8"},{brand:"Chromium",version:"153"}]`), but it always carries a
+     "GREASE" entry (a deliberately meaningless brand string, so a site sniffing
+     for an exact brand list breaks instead of special-casing an unlisted one)
+     and it always carries "Chromium" too, since every Chromium-family browser
+     is honest about its own engine. A naive "first entry" or "any entry" read
+     is wrong on both counts.
+
+   Path wins when the two disagree, because a spoofed or absent Client Hints
+   API says nothing about what actually launched, while the path is the
+   command this file itself passed to `child_process.spawn`. But a disagreement
+   is reported, never silently dropped: if the path scan and the runtime ever
+   point at different products, that mismatch is itself worth seeing, not a
+   detail to resolve by picking one field and throwing the other away. */
+
+/* Order matters: brave / vivaldi / opera / edge are checked BEFORE chrome,
+   and chromium is checked last, because a specific-brand path can be mistaken
+   for a more generic one if the generic pattern is tried first (a Chrome for
+   Testing path such as chrome-headless-shell.exe legitimately matches
+   "chrome", but nothing here should ever get the chance to call a Brave path
+   Chrome because a looser pattern fired first). Chromium is the fallback: it
+   is the name of the open-source engine every one of these ships, so it is
+   only correct to report once nothing more specific matched. */
+var PATH_BRAND_PATTERNS = [
+  ['Brave', /brave/i],
+  ['Vivaldi', /vivaldi/i],
+  ['Opera', /opera/i],
+  ['Edge', /edge/i],
+  ['Chrome', /chrome/i],
+  ['Chromium', /chromium/i]
+];
+
+// Pure: no filesystem, no process, so it is testable on a string alone.
+function brandFromPath(binPath) {
+  if (!binPath) return null;
+  for (var i = 0; i < PATH_BRAND_PATTERNS.length; i++) {
+    if (PATH_BRAND_PATTERNS[i][1].test(binPath)) return PATH_BRAND_PATTERNS[i][0];
+  }
+  return null;
+}
+
+/* A GREASE brand looks like `Not_A Brand`, `Not)A;Brand` or ` Not A;Brand`:
+   deliberately varying punctuation and spacing release over release so a site
+   cannot hard-code one literal string. Stripping every non-letter and
+   lowercasing collapses all of those variants to the same "notabrand", which
+   is the only check narrow enough to catch the family without also matching
+   a real brand name that happens to contain those letters. */
+function isGreaseBrand(name) {
+  return /^notabrand$/i.test(String(name || '').replace(/[^a-zA-Z]/g, ''));
+}
+
+/* Filters GREASE, then prefers a brand that is not literally "Chromium":
+   Brave, Edge and the rest all carry a genuine "Chromium" entry alongside
+   their own name (they ARE Chromium), so picking the first survivor without
+   this preference would report the engine name on every one of them and
+   never the brand. Only when nothing but Chromium (and GREASE) survives does
+   Chromium become the honest answer, because at that point it is all the
+   array actually says. */
+function brandFromUaBrands(brands) {
+  if (!Array.isArray(brands)) return null;
+  var real = brands.filter(function (b) { return b && b.brand && !isGreaseBrand(b.brand); });
+  if (!real.length) return null;
+  var nonChromium = real.filter(function (b) { return b.brand !== 'Chromium'; });
+  var pick = nonChromium[0] || real[0];
+  return { name: pick.brand, version: pick.version };
+}
+
+/* PURE and testable without launching anything: given a binary path and a
+   `userAgentData.brands` array (or null, for an engine/build with no Client
+   Hints support at all), returns both readings plus the decisive call.
+   Exported below as `brandOf`. */
+function brandOf(binPath, uaBrands) {
+  var fromPath = brandFromPath(binPath);
+  var fromUaObj = brandFromUaBrands(uaBrands);
+  var fromUa = fromUaObj ? fromUaObj.name : null;
+  return {
+    // The decisive name. Path first (see file-header note), UA as a fallback
+    // for a binary path this file's pattern list does not recognise, and
+    // 'unknown' rather than a guess when neither signal resolved anything.
+    brand: fromPath || fromUa || 'unknown',
+    fromPath: fromPath,
+    fromUa: fromUa,
+    uaVersion: fromUaObj ? fromUaObj.version : null,
+    // false whenever either side is missing, not just when they conflict:
+    // "agreement" should mean both signals were checked and matched.
+    agree: !!(fromPath && fromUa && fromPath.toLowerCase() === fromUa.toLowerCase())
+  };
+}
+
+/* `--version` on the actual binary is the most direct evidence available (for
+   Brave, measured: `Brave Browser 153.1.95.102`) and is used as-is rather than
+   reparsed, since re-deriving a product name from it would just be a second,
+   worse brandFromPath. Wrapped in try/catch with a short timeout: a build that
+   does not support `--version`, or one that is slow to answer under whatever
+   invoked this gate, degrades to no product string rather than hanging the
+   whole check or throwing past its caller. */
+function captureProductVersion(bin) {
+  try {
+    return childProcess.execFileSync(bin, ['--version'], { timeout: 3000, encoding: 'utf8' }).trim();
+  } catch (e) {
+    return null;
+  }
+}
+
+/* One line a check can print as-is that states the brand AND flags the engine
+   string for what it is, so a reader never again mistakes Chrome/153.x for
+   the browser's name. Shape: "Brave Browser 153.1.95.102  [engine
+   Chrome/153.0.8010.48, /usr/bin/brave]", or, on a path/UA disagreement,
+   the same line with both readings named rather than one silently dropped. */
+function buildLabel(brandInfo, productVersion, engineVersion, binPath) {
+  var head = productVersion ||
+    (brandInfo.brand === 'unknown' ? 'Unknown browser' : brandInfo.brand);
+  var disagreement = (brandInfo.fromPath && brandInfo.fromUa && !brandInfo.agree)
+    ? ' (binary path says ' + brandInfo.fromPath + ', browser reports ' + brandInfo.fromUa + ')'
+    : '';
+  return head + disagreement + '  [engine ' + engineVersion + ', ' + binPath + ']';
 }
 
 /* Opens a page and returns a small handle. Throws a NotChecked-tagged error
@@ -92,6 +349,34 @@ async function open(url, opts) {
   }
 
   var port = opts.port || 9377;
+
+  /* A fresh, isolated --user-data-dir on every launch. Before this, the
+     browser was spawned with NO profile flag at all, which means headless
+     Chrome/Brave attaches to the CALLER'S REAL, DEFAULT profile directory:
+     this gate has been driving the user's live browser profile on every run.
+
+     That is not just a hygiene problem, it is the root cause of a download
+     defect measured with a 6-trial controlled probe (one variable changed at
+     a time): a shared profile makes EVERY download transfer fully to
+     `inProgress 100%` and then flip to `canceled` at the moment Chrome tries
+     to commit the file, regardless of headless mode (`--headless` vs
+     `--headless=new`) or download mechanism (blob vs. HTTP with
+     Content-Disposition): both varied independently and neither moved the
+     result. A fresh --user-data-dir, and only that variable, changed 0/3 to
+     3/3 completed. The mechanism is the user's live Brave process holding the
+     profile's `SingletonLock`; a second Chromium instance pointed at the same
+     profile is allowed to browse but is not trusted to finish writing a file
+     into it. Download path (`/tmp`, a `~/Downloads` subdirectory, or
+     `~/Downloads` itself) made no difference, nor did the absence of any
+     Brave `DownloadRestrictions` policy on this host: both were checked and
+     ruled out before the profile was identified as decisive.
+
+     Removed in close() once every process using it has actually exited (see
+     removeProfileDirWhenSafe() above for why that check is not as simple as
+     it sounds). `--no-first-run` and `--no-default-browser-check` suppress
+     the first-launch prompts a brand new profile would otherwise show,
+     which this gate never has a UI able to dismiss. */
+  var profileDir = fs.mkdtempSync(path.join(os.tmpdir(), 'hl-cdp-profile-'));
   var proc = childProcess.spawn(bin, [
     '--headless',
     '--disable-gpu',
@@ -101,6 +386,9 @@ async function open(url, opts) {
     '--window-size=' + (opts.width || 1280) + ',' + (opts.height || 1400),
     '--remote-debugging-port=' + port,
     '--remote-allow-origins=*',
+    '--user-data-dir=' + profileDir,
+    '--no-first-run',
+    '--no-default-browser-check',
     'about:blank'
   ], { stdio: 'ignore' });
 
@@ -124,15 +412,77 @@ async function open(url, opts) {
   var pending = {};
   var networkUrls = [];
   var consoleErrors = [];
+
+  /* Richer records, added alongside the two arrays above rather than in
+     place of them. `consoleErrors()` and `networkUrls()` are depended on
+     elsewhere (check-browser-wire.js `.join(' | ')`s the former; multiple
+     checks read the latter) and both MUST keep returning plain strings:
+     breaking that shape is a regression, not an enhancement. The detail
+     below is new, additive surface for a caller that wants the URL a
+     failure actually belongs to instead of just its text. */
+  var reqUrlById = {};
+  var networkFailures = [];
+  var consoleErrorDetails = [];
+  // Download lifecycle, keyed by CDP's own guid. See armDownloads() below for
+  // how a caller reads "the browser canceled it" out of this.
+  var downloadLog = [];
+
   ws.on('message', function (raw) {
     var m = JSON.parse(raw.toString());
     if (m.id && pending[m.id]) { pending[m.id](m); delete pending[m.id]; return; }
-    if (m.method === 'Network.requestWillBeSent') networkUrls.push(m.params.request.url);
+    if (m.method === 'Network.requestWillBeSent') {
+      networkUrls.push(m.params.request.url);
+      // Kept so a later loadingFailed for this requestId can be joined back
+      // to the URL it belongs to: the event itself does not carry one.
+      reqUrlById[m.params.requestId] = m.params.request.url;
+    }
+    if (m.method === 'Network.loadingFailed') {
+      networkFailures.push({
+        url: reqUrlById[m.params.requestId] || null,
+        errorText: m.params.errorText,
+        blockedReason: m.params.blockedReason || null,
+        type: m.params.type || null
+      });
+    }
     if (m.method === 'Runtime.exceptionThrown') {
-      consoleErrors.push(m.params.exceptionDetails.text || 'exception');
+      var excText = m.params.exceptionDetails.text || 'exception';
+      consoleErrors.push(excText);
+      // No URL on a thrown exception's own event; recorded null rather than
+      // guessed at, honestly, from something adjacent like the page URL.
+      consoleErrorDetails.push({ text: excText, url: null, source: 'exception' });
     }
     if (m.method === 'Log.entryAdded' && m.params.entry.level === 'error') {
       consoleErrors.push(m.params.entry.text);
+      // Log.entryAdded already carries the entry's OWN url; use it rather
+      // than the page's URL, since a console error from a loaded script
+      // legitimately points at that script, not at the document.
+      consoleErrorDetails.push({
+        text: m.params.entry.text,
+        url: m.params.entry.url || null,
+        source: m.params.entry.source || 'log'
+      });
+    }
+    if (m.method === 'Browser.downloadWillBegin') {
+      downloadLog.push({
+        guid: m.params.guid, url: m.params.url,
+        filename: m.params.suggestedFilename, state: 'pending'
+      });
+    }
+    if (m.method === 'Browser.downloadProgress') {
+      var rec = null;
+      for (var di = 0; di < downloadLog.length; di++) {
+        if (downloadLog[di].guid === m.params.guid) { rec = downloadLog[di]; break; }
+      }
+      if (!rec) {
+        // downloadProgress arrived without a matching downloadWillBegin (seen
+        // when the willBegin race loses to the first progress tick); record
+        // it anyway rather than dropping the state transition on the floor.
+        rec = { guid: m.params.guid, url: null, filename: null, state: null };
+        downloadLog.push(rec);
+      }
+      rec.state = m.params.state;
+      rec.totalBytes = m.params.totalBytes;
+      rec.receivedBytes = m.params.receivedBytes;
     }
   });
   await new Promise(function (r) { ws.on('open', r); });
@@ -163,9 +513,46 @@ async function open(url, opts) {
     return r.result.result.value;
   }
 
+  /* Brand identification, gathered once at open() time rather than lazily,
+     since it needs a live page to read `navigator.userAgentData` from and
+     every caller wants it printed up front (see the checks that log
+     `page.version` as their first line). `evaluate` is a hoisted function
+     declaration, callable here even though its own definition sits above:
+     see the ordinary JS scoping rule, not a special case for this file. */
+  var uaBrandsRaw = null;
+  try {
+    uaBrandsRaw = await evaluate(
+      '(navigator.userAgentData && navigator.userAgentData.brands) ? ' +
+      'navigator.userAgentData.brands : null'
+    );
+  } catch (evalErr) {
+    // No Client Hints support (or the page threw evaluating it) is a fact
+    // about the engine, not a reason to fail brand identification outright;
+    // brandOf() falls back to the binary path alone.
+    uaBrandsRaw = null;
+  }
+  var productVersion = captureProductVersion(bin);
+  var brandInfo = brandOf(bin, uaBrandsRaw);
+  var brandLabel = buildLabel(brandInfo, productVersion, up.Browser, bin);
+
   return {
+    // KEPT EXACTLY AS-IS: the raw `/json/version` Browser string. Three
+    // checks print it and one lane depends on it. This is the CHROMIUM
+    // ENGINE version, not the brand: see brand / label below for the name.
     version: up.Browser,
     binary: bin,
+    // The decisive brand name ('Brave', 'Chrome', 'Chromium', 'unknown', ...).
+    brand: brandInfo.brand,
+    // Both raw readings, so a disagreement is visible rather than resolved
+    // silently in one direction.
+    brandFromPath: brandInfo.fromPath,
+    brandFromUa: brandInfo.fromUa,
+    brandAgree: brandInfo.agree,
+    // Raw trimmed `--version` output, or null if it could not be captured.
+    productVersion: productVersion,
+    // Ready to print as-is: e.g. "Brave Browser 153.1.95.102  [engine
+    // Chrome/153.0.8010.48, /usr/bin/brave]".
+    label: brandLabel,
     send: send,
     evaluate: evaluate,
     // Evaluate and parse, so a check can pull a whole object in one round trip.
@@ -280,7 +667,7 @@ async function open(url, opts) {
          So: settle, and if the target has moved, scroll again to correct for
          the drift, before trusting the landing check that follows. Bounded at
          5 rounds (~1s worst case) rather than open-ended, and it gives up as
-         soon as position stops changing — a target that has stopped moving
+         soon as position stops changing: a target that has stopped moving
          but is still off-target is genuinely covered or off-screen, not
          mid-settle, and no amount of re-scrolling will fix that. */
       for (var round = 0; round < 5 && !pt.onTarget; round++) {
@@ -350,6 +737,11 @@ async function open(url, opts) {
          either: the file Chrome just wrote is still held and the unlink fails. */
       dir = path.resolve(dir);
       fs.mkdirSync(dir, { recursive: true });
+      // Boundary for canceled(): only downloads that started at or after THIS
+      // arm belong to this call, so a second armDownloads() in the same page
+      // session (see check-browser-downloads.js's nextDl()) never reports a
+      // previous download's cancellation as its own.
+      var startLen = downloadLog.length;
       await send('Browser.setDownloadBehavior', {
         behavior: 'allow', downloadPath: dir, eventsEnabled: true
       });
@@ -401,6 +793,23 @@ async function open(url, opts) {
             }
             await sleep(150);
           }
+        },
+        /* Distinguishes "the browser refused a download that started" from
+           "the page never triggered one": two failures that look identical
+           to waitNew() (both return zero files) but mean opposite things
+           about what to report. A `Browser.downloadProgress` event reaching
+           state 'canceled' means Chrome/Brave itself walked a transfer back
+           after starting it: the measured shared-profile SingletonLock
+           defect this file's constructor comment describes is exactly this
+           shape: inProgress 100% then canceled at commit. That is an
+           environment failure, not evidence against the page, and a caller
+           seeing it here should report NOT CHECKED rather than FAIL. An empty
+           array here with zero files from waitNew() means no download was
+           even attempted, which IS a page-side finding worth failing on. */
+        canceled: function () {
+          return downloadLog.slice(startLen)
+            .filter(function (d) { return d.state === 'canceled'; })
+            .map(function (d) { return { guid: d.guid, url: d.url, filename: d.filename }; });
         }
       };
     },
@@ -412,8 +821,33 @@ async function open(url, opts) {
     },
     networkUrls: function () { return networkUrls.slice(); },
     consoleErrors: function () { return consoleErrors.slice(); },
-    close: function () { try { ws.close(); } catch (e) { /* already gone */ } proc.kill(); }
+    // New, additive accessors: rich records instead of plain strings. Added
+    // because the plain-string form throws away the URL a failure belongs
+    // to, and a check chasing down a console error or a failed request has
+    // no way to say WHERE it came from without it.
+    networkFailures: function () { return networkFailures.slice(); },
+    consoleErrorDetails: function () { return consoleErrorDetails.slice(); },
+    close: function () {
+      try { ws.close(); } catch (e) { /* already gone */ }
+      try { proc.kill(); } catch (e) { /* already gone */ }
+      // See removeProfileDirWhenSafe() above: this is still synchronous and
+      // still best-effort in EFFECT (it never throws past the caller), but
+      // it no longer races proc.kill() against the browser's own shutdown,
+      // and a removal that genuinely cannot happen is now logged rather
+      // than swallowed.
+      removeProfileDirWhenSafe(profileDir);
+    }
   };
 }
 
-module.exports = { open: open, findBrowser: findBrowser, sleep: sleep };
+module.exports = {
+  open: open,
+  findBrowser: findBrowser,
+  sleep: sleep,
+  brandOf: brandOf,
+  // Test-only surface for the profile-cleanup race fixed 2026-09-22 (see
+  // removeProfileDirWhenSafe's own comment above): exported so the wait/remove
+  // and wait/give-up paths can be exercised directly against a real short-lived
+  // marker process, without spawning an actual browser.
+  removeProfileDirWhenSafe: removeProfileDirWhenSafe
+};

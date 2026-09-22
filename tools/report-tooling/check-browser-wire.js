@@ -114,7 +114,8 @@ async function main() {
     throw e;
   }
 
-  console.log('browser: ' + page.version);
+  // Brand, not just the Chromium engine string. See check-browser-report.js.
+  console.log('browser: ' + page.label);
   console.log('corpus:  ' + built.rows + ' rows over ' + built.days.length +
     ' days (' + first + ' .. ' + last + '), busiest ' + busiest + '=' +
     built.dayCounts[busiest] + ', quiet day ' + (quiet || 'none'));

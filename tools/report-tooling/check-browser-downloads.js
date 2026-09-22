@@ -113,6 +113,40 @@ function pickDetections() {
 }
 function pickFeed() { return T.pickFeed(loadYaml('ioc_tables.yml')); }
 
+/* Zero files on disk has TWO OPPOSITE CAUSES and they must not share a verdict.
+
+   If the browser CANCELED a transfer it had already started, nothing was
+   learned about the page: the measured case is a headless browser sharing a
+   profile directory with a running one, where every download reaches 100% and
+   is then walked back at commit. That is an environment failure and reports
+   NOT CHECKED with the reason named.
+
+   If no download was ever attempted, the page did not deliver what it claims
+   to, and that IS a finding worth failing on.
+
+   Before this split, both rendered as `FAIL ... NOTHING ARRIVED on disk`, which
+   says nothing about the site and invites someone to go looking for a bug in
+   the page. See homelab-soc/docs/gate-honesty-contract.md. */
+function delivered(name, files, want, dl, subject) {
+  if (files.length === want) {
+    check(name, true, files.map(function (f) { return f.name; }).join(', '));
+    return true;
+  }
+  var killed = dl.canceled();
+  if (!files.length && killed.length) {
+    skip(name + ' (the browser canceled the download)',
+      killed.length + ' download(s) started and were canceled by the browser before ' +
+      'landing: ' + killed.map(function (c) { return c.filename || c.guid; }).join(', ') +
+      '. An environment failure, so this says nothing about ' + subject + '.');
+    return false;
+  }
+  check(name, false, files.length
+    ? files.map(function (f) { return f.name; }).join(', ') + ' (expected ' + want + ')'
+    : 'NOTHING ARRIVED on disk, and the browser canceled nothing, so the page ' +
+      'never started a download');
+  return false;
+}
+
 async function main() {
   var keepDir = null;
   var ki = process.argv.indexOf('--keep');
@@ -155,7 +189,8 @@ async function main() {
     if (e.notChecked) notChecked(e.message);
     throw e;
   }
-  console.log('browser: ' + page.version);
+  // Brand, not just the Chromium engine string. See check-browser-report.js.
+  console.log('browser: ' + page.label);
   console.log('downloads: ' + dlDir);
   console.log('');
 
@@ -202,9 +237,8 @@ async function main() {
         await page.click('.hl-picker__btn[data-act="dl"]');
         var files = await dl.waitNew(beforeDl, 1, 8000);
 
-        check('a real click delivers exactly one engine-native file',
-          files.length === 1, files.length ? files.map(function (f) { return f.name; }).join(', ')
-            : 'NOTHING ARRIVED on disk');
+        delivered('a real click delivers exactly one engine-native file',
+          files, 1, dl, 'the detection picker');
 
         if (files.length) {
           var want = det.key.replace(/-detections$/, '') + '-' + det.pick.engine + EXT[det.pick.engine];
@@ -310,8 +344,7 @@ async function main() {
         var beforeCsv = dl.snapshot();
         await page.click('.hl-ioctable__btn[data-act="csv"]');
         var csvFiles = await dl.waitNew(beforeCsv, 1, 8000);
-        check('a real click delivers a CSV file',
-          csvFiles.length === 1, csvFiles.map(function (f) { return f.name; }).join(', ') || 'NOTHING ARRIVED');
+        delivered('a real click delivers a CSV file', csvFiles, 1, dl, 'the feed viewer');
 
         if (csvFiles.length) {
           check('the CSV is named for the feed',
@@ -340,8 +373,7 @@ async function main() {
         var beforeTxt = dl.snapshot();
         await page.click('.hl-ioctable__btn[data-act="txt"]');
         var txtFiles = await dl.waitNew(beforeTxt, 1, 8000);
-        check('a real click delivers a TXT file',
-          txtFiles.length === 1, txtFiles.map(function (f) { return f.name; }).join(', ') || 'NOTHING ARRIVED');
+        delivered('a real click delivers a TXT file', txtFiles, 1, dl, 'the feed viewer');
 
         if (txtFiles.length) {
           var txtLines = txtFiles[0].content.replace(/\s+$/, '').split(/\r?\n/)

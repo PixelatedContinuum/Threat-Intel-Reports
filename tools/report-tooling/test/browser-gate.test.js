@@ -14,6 +14,10 @@
 
 var test = require('node:test');
 var assert = require('node:assert');
+var fs = require('node:fs');
+var os = require('node:os');
+var path = require('node:path');
+var childProcess = require('node:child_process');
 var CDP = require('../lib/cdp.js');
 var WH = require('../lib/wire-harness.js');
 var JSDOM = require('jsdom').JSDOM;
@@ -62,6 +66,134 @@ test('open() throws a NOT CHECKED error rather than failing, when no browser exi
   } finally {
     if (saved === undefined) delete process.env.HL_CHROME;
     else process.env.HL_CHROME = saved;
+  }
+});
+
+/* ---- brandOf: naming the browser by BRAND, not just the Chromium engine ----
+
+   Pure and testable without launching anything, per the file's own comment:
+   these exercise brandFromPath / brandFromUaBrands / brandOf directly, on
+   binary-path strings and a userAgentData.brands array, exactly the shape
+   check-browser-wire.js and check-browser-downloads.js already print
+   page.version + page.label for. Nothing here spawns a browser: see the
+   file header above for why that boundary is deliberate. */
+
+// The array measured 2026-09-22 via CDP against the workstation's real Brave.
+var BRAVE_UA_BRANDS = [
+  { brand: 'Brave', version: '153' },
+  { brand: 'Not_A Brand', version: '8' },
+  { brand: 'Chromium', version: '153' }
+];
+
+test('a Brave binary path is named Brave', function () {
+  assert.equal(CDP.brandOf('/usr/bin/brave', null).brand, 'Brave');
+  assert.equal(CDP.brandOf('/opt/brave-bin/brave', null).brand, 'Brave');
+});
+
+test('a google-chrome path is named Chrome, never Brave or Chromium', function () {
+  var r = CDP.brandOf('/usr/bin/google-chrome', null);
+  assert.equal(r.brand, 'Chrome');
+  assert.notEqual(r.brand, 'Brave');
+  assert.notEqual(r.brand, 'Chromium');
+});
+
+test('a bare chromium path is named Chromium', function () {
+  assert.equal(CDP.brandOf('/usr/bin/chromium', null).brand, 'Chromium');
+});
+
+test('the measured Brave userAgentData.brands array names Brave, GREASE filtered, Chromium not winning', function () {
+  // Path deliberately withheld (null) to isolate what the UA-brands reading
+  // alone resolves to.
+  var r = CDP.brandOf(null, BRAVE_UA_BRANDS);
+  assert.equal(r.fromUa, 'Brave');
+  assert.equal(r.brand, 'Brave');
+});
+
+test('a brands array carrying only Chromium and GREASE resolves to Chromium', function () {
+  var r = CDP.brandOf(null, [
+    { brand: 'Chromium', version: '153' },
+    { brand: 'Not_A Brand', version: '8' }
+  ]);
+  assert.equal(r.fromUa, 'Chromium');
+  assert.equal(r.brand, 'Chromium');
+});
+
+test('path and UA disagreeing reports BOTH, neither silently dropped', function () {
+  // A Chrome-named binary somehow reporting Brave's own UA brands: contrived,
+  // but exactly the shape a caller must not resolve by picking one side.
+  var r = CDP.brandOf('/usr/bin/google-chrome', BRAVE_UA_BRANDS);
+  assert.equal(r.fromPath, 'Chrome', 'the path reading must survive');
+  assert.equal(r.fromUa, 'Brave', 'the UA reading must survive');
+  assert.equal(r.agree, false);
+  // The binary path is decisive per the file's own doctrine.
+  assert.equal(r.brand, 'Chrome');
+});
+
+test('a path matching no known brand does not crash and reports unknown honestly', function () {
+  assert.doesNotThrow(function () { CDP.brandOf('/usr/bin/mystery-browser', null); });
+  var r = CDP.brandOf('/usr/bin/mystery-browser', null);
+  assert.equal(r.fromPath, null);
+  assert.equal(r.fromUa, null);
+  assert.equal(r.brand, 'unknown');
+});
+
+/* ---- removeProfileDirWhenSafe: the --user-data-dir cleanup race, fixed 2026-09-22 ----
+
+   Real bug, real regression cover, no browser needed. The defect measured
+   2026-09-22 (see the function's own comment in lib/cdp.js) was never that
+   rmSync failed; it raced a process that had been told to exit but had not
+   actually stopped running yet. These tests reproduce that exact shape with
+   a real, short-lived marker process standing in for the browser -- `sleep`,
+   given the target directory's own path as one of its arguments so
+   `pgrep -f <dir>` genuinely matches it while it runs -- rather than mocking
+   anything, so what is exercised is the real wait loop against a real
+   process the kernel actually schedules. */
+
+function markerFor(dir, seconds) {
+  /* `sh -c "sleep <seconds>; : <dir>"`, not `sleep <seconds> <dir>`.
+
+     GNU `sleep` treats every argument as a NUMBER to add to the total delay,
+     so a second, non-numeric argument makes it exit immediately with
+     "invalid time interval" instead of running for `seconds` -- measured
+     directly after this test first failed for the wrong reason (the
+     directory really was removed, because the "still-running" marker had
+     already exited by the time the check ran).
+
+     Routing the directory's path through a no-op `sh` command instead keeps
+     it in `sh`'s OWN argv for the process's whole lifetime -- `sh` blocks on
+     its `sleep` child for the full duration before it ever reaches the
+     `: <dir>` no-op -- which is exactly what `pgrep -f <dir>` needs to match
+     against, without changing how long the marker actually runs. */
+  return childProcess.spawn('/bin/sh', ['-c', 'sleep ' + seconds + '; : ' + dir], { stdio: 'ignore' });
+}
+
+test('the directory is removed once the process using it has actually exited', function () {
+  var dir = fs.mkdtempSync(path.join(os.tmpdir(), 'hl-cdp-profile-test-'));
+  var marker = markerFor(dir, 0.1);
+  var t0 = Date.now();
+  CDP.removeProfileDirWhenSafe(dir);
+  var elapsed = Date.now() - t0;
+  assert.equal(fs.existsSync(dir), false, 'directory should be gone once the process exited');
+  // Loose bound: must not have removed instantly (that would mean it never
+  // waited at all), and must not have burned anywhere near the 2s deadline
+  // for a process that only ran 100ms.
+  assert.ok(elapsed < 1000, 'should not fall through to the full deadline: took ' + elapsed + 'ms');
+  marker.kill(); // already exited; best-effort, mirrors production's own style
+});
+
+test('a still-running process blocks removal, and the directory is left in place at the deadline', function () {
+  var dir = fs.mkdtempSync(path.join(os.tmpdir(), 'hl-cdp-profile-test-'));
+  var marker = markerFor(dir, 5); // deliberately outlives the short deadline below
+  try {
+    var t0 = Date.now();
+    CDP.removeProfileDirWhenSafe(dir, { deadlineMs: 80 });
+    var elapsed = Date.now() - t0;
+    assert.ok(elapsed >= 80, 'should have actually waited out the deadline: took ' + elapsed + 'ms');
+    assert.equal(fs.existsSync(dir), true,
+      'must NOT remove a directory a process is still using, even after giving up on waiting');
+  } finally {
+    marker.kill();
+    fs.rmSync(dir, { recursive: true, force: true });
   }
 });
 
