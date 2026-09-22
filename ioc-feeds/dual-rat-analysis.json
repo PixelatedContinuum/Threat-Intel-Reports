@@ -251,11 +251,13 @@
   "hunt_only_never_block": [
     {
       "value": "ipwho.is",
-      "category": "ip lookup service"
+      "category": "ip lookup service",
+      "context": "A free, public IP-lookup service the implant calls to verify internet connectivity and discover the victim host's external IP address before contacting C2. The service is general-purpose and is queried by a very large number of unrelated legitimate applications; blocking it breaks those and does not impede the operator, who can substitute any of dozens of equivalent endpoints. Hunt for the lookup followed minutes later by an outbound connection to a fixed C2 address, not for the destination on its own."
     },
     {
       "value": "api.ipify.org",
-      "category": "ip lookup service"
+      "category": "ip lookup service",
+      "context": "The backup for the lookup above, called immediately after it as part of the same pre-beacon reconnaissance step. ipify is a widely embedded public utility API, so the destination carries no operator signal by itself; what is distinctive is an unattended process making both lookups in sequence and then opening an encrypted connection to a fixed C2 address roughly four minutes later."
     }
   ]
 }

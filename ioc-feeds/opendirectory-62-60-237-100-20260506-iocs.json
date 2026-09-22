@@ -1095,7 +1095,8 @@
     },
     {
       "value": "23.106.161.1",
-      "category": "author-marked never-block"
+      "category": "author-marked never-block",
+      "context": "Appears only embedded in the CAB filename '1468_US_23.106.161.1_28-01-26.cab', which follows the kit's per-victim customization pattern, and resolves to a Synology QuickConnect / Leaseweb VPN address on AS7203. It is more likely the victim or an unrelated third party than operator infrastructure, held at LOW confidence, and the UNC5267 cluster overlap on it is incidental. Do not block it at the perimeter without independent verification; treat it as a host to investigate, not an address to deny."
     }
   ]
 }

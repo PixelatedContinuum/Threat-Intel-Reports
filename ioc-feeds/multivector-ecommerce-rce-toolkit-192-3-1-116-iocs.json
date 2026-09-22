@@ -504,7 +504,8 @@
   "hunt_only_never_block": [
     {
       "value": "open.oppomobile.com",
-      "category": "vendor download"
+      "category": "vendor download",
+      "context": "A major smartphone OEM's legitimate developer platform, targeted by the toolkit's own oppo_om_fuzz.py script (31x31 service/method API fuzzing plus JavaScript secret-hunting against its downloaded bundles). The malicious activity is the outbound fuzzing traffic, not the destination; blocking this domain would cut off legitimate OPPO developers and devices worldwide rather than the operator."
     },
     {
       "value": "31.22.111.190",

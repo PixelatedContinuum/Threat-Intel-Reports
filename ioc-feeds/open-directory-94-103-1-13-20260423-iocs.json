@@ -913,11 +913,13 @@
   "hunt_only_never_block": [
     {
       "value": "172.86.76.198",
-      "category": "author-marked never-block"
+      "category": "author-marked never-block",
+      "context": "Hit by the OTP brute-force scripts (otp2.py / otp_brute.py) on AS14956 RouterHosting LLC (UAE), but the direction of that traffic could not be resolved from static analysis: it is LOW confidence operator-controlled, and could equally be the targeted application itself. Blocking it risks blocking the victim, not the operator."
     },
     {
       "value": "dhost.su",
-      "category": "author-marked never-block"
+      "category": "author-marked never-block",
+      "context": "The staging ASN's own self-domain, served via BEGET-SU, a well-known low-cost Russian hosting registrar. It resolves clean on VirusTotal (0/94) because it is the provider's own infrastructure, not operator-malicious content; blocking it would hit BEGET-SU's unrelated customer base rather than this operator."
     },
     {
       "value": "http://172.86.76.198:3000/api/auth/verify-otp",
@@ -926,19 +928,23 @@
     },
     {
       "value": "85.238.98.37",
-      "category": "author-marked never-block"
+      "category": "author-marked never-block",
+      "context": "A SnipeIT asset-management host in Odessa, Ukraine, one of seven addresses the operator's own exploit scripts probe as targets rather than infrastructure the operator controls. It is a victim/target host, not operator C2; do not block it, hunt it for signs of compromise."
     },
     {
       "value": "178.20.159.99",
-      "category": "author-marked never-block"
+      "category": "author-marked never-block",
+      "context": "A Verkhovyna SIP PBX in Ukraine, one of seven addresses the operator's own exploit scripts probe as targets rather than infrastructure the operator controls. It is a victim/target host, not operator C2; do not block it, hunt it for signs of compromise."
     },
     {
       "value": "185.237.218.100",
-      "category": "author-marked never-block"
+      "category": "author-marked never-block",
+      "context": "An Exim MTA on RU shared hosting, one of seven addresses the operator's own exploit scripts probe as targets rather than infrastructure the operator controls. It is a victim/target host, not operator C2; do not block it, hunt it for signs of compromise."
     },
     {
       "value": "192.227.113.124",
-      "category": "author-marked never-block"
+      "category": "author-marked never-block",
+      "context": "A CGMiner RPC endpoint in the US (Cloud South), one of seven addresses the operator's own exploit scripts probe as targets rather than infrastructure the operator controls. It is a victim/target host, not operator C2; do not block it, hunt it for signs of compromise."
     },
     {
       "value": "37.17.245.209",

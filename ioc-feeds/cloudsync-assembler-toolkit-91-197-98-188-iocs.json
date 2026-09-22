@@ -440,7 +440,8 @@
     },
     {
       "value": "hopto.org",
-      "category": "dynamic dns provider"
+      "category": "dynamic dns provider",
+      "context": "A shared dynamic-DNS apex used by many unrelated subscribers. It surfaces here only as prior-tenant passive-DNS residue (alongside aka1.hopto.org) on the recycled C2 IP, predating the operator's 2026-03-13 allocation of that address, and is excluded as unrelated noise rather than treated as operator infrastructure."
     }
   ]
 }
