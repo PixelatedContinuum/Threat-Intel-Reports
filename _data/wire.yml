@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-22T14:01:32Z
+generated_at: 2026-09-22T16:00:57Z
 window_days: 30
 counts:
-  total: 528
-  research: 181
+  total: 529
+  research: 182
   news: 347
 unclassified_sources:
   - "The DFIR Report"
@@ -69,6 +69,7 @@ label_colors:
   "adobe": 1
   "adobe commerce": 12
   "adversary infrastructure": 12
+  "adversary-in-the-middle (aitm)": 1
   "adware disguise": 5
   "aerospace": 7
   "aesto health": 6
@@ -463,6 +464,18 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 11
 items:
+  - title: "Unmasking EvilTokens: Getting to the root of device code phishing"
+    url: "https://www.microsoft.com/en-us/security/blog/2026/09/22/unmasking-eviltokens-getting-to-the-root-of-device-code-phishing/"
+    source: "Microsoft"
+    date: 2026-09-22T15:00:00Z
+    kind: research
+    labels: ["adversary-in-the-middle (aitm)", "phishing"]
+  - title: "EvilTokens PhaaS disrupted after compromising 12,000 Microsoft accounts"
+    url: "https://www.bleepingcomputer.com/news/security/eviltokens-phaas-disrupted-after-compromising-12-000-microsoft-accounts/"
+    source: "BleepingComputer"
+    date: 2026-09-22T15:00:00Z
+    kind: news
+    labels: []
   - title: "Nightmare Eclipse Drops New Microsoft Defender Exploit After Revealing Identity"
     url: "https://www.securityweek.com/nightmare-eclipse-drops-new-microsoft-defender-exploit-after-revealing-identity/"
     source: "SecurityWeek"
@@ -3625,9 +3638,3 @@ items:
     date: 2026-08-24T00:00:00Z
     kind: research
     labels: ["security-labs"]
-  - title: "ToxicPanda Android malware uses VPN permissions to block Google Play"
-    url: "https://www.bleepingcomputer.com/news/security/toxicpanda-android-malware-uses-vpn-permissions-to-block-google-play/"
-    source: "BleepingComputer"
-    date: 2026-08-23T14:23:46Z
-    kind: news
-    labels: ["mobile"]
