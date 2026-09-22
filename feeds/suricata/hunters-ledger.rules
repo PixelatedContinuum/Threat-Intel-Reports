@@ -1,6 +1,6 @@
 # Hunters Ledger - consolidated Suricata detection feed
 # https://the-hunters-ledger.com/  |  License: CC BY 4.0
-# 112 rules from 35 campaigns. SIDs are STABLE across rebuilds (persistent
+# 116 rules from 36 campaigns. SIDs are STABLE across rebuilds (persistent
 # sid-map.json; allocated block 3500000-3509999 via sidallocation.org).
 # Above each rule: '# <campaign> (orig sid:N)', then annotation lines:
 #   TIER: Detection|Hunting  |  robustness N  |  confidence X
@@ -179,6 +179,25 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT GOCLOUD-Cryptojac
 #   rate-limited
 #   FP: Any traffic carrying the literal miner.sh|bash string, which is rare but possible in benign automation discussion or logs. Triage the flow direction...
 alert tcp any any -> any any (msg:"THL HUNT GOCLOUD-Cryptojacking Linux Miner Delivery One-Liner (miner.sh Piped To Bash)"; flow:established; content:"miner.sh|7c|bash"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:3500180; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-26, reference https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/;)
+# gotenberg-rce-cryptomining-107-175-69-137 (orig sid:1000001)
+#   TIER: Detection  |  robustness 3  |  confidence HIGH
+#   FP: Authorized security testing or red-team exercises sending the same proof-of-concept payload; otherwise unlikely, the anchor fires only on a POST to...
+alert http any any -> any any (msg:"THL DETECT Gotenberg-RCE ExifTool Metadata Key Injection Attempt (CVE-2026-42589 Exploitation Indicator)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/forms/pdfengines/metadata/write"; http.request_body; content:"|5c 6e 2d 69 66 5c 6e 73 79 73 74 65 6d 28|"; fast_pattern; reference:cve,2026-42589; classtype:attempted-admin; sid:3500202; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-16, reference https://the-hunters-ledger.com/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/;)
+# gotenberg-rce-cryptomining-107-175-69-137 (orig sid:1000002)
+#   TIER: Hunting  |  robustness 1  |  confidence MODERATE  |  BROAD - triage before alerting
+#   rate-limited
+#   FP: Any web application whose URI paths carry the underscore-delimited tag-host-uid shape (a segment of single-letter-prefixed digits, then a token, then...
+alert http $HOME_NET any -> any any (msg:"THL HUNT Gotenberg-RCE Tagged Out-of-Band Callback URI Shape (C2 Beacon Indicator)"; flow:established,to_server; http.uri; content:"_"; pcre:"/^\/(?:[TWCN]\d+|PPROBE\d+)_[^\/\s]+_\d+\/?$/"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:command-and-control; sid:3500203; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-16, reference https://the-hunters-ledger.com/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/;)
+# gotenberg-rce-cryptomining-107-175-69-137 (orig sid:1000003)
+#   TIER: Hunting  |  robustness 1  |  confidence HIGH THAT A HIT IS THIS TOOLKIT'S DEPLOY CHANNEL; THE LITERAL IS THE OPERATOR'S OWN VERDICT TOKEN, WRITTEN BY THEIR DEPLOY SCRIPT  |  BROAD - triage before alerting
+#   rate-limited
+#   FP: Some other application using the literal string MINER_OK in a request body, none known
+alert http $HOME_NET any -> any any (msg:"THL HUNT Gotenberg-RCE Miner Deploy Verdict Body MINER_OK (OOB Deploy-Callback Indicator)"; flow:established,to_server; http.request_body; content:"MINER_OK"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:command-and-control; sid:3500204; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-16, reference https://the-hunters-ledger.com/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/;)
+# gotenberg-rce-cryptomining-107-175-69-137 (orig sid:1000004)
+#   TIER: Hunting  |  robustness 1  |  confidence MODERATE  |  BROAD - triage before alerting
+#   rate-limited
+#   FP: Any application that posts a body containing both ===START=== and ===END=== literal markers, none known in ordinary traffic
+alert http $HOME_NET any -> any any (msg:"THL HUNT Gotenberg-RCE Command Output Body Markers START END (OOB Command-Output Indicator)"; flow:established,to_server; http.request_body; content:"===START==="; content:"===END==="; threshold:type limit,track by_src,count 1,seconds 3600; classtype:command-and-control; sid:3500205; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-16, reference https://the-hunters-ledger.com/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/;)
 # inkognito-russian-vpn-phishing-185-221-196-118-20260516 (orig sid:9001003)
 #   TIER: Hunting  |  robustness 2  |  confidence MODERATE  |  BROAD - triage before alerting
 #   rate-limited

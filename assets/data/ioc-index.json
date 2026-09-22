@@ -1,11 +1,11 @@
 {
- "generated_at": "2026-09-18T01:02:23Z",
+ "generated_at": "2026-09-22T17:54:23Z",
  "counts": {
-  "indicators": 2141,
-  "reports": 57,
+  "indicators": 2147,
+  "reports": 58,
   "multi_report": 147,
   "suppressed_benign": 129,
-  "never_block": 66
+  "never_block": 68
  },
  "coverage": {
   "indexed": [
@@ -37,6 +37,7 @@
    "fleetagentfud-exe.json",
    "ghost-cryptojacker-vova75rus-77.110.96.200-iocs.json",
    "gocloud-multiservice-cryptojacking-149-28-112-221-iocs.json",
+   "gotenberg-rce-cryptomining-107-175-69-137-iocs.json",
    "inkognito-russian-vpn-phishing-185-221-196-118-20260516-iocs.json",
    "kaido-quasar-rat-iocs.json",
    "korean-claude-openclaw-221.150.15.104-iocs.json",
@@ -67,9 +68,7 @@
    "webserver-compromise-kit-91-236-230-250-iocs.json",
    "webshells-to-the-cloud.json"
   ],
-  "embargoed": [
-   "gotenberg-rce-cryptomining-107-175-69-137-iocs.json"
-  ],
+  "embargoed": [],
   "unknown": [],
   "empty": []
  },
@@ -298,6 +297,14 @@
    "report_url": "/reports/gocloud-multiservice-cryptojacking-149-28-112-221/",
    "detection_url": "/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections",
    "ioc_url": "/ioc-feeds/gocloud-multiservice-cryptojacking-149-28-112-221-iocs.json"
+  },
+  "gotenberg-rce-cryptomining-107-175-69-137": {
+   "title": "Gotenberg CVE-2026-42589 Mass Exploitation and Cryptomining",
+   "date": "2026-09-16",
+   "severity": "high",
+   "report_url": "/reports/gotenberg-rce-cryptomining-107-175-69-137/",
+   "detection_url": "/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections",
+   "ioc_url": "/ioc-feeds/gotenberg-rce-cryptomining-107-175-69-137-iocs.json"
   },
   "inkognito-russian-vpn-phishing-185-221-196-118-20260516": {
    "title": "Inkognito Russian VPN/Phishing Operator (INK VPN / INK Lens)",
@@ -4292,6 +4299,40 @@
    {
     "report": "gocloud-multiservice-cryptojacking-149-28-112-221",
     "role": "fofa_api_key"
+   }
+  ],
+  "url:https://the-hunters-ledger.com/reports/gotenberg-rce-cryptomining-107-175-69-137/": [
+   {
+    "report": "gotenberg-rce-cryptomining-107-175-69-137"
+   }
+  ],
+  "ipv4:107.175.69.137": [
+   {
+    "report": "gotenberg-rce-cryptomining-107-175-69-137",
+    "role": "ipv4"
+   }
+  ],
+  "domain:systemd-polkitd.service": [
+   {
+    "report": "gotenberg-rce-cryptomining-107-175-69-137",
+    "role": "systemd_unit"
+   }
+  ],
+  "domain:systemd-vconsole-setup.service": [
+   {
+    "report": "gotenberg-rce-cryptomining-107-175-69-137",
+    "role": "Second unit shipped in the same miner package."
+   }
+  ],
+  "sha256:b20f39fc00d242e706b6c30367ad811c676e0575050a4ec2f30104b696944b49": [
+   {
+    "report": "gotenberg-rce-cryptomining-107-175-69-137",
+    "role": "sha256"
+   }
+  ],
+  "domain:nanachiapproved.cfd": [
+   {
+    "report": "gotenberg-rce-cryptomining-107-175-69-137"
    }
   ],
   "sha256:8a69fe67a7e9908aa1248c632ffd784033fc4dc613d0b5589279ccc62f717978": [
@@ -13157,6 +13198,16 @@
   "domain:bing.com": [
    {
     "report": "ghost-cryptojacker-vova75rus-77.110.96.200"
+   }
+  ],
+  "domain:vibecoders.vip": [
+   {
+    "report": "gotenberg-rce-cryptomining-107-175-69-137"
+   }
+  ],
+  "domain:dohwawazs.pro": [
+   {
+    "report": "gotenberg-rce-cryptomining-107-175-69-137"
    }
   ],
   "domain:open.oppomobile.com": [

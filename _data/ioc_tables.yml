@@ -3025,6 +3025,59 @@
       context: "Stock XMRig Windows miner (node 2)"
   never_block_total: 0
   never_block_rows:
+"gotenberg-rce-cryptomining-107-175-69-137":
+  slug: "gotenberg-rce-cryptomining-107-175-69-137"
+  page_url: "/ioc-feeds/gotenberg-rce-cryptomining-107-175-69-137/"
+  title: "Gotenberg CVE-2026-42589 Mass Exploitation and Cryptomining"
+  date: "2026-09-16"
+  severity: "high"
+  feed_url: "/ioc-feeds/gotenberg-rce-cryptomining-107-175-69-137-iocs.json"
+  report_url: "/reports/gotenberg-rce-cryptomining-107-175-69-137/"
+  detection_url: "/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections"
+  total: 9
+  untyped: 38
+  counts:
+    domain: 3
+    ipv4: 1
+    path: 3
+    sha256: 1
+    url: 1
+  rows:
+    - type: "ipv4"
+      value: "107.175.69.137"
+      context: null
+    - type: "domain"
+      value: "nanachiapproved.cfd"
+      context: null
+    - type: "domain"
+      value: "systemd-polkitd.service"
+      context: null
+    - type: "domain"
+      value: "systemd-vconsole-setup.service"
+      context: "Second unit shipped in the same miner package."
+    - type: "url"
+      value: "https://the-hunters-ledger.com/reports/gotenberg-rce-cryptomining-107-175-69-137/"
+      context: null
+    - type: "sha256"
+      value: "b20f39fc00d242e706b6c30367ad811c676e0575050a4ec2f30104b696944b49"
+      context: null
+    - type: "path"
+      value: "/home/gotenberg/.local/share/watchdog.sh"
+      context: null
+    - type: "path"
+      value: "/tmp/polkitd/"
+      context: null
+    - type: "path"
+      value: "/usr/bin/polkitd.d/"
+      context: null
+  never_block_total: 2
+  never_block_rows:
+    - type: "domain"
+      value: "dohwawazs.pro"
+      context: "No reason recorded in the feed"
+    - type: "domain"
+      value: "vibecoders.vip"
+      context: "No reason recorded in the feed"
 "inkognito-russian-vpn-phishing-185-221-196-118-20260516":
   slug: "inkognito-russian-vpn-phishing-185-221-196-118-20260516"
   page_url: "/ioc-feeds/inkognito-russian-vpn-phishing-185-221-196-118-20260516/"

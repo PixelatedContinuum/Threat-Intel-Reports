@@ -1,0 +1,366 @@
+{
+    "type": "bundle",
+    "id": "bundle--b8c490bc-5895-4556-b5d4-a81b4d5a66cd",
+    "objects": [
+        {
+            "type": "identity",
+            "spec_version": "2.1",
+            "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-22T17:51:17.325637Z",
+            "modified": "2026-09-22T17:51:17.325637Z",
+            "name": "The Hunters Ledger",
+            "identity_class": "organization"
+        },
+        {
+            "type": "marking-definition",
+            "spec_version": "2.1",
+            "id": "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9",
+            "created": "2017-01-20T00:00:00.000Z",
+            "definition_type": "tlp",
+            "name": "TLP:WHITE",
+            "definition": {
+                "tlp": "white"
+            }
+        },
+        {
+            "type": "domain-name",
+            "spec_version": "2.1",
+            "id": "domain-name--247a2c6e-c61a-537d-9dfd-62cfef233977",
+            "value": "gulf.moneroocean.stream:10032"
+        },
+        {
+            "type": "domain-name",
+            "spec_version": "2.1",
+            "id": "domain-name--aaf01f48-344f-59af-8456-f1eee6e73d7b",
+            "value": "ca.moneroocean.stream:10032"
+        },
+        {
+            "type": "domain-name",
+            "spec_version": "2.1",
+            "id": "domain-name--927dff86-f18b-51af-8576-c919c9cb410b",
+            "value": "vibecoders.vip"
+        },
+        {
+            "type": "domain-name",
+            "spec_version": "2.1",
+            "id": "domain-name--51bb3f02-9d79-5258-a249-b3be8bd12c66",
+            "value": "dohwawazs.pro"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--06bf1ad1-12f3-5810-bd37-8b124eacb736",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-22T17:51:17.333748Z",
+            "modified": "2026-09-22T17:51:17.333748Z",
+            "name": "Gotenberg ExifTool Metadata Key CVE-2026-42589 Injection Attempt",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Gotenberg ExifTool Metadata Key CVE-2026-42589 Injection Attempt\nid: 5c6643c6-b8b6-415c-b5b1-e14ab21125f9\nstatus: experimental\ndescription: >-\n    Detects an HTTP POST to a Gotenberg ExifTool metadata-write endpoint whose metadata JSON\n    key carries the JSON-escaped newline sequence \\n-if\\nsystem( , the wire-confirmed\n    signature of CVE-2026-42589 ExifTool argv-splitting RCE. Requires a telemetry source that\n    captures the raw HTTP request body (a reverse proxy, WAF, or network sensor forwarding\n    body content); Gotenberg's own application log does not record the metadata payload on a\n    request that parses as valid JSON, so this rule cannot run on that log.\nreferences:\n    - https://nvd.nist.gov/vuln/detail/CVE-2026-42589\n    - https://the-hunters-ledger.com/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/\nauthor: The Hunters Ledger\ndate: 2026-09-16\ntags:\n    - attack.initial-access\n    - attack.t1190\n    - stp.4\nlogsource:\n    category: webserver\n    definition: >-\n        Assumes a reverse proxy, WAF, or gateway in front of Gotenberg that logs the raw\n        request body, or a network sensor that forwards body content into a searchable field.\n        The payload anchor is a fieldless keyword selection that matches payload text in the\n        log message; the Sigma specification defines no native field for raw request-body\n        content in any supported logsource category, so the endpoint is identified by the\n        proxy/webserver fields and the payload by the free-text match.\ndetection:\n    selection_method:\n        cs-method: 'POST'\n    selection_uri:\n        cs-uri-stem|contains: '/forms/pdfengines/metadata/write'\n    injection_anchor: '\\n-if\\nsystem('\n    condition: selection_method and selection_uri and injection_anchor\nfalsepositives:\n    - Authorized security testing or red-team exercises sending the same proof-of-concept payload against a Gotenberg instance\n    - Unlikely otherwise, no legitimate metadata-write payload shape tested matched this anchor\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-09-16T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--d0181a1f-58f6-5f9e-b5da-3d5fa4b55242",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-22T17:51:17.334142Z",
+            "modified": "2026-09-22T17:51:17.334142Z",
+            "name": "ExifTool Invoked With Condition Option Executing Shell Commands",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: ExifTool Invoked With Condition Option Executing Shell Commands\nid: 37d092d3-cc96-4864-aef2-0679d3be9088\nstatus: experimental\ndescription: >-\n    Detects ExifTool being invoked with its -if condition option whose argument calls the\n    Perl system() function, the argv-splitting shape of CVE-2026-42589 metadata-key injection\n    as it appears in process telemetry on the victim host once Gotenberg expands the metadata\n    JSON. No legitimate ExifTool condition needs to execute shell commands, and any command\n    the injected condition runs (timing probes, out-of-band callbacks, staged scripts) matches.\nreferences:\n    - https://nvd.nist.gov/vuln/detail/CVE-2026-42589\n    - https://the-hunters-ledger.com/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/\nauthor: The Hunters Ledger\ndate: 2026-09-16\ntags:\n    - attack.initial-access\n    - attack.execution\n    - attack.t1190\n    - attack.t1059.004\n    - stp.4\nlogsource:\n    category: process_creation\n    product: linux\n    definition: >-\n        Requires process-creation telemetry that captures full command lines on the victim\n        host: auditd execve rules, Sysmon for Linux, or an EDR agent. Without command-line\n        capture the -if and system( arguments are not visible and this rule cannot fire.\ndetection:\n    selection_img:\n        Image|endswith: 'exiftool'\n    selection_cond:\n        CommandLine|contains: '-if'\n    selection_exec:\n        CommandLine|contains: 'system('\n    condition: selection_img and selection_cond and selection_exec\nfalsepositives:\n    - >-\n        Bespoke tooling whose legitimate -if condition evaluates Perl code that calls\n        system(), which has no known legitimate purpose but cannot be fully excluded\n    - Authorized security testing or red-team exercises replaying the CVE-2026-42589 payload\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-09-16T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--fa2b66da-d7d0-53c7-9405-2c8d049d727f",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-22T17:51:17.334251Z",
+            "modified": "2026-09-22T17:51:17.334251Z",
+            "name": "Polkitd Daemon Executed From a Non-Standard Directory",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Polkitd Daemon Executed From a Non-Standard Directory\nid: c0678478-efcc-4d57-b733-6a4971058ff1\nstatus: experimental\ndescription: >-\n    Detects a process running from an executable named polkitd outside the legitimate Polkit\n    install locations. In this campaign the XMRig miner masquerades as polkitd from both drop\n    locations (/tmp/polkitd/ ephemeral and /usr/bin/polkitd.d/ persistent), and the deploy\n    script kills any existing process named polkitd before installing its own, so this anchor\n    also surfaces rival miners reusing the same mask name. Host-side detection of the\n    masquerade is load-bearing because the persistent systemd variant survives a reboot.\nreferences:\n    - https://nvd.nist.gov/vuln/detail/CVE-2026-42589\n    - https://the-hunters-ledger.com/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/\nauthor: The Hunters Ledger\ndate: 2026-09-16\ntags:\n    - attack.stealth\n    - attack.t1036.005\n    - stp.4\nlogsource:\n    category: process_creation\n    product: linux\n    definition: >-\n        Requires process-creation telemetry that captures the full executable path on the\n        victim host: auditd execve rules, Sysmon for Linux, or an EDR agent.\ndetection:\n    selection_daemon:\n        Image|endswith: '/polkitd'\n    filter_legit_paths:\n        Image|startswith:\n            - '/usr/lib/polkit-1/'\n            - '/usr/libexec/polkit-1/'\n    condition: selection_daemon and not filter_legit_paths\nfalsepositives:\n    - Custom Polkit builds deployed at non-standard prefixes (Nix store, container image layer paths)\n    - Authorized security tooling or tests that stage a binary named polkitd\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-09-16T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--97433269-12d2-51f3-8cf1-f02a8f674645",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-22T17:51:17.334409Z",
+            "modified": "2026-09-22T17:51:17.334409Z",
+            "name": "Shell Spawned by Systemd Executes Binary After Path Export and Directory Change",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Shell Spawned by Systemd Executes Binary After Path Export and Directory Change\nid: 7ed14be2-a79d-45e3-acae-7617284f746f\nstatus: experimental\ndescription: >-\n    Detects the persistent-install launch shape observed in this campaign's shipped\n    systemd-polkitd.service unit: a shell command execution whose command line exports a\n    directory onto PATH, changes into it, and execs a binary, all in one invocation. This is\n    the wrapper the miner's persistent root unit uses (Restart=always, RestartSec=10s,\n    User=root), and it is the shape a reboot does not clear. The anchor keys on the launch\n    pattern, not on the masqueraded binary name, so a renamed miner running the same wrapper\n    still matches.\nreferences:\n    - https://nvd.nist.gov/vuln/detail/CVE-2026-42589\n    - https://the-hunters-ledger.com/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/\nauthor: The Hunters Ledger\ndate: 2026-09-16\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1543.002\n    - stp.4\nlogsource:\n    category: process_creation\n    product: linux\n    definition: >-\n        Requires process-creation telemetry that captures both the parent process and the\n        full command line for processes spawned by systemd, for example auditd execve rules\n        with parent tracking, Sysmon for Linux, or an EDR agent.\ndetection:\n    selection_parent:\n        ParentImage|endswith:\n            - 'systemd'\n            - '/init'\n    selection_shell:\n        Image|endswith:\n            - '/sh'\n            - '/bash'\n    selection_wrapper:\n        CommandLine|contains|all:\n            - 'export PATH='\n            - ';cd '\n            - ';exec '\n    condition: selection_parent and selection_shell and selection_wrapper\nfalsepositives:\n    - >-\n        Legitimate service units whose ExecStart wraps an export PATH plus cd plus exec\n        sequence in one shell invocation, uncommon but documented practice for relocatable\n        services\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-09-16T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--9d3ad059-a4b3-556b-af7d-a9ef43d0daa2",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-22T17:51:17.334511Z",
+            "modified": "2026-09-22T17:51:17.334511Z",
+            "name": "Gotenberg Metadata-Write Endpoint Anomalous Latency (Possible CVE-2026-42589)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Gotenberg Metadata-Write Endpoint Anomalous Latency (Possible CVE-2026-42589)\nid: 38daaffe-5d58-4edb-9549-4aec80f168ac\nstatus: experimental\ndescription: >-\n    Gotenberg's own structured access log never records the metadata payload on a request\n    that parses as valid JSON, so a sleep-based CVE-2026-42589 RCE attempt is visible in this\n    log only as a latency spike on an endpoint that is otherwise sub-second (measured clean\n    baseline roughly 250 to 650 milliseconds). False-positive risk is high: a genuinely slow\n    ExifTool write (large or malformed document, resource contention) matches identically.\n    Use only where the Detection-tier rule's body visibility is unavailable. Not for alerting.\nreferences:\n    - https://nvd.nist.gov/vuln/detail/CVE-2026-42589\nauthor: The Hunters Ledger\ndate: 2026-09-16\ntags:\n    - attack.initial-access\n    - attack.t1190\n    - stp.3\nlogsource:\n    category: application\n    product: gotenberg\n    definition: >-\n        Keys on Gotenberg's own structured HTTP access log fields (uri, method, status,\n        latency). The latency field is assumed to carry Go's time.Duration serialized in\n        nanoseconds, so the 2000000000 threshold is 2 seconds; verify the unit in your own\n        deployment before relying on the threshold.\ndetection:\n    selection:\n        uri: '/forms/pdfengines/metadata/write'\n        method: POST\n        status: 200\n        latency|gte: 2000000000\n    condition: selection\nfalsepositives:\n    - Genuinely slow ExifTool metadata writes under load or on large or malformed documents\nlevel: low",
+            "pattern_type": "sigma",
+            "valid_from": "2026-09-16T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--6a84f31c-0425-55ed-9fbe-5f4b1fae9dc8",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-22T17:51:17.334632Z",
+            "modified": "2026-09-22T17:51:17.334632Z",
+            "name": "Pkill Kill Sweep Against Rival Cryptominer Process Names",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Pkill Kill Sweep Against Rival Cryptominer Process Names\nid: 68d7470d-33e0-4bed-9078-dc6c31d96138\nstatus: experimental\ndescription: >-\n    Detects a pkill -9 -f kill sweep aimed at process names used by commodity Linux\n    cryptominers before a competing payload is installed. This campaign's deploy script runs\n    such a sweep (against xmrig, systemd-devd, kdevtmpfsi, kswapd0, khovr and others) as its\n    first act on every target, and rival-miner kills were confirmed in captured deploy\n    output. The sweep is displacement behavior shared by rival cryptojacking operators, so\n    the anchor indicates miner-versus-miner competition on a host rather than this operator\n    specifically. Not for alerting; triage hits against known miner presence.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/\nauthor: The Hunters Ledger\ndate: 2026-09-16\ntags:\n    - attack.execution\n    - attack.t1059.004\n    - stp.2\nlogsource:\n    category: process_creation\n    product: linux\n    definition: >-\n        Requires process-creation telemetry that captures full command lines on the victim\n        host: auditd execve rules, Sysmon for Linux, or an EDR agent.\ndetection:\n    selection_pkill:\n        CommandLine|contains|all:\n            - 'pkill'\n            - '-9'\n            - '-f'\n    selection_miner_name:\n        CommandLine|contains:\n            - 'kdevtmpfsi'\n            - 'kswapd0'\n            - 'khovr'\n            - 'systemd-devd'\n            - 'xmrig'\n    condition: selection_pkill and selection_miner_name\nfalsepositives:\n    - Administrators cleaning up a confirmed miner infection by hand\n    - >-\n        Another cryptojacking operator's own displacement sweep on the same host, which is\n        the behavior this rule detects and is expected to fire on\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-09-16T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--e59b934f-3a35-5d4f-8583-3b8cf7ee2f5f",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-22T17:51:17.334718Z",
+            "modified": "2026-09-22T17:51:17.334718Z",
+            "name": "Base64 Decoded Script Written to Tmp and Executed by Bash",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Base64 Decoded Script Written to Tmp and Executed by Bash\nid: a3dcd1d3-0c9f-4cd2-a6e7-bed5dd6bd3c1\nstatus: experimental\ndescription: >-\n    Detects a single shell command line that decodes a base64 payload into a script file\n    under /tmp and immediately executes it with bash, the staging shape this campaign's\n    deploy driver uses to carry its miner install script through shell quoting constraints\n    (echo of encoded script piped to base64 -d into /tmp/d.sh, then bash of that file).\n    Cloud provisioning and installer tooling legitimately uses decode-then-execute patterns,\n    so this is a hunting anchor and triage hits against deployment context.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/\nauthor: The Hunters Ledger\ndate: 2026-09-16\ntags:\n    - attack.execution\n    - attack.stealth\n    - attack.t1059.004\n    - attack.t1140\n    - stp.2\nlogsource:\n    category: process_creation\n    product: linux\n    definition: >-\n        Requires process-creation telemetry that captures full command lines on the victim\n        host: auditd execve rules, Sysmon for Linux, or an EDR agent.\ndetection:\n    selection_decode:\n        CommandLine|contains|all:\n            - 'base64 -d'\n            - '>/tmp/'\n    selection_exec:\n        CommandLine|contains|all:\n            - 'bash '\n            - '/tmp/'\n    condition: selection_decode and selection_exec\nfalsepositives:\n    - Provisioning, cloud-init or installer scripts that decode payloads to tmp and run them\n    - Authorized security tooling staging encoded scripts\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-09-16T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--7a1a6e25-5b45-5586-8dc7-39fa68b23ee9",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-22T17:51:17.3348Z",
+            "modified": "2026-09-22T17:51:17.3348Z",
+            "name": "THL DETECT Gotenberg-RCE ExifTool Metadata Key Injection Attempt (CVE-2026-42589 Exploitation Indicator)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "# LOAD-BEARING: the bytes |5c 6e| in the content match below appear twice ON PURPOSE. They are\n# the JSON-escaped form of the injected newlines. The metadata field travels as JSON, so the\n# newline leaves the socket as the two ASCII bytes backslash (0x5c) and n (0x6e). Gotenberg\n# un-escapes it only server-side, after any sensor has seen the packet. Do NOT \"correct\" these\n# bytes to a raw 0x0a newline or to a PCRE newline escape: a rule keyed on a raw newline parses\n# cleanly and NEVER fires on real traffic (confirmed against captured traffic).\nalert http any any -> any any (msg:\"THL DETECT Gotenberg-RCE ExifTool Metadata Key Injection Attempt (CVE-2026-42589 Exploitation Indicator)\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"/forms/pdfengines/metadata/write\"; http.request_body; content:\"|5c 6e 2d 69 66 5c 6e 73 79 73 74 65 6d 28|\"; fast_pattern; reference:cve,2026-42589; classtype:attempted-admin; sid:1000001; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-16, reference https://the-hunters-ledger.com/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-09-16T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--8a2af963-ddc8-57d1-88ba-1ae28ab4809f",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-22T17:51:17.334889Z",
+            "modified": "2026-09-22T17:51:17.334889Z",
+            "name": "THL HUNT Gotenberg-RCE Tagged Out-of-Band Callback URI Shape (C2 Beacon Indicator)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert http $HOME_NET any -> any any (msg:\"THL HUNT Gotenberg-RCE Tagged Out-of-Band Callback URI Shape (C2 Beacon Indicator)\"; flow:established,to_server; http.uri; content:\"_\"; pcre:\"/^\\/(?:[TWCN]\\d+|PPROBE\\d+)_[^\\/\\s]+_\\d+\\/?$/\"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:command-and-control; sid:1000002; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-16, reference https://the-hunters-ledger.com/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-09-16T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--5d2d1e23-9a0e-58e7-94ad-fe7ea6323b5b",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-22T17:51:17.334972Z",
+            "modified": "2026-09-22T17:51:17.334972Z",
+            "name": "THL HUNT Gotenberg-RCE Miner Deploy Verdict Body MINER_OK (OOB Deploy-Callback Indicator)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert http $HOME_NET any -> any any (msg:\"THL HUNT Gotenberg-RCE Miner Deploy Verdict Body MINER_OK (OOB Deploy-Callback Indicator)\"; flow:established,to_server; http.request_body; content:\"MINER_OK\"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:command-and-control; sid:1000003; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-16, reference https://the-hunters-ledger.com/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-09-16T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--d859d8a8-fb72-59d0-902c-05b0b9043e5c",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-22T17:51:17.335071Z",
+            "modified": "2026-09-22T17:51:17.335071Z",
+            "name": "THL HUNT Gotenberg-RCE Command Output Body Markers START END (OOB Command-Output Indicator)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert http $HOME_NET any -> any any (msg:\"THL HUNT Gotenberg-RCE Command Output Body Markers START END (OOB Command-Output Indicator)\"; flow:established,to_server; http.request_body; content:\"===START===\"; content:\"===END===\"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:command-and-control; sid:1000004; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-16, reference https://the-hunters-ledger.com/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-09-16T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "vulnerability",
+            "spec_version": "2.1",
+            "id": "vulnerability--1924e2cd-20fd-5cba-b961-d79effa669fe",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-22T17:51:17.335462Z",
+            "modified": "2026-09-22T17:51:17.335462Z",
+            "name": "CVE-2026-40281",
+            "external_references": [
+                {
+                    "source_name": "cve",
+                    "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-40281",
+                    "external_id": "CVE-2026-40281"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "vulnerability",
+            "spec_version": "2.1",
+            "id": "vulnerability--a6c33c6c-c120-5cd2-a8af-226c473b54df",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-22T17:51:17.335649Z",
+            "modified": "2026-09-22T17:51:17.335649Z",
+            "name": "CVE-2026-42589",
+            "external_references": [
+                {
+                    "source_name": "cve",
+                    "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42589",
+                    "external_id": "CVE-2026-42589"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "report",
+            "spec_version": "2.1",
+            "id": "report--7963499f-e9ec-5e0b-848a-8473bdffa3d2",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-22T17:51:17.335796Z",
+            "modified": "2026-09-22T17:51:17.335796Z",
+            "name": "Gotenberg CVE-2026-42589 Mass Exploitation and Cryptomining",
+            "report_types": [
+                "threat-report"
+            ],
+            "published": "2026-09-16T00:00:00Z",
+            "object_refs": [
+                "domain-name--247a2c6e-c61a-537d-9dfd-62cfef233977",
+                "domain-name--aaf01f48-344f-59af-8456-f1eee6e73d7b",
+                "domain-name--927dff86-f18b-51af-8576-c919c9cb410b",
+                "domain-name--51bb3f02-9d79-5258-a249-b3be8bd12c66",
+                "indicator--06bf1ad1-12f3-5810-bd37-8b124eacb736",
+                "indicator--d0181a1f-58f6-5f9e-b5da-3d5fa4b55242",
+                "indicator--fa2b66da-d7d0-53c7-9405-2c8d049d727f",
+                "indicator--97433269-12d2-51f3-8cf1-f02a8f674645",
+                "indicator--9d3ad059-a4b3-556b-af7d-a9ef43d0daa2",
+                "indicator--6a84f31c-0425-55ed-9fbe-5f4b1fae9dc8",
+                "indicator--e59b934f-3a35-5d4f-8583-3b8cf7ee2f5f",
+                "indicator--7a1a6e25-5b45-5586-8dc7-39fa68b23ee9",
+                "indicator--8a2af963-ddc8-57d1-88ba-1ae28ab4809f",
+                "indicator--5d2d1e23-9a0e-58e7-94ad-fe7ea6323b5b",
+                "indicator--d859d8a8-fb72-59d0-902c-05b0b9043e5c",
+                "vulnerability--1924e2cd-20fd-5cba-b961-d79effa669fe",
+                "vulnerability--a6c33c6c-c120-5cd2-a8af-226c473b54df"
+            ],
+            "labels": [
+                "Cryptomining",
+                "Mass Exploitation",
+                "CVE-2026-42589",
+                "XMRig"
+            ],
+            "external_references": [
+                {
+                    "source_name": "The Hunters Ledger",
+                    "url": "https://the-hunters-ledger.com/reports/gotenberg-rce-cryptomining-107-175-69-137/"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        }
+    ]
+}

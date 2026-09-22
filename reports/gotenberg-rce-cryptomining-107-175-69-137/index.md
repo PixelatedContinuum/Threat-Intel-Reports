@@ -27,7 +27,6 @@ ioc_highlights:
   - value: "systemd-polkitd.service"
     note: "Root systemd unit, Restart=always, that makes the persistent mode survive"
 hide: true
-unlisted: true
 analysis_scope_exempt: "Capabilities Deep-Dive, Dynamic Analysis"
 analysis_scope_exempt_reason: "Commodity, unmodified XMRig payload with no custom implant; the campaign's substance is the exploitation mechanism and the operator's wider enterprise, not the miner's runtime behavior."
 figure_nav:
@@ -112,6 +111,7 @@ capability_axes:
       detail: "The writability probe, a relative rather than fixed timing threshold, and a three-transport retry ladder survive. A dedicated Chinese-language security search, run with working controls proving it could surface real content, removed the fourth: per-host callback tagging built from shell command substitution is foundational, widely taught technique in that literature, not an operator contribution."
       limit: "Held at MODERATE-HIGH rather than higher because three-of-four standing against a working search is evidence of absence, not a positive discovery. Recovery of the operator's own reconnaissance notes, or a private or paywalled writeup covering the writability check or the retry ladder, would lower this toward the copied-technique reading already applied to callback tagging."
   foot: "The fuller reasoning, the one alternative excluded, and what would move either rating are in the surrounding text."
+stix_bundle: /stix/gotenberg-rce-cryptomining-107-175-69-137.json
 ---
 
 **Campaign Identifier:** Gotenberg-RCE-Cryptomining-107.175.69.137<br>

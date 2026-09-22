@@ -4,7 +4,6 @@ date: '2026-09-16'
 layout: post
 permalink: /hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/
 hide: true
-unlisted: true
 ---
 
 **Campaign:** Gotenberg-RCE-107.175.69.137
