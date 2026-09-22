@@ -1719,7 +1719,7 @@
   never_block_rows:
     - type: "domain"
       value: "api.ipify.org"
-      context: "The backup for the lookup above, called immediately after it as part of the same pre-beacon reconnaissance step. ipify is a widely embedded public utility API, so the destination carries no operator signal by itself; what is distinctive is an unattended process making both lookups in sequence and then opening an encrypted connection to a fixed C2 address roughly four minutes later."
+      context: "The backup IP-discovery call, made immediately after the ipwho.is lookup as part of the same pre-beacon reconnaissance step. ipify is a widely embedded public utility API, so the destination carries no operator signal by itself; what is distinctive is an unattended process making both lookups in sequence and then opening an encrypted connection to a fixed C2 address roughly four minutes later."
     - type: "domain"
       value: "ipwho.is"
       context: "A free, public IP-lookup service the implant calls to verify internet connectivity and discover the victim host's external IP address before contacting C2. The service is general-purpose and is queried by a very large number of unrelated legitimate applications; blocking it breaks those and does not impede the operator, who can substitute any of dozens of equivalent endpoints. Hunt for the lookup followed minutes later by an outbound connection to a fixed C2 address, not for the destination on its own."
@@ -3070,14 +3070,20 @@
     - type: "path"
       value: "/usr/bin/polkitd.d/"
       context: null
-  never_block_total: 2
+  never_block_total: 4
   never_block_rows:
     - type: "domain"
       value: "dohwawazs.pro"
-      context: "No reason recorded in the feed"
+      context: "Part of the same shared cryptojacking-kit drop layer as vibecoders.vip: it carries this campaign's exact miner hash in its VirusTotal downloaded_files, but the serving check*.sh installer family has multiple independent unrelated submitters. Graded LOW under the Supplier Test: shared, not operator-exclusive, and shared is not the same as paid."
     - type: "domain"
       value: "vibecoders.vip"
-      context: "No reason recorded in the feed"
+      context: "Carries this campaign's exact miner hash in its VirusTotal downloaded_files, but the serving check*.sh installer family has multiple independent unrelated submitters. Graded LOW under the Supplier Test: shared, not operator-exclusive, and shared is not the same as paid."
+    - type: "endpoint"
+      value: "ca.moneroocean.stream:10032"
+      context: "The second MoneroOcean pool endpoint, carrying the same judgment as gulf.moneroocean.stream:10032: a public mining pool used by unrelated operators and by legitimate miners, graded Class E shared ecosystem infrastructure and INSUFFICIENT alone for attribution. Both endpoints appear only in the dropped config, never in the binary. Hunt for them; do not blocklist them as operator infrastructure."
+    - type: "endpoint"
+      value: "gulf.moneroocean.stream:10032"
+      context: "MoneroOcean is a public mining pool used by unrelated operators and by legitimate miners. Graded Class E shared ecosystem infrastructure, INSUFFICIENT alone for attribution, and corroborated in unrelated published campaigns back to 2024. Hunt for it; do not blocklist it as operator infrastructure."
 "inkognito-russian-vpn-phishing-185-221-196-118-20260516":
   slug: "inkognito-russian-vpn-phishing-185-221-196-118-20260516"
   page_url: "/ioc-feeds/inkognito-russian-vpn-phishing-185-221-196-118-20260516/"

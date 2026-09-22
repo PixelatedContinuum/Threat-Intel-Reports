@@ -208,6 +208,48 @@ test('the benign-value filter does not apply inside the never-block walk', funct
   assert.deepEqual(values(r.neverBlockRows), ['github.com']);
 });
 
+/* --- reason-keyed entries and host:port survival: 2026-09-22 ---------------
+
+   gotenberg-rce-cryptomining-107-175-69-137 is the only feed in the corpus
+   whose hunt_only_never_block entries justify themselves under `reason`
+   rather than any of the other NB_ROLE_KEYS, and it is also the only feed
+   carrying host:port values (two mining-pool endpoints) in that bucket. Both
+   defects shipped together and are fixed together; these cases are the
+   feed's own shape, not an invented fixture. */
+
+test('a never-block entry justified under `reason` renders that text, not the fallback', function () {
+  var r = X.summarise({ hunt_only_never_block: [{
+    value: 'vibecoders.vip', category: 'shared cryptojacking-kit drop layer',
+    reason: 'Carries this campaign\'s exact miner hash, but the serving install ' +
+      'family has multiple independent unrelated submitters.'
+  }] });
+  assert.equal(r.neverBlockRows[0].context,
+    'Carries this campaign\'s exact miner hash, but the serving install family ' +
+    'has multiple independent unrelated submitters.');
+});
+
+test('a never-block host:port value survives into the table as type endpoint', function () {
+  var r = X.summarise({ hunt_only_never_block: [{
+    value: 'gulf.moneroocean.stream:10032', category: 'shared mining-pool infrastructure',
+    reason: 'MoneroOcean is a public mining pool used by unrelated operators.'
+  }] });
+  assert.equal(r.neverBlockRows.length, 1);
+  assert.equal(r.neverBlockRows[0].type, 'endpoint');
+  assert.equal(r.neverBlockRows[0].value, 'gulf.moneroocean.stream:10032');
+  assert.equal(r.neverBlockRows[0].context,
+    'MoneroOcean is a public mining pool used by unrelated operators.');
+});
+
+test('the fallback still fires for a genuinely empty never-block entry, reason included', function () {
+  // `category` is corpus-real (every gotenberg never-block object carries one)
+  // and deliberately absent from NB_ROLE_KEYS: it is a short label, not a
+  // justification, and must never be picked up as one.
+  var r = X.summarise({ hunt_only_never_block: [{
+    value: '203.0.113.50', category: 'shared mining-pool infrastructure'
+  }] });
+  assert.equal(r.neverBlockRows[0].context, 'No reason recorded in the feed');
+});
+
 test('a feed with no hunt_only_never_block bucket yields an empty neverBlockRows, not an error', function () {
   var r = X.summarise({ network_indicators: ['1.2.3.4'] });
   assert.deepEqual(r.neverBlockRows, []);

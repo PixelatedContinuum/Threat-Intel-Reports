@@ -9,8 +9,8 @@
    disagree with the table about what an indicator is, and nothing would say so.
 
    So every value is offered to ioc-classify.js first, and only what it declines is
-   considered for the three host types this module adds: path, registry, filename.
-   test/ioc-table-extract.test.js pins that agreement directly.
+   considered for the four host types this module adds: path, registry, filename,
+   endpoint. test/ioc-table-extract.test.js pins that agreement directly.
 
    Why those three and not more. Sampling every leaf string the atomic classifier
    rejects, filtered to structurally indicator-shaped values:
@@ -31,7 +31,21 @@
 
    Typing is by VALUE PATTERN, never by bucket name, the same rule that made the
    search index work. This corpus has `location`, `file_path`, `value_data`, `value`
-   and `key` all carrying the same kinds of value. */
+   and `key` all carrying the same kinds of value.
+
+   FOURTH HOST TYPE ADDED 2026-09-22: endpoint (a domain with an explicit port,
+   `gulf.moneroocean.stream:10032`). ioc-classify.js's IPv4 regex has always
+   accepted an optional `:port` suffix (stripping it from the returned value),
+   but its domain regex never grew the matching allowance, so a domain:port
+   value fell all the way through classify() AND the three host types above to
+   the untyped counter -- silently, because the counter only prints a number,
+   never the value itself. Diagnosed on gotenberg-rce-cryptomining-107-175-69-137,
+   the corpus's only feed whose hunt_only_never_block bucket carries this shape:
+   two mining-pool endpoints, dropped from the rendered "Do not block" table
+   entirely rather than rendering with a fallback reason. See hostType() below:
+   it delegates the host half back to C.classify() rather than re-deriving the
+   domain grammar a second time, keeping the "offered to ioc-classify.js first"
+   rule intact even for this derived, port-stripped probe. */
 
 var C = require('../../../assets/js/ioc-classify.js');
 var B = require('./benign.js');
@@ -169,17 +183,34 @@ var EXEMPT_TOP = { hunt_only_never_block: true };
 
 /* Preference order for the never-block section's visible reason column.
    `false_positive_risk` first, because where present it is the most direct
-   statement of why the value must not be blocked. Unlike ROLE_KEYS above, this
-   list has no length cap on the field it picks (see NB_ROLE_MAXLEN): a reason
-   explaining why a value cannot be blocked is meant to be read in full, not
-   trimmed to fit as a hover label the way an ordinary indicator's context is. */
-var NB_ROLE_KEYS = ['false_positive_risk', 'purpose', 'context', 'notes', 'note',
-                     'description', 'role'];
+   statement of why the value must not be blocked. `reason` sits right behind
+   it for the same reason -- it is what gotenberg-rce-cryptomining-107-175-69-137
+   names its own justification field, and no other feed in the corpus uses
+   `reason` inside hunt_only_never_block (checked 2026-09-22 against all 18
+   feeds carrying the bucket), so adding it cannot re-rank any existing feed's
+   choice of label; it only stops this one feed's text from falling through to
+   the 'No reason recorded in the feed' fallback it never actually earned.
+   Unlike ROLE_KEYS above, this list has no length cap on the field it picks
+   (see NB_ROLE_MAXLEN): a reason explaining why a value cannot be blocked is
+   meant to be read in full, not trimmed to fit as a hover label the way an
+   ordinary indicator's context is. */
+var NB_ROLE_KEYS = ['false_positive_risk', 'reason', 'purpose', 'context', 'notes',
+                     'note', 'description', 'role'];
 var NB_ROLE_MAXLEN = Infinity;
 
 var RX_REGISTRY = /^HK(LM|CU|CR|U|CC|EY_[A-Z_]+)\\/i;
 var RX_WIN_PATH = /^(?:[A-Za-z]:\\|%[A-Za-z_][A-Za-z_0-9()]*%|\\\\[^\\])/;
 var RX_NIX_PATH = /^\/(etc|usr|tmp|var|opt|home|root|dev|proc|bin|sbin|lib|srv|boot|mnt)\//;
+
+/* A trailing `:<port>` on an otherwise-ordinary domain. Matched generically
+   (any suffix of 1-5 digits after the last colon) so the actual domain
+   grammar is never re-implemented here -- the candidate host is handed BACK
+   to C.classify() below, exactly the same call every atomic value gets, and
+   only a 'domain' verdict on that stripped-down probe earns the 'endpoint'
+   type. A value that fails on the host half (a path, a registry key, prose
+   with a trailing ratio like "9 : 5") never reaches C.classify() with
+   anything domain-shaped and is correctly declined. */
+var RX_TRAILING_PORT = /^(.+):(\d{1,5})$/;
 
 /* Host types, considered only for values ioc-classify.js declined. Order matters:
    a registry key can contain backslashes that also read as a UNC prefix. */
@@ -190,11 +221,16 @@ function hostType(s) {
   /* filename is NOT here. ioc-classify.js gained that type on 2026-08-19, so
      delegation already covers it and a rule here would be the second
      implementation this module exists to avoid. */
+  var portMatch = RX_TRAILING_PORT.exec(s);
+  if (portMatch) {
+    var host = C.classify(portMatch[1]);
+    if (host && host.type === 'domain') return 'endpoint';
+  }
   return null;
 }
 
-var TYPE_ORDER = ['ipv4', 'domain', 'url', 'sha256', 'sha1', 'md5', 'email',
-                  'path', 'registry', 'filename'];
+var TYPE_ORDER = ['ipv4', 'domain', 'endpoint', 'url', 'sha256', 'sha1', 'md5',
+                  'email', 'path', 'registry', 'filename'];
 
 function typeRank(t) {
   var i = TYPE_ORDER.indexOf(t);

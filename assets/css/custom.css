@@ -4123,10 +4123,13 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
    who learns that cyan is a domain on one feed page must find it is a domain on
    the next one too.
 
-   Cool hues are network (ipv4, domain, url), violets are file hashes (sha256,
-   sha1, md5), pink is email, and warm hues are host artefacts (path, registry,
-   filename). So the two halves of a hunt, what to look for on the wire and what
-   to look for on the box, separate at a glance before any label is read.
+   Cool hues are network (ipv4, domain, endpoint, url), violets are file hashes
+   (sha256, sha1, md5), pink is email, and warm hues are host artefacts (path,
+   registry, filename). So the two halves of a hunt, what to look for on the wire
+   and what to look for on the box, separate at a glance before any label is read.
+   `endpoint` (a domain with an explicit port, added 2026-09-22 alongside
+   ioc-table-extract.js's fourth host type) sits with its network siblings for
+   the same reason domain and url do.
 
    THE DEFAULT IS DECLARED ON THE CONTAINER, deliberately. A var() fallback
    written on the same element it falls back for is an override rather than a
@@ -4141,6 +4144,7 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
    it filters to. */
 .hl-ioctable [data-type="ipv4"]     { --ioct-type: #58a6ff; }  /* blue    */
 .hl-ioctable [data-type="domain"]   { --ioct-type: #22d3ee; }  /* cyan    */
+.hl-ioctable [data-type="endpoint"] { --ioct-type: #4ade80; }  /* green   */
 .hl-ioctable [data-type="url"]      { --ioct-type: #2dd4bf; }  /* teal    */
 .hl-ioctable [data-type="sha256"]   { --ioct-type: #a371f7; }  /* purple  */
 .hl-ioctable [data-type="sha1"]     { --ioct-type: #818cf8; }  /* indigo  */

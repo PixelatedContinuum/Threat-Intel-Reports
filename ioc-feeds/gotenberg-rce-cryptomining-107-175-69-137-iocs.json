@@ -205,7 +205,7 @@
     {
       "value": "ca.moneroocean.stream:10032",
       "category": "shared mining-pool infrastructure",
-      "reason": "Same as above. The pool endpoints live only in the dropped config, not in the binary."
+      "reason": "The second MoneroOcean pool endpoint, carrying the same judgment as gulf.moneroocean.stream:10032: a public mining pool used by unrelated operators and by legitimate miners, graded Class E shared ecosystem infrastructure and INSUFFICIENT alone for attribution. Both endpoints appear only in the dropped config, never in the binary. Hunt for them; do not blocklist them as operator infrastructure."
     },
     {
       "value": "vibecoders.vip",
@@ -215,7 +215,7 @@
     {
       "value": "dohwawazs.pro",
       "category": "shared cryptojacking-kit drop layer",
-      "reason": "Identical pattern to the above."
+      "reason": "Part of the same shared cryptojacking-kit drop layer as vibecoders.vip: it carries this campaign's exact miner hash in its VirusTotal downloaded_files, but the serving check*.sh installer family has multiple independent unrelated submitters. Graded LOW under the Supplier Test: shared, not operator-exclusive, and shared is not the same as paid."
     }
   ],
   "non_indicators": [
