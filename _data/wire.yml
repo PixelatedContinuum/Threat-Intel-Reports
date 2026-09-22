@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-22T20:02:41Z
+generated_at: 2026-09-22T22:00:48Z
 window_days: 30
 counts:
-  total: 534
+  total: 536
   research: 182
-  news: 352
+  news: 354
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -18,11 +18,11 @@ topics:
   - label: "cybercrime"
     count: 60
     color: 2
+  - label: "government"
+    count: 34
+    color: 3
   - label: "artificial intelligence"
     count: 33
-    color: 3
-  - label: "government"
-    count: 32
     color: 4
   - label: "malware"
     count: 32
@@ -123,7 +123,7 @@ label_colors:
   "arktunnel": 6
   "arm": 10
   "arrested": 2
-  "artificial intelligence": 3
+  "artificial intelligence": 4
   "arx cipher": 2
   "asia-pacific": 6
   "asiogate": 3
@@ -362,7 +362,7 @@ label_colors:
   "google cloud": 8
   "google infrastructure abuse": 8
   "google tag manager abuse": 4
-  "government": 4
+  "government": 3
   "government impersonation": 7
   "gta6": 6
   "gyazo": 8
@@ -465,6 +465,18 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 11
 items:
+  - title: "Sweden fines Miljödata $183,000 over breach affecting 2.2 million"
+    url: "https://www.bleepingcomputer.com/news/security/sweden-fines-milj-data-183-000-over-breach-affecting-22-million/"
+    source: "BleepingComputer"
+    date: 2026-09-22T21:40:37Z
+    kind: news
+    labels: ["government", "legal"]
+  - title: "Chinese hackers exploit WordPress, Zyxel flaws to steal govt data"
+    url: "https://www.bleepingcomputer.com/news/security/chinese-hackers-exploit-multiple-technologies-to-steal-govt-data/"
+    source: "BleepingComputer"
+    date: 2026-09-22T20:35:24Z
+    kind: news
+    labels: ["government"]
   - title: "ShinyHunters claims FBI hack, data theft in PeopleSoft zero-day breach"
     url: "https://www.bleepingcomputer.com/news/security/shinyhunters-claims-fbi-hack-data-theft-in-peoplesoft-zero-day-breach/"
     source: "BleepingComputer"
