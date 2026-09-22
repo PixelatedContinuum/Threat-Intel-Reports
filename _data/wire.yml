@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-22T08:02:03Z
+generated_at: 2026-09-22T10:02:08Z
 window_days: 30
 counts:
-  total: 513
-  research: 174
-  news: 339
+  total: 521
+  research: 181
+  news: 340
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -18,11 +18,11 @@ topics:
   - label: "cybercrime"
     count: 58
     color: 2
-  - label: "malware"
+  - label: "artificial intelligence"
     count: 32
     color: 3
-  - label: "artificial intelligence"
-    count: 30
+  - label: "malware"
+    count: 32
     color: 4
   - label: "government"
     count: 30
@@ -107,6 +107,7 @@ label_colors:
   "anthropic": 8
   "anti-analysis": 11
   "antivirus removal": 7
+  "anydesk": 9
   "api": 12
   "apollo": 11
   "app-bound-encryption": 6
@@ -121,7 +122,8 @@ label_colors:
   "arktunnel": 6
   "arm": 10
   "arrested": 2
-  "artificial intelligence": 4
+  "artificial intelligence": 3
+  "arx cipher": 2
   "asia-pacific": 6
   "asiogate": 3
   "asukastealer": 5
@@ -129,6 +131,7 @@ label_colors:
   "asyncrat": 11
   "atf": 7
   "attack surface": 11
+  "attack-campaigns": 8
   "attacks": 7
   "australia": 10
   "authentication bypass": 4
@@ -168,6 +171,7 @@ label_colors:
   "blindingcan": 11
   "blockchain abuse": 2
   "blockchain c2": 1
+  "blockchain infrastructure": 11
   "blog post": 6
   "bloodalchemy": 3
   "bluemoon": 5
@@ -188,6 +192,8 @@ label_colors:
   "bulletproof hosting": 12
   "business email compromise": 8
   "byovd": 12
+  "byovd attack": 2
+  "bytecode interpreter": 5
   "c2": 9
   "c2 framework": 5
   "c2 infrastructure": 12
@@ -200,6 +206,7 @@ label_colors:
   "castlerat": 9
   "cdn poisoning": 9
   "centerpoint energy": 7
+  "certificate hierarchy": 12
   "chainscript": 2
   "chaotic eclipse": 12
   "chatgpt": 1
@@ -250,6 +257,7 @@ label_colors:
   "critical infrastructure": 4
   "critical infrastructure targeting": 5
   "cron-injection": 10
+  "cross-border infrastructure": 8
   "cross-platform": 10
   "crowdoor": 11
   "crowdsec": 12
@@ -259,6 +267,7 @@ label_colors:
   "cryptocurrency miner": 1
   "cryptocurrency mining": 6
   "cryptocurrency stealer": 4
+  "cryptocurrency targeting": 5
   "cryptocurrency theft": 3
   "cryptographic": 9
   "cspu": 1
@@ -384,7 +393,7 @@ label_colors:
   "maas framework": 12
   "mac malware": 8
   "macos": 11
-  "malware": 3
+  "malware": 4
   "malware analysis": 7
   "mathspace": 4
   "meshagent": 2
@@ -451,6 +460,36 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 11
 items:
+  - title: "The Closed Quorum: Inside the first reported autonomous AI C2 implant"
+    url: "https://blog.talosintelligence.com/the-closed-quorum-inside-the-first-reported-autonomous-ai-c2-implant/"
+    source: "Cisco Talos"
+    date: 2026-09-22T10:00:58Z
+    kind: research
+    labels: ["artificial intelligence", "threat spotlight"]
+  - title: "Introducing CAIRN: Frontier tracking for AI-integrated malware"
+    url: "https://blog.talosintelligence.com/introducing-cairn-frontier-tracking-for-ai-integrated-malware/"
+    source: "Cisco Talos"
+    date: 2026-09-22T10:00:25Z
+    kind: research
+    labels: ["artificial intelligence", "landing page top story", "tool talk", "top story"]
+  - title: "CISA orders feds to patch Zyxel flaw exploited for data theft"
+    url: "https://www.bleepingcomputer.com/news/security/cisa-orders-feds-to-patch-actively-exploited-zyxel-flaw-by-thursday/"
+    source: "BleepingComputer"
+    date: 2026-09-22T08:53:09Z
+    kind: news
+    labels: []
+  - title: "Equation of Compromise: Anatomy of a Live npm Supply-Chain Campaign"
+    url: "https://research.jfrog.com/post/equation-of-compromise/"
+    source: "AlienVault"
+    date: 2026-09-22T07:30:17Z
+    kind: research
+    labels: ["blockchain infrastructure", "cryptocurrency targeting", "defi developers", "download inflation", "encrypted loader", "github actions abuse", "npm supply-chain", "smart contract c2"]
+  - title: "AI Security Incident Case: Trusted AI Platforms Become a New Channel for Malware Distribution"
+    url: "https://otx.alienvault.com/pulse/6ab22dd5026bef69ef5a17fd"
+    source: "AlienVault"
+    date: 2026-09-22T07:27:17Z
+    kind: research
+    labels: ["attack-campaigns", "credential-harvesting", "cybersecurity", "data-exfiltration", "lateral-movement", "supply-chain", "threat-intelligence", "vulnerability-exploitation"]
   - title: "BigCommerce alerts merchants of data breach linked to Ribon apps"
     url: "https://www.bleepingcomputer.com/news/security/bigcommerce-alerts-merchants-of-data-breach-linked-to-ribon-apps/"
     source: "BleepingComputer"
@@ -475,6 +514,24 @@ items:
     date: 2026-09-21T17:19:53Z
     kind: news
     labels: ["fine", "gdpr", "google", "privacy", "privacy & compliance"]
+  - title: "Vidar Adds Virtual Machine and Custom Stream Ciphers For String Obfuscation"
+    url: "https://otx.alienvault.com/pulse/6ab15f3f1d05b3fb6ae23973"
+    source: "AlienVault"
+    date: 2026-09-21T16:45:51Z
+    kind: research
+    labels: ["arx cipher", "bytecode interpreter", "chacha20", "custom stream cipher", "information stealer", "string obfuscation", "vidar", "virtual machine"]
+  - title: "North Korea's Hangro Revisited"
+    url: "https://otx.alienvault.com/pulse/6ab15e0fe200afb0f82b8895"
+    source: "AlienVault"
+    date: 2026-09-21T16:40:47Z
+    kind: research
+    labels: ["certificate hierarchy", "cross-border infrastructure", "hangro", "mail relay systems", "north korea networks", "silibank", "softether", "vpn infrastructure"]
+  - title: "The Tale of Two INC Ransom Notes: A Ransomware Timeline"
+    url: "https://www.huntress.com/blog/two-inc-ransom-notes"
+    source: "AlienVault"
+    date: 2026-09-21T16:35:37Z
+    kind: research
+    labels: ["anydesk", "byovd attack", "double extortion", "impacket", "inc", "inc ransomware", "initial access broker", "lateral movement", "scheduled tasks"]
   - title: "Fake LastPass Installers Push Kernel-Level EDR Killer, ‘Rapuncel’ Stealer"
     url: "https://www.securityweek.com/fake-lastpass-installers-push-kernel-level-edr-killer-rapuncel-stealer/"
     source: "SecurityWeek"
