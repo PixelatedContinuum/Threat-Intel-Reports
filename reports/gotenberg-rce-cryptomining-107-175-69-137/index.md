@@ -136,15 +136,16 @@ the metadata *key*, splitting ExifTool's argument parser and reaching a Perl `ev
 vendor's own security advisory (HIGH-to-DEFINITE). The barrier to entry for this attack is zero,
 and the working exploit sits in a public document anyone can read, so expect unrelated copycats
 to reach for the same primitive, not only this operator. What is not copied is the campaign built
-around it: 206 candidates probed, 198 confirmed exploitable, and a cryptominer running on
-somewhere between 148 and 151 of them, the whole thing inside a 54-minute window on 2026-08-31.
+around it: 205 probed alive from a 206-row target list, 198 confirmed exploitable, and a
+cryptominer running on somewhere between 148 and 151 of them, the whole thing inside a 54-minute
+window on 2026-08-31.
 
 Then the finding that matters most for a defender: the obvious detection signature for this
 injection never fires on a real request. The metadata field travels as JSON, so the injected
 newline reaches the wire as the two-byte escape sequence backslash-then-`n`, and Gotenberg converts
 it back to a real newline only after its own server has parsed it, after any network sensor has
-already seen and passed the packet. Anyone who writes a rule for this CVE straight from the
-advisory will build one that parses cleanly, loads without error, and never once matches. Section 7
+already seen and passed the packet. A rule built by reading the operator's own scripts, where that
+newline is a real newline, parses cleanly, loads without error, and never once matches. Section 7
 gives the rule that actually works, and warns why the escaped bytes must never be "corrected" back
 to a literal newline.
 
