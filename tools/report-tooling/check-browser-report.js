@@ -7,8 +7,8 @@
    clothes: nothing proves the glossary tooltip renders, that a figure-nav chip
    click scrolls and opens the teardown it points at, or that the register switch
    hides a section and its TOC entry. All three are BUILT BY JAVASCRIPT AT
-   RUNTIME — a fetched report contains no `.hl-viewswitch` and no `.hl-fignav` at
-   all, only the tier markers and figures they are built from — so every check
+   RUNTIME: a fetched report contains no `.hl-viewswitch` and no `.hl-fignav` at
+   all, only the tier markers and figures they are built from: so every check
    that reads fetched HTML is looking at the inputs and calling them the output.
 
    jsdom cannot close the gap either: it has no layout, so every rect is zero,
@@ -39,10 +39,11 @@ function notChecked(reason) {
   process.exit(2);
 }
 
-var CDP, SERVER, yaml;
+var CDP, SERVER, TRIAGE, yaml;
 try {
   CDP = require('./lib/cdp.js');
   SERVER = require('./lib/page-server.js');
+  TRIAGE = require('./lib/console-triage.js');
   yaml = require('js-yaml');
 } catch (e) {
   notChecked(e.message + '. Run `npm ci` in tools/report-tooling, then re-run.');
@@ -107,6 +108,106 @@ function check(name, pass, detail) {
   if (detail) console.log('         ' + detail);
 }
 
+/* Everything this file measures on first read of the page -- the register
+   switch, the figure-nav chips, the TOC -- is BUILT BY JAVASCRIPT after load,
+   and `CDP.open()` only waits a FIXED settle (opts.settle, default 2500ms)
+   before handing back a page handle. That is a guess, not a measurement, and
+   on a cold HTTP cache it is sometimes wrong.
+
+   Measured 2026-09-22, the SAME report run twice back to back with nothing
+   else changed:
+
+     run 1  14 H2 sections on load, 0 of 43 TOC items hidden by the brief
+            register  -> both register-switch checks FAIL
+     run 2  13 H2 sections on load, 11 of 64 TOC items hidden by the brief
+            register  -> both PASS
+
+   The H2 count differs, the TOC link count differs, and even the register's
+   own computed reading time differs between runs. That is not flakiness in
+   the check, it is the page still assembling itself at read time: run 1
+   measured a DOM that had not finished building.
+
+   The fix is not a longer fixed sleep -- that only narrows the window, it
+   does not close it, and it makes every run slower whether or not the page
+   needed the extra time. Instead, poll `inputs` (the same five counts
+   already printed below) until two CONSECUTIVE reads agree, bounded by a
+   deadline. Two matching reads in a row is the cheapest signal available
+   that the mutations driving these numbers (tier markers, figures,
+   teardowns, headings, TOC links) have stopped, without asserting anything
+   further about what "finished" means for a page this file does not own.
+
+   This must not turn into a check that can no longer FAIL. A report that
+   genuinely never builds the machinery (wrong slug, a broken bundle) holds
+   at zero for every count, and zero agrees with zero on the very next read
+   -- it settles almost immediately and still reports zero, so the existing
+   "carries none of the machinery" branch below fires exactly as before.
+   Waiting only changes the answer for a page that is still CHANGING; it
+   never invents a value for one that is genuinely, permanently absent. */
+var INPUTS_EXPR = '(function(){return {' +
+  'tiers: document.querySelectorAll("[class*=hl-tier-]").length,' +
+  'figures: document.querySelectorAll(".hl-post-content figure").length,' +
+  'teardowns: document.querySelectorAll("details.hl-teardown").length,' +
+  'headings: document.querySelectorAll(".hl-post-content h2").length,' +
+  'tocLinks: document.querySelectorAll("#hl-toc-list a").length};})()';
+
+async function waitForStableInputs(page) {
+  var pollMs = 250;
+  var deadlineMs = 8000; // matches CDP.waitFor's own default deadline
+  var start = Date.now();
+  var prevStr = null;
+  var reads = 0;
+  var cur;
+  for (;;) {
+    cur = await page.json(INPUTS_EXPR);
+    reads++;
+    var curStr = JSON.stringify(cur);
+    var elapsed = Date.now() - start;
+    if (curStr === prevStr) {
+      return { inputs: cur, settled: true, waitedMs: elapsed, reads: reads };
+    }
+    prevStr = curStr;
+    if (elapsed >= deadlineMs) {
+      // Report what was last seen, honestly labelled as unsettled, rather
+      // than silently treating a deadline hit as a clean read.
+      return { inputs: cur, settled: false, waitedMs: elapsed, reads: reads };
+    }
+    await CDP.sleep(pollMs);
+  }
+}
+
+/* Defect 2, mine, from wiring this an hour ago: one blocked request yields
+   TWO console-triage records (a network failure and a console log entry),
+   so the same excluded URL printed its full multi-sentence reason twice in
+   a row. That is not a counting bug -- `triaged.total` and the three bucket
+   lengths must keep counting every record, exactly as before -- it is a
+   PRINTING bug: the same fact stated twice, at full length, is unreadable.
+
+   Grouping happens HERE, not in lib/console-triage.js: the module's counts
+   stay one-record-per-event (that is what the summary line's three numbers
+   mean), and only this on-screen listing collapses duplicates by URL. */
+function groupExcludedForDisplay(rows) {
+  var order = [];
+  var byKey = {};
+  (rows || []).forEach(function (row) {
+    var key = row.url || '(no url)';
+    if (!byKey[key]) {
+      byKey[key] = { url: row.url, why: row.why, count: 0 };
+      order.push(key);
+    }
+    byKey[key].count++;
+  });
+  return order.map(function (key) { return byKey[key]; });
+}
+
+var EXCLUDED_REASON_MAX = 140;
+function renderExcludedGroup(g) {
+  var reason = g.why.length > EXCLUDED_REASON_MAX
+    ? g.why.slice(0, EXCLUDED_REASON_MAX - 3) + '...'
+    : g.why;
+  return (g.url || '(no url)') + (g.count > 1 ? '  (x' + g.count + ')' : '') +
+    '  -- ' + reason;
+}
+
 async function main() {
   var s = pickSlug();
   if (!s) notChecked('no report slug given and none could be picked from _data/catalog.yml');
@@ -129,7 +230,13 @@ async function main() {
     throw e;
   }
 
-  console.log('browser: ' + page.version);
+  /* Name the BROWSER, by brand, not only the engine string it reports over
+     CDP. Brave identifies itself as `Chrome/153.x` because it is Chromium
+     based, so every run of this gate printed `Chrome/...` and looked like it
+     had run Chrome. A run that silently used a different browser than the
+     checks were written against is the failure underneath every other one
+     here, and it is invisible unless the harness says so out loud. */
+  console.log('browser: ' + page.label);
   console.log('report:  ' + s);
 
   try {
@@ -137,13 +244,13 @@ async function main() {
        A report carrying no tier markers and no figures would let every check
        below pass by finding nothing, which is the shape of failure this whole
        convention exists to stop. */
-    var inputs = await page.json('(function(){return {' +
-      'tiers: document.querySelectorAll("[class*=hl-tier-]").length,' +
-      'figures: document.querySelectorAll(".hl-post-content figure").length,' +
-      'teardowns: document.querySelectorAll("details.hl-teardown").length,' +
-      'headings: document.querySelectorAll(".hl-post-content h2").length,' +
-      'tocLinks: document.querySelectorAll("#hl-toc-list a").length};})()');
+    var settleResult = await waitForStableInputs(page);
+    var inputs = settleResult.inputs;
     console.log('inputs:  ' + JSON.stringify(inputs));
+    console.log('settle:  ' + (settleResult.settled
+      ? 'stable after ' + settleResult.waitedMs + 'ms (' + settleResult.reads + ' reads)'
+      : 'DEADLINE HIT after ' + settleResult.waitedMs + 'ms (' + settleResult.reads +
+        ' reads); the page may still have been changing when this measured it'));
     console.log('');
 
     if (!inputs.tiers && !inputs.figures) {
@@ -153,29 +260,46 @@ async function main() {
       throw new Error('__notchecked__');
     }
 
-    /* A published report embeds a third-party subscribe form, and headless
-       Chrome has no storage-access prompt for it to use. That error says nothing
-       about this site's modules.
+    /* A published report embeds third-party resources a reader's browser
+       fetches from someone else's origin: a Cloudflare analytics beacon and a
+       newsletter form. Neither is a report module, and a privacy browser
+       refuses the beacon by design.
 
-       It is EXCLUDED BY NAME and still PRINTED, rather than the check being
-       relaxed to tolerate any error. A tolerance wide enough to swallow it would
-       also swallow the failure this check exists to catch, and an exclusion
-       nobody can see is indistinguishable from a check that passed. */
-    var BENIGN = [/requestStorageAccess/i, /eocampaign1\.com/i,
-      /ERR_BLOCKED_BY_CLIENT/i, /third-party cookie/i];
-    var allErrs = page.consoleErrors();
-    var benign = allErrs.filter(function (e) {
-      return BENIGN.some(function (rx) { return rx.test(e); });
+       WHY THIS MOVED OUT OF A TEXT MATCH, measured 2026-09-22. The old list
+       tested the console message TEXT, and a blocked subresource's text is
+       exactly `Failed to load resource: net::ERR_CONNECTION_REFUSED` with no
+       URL in it at all. So the URL-shaped entries in that list (eocampaign1,
+       and the rest) could never match anything, and this check failed on all 43
+       reports. The URL was available the whole time; cdp.js was discarding it.
+
+       The decision now runs on ORIGIN first and NAME second, in
+       lib/console-triage.js. A failure on the page's own origin can never be
+       excluded by any naming rule, which is the property that lets a genuinely
+       refused first-party module still fail loudly while a named third-party
+       beacon is excluded. Adding /ERR_CONNECTION_REFUSED/ to a tolerance list
+       instead would have blinded this check to exactly the failure it exists
+       for, because Brave spells a blocked request with that same string.
+
+       ALL THREE BUCKETS ARE PRINTED, INCLUDING ZEROS, so an empty bucket is
+       distinguishable from one nobody measured, and every exclusion is named
+       on screen rather than inferred from a count.
+       See homelab-soc/docs/gate-honesty-contract.md. */
+    var triaged = TRIAGE.triage(page.consoleErrorDetails(), srv.origin);
+    console.log('   console  ' + triaged.total + ' error(s) on ' + srv.origin + ': ' +
+      triaged.firstParty.length + ' first-party, ' + triaged.excluded.length +
+      ' excluded by name, ' + triaged.unexplained.length + ' unexplained');
+    groupExcludedForDisplay(triaged.excluded).forEach(function (g) {
+      console.log('   note     excluded  ' + renderExcludedGroup(g));
     });
-    var ours = allErrs.filter(function (e) { return benign.indexOf(e) === -1; });
-    if (benign.length) {
-      console.log('   note  ' + benign.length + ' third-party/headless error(s) excluded by name: ' +
-        benign.slice(0, 2).join(' | '));
-    }
-    check('no script error blocked the report modules', ours.length === 0,
-      ours.length ? ours.slice(0, 3).join(' | ') +
+    /* Both buckets fail. An unexplained THIRD-PARTY error is not waved through:
+       exclusion is by name, so an origin nobody has named is a thing to look at
+       rather than a thing to assume is someone else's problem. */
+    var failing = triaged.firstParty.concat(triaged.unexplained);
+    check('no script error blocked the report modules', failing.length === 0,
+      failing.length ? TRIAGE.renderFailing(failing).slice(0, 3).join(' | ') +
         (srv.misses.length ? '  [assets not served: ' + srv.misses.join(', ') + ']' : '')
-        : 'clean, ignoring ' + benign.length + ' named third-party error(s)');
+        : 'clean: 0 first-party, 0 unexplained, ' + triaged.excluded.length +
+          ' third-party error(s) excluded by name');
 
     // ---------- the register switch ----------
     var vs = await page.computed('.hl-viewswitch', ['display']);
@@ -357,6 +481,40 @@ async function main() {
   process.exit(failed.length === notCheckedRows.length ? 2 : 1);
 }
 
+/* Defect: a crash here used to erase a FAIL that `results` already recorded.
+   Example measured directly: a first-party module (register-switch.js) made
+   genuinely unreachable correctly fails "no script error blocked the report
+   modules", but the missing module then leaves `.hl-viewswitch__btn` never
+   built, so the later `page.click('.hl-viewswitch__btn')` throws. That
+   exception is not the `__notchecked__` sentinel, so it escapes the try/catch
+   inside main() (see the rethrow there) and lands here -- and this handler
+   used to call `notChecked(...)` unconditionally, reporting exit 2 for a run
+   that had already found a real defect. Per
+   homelab-soc/docs/gate-honesty-contract.md the three states (PASS/FAIL/NOT
+   CHECKED) must stay distinguishable; a recorded FAIL must never be
+   relabelled NOT CHECKED just because something else broke afterward.
+
+   The fix reads `results` -- the same array `check()` has been pushing into
+   all along -- for any row that is a genuine failure (not one of the
+   'NOT CHECKED: ...'-named rows check() also uses to record an early,
+   legitimate NOT CHECKED branch). If one exists, the run already failed
+   before it crashed: print every recorded failure, print the crash message
+   too (the reason the run aborted early is still information and must not
+   be suppressed), and exit 1. Only when NOTHING has failed yet does a crash
+   here still mean NOT CHECKED, exactly as before -- so the sentinel path
+   (which never reaches this handler at all; it is caught and handled inside
+   main() itself) and the "crashed before any check ran" path are both
+   unchanged. */
 main().catch(function (e) {
+  var recordedFailures = results.filter(function (r) {
+    return !r.pass && !/^NOT CHECKED/.test(r.name);
+  });
+  if (recordedFailures.length) {
+    console.log('\nFAIL  the run aborted early: ' + recordedFailures.length +
+      ' check(s) had already failed before the crash below.');
+    recordedFailures.forEach(function (r) { console.log('   FAIL  ' + r.name); });
+    console.log('\ncrash: ' + e.message);
+    process.exit(1);
+  }
   notChecked('the browser check errored before finishing: ' + e.message);
 });
