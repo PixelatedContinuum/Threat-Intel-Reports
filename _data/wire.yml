@@ -3,17 +3,17 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-23T08:01:38Z
+generated_at: 2026-09-23T10:02:18Z
 window_days: 30
 counts:
-  total: 539
+  total: 540
   research: 181
-  news: 358
+  news: 359
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 76
+    count: 77
     color: 1
   - label: "cybercrime"
     count: 60
@@ -25,7 +25,7 @@ topics:
     count: 33
     color: 4
   - label: "exploited"
-    count: 32
+    count: 33
     color: 5
   - label: "malware"
     count: 32
@@ -39,10 +39,10 @@ topics:
   - label: "social engineering"
     count: 16
     color: 9
-  - label: "clickfix"
-    count: 15
-    color: 10
   - label: "zero-day"
+    count: 16
+    color: 10
+  - label: "clickfix"
     count: 15
     color: 11
   - label: "nation-state"
@@ -120,6 +120,7 @@ label_colors:
   "apt-q-95": 4
   "apt28": 3
   "apt36": 10
+  "arista": 10
   "arktunnel": 6
   "arm": 10
   "arrested": 2
@@ -240,7 +241,7 @@ label_colors:
   "claude desktop": 12
   "cleo": 7
   "click2shell": 4
-  "clickfix": 10
+  "clickfix": 11
   "clipper": 3
   "cloaked ursa": 2
   "cloud": 7
@@ -259,7 +260,6 @@ label_colors:
   "credential theft": 6
   "credential-harvesting": 1
   "credential-theft": 5
-  "critical infrastructure": 4
   "critical infrastructure targeting": 5
   "cron-injection": 10
   "cross-border infrastructure": 8
@@ -464,8 +464,20 @@ label_colors:
   "vmware": 2
   "vpn": 8
   "vulnerabilities": 1
-  "zero-day": 11
+  "zero-day": 10
 items:
+  - title: "Arista Urges Immediate Patching of Exploited VCO Zero-Day"
+    url: "https://www.securityweek.com/arista-urges-immediate-patching-of-exploited-vco-zero-day/"
+    source: "SecurityWeek"
+    date: 2026-09-23T08:33:06Z
+    kind: news
+    labels: ["arista", "cisa kev", "exploited", "vulnerabilities", "zero-day"]
+  - title: "Ryuk ransomware member sentenced to 24 months in prison"
+    url: "https://www.bleepingcomputer.com/news/security/ryuk-ransomware-member-sentenced-to-24-months-in-prison/"
+    source: "BleepingComputer"
+    date: 2026-09-23T08:20:05Z
+    kind: news
+    labels: []
   - title: "Critical F5 BIG-IP Vulnerability Exploited as Zero-Day"
     url: "https://www.securityweek.com/critical-f5-big-ip-vulnerability-exploited-as-zero-day/"
     source: "SecurityWeek"
@@ -3694,9 +3706,3 @@ items:
     date: 2026-08-24T10:08:42Z
     kind: news
     labels: ["apollo", "cybercrime", "data breaches"]
-  - title: "Iran-Linked Hackers Shut Down UK Power Plant for Four Days"
-    url: "https://www.securityweek.com/iran-linked-hackers-shut-down-uk-power-plant-for-four-days/"
-    source: "SecurityWeek"
-    date: 2026-08-24T09:22:09Z
-    kind: news
-    labels: ["critical infrastructure", "cyberattacks", "ics/ot", "iran", "uk"]
