@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-23T20:02:57Z
+generated_at: 2026-09-23T22:01:22Z
 window_days: 30
 counts:
-  total: 547
+  total: 548
   research: 188
-  news: 359
+  news: 360
 topics:
   - label: "vulnerabilities"
     count: 78
@@ -41,7 +41,7 @@ topics:
     count: 15
     color: 10
   - label: "social engineering"
-    count: 15
+    count: 14
     color: 11
   - label: "nation-state"
     count: 13
@@ -82,6 +82,7 @@ label_colors:
   "ai guardrails": 8
   "ai infrastructure": 11
   "ai malware": 9
+  "ai models": 12
   "ai training": 8
   "ai voice phishing": 4
   "ai-agent": 12
@@ -143,6 +144,7 @@ label_colors:
   "automated-exploitation": 9
   "aveva": 1
   "aviation sector": 9
+  "avisloader": 6
   "awareness training": 1
   "aws": 7
   "aws cloudtrail": 6
@@ -243,12 +245,12 @@ label_colors:
   "cisco talos network intrusion prevention": 9
   "cisco talos web filtering": 12
   "citrix": 11
-  "claude desktop": 12
   "cleo": 7
   "click2shell": 4
   "clickfix": 10
   "clipper": 3
   "cloaked ursa": 2
+  "closedquorum": 9
   "cloud": 7
   "cloud cybersecurity research": 3
   "cloud-storage-exploitation": 2
@@ -311,7 +313,6 @@ label_colors:
   "data security": 10
   "data-exfiltration": 12
   "ddos": 4
-  "dead drop resolver": 7
   "decoys": 1
   "defender exclusions": 12
   "defense sector": 12
@@ -473,6 +474,24 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 9
 items:
+  - title: "New RemControl Android banking malware targets users in Europe and Canada"
+    url: "https://www.bleepingcomputer.com/news/security/new-remcontrol-android-banking-malware-targets-users-in-europe-and-canada/"
+    source: "BleepingComputer"
+    date: 2026-09-23T21:25:13Z
+    kind: news
+    labels: ["mobile"]
+  - title: "This Windows Malware is Built to Let Up to Four AI Models Vote on Its Next Move"
+    url: "https://otx.alienvault.com/pulse/6ab431db415b8cd13de69a7e"
+    source: "AlienVault"
+    date: 2026-09-23T20:08:58Z
+    kind: research
+    labels: ["ai models", "closedquorum", "crypto", "infostealer", "lsass", "password stealer", "windows credentials", "windows malware"]
+  - title: "Check Point warns of hackers exploiting Security Gateway VPN RCE flaw"
+    url: "https://www.bleepingcomputer.com/news/security/check-point-warns-of-hackers-exploiting-security-gateway-vpn-rce-flaw/"
+    source: "BleepingComputer"
+    date: 2026-09-23T19:53:54Z
+    kind: news
+    labels: []
   - title: "CVE-2024-0244 – A heap buffer overflow in the Canon MF753Cdw printer"
     url: "https://www.thezdi.com/blog/2026/9/23/cve-2024-0244-a-heap-buffer-overflow-in-the-canon-mf753cdw-printer"
     source: "Zero Day Initiative"
@@ -485,6 +504,12 @@ items:
     date: 2026-09-23T18:31:22Z
     kind: news
     labels: []
+  - title: "Meet AvisLoader: A Windows Loader Built to Outlast a Takedown"
+    url: "https://otx.alienvault.com/pulse/6ab40d6887e7e948c6a09d80"
+    source: "AlienVault"
+    date: 2026-09-23T17:33:28Z
+    kind: research
+    labels: ["avisloader", "clickfix", "cloudflare", "loader", "p2p c2", "persistence", "shortcut modification", "tox", "uac bypass"]
   - title: "VeloCloud Orchestrator Remote Access Vulnerability"
     url: "https://www.arista.com/en/support/advisories-notices/security-advisory/24765-security-advisory-0183"
     source: "AlienVault"
@@ -3737,21 +3762,3 @@ items:
     date: 2026-08-24T23:00:00Z
     kind: news
     labels: ["government", "nation-state"]
-  - title: "A ClickFix cluster: Observed activity from recent ClickFix campaigns"
-    url: "https://fieldeffect.com/blog/clickfix-cluster-observed-activity-recent-campaigns"
-    source: "AlienVault"
-    date: 2026-08-24T21:19:20Z
-    kind: research
-    labels: ["clickfix", "dead drop resolver", "digital point", "dll sideloading", "lorem ipsum", "msi packages", "nodejs", "python", "social engineering", "supper", "wordpress compromise"]
-  - title: "Ten Minutes to Containment: How Agentic MXDR Scoped a Fake Claude Desktop Intrusion"
-    url: "https://www.cyberproof.com/blog/ten-minutes-to-containment-how-agentic-mxdr-scoped-a-fake-claude-desktop-intrusion/"
-    source: "AlienVault"
-    date: 2026-08-24T21:19:19Z
-    kind: research
-    labels: ["blockchain c2", "claude desktop", "dll sideloading", "docker desktop", "etherhiding", "fake installer", "fakeagent", "malvertising", "scheduled task persistence", "sectoprat"]
-  - title: "Unpatched Calix flaw lets hackers bypass NAT to expose internal devices"
-    url: "https://www.bleepingcomputer.com/news/security/unpatched-calix-flaw-lets-hackers-bypass-nat-to-expose-internal-devices/"
-    source: "BleepingComputer"
-    date: 2026-08-24T21:14:30Z
-    kind: news
-    labels: ["hardware"]
