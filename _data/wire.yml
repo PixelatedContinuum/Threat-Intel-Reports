@@ -3,35 +3,35 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-23T06:02:04Z
+generated_at: 2026-09-23T08:01:38Z
 window_days: 30
 counts:
-  total: 535
+  total: 539
   research: 181
-  news: 354
+  news: 358
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 74
+    count: 76
     color: 1
   - label: "cybercrime"
     count: 60
     color: 2
   - label: "government"
-    count: 34
+    count: 35
     color: 3
   - label: "artificial intelligence"
     count: 33
     color: 4
-  - label: "malware"
+  - label: "exploited"
     count: 32
     color: 5
-  - label: "exploited"
-    count: 30
+  - label: "malware"
+    count: 32
     color: 6
   - label: "data breaches"
-    count: 25
+    count: 26
     color: 7
   - label: "ransomware"
     count: 16
@@ -43,7 +43,7 @@ topics:
     count: 15
     color: 10
   - label: "zero-day"
-    count: 14
+    count: 15
     color: 11
   - label: "nation-state"
     count: 13
@@ -161,6 +161,7 @@ label_colors:
   "behavior-based-detection": 12
   "beijing institute of technology": 12
   "berlin": 6
+  "big-ip": 6
   "bigbear": 8
   "bigbear 2.0": 8
   "bigcommerce": 3
@@ -330,7 +331,7 @@ label_colors:
   "espionage": 11
   "eu": 12
   "exploit": 9
-  "exploited": 6
+  "exploited": 5
   "exposure management": 4
   "extortion": 12
   "extortionware": 11
@@ -397,7 +398,7 @@ label_colors:
   "maas framework": 12
   "mac malware": 8
   "macos": 11
-  "malware": 5
+  "malware": 6
   "malware analysis": 7
   "mathspace": 4
   "meshagent": 2
@@ -465,6 +466,30 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 11
 items:
+  - title: "Critical F5 BIG-IP Vulnerability Exploited as Zero-Day"
+    url: "https://www.securityweek.com/critical-f5-big-ip-vulnerability-exploited-as-zero-day/"
+    source: "SecurityWeek"
+    date: 2026-09-23T07:34:18Z
+    kind: news
+    labels: ["big-ip", "exploited", "f5", "vulnerabilities", "zero-day"]
+  - title: "F5 patches BIG-IP APM zero-day flaw exploited in RCE attacks"
+    url: "https://www.bleepingcomputer.com/news/security/f5-warns-of-big-ip-apm-remote-code-execution-zero-day-exploited-in-attacks/"
+    source: "BleepingComputer"
+    date: 2026-09-23T07:17:23Z
+    kind: news
+    labels: []
+  - title: "ShinyHunters Claims FBI Hack, Demands Retraction of Threat Report"
+    url: "https://www.securityweek.com/shinyhunters-claims-fbi-hack-demands-retraction-of-threat-report/"
+    source: "SecurityWeek"
+    date: 2026-09-23T07:13:49Z
+    kind: news
+    labels: ["data breaches", "data leak", "fbi", "government", "shinyhunters"]
+  - title: "Check Point Patches Exploited Management Server Zero-Day"
+    url: "https://www.securityweek.com/check-point-patches-exploited-management-server-zero-day/"
+    source: "SecurityWeek"
+    date: 2026-09-23T06:14:03Z
+    kind: news
+    labels: ["check point", "exploited", "vulnerabilities"]
   - title: "Sweden fines Miljödata $183,000 over breach affecting 2.2 million"
     url: "https://www.bleepingcomputer.com/news/security/sweden-fines-milj-data-183-000-over-breach-affecting-22-million/"
     source: "BleepingComputer"
