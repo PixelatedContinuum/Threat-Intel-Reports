@@ -3,18 +3,18 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-23T18:02:32Z
+generated_at: 2026-09-23T20:02:57Z
 window_days: 30
 counts:
-  total: 546
-  research: 186
-  news: 360
+  total: 547
+  research: 188
+  news: 359
 topics:
   - label: "vulnerabilities"
     count: 78
     color: 1
   - label: "cybercrime"
-    count: 61
+    count: 60
     color: 2
   - label: "government"
     count: 36
@@ -61,6 +61,7 @@ label_colors:
   "active directory": 5
   "active directory compromise": 7
   "active directory reconnaissance": 1
+  "active exploitation": 2
   "adapthealth": 2
   "adaptixc2": 8
   "adb propagation": 1
@@ -211,6 +212,7 @@ label_colors:
   "castlerat": 9
   "cdn poisoning": 9
   "centerpoint energy": 7
+  "certificate authentication bypass": 5
   "certificate hierarchy": 12
   "chainscript": 2
   "chaotic eclipse": 12
@@ -471,6 +473,24 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 9
 items:
+  - title: "CVE-2024-0244 – A heap buffer overflow in the Canon MF753Cdw printer"
+    url: "https://www.thezdi.com/blog/2026/9/23/cve-2024-0244-a-heap-buffer-overflow-in-the-canon-mf753cdw-printer"
+    source: "Zero Day Initiative"
+    date: 2026-09-23T19:03:34Z
+    kind: research
+    labels: ["blog post"]
+  - title: "Hackers start exploiting critical WordPress flaw for code execution"
+    url: "https://www.bleepingcomputer.com/news/security/hackers-start-exploiting-critical-wordpress-flaw-for-code-execution/"
+    source: "BleepingComputer"
+    date: 2026-09-23T18:31:22Z
+    kind: news
+    labels: []
+  - title: "VeloCloud Orchestrator Remote Access Vulnerability"
+    url: "https://www.arista.com/en/support/advisories-notices/security-advisory/24765-security-advisory-0183"
+    source: "AlienVault"
+    date: 2026-09-23T16:45:43Z
+    kind: research
+    labels: ["active exploitation", "certificate authentication bypass", "cve-2026-93952", "privileged access", "remote exploitation", "velocloud orchestrator"]
   - title: "Ryuk ransomware operator gets 2-year sentence after extorting victims for $1.2 million"
     url: "https://therecord.media/ransomware-ryuk-sentenced-DOJ"
     source: "Recorded Future"
@@ -3735,15 +3755,3 @@ items:
     date: 2026-08-24T21:14:30Z
     kind: news
     labels: ["hardware"]
-  - title: "Hackers target WordPress sites in miniOrange auth bypass attacks"
-    url: "https://www.bleepingcomputer.com/news/security/hackers-target-wordpress-sites-in-miniorange-auth-bypass-attacks/"
-    source: "BleepingComputer"
-    date: 2026-08-24T19:26:32Z
-    kind: news
-    labels: []
-  - title: "Indian man who fled US arrested on charges he helped scammers siphon $7.5 million from the elderly"
-    url: "https://therecord.media/cyber-scam-indian-arrested"
-    source: "Recorded Future"
-    date: 2026-08-24T18:30:00Z
-    kind: news
-    labels: ["cybercrime"]
