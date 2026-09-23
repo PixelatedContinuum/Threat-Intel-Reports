@@ -3,23 +3,21 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-23T12:02:48Z
+generated_at: 2026-09-23T16:02:18Z
 window_days: 30
 counts:
-  total: 541
-  research: 182
-  news: 359
-unclassified_sources:
-  - "The DFIR Report"
+  total: 547
+  research: 186
+  news: 361
 topics:
   - label: "vulnerabilities"
     count: 78
     color: 1
   - label: "cybercrime"
-    count: 60
+    count: 62
     color: 2
   - label: "government"
-    count: 35
+    count: 36
     color: 3
   - label: "artificial intelligence"
     count: 33
@@ -55,6 +53,7 @@ label_colors:
   "a little sunshine": 6
   "academic lure": 1
   "accessibility abuse": 6
+  "accessibility service abuse": 11
   "accessibility services": 10
   "account takeover": 2
   "acronis": 1
@@ -98,10 +97,9 @@ label_colors:
   "aitm": 5
   "alphaagent": 1
   "amadey": 5
+  "amatera": 5
   "amatera stealer": 1
   "amd": 6
-  "amos": 6
-  "amos stealer": 2
   "amsi evasion": 1
   "android": 9
   "android banking trojan": 11
@@ -221,7 +219,9 @@ label_colors:
   "china": 5
   "china apt": 12
   "china-nexus": 11
+  "chinese apt": 4
   "chinese threat cluster": 7
+  "chinese-speaking actor": 9
   "chinese-speaking operator": 4
   "chosen brick": 7
   "chrome": 12
@@ -229,6 +229,7 @@ label_colors:
   "chrome extension theft": 4
   "chrome extensions": 8
   "chrome rat": 5
+  "chrome vulnerabilities": 6
   "chromium vulnerability": 4
   "ci/cd pipeline exploitation": 4
   "cisa": 6
@@ -280,6 +281,7 @@ label_colors:
   "cspu": 1
   "curlrat": 3
   "cve-2021-38003": 1
+  "cve-2022-0847": 7
   "cve-2023-49105": 4
   "cve-2024-21762": 6
   "cve-2026-19949": 8
@@ -300,6 +302,7 @@ label_colors:
   "cyberespionage": 8
   "cyberwarfare": 9
   "darklantern": 4
+  "darkme": 8
   "data breaches": 7
   "data exfiltration": 9
   "data leak": 9
@@ -468,6 +471,54 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 10
 items:
+  - title: "Ryuk ransomware operator gets 2-year sentence after extorting victims for $1.2 million"
+    url: "https://therecord.media/ransomware-ryuk-sentenced-DOJ"
+    source: "Recorded Future"
+    date: 2026-09-23T15:30:00Z
+    kind: news
+    labels: ["cybercrime", "malware"]
+  - title: "InfraTrust report warns network management systems under attack"
+    url: "https://www.bleepingcomputer.com/news/security/infratrust-report-warns-network-management-systems-under-attack/"
+    source: "BleepingComputer"
+    date: 2026-09-23T14:35:26Z
+    kind: news
+    labels: []
+  - title: "FBI investigating alleged ShinyHunters breach of its jobs site"
+    url: "https://therecord.media/fbi-investigating-alleged-shinyhunters-job-site-breach"
+    source: "Recorded Future"
+    date: 2026-09-23T14:22:00Z
+    kind: news
+    labels: ["cybercrime", "government"]
+  - title: "Latvia arrests suspected hacker for electronics repair company breach"
+    url: "https://therecord.media/latvia-hacker-arrest-cyberattack"
+    source: "Recorded Future"
+    date: 2026-09-23T12:45:00Z
+    kind: news
+    labels: ["cybercrime"]
+  - title: "RemControl: AI Built the Overlays. Victims Lose their PINs"
+    url: "https://www.group-ib.com/blog/remcontrol-android-banking-trojan/"
+    source: "AlienVault"
+    date: 2026-09-23T12:34:25Z
+    kind: research
+    labels: ["accessibility service abuse", "android banking trojan", "malware-as-a-service", "medusa", "overlay injection", "remcontrol", "screen streaming", "telegram dead-drop", "unkk threat actor"]
+  - title: "Arista patches actively exploited VeloCloud Orchestrator zero-day"
+    url: "https://www.bleepingcomputer.com/news/security/arista-patches-actively-exploited-velocloud-orchestrator-zero-day/"
+    source: "BleepingComputer"
+    date: 2026-09-23T12:29:53Z
+    kind: news
+    labels: []
+  - title: "Mind the (Patch) Gap, Part 2: Fake Websites Used to Deploy Chrome & Windows 0-Day Exploits"
+    url: "https://www.volexity.com/blog/2026/09/21/mind-the-patch-gap-part-2-fake-websites-used-to-deploy-chrome-windows-0-day-exploits"
+    source: "AlienVault"
+    date: 2026-09-23T12:17:15Z
+    kind: research
+    labels: ["chinese apt", "chrome vulnerabilities", "cleangulp", "cve-2026-85046", "cve-2026-85880", "cve-2026-87491", "domain spoofing", "phishing campaigns", "uta0565", "windows privilege escalation", "zero-day exploitation"]
+  - title: "Disposable Domains, Durable Hosting"
+    url: "https://activesoc.blackhillsinfosec.com/blog/disposable-domains-durable-hosting"
+    source: "AlienVault"
+    date: 2026-09-23T12:17:14Z
+    kind: research
+    labels: ["amadey", "amatera", "as202412", "blockchain c2", "bulletproof hosting", "clickfix", "compromised websites", "darkgate", "etherhiding", "fake captcha", "matanbuchus", "trojanized installer", "wacatac"]
   - title: "Adobe Patches Critical Flaws in Connect, AEM Forms"
     url: "https://www.securityweek.com/adobe-patches-critical-flaws-in-connect-aem-forms/"
     source: "SecurityWeek"
@@ -522,6 +573,12 @@ items:
     date: 2026-09-23T06:14:03Z
     kind: news
     labels: ["check point", "exploited", "vulnerabilities"]
+  - title: "DarkMe RAT: A VB6 APT Trojan Turned Conventional Infostealer"
+    url: "https://www.huntress.com/blog/darkme-rat-abandons-exploits"
+    source: "AlienVault"
+    date: 2026-09-23T01:10:12Z
+    kind: research
+    labels: ["cryptocurrency theft", "darkme", "financial targeting", "phishing campaign", "process hollowing", "rat", "social engineering", "visual basic 6"]
   - title: "Sweden fines Miljödata $183,000 over breach affecting 2.2 million"
     url: "https://www.bleepingcomputer.com/news/security/sweden-fines-milj-data-183-000-over-breach-affecting-22-million/"
     source: "BleepingComputer"
@@ -606,6 +663,12 @@ items:
     date: 2026-09-22T11:55:20Z
     kind: news
     labels: ["exploited", "switch", "vulnerabilities", "zyxel"]
+  - title: "Open Season on Kapibala: Attacker Steals Over 18,000 Government Records Through WordPress Exploitation"
+    url: "https://www.greynoise.io/blog/open-season-on-kapibala-attacker-steals-government-records-wordpress-exploitation"
+    source: "AlienVault"
+    date: 2026-09-22T11:40:06Z
+    kind: research
+    labels: ["chinese-speaking actor", "cve-2022-0847", "cve-2023-54391", "cve-2026-34908", "cve-2026-34909", "cve-2026-34910", "cve-2026-54569", "cve-2026-56271", "cve-2026-60004", "cve-2026-60137", "cve-2026-63030", "cve-2026-7273", "cve-2026-79756", "data exfiltration", "government breach", "kapibala", "privilege escalation", "wordpress exploitation", "zyxel switches"]
   - title: "WordPress Patches ‘Click2Shell’ Vulnerability"
     url: "https://www.securityweek.com/wordpress-patches-click2shell-vulnerability/"
     source: "SecurityWeek"
@@ -3690,27 +3753,3 @@ items:
     date: 2026-08-24T17:38:21Z
     kind: news
     labels: ["cybercrime", "data breaches", "phishing", "reliaquest", "shinyhunters", "social engineering"]
-  - title: "ReliaQuest confirms failed data-theft attack after ShinyHunters breach"
-    url: "https://www.bleepingcomputer.com/news/security/reliaquest-confirms-failed-data-theft-attack-after-shinyhunters-breach/"
-    source: "BleepingComputer"
-    date: 2026-08-24T15:17:16Z
-    kind: news
-    labels: []
-  - title: "South Korean startup platform breach exposes key management failures"
-    url: "https://www.bleepingcomputer.com/news/security/south-korean-startup-platform-breach-exposes-key-management-failures/"
-    source: "BleepingComputer"
-    date: 2026-08-24T14:00:10Z
-    kind: news
-    labels: []
-  - title: "Hackers infecting Android car systems to build proxy botnet"
-    url: "https://therecord.media/android-botnet-china-hackers"
-    source: "Recorded Future"
-    date: 2026-08-24T12:15:00Z
-    kind: news
-    labels: ["cybercrime", "malware"]
-  - title: "Anatomy of a macOS ClickFix Crimekit that Weaponises EtherHiding"
-    url: "https://otx.alienvault.com/pulse/6a8c3403077781b7036ee79a"
-    source: "AlienVault"
-    date: 2026-08-24T12:07:31Z
-    kind: research
-    labels: ["amos", "amos stealer", "applescript", "clickfix", "etherhiding", "macos", "polygon blockchain", "social engineering", "xmrig", "xmrig cryptominer"]
