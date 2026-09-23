@@ -3,17 +3,17 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-23T10:02:18Z
+generated_at: 2026-09-23T12:02:48Z
 window_days: 30
 counts:
-  total: 540
-  research: 181
+  total: 541
+  research: 182
   news: 359
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 77
+    count: 78
     color: 1
   - label: "cybercrime"
     count: 60
@@ -31,7 +31,7 @@ topics:
     count: 32
     color: 6
   - label: "data breaches"
-    count: 26
+    count: 25
     color: 7
   - label: "ransomware"
     count: 16
@@ -45,8 +45,8 @@ topics:
   - label: "clickfix"
     count: 15
     color: 11
-  - label: "nation-state"
-    count: 13
+  - label: "phishing"
+    count: 14
     color: 12
 label_colors:
   ".net loader": 4
@@ -58,6 +58,7 @@ label_colors:
   "accessibility services": 10
   "account takeover": 2
   "acronis": 1
+  "acrstealer": 4
   "active directory": 5
   "active directory compromise": 7
   "active directory reconnaissance": 1
@@ -77,6 +78,7 @@ label_colors:
   "agentev2": 6
   "agentic ai": 9
   "agentic soc": 2
+  "agenttesla": 2
   "ai guardrails": 8
   "ai infrastructure": 11
   "ai malware": 9
@@ -330,6 +332,7 @@ label_colors:
   "entra id": 5
   "espionage": 11
   "eu": 12
+  "eviltokens": 6
   "exploit": 9
   "exploited": 5
   "exposure management": 4
@@ -409,7 +412,7 @@ label_colors:
   "mobile": 4
   "mobile & wireless": 4
   "n-central": 6
-  "nation-state": 12
+  "nation-state": 11
   "netch-gateway": 5
   "network security": 6
   "next-gen identity security": 12
@@ -427,7 +430,7 @@ label_colors:
   "patched": 1
   "patches": 2
   "payment fraud": 12
-  "phishing": 10
+  "phishing": 12
   "phishing campaign": 6
   "plugin vulnerability": 1
   "poc exploit": 3
@@ -453,7 +456,6 @@ label_colors:
   "soc": 9
   "social engineering": 9
   "software": 5
-  "spring": 5
   "surfshark": 11
   "switch": 10
   "threat hunting & intel": 9
@@ -466,6 +468,24 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 10
 items:
+  - title: "Adobe Patches Critical Flaws in Connect, AEM Forms"
+    url: "https://www.securityweek.com/adobe-patches-critical-flaws-in-connect-aem-forms/"
+    source: "SecurityWeek"
+    date: 2026-09-23T11:40:59Z
+    kind: news
+    labels: ["adobe", "patch", "vulnerabilities"]
+  - title: "AI-Powered Phishing Platform EvilTokens Disrupted by Microsoft"
+    url: "https://www.securityweek.com/ai-powered-phishing-platform-eviltokens-disrupted-by-microsoft/"
+    source: "SecurityWeek"
+    date: 2026-09-23T11:23:30Z
+    kind: news
+    labels: ["cybercrime", "eviltokens", "microsoft", "phishing", "takedown"]
+  - title: "Chrome 154 Patches 108 Vulnerabilities"
+    url: "https://www.securityweek.com/chrome-154-patches-108-vulnerabilities/"
+    source: "SecurityWeek"
+    date: 2026-09-23T10:36:07Z
+    kind: news
+    labels: ["chrome", "patched", "vulnerabilities"]
   - title: "Arista Urges Immediate Patching of Exploited VCO Zero-Day"
     url: "https://www.securityweek.com/arista-urges-immediate-patching-of-exploited-vco-zero-day/"
     source: "SecurityWeek"
@@ -562,6 +582,12 @@ items:
     date: 2026-09-22T13:26:51Z
     kind: news
     labels: ["bigdiskbuster", "chaotic eclipse", "controversy", "poc exploit", "unmasked", "vulnerabilities"]
+  - title: "August 2026 Infostealer Trend Report"
+    url: "https://asec.ahnlab.com/en/95519/"
+    source: "AlienVault"
+    date: 2026-09-22T13:13:35Z
+    kind: research
+    labels: ["acrstealer", "agenttesla", "dll side-loading", "email distribution", "formbook", "infostealer", "lummac2", "remus", "seo poisoning", "vidar"]
   - title: "AI is set to help cyber attackers much more than defenders, says UK official"
     url: "https://therecord.media/ai-set-to-help-attackers-more-than-defenders"
     source: "Recorded Future"
@@ -3688,21 +3714,3 @@ items:
     date: 2026-08-24T12:07:31Z
     kind: research
     labels: ["amos", "amos stealer", "applescript", "clickfix", "etherhiding", "macos", "polygon blockchain", "social engineering", "xmrig", "xmrig cryptominer"]
-  - title: "91 Vulnerabilities Patched in Spring Application Framework"
-    url: "https://www.securityweek.com/91-vulnerabilities-patched-in-spring-application-framework/"
-    source: "SecurityWeek"
-    date: 2026-08-24T11:58:28Z
-    kind: news
-    labels: ["spring", "vulnerabilities"]
-  - title: "CISA orders urgent patching of actively exploited Zimbra flaw"
-    url: "https://www.bleepingcomputer.com/news/security/cisa-orders-urgent-patching-of-actively-exploited-zimbra-flaw/"
-    source: "BleepingComputer"
-    date: 2026-08-24T10:45:12Z
-    kind: news
-    labels: []
-  - title: "Personal Information Exposed in Apollo Global Data Breach"
-    url: "https://www.securityweek.com/personal-information-exposed-in-apollo-global-data-breach/"
-    source: "SecurityWeek"
-    date: 2026-08-24T10:08:42Z
-    kind: news
-    labels: ["apollo", "cybercrime", "data breaches"]
