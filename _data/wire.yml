@@ -3,18 +3,18 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-23T16:02:18Z
+generated_at: 2026-09-23T18:02:32Z
 window_days: 30
 counts:
-  total: 547
+  total: 546
   research: 186
-  news: 361
+  news: 360
 topics:
   - label: "vulnerabilities"
     count: 78
     color: 1
   - label: "cybercrime"
-    count: 62
+    count: 61
     color: 2
   - label: "government"
     count: 36
@@ -29,22 +29,22 @@ topics:
     count: 32
     color: 6
   - label: "data breaches"
-    count: 25
+    count: 24
     color: 7
   - label: "ransomware"
     count: 16
     color: 8
-  - label: "social engineering"
-    count: 16
-    color: 9
   - label: "zero-day"
     count: 16
-    color: 10
+    color: 9
   - label: "clickfix"
     count: 15
+    color: 10
+  - label: "social engineering"
+    count: 15
     color: 11
-  - label: "phishing"
-    count: 14
+  - label: "nation-state"
+    count: 13
     color: 12
 label_colors:
   ".net loader": 4
@@ -244,7 +244,7 @@ label_colors:
   "claude desktop": 12
   "cleo": 7
   "click2shell": 4
-  "clickfix": 11
+  "clickfix": 10
   "clipper": 3
   "cloaked ursa": 2
   "cloud": 7
@@ -415,7 +415,7 @@ label_colors:
   "mobile": 4
   "mobile & wireless": 4
   "n-central": 6
-  "nation-state": 11
+  "nation-state": 12
   "netch-gateway": 5
   "network security": 6
   "next-gen identity security": 12
@@ -433,7 +433,7 @@ label_colors:
   "patched": 1
   "patches": 2
   "payment fraud": 12
-  "phishing": 12
+  "phishing": 10
   "phishing campaign": 6
   "plugin vulnerability": 1
   "poc exploit": 3
@@ -457,7 +457,7 @@ label_colors:
   "servicenow": 1
   "sma1000": 2
   "soc": 9
-  "social engineering": 9
+  "social engineering": 11
   "software": 5
   "surfshark": 11
   "switch": 10
@@ -469,7 +469,7 @@ label_colors:
   "vmware": 2
   "vpn": 8
   "vulnerabilities": 1
-  "zero-day": 10
+  "zero-day": 9
 items:
   - title: "Ryuk ransomware operator gets 2-year sentence after extorting victims for $1.2 million"
     url: "https://therecord.media/ransomware-ryuk-sentenced-DOJ"
@@ -3747,9 +3747,3 @@ items:
     date: 2026-08-24T18:30:00Z
     kind: news
     labels: ["cybercrime"]
-  - title: "ReliaQuest Confirms ShinyHunters Hack, but Says Impact Was Limited"
-    url: "https://www.securityweek.com/reliaquest-confirms-shinyhunters-hack-but-says-impact-was-limited/"
-    source: "SecurityWeek"
-    date: 2026-08-24T17:38:21Z
-    kind: news
-    labels: ["cybercrime", "data breaches", "phishing", "reliaquest", "shinyhunters", "social engineering"]
