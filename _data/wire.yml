@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-22T22:00:48Z
+generated_at: 2026-09-23T00:01:04Z
 window_days: 30
 counts:
-  total: 536
-  research: 182
+  total: 535
+  research: 181
   news: 354
 unclassified_sources:
   - "The DFIR Report"
@@ -3675,9 +3675,3 @@ items:
     date: 2026-08-24T09:22:09Z
     kind: news
     labels: ["critical infrastructure", "cyberattacks", "ics/ot", "iran", "uk"]
-  - title: "How a team of entity maintainers monitors, connects and scores entities in Elastic Security"
-    url: "https://www.elastic.co/security-labs/entity-resolution-identity-scoring-elastic-security"
-    source: "Elastic"
-    date: 2026-08-24T00:00:00Z
-    kind: research
-    labels: ["security-labs"]
