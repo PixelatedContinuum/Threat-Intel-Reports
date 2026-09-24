@@ -3,21 +3,21 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-24T10:01:18Z
+generated_at: 2026-09-24T12:03:05Z
 window_days: 30
 counts:
   total: 544
-  research: 183
-  news: 361
+  research: 182
+  news: 362
 topics:
   - label: "vulnerabilities"
-    count: 77
+    count: 78
     color: 1
   - label: "cybercrime"
-    count: 61
+    count: 60
     color: 2
   - label: "government"
-    count: 35
+    count: 34
     color: 3
   - label: "artificial intelligence"
     count: 33
@@ -26,10 +26,10 @@ topics:
     count: 33
     color: 5
   - label: "malware"
-    count: 31
+    count: 30
     color: 6
   - label: "data breaches"
-    count: 24
+    count: 25
     color: 7
   - label: "ransomware"
     count: 16
@@ -40,11 +40,11 @@ topics:
   - label: "clickfix"
     count: 14
     color: 10
-  - label: "social engineering"
+  - label: "healthcare"
     count: 13
     color: 11
-  - label: "healthcare"
-    count: 12
+  - label: "social engineering"
+    count: 13
     color: 12
 label_colors:
   "3bb": 7
@@ -76,7 +76,6 @@ label_colors:
   "agentcore runtime": 2
   "agentev2": 6
   "agentic ai": 9
-  "agentic execution": 5
   "agentic soc": 2
   "agenttesla": 2
   "ai framework": 4
@@ -91,7 +90,6 @@ label_colors:
   "ai-assisted malware": 8
   "ai-assisted-development": 9
   "ai-driven-campaign": 10
-  "ai-enabled threats": 7
   "ai-generated decoys": 1
   "ai-generated-content": 4
   "ai-orchestrated campaign": 1
@@ -130,6 +128,7 @@ label_colors:
   "arx cipher": 2
   "asia-pacific": 6
   "asiogate": 3
+  "astrana health": 8
   "asukastealer": 5
   "asyncapi": 2
   "asyncrat": 11
@@ -154,7 +153,6 @@ label_colors:
   "azure tokens": 3
   "babuk": 7
   "backdoor": 11
-  "badbox": 10
   "bambootoken": 7
   "bandook": 10
   "banking software": 7
@@ -345,6 +343,7 @@ label_colors:
   "fake captcha": 11
   "fake job interview": 1
   "fake tax documents": 4
+  "fbi": 9
   "fengtai government": 3
   "financial scam": 1
   "fine": 10
@@ -378,7 +377,7 @@ label_colors:
   "handala hack": 2
   "hardware": 6
   "hasbro": 1
-  "healthcare": 12
+  "healthcare": 11
   "hideul.exe": 7
   "hts": 11
   "hugging face": 6
@@ -456,8 +455,9 @@ label_colors:
   "servicenow": 1
   "sma1000": 2
   "soc": 9
-  "social engineering": 11
+  "social engineering": 12
   "software": 5
+  "solarwinds": 10
   "surfshark": 11
   "switch": 10
   "threat hunting & intel": 9
@@ -470,6 +470,30 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 9
 items:
+  - title: "OT Security Guidance: NIST Drafts Updated Guide, CISA/FBI Advise on ICS Integrators"
+    url: "https://www.securityweek.com/ot-security-guidance-nist-drafts-updated-guide-cisa-fbi-advise-on-ics-integrators/"
+    source: "SecurityWeek"
+    date: 2026-09-24T11:05:16Z
+    kind: news
+    labels: ["cisa", "fbi", "guidance", "ics", "ics/ot", "nist", "ot"]
+  - title: "CISA: Ransomware gangs now exploiting critical TeamCity flaw"
+    url: "https://www.bleepingcomputer.com/news/security/cisa-ransomware-gangs-now-exploiting-critical-teamcity-flaw/"
+    source: "BleepingComputer"
+    date: 2026-09-24T10:42:37Z
+    kind: news
+    labels: []
+  - title: "SolarWinds Patches Critical RCE Flaws in Observability Self-Hosted"
+    url: "https://www.securityweek.com/solarwinds-patches-critical-rce-flaws-in-observability-self-hosted/"
+    source: "SecurityWeek"
+    date: 2026-09-24T10:40:40Z
+    kind: news
+    labels: ["solarwinds", "vulnerabilities"]
+  - title: "Astrana Health Data Breach Impacts Private, Confidential Information"
+    url: "https://www.securityweek.com/astrana-health-data-breach-impacts-private-confidential-information/"
+    source: "SecurityWeek"
+    date: 2026-09-24T09:56:04Z
+    kind: news
+    labels: ["astrana health", "data breaches", "healthcare"]
   - title: "OpenAI hacked Australian Medicare govt site, probed data providers"
     url: "https://www.bleepingcomputer.com/news/security/openai-hacked-australian-medicare-govt-site-probed-data-providers/"
     source: "BleepingComputer"
@@ -3708,29 +3732,5 @@ items:
     url: "https://www.bleepingcomputer.com/news/security/hackers-breached-over-270-zimbra-servers-in-ongoing-attacks/"
     source: "BleepingComputer"
     date: 2026-08-25T12:04:02Z
-    kind: news
-    labels: []
-  - title: "The State of AI-Enabled Malware August 2026: From Brand Abuse to Agentic Execution"
-    url: "https://unit42.paloaltonetworks.com/ai-enabled-malware-analysis/"
-    source: "AlienVault"
-    date: 2026-08-25T11:59:25Z
-    kind: research
-    labels: ["agentic execution", "ai-enabled threats", "cleanboost", "endpoint detection", "funksec", "llm-generated code", "oyster", "oyster backdoor", "proof-of-concept", "recipelister", "rhadamanthys"]
-  - title: "Large DDoS attack knocks Norwegian public services offline"
-    url: "https://therecord.media/norway-cyberattack-ddos-government"
-    source: "Recorded Future"
-    date: 2026-08-25T11:45:00Z
-    kind: news
-    labels: ["cybercrime", "government"]
-  - title: "First Malware Built Specifically for Car Head Units Fuels Botnet"
-    url: "https://www.securityweek.com/first-malware-built-specifically-for-car-head-units-fuels-botnet/"
-    source: "SecurityWeek"
-    date: 2026-08-25T11:18:22Z
-    kind: news
-    labels: ["android malware", "badbox", "botnet", "car hacking", "head unit", "iot security", "malware"]
-  - title: "Police arrests dozens of suspects in global cybercrime crackdown"
-    url: "https://www.bleepingcomputer.com/news/security/police-arrests-dozens-of-suspects-in-global-cybercrime-crackdown/"
-    source: "BleepingComputer"
-    date: 2026-08-25T10:53:20Z
     kind: news
     labels: []
