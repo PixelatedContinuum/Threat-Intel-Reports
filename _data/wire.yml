@@ -3,33 +3,33 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-24T12:03:05Z
+generated_at: 2026-09-24T14:02:08Z
 window_days: 30
 counts:
-  total: 544
+  total: 547
   research: 182
-  news: 362
+  news: 365
 topics:
   - label: "vulnerabilities"
-    count: 78
+    count: 77
     color: 1
   - label: "cybercrime"
-    count: 60
+    count: 61
     color: 2
   - label: "government"
-    count: 34
+    count: 36
     color: 3
   - label: "artificial intelligence"
-    count: 33
+    count: 34
     color: 4
   - label: "exploited"
-    count: 33
+    count: 32
     color: 5
   - label: "malware"
-    count: 30
+    count: 31
     color: 6
   - label: "data breaches"
-    count: 25
+    count: 26
     color: 7
   - label: "ransomware"
     count: 16
@@ -263,6 +263,7 @@ label_colors:
   "credential theft": 6
   "credential-harvesting": 1
   "credential-theft": 5
+  "credit card": 7
   "critical infrastructure targeting": 5
   "cron-injection": 10
   "cross-border infrastructure": 8
@@ -410,7 +411,6 @@ label_colors:
   "microsoft": 4
   "microsoft teams": 10
   "mikrotik": 2
-  "miniorange": 5
   "mobile": 4
   "mobile & wireless": 4
   "n-central": 6
@@ -470,6 +470,36 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 9
 items:
+  - title: "Kyiv internet providers report major outages after Russian attacks damage data centers"
+    url: "https://therecord.media/kyiv-internet-providers-report-outages-after-russian-strikes"
+    source: "Recorded Future"
+    date: 2026-09-24T13:30:00Z
+    kind: news
+    labels: ["government", "industry"]
+  - title: "Hackers now exploit critical Roundcube flaw in code injection attacks"
+    url: "https://www.bleepingcomputer.com/news/security/critical-roundcube-flaw-now-actively-exploited-in-code-injection-attacks/"
+    source: "BleepingComputer"
+    date: 2026-09-24T13:27:57Z
+    kind: news
+    labels: []
+  - title: "Astrana latest healthcare tech firm to report data breach to SEC"
+    url: "https://therecord.media/astrana-cyberattack-sec-ransomware"
+    source: "Recorded Future"
+    date: 2026-09-24T13:15:00Z
+    kind: news
+    labels: ["cybercrime"]
+  - title: "AI-Powered Campaign Targets Hundreds of Online Retailers"
+    url: "https://www.securityweek.com/ai-powered-campaign-targets-hundreds-of-online-retailers/"
+    source: "SecurityWeek"
+    date: 2026-09-24T12:48:14Z
+    kind: news
+    labels: ["artificial intelligence", "credit card", "data breaches", "malware"]
+  - title: "OpenAI agent breached Australian government health website, Albanese says"
+    url: "https://therecord.media/openai-australia-health-breach"
+    source: "Recorded Future"
+    date: 2026-09-24T12:30:00Z
+    kind: news
+    labels: ["government"]
   - title: "OT Security Guidance: NIST Drafts Updated Guide, CISA/FBI Advise on ICS Integrators"
     url: "https://www.securityweek.com/ot-security-guidance-nist-drafts-updated-guide-cisa-fbi-advise-on-ics-integrators/"
     source: "SecurityWeek"
@@ -3722,15 +3752,3 @@ items:
     date: 2026-08-25T14:44:16Z
     kind: news
     labels: ["healthcare"]
-  - title: "WordPress Websites Targeted via MiniOrange Plugin Vulnerabilities"
-    url: "https://www.securityweek.com/wordpress-websites-targeted-via-miniorange-plugin-vulnerabilities/"
-    source: "SecurityWeek"
-    date: 2026-08-25T13:33:12Z
-    kind: news
-    labels: ["exploited", "miniorange", "vulnerabilities", "wordpress"]
-  - title: "Hackers breached over 270 Zimbra servers in ongoing attacks"
-    url: "https://www.bleepingcomputer.com/news/security/hackers-breached-over-270-zimbra-servers-in-ongoing-attacks/"
-    source: "BleepingComputer"
-    date: 2026-08-25T12:04:02Z
-    kind: news
-    labels: []
