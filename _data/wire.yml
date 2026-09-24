@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-24T06:01:28Z
+generated_at: 2026-09-24T08:00:57Z
 window_days: 30
 counts:
-  total: 546
-  research: 186
+  total: 543
+  research: 183
   news: 360
 topics:
   - label: "vulnerabilities"
@@ -38,16 +38,15 @@ topics:
     count: 16
     color: 9
   - label: "clickfix"
-    count: 15
+    count: 14
     color: 10
   - label: "social engineering"
-    count: 14
+    count: 13
     color: 11
   - label: "healthcare"
     count: 12
     color: 12
 label_colors:
-  ".net loader": 4
   "3bb": 7
   "3snake": 7
   "a little sunshine": 6
@@ -100,7 +99,6 @@ label_colors:
   "alphaagent": 1
   "amadey": 5
   "amatera": 5
-  "amatera stealer": 1
   "amd": 6
   "amsi evasion": 1
   "android": 9
@@ -109,7 +107,6 @@ label_colors:
   "angryrebel": 7
   "anthropic": 8
   "anti-analysis": 11
-  "antivirus removal": 7
   "anydesk": 9
   "api": 12
   "apollo": 11
@@ -188,7 +185,6 @@ label_colors:
   "breadcrumbs": 10
   "brevo": 8
   "brevo compromise": 8
-  "browser data theft": 1
   "browser extension": 11
   "browser extension malware": 6
   "browser extensions": 4
@@ -345,7 +341,6 @@ label_colors:
   "extortionware": 11
   "fake captcha": 11
   "fake job interview": 1
-  "fake security scan": 12
   "fake tax documents": 4
   "fengtai government": 3
   "financial scam": 1
@@ -472,6 +467,12 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 9
 items:
+  - title: "Critical WordPress Vulnerability Exploited Immediately After Disclosure"
+    url: "https://www.securityweek.com/critical-wordpress-vulnerability-exploited-immediately-after-disclosure/"
+    source: "SecurityWeek"
+    date: 2026-09-24T07:12:26Z
+    kind: news
+    labels: ["exploited", "vulnerabilities", "wordpress"]
   - title: "Placeholder domain used in dev docs now serves ClickFix attacks"
     url: "https://www.bleepingcomputer.com/news/security/placeholder-domain-used-in-dev-docs-now-serves-clickfix-attacks/"
     source: "BleepingComputer"
@@ -3724,27 +3725,3 @@ items:
     date: 2026-08-25T10:00:00Z
     kind: news
     labels: ["patches", "vulnerabilities"]
-  - title: "CISA Warns of Exploited Oracle WebLogic Vulnerability"
-    url: "https://www.securityweek.com/cisa-warns-of-exploited-oracle-weblogic-vulnerability/"
-    source: "SecurityWeek"
-    date: 2026-08-25T07:46:34Z
-    kind: news
-    labels: ["cisa kev", "exploited", "oracle", "oracle weblogic", "vulnerabilities"]
-  - title: "Tracking PavinLoader across ClickFix and fake download campaigns"
-    url: "https://www.malwarebytes.com/blog/threat-intel/2026/08/tracking-pavinloader-across-clickfix-and-fake-download-campaigns"
-    source: "AlienVault"
-    date: 2026-08-25T07:12:42Z
-    kind: research
-    labels: [".net loader", "amatera stealer", "blockchain c2", "clickfix", "etherhiding", "fake captcha", "hijackloader", "pavinloader"]
-  - title: "Fake GTA 6 Extended Look and demo sites deliver an infostealer"
-    url: "https://www.malwarebytes.com/blog/threat-intel/2026/08/fake-gta-6-extended-look-and-demo-sites-deliver-an-infostealer"
-    source: "AlienVault"
-    date: 2026-08-25T07:10:28Z
-    kind: research
-    labels: ["browser data theft", "credential theft", "fake download sites", "gaming scam", "gta 6", "infostealer", "session hijacking", "vidar"]
-  - title: "Fake security scans trick victims into uninstalling their antivirus"
-    url: "https://www.malwarebytes.com/blog/threat-intel/2026/08/fake-microsoft-security-scans-trick-victims-into-uninstalling-their-antivirus"
-    source: "AlienVault"
-    date: 2026-08-25T07:10:25Z
-    kind: research
-    labels: ["antivirus removal", "fake security scan", "refund scam", "remote access", "social engineering", "sysscan", "tech support fraud", "telegram exfiltration"]
