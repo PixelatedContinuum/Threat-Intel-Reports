@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-23T22:01:22Z
+generated_at: 2026-09-24T00:02:08Z
 window_days: 30
 counts:
-  total: 548
-  research: 188
+  total: 547
+  research: 187
   news: 360
 topics:
   - label: "vulnerabilities"
@@ -17,7 +17,7 @@ topics:
     count: 60
     color: 2
   - label: "government"
-    count: 36
+    count: 35
     color: 3
   - label: "artificial intelligence"
     count: 33
@@ -43,7 +43,7 @@ topics:
   - label: "social engineering"
     count: 14
     color: 11
-  - label: "nation-state"
+  - label: "phishing"
     count: 13
     color: 12
 label_colors:
@@ -418,7 +418,7 @@ label_colors:
   "mobile": 4
   "mobile & wireless": 4
   "n-central": 6
-  "nation-state": 12
+  "nation-state": 11
   "netch-gateway": 5
   "network security": 6
   "next-gen identity security": 12
@@ -436,7 +436,7 @@ label_colors:
   "patched": 1
   "patches": 2
   "payment fraud": 12
-  "phishing": 10
+  "phishing": 12
   "phishing campaign": 6
   "plugin vulnerability": 1
   "poc exploit": 3
@@ -456,7 +456,6 @@ label_colors:
   "screenconnect deployment": 5
   "securing ai": 4
   "security operations": 4
-  "security-labs": 3
   "servicenow": 1
   "sma1000": 2
   "soc": 9
@@ -474,6 +473,12 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 9
 items:
+  - title: "Placeholder domain used in dev docs now serves ClickFix attacks"
+    url: "https://www.bleepingcomputer.com/news/security/placeholder-domain-used-in-dev-docs-now-serves-clickfix-attacks/"
+    source: "BleepingComputer"
+    date: 2026-09-23T22:46:01Z
+    kind: news
+    labels: []
   - title: "New RemControl Android banking malware targets users in Europe and Canada"
     url: "https://www.bleepingcomputer.com/news/security/new-remcontrol-android-banking-malware-targets-users-in-europe-and-canada/"
     source: "BleepingComputer"
@@ -3750,15 +3755,3 @@ items:
     date: 2026-08-25T02:55:59Z
     kind: research
     labels: ["browser-in-browser", "credential-harvesting", "enterprise-targeting", "mobile-threats", "oauth-tokens", "phishing", "recruittrap", "social-engineering"]
-  - title: "Inside Elastic's agentic SOC: How we took AI alert triage from 60% to 92% accuracy"
-    url: "https://www.elastic.co/security-labs/alert-triage-agentic-soc-self-correcting-agents"
-    source: "Elastic"
-    date: 2026-08-25T00:00:00Z
-    kind: research
-    labels: ["security-labs"]
-  - title: "US sanctions Iranian cyber actors as UK discloses power plant attack"
-    url: "https://therecord.media/iran-cyberattacks-us-uk"
-    source: "Recorded Future"
-    date: 2026-08-24T23:00:00Z
-    kind: news
-    labels: ["government", "nation-state"]
