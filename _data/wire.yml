@@ -3,18 +3,18 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-24T08:00:57Z
+generated_at: 2026-09-24T10:01:18Z
 window_days: 30
 counts:
-  total: 543
+  total: 544
   research: 183
-  news: 360
+  news: 361
 topics:
   - label: "vulnerabilities"
-    count: 78
+    count: 77
     color: 1
   - label: "cybercrime"
-    count: 60
+    count: 61
     color: 2
   - label: "government"
     count: 35
@@ -26,7 +26,7 @@ topics:
     count: 33
     color: 5
   - label: "malware"
-    count: 32
+    count: 31
     color: 6
   - label: "data breaches"
     count: 24
@@ -76,8 +76,10 @@ label_colors:
   "agentcore runtime": 2
   "agentev2": 6
   "agentic ai": 9
+  "agentic execution": 5
   "agentic soc": 2
   "agenttesla": 2
+  "ai framework": 4
   "ai guardrails": 8
   "ai infrastructure": 11
   "ai malware": 9
@@ -89,6 +91,7 @@ label_colors:
   "ai-assisted malware": 8
   "ai-assisted-development": 9
   "ai-driven-campaign": 10
+  "ai-enabled threats": 7
   "ai-generated decoys": 1
   "ai-generated-content": 4
   "ai-orchestrated campaign": 1
@@ -467,6 +470,24 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 9
 items:
+  - title: "OpenAI hacked Australian Medicare govt site, probed data providers"
+    url: "https://www.bleepingcomputer.com/news/security/openai-hacked-australian-medicare-govt-site-probed-data-providers/"
+    source: "BleepingComputer"
+    date: 2026-09-24T09:38:53Z
+    kind: news
+    labels: []
+  - title: "US Court Sentences Armenian Man to Prison for Ryuk Ransomware Attacks"
+    url: "https://www.securityweek.com/us-court-sentences-armenian-man-to-prison-for-ryuk-ransomware-attacks/"
+    source: "SecurityWeek"
+    date: 2026-09-24T08:38:29Z
+    kind: news
+    labels: ["cybercrime", "ransomware", "ryuk", "sentenced"]
+  - title: "CARBONATO: a botnet built around an AI agent"
+    url: "https://www.threatdown.com/blog/carbonato/"
+    source: "AlienVault"
+    date: 2026-09-24T07:56:13Z
+    kind: research
+    labels: ["ai framework", "botnet", "carbonato", "container security", "credential theft", "cryptocurrency", "docker", "exposed daemon", "hermes agent", "telegram"]
   - title: "Critical WordPress Vulnerability Exploited Immediately After Disclosure"
     url: "https://www.securityweek.com/critical-wordpress-vulnerability-exploited-immediately-after-disclosure/"
     source: "SecurityWeek"
@@ -3689,6 +3710,12 @@ items:
     date: 2026-08-25T12:04:02Z
     kind: news
     labels: []
+  - title: "The State of AI-Enabled Malware August 2026: From Brand Abuse to Agentic Execution"
+    url: "https://unit42.paloaltonetworks.com/ai-enabled-malware-analysis/"
+    source: "AlienVault"
+    date: 2026-08-25T11:59:25Z
+    kind: research
+    labels: ["agentic execution", "ai-enabled threats", "cleanboost", "endpoint detection", "funksec", "llm-generated code", "oyster", "oyster backdoor", "proof-of-concept", "recipelister", "rhadamanthys"]
   - title: "Large DDoS attack knocks Norwegian public services offline"
     url: "https://therecord.media/norway-cyberattack-ddos-government"
     source: "Recorded Future"
@@ -3707,21 +3734,3 @@ items:
     date: 2026-08-25T10:53:20Z
     kind: news
     labels: []
-  - title: "The State of AI-Enabled Malware August 2026: From Brand Abuse to Agentic Execution"
-    url: "https://unit42.paloaltonetworks.com/ai-enabled-malware-analysis/"
-    source: "Palo Alto Networks"
-    date: 2026-08-25T10:00:57Z
-    kind: research
-    labels: ["backdoor", "bitcoin", "dll hijacking", "malware", "ransomware", "sandbox", "threat research", "virustotal"]
-  - title: "The safety penalty: Reclaiming operational sovereignty in the age of AI"
-    url: "https://blog.talosintelligence.com/the-safety-penalty-reclaiming-operational-sovereignty-in-the-age-of-ai/"
-    source: "Cisco Talos"
-    date: 2026-08-25T10:00:22Z
-    kind: research
-    labels: ["landing page top story", "on the radar", "top story"]
-  - title: "Silent Patches Don’t Stop Attackers—They Blind Defenders"
-    url: "https://www.securityweek.com/silent-patches-dont-stop-attackers-they-blind-defenders/"
-    source: "SecurityWeek"
-    date: 2026-08-25T10:00:00Z
-    kind: news
-    labels: ["patches", "vulnerabilities"]
