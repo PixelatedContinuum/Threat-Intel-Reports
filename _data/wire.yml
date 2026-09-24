@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-24T18:02:33Z
+generated_at: 2026-09-24T20:02:21Z
 window_days: 30
 counts:
-  total: 549
-  research: 184
+  total: 556
+  research: 191
   news: 365
 topics:
   - label: "vulnerabilities"
@@ -17,7 +17,7 @@ topics:
     count: 61
     color: 2
   - label: "government"
-    count: 36
+    count: 37
     color: 3
   - label: "artificial intelligence"
     count: 35
@@ -32,7 +32,7 @@ topics:
     count: 26
     color: 7
   - label: "ransomware"
-    count: 17
+    count: 18
     color: 8
   - label: "zero-day"
     count: 16
@@ -41,7 +41,7 @@ topics:
     count: 14
     color: 10
   - label: "social engineering"
-    count: 13
+    count: 14
     color: 11
   - label: "healthcare"
     count: 12
@@ -49,6 +49,7 @@ topics:
 label_colors:
   "3bb": 7
   "3snake": 7
+  "7zip sfx": 7
   "a little sunshine": 6
   "academic lure": 1
   "accessibility abuse": 6
@@ -86,6 +87,7 @@ label_colors:
   "ai training": 8
   "ai voice phishing": 4
   "ai-agent": 12
+  "ai-assisted development": 10
   "ai-assisted intrusions": 3
   "ai-assisted malware": 8
   "ai-assisted-development": 9
@@ -101,6 +103,7 @@ label_colors:
   "amadey": 5
   "amatera": 5
   "amd": 6
+  "amos": 6
   "amsi evasion": 1
   "android": 9
   "android banking trojan": 11
@@ -153,6 +156,7 @@ label_colors:
   "azure tokens": 3
   "babuk": 7
   "backdoor": 11
+  "backdoor module": 7
   "bambootoken": 7
   "bandook": 10
   "banking software": 7
@@ -210,6 +214,7 @@ label_colors:
   "cdn poisoning": 9
   "centerpoint energy": 7
   "certificate authentication bypass": 5
+  "certificate bloating": 7
   "certificate hierarchy": 12
   "chainscript": 2
   "chaotic eclipse": 12
@@ -321,6 +326,7 @@ label_colors:
   "dns txt records": 3
   "docusign impersonation": 2
   "domain controller": 4
+  "double extortion": 1
   "dprk apt": 2
   "e-commerce attacks": 10
   "earth estries": 3
@@ -353,6 +359,7 @@ label_colors:
   "fortinet": 7
   "fraud & identity theft": 11
   "frontier ai": 3
+  "galago": 5
   "gaming": 5
   "garage2global": 10
   "gdpr": 9
@@ -400,6 +407,7 @@ label_colors:
   "leadership": 11
   "legal": 7
   "linux": 2
+  "lnk files": 8
   "maas framework": 12
   "mac malware": 8
   "macos": 11
@@ -417,6 +425,7 @@ label_colors:
   "netch-gateway": 5
   "network security": 6
   "next-gen identity security": 12
+  "north korea": 3
   "nvidia": 3
   "oauth token theft": 5
   "on the radar": 4
@@ -470,6 +479,18 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 9
 items:
+  - title: "Rydox cybercriminal marketplace operator pleads guilty following co-conspirator brothers’s deportation"
+    url: "https://therecord.media/rydox-criminal-marketplace-operator-pleads-guilty"
+    source: "Recorded Future"
+    date: 2026-09-24T18:57:00Z
+    kind: news
+    labels: ["cybercrime", "government"]
+  - title: "Trust and the enticing consultancy offer"
+    url: "https://blog.talosintelligence.com/trust-and-the-enticing-consultancy-offer/"
+    source: "Cisco Talos"
+    date: 2026-09-24T18:00:37Z
+    kind: research
+    labels: ["threat source newsletter"]
   - title: "Exposed GitLab project email addresses let attackers push code"
     url: "https://www.bleepingcomputer.com/news/security/exposed-gitlab-project-email-addresses-let-attackers-push-code/"
     source: "BleepingComputer"
@@ -506,6 +527,12 @@ items:
     date: 2026-09-24T13:27:57Z
     kind: news
     labels: []
+  - title: "OpenSUpdater Hides in Recompiled 7zip SFX, Evading Analysts"
+    url: "https://blog.gdatasoftware.com/2026/09/38490-opensupdater-evades-with-recompiled-7zip-sfx"
+    source: "AlienVault"
+    date: 2026-09-24T13:26:16Z
+    kind: research
+    labels: ["7zip sfx", "certificate bloating", "code signing abuse", "evasion techniques", "nsis", "opensupdater", "reflective loader", "snackarcin"]
   - title: "Astrana latest healthcare tech firm to report data breach to SEC"
     url: "https://therecord.media/astrana-cyberattack-sec-ransomware"
     source: "Recorded Future"
@@ -518,12 +545,42 @@ items:
     date: 2026-09-24T12:48:14Z
     kind: news
     labels: ["artificial intelligence", "credit card", "data breaches", "malware"]
+  - title: "New RemControl Android Banking Trojan Steals PINs Using AI-Built Phishing Overlays"
+    url: "https://cyberpress.org/remcontrol-trojan-steals-banking-pins/?amp=1"
+    source: "AlienVault"
+    date: 2026-09-24T12:41:17Z
+    kind: research
+    labels: ["accessibility service abuse", "ai-assisted development", "android trojan", "banking credentials", "maas", "phishing overlays", "remcontrol", "tvtap", "websocket c2"]
+  - title: "TASK#STOMP PowerShell Backdoor Steals Business Documents and Maintains Persistent Remote Access"
+    url: "https://cyberpress.org/taskstomp-backdoor-steals-documents/?amp=1"
+    source: "AlienVault"
+    date: 2026-09-24T12:41:15Z
+    kind: research
+    labels: ["avisloader", "data exfiltration", "document theft", "filesystem monitoring", "persistent access", "powershell backdoor", "scheduled tasks", "task#stomp", "tls bypass", "vbscript", "velvetcake"]
+  - title: "Konni Hackers Target Ukraine With Malicious LNK Files and VelvetCake PowerShell Malware"
+    url: "https://otx.alienvault.com/pulse/6ab51a43ec94931b637c0607"
+    source: "AlienVault"
+    date: 2026-09-24T12:40:35Z
+    kind: research
+    labels: ["lnk files", "north korea", "operation conflict compass", "powershell", "scheduled tasks", "spear-phishing", "ukraine targeting", "velvetcake"]
+  - title: "Galago Ransomware Emerges With Shared Infrastructure Ties to Panzer"
+    url: "https://otx.alienvault.com/pulse/6ab51a418ee0b2466a9da4f1"
+    source: "AlienVault"
+    date: 2026-09-24T12:40:33Z
+    kind: research
+    labels: ["double extortion", "galago", "healthcare targeting", "iceland", "infrastructure sharing", "panzer", "raas", "ransomware", "tor leak site"]
   - title: "OpenAI agent breached Australian government health website, Albanese says"
     url: "https://therecord.media/openai-australia-health-breach"
     source: "Recorded Future"
     date: 2026-09-24T12:30:00Z
     kind: news
     labels: ["government"]
+  - title: "A new version of the MacSync macOS stealer targets crypto enthusiasts and developers"
+    url: "https://securelist.com/macsync-new-version/121383/"
+    source: "AlienVault"
+    date: 2026-09-24T12:28:26Z
+    kind: research
+    labels: ["amos", "backdoor module", "cryptocurrency theft", "developer targeting", "icloud abuse", "infostealer", "macos stealer", "macsync", "pam stealer", "social engineering"]
   - title: "OT Security Guidance: NIST Drafts Updated Guide, CISA/FBI Advise on ICS Integrators"
     url: "https://www.securityweek.com/ot-security-guidance-nist-drafts-updated-guide-cisa-fbi-advise-on-ics-integrators/"
     source: "SecurityWeek"
@@ -3758,9 +3815,3 @@ items:
     date: 2026-08-25T20:25:26Z
     kind: news
     labels: ["apple", "artificial intelligence"]
-  - title: "Employee benefits platform Paylogix says hackers stole financial and health data"
-    url: "https://therecord.media/paylogix-cyberattack-akira-ransomware"
-    source: "Recorded Future"
-    date: 2026-08-25T18:45:00Z
-    kind: news
-    labels: ["cybercrime", "privacy"]
