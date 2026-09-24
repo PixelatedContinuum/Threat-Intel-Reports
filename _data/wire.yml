@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-24T14:02:08Z
+generated_at: 2026-09-24T16:02:57Z
 window_days: 30
 counts:
   total: 547
-  research: 182
-  news: 365
+  research: 183
+  news: 364
 topics:
   - label: "vulnerabilities"
     count: 77
@@ -20,7 +20,7 @@ topics:
     count: 36
     color: 3
   - label: "artificial intelligence"
-    count: 34
+    count: 35
     color: 4
   - label: "exploited"
     count: 32
@@ -40,11 +40,11 @@ topics:
   - label: "clickfix"
     count: 14
     color: 10
-  - label: "healthcare"
-    count: 13
-    color: 11
   - label: "social engineering"
     count: 13
+    color: 11
+  - label: "healthcare"
+    count: 12
     color: 12
 label_colors:
   "3bb": 7
@@ -378,7 +378,7 @@ label_colors:
   "handala hack": 2
   "hardware": 6
   "hasbro": 1
-  "healthcare": 11
+  "healthcare": 12
   "hideul.exe": 7
   "hts": 11
   "hugging face": 6
@@ -455,7 +455,7 @@ label_colors:
   "servicenow": 1
   "sma1000": 2
   "soc": 9
-  "social engineering": 12
+  "social engineering": 11
   "software": 5
   "solarwinds": 10
   "surfshark": 11
@@ -470,6 +470,18 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 9
 items:
+  - title: "OpenAI Agents Probed Websites for Vulnerabilities While Fetching Public Data"
+    url: "https://www.securityweek.com/openai-agents-probed-websites-for-vulnerabilities-while-fetching-public-data/"
+    source: "SecurityWeek"
+    date: 2026-09-24T14:43:13Z
+    kind: news
+    labels: ["artificial intelligence", "australia", "openai", "rogue ai"]
+  - title: "Proactive Defense: Hardening Code Pipelines and CI/CD Infrastructure"
+    url: "https://cloud.google.com/blog/topics/threat-intelligence/hardening-code-pipelines-and-ci-cd-infrastructure/"
+    source: "Google"
+    date: 2026-09-24T14:00:00Z
+    kind: research
+    labels: ["threat intelligence"]
   - title: "Kyiv internet providers report major outages after Russian attacks damage data centers"
     url: "https://therecord.media/kyiv-internet-providers-report-outages-after-russian-strikes"
     source: "Recorded Future"
@@ -3740,15 +3752,3 @@ items:
     date: 2026-08-25T16:29:33Z
     kind: research
     labels: ["android banking trojan", "blackrock", "cerberus", "cryptocurrency wallets", "docker deployment", "ermac", "hook", "hookbot", "lokibot", "overlay attacks", "source code leak", "vnc remote control", "xerxes"]
-  - title: "Massive DDoS attack disrupts Norway’s government digital services"
-    url: "https://www.bleepingcomputer.com/news/security/massive-ddos-attack-disrupts-norways-government-digital-services/"
-    source: "BleepingComputer"
-    date: 2026-08-25T15:52:36Z
-    kind: news
-    labels: []
-  - title: "Hospital operator Nutex Health says data stolen in cyberattack"
-    url: "https://www.bleepingcomputer.com/news/security/hospital-operator-nutex-health-says-data-stolen-in-cyberattack/"
-    source: "BleepingComputer"
-    date: 2026-08-25T14:44:16Z
-    kind: news
-    labels: ["healthcare"]
