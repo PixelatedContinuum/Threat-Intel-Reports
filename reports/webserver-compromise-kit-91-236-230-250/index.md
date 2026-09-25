@@ -71,7 +71,7 @@ This campaign targets any internet-exposed IIS/.NET application, with no sector 
 
 ### Campaign Overview
 
-**Campaign Identifier:** WebServer-Compromise-Kit-91.236.230.250
+**Campaign Identifier:** WebServer-Compromise-Kit-91.236.230.250<br>
 I discovered this on 6 February 2026.
 The infrastructure was active as of 8 February 2026.
 Targeting is opportunistic, reaching any organization running vulnerable IIS or .NET applications.

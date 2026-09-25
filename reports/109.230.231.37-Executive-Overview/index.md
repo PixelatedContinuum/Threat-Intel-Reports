@@ -589,7 +589,7 @@ The timeline analysis provides a second-by-second execution chronology showing h
 
 ---
 
-### Confidence Levels
+### Confidence Levels Summary
 
 <table class="professional-table">
   <thead>

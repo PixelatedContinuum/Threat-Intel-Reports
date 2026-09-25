@@ -211,14 +211,7 @@ The analytical takeaway is that this is not coincidence. Blocking the domains do
 
 The parallel pre-production campaign staged on 94.103.1.13 contains exploit scripts targeting seven IP addresses. **These are victim / target IPs, not operator C2.** Do not block them as malicious infrastructure, hunt them for signs of compromise.
 
-| IP | Port | Target | Origin |
-|---|---|---|---|
-| 85.238.98.37 | 8080 | SnipeIT (asset management) | Odessa, Ukraine |
-| 178.20.159.99 | 8080 | Verkhovyna SIP PBX | Verkhovyna, Ukraine |
-| 185.237.218.100 | 25 | Exim MTA | RU shared hosting |
-| 192.227.113.124 | 4028 | CGMiner RPC | Cloud South (US) |
-| 192.227.108.142 | — | Neighbor host | Cloud South (US) |
-| 37.17.245.209 | — | Unknown target | Ukraine |
+The target IPs, ports, and what each one is, are in [open-directory-94-103-1-13-20260423-iocs.json](/ioc-feeds/open-directory-94-103-1-13-20260423-iocs.json), each one marked `victim_infrastructure_do_not_block` with the same hunt-not-block guidance.
 
 Four of seven target IPs are on Ukrainian ASNs, consistent with opportunistic targeting rather than nation-state geographic focus. The operator's targeting is financially motivated (SIP fraud, asset-inventory pivoting, mining-rig hijacking, OTP/authentication bypass) rather than sector- or region-specific APT activity.
 

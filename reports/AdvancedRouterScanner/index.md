@@ -217,7 +217,7 @@ Timeline Analysis
 - **Intent:** Botnet recruitment, proxy infrastructure, or resale of access
 - **Attribution Value:** High
 
-### Confidence Levels
+### Confidence Levels Summary
 
 **CONFIRMED (Highest Confidence):**
 - Tool uniqueness and custom development (AdvancedRouterScanner class)
