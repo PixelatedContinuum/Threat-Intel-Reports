@@ -979,7 +979,7 @@ A1 assumes `mailuxe.net` resolves to 45.94.31.220. If that is wrong, and `mailux
 
 A2 concerns the actual C2 IP inside the Donut instance. I cannot confirm the C2 IP embedded in the AES-encrypted Donut section without offline decryption. The recovered AES-128-CTR key (`19 72 1F E6 E3 B0 CF 0C 32 0B 93 E0 C2 BE 91 1A`) and nonce (`EA 2A 1C 5A 8D E1 33 7B DA 31 47 65 40 51 D0 89`) enable offline decryption of the memory dump at VAD region `0x1f7f8e00000` to `0x1f7fa074fff`. **This is the highest-priority analytical gap.**
 
-**A3, Excel.exe shares the same payload core as OneDriveSync.exe:** Assessed as HIGH confidence (90%) based on identical ~33 MB file size and same build date, hash is the same. A second, uncharacterized C2 channel remains possible if Excel.exe uses a different configuration.
+**A3, Excel.exe shares the same payload core as OneDriveSync.exe:** Assessed as HIGH confidence (90%) based on identical ~33 MB file size and same build date; the hash itself was not recovered. A second, uncharacterized C2 channel remains possible if Excel.exe uses a different configuration.
 
 A4 assumes the open directory exposure was accidental. The evidence is strong, with an unencrypted private key exposed, the build log left in the serving directory, and a sub-7-hour exposure window after the build. I put the probability of a deliberate decoy under 3 percent. If that is wrong, every artifact should be re-evaluated as potentially misleading.
 
