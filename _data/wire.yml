@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-25T20:00:28Z
+generated_at: 2026-09-25T22:01:57Z
 window_days: 30
 counts:
-  total: 552
-  research: 191
-  news: 361
+  total: 549
+  research: 189
+  news: 360
 topics:
   - label: "vulnerabilities"
     count: 76
@@ -17,7 +17,7 @@ topics:
     count: 60
     color: 2
   - label: "government"
-    count: 38
+    count: 37
     color: 3
   - label: "artificial intelligence"
     count: 36
@@ -220,7 +220,6 @@ label_colors:
   "check point": 6
   "china": 5
   "china apt": 12
-  "china-nexus": 11
   "chinese apt": 4
   "chinese cyber-espionage": 2
   "chinese threat cluster": 7
@@ -266,7 +265,6 @@ label_colors:
   "credential-harvesting": 1
   "credential-theft": 5
   "credit card": 7
-  "critical infrastructure targeting": 5
   "cron-injection": 10
   "cross-border infrastructure": 8
   "cross-platform": 10
@@ -315,7 +313,6 @@ label_colors:
   "defender exclusions": 12
   "defense sector": 12
   "detection engineering": 12
-  "device code phishing": 5
   "devops targeting": 8
   "diplomatic targeting": 1
   "disrupted": 8
@@ -404,7 +401,6 @@ label_colors:
   "landing page top story": 2
   "lateral movement": 6
   "law enforcement": 6
-  "leadership": 11
   "legal": 7
   "linux": 2
   "lnk files": 8
@@ -477,6 +473,12 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 9
 items:
+  - title: "ShinyHunters hacked Clop leak site using Grav CMS path traversal flaw"
+    url: "https://www.bleepingcomputer.com/news/security/shinyhunters-hacked-clop-leak-site-using-grav-cms-path-traversal-flaw/"
+    source: "BleepingComputer"
+    date: 2026-09-25T20:57:55Z
+    kind: news
+    labels: []
   - title: "Elementor WordPress flaw lets attackers create admin accounts"
     url: "https://www.bleepingcomputer.com/news/security/elementor-wordpress-flaw-lets-attackers-create-admin-accounts/"
     source: "BleepingComputer"
@@ -3765,27 +3767,3 @@ items:
     date: 2026-08-27T04:39:19Z
     kind: news
     labels: ["cisa kev", "citrix", "exploited", "vulnerabilities"]
-  - title: "Inside cyber espionage infrastructure"
-    url: "https://www.lumen.com/blog/en-us/the-infrastructure-quartermaster-inside-a-china-nexus-state-enablement-model"
-    source: "AlienVault"
-    date: 2026-08-26T22:00:43Z
-    kind: research
-    labels: ["china-nexus", "critical infrastructure targeting", "cyber espionage", "fast labyrinth", "proxy infrastructure", "qscan", "qtrouter", "quartermaster model"]
-  - title: "Inhospitable: Tracking Russian Cyber Espionage Infrastructure"
-    url: "https://www.validin.com/blog/inhospitable_russian_cyber_espionage_clusters/"
-    source: "AlienVault"
-    date: 2026-08-26T21:58:59Z
-    kind: research
-    labels: ["credential harvesting", "device code phishing", "dns pivoting", "evilginx", "infrastructure tracking", "oauth phishing", "russian cyber espionage", "think tank targeting"]
-  - title: "Critical Avada WordPress theme flaw enables zero-click RCE"
-    url: "https://www.bleepingcomputer.com/news/security/critical-avada-wordpress-theme-flaw-enables-zero-click-rce/"
-    source: "BleepingComputer"
-    date: 2026-08-26T21:33:20Z
-    kind: news
-    labels: []
-  - title: "Exclusive: NSA to host a hacker reunion in bid to rebuild secretive unit"
-    url: "https://therecord.media/nsa-to-host-hacker-reunion-in-bid-to-rebuild-secretive-unit"
-    source: "Recorded Future"
-    date: 2026-08-26T20:53:00Z
-    kind: news
-    labels: ["government", "leadership"]
