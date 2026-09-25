@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-25T10:00:27Z
+generated_at: 2026-09-25T12:00:38Z
 window_days: 30
 counts:
-  total: 554
+  total: 553
   research: 189
-  news: 365
+  news: 364
 topics:
   - label: "vulnerabilities"
     count: 77
@@ -477,6 +477,12 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 9
 items:
+  - title: "Windows, Linux, Android File Notification Systems Leak User Activity"
+    url: "https://www.securityweek.com/windows-linux-android-file-notification-systems-leak-user-activity/"
+    source: "SecurityWeek"
+    date: 2026-09-25T10:53:32Z
+    kind: news
+    labels: ["android", "data leak", "data protection", "data security", "endpoint security", "linux", "macos", "research", "windows"]
   - title: "‘SalesBleed’ Flaws in Salesforce Agentforce Enabled Zero-Click Data Exfiltration"
     url: "https://www.securityweek.com/salesbleed-flaws-in-salesforce-agentforce-enabled-zero-click-data-exfiltration/"
     source: "SecurityWeek"
@@ -3789,15 +3795,3 @@ items:
     date: 2026-08-26T12:32:30Z
     kind: research
     labels: ["canada revenue agency", "fake tax documents", "hands-on-keyboard access", "living-off-the-land", "password-protected archives", "phishing", "remote management monitoring", "rmm abuse", "social security administration", "vercel infrastructure"]
-  - title: "CISA: Over 100 Internet-Exposed Water Systems Targeted in July Cyberattacks"
-    url: "https://www.securityweek.com/cisa-over-100-internet-exposed-water-systems-targeted-in-july-cyberattacks/"
-    source: "SecurityWeek"
-    date: 2026-08-26T11:29:50Z
-    kind: news
-    labels: ["cisa", "ics", "ics/ot", "ot", "water"]
-  - title: "Hackers now exploit critical Gitea flaw in code injection attacks"
-    url: "https://www.bleepingcomputer.com/news/security/hackers-now-exploit-critical-gitea-flaw-in-code-injection-attacks/"
-    source: "BleepingComputer"
-    date: 2026-08-26T11:07:48Z
-    kind: news
-    labels: []
