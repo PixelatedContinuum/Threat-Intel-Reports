@@ -549,17 +549,7 @@ BellaMain/
 
 The 12-character random admin directory name `V5VgjLU0jsDe` is a deliberate non-guessable path. Common admin-directory wordlist attacks (`admin`, `manager`, `panel`, `control`, `dashboard`) will not surface it, only operator-shared knowledge or directory-listing exposure (as on this server) reveals it.
 
-**Seven kit RAR archives** sit alongside the panel ZIP on the open directory, each between 1.3 MB and 4.9 MB:
-
-| Kit RAR | SHA256 | Size | VT detection | First VT seen |
-|---|---|---|---|---|
-| `Dolap.rar` | `2c656360c4e58854dca35ff21b3fc62db41155ca76f8568ecc18fa52aa38fb31` | 1.3 MB | 0/62 | 2024-04-18 |
-| `Kargo.rar` (Yurtiçi Kargo) | `705793c011fdfe17941700a3bf42eee0ba2ebdc04870ce19779ea528b3565fac` | 1.4 MB | 0/62 | 2024-04-18 |
-| `Letgo.rar` | `e21fb63a3b4d65a3d48dec1bf17a84a414482f819b93cb8d77a81852dc34c95f` | 2.6 MB | 1/61 | 2024-04-18 |
-| `Pttavm.rar` | `ee9d4fccebbf73fb33980da15142bc71e5d9661d1bc583c2b09b77490065efd9` | 4.9 MB | 0/61 | 2024-04-18 |
-| `sahibinden.rar` | `b2f4f1617577d14612b30a54a733b15af809c399f325717b4329c13aaa4c915c` | 2.6 MB | 0/62 | 2024-04-18 |
-| `shopier.rar` | `504b1a30ce7060eafa7b2a3f6249c954a0be6ce1d2930e03b030434cb232600a` | 2.5 MB | 2/59 | 2024-04-18 |
-| `turkcell.rar` | `219cd4f6177a2358ec7f06b230d611f47e1049fcb3e2b44d06ec410b336382b0` | 1.4 MB | 0/62 | 2024-04-18 |
+**Seven kit RAR archives** sit alongside the panel ZIP on the open directory, each between 1.3 MB and 4.9 MB. Full SHA256 hashes, sizes, and VT detection counts for all seven kits are in the [machine-readable IOC feed](/ioc-feeds/bellamain-turkish-phaas-79-137-192-3-20260516-iocs.json).
 
 All seven kits share the same first-VT-seen date (2024-04-18), consistent with a single batch submission, likely by a Turkish security researcher whose submission directory on `Dolap.rar` was named `topluphis/` (Turkish for "bulk phishing"). The panel ZIP `BellaMain.zip` was **never** submitted to VirusTotal before this investigation, operators distributed the kits publicly enough to be sampled but kept the admin backend off public infrastructure.
 

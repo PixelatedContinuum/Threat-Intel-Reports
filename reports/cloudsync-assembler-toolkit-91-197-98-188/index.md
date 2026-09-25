@@ -685,7 +685,7 @@ The techniques that carry the most detection value are concentrated in Defense E
 ## 11. Threat Actor Assessment
 {: .hl-tier-2}
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-[YEAR]-[###] is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-021 is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
 
 I cannot name this operator, and I want to be clear that this is a conclusion rather than a shortfall.
 

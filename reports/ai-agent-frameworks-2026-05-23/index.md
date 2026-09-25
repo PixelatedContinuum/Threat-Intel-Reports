@@ -59,7 +59,7 @@ This is the parent of a six-report series, surfaced via [Hunt.io open-directory 
 
 ### Findings at a glance
 
-The eight active operator cases, each with its home section:
+The eight active operator cases, each carrying its own UTA designation (an internal tracking label used by The Hunters Ledger) and its own home section:
 
 - **[Case 1: Russian Gemini credential-mill](/reports/russian-gemini-credential-mill-213.165.51.115/)** (UTA-2026-012, since cross-identified with Trend Micro's `bandcampro` and raised to MODERATE-HIGH 83%), AEZA host, Cloudflare-Tunnel C2 under `tralalarkefe.com`, persistent RDP+SSH into the US healthcare victim, 40+ stolen Gemini keys; source of two novel TTPs. See §4.1.
 - **[Case 2: Turkish ARPA observability-harvester](/reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/)** (UTA-2026-013, high-MODERATE 78%), `ARPA Korelasyon Motoru` platform cross-correlating four stolen observability sources against a state-affiliated Turkish financial-sector victim, with insider AD recruitment. GitHub T&S actioned handle MehmetARPA on 2026-05-25. See §4.2.
@@ -886,17 +886,7 @@ This is the architectural symmetry: **the attackers in this report use AI agents
 
 Every one of the 9 cases documented in this report originated from Hunt.io's open-directory dataset. The platform crawls exposed open directories at scale and applies classifier-derived framings, short threat-class summaries that orient the investigator before any deeper pull. In this investigation, Hunt.io's curated framings were accurate in all 9 cases reviewed, and the dataset's signal-to-noise was high enough that 25 candidate hosts surfaced for review narrowed to 9 publishable cases without significant manual filtering.
 
-| Case | Host | Hunt.io Curated Framing |
-|---|---|---|
-| 1 | 213.165.51.115 | "Gemini CLI-Orchestrated C2, WordPress Credential Theft & Dental Practice Compromise" |
-| 2 | 209.38.205.158 | Turkish-language operator targeting IBM Instana (operator-note files in Turkish) |
-| 3 | 87.106.143.220 | Atlassian Rovodev installation + Mirai-style botnet |
-| 4 | 221.150.15.104 | Claude Code + OpenClaw co-installation with customized `settings.local.json` |
-| 5 (demoted) | 173.249.2.23 | Claude Code + custom MCP server suite for 14+ platforms |
-| 6 (demoted) | 66.94.120.32 | "Multi-AI offensive workstation", "using multiple AI coding assistants" |
-| 7 | 139.59.239.112 | Weevely PHP web shells + Claude AI |
-| 8 | 68.183.92.28 | 60-second AI-orchestrated payment API attack |
-| 9 | 77.110.96.200 | ComfyUI GPU cryptojacking (PAM backdoor + 16-cloud-provider targeting) |
+The nine hosts behind each case, with Hunt.io's curated framing for each, are in the [machine-readable IOC feed](/ioc-feeds/ai-agent-frameworks-2026-05-23-iocs.json).
 
 The implication for defenders is that an open-directory crawl-and-classify capability, Hunt.io being the platform used here and others existing in the same category, is the discovery layer upstream of any investigation like this one. Without a curated dataset of exposed operator directories, this investigation would not have started. Teams considering investment in that capability should treat the discovery layer as the gating dependency for everything downstream.
 
