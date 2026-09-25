@@ -38,7 +38,7 @@ hide: true
 ### Business Impact Summary
 **agent.exe** is a **CRITICAL-severity Remote Access Trojan (RAT)** that matches signatures for the **PoetRAT** malware family. This 64-bit Golang-compiled malware demonstrates professional-grade development with sophisticated persistence mechanisms, anti-analysis capabilities, and a comprehensive offensive toolkit including keylogging, PowerShell execution, and remote desktop access capabilities. This sample is also new and was not submitted to virus total prior to these findings.
 
-The malware employs **dual persistence mechanisms** masquerading as Windows Defender components, creating both startup folder entries and registry Run keys to ensure survivability across system reboots. Static analysis reveals cryptographic capabilities (AES, ChaCha20, RSA, SHA) and anti-debugging protections, while behavioral analysis shows environment-aware C2 behavior—likely remaining dormant until specific conditions are met. The malware's ability to create services, escalate privileges, and establish network listeners positions it as a **full-featured remote access platform** capable of long-term system compromise, credential theft, and lateral movement within enterprise environments.
+The malware employs **dual persistence mechanisms** masquerading as Windows Defender components, creating both startup folder entries and registry Run keys to ensure survivability across system reboots. Static analysis reveals cryptographic capabilities (AES, ChaCha20, RSA, SHA) and anti-debugging protections, while behavioral analysis shows environment-aware C2 behavior, likely remaining dormant until specific conditions are met. The malware's ability to create services, escalate privileges, and establish network listeners positions it as a **full-featured remote access platform** capable of long-term system compromise, credential theft, and lateral movement within enterprise environments.
 
 ### Key Risk Factors
 <table class="professional-table">
@@ -224,7 +224,7 @@ Remediation is of MEDIUM complexity. Both persistence mechanisms have to come ou
 ### Command & Control Infrastructure
 
 #### Deep Technical Analysis
-During dynamic analysis, agent.exe demonstrated **environment-aware C2 behavior**—the malware did NOT establish outbound command and control connections despite possessing confirmed network capabilities through YARA signature detection.
+During dynamic analysis, agent.exe demonstrated **environment-aware C2 behavior**: the malware did NOT establish outbound command and control connections despite possessing confirmed network capabilities through YARA signature detection.
 
 **C2 Infrastructure Characteristics**:
 - **Status**: NOT OBSERVED in controlled sandbox environment
@@ -598,7 +598,7 @@ A: agent.exe demonstrates environment-aware behavior typical of professional-gra
 A: Golang provides inherent code obfuscation, larger binary sizes that complicate analysis, cross-platform compilation capabilities, and built-in runtime that makes reverse engineering more difficult compared to C/C++ binaries. Traditional signature-based detection is less effective against Golang malware.
 
 **Q: What makes the dual persistence mechanism effective?**
-A: Redundant persistence creates self-healing capability—even if security tools or administrators remove one mechanism (e.g., startup folder file), the other (e.g., registry Run key) re-establishes execution on next login. Complete remediation requires simultaneous removal of both mechanisms.
+A: Redundant persistence creates self-healing capability: even if security tools or administrators remove one mechanism (e.g., startup folder file), the other (e.g., registry Run key) re-establishes execution on next login. Complete remediation requires simultaneous removal of both mechanisms.
 
 **Q: How dangerous is the keylogging capability?**
 A: CRITICAL. Keylogging enables theft of passwords, MFA codes, sensitive communications, and intellectual property. Compromised credentials provide attackers with persistent access even after malware removal. MANDATORY credential rotation is required for all users on infected systems.

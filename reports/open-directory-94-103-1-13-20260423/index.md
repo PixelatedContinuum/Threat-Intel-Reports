@@ -74,7 +74,7 @@ I walk the loader chain in defender-actionable detail and hand off a set of cros
 
 ### What Was Found
 
-Open-directory monitoring flagged `94.103.1.13` on 2026-04-17. The server was exposing directory listings for a mixed staging tree containing ~47 distinct samples: Stage-1 batch droppers, obfuscated PowerShell loaders, .NET Stage-4 and Stage-5 modules, an Orcus RAT v7 build, a custom PrintSpoofer-class privilege-escalation binary, a full Mimikatz suite, multiple GodPotato variants, PrintNightmare tooling (including the signed `mimispool.dll`), Chisel and Plink tunneling binaries, a Python tunnel-stub collection, and a second (parallel) pre-production campaign tree containing SnipeIT/SIP-PBX/Exim/CGMiner/OTP exploit scripts targeting seven IP addresses (four of them Ukrainian).
+Open-directory monitoring flagged `94.103.1.13` on 2026-04-17. The server was exposing directory listings for a mixed staging tree containing ~47 distinct samples: Stage-1 batch droppers, obfuscated PowerShell loaders, .NET Stage-4 and Stage-5 modules, an Orcus RAT v7 build, a custom PrintSpoofer-class privilege-escalation binary, a full Mimikatz suite, multiple GodPotato variants, PrintNightmare tooling (including the signed `mimispool.dll`), Chisel and Plink tunneling binaries, a Python tunnel-stub collection, and a second (parallel) pre-production campaign tree containing SnipeIT/SIP-PBX/Exim/CGMiner/OTP exploit scripts targeting six IP addresses (three of them Ukrainian).
 
 Of the 47 samples, two were the loader chain that matters: the sibling batch droppers `mymain.bat` (2.6 MB, SHA256 `3b5d30e3…`, VT 0/76 at submission) and `myfile.bat` (2.65 MB, SHA256 `fb39fa0d…`). Both are heavily DOSfuscated and both carry two large Base64-alphabet-substituted blobs that decode into a five-stage loader chain terminating in Chaos/TorBrowserTor ransomware plus a pre-compiled UACME #41 UAC-bypass module. The two builds share the same builder pipeline and identical invariants (mutex GUID, Stage-5b PE) but rotate cryptographic keys and resource names, evidence that the crypter is a re-runnable builder rather than a one-off weaponization.
 
@@ -209,11 +209,11 @@ The analytical takeaway is that this is not coincidence. Blocking the domains do
 
 ### Victim vs Operator Infrastructure: Critical Distinction
 
-The parallel pre-production campaign staged on 94.103.1.13 contains exploit scripts targeting seven IP addresses. **These are victim / target IPs, not operator C2.** Do not block them as malicious infrastructure, hunt them for signs of compromise.
+The parallel pre-production campaign staged on 94.103.1.13 contains exploit scripts targeting six IP addresses. **These are victim / target IPs, not operator C2.** Do not block them as malicious infrastructure, hunt them for signs of compromise.
 
 The target IPs, ports, and what each one is, are in [open-directory-94-103-1-13-20260423-iocs.json](/ioc-feeds/open-directory-94-103-1-13-20260423-iocs.json), each one marked `victim_infrastructure_do_not_block` with the same hunt-not-block guidance.
 
-Four of seven target IPs are on Ukrainian ASNs, consistent with opportunistic targeting rather than nation-state geographic focus. The operator's targeting is financially motivated (SIP fraud, asset-inventory pivoting, mining-rig hijacking, OTP/authentication bypass) rather than sector- or region-specific APT activity.
+Three of six target IPs are on Ukrainian ASNs, consistent with opportunistic targeting rather than nation-state geographic focus. The operator's targeting is financially motivated (SIP fraud, asset-inventory pivoting, mining-rig hijacking, OTP/authentication bypass) rather than sector- or region-specific APT activity.
 
 ### Research Gaps Carried Into This Report
 

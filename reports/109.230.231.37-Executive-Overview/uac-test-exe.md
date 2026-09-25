@@ -116,7 +116,7 @@ This sample was found on an open directory at 109.230.231.37, an active malware 
 ## Executive Technical Summary
 
 ### Business Context
-uac_test.exe represents a **legitimate security research tool** that has been publicly documented and is commonly used by penetration testers and security researchers to demonstrate UAC weaknesses. Its design prioritizes **transparency and education** over malicious functionality—it includes user-facing status messages, conditional bypass logic that skips execution if already elevated, and lacks any post-exploitation payload.
+uac_test.exe represents a **legitimate security research tool** that has been publicly documented and is commonly used by penetration testers and security researchers to demonstrate UAC weaknesses. Its design prioritizes **transparency and education** over malicious functionality: it includes user-facing status messages, conditional bypass logic that skips execution if already elevated, and lacks any post-exploitation payload.
 
 ### Key Business Impacts
 - **Policy Violation Indicator**: Presence suggests unauthorized security tool usage or approved penetration testing
@@ -458,7 +458,7 @@ The tool's internal logic includes a privilege check that executes **BEFORE** an
 3. Exited cleanly with status code 0 (success)
 4. Total runtime: < 1 second
 
-**This is expected behavior for a proof-of-concept testing tool**. Real malware would not include this conditional logic—it would attempt privilege escalation regardless of current state, then proceed to install persistence, establish C2 communications, and execute its malicious payload.
+**This is expected behavior for a proof-of-concept testing tool**. Real malware would not include this conditional logic. It would attempt privilege escalation regardless of current state, then proceed to install persistence, establish C2 communications, and execute its malicious payload.
 
 **Forensic Artifacts:**
 
@@ -547,7 +547,7 @@ Technical analysis confirms this is a proof-of-concept UAC bypass tool designed 
 1. **Educational Logging Messages**: User-facing status updates like `"[+] Already running as administrator!"` and `"UAC Bypass Test - Rust Implementation"` are typical of demonstration tools
 2. **Conditional Logic**: Built-in check that skips bypass if already elevated (malware would not include this)
 3. **No Malicious Payload**: After obtaining elevation (if needed), the tool has no secondary payload, data theft, or persistence
-4. **Clean Exit**: Tool terminates immediately after privilege check—malware maintains execution
+4. **Clean Exit**: Tool terminates immediately after privilege check (malware maintains execution)
 5. **Rust Development**: Modern, memory-safe language popular with security researchers
 6. **Transparent Naming**: "uac_test.exe" clearly indicates purpose (not attempting to hide)
 
@@ -582,7 +582,7 @@ The [Detection Package]({{ "/hunting-detections/uac-test-exe/" | relative_url }}
 **Exceptions Requiring Deeper Investigation:**
 - If tool was executed alongside actual malware (check for other suspicious executables)
 - If unauthorized user executed tool as part of broader malicious activity (review full user timeline)
-- If Fodhelper registry keys ARE present (indicates bypass was attempted—warrants investigation)
+- If Fodhelper registry keys ARE present (indicates bypass was attempted, warrants investigation)
 
 ---
 
@@ -740,7 +740,7 @@ That the bypass **would have succeeded** still points to a **configuration weakn
 
 ### Q6: "Should we be concerned about whoever ran this tool?"
 
-It depends on context—authorized testing is legitimate; unauthorized research may be a policy violation.
+It depends on context: authorized testing is legitimate; unauthorized research may be a policy violation.
 
 **Assess Intent Based On:**
 
@@ -753,7 +753,7 @@ It depends on context—authorized testing is legitimate; unauthorized research 
 **2. Context of Execution:**
 - **On security testing VM / lab environment**: Authorized research
 - **On production system**: Requires investigation regardless of user role
-- **Multiple systems**: Broader concern—systematic testing or reconnaissance
+- **Multiple systems**: Broader concern, systematic testing or reconnaissance
 
 **3. Accompanying Activity:**
 - **Other security tools found** (Mimikatz, BloodHound, Cobalt Strike): Strong indicator of penetration testing OR malicious activity
