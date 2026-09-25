@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-25T04:02:57Z
+generated_at: 2026-09-25T06:01:29Z
 window_days: 30
 counts:
-  total: 556
+  total: 555
   research: 191
-  news: 365
+  news: 364
 topics:
   - label: "vulnerabilities"
-    count: 77
+    count: 76
     color: 1
   - label: "cybercrime"
     count: 61
@@ -23,7 +23,7 @@ topics:
     count: 36
     color: 4
   - label: "exploited"
-    count: 32
+    count: 31
     color: 5
   - label: "malware"
     count: 31
@@ -3810,9 +3810,3 @@ items:
     date: 2026-08-26T07:21:30Z
     kind: research
     labels: ["binary ninja", "control-flow flattening", "credential theft", "cve-2026-35616", "ekz stealer", "fortinet ems", "obfuscation analysis", "powershell exfiltration"]
-  - title: "CISA Warns of Exploited Gitea Vulnerability"
-    url: "https://www.securityweek.com/cisa-warns-of-exploited-gitea-vulnerability/"
-    source: "SecurityWeek"
-    date: 2026-08-26T05:17:28Z
-    kind: news
-    labels: ["cisa kev", "exploited", "gitea", "vulnerabilities"]
