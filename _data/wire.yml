@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-25T08:02:28Z
+generated_at: 2026-09-25T10:00:27Z
 window_days: 30
 counts:
   total: 554
-  research: 190
-  news: 364
+  research: 189
+  news: 365
 topics:
   - label: "vulnerabilities"
     count: 77
@@ -437,7 +437,6 @@ label_colors:
   "patch tuesady": 5
   "patch tuesday": 11
   "patched": 1
-  "patches": 2
   "payment fraud": 12
   "phishing": 10
   "phishing campaign": 6
@@ -478,6 +477,18 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 9
 items:
+  - title: "‘SalesBleed’ Flaws in Salesforce Agentforce Enabled Zero-Click Data Exfiltration"
+    url: "https://www.securityweek.com/salesbleed-flaws-in-salesforce-agentforce-enabled-zero-click-data-exfiltration/"
+    source: "SecurityWeek"
+    date: 2026-09-25T09:27:51Z
+    kind: news
+    labels: ["artificial intelligence", "vulnerabilities"]
+  - title: "Hackers steal $351.6 million in Bitget crypto exchange hack"
+    url: "https://www.bleepingcomputer.com/news/security/hackers-steal-3516-million-in-bitget-crypto-exchange-hack/"
+    source: "BleepingComputer"
+    date: 2026-09-25T08:33:44Z
+    kind: news
+    labels: ["cryptocurrency"]
   - title: "Roundcube Webmail Vulnerability in Attackers’ Crosshairs"
     url: "https://www.securityweek.com/roundcube-webmail-vulnerability-in-attackers-crosshairs/"
     source: "SecurityWeek"
@@ -3790,15 +3801,3 @@ items:
     date: 2026-08-26T11:07:48Z
     kind: news
     labels: []
-  - title: "Choose your fighter: Balancing competing requirements to select models for your AI SOC"
-    url: "https://blog.talosintelligence.com/choose-your-fighter-balancing-competing-requirements-to-select-models-for-your-ai-soc/"
-    source: "Cisco Talos"
-    date: 2026-08-26T10:00:05Z
-    kind: research
-    labels: ["artificial intelligence", "tool talk"]
-  - title: "Chrome 152 Patches Over 300 Vulnerabilities"
-    url: "https://www.securityweek.com/chrome-152-patches-over-300-vulnerabilities/"
-    source: "SecurityWeek"
-    date: 2026-08-26T09:50:34Z
-    kind: news
-    labels: ["chrome", "patches", "vulnerabilities"]
