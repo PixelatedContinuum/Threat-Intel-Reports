@@ -531,7 +531,7 @@ The full IOC feed is at [`/ioc-feeds/ai-agent-frameworks-2026-05-23-iocs.json`](
 ## 9. Threat Actor Assessment
 {: .hl-tier-2}
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-[YEAR]-[###] is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports. It is specific to this publication. If future evidence links any UTA-2026-012 through UTA-2026-017 to a known named actor, the designation will be retired and updated accordingly.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-012 through UTA-2026-017 are internal tracking designations assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. These labels will not appear in external threat intelligence feeds or vendor reports. They are specific to this publication. If future evidence links any of them to a known named actor, that designation will be retired and updated accordingly.
 
 This is a **multi-actor** campaign. Alternative Competing Hypotheses (ACH) analysis ruled for the **multi-actor unrelated** hypothesis, with **campaign coordination explicitly REFUTED** by distinct IOCs, wallets, language, geography, targets, motivations, AI tools, and infrastructure across all 8 cases. Attribution spans one named actor (Vova75Rus) and six UTAs; Cases 7, 8, 10 are INSUFFICIENT at capsule depth. **No Tier-1 government attribution** applies to any operator.
 
