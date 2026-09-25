@@ -936,6 +936,28 @@ A: The malware establishes persistence through two independent mechanisms, regis
 
 ---
 
+## Confidence Summary
+{: .hl-tier-2}
+
+The File Overview table and the MITRE ATT&CK mapping are the only places this report attaches a confidence level to a finding. I collect both here.
+
+<table class="professional-table">
+  <thead>
+    <tr><th>Finding</th><th>Confidence Level</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Original filename and its translated form</td><td class="confirmed">CONFIRMED</td></tr>
+    <tr><td>Malware type: hybrid loader/stealer with ecosystem integration</td><td class="confirmed">CONFIRMED</td></tr>
+    <tr><td>File type and packaging: PE32 executable, Nullsoft NSIS installer</td><td class="confirmed">CONFIRMED</td></tr>
+    <tr><td>Threat level: CRITICAL, active cybercrime infrastructure</td><td class="confirmed">CONFIRMED</td></tr>
+    <tr><td>All 14 MITRE ATT&CK techniques mapped in this report</td><td class="likely">HIGH</td></tr>
+  </tbody>
+</table>
+
+I did not attach a confidence level anywhere in this report to the attribution pivots discussed in the Linkage Analysis section, the WeChat ID, the Taobao shop name, or the QingLong Panel operator's identity. Those stand as reported findings with no stated confidence.
+
+---
+
 ## License
 {: .hl-tier-2}
 

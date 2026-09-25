@@ -2306,6 +2306,21 @@ Indirect costs cover productivity loss, regulatory notification obligations wher
 
 ---
 
+## 12. CONFIDENCE SUMMARY
+{: .hl-tier-2}
+
+This report labels confidence at three levels throughout: the classification table in Section 3, a per-module CONFIDENCE LEVEL line at the start of most capability subsections in Section 6, and a Confidence column on every row of the Section 5 technique-mapping table. I organize all three here rather than leaving a reader to collect them section by section.
+
+**CONFIRMED**, code or behavior directly present and observed: the malware type (Remote Access Trojan) and its professional-grade sophistication; the C2 architecture and its multi-layered evasion of domain and IP based detection; keylogging; automated browser password extraction; clipboard hijacking targeting cryptocurrency addresses; screen and video capture; the API calls behind token manipulation and process injection; the SOCKS proxy module; anti-VM, anti-debugger, and sandbox-evasion detection; the cryptographic obfuscation; and Registry RunOnce persistence. The Section 5 technique-mapping table carries the same label on 35 of its 47 rows.
+
+**HIGH**: the Pulsar RAT / Quasar-derivative family identification; the infrastructure context tying `185[.]208[.]159[.]182` to the broader `185.208.15x.xxx` range flagged by threat intelligence feeds; the HVNC (Hidden Virtual Network Computing) capability, which requires driver installation to function; and WinRE persistence, present in code but not confirmed to survive every recovery scenario. One row of the Section 5 table, Windows Recovery Environment persistence under Pre-OS Boot, also carries this label.
+
+**MODERATE**: the UAC bypass technique, present in code with the specific bypass method unconfirmed by dynamic analysis; the threat actor type (professional cybercriminals), the primary motivation (financial gain), and the target profile (broad, opportunistic) from the Section 3 classification table; and, restated from Section 10, financial motivation aligning with the credential-harvesting and clipboard-hijacking capabilities observed. Seven rows of the Section 5 table carry this label, covering spearphishing-attachment delivery, potential service-based persistence and creation, the UAC bypass technique, impairing security tools, session-cookie theft, and lateral movement through compromised systems.
+
+**LOW**: four rows of the Section 5 table, drive-by compromise as a possible distribution vector, potential abuse of legitimate Windows binaries, adversary-in-the-middle interception via the SOCKS proxy, and internal spearphishing using stolen credentials. Each describes a capability the code supports rather than one directly observed in use.
+
+---
+
 ## License
 {: .hl-tier-2}
 

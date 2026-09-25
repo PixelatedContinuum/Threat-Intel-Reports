@@ -295,6 +295,13 @@ Some network monitoring systems inspect image-extension files less aggressively 
 
 ---
 
+## Confidence Summary
+{: .hl-tier-2}
+
+The MITRE ATT&CK mapping in this report is the only place a confidence level is stated. All five rows are HIGH confidence by default, except the one row explicitly marked otherwise: Windows Service persistence, tied to the RAT deployment establishing long-term access, is MODERATE.
+
+---
+
 ## License
 {: .hl-tier-2}
 

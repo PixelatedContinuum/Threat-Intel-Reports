@@ -382,6 +382,13 @@ A: Cloud access monitoring, API security controls, regular access reviews, and l
 
 ---
 
+## Confidence Summary
+{: .hl-tier-2}
+
+The Attribution Fingerprints table is the only place this report grades a finding by confidence. The reused RSA public key, the consistent `clp-fm` cookie name, and the shared file path pattern are all CONFIRMED across the infrastructure. The reused account credentials are MODERATE, since a shared credential pattern is weaker evidence of common operator behavior than a reused cryptographic key or a hardcoded file path.
+
+---
+
 ## License
 {: .hl-tier-2}
 

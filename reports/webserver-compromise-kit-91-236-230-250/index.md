@@ -604,6 +604,13 @@ Set-Service Spooler -StartupType Disabled
 
 ---
 
+## Confidence Summary
+{: .hl-tier-2}
+
+Attribution is the only graded confidence judgment in this report. The threat actor is unknown, and I cannot attribute this activity to a known group, so I hold confidence below 50 percent, INSUFFICIENT: every tool in the kit is public and unmodified, no infrastructure overlaps a known actor, every technique is generic, and there is no distinctive operational pattern to pivot on.
+
+---
+
 ## License
 {: .hl-tier-2}
 

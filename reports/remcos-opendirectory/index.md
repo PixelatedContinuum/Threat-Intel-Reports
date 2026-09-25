@@ -875,6 +875,17 @@ Manual remediation requires removing the Remcos executable from `C:\Users\[USERN
 
 ---
 
+## 11. Confidence Summary
+{: .hl-tier-2}
+
+The MITRE ATT&CK mapping in Section 7 carries a blanket HIGH confidence note, and none of its 27 rows is marked with the `(MODERATE)` exception the note reserves, so I hold all 27 techniques at HIGH.
+
+Attribution is the one judgment in this report I hold below HIGH. I assess the operator as a cybercriminal or an initial access broker, based on the open-directory distribution, the consolidated single-IP infrastructure, the reliance on a commercial RAT, the credential-theft capability, and the poor operational security that a nation-state actor would be unlikely to show. I hold that assessment at MODERATE: it rests on tactics, techniques, and infrastructure patterns rather than a definitive link to a known group, and it cannot rule out an APT false-flag operation.
+
+Section 6's analysis of the C2 channel notes a limit I did not resolve: live C2 traffic was not captured, because the malware ran in an isolated environment with no network path to the malicious infrastructure, so a full protocol dissection would need direct interaction with the live server.
+
+---
+
 ## License
 {: .hl-tier-2}
 

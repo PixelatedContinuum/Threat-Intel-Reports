@@ -879,6 +879,15 @@ A: Both RATs enable comprehensive data theft and surveillance, keylogging, scree
 
 ---
 
+## Confidence Summary
+{: .hl-tier-2}
+
+Both MITRE ATT&CK mapping tables in this report, one for the Quasar RAT sample and one for the NjRAT/XWorm sample, carry a Confidence column, and every one of their 23 combined rows reads CONFIRMED. That is the only confidence grading stated anywhere in this report.
+
+Nothing in the report attaches a confidence level to the APT10 association claimed for Quasar RAT, to the "higher risk" ranking assigned to Quasar RAT over NjRAT/XWorm, or to the assessment that the co-presence of Quasar RAT, NjRAT/XWorm, and Pulsar RAT on the same infrastructure indicates one operator evaluating multiple RAT families at once. Those stand as reported findings with no stated confidence.
+
+---
+
 ## License
 {: .hl-tier-2}
 

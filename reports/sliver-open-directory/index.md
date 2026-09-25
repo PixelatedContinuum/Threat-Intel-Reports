@@ -1053,6 +1053,23 @@ Remediation strategy should reflect the injection architecture:
 
 ---
 
+## 11. Confidence Summary
+{: .hl-tier-2}
+
+This report already carries confidence labels through Sections 3, 6, 7, and 9. I collect them here by level rather than leave a reader to gather them section by section.
+
+**DEFINITE**: the active injection mode is process hollowing, confirmed by the XZ config header mode byte and by dynamic analysis. Of the 26 techniques in the Section 7 ATT&CK mapping, 18 carry this label, including the code-signing certificate infrastructure, the PowerShell stager, native syscalls via SysWhispers3, parent-PID spoofing, masquerading as a signed VMware binary, software packing and stripped symbols, the AES-encrypted Donut instance, the anti-VM and anti-sandbox checks, and the ingress tool transfer from the build server.
+
+**HIGH**: the threat category, cybercrime, most likely an access broker or post-access monetization operation, which I hold at 80 percent. Attacker control of `mailuxe.net`, based on its co-location with the bulletproof VPS build server and its explicit reference in the recovered build log. That `Excel.exe` shares the same payload core as `OneDriveSync.exe`, which I hold at 90 percent, based on an identical roughly 33 MB file size and matching build date, though the hash itself was not recovered. Three of the Section 7 ATT&CK rows carry this label: PEB command-line masquerading, and the two C2 techniques, web protocols and mutual TLS.
+
+**MODERATE**: the `sihost.exe` process-hollowing target, which I hold at 75 percent from the build log alone, not confirmed in live analysis. The Sliver teamserver listener location, which I hold at 70 percent, since the actual C2 may sit on separate infrastructure if `mailuxe.net` resolves elsewhere. My judgment that this is a single, distinct threat actor rather than multiple operators sharing the same toolchain, which I hold at 68 percent. Five of the Section 7 ATT&CK rows carry this label, covering user execution of the lure file, process ghosting, module stomping, indicator removal via delayed file deletion, and process discovery ahead of PID spoofing.
+
+**LOW**: the competing hypothesis that this is a state-sponsored operator using commodity tools as cover, which I hold at 5 percent against the 80 percent I give the cybercrime hypothesis and the 15 percent I give a skilled individual criminal.
+
+**INSUFFICIENT**: named attribution to a known threat group. Research found no infrastructure overlap with any previously reported campaign, `mailuxe.net` carries no prior malicious history, the hosting provider serves thousands of unrelated domains, and the build-pipeline fingerprint (ScareCrow, Donut, SysWhispers3) is consistent with multiple independent operators using the same public tools. That is why I designate the operator **UTA-2026-001** rather than name an actor.
+
+---
+
 ## Appendix A: IOC and Detection File References {#appendix-a}
 {: .hl-tier-2}
 
