@@ -81,6 +81,17 @@ The OPSEC failures (open directory, exposed C2 panel, debug logs in droppers) in
 ## 3. Business Risk Assessment 
 {: .hl-tier-1}
 
+### Risk Score
+
+| Risk Factor             | Score            | Business Impact                                                                                       |
+| ------------------------ | ---------------- | -------------------------------------------------------------------------------------------------------|
+| **Overall Risk**         | **8.8/10, HIGH** | Priority response warranted; active infrastructure; ransomware-ready                                    |
+| Data Exfiltration         | 9.5               | Four parallel credential theft channels; 9.1M records already staged; O365 BEC enabled                  |
+| System Compromise         | 9.5               | Four simultaneous RAT families; full remote control including hidden desktop sessions                   |
+| Ransomware Readiness      | 9.0               | XWorm ransomware module embedded; deployable to any victim on-demand; no additional staging required     |
+| Persistence Difficulty    | 7.5               | Registry Run keys + ScreenConnect legitimate software; survives standard malware scans                   |
+| Evasion Capability        | 8.5               | Fileless loading, sandbox detection, ScreenConnect allow-listed, reflective PE injection                  |
+| Lateral Movement Risk     | 7.5               | USB worm spreading; SOCKS proxy; hidden VNC for invisible account takeover                                |
 
 | Impact Scenario                                  | Likelihood | Explanation                                                                                                                                                                                                                                                                                          |
 | ------------------------------------------------ | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -706,6 +717,16 @@ Operator runs `vicTest.exe` on their server (port 8777 listener) → compiled vi
 
 ## 7. Threat Intelligence Context
 {: .hl-tier-2}
+
+### Infrastructure Overview
+
+The infrastructure splits into two clusters. The C2 server at `185.49.126.140` (AS834, IPXO, Netherlands) carries all malware C2 traffic: four separate malware services run simultaneously across seven ports. The domain `adminxyzhosting[.]com` carries a PTR record pointing directly at this IP, tying the ScreenConnect relay domain to the C2 server.
+
+The PureRAT TLS certificate (`CN=Ayzyqztcoa`) dates to November 2024, and domain registration corroborates that timeline independently: `adminxyzhosting[.]com` was registered on 2024-10-23, with ScreenConnect deployed to the server within 25 days. Neither has been taken down as of the analysis date (2026-03-16). I hold AS834 as suspected abuse-tolerant hosting at MODERATE confidence, resting on its IP-leasing model, a documented history of slow abuse response, and this C2 remaining active for 16+ months without action.
+
+The staging cluster sits at `74.0.42.x` (AS40662, Layer7, Germany): three IPs in the same /24 block, all under one customer account, at HIGH confidence on a ROA-validated BGP announcement and three-source agreement. The open directory at `74.0.42.25` hosts the complete malware toolkit, credential databases, and operator tooling; `chainconnects[.]net` currently resolves to `74.0.42.162` in the same block.
+
+Both clusters geolocate to the Aachen-Kerkrade corridor on the German-Dutch border, less than 5km apart.
 
 ### XWorm V5.6 Landscape Context
 

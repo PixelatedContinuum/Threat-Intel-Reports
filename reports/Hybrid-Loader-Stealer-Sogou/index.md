@@ -26,7 +26,7 @@ stix_bundle: /stix/Hybrid-Loader-Stealer-Sogou.json
 
 **Campaign Identifier:** Sogou-Hybrid-Loader-Stealer-Ecosystem<br>
 **Last Updated:** November 21, 2025<br>
-**Threat Level:** MEDIUM
+**Threat Level:** HIGH
 
 
 ---
@@ -127,7 +127,7 @@ Command-and-control relies on disposable ccTLD domains and cloud IPs (6[.]ar →
     </tr>
     <tr>
       <td><strong>Threat Level</strong></td>
-      <td>CRITICAL - Active cybercrime infrastructure</td>
+      <td>HIGH - Active cybercrime infrastructure</td>
       <td class="confirmed">CONFIRMED</td>
     </tr>
   </tbody>

@@ -63,7 +63,7 @@
   page_url: "/ioc-feeds/Hybrid-Loader-Stealer-Sogou/"
   title: "Hybrid Loader/Stealer Ecosystem Masquerading as Sogou"
   date: "2025-11-20"
-  severity: "med"
+  severity: "high"
   feed_url: "/ioc-feeds/Hybrid-Loader-Stealer-Sogou.json"
   report_url: "/reports/Hybrid-Loader-Stealer-Sogou/"
   detection_url: "/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections"

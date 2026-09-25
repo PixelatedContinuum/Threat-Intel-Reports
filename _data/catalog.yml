@@ -381,7 +381,7 @@ entries:
 
   - title: "Hybrid Loader/Stealer Ecosystem Masquerading as Sogou"
     date: 2025-11-20
-    severity: med
+    severity: high
     tags: [Loader, Stealer, Cred Theft, Evasion]
     report_url: /reports/Hybrid-Loader-Stealer-Sogou/
     stix_url: /stix/Hybrid-Loader-Stealer-Sogou.json

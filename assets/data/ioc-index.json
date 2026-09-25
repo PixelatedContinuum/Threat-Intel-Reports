@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-22T17:54:23Z",
+ "generated_at": "2026-09-25T11:09:34Z",
  "counts": {
   "indicators": 2147,
   "reports": 58,
@@ -85,7 +85,7 @@
   "Hybrid-Loader-Stealer-Sogou.json": {
    "title": "Hybrid Loader/Stealer Ecosystem Masquerading as Sogou",
    "date": "2025-11-20",
-   "severity": "med",
+   "severity": "high",
    "report_url": "/reports/Hybrid-Loader-Stealer-Sogou/",
    "detection_url": "/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections",
    "ioc_url": "/ioc-feeds/Hybrid-Loader-Stealer-Sogou.json"
