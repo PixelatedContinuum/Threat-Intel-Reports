@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-25T16:00:18Z
+generated_at: 2026-09-25T18:00:09Z
 window_days: 30
 counts:
-  total: 554
-  research: 193
+  total: 552
+  research: 191
   news: 361
 topics:
   - label: "vulnerabilities"
@@ -17,7 +17,7 @@ topics:
     count: 60
     color: 2
   - label: "government"
-    count: 39
+    count: 38
     color: 3
   - label: "artificial intelligence"
     count: 36
@@ -26,7 +26,7 @@ topics:
     count: 32
     color: 5
   - label: "malware"
-    count: 30
+    count: 29
     color: 6
   - label: "data breaches"
     count: 25
@@ -43,8 +43,8 @@ topics:
   - label: "social engineering"
     count: 15
     color: 11
-  - label: "nation-state"
-    count: 12
+  - label: "healthcare"
+    count: 11
     color: 12
 label_colors:
   "3bb": 7
@@ -130,7 +130,6 @@ label_colors:
   "artificial intelligence": 4
   "arx cipher": 2
   "asia-pacific": 6
-  "asiogate": 3
   "astrana health": 8
   "asukastealer": 5
   "asyncapi": 2
@@ -158,7 +157,6 @@ label_colors:
   "backdoor": 11
   "backdoor module": 7
   "bambootoken": 7
-  "bandook": 10
   "banking software": 7
   "banking trojan": 4
   "bashnatch": 10
@@ -227,7 +225,6 @@ label_colors:
   "chinese cyber-espionage": 2
   "chinese threat cluster": 7
   "chinese-speaking actor": 9
-  "chinese-speaking operator": 4
   "chosen brick": 7
   "chrome": 12
   "chrome exploitation": 6
@@ -289,7 +286,6 @@ label_colors:
   "curlrat": 3
   "cve-2021-38003": 1
   "cve-2022-0847": 7
-  "cve-2023-49105": 4
   "cve-2024-21762": 6
   "cve-2026-19949": 8
   "cve-2026-20354": 12
@@ -302,7 +298,6 @@ label_colors:
   "cve-2026-75650": 3
   "cve-2026-81578": 1
   "cve-2026-86218": 9
-  "cyber-espionage": 3
   "cybera": 2
   "cyberattacks": 8
   "cybercrime": 2
@@ -387,7 +382,7 @@ label_colors:
   "handala hack": 2
   "hardware": 6
   "hasbro": 1
-  "healthcare": 11
+  "healthcare": 12
   "hideul.exe": 7
   "hts": 11
   "hugging face": 6
@@ -426,7 +421,7 @@ label_colors:
   "mobile": 4
   "mobile & wireless": 4
   "n-central": 6
-  "nation-state": 12
+  "nation-state": 11
   "netch-gateway": 5
   "network security": 6
   "next-gen identity security": 12
@@ -482,6 +477,18 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 9
 items:
+  - title: "CISA warns of Sharepoint, WSO2, Adobe Commerce flaws exploited in attacks"
+    url: "https://www.bleepingcomputer.com/news/security/cisa-warns-of-sharepoint-wso2-adobe-commerce-flaws-exploited-in-attacks/"
+    source: "BleepingComputer"
+    date: 2026-09-25T17:24:20Z
+    kind: news
+    labels: []
+  - title: "Storm-3168: Agentic-driven cloud attacks using compromised service principals"
+    url: "https://www.microsoft.com/en-us/security/blog/2026/09/25/storm-3168-agentic-driven-cloud-attacks-using-compromised-service-principals/"
+    source: "Microsoft"
+    date: 2026-09-25T15:35:08Z
+    kind: research
+    labels: []
   - title: "In Other News: Clop Leak Site Takeover, Docker Botnet Hunts AI Keys, Water Utility Exposure"
     url: "https://www.securityweek.com/in-other-news-clop-leak-site-takeover-docker-botnet-hunts-ai-keys-water-utility-exposure/"
     source: "SecurityWeek"
@@ -3782,27 +3789,3 @@ items:
     date: 2026-08-26T18:48:24Z
     kind: news
     labels: ["hardware"]
-  - title: "Philippine Nuclear Agency and Naval Contractor Targeted by Suspected Chinese-Speaking Operator Using Known Vulnerabilities"
-    url: "https://otx.alienvault.com/pulse/6a8f1fe1d950c245b840741b"
-    source: "AlienVault"
-    date: 2026-08-26T17:18:25Z
-    kind: research
-    labels: ["chinese-speaking operator", "cve-2023-49105", "cve-2024-28000", "data exfiltration", "metasploit", "mettle", "naval contractor", "nuclear research", "owncloud exploitation", "philippines", "sliver", "south china sea", "wordpress compromise"]
-  - title: "Expands Toolset With New Backdoor, SSH Tunnel"
-    url: "https://otx.alienvault.com/pulse/6a8f1fe0b63c473eb499fd00"
-    source: "AlienVault"
-    date: 2026-08-26T17:18:24Z
-    kind: research
-    labels: ["backdoor", "cyber-espionage", "dll hijacking", "iranian threat actor", "mirage kitten", "ssh tunneling", "tortoiseshell", "twostroke", "wtsapi32.dll"]
-  - title: "Dark Caracal Reloaded: New Malware, Same Hunting Grounds"
-    url: "https://arcticwolf.com/resources/blog/dark-caracal-reloaded-new-malware-same-hunting-grounds/"
-    source: "AlienVault"
-    date: 2026-08-26T17:18:24Z
-    kind: research
-    labels: ["asiogate", "bandook", "blockchain infrastructure", "cyberespionage", "ethereum c2 fallback", "gocaracal", "latin america targeting", "modular framework", "venezuela"]
-  - title: "US takes down alleged Chinese hacking tools used against Federal Reserve, DOJ and Senate"
-    url: "https://therecord.media/qscan-qtrouter-us-takedown-alleged-china-hacking-tools"
-    source: "Recorded Future"
-    date: 2026-08-26T16:25:00Z
-    kind: news
-    labels: ["china", "government", "malware", "nation-state"]
