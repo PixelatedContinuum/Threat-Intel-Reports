@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-25T00:01:16Z
+generated_at: 2026-09-25T02:01:39Z
 window_days: 30
 counts:
-  total: 557
-  research: 192
+  total: 556
+  research: 191
   news: 365
 topics:
   - label: "vulnerabilities"
@@ -37,11 +37,11 @@ topics:
   - label: "zero-day"
     count: 16
     color: 9
-  - label: "clickfix"
-    count: 15
-    color: 10
   - label: "social engineering"
     count: 15
+    color: 10
+  - label: "clickfix"
+    count: 14
     color: 11
   - label: "healthcare"
     count: 12
@@ -247,7 +247,7 @@ label_colors:
   "citrix": 11
   "cleo": 7
   "click2shell": 4
-  "clickfix": 10
+  "clickfix": 11
   "clipboard poisoning": 6
   "clipper": 3
   "cloaked ursa": 2
@@ -256,7 +256,6 @@ label_colors:
   "cloud cybersecurity research": 3
   "cloud-storage-exploitation": 2
   "cloudflare": 11
-  "cloudflare captcha": 5
   "coast guard": 1
   "cobalt strike": 5
   "conti": 1
@@ -466,7 +465,7 @@ label_colors:
   "servicenow": 1
   "sma1000": 2
   "soc": 9
-  "social engineering": 11
+  "social engineering": 10
   "software": 5
   "solarwinds": 10
   "surfshark": 11
@@ -3817,9 +3816,3 @@ items:
     date: 2026-08-26T05:17:28Z
     kind: news
     labels: ["cisa kev", "exploited", "gitea", "vulnerabilities"]
-  - title: "ClickFix Phishing Hidden in Malicious npm Packages"
-    url: "https://www.ox.security/blog/research-clickfix-phishing-npm-packages"
-    source: "AlienVault"
-    date: 2026-08-26T01:34:37Z
-    kind: research
-    labels: ["clickfix", "cloudflare captcha", "infrastructure abuse", "npm mirrors", "npm packages", "phishing campaign", "supply chain", "typosquatting"]
