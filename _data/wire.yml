@@ -3,18 +3,18 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-25T14:01:04Z
+generated_at: 2026-09-25T16:00:18Z
 window_days: 30
 counts:
-  total: 552
-  research: 188
-  news: 364
+  total: 554
+  research: 193
+  news: 361
 topics:
   - label: "vulnerabilities"
     count: 76
     color: 1
   - label: "cybercrime"
-    count: 61
+    count: 60
     color: 2
   - label: "government"
     count: 39
@@ -26,7 +26,7 @@ topics:
     count: 32
     color: 5
   - label: "malware"
-    count: 31
+    count: 30
     color: 6
   - label: "data breaches"
     count: 25
@@ -37,11 +37,11 @@ topics:
   - label: "zero-day"
     count: 16
     color: 9
-  - label: "social engineering"
+  - label: "clickfix"
     count: 15
     color: 10
-  - label: "clickfix"
-    count: 14
+  - label: "social engineering"
+    count: 15
     color: 11
   - label: "nation-state"
     count: 12
@@ -82,7 +82,6 @@ label_colors:
   "ai framework": 4
   "ai guardrails": 8
   "ai infrastructure": 11
-  "ai malware": 9
   "ai models": 12
   "ai training": 8
   "ai voice phishing": 4
@@ -114,6 +113,7 @@ label_colors:
   "anydesk": 9
   "api": 12
   "apollo": 11
+  "app-bound encryption": 3
   "app-bound-encryption": 6
   "apple": 12
   "apple activation lock": 5
@@ -183,6 +183,7 @@ label_colors:
   "blog post": 6
   "bloodalchemy": 3
   "bluemoon": 5
+  "bnb smart chain": 10
   "botnet": 6
   "botnet takedown": 5
   "breadcrumbs": 10
@@ -203,6 +204,7 @@ label_colors:
   "c2": 9
   "c2 framework": 5
   "c2 infrastructure": 12
+  "c3pool": 6
   "calendar": 8
   "canada": 4
   "card-skimming": 8
@@ -222,6 +224,7 @@ label_colors:
   "china apt": 12
   "china-nexus": 11
   "chinese apt": 4
+  "chinese cyber-espionage": 2
   "chinese threat cluster": 7
   "chinese-speaking actor": 9
   "chinese-speaking operator": 4
@@ -245,7 +248,8 @@ label_colors:
   "citrix": 11
   "cleo": 7
   "click2shell": 4
-  "clickfix": 11
+  "clickfix": 10
+  "clipboard": 10
   "clipboard poisoning": 6
   "clipper": 3
   "cloaked ursa": 2
@@ -273,6 +277,7 @@ label_colors:
   "crowdsec": 12
   "crowdstrike": 1
   "crudeexclude": 7
+  "crypto": 5
   "cryptocurrency": 12
   "cryptocurrency miner": 1
   "cryptocurrency mining": 6
@@ -332,6 +337,7 @@ label_colors:
   "election": 3
   "elections targeting": 5
   "email security": 12
+  "embedding": 3
   "encrypted payload": 10
   "endpoint security": 11
   "endpoint security & xdr": 11
@@ -401,6 +407,7 @@ label_colors:
   "kimsuky": 1
   "labubarat": 10
   "landing page top story": 2
+  "lateral movement": 6
   "law enforcement": 6
   "leadership": 11
   "legal": 7
@@ -460,7 +467,7 @@ label_colors:
   "servicenow": 1
   "sma1000": 2
   "soc": 9
-  "social engineering": 10
+  "social engineering": 11
   "software": 5
   "solarwinds": 10
   "surfshark": 11
@@ -475,6 +482,24 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 9
 items:
+  - title: "In Other News: Clop Leak Site Takeover, Docker Botnet Hunts AI Keys, Water Utility Exposure"
+    url: "https://www.securityweek.com/in-other-news-clop-leak-site-takeover-docker-botnet-hunts-ai-keys-water-utility-exposure/"
+    source: "SecurityWeek"
+    date: 2026-09-25T15:07:31Z
+    kind: news
+    labels: ["artificial intelligence", "in other news", "malware"]
+  - title: "The Psychedelic Stealer: When a CAPTCHA Becomes an Installer"
+    url: "https://arcticwolf.com/resources/blog/psychedelic-stealer-fake-clickfix-captcha-targets-ukraine/"
+    source: "AlienVault"
+    date: 2026-09-25T14:53:38Z
+    kind: research
+    labels: ["clipboard", "fake captcha", "infostealer", "msi package", "psychedelic", "windows run"]
+  - title: "Uncovering a SectopRAT Variant Embedded in Legitimate Software"
+    url: "https://www.fortinet.com/blog/threat-research/uncovering-a-sectoprat-variant-embedded-in-legitimate-software"
+    source: "AlienVault"
+    date: 2026-09-25T14:42:13Z
+    kind: research
+    labels: ["crypto", "embedding", "infostealer", "rat", "sectoprat"]
   - title: "CISA Election Security Plan Flags Patching Barriers, Voter Database Attacks"
     url: "https://www.securityweek.com/cisa-election-security-plan-flags-patching-barriers-voter-database-attacks/"
     source: "SecurityWeek"
@@ -505,6 +530,12 @@ items:
     date: 2026-09-25T08:33:44Z
     kind: news
     labels: ["cryptocurrency"]
+  - title: "Major vulnerability found in ancient TACACS+ networking protocol"
+    url: "https://news.risky.biz/risky-bulletin-major-vulnerability-found-in-ancient-tacacs-networking-protocol/"
+    source: "AlienVault"
+    date: 2026-09-25T07:09:34Z
+    kind: research
+    labels: ["chinese cyber-espionage", "lateral movement", "networking protocol", "persistence", "pre-authentication", "remote code execution", "tacacs+", "telecommunications targeting"]
   - title: "Roundcube Webmail Vulnerability in Attackers’ Crosshairs"
     url: "https://www.securityweek.com/roundcube-webmail-vulnerability-in-attackers-crosshairs/"
     source: "SecurityWeek"
@@ -553,6 +584,18 @@ items:
     date: 2026-09-24T17:47:44Z
     kind: news
     labels: []
+  - title: "The Not So Silent Miner: Threat Actor Compiles Cryptominer on the Endpoint"
+    url: "https://www.huntress.com/blog/threat-actor-compiles-cryptominer"
+    source: "AlienVault"
+    date: 2026-09-24T17:43:49Z
+    kind: research
+    labels: ["anydesk", "c3pool", "cryptominer", "cve-2024-7399", "cve-2025-4632", "monero", "on-endpoint compilation", "samsung magicinfo", "silentxmrminer"]
+  - title: "RemotePanel and BoundSiphon: A Dual-Payload Toolkit for Persistent Access and Browser Theft"
+    url: "https://otx.alienvault.com/pulse/6ab561541d94721ef4ce040e"
+    source: "AlienVault"
+    date: 2026-09-24T17:43:48Z
+    kind: research
+    labels: ["app-bound encryption", "bnb smart chain", "boundsiphon", "browser hijacking", "clickfix", "credential theft", "cryptocurrency wallet", "hvnc", "persistence", "remotepanel"]
   - title: "third-party.com Placeholder Domain Now Serves ClickFix"
     url: "https://www.manifold.security/blog/third-party-com-placeholder-clickfix"
     source: "AlienVault"
@@ -3763,27 +3806,3 @@ items:
     date: 2026-08-26T16:25:00Z
     kind: news
     labels: ["china", "government", "malware", "nation-state"]
-  - title: "Iran-linked hackers expand infrastructure across Europe and Middle East, report says"
-    url: "https://therecord.media/iran-linked-hackers-expand-infrastructure-europe-middle-east"
-    source: "Recorded Future"
-    date: 2026-08-26T15:45:00Z
-    kind: news
-    labels: ["cybercrime", "malware"]
-  - title: "AI Speeds Up Malware Development, Not Its Success Rate: Analysis"
-    url: "https://www.securityweek.com/ai-speeds-up-malware-development-not-its-success-rate-analysis/"
-    source: "SecurityWeek"
-    date: 2026-08-26T15:23:45Z
-    kind: news
-    labels: ["artificial intelligence", "ai malware", "malware"]
-  - title: "Hackers target Microsoft SharePoint RCE chain with PoC exploit"
-    url: "https://www.bleepingcomputer.com/news/security/hackers-target-microsoft-sharepoint-rce-chain-with-poc-exploit/"
-    source: "BleepingComputer"
-    date: 2026-08-26T14:47:51Z
-    kind: news
-    labels: []
-  - title: "FBI disrupts proxy network enabling Chinese espionage operations"
-    url: "https://www.bleepingcomputer.com/news/security/fbi-disrupts-proxy-network-enabling-chinese-espionage-operations/"
-    source: "BleepingComputer"
-    date: 2026-08-26T14:17:59Z
-    kind: news
-    labels: []
