@@ -133,22 +133,7 @@ For ongoing monitoring, watch for reinfection via bulk ScreenConnect links, sinc
 
 The total sample inventory runs to 34 items, 32 binaries and 4 scripts.
 
-**File Identifier, Primary Analysis Samples:**
-
-
-| Filename          | SHA256 (full)                                                      | Role                                                          |
-| ----------------- | ------------------------------------------------------------------ | ------------------------------------------------------------- |
-| `XClient.exe`     | `427f818131c9beb7f8a487cb28fe13e2699db844ac3c9e9ae613fd35113fe77f` | XWorm V5.6 stub, full C2 config decrypted                    |
-| `Xworm_V5.6.exe`  | `90f58865f265722ab007abb25074b3fc4916e927402552c6be17ef9afac96405` | XWorm builder/server panel (14.8MB)                           |
-| `XwormLoader.exe` | `f5f14b9073f86da926a8ed319b3289b893442414d1511e45177f6915fb4e5478` | Native C++ 11-stage reflective PE loader                      |
-| `Aspdkzb.exe`     | `978ead9671e59772eeeb73344fc3b0c068c5168de7f67f738269f5b59e681a9a` | Stage 1, ConfuserEx fileless loader                          |
-| `Faidowra.dll`    | `6b526c29a6961c1f03eeb1ec4ca3a0fdc5680e3f90db013dea8b27d8b63cce57` | Stage 3, PureRAT v4.1.9 (novel; not in public sandboxes)     |
-| `vicTest.exe`     | `b34a0bb0c0ba24dae59b748f1e9dc70fc739c5d4300fe96e8ff66cf6166d3dd8` | Raven RAT C2 panel (operator console, accidentally uploaded) |
-| `Attachment.vbs`  | `fdca9ee6e64d67795cd48c5740fa54f509b00bff3e2e94d5f7863e21b23da7f6` | Phishing VBScript dropper                                     |
-| `vlc_boxed.exe`   | `7a848e3509c5945f1104c0baa89032ac6e329a84844ca6bf4177b9308d98b2d3` | DGA-capable unknown family (Enigma VB)                        |
-
-
-Full SHA256 hashes for all 34 samples are available in the [IOC feed]({{ "/ioc-feeds/opendirectory-74-0-42-25-20260316-iocs.json" | relative_url }}).
+The eight primary analysis samples, XClient.exe, Xworm_V5.6.exe, XwormLoader.exe, Aspdkzb.exe, Faidowra.dll, vicTest.exe, Attachment.vbs, and vlc_boxed.exe, along with full SHA256 hashes for all 34 samples, are in the [IOC feed]({{ "/ioc-feeds/opendirectory-74-0-42-25-20260316-iocs.json" | relative_url }}).
 
 On sophistication I put this operator at intermediate. They assemble commodity and MaaS tools (a cracked XWorm builder, a PureRAT subscription), augment them with a novel three-stage fileless loader chain (the Aspdkzb cluster, not publicly documented), and have developed a custom Delphi RAT, Raven RAT, to roughly 60 percent completion. The significant OPSEC failure, exposing the entire toolkit, source code, C2 panel and credential database on an open directory, is inconsistent with a sophisticated organized group.
 
