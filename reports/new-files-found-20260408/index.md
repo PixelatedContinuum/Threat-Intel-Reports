@@ -34,7 +34,7 @@ stix_bundle: /stix/new-files-found-20260408.json
 
 ---
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-004 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports. It is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-004 is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
 
 ---
 
@@ -878,7 +878,7 @@ All 10 custom GCC 15 operator tools (including all four OpenStrike beacon genera
 
 > **Analyst note:** This section addresses who is behind this campaign and what we can and cannot determine about their identity. The short answer is: we cannot identify a specific named actor. The longer answer explains what the evidence does tell us, and why the evidence that might suggest a Chinese-linked actor is insufficient for that conclusion.
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-004 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports. It is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-004 is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
 
 I maintain the UTA-2026-004 attribution, with no upgrade warranted, and named-actor confidence stays INSUFFICIENT below 50 percent.
 

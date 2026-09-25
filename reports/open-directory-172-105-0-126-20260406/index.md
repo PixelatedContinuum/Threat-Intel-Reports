@@ -936,7 +936,7 @@ The open directory was almost certainly an operator error, a misconfigured web s
 ## 7. Threat Actor Assessment
 {: .hl-tier-2}
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-004 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports. It is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-004 is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
 
 The designation is UTA-2026-004.
 **Attribution Confidence: INSUFFICIENT (<50%)**

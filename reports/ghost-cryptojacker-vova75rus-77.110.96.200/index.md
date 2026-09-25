@@ -639,7 +639,7 @@ The full IOC feed is at [`/ioc-feeds/ghost-cryptojacker-vova75rus-77.110.96.200-
 ## 9. Threat Actor Assessment
 {: .hl-tier-2}
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-016 and UTA-2026-017 are internal tracking designations assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. These labels will not appear in external threat intelligence feeds or vendor reports. They are specific to this publication. If future evidence links this activity to a known named actor, the designations will be retired and updated accordingly.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-016 and UTA-2026-017 are tracking labels The Hunters Ledger assigns to actors I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use these labels; they are specific to this publication. If later evidence ties any of them to a named actor, I will retire that label and update the report.
 
 Attribution for Case 9 resolves into three identity tiers: a named kit author (Vova75Rus, HIGH 88%), two unattributed customer operators (UTA-2026-016 and UTA-2026-017, both LOW), and a supply-chain context entity (UnamSanctam, explicitly NOT a Case 9 threat actor; included for ecosystem context only).
 

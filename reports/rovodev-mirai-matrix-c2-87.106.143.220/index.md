@@ -954,7 +954,7 @@ The full IOC feed is at [`/ioc-feeds/rovodev-mirai-matrix-c2-87.106.143.220-iocs
 ## 9. Threat Actor Assessment: UTA-2026-014
 {: .hl-tier-2}
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-014 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports. It is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-014 is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
 
 The overall operator-profile claim (English-speaking Hybrid AI-augmented solo-or-small-team operator) is held at **LOW 60% within the canonical LOW band (50-70%)**; this sub-report establishes the canonical Threat Actor Assessment for the Case 3 operator. Specific sub-claims hold at higher confidence: the HYBRID AI-augmented operator class assignment holds at HIGH (~80%); Atlassian Rovodev AI co-authoring of the Matrix C2 framework is DEFINITE (95%); the AI-Generated Offensive Code Structural Signature universal subset is DEFINITE for the cross-3-operator ecosystem-level claim; the solo-versus-small-team discrimination favors solo at HIGH (~80%); real-world identity remains INSUFFICIENT.
 

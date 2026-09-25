@@ -808,7 +808,7 @@ Thirteen of the fourteen tactics are populated. Impact is empty by evidence, and
 ## 13. Threat Actor Assessment
 {: .hl-tier-2}
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-022 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports, it is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-022 is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
 
 Attribution here is not one question, it is four, and conflating them is the main analytic hazard in this case. The operator spent five months telling an AI assistant that he was authorised, and a reader who takes that at face value gets everything else wrong.
 

@@ -785,7 +785,7 @@ What was exposed is 270 files across 69 subdirectories, totaling 144 MB. That in
 
 ### UTA-2026-001 Designation
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-001 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports. It is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-001 is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
 
 The threat actor is unknown, and I designate them **UTA-2026-001**. I hold the distinct-actor judgment at MODERATE, 68 percent, and named attribution stays INSUFFICIENT, because research found no infrastructure overlap with any known named campaign.
 

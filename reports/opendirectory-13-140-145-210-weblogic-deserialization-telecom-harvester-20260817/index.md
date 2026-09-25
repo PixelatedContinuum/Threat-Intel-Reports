@@ -833,7 +833,7 @@ Two mapping decisions are worth stating rather than leaving for someone to query
 ## 12. Threat Actor Assessment
 {: .hl-tier-2}
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-023 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports, it is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-023 is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
 
 I cannot attribute this activity to a named threat actor, and the evidence does not support trying. I hold that at INSUFFICIENT confidence, around 15 percent that a currently catalogued named actor is responsible.
 

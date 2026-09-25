@@ -876,7 +876,7 @@ For the complete validated indicator set with confidence levels and contextual m
 ## 9. Threat Actor Assessment
 {: .hl-tier-2}
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-008, UTA-2026-009 and UTA-2026-010 are internal tracking designations assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. These labels will not appear in external threat intelligence feeds or vendor reports. They are specific to this publication. If future evidence links any of them to a known named actor, that designation will be retired and updated accordingly.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-008, UTA-2026-009 and UTA-2026-010 are tracking labels The Hunters Ledger assigns to actors I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use these labels; they are specific to this publication. If later evidence ties any of them to a named actor, I will retire that label and update the report.
 
 This investigation surfaced **three operationally separate threat clusters** that share infrastructure (multi-tenant Aeza staging IP `79.137.192.3`) but exhibit **zero operator-level overlap** across seven dimensions tested (Telegram, pseudonyms, DNS/SOA, language, payments, malware family, production-C2 provider). Each cluster receives its own UTA designation. Cross-cluster linkage is rated **LOW (actively rebutted, not absent)**, anchored on Tier-1 OFAC documentation that the same Aeza infrastructure simultaneously hosts multiple unrelated actor ecosystems.
 

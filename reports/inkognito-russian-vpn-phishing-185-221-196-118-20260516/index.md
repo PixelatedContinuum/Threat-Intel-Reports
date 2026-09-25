@@ -782,7 +782,7 @@ What the investigation does establish about exposure surface: the brand-imperson
 ## 9. Threat Actor Assessment
 {: .hl-tier-2}
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-009 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports. It is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-009 is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
 
 > **UTA file lineage:** UTA-2026-009 was **originally created in the 2026-05-15 multi-cluster investigation** as one of three new UTAs (UTA-2026-008 BellaMain, UTA-2026-009 Inkognito, UTA-2026-010 Rhadamanthys MaaS customer) covering the OpenDirectory 79.137.192.3 co-tenancy. This standalone report **extends** the UTA-2026-009 Activity Log with deeper Inkognito-specific evidence; it does not create a new UTA and does not modify the originating distinguishing characteristics. The canonical UTA file is at `threat-intel-vault/threat-actors/UTA-2026-009.md`.
 

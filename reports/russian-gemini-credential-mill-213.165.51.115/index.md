@@ -777,7 +777,7 @@ The full IOC feed is at [`/ioc-feeds/russian-gemini-credential-mill-213.165.51.1
 ## 9. Threat Actor Assessment: UTA-2026-012
 {: .hl-tier-2}
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-012 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports. It is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly. UTA-2026-012 has DEFINITE cross-identification with the Trend Micro vendor catalog handle **"bandcampro"** (Trend Micro "Patriot Bait" publication 2026-05-22); both refer to the same operator.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-012 is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report. UTA-2026-012 has DEFINITE cross-identification with the Trend Micro vendor catalog handle **"bandcampro"** (Trend Micro "Patriot Bait" publication 2026-05-22); both refer to the same operator.
 
 ### 9.1 Attribution Conclusion
 
