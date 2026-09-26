@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-26T10:02:18Z
+generated_at: 2026-09-26T12:01:08Z
 window_days: 30
 counts:
-  total: 545
+  total: 542
   research: 189
-  news: 356
+  news: 353
 topics:
   - label: "vulnerabilities"
     count: 75
@@ -16,11 +16,11 @@ topics:
   - label: "cybercrime"
     count: 59
     color: 2
-  - label: "artificial intelligence"
-    count: 37
-    color: 3
   - label: "government"
     count: 37
+    color: 3
+  - label: "artificial intelligence"
+    count: 36
     color: 4
   - label: "exploited"
     count: 31
@@ -32,7 +32,7 @@ topics:
     count: 25
     color: 7
   - label: "ransomware"
-    count: 17
+    count: 16
     color: 8
   - label: "zero-day"
     count: 16
@@ -92,7 +92,6 @@ label_colors:
   "ai-generated-content": 4
   "ai-orchestrated campaign": 1
   "ai-powered cybercrime": 12
-  "aikido security": 1
   "airport": 9
   "aitm": 5
   "alphaagent": 1
@@ -123,7 +122,7 @@ label_colors:
   "arktunnel": 6
   "arm": 10
   "arrested": 2
-  "artificial intelligence": 3
+  "artificial intelligence": 4
   "arx cipher": 2
   "asia-pacific": 6
   "astrana health": 8
@@ -180,7 +179,6 @@ label_colors:
   "bnb smart chain": 10
   "botnet": 6
   "botnet takedown": 5
-  "breadcrumbs": 10
   "brevo": 8
   "brevo compromise": 8
   "browser extension": 11
@@ -365,7 +363,7 @@ label_colors:
   "google cloud": 8
   "google infrastructure abuse": 8
   "google tag manager abuse": 4
-  "government": 4
+  "government": 3
   "government impersonation": 7
   "gta6": 6
   "gyazo": 8
@@ -377,7 +375,6 @@ label_colors:
   "healthcare": 12
   "hideul.exe": 7
   "hts": 11
-  "hugging face": 6
   "ics": 3
   "ics/ot": 1
   "in other news": 8
@@ -3721,21 +3718,3 @@ items:
     date: 2026-08-27T12:15:00Z
     kind: news
     labels: ["cybercrime", "government", "privacy"]
-  - title: "OpenAI Agents Coordinated via Makeshift Message Board Ahead of Hugging Face Hack"
-    url: "https://www.securityweek.com/openai-agents-coordinated-via-makeshift-message-board-ahead-of-hugging-face-hack/"
-    source: "SecurityWeek"
-    date: 2026-08-27T11:58:01Z
-    kind: news
-    labels: ["artificial intelligence", "hugging face", "incident response", "openai"]
-  - title: "Carhartt data breach exposes information of 12.9 million accounts"
-    url: "https://www.bleepingcomputer.com/news/security/carhartt-data-breach-exposes-information-of-129-million-accounts/"
-    source: "BleepingComputer"
-    date: 2026-08-27T11:10:04Z
-    kind: news
-    labels: []
-  - title: "Two Alleged ‘TeamPCP’ Hackers Arrested in Australia"
-    url: "https://krebsonsecurity.com/2026/08/two-alleged-teampcp-hackers-arrested-in-australia/"
-    source: "Krebs on Security"
-    date: 2026-08-27T11:04:15Z
-    kind: news
-    labels: ["aikido security", "breadcrumbs", "bulkdmt", "charlie eriksen", "constella intelligence", "cybercats", "domaintools", "ellis", "epieos", "express", "flashpoint", "github", "intel 471", "ne'er-do-well news", "opsec express", "pcpcats", "persy_pcp", "ransomware", "ruben@securecomputing.au", "rubenthomson.com", "sheepstealing@gmail.com", "shitstickpp@gmail.com", "spycloud", "surfinup8@gmail.com", "teampcp", "tensor industries", "yolosolo17@gmail.com"]
