@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-26T16:02:38Z
+generated_at: 2026-09-26T18:01:18Z
 window_days: 30
 counts:
-  total: 538
-  research: 188
-  news: 350
+  total: 534
+  research: 186
+  news: 348
 topics:
   - label: "vulnerabilities"
     count: 75
@@ -116,7 +116,6 @@ label_colors:
   "application security": 6
   "apt": 5
   "apt-q-95": 4
-  "apt28": 3
   "apt36": 10
   "arista": 10
   "arktunnel": 6
@@ -304,7 +303,6 @@ label_colors:
   "defense sector": 12
   "detection engineering": 12
   "devops targeting": 8
-  "diplomatic targeting": 1
   "disrupted": 8
   "dns": 1
   "dns txt records": 3
@@ -3667,27 +3665,3 @@ items:
     date: 2026-08-27T19:45:00Z
     kind: news
     labels: ["cybercrime", "government", "nation-state"]
-  - title: "“Sorry, I can’t help with that”: How your guardrails might become the attacker’s best friend"
-    url: "https://blog.talosintelligence.com/sorry-i-cant-help-with-that-how-your-guardrails-might-become-the-attackers-best-friend/"
-    source: "Cisco Talos"
-    date: 2026-08-27T18:00:24Z
-    kind: research
-    labels: ["threat source newsletter"]
-  - title: "Defense and Diplomacy Targeted with HOOKEDGE"
-    url: "https://www.recordedfuture.com/research/bluedelta-targets-with-hookedge"
-    source: "AlienVault"
-    date: 2026-08-27T17:37:41Z
-    kind: research
-    labels: ["apt28", "diplomatic targeting", "fancy bear", "forest blizzard", "gru", "headlace", "hookedge", "macro-enabled documents", "webhook abuse"]
-  - title: "PaperCut warns of NG, MF flaw exploited in zero-day attacks"
-    url: "https://www.bleepingcomputer.com/news/security/papercut-warns-of-ng-mf-flaw-exploited-in-zero-day-attacks/"
-    source: "BleepingComputer"
-    date: 2026-08-27T16:31:53Z
-    kind: news
-    labels: []
-  - title: "Manchester Airports Group says hackers stole travelers' data"
-    url: "https://www.bleepingcomputer.com/news/security/manchester-airports-group-says-hackers-stole-travelers-data/"
-    source: "BleepingComputer"
-    date: 2026-08-27T16:12:26Z
-    kind: news
-    labels: []
