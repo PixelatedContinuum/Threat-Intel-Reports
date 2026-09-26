@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-26T04:02:18Z
+generated_at: 2026-09-26T06:00:57Z
 window_days: 30
 counts:
-  total: 552
+  total: 551
   research: 191
-  news: 361
+  news: 360
 topics:
   - label: "vulnerabilities"
-    count: 76
+    count: 75
     color: 1
   - label: "cybercrime"
     count: 60
@@ -23,7 +23,7 @@ topics:
     count: 37
     color: 4
   - label: "exploited"
-    count: 32
+    count: 31
     color: 5
   - label: "malware"
     count: 29
@@ -3779,9 +3779,3 @@ items:
     date: 2026-08-27T08:00:00Z
     kind: news
     labels: ["cybercrime", "cyberwarfare", "norway", "russia", "server killers"]
-  - title: "Recent Citrix NetScaler Vulnerability Exploited in the Wild"
-    url: "https://www.securityweek.com/recent-citrix-netscaler-vulnerability-exploited-in-the-wild/"
-    source: "SecurityWeek"
-    date: 2026-08-27T04:39:19Z
-    kind: news
-    labels: ["cisa kev", "citrix", "exploited", "vulnerabilities"]
