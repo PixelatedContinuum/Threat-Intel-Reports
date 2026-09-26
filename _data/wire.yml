@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-26T08:00:08Z
+generated_at: 2026-09-26T10:02:18Z
 window_days: 30
 counts:
-  total: 550
-  research: 191
-  news: 359
+  total: 545
+  research: 189
+  news: 356
 topics:
   - label: "vulnerabilities"
     count: 75
@@ -32,7 +32,7 @@ topics:
     count: 25
     color: 7
   - label: "ransomware"
-    count: 18
+    count: 17
     color: 8
   - label: "zero-day"
     count: 16
@@ -59,13 +59,11 @@ label_colors:
   "acronis": 1
   "acrstealer": 4
   "active directory": 5
-  "active directory compromise": 7
   "active directory reconnaissance": 1
   "active exploitation": 2
   "adapthealth": 2
   "adaptixc2": 8
   "adb propagation": 1
-  "adcs exploitation": 11
   "administrative compromise": 8
   "adobe": 1
   "adobe commerce": 12
@@ -84,7 +82,6 @@ label_colors:
   "ai infrastructure": 11
   "ai models": 12
   "ai training": 8
-  "ai voice phishing": 4
   "ai-agent": 12
   "ai-assisted development": 10
   "ai-assisted intrusions": 3
@@ -116,7 +113,6 @@ label_colors:
   "app-bound encryption": 3
   "app-bound-encryption": 6
   "apple": 12
-  "apple activation lock": 5
   "applescript": 5
   "application security": 6
   "apt": 5
@@ -466,7 +462,8 @@ label_colors:
   "threat intelligence": 9
   "threat source newsletter": 6
   "threat spotlight": 2
-  "tool talk": 4
+  "trend micro research : artificial intelligence (ai)": 2
+  "trend micro research : expert perspective": 4
   "vmware": 2
   "vpn": 8
   "vulnerabilities": 1
@@ -574,6 +571,12 @@ items:
     date: 2026-09-25T06:57:40Z
     kind: news
     labels: ["email security", "exploited", "roundcube", "vulnerabilities"]
+  - title: "AI Agents Can Be Secured. We Can Do It."
+    url: "https://www.trendmicro.com/en_us/research/26/i/safely-securing-ai-agents.html"
+    source: "Trend Micro"
+    date: 2026-09-25T00:00:00Z
+    kind: research
+    labels: ["trend micro research : artificial intelligence (ai)", "trend micro research : expert perspective"]
   - title: "MacSync malware uses public iCloud calendars to deliver new payloads"
     url: "https://www.bleepingcomputer.com/news/security/macsync-malware-uses-public-icloud-calendars-to-deliver-new-payloads/"
     source: "BleepingComputer"
@@ -3736,39 +3739,3 @@ items:
     date: 2026-08-27T11:04:15Z
     kind: news
     labels: ["aikido security", "breadcrumbs", "bulkdmt", "charlie eriksen", "constella intelligence", "cybercats", "domaintools", "ellis", "epieos", "express", "flashpoint", "github", "intel 471", "ne'er-do-well news", "opsec express", "pcpcats", "persy_pcp", "ransomware", "ruben@securecomputing.au", "rubenthomson.com", "sheepstealing@gmail.com", "shitstickpp@gmail.com", "spycloud", "surfinup8@gmail.com", "teampcp", "tensor industries", "yolosolo17@gmail.com"]
-  - title: "JavaScript obfuscation: From party trick to phishing kit"
-    url: "https://blog.talosintelligence.com/javascript-obfuscation-from-party-trick-to-phishing-kit/"
-    source: "Cisco Talos"
-    date: 2026-08-27T10:00:27Z
-    kind: research
-    labels: ["tool talk"]
-  - title: "CISA orders feds to patch Citrix NetScaler RCE flaw by Saturday"
-    url: "https://www.bleepingcomputer.com/news/security/cisa-hackers-now-exploiting-citrix-netscaler-rce-flaw-in-attacks/"
-    source: "BleepingComputer"
-    date: 2026-08-27T09:16:50Z
-    kind: news
-    labels: []
-  - title: "US Disrupts Chinese Hacking Platform Used in Military and Critical Infrastructure Attacks"
-    url: "https://www.securityweek.com/us-disrupts-chinese-hacking-platform-used-in-military-and-critical-infrastructure-attacks/"
-    source: "SecurityWeek"
-    date: 2026-08-27T09:01:06Z
-    kind: news
-    labels: ["china", "china apt", "disrupted", "disruption", "nation-state", "qtfy", "tracking & law enforcement"]
-  - title: "ATF confirms “major incident” after recent Qilin breach claims"
-    url: "https://www.bleepingcomputer.com/news/security/atf-confirms-major-incident-after-recent-qilin-breach-claims/"
-    source: "BleepingComputer"
-    date: 2026-08-27T08:13:50Z
-    kind: news
-    labels: []
-  - title: "AI-Powered PhaaS Supply Chain"
-    url: "https://otx.alienvault.com/pulse/6a8fefa73dcdd0e3c18df580"
-    source: "AlienVault"
-    date: 2026-08-27T08:04:55Z
-    kind: research
-    labels: ["ai voice phishing", "apple activation lock", "credential harvesting", "iphone theft", "multi-channel phishing", "phishing-as-a-service", "stolen device monetization", "vishing"]
-  - title: "Caught in 4K: The Aurora Files"
-    url: "https://otx.alienvault.com/pulse/6a8feed78b0eee1b289d2bbf"
-    source: "AlienVault"
-    date: 2026-08-27T08:01:27Z
-    kind: research
-    labels: ["active directory compromise", "adcs exploitation", "aurora", "cryptocurrency laundering", "cve-2017-0144", "esxi encryption", "ransomware", "russian-speaking affiliate", "zig programming language"]
