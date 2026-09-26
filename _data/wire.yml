@@ -3,23 +3,23 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-26T12:01:08Z
+generated_at: 2026-09-26T14:00:28Z
 window_days: 30
 counts:
-  total: 542
-  research: 189
-  news: 353
+  total: 538
+  research: 188
+  news: 350
 topics:
   - label: "vulnerabilities"
     count: 75
     color: 1
   - label: "cybercrime"
-    count: 59
+    count: 56
     color: 2
-  - label: "government"
+  - label: "artificial intelligence"
     count: 37
     color: 3
-  - label: "artificial intelligence"
+  - label: "government"
     count: 36
     color: 4
   - label: "exploited"
@@ -31,13 +31,13 @@ topics:
   - label: "data breaches"
     count: 25
     color: 7
-  - label: "ransomware"
-    count: 16
-    color: 8
   - label: "zero-day"
     count: 16
-    color: 9
+    color: 8
   - label: "clickfix"
+    count: 15
+    color: 9
+  - label: "ransomware"
     count: 15
     color: 10
   - label: "social engineering"
@@ -121,10 +121,8 @@ label_colors:
   "arista": 10
   "arktunnel": 6
   "arm": 10
-  "arrested": 2
-  "artificial intelligence": 4
+  "artificial intelligence": 3
   "arx cipher": 2
-  "asia-pacific": 6
   "astrana health": 8
   "asukastealer": 5
   "asyncapi": 2
@@ -238,7 +236,7 @@ label_colors:
   "citrix": 11
   "cleo": 7
   "click2shell": 4
-  "clickfix": 10
+  "clickfix": 9
   "clipboard": 10
   "clipboard poisoning": 6
   "clipper": 3
@@ -300,7 +298,6 @@ label_colors:
   "data exfiltration": 9
   "data leak": 9
   "data security": 10
-  "data-exfiltration": 12
   "ddos": 4
   "decoys": 1
   "defender exclusions": 12
@@ -363,7 +360,7 @@ label_colors:
   "google cloud": 8
   "google infrastructure abuse": 8
   "google tag manager abuse": 4
-  "government": 3
+  "government": 4
   "government impersonation": 7
   "gta6": 6
   "gyazo": 8
@@ -435,7 +432,7 @@ label_colors:
   "privacy": 12
   "proxy abuse": 6
   "qilin": 11
-  "ransomware": 8
+  "ransomware": 10
   "ransomware as a service": 3
   "rce": 10
   "revolut": 5
@@ -464,8 +461,14 @@ label_colors:
   "vmware": 2
   "vpn": 8
   "vulnerabilities": 1
-  "zero-day": 9
+  "zero-day": 8
 items:
+  - title: "New x47.c Windows Botnet Weaponizes xAI Grok, AI API Draining"
+    url: "https://www.securityweek.com/new-x47-c-windows-botnet-weaponizes-xai-grok-ai-api-draining/"
+    source: "SecurityWeek"
+    date: 2026-09-26T12:00:00Z
+    kind: news
+    labels: ["artificial intelligence", "botnet", "malware", "x47.c"]
   - title: "3 Consulting Myths Debunked by Unit 42 Experts"
     url: "https://unit42.paloaltonetworks.com/3-consulting-myths-debunked-by-unit-42-experts/"
     source: "Palo Alto Networks"
@@ -3688,33 +3691,3 @@ items:
     date: 2026-08-27T16:12:26Z
     kind: news
     labels: []
-  - title: "Australia arrests alleged TeamPCP hackers behind supply-chain attacks"
-    url: "https://www.bleepingcomputer.com/news/security/australia-arrests-alleged-teampcp-hackers-behind-supply-chain-attacks/"
-    source: "BleepingComputer"
-    date: 2026-08-27T13:31:13Z
-    kind: news
-    labels: ["legal"]
-  - title: "‘The Gentlemen’ Profile: Why This Ransomware Group Wants In Before It Locks You Out"
-    url: "https://otx.alienvault.com/pulse/6a9035ff9a03d932d9008b31"
-    source: "AlienVault"
-    date: 2026-08-27T13:05:03Z
-    kind: research
-    labels: ["asia-pacific", "data-exfiltration", "dual-extortion", "encryption", "persistence", "privilege-escalation", "raas", "ransomware", "storm-2697", "the gentlemen"]
-  - title: "Australia charges two men for TeamPCP supply-chain hacking spree"
-    url: "https://therecord.media/australia-teampcp-hackers-arrested"
-    source: "Recorded Future"
-    date: 2026-08-27T13:00:00Z
-    kind: news
-    labels: ["cybercrime", "malware"]
-  - title: "Australia Arrests 2 Alleged TeamPCP Hackers"
-    url: "https://www.securityweek.com/australia-arrests-2-alleged-teampcp-hackers/"
-    source: "SecurityWeek"
-    date: 2026-08-27T12:48:03Z
-    kind: news
-    labels: ["arrested", "australia", "cybercrime", "hacker", "teampcp"]
-  - title: "DOJ firearms agency says hackers breached system containing investigation targets"
-    url: "https://therecord.media/doj-atf-cyberattack-qilin-ransomware"
-    source: "Recorded Future"
-    date: 2026-08-27T12:15:00Z
-    kind: news
-    labels: ["cybercrime", "government", "privacy"]
