@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-27T02:02:18Z
+generated_at: 2026-09-27T04:01:57Z
 window_days: 30
 counts:
-  total: 528
-  research: 181
+  total: 527
+  research: 180
   news: 347
 topics:
   - label: "vulnerabilities"
@@ -188,7 +188,6 @@ label_colors:
   "bytecode interpreter": 5
   "c2": 9
   "c2 framework": 5
-  "c2 infrastructure": 12
   "c3pool": 6
   "calendar": 8
   "canada": 4
@@ -3617,9 +3616,3 @@ items:
     date: 2026-08-28T08:40:36Z
     kind: news
     labels: ["exploited", "papercut", "printer", "vulnerabilities", "zero-day"]
-  - title: "Open Directory Exposes Moobot Source Code and Ongoing Activity Post 2024 Court-Authorized Disruption"
-    url: "https://otx.alienvault.com/pulse/6a90f19bbcdbb55af3412789"
-    source: "AlienVault"
-    date: 2026-08-28T02:25:31Z
-    kind: research
-    labels: ["botnet", "c2 infrastructure", "chinese cybercrime", "ddos-as-a-service", "iot security", "mirai", "moobot", "stresd pro+"]
