@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-27T18:00:18Z
+generated_at: 2026-09-27T20:00:12Z
 window_days: 30
 counts:
-  total: 518
+  total: 516
   research: 178
-  news: 340
+  news: 338
 topics:
   - label: "vulnerabilities"
     count: 73
@@ -3546,15 +3546,3 @@ items:
     date: 2026-08-28T22:00:07Z
     kind: research
     labels: ["artificial intelligence", "insights", "jailbreak", "llm"]
-  - title: "PaperCut releases second emergency patch for exploited flaws"
-    url: "https://www.bleepingcomputer.com/news/security/papercut-releases-second-emergency-patch-for-exploited-flaws/"
-    source: "BleepingComputer"
-    date: 2026-08-28T19:08:26Z
-    kind: news
-    labels: []
-  - title: "GiveWP WordPress donation plugin flaw lets hackers execute server commands"
-    url: "https://www.bleepingcomputer.com/news/security/givewp-wordpress-donation-plugin-flaw-lets-hackers-execute-server-commands/"
-    source: "BleepingComputer"
-    date: 2026-08-28T18:18:55Z
-    kind: news
-    labels: []
