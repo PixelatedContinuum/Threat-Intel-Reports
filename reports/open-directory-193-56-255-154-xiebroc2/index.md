@@ -789,7 +789,7 @@ The third characteristic is infrastructural, a shared OPSEC failure pattern acro
 {: .hl-tier-2}
 
 **APT28 (Fancy Bear / Sednit / UAC-0001), EXPLICITLY REJECTED:**
-APT28's documented Covenant variant uses heavy customization including cloud-based C2 routing through file-sharing services (pCloud, Koofr, Icedrive, Filen), developed and refined across three years of operations [Source: The Hacker News citing ESET, https://thehackernews.com/2026/03/apt28-uses-beardshell-and-covenant.html; BleepingComputer, https://www.bleepingcomputer.com/news/security/apt28-hackers-deploy-customized-variant-of-covenant-open-source-tool/]. The stock default-profile Covenant in this campaign (Chrome 41 User-Agent from 2015, static session token, unmodified URL paths, no cloud routing) is inconsistent with APT28's documented operational sophistication. No infrastructure overlap with APT28's documented Covenant infrastructure exists in available reporting.
+APT28's documented Covenant variant uses heavy customization including cloud-based C2 routing through file-sharing services (pCloud, Koofr, Filen), developed and refined across three years of operations [Source: The Hacker News citing ESET, https://thehackernews.com/2026/03/apt28-uses-beardshell-and-covenant.html; BleepingComputer, https://www.bleepingcomputer.com/news/security/apt28-hackers-deploy-customized-variant-of-covenant-open-source-tool/]. The stock default-profile Covenant in this campaign (Chrome 41 User-Agent from 2015, static session token, unmodified URL paths, no cloud routing) is inconsistent with APT28's documented operational sophistication. No infrastructure overlap with APT28's documented Covenant infrastructure exists in available reporting.
 
 **APT41 / Chinese-nexus named groups, INSUFFICIENT:**
 GBK encoding and XiebroC2's Chinese-language origin are consistent with a Chinese-language operator environment, but named Chinese-nexus APT groups are characterized by custom tooling families (PlugX, ShadowPad, KEYPLUG, CROSSWALK) and sophisticated operational security, not default-configuration public frameworks with seven simultaneous OPSEC failures. XiebroC2 is publicly available to any Chinese-language offensive security practitioner.
@@ -928,7 +928,7 @@ The Hermes DLL is a novel, undocumented WinInet-based HTTP beacon in pre-alpha s
 
 M247 Europe SRL is a legitimate commercial hosting and connectivity provider, not a purpose-built bulletproof hosting service. Its scale, budget VPS pricing, and documented enforcement inconsistency make it attractive to threat actors. Published research documents prior malicious use of M247 infrastructure:
 
-- Open directories containing Risepro stealer and generic trojans documented on M247 Dallas infrastructure [HYAS Threat Intel, May 2024: https://www.hyas.com/blog/hyas-threat-intel-report-may-202024]
+- Open directories containing Risepro stealer and generic trojans documented on M247 Dallas infrastructure [HYAS Threat Intel, May 2024: https://web.archive.org/web/20240525125244/https://www.hyas.com/blog/hyas-threat-intel-report-may-202024]
 - Published threat intelligence research (2022) identified M247 among the top hosting providers for BumbleBee and Cerberus malware families
 - Active IOC documentation for AS9009 maintained by ThreatFox [https://threatfox.abuse.ch/asn/9009/] and Blocklist.de [https://www.blocklist.de/en/search.html?as=9009]
 
@@ -1308,7 +1308,7 @@ Covenant's archived status (original repository archived 2021/2022) did not redu
 - **cobbr/Covenant GitHub repository (archived):** https://github.com/cobbr/Covenant
 
 **Infrastructure and Hosting:**
-- **HYAS Threat Intel (May 2024):** M247 infrastructure malware hosting documentation, https://www.hyas.com/blog/hyas-threat-intel-report-may-202024
+- **HYAS Threat Intel (May 2024):** M247 infrastructure malware hosting documentation, https://web.archive.org/web/20240525125244/https://www.hyas.com/blog/hyas-threat-intel-report-may-202024
 - **IPinfo.io AS9009:** M247 network block data, https://ipinfo.io/AS9009/193.56.255.0/24
 - **ThreatFox AS9009:** https://threatfox.abuse.ch/asn/9009/
 
