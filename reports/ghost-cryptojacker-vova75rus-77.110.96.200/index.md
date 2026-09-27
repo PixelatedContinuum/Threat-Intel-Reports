@@ -741,7 +741,7 @@ The historical wallet cfx:aasktcha7r... drains to the same consolidator as the c
 
 UnamSanctam is included in this section for **supply-chain context only**. UnamSanctam is **not** a Case 9 threat actor.
 
-UnamSanctam has been an active GitHub developer since 2014, with 860 followers and 6 public repositories carrying 2,584 cumulative stars (UnamWebPanel 198, SilentCryptoMiner 1020, SilentXMRMiner 643, SilentETHMiner 254, UnamBinder 279, UnamDownloader 190). They supply upstream OSS tooling that downstream malware kits, including GHOST, bundle. SilentCryptoMiner was disabled by GitHub for ToS violations, and the remaining repositories are active.
+UnamSanctam is an active GitHub developer, with 860 followers and public repositories carrying 2,584 cumulative stars (UnamWebPanel 198, SilentCryptoMiner 1020, SilentXMRMiner 643, SilentETHMiner 254, UnamBinder 279, UnamDownloader 190) as of this report's publication (2026-05-25); these are live counts that will have drifted by the time this is read [Source: github.com/UnamSanctam](https://github.com/UnamSanctam). They supply upstream OSS tooling that downstream malware kits, including GHOST, bundle. SilentCryptoMiner was disabled by GitHub for ToS violations, and the remaining repositories are active.
 
 UnamSanctam's involvement in GHOST is passive. The upstream attribution comment `/* Made by Unam Sanctam https://github.com/UnamSanctam */` appears in the GHOST kit's deployed PHP files because Vova75Rus bundles UnamWebPanel without modifying the attribution. There is no evidence of direct UnamSanctam involvement in the GHOST kit's authorship, distribution, or operation.
 
