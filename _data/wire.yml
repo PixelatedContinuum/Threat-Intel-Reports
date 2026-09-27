@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-26T22:00:48Z
+generated_at: 2026-09-27T00:00:48Z
 window_days: 30
 counts:
-  total: 532
-  research: 185
+  total: 528
+  research: 181
   news: 347
 topics:
   - label: "vulnerabilities"
@@ -78,7 +78,6 @@ label_colors:
   "agentic soc": 2
   "agenttesla": 2
   "ai framework": 4
-  "ai infrastructure": 11
   "ai models": 12
   "ai training": 8
   "ai-agent": 12
@@ -123,7 +122,6 @@ label_colors:
   "arx cipher": 2
   "astrana health": 8
   "asukastealer": 5
-  "asyncapi": 2
   "asyncrat": 11
   "atf": 7
   "attack surface": 11
@@ -179,7 +177,6 @@ label_colors:
   "brevo compromise": 8
   "browser extension": 11
   "browser extension malware": 6
-  "browser extensions": 4
   "browser theft": 3
   "browser-extension": 12
   "browser-in-the-browser": 7
@@ -222,7 +219,6 @@ label_colors:
   "chrome rat": 5
   "chrome vulnerabilities": 6
   "chromium vulnerability": 4
-  "ci/cd pipeline exploitation": 4
   "cisa": 6
   "cisa kev": 12
   "cisco": 9
@@ -290,7 +286,6 @@ label_colors:
   "cyberattacks": 8
   "cybercrime": 2
   "cyberespionage": 8
-  "darklantern": 4
   "darkme": 8
   "data breaches": 7
   "data exfiltration": 9
@@ -3628,27 +3623,3 @@ items:
     date: 2026-08-28T02:25:31Z
     kind: research
     labels: ["botnet", "c2 infrastructure", "chinese cybercrime", "ddos-as-a-service", "iot security", "mirai", "moobot", "stresd pro+"]
-  - title: "Attacks on AI Infrastructure: 90-Day Honeypot Telemetry"
-    url: "https://www.wiz.io/blog/ai-infrastructure-honeypot"
-    source: "AlienVault"
-    date: 2026-08-27T22:16:26Z
-    kind: research
-    labels: ["ai infrastructure", "credential theft", "cryptomining", "cve-2026-42271", "cve-2026-48710", "cve-2026-59822", "honeypot", "litellm", "mcp servers", "post-exploitation", "prompt injection", "xmrig"]
-  - title: "19 Chrome and Edge Extensions Deliver a Wallet Drainer and Credential-Stealing Payloads"
-    url: "https://socket.dev/blog/chrome-edge-extension-wallet-drainer"
-    source: "AlienVault"
-    date: 2026-08-27T22:16:26Z
-    kind: research
-    labels: ["browser extensions", "credential harvesting", "cryptocurrency theft", "csp stripping", "supply chain compromise", "wallet drainer", "websocket c2", "xss injection"]
-  - title: "Inside the AsyncAPI Supply Chain Compromise"
-    url: "https://otx.alienvault.com/pulse/6a90b738237841eddd8428c7"
-    source: "AlienVault"
-    date: 2026-08-27T22:16:24Z
-    kind: research
-    labels: ["asyncapi", "ci/cd pipeline exploitation", "ipfs payload delivery", "node.js targeting", "npm compromise", "package lifecycle hooks", "rat deployment", "supply chain attack", "sync.js"]
-  - title: "Implants in the Supply Chain"
-    url: "https://www.vulncheck.com/blog/zbt-darklantern-speakingstone"
-    source: "AlienVault"
-    date: 2026-08-27T22:16:24Z
-    kind: research
-    labels: ["backdoor", "darklantern", "endlessdoors", "firmware implants", "phone-home implant", "speakingstone", "supply chain compromise", "surveillance infrastructure", "zbt routers"]
