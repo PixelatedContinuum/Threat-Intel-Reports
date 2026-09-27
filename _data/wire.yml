@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-27T14:02:32Z
+generated_at: 2026-09-27T16:01:32Z
 window_days: 30
 counts:
-  total: 520
-  research: 179
-  news: 341
+  total: 518
+  research: 178
+  news: 340
 topics:
   - label: "vulnerabilities"
-    count: 74
+    count: 73
     color: 1
   - label: "cybercrime"
     count: 55
@@ -51,7 +51,6 @@ label_colors:
   "3snake": 7
   "7zip sfx": 7
   "a little sunshine": 6
-  "academic lure": 1
   "accessibility abuse": 6
   "accessibility service abuse": 11
   "accessibility services": 10
@@ -150,7 +149,6 @@ label_colors:
   "beacon": 6
   "beavertail": 7
   "behavior-based-detection": 12
-  "beijing institute of technology": 12
   "berlin": 6
   "big-ip": 6
   "bigbear": 8
@@ -3560,15 +3558,3 @@ items:
     date: 2026-08-28T16:30:00Z
     kind: news
     labels: ["cybercrime", "industry"]
-  - title: "In Other News: Log4j RCE Scare, Minimus Shutdown, Iranian Hacker Sanctions"
-    url: "https://www.securityweek.com/in-other-news-log4j-rce-scare-minimus-shutdown-iranian-hacker-sanctions/"
-    source: "SecurityWeek"
-    date: 2026-08-28T15:35:34Z
-    kind: news
-    labels: ["in other news", "vulnerabilities"]
-  - title: "A fake resume invoked China's defence-tech elite, then installed VShell"
-    url: "https://otx.alienvault.com/pulse/6a91a5a487efed140546d754"
-    source: "AlienVault"
-    date: 2026-08-28T15:13:40Z
-    kind: research
-    labels: ["academic lure", "beijing institute of technology", "china targeting", "fileless execution", "go loader", "sandbox evasion", "snowlight", "vshell"]
