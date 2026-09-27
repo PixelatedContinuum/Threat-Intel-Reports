@@ -3,7 +3,7 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-27T08:01:08Z
+generated_at: 2026-09-27T10:02:38Z
 window_days: 30
 counts:
   total: 527
@@ -31,16 +31,16 @@ topics:
   - label: "data breaches"
     count: 25
     color: 7
-  - label: "zero-day"
-    count: 16
-    color: 8
   - label: "clickfix"
     count: 15
-    color: 9
+    color: 8
   - label: "ransomware"
     count: 15
-    color: 10
+    color: 9
   - label: "social engineering"
+    count: 15
+    color: 10
+  - label: "zero-day"
     count: 15
     color: 11
   - label: "healthcare"
@@ -229,7 +229,7 @@ label_colors:
   "citrix": 11
   "cleo": 7
   "click2shell": 4
-  "clickfix": 9
+  "clickfix": 8
   "clipboard": 10
   "clipboard poisoning": 6
   "clipper": 3
@@ -423,7 +423,7 @@ label_colors:
   "privacy": 12
   "proxy abuse": 6
   "qilin": 11
-  "ransomware": 10
+  "ransomware": 9
   "ransomware as a service": 3
   "rce": 10
   "revolut": 5
@@ -436,9 +436,10 @@ label_colors:
   "securing ai": 4
   "security operations": 4
   "servicenow": 1
+  "sharepoint": 11
   "sma1000": 2
   "soc": 9
-  "social engineering": 11
+  "social engineering": 10
   "software": 5
   "solarwinds": 10
   "surfshark": 11
@@ -452,8 +453,14 @@ label_colors:
   "vmware": 2
   "vpn": 8
   "vulnerabilities": 1
-  "zero-day": 8
+  "zero-day": 11
 items:
+  - title: "Microsoft SharePoint Flaw CVE-2026-65660 Now Exploited in Attacks"
+    url: "https://www.securityweek.com/microsoft-sharepoint-flaw-cve-2026-65660-now-exploited-in-attacks/"
+    source: "SecurityWeek"
+    date: 2026-09-27T09:23:09Z
+    kind: news
+    labels: ["exploited", "sharepoint", "vulnerabilities"]
   - title: "ShinyHunters uses WAF bypass trick in Oracle PeopleSoft attacks"
     url: "https://www.bleepingcomputer.com/news/security/shinyhunters-uses-waf-bypass-trick-in-oracle-peoplesoft-attacks/"
     source: "BleepingComputer"
@@ -3610,9 +3617,3 @@ items:
     date: 2026-08-28T10:29:42Z
     kind: news
     labels: []
-  - title: "PaperCut Releases Emergency Patch for Exploited Zero-Day"
-    url: "https://www.securityweek.com/papercut-releases-emergency-patch-for-exploited-zero-day/"
-    source: "SecurityWeek"
-    date: 2026-08-28T08:40:36Z
-    kind: news
-    labels: ["exploited", "papercut", "printer", "vulnerabilities", "zero-day"]
