@@ -1435,7 +1435,7 @@ If an endpoint compromise is confirmed, the following response phases apply:
 
 MITRE ATT&CK (Tier 1) publishes "S0262: Quasar RAT", the official ATT&CK technique mappings for the Quasar lineage, at [https://attack.mitre.org/software/S0262/](https://attack.mitre.org/software/S0262/)
 
-Malpedia (Tier 2, Fraunhofer FKIE) carries the `win.quasar_rat` and `win.pulsar_rat` entries, at [https://malpedia.caad.fkie.fraunhofer.de/details/win.quasar_rat](https://malpedia.caad.fkie.fraunhofer.de/details/win.quasar_rat)
+Malpedia (Tier 2, Fraunhofer FKIE) carries the `win.quasar_rat` entry at [https://malpedia.caad.fkie.fraunhofer.de/details/win.quasar_rat](https://malpedia.caad.fkie.fraunhofer.de/details/win.quasar_rat) and the `win.pulsar_rat` entry at [https://malpedia.caad.fkie.fraunhofer.de/details/win.pulsar_rat](https://malpedia.caad.fkie.fraunhofer.de/details/win.pulsar_rat)
 
 ThreatMon (Tier 2) published the "Pulsar RAT Report" on 2026-06-13, a technical analysis of Pulsar RAT.
 
