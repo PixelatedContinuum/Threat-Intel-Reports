@@ -3,27 +3,27 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-27T12:00:57Z
+generated_at: 2026-09-27T14:02:32Z
 window_days: 30
 counts:
-  total: 524
+  total: 520
   research: 179
-  news: 345
+  news: 341
 topics:
   - label: "vulnerabilities"
-    count: 75
+    count: 74
     color: 1
   - label: "cybercrime"
     count: 55
     color: 2
   - label: "artificial intelligence"
-    count: 36
+    count: 35
     color: 3
   - label: "government"
     count: 35
     color: 4
   - label: "exploited"
-    count: 31
+    count: 30
     color: 5
   - label: "malware"
     count: 29
@@ -34,14 +34,14 @@ topics:
   - label: "clickfix"
     count: 15
     color: 8
-  - label: "ransomware"
-    count: 15
-    color: 9
   - label: "social engineering"
     count: 15
-    color: 10
+    color: 9
   - label: "zero-day"
     count: 15
+    color: 10
+  - label: "ransomware"
+    count: 14
     color: 11
   - label: "healthcare"
     count: 11
@@ -122,7 +122,6 @@ label_colors:
   "astrana health": 8
   "asukastealer": 5
   "asyncrat": 11
-  "atf": 7
   "attack surface": 11
   "attack-campaigns": 8
   "attacks": 7
@@ -421,8 +420,7 @@ label_colors:
   "postgresql": 12
   "privacy": 12
   "proxy abuse": 6
-  "qilin": 11
-  "ransomware": 9
+  "ransomware": 11
   "ransomware as a service": 3
   "rce": 10
   "revolut": 5
@@ -438,7 +436,7 @@ label_colors:
   "sharepoint": 11
   "sma1000": 2
   "soc": 9
-  "social engineering": 10
+  "social engineering": 9
   "software": 5
   "solarwinds": 10
   "surfshark": 11
@@ -452,7 +450,7 @@ label_colors:
   "vmware": 2
   "vpn": 8
   "vulnerabilities": 1
-  "zero-day": 11
+  "zero-day": 10
 items:
   - title: "Microsoft SharePoint Flaw CVE-2026-65660 Now Exploited in Attacks"
     url: "https://www.securityweek.com/microsoft-sharepoint-flaw-cve-2026-65660-now-exploited-in-attacks/"
@@ -3574,27 +3572,3 @@ items:
     date: 2026-08-28T15:13:40Z
     kind: research
     labels: ["academic lure", "beijing institute of technology", "china targeting", "fileless execution", "go loader", "sandbox evasion", "snowlight", "vshell"]
-  - title: "AI Is Accelerating Vulnerability Discovery. Can Defenders Keep Up?"
-    url: "https://www.bleepingcomputer.com/news/security/ai-is-accelerating-vulnerability-discovery-can-defenders-keep-up/"
-    source: "BleepingComputer"
-    date: 2026-08-28T14:00:10Z
-    kind: news
-    labels: []
-  - title: "ATF Confirms Cyber Incident After Ransomware Group Claims Attack"
-    url: "https://www.securityweek.com/atf-confirms-cyber-incident-after-ransomware-group-claims-attack/"
-    source: "SecurityWeek"
-    date: 2026-08-28T13:59:14Z
-    kind: news
-    labels: ["atf", "qilin", "ransomware"]
-  - title: "Over 8,300 Gitea servers vulnerable to code execution attacks"
-    url: "https://www.bleepingcomputer.com/news/security/over-8-300-gitea-servers-vulnerable-to-code-execution-attacks/"
-    source: "BleepingComputer"
-    date: 2026-08-28T12:58:43Z
-    kind: news
-    labels: []
-  - title: "OpenAI Agents Exploited Linux Kernel Flaw on Company’s Own Systems"
-    url: "https://www.securityweek.com/openai-agents-exploited-linux-kernel-flaw-on-companys-own-systems/"
-    source: "SecurityWeek"
-    date: 2026-08-28T12:36:53Z
-    kind: news
-    labels: ["artificial intelligence", "cisa kev", "exploited", "linux", "linux kernel", "openai", "vulnerabilities"]
