@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-28T20:00:10Z
+generated_at: 2026-09-28T22:01:48Z
 window_days: 30
 counts:
-  total: 534
+  total: 536
   research: 187
-  news: 347
+  news: 349
 topics:
   - label: "vulnerabilities"
     count: 76
@@ -466,6 +466,18 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 8
 items:
+  - title: "Japan's Keio confirms ransomware attack disrupted business systems"
+    url: "https://www.bleepingcomputer.com/news/security/japans-keio-confirms-ransomware-attack-disrupted-business-systems/"
+    source: "BleepingComputer"
+    date: 2026-09-28T20:56:47Z
+    kind: news
+    labels: []
+  - title: "Times Car confirms data breach affecting 6.6 million user accounts"
+    url: "https://www.bleepingcomputer.com/news/security/times-car-confirms-data-breach-affecting-66-million-user-accounts/"
+    source: "BleepingComputer"
+    date: 2026-09-28T20:31:16Z
+    kind: news
+    labels: []
   - title: "Dutch police confirm arrest in ShinyHunters hacking investigation"
     url: "https://www.bleepingcomputer.com/news/security/dutch-police-confirm-arrest-in-shinyhunters-hacking-investigation/"
     source: "BleepingComputer"
