@@ -3,21 +3,21 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-28T16:02:28Z
+generated_at: 2026-09-28T18:02:28Z
 window_days: 30
 counts:
-  total: 529
-  research: 186
-  news: 343
+  total: 532
+  research: 187
+  news: 345
 topics:
   - label: "vulnerabilities"
     count: 76
     color: 1
   - label: "cybercrime"
-    count: 57
+    count: 58
     color: 2
   - label: "government"
-    count: 35
+    count: 36
     color: 3
   - label: "artificial intelligence"
     count: 34
@@ -78,6 +78,7 @@ label_colors:
   "agentic ai": 9
   "agentic soc": 2
   "agenttesla": 2
+  "ai & automation": 1
   "ai agents": 8
   "ai framework": 4
   "ai models": 12
@@ -377,6 +378,7 @@ label_colors:
   "infostealer": 8
   "inside google cloud": 2
   "insights": 5
+  "integrations & tools": 12
   "iocontrol": 7
   "ios": 11
   "itorrents compromise": 8
@@ -464,6 +466,18 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 8
 items:
+  - title: "US, UK warn of exploited Citrix NetScaler zero-day bugs"
+    url: "https://therecord.media/us-uk-warn-of-citrix-netscaler-zero-day-bug"
+    source: "Recorded Future"
+    date: 2026-09-28T16:19:00Z
+    kind: news
+    labels: ["cybercrime", "government", "industry"]
+  - title: "JadePuffer agentic AI attacks target Azure, destroy cloud resources"
+    url: "https://www.bleepingcomputer.com/news/security/jadepuffer-agentic-ai-attacks-target-azure-destroy-cloud-resources/"
+    source: "BleepingComputer"
+    date: 2026-09-28T15:49:27Z
+    kind: news
+    labels: ["cloud"]
   - title: "Dutch Police Arrest ‘Reformed’ Hacker in Shiny Hunters Investigation"
     url: "https://krebsonsecurity.com/2026/09/dutch-police-arrest-reformed-hacker-in-shiny-hunters-investigation/"
     source: "Krebs on Security"
@@ -554,6 +568,12 @@ items:
     date: 2026-09-28T04:00:00Z
     kind: research
     labels: ["securing ai"]
+  - title: "Quarantined isn't contained: Agentic phishing response with Elastic and Sublime"
+    url: "https://www.elastic.co/security-labs/blog/phishing-incident-response-sublime-security"
+    source: "Elastic"
+    date: 2026-09-28T00:00:00Z
+    kind: research
+    labels: ["ai & automation", "integrations & tools", "soc"]
   - title: "Citrix admins warned to shut down NetScalers over 2 exploited zero-days"
     url: "https://www.bleepingcomputer.com/news/security/citrix-admins-warned-to-shut-down-netscalers-over-2-exploited-zero-days/"
     source: "BleepingComputer"
