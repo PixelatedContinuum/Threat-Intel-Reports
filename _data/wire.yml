@@ -3,18 +3,18 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-28T18:02:28Z
+generated_at: 2026-09-28T20:00:10Z
 window_days: 30
 counts:
-  total: 532
+  total: 534
   research: 187
-  news: 345
+  news: 347
 topics:
   - label: "vulnerabilities"
     count: 76
     color: 1
   - label: "cybercrime"
-    count: 58
+    count: 59
     color: 2
   - label: "government"
     count: 36
@@ -466,6 +466,18 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 8
 items:
+  - title: "Dutch police confirm arrest in ShinyHunters hacking investigation"
+    url: "https://www.bleepingcomputer.com/news/security/dutch-police-confirm-arrest-in-shinyhunters-hacking-investigation/"
+    source: "BleepingComputer"
+    date: 2026-09-28T19:49:10Z
+    kind: news
+    labels: []
+  - title: "ShinyHunters exploiting workarounds for Oracle PeopleSoft bug, Mandiant warns"
+    url: "https://therecord.media/shinyhunters-cyberattacks-oracle-mandiant"
+    source: "Recorded Future"
+    date: 2026-09-28T19:30:00Z
+    kind: news
+    labels: ["cybercrime"]
   - title: "US, UK warn of exploited Citrix NetScaler zero-day bugs"
     url: "https://therecord.media/us-uk-warn-of-citrix-netscaler-zero-day-bug"
     source: "Recorded Future"
