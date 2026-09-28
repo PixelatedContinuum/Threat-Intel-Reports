@@ -942,7 +942,7 @@ No prior open-source campaign attributions were found for `193.56.255.154` speci
 This subsection documents what is publicly known about the range of threat actors who have deployed XiebroC2 and Covenant, and whether the infrastructure in this investigation overlaps with any documented campaigns.
 
 **XiebroC2 ecosystem:**
-AhnLab ASEC documented XiebroC2 in credential brute-force campaigns targeting exposed MS-SQL servers in Q3-Q4 2025 [ASEC: https://asec.ahnlab.com/en/90369/; https://asec.ahnlab.com/en/90572/]. Those campaigns used the same default AES-128-ECB key (`QWERt_CSDMAHUATW`) documented in this report, confirming that framework default configurations are prevalent across XiebroC2 deployments, likely because the operator population using this tool is predominantly low-to-intermediate sophistication crimeware actors who do not customize framework defaults. No named APT-level group has been publicly attributed to XiebroC2 usage in any Tier 1 or Tier 2 source as of this publication. The framework's Chinese-language origin and GitHub availability make it a commodity tool within that ecosystem rather than a signature indicator for any specific actor.
+AhnLab ASEC documented XiebroC2 in a credential brute-force case against an exposed MS-SQL server in September 2025, and restated it in its Q3 2025 statistics [ASEC: https://asec.ahnlab.com/en/90369/; https://asec.ahnlab.com/en/90572/]. That case used the same default AES-128-ECB key (`QWERt_CSDMAHUATW`) documented in this report, which suggests operators leave the framework default in place, consistent with an operator population of low-to-intermediate sophistication crimeware actors who do not customise defaults. No named APT-level group has been publicly attributed to XiebroC2 usage in any Tier 1 or Tier 2 source as of this publication. The framework's Chinese-language origin and GitHub availability make it a commodity tool within that ecosystem rather than a signature indicator for any specific actor.
 
 **Covenant ecosystem:**
 Covenant's documented threat actor users include: (1) **APT28** (documented, DIFFERENT heavily-modified variant using cloud-based C2 routing, explicitly inconsistent with this campaign's stock default profile, as detailed in Section 6.3); (2) various red team operators who use the archived framework for legitimate authorized testing; and (3) crimeware operators who deploy the framework without customization, relying on its default HTTP profile and pre-shared key infrastructure. No Tier 1 or Tier 2 source has attributed default-profile Covenant (matching the fingerprints in this investigation) to any named nation-state actor. The stock Chrome 41 User-Agent, unmodified URL paths, and static session token are consistent with an operator who compiled and deployed the framework without reviewing or modifying its default configuration, a profile that aligns with the crimeware hypothesis in Section 6.4.
@@ -1282,7 +1282,7 @@ The `main.exe` SHA256 is a gap. The triage preprocessing log was confirmed to ha
 
 The AES-128-ECB key `QWERt_CSDMAHUATW` was independently documented by AhnLab ASEC in their September 2025 analysis of XiebroC2 campaigns targeting exposed MS-SQL servers [AhnLab ASEC, Tier 2: https://asec.ahnlab.com/en/90369/]. The ASEC sample connected to a different IP (`1.94.185.235:8433`) using WebSocket transport, while this investigation's sample uses `193.56.255.154:4444` with TCP transport, confirming these are different deployments using the same framework default key.
 
-For threat hunting, the key `QWERt_CSDMAHUATW` can serve as a detection string for any XiebroC2 deployment using the default key configuration, not just this campaign. The AhnLab ASEC Q4 2025 MS-SQL statistics report confirms XiebroC2 remained active through the end of 2025 [https://asec.ahnlab.com/en/92003/].
+For threat hunting, the key `QWERt_CSDMAHUATW` can serve as a detection string for any XiebroC2 deployment using the default key configuration, not just this campaign. AhnLab ASEC's Q3 2025 MS-SQL statistics report restates the same case, with the same C2 address and key [https://asec.ahnlab.com/en/90572/]. ASEC's Q4 2025 report covers Trigona activity and does not mention XiebroC2, so the latest public XiebroC2 activity I can source is from the third quarter of 2025.
 
 ## Appendix C: Covenant Framework Historical Adoption Context
 {: .hl-tier-2}
@@ -1291,15 +1291,15 @@ Covenant's archived status (original repository archived 2021/2022) did not redu
 
 - **APT28 (documented, different variant):** Since 2023, APT28 has incorporated a heavily modified Covenant variant with cloud-based C2 routing. The stock default-profile Covenant in this investigation is explicitly inconsistent with APT28's documented variant [Source: The Hacker News citing ESET, https://thehackernews.com/2026/03/apt28-uses-beardshell-and-covenant.html].
 - **XiebroC2 crimeware campaigns (documented):** AhnLab ASEC documented XiebroC2 in credential brute-force campaigns against exposed MS-SQL servers [Source: ASEC, https://asec.ahnlab.com/en/90369/; https://asec.ahnlab.com/en/90572/].
-- **go-clr library:** The `github.com/Ne0nd0g/go-clr` library vendored in `main.exe` was developed by security researcher Russel Van Tuyl (Ne0nd0g) and is documented at [https://github.com/Ne0nd0g/go-clr].
+- **go-clr library:** The `github.com/Ne0nd0g/go-clr` library vendored in `main.exe` is Russel Van Tuyl's (Ne0nd0g) fork of go-clr, a package originally written by Ronnie Flathers (ropnop) [https://github.com/Ne0nd0g/go-clr; https://github.com/ropnop/go-clr].
 
 ## Appendix D: Research References
 {: .hl-tier-2}
 
 **XiebroC2:**
-- **AhnLab ASEC (2025):** "XiebroC2 Being Distributed in Attacks Against MS-SQL Servers", https://asec.ahnlab.com/en/90369/
-- **AhnLab ASEC (2025):** "Coin Miner and XiebroC2 Targeting MS-SQL Servers", https://asec.ahnlab.com/en/90572/
-- **AhnLab ASEC Q4 2025:** MS-SQL malware statistics confirming ongoing XiebroC2 activity, https://asec.ahnlab.com/en/92003/
+- **AhnLab ASEC (2025):** "XiebroC2 Identified in MS-SQL Server Attack Cases", https://asec.ahnlab.com/en/90369/
+- **AhnLab ASEC (2025):** "Statistics Report on Malware Targeting Windows Database Servers in Q3 2025", https://asec.ahnlab.com/en/90572/
+- **AhnLab ASEC Q4 2025:** MS-SQL malware statistics (Trigona; no XiebroC2 activity reported), https://asec.ahnlab.com/en/92003/
 - **INotGreen/XiebroC2 GitHub repository:** https://github.com/INotGreen/XiebroC2
 
 **Covenant C2:**
@@ -1318,6 +1318,7 @@ Covenant's archived status (original repository archived 2021/2022) did not redu
 
 **Detection Libraries:**
 - **Ne0nd0g/go-clr:** https://github.com/Ne0nd0g/go-clr
+- **ropnop/go-clr:** https://github.com/ropnop/go-clr
 - **EmergingThreats XiebroC2 Ruleset:** ET TROJAN XiebroC2 CnC Activity (KeepAlive, SendInfo, List Process)
 
 ---
