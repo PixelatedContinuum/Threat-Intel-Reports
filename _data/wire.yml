@@ -3,18 +3,18 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-28T12:00:48Z
+generated_at: 2026-09-28T14:01:05Z
 window_days: 30
 counts:
-  total: 514
-  research: 175
-  news: 339
+  total: 519
+  research: 178
+  news: 341
 topics:
   - label: "vulnerabilities"
     count: 75
     color: 1
   - label: "cybercrime"
-    count: 55
+    count: 57
     color: 2
   - label: "government"
     count: 35
@@ -104,6 +104,7 @@ label_colors:
   "angryrebel": 7
   "anthropic": 8
   "anti-analysis": 11
+  "anti-vm": 6
   "anydesk": 9
   "api": 12
   "apollo": 11
@@ -173,6 +174,7 @@ label_colors:
   "browser extension": 11
   "browser extension malware": 6
   "browser theft": 3
+  "browser-data-extraction": 5
   "browser-extension": 12
   "browser-in-the-browser": 7
   "build path attribution": 4
@@ -185,6 +187,7 @@ label_colors:
   "c2 framework": 5
   "c3pool": 6
   "calendar": 8
+  "cameron john wagenius": 5
   "canada": 4
   "card-skimming": 8
   "casino domains": 4
@@ -261,6 +264,8 @@ label_colors:
   "cryptographic": 9
   "cspu": 1
   "curlrat": 3
+  "cve-2019-18935": 12
+  "cve-2020-1938": 5
   "cve-2021-38003": 1
   "cve-2022-0847": 7
   "cve-2024-21762": 6
@@ -340,6 +345,7 @@ label_colors:
   "github actions": 6
   "github-actions": 9
   "gitlab": 3
+  "godzilla": 12
   "google": 7
   "google cloud": 8
   "google infrastructure abuse": 8
@@ -448,18 +454,48 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 9
 items:
+  - title: "Former US soldier gets nearly six-year sentence for hacking, extorting telecoms"
+    url: "https://therecord.media/hacker-telecom-army-sentenced"
+    source: "Recorded Future"
+    date: 2026-09-28T12:45:00Z
+    kind: news
+    labels: ["cybercrime"]
+  - title: "Prison Sentence for Former US Soldier Who Hacked AT&T and Verizon"
+    url: "https://www.securityweek.com/prison-sentence-for-former-us-soldier-who-hacked-att-and-verizon/"
+    source: "SecurityWeek"
+    date: 2026-09-28T12:36:16Z
+    kind: news
+    labels: ["cameron john wagenius", "cybercrime", "hacker", "sentenced"]
   - title: "Google Warns of ShinyHunters’ Fresh Oracle PeopleSoft Campaign"
     url: "https://www.securityweek.com/google-warns-of-shinyhunters-fresh-oracle-peoplesoft-campaign/"
     source: "SecurityWeek"
     date: 2026-09-28T10:56:46Z
     kind: news
     labels: ["cybercrime", "oracle peoplesoft", "shinyhunters", "vulnerabilities"]
+  - title: "Operation Master: Deconstructing a Multi-Tiered Intrusion and Monetization Pipeline"
+    url: "https://socradar.io/blog/operation-master-intrusion-monetization-pipeline"
+    source: "AlienVault"
+    date: 2026-09-28T10:51:15Z
+    kind: research
+    labels: ["adaptixc2", "cve-2020-1938", "cve-2021-36260", "cve-2021-4034", "cve-2022-28368", "cve-2022-40684", "cve-2023-7028", "cve-2024-1086", "cve-2026-0257", "dns tunneling", "energy sector targeting", "globalprotect exploitation", "invoice fraud platform", "multi-tenant phishing", "oauth device-code phishing", "pix payment fraud"]
+  - title: "The Stealer Factory: Unpacking a Python-Based MaaS Infostealer Builder"
+    url: "https://labs.k7computing.com/index.php/the-stealer-factory-unpacking-a-python-based-maas-infostealer-builder"
+    source: "AlienVault"
+    date: 2026-09-28T10:51:14Z
+    kind: research
+    labels: ["anti-vm", "browser-data-extraction", "credential-theft", "infostealer", "maas", "nuitka", "pyinstaller", "python-based", "webhook-exfiltration"]
   - title: "Kiteworks Urges Server Shutdown, Finds Advanced Forms Vulnerability"
     url: "https://www.securityweek.com/kiteworks-urges-server-shutdown-finds-advanced-forms-vulnerability/"
     source: "SecurityWeek"
     date: 2026-09-28T09:44:27Z
     kind: news
     labels: ["alert", "kiteworks", "malware", "vulnerabilities"]
+  - title: "Telerik UI 취약점을 악용한 웹쉘 설치 및 스캐너 실행 공격 사례"
+    url: "https://asec.ahnlab.com/ko/95560/"
+    source: "AlienVault"
+    date: 2026-09-28T07:13:28Z
+    kind: research
+    labels: ["cve-2019-18935", "godzilla", "iis server", "privilege escalation", "reverse shell", "sweetpotato", "telerik ui", "web shell", "wordpress scanner"]
   - title: "CISA orders feds to patch exploited Citrix flaws by Wednesday"
     url: "https://www.bleepingcomputer.com/news/security/cisa-orders-feds-to-patch-exploited-citrix-flaws-by-wednesday/"
     source: "BleepingComputer"
