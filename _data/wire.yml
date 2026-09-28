@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-28T00:01:28Z
+generated_at: 2026-09-28T02:00:38Z
 window_days: 30
 counts:
-  total: 514
-  research: 177
+  total: 512
+  research: 175
   news: 337
 topics:
   - label: "vulnerabilities"
@@ -120,13 +120,11 @@ label_colors:
   "arx cipher": 2
   "astrana health": 8
   "asukastealer": 5
-  "asyncrat": 11
   "attack surface": 11
   "attack-campaigns": 8
   "attacks": 7
   "australia": 10
   "authentication bypass": 4
-  "autoit": 8
   "autoit loader": 11
   "automated-exploitation": 9
   "aveva": 1
@@ -234,7 +232,6 @@ label_colors:
   "cloud": 7
   "cloud cybersecurity research": 3
   "cloud-storage-exploitation": 2
-  "cloudflare": 11
   "coast guard": 1
   "cobalt strike": 5
   "conti": 1
@@ -307,7 +304,6 @@ label_colors:
   "elections targeting": 5
   "email security": 12
   "embedding": 3
-  "encrypted payload": 10
   "endpoint security": 11
   "endpoint security & xdr": 11
   "entra id": 5
@@ -3522,15 +3518,3 @@ items:
     date: 2026-08-29T03:43:27Z
     kind: research
     labels: ["clickfix"]
-  - title: "Still Circling: Inside the Operator Behind the GitHub Loader"
-    url: "https://otx.alienvault.com/pulse/6a9226b8695b02a09a6160ef"
-    source: "AlienVault"
-    date: 2026-08-29T00:24:24Z
-    kind: research
-    labels: ["asyncrat", "autoit", "colombian phishing", "crypter services", "dcrat", "duckdns c2", "github loader", "infrastructure analysis", "rat deployment", "remcos", "stealer log", "xworm"]
-  - title: "Fake MP4 File Carries Malicious Payload"
-    url: "https://censys.com/blog/fake-mp4-file-carries-malicious-payload/"
-    source: "AlienVault"
-    date: 2026-08-29T00:24:24Z
-    kind: research
-    labels: ["cloudflare", "encrypted payload", "fake mp4", "iso-bmff", "netsupport", "netsupport manager", "powershell", "remote administration tool", "uuid box"]
