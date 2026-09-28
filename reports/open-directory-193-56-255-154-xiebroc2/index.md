@@ -337,7 +337,7 @@ The 16-byte AES encryption key used for **all** C2 traffic (both commands sent t
 | Algorithm | AES-128-ECB (no IV) |
 | Confidence | DEFINITE (static analysis) |
 
-This key matters for defenders. AES-ECB, Electronic Codebook mode, is cryptographically weak, because identical plaintext produces identical ciphertext and there is no initialization vector. The keyboard-walk pattern of the key, `QWERt` from the top-left keyboard row, confirms it is the **XiebroC2 framework default**, the same key AhnLab ASEC documented in their September 2025 analysis of XiebroC2 MS-SQL targeting campaigns [AhnLab ASEC, Tier 2: https://asec.ahnlab.com/en/90369/]. Any network capture of traffic to `193.56.255.154:4444` can be decrypted offline with it.
+This key matters for defenders. AES-ECB, Electronic Codebook mode, is cryptographically weak, because identical plaintext produces identical ciphertext and there is no initialization vector. The keyboard-walk pattern of the key, `QWERt` from the top-left keyboard row, confirms it is the **XiebroC2 framework default**, the same key AhnLab ASEC documented in their September 2025 analysis of a XiebroC2 attack on an exposed MS-SQL server [AhnLab ASEC, Tier 2: https://asec.ahnlab.com/en/90369/]. Any network capture of traffic to `193.56.255.154:4444` can be decrypted offline with it.
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/open-directory-193-56-255-154-xiebroc2/xiebroc2-aes-ecb-encrypt-call.png" | relative_url }}" alt="Decompiled code showing the call to main/Encrypt::aesECBncrypt confirming AES-ECB mode encryption is used for all C2 traffic">
@@ -768,7 +768,7 @@ UTA Tracking:       MODERATE confidence (72%)
 
 **Attribution to any named threat group (including APT28, APT41, or any Chinese-nexus actor) is not supportable with the available evidence.** Three independent lines of analysis converge on this conclusion:
 
-1. **Infrastructure line:** Zero confirmed overlaps between `193.56.255.154` or `92.60.75.103` and any named threat actor's documented infrastructure. The XiebroC2 AES key cross-match with AhnLab ASEC-documented campaigns identifies only a shared framework default, not an operator-level link.
+1. **Infrastructure line:** Zero confirmed overlaps between `193.56.255.154` or `92.60.75.103` and any named threat actor's documented infrastructure. The XiebroC2 AES key cross-match with the AhnLab ASEC-documented MS-SQL case identifies only a shared framework default, not an operator-level link.
 
 2. **TTP line:** All 25 observed MITRE ATT&CK techniques are either generic (used by dozens of different actor groups) or attributable to the frameworks themselves (XiebroC2, Covenant) rather than to any unique operator tradecraft.
 
@@ -1280,7 +1280,7 @@ The `main.exe` SHA256 is a gap. The triage preprocessing log was confirmed to ha
 ## Appendix B: XiebroC2 v3.1 AES Key: Framework Default Confirmation
 {: .hl-tier-2}
 
-The AES-128-ECB key `QWERt_CSDMAHUATW` was independently documented by AhnLab ASEC in their September 2025 analysis of XiebroC2 campaigns targeting exposed MS-SQL servers [AhnLab ASEC, Tier 2: https://asec.ahnlab.com/en/90369/]. The ASEC sample connected to a different IP (`1.94.185.235:8433`) using WebSocket transport, while this investigation's sample uses `193.56.255.154:4444` with TCP transport, confirming these are different deployments using the same framework default key.
+The AES-128-ECB key `QWERt_CSDMAHUATW` was independently documented by AhnLab ASEC in their September 2025 analysis of a XiebroC2 attack on an exposed MS-SQL server [AhnLab ASEC, Tier 2: https://asec.ahnlab.com/en/90369/]. The ASEC sample connected to a different IP (`1.94.185.235:8433`) using WebSocket transport, while this investigation's sample uses `193.56.255.154:4444` with TCP transport, confirming these are different deployments using the same framework default key.
 
 For threat hunting, the key `QWERt_CSDMAHUATW` can serve as a detection string for any XiebroC2 deployment using the default key configuration, not just this campaign. AhnLab ASEC's Q3 2025 MS-SQL statistics report restates the same case, with the same C2 address and key [https://asec.ahnlab.com/en/90572/]. ASEC's Q4 2025 report covers Trigona activity and does not mention XiebroC2, so the latest public XiebroC2 activity I can source is from the third quarter of 2025.
 
@@ -1290,7 +1290,7 @@ For threat hunting, the key `QWERt_CSDMAHUATW` can serve as a detection string f
 Covenant's archived status (original repository archived 2021/2022) did not reduce its threat actor adoption. Key documented actor usage:
 
 - **APT28 (documented, different variant):** Since 2023, APT28 has incorporated a heavily modified Covenant variant with cloud-based C2 routing. The stock default-profile Covenant in this investigation is explicitly inconsistent with APT28's documented variant [Source: The Hacker News citing ESET, https://thehackernews.com/2026/03/apt28-uses-beardshell-and-covenant.html].
-- **XiebroC2 crimeware campaigns (documented):** AhnLab ASEC documented XiebroC2 in credential brute-force campaigns against exposed MS-SQL servers [Source: ASEC, https://asec.ahnlab.com/en/90369/; https://asec.ahnlab.com/en/90572/].
+- **XiebroC2 crimeware activity (documented):** AhnLab ASEC documented XiebroC2 in a credential brute-force case against an exposed MS-SQL server, restated in its Q3 2025 statistics [Source: ASEC, https://asec.ahnlab.com/en/90369/; https://asec.ahnlab.com/en/90572/].
 - **go-clr library:** The `github.com/Ne0nd0g/go-clr` library vendored in `main.exe` is Russel Van Tuyl's (Ne0nd0g) fork of go-clr, a package originally written by Ronnie Flathers (ropnop) [https://github.com/Ne0nd0g/go-clr; https://github.com/ropnop/go-clr].
 
 ## Appendix D: Research References

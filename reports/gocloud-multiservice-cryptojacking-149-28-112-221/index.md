@@ -607,7 +607,6 @@ External sources cited, by tier:
 
 #### Tier 1 (government / authoritative)
 - [CISA joint advisory AA24-317A, 2023 Top Routinely Exploited Vulnerabilities](https://www.cisa.gov/news-events/cybersecurity-advisories/aa24-317a)
-- [VulnCheck, analysis of CISA's 2023 top routinely exploited vulnerabilities list](https://www.vulncheck.com/blog/cisa-top-exploited-2024)
 - [CISA Secure by Design Alert, Eliminating Default Passwords](https://www.cisa.gov/news-events/alerts/2023/12/15/cisa-secure-design-alert-urges-manufacturers-eliminate-default-passwords)
 - [NVD, CVE-2023-4165 (Tongda OA)](https://nvd.nist.gov/vuln/detail/CVE-2023-4165)
 - [Verizon 2025 Data Breach Investigations Report](https://www.verizon.com/business/resources/reports/2025-dbir-data-breach-investigations-report.pdf)
@@ -621,6 +620,7 @@ External sources cited, by tier:
 - [Cisco Talos, "Ransom Where?" XMR mining economics](https://blog.talosintelligence.com/malicious-xmr-mining/)
 - [Sysdig, cryptojacking victim-cost asymmetry](https://www.sysdig.com/press-releases/sysdig-threat-report-reveals-victims-lose-53-for-every-1-cryptojackers-gain)
 - [Rapid7, GitLab CVE-2021-22205 exploited in the wild](https://www.rapid7.com/blog/post/2021/11/01/gitlab-unauthenticated-remote-code-execution-cve-2021-22205-exploited-in-the-wild/)
+- [VulnCheck, analysis of CISA's 2023 top routinely exploited vulnerabilities list](https://www.vulncheck.com/blog/cisa-top-exploited-2024)
 - [VulnCheck, Seeyon A8 unauthenticated file write (CVE-2019-25714)](https://www.vulncheck.com/advisories/seeyon-office-anywhere-oa-a8-unauthenticated-arbitrary-file-write-via-htmlofficeservlet)
 - [VulnCheck, Seeyon Zhiyuan OA authentication bypass (CVE-2021-4461)](https://www.vulncheck.com/advisories/seeyon-zhiyuan-oa-web-application-system-authentication-bypass)
 - [SOCRadar, WP-SHELLSTORM](https://socradar.io/blog/wp-shellstorm-expose-1-4m-wordpress-sites/)
