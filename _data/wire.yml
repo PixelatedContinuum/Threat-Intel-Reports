@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-28T14:01:05Z
+generated_at: 2026-09-28T16:02:28Z
 window_days: 30
 counts:
-  total: 519
-  research: 178
-  news: 341
+  total: 529
+  research: 186
+  news: 343
 topics:
   - label: "vulnerabilities"
-    count: 75
+    count: 76
     color: 1
   - label: "cybercrime"
     count: 57
@@ -22,26 +22,26 @@ topics:
   - label: "artificial intelligence"
     count: 34
     color: 4
-  - label: "exploited"
-    count: 30
-    color: 5
   - label: "malware"
+    count: 31
+    color: 5
+  - label: "exploited"
     count: 30
     color: 6
   - label: "data breaches"
     count: 24
     color: 7
-  - label: "social engineering"
-    count: 15
-    color: 8
   - label: "zero-day"
+    count: 16
+    color: 8
+  - label: "clickfix"
     count: 15
     color: 9
-  - label: "clickfix"
-    count: 14
-    color: 10
   - label: "ransomware"
-    count: 14
+    count: 15
+    color: 10
+  - label: "social engineering"
+    count: 15
     color: 11
   - label: "phishing"
     count: 11
@@ -49,6 +49,7 @@ topics:
 label_colors:
   "3bb": 7
   "3snake": 7
+  "404 media": 12
   "7zip sfx": 7
   "a little sunshine": 6
   "accessibility abuse": 6
@@ -71,11 +72,13 @@ label_colors:
   "adware disguise": 5
   "aerospace": 7
   "aesto health": 6
+  "affiliate fraud": 7
   "agentcore runtime": 2
   "agentev2": 6
   "agentic ai": 9
   "agentic soc": 2
   "agenttesla": 2
+  "ai agents": 8
   "ai framework": 4
   "ai models": 12
   "ai training": 8
@@ -176,6 +179,7 @@ label_colors:
   "browser theft": 3
   "browser-data-extraction": 5
   "browser-extension": 12
+  "browser-hijacking": 7
   "browser-in-the-browser": 7
   "build path attribution": 4
   "bulletproof hosting": 12
@@ -225,9 +229,10 @@ label_colors:
   "cisco talos network intrusion prevention": 9
   "cisco talos web filtering": 12
   "citrix": 11
+  "citrix netscaler": 2
   "cleo": 7
   "click2shell": 4
-  "clickfix": 10
+  "clickfix": 9
   "clipboard": 10
   "clipboard poisoning": 6
   "clipper": 3
@@ -293,6 +298,7 @@ label_colors:
   "decoys": 1
   "defender exclusions": 12
   "defense sector": 12
+  "denial of service": 1
   "detection engineering": 12
   "devops targeting": 8
   "disrupted": 8
@@ -300,6 +306,7 @@ label_colors:
   "dns txt records": 3
   "docusign impersonation": 2
   "domain controller": 4
+  "donut loader": 3
   "double extortion": 1
   "dprk apt": 2
   "e-commerce attacks": 10
@@ -310,6 +317,7 @@ label_colors:
   "elections targeting": 5
   "email security": 12
   "embedding": 3
+  "encrypted c2": 9
   "endpoint security": 11
   "endpoint security & xdr": 11
   "entra id": 5
@@ -317,7 +325,7 @@ label_colors:
   "eu": 12
   "eviltokens": 6
   "exploit": 9
-  "exploited": 5
+  "exploited": 6
   "exposure management": 4
   "extortion": 12
   "extortionware": 11
@@ -376,6 +384,7 @@ label_colors:
   "jfrog": 8
   "kimsuky": 1
   "kiteworks": 9
+  "kothamine": 10
   "labubarat": 10
   "landing page top story": 2
   "lateral movement": 6
@@ -386,7 +395,7 @@ label_colors:
   "maas framework": 12
   "mac malware": 8
   "macos": 11
-  "malware": 6
+  "malware": 5
   "malware analysis": 7
   "mathspace": 4
   "meshagent": 2
@@ -422,7 +431,7 @@ label_colors:
   "postgresql": 12
   "privacy": 12
   "proxy abuse": 6
-  "ransomware": 11
+  "ransomware": 10
   "ransomware as a service": 3
   "rce": 10
   "revolut": 5
@@ -438,9 +447,10 @@ label_colors:
   "sharepoint": 11
   "sma1000": 2
   "soc": 9
-  "social engineering": 8
+  "social engineering": 11
   "software": 5
   "solarwinds": 10
+  "storm": 7
   "surfshark": 11
   "switch": 10
   "threat hunting & intel": 9
@@ -452,8 +462,32 @@ label_colors:
   "vmware": 2
   "vpn": 8
   "vulnerabilities": 1
-  "zero-day": 9
+  "zero-day": 8
 items:
+  - title: "Dutch Police Arrest ‘Reformed’ Hacker in Shiny Hunters Investigation"
+    url: "https://krebsonsecurity.com/2026/09/dutch-police-arrest-reformed-hacker-in-shiny-hunters-investigation/"
+    source: "Krebs on Security"
+    date: 2026-09-28T15:08:57Z
+    kind: news
+    labels: ["404 media", "a little sunshine", "bloomberg", "cl0p", "fbi", "google threat intelligence group", "kela", "latest warnings", "mandiant", "ne'er-do-well news", "neo security", "nl times", "odido", "oracle", "peoplesoft", "pepijn van der stap", "ransomware", "reuters", "scatteredlapsusshunters", "shinyhunters", "slsh", "teampcp", "umbreon", "wired"]
+  - title: "Threat Brief: NetScaler Zero Days CVE-2026-88771 and CVE-2026-88772 Exploited in the Wild"
+    url: "https://unit42.paloaltonetworks.com/netscaler-zero-days-exploited/"
+    source: "Palo Alto Networks"
+    date: 2026-09-28T15:02:04Z
+    kind: research
+    labels: ["citrix netscaler", "denial of service", "high profile threats", "remote code execution", "vulnerabilities", "zero-day"]
+  - title: "NeedyMantis: Unpacking a post-compromise malware family used in targeted operations"
+    url: "https://www.microsoft.com/en-us/security/blog/2026/09/28/needymantis-unpacking-a-post-compromise-malware-family-used-in-targeted-operations/"
+    source: "Microsoft"
+    date: 2026-09-28T15:00:00Z
+    kind: research
+    labels: ["malware", "storm"]
+  - title: "80,000+ Organizations Had AI Logins Stolen: From Shadow AI to LLMjacking"
+    url: "https://www.bleepingcomputer.com/news/security/80-000-plus-organizations-had-ai-logins-stolen-from-shadow-ai-to-llmjacking/"
+    source: "BleepingComputer"
+    date: 2026-09-28T14:00:10Z
+    kind: news
+    labels: []
   - title: "Former US soldier gets nearly six-year sentence for hacking, extorting telecoms"
     url: "https://therecord.media/hacker-telecom-army-sentenced"
     source: "Recorded Future"
@@ -484,6 +518,12 @@ items:
     date: 2026-09-28T10:51:14Z
     kind: research
     labels: ["anti-vm", "browser-data-extraction", "credential-theft", "infostealer", "maas", "nuitka", "pyinstaller", "python-based", "webhook-exfiltration"]
+  - title: "ShinyHunters Exploits Oracle PeopleSoft Vulnerability CVE-2026-35273 in New Attack Wave"
+    url: "https://cyberpress.org/shinyhunters-renew-peoplesoft-attacks/?amp=1"
+    source: "AlienVault"
+    date: 2026-09-28T10:35:50Z
+    kind: research
+    labels: []
   - title: "Kiteworks Urges Server Shutdown, Finds Advanced Forms Vulnerability"
     url: "https://www.securityweek.com/kiteworks-urges-server-shutdown-finds-advanced-forms-vulnerability/"
     source: "SecurityWeek"
@@ -491,6 +531,12 @@ items:
     kind: news
     labels: ["alert", "kiteworks", "malware", "vulnerabilities"]
   - title: "Telerik UI 취약점을 악용한 웹쉘 설치 및 스캐너 실행 공격 사례"
+    url: "https://asec.ahnlab.com/ko/95560/"
+    source: "AlienVault"
+    date: 2026-09-28T07:13:28Z
+    kind: research
+    labels: ["cve-2019-18935", "godzilla", "iis server", "privilege escalation", "reverse shell", "sweetpotato", "telerik ui", "web shell", "wordpress scanner"]
+  - title: "Telerik UI Exploitation Leads to Webshell Install and Scanner Execution"
     url: "https://asec.ahnlab.com/ko/95560/"
     source: "AlienVault"
     date: 2026-09-28T07:13:28Z
@@ -520,12 +566,30 @@ items:
     date: 2026-09-27T09:23:09Z
     kind: news
     labels: ["exploited", "sharepoint", "vulnerabilities"]
+  - title: "Lunex Unmasked: A New Information Stealer Deployed Through BYOVD"
+    url: "https://otx.alienvault.com/pulse/6ab83188fddeab6ca23aeafc"
+    source: "AlienVault"
+    date: 2026-09-26T20:56:40Z
+    kind: research
+    labels: ["browser-hijacking", "byovd", "credential-theft", "cryptocurrency-wallet", "cve-2023-20598", "information-stealer", "kernel-driver-abuse", "lunex", "lunexloader", "lunexstealer", "native-messaging-host", "pdfwkrnl", "ukrainian-targeting"]
+  - title: "Placeholder Domains Whose Ads Serve Scams"
+    url: "https://otx.alienvault.com/pulse/6ab831882ea7368fb92b06f6"
+    source: "AlienVault"
+    date: 2026-09-26T20:56:39Z
+    kind: research
+    labels: ["affiliate fraud", "ai agents", "clickfix", "cloaking", "github", "investment fraud", "malvertising", "placeholder domains", "scareware"]
   - title: "ShinyHunters uses WAF bypass trick in Oracle PeopleSoft attacks"
     url: "https://www.bleepingcomputer.com/news/security/shinyhunters-uses-waf-bypass-trick-in-oracle-peoplesoft-attacks/"
     source: "BleepingComputer"
     date: 2026-09-26T19:03:34Z
     kind: news
     labels: []
+  - title: "Kothamine malware uses Tailscale's tailcat to evade network detection"
+    url: "https://www.malwarebytes.com/blog/threat-intel/2026/09/kothamine-malware-uses-tailscales-tailcat-to-evade-network-detection"
+    source: "AlienVault"
+    date: 2026-09-26T13:16:09Z
+    kind: research
+    labels: ["encrypted c2", "kothamine", "kothamine agent", "npm packages", "remote access trojan", "stealer", "tailcat", "tailscale", "windows"]
   - title: "New x47.c Windows Botnet Weaponizes xAI Grok, AI API Draining"
     url: "https://www.securityweek.com/new-x47-c-windows-botnet-weaponizes-xai-grok-ai-api-draining/"
     source: "SecurityWeek"
@@ -562,6 +626,12 @@ items:
     date: 2026-09-25T17:24:20Z
     kind: news
     labels: []
+  - title: "PureRAT and PureLogs Campaign Targeting Japanese Organizations"
+    url: "https://blog-en.itochuci.co.jp/entry/2026/09/25/090000"
+    source: "AlienVault"
+    date: 2026-09-25T15:41:27Z
+    kind: research
+    labels: ["byovd", "donut loader", "japanese organizations", "phishing campaign", "process hollowing", "purelogs", "purerat", "stealer"]
   - title: "Storm-3168: Agentic-driven cloud attacks using compromised service principals"
     url: "https://www.microsoft.com/en-us/security/blog/2026/09/25/storm-3168-agentic-driven-cloud-attacks-using-compromised-service-principals/"
     source: "Microsoft"
