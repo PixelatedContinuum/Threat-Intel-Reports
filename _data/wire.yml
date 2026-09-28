@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-27T22:01:32Z
+generated_at: 2026-09-28T00:01:28Z
 window_days: 30
 counts:
-  total: 515
+  total: 514
   research: 177
-  news: 338
+  news: 337
 topics:
   - label: "vulnerabilities"
     count: 73
@@ -43,7 +43,7 @@ topics:
   - label: "ransomware"
     count: 14
     color: 11
-  - label: "healthcare"
+  - label: "phishing"
     count: 11
     color: 12
 label_colors:
@@ -356,7 +356,7 @@ label_colors:
   "handala hack": 2
   "hardware": 6
   "hasbro": 1
-  "healthcare": 12
+  "healthcare": 11
   "hideul.exe": 7
   "hts": 11
   "ics": 3
@@ -410,7 +410,7 @@ label_colors:
   "patch tuesday": 11
   "patched": 1
   "payment fraud": 12
-  "phishing": 10
+  "phishing": 12
   "phishing campaign": 6
   "plugin vulnerability": 1
   "poc exploit": 3
@@ -3534,9 +3534,3 @@ items:
     date: 2026-08-29T00:24:24Z
     kind: research
     labels: ["cloudflare", "encrypted payload", "fake mp4", "iso-bmff", "netsupport", "netsupport manager", "powershell", "remote administration tool", "uuid box"]
-  - title: "McKesson discloses breach after ShinyHunters claims patient data theft"
-    url: "https://www.bleepingcomputer.com/news/security/mckesson-discloses-breach-after-shinyhunters-claims-patient-data-theft/"
-    source: "BleepingComputer"
-    date: 2026-08-28T22:40:17Z
-    kind: news
-    labels: ["healthcare"]
