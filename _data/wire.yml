@@ -3,18 +3,18 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-28T10:02:48Z
+generated_at: 2026-09-28T12:00:48Z
 window_days: 30
 counts:
-  total: 513
+  total: 514
   research: 175
-  news: 338
+  news: 339
 topics:
   - label: "vulnerabilities"
-    count: 73
+    count: 75
     color: 1
   - label: "cybercrime"
-    count: 54
+    count: 55
     color: 2
   - label: "government"
     count: 35
@@ -26,10 +26,10 @@ topics:
     count: 30
     color: 5
   - label: "malware"
-    count: 29
+    count: 30
     color: 6
   - label: "data breaches"
-    count: 25
+    count: 24
     color: 7
   - label: "social engineering"
     count: 15
@@ -91,6 +91,7 @@ label_colors:
   "ai-powered cybercrime": 12
   "airport": 9
   "aitm": 5
+  "alert": 2
   "alphaagent": 1
   "amadey": 5
   "amatera": 5
@@ -351,7 +352,6 @@ label_colors:
   "hacker conversations": 8
   "handala hack": 2
   "hardware": 6
-  "hasbro": 1
   "healthcare": 11
   "hideul.exe": 7
   "hts": 11
@@ -369,6 +369,7 @@ label_colors:
   "ivanti": 7
   "jfrog": 8
   "kimsuky": 1
+  "kiteworks": 9
   "labubarat": 10
   "landing page top story": 2
   "lateral movement": 6
@@ -398,6 +399,7 @@ label_colors:
   "on the radar": 4
   "openai": 4
   "oracle": 12
+  "oracle peoplesoft": 3
   "orkes": 6
   "ot": 3
   "papercut": 8
@@ -446,6 +448,18 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 9
 items:
+  - title: "Google Warns of ShinyHunters’ Fresh Oracle PeopleSoft Campaign"
+    url: "https://www.securityweek.com/google-warns-of-shinyhunters-fresh-oracle-peoplesoft-campaign/"
+    source: "SecurityWeek"
+    date: 2026-09-28T10:56:46Z
+    kind: news
+    labels: ["cybercrime", "oracle peoplesoft", "shinyhunters", "vulnerabilities"]
+  - title: "Kiteworks Urges Server Shutdown, Finds Advanced Forms Vulnerability"
+    url: "https://www.securityweek.com/kiteworks-urges-server-shutdown-finds-advanced-forms-vulnerability/"
+    source: "SecurityWeek"
+    date: 2026-09-28T09:44:27Z
+    kind: news
+    labels: ["alert", "kiteworks", "malware", "vulnerabilities"]
   - title: "CISA orders feds to patch exploited Citrix flaws by Wednesday"
     url: "https://www.bleepingcomputer.com/news/security/cisa-orders-feds-to-patch-exploited-citrix-flaws-by-wednesday/"
     source: "BleepingComputer"
@@ -3518,9 +3532,3 @@ items:
     date: 2026-08-30T14:30:25Z
     kind: news
     labels: ["artificial intelligence"]
-  - title: "Hasbro Data Breach Exposed Employee Personal Information"
-    url: "https://www.securityweek.com/hasbro-data-breach-exposed-employee-personal-information/"
-    source: "SecurityWeek"
-    date: 2026-08-29T11:55:00Z
-    kind: news
-    labels: ["data breaches", "hasbro"]
