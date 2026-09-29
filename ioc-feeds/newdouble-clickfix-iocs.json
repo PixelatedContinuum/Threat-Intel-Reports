@@ -11,7 +11,7 @@
     "tlp": "CLEAR",
     "license": "CC BY 4.0",
     "reference": "https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/",
-    "scope_note": "Indicators come from two saved Webamon pages (2026-08-26 and 2026-09-26), cached VirusTotal URL and file records, and static analysis of the two retrieved files. Nothing here asserts current liveness or a victim execution. Operator linkage across the older template pages is INSUFFICIENT. The delivery IP, the two lure domains and the two delivery URLs are held in hunt_only_never_block as historical hunt leads (action HUNT), not in the blocklist buckets, because their current liveness and ownership are NOT CHECKED.",
+    "scope_note": "Indicators come from two saved Webamon pages (2026-08-26 and 2026-09-26), cached VirusTotal URL and file records, and static analysis of the two retrieved files. A scan on 2026-09-29 also found an open directory at http://202.71.14.31/y/. Nothing here asserts liveness after that date or a victim execution. Operator linkage across the older template pages is INSUFFICIENT. The delivery IP, the two lure domains and the two delivery URLs are held in hunt_only_never_block as historical hunt leads (action HUNT), not in the blocklist buckets, because their current liveness and ownership are NOT CHECKED.",
     "victim_names": []
   },
   "file_hashes": {
@@ -58,7 +58,7 @@
         "filename": "x.exe"
       }
     ],
-    "notes": "The y.ps1 and x.exe hashes are the bytes VirusTotal held for the two URLs by 2026-09-25. Whether either saved lure page's visitor received these exact bytes is NOT CHECKED. Older-template scripts served from other addresses returned a different response hash and are not included. The embedded DLL hashes are in hunt_only_never_block, not in these buckets, because the module is memory-resident and is not a blocklist entry."
+    "notes": "The y.ps1 and x.exe hashes are the bytes VirusTotal held for the two URLs by 2026-09-25. The y.ps1 hash was re-observed unchanged on 2026-09-29 (/y/ listing); this bucket carries no last_seen field, so the date is recorded here and on the URL and IP entries.Whether either saved lure page's visitor received these exact bytes is NOT CHECKED. Older-template scripts served from other addresses returned a different response hash and are not included. The embedded DLL hashes are in hunt_only_never_block, not in these buckets, because the module is memory-resident and is not a blocklist entry."
   },
   "network_indicators": {
     "ipv4": [],
@@ -109,11 +109,11 @@
       "category": "historical infrastructure, hunt only",
       "purpose": "Host of the first-stage script and the second-stage executable named in the clipboard command",
       "first_seen": "2026-08-26",
-      "last_seen": "2026-09-26",
+      "last_seen": "2026-09-29",
       "confidence": "HIGH",
       "action": "HUNT",
-      "notes": "Historical observation only. Current liveness and current ownership are NOT CHECKED, and no live probe was run. A reassigned host or a re-registered domain would put an unrelated owner on a blocklist, so this is a hunt lead for matching against dated lure and file records, never a blocklist entry.",
-      "evidence_note": "Named in the saved lure pages of 2026-08-26 and 2026-09-26; VirusTotal held the script and executable bodies for its two URLs by 2026-09-25."
+      "notes": "Seen live on 2026-09-29 (open directory at /y/). Liveness after that date and current ownership are NOT CHECKED. A reassigned host would put an unrelated owner on a blocklist, so this is a hunt lead for matching against dated lure and file records, never a blocklist entry.",
+      "evidence_note": "Named in the saved lure pages of 2026-08-26 and 2026-09-26; VirusTotal held the script and executable bodies for its two URLs by 2026-09-25; on 2026-09-29 12:28:01 UTC an open directory was found listing y.ps1 on this host."
     },
     {
       "value": "newdoubleauthentification.com",
@@ -145,11 +145,23 @@
       "category": "historical infrastructure, hunt only",
       "purpose": "First-stage script URL placed on the clipboard by the lure page",
       "first_seen": "2026-08-26",
-      "last_seen": "2026-09-25",
+      "last_seen": "2026-09-29",
       "confidence": "HIGH",
       "action": "HUNT",
-      "notes": "Historical observation only. Current liveness and current ownership are NOT CHECKED, and no live probe was run. A reassigned host or a re-registered domain would put an unrelated owner on a blocklist, so this is a hunt lead for matching against dated lure and file records, never a blocklist entry.",
-      "evidence_note": "Body cached by VirusTotal by 2026-09-25 matches the y.ps1 hash in file_hashes."
+      "notes": "Seen served on 2026-09-29 (file listed in the /y/ open directory; same SHA-256 as file_hashes). Liveness after that date and current ownership are NOT CHECKED. A reassigned host would put an unrelated owner on a blocklist, so this is a hunt lead for matching against dated lure and file records, never a blocklist entry.",
+      "evidence_note": "Body cached by VirusTotal by 2026-09-25 matches the y.ps1 hash in file_hashes; The file in the /y/ listing, hashed on 2026-09-29 12:28:12 UTC, has the same SHA-256."
+    },
+    {
+      "value": "http://202.71.14.31/y/",
+      "type": "url",
+      "category": "historical infrastructure, hunt only",
+      "purpose": "Open directory listing on the payload host; it lists one file, y.ps1",
+      "first_seen": "2026-09-29",
+      "last_seen": "2026-09-29",
+      "confidence": "HIGH",
+      "action": "HUNT",
+      "notes": "Observed once, on 2026-09-29 12:28:01 UTC. first_seen is the date we saw the listing; whether it existed earlier is NOT CHECKED. Liveness after that date and current ownership are NOT CHECKED, so this is a hunt lead, never a blocklist entry.",
+      "evidence_note": "http://202.71.14.31/y/ returned a directory listing with 1 file (y.ps1) on 2026-09-29."
     },
     {
       "value": "http://202.71.14.31/x/x.exe",
