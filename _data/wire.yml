@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-29T18:01:18Z
+generated_at: 2026-09-29T20:00:19Z
 window_days: 30
 counts:
-  total: 553
-  research: 193
-  news: 360
+  total: 560
+  research: 198
+  news: 362
 topics:
   - label: "vulnerabilities"
     count: 79
@@ -31,20 +31,20 @@ topics:
   - label: "data breaches"
     count: 25
     color: 7
-  - label: "zero-day"
+  - label: "clickfix"
     count: 17
     color: 8
-  - label: "clickfix"
-    count: 16
-    color: 9
   - label: "social engineering"
-    count: 16
+    count: 17
+    color: 9
+  - label: "zero-day"
+    count: 17
     color: 10
   - label: "ransomware"
     count: 15
     color: 11
   - label: "phishing"
-    count: 12
+    count: 13
     color: 12
 label_colors:
   "3bb": 7
@@ -63,6 +63,7 @@ label_colors:
   "active exploitation": 2
   "adapthealth": 2
   "adaptixc2": 8
+  "adb exploitation": 3
   "adb propagation": 1
   "administrative compromise": 8
   "adobe": 1
@@ -82,6 +83,7 @@ label_colors:
   "ai agents": 8
   "ai framework": 4
   "ai models": 12
+  "ai services": 10
   "ai training": 8
   "ai-agent": 12
   "ai-assisted development": 10
@@ -92,6 +94,7 @@ label_colors:
   "ai-generated decoys": 1
   "ai-generated-content": 4
   "ai-orchestrated campaign": 1
+  "ai-powered automation": 6
   "ai-powered cybercrime": 12
   "airport": 9
   "aitm": 5
@@ -175,10 +178,12 @@ label_colors:
   "bnb smart chain": 10
   "botnet": 6
   "botnet takedown": 5
+  "brand impersonation": 7
   "brevo": 8
   "brevo compromise": 8
   "browser extension": 11
   "browser extension malware": 6
+  "browser proxy": 4
   "browser theft": 3
   "browser-data-extraction": 5
   "browser-extension": 12
@@ -196,6 +201,7 @@ label_colors:
   "calendar": 8
   "cameron john wagenius": 5
   "canada": 4
+  "canon sideloading": 6
   "card-skimming": 8
   "casino domains": 4
   "castleloader": 11
@@ -236,7 +242,7 @@ label_colors:
   "citrix netscaler": 2
   "cleo": 7
   "click2shell": 4
-  "clickfix": 9
+  "clickfix": 8
   "clipboard": 10
   "clipboard poisoning": 6
   "clipper": 3
@@ -273,6 +279,7 @@ label_colors:
   "cryptographic": 9
   "cspu": 1
   "curlrat": 3
+  "cve-2017-0199": 11
   "cve-2019-18935": 12
   "cve-2020-1938": 5
   "cve-2021-38003": 1
@@ -375,6 +382,7 @@ label_colors:
   "hardware": 6
   "healthcare": 11
   "hideul.exe": 7
+  "hta execution": 3
   "hts": 11
   "ics": 3
   "ics/ot": 1
@@ -455,7 +463,7 @@ label_colors:
   "sharepoint": 11
   "sma1000": 2
   "soc": 9
-  "social engineering": 10
+  "social engineering": 9
   "software": 5
   "solarwinds": 10
   "storm": 7
@@ -470,8 +478,20 @@ label_colors:
   "vmware": 2
   "vpn": 8
   "vulnerabilities": 1
-  "zero-day": 8
+  "zero-day": 10
 items:
+  - title: "Hackers exploit Citrix NetScaler zero-day to deploy web shells"
+    url: "https://www.bleepingcomputer.com/news/security/hackers-exploit-citrix-netscaler-zero-day-to-deploy-web-shells/"
+    source: "BleepingComputer"
+    date: 2026-09-29T18:37:12Z
+    kind: news
+    labels: []
+  - title: "Former US Air Force members sent to prison over BEC attacks"
+    url: "https://www.bleepingcomputer.com/news/security/former-us-air-force-members-sent-to-prison-over-bec-attacks/"
+    source: "BleepingComputer"
+    date: 2026-09-29T18:09:39Z
+    kind: news
+    labels: []
   - title: "New Spectre v2 attack variant leaks Linux root password hash in minutes"
     url: "https://www.bleepingcomputer.com/news/security/new-spectre-v2-attack-variant-leaks-linux-root-password-hash-in-minutes/"
     source: "BleepingComputer"
@@ -496,6 +516,12 @@ items:
     date: 2026-09-29T15:00:00Z
     kind: research
     labels: ["blizzard", "credential theft", "cyberespionage", "domain compromise", "malware", "phishing", "social engineering", "star blizzard (seaborgium)"]
+  - title: "Beware of Phishing Emails That Disguise Themselves as Project Material Purchase Requests"
+    url: "https://otx.alienvault.com/pulse/6abbbd28cb7e4cac7c679e36"
+    source: "AlienVault"
+    date: 2026-09-29T13:29:12Z
+    kind: research
+    labels: ["cve-2017-0199", "hta execution", "ole exploitation", "phishing", "powershell obfuscation", "remcos", "remcos rat", "south korea", "steganography"]
   - title: "Hackers Use ChatGPT Custom GPTs in ClickFix Attacks"
     url: "https://www.securityweek.com/hackers-use-chatgpt-custom-gpts-in-clickfix-attacks/"
     source: "SecurityWeek"
@@ -562,6 +588,12 @@ items:
     date: 2026-09-29T07:33:12Z
     kind: news
     labels: ["apple"]
+  - title: "The \"VPN for X\" Proxy Farm — Risky Plugins"
+    url: "https://riskyplugins.com/threat-library/russian-vpn-proxy-farm?utm_source=gemini"
+    source: "AlienVault"
+    date: 2026-09-29T06:34:53Z
+    kind: research
+    labels: ["browser proxy", "chrome extensions", "dynamic configuration", "proxy farm", "remote control", "russian-language", "traffic interception", "vpn impersonation"]
   - title: "Apple Patches Meta-Reported Zero-Day Linked to ‘Extremely Sophisticated Attack’"
     url: "https://www.securityweek.com/apple-patches-meta-reported-zero-day-linked-to-extremely-sophisticated-attack/"
     source: "SecurityWeek"
@@ -580,6 +612,12 @@ items:
     date: 2026-09-29T05:00:00Z
     kind: research
     labels: ["threat hunting & intel"]
+  - title: "Attackers Abuse ChatGPT Custom GPTs to Deliver RAT via ClickFix"
+    url: "https://www.huntress.com/blog/chatgpt-custom-gpts-clickfix-rat"
+    source: "AlienVault"
+    date: 2026-09-29T00:54:45Z
+    kind: research
+    labels: ["amos", "canon sideloading", "chatgpt custom gpt", "clickfix", "dll sideloading", "google sites abuse", "lumma stealer", "macsync", "powershell obfuscation", "rat deployment", "sectoprat", "social engineering"]
   - title: "No MDM for Linux? A 68-line Elastic workflow keeps every endpoint's config current"
     url: "https://www.elastic.co/security-labs/blog/linux-endpoint-management-elastic-workflows"
     source: "Elastic"
@@ -598,6 +636,12 @@ items:
     date: 2026-09-28T20:31:16Z
     kind: news
     labels: []
+  - title: "From BlackCat to Panda Workshop: Inside the Evolving C2 Panel Behind RATHat"
+    url: "https://www.cleafy.com/cleafy-labs/from-blackcat-to-panda-workshop-inside-the-evolving-c2-panel-behind-rathat"
+    source: "AlienVault"
+    date: 2026-09-28T20:24:24Z
+    kind: research
+    labels: ["adb exploitation", "ai-powered automation", "android banking trojan", "blackcat panel", "c2 infrastructure", "maas operation", "panda workshop", "rathat", "wireless debugging"]
   - title: "Dutch police confirm arrest in ShinyHunters hacking investigation"
     url: "https://www.bleepingcomputer.com/news/security/dutch-police-confirm-arrest-in-shinyhunters-hacking-investigation/"
     source: "BleepingComputer"
@@ -640,6 +684,12 @@ items:
     date: 2026-09-28T15:00:00Z
     kind: research
     labels: ["malware", "storm"]
+  - title: "Rise of the Jev-Clones"
+    url: "https://research.eye.security/rise-of-the-jev-clones"
+    source: "AlienVault"
+    date: 2026-09-28T14:58:08Z
+    kind: research
+    labels: ["ai services", "brand impersonation", "domain squatting", "fraudulent storefronts", "jev api", "lookalike domains", "price inflation", "typesafe ai"]
   - title: "80,000+ Organizations Had AI Logins Stolen: From Shadow AI to LLMjacking"
     url: "https://www.bleepingcomputer.com/news/security/80-000-plus-organizations-had-ai-logins-stolen-from-shadow-ai-to-llmjacking/"
     source: "BleepingComputer"
