@@ -3,21 +3,21 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-29T20:00:19Z
+generated_at: 2026-09-29T22:00:18Z
 window_days: 30
 counts:
-  total: 560
+  total: 565
   research: 198
-  news: 362
+  news: 367
 topics:
   - label: "vulnerabilities"
     count: 79
     color: 1
   - label: "cybercrime"
-    count: 61
+    count: 63
     color: 2
   - label: "government"
-    count: 38
+    count: 40
     color: 3
   - label: "artificial intelligence"
     count: 36
@@ -480,6 +480,36 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 10
 items:
+  - title: "US Air Force members given over 6 years in prison for cyber theft of more than $2 million"
+    url: "https://therecord.media/us-air-force-members-given-6-year-sentence-cyber"
+    source: "Recorded Future"
+    date: 2026-09-29T21:01:00Z
+    kind: news
+    labels: ["cybercrime", "government"]
+  - title: "Custom ChatGPTs push ClickFix attacks to deploy RAT malware"
+    url: "https://www.bleepingcomputer.com/news/security/custom-chatgpts-push-clickfix-attacks-to-deploy-rat-malware/"
+    source: "BleepingComputer"
+    date: 2026-09-29T20:59:39Z
+    kind: news
+    labels: []
+  - title: "Controversial spyware firm Paragon to go public by end of year"
+    url: "https://therecord.media/controversial-spyware-firm-paragon-to-go-public"
+    source: "Recorded Future"
+    date: 2026-09-29T20:35:00Z
+    kind: news
+    labels: ["industry"]
+  - title: "FBI tells ShinyHunters members to turn themselves in after recent arrest"
+    url: "https://www.bleepingcomputer.com/news/security/fbi-tells-shinyhunters-members-to-turn-themselves-in-after-recent-arrest/"
+    source: "BleepingComputer"
+    date: 2026-09-29T20:09:55Z
+    kind: news
+    labels: []
+  - title: "OpenAI apologizes for agents breaching Australian government websites without authorization"
+    url: "https://therecord.media/openai-apologizes-australia-medicare-breach"
+    source: "Recorded Future"
+    date: 2026-09-29T19:48:00Z
+    kind: news
+    labels: ["cybercrime", "government", "industry", "privacy"]
   - title: "Hackers exploit Citrix NetScaler zero-day to deploy web shells"
     url: "https://www.bleepingcomputer.com/news/security/hackers-exploit-citrix-netscaler-zero-day-to-deploy-web-shells/"
     source: "BleepingComputer"
