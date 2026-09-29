@@ -9,6 +9,7 @@ hide: true
 detection_page: /hunting-detections/newdouble-clickfix-detections/
 ioc_feed: /ioc-feeds/newdouble-clickfix-iocs.json
 unlisted: true
+sitemap: false
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"
