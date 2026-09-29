@@ -4,8 +4,6 @@ date: '2026-09-28'
 layout: post
 permalink: /hunting-detections/newdouble-clickfix-detections/
 hide: true
-unlisted: true
-sitemap: false
 ---
 
 **Campaign:** Newdouble-ClickFix-202.71.14.31

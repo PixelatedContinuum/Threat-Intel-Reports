@@ -3,13 +3,12 @@ title: "FACEIT ClickFix Pages Point CS2 Players to a Script URL That VirusTotal 
 date: '2026-09-28'
 layout: post
 permalink: /reports/newdouble-clickfix/
+thumbnail: /assets/images/cards/newdouble-clickfix.png
 category: "ClickFix Delivery Chain"
 description: "Fake FACEIT verification pages direct CS2 players to run a PowerShell downloader that, as held by VirusTotal on September 25, 2026, downloaded an executable built for Steam account theft."
 hide: true
 detection_page: /hunting-detections/newdouble-clickfix-detections/
-ioc_feed: /ioc-feeds/newdouble-clickfix-iocs.json
-unlisted: true
-sitemap: false
+ioc_feed: /ioc-feeds/newdouble-clickfix/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"
@@ -23,6 +22,7 @@ ioc_highlights:
   - "newdouble-authentification[.]com"
   - "dd29536b27649fa897d39198f3ec32d05215b9c6d2864acc32f51de648a25e25"
   - "1366b8ca7f315142ba9989241402758cf2a86e5568a28da0942e1810fe12c324"
+stix_bundle: /stix/newdouble-clickfix.json
 ---
 
 **Campaign Identifier:** Newdouble-ClickFix-202.71.14.31<br>

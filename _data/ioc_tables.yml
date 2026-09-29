@@ -3956,6 +3956,96 @@
       context: "PS1 stager wrapper, port 80, URI /msI4"
   never_block_total: 0
   never_block_rows:
+"newdouble-clickfix":
+  slug: "newdouble-clickfix"
+  page_url: "/ioc-feeds/newdouble-clickfix/"
+  title: "FACEIT ClickFix Pages Point CS2 Players to a Script URL That VirusTotal Ties to a Steam-Focused Executable"
+  date: "2026-09-28"
+  severity: "high"
+  feed_url: "/ioc-feeds/newdouble-clickfix-iocs.json"
+  report_url: "/reports/newdouble-clickfix/"
+  detection_url: "/hunting-detections/newdouble-clickfix-detections"
+  total: 13
+  untyped: 5
+  counts:
+    filename: 2
+    md5: 3
+    path: 3
+    sha1: 2
+    sha256: 2
+    url: 1
+  rows:
+    - type: "url"
+      value: "https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/"
+      context: null
+    - type: "sha256"
+      value: "1366b8ca7f315142ba9989241402758cf2a86e5568a28da0942e1810fe12c324"
+      context: null
+    - type: "sha256"
+      value: "dd29536b27649fa897d39198f3ec32d05215b9c6d2864acc32f51de648a25e25"
+      context: null
+    - type: "sha1"
+      value: "b7119d01b2e49938ac310543e7240815e26b711c"
+      context: null
+    - type: "sha1"
+      value: "f9d075fc57b6b27a6066734a9a9ba25d666ba9db"
+      context: null
+    - type: "md5"
+      value: "405186a1740ede3e8c56bbf81c043e7e"
+      context: null
+    - type: "md5"
+      value: "6971a368b4164f8d53a9041b717e8ace"
+      context: null
+    - type: "md5"
+      value: "87e8479ef75eb55bf7a09ca6b8a60c49"
+      context: null
+    - type: "path"
+      value: "%APPDATA%\\Microsoft\\Windows\\Libraries\\Cache\\steamwebhelper.exe"
+      context: null
+    - type: "path"
+      value: "%APPDATA%\\MyApp\\y.dat"
+      context: null
+    - type: "path"
+      value: "%APPDATA%\\MyApp\\y.ps1"
+      context: null
+    - type: "filename"
+      value: "x.exe"
+      context: null
+    - type: "filename"
+      value: "y.ps1"
+      context: null
+  never_block_total: 10
+  never_block_rows:
+    - type: "ipv4"
+      value: "202.71.14.31"
+      context: "Host of the first-stage script and the second-stage executable named in the clipboard command"
+    - type: "domain"
+      value: "newdouble-authentification.com"
+      context: "Fake verification lure page"
+    - type: "domain"
+      value: "newdoubleauthentification.com"
+      context: "Fake verification lure page"
+    - type: "url"
+      value: "http://202.71.14.31/x/x.exe"
+      context: "Second-stage executable URL configured inside the script"
+    - type: "url"
+      value: "http://202.71.14.31/y/"
+      context: "Open directory listing on the payload host; it lists one file, y.ps1"
+    - type: "url"
+      value: "http://202.71.14.31/y/y.ps1"
+      context: "First-stage script URL placed on the clipboard by the lure page"
+    - type: "sha256"
+      value: "f6afe770a78d3655c367819b0c5e8afb623cf56b9922c179efbc89fea1a9ea86"
+      context: "Module stored inside x.exe (carved at file offset 0x1B1C50, PE64 DLL, 400,896 bytes). It exists as its own file only in an analysis carve, so on a host it appears in process memory, not on disk. Use these values as memory-scan and YARA seeds. Never load them into a file-hash blocklist: a disk hash match cannot occur, and the values are held apart from the indicator buckets on purpose."
+    - type: "sha1"
+      value: "17602aa32d21a7bba16e1c657b4a818463fc560a"
+      context: "Module stored inside x.exe (carved at file offset 0x1B1C50, PE64 DLL, 400,896 bytes). It exists as its own file only in an analysis carve, so on a host it appears in process memory, not on disk. Use these values as memory-scan and YARA seeds. Never load them into a file-hash blocklist: a disk hash match cannot occur, and the values are held apart from the indicator buckets on purpose."
+    - type: "md5"
+      value: "3b5072ed500f8d2a34027ed6ea7f0a30"
+      context: "Module stored inside x.exe (carved at file offset 0x1B1C50, PE64 DLL, 400,896 bytes). It exists as its own file only in an analysis carve, so on a host it appears in process memory, not on disk. Use these values as memory-scan and YARA seeds. Never load them into a file-hash blocklist: a disk hash match cannot occur, and the values are held apart from the indicator buckets on purpose."
+    - type: "md5"
+      value: "83cb3b733cad23c702777baa42efaca3"
+      context: "Module stored inside x.exe (carved at file offset 0x1B1C50, PE64 DLL, 400,896 bytes). It exists as its own file only in an analysis carve, so on a host it appears in process memory, not on disk. Use these values as memory-scan and YARA seeds. Never load them into a file-hash blocklist: a disk hash match cannot occur, and the values are held apart from the indicator buckets on purpose."
 "nsminer-cryptojacker.json":
   slug: "nsminer-cryptojacker"
   page_url: "/ioc-feeds/nsminer-cryptojacker/"

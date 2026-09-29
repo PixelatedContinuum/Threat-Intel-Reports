@@ -1,0 +1,450 @@
+{
+    "type": "bundle",
+    "id": "bundle--d33c4ffb-f610-4588-9d98-926e42e478e1",
+    "objects": [
+        {
+            "type": "identity",
+            "spec_version": "2.1",
+            "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-29T18:28:47.618826Z",
+            "modified": "2026-09-29T18:28:47.618826Z",
+            "name": "The Hunters Ledger",
+            "identity_class": "organization"
+        },
+        {
+            "type": "marking-definition",
+            "spec_version": "2.1",
+            "id": "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9",
+            "created": "2017-01-20T00:00:00.000Z",
+            "definition_type": "tlp",
+            "name": "TLP:WHITE",
+            "definition": {
+                "tlp": "white"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--3f91f04e-14d1-5986-832f-61cf0cd60b85",
+            "hashes": {
+                "SHA-256": "1366b8ca7f315142ba9989241402758cf2a86e5568a28da0942e1810fe12c324"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--ba233a5c-c859-5bd7-914c-5cd411f49750",
+            "hashes": {
+                "SHA-256": "dd29536b27649fa897d39198f3ec32d05215b9c6d2864acc32f51de648a25e25"
+            }
+        },
+        {
+            "type": "ipv4-addr",
+            "spec_version": "2.1",
+            "id": "ipv4-addr--fc6b7510-1c84-54bf-91ff-9b7a3f9a9756",
+            "value": "202.71.14.31"
+        },
+        {
+            "type": "domain-name",
+            "spec_version": "2.1",
+            "id": "domain-name--a1dc2bc7-e594-5b5a-86b0-e22e62851cc9",
+            "value": "newdoubleauthentification.com"
+        },
+        {
+            "type": "domain-name",
+            "spec_version": "2.1",
+            "id": "domain-name--8b33f13d-0255-5e5f-80d6-dcefebc92564",
+            "value": "newdouble-authentification.com"
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--e6fd5677-6afd-566e-8f2e-e30bdf43c458",
+            "value": "http://202.71.14.31/y/y.ps1"
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--49d9c913-185e-54ae-89cd-249052d4a1b5",
+            "value": "http://202.71.14.31/y/"
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--38079991-22ef-58bf-8885-42e6266504ad",
+            "value": "http://202.71.14.31/x/x.exe"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--e215c6ab-8a89-589c-8392-df91bb08557b",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-29T18:28:47.625714Z",
+            "modified": "2026-09-29T18:28:47.625714Z",
+            "name": "Newdouble_ClickFix_SteamCDP_Loader_Strings",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule Newdouble_ClickFix_SteamCDP_Loader_Strings {\n   meta:\n      description = \"Detects the Steam-focused x64 executable delivered by the newdouble ClickFix chain by its mutex-style name, its log banner, its panel upload path and header name, and the Steam CEF debugging marker file name\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/\"\n      date = \"2026-09-28\"\n      hash1 = \"1366b8ca7f315142ba9989241402758cf2a86e5568a28da0942e1810fe12c324\"\n      hash2 = \"f9d075fc57b6b27a6066734a9a9ba25d666ba9db\"\n      hash3 = \"405186a1740ede3e8c56bbf81c043e7e\"\n      family = \"newdouble ClickFix Steam-focused loader chain\"\n      id = \"bffecf94-dc62-549b-9111-8f6add7c93b9\"\n   strings:\n      $x1 = \"Global\\\\SteamCDP\" ascii wide\n      $x2 = \"=== BerserkCDP started ===\" ascii wide\n      $s1 = \"X-Vac-Secret\" ascii wide\n      $s2 = \"/api/mafile/import\" ascii wide\n      $s3 = \".cef-enable-remote-debugging\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      uint32(uint32(0x3C)) == 0x00004550 and\n      filesize < 8MB and\n      ( $x2 or ( $x1 and 1 of ($s*) ) or 3 of ($s*) )\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-09-28T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--55a48c1f-b093-5b7c-a1ee-3b5b8caaea01",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-29T18:28:47.626086Z",
+            "modified": "2026-09-29T18:28:47.626086Z",
+            "name": "Newdouble_ClickFix_Berserk_Embedded_DLL_PDB_Hooks",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule Newdouble_ClickFix_Berserk_Embedded_DLL_PDB_Hooks {\n   meta:\n      description = \"Detects the Counter-Strike 2 overlay DLL carried inside the newdouble ClickFix executable, by its build PDB path together with its four hook-name strings and the matchmaking-penalty localisation token\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/\"\n      date = \"2026-09-28\"\n      hash1 = \"f6afe770a78d3655c367819b0c5e8afb623cf56b9922c179efbc89fea1a9ea86\"\n      hash2 = \"17602aa32d21a7bba16e1c657b4a818463fc560a\"\n      hash3 = \"83cb3b733cad23c702777baa42efaca3\"\n      family = \"newdouble ClickFix Steam-focused loader chain\"\n      id = \"c94f292f-ef23-5d7d-aee8-79aabc82bc7f\"\n   strings:\n      $x1 = \"D:\\\\PROJECTVS\\\\berserk_gamebaker\\\\x64\\\\Release\\\\berserkv2.pdb\" ascii wide\n      $s1 = \"hkantitamper\" ascii wide\n      $s2 = \"hkIsVacBanned\" ascii wide\n      $s3 = \"hkMMUpdate\" ascii wide\n      $s4 = \"hkStartMatchmaking\" ascii wide\n      $s5 = \"#SFUI_QMM_ERROR_1_PenaltySeconds\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      uint32(uint32(0x3C)) == 0x00004550 and\n      filesize < 8MB and\n      ( $x1 or 3 of ($s*) )\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-09-28T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--24e9b4a5-1256-52ce-8516-0a887229bd26",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-29T18:28:47.626197Z",
+            "modified": "2026-09-29T18:28:47.626197Z",
+            "name": "Newdouble_ClickFix_Berserk_Loader_Imphash_Or_Export",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "import \"pe\"\n\nrule Newdouble_ClickFix_Berserk_Loader_Imphash_Or_Export {\n   meta:\n      description = \"Hunting rule for the newdouble ClickFix executable and rebuilds that keep its import table or the module name BERSERK.exe in the PE export directory\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/\"\n      date = \"2026-09-28\"\n      hash1 = \"1366b8ca7f315142ba9989241402758cf2a86e5568a28da0942e1810fe12c324\"\n      hash2 = \"f9d075fc57b6b27a6066734a9a9ba25d666ba9db\"\n      hash3 = \"405186a1740ede3e8c56bbf81c043e7e\"\n      family = \"newdouble ClickFix Steam-focused loader chain\"\n      id = \"d8deb920-6a28-5fa0-9d91-60ba1b54902e\"\n   condition:\n      uint16(0) == 0x5A4D and\n      uint32(uint32(0x3C)) == 0x00004550 and\n      filesize < 8MB and\n      ( pe.imphash() == \"87e8479ef75eb55bf7a09ca6b8a60c49\" or\n        pe.dll_name == \"BERSERK.exe\" )\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-09-28T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--1f6946d9-5289-5691-9498-0d678a8881e8",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-29T18:28:47.626292Z",
+            "modified": "2026-09-29T18:28:47.626292Z",
+            "name": "ClickFix PowerShell Stager Pasted Into Run Dialog Downloading a Script Then Running It",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: ClickFix PowerShell Stager Pasted Into Run Dialog Downloading a Script Then Running It\nid: a952ed07-5481-4776-aa2e-22187bb98c4a\nstatus: experimental\ndescription: >-\n    Detects a PowerShell command line launched by explorer.exe that downloads a\n    script with Invoke-WebRequest, saves it with -OutFile as a .ps1 file, and\n    runs it with -File in the same command. This is the shape of the command\n    a ClickFix fake-verification page places on the clipboard for the victim to\n    paste into the Windows Run dialog.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/\nauthor: The Hunters Ledger\ndate: 2026-09-28\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - attack.t1204.004\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: process_creation\n    product: windows\n    definition: 'Requires process creation logging that populates CommandLine and ParentImage, for example Sysmon EID 1 or Security EID 4688 with command line auditing enabled.'\ndetection:\n    selection_parent:\n        ParentImage|endswith: '\\explorer.exe'\n    selection_image:\n        Image|endswith:\n            - '\\powershell.exe'\n            - '\\pwsh.exe'\n    selection_download:\n        CommandLine|contains:\n            - 'iwr '\n            - 'Invoke-WebRequest'\n    selection_flow:\n        CommandLine|contains|all:\n            - '-OutFile'\n            - '.ps1'\n            - '-File'\n    condition: all of selection_*\nfalsepositives:\n    - An administrator pasting a download-and-run one-liner into the Run dialog\n    - Internal onboarding instructions that tell users to paste a script bootstrap command\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-09-28T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--7f68f55d-57d8-5dd7-98ee-b24be22f816a",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-29T18:28:47.626383Z",
+            "modified": "2026-09-29T18:28:47.626383Z",
+            "name": "Defender Path, Process and Extension Exclusions Set in One PowerShell Script Block",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Defender Path, Process and Extension Exclusions Set in One PowerShell Script Block\nid: 637cc940-8288-4050-942b-937f287507ab\nstatus: experimental\ndescription: >-\n    Detects a single PowerShell script block that calls Set-MpPreference or\n    Add-MpPreference with path, process and extension exclusion parameters\n    together. Setting all three exclusion classes in one call is the pattern used\n    by a ClickFix first-stage script that exempts powershell.exe, executables and\n    .ps1 files from Microsoft Defender before it downloads its next stage.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/\n    - https://learn.microsoft.com/en-us/powershell/module/defender/set-mppreference\nauthor: The Hunters Ledger\ndate: 2026-09-28\ntags:\n    - attack.defense-impairment\n    - attack.t1685\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: ps_script\n    product: windows\n    definition: 'Requires PowerShell Script Block Logging (Microsoft-Windows-PowerShell/Operational EID 4104) to be enabled.'\ndetection:\n    selection_cmdlet:\n        ScriptBlockText|contains:\n            - 'Set-MpPreference'\n            - 'Add-MpPreference'\n    selection_exclusions:\n        ScriptBlockText|contains|all:\n            - '-ExclusionPath'\n            - '-ExclusionProcess'\n            - '-ExclusionExtension'\n    condition: all of selection_*\nfalsepositives:\n    - Deployment or hardening scripts that set several Defender exclusion types in one call\n    - Software installers that register their own exclusions during setup\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-09-28T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--ae5fa070-a09e-5525-9a05-2d6bfab4fc53",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-29T18:28:47.626469Z",
+            "modified": "2026-09-29T18:28:47.626469Z",
+            "name": "PowerShell Writing a Script Into a Roaming Profile Subfolder",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: PowerShell Writing a Script Into a Roaming Profile Subfolder\nid: 00e6aae1-d69f-473d-a5c9-c3520d170a31\nstatus: experimental\ndescription: >-\n    Detects powershell.exe creating a .ps1 file in a subfolder of the roaming\n    AppData directory. A ClickFix first-stage script copies itself to\n    %APPDATA%\\MyApp\\y.ps1 and relaunches from that copy. The folder name is\n    attacker-chosen, so the rule keys on the write pattern rather than the name.\n    This is a hunting lead, not an alert.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/\nauthor: The Hunters Ledger\ndate: 2026-09-28\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - detection.emerging-threats\n    - stp.2\nlogsource:\n    category: file_event\n    product: windows\n    definition: 'Requires Sysmon EID 11 (FileCreate) logging with Image populated.'\ndetection:\n    selection:\n        Image|endswith:\n            - '\\powershell.exe'\n            - '\\pwsh.exe'\n        TargetFilename|contains: '\\AppData\\Roaming\\'\n        TargetFilename|endswith: '.ps1'\n    condition: selection\nfalsepositives:\n    - PowerShell modules or profile scripts saved to the roaming profile by administrators\n    - Developer tooling that writes helper scripts under the roaming profile\nlevel: low",
+            "pattern_type": "sigma",
+            "valid_from": "2026-09-28T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--f74d7379-50b9-51f4-b837-0ea0667a9d96",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-29T18:28:47.62655Z",
+            "modified": "2026-09-29T18:28:47.62655Z",
+            "name": "Per-User Proxy or PAC Setting Changed by a Process Running From AppData",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Per-User Proxy or PAC Setting Changed by a Process Running From AppData\nid: a46ddda1-468c-4417-a38f-38ade5e69da6\nstatus: experimental\ndescription: >-\n    Detects a process running from a user AppData folder writing the ProxyServer,\n    ProxyEnable or AutoConfigURL value under the per-user Internet Settings key.\n    A Steam-focused executable delivered by a ClickFix chain changes these values\n    as part of a traffic-interception setup. The values it writes were not\n    recovered, so the rule keys on the writer and the setting, not the data.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/\nauthor: The Hunters Ledger\ndate: 2026-09-28\ntags:\n    - attack.credential-access\n    - attack.collection\n    - attack.t1557\n    - detection.emerging-threats\n    - stp.2\nlogsource:\n    category: registry_set\n    product: windows\n    definition: 'Requires Sysmon EID 13 (RegistryEvent value set) with the Internet Settings key path included in the registry monitoring config.'\ndetection:\n    selection:\n        TargetObject|contains: '\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\'\n        TargetObject|endswith:\n            - '\\ProxyServer'\n            - '\\ProxyEnable'\n            - '\\AutoConfigURL'\n        Image|contains: '\\AppData\\'\n    condition: selection\nfalsepositives:\n    - VPN, proxy and filtering clients installed under the user profile that manage the system proxy\n    - Developer proxy tools started from a user profile folder\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-09-28T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--4adefd46-908c-5510-b33a-ac77dedf2ed7",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-29T18:28:47.626628Z",
+            "modified": "2026-09-29T18:28:47.626628Z",
+            "name": "Root Certificate Added to the Machine Root Store by a Process Running From AppData",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Root Certificate Added to the Machine Root Store by a Process Running From AppData\nid: ba366b18-496e-4ebe-8302-4bb4d305ee2a\nstatus: experimental\ndescription: >-\n    Detects a process running from a user AppData folder writing a certificate\n    blob under the machine (HKLM, LOCAL_MACHINE) Root certificate store. A certificate\n    written to the current user's Root store does not match. A Steam-focused executable\n    delivered by a ClickFix chain installs a root certificate as part of a\n    traffic-interception setup. Legitimate root additions normally come from\n    installers, group policy or management tooling, not from a binary in AppData.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/\nauthor: The Hunters Ledger\ndate: 2026-09-28\ntags:\n    - attack.defense-impairment\n    - attack.t1553.004\n    - detection.emerging-threats\n    - stp.2\nlogsource:\n    category: registry_set\n    product: windows\n    definition: 'Requires Sysmon EID 13 (RegistryEvent value set) with the SystemCertificates key path included in the registry monitoring config.'\ndetection:\n    selection:\n        TargetObject|startswith: 'HKLM\\SOFTWARE\\Microsoft\\SystemCertificates\\Root\\Certificates\\'\n        TargetObject|endswith: '\\Blob'\n        Image|contains: '\\AppData\\'\n    condition: selection\nfalsepositives:\n    - Local development tools that create and trust a local certificate authority from a user profile folder\n    - Per-user installers of filtering or inspection software\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-09-28T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--c68e5fea-d942-5d21-9383-9cf0137d8a9a",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-29T18:28:47.626705Z",
+            "modified": "2026-09-29T18:28:47.626705Z",
+            "name": "Steam CEF Remote Debugging Marker File Created",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Steam CEF Remote Debugging Marker File Created\nid: cdfa7e7b-3669-40ec-a423-a9f4e06bdb84\nstatus: experimental\ndescription: >-\n    Detects creation of the .cef-enable-remote-debugging marker file, which tells\n    the Steam client to expose its embedded browser debugging port. A Steam-focused\n    executable delivered by a ClickFix chain carries this filename and uses the\n    debugging port to drive the Steam interface. The filename is defined by Steam,\n    so it cannot be renamed while the technique works, but Steam interface\n    modding tools create it deliberately, so treat hits as leads.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/\nauthor: The Hunters Ledger\ndate: 2026-09-28\ntags:\n    - attack.collection\n    - attack.t1185\n    - detection.emerging-threats\n    - stp.4\nlogsource:\n    category: file_event\n    product: windows\n    definition: 'Requires Sysmon EID 11 (FileCreate) logging with Image populated.'\ndetection:\n    selection:\n        TargetFilename|endswith: '\\.cef-enable-remote-debugging'\n    condition: selection\nfalsepositives:\n    - Steam interface modding and theming tools that enable browser debugging on purpose\n    - Developers debugging Steam overlay or store pages\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-09-28T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--682749db-45cf-566c-8927-0a4f8e9ed9e3",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-29T18:28:47.626781Z",
+            "modified": "2026-09-29T18:28:47.626781Z",
+            "name": "THL HUNT newdouble-ClickFix Panel Import POST With X-Vac-Secret Header (Steam Account Data Upload)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT newdouble-ClickFix Panel Import POST With X-Vac-Secret Header (Steam Account Data Upload)\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"/api/mafile/import\"; startswith; http.header; content:\"X-Vac-Secret|3a|\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000005; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-28, reference https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-09-28T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--510db276-4f64-5bd6-9317-96fc6f5f417b",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-29T18:28:47.626855Z",
+            "modified": "2026-09-29T18:28:47.626855Z",
+            "name": "THL HUNT newdouble-ClickFix First-Stage Script Fetch (y.ps1 URI Path)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT newdouble-ClickFix First-Stage Script Fetch (y.ps1 URI Path)\"; flow:established,to_server; http.method; content:\"GET\"; http.uri; content:\"/y/y.ps1\"; endswith; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000001; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-28, reference https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-09-28T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--407cea07-cf9a-55f6-9238-9c45b74e898f",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-29T18:28:47.626929Z",
+            "modified": "2026-09-29T18:28:47.626929Z",
+            "name": "THL HUNT newdouble-ClickFix Second-Stage Executable Fetch (x.exe URI Path to Delivery Host)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert http $HOME_NET any -> 202.71.14.31 any (msg:\"THL HUNT newdouble-ClickFix Second-Stage Executable Fetch (x.exe URI Path to Delivery Host)\"; flow:established,to_server; http.method; content:\"GET\"; http.uri; content:\"/x/x.exe\"; endswith; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000002; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-28, reference https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-09-28T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--aa4697b6-85a4-53f6-b0c4-9b8ac4115aeb",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-29T18:28:47.627003Z",
+            "modified": "2026-09-29T18:28:47.627003Z",
+            "name": "THL HUNT newdouble-ClickFix Lure Domain DNS Query (Fake Verification Page)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert dns $HOME_NET any -> any any (msg:\"THL HUNT newdouble-ClickFix Lure Domain DNS Query (Fake Verification Page)\"; dns.query; content:\"newdouble\"; nocase; content:\"authentification.com\"; nocase; distance:0; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000003; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-28, reference https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-09-28T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--4db02044-07be-5901-a1cd-f7e865a586b2",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-29T18:28:47.627078Z",
+            "modified": "2026-09-29T18:28:47.627078Z",
+            "name": "THL HUNT newdouble-ClickFix Lure Domain TLS SNI (Fake Verification Page)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT newdouble-ClickFix Lure Domain TLS SNI (Fake Verification Page)\"; flow:established,to_server; tls.sni; content:\"newdouble\"; nocase; content:\"authentification.com\"; nocase; distance:0; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000004; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-28, reference https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-09-28T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--26dca654-8dd2-5bfd-8feb-ae8568aeba0a",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-29T18:28:47.627225Z",
+            "modified": "2026-09-29T18:28:47.627225Z",
+            "name": "x.exe",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--b5df52cd-3541-5086-964d-f911cafe9713",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-29T18:28:47.627308Z",
+            "modified": "2026-09-29T18:28:47.627308Z",
+            "name": "y.ps1",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "report",
+            "spec_version": "2.1",
+            "id": "report--851e8bde-d374-5746-9390-ba1a54c91f64",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-09-29T18:28:47.627519Z",
+            "modified": "2026-09-29T18:28:47.627519Z",
+            "name": "FACEIT ClickFix Pages Point CS2 Players to a Script URL That VirusTotal Ties to a Steam-Focused Executable",
+            "report_types": [
+                "threat-report"
+            ],
+            "published": "2026-09-28T00:00:00Z",
+            "object_refs": [
+                "file--3f91f04e-14d1-5986-832f-61cf0cd60b85",
+                "file--ba233a5c-c859-5bd7-914c-5cd411f49750",
+                "ipv4-addr--fc6b7510-1c84-54bf-91ff-9b7a3f9a9756",
+                "domain-name--a1dc2bc7-e594-5b5a-86b0-e22e62851cc9",
+                "domain-name--8b33f13d-0255-5e5f-80d6-dcefebc92564",
+                "url--e6fd5677-6afd-566e-8f2e-e30bdf43c458",
+                "url--49d9c913-185e-54ae-89cd-249052d4a1b5",
+                "url--38079991-22ef-58bf-8885-42e6266504ad",
+                "indicator--e215c6ab-8a89-589c-8392-df91bb08557b",
+                "indicator--55a48c1f-b093-5b7c-a1ee-3b5b8caaea01",
+                "indicator--24e9b4a5-1256-52ce-8516-0a887229bd26",
+                "indicator--1f6946d9-5289-5691-9498-0d678a8881e8",
+                "indicator--7f68f55d-57d8-5dd7-98ee-b24be22f816a",
+                "indicator--ae5fa070-a09e-5525-9a05-2d6bfab4fc53",
+                "indicator--f74d7379-50b9-51f4-b837-0ea0667a9d96",
+                "indicator--4adefd46-908c-5510-b33a-ac77dedf2ed7",
+                "indicator--c68e5fea-d942-5d21-9383-9cf0137d8a9a",
+                "indicator--682749db-45cf-566c-8927-0a4f8e9ed9e3",
+                "indicator--510db276-4f64-5bd6-9317-96fc6f5f417b",
+                "indicator--407cea07-cf9a-55f6-9238-9c45b74e898f",
+                "indicator--aa4697b6-85a4-53f6-b0c4-9b8ac4115aeb",
+                "indicator--4db02044-07be-5901-a1cd-f7e865a586b2",
+                "tool--26dca654-8dd2-5bfd-8feb-ae8568aeba0a",
+                "tool--b5df52cd-3541-5086-964d-f911cafe9713"
+            ],
+            "labels": [
+                "ClickFix",
+                "Stealer",
+                "Loader",
+                "PowerShell"
+            ],
+            "external_references": [
+                {
+                    "source_name": "The Hunters Ledger",
+                    "url": "https://the-hunters-ledger.com/reports/newdouble-clickfix/"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        }
+    ]
+}

@@ -1,11 +1,11 @@
 {
- "generated_at": "2026-09-29T11:57:02Z",
+ "generated_at": "2026-09-29T18:24:35Z",
  "counts": {
-  "indicators": 2147,
-  "reports": 58,
+  "indicators": 2157,
+  "reports": 59,
   "multi_report": 147,
   "suppressed_benign": 129,
-  "never_block": 68
+  "never_block": 78
  },
  "coverage": {
   "indexed": [
@@ -44,6 +44,7 @@
    "malware-analysis-houselet.json",
    "multivector-ecommerce-rce-toolkit-192-3-1-116-iocs.json",
    "new-files-found-20260408-iocs.json",
+   "newdouble-clickfix-iocs.json",
    "nsminer-cryptojacker.json",
    "open-directory-172-105-0-126-20260406-iocs.json",
    "open-directory-94-103-1-13-20260423-iocs.json",
@@ -68,9 +69,7 @@
    "webserver-compromise-kit-91-236-230-250-iocs.json",
    "webshells-to-the-cloud.json"
   ],
-  "embargoed": [
-   "newdouble-clickfix-iocs.json"
-  ],
+  "embargoed": [],
   "unknown": [],
   "empty": []
  },
@@ -355,6 +354,14 @@
    "report_url": "/reports/new-files-found-20260408/",
    "detection_url": "/hunting-detections/new-files-found-20260408-detections",
    "ioc_url": "/ioc-feeds/new-files-found-20260408-iocs.json"
+  },
+  "newdouble-clickfix": {
+   "title": "FACEIT ClickFix Pages Point CS2 Players to a Script URL That VirusTotal Ties to a Steam-Focused Executable",
+   "date": "2026-09-28",
+   "severity": "high",
+   "report_url": "/reports/newdouble-clickfix/",
+   "detection_url": "/hunting-detections/newdouble-clickfix-detections",
+   "ioc_url": "/ioc-feeds/newdouble-clickfix-iocs.json"
   },
   "nsminer-cryptojacker.json": {
    "title": "NsMiner: Multi-Stage Cryptojacking Operation",
@@ -5523,6 +5530,60 @@
   "md5:8bb4df00c120881a1945a43e2bb2379e": [
    {
     "report": "new-files-found-20260408"
+   }
+  ],
+  "url:https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/": [
+   {
+    "report": "newdouble-clickfix"
+   }
+  ],
+  "sha256:dd29536b27649fa897d39198f3ec32d05215b9c6d2864acc32f51de648a25e25": [
+   {
+    "report": "newdouble-clickfix",
+    "role": "PowerShell script, 4,620 bytes"
+   }
+  ],
+  "filename:y.ps1": [
+   {
+    "report": "newdouble-clickfix",
+    "role": "PowerShell script, 4,620 bytes"
+   }
+  ],
+  "sha256:1366b8ca7f315142ba9989241402758cf2a86e5568a28da0942e1810fe12c324": [
+   {
+    "report": "newdouble-clickfix",
+    "role": "PE64 GUI executable, 2,595,328 bytes"
+   }
+  ],
+  "filename:x.exe": [
+   {
+    "report": "newdouble-clickfix",
+    "role": "PE64 GUI executable, 2,595,328 bytes"
+   }
+  ],
+  "md5:6971a368b4164f8d53a9041b717e8ace": [
+   {
+    "report": "newdouble-clickfix"
+   }
+  ],
+  "md5:405186a1740ede3e8c56bbf81c043e7e": [
+   {
+    "report": "newdouble-clickfix"
+   }
+  ],
+  "sha1:b7119d01b2e49938ac310543e7240815e26b711c": [
+   {
+    "report": "newdouble-clickfix"
+   }
+  ],
+  "sha1:f9d075fc57b6b27a6066734a9a9ba25d666ba9db": [
+   {
+    "report": "newdouble-clickfix"
+   }
+  ],
+  "md5:87e8479ef75eb55bf7a09ca6b8a60c49": [
+   {
+    "report": "newdouble-clickfix"
    }
   ],
   "sha256:e06aa8ce984b22dd80a60c1f818b781b05d1c07facc91fec8637b312a728c145": [
@@ -13227,6 +13288,62 @@
    {
     "report": "multivector-ecommerce-rce-toolkit-192-3-1-116",
     "role": "Attack-traffic relay"
+   }
+  ],
+  "ipv4:202.71.14.31": [
+   {
+    "report": "newdouble-clickfix",
+    "role": "ipv4"
+   }
+  ],
+  "domain:newdoubleauthentification.com": [
+   {
+    "report": "newdouble-clickfix",
+    "role": "domain"
+   }
+  ],
+  "domain:newdouble-authentification.com": [
+   {
+    "report": "newdouble-clickfix",
+    "role": "domain"
+   }
+  ],
+  "url:http://202.71.14.31/y/y.ps1": [
+   {
+    "report": "newdouble-clickfix",
+    "role": "url"
+   }
+  ],
+  "url:http://202.71.14.31/y/": [
+   {
+    "report": "newdouble-clickfix",
+    "role": "url"
+   }
+  ],
+  "url:http://202.71.14.31/x/x.exe": [
+   {
+    "report": "newdouble-clickfix",
+    "role": "url"
+   }
+  ],
+  "sha256:f6afe770a78d3655c367819b0c5e8afb623cf56b9922c179efbc89fea1a9ea86": [
+   {
+    "report": "newdouble-clickfix"
+   }
+  ],
+  "sha1:17602aa32d21a7bba16e1c657b4a818463fc560a": [
+   {
+    "report": "newdouble-clickfix"
+   }
+  ],
+  "md5:83cb3b733cad23c702777baa42efaca3": [
+   {
+    "report": "newdouble-clickfix"
+   }
+  ],
+  "md5:3b5072ed500f8d2a34027ed6ea7f0a30": [
+   {
+    "report": "newdouble-clickfix"
    }
   ],
   "ipv4:172.86.76.198": [

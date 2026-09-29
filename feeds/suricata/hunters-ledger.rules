@@ -1,6 +1,6 @@
 # Hunters Ledger - consolidated Suricata detection feed
 # https://the-hunters-ledger.com/  |  License: CC BY 4.0
-# 116 rules from 36 campaigns. SIDs are STABLE across rebuilds (persistent
+# 121 rules from 37 campaigns. SIDs are STABLE across rebuilds (persistent
 # sid-map.json; allocated block 3500000-3509999 via sidallocation.org).
 # Above each rule: '# <campaign> (orig sid:N)', then annotation lines:
 #   TIER: Detection|Hunting  |  robustness N  |  confidence X
@@ -296,6 +296,31 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT CovertVPN HTTP Data
 #   rate-limited
 #   FP: Legitimate network diagnostic tooling generating large ICMP echo payloads (e.g., ping -l on Windows, MTU path discovery) whose payload happens to...
 alert icmp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT CovertVPN ICMP Tunnel Oversized Payload with Data or Keepalive Marker"; itype:8; dsize:>128; byte_test:1,=,0xDD,4; threshold:type limit,track by_src,count 5,seconds 60; classtype:trojan-activity; sid:3500049; rev:1; metadata:author The_Hunters_Ledger, date 2026-04-08, reference https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/;)
+# newdouble-clickfix (orig sid:1000005)
+#   TIER: Hunting  |  robustness 2  |  confidence MODERATE  |  BROAD - triage before alerting
+#   rate-limited
+#   FP: None known, and untested against live traffic. A third-party panel that implements the same import API and header would match.
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT newdouble-ClickFix Panel Import POST With X-Vac-Secret Header (Steam Account Data Upload)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/api/mafile/import"; startswith; http.header; content:"X-Vac-Secret|3a|"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:3500206; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-28, reference https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/;)
+# newdouble-clickfix (orig sid:1000001)
+#   TIER: Hunting  |  robustness 1  |  confidence MODERATE  |  BROAD - triage before alerting
+#   rate-limited
+#   FP: Any internal or third-party server that serves a script at /y/y.ps1.
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT newdouble-ClickFix First-Stage Script Fetch (y.ps1 URI Path)"; flow:established,to_server; http.method; content:"GET"; http.uri; content:"/y/y.ps1"; endswith; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:3500207; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-28, reference https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/;)
+# newdouble-clickfix (orig sid:1000002)
+#   TIER: Hunting  |  robustness 1  |  confidence MODERATE  |  BROAD - triage before alerting
+#   rate-limited
+#   FP: None expected while the delivery address stays with this operator; if the address is reassigned, hits become unrelated traffic.
+alert http $HOME_NET any -> 202.71.14.31 any (msg:"THL HUNT newdouble-ClickFix Second-Stage Executable Fetch (x.exe URI Path to Delivery Host)"; flow:established,to_server; http.method; content:"GET"; http.uri; content:"/x/x.exe"; endswith; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:3500208; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-28, reference https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/;)
+# newdouble-clickfix (orig sid:1000003)
+#   TIER: Hunting  |  robustness 1  |  confidence MODERATE  |  BROAD - triage before alerting
+#   rate-limited
+#   FP: None expected for the two observed domains; a lookalike registered by someone else would match the newdouble prefix and the authentification.com...
+alert dns $HOME_NET any -> any any (msg:"THL HUNT newdouble-ClickFix Lure Domain DNS Query (Fake Verification Page)"; dns.query; content:"newdouble"; nocase; content:"authentification.com"; nocase; distance:0; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:3500209; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-28, reference https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/;)
+# newdouble-clickfix (orig sid:1000004)
+#   TIER: Hunting  |  robustness 1  |  confidence MODERATE  |  BROAD - triage before alerting
+#   rate-limited
+#   FP: Same as the DNS signature: a lookalike domain with the same prefix and suffix.
+alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT newdouble-ClickFix Lure Domain TLS SNI (Fake Verification Page)"; flow:established,to_server; tls.sni; content:"newdouble"; nocase; content:"authentification.com"; nocase; distance:0; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:3500210; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-28, reference https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/;)
 # open-directory-172-105-0-126-20260406 (orig sid:9001003)
 #   TIER: Detection  |  robustness 2  |  confidence HIGH
 #   rate-limited
