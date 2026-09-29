@@ -3,39 +3,39 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-29T12:02:48Z
+generated_at: 2026-09-29T14:02:05Z
 window_days: 30
 counts:
-  total: 544
-  research: 189
-  news: 355
+  total: 549
+  research: 190
+  news: 359
 topics:
   - label: "vulnerabilities"
     count: 78
     color: 1
   - label: "cybercrime"
-    count: 59
+    count: 61
     color: 2
   - label: "government"
-    count: 36
+    count: 38
     color: 3
   - label: "artificial intelligence"
-    count: 35
+    count: 36
     color: 4
   - label: "malware"
-    count: 33
+    count: 34
     color: 5
   - label: "exploited"
     count: 31
     color: 6
   - label: "data breaches"
-    count: 24
+    count: 25
     color: 7
   - label: "zero-day"
     count: 17
     color: 8
   - label: "clickfix"
-    count: 15
+    count: 16
     color: 9
   - label: "ransomware"
     count: 15
@@ -306,6 +306,7 @@ label_colors:
   "detection engineering": 12
   "devops targeting": 8
   "disrupted": 8
+  "dmdc": 12
   "dns": 1
   "dns txt records": 3
   "docusign impersonation": 2
@@ -469,6 +470,30 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 8
 items:
+  - title: "Hackers Use ChatGPT Custom GPTs in ClickFix Attacks"
+    url: "https://www.securityweek.com/hackers-use-chatgpt-custom-gpts-in-clickfix-attacks/"
+    source: "SecurityWeek"
+    date: 2026-09-29T13:03:35Z
+    kind: news
+    labels: ["artificial intelligence", "chatgpt", "clickfix", "malware"]
+  - title: "Russian pizza chain with 1,500 locations confirms cyberattack following hacker claims"
+    url: "https://therecord.media/russian-pizza-chain-dodo-confirms-data-breach"
+    source: "Recorded Future"
+    date: 2026-09-29T12:34:00Z
+    kind: news
+    labels: ["cybercrime"]
+  - title: "Arizona Supreme Court says hackers stole residents’ personal data"
+    url: "https://therecord.media/arizona-supreme-court-says-hackers-stole-data"
+    source: "Recorded Future"
+    date: 2026-09-29T12:27:00Z
+    kind: news
+    labels: ["cybercrime", "government", "privacy"]
+  - title: "Pentagon Personnel Agency Data Breach Impacts 3 Million People"
+    url: "https://www.securityweek.com/pentagon-personnel-agency-data-breach-impacts-3-million-people/"
+    source: "SecurityWeek"
+    date: 2026-09-29T12:25:12Z
+    kind: news
+    labels: ["data breaches", "dmdc", "government", "pentagon"]
   - title: "Vietnamese man charged in $16 million 'pig butchering' crypto scam"
     url: "https://www.bleepingcomputer.com/news/security/vietnamese-man-charged-in-16-million-pig-butchering-crypto-scam/"
     source: "BleepingComputer"
@@ -517,6 +542,12 @@ items:
     date: 2026-09-29T06:18:27Z
     kind: news
     labels: ["apple", "exploited", "ios", "macos", "meta", "mobile & wireless", "vulnerabilities", "zero-day"]
+  - title: "Defending Against Active Exploitation of Citrix NetScaler ADC and Gateway Appliances"
+    url: "https://cloud.google.com/blog/topics/threat-intelligence/defending-against-active-exploitation-of-citrix-netscaler-adc-and-gateway-appliances/"
+    source: "Google"
+    date: 2026-09-29T05:00:00Z
+    kind: research
+    labels: ["threat intelligence"]
   - title: "Japan's Keio confirms ransomware attack disrupted business systems"
     url: "https://www.bleepingcomputer.com/news/security/japans-keio-confirms-ransomware-attack-disrupted-business-systems/"
     source: "BleepingComputer"
