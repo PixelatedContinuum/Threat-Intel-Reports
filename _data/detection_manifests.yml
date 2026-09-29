@@ -3166,6 +3166,131 @@ new-files-found-20260408-detections:
     robustness: 2
     confidence: "MODERATE"
     attack: [T1095, T1572]
+newdouble-clickfix-detections:
+  - name: "Newdouble_ClickFix_SteamCDP_Loader_Strings"
+    engine: yara
+    tier: Hunting
+    fence: 0
+    hash: "0ca53945"
+    head: "rule Newdouble_ClickFix_SteamCDP_Loader_Strings "
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1185, T1041]
+  - name: "Newdouble_ClickFix_Berserk_Embedded_DLL_PDB_Hooks"
+    engine: yara
+    tier: Hunting
+    fence: 1
+    hash: "92aaf283"
+    head: "rule Newdouble_ClickFix_Berserk_Embedded_DLL_PDB"
+    robustness: 2
+    confidence: "HIGH"
+  - name: "Newdouble_ClickFix_Berserk_Loader_Imphash_Or_Export"
+    engine: yara
+    tier: Hunting
+    fence: 2
+    hash: "01539ee3"
+    head: "import \"pe\" rule Newdouble_ClickFix_Berserk_Load"
+    robustness: 1
+    confidence: "MODERATE"
+  - name: "ClickFix PowerShell Stager Pasted Into Run Dialog Downloading a Script Then Running It"
+    engine: sigma
+    tier: Hunting
+    fence: 3
+    hash: "b8585fef"
+    head: "title: ClickFix PowerShell Stager Pasted Into Ru"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1059.001, T1204.004]
+  - name: "Defender Path, Process and Extension Exclusions Set in One PowerShell Script Block"
+    engine: sigma
+    tier: Hunting
+    fence: 4
+    hash: "ddb8aa7a"
+    head: "title: Defender Path, Process and Extension Excl"
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1685]
+  - name: "PowerShell Writing a Script Into a Roaming Profile Subfolder"
+    engine: sigma
+    tier: Hunting
+    fence: 5
+    hash: "90ec9aa1"
+    head: "title: PowerShell Writing a Script Into a Roamin"
+    robustness: 1
+    confidence: "LOW"
+    attack: [T1059.001]
+  - name: "Per-User Proxy or PAC Setting Changed by a Process Running From AppData"
+    engine: sigma
+    tier: Hunting
+    fence: 6
+    hash: "eed728f0"
+    head: "title: Per-User Proxy or PAC Setting Changed by "
+    robustness: 1
+    confidence: "LOW"
+    attack: [T1557]
+  - name: "Root Certificate Added to the Machine Root Store by a Process Running From AppData"
+    engine: sigma
+    tier: Hunting
+    fence: 7
+    hash: "a5bace13"
+    head: "title: Root Certificate Added to the Machine Roo"
+    robustness: 1
+    confidence: "LOW"
+    attack: [T1553.004]
+  - name: "Steam CEF Remote Debugging Marker File Created"
+    engine: sigma
+    tier: Hunting
+    fence: 8
+    hash: "29a011d6"
+    head: "title: Steam CEF Remote Debugging Marker File Cr"
+    robustness: 3
+    confidence: "MODERATE"
+    attack: [T1185]
+  - name: "Panel Import POST With X-Vac-Secret Header"
+    engine: suricata
+    tier: Hunting
+    fence: 9
+    hash: "589cf030"
+    head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1041]
+  - name: "First-Stage Script Fetch (y.ps1 URI Path)"
+    engine: suricata
+    tier: Hunting
+    fence: 10
+    hash: "fe2c8b2b"
+    head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1105]
+  - name: "Second-Stage Executable Fetch (x.exe URI Path to Delivery Host)"
+    engine: suricata
+    tier: Hunting
+    fence: 11
+    hash: "eba94129"
+    head: "alert http $HOME_NET any -> 202.71.14.31 any (ms"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1105]
+  - name: "Lure Domain DNS Query (Fake Verification Page)"
+    engine: suricata
+    tier: Hunting
+    fence: 12
+    hash: "d7c230c6"
+    head: "alert dns $HOME_NET any -> any any (msg:\"THL HUN"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1204.004]
+  - name: "Lure Domain TLS SNI (Fake Verification Page)"
+    engine: suricata
+    tier: Hunting
+    fence: 13
+    hash: "e7429c6e"
+    head: "alert tls $HOME_NET any -> $EXTERNAL_NET any (ms"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1204.004]
 nsminer-cryptojacker-detections:
   - name: "NsMiner_Dropper_Downloader"
     engine: yara

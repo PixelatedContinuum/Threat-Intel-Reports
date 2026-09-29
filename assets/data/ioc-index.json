@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-25T11:09:34Z",
+ "generated_at": "2026-09-29T11:57:02Z",
  "counts": {
   "indicators": 2147,
   "reports": 58,
@@ -68,7 +68,9 @@
    "webserver-compromise-kit-91-236-230-250-iocs.json",
    "webshells-to-the-cloud.json"
   ],
-  "embargoed": [],
+  "embargoed": [
+   "newdouble-clickfix-iocs.json"
+  ],
   "unknown": [],
   "empty": []
  },

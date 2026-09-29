@@ -1678,6 +1678,51 @@
       name: "Exfiltration Over C2 Channel"
       rules: "OpenStrike Gen-4 Beacon (YARA, Detection); OpenStrike Gen-4 Beacon Output Submission HTTP POST to /submit with Hex Beacon ID (SIGMA, Hunting); OpenStrike Gen-4 Beacon Output Submission (POST /submit) (SURICATA, Hunting)"
       count: 3
+"newdouble-clickfix-detections":
+  total: 8
+  tactics: 6
+  unresolved: []
+  rows:
+    - tactic: "Execution"
+      id: "T1059.001"
+      name: "PowerShell"
+      rules: "ClickFix PowerShell Stager Pasted Into Run Dialog Downloading a Script Then Running It (SIGMA, Hunting); PowerShell Writing a Script Into a Roaming Profile Subfolder (SIGMA, Hunting)"
+      count: 2
+    - tactic: "Execution"
+      id: "T1204.004"
+      name: "Malicious Copy and Paste"
+      rules: "ClickFix PowerShell Stager Pasted Into Run Dialog Downloading a Script Then Running It (SIGMA, Hunting); Lure Domain DNS Query (Fake Verification Page) (SURICATA, Hunting); Lure Domain TLS SNI (Fake Verification Page) (SURICATA, Hunting)"
+      count: 3
+    - tactic: "Defense Impairment"
+      id: "T1553.004"
+      name: "Install Root Certificate"
+      rules: "Root Certificate Added to the Machine Root Store by a Process Running From AppData (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Defense Impairment"
+      id: "T1685"
+      name: "Disable or Modify Tools"
+      rules: "Defender Path, Process and Extension Exclusions Set in One PowerShell Script Block (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Credential Access"
+      id: "T1557"
+      name: "Adversary-in-the-Middle"
+      rules: "Per-User Proxy or PAC Setting Changed by a Process Running From AppData (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Collection"
+      id: "T1185"
+      name: "Browser Session Hijacking"
+      rules: "Newdouble_ClickFix_SteamCDP_Loader_Strings (YARA, Hunting); Steam CEF Remote Debugging Marker File Created (SIGMA, Hunting)"
+      count: 2
+    - tactic: "Command and Control"
+      id: "T1105"
+      name: "Ingress Tool Transfer"
+      rules: "First-Stage Script Fetch (y.ps1 URI Path) (SURICATA, Hunting); Second-Stage Executable Fetch (x.exe URI Path to Delivery Host) (SURICATA, Hunting)"
+      count: 2
+    - tactic: "Exfiltration"
+      id: "T1041"
+      name: "Exfiltration Over C2 Channel"
+      rules: "Newdouble_ClickFix_SteamCDP_Loader_Strings (YARA, Hunting); Panel Import POST With X-Vac-Secret Header (SURICATA, Hunting)"
+      count: 2
 "nsminer-cryptojacker-detections":
   total: 4
   tactics: 3

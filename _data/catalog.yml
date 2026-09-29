@@ -5,6 +5,18 @@
 # Publishing a campaign = add one entry here (no more editing four files).
 
 entries:
+  # ===== PENDING GO-LIVE — FACEIT ClickFix Pages and a Steam-Focused Executable (newdouble-clickfix) =====
+  # PREVIEW: staged unlisted 2026-09-29 (THE-223). Uncomment at launch, then drop `unlisted: true` from the
+  # report + detection front matter, repoint the report `ioc_feed` at /ioc-feeds/newdouble-clickfix/ once the
+  # indicator page exists, add `stix_url`, run update-metrics.py and regenerate the Suricata feed.
+  #  - title: "FACEIT ClickFix Pages Point CS2 Players to a Script URL That VirusTotal Ties to a Steam-Focused Executable"
+  #    date: 2026-09-28
+  #    severity: high
+  #    tags: [ClickFix, Stealer, Loader, PowerShell]
+  #    report_url: /reports/newdouble-clickfix/
+  #    detection_url: /hunting-detections/newdouble-clickfix-detections
+  #    ioc_url: /ioc-feeds/newdouble-clickfix-iocs.json
+  # ============================================================================================
   - title: "Gotenberg CVE-2026-42589 Mass Exploitation and Cryptomining"
     date: 2026-09-16
     severity: high

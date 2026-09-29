@@ -1,0 +1,177 @@
+{
+  "metadata": {
+    "malware_name": "newdouble ClickFix Steam-focused loader chain",
+    "family": "Unattributed. No family label is supported by the evidence (VT automated names such as Tedy are generic).",
+    "campaign_slug": "newdouble-clickfix",
+    "campaign_title": "newdouble ClickFix fake-verification chain to a Steam-focused executable",
+    "report_date": "2026-09-28",
+    "first_seen": "2026-08-26",
+    "analyst": "The Hunters Ledger",
+    "confidence": "HIGH",
+    "tlp": "CLEAR",
+    "license": "CC BY 4.0",
+    "reference": "https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/",
+    "scope_note": "Indicators come from two saved Webamon pages (2026-08-26 and 2026-09-26), cached VirusTotal URL and file records, and static analysis of the two retrieved files. Nothing here asserts current liveness or a victim execution. Operator linkage across the older template pages is INSUFFICIENT. The delivery IP, the two lure domains and the two delivery URLs are held in hunt_only_never_block as historical hunt leads (action HUNT), not in the blocklist buckets, because their current liveness and ownership are NOT CHECKED.",
+    "victim_names": []
+  },
+  "file_hashes": {
+    "sha256": [
+      {
+        "value": "dd29536b27649fa897d39198f3ec32d05215b9c6d2864acc32f51de648a25e25",
+        "filename": "y.ps1",
+        "type": "PowerShell script, 4,620 bytes",
+        "confidence": "HIGH",
+        "description": "First-stage downloader and launcher named by the clipboard command. Same bytes as the body VirusTotal cached for the /y/y.ps1 URL."
+      },
+      {
+        "value": "1366b8ca7f315142ba9989241402758cf2a86e5568a28da0942e1810fe12c324",
+        "filename": "x.exe",
+        "type": "PE64 GUI executable, 2,595,328 bytes",
+        "confidence": "HIGH",
+        "description": "Second-stage executable the script saves as steamwebhelper.exe. Same bytes as the body VirusTotal cached for the /x/x.exe URL."
+      }
+    ],
+    "md5": [
+      {
+        "value": "6971a368b4164f8d53a9041b717e8ace",
+        "filename": "y.ps1"
+      },
+      {
+        "value": "405186a1740ede3e8c56bbf81c043e7e",
+        "filename": "x.exe"
+      }
+    ],
+    "sha1": [
+      {
+        "value": "b7119d01b2e49938ac310543e7240815e26b711c",
+        "filename": "y.ps1"
+      },
+      {
+        "value": "f9d075fc57b6b27a6066734a9a9ba25d666ba9db",
+        "filename": "x.exe"
+      }
+    ],
+    "imphash": [
+      {
+        "value": "87e8479ef75eb55bf7a09ca6b8a60c49",
+        "tool": "pefile",
+        "filename": "x.exe"
+      }
+    ],
+    "notes": "The y.ps1 and x.exe hashes are the bytes VirusTotal held for the two URLs by 2026-09-25. Whether either saved lure page's visitor received these exact bytes is NOT CHECKED. Older-template scripts served from other addresses returned a different response hash and are not included. The embedded DLL hashes are in hunt_only_never_block, not in these buckets, because the module is memory-resident and is not a blocklist entry."
+  },
+  "network_indicators": {
+    "ipv4": [],
+    "ipv6": [],
+    "domains": [],
+    "urls": [],
+    "email_addresses": [],
+    "user_agents": []
+  },
+  "host_indicators": {
+    "registry_keys": [],
+    "file_paths": [
+      {
+        "value": "%APPDATA%\\MyApp\\y.ps1",
+        "purpose": "Copy of the first-stage script the script writes for itself",
+        "confidence": "MODERATE",
+        "notes": "Path taken from the script source. Also listed by one sandbox as a dropped copy. Not observed on an endpoint in our own pass."
+      },
+      {
+        "value": "%APPDATA%\\MyApp\\y.dat",
+        "purpose": "Run-marker file the script writes to record that it already ran",
+        "confidence": "MODERATE",
+        "notes": "A marker file, not an OS mutex. Path taken from the script source."
+      },
+      {
+        "value": "%APPDATA%\\Microsoft\\Windows\\Libraries\\Cache\\steamwebhelper.exe",
+        "purpose": "Save location of the second-stage executable, plus a Startup-folder shortcut or fallback copy",
+        "confidence": "MODERATE",
+        "notes": "Built from the script's path construction and its Name setting. The final path and shortcut filename were not confirmed in a run. The real Steam helper of the same name lives under the Steam install folder, so match the path, not the filename."
+      }
+    ],
+    "mutex_names": [
+      {
+        "value": "Global\\SteamCDP",
+        "purpose": "Named object string carried by x.exe next to its Steam browser-debugging code",
+        "confidence": "LOW",
+        "notes": "Present as a string. Its creation as a mutex was not traced."
+      }
+    ],
+    "service_names": [],
+    "scheduled_tasks": [],
+    "named_pipes": []
+  },
+  "hunt_only_never_block": [
+    {
+      "value": "202.71.14.31",
+      "type": "ipv4",
+      "category": "historical infrastructure, hunt only",
+      "purpose": "Host of the first-stage script and the second-stage executable named in the clipboard command",
+      "first_seen": "2026-08-26",
+      "last_seen": "2026-09-26",
+      "confidence": "HIGH",
+      "action": "HUNT",
+      "notes": "Historical observation only. Current liveness and current ownership are NOT CHECKED, and no live probe was run. A reassigned host or a re-registered domain would put an unrelated owner on a blocklist, so this is a hunt lead for matching against dated lure and file records, never a blocklist entry.",
+      "evidence_note": "Named in the saved lure pages of 2026-08-26 and 2026-09-26; VirusTotal held the script and executable bodies for its two URLs by 2026-09-25."
+    },
+    {
+      "value": "newdoubleauthentification.com",
+      "type": "domain",
+      "category": "historical infrastructure, hunt only",
+      "purpose": "Fake verification lure page",
+      "first_seen": "2026-08-26",
+      "last_seen": "2026-08-26",
+      "confidence": "HIGH",
+      "action": "HUNT",
+      "notes": "Historical observation only. Current liveness and current ownership are NOT CHECKED, and no live probe was run. A reassigned host or a re-registered domain would put an unrelated owner on a blocklist, so this is a hunt lead for matching against dated lure and file records, never a blocklist entry.",
+      "evidence_note": "Certificate issue time 2026-08-25 15:39:16 UTC is CT-derived and is not a registration date."
+    },
+    {
+      "value": "newdouble-authentification.com",
+      "type": "domain",
+      "category": "historical infrastructure, hunt only",
+      "purpose": "Fake verification lure page",
+      "first_seen": "2026-09-26",
+      "last_seen": "2026-09-26",
+      "confidence": "HIGH",
+      "action": "HUNT",
+      "notes": "Historical observation only. Current liveness and current ownership are NOT CHECKED, and no live probe was run. A reassigned host or a re-registered domain would put an unrelated owner on a blocklist, so this is a hunt lead for matching against dated lure and file records, never a blocklist entry.",
+      "evidence_note": "Certificate issue time 2026-09-25 16:06:42 UTC is CT-derived and is not a registration date."
+    },
+    {
+      "value": "http://202.71.14.31/y/y.ps1",
+      "type": "url",
+      "category": "historical infrastructure, hunt only",
+      "purpose": "First-stage script URL placed on the clipboard by the lure page",
+      "first_seen": "2026-08-26",
+      "last_seen": "2026-09-25",
+      "confidence": "HIGH",
+      "action": "HUNT",
+      "notes": "Historical observation only. Current liveness and current ownership are NOT CHECKED, and no live probe was run. A reassigned host or a re-registered domain would put an unrelated owner on a blocklist, so this is a hunt lead for matching against dated lure and file records, never a blocklist entry.",
+      "evidence_note": "Body cached by VirusTotal by 2026-09-25 matches the y.ps1 hash in file_hashes."
+    },
+    {
+      "value": "http://202.71.14.31/x/x.exe",
+      "type": "url",
+      "category": "historical infrastructure, hunt only",
+      "purpose": "Second-stage executable URL configured inside the script",
+      "first_seen": "2026-08-26",
+      "last_seen": "2026-09-25",
+      "confidence": "HIGH",
+      "action": "HUNT",
+      "notes": "Historical observation only. Current liveness and current ownership are NOT CHECKED, and no live probe was run. A reassigned host or a re-registered domain would put an unrelated owner on a blocklist, so this is a hunt lead for matching against dated lure and file records, never a blocklist entry.",
+      "evidence_note": "Body cached by VirusTotal by 2026-09-25 matches the x.exe hash in file_hashes."
+    },
+    {
+      "category": "memory-resident hunting seed",
+      "description": "Module stored inside x.exe (carved at file offset 0x1B1C50, PE64 DLL, 400,896 bytes). It exists as its own file only in an analysis carve, so on a host it appears in process memory, not on disk. Use these values as memory-scan and YARA seeds. Never load them into a file-hash blocklist: a disk hash match cannot occur, and the values are held apart from the indicator buckets on purpose.",
+      "confidence": "MODERATE",
+      "sha256": "f6afe770a78d3655c367819b0c5e8afb623cf56b9922c179efbc89fea1a9ea86",
+      "md5": "83cb3b733cad23c702777baa42efaca3",
+      "sha1": "17602aa32d21a7bba16e1c657b4a818463fc560a",
+      "imphash": "3b5072ed500f8d2a34027ed6ea7f0a30",
+      "imphash_tool": "pefile"
+    }
+  ]
+}
