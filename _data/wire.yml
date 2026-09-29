@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-29T08:00:05Z
+generated_at: 2026-09-29T10:00:09Z
 window_days: 30
 counts:
-  total: 538
+  total: 540
   research: 187
-  news: 351
+  news: 353
 topics:
   - label: "vulnerabilities"
     count: 77
@@ -22,10 +22,10 @@ topics:
   - label: "artificial intelligence"
     count: 34
     color: 4
-  - label: "exploited"
-    count: 31
-    color: 5
   - label: "malware"
+    count: 32
+    color: 5
+  - label: "exploited"
     count: 31
     color: 6
   - label: "data breaches"
@@ -290,6 +290,7 @@ label_colors:
   "cyberattacks": 8
   "cybercrime": 2
   "cyberespionage": 8
+  "daemon tools": 3
   "darkme": 8
   "data breaches": 7
   "data exfiltration": 9
@@ -326,7 +327,7 @@ label_colors:
   "eu": 12
   "eviltokens": 6
   "exploit": 9
-  "exploited": 5
+  "exploited": 6
   "exposure management": 4
   "extortion": 12
   "extortionware": 11
@@ -397,7 +398,7 @@ label_colors:
   "maas framework": 12
   "mac malware": 8
   "macos": 11
-  "malware": 6
+  "malware": 5
   "malware analysis": 7
   "mathspace": 4
   "meshagent": 2
@@ -466,6 +467,18 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 8
 items:
+  - title: "Daemon Tools Hackers’ NeedyMantis Malware Dissected by Microsoft"
+    url: "https://www.securityweek.com/daemon-tools-hackers-needymantis-malware-dissected-by-microsoft/"
+    source: "SecurityWeek"
+    date: 2026-09-29T09:46:13Z
+    kind: news
+    labels: ["china", "daemon tools", "malware", "needymantis", "supply chain security"]
+  - title: "Kiteworks patches critical flaw, brings customer systems online"
+    url: "https://www.bleepingcomputer.com/news/security/kiteworks-lifts-shutdown-warning-after-patching-critical-flaw/"
+    source: "BleepingComputer"
+    date: 2026-09-29T09:04:06Z
+    kind: news
+    labels: []
   - title: "Apple patches CoreGraphics zero-day flaw exploited in attacks"
     url: "https://www.bleepingcomputer.com/news/security/apple-patches-coregraphics-zero-day-flaw-exploited-in-attacks/"
     source: "BleepingComputer"
