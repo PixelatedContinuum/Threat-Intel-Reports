@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-29T10:00:09Z
+generated_at: 2026-09-29T12:02:48Z
 window_days: 30
 counts:
-  total: 540
-  research: 187
-  news: 353
+  total: 544
+  research: 189
+  news: 355
 topics:
   - label: "vulnerabilities"
-    count: 77
+    count: 78
     color: 1
   - label: "cybercrime"
     count: 59
@@ -20,10 +20,10 @@ topics:
     count: 36
     color: 3
   - label: "artificial intelligence"
-    count: 34
+    count: 35
     color: 4
   - label: "malware"
-    count: 32
+    count: 33
     color: 5
   - label: "exploited"
     count: 31
@@ -122,6 +122,7 @@ label_colors:
   "arista": 10
   "arktunnel": 6
   "arm": 10
+  "arrested": 2
   "artificial intelligence": 4
   "arx cipher": 2
   "astrana health": 8
@@ -226,6 +227,7 @@ label_colors:
   "cisco": 9
   "cisco ise": 8
   "cisco talos antivirus": 7
+  "cisco talos incident response": 3
   "cisco talos malware protection": 8
   "cisco talos network intrusion prevention": 9
   "cisco talos web filtering": 12
@@ -467,6 +469,30 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 8
 items:
+  - title: "Vietnamese man charged in $16 million 'pig butchering' crypto scam"
+    url: "https://www.bleepingcomputer.com/news/security/vietnamese-man-charged-in-16-million-pig-butchering-crypto-scam/"
+    source: "BleepingComputer"
+    date: 2026-09-29T11:41:53Z
+    kind: news
+    labels: []
+  - title: "Dutch Police Arrest Convicted Hacker in ShinyHunters Investigation"
+    url: "https://www.securityweek.com/dutch-police-arrest-convicted-hacker-in-shinyhunters-investigation/"
+    source: "SecurityWeek"
+    date: 2026-09-29T11:01:55Z
+    kind: news
+    labels: ["arrested", "hacker", "shinyhunters", "tracking & law enforcement"]
+  - title: "OperTraitors: How Kubernetes Operators Betray Your Security Posture"
+    url: "https://unit42.paloaltonetworks.com/agentic-ai-kubernetes-operator-risks/"
+    source: "Palo Alto Networks"
+    date: 2026-09-29T10:00:48Z
+    kind: research
+    labels: ["artificial intelligence", "ai agents", "api", "github", "identity", "malware", "threat research", "vulnerabilities"]
+  - title: "Securing the keys to the kingdom: Announcing Executive Threat Detection"
+    url: "https://blog.talosintelligence.com/securing-the-keys-to-the-kingdom-announcing-executive-threat-detection/"
+    source: "Cisco Talos"
+    date: 2026-09-29T10:00:36Z
+    kind: research
+    labels: ["cisco talos incident response"]
   - title: "Daemon Tools Hackers’ NeedyMantis Malware Dissected by Microsoft"
     url: "https://www.securityweek.com/daemon-tools-hackers-needymantis-malware-dissected-by-microsoft/"
     source: "SecurityWeek"
