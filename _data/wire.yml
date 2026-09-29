@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-29T06:01:39Z
+generated_at: 2026-09-29T08:00:05Z
 window_days: 30
 counts:
-  total: 536
+  total: 538
   research: 187
-  news: 349
+  news: 351
 topics:
   - label: "vulnerabilities"
-    count: 76
+    count: 77
     color: 1
   - label: "cybercrime"
     count: 59
@@ -22,17 +22,17 @@ topics:
   - label: "artificial intelligence"
     count: 34
     color: 4
-  - label: "malware"
+  - label: "exploited"
     count: 31
     color: 5
-  - label: "exploited"
-    count: 30
+  - label: "malware"
+    count: 31
     color: 6
   - label: "data breaches"
     count: 24
     color: 7
   - label: "zero-day"
-    count: 16
+    count: 17
     color: 8
   - label: "clickfix"
     count: 15
@@ -326,7 +326,7 @@ label_colors:
   "eu": 12
   "eviltokens": 6
   "exploit": 9
-  "exploited": 6
+  "exploited": 5
   "exposure management": 4
   "extortion": 12
   "extortionware": 11
@@ -397,7 +397,7 @@ label_colors:
   "maas framework": 12
   "mac malware": 8
   "macos": 11
-  "malware": 5
+  "malware": 6
   "malware analysis": 7
   "mathspace": 4
   "meshagent": 2
@@ -466,6 +466,18 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 8
 items:
+  - title: "Apple patches CoreGraphics zero-day flaw exploited in attacks"
+    url: "https://www.bleepingcomputer.com/news/security/apple-patches-coregraphics-zero-day-flaw-exploited-in-attacks/"
+    source: "BleepingComputer"
+    date: 2026-09-29T07:33:12Z
+    kind: news
+    labels: ["apple"]
+  - title: "Apple Patches Meta-Reported Zero-Day Linked to ‘Extremely Sophisticated Attack’"
+    url: "https://www.securityweek.com/apple-patches-meta-reported-zero-day-linked-to-extremely-sophisticated-attack/"
+    source: "SecurityWeek"
+    date: 2026-09-29T06:18:27Z
+    kind: news
+    labels: ["apple", "exploited", "ios", "macos", "meta", "mobile & wireless", "vulnerabilities", "zero-day"]
   - title: "Japan's Keio confirms ransomware attack disrupted business systems"
     url: "https://www.bleepingcomputer.com/news/security/japans-keio-confirms-ransomware-attack-disrupted-business-systems/"
     source: "BleepingComputer"
