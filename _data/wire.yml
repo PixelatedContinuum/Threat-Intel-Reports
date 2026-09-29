@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-29T16:00:18Z
+generated_at: 2026-09-29T18:01:18Z
 window_days: 30
 counts:
-  total: 548
-  research: 191
-  news: 357
+  total: 553
+  research: 193
+  news: 360
 topics:
   - label: "vulnerabilities"
-    count: 78
+    count: 79
     color: 1
   - label: "cybercrime"
     count: 61
@@ -20,10 +20,10 @@ topics:
     count: 38
     color: 3
   - label: "artificial intelligence"
-    count: 35
+    count: 36
     color: 4
   - label: "malware"
-    count: 34
+    count: 35
     color: 5
   - label: "exploited"
     count: 31
@@ -37,14 +37,14 @@ topics:
   - label: "clickfix"
     count: 16
     color: 9
-  - label: "ransomware"
-    count: 15
-    color: 10
   - label: "social engineering"
+    count: 16
+    color: 10
+  - label: "ransomware"
     count: 15
     color: 11
   - label: "phishing"
-    count: 11
+    count: 12
     color: 12
 label_colors:
   "3bb": 7
@@ -165,6 +165,7 @@ label_colors:
   "bitcoin": 2
   "black hat seo": 5
   "blindingcan": 11
+  "blizzard": 8
   "blockchain abuse": 2
   "blockchain c2": 1
   "blockchain infrastructure": 11
@@ -323,6 +324,7 @@ label_colors:
   "email security": 12
   "embedding": 3
   "encrypted c2": 9
+  "endpoint protection & security": 10
   "endpoint security": 11
   "endpoint security & xdr": 11
   "entra id": 5
@@ -437,7 +439,7 @@ label_colors:
   "postgresql": 12
   "privacy": 12
   "proxy abuse": 6
-  "ransomware": 10
+  "ransomware": 11
   "ransomware as a service": 3
   "rce": 10
   "revolut": 5
@@ -453,7 +455,7 @@ label_colors:
   "sharepoint": 11
   "sma1000": 2
   "soc": 9
-  "social engineering": 11
+  "social engineering": 10
   "software": 5
   "solarwinds": 10
   "storm": 7
@@ -470,6 +472,30 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 8
 items:
+  - title: "New Spectre v2 attack variant leaks Linux root password hash in minutes"
+    url: "https://www.bleepingcomputer.com/news/security/new-spectre-v2-attack-variant-leaks-linux-root-password-hash-in-minutes/"
+    source: "BleepingComputer"
+    date: 2026-09-29T17:10:11Z
+    kind: news
+    labels: ["hardware", "linux"]
+  - title: "New Spectre v2 Variant Exposes Intel, AMD, Arm CPUs to Data Leaks"
+    url: "https://www.securityweek.com/new-spectre-v2-variant-exposes-intel-amd-arm-cpus-to-data-leaks/"
+    source: "SecurityWeek"
+    date: 2026-09-29T17:00:00Z
+    kind: news
+    labels: ["amd", "arm", "cpu", "cpu attack", "cpu vulnerability", "data leak", "endpoint security", "intel", "spectre", "vulnerabilities"]
+  - title: "Automated AI agent used to breach cybersecurity nonprofit DIVD"
+    url: "https://www.bleepingcomputer.com/news/security/automated-ai-agent-used-to-breach-cybersecurity-nonprofit-divd/"
+    source: "BleepingComputer"
+    date: 2026-09-29T15:39:19Z
+    kind: news
+    labels: ["artificial intelligence"]
+  - title: "Star Blizzard refines phishing and malware delivery with the RedFlick technique"
+    url: "https://www.microsoft.com/en-us/security/blog/2026/09/29/star-blizzard-refines-phishing-and-malware-delivery-with-the-redflick-technique/"
+    source: "Microsoft"
+    date: 2026-09-29T15:00:00Z
+    kind: research
+    labels: ["blizzard", "credential theft", "cyberespionage", "domain compromise", "malware", "phishing", "social engineering", "star blizzard (seaborgium)"]
   - title: "Hackers Use ChatGPT Custom GPTs in ClickFix Attacks"
     url: "https://www.securityweek.com/hackers-use-chatgpt-custom-gpts-in-clickfix-attacks/"
     source: "SecurityWeek"
@@ -554,6 +580,12 @@ items:
     date: 2026-09-29T05:00:00Z
     kind: research
     labels: ["threat hunting & intel"]
+  - title: "No MDM for Linux? A 68-line Elastic workflow keeps every endpoint's config current"
+    url: "https://www.elastic.co/security-labs/blog/linux-endpoint-management-elastic-workflows"
+    source: "Elastic"
+    date: 2026-09-29T00:00:00Z
+    kind: research
+    labels: ["ai & automation", "endpoint protection & security"]
   - title: "Japan's Keio confirms ransomware attack disrupted business systems"
     url: "https://www.bleepingcomputer.com/news/security/japans-keio-confirms-ransomware-attack-disrupted-business-systems/"
     source: "BleepingComputer"
