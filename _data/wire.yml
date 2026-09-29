@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-29T14:02:05Z
+generated_at: 2026-09-29T16:00:18Z
 window_days: 30
 counts:
-  total: 549
-  research: 190
-  news: 359
+  total: 548
+  research: 191
+  news: 357
 topics:
   - label: "vulnerabilities"
     count: 78
@@ -20,7 +20,7 @@ topics:
     count: 38
     color: 3
   - label: "artificial intelligence"
-    count: 36
+    count: 35
     color: 4
   - label: "malware"
     count: 34
@@ -548,6 +548,12 @@ items:
     date: 2026-09-29T05:00:00Z
     kind: research
     labels: ["threat intelligence"]
+  - title: "Copy, Paste, Compromised: How ClickFix Attacks Work and How CrowdStrike Stops Them"
+    url: "https://www.crowdstrike.com/en-us/blog/how-clickfix-attacks-work-and-how-to-stop-them/"
+    source: "Crowdstrike"
+    date: 2026-09-29T05:00:00Z
+    kind: research
+    labels: ["threat hunting & intel"]
   - title: "Japan's Keio confirms ransomware attack disrupted business systems"
     url: "https://www.bleepingcomputer.com/news/security/japans-keio-confirms-ransomware-attack-disrupted-business-systems/"
     source: "BleepingComputer"
@@ -3752,15 +3758,3 @@ items:
     date: 2026-08-31T00:14:29Z
     kind: research
     labels: ["active directory reconnaissance", "clickfix", "dll sideloading", "fake captcha", "powershell execution", "reverse tunnel", "steganography", "terminalfix"]
-  - title: "FulcrumSec claims Manchester Airports hack, theft of 86 GB of data"
-    url: "https://www.bleepingcomputer.com/news/security/fulcrumsec-claims-manchester-airports-hack-theft-of-86-gb-of-data/"
-    source: "BleepingComputer"
-    date: 2026-08-30T15:00:21Z
-    kind: news
-    labels: []
-  - title: "Anthropic warns infostealer malware is hijacking Claude sessions to drain usage"
-    url: "https://www.bleepingcomputer.com/news/artificial-intelligence/anthropic-warns-infostealer-malware-is-hijacking-claude-sessions-to-drain-usage/"
-    source: "BleepingComputer"
-    date: 2026-08-30T14:30:25Z
-    kind: news
-    labels: ["artificial intelligence"]
