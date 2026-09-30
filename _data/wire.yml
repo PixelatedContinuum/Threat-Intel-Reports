@@ -3,7 +3,7 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-30T00:01:57Z
+generated_at: 2026-09-30T02:00:08Z
 window_days: 30
 counts:
   total: 566
@@ -32,13 +32,13 @@ topics:
     count: 25
     color: 7
   - label: "social engineering"
-    count: 18
+    count: 19
     color: 8
-  - label: "clickfix"
-    count: 17
-    color: 9
   - label: "zero-day"
     count: 17
+    color: 9
+  - label: "clickfix"
+    count: 16
     color: 10
   - label: "ransomware"
     count: 15
@@ -59,7 +59,6 @@ label_colors:
   "acronis": 1
   "acrstealer": 4
   "active directory": 5
-  "active directory reconnaissance": 1
   "active exploitation": 2
   "adapthealth": 2
   "adaptixc2": 8
@@ -242,7 +241,7 @@ label_colors:
   "citrix netscaler": 2
   "cleo": 7
   "click2shell": 4
-  "clickfix": 9
+  "clickfix": 10
   "clipboard": 10
   "clipboard poisoning": 6
   "clipper": 3
@@ -258,6 +257,7 @@ label_colors:
   "cpanel": 1
   "credential exfiltration": 4
   "credential harvesting": 4
+  "credential stealing": 6
   "credential theft": 6
   "credential-harvesting": 1
   "credential-theft": 5
@@ -478,7 +478,7 @@ label_colors:
   "vmware": 2
   "vpn": 8
   "vulnerabilities": 1
-  "zero-day": 10
+  "zero-day": 9
 items:
   - title: "Phishing Abuses RMM Tools for Persistent Access"
     url: "https://www.microsoft.com/en-us/security/blog/2026/09/29/phishing-abuses-rmm-tools-persistent-access/"
@@ -552,6 +552,12 @@ items:
     date: 2026-09-29T15:00:00Z
     kind: research
     labels: ["blizzard", "credential theft", "cyberespionage", "domain compromise", "malware", "phishing", "social engineering", "star blizzard (seaborgium)"]
+  - title: "Fake iPhone Duo preorder scam triggers DarkSword attack"
+    url: "https://www.malwarebytes.com/blog/threat-intel/2026/09/fake-iphone-duo-preorder-scam-triggers-darksword-attack"
+    source: "AlienVault"
+    date: 2026-09-29T13:59:04Z
+    kind: research
+    labels: ["credential stealing", "cryptocurrency theft", "darksword", "darksword exploit", "fake preorder", "ios vulnerability", "iphone duo", "safari targeting", "social engineering"]
   - title: "Beware of Phishing Emails That Disguise Themselves as Project Material Purchase Requests"
     url: "https://otx.alienvault.com/pulse/6abbbd28cb7e4cac7c679e36"
     source: "AlienVault"
@@ -3870,9 +3876,3 @@ items:
     date: 2026-08-31T04:00:00Z
     kind: research
     labels: ["securing ai"]
-  - title: "Campaign deploys a reverse tunnel through multistage intrusion"
-    url: "https://www.microsoft.com/en-us/security/blog/2026/08/28/terminalfix-campaign-deploys-reverse-tunnel-through-multistage-intrusion/"
-    source: "AlienVault"
-    date: 2026-08-31T00:14:29Z
-    kind: research
-    labels: ["active directory reconnaissance", "clickfix", "dll sideloading", "fake captcha", "powershell execution", "reverse tunnel", "steganography", "terminalfix"]
