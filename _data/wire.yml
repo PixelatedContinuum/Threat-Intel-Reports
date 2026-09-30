@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-29T22:00:18Z
+generated_at: 2026-09-30T00:01:57Z
 window_days: 30
 counts:
-  total: 565
-  research: 198
+  total: 566
+  research: 199
   news: 367
 topics:
   - label: "vulnerabilities"
@@ -31,10 +31,10 @@ topics:
   - label: "data breaches"
     count: 25
     color: 7
-  - label: "clickfix"
-    count: 17
-    color: 8
   - label: "social engineering"
+    count: 18
+    color: 8
+  - label: "clickfix"
     count: 17
     color: 9
   - label: "zero-day"
@@ -44,7 +44,7 @@ topics:
     count: 15
     color: 11
   - label: "phishing"
-    count: 13
+    count: 14
     color: 12
 label_colors:
   "3bb": 7
@@ -242,7 +242,7 @@ label_colors:
   "citrix netscaler": 2
   "cleo": 7
   "click2shell": 4
-  "clickfix": 8
+  "clickfix": 9
   "clipboard": 10
   "clipboard poisoning": 6
   "clipper": 3
@@ -463,7 +463,7 @@ label_colors:
   "sharepoint": 11
   "sma1000": 2
   "soc": 9
-  "social engineering": 9
+  "social engineering": 8
   "software": 5
   "solarwinds": 10
   "storm": 7
@@ -480,6 +480,12 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 10
 items:
+  - title: "Phishing Abuses RMM Tools for Persistent Access"
+    url: "https://www.microsoft.com/en-us/security/blog/2026/09/29/phishing-abuses-rmm-tools-persistent-access/"
+    source: "Microsoft"
+    date: 2026-09-29T21:39:27Z
+    kind: research
+    labels: ["phishing", "social engineering"]
   - title: "US Air Force members given over 6 years in prison for cyber theft of more than $2 million"
     url: "https://therecord.media/us-air-force-members-given-6-year-sentence-cyber"
     source: "Recorded Future"
