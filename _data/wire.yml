@@ -3,27 +3,27 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-30T14:01:40Z
+generated_at: 2026-09-30T16:02:42Z
 window_days: 30
 counts:
-  total: 564
-  research: 194
+  total: 561
+  research: 191
   news: 370
 topics:
   - label: "vulnerabilities"
     count: 80
     color: 1
   - label: "cybercrime"
-    count: 65
+    count: 64
     color: 2
   - label: "government"
-    count: 40
+    count: 39
     color: 3
   - label: "artificial intelligence"
-    count: 36
+    count: 37
     color: 4
   - label: "malware"
-    count: 35
+    count: 36
     color: 5
   - label: "exploited"
     count: 30
@@ -34,10 +34,10 @@ topics:
   - label: "social engineering"
     count: 18
     color: 8
-  - label: "zero-day"
-    count: 17
-    color: 9
   - label: "clickfix"
+    count: 16
+    color: 9
+  - label: "zero-day"
     count: 16
     color: 10
   - label: "phishing"
@@ -73,7 +73,6 @@ label_colors:
   "aesto health": 6
   "affiliate fraud": 7
   "agentcore runtime": 2
-  "agentev2": 6
   "agentic ai": 9
   "agentic soc": 2
   "agenttesla": 2
@@ -87,13 +86,11 @@ label_colors:
   "ai-assisted development": 10
   "ai-assisted intrusions": 3
   "ai-assisted malware": 8
-  "ai-assisted-development": 9
   "ai-driven-campaign": 10
   "ai-generated decoys": 1
   "ai-generated-content": 4
   "ai-orchestrated campaign": 1
   "ai-powered automation": 6
-  "ai-powered cybercrime": 12
   "aitm": 5
   "alert": 2
   "alphaagent": 1
@@ -102,6 +99,7 @@ label_colors:
   "amd": 6
   "amos": 6
   "amsi evasion": 1
+  "analysis": 12
   "android": 9
   "android banking trojan": 11
   "android malware": 4
@@ -154,7 +152,6 @@ label_colors:
   "bashnatch": 10
   "beacon": 6
   "beavertail": 7
-  "behavior-based-detection": 12
   "big-ip": 6
   "bigbear": 8
   "bigbear 2.0": 8
@@ -165,7 +162,6 @@ label_colors:
   "black hat seo": 5
   "blindingcan": 11
   "blizzard": 8
-  "blockchain abuse": 2
   "blockchain c2": 1
   "blockchain infrastructure": 11
   "blog post": 6
@@ -197,7 +193,6 @@ label_colors:
   "cameron john wagenius": 5
   "canada": 4
   "canon sideloading": 6
-  "card-skimming": 8
   "casino domains": 4
   "castleloader": 11
   "castlerat": 9
@@ -239,7 +234,7 @@ label_colors:
   "citrix netscaler": 2
   "cleo": 7
   "click2shell": 4
-  "clickfix": 10
+  "clickfix": 9
   "clipboard": 10
   "clipboard poisoning": 6
   "clipper": 3
@@ -357,7 +352,6 @@ label_colors:
   "gh0st rat": 11
   "ghostcode": 6
   "gigabud": 9
-  "github-actions": 9
   "gitlab": 3
   "godzilla": 12
   "google": 7
@@ -471,8 +465,32 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
   "watchguard": 2
-  "zero-day": 9
+  "zero-day": 10
 items:
+  - title: "Cisco warns of new SD-WAN zero-day exploited in attacks"
+    url: "https://www.bleepingcomputer.com/news/security/cisco-warns-of-new-sd-wan-authentication-bypass-zero-day-exploited-in-attacks/"
+    source: "BleepingComputer"
+    date: 2026-09-30T14:46:40Z
+    kind: news
+    labels: []
+  - title: "Google: AI Is Changing the Pace and Profile of Vulnerability Discovery"
+    url: "https://www.securityweek.com/google-ai-is-changing-the-pace-and-profile-of-vulnerability-discovery/"
+    source: "SecurityWeek"
+    date: 2026-09-30T14:05:58Z
+    kind: news
+    labels: ["artificial intelligence", "analysis", "google", "report", "vulnerabilities"]
+  - title: "Vulnerability Discovery and Exploitation Trends in the AI Era"
+    url: "https://cloud.google.com/blog/topics/threat-intelligence/vulnerability-discovery-and-exploitation-trends-in-the-ai-era/"
+    source: "Google"
+    date: 2026-09-30T14:00:00Z
+    kind: research
+    labels: ["threat intelligence"]
+  - title: "Mobile malware warning from Ukrainian researchers includes iPhone exploit kit"
+    url: "https://therecord.media/ukraine-ssscip-mobile-malware-warning-ios-android"
+    source: "Recorded Future"
+    date: 2026-09-30T14:00:00Z
+    kind: news
+    labels: ["malware", "nation-state"]
   - title: "Microsoft to block Entra ID script injection attacks starting October"
     url: "https://www.bleepingcomputer.com/news/security/microsoft-to-block-entra-id-script-injection-attacks-starting-october/"
     source: "BleepingComputer"
@@ -3815,45 +3833,3 @@ items:
     date: 2026-08-31T18:51:04Z
     kind: news
     labels: []
-  - title: "Anatomy of BraZetsu: How Cybercriminals Fuel the Underground Ecosystem"
-    url: "https://www.group-ib.com/blog/brazetsu-ai-enhanced-iab-marketplace/"
-    source: "AlienVault"
-    date: 2026-08-31T15:42:36Z
-    kind: research
-    labels: ["agentev2", "ai-powered cybercrime", "brazetsu", "cnab", "cnabhunter", "financial remittance", "initial access broker", "latam", "ousaban", "python malware", "underground marketplace"]
-  - title: "Toolkit: AI-Assisted Development and Persistent Threat Operations"
-    url: "https://reliaquest.com/blog/threat-spotlight-gryxa-ai-built-toolkit"
-    source: "AlienVault"
-    date: 2026-08-31T15:39:24Z
-    kind: research
-    labels: ["ai-assisted-development", "behavior-based-detection", "gryxa", "persistence-mechanisms", "rmm-client", "scheduled-tasks", "toolkit", "windows-event-subscription"]
-  - title: "Shai-Hulud Trinitite Hits @7nohe/openapi-react-query-codegen"
-    url: "https://research.jfrog.com/post/shai-hulud-trinitite"
-    source: "AlienVault"
-    date: 2026-08-31T15:26:41Z
-    kind: research
-    labels: ["credential-theft", "github-actions", "mini shai-hulud", "npm", "oidc", "persistence", "shai-hulud", "supply-chain", "trinitite", "worm"]
-  - title: "Skimming on the Blockchain: A Magecart Campaign That Uses EtherHiding, Found by Malvertising Scanning"
-    url: "https://otx.alienvault.com/pulse/6a9596d78e30aca83cac86db"
-    source: "AlienVault"
-    date: 2026-08-31T14:59:35Z
-    kind: research
-    labels: ["blockchain abuse", "card-skimming", "disposable domains", "e-commerce attacks", "ethereum smart contracts", "etherhiding", "payment skimming", "woocommerce compromise"]
-  - title: "Chinese Fire Ant hackers turn Cisco routers into spying platforms"
-    url: "https://www.bleepingcomputer.com/news/security/chinese-fire-ant-hackers-turn-cisco-routers-into-spying-platforms/"
-    source: "BleepingComputer"
-    date: 2026-08-31T14:52:03Z
-    kind: news
-    labels: []
-  - title: "Berlin says it won’t pay ransom after hackers steal government data"
-    url: "https://therecord.media/berlin-says-it-wont-pay-ransom-after-hackers-steal-gov-data"
-    source: "Recorded Future"
-    date: 2026-08-31T14:45:00Z
-    kind: news
-    labels: ["cybercrime", "government"]
-  - title: "Nightmare Eclipse Drops ‘HardBreacher’ Kaspersky Product Exploit"
-    url: "https://www.securityweek.com/nightmare-eclipse-drops-hardbreacher-kaspersky-product-exploit/"
-    source: "SecurityWeek"
-    date: 2026-08-31T14:32:34Z
-    kind: news
-    labels: ["chaotic eclipse", "endpoint security", "hardbreacher", "kaspersky", "poc exploit", "security products", "vulnerabilities", "zero-day"]
