@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-30T08:00:28Z
+generated_at: 2026-09-30T10:02:18Z
 window_days: 30
 counts:
-  total: 565
-  research: 198
-  news: 367
+  total: 562
+  research: 196
+  news: 366
 topics:
   - label: "vulnerabilities"
     count: 79
@@ -23,13 +23,13 @@ topics:
     count: 36
     color: 4
   - label: "malware"
-    count: 35
+    count: 34
     color: 5
   - label: "exploited"
     count: 30
     color: 6
   - label: "data breaches"
-    count: 25
+    count: 24
     color: 7
   - label: "social engineering"
     count: 19
@@ -40,10 +40,10 @@ topics:
   - label: "zero-day"
     count: 16
     color: 10
-  - label: "ransomware"
-    count: 15
-    color: 11
   - label: "phishing"
+    count: 14
+    color: 11
+  - label: "ransomware"
     count: 14
     color: 12
 label_colors:
@@ -156,14 +156,12 @@ label_colors:
   "beacon": 6
   "beavertail": 7
   "behavior-based-detection": 12
-  "berlin": 6
   "big-ip": 6
   "bigbear": 8
   "bigbear 2.0": 8
   "bigcommerce": 3
   "bigdiskbuster": 2
   "bind": 7
-  "binding.gyp": 1
   "bitcoin": 2
   "black hat seo": 5
   "blindingcan": 11
@@ -245,7 +243,6 @@ label_colors:
   "clipboard": 10
   "clipboard poisoning": 6
   "clipper": 3
-  "cloaked ursa": 2
   "closedquorum": 9
   "cloud": 7
   "cloud cybersecurity research": 3
@@ -334,7 +331,6 @@ label_colors:
   "endpoint protection & security": 10
   "endpoint security": 11
   "endpoint security & xdr": 11
-  "entra id": 5
   "espionage": 11
   "eu": 12
   "eviltokens": 6
@@ -364,7 +360,6 @@ label_colors:
   "gh0st rat": 11
   "ghostcode": 6
   "gigabud": 9
-  "github actions": 6
   "github-actions": 9
   "gitlab": 3
   "godzilla": 12
@@ -441,7 +436,7 @@ label_colors:
   "patched": 1
   "patches": 2
   "payment fraud": 12
-  "phishing": 12
+  "phishing": 11
   "phishing campaign": 6
   "plugin vulnerability": 1
   "poc exploit": 3
@@ -449,7 +444,7 @@ label_colors:
   "postgresql": 12
   "privacy": 12
   "proxy abuse": 6
-  "ransomware": 11
+  "ransomware": 12
   "ransomware as a service": 3
   "rce": 10
   "revolut": 5
@@ -3854,21 +3849,3 @@ items:
     date: 2026-08-31T10:29:10Z
     kind: news
     labels: ["airport", "data breaches", "ransomware"]
-  - title: "Spring Ring: An Inside Look at Voice Phishing Campaigns in Microsoft Teams"
-    url: "https://unit42.paloaltonetworks.com/spring-ring-voice-phishing-campaigns/"
-    source: "Palo Alto Networks"
-    date: 2026-08-31T10:00:36Z
-    kind: research
-    labels: ["cloaked ursa", "entra id", "malware", "microsoft teams", "payload", "powershell", "remote access trojan", "spoof", "threat research", "vishing"]
-  - title: "Real-time Open Source Software Supply Chain Security"
-    url: "https://safedep.io/mini-shai-hulud-openapi-react-query-codegen-compromised/"
-    source: "AlienVault"
-    date: 2026-08-31T09:00:33Z
-    kind: research
-    labels: ["binding.gyp", "github actions", "mini shai-hulud", "node-gyp", "npm", "obfuscation", "oidc publishing", "supply-chain"]
-  - title: "Berlin Won’t Pay Extortion Group Claiming Data Theft"
-    url: "https://www.securityweek.com/berlin-wont-pay-extortion-group-claiming-data-theft/"
-    source: "SecurityWeek"
-    date: 2026-08-31T08:49:36Z
-    kind: news
-    labels: ["berlin", "data breaches", "ransomware", "rhysida"]
