@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-30T20:00:13Z
+generated_at: 2026-09-30T22:01:32Z
 window_days: 30
 counts:
-  total: 564
-  research: 192
+  total: 563
+  research: 191
   news: 372
 topics:
   - label: "vulnerabilities"
@@ -247,7 +247,6 @@ label_colors:
   "conti": 1
   "coordinated-inauthentic-behavior": 12
   "cpanel": 1
-  "credential exfiltration": 4
   "credential harvesting": 4
   "credential stealing": 6
   "credential theft": 6
@@ -467,6 +466,12 @@ label_colors:
   "watchguard": 2
   "zero-day": 10
 items:
+  - title: "Russian state hackers use new RedFlick technique to push malware"
+    url: "https://www.bleepingcomputer.com/news/security/russian-state-hackers-use-new-redflick-technique-to-push-malware/"
+    source: "BleepingComputer"
+    date: 2026-09-30T20:34:01Z
+    kind: news
+    labels: []
   - title: "DIVD says Zammad zero-days enabled AI-driven network breach"
     url: "https://www.bleepingcomputer.com/news/security/divd-says-zammad-zero-days-enabled-ai-driven-network-breach/"
     source: "BleepingComputer"
@@ -3839,15 +3844,3 @@ items:
     date: 2026-09-01T04:00:00Z
     kind: research
     labels: ["securing ai"]
-  - title: "Cronos blockchain restarts after $74 million Tectonic exploit"
-    url: "https://www.bleepingcomputer.com/news/security/cronos-blockchain-restarts-after-74-million-tectonic-exploit/"
-    source: "BleepingComputer"
-    date: 2026-08-31T20:47:54Z
-    kind: news
-    labels: ["cryptocurrency"]
-  - title: "13 Malicious Packagist Themes Deliver iOS Spyware That Steals Crypto Wallet Seeds"
-    url: "https://otx.alienvault.com/pulse/6a95df86eed3f6fb54baef2d"
-    source: "AlienVault"
-    date: 2026-08-31T20:09:42Z
-    kind: research
-    labels: ["credential exfiltration", "cryptocurrency theft", "cve-2025-31277", "cve-2025-43529", "cve-2026-43655", "funnull infrastructure", "ios exploitation", "kernel escape", "packagist", "spyware", "supply chain attack", "webkit vulnerability"]
