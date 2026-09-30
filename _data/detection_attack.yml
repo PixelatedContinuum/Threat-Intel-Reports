@@ -1256,13 +1256,13 @@
     - tactic: "Command and Control"
       id: "T1571"
       name: "Non-Standard Port"
-      rules: "High-Frequency Ncat Listener Creation on Linux Host (SIGMA, Hunting); GHOST Cryptojacker Kit Hysteria v2 QUIC Backdoor Egress: Known Operator Ports (SURICATA, Hunting)"
-      count: 2
+      rules: "High-Frequency Ncat Listener Creation on Linux Host (SIGMA, Hunting); GHOST Cryptojacker Kit Hysteria v2 QUIC Backdoor Egress: Known Operator Ports (SURICATA, Hunting); GHOST Cryptojacker Kit Hysteria v2 QUIC Backdoor Inbound: Victim-Hosted Listener Ports (SURICATA, Hunting)"
+      count: 3
     - tactic: "Command and Control"
       id: "T1572"
       name: "Protocol Tunneling"
-      rules: "MAL_Linux_GHOST_Hysteria_Operator_Wrapper (YARA, Hunting); Hysteria V2 QUIC Proxy Process Execution on Linux Server (SIGMA, Hunting); GHOST Cryptojacker Kit Hysteria v2 QUIC Backdoor Egress: Known Operator Ports (SURICATA, Hunting)"
-      count: 3
+      rules: "MAL_Linux_GHOST_Hysteria_Operator_Wrapper (YARA, Hunting); Hysteria V2 QUIC Proxy Process Execution on Linux Server (SIGMA, Hunting); GHOST Cryptojacker Kit Hysteria v2 QUIC Backdoor Egress: Known Operator Ports (SURICATA, Hunting); GHOST Cryptojacker Kit Hysteria v2 QUIC Backdoor Inbound: Victim-Hosted Listener Ports (SURICATA, Hunting)"
+      count: 4
     - tactic: "Impact"
       id: "T1496.001"
       name: "Compute Hijacking"

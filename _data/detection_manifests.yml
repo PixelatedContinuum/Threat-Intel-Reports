@@ -426,7 +426,7 @@ ai-agent-frameworks-2026-05-23-detections:
     engine: sigma
     tier: Hunting
     fence: 14
-    hash: "40cdfc58"
+    hash: "91fb71c3"
     head: "title: >- Claude Code settings.local.json or set"
     robustness: 2
     confidence: "MODERATE — the rule's own description states this is a hunting lead, not an alert"
@@ -2262,15 +2262,24 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
     engine: suricata
     tier: Hunting
     fence: 21
-    hash: "7e8d5fb6"
+    hash: "d47a2274"
     head: "alert udp $HOME_NET any -> $EXTERNAL_NET 14433:1"
     robustness: 2
     confidence: "MODERATE"
     attack: [T1572, T1571]
-  - name: "GHOST Cryptojacker Kit Telegram API Egress from Production Server: Covert Mining Report"
+  - name: "GHOST Cryptojacker Kit Hysteria v2 QUIC Backdoor Inbound: Victim-Hosted Listener Ports"
     engine: suricata
     tier: Hunting
     fence: 22
+    hash: "c464109a"
+    head: "alert udp $EXTERNAL_NET any -> $HOME_NET 14433:1"
+    robustness: 2
+    confidence: "LOW"
+    attack: [T1572, T1571]
+  - name: "GHOST Cryptojacker Kit Telegram API Egress from Production Server: Covert Mining Report"
+    engine: suricata
+    tier: Hunting
+    fence: 23
     hash: "018efa55"
     head: "alert tls $HOME_NET any -> any any (msg:\"THL HUN"
     robustness: 1
@@ -2799,7 +2808,7 @@ malware-analysis-houselet-detections:
     engine: sigma
     tier: Hunting
     fence: 4
-    hash: "f9809d16"
+    hash: "d9702f50"
     head: "title: Command Line Referencing Virtualization o"
     robustness: 2
     confidence: "MODERATE"

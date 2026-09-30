@@ -1,6 +1,6 @@
 # Hunters Ledger - consolidated Suricata detection feed
 # https://the-hunters-ledger.com/  |  License: CC BY 4.0
-# 121 rules from 37 campaigns. SIDs are STABLE across rebuilds (persistent
+# 122 rules from 37 campaigns. SIDs are STABLE across rebuilds (persistent
 # sid-map.json; allocated block 3500000-3509999 via sidallocation.org).
 # Above each rule: '# <campaign> (orig sid:N)', then annotation lines:
 #   TIER: Detection|Hunting  |  robustness N  |  confidence X
@@ -148,8 +148,13 @@ alert http $HOME_NET any -> 77.110.0.0/16 any (msg:"THL DETECT GHOST Cryptojacke
 # ghost-cryptojacker-vova75rus-77.110.96.200 (orig sid:9100103)
 #   TIER: Hunting  |  robustness 2  |  confidence MODERATE  |  BROAD - triage before alerting
 #   rate-limited
-#   FP: Any legitimate or unrelated service that happens to use UDP 14433–14444 (uncommon but not impossible); the threshold limits alert volume per source....
-alert udp $HOME_NET any -> $EXTERNAL_NET 14433:14444 (msg:"THL HUNT GHOST Cryptojacker Kit Hysteria v2 QUIC Backdoor Egress Candidate - Known Operator Ports (Hunt Lead, Corroborate Before Escalating)"; threshold:type threshold,track by_src,count 5,seconds 60; classtype:policy-violation; sid:3500023; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-25, modified 2026-08-20, reference https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/, signature_severity Minor, tag Backdoor, tag GHOST_kit, tag Hysteria_v2;)
+#   FP: Any legitimate QUIC v1 client (HTTP/3 browsers and apps, or another Hysteria, MASQUE or QUIC-based VPN or tunnel product) that sends a client Initial...
+alert udp $HOME_NET any -> $EXTERNAL_NET 14433:14444 (msg:"THL HUNT GHOST Cryptojacker Kit Hysteria v2 QUIC Initial on Operator Ports (Hunt Lead, Corroborate Before Escalating)"; dsize:>=1200; byte_test:1,=,0xC,0,bitmask 0xF0; content:"|00 00 00 01|"; offset:1; depth:4; threshold:type limit,track by_src,count 1,seconds 3600; classtype:policy-violation; sid:3500023; rev:4; metadata:author The_Hunters_Ledger, date 2026-05-25, modified 2026-09-30, reference https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/, signature_severity Minor, tag Backdoor, tag GHOST_kit, tag Hysteria_v2;)
+# ghost-cryptojacker-vova75rus-77.110.96.200 (orig sid:9100109)
+#   TIER: Hunting  |  robustness 2  |  confidence LOW  |  BROAD - triage before alerting
+#   rate-limited
+#   FP: Any legitimate QUIC v1 client (HTTP/3 browsers and apps, or another Hysteria, MASQUE or QUIC-based VPN or tunnel product) that connects from outside...
+alert udp $EXTERNAL_NET any -> $HOME_NET 14433:14444 (msg:"THL HUNT GHOST Cryptojacker Kit Hysteria v2 QUIC Initial Inbound to Victim-Hosted Listener Ports (Hunt Lead, Corroborate Before Escalating)"; dsize:>=1200; byte_test:1,=,0xC,0,bitmask 0xF0; content:"|00 00 00 01|"; offset:1; depth:4; threshold:type limit,track by_dst,count 1,seconds 3600; classtype:policy-violation; sid:3500211; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-30, reference https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/, signature_severity Minor, tag Backdoor, tag GHOST_kit, tag Hysteria_v2;)
 # ghost-cryptojacker-vova75rus-77.110.96.200 (orig sid:9100108)
 #   TIER: Hunting  |  robustness 1  |  confidence LOW–MODERATE  |  BROAD - triage before alerting
 #   rate-limited
