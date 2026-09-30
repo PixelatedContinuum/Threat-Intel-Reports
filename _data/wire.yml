@@ -3,36 +3,36 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-30T10:02:18Z
+generated_at: 2026-09-30T12:01:05Z
 window_days: 30
 counts:
-  total: 562
-  research: 196
-  news: 366
+  total: 563
+  research: 195
+  news: 368
 topics:
   - label: "vulnerabilities"
-    count: 79
+    count: 78
     color: 1
   - label: "cybercrime"
-    count: 63
+    count: 64
     color: 2
   - label: "government"
-    count: 40
+    count: 41
     color: 3
   - label: "artificial intelligence"
-    count: 36
+    count: 37
     color: 4
   - label: "malware"
-    count: 34
+    count: 35
     color: 5
   - label: "exploited"
-    count: 30
+    count: 29
     color: 6
   - label: "data breaches"
-    count: 24
+    count: 23
     color: 7
   - label: "social engineering"
-    count: 19
+    count: 18
     color: 8
   - label: "clickfix"
     count: 16
@@ -44,7 +44,7 @@ topics:
     count: 14
     color: 11
   - label: "ransomware"
-    count: 14
+    count: 13
     color: 12
 label_colors:
   "3bb": 7
@@ -69,7 +69,6 @@ label_colors:
   "adobe commerce": 12
   "adversary infrastructure": 12
   "adversary-in-the-middle (aitm)": 1
-  "adware disguise": 5
   "aerospace": 7
   "aesto health": 6
   "affiliate fraud": 7
@@ -95,7 +94,6 @@ label_colors:
   "ai-orchestrated campaign": 1
   "ai-powered automation": 6
   "ai-powered cybercrime": 12
-  "airport": 9
   "aitm": 5
   "alert": 2
   "alphaagent": 1
@@ -119,6 +117,7 @@ label_colors:
   "apple": 12
   "applescript": 5
   "application security": 6
+  "apt": 5
   "apt-q-95": 4
   "apt36": 10
   "arista": 10
@@ -231,6 +230,8 @@ label_colors:
   "cisco": 9
   "cisco ise": 8
   "cisco talos antivirus": 7
+  "cisco talos dns security": 7
+  "cisco talos email threat prevention": 12
   "cisco talos incident response": 3
   "cisco talos malware protection": 8
   "cisco talos network intrusion prevention": 9
@@ -315,7 +316,6 @@ label_colors:
   "dns": 1
   "dns txt records": 3
   "docusign impersonation": 2
-  "domain controller": 4
   "donut loader": 3
   "double extortion": 1
   "dprk apt": 2
@@ -399,6 +399,7 @@ label_colors:
   "labubarat": 10
   "landing page top story": 2
   "lateral movement": 6
+  "law": 4
   "law enforcement": 6
   "legal": 7
   "linux": 2
@@ -411,7 +412,6 @@ label_colors:
   "mathspace": 4
   "meshagent": 2
   "microsoft": 4
-  "microsoft teams": 10
   "mikrotik": 2
   "mobile": 4
   "mobile & wireless": 4
@@ -450,7 +450,6 @@ label_colors:
   "revolut": 5
   "rewards points scam": 3
   "rmm abuse": 2
-  "ruby on rails": 12
   "sap": 8
   "screenconnect": 2
   "screenconnect deployment": 5
@@ -477,6 +476,36 @@ label_colors:
   "vulnerabilities": 1
   "zero-day": 10
 items:
+  - title: "Anthropic Flags AI Agent Liability Risks as OpenAI Faces Hacking Lawsuit"
+    url: "https://www.securityweek.com/anthropic-flags-ai-agent-liability-risks-as-openai-faces-hacking-lawsuit/"
+    source: "SecurityWeek"
+    date: 2026-09-30T11:19:00Z
+    kind: news
+    labels: ["artificial intelligence", "law", "legislation"]
+  - title: "Bitget hacked via zero-day in third-party security products"
+    url: "https://www.bleepingcomputer.com/news/security/bitget-hacked-via-zero-day-in-third-party-security-products/"
+    source: "BleepingComputer"
+    date: 2026-09-30T11:11:46Z
+    kind: news
+    labels: ["cryptocurrency"]
+  - title: "Russian APT Star Blizzard Uses ‘RedFlick’ Infection Chain in Recent Attacks"
+    url: "https://www.securityweek.com/russian-apt-star-blizzard-uses-redflick-infection-chain-in-recent-attacks/"
+    source: "SecurityWeek"
+    date: 2026-09-30T10:59:30Z
+    kind: news
+    labels: ["apt", "malware", "redflick", "russia", "star blizzard"]
+  - title: "ShinyHunters Defiant After FBI Calls on Members to Come Forward"
+    url: "https://www.securityweek.com/shinyhunters-defiant-after-fbi-calls-on-members-to-come-forward/"
+    source: "SecurityWeek"
+    date: 2026-09-30T10:20:02Z
+    kind: news
+    labels: ["cybercrime", "data leak", "fbi", "government", "shinyhunters"]
+  - title: "China-nexus UAT-11587 targets government and policy organizations across Asia with Antino backdoor"
+    url: "https://blog.talosintelligence.com/china-nexus-uat-11587-targets-government-and-policy-organizations-across-asia-with-antino-backdoor/"
+    source: "Cisco Talos"
+    date: 2026-09-30T10:00:01Z
+    kind: research
+    labels: ["cisco talos dns security", "cisco talos email threat prevention", "cisco talos malware protection", "threat spotlight"]
   - title: "High-Severity Vulnerabilities Patched in OpenSSL, WolfSSL"
     url: "https://www.securityweek.com/high-severity-vulnerabilities-patched-in-openssl-wolfssl/"
     source: "SecurityWeek"
@@ -3825,27 +3854,3 @@ items:
     date: 2026-08-31T12:11:58Z
     kind: news
     labels: ["artificial intelligence", "anthropic", "claude", "malware"]
-  - title: "Critical Ruby on Rails Vulnerability in Attackers’ Crosshairs"
-    url: "https://www.securityweek.com/critical-ruby-on-rails-vulnerability-in-attackers-crosshairs/"
-    source: "SecurityWeek"
-    date: 2026-08-31T11:24:17Z
-    kind: news
-    labels: ["exploited", "ruby on rails", "vulnerabilities"]
-  - title: "ValleyRAT is spreading disguised as adware"
-    url: "https://otx.alienvault.com/pulse/6a9561756240dfd1ccd91f80"
-    source: "AlienVault"
-    date: 2026-08-31T11:11:49Z
-    kind: research
-    labels: ["adware disguise", "backdoor", "china", "dll sideloading", "india", "qn wallpaper", "spyware", "valleyrat"]
-  - title: "An Inside Look at Voice Phishing Campaigns in Microsoft Teams"
-    url: "https://unit42.paloaltonetworks.com/spring-ring-voice-phishing-campaigns/"
-    source: "AlienVault"
-    date: 2026-08-31T11:06:36Z
-    kind: research
-    labels: ["domain controller", "microsoft teams", "ntlm relay", "petitpotam", "powershell rat", "rmm tools", "social engineering", "spring ring", "vishing", "voice phishing"]
-  - title: "Extortion Group Claims Manchester Airports Group Data Breach"
-    url: "https://www.securityweek.com/extortion-group-claims-manchester-airports-group-data-breach/"
-    source: "SecurityWeek"
-    date: 2026-08-31T10:29:10Z
-    kind: news
-    labels: ["airport", "data breaches", "ransomware"]
