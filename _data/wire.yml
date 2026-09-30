@@ -3,7 +3,7 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-30T06:00:48Z
+generated_at: 2026-09-30T08:00:28Z
 window_days: 30
 counts:
   total: 565
@@ -26,7 +26,7 @@ topics:
     count: 35
     color: 5
   - label: "exploited"
-    count: 31
+    count: 30
     color: 6
   - label: "data breaches"
     count: 25
@@ -34,10 +34,10 @@ topics:
   - label: "social engineering"
     count: 19
     color: 8
-  - label: "zero-day"
-    count: 17
-    color: 9
   - label: "clickfix"
+    count: 16
+    color: 9
+  - label: "zero-day"
     count: 16
     color: 10
   - label: "ransomware"
@@ -241,7 +241,7 @@ label_colors:
   "citrix netscaler": 2
   "cleo": 7
   "click2shell": 4
-  "clickfix": 10
+  "clickfix": 9
   "clipboard": 10
   "clipboard poisoning": 6
   "clipper": 3
@@ -429,6 +429,7 @@ label_colors:
   "oauth token theft": 5
   "on the radar": 4
   "openai": 4
+  "openssl": 10
   "oracle": 12
   "oracle peoplesoft": 3
   "orkes": 6
@@ -438,6 +439,7 @@ label_colors:
   "patch tuesady": 5
   "patch tuesday": 11
   "patched": 1
+  "patches": 2
   "payment fraud": 12
   "phishing": 12
   "phishing campaign": 6
@@ -478,8 +480,14 @@ label_colors:
   "vmware": 2
   "vpn": 8
   "vulnerabilities": 1
-  "zero-day": 9
+  "zero-day": 10
 items:
+  - title: "High-Severity Vulnerabilities Patched in OpenSSL, WolfSSL"
+    url: "https://www.securityweek.com/high-severity-vulnerabilities-patched-in-openssl-wolfssl/"
+    source: "SecurityWeek"
+    date: 2026-09-30T06:55:50Z
+    kind: news
+    labels: ["openssl", "patches", "vulnerabilities", "wolfssl"]
   - title: "Phishing Abuses RMM Tools for Persistent Access"
     url: "https://www.microsoft.com/en-us/security/blog/2026/09/29/phishing-abuses-rmm-tools-persistent-access/"
     source: "Microsoft"
@@ -3864,9 +3872,3 @@ items:
     date: 2026-08-31T08:49:36Z
     kind: news
     labels: ["berlin", "data breaches", "ransomware", "rhysida"]
-  - title: "More Details Emerge on Exploited PaperCut Vulnerabilities"
-    url: "https://www.securityweek.com/more-details-emerge-on-exploited-papercut-vulnerabilities/"
-    source: "SecurityWeek"
-    date: 2026-08-31T06:51:31Z
-    kind: news
-    labels: ["exploited", "papercut", "vulnerabilities", "zero-day"]
