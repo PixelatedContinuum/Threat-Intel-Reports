@@ -3,41 +3,41 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-30T12:01:05Z
+generated_at: 2026-09-30T14:01:40Z
 window_days: 30
 counts:
-  total: 563
-  research: 195
-  news: 368
+  total: 564
+  research: 194
+  news: 370
 topics:
   - label: "vulnerabilities"
-    count: 78
+    count: 80
     color: 1
   - label: "cybercrime"
-    count: 64
+    count: 65
     color: 2
   - label: "government"
-    count: 41
+    count: 40
     color: 3
   - label: "artificial intelligence"
-    count: 37
+    count: 36
     color: 4
   - label: "malware"
     count: 35
     color: 5
   - label: "exploited"
-    count: 29
+    count: 30
     color: 6
   - label: "data breaches"
-    count: 23
+    count: 22
     color: 7
   - label: "social engineering"
     count: 18
     color: 8
-  - label: "clickfix"
-    count: 16
-    color: 9
   - label: "zero-day"
+    count: 17
+    color: 9
+  - label: "clickfix"
     count: 16
     color: 10
   - label: "phishing"
@@ -180,7 +180,6 @@ label_colors:
   "browser extension": 11
   "browser extension malware": 6
   "browser proxy": 4
-  "browser theft": 3
   "browser-data-extraction": 5
   "browser-extension": 12
   "browser-hijacking": 7
@@ -240,7 +239,7 @@ label_colors:
   "citrix netscaler": 2
   "cleo": 7
   "click2shell": 4
-  "clickfix": 9
+  "clickfix": 10
   "clipboard": 10
   "clipboard poisoning": 6
   "clipper": 3
@@ -271,7 +270,6 @@ label_colors:
   "cryptocurrency": 12
   "cryptocurrency miner": 1
   "cryptocurrency mining": 6
-  "cryptocurrency stealer": 4
   "cryptocurrency targeting": 5
   "cryptocurrency theft": 3
   "cryptographic": 9
@@ -337,7 +335,6 @@ label_colors:
   "exploit": 9
   "exploited": 6
   "exposure management": 4
-  "extortion": 12
   "extortionware": 11
   "fake captcha": 11
   "fake job interview": 1
@@ -455,7 +452,6 @@ label_colors:
   "screenconnect deployment": 5
   "securing ai": 4
   "security operations": 4
-  "servicenow": 1
   "sharepoint": 11
   "sma1000": 2
   "soc": 9
@@ -474,8 +470,45 @@ label_colors:
   "vmware": 2
   "vpn": 8
   "vulnerabilities": 1
-  "zero-day": 10
+  "watchguard": 2
+  "zero-day": 9
 items:
+  - title: "Microsoft to block Entra ID script injection attacks starting October"
+    url: "https://www.bleepingcomputer.com/news/security/microsoft-to-block-entra-id-script-injection-attacks-starting-october/"
+    source: "BleepingComputer"
+    date: 2026-09-30T13:37:15Z
+    kind: news
+    labels: ["microsoft"]
+  - title: "WatchGuard Patches Critical Fireware OS Code Injection Vulnerability"
+    url: "https://www.securityweek.com/watchguard-patches-critical-fireware-os-code-injection-vulnerability/"
+    source: "SecurityWeek"
+    date: 2026-09-30T13:16:56Z
+    kind: news
+    labels: ["vulnerabilities", "watchguard"]
+  - title: "Government, Finance Orgs Targeted in Weeks-Long NetScaler Zero-Day Attacks"
+    url: "https://www.securityweek.com/government-finance-orgs-targeted-in-weeks-long-netscaler-zero-day-attacks/"
+    source: "SecurityWeek"
+    date: 2026-09-30T12:48:20Z
+    kind: news
+    labels: ["citrix", "exploited", "netscaler", "vulnerabilities", "zero-day"]
+  - title: "TeamViewer urges users to patch severe flaws “as soon as possible”"
+    url: "https://www.bleepingcomputer.com/news/security/teamviewer-urges-users-to-patch-severe-flaws-as-soon-as-possible/"
+    source: "BleepingComputer"
+    date: 2026-09-30T12:25:10Z
+    kind: news
+    labels: []
+  - title: "Chrome, Firefox Updates Patch Over 100 Vulnerabilities"
+    url: "https://www.securityweek.com/chrome-firefox-updates-patch-over-100-vulnerabilities/"
+    source: "SecurityWeek"
+    date: 2026-09-30T12:16:52Z
+    kind: news
+    labels: ["chrome", "firefox", "patches", "vulnerabilities"]
+  - title: "Russian FSB-linked hackers scale up phishing attacks against Ukraine supporters"
+    url: "https://therecord.media/russia-hackers-ukraine-blizzard"
+    source: "Recorded Future"
+    date: 2026-09-30T12:00:00Z
+    kind: news
+    labels: ["cybercrime", "malware", "nation-state"]
   - title: "Anthropic Flags AI Agent Liability Risks as OpenAI Faces Hacking Lawsuit"
     url: "https://www.securityweek.com/anthropic-flags-ai-agent-liability-risks-as-openai-faces-hacking-lawsuit/"
     source: "SecurityWeek"
@@ -3824,33 +3857,3 @@ items:
     date: 2026-08-31T14:32:34Z
     kind: news
     labels: ["chaotic eclipse", "endpoint security", "hardbreacher", "kaspersky", "poc exploit", "security products", "vulnerabilities", "zero-day"]
-  - title: "Breaking the Seal: Static Deobfuscation of JSCeal's Compiled V8 Bytecode"
-    url: "https://otx.alienvault.com/pulse/6a9588f280b90b756f991401"
-    source: "AlienVault"
-    date: 2026-08-31T14:00:18Z
-    kind: research
-    labels: ["browser theft", "cryptocurrency stealer", "deobfuscation", "javascript-obfuscator", "jsceal", "mitm proxy", "node.js", "v8 bytecode"]
-  - title: "ServiceNow Patches 3 Critical Code Injection Vulnerabilities"
-    url: "https://www.securityweek.com/servicenow-patches-3-critical-code-injection-vulnerabilities/"
-    source: "SecurityWeek"
-    date: 2026-08-31T13:59:19Z
-    kind: news
-    labels: ["patched", "servicenow", "vulnerabilities"]
-  - title: "Berlin confirms data theft after Rhysida ransomware attack claims"
-    url: "https://www.bleepingcomputer.com/news/security/berlin-confirms-data-theft-after-rhysida-ransomware-attack-claims/"
-    source: "BleepingComputer"
-    date: 2026-08-31T13:30:01Z
-    kind: news
-    labels: ["government"]
-  - title: "McKesson Confirms Data Breach as Attacker Deadline Looms"
-    url: "https://www.securityweek.com/mckesson-confirms-data-breach-as-attacker-deadline-looms/"
-    source: "SecurityWeek"
-    date: 2026-08-31T13:14:46Z
-    kind: news
-    labels: ["data breaches", "extortion", "healthcare", "mckesson", "shinyhunters"]
-  - title: "Anthropic Warns Claude Users of Infostealer Malware Infections"
-    url: "https://www.securityweek.com/anthropic-warns-claude-users-of-infostealer-malware-infections/"
-    source: "SecurityWeek"
-    date: 2026-08-31T12:11:58Z
-    kind: news
-    labels: ["artificial intelligence", "anthropic", "claude", "malware"]
