@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-30T02:00:08Z
+generated_at: 2026-09-30T04:00:59Z
 window_days: 30
 counts:
-  total: 566
-  research: 199
+  total: 565
+  research: 198
   news: 367
 topics:
   - label: "vulnerabilities"
@@ -3870,9 +3870,3 @@ items:
     date: 2026-08-31T06:51:31Z
     kind: news
     labels: ["exploited", "papercut", "vulnerabilities", "zero-day"]
-  - title: "Agents of Chaos: A New $100K Agentic Security Challenge"
-    url: "https://www.crowdstrike.com/en-us/blog/agents-of-chaos-immersive-ai-security-challenge/"
-    source: "Crowdstrike"
-    date: 2026-08-31T04:00:00Z
-    kind: research
-    labels: ["securing ai"]
