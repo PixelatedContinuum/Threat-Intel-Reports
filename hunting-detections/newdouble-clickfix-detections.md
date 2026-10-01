@@ -493,7 +493,7 @@ All five signatures are Hunting and use the local sids 1000001 to 1000005, which
 **Deployment:** Egress HTTP inspection, or TLS-terminating proxy logs replayed through the engine; hunting only.
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT newdouble-ClickFix Panel Import POST With X-Vac-Secret Header (Steam Account Data Upload)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/api/mafile/import"; startswith; http.header; content:"X-Vac-Secret|3a|"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000005; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-28, reference https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT newdouble-ClickFix Panel Import POST With X-Vac-Secret Header (Steam Account Data Upload)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/api/mafile/import"; startswith; http.header; content:"X-Vac-Secret|3a|"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:1000005; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)
 ```
 
 #### First-Stage Script Fetch (y.ps1 URI Path)
@@ -508,7 +508,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT newdouble-ClickFix 
 **Deployment:** Egress HTTP inspection; hunting only.
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT newdouble-ClickFix First-Stage Script Fetch (y.ps1 URI Path)"; flow:established,to_server; http.method; content:"GET"; http.uri; content:"/y/y.ps1"; endswith; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000001; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-28, reference https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT newdouble-ClickFix First-Stage Script Fetch (y.ps1 URI Path)"; flow:established,to_server; http.method; content:"GET"; http.uri; content:"/y/y.ps1"; endswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:1000001; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)
 ```
 
 #### Second-Stage Executable Fetch (x.exe URI Path to Delivery Host)
@@ -523,7 +523,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT newdouble-ClickFix 
 **Deployment:** Egress HTTP inspection; hunting only.
 
 ```
-alert http $HOME_NET any -> 202.71.14.31 any (msg:"THL HUNT newdouble-ClickFix Second-Stage Executable Fetch (x.exe URI Path to Delivery Host)"; flow:established,to_server; http.method; content:"GET"; http.uri; content:"/x/x.exe"; endswith; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000002; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-28, reference https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/;)
+alert http $HOME_NET any -> 202.71.14.31 any (msg:"THL HUNT newdouble-ClickFix Second-Stage Executable Fetch (x.exe URI Path to Delivery Host)"; flow:established,to_server; http.method; content:"GET"; http.uri; content:"/x/x.exe"; endswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:1000002; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)
 ```
 
 #### Lure Domain DNS Query (Fake Verification Page)
@@ -538,7 +538,7 @@ alert http $HOME_NET any -> 202.71.14.31 any (msg:"THL HUNT newdouble-ClickFix S
 **Deployment:** DNS inspection or resolver logs replayed through the engine; hunting only.
 
 ```
-alert dns $HOME_NET any -> any any (msg:"THL HUNT newdouble-ClickFix Lure Domain DNS Query (Fake Verification Page)"; dns.query; content:"newdouble"; nocase; content:"authentification.com"; nocase; distance:0; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000003; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-28, reference https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/;)
+alert dns $HOME_NET any -> any any (msg:"THL HUNT newdouble-ClickFix Lure Domain DNS Query (Fake Verification Page)"; dns.query; content:"newdouble"; nocase; content:"authentification.com"; nocase; distance:0; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:1000003; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)
 ```
 
 #### Lure Domain TLS SNI (Fake Verification Page)
@@ -553,7 +553,7 @@ alert dns $HOME_NET any -> any any (msg:"THL HUNT newdouble-ClickFix Lure Domain
 **Deployment:** TLS inspection; hunting only.
 
 ```
-alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT newdouble-ClickFix Lure Domain TLS SNI (Fake Verification Page)"; flow:established,to_server; tls.sni; content:"newdouble"; nocase; content:"authentification.com"; nocase; distance:0; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000004; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-28, reference https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/;)
+alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT newdouble-ClickFix Lure Domain TLS SNI (Fake Verification Page)"; flow:established,to_server; tls.sni; content:"newdouble"; nocase; content:"authentification.com"; nocase; distance:0; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:1000004; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)
 ```
 
 ---

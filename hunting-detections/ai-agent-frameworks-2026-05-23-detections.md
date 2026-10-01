@@ -1162,7 +1162,7 @@ level: low
 **Deployment:** Network IDS/IPS on server-segment egress, HTTP-capable IDS with header inspection.
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT AI-Agent-Campaign Russian A2A C2 X-Agent-Id Header + API Endpoint (Case 1 C2 Protocol Indicator)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/api/v1/"; http.header_names; content:"X-Agent-Id"; nocase; classtype:trojan-activity; threshold:type limit,track by_src,count 3,seconds 3600; sid:9200007; rev:1; metadata:author The_Hunters_Ledger, date 2026-05-25, reference https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT AI-Agent-Campaign Russian A2A C2 X-Agent-Id Header + API Endpoint (Case 1 C2 Protocol Indicator)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/api/v1/"; http.header_names; content:"X-Agent-Id"; nocase; reference:url,the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/; classtype:trojan-activity; threshold:type limit,track by_src,count 3,seconds 3600; sid:9200007; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-25;)
 ```
 
 ### Hunting Rules
@@ -1180,7 +1180,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT AI-Agent-Campaign
 **Deployment:** Network IDS/IPS on server-segment egress, DNS monitoring.
 
 ```
-alert dns $HOME_NET any -> any any (msg:"THL HUNT AI-Agent-Campaign trycloudflare.com Quick-Tunnel DNS Query from Server Host (C2 Transport Indicator)"; dns_query; content:"trycloudflare.com"; nocase; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:9200000; rev:1; metadata:author The_Hunters_Ledger, date 2026-05-25, reference https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/;)
+alert dns $HOME_NET any -> any any (msg:"THL HUNT AI-Agent-Campaign trycloudflare.com Quick-Tunnel DNS Query from Server Host (C2 Transport Indicator)"; dns_query; content:"trycloudflare.com"; nocase; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/; classtype:trojan-activity; sid:9200000; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-25;)
 ```
 
 **GHOST Kit + libpam_cache Rootkit (Case 9)**
@@ -1196,7 +1196,7 @@ alert dns $HOME_NET any -> any any (msg:"THL HUNT AI-Agent-Campaign trycloudflar
 **Deployment:** Network IDS/IPS, DNS monitoring, threat hunting on all server-class hosts.
 
 ```
-alert dns $HOME_NET any -> any any (msg:"THL HUNT AI-Agent-Campaign Kryptex Mining Pool DNS Query — GHOST Cryptojacker Kit Pool (cfx.kryptex.network / etc.kryptex.network)"; dns_query; content:"kryptex.network"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:9200001; rev:1; metadata:author The_Hunters_Ledger, date 2026-05-25, reference https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/;)
+alert dns $HOME_NET any -> any any (msg:"THL HUNT AI-Agent-Campaign Kryptex Mining Pool DNS Query — GHOST Cryptojacker Kit Pool (cfx.kryptex.network / etc.kryptex.network)"; dns_query; content:"kryptex.network"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/; classtype:trojan-activity; sid:9200001; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-25;)
 ```
 
 #### Generic Cryptojacker Mining Pool DNS Pattern (c3pool / nanopool / moneroocean / hashvault)
@@ -1210,10 +1210,10 @@ alert dns $HOME_NET any -> any any (msg:"THL HUNT AI-Agent-Campaign Kryptex Mini
 **Deployment:** Network IDS/IPS perimeter monitoring, DNS monitoring.
 
 ```
-alert dns $HOME_NET any -> any any (msg:"THL HUNT AI-Agent-Campaign c3pool.org Mining Pool DNS Query (Cryptojacker Activity)"; dns_query; content:"c3pool.org"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:9200002; rev:1; metadata:author The_Hunters_Ledger, date 2026-05-25, reference https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/;)
-alert dns $HOME_NET any -> any any (msg:"THL HUNT AI-Agent-Campaign nanopool.org Mining Pool DNS Query (Cryptojacker Activity)"; dns_query; content:"nanopool.org"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:9200003; rev:1; metadata:author The_Hunters_Ledger, date 2026-05-25, reference https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/;)
-alert dns $HOME_NET any -> any any (msg:"THL HUNT AI-Agent-Campaign moneroocean.stream Mining Pool DNS Query (Cryptojacker Activity)"; dns_query; content:"moneroocean.stream"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:9200004; rev:1; metadata:author The_Hunters_Ledger, date 2026-05-25, reference https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/;)
-alert dns $HOME_NET any -> any any (msg:"THL HUNT AI-Agent-Campaign hashvault.pro Mining Pool DNS Query (Cryptojacker Activity)"; dns_query; content:"hashvault.pro"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:9200005; rev:1; metadata:author The_Hunters_Ledger, date 2026-05-25, reference https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/;)
+alert dns $HOME_NET any -> any any (msg:"THL HUNT AI-Agent-Campaign c3pool.org Mining Pool DNS Query (Cryptojacker Activity)"; dns_query; content:"c3pool.org"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/; classtype:trojan-activity; sid:9200002; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-25;)
+alert dns $HOME_NET any -> any any (msg:"THL HUNT AI-Agent-Campaign nanopool.org Mining Pool DNS Query (Cryptojacker Activity)"; dns_query; content:"nanopool.org"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/; classtype:trojan-activity; sid:9200003; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-25;)
+alert dns $HOME_NET any -> any any (msg:"THL HUNT AI-Agent-Campaign moneroocean.stream Mining Pool DNS Query (Cryptojacker Activity)"; dns_query; content:"moneroocean.stream"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/; classtype:trojan-activity; sid:9200004; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-25;)
+alert dns $HOME_NET any -> any any (msg:"THL HUNT AI-Agent-Campaign hashvault.pro Mining Pool DNS Query (Cryptojacker Activity)"; dns_query; content:"hashvault.pro"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/; classtype:trojan-activity; sid:9200005; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-25;)
 ```
 
 #### Hysteria v2 QUIC bing.com SNI Masquerade Detection (Case 9)
@@ -1239,7 +1239,7 @@ Coverage cost, stated plainly: a Hysteria masquerade on any other port is now mi
 Until that is resolved against a live capture, a promotion would rest on a paper clearance: no Hysteria connection was ever observed to validate the rule against, and the masquerade domain is separately acknowledged above as trivially changed. Hunting is the honest tier for a rule that has never fired on the thing it detects.
 
 ```
-alert quic $HOME_NET any -> any [14433,14444] (msg:"THL HUNT AI-Agent-Campaign Hysteria v2 QUIC bing.com SNI Masquerade on GHOST Kit Operator Ports"; flow:to_server; quic.sni; content:"bing.com"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:9200006; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-25, modified 2026-08-20, reference https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/;)
+alert quic $HOME_NET any -> any [14433,14444] (msg:"THL HUNT AI-Agent-Campaign Hysteria v2 QUIC bing.com SNI Masquerade on GHOST Kit Operator Ports"; flow:to_server; quic.sni; content:"bing.com"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/; classtype:trojan-activity; sid:9200006; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-25, modified 2026-08-20;)
 ```
 
 ---

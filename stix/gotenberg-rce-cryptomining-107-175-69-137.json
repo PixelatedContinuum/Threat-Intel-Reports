@@ -1,13 +1,13 @@
 {
     "type": "bundle",
-    "id": "bundle--b8c490bc-5895-4556-b5d4-a81b4d5a66cd",
+    "id": "bundle--4ff1c50f-2121-423d-a619-d1601a26a2d3",
     "objects": [
         {
             "type": "identity",
             "spec_version": "2.1",
             "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-22T17:51:17.325637Z",
-            "modified": "2026-09-22T17:51:17.325637Z",
+            "created": "2026-10-01T19:54:14.346318Z",
+            "modified": "2026-10-01T19:54:14.346318Z",
             "name": "The Hunters Ledger",
             "identity_class": "organization"
         },
@@ -51,8 +51,8 @@
             "spec_version": "2.1",
             "id": "indicator--06bf1ad1-12f3-5810-bd37-8b124eacb736",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-22T17:51:17.333748Z",
-            "modified": "2026-09-22T17:51:17.333748Z",
+            "created": "2026-10-01T19:54:14.353771Z",
+            "modified": "2026-10-01T19:54:14.353771Z",
             "name": "Gotenberg ExifTool Metadata Key CVE-2026-42589 Injection Attempt",
             "indicator_types": [
                 "malicious-activity"
@@ -72,8 +72,8 @@
             "spec_version": "2.1",
             "id": "indicator--d0181a1f-58f6-5f9e-b5da-3d5fa4b55242",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-22T17:51:17.334142Z",
-            "modified": "2026-09-22T17:51:17.334142Z",
+            "created": "2026-10-01T19:54:14.354195Z",
+            "modified": "2026-10-01T19:54:14.354195Z",
             "name": "ExifTool Invoked With Condition Option Executing Shell Commands",
             "indicator_types": [
                 "malicious-activity"
@@ -93,8 +93,8 @@
             "spec_version": "2.1",
             "id": "indicator--fa2b66da-d7d0-53c7-9405-2c8d049d727f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-22T17:51:17.334251Z",
-            "modified": "2026-09-22T17:51:17.334251Z",
+            "created": "2026-10-01T19:54:14.3543Z",
+            "modified": "2026-10-01T19:54:14.3543Z",
             "name": "Polkitd Daemon Executed From a Non-Standard Directory",
             "indicator_types": [
                 "malicious-activity"
@@ -114,8 +114,8 @@
             "spec_version": "2.1",
             "id": "indicator--97433269-12d2-51f3-8cf1-f02a8f674645",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-22T17:51:17.334409Z",
-            "modified": "2026-09-22T17:51:17.334409Z",
+            "created": "2026-10-01T19:54:14.354392Z",
+            "modified": "2026-10-01T19:54:14.354392Z",
             "name": "Shell Spawned by Systemd Executes Binary After Path Export and Directory Change",
             "indicator_types": [
                 "malicious-activity"
@@ -135,8 +135,8 @@
             "spec_version": "2.1",
             "id": "indicator--9d3ad059-a4b3-556b-af7d-a9ef43d0daa2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-22T17:51:17.334511Z",
-            "modified": "2026-09-22T17:51:17.334511Z",
+            "created": "2026-10-01T19:54:14.354476Z",
+            "modified": "2026-10-01T19:54:14.354476Z",
             "name": "Gotenberg Metadata-Write Endpoint Anomalous Latency (Possible CVE-2026-42589)",
             "indicator_types": [
                 "malicious-activity"
@@ -156,8 +156,8 @@
             "spec_version": "2.1",
             "id": "indicator--6a84f31c-0425-55ed-9fbe-5f4b1fae9dc8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-22T17:51:17.334632Z",
-            "modified": "2026-09-22T17:51:17.334632Z",
+            "created": "2026-10-01T19:54:14.354557Z",
+            "modified": "2026-10-01T19:54:14.354557Z",
             "name": "Pkill Kill Sweep Against Rival Cryptominer Process Names",
             "indicator_types": [
                 "malicious-activity"
@@ -177,8 +177,8 @@
             "spec_version": "2.1",
             "id": "indicator--e59b934f-3a35-5d4f-8583-3b8cf7ee2f5f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-22T17:51:17.334718Z",
-            "modified": "2026-09-22T17:51:17.334718Z",
+            "created": "2026-10-01T19:54:14.354639Z",
+            "modified": "2026-10-01T19:54:14.354639Z",
             "name": "Base64 Decoded Script Written to Tmp and Executed by Bash",
             "indicator_types": [
                 "malicious-activity"
@@ -198,13 +198,13 @@
             "spec_version": "2.1",
             "id": "indicator--7a1a6e25-5b45-5586-8dc7-39fa68b23ee9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-22T17:51:17.3348Z",
-            "modified": "2026-09-22T17:51:17.3348Z",
+            "created": "2026-10-01T19:54:14.354716Z",
+            "modified": "2026-10-01T19:54:14.354716Z",
             "name": "THL DETECT Gotenberg-RCE ExifTool Metadata Key Injection Attempt (CVE-2026-42589 Exploitation Indicator)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "# LOAD-BEARING: the bytes |5c 6e| in the content match below appear twice ON PURPOSE. They are\n# the JSON-escaped form of the injected newlines. The metadata field travels as JSON, so the\n# newline leaves the socket as the two ASCII bytes backslash (0x5c) and n (0x6e). Gotenberg\n# un-escapes it only server-side, after any sensor has seen the packet. Do NOT \"correct\" these\n# bytes to a raw 0x0a newline or to a PCRE newline escape: a rule keyed on a raw newline parses\n# cleanly and NEVER fires on real traffic (confirmed against captured traffic).\nalert http any any -> any any (msg:\"THL DETECT Gotenberg-RCE ExifTool Metadata Key Injection Attempt (CVE-2026-42589 Exploitation Indicator)\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"/forms/pdfengines/metadata/write\"; http.request_body; content:\"|5c 6e 2d 69 66 5c 6e 73 79 73 74 65 6d 28|\"; fast_pattern; reference:cve,2026-42589; classtype:attempted-admin; sid:1000001; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-16, reference https://the-hunters-ledger.com/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/;)",
+            "pattern": "# LOAD-BEARING: the bytes |5c 6e| in the content match below appear twice ON PURPOSE. They are\n# the JSON-escaped form of the injected newlines. The metadata field travels as JSON, so the\n# newline leaves the socket as the two ASCII bytes backslash (0x5c) and n (0x6e). Gotenberg\n# un-escapes it only server-side, after any sensor has seen the packet. Do NOT \"correct\" these\n# bytes to a raw 0x0a newline or to a PCRE newline escape: a rule keyed on a raw newline parses\n# cleanly and NEVER fires on real traffic (confirmed against captured traffic).\nalert http any any -> any any (msg:\"THL DETECT Gotenberg-RCE ExifTool Metadata Key Injection Attempt (CVE-2026-42589 Exploitation Indicator)\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"/forms/pdfengines/metadata/write\"; http.request_body; content:\"|5c 6e 2d 69 66 5c 6e 73 79 73 74 65 6d 28|\"; fast_pattern; reference:cve,2026-42589; reference:url,the-hunters-ledger.com/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/; classtype:attempted-admin; sid:1000001; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-16;)",
             "pattern_type": "suricata",
             "valid_from": "2026-09-16T00:00:00Z",
             "labels": [
@@ -219,13 +219,13 @@
             "spec_version": "2.1",
             "id": "indicator--8a2af963-ddc8-57d1-88ba-1ae28ab4809f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-22T17:51:17.334889Z",
-            "modified": "2026-09-22T17:51:17.334889Z",
+            "created": "2026-10-01T19:54:14.354793Z",
+            "modified": "2026-10-01T19:54:14.354793Z",
             "name": "THL HUNT Gotenberg-RCE Tagged Out-of-Band Callback URI Shape (C2 Beacon Indicator)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> any any (msg:\"THL HUNT Gotenberg-RCE Tagged Out-of-Band Callback URI Shape (C2 Beacon Indicator)\"; flow:established,to_server; http.uri; content:\"_\"; pcre:\"/^\\/(?:[TWCN]\\d+|PPROBE\\d+)_[^\\/\\s]+_\\d+\\/?$/\"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:command-and-control; sid:1000002; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-16, reference https://the-hunters-ledger.com/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/;)",
+            "pattern": "alert http $HOME_NET any -> any any (msg:\"THL HUNT Gotenberg-RCE Tagged Out-of-Band Callback URI Shape (C2 Beacon Indicator)\"; flow:established,to_server; http.uri; content:\"_\"; pcre:\"/^\\/(?:[TWCN]\\d+|PPROBE\\d+)_[^\\/\\s]+_\\d+\\/?$/\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/; classtype:command-and-control; sid:1000002; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-16;)",
             "pattern_type": "suricata",
             "valid_from": "2026-09-16T00:00:00Z",
             "labels": [
@@ -240,13 +240,13 @@
             "spec_version": "2.1",
             "id": "indicator--5d2d1e23-9a0e-58e7-94ad-fe7ea6323b5b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-22T17:51:17.334972Z",
-            "modified": "2026-09-22T17:51:17.334972Z",
+            "created": "2026-10-01T19:54:14.354877Z",
+            "modified": "2026-10-01T19:54:14.354877Z",
             "name": "THL HUNT Gotenberg-RCE Miner Deploy Verdict Body MINER_OK (OOB Deploy-Callback Indicator)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> any any (msg:\"THL HUNT Gotenberg-RCE Miner Deploy Verdict Body MINER_OK (OOB Deploy-Callback Indicator)\"; flow:established,to_server; http.request_body; content:\"MINER_OK\"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:command-and-control; sid:1000003; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-16, reference https://the-hunters-ledger.com/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/;)",
+            "pattern": "alert http $HOME_NET any -> any any (msg:\"THL HUNT Gotenberg-RCE Miner Deploy Verdict Body MINER_OK (OOB Deploy-Callback Indicator)\"; flow:established,to_server; http.request_body; content:\"MINER_OK\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/; classtype:command-and-control; sid:1000003; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-16;)",
             "pattern_type": "suricata",
             "valid_from": "2026-09-16T00:00:00Z",
             "labels": [
@@ -261,13 +261,13 @@
             "spec_version": "2.1",
             "id": "indicator--d859d8a8-fb72-59d0-902c-05b0b9043e5c",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-22T17:51:17.335071Z",
-            "modified": "2026-09-22T17:51:17.335071Z",
+            "created": "2026-10-01T19:54:14.354954Z",
+            "modified": "2026-10-01T19:54:14.354954Z",
             "name": "THL HUNT Gotenberg-RCE Command Output Body Markers START END (OOB Command-Output Indicator)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> any any (msg:\"THL HUNT Gotenberg-RCE Command Output Body Markers START END (OOB Command-Output Indicator)\"; flow:established,to_server; http.request_body; content:\"===START===\"; content:\"===END===\"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:command-and-control; sid:1000004; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-16, reference https://the-hunters-ledger.com/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/;)",
+            "pattern": "alert http $HOME_NET any -> any any (msg:\"THL HUNT Gotenberg-RCE Command Output Body Markers START END (OOB Command-Output Indicator)\"; flow:established,to_server; http.request_body; content:\"===START===\"; content:\"===END===\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/; classtype:command-and-control; sid:1000004; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-16;)",
             "pattern_type": "suricata",
             "valid_from": "2026-09-16T00:00:00Z",
             "labels": [
@@ -282,8 +282,8 @@
             "spec_version": "2.1",
             "id": "vulnerability--1924e2cd-20fd-5cba-b961-d79effa669fe",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-22T17:51:17.335462Z",
-            "modified": "2026-09-22T17:51:17.335462Z",
+            "created": "2026-10-01T19:54:14.355185Z",
+            "modified": "2026-10-01T19:54:14.355185Z",
             "name": "CVE-2026-40281",
             "external_references": [
                 {
@@ -301,8 +301,8 @@
             "spec_version": "2.1",
             "id": "vulnerability--a6c33c6c-c120-5cd2-a8af-226c473b54df",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-22T17:51:17.335649Z",
-            "modified": "2026-09-22T17:51:17.335649Z",
+            "created": "2026-10-01T19:54:14.355306Z",
+            "modified": "2026-10-01T19:54:14.355306Z",
             "name": "CVE-2026-42589",
             "external_references": [
                 {
@@ -320,8 +320,8 @@
             "spec_version": "2.1",
             "id": "report--7963499f-e9ec-5e0b-848a-8473bdffa3d2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-22T17:51:17.335796Z",
-            "modified": "2026-09-22T17:51:17.335796Z",
+            "created": "2026-10-01T19:54:14.355435Z",
+            "modified": "2026-10-01T19:54:14.355435Z",
             "name": "Gotenberg CVE-2026-42589 Mass Exploitation and Cryptomining",
             "report_types": [
                 "threat-report"

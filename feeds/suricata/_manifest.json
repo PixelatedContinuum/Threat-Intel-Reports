@@ -1,8 +1,8 @@
 {
   "sid_base": 3500000,
-  "sid_last": 3500201,
+  "sid_last": 3500211,
   "sid_alloc_range": "3500000-3509999",
-  "total_rules": 112,
+  "total_rules": 122,
   "quarantined": 0,
   "lint_dropped": 0,
   "new_sid_assignments": 0,
@@ -56,11 +56,15 @@
     },
     {
       "slug": "ghost-cryptojacker-vova75rus-77.110.96.200",
-      "rules": 3
+      "rules": 4
     },
     {
       "slug": "gocloud-multiservice-cryptojacking-149-28-112-221",
       "rules": 5
+    },
+    {
+      "slug": "gotenberg-rce-cryptomining-107-175-69-137",
+      "rules": 4
     },
     {
       "slug": "inkognito-russian-vpn-phishing-185-221-196-118-20260516",
@@ -76,6 +80,10 @@
     },
     {
       "slug": "new-files-found-20260408",
+      "rules": 5
+    },
+    {
+      "slug": "newdouble-clickfix",
       "rules": 5
     },
     {

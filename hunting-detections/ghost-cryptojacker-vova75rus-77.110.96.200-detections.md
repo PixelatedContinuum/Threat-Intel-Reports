@@ -1098,7 +1098,7 @@ level: medium
 **Deployment:** Network IDS/IPS at perimeter, HTTP proxy inspection.
 
 ```suricata
-alert http $HOME_NET any -> 77.110.0.0/16 any (msg:"THL DETECT GHOST Cryptojacker Kit Distribution File Download from AEZA Hosting Range"; flow:established,to_server; http.uri; pcre:"/\/(libpam_cache\.so|ghost\.sh|hyst\.sh|min1\.sh|libpam_cache\.c)$/"; classtype:trojan-activity; sid:9100104; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-25, reference https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/, tag Dropper, tag GHOST_kit;)
+alert http $HOME_NET any -> 77.110.0.0/16 any (msg:"THL DETECT GHOST Cryptojacker Kit Distribution File Download from AEZA Hosting Range"; flow:established,to_server; http.uri; pcre:"/\/(libpam_cache\.so|ghost\.sh|hyst\.sh|min1\.sh|libpam_cache\.c)$/"; reference:url,the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/; classtype:trojan-activity; sid:9100104; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-25, tag Dropper, tag GHOST_kit;)
 ```
 
 ### Hunting Rules
@@ -1144,7 +1144,7 @@ Historical measurement against the 140 historical alerts: the alert records carr
 The rule remains Hunting, Robustness 2. It is now specific to QUIC-shaped traffic to the operator's ports and no longer fires on non-QUIC traffic that happens to land in the range.
 
 ```suricata
-alert udp $HOME_NET any -> $EXTERNAL_NET 14433:14444 (msg:"THL HUNT GHOST Cryptojacker Kit Hysteria v2 QUIC Initial on Operator Ports (Hunt Lead, Corroborate Before Escalating)"; dsize:>=1200; byte_test:1,=,0xC,0,bitmask 0xF0; content:"|00 00 00 01|"; offset:1; depth:4; threshold:type limit,track by_src,count 1,seconds 3600; classtype:policy-violation; sid:9100103; rev:4; metadata:author The_Hunters_Ledger, date 2026-05-25, modified 2026-09-30, reference https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/, signature_severity Minor, tag Backdoor, tag GHOST_kit, tag Hysteria_v2;)
+alert udp $HOME_NET any -> $EXTERNAL_NET 14433:14444 (msg:"THL HUNT GHOST Cryptojacker Kit Hysteria v2 QUIC Initial on Operator Ports (Hunt Lead, Corroborate Before Escalating)"; dsize:>=1200; byte_test:1,=,0xC,0,bitmask 0xF0; content:"|00 00 00 01|"; offset:1; depth:4; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/; classtype:policy-violation; sid:9100103; rev:5; metadata:author The_Hunters_Ledger, date 2026-05-25, modified 2026-09-30, signature_severity Minor, tag Backdoor, tag GHOST_kit, tag Hysteria_v2;)
 ```
 
 #### GHOST Cryptojacker Kit Hysteria v2 QUIC Backdoor Inbound: Victim-Hosted Listener Ports
@@ -1160,7 +1160,7 @@ alert udp $HOME_NET any -> $EXTERNAL_NET 14433:14444 (msg:"THL HUNT GHOST Crypto
 **Deployment:** Network IDS/IPS at the perimeter, monitoring inbound traffic to servers that have no reason to accept UDP on these ports; hunt-tune before alerting, and corroborate with the AEZA-range Detection rule and the egress rule above before escalating. Confirm `EXTERNAL_NET` is defined as `!$HOME_NET` on your sensor rather than the literal `any`.
 
 ```suricata
-alert udp $EXTERNAL_NET any -> $HOME_NET 14433:14444 (msg:"THL HUNT GHOST Cryptojacker Kit Hysteria v2 QUIC Initial Inbound to Victim-Hosted Listener Ports (Hunt Lead, Corroborate Before Escalating)"; dsize:>=1200; byte_test:1,=,0xC,0,bitmask 0xF0; content:"|00 00 00 01|"; offset:1; depth:4; threshold:type limit,track by_dst,count 1,seconds 3600; classtype:policy-violation; sid:9100109; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-30, reference https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/, signature_severity Minor, tag Backdoor, tag GHOST_kit, tag Hysteria_v2;)
+alert udp $EXTERNAL_NET any -> $HOME_NET 14433:14444 (msg:"THL HUNT GHOST Cryptojacker Kit Hysteria v2 QUIC Initial Inbound to Victim-Hosted Listener Ports (Hunt Lead, Corroborate Before Escalating)"; dsize:>=1200; byte_test:1,=,0xC,0,bitmask 0xF0; content:"|00 00 00 01|"; offset:1; depth:4; threshold:type limit,track by_dst,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/; classtype:policy-violation; sid:9100109; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-30, signature_severity Minor, tag Backdoor, tag GHOST_kit, tag Hysteria_v2;)
 ```
 
 #### GHOST Cryptojacker Kit Telegram API Egress from Production Server: Covert Mining Report
@@ -1174,7 +1174,7 @@ alert udp $EXTERNAL_NET any -> $HOME_NET 14433:14444 (msg:"THL HUNT GHOST Crypto
 **Deployment:** TLS-decryption-capable inline IDS/IPS or proxy with DLP inspection for genuine bot-token-level specificity; this SNI-only fallback should be scoped to production server IP ranges with no expected Telegram use and treated as a hunting lead, not an alert.
 
 ```suricata
-alert tls $HOME_NET any -> any any (msg:"THL HUNT GHOST Cryptojacker Kit Telegram API Egress from Production Server - Covert Mining Report"; tls.sni; content:"api.telegram.org"; endswith; nocase; threshold:type threshold,track by_src,count 5,seconds 300; classtype:policy-violation; sid:9100108; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-25, reference https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/, tag GHOST_kit, tag Telegram_reporting;)
+alert tls $HOME_NET any -> any any (msg:"THL HUNT GHOST Cryptojacker Kit Telegram API Egress from Production Server - Covert Mining Report"; tls.sni; content:"api.telegram.org"; endswith; nocase; threshold:type threshold,track by_src,count 5,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/; classtype:policy-violation; sid:9100108; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-25, tag GHOST_kit, tag Telegram_reporting;)
 ```
 
 ---

@@ -451,7 +451,7 @@ level: medium
 **Deployment:** Network IDS/IPS on egress and internal segments. Treat hits as a strong lead requiring packet capture review to confirm wire format.
 
 ```
-alert tcp $HOME_NET any -> any any (msg:"THL HUNT XWormV2-109.230.231.37 AgentSec Authentication Secret Pattern in TCP Payload (Unconfirmed Wire Encoding)"; flow:established,to_server; content:"AgentSec_"; nocase; pcre:"/AgentSec_[0-9A-Za-z]{40,50}/i"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000023; rev:1; metadata:author The_Hunters_Ledger, date 2026-01-12, reference https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/;)
+alert tcp $HOME_NET any -> any any (msg:"THL HUNT XWormV2-109.230.231.37 AgentSec Authentication Secret Pattern in TCP Payload (Unconfirmed Wire Encoding)"; flow:established,to_server; content:"AgentSec_"; nocase; pcre:"/AgentSec_[0-9A-Za-z]{40,50}/i"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/; classtype:trojan-activity; sid:1000023; rev:2; metadata:author The_Hunters_Ledger, date 2026-01-12;)
 ```
 
 ---

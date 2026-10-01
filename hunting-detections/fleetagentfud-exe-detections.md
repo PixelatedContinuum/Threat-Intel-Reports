@@ -700,7 +700,7 @@ tags:
 **Deployment:** Network IDS/IPS on egress with HTTP header inspection enabled (TLS decryption required for `wss://` sessions).
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT FleetAgentFUD X-Agent-Secret WebSocket Authentication Header (Custom C2 Protocol Indicator)"; flow:established,to_server; http.header_names; content:"X-Agent-Secret"; classtype:trojan-activity; sid:2100022; rev:1; metadata:author The_Hunters_Ledger, date 2026-01-12, reference https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT FleetAgentFUD X-Agent-Secret WebSocket Authentication Header (Custom C2 Protocol Indicator)"; flow:established,to_server; http.header_names; content:"X-Agent-Secret"; reference:url,the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/; classtype:trojan-activity; sid:2100022; rev:2; metadata:author The_Hunters_Ledger, date 2026-01-12;)
 ```
 
 ### Hunting Rules
@@ -716,7 +716,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT FleetAgentFUD X-A
 **Deployment:** Network IDS/IPS on egress with HTTP inspection enabled; treat hits as a scoping lead pending goodware-corpus validation.
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT FleetAgentFUD Default .NET WebClient User-Agent + WebSocket Upgrade (Custom C2 Client Indicator)"; flow:established,to_server; http.user_agent; content:"Mozilla/4.0 (compatible|3b| MSIE 6.0|3b| Windows NT 5.2|3b| .NET CLR"; http.header; content:"Connection|3a 20|Upgrade"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:2100023; rev:1; metadata:author The_Hunters_Ledger, date 2026-01-12, reference https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT FleetAgentFUD Default .NET WebClient User-Agent + WebSocket Upgrade (Custom C2 Client Indicator)"; flow:established,to_server; http.user_agent; content:"Mozilla/4.0 (compatible|3b| MSIE 6.0|3b| Windows NT 5.2|3b| .NET CLR"; http.header; content:"Connection|3a 20|Upgrade"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/; classtype:trojan-activity; sid:2100023; rev:2; metadata:author The_Hunters_Ledger, date 2026-01-12;)
 ```
 
 ---

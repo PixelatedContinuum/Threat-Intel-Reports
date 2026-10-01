@@ -27,6 +27,23 @@ reasoned.
 
 ---
 
+## 2026-10-01: report link moved from metadata to a reference keyword on 119 rules
+
+**Rules:** 119 of the feed's 122 rules, revision number raised by one on each. **Feed:** 122
+rules, unchanged (no SID renumbered, added or withdrawn)
+
+Until now I wrote each rule's report link inside the `metadata` option, as
+`reference https://the-hunters-ledger.com/...`. That is a metadata key and value, not a Suricata
+reference, so tools that read the `reference` keyword never saw it. Each rule now carries a real
+`reference:url,the-hunters-ledger.com/...;` keyword (Suricata's default `reference.config`
+supplies the `http://` prefix), and `metadata` holds only the author and date.
+
+**Nothing about what a rule matches changed**, so past alerts from these SIDs keep the meaning
+they had. Only the revision number moved, which is what `suricata-update` uses to pick up the
+new text. The other 3 rules already used the keyword and are untouched.
+
+---
+
 ## 2026-09-09 — SIDs 3500103 and 3500104 moved Detection to Hunting
 
 **Rules:** `THL ShinyHunters DLS - HTTP Host Header shinyhunte.rs` (SID 3500103, vault SID

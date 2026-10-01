@@ -1,13 +1,13 @@
 {
     "type": "bundle",
-    "id": "bundle--d33c4ffb-f610-4588-9d98-926e42e478e1",
+    "id": "bundle--17c9c42a-4c1b-4cc8-8870-29eb11c4c339",
     "objects": [
         {
             "type": "identity",
             "spec_version": "2.1",
             "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-29T18:28:47.618826Z",
-            "modified": "2026-09-29T18:28:47.618826Z",
+            "created": "2026-10-01T19:54:15.410048Z",
+            "modified": "2026-10-01T19:54:15.410048Z",
             "name": "The Hunters Ledger",
             "identity_class": "organization"
         },
@@ -79,8 +79,8 @@
             "spec_version": "2.1",
             "id": "indicator--e215c6ab-8a89-589c-8392-df91bb08557b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-29T18:28:47.625714Z",
-            "modified": "2026-09-29T18:28:47.625714Z",
+            "created": "2026-10-01T19:54:15.416959Z",
+            "modified": "2026-10-01T19:54:15.416959Z",
             "name": "Newdouble_ClickFix_SteamCDP_Loader_Strings",
             "indicator_types": [
                 "malicious-activity"
@@ -100,8 +100,8 @@
             "spec_version": "2.1",
             "id": "indicator--55a48c1f-b093-5b7c-a1ee-3b5b8caaea01",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-29T18:28:47.626086Z",
-            "modified": "2026-09-29T18:28:47.626086Z",
+            "created": "2026-10-01T19:54:15.417329Z",
+            "modified": "2026-10-01T19:54:15.417329Z",
             "name": "Newdouble_ClickFix_Berserk_Embedded_DLL_PDB_Hooks",
             "indicator_types": [
                 "malicious-activity"
@@ -121,8 +121,8 @@
             "spec_version": "2.1",
             "id": "indicator--24e9b4a5-1256-52ce-8516-0a887229bd26",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-29T18:28:47.626197Z",
-            "modified": "2026-09-29T18:28:47.626197Z",
+            "created": "2026-10-01T19:54:15.417449Z",
+            "modified": "2026-10-01T19:54:15.417449Z",
             "name": "Newdouble_ClickFix_Berserk_Loader_Imphash_Or_Export",
             "indicator_types": [
                 "malicious-activity"
@@ -142,8 +142,8 @@
             "spec_version": "2.1",
             "id": "indicator--1f6946d9-5289-5691-9498-0d678a8881e8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-29T18:28:47.626292Z",
-            "modified": "2026-09-29T18:28:47.626292Z",
+            "created": "2026-10-01T19:54:15.417586Z",
+            "modified": "2026-10-01T19:54:15.417586Z",
             "name": "ClickFix PowerShell Stager Pasted Into Run Dialog Downloading a Script Then Running It",
             "indicator_types": [
                 "malicious-activity"
@@ -163,8 +163,8 @@
             "spec_version": "2.1",
             "id": "indicator--7f68f55d-57d8-5dd7-98ee-b24be22f816a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-29T18:28:47.626383Z",
-            "modified": "2026-09-29T18:28:47.626383Z",
+            "created": "2026-10-01T19:54:15.417671Z",
+            "modified": "2026-10-01T19:54:15.417671Z",
             "name": "Defender Path, Process and Extension Exclusions Set in One PowerShell Script Block",
             "indicator_types": [
                 "malicious-activity"
@@ -184,8 +184,8 @@
             "spec_version": "2.1",
             "id": "indicator--ae5fa070-a09e-5525-9a05-2d6bfab4fc53",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-29T18:28:47.626469Z",
-            "modified": "2026-09-29T18:28:47.626469Z",
+            "created": "2026-10-01T19:54:15.417752Z",
+            "modified": "2026-10-01T19:54:15.417752Z",
             "name": "PowerShell Writing a Script Into a Roaming Profile Subfolder",
             "indicator_types": [
                 "malicious-activity"
@@ -205,8 +205,8 @@
             "spec_version": "2.1",
             "id": "indicator--f74d7379-50b9-51f4-b837-0ea0667a9d96",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-29T18:28:47.62655Z",
-            "modified": "2026-09-29T18:28:47.62655Z",
+            "created": "2026-10-01T19:54:15.417853Z",
+            "modified": "2026-10-01T19:54:15.417853Z",
             "name": "Per-User Proxy or PAC Setting Changed by a Process Running From AppData",
             "indicator_types": [
                 "malicious-activity"
@@ -226,8 +226,8 @@
             "spec_version": "2.1",
             "id": "indicator--4adefd46-908c-5510-b33a-ac77dedf2ed7",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-29T18:28:47.626628Z",
-            "modified": "2026-09-29T18:28:47.626628Z",
+            "created": "2026-10-01T19:54:15.417943Z",
+            "modified": "2026-10-01T19:54:15.417943Z",
             "name": "Root Certificate Added to the Machine Root Store by a Process Running From AppData",
             "indicator_types": [
                 "malicious-activity"
@@ -247,8 +247,8 @@
             "spec_version": "2.1",
             "id": "indicator--c68e5fea-d942-5d21-9383-9cf0137d8a9a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-29T18:28:47.626705Z",
-            "modified": "2026-09-29T18:28:47.626705Z",
+            "created": "2026-10-01T19:54:15.418021Z",
+            "modified": "2026-10-01T19:54:15.418021Z",
             "name": "Steam CEF Remote Debugging Marker File Created",
             "indicator_types": [
                 "malicious-activity"
@@ -268,13 +268,13 @@
             "spec_version": "2.1",
             "id": "indicator--682749db-45cf-566c-8927-0a4f8e9ed9e3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-29T18:28:47.626781Z",
-            "modified": "2026-09-29T18:28:47.626781Z",
+            "created": "2026-10-01T19:54:15.418101Z",
+            "modified": "2026-10-01T19:54:15.418101Z",
             "name": "THL HUNT newdouble-ClickFix Panel Import POST With X-Vac-Secret Header (Steam Account Data Upload)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT newdouble-ClickFix Panel Import POST With X-Vac-Secret Header (Steam Account Data Upload)\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"/api/mafile/import\"; startswith; http.header; content:\"X-Vac-Secret|3a|\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000005; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-28, reference https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/;)",
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT newdouble-ClickFix Panel Import POST With X-Vac-Secret Header (Steam Account Data Upload)\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"/api/mafile/import\"; startswith; http.header; content:\"X-Vac-Secret|3a|\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:1000005; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)",
             "pattern_type": "suricata",
             "valid_from": "2026-09-28T00:00:00Z",
             "labels": [
@@ -289,13 +289,13 @@
             "spec_version": "2.1",
             "id": "indicator--510db276-4f64-5bd6-9317-96fc6f5f417b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-29T18:28:47.626855Z",
-            "modified": "2026-09-29T18:28:47.626855Z",
+            "created": "2026-10-01T19:54:15.418176Z",
+            "modified": "2026-10-01T19:54:15.418176Z",
             "name": "THL HUNT newdouble-ClickFix First-Stage Script Fetch (y.ps1 URI Path)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT newdouble-ClickFix First-Stage Script Fetch (y.ps1 URI Path)\"; flow:established,to_server; http.method; content:\"GET\"; http.uri; content:\"/y/y.ps1\"; endswith; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000001; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-28, reference https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/;)",
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT newdouble-ClickFix First-Stage Script Fetch (y.ps1 URI Path)\"; flow:established,to_server; http.method; content:\"GET\"; http.uri; content:\"/y/y.ps1\"; endswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:1000001; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)",
             "pattern_type": "suricata",
             "valid_from": "2026-09-28T00:00:00Z",
             "labels": [
@@ -310,13 +310,13 @@
             "spec_version": "2.1",
             "id": "indicator--407cea07-cf9a-55f6-9238-9c45b74e898f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-29T18:28:47.626929Z",
-            "modified": "2026-09-29T18:28:47.626929Z",
+            "created": "2026-10-01T19:54:15.418251Z",
+            "modified": "2026-10-01T19:54:15.418251Z",
             "name": "THL HUNT newdouble-ClickFix Second-Stage Executable Fetch (x.exe URI Path to Delivery Host)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> 202.71.14.31 any (msg:\"THL HUNT newdouble-ClickFix Second-Stage Executable Fetch (x.exe URI Path to Delivery Host)\"; flow:established,to_server; http.method; content:\"GET\"; http.uri; content:\"/x/x.exe\"; endswith; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000002; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-28, reference https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/;)",
+            "pattern": "alert http $HOME_NET any -> 202.71.14.31 any (msg:\"THL HUNT newdouble-ClickFix Second-Stage Executable Fetch (x.exe URI Path to Delivery Host)\"; flow:established,to_server; http.method; content:\"GET\"; http.uri; content:\"/x/x.exe\"; endswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:1000002; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)",
             "pattern_type": "suricata",
             "valid_from": "2026-09-28T00:00:00Z",
             "labels": [
@@ -331,13 +331,13 @@
             "spec_version": "2.1",
             "id": "indicator--aa4697b6-85a4-53f6-b0c4-9b8ac4115aeb",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-29T18:28:47.627003Z",
-            "modified": "2026-09-29T18:28:47.627003Z",
+            "created": "2026-10-01T19:54:15.418325Z",
+            "modified": "2026-10-01T19:54:15.418325Z",
             "name": "THL HUNT newdouble-ClickFix Lure Domain DNS Query (Fake Verification Page)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert dns $HOME_NET any -> any any (msg:\"THL HUNT newdouble-ClickFix Lure Domain DNS Query (Fake Verification Page)\"; dns.query; content:\"newdouble\"; nocase; content:\"authentification.com\"; nocase; distance:0; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000003; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-28, reference https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/;)",
+            "pattern": "alert dns $HOME_NET any -> any any (msg:\"THL HUNT newdouble-ClickFix Lure Domain DNS Query (Fake Verification Page)\"; dns.query; content:\"newdouble\"; nocase; content:\"authentification.com\"; nocase; distance:0; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:1000003; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)",
             "pattern_type": "suricata",
             "valid_from": "2026-09-28T00:00:00Z",
             "labels": [
@@ -352,13 +352,13 @@
             "spec_version": "2.1",
             "id": "indicator--4db02044-07be-5901-a1cd-f7e865a586b2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-29T18:28:47.627078Z",
-            "modified": "2026-09-29T18:28:47.627078Z",
+            "created": "2026-10-01T19:54:15.4184Z",
+            "modified": "2026-10-01T19:54:15.4184Z",
             "name": "THL HUNT newdouble-ClickFix Lure Domain TLS SNI (Fake Verification Page)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT newdouble-ClickFix Lure Domain TLS SNI (Fake Verification Page)\"; flow:established,to_server; tls.sni; content:\"newdouble\"; nocase; content:\"authentification.com\"; nocase; distance:0; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000004; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-28, reference https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/;)",
+            "pattern": "alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT newdouble-ClickFix Lure Domain TLS SNI (Fake Verification Page)\"; flow:established,to_server; tls.sni; content:\"newdouble\"; nocase; content:\"authentification.com\"; nocase; distance:0; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:1000004; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)",
             "pattern_type": "suricata",
             "valid_from": "2026-09-28T00:00:00Z",
             "labels": [
@@ -373,8 +373,8 @@
             "spec_version": "2.1",
             "id": "tool--26dca654-8dd2-5bfd-8feb-ae8568aeba0a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-29T18:28:47.627225Z",
-            "modified": "2026-09-29T18:28:47.627225Z",
+            "created": "2026-10-01T19:54:15.418539Z",
+            "modified": "2026-10-01T19:54:15.418539Z",
             "name": "x.exe",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -385,8 +385,8 @@
             "spec_version": "2.1",
             "id": "tool--b5df52cd-3541-5086-964d-f911cafe9713",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-29T18:28:47.627308Z",
-            "modified": "2026-09-29T18:28:47.627308Z",
+            "created": "2026-10-01T19:54:15.41862Z",
+            "modified": "2026-10-01T19:54:15.41862Z",
             "name": "y.ps1",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -397,8 +397,8 @@
             "spec_version": "2.1",
             "id": "report--851e8bde-d374-5746-9390-ba1a54c91f64",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-29T18:28:47.627519Z",
-            "modified": "2026-09-29T18:28:47.627519Z",
+            "created": "2026-10-01T19:54:15.41885Z",
+            "modified": "2026-10-01T19:54:15.41885Z",
             "name": "FACEIT ClickFix Pages Point CS2 Players to a Script URL That VirusTotal Ties to a Steam-Focused Executable",
             "report_types": [
                 "threat-report"

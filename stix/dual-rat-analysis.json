@@ -1,13 +1,13 @@
 {
     "type": "bundle",
-    "id": "bundle--b55f54d4-e14e-4738-939b-854899367f5d",
+    "id": "bundle--a7cba4eb-6cd3-4991-8fac-94b812f909d4",
     "objects": [
         {
             "type": "identity",
             "spec_version": "2.1",
             "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:27:55.74414Z",
-            "modified": "2026-09-19T20:27:55.74414Z",
+            "created": "2026-10-01T19:54:12.943704Z",
+            "modified": "2026-10-01T19:54:12.943704Z",
             "name": "The Hunters Ledger",
             "identity_class": "organization"
         },
@@ -43,8 +43,8 @@
             "spec_version": "2.1",
             "id": "indicator--c7e3581a-628b-5aa6-9d16-94157b9fd440",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:27:55.753932Z",
-            "modified": "2026-09-19T20:27:55.753932Z",
+            "created": "2026-10-01T19:54:12.950995Z",
+            "modified": "2026-10-01T19:54:12.950995Z",
             "name": "NjRAT_XWorm_Triple_Persistence",
             "indicator_types": [
                 "malicious-activity"
@@ -64,8 +64,8 @@
             "spec_version": "2.1",
             "id": "indicator--21ef97e8-dd1b-552d-ba7b-5f99cdee238e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:27:55.754204Z",
-            "modified": "2026-09-19T20:27:55.754204Z",
+            "created": "2026-10-01T19:54:12.951471Z",
+            "modified": "2026-10-01T19:54:12.951471Z",
             "name": "Quasar_RAT_MarkOfWeb_Removal",
             "indicator_types": [
                 "malicious-activity"
@@ -85,8 +85,8 @@
             "spec_version": "2.1",
             "id": "indicator--141ae941-1766-5d02-91e1-2935af10abb0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:27:55.754323Z",
-            "modified": "2026-09-19T20:27:55.754323Z",
+            "created": "2026-10-01T19:54:12.951573Z",
+            "modified": "2026-10-01T19:54:12.951573Z",
             "name": "NjRAT_XWorm_Core_Detection",
             "indicator_types": [
                 "malicious-activity"
@@ -106,8 +106,8 @@
             "spec_version": "2.1",
             "id": "indicator--ed0a0fbb-467d-567e-af09-59fa7bac51d1",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:27:55.754444Z",
-            "modified": "2026-09-19T20:27:55.754444Z",
+            "created": "2026-10-01T19:54:12.951661Z",
+            "modified": "2026-10-01T19:54:12.951661Z",
             "name": "Quasar RAT Scheduled Task Persistence via schtasks.exe",
             "indicator_types": [
                 "malicious-activity"
@@ -127,8 +127,8 @@
             "spec_version": "2.1",
             "id": "indicator--9d7c72ef-c9f1-5fec-a74c-8a34f76d17b0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:27:55.754545Z",
-            "modified": "2026-09-19T20:27:55.754545Z",
+            "created": "2026-10-01T19:54:12.951742Z",
+            "modified": "2026-10-01T19:54:12.951742Z",
             "name": "Quasar RAT Remote Thread Creation Into System Processes",
             "indicator_types": [
                 "malicious-activity"
@@ -148,8 +148,8 @@
             "spec_version": "2.1",
             "id": "indicator--ae6086da-0c55-53e2-816c-d282684d1da8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:27:55.754644Z",
-            "modified": "2026-09-19T20:27:55.754644Z",
+            "created": "2026-10-01T19:54:12.951827Z",
+            "modified": "2026-10-01T19:54:12.951827Z",
             "name": "Quasar RAT Mark of the Web Removal",
             "indicator_types": [
                 "malicious-activity"
@@ -169,8 +169,8 @@
             "spec_version": "2.1",
             "id": "indicator--1b6c7586-d46c-508f-a896-9793b391a0b4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:27:55.754743Z",
-            "modified": "2026-09-19T20:27:55.754743Z",
+            "created": "2026-10-01T19:54:12.951907Z",
+            "modified": "2026-10-01T19:54:12.951907Z",
             "name": "Quasar RAT C2 Connection on TCP 4782",
             "indicator_types": [
                 "malicious-activity"
@@ -190,8 +190,8 @@
             "spec_version": "2.1",
             "id": "indicator--48ebbe76-3452-5c05-be8b-5455c38a4077",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:27:55.754836Z",
-            "modified": "2026-09-19T20:27:55.754836Z",
+            "created": "2026-10-01T19:54:12.951985Z",
+            "modified": "2026-10-01T19:54:12.951985Z",
             "name": "NjRAT/XWorm Pastebin Dead-Drop C2 Resolution",
             "indicator_types": [
                 "malicious-activity"
@@ -211,8 +211,8 @@
             "spec_version": "2.1",
             "id": "indicator--5d202fff-0854-5b04-9617-a2df6b9e675b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:27:55.754923Z",
-            "modified": "2026-09-19T20:27:55.754923Z",
+            "created": "2026-10-01T19:54:12.952066Z",
+            "modified": "2026-10-01T19:54:12.952066Z",
             "name": "NjRAT/XWorm Persistence - Scheduled Task (Conhost, 1-Minute Interval)",
             "indicator_types": [
                 "malicious-activity"
@@ -232,8 +232,8 @@
             "spec_version": "2.1",
             "id": "indicator--c932922c-b9f8-5841-b17a-fe1852217002",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:27:55.755007Z",
-            "modified": "2026-09-19T20:27:55.755007Z",
+            "created": "2026-10-01T19:54:12.952143Z",
+            "modified": "2026-10-01T19:54:12.952143Z",
             "name": "Suspicious Access to Dead-Drop Services",
             "indicator_types": [
                 "malicious-activity"
@@ -253,8 +253,8 @@
             "spec_version": "2.1",
             "id": "indicator--b307f73c-c810-50b1-a785-0879c634231c",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:27:55.755108Z",
-            "modified": "2026-09-19T20:27:55.755108Z",
+            "created": "2026-10-01T19:54:12.95222Z",
+            "modified": "2026-10-01T19:54:12.95222Z",
             "name": "Remote Thread Created by a Process Resident in AppData Roaming or Temp",
             "indicator_types": [
                 "malicious-activity"
@@ -274,13 +274,13 @@
             "spec_version": "2.1",
             "id": "indicator--130a0d8f-a2ce-52cf-8879-7c3d7d80480b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:27:55.755229Z",
-            "modified": "2026-09-19T20:27:55.755229Z",
+            "created": "2026-10-01T19:54:12.952296Z",
+            "modified": "2026-10-01T19:54:12.952296Z",
             "name": "THL HUNT Dual-RAT-Quasar-NjRAT Quasar Binary Protocol C2 on TCP 4782 (RAT C2 Channel)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:\"THL HUNT Dual-RAT-Quasar-NjRAT Quasar Binary Protocol C2 on TCP 4782 (RAT C2 Channel)\"; flow:established,to_server; dsize:>0; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:2100001; rev:2; metadata:author The_Hunters_Ledger, date 2025-12-06, reference https://the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/;)",
+            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:\"THL HUNT Dual-RAT-Quasar-NjRAT Quasar Binary Protocol C2 on TCP 4782 (RAT C2 Channel)\"; flow:established,to_server; dsize:>0; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/; classtype:trojan-activity; sid:2100001; rev:3; metadata:author The_Hunters_Ledger, date 2025-12-06;)",
             "pattern_type": "suricata",
             "valid_from": "2025-12-06T00:00:00Z",
             "labels": [
@@ -295,13 +295,13 @@
             "spec_version": "2.1",
             "id": "indicator--69042fde-9e20-5282-aea8-5c39fe036dd3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:27:55.755347Z",
-            "modified": "2026-09-19T20:27:55.755347Z",
+            "created": "2026-10-01T19:54:12.952371Z",
+            "modified": "2026-10-01T19:54:12.952371Z",
             "name": "THL HUNT Dual-RAT-Quasar-NjRAT NjRAT-XWorm Spoofed Mobile Safari User-Agent (Dead-Drop C2 Resolution Indicator)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT Dual-RAT-Quasar-NjRAT NjRAT-XWorm Spoofed Mobile Safari User-Agent (Dead-Drop C2 Resolution Indicator)\"; flow:established,to_server; http.user_agent; content:\"iPhone OS 11_4_1 like Mac OS X\"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:2100004; rev:2; metadata:author The_Hunters_Ledger, date 2025-12-06, reference https://the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/;)",
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT Dual-RAT-Quasar-NjRAT NjRAT-XWorm Spoofed Mobile Safari User-Agent (Dead-Drop C2 Resolution Indicator)\"; flow:established,to_server; http.user_agent; content:\"iPhone OS 11_4_1 like Mac OS X\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/; classtype:trojan-activity; sid:2100004; rev:3; metadata:author The_Hunters_Ledger, date 2025-12-06;)",
             "pattern_type": "suricata",
             "valid_from": "2025-12-06T00:00:00Z",
             "labels": [
@@ -316,8 +316,8 @@
             "spec_version": "2.1",
             "id": "tool--4634c541-7106-53c9-b6f3-c0bdd766cdea",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:27:55.755495Z",
-            "modified": "2026-09-19T20:27:55.755495Z",
+            "created": "2026-10-01T19:54:12.952502Z",
+            "modified": "2026-10-01T19:54:12.952502Z",
             "name": "client.exe",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -328,8 +328,8 @@
             "spec_version": "2.1",
             "id": "tool--553392d6-b994-5723-b71b-c97f7431e5ff",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:27:55.7556Z",
-            "modified": "2026-09-19T20:27:55.7556Z",
+            "created": "2026-10-01T19:54:12.952582Z",
+            "modified": "2026-10-01T19:54:12.952582Z",
             "name": "server (1).exe",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -340,8 +340,8 @@
             "spec_version": "2.1",
             "id": "report--5d4d9a1b-5e15-5ad5-9783-ae7ec6901915",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:27:55.75587Z",
-            "modified": "2026-09-19T20:27:55.75587Z",
+            "created": "2026-10-01T19:54:12.95275Z",
+            "modified": "2026-10-01T19:54:12.95275Z",
             "name": "Quasar RAT vs. NjRAT/XWorm — Technical Deep-Dive",
             "report_types": [
                 "threat-report"

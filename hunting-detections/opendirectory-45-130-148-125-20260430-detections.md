@@ -652,7 +652,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT - AdaptixC2 Defau
 **Deployment:** Perimeter IDS/IPS; east-west sensor. Complements rather than replaces SID 5001002, which stays as the broader framework catch.
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT AdaptixC2 Beacon Empty-Body POST Carrying X-Beacon-Id Header (Framework C2 Heartbeat)"; flow:established,to_server; http.method; content:"POST"; http.header_names; content:"X-Beacon-Id"; nocase; http.header; content:"Content-Length|3a| 0|0d 0a|"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:5001006; rev:1; metadata:author The_Hunters_Ledger, date 2026-08-12, reference https://the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT AdaptixC2 Beacon Empty-Body POST Carrying X-Beacon-Id Header (Framework C2 Heartbeat)"; flow:established,to_server; http.method; content:"POST"; http.header_names; content:"X-Beacon-Id"; nocase; http.header; content:"Content-Length|3a| 0|0d 0a|"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/; classtype:trojan-activity; sid:5001006; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-12;)
 ```
 
 ### Hunting Rules
@@ -698,7 +698,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT - AdaptixC2 Operato
 **Deployment:** Network sensor with `file.data` reassembly on HTTP responses; proxy logs that retain response bodies.
 
 ```
-alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT AdaptixC2 Stock Listener Response Envelope (Server-Side Framework Default)"; flow:established,to_client; file.data; content:"{|22|status|22|: |22|ok|22|, |22|data|22|: |22|"; content:"|22|, |22|metrics|22|: |22|sync|22|}"; distance:0; threshold:type limit,track by_dst,count 1,seconds 3600; classtype:trojan-activity; sid:5001007; rev:1; metadata:author The_Hunters_Ledger, date 2026-08-12, reference https://the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/;)
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT AdaptixC2 Stock Listener Response Envelope (Server-Side Framework Default)"; flow:established,to_client; file.data; content:"{|22|status|22|: |22|ok|22|, |22|data|22|: |22|"; content:"|22|, |22|metrics|22|: |22|sync|22|}"; distance:0; threshold:type limit,track by_dst,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/; classtype:trojan-activity; sid:5001007; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-12;)
 ```
 
 ---

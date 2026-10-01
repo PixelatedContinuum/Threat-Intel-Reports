@@ -1,13 +1,13 @@
 {
     "type": "bundle",
-    "id": "bundle--7e0082a5-c9b6-4fe9-ac18-573217be61ef",
+    "id": "bundle--75091b81-3eb7-4f28-b733-0ef6688695be",
     "objects": [
         {
             "type": "identity",
             "spec_version": "2.1",
             "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:28:04.977435Z",
-            "modified": "2026-09-19T20:28:04.977435Z",
+            "created": "2026-10-01T19:54:22.578602Z",
+            "modified": "2026-10-01T19:54:22.578602Z",
             "name": "The Hunters Ledger",
             "identity_class": "organization"
         },
@@ -91,8 +91,8 @@
             "spec_version": "2.1",
             "id": "indicator--c7864546-6dc9-5a7e-b56c-964de02692dd",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:28:04.986793Z",
-            "modified": "2026-09-19T20:28:04.986793Z",
+            "created": "2026-10-01T19:54:22.584989Z",
+            "modified": "2026-10-01T19:54:22.584989Z",
             "name": "Suspicious File Manager Access",
             "indicator_types": [
                 "malicious-activity"
@@ -112,8 +112,8 @@
             "spec_version": "2.1",
             "id": "indicator--bd2e0bc7-9d5d-5952-a719-d9202a07271a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:28:04.987037Z",
-            "modified": "2026-09-19T20:28:04.987037Z",
+            "created": "2026-10-01T19:54:22.585455Z",
+            "modified": "2026-10-01T19:54:22.585455Z",
             "name": "Suspicious Clp-Fm Cookie",
             "indicator_types": [
                 "malicious-activity"
@@ -133,8 +133,8 @@
             "spec_version": "2.1",
             "id": "indicator--7450b221-9394-5c63-95c2-efc4d3a2103e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:28:04.987169Z",
-            "modified": "2026-09-19T20:28:04.987169Z",
+            "created": "2026-10-01T19:54:22.585561Z",
+            "modified": "2026-10-01T19:54:22.585561Z",
             "name": "Suspicious User Creation",
             "indicator_types": [
                 "malicious-activity"
@@ -154,8 +154,8 @@
             "spec_version": "2.1",
             "id": "indicator--53f2b4e9-2432-58f0-b442-2a57d90393d2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:28:04.987271Z",
-            "modified": "2026-09-19T20:28:04.987271Z",
+            "created": "2026-10-01T19:54:22.585651Z",
+            "modified": "2026-10-01T19:54:22.585651Z",
             "name": "Webshell File Creation",
             "indicator_types": [
                 "malicious-activity"
@@ -175,8 +175,8 @@
             "spec_version": "2.1",
             "id": "indicator--353d5f0f-9e8e-5633-97c0-adfa4b1a5395",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:28:04.987389Z",
-            "modified": "2026-09-19T20:28:04.987389Z",
+            "created": "2026-10-01T19:54:22.585734Z",
+            "modified": "2026-10-01T19:54:22.585734Z",
             "name": "Rclone Execution",
             "indicator_types": [
                 "malicious-activity"
@@ -196,8 +196,8 @@
             "spec_version": "2.1",
             "id": "indicator--8bb6005c-d5c6-5f82-b0b2-e3b6407ceccd",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:28:04.98748Z",
-            "modified": "2026-09-19T20:28:04.98748Z",
+            "created": "2026-10-01T19:54:22.585817Z",
+            "modified": "2026-10-01T19:54:22.585817Z",
             "name": "Dropbox API Traffic",
             "indicator_types": [
                 "malicious-activity"
@@ -217,8 +217,8 @@
             "spec_version": "2.1",
             "id": "indicator--5e808de1-0cc7-5b98-b1fb-a25c9d7ff191",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:28:04.987584Z",
-            "modified": "2026-09-19T20:28:04.987584Z",
+            "created": "2026-10-01T19:54:22.585898Z",
+            "modified": "2026-10-01T19:54:22.585898Z",
             "name": "Suspicious WordPress Install",
             "indicator_types": [
                 "malicious-activity"
@@ -238,8 +238,8 @@
             "spec_version": "2.1",
             "id": "indicator--d6cde6d3-77ba-5e19-95ed-9eed221e07fb",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:28:04.987703Z",
-            "modified": "2026-09-19T20:28:04.987703Z",
+            "created": "2026-10-01T19:54:22.585975Z",
+            "modified": "2026-10-01T19:54:22.585975Z",
             "name": "Nginx Configuration File Modified",
             "indicator_types": [
                 "malicious-activity"
@@ -259,13 +259,13 @@
             "spec_version": "2.1",
             "id": "indicator--327d1be6-b9ac-5773-9326-f8891a70d539",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:28:04.987818Z",
-            "modified": "2026-09-19T20:28:04.987818Z",
+            "created": "2026-10-01T19:54:22.58605Z",
+            "modified": "2026-10-01T19:54:22.58605Z",
             "name": "THL HUNT Webshells-To-Cloud-Modular-Intrusion Suspicious mxx POST Parameter (Webshell Command Parameter Indicator)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL HUNT Webshells-To-Cloud-Modular-Intrusion Suspicious mxx POST Parameter (Webshell Command Parameter Indicator)\"; flow:established,to_server; http.request_body; content:\"mxx=\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:web-application-attack; sid:100002; rev:2; metadata:author The_Hunters_Ledger, date 2025-10-20, reference https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/;)",
+            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL HUNT Webshells-To-Cloud-Modular-Intrusion Suspicious mxx POST Parameter (Webshell Command Parameter Indicator)\"; flow:established,to_server; http.request_body; content:\"mxx=\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/; classtype:web-application-attack; sid:100002; rev:3; metadata:author The_Hunters_Ledger, date 2025-10-20;)",
             "pattern_type": "suricata",
             "valid_from": "2025-10-20T00:00:00Z",
             "labels": [
@@ -280,8 +280,8 @@
             "spec_version": "2.1",
             "id": "tool--cdf837e6-0c29-55ee-ae22-d8d711b1465d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:28:04.987975Z",
-            "modified": "2026-09-19T20:28:04.987975Z",
+            "created": "2026-10-01T19:54:22.586192Z",
+            "modified": "2026-10-01T19:54:22.586192Z",
             "name": "02ed1649179f",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -292,8 +292,8 @@
             "spec_version": "2.1",
             "id": "tool--4b06d06e-a674-544a-ad20-493183fcffea",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:28:04.988101Z",
-            "modified": "2026-09-19T20:28:04.988101Z",
+            "created": "2026-10-01T19:54:22.58628Z",
+            "modified": "2026-10-01T19:54:22.58628Z",
             "name": "1b62bd9aef9d",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -304,8 +304,8 @@
             "spec_version": "2.1",
             "id": "tool--6831f1d1-8dac-5738-a658-f86b0203d35e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:28:04.988234Z",
-            "modified": "2026-09-19T20:28:04.988234Z",
+            "created": "2026-10-01T19:54:22.586351Z",
+            "modified": "2026-10-01T19:54:22.586351Z",
             "name": "4213d1a76437",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -316,8 +316,8 @@
             "spec_version": "2.1",
             "id": "tool--531596a9-ebdc-53a4-b8f4-aa9b7bc40912",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:28:04.988359Z",
-            "modified": "2026-09-19T20:28:04.988359Z",
+            "created": "2026-10-01T19:54:22.586416Z",
+            "modified": "2026-10-01T19:54:22.586416Z",
             "name": "4f4fad2fd314",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -328,8 +328,8 @@
             "spec_version": "2.1",
             "id": "tool--676180f8-f1c4-55fc-afcb-20afa0a16225",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:28:04.98848Z",
-            "modified": "2026-09-19T20:28:04.98848Z",
+            "created": "2026-10-01T19:54:22.58648Z",
+            "modified": "2026-10-01T19:54:22.58648Z",
             "name": "83c29e70cd7f",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -340,8 +340,8 @@
             "spec_version": "2.1",
             "id": "tool--e543ae5b-3eb8-55c1-a1b9-468df4df2ca8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:28:04.988607Z",
-            "modified": "2026-09-19T20:28:04.988607Z",
+            "created": "2026-10-01T19:54:22.586541Z",
+            "modified": "2026-10-01T19:54:22.586541Z",
             "name": "c0f67589eea4",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -352,8 +352,8 @@
             "spec_version": "2.1",
             "id": "tool--08c09e5b-4cad-541c-9071-40676297193c",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:28:04.988725Z",
-            "modified": "2026-09-19T20:28:04.988725Z",
+            "created": "2026-10-01T19:54:22.586602Z",
+            "modified": "2026-10-01T19:54:22.586602Z",
             "name": "d98c28743899",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -364,8 +364,8 @@
             "spec_version": "2.1",
             "id": "tool--621fcde9-4c6e-5f78-a20a-21bc20731afe",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:28:04.988844Z",
-            "modified": "2026-09-19T20:28:04.988844Z",
+            "created": "2026-10-01T19:54:22.586663Z",
+            "modified": "2026-10-01T19:54:22.586663Z",
             "name": "f75f22a3828a",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -376,8 +376,8 @@
             "spec_version": "2.1",
             "id": "report--3a042466-61a6-5b3e-a1f9-5c5412cffba2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:28:04.989171Z",
-            "modified": "2026-09-19T20:28:04.989171Z",
+            "created": "2026-10-01T19:54:22.586822Z",
+            "modified": "2026-10-01T19:54:22.586822Z",
             "name": "From Webshells to the Cloud",
             "report_types": [
                 "threat-report"

@@ -454,7 +454,7 @@ The Detection-tier signature was accepted by the production rule-parsing engine 
 # un-escapes it only server-side, after any sensor has seen the packet. Do NOT "correct" these
 # bytes to a raw 0x0a newline or to a PCRE newline escape: a rule keyed on a raw newline parses
 # cleanly and NEVER fires on real traffic (confirmed against captured traffic).
-alert http any any -> any any (msg:"THL DETECT Gotenberg-RCE ExifTool Metadata Key Injection Attempt (CVE-2026-42589 Exploitation Indicator)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/forms/pdfengines/metadata/write"; http.request_body; content:"|5c 6e 2d 69 66 5c 6e 73 79 73 74 65 6d 28|"; fast_pattern; reference:cve,2026-42589; classtype:attempted-admin; sid:1000001; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-16, reference https://the-hunters-ledger.com/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/;)
+alert http any any -> any any (msg:"THL DETECT Gotenberg-RCE ExifTool Metadata Key Injection Attempt (CVE-2026-42589 Exploitation Indicator)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/forms/pdfengines/metadata/write"; http.request_body; content:"|5c 6e 2d 69 66 5c 6e 73 79 73 74 65 6d 28|"; fast_pattern; reference:cve,2026-42589; reference:url,the-hunters-ledger.com/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/; classtype:attempted-admin; sid:1000001; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-16;)
 ```
 
 ### Hunting Rules
@@ -473,7 +473,7 @@ The three signatures below hunt the campaign's out-of-band callback channel rath
 **Deployment:** Packet sensor or IDS tap watching egress from managed hosts. Not for blocking; correlate hits with the destination before judging.
 
 ```suricata
-alert http $HOME_NET any -> any any (msg:"THL HUNT Gotenberg-RCE Tagged Out-of-Band Callback URI Shape (C2 Beacon Indicator)"; flow:established,to_server; http.uri; content:"_"; pcre:"/^\/(?:[TWCN]\d+|PPROBE\d+)_[^\/\s]+_\d+\/?$/"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:command-and-control; sid:1000002; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-16, reference https://the-hunters-ledger.com/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/;)
+alert http $HOME_NET any -> any any (msg:"THL HUNT Gotenberg-RCE Tagged Out-of-Band Callback URI Shape (C2 Beacon Indicator)"; flow:established,to_server; http.uri; content:"_"; pcre:"/^\/(?:[TWCN]\d+|PPROBE\d+)_[^\/\s]+_\d+\/?$/"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/; classtype:command-and-control; sid:1000002; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-16;)
 ```
 
 #### Out-of-Band Deploy Verdict Body (MINER_OK)
@@ -488,7 +488,7 @@ alert http $HOME_NET any -> any any (msg:"THL HUNT Gotenberg-RCE Tagged Out-of-B
 **Deployment:** Packet sensor watching egress. Not for blocking; the body content is diagnostic of the install verdict channel.
 
 ```suricata
-alert http $HOME_NET any -> any any (msg:"THL HUNT Gotenberg-RCE Miner Deploy Verdict Body MINER_OK (OOB Deploy-Callback Indicator)"; flow:established,to_server; http.request_body; content:"MINER_OK"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:command-and-control; sid:1000003; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-16, reference https://the-hunters-ledger.com/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/;)
+alert http $HOME_NET any -> any any (msg:"THL HUNT Gotenberg-RCE Miner Deploy Verdict Body MINER_OK (OOB Deploy-Callback Indicator)"; flow:established,to_server; http.request_body; content:"MINER_OK"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/; classtype:command-and-control; sid:1000003; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-16;)
 ```
 
 #### Out-of-Band Command Output Body Markers (START/END Brackets)
@@ -504,7 +504,7 @@ alert http $HOME_NET any -> any any (msg:"THL HUNT Gotenberg-RCE Miner Deploy Ve
 **Deployment:** Packet sensor watching egress. Not for blocking.
 
 ```suricata
-alert http $HOME_NET any -> any any (msg:"THL HUNT Gotenberg-RCE Command Output Body Markers START END (OOB Command-Output Indicator)"; flow:established,to_server; http.request_body; content:"===START==="; content:"===END==="; threshold:type limit,track by_src,count 1,seconds 3600; classtype:command-and-control; sid:1000004; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-16, reference https://the-hunters-ledger.com/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/;)
+alert http $HOME_NET any -> any any (msg:"THL HUNT Gotenberg-RCE Command Output Body Markers START END (OOB Command-Output Indicator)"; flow:established,to_server; http.request_body; content:"===START==="; content:"===END==="; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/; classtype:command-and-control; sid:1000004; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-16;)
 ```
 
 ---
