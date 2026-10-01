@@ -3,24 +3,24 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-01T12:01:52Z
+generated_at: 2026-10-01T14:01:22Z
 window_days: 30
 counts:
-  total: 560
-  research: 189
-  news: 371
+  total: 562
+  research: 192
+  news: 370
 topics:
   - label: "vulnerabilities"
-    count: 80
+    count: 81
     color: 1
   - label: "cybercrime"
-    count: 66
+    count: 65
     color: 2
   - label: "government"
     count: 40
     color: 3
   - label: "artificial intelligence"
-    count: 39
+    count: 38
     color: 4
   - label: "malware"
     count: 37
@@ -47,6 +47,7 @@ topics:
     count: 12
     color: 12
 label_colors:
+  "2cloader": 6
   "3bb": 7
   "3snake": 7
   "404 media": 12
@@ -242,6 +243,7 @@ label_colors:
   "conti": 1
   "coordinated-inauthentic-behavior": 12
   "cpanel": 1
+  "credential dumping": 3
   "credential harvesting": 4
   "credential stealing": 6
   "credential theft": 6
@@ -421,6 +423,7 @@ label_colors:
   "patch tuesday": 11
   "patched": 1
   "patches": 2
+  "patching": 8
   "payment fraud": 12
   "phishing": 11
   "phishing campaign": 6
@@ -463,6 +466,24 @@ label_colors:
   "zammad": 4
   "zero-day": 9
 items:
+  - title: "Kiteworks patches max severity code injection vulnerability"
+    url: "https://www.bleepingcomputer.com/news/security/kiteworks-patches-max-severity-email-protection-gateway-code-injection-vulnerability/"
+    source: "BleepingComputer"
+    date: 2026-10-01T13:51:08Z
+    kind: news
+    labels: []
+  - title: "AI Has Changed Attack Speed, Not Security Fundamentals"
+    url: "https://www.securityweek.com/ai-has-changed-attack-speed-not-security-fundamentals/"
+    source: "SecurityWeek"
+    date: 2026-10-01T13:15:00Z
+    kind: news
+    labels: ["patching", "artificial intelligence", "security architecture", "security infrastructure", "vulnerabilities"]
+  - title: "Zimbra Vulnerability Exploited in the Wild Prior to Public Disclosure"
+    url: "https://www.securityweek.com/zimbra-vulnerability-exploited-in-the-wild-prior-to-public-disclosure/"
+    source: "SecurityWeek"
+    date: 2026-10-01T12:55:57Z
+    kind: news
+    labels: ["exploited", "vulnerabilities", "zimbra"]
   - title: "Treasury Blacklists Most-Wanted ATM Malware Developer and His Network"
     url: "https://www.securityweek.com/treasury-blacklists-most-wanted-atm-malware-developer-and-his-network/"
     source: "SecurityWeek"
@@ -499,6 +520,24 @@ items:
     date: 2026-10-01T08:26:03Z
     kind: news
     labels: ["cisco", "exploited", "sd-wan", "vulnerabilities", "zero-day"]
+  - title: "Citrix NetScaler CVE-2026-88771: Observed Exploitation Artifacts and Hunt Indicators"
+    url: "https://otx.alienvault.com/pulse/6abde7dd3f829cf6b721cfaa"
+    source: "AlienVault"
+    date: 2026-10-01T04:55:57Z
+    kind: research
+    labels: ["cve-2026-88771", "citrix netscaler", "command-injection", "configuration-exfiltration", "credential-creation", "main.py", "pre-authentication", "reverse-shell", "update_c08937.pl", "web-shell"]
+  - title: "PaperCut MF Zero-Day Intrusion: Java Loader, Web Shell, and AdaptixC2 via CVE-2026-82078 and CVE-2026-81578"
+    url: "https://otx.alienvault.com/pulse/6abde39c863acdfda74e5d84"
+    source: "AlienVault"
+    date: 2026-10-01T04:37:48Z
+    kind: research
+    labels: ["adaptixc2", "credential dumping", "cve-2026-81578", "cve-2026-82078", "domain compromise", "java loader", "lateral movement", "papercut mf", "web shell", "zero-day exploitation"]
+  - title: "Swarming Against Citrix 0-Day Exploitation"
+    url: "https://otx.alienvault.com/pulse/6abde373c68b5d048accac49"
+    source: "AlienVault"
+    date: 2026-10-01T04:37:07Z
+    kind: research
+    labels: ["cve-2026-88771", "citrix netscaler", "citrixbleed", "command injection", "cve-2025-5777", "pre-disclosure attack", "rce", "webshell", "zero-day exploitation"]
   - title: "US sanctions 10 over ATM malware scheme tied to Tren de Aragua"
     url: "https://therecord.media/us-sanctions-10-atm-jackpotting-tren-de-aragua"
     source: "Recorded Future"
@@ -535,6 +574,12 @@ items:
     date: 2026-09-30T18:08:34Z
     kind: news
     labels: []
+  - title: "2CLoader: A New Malware Loader Delivering Vidar and Remus"
+    url: "https://www.zscaler.com/blogs/security-research/2cloader-new-malware-loader-delivering-vidar-and-remus"
+    source: "AlienVault"
+    date: 2026-09-30T18:08:12Z
+    kind: research
+    labels: ["2cloader", "anti-analysis", "evasion techniques", "indirect syscalls", "information stealer", "loader", "payload encryption", "remus", "vidar", "xworm"]
   - title: "CISA warns of critical pre-auth RCE flaw in MikroTik RouterOS"
     url: "https://www.bleepingcomputer.com/news/security/cisa-warns-of-critical-pre-auth-rce-flaw-in-mikrotik-routeros/"
     source: "BleepingComputer"
@@ -3793,33 +3838,3 @@ items:
     date: 2026-09-01T14:28:40Z
     kind: news
     labels: ["healthcare"]
-  - title: "Financially Motivated Threat Actor BREEZE COMET Targets Brazil"
-    url: "https://cloud.google.com/blog/topics/threat-intelligence/financially-motivated-threat-actor-breeze-comet-targets-brazil/"
-    source: "Google"
-    date: 2026-09-01T14:00:00Z
-    kind: research
-    labels: ["threat intelligence"]
-  - title: "Nearly 22,000 Microsoft Exchange servers vulnerable to hijack attacks"
-    url: "https://www.bleepingcomputer.com/news/security/nearly-22-000-microsoft-exchange-servers-vulnerable-to-hijack-attacks/"
-    source: "BleepingComputer"
-    date: 2026-09-01T12:38:35Z
-    kind: news
-    labels: ["microsoft"]
-  - title: "Experiment: Porting a PLC Exploit With AI Takes Hours and Hundreds of Dollars"
-    url: "https://www.securityweek.com/experiment-porting-a-plc-exploit-with-ai-takes-hours-and-hundreds-of-dollars/"
-    source: "SecurityWeek"
-    date: 2026-09-01T12:37:15Z
-    kind: news
-    labels: ["artificial intelligence", "exploit", "ics", "ics/ot", "plc", "wago"]
-  - title: "Iranian cyber spies target aviation, fintech developers with new malware"
-    url: "https://therecord.media/iranian-cyber-spies-target-aviation-fintech-new-malware"
-    source: "Recorded Future"
-    date: 2026-09-01T12:33:00Z
-    kind: news
-    labels: ["cybercrime"]
-  - title: "Hackers Start Exploiting Critical Langflow Vulnerability"
-    url: "https://www.securityweek.com/hackers-start-exploiting-critical-langflow-vulnerability/"
-    source: "SecurityWeek"
-    date: 2026-09-01T12:07:54Z
-    kind: news
-    labels: ["artificial intelligence", "exploited", "langflow", "vulnerabilities"]
