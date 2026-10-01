@@ -3,18 +3,18 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-01T16:01:02Z
+generated_at: 2026-10-01T18:02:18Z
 window_days: 30
 counts:
-  total: 563
-  research: 193
+  total: 564
+  research: 194
   news: 370
 topics:
   - label: "vulnerabilities"
     count: 81
     color: 1
   - label: "cybercrime"
-    count: 65
+    count: 66
     color: 2
   - label: "government"
     count: 40
@@ -468,6 +468,18 @@ label_colors:
   "zammad": 4
   "zero-day": 9
 items:
+  - title: "Give yourself room to be human"
+    url: "https://blog.talosintelligence.com/give-yourself-room-to-be-human/"
+    source: "Cisco Talos"
+    date: 2026-10-01T18:00:52Z
+    kind: research
+    labels: ["threat source newsletter"]
+  - title: "Police disrupt KillSec ransomware, arrest suspected teenage leader"
+    url: "https://therecord.media/killsec-ransomware-raas-arrests-europe"
+    source: "Recorded Future"
+    date: 2026-10-01T15:55:00Z
+    kind: news
+    labels: ["cybercrime"]
   - title: "Hacker Conversations: Rob Juncker, a Knock at the Door and a Moral Compass"
     url: "https://www.securityweek.com/hacker-conversations-rob-juncker-a-knock-at-the-door-and-a-moral-compass/"
     source: "SecurityWeek"
@@ -3840,9 +3852,3 @@ items:
     date: 2026-09-01T18:13:21Z
     kind: research
     labels: ["azure table storage", "credential theft", "dll4_browser", "dll4_cmd", "dll4_fileman", "dll4_script", "dll4_socks", "dll4_vnc", "exodus wallet", "hidden vnc", "javascript dropper", "modular rat", "reflective loading", "socks proxy"]
-  - title: "Critical Langflow flaw exploited to steal OpenAI and AWS keys"
-    url: "https://www.bleepingcomputer.com/news/security/critical-langflow-flaw-exploited-to-steal-openai-and-aws-keys/"
-    source: "BleepingComputer"
-    date: 2026-09-01T17:54:22Z
-    kind: news
-    labels: []
