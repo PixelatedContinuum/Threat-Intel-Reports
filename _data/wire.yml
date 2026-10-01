@@ -3,21 +3,21 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-30T22:01:32Z
+generated_at: 2026-10-01T00:01:33Z
 window_days: 30
 counts:
-  total: 563
-  research: 191
-  news: 372
+  total: 565
+  research: 192
+  news: 373
 topics:
   - label: "vulnerabilities"
-    count: 80
+    count: 81
     color: 1
   - label: "cybercrime"
-    count: 64
+    count: 65
     color: 2
   - label: "government"
-    count: 39
+    count: 40
     color: 3
   - label: "artificial intelligence"
     count: 38
@@ -34,10 +34,10 @@ topics:
   - label: "social engineering"
     count: 18
     color: 8
-  - label: "clickfix"
-    count: 16
-    color: 9
   - label: "zero-day"
+    count: 17
+    color: 9
+  - label: "clickfix"
     count: 16
     color: 10
   - label: "phishing"
@@ -234,7 +234,7 @@ label_colors:
   "citrix netscaler": 2
   "cleo": 7
   "click2shell": 4
-  "clickfix": 9
+  "clickfix": 10
   "clipboard": 10
   "clipboard poisoning": 6
   "clipper": 3
@@ -286,6 +286,8 @@ label_colors:
   "cve-2026-75650": 3
   "cve-2026-81578": 1
   "cve-2026-86218": 9
+  "cve-2026-88771": 1
+  "cve-2026-88772": 10
   "cybera": 2
   "cyberattacks": 8
   "cybercrime": 2
@@ -464,14 +466,26 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
   "watchguard": 2
-  "zero-day": 10
+  "zero-day": 9
 items:
+  - title: "US sanctions 10 over ATM malware scheme tied to Tren de Aragua"
+    url: "https://therecord.media/us-sanctions-10-atm-jackpotting-tren-de-aragua"
+    source: "Recorded Future"
+    date: 2026-09-30T22:35:00Z
+    kind: news
+    labels: ["cybercrime", "government"]
   - title: "Russian state hackers use new RedFlick technique to push malware"
     url: "https://www.bleepingcomputer.com/news/security/russian-state-hackers-use-new-redflick-technique-to-push-malware/"
     source: "BleepingComputer"
     date: 2026-09-30T20:34:01Z
     kind: news
     labels: []
+  - title: "Threat Brief: NetScaler Zero Days CVE-2026-88771 and CVE-2026-88772 Exploited in the Wild (Updated September 30)"
+    url: "https://unit42.paloaltonetworks.com/netscaler-zero-days-exploited/"
+    source: "Palo Alto Networks"
+    date: 2026-09-30T20:00:04Z
+    kind: research
+    labels: ["cve-2026-88771", "cve-2026-88772", "citrix", "denial of service", "high profile threats", "remote code execution", "vulnerabilities", "zero-day"]
   - title: "DIVD says Zammad zero-days enabled AI-driven network breach"
     url: "https://www.bleepingcomputer.com/news/security/divd-says-zammad-zero-days-enabled-ai-driven-network-breach/"
     source: "BleepingComputer"
