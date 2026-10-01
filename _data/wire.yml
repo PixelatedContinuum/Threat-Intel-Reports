@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-01T14:01:22Z
+generated_at: 2026-10-01T16:01:02Z
 window_days: 30
 counts:
-  total: 562
-  research: 192
+  total: 563
+  research: 193
   news: 370
 topics:
   - label: "vulnerabilities"
@@ -44,7 +44,7 @@ topics:
     count: 14
     color: 11
   - label: "ransomware"
-    count: 12
+    count: 13
     color: 12
 label_colors:
   "2cloader": 6
@@ -381,6 +381,7 @@ label_colors:
   "ios": 11
   "itorrents compromise": 8
   "ivanti": 7
+  "killsec": 7
   "kimsuky": 1
   "kiteworks": 9
   "kothamine": 10
@@ -433,6 +434,7 @@ label_colors:
   "postgresql": 12
   "privacy": 12
   "proxy abuse": 6
+  "public sector": 3
   "ransomware": 12
   "ransomware as a service": 3
   "revolut": 5
@@ -466,6 +468,24 @@ label_colors:
   "zammad": 4
   "zero-day": 9
 items:
+  - title: "Hacker Conversations: Rob Juncker, a Knock at the Door and a Moral Compass"
+    url: "https://www.securityweek.com/hacker-conversations-rob-juncker-a-knock-at-the-door-and-a-moral-compass/"
+    source: "SecurityWeek"
+    date: 2026-10-01T14:30:00Z
+    kind: news
+    labels: ["hacker", "hacker conversations"]
+  - title: "Police dismantle KillSec ransomware gang allegedly led by 16-year-old"
+    url: "https://www.bleepingcomputer.com/news/security/police-dismantle-killsec-ransomware-gang-allegedly-led-by-16-year-old/"
+    source: "BleepingComputer"
+    date: 2026-10-01T14:25:14Z
+    kind: news
+    labels: []
+  - title: "Police Shut Down KillSec Ransomware, Identify Alleged Teen Leader"
+    url: "https://www.securityweek.com/police-shut-down-killsec-ransomware-identify-alleged-teen-leader/"
+    source: "SecurityWeek"
+    date: 2026-10-01T14:17:07Z
+    kind: news
+    labels: ["killsec", "cybercrime", "disruption", "europol", "ransomware", "takedown"]
   - title: "Kiteworks patches max severity code injection vulnerability"
     url: "https://www.bleepingcomputer.com/news/security/kiteworks-patches-max-severity-email-protection-gateway-code-injection-vulnerability/"
     source: "BleepingComputer"
@@ -520,6 +540,12 @@ items:
     date: 2026-10-01T08:26:03Z
     kind: news
     labels: ["cisco", "exploited", "sd-wan", "vulnerabilities", "zero-day"]
+  - title: "CrowdStrike Expands Federal SOC Modernization Through CISA-Funded SIEMaaS"
+    url: "https://www.crowdstrike.com/en-us/blog/crowdstrike-expands-federal-soc-modernization-via-cisa-siemaas/"
+    source: "Crowdstrike"
+    date: 2026-10-01T05:00:00Z
+    kind: research
+    labels: ["public sector"]
   - title: "Citrix NetScaler CVE-2026-88771: Observed Exploitation Artifacts and Hunt Indicators"
     url: "https://otx.alienvault.com/pulse/6abde7dd3f829cf6b721cfaa"
     source: "AlienVault"
@@ -3820,21 +3846,3 @@ items:
     date: 2026-09-01T17:54:22Z
     kind: news
     labels: []
-  - title: "Healthcare facilities operator Nutex says patient, employee data stolen in August incident"
-    url: "https://therecord.media/nutex-health-data-breach"
-    source: "Recorded Future"
-    date: 2026-09-01T15:31:00Z
-    kind: news
-    labels: ["cybercrime", "industry"]
-  - title: "Hackers push malicious Virtualizor update in BGP hijacking attack"
-    url: "https://www.bleepingcomputer.com/news/security/hackers-push-malicious-virtualizor-update-in-bgp-hijacking-attack/"
-    source: "BleepingComputer"
-    date: 2026-09-01T14:45:06Z
-    kind: news
-    labels: []
-  - title: "Novocure data breach affects more than 1,400 cancer patients"
-    url: "https://www.bleepingcomputer.com/news/security/novocure-data-breach-affects-more-than-1-400-cancer-patients/"
-    source: "BleepingComputer"
-    date: 2026-09-01T14:28:40Z
-    kind: news
-    labels: ["healthcare"]
