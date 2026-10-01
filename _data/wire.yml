@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-01T04:00:12Z
+generated_at: 2026-10-01T06:01:39Z
 window_days: 30
 counts:
-  total: 564
+  total: 563
   research: 191
-  news: 373
+  news: 372
 topics:
   - label: "vulnerabilities"
-    count: 81
+    count: 80
     color: 1
   - label: "cybercrime"
     count: 65
@@ -26,7 +26,7 @@ topics:
     count: 36
     color: 5
   - label: "exploited"
-    count: 30
+    count: 29
     color: 6
   - label: "data breaches"
     count: 22
@@ -34,10 +34,10 @@ topics:
   - label: "social engineering"
     count: 18
     color: 8
-  - label: "zero-day"
-    count: 17
-    color: 9
   - label: "clickfix"
+    count: 16
+    color: 9
+  - label: "zero-day"
     count: 16
     color: 10
   - label: "phishing"
@@ -234,7 +234,7 @@ label_colors:
   "citrix netscaler": 2
   "cleo": 7
   "click2shell": 4
-  "clickfix": 10
+  "clickfix": 9
   "clipboard": 10
   "clipboard poisoning": 6
   "clipper": 3
@@ -466,7 +466,7 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
   "watchguard": 2
-  "zero-day": 9
+  "zero-day": 10
 items:
   - title: "US sanctions 10 over ATM malware scheme tied to Tren de Aragua"
     url: "https://therecord.media/us-sanctions-10-atm-jackpotting-tren-de-aragua"
@@ -3846,9 +3846,3 @@ items:
     date: 2026-09-01T07:05:40Z
     kind: research
     labels: ["ai-assisted malware", "banking software", "boatbeam", "brazil financial fraud", "breeze comet", "cobaltspin", "compromised government sites", "kickplate", "latin america", "lightpaint", "mildfrost", "payment system manipulation", "pix targeting", "realbreeze", "xworm"]
-  - title: "PaperCut Exploitation Escalates to Active Intrusions"
-    url: "https://www.securityweek.com/papercut-exploitation-escalates-to-active-intrusions/"
-    source: "SecurityWeek"
-    date: 2026-09-01T05:27:18Z
-    kind: news
-    labels: ["exploited", "papercut", "vulnerabilities", "zero-day"]
