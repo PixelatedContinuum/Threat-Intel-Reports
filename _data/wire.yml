@@ -3,39 +3,39 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-01T10:01:32Z
+generated_at: 2026-10-01T12:01:52Z
 window_days: 30
 counts:
-  total: 558
-  research: 188
-  news: 370
+  total: 560
+  research: 189
+  news: 371
 topics:
   - label: "vulnerabilities"
-    count: 79
+    count: 80
     color: 1
   - label: "cybercrime"
-    count: 65
+    count: 66
     color: 2
   - label: "government"
     count: 40
     color: 3
   - label: "artificial intelligence"
-    count: 38
+    count: 39
     color: 4
   - label: "malware"
-    count: 36
+    count: 37
     color: 5
   - label: "exploited"
-    count: 29
+    count: 30
     color: 6
   - label: "data breaches"
-    count: 21
+    count: 20
     color: 7
   - label: "social engineering"
     count: 18
     color: 8
   - label: "zero-day"
-    count: 17
+    count: 18
     color: 9
   - label: "clickfix"
     count: 16
@@ -44,7 +44,7 @@ topics:
     count: 14
     color: 11
   - label: "ransomware"
-    count: 13
+    count: 12
     color: 12
 label_colors:
   "3bb": 7
@@ -301,6 +301,7 @@ label_colors:
   "detection engineering": 12
   "devops targeting": 8
   "disrupted": 8
+  "divd": 1
   "dmdc": 12
   "dns": 1
   "dns txt records": 3
@@ -344,7 +345,6 @@ label_colors:
   "garage2global": 10
   "gdpr": 9
   "gemini": 7
-  "gentlemen": 1
   "gh0st rat": 11
   "ghostcode": 6
   "gigabud": 9
@@ -453,14 +453,34 @@ label_colors:
   "threat intelligence": 9
   "threat source newsletter": 6
   "threat spotlight": 2
+  "treasury": 5
   "trend micro research : artificial intelligence (ai)": 2
   "trend micro research : expert perspective": 4
   "vmware": 2
   "vpn": 8
   "vulnerabilities": 1
   "watchguard": 2
+  "zammad": 4
   "zero-day": 9
 items:
+  - title: "Treasury Blacklists Most-Wanted ATM Malware Developer and His Network"
+    url: "https://www.securityweek.com/treasury-blacklists-most-wanted-atm-malware-developer-and-his-network/"
+    source: "SecurityWeek"
+    date: 2026-10-01T10:51:39Z
+    kind: news
+    labels: ["treasury", "cybercrime", "malware", "ploutus", "sanctions", "tracking & law enforcement"]
+  - title: "Zammad Zero-Days Exploited in AI-Powered DIVD Hack"
+    url: "https://www.securityweek.com/zammad-zero-days-exploited-in-ai-powered-divd-hack/"
+    source: "SecurityWeek"
+    date: 2026-10-01T10:42:49Z
+    kind: news
+    labels: ["divd", "zammad", "artificial intelligence", "exploited", "incident response", "vulnerabilities", "zero-day"]
+  - title: "The Fine Art of Frustrating the Adversary"
+    url: "https://blog.talosintelligence.com/the-fine-art-of-frustrating-the-adversary/"
+    source: "Cisco Talos"
+    date: 2026-10-01T10:00:05Z
+    kind: research
+    labels: ["on the radar"]
   - title: "Hackers stole Pentagon personnel records of over 3 million people"
     url: "https://www.bleepingcomputer.com/news/security/hackers-breach-pentagon-human-resources-management-system-steal-data-of-nearly-3-million-people/"
     source: "BleepingComputer"
@@ -3803,9 +3823,3 @@ items:
     date: 2026-09-01T12:07:54Z
     kind: news
     labels: ["artificial intelligence", "exploited", "langflow", "vulnerabilities"]
-  - title: "Ransomware Gang Claims Nutex Health Data Breach"
-    url: "https://www.securityweek.com/ransomware-gang-claims-nutex-health-data-breach/"
-    source: "SecurityWeek"
-    date: 2026-09-01T10:47:47Z
-    kind: news
-    labels: ["data breaches", "gentlemen", "healthcare", "nutex", "ransomware"]
