@@ -3,7 +3,7 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-01T20:01:08Z
+generated_at: 2026-10-01T22:02:12Z
 window_days: 30
 counts:
   total: 563
@@ -14,7 +14,7 @@ topics:
     count: 81
     color: 1
   - label: "cybercrime"
-    count: 66
+    count: 67
     color: 2
   - label: "government"
     count: 40
@@ -43,7 +43,7 @@ topics:
   - label: "phishing"
     count: 14
     color: 11
-  - label: "ransomware"
+  - label: "nation-state"
     count: 13
     color: 12
 label_colors:
@@ -403,7 +403,7 @@ label_colors:
   "mobile": 4
   "mobile & wireless": 4
   "n-central": 6
-  "nation-state": 11
+  "nation-state": 12
   "netch-gateway": 5
   "network security": 6
   "next-gen identity security": 12
@@ -433,7 +433,7 @@ label_colors:
   "privacy": 12
   "proxy abuse": 6
   "public sector": 3
-  "ransomware": 12
+  "ransomware": 11
   "ransomware as a service": 3
   "revolut": 5
   "rewards points scam": 3
@@ -466,6 +466,18 @@ label_colors:
   "zammad": 4
   "zero-day": 9
 items:
+  - title: "Autonomous AI agents tried to hack US, Canadian government websites"
+    url: "https://www.bleepingcomputer.com/news/security/autonomous-ai-agents-tried-to-hack-us-canadian-government-websites/"
+    source: "BleepingComputer"
+    date: 2026-10-01T20:52:50Z
+    kind: news
+    labels: []
+  - title: "Iranian accused of hacking American universities extradited from Montenegro"
+    url: "https://therecord.media/iran-montenegro-hacker-extradition"
+    source: "Recorded Future"
+    date: 2026-10-01T20:15:00Z
+    kind: news
+    labels: ["cybercrime", "nation-state"]
   - title: "Researchers find Chinese hacking campaigns targeting AI firms, Asian governments"
     url: "https://therecord.media/china-linked-phishing-scheme-backdoor-taiwan"
     source: "Recorded Future"
@@ -3832,15 +3844,3 @@ items:
     date: 2026-09-01T22:40:28Z
     kind: news
     labels: ["a little sunshine", "cybera", "data breaches", "decryptads", "exploit", "hertz", "idscan.net", "jillian kossman", "larry baldwin", "nexus", "planet13", "the coming storm", "web fraud 2.0", "zach edwards"]
-  - title: "Hackers abuse Faronics Deploy admin tool to install ScreenConnect"
-    url: "https://www.bleepingcomputer.com/news/security/hackers-abuse-faronics-deploy-admin-tool-to-install-screenconnect/"
-    source: "BleepingComputer"
-    date: 2026-09-01T20:53:23Z
-    kind: news
-    labels: []
-  - title: "China's 'Fire Ant' campaign used compromised Cisco routers as platform for more attacks"
-    url: "https://therecord.media/router-hacks-fire-ant-group-china"
-    source: "Recorded Future"
-    date: 2026-09-01T20:35:00Z
-    kind: news
-    labels: ["china"]
