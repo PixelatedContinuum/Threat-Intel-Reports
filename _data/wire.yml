@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-01T08:01:32Z
+generated_at: 2026-10-01T10:01:32Z
 window_days: 30
 counts:
-  total: 561
-  research: 190
-  news: 371
+  total: 558
+  research: 188
+  news: 370
 topics:
   - label: "vulnerabilities"
-    count: 80
+    count: 79
     color: 1
   - label: "cybercrime"
     count: 65
@@ -29,15 +29,15 @@ topics:
     count: 29
     color: 6
   - label: "data breaches"
-    count: 22
+    count: 21
     color: 7
   - label: "social engineering"
     count: 18
     color: 8
-  - label: "clickfix"
-    count: 16
-    color: 9
   - label: "zero-day"
+    count: 17
+    color: 9
+  - label: "clickfix"
     count: 16
     color: 10
   - label: "phishing"
@@ -70,7 +70,6 @@ label_colors:
   "adversary infrastructure": 12
   "adversary-in-the-middle (aitm)": 1
   "aerospace": 7
-  "aesto health": 6
   "affiliate fraud": 7
   "agentcore runtime": 2
   "agentic ai": 9
@@ -133,13 +132,11 @@ label_colors:
   "autoit loader": 11
   "automated-exploitation": 9
   "aveva": 1
-  "aviation sector": 9
   "avisloader": 6
   "awareness training": 1
   "aws": 7
   "aws cloudtrail": 6
   "azure": 1
-  "azure infrastructure": 4
   "azure table storage": 2
   "azure tokens": 3
   "babuk": 7
@@ -232,7 +229,7 @@ label_colors:
   "citrix netscaler": 2
   "cleo": 7
   "click2shell": 4
-  "clickfix": 9
+  "clickfix": 10
   "clipboard": 10
   "clipboard poisoning": 6
   "clipper": 3
@@ -382,7 +379,6 @@ label_colors:
   "ios": 11
   "itorrents compromise": 8
   "ivanti": 7
-  "jfrog": 8
   "kimsuky": 1
   "kiteworks": 9
   "kothamine": 10
@@ -436,7 +432,6 @@ label_colors:
   "proxy abuse": 6
   "ransomware": 12
   "ransomware as a service": 3
-  "rce": 10
   "revolut": 5
   "rewards points scam": 3
   "rmm abuse": 2
@@ -464,8 +459,26 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
   "watchguard": 2
-  "zero-day": 10
+  "zero-day": 9
 items:
+  - title: "Hackers stole Pentagon personnel records of over 3 million people"
+    url: "https://www.bleepingcomputer.com/news/security/hackers-breach-pentagon-human-resources-management-system-steal-data-of-nearly-3-million-people/"
+    source: "BleepingComputer"
+    date: 2026-10-01T09:44:28Z
+    kind: news
+    labels: []
+  - title: "500,000 Active Credentials Left Exposed on GitHub"
+    url: "https://www.securityweek.com/500000-active-credentials-left-exposed-on-github/"
+    source: "SecurityWeek"
+    date: 2026-10-01T09:43:56Z
+    kind: news
+    labels: ["application security", "data leak", "data protection", "github", "identity & access", "secrets scanning", "secrets sprawl"]
+  - title: "Cisco Patches Exploited Catalyst SD-WAN Zero-Day Vulnerability"
+    url: "https://www.securityweek.com/cisco-patches-exploited-catalyst-sd-wan-zero-day-vulnerability/"
+    source: "SecurityWeek"
+    date: 2026-10-01T08:26:03Z
+    kind: news
+    labels: ["cisco", "exploited", "sd-wan", "vulnerabilities", "zero-day"]
   - title: "US sanctions 10 over ATM malware scheme tied to Tren de Aragua"
     url: "https://therecord.media/us-sanctions-10-atm-jackpotting-tren-de-aragua"
     source: "Recorded Future"
@@ -3796,39 +3809,3 @@ items:
     date: 2026-09-01T10:47:47Z
     kind: news
     labels: ["data breaches", "gentlemen", "healthcare", "nutex", "ransomware"]
-  - title: "Critical JFrog Artifactory Vulnerability Reportedly Exploited in the Wild"
-    url: "https://www.securityweek.com/critical-jfrog-artifactory-vulnerability-reportedly-exploited-in-the-wild/"
-    source: "SecurityWeek"
-    date: 2026-09-01T09:59:44Z
-    kind: news
-    labels: ["exploited", "jfrog", "jfrog artifactory", "vulnerabilities"]
-  - title: "Five Venezuelans plead guilty to ATM jackpotting attacks in US"
-    url: "https://www.bleepingcomputer.com/news/security/five-venezuelans-plead-guilty-to-atm-jackpotting-attacks-in-us/"
-    source: "BleepingComputer"
-    date: 2026-09-01T09:15:07Z
-    kind: news
-    labels: []
-  - title: "9.5 Million Impacted by Aesto Health Data Breach"
-    url: "https://www.securityweek.com/9-5-million-impacted-by-aesto-health-data-breach/"
-    source: "SecurityWeek"
-    date: 2026-09-01T09:09:34Z
-    kind: news
-    labels: ["aesto health", "data breaches", "healthcare"]
-  - title: "WatchGuard Patches Critical Vulnerabilities"
-    url: "https://www.securityweek.com/watchguard-patches-critical-vulnerabilities/"
-    source: "SecurityWeek"
-    date: 2026-09-01T08:50:04Z
-    kind: news
-    labels: ["patch", "rce", "vulnerabilities", "watchguard"]
-  - title: "Switches to Node.js and JavaScript malware"
-    url: "https://otx.alienvault.com/pulse/6a96918b7f129c94fa473bb0"
-    source: "AlienVault"
-    date: 2026-09-01T08:49:15Z
-    kind: research
-    labels: ["aviation sector", "azure infrastructure", "cross-platform rat", "fintech targeting", "linkedin recruitment lure", "minifast", "noderabbit", "pollcat", "retrograde", "trojanized coding challenge"]
-  - title: "Mirage Kitten targeting aviation and FinTech sectors across the Middle East and Africa with a new malware set"
-    url: "https://otx.alienvault.com/pulse/6a96918b7f129c94fa473bb0"
-    source: "AlienVault"
-    date: 2026-09-01T08:49:15Z
-    kind: research
-    labels: ["aviation sector", "azure infrastructure", "cross-platform rat", "fintech targeting", "linkedin recruitment lure", "minifast", "noderabbit", "pollcat", "retrograde", "trojanized coding challenge"]
