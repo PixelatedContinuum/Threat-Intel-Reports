@@ -3,18 +3,18 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-02T10:00:32Z
+generated_at: 2026-10-02T12:02:12Z
 window_days: 30
 counts:
   total: 564
-  research: 196
-  news: 368
+  research: 195
+  news: 369
 topics:
   - label: "vulnerabilities"
     count: 81
     color: 1
   - label: "cybercrime"
-    count: 67
+    count: 68
     color: 2
   - label: "artificial intelligence"
     count: 40
@@ -43,8 +43,8 @@ topics:
   - label: "phishing"
     count: 14
     color: 11
-  - label: "ransomware"
-    count: 14
+  - label: "nation-state"
+    count: 13
     color: 12
 label_colors:
   "2cloader": 6
@@ -336,6 +336,7 @@ label_colors:
   "exploited": 6
   "exposure management": 4
   "extortionware": 11
+  "extradited": 4
   "fake captcha": 11
   "fake job interview": 1
   "fbi": 9
@@ -348,7 +349,6 @@ label_colors:
   "fortimail": 5
   "fortinet": 7
   "fraud & identity theft": 11
-  "frontier ai": 3
   "galago": 5
   "gaming": 5
   "garage2global": 10
@@ -411,7 +411,7 @@ label_colors:
   "mobile": 4
   "mobile & wireless": 4
   "n-central": 6
-  "nation-state": 11
+  "nation-state": 12
   "netch-gateway": 5
   "network security": 6
   "north korea": 3
@@ -440,7 +440,7 @@ label_colors:
   "privacy": 12
   "proxy abuse": 6
   "public sector": 3
-  "ransomware": 12
+  "ransomware": 11
   "ransomware as a service": 3
   "revolut": 5
   "rewards points scam": 3
@@ -472,6 +472,12 @@ label_colors:
   "zammad": 4
   "zero-day": 9
 items:
+  - title: "In Rare Move, Alleged Iranian State Hacker Extradited to US"
+    url: "https://www.securityweek.com/in-rare-move-iranian-hacker-accused-of-working-for-irgc-extradited-to-us/"
+    source: "SecurityWeek"
+    date: 2026-10-02T11:14:34Z
+    kind: news
+    labels: ["cybercrime", "extradited", "hacker", "iran", "tracking & law enforcement"]
   - title: "Warlock Expands SharePoint Exploitation in Critical Infrastructure Attacks"
     url: "https://www.securityweek.com/warlock-expands-sharepoint-exploitation-in-critical-infrastructure-attacks/"
     source: "SecurityWeek"
@@ -3850,9 +3856,3 @@ items:
     date: 2026-09-02T12:18:15Z
     kind: news
     labels: ["cleo", "poc exploit", "vulnerabilities"]
-  - title: "An AI-Assisted Cyber Attack: Inside a Unit 42 Investigation"
-    url: "https://unit42.paloaltonetworks.com/ai-assisted-cyber-attack-inside-a-unit-42-investigation/"
-    source: "Palo Alto Networks"
-    date: 2026-09-02T10:00:46Z
-    kind: research
-    labels: ["agentic ai", "frontier ai", "insights", "ransomware", "threat research"]
