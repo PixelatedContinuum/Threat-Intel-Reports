@@ -12,12 +12,11 @@
    so rather than reporting a clean sweep of zero. See
    homelab-soc/docs/gate-honesty-contract.md. */
 
-// Calibrated against the two-hourly timer, not by the twice-daily era's rule
-// of thumb. Applied literally that rule lands near five hours, tight enough
-// that one OpenCTI hiccup or one push collision would fail the next publish.
-// Eight hours is four consecutive misses, which is a dead timer rather than a
-// blip, and still names one 4.5x sooner than the 36 hours this replaced.
-var STALE_HOURS = 8;
+// Calibrated against the hourly timer (was two-hourly with an 8 hour limit, until
+// 2026-10-02). Four hours is four consecutive misses, which is a dead timer
+// rather than a blip, and tight enough that one OpenCTI hiccup or one push
+// collision does not fail the next publish.
+var STALE_HOURS = 4;
 var REQUIRED = ['title', 'url', 'source', 'date', 'kind'];
 // Hues defined in assets/css/custom.css as .hl-topic-c1 .. .hl-topic-c12.
 var PALETTE_SIZE = 12;

@@ -8,7 +8,7 @@ var NOW = Date.parse('2026-08-19T12:00:00Z');
 
 function doc(over) {
   var d = {
-    generated_at: '2026-08-19T07:00:00Z',
+    generated_at: '2026-08-19T10:00:00Z',
     window_days: 30,
     counts: { total: 2, research: 1, news: 1 },
     // Must name a label an item actually carries, or the topic check fires.
@@ -41,10 +41,10 @@ test('an absent file is NOT CHECKED, never PASS', function () {
 /* An old local file is the trigger for the staleness question, not the answer.
    These four pin the answer to what origin holds, because reading local age
    alone accused a healthy generator on every session that opened a clone more
-   than eight hours old. */
+   than four hours old. */
 
 test('a stale local file fails only when origin is stale too', function () {
-  // 10 hours old against the two-hourly timer, and origin is no fresher: the
+  // 10 hours old against the hourly timer, and origin is no fresher: the
   // timer really has stopped, which is the case this gate exists for.
   var r = CW.check(doc({ generated_at: '2026-08-19T02:00:00Z' }), SOURCES, NOW,
     { generated_at: '2026-08-19T02:00:00Z' });
@@ -81,10 +81,17 @@ test('a fresh local file never consults origin', function () {
 });
 
 test('a transient run of misses still passes', function () {
-  // 6 hours old: three missed runs, still inside the eight-hour threshold, so
-  // a blip on the generator does not fail somebody else's publish.
-  var r = CW.check(doc({ generated_at: '2026-08-19T06:00:00Z' }), SOURCES, NOW);
+  // 3 hours old: three missed hourly runs, still inside the four-hour threshold,
+  // so a blip on the generator does not fail somebody else's publish.
+  var r = CW.check(doc({ generated_at: '2026-08-19T09:00:00Z' }), SOURCES, NOW);
   assert.equal(r.status, 'PASS');
+});
+
+test('a file past the four-hour limit with origin equally stale fails', function () {
+  // 5 hours old: five missed hourly runs, and origin holds the same file.
+  var r = CW.check(doc({ generated_at: '2026-08-19T07:00:00Z' }), SOURCES, NOW,
+    { generated_at: '2026-08-19T07:00:00Z' });
+  assert.equal(r.status, 'FAIL');
 });
 
 test('a description key fails, because that is the copyright limit', function () {
