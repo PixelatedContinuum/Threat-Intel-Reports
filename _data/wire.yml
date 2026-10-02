@@ -3,30 +3,30 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-02T08:01:32Z
+generated_at: 2026-10-02T10:00:32Z
 window_days: 30
 counts:
-  total: 556
-  research: 189
-  news: 367
+  total: 564
+  research: 196
+  news: 368
 topics:
   - label: "vulnerabilities"
-    count: 80
+    count: 81
     color: 1
   - label: "cybercrime"
     count: 67
     color: 2
-  - label: "government"
+  - label: "artificial intelligence"
     count: 40
     color: 3
-  - label: "artificial intelligence"
-    count: 39
+  - label: "government"
+    count: 40
     color: 4
   - label: "malware"
-    count: 37
+    count: 38
     color: 5
   - label: "exploited"
-    count: 29
+    count: 31
     color: 6
   - label: "data breaches"
     count: 19
@@ -35,7 +35,7 @@ topics:
     count: 18
     color: 8
   - label: "zero-day"
-    count: 17
+    count: 18
     color: 9
   - label: "clickfix"
     count: 16
@@ -43,8 +43,8 @@ topics:
   - label: "phishing"
     count: 14
     color: 11
-  - label: "nation-state"
-    count: 13
+  - label: "ransomware"
+    count: 14
     color: 12
 label_colors:
   "2cloader": 6
@@ -79,6 +79,7 @@ label_colors:
   "ai agents": 8
   "ai framework": 4
   "ai models": 12
+  "ai policy": 8
   "ai services": 10
   "ai training": 8
   "ai-agent": 12
@@ -87,6 +88,7 @@ label_colors:
   "ai-driven-campaign": 10
   "ai-generated decoys": 1
   "ai-generated-content": 4
+  "ai-generated-scripts": 3
   "ai-orchestrated campaign": 1
   "ai-powered automation": 6
   "aitm": 5
@@ -105,6 +107,8 @@ label_colors:
   "anti-analysis": 11
   "anti-vm": 6
   "anydesk": 9
+  "aotera": 8
+  "aotera loader": 11
   "api": 12
   "apollo": 11
   "app-bound encryption": 3
@@ -113,13 +117,15 @@ label_colors:
   "applescript": 5
   "application security": 6
   "apt": 5
+  "apt campaign": 3
   "apt-q-95": 4
   "apt36": 10
+  "arbitrary file write": 11
   "arista": 10
   "arktunnel": 6
   "arm": 10
   "arrested": 2
-  "artificial intelligence": 4
+  "artificial intelligence": 3
   "arx cipher": 2
   "astrana health": 8
   "asukastealer": 5
@@ -135,6 +141,7 @@ label_colors:
   "awareness training": 1
   "aws": 7
   "aws cloudtrail": 6
+  "aws credentials": 9
   "azure": 1
   "azure tokens": 3
   "babuk": 7
@@ -156,16 +163,17 @@ label_colors:
   "blindingcan": 11
   "blizzard": 8
   "blockchain c2": 1
+  "blockchain fraud": 2
   "blockchain infrastructure": 11
   "blog post": 6
   "bloodalchemy": 3
   "bluemoon": 5
   "bnb smart chain": 10
   "botnet": 6
-  "botnet takedown": 5
   "brand impersonation": 7
   "brevo": 8
   "brevo compromise": 8
+  "browser credential theft": 10
   "browser extension": 11
   "browser extension malware": 6
   "browser proxy": 4
@@ -199,6 +207,7 @@ label_colors:
   "check point": 6
   "china": 5
   "china apt": 12
+  "china-based": 3
   "chinese apt": 4
   "chinese cyber-espionage": 2
   "chinese threat cluster": 7
@@ -229,13 +238,13 @@ label_colors:
   "clickfix": 10
   "clipboard": 10
   "clipboard poisoning": 6
-  "clipper": 3
   "closedquorum": 9
   "cloud": 7
   "cloud cybersecurity research": 3
   "cloud-storage-exploitation": 2
   "coast guard": 1
   "cobalt strike": 5
+  "configuration exposure": 3
   "conti": 1
   "coordinated-inauthentic-behavior": 12
   "cpanel": 1
@@ -246,6 +255,7 @@ label_colors:
   "credential-harvesting": 1
   "credential-theft": 5
   "credit card": 7
+  "critical infrastructure": 4
   "cron-injection": 10
   "cross-border infrastructure": 8
   "cross-platform": 10
@@ -254,6 +264,7 @@ label_colors:
   "crowdstrike": 1
   "crudeexclude": 7
   "crypto": 5
+  "crypto impersonation": 5
   "cryptocurrency": 12
   "cryptocurrency miner": 1
   "cryptocurrency mining": 6
@@ -268,6 +279,7 @@ label_colors:
   "cve-2021-38003": 1
   "cve-2022-0847": 7
   "cve-2024-21762": 6
+  "cve-2026-104286": 3
   "cve-2026-19949": 8
   "cve-2026-20354": 12
   "cve-2026-31431": 6
@@ -297,8 +309,8 @@ label_colors:
   "denial of service": 1
   "detection engineering": 12
   "devops targeting": 8
-  "disrupted": 8
   "divd": 1
+  "dll side-loading": 4
   "dmdc": 12
   "dns": 1
   "dns txt records": 3
@@ -333,6 +345,7 @@ label_colors:
   "firebase c2": 6
   "firefox": 3
   "fortigate": 1
+  "fortimail": 5
   "fortinet": 7
   "fraud & identity theft": 11
   "frontier ai": 3
@@ -350,7 +363,7 @@ label_colors:
   "google cloud": 8
   "google infrastructure abuse": 8
   "google tag manager abuse": 4
-  "government": 3
+  "government": 4
   "government impersonation": 7
   "gta6": 6
   "gyazo": 8
@@ -398,7 +411,7 @@ label_colors:
   "mobile": 4
   "mobile & wireless": 4
   "n-central": 6
-  "nation-state": 12
+  "nation-state": 11
   "netch-gateway": 5
   "network security": 6
   "north korea": 3
@@ -427,7 +440,7 @@ label_colors:
   "privacy": 12
   "proxy abuse": 6
   "public sector": 3
-  "ransomware": 11
+  "ransomware": 12
   "ransomware as a service": 3
   "revolut": 5
   "rewards points scam": 3
@@ -459,24 +472,84 @@ label_colors:
   "zammad": 4
   "zero-day": 9
 items:
+  - title: "Warlock Expands SharePoint Exploitation in Critical Infrastructure Attacks"
+    url: "https://www.securityweek.com/warlock-expands-sharepoint-exploitation-in-critical-infrastructure-attacks/"
+    source: "SecurityWeek"
+    date: 2026-10-02T09:34:41Z
+    kind: news
+    labels: ["china", "exploited", "malware", "ransomware", "sharepoint", "vulnerabilities", "warlock"]
+  - title: "Microsoft’s X account hacked in crypto pump-and-dump scheme"
+    url: "https://www.bleepingcomputer.com/news/security/microsofts-x-account-hacked-in-crypto-token-pump-and-dump-scheme/"
+    source: "BleepingComputer"
+    date: 2026-10-02T09:29:56Z
+    kind: news
+    labels: ["cryptocurrency", "microsoft"]
+  - title: "AI Agents Aimed SQL Injection at US and Canadian Government Sites"
+    url: "https://www.securityweek.com/ai-agents-aimed-sql-injection-at-us-and-canadian-government-sites/"
+    source: "SecurityWeek"
+    date: 2026-10-02T08:38:46Z
+    kind: news
+    labels: ["artificial intelligence", "malware", "openai", "rogue ai", "sql injection"]
+  - title: "Exploited Fortinet FortiMail Zero-Day Calls for Urgent Action"
+    url: "https://www.securityweek.com/exploited-fortinet-fortimail-zero-day-calls-for-urgent-action/"
+    source: "SecurityWeek"
+    date: 2026-10-02T08:07:33Z
+    kind: news
+    labels: ["exploited", "fortimail", "fortinet", "vulnerabilities", "zero-day"]
+  - title: "Determined Attacker Uploads Malicious Webshells to Parks and Rec Management Platform Servers"
+    url: "https://www.huntress.com/blog/parks-recreation-platform-webshell-attack"
+    source: "AlienVault"
+    date: 2026-10-02T07:17:52Z
+    kind: research
+    labels: ["ai-generated-scripts", "china-based", "credential-harvesting", "file-upload-vulnerability", "payment-card-theft", "recreation-management-platform", "timestomping", "webshell"]
+  - title: "August 2026 Threat Trend Report on APT Attacks (South Korea)"
+    url: "https://asec.ahnlab.com/en/95649"
+    source: "AlienVault"
+    date: 2026-10-02T07:16:45Z
+    kind: research
+    labels: ["apt campaign", "dll side-loading", "infostealer", "lnk files", "powershell", "south korea", "spear phishing", "xenorat"]
+  - title: "$100k in Crypto Drained by the Underground Operation"
+    url: "https://otx.alienvault.com/pulse/6abf599ea3419c5518645c45"
+    source: "AlienVault"
+    date: 2026-10-02T07:13:34Z
+    kind: research
+    labels: ["aotera", "aotera loader", "browser injection", "clipboard clipper", "cryptocurrency theft", "exchange drain", "tedy", "underground", "vidar", "vidar stealer"]
   - title: "RemusStealer: EtherHiding In Hidden Windows"
     url: "https://binarydefense.com/resources/blog/remusstealer-etherhiding-in-hidden-windows"
     source: "AlienVault"
     date: 2026-10-02T01:47:27Z
     kind: research
     labels: ["blockchain c2", "credential theft", "ethereum smart contracts", "etherhiding", "hidden desktops", "information stealer", "lummastealer", "remusstealer"]
+  - title: "PSIRT"
+    url: "https://otx.alienvault.com/pulse/6abf0b86fb14812f2dc84fb2"
+    source: "AlienVault"
+    date: 2026-10-02T01:40:22Z
+    kind: research
+    labels: ["arbitrary file write", "cve-2026-104286", "fortimail", "ibe feature", "path traversal", "system compromise", "unauthenticated access", "zero-day exploitation"]
   - title: "Fortinet warns of critical FortiMail flaw exploited in zero-day attacks"
     url: "https://www.bleepingcomputer.com/news/security/fortinet-warns-of-critical-fortimail-flaw-exploited-in-zero-day-attacks/"
     source: "BleepingComputer"
     date: 2026-10-01T22:42:49Z
     kind: news
     labels: []
+  - title: "TIKTOUK: Tracing a WordPress Credential Collection Toolkit"
+    url: "https://otx.alienvault.com/pulse/6abeceb3ed88945bc5661c7d"
+    source: "AlienVault"
+    date: 2026-10-01T21:20:51Z
+    kind: research
+    labels: ["aws credentials", "configuration exposure", "credential theft", "cve-2026-60137", "cve-2026-63030", "javascript scanning", "rest api probing", "smtp plugin decryption", "tiktouk", "wordpress"]
   - title: "Autonomous AI agents tried to hack US, Canadian government websites"
     url: "https://www.bleepingcomputer.com/news/security/autonomous-ai-agents-tried-to-hack-us-canadian-government-websites/"
     source: "BleepingComputer"
     date: 2026-10-01T20:52:50Z
     kind: news
     labels: []
+  - title: "Fake xStocks, Pendle, and other sites bait crypto users with rewards votes"
+    url: "https://www.malwarebytes.com/blog/threat-intel/2026/10/fake-xstocks-pendle-and-other-sites-bait-crypto-users-with-rewards-votes"
+    source: "AlienVault"
+    date: 2026-10-01T20:52:12Z
+    kind: research
+    labels: ["blockchain fraud", "crypto impersonation", "cryptocurrency phishing", "fake voting scam", "token theft", "wallet drainer", "walletconnect abuse"]
   - title: "Iranian accused of hacking American universities extradited from Montenegro"
     url: "https://therecord.media/iran-montenegro-hacker-extradition"
     source: "Recorded Future"
@@ -507,6 +580,12 @@ items:
     date: 2026-10-01T15:55:00Z
     kind: news
     labels: ["cybercrime"]
+  - title: "Warlock Ransomware Attackers Hit Water and Telecom Operators"
+    url: "https://otx.alienvault.com/pulse/6abe7e463c092196777a7816"
+    source: "AlienVault"
+    date: 2026-10-01T15:37:42Z
+    kind: research
+    labels: ["byovd", "critical infrastructure", "cve-2025-1055", "cve-2025-49704", "cve-2025-49706", "cve-2025-53770", "cve-2025-53771", "longlegs", "sharepoint exploitation", "storm-2603", "telecommunications", "toolshell", "warlock", "water utility"]
   - title: "Hacker Conversations: Rob Juncker, a Knock at the Door and a Moral Compass"
     url: "https://www.securityweek.com/hacker-conversations-rob-juncker-a-knock-at-the-door-and-a-moral-compass/"
     source: "SecurityWeek"
@@ -549,6 +628,12 @@ items:
     date: 2026-10-01T10:51:39Z
     kind: news
     labels: ["treasury", "cybercrime", "malware", "ploutus", "sanctions", "tracking & law enforcement"]
+  - title: "Hallucinating Credibility: China-Aligned TA419 Impersonates its Way into US AI Policy Circles"
+    url: "https://www.proofpoint.com/us/blog/threat-insight/hallucinating-credibility-china-aligned-ta419-impersonates-its-way-us-ai-policy"
+    source: "AlienVault"
+    date: 2026-10-01T10:43:47Z
+    kind: research
+    labels: ["ai policy", "aitm", "browser-in-the-browser", "china-aligned", "credential phishing", "espionage", "frameless bitb", "impersonation", "ta419", "think tanks"]
   - title: "Zammad Zero-Days Exploited in AI-Powered DIVD Hack"
     url: "https://www.securityweek.com/zammad-zero-days-exploited-in-ai-powered-divd-hack/"
     source: "SecurityWeek"
@@ -1599,6 +1684,12 @@ items:
     date: 2026-09-22T21:40:37Z
     kind: news
     labels: ["government", "legal"]
+  - title: "New PamStealer variant targets macOS via fake crypto wallet"
+    url: "https://otx.alienvault.com/pulse/6ab2e69de1b172350066344d"
+    source: "AlienVault"
+    date: 2026-09-22T20:35:41Z
+    kind: research
+    labels: ["browser credential theft", "cryptocurrency", "ecies", "infostealer", "keychain", "macos", "pam validation", "pamstealer", "persistence", "swift"]
   - title: "Chinese hackers exploit WordPress, Zyxel flaws to steal govt data"
     url: "https://www.bleepingcomputer.com/news/security/chinese-hackers-exploit-multiple-technologies-to-steal-govt-data/"
     source: "BleepingComputer"
@@ -3765,33 +3856,3 @@ items:
     date: 2026-09-02T10:00:46Z
     kind: research
     labels: ["agentic ai", "frontier ai", "insights", "ransomware", "threat research"]
-  - title: "Hackers Weaponize Microsoft Teams Help Desk Calls for Malware and Network Lateral Movement"
-    url: "https://cybersecuritynews.com/hackers-weaponize-microsoft-teams/"
-    source: "AlienVault"
-    date: 2026-09-02T09:59:12Z
-    kind: research
-    labels: []
-  - title: "Sality's P2P Network Turned Against Itself, Cutting Off New Malware Payloads"
-    url: "https://otx.alienvault.com/pulse/6a97f2b0566cf1ccb1ec8fb4"
-    source: "AlienVault"
-    date: 2026-09-02T09:56:00Z
-    kind: research
-    labels: ["botnet takedown", "clipper", "cryptocurrency theft", "ddos campaigns", "eggjagger", "law enforcement operation", "p2p network", "peer list manipulation", "sality"]
-  - title: "Chrome and Firefox Updates Patch Dozens of Vulnerabilities"
-    url: "https://www.securityweek.com/chrome-and-firefox-updates-patch-dozens-of-vulnerabilities/"
-    source: "SecurityWeek"
-    date: 2026-09-02T09:12:29Z
-    kind: news
-    labels: ["chrome", "firefox", "mozilla", "patches", "vulnerabilities"]
-  - title: "US charges Russian for infecting 80,000 freelancers with malware"
-    url: "https://www.bleepingcomputer.com/news/security/us-charges-russian-for-infecting-80-000-freelancers-with-malware/"
-    source: "BleepingComputer"
-    date: 2026-09-02T09:06:48Z
-    kind: news
-    labels: []
-  - title: "23-Year-Old Sality P2P Botnet Disrupted"
-    url: "https://www.securityweek.com/23-year-old-sality-p2p-botnet-disrupted/"
-    source: "SecurityWeek"
-    date: 2026-09-02T08:38:00Z
-    kind: news
-    labels: ["botnet", "disrupted", "law enforcement", "malware", "sality", "tracking & law enforcement"]
