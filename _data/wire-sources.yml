@@ -183,3 +183,192 @@ drop:
   - preview build
   - insider build
   - subscription
+
+# Rule-derived tags (T-0105). Matched against the headline only, with the same
+# term syntax as keep and drop (word-bounded, "*" for a prefix). A matching tag
+# goes in front of the feed's own labels, and the page draws the first two, so
+# the order here is the display priority: specific tags first, the broad
+# "vulnerabilities" and "malware" last. Tag names reuse the existing chip names
+# where there is one, so rule tags and upstream labels count together.
+# Precision was sampled before shipping; see Docs/hunters-ledger-wire-feed-2026-10-02.md
+# in the workflows repo.
+tag_rules:
+  zero-day:
+    - zero-day*
+    - zero day*
+    - 0-day*
+  exploited:
+    - exploited
+    - exploiting
+    - exploitation
+    - in the wild
+  ransomware:
+    - ransom*
+    - lockbit
+    - akira
+    - qilin
+    - clop
+    - cl0p
+    - blackcat
+    - alphv
+    - black basta
+    - rhysida
+    - revil
+  infostealer:
+    - infostealer*
+    - info-stealer*
+    - stealer*
+    - information stealer*
+    - lumma
+    - redline
+    - vidar
+  nation-state:
+    - nation-state*
+    - state-sponsored
+    - state-backed
+    - state sponsored
+    - espionage
+    - cyberespionage
+    - apt
+    - apt1*
+    - apt2*
+    - apt3*
+    - apt4*
+    - lazarus
+    - kimsuky
+    - sandworm
+    - turla
+    - muddywater
+    - oilrig
+    - fancy bear
+    - typhoon
+    - blizzard
+    - sandstorm
+    - china-linked
+    - china-nexus
+    - russia-linked
+    - russia-nexus
+    - iran-linked
+    - north korea*
+    - chinese hackers
+    - russian hackers
+    - iranian hackers
+  supply chain:
+    - supply chain
+    - supply-chain
+    - npm
+    - pypi
+    - malicious package*
+    - malicious extension*
+    - typosquat*
+  ddos:
+    - ddos
+    - denial of service
+    - denial-of-service
+  data breaches:
+    - breach*
+    - data leak*
+    - leaked
+    - data theft
+    - stolen data
+    - data exposure
+    - exposed database*
+    - exfiltrat*
+  phishing:
+    - phish*
+    - smishing
+    - quishing
+    - business email compromise
+  social engineering:
+    - social engineering
+    - clickfix
+    - vishing
+    - smishing
+  law enforcement:
+    - arrest*
+    - indict*
+    - law enforcement
+    - europol
+    - interpol
+    - takedown of
+    - takedown operation
+    - taken down
+    - seiz*
+    - extradit*
+    - sentenced
+    - pleads guilty
+    - pleaded guilty
+    - charged with
+    - convicted
+  mobile:
+    - android
+    - ios
+    - iphone
+    - ipados
+    - mobile malware
+    - mobile banking
+    - mobile app*
+    - mobile ransomware
+    - google play
+    - app store
+  cloud:
+    - cloud
+    - aws
+    - azure
+    - gcp
+    - google cloud
+    - kubernetes
+    - microsoft 365
+    - entra*
+    - s3 bucket*
+    - saas
+  artificial intelligence:
+    - ai
+    - artificial intelligence
+    - llm
+    - llms
+    - chatgpt
+    - openai
+    - copilot
+    - machine learning
+    - generative ai
+    - deepfake*
+    - prompt injection
+    - agentic
+  vulnerabilities:
+    - cve-*
+    - vulnerab*
+    - rce
+    - remote code execution
+    - privilege escalation
+    - sql injection
+    - xss
+    - deserializ*
+    - buffer overflow
+    - authentication bypass
+    - auth bypass
+    - security flaw*
+    - flaw
+    - flaws
+    - patch tuesday
+    - security update*
+    - security patch*
+    - path traversal
+    - command injection
+    - out-of-bounds
+  malware:
+    - malware
+    - trojan*
+    - backdoor*
+    - botnet*
+    - rootkit*
+    - spyware
+    - worm
+    - worms
+    - loader
+    - dropper
+    - wiper
+    - rat
+    - rats
+    - malicious
+    - mirai
