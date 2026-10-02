@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-02T06:00:42Z
+generated_at: 2026-10-02T08:01:32Z
 window_days: 30
 counts:
-  total: 557
-  research: 188
-  news: 369
+  total: 556
+  research: 189
+  news: 367
 topics:
   - label: "vulnerabilities"
     count: 80
@@ -459,6 +459,12 @@ label_colors:
   "zammad": 4
   "zero-day": 9
 items:
+  - title: "RemusStealer: EtherHiding In Hidden Windows"
+    url: "https://binarydefense.com/resources/blog/remusstealer-etherhiding-in-hidden-windows"
+    source: "AlienVault"
+    date: 2026-10-02T01:47:27Z
+    kind: research
+    labels: ["blockchain c2", "credential theft", "ethereum smart contracts", "etherhiding", "hidden desktops", "information stealer", "lummastealer", "remusstealer"]
   - title: "Fortinet warns of critical FortiMail flaw exploited in zero-day attacks"
     url: "https://www.bleepingcomputer.com/news/security/fortinet-warns-of-critical-fortimail-flaw-exploited-in-zero-day-attacks/"
     source: "BleepingComputer"
@@ -3789,15 +3795,3 @@ items:
     date: 2026-09-02T08:38:00Z
     kind: news
     labels: ["botnet", "disrupted", "law enforcement", "malware", "sality", "tracking & law enforcement"]
-  - title: "Sality botnet infrastructure dismantled in joint global takedown"
-    url: "https://www.bleepingcomputer.com/news/security/sality-botnet-infrastructure-dismantled-in-joint-global-takedown/"
-    source: "BleepingComputer"
-    date: 2026-09-02T08:00:43Z
-    kind: news
-    labels: []
-  - title: "SonicWall warns of actively exploited SMA1000 zero-day flaws"
-    url: "https://www.bleepingcomputer.com/news/security/sonicwall-warns-of-actively-exploited-sma1000-zero-day-flaws/"
-    source: "BleepingComputer"
-    date: 2026-09-02T06:39:29Z
-    kind: news
-    labels: []
