@@ -3,18 +3,18 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-02T14:01:40Z
+generated_at: 2026-10-02T16:03:02Z
 window_days: 30
 counts:
-  total: 560
+  total: 562
   research: 192
-  news: 368
+  news: 370
 topics:
   - label: "vulnerabilities"
     count: 79
     color: 1
   - label: "cybercrime"
-    count: 68
+    count: 69
     color: 2
   - label: "artificial intelligence"
     count: 40
@@ -23,7 +23,7 @@ topics:
     count: 40
     color: 4
   - label: "malware"
-    count: 39
+    count: 40
     color: 5
   - label: "exploited"
     count: 31
@@ -469,6 +469,36 @@ label_colors:
   "zammad": 4
   "zero-day": 9
 items:
+  - title: "US sanctions Tren de Aragua gang members in ATM hacks crackdown"
+    url: "https://www.bleepingcomputer.com/news/security/us-sanctions-tren-de-aragua-members-in-atm-jackpotting-crackdown/"
+    source: "BleepingComputer"
+    date: 2026-10-02T15:20:53Z
+    kind: news
+    labels: []
+  - title: "In Other News: $15K iCloud Spoofing Bugs, AI Policy Experts Phished, Adblocker Spies on AI Chats"
+    url: "https://www.securityweek.com/in-other-news-15k-icloud-spoofing-bugs-ai-policy-experts-phished-adblocker-spies-on-ai-chats/"
+    source: "SecurityWeek"
+    date: 2026-10-02T14:30:00Z
+    kind: news
+    labels: ["in other news", "malware"]
+  - title: "Mississippi mayor says ransomware incident led city to shut down systems"
+    url: "https://therecord.media/vicksburg-mississippi-government-ransomware-attack"
+    source: "Recorded Future"
+    date: 2026-10-02T14:06:00Z
+    kind: news
+    labels: ["cybercrime", "government"]
+  - title: "'Warlock' ransomware used in attacks on critical infrastructure in Portuguese, Spanish-speaking countries"
+    url: "https://therecord.media/warlock-ransomware-used-in-critical-infrastructure-attacks"
+    source: "Recorded Future"
+    date: 2026-10-02T14:05:00Z
+    kind: news
+    labels: ["cybercrime"]
+  - title: "The EDR blind spot: 3 ways browser attacks evade endpoint telemetry"
+    url: "https://www.bleepingcomputer.com/news/security/the-edr-blind-spot-3-ways-browser-attacks-evade-endpoint-telemetry/"
+    source: "BleepingComputer"
+    date: 2026-10-02T14:00:10Z
+    kind: news
+    labels: []
   - title: "macOS Users Targeted by Fake Zoom Installer Carrying CloudSyncD Backdoor"
     url: "https://www.securityweek.com/macos-users-targeted-by-fake-zoom-installer-carrying-cloudsyncd-backdoor/"
     source: "SecurityWeek"
@@ -3811,21 +3841,3 @@ items:
     date: 2026-09-02T17:15:00Z
     kind: news
     labels: ["cybercrime", "malware", "privacy"]
-  - title: "Hackers exploit critical JFrog Artifactory flaw to forge admin tokens"
-    url: "https://www.bleepingcomputer.com/news/security/hackers-exploit-critical-jfrog-artifactory-flaw-to-forge-admin-tokens/"
-    source: "BleepingComputer"
-    date: 2026-09-02T15:47:08Z
-    kind: news
-    labels: []
-  - title: "New pro-Ukraine hacker group targets Russian companies with custom ransomware"
-    url: "https://therecord.media/new-pro-ukraine-hacker-group-custom-ransomware-russia"
-    source: "Recorded Future"
-    date: 2026-09-02T15:07:00Z
-    kind: news
-    labels: ["cybercrime", "government"]
-  - title: "Ransomware protection for MSPs: A 6-point checklist for faster recovery"
-    url: "https://www.bleepingcomputer.com/news/security/ransomware-protection-for-msps-a-6-point-checklist-for-faster-recovery/"
-    source: "BleepingComputer"
-    date: 2026-09-02T14:02:12Z
-    kind: news
-    labels: []
