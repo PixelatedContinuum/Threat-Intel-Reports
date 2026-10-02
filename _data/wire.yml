@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-02T02:00:22Z
+generated_at: 2026-10-02T04:00:12Z
 window_days: 30
 counts:
-  total: 562
-  research: 192
+  total: 558
+  research: 188
   news: 370
 topics:
   - label: "vulnerabilities"
@@ -74,7 +74,6 @@ label_colors:
   "affiliate fraud": 7
   "agentcore runtime": 2
   "agentic ai": 9
-  "agentic soc": 2
   "agenttesla": 2
   "ai & automation": 1
   "ai agents": 8
@@ -204,7 +203,6 @@ label_colors:
   "chinese cyber-espionage": 2
   "chinese threat cluster": 7
   "chinese-speaking actor": 9
-  "chinese-speaking targets": 4
   "chosen brick": 7
   "chrome": 12
   "chrome exploitation": 6
@@ -238,7 +236,6 @@ label_colors:
   "cloud-storage-exploitation": 2
   "coast guard": 1
   "cobalt strike": 5
-  "command-and-control": 7
   "conti": 1
   "coordinated-inauthentic-behavior": 12
   "cpanel": 1
@@ -320,7 +317,6 @@ label_colors:
   "encrypted c2": 9
   "endpoint protection & security": 10
   "endpoint security": 11
-  "endpoint security & xdr": 11
   "espionage": 11
   "eu": 12
   "eviltokens": 6
@@ -405,7 +401,6 @@ label_colors:
   "nation-state": 12
   "netch-gateway": 5
   "network security": 6
-  "next-gen identity security": 12
   "north korea": 3
   "oauth token theft": 5
   "on the radar": 4
@@ -3813,27 +3808,3 @@ items:
     date: 2026-09-02T05:04:52Z
     kind: news
     labels: ["exploited", "sma1000", "sonicwall", "vulnerabilities", "zero-day"]
-  - title: "CrowdStrike Extends Endpoint Security to Stop Software Supply Chain Attacks"
-    url: "https://www.crowdstrike.com/en-us/blog/crowdstrike-extends-endpoint-security-to-stop-supply-chain-attacks/"
-    source: "Crowdstrike"
-    date: 2026-09-02T04:00:00Z
-    kind: research
-    labels: ["endpoint security & xdr"]
-  - title: "CrowdStrike Delivers the Next Evolution of the Agentic SOC"
-    url: "https://www.crowdstrike.com/en-us/blog/crowdstrike-delivers-next-evolution-of-agentic-soc/"
-    source: "Crowdstrike"
-    date: 2026-09-02T04:00:00Z
-    kind: research
-    labels: ["agentic soc"]
-  - title: "CrowdStrike Announces Agentic Identity Provider"
-    url: "https://www.crowdstrike.com/en-us/blog/crowdstrike-announces-agentic-identity-provider/"
-    source: "Crowdstrike"
-    date: 2026-09-02T04:00:00Z
-    kind: research
-    labels: ["next-gen identity security"]
-  - title: "Counterfeit installers to system compromise: Tracking a deceptive software download campaign"
-    url: "https://www.microsoft.com/en-us/security/blog/2026/09/01/counterfeit-installers-system-compromise-tracking-deceptive-software-download-campaign"
-    source: "AlienVault"
-    date: 2026-09-02T02:57:18Z
-    kind: research
-    labels: ["chinese-speaking targets", "command-and-control", "counterfeit installers", "defense evasion", "fake software", "scheduled tasks", "silver fox", "yinhu"]
