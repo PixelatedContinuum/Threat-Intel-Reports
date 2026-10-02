@@ -3,33 +3,33 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-02T19:02:39Z
+generated_at: 2026-10-02T20:02:49Z
 window_days: 30
 counts:
-  total: 561
-  research: 191
-  news: 370
+  total: 577
+  research: 193
+  news: 384
 topics:
   - label: "vulnerabilities"
-    count: 152
+    count: 159
     color: 1
   - label: "malware"
-    count: 105
+    count: 106
     color: 2
   - label: "exploited"
-    count: 86
+    count: 91
     color: 3
   - label: "artificial intelligence"
-    count: 83
+    count: 84
     color: 4
   - label: "cybercrime"
     count: 67
     color: 5
   - label: "data breaches"
-    count: 61
+    count: 62
     color: 6
   - label: "zero-day"
-    count: 57
+    count: 58
     color: 7
   - label: "government"
     count: 40
@@ -41,10 +41,10 @@ topics:
     count: 33
     color: 10
   - label: "social engineering"
-    count: 29
+    count: 30
     color: 11
   - label: "phishing"
-    count: 25
+    count: 26
     color: 12
 label_colors:
   "3bb": 7
@@ -196,7 +196,6 @@ label_colors:
   "cryptocurrency mining": 6
   "cryptocurrency theft": 3
   "cspu": 1
-  "curlrat": 3
   "cve-2017-0199": 11
   "cve-2019-18935": 12
   "cve-2020-1938": 5
@@ -228,6 +227,7 @@ label_colors:
   "election": 3
   "email security": 12
   "embedding": 3
+  "emergent threat response": 6
   "encrypted c2": 9
   "endpoint protection & security": 10
   "eu": 12
@@ -251,6 +251,7 @@ label_colors:
   "gyazo": 8
   "hacker": 8
   "hacker conversations": 8
+  "hacking": 1
   "hardware": 6
   "healthcare": 11
   "in other news": 8
@@ -260,6 +261,7 @@ label_colors:
   "iocontrol": 7
   "ivanti": 7
   "killsec": 7
+  "labs": 6
   "labubarat": 10
   "law": 4
   "law enforcement": 6
@@ -305,16 +307,25 @@ label_colors:
   "supply chain": 8
   "surfshark": 11
   "threat hunting & intel": 9
+  "threat intel": 6
   "threat intelligence": 9
   "threat source newsletter": 6
   "threat spotlight": 2
   "treasury": 5
   "trend micro research : artificial intelligence (ai)": 2
   "vulnerabilities": 1
+  "vulnerability disclosure": 7
+  "vulnerability management": 9
   "watchguard": 2
   "x": 4
   "zero-day": 7
 items:
+  - title: "Frontline Education breach exposes school district employee data"
+    url: "https://www.bleepingcomputer.com/news/security/frontline-education-data-breach-impacts-school-district-employees/"
+    source: "BleepingComputer"
+    date: 2026-10-02T19:01:40Z
+    kind: news
+    labels: ["data breaches"]
   - title: "Warlock ransomware breach SharePoint in water, telecom operator attacks"
     url: "https://www.bleepingcomputer.com/news/security/warlock-ransomware-breach-sharepoint-in-water-telecom-operator-attacks/"
     source: "BleepingComputer"
@@ -573,6 +584,12 @@ items:
     date: 2026-10-01T08:26:03Z
     kind: news
     labels: ["zero-day", "exploited", "vulnerabilities", "cisco", "sd-wan"]
+  - title: "ScreenConnect Client (Ab)used by Attackers, (Thu, Oct 1st)"
+    url: "https://isc.sans.edu/diary/rss/33388"
+    source: "SANS Internet Storm Center"
+    date: 2026-10-01T05:32:13Z
+    kind: news
+    labels: []
   - title: "CrowdStrike Expands Federal SOC Modernization Through CISA-Funded SIEMaaS"
     url: "https://www.crowdstrike.com/en-us/blog/crowdstrike-expands-federal-soc-modernization-via-cisa-siemaas/"
     source: "Crowdstrike"
@@ -645,6 +662,12 @@ items:
     date: 2026-09-30T15:49:29Z
     kind: news
     labels: ["vulnerabilities", "hardware"]
+  - title: "Critical Cisco Catalyst SD-WAN Manager API authentication bypass exploited in the wild (CVE-2026-76504)"
+    url: "https://www.rapid7.com/blog/post/etr-critical-cisco-catalyst-sd-wan-manager-api-authentication-bypass-exploited-in-the-wild-cve-2026-76504"
+    source: "Rapid7"
+    date: 2026-09-30T15:09:22Z
+    kind: news
+    labels: ["exploited", "vulnerabilities", "emergent threat response", "labs", "vulnerability management"]
   - title: "Cisco warns of new SD-WAN zero-day exploited in attacks"
     url: "https://www.bleepingcomputer.com/news/security/cisco-warns-of-new-sd-wan-authentication-bypass-zero-day-exploited-in-attacks/"
     source: "BleepingComputer"
@@ -933,6 +956,12 @@ items:
     date: 2026-09-29T00:00:00Z
     kind: research
     labels: ["ai & automation", "endpoint protection & security"]
+  - title: "Apple Emergency Patch for iOS 26, macOS26, macOS15 (CVE-2026-86950), (Mon, Sep 28th)"
+    url: "https://isc.sans.edu/diary/rss/33376"
+    source: "SANS Internet Storm Center"
+    date: 2026-09-28T22:35:35Z
+    kind: news
+    labels: ["mobile", "vulnerabilities"]
   - title: "Japan's Keio confirms ransomware attack disrupted business systems"
     url: "https://www.bleepingcomputer.com/news/security/japans-keio-confirms-ransomware-attack-disrupted-business-systems/"
     source: "BleepingComputer"
@@ -1041,6 +1070,12 @@ items:
     date: 2026-09-28T10:35:50Z
     kind: research
     labels: ["vulnerabilities"]
+  - title: "Zero-Day Exploitation of Citrix NetScaler ADC and Gateway: CVE-2026-88771 and CVE-2026-88772"
+    url: "https://www.rapid7.com/blog/post/etr-zero-day-exploitation-of-citrix-netscaler-adc-and-gateway-cve-2026-88771-and-cve-2026-88772"
+    source: "Rapid7"
+    date: 2026-09-28T10:05:00Z
+    kind: news
+    labels: ["zero-day", "exploited", "vulnerabilities", "emergent threat response", "emerging threats", "vulnerability management"]
   - title: "Kiteworks Urges Server Shutdown, Finds Advanced Forms Vulnerability"
     url: "https://www.securityweek.com/kiteworks-urges-server-shutdown-finds-advanced-forms-vulnerability/"
     source: "SecurityWeek"
@@ -1185,6 +1220,12 @@ items:
     date: 2026-09-25T14:00:00Z
     kind: research
     labels: ["exploited", "threat intelligence"]
+  - title: "A Closer Look at Malware From the Macfinger ClickFix Campaign, (Fri, Sep 25th)"
+    url: "https://isc.sans.edu/diary/rss/33368"
+    source: "SANS Internet Storm Center"
+    date: 2026-09-25T12:45:19Z
+    kind: news
+    labels: ["social engineering", "malware"]
   - title: "CISA Election Security Plan Flags Patching Barriers, Voter Database Attacks"
     url: "https://www.securityweek.com/cisa-election-security-plan-flags-patching-barriers-voter-database-attacks/"
     source: "SecurityWeek"
@@ -1335,6 +1376,12 @@ items:
     date: 2026-09-24T13:15:00Z
     kind: news
     labels: ["data breaches", "cybercrime"]
+  - title: "When Business Email Compromise Starts Rewriting Reality"
+    url: "https://www.rapid7.com/blog/post/ve-business-email-compromise-rewriting-reality-zimbra-cve"
+    source: "Rapid7"
+    date: 2026-09-24T13:00:00Z
+    kind: news
+    labels: ["phishing", "vulnerability disclosure"]
   - title: "AI-Powered Campaign Targets Hundreds of Online Retailers"
     url: "https://www.securityweek.com/ai-powered-campaign-targets-hundreds-of-online-retailers/"
     source: "SecurityWeek"
@@ -1545,6 +1592,12 @@ items:
     date: 2026-09-23T10:36:07Z
     kind: news
     labels: ["vulnerabilities", "chrome", "patched"]
+  - title: "CVE-2026-94127: Critical Unauthenticated RCE in F5 BIG-IP APM"
+    url: "https://www.rapid7.com/blog/post/etr-cve-2026-94127-critical-unauthenticated-rce-in-f5-big-ip-apm"
+    source: "Rapid7"
+    date: 2026-09-23T08:43:39Z
+    kind: news
+    labels: ["vulnerabilities", "emergent threat response", "labs", "vulnerability management"]
   - title: "Arista Urges Immediate Patching of Exploited VCO Zero-Day"
     url: "https://www.securityweek.com/arista-urges-immediate-patching-of-exploited-vco-zero-day/"
     source: "SecurityWeek"
@@ -1845,6 +1898,12 @@ items:
     date: 2026-09-21T00:00:00Z
     kind: research
     labels: ["cloud", "detection engineering"]
+  - title: "Windows Exploitation Techniques: Dangling COM Object Registrations"
+    url: "https://projectzero.google/2026/09/windows-dangling-com.html"
+    source: "Google Project Zero"
+    date: 2026-09-20T22:00:00Z
+    kind: research
+    labels: ["exploited"]
   - title: "BragJack attacks hijack AI browser agents through malicious extensions"
     url: "https://www.bleepingcomputer.com/news/security/bragjack-attacks-hijack-ai-browser-agents-through-malicious-extensions/"
     source: "BleepingComputer"
@@ -2445,6 +2504,12 @@ items:
     date: 2026-09-15T12:42:32Z
     kind: news
     labels: ["artificial intelligence", "openai", "rubygems"]
+  - title: "CVE-2026-76461: Critical Cisco Secure Email Gateway Vulnerability Exploited in the Wild"
+    url: "https://www.rapid7.com/blog/post/etr-cve-2026-76461-critical-cisco-secure-email-gateway-vulnerability-exploited-in-the-wild"
+    source: "Rapid7"
+    date: 2026-09-15T12:22:50Z
+    kind: news
+    labels: ["exploited", "vulnerabilities", "emergent threat response", "labs", "vulnerability management"]
   - title: "CISA: Critical VMware RCE flaw now exploited by ransomware gangs"
     url: "https://www.bleepingcomputer.com/news/security/cisa-critical-vmware-vcenter-rce-flaw-now-exploited-by-ransomware-gangs/"
     source: "BleepingComputer"
@@ -2547,6 +2612,12 @@ items:
     date: 2026-09-14T11:51:29Z
     kind: news
     labels: ["nation-state", "vulnerabilities", "china", "china apt", "exploit", "exploited", "sogou", "tencent"]
+  - title: "CVE-2026-85706: Critical GitLab Path Traversal Exploited in the Wild"
+    url: "https://www.rapid7.com/blog/post/etr-cve-2026-85706-critical-gitlab-path-traversal-exploited-in-the-wild"
+    source: "Rapid7"
+    date: 2026-09-14T10:02:57Z
+    kind: news
+    labels: ["exploited", "vulnerabilities", "emergent threat response", "emerging threats"]
   - title: "Unmasking Cloud Identities: From Behavioral Clustering to Automated Detection"
     url: "https://unit42.paloaltonetworks.com/behavioral-clustering-map-to-cloud-identities/"
     source: "Palo Alto Networks"
@@ -2679,6 +2750,12 @@ items:
     date: 2026-09-11T14:01:11Z
     kind: news
     labels: ["artificial intelligence"]
+  - title: "The Fraud Ecosystem: A Transition From Known Marketplaces to a Fragmented Environment"
+    url: "https://www.rapid7.com/blog/post/tr-fraud-ecosystem-fragmenting-marketplaces"
+    source: "Rapid7"
+    date: 2026-09-11T13:33:33Z
+    kind: news
+    labels: ["threat intel"]
   - title: "Beware of the LegionLoader malware being distributed via the ClickFix method"
     url: "https://asec.ahnlab.com/en/95374/"
     source: "AlienVault"
@@ -3051,6 +3128,12 @@ items:
     date: 2026-09-09T15:31:23Z
     kind: news
     labels: ["ransomware", "data breaches", "healthcare"]
+  - title: "Credentialed Pre-Port Discovery: Don't Probe the Host, Ask it"
+    url: "https://www.rapid7.com/blog/post/pt-credentialed-pre-port-discovery-asking-host"
+    source: "Rapid7"
+    date: 2026-09-09T15:16:34Z
+    kind: news
+    labels: ["vulnerability management"]
   - title: "Fortinet Patches Critical Vulnerabilities in FortiMonitorOnSight, Chrome Extension"
     url: "https://www.securityweek.com/fortinet-patches-critical-vulnerabilities-in-fortimonitoronsight-chrome-extension/"
     source: "SecurityWeek"
@@ -3141,6 +3224,12 @@ items:
     date: 2026-09-08T22:16:35Z
     kind: research
     labels: ["vulnerabilities", "patch tuesday"]
+  - title: "Patch Tuesday - September 2026"
+    url: "https://www.rapid7.com/blog/post/em-patch-tuesday-september-2026"
+    source: "Rapid7"
+    date: 2026-09-08T21:44:04Z
+    kind: news
+    labels: ["vulnerabilities", "patch tuesday", "vulnerability management"]
   - title: "Scammer behind $245 million crypto heist pleads guilty to RICO charges"
     url: "https://therecord.media/scammer-behind-245-million-crypto-heist-pleads-guilty-rico"
     source: "Recorded Future"
@@ -3267,6 +3356,12 @@ items:
     date: 2026-09-08T11:15:00Z
     kind: news
     labels: ["vulnerabilities", "mikrotik", "network security"]
+  - title: "CVE-2026-86206, CVE-2026-86207: N-able N-central Authentication Bypass (FIXED)"
+    url: "https://www.rapid7.com/blog/post/ve-cve-2026-86206-cve-2026-86207-n-able-n-central-authentication-bypass-fixed"
+    source: "Rapid7"
+    date: 2026-09-08T11:01:27Z
+    kind: news
+    labels: ["vulnerabilities", "labs", "rapid7 disclosure", "vulnerability disclosure", "vulnerability management"]
   - title: "Mathspace Data Breach Exposes Over 1 Million People"
     url: "https://www.securityweek.com/mathspace-data-breach-exposes-over-1-million-people/"
     source: "SecurityWeek"
@@ -3303,6 +3398,12 @@ items:
     date: 2026-09-08T05:00:00Z
     kind: research
     labels: ["zero-day", "exploited", "vulnerabilities", "exposure management"]
+  - title: "Testing race conditions with memory access tracing and stack-based delay injection"
+    url: "https://projectzero.google/2026/09/maccconc-race-condition.html"
+    source: "Google Project Zero"
+    date: 2026-09-07T22:00:00Z
+    kind: research
+    labels: []
   - title: "Bypassing the Gatekeepers: How a Global Phishing Campaign Turns Google's Infrastructure into a Trust Proxy"
     url: "https://blog.knowbe4.com/bypassing-the-gatekeepers-how-a-global-phishing-campaign-turns-googles-infrastructure-into-a-trust-proxy"
     source: "AlienVault"
@@ -3447,18 +3548,18 @@ items:
     date: 2026-09-04T16:56:45Z
     kind: news
     labels: ["data breaches", "legal"]
-  - title: "DPRK APTs: Ted backdoor and curlRAT target South Korean media and automotive sectors"
-    url: "https://www.rapid7.com/blog/post/tr-dprk-apts-ted-backdoor-curlrat-target-south-korean-media-automotive-sectors"
-    source: "AlienVault"
-    date: 2026-09-04T16:53:57Z
-    kind: research
-    labels: ["malware", "curlrat", "dprk apt", "haproxy", "linux toolkit", "south korea", "ted backdoor", "trojanized binaries", "watering-hole"]
   - title: "In Other News: Microsoft’s Cloud Patches, Hacked Dropbox Accounts, Guardio’s $1.1B Valuation"
     url: "https://www.securityweek.com/in-other-news-microsofts-cloud-patches-hacked-dropbox-accounts-guardios-1-1b-valuation/"
     source: "SecurityWeek"
     date: 2026-09-04T16:18:30Z
     kind: news
     labels: ["cloud", "in other news", "network security"]
+  - title: "China-Based Artificial Intelligence Companies Conducting Industrial-Scale Distillation Campaigns Against U.S. AI Companies"
+    url: "https://www.cisa.gov/news-events/cybersecurity-advisories/aa26-251a"
+    source: "CISA"
+    date: 2026-09-04T16:12:28Z
+    kind: research
+    labels: ["artificial intelligence"]
   - title: "HPE Patches Critical RCE Vulnerabilities in AOS-CX"
     url: "https://www.securityweek.com/hpe-patches-critical-rce-vulnerabilities-in-aos-cx/"
     source: "SecurityWeek"
@@ -3513,6 +3614,12 @@ items:
     date: 2026-09-04T12:06:13Z
     kind: news
     labels: ["vulnerabilities", "cve-2026-6471", "postgresql"]
+  - title: "DPRK APTs: Ted backdoor and curlRAT target South Korean media and automotive sectors"
+    url: "https://www.rapid7.com/blog/post/tr-dprk-apts-ted-backdoor-curlrat-target-south-korean-media-automotive-sectors"
+    source: "Rapid7"
+    date: 2026-09-04T12:00:00Z
+    kind: news
+    labels: ["malware", "hacking", "labs"]
   - title: "Google warns of new Chrome zero-day flaw exploited in attacks"
     url: "https://www.bleepingcomputer.com/news/security/google-warns-of-new-chrome-zero-day-flaw-exploited-in-attacks/"
     source: "BleepingComputer"
@@ -3673,11 +3780,5 @@ items:
     url: "https://www.bleepingcomputer.com/news/security/hackers-exploit-sangoma-switchvox-flaw-to-deploy-reverse-shells/"
     source: "BleepingComputer"
     date: 2026-09-02T21:00:13Z
-    kind: news
-    labels: ["vulnerabilities"]
-  - title: "WordPress backup plugin flaw exposes millions of sites to takeover attacks"
-    url: "https://www.bleepingcomputer.com/news/security/wordpress-backup-plugin-flaw-exposes-millions-of-sites-to-takeover-attacks/"
-    source: "BleepingComputer"
-    date: 2026-09-02T19:28:46Z
     kind: news
     labels: ["vulnerabilities"]
