@@ -34,10 +34,24 @@ sources:
   # and check-wire.js then fails as a missing url, and it batches up to 49
   # advisories on a patch day, which would bury a day's actual headlines.
   Zero Day Initiative: research
+  # Added 2026-10-02 (T-0105). Research on purpose: the filter is the choice of
+  # feed. CISA is taken from two OpenCTI ingesters whose feeds carry only
+  # joint cybersecurity advisories (cybersecurity-advisories.xml) and malware
+  # analysis reports (analysis-reports.xml). The Known Exploited Vulnerabilities
+  # alerts live in alerts.xml and all.xml, and the ICS advisories in
+  # ics-advisories.xml; none of those is ingested. The drop list below is
+  # global and only ever applies to news sources, so it cannot guard this one.
+  CISA: research
+  # Vulnerability research posts only, so every item is on topic.
+  Google Project Zero: research
   BleepingComputer: news
   SecurityWeek: news
   Recorded Future: news
   Krebs on Security: news
+  # Added 2026-10-02 (T-0105). Diaries and stormcast podcasts mixed, and a vendor
+  # blog with product posts: both take the keyword rule.
+  SANS Internet Storm Center: news
+  Rapid7: news
   # Publishes "Maltrail IOC for 2026-08-12" style dumps, one a day. IOC lists,
   # not articles, so there is nothing for a reader to click through to.
   Krawczyk Industries Limited: exclude
