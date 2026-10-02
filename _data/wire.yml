@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-01T22:02:12Z
+generated_at: 2026-10-02T00:00:40Z
 window_days: 30
 counts:
-  total: 563
-  research: 193
+  total: 562
+  research: 192
   news: 370
 topics:
   - label: "vulnerabilities"
@@ -23,13 +23,13 @@ topics:
     count: 39
     color: 4
   - label: "malware"
-    count: 38
+    count: 37
     color: 5
   - label: "exploited"
     count: 30
     color: 6
   - label: "data breaches"
-    count: 20
+    count: 19
     color: 7
   - label: "social engineering"
     count: 18
@@ -97,7 +97,6 @@ label_colors:
   "amatera": 5
   "amd": 6
   "amos": 6
-  "amsi evasion": 1
   "analysis": 12
   "android": 9
   "android banking trojan": 11
@@ -175,7 +174,6 @@ label_colors:
   "browser-extension": 12
   "browser-hijacking": 7
   "browser-in-the-browser": 7
-  "build path attribution": 4
   "bulletproof hosting": 12
   "business email compromise": 8
   "byovd": 12
@@ -206,6 +204,7 @@ label_colors:
   "chinese cyber-espionage": 2
   "chinese threat cluster": 7
   "chinese-speaking actor": 9
+  "chinese-speaking targets": 4
   "chosen brick": 7
   "chrome": 12
   "chrome exploitation": 6
@@ -239,6 +238,7 @@ label_colors:
   "cloud-storage-exploitation": 2
   "coast guard": 1
   "cobalt strike": 5
+  "command-and-control": 7
   "conti": 1
   "coordinated-inauthentic-behavior": 12
   "cpanel": 1
@@ -284,7 +284,6 @@ label_colors:
   "cve-2026-86218": 9
   "cve-2026-88771": 1
   "cve-2026-88772": 10
-  "cybera": 2
   "cyberattacks": 8
   "cybercrime": 2
   "cyberespionage": 8
@@ -466,6 +465,12 @@ label_colors:
   "zammad": 4
   "zero-day": 9
 items:
+  - title: "Fortinet warns of critical FortiMail flaw exploited in zero-day attacks"
+    url: "https://www.bleepingcomputer.com/news/security/fortinet-warns-of-critical-fortimail-flaw-exploited-in-zero-day-attacks/"
+    source: "BleepingComputer"
+    date: 2026-10-01T22:42:49Z
+    kind: news
+    labels: []
   - title: "Autonomous AI agents tried to hack US, Canadian government websites"
     url: "https://www.bleepingcomputer.com/news/security/autonomous-ai-agents-tried-to-hack-us-canadian-government-websites/"
     source: "BleepingComputer"
@@ -3826,21 +3831,9 @@ items:
     date: 2026-09-02T04:00:00Z
     kind: research
     labels: ["next-gen identity security"]
-  - title: "One leftover build path links an infostealer, a remote-access tool, and a ransomware family"
-    url: "https://www.vmray.com/news/one-leftover-build-path-links-an-infostealer-a-remote-access-tool-and-a-ransomware-family/"
-    source: "AlienVault"
-    date: 2026-09-01T22:50:50Z
-    kind: research
-    labels: ["amsi evasion", "build path attribution", "credential theft", "cross-platform", "enigma locker", "hvnc", "rust", "zer0day stealer"]
   - title: "Counterfeit installers to system compromise: Tracking a deceptive software download campaign"
-    url: "https://www.microsoft.com/en-us/security/blog/2026/09/01/counterfeit-installers-system-compromise-tracking-deceptive-software-download-campaign/"
-    source: "Microsoft"
-    date: 2026-09-01T22:48:28Z
+    url: "https://www.microsoft.com/en-us/security/blog/2026/09/01/counterfeit-installers-system-compromise-tracking-deceptive-software-download-campaign"
+    source: "AlienVault"
+    date: 2026-09-02T02:57:18Z
     kind: research
-    labels: ["malware"]
-  - title: "FBI Probes Service Selling 153M+ Drivers Licenses"
-    url: "https://krebsonsecurity.com/2026/09/fbi-probes-service-selling-153m-drivers-licenses/"
-    source: "Krebs on Security"
-    date: 2026-09-01T22:40:28Z
-    kind: news
-    labels: ["a little sunshine", "cybera", "data breaches", "decryptads", "exploit", "hertz", "idscan.net", "jillian kossman", "larry baldwin", "nexus", "planet13", "the coming storm", "web fraud 2.0", "zach edwards"]
+    labels: ["chinese-speaking targets", "command-and-control", "counterfeit installers", "defense evasion", "fake software", "scheduled tasks", "silver fox", "yinhu"]
