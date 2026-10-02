@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-02T12:02:12Z
+generated_at: 2026-10-02T14:01:40Z
 window_days: 30
 counts:
-  total: 564
-  research: 195
-  news: 369
+  total: 560
+  research: 192
+  news: 368
 topics:
   - label: "vulnerabilities"
-    count: 81
+    count: 79
     color: 1
   - label: "cybercrime"
     count: 68
@@ -23,7 +23,7 @@ topics:
     count: 40
     color: 4
   - label: "malware"
-    count: 38
+    count: 39
     color: 5
   - label: "exploited"
     count: 31
@@ -40,22 +40,21 @@ topics:
   - label: "clickfix"
     count: 16
     color: 10
-  - label: "phishing"
-    count: 14
-    color: 11
   - label: "nation-state"
+    count: 13
+    color: 11
+  - label: "phishing"
     count: 13
     color: 12
 label_colors:
   "2cloader": 6
   "3bb": 7
-  "3snake": 7
   "404 media": 12
   "7zip sfx": 7
   "a little sunshine": 6
   "accessibility abuse": 6
   "accessibility service abuse": 11
-  "accessibility services": 10
+  "account hack": 10
   "account takeover": 2
   "acronis": 1
   "acrstealer": 4
@@ -93,7 +92,6 @@ label_colors:
   "ai-powered automation": 6
   "aitm": 5
   "alert": 2
-  "alphaagent": 1
   "amadey": 5
   "amatera": 5
   "amd": 6
@@ -233,7 +231,6 @@ label_colors:
   "cisco talos web filtering": 12
   "citrix": 11
   "citrix netscaler": 2
-  "cleo": 7
   "click2shell": 4
   "clickfix": 10
   "clipboard": 10
@@ -411,7 +408,7 @@ label_colors:
   "mobile": 4
   "mobile & wireless": 4
   "n-central": 6
-  "nation-state": 12
+  "nation-state": 11
   "netch-gateway": 5
   "network security": 6
   "north korea": 3
@@ -431,10 +428,9 @@ label_colors:
   "patches": 2
   "patching": 8
   "payment fraud": 12
-  "phishing": 11
+  "phishing": 12
   "phishing campaign": 6
   "plugin vulnerability": 1
-  "poc exploit": 3
   "polinrider": 2
   "postgresql": 12
   "privacy": 12
@@ -469,9 +465,28 @@ label_colors:
   "vpn": 8
   "vulnerabilities": 1
   "watchguard": 2
+  "x": 4
   "zammad": 4
   "zero-day": 9
 items:
+  - title: "macOS Users Targeted by Fake Zoom Installer Carrying CloudSyncD Backdoor"
+    url: "https://www.securityweek.com/macos-users-targeted-by-fake-zoom-installer-carrying-cloudsyncd-backdoor/"
+    source: "SecurityWeek"
+    date: 2026-10-02T13:15:00Z
+    kind: news
+    labels: ["macos", "malware"]
+  - title: "Dell asks admins to patch max severity CSM flaws as soon as possible"
+    url: "https://www.bleepingcomputer.com/news/security/new-max-severity-dell-csm-flaws-give-hackers-admin-privileges/"
+    source: "BleepingComputer"
+    date: 2026-10-02T12:37:40Z
+    kind: news
+    labels: []
+  - title: "Crypto Scammers Hijack Microsoft’s Official X Account"
+    url: "https://www.securityweek.com/crypto-scammers-hijack-microsofts-official-x-account/"
+    source: "SecurityWeek"
+    date: 2026-10-02T11:46:10Z
+    kind: news
+    labels: ["x", "account hack", "cryptocurrency scam", "cybercrime", "hacked", "microsoft"]
   - title: "In Rare Move, Alleged Iranian State Hacker Extradited to US"
     url: "https://www.securityweek.com/in-rare-move-iranian-hacker-accused-of-working-for-irgc-extradited-to-us/"
     source: "SecurityWeek"
@@ -3814,45 +3829,3 @@ items:
     date: 2026-09-02T14:02:12Z
     kind: news
     labels: []
-  - title: "Gaming the system: how a Chinese-speaking actor turned Brazilian government sites into an SEO weapon"
-    url: "https://research.checkpoint.com/2026/gaming-the-system-how-a-chinese-speaking-actor-turned-brazilian-government-sites-into-an-seo-weapon/"
-    source: "AlienVault"
-    date: 2026-09-02T13:40:05Z
-    kind: research
-    labels: ["3snake", "alphaagent", "apache modules", "brazilian government", "bruteforcer", "chuser", "credential theft", "downpro", "earth berberoka", "gambling goblin", "linux toolkit", "orat", "passwordharvester", "phishing", "reconnaissance", "seo manipulation"]
-  - title: "Uncovering StreamRat: From Meta Ads to Full Device Takeover"
-    url: "https://otx.alienvault.com/pulse/6a9826f869eb70a6b15298ec"
-    source: "AlienVault"
-    date: 2026-09-02T13:39:04Z
-    kind: research
-    labels: ["accessibility services", "android", "banking trojan", "godfather", "maas", "mediaprojection", "meta advertisements", "mirax", "spain", "streamrat", "sturnus", "tiktok", "vnc"]
-  - title: "Inside Knight Office, a New M365 AiTM Phishing Kit"
-    url: "https://www.huntress.com/blog/inside-knight-office-m365-aitm-attack"
-    source: "AlienVault"
-    date: 2026-09-02T13:39:03Z
-    kind: research
-    labels: ["aitm", "credential harvesting", "device registration", "knight office", "oauth", "phishing kit", "session token theft", "windows hello for business"]
-  - title: "Hackers expose donor data from Russian fundraisers for Ukrainians, political prisoners"
-    url: "https://therecord.media/hackers-russia-fundraisers-ukraine"
-    source: "Recorded Future"
-    date: 2026-09-02T13:00:00Z
-    kind: news
-    labels: ["cybercrime"]
-  - title: "Rockwell Automation Patches Over a Dozen Vulnerabilities Across Products"
-    url: "https://www.securityweek.com/rockwell-automation-patches-over-a-dozen-vulnerabilities-across-products/"
-    source: "SecurityWeek"
-    date: 2026-09-02T12:39:07Z
-    kind: news
-    labels: ["ics", "ics/ot", "rockwell automation", "vulnerabilities"]
-  - title: "Dropbox accounts breached through Lenovo email verification flaw"
-    url: "https://www.bleepingcomputer.com/news/security/dropbox-accounts-breached-through-lenovo-email-verification-flaw/"
-    source: "BleepingComputer"
-    date: 2026-09-02T12:30:22Z
-    kind: news
-    labels: ["cloud"]
-  - title: "Exploit Published for Fresh Cleo Harmony Vulnerability"
-    url: "https://www.securityweek.com/exploit-published-for-fresh-cleo-harmony-vulnerability/"
-    source: "SecurityWeek"
-    date: 2026-09-02T12:18:15Z
-    kind: news
-    labels: ["cleo", "poc exploit", "vulnerabilities"]
