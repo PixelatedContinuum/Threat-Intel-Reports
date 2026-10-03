@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-03T12:00:32Z
+generated_at: 2026-10-03T13:02:12Z
 window_days: 30
 counts:
-  total: 571
-  research: 190
+  total: 569
+  research: 188
   news: 381
 topics:
   - label: "vulnerabilities"
@@ -20,7 +20,7 @@ topics:
     count: 91
     color: 3
   - label: "artificial intelligence"
-    count: 84
+    count: 83
     color: 4
   - label: "cybercrime"
     count: 66
@@ -72,7 +72,6 @@ label_colors:
   "ai training": 8
   "ai-agent": 12
   "ai-assisted intrusions": 3
-  "ai-enabled attacks": 3
   "ai-generated-content": 4
   "ai-generated-scripts": 3
   "ai-orchestrated campaign": 1
@@ -104,7 +103,6 @@ label_colors:
   "artificial intelligence": 4
   "arx cipher": 2
   "astrana health": 8
-  "asukastealer": 5
   "attack surface": 11
   "attacks": 7
   "autoit loader": 11
@@ -3732,15 +3730,3 @@ items:
     date: 2026-09-03T13:50:59Z
     kind: news
     labels: ["infostealer"]
-  - title: "Node.js: Old Technique Makes a Comeback"
-    url: "https://otx.alienvault.com/pulse/6a996ed3562f794a642feaaf"
-    source: "AlienVault"
-    date: 2026-09-03T12:57:55Z
-    kind: research
-    labels: ["adaptixc2", "asukastealer", "clickfix technique", "cobalt strike", "etherhiding", "modelorat", "node.js abuse", "ransomware access broker"]
-  - title: "Attackers Expose Ongoing AI Tool Use Targeting Organizations in Latin America"
-    url: "https://unit42.paloaltonetworks.com/ai-tool-use-targeting-latam-orgs/"
-    source: "AlienVault"
-    date: 2026-09-03T12:45:15Z
-    kind: research
-    labels: ["artificial intelligence", "ai-enabled attacks", "nextchat", "phishing campaign", "socks5 proxy", "socktz"]
