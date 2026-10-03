@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-03T11:02:22Z
+generated_at: 2026-10-03T12:00:32Z
 window_days: 30
 counts:
-  total: 572
+  total: 571
   research: 190
-  news: 382
+  news: 381
 topics:
   - label: "vulnerabilities"
     count: 156
@@ -23,10 +23,10 @@ topics:
     count: 84
     color: 4
   - label: "cybercrime"
-    count: 67
+    count: 66
     color: 5
   - label: "data breaches"
-    count: 62
+    count: 61
     color: 6
   - label: "zero-day"
     count: 58
@@ -133,6 +133,7 @@ label_colors:
   "bloodalchemy": 3
   "bluemoon": 5
   "bnb smart chain": 10
+  "boks": 5
   "botnet": 6
   "brand impersonation": 7
   "brevo": 8
@@ -317,6 +318,12 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "Fortra Patches Critical Vulnerabilities in BoKS"
+    url: "https://www.securityweek.com/fortra-patches-critical-vulnerabilities-in-boks/"
+    source: "SecurityWeek"
+    date: 2026-10-03T11:34:00Z
+    kind: news
+    labels: ["vulnerabilities", "boks", "fortra", "patches"]
   - title: "Judge dismisses spyware case brought by Salvadoran journalists targeted with Pegasus"
     url: "https://therecord.media/judge-dismisses-spyware-case-brought-by-salvadoran-journalists"
     source: "Recorded Future"
@@ -3737,15 +3744,3 @@ items:
     date: 2026-09-03T12:45:15Z
     kind: research
     labels: ["artificial intelligence", "ai-enabled attacks", "nextchat", "phishing campaign", "socks5 proxy", "socktz"]
-  - title: "US and Canadian court data exposed in Thomson Reuters breach"
-    url: "https://therecord.media/thomson-reuters-cyberattack-data"
-    source: "Recorded Future"
-    date: 2026-09-03T12:00:00Z
-    kind: news
-    labels: ["data breaches", "cybercrime", "privacy"]
-  - title: "Plex warns users to patch security vulnerabilities immediately"
-    url: "https://www.bleepingcomputer.com/news/security/plex-warns-users-to-patch-security-vulnerabilities-immediately/"
-    source: "BleepingComputer"
-    date: 2026-09-03T11:02:22Z
-    kind: news
-    labels: ["vulnerabilities"]
