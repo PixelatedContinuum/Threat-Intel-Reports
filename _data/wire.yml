@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-03T22:01:19Z
+generated_at: 2026-10-03T23:01:22Z
 window_days: 30
 counts:
-  total: 562
-  research: 185
-  news: 377
+  total: 560
+  research: 184
+  news: 376
 topics:
   - label: "vulnerabilities"
     count: 154
@@ -26,7 +26,7 @@ topics:
     count: 65
     color: 5
   - label: "data breaches"
-    count: 61
+    count: 60
     color: 6
   - label: "zero-day"
     count: 58
@@ -228,7 +228,6 @@ label_colors:
   "eu": 12
   "exploited": 3
   "exposure management": 4
-  "fake job interview": 1
   "fbi": 9
   "financial scam": 1
   "fine": 10
@@ -3675,15 +3674,3 @@ items:
     date: 2026-09-04T00:00:00Z
     kind: research
     labels: ["security operations", "soc"]
-  - title: "Contagious Interview steps outside the developer workflow"
-    url: "https://www.jamf.com/blog/contagious-interview-trojanized-macos-installers/"
-    source: "AlienVault"
-    date: 2026-09-03T22:07:29Z
-    kind: research
-    labels: ["fake job interview", "macos", "ottercookie", "trojanized installers"]
-  - title: "French hospital fined €500,000 after breach exposes data of 727,000"
-    url: "https://www.bleepingcomputer.com/news/security/french-hospital-fined-500-000-after-breach-exposes-data-of-727-000/"
-    source: "BleepingComputer"
-    date: 2026-09-03T22:01:37Z
-    kind: news
-    labels: ["data breaches", "healthcare", "legal"]
