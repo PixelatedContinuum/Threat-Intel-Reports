@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-03T13:02:12Z
+generated_at: 2026-10-03T14:02:12Z
 window_days: 30
 counts:
-  total: 569
+  total: 568
   research: 188
-  news: 381
+  news: 380
 topics:
   - label: "vulnerabilities"
     count: 156
@@ -3724,9 +3724,3 @@ items:
     date: 2026-09-03T14:52:20Z
     kind: news
     labels: ["exploited", "vulnerabilities"]
-  - title: "Your Employee’s Password Appeared in an Infostealer Log. Now What?"
-    url: "https://www.bleepingcomputer.com/news/security/your-employees-password-appeared-in-an-infostealer-log-now-what/"
-    source: "BleepingComputer"
-    date: 2026-09-03T13:50:59Z
-    kind: news
-    labels: ["infostealer"]
