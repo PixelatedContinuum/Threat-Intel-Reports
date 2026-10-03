@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-03T15:00:32Z
+generated_at: 2026-10-03T16:01:32Z
 window_days: 30
 counts:
-  total: 568
+  total: 567
   research: 188
-  news: 380
+  news: 379
 topics:
   - label: "vulnerabilities"
     count: 155
@@ -23,10 +23,10 @@ topics:
     count: 83
     color: 4
   - label: "cybercrime"
-    count: 66
+    count: 65
     color: 5
   - label: "data breaches"
-    count: 62
+    count: 61
     color: 6
   - label: "zero-day"
     count: 58
@@ -35,13 +35,13 @@ topics:
     count: 41
     color: 8
   - label: "ransomware"
-    count: 40
+    count: 39
     color: 9
   - label: "nation-state"
     count: 33
     color: 10
   - label: "social engineering"
-    count: 29
+    count: 28
     color: 11
   - label: "phishing"
     count: 26
@@ -3706,21 +3706,15 @@ items:
     date: 2026-09-03T18:00:13Z
     kind: research
     labels: ["threat source newsletter"]
+  - title: "ASCII smuggling crosses over from AI prompt injection to phishing evasion"
+    url: "https://www.microsoft.com/en-us/security/blog/2026/09/03/ascii-smuggling-crosses-over-from-ai-prompt-injection-to-phishing-evasion/"
+    source: "AlienVault"
+    date: 2026-09-03T17:36:50Z
+    kind: research
+    labels: ["phishing", "artificial intelligence", "ascii smuggling", "email obfuscation", "invisible characters", "phishing evasion", "prompt injection"]
   - title: "Chinese-Speaking Operator Uses AI Agents to Target Government and Education Systems Across Asia"
     url: "https://hunt.io/blog/chinese-operator-secflow-claude-qwen-deepseek-asia"
     source: "AlienVault"
     date: 2026-09-03T17:26:22Z
     kind: research
     labels: ["artificial intelligence", "ai-assisted intrusions", "fengtai government", "glutton", "glutton webshells", "secbox", "secflow framework", "steganographic payloads"]
-  - title: "ASCII smuggling crosses over from AI prompt injection to phishing evasion"
-    url: "https://www.microsoft.com/en-us/security/blog/2026/09/03/ascii-smuggling-crosses-over-from-ai-prompt-injection-to-phishing-evasion/"
-    source: "Microsoft"
-    date: 2026-09-03T16:00:00Z
-    kind: research
-    labels: ["phishing", "artificial intelligence", "social engineering"]
-  - title: "Manchester Airports Group Data on 8.8 Million People Leaked After Ransom Refusal"
-    url: "https://www.securityweek.com/manchester-airports-group-data-on-8-8-million-people-leaked-after-ransom-refusal/"
-    source: "SecurityWeek"
-    date: 2026-09-03T15:35:19Z
-    kind: news
-    labels: ["ransomware", "data breaches", "cybercrime", "ransom"]
