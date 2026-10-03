@@ -3,18 +3,18 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-03T20:01:02Z
+generated_at: 2026-10-03T21:02:02Z
 window_days: 30
 counts:
-  total: 563
+  total: 562
   research: 185
-  news: 378
+  news: 377
 topics:
   - label: "vulnerabilities"
     count: 154
     color: 1
   - label: "malware"
-    count: 104
+    count: 103
     color: 2
   - label: "exploited"
     count: 90
@@ -3687,9 +3687,3 @@ items:
     date: 2026-09-03T22:01:37Z
     kind: news
     labels: ["data breaches", "healthcare", "legal"]
-  - title: "Coder's registry infrastructure compromised to push malicious modules"
-    url: "https://www.bleepingcomputer.com/news/security/coders-registry-infrastructure-compromised-to-push-malicious-modules/"
-    source: "BleepingComputer"
-    date: 2026-09-03T20:04:24Z
-    kind: news
-    labels: ["malware"]
