@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-03T03:00:59Z
+generated_at: 2026-10-03T04:01:12Z
 window_days: 30
 counts:
-  total: 577
-  research: 193
+  total: 576
+  research: 192
   news: 384
 topics:
   - label: "vulnerabilities"
@@ -41,7 +41,7 @@ topics:
     count: 33
     color: 10
   - label: "social engineering"
-    count: 31
+    count: 30
     color: 11
   - label: "phishing"
     count: 26
@@ -220,7 +220,6 @@ label_colors:
   "dmdc": 12
   "dns txt records": 3
   "docusign impersonation": 2
-  "domain reconnaissance": 4
   "donut loader": 3
   "double extortion": 1
   "e-commerce attacks": 10
@@ -255,7 +254,6 @@ label_colors:
   "hacking": 1
   "hardware": 6
   "healthcare": 11
-  "helpdesk impersonation": 12
   "in other news": 8
   "industry": 8
   "infostealer": 8
@@ -3778,9 +3776,3 @@ items:
     date: 2026-09-03T07:26:56Z
     kind: research
     labels: ["chinese threat cluster", "defender exclusions", "dll sideloading", "fake installers", "gh0st rat", "silver fox trojan", "spoofed websites", "valleyrat", "windows update tampering"]
-  - title: "Impersonating IT support: how threat actors turn a remote session into enterprise-wide access"
-    url: "https://otx.alienvault.com/pulse/6a98ece13ef339971e686ab5"
-    source: "AlienVault"
-    date: 2026-09-03T03:43:29Z
-    kind: research
-    labels: ["domain reconnaissance", "helpdesk impersonation", "msi loader", "node.js implant", "remote monitoring tools", "social engineering", "teams phishing", "winrm lateral movement"]
