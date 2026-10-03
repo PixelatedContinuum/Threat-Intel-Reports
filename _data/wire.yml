@@ -3,7 +3,7 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-03T19:02:52Z
+generated_at: 2026-10-03T20:01:02Z
 window_days: 30
 counts:
   total: 563
@@ -14,7 +14,7 @@ topics:
     count: 154
     color: 1
   - label: "malware"
-    count: 105
+    count: 104
     color: 2
   - label: "exploited"
     count: 90
@@ -315,6 +315,12 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "ShinyHunters hacker reportedly detained in Jordan, aiding FBI"
+    url: "https://www.bleepingcomputer.com/news/security/shinyhunters-hacker-reportedly-detained-in-jordan-aiding-fbi/"
+    source: "BleepingComputer"
+    date: 2026-10-03T19:09:38Z
+    kind: news
+    labels: []
   - title: "Danish university DTU breach exposes data of up to 200,000 people"
     url: "https://www.bleepingcomputer.com/news/security/danish-university-dtu-breach-exposes-data-of-up-to-200-000-people/"
     source: "BleepingComputer"
@@ -3687,9 +3693,3 @@ items:
     date: 2026-09-03T20:04:24Z
     kind: news
     labels: ["malware"]
-  - title: "Large group of Serbian opposition, activist figures targeted with spyware"
-    url: "https://therecord.media/serbia-spyware-pegasus-europe"
-    source: "Recorded Future"
-    date: 2026-09-03T19:30:41Z
-    kind: news
-    labels: ["malware", "privacy"]
