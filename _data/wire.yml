@@ -3,7 +3,7 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-03T14:02:12Z
+generated_at: 2026-10-03T15:00:32Z
 window_days: 30
 counts:
   total: 568
@@ -11,13 +11,13 @@ counts:
   news: 380
 topics:
   - label: "vulnerabilities"
-    count: 156
+    count: 155
     color: 1
   - label: "malware"
     count: 105
     color: 2
   - label: "exploited"
-    count: 91
+    count: 90
     color: 3
   - label: "artificial intelligence"
     count: 83
@@ -26,7 +26,7 @@ topics:
     count: 66
     color: 5
   - label: "data breaches"
-    count: 61
+    count: 62
     color: 6
   - label: "zero-day"
     count: 58
@@ -316,6 +316,12 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "Danish university DTU breach exposes data of up to 200,000 people"
+    url: "https://www.bleepingcomputer.com/news/security/danish-university-dtu-breach-exposes-data-of-up-to-200-000-people/"
+    source: "BleepingComputer"
+    date: 2026-10-03T14:35:20Z
+    kind: news
+    labels: ["data breaches"]
   - title: "Fortra Patches Critical Vulnerabilities in BoKS"
     url: "https://www.securityweek.com/fortra-patches-critical-vulnerabilities-in-boks/"
     source: "SecurityWeek"
@@ -3718,9 +3724,3 @@ items:
     date: 2026-09-03T15:35:19Z
     kind: news
     labels: ["ransomware", "data breaches", "cybercrime", "ransom"]
-  - title: "Critical Elementor Pro flaw exploited to take over WordPress sites"
-    url: "https://www.bleepingcomputer.com/news/security/critical-elementor-pro-flaw-exploited-to-take-over-wordpress-sites/"
-    source: "BleepingComputer"
-    date: 2026-09-03T14:52:20Z
-    kind: news
-    labels: ["exploited", "vulnerabilities"]
