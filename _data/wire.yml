@@ -3,30 +3,30 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-04T16:00:22Z
+generated_at: 2026-10-04T17:02:22Z
 window_days: 30
 counts:
-  total: 546
-  research: 181
-  news: 365
+  total: 541
+  research: 179
+  news: 362
 topics:
   - label: "vulnerabilities"
-    count: 148
+    count: 147
     color: 1
   - label: "malware"
-    count: 103
+    count: 102
     color: 2
   - label: "exploited"
     count: 88
     color: 3
   - label: "artificial intelligence"
-    count: 81
+    count: 80
     color: 4
   - label: "cybercrime"
     count: 63
     color: 5
   - label: "data breaches"
-    count: 60
+    count: 59
     color: 6
   - label: "zero-day"
     count: 55
@@ -191,7 +191,6 @@ label_colors:
   "cryptocurrency mining": 6
   "cryptocurrency theft": 3
   "cspu": 1
-  "curlrat": 3
   "cve-2017-0199": 11
   "cve-2019-18935": 12
   "cve-2020-1938": 5
@@ -243,7 +242,6 @@ label_colors:
   "hacker conversations": 8
   "hardware": 6
   "healthcare": 11
-  "in other news": 8
   "industry": 8
   "infostealer": 8
   "insights": 5
@@ -254,7 +252,6 @@ label_colors:
   "labubarat": 10
   "law": 4
   "law enforcement": 6
-  "legal": 7
   "linux": 2
   "lnk files": 8
   "maas framework": 12
@@ -3553,33 +3550,3 @@ items:
     date: 2026-09-05T13:00:28Z
     kind: news
     labels: ["exploited", "vulnerabilities", "application security", "wordpress"]
-  - title: "IDScan sued over alleged data breach affecting 153 million drivers"
-    url: "https://www.bleepingcomputer.com/news/security/idscan-sued-over-alleged-data-breach-affecting-153-million-drivers/"
-    source: "BleepingComputer"
-    date: 2026-09-04T16:56:45Z
-    kind: news
-    labels: ["data breaches", "legal"]
-  - title: "DPRK APTs: Ted backdoor and curlRAT target South Korean media and automotive sectors"
-    url: "https://www.rapid7.com/blog/post/tr-dprk-apts-ted-backdoor-curlrat-target-south-korean-media-automotive-sectors"
-    source: "AlienVault"
-    date: 2026-09-04T16:53:57Z
-    kind: research
-    labels: ["malware", "curlrat", "dprk apt", "haproxy", "linux toolkit", "south korea", "ted backdoor", "trojanized binaries", "watering-hole"]
-  - title: "In Other News: Microsoft’s Cloud Patches, Hacked Dropbox Accounts, Guardio’s $1.1B Valuation"
-    url: "https://www.securityweek.com/in-other-news-microsofts-cloud-patches-hacked-dropbox-accounts-guardios-1-1b-valuation/"
-    source: "SecurityWeek"
-    date: 2026-09-04T16:18:30Z
-    kind: news
-    labels: ["cloud", "in other news", "network security"]
-  - title: "China-Based Artificial Intelligence Companies Conducting Industrial-Scale Distillation Campaigns Against U.S. AI Companies"
-    url: "https://www.cisa.gov/news-events/cybersecurity-advisories/aa26-251a"
-    source: "CISA"
-    date: 2026-09-04T16:12:28Z
-    kind: research
-    labels: ["artificial intelligence"]
-  - title: "HPE Patches Critical RCE Vulnerabilities in AOS-CX"
-    url: "https://www.securityweek.com/hpe-patches-critical-rce-vulnerabilities-in-aos-cx/"
-    source: "SecurityWeek"
-    date: 2026-09-04T16:11:06Z
-    kind: news
-    labels: ["vulnerabilities", "network security"]
