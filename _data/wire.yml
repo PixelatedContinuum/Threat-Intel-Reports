@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-04T06:00:49Z
+generated_at: 2026-10-04T07:01:12Z
 window_days: 30
 counts:
-  total: 559
-  research: 183
+  total: 558
+  research: 182
   news: 376
 topics:
   - label: "vulnerabilities"
@@ -238,7 +238,6 @@ label_colors:
   "gigabud": 9
   "godzilla": 12
   "google": 7
-  "google cloud": 8
   "google tag manager abuse": 4
   "government": 8
   "government impersonation": 7
@@ -3662,9 +3661,3 @@ items:
     date: 2026-09-04T07:52:40Z
     kind: research
     labels: ["netch-gateway", "proxy abuse", "radmin", "softether vpn", "ultravnc"]
-  - title: "What’s new with Google Cloud"
-    url: "https://cloud.google.com/blog/topics/inside-google-cloud/whats-new-google-cloud/"
-    source: "Google"
-    date: 2026-09-04T07:00:00Z
-    kind: research
-    labels: ["cloud", "google cloud", "inside google cloud"]
