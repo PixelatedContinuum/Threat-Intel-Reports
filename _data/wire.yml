@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-04T12:00:12Z
+generated_at: 2026-10-04T13:01:18Z
 window_days: 30
 counts:
-  total: 554
-  research: 182
-  news: 372
+  total: 552
+  research: 181
+  news: 371
 topics:
   - label: "vulnerabilities"
-    count: 151
+    count: 150
     color: 1
   - label: "malware"
     count: 103
@@ -111,8 +111,6 @@ label_colors:
   "aws": 7
   "aws cloudtrail": 6
   "aws credentials": 9
-  "babuk": 7
-  "backdoor": 11
   "bambootoken": 7
   "banking trojan": 4
   "beacon": 6
@@ -201,7 +199,6 @@ label_colors:
   "cve-2026-104286": 3
   "cve-2026-31431": 6
   "cve-2026-44756": 12
-  "cve-2026-6471": 10
   "cve-2026-86218": 9
   "cyberattacks": 8
   "cybercrime": 5
@@ -3622,15 +3619,3 @@ items:
     date: 2026-09-04T13:22:01Z
     kind: news
     labels: ["zero-day"]
-  - title: "Angry Birds: Toy Ghouls’ new toys"
-    url: "https://securelist.com/toy-ghouls-new-hivemq-and-element-backdoors/121270/"
-    source: "AlienVault"
-    date: 2026-09-04T12:34:10Z
-    kind: research
-    labels: ["babuk", "backdoor", "element messenger", "financially motivated", "genielocker", "hivemq", "lockbit", "matrix protocol", "matrix-bird-agent", "mqtt", "mqtt-bird-agent", "toy ghouls", "winrm"]
-  - title: "12-Year-Old PostgreSQL Vulnerability Enables Database, Server Takeover"
-    url: "https://www.securityweek.com/12-year-old-postgresql-vulnerability-enables-database-server-takeover/"
-    source: "SecurityWeek"
-    date: 2026-09-04T12:06:13Z
-    kind: news
-    labels: ["vulnerabilities", "cve-2026-6471", "postgresql"]
