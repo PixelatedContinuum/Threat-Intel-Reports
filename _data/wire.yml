@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-04T07:01:12Z
+generated_at: 2026-10-04T08:02:32Z
 window_days: 30
 counts:
-  total: 558
-  research: 182
+  total: 557
+  research: 181
   news: 376
 topics:
   - label: "vulnerabilities"
@@ -270,7 +270,6 @@ label_colors:
   "mikrotik": 2
   "mobile": 4
   "nation-state": 10
-  "netch-gateway": 5
   "network security": 6
   "on the radar": 4
   "openai": 4
@@ -283,7 +282,6 @@ label_colors:
   "phishing campaign": 6
   "polinrider": 2
   "privacy": 12
-  "proxy abuse": 6
   "public sector": 3
   "ransomware": 9
   "ransomware as a service": 3
@@ -3655,9 +3653,3 @@ items:
     date: 2026-09-04T11:31:52Z
     kind: news
     labels: ["zero-day", "chrome", "vulnerabilities"]
-  - title: "Attack Cases in Korea Involving the Installation of Radmin and UltraVNC"
-    url: "https://otx.alienvault.com/pulse/6a9a78c9a7a8e20715261f8c"
-    source: "AlienVault"
-    date: 2026-09-04T07:52:40Z
-    kind: research
-    labels: ["netch-gateway", "proxy abuse", "radmin", "softether vpn", "ultravnc"]
