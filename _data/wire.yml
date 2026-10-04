@@ -3,21 +3,21 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-04T11:02:40Z
+generated_at: 2026-10-04T12:00:12Z
 window_days: 30
 counts:
-  total: 557
-  research: 181
-  news: 376
+  total: 554
+  research: 182
+  news: 372
 topics:
   - label: "vulnerabilities"
-    count: 154
+    count: 151
     color: 1
   - label: "malware"
     count: 103
     color: 2
   - label: "exploited"
-    count: 90
+    count: 89
     color: 3
   - label: "artificial intelligence"
     count: 81
@@ -29,7 +29,7 @@ topics:
     count: 60
     color: 6
   - label: "zero-day"
-    count: 58
+    count: 56
     color: 7
   - label: "government"
     count: 41
@@ -193,6 +193,7 @@ label_colors:
   "cryptocurrency mining": 6
   "cryptocurrency theft": 3
   "cspu": 1
+  "curlrat": 3
   "cve-2017-0199": 11
   "cve-2019-18935": 12
   "cve-2020-1938": 5
@@ -200,7 +201,6 @@ label_colors:
   "cve-2026-104286": 3
   "cve-2026-31431": 6
   "cve-2026-44756": 12
-  "cve-2026-59346": 5
   "cve-2026-6471": 10
   "cve-2026-86218": 9
   "cyberattacks": 8
@@ -244,7 +244,6 @@ label_colors:
   "gyazo": 8
   "hacker": 8
   "hacker conversations": 8
-  "hacking": 1
   "hardware": 6
   "healthcare": 11
   "in other news": 8
@@ -3563,6 +3562,12 @@ items:
     date: 2026-09-04T16:56:45Z
     kind: news
     labels: ["data breaches", "legal"]
+  - title: "DPRK APTs: Ted backdoor and curlRAT target South Korean media and automotive sectors"
+    url: "https://www.rapid7.com/blog/post/tr-dprk-apts-ted-backdoor-curlrat-target-south-korean-media-automotive-sectors"
+    source: "AlienVault"
+    date: 2026-09-04T16:53:57Z
+    kind: research
+    labels: ["malware", "curlrat", "dprk apt", "haproxy", "linux toolkit", "south korea", "ted backdoor", "trojanized binaries", "watering-hole"]
   - title: "In Other News: Microsoft’s Cloud Patches, Hacked Dropbox Accounts, Guardio’s $1.1B Valuation"
     url: "https://www.securityweek.com/in-other-news-microsofts-cloud-patches-hacked-dropbox-accounts-guardios-1-1b-valuation/"
     source: "SecurityWeek"
@@ -3629,27 +3634,3 @@ items:
     date: 2026-09-04T12:06:13Z
     kind: news
     labels: ["vulnerabilities", "cve-2026-6471", "postgresql"]
-  - title: "DPRK APTs: Ted backdoor and curlRAT target South Korean media and automotive sectors"
-    url: "https://www.rapid7.com/blog/post/tr-dprk-apts-ted-backdoor-curlrat-target-south-korean-media-automotive-sectors"
-    source: "Rapid7"
-    date: 2026-09-04T12:00:00Z
-    kind: news
-    labels: ["malware", "hacking", "labs"]
-  - title: "Google warns of new Chrome zero-day flaw exploited in attacks"
-    url: "https://www.bleepingcomputer.com/news/security/google-warns-of-new-chrome-zero-day-flaw-exploited-in-attacks/"
-    source: "BleepingComputer"
-    date: 2026-09-04T11:48:17Z
-    kind: news
-    labels: ["zero-day", "exploited", "vulnerabilities"]
-  - title: "VMware Workstation and Fusion Updates Patch Critical Vulnerability"
-    url: "https://www.securityweek.com/vmware-workstation-and-fusion-updates-patch-critical-vulnerability/"
-    source: "SecurityWeek"
-    date: 2026-09-04T11:42:55Z
-    kind: news
-    labels: ["vulnerabilities", "cve-2026-59346", "vmware"]
-  - title: "Google Patches 6th Chrome Zero-Day of 2026"
-    url: "https://www.securityweek.com/google-patches-6th-chrome-zero-day-of-2026/"
-    source: "SecurityWeek"
-    date: 2026-09-04T11:31:52Z
-    kind: news
-    labels: ["zero-day", "chrome", "vulnerabilities"]
