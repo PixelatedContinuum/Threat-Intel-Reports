@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-04T15:02:22Z
+generated_at: 2026-10-04T16:00:22Z
 window_days: 30
 counts:
-  total: 548
+  total: 546
   research: 181
-  news: 367
+  news: 365
 topics:
   - label: "vulnerabilities"
-    count: 149
+    count: 148
     color: 1
   - label: "malware"
     count: 103
@@ -23,7 +23,7 @@ topics:
     count: 81
     color: 4
   - label: "cybercrime"
-    count: 64
+    count: 63
     color: 5
   - label: "data breaches"
     count: 60
@@ -32,7 +32,7 @@ topics:
     count: 55
     color: 7
   - label: "government"
-    count: 40
+    count: 39
     color: 8
   - label: "ransomware"
     count: 39
@@ -3583,15 +3583,3 @@ items:
     date: 2026-09-04T16:11:06Z
     kind: news
     labels: ["vulnerabilities", "network security"]
-  - title: "US, Britain to coordinate on scam center takedowns"
-    url: "https://therecord.media/scam-compounds-coordination-us-uk-memorandum"
-    source: "Recorded Future"
-    date: 2026-09-04T15:42:00Z
-    kind: news
-    labels: ["cybercrime", "government"]
-  - title: "Critical Citrix NetScaler auth bypass now leveraged in attacks"
-    url: "https://www.bleepingcomputer.com/news/security/hackers-target-critical-citrix-netscaler-auth-bypass-in-attacks/"
-    source: "BleepingComputer"
-    date: 2026-09-04T15:25:59Z
-    kind: news
-    labels: ["vulnerabilities"]
