@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-03T23:01:22Z
+generated_at: 2026-10-04T00:00:52Z
 window_days: 30
 counts:
-  total: 560
-  research: 184
+  total: 559
+  research: 183
   news: 376
 topics:
   - label: "vulnerabilities"
@@ -3668,9 +3668,3 @@ items:
     date: 2026-09-04T07:00:00Z
     kind: research
     labels: ["cloud", "google cloud", "inside google cloud"]
-  - title: "Data access: the hidden cost of security vendor lock-in"
-    url: "https://www.elastic.co/security-labs/blog/siem-data-export-comparison"
-    source: "Elastic"
-    date: 2026-09-04T00:00:00Z
-    kind: research
-    labels: ["security operations", "soc"]
