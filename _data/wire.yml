@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-04T14:02:32Z
+generated_at: 2026-10-04T15:02:22Z
 window_days: 30
 counts:
-  total: 549
+  total: 548
   research: 181
-  news: 368
+  news: 367
 topics:
   - label: "vulnerabilities"
     count: 149
@@ -23,7 +23,7 @@ topics:
     count: 81
     color: 4
   - label: "cybercrime"
-    count: 65
+    count: 64
     color: 5
   - label: "data breaches"
     count: 60
@@ -32,7 +32,7 @@ topics:
     count: 55
     color: 7
   - label: "government"
-    count: 41
+    count: 40
     color: 8
   - label: "ransomware"
     count: 39
@@ -3595,9 +3595,3 @@ items:
     date: 2026-09-04T15:25:59Z
     kind: news
     labels: ["vulnerabilities"]
-  - title: "UK account-hack losses surge as new reporting system exposes hidden cases"
-    url: "https://therecord.media/uk-account-hack-losses-surge-as-reporting-changes"
-    source: "Recorded Future"
-    date: 2026-09-04T14:45:00Z
-    kind: news
-    labels: ["cybercrime", "government", "industry"]
