@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-04T22:01:18Z
+generated_at: 2026-10-04T23:02:30Z
 window_days: 30
 counts:
-  total: 541
+  total: 542
   research: 179
-  news: 362
+  news: 363
 topics:
   - label: "vulnerabilities"
     count: 147
@@ -17,7 +17,7 @@ topics:
     count: 102
     color: 2
   - label: "exploited"
-    count: 88
+    count: 89
     color: 3
   - label: "artificial intelligence"
     count: 80
@@ -29,7 +29,7 @@ topics:
     count: 59
     color: 6
   - label: "zero-day"
-    count: 55
+    count: 56
     color: 7
   - label: "government"
     count: 39
@@ -304,6 +304,12 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "Citrix patches NetScaler SAML zero-day exploited in attacks"
+    url: "https://www.bleepingcomputer.com/news/security/citrix-patches-netscaler-saml-zero-day-exploited-in-attacks/"
+    source: "BleepingComputer"
+    date: 2026-10-04T21:58:01Z
+    kind: news
+    labels: ["zero-day", "exploited"]
   - title: "ShinyHunters hacker reportedly detained in Jordan, aiding FBI"
     url: "https://www.bleepingcomputer.com/news/security/shinyhunters-hacker-reportedly-detained-in-jordan-aiding-fbi/"
     source: "BleepingComputer"
