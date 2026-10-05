@@ -3,39 +3,39 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-05T12:00:26Z
+generated_at: 2026-10-05T13:01:42Z
 window_days: 30
 counts:
-  total: 550
+  total: 551
   research: 184
-  news: 366
+  news: 367
 topics:
   - label: "vulnerabilities"
-    count: 149
+    count: 148
     color: 1
   - label: "malware"
     count: 103
     color: 2
   - label: "exploited"
-    count: 92
+    count: 91
     color: 3
   - label: "artificial intelligence"
     count: 81
     color: 4
   - label: "cybercrime"
-    count: 64
+    count: 65
     color: 5
   - label: "data breaches"
-    count: 59
+    count: 61
     color: 6
   - label: "zero-day"
     count: 57
     color: 7
   - label: "government"
-    count: 39
+    count: 40
     color: 8
   - label: "ransomware"
-    count: 39
+    count: 40
     color: 9
   - label: "nation-state"
     count: 33
@@ -310,6 +310,18 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "250,000 Impacted by Data Breaches at New Jersey, Texas Healthcare Firms"
+    url: "https://www.securityweek.com/250000-impacted-by-data-breaches-at-new-jersey-texas-healthcare-firms/"
+    source: "SecurityWeek"
+    date: 2026-10-05T12:35:15Z
+    kind: news
+    labels: ["data breaches", "healthcare", "ransomware"]
+  - title: "Data breach at Denmark’s national population register exposes 8.8 million people"
+    url: "https://therecord.media/denmark-breach-register-cyberattack"
+    source: "Recorded Future"
+    date: 2026-10-05T12:00:00Z
+    kind: news
+    labels: ["data breaches", "cybercrime", "government", "privacy"]
   - title: "Exploitation Hits Rejetto HFS Vulnerability Discovered by AI"
     url: "https://www.securityweek.com/exploitation-hits-rejetto-hfs-vulnerability-discovered-by-ai/"
     source: "SecurityWeek"
@@ -3604,9 +3616,3 @@ items:
     date: 2026-09-05T14:29:13Z
     kind: news
     labels: ["social engineering"]
-  - title: "Elementor Pro WordPress Plugin Vulnerability Exploited to Hack Sites"
-    url: "https://www.securityweek.com/elementor-pro-wordpress-plugin-vulnerability-exploited-to-hack-sites/"
-    source: "SecurityWeek"
-    date: 2026-09-05T13:00:28Z
-    kind: news
-    labels: ["exploited", "vulnerabilities", "application security", "wordpress"]
