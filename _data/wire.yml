@@ -3,18 +3,18 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-05T15:01:18Z
+generated_at: 2026-10-05T16:01:02Z
 window_days: 30
 counts:
-  total: 554
-  research: 184
-  news: 370
+  total: 558
+  research: 186
+  news: 372
 topics:
   - label: "vulnerabilities"
-    count: 149
+    count: 150
     color: 1
   - label: "malware"
-    count: 105
+    count: 106
     color: 2
   - label: "exploited"
     count: 91
@@ -26,16 +26,16 @@ topics:
     count: 66
     color: 5
   - label: "data breaches"
-    count: 62
+    count: 63
     color: 6
   - label: "zero-day"
     count: 57
     color: 7
   - label: "government"
-    count: 41
+    count: 42
     color: 8
   - label: "ransomware"
-    count: 40
+    count: 41
     color: 9
   - label: "nation-state"
     count: 33
@@ -76,6 +76,7 @@ label_colors:
   "ai-generated-content": 4
   "ai-generated-scripts": 3
   "ai-orchestrated campaign": 1
+  "ai-platform": 2
   "alert": 2
   "amadey": 5
   "amatera": 5
@@ -166,6 +167,7 @@ label_colors:
   "chrome extension theft": 4
   "chrome extensions": 8
   "chromium vulnerability": 4
+  "ci/cd": 10
   "cisa": 6
   "cisco": 9
   "cisco talos antivirus": 7
@@ -174,6 +176,7 @@ label_colors:
   "citrix": 11
   "click2shell": 4
   "clickfix": 3
+  "cling": 11
   "clipboard": 10
   "cloud": 7
   "cloud-storage-exploitation": 2
@@ -310,6 +313,18 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "Denmark population registry data breach affects 8.8 million people"
+    url: "https://www.bleepingcomputer.com/news/security/denmark-population-registry-data-breach-affects-88-million-people/"
+    source: "BleepingComputer"
+    date: 2026-10-05T15:21:10Z
+    kind: news
+    labels: ["data breaches", "government"]
+  - title: "New Dell System Update flaw lets hackers gain root privileges"
+    url: "https://www.bleepingcomputer.com/news/security/new-dell-system-update-flaw-lets-hackers-gain-root-privileges/"
+    source: "BleepingComputer"
+    date: 2026-10-05T14:53:06Z
+    kind: news
+    labels: ["vulnerabilities"]
   - title: "South Korea probes bank breaches amid suspected AI-powered attacks"
     url: "https://www.bleepingcomputer.com/news/security/south-korea-probes-bank-breaches-amid-suspected-ai-powered-attacks/"
     source: "BleepingComputer"
@@ -322,6 +337,12 @@ items:
     date: 2026-10-05T13:55:00Z
     kind: news
     labels: ["cybercrime", "industry"]
+  - title: "Caught in 4K: The Gentlemen Files"
+    url: "https://www.cloudsek.com/blog/caught-in-4k-the-gentlemen-files"
+    source: "AlienVault"
+    date: 2026-10-05T13:32:08Z
+    kind: research
+    labels: ["ai-platform", "ci/cd", "double-extortion", "exfiltration", "gentlemen", "gitlab", "leakned", "mcp", "raas", "ransomware"]
   - title: "Alleged dev of Ploutus ATM malware appears in US court after arrest"
     url: "https://www.bleepingcomputer.com/news/security/suspected-dev-of-ploutus-atm-malware-appears-in-us-court-after-arrest/"
     source: "BleepingComputer"
@@ -352,6 +373,12 @@ items:
     date: 2026-10-05T11:00:05Z
     kind: news
     labels: ["exploited", "artificial intelligence", "vulnerabilities", "rejetto"]
+  - title: "A STUNning Disguise: Cling Malware Masquerades as Google"
+    url: "https://www.nozominetworks.com/blog/a-stunning-disguise-cling-malware-masquerades-as-google-"
+    source: "AlienVault"
+    date: 2026-10-05T09:06:12Z
+    kind: research
+    labels: ["malware", "cling", "command-and-control", "cve-2014-8361", "cve-2016-10372", "cve-2016-20016", "cve-2021-35394", "cve-2023-26801", "cve-2023-41011", "cve-2024-3721", "cve-2025-34037", "ddos", "iot botnet", "ip spoofing", "realtek exploitation", "stun protocol abuse", "wget hijacking"]
   - title: "Alleged ShinyHunters Leader Arrested in Jordan"
     url: "https://www.securityweek.com/alleged-shinyhunters-leader-arrested-in-jordan/"
     source: "SecurityWeek"
