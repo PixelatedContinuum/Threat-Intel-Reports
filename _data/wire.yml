@@ -3,21 +3,21 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-05T09:02:32Z
+generated_at: 2026-10-05T10:02:18Z
 window_days: 30
 counts:
-  total: 544
-  research: 179
+  total: 549
+  research: 184
   news: 365
 topics:
   - label: "vulnerabilities"
     count: 148
     color: 1
   - label: "malware"
-    count: 102
+    count: 103
     color: 2
   - label: "exploited"
-    count: 90
+    count: 91
     color: 3
   - label: "artificial intelligence"
     count: 80
@@ -44,7 +44,7 @@ topics:
     count: 28
     color: 11
   - label: "phishing"
-    count: 25
+    count: 26
     color: 12
 label_colors:
   "3bb": 7
@@ -64,6 +64,7 @@ label_colors:
   "adversary-in-the-middle (aitm)": 1
   "affiliate fraud": 7
   "agentcore runtime": 2
+  "agentev2": 6
   "agentic ai": 9
   "ai & automation": 1
   "ai agents": 8
@@ -71,6 +72,7 @@ label_colors:
   "ai services": 10
   "ai training": 8
   "ai-agent": 12
+  "ai-enhanced reconnaissance": 5
   "ai-generated-content": 4
   "ai-generated-scripts": 3
   "ai-orchestrated campaign": 1
@@ -105,6 +107,7 @@ label_colors:
   "attack surface": 11
   "attacks": 7
   "autoit loader": 11
+  "averat": 1
   "aveva": 1
   "avisloader": 6
   "awareness training": 1
@@ -130,6 +133,7 @@ label_colors:
   "bnb smart chain": 10
   "boks": 5
   "botnet": 6
+  "bpfdoor": 4
   "brand impersonation": 7
   "brevo": 8
   "browser credential theft": 10
@@ -206,6 +210,7 @@ label_colors:
   "data leak": 9
   "data security": 10
   "ddos": 4
+  "dead-drop": 4
   "decoys": 1
   "detection engineering": 12
   "dmdc": 12
@@ -311,6 +316,12 @@ items:
     date: 2026-10-05T07:16:53Z
     kind: news
     labels: ["law enforcement", "rey", "arrested", "cybercrime", "fbi", "shinyhunters", "tracking & law enforcement"]
+  - title: "XWorm Malware: Worming Its Way From Entry to Exploitation"
+    url: "https://cyberint.com/blog/dark-web/xworm-malware-worming-its-way-from-entry-to-exploitation/"
+    source: "AlienVault"
+    date: 2026-10-05T07:16:30Z
+    kind: research
+    labels: ["exploited", "malware", "botnet", "data theft", "ddgroup", "modular threat", "phishing", "ransomware delivery", "rdp exploitation", "xworm"]
   - title: "Exploitation of Citrix NetScaler Zero-Day Hits Appliances Patched Days Earlier"
     url: "https://www.securityweek.com/exploitation-of-citrix-netscaler-zero-day-hits-appliances-patched-days-earlier/"
     source: "SecurityWeek"
@@ -341,6 +352,12 @@ items:
     date: 2026-10-03T11:34:00Z
     kind: news
     labels: ["vulnerabilities", "boks", "fortra", "patches"]
+  - title: "Pretty Themes, Hidden Loaders: GlassWorm-Linked Extensions Span VS Code Marketplace and Open VSX"
+    url: "https://otx.alienvault.com/pulse/6ac07308bd5cef8481adcf61"
+    source: "AlienVault"
+    date: 2026-10-03T03:14:16Z
+    kind: research
+    labels: ["credential theft", "dead-drop", "extensions", "glassworm", "open vsx", "solana", "supply chain", "themes", "vs code"]
   - title: "Judge dismisses spyware case brought by Salvadoran journalists targeted with Pegasus"
     url: "https://therecord.media/judge-dismisses-spyware-case-brought-by-salvadoran-journalists"
     source: "Recorded Future"
@@ -395,12 +412,30 @@ items:
     date: 2026-10-02T14:00:10Z
     kind: news
     labels: []
+  - title: "The Psychedelic Stealer: When the CAPTCHA Is the Installer"
+    url: "https://connect.securonix.com/threat-research-intelligence-62/the-psychedelic-stealer-when-the-captcha-is-the-installer-582"
+    source: "AlienVault"
+    date: 2026-10-02T13:48:42Z
+    kind: research
+    labels: ["infostealer", "browser extension", "clickfix", "cryptocurrency theft", "fake captcha", "msi execution", "native-messaging bridge", "psychedelic", "psychedelic stealer", "psychedeliclove.exe", "ukraine targeting"]
+  - title: "SMTP is the key: BPFDoor and AVERAT hitting the network edge"
+    url: "https://otx.alienvault.com/pulse/6abfb61b65922c3229d35cf8"
+    source: "AlienVault"
+    date: 2026-10-02T13:48:11Z
+    kind: research
+    labels: ["averat", "bpfdoor", "implant", "linux", "network-edge", "passive-backdoor", "process-spoofing", "rekoobe", "smtp", "telecommunications"]
   - title: "macOS Users Targeted by Fake Zoom Installer Carrying CloudSyncD Backdoor"
     url: "https://www.securityweek.com/macos-users-targeted-by-fake-zoom-installer-carrying-cloudsyncd-backdoor/"
     source: "SecurityWeek"
     date: 2026-10-02T13:15:00Z
     kind: news
     labels: ["malware", "macos"]
+  - title: "Anatomy of BraZetsu: How Cybercriminals Supply the Underground Ecosystem"
+    url: "https://www.group-ib.com/blog/brazetsu-ai-enhanced-iab-marketplace-es/"
+    source: "AlienVault"
+    date: 2026-10-02T13:14:24Z
+    kind: research
+    labels: ["agentev2", "ai-enhanced reconnaissance", "brazetsu", "cnab targeting", "cnabhunter", "financial infrastructure", "infected marketplace", "initial access broker", "latin america", "nuitka compilation", "ousaban", "python malware", "websocket c2"]
   - title: "Dell asks admins to patch max severity CSM flaws as soon as possible"
     url: "https://www.bleepingcomputer.com/news/security/new-max-severity-dell-csm-flaws-give-hackers-admin-privileges/"
     source: "BleepingComputer"
