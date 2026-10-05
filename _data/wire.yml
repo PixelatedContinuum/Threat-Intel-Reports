@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-05T17:02:32Z
+generated_at: 2026-10-05T18:01:32Z
 window_days: 30
 counts:
-  total: 560
+  total: 562
   research: 187
-  news: 373
+  news: 375
 topics:
   - label: "vulnerabilities"
-    count: 150
+    count: 151
     color: 1
   - label: "malware"
     count: 107
@@ -23,7 +23,7 @@ topics:
     count: 82
     color: 4
   - label: "cybercrime"
-    count: 67
+    count: 69
     color: 5
   - label: "data breaches"
     count: 63
@@ -32,7 +32,7 @@ topics:
     count: 57
     color: 7
   - label: "government"
-    count: 42
+    count: 43
     color: 8
   - label: "ransomware"
     count: 42
@@ -313,6 +313,18 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "US, Australia warn of latest Citrix vulnerability after NetScaler advisory"
+    url: "https://therecord.media/us-australia-warn-of-latest-citrix-vulnerability"
+    source: "Recorded Future"
+    date: 2026-10-05T17:22:00Z
+    kind: news
+    labels: ["vulnerabilities", "cybercrime", "government"]
+  - title: "Ukraine grocery chain ATB confirms cyberattack as hackers threaten to leak data"
+    url: "https://therecord.media/atb-ukraine-cyberattack-ransomware"
+    source: "Recorded Future"
+    date: 2026-10-05T17:00:00Z
+    kind: news
+    labels: ["cybercrime", "privacy"]
   - title: "University of Illinois Chicago affected by ransomware attack on medical school"
     url: "https://therecord.media/ransomware-university-illinois-chicago"
     source: "Recorded Future"
