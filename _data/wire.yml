@@ -3,18 +3,18 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-05T16:01:02Z
+generated_at: 2026-10-05T17:02:32Z
 window_days: 30
 counts:
-  total: 558
-  research: 186
-  news: 372
+  total: 560
+  research: 187
+  news: 373
 topics:
   - label: "vulnerabilities"
     count: 150
     color: 1
   - label: "malware"
-    count: 106
+    count: 107
     color: 2
   - label: "exploited"
     count: 91
@@ -23,7 +23,7 @@ topics:
     count: 82
     color: 4
   - label: "cybercrime"
-    count: 66
+    count: 67
     color: 5
   - label: "data breaches"
     count: 63
@@ -35,7 +35,7 @@ topics:
     count: 42
     color: 8
   - label: "ransomware"
-    count: 41
+    count: 42
     color: 9
   - label: "nation-state"
     count: 33
@@ -313,6 +313,12 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "University of Illinois Chicago affected by ransomware attack on medical school"
+    url: "https://therecord.media/ransomware-university-illinois-chicago"
+    source: "Recorded Future"
+    date: 2026-10-05T15:30:00Z
+    kind: news
+    labels: ["ransomware", "cybercrime", "malware"]
   - title: "Denmark population registry data breach affects 8.8 million people"
     url: "https://www.bleepingcomputer.com/news/security/denmark-population-registry-data-breach-affects-88-million-people/"
     source: "BleepingComputer"
@@ -397,6 +403,12 @@ items:
     date: 2026-10-05T05:14:48Z
     kind: news
     labels: ["zero-day", "exploited", "citrix", "netscaler", "vulnerabilities"]
+  - title: "Behind the tags: How Elastic SIEM grades 1,781 detection rules on noise, speed, and threat coverage"
+    url: "https://www.elastic.co/security-labs/threat-command/elastic-siem-detection-rule-tags"
+    source: "Elastic"
+    date: 2026-10-05T00:00:00Z
+    kind: research
+    labels: ["detection engineering"]
   - title: "Citrix patches NetScaler SAML zero-day exploited in attacks"
     url: "https://www.bleepingcomputer.com/news/security/citrix-patches-netscaler-saml-zero-day-exploited-in-attacks/"
     source: "BleepingComputer"
