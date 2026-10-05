@@ -3,21 +3,21 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-05T05:02:40Z
+generated_at: 2026-10-05T06:02:18Z
 window_days: 30
 counts:
-  total: 542
+  total: 543
   research: 179
-  news: 363
+  news: 364
 topics:
   - label: "vulnerabilities"
-    count: 147
+    count: 148
     color: 1
   - label: "malware"
     count: 102
     color: 2
   - label: "exploited"
-    count: 89
+    count: 90
     color: 3
   - label: "artificial intelligence"
     count: 80
@@ -29,7 +29,7 @@ topics:
     count: 59
     color: 6
   - label: "zero-day"
-    count: 56
+    count: 57
     color: 7
   - label: "government"
     count: 39
@@ -304,6 +304,12 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "Exploitation of Citrix NetScaler Zero-Day Hits Appliances Patched Days Earlier"
+    url: "https://www.securityweek.com/exploitation-of-citrix-netscaler-zero-day-hits-appliances-patched-days-earlier/"
+    source: "SecurityWeek"
+    date: 2026-10-05T05:14:48Z
+    kind: news
+    labels: ["zero-day", "exploited", "citrix", "netscaler", "vulnerabilities"]
   - title: "Citrix patches NetScaler SAML zero-day exploited in attacks"
     url: "https://www.bleepingcomputer.com/news/security/citrix-patches-netscaler-saml-zero-day-exploited-in-attacks/"
     source: "BleepingComputer"
