@@ -3,18 +3,18 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-05T13:01:42Z
+generated_at: 2026-10-05T14:01:42Z
 window_days: 30
 counts:
-  total: 551
+  total: 553
   research: 184
-  news: 367
+  news: 369
 topics:
   - label: "vulnerabilities"
-    count: 148
+    count: 149
     color: 1
   - label: "malware"
-    count: 103
+    count: 105
     color: 2
   - label: "exploited"
     count: 91
@@ -310,6 +310,18 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "Alleged dev of Ploutus ATM malware appears in US court after arrest"
+    url: "https://www.bleepingcomputer.com/news/security/suspected-dev-of-ploutus-atm-malware-appears-in-us-court-after-arrest/"
+    source: "BleepingComputer"
+    date: 2026-10-05T13:01:45Z
+    kind: news
+    labels: ["law enforcement", "malware"]
+  - title: "Linux Backdoor Abuses STUN Protocol, Exploits Dozens of Flaws"
+    url: "https://www.securityweek.com/linux-backdoor-abuses-stun-protocol-exploits-dozens-of-flaws/"
+    source: "SecurityWeek"
+    date: 2026-10-05T13:00:00Z
+    kind: news
+    labels: ["vulnerabilities", "malware", "clingstun", "linux malware"]
   - title: "250,000 Impacted by Data Breaches at New Jersey, Texas Healthcare Firms"
     url: "https://www.securityweek.com/250000-impacted-by-data-breaches-at-new-jersey-texas-healthcare-firms/"
     source: "SecurityWeek"
