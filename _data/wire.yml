@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-05T20:00:42Z
+generated_at: 2026-10-05T21:00:22Z
 window_days: 30
 counts:
-  total: 563
+  total: 564
   research: 188
-  news: 375
+  news: 376
 topics:
   - label: "vulnerabilities"
-    count: 151
+    count: 152
     color: 1
   - label: "malware"
     count: 107
@@ -313,6 +313,12 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "Rejetto HFS servers now actively scanned for critical RCE flaw"
+    url: "https://www.bleepingcomputer.com/news/security/rejetto-hfs-servers-now-actively-scanned-for-critical-rce-flaw/"
+    source: "BleepingComputer"
+    date: 2026-10-05T20:20:05Z
+    kind: news
+    labels: ["vulnerabilities"]
   - title: "Pwn2Own Ireland 2026 - The Full Schedule"
     url: "https://www.thezdi.com/blog/2026/10/5/pwn2own-ireland-2026-the-full-schedule"
     source: "Zero Day Initiative"
@@ -3571,6 +3577,12 @@ items:
     date: 2026-09-07T17:27:35Z
     kind: research
     labels: ["phishing", "credential harvesting", "google infrastructure abuse", "open redirect exploitation"]
+  - title: "StyleSmuggler: Magento and Adobe Commerce 0-day RCE under active attack"
+    url: "https://otx.alienvault.com/pulse/6a9ef14fbc62257cff38357b"
+    source: "AlienVault"
+    date: 2026-09-07T17:15:59Z
+    kind: research
+    labels: ["zero-day", "vulnerabilities", "adobe commerce", "remote code execution", "rust backdoor", "stylesmuggler"]
   - title: "Tracking BigBear 2.0 Evilginx2 Phishing Campaign"
     url: "https://otx.alienvault.com/pulse/6a9ef10da8f75f1218af678c"
     source: "AlienVault"
@@ -3685,9 +3697,3 @@ items:
     date: 2026-09-06T07:32:55Z
     kind: research
     labels: ["black hat seo", "garage2global", "github infrastructure", "india", "matomo analytics", "mayabot", "seo poisoning", "tds", "tech support scam", "weconnect"]
-  - title: "StyleSmuggler: Magento and Adobe Commerce 0-day RCE under active attack"
-    url: "https://sansec.io/research/stylesmuggler"
-    source: "AlienVault"
-    date: 2026-09-05T20:33:07Z
-    kind: research
-    labels: ["zero-day", "vulnerabilities", "adobe commerce", "backdoor", "graphql", "magento", "payment email", "remote code execution", "stylesmuggler"]
