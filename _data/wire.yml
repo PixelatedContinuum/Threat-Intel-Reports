@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-05T14:01:42Z
+generated_at: 2026-10-05T15:01:18Z
 window_days: 30
 counts:
-  total: 553
+  total: 554
   research: 184
-  news: 369
+  news: 370
 topics:
   - label: "vulnerabilities"
     count: 149
@@ -20,19 +20,19 @@ topics:
     count: 91
     color: 3
   - label: "artificial intelligence"
-    count: 81
+    count: 82
     color: 4
   - label: "cybercrime"
-    count: 65
+    count: 66
     color: 5
   - label: "data breaches"
-    count: 61
+    count: 62
     color: 6
   - label: "zero-day"
     count: 57
     color: 7
   - label: "government"
-    count: 40
+    count: 41
     color: 8
   - label: "ransomware"
     count: 40
@@ -41,7 +41,7 @@ topics:
     count: 33
     color: 10
   - label: "social engineering"
-    count: 28
+    count: 27
     color: 11
   - label: "phishing"
     count: 26
@@ -310,6 +310,18 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "South Korea probes bank breaches amid suspected AI-powered attacks"
+    url: "https://www.bleepingcomputer.com/news/security/south-korea-probes-bank-breaches-amid-suspected-ai-powered-attacks/"
+    source: "BleepingComputer"
+    date: 2026-10-05T14:22:12Z
+    kind: news
+    labels: ["data breaches", "artificial intelligence", "government"]
+  - title: "Belarusian hacktivists spent two years inside Russian healthcare network, researchers say"
+    url: "https://therecord.media/belarusian-hacktivists-two-years-Russian-healthcare-network"
+    source: "Recorded Future"
+    date: 2026-10-05T13:55:00Z
+    kind: news
+    labels: ["cybercrime", "industry"]
   - title: "Alleged dev of Ploutus ATM malware appears in US court after arrest"
     url: "https://www.bleepingcomputer.com/news/security/suspected-dev-of-ploutus-atm-malware-appears-in-us-court-after-arrest/"
     source: "BleepingComputer"
@@ -3622,9 +3634,3 @@ items:
     date: 2026-09-05T20:33:07Z
     kind: research
     labels: ["zero-day", "vulnerabilities", "adobe commerce", "backdoor", "graphql", "magento", "payment email", "remote code execution", "stylesmuggler"]
-  - title: "Over 5,400 hacked sites serve ClickFix payloads stored on the blockchain"
-    url: "https://www.bleepingcomputer.com/news/security/over-5-400-hacked-sites-serve-clickfix-payloads-stored-on-the-blockchain/"
-    source: "BleepingComputer"
-    date: 2026-09-05T14:29:13Z
-    kind: news
-    labels: ["social engineering"]
