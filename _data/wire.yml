@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-05T18:01:32Z
+generated_at: 2026-10-05T19:02:18Z
 window_days: 30
 counts:
-  total: 562
-  research: 187
+  total: 563
+  research: 188
   news: 375
 topics:
   - label: "vulnerabilities"
@@ -313,6 +313,12 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "Pwn2Own Ireland 2026 - The Full Schedule"
+    url: "https://www.thezdi.com/blog/2026/10/5/pwn2own-ireland-2026-the-full-schedule"
+    source: "Zero Day Initiative"
+    date: 2026-10-05T18:11:29Z
+    kind: research
+    labels: ["blog post"]
   - title: "US, Australia warn of latest Citrix vulnerability after NetScaler advisory"
     url: "https://therecord.media/us-australia-warn-of-latest-citrix-vulnerability"
     source: "Recorded Future"
