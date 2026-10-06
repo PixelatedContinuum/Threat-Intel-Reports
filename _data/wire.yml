@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-06T09:02:12Z
+generated_at: 2026-10-06T10:02:59Z
 window_days: 30
 counts:
-  total: 567
-  research: 190
-  news: 377
+  total: 570
+  research: 192
+  news: 378
 topics:
   - label: "vulnerabilities"
     count: 152
@@ -26,7 +26,7 @@ topics:
     count: 69
     color: 5
   - label: "data breaches"
-    count: 63
+    count: 64
     color: 6
   - label: "zero-day"
     count: 57
@@ -81,6 +81,7 @@ label_colors:
   "amadey": 5
   "amatera": 5
   "amd": 6
+  "amd driver vulnerability": 12
   "amos": 6
   "android": 9
   "android banking trojan": 11
@@ -312,6 +313,24 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "Pwn2Own Ireland 2026 - Day One Results"
+    url: "https://www.thezdi.com/blog/2026/10/6/pwn2own-ireland-2026-day-one-results"
+    source: "Zero Day Initiative"
+    date: 2026-10-06T09:28:31Z
+    kind: research
+    labels: ["blog post"]
+  - title: "Nikkei discloses breaches of employees’ Microsoft, Google email accounts"
+    url: "https://www.bleepingcomputer.com/news/security/nikkei-discloses-breaches-of-employees-microsoft-google-email-accounts/"
+    source: "BleepingComputer"
+    date: 2026-10-06T09:25:50Z
+    kind: news
+    labels: ["data breaches"]
+  - title: "Lunex Uses BYOVD to Disable Security Monitoring and Deploy Persistent Stealer"
+    url: "https://otx.alienvault.com/pulse/6ac4b1c8431cd87d87aa1784"
+    source: "AlienVault"
+    date: 2026-10-06T08:31:04Z
+    kind: research
+    labels: ["infostealer", "amd driver vulnerability", "byovd", "credential stealer", "cryptocurrency wallet theft", "cve-2023-20598", "endpoint security evasion", "kernel callback manipulation", "lunexloader", "lunexstealer", "native messaging host persistence", "pdfwkrnl.sys", "ukrainian targeting"]
   - title: "ClingSTUN Linux Backdoor Abuses Public STUN Infrastructure"
     url: "https://www.fortinet.com/blog/threat-research/clingstun-linux-backdoor-abuses-public-stun-infrastructure"
     source: "AlienVault"
