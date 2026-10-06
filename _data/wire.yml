@@ -3,18 +3,18 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-06T13:01:42Z
+generated_at: 2026-10-06T14:01:32Z
 window_days: 30
 counts:
-  total: 572
+  total: 575
   research: 192
-  news: 380
+  news: 383
 topics:
   - label: "vulnerabilities"
     count: 152
     color: 1
   - label: "malware"
-    count: 110
+    count: 112
     color: 2
   - label: "exploited"
     count: 91
@@ -23,7 +23,7 @@ topics:
     count: 84
     color: 4
   - label: "cybercrime"
-    count: 69
+    count: 72
     color: 5
   - label: "data breaches"
     count: 65
@@ -41,7 +41,7 @@ topics:
     count: 33
     color: 10
   - label: "social engineering"
-    count: 27
+    count: 28
     color: 11
   - label: "phishing"
     count: 26
@@ -315,6 +315,18 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "ClickFix campaign in Ukraine compromises over 100 websites to spread Lunex malware"
+    url: "https://therecord.media/clickfix-campaign-ukraine-lunex-stealer"
+    source: "Recorded Future"
+    date: 2026-10-06T13:17:00Z
+    kind: news
+    labels: ["social engineering", "malware", "cybercrime"]
+  - title: "FBI Arrests ‘Most Wanted’ Developer of Ploutus ATM Malware"
+    url: "https://www.securityweek.com/fbi-arrests-most-wanted-developer-of-ploutus-atm-malware/"
+    source: "SecurityWeek"
+    date: 2026-10-06T12:47:57Z
+    kind: news
+    labels: ["law enforcement", "malware", "arrested", "atm jackpotting", "cybercrime", "ploutus", "tracking & law enforcement"]
   - title: "Long-Running NPM Malware Campaign Accumulates 40,000 Downloads"
     url: "https://www.securityweek.com/long-running-npm-malware-campaign-accumulates-40000-downloads/"
     source: "SecurityWeek"
@@ -351,6 +363,12 @@ items:
     date: 2026-10-06T08:31:04Z
     kind: research
     labels: ["infostealer", "amd driver vulnerability", "byovd", "credential stealer", "cryptocurrency wallet theft", "cve-2023-20598", "endpoint security evasion", "kernel callback manipulation", "lunexloader", "lunexstealer", "native messaging host persistence", "pdfwkrnl.sys", "ukrainian targeting"]
+  - title: "Shares in British clothing company ASOS dive after hackers apparently send push notification"
+    url: "https://therecord.media/asos-push-notification-apparently-sent-by-hackers"
+    source: "Recorded Future"
+    date: 2026-10-06T04:00:00Z
+    kind: news
+    labels: ["cybercrime", "industry"]
   - title: "ClingSTUN Linux Backdoor Abuses Public STUN Infrastructure"
     url: "https://www.fortinet.com/blog/threat-research/clingstun-linux-backdoor-abuses-public-stun-infrastructure"
     source: "AlienVault"
