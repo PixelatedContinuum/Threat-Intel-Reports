@@ -3,18 +3,18 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-06T16:00:52Z
+generated_at: 2026-10-06T17:01:02Z
 window_days: 30
 counts:
-  total: 577
+  total: 579
   research: 192
-  news: 385
+  news: 387
 topics:
   - label: "vulnerabilities"
     count: 152
     color: 1
   - label: "malware"
-    count: 112
+    count: 113
     color: 2
   - label: "exploited"
     count: 91
@@ -23,10 +23,10 @@ topics:
     count: 85
     color: 4
   - label: "cybercrime"
-    count: 74
+    count: 75
     color: 5
   - label: "data breaches"
-    count: 66
+    count: 67
     color: 6
   - label: "zero-day"
     count: 57
@@ -43,7 +43,7 @@ topics:
   - label: "social engineering"
     count: 28
     color: 11
-  - label: "phishing"
+  - label: "law enforcement"
     count: 25
     color: 12
 label_colors:
@@ -261,7 +261,7 @@ label_colors:
   "labs": 6
   "labubarat": 10
   "law": 4
-  "law enforcement": 6
+  "law enforcement": 12
   "linux": 2
   "lnk files": 8
   "maas framework": 12
@@ -281,7 +281,7 @@ label_colors:
   "patch tuesday": 11
   "patching": 8
   "payment fraud": 12
-  "phishing": 12
+  "phishing": 10
   "phishing campaign": 6
   "polinrider": 2
   "privacy": 12
@@ -315,6 +315,18 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "ASOS confirms data breach after “HACKED” in-app notifications"
+    url: "https://www.bleepingcomputer.com/news/security/asos-confirms-data-breach-after-hacked-in-app-notifications/"
+    source: "BleepingComputer"
+    date: 2026-10-06T16:33:54Z
+    kind: news
+    labels: ["data breaches"]
+  - title: "Alleged ATM malware creator appears in Nebraska court after arrest"
+    url: "https://therecord.media/atm-malware-creator-appears-in-nebraska-court"
+    source: "Recorded Future"
+    date: 2026-10-06T15:53:00Z
+    kind: news
+    labels: ["law enforcement", "malware", "cybercrime"]
   - title: "South Korean officials believe AI agents were used to hack several banks"
     url: "https://therecord.media/south-korean-bank-hacks-ai-agents"
     source: "Recorded Future"
