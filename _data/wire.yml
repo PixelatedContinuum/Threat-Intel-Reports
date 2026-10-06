@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-06T12:01:02Z
+generated_at: 2026-10-06T13:01:42Z
 window_days: 30
 counts:
-  total: 573
-  research: 193
+  total: 572
+  research: 192
   news: 380
 topics:
   - label: "vulnerabilities"
@@ -95,7 +95,6 @@ label_colors:
   "api": 12
   "apollo": 11
   "app-bound encryption": 3
-  "app-bound-encryption": 6
   "apple": 12
   "application security": 6
   "apt": 5
@@ -3748,9 +3747,3 @@ items:
     date: 2026-09-06T14:23:46Z
     kind: news
     labels: ["phishing"]
-  - title: "REVSTEALER ramps up: analysis of up-and-coming infostealer"
-    url: "https://www.elastic.co/security-labs/threat-command/revstealer-credential-harvesting-infostealer"
-    source: "AlienVault"
-    date: 2026-09-06T12:08:52Z
-    kind: research
-    labels: ["infostealer", "app-bound-encryption", "credential-theft", "cryptocurrency-wallets", "gaming-platforms", "lockapphost", "polygon-blockchain", "promanager", "ref2859", "revstealer", "sandbox-evasion", "softmanager", "vmprotect", "winupdate", "xmrig"]
