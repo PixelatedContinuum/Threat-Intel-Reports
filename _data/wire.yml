@@ -3,18 +3,18 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-06T10:02:59Z
+generated_at: 2026-10-06T11:00:32Z
 window_days: 30
 counts:
-  total: 570
-  research: 192
-  news: 378
+  total: 572
+  research: 193
+  news: 379
 topics:
   - label: "vulnerabilities"
     count: 152
     color: 1
   - label: "malware"
-    count: 108
+    count: 109
     color: 2
   - label: "exploited"
     count: 91
@@ -26,7 +26,7 @@ topics:
     count: 69
     color: 5
   - label: "data breaches"
-    count: 64
+    count: 65
     color: 6
   - label: "zero-day"
     count: 57
@@ -60,9 +60,11 @@ label_colors:
   "adaptixc2": 8
   "adb exploitation": 3
   "adobe": 1
+  "advanced persistent threat": 9
   "adversary infrastructure": 12
   "adversary-in-the-middle (aitm)": 1
   "affiliate fraud": 7
+  "agent serpens": 5
   "agentcore runtime": 2
   "agentev2": 6
   "agentic ai": 9
@@ -216,6 +218,7 @@ label_colors:
   "ddos": 4
   "dead-drop": 4
   "decoys": 1
+  "denmark": 10
   "detection engineering": 12
   "dmdc": 12
   "dns txt records": 3
@@ -313,6 +316,18 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "Blinder Tunnel Campaign Targets Iraqi Infrastructure"
+    url: "https://unit42.paloaltonetworks.com/blinder-tunnel-targets-critical-infrastructure/"
+    source: "Palo Alto Networks"
+    date: 2026-10-06T10:00:33Z
+    kind: research
+    labels: ["agent serpens", "advanced persistent threat", "appdomainmanager", "github", "iran", "malware", "payload", "threat research"]
+  - title: "8.8 Million Impacted by Data Breach at Denmark’s Central Person Register"
+    url: "https://www.securityweek.com/8-8-million-impacted-by-data-breach-at-denmarks-central-person-register/"
+    source: "SecurityWeek"
+    date: 2026-10-06T09:38:30Z
+    kind: news
+    labels: ["data breaches", "denmark"]
   - title: "Pwn2Own Ireland 2026 - Day One Results"
     url: "https://www.thezdi.com/blog/2026/10/6/pwn2own-ireland-2026-day-one-results"
     source: "Zero Day Initiative"
