@@ -3,21 +3,21 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-06T21:00:32Z
+generated_at: 2026-10-06T22:02:02Z
 window_days: 30
 counts:
-  total: 582
+  total: 583
   research: 194
-  news: 388
+  news: 389
 topics:
   - label: "vulnerabilities"
-    count: 152
+    count: 153
     color: 1
   - label: "malware"
     count: 113
     color: 2
   - label: "exploited"
-    count: 91
+    count: 92
     color: 3
   - label: "artificial intelligence"
     count: 86
@@ -315,6 +315,12 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "Ninja Forms plugin flaw exploited to hack WordPress sites"
+    url: "https://www.bleepingcomputer.com/news/security/ninja-forms-plugin-flaw-exploited-to-hack-wordpress-sites/"
+    source: "BleepingComputer"
+    date: 2026-10-06T21:00:27Z
+    kind: news
+    labels: ["exploited", "vulnerabilities"]
   - title: "Hackers exploit 32 zero-days on first day of Pwn2Own Ireland"
     url: "https://www.bleepingcomputer.com/news/security/hackers-exploit-32-zero-days-on-first-day-of-pwn2own-ireland/"
     source: "BleepingComputer"
