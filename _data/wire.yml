@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-06T07:01:22Z
+generated_at: 2026-10-06T08:00:40Z
 window_days: 30
 counts:
-  total: 567
-  research: 190
+  total: 566
+  research: 189
   news: 377
 topics:
   - label: "vulnerabilities"
@@ -124,7 +124,6 @@ label_colors:
   "bigdiskbuster": 2
   "bind": 7
   "bitcoin": 2
-  "black hat seo": 5
   "blockchain c2": 1
   "blockchain fraud": 2
   "blockchain infrastructure": 11
@@ -238,7 +237,6 @@ label_colors:
   "fortigate": 1
   "fortinet": 7
   "gaming": 5
-  "garage2global": 10
   "gigabud": 9
   "godzilla": 12
   "google": 7
@@ -3709,9 +3707,3 @@ items:
     date: 2026-09-06T12:08:52Z
     kind: research
     labels: ["infostealer", "app-bound-encryption", "credential-theft", "cryptocurrency-wallets", "gaming-platforms", "lockapphost", "polygon-blockchain", "promanager", "ref2859", "revstealer", "sandbox-evasion", "softmanager", "vmprotect", "winupdate", "xmrig"]
-  - title: "BengalSEO Part 1: Anatomy of the Operation"
-    url: "https://thedfirreport.com/2026/08/24/bengalseo-part-1-anatomy-of-the-operation/"
-    source: "AlienVault"
-    date: 2026-09-06T07:32:55Z
-    kind: research
-    labels: ["black hat seo", "garage2global", "github infrastructure", "india", "matomo analytics", "mayabot", "seo poisoning", "tds", "tech support scam", "weconnect"]
