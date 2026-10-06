@@ -3,7 +3,7 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-06T14:01:32Z
+generated_at: 2026-10-06T15:02:32Z
 window_days: 30
 counts:
   total: 575
@@ -23,10 +23,10 @@ topics:
     count: 84
     color: 4
   - label: "cybercrime"
-    count: 72
+    count: 73
     color: 5
   - label: "data breaches"
-    count: 65
+    count: 66
     color: 6
   - label: "zero-day"
     count: 57
@@ -44,7 +44,7 @@ topics:
     count: 28
     color: 11
   - label: "phishing"
-    count: 26
+    count: 25
     color: 12
 label_colors:
   "3bb": 7
@@ -315,6 +315,12 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "FBI Blames Contractor’s Missed Patch for ShinyHunters Breach"
+    url: "https://www.securityweek.com/fbi-blames-contractors-missed-patch-for-shinyhunters-breach/"
+    source: "SecurityWeek"
+    date: 2026-10-06T14:15:00Z
+    kind: news
+    labels: ["data breaches", "cybercrime", "fbi", "oracle peoplesoft", "patch", "shinyhunters"]
   - title: "ClickFix campaign in Ukraine compromises over 100 websites to spread Lunex malware"
     url: "https://therecord.media/clickfix-campaign-ukraine-lunex-stealer"
     source: "Recorded Future"
@@ -3759,9 +3765,3 @@ items:
     date: 2026-09-07T06:17:41Z
     kind: news
     labels: ["vulnerabilities"]
-  - title: "Attackers conceal phishing lures using invisible Unicode characters"
-    url: "https://www.bleepingcomputer.com/news/security/attackers-conceal-phishing-lures-using-invisible-unicode-characters/"
-    source: "BleepingComputer"
-    date: 2026-09-06T14:23:46Z
-    kind: news
-    labels: ["phishing"]
