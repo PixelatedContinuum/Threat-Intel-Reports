@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-06T19:02:32Z
+generated_at: 2026-10-06T20:01:52Z
 window_days: 30
 counts:
-  total: 580
-  research: 193
-  news: 387
+  total: 582
+  research: 194
+  news: 388
 topics:
   - label: "vulnerabilities"
     count: 152
@@ -20,7 +20,7 @@ topics:
     count: 91
     color: 3
   - label: "artificial intelligence"
-    count: 85
+    count: 86
     color: 4
   - label: "cybercrime"
     count: 75
@@ -29,7 +29,7 @@ topics:
     count: 67
     color: 6
   - label: "zero-day"
-    count: 57
+    count: 58
     color: 7
   - label: "government"
     count: 44
@@ -315,6 +315,12 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "Hackers exploit 32 zero-days on first day of Pwn2Own Ireland"
+    url: "https://www.bleepingcomputer.com/news/security/hackers-exploit-32-zero-days-on-first-day-of-pwn2own-ireland/"
+    source: "BleepingComputer"
+    date: 2026-10-06T19:21:53Z
+    kind: news
+    labels: ["zero-day"]
   - title: "ASOS confirms data breach after “HACKED” in-app notifications"
     url: "https://www.bleepingcomputer.com/news/security/asos-confirms-data-breach-after-hacked-in-app-notifications/"
     source: "BleepingComputer"
@@ -399,6 +405,12 @@ items:
     date: 2026-10-06T07:00:00Z
     kind: research
     labels: []
+  - title: "Request, Aggregate, Bypass: How Attackers Can Evade LLM Safety Classifiers"
+    url: "https://www.crowdstrike.com/en-us/blog/how-attackers-can-bypass-llm-safety-classifiers/"
+    source: "Crowdstrike"
+    date: 2026-10-06T05:00:00Z
+    kind: research
+    labels: ["artificial intelligence", "securing ai"]
   - title: "Shares in British clothing company ASOS dive after hackers apparently send push notification"
     url: "https://therecord.media/asos-push-notification-apparently-sent-by-hackers"
     source: "Recorded Future"
