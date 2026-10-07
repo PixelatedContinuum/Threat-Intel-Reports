@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-07T07:02:12Z
+generated_at: 2026-10-07T08:00:32Z
 window_days: 30
 counts:
-  total: 584
+  total: 585
   research: 194
-  news: 390
+  news: 391
 topics:
   - label: "vulnerabilities"
-    count: 153
+    count: 154
     color: 1
   - label: "malware"
     count: 113
@@ -316,6 +316,12 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "Android’s October 2026 Updates Patch 25 Vulnerabilities"
+    url: "https://www.securityweek.com/androids-october-2026-updates-patch-25-vulnerabilities/"
+    source: "SecurityWeek"
+    date: 2026-10-07T06:55:52Z
+    kind: news
+    labels: ["mobile", "vulnerabilities", "android", "mobile & wireless", "patch"]
   - title: "Atlassian Patches Critical Vulnerability Affecting 8 Products"
     url: "https://www.securityweek.com/atlassian-patches-critical-vulnerability-affecting-8-products/"
     source: "SecurityWeek"
