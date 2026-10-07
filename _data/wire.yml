@@ -3,24 +3,24 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-07T12:02:32Z
+generated_at: 2026-10-07T13:01:22Z
 window_days: 30
 counts:
-  total: 590
-  research: 199
-  news: 391
+  total: 587
+  research: 198
+  news: 389
 topics:
   - label: "vulnerabilities"
     count: 152
     color: 1
   - label: "malware"
-    count: 111
+    count: 109
     color: 2
   - label: "exploited"
     count: 91
     color: 3
   - label: "artificial intelligence"
-    count: 87
+    count: 86
     color: 4
   - label: "cybercrime"
     count: 74
@@ -29,16 +29,16 @@ topics:
     count: 69
     color: 6
   - label: "zero-day"
-    count: 57
+    count: 56
     color: 7
   - label: "ransomware"
-    count: 45
+    count: 46
     color: 8
   - label: "government"
     count: 43
     color: 9
   - label: "nation-state"
-    count: 32
+    count: 31
     color: 10
   - label: "social engineering"
     count: 28
@@ -114,7 +114,6 @@ label_colors:
   "astrana health": 8
   "atlassian": 8
   "attack surface": 11
-  "attacks": 7
   "autoit loader": 11
   "averat": 1
   "aveva": 1
@@ -198,7 +197,6 @@ label_colors:
   "credit card": 7
   "crowdoor": 11
   "crowdsec": 12
-  "crowdstrike": 1
   "crudeexclude": 7
   "crypto": 5
   "crypto impersonation": 5
@@ -321,6 +319,18 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "Advantest Discloses Data Breach Months After Ransomware Attack"
+    url: "https://www.securityweek.com/advantest-discloses-data-breach-months-after-ransomware-attack/"
+    source: "SecurityWeek"
+    date: 2026-10-07T12:37:24Z
+    kind: news
+    labels: ["ransomware", "data breaches", "advantest"]
+  - title: "CVE-2026-21589: Critical unauthenticated arbitrary file access in Atlassian products"
+    url: "https://www.rapid7.com/blog/post/etr-cve-2026-21589-critical-unauthenticated-arbitrary-file-access-in-atlassian-products"
+    source: "Rapid7"
+    date: 2026-10-07T12:11:26Z
+    kind: news
+    labels: ["vulnerabilities", "emergent threat response", "labs", "vulnerability management"]
   - title: "Chrome 155 Update Patches 247 Vulnerabilities"
     url: "https://www.securityweek.com/chrome-155-update-patches-247-vulnerabilities/"
     source: "SecurityWeek"
@@ -3831,33 +3841,3 @@ items:
     date: 2026-09-07T13:05:11Z
     kind: news
     labels: ["data breaches"]
-  - title: "PEEP: A Browser RAT Posing as a Chrome Extension"
-    url: "https://otx.alienvault.com/pulse/6a9eb13dfccfac432c46d96e"
-    source: "AlienVault"
-    date: 2026-09-07T12:42:37Z
-    kind: research
-    labels: ["malware", "browser extension", "chrome rat", "native messaging", "peep", "post-exploitation", "session hijacking"]
-  - title: "Trezor data breach impact now reaches 81,000 customers"
-    url: "https://www.bleepingcomputer.com/news/security/trezor-data-breach-impact-now-reaches-81-000-customers/"
-    source: "BleepingComputer"
-    date: 2026-09-07T12:16:32Z
-    kind: news
-    labels: ["data breaches"]
-  - title: "Nightmare Eclipse Drops CrowdStrike, Nvidia, Avast Zero-Day Exploits"
-    url: "https://www.securityweek.com/nightmare-eclipse-drops-crowdstrike-nvidia-avast-zero-day-exploits/"
-    source: "SecurityWeek"
-    date: 2026-09-07T12:15:57Z
-    kind: news
-    labels: ["zero-day", "crowdstrike", "exploit", "nvidia", "vulnerabilities"]
-  - title: "North Korean Hackers Deploy New Linux Espionage Toolkit"
-    url: "https://www.securityweek.com/north-korean-hackers-deploy-new-linux-espionage-toolkit/"
-    source: "SecurityWeek"
-    date: 2026-09-07T12:12:08Z
-    kind: news
-    labels: ["nation-state", "linux", "malware", "north korea"]
-  - title: "OpenAI Agents Hijack Another Victim Website"
-    url: "https://www.securityweek.com/openai-agents-hijack-another-victim-website/"
-    source: "SecurityWeek"
-    date: 2026-09-07T12:03:04Z
-    kind: news
-    labels: ["artificial intelligence", "attacks", "openai"]
