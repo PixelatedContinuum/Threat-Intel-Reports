@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-07T13:01:22Z
+generated_at: 2026-10-07T14:02:00Z
 window_days: 30
 counts:
-  total: 587
-  research: 198
-  news: 389
+  total: 591
+  research: 199
+  news: 392
 topics:
   - label: "vulnerabilities"
-    count: 152
+    count: 153
     color: 1
   - label: "malware"
     count: 109
@@ -20,10 +20,10 @@ topics:
     count: 91
     color: 3
   - label: "artificial intelligence"
-    count: 86
+    count: 87
     color: 4
   - label: "cybercrime"
-    count: 74
+    count: 76
     color: 5
   - label: "data breaches"
     count: 69
@@ -32,7 +32,7 @@ topics:
     count: 56
     color: 7
   - label: "ransomware"
-    count: 46
+    count: 48
     color: 8
   - label: "government"
     count: 43
@@ -41,10 +41,10 @@ topics:
     count: 31
     color: 10
   - label: "social engineering"
-    count: 28
+    count: 29
     color: 11
   - label: "law enforcement"
-    count: 25
+    count: 27
     color: 12
 label_colors:
   "3bb": 7
@@ -63,6 +63,7 @@ label_colors:
   "advanced persistent threat": 9
   "adversary infrastructure": 12
   "adversary-in-the-middle (aitm)": 1
+  "advertising accounts": 12
   "affiliate fraud": 7
   "agent serpens": 5
   "agentcore runtime": 2
@@ -126,6 +127,7 @@ label_colors:
   "banking trojan": 4
   "beacon": 6
   "beavertail": 7
+  "benjamin korper": 5
   "bigbear": 8
   "bigcommerce": 3
   "bigdiskbuster": 2
@@ -319,6 +321,30 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "ShinyHunters Extorted Boeing Spin-off Prior to Arrests"
+    url: "https://krebsonsecurity.com/2026/10/shinyhunters-extorted-boeing-spin-off-prior-to-arrests/"
+    source: "Krebs on Security"
+    date: 2026-10-07T13:48:45Z
+    kind: news
+    labels: ["law enforcement", "benjamin korper", "boeing", "jeppesen foreflight", "royal jordanian airlines", "a little sunshine", "accenture", "cl0p", "cve-2026-35273", "data breaches", "fbi", "google threat intelligence group", "mandiant", "ne'er-do-well news", "neo security", "oracle", "peoplesoft", "pepijn van der stap", "ransomware", "reuters", "saif al-din khader", "shinyhunters", "the coming storm", "umbreon"]
+  - title: "Qilin Ransomware Suspect Arrested in Japan, Extradited to Germany"
+    url: "https://www.securityweek.com/qilin-ransomware-suspect-arrested-in-japan-extradited-to-germany/"
+    source: "SecurityWeek"
+    date: 2026-10-07T13:47:12Z
+    kind: news
+    labels: ["ransomware", "law enforcement", "cybercrime", "extradited", "germany", "hacker", "japan", "qilin", "tracking & law enforcement"]
+  - title: "FBI, Secret Service add to warnings of FortiBleed credential stealing campaign"
+    url: "https://therecord.media/fortibleed-warning-fbi-secret-service"
+    source: "Recorded Future"
+    date: 2026-10-07T12:50:00Z
+    kind: news
+    labels: ["cybercrime"]
+  - title: "Hackers exploit critical Atlassian flaw after public PoC release"
+    url: "https://www.bleepingcomputer.com/news/security/hackers-exploit-critical-atlassian-flaw-after-public-poc-release/"
+    source: "BleepingComputer"
+    date: 2026-10-07T12:49:01Z
+    kind: news
+    labels: ["vulnerabilities"]
   - title: "Advantest Discloses Data Breach Months After Ransomware Attack"
     url: "https://www.securityweek.com/advantest-discloses-data-breach-months-after-ransomware-attack/"
     source: "SecurityWeek"
@@ -331,6 +357,12 @@ items:
     date: 2026-10-07T12:11:26Z
     kind: news
     labels: ["vulnerabilities", "emergent threat response", "labs", "vulnerability management"]
+  - title: "Behind the Connect Button: The Fake AI Ads Campaign"
+    url: "https://www.island.io/blog/behind-the-connect-button-the-fake-ai-ads-campaign"
+    source: "AlienVault"
+    date: 2026-10-07T12:09:53Z
+    kind: research
+    labels: ["artificial intelligence", "advertising accounts", "ai impersonation", "browser-in-the-browser", "credential theft", "mfa bypass", "phishing campaign", "social engineering", "socket.io"]
   - title: "Chrome 155 Update Patches 247 Vulnerabilities"
     url: "https://www.securityweek.com/chrome-155-update-patches-247-vulnerabilities/"
     source: "SecurityWeek"
@@ -3835,9 +3867,3 @@ items:
     date: 2026-09-07T15:39:51Z
     kind: news
     labels: ["phishing", "cloud"]
-  - title: "Mathspace discloses data breach affecting over 1 million people"
-    url: "https://www.bleepingcomputer.com/news/security/mathspace-discloses-data-breach-affecting-over-1-million-people/"
-    source: "BleepingComputer"
-    date: 2026-09-07T13:05:11Z
-    kind: news
-    labels: ["data breaches"]
