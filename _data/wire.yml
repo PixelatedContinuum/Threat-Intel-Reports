@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-07T20:02:32Z
+generated_at: 2026-10-07T21:00:18Z
 window_days: 30
 counts:
-  total: 596
+  total: 598
   research: 199
-  news: 397
+  news: 399
 topics:
   - label: "vulnerabilities"
     count: 154
@@ -23,10 +23,10 @@ topics:
     count: 89
     color: 4
   - label: "cybercrime"
-    count: 79
+    count: 80
     color: 5
   - label: "data breaches"
-    count: 71
+    count: 72
     color: 6
   - label: "zero-day"
     count: 54
@@ -38,7 +38,7 @@ topics:
     count: 46
     color: 9
   - label: "nation-state"
-    count: 31
+    count: 32
     color: 10
   - label: "social engineering"
     count: 29
@@ -322,6 +322,18 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "Hackers hijack Google domains after breaching ccTLD registries"
+    url: "https://www.bleepingcomputer.com/news/security/hackers-hijack-google-domains-after-breaching-cctld-registries/"
+    source: "BleepingComputer"
+    date: 2026-10-07T20:50:13Z
+    kind: news
+    labels: ["data breaches", "google"]
+  - title: "US posts $10 million reward for accused Chinese ‘Hafnium’ hacker"
+    url: "https://therecord.media/accused-hafnium-hacker-zhang-yu-10million-reward"
+    source: "Recorded Future"
+    date: 2026-10-07T19:50:00Z
+    kind: news
+    labels: ["china", "cybercrime", "nation-state", "people"]
   - title: "Microsoft, Adobe, Apple, and Foxit vulnerabilities"
     url: "https://blog.talosintelligence.com/microsoft-adobe-apple-and-foxit-vulnerabilities/"
     source: "Cisco Talos"
