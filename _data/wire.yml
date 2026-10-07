@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-07T01:00:12Z
+generated_at: 2026-10-07T02:01:18Z
 window_days: 30
 counts:
-  total: 583
+  total: 584
   research: 194
-  news: 389
+  news: 390
 topics:
   - label: "vulnerabilities"
     count: 153
@@ -26,7 +26,7 @@ topics:
     count: 75
     color: 5
   - label: "data breaches"
-    count: 67
+    count: 68
     color: 6
   - label: "zero-day"
     count: 58
@@ -315,6 +315,12 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "Personal Information for Over 1 Million People Stolen in a Cyberattack on Arizona’s Court System"
+    url: "https://www.securityweek.com/personal-information-for-over-1-million-people-stolen-in-a-cyberattack-on-arizonas-court-system/"
+    source: "SecurityWeek"
+    date: 2026-10-07T01:32:58Z
+    kind: news
+    labels: ["data breaches"]
   - title: "Ninja Forms plugin flaw exploited to hack WordPress sites"
     url: "https://www.bleepingcomputer.com/news/security/ninja-forms-plugin-flaw-exploited-to-hack-wordpress-sites/"
     source: "BleepingComputer"
