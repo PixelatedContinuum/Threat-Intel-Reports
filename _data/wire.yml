@@ -3,24 +3,24 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-07T15:00:10Z
+generated_at: 2026-10-07T16:02:52Z
 window_days: 30
 counts:
-  total: 595
+  total: 596
   research: 199
-  news: 396
+  news: 397
 topics:
   - label: "vulnerabilities"
-    count: 153
+    count: 154
     color: 1
   - label: "malware"
-    count: 109
+    count: 110
     color: 2
   - label: "exploited"
     count: 91
     color: 3
   - label: "artificial intelligence"
-    count: 87
+    count: 88
     color: 4
   - label: "cybercrime"
     count: 78
@@ -322,6 +322,18 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "PoeLLM malware infects exposed AI servers in cryptomining attacks"
+    url: "https://www.bleepingcomputer.com/news/security/poellm-malware-infects-exposed-ai-servers-in-cryptomining-attacks/"
+    source: "BleepingComputer"
+    date: 2026-10-07T15:04:08Z
+    kind: news
+    labels: ["artificial intelligence", "malware"]
+  - title: "Scans for Atlassian vulnerablity (CVE-2026-21589), (Wed, Oct 7th)"
+    url: "https://isc.sans.edu/diary/rss/33406"
+    source: "SANS Internet Storm Center"
+    date: 2026-10-07T14:59:33Z
+    kind: news
+    labels: ["vulnerabilities"]
   - title: "Georgia Power, Alabama Power Data Breach Hits 400,000 Accounts"
     url: "https://www.securityweek.com/georgia-power-alabama-power-data-breach-hits-400000-accounts/"
     source: "SecurityWeek"
@@ -3886,9 +3898,3 @@ items:
     date: 2026-09-07T16:50:29Z
     kind: news
     labels: ["zero-day", "exploited", "malware"]
-  - title: "BigBear Microsoft 365 phishing service bypassed MFA at 258 organizations"
-    url: "https://www.bleepingcomputer.com/news/security/bigbear-microsoft-365-phishing-service-bypassed-mfa-at-258-organizations/"
-    source: "BleepingComputer"
-    date: 2026-09-07T15:39:51Z
-    kind: news
-    labels: ["phishing", "cloud"]
