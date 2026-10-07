@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-07T08:00:32Z
+generated_at: 2026-10-07T09:01:39Z
 window_days: 30
 counts:
-  total: 585
-  research: 194
+  total: 584
+  research: 193
   news: 391
 topics:
   - label: "vulnerabilities"
@@ -20,7 +20,7 @@ topics:
     count: 92
     color: 3
   - label: "artificial intelligence"
-    count: 86
+    count: 85
     color: 4
   - label: "cybercrime"
     count: 75
@@ -38,7 +38,7 @@ topics:
     count: 43
     color: 9
   - label: "nation-state"
-    count: 33
+    count: 32
     color: 10
   - label: "social engineering"
     count: 28
@@ -3820,9 +3820,3 @@ items:
     date: 2026-09-07T10:06:38Z
     kind: news
     labels: ["vulnerabilities"]
-  - title: "Kimsuky Uses the AI Agent 'opencode' to Create Decoys as Its GitHub PAT-Based LNK Attacks Evolve"
-    url: "https://otx.alienvault.com/pulse/6a9e70fd7eb74853a795cc57"
-    source: "AlienVault"
-    date: 2026-09-07T08:08:29Z
-    kind: research
-    labels: ["nation-state", "artificial intelligence", "ai-generated decoys", "kimsuky", "opencode"]
