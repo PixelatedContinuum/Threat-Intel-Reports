@@ -3,7 +3,7 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-07T06:00:12Z
+generated_at: 2026-10-07T07:02:12Z
 window_days: 30
 counts:
   total: 584
@@ -107,6 +107,7 @@ label_colors:
   "artificial intelligence": 4
   "arx cipher": 2
   "astrana health": 8
+  "atlassian": 8
   "attack surface": 11
   "attacks": 7
   "autoit loader": 11
@@ -315,6 +316,12 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "Atlassian Patches Critical Vulnerability Affecting 8 Products"
+    url: "https://www.securityweek.com/atlassian-patches-critical-vulnerability-affecting-8-products/"
+    source: "SecurityWeek"
+    date: 2026-10-07T06:37:16Z
+    kind: news
+    labels: ["vulnerabilities", "atlassian", "patches"]
   - title: "Personal Information for Over 1 Million People Stolen in a Cyberattack on Arizona’s Court System"
     url: "https://www.securityweek.com/personal-information-for-over-1-million-people-stolen-in-a-cyberattack-on-arizonas-court-system/"
     source: "SecurityWeek"
@@ -3813,9 +3820,3 @@ items:
     date: 2026-09-07T08:08:29Z
     kind: research
     labels: ["nation-state", "artificial intelligence", "ai-generated decoys", "kimsuky", "opencode"]
-  - title: "N-able patches max severity N-central flaw amid ongoing attacks"
-    url: "https://www.bleepingcomputer.com/news/security/n-able-patches-max-severity-n-central-flaw-amid-ongoing-attacks/"
-    source: "BleepingComputer"
-    date: 2026-09-07T06:17:41Z
-    kind: news
-    labels: ["vulnerabilities"]
