@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-07T18:00:52Z
+generated_at: 2026-10-07T19:02:39Z
 window_days: 30
 counts:
-  total: 594
+  total: 595
   research: 198
-  news: 396
+  news: 397
 topics:
   - label: "vulnerabilities"
     count: 153
@@ -23,7 +23,7 @@ topics:
     count: 89
     color: 4
   - label: "cybercrime"
-    count: 78
+    count: 79
     color: 5
   - label: "data breaches"
     count: 71
@@ -35,7 +35,7 @@ topics:
     count: 49
     color: 8
   - label: "government"
-    count: 45
+    count: 46
     color: 9
   - label: "nation-state"
     count: 31
@@ -321,6 +321,12 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "Arizona courts say hackers stole info on more than 1.3 million people"
+    url: "https://therecord.media/arizona-courts-say-hackers-stole-info-on-over-1-million"
+    source: "Recorded Future"
+    date: 2026-10-07T18:31:00Z
+    kind: news
+    labels: ["cybercrime", "government"]
   - title: "PoeLLM malware infects exposed AI servers in cryptomining attacks"
     url: "https://www.bleepingcomputer.com/news/security/poellm-malware-infects-exposed-ai-servers-in-cryptomining-attacks/"
     source: "BleepingComputer"
