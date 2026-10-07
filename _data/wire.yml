@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-07T22:02:59Z
+generated_at: 2026-10-07T23:02:32Z
 window_days: 30
 counts:
-  total: 598
-  research: 198
+  total: 599
+  research: 199
   news: 400
 topics:
   - label: "vulnerabilities"
@@ -322,6 +322,12 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "Evolution of Web3 in Cloud Supply Chain Attacks"
+    url: "https://unit42.paloaltonetworks.com/web3-cloud-supply-chain-attacks/"
+    source: "Palo Alto Networks"
+    date: 2026-10-07T22:00:16Z
+    kind: research
+    labels: ["supply chain", "cloud", "cloud configuration", "dprk", "insights", "supply-chain attack", "web3"]
   - title: "FBI: Ongoing FortiBleed attacks lock out FortiGate VPN admins"
     url: "https://www.bleepingcomputer.com/news/security/fbi-ongoing-fortibleed-attacks-lock-out-fortigate-vpn-admins/"
     source: "BleepingComputer"
