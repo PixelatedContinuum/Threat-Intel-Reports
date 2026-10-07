@@ -3,24 +3,24 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-07T16:02:52Z
+generated_at: 2026-10-07T17:02:52Z
 window_days: 30
 counts:
-  total: 596
-  research: 199
-  news: 397
+  total: 597
+  research: 201
+  news: 396
 topics:
   - label: "vulnerabilities"
     count: 154
     color: 1
   - label: "malware"
-    count: 110
+    count: 109
     color: 2
   - label: "exploited"
-    count: 91
+    count: 90
     color: 3
   - label: "artificial intelligence"
-    count: 88
+    count: 89
     color: 4
   - label: "cybercrime"
     count: 78
@@ -29,7 +29,7 @@ topics:
     count: 71
     color: 6
   - label: "zero-day"
-    count: 56
+    count: 55
     color: 7
   - label: "ransomware"
     count: 49
@@ -238,6 +238,7 @@ label_colors:
   "emergent threat response": 6
   "encrypted c2": 9
   "endpoint protection & security": 10
+  "endpoint security & xdr": 11
   "eu": 12
   "exploited": 3
   "exposure management": 4
@@ -472,6 +473,18 @@ items:
     date: 2026-10-07T06:37:16Z
     kind: news
     labels: ["vulnerabilities", "atlassian", "patches"]
+  - title: "Unknown Threat Actor Uses AI-Driven ARTEX to Target South Korean Finance"
+    url: "https://www.crowdstrike.com/en-us/blog/unknown-threat-actor-uses-artex-to-target-south-korean-finance/"
+    source: "Crowdstrike"
+    date: 2026-10-07T05:00:00Z
+    kind: research
+    labels: ["artificial intelligence", "threat hunting & intel"]
+  - title: "CrowdStrike Named a Leader in the 2026 IDC MarketScape for Worldwide Modern Endpoint Security for Enterprises Vendor Assessment"
+    url: "https://www.crowdstrike.com/en-us/blog/crowdstrike-named-leader-2026-idc-marketscape-worldwide-modern-endpoint-security-for-enterprises/"
+    source: "Crowdstrike"
+    date: 2026-10-07T05:00:00Z
+    kind: research
+    labels: ["endpoint security & xdr"]
   - title: "Personal Information for Over 1 Million People Stolen in a Cyberattack on Arizona’s Court System"
     url: "https://www.securityweek.com/personal-information-for-over-1-million-people-stolen-in-a-cyberattack-on-arizonas-court-system/"
     source: "SecurityWeek"
@@ -3892,9 +3905,3 @@ items:
     date: 2026-09-07T17:14:53Z
     kind: research
     labels: ["phishing", "bigbear", "bigbear 2.0", "evilginx2", "microsoft 365", "phishing-as-a-service"]
-  - title: "Magento StyleSmuggler zero-day exploited to deploy Linux backdoor"
-    url: "https://www.bleepingcomputer.com/news/security/magento-stylesmuggler-zero-day-exploited-to-deploy-linux-backdoor/"
-    source: "BleepingComputer"
-    date: 2026-09-07T16:50:29Z
-    kind: news
-    labels: ["zero-day", "exploited", "malware"]
