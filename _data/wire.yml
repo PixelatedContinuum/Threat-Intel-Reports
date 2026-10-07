@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-07T14:02:00Z
+generated_at: 2026-10-07T15:00:10Z
 window_days: 30
 counts:
-  total: 591
+  total: 595
   research: 199
-  news: 392
+  news: 396
 topics:
   - label: "vulnerabilities"
     count: 153
@@ -23,19 +23,19 @@ topics:
     count: 87
     color: 4
   - label: "cybercrime"
-    count: 76
+    count: 78
     color: 5
   - label: "data breaches"
-    count: 69
+    count: 71
     color: 6
   - label: "zero-day"
     count: 56
     color: 7
   - label: "ransomware"
-    count: 48
+    count: 49
     color: 8
   - label: "government"
-    count: 43
+    count: 45
     color: 9
   - label: "nation-state"
     count: 31
@@ -247,6 +247,7 @@ label_colors:
   "fortigate": 1
   "fortinet": 7
   "gaming": 5
+  "georgia power": 3
   "gigabud": 9
   "godzilla": 12
   "google": 7
@@ -321,6 +322,30 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "Georgia Power, Alabama Power Data Breach Hits 400,000 Accounts"
+    url: "https://www.securityweek.com/georgia-power-alabama-power-data-breach-hits-400000-accounts/"
+    source: "SecurityWeek"
+    date: 2026-10-07T14:15:20Z
+    kind: news
+    labels: ["data breaches", "georgia power", "electric", "energy", "utility"]
+  - title: "Cyber experts call on CISA to create mandatory federal OT rules"
+    url: "https://therecord.media/cyber-experts-call-on-cisa-require-ot-security"
+    source: "Recorded Future"
+    date: 2026-10-07T14:03:00Z
+    kind: news
+    labels: ["cybercrime", "government", "industry"]
+  - title: "Ransomware has a new target. Is your backup ready?"
+    url: "https://www.bleepingcomputer.com/news/security/ransomware-has-a-new-target-is-your-backup-ready/"
+    source: "BleepingComputer"
+    date: 2026-10-07T14:01:11Z
+    kind: news
+    labels: ["ransomware"]
+  - title: "Senate passes healthcare cybersecurity bill after 190 million impacted by Change Healthcare breach"
+    url: "https://therecord.media/senate-passes-healthcare-cyber-bill-after-change-breach"
+    source: "Recorded Future"
+    date: 2026-10-07T13:49:00Z
+    kind: news
+    labels: ["data breaches", "cybercrime", "government", "leadership"]
   - title: "ShinyHunters Extorted Boeing Spin-off Prior to Arrests"
     url: "https://krebsonsecurity.com/2026/10/shinyhunters-extorted-boeing-spin-off-prior-to-arrests/"
     source: "Krebs on Security"
