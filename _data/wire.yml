@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-07T09:01:39Z
+generated_at: 2026-10-07T10:00:12Z
 window_days: 30
 counts:
-  total: 584
-  research: 193
-  news: 391
+  total: 588
+  research: 196
+  news: 392
 topics:
   - label: "vulnerabilities"
     count: 154
@@ -20,13 +20,13 @@ topics:
     count: 92
     color: 3
   - label: "artificial intelligence"
-    count: 85
+    count: 86
     color: 4
   - label: "cybercrime"
     count: 75
     color: 5
   - label: "data breaches"
-    count: 68
+    count: 69
     color: 6
   - label: "zero-day"
     count: 58
@@ -70,6 +70,7 @@ label_colors:
   "agentic ai": 9
   "ai & automation": 1
   "ai agents": 8
+  "ai platform exploitation": 7
   "ai policy": 8
   "ai services": 10
   "ai training": 8
@@ -82,6 +83,7 @@ label_colors:
   "alert": 2
   "amadey": 5
   "amatera": 5
+  "amazon bedrock": 8
   "amd": 6
   "amd driver vulnerability": 12
   "amos": 6
@@ -106,6 +108,7 @@ label_colors:
   "arrested": 2
   "artificial intelligence": 4
   "arx cipher": 2
+  "asos": 4
   "astrana health": 8
   "atlassian": 8
   "attack surface": 11
@@ -316,6 +319,24 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "ASOS Confirms Cyberattack, Data Breach"
+    url: "https://www.securityweek.com/asos-confirms-cyberattack-data-breach/"
+    source: "SecurityWeek"
+    date: 2026-10-07T09:46:20Z
+    kind: news
+    labels: ["data breaches", "asos", "cyberattacks", "snowflake", "uk"]
+  - title: "Pwn2Own Ireland 2026 - Day Two Results"
+    url: "https://www.thezdi.com/blog/2026/10/7/pwn2own-ireland-2026-day-two-results"
+    source: "Zero Day Initiative"
+    date: 2026-10-07T09:12:37Z
+    kind: research
+    labels: ["blog post"]
+  - title: "Attackers Target AI Development Platform Langflow"
+    url: "https://www.f5.com/labs/articles/attackers-target-ai-development-platform-langflow"
+    source: "AlienVault"
+    date: 2026-10-07T07:14:43Z
+    kind: research
+    labels: ["artificial intelligence", "ai platform exploitation", "capability probing", "credential harvesting", "cve-2017-9841", "cve-2018-20062", "cve-2021-26855", "cve-2021-34523", "cve-2022-41082", "cve-2024-44000", "cve-2024-4577", "cve-2025-29927", "cve-2025-55182", "cve-2025-55184", "cve-2026-0768", "cve-2026-4020", "langflow", "python injection", "remote code execution", "unauthenticated access"]
   - title: "Android’s October 2026 Updates Patch 25 Vulnerabilities"
     url: "https://www.securityweek.com/androids-october-2026-updates-patch-25-vulnerabilities/"
     source: "SecurityWeek"
@@ -346,6 +367,12 @@ items:
     date: 2026-10-06T19:21:53Z
     kind: news
     labels: ["zero-day"]
+  - title: "Beyond valid credentials: How exposed AWS keys are tested for Amazon Bedrock access"
+    url: "https://securitylabs.datadoghq.com/articles/beyond-valid-credentials-how-exposed-aws-keys-are-tested-for-amazon-bedrock-access"
+    source: "AlienVault"
+    date: 2026-10-06T17:14:48Z
+    kind: research
+    labels: ["cloud", "amazon bedrock", "anthropic claude", "aws", "cloud security", "credential harvesting", "credential validation", "llm", "token-jacking"]
   - title: "ASOS confirms data breach after “HACKED” in-app notifications"
     url: "https://www.bleepingcomputer.com/news/security/asos-confirms-data-breach-after-hacked-in-app-notifications/"
     source: "BleepingComputer"
