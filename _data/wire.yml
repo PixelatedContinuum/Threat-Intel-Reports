@@ -3,39 +3,39 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-07T11:02:12Z
+generated_at: 2026-10-07T12:02:32Z
 window_days: 30
 counts:
-  total: 592
+  total: 590
   research: 199
-  news: 393
+  news: 391
 topics:
   - label: "vulnerabilities"
     count: 152
     color: 1
   - label: "malware"
-    count: 114
+    count: 111
     color: 2
   - label: "exploited"
-    count: 92
+    count: 91
     color: 3
   - label: "artificial intelligence"
     count: 87
     color: 4
   - label: "cybercrime"
-    count: 75
+    count: 74
     color: 5
   - label: "data breaches"
-    count: 70
+    count: 69
     color: 6
   - label: "zero-day"
-    count: 58
+    count: 57
     color: 7
   - label: "ransomware"
     count: 45
     color: 8
   - label: "government"
-    count: 44
+    count: 43
     color: 9
   - label: "nation-state"
     count: 32
@@ -297,7 +297,6 @@ label_colors:
   "ransomware as a service": 3
   "revolut": 5
   "rey": 8
-  "screenconnect": 2
   "screenconnect deployment": 5
   "securing ai": 4
   "security operations": 4
@@ -322,6 +321,12 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "Chrome 155 Update Patches 247 Vulnerabilities"
+    url: "https://www.securityweek.com/chrome-155-update-patches-247-vulnerabilities/"
+    source: "SecurityWeek"
+    date: 2026-10-07T10:51:57Z
+    kind: news
+    labels: ["vulnerabilities", "chrome"]
   - title: "The ASOS incident: When attackers use the channels customers trust"
     url: "https://www.rapid7.com/blog/post/it-asos-incident-attackers-using-channels-customers-trust"
     source: "Rapid7"
@@ -3856,21 +3861,3 @@ items:
     date: 2026-09-07T12:03:04Z
     kind: news
     labels: ["artificial intelligence", "attacks", "openai"]
-  - title: "Adobe Commerce Zero-Day Exploited to Backdoor Online Stores"
-    url: "https://www.securityweek.com/adobe-commerce-zero-day-exploited-to-backdoor-online-stores/"
-    source: "SecurityWeek"
-    date: 2026-09-07T11:58:37Z
-    kind: news
-    labels: ["zero-day", "exploited", "malware", "vulnerabilities"]
-  - title: "Berlin investigates new data leak after hackers publish stolen login credentials"
-    url: "https://therecord.media/germany-berlin-second-data-breach-city-agencies"
-    source: "Recorded Future"
-    date: 2026-09-07T11:50:00Z
-    kind: news
-    labels: ["data breaches", "cybercrime", "government", "malware"]
-  - title: "Modified ScreenConnect Clients Used in Worm-Like Campaign"
-    url: "https://www.securityweek.com/modified-screenconnect-clients-used-in-worm-like-campaign/"
-    source: "SecurityWeek"
-    date: 2026-09-07T11:45:48Z
-    kind: news
-    labels: ["malware", "screenconnect"]
