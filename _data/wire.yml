@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-07T17:02:52Z
+generated_at: 2026-10-07T18:00:52Z
 window_days: 30
 counts:
-  total: 597
-  research: 201
+  total: 594
+  research: 198
   news: 396
 topics:
   - label: "vulnerabilities"
-    count: 154
+    count: 153
     color: 1
   - label: "malware"
     count: 109
@@ -29,7 +29,7 @@ topics:
     count: 71
     color: 6
   - label: "zero-day"
-    count: 55
+    count: 54
     color: 7
   - label: "ransomware"
     count: 49
@@ -128,7 +128,6 @@ label_colors:
   "beacon": 6
   "beavertail": 7
   "benjamin korper": 5
-  "bigbear": 8
   "bigcommerce": 3
   "bigdiskbuster": 2
   "bind": 7
@@ -193,7 +192,6 @@ label_colors:
   "cobalt strike": 5
   "configuration exposure": 3
   "coordinated-inauthentic-behavior": 12
-  "credential harvesting": 4
   "credential stealing": 6
   "credential theft": 6
   "credit card": 7
@@ -3887,21 +3885,3 @@ items:
     date: 2026-09-07T22:00:00Z
     kind: research
     labels: []
-  - title: "Bypassing the Gatekeepers: How a Global Phishing Campaign Turns Google's Infrastructure into a Trust Proxy"
-    url: "https://blog.knowbe4.com/bypassing-the-gatekeepers-how-a-global-phishing-campaign-turns-googles-infrastructure-into-a-trust-proxy"
-    source: "AlienVault"
-    date: 2026-09-07T17:27:35Z
-    kind: research
-    labels: ["phishing", "credential harvesting", "google infrastructure abuse", "open redirect exploitation"]
-  - title: "StyleSmuggler: Magento and Adobe Commerce 0-day RCE under active attack"
-    url: "https://otx.alienvault.com/pulse/6a9ef14fbc62257cff38357b"
-    source: "AlienVault"
-    date: 2026-09-07T17:15:59Z
-    kind: research
-    labels: ["zero-day", "vulnerabilities", "adobe commerce", "remote code execution", "rust backdoor", "stylesmuggler"]
-  - title: "Tracking BigBear 2.0 Evilginx2 Phishing Campaign"
-    url: "https://otx.alienvault.com/pulse/6a9ef10da8f75f1218af678c"
-    source: "AlienVault"
-    date: 2026-09-07T17:14:53Z
-    kind: research
-    labels: ["phishing", "bigbear", "bigbear 2.0", "evilginx2", "microsoft 365", "phishing-as-a-service"]
