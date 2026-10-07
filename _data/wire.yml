@@ -3,39 +3,39 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-07T10:00:12Z
+generated_at: 2026-10-07T11:02:12Z
 window_days: 30
 counts:
-  total: 588
-  research: 196
-  news: 392
+  total: 592
+  research: 199
+  news: 393
 topics:
   - label: "vulnerabilities"
-    count: 154
+    count: 152
     color: 1
   - label: "malware"
-    count: 113
+    count: 114
     color: 2
   - label: "exploited"
     count: 92
     color: 3
   - label: "artificial intelligence"
-    count: 86
+    count: 87
     color: 4
   - label: "cybercrime"
     count: 75
     color: 5
   - label: "data breaches"
-    count: 69
+    count: 70
     color: 6
   - label: "zero-day"
     count: 58
     color: 7
+  - label: "ransomware"
+    count: 45
+    color: 8
   - label: "government"
     count: 44
-    color: 8
-  - label: "ransomware"
-    count: 43
     color: 9
   - label: "nation-state"
     count: 32
@@ -80,6 +80,7 @@ label_colors:
   "ai-generated-scripts": 3
   "ai-orchestrated campaign": 1
   "ai-platform": 2
+  "akira": 2
   "alert": 2
   "amadey": 5
   "amatera": 5
@@ -97,6 +98,7 @@ label_colors:
   "api": 12
   "apollo": 11
   "app-bound encryption": 3
+  "appdomainmanager hijacking": 8
   "apple": 12
   "application security": 6
   "apt": 5
@@ -249,11 +251,12 @@ label_colors:
   "godzilla": 12
   "google": 7
   "google tag manager abuse": 4
-  "government": 8
+  "government": 9
   "government impersonation": 7
   "gyazo": 8
   "hacker": 8
   "hacker conversations": 8
+  "hacking": 1
   "hardware": 6
   "healthcare": 11
   "industry": 8
@@ -290,7 +293,7 @@ label_colors:
   "polinrider": 2
   "privacy": 12
   "public sector": 3
-  "ransomware": 9
+  "ransomware": 8
   "ransomware as a service": 3
   "revolut": 5
   "rey": 8
@@ -319,12 +322,48 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "The ASOS incident: When attackers use the channels customers trust"
+    url: "https://www.rapid7.com/blog/post/it-asos-incident-attackers-using-channels-customers-trust"
+    source: "Rapid7"
+    date: 2026-10-07T10:40:07Z
+    kind: news
+    labels: ["hacking"]
+  - title: "Musician sent to prison for $10 million streaming fraud using AI bots"
+    url: "https://www.bleepingcomputer.com/news/security/musician-gets-18-months-in-prison-for-10-million-streaming-fraud-using-ai-bots/"
+    source: "BleepingComputer"
+    date: 2026-10-07T10:35:15Z
+    kind: news
+    labels: ["artificial intelligence"]
+  - title: "Advantest confirms personal information stolen in ransomware attack"
+    url: "https://www.bleepingcomputer.com/news/security/advantest-confirms-personal-information-stolen-in-ransomware-attack/"
+    source: "BleepingComputer"
+    date: 2026-10-07T10:27:52Z
+    kind: news
+    labels: ["ransomware"]
+  - title: "One breach, please, and make no mistakes"
+    url: "https://blog.talosintelligence.com/one-breach-please-and-make-no-mistakes/"
+    source: "Cisco Talos"
+    date: 2026-10-07T10:00:25Z
+    kind: research
+    labels: ["data breaches", "on the radar"]
+  - title: "Iranian State-Aligned Threat Actor Masquerading as Dubai Airports IT Department Delivering Trojanized Coding Challenges - Blinder Tunnel Campaign Targeting Iraqi Critical Infrastructure"
+    url: "https://unit42.paloaltonetworks.com/blinder-tunnel-targets-critical-infrastructure/"
+    source: "AlienVault"
+    date: 2026-10-07T09:47:16Z
+    kind: research
+    labels: ["malware", "appdomainmanager hijacking", "blackwood.dll", "blinder tunnel", "chisel", "dll sideloading", "dubai airports impersonation", "github c2", "iranian threat actor", "iraqi critical infrastructure", "psproxy.dll", "runtimebroker.dll", "shelbyloader v2"]
   - title: "ASOS Confirms Cyberattack, Data Breach"
     url: "https://www.securityweek.com/asos-confirms-cyberattack-data-breach/"
     source: "SecurityWeek"
     date: 2026-10-07T09:46:20Z
     kind: news
     labels: ["data breaches", "asos", "cyberattacks", "snowflake", "uk"]
+  - title: "Akira Ransomware Attack Investigation"
+    url: "https://www.huntress.com/blog/mapping-akira-ransomware-attack"
+    source: "AlienVault"
+    date: 2026-10-07T09:45:46Z
+    kind: research
+    labels: ["ransomware", "akira", "antivirus evasion", "data exfiltration", "gost", "gost tunnel", "persistence", "rclone", "rdp"]
   - title: "Pwn2Own Ireland 2026 - Day Two Results"
     url: "https://www.thezdi.com/blog/2026/10/7/pwn2own-ireland-2026-day-two-results"
     source: "Zero Day Initiative"
@@ -3835,15 +3874,3 @@ items:
     date: 2026-09-07T11:45:48Z
     kind: news
     labels: ["malware", "screenconnect"]
-  - title: "Hackers exploit new MikroTik RouterOS flaws to hijack routers"
-    url: "https://www.bleepingcomputer.com/news/security/hackers-exploit-new-mikrotik-routeros-flaws-to-hijack-routers/"
-    source: "BleepingComputer"
-    date: 2026-09-07T10:32:40Z
-    kind: news
-    labels: ["vulnerabilities", "hardware"]
-  - title: "ConnectWise warns of new ScreenConnect flaw without patch"
-    url: "https://www.bleepingcomputer.com/news/security/connectwise-warns-of-new-screenconnect-flaw-without-patch/"
-    source: "BleepingComputer"
-    date: 2026-09-07T10:06:38Z
-    kind: news
-    labels: ["vulnerabilities"]
