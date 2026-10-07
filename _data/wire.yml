@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-07T19:02:39Z
+generated_at: 2026-10-07T20:02:32Z
 window_days: 30
 counts:
-  total: 595
-  research: 198
+  total: 596
+  research: 199
   news: 397
 topics:
   - label: "vulnerabilities"
-    count: 153
+    count: 154
     color: 1
   - label: "malware"
     count: 109
@@ -317,10 +317,17 @@ label_colors:
   "vulnerabilities": 1
   "vulnerability disclosure": 7
   "vulnerability management": 9
+  "vulnerability roundup": 1
   "watchguard": 2
   "x": 4
   "zero-day": 7
 items:
+  - title: "Microsoft, Adobe, Apple, and Foxit vulnerabilities"
+    url: "https://blog.talosintelligence.com/microsoft-adobe-apple-and-foxit-vulnerabilities/"
+    source: "Cisco Talos"
+    date: 2026-10-07T19:27:08Z
+    kind: research
+    labels: ["vulnerabilities", "vulnerability roundup"]
   - title: "Arizona courts say hackers stole info on more than 1.3 million people"
     url: "https://therecord.media/arizona-courts-say-hackers-stole-info-on-over-1-million"
     source: "Recorded Future"
