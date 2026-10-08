@@ -3,7 +3,7 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-08T07:02:32Z
+generated_at: 2026-10-08T08:02:32Z
 window_days: 30
 counts:
   total: 600
@@ -14,7 +14,7 @@ topics:
     count: 153
     color: 1
   - label: "malware"
-    count: 109
+    count: 110
     color: 2
   - label: "artificial intelligence"
     count: 89
@@ -243,6 +243,7 @@ label_colors:
   "fbi": 9
   "financial scam": 1
   "fine": 10
+  "fortibleed": 6
   "fortigate": 1
   "fortinet": 7
   "gaming": 5
@@ -322,6 +323,12 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "FortiBleed Attackers Locking Victims Out of Fortinet Devices"
+    url: "https://www.securityweek.com/fortibleed-attackers-locking-victims-out-of-fortinet-devices/"
+    source: "SecurityWeek"
+    date: 2026-10-08T07:52:33Z
+    kind: news
+    labels: ["fortibleed", "fortinet", "malware"]
   - title: "Samsung Galaxy S26 hacked three more times at Pwn2Own Ireland"
     url: "https://www.bleepingcomputer.com/news/security/samsung-galaxy-s26-hacked-three-more-times-at-pwn2own-ireland/"
     source: "BleepingComputer"
@@ -3916,9 +3923,3 @@ items:
     date: 2026-09-08T10:00:38Z
     kind: research
     labels: ["social engineering", "cisco talos web filtering", "threat spotlight"]
-  - title: "220 million traveler records exposed in Vietnam-linked APIS leak"
-    url: "https://www.bleepingcomputer.com/news/security/220-million-traveler-records-exposed-in-vietnam-linked-apis-leak/"
-    source: "BleepingComputer"
-    date: 2026-09-08T07:35:50Z
-    kind: news
-    labels: []
