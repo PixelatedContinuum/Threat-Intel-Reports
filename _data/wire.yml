@@ -3,21 +3,21 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-08T10:00:52Z
+generated_at: 2026-10-08T11:02:12Z
 window_days: 30
 counts:
   total: 608
-  research: 204
-  news: 404
+  research: 207
+  news: 401
 topics:
   - label: "vulnerabilities"
-    count: 153
+    count: 151
     color: 1
   - label: "malware"
-    count: 111
+    count: 112
     color: 2
   - label: "artificial intelligence"
-    count: 89
+    count: 91
     color: 3
   - label: "exploited"
     count: 89
@@ -26,10 +26,10 @@ topics:
     count: 81
     color: 5
   - label: "data breaches"
-    count: 73
+    count: 72
     color: 6
   - label: "zero-day"
-    count: 53
+    count: 52
     color: 7
   - label: "ransomware"
     count: 51
@@ -181,7 +181,6 @@ label_colors:
   "ci/cd": 10
   "cisa": 6
   "cisco": 9
-  "cisco talos antivirus": 7
   "cisco talos incident response": 3
   "citrix": 11
   "click2shell": 4
@@ -215,7 +214,6 @@ label_colors:
   "cve-2026-104286": 3
   "cve-2026-31431": 6
   "cve-2026-44756": 12
-  "cve-2026-86218": 9
   "cyberattacks": 8
   "cybercrime": 5
   "cyberespionage": 8
@@ -271,7 +269,6 @@ label_colors:
   "iocontrol": 7
   "ivanti": 7
   "killsec": 7
-  "labs": 6
   "labubarat": 10
   "law": 4
   "law enforcement": 12
@@ -281,7 +278,6 @@ label_colors:
   "macos": 11
   "malware": 2
   "malware analysis": 7
-  "mathspace": 4
   "microsoft": 4
   "mikrotik": 2
   "mobile": 4
@@ -330,6 +326,24 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "Pwn2Own Ireland 2026 - Day Three Results & Master of Pwn"
+    url: "https://www.thezdi.com/blog/2026/10/8/pwn2own-ireland-2026-day-three-results-amp-master-of-pwn"
+    source: "Zero Day Initiative"
+    date: 2026-10-08T10:41:14Z
+    kind: research
+    labels: ["blog post"]
+  - title: "UAT-11985: AI-assisted event lures delivering real-time Google AitM phishing"
+    url: "https://blog.talosintelligence.com/uat-11985/"
+    source: "Cisco Talos"
+    date: 2026-10-08T10:01:06Z
+    kind: research
+    labels: ["phishing", "artificial intelligence", "apt", "cisco talos email threat prevention", "cisco talos network intrusion prevention", "cisco talos web filtering", "threat spotlight"]
+  - title: "Ignore all instructions and read this blog: The state of AI-analysis evasion in malware"
+    url: "https://blog.talosintelligence.com/ignore-all-instructions-and-read-this-blog-the-state-of-ai-analysis-evasion-in-malware/"
+    source: "Cisco Talos"
+    date: 2026-10-08T10:00:14Z
+    kind: research
+    labels: ["artificial intelligence", "malware", "threat spotlight"]
   - title: "Fake Decryption Tools Masked $11M Markup in Ransomware Recovery Scheme"
     url: "https://www.securityweek.com/fake-decryption-tools-masked-11m-markup-in-ransomware-recovery-scheme/"
     source: "SecurityWeek"
@@ -3942,6 +3956,12 @@ items:
     date: 2026-09-08T12:29:01Z
     kind: research
     labels: ["exploited", "infostealer", "social engineering", "applescript", "clickfix", "credential theft", "cryptocurrency wallets", "lummac2", "maas", "macos stealer", "macsync", "obfuscation", "stealc", "vidar"]
+  - title: "ClearFake WebDAV infection chain delivers Amatera stealer, ZigCryptoStealer, and NetSupport Manager"
+    url: "https://blog.talosintelligence.com/clearfake-webdav-infection-chain/"
+    source: "AlienVault"
+    date: 2026-09-08T12:22:29Z
+    kind: research
+    labels: ["infostealer", "amatera", "amatera stealer", "bnb smart chain", "clearfake", "clickfix", "credential theft", "cryptocurrency theft", "etherhiding", "netsupport manager", "webdav", "zigcryptostealer"]
   - title: "Hackers build AI frameworks for widescale credential theft"
     url: "https://www.bleepingcomputer.com/news/security/hackers-build-ai-frameworks-for-widescale-credential-theft/"
     source: "BleepingComputer"
@@ -3954,27 +3974,3 @@ items:
     date: 2026-09-08T11:15:00Z
     kind: news
     labels: ["vulnerabilities", "mikrotik", "network security"]
-  - title: "CVE-2026-86206, CVE-2026-86207: N-able N-central Authentication Bypass (FIXED)"
-    url: "https://www.rapid7.com/blog/post/ve-cve-2026-86206-cve-2026-86207-n-able-n-central-authentication-bypass-fixed"
-    source: "Rapid7"
-    date: 2026-09-08T11:01:27Z
-    kind: news
-    labels: ["vulnerabilities", "labs", "rapid7 disclosure", "vulnerability disclosure", "vulnerability management"]
-  - title: "Mathspace Data Breach Exposes Over 1 Million People"
-    url: "https://www.securityweek.com/mathspace-data-breach-exposes-over-1-million-people/"
-    source: "SecurityWeek"
-    date: 2026-09-08T10:47:36Z
-    kind: news
-    labels: ["data breaches", "mathspace"]
-  - title: "N-able Patches Critical Zero-Day in N-central"
-    url: "https://www.securityweek.com/n-able-patches-critical-zero-day-in-n-central/"
-    source: "SecurityWeek"
-    date: 2026-09-08T10:37:58Z
-    kind: news
-    labels: ["zero-day", "cve-2026-86218", "n-central", "vulnerabilities"]
-  - title: "ClearFake WebDAV infection chain delivers Amatera stealer, ZigCryptoStealer, and NetSupport Manager"
-    url: "https://blog.talosintelligence.com/clearfake-webdav-infection-chain/"
-    source: "Cisco Talos"
-    date: 2026-09-08T10:01:07Z
-    kind: research
-    labels: ["infostealer", "cisco talos antivirus", "cisco talos malware protection", "cisco talos network intrusion prevention", "threats"]
