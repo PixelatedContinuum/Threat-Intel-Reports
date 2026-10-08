@@ -3,7 +3,7 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-08T11:02:12Z
+generated_at: 2026-10-08T12:01:52Z
 window_days: 30
 counts:
   total: 608
@@ -11,7 +11,7 @@ counts:
   news: 401
 topics:
   - label: "vulnerabilities"
-    count: 151
+    count: 150
     color: 1
   - label: "malware"
     count: 112
@@ -26,7 +26,7 @@ topics:
     count: 81
     color: 5
   - label: "data breaches"
-    count: 72
+    count: 73
     color: 6
   - label: "zero-day"
     count: 52
@@ -41,7 +41,7 @@ topics:
     count: 32
     color: 10
   - label: "social engineering"
-    count: 30
+    count: 31
     color: 11
   - label: "law enforcement"
     count: 27
@@ -279,7 +279,6 @@ label_colors:
   "malware": 2
   "malware analysis": 7
   "microsoft": 4
-  "mikrotik": 2
   "mobile": 4
   "monstercloud": 11
   "nation-state": 10
@@ -326,6 +325,12 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "ASOS links data breach to social engineering attack, credential theft"
+    url: "https://www.bleepingcomputer.com/news/security/asos-links-data-breach-to-social-engineering-attack-credential-theft/"
+    source: "BleepingComputer"
+    date: 2026-10-08T11:42:46Z
+    kind: news
+    labels: ["data breaches", "social engineering"]
   - title: "Pwn2Own Ireland 2026 - Day Three Results & Master of Pwn"
     url: "https://www.thezdi.com/blog/2026/10/8/pwn2own-ireland-2026-day-three-results-amp-master-of-pwn"
     source: "Zero Day Initiative"
@@ -3968,9 +3973,3 @@ items:
     date: 2026-09-08T12:03:03Z
     kind: news
     labels: ["artificial intelligence", "google"]
-  - title: "MikroTik Patches Critical Flaws Chained to Hack Routers"
-    url: "https://www.securityweek.com/mikrotik-patches-critical-flaws-chained-to-hack-routers/"
-    source: "SecurityWeek"
-    date: 2026-09-08T11:15:00Z
-    kind: news
-    labels: ["vulnerabilities", "mikrotik", "network security"]
