@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-08T18:01:18Z
+generated_at: 2026-10-08T19:02:52Z
 window_days: 30
 counts:
-  total: 612
+  total: 610
   research: 208
-  news: 404
+  news: 402
 topics:
   - label: "vulnerabilities"
-    count: 151
+    count: 148
     color: 1
   - label: "malware"
     count: 114
@@ -32,7 +32,7 @@ topics:
     count: 52
     color: 7
   - label: "zero-day"
-    count: 51
+    count: 49
     color: 8
   - label: "government"
     count: 47
@@ -327,6 +327,12 @@ label_colors:
   "x": 4
   "zero-day": 8
 items:
+  - title: "Making sure the checks get printed"
+    url: "https://blog.talosintelligence.com/making-sure-the-checks-get-printed/"
+    source: "Cisco Talos"
+    date: 2026-10-08T18:00:29Z
+    kind: research
+    labels: ["threat source newsletter"]
   - title: "FakeGit malware campaign returns with 17,610 malicious GitHub repos"
     url: "https://www.bleepingcomputer.com/news/security/fakegit-malware-campaign-returns-with-17-610-malicious-github-repos/"
     source: "BleepingComputer"
@@ -3981,21 +3987,3 @@ items:
     date: 2026-09-08T19:20:06Z
     kind: news
     labels: ["zero-day", "exploited", "vulnerabilities", "microsoft", "patch tuesady"]
-  - title: "Adobe Patches Over 170 Vulnerabilities, Including Commerce Zero-Day"
-    url: "https://www.securityweek.com/adobe-patches-over-170-vulnerabilities-including-commerce-zero-day/"
-    source: "SecurityWeek"
-    date: 2026-09-08T18:37:17Z
-    kind: news
-    labels: ["zero-day", "vulnerabilities", "adobe", "cve-2026-75650", "patch tuesady"]
-  - title: "The September 2026 Security Update Review"
-    url: "https://www.thezdi.com/blog/2026/9/8/the-september-2026-security-update-review"
-    source: "Zero Day Initiative"
-    date: 2026-09-08T18:32:13Z
-    kind: research
-    labels: ["vulnerabilities", "blog post"]
-  - title: "Microsoft September 2026 Patch Tuesday fixes 966 flaws, 2 zero-days"
-    url: "https://www.bleepingcomputer.com/news/microsoft/microsoft-september-2026-patch-tuesday-fixes-966-flaws-2-zero-days/"
-    source: "BleepingComputer"
-    date: 2026-09-08T18:18:05Z
-    kind: news
-    labels: ["zero-day", "vulnerabilities", "microsoft"]
