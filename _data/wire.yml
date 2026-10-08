@@ -3,18 +3,18 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-08T16:02:39Z
+generated_at: 2026-10-08T17:01:50Z
 window_days: 30
 counts:
-  total: 612
-  research: 208
-  news: 404
+  total: 607
+  research: 206
+  news: 401
 topics:
   - label: "vulnerabilities"
     count: 151
     color: 1
   - label: "malware"
-    count: 115
+    count: 113
     color: 2
   - label: "artificial intelligence"
     count: 90
@@ -23,10 +23,10 @@ topics:
     count: 88
     color: 4
   - label: "cybercrime"
-    count: 82
+    count: 80
     color: 5
   - label: "data breaches"
-    count: 74
+    count: 73
     color: 6
   - label: "ransomware"
     count: 51
@@ -135,7 +135,6 @@ label_colors:
   "bigdiskbuster": 2
   "bind": 7
   "bip39 recovery phrases": 2
-  "bitcoin": 2
   "blockchain c2": 1
   "blockchain fraud": 2
   "blockchain infrastructure": 11
@@ -144,7 +143,6 @@ label_colors:
   "bluemoon": 5
   "bnb smart chain": 10
   "boks": 5
-  "botnet": 6
   "bpfdoor": 4
   "brand impersonation": 7
   "brevo": 8
@@ -3970,33 +3968,3 @@ items:
     date: 2026-09-08T18:18:05Z
     kind: news
     labels: ["zero-day", "vulnerabilities", "microsoft"]
-  - title: "‘White hat’ hackers take $47 million bounty after $320 million crypto theft"
-    url: "https://therecord.media/liquid-network-blockstream-crypto-theft-hackers-keep-reward"
-    source: "Recorded Future"
-    date: 2026-09-08T17:00:00Z
-    kind: news
-    labels: ["cybercrime"]
-  - title: "Redis Cryptomining Botnet Compromised 3,562 Servers, Exposed by the Operator's Own Files"
-    url: "https://otx.alienvault.com/pulse/6aa03edde73b7cd2b94b199e"
-    source: "AlienVault"
-    date: 2026-09-08T16:59:09Z
-    kind: research
-    labels: ["malware", "botnet", "cron-injection", "cryptomining", "meterpreter", "misconfiguration", "monero", "redis", "rogue-replication", "xmrig"]
-  - title: "Inside a Packed Android RAT Loader"
-    url: "https://darkatlas.io/blog/hagaseca-inside-a-packed-android-rat-loader"
-    source: "AlienVault"
-    date: 2026-09-08T16:59:09Z
-    kind: research
-    labels: ["mobile", "malware", "accessibility abuse", "adb propagation", "android rat", "hagaseca", "redroid", "tc9", "tc9.dex", "thost4", "thost9", "worm behavior"]
-  - title: "Hackers Return $263 Million Stolen From Liquid Network"
-    url: "https://www.securityweek.com/hackers-return-263-million-stolen-from-liquid-network/"
-    source: "SecurityWeek"
-    date: 2026-09-08T16:35:54Z
-    kind: news
-    labels: ["bitcoin", "cybercrime"]
-  - title: "ShinyHunters hackers claim breach of Florida \"DAVID\" DMV database"
-    url: "https://www.bleepingcomputer.com/news/security/shinyhunters-hackers-claim-breach-of-florida-david-dmv-database/"
-    source: "BleepingComputer"
-    date: 2026-09-08T16:35:47Z
-    kind: news
-    labels: ["data breaches"]
