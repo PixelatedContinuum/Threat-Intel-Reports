@@ -3,23 +3,23 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-08T04:00:52Z
+generated_at: 2026-10-08T06:02:05Z
 window_days: 30
 counts:
-  total: 600
-  research: 199
+  total: 599
+  research: 198
   news: 401
 topics:
   - label: "vulnerabilities"
-    count: 154
+    count: 153
     color: 1
   - label: "malware"
     count: 109
     color: 2
-  - label: "exploited"
-    count: 90
-    color: 3
   - label: "artificial intelligence"
+    count: 89
+    color: 3
+  - label: "exploited"
     count: 89
     color: 4
   - label: "cybercrime"
@@ -29,7 +29,7 @@ topics:
     count: 72
     color: 6
   - label: "zero-day"
-    count: 54
+    count: 53
     color: 7
   - label: "ransomware"
     count: 50
@@ -109,7 +109,7 @@ label_colors:
   "arbitrary file write": 11
   "arktunnel": 6
   "arrested": 2
-  "artificial intelligence": 4
+  "artificial intelligence": 3
   "arx cipher": 2
   "asos": 4
   "astrana health": 8
@@ -238,7 +238,7 @@ label_colors:
   "endpoint protection & security": 10
   "endpoint security & xdr": 11
   "eu": 12
-  "exploited": 3
+  "exploited": 4
   "exposure management": 4
   "fbi": 9
   "financial scam": 1
@@ -3916,9 +3916,3 @@ items:
     date: 2026-09-08T07:35:50Z
     kind: news
     labels: []
-  - title: "September 2026 Patch Tuesday: Two Exploited Zero-Days and 113 Critical Vulnerabilities Among 972 CVEs"
-    url: "https://www.crowdstrike.com/en-us/blog/patch-tuesday-analysis-september-2026/"
-    source: "Crowdstrike"
-    date: 2026-09-08T05:00:00Z
-    kind: research
-    labels: ["zero-day", "exploited", "vulnerabilities", "exposure management"]
