@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-07T23:02:32Z
+generated_at: 2026-10-08T00:02:09Z
 window_days: 30
 counts:
-  total: 599
+  total: 600
   research: 199
-  news: 400
+  news: 401
 topics:
   - label: "vulnerabilities"
     count: 154
@@ -32,7 +32,7 @@ topics:
     count: 54
     color: 7
   - label: "ransomware"
-    count: 49
+    count: 50
     color: 8
   - label: "government"
     count: 46
@@ -322,6 +322,12 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "Ransomware recovery CEO charged over secret ransom payments"
+    url: "https://www.bleepingcomputer.com/news/security/ransomware-recovery-ceo-charged-over-secret-ransom-payments/"
+    source: "BleepingComputer"
+    date: 2026-10-07T23:04:37Z
+    kind: news
+    labels: ["ransomware"]
   - title: "Evolution of Web3 in Cloud Supply Chain Attacks"
     url: "https://unit42.paloaltonetworks.com/web3-cloud-supply-chain-attacks/"
     source: "Palo Alto Networks"
