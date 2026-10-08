@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-08T13:00:12Z
+generated_at: 2026-10-08T14:01:40Z
 window_days: 30
 counts:
-  total: 607
+  total: 608
   research: 206
-  news: 401
+  news: 402
 topics:
   - label: "vulnerabilities"
     count: 151
@@ -17,10 +17,10 @@ topics:
     count: 113
     color: 2
   - label: "artificial intelligence"
-    count: 90
+    count: 89
     color: 3
   - label: "exploited"
-    count: 88
+    count: 87
     color: 4
   - label: "cybercrime"
     count: 80
@@ -28,10 +28,10 @@ topics:
   - label: "data breaches"
     count: 73
     color: 6
-  - label: "zero-day"
-    count: 52
-    color: 7
   - label: "ransomware"
+    count: 51
+    color: 7
+  - label: "zero-day"
     count: 51
     color: 8
   - label: "government"
@@ -44,7 +44,7 @@ topics:
     count: 30
     color: 11
   - label: "law enforcement"
-    count: 26
+    count: 27
     color: 12
 label_colors:
   "3bb": 7
@@ -299,7 +299,7 @@ label_colors:
   "polinrider": 2
   "privacy": 12
   "public sector": 3
-  "ransomware": 8
+  "ransomware": 7
   "ransomware as a service": 3
   "revolut": 5
   "rey": 8
@@ -326,8 +326,20 @@ label_colors:
   "vulnerability roundup": 1
   "watchguard": 2
   "x": 4
-  "zero-day": 7
+  "zero-day": 8
 items:
+  - title: "Uranium crypto exchange hacker convicted for stealing $53 million"
+    url: "https://www.bleepingcomputer.com/news/security/uranium-crypto-exchange-hacker-found-guilty-of-53-million-theft/"
+    source: "BleepingComputer"
+    date: 2026-10-08T13:18:36Z
+    kind: news
+    labels: ["law enforcement"]
+  - title: "Thousands of cheap Android phones shipped with ad-fraud malware"
+    url: "https://therecord.media/cheap-androids-shipped-with-ad-fraud-malware"
+    source: "Recorded Future"
+    date: 2026-10-08T13:00:00Z
+    kind: news
+    labels: ["mobile", "malware"]
   - title: "The phone was compromised before the user turned it on: the rise of Midnight Mimosa"
     url: "https://www.bitdefender.com/en-us/blog/labs/midnight-mimosa-malware"
     source: "BitDefender"
@@ -418,6 +430,12 @@ items:
     date: 2026-10-08T06:32:16Z
     kind: news
     labels: []
+  - title: "Introducing AlertZero: Inbox zero for your alert queue"
+    url: "https://www.elastic.co/security-labs/blog/ai-soc-automation-alertzero"
+    source: "Elastic"
+    date: 2026-10-08T00:00:00Z
+    kind: research
+    labels: ["ai & automation", "soc"]
   - title: "Ransomware recovery CEO charged over secret ransom payments"
     url: "https://www.bleepingcomputer.com/news/security/ransomware-recovery-ceo-charged-over-secret-ransom-payments/"
     source: "BleepingComputer"
@@ -3958,15 +3976,3 @@ items:
     date: 2026-09-08T14:55:06Z
     kind: news
     labels: ["vulnerabilities", "cve-2026-44756", "sap"]
-  - title: "GTIG AI Threat Tracker: From Prompting to Autonomy – The Evolution of Adversarial AI"
-    url: "https://cloud.google.com/blog/topics/threat-intelligence/from-prompting-to-autonomy-the-evolution-of-adversarial-ai/"
-    source: "Google"
-    date: 2026-09-08T14:00:00Z
-    kind: research
-    labels: ["artificial intelligence", "threat intelligence"]
-  - title: "Adobe fixes critical Magento zero-day exploited to backdoor servers"
-    url: "https://www.bleepingcomputer.com/news/security/adobe-fixes-critical-magento-zero-day-exploited-to-backdoor-servers/"
-    source: "BleepingComputer"
-    date: 2026-09-08T13:34:47Z
-    kind: news
-    labels: ["zero-day", "exploited", "malware"]
