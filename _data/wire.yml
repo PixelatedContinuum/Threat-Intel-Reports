@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-08T22:02:02Z
+generated_at: 2026-10-08T23:01:40Z
 window_days: 30
 counts:
-  total: 607
-  research: 208
+  total: 606
+  research: 207
   news: 399
 topics:
   - label: "vulnerabilities"
-    count: 146
+    count: 144
     color: 1
   - label: "malware"
     count: 114
@@ -20,13 +20,13 @@ topics:
     count: 90
     color: 3
   - label: "exploited"
-    count: 87
+    count: 86
     color: 4
   - label: "cybercrime"
     count: 81
     color: 5
   - label: "data breaches"
-    count: 72
+    count: 73
     color: 6
   - label: "ransomware"
     count: 53
@@ -290,7 +290,6 @@ label_colors:
   "oracle health": 8
   "oracle peoplesoft": 3
   "patch": 10
-  "patch tuesday": 11
   "patching": 8
   "payment fraud": 12
   "phishing": 10
@@ -327,6 +326,12 @@ label_colors:
   "x": 4
   "zero-day": 8
 items:
+  - title: "FBI disrupts Chinese hacking tools used to breach critical infrastructure"
+    url: "https://www.bleepingcomputer.com/news/security/fbi-disrupts-chinese-hacking-tools-used-to-breach-critical-infrastructure/"
+    source: "BleepingComputer"
+    date: 2026-10-08T21:42:51Z
+    kind: news
+    labels: ["data breaches"]
   - title: "Ransomware attack disrupts Japan's IDCF Cloud used by govt clients"
     url: "https://www.bleepingcomputer.com/news/security/ransomware-attack-disrupts-japans-idcf-cloud-used-by-govt-clients/"
     source: "BleepingComputer"
@@ -3957,15 +3962,3 @@ items:
     date: 2026-09-09T06:25:48Z
     kind: news
     labels: ["zero-day", "exploited", "google"]
-  - title: "Microsoft posts nearly 1,000 bugs for Patch Tuesday as CISA warns two being exploited"
-    url: "https://therecord.media/microsoft-patch-tuesday-september-2026"
-    source: "Recorded Future"
-    date: 2026-09-08T22:40:00Z
-    kind: news
-    labels: ["exploited", "vulnerabilities"]
-  - title: "Microsoft Patch Tuesday for September 2026 — Snort rules and prominent vulnerabilities"
-    url: "https://blog.talosintelligence.com/microsoft-patch-tuesday-for-september-2026/"
-    source: "Cisco Talos"
-    date: 2026-09-08T22:16:35Z
-    kind: research
-    labels: ["vulnerabilities", "patch tuesday"]
