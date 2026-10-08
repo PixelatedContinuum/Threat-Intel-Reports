@@ -3,7 +3,7 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-08T19:02:52Z
+generated_at: 2026-10-08T20:00:12Z
 window_days: 30
 counts:
   total: 610
@@ -11,16 +11,16 @@ counts:
   news: 402
 topics:
   - label: "vulnerabilities"
-    count: 148
+    count: 147
     color: 1
   - label: "malware"
-    count: 114
+    count: 115
     color: 2
   - label: "artificial intelligence"
     count: 90
     color: 3
   - label: "exploited"
-    count: 88
+    count: 87
     color: 4
   - label: "cybercrime"
     count: 82
@@ -32,7 +32,7 @@ topics:
     count: 52
     color: 7
   - label: "zero-day"
-    count: 49
+    count: 48
     color: 8
   - label: "government"
     count: 47
@@ -327,6 +327,12 @@ label_colors:
   "x": 4
   "zero-day": 8
 items:
+  - title: "Low-cost Android phones ship with residential proxy malware"
+    url: "https://www.bleepingcomputer.com/news/security/low-cost-android-phones-ship-with-residential-proxy-malware/"
+    source: "BleepingComputer"
+    date: 2026-10-08T19:20:33Z
+    kind: news
+    labels: ["mobile", "malware"]
   - title: "Making sure the checks get printed"
     url: "https://blog.talosintelligence.com/making-sure-the-checks-get-printed/"
     source: "Cisco Talos"
@@ -3981,9 +3987,3 @@ items:
     date: 2026-09-08T20:08:55Z
     kind: news
     labels: ["data breaches", "malware"]
-  - title: "Microsoft Patches Record 974 Vulnerabilities, Including Two Exploited Zero-Days"
-    url: "https://www.securityweek.com/microsoft-patches-record-974-vulnerabilities-including-two-exploited-zero-days/"
-    source: "SecurityWeek"
-    date: 2026-09-08T19:20:06Z
-    kind: news
-    labels: ["zero-day", "exploited", "vulnerabilities", "microsoft", "patch tuesady"]
