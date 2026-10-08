@@ -3,18 +3,18 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-08T08:02:32Z
+generated_at: 2026-10-08T09:02:12Z
 window_days: 30
 counts:
-  total: 600
-  research: 198
-  news: 402
+  total: 608
+  research: 205
+  news: 403
 topics:
   - label: "vulnerabilities"
     count: 153
     color: 1
   - label: "malware"
-    count: 110
+    count: 111
     color: 2
   - label: "artificial intelligence"
     count: 89
@@ -26,7 +26,7 @@ topics:
     count: 80
     color: 5
   - label: "data breaches"
-    count: 72
+    count: 73
     color: 6
   - label: "zero-day"
     count: 53
@@ -41,7 +41,7 @@ topics:
     count: 32
     color: 10
   - label: "social engineering"
-    count: 29
+    count: 31
     color: 11
   - label: "law enforcement"
     count: 27
@@ -71,6 +71,7 @@ label_colors:
   "agentic ai": 9
   "ai & automation": 1
   "ai agents": 8
+  "ai infrastructure": 11
   "ai platform exploitation": 7
   "ai policy": 8
   "ai services": 10
@@ -131,6 +132,7 @@ label_colors:
   "bigcommerce": 3
   "bigdiskbuster": 2
   "bind": 7
+  "bip39 recovery phrases": 2
   "bitcoin": 2
   "blockchain c2": 1
   "blockchain fraud": 2
@@ -147,6 +149,7 @@ label_colors:
   "browser credential theft": 10
   "browser extension": 11
   "browser extension malware": 6
+  "browser fingerprinting": 2
   "browser proxy": 4
   "browser-hijacking": 7
   "browser-in-the-browser": 7
@@ -166,6 +169,7 @@ label_colors:
   "chaotic eclipse": 12
   "check point": 6
   "china": 5
+  "china-based operator": 11
   "chinese apt": 4
   "chinese cyber-espionage": 2
   "chinese-speaking actor": 9
@@ -192,6 +196,7 @@ label_colors:
   "cobalt strike": 5
   "configuration exposure": 3
   "coordinated-inauthentic-behavior": 12
+  "credential harvesting": 4
   "credential stealing": 6
   "credential theft": 6
   "credit card": 7
@@ -218,6 +223,7 @@ label_colors:
   "data breaches": 6
   "data leak": 9
   "data security": 10
+  "datto": 8
   "ddos": 4
   "dead-drop": 4
   "decoys": 1
@@ -285,6 +291,7 @@ label_colors:
   "on the radar": 4
   "openai": 4
   "openssl": 10
+  "oracle health": 8
   "oracle peoplesoft": 3
   "patch tuesday": 11
   "patching": 8
@@ -323,12 +330,36 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "Oracle Health Data Breach Tally Climbs to Nearly 20 Million"
+    url: "https://www.securityweek.com/oracle-health-data-breach-tally-climbs-to-nearly-20-million/"
+    source: "SecurityWeek"
+    date: 2026-10-08T08:23:31Z
+    kind: news
+    labels: ["data breaches", "oracle health", "healthcare"]
   - title: "FortiBleed Attackers Locking Victims Out of Fortinet Devices"
     url: "https://www.securityweek.com/fortibleed-attackers-locking-victims-out-of-fortinet-devices/"
     source: "SecurityWeek"
     date: 2026-10-08T07:52:33Z
     kind: news
     labels: ["fortibleed", "fortinet", "malware"]
+  - title: "16 Malicious Firefox Extensions Steal Cryptocurrency Wallet Credentials"
+    url: "https://otx.alienvault.com/pulse/6ac74668a88744f8ef47c332"
+    source: "AlienVault"
+    date: 2026-10-08T07:29:44Z
+    kind: research
+    labels: ["malware", "browser extension", "cloudflare workers", "credential theft", "cryptocurrency", "firefox extensions", "okx wallet", "phishing", "rabby wallet", "web3"]
+  - title: "RMM Tools Being Distributed Through Phishing Attacks (ScreenConnect, FleetDeck, Datto, SimpleHelp, JumpCloud, N-able)"
+    url: "https://otx.alienvault.com/pulse/6ac741ed2968234538d416fa"
+    source: "AlienVault"
+    date: 2026-10-08T07:10:37Z
+    kind: research
+    labels: ["phishing", "datto", "fleetdeck", "it management abuse", "jumpcloud", "n-able", "pdf lures", "phishing campaign", "remote access", "rmm tools", "screenconnect", "simplehelp", "social engineering"]
+  - title: "TensorLake npm SDK Compromised in ChainDrop Shai-Hulud Credential-Stealing Attack"
+    url: "https://otx.alienvault.com/pulse/6ac7415f2754c1b2193c9737"
+    source: "AlienVault"
+    date: 2026-10-08T07:08:15Z
+    kind: research
+    labels: ["supply chain", "ai infrastructure", "chaindrop", "credential theft", "npm compromise", "persistence mechanism", "shai-hulud", "supply chain attack", "worm"]
   - title: "Samsung Galaxy S26 hacked three more times at Pwn2Own Ireland"
     url: "https://www.bleepingcomputer.com/news/security/samsung-galaxy-s26-hacked-three-more-times-at-pwn2own-ireland/"
     source: "BleepingComputer"
@@ -347,6 +378,18 @@ items:
     date: 2026-10-07T22:00:16Z
     kind: research
     labels: ["supply chain", "cloud", "cloud configuration", "dprk", "insights", "supply-chain attack", "web3"]
+  - title: "DarkSword/Coruna Open Directory Finding"
+    url: "https://censys.com/blog/darksword-coruna-open-directory-finding-report/"
+    source: "AlienVault"
+    date: 2026-10-07T21:37:32Z
+    kind: research
+    labels: ["bip39 recovery phrases", "china-based operator", "coruna", "cryptocurrency wallet theft", "cve-2025-24201", "cve-2025-31200", "cve-2026-31001", "darksword", "exploitation-as-a-service", "ghostblade", "ghostknife", "ghostsaber", "ios exploitation", "open directory"]
+  - title: "Inside PhantomPolia: Remus Stealer Delivery via Donut Shellcode in ClickFix Campaign"
+    url: "https://www.levelblue.com/blogs/spiderlabs-blog/inside-phantompolia-remus-stealer-delivery-via-donut-shellcode-in-clickfix-campaign"
+    source: "AlienVault"
+    date: 2026-10-07T21:37:31Z
+    kind: research
+    labels: ["infostealer", "social engineering", "autoit", "clickfix", "cryptocurrency wallets", "donut shellcode", "ethereum sepolia", "information stealer", "phantompolia", "powershell", "remus stealer"]
   - title: "FBI: Ongoing FortiBleed attacks lock out FortiGate VPN admins"
     url: "https://www.bleepingcomputer.com/news/security/fbi-ongoing-fortibleed-attacks-lock-out-fortigate-vpn-admins/"
     source: "BleepingComputer"
@@ -377,6 +420,18 @@ items:
     date: 2026-10-07T18:31:00Z
     kind: news
     labels: ["cybercrime", "government"]
+  - title: "FortiBleed Operations Continue Targeting Exposed Systems Leading to Reports of Lockouts"
+    url: "https://otx.alienvault.com/pulse/6ac679e7bbe47190f9ffce7a"
+    source: "AlienVault"
+    date: 2026-10-07T16:57:11Z
+    kind: research
+    labels: ["credential harvesting", "fortibleed", "fortigate", "fortinet", "gpu cracking", "hashtopolis", "inc/lynx", "initial access broker", "payload", "ssl vpn"]
+  - title: "Phishing Campaign Abuses Microsoft Power BI to Deploy Rogue RMMs"
+    url: "https://otx.alienvault.com/pulse/6ac6796b14fb153d2a5f5a04"
+    source: "AlienVault"
+    date: 2026-10-07T16:55:07Z
+    kind: research
+    labels: ["phishing", "browser fingerprinting", "defense evasion", "hideul_x64.exe", "microsoft power bi", "persistence", "rmm", "scheduled tasks", "screenconnect"]
   - title: "PoeLLM malware infects exposed AI servers in cryptomining attacks"
     url: "https://www.bleepingcomputer.com/news/security/poellm-malware-infects-exposed-ai-servers-in-cryptomining-attacks/"
     source: "BleepingComputer"
