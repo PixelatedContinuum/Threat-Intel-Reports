@@ -3,27 +3,27 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-08T12:01:52Z
+generated_at: 2026-10-08T13:00:12Z
 window_days: 30
 counts:
-  total: 608
-  research: 207
+  total: 607
+  research: 206
   news: 401
 topics:
   - label: "vulnerabilities"
-    count: 150
+    count: 151
     color: 1
   - label: "malware"
-    count: 112
+    count: 113
     color: 2
   - label: "artificial intelligence"
-    count: 91
+    count: 90
     color: 3
   - label: "exploited"
-    count: 89
+    count: 88
     color: 4
   - label: "cybercrime"
-    count: 81
+    count: 80
     color: 5
   - label: "data breaches"
     count: 73
@@ -35,16 +35,16 @@ topics:
     count: 51
     color: 8
   - label: "government"
-    count: 46
+    count: 47
     color: 9
   - label: "nation-state"
-    count: 32
+    count: 33
     color: 10
   - label: "social engineering"
-    count: 31
+    count: 30
     color: 11
   - label: "law enforcement"
-    count: 27
+    count: 26
     color: 12
 label_colors:
   "3bb": 7
@@ -93,6 +93,7 @@ label_colors:
   "android": 9
   "android banking trojan": 11
   "anti-analysis": 11
+  "anti-malware research": 1
   "anti-vm": 6
   "anydesk": 9
   "aotera": 8
@@ -261,6 +262,7 @@ label_colors:
   "hacker": 8
   "hacker conversations": 8
   "hacking": 1
+  "hafnium": 4
   "hardware": 6
   "healthcare": 11
   "industry": 8
@@ -288,6 +290,7 @@ label_colors:
   "openssl": 10
   "oracle health": 8
   "oracle peoplesoft": 3
+  "patch": 10
   "patch tuesday": 11
   "patching": 8
   "payment fraud": 12
@@ -325,6 +328,30 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "The phone was compromised before the user turned it on: the rise of Midnight Mimosa"
+    url: "https://www.bitdefender.com/en-us/blog/labs/midnight-mimosa-malware"
+    source: "BitDefender"
+    date: 2026-10-08T12:57:43Z
+    kind: research
+    labels: ["anti-malware research"]
+  - title: "US Seeks Alleged Chinese Hafnium Hacker With $10 Million Reward"
+    url: "https://www.securityweek.com/us-seeks-alleged-chinese-hafnium-hacker-with-10-million-reward/"
+    source: "SecurityWeek"
+    date: 2026-10-08T12:46:21Z
+    kind: news
+    labels: ["hafnium", "china", "government", "hacker", "reward", "silk typhoon", "us"]
+  - title: "SonicWall and Splunk Patch Critical Vulnerabilities"
+    url: "https://www.securityweek.com/sonicwall-and-splunk-patch-critical-vulnerabilities/"
+    source: "SecurityWeek"
+    date: 2026-10-08T12:37:32Z
+    kind: news
+    labels: ["vulnerabilities", "patch", "sonicwall", "splunk"]
+  - title: "Russian-aligned spies upgrade malware used in attacks on Ukrainian transport, energy firms"
+    url: "https://therecord.media/russia-ukraine-malware-transportation"
+    source: "Recorded Future"
+    date: 2026-10-08T12:30:00Z
+    kind: news
+    labels: ["malware", "cybercrime", "nation-state"]
   - title: "ASOS links data breach to social engineering attack, credential theft"
     url: "https://www.bleepingcomputer.com/news/security/asos-links-data-breach-to-social-engineering-attack-credential-theft/"
     source: "BleepingComputer"
@@ -3943,33 +3970,3 @@ items:
     date: 2026-09-08T13:34:47Z
     kind: news
     labels: ["zero-day", "exploited", "malware"]
-  - title: "Party’s Over for Crypto Scammers Who Went on a Spending Spree After a $240 Million Bitcoin Theft"
-    url: "https://www.securityweek.com/partys-over-for-crypto-scammers-who-went-on-a-spending-spree-after-a-240-million-bitcoin-theft/"
-    source: "SecurityWeek"
-    date: 2026-09-08T13:00:00Z
-    kind: news
-    labels: ["bitcoin", "cybercrime"]
-  - title: "French prosecutors confirm arrest of suspected ZeroBytes hacker behind tax cyberattack"
-    url: "https://therecord.media/france-hacker-arrest-zerobytes"
-    source: "Recorded Future"
-    date: 2026-09-08T12:30:00Z
-    kind: news
-    labels: ["law enforcement", "cybercrime"]
-  - title: "MacSync: The Evasive macOS Stealer Exploiting ClickFix Lures"
-    url: "https://otx.alienvault.com/pulse/6a9fff8d4e576223ee6f9b4e"
-    source: "AlienVault"
-    date: 2026-09-08T12:29:01Z
-    kind: research
-    labels: ["exploited", "infostealer", "social engineering", "applescript", "clickfix", "credential theft", "cryptocurrency wallets", "lummac2", "maas", "macos stealer", "macsync", "obfuscation", "stealc", "vidar"]
-  - title: "ClearFake WebDAV infection chain delivers Amatera stealer, ZigCryptoStealer, and NetSupport Manager"
-    url: "https://blog.talosintelligence.com/clearfake-webdav-infection-chain/"
-    source: "AlienVault"
-    date: 2026-09-08T12:22:29Z
-    kind: research
-    labels: ["infostealer", "amatera", "amatera stealer", "bnb smart chain", "clearfake", "clickfix", "credential theft", "cryptocurrency theft", "etherhiding", "netsupport manager", "webdav", "zigcryptostealer"]
-  - title: "Hackers build AI frameworks for widescale credential theft"
-    url: "https://www.bleepingcomputer.com/news/security/hackers-build-ai-frameworks-for-widescale-credential-theft/"
-    source: "BleepingComputer"
-    date: 2026-09-08T12:03:03Z
-    kind: news
-    labels: ["artificial intelligence", "google"]
