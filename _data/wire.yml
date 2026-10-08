@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-08T09:02:12Z
+generated_at: 2026-10-08T10:00:52Z
 window_days: 30
 counts:
   total: 608
-  research: 205
-  news: 403
+  research: 204
+  news: 404
 topics:
   - label: "vulnerabilities"
     count: 153
@@ -23,7 +23,7 @@ topics:
     count: 89
     color: 4
   - label: "cybercrime"
-    count: 80
+    count: 81
     color: 5
   - label: "data breaches"
     count: 73
@@ -32,7 +32,7 @@ topics:
     count: 53
     color: 7
   - label: "ransomware"
-    count: 50
+    count: 51
     color: 8
   - label: "government"
     count: 46
@@ -41,7 +41,7 @@ topics:
     count: 32
     color: 10
   - label: "social engineering"
-    count: 31
+    count: 30
     color: 11
   - label: "law enforcement"
     count: 27
@@ -183,7 +183,6 @@ label_colors:
   "cisco": 9
   "cisco talos antivirus": 7
   "cisco talos incident response": 3
-  "cisco talos web filtering": 12
   "citrix": 11
   "click2shell": 4
   "clickfix": 3
@@ -286,6 +285,7 @@ label_colors:
   "microsoft": 4
   "mikrotik": 2
   "mobile": 4
+  "monstercloud": 11
   "nation-state": 10
   "network security": 6
   "on the radar": 4
@@ -330,6 +330,12 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "Fake Decryption Tools Masked $11M Markup in Ransomware Recovery Scheme"
+    url: "https://www.securityweek.com/fake-decryption-tools-masked-11m-markup-in-ransomware-recovery-scheme/"
+    source: "SecurityWeek"
+    date: 2026-10-08T09:27:55Z
+    kind: news
+    labels: ["ransomware", "monstercloud", "charged", "cybercrime"]
   - title: "Oracle Health Data Breach Tally Climbs to Nearly 20 Million"
     url: "https://www.securityweek.com/oracle-health-data-breach-tally-climbs-to-nearly-20-million/"
     source: "SecurityWeek"
@@ -3972,9 +3978,3 @@ items:
     date: 2026-09-08T10:01:07Z
     kind: research
     labels: ["infostealer", "cisco talos antivirus", "cisco talos malware protection", "cisco talos network intrusion prevention", "threats"]
-  - title: "ClickFix moves into the browser: Cryptocurrency theft with Google-hosted C2"
-    url: "https://blog.talosintelligence.com/clickfix-moves-into-the-browser/"
-    source: "Cisco Talos"
-    date: 2026-09-08T10:00:38Z
-    kind: research
-    labels: ["social engineering", "cisco talos web filtering", "threat spotlight"]
