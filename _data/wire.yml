@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-08T06:02:05Z
+generated_at: 2026-10-08T07:02:32Z
 window_days: 30
 counts:
-  total: 599
+  total: 600
   research: 198
-  news: 401
+  news: 402
 topics:
   - label: "vulnerabilities"
     count: 153
@@ -322,6 +322,12 @@ label_colors:
   "x": 4
   "zero-day": 7
 items:
+  - title: "Samsung Galaxy S26 hacked three more times at Pwn2Own Ireland"
+    url: "https://www.bleepingcomputer.com/news/security/samsung-galaxy-s26-hacked-three-more-times-at-pwn2own-ireland/"
+    source: "BleepingComputer"
+    date: 2026-10-08T06:32:16Z
+    kind: news
+    labels: []
   - title: "Ransomware recovery CEO charged over secret ransom payments"
     url: "https://www.bleepingcomputer.com/news/security/ransomware-recovery-ceo-charged-over-secret-ransom-payments/"
     source: "BleepingComputer"
