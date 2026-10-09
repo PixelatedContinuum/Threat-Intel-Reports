@@ -1,0 +1,206 @@
+# Build and deploy the-hunters-ledger.com with GitHub Actions.
+#
+# Why this exists. The Wire (/wire/) refreshes hourly, and until now each refresh
+# was a commit to main: 37 of the last 50 commits were "wire: refresh", which
+# buried the real history. This workflow builds the site from main but takes the
+# Wire data from a separate `wire-data` branch that the generator force-pushes as
+# a single orphan commit each hour. main stays a history of the site; the Wire
+# still updates hourly with nobody touching anything.
+#
+# Triggers. A push to main (content, layouts, data) or to wire-data (an hourly
+# refresh) both build the SAME thing: main's tree plus the newest Wire file. The
+# `concurrency` group cancels an in-flight build when a newer push arrives, so
+# an hour's worth of pushes costs one deploy, never a queue.
+#
+# Two-phase cutover, on purpose. The `build` job always runs, so from the moment
+# this file lands the site is being test-built on every push and any Liquid or
+# data regression shows up red in the Actions tab. The `deploy` job runs only
+# once the repository variable PAGES_VIA_ACTIONS is set to "true", which is the
+# step you take right after switching Settings > Pages > Source to "GitHub
+# Actions". Until then the existing deploy-from-branch keeps serving the site
+# and this workflow changes nothing a reader sees. Rolling back is the same two
+# switches in reverse.
+#
+# The Wire data is gated before it is built in (tools/report-tooling/check-wire.js).
+# Malformed data is dropped so /wire/ renders its "not currently available"
+# state instead of a broken page, and a report push is never blocked by a
+# generator problem. Stale-but-well-formed data is kept: the page prints its
+# own generated_at, which is the honest thing to show, and the gate's warning
+# lands in the run summary where you will see it. A FAIL on wire/index.md
+# itself is a code bug on main, so that one fails the build.
+
+name: Build and deploy site
+
+on:
+  push:
+    branches: [main, wire-data]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build (main + newest Wire)
+    runs-on: ubuntu-latest
+    steps:
+      # Always main, whichever branch's push woke us: a wire-data push must not
+      # build the wire-data tree (it holds one file).
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Bring in the Wire data from the wire-data branch
+        run: |
+          set -eu
+          if git fetch --depth=1 origin '+refs/heads/wire-data:refs/remotes/origin/wire-data' 2>/dev/null; then
+            git show origin/wire-data:wire.yml > _data/wire.yml
+            echo "wire: using origin/wire-data ($(grep -m1 '^generated_at:' _data/wire.yml || echo 'no generated_at'))"
+          elif [ -f _data/wire.yml ]; then
+            echo "::notice::wire: no wire-data branch yet; building with the copy committed on main ($(grep -m1 '^generated_at:' _data/wire.yml))"
+          else
+            echo "::warning::wire: no wire-data branch and no committed _data/wire.yml; /wire/ will render as unavailable"
+          fi
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: tools/report-tooling/package-lock.json
+
+      - name: Install report tooling
+        working-directory: tools/report-tooling
+        run: npm ci --no-audit --no-fund
+
+      - name: Gate the Wire data
+        working-directory: tools/report-tooling
+        env:
+          WIRE_GATE_NO_FETCH: "1"
+        run: |
+          set +e
+          node check-wire.js | tee /tmp/wire-gate.txt
+          rc=${PIPESTATUS[0]}
+          set -e
+          if [ "$rc" -eq 0 ]; then exit 0; fi
+          if [ "$rc" -eq 2 ]; then
+            echo "::warning::check-wire: NOT CHECKED (see log). Building with the data as-is."
+            exit 0
+          fi
+          # rc 1: separate a page defect (code on main, fail the build) from a data
+          # defect (generator output, drop the file and keep publishing).
+          if grep -q '^FAIL .*wire/index.md' /tmp/wire-gate.txt; then
+            echo "::error::check-wire: wire/index.md failed its day-derivation check. That is a page bug on main, not a data problem."
+            exit 1
+          fi
+          # Data problems that are ONLY staleness keep the data: the page shows its own timestamp.
+          if grep '^   FAIL ' /tmp/wire-gate.txt | grep -qv 'stale:'; then
+            echo "::warning::check-wire: the Wire data is malformed. Dropping it so /wire/ renders as unavailable rather than broken. Fix the generator and push wire-data again."
+            rm -f ../../_data/wire.yml
+          else
+            echo "::warning::check-wire: the Wire data is stale (generator has missed runs). Publishing it anyway; the page shows its generated_at."
+          fi
+
+      - name: Configure Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      # The same builder GitHub Pages uses for deploy-from-branch (github-pages
+      # gem, remote_theme support), so what this produces is what the branch
+      # deploy produced, byte for byte where the inputs match.
+      - name: Build with Jekyll
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./
+          destination: ./_site
+
+      - name: Sanity-check the build
+        run: |
+          set -eu
+          test -f _site/index.html
+          test -f _site/wire/index.html
+          test -f _site/reports/index.html
+          test -f _site/feed.xml
+          test -f _site/sitemap.xml
+          cards=$(grep -o 'hl-catalog-card' _site/reports/index.html | wc -l)
+          echo "reports listing renders $cards cards"
+          test "$cards" -gt 0
+          if grep -q 'hl-wire__item' _site/wire/index.html; then
+            echo "wire renders $(grep -o 'hl-wire__item ' _site/wire/index.html | wc -l) headlines"
+          else
+            echo "::notice::wire page rendered in its unavailable state"
+          fi
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./_site
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    # Flip this repository variable to "true" right after switching
+    # Settings > Pages > Source to "GitHub Actions". Until then the branch deploy
+    # serves the site and this job is skipped.
+    if: vars.PAGES_VIA_ACTIONS == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  # The source-side gates that the pre-commit hook runs locally, run here on
+  # every push so a bypassed hook (or a push from a machine without it) is still
+  # caught. Independent of deploy on purpose: a tooling regression should show
+  # red here, not hold back a report.
+  gates:
+    name: Tests and source gates
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: tools/report-tooling/package-lock.json
+      - name: Install report tooling
+        working-directory: tools/report-tooling
+        run: npm ci --no-audit --no-fund
+      - name: Unit tests
+        working-directory: tools/report-tooling
+        run: npm test
+      - name: Source-side gates
+        working-directory: tools/report-tooling
+        run: |
+          set -u
+          fail=0
+          for g in check-detection-manifest.js check-detection-attack.js check-ioc-index.js \
+                   check-ioc-tables.js check-ioc-feeds.js check-ioc-feeds-attack.js \
+                   check-embargo-artifacts.js check-tags.js; do
+            echo "::group::$g"
+            node "$g"; rc=$?
+            echo "::endgroup::"
+            case $rc in
+              0) echo "PASS         $g" ;;
+              2) echo "::warning::$g NOT CHECKED (exit 2); see its log above" ;;
+              *) echo "::error::$g FAILED (exit $rc)"; fail=1 ;;
+            esac
+          done
+          echo "::group::check-report.js (every report)"
+          for r in ../../reports/*/index.md; do
+            node check-report.js "$r" > /tmp/cr.txt 2>&1; rc=$?
+            if [ $rc -eq 1 ]; then echo "::error::check-report FAILED for $r"; cat /tmp/cr.txt; fail=1; fi
+          done
+          echo "::endgroup::"
+          exit $fail

@@ -1,0 +1,172 @@
+# Controlled vocabulary for the catalog tags in _data/catalog.yml.
+#
+# Why this exists. The listing filter builds its chips from tags that appear on
+# three or more entries, and tag-badge.html picks a badge colour by tag name. Both
+# compare strings exactly, so "Open Dir" and "OpenDirectory" were two different
+# tags to the site: neither reached the chip threshold on its own, and the drift
+# was invisible from any one catalog entry. This file is the one place the
+# spelling is decided.
+#
+# Every entry has a `tag` (the canonical spelling, exactly as it must appear in
+# the catalog), a `color` (one of blue, red, green, purple, yellow; the badge
+# palette in assets/css/custom.css), and optionally `aliases`: spellings that
+# have appeared before and must NOT be used again. check-tags.js in
+# tools/report-tooling FAILS a commit whose catalog carries an alias, and warns
+# by name on a tag this file does not know, so a new tag is added here
+# deliberately rather than slipping in as a near-duplicate.
+#
+# Keep the canonical form short, since a badge is a chip and a chip row has a
+# dozen of them: "Cred Theft" not "Credential Theft", "Post-Ex" not
+# "Post-Exploitation", "Open Dir" not "OpenDirectory".
+
+tags:
+  # ---- what was found / campaign type ----
+  - tag: Open Dir
+    color: green
+    aliases: [OpenDirectory, Open Directory, OpenDir]
+  - tag: C2
+    color: blue
+  - tag: RAT
+    color: blue
+  - tag: Loader
+    color: purple
+  - tag: Dropper
+    color: purple
+  - tag: Stealer
+    color: purple
+  - tag: Ransomware
+    color: red
+  - tag: Rootkit
+    color: red
+  - tag: Botnet
+    color: red
+  - tag: Webshell
+    color: red
+  - tag: Toolkit
+    color: red
+    aliases: [Intrusion Toolkit]
+  - tag: Scanner
+    color: green
+  - tag: Builder
+    color: blue
+  - tag: Cryptojacking
+    color: green
+    aliases: [Cryptominer, Cryptomining, Crypto Mining, Cryptojacker]
+  - tag: XMRig
+    color: green
+  - tag: Phishing
+    color: red
+  - tag: PhaaS
+    color: blue
+  - tag: Fraud
+    color: red
+  - tag: ClickFix
+    color: red
+  - tag: MaaS
+    color: blue
+  - tag: Access Broker
+    color: blue
+  - tag: Multi-Family
+    color: blue
+  - tag: Threat
+    color: red
+
+  # ---- technique / behaviour ----
+  - tag: Evasion
+    color: purple
+  - tag: Persistence
+    color: purple
+  - tag: Injection
+    color: purple
+  - tag: DLL Hijack
+    color: purple
+  - tag: BYOVD
+    color: red
+  - tag: Priv Esc
+    color: yellow
+  - tag: Post-Ex
+    color: purple
+    aliases: [Post-Exploitation, Post Exploitation, PostEx]
+  - tag: Cred Theft
+    color: blue
+    aliases: [Credential Theft, Credential-Theft]
+  - tag: Data Theft
+    color: blue
+    aliases: [DataTheft]
+  - tag: Exfil
+    color: red
+  - tag: Exploitation
+    color: green
+    aliases: [CVE Exploit]
+  - tag: Mass Exploitation
+    color: red
+  - tag: RCE
+    color: red
+  - tag: EtherHiding
+    color: purple
+  - tag: Blockchain C2
+    color: blue
+  - tag: HVNC
+    color: blue
+  - tag: VPN Abuse
+    color: red
+  - tag: AI Abuse
+    color: red
+
+  # ---- language / platform / product ----
+  - tag: Rust
+    color: blue
+  - tag: Go
+    color: blue
+  - tag: .NET
+    color: blue
+  - tag: Python
+    color: blue
+  - tag: PHP
+    color: blue
+  - tag: PowerShell
+    color: purple
+  - tag: Sliver
+    color: blue
+  - tag: SSH
+    color: blue
+  - tag: Tor
+    color: blue
+  - tag: WebLogic
+    color: blue
+  - tag: Cisco IOS-XE
+    color: blue
+  - tag: CVE-2026-42589
+    color: blue
+
+  # ---- sector / geography ----
+  - tag: Government
+    color: blue
+  - tag: Telecom
+    color: blue
+  - tag: E-Commerce
+    color: blue
+  - tag: China
+    color: blue
+  - tag: Brazil
+    color: blue
+  - tag: SE-Asia
+    color: blue
+
+  # ---- badge-only vocabulary (used by tag-badge.html outside the catalog) ----
+  - tag: IP
+    color: blue
+  - tag: Hash
+    color: blue
+  - tag: Domain
+    color: green
+  - tag: Sigma
+    color: green
+  - tag: YARA
+    color: purple
+  - tag: Suricata
+    color: purple
+  - tag: Note
+    color: yellow
+  - tag: Warning
+    color: yellow

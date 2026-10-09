@@ -68,6 +68,12 @@ var CHECKS = {
     label: 'detection ATT&CK tables',
     cmd: 'check-detection-attack.js',
     why: 'hunting-detections/, its manifest, the ATT&CK tables or the catalog is staged'
+  },
+  tags: {
+    id: 'tags',
+    label: 'catalog tags',
+    cmd: 'check-tags.js',
+    why: '_data/catalog.yml or _data/tags.yml is staged'
   }
 };
 
@@ -137,6 +143,13 @@ function plan(paths, opts) {
        would let an edit that re-derives it, drops `data-day` entirely, or
        forgets the script cache-bust commit with the gate never running. */
     if (p === '_data/wire.yml' || p === 'wire/index.md') want.wire = true;
+    /* Both halves route to the tag gate. A catalog edit is where a retired
+       spelling comes back; a vocabulary edit is where a spelling is retired, and
+       that retirement is only true once every entry still carrying it has
+       moved. Routing on the catalog alone would let the vocabulary say "Cred
+       Theft" while four published entries still said "Credential Theft", with
+       the gate never asked. */
+    if (p === '_data/catalog.yml' || p === '_data/tags.yml') want.tags = true;
     if (p === '_data/glossary.yml' && owed.indexOf(OWED_GLOSSARY) === -1) owed.push(OWED_GLOSSARY);
 
     /* STIX bundle safety (2026-09-14): no value a feed marks unblockable may sit

@@ -9,10 +9,11 @@
   {% if page.unlisted %}{% assign _head = _head | replace: "</head>", '<meta name="robots" content="noindex, nofollow"></head>' %}{% endif %}
   {{ _head | split: " " | join: " "}}
   <body>
+    <a class="hl-skip" href="#main">Skip to content</a>
     {% capture _navbar %}{% include default/navbar.liquid %}{% endcapture %}
     {{ _navbar | split: " " | join: " "}}
     {% include sidebar-sponsors.html %}
-    <main class="content">
+    <main class="content" id="main" tabindex="-1">
       {{ content }}
     </main>
     {% capture _footer %}{% include default/footer.liquid %}{% endcapture %}

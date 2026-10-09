@@ -18,7 +18,7 @@ ioc_highlights:
 layout: post
 permalink: /reports/AdvancedRouterScanner/
 thumbnail: /assets/images/cards/AdvancedRouterScanner.png
-category: "Network Scanner"
+category: "Actor Tooling and Infrastructure"
 hide: true
 description: "A purpose-built router exploitation framework discovered targeting embedded network devices globally, with over 50,000 confirmed compromises. The toolkit chains credential brute-forcing, reverse shell deployment, and botnet recruitment across multiple continents using a layered five-stage attack chain."
 stix_bundle: /stix/AdvancedRouterScanner.json

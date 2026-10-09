@@ -6,7 +6,7 @@ permalink: /reports/rovodev-mirai-matrix-c2-87.106.143.220/
 thumbnail: /assets/images/cards/rovodev-mirai-matrix-c2-87.106.143.220.png
 hide: true
 sponsored_by: hunt-io
-category: "AI-Augmented Cybercrime"
+category: "AI-Augmented Operations"
 series: ai-agent-frameworks
 series_role: member
 series_order: 3

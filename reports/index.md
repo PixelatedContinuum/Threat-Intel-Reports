@@ -33,4 +33,4 @@ position: 2
 {%- endfor -%}
 </div>
 
-*Reports are © Joseph. All rights reserved, free to read, but reuse requires written permission.*
+*Reports are © Joseph, The Hunter's Ledger, licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/): free to read, republish and adapt, including commercially, with attribution.*

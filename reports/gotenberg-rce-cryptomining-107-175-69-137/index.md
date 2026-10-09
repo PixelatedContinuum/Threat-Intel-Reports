@@ -4,7 +4,7 @@ date: '2026-09-16'
 layout: post
 permalink: /reports/gotenberg-rce-cryptomining-107-175-69-137/
 thumbnail: /assets/images/cards/gotenberg-rce-cryptomining-107-175-69-137.png
-category: Mass Exploitation
+category: "Exploitation Campaign"
 description: One operator confirmed remote code execution on 198 internet-facing Gotenberg instances in 54 minutes and dropped a cryptominer, and the obvious network signature for the attack never fires because the injected newlines are JSON-escaped on the wire.
 detection_page: /hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/
 ioc_feed: /ioc-feeds/gotenberg-rce-cryptomining-107-175-69-137/

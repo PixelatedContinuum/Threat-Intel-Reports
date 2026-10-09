@@ -5,7 +5,7 @@ layout: post
 permalink: /reports/gocloud-multiservice-cryptojacking-149-28-112-221/
 thumbnail: /assets/images/cards/gocloud-multiservice-cryptojacking-149-28-112-221.png
 hide: true
-category: "Cryptojacking Operation"
+category: "Cryptojacking"
 description: "A self-branded, single-operator commodity cryptojacking operation captured across two hosts. Its own ledgers claim roughly 7,145 successes; independent evidence covers seven hosts. The gap between the two is the finding."
 detection_page: /hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/
 ioc_feed: /ioc-feeds/gocloud-multiservice-cryptojacking-149-28-112-221/

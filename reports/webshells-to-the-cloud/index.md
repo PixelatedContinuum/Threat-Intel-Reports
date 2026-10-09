@@ -16,7 +16,7 @@ ioc_highlights:
 layout: post
 permalink: /reports/webshells-to-the-cloud/
 thumbnail: /assets/images/cards/webshells-to-the-cloud.png
-category: "Web Compromise"
+category: "Exploitation Campaign"
 hide: true
 description: "A modular multi-phase intrusion chain beginning with web server compromise via PHP webshells, then pivoting to cloud infrastructure abuse for command-and-control, data exfiltration, and automated attack orchestration. The campaign demonstrates systematic exploitation methodology with strong attribution fingerprints across cloud provider APIs."
 stix_bundle: /stix/webshells-to-the-cloud.json

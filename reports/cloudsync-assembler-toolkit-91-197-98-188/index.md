@@ -5,7 +5,7 @@ layout: post
 permalink: /reports/cloudsync-assembler-toolkit-91-197-98-188/
 thumbnail: /assets/images/cards/cloudsync-assembler-toolkit-91-197-98-188.png
 hide: true
-category: "Intrusion Toolkit"
+category: "Post-Exploitation Toolkit"
 description: "A 22-file intrusion toolkit staged on a live open directory, built almost entirely from other people's tooling. Three named threat actors' tools sit in the kit, and the operator is none of them."
 detection_page: /hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/
 ioc_feed: /ioc-feeds/cloudsync-assembler-toolkit-91-197-98-188/

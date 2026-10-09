@@ -5,7 +5,7 @@ layout: post
 permalink: /reports/new-files-found-20260408/
 thumbnail: /assets/images/cards/new-files-found-20260408.png
 hide: true
-category: Custom RAT Toolkit
+category: "Remote Access Trojan"
 description: 'Continued analysis of UTA-2026-004 open directory reveals 106 additional files including a complete cracked Cobalt Strike 4.9.1 installation, a four-generation custom implant evolution chain (OpenStrike), CovertVPN Layer 2 tunneling, and an EAX-redirect process hollowing variant that bypasses standard EDR detection logic.'
 detection_page: /hunting-detections/new-files-found-20260408-detections/
 ioc_feed: /ioc-feeds/new-files-found-20260408/

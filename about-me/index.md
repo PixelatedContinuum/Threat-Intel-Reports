@@ -1,5 +1,6 @@
 ---
 title: About Me
+description: "Joseph Harrison: SOC operations lead, GCFA, threat intelligence researcher and the analyst behind The Hunter's Ledger. Background, experience and how to get in touch."
 date: '2025-11-17'
 layout: page
 permalink: /about-me/

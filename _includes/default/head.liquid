@@ -77,21 +77,27 @@
     <meta property="og:image:height" content="630">
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:alt" content="{{ page.title | default: site.title }}">
-    {% seo %}
+    {%- comment -%} jekyll-seo-tag emits `twitter:card=summary` for any page without an SEO
+    `image:` key, and this site wires cards through `thumbnail:` instead, so left alone X saw two
+    card tags on every page. The plugin's output is captured and that one tag removed; the
+    `summary_large_image` tag below is then the only card declaration. The replace is an exact
+    string match on what jekyll-seo-tag 2.8 (the GitHub Pages pin) writes, so if a future plugin
+    version changes its markup the replace is a no-op and the page simply reverts to the old
+    duplicate rather than losing anything. The plugin's own `twitter:title` is kept and the
+    hand-written one dropped, so title is emitted once too. {%- endcomment -%}
+    {%- capture _seo %}{% seo %}{% endcapture -%}
+    {{ _seo | replace: '<meta name="twitter:card" content="summary" />', '' }}
     {% if page.layout == "post" %}{% if page.url contains "/reports/" or page.url contains "/hunting-detections/" %}{% include structured-data.liquid %}{% endif %}{% endif %}
 
     <!-- RSS -->
     <link rel="alternate" type="application/atom+xml" title="{{ site.title | default: 'Title' }}" href="{{ 'feed.xml' | absolute_url }}"/>
     {% feed_meta %}
 
-    {%- comment -%} jekyll-seo-tag (above) also emits twitter:card=summary — it ignores
-    site.twitter.card unless the page exposes an `image:`, and cards here are wired via a
-    custom `thumbnail:` key. So X sees two card tags; this explicit summary_large_image is
-    the effective large-card backstop. og:image (used by Slack/Discord/LinkedIn/etc.) is
-    correct everywhere. Single-tag fix for X = adopt the SEO `image:` convention site-wide
-    (deferred — needs a local/preview Jekyll build to verify safely). {%- endcomment -%}
+    {%- comment -%} Twitter/X card. `twitter:title` comes from jekyll-seo-tag above; the
+    `summary` card it also writes is stripped there, so these are the only card, description
+    and image tags on the page. og:image (used by Slack/Discord/LinkedIn/etc.) is set above
+    and is correct everywhere. {%- endcomment -%}
     <!-- Twitter Cards -->
-    <meta name="twitter:title" content="{{ page.title | default: site.title }}">
     <meta name="twitter:description" content="{{ page.description | default: site.description | strip_html | strip_newlines | truncate: 200 }}">
     {% if site.data.social.twitter %}
     <meta name="twitter:creator" content="@{{ site.data.social.twitter }}">

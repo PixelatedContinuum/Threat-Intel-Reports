@@ -29,7 +29,7 @@ ioc_highlights:
 layout: post
 permalink: /reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/
 thumbnail: /assets/images/cards/inkognito-russian-vpn-phishing-185-221-196-118-20260516.png
-category: "Fraud Operation"
+category: "Phishing and Fraud"
 hide: true
 description: "Inkognito is a Russian-speaking multi-product fraud operator that has run continuously for nearly three years. The operator pairs a real commercially-billed VPN service with a 467+ brand-impersonation phishing subdomain library targeting US banking, enterprise SaaS, Chinese internet giants, and Russian telecom. Apex chameleon-decoy tradecraft, an 11-minute domain-to-live deployment pipeline, and infrastructure spanning two sanctioned bulletproof hosters (Aeza, Stark/Worktitans) define the operator footprint. This is the first public cross-brand documentation of the Inkognito portfolio."
 stix_bundle: /stix/inkognito-russian-vpn-phishing-185-221-196-118-20260516.json

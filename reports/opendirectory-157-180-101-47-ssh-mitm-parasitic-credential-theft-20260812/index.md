@@ -4,7 +4,7 @@ date: '2026-08-12'
 layout: post
 permalink: /reports/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812/
 hide: true
-category: "Credential Interception Platform"
+category: "Credential and Data Theft"
 description: "An operator-built SSH man-in-the-middle platform that steals other attackers' successful brute-force credentials at the instant they prove themselves, built in about 23 hours with a jailbroken AI coding assistant, and invisible to port scanning by design."
 detection_page: /hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/
 ioc_feed: /ioc-feeds/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-iocs.json

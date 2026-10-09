@@ -4,7 +4,7 @@ date: '2026-09-07'
 layout: post
 permalink: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
 hide: true
-category: Post-Exploitation Toolkit
+category: "Post-Exploitation Toolkit"
 description: A Sliver C2 and a separate blockchain-resolved Node.js implant, staged from one open directory, reached Domain Admin in a US organisation's Windows estate; the second implant's C2 rotation is logged permanently and publicly on an Ethereum smart contract.
 detection_page: /hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/
 ioc_feed: /ioc-feeds/sliver-c2-windows-postex-staging-193-233-202-17/

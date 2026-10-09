@@ -6,7 +6,7 @@ permalink: /reports/ai-agent-frameworks-2026-05-23/
 thumbnail: /assets/images/cards/ai-agent-frameworks-2026-05-23.png
 hide: true
 sponsored_by: hunt-io
-category: "AI-Augmented Threat Operations"
+category: "AI-Augmented Operations"
 series: ai-agent-frameworks
 series_role: parent
 series_order: 0

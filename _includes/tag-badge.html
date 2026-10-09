@@ -1,15 +1,15 @@
-{% assign t = include.tag | strip %}
-{% assign tl = t | downcase %}
-{% if tl == "c2" or tl == "rat" or tl == "ip" or tl == "hash" or tl == "maas" or tl == "cred theft" or tl == "multi-family" %}
-  <span class="hl-tag hl-tag--blue">{{ t }}</span>
-{% elsif tl == "webshell" or tl == "rce" or tl == "threat" or tl == "toolkit" or tl == "ransomware" or tl == "rootkit" or tl == "byovd" or tl == "exfil" %}
-  <span class="hl-tag hl-tag--red">{{ t }}</span>
-{% elsif tl == "open dir" or tl == "domain" or tl == "sigma" or tl == "cryptominer" or tl == "scanner" or tl == "exploitation" %}
-  <span class="hl-tag hl-tag--green">{{ t }}</span>
-{% elsif tl == "loader" or tl == "suricata" or tl == "yara" or tl == "stealer" or tl == "dropper" or tl == "evasion" or tl == "injection" or tl == "dll hijack" or tl == "persistence" %}
-  <span class="hl-tag hl-tag--purple">{{ t }}</span>
-{% elsif tl == "note" or tl == "warning" or tl == "priv esc" %}
-  <span class="hl-tag hl-tag--yellow">{{ t }}</span>
-{% else %}
-  <span class="hl-tag hl-tag--blue">{{ t }}</span>
-{% endif %}
+{%- comment -%}
+  One tag badge. The colour comes from _data/tags.yml, the controlled vocabulary
+  that check-tags.js enforces on the catalog, so a tag's spelling and its badge
+  colour are decided in one place. A tag the vocabulary does not know still
+  renders, in the default blue, rather than vanishing: the gate warns about it at
+  commit time, which is where an unknown tag should be noticed.
+
+  The lookup is exact on the canonical spelling. That is deliberate: the gate
+  fails a catalog tag whose case or spacing drifts from the vocabulary, so the
+  include never has to guess at a near-match.
+{%- endcomment -%}
+{%- assign t = include.tag | strip -%}
+{%- assign _entry = site.data.tags.tags | where: "tag", t | first -%}
+{%- assign _color = _entry.color | default: "blue" -%}
+<span class="hl-tag hl-tag--{{ _color }}">{{ t }}</span>
