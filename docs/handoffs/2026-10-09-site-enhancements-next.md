@@ -184,8 +184,9 @@
 - Verified: 824 unit tests, both gates, PyMISP 2.5.34.4 on all 59 events, a local github-pages
   build (63 files under `_site/feeds/misp/`, `_state.json` absent), Playwright desktop and
   iPhone 13 screenshots of the feed page, the changelog and the subscribe panel.
-- NOT verified: a real pull by a MISP instance. Joseph's own MISP (which feeds his OpenCTI) is
-  the intended first subscriber and the real test; the first pull will show whether the galaxy
+- NOT verified: a real pull by a MISP instance. Filed as T-0201 in ai-workflows, blocked on
+  Joseph being home. His own MISP (which feeds his OpenCTI) is the intended first subscriber and
+  the real test; the first pull will show whether the galaxy
   tag names resolve against his installed galaxy and whether the `snort` attributes (full rule
   text with leading comment lines) import as he wants. If an attribute type or category needs
   changing, change it in `lib/misp-feed.js`, regenerate, and the state file will bump every
