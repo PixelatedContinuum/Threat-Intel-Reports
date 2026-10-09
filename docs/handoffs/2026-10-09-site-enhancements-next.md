@@ -71,18 +71,27 @@
   report, the host the assigning report is named for, tooling, the ATT&CK techniques the
   primary reports map, and related designations with the published relation.
 - The record is `_data/actors.yml` (hand-written; everything in it is a summary of the linked
-  report, and it carries no handles, wallets, credentials or victim names on purpose).
-  `tools/report-tooling/generate-actors.js` writes `_data/actors_index.yml` and the stub pages,
-  `link-actors.js` links every bare designation in reports and detection pages (304 mentions
-  across 26 files, HTML anchors so raw HTML blocks render too), and `check-actors.js` gates all
-  of it; it runs in the pre-commit hook and in the Actions `gates` job. Rules of the gate: a
-  bare mention with a page FAILS, a designation a published report names with no entry FAILS,
-  an actor whose only report is unlisted gets no page (UTA-2026-022 today) and is named as
-  absent on purpose.
-- When a report publishes a new designation: add its entry to `_data/actors.yml` (figures from
-  the report, not the vault file), then `node generate-actors.js && node link-actors.js`.
-  When an embargoed report goes live, uncomment its catalog entry, drop `unlisted`, add the
-  actor entry, regenerate, link.
+  report). Each entry also carries `targeting` (region and sector categories, never a victim
+  name) and `identifiers` (actor-OWNED artifacts the operator chose or made: handles, channels,
+  operator brands and domains, wallets, bot ids, personas, operator C2). Victim names are never
+  a field. `tools/report-tooling/generate-actors.js` writes `_data/actors_index.yml` and the stub
+  pages, `link-actors.js` links every bare designation in reports and detection pages (304
+  mentions across 26 files, HTML anchors so raw HTML blocks render too), and `check-actors.js`
+  gates all of it; it runs in the pre-commit hook and in the Actions `gates` job. Rules of the
+  gate: a bare mention with a page FAILS; a designation a published report names with no entry
+  FAILS; an actor whose only report is unlisted gets no page (UTA-2026-022 today) and is named
+  as absent on purpose; and every `identifiers[].value` must be printed verbatim in one of that
+  actor's own PUBLISHED reports, or it FAILS. That last rule is the safety contract: the page
+  carries no claim the public reports do not already make, and since every published report has
+  cleared the victim-naming gate, an identifier that passes cannot be a victim's. Values a
+  report withholds (UTA-2026-019's build-host and messaging ids, UTA-2026-020's FOFA account,
+  UTA-2026-021's kit-author Telegram id) stay off.
+- When a report publishes a new designation: add its entry to `_data/actors.yml` (figures,
+  targeting and identifiers from the report, not the vault file), then
+  `node generate-actors.js && node link-actors.js`. When an embargoed report goes live,
+  uncomment its catalog entry, drop `unlisted`, add the actor entry, regenerate, link. This is
+  now a documented publish step: `hunters-ledger-publish` Step 4f in the ai-workflows repo, with
+  a checklist item, a 1j verify-table row and the go-live flip updated to match.
 - Not done, by choice: the one HIGH named actor in the corpus (the GHOST kit author) has no
   profile; the index is UTA-only. A `kind: named` entry would be a small extension of the same
   layout if wanted. The ATT&CK section lists techniques per actor; the site-wide heatmap and
