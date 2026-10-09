@@ -3,21 +3,21 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-09T09:00:32Z
+generated_at: 2026-10-09T10:01:42Z
 window_days: 30
 counts:
-  total: 612
-  research: 210
-  news: 402
+  total: 613
+  research: 213
+  news: 400
 topics:
   - label: "vulnerabilities"
     count: 147
     color: 1
   - label: "malware"
-    count: 118
+    count: 116
     color: 2
   - label: "artificial intelligence"
-    count: 91
+    count: 92
     color: 3
   - label: "exploited"
     count: 85
@@ -35,7 +35,7 @@ topics:
     count: 47
     color: 8
   - label: "zero-day"
-    count: 47
+    count: 46
     color: 9
   - label: "nation-state"
     count: 34
@@ -69,6 +69,7 @@ label_colors:
   "agentcore runtime": 2
   "agentev2": 6
   "agentic ai": 9
+  "ahsaycbs": 4
   "ai & automation": 1
   "ai agents": 8
   "ai infrastructure": 11
@@ -155,7 +156,6 @@ label_colors:
   "bulletproof hosting": 12
   "business email compromise": 8
   "byovd": 12
-  "c2": 9
   "c2 framework": 5
   "c3pool": 6
   "calendar": 8
@@ -226,6 +226,7 @@ label_colors:
   "detection engineering": 12
   "dmdc": 12
   "dns txt records": 3
+  "docro hijacker": 6
   "docusign impersonation": 2
   "donut loader": 3
   "double extortion": 1
@@ -276,10 +277,12 @@ label_colors:
   "law enforcement": 12
   "linux": 2
   "lnk files": 8
+  "lonepage": 7
   "maas framework": 12
   "macos": 11
   "malware": 2
   "malware analysis": 7
+  "matchboil": 5
   "microscan": 7
   "microsoft": 4
   "mobile": 4
@@ -348,6 +351,12 @@ items:
     date: 2026-10-09T08:22:58Z
     kind: research
     labels: ["supply chain", "artificial intelligence", "malware", "hvnc", "nebula", "npm", "supply chain attack"]
+  - title: "Warden Stealer: The Rapid Rise of an Infostealer with an Appetite for AI Agent Data"
+    url: "https://www.gendigital.com/blog/insights/research/warden-stealer-rust-infostealer-analysis"
+    source: "AlienVault"
+    date: 2026-10-09T07:40:30Z
+    kind: research
+    labels: ["infostealer", "artificial intelligence", "amatera", "callbackbeaver", "goflateloader", "maas", "obfuscation", "remus", "vidar", "warden stealer"]
   - title: "Citrix Urges Immediate Patching of Critical NetScaler Vulnerability"
     url: "https://www.securityweek.com/citrix-urges-immediate-patching-of-critical-netscaler-vulnerability/"
     source: "SecurityWeek"
@@ -366,6 +375,18 @@ items:
     date: 2026-10-09T05:41:04Z
     kind: news
     labels: ["zero-day"]
+  - title: "Threat Actors Exploit Critical AhsayCBS Flaws to Drop Webshells and XMRig Cryptominer"
+    url: "https://www.huntress.com/blog/ahsaycbs-flaws-exploit"
+    source: "AlienVault"
+    date: 2026-10-09T01:57:42Z
+    kind: research
+    labels: ["vulnerabilities", "ahsaycbs", "cryptomining", "kernel driver exploitation", "msp targeting", "webshell", "xmrig"]
+  - title: "MATCHBOIL: New tricks, same old evil intentions"
+    url: "https://otx.alienvault.com/pulse/6ac84a166254b974f23968a2"
+    source: "AlienVault"
+    date: 2026-10-09T01:57:42Z
+    kind: research
+    labels: ["lonepage", "matchboil", "spearphishing", "uac-0099"]
   - title: "US disrupts Chinese hacking tools as 7 govts warn of PRC spies stealing sensitive data worldwide"
     url: "https://otx.alienvault.com/pulse/6ac84a155bb626a3710179b9"
     source: "AlienVault"
@@ -3966,6 +3987,12 @@ items:
     date: 2026-09-09T11:12:35Z
     kind: research
     labels: ["zero-day", "bluemoon", "browser-extension", "gemstone", "shadowpad"]
+  - title: "Untracked Nightmares: The Threats Hiding Behind Commodity Infrastructure"
+    url: "https://otx.alienvault.com/pulse/6aa13e05864a561a7db38073"
+    source: "AlienVault"
+    date: 2026-09-09T11:07:49Z
+    kind: research
+    labels: ["arktunnel", "docro hijacker", "gcleaner", "insomnia rat", "pay-per-install", "seo poisoning", "socks5systemz"]
   - title: "ICS Patch Tuesday: Schneider Electric, Siemens Fix Critical Flaws"
     url: "https://www.securityweek.com/ics-patch-tuesday-schneider-electric-siemens-fix-critical-flaws/"
     source: "SecurityWeek"
@@ -3984,21 +4011,3 @@ items:
     date: 2026-09-09T10:11:29Z
     kind: news
     labels: ["vulnerabilities"]
-  - title: "Untracked Nightmares: The Threats Hiding Behind Commodity Infrastructure"
-    url: "https://unit42.paloaltonetworks.com/ppi-network-malware-campaign-analysis/"
-    source: "Palo Alto Networks"
-    date: 2026-09-09T10:00:55Z
-    kind: research
-    labels: ["arktunnel", "c2", "cl-cri-1171", "docro hijacker", "malware", "pay-per-install", "payload", "threat research"]
-  - title: "New Phishing Attack Creates Malicious Pages Inside the Victim’s Browser"
-    url: "https://www.securityweek.com/new-phishing-attack-creates-malicious-pages-inside-the-victims-browser/"
-    source: "SecurityWeek"
-    date: 2026-09-09T10:00:00Z
-    kind: news
-    labels: ["phishing", "malware"]
-  - title: "Chrome 153 Patches Seventh Zero-Day of 2026"
-    url: "https://www.securityweek.com/chrome-153-patches-seventh-zero-day-of-2026/"
-    source: "SecurityWeek"
-    date: 2026-09-09T09:45:00Z
-    kind: news
-    labels: ["zero-day", "chrome", "vulnerabilities"]
