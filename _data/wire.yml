@@ -3,24 +3,24 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-09T10:01:42Z
+generated_at: 2026-10-09T11:00:32Z
 window_days: 30
 counts:
-  total: 613
+  total: 612
   research: 213
-  news: 400
+  news: 399
 topics:
   - label: "vulnerabilities"
-    count: 147
+    count: 145
     color: 1
   - label: "malware"
-    count: 116
+    count: 117
     color: 2
   - label: "artificial intelligence"
     count: 92
     color: 3
   - label: "exploited"
-    count: 85
+    count: 86
     color: 4
   - label: "cybercrime"
     count: 81
@@ -120,7 +120,6 @@ label_colors:
   "attack surface": 11
   "autoit loader": 11
   "averat": 1
-  "aveva": 1
   "avisloader": 6
   "awareness training": 1
   "aws": 7
@@ -270,7 +269,6 @@ label_colors:
   "infostealer": 8
   "insights": 5
   "iocontrol": 7
-  "ivanti": 7
   "killsec": 7
   "labubarat": 10
   "law": 4
@@ -333,6 +331,18 @@ label_colors:
   "x": 4
   "zero-day": 9
 items:
+  - title: "Unpatched AhsayCBS Vulnerabilities Exploited in the Wild"
+    url: "https://www.securityweek.com/unpatched-ahsaycbs-vulnerabilities-exploited-in-the-wild/"
+    source: "SecurityWeek"
+    date: 2026-10-09T10:23:42Z
+    kind: news
+    labels: ["exploited", "vulnerabilities", "ahsaycbs"]
+  - title: "Pre-Baked Firmware Malware Hits Budget Android Devices in 150+ Countries"
+    url: "https://www.securityweek.com/pre-baked-firmware-malware-hits-budget-android-devices-in-150-countries/"
+    source: "SecurityWeek"
+    date: 2026-10-09T09:55:35Z
+    kind: news
+    labels: ["mobile", "malware", "midnight mimosa", "android malware", "firmware", "mobile & wireless"]
   - title: "US Disrupts Chinese State-Sponsored Hacking Tools"
     url: "https://www.securityweek.com/us-disrupts-chinese-state-sponsored-hacking-tools/"
     source: "SecurityWeek"
@@ -3993,21 +4003,3 @@ items:
     date: 2026-09-09T11:07:49Z
     kind: research
     labels: ["arktunnel", "docro hijacker", "gcleaner", "insomnia rat", "pay-per-install", "seo poisoning", "socks5systemz"]
-  - title: "ICS Patch Tuesday: Schneider Electric, Siemens Fix Critical Flaws"
-    url: "https://www.securityweek.com/ics-patch-tuesday-schneider-electric-siemens-fix-critical-flaws/"
-    source: "SecurityWeek"
-    date: 2026-09-09T10:49:30Z
-    kind: news
-    labels: ["vulnerabilities", "aveva", "ics", "ics/ot", "patches", "schneider electric", "siemens"]
-  - title: "Ivanti Patches Critical Flaws Across Enterprise Security Products"
-    url: "https://www.securityweek.com/ivanti-patches-critical-flaws-across-enterprise-security-products/"
-    source: "SecurityWeek"
-    date: 2026-09-09T10:28:34Z
-    kind: news
-    labels: ["vulnerabilities", "ivanti", "network security"]
-  - title: "Over 36,000 exposed Plex servers vulnerable to recent flaws"
-    url: "https://www.bleepingcomputer.com/news/security/over-36-000-plex-servers-unpatched-against-recently-disclosed-flaws/"
-    source: "BleepingComputer"
-    date: 2026-09-09T10:11:29Z
-    kind: news
-    labels: ["vulnerabilities"]
