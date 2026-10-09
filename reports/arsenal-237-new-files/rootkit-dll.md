@@ -42,7 +42,7 @@ rootkit.dll is a sophisticated defense evasion framework masquerading as a rootk
 ## Quick Reference
 
 **Detections & IOCs:**
-- [rootkit.dll Detection Rules]({{ "/hunting-detections/arsenal-237-rootkit-dll/" | relative_url }})
+- [rootkit.dll Detection Rules]({{ "/hunting-detections/arsenal-237-rootkit-dll-detections/" | relative_url }})
 - [rootkit.dll IOCs]({{ "/ioc-feeds/arsenal-237-rootkit-dll.json" | relative_url }})
 
 **Related Reports:**

@@ -83,11 +83,11 @@ When Arsenal-237 reaches a target environment, attackers gain the ability to:
 
 Each sample has three companion resources: a technical report with behavioral analysis and response guidance, a detection package with YARA/Sigma rules, and a machine-readable IOC feed for SIEM/EDR ingestion.
 
-**killer.dll (BYOVD Process Termination):** | [Technical Report]({{ "/reports/arsenal-237-new-files/killer-dll/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/arsenal-237-killer-dll/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/arsenal-237-killer-dll.json" | relative_url }})
+**killer.dll (BYOVD Process Termination):** | [Technical Report]({{ "/reports/arsenal-237-new-files/killer-dll/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/arsenal-237-killer-dll-detections/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/arsenal-237-killer-dll.json" | relative_url }})
 **killer_crowdstrike.dll (CrowdStrike Variant):** | [Technical Report]({{ "/reports/arsenal-237-new-files/killer-crowdstrike-dll/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/arsenal-237-killer-crowdstrike-dll/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/arsenal-237-killer-crowdstrike-dll.json" | relative_url }})
 **lpe.exe (Privilege Escalation):** | [Technical Report]({{ "/reports/arsenal-237-lpe-exe/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/arsenal-237-lpe-exe/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/arsenal-237-lpe-exe.json" | relative_url }})
 **BdApiUtil64.sys (Vulnerable Baidu Driver):** | [Technical Report]({{ "/reports/bdapiutil64-sys/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/arsenal-237-BdApiUtil64-sys/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/arsenal-237-BdApiUtil64-sys.json" | relative_url }})
-**rootkit.dll (Kernel-Mode Rootkit):** | [Technical Report]({{ "/reports/arsenal-237/rootkit-dll/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/arsenal-237-rootkit-dll/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/arsenal-237-rootkit-dll.json" | relative_url }})
+**rootkit.dll (Kernel-Mode Rootkit):** | [Technical Report]({{ "/reports/arsenal-237/rootkit-dll/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/arsenal-237-rootkit-dll-detections/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/arsenal-237-rootkit-dll.json" | relative_url }})
 **nethost.dll (DLL Hijacking Persistence):** | [Technical Report]({{ "/reports/arsenal-237/nethost-dll/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/arsenal-237-nethost-dll/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/arsenal-237-nethost-dll.json" | relative_url }})
 **chromelevator.exe (Browser Credential Theft):** | [Technical Report]({{ "/reports/arsenal-237-new-files/chromelevator-exe/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/arsenal-237-chromelevator-exe/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/arsenal-237-chromelevator-exe.json" | relative_url }})
 **enc_c2.exe (Rust Ransomware with Tor C2):** | [Technical Report]({{ "/reports/arsenal-237-new-files/enc_c2-exe/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/arsenal-237-enc_c2-exe/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/arsenal-237-enc_c2-exe.json" | relative_url }})
@@ -196,7 +196,7 @@ The full report is at [./killer-dll.md](./killer-dll.md).
 
 ---
 
-#### 2. [killer_crowdstrike.dll - CrowdStrike-Specific Process Termination](./killer_crowdstrike-dll.md)
+#### 2. [killer_crowdstrike.dll - CrowdStrike-Specific Process Termination](./killer-crowdstrike-dll.md)
 
 This component is an EDR-specific defense disabler.
 
@@ -208,7 +208,7 @@ It is a killer.dll variant with product-specific targeting of CSFalconService.ex
 
 I hold this CONFIRMED, on product-specific function names and driver interactions.
 
-The full report is at [./killer_crowdstrike-dll.md](./killer_crowdstrike-dll.md).
+The full report is at [./killer-crowdstrike-dll.md](./killer-crowdstrike-dll.md).
 
 ---
 
@@ -779,7 +779,7 @@ Access detailed technical analysis for each toolkit component:
 
 1. **Phase 1 - Defense Evasion Components:**
    - [killer.dll - Basic BYOVD Process Termination](./killer-dll.md)
-   - [killer_crowdstrike.dll - CrowdStrike-Specific Termination](./killer_crowdstrike-dll.md)
+   - [killer_crowdstrike.dll - CrowdStrike-Specific Termination](./killer-crowdstrike-dll.md)
    - [lpe.exe - Privilege Escalation Wrapper](./lpe-exe.md)
    - [BdApiUtil64.sys - Vulnerable Baidu Driver](./BdApiUtil64-sys.md)
    - [rootkit.dll - Kernel-Mode Rootkit](./rootkit-dll.md)
