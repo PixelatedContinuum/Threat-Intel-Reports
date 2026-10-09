@@ -36,7 +36,11 @@ position: 2.7
 <div class="hl-grid hl-grid--actors" data-filter-grid data-pagefind-ignore>
 {%- for a in actors -%}
   {%- assign ix = idx | where: "id", a.id | first -%}
-  {%- assign hay = a.type | append: " " | append: a.motivation | append: " " | append: a.tooling | join: " " | append: " " | append: a.alias -%}
+  {%- assign tgt = "" -%}
+  {%- if a.targeting.regions %}{% assign tgt = tgt | append: " " | append: a.targeting.regions | join: " " %}{% endif -%}
+  {%- if a.targeting.sectors %}{% assign tgt = tgt | append: " " | append: a.targeting.sectors | join: " " %}{% endif -%}
+  {%- if a.identifiers %}{% for idn in a.identifiers %}{% assign tgt = tgt | append: " " | append: idn.value %}{% endfor %}{% endif -%}
+  {%- assign hay = a.type | append: " " | append: a.motivation | append: " " | append: a.tooling | join: " " | append: " " | append: a.alias | append: " " | append: tgt -%}
   {%- assign tagbag = "" -%}
   {%- if a.confidence.distinct_actor %}{% assign tagbag = tagbag | append: a.confidence.distinct_actor | downcase %}{% endif -%}
   {%- assign lower = hay | downcase -%}
@@ -50,7 +54,7 @@ position: 2.7
     <div class="hl-card__inner">
       <div class="hl-card__bar hl-actor-card__bar--{{ a.confidence.distinct_actor | default: 'none' | downcase }}"></div>
       <div>
-        <div class="hl-card__meta hl-actor-card__meta">{{ a.first_observed | date: "%b %Y" }}{% if a.confidence.distinct_actor %} &middot; {{ a.confidence.distinct_actor }}{% if a.confidence.distinct_actor_pct %} {{ a.confidence.distinct_actor_pct }}%{% endif %}{% endif %}{% if ix %} &middot; {{ ix.report_count }} report{% if ix.report_count != 1 %}s{% endif %}{% endif %}</div>
+        <div class="hl-card__meta hl-actor-card__meta">{{ a.first_observed | date: "%b %Y" }}{% if a.confidence.distinct_actor %} &middot; {{ a.confidence.distinct_actor }}{% if a.confidence.distinct_actor_pct %} {{ a.confidence.distinct_actor_pct }}%{% endif %}{% endif %}{% if ix %} &middot; {{ ix.report_count }} report{% if ix.report_count != 1 %}s{% endif %}{% endif %}{% if a.targeting.regions and a.targeting.regions.size > 0 %} &middot; {{ a.targeting.regions | join: ", " }}{% endif %}</div>
         <div class="hl-card__title">{{ a.id }}{% if a.alias %} <span class="hl-actor-card__alias">{{ a.alias }}</span>{% endif %}</div>
         <div class="hl-actor-card__type">{{ a.type }}</div>
       </div>

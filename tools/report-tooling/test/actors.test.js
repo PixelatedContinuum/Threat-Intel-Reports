@@ -13,10 +13,13 @@ actors:
     last_updated: 2026-03-01
     type: Sliver operator
     motivation: Cybercrime
+    targeting: { regions: [United States], sectors: [Healthcare] }
     confidence: { distinct_actor: MODERATE, distinct_actor_pct: 68, named_actor: INSUFFICIENT }
     summary: One.
     primary_host: 203.0.113.1
     tooling: [Sliver]
+    identifiers:
+      - { kind: brand, value: SELFBRAND, context: operator self-name }
     reports:
       primary: [/reports/one/]
     related:
@@ -28,6 +31,7 @@ actors:
     last_updated: 2026-04-03
     type: Second operator
     motivation: Unknown
+    targeting: { note: No targeting evidence recovered. }
     confidence: { distinct_actor: null, distinct_actor_pct: null, named_actor: INSUFFICIENT }
     summary: Two.
     primary_host: 203.0.113.2
@@ -95,7 +99,7 @@ test('build lists primary reports first, discovers mentions, and withholds an em
   const actors = A.parseActors(GOOD).actors;
   const cat = A.parseCatalog(CATALOG);
   const reports = [
-    report('one', 'about UTA-2026-001, UTA-2026-001 again, and a nod to UTA-2026-002'),
+    report('one', 'about UTA-2026-001, UTA-2026-001 again, a nod to UTA-2026-002, and SELFBRAND'),
     report('two', 'about UTA-2026-002 only'),
     report('three', 'embargoed UTA-2026-003 and UTA-2026-001', { unlisted: true })
   ];
@@ -140,7 +144,7 @@ test('build fails on a primary report that is unlisted or never names the actor,
 test('toYaml is deterministic and carries the generated marker; stub carries the layout marker', () => {
   const actors = A.parseActors(GOOD).actors;
   const cat = A.parseCatalog(CATALOG);
-  const reports = [report('one', 'UTA-2026-001'), report('two', 'UTA-2026-002')];
+  const reports = [report('one', 'UTA-2026-001 SELFBRAND'), report('two', 'UTA-2026-002')];
   const a = A.toYaml(A.build(actors, reports, cat));
   const b = A.toYaml(A.build(actors, reports, cat));
   assert.equal(a, b);
@@ -187,7 +191,7 @@ test('linkify links bare mentions of known designations and nothing else', () =>
 test('a primary report without its own ATT&CK table falls back to its detection page mapping', () => {
   const actors = A.parseActors(GOOD).actors;
   const cat = A.parseCatalog(CATALOG);
-  const reports = [report('one', 'UTA-2026-001'), report('two', 'UTA-2026-002')];
+  const reports = [report('one', 'UTA-2026-001 SELFBRAND'), report('two', 'UTA-2026-002')];
   const ix = A.build(actors, reports, cat, {
     attack: () => [],
     detectionAttack: { 'one-detections': { rows: [{ tactic: 'Execution', id: 'T1059', name: 'Command and Scripting Interpreter' }] } }
@@ -198,4 +202,75 @@ test('a primary report without its own ATT&CK table falls back to its detection 
   assert.equal(one.attack[0].link, '/hunting-detections/one-detections');
   // Report two has no detection page, so nothing to fall back to.
   assert.equal(ix.entries[1].attack.length, 0);
+});
+
+test('an identifier not printed in a published report fails; a withheld value stays off', () => {
+  const src = `
+actors:
+  - id: UTA-2026-001
+    status: active
+    first_observed: 2026-02-28
+    last_updated: 2026-03-01
+    type: t
+    motivation: m
+    targeting: { note: n }
+    confidence: { named_actor: INSUFFICIENT }
+    summary: s
+    primary_host: 203.0.113.1
+    identifiers:
+      - { kind: handle, value: PRINTED, context: in the report }
+      - { kind: handle, value: WITHHELD, context: not in the report }
+    reports:
+      primary: [/reports/one/]`;
+  const actors = A.parseActors(src).actors;
+  const cat = A.parseCatalog(CATALOG);
+  const ix = A.build(actors, [report('one', 'names UTA-2026-001 and prints PRINTED only')], cat);
+  const text = ix.problems.join('\n');
+  assert.match(text, /identifier "WITHHELD" is not printed/);
+  assert.doesNotMatch(text, /identifier "PRINTED"/);
+});
+
+test('identifier and targeting shapes are validated', () => {
+  const bad = A.parseActors(`
+actors:
+  - id: UTA-2026-001
+    status: active
+    first_observed: 2026-01-01
+    last_updated: 2026-01-01
+    type: t
+    summary: s
+    confidence: { named_actor: INSUFFICIENT }
+    reports: { primary: [/reports/one/] }
+    identifiers: [{ kind: handle }]
+    targeting: {}`);
+  const text = bad.problems.join('\n');
+  assert.match(text, /identifiers\[0\] needs kind, value and context/);
+  assert.match(text, /targeting must carry at least a region, a sector, or a note/);
+});
+
+test('an unlisted report does not satisfy an identifier (it must be printed publicly)', () => {
+  const src = `
+actors:
+  - id: UTA-2026-001
+    status: active
+    first_observed: 2026-02-28
+    last_updated: 2026-03-01
+    type: t
+    motivation: m
+    targeting: { note: n }
+    confidence: { named_actor: INSUFFICIENT }
+    summary: s
+    primary_host: 203.0.113.1
+    identifiers:
+      - { kind: handle, value: ONLYINEMBARGO, context: x }
+    reports:
+      primary: [/reports/one/]`;
+  const actors = A.parseActors(src).actors;
+  const cat = A.parseCatalog(CATALOG);
+  // report one is published but does not print the value; an unlisted report does.
+  const ix = A.build(actors, [
+    report('one', 'UTA-2026-001 here'),
+    report('three', 'UTA-2026-001 and ONLYINEMBARGO', { unlisted: true })
+  ], cat);
+  assert.match(ix.problems.join('\n'), /identifier "ONLYINEMBARGO" is not printed in any published/);
 });

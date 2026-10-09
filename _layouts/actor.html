@@ -44,6 +44,20 @@ layout: page
   <p class="hl-actor__summary">{{ a.summary }}</p>
   <p class="hl-actor__muted">The confidence levels above are the published report's figures. Every claim on this page is a summary of the linked reports, which remain the record.</p>
 
+  {%- if a.targeting -%}
+  <h2 id="targeting">Targeting</h2>
+  <div class="hl-actor__targeting">
+    {%- if a.targeting.regions and a.targeting.regions.size > 0 -%}
+    <div><dt>Regions</dt><dd><span class="hl-tags">{% for r in a.targeting.regions %}<span class="hl-tag hl-tag--green">{{ r }}</span>{% endfor %}</span></dd></div>
+    {%- endif -%}
+    {%- if a.targeting.sectors and a.targeting.sectors.size > 0 -%}
+    <div><dt>Sectors</dt><dd><span class="hl-tags">{% for sct in a.targeting.sectors %}<span class="hl-tag hl-tag--yellow">{{ sct }}</span>{% endfor %}</span></dd></div>
+    {%- endif -%}
+    {%- if a.targeting.note -%}<p class="hl-actor__targeting-note">{{ a.targeting.note }}</p>{%- endif -%}
+  </div>
+  <p class="hl-actor__muted">Targeting is given as region and sector, drawn from the reports. Victim names are deliberately not published here or in the reports.</p>
+  {%- endif -%}
+
   <h2 id="reports">Reports</h2>
   {%- if ix and ix.reports.size > 0 -%}
   <div class="hl-actor__reports">
@@ -66,6 +80,20 @@ layout: page
   </div>
   {%- else -%}
   <p class="hl-actor__muted">No published report names this designation yet.</p>
+  {%- endif -%}
+
+  {%- if a.identifiers and a.identifiers.size > 0 -%}
+  <h2 id="identifiers">Actor identifiers</h2>
+  <p class="hl-actor__muted">Artifacts this operator chose or created: handles, channels, operator brands and domains, wallets and the like. Each is printed in a report linked above; the full indicator set, with its caveats, is in each report's IOC feed.</p>
+  <div class="hl-actor__idents">
+    {%- for idn in a.identifiers -%}
+    <div class="hl-actor__ident">
+      <span class="hl-actor__ident-kind">{{ idn.kind }}</span>
+      <code class="hl-actor__ident-value">{{ idn.value }}</code>
+      <span class="hl-actor__ident-context">{{ idn.context }}</span>
+    </div>
+    {%- endfor -%}
+  </div>
   {%- endif -%}
 
   <h2 id="infrastructure">Infrastructure and tooling</h2>

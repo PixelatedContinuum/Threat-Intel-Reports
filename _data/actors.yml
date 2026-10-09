@@ -36,463 +36,956 @@
 # file until go-live, exactly as its catalog entry is; the generator refuses to
 # build a page for one anyway. generate-actors.js and check-actors.js in
 # tools/report-tooling gate the file against the reports.
+#   targeting      regions and sectors the actor went after, as categories, plus an
+#                  optional one-line note. NEVER a victim's name: region and sector are
+#                  targeting, a named organisation is not, and the publish gate's
+#                  victim-naming check still governs the report these summarise.
+#   identifiers    actor-OWNED, self-identifying artifacts the actor chose or made:
+#                  handles, channels, operator brands, operator domains, wallets, bot
+#                  ids, personas, operator C2. {kind, value, context}. check-actors.js
+#                  FAILS on any value not printed verbatim in one of this actor's own
+#                  PUBLISHED reports, so the page never carries an unpublished claim and
+#                  (since every published report already cleared the victim-naming gate)
+#                  never a victim's identifier. A value the report withholds stays off.
 actors:
-  - id: UTA-2026-001
-    status: active
-    first_observed: 2026-02-28
-    last_updated: 2026-03-01
-    type: Sliver C2 operator with an automated ScareCrow, Donut and SysWhispers3 build pipeline
-    motivation: Cybercrime, assessed as access brokering or post-access monetisation (HIGH)
-    confidence: { distinct_actor: MODERATE, distinct_actor_pct: 68, named_actor: INSUFFICIENT }
-    summary: >-
-      An operator whose complete Sliver build workspace was exposed on bulletproof hosting
-      hours after an automated pipeline finished. The build fingerprint, a fraudulent
-      code-signing certificate impersonating VMware, and a dual-beacon delivery design are
-      the characteristics the designation rests on. No infrastructure overlap with any
-      named campaign was found.
-    primary_host: 45.94.31.220
-    tooling: [Sliver, ScareCrow, Donut, SysWhispers3]
-    reports:
-      primary: [/reports/sliver-open-directory/]
-    related:
-      - id: UTA-2026-007
-        relation: Shares a bulletproof hosting provider at the C2 layer only; assessed LOW and not a link.
-
-  - id: UTA-2026-002
-    status: active
-    first_observed: 2026-04-03
-    last_updated: 2026-04-03
-    type: XiebroC2 and Covenant operator working from a Chinese-language build environment
-    motivation: Assessed as a generic crimeware operator; named-group attribution rejected
-    confidence: { distinct_actor: MODERATE, distinct_actor_pct: 72, named_actor: INSUFFICIENT }
-    summary: >-
-      A multi-framework C2 toolkit exposed on one VPS, with a probable second operator
-      server identified by a matching pattern of OPSEC failures in the same two-week window.
-      Build-path and character-set artifacts in the implant point to a Chinese-language
-      operator environment, which the report is careful to separate from any named
-      Chinese-nexus group.
-    primary_host: 193.56.255.154
-    tooling: [XiebroC2, Covenant]
-    reports:
-      primary: [/reports/open-directory-193-56-255-154-xiebroc2/]
-
-  - id: UTA-2026-003
-    status: active
-    first_observed: 2026-04-04
-    last_updated: 2026-04-04
-    type: Commodity MaaS consumer running Shadow RAT and XWorm from one Windows VPS
-    motivation: Financial (DEFINITE)
-    confidence: { distinct_actor: LOW, distinct_actor_pct: 55, named_actor: INSUFFICIENT }
-    summary: >-
-      A single operator running purchasable remote-access tools against US victims with
-      tax-season lures, who later moved to a commercial remote-management product for
-      persistence. Low operational security and a stable single-VPS footprint are consistent
-      with an individual rather than an organised group.
-    primary_host: 151.245.112.70
-    tooling: [Shadow RAT, XWorm, ScreenConnect]
-    reports:
-      primary: [/reports/shadow-xworm-opendirectory/]
-
-  - id: UTA-2026-004
-    status: active
-    first_observed: 2026-04-06
-    last_updated: 2026-04-08
-    type: Developer of the OpenStrike multi-implant C2 toolkit, with a cracked Cobalt Strike arsenal
-    motivation: Assessed as an independent skilled developer or small private group; pre-operational
-    confidence: { distinct_actor: null, distinct_actor_pct: null, named_actor: INSUFFICIENT }
-    summary: >-
-      A novel C2 toolkit whose three implant variants share one RSA key, recovered from an
-      open directory before any known compromise, then expanded by 106 further files
-      including a four-generation implant evolution chain. The watermark and cracked-tool
-      branding found alongside it are distribution artifacts, and the report rejects them
-      as actor evidence.
-    primary_host: 172.105.0.126
-    tooling: [OpenStrike, Cobalt Strike (cracked), CovertVPN]
-    reports:
-      primary: [/reports/open-directory-172-105-0-126-20260406/, /reports/new-files-found-20260408/]
-
-  - id: UTA-2026-005
-    status: active
-    first_observed: 2026-04-23
-    last_updated: 2026-04-23
-    type: Chaos ransomware builder user with a private five-stage crypter
-    motivation: Financial, opportunistic
-    confidence: { distinct_actor: MODERATE, distinct_actor_pct: 72, named_actor: INSUFFICIENT }
-    summary: >-
-      An operator delivering a Chaos builder variant through a private batch-to-PowerShell
-      crypter whose cross-layer key reuse, a cross-build mutex and a byte-identical UAC bypass
-      stage form the tracking fingerprint. The report separates this operator explicitly from
-      the named Chaos ransomware-as-a-service group, which uses a different codebase.
-    primary_host: 94.103.1.13
-    tooling: [Chaos ransomware builder, Orcus RAT, UACME]
-    reports:
-      primary: [/reports/open-directory-94-103-1-13-20260423/]
-
-  - id: UTA-2026-006
-    status: active
-    first_observed: 2026-04-30
-    last_updated: 2026-08-12
-    type: Stock AdaptixC2 operator with an operator-written PowerShell and .NET injection chain
-    motivation: Cohort alignment with ransomware affiliate tradecraft, a population estimate only
-    confidence: { distinct_actor: null, distinct_actor_pct: null, named_actor: INSUFFICIENT }
-    summary: >-
-      A complete AdaptixC2 operator toolkit covering the full intrusion kill chain, exposed with
-      its team server, C2 and staging co-located on one Uzbekistan-hosted IP. A Linux build
-      fingerprint, recovered listener configuration and a matched loader pair make the operator
-      trackable; two APT candidates were ruled out on tradecraft.
-    primary_host: 45.130.148.125
-    tooling: [AdaptixC2, SharpHound, Rubeus, Mimikatz, Ligolo-ng, chisel]
-    reports:
-      primary: [/reports/opendirectory-45-130-148-125-20260430/]
-    related:
-      - id: UTA-2026-004
-        relation: A generic filename convention overlap only; assessed LOW, different frameworks.
-
+- id: UTA-2026-001
+  status: active
+  first_observed: 2026-02-28
+  last_updated: 2026-03-01
+  type: Sliver C2 operator with an automated ScareCrow, Donut and SysWhispers3 build pipeline
+  motivation: Cybercrime, assessed as access brokering or post-access monetisation (HIGH)
+  targeting:
+    note: No victim or targeting evidence was recovered; the toolkit was captured before deployment.
+  confidence:
+    distinct_actor: MODERATE
+    distinct_actor_pct: 68
+    named_actor: INSUFFICIENT
+  summary: An operator whose complete Sliver build workspace was exposed on bulletproof hosting hours
+    after an automated pipeline finished. The build fingerprint, a fraudulent code-signing certificate
+    impersonating VMware, and a dual-beacon delivery design are the characteristics the designation rests
+    on. No infrastructure overlap with any named campaign was found.
+  primary_host: 45.94.31.220
+  tooling:
+  - Sliver
+  - ScareCrow
+  - Donut
+  - SysWhispers3
+  identifiers:
+  - kind: certificate
+    value: 659EEB5AA4A489FB238993AF259D23F057F6D6D6
+    context: fraudulent code-signing certificate serial, identifies the build pipeline
+  - kind: domain
+    value: mailuxe.net
+    context: registered C2 domain
+  - kind: domain
+    value: mailmassange.duckdns.org
+    context: backup C2 domain
+  reports:
+    primary:
+    - /reports/sliver-open-directory/
+  related:
   - id: UTA-2026-007
-    status: active
-    first_observed: 2026-05-06
-    last_updated: 2026-08-11
-    type: HijackLoader customer running a 15-month multi-vector phishing campaign into an AsyncRAT-class RAT
-    motivation: Financial crimeware
-    language: Russian-speaking (HIGH)
-    confidence: { distinct_actor: LOW, distinct_actor_pct: 58, named_actor: INSUFFICIENT }
-    summary: >-
-      Seven delivery vectors staged from sanctioned bulletproof hosting and beaconing to a
-      second blocklisted provider. The operator's own contribution sits at the bundle layer,
-      and a misspelled cloud-storage path stable across every vector for over a year is the
-      load-bearing fingerprint. Two named clusters were ruled out on payload lineage.
-    primary_host: 62.60.237.100
-    tooling: [HijackLoader, Penguish, Rugmi, AsyncRAT-class RAT, GoProxy]
-    reports:
-      primary: [/reports/opendirectory-62-60-237-100-20260506/]
-    related:
-      - id: UTA-2026-001
-        relation: Shared bulletproof provider at the C2 layer; assessed LOW, completely different technical stack.
-
-  - id: UTA-2026-008
-    status: active
-    first_observed: 2026-05-15
-    last_updated: 2026-05-16
-    type: Developer and operator of the BellaMain Turkish phishing-as-a-service panel
-    motivation: Financial, Turkish consumer fraud
-    language: Turkish-speaking
-    confidence: { distinct_actor: MODERATE, distinct_actor_pct: 75, named_actor: INSUFFICIENT }
-    summary: >-
-      A phishing panel and seven brand-impersonation kits recovered in full source from a
-      multi-tenant staging host. A developer signature hard-coded into function names and a
-      single shared database across the panel and every kit rule out a leaked template and
-      point to one developer-operator. First public documentation of the panel.
-    primary_host: 79.137.192.3
-    tooling: [BellaMain PhaaS panel]
-    reports:
-      primary: [/reports/opendirectory-79-137-192-3-20260515/, /reports/bellamain-turkish-phaas-79-137-192-3-20260516/]
-    related:
-      - id: UTA-2026-009
-        relation: Co-tenant on the same staging host; linkage assessed LOW and actively rebutted on seven dimensions.
-      - id: UTA-2026-010
-        relation: Co-tenant on the same staging host; no operator-level overlap.
-
+    relation: Shares a bulletproof hosting provider at the C2 layer only; assessed LOW and not a link.
+- id: UTA-2026-002
+  status: active
+  first_observed: 2026-04-03
+  last_updated: 2026-04-03
+  type: XiebroC2 and Covenant operator working from a Chinese-language build environment
+  motivation: Assessed as a generic crimeware operator; named-group attribution rejected
+  targeting:
+    note: No victims identified; targeting could not be assessed.
+  confidence:
+    distinct_actor: MODERATE
+    distinct_actor_pct: 72
+    named_actor: INSUFFICIENT
+  summary: A multi-framework C2 toolkit exposed on one VPS, with a probable second operator server identified
+    by a matching pattern of OPSEC failures in the same two-week window. Build-path and character-set
+    artifacts in the implant point to a Chinese-language operator environment, which the report is careful
+    to separate from any named Chinese-nexus group.
+  primary_host: 193.56.255.154
+  tooling:
+  - XiebroC2
+  - Covenant
+  identifiers:
+  - kind: handle
+    value: iamem
+    context: developer username in a recovered PDB path
+  - kind: infrastructure
+    value: 92.60.75.103
+    context: probable second operator server
+  reports:
+    primary:
+    - /reports/open-directory-193-56-255-154-xiebroc2/
+- id: UTA-2026-003
+  status: active
+  first_observed: 2026-04-04
+  last_updated: 2026-04-04
+  type: Commodity MaaS consumer running Shadow RAT and XWorm from one Windows VPS
+  motivation: Financial (DEFINITE)
+  targeting:
+    regions:
+    - United States
+    sectors:
+    - Consumers and individuals
+    note: US victims via tax-season social-engineering lures.
+  confidence:
+    distinct_actor: LOW
+    distinct_actor_pct: 55
+    named_actor: INSUFFICIENT
+  summary: A single operator running purchasable remote-access tools against US victims with tax-season
+    lures, who later moved to a commercial remote-management product for persistence. Low operational
+    security and a stable single-VPS footprint are consistent with an individual rather than an organised
+    group.
+  primary_host: 151.245.112.70
+  tooling:
+  - Shadow RAT
+  - XWorm
+  - ScreenConnect
+  identifiers:
+  - kind: domain
+    value: epgoldsecurity
+    context: payload-server domain
+  - kind: domain
+    value: harrismanlieb
+    context: operator phishing domain
+  reports:
+    primary:
+    - /reports/shadow-xworm-opendirectory/
+- id: UTA-2026-004
+  status: active
+  first_observed: 2026-04-06
+  last_updated: 2026-04-08
+  type: Developer of the OpenStrike multi-implant C2 toolkit, with a cracked Cobalt Strike arsenal
+  motivation: Assessed as an independent skilled developer or small private group; pre-operational
+  targeting:
+    note: No victims identified; assessed as pre-operational capability development.
+  confidence:
+    distinct_actor: null
+    distinct_actor_pct: null
+    named_actor: INSUFFICIENT
+  summary: A novel C2 toolkit whose three implant variants share one RSA key, recovered from an open directory
+    before any known compromise, then expanded by 106 further files including a four-generation implant
+    evolution chain. The watermark and cracked-tool branding found alongside it are distribution artifacts,
+    and the report rejects them as actor evidence.
+  primary_host: 172.105.0.126
+  tooling:
+  - OpenStrike
+  - Cobalt Strike (cracked)
+  - CovertVPN
+  identifiers:
+  - kind: brand
+    value: OpenStrike
+    context: operator toolkit self-name
+  reports:
+    primary:
+    - /reports/open-directory-172-105-0-126-20260406/
+    - /reports/new-files-found-20260408/
+- id: UTA-2026-005
+  status: active
+  first_observed: 2026-04-23
+  last_updated: 2026-04-23
+  type: Chaos ransomware builder user with a private five-stage crypter
+  motivation: Financial, opportunistic
+  targeting:
+    note: Opportunistic, financially motivated; target IPs sat on Ukrainian ASNs, read as opportunistic
+      rather than geographic focus.
+  confidence:
+    distinct_actor: MODERATE
+    distinct_actor_pct: 72
+    named_actor: INSUFFICIENT
+  summary: An operator delivering a Chaos builder variant through a private batch-to-PowerShell crypter
+    whose cross-layer key reuse, a cross-build mutex and a byte-identical UAC bypass stage form the tracking
+    fingerprint. The report separates this operator explicitly from the named Chaos ransomware-as-a-service
+    group, which uses a different codebase.
+  primary_host: 94.103.1.13
+  tooling:
+  - Chaos ransomware builder
+  - Orcus RAT
+  - UACME
+  identifiers:
+  - kind: domain
+    value: forumrutor24.com
+    context: concurrent operator-controlled domain
+  - kind: domain
+    value: gtanuncios.com
+    context: concurrent operator-controlled domain
+  - kind: domain
+    value: bulgainme.pro
+    context: concurrent operator-controlled domain
+  reports:
+    primary:
+    - /reports/open-directory-94-103-1-13-20260423/
+- id: UTA-2026-006
+  status: active
+  first_observed: 2026-04-30
+  last_updated: 2026-08-12
+  type: Stock AdaptixC2 operator with an operator-written PowerShell and .NET injection chain
+  motivation: Cohort alignment with ransomware affiliate tradecraft, a population estimate only
+  targeting:
+    note: No live victim traffic was captured; targeting could not be assessed.
+  confidence:
+    distinct_actor: null
+    distinct_actor_pct: null
+    named_actor: INSUFFICIENT
+  summary: A complete AdaptixC2 operator toolkit covering the full intrusion kill chain, exposed with
+    its team server, C2 and staging co-located on one Uzbekistan-hosted IP. A Linux build fingerprint,
+    recovered listener configuration and a matched loader pair make the operator trackable; two APT candidates
+    were ruled out on tradecraft.
+  primary_host: 45.130.148.125
+  tooling:
+  - AdaptixC2
+  - SharpHound
+  - Rubeus
+  - Mimikatz
+  - Ligolo-ng
+  - chisel
+  identifiers:
+  - kind: build-id
+    value: si_build
+    context: operator build label and PDB fingerprint
+  - kind: cryptographic-key
+    value: f443b9ce7e0658900f6a7ff0991cdee6
+    context: operator RC4 listener key
+  reports:
+    primary:
+    - /reports/opendirectory-45-130-148-125-20260430/
+  related:
+  - id: UTA-2026-004
+    relation: A generic filename convention overlap only; assessed LOW, different frameworks.
+- id: UTA-2026-007
+  status: active
+  first_observed: 2026-05-06
+  last_updated: 2026-08-11
+  type: HijackLoader customer running a 15-month multi-vector phishing campaign into an AsyncRAT-class
+    RAT
+  motivation: Financial crimeware
+  language: Russian-speaking (HIGH)
+  targeting:
+    sectors:
+    - Broad B2B (sales, legal, procurement, transport)
+    note: Broad opportunistic commodity targeting; no single industry narrowly targeted.
+  confidence:
+    distinct_actor: LOW
+    distinct_actor_pct: 58
+    named_actor: INSUFFICIENT
+  summary: Seven delivery vectors staged from sanctioned bulletproof hosting and beaconing to a second
+    blocklisted provider. The operator's own contribution sits at the bundle layer, and a misspelled cloud-storage
+    path stable across every vector for over a year is the load-bearing fingerprint. Two named clusters
+    were ruled out on payload lineage.
+  primary_host: 62.60.237.100
+  tooling:
+  - HijackLoader
+  - Penguish
+  - Rugmi
+  - AsyncRAT-class RAT
+  - GoProxy
+  identifiers:
+  - kind: path
+    value: busket/
+    context: operator cloud-storage path typo, stable across every delivery vector
+  - kind: build-id
+    value: Plowshare
+    context: operator project codename in a rebuilt component PDB
+  reports:
+    primary:
+    - /reports/opendirectory-62-60-237-100-20260506/
+  related:
+  - id: UTA-2026-001
+    relation: Shared bulletproof provider at the C2 layer; assessed LOW, completely different technical
+      stack.
+- id: UTA-2026-008
+  status: active
+  first_observed: 2026-05-15
+  last_updated: 2026-05-16
+  type: Developer and operator of the BellaMain Turkish phishing-as-a-service panel
+  motivation: Financial, Turkish consumer fraud
+  language: Turkish-speaking
+  targeting:
+    regions:
+    - Turkey
+    sectors:
+    - Consumer marketplaces
+    - Telecom
+    - Cargo
+  confidence:
+    distinct_actor: MODERATE
+    distinct_actor_pct: 75
+    named_actor: INSUFFICIENT
+  summary: A phishing panel and seven brand-impersonation kits recovered in full source from a multi-tenant
+    staging host. A developer signature hard-coded into function names and a single shared database across
+    the panel and every kit rule out a leaked template and point to one developer-operator. First public
+    documentation of the panel.
+  primary_host: 79.137.192.3
+  tooling:
+  - BellaMain PhaaS panel
+  identifiers:
+  - kind: channel
+    value: '@AresRS34'
+    context: operator Telegram alias
+  - kind: persona
+    value: Wadanz
+    context: developer pseudonym hard-coded in function names
+  - kind: brand
+    value: BellaMain
+    context: phishing-as-a-service panel brand
+  - kind: account-id
+    value: '5606327063'
+    context: admin Telegram UID (withdrawal approver)
+  - kind: account-id
+    value: '-1002104835510'
+    context: operator Telegram group
+  reports:
+    primary:
+    - /reports/opendirectory-79-137-192-3-20260515/
+    - /reports/bellamain-turkish-phaas-79-137-192-3-20260516/
+  related:
   - id: UTA-2026-009
-    status: active
-    first_observed: 2026-05-15
-    last_updated: 2026-08-21
-    type: Multi-product fraud operator pairing a real VPN service with a brand-impersonation phishing library
-    motivation: Financial (HIGH)
-    language: Russian-speaking (HIGH)
-    confidence: { distinct_actor: MODERATE, distinct_actor_pct: 78, named_actor: INSUFFICIENT }
-    summary: >-
-      A nearly three-year operation spanning a commercial VPN, a phishing subdomain library of
-      several hundred brand impersonations, business-email burn domains and a fake exchange,
-      across two sanctioned hosting providers. One supporting characteristic was withdrawn in
-      August 2026 as a hosting-platform default and the report records that retraction.
-    primary_host: 185.221.196.118
-    tooling: [EspoCRM back-office, Marzban panel, custom web stack]
-    reports:
-      primary: [/reports/opendirectory-79-137-192-3-20260515/, /reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/]
-    related:
-      - id: UTA-2026-008
-        relation: Co-tenant on the same staging host; linkage assessed LOW and actively rebutted.
-      - id: UTA-2026-010
-        relation: Co-tenant on the same staging host; zero indicator overlap.
-
+    relation: Co-tenant on the same staging host; linkage assessed LOW and actively rebutted on seven
+      dimensions.
   - id: UTA-2026-010
-    status: active
-    first_observed: 2026-05-15
-    last_updated: 2026-05-15
-    type: Rhadamanthys MaaS customer with a self-built loader (customer side only, never the vendor)
-    motivation: Financial
-    confidence: { distinct_actor: MODERATE, distinct_actor_pct: 72, named_actor: INSUFFICIENT }
-    summary: >-
-      The customer-side operator of a commodity infostealer, identified by a homebrew loader
-      with zero-public-hit strings, an unusual key length and a hollowing target no other
-      documented customer uses, calling back to a C2 that stayed stable for almost three years
-      and outlived a law-enforcement takedown. The stealer's vendor is a separate, well-documented
-      target and is explicitly outside this designation.
-    primary_host: 79.137.192.3
-    tooling: [Rhadamanthys (vendor product), custom loader]
-    reports:
-      primary: [/reports/opendirectory-79-137-192-3-20260515/]
-    related:
-      - id: UTA-2026-008
-        relation: Co-tenant on the same staging host; no operator-level overlap.
-      - id: UTA-2026-009
-        relation: Co-tenant on the same staging host; no operator-level overlap.
-
-  - id: UTA-2026-011
-    status: active
-    first_observed: 2026-05-17
-    last_updated: 2026-05-17
-    type: Financially motivated operator weaponising a cPanel authentication bypass with a custom harvesting toolkit
-    motivation: Financial, credential theft and traffic monetisation (HIGH)
-    confidence: { distinct_actor: HIGH, distinct_actor_pct: 87, named_actor: INSUFFICIENT }
-    summary: >-
-      A 45-file credential-harvesting toolkit, a live Flask dashboard and a traffic-distribution
-      monetisation layer across more than seventeen domains, deployed about two weeks after the
-      vulnerability's disclosure. Registrar-level account locks and synchronised DNS changes across
-      otherwise separate domain clusters are what tie the estate to one operator.
-    primary_host: 216.126.227.49
-    tooling: [Custom Python and Bash harvester, Flask C2 dashboard, Parklogic TDS]
-    reports:
-      primary: [/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/]
-
-  - id: UTA-2026-012
-    status: active
-    first_observed: 2026-05-25
-    last_updated: 2026-08-31
-    type: AI-augmented credential-mill operator using an LLM for per-target password mutation
-    motivation: Financial, with a co-located political disinformation sideline
-    language: Russian-native (DEFINITE)
-    alias: bandcampro (Trend Micro)
-    confidence: { distinct_actor: MODERATE, distinct_actor_pct: 83, named_actor: INSUFFICIENT }
-    summary: >-
-      A mid-tier operator who orchestrated a credential mill through an AI command-line agent,
-      ran an operator-built unauthenticated C2, and tunnelled persistent access into a US
-      healthcare victim through named tunnels under an operator-owned domain. Trend Micro
-      independently documented the same operator under its own tracking handle, which the
-      report pairs with the designation rather than retiring it.
-    primary_host: 213.165.51.115
-    tooling: [Gemini CLI, custom Python C2, Cloudflare Tunnel, nuclei]
-    reports:
-      primary: [/reports/russian-gemini-credential-mill-213.165.51.115/]
-    related:
-      - id: UTA-2026-016
-        relation: Shares a hosting provider preference only; assessed an ecosystem signal, not coordination.
-      - id: UTA-2026-017
-        relation: Shares a hosting provider preference only; assessed an ecosystem signal, not coordination.
-
-  - id: UTA-2026-013
-    status: active
-    first_observed: 2026-05-25
-    last_updated: 2026-05-25
-    type: Espionage-flavoured operator harvesting a state-affiliated insurer's observability stack through an AI agent platform
-    motivation: Intelligence collection; no monetisation found across 780 operator files
-    language: Turkish-speaking, Turkish-located
-    confidence: { distinct_actor: MODERATE, distinct_actor_pct: 78, named_actor: INSUFFICIENT }
-    summary: >-
-      A custom analytics platform built on an AI agent framework that ingested four stolen
-      observability sources from one Turkish financial-sector victim over a 73-day dwell,
-      alongside operator-authored documentation guiding an in-network insider. The report names
-      no individual, treats the operator's handle as an indicator only, and leaves the
-      state-aligned versus factional question unresolved.
-    primary_host: 209.38.205.158
-    tooling: [OpenClaw, custom ARPA correlation platform, TimescaleDB, Neo4j]
-    reports:
-      primary: [/reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/]
-    related:
-      - id: UTA-2026-015
-        relation: Both use the same AI agent platform; assessed an ecosystem signal, not coordination.
-
-  - id: UTA-2026-014
-    status: active
-    first_observed: 2026-05-25
-    last_updated: 2026-05-26
-    type: DDoS-for-hire operator running an AI co-authored C2 framework over a Pandora-Mirai botnet
-    motivation: Financial, DDoS-as-a-Service
-    language: English-speaking
-    confidence: { distinct_actor: LOW, distinct_actor_pct: 60, named_actor: INSUFFICIENT }
-    summary: >-
-      An eleven-architecture Mirai-lineage botnet with a Discord-fronted customer dispatch, whose
-      Python attack framework was co-authored by an AI coding agent, captured with the agent's
-      own session logs as primary evidence. The operator is a downstream adopter of a publicly
-      documented variant lineage, not its author.
-    primary_host: 87.106.143.220
-    tooling: [Pandora-Mirai variant, Matrix C2, Atlassian Rovodev]
-    reports:
-      primary: [/reports/rovodev-mirai-matrix-c2-87.106.143.220/]
-
-  - id: UTA-2026-015
-    status: active
-    first_observed: 2026-05-25
-    last_updated: 2026-05-27
-    type: Operator running Claude Code and OpenClaw side by side, observed at capsule depth only
-    motivation: Unresolved; a benign-developer reading is retained as a minority hypothesis
-    language: Korean-speaking (weak indicators only)
-    confidence: { distinct_actor: LOW, distinct_actor_pct: 55, named_actor: INSUFFICIENT }
-    summary: >-
-      The first publicly documented attacker-customised AI coding-agent permission allowlist,
-      pre-approving an agent framework's install-and-run chain, recovered from a residential
-      Korean host. Investigation depth stopped at that one artifact, which is why this is the
-      lowest-confidence designation in the series.
-    primary_host: 221.150.15.104
-    tooling: [Claude Code, OpenClaw]
-    reports:
-      primary: [/reports/korean-claude-openclaw-221.150.15.104/]
-    related:
-      - id: UTA-2026-013
-        relation: Both use the same AI agent platform; assessed an ecosystem signal, not coordination.
-
+    relation: Co-tenant on the same staging host; no operator-level overlap.
+- id: UTA-2026-009
+  status: active
+  first_observed: 2026-05-15
+  last_updated: 2026-08-21
+  type: Multi-product fraud operator pairing a real VPN service with a brand-impersonation phishing library
+  motivation: Financial (HIGH)
+  language: Russian-speaking (HIGH)
+  targeting:
+    regions:
+    - Russia
+    - Iran
+    - China
+    - United States
+    sectors:
+    - Banking
+    - Enterprise SaaS
+    - Telecom
+    note: Censorship-region VPN users, plus a brand-impersonation library against US banking, enterprise
+      SaaS, Chinese internet firms and Russian telecom.
+  confidence:
+    distinct_actor: MODERATE
+    distinct_actor_pct: 78
+    named_actor: INSUFFICIENT
+  summary: A nearly three-year operation spanning a commercial VPN, a phishing subdomain library of several
+    hundred brand impersonations, business-email burn domains and a fake exchange, across two sanctioned
+    hosting providers. One supporting characteristic was withdrawn in August 2026 as a hosting-platform
+    default and the report records that retraction.
+  primary_host: 185.221.196.118
+  tooling:
+  - EspoCRM back-office
+  - Marzban panel
+  - custom web stack
+  identifiers:
+  - kind: channel
+    value: '@inkconnectvpn'
+    context: operator Telegram channel, self-declares the parent brand
+  - kind: brand
+    value: Inkognito
+    context: operator parent brand
+  - kind: domain
+    value: inklens.ru
+    context: brand-impersonation phishing platform domain
+  - kind: domain
+    value: inkconnect.ru
+    context: VPN customer-facing domain
+  - kind: domain
+    value: cryptone.bot
+    context: fake-exchange front
+  - kind: string
+    value: X-Admin-Token
+    context: operator-designed custom API header
+  - kind: account-id
+    value: '98466329'
+    context: operator-controlled Yandex Webmaster ID
+  reports:
+    primary:
+    - /reports/opendirectory-79-137-192-3-20260515/
+    - /reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/
+  related:
+  - id: UTA-2026-008
+    relation: Co-tenant on the same staging host; linkage assessed LOW and actively rebutted.
+  - id: UTA-2026-010
+    relation: Co-tenant on the same staging host; zero indicator overlap.
+- id: UTA-2026-010
+  status: active
+  first_observed: 2026-05-15
+  last_updated: 2026-05-15
+  type: Rhadamanthys MaaS customer with a self-built loader (customer side only, never the vendor)
+  motivation: Financial
+  targeting:
+    note: Opportunistic; delivered via cracked-software and game-cheat lures.
+  confidence:
+    distinct_actor: MODERATE
+    distinct_actor_pct: 72
+    named_actor: INSUFFICIENT
+  summary: The customer-side operator of a commodity infostealer, identified by a homebrew loader with
+    zero-public-hit strings, an unusual key length and a hollowing target no other documented customer
+    uses, calling back to a C2 that stayed stable for almost three years and outlived a law-enforcement
+    takedown. The stealer's vendor is a separate, well-documented target and is explicitly outside this
+    designation.
+  primary_host: 79.137.192.3
+  tooling:
+  - Rhadamanthys (vendor product)
+  - custom loader
+  identifiers:
+  - kind: infrastructure
+    value: 79.133.180.168
+    context: operator C2 endpoint, stable for about 34 months
+  - kind: string
+    value: BombAUb23456
+    context: zero-public-hit operator string in the loader
+  - kind: string
+    value: DubzAias932
+    context: zero-public-hit operator string in the loader
+  - kind: string
+    value: take it everywhere
+    context: operator personality marker logged by the loader
+  reports:
+    primary:
+    - /reports/opendirectory-79-137-192-3-20260515/
+  related:
+  - id: UTA-2026-008
+    relation: Co-tenant on the same staging host; no operator-level overlap.
+  - id: UTA-2026-009
+    relation: Co-tenant on the same staging host; no operator-level overlap.
+- id: UTA-2026-011
+  status: active
+  first_observed: 2026-05-17
+  last_updated: 2026-05-17
+  type: Financially motivated operator weaponising a cPanel authentication bypass with a custom harvesting
+    toolkit
+  motivation: Financial, credential theft and traffic monetisation (HIGH)
+  targeting:
+    sectors:
+    - Enterprise (Office 365)
+    - Web hosting
+    - Cryptocurrency
+    - Aviation
+    - Government tax authorities
+    note: Multi-sector credential phishing behind a traffic-distribution monetisation layer.
+  confidence:
+    distinct_actor: HIGH
+    distinct_actor_pct: 87
+    named_actor: INSUFFICIENT
+  summary: A 45-file credential-harvesting toolkit, a live Flask dashboard and a traffic-distribution
+    monetisation layer across more than seventeen domains, deployed about two weeks after the vulnerability's
+    disclosure. Registrar-level account locks and synchronised DNS changes across otherwise separate domain
+    clusters are what tie the estate to one operator.
+  primary_host: 216.126.227.49
+  tooling:
+  - Custom Python and Bash harvester
+  - Flask C2 dashboard
+  - Parklogic TDS
+  identifiers:
+  - kind: infrastructure
+    value: mx.plingest.com
+    context: operator MX backend across otherwise-separate domain clusters
+  - kind: string
+    value: 6e3644a97f844763a34565b865d35310
+    context: operator Linux machine-id
+  - kind: account-id
+    value: pkAId=2143526812
+    context: operator traffic-monetisation customer account ID
+  - kind: domain
+    value: adorarama.com
+    context: operator-controlled TDS landing domain
+  - kind: brand
+    value: Beast
+    context: possible operator self-brand in toolkit filenames (unverified)
+  reports:
+    primary:
+    - /reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/
+- id: UTA-2026-012
+  status: active
+  first_observed: 2026-05-25
+  last_updated: 2026-08-31
+  type: AI-augmented credential-mill operator using an LLM for per-target password mutation
+  motivation: Financial, with a co-located political disinformation sideline
+  language: Russian-native (DEFINITE)
+  targeting:
+    regions:
+    - United States
+    sectors:
+    - Healthcare
+  confidence:
+    distinct_actor: MODERATE
+    distinct_actor_pct: 83
+    named_actor: INSUFFICIENT
+  alias: bandcampro (Trend Micro)
+  summary: A mid-tier operator who orchestrated a credential mill through an AI command-line agent, ran
+    an operator-built unauthenticated C2, and tunnelled persistent access into a US healthcare victim
+    through named tunnels under an operator-owned domain. Trend Micro independently documented the same
+    operator under its own tracking handle, which the report pairs with the designation rather than retiring
+    it.
+  primary_host: 213.165.51.115
+  tooling:
+  - Gemini CLI
+  - custom Python C2
+  - Cloudflare Tunnel
+  - nuclei
+  identifiers:
+  - kind: handle
+    value: sonner1337
+    context: operator GitHub handle
+  - kind: channel
+    value: '@americanpatriotus'
+    context: operator Telegram channel (co-located disinformation)
+  - kind: domain
+    value: tralalarkefe.com
+    context: operator-owned domain fronting named C2 tunnels
+  reports:
+    primary:
+    - /reports/russian-gemini-credential-mill-213.165.51.115/
+  related:
   - id: UTA-2026-016
-    status: active
-    first_observed: 2026-05-25
-    last_updated: 2026-05-25
-    type: GHOST cryptojacker kit customer (operator A) with self-hosted mining pool proxies
-    motivation: Financial, cryptojacking of exposed GPU hosts
-    language: Russian-speaking (DEFINITE)
-    confidence: { distinct_actor: LOW, distinct_actor_pct: 65, named_actor: INSUFFICIENT }
-    summary: >-
-      The higher-OPSEC of two customers of a commercial cryptojacking kit, running a userland
-      rootkit, self-hosted pool proxies and a masqueraded QUIC backdoor against exposed
-      machine-learning hosts, and still active weeks after the kit was publicly disclosed. The
-      kit's author is a separately named actor; this designation covers only the customer.
-    primary_host: 77.110.96.200
-    tooling: [GHOST cryptojacker kit, XMRig, Hysteria v2]
-    reports:
-      primary: [/reports/ghost-cryptojacker-vova75rus-77.110.96.200/]
-    related:
-      - id: UTA-2026-017
-        relation: Sibling customer of the same kit; same-individual question unresolved at about one in five.
-
+    relation: Shares a hosting provider preference only; assessed an ecosystem signal, not coordination.
   - id: UTA-2026-017
-    status: active
-    first_observed: 2026-05-25
-    last_updated: 2026-05-25
-    type: GHOST cryptojacker kit customer (operator B) using public mining pools, host abandoned
-    motivation: Financial, cryptojacking
-    language: Russian-speaking (DEFINITE)
-    confidence: { distinct_actor: LOW, distinct_actor_pct: 60, named_actor: INSUFFICIENT }
-    summary: >-
-      The lower-OPSEC customer of the same kit, separated from the kit author by a per-customer
-      configuration delta and from the sibling customer by distinct wallets and public pools.
-      The host was abandoned days after public disclosure and its earnings were never withdrawn,
-      for reasons the report leaves unresolved.
-    primary_host: 77.110.125.145
-    tooling: [GHOST cryptojacker kit, XMRig]
-    reports:
-      primary: [/reports/ghost-cryptojacker-vova75rus-77.110.96.200/]
-    related:
-      - id: UTA-2026-016
-        relation: Sibling customer of the same kit; different OPSEC tier argues different operators.
-
-  - id: UTA-2026-018
-    status: active
-    first_observed: 2026-07-17
-    last_updated: 2026-08-13
-    type: Hands-on-keyboard operator exploiting four Southeast Asian governments with a bespoke edge-device toolkit
-    motivation: Intelligence collection, document and credential theft, no monetisation signal
-    confidence: { distinct_actor: MODERATE, distinct_actor_pct: null, named_actor: INSUFFICIENT }
-    summary: >-
-      A middle-tier operator, capable enough to write its own tunnelling tool and ninety-nine
-      exploitation scripts yet visibly new to hardened government targets, working from one
-      rented box behind layered public anonymisation. Named-actor attribution is a measured
-      negative, and two neighbouring actors are kept explicitly separate.
-    primary_host: 144.172.106.236
-    tooling: [Custom Go tunnel, chisel, bespoke n-day exploitation scripts]
-    reports:
-      primary: [/reports/seasia-gov-exploitation-toolkit-144-172-106-236/]
-    related:
-      - id: UTA-2026-023
-        relation: Superficial resemblance only (one box, an open directory, chisel); stated explicitly as not a link.
-
-  - id: UTA-2026-019
-    status: active
-    first_observed: 2026-07-21
-    last_updated: 2026-07-21
-    type: Grey-market personal-data harvester running scores of LLM-assisted attack scripts against Chinese consumer platforms
-    motivation: Customer PII harvest for resale; state nexus rejected (HIGH)
-    language: Chinese-language (HIGH for language and targeting)
-    confidence: { distinct_actor: MODERATE, distinct_actor_pct: 65, named_actor: INSUFFICIENT }
-    summary: >-
-      An exposed staging directory showing how an ordinary operator now runs an intrusion
-      campaign, with probably-generated attack scripts and an off-the-shelf agentic-AI
-      framework wired in as the console. A build-host key comment shared across three key
-      pairs and a reused account-naming series are the tracking anchors.
-    primary_host: 192.3.1.116
-    tooling: [Open-source agent framework, SoftEther VPN, commodity exploitation scripts]
-    reports:
-      primary: [/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/]
-
-  - id: UTA-2026-020
-    status: active
-    first_observed: 2026-07-23
-    last_updated: 2026-07-26
-    type: Self-branded commodity cryptojacking operator mass-exploiting exposed Chinese enterprise software
-    motivation: Financial, cryptojacking (HIGH)
-    language: Chinese-language (HIGH)
-    confidence: { distinct_actor: HIGH, distinct_actor_pct: 85, named_actor: INSUFFICIENT }
-    summary: >-
-      A two-host cluster bound by a shared reconnaissance credential and one revenue wallet, with
-      a version-stamped toolkit and a recurring integration-bug signature. The report withholds
-      the operator's real-world business identity, which it could not corroborate, and
-      publishes the finding rather than the person.
-    primary_host: 149.28.112.221
-    tooling: [GOCLOUD and OmniHunter toolkit, XMRig, FOFA-driven scanning]
-    reports:
-      primary: [/reports/gocloud-multiservice-cryptojacking-149-28-112-221/]
-
-  - id: UTA-2026-021
-    status: active
-    first_observed: 2026-08-03
-    last_updated: 2026-08-03
-    type: Assembler-model intrusion operator staging other actors' tooling against one German victim forest
-    motivation: Access and persistence; single operator versus sold builder deliberately unresolved
-    confidence: { distinct_actor: null, distinct_actor_pct: null, named_actor: INSUFFICIENT }
-    summary: >-
-      A 22-file toolkit built almost entirely from other people's tooling, with components
-      publicly tied to three unrelated named actors, none of which is the operator. Named
-      attribution is insufficient by refutation rather than by absence, and the designation
-      is anchored on the infrastructure estate and a target-specific orchestrator.
-    primary_host: 91.197.98.188
-    tooling: [CloudSync RAT, Paralell loader, Sharp4WebCmd web shell, commercial RMM products]
-    reports:
-      primary: [/reports/cloudsync-assembler-toolkit-91-197-98-188/]
-
-  # UTA-2026-022 is assigned by a report that is published preview-style and unlisted
-  # (its catalog entry is commented out the same way). It gets an entry here at go-live.
-
+    relation: Shares a hosting provider preference only; assessed an ecosystem signal, not coordination.
+- id: UTA-2026-013
+  status: active
+  first_observed: 2026-05-25
+  last_updated: 2026-05-25
+  type: Espionage-flavoured operator harvesting a state-affiliated insurer's observability stack through
+    an AI agent platform
+  motivation: Intelligence collection; no monetisation found across 780 operator files
+  language: Turkish-speaking, Turkish-located
+  targeting:
+    regions:
+    - Turkey
+    sectors:
+    - Finance
+    - State-affiliated insurer
+  confidence:
+    distinct_actor: MODERATE
+    distinct_actor_pct: 78
+    named_actor: INSUFFICIENT
+  summary: A custom analytics platform built on an AI agent framework that ingested four stolen observability
+    sources from one Turkish financial-sector victim over a 73-day dwell, alongside operator-authored
+    documentation guiding an in-network insider. The report names no individual, treats the operator's
+    handle as an indicator only, and leaves the state-aligned versus factional question unresolved.
+  primary_host: 209.38.205.158
+  tooling:
+  - OpenClaw
+  - custom ARPA correlation platform
+  - TimescaleDB
+  - Neo4j
+  identifiers:
+  - kind: handle
+    value: MehmetARPA
+    context: operator GitHub handle (not confirmed as a real name, kept as an indicator)
+  - kind: brand
+    value: ARPA Korelasyon
+    context: operator self-brand for the collection platform
+  - kind: infrastructure
+    value: 31.223.97.87
+    context: operator residential origin IP (direct, not VPN-routed)
+  reports:
+    primary:
+    - /reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/
+  related:
+  - id: UTA-2026-015
+    relation: Both use the same AI agent platform; assessed an ecosystem signal, not coordination.
+- id: UTA-2026-014
+  status: active
+  first_observed: 2026-05-25
+  last_updated: 2026-05-26
+  type: DDoS-for-hire operator running an AI co-authored C2 framework over a Pandora-Mirai botnet
+  motivation: Financial, DDoS-as-a-Service
+  language: English-speaking
+  targeting:
+    sectors:
+    - IoT devices
+    - DDoS-for-hire customers
+    note: Eleven-architecture IoT botnet sold as a DDoS-for-hire service.
+  confidence:
+    distinct_actor: LOW
+    distinct_actor_pct: 60
+    named_actor: INSUFFICIENT
+  summary: An eleven-architecture Mirai-lineage botnet with a Discord-fronted customer dispatch, whose
+    Python attack framework was co-authored by an AI coding agent, captured with the agent's own session
+    logs as primary evidence. The operator is a downstream adopter of a publicly documented variant lineage,
+    not its author.
+  primary_host: 87.106.143.220
+  tooling:
+  - Pandora-Mirai variant
+  - Matrix C2
+  - Atlassian Rovodev
+  identifiers:
+  - kind: account-id
+    value: '1441591352927326259'
+    context: operator Discord ID
+  - kind: string
+    value: PandoraNet
+    context: botnet identifier baked into binaries
+  - kind: string
+    value: Pandoras_Box
+    context: operator directory-naming convention
+  - kind: string
+    value: 1gba4cdom53nhp12ei0kfj
+    context: operator-bespoke 22-character charset
+  reports:
+    primary:
+    - /reports/rovodev-mirai-matrix-c2-87.106.143.220/
+- id: UTA-2026-015
+  status: active
+  first_observed: 2026-05-25
+  last_updated: 2026-05-27
+  type: Operator running Claude Code and OpenClaw side by side, observed at capsule depth only
+  motivation: Unresolved; a benign-developer reading is retained as a minority hypothesis
+  language: Korean-speaking (weak indicators only)
+  targeting:
+    note: Observed at capsule depth; no targeting or victim evidence was recovered.
+  confidence:
+    distinct_actor: LOW
+    distinct_actor_pct: 55
+    named_actor: INSUFFICIENT
+  summary: The first publicly documented attacker-customised AI coding-agent permission allowlist, pre-approving
+    an agent framework's install-and-run chain, recovered from a residential Korean host. Investigation
+    depth stopped at that one artifact, which is why this is the lowest-confidence designation in the
+    series.
+  primary_host: 221.150.15.104
+  tooling:
+  - Claude Code
+  - OpenClaw
+  identifiers:
+  - kind: port
+    value: '18789'
+    context: operator-customised OpenClaw gateway port
+  reports:
+    primary:
+    - /reports/korean-claude-openclaw-221.150.15.104/
+  related:
+  - id: UTA-2026-013
+    relation: Both use the same AI agent platform; assessed an ecosystem signal, not coordination.
+- id: UTA-2026-016
+  status: active
+  first_observed: 2026-05-25
+  last_updated: 2026-05-25
+  type: GHOST cryptojacker kit customer (operator A) with self-hosted mining pool proxies
+  motivation: Financial, cryptojacking of exposed GPU hosts
+  language: Russian-speaking (DEFINITE)
+  targeting:
+    sectors:
+    - Cloud GPU and ML-inference hosts
+    note: Exposed ComfyUI and GPU-cloud hosts scanned for cryptojacking.
+  confidence:
+    distinct_actor: LOW
+    distinct_actor_pct: 65
+    named_actor: INSUFFICIENT
+  summary: The higher-OPSEC of two customers of a commercial cryptojacking kit, running a userland rootkit,
+    self-hosted pool proxies and a masqueraded QUIC backdoor against exposed machine-learning hosts, and
+    still active weeks after the kit was publicly disclosed. The kit's author is a separately named actor;
+    this designation covers only the customer.
+  primary_host: 77.110.96.200
+  tooling:
+  - GHOST cryptojacker kit
+  - XMRig
+  - Hysteria v2
+  identifiers:
+  - kind: bot
+    value: '8315596543'
+    context: operator-owned MIRROR Telegram bot
+  - kind: wallet
+    value: 4BBj3gj4
+    context: operator Monero wallet prefix
+  - kind: wallet
+    value: cfx:aaj5x
+    context: operator Conflux wallet prefix
+  reports:
+    primary:
+    - /reports/ghost-cryptojacker-vova75rus-77.110.96.200/
+  related:
+  - id: UTA-2026-017
+    relation: Sibling customer of the same kit; same-individual question unresolved at about one in five.
+- id: UTA-2026-017
+  status: active
+  first_observed: 2026-05-25
+  last_updated: 2026-05-25
+  type: GHOST cryptojacker kit customer (operator B) using public mining pools, host abandoned
+  motivation: Financial, cryptojacking
+  language: Russian-speaking (DEFINITE)
+  targeting:
+    sectors:
+    - Cloud GPU and ML-inference hosts
+    note: Same kit and target class as the sibling customer; host abandoned after public disclosure.
+  confidence:
+    distinct_actor: LOW
+    distinct_actor_pct: 60
+    named_actor: INSUFFICIENT
+  summary: The lower-OPSEC customer of the same kit, separated from the kit author by a per-customer configuration
+    delta and from the sibling customer by distinct wallets and public pools. The host was abandoned days
+    after public disclosure and its earnings were never withdrawn, for reasons the report leaves unresolved.
+  primary_host: 77.110.125.145
+  tooling:
+  - GHOST cryptojacker kit
+  - XMRig
+  identifiers:
+  - kind: wallet
+    value: 46a5osg
+    context: operator Monero wallet prefix
+  - kind: wallet
+    value: cfx:aat5y
+    context: operator Conflux wallet prefix, never drained
+  - kind: handle
+    value: jamestechdev-oss
+    context: operator GitHub collaborator organisation
+  reports:
+    primary:
+    - /reports/ghost-cryptojacker-vova75rus-77.110.96.200/
+  related:
+  - id: UTA-2026-016
+    relation: Sibling customer of the same kit; different OPSEC tier argues different operators.
+- id: UTA-2026-018
+  status: active
+  first_observed: 2026-07-17
+  last_updated: 2026-08-13
+  type: Hands-on-keyboard operator exploiting four Southeast Asian governments with a bespoke edge-device
+    toolkit
+  motivation: Intelligence collection, document and credential theft, no monetisation signal
+  targeting:
+    regions:
+    - Indonesia
+    - Thailand
+    - Malaysia
+    - Philippines
+    sectors:
+    - Government
+    - Military
+  confidence:
+    distinct_actor: MODERATE
+    distinct_actor_pct: null
+    named_actor: INSUFFICIENT
+  summary: A middle-tier operator, capable enough to write its own tunnelling tool and ninety-nine exploitation
+    scripts yet visibly new to hardened government targets, working from one rented box behind layered
+    public anonymisation. Named-actor attribution is a measured negative, and two neighbouring actors
+    are kept explicitly separate.
+  primary_host: 144.172.106.236
+  tooling:
+  - Custom Go tunnel
+  - chisel
+  - bespoke n-day exploitation scripts
+  identifiers:
+  - kind: string
+    value: tunnel-proxy/pkg/mux
+    context: self-authored Go tunnel module path
+  - kind: string
+    value: Zimbra Security Monitor v3.1
+    context: operator-authored webshell decoy string
+  - kind: cryptographic-key
+    value: yW2X8fCV
+    context: chisel server key fingerprint (operator-generated)
+  reports:
+    primary:
+    - /reports/seasia-gov-exploitation-toolkit-144-172-106-236/
+  related:
   - id: UTA-2026-023
-    status: active
-    first_observed: 2026-08-18
-    last_updated: 2026-09-02
-    type: Telecom-focused operator reaching a carrier's credential plane through a customer's managed router
-    motivation: Espionage-flavoured collection leans over access brokering; held as a lean
-    language: Spanish-speaking (MODERATE)
-    confidence: { distinct_actor: MODERATE, distinct_actor_pct: 72, named_actor: INSUFFICIENT }
-    summary: >-
-      An operator who made a carrier-managed customer-premises router upload its own firmware,
-      crash dumps and configuration, manufacturing the crash dumps it then harvested for
-      credentials. Hand-built exploitation tooling and a single-box fingerprint with no siblings
-      anywhere anchor the designation; a China-nexus candidate was tested and rejected.
-    primary_host: 13.140.145.210
-    tooling: [Custom WebLogic T3 suite, hand-rolled LDAP exploitation server, chisel]
-    reports:
-      primary: [/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/]
-    related:
-      - id: UTA-2026-018
-        relation: Superficial resemblance only; stated explicitly as not a link.
-
-  - id: UTA-2026-024
-    status: active
-    first_observed: 2026-09-07
-    last_updated: 2026-09-07
-    type: Windows post-exploitation intrusion set with Sliver and a blockchain-resolved implant
-    motivation: Access and tunnelling; ransomware deployment by this operator held at LOW
-    confidence: { distinct_actor: MODERATE, distinct_actor_pct: 75, named_actor: INSUFFICIENT }
-    summary: >-
-      An intrusion set that reached Domain Admin in a US organisation, whose second implant
-      resolves its C2 from an Ethereum contract that logs every rotation publicly. The
-      infrastructure served a confirmed ransomware deployment during this operator's tenancy,
-      but whether this operator or a partner deployed the encryptor cannot be settled.
-    primary_host: 193.233.202.17
-    tooling: [Sliver, chisel, Ligolo, EtherRAT-class Node.js bot]
-    reports:
-      primary: [/reports/sliver-c2-windows-postex-staging-193-233-202-17/]
+    relation: Superficial resemblance only (one box, an open directory, chisel); stated explicitly as
+      not a link.
+- id: UTA-2026-019
+  status: active
+  first_observed: 2026-07-21
+  last_updated: 2026-07-21
+  type: Grey-market personal-data harvester running scores of LLM-assisted attack scripts against Chinese
+    consumer platforms
+  motivation: Customer PII harvest for resale; state nexus rejected (HIGH)
+  language: Chinese-language (HIGH for language and targeting)
+  targeting:
+    regions:
+    - China
+    sectors:
+    - Consumer finance and e-commerce (installment, credit rental, loan referral)
+    note: Identity artifacts are deliberately withheld per the report's publish-the-finding-not-the-person
+      boundary; only the reusable account-naming pattern is shown.
+  confidence:
+    distinct_actor: MODERATE
+    distinct_actor_pct: 65
+    named_actor: INSUFFICIENT
+  summary: An exposed staging directory showing how an ordinary operator now runs an intrusion campaign,
+    with probably-generated attack scripts and an off-the-shelf agentic-AI framework wired in as the console.
+    A build-host key comment shared across three key pairs and a reused account-naming series are the
+    tracking anchors.
+  primary_host: 192.3.1.116
+  tooling:
+  - Open-source agent framework
+  - SoftEther VPN
+  - commodity exploitation scripts
+  identifiers:
+  - kind: string
+    value: redteam
+    context: operator account-naming series reused across unrelated targets
+  reports:
+    primary:
+    - /reports/multivector-ecommerce-rce-toolkit-192-3-1-116/
+- id: UTA-2026-020
+  status: active
+  first_observed: 2026-07-23
+  last_updated: 2026-07-26
+  type: Self-branded commodity cryptojacking operator mass-exploiting exposed Chinese enterprise software
+  motivation: Financial, cryptojacking (HIGH)
+  language: Chinese-language (HIGH)
+  targeting:
+    regions:
+    - China
+    sectors:
+    - Enterprise software
+    - Internet cafes
+    note: FOFA-driven mass exploitation of exposed Chinese enterprise software; the reconnaissance account
+      and key are withheld as third-party residue per the report.
+  confidence:
+    distinct_actor: HIGH
+    distinct_actor_pct: 85
+    named_actor: INSUFFICIENT
+  summary: A two-host cluster bound by a shared reconnaissance credential and one revenue wallet, with
+    a version-stamped toolkit and a recurring integration-bug signature. The report withholds the operator's
+    real-world business identity, which it could not corroborate, and publishes the finding rather than
+    the person.
+  primary_host: 149.28.112.221
+  tooling:
+  - GOCLOUD and OmniHunter toolkit
+  - XMRig
+  - FOFA-driven scanning
+  identifiers:
+  - kind: brand
+    value: GOCLOUD
+    context: operator toolkit self-brand
+  - kind: brand
+    value: OmniHunter
+    context: operator exploitation-orchestrator self-brand
+  - kind: handle
+    value: Jianzan
+    context: operator handle on their own signed work
+  - kind: wallet
+    value: 42CThVKA9Sx
+    context: operator Monero wallet prefix
+  - kind: infrastructure
+    value: 122.51.91.77
+    context: second operator host (staging and C2)
+  reports:
+    primary:
+    - /reports/gocloud-multiservice-cryptojacking-149-28-112-221/
+- id: UTA-2026-021
+  status: active
+  first_observed: 2026-08-03
+  last_updated: 2026-08-03
+  type: Assembler-model intrusion operator staging other actors' tooling against one German victim forest
+  motivation: Access and persistence; single operator versus sold builder deliberately unresolved
+  targeting:
+    regions:
+    - Germany
+    sectors:
+    - Healthcare
+    - Social care
+    note: Anchored on the infrastructure and a target-specific orchestrator; the kit-author identifiers
+      in the toolkit are not this operator's.
+  confidence:
+    distinct_actor: null
+    distinct_actor_pct: null
+    named_actor: INSUFFICIENT
+  summary: A 22-file toolkit built almost entirely from other people's tooling, with components publicly
+    tied to three unrelated named actors, none of which is the operator. Named attribution is insufficient
+    by refutation rather than by absence, and the designation is anchored on the infrastructure estate
+    and a target-specific orchestrator.
+  primary_host: 91.197.98.188
+  tooling:
+  - CloudSync RAT
+  - Paralell loader
+  - Sharp4WebCmd web shell
+  - commercial RMM products
+  identifiers:
+  - kind: infrastructure
+    value: 91.92.43.221
+    context: dedicated operator C2 host
+  - kind: infrastructure
+    value: 2.27.248.138
+    context: dedicated operator C2 host
+  - kind: string
+    value: WinUpdateService
+    context: operator service-masquerade name
+  - kind: string
+    value: '[C2_END]'
+    context: operator C2 message terminator (later build)
+  reports:
+    primary:
+    - /reports/cloudsync-assembler-toolkit-91-197-98-188/
+- id: UTA-2026-023
+  status: active
+  first_observed: 2026-08-18
+  last_updated: 2026-09-02
+  type: Telecom-focused operator reaching a carrier's credential plane through a customer's managed router
+  motivation: Espionage-flavoured collection leans over access brokering; held as a lean
+  language: Spanish-speaking (MODERATE)
+  targeting:
+    regions:
+    - Ecuador
+    sectors:
+    - Telecommunications
+  confidence:
+    distinct_actor: MODERATE
+    distinct_actor_pct: 72
+    named_actor: INSUFFICIENT
+  summary: An operator who made a carrier-managed customer-premises router upload its own firmware, crash
+    dumps and configuration, manufacturing the crash dumps it then harvested for credentials. Hand-built
+    exploitation tooling and a single-box fingerprint with no siblings anywhere anchor the designation;
+    a China-nexus candidate was tested and rejected.
+  primary_host: 13.140.145.210
+  tooling:
+  - Custom WebLogic T3 suite
+  - hand-rolled LDAP exploitation server
+  - chisel
+  identifiers:
+  - kind: domain
+    value: radius-sync.com
+    context: operator domain impersonating telecom AAA infrastructure
+  - kind: string
+    value: hello_from_ldap
+    context: operator callback-validation probe string
+  - kind: path
+    value: '%2577eb%2575i_%2577sma_Http'
+    context: operator-constructed double-encoded exploitation path
+  - kind: string
+    value: netcraker
+    context: carrier back-office name seeded into the operator wordlist
+  reports:
+    primary:
+    - /reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/
+  related:
+  - id: UTA-2026-018
+    relation: Superficial resemblance only; stated explicitly as not a link.
+- id: UTA-2026-024
+  status: active
+  first_observed: 2026-09-07
+  last_updated: 2026-09-07
+  type: Windows post-exploitation intrusion set with Sliver and a blockchain-resolved implant
+  motivation: Access and tunnelling; ransomware deployment by this operator held at LOW
+  targeting:
+    regions:
+    - United States
+    sectors:
+    - Windows enterprise estate
+    note: Reached Domain Admin in one US organisation; the encryptor deployment is attributed only as
+      a graded attribute.
+  confidence:
+    distinct_actor: MODERATE
+    distinct_actor_pct: 75
+    named_actor: INSUFFICIENT
+  summary: An intrusion set that reached Domain Admin in a US organisation, whose second implant resolves
+    its C2 from an Ethereum contract that logs every rotation publicly. The infrastructure served a confirmed
+    ransomware deployment during this operator's tenancy, but whether this operator or a partner deployed
+    the encryptor cannot be settled.
+  primary_host: 193.233.202.17
+  tooling:
+  - Sliver
+  - chisel
+  - Ligolo
+  - EtherRAT-class Node.js bot
+  identifiers:
+  - kind: contract
+    value: '0xb3f2897f2bc797e5b9033faef8c81e92b01cb831'
+    context: Ethereum contract the second implant resolves its C2 from
+  - kind: user-agent
+    value: Chrome/108.0.6602.492
+    context: internally impossible User-Agent in the Sliver beacon
+  reports:
+    primary:
+    - /reports/sliver-c2-windows-postex-staging-193-233-202-17/

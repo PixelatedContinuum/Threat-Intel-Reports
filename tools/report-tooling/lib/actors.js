@@ -83,6 +83,33 @@ function parseActors(text) {
         problems.push(where + ': every related entry needs an id and a relation');
       }
     });
+    if (a.identifiers != null) {
+      if (!Array.isArray(a.identifiers)) {
+        problems.push(where + ': identifiers must be a list');
+      } else {
+        a.identifiers.forEach(function (idn, j) {
+          if (!idn || typeof idn !== 'object' || !idn.kind || !idn.value || !idn.context) {
+            problems.push(where + ': identifiers[' + j + '] needs kind, value and context');
+          }
+        });
+      }
+    }
+    if (a.targeting != null) {
+      if (typeof a.targeting !== 'object' || Array.isArray(a.targeting)) {
+        problems.push(where + ': targeting must be a mapping of regions, sectors and/or note');
+      } else {
+        ['regions', 'sectors'].forEach(function (k) {
+          if (a.targeting[k] != null && !Array.isArray(a.targeting[k])) {
+            problems.push(where + ': targeting.' + k + ' must be a list');
+          }
+        });
+        if (!(a.targeting.regions && a.targeting.regions.length) &&
+            !(a.targeting.sectors && a.targeting.sectors.length) && !a.targeting.note) {
+          problems.push(where + ': targeting must carry at least a region, a sector, or a note ' +
+            '(write a note when a report found no targeting, so silence is never mistaken for an omission)');
+        }
+      }
+    }
     return a;
   }).filter(Boolean);
   actors.forEach(function (a) {
@@ -253,6 +280,29 @@ function build(actors, reports, catalogByUrl, opts) {
     list.sort(function (x, y) {
       if (x.role !== y.role) return x.role === 'primary' ? -1 : 1;
       return String(y.date) < String(x.date) ? -1 : (String(y.date) > String(x.date) ? 1 : 0);
+    });
+
+    /* Every identifier on an actor page must be printed, verbatim, in one of
+       that actor's own PUBLISHED reports. This is the safety contract of the
+       page: it carries no claim the public reports do not already make, and
+       because every published report has cleared the publish gate's
+       victim-naming check, an identifier that passes here cannot be a victim's.
+       A value the report deliberately withholds (a reconnaissance credential,
+       a build-host key) fails this and stays off the page until a report prints
+       it. The match is against published reports only: `list` already excludes
+       unlisted ones. */
+    (a.identifiers || []).forEach(function (idn) {
+      if (!idn || !idn.value) return;
+      var seen = list.some(function (row) {
+        var r = byUrl[row.url];
+        return r && r.body.indexOf(String(idn.value)) > -1;
+      });
+      if (!seen) {
+        problems.push(a.id + ': identifier "' + idn.value + '" is not printed in any published ' +
+          'report for this actor. Put it on the page only once a report carries it, or drop it. ' +
+          'A value the report withholds (a reconnaissance credential, a build-host key, a ' +
+          'victim-named artifact) must not appear here.');
+      }
     });
 
     /* Techniques come from each primary report's own mapping table. A report
