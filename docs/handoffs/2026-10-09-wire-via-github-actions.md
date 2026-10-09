@@ -4,7 +4,7 @@
 **Branch carrying the repo-side work:** `claude/gracious-curie-truz72`
 **Status (updated 2026-10-09 16:45 UTC):** Steps 1 to 3 done. Pages deploys through Actions, the
 generator publishes to `wire-data` (first commit 16:39:27Z, run 4 built and deployed green). Step 4
-remains, after a few clean hourly runs.
+was done the same day.
 
 ---
 
@@ -138,7 +138,8 @@ key already has write access to the whole repo, which covers `wire-data`.
 Do **not** protect the `wire-data` branch: the publisher force-pushes it by design. Branch
 protection on `main` is irrelevant to it.
 
-### Step 4: clean up `main` (after Step 3 is verified)
+### Step 4: clean up `main` (done 2026-10-09, same day: the fallback was never needed once
+`wire-data` existed, and the removal is one `git revert` away)
 
 **Where:** this repository. A cloud session can do all of it.
 

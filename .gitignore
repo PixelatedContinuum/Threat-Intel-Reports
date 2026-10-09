@@ -13,3 +13,8 @@ tools/report-tooling/shots/
 .sass-cache/
 _site/
 .jekyll-cache/
+
+# The Wire data lives on the wire-data branch (one orphan commit, rewritten hourly by the
+# generator) and is copied in at build time by .github/workflows/pages.yml. For a local
+# preview build run `npm run wire:pull` in tools/report-tooling; never commit the file.
+_data/wire.yml

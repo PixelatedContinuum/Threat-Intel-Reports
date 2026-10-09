@@ -7,6 +7,7 @@
     "test": "node --test \"test/**/*.test.js\"",
     "verify": "node verify-corpus.js && node check-wire.js && node check-ioc-index.js && node check-detection-attack.js && node check-tags.js",
     "verify:tags": "node check-tags.js",
+    "wire:pull": "git fetch origin +refs/heads/wire-data:refs/remotes/origin/wire-data && git show origin/wire-data:wire.yml > ../../_data/wire.yml && grep -m1 generated_at ../../_data/wire.yml",
     "verify:wire": "node check-wire.js",
     "verify:lookup": "node check-ioc-index.js",
     "verify:attack": "node check-detection-attack.js",

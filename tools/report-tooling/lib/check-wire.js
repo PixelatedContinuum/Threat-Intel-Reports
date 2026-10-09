@@ -58,8 +58,9 @@ function normTitle(t) {
    trigger for the question, never the answer to it. */
 function check(doc, sources, now, remote) {
   if (!doc) {
-    return verdict('NOT CHECKED', 'wire.yml is absent or unparseable. ' +
-      'Run wire_export.py on LXC-102 to generate it.');
+    return verdict('NOT CHECKED', 'wire.yml is absent or unparseable. It is not ' +
+      'committed on main: run `npm run wire:pull` to fetch the newest copy from ' +
+      'origin/wire-data (the generator on LXC-102 writes it there every hour).');
   }
 
   var items = doc.items;
