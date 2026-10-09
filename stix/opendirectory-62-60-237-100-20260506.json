@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--86be5e55-cad8-4a0e-97e6-d5ebb29e9d92",
+    "id": "bundle--1cdf2377-ecbd-40ee-be02-50f6c6c24a33",
     "objects": [
         {
             "type": "identity",
@@ -1548,12 +1548,12 @@
             "id": "indicator--a5eb9d7c-a205-58f9-9317-e4b046750290",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.397827Z",
-            "modified": "2026-10-01T19:54:18.397827Z",
+            "modified": "2026-10-09T13:20:10.195968Z",
             "name": "THL DETECT HijackLoader-Penguish-Rugmi AsyncRAT SSL JA3 Fingerprint 07af4aa9e4d215a5ee63f9a0a277fbe3 (RAT C2 Fleet Indicator)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert tls $HOME_NET any -> any any (msg:\"THL DETECT HijackLoader-Penguish-Rugmi AsyncRAT SSL JA3 Fingerprint 07af4aa9e4d215a5ee63f9a0a277fbe3 (RAT C2 Fleet Indicator)\"; flow:established,to_server; ja3.hash; content:\"07af4aa9e4d215a5ee63f9a0a277fbe3\"; endswith; threshold:type limit,track by_src,count 3,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/; classtype:trojan-activity; sid:1000001; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-06;)",
+            "pattern": "alert tls $HOME_NET any -> any any (msg:\"THL DETECT HijackLoader-Penguish-Rugmi AsyncRAT SSL JA3 Fingerprint 07af4aa9e4d215a5ee63f9a0a277fbe3 (RAT C2 Fleet Indicator)\"; flow:established,to_server; ja3.hash; content:\"07af4aa9e4d215a5ee63f9a0a277fbe3\"; endswith; threshold:type limit,track by_src,count 3,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/; classtype:trojan-activity; sid:9301101; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-06;)",
             "pattern_type": "suricata",
             "valid_from": "2026-05-06T00:00:00Z",
             "labels": [

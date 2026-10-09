@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--2fb44a6f-f7fd-4130-9e14-b0691fbbb49a",
+    "id": "bundle--82fb9351-671b-430e-a3f2-b1af481fa69b",
     "objects": [
         {
             "type": "identity",
@@ -1623,12 +1623,12 @@
             "id": "indicator--75a68f3d-19d7-563c-a21f-1c5428df29be",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.55672Z",
-            "modified": "2026-10-01T19:54:14.55672Z",
+            "modified": "2026-10-09T13:20:05.762483Z",
             "name": "THL HUNT Inkognito Custom X-Admin-Token Header in HTTP Request (Admin API Auth Primitive)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT Inkognito Custom X-Admin-Token Header in HTTP Request (Admin API Auth Primitive)\"; flow:established,to_server; http.header; content:\"X-Admin-Token\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/; classtype:trojan-activity; sid:9001003; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-16;)",
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT Inkognito Custom X-Admin-Token Header in HTTP Request (Admin API Auth Primitive)\"; flow:established,to_server; http.header; content:\"X-Admin-Token\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/; classtype:trojan-activity; sid:9300303; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-16;)",
             "pattern_type": "suricata",
             "valid_from": "2026-05-16T00:00:00Z",
             "labels": [

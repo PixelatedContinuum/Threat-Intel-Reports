@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--e8837840-d697-45bf-a486-62a75558b398",
+    "id": "bundle--e6ce9fc0-19d3-42ec-ad11-eca9ac3a6f1d",
     "objects": [
         {
             "type": "identity",
@@ -818,12 +818,12 @@
             "id": "indicator--a5f74ec1-1480-5775-959e-2407b285f67a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.725152Z",
-            "modified": "2026-10-01T19:54:12.725152Z",
+            "modified": "2026-10-09T13:20:04.180054Z",
             "name": "THL DETECT CloudSync-Assembler-Toolkit AUTO UPDATE C2 Registration Marker (C2 Registration)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT CloudSync-Assembler-Toolkit AUTO UPDATE C2 Registration Marker (C2 Registration)\"; flow:established,to_server; content:\"=== AUTO UPDATE ===\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/; classtype:trojan-activity; sid:1000001; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-03;)",
+            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT CloudSync-Assembler-Toolkit AUTO UPDATE C2 Registration Marker (C2 Registration)\"; flow:established,to_server; content:\"=== AUTO UPDATE ===\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/; classtype:trojan-activity; sid:9301601; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-03;)",
             "pattern_type": "suricata",
             "valid_from": "2026-08-03T00:00:00Z",
             "labels": [
@@ -839,12 +839,12 @@
             "id": "indicator--3b827c7f-55e6-5cd6-afb1-cb4f049c627f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.72527Z",
-            "modified": "2026-10-01T19:54:12.72527Z",
+            "modified": "2026-10-09T13:20:04.180162Z",
             "name": "THL DETECT CloudSync-Assembler-Toolkit Shares Heartbeat Terminator Marker (C2 Heartbeat)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT CloudSync-Assembler-Toolkit Shares Heartbeat Terminator Marker (C2 Heartbeat)\"; flow:established,to_server; content:\"[Shares]\"; pcre:\"/\\[(C2_END|END)\\]/\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/; classtype:trojan-activity; sid:1000002; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-03;)",
+            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT CloudSync-Assembler-Toolkit Shares Heartbeat Terminator Marker (C2 Heartbeat)\"; flow:established,to_server; content:\"[Shares]\"; pcre:\"/\\[(C2_END|END)\\]/\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/; classtype:trojan-activity; sid:9301602; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-03;)",
             "pattern_type": "suricata",
             "valid_from": "2026-08-03T00:00:00Z",
             "labels": [
@@ -860,12 +860,12 @@
             "id": "indicator--0a0add0c-c85a-55ca-b499-522b5769129a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.725373Z",
-            "modified": "2026-10-01T19:54:12.725373Z",
+            "modified": "2026-10-09T13:20:04.180273Z",
             "name": "THL HUNT CloudSync-Assembler-Toolkit SentinelStealer c3lestial.fun TLS SNI (Sourced Commodity Stealer C2)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT CloudSync-Assembler-Toolkit SentinelStealer c3lestial.fun TLS SNI (Sourced Commodity Stealer C2)\"; flow:established,to_server; tls.sni; content:\"c3lestial.fun\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/; classtype:trojan-activity; sid:1000003; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-03;)",
+            "pattern": "alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT CloudSync-Assembler-Toolkit SentinelStealer c3lestial.fun TLS SNI (Sourced Commodity Stealer C2)\"; flow:established,to_server; tls.sni; content:\"c3lestial.fun\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/; classtype:trojan-activity; sid:9301603; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-03;)",
             "pattern_type": "suricata",
             "valid_from": "2026-08-03T00:00:00Z",
             "labels": [
@@ -881,12 +881,12 @@
             "id": "indicator--d39d8a3d-469a-57b4-b940-8691dd49457b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.725477Z",
-            "modified": "2026-10-01T19:54:12.725477Z",
+            "modified": "2026-10-09T13:20:04.180375Z",
             "name": "THL HUNT CloudSync-Assembler-Toolkit SentinelStealer c3lestial.fun DNS Query (Sourced Commodity Stealer C2)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert dns $HOME_NET any -> any any (msg:\"THL HUNT CloudSync-Assembler-Toolkit SentinelStealer c3lestial.fun DNS Query (Sourced Commodity Stealer C2)\"; dns_query; content:\"c3lestial.fun\"; nocase; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/; classtype:trojan-activity; sid:1000004; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-03;)",
+            "pattern": "alert dns $HOME_NET any -> any any (msg:\"THL HUNT CloudSync-Assembler-Toolkit SentinelStealer c3lestial.fun DNS Query (Sourced Commodity Stealer C2)\"; dns_query; content:\"c3lestial.fun\"; nocase; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/; classtype:trojan-activity; sid:9301604; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-03;)",
             "pattern_type": "suricata",
             "valid_from": "2026-08-03T00:00:00Z",
             "labels": [

@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--63fd54cb-fde6-4fea-8913-ae3650575243",
+    "id": "bundle--7acd534b-9126-4701-b248-33ba20c895b5",
     "objects": [
         {
             "type": "identity",
@@ -1288,12 +1288,12 @@
             "id": "indicator--40cd5a54-e3a9-5dd5-a175-081a84ad8005",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.998841Z",
-            "modified": "2026-10-01T19:54:15.998841Z",
+            "modified": "2026-10-09T13:20:06.756995Z",
             "name": "THL HUNT OpenDirectory-94.103.1.13 XOR-Encoded Payload Staging Download via .xor URI Suffix (Loader Staging Indicator)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> any any (msg:\"THL HUNT OpenDirectory-94.103.1.13 XOR-Encoded Payload Staging Download via .xor URI Suffix (Loader Staging Indicator)\"; flow:established,to_server; http.method; content:\"GET\"; http.uri; content:\".xor\"; endswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/; classtype:trojan-activity; sid:1000001; rev:2; metadata:author The_Hunters_Ledger, date 2026-04-23;)",
+            "pattern": "alert http $HOME_NET any -> any any (msg:\"THL HUNT OpenDirectory-94.103.1.13 XOR-Encoded Payload Staging Download via .xor URI Suffix (Loader Staging Indicator)\"; flow:established,to_server; http.method; content:\"GET\"; http.uri; content:\".xor\"; endswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/; classtype:trojan-activity; sid:9301001; rev:2; metadata:author The_Hunters_Ledger, date 2026-04-23;)",
             "pattern_type": "suricata",
             "valid_from": "2026-04-23T00:00:00Z",
             "labels": [

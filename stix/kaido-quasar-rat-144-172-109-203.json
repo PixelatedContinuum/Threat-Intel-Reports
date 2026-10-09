@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--f7066a02-281a-4eaa-b91d-983516b929ad",
+    "id": "bundle--a36dc265-9d00-4b7c-ad5d-4d481fb18dde",
     "objects": [
         {
             "type": "identity",
@@ -421,12 +421,12 @@
             "id": "indicator--ef6ac06d-558b-5657-b8b6-dbd1faa59ddf",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.820016Z",
-            "modified": "2026-10-01T19:54:14.820016Z",
+            "modified": "2026-10-09T13:20:05.98161Z",
             "name": "THL DETECT KAIDO-EvilSoul-MaaS TeamKAIDO C2 TLS Certificate Issuer (RAT C2 Fleet Indicator)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT KAIDO-EvilSoul-MaaS TeamKAIDO C2 TLS Certificate Issuer (RAT C2 Fleet Indicator)\"; flow:established,to_server; tls.cert_issuer; content:\"TeamKAIDO\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/; classtype:trojan-activity; sid:1000002; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-03;)",
+            "pattern": "alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT KAIDO-EvilSoul-MaaS TeamKAIDO C2 TLS Certificate Issuer (RAT C2 Fleet Indicator)\"; flow:established,to_server; tls.cert_issuer; content:\"TeamKAIDO\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/; classtype:trojan-activity; sid:9300802; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-03;)",
             "pattern_type": "suricata",
             "valid_from": "2026-07-03T00:00:00Z",
             "labels": [
@@ -442,12 +442,12 @@
             "id": "indicator--538ac15a-1f90-52bf-a7a1-3631d0255714",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.820102Z",
-            "modified": "2026-10-01T19:54:14.820102Z",
+            "modified": "2026-10-09T13:20:05.981711Z",
             "name": "THL HUNT KAIDO-EvilSoul-MaaS Quasar Binary Protocol C2 on TCP 4782 (RAT C2 Channel)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:\"THL HUNT KAIDO-EvilSoul-MaaS Quasar Binary Protocol C2 on TCP 4782 (RAT C2 Channel)\"; flow:established,to_server; dsize:>0; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/; classtype:trojan-activity; sid:1000001; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-03;)",
+            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:\"THL HUNT KAIDO-EvilSoul-MaaS Quasar Binary Protocol C2 on TCP 4782 (RAT C2 Channel)\"; flow:established,to_server; dsize:>0; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/; classtype:trojan-activity; sid:9300801; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-03;)",
             "pattern_type": "suricata",
             "valid_from": "2026-07-03T00:00:00Z",
             "labels": [

@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--69c2ea9a-f4ca-4509-9d84-ae08ae0ed89f",
+    "id": "bundle--700f29e1-b8cb-4187-980e-4e5e5753cf3c",
     "objects": [
         {
             "type": "identity",
@@ -480,12 +480,12 @@
             "id": "indicator--9373b70c-898e-5411-96d7-554bd657351e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.008507Z",
-            "modified": "2026-10-01T19:54:15.008507Z",
+            "modified": "2026-10-09T13:20:06.166263Z",
             "name": "THL DETECT MultiVector-192.3.1.116 LDAP Anonymous BindRequest to Non-Standard Directory Port (JNDI Callback Indicator)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET [1389,1099] (msg:\"THL DETECT MultiVector-192.3.1.116 LDAP Anonymous BindRequest to Non-Standard Directory Port (JNDI Callback Indicator)\"; flow:established,to_server; content:\"|30 0c 02 01 01 60 07 02 01 03 04 00 80 00|\"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:1000001; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)",
+            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET [1389,1099] (msg:\"THL DETECT MultiVector-192.3.1.116 LDAP Anonymous BindRequest to Non-Standard Directory Port (JNDI Callback Indicator)\"; flow:established,to_server; content:\"|30 0c 02 01 01 60 07 02 01 03 04 00 80 00|\"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:9301401; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)",
             "pattern_type": "suricata",
             "valid_from": "2026-07-21T00:00:00Z",
             "labels": [
@@ -501,12 +501,12 @@
             "id": "indicator--abd8d89c-1f8c-5744-897b-031fdf9f3bc9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.008582Z",
-            "modified": "2026-10-01T19:54:15.008582Z",
+            "modified": "2026-10-09T13:20:06.166364Z",
             "name": "THL DETECT MultiVector-192.3.1.116 SnakeYAML ScriptEngineManager Gadget Chain in HTTP Request Body (CVE-2022-1471 Family)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 SnakeYAML ScriptEngineManager Gadget Chain in HTTP Request Body (CVE-2022-1471 Family)\"; flow:established,to_server; http.request_body; content:\"!!javax.script.ScriptEngineManager\"; content:\"!!java.net.URLClassLoader\"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-user; sid:1000002; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)",
+            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 SnakeYAML ScriptEngineManager Gadget Chain in HTTP Request Body (CVE-2022-1471 Family)\"; flow:established,to_server; http.request_body; content:\"!!javax.script.ScriptEngineManager\"; content:\"!!java.net.URLClassLoader\"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-user; sid:9301402; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)",
             "pattern_type": "suricata",
             "valid_from": "2026-07-21T00:00:00Z",
             "labels": [
@@ -522,12 +522,12 @@
             "id": "indicator--7dc25ed0-4849-59a7-9adc-f9d42edc2938",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.008656Z",
-            "modified": "2026-10-01T19:54:15.008656Z",
+            "modified": "2026-10-09T13:20:06.166465Z",
             "name": "THL DETECT MultiVector-192.3.1.116 XXE Entity Declaration Targeting Cloud Metadata in Upload",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 XXE Entity Declaration Targeting Cloud Metadata in Upload\"; flow:established,to_server; http.request_body; content:\"<!ENTITY\"; content:\"SYSTEM\"; content:\"169.254.169.254\"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:1000003; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)",
+            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 XXE Entity Declaration Targeting Cloud Metadata in Upload\"; flow:established,to_server; http.request_body; content:\"<!ENTITY\"; content:\"SYSTEM\"; content:\"169.254.169.254\"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:9301403; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)",
             "pattern_type": "suricata",
             "valid_from": "2026-07-21T00:00:00Z",
             "labels": [
@@ -543,12 +543,12 @@
             "id": "indicator--2fc688ab-36d0-5473-90c7-653371dcbc65",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.008729Z",
-            "modified": "2026-10-01T19:54:15.008729Z",
+            "modified": "2026-10-09T13:20:06.166564Z",
             "name": "THL DETECT MultiVector-192.3.1.116 Gopher-Scheme SSRF Protocol Smuggling in HTTP URI",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 Gopher-Scheme SSRF Protocol Smuggling in HTTP URI\"; flow:established,to_server; http.uri; content:\"gopher://\"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:1000004; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)",
+            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 Gopher-Scheme SSRF Protocol Smuggling in HTTP URI\"; flow:established,to_server; http.uri; content:\"gopher://\"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:9301404; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)",
             "pattern_type": "suricata",
             "valid_from": "2026-07-21T00:00:00Z",
             "labels": [
@@ -564,12 +564,12 @@
             "id": "indicator--8f3b5bd9-4f47-5cab-b3f0-af4cfeda6be3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.008807Z",
-            "modified": "2026-10-01T19:54:15.008807Z",
+            "modified": "2026-10-09T13:20:06.166663Z",
             "name": "THL DETECT MultiVector-192.3.1.116 Gopher-Scheme SSRF Protocol Smuggling in HTTP Request Body",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 Gopher-Scheme SSRF Protocol Smuggling in HTTP Request Body\"; flow:established,to_server; http.request_body; content:\"gopher://\"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:1000005; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)",
+            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 Gopher-Scheme SSRF Protocol Smuggling in HTTP Request Body\"; flow:established,to_server; http.request_body; content:\"gopher://\"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:9301405; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)",
             "pattern_type": "suricata",
             "valid_from": "2026-07-21T00:00:00Z",
             "labels": [
@@ -585,12 +585,12 @@
             "id": "indicator--4c6596a7-a60a-5e48-b037-96280be453ee",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.008881Z",
-            "modified": "2026-10-01T19:54:15.008881Z",
+            "modified": "2026-10-09T13:20:06.166763Z",
             "name": "THL DETECT MultiVector-192.3.1.116 SSRF-to-Redis CONFIG/BGSAVE Command Sequence via HTTP (SSH Key Write Chain)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 SSRF-to-Redis CONFIG/BGSAVE Command Sequence via HTTP (SSH Key Write Chain)\"; flow:established,to_server; http.request_body; content:\"CONFIG SET dir\"; content:\"BGSAVE\"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:1000006; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)",
+            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 SSRF-to-Redis CONFIG/BGSAVE Command Sequence via HTTP (SSH Key Write Chain)\"; flow:established,to_server; http.request_body; content:\"CONFIG SET dir\"; content:\"BGSAVE\"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:9301406; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)",
             "pattern_type": "suricata",
             "valid_from": "2026-07-21T00:00:00Z",
             "labels": [
@@ -606,12 +606,12 @@
             "id": "indicator--2766abc4-d6b2-5ea7-a1d7-74a33cdfd757",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.008959Z",
-            "modified": "2026-10-01T19:54:15.008959Z",
+            "modified": "2026-10-09T13:20:06.166875Z",
             "name": "THL DETECT MultiVector-192.3.1.116 Eureka Apps-Delta Request (Flowbits Setter -- pairs with sid:1000008)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 Eureka Apps-Delta Request (Flowbits Setter -- pairs with sid:1000008)\"; flow:established,to_server; http.uri; content:\"/eureka/apps/delta\"; flowbits:set,thl.mvec.eureka.delta; flowbits:noalert; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:trojan-activity; sid:1000007; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)\nalert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 Eureka Apps-Delta Response Containing XStream Gadget Markers (requires flowbits setter sid:1000007)\"; flow:established,to_client; flowbits:isset,thl.mvec.eureka.delta; http.response_body; content:\"java.lang.ProcessBuilder\"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:trojan-activity; sid:1000008; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)",
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 Eureka Apps-Delta Request (Flowbits Setter -- pairs with sid:1000008)\"; flow:established,to_server; http.uri; content:\"/eureka/apps/delta\"; flowbits:set,thl.mvec.eureka.delta; flowbits:noalert; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:trojan-activity; sid:9301407; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)\nalert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 Eureka Apps-Delta Response Containing XStream Gadget Markers (requires flowbits setter sid:9301407)\"; flow:established,to_client; flowbits:isset,thl.mvec.eureka.delta; http.response_body; content:\"java.lang.ProcessBuilder\"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:trojan-activity; sid:1000008; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)",
             "pattern_type": "suricata",
             "valid_from": "2026-07-21T00:00:00Z",
             "labels": [
@@ -690,12 +690,12 @@
             "id": "indicator--ece15069-8cc4-5ec6-b3b1-49e6460e72c8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.009256Z",
-            "modified": "2026-10-01T19:54:15.009256Z",
+            "modified": "2026-10-09T13:20:06.16728Z",
             "name": "THL HUNT MultiVector-192.3.1.116 Password-Reset Endpoint POST Burst (forgetPwd Verification-Code Brute-Force Indicator)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL HUNT MultiVector-192.3.1.116 Password-Reset Endpoint POST Burst (forgetPwd Verification-Code Brute-Force Indicator)\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"forgetPwd\"; nocase; threshold:type threshold,track by_src,count 50,seconds 600; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:1000013; rev:3; metadata:author The_Hunters_Ledger, date 2026-07-21;)",
+            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL HUNT MultiVector-192.3.1.116 Password-Reset Endpoint POST Burst (forgetPwd Verification-Code Brute-Force Indicator)\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"forgetPwd\"; nocase; threshold:type threshold,track by_src,count 50,seconds 600; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:9301413; rev:3; metadata:author The_Hunters_Ledger, date 2026-07-21;)",
             "pattern_type": "suricata",
             "valid_from": "2026-07-21T00:00:00Z",
             "labels": [
@@ -1373,9 +1373,9 @@
             "id": "report--d2cbc7b4-0c74-5743-bbb9-91e98e6c514c",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.012674Z",
-            "modified": "2026-10-01T19:54:15.012674Z",
+            "modified": "2026-10-09T13:20:06.172203Z",
             "name": "Enough to Be Dangerous: The Mechanics of an LLM-Assisted Intrusion Campaign",
-            "description": "Exposed operator open directory holding a multi-vector offensive toolkit. There is no malware sample, no implant and no malware family, so this feed carries no file_hashes. Four categories are deliberately excluded: believed-real victim credentials, the operator's live reconnaissance-API subscription key, all raw JWTs, and all victim personal data. Post-discovery crawler and scanner addresses are listed under non_indicators. See threat-intel-vault/research/multivector-ecommerce-rce-toolkit-192-3-1-116/stage1-malware-analyst.md.",
+            "description": "Exposed operator open directory holding a multi-vector offensive toolkit. There is no malware sample, no implant and no malware family, so this feed carries no file_hashes. Four categories are deliberately excluded: believed-real victim credentials, the operator's live reconnaissance-API subscription key, all raw JWTs, and all victim personal data. Post-discovery crawler and scanner addresses are listed under non_indicators.",
             "report_types": [
                 "threat-report"
             ],

@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--291e31e2-3957-49e1-81b9-cef558593878",
+    "id": "bundle--aa1e05e8-85e8-451e-8ce0-cf8c591d2e65",
     "objects": [
         {
             "type": "identity",
@@ -469,12 +469,12 @@
             "id": "indicator--803e1ca2-38a5-5852-a30d-b2e3fbaaf9f9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.488418Z",
-            "modified": "2026-10-01T19:54:20.488418Z",
+            "modified": "2026-10-09T13:20:12.728943Z",
             "name": "THL DETECT ShinyHunters DLS - HTTP Request to DLS Content Path pay_or_leak",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT ShinyHunters DLS - HTTP Request to DLS Content Path pay_or_leak\"; flow:established,to_server; http.uri; content:\"/pay_or_leak/\"; reference:url,the-hunters-ledger.com/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/; classtype:trojan-activity; threshold:type limit,track by_src,count 1,seconds 300; sid:9001003; rev:3; metadata:author The_Hunters_Ledger, date 2026-04-17, attack_target Client_Endpoint, mitre_tactic_id TA0040, mitre_technique_id T1657;)",
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT ShinyHunters DLS - HTTP Request to DLS Content Path pay_or_leak\"; flow:established,to_server; http.uri; content:\"/pay_or_leak/\"; reference:url,the-hunters-ledger.com/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/; classtype:trojan-activity; threshold:type limit,track by_src,count 1,seconds 300; sid:9300103; rev:3; metadata:author The_Hunters_Ledger, date 2026-04-17, attack_target Client_Endpoint, mitre_tactic_id TA0040, mitre_technique_id T1657;)",
             "pattern_type": "suricata",
             "valid_from": "2026-04-17T00:00:00Z",
             "labels": [
@@ -511,12 +511,12 @@
             "id": "indicator--c529d344-80c2-5f51-830b-4e365eeccd9b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.488565Z",
-            "modified": "2026-10-01T19:54:20.488565Z",
+            "modified": "2026-10-09T13:20:12.72919Z",
             "name": "THL HUNT ShinyHunters DLS - TLS SNI shinyhunte.rs",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT ShinyHunters DLS - TLS SNI shinyhunte.rs\"; flow:established,to_server; tls.sni; content:\"shinyhunte.rs\"; endswith; nocase; reference:url,the-hunters-ledger.com/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/; classtype:trojan-activity; sid:9001002; rev:2; metadata:author The_Hunters_Ledger, date 2026-04-17, attack_target Client_Endpoint, mitre_tactic_id TA0011, mitre_technique_id T1583.001;)",
+            "pattern": "alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT ShinyHunters DLS - TLS SNI shinyhunte.rs\"; flow:established,to_server; tls.sni; content:\"shinyhunte.rs\"; endswith; nocase; reference:url,the-hunters-ledger.com/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/; classtype:trojan-activity; sid:9300102; rev:2; metadata:author The_Hunters_Ledger, date 2026-04-17, attack_target Client_Endpoint, mitre_tactic_id TA0011, mitre_technique_id T1583.001;)",
             "pattern_type": "suricata",
             "valid_from": "2026-04-17T00:00:00Z",
             "labels": [

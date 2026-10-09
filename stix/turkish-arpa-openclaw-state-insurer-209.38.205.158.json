@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--47d9d3c9-a08d-454f-a2f0-9302fa9b08c1",
+    "id": "bundle--4c1b912b-5178-4da9-a3a2-246e1a0ff47c",
     "objects": [
         {
             "type": "identity",
@@ -1095,12 +1095,12 @@
             "id": "indicator--0873fbc8-b1f2-552d-b90b-274a90d19e75",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.227871Z",
-            "modified": "2026-10-01T19:54:22.227871Z",
+            "modified": "2026-10-09T13:20:15.51476Z",
             "name": "THL HUNT Turkish-ARPA-State-Insurer DNS Query to Victim Instana OCP Tenant (Potential Unauthorized Collector Activity)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert dns $HOME_NET any -> any any (msg:\"THL HUNT Turkish-ARPA-State-Insurer DNS Query to Victim Instana OCP Tenant (Potential Unauthorized Collector Activity)\"; dns.query; content:\"ocpinstana.[victim-domain].com.tr\"; nocase; threshold:type limit,track by_src,count 1,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/; classtype:policy-violation; sid:9001001; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)",
+            "pattern": "alert dns $HOME_NET any -> any any (msg:\"THL HUNT Turkish-ARPA-State-Insurer DNS Query to Victim Instana OCP Tenant (Potential Unauthorized Collector Activity)\"; dns.query; content:\"ocpinstana.[victim-domain].com.tr\"; nocase; threshold:type limit,track by_src,count 1,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/; classtype:policy-violation; sid:9300601; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)",
             "pattern_type": "suricata",
             "valid_from": "2026-05-25T00:00:00Z",
             "labels": [

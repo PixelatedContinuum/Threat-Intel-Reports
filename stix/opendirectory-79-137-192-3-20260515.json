@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--26d13ab3-ff01-4f25-bd5c-0f4041182484",
+    "id": "bundle--17e883a2-1d56-409a-834b-fc9ae62df0a4",
     "objects": [
         {
             "type": "identity",
@@ -1847,12 +1847,12 @@
             "id": "indicator--295cf947-463c-55e5-a83f-487396eee11e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.788515Z",
-            "modified": "2026-10-01T19:54:18.788515Z",
+            "modified": "2026-10-09T13:20:10.659194Z",
             "name": "THL DETECT OpenDirectory-79.137.192.3 Rhadamanthys MaaS-Customer Panel ID URL Pattern (C2 Transport Indicator)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT OpenDirectory-79.137.192.3 Rhadamanthys MaaS-Customer Panel ID URL Pattern (C2 Transport Indicator)\"; flow:established,to_server; http.uri; content:\"/e6d92c6b5b2a03bee7fbab40/\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/; classtype:trojan-activity; sid:1000003; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-15;)",
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT OpenDirectory-79.137.192.3 Rhadamanthys MaaS-Customer Panel ID URL Pattern (C2 Transport Indicator)\"; flow:established,to_server; http.uri; content:\"/e6d92c6b5b2a03bee7fbab40/\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/; classtype:trojan-activity; sid:9300203; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-15;)",
             "pattern_type": "suricata",
             "valid_from": "2026-05-15T00:00:00Z",
             "labels": [

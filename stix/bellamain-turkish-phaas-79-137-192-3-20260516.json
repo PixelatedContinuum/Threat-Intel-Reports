@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--7264bf80-b95e-4c52-8c44-df25947b5078",
+    "id": "bundle--e13a585d-dc24-48fb-9c26-eaffd7dfcd12",
     "objects": [
         {
             "type": "identity",
@@ -671,12 +671,12 @@
             "id": "indicator--6f3ba147-b1b3-5e53-bdea-4db20dbc1355",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.423925Z",
-            "modified": "2026-10-01T19:54:12.423925Z",
+            "modified": "2026-10-09T13:20:03.909348Z",
             "name": "THL HUNT BellaMain-PhaaS USOM Blocklist Poll from Web Server (Security Tool Discovery Indicator)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> any any (msg:\"THL HUNT BellaMain-PhaaS USOM Blocklist Poll from Web Server (Security Tool Discovery Indicator)\"; flow:established,to_server; http.host; content:\"usom.gov.tr\"; endswith; http.uri; content:\"url-list.txt\"; nocase; threshold:type limit,track by_src,count 1,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/; classtype:policy-violation; sid:9001004; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-16;)",
+            "pattern": "alert http $HOME_NET any -> any any (msg:\"THL HUNT BellaMain-PhaaS USOM Blocklist Poll from Web Server (Security Tool Discovery Indicator)\"; flow:established,to_server; http.host; content:\"usom.gov.tr\"; endswith; http.uri; content:\"url-list.txt\"; nocase; threshold:type limit,track by_src,count 1,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/; classtype:policy-violation; sid:9300404; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-16;)",
             "pattern_type": "suricata",
             "valid_from": "2026-05-16T00:00:00Z",
             "labels": [

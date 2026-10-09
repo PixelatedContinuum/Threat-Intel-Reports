@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--62aec243-ec62-49b3-ba2a-d16554e298c7",
+    "id": "bundle--b5f0f71d-f0bc-4f14-b2c7-ddf3a2f4f341",
     "objects": [
         {
             "type": "identity",
@@ -1489,12 +1489,12 @@
             "id": "indicator--f20bcc7e-253b-5328-9a9e-67d7847bb49b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.204679Z",
-            "modified": "2026-10-01T19:54:19.204679Z",
+            "modified": "2026-10-09T13:20:11.325324Z",
             "name": "THL DETECT UTA-2026-014 Pandora-Mirai Naku Binary Distribution URI Path (IoT Botnet Payload Delivery)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT UTA-2026-014 Pandora-Mirai Naku Binary Distribution URI Path (IoT Botnet Payload Delivery)\"; flow:established,to_server; http.uri; content:\"/bins/Naku.\"; startswith; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:9001003; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)",
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT UTA-2026-014 Pandora-Mirai Naku Binary Distribution URI Path (IoT Botnet Payload Delivery)\"; flow:established,to_server; http.uri; content:\"/bins/Naku.\"; startswith; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:9300503; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)",
             "pattern_type": "suricata",
             "valid_from": "2026-05-26T00:00:00Z",
             "labels": [
@@ -1510,12 +1510,12 @@
             "id": "indicator--f8803dfb-8ead-5ba8-be9e-bfce4b8a02a5",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.204753Z",
-            "modified": "2026-10-01T19:54:19.204753Z",
+            "modified": "2026-10-09T13:20:11.325435Z",
             "name": "THL DETECT UTA-2026-014 Pandora-Mirai Pandoras-Box Binary Distribution URI Path (IoT Botnet Payload Delivery)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT UTA-2026-014 Pandora-Mirai Pandoras-Box Binary Distribution URI Path (IoT Botnet Payload Delivery)\"; flow:established,to_server; http.uri; content:\"/Pandoras_Box/Pandora.\"; startswith; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:9001005; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)",
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT UTA-2026-014 Pandora-Mirai Pandoras-Box Binary Distribution URI Path (IoT Botnet Payload Delivery)\"; flow:established,to_server; http.uri; content:\"/Pandoras_Box/Pandora.\"; startswith; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:9300505; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)",
             "pattern_type": "suricata",
             "valid_from": "2026-05-26T00:00:00Z",
             "labels": [
@@ -1531,12 +1531,12 @@
             "id": "indicator--6b1af4f8-309f-5b33-82b6-2d673a7e0b1d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.20483Z",
-            "modified": "2026-10-01T19:54:19.20483Z",
+            "modified": "2026-10-09T13:20:11.325545Z",
             "name": "THL HUNT UTA-2026-014 Pandora-Mirai bot.sh Reseed Download URI Pattern (IoT Botnet Reseed Channel)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT UTA-2026-014 Pandora-Mirai bot.sh Reseed Download URI Pattern (IoT Botnet Reseed Channel)\"; flow:established,to_server; http.uri; content:\"/bot.sh\"; endswith; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:9001004; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)",
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT UTA-2026-014 Pandora-Mirai bot.sh Reseed Download URI Pattern (IoT Botnet Reseed Channel)\"; flow:established,to_server; http.uri; content:\"/bot.sh\"; endswith; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:9300504; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)",
             "pattern_type": "suricata",
             "valid_from": "2026-05-26T00:00:00Z",
             "labels": [
@@ -1573,12 +1573,12 @@
             "id": "indicator--692ed72a-edc8-5895-9fd4-fdd30214dff0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.204976Z",
-            "modified": "2026-10-01T19:54:19.204976Z",
+            "modified": "2026-10-09T13:20:11.325765Z",
             "name": "THL HUNT UTA-2026-014 keyosbuff C2-Leak Repository Reference in HTTP URI (Operator OPSEC Artifact)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> any any (msg:\"THL HUNT UTA-2026-014 keyosbuff C2-Leak Repository Reference in HTTP URI (Operator OPSEC Artifact)\"; flow:established,to_server; http.uri; content:\"keyosbuff\"; nocase; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:9001002; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)",
+            "pattern": "alert http $HOME_NET any -> any any (msg:\"THL HUNT UTA-2026-014 keyosbuff C2-Leak Repository Reference in HTTP URI (Operator OPSEC Artifact)\"; flow:established,to_server; http.uri; content:\"keyosbuff\"; nocase; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:9300502; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)",
             "pattern_type": "suricata",
             "valid_from": "2026-05-26T00:00:00Z",
             "labels": [

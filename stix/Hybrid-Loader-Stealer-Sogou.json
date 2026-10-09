@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--4eca4b63-73cb-4bad-ae49-b699909366a8",
+    "id": "bundle--773b39fd-d451-4013-831d-4a2fd89ea37a",
     "objects": [
         {
             "type": "identity",
@@ -162,12 +162,12 @@
             "id": "indicator--b90594fd-c0c9-508a-9bc6-deac801bc21b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.461701Z",
-            "modified": "2026-10-01T19:54:11.461701Z",
+            "modified": "2026-10-09T13:20:02.556063Z",
             "name": "THL HUNT SogouStealer-HybridLoader CGI1 C2 URI Pattern (C2 Transport Indicator)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT SogouStealer-HybridLoader CGI1 C2 URI Pattern (C2 Transport Indicator)\"; flow:established,to_server; http.uri; content:\"/cgi1\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/; classtype:trojan-activity; sid:1000001; rev:2; metadata:author The_Hunters_Ledger, date 2025-11-21;)",
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT SogouStealer-HybridLoader CGI1 C2 URI Pattern (C2 Transport Indicator)\"; flow:established,to_server; http.uri; content:\"/cgi1\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/; classtype:trojan-activity; sid:9300901; rev:2; metadata:author The_Hunters_Ledger, date 2025-11-21;)",
             "pattern_type": "suricata",
             "valid_from": "2025-11-21T00:00:00Z",
             "labels": [

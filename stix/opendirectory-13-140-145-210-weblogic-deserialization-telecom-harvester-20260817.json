@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--68997d89-d511-4724-9d2d-d599de431bf2",
+    "id": "bundle--6e093c2c-583a-4a5b-80b4-5bce359ae295",
     "objects": [
         {
             "type": "identity",
@@ -2668,12 +2668,12 @@
             "id": "indicator--4d23d92b-18a3-55c3-a41c-4133e1c0ebb0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:16.470805Z",
-            "modified": "2026-10-01T19:54:16.470805Z",
+            "modified": "2026-10-09T13:20:07.379983Z",
             "name": "THL DETECT WebLogicTelecomHarvester Network-Device Self-Exfiltration Outbound PUT UA cisco-IOS (WSMA Abuse)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT WebLogicTelecomHarvester Network-Device Self-Exfiltration Outbound PUT UA cisco-IOS (WSMA Abuse)\"; flow:established,to_server; content:\"PUT\"; http_method; content:\"cisco-IOS\"; http_user_agent; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:1000001; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT WebLogicTelecomHarvester Network-Device Self-Exfiltration Outbound PUT UA cisco-IOS (WSMA Abuse)\"; flow:established,to_server; content:\"PUT\"; http_method; content:\"cisco-IOS\"; http_user_agent; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:9301801; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
             "pattern_type": "suricata",
             "valid_from": "2026-08-18T00:00:00Z",
             "labels": [
@@ -2689,12 +2689,12 @@
             "id": "indicator--cb3d7204-91ac-5432-a245-183500d921bc",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:16.470878Z",
-            "modified": "2026-10-01T19:54:16.470878Z",
+            "modified": "2026-10-09T13:20:07.380082Z",
             "name": "THL DETECT WebLogicTelecomHarvester Cisco IOS-XE Double-Encoded WSMA Path Bypass (CVE-2023-20273 Operator Fingerprint)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT WebLogicTelecomHarvester Cisco IOS-XE Double-Encoded WSMA Path Bypass (CVE-2023-20273 Operator Fingerprint)\"; flow:established,to_server; content:\"%2577eb%2575i_%2577sma_Http\"; http_uri; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:1000002; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
+            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT WebLogicTelecomHarvester Cisco IOS-XE Double-Encoded WSMA Path Bypass (CVE-2023-20273 Operator Fingerprint)\"; flow:established,to_server; content:\"%2577eb%2575i_%2577sma_Http\"; http_uri; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:9301802; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
             "pattern_type": "suricata",
             "valid_from": "2026-08-18T00:00:00Z",
             "labels": [
@@ -2710,12 +2710,12 @@
             "id": "indicator--48a8641f-f1d2-5df6-b479-a6aab65210d5",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:16.47095Z",
-            "modified": "2026-10-01T19:54:16.47095Z",
+            "modified": "2026-10-09T13:20:07.38018Z",
             "name": "THL DETECT GENERIC-CVE-2023-20198 Cisco IOS-XE WebUI Auth-Bypass Confirmation URI (Public Exploit Class, Not Operator-Specific)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT GENERIC-CVE-2023-20198 Cisco IOS-XE WebUI Auth-Bypass Confirmation URI (Public Exploit Class, Not Operator-Specific)\"; flow:established,to_server; content:\"/webui/logoutconfirm.html\"; http_uri; content:\"logon_hash=1\"; http_uri; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:web-application-attack; sid:1000003; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
+            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT GENERIC-CVE-2023-20198 Cisco IOS-XE WebUI Auth-Bypass Confirmation URI (Public Exploit Class, Not Operator-Specific)\"; flow:established,to_server; content:\"/webui/logoutconfirm.html\"; http_uri; content:\"logon_hash=1\"; http_uri; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:web-application-attack; sid:9301803; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
             "pattern_type": "suricata",
             "valid_from": "2026-08-18T00:00:00Z",
             "labels": [
@@ -2731,12 +2731,12 @@
             "id": "indicator--4d269a3b-1d9b-5016-8b69-2c5afbc615ba",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:16.471022Z",
-            "modified": "2026-10-01T19:54:16.471022Z",
+            "modified": "2026-10-09T13:20:07.38028Z",
             "name": "THL DETECT GENERIC-CVE-2023-20198 Cisco IOS-XE Forged Bare-Hex Authorization Token (Public Exploit Class)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT GENERIC-CVE-2023-20198 Cisco IOS-XE Forged Bare-Hex Authorization Token (Public Exploit Class)\"; flow:established,to_server; content:\"Authorization\"; http_header; pcre:\"/^Authorization:\\s*[a-f0-9]{18}\\s*$/mHi\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:web-application-attack; sid:1000004; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
+            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT GENERIC-CVE-2023-20198 Cisco IOS-XE Forged Bare-Hex Authorization Token (Public Exploit Class)\"; flow:established,to_server; content:\"Authorization\"; http_header; pcre:\"/^Authorization:\\s*[a-f0-9]{18}\\s*$/mHi\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:web-application-attack; sid:9301804; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
             "pattern_type": "suricata",
             "valid_from": "2026-08-18T00:00:00Z",
             "labels": [
@@ -2752,12 +2752,12 @@
             "id": "indicator--9838dc03-8802-5247-93a1-a3cb785b6727",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:16.471094Z",
-            "modified": "2026-10-01T19:54:16.471094Z",
+            "modified": "2026-10-09T13:20:07.380379Z",
             "name": "THL DETECT WebLogicTelecomHarvester Cisco WSMA fileCopy Exfiltration Primitive to External dstURL",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT WebLogicTelecomHarvester Cisco WSMA fileCopy Exfiltration Primitive to External dstURL\"; flow:established,to_server; content:\"urn:cisco:wsma-filesystem\"; http_client_body; content:\"fileCopy\"; http_client_body; content:\"dstURL=\"; http_client_body; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:1000005; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
+            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT WebLogicTelecomHarvester Cisco WSMA fileCopy Exfiltration Primitive to External dstURL\"; flow:established,to_server; content:\"urn:cisco:wsma-filesystem\"; http_client_body; content:\"fileCopy\"; http_client_body; content:\"dstURL=\"; http_client_body; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:9301805; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
             "pattern_type": "suricata",
             "valid_from": "2026-08-18T00:00:00Z",
             "labels": [
@@ -2773,12 +2773,12 @@
             "id": "indicator--dc4ae91b-0cde-5837-a9f2-70b960f15198",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:16.471166Z",
-            "modified": "2026-10-01T19:54:16.471166Z",
+            "modified": "2026-10-09T13:20:07.380478Z",
             "name": "THL DETECT WebLogicTelecomHarvester WebLogic T3-IIOP JNDI OpaqueReference Injection (CVE-2023-21839/CVE-2024-21182)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert tcp $EXTERNAL_NET any -> $HOME_NET 7001 (msg:\"THL DETECT WebLogicTelecomHarvester WebLogic T3-IIOP JNDI OpaqueReference Injection (CVE-2023-21839/CVE-2024-21182)\"; flow:established,to_server; content:\"OpaqueReference\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-admin; sid:1000006; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
+            "pattern": "alert tcp $EXTERNAL_NET any -> $HOME_NET 7001 (msg:\"THL DETECT WebLogicTelecomHarvester WebLogic T3-IIOP JNDI OpaqueReference Injection (CVE-2023-21839/CVE-2024-21182)\"; flow:established,to_server; content:\"OpaqueReference\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-admin; sid:9301806; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
             "pattern_type": "suricata",
             "valid_from": "2026-08-18T00:00:00Z",
             "labels": [
@@ -2794,12 +2794,12 @@
             "id": "indicator--cd5a6421-4335-5fe3-95d4-8877a47fa283",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:16.471238Z",
-            "modified": "2026-10-01T19:54:16.471238Z",
+            "modified": "2026-10-09T13:20:07.380579Z",
             "name": "THL DETECT WebLogicTelecomHarvester Malicious LDAP-JNDI Callback Response (javaCodeBase/javaSerializedData)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT WebLogicTelecomHarvester Malicious LDAP-JNDI Callback Response (javaCodeBase/javaSerializedData)\"; flow:established,to_client; content:\"javaCodeBase\"; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-admin; sid:1000007; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
+            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT WebLogicTelecomHarvester Malicious LDAP-JNDI Callback Response (javaCodeBase/javaSerializedData)\"; flow:established,to_client; content:\"javaCodeBase\"; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-admin; sid:9301807; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
             "pattern_type": "suricata",
             "valid_from": "2026-08-18T00:00:00Z",
             "labels": [
@@ -2815,12 +2815,12 @@
             "id": "indicator--d7fcbbbd-1a8d-56e0-bda2-c508ae9a4403",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:16.471309Z",
-            "modified": "2026-10-01T19:54:16.471309Z",
+            "modified": "2026-10-09T13:20:07.380677Z",
             "name": "THL DETECT WebLogicTelecomHarvester GeoServer OGC-Filter RCE via valueReference exec() (CVE-2024-36401)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT WebLogicTelecomHarvester GeoServer OGC-Filter RCE via valueReference exec() (CVE-2024-36401)\"; flow:established,to_server; content:\"valueReference\"; http_uri; content:\"exec(\"; http_uri; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:web-application-attack; sid:1000009; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
+            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT WebLogicTelecomHarvester GeoServer OGC-Filter RCE via valueReference exec() (CVE-2024-36401)\"; flow:established,to_server; content:\"valueReference\"; http_uri; content:\"exec(\"; http_uri; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:web-application-attack; sid:9301809; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
             "pattern_type": "suricata",
             "valid_from": "2026-08-18T00:00:00Z",
             "labels": [
@@ -2836,12 +2836,12 @@
             "id": "indicator--46da810f-923c-5b52-883e-a0a806eae8ee",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:16.471382Z",
-            "modified": "2026-10-01T19:54:16.471382Z",
+            "modified": "2026-10-09T13:20:07.380775Z",
             "name": "THL HUNT WebLogicTelecomHarvester Non-Standard X-CMD Webshell Dispatch Header",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL HUNT WebLogicTelecomHarvester Non-Standard X-CMD Webshell Dispatch Header\"; flow:established,to_server; content:\"X-CMD|3a|\"; http_header; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:1000010; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
+            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL HUNT WebLogicTelecomHarvester Non-Standard X-CMD Webshell Dispatch Header\"; flow:established,to_server; content:\"X-CMD|3a|\"; http_header; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:9301810; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
             "pattern_type": "suricata",
             "valid_from": "2026-08-18T00:00:00Z",
             "labels": [
@@ -2857,12 +2857,12 @@
             "id": "indicator--808ca194-a866-5d41-8ba3-ea83d3f897b3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:16.471454Z",
-            "modified": "2026-10-01T19:54:16.471454Z",
+            "modified": "2026-10-09T13:20:07.380881Z",
             "name": "THL DETECT WebLogicTelecomHarvester PRTG Bulk Credential Extraction via getobjectproperty.htm",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT WebLogicTelecomHarvester PRTG Bulk Credential Extraction via getobjectproperty.htm\"; flow:established,to_server; content:\"getobjectproperty.htm\"; http_uri; content:\"passhash=\"; http_uri; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-recon; sid:1000011; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
+            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT WebLogicTelecomHarvester PRTG Bulk Credential Extraction via getobjectproperty.htm\"; flow:established,to_server; content:\"getobjectproperty.htm\"; http_uri; content:\"passhash=\"; http_uri; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-recon; sid:9301811; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
             "pattern_type": "suricata",
             "valid_from": "2026-08-18T00:00:00Z",
             "labels": [
@@ -2878,12 +2878,12 @@
             "id": "indicator--14de4f25-c53e-564b-86f3-dfc6a45b55a4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:16.471527Z",
-            "modified": "2026-10-01T19:54:16.471527Z",
+            "modified": "2026-10-09T13:20:07.380981Z",
             "name": "THL HUNT WebLogicTelecomHarvester Chisel-Style Reverse-Tunnel WebSocket Upgrade Handshake (Broad, Chisel Has Legitimate Uses)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT WebLogicTelecomHarvester Chisel-Style Reverse-Tunnel WebSocket Upgrade Handshake (Broad, Chisel Has Legitimate Uses)\"; flow:established,to_server; content:\"Upgrade|3a| websocket\"; http_header; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:1000008; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT WebLogicTelecomHarvester Chisel-Style Reverse-Tunnel WebSocket Upgrade Handshake (Broad, Chisel Has Legitimate Uses)\"; flow:established,to_server; content:\"Upgrade|3a| websocket\"; http_header; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:9301808; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
             "pattern_type": "suricata",
             "valid_from": "2026-08-18T00:00:00Z",
             "labels": [
@@ -2899,12 +2899,12 @@
             "id": "indicator--8276907e-9575-56dd-bc64-804901fa117e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:16.471598Z",
-            "modified": "2026-10-01T19:54:16.471598Z",
+            "modified": "2026-10-09T13:20:07.381081Z",
             "name": "THL HUNT WebLogicTelecomHarvester PRTG Bulk Device Inventory Query via table.json (Broad, Legitimate Bulk Queries Exist)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL HUNT WebLogicTelecomHarvester PRTG Bulk Device Inventory Query via table.json (Broad, Legitimate Bulk Queries Exist)\"; flow:established,to_server; content:\"table.json\"; http_uri; content:\"content=devices\"; http_uri; content:\"count=500\"; http_uri; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-recon; sid:1000012; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
+            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL HUNT WebLogicTelecomHarvester PRTG Bulk Device Inventory Query via table.json (Broad, Legitimate Bulk Queries Exist)\"; flow:established,to_server; content:\"table.json\"; http_uri; content:\"content=devices\"; http_uri; content:\"count=500\"; http_uri; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-recon; sid:9301812; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
             "pattern_type": "suricata",
             "valid_from": "2026-08-18T00:00:00Z",
             "labels": [

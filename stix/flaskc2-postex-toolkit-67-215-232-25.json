@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--dd885624-dfde-4506-99c3-b997778dca99",
+    "id": "bundle--557e219a-8f40-4d1a-8397-01c08ef9df10",
     "objects": [
         {
             "type": "identity",
@@ -627,12 +627,12 @@
             "id": "indicator--5a9ae069-d8e3-5588-ad55-8ef76aa5ebe4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.473908Z",
-            "modified": "2026-10-01T19:54:13.473908Z",
+            "modified": "2026-10-09T13:20:04.805286Z",
             "name": "THL DETECT FlaskC2-PostEx C2 Health Endpoint Response - Bespoke Flask C2 Active",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT FlaskC2-PostEx C2 Health Endpoint Response - Bespoke Flask C2 Active\"; flow:established,to_client; file_data; content:\"active_servers\"; nocase; content:\"pending_commands\"; nocase; distance:0; content:\"completed_commands\"; nocase; distance:0; content:\"status\"; nocase; distance:0; content:\"timestamp\"; nocase; distance:0; reference:url,the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/; classtype:trojan-activity; sid:9001001; rev:3; metadata:author The_Hunters_Ledger, date 2026-06-12;)",
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT FlaskC2-PostEx C2 Health Endpoint Response - Bespoke Flask C2 Active\"; flow:established,to_client; file_data; content:\"active_servers\"; nocase; content:\"pending_commands\"; nocase; distance:0; content:\"completed_commands\"; nocase; distance:0; content:\"status\"; nocase; distance:0; content:\"timestamp\"; nocase; distance:0; reference:url,the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/; classtype:trojan-activity; sid:9300701; rev:3; metadata:author The_Hunters_Ledger, date 2026-06-12;)",
             "pattern_type": "suricata",
             "valid_from": "2026-06-12T00:00:00Z",
             "labels": [
@@ -648,12 +648,12 @@
             "id": "indicator--56b7f149-3cf7-5198-ac5f-33842470f3a4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.473992Z",
-            "modified": "2026-10-01T19:54:13.473992Z",
+            "modified": "2026-10-09T13:20:04.805407Z",
             "name": "THL HUNT FlaskC2-PostEx C2 Beacon POST to /api/report",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> any any (msg:\"THL HUNT FlaskC2-PostEx C2 Beacon POST to /api/report\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"/api/report\"; nocase; reference:url,the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/; classtype:trojan-activity; sid:9001002; rev:3; metadata:author The_Hunters_Ledger, date 2026-06-12;)",
+            "pattern": "alert http $HOME_NET any -> any any (msg:\"THL HUNT FlaskC2-PostEx C2 Beacon POST to /api/report\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"/api/report\"; nocase; reference:url,the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/; classtype:trojan-activity; sid:9300702; rev:3; metadata:author The_Hunters_Ledger, date 2026-06-12;)",
             "pattern_type": "suricata",
             "valid_from": "2026-06-12T00:00:00Z",
             "labels": [
@@ -669,12 +669,12 @@
             "id": "indicator--8b4bb049-573f-5c5f-b529-632689acb39b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.474075Z",
-            "modified": "2026-10-01T19:54:13.474075Z",
+            "modified": "2026-10-09T13:20:04.805522Z",
             "name": "THL HUNT FlaskC2-PostEx C2 Beacon POST to /api/heartbeat",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> any any (msg:\"THL HUNT FlaskC2-PostEx C2 Beacon POST to /api/heartbeat\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"/api/heartbeat\"; nocase; reference:url,the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/; classtype:trojan-activity; sid:9001003; rev:3; metadata:author The_Hunters_Ledger, date 2026-06-12;)",
+            "pattern": "alert http $HOME_NET any -> any any (msg:\"THL HUNT FlaskC2-PostEx C2 Beacon POST to /api/heartbeat\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"/api/heartbeat\"; nocase; reference:url,the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/; classtype:trojan-activity; sid:9300703; rev:3; metadata:author The_Hunters_Ledger, date 2026-06-12;)",
             "pattern_type": "suricata",
             "valid_from": "2026-06-12T00:00:00Z",
             "labels": [

@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--51caaa23-cac7-4d13-b4ce-257caef1f5cc",
+    "id": "bundle--fad3f326-1237-4c73-aa5b-dd2e5d501614",
     "objects": [
         {
             "type": "identity",
@@ -379,15 +379,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--db6425fa-cfe2-56c9-baf9-7d4f9a0d646a",
+            "id": "indicator--6dd7a667-2975-5c8e-8ac1-d5b7eea8c3cd",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:28:01.353919Z",
-            "modified": "2026-09-19T20:28:01.353919Z",
-            "name": "Non-Browser Process Accessing Browser Credential Store Files",
+            "created": "2026-10-09T13:20:11.210736Z",
+            "modified": "2026-10-09T13:20:11.210736Z",
+            "name": "Remcos RAT Non-Browser Process Accessing Browser Credential Store Files",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Non-Browser Process Accessing Browser Credential Store Files\nid: 27e252f6-c5d9-4545-ab96-b180ab116a88\nstatus: experimental\ndescription: >-\n  Detects access to Chrome or Firefox credential and cookie database\n  files by a process other than the browser itself - the technique\n  used by the Remcos RAT credential-theft module in this campaign.\n  This is a family-agnostic technique detector; legitimate password\n  managers and backup software are known to trigger it, so it is\n  tiered for hunting rather than direct alerting.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/remcos-opendirectory-detections/\nauthor: The Hunters Ledger\ndate: '2026-02-04'\ntags:\n    - attack.credential-access\n    - attack.t1555.003\n    - attack.t1539\n    - detection.emerging-threats\nlogsource:\n    category: file_access\n    product: windows\ndetection:\n    selection_chrome:\n        TargetFilename|contains:\n            - '\\Google\\Chrome\\User Data\\Default\\Login Data'\n            - '\\Google\\Chrome\\User Data\\Default\\Cookies'\n    selection_firefox:\n        TargetFilename|contains: '\\Mozilla\\Firefox\\Profiles\\'\n        TargetFilename|endswith:\n            - '\\logins.json'\n            - '\\cookies.sqlite'\n    filter_legitimate:\n        Image|endswith:\n            - '\\chrome.exe'\n            - '\\firefox.exe'\n            - '\\msedge.exe'\n    condition: (selection_chrome or selection_firefox) and not filter_legitimate\nfalsepositives:\n    - Password managers (1Password, Bitwarden, LastPass) importing saved browser credentials\n    - Backup software performing full user-profile backups\nlevel: medium",
+            "pattern": "title: Remcos RAT Non-Browser Process Accessing Browser Credential Store Files\nid: 27e252f6-c5d9-4545-ab96-b180ab116a88\nstatus: experimental\ndescription: >-\n  Detects access to Chrome or Firefox credential and cookie database\n  files by a process other than the browser itself - the technique\n  used by the Remcos RAT credential-theft module in this campaign.\n  This is a family-agnostic technique detector; legitimate password\n  managers and backup software are known to trigger it, so it is\n  tiered for hunting rather than direct alerting.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/remcos-opendirectory-detections/\nauthor: The Hunters Ledger\ndate: '2026-02-04'\ntags:\n    - attack.credential-access\n    - attack.t1555.003\n    - attack.t1539\n    - detection.emerging-threats\nlogsource:\n    category: file_access\n    product: windows\ndetection:\n    selection_chrome:\n        TargetFilename|contains:\n            - '\\Google\\Chrome\\User Data\\Default\\Login Data'\n            - '\\Google\\Chrome\\User Data\\Default\\Cookies'\n    selection_firefox:\n        TargetFilename|contains: '\\Mozilla\\Firefox\\Profiles\\'\n        TargetFilename|endswith:\n            - '\\logins.json'\n            - '\\cookies.sqlite'\n    filter_legitimate:\n        Image|endswith:\n            - '\\chrome.exe'\n            - '\\firefox.exe'\n            - '\\msedge.exe'\n    condition: (selection_chrome or selection_firefox) and not filter_legitimate\nfalsepositives:\n    - Password managers (1Password, Bitwarden, LastPass) importing saved browser credentials\n    - Backup software performing full user-profile backups\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-02-04T00:00:00Z",
             "labels": [
@@ -660,12 +660,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--d5df7eae-785b-5072-9897-2a9366725c02",
+            "id": "relationship--dc1ca868-fc2a-5caa-8b78-f231fba6c1bd",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:28:01.356566Z",
-            "modified": "2026-09-19T20:28:01.356566Z",
+            "created": "2026-10-09T13:20:11.212706Z",
+            "modified": "2026-10-09T13:20:11.212706Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--db6425fa-cfe2-56c9-baf9-7d4f9a0d646a",
+            "source_ref": "indicator--6dd7a667-2975-5c8e-8ac1-d5b7eea8c3cd",
             "target_ref": "malware--cb6b9f0e-67c7-5303-9a9f-caa8d412d9f5",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -677,7 +677,7 @@
             "id": "report--cfe4d76a-a030-5b5a-874a-5f584b6c436b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-09-19T20:28:01.356702Z",
-            "modified": "2026-09-19T20:28:01.356702Z",
+            "modified": "2026-10-09T13:20:11.21281Z",
             "name": "Remcos OpenDirectory Campaign",
             "report_types": [
                 "threat-report"
@@ -702,7 +702,7 @@
                 "indicator--77f48efd-39c5-5ef8-9495-c1941b39d57d",
                 "indicator--12a79448-82e1-57f2-83f7-f74b48336f73",
                 "indicator--bea4da2b-6b1a-5b61-9ae6-f72b9129ef98",
-                "indicator--db6425fa-cfe2-56c9-baf9-7d4f9a0d646a",
+                "indicator--6dd7a667-2975-5c8e-8ac1-d5b7eea8c3cd",
                 "malware--cb6b9f0e-67c7-5303-9a9f-caa8d412d9f5",
                 "malware--031d817c-8fb0-5278-813d-89441096c4a1",
                 "relationship--cdc55bda-a2d0-5412-9c48-db5d65c03144",
@@ -721,7 +721,7 @@
                 "relationship--19c26ec0-a601-589b-9430-2ffdba269557",
                 "relationship--5d14ca9b-db1f-5106-8319-375f98af937d",
                 "relationship--55242495-82a6-5d32-b821-5767a774797e",
-                "relationship--d5df7eae-785b-5072-9897-2a9366725c02"
+                "relationship--dc1ca868-fc2a-5caa-8b78-f231fba6c1bd"
             ],
             "labels": [
                 "RAT",

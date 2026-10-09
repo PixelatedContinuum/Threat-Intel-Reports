@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--17c9c42a-4c1b-4cc8-8870-29eb11c4c339",
+    "id": "bundle--080292e0-21f4-46b1-bf29-2e884de0f9ec",
     "objects": [
         {
             "type": "identity",
@@ -269,12 +269,12 @@
             "id": "indicator--682749db-45cf-566c-8927-0a4f8e9ed9e3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.418101Z",
-            "modified": "2026-10-01T19:54:15.418101Z",
+            "modified": "2026-10-09T13:20:06.430922Z",
             "name": "THL HUNT newdouble-ClickFix Panel Import POST With X-Vac-Secret Header (Steam Account Data Upload)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT newdouble-ClickFix Panel Import POST With X-Vac-Secret Header (Steam Account Data Upload)\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"/api/mafile/import\"; startswith; http.header; content:\"X-Vac-Secret|3a|\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:1000005; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)",
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT newdouble-ClickFix Panel Import POST With X-Vac-Secret Header (Steam Account Data Upload)\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"/api/mafile/import\"; startswith; http.header; content:\"X-Vac-Secret|3a|\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:9302105; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)",
             "pattern_type": "suricata",
             "valid_from": "2026-09-28T00:00:00Z",
             "labels": [
@@ -290,12 +290,12 @@
             "id": "indicator--510db276-4f64-5bd6-9317-96fc6f5f417b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.418176Z",
-            "modified": "2026-10-01T19:54:15.418176Z",
+            "modified": "2026-10-09T13:20:06.431044Z",
             "name": "THL HUNT newdouble-ClickFix First-Stage Script Fetch (y.ps1 URI Path)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT newdouble-ClickFix First-Stage Script Fetch (y.ps1 URI Path)\"; flow:established,to_server; http.method; content:\"GET\"; http.uri; content:\"/y/y.ps1\"; endswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:1000001; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)",
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT newdouble-ClickFix First-Stage Script Fetch (y.ps1 URI Path)\"; flow:established,to_server; http.method; content:\"GET\"; http.uri; content:\"/y/y.ps1\"; endswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:9302101; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)",
             "pattern_type": "suricata",
             "valid_from": "2026-09-28T00:00:00Z",
             "labels": [
@@ -311,12 +311,12 @@
             "id": "indicator--407cea07-cf9a-55f6-9238-9c45b74e898f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.418251Z",
-            "modified": "2026-10-01T19:54:15.418251Z",
+            "modified": "2026-10-09T13:20:06.431161Z",
             "name": "THL HUNT newdouble-ClickFix Second-Stage Executable Fetch (x.exe URI Path to Delivery Host)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> 202.71.14.31 any (msg:\"THL HUNT newdouble-ClickFix Second-Stage Executable Fetch (x.exe URI Path to Delivery Host)\"; flow:established,to_server; http.method; content:\"GET\"; http.uri; content:\"/x/x.exe\"; endswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:1000002; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)",
+            "pattern": "alert http $HOME_NET any -> 202.71.14.31 any (msg:\"THL HUNT newdouble-ClickFix Second-Stage Executable Fetch (x.exe URI Path to Delivery Host)\"; flow:established,to_server; http.method; content:\"GET\"; http.uri; content:\"/x/x.exe\"; endswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:9302102; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)",
             "pattern_type": "suricata",
             "valid_from": "2026-09-28T00:00:00Z",
             "labels": [
@@ -332,12 +332,12 @@
             "id": "indicator--aa4697b6-85a4-53f6-b0c4-9b8ac4115aeb",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.418325Z",
-            "modified": "2026-10-01T19:54:15.418325Z",
+            "modified": "2026-10-09T13:20:06.431277Z",
             "name": "THL HUNT newdouble-ClickFix Lure Domain DNS Query (Fake Verification Page)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert dns $HOME_NET any -> any any (msg:\"THL HUNT newdouble-ClickFix Lure Domain DNS Query (Fake Verification Page)\"; dns.query; content:\"newdouble\"; nocase; content:\"authentification.com\"; nocase; distance:0; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:1000003; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)",
+            "pattern": "alert dns $HOME_NET any -> any any (msg:\"THL HUNT newdouble-ClickFix Lure Domain DNS Query (Fake Verification Page)\"; dns.query; content:\"newdouble\"; nocase; content:\"authentification.com\"; nocase; distance:0; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:9302103; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)",
             "pattern_type": "suricata",
             "valid_from": "2026-09-28T00:00:00Z",
             "labels": [
@@ -353,12 +353,12 @@
             "id": "indicator--4db02044-07be-5901-a1cd-f7e865a586b2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.4184Z",
-            "modified": "2026-10-01T19:54:15.4184Z",
+            "modified": "2026-10-09T13:20:06.431403Z",
             "name": "THL HUNT newdouble-ClickFix Lure Domain TLS SNI (Fake Verification Page)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT newdouble-ClickFix Lure Domain TLS SNI (Fake Verification Page)\"; flow:established,to_server; tls.sni; content:\"newdouble\"; nocase; content:\"authentification.com\"; nocase; distance:0; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:1000004; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)",
+            "pattern": "alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT newdouble-ClickFix Lure Domain TLS SNI (Fake Verification Page)\"; flow:established,to_server; tls.sni; content:\"newdouble\"; nocase; content:\"authentification.com\"; nocase; distance:0; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:9302104; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)",
             "pattern_type": "suricata",
             "valid_from": "2026-09-28T00:00:00Z",
             "labels": [

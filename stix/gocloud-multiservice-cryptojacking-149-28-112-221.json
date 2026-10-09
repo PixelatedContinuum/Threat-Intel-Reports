@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--8b0af76b-b854-4517-a006-5900855b8dee",
+    "id": "bundle--29185711-8715-4cf1-b919-58a23a46893b",
     "objects": [
         {
             "type": "identity",
@@ -1177,12 +1177,12 @@
             "id": "indicator--cff350da-2e87-55d3-91cb-14537c72085e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.131985Z",
-            "modified": "2026-10-01T19:54:14.131985Z",
+            "modified": "2026-10-09T13:20:05.511323Z",
             "name": "THL DETECT GOCLOUD-Cryptojacking XMRig Deployment Heartbeat GET (Fixed Parameter Order to Payload Host)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT GOCLOUD-Cryptojacking XMRig Deployment Heartbeat GET (Fixed Parameter Order to Payload Host)\"; flow:established,to_server; http.uri; content:\"/r?host=\"; startswith; nocase; content:\"&status=OK&ts=\"; distance:0; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:1000001; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-26;)",
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT GOCLOUD-Cryptojacking XMRig Deployment Heartbeat GET (Fixed Parameter Order to Payload Host)\"; flow:established,to_server; http.uri; content:\"/r?host=\"; startswith; nocase; content:\"&status=OK&ts=\"; distance:0; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:9301501; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-26;)",
             "pattern_type": "suricata",
             "valid_from": "2026-07-26T00:00:00Z",
             "labels": [
@@ -1198,12 +1198,12 @@
             "id": "indicator--df7cef82-1f93-57c2-ae30-79fb54a6d2a0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.132057Z",
-            "modified": "2026-10-01T19:54:14.132057Z",
+            "modified": "2026-10-09T13:20:05.511423Z",
             "name": "THL DETECT GOCLOUD-Cryptojacking XMRig Worker-Label Heartbeat (gocloud_ or winjenkins_ Naming Convention)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT GOCLOUD-Cryptojacking XMRig Worker-Label Heartbeat (gocloud_ or winjenkins_ Naming Convention)\"; flow:established,to_server; http.uri; content:\"worker=\"; nocase; pcre:\"/worker=(gocloud|winjenkins)_/i\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:1000002; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-26;)",
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT GOCLOUD-Cryptojacking XMRig Worker-Label Heartbeat (gocloud_ or winjenkins_ Naming Convention)\"; flow:established,to_server; http.uri; content:\"worker=\"; nocase; pcre:\"/worker=(gocloud|winjenkins)_/i\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:9301502; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-26;)",
             "pattern_type": "suricata",
             "valid_from": "2026-07-26T00:00:00Z",
             "labels": [
@@ -1219,12 +1219,12 @@
             "id": "indicator--20e9dae7-70ff-5fc8-af19-3922ba151127",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.132129Z",
-            "modified": "2026-10-01T19:54:14.132129Z",
+            "modified": "2026-10-09T13:20:05.511525Z",
             "name": "THL DETECT GOCLOUD-Cryptojacking LAN Lateral-Movement Report Banner (=== ATTACK === Cleartext to Operator)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT GOCLOUD-Cryptojacking LAN Lateral-Movement Report Banner (=== ATTACK === Cleartext to Operator)\"; flow:established,to_server; content:\"=== ATTACK ===\"; content:\"OK!\"; distance:0; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:1000003; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-26;)",
+            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT GOCLOUD-Cryptojacking LAN Lateral-Movement Report Banner (=== ATTACK === Cleartext to Operator)\"; flow:established,to_server; content:\"=== ATTACK ===\"; content:\"OK!\"; distance:0; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:9301503; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-26;)",
             "pattern_type": "suricata",
             "valid_from": "2026-07-26T00:00:00Z",
             "labels": [
@@ -1240,12 +1240,12 @@
             "id": "indicator--f8282de0-deda-56e6-9362-c6cf73047c8d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.132202Z",
-            "modified": "2026-10-01T19:54:14.132202Z",
+            "modified": "2026-10-09T13:20:05.511627Z",
             "name": "THL DETECT GOCLOUD-Cryptojacking Windows Worm Component Retrieval (worm.vbs over HTTP)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT GOCLOUD-Cryptojacking Windows Worm Component Retrieval (worm.vbs over HTTP)\"; flow:established,to_server; http.uri; content:\"worm.vbs\"; endswith; nocase; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:1000004; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-26;)",
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT GOCLOUD-Cryptojacking Windows Worm Component Retrieval (worm.vbs over HTTP)\"; flow:established,to_server; http.uri; content:\"worm.vbs\"; endswith; nocase; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:9301504; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-26;)",
             "pattern_type": "suricata",
             "valid_from": "2026-07-26T00:00:00Z",
             "labels": [
@@ -1261,12 +1261,12 @@
             "id": "indicator--7f568619-17e8-5781-a73b-30e61042eb4e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.132275Z",
-            "modified": "2026-10-01T19:54:14.132275Z",
+            "modified": "2026-10-09T13:20:05.511727Z",
             "name": "THL HUNT GOCLOUD-Cryptojacking Linux Miner Delivery One-Liner (miner.sh Piped To Bash)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert tcp any any -> any any (msg:\"THL HUNT GOCLOUD-Cryptojacking Linux Miner Delivery One-Liner (miner.sh Piped To Bash)\"; flow:established; content:\"miner.sh|7c|bash\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:1000005; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-26;)",
+            "pattern": "alert tcp any any -> any any (msg:\"THL HUNT GOCLOUD-Cryptojacking Linux Miner Delivery One-Liner (miner.sh Piped To Bash)\"; flow:established; content:\"miner.sh|7c|bash\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:9301505; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-26;)",
             "pattern_type": "suricata",
             "valid_from": "2026-07-26T00:00:00Z",
             "labels": [
