@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-09T14:01:52Z
+generated_at: 2026-10-09T15:02:03Z
 window_days: 30
 counts:
-  total: 611
+  total: 610
   research: 211
-  news: 400
+  news: 399
 topics:
   - label: "vulnerabilities"
-    count: 146
+    count: 145
     color: 1
   - label: "malware"
     count: 118
@@ -3989,9 +3989,3 @@ items:
     date: 2026-09-09T15:16:34Z
     kind: news
     labels: ["vulnerability management"]
-  - title: "Fortinet Patches Critical Vulnerabilities in FortiMonitorOnSight, Chrome Extension"
-    url: "https://www.securityweek.com/fortinet-patches-critical-vulnerabilities-in-fortimonitoronsight-chrome-extension/"
-    source: "SecurityWeek"
-    date: 2026-09-09T14:33:52Z
-    kind: news
-    labels: ["vulnerabilities", "fortinet", "network security"]
