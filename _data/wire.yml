@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-09T13:01:42Z
+generated_at: 2026-10-09T14:01:52Z
 window_days: 30
 counts:
-  total: 612
+  total: 611
   research: 211
-  news: 401
+  news: 400
 topics:
   - label: "vulnerabilities"
     count: 146
@@ -3995,9 +3995,3 @@ items:
     date: 2026-09-09T14:33:52Z
     kind: news
     labels: ["vulnerabilities", "fortinet", "network security"]
-  - title: "MFA's Weakest Link: Account Recovery Is the New Attack Path"
-    url: "https://www.bleepingcomputer.com/news/security/mfas-weakest-link-account-recovery-is-the-new-attack-path/"
-    source: "BleepingComputer"
-    date: 2026-09-09T14:01:11Z
-    kind: news
-    labels: []
