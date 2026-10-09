@@ -104,9 +104,9 @@ What separates this variant from the generic killer.dll is nothing in the mechan
 - [killer_crowdstrike.dll IOCs]({{ "/ioc-feeds/arsenal-237-killer-crowdstrike-dll.json" | relative_url }})
 
 **Related Reports:**
-- [killer.dll Generic Variant](/reports/killer-dll/) - Original BYOVD implementation
+- [killer.dll Generic Variant](/reports/arsenal-237-new-files/killer-dll/) - Original BYOVD implementation
 - [Arsenal-237 Executive Overview](/reports/109.230.231.37-Executive-Overview/) - Full toolkit analysis
-- [lpe.exe Privilege Escalation Module](/reports/lpe-exe/) - Stage 1 component
+- [lpe.exe Privilege Escalation Module](/reports/arsenal-237-lpe-exe/) - Stage 1 component
 
 ---
 

@@ -100,7 +100,7 @@ The hardcoded AES-128-ECB key `QWERt_CSDMAHUATW` lets defenders decrypt any capt
 
 **Immediate Hunt Priorities:**
 - Block `193.56.255.154` at perimeter across ports 80, 443, and 4444; any existing connection represents a confirmed compromise or exposure event
-- Hunt for Covenant session token `75db-99b1-25fe4e9afbe58696-320bea73` in HTTP proxy logs; this string appears in every POST from either stager build (see [Section 9](#9-detection--hunting) and the [detection rules file](/hunting-detections/opendirectory-193-56-255-154-20260403-detections.md))
+- Hunt for Covenant session token `75db-99b1-25fe4e9afbe58696-320bea73` in HTTP proxy logs; this string appears in every POST from either stager build (see [Section 9](#9-detection--hunting) and the [detection rules file](/hunting-detections/open-directory-193-56-255-154-xiebroc2-detections/))
 - Investigate any endpoint that made a TCP connection to port 4444 or unencrypted HTTP to port 443 of this IP
 - Query ETW `DotNETRuntime` AssemblyLoad events (Event ID 152) from non-.NET host processes, catches both Covenant stager delivery and XiebroC2 fileless .NET execution regardless of disk artifacts
 - The hardcoded AES-128-ECB key `QWERt_CSDMAHUATW` enables offline decryption of any captured XiebroC2 C2 traffic from this campaign
@@ -1150,7 +1150,7 @@ The following table shows HIGH confidence technique mappings drawn directly from
 
 Complete detection rules are available in the dedicated detection file:
 
-**[hunting-detections/opendirectory-193-56-255-154-20260403-detections.md](/hunting-detections/opendirectory-193-56-255-154-20260403-detections.md)**
+**[hunting-detections/open-directory-193-56-255-154-xiebroc2-detections.md](/hunting-detections/open-directory-193-56-255-154-xiebroc2-detections/)**
 
 Detection coverage includes:
 - **4 YARA rules:** XiebroC2 v3.1 static detection (AES key, typo strings, RunPE error strings); Covenant GruntStager static detection; PowerShell fileless loader detection
