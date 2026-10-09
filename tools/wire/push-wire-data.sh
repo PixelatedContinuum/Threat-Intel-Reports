@@ -50,7 +50,26 @@ export GIT_AUTHOR_NAME="$NAME" GIT_AUTHOR_EMAIL="$EMAIL"
 export GIT_COMMITTER_NAME="$NAME" GIT_COMMITTER_EMAIL="$EMAIL"
 
 BLOB=$(git hash-object -w "$SRC") || exit 2
-TREE=$(printf '100644 blob %s\twire.yml\n' "$BLOB" | git mktree) || exit 2
+
+# The commit also carries main's .github/workflows/pages.yml. GitHub runs a push
+# event from the workflow files in the PUSHED commit's tree, so a commit holding
+# wire.yml alone triggers nothing and the site is never rebuilt (found at cutover,
+# 2026-10-09). The workflow checks out main whatever woke it, so this copy only
+# has to exist; taking it from $REMOTE/main each run keeps it current (run.sh
+# fast-forwards main first). Only pages.yml: any other workflow copied here would
+# fire on every hourly push too.
+WF=.github/workflows/pages.yml
+WF_BLOB=$(git rev-parse --verify --quiet "refs/remotes/$REMOTE/main:$WF") || {
+  echo "refusing: $REMOTE/main has no $WF, so a push to $BRANCH would trigger no build" >&2
+  exit 2
+}
+TMP_INDEX=$(mktemp) || exit 2
+trap 'rm -f "$TMP_INDEX"' EXIT
+rm -f "$TMP_INDEX"
+TREE=$(GIT_INDEX_FILE=$TMP_INDEX sh -c '
+  git update-index --add --cacheinfo "100644,$1,wire.yml" &&
+  git update-index --add --cacheinfo "100644,$2,$3" &&
+  git write-tree' sh "$BLOB" "$WF_BLOB" "$WF") || exit 2
 COMMIT=$(git commit-tree "$TREE" -m "wire: refresh $STAMP") || exit 2
 
 if git push --force --quiet "$REMOTE" "$COMMIT:refs/heads/$BRANCH"; then
