@@ -5912,17 +5912,41 @@ main.content:focus { outline: none; }
   background: color-mix(in srgb, currentColor 20%, transparent);
 }
 
-/* --- Navbar: search field beside the brand -------------------
-   A plain GET form posting ?q= to /search/, which reads the parameter and runs
-   the query, so the navbar loads no search script. The magnifier is a <label>
-   for the input: clicking it focuses the field, which is what expands it on
-   the widths where it collapses to the icon alone. Enter submits (single
-   text field, implicit submission). */
+/* ============================================================
+   Navbar (2026-10-09): menu button, brand, search field. The links moved into
+   a drawer (.hl-drawer, below); .hl-nav__links rules above are now unused.
+   ============================================================ */
+.hl-nav { justify-content: flex-start; gap: 16px; }
+
+.hl-nav__menu {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: var(--hl-text-muted);
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+}
+.hl-nav__menu:hover,
+.hl-nav__menu[aria-expanded="true"] {
+  color: var(--hl-text-primary);
+  background: #161b22;
+  border-color: var(--hl-border-card);
+}
+.hl-nav__menu:focus-visible { outline: 2px solid var(--hl-accent-blue); outline-offset: 2px; }
+
+/* Search: a plain GET form posting ?q= to /search/. The magnifier is a <label>
+   for the input, so on phones (icon only) a tap focuses and expands the field. */
 .hl-nav__search {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-left: 26px;
+  margin-left: 10px;
   flex-shrink: 0;
   height: 36px;
   padding: 0 10px;
@@ -5935,16 +5959,10 @@ main.content:focus { outline: none; }
   border-color: var(--hl-accent-blue);
   box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.16);
 }
-.hl-nav__search-icon {
-  display: flex;
-  align-items: center;
-  color: var(--hl-text-muted);
-  cursor: pointer;
-  flex-shrink: 0;
-}
+.hl-nav__search-icon { display: flex; align-items: center; color: var(--hl-text-muted); cursor: pointer; flex-shrink: 0; }
 .hl-nav__search:focus-within .hl-nav__search-icon { color: var(--hl-accent-blue); }
 .hl-nav__search-input {
-  width: 170px;
+  width: 210px;
   background: transparent;
   border: 0;
   outline: none;
@@ -5954,65 +5972,132 @@ main.content:focus { outline: none; }
   font-size: 0.95rem;
   transition: width 0.2s ease;
 }
-.hl-nav__search-input:focus { width: 250px; }
+.hl-nav__search-input:focus { width: 300px; }
 .hl-nav__search-input::placeholder { color: #6e7681; }
 .hl-nav__search-input::-webkit-search-decoration,
 .hl-nav__search-input::-webkit-search-cancel-button { -webkit-appearance: none; }
 
-/* The links sit to the right of the search field; a slightly tighter run than
-   before so the field fits at 1280px without pushing the last link off. */
-.hl-nav__links { margin-left: auto; gap: 30px; }
-.hl-nav__link, .hl-nav__link:visited { font-size: 1.1rem; }
-
-/* Laptop widths (1101 to 1279px): seven links plus the brand leave no room for
-   a permanent field, so it collapses to the icon. Focus (a click on the icon)
-   opens the field OVER the first links as an absolutely positioned box rather
-   than pushing them, so typing never reflows the nav or clips the last link. */
-@media (max-width: 1279px) and (min-width: 1101px) {
-  .hl-nav__search { position: relative; padding: 0 8px; margin-left: 18px; }
+/* Phones: one row, menu + brand on the left, the search icon on the right.
+   The field opens over the bar as an absolutely positioned box when focused,
+   so it never reflows the row. 16px font stops iOS zooming the page. */
+@media (max-width: 768px) {
+  .hl-nav { height: 58px; padding-top: 0; padding-bottom: 0; flex-wrap: nowrap; gap: 10px; }
+  .hl-nav__menu { width: 38px; height: 38px; }
+  .hl-nav__search { position: relative; margin-left: auto; padding: 0 8px; }
   .hl-nav__search-input {
     position: absolute;
-    left: 100%;
+    right: 100%;
     top: -1px;
     height: 36px;
     width: 0;
     opacity: 0;
-    margin-left: 6px;
+    margin-right: 6px;
     padding: 0;
     box-sizing: border-box;
     background: #161b22;
     border: 1px solid var(--hl-accent-blue);
     border-radius: 8px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    font-size: 16px;
     z-index: 2;
     transition: width 0.2s ease, opacity 0.15s ease;
   }
-  .hl-nav__search:focus-within .hl-nav__search-input { width: 240px; opacity: 1; padding: 0 12px; }
-  .hl-nav__links { gap: 22px; }
+  .hl-nav__search:focus-within .hl-nav__search-input { width: min(260px, calc(100vw - 150px)); opacity: 1; padding: 0 12px; }
 }
 
-/* Tablet and small laptop (769 to 1100px): the links no longer fit beside the
-   brand at all (they were being clipped before the field existed), so the nav
-   wraps: brand and the full search field on the first row, links on a second. */
-@media (max-width: 1100px) and (min-width: 769px) {
-  .hl-nav { height: auto; flex-wrap: wrap; padding-top: 12px; padding-bottom: 10px; row-gap: 8px; }
-  /* margin-right:auto keeps the field beside the brand; without it the bar's
-     space-between would push it to the far right of the first row. */
-  .hl-nav__search { margin-left: 22px; margin-right: auto; }
-  .hl-nav__links { width: 100%; gap: 16px; flex-wrap: wrap; }
-  .hl-nav__link, .hl-nav__link:visited { font-size: 0.95rem; }
+/* --- Navigation drawer ------------------------------------------------- */
+.hl-drawer__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 1100;
 }
+.hl-drawer__backdrop--open { opacity: 1; }
+.hl-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: min(320px, 86vw);
+  overflow-y: auto;
+  background: #0d1117;
+  border-right: 1px solid var(--hl-border-card);
+  box-shadow: 8px 0 32px rgba(0, 0, 0, 0.5);
+  transform: translateX(-100%);
+  transition: transform 0.22s ease;
+  z-index: 1101;
+  padding: 0 0 24px;
+  box-sizing: border-box;
+}
+.hl-drawer--open { transform: translateX(0); }
+.hl-drawer[hidden], .hl-drawer__backdrop[hidden] { display: none; }
+body.hl-drawer-locked { overflow: hidden; }
 
-/* Phones: the nav already wraps into brand row + links row; the search field
-   becomes its own full-width row after the links. 16px font stops iOS zooming. */
+.hl-drawer__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 70px;
+  padding: 0 16px 0 22px;
+  border-bottom: 1px solid var(--hl-border-card);
+}
+.hl-drawer__title {
+  font-family: var(--hl-font-display);
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--hl-text-muted);
+}
+.hl-drawer__close {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: var(--hl-text-muted);
+  cursor: pointer;
+}
+.hl-drawer__close:hover { color: var(--hl-text-primary); background: #161b22; border-color: var(--hl-border-card); }
+.hl-drawer__close:focus-visible { outline: 2px solid var(--hl-accent-blue); outline-offset: 2px; }
+
+.hl-drawer__group { padding: 18px 12px 6px; }
+.hl-drawer__group + .hl-drawer__group { border-top: 1px solid var(--hl-border-row); }
+.hl-drawer__label {
+  font-family: var(--hl-font-display);
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #6e7681;
+  padding: 0 10px 8px;
+}
+.hl-drawer__link,
+.hl-drawer__link:visited {
+  display: block;
+  padding: 10px 10px;
+  border-radius: 8px;
+  color: var(--hl-text-secondary) !important;
+  font-size: 1.05rem;
+  font-weight: 500;
+  text-decoration: none !important;
+  transition: background 0.12s, color 0.12s;
+}
+.hl-drawer__link:hover { background: #161b22; color: var(--hl-text-primary) !important; }
+.hl-drawer__link:focus-visible { outline: 2px solid var(--hl-accent-blue); outline-offset: -2px; }
+.hl-drawer__link[aria-current="page"] {
+  color: var(--hl-text-primary) !important;
+  background: color-mix(in srgb, var(--hl-accent-blue) 12%, transparent);
+  box-shadow: inset 3px 0 0 var(--hl-accent-blue);
+}
+@media (prefers-reduced-motion: reduce) {
+  .hl-drawer, .hl-drawer__backdrop, .hl-nav__search-input { transition: none; }
+}
 @media (max-width: 768px) {
-  .hl-nav__search {
-    order: 3;
-    width: 100%;
-    margin-left: 0;
-    height: 38px;
-    padding: 0 12px;
-  }
-  .hl-nav__search-input,
-  .hl-nav__search:focus-within .hl-nav__search-input { width: 100%; font-size: 16px; }
+  .hl-drawer__head { height: 58px; }
 }

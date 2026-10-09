@@ -1,4 +1,7 @@
 <header class="hl-nav">
+  <button class="hl-nav__menu" type="button" aria-controls="hl-drawer" aria-expanded="false" aria-label="Open menu">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true" focusable="false"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
   <a class="hl-nav__brand" href="{{ '/' | relative_url }}">
     <svg class="hl-brand__icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><rect width="64" height="64" rx="14" fill="#161b22"/><rect x="1" y="1" width="62" height="62" rx="13" fill="none" stroke="#30363d" stroke-width="1.5"/><g stroke="#58a6ff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M19 16 V48 M35 16 V48 M19 32 H35"/><path d="M35 48 H50"/></g></svg>
     <span class="hl-brand__rule" aria-hidden="true"></span>
@@ -7,18 +10,50 @@
       <span class="hl-brand__main">LEDGER<span class="hl-brand__dot" aria-hidden="true"></span></span>
     </span>
   </a>
+  {%- comment -%} A plain GET form posting ?q= to /search/, which reads the parameter and
+    runs the query, so the bar itself loads no search script. The magnifier is a <label>
+    for the input: on phones the field collapses to the icon and clicking it focuses
+    (and so expands) the field. Enter submits. {%- endcomment -%}
   <form class="hl-nav__search" action="{{ '/search/' | relative_url }}" method="get" role="search" aria-label="Search the site">
     <label class="hl-nav__search-icon" for="hl-nav-q" title="Search the Ledger">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     </label>
     <input class="hl-nav__search-input" id="hl-nav-q" name="q" type="search" placeholder="Search the Ledger" aria-label="Search the site" autocomplete="off" spellcheck="false">
   </form>
-  <nav class="hl-nav__links" aria-label="Site navigation">
-    {% assign nav_pages = site.pages | where_exp: "item", "item.position" | sort: 'position' %}
-    {% for nav_page in nav_pages %}
-      {% unless nav_page.title == null or nav_page.hide or nav_page.title == site.title %}
-      <a class="hl-nav__link" href="{{ nav_page.url | relative_url }}">{{ nav_page.nav_title | default: nav_page.title }}</a>
-      {% endunless %}
-    {% endfor %}
-  </nav>
 </header>
+{%- comment -%}
+  Site navigation lives in a drawer that slides in from the left (assets/js/nav-drawer.js).
+  The primary group is driven by `position:` front matter exactly as the old bar was, so
+  adding a section is still one key on its page. The second group is the set of pages the
+  footer also carries. Links are real anchors in the HTML whether or not the drawer is open,
+  so crawlers and a reader without JavaScript (the footer repeats them) lose nothing.
+{%- endcomment -%}
+<div class="hl-drawer__backdrop" id="hl-drawer-backdrop" hidden></div>
+<nav class="hl-drawer" id="hl-drawer" aria-label="Site navigation" aria-hidden="true" hidden>
+  <div class="hl-drawer__head">
+    <span class="hl-drawer__title">Menu</span>
+    <button class="hl-drawer__close" type="button" aria-label="Close menu">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true" focusable="false"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg>
+    </button>
+  </div>
+  <div class="hl-drawer__group">
+    <div class="hl-drawer__label">Explore</div>
+    {%- assign nav_pages = site.pages | where_exp: "item", "item.position" | sort: 'position' -%}
+    {%- for nav_page in nav_pages -%}
+      {%- unless nav_page.title == null or nav_page.hide or nav_page.title == site.title -%}
+    <a class="hl-drawer__link" href="{{ nav_page.url | relative_url }}"{% if page.url == nav_page.url %} aria-current="page"{% endif %}>{{ nav_page.nav_title | default: nav_page.title }}</a>
+      {%- endunless -%}
+    {%- endfor -%}
+  </div>
+  <div class="hl-drawer__group">
+    <div class="hl-drawer__label">More</div>
+    <a class="hl-drawer__link" href="{{ '/search/' | relative_url }}"{% if page.url == '/search/' %} aria-current="page"{% endif %}>Search</a>
+    <a class="hl-drawer__link" href="{{ '/consulting/' | relative_url }}"{% if page.url == '/consulting/' %} aria-current="page"{% endif %}>Consulting &amp; Advisory</a>
+    <a class="hl-drawer__link" href="{{ '/sponsor/' | relative_url }}"{% if page.url == '/sponsor/' %} aria-current="page"{% endif %}>Sponsorship</a>
+    <a class="hl-drawer__link" href="{{ '/about-me/' | relative_url }}"{% if page.url == '/about-me/' %} aria-current="page"{% endif %}>About Me</a>
+    <a class="hl-drawer__link" href="{{ '/behind-the-reports/' | relative_url }}"{% if page.url == '/behind-the-reports/' %} aria-current="page"{% endif %}>Behind the Reports</a>
+    <a class="hl-drawer__link" href="{{ '/pgp/' | relative_url }}"{% if page.url == '/pgp/' %} aria-current="page"{% endif %}>PGP Key</a>
+    <a class="hl-drawer__link" href="{{ '/feed.xml' | relative_url }}">RSS Feed</a>
+  </div>
+</nav>
+<script defer src="{{ '/assets/js/nav-drawer.js' | relative_url }}?v=1"></script>
