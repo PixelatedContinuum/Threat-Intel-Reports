@@ -45,6 +45,13 @@ every push to `main` now gets a full build, the unit tests and the source-side g
 | `tools/report-tooling/check-wire.js` | The staleness check now reads `origin/wire-data:wire.yml` first and falls back to `origin/main:_data/wire.yml`, so it is correct before, during and after the cutover. |
 | `tools/report-tooling/README.md`, `lib/check-wire.js` | Wording updated for the new path. |
 
+**In the `ai-workflows` repo** (branch `claude/wire-data-cutover`, task note `tasks/T-0194.md`):
+
+| File | What it is |
+|---|---|
+| `Projects/hunters-ledger-wire/run.sh` | The new timer wrapper for LXC-102: fast-forward `main`, generate to `/opt/opencti-wire/wire.yml`, publish with `push-wire-data.sh`, one retry. Replaces the untracked `/opt/opencti-wire/run.sh`. |
+| `Projects/hunters-ledger-wire/README.md` | Flow, locations and a copy-paste deploy block for `run.sh`, plus the new "is wire-data fresh?" troubleshooting step. |
+
 The workflow is **inert for readers until Step 2**. From the moment the branch merges, the
 `build` and `gates` jobs run on every push and show red in the Actions tab if anything regresses,
 but `deploy` is skipped, so the existing deploy-from-branch keeps serving the site unchanged.
@@ -92,34 +99,38 @@ during that overlap the generator's hourly commits to `main` trigger the Actions
 ### Step 3: point the generator at `wire-data`
 
 **Where:** your host, LXC-102 (the machine that runs `wire_export.py` on the hourly timer and
-holds a clone of this repository with push rights). Not a cloud session.
+holds the site clone at `/opt/opencti-wire/site` with the `lxc102-wire` write deploy key).
+Not a cloud session: the container is only reachable over your LAN
+(`ssh root@10.0.99.10`, then `pct exec 102`).
 
-1. In the site clone on LXC-102, pull `main` so `tools/wire/push-wire-data.sh` is present:
-   `git pull origin main`.
-2. Find the timer's publish step. Today it does something equivalent to
-   `cp wire.yml _data/wire.yml && git add _data/wire.yml && git commit -m "wire: refresh …" && git push origin main`.
-   Replace that whole step with one line, run from inside the clone:
+The replacement wrapper is already written and tracked in the `ai-workflows` repo at
+`Projects/hunters-ledger-wire/run.sh`, and that repo's `Projects/hunters-ledger-wire/README.md`
+carries the deploy recipe under "Deploying run.sh". In short:
 
-   ```sh
-   /path/to/Threat-Intel-Reports/tools/wire/push-wire-data.sh /path/to/generated/wire.yml
-   ```
-
-   It uses the clone's existing `origin` and credentials (the same ones that pushed to `main`),
-   needs no checkout, no stash and no branch switch, and prints one line on success. Exit 1 means
-   it refused the input (no `generated_at`, or a `description` field present); exit 2 is a git or
-   push failure. Keep whatever alerting the old step had and attach it to a non-zero exit here.
-3. Run the timer's job once by hand and check:
-   - `git ls-remote origin wire-data` prints a hash.
+1. Merge the `ai-workflows` branch that carries the new `run.sh` and README (task note `tasks/T-0194.md` there
+   tracks this cutover and is marked blocked on you).
+2. From your workstation checkout of `ai-workflows`, run the "Deploying run.sh" block in the
+   README. It backs up the current `/opt/opencti-wire/run.sh`, copies the new one in, makes it
+   executable and prints both md5sums for you to compare.
+3. Run the job once by hand:
+   `ssh root@10.0.99.10 'pct exec 102 -- flock -n /run/opencti-wire.lock /opt/opencti-wire/run.sh'`
+   The first run does a `git pull --ff-only` of `main`, which is what brings
+   `tools/wire/push-wire-data.sh` into the clone. Expected last line:
+   `pushed wire.yml (<generated_at>) to origin/wire-data as <sha>`.
+4. Verify:
+   - `git -C /opt/opencti-wire/site ls-remote origin wire-data` prints a hash.
    - The Actions tab shows a new "Build and deploy site" run triggered by `wire-data`, with
      `deploy` green.
    - `/wire/` on the live site shows the new timestamp.
-   - After the second hourly run, `git rev-list --count origin/wire-data` is still `1`.
-4. Only now remove the old commit-to-main step for good, if you kept it running in parallel.
+   - After the second hourly run, `git rev-list --count origin/wire-data` (after a fetch) is still `1`.
 
-If `wire-data` needs a credential of its own (for example the clone pushes with a deploy key that
-is scoped per branch, which is unusual), the key needs write access to `refs/heads/wire-data` and
-nothing else. Branch protection on `main` is irrelevant to this branch; do **not** protect
-`wire-data`, because the script force-pushes it by design.
+What changed in the wrapper: it no longer writes into the clone's `_data/`, no longer commits,
+and pulls `main` with `--ff-only` so a diverged clone fails loudly instead of carrying a commit
+nobody will push. The deploy key, the systemd unit, the timer and the `flock` are untouched; the
+key already has write access to the whole repo, which covers `wire-data`.
+
+Do **not** protect the `wire-data` branch: the publisher force-pushes it by design. Branch
+protection on `main` is irrelevant to it.
 
 ### Step 4: clean up `main` (after Step 3 is verified)
 
