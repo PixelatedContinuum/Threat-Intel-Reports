@@ -209,28 +209,6 @@ main.content {
   display: inline-block;
 }
 
-.hl-nav__links {
-  display: flex;
-  align-items: center;
-  gap: 40px;
-}
-
-.hl-nav__link,
-.hl-nav__link:visited {
-  color: var(--hl-text-muted) !important;
-  font-size: 1.2rem;
-  font-weight: 500;
-  text-decoration: none !important;
-  white-space: nowrap;
-  transition: color 0.15s;
-  letter-spacing: 0.02em;
-}
-
-.hl-nav__link:hover {
-  color: var(--hl-text-primary) !important;
-  text-decoration: none !important;
-}
-
 @media (max-width: 700px) {
   .hl-nav {
     height: auto;
@@ -242,12 +220,6 @@ main.content {
   .hl-brand__main { font-size: 15px; }
   .hl-brand__rule { height: 27px; }
   .hl-brand__icon { width: 32px; height: 32px; }
-  .hl-nav__links {
-    width: 100%;
-    flex-wrap: wrap;
-    gap: 20px;
-    padding-bottom: 6px;
-  }
 }
 
 
@@ -1806,13 +1778,6 @@ img { max-width: 100%; height: auto; }
     will-change: transform;
   }
   .hl-nav__brand { font-size: 1.1rem; }
-  .hl-nav__links {
-    width: 100%;
-    flex-wrap: wrap;
-    gap: 18px;
-    padding-bottom: 4px;
-  }
-  .hl-nav__link { font-size: 0.95rem; }
 
   /* Auto-hide state: slide the whole nav up out of view. The fixed mobile
      TOC bar is slid up in tandem by the scroll handler in default.html. */
@@ -1932,8 +1897,6 @@ img { max-width: 100%; height: auto; }
   main.content { padding: 0 12px 24px !important; font-size: 0.88em; }
   .hl-nav { padding: 10px 12px; }
   .hl-nav__brand { font-size: 1rem; }
-  .hl-nav__links { gap: 14px; }
-  .hl-nav__link { font-size: 0.9rem; }
   .hl-post-header,
   .hl-page-header,
   .hl-post-header__title,
@@ -2042,11 +2005,6 @@ button,
   .hl-back-top:hover { transform: none; }
 
   /* 44px minimum touch targets (WCAG 2.5.5) */
-  .hl-nav__link {
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
-  }
   .hl-back-top {
     width: 44px;
     height: 44px;
@@ -5914,7 +5872,7 @@ main.content:focus { outline: none; }
 
 /* ============================================================
    Navbar (2026-10-09): menu button, brand, search field. The links moved into
-   a drawer (.hl-drawer, below); .hl-nav__links rules above are now unused.
+   a drawer (.hl-drawer, below); the old .hl-nav__links rules were removed 2026-10-09.
    ============================================================ */
 .hl-nav { justify-content: flex-start; gap: 16px; }
 
