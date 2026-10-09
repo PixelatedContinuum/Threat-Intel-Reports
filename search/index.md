@@ -93,6 +93,55 @@ description: "Full-text search across every published report, detection page, IO
       });
     }
     if (initial && typeof ui.triggerSearch === 'function') ui.triggerSearch(initial);
+
+    // Colour each result by the section its URL belongs to, the same palette the
+    // listing cards use, and prepend a section chip. Pagefind renders results
+    // itself, so this watches the mount and decorates each new result once.
+    var SECTIONS = [
+      ['/reports/',            'reports',    'Report'],
+      ['/hunting-detections/', 'detections', 'Detection Rules'],
+      ['/ioc-feeds/',          'ioc',        'IOC Feed'],
+      ['/stix/',               'stix',       'STIX'],
+      ['/wire/',               'wire',       'The Wire'],
+      ['/behind-the-reports/', 'behind',     'Behind the Reports']
+    ];
+    function decorate(li) {
+      if (li.getAttribute('data-hl-section')) return;
+      var a = li.querySelector('.pagefind-ui__result-link');
+      // The observer can see the <li> before Pagefind has filled it; leave it
+      // unmarked so the next mutation, with the link present, decorates it.
+      if (!a) return;
+      var href = a.getAttribute('href') || '';
+      var key = 'pages', label = 'Page';
+      for (var i = 0; i < SECTIONS.length; i++) {
+        if (href.indexOf(base + SECTIONS[i][0]) === 0) { key = SECTIONS[i][1]; label = SECTIONS[i][2]; break; }
+      }
+      li.setAttribute('data-hl-section', key);
+      li.classList.add('hl-sr', 'hl-sr--' + key);
+      var title = li.querySelector('.pagefind-ui__result-inner > .pagefind-ui__result-title');
+      if (title) {
+        var chip = document.createElement('span');
+        chip.className = 'hl-sr__chip';
+        chip.textContent = label;
+        title.parentNode.insertBefore(chip, title);
+      }
+    }
+    // On a phone the open filter panel pushes the first result below the fold,
+    // so it starts collapsed there; one tap opens it. Done once per render.
+    var narrow = window.matchMedia && window.matchMedia('(max-width: 640px)').matches;
+    function collapseFilters() {
+      if (!narrow) return;
+      var blocks = mount.querySelectorAll('details.pagefind-ui__filter-block:not([data-hl-collapsed])');
+      for (var i = 0; i < blocks.length; i++) { blocks[i].open = false; blocks[i].setAttribute('data-hl-collapsed', '1'); }
+    }
+    if (mount && window.MutationObserver) {
+      var mo = new MutationObserver(function () {
+        collapseFilters();
+        var items = mount.querySelectorAll('.pagefind-ui__result');
+        for (var i = 0; i < items.length; i++) decorate(items[i]);
+      });
+      mo.observe(mount, { childList: true, subtree: true });
+    }
   };
   document.head.appendChild(s);
 })();
