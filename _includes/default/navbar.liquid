@@ -7,6 +7,12 @@
       <span class="hl-brand__main">LEDGER<span class="hl-brand__dot" aria-hidden="true"></span></span>
     </span>
   </a>
+  <form class="hl-nav__search" action="{{ '/search/' | relative_url }}" method="get" role="search" aria-label="Search the site">
+    <label class="hl-nav__search-icon" for="hl-nav-q" title="Search the Ledger">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </label>
+    <input class="hl-nav__search-input" id="hl-nav-q" name="q" type="search" placeholder="Search the Ledger" aria-label="Search the site" autocomplete="off" spellcheck="false">
+  </form>
   <nav class="hl-nav__links" aria-label="Site navigation">
     {% assign nav_pages = site.pages | where_exp: "item", "item.position" | sort: 'position' %}
     {% for nav_page in nav_pages %}

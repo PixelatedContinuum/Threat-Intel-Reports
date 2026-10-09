@@ -1,11 +1,9 @@
 ---
 title: Consulting & Advisory
 description: "Independent security consulting: malware analysis, incident response advisory, detection engineering and AI workflow engineering."
-nav_title: Need Help?
 layout: page
 permalink: /consulting/
 thumbnail: /assets/images/cards/consulting.png
-position: 7
 ---
 
 <div class="hl-page-header" style="--ph-accent: #b8902f;">

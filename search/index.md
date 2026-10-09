@@ -2,8 +2,6 @@
 title: Search
 layout: page
 permalink: /search/
-position: 4.8
-nav_title: Search
 description: "Full-text search across every published report, detection page, IOC feed and STIX bundle on The Hunter's Ledger."
 ---
 
