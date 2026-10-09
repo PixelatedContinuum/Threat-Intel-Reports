@@ -24,9 +24,9 @@ ioc_highlights:
   - value: "da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8"
     note: "Stage-5b UACME #41 UAC bypass (cross-build, 8/77 VT)"
   - value: "f7a4fe18d838e9d87db2db6378ffb21b90c3881d28d70871b8c2a661c6a78a6a"
-    note: "myfile.exe — Orcus RAT v7 Wardow crack"
+    note: "myfile.exe: Orcus RAT v7 Wardow crack"
   - value: "3b5d30e35f8e4f31a3e70d3754d02d0f045e39b6e0cfde22b1754667b7eb60a4"
-    note: "mymain.bat — outer 5-stage batch loader"
+    note: "mymain.bat: outer 5-stage batch loader"
 stix_bundle: /stix/open-directory-94-103-1-13-20260423.json
 ---
 

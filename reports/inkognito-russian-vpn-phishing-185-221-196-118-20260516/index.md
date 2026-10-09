@@ -15,11 +15,11 @@ detection_sections:
     anchor: "#suricata-signatures"
 ioc_highlights:
   - value: "185[.]221[.]196[.]118"
-    note: "Operator EspoCRM back-office (Aeza Italy AS210644 — OFAC SDN)"
+    note: "Operator EspoCRM back-office (Aeza Italy AS210644, OFAC SDN)"
   - value: "176[.]124[.]211[.]174"
     note: "Current primary phishing host (Timeweb RU AS9123)"
   - value: "193[.]46[.]56[.]182"
-    note: "Long-term VPN endpoint (Stark/Worktitans TR — EU-sanctioned)"
+    note: "Long-term VPN endpoint (Stark/Worktitans TR, EU-sanctioned)"
   - value: "inkconnect[.]ru"
     note: "INK VPN flagship brand (Cloudflare-fronted Vite/React SPA)"
   - value: "inklens[.]ru"

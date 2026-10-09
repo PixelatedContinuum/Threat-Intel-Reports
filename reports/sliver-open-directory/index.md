@@ -16,7 +16,7 @@ ioc_highlights:
   - value: "mailuxe[.]net"
     note: "Sliver C2 beacon endpoint"
   - value: "e2ad6f8202994058cc987cc971698238c2dc63a951dd1e43063cc9b8b138713b"
-    note: "OneDriveSync.exe — ScareCrow Sliver"
+    note: "OneDriveSync.exe: ScareCrow Sliver"
 layout: post
 permalink: /reports/sliver-open-directory/
 thumbnail: /assets/images/cards/sliver-open-directory.png
