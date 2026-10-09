@@ -5918,26 +5918,34 @@ main.content:focus { outline: none; }
    ============================================================ */
 .hl-nav { justify-content: flex-start; gap: 16px; }
 
+/* The menu button is the only way into the site's sections, so it is drawn as
+   a blue control with a label rather than a grey glyph that reads as decoration. */
 .hl-nav__menu {
   flex-shrink: 0;
-  width: 40px;
   height: 40px;
+  padding: 0 14px 0 11px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: 1px solid transparent;
+  gap: 8px;
+  background: color-mix(in srgb, var(--hl-accent-blue) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--hl-accent-blue) 55%, transparent);
   border-radius: 8px;
-  color: var(--hl-text-muted);
+  color: var(--hl-accent-blue);
+  font-family: var(--hl-font-display);
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
   cursor: pointer;
   transition: color 0.15s, background 0.15s, border-color 0.15s;
 }
+.hl-nav__menu-label { line-height: 1; }
 .hl-nav__menu:hover,
 .hl-nav__menu[aria-expanded="true"] {
-  color: var(--hl-text-primary);
-  background: #161b22;
-  border-color: var(--hl-border-card);
+  color: #0d1117;
+  background: var(--hl-accent-blue);
+  border-color: var(--hl-accent-blue);
 }
+
 .hl-nav__menu:focus-visible { outline: 2px solid var(--hl-accent-blue); outline-offset: 2px; }
 
 /* Search: a plain GET form posting ?q= to /search/. The magnifier is a <label>
@@ -5946,7 +5954,7 @@ main.content:focus { outline: none; }
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-left: 10px;
+  margin-left: auto;   /* right end of the bar on every width */
   flex-shrink: 0;
   height: 36px;
   padding: 0 10px;
@@ -5982,7 +5990,8 @@ main.content:focus { outline: none; }
    so it never reflows the row. 16px font stops iOS zooming the page. */
 @media (max-width: 768px) {
   .hl-nav { height: 58px; padding-top: 0; padding-bottom: 0; flex-wrap: nowrap; gap: 10px; }
-  .hl-nav__menu { width: 38px; height: 38px; }
+  .hl-nav__menu { height: 38px; padding: 0 9px; }
+  .hl-nav__menu-label { display: none; }
   .hl-nav__search { position: relative; margin-left: auto; padding: 0 8px; }
   .hl-nav__search-input {
     position: absolute;
