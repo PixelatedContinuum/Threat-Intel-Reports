@@ -13,7 +13,7 @@
   {% if _s %}{% assign resolved_sponsors = resolved_sponsors | push: _s %}{% endif %}
 {% endfor %}
 {% if resolved_sponsors.size > 0 %}
-<div class="hl-sponsor-banner">
+<div class="hl-sponsor-banner" data-pagefind-ignore>
   <span class="hl-sponsor-banner__label">Sponsored by</span>
   <div class="hl-sponsor-banner__entries">
   {% for sponsor in resolved_sponsors %}

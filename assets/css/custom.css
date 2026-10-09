@@ -5746,3 +5746,168 @@ main.content:focus { outline: none; }
   color:var(--hl-text-muted);
   font-size:.78em;
 }
+
+/* --- Listing filter: clickable tag badges --- */
+/* listing-filter.js adds this class to badges inside a [data-filter-grid] at
+   init, where a badge click applies the matching chip instead of opening the
+   card. Badges rendered anywhere else keep the plain .hl-tag look. The hover
+   stays on the border and text only, so each colour variant keeps its own
+   background. */
+.hl-tag--clickable {
+  cursor: pointer;
+  transition: border-color .15s ease, color .15s ease;
+}
+.hl-tag--clickable:hover {
+  border-color: var(--hl-accent-blue);
+  color: var(--hl-text-primary);
+}
+
+/* --- Search page: Pagefind UI theming --- */
+/* /search/ mounts Pagefind's default UI (pagefind-ui.js, built at deploy). The
+   widget themes itself through --pagefind-ui-* custom properties, so the site's
+   own tokens are mapped onto them here and the few places the defaults fight
+   the dark theme (result card spacing, light excerpt text) are tidied below. */
+.hl-search {
+  --pagefind-ui-scale: 1;
+  --pagefind-ui-primary: var(--hl-accent-blue);
+  --pagefind-ui-text: var(--hl-text-primary);
+  --pagefind-ui-background: var(--hl-bg-card);
+  --pagefind-ui-border: var(--hl-border-card);
+  --pagefind-ui-tag: var(--hl-bg-row);
+  --pagefind-ui-border-width: 1px;
+  --pagefind-ui-border-radius: 8px;
+  --pagefind-ui-image-border-radius: 8px;
+  --pagefind-ui-image-box-ratio: 3 / 2;
+  --pagefind-ui-font: var(--hl-font-display);
+  margin:0 0 2.5rem;
+}
+.hl-search .pagefind-ui__search-input {
+  background:var(--hl-bg-card);
+  color:var(--hl-text-primary);
+  border-color:var(--hl-border-card);
+  font-weight:500;
+}
+.hl-search .pagefind-ui__search-input::placeholder {
+  color:var(--hl-text-muted);
+  opacity:1;
+}
+.hl-search .pagefind-ui__search-input:focus {
+  outline:2px solid var(--hl-accent-blue);
+  outline-offset:1px;
+}
+.hl-search .pagefind-ui__search-clear {
+  color:var(--hl-text-muted);
+  background:transparent;
+}
+.hl-search .pagefind-ui__message {
+  color:var(--hl-text-muted);
+  font-weight:500;
+}
+.hl-search .pagefind-ui__filter-name {
+  color:var(--hl-text-primary);
+}
+.hl-search .pagefind-ui__filter-label {
+  color:var(--hl-text-secondary);
+}
+.hl-search .pagefind-ui__filter-value::before {
+  border-color:var(--hl-border-card);
+}
+.hl-search .pagefind-ui__result {
+  border-top:1px solid var(--hl-border-row);
+  padding:1.1rem 0;
+}
+.hl-search .pagefind-ui__result-link {
+  color:var(--hl-accent-blue);
+  text-decoration:none;
+  font-weight:600;
+}
+.hl-search .pagefind-ui__result-link:hover {
+  text-decoration:underline;
+}
+.hl-search .pagefind-ui__result-excerpt {
+  color:var(--hl-text-secondary);
+  opacity:.85;
+  line-height:1.55;
+}
+.hl-search .pagefind-ui__result-excerpt mark {
+  background:rgba(88,166,255,.22);
+  color:var(--hl-text-primary);
+  border-radius:3px;
+  padding:0 2px;
+}
+.hl-search .pagefind-ui__result-nested {
+  padding-left:1rem;
+  border-left:2px solid var(--hl-border-row);
+}
+.hl-search .pagefind-ui__result-tag {
+  background:var(--hl-bg-row);
+  color:var(--hl-text-muted);
+  border:1px solid var(--hl-border-row);
+}
+.hl-search .pagefind-ui__button {
+  background:var(--hl-bg-card);
+  color:var(--hl-text-primary);
+  border-color:var(--hl-border-card);
+}
+.hl-search .pagefind-ui__button:hover {
+  border-color:var(--hl-accent-blue);
+  color:var(--hl-accent-blue);
+}
+.hl-search__notice {
+  color:var(--hl-text-muted);
+  border:1px dashed var(--hl-border-card);
+  border-radius:8px;
+  padding:.9rem 1.1rem;
+  font-size:.9em;
+}
+
+/* --- IOC table: confidence, action and FP-risk columns, defang toggle ---
+
+   Added 2026-10-09 for _layouts/ioc-table.html's three optional columns and
+   the defang button. Kept beside the component's own block only in name: that
+   block is bounded by ioc-table-css.test.js at the next non-ioctable selector,
+   so these rules live here, sized in em and px for the same rem reason the
+   main block states (body is 1.25em = 20px; rem resolves against 16px).
+
+   Action is a badge coloured by what the reader is being told to do: BLOCK in
+   the site's red token, MONITOR in the gold token, and HUNT or anything else in
+   the muted grey, so the one instruction that touches a firewall is the one
+   that stands out. The modifier class is the first word of the value, so a
+   value such as "BLOCK at network perimeter" paints the same as a bare BLOCK.
+   Confidence and FP risk are muted small text: they qualify the row, they do
+   not act on it. The pressed state of the toggle mirrors
+   .hl-ioctable__chip[aria-pressed="true"] (border in the control's own colour,
+   a 20% tint behind it), using currentColor because the action buttons carry
+   no per-type hue. */
+.hl-ioctable__conf,
+.hl-ioctable__fp {
+  font-size: 0.74em;
+  color: var(--ioct-dim);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.hl-ioctable__fp { white-space: normal; }
+.hl-ioctable__act {
+  display: inline-block;
+  font-size: 0.68em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 1px 7px;
+  border-radius: 999px;
+  color: var(--ioct-dim);
+  border: 1px solid color-mix(in srgb, currentColor 40%, var(--ioct-border));
+  background: color-mix(in srgb, currentColor 10%, transparent);
+  white-space: nowrap;
+  max-width: 18em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+}
+.hl-ioctable__act--block   { color: var(--hl-accent-red, #f87171); }
+.hl-ioctable__act--monitor { color: var(--hl-accent-gold, #b8902f); }
+.hl-ioctable__act--hunt    { color: var(--ioct-dim); }
+.hl-ioctable__btn--toggle[aria-pressed="true"] {
+  border-color: currentColor;
+  background: color-mix(in srgb, currentColor 20%, transparent);
+}

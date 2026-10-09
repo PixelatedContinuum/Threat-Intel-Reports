@@ -36,8 +36,15 @@ function attr(s) {
     .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
-function page(rows, nbRows) {
+/* opts.flags mirrors the manifest's has_* booleans as the layout carries them
+   on the container (data-has-confidence and friends); the optional cells and
+   data attributes are emitted exactly as _layouts/ioc-table.html emits them,
+   only when the matching flag is on. Omitted, the fixture is the two-column
+   table every pre-2026-10-09 test was written against. */
+function page(rows, nbRows, opts) {
   nbRows = nbRows || [];
+  opts = opts || {};
+  var flags = opts.flags || {};
   var counts = {};
   rows.forEach(function (r) { counts[r.type] = (counts[r.type] || 0) + 1; });
   var chips = Object.keys(counts).map(function (t) {
@@ -50,9 +57,26 @@ function page(rows, nbRows) {
       // quote here would be truncated by the HTML parser and the test would be
       // asserting on a fixture bug rather than on the CSV writer.
       (r.context ? ' data-context="' + attr(r.context) + '"' : '') +
+      (r.confidence ? ' data-confidence="' + attr(r.confidence) + '"' : '') +
+      (r.action ? ' data-action="' + attr(r.action) + '"' : '') +
+      (r.fp_risk ? ' data-fp="' + attr(r.fp_risk) + '"' : '') +
       '><td><span class="hl-ioctable__type">' + r.type + '</span></td>' +
-      '<td><code>' + r.value + '</code></td></tr>';
+      '<td><code>' + r.value + '</code></td>' +
+      (flags.confidence ? '<td>' + (r.confidence ? '<span class="hl-ioctable__conf">' +
+        r.confidence + '</span>' : '') + '</td>' : '') +
+      (flags.action ? '<td>' + (r.action ? '<span class="hl-ioctable__act">' +
+        r.action + '</span>' : '') + '</td>' : '') +
+      (flags.fp ? '<td>' + (r.fp_risk ? '<span class="hl-ioctable__fp">' +
+        r.fp_risk + '</span>' : '') + '</td>' : '') +
+      '</tr>';
   }).join('');
+  var head = '<thead><tr><th>Type</th><th>Indicator</th>' +
+    (flags.confidence ? '<th>Confidence</th>' : '') +
+    (flags.action ? '<th>Action</th>' : '') +
+    (flags.fp ? '<th>FP risk</th>' : '') + '</tr></thead>';
+  var flagAttrs = ' data-has-confidence="' + (flags.confidence ? 'true' : 'false') + '"' +
+    ' data-has-action="' + (flags.action ? 'true' : 'false') + '"' +
+    ' data-has-fp-risk="' + (flags.fp ? 'true' : 'false') + '"';
 
   // The never-block section, structurally separate: a DIFFERENT table class
   // (hl-ioctable__nbtable, not hl-ioctable__table), exactly as _layouts/
@@ -70,15 +94,16 @@ function page(rows, nbRows) {
 
   var dom = new JSDOM(
     '<!doctype html><html><body>' +
-    '<div class="hl-ioctable" data-slug="demo" data-title="Demo Campaign">' +
+    '<div class="hl-ioctable" data-slug="demo" data-title="Demo Campaign"' + flagAttrs + '>' +
     '<div class="hl-ioctable__filters">' + chips +
     '<button class="hl-ioctable__clear" hidden>Clear filters</button></div>' +
     '<div class="hl-ioctable__actions">' +
     '<button class="hl-ioctable__btn" data-act="copy">Copy shown</button>' +
     '<button class="hl-ioctable__btn" data-act="txt">Download .txt</button>' +
     '<button class="hl-ioctable__btn" data-act="csv">Download .csv</button>' +
+    '<button class="hl-ioctable__btn hl-ioctable__btn--toggle" data-act="defang" aria-pressed="false">Defang</button>' +
     '<span class="hl-ioctable__count"></span></div>' +
-    '<table class="hl-ioctable__table"><tbody>' + trs + '</tbody></table>' +
+    '<table class="hl-ioctable__table">' + head + '<tbody>' + trs + '</tbody></table>' +
     nbSection +
     '</div></body></html>',
     { runScripts: 'outside-only', url: 'https://example.test/ioc-feeds/demo/' });
@@ -351,4 +376,211 @@ test('filtering to one type still excludes the never-block section, which has no
   assert.deepEqual(p.cap.clipboard.split('\n'), ['185.49.126.140', '91.197.98.188']);
   assert.equal(p.doc.querySelectorAll('.hl-ioctable__nbtable tbody tr').length, NB_ROWS.length,
     'the never-block table is untouched by the ordinary-table filter chips');
+});
+
+/* --- optional columns and the defang toggle, 2026-10-09 ---------------------
+
+   The columns are a BUILD-TIME decision (the layout emits them only when the
+   manifest's has_* flag is true), so what this suite can prove about them is
+   that the script reads the same flags for the CSV: a column that is not on
+   screen is not in the file. The defang toggle is pure client behaviour and is
+   proved end to end here: which types it rewrites, that it restores exactly,
+   that every export path follows the display, and that it cannot reach the
+   never-block table. */
+
+var TAGGED_ROWS = [
+  { type: 'ipv4', value: '185.49.126.140', context: 'C2 server',
+    confidence: 'DEFINITE', action: 'BLOCK', fp_risk: 'low' },
+  { type: 'domain', value: 'evil.test', context: 'staging', confidence: 'HIGH', action: 'MONITOR' },
+  { type: 'endpoint', value: 'pool.evil.test:10032', context: null, action: 'HUNT' },
+  { type: 'url', value: 'https://evil.test/a.php?x=1', context: null, confidence: 'MODERATE' },
+  { type: 'email', value: 'ops@evil.test', context: null },
+  { type: 'sha256', value: 'a'.repeat(64), context: null, confidence: 'DEFINITE', action: 'BLOCK' },
+  { type: 'filename', value: 'windefendersvc.exe', context: 'dropped' },
+  { type: 'path', value: 'C:' + String.fromCharCode(92) + 'Windows' +
+      String.fromCharCode(92) + 'x.exe', context: null },
+  { type: 'registry', value: 'HKLM' + String.fromCharCode(92) + 'SYSTEM' +
+      String.fromCharCode(92) + 'Svc.Key', context: null },
+  { type: 'md5', value: 'd'.repeat(32), context: null }
+];
+var ALL_FLAGS = { confidence: true, action: true, fp: true };
+
+function headers(doc) {
+  return Array.prototype.slice.call(doc.querySelectorAll('.hl-ioctable__table thead th'))
+    .map(function (th) { return th.textContent; });
+}
+
+function liveValues(doc) {
+  return Array.prototype.slice.call(doc.querySelectorAll('.hl-ioctable__table tbody tr code'))
+    .map(function (c) { return c.getAttribute('data-live'); });
+}
+
+test('with every flag false the table has only Type and Indicator, as before', function () {
+  var p = page(TAGGED_ROWS);
+  assert.deepEqual(headers(p.doc), ['Type', 'Indicator']);
+  assert.equal(p.doc.querySelectorAll('.hl-ioctable__table tbody tr:first-child td').length, 2);
+});
+
+test('a flagged feed renders exactly the flagged columns, in order', function () {
+  var p = page(TAGGED_ROWS, [], { flags: { action: true } });
+  assert.deepEqual(headers(p.doc), ['Type', 'Indicator', 'Action']);
+  var all = page(TAGGED_ROWS, [], { flags: ALL_FLAGS });
+  assert.deepEqual(headers(all.doc), ['Type', 'Indicator', 'Confidence', 'Action', 'FP risk']);
+});
+
+test('the defang button starts unpressed, reading Defang, and the table starts live', function () {
+  var p = page(TAGGED_ROWS);
+  var btn = p.doc.querySelector('.hl-ioctable__btn[data-act="defang"]');
+  assert.equal(btn.getAttribute('aria-pressed'), 'false');
+  assert.equal(btn.textContent, 'Defang');
+  assert.deepEqual(visibleValues(p.doc), TAGGED_ROWS.map(function (r) { return r.value; }));
+});
+
+test('every code element carries its live value in data-live before any toggle', function () {
+  var p = page(TAGGED_ROWS);
+  assert.deepEqual(liveValues(p.doc), TAGGED_ROWS.map(function (r) { return r.value; }));
+});
+
+test('DEFANG REWRITES ONLY THE NETWORK TYPES, and leaves every host type byte for byte', function () {
+  var p = page(TAGGED_ROWS);
+  var btn = click(p.doc, '.hl-ioctable__btn[data-act="defang"]');
+  assert.equal(btn.getAttribute('aria-pressed'), 'true');
+  assert.equal(btn.textContent, 'Defanged');
+  assert.deepEqual(visibleValues(p.doc), [
+    '185[.]49[.]126[.]140',
+    'evil[.]test',
+    'pool[.]evil[.]test:10032',
+    'hxxps://evil[.]test/a[.]php?x=1',
+    'ops[@]evil[.]test',
+    'a'.repeat(64),
+    'windefendersvc.exe',
+    'C:' + String.fromCharCode(92) + 'Windows' + String.fromCharCode(92) + 'x.exe',
+    'HKLM' + String.fromCharCode(92) + 'SYSTEM' + String.fromCharCode(92) + 'Svc.Key',
+    'd'.repeat(32)
+  ]);
+});
+
+test('a plain http url becomes hxxp, not hxxps', function () {
+  var p = page([{ type: 'url', value: 'http://evil.test/x', context: null }]);
+  click(p.doc, '.hl-ioctable__btn[data-act="defang"]');
+  assert.deepEqual(visibleValues(p.doc), ['hxxp://evil[.]test/x']);
+});
+
+test('TOGGLING OFF RESTORES EVERY VALUE EXACTLY, from data-live and not by reversing the rewrite', function () {
+  // A value that already carried a bracket would not survive a reverse
+  // substitution; it survives a restore from the recorded live value.
+  var odd = [{ type: 'domain', value: 'already[.]odd.test', context: null },
+             { type: 'url', value: 'hxxp://pre.defanged.test/', context: null }];
+  var rows = TAGGED_ROWS.concat(odd);
+  var p = page(rows);
+  click(p.doc, '.hl-ioctable__btn[data-act="defang"]');
+  var btn = click(p.doc, '.hl-ioctable__btn[data-act="defang"]');
+  assert.equal(btn.getAttribute('aria-pressed'), 'false');
+  assert.equal(btn.textContent, 'Defang');
+  assert.deepEqual(visibleValues(p.doc), rows.map(function (r) { return r.value; }));
+  assert.deepEqual(liveValues(p.doc), rows.map(function (r) { return r.value; }),
+    'data-live is never rewritten by the toggle');
+});
+
+test('COPY FOLLOWS THE DISPLAY: a defanged table copies defanged values', function () {
+  var p = page(TAGGED_ROWS);
+  click(p.doc, '.hl-ioctable__btn[data-act="defang"]');
+  click(p.doc, '.hl-ioctable__chip[data-type="ipv4"]');
+  click(p.doc, '.hl-ioctable__btn[data-act="copy"]');
+  assert.equal(p.cap.clipboard, '185[.]49[.]126[.]140');
+});
+
+test('the .txt download follows the display too, and goes back to live when toggled off', function () {
+  var p = page(TAGGED_ROWS);
+  click(p.doc, '.hl-ioctable__chip[data-type="url"]');
+  click(p.doc, '.hl-ioctable__btn[data-act="defang"]');
+  click(p.doc, '.hl-ioctable__btn[data-act="txt"]');
+  assert.equal(p.dom.window.__lastDownloadText, 'hxxps://evil[.]test/a[.]php?x=1');
+  click(p.doc, '.hl-ioctable__btn[data-act="defang"]');
+  click(p.doc, '.hl-ioctable__btn[data-act="txt"]');
+  assert.equal(p.dom.window.__lastDownloadText, 'https://evil.test/a.php?x=1');
+});
+
+test('the .csv value column follows the display while type and context stay as recorded', function () {
+  var p = page(TAGGED_ROWS);
+  click(p.doc, '.hl-ioctable__chip[data-type="domain"]');
+  click(p.doc, '.hl-ioctable__btn[data-act="defang"]');
+  click(p.doc, '.hl-ioctable__btn[data-act="csv"]');
+  var csv = p.dom.window.__lastDownloadText.split('\n');
+  assert.equal(csv[0], 'value,type,context');
+  assert.equal(csv[1], 'evil[.]test,domain,staging');
+});
+
+test('a row hidden by the filter is still defanged, so revealing it later matches the toggle', function () {
+  var p = page(TAGGED_ROWS);
+  click(p.doc, '.hl-ioctable__chip[data-type="sha256"]');
+  click(p.doc, '.hl-ioctable__btn[data-act="defang"]');
+  click(p.doc, '.hl-ioctable__clear');
+  assert.equal(visibleValues(p.doc)[0], '185[.]49[.]126[.]140');
+});
+
+test('THE CSV HEADER GAINS THE EXTRA COLUMNS ONLY WHEN FLAGGED, and never without the flag', function () {
+  var none = page(TAGGED_ROWS);
+  click(none.doc, '.hl-ioctable__btn[data-act="csv"]');
+  var csv0 = none.dom.window.__lastDownloadText.split('\n');
+  assert.equal(csv0[0], 'value,type,context',
+    'rows carrying data-action must not add a column the table does not show');
+  assert.equal(csv0[1], '185.49.126.140,ipv4,C2 server');
+
+  var some = page(TAGGED_ROWS, [], { flags: { action: true } });
+  click(some.doc, '.hl-ioctable__btn[data-act="csv"]');
+  var csv1 = some.dom.window.__lastDownloadText.split('\n');
+  assert.equal(csv1[0], 'value,type,context,action');
+  assert.equal(csv1[1], '185.49.126.140,ipv4,C2 server,BLOCK');
+
+  var all = page(TAGGED_ROWS, [], { flags: ALL_FLAGS });
+  click(all.doc, '.hl-ioctable__btn[data-act="csv"]');
+  var csv2 = all.dom.window.__lastDownloadText.split('\n');
+  assert.equal(csv2[0], 'value,type,context,confidence,action,fp_risk');
+  assert.equal(csv2[1], '185.49.126.140,ipv4,C2 server,DEFINITE,BLOCK,low');
+});
+
+test('a flagged row with no value for that field leaves the csv field empty, never null', function () {
+  var p = page(TAGGED_ROWS, [], { flags: ALL_FLAGS });
+  click(p.doc, '.hl-ioctable__chip[data-type="email"]');
+  click(p.doc, '.hl-ioctable__btn[data-act="csv"]');
+  assert.equal(p.dom.window.__lastDownloadText.split('\n')[1], 'ops@evil.test,email,,,,');
+});
+
+test('an action carrying a comma is quoted in the csv like any other field', function () {
+  var p = page([{ type: 'ipv4', value: '1.2.3.4', context: null,
+                  action: 'BLOCK, THEN NOTIFY' }], [], { flags: { action: true } });
+  click(p.doc, '.hl-ioctable__btn[data-act="csv"]');
+  assert.equal(p.dom.window.__lastDownloadText.split('\n')[1], '1.2.3.4,ipv4,,"BLOCK, THEN NOTIFY"');
+});
+
+test('defanged values and flagged columns combine in one csv', function () {
+  var p = page(TAGGED_ROWS, [], { flags: ALL_FLAGS });
+  click(p.doc, '.hl-ioctable__btn[data-act="defang"]');
+  click(p.doc, '.hl-ioctable__chip[data-type="ipv4"]');
+  click(p.doc, '.hl-ioctable__btn[data-act="csv"]');
+  assert.equal(p.dom.window.__lastDownloadText.split('\n')[1],
+    '185[.]49[.]126[.]140,ipv4,C2 server,DEFINITE,BLOCK,low');
+});
+
+test('THE NEVER-BLOCK TABLE IS NEVER TOUCHED BY THE TOGGLE', function () {
+  var p = page(TAGGED_ROWS, NB_ROWS);
+  click(p.doc, '.hl-ioctable__btn[data-act="defang"]');
+  var nb = Array.prototype.slice.call(p.doc.querySelectorAll('.hl-ioctable__nbtable code'));
+  assert.deepEqual(nb.map(function (c) { return c.textContent; }),
+    NB_ROWS.map(function (r) { return r.value; }), 'never-block values were rewritten');
+  nb.forEach(function (c) {
+    assert.equal(c.hasAttribute('data-live'), false, 'the toggle recorded a never-block value');
+  });
+  // And the ordinary rows were, so the toggle did fire.
+  assert.equal(visibleValues(p.doc)[0], '185[.]49[.]126[.]140');
+});
+
+test('the toggle does not persist: a fresh page is live again', function () {
+  var p = page(TAGGED_ROWS);
+  click(p.doc, '.hl-ioctable__btn[data-act="defang"]');
+  var q = page(TAGGED_ROWS);
+  assert.equal(q.doc.querySelector('.hl-ioctable__btn[data-act="defang"]')
+    .getAttribute('aria-pressed'), 'false');
+  assert.equal(visibleValues(q.doc)[0], '185.49.126.140');
 });

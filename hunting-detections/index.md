@@ -40,7 +40,7 @@ position: 3
 
 {% include listing-filter.html entries=det_entries tag_field="detection_tags" placeholder="Search detections by name…" %}
 
-<div class="hl-grid" data-filter-grid>
+<div class="hl-grid" data-filter-grid data-pagefind-ignore>
 {% for e in det_entries %}
   {% if e.detection_title %}{% assign dtitle = e.detection_title %}{% else %}{% assign dtitle = e.title | prepend: "Detection Rules — " %}{% endif %}
   {% assign dtags = e.detection_tags | default: e.tags %}

@@ -89,6 +89,9 @@
     return {
       attr: attr,
       cardAttr: cardAttr || attr,
+      // The key this axis uses in the URL hash: data-tag is `tag=`, data-kind
+      // is `kind=`. Derived, so a third axis would name itself.
+      param: attr.replace(/^data-/, ''),
       chips: [].slice.call(bar.querySelectorAll('.hl-chip-btn[' + attr + ']')),
       allChip: bar.querySelector('.hl-chip-btn[' + attr + '=""]'),
       active: {},
@@ -159,25 +162,172 @@
     // `display: none` that the hidden attribute relies on, so the CSS carries an
     // explicit [hidden] rule.
     if (dateClear) dateClear.hidden = !(dateInput && dateInput.value);
+    writeHash();
+  }
+
+  /* Every change to a chip row goes through these two, so a chip click, a tag
+     badge click and a hash read all leave the row in the same shape: the All
+     chip is on exactly when nothing else on that row is. `wanted` holds
+     lowercase values; the Wire renders its chips from the label as spelled, so
+     the compare is case-insensitive while dim.active keeps the chip's own
+     spelling for matchDim. */
+  function setDim(dim, wanted) {
+    dim.active = {};
+    dim.chips.forEach(function (x) {
+      var t = x.getAttribute(dim.attr);
+      var on = t !== '' && wanted.indexOf(t.toLowerCase()) > -1;
+      if (on) { dim.active[t] = 1; x.classList.add('is-on'); }
+      else { x.classList.remove('is-on'); }
+    });
+    if (dim.allChip && dim.keys().length === 0) dim.allChip.classList.add('is-on');
+  }
+
+  function toggleChip(dim, ch) {
+    var t = ch.getAttribute(dim.attr);
+    if (t === '') { setDim(dim, []); return; }
+    var keys = dim.keys().map(function (k) { return k.toLowerCase(); });
+    var i = keys.indexOf(t.toLowerCase());
+    if (i > -1) keys.splice(i, 1); else keys.push(t.toLowerCase());
+    setDim(dim, keys);
   }
 
   dims.forEach(function (dim) {
     dim.chips.forEach(function (ch) {
       ch.addEventListener('click', function () {
-        var t = ch.getAttribute(dim.attr);
-        if (t === '') {
-          dim.active = {};
-          dim.chips.forEach(function (x) { x.classList.remove('is-on'); });
-          if (dim.allChip) dim.allChip.classList.add('is-on');
-        } else {
-          if (dim.allChip) dim.allChip.classList.remove('is-on');
-          if (dim.active[t]) { delete dim.active[t]; ch.classList.remove('is-on'); }
-          else { dim.active[t] = 1; ch.classList.add('is-on'); }
-          if (dim.keys().length === 0 && dim.allChip) dim.allChip.classList.add('is-on');
-        }
+        toggleChip(dim, ch);
         apply();
       });
     });
+  });
+
+  /* --- URL state ------------------------------------------------------------
+
+     The bar's state is mirrored into the hash so a filtered view can be handed
+     to someone as a link:
+
+         #q=<encoded text>&tag=<a>,<b>&date=YYYY-MM-DD
+
+     plus `kind=` on a page that renders a second chip row. Empty parts are
+     omitted, and when nothing is active the hash goes away entirely, so the
+     bare page URL stays the one people copy. Tag values are the chip's data-tag
+     lowercased; a tag with no chip on this page is ignored on read, since there
+     is nothing to press.
+
+     replaceState, never pushState. Every keystroke in the search box is an
+     apply(), and a history entry per keystroke would make the back button walk
+     through the reader's typing. The hash is read once BEFORE the first
+     apply(), so a shared link lands filtered rather than flashing the full list,
+     and again on hashchange, which the browser fires when the reader edits the
+     URL or steps between two shared links. It does not fire for our own
+     replaceState, so write and read never chase each other.
+
+     Not every fragment is ours. The layout's "Skip to content" link lands on
+     #main, and a report's TOC links on headings, so a hash that carries none of
+     the filter's keys is left alone rather than read as "clear everything".
+     Only an EMPTY hash clears, which is what stepping back from a filtered link
+     to the bare page looks like.
+
+     The veto ioc-search.js sets on cards is not this bar's state and never
+     reaches the hash: it derives from text in a different control that a link
+     cannot carry, and apply() reads it fresh from the card each time. */
+  var hasHistory = !!(window.history && window.history.replaceState);
+  var DATE_SHAPE = /^\d{4}-\d{2}-\d{2}$/;
+
+  function decode(s) {
+    // A hand-edited `%` the browser could not decode is not worth a thrown
+    // error in the middle of init; it reads as nothing.
+    try { return decodeURIComponent(s); } catch (e) { return ''; }
+  }
+
+  function readHash() {
+    var raw = String(window.location.hash || '').replace(/^#/, '');
+    var out = { ours: raw === '', q: '', date: '', tag: [], kind: [] };
+    if (!raw) return out;
+    raw.split('&').forEach(function (part) {
+      var eq = part.indexOf('=');
+      if (eq < 0) return;
+      var k = part.slice(0, eq), v = part.slice(eq + 1);
+      if (k === 'q') { out.q = decode(v); out.ours = true; }
+      else if (k === 'date') { out.date = decode(v); out.ours = true; }
+      else if (k === 'tag' || k === 'kind') {
+        out.ours = true;
+        out[k] = v.split(',').map(decode)
+          .map(function (t) { return t.trim().toLowerCase(); })
+          .filter(Boolean);
+      }
+      // Any other key is not ours; it is dropped on the next write.
+    });
+    return out;
+  }
+
+  function stateToHash() {
+    var parts = [];
+    var term = (search && search.value || '').trim();
+    if (term) parts.push('q=' + encodeURIComponent(term));
+    dims.forEach(function (d) {
+      var keys = d.keys().map(function (k) { return encodeURIComponent(k.toLowerCase()); });
+      if (keys.length) parts.push(d.param + '=' + keys.join(','));
+    });
+    if (dateInput && dateInput.value) parts.push('date=' + encodeURIComponent(dateInput.value));
+    return parts.join('&');
+  }
+
+  function writeHash() {
+    if (!hasHistory) return;
+    var loc = window.location;
+    var h = stateToHash();
+    var want = loc.pathname + loc.search + (h ? '#' + h : '');
+    if (want === loc.pathname + loc.search + loc.hash) return;
+    // A URL the history API refuses (file://, a sandboxed frame) must not stop
+    // the filter itself working; the link is a convenience on top of it.
+    try { window.history.replaceState(null, '', want); } catch (e) { /* see above */ }
+  }
+
+  function applyHash() {
+    var s = readHash();
+    if (!s.ours) return false;
+    if (search) search.value = s.q;
+    dims.forEach(function (d) { setDim(d, s[d.param] || []); });
+    // A date the input cannot hold would be coerced to '' by the browser
+    // anyway; checking the shape here makes that explicit and testable.
+    if (dateInput) dateInput.value = DATE_SHAPE.test(s.date) ? s.date : '';
+    apply();
+    return true;
+  }
+
+  window.addEventListener('hashchange', applyHash);
+
+  /* --- Tag badges as controls ------------------------------------------------
+
+     A badge on a card sits inside the card's link, so a click on it would open
+     the entry. Inside a filter grid it filters instead: the chip whose data-tag
+     matches the badge text is toggled exactly as a chip click would, and a tag
+     too rare to have earned a chip (fewer than three entries, see
+     listing-filter.html) goes into the search box, which already matches on
+     tags. The affordance (cursor, title) is set here and not in tag-badge.html,
+     because that include also renders badges on report pages, where a badge is
+     a label and not a control. No tabindex: a span inside a link is not a
+     focus stop, and keyboard users have the chips. */
+  var tagDim = dims[0];
+  [].slice.call(grid.querySelectorAll('.hl-tag')).forEach(function (b) {
+    b.classList.add('hl-tag--clickable');
+    b.setAttribute('title', 'Filter by this tag');
+  });
+  grid.addEventListener('click', function (e) {
+    var b = e.target && e.target.closest ? e.target.closest('.hl-tag') : null;
+    if (!b || !grid.contains(b)) return;
+    e.preventDefault();
+    e.stopPropagation();
+    var text = (b.textContent || '').trim();
+    var key = text.toLowerCase();
+    var chip = null;
+    tagDim.chips.forEach(function (ch) {
+      var t = ch.getAttribute(tagDim.attr);
+      if (t !== '' && t.toLowerCase() === key) chip = ch;
+    });
+    if (chip) { toggleChip(tagDim, chip); }
+    else if (search) { search.value = text; }
+    apply();
   });
 
   // An external control mutates data-veto, then asks for a re-apply.
@@ -208,5 +358,7 @@
     if (dateInput) dateInput.value = '';
     apply();
   });
-  apply();
+  // The first render is the hash's when the page was opened from a shared
+  // link; a fragment that is not ours (#main) gets the plain first render.
+  if (!applyHash()) apply();
 })();

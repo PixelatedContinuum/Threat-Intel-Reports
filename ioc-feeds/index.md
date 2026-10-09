@@ -28,7 +28,7 @@ redirect_from:
 
 {% include listing-filter.html entries=ioc_entries tag_field="ioc_tags" placeholder="Search IOC feeds by name…" %}
 
-<div class="hl-grid" data-filter-grid>
+<div class="hl-grid" data-filter-grid data-pagefind-ignore>
 {% for e in ioc_entries %}
   {% if e.ioc_title %}{% assign ititle = e.ioc_title %}{% else %}{% assign ititle = e.title | append: " — IOC Feed" %}{% endif %}
   {% assign itags = e.ioc_tags | default: e.tags %}

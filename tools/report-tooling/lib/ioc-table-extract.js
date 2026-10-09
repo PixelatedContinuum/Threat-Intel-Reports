@@ -232,6 +232,63 @@ function hostType(s) {
 var TYPE_ORDER = ['ipv4', 'domain', 'endpoint', 'url', 'sha256', 'sha1', 'md5',
                   'email', 'path', 'registry', 'filename'];
 
+/* Per-row analyst fields, added 2026-10-09: `confidence`, `action` and
+   `false_positive_risk` (carried as `fp_risk`), read from the SAME object the
+   value sits in and nowhere else. They are display metadata for the viewer's
+   extra columns, not inputs to typing, ordering, dedupe or the never-block
+   split, none of which reads them.
+
+   Scope is the nearest enclosing object, crossed through arrays but never
+   through a nested object: a feed-level `metadata.confidence` must not become
+   every row's confidence, and a value inside a sub-object of an indicator
+   object does not inherit the parent's rating either. Confidence and action
+   are upper-cased, a one-word fp_risk lower-cased, all trimmed; a missing,
+   non-string or blank field is null (see actionOf and fpRiskOf below for the
+   two values that are deliberately NOT carried). The corpus carries `false_positive_risk: true` on nine
+   objects and that is null here rather than "true", because a boolean rating
+   is not the vocabulary the column is documented to show. On a duplicated
+   value (the same type:value key on several objects) the first object's
+   fields win, exactly as its plain context does. */
+var NO_META = { confidence: null, action: null, fp_risk: null };
+
+function metaField(v) {
+  if (typeof v !== 'string') return null;
+  var t = v.trim();
+  return t ? t : null;
+}
+
+/* `action` is a defender verb (BLOCK, MONITOR, HUNT, ALERT ...) and renders as a
+   badge. Some feeds reuse the key for a persistence COMMAND or PATH beside a
+   registry value (dual-rat-analysis: `action: %APPDATA%\SUBDIR\CLIENT.EXE`), which
+   is not a verb and would render as a clipped badge saying nothing. A value
+   carrying a path separator, a percent sign, a dot or more than 40 characters is
+   therefore not an action for this column and is null; the raw JSON keeps it. */
+var ACTION_NOT_A_VERB = /[\\\/%.]/;
+function actionOf(v) {
+  var t = metaField(v);
+  if (!t || t.length > 40 || ACTION_NOT_A_VERB.test(t)) return null;
+  return t.toUpperCase();
+}
+
+/* `false_positive_risk` is usually a one-word rating (low, medium, high), which is
+   normalised to lower case so "Low" and "LOW" render alike. Seventeen rows in the
+   corpus carry a sentence instead; lower-casing those would mangle product names
+   and an email address, so anything beyond a single word is kept as authored. */
+function fpRiskOf(v) {
+  var t = metaField(v);
+  if (!t) return null;
+  return /^[A-Za-z-]+$/.test(t) ? t.toLowerCase() : t;
+}
+
+function metaOf(node) {
+  var c = metaField(node.confidence);
+  return {
+    confidence: c ? c.toUpperCase() : null,
+    action: actionOf(node.action),
+    fp_risk: fpRiskOf(node.false_positive_risk)
+  };
+}
+
 function typeRank(t) {
   var i = TYPE_ORDER.indexOf(t);
   return i === -1 ? TYPE_ORDER.length : i;
@@ -257,7 +314,7 @@ function typeRank(t) {
 function runWalk(root, roleKeys, roleMaxLen, exempt, suppressBenign) {
   var byKey = {}, order = [], untyped = 0;
 
-  function take(raw, role, roleIsCaveat) {
+  function take(raw, role, roleIsCaveat, meta) {
     if (typeof raw !== 'string') return;
     var s = raw.trim();
     if (!s || s.length > 300) return;
@@ -265,11 +322,11 @@ function runWalk(root, roleKeys, roleMaxLen, exempt, suppressBenign) {
     var atomic = C.classify(s);
     if (atomic) {
       if (suppressBenign && B.isBenign(atomic.type, atomic.value)) return;   // 8.8.8.8 and friends
-      return push(atomic.type, atomic.value, role, roleIsCaveat);
+      return push(atomic.type, atomic.value, role, roleIsCaveat, meta);
     }
 
     var h = hostType(s);
-    if (h) return push(h, s, role, roleIsCaveat);
+    if (h) return push(h, s, role, roleIsCaveat, meta);
 
     /* Not typed. Only count values that plausibly wanted to be an indicator:
        a short, space-free token, or something path- or hash-shaped. Prose, which
@@ -287,13 +344,14 @@ function runWalk(root, roleKeys, roleMaxLen, exempt, suppressBenign) {
      true) for an EXISTING key accumulates into `caveats` instead of being dropped, and
      row assembly below joins every distinct one collected, in encounter order. A
      non-caveat push for an existing key is unchanged: first wins, as before this fix. */
-  function push(type, value, role, roleIsCaveat) {
+  function push(type, value, role, roleIsCaveat, meta) {
     var k = type + ':' + value;
     var existing = byKey[k];
     if (!existing) {
       byKey[k] = {
         type: type, value: value, context: role || null,
-        caveats: (roleIsCaveat && role) ? [role] : []
+        caveats: (roleIsCaveat && role) ? [role] : [],
+        meta: meta || NO_META
       };
       order.push(k);
       return;
@@ -303,17 +361,21 @@ function runWalk(root, roleKeys, roleMaxLen, exempt, suppressBenign) {
     }
   }
 
-  function walk(node, key, role, roleIsCaveat) {
+  function walk(node, key, role, roleIsCaveat, meta) {
     if (node == null) return;
     if (typeof node === 'string') {
       if (PROSE_KEYS[key]) return;
-      return take(node, role, roleIsCaveat);
+      return take(node, role, roleIsCaveat, meta);
     }
     if (Array.isArray(node)) {
-      node.forEach(function (x) { walk(x, key, role, roleIsCaveat); });
+      node.forEach(function (x) { walk(x, key, role, roleIsCaveat, meta); });
       return;
     }
     if (typeof node !== 'object') return;
+
+    /* The analyst fields are re-read at EVERY object boundary (see metaOf above),
+       unlike the role label, which a nested value inherits from its ancestors. */
+    var myMeta = metaOf(node);
 
     /* An object may label the value beside it. Take the first role-bearing field
        that is prose rather than an indicator, so `context: "C2 server"` becomes the
@@ -380,11 +442,11 @@ function runWalk(root, roleKeys, roleMaxLen, exempt, suppressBenign) {
     }
     Object.keys(node).forEach(function (k) {
       if (exempt && exempt[k]) return;
-      walk(node[k], k, myRole, myRoleIsCaveat);
+      walk(node[k], k, myRole, myRoleIsCaveat, myMeta);
     });
   }
 
-  walk(root, null, null, false);
+  walk(root, null, null, false, NO_META);
 
   var rows = order.map(function (k) {
     var r = byKey[k];
@@ -393,7 +455,8 @@ function runWalk(root, roleKeys, roleMaxLen, exempt, suppressBenign) {
        within one object, extended across every occurrence of this value. Joined with
        " | " so multiple distinct reasons read as separate sentences, not one run-on. */
     var context = r.caveats.length ? r.caveats.join(' | ') : r.context;
-    return { type: r.type, value: r.value, context: context };
+    return { type: r.type, value: r.value, context: context,
+             confidence: r.meta.confidence, action: r.meta.action, fp_risk: r.meta.fp_risk };
   });
   // Stable order, so a regenerated page diffs cleanly rather than reshuffling.
   rows.sort(function (a, b) {

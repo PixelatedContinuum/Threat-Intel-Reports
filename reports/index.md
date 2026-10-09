@@ -17,7 +17,7 @@ position: 2
 
 {% include listing-filter.html entries=report_entries placeholder="Search reports by name…" %}
 
-<div class="hl-grid" data-filter-grid>
+<div class="hl-grid" data-filter-grid data-pagefind-ignore>
 {%- assign emitted_series = "" -%}
 {%- for e in report_entries -%}
 {%- if e.series -%}

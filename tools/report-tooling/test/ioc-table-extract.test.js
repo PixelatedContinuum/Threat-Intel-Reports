@@ -349,3 +349,130 @@ test('FAIL-DIRECTION: a value isRatingOnly() cannot classify is carried, never d
   }] } });
   assert.equal(r.rows[0].context, 'LOW: shared with three other tenants, treat with care');
 });
+
+/* --- per-row analyst fields: 2026-10-09 -------------------------------------
+
+   confidence, action and false_positive_risk (carried as fp_risk) are read from
+   the SAME object the value sits in, normalised, and otherwise null. They are
+   display metadata for the viewer's optional columns: nothing about which rows
+   exist, their order, the never-block split or the untyped count may change. */
+
+test('confidence, action and fp_risk are carried from the indicator object, normalised', function () {
+  var rows = X.extract({ network_indicators: { ips: [{
+    value: '203.0.113.7', confidence: ' high ', action: 'block', false_positive_risk: 'LOW'
+  }] } });
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].confidence, 'HIGH', 'confidence is trimmed and upper-cased');
+  assert.equal(rows[0].action, 'BLOCK', 'action is trimmed and upper-cased');
+  assert.equal(rows[0].fp_risk, 'low', 'fp_risk is trimmed and lower-cased');
+});
+
+test('a row whose object records none of the three fields carries null for each', function () {
+  var rows = X.extract({ a: [{ value: '203.0.113.8', context: 'staging' }, '203.0.113.9'] });
+  rows.forEach(function (r) {
+    assert.strictEqual(r.confidence, null, r.value + ' confidence');
+    assert.strictEqual(r.action, null, r.value + ' action');
+    assert.strictEqual(r.fp_risk, null, r.value + ' fp_risk');
+  });
+});
+
+test('a non-string field value is null, never stringified', function () {
+  // false_positive_risk: true is corpus-real (nine objects across six feeds).
+  var rows = X.extract({ a: [{ value: '203.0.113.10', confidence: 3, action: ['BLOCK'],
+                               false_positive_risk: true }] });
+  assert.strictEqual(rows[0].confidence, null);
+  assert.strictEqual(rows[0].action, null);
+  assert.strictEqual(rows[0].fp_risk, null);
+});
+
+test('a blank or whitespace-only field is null, so no empty badge is rendered', function () {
+  var rows = X.extract({ a: [{ value: '203.0.113.11', confidence: '  ', action: '' }] });
+  assert.strictEqual(rows[0].confidence, null);
+  assert.strictEqual(rows[0].action, null);
+});
+
+test('the fields come from the NEAREST object: a feed-level confidence is not inherited', function () {
+  // metadata.confidence rates the whole feed. The row's own object says nothing,
+  // so the row says nothing; inheriting would print HIGH on every row of a feed.
+  var rows = X.extract({ metadata: { confidence: 'HIGH', action: 'BLOCK' },
+                         network_indicators: { ips: [{ value: '203.0.113.12', context: 'C2' }] } });
+  assert.strictEqual(rows[0].confidence, null);
+  assert.strictEqual(rows[0].action, null);
+});
+
+test('a value in a nested sub-object does not inherit the parent indicator object\'s fields', function () {
+  var rows = X.extract({ a: [{ value: '203.0.113.13', confidence: 'DEFINITE',
+                               related: { value: 'evil.test' } }] });
+  var byVal = {};
+  rows.forEach(function (r) { byVal[r.value] = r; });
+  assert.equal(byVal['203.0.113.13'].confidence, 'DEFINITE');
+  assert.strictEqual(byVal['evil.test'].confidence, null);
+});
+
+test('a bare array of values under an object takes that object\'s fields, through the array', function () {
+  // The seasia shape: a group object with a note and a plain list of domains.
+  var rows = X.extract({ a: [{ note: 'group', confidence: 'MODERATE', domains: ['a.test', 'b.test'] }] });
+  assert.deepEqual(rows.map(function (r) { return r.confidence; }), ['MODERATE', 'MODERATE']);
+});
+
+test('on a duplicated value the first object\'s fields win, exactly as its context does', function () {
+  var rows = X.extract({ a: [{ value: '203.0.113.14', confidence: 'HIGH', action: 'BLOCK' }],
+                         b: [{ value: '203.0.113.14', confidence: 'LOW', action: 'MONITOR' }] });
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].confidence, 'HIGH');
+  assert.equal(rows[0].action, 'BLOCK');
+});
+
+test('the fields change nothing about which rows exist, their order, the split or the untyped count', function () {
+  var plain = {
+    network_indicators: { ipv4: ['203.0.113.15', { value: 'evil.test' }] },
+    Commands: ['curl', 'wget'],
+    hunt_only_never_block: [{ value: 'api.telegram.org', context: 'Shared platform' }]
+  };
+  var tagged = {
+    network_indicators: { ipv4: [{ value: '203.0.113.15', confidence: 'HIGH', action: 'BLOCK',
+                                   false_positive_risk: 'low' },
+                                 { value: 'evil.test', confidence: 'LOW', action: 'HUNT' }] },
+    Commands: ['curl', 'wget'],
+    hunt_only_never_block: [{ value: 'api.telegram.org', context: 'Shared platform',
+                              confidence: 'HIGH', action: 'BLOCK' }]
+  };
+  var a = X.summarise(plain), b = X.summarise(tagged);
+  assert.deepEqual(values(a.rows), values(b.rows));
+  assert.deepEqual(types(a.rows), types(b.rows));
+  assert.equal(a.untyped, b.untyped);
+  assert.deepEqual(a.neverBlockRows, b.neverBlockRows,
+    'never-block rows carry type, value and context only, whatever the object recorded');
+});
+
+test('the never-block rows carry no analyst fields at all', function () {
+  var r = X.summarise({ hunt_only_never_block: [{ value: 'api.telegram.org', context: 'Shared',
+                                                   confidence: 'HIGH', action: 'BLOCK',
+                                                   false_positive_risk: 'high' }] });
+  assert.deepEqual(Object.keys(r.neverBlockRows[0]).sort(), ['context', 'type', 'value']);
+});
+
+/* Two values the columns deliberately do NOT carry (2026-10-09, found on the
+   real corpus the first time the columns rendered). */
+test('an action that is a path or command is null, not a badge', function () {
+  var r = X.summarise({ host_indicators: { registry: [
+    { value: 'HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\RuntimeBroker',
+      type: 'registry', action: '%APPDATA%\\SUBDIR\\CLIENT.EXE' },
+    { value: 'HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run', type: 'registry', action: 'block (after validation)' }
+  ] } });
+  var byVal = {};
+  r.rows.forEach(function (row) { byVal[row.value] = row; });
+  assert.equal(byVal['HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\RuntimeBroker'].action, null);
+  assert.equal(byVal['HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run'].action, 'BLOCK (AFTER VALIDATION)');
+});
+
+test('a one-word FP risk is lower-cased, a sentence is kept as authored', function () {
+  var r = X.summarise({ network_indicators: { domains: [
+    { value: 'one.example', type: 'domain', false_positive_risk: 'Low' },
+    { value: 'two.example', type: 'domain', false_positive_risk: 'Medium: Qihoo 360 also resolves this name.' }
+  ] } });
+  var byVal = {};
+  r.rows.forEach(function (row) { byVal[row.value] = row; });
+  assert.equal(byVal['one.example'].fp_risk, 'low');
+  assert.equal(byVal['two.example'].fp_risk, 'Medium: Qihoo 360 also resolves this name.');
+});

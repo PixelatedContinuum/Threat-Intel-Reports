@@ -13,7 +13,25 @@
     {% capture _navbar %}{% include default/navbar.liquid %}{% endcapture %}
     {{ _navbar | split: " " | join: " "}}
     {% include sidebar-sponsors.html %}
-    <main class="content" id="main" tabindex="-1">
+    {%- comment -%}
+      Pagefind (site search, built in the deploy workflow). Once any page carries
+      data-pagefind-body, Pagefind indexes ONLY pages that carry it, so an
+      unlisted page (an embargoed report and its detection page set
+      `unlisted: true`) drops out of the index by construction, with no list to
+      maintain. The 404 page and the search page itself are skipped for the
+      same reason: neither is a result anyone wants. The section filter and the
+      date sort feed the UI on /search/.
+    {%- endcomment -%}
+    {%- assign _pf_index = true -%}
+    {%- if page.unlisted or page.url == '/404.html' or page.url == '/search/' -%}{%- assign _pf_index = false -%}{%- endif -%}
+    {%- assign _pf_section = 'Pages' -%}
+    {%- if page.url contains '/reports/' -%}{%- assign _pf_section = 'Reports' -%}
+    {%- elsif page.url contains '/hunting-detections/' -%}{%- assign _pf_section = 'Detections' -%}
+    {%- elsif page.url contains '/ioc-feeds/' -%}{%- assign _pf_section = 'IOC Feeds' -%}
+    {%- elsif page.url contains '/stix/' -%}{%- assign _pf_section = 'STIX' -%}
+    {%- elsif page.url contains '/behind-the-reports/' -%}{%- assign _pf_section = 'Behind the Reports' -%}
+    {%- endif %}
+    <main class="content" id="main" tabindex="-1"{% if _pf_index %} data-pagefind-body data-pagefind-filter="section:{{ _pf_section }}"{% if page.date %} data-pagefind-meta="date:{{ page.date | date: '%Y-%m-%d' }}" data-pagefind-sort="date"{% endif %}{% endif %}>
       {{ content }}
     </main>
     {% capture _footer %}{% include default/footer.liquid %}{% endcapture %}

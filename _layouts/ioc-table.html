@@ -32,7 +32,14 @@ layout: page
 </div>
 
 {%- if t -%}
-<div class="hl-ioctable" data-slug="{{ page.ioc_slug }}" data-title="{{ t.title | escape }}">
+{%- comment -%}
+  The three has_* flags travel to assets/js/ioc-table.js as data attributes, so
+  the CSV writer adds a confidence, action or fp_risk column only when the table
+  on screen has one. Liquid prints a boolean as the literal "true" or "false".
+{%- endcomment -%}
+<div class="hl-ioctable" data-slug="{{ page.ioc_slug }}" data-title="{{ t.title | escape }}"
+     data-has-confidence="{{ t.has_confidence }}" data-has-action="{{ t.has_action }}"
+     data-has-fp-risk="{{ t.has_fp_risk }}">
 
   <div class="hl-ioctable__links">
     <a class="hl-ioctable__link" href="{{ t.feed_url | relative_url }}">Raw JSON feed</a>
@@ -40,7 +47,7 @@ layout: page
     {%- if t.detection_url %}<a class="hl-ioctable__link" href="{{ t.detection_url | relative_url }}">Detection rules</a>{% endif -%}
   </div>
 
-  <div class="hl-ioctable__filters" role="group" aria-label="Filter by indicator type">
+  <div class="hl-ioctable__filters" role="group" aria-label="Filter by indicator type" data-pagefind-ignore>
     {%- for c in t.counts -%}
     <button type="button" class="hl-ioctable__chip" data-type="{{ c[0] }}" aria-pressed="false">
       {{ c[0] }} <span class="hl-ioctable__chipn">{{ c[1] }}</span>
@@ -52,21 +59,48 @@ layout: page
     <button type="button" class="hl-ioctable__clear" hidden>Clear filters</button>
   </div>
 
-  <div class="hl-ioctable__actions">
+  <div class="hl-ioctable__actions" data-pagefind-ignore>
     <button type="button" class="hl-ioctable__btn" data-act="copy">Copy shown</button>
     <button type="button" class="hl-ioctable__btn" data-act="txt">Download .txt</button>
     <button type="button" class="hl-ioctable__btn" data-act="csv">Download .csv</button>
+    {%- comment -%} Rewrites the DISPLAYED value of every network-shaped row
+      (1.2.3.4 becomes 1[.]2[.]3[.]4, https becomes hxxps) so it can be pasted
+      into a ticket or a chat without becoming a live link. Copy and download
+      follow the display, so a defanged table exports defanged values. The live
+      value stays on the <code> element's data-live attribute and the toggle
+      restores it exactly. Default is live, never remembered across loads.
+    {%- endcomment -%}
+    <button type="button" class="hl-ioctable__btn hl-ioctable__btn--toggle" data-act="defang" aria-pressed="false">Defang</button>
     <span class="hl-ioctable__count" role="status" aria-live="polite">{{ t.total }} shown</span>
   </div>
 
   <div class="hl-ioctable__scroll">
     <table class="hl-ioctable__table">
-      <thead><tr><th>Type</th><th>Indicator</th></tr></thead>
+      {%- comment -%}
+        Confidence, Action and FP risk render only when the feed's has_* flag is
+        true (lib/ioc-tables.js), so a feed that never recorded them keeps the
+        two-column table. The cell is emitted for every row of a flagged feed,
+        empty where that row has no value, so the columns stay aligned. The
+        action badge's modifier class is the first word of the value, lowercased
+        by `slugify`: "BLOCK" and "BLOCK at network perimeter" both paint red,
+        and a value the stylesheet does not name falls back to the muted default.
+      {%- endcomment -%}
+      <thead><tr><th>Type</th><th>Indicator</th>
+        {%- if t.has_confidence %}<th>Confidence</th>{% endif -%}
+        {%- if t.has_action %}<th>Action</th>{% endif -%}
+        {%- if t.has_fp_risk %}<th>FP risk</th>{% endif -%}
+      </tr></thead>
       <tbody>
       {%- for r in t.rows -%}
-        <tr data-type="{{ r.type }}"{% if r.context %} data-context="{{ r.context | escape }}"{% endif %}>
+        <tr data-type="{{ r.type }}"{% if r.context %} data-context="{{ r.context | escape }}"{% endif %}
+            {%- if r.confidence %} data-confidence="{{ r.confidence | escape }}"{% endif %}
+            {%- if r.action %} data-action="{{ r.action | escape }}"{% endif %}
+            {%- if r.fp_risk %} data-fp="{{ r.fp_risk | escape }}"{% endif %}>
           <td><span class="hl-ioctable__type">{{ r.type }}</span></td>
           <td><code>{{ r.value }}</code></td>
+          {%- if t.has_confidence %}<td>{% if r.confidence %}<span class="hl-ioctable__conf">{{ r.confidence }}</span>{% endif %}</td>{% endif -%}
+          {%- if t.has_action %}<td>{% if r.action %}{% assign act_word = r.action | split: ' ' | first | slugify %}<span class="hl-ioctable__act hl-ioctable__act--{{ act_word }}" title="{{ r.action | escape }}">{{ r.action }}</span>{% endif %}</td>{% endif -%}
+          {%- if t.has_fp_risk %}<td>{% if r.fp_risk %}<span class="hl-ioctable__fp">{{ r.fp_risk }}</span>{% endif %}</td>{% endif -%}
         </tr>
       {%- endfor -%}
       </tbody>
@@ -134,7 +168,7 @@ layout: page
   </p>
 </div>
 
-<script defer src="{{ '/assets/js/ioc-table.js' | relative_url }}?v=2"></script>
+<script defer src="{{ '/assets/js/ioc-table.js' | relative_url }}?v=3"></script>
 {%- endif -%}
 
 {{ content }}

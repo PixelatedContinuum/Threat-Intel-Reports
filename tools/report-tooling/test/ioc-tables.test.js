@@ -190,3 +190,93 @@ test('never_block_rows round-trips through YAML, including the explicit no-reaso
   assert.equal(byValue['23.106.161.1'], 'No reason recorded in the feed',
     'a genuinely reasonless entry must render the explicit string, never null or empty');
 });
+
+/* --- per-feed has_* flags and per-row analyst fields, 2026-10-09 ----------- */
+
+var TAGGED = {
+  network_indicators: { ips: [
+    { value: '203.0.113.20', confidence: 'DEFINITE', action: 'BLOCK', false_positive_risk: 'low' },
+    { value: '203.0.113.21', confidence: 'LOW' }
+  ] }
+};
+
+test('has_confidence, has_action and has_fp_risk are true when at least one row carries the field', function () {
+  var r = T.build({ 'x-iocs.json': TAGGED }, { 'x-iocs.json': 'published' }, {});
+  assert.strictEqual(r.tables.x.has_confidence, true);
+  assert.strictEqual(r.tables.x.has_action, true);
+  assert.strictEqual(r.tables.x.has_fp_risk, true);
+});
+
+test('a flag is true for ONE row carrying the field, and false when no row does', function () {
+  var r = T.build({ 'x-iocs.json': { a: [{ value: '203.0.113.22', action: 'HUNT' }, '203.0.113.23'] } },
+                  { 'x-iocs.json': 'published' }, {});
+  assert.strictEqual(r.tables.x.has_action, true);
+  assert.strictEqual(r.tables.x.has_confidence, false);
+  assert.strictEqual(r.tables.x.has_fp_risk, false);
+});
+
+test('a feed with none of the fields has all three flags false and nulls on every row', function () {
+  var r = T.build(feeds(), STATUS, META);
+  var t = r.tables.live;
+  assert.strictEqual(t.has_confidence, false);
+  assert.strictEqual(t.has_action, false);
+  assert.strictEqual(t.has_fp_risk, false);
+  t.rows.forEach(function (row) {
+    assert.strictEqual(row.confidence, null);
+    assert.strictEqual(row.action, null);
+    assert.strictEqual(row.fp_risk, null);
+  });
+});
+
+test('never-block rows cannot switch a column on', function () {
+  var feed = { network_indicators: ['evil.test'],
+               hunt_only_never_block: [{ value: 'api.telegram.org', context: 'Shared',
+                                         confidence: 'HIGH', action: 'BLOCK',
+                                         false_positive_risk: 'high' }] };
+  var r = T.build({ 'x-iocs.json': feed }, { 'x-iocs.json': 'published' }, {});
+  assert.strictEqual(r.tables.x.has_confidence, false);
+  assert.strictEqual(r.tables.x.has_action, false);
+  assert.strictEqual(r.tables.x.has_fp_risk, false);
+});
+
+test('the flags and the row fields round-trip through YAML, nulls as nulls', function () {
+  var yaml = require('js-yaml');
+  var r = T.build({ 'x-iocs.json': TAGGED }, { 'x-iocs.json': 'published' }, {});
+  var doc = yaml.load(T.toYaml(r.tables));
+  assert.strictEqual(doc.x.has_confidence, true);
+  assert.strictEqual(doc.x.has_action, true);
+  assert.strictEqual(doc.x.has_fp_risk, true);
+  var byValue = {};
+  doc.x.rows.forEach(function (row) { byValue[row.value] = row; });
+  assert.equal(byValue['203.0.113.20'].confidence, 'DEFINITE');
+  assert.equal(byValue['203.0.113.20'].action, 'BLOCK');
+  assert.equal(byValue['203.0.113.20'].fp_risk, 'low');
+  assert.equal(byValue['203.0.113.21'].confidence, 'LOW');
+  assert.strictEqual(byValue['203.0.113.21'].action, null);
+  assert.strictEqual(byValue['203.0.113.21'].fp_risk, null);
+});
+
+test('a flag-free feed round-trips with false flags and null fields', function () {
+  var yaml = require('js-yaml');
+  var doc = yaml.load(T.toYaml(T.build(feeds(), STATUS, META).tables));
+  assert.strictEqual(doc.live.has_confidence, false);
+  assert.strictEqual(doc.live.has_action, false);
+  assert.strictEqual(doc.live.has_fp_risk, false);
+  doc.live.rows.forEach(function (row) {
+    assert.strictEqual(row.confidence, null);
+    assert.strictEqual(row.action, null);
+    assert.strictEqual(row.fp_risk, null);
+  });
+});
+
+test('an action or fp_risk carrying a quote, a colon or a backslash survives YAML', function () {
+  var yaml = require('js-yaml');
+  var win = 'C:' + String.fromCharCode(92) + 'x.exe';
+  var r = T.build({ 'x-iocs.json': { a: [{ value: '203.0.113.24',
+    action: 'BLOCK: the "main" one', false_positive_risk: 'LOW, see ' + win }] } },
+    { 'x-iocs.json': 'published' }, {});
+  var doc = yaml.load(T.toYaml(r.tables));
+  assert.equal(doc.x.rows[0].action, 'BLOCK: THE "MAIN" ONE');
+  // A multi-word fp_risk is kept as authored (only a one-word rating is lower-cased).
+  assert.equal(doc.x.rows[0].fp_risk, 'LOW, see ' + win);
+});

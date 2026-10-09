@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
 </div>
 {% include sponsor-banner.html %}
 <div class="hl-post-body">
-  <details class="hl-post-toc-mobile" id="hl-toc-mobile">
+  <details class="hl-post-toc-mobile" id="hl-toc-mobile" data-pagefind-ignore>
     <summary>Contents</summary>
     <nav><ul id="hl-toc-list-mobile"></ul></nav>
   </details>
@@ -96,7 +96,7 @@ the coverage above is narrower than the rule set.</em></p>
 {%- endif %}
     {{ content }}
   </div>
-  <aside class="hl-post-toc" id="hl-toc" aria-label="Table of contents">
+  <aside class="hl-post-toc" id="hl-toc" aria-label="Table of contents" data-pagefind-ignore>
     <div class="hl-post-toc__heading">Contents</div>
     <nav><ul class="hl-toc__list" id="hl-toc-list"></ul></nav>
   </aside>
@@ -164,7 +164,7 @@ the coverage above is narrower than the rule set.</em></p>
   {%- endfor -%}
 {%- endif -%}
 {% if rp_list.size > 0 %}
-<div class="hl-related">
+<div class="hl-related" data-pagefind-ignore>
   <div class="hl-related__heading">Continue Reading</div>
   <div class="hl-related__grid">
     {% for rp in rp_list %}
@@ -185,7 +185,7 @@ the coverage above is narrower than the rule set.</em></p>
 
 {% unless page.path contains "hunting-detections" %}
 {% if page.detection_page or page.ioc_feed or page.stix_bundle %}
-<div class="hl-quicklinks">
+<div class="hl-quicklinks" data-pagefind-ignore>
   {% if page.detection_page %}
   {% if page.detection_sections %}
   <button class="hl-quicklink hl-quicklink--detect-btn" id="hl-detect-tab" aria-label="Jump to detection sections" aria-expanded="false">
@@ -220,7 +220,7 @@ the coverage above is narrower than the rule set.</em></p>
   {% endif %}
 </div>
 {% if page.detection_sections %}
-<div class="hl-detect-panel" id="hl-detect-panel">
+<div class="hl-detect-panel" id="hl-detect-panel" data-pagefind-ignore>
   <div class="hl-detect-panel__hdr">Jump to Detections</div>
   <ul class="hl-detect-panel__list">
     {% for sec in page.detection_sections %}
@@ -233,7 +233,7 @@ the coverage above is narrower than the rule set.</em></p>
 </div>
 {% endif %}
 {% if page.ioc_highlights %}
-<div class="hl-ioc-panel" id="hl-ioc-panel">
+<div class="hl-ioc-panel" id="hl-ioc-panel" data-pagefind-ignore>
   <div class="hl-ioc-panel__hdr">High Priority IOCs</div>
   <ul class="hl-ioc-panel__list">
     {% for ioc in page.ioc_highlights %}
@@ -255,7 +255,7 @@ the coverage above is narrower than the rule set.</em></p>
 </div>
 {% endif %}
 {% if page.stix_bundle %}
-<div class="hl-stix-panel" id="hl-stix-panel">
+<div class="hl-stix-panel" id="hl-stix-panel" data-pagefind-ignore>
   <div class="hl-stix-panel__hdr">STIX 2.1 Bundle</div>
   <p class="hl-stix-panel__info">Machine-readable threat intel for this report, ready to import into OpenCTI, MISP, or any STIX-aware platform.</p>
   <div class="hl-stix-panel__foot">

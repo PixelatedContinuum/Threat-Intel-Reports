@@ -30,7 +30,7 @@ position: 2.5
   and cost 3.2 million iterations on every build. Both measured, not assumed.
   The markup and class names are the include's, so the CSS and the JS are shared.
 {%- endcomment -%}
-<div class="hl-filter hl-filter--wire" data-listing-filter>
+<div class="hl-filter hl-filter--wire" data-listing-filter data-pagefind-ignore>
   {%- comment -%}
     The box already matches BOTH the headline and the item's labels, so an actor
     name like cl0p surfaces items tagged with it and never mentioned in the
@@ -52,7 +52,7 @@ position: 2.5
   <div class="hl-filter__empty" data-filter-empty hidden><span data-filter-empty-msg>No headlines match that filter.</span> <button type="button" class="hl-filter__reset" data-filter-reset>Clear filters</button></div>
 </div>
 
-<div class="hl-wire" data-filter-grid data-filter-item=".hl-wire__item">
+<div class="hl-wire" data-filter-grid data-filter-item=".hl-wire__item" data-pagefind-ignore>
 {%- assign current_day = "" -%}
 {%- for i in wire.items -%}
 {%- assign day = i.date | date: "%Y-%m-%d" -%}
@@ -64,7 +64,7 @@ position: 2.5
 {%- endfor -%}
 </div>
 
-<script defer src="{{ '/assets/js/listing-filter.js' | relative_url }}?v=10"></script>
+<script defer src="{{ '/assets/js/listing-filter.js' | relative_url }}?v=11"></script>
 
 {%- else -%}
 

@@ -125,6 +125,16 @@ jobs:
           source: ./
           destination: ./_site
 
+      # Site search. Pagefind indexes the built HTML in place and writes its
+      # bundle to _site/pagefind/, which /search/ loads at runtime. Only pages
+      # carrying data-pagefind-body (set in _layouts/default.html, withheld from
+      # unlisted pages) are indexed, so an embargoed report never reaches the
+      # index. Pinned so an upstream release cannot change the bundle under us.
+      - name: Build the search index
+        run: |
+          set -euo pipefail
+          npx --yes pagefind@1.3.0 --site _site 2>&1 | tee /tmp/pagefind.txt
+
       - name: Sanity-check the build
         run: |
           set -eu
@@ -133,6 +143,10 @@ jobs:
           test -f _site/reports/index.html
           test -f _site/feed.xml
           test -f _site/sitemap.xml
+          test -f _site/search/index.html
+          test -f _site/pagefind/pagefind.js
+          test -f _site/pagefind/pagefind-ui.js
+          echo "search index: $(grep -m1 -o 'Indexed [0-9]* pages' /tmp/pagefind.txt || echo 'page count not reported')"
           cards=$(grep -o 'hl-catalog-card' _site/reports/index.html | wc -l)
           echo "reports listing renders $cards cards"
           test "$cards" -gt 0

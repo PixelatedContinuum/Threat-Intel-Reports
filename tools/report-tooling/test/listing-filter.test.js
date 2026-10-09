@@ -21,10 +21,23 @@ var JSDOM = require('jsdom').JSDOM;
 var SRC = fs.readFileSync(
   path.join(__dirname, '..', '..', '..', 'assets', 'js', 'listing-filter.js'), 'utf8');
 
-function build(html) {
-  var dom = new JSDOM('<body>' + html + '</body>', { runScripts: 'outside-only' });
+/* `url` is the page address the module sees at init. It defaults to a real
+   https origin rather than jsdom's about:blank because the module mirrors its
+   state into the hash with history.replaceState, and about:blank cannot be a
+   base for that. A hash on the url is what a shared link looks like. */
+function build(html, url) {
+  var dom = new JSDOM('<body>' + html + '</body>', {
+    runScripts: 'outside-only',
+    url: url || 'https://example.test/reports/'
+  });
   dom.window.eval(SRC);
   return dom.window;
+}
+
+// jsdom queues hashchange as a task after a location.hash assignment, as a
+// browser does, so a test that sets the hash waits one turn before asserting.
+function tick() {
+  return new Promise(function (r) { setTimeout(r, 0); });
 }
 
 function click(win, el) {
@@ -362,4 +375,226 @@ test('the day axis is inert on a page that renders no date control', function ()
   assert.equal(visible(win, '.hl-catalog-card'), 3);
   click(win, win.document.querySelector('.hl-chip-btn[data-tag="alpha"]'));
   assert.equal(visible(win, '.hl-catalog-card'), 2);
+});
+
+/* ---- URL state: the filter bar is deep-linkable --------------------------
+
+   State is mirrored into the hash (#q=...&tag=a,b&date=YYYY-MM-DD) so a
+   filtered view can be shared as a link. The hash is read before the first
+   render and written with replaceState on every apply, never pushState, so
+   the back button never walks through someone's typing. */
+
+function href(win) { return win.location.href; }
+
+test('a hash present at load applies q, tags and date before the first render', function () {
+  var win = build(wireBar(DAYS), 'https://example.test/wire/#q=alpha&tag=alpha&date=2026-08-10');
+  assert.equal(win.document.querySelector('.hl-filter__search').value, 'alpha');
+  assert.equal(win.document.querySelector('.hl-chip-btn[data-tag="alpha"]').classList.contains('is-on'), true);
+  assert.equal(win.document.querySelector('.hl-chip-btn[data-tag=""]').classList.contains('is-on'), false);
+  assert.equal(win.document.querySelector('[data-filter-date]').value, '2026-08-10');
+  assert.equal(visible(win, '.hl-wire__item'), 1);
+  assert.equal(win.document.querySelector('[data-filter-count]').textContent,
+    'Showing 1 of 3');
+});
+
+test('a shared link carrying several tags selects each chip', function () {
+  var win = build(bar(CARDS), 'https://example.test/reports/#tag=alpha,beta');
+  assert.equal(win.document.querySelectorAll('.hl-chip-btn.is-on').length, 2);
+  assert.equal(visible(win, '.hl-catalog-card'), 3);
+  assert.equal(win.location.hash, '#tag=alpha,beta');
+});
+
+test('a tag in the hash with no chip on the page is ignored silently', function () {
+  var win = build(bar(CARDS), 'https://example.test/reports/#tag=alpha,nosuchtag');
+  assert.equal(win.document.querySelectorAll('.hl-chip-btn.is-on').length, 1);
+  assert.equal(visible(win, '.hl-catalog-card'), 2);
+  // The write back normalises the hash to what the page can actually honour.
+  assert.equal(win.location.hash, '#tag=alpha');
+});
+
+test('an encoded search term in the hash is decoded', function () {
+  var win = build(bar(CARDS), 'https://example.test/reports/#q=second%20report');
+  assert.equal(win.document.querySelector('.hl-filter__search').value, 'second report');
+  assert.equal(visible(win, '.hl-catalog-card'), 1);
+});
+
+test('a chip click writes the hash and a second click clears it', function () {
+  var win = build(bar(CARDS));
+  var alpha = win.document.querySelector('.hl-chip-btn[data-tag="alpha"]');
+  click(win, alpha);
+  assert.equal(win.location.hash, '#tag=alpha');
+  click(win, alpha);
+  assert.equal(win.location.hash, '');
+  assert.equal(href(win), 'https://example.test/reports/', 'no trailing #');
+});
+
+test('the All chip clears the hash entirely', function () {
+  var win = build(bar(CARDS));
+  click(win, win.document.querySelector('.hl-chip-btn[data-tag="alpha"]'));
+  click(win, win.document.querySelector('.hl-chip-btn[data-tag="beta"]'));
+  assert.equal(win.location.hash, '#tag=alpha,beta');
+  click(win, win.document.querySelector('.hl-chip-btn[data-tag=""]'));
+  assert.equal(href(win), 'https://example.test/reports/', 'no trailing #');
+});
+
+test('the reset button clears the hash entirely', function () {
+  var win = build(wireBar(DAYS));
+  click(win, win.document.querySelector('.hl-chip-btn[data-tag="alpha"]'));
+  pick(win, '2026-08-10');
+  var s = win.document.querySelector('.hl-filter__search');
+  s.value = 'newest';
+  s.dispatchEvent(new win.Event('input', { bubbles: true }));
+  assert.equal(win.location.hash, '#q=newest&tag=alpha&date=2026-08-10');
+  click(win, win.document.querySelector('[data-filter-reset]'));
+  assert.equal(href(win), 'https://example.test/reports/', 'no trailing #');
+});
+
+test('typing in the search box updates the hash, encoded', function () {
+  var win = build(bar(CARDS));
+  var s = win.document.querySelector('.hl-filter__search');
+  s.value = 'two words & more';
+  s.dispatchEvent(new win.Event('input', { bubbles: true }));
+  assert.equal(win.location.hash, '#q=two%20words%20%26%20more');
+  s.value = '';
+  s.dispatchEvent(new win.Event('input', { bubbles: true }));
+  assert.equal(href(win), 'https://example.test/reports/');
+});
+
+test('the kind axis is written as kind= on a page that renders it', function () {
+  var win = build(bar(WIRE, KIND_ROW));
+  click(win, win.document.querySelector('.hl-chip-btn[data-kind="news"]'));
+  assert.equal(win.location.hash, '#kind=news');
+});
+
+test('filtering never adds a history entry', function () {
+  var win = build(bar(CARDS));
+  var before = win.history.length;
+  click(win, win.document.querySelector('.hl-chip-btn[data-tag="alpha"]'));
+  click(win, win.document.querySelector('.hl-chip-btn[data-tag="beta"]'));
+  var s = win.document.querySelector('.hl-filter__search');
+  s.value = 'x';
+  s.dispatchEvent(new win.Event('input', { bubbles: true }));
+  assert.equal(win.history.length, before);
+});
+
+test('hashchange re-applies the filter from the new hash', async function () {
+  var win = build(bar(CARDS));
+  assert.equal(visible(win, '.hl-catalog-card'), 3);
+  win.location.hash = '#tag=beta';
+  await tick();
+  assert.equal(visible(win, '.hl-catalog-card'), 2);
+  assert.equal(win.document.querySelector('.hl-chip-btn[data-tag="beta"]').classList.contains('is-on'), true);
+  // Stepping back to the bare page clears everything.
+  win.location.hash = '';
+  await tick();
+  assert.equal(visible(win, '.hl-catalog-card'), 3);
+  assert.equal(win.document.querySelector('.hl-chip-btn[data-tag=""]').classList.contains('is-on'), true);
+});
+
+test('a fragment that is not the filter\'s (the skip link) leaves the filter alone', async function () {
+  // _layouts/default.html carries <a href="#main">Skip to content</a> on every page.
+  var win = build(bar(CARDS));
+  click(win, win.document.querySelector('.hl-chip-btn[data-tag="alpha"]'));
+  win.location.hash = '#main';
+  await tick();
+  assert.equal(visible(win, '.hl-catalog-card'), 2, 'the chip filter survives');
+  assert.equal(win.document.querySelector('.hl-chip-btn[data-tag="alpha"]').classList.contains('is-on'), true);
+});
+
+test('a page opened at #main gets the plain first render', function () {
+  var win = build(bar(CARDS), 'https://example.test/reports/#main');
+  assert.equal(visible(win, '.hl-catalog-card'), 3);
+  assert.equal(win.document.querySelector('[data-filter-count]').textContent, 'Showing 3 of 3');
+});
+
+/* ---- tag badges on cards apply the matching chip -------------------------
+
+   Badges are spans INSIDE the card link, so a plain click would open the
+   entry. Inside a filter grid they filter instead. */
+
+var BADGED =
+  '<div class="hl-grid" data-filter-grid>' +
+  '<a class="hl-card hl-catalog-card" href="/reports/one/" data-title="first report" data-tags="alpha|gamma">' +
+    '<div class="hl-tags"><span class="hl-tag hl-tag--blue">Alpha</span><span class="hl-tag hl-tag--red"> Gamma </span></div></a>' +
+  '<a class="hl-card hl-catalog-card" href="/reports/two/" data-title="second report" data-tags="beta">' +
+    '<div class="hl-tags"><span class="hl-tag hl-tag--green">Beta</span></div></a>' +
+  '<a class="hl-card hl-catalog-card" href="/reports/three/" data-title="third report" data-tags="alpha|beta">' +
+    '<div class="hl-tags"><span class="hl-tag hl-tag--blue">Alpha</span><span class="hl-tag hl-tag--green">Beta</span></div></a>' +
+  '</div>' +
+  '<p><span class="hl-tag hl-tag--blue" id="outside">Alpha</span></p>';
+
+function badgeClick(win, el) {
+  var ev = new win.MouseEvent('click', { bubbles: true, cancelable: true });
+  el.dispatchEvent(ev);
+  return ev;
+}
+
+test('badges inside the filter grid get the affordance at init, others do not', function () {
+  var win = build(bar(BADGED));
+  var inside = win.document.querySelector('[data-filter-grid] .hl-tag');
+  assert.equal(inside.classList.contains('hl-tag--clickable'), true);
+  assert.equal(inside.getAttribute('title'), 'Filter by this tag');
+  assert.equal(inside.hasAttribute('tabindex'), false, 'no focus stop inside a link');
+  var outside = win.document.getElementById('outside');
+  assert.equal(outside.classList.contains('hl-tag--clickable'), false);
+  assert.equal(outside.hasAttribute('title'), false);
+});
+
+test('a badge click with a matching chip toggles the chip and does not navigate', function () {
+  var win = build(bar(BADGED));
+  var reached = 0;
+  win.document.addEventListener('click', function () { reached++; });
+  var badge = win.document.querySelector('[data-filter-grid] .hl-tag--blue');
+  var ev = badgeClick(win, badge);
+  assert.equal(ev.defaultPrevented, true, 'the card link must not be followed');
+  assert.equal(reached, 0, 'the click stops at the grid');
+  assert.equal(win.location.pathname, '/reports/');
+  var chip = win.document.querySelector('.hl-chip-btn[data-tag="alpha"]');
+  assert.equal(chip.classList.contains('is-on'), true);
+  assert.equal(visible(win, '.hl-catalog-card'), 2);
+  assert.equal(win.location.hash, '#tag=alpha');
+  // A second click toggles it off again, exactly as the chip would.
+  badgeClick(win, badge);
+  assert.equal(chip.classList.contains('is-on'), false);
+  assert.equal(win.document.querySelector('.hl-chip-btn[data-tag=""]').classList.contains('is-on'), true);
+  assert.equal(visible(win, '.hl-catalog-card'), 3);
+  assert.equal(win.location.hash, '');
+});
+
+test('a badge click with no matching chip puts the badge text in the search box', function () {
+  // Gamma is on one entry only, so no chip was rendered for it.
+  var win = build(bar(BADGED));
+  var badge = win.document.querySelector('[data-filter-grid] .hl-tag--red');
+  var ev = badgeClick(win, badge);
+  assert.equal(ev.defaultPrevented, true);
+  assert.equal(win.document.querySelector('.hl-filter__search').value, 'Gamma', 'trimmed');
+  assert.equal(visible(win, '.hl-catalog-card'), 1);
+  assert.equal(win.location.hash, '#q=Gamma');
+  assert.equal(win.document.querySelectorAll('.hl-chip-btn.is-on').length, 1, 'only All stays on');
+});
+
+test('a click on the card itself, not a badge, is left to the browser', function () {
+  var win = build(bar(BADGED));
+  var ev = badgeClick(win, win.document.querySelector('[data-filter-grid] .hl-catalog-card'));
+  assert.equal(ev.defaultPrevented, false);
+});
+
+/* ---- the veto is not URL state ------------------------------------------- */
+
+test('data-veto cards stay hidden whatever the hash says, and the hash never mentions veto', function () {
+  var win = build(bar(CARDS), 'https://example.test/ioc-feeds/#tag=alpha&veto=0');
+  assert.equal(visible(win, '.hl-catalog-card'), 2);
+  assert.equal(win.location.hash, '#tag=alpha', 'a foreign key is dropped on write');
+  // ioc-search.js marks a card and asks for a re-apply.
+  win.document.querySelector('.hl-catalog-card[data-title="first report"]').setAttribute('data-veto', '1');
+  win.document.dispatchEvent(new win.CustomEvent('hl:refilter'));
+  assert.equal(visible(win, '.hl-catalog-card'), 1);
+  assert.doesNotMatch(win.location.hash, /veto/);
+  assert.equal(win.location.hash, '#tag=alpha');
+  // A hash edit re-applies the filter but cannot lift the veto.
+  win.location.hash = '#tag=alpha,beta';
+  return tick().then(function () {
+    assert.equal(visible(win, '.hl-catalog-card'), 2, 'third plus second; first stays vetoed');
+    assert.doesNotMatch(win.location.hash, /veto/);
+  });
 });

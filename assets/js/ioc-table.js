@@ -1,4 +1,4 @@
-/* IOC feed viewer: filter by type, copy or download what is shown.
+/* IOC feed viewer: filter by type, defang, copy or download what is shown.
 
    The table is rendered at build time by _layouts/ioc-table.html from
    _data/ioc_tables.yml, so it is complete and readable before this file runs.
@@ -8,6 +8,11 @@
    path reads the same visible-row set the filter produced, never the original
    data, because a filtered table that exports the unfiltered set would hand a
    defender a block list they did not ask for and would not notice was wrong.
+   The defang toggle (2026-10-09) rides on the same rule: it rewrites the
+   DISPLAYED value, and copy, .txt and .csv read the display, so a defanged
+   table exports defanged values and a live one exports live values. The live
+   value is kept on the <code> element's data-live attribute so switching the
+   toggle off restores it byte for byte rather than re-deriving it.
 
    Zero chips pressed means NO FILTER, never "match nothing". An empty table that
    looks like a filter result is worse than either. */
@@ -20,6 +25,22 @@
     } else { fn(); }
   }
 
+  /* The types whose value is a network locator and so becomes a live link or a
+     resolvable name when pasted. Hashes, paths, filenames, registry keys and
+     mutexes are left exactly as they are: there is nothing in them to disarm,
+     and a bracket inserted into a path would break the string a hunter pastes.
+     ipv6 is listed although the extractor does not emit it today, so a feed
+     that gains the type is defanged rather than silently passed through. */
+  var DEFANG_TYPES = { ipv4: true, ipv6: true, domain: true, endpoint: true,
+                       url: true, email: true };
+
+  function defang(value, type) {
+    var s = value;
+    if (type === 'url') s = s.replace(/^http(s?)/i, 'hxxp$1');
+    if (type === 'email') s = s.replace(/@/g, '[@]');
+    return s.replace(/\./g, '[.]');
+  }
+
   function init() {
     var root = document.querySelector('.hl-ioctable');
     if (!root) return;
@@ -29,9 +50,20 @@
     var chips = Array.prototype.slice.call(root.querySelectorAll('.hl-ioctable__chip'));
     var countEl = root.querySelector('.hl-ioctable__count');
     var clearEl = root.querySelector('.hl-ioctable__clear');
+    var defangEl = root.querySelector('.hl-ioctable__btn[data-act="defang"]');
     var slug = root.getAttribute('data-slug') || 'indicators';
 
+    /* Which optional columns this feed's table carries, set by the layout from
+       the manifest's has_* flags. The CSV follows the table: a column that is
+       not on screen is not in the file, so the header never promises a field
+       the feed never recorded. */
+    function flag(name) { return root.getAttribute(name) === 'true'; }
+    var hasConfidence = flag('data-has-confidence');
+    var hasAction = flag('data-has-action');
+    var hasFp = flag('data-has-fp-risk');
+
     var active = {};
+    var defanged = false;
 
     function activeCount() { return Object.keys(active).length; }
 
@@ -78,6 +110,34 @@
       });
     });
 
+    /* The live value is recorded once, up front, on EVERY row's <code>, before
+       any rewrite can happen. Restoring then reads that attribute rather than
+       undoing the substitution, so a value that already carried a bracket or an
+       hxxp of its own comes back exactly as the feed recorded it. Hidden rows
+       are rewritten too: a row the filter later reveals must already match the
+       toggle's state, not the state it had when it was hidden. Only the
+       ordinary table's rows are in `rows`; the never-block table is a different
+       element the selector above never finds, so the toggle cannot reach it. */
+    rows.forEach(function (tr) {
+      var c = tr.querySelector('code');
+      if (c && !c.hasAttribute('data-live')) c.setAttribute('data-live', c.textContent);
+    });
+
+    function applyDefang() {
+      rows.forEach(function (tr) {
+        var c = tr.querySelector('code');
+        if (!c) return;
+        var live = c.getAttribute('data-live');
+        if (live == null) return;
+        var type = tr.getAttribute('data-type');
+        c.textContent = (defanged && DEFANG_TYPES[type]) ? defang(live, type) : live;
+      });
+      if (defangEl) {
+        defangEl.setAttribute('aria-pressed', defanged ? 'true' : 'false');
+        defangEl.textContent = defanged ? 'Defanged' : 'Defang';
+      }
+    }
+
     function valueOf(tr) {
       var c = tr.querySelector('code');
       return c ? c.textContent : '';
@@ -96,11 +156,19 @@
     }
 
     function csv() {
-      var out = ['value,type,context'];
+      var header = ['value', 'type', 'context'];
+      if (hasConfidence) header.push('confidence');
+      if (hasAction) header.push('action');
+      if (hasFp) header.push('fp_risk');
+      var out = [header.join(',')];
       shown().forEach(function (tr) {
-        out.push([csvField(valueOf(tr)),
-                  csvField(tr.getAttribute('data-type') || ''),
-                  csvField(tr.getAttribute('data-context') || '')].join(','));
+        var cells = [csvField(valueOf(tr)),
+                     csvField(tr.getAttribute('data-type') || ''),
+                     csvField(tr.getAttribute('data-context') || '')];
+        if (hasConfidence) cells.push(csvField(tr.getAttribute('data-confidence') || ''));
+        if (hasAction) cells.push(csvField(tr.getAttribute('data-action') || ''));
+        if (hasFp) cells.push(csvField(tr.getAttribute('data-fp') || ''));
+        out.push(cells.join(','));
       });
       return out.join('\n');
     }
@@ -143,6 +211,9 @@
         download(txt(), slug + '-indicators.txt', 'text/plain');
       } else if (act === 'csv') {
         download(csv(), slug + '-indicators.csv', 'text/csv');
+      } else if (act === 'defang') {
+        defanged = !defanged;
+        applyDefang();
       }
     });
 

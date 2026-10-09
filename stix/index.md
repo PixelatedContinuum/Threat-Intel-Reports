@@ -19,7 +19,7 @@ thumbnail: /assets/images/cards/stix.png
 
 {% include listing-filter.html entries=stix_entries tag_field="stix_tags" placeholder="Search STIX bundles by name…" %}
 
-<div class="hl-grid" data-filter-grid>
+<div class="hl-grid" data-filter-grid data-pagefind-ignore>
 {% for e in stix_entries %}
   {% if e.stix_title %}{% assign stitle = e.stix_title %}{% else %}{% assign stitle = e.title | append: " — STIX Bundle" %}{% endif %}
   {% assign stags = e.stix_tags | default: e.tags %}

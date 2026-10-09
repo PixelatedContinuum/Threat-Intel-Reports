@@ -89,6 +89,16 @@ function build(feeds, status, meta) {
     var counts = {};
     s.rows.forEach(function (r) { counts[r.type] = (counts[r.type] || 0) + 1; });
 
+    /* Per-feed flags for the viewer's optional columns (2026-10-09). True when
+       at least one ORDINARY row carries the field; the never-block rows carry
+       none of them, so they cannot switch a column on. The layout renders a
+       column only when its flag is true, so the many older feeds that record
+       no confidence, action or false_positive_risk keep their two-column table
+       rather than gaining three empty ones. */
+    function hasField(k) {
+      return s.rows.some(function (r) { return r[k] != null; });
+    }
+
     var m = (meta || {})[file] || {};
     out[key] = {
       slug: slug,
@@ -102,6 +112,9 @@ function build(feeds, status, meta) {
       total: s.rows.length,
       untyped: s.untyped,
       counts: counts,
+      has_confidence: hasField('confidence'),
+      has_action: hasField('action'),
+      has_fp_risk: hasField('fp_risk'),
       rows: s.rows,
       never_block_total: nbRows.length,
       never_block_rows: nbRows
@@ -133,11 +146,19 @@ function toYaml(tables) {
     Object.keys(t.counts).sort().forEach(function (k) {
       lines.push('    ' + k + ': ' + t.counts[k]);
     });
+    lines.push('  has_confidence: ' + (t.has_confidence ? 'true' : 'false'));
+    lines.push('  has_action: ' + (t.has_action ? 'true' : 'false'));
+    lines.push('  has_fp_risk: ' + (t.has_fp_risk ? 'true' : 'false'));
     lines.push('  rows:');
     t.rows.forEach(function (r) {
       lines.push('    - type: ' + esc(r.type));
       lines.push('      value: ' + esc(r.value));
       lines.push('      context: ' + (r.context ? esc(r.context) : 'null'));
+      // Written as an explicit null rather than omitted, matching `context`, so a
+      // reader of the YAML can tell "not recorded" from "key not yet generated".
+      lines.push('      confidence: ' + (r.confidence ? esc(r.confidence) : 'null'));
+      lines.push('      action: ' + (r.action ? esc(r.action) : 'null'));
+      lines.push('      fp_risk: ' + (r.fp_risk ? esc(r.fp_risk) : 'null'));
     });
     lines.push('  never_block_total: ' + (t.never_block_total || 0));
     lines.push('  never_block_rows:');
