@@ -6350,3 +6350,80 @@ body.hl-drawer-locked { overflow: hidden; }
   .hl-actor__facts { grid-template-columns: 1fr 1fr; padding: 12px 14px; }
   .hl-actor__facts--wide { grid-template-columns: 1fr; }
 }
+
+/* --- Cross-reference pages: /techniques/ and /families/ ----------------- */
+/* Techniques take amber (#fb923c) and families teal (#2dd4bf), both distinct
+   from the report purple, the detection green and the actor fuchsia. The
+   item list mirrors .hl-actor__report so the three cross-reference surfaces
+   read as one family of pages. */
+.hl-xref__id { font-size: 0.82em; vertical-align: middle; }
+.hl-xref__nav { font-size: 0.86em; margin: 0 0 1.2rem; }
+.hl-xref__muted { color: var(--hl-text-muted); font-size: 0.86em; }
+.hl-xref__licence { font-size: 0.8em; color: var(--hl-text-muted); margin-top: 2rem; }
+.hl-xref__list { display: grid; gap: 10px; margin-bottom: 1.6rem; }
+.hl-xref__item {
+  background: var(--hl-bg-card); border: 1px solid var(--hl-border-card); border-left: 3px solid #6e7681;
+  border-radius: 6px; padding: 12px 14px;
+}
+.hl-xref__item--report    { border-left-color: #a371f7; }
+.hl-xref__item--detection { border-left-color: #4ade80; }
+.hl-xref__item--feed      { border-left-color: #f87171; }
+.hl-xref__item-head { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline; margin-bottom: 4px; }
+.hl-xref__role { font-size: 0.66em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--hl-text-muted); }
+.hl-xref__item--report .hl-xref__role    { color: #a371f7; }
+.hl-xref__item--detection .hl-xref__role { color: #4ade80; }
+.hl-xref__item--feed .hl-xref__role      { color: #f87171; }
+.hl-xref__item-meta { font-size: 0.72em; color: var(--hl-text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.hl-xref__item-meta code { text-transform: none; letter-spacing: 0; font-size: 1em; }
+.hl-xref__conf--definite, .hl-xref__conf--high { color: #4ade80; }
+.hl-xref__conf--moderate     { color: #facc15; }
+.hl-xref__conf--low          { color: #fb923c; }
+.hl-xref__conf--insufficient { color: #f87171; }
+.hl-xref__item-title { font-weight: 600; font-size: 0.95em; line-height: 1.35; display: block; }
+.hl-xref__item-links { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 7px; font-size: 0.8em; }
+.hl-xref__rules { margin-top: 6px; font-family: var(--hl-font-mono, monospace); font-size: 0.78em; color: var(--hl-text-secondary); overflow-wrap: anywhere; }
+.hl-xref__actors { font-size: 0.9em; line-height: 1.55; }
+.hl-xref__top { font-size: 0.92em; line-height: 1.6; }
+.hl-xref__top code { font-size: 0.9em; }
+
+.hl-family-card__bar { background: #2dd4bf; }
+.hl-family-card__meta { color: #2dd4bf; }
+.hl-family-card__summary { font-size: 0.82em; color: var(--hl-text-secondary); line-height: 1.4; margin-bottom: 9px; }
+
+/* The heatmap: one column per tactic in matrix order, cells shaded by score
+   through two custom properties (the cell's score and the corpus maximum),
+   so the shading needs no per-cell class and no script. */
+.hl-heatmap {
+  display: grid; grid-auto-flow: column; grid-auto-columns: minmax(118px, 1fr);
+  gap: 6px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 0.8rem;
+  scrollbar-width: thin;
+}
+.hl-heatmap__col { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.hl-heatmap__col.is-empty { opacity: 0.35; }
+.hl-heatmap__tactic {
+  font-size: 0.6em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #fb923c;
+  line-height: 1.25; padding: 4px 4px 6px; border-bottom: 1px solid var(--hl-border-card); margin-bottom: 3px;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4px;
+}
+.hl-heatmap__tactic-count { color: var(--hl-text-muted); font-weight: 500; flex: none; }
+.hl-heatmap__tactic > span:first-child { min-width: 0; overflow-wrap: anywhere; }
+a.hl-attack__chip { color: inherit; text-decoration: none !important; }
+a.hl-attack__chip:hover { border-color: var(--hl-accent-blue); color: var(--hl-text-primary); }
+.hl-actor__technique-src { color: var(--hl-text-secondary); text-decoration: none; }
+.hl-actor__technique-src:hover { color: var(--hl-text-primary); text-decoration: underline; }
+.hl-heatmap__cell {
+  --hl-heat-t: calc(var(--hl-heat, 0) / var(--hl-heat-max, 1));
+  display: block; text-decoration: none !important; border-radius: 4px; padding: 4px 6px;
+  border: 1px solid color-mix(in srgb, #fb923c calc(20% + var(--hl-heat-t) * 70%), var(--hl-border-card));
+  background: color-mix(in srgb, #fb923c calc(6% + var(--hl-heat-t) * 56%), var(--hl-bg-card));
+  color: var(--hl-text-primary); line-height: 1.2; position: relative;
+}
+.hl-heatmap__cell:hover { border-color: #fb923c; filter: brightness(1.15); }
+.hl-heatmap__id { display: block; font-family: var(--hl-font-mono, monospace); font-size: 0.68em; color: var(--hl-text-primary); }
+.hl-heatmap__name { display: block; font-size: 0.62em; color: var(--hl-text-secondary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hl-heatmap__score { position: absolute; top: 3px; right: 5px; font-size: 0.6em; color: var(--hl-text-muted); }
+.hl-heatmap__empty { color: var(--hl-text-muted); font-size: 0.9em; }
+@media (max-width: 640px) {
+  .hl-heatmap { grid-auto-columns: minmax(104px, 1fr); }
+  .hl-heatmap__tactic { font-size: 0.54em; letter-spacing: 0.04em; }
+}

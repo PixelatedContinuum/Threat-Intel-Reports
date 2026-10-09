@@ -152,6 +152,15 @@ jobs:
           actors=$(grep -o 'class="hl-card hl-catalog-card hl-actor-card"' _site/actors/index.html | wc -l)
           echo "actor index renders $actors cards"
           test "$actors" -gt 0
+          test -f _site/techniques/index.html
+          test -f _site/families/index.html
+          test -f _site/assets/data/attack-navigator-layer.json
+          cells=$(grep -o 'class="hl-heatmap__cell"' _site/techniques/index.html | wc -l)
+          echo "technique heatmap renders $cells cells"
+          test "$cells" -gt 0
+          fams=$(grep -o 'class="hl-card hl-catalog-card hl-family-card"' _site/families/index.html | wc -l)
+          echo "family index renders $fams cards"
+          test "$fams" -gt 0
           test -f _site/pagefind/pagefind.js
           test -f _site/pagefind/pagefind-ui.js
           echo "search index: $(grep -m1 -o 'Indexed [0-9]* pages' /tmp/pagefind.txt || echo 'page count not reported')"
@@ -213,7 +222,7 @@ jobs:
           fail=0
           for g in check-detection-manifest.js check-detection-attack.js check-ioc-index.js \
                    check-ioc-tables.js check-ioc-feeds.js check-ioc-feeds-attack.js \
-                   check-embargo-artifacts.js check-tags.js check-actors.js; do
+                   check-embargo-artifacts.js check-tags.js check-actors.js check-xref.js; do
             echo "::group::$g"
             node "$g"; rc=$?
             echo "::endgroup::"

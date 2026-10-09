@@ -1,0 +1,103 @@
+---
+layout: page
+---
+{%- comment -%}
+  One malware or tool family, rendered for a person.
+
+  The stub page carries `family_slug` in its front matter. The hand-written
+  record (kind, aliases, summary) is in _data/families.yml and the derived part
+  (which published reports, detection rules, IOC feeds and actor profiles name
+  the family) in _data/family_index.yml, which generate-xref.js writes by
+  matching the YARA family metadata, the feed family fields, the catalog tags
+  and the actors' tooling against the vocabulary. Nothing here derives a fact
+  of its own: the report is the record and this page points at it.
+{%- endcomment -%}
+{%- assign f = site.data.family_index.families | where: "slug", page.family_slug | first -%}
+
+<div class="hl-page-header" style="--ph-accent: #2dd4bf;">
+  <div class="hl-page-header__label">{% if f %}{{ f.kind | replace: "-", " " }}{% else %}Family{% endif %}</div>
+  <div class="hl-page-header__title">{{ page.title }}</div>
+  <div class="hl-page-header__desc">{% if f %}{% if f.summary %}{{ f.summary }} {% endif %}Named by {{ f.report_count }} report{% if f.report_count != 1 %}s{% endif %}, {{ f.rule_count }} detection rule{% if f.rule_count != 1 %}s{% endif %}, {{ f.feed_count }} IOC feed{% if f.feed_count != 1 %}s{% endif %}{% if f.actor_count > 0 %} and {{ f.actor_count }} tracked actor{% if f.actor_count != 1 %}s{% endif %}{% endif %}.{% else %}This family is missing from <code>_data/family_index.yml</code>. Re-run <code>generate-xref.js</code>.{% endif %}</div>
+</div>
+
+{%- if f -%}
+<div class="hl-xref">
+
+  <p class="hl-xref__nav"><a href="{{ '/families/' | relative_url }}">&larr; All families</a></p>
+
+  {%- if f.aliases.size > 0 -%}
+  <p class="hl-xref__muted">Also written as: {% for a in f.aliases %}<code>{{ a }}</code>{% unless forloop.last %}, {% endunless %}{% endfor %}. These are the spellings the rules, feeds and profiles use; the page collects all of them.</p>
+  {%- endif -%}
+
+  <h2 id="reports">Reports</h2>
+  {%- if f.reports.size > 0 -%}
+  <div class="hl-xref__list">
+    {%- for r in f.reports -%}
+    <div class="hl-xref__item hl-xref__item--report">
+      <div class="hl-xref__item-head">
+        <span class="hl-xref__role">Report</span>
+        <span class="hl-xref__item-meta">{% if r.date %}{{ r.date | date: "%b %Y" }}{% endif %}</span>
+      </div>
+      <a class="hl-xref__item-title" href="{{ r.url | relative_url }}">{{ r.title }}</a>
+      {%- if r.detection_url or r.ioc_url or r.stix_url -%}
+      <div class="hl-xref__item-links">
+        {%- if r.detection_url -%}<a href="{{ r.detection_url | relative_url }}">Detection rules</a>{%- endif -%}
+        {%- if r.ioc_url -%}<a href="{{ r.ioc_url | relative_url }}">IOC feed</a>{%- endif -%}
+        {%- if r.stix_url -%}<a href="{{ r.stix_url | relative_url }}">STIX bundle</a>{%- endif -%}
+      </div>
+      {%- endif -%}
+    </div>
+    {%- endfor -%}
+  </div>
+  {%- else -%}
+  <p class="hl-xref__muted">No published report carries this family in a rule, feed or tag; it is named on actor profiles only.</p>
+  {%- endif -%}
+
+  <h2 id="detections">Detection rules</h2>
+  {%- if f.detections.size > 0 -%}
+  <p class="hl-xref__muted">YARA rules whose <code>family</code> metadata names this family, by detection page.</p>
+  <div class="hl-xref__list">
+    {%- for d in f.detections -%}
+    <div class="hl-xref__item hl-xref__item--detection">
+      <div class="hl-xref__item-head">
+        <span class="hl-xref__role">Detection rules</span>
+        <span class="hl-xref__item-meta">{% if d.date %}{{ d.date | date: "%b %Y" }} &middot; {% endif %}{{ d.rules.size }} rule{% if d.rules.size != 1 %}s{% endif %} &middot; family = <code>{{ d.label }}</code></span>
+      </div>
+      <a class="hl-xref__item-title" href="{{ d.url | relative_url }}">{{ d.title }}</a>
+      <div class="hl-xref__rules">{{ d.rules | join: ", " }}</div>
+    </div>
+    {%- endfor -%}
+  </div>
+  {%- else -%}
+  <p class="hl-xref__muted">No published YARA rule names this family in its metadata.</p>
+  {%- endif -%}
+
+  {%- if f.feeds.size > 0 -%}
+  <h2 id="feeds">IOC feeds</h2>
+  <div class="hl-xref__list">
+    {%- for d in f.feeds -%}
+    <div class="hl-xref__item hl-xref__item--feed">
+      <div class="hl-xref__item-head">
+        <span class="hl-xref__role">IOC feed</span>
+        <span class="hl-xref__item-meta">{% if d.date %}{{ d.date | date: "%b %Y" }} &middot; {% endif %}family = <code>{{ d.label }}</code></span>
+      </div>
+      <a class="hl-xref__item-title" href="{{ d.url | relative_url }}">{{ d.title }}</a>
+    </div>
+    {%- endfor -%}
+  </div>
+  {%- endif -%}
+
+  {%- if f.actors.size > 0 -%}
+  <h2 id="actors">Tracked actors</h2>
+  <p class="hl-xref__muted">Designations whose profile lists this family as tooling.</p>
+  <ul class="hl-xref__actors">
+    {%- for id in f.actors -%}
+    {%- assign a = site.data.actors.actors | where: "id", id | first -%}
+    <li><a href="{{ id | prepend: '/actors/' | append: '/' | relative_url }}">{{ id }}</a>{% if a %}: {{ a.type }}{% endif %}</li>
+    {%- endfor -%}
+  </ul>
+  {%- endif -%}
+
+  <p class="hl-xref__licence">A family name here is the label the linked rule, feed or profile carries, normalised to one spelling by <code>_data/families.yml</code>. Where a report declines to name a family, this page does not either.</p>
+</div>
+{%- endif -%}

@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <thead><tr><th>Tactic / Technique</th><th>Name</th><th>Rules</th></tr></thead>
 <tbody>
 {%- for row in _atk.rows %}
-<tr><td>{{ row.tactic }} / {{ row.id }}</td><td>{{ row.name }}</td><td>{{ row.rules }}</td></tr>
+<tr><td>{{ row.tactic }} / <a href="{{ row.id | prepend: '/techniques/' | append: '/' | relative_url }}">{{ row.id }}</a></td><td>{{ row.name }}</td><td>{{ row.rules }}</td></tr>
 {%- endfor %}
 </tbody>
 </table>
@@ -747,7 +747,7 @@ the coverage above is narrower than the rule set.</em></p>
   window.addEventListener('load', function () { if (location.hash) setTimeout(handleHash, 60); });
 })();
 </script>
-<script src="{{ '/assets/js/attack-coverage.js' | relative_url }}" defer></script>
+<script src="{{ '/assets/js/attack-coverage.js' | relative_url }}?v=2" defer></script>
 {%- comment -%}
   After attack-coverage on purpose, and both deferred, so they run in order: this
   reads HLAttackCoverage for the parser and hooks the strip that one has already

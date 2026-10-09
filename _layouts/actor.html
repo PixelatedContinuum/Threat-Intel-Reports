@@ -114,7 +114,7 @@ layout: page
       <div class="hl-actor__tactic-name">{{ tactic }}</div>
       <ul class="hl-actor__techniques">
         {%- for t in ix.attack -%}{%- if t.tactic == tactic -%}
-        <li><a href="{% if t.source == 'detections' %}{{ t.link | relative_url }}{% else %}{{ t.link | relative_url }}#mitre-attck-mapping{% endif %}" title="{% if t.source == 'detections' %}Mapped on the detection page{% else %}Mapped in the report{% endif %}"><code>{{ t.id }}</code></a> {{ t.name }}</li>
+        <li><a href="{{ t.id | prepend: '/techniques/' | append: '/' | relative_url }}" title="Every report and rule mapping {{ t.id }}"><code>{{ t.id }}</code></a> <a class="hl-actor__technique-src" href="{% if t.source == 'detections' %}{{ t.link | relative_url }}{% else %}{{ t.link | relative_url }}#mitre-attck-mapping{% endif %}" title="{% if t.source == 'detections' %}Mapped on the detection page{% else %}Mapped in the report{% endif %}">{{ t.name }}</a></li>
         {%- endif -%}{%- endfor -%}
       </ul>
     </div>

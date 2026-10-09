@@ -103,6 +103,8 @@ description: "Full-text search across every published report, detection page, IO
       ['/ioc-feeds/',          'ioc',        'IOC Feed'],
       ['/stix/',               'stix',       'STIX'],
       ['/actors/',             'actors',     'Threat Actor'],
+      ['/techniques/',         'techniques', 'ATT&CK Technique'],
+      ['/families/',           'families',   'Family'],
       ['/wire/',               'wire',       'The Wire'],
       ['/behind-the-reports/', 'behind',     'Behind the Reports']
     ];

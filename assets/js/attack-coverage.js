@@ -463,7 +463,11 @@
         detail.appendChild(el(doc, 'div', 'hl-attack__detailhead',
           tactic + ' \u00b7 ' + list.length + ' technique' + (list.length === 1 ? '' : 's')));
         list.forEach(function (t) {
-          var chip = el(doc, 'span', 'hl-attack__chip', t.id + ' ' + t.name);
+          // A link to the site-wide technique page, which lists every report
+          // and rule mapping it; the chip text and data-confidence are unchanged.
+          var chip = el(doc, 'a', 'hl-attack__chip', t.id + ' ' + t.name);
+          chip.setAttribute('href', '/techniques/' + t.id + '/');
+          chip.setAttribute('title', 'Every report and rule mapping ' + t.id);
           chip.setAttribute('data-confidence', t.confidence);
           detail.appendChild(chip);
         });

@@ -112,6 +112,19 @@ and the stubs, a FAIL on a bare mention that has a page, and a FAIL on a designa
 report names with no entry. A designation whose only report is unlisted gets no entry and no
 page until go-live, and the gate names it as absent on purpose.
 
+`node generate-xref.js` writes the cross-reference pages: `_data/attack_index.yml` and one stub
+per ATT&CK technique under `techniques/<id>/` (from the reports' mapping tables, the generated
+detection tables in `_data/detection_attack.yml` and the per-actor lists in
+`_data/actors_index.yml`), `_data/family_index.yml` and one stub per family under
+`families/<slug>/` (from the hand-written vocabulary `_data/families.yml` matched against the
+YARA `family` metadata, the feeds' `family` fields, the catalog tags and the actors' tooling), and
+the site-wide Navigator layer at `assets/data/attack-navigator-layer.json`. Published sources
+only. A technique id outside the ATT&CK catalog and a family label outside the vocabulary are
+listed by name under `unresolved` and `unmapped`, never guessed into a page; a vocabulary entry
+nothing published matches FAILS, so an empty page never ships. `node check-xref.js` gates the two
+indexes, the layer and the stubs by regenerate-and-diff.
+
 | `_data/actors.yml`, `_data/actors_index.yml`, `actors/*/index.md`, `_data/catalog.yml`, `reports/*/index.md`, `hunting-detections/*.md` | `check-actors.js` | index or a page stale, a bare designation unlinked, a designation with no entry |
+| `_data/families.yml`, `_data/attack_index.yml`, `_data/family_index.yml`, `techniques/*/index.md`, `families/*/index.md`, `assets/data/attack-navigator-layer.json`, plus every input above and `ioc-feeds/*.json` | `check-xref.js` | an index, the layer or a page stale, a vocabulary entry nothing published matches |
 
 Nothing here is published: `_config.yml` excludes `tools/*` from the Jekyll build.

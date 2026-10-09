@@ -25,14 +25,14 @@ test('a detection edit routes to the manifest AND the ATT&CK-table gate', functi
   // Both derive from the same markdown. The ATT&CK tables derive from the
   // manifest in turn, so an edit that moves one moves the other.
   var p = SG.plan(['hunting-detections/acme-detections.md']);
-  assert.deepEqual(ids(p), ['actors', 'detection-attack', 'manifest']);
+  assert.deepEqual(ids(p), ['actors', 'detection-attack', 'manifest', 'xref']);
 });
 
 test('a DELETED detection file still routes to the manifest gate', function () {
   // A deletion makes the manifest stale exactly as an edit does. Filtering
   // deletions out of the staged list would skip the check that catches it.
   var p = SG.plan(['hunting-detections/gone-detections.md'], { existing: [] });
-  assert.deepEqual(ids(p), ['actors', 'detection-attack', 'manifest']);
+  assert.deepEqual(ids(p), ['actors', 'detection-attack', 'manifest', 'xref']);
 });
 
 test('an IOC feed edit routes to the index, the viewer tables AND the safety gate',
@@ -41,7 +41,7 @@ test('an IOC feed edit routes to the index, the viewer tables AND the safety gat
     // product, so it always routes to the blocklist-safety check.
     var p = SG.plan(['ioc-feeds/acme-iocs.json']);
     assert.deepEqual(ids(p),
-      ['embargo-artifacts', 'feed-attack', 'feed-hygiene', 'ioc-index', 'ioc-tables']);
+      ['embargo-artifacts', 'feed-attack', 'feed-hygiene', 'ioc-index', 'ioc-tables', 'xref']);
   });
 
 test('a catalog edit routes to the index, the viewer tables AND the tag gate',
@@ -49,7 +49,7 @@ test('a catalog edit routes to the index, the viewer tables AND the tag gate',
     // Publication status gates the first two; the tag vocabulary gates the third,
     // because the catalog is the only place a retired spelling can come back.
     var p = SG.plan(['_data/catalog.yml']);
-    assert.deepEqual(ids(p), ['actors', 'ioc-index', 'ioc-tables', 'tags']);
+    assert.deepEqual(ids(p), ['actors', 'ioc-index', 'ioc-tables', 'tags', 'xref']);
   });
 
 test('a vocabulary edit routes to the tag gate, not the catalog alone', function () {
@@ -64,7 +64,7 @@ test('A REPORT EDIT ROUTES TO THE VIEWER TABLES, because front matter is half th
     // `unlisted: true` is the other half of the publication signal. A go-live that
     // flips only the front matter must still reach the gate that would notice.
     var p = SG.plan(['reports/acme/index.md'], { existing: ['reports/acme/index.md'] });
-    assert.deepEqual(ids(p), ['actors', 'embargo-artifacts', 'ioc-tables']);
+    assert.deepEqual(ids(p), ['actors', 'embargo-artifacts', 'ioc-tables', 'xref']);
   });
 
 test('a surviving viewer stub routes to its own gate', function () {
@@ -78,11 +78,11 @@ test('staging a generated artifact by hand still gates it', function () {
   assert.deepEqual(ids(SG.plan(['_data/detection_manifests.yml'])),
     ['detection-attack', 'manifest']);
   assert.deepEqual(ids(SG.plan(['assets/data/ioc-index.json'])), ['ioc-index']);
-  assert.deepEqual(ids(SG.plan(['_data/detection_attack.yml'])), ['detection-attack']);
+  assert.deepEqual(ids(SG.plan(['_data/detection_attack.yml'])), ['detection-attack', 'xref']);
   // An ATT&CK version bump rewrites the catalog and nothing else. Without this
   // route the 57 generated tables would go stale with every gate still green.
   assert.deepEqual(ids(SG.plan(['tools/report-tooling/data/attack-techniques.tsv'])),
-    ['actors', 'detection-attack']);
+    ['actors', 'detection-attack', 'xref']);
 });
 
 test('a wire data edit routes to the wire gate', function () {
@@ -129,7 +129,7 @@ test('one check is queued once however many files trigger it', function () {
     'hunting-detections/b-detections.md',
     'hunting-detections/c-detections.md'
   ]);
-  assert.deepEqual(ids(p), ['actors', 'detection-attack', 'manifest']);
+  assert.deepEqual(ids(p), ['actors', 'detection-attack', 'manifest', 'xref']);
 });
 
 test('a mixed commit queues every check it touches, deduplicated', function () {
@@ -145,7 +145,7 @@ test('a mixed commit queues every check it touches, deduplicated', function () {
   ], { existing: ['reports/one/index.md', 'reports/two/index.md'] });
   assert.deepEqual(ids(p),
     ['actors', 'detection-attack', 'embargo-artifacts', 'feed-attack', 'feed-hygiene', 'ioc-index',
-     'ioc-tables', 'manifest', 'tags', 'wire']);
+     'ioc-tables', 'manifest', 'tags', 'wire', 'xref']);
   assert.deepEqual(p.reports.sort(), ['reports/one/index.md', 'reports/two/index.md']);
   assert.equal(p.owed.length, 1);
 });
@@ -158,7 +158,7 @@ test('every queued check carries the reason it was queued, for the hook output',
 
 test('backslash paths are accepted, since git on Windows can hand them over', function () {
   var p = SG.plan(['hunting-detections\\acme-detections.md']);
-  assert.deepEqual(ids(p), ['actors', 'detection-attack', 'manifest']);
+  assert.deepEqual(ids(p), ['actors', 'detection-attack', 'manifest', 'xref']);
 });
 
 /* --- STIX bundle safety trigger, 2026-09-14 ---------------------------------
@@ -201,7 +201,7 @@ test('a mixed commit still wants it exactly once, alongside everything else', fu
   assert.equal(p.wantBundleSafety, true);
   assert.deepEqual(ids(p),
     ['actors', 'detection-attack', 'embargo-artifacts', 'feed-attack', 'feed-hygiene', 'ioc-index',
-     'ioc-tables', 'manifest', 'wire']);
+     'ioc-tables', 'manifest', 'wire', 'xref']);
 });
 
 test('the actor index routes on its record, its generated index, a stub page, the catalog, a report and a detection page', function () {
@@ -213,6 +213,24 @@ test('the actor index routes on its record, its generated index, a stub page, th
    'tools/report-tooling/data/attack-techniques.tsv'].forEach(function (path) {
     assert.ok(ids(SG.plan([path], { existing: [path] })).indexOf('actors') > -1, path);
   });
-  assert.deepEqual(ids(SG.plan(['_data/actors.yml'])), ['actors']);
+  assert.deepEqual(ids(SG.plan(['_data/actors.yml'])), ['actors', 'xref']);
   assert.deepEqual(ids(SG.plan(['actors/index.md', 'assets/css/custom.css'])), []);
+});
+
+test('the technique and family pages route on the vocabulary, their generated indexes, a stub, the layer, a feed and every actor-index input', function () {
+  // The cross-reference pages derive from everything the actor index does plus
+  // the family vocabulary, the feeds and the generated detection tables, and
+  // write stubs and the Navigator layer. Any of those staged routes here, so a
+  // page never lists less than the site publishes. The two listing pages and a
+  // stylesheet do not route here.
+  ['_data/families.yml', '_data/attack_index.yml', '_data/family_index.yml',
+   'techniques/T1059.001/index.md', 'families/xworm/index.md',
+   'assets/data/attack-navigator-layer.json', '_data/detection_attack.yml',
+   '_data/actors.yml', '_data/actors_index.yml', '_data/catalog.yml',
+   'reports/acme/index.md', 'hunting-detections/acme-detections.md', 'ioc-feeds/acme-iocs.json',
+   'tools/report-tooling/data/attack-techniques.tsv'].forEach(function (path) {
+    assert.ok(ids(SG.plan([path], { existing: [path] })).indexOf('xref') > -1, path);
+  });
+  assert.deepEqual(ids(SG.plan(['_data/families.yml'])), ['xref']);
+  assert.deepEqual(ids(SG.plan(['techniques/index.md', 'families/index.md', 'assets/js/heatmap-filter.js'])), []);
 });

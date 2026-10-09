@@ -80,6 +80,12 @@ var CHECKS = {
     label: 'catalog tags',
     cmd: 'check-tags.js',
     why: '_data/catalog.yml or _data/tags.yml is staged'
+  },
+  xref: {
+    id: 'xref',
+    label: 'technique and family pages',
+    cmd: 'check-xref.js',
+    why: '_data/families.yml, a generated cross-reference index or page, the Navigator layer, the catalog, the actor data, a report, a detection page or an IOC feed is staged'
   }
 };
 
@@ -167,6 +173,20 @@ function plan(paths, opts) {
         /^reports\/[^/]+\/index\.md$/.test(p) || /^hunting-detections\/.+\.md$/.test(p) ||
         p === 'tools/report-tooling/data/attack-techniques.tsv') {
       want.actors = true;
+    }
+    /* The technique and family pages derive from everything the actor index
+       does plus the family vocabulary, the IOC feeds (their family fields) and
+       the generated detection ATT&CK tables, and write stub pages and the
+       Navigator layer of their own. Any of those staged routes here so a
+       technique or family page never lists less than the site publishes. */
+    if (p === '_data/families.yml' || p === '_data/attack_index.yml' || p === '_data/family_index.yml' ||
+        p === '_data/detection_attack.yml' || p === '_data/actors.yml' || p === '_data/actors_index.yml' ||
+        p === 'assets/data/attack-navigator-layer.json' ||
+        /^techniques\/[^/]+\/index\.md$/.test(p) || /^families\/[^/]+\/index\.md$/.test(p) ||
+        p === '_data/catalog.yml' || /^reports\/[^/]+\/index\.md$/.test(p) ||
+        /^hunting-detections\/.+\.md$/.test(p) || /^ioc-feeds\/[^/]+\.json$/.test(p) ||
+        p === 'tools/report-tooling/data/attack-techniques.tsv') {
+      want.xref = true;
     }
     if (p === '_data/glossary.yml' && owed.indexOf(OWED_GLOSSARY) === -1) owed.push(OWED_GLOSSARY);
 

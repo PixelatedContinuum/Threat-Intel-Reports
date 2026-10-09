@@ -1,0 +1,181 @@
+# Controlled vocabulary for the malware and tool families the site cross-references.
+#
+# Why this exists. The YARA rules carry a `family` metadata string, the IOC feeds
+# a `family` field, the catalog a tag and each actor profile a tooling list, and
+# none of the four spells a family the same way ("XWorm", "Xworm", "XwormLoader",
+# "QuasarRAT/Xworm"). This file is the one place the canonical name is decided.
+# generate-xref.js in tools/report-tooling matches every label it finds against
+# the names and aliases here and writes one page per family under /families/,
+# listing every published report, rule, feed and actor that names it.
+#
+# Each entry has a `family` (the canonical name, which is also the page title),
+# a `kind` (rat, stealer, loader, c2-framework, cryptominer, kit, toolkit,
+# ransomware, webshell, botnet, backdoor, tunnel, exploit, other), optional
+# `aliases` (spellings that appear in a rule, feed or tooling list; a label is
+# also matched with its parentheticals removed and, when every part is known,
+# split on "/" or " + "), optional `tags` (catalog tags whose reports belong on
+# the page) and an optional `summary`, one sentence in the site's own words.
+#
+# A label this file does not know is listed by name under `unmapped` in
+# _data/family_index.yml, never guessed into a page. An entry nothing published
+# matches FAILS the gate, so a family is added here when the corpus names it,
+# not in advance. Operator-specific toolkits with no life outside one report
+# are deliberately not families; the report and the actor profile carry them.
+
+families:
+  # ---- command and control frameworks ----
+  - family: Sliver
+    kind: c2-framework
+    tags: [Sliver]
+    summary: BishopFox's open-source adversary emulation framework, found deployed as a live C2 by more than one operator.
+  - family: Cobalt Strike
+    kind: c2-framework
+    aliases: [CobaltStrike, "Cobalt Strike (cracked)"]
+    summary: The commercial red-team framework, seen on the site only as cracked builds staged by criminal operators.
+  - family: OpenStrike
+    kind: c2-framework
+    summary: An open-source Cobalt Strike reimplementation, staged alongside cracked Cobalt Strike builds.
+  - family: AdaptixC2
+    kind: c2-framework
+  - family: XiebroC2
+    kind: c2-framework
+  - family: Covenant
+    kind: c2-framework
+  - family: Matrix C2
+    kind: c2-framework
+    aliases: ["Matrix C2 (operator-built; AI-co-authored)"]
+    summary: An operator-built, AI-co-authored controller for a Mirai-derived botnet.
+  - family: A2A C2
+    kind: c2-framework
+    aliases: [Russian-A2A-C2, A2A-C2-Client-Console, A2A-C2-Server-Unauthenticated, A2A-C2-PowerShell-Loader, A2A-C2-Operator-Attribution, "custom Python C2"]
+    summary: A bespoke Python agent-to-agent C2 built by a Russian-speaking operator, with an LLM-assisted credential pipeline behind it.
+
+  # ---- remote access trojans ----
+  - family: XWorm
+    kind: rat
+    aliases: [Xworm, XwormLoader]
+    summary: A commodity .NET RAT sold as malware-as-a-service, among the most frequently recovered families in open directories.
+  - family: Quasar RAT
+    kind: rat
+    aliases: [QuasarRAT, Quasar]
+    summary: The open-source .NET RAT that several rebranded forks on this site descend from.
+  - family: KAIDO
+    kind: rat
+    aliases: ["KAIDO (rebranded 64-bit Quasar RAT fork, v2.4.5) + HVNC + full-spectrum surveillance"]
+    summary: A rebranded 64-bit Quasar RAT fork with HVNC, sold as a product.
+  - family: NjRAT
+    kind: rat
+    aliases: [njRAT, Bladabindi]
+  - family: ShadowRAT
+    kind: rat
+    aliases: ["Shadow RAT"]
+  - family: Remcos
+    kind: rat
+    aliases: ["Remcos RAT"]
+  - family: PureRAT
+    kind: rat
+    aliases: ["Pure RAT"]
+  - family: RavenRAT
+    kind: rat
+    aliases: ["Raven RAT"]
+  - family: Pulsar RAT
+    kind: rat
+    aliases: [PULSAR-RAT, PulsarRAT]
+  - family: Orcus RAT
+    kind: rat
+    aliases: [OrcusRAT-WardowCrack, OrcusRAT]
+  - family: CloudSync
+    kind: rat
+    aliases: ["CloudSync RAT"]
+    summary: A custom C++ RAT with a Tor-reachable panel, found with the .NET SvchostPayload RAT on the same assembler toolkit.
+  - family: SvchostPayload
+    kind: rat
+  - family: EtherRAT
+    kind: rat
+    aliases: ["EtherRAT-class Node.js bot"]
+    summary: A Node.js bot whose C2 address is resolved from an Ethereum contract (EtherHiding).
+
+  # ---- stealers ----
+  - family: Rhadamanthys
+    kind: stealer
+    aliases: ["Rhadamanthys (vendor product)"]
+  - family: RedLine Stealer
+    kind: stealer
+    aliases: [RedLine]
+  - family: SentinelStealer
+    kind: stealer
+  - family: SogouStealer
+    kind: stealer
+  - family: EvilSoul-Engine
+    kind: stealer
+    aliases: ["EvilSoul Engine"]
+    summary: A Node and Electron stealer-builder forked from the xaitax ChromElevator project and sold as a service.
+
+  # ---- loaders ----
+  - family: HijackLoader
+    kind: loader
+  - family: SmokeLoader
+    kind: loader
+    aliases: ["SmokeLoader/Heracles", Heracles]
+
+  # ---- cryptominers and their kits ----
+  - family: XMRig
+    kind: cryptominer
+    tags: [XMRig]
+    summary: The open-source Monero miner every cryptojacking kit on the site deploys.
+  - family: GHOST cryptojacker kit
+    kind: kit
+    aliases: [GHOST-cryptojacker-kit, GHOST-Cryptojacker-Kit, GHOST-Cryptojacker-LDPreload-Rootkit, "GHOST v5.1/v6.0"]
+    summary: A Linux cryptojacking kit with an LD_PRELOAD rootkit, competitor-killing and self-spreading stages, run by more than one operator.
+  - family: GOCLOUD
+    kind: toolkit
+    aliases: ["GOCLOUD and OmniHunter toolkit", OmniHunter]
+  - family: NsMiner
+    kind: cryptominer
+
+  # ---- botnets, ransomware, backdoors, web shells, tunnels ----
+  - family: Pandora-Mirai
+    kind: botnet
+    aliases: [Pandora-Mirai-Variant, "Pandora-Mirai variant"]
+    summary: A Sora-fork Mirai derivative, built with an AI coding agent in the loop.
+  - family: Tofsee
+    kind: botnet
+    aliases: ["Tofsee spam botnet"]
+  - family: Chaos
+    kind: ransomware
+    aliases: [Chaos-TorBrowserTor, Chaos-TorBrowserTor-Crypter, "Chaos ransomware builder", "Chaos ransomware"]
+    summary: The Chaos ransomware builder lineage, here as a TorBrowserTor-named variant with its own crypter.
+  - family: GSocket
+    kind: backdoor
+    aliases: ["GSocket/THC backdoor kit", gsocket]
+  - family: Godzilla
+    kind: webshell
+    aliases: ["Godzilla-style .NET loader webshell"]
+  - family: InsomniaShell
+    kind: webshell
+  - family: Ligolo-ng
+    kind: tunnel
+    aliases: [Ligolo]
+  - family: chisel
+    kind: tunnel
+    aliases: [Chisel]
+    summary: The open-source TCP/UDP tunnel, the single most shared piece of tooling across the actors tracked here.
+  - family: revsocks
+    kind: tunnel
+  - family: CovertVPN
+    kind: tunnel
+  - family: PrintSpoofer
+    kind: exploit
+
+  # ---- kits and toolkits ----
+  - family: BellaMain
+    kind: kit
+    aliases: ["BellaMain PhaaS panel"]
+    summary: An operator-developed PHP phishing-as-a-service panel with brand-impersonation kits.
+  - family: ScareCrow
+    kind: toolkit
+    aliases: ["ScareCrow Build Pipeline"]
+  - family: ARPA
+    kind: toolkit
+    aliases: [ARPA-Observability-Harvester, ARPA-observability-harvester, "ARPA / ARPA Korelasyon Motoru", "custom ARPA correlation platform"]
+    summary: A Turkish-language observability-harvesting and correlation platform built on an AI agent framework.

@@ -1,0 +1,81 @@
+---
+layout: page
+---
+{%- comment -%}
+  One ATT&CK technique, rendered for a person.
+
+  The stub page carries `technique_id` in its front matter. Everything shown
+  is looked up in _data/attack_index.yml, which generate-xref.js writes from
+  the reports' own mapping tables (read with the coverage strip's parser), the
+  generated detection tables in _data/detection_attack.yml and the per-actor
+  technique lists in _data/actors_index.yml. Nothing here derives a fact of its
+  own: each row links to the report, detection page or actor profile where
+  the mapping is made, and that page remains the record.
+
+  Only published sources are indexed, so a technique mapped only by an
+  unlisted report has no page and never reaches here.
+{%- endcomment -%}
+{%- assign t = site.data.attack_index.techniques | where: "id", page.technique_id | first -%}
+
+<div class="hl-page-header" style="--ph-accent: #fb923c;">
+  <div class="hl-page-header__label">ATT&amp;CK Technique{% if t and t.tactics.size > 0 %} &middot; {{ t.tactics | join: " / " }}{% endif %}</div>
+  <div class="hl-page-header__title"><code class="hl-xref__id">{{ page.technique_id }}</code> {% if t %}{{ t.name }}{% endif %}</div>
+  <div class="hl-page-header__desc">{% if t %}Mapped by {{ t.report_count }} report{% if t.report_count != 1 %}s{% endif %}, {{ t.rule_count }} detection rule{% if t.rule_count != 1 %}s{% endif %}{% if t.actor_count > 0 %} and {{ t.actor_count }} tracked actor{% if t.actor_count != 1 %}s{% endif %}{% endif %} on The Hunters Ledger. <a href="{{ t.mitre_url }}" rel="noopener">Technique page on attack.mitre.org</a>.{% else %}This technique is missing from <code>_data/attack_index.yml</code>. Re-run <code>generate-xref.js</code>.{% endif %}</div>
+</div>
+
+{%- if t -%}
+<div class="hl-xref">
+
+  <p class="hl-xref__nav"><a href="{{ '/techniques/' | relative_url }}">&larr; All techniques and the coverage heatmap</a></p>
+
+  <h2 id="reports">Reports</h2>
+  {%- if t.reports.size > 0 -%}
+  <p class="hl-xref__muted">Each report maps this technique in its own ATT&amp;CK table, at the confidence the report states. The link opens that table.</p>
+  <div class="hl-xref__list">
+    {%- for r in t.reports -%}
+    <div class="hl-xref__item hl-xref__item--report">
+      <div class="hl-xref__item-head">
+        <span class="hl-xref__role">Report</span>
+        <span class="hl-xref__item-meta">{{ r.date | date: "%b %Y" }}{% if r.tactic != "" %} &middot; under {{ r.tactic }}{% endif %}{% if r.confidence %} &middot; <span class="hl-xref__conf hl-xref__conf--{{ r.confidence | downcase }}">{{ r.confidence }}</span>{% endif %}</span>
+      </div>
+      <a class="hl-xref__item-title" href="{{ r.url | relative_url }}#mitre-attck-mapping">{{ r.title }}</a>
+    </div>
+    {%- endfor -%}
+  </div>
+  {%- else -%}
+  <p class="hl-xref__muted">No published report maps this technique in its ATT&amp;CK table; it is carried by detection rules only.</p>
+  {%- endif -%}
+
+  <h2 id="detections">Detection rules</h2>
+  {%- if t.detections.size > 0 -%}
+  <p class="hl-xref__muted">Rules whose ATT&amp;CK coverage line names this technique, by detection page. The link opens the page's coverage table.</p>
+  <div class="hl-xref__list">
+    {%- for d in t.detections -%}
+    <div class="hl-xref__item hl-xref__item--detection">
+      <div class="hl-xref__item-head">
+        <span class="hl-xref__role">Detection rules</span>
+        <span class="hl-xref__item-meta">{% if d.date %}{{ d.date | date: "%b %Y" }} &middot; {% endif %}{{ d.count }} rule{% if d.count != 1 %}s{% endif %}</span>
+      </div>
+      <a class="hl-xref__item-title" href="{{ d.url | relative_url }}">{{ d.title }}</a>
+      {%- if d.rules != "" -%}<div class="hl-xref__rules">{{ d.rules }}</div>{%- endif -%}
+    </div>
+    {%- endfor -%}
+  </div>
+  {%- else -%}
+  <p class="hl-xref__muted">No published detection rule on the site covers this technique yet.</p>
+  {%- endif -%}
+
+  {%- if t.actors.size > 0 -%}
+  <h2 id="actors">Tracked actors</h2>
+  <p class="hl-xref__muted">Designations whose reports map this technique.</p>
+  <ul class="hl-xref__actors">
+    {%- for id in t.actors -%}
+    {%- assign a = site.data.actors.actors | where: "id", id | first -%}
+    <li><a href="{{ id | prepend: '/actors/' | append: '/' | relative_url }}">{{ id }}</a>{% if a %}: {{ a.type }}{% endif %}</li>
+    {%- endfor -%}
+  </ul>
+  {%- endif -%}
+
+  <p class="hl-xref__licence">ATT&amp;CK v{{ site.data.attack_index.attack_version }}. MITRE ATT&amp;CK&reg; is a registered trademark of The MITRE Corporation; technique names are MITRE's and link to MITRE's own pages. The mapping on each linked page is this publication's reading of its own evidence.</p>
+</div>
+{%- endif -%}
