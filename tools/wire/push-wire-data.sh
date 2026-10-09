@@ -1,6 +1,7 @@
 #!/bin/sh
 # Publish a freshly generated wire.yml to the `wire-data` branch as ONE orphan
-# commit, replacing whatever was there. Run by the Wire generator host after
+# commit (wire.yml plus a copy of main's pages.yml, see below), replacing whatever
+# was there. Run by the Wire generator host after
 # wire_export.py writes the file; this replaces the old "commit to main" step.
 #
 # Why an orphan commit and a force-push. The branch is a mailbox, not a history:
