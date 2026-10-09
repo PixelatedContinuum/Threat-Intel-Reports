@@ -3,7 +3,7 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-09T07:00:22Z
+generated_at: 2026-10-09T08:00:27Z
 window_days: 30
 counts:
   total: 606
@@ -11,7 +11,7 @@ counts:
   news: 400
 topics:
   - label: "vulnerabilities"
-    count: 145
+    count: 146
     color: 1
   - label: "malware"
     count: 114
@@ -32,7 +32,7 @@ topics:
     count: 53
     color: 7
   - label: "zero-day"
-    count: 48
+    count: 47
     color: 8
   - label: "government"
     count: 46
@@ -327,6 +327,12 @@ label_colors:
   "x": 4
   "zero-day": 8
 items:
+  - title: "Citrix Urges Immediate Patching of Critical NetScaler Vulnerability"
+    url: "https://www.securityweek.com/citrix-urges-immediate-patching-of-critical-netscaler-vulnerability/"
+    source: "SecurityWeek"
+    date: 2026-10-09T06:53:53Z
+    kind: news
+    labels: ["vulnerabilities", "citrix", "netscaler", "patch"]
   - title: "Google Pixel 10 Exploits Earned Hackers $560,000 at Pwn2Own"
     url: "https://www.securityweek.com/google-pixel-10-exploits-earned-hackers-560000-at-pwn2own/"
     source: "SecurityWeek"
@@ -3957,9 +3963,3 @@ items:
     date: 2026-09-09T09:45:00Z
     kind: news
     labels: ["zero-day", "chrome", "vulnerabilities"]
-  - title: "New Microsoft Defender 'ShieldCrash' zero-day grants SYSTEM access"
-    url: "https://www.bleepingcomputer.com/news/security/new-microsoft-defender-shieldcrash-zero-day-grants-system-access/"
-    source: "BleepingComputer"
-    date: 2026-09-09T07:30:15Z
-    kind: news
-    labels: ["zero-day", "microsoft"]
