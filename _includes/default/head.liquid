@@ -107,7 +107,13 @@
     <meta name="twitter:image" content="{{ page.thumbnail | default: page['feature-img'] | default: site.header_feature_image | absolute_url }}">
     <meta name="twitter:image:alt" content="{{ page.title | default: site.title }}">
     <!-- Local override: project design system -->
-    <link rel="stylesheet" href="{{ '/assets/css/custom.css' | relative_url }}">
+    {%- comment -%} Versioned per build so markup and stylesheet always ship as a pair.
+    GitHub Pages caches assets for ten minutes; without this, a returning reader got new
+    HTML styled by the previous CSS for that window (seen 2026-10-09 on the nav drawer,
+    which rendered as an unstyled list). build_revision is the commit the build ran from,
+    so the URL only changes when main changes; a local build falls back to the build time. {%- endcomment -%}
+    {%- capture _css_v -%}{% if site.github.build_revision %}{{ site.github.build_revision | slice: 0, 10 }}{% else %}{{ site.time | date: '%s' }}{% endif %}{%- endcapture -%}
+    <link rel="stylesheet" href="{{ '/assets/css/custom.css' | relative_url }}?v={{ _css_v }}">
     <link rel="preload" href="{{ '/assets/fonts/space-grotesk.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
 
     {%- comment -%} Cloudflare Web Analytics, JS-snippet install. This site is deliberately
