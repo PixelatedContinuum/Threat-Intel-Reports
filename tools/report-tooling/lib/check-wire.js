@@ -47,8 +47,9 @@ function normTitle(t) {
    `now`, and it is what separates the two ways this file goes old.
 
    Those two ways look identical from inside the working tree and are not the
-   same event. The generator pushes wire.yml straight to origin twelve times a
-   day, so a clone nobody has fetched falls behind by exactly as many hours as
+   same event. The generator pushes wire.yml straight to origin every hour (to
+   the wire-data branch; see tools/wire/push-wire-data.sh), so a clone nobody
+   has fetched falls behind by exactly as many hours as
    it has sat there, while the live page stays current. Reading local age alone,
    this gate called a three-day-old clone a dead timer and named LXC-102 as the
    cause; measured over the ten days after the two-hourly cadence landed, the

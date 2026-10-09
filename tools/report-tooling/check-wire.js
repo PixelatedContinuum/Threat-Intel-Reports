@@ -35,28 +35,47 @@ function load(p) {
 /* What origin holds, which is the only thing that can say whether an old local
    wire.yml means a stopped generator or just a checkout nobody pulled.
 
-   Always origin/main, never the current upstream: the generator pushes there
-   and nowhere else, so a publish worktree on its own branch still has to ask
-   main. Returns null on any failure, and null means unknown, never healthy.
-   Set WIRE_GATE_NO_FETCH=1 to read the ref already in the clone without going
-   to the network, which is what a CI job on a fresh clone wants. */
+   The authoritative copy is `wire.yml` at the tip of origin/wire-data: the
+   generator force-pushes one orphan commit there every hour, and the Pages
+   workflow (.github/workflows/pages.yml) copies it into _data/ at build time.
+   origin/main:_data/wire.yml is the pre-cutover location and is read as a
+   fallback so this gate keeps working during the transition and on a clone
+   that predates it. Returns null on any failure, and null means unknown,
+   never healthy.
+
+   Set WIRE_GATE_NO_FETCH=1 to read the refs already in the clone without going
+   to the network, which is what a CI job on a fresh clone wants (the workflow
+   fetches wire-data itself, then runs this). */
 function remoteWire() {
   if (!process.env.WIRE_GATE_NO_FETCH) {
     try {
-      cp.execFileSync('git', ['fetch', 'origin', 'main', '--quiet'],
+      cp.execFileSync('git', ['fetch', 'origin', '--quiet',
+        '+refs/heads/main:refs/remotes/origin/main',
+        '+refs/heads/wire-data:refs/remotes/origin/wire-data'],
         { cwd: ROOT, stdio: 'ignore', timeout: 30000 });
     } catch (e) {
-      return null; // offline, no remote, or an auth prompt: origin is unknown
+      // wire-data may not exist yet; fall back to fetching main alone before giving up.
+      try {
+        cp.execFileSync('git', ['fetch', 'origin', 'main', '--quiet'],
+          { cwd: ROOT, stdio: 'ignore', timeout: 30000 });
+      } catch (e2) {
+        return null; // offline, no remote, or an auth prompt: origin is unknown
+      }
     }
   }
-  try {
-    var out = cp.execFileSync('git', ['show', 'origin/main:_data/wire.yml'],
-      { cwd: ROOT, encoding: 'utf8', timeout: 30000, maxBuffer: 32 * 1024 * 1024 });
-    var m = /^generated_at:[ \t]*(\S+)/m.exec(out);
-    return m ? { generated_at: m[1] } : null;
-  } catch (e) {
-    return null;
+  var refs = ['origin/wire-data:wire.yml', 'origin/main:_data/wire.yml'];
+  for (var i = 0; i < refs.length; i++) {
+    try {
+      var out = cp.execFileSync('git', ['show', refs[i]],
+        { cwd: ROOT, encoding: 'utf8', timeout: 30000, maxBuffer: 32 * 1024 * 1024,
+          stdio: ['ignore', 'pipe', 'ignore'] });   // a missing ref is expected, not news
+      var m = /^generated_at:[ \t]*(\S+)/m.exec(out);
+      if (m) return { generated_at: m[1], ref: refs[i] };
+    } catch (e) {
+      // ref absent in this clone; try the next
+    }
   }
+  return null;
 }
 
 var doc = load(WIRE);
