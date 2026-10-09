@@ -8,7 +8,7 @@ description: "Full-text search across every published report, detection page, IO
 <div class="hl-page-header" style="--ph-accent: #58a6ff;">
   <div class="hl-page-header__label">Search</div>
   <div class="hl-page-header__title">Search the Ledger</div>
-  <div class="hl-page-header__desc">Full-text search across every published report, detection page, IOC feed and STIX bundle. Type an indicator, a technique, a tool name or a phrase; filter by section on the left.</div>
+  <div class="hl-page-header__desc">Full-text search across every published report, detection page, IOC feed and STIX bundle. Type an indicator, a technique, a tool name or a phrase, and narrow by section.</div>
 </div>
 
 {%- comment -%}

@@ -6230,4 +6230,10 @@ body.hl-drawer-locked { overflow: hidden; }
   #hl-search .pagefind-ui__result { padding: 14px 14px 14px 18px; }
   #hl-search .pagefind-ui__result-link { font-size: 1rem; }
 }
+#hl-search details.pagefind-ui__filter-block { padding-bottom: 0; border-bottom: 0; margin-bottom: 0; }
+#hl-search details.pagefind-ui__filter-block[open] { padding-bottom: 6px; }
+@media (max-width: 640px) {
+  #hl-search .pagefind-ui__filter-panel { padding: 6px 14px; }
+  #hl-search .pagefind-ui__filter-name { padding: 10px 0; }
+}
 
