@@ -101,7 +101,7 @@ This module targets a comprehensive list of enterprise security products includi
 ## Quick Reference
 
 **Detections & IOCs:**
-- [killer.dll Detection Rules]({{ "/hunting-detections/arsenal-237-killer-dll/" | relative_url }})
+- [killer.dll Detection Rules]({{ "/hunting-detections/arsenal-237-killer-dll-detections/" | relative_url }})
 - [killer.dll IOCs]({{ "/ioc-feeds/arsenal-237-killer-dll.json" | relative_url }})
 
 ---
@@ -1957,7 +1957,7 @@ In an enterprise environment, **rebuild is the only defensible approach** that m
 ---
 
 ## Detections
-- [killer.dll Detection Rules]({{ "/hunting-detections/arsenal-237-killer-dll/" | relative_url }})
+- [killer.dll Detection Rules]({{ "/hunting-detections/arsenal-237-killer-dll-detections/" | relative_url }})
 
 ---
 

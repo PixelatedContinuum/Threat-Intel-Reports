@@ -95,7 +95,7 @@ This campaign deploys Remcos RAT through a two-stage chain: a VB6 obfuscated dro
 
 The campaign's primary risk is complete, persistent access to every compromised endpoint. Credential theft targets Chrome and Firefox saved passwords and session cookies, enabling account takeover across corporate and personal services. The Userinit hijack survives Safe Mode and activates for every user account on the system, standard Run-key removal leaves the infection intact. Threat intelligence context is in Section 8; attribution assessment in Section 9.
 
-Operationally, the threat actor's consolidation of distribution and C2 on a single IP creates a high-value blocking target. Blocking 203[.]159[.]90[.]147 disrupts both payload delivery and post-compromise tasking. Response guidance is in Section 10; YARA, Sigma, and network detection rules are in the [detection file](/hunting-detections/remcos-opendirectory/).
+Operationally, the threat actor's consolidation of distribution and C2 on a single IP creates a high-value blocking target. Blocking 203[.]159[.]90[.]147 disrupts both payload delivery and post-compromise tasking. Response guidance is in Section 10; YARA, Sigma, and network detection rules are in the [detection file](/hunting-detections/remcos-opendirectory-detections/).
 
 ### Primary Threat Vector
 
@@ -843,7 +843,7 @@ I hold that assessment at MODERATE.
 
 ### Malware Removal
 
-Endpoint detection platforms should identify this sample as "Remcos RAT" family. Update definitions if not detected, and deploy the YARA rules from the [detection file](/hunting-detections/remcos-opendirectory/) across the environment. For high-value systems, full reimaging is recommended.
+Endpoint detection platforms should identify this sample as "Remcos RAT" family. Update definitions if not detected, and deploy the YARA rules from the [detection file](/hunting-detections/remcos-opendirectory-detections/) across the environment. For high-value systems, full reimaging is recommended.
 
 Manual remediation requires removing the Remcos executable from `C:\Users\[USERNAME]\AppData\Roaming\remcos\`, restoring the Winlogon Userinit registry value to `C:\WINDOWS\system32\userinit.exe,`, removing Remcos Run key entries from HKCU and HKLM, re-enabling UAC (EnableLUA=1), and checking for Shell hijack modifications. Verify removal by confirming mutex "Remcos_Mutex_Inj" is absent after reboot.
 

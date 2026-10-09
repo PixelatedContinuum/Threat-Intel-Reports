@@ -875,7 +875,7 @@ A: Both RATs enable comprehensive data theft and surveillance, keylogging, scree
 - [Dual-RAT Analysis IOCs]({{ "/ioc-feeds/dual-rat-analysis.json" | relative_url }})
 
 ### Detections
-- [Dual-RAT Analysis Detections]({{ "/hunting-detections/dual-rat-analysis/" | relative_url }})
+- [Dual-RAT Analysis Detections]({{ "/hunting-detections/dual-rat-analysis-detections/" | relative_url }})
 
 ---
 
