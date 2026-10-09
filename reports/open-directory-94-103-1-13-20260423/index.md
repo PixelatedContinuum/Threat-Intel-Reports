@@ -653,7 +653,7 @@ Named-actor attribution is INSUFFICIENT at 0 percent. There are zero infrastruct
 
 Family-level identification is DEFINITE at 97 percent. This is the Chaos ransomware builder of 2021 origin, v1 to v5 lineage, configured as the TorBrowserTor variant. That is a family-level identification rather than an actor attribution, because the Chaos builder is publicly available and shared by many unrelated operators.
 
-At operator level I track this as UTA-2026-005, a distinctive trackable cluster resting on a private five-stage crypter with cross-layer key reuse, a cross-build mutex GUID invariant, a byte-identical Stage-5b UAC bypass PE, and a tri-artifact anti-sandbox gate. See [UTA-2026-005.md](/threat-actors/UTA-2026-005/) for the full fingerprint record.
+At operator level I track this as UTA-2026-005, a distinctive trackable cluster resting on a private five-stage crypter with cross-layer key reuse, a cross-build mutex GUID invariant, a byte-identical Stage-5b UAC bypass PE, and a tri-artifact anti-sandbox gate. See UTA-2026-005.md for the full fingerprint record.
 
 ### 7.2 Chaos Builder vs Chaos RaaS Group (2025): Mandatory Disambiguation
 
