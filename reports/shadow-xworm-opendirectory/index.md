@@ -448,7 +448,7 @@ The master key used as PBKDF2 input is: `97DC71A09A26EAF63C56B6FF2BA582AA3A994D6
 Wire format for each config field: `[HMAC-SHA256 (32 bytes)][IV (16 bytes)][AES-256-CBC ciphertext]`
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/shadow-xworm-opendirectory/shadow-rat-encrypted-fields.png" | relative_url }}" alt="Decompiled Shadow RAT config class showing encrypted static string fields, each field stores a long Base64-encoded ciphertext blob, with the AES key and PBKDF2 salt extracted from Shadow.Common.dll required to decrypt them">
+  <img loading="lazy" src="{{ "/assets/images/shadow-xworm-opendirectory/shadow-rat-encrypted-fields.webp" | relative_url }}" alt="Decompiled Shadow RAT config class showing encrypted static string fields, each field stores a long Base64-encoded ciphertext blob, with the AES key and PBKDF2 salt extracted from Shadow.Common.dll required to decrypt them">
   <figcaption><em>Figure 7: Shadow RAT config class, each field stores AES-256-CBC ciphertext that is indistinguishable from random data without the PBKDF2-derived key recovered from Shadow.Common.dll.</em></figcaption>
 </figure>
 

@@ -207,7 +207,7 @@ The encrypted configuration block decrypted in full (**DEFINITE**, an offline de
 - **Cryptography:** AES-256-GCM with PBKDF2-HMAC-SHA256 key derivation at 100,000 iterations; wire framing of `[12-byte nonce][16-byte tag][ciphertext]`, base64-encoded.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/kaido-quasar-rat-144-172-109-203/kaido-config-c2-defanged.png" | relative_url }}" alt="Recovered KAIDO operator configuration (secrets defanged) showing the 0xK41 brand name, the t.me/n_3_xl operator Telegram contact, exfiltration author templates such as '0xK41 ~ BrowserData', and operator panel and webhook fields.">
+  <img loading="lazy" src="{{ "/assets/images/kaido-quasar-rat-144-172-109-203/kaido-config-c2-defanged.webp" | relative_url }}" alt="Recovered KAIDO operator configuration (secrets defanged) showing the 0xK41 brand name, the t.me/n_3_xl operator Telegram contact, exfiltration author templates such as '0xK41 ~ BrowserData', and operator panel and webhook fields.">
   <figcaption><em>Figure 4: Recovered KAIDO operator configuration with credentials and tokens defanged. Beyond the command-and-control and crypto parameters recovered from the client builds, the operator-side configuration exposes the identity artifacts that anchor attribution, the <code>0xK41</code> brand name, the <code>t.me/n_3_xl</code> operator contact, and branded exfiltration author templates (<code>0xK41 ~ BrowserData</code>, Steam/Minecraft/Roblox session labels). These self-attested branding strings tie the tooling to the named operator (Section 10) and survive as recovery evidence.</em></figcaption>
 </figure>
 

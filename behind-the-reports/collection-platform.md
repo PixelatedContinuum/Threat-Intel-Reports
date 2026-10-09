@@ -146,7 +146,7 @@ Each enrichment response classifies the file into a priority tier:
 The platform surfaces everything it finds through a dark-themed analyst dashboard. This is where automated collection ends and human judgment takes over. The platform finds and organizes, I decide what is worth investigating.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/behind-the-reports/vantage-dashboard.png" | relative_url }}" alt="Vantage dashboard showing the main triage view with severity-tiered directory cards (6 HIGH, 5 MEDIUM, 45 LOW), workflow status filters, global statistics bar displaying 74,492 total directories and 27 novel detections, a global search bar with database and live scan modes, and the high-priority hosts table listing active hosts with file counts and last activity timestamps">
+  <img src="{{ "/assets/images/behind-the-reports/vantage-dashboard.webp" | relative_url }}" alt="Vantage dashboard showing the main triage view with severity-tiered directory cards (6 HIGH, 5 MEDIUM, 45 LOW), workflow status filters, global statistics bar displaying 74,492 total directories and 27 novel detections, a global search bar with database and live scan modes, and the high-priority hosts table listing active hosts with file counts and last activity timestamps">
   <figcaption><em>Figure 1: The main dashboard view, with severity-tiered directory counts at top, global statistics and search in the middle, and the high-priority hosts table showing hosts with novel or low-detection files awaiting triage.</em></figcaption>
 </figure>
 

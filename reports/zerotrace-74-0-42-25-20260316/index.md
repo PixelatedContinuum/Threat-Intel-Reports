@@ -413,7 +413,7 @@ BoxedApp SDK is a commercial virtual filesystem toolkit that bundles multiple ex
 This matters because the same IP (`185.49.126.140`) appears hardcoded across three binaries from different families, XWorm on port 5000, PureRAT on ports 56001-56003, and PureHVNC on port 8000, which confirms single-operator control through one consolidated C2 server. Blocking that IP disrupts all three families simultaneously. Because the hidden desktop operates as a legitimate Windows component, most endpoint detection solutions do not flag HVNC activity, so behavioral detections for unexpected `CreateDesktop()` calls are the reliable path.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-74.0.42.25/xh_exe.png" | relative_url }}" alt="Decompiled xh.exe PureHVNC stub showing hardcoded C2 IP 185.49.126.140 and HVNC.StartHVNC call">
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-74.0.42.25/xh_exe.webp" | relative_url }}" alt="Decompiled xh.exe PureHVNC stub showing hardcoded C2 IP 185.49.126.140 and HVNC.StartHVNC call">
   <figcaption><em>Figure 5: Decompiled <code>xh.exe</code> (the PureHVNC victim stub) with the hardcoded C2 address <code>185.49.126.140</code> highlighted. The same IP appears hardcoded across three separate binaries from different malware families (XWorm (port 5000), PureRAT (ports 56001-56003), and PureHVNC (port 8000)) directly confirming a single operator controls all three families through one consolidated C2 server. The <code>HVNC.StartHVNC()</code> call initiates the hidden desktop session using those hardcoded parameters.</em></figcaption>
 </figure>
 
@@ -775,7 +775,7 @@ The threat actor is ZeroTrace. I hold the operating identity at HIGH, 88 percent
 
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-74.0.42.25/telegram_handle_AI.png" | relative_url }}" alt="Raven RAT README.md showing @ZeroTraceDevOfficial Telegram link at line 10">
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-74.0.42.25/telegram_handle_AI.webp" | relative_url }}" alt="Raven RAT README.md showing @ZeroTraceDevOfficial Telegram link at line 10">
   <figcaption><em>Figure 10: <code>README.md</code> recovered from the Raven RAT source directory on the open directory server. The <code>@ZeroTraceDevOfficial</code> Telegram link at line 10 is the primary digital identity anchor for ZeroTrace, independently corroborated by CYFIRMA. The feature list confirms all capabilities documented through binary analysis: HVNC, keylogger, process manager, and cryptocurrency wallet theft.</em></figcaption>
 </figure>
 
