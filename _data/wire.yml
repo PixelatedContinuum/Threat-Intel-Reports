@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-09T11:00:32Z
+generated_at: 2026-10-09T12:00:32Z
 window_days: 30
 counts:
-  total: 612
-  research: 213
-  news: 399
+  total: 611
+  research: 211
+  news: 400
 topics:
   - label: "vulnerabilities"
     count: 145
@@ -35,7 +35,7 @@ topics:
     count: 47
     color: 8
   - label: "zero-day"
-    count: 46
+    count: 45
     color: 9
   - label: "nation-state"
     count: 34
@@ -110,7 +110,6 @@ label_colors:
   "apt-q-95": 4
   "apt36": 10
   "arbitrary file write": 11
-  "arktunnel": 6
   "arrested": 2
   "artificial intelligence": 3
   "arx cipher": 2
@@ -225,7 +224,6 @@ label_colors:
   "detection engineering": 12
   "dmdc": 12
   "dns txt records": 3
-  "docro hijacker": 6
   "docusign impersonation": 2
   "donut loader": 3
   "double extortion": 1
@@ -331,6 +329,12 @@ label_colors:
   "x": 4
   "zero-day": 9
 items:
+  - title: "Man admits to running network of 15,000 money mules for cybercriminals"
+    url: "https://www.bleepingcomputer.com/news/security/ukrainian-russian-dual-citizen-admits-to-laundering-millions-for-cybercriminals/"
+    source: "BleepingComputer"
+    date: 2026-10-09T11:14:28Z
+    kind: news
+    labels: []
   - title: "Unpatched AhsayCBS Vulnerabilities Exploited in the Wild"
     url: "https://www.securityweek.com/unpatched-ahsaycbs-vulnerabilities-exploited-in-the-wild/"
     source: "SecurityWeek"
@@ -3991,15 +3995,3 @@ items:
     date: 2026-09-09T12:15:00Z
     kind: news
     labels: ["cybercrime", "government"]
-  - title: "Once in a BlueMoon: Multiple State-Aligned Threat Actors Rapidly Adopt Novel Exploit Chain Using Chrome and Windows Zero-Days"
-    url: "https://otx.alienvault.com/pulse/6aa13f23b5ab6aa77a03e1e3"
-    source: "AlienVault"
-    date: 2026-09-09T11:12:35Z
-    kind: research
-    labels: ["zero-day", "bluemoon", "browser-extension", "gemstone", "shadowpad"]
-  - title: "Untracked Nightmares: The Threats Hiding Behind Commodity Infrastructure"
-    url: "https://otx.alienvault.com/pulse/6aa13e05864a561a7db38073"
-    source: "AlienVault"
-    date: 2026-09-09T11:07:49Z
-    kind: research
-    labels: ["arktunnel", "docro hijacker", "gcleaner", "insomnia rat", "pay-per-install", "seo poisoning", "socks5systemz"]
