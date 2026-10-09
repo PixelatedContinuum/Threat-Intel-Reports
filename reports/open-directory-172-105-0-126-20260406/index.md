@@ -109,7 +109,7 @@ OpenStrike is notable for three reasons that create specific defender blind spot
 
 **Threat Actor**
 
-Attribution is INSUFFICIENT (<50% confidence). The operator is tracked internally as UTA-2026-004 *(an internal tracking label used by The Hunters Ledger, see [Section 7](#7-threat-actor-assessment))*. Technical behavioral indicators (cracked CS watermark=0, GCC 15.1 build environment, single shared RSA key, open directory OPSEC failure) are most consistent with an independent skilled developer or small private group, not a nation-state APT or MaaS operator.
+Attribution is INSUFFICIENT (<50% confidence). The operator is tracked internally as <a href="/actors/UTA-2026-004/">UTA-2026-004</a> *(an internal tracking label used by The Hunters Ledger, see [Section 7](#7-threat-actor-assessment))*. Technical behavioral indicators (cracked CS watermark=0, GCC 15.1 build environment, single shared RSA key, open directory OPSEC failure) are most consistent with an independent skilled developer or small private group, not a nation-state APT or MaaS operator.
 
 **For Technical Teams**
 
@@ -936,9 +936,9 @@ The open directory was almost certainly an operator error, a misconfigured web s
 ## 7. Threat Actor Assessment
 {: .hl-tier-2}
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-004 is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. <a href="/actors/UTA-2026-004/">UTA-2026-004</a> is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
 
-The designation is UTA-2026-004.
+The designation is <a href="/actors/UTA-2026-004/">UTA-2026-004</a>.
 **Attribution Confidence: INSUFFICIENT (<50%)**
 
 Attribution is not possible with available evidence. No infrastructure overlaps, code similarity corpus, targeting pattern, or external attribution sources exist to link this activity to any named threat actor or tracked group.
@@ -952,7 +952,7 @@ Attribution is not possible with available evidence. No infrastructure overlaps,
 | H3: MaaS operator | LOW, single shared RSA key indicates single-operator control, inconsistent with multi-customer architecture | Ruled out |
 | H4: False flag / infrastructure reuse | INSUFFICIENT data | Cannot assess |
 
-**Operator profile (UTA-2026-004):**
+**Operator profile (<a href="/actors/UTA-2026-004/">UTA-2026-004</a>):**
 
 - **Build environment:** GCC 15.1 (MinGW), released April 25, 2025; activity window late 2025 onward
 - **Capability tier:** Advanced, custom bytecode VM, novel anti-analysis techniques, multi-language C2 architecture, BOF runtime compilation

@@ -39,7 +39,7 @@ stix_bundle: /stix/sliver-open-directory.json
 
 An exposed open directory at `45.94.31.220`, hosted on bulletproof infrastructure operated by 1337 Services GmbH (AS210558), yielded a complete attacker build workspace containing 270 files, 69 subdirectories, and 144 MB of offensive tooling. The workspace includes a fully operational Sliver C2 implant wrapped in a ScareCrow loader with 15 layered EDR evasion techniques, custom source code for five evasion modules, a fraudulent VMware code-signing certificate with its unencrypted private key, and a Sliver beacon generation command revealing complete C2 configuration. The toolkit was built on 2026-02-14 at 15:01 UTC and discovered approximately 6.75 hours later, likely before successful victim deployment.
 
-I categorize this as cybercrime at HIGH confidence, 80 percent, and designate the operator **UTA-2026-001** *(an internal tracking label used by The Hunters Ledger, see Section 6)*.
+I categorize this as cybercrime at HIGH confidence, 80 percent, and designate the operator **<a href="/actors/UTA-2026-001/">UTA-2026-001</a>** *(an internal tracking label used by The Hunters Ledger, see Section 6)*.
 **Threat Level:** MEDIUM, C2 infrastructure offline at analysis time; no confirmed victims; automated build pipeline means functionally equivalent beacons can be regenerated in approximately 8 minutes.
 The intelligence here is descriptive, covering what was built, and explanatory, covering how the evasion works. Anticipatory intelligence is a documented gap, because actual victim deployment and targeting remain unconfirmed.
 
@@ -175,7 +175,7 @@ The stub/implemented split is not an incomplete build. It is the correct archite
 | **CA:TRUE flag**         | Present, scripted openssl generation indicator; legitimate code-signing certs never carry CA:TRUE  |
 
 
-There is a third-party signing risk here. Anyone who downloaded `key.pem` from the open directory before it was taken down can sign arbitrary binaries with the `VMware, Inc. Code Signing` identity. That means the certificate serial `659EEB5AA4A489FB238993AF259D23F057F6D6D6` may appear on binaries that did not originate from UTA-2026-001, creating potential false positives in any investigation that assumes every artifact carrying this serial shares a single origin.
+There is a third-party signing risk here. Anyone who downloaded `key.pem` from the open directory before it was taken down can sign arbitrary binaries with the `VMware, Inc. Code Signing` identity. That means the certificate serial `659EEB5AA4A489FB238993AF259D23F057F6D6D6` may appear on binaries that did not originate from <a href="/actors/UTA-2026-001/">UTA-2026-001</a>, creating potential false positives in any investigation that assumes every artifact carrying this serial shares a single origin.
 
 ---
 
@@ -785,9 +785,9 @@ What was exposed is 270 files across 69 subdirectories, totaling 144 MB. That in
 
 ### UTA-2026-001 Designation
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-001 is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. <a href="/actors/UTA-2026-001/">UTA-2026-001</a> is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
 
-The threat actor is unknown, and I designate them **UTA-2026-001**. I hold the distinct-actor judgment at MODERATE, 68 percent, and named attribution stays INSUFFICIENT, because research found no infrastructure overlap with any known named campaign.
+The threat actor is unknown, and I designate them **<a href="/actors/UTA-2026-001/">UTA-2026-001</a>**. I hold the distinct-actor judgment at MODERATE, 68 percent, and named attribution stays INSUFFICIENT, because research found no infrastructure overlap with any known named campaign.
 
 
 
@@ -1066,7 +1066,7 @@ This report already carries confidence labels through Sections 3, 6, 7, and 9. I
 
 **LOW**: the competing hypothesis that this is a state-sponsored operator using commodity tools as cover, which I hold at 5 percent against the 80 percent I give the cybercrime hypothesis and the 15 percent I give a skilled individual criminal.
 
-**INSUFFICIENT**: named attribution to a known threat group. Research found no infrastructure overlap with any previously reported campaign, `mailuxe.net` carries no prior malicious history, the hosting provider serves thousands of unrelated domains, and the build-pipeline fingerprint (ScareCrow, Donut, SysWhispers3) is consistent with multiple independent operators using the same public tools. That is why I designate the operator **UTA-2026-001** rather than name an actor.
+**INSUFFICIENT**: named attribution to a known threat group. Research found no infrastructure overlap with any previously reported campaign, `mailuxe.net` carries no prior malicious history, the hosting provider serves thousands of unrelated domains, and the build-pipeline fingerprint (ScareCrow, Donut, SysWhispers3) is consistent with multiple independent operators using the same public tools. That is why I designate the operator **<a href="/actors/UTA-2026-001/">UTA-2026-001</a>** rather than name an actor.
 
 ---
 

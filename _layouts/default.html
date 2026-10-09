@@ -29,6 +29,7 @@
     {%- elsif page.url contains '/hunting-detections/' -%}{%- assign _pf_section = 'Detections' -%}
     {%- elsif page.url contains '/ioc-feeds/' -%}{%- assign _pf_section = 'IOC Feeds' -%}
     {%- elsif page.url contains '/stix/' -%}{%- assign _pf_section = 'STIX' -%}
+    {%- elsif page.url contains '/actors/' -%}{%- assign _pf_section = 'Actors' -%}
     {%- elsif page.url contains '/behind-the-reports/' -%}{%- assign _pf_section = 'Behind the Reports' -%}
     {%- endif %}
     <main class="content" id="main" tabindex="-1"{% if _pf_index %} data-pagefind-body data-pagefind-filter="section:{{ _pf_section }}"{% if page.date %} data-pagefind-meta="date:{{ page.date | date: '%Y-%m-%d' }}" data-pagefind-sort="date"{% endif %}{% endif %}>

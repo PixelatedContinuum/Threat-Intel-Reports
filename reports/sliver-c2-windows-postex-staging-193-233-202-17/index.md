@@ -76,7 +76,7 @@ That is the defensive recommendation this case actually produces. Monitoring the
 
 ### Attribution, in one paragraph
 
-I cannot attribute this to a named threat actor. The infrastructure served a confirmed ransomware deployment by a criminal group known as The Gentlemen, but whether the operator I tracked pulled that trigger themselves or handed access to someone who did is something the evidence cannot settle. I am tracking the intrusion set as **UTA-2026-024** *(an internal tracking label used by The Hunters Ledger, see Section 11)*. The full assessment decomposes into four separate questions carrying four different confidence levels, and collapsing them into one label would misrepresent all four.
+I cannot attribute this to a named threat actor. The infrastructure served a confirmed ransomware deployment by a criminal group known as The Gentlemen, but whether the operator I tracked pulled that trigger themselves or handed access to someone who did is something the evidence cannot settle. I am tracking the intrusion set as **<a href="/actors/UTA-2026-024/">UTA-2026-024</a>** *(an internal tracking label used by The Hunters Ledger, see Section 11)*. The full assessment decomposes into four separate questions carrying four different confidence levels, and collapsing them into one label would misrepresent all four.
 
 ### What a defender should do first
 
@@ -665,7 +665,7 @@ The mapping uses ATT&CK v19.2. The T1562 Impair Defenses tree was revoked in tha
 ## 11. Threat Actor Assessment
 {: .hl-tier-2}
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-024 is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. <a href="/actors/UTA-2026-024/">UTA-2026-024</a> is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
 
 I cannot attribute this to a named threat actor. The infrastructure served a confirmed ransomware deployment by a criminal group known as The Gentlemen, but whether the operator I tracked pulled that trigger themselves or handed access to someone who did is something the evidence cannot settle.
 
@@ -697,7 +697,7 @@ That is an upgrade from inference to measurement and I want to be honest that it
 
 ### The designation
 
-I am tracking this as **UTA-2026-024**, working name "the EtherHiding resolver operator at AS203273", status ACTIVE.
+I am tracking this as **<a href="/actors/UTA-2026-024/">UTA-2026-024</a>**, working name "the EtherHiding resolver operator at AS203273", status ACTIVE.
 
 The designation covers the intrusion set, meaning the operator who ran the Sliver, Chisel and blockchain-resolved toolkit captured here. It does not cover The Gentlemen ransomware program, and the relationship to that program is an attribute of the designation carrying its own confidence rather than part of its identity. My confidence that this is a distinct actor at all is **MODERATE**, around 75 percent, because it separates cleanly from the three sibling contracts on build fingerprint while it remains unresolved whether it is distinct from the operator behind a separate June intrusion that used the same resolver entry.
 

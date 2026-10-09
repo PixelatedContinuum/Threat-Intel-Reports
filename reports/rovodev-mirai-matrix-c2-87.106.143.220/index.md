@@ -80,7 +80,7 @@ The campaign scores 8.2 out of 10 overall, which puts it in the HIGH band. It is
 
 ### Threat Actor Summary
 
-This is a **single-operator** case tracked as **UTA-2026-014** *(an internal tracking label used by The Hunters Ledger, see Section 9)*. No prior public attribution exists across Trend Micro, Mandiant, CrowdStrike, Kaspersky, the Hunt.io threat-actor catalog, MITRE ATT&CK groups, or VirusTotal at investigation date, **this report is the first public attribution.** The full assessment is in §9; the headline confidence picture:
+This is a **single-operator** case tracked as **<a href="/actors/UTA-2026-014/">UTA-2026-014</a>** *(an internal tracking label used by The Hunters Ledger, see Section 9)*. No prior public attribution exists across Trend Micro, Mandiant, CrowdStrike, Kaspersky, the Hunt.io threat-actor catalog, MITRE ATT&CK groups, or VirusTotal at investigation date, **this report is the first public attribution.** The full assessment is in §9; the headline confidence picture:
 
 - Overall operator-profile claim (English-speaking Hybrid AI-augmented solo-or-small-team operator), **LOW (60%)**.
 - HYBRID AI-augmented operator class: **HIGH (~80%)** (Phase 7 ACH; pure-AI-democratized-script-kiddie REFUTED via bespoke C modifications).
@@ -829,7 +829,7 @@ ROOT            (commodity)
 - (a) Operator-added for deliberate Turkish residential IoT targeting: supports the broader Turkey-targeting cluster pattern across the parent investigation (Case 2 ARPA confirmed Turkey-targeting; this case + the ARPA case both on AI-augmented operations)
 - (b) Inherited from upstream Sora-fork source-tree: LOW-confidence indication based on absent upstream Sora-source comparison that TTNET is a long-standing addition by some prior Sora-fork operator, now commodity in the ecosystem
 
-Regardless of which read is correct for this operator, the cross-case Turkey signal is independently confirmed: Sub-report 3 (UTA-2026-013, the Turkish ARPA operator) confirmed Turkey as an active target sector via five-axis convergence (language, handle, self-branding, explicit target references, and residential ISP signals). That confirmation is independent of this operator's Sora-fork inheritance question.
+Regardless of which read is correct for this operator, the cross-case Turkey signal is independently confirmed: Sub-report 3 (<a href="/actors/UTA-2026-013/">UTA-2026-013</a>, the Turkish ARPA operator) confirmed Turkey as an active target sector via five-axis convergence (language, handle, self-branding, explicit target references, and residential ISP signals). That confirmation is independent of this operator's Sora-fork inheritance question.
 
 </details>
 
@@ -954,7 +954,7 @@ The full IOC feed is at [`/ioc-feeds/rovodev-mirai-matrix-c2-87.106.143.220-iocs
 ## 9. Threat Actor Assessment: UTA-2026-014
 {: .hl-tier-2}
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-014 is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. <a href="/actors/UTA-2026-014/">UTA-2026-014</a> is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
 
 The overall operator-profile claim (English-speaking Hybrid AI-augmented solo-or-small-team operator) is held at **LOW 60% within the canonical LOW band (50-70%)**; this sub-report establishes the canonical Threat Actor Assessment for the Case 3 operator. Specific sub-claims hold at higher confidence: the HYBRID AI-augmented operator class assignment holds at HIGH (~80%); Atlassian Rovodev AI co-authoring of the Matrix C2 framework is DEFINITE (95%); the AI-Generated Offensive Code Structural Signature universal subset is DEFINITE for the cross-3-operator ecosystem-level claim; the solo-versus-small-team discrimination favors solo at HIGH (~80%); real-world identity remains INSUFFICIENT.
 
@@ -1011,7 +1011,7 @@ Operator geography remains **INSUFFICIENT (0%)** under the project-standard Attr
 - Operator natural-language prompts lack region-specific idiom (no UK-vs-US spelling distinction examined)
 - No operator residential IP captured (no ISP geographic signal)
 
-Compare to parent series Case 2 ARPA operator (UTA-2026-013) where five-axis Turkish convergence (language + handle + self-branding + target + residential ISP) supports high-MODERATE geographic confidence; no equivalent convergence exists for this case.
+Compare to parent series Case 2 ARPA operator (<a href="/actors/UTA-2026-013/">UTA-2026-013</a>) where five-axis Turkish convergence (language + handle + self-branding + target + residential ISP) supports high-MODERATE geographic confidence; no equivalent convergence exists for this case.
 
 ### 9.4 First Publicly-Documented Atlassian Rovodev Abuse Case
 
@@ -1023,9 +1023,9 @@ A search of Tier 1-3 sources at investigation date returned ZERO prior documenta
 - Researcher community: Hunt.io threat-actor catalog, MITRE ATT&CK groups, VirusTotal threat-actor associations
 - AI-misuse-specific reporting: Google GTIG (AI vulnerability exploitation 2025-2026), Anthropic Misuse Report (August 2025), Microsoft Security Blog (AI threat acceleration April 2026), Georgia Tech Vibe Security Radar (April 2026)
 
-**Status: PUBLICATION-SIGNIFICANCE (not a confidence boost).** The first-publicly-documented status reflects sweep completeness. It is a finding about the public record, not about this operator's identity. Sub-report establishes the canonical tracking designation; subsequent vendor coverage will reference UTA-2026-014 as the prior-art anchor for Atlassian Rovodev offensive-use cases.
+**Status: PUBLICATION-SIGNIFICANCE (not a confidence boost).** The first-publicly-documented status reflects sweep completeness. It is a finding about the public record, not about this operator's identity. Sub-report establishes the canonical tracking designation; subsequent vendor coverage will reference <a href="/actors/UTA-2026-014/">UTA-2026-014</a> as the prior-art anchor for Atlassian Rovodev offensive-use cases.
 
-To disambiguate, this status mirrors Sub3 Case 2's first-public-attribution status, the Turkish ARPA and OpenClaw operator UTA-2026-013. Both are first-publicly-documented because of sweep completeness, and neither is "first known" in the absolute sense. I hold at LOW confidence, given the inherent invisibility of classified-channel reporting, that restricted or classified government reporting documents equivalent patterns. The status is bounded by a Tier 1-3 public-source sweep only.
+To disambiguate, this status mirrors Sub3 Case 2's first-public-attribution status, the Turkish ARPA and OpenClaw operator <a href="/actors/UTA-2026-013/">UTA-2026-013</a>. Both are first-publicly-documented because of sweep completeness, and neither is "first known" in the absolute sense. I hold at LOW confidence, given the inherent invisibility of classified-channel reporting, that restricted or classified government reporting documents equivalent patterns. The status is bounded by a Tier 1-3 public-source sweep only.
 
 ### 9.5 Confidence Statement (Required Format)
 
@@ -1058,7 +1058,7 @@ The following claims are NOT supported by current evidence and MUST NOT be made:
 - That `keyosbuff` IS the operator under a different pseudonym
 - That the three operators (Cases 1, 2, 3) are linked or coordinated via the AI-Generated Code Signature (signature is downstream of AI tools, not operator coordination)
 - That the operator IS the Pandora-Mirai variant author (operator is downstream adopter; family is public-ecosystem property)
-- Escalation of UTA-2026-014 confidence beyond LOW 60% on operator profile without Tier-1 government attribution OR multi-vendor T&S coordination evidence
+- Escalation of <a href="/actors/UTA-2026-014/">UTA-2026-014</a> confidence beyond LOW 60% on operator profile without Tier-1 government attribution OR multi-vendor T&S coordination evidence
 
 ---
 
@@ -1157,7 +1157,7 @@ This section organizes the report's findings by confidence level using the proje
 
 ### LOW (50-70%)
 
-- UTA-2026-014 operator-profile claim (English-speaking Hybrid AI-augmented solo-or-small-team operator) at LOW 60%
+- <a href="/actors/UTA-2026-014/">UTA-2026-014</a> operator-profile claim (English-speaking Hybrid AI-augmented solo-or-small-team operator) at LOW 60%
 - TTNET credential brute-list entry interpretation (operator-added vs Sora-upstream-inherited, requires upstream Sora source comparison to discriminate)
 - Multi-person team with division-of-labor hypothesis (H3) at ~10%: cannot be ruled out from captured evidence
 
@@ -1248,13 +1248,13 @@ On sweep completeness, a Tier 1-3 source sweep at investigation date returned ZE
 
 I frame that status as publication significance, not a confidence boost. The first-publicly-documented status reflects sweep completeness, so it is a finding about the public record rather than about this operator's identity. Standalone attribution confidence stays bounded by the absence of Tier-1 government or multi-vendor T&S evidence.
 
-I expect subsequent coverage to follow. This sub-report establishes the canonical tracking designation, and later vendor coverage will reference UTA-2026-014 as the prior-art anchor for Atlassian Rovodev offensive-use cases.
+I expect subsequent coverage to follow. This sub-report establishes the canonical tracking designation, and later vendor coverage will reference <a href="/actors/UTA-2026-014/">UTA-2026-014</a> as the prior-art anchor for Atlassian Rovodev offensive-use cases.
 
 ### 13.3 AI-Generated Offensive Code Structural Signature Universal Subset Upgraded HIGH → DEFINITE
 
 In an earlier phase I framed this differently again. Phase 5 and Phase 13 §2 documented the AI-Generated Offensive Code Structural Signature at HIGH confidence for criteria #1, #3, #7, #9 and #10 within this case, at N=1 operator.
 
-**Cross-3-operator validation evidence (Phase 14 §3):** Independent confirmation across Cases 1 (Russian Gemini operator at 213.165.51.115, UTA-2026-012), Case 2 (Turkish ARPA operator at 209.38.205.158, UTA-2026-013), and this Case 3 (English-speaking operator at 87.106.143.220, UTA-2026-014). Three operators share zero overlap in language / country / target sector / motivation / AI tool vendor.
+**Cross-3-operator validation evidence (Phase 14 §3):** Independent confirmation across Cases 1 (Russian Gemini operator at 213.165.51.115, <a href="/actors/UTA-2026-012/">UTA-2026-012</a>), Case 2 (Turkish ARPA operator at 209.38.205.158, <a href="/actors/UTA-2026-013/">UTA-2026-013</a>), and this Case 3 (English-speaking operator at 87.106.143.220, <a href="/actors/UTA-2026-014/">UTA-2026-014</a>). Three operators share zero overlap in language / country / target sector / motivation / AI tool vendor.
 
 The calibration outcome is that the universal subset upgrades to **DEFINITE for the cross-3-operator ecosystem-level claim**, and criterion #4, zero anti-analysis, refines to **prompt-conditional rather than structural** on this case's `stealth_agent.py` evidence.
 

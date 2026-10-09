@@ -113,8 +113,8 @@ One disclosure outcome landed on 2026-06-19. Of the three Hetzner-customer Comfy
 Three identity tiers, detailed with full evidence in §9. Vova75Rus is **not** any customer operator. The wallet-match test refuted the initial conflation (§13.2): his personal XTM/Tari setup (Kryptex worker `1238rkM7gGg3sl`) is distinct from Operator-A's XMR + CFX wallets.
 
 - **Vova75Rus** (kit author, GitHub UID 73169104): **HIGH (88%), NAMED** (§9.2). Russian-origin; account suspended by GitHub T&S 2026-05-25.
-- **UTA-2026-016** *(an internal tracking label used by The Hunters Ledger, see Section 9)* = Operator-A (77.110.96.200), **LOW (65%, top of the LOW band)**, unattributed (§9.3). DEFINITE Russian-speaking; higher-OPSEC (self-hosted XMR/CFX pool proxies); active.
-- **UTA-2026-017** = Operator-B (77.110.125.145): **LOW (60%)**, unattributed (§9.4). DEFINITE Russian-speaking; lower-OPSEC (public pools); host abandoned ~5 days post-Censys.
+- **<a href="/actors/UTA-2026-016/">UTA-2026-016</a>** *(an internal tracking label used by The Hunters Ledger, see Section 9)* = Operator-A (77.110.96.200), **LOW (65%, top of the LOW band)**, unattributed (§9.3). DEFINITE Russian-speaking; higher-OPSEC (self-hosted XMR/CFX pool proxies); active.
+- **<a href="/actors/UTA-2026-017/">UTA-2026-017</a>** = Operator-B (77.110.125.145): **LOW (60%)**, unattributed (§9.4). DEFINITE Russian-speaking; lower-OPSEC (public pools); host abandoned ~5 days post-Censys.
 - **UnamSanctam** (upstream OSS): **HIGH (90%) on the passive-OSS-author role, NOT a Case 9 threat actor** (§9.5). Supplies UnamWebPanel / SilentCryptoMiner tooling the kit author bundles.
 
 ### For Technical Teams
@@ -639,9 +639,9 @@ The full IOC feed is at [`/ioc-feeds/ghost-cryptojacker-vova75rus-77.110.96.200-
 ## 9. Threat Actor Assessment
 {: .hl-tier-2}
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-016 and UTA-2026-017 are tracking labels The Hunters Ledger assigns to actors I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use these labels; they are specific to this publication. If later evidence ties any of them to a named actor, I will retire that label and update the report.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. <a href="/actors/UTA-2026-016/">UTA-2026-016</a> and <a href="/actors/UTA-2026-017/">UTA-2026-017</a> are tracking labels The Hunters Ledger assigns to actors I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use these labels; they are specific to this publication. If later evidence ties any of them to a named actor, I will retire that label and update the report.
 
-Attribution for Case 9 resolves into three identity tiers: a named kit author (Vova75Rus, HIGH 88%), two unattributed customer operators (UTA-2026-016 and UTA-2026-017, both LOW), and a supply-chain context entity (UnamSanctam, explicitly NOT a Case 9 threat actor; included for ecosystem context only).
+Attribution for Case 9 resolves into three identity tiers: a named kit author (Vova75Rus, HIGH 88%), two unattributed customer operators (<a href="/actors/UTA-2026-016/">UTA-2026-016</a> and <a href="/actors/UTA-2026-017/">UTA-2026-017</a>, both LOW), and a supply-chain context entity (UnamSanctam, explicitly NOT a Case 9 threat actor; included for ecosystem context only).
 
 ### 9.1 The 4-Tier Supply Chain Model (Central Attribution Finding)
 
@@ -876,8 +876,8 @@ This summary organizes every finding by confidence level, from DEFINITE down to 
 
 ### LOW (Weak Evidence)
 
-- **UTA-2026-016 / Operator-A attribution (LOW 65%).** Russian-speaking is DEFINITE; identity beyond Russian-speaking is INSUFFICIENT. Cannot link to real-world individual. Upgraded from LOW (60%) via four net-new sub-report evidence elements.
-- **UTA-2026-017 / Operator-B attribution (LOW 60%).** Same condition as Operator-A. Upgraded from LOW (55%) via the 183-Cyrillic-word finding.
+- **<a href="/actors/UTA-2026-016/">UTA-2026-016</a> / Operator-A attribution (LOW 65%).** Russian-speaking is DEFINITE; identity beyond Russian-speaking is INSUFFICIENT. Cannot link to real-world individual. Upgraded from LOW (60%) via four net-new sub-report evidence elements.
+- **<a href="/actors/UTA-2026-017/">UTA-2026-017</a> / Operator-B attribution (LOW 60%).** Same condition as Operator-A. Upgraded from LOW (55%) via the 183-Cyrillic-word finding.
 - **Zabaykalsky Krai geographic precision**: region indicator from handle "75" suffix matching Russian plate-code convention; coherent but low precision (a handle suffix is not a strong geographic anchor).
 - **Vova75Rus solo-vs-small-team discrimination**: coherent single-individual indicators present (1-follower account, personal-dedication page) but small-team hypothesis cannot be excluded from available evidence.
 

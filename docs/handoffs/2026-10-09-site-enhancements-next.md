@@ -63,21 +63,42 @@
 - `arsenal-237-enc_c2-exe`: a registry row with confidence `NOT OBSERVED - SINGLE-RUN MODEL`.
 - Nine objects corpus-wide have boolean `false_positive_risk`; they render as no value.
 
+## Shipped since the first session: the threat actor index (T-0197, 2026-10-09)
+
+- `/actors/` lists every UTA designation with a published report; `/actors/<id>/` is a profile:
+  status, the published confidence figures, summary, the reports that are about it and the
+  ones that merely name it (discovered, never hand-listed), detection, IOC and STIX links per
+  report, the host the assigning report is named for, tooling, the ATT&CK techniques the
+  primary reports map, and related designations with the published relation.
+- The record is `_data/actors.yml` (hand-written; everything in it is a summary of the linked
+  report, and it carries no handles, wallets, credentials or victim names on purpose).
+  `tools/report-tooling/generate-actors.js` writes `_data/actors_index.yml` and the stub pages,
+  `link-actors.js` links every bare designation in reports and detection pages (304 mentions
+  across 26 files, HTML anchors so raw HTML blocks render too), and `check-actors.js` gates all
+  of it; it runs in the pre-commit hook and in the Actions `gates` job. Rules of the gate: a
+  bare mention with a page FAILS, a designation a published report names with no entry FAILS,
+  an actor whose only report is unlisted gets no page (UTA-2026-022 today) and is named as
+  absent on purpose.
+- When a report publishes a new designation: add its entry to `_data/actors.yml` (figures from
+  the report, not the vault file), then `node generate-actors.js && node link-actors.js`.
+  When an embargoed report goes live, uncomment its catalog entry, drop `unlisted`, add the
+  actor entry, regenerate, link.
+- Not done, by choice: the one HIGH named actor in the corpus (the GHOST kit author) has no
+  profile; the index is UTA-only. A `kind: named` entry would be a small extension of the same
+  layout if wanted. The ATT&CK section lists techniques per actor; the site-wide heatmap and
+  Navigator layer belong to backlog item 2.
+
 ## The backlog, ranked
 
 Each item is self-contained. The first three are the ones Joseph was leaning toward.
 
-1. **Threat actor index.** UTA designators (`UTA-2026-NNN`) appear hundreds of times across
-   reports with no page behind them (a recent commit had to unlink them). Build
-   `_data/actors.yml` (designator, name if public, summary, confidence, reports, infrastructure,
-   tooling, ATT&CK) and generate `/actors/` plus `/actors/<id>/`; link every in-report mention.
-   Start by listing designators: `grep -rhoE 'UTA-2026-[0-9]{3}' reports/*/index.md | sort | uniq -c`.
-   The ai-workflows repo has `actor-linkage` and `attribution-analysis` skills and
-   `references/naming-and-uta.md` that define what a UTA record may claim; read them first.
+1. **Threat actor index.** DONE 2026-10-09, see above. Left open: a named-actor entry kind,
+   and a per-actor Navigator layer download once item 2 builds the site-wide layer.
 2. **Technique and family cross-reference pages.** `/techniques/T1190/` listing every report and
    rule mapped to it (from `_data/detection_attack.yml` and the reports' ATT&CK tables parsed by
-   `assets/js/attack-coverage.js`, whose parser `tools/report-tooling/lib/attack-catalog.js` can
-   reuse at build time); `/families/<name>/` from the feeds' `primary_family`. Pure templating
+   `assets/js/attack-coverage.js`; `lib/actors.js` `attackFor()` already runs that parser over a
+   report at build time and `_data/actors_index.yml` carries the per-actor result, so the
+   technique page can also list the actors mapped to it); `/families/<name>/` from the feeds' `primary_family`. Pure templating
    over existing data, plus a site-wide ATT&CK heatmap and Navigator layer.
 3. **Consolidated YARA and Sigma feeds**, modelled on `feeds/suricata/`: one file per engine
    with stable identifiers and a withdrawn-rule changelog, regenerated from

@@ -35,7 +35,7 @@ stix_bundle: /stix/russian-gemini-credential-mill-213.165.51.115.json
 
 > **Part of series:** This is sub-report 2 of 6 in the parent investigation [AI-Agent-Frameworks-MultiActor-2026-05-23](/reports/ai-agent-frameworks-2026-05-23/). The parent report synthesizes the cross-case findings across eight operator cases; this sub-report provides the operator-specific technical deep-dive for Case 1, the Russian-native Gemini-CLI-augmented credential mill targeting a US healthcare victim.
 
-> **Cross-Vendor Naming:** This same operator is independently tracked by Trend Micro (TrendAI Research) as **"bandcampro"** per their 2026-05-22 publication "[One Man, One AI, One Fake Persona: Inside the 5-Year Influence and Fraud 'Patriot Bait' Campaign](https://www.trendmicro.com/en_us/research/26/e/inside-the-influence-and-fraud-patriot-bait-campaign.html)." Cross-identification is DEFINITE via a five-point IOC match (4-of-4 IPs + `@americanpatriotus` Telegram channel). The Hunters Ledger tracking designation is **UTA-2026-012**; the Trend Micro vendor catalog handle is **bandcampro**; both refer to the same operator.
+> **Cross-Vendor Naming:** This same operator is independently tracked by Trend Micro (TrendAI Research) as **"bandcampro"** per their 2026-05-22 publication "[One Man, One AI, One Fake Persona: Inside the 5-Year Influence and Fraud 'Patriot Bait' Campaign](https://www.trendmicro.com/en_us/research/26/e/inside-the-influence-and-fraud-patriot-bait-campaign.html)." Cross-identification is DEFINITE via a five-point IOC match (4-of-4 IPs + `@americanpatriotus` Telegram channel). The Hunters Ledger tracking designation is **<a href="/actors/UTA-2026-012/">UTA-2026-012</a>**; the Trend Micro vendor catalog handle is **bandcampro**; both refer to the same operator.
 
 ---
 
@@ -62,7 +62,7 @@ Each finding below names its home section, where the evidence and confidence lab
 
 ### Why This Threat Is Significant
 
-This sub-report extends Trend Micro's 2026-05-22 macro-level "Patriot Bait" coverage to defender-actionable, artifact-level analysis. Trend Micro framed the operator profile (Russian-speaking, AI-augmented, dual-track financial + influence) and provided the four operator IPs plus the `@americanpatriotus` channel, the Tier-2 evidence anchoring the cross-identification with UTA-2026-012. On top of that, this investigation contributes six net-new findings, each developed in its home section:
+This sub-report extends Trend Micro's 2026-05-22 macro-level "Patriot Bait" coverage to defender-actionable, artifact-level analysis. Trend Micro framed the operator profile (Russian-speaking, AI-augmented, dual-track financial + influence) and provided the four operator IPs plus the `@americanpatriotus` channel, the Tier-2 evidence anchoring the cross-identification with <a href="/actors/UTA-2026-012/">UTA-2026-012</a>. On top of that, this investigation contributes six net-new findings, each developed in its home section:
 
 1. **Source-code analysis of the LLM password mutator with the verbatim Gemini prompt**: §4.1. The prompt fragment and the operator's bespoke filenames are the highest-signal single-artifact YARA strings in the campaign.
 2. **AI Operator Handoff Documents**: the three-exemplar structured-handoff pattern, structurally distinct from `GEMINI.md` jailbreak persistence. HIGH-confidence novelty claim MAINTAINED (§4.2).
@@ -100,7 +100,7 @@ I score the campaign 9.0 out of 10, which is CRITICAL rather than HIGH, and that
 
 ### Threat Actor Summary
 
-This is a single-operator case. The actor is tracked as **UTA-2026-012** *(an internal tracking label used by The Hunters Ledger, see Section 9)* and as **bandcampro** by Trend Micro; both refer to the same operator (DEFINITE 5-point IOC cross-match). Attribution holds at **MODERATE 83%** (top of the MODERATE band 70-85%, upgraded from parent MODERATE 75% via Trend Micro Tier-2 corroboration). The four-axis profile is Russian-native (DEFINITE), mid-tier selective sophistication (HIGH), active campaign with concurrent R&D (HIGH), and hybrid resource model (HIGH); §9.3 develops each axis and its evidence. Real-world identity remains INSUFFICIENT (<50%), `bandcampro` is a vendor tracking handle, not a real-name identification, and the confidence ceiling without subpoena-grade disclosure or a third Tier-2 vendor is HIGH 88-90% (§9.5).
+This is a single-operator case. The actor is tracked as **<a href="/actors/UTA-2026-012/">UTA-2026-012</a>** *(an internal tracking label used by The Hunters Ledger, see Section 9)* and as **bandcampro** by Trend Micro; both refer to the same operator (DEFINITE 5-point IOC cross-match). Attribution holds at **MODERATE 83%** (top of the MODERATE band 70-85%, upgraded from parent MODERATE 75% via Trend Micro Tier-2 corroboration). The four-axis profile is Russian-native (DEFINITE), mid-tier selective sophistication (HIGH), active campaign with concurrent R&D (HIGH), and hybrid resource model (HIGH); §9.3 develops each axis and its evidence. Real-world identity remains INSUFFICIENT (<50%), `bandcampro` is a vendor tracking handle, not a real-name identification, and the confidence ceiling without subpoena-grade disclosure or a third Tier-2 vendor is HIGH 88-90% (§9.5).
 
 ### For Technical Teams
 
@@ -182,7 +182,7 @@ The arsenal is an operator-built composite: a custom Python-stdlib C2, an LLM-pe
 <tr><td>Target Profile</td><td>Opportunistic small-business WordPress (~30,000 sites validated via nuclei) + selective US healthcare (the US dental-practice victim, named target with victim-named GCP project signal); US-domestic political audience for the Telegram disinformation side track</td><td>DEFINITE</td></tr>
 <tr><td>Geographic Origin</td><td>Russian-native operator (DEFINITE via informal idiom register `Бро` / `братух` / `Погнали` / `тачка` / `Комп Доктора` plus Cyrillic-English technical bilingualism plus in-session credential ledger format `Формат: Имя тачки - Юзер - Пароль`); AEZA bulletproof-adjacent hosting preference; duty-free.cc Russian carding forum context</td><td>HIGH</td></tr>
 <tr><td>Campaign Complexity</td><td>Multi-tool, custom C2 + 3-stage AI integration (key validation + role-prime mutation + handoff documents) + commodity-service procurement (nuclei, AntiPublic.one) + cross-domain disinformation operation</td><td>HIGH</td></tr>
-<tr><td>Cross-Vendor Naming</td><td>The Hunters Ledger: UTA-2026-012; Trend Micro (TrendAI Research) "Patriot Bait" 2026-05-22: bandcampro. DEFINITE 5-point IOC cross-match</td><td>DEFINITE</td></tr>
+<tr><td>Cross-Vendor Naming</td><td>The Hunters Ledger: <a href="/actors/UTA-2026-012/">UTA-2026-012</a>; Trend Micro (TrendAI Research) "Patriot Bait" 2026-05-22: bandcampro. DEFINITE 5-point IOC cross-match</td><td>DEFINITE</td></tr>
 </tbody>
 </table>
 
@@ -447,7 +447,7 @@ The HIPAA Breach Notification Rule sets specific timelines and notification requ
 
 I hold this DEFINITE, with all three platforms captured alongside operator-side metadata.
 
-The first platform is AEZA AS210644 at `213.165.51.115`, hosting the operator workstation. AEZA Group LLC is a Russian-corporate provider under OFAC sanctions effective 2025-07-01 (Federal Register citation 2025-20573, effective 2025-11-21). Its known customer base includes BianLian ransomware, RedLine infostealer, Meduza infostealer, Lumma infostealer, the BlackSprut darknet marketplace, Doppelganger disinformation, plus this operator (UTA-2026-012) and the Case 9 GHOST cryptojacker operators (Sub-report 1). AEZA's non-cooperative abuse response posture combined with its OFAC sanction status places the provider in the bulletproof-adjacent class. The operator's open-directory exposure on `213.165.51.115` was self-cleaned between the Phase 7 and Phase 8 captures, reaching totalItems: 0 by 2026-05-23, so the operator detected and responded to the exposure within days.
+The first platform is AEZA AS210644 at `213.165.51.115`, hosting the operator workstation. AEZA Group LLC is a Russian-corporate provider under OFAC sanctions effective 2025-07-01 (Federal Register citation 2025-20573, effective 2025-11-21). Its known customer base includes BianLian ransomware, RedLine infostealer, Meduza infostealer, Lumma infostealer, the BlackSprut darknet marketplace, Doppelganger disinformation, plus this operator (<a href="/actors/UTA-2026-012/">UTA-2026-012</a>) and the Case 9 GHOST cryptojacker operators (Sub-report 1). AEZA's non-cooperative abuse response posture combined with its OFAC sanction status places the provider in the bulletproof-adjacent class. The operator's open-directory exposure on `213.165.51.115` was self-cleaned between the Phase 7 and Phase 8 captures, reaching totalItems: 0 by 2026-05-23, so the operator detected and responded to the exposure within days.
 
 **Platform 2, Google Cloud Platform (three instances + two projects):**
 
@@ -777,7 +777,7 @@ The full IOC feed is at [`/ioc-feeds/russian-gemini-credential-mill-213.165.51.1
 ## 9. Threat Actor Assessment: UTA-2026-012
 {: .hl-tier-2}
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-012 is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report. UTA-2026-012 has DEFINITE cross-identification with the Trend Micro vendor catalog handle **"bandcampro"** (Trend Micro "Patriot Bait" publication 2026-05-22); both refer to the same operator.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. <a href="/actors/UTA-2026-012/">UTA-2026-012</a> is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report. <a href="/actors/UTA-2026-012/">UTA-2026-012</a> has DEFINITE cross-identification with the Trend Micro vendor catalog handle **"bandcampro"** (Trend Micro "Patriot Bait" publication 2026-05-22); both refer to the same operator.
 
 ### 9.1 Attribution Conclusion
 
@@ -793,8 +793,8 @@ Named-actor attribution stays **INSUFFICIENT (<50%)**, because `bandcampro` is a
 
 | Vendor | Tracking handle | Publication | Date | Cross-ID confidence |
 |---|---|---|---|---|
-| The Hunters Ledger | **UTA-2026-012** | This report (sub-report 2 of `ai-agent-frameworks-2026-05-23` series) | 2026-05-25 | (this report) |
-| Trend Micro (TrendAI Research) | **bandcampro** | "[One Man, One AI, One Fake Persona: Inside the 5-Year Influence and Fraud 'Patriot Bait' Campaign](https://www.trendmicro.com/en_us/research/26/e/inside-the-influence-and-fraud-patriot-bait-campaign.html)" | 2026-05-22 | DEFINITE 5-point IOC cross-match with UTA-2026-012 |
+| The Hunters Ledger | **<a href="/actors/UTA-2026-012/">UTA-2026-012</a>** | This report (sub-report 2 of `ai-agent-frameworks-2026-05-23` series) | 2026-05-25 | (this report) |
+| Trend Micro (TrendAI Research) | **bandcampro** | "[One Man, One AI, One Fake Persona: Inside the 5-Year Influence and Fraud 'Patriot Bait' Campaign](https://www.trendmicro.com/en_us/research/26/e/inside-the-influence-and-fraud-patriot-bait-campaign.html)" | 2026-05-22 | DEFINITE 5-point IOC cross-match with <a href="/actors/UTA-2026-012/">UTA-2026-012</a> |
 
 **The 5-point IOC cross-match (DEFINITE):**
 
@@ -806,7 +806,7 @@ Named-actor attribution stays **INSUFFICIENT (<50%)**, because `bandcampro` is a
 
 **Statistical implausibility of two independent operators:** The probability of two independent operators using identical Telegram channel + identical 4-IP infrastructure + identical Gemini-CLI integration architecture + identical Quantum Patriot branding is effectively zero. The cross-identification is DEFINITE.
 
-Downstream artifact authoring should use **"UTA-2026-012 (Trend Micro: bandcampro)"** to maintain cross-vendor traceability.
+Downstream artifact authoring should use **"<a href="/actors/UTA-2026-012/">UTA-2026-012</a> (Trend Micro: bandcampro)"** to maintain cross-vendor traceability.
 
 ### 9.3 Four-Axis Operator Profile (Phase 11 Synthesis)
 
@@ -844,18 +844,18 @@ The MODERATE 83% confidence can be elevated via the following paths:
 
 ### 9.6 Alternative Hypothesis Considered and Rejected
 
-H2, which I reject at effectively zero probability, is coincidental adjacent-operator misidentification between Trend Micro's `bandcampro` and our UTA-2026-012. The 5-point IOC match, including a 4-of-4 exact IP match, refutes it.
+H2, which I reject at effectively zero probability, is coincidental adjacent-operator misidentification between Trend Micro's `bandcampro` and our <a href="/actors/UTA-2026-012/">UTA-2026-012</a>. The 5-point IOC match, including a 4-of-4 exact IP match, refutes it.
 
 ### 9.7 Defensive Boundaries (What This Assessment Does NOT Claim)
 
-- UTA-2026-012 real-world identity beyond GitHub handle + Telegram channel + persona string + AEZA hosting
+- <a href="/actors/UTA-2026-012/">UTA-2026-012</a> real-world identity beyond GitHub handle + Telegram channel + persona string + AEZA hosting
 - That `bandcampro` is a real-name identification (it is a Trend Micro vendor tracking handle only)
 - That the operator is state-directed (the disinfo sideline is a behavioral observation only)
 - That the cross-domain operator class is unique in the threat landscape (it is rare in published reporting only)
-- That UTA-2026-012 and any Case 9 GHOST kit operator (Vova75Rus / UTA-2026-016 / UTA-2026-017) are the same individual (AEZA co-residency is ecosystem signal, not operational coordination)
-- That UTA-2026-012 is part of a coordinated multi-operator campaign with the other 7 cases in the parent report
+- That <a href="/actors/UTA-2026-012/">UTA-2026-012</a> and any Case 9 GHOST kit operator (Vova75Rus / <a href="/actors/UTA-2026-016/">UTA-2026-016</a> / <a href="/actors/UTA-2026-017/">UTA-2026-017</a>) are the same individual (AEZA co-residency is ecosystem signal, not operational coordination)
+- That <a href="/actors/UTA-2026-012/">UTA-2026-012</a> is part of a coordinated multi-operator campaign with the other 7 cases in the parent report
 - That the healthcare victim is the only victim historically (sole victim in the captured session corpus)
-- Tier-1 government attribution for UTA-2026-012
+- Tier-1 government attribution for <a href="/actors/UTA-2026-012/">UTA-2026-012</a>
 - 3+ Tier-2 vendor convergence achieved (currently 2, Trend Micro + The Hunters Ledger)
 
 ---
@@ -926,7 +926,7 @@ This section organizes the report's findings by confidence level per CLAUDE.md C
 - **`/api/v1/get_results` server-side non-implementation** (iterative-development evidence)
 - **The healthcare-victim environment inventory**: AD domain `[victim AD domain, redacted]`, 2 subnets, 6 local NTLM hashes, OpenDental MySQL root hash, 2 active Cloudflare Tunnel access subdomains
 - **GCP project `[victim-named GCP project, redacted]` operator-named-after-victim**
-- **Multi-source operator identification**: UTA-2026-012 = Trend Micro `bandcampro` cross-identification via 5-point IOC match (4-of-4 IPs + `@americanpatriotus` channel)
+- **Multi-source operator identification**: <a href="/actors/UTA-2026-012/">UTA-2026-012</a> = Trend Micro `bandcampro` cross-identification via 5-point IOC match (4-of-4 IPs + `@americanpatriotus` channel)
 - **Russian-native operator linguistic register** (Phase 11 analysis of 122 Gemini CLI session JSONs; informal idiom register; Cyrillic-English technical bilingualism)
 - **`@americanpatriotus` Telegram channel operator co-location** (same operator infrastructure)
 - **AEZA AS210644 hosting + OFAC sanction status** (2025-07-01 effective)
@@ -943,7 +943,7 @@ This section organizes the report's findings by confidence level per CLAUDE.md C
 
 ### MODERATE (Reasonable Evidence, Notable Gaps)
 
-- **UTA-2026-012 (= bandcampro) attribution** at MODERATE 83% (top of MODERATE band 70-85%, upgraded from parent MODERATE 75% via Trend Micro Tier-2 corroboration)
+- **<a href="/actors/UTA-2026-012/">UTA-2026-012</a> (= bandcampro) attribution** at MODERATE 83% (top of MODERATE band 70-85%, upgraded from parent MODERATE 75% via Trend Micro Tier-2 corroboration)
 - **WMI Event Subscription persistence** (inferred from `stealth.ps1` operator references; binary not extracted)
 - **Scheduled Task persistence** (inferred from operator notes; not directly captured)
 - **WinRM lateral movement** (inferred from `windows_server.tralalarkefe.com` tunnel role)
@@ -958,7 +958,7 @@ This section organizes the report's findings by confidence level per CLAUDE.md C
 
 ### INSUFFICIENT (Cannot Assess from Current Evidence)
 
-- **Real-world identity of UTA-2026-012 / bandcampro**: bandcampro is a Trend Micro vendor tracking handle, not a real-name identification
+- **Real-world identity of <a href="/actors/UTA-2026-012/">UTA-2026-012</a> / bandcampro**: bandcampro is a Trend Micro vendor tracking handle, not a real-name identification
 - **Discrimination Russian-resident vs Russian-diaspora**
 - **Tier-1 government attribution**
 - **3+ Tier-2 vendor convergence** (currently 2)

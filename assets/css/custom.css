@@ -6125,6 +6125,7 @@ body.hl-drawer-locked { overflow: hidden; }
 #hl-search .hl-sr--detections { --sr-acc: #4ade80; }
 #hl-search .hl-sr--ioc        { --sr-acc: #f87171; }
 #hl-search .hl-sr--stix       { --sr-acc: #22d3ee; }
+#hl-search .hl-sr--actors     { --sr-acc: #e879f9; }
 #hl-search .hl-sr--wire       { --sr-acc: #58a6ff; }
 #hl-search .hl-sr--behind     { --sr-acc: #f97316; }
 #hl-search .hl-sr--pages      { --sr-acc: #60a5fa; }
@@ -6246,3 +6247,78 @@ body.hl-drawer-locked { overflow: hidden; }
   #hl-search .pagefind-ui__filter-name { padding: 10px 0; }
 }
 
+
+
+/* --- Threat actor index and profiles (/actors/) ------------------------ */
+/* Accent #e879f9 (fuchsia), distinct from the report purple and the IOC red,
+   used on the page header, the search result chip and the card bar. */
+.hl-actor__alias, .hl-actor-card__alias {
+  font-size: 0.6em; font-weight: 500; color: var(--hl-text-muted);
+  vertical-align: middle; margin-left: 6px; white-space: nowrap;
+}
+.hl-actor-card__type { font-size: 0.82em; color: var(--hl-text-secondary); line-height: 1.4; margin-bottom: 9px; }
+.hl-actor-card__meta { color: #e879f9; }
+.hl-actor-card__bar--high     { background: #4ade80; }
+.hl-actor-card__bar--moderate { background: #facc15; }
+.hl-actor-card__bar--low      { background: #fb923c; }
+.hl-actor-card__bar--none     { background: #6e7681; }
+
+.hl-actor__facts {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px 18px;
+  margin: 0 0 1.6rem; padding: 16px 18px;
+  background: var(--hl-bg-card); border: 1px solid var(--hl-border-card); border-radius: 8px;
+}
+.hl-actor__facts--wide { grid-template-columns: 1fr; }
+.hl-actor__facts > div { min-width: 0; }
+.hl-actor__facts dt {
+  font-size: 0.66em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--hl-text-muted); margin: 0 0 3px;
+}
+.hl-actor__facts dd { margin: 0; font-size: 0.9em; line-height: 1.45; overflow-wrap: anywhere; }
+.hl-actor__status {
+  display: inline-block; font-size: 0.72em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+  padding: 2px 8px; border-radius: 999px; border: 1px solid;
+}
+.hl-actor__status--active  { color: #4ade80; border-color: #16653455; background: #16653433; }
+.hl-actor__status--merged  { color: #58a6ff; border-color: #1f6feb55; background: #1f6feb33; }
+.hl-actor__status--retired { color: #9ca3af; border-color: #4b556355; background: #37415133; }
+.hl-actor__conf { font-weight: 700; letter-spacing: 0.04em; }
+.hl-actor__conf--definite, .hl-actor__conf--high { color: #4ade80; }
+.hl-actor__conf--moderate     { color: #facc15; }
+.hl-actor__conf--low          { color: #fb923c; }
+.hl-actor__conf--insufficient { color: #f87171; }
+.hl-actor__pct { color: var(--hl-text-secondary); font-size: 0.9em; }
+.hl-actor__muted { color: var(--hl-text-muted); font-size: 0.86em; }
+.hl-actor__note { font-size: 0.9em; }
+.hl-actor__summary { font-size: 1.02em; line-height: 1.6; }
+
+.hl-actor__reports { display: grid; gap: 10px; margin-bottom: 1.6rem; }
+.hl-actor__report {
+  background: var(--hl-bg-card); border: 1px solid var(--hl-border-card); border-left: 3px solid #6e7681;
+  border-radius: 6px; padding: 12px 14px;
+}
+.hl-actor__report--primary { border-left-color: #e879f9; }
+.hl-actor__report-head { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline; margin-bottom: 4px; }
+.hl-actor__role {
+  font-size: 0.66em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #e879f9;
+}
+.hl-actor__report--mentions .hl-actor__role { color: var(--hl-text-muted); }
+.hl-actor__report-meta { font-size: 0.72em; color: var(--hl-text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.hl-actor__report-title { font-weight: 600; font-size: 0.95em; line-height: 1.35; display: block; }
+.hl-actor__report-links { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 7px; font-size: 0.8em; }
+
+.hl-actor__attack { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin-bottom: 1.6rem; }
+.hl-actor__tactic { background: var(--hl-bg-card); border: 1px solid var(--hl-border-card); border-radius: 6px; padding: 10px 12px; }
+.hl-actor__tactic-name {
+  font-size: 0.68em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #e879f9; margin-bottom: 6px;
+}
+.hl-actor__techniques { list-style: none; margin: 0; padding: 0; font-size: 0.82em; line-height: 1.5; }
+.hl-actor__techniques li { padding: 2px 0; }
+.hl-actor__techniques code { font-size: 0.92em; }
+.hl-actor__related { font-size: 0.9em; line-height: 1.55; }
+.hl-actor__licence { font-size: 0.8em; color: var(--hl-text-muted); margin-top: 2rem; }
+
+@media (max-width: 640px) {
+  .hl-actor__facts { grid-template-columns: 1fr 1fr; padding: 12px 14px; }
+  .hl-actor__facts--wide { grid-template-columns: 1fr; }
+}

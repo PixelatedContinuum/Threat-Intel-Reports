@@ -18,7 +18,7 @@ hide: true
 
 ## Detection Coverage Summary
 
-> **Scope note:** Inkognito (UTA-2026-009) is a web-application fraud operation; there are no PE binaries. Detection coverage is entirely at the network, DNS, proxy, and web-content-inspection layers. YARA rules target static web assets (JS bundle, favicon SVG) scraped from the live operator infrastructure. This file does NOT duplicate Cluster A (BellaMain) or Cluster C (Rhadamanthys) detection content from the 2026-05-15 multi-cluster report.
+> **Scope note:** Inkognito (<a href="/actors/UTA-2026-009/">UTA-2026-009</a>) is a web-application fraud operation; there are no PE binaries. Detection coverage is entirely at the network, DNS, proxy, and web-content-inspection layers. YARA rules target static web assets (JS bundle, favicon SVG) scraped from the live operator infrastructure. This file does NOT duplicate Cluster A (BellaMain) or Cluster C (Rhadamanthys) detection content from the 2026-05-15 multi-cluster report.
 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|

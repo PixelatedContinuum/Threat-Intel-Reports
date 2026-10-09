@@ -1,0 +1,117 @@
+---
+layout: page
+---
+{%- comment -%}
+  One threat actor, rendered for a person.
+
+  The stub page carries `actor_id` in its front matter. The hand-written record
+  (type, confidence, summary, tooling, related designations) is looked up in
+  _data/actors.yml and the derived part (which published reports name the
+  designation, which ATT&CK techniques their mapping tables carry) in
+  _data/actors_index.yml, which generate-actors.js writes. Nothing here derives
+  a fact of its own: the report is the record and this page points at it.
+
+  An actor whose only report is unlisted has no stub, so it never reaches here.
+{%- endcomment -%}
+{%- assign a = site.data.actors.actors | where: "id", page.actor_id | first -%}
+{%- assign ix = site.data.actors_index.actors | where: "id", page.actor_id | first -%}
+
+<div class="hl-page-header" style="--ph-accent: #e879f9;">
+  <div class="hl-page-header__label">Threat Actor</div>
+  <div class="hl-page-header__title">{{ page.actor_id }}{% if a.alias %} <span class="hl-actor__alias">{{ a.alias }}</span>{% endif %}</div>
+  <div class="hl-page-header__desc">{% if a %}{{ a.type }}{% else %}This designation's data is missing from <code>_data/actors.yml</code>. Re-run <code>generate-actors.js</code>.{% endif %}</div>
+</div>
+
+{%- if a -%}
+<div class="hl-actor">
+
+  <dl class="hl-actor__facts">
+    <div><dt>Status</dt><dd><span class="hl-actor__status hl-actor__status--{{ a.status }}">{{ a.status | capitalize }}</span></dd></div>
+    <div><dt>Distinct actor</dt><dd>{% if a.confidence.distinct_actor %}<span class="hl-actor__conf hl-actor__conf--{{ a.confidence.distinct_actor | downcase }}">{{ a.confidence.distinct_actor }}</span>{% if a.confidence.distinct_actor_pct %} <span class="hl-actor__pct">{{ a.confidence.distinct_actor_pct }}%</span>{% endif %}{% else %}<span class="hl-actor__muted">Tracked as a cluster; no figure published</span>{% endif %}</dd></div>
+    <div><dt>Named actor</dt><dd><span class="hl-actor__conf hl-actor__conf--{{ a.confidence.named_actor | downcase }}">{{ a.confidence.named_actor }}</span></dd></div>
+    <div><dt>First observed</dt><dd>{{ a.first_observed | date: "%-d %b %Y" }}</dd></div>
+    <div><dt>Last updated</dt><dd>{{ a.last_updated | date: "%-d %b %Y" }}</dd></div>
+    {%- if a.language %}<div><dt>Operator language</dt><dd>{{ a.language }}</dd></div>{% endif -%}
+    <div><dt>Motivation</dt><dd>{{ a.motivation }}</dd></div>
+    {%- if a.alias %}<div><dt>Also tracked as</dt><dd>{{ a.alias }}</dd></div>{% endif -%}
+  </dl>
+
+  <blockquote class="hl-actor__note">
+    <strong>Note on UTA identifiers:</strong> "UTA" stands for Unattributed Threat Actor. {{ page.actor_id }} is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
+  </blockquote>
+
+  <h2 id="summary">Summary</h2>
+  <p class="hl-actor__summary">{{ a.summary }}</p>
+  <p class="hl-actor__muted">The confidence levels above are the published report's figures. Every claim on this page is a summary of the linked reports, which remain the record.</p>
+
+  <h2 id="reports">Reports</h2>
+  {%- if ix and ix.reports.size > 0 -%}
+  <div class="hl-actor__reports">
+    {%- for r in ix.reports -%}
+    <div class="hl-actor__report hl-actor__report--{{ r.role }}">
+      <div class="hl-actor__report-head">
+        <span class="hl-actor__role">{% if r.role == "primary" %}About this actor{% else %}Mentions this actor{% endif %}</span>
+        <span class="hl-actor__report-meta">{{ r.date | date: "%b %Y" }}{% if r.severity %} &middot; {{ r.severity | upcase }}{% endif %} &middot; {{ r.mentions }} mention{% if r.mentions != 1 %}s{% endif %}</span>
+      </div>
+      <a class="hl-actor__report-title" href="{{ r.url | relative_url }}">{{ r.title }}</a>
+      {%- if r.detection_url or r.ioc_url or r.stix_url -%}
+      <div class="hl-actor__report-links">
+        {%- if r.detection_url %}<a href="{{ r.detection_url | relative_url }}">Detection rules</a>{% endif -%}
+        {%- if r.ioc_url %}<a href="{{ r.ioc_url | relative_url }}">IOC feed</a>{% endif -%}
+        {%- if r.stix_url %}<a href="{{ r.stix_url | relative_url }}">STIX bundle</a>{% endif -%}
+      </div>
+      {%- endif -%}
+    </div>
+    {%- endfor -%}
+  </div>
+  {%- else -%}
+  <p class="hl-actor__muted">No published report names this designation yet.</p>
+  {%- endif -%}
+
+  <h2 id="infrastructure">Infrastructure and tooling</h2>
+  <dl class="hl-actor__facts hl-actor__facts--wide">
+    <div><dt>Primary host</dt><dd><code>{{ a.primary_host }}</code> <span class="hl-actor__muted">(the operator-controlled host the assigning report is named for; the full indicator set, with its caveats, is in each report's IOC feed)</span></dd></div>
+    {%- if a.tooling and a.tooling.size > 0 -%}
+    <div><dt>Tooling</dt><dd><span class="hl-tags">{% for t in a.tooling %}<span class="hl-tag hl-tag--blue">{{ t }}</span>{% endfor %}</span></dd></div>
+    {%- endif -%}
+  </dl>
+
+  <h2 id="attack">MITRE ATT&amp;CK</h2>
+  {%- if ix and ix.attack.size > 0 -%}
+  {%- assign from_det = ix.attack | where: "source", "detections" -%}
+  <p class="hl-actor__muted">{{ ix.attack.size }} technique{% if ix.attack.size != 1 %}s{% endif %} across {{ ix.tactics.size }} tactic{% if ix.tactics.size != 1 %}s{% endif %}, read from the mapping tables of the reports about this actor{% if from_det.size == ix.attack.size %}, which keep their mapping on the companion detection page{% elsif from_det.size > 0 %} and, where a report keeps its mapping on the companion detection page, from that page{% endif %}. Each technique links to where it is mapped.</p>
+  <div class="hl-actor__attack">
+    {%- for tactic in ix.tactics -%}
+    <div class="hl-actor__tactic">
+      <div class="hl-actor__tactic-name">{{ tactic }}</div>
+      <ul class="hl-actor__techniques">
+        {%- for t in ix.attack -%}{%- if t.tactic == tactic -%}
+        <li><a href="{% if t.source == 'detections' %}{{ t.link | relative_url }}{% else %}{{ t.link | relative_url }}#mitre-attck-mapping{% endif %}" title="{% if t.source == 'detections' %}Mapped on the detection page{% else %}Mapped in the report{% endif %}"><code>{{ t.id }}</code></a> {{ t.name }}</li>
+        {%- endif -%}{%- endfor -%}
+      </ul>
+    </div>
+    {%- endfor -%}
+  </div>
+  {%- else -%}
+  <p class="hl-actor__muted">The reports about this actor carry no ATT&amp;CK mapping table the strip parser recognises.</p>
+  {%- endif -%}
+
+  {%- if a.related and a.related.size > 0 -%}
+  <h2 id="related">Related designations</h2>
+  <ul class="hl-actor__related">
+    {%- for r in a.related -%}
+    {%- assign rr = site.data.actors.actors | where: "id", r.id | first -%}
+    <li>{% if rr %}<a href="{{ r.id | prepend: '/actors/' | append: '/' | relative_url }}">{{ r.id }}</a>{% else %}{{ r.id }}{% endif %}: {{ r.relation }}</li>
+    {%- endfor -%}
+  </ul>
+  {%- endif -%}
+
+  <p class="hl-actor__licence">
+    Actor profiles and the reports behind them are &copy; Joseph, The Hunter's Ledger, licensed
+    <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>: free to use, including commercially, with attribution.
+    <a href="{{ '/actors/' | relative_url }}">All tracked actors</a>.
+  </p>
+</div>
+{%- endif -%}
+
+{{ content }}

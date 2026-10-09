@@ -76,7 +76,7 @@ No malware binary was extracted and no victims were observed.
 <tr><td>Active-Intrusion Risk</td><td>3/10</td><td>No victims observed, no beacons, no C2 traffic, no exfiltration evidence. The captured artifact is the operator's local tradecraft footprint, not a campaign against a named target.</td></tr>
 <tr><td>Defender-Hunt Utility</td><td>8/10</td><td>The artifact provides immediately-actionable filesystem and content hunt criteria deployable across developer endpoint estates without environment-specific tuning.</td></tr>
 <tr><td>Operator Reproducibility</td><td>7/10</td><td>OpenClaw is publicly distributed; the allowlist technique is documented in Anthropic's Claude Code documentation. The combined technique requires only minutes of operator effort. Wider operator adoption is plausible going forward.</td></tr>
-<tr><td>Attribution Confidence</td><td>3/10</td><td>UTA-2026-015 LOW (55%). Korean-language inference is curator-derived from Hunt.io; no independent corroboration in the captured artifact (file contents are English). Residential-ISP attribution carries no actor-clustering signal.</td></tr>
+<tr><td>Attribution Confidence</td><td>3/10</td><td><a href="/actors/UTA-2026-015/">UTA-2026-015</a> LOW (55%). Korean-language inference is curator-derived from Hunt.io; no independent corroboration in the captured artifact (file contents are English). Residential-ISP attribution carries no actor-clustering signal.</td></tr>
 </tbody>
 </table>
 
@@ -84,7 +84,7 @@ No malware binary was extracted and no victims were observed.
 
 ### Threat Actor
 
-The operator is tracked as **UTA-2026-015** *(an internal tracking label used by The Hunters Ledger, see Section 6)* at **LOW (55%)** confidence. The strongest signals are Hunt.io's Korean-language curator label and the Korea Telecom AS4766 residential exposure; the `settings.local.json` content is English-only and corroborates neither, and no clustering with named threat actors was found. **Disposition:** the residential exposure at `221.150.15.104:8080` remained reachable at investigation close (2026-05-23). No vendor takedown applies. This tradecraft-observation case has no named victim and no removable artifact (Section 6).
+The operator is tracked as **<a href="/actors/UTA-2026-015/">UTA-2026-015</a>** *(an internal tracking label used by The Hunters Ledger, see Section 6)* at **LOW (55%)** confidence. The strongest signals are Hunt.io's Korean-language curator label and the Korea Telecom AS4766 residential exposure; the `settings.local.json` content is English-only and corroborates neither, and no clustering with named threat actors was found. **Disposition:** the residential exposure at `221.150.15.104:8080` remained reachable at investigation close (2026-05-23). No vendor takedown applies. This tradecraft-observation case has no named victim and no removable artifact (Section 6).
 
 ### For Technical Teams
 
@@ -137,7 +137,7 @@ This is an **operator-tradecraft analysis report, not a malware analysis report.
 | Primary captured artifact | `~/.claude/settings.local.json` (442 bytes JSON) | DEFINITE |
 | Secondary captured evidence | `~/.openclaw/` directory presence; `~/.openclaw/completions/openclaw.ps1` | DEFINITE |
 | Malware binary | None extracted; analysis subject is configuration tradecraft | DEFINITE |
-| Threat actor | UTA-2026-015 (internal designation) | LOW (55%) |
+| Threat actor | <a href="/actors/UTA-2026-015/">UTA-2026-015</a> (internal designation) | LOW (55%) |
 | Operator class | AI-integrated mature operator (per umbrella Section 4.10 taxonomy) | MODERATE |
 | Sophistication | Mid-tier-selective (allowlist tuning + residential exposure paradox) | MODERATE |
 | Target profile | Unknown, no victims observed | INSUFFICIENT |
@@ -158,7 +158,7 @@ This is an **operator-tradecraft analysis report, not a malware analysis report.
 
 ### Why This Is a Capsule-Depth Case Rather Than a Full Malware Analysis
 
-The standard malware-analysis stages do not apply: there is no binary to reverse or sandbox, prior-art research is complete in the parent umbrella, a single residential Korea Telecom IP carries no infrastructure-pivot value, and attribution (UTA-2026-015 LOW 55%) was already assigned in the parent investigation. Appendix B expands each point.
+The standard malware-analysis stages do not apply: there is no binary to reverse or sandbox, prior-art research is complete in the parent umbrella, a single residential Korea Telecom IP carries no infrastructure-pivot value, and attribution (<a href="/actors/UTA-2026-015/">UTA-2026-015</a> LOW 55%) was already assigned in the parent investigation. Appendix B expands each point.
 
 ### Architectural Pattern Summary
 
@@ -326,7 +326,7 @@ The full ATT&CK technique mapping for this case is maintained alongside the dete
 ## 6. Threat Actor Assessment
 {: .hl-tier-2}
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-015 is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. <a href="/actors/UTA-2026-015/">UTA-2026-015</a> is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
 
 ### Confidence Statement
 
@@ -364,7 +364,7 @@ Per CLAUDE.md ATTRIBUTION CONFIDENCE SCALE, the Korean-language attribution is L
 
 ### Operator-Class Taxonomy
 
-UTA-2026-015 fits the **"AI-integrated mature operator"** profile from the umbrella's Section 4.10 taxonomy:
+<a href="/actors/UTA-2026-015/">UTA-2026-015</a> fits the **"AI-integrated mature operator"** profile from the umbrella's Section 4.10 taxonomy:
 
 - **Allowlist-tuning sophistication.** The deliberate seven-entry sequence covering the full OpenClaw bring-up reflects planning and awareness of Claude Code's permission model, not opportunistic scripting.
 - **Side-loaded toolkit adoption.** Choosing Claude Code + OpenClaw together is characteristic of operators who treat their AI tooling as a deliberate operational stack; mainstream-only operators use Claude Code alone, opportunistic ones never install OpenClaw.
@@ -471,7 +471,7 @@ Findings organized by confidence level. The body attaches per-claim confidence i
 
 ### LOW (weak or circumstantial evidence)
 
-- Attribution to UTA-2026-015 at 55% confidence
+- Attribution to <a href="/actors/UTA-2026-015/">UTA-2026-015</a> at 55% confidence
 - Operator motivation framing (capability-building inference based on tooling choice)
 
 ### INSUFFICIENT (cannot assess)
@@ -506,7 +506,7 @@ The following are explicitly out of scope and represent gaps the captured eviden
 | Specific OpenClaw skills used | The operator's allowlist documents OpenClaw installation, onboarding, and gateway startup, but does not document which specific OpenClaw skills were invoked through Claude Code post-install | Would inform which downstream attacker capabilities the operator wired through the Claude Code + OpenClaw bridge | Requires extraction of OpenClaw's local state directory (`~/.openclaw/` subdirectory contents) plus correlated Claude Code session transcripts |
 | Active operations against named victims | No victim identifiers, exfiltrated data, target lists, or attack-against-specific-target evidence was observed in the captured filesystem scope | The capsule case documents tradecraft pre-staging; whether the operator has used the staged toolchain against any specific victim is unknown | Requires Claude Code session content or OpenClaw runtime logs, neither captured |
 | Operator full toolkit | Co-located evidence is limited to Claude Code + OpenClaw + standard developer environment (Node, npm) | Operators commonly combine multiple AI agents and conventional tools; whether this operator runs additional tooling beyond what is captured is unknown | Requires deeper filesystem extraction; would require re-pulling additional `~/` subdirectories |
-| Operator identity beyond UTA-2026-015 | Korean-language operator inferred from Hunt curator label and parent-investigation analysis; no Cyrillic / Korean text directly observed in the 442-byte allowlist artifact | The LOW 55% UTA confidence reflects this gap, language attribution is corroborated by parent-investigation language analysis but not directly by the smoking-gun artifact alone | Requires additional artifacts containing operator-native-language text |
+| Operator identity beyond <a href="/actors/UTA-2026-015/">UTA-2026-015</a> | Korean-language operator inferred from Hunt curator label and parent-investigation analysis; no Cyrillic / Korean text directly observed in the 442-byte allowlist artifact | The LOW 55% UTA confidence reflects this gap, language attribution is corroborated by parent-investigation language analysis but not directly by the smoking-gun artifact alone | Requires additional artifacts containing operator-native-language text |
 | Whether OpenClaw skills themselves contain malicious capabilities | OpenClaw is publicly distributed at openclaw.ai with both legitimate-purpose adopters and confirmed-malicious operators across the parent investigation (Case 2 Turkish ARPA and this case) | Determines whether OpenClaw-the-product warrants treatment as a malicious tool, a dual-use tool, or a legitimate tool with abusive populations | Out of scope for this sub-report; would require independent OpenClaw skill catalog audit |
 
 ### 10.4 Behavioral Analysis Limits
@@ -519,7 +519,7 @@ Read all findings in light of the gaps above:
 - **DEFINITE** claims attach only to artifact-level observations (JSON content, the 7 allowlist entries, the IP, ASN, file path, port number, distribution domains).
 - **HIGH** claims attach to the technique characterization (the allowlist customization as Disable or Modify Tools; the operator-class taxonomy fit; the OpenClaw architectural pattern).
 - **MODERATE** claims attach to operator-attribution inferences (Korean language, residential exposure pattern, mid-tier-selective sophistication).
-- **LOW** confidence attaches to UTA-2026-015 itself (55% per parent investigation).
+- **LOW** confidence attaches to <a href="/actors/UTA-2026-015/">UTA-2026-015</a> itself (55% per parent investigation).
 - **INSUFFICIENT** evidence is acknowledged for all Section 10.3 gap items.
 
 Defenders building hunt and detection logic should anchor on the DEFINITE artifact-level observations (file content, path, network indicators). HIGH-and-below content is interpretive context for the technique, not a basis for blocking or attribution.
@@ -549,7 +549,7 @@ Defenders building hunt and detection logic should anchor on the DEFINITE artifa
 
 ### Appendix A: The Hunters Ledger UTA Designation System
 
-UTA designations (Unattributed Threat Actor) are internal tracking labels used by The Hunters Ledger to track threat actors observed in analysis that cannot yet be linked to a publicly named threat group. UTAs are numbered sequentially per calendar year. UTA-2026-015 is the fifteenth UTA designation assigned in 2026 by The Hunters Ledger. The designation is internal: it will not appear in external threat-intelligence feeds, vendor reports, or government attribution statements. If future evidence ties UTA-2026-015 activity to a publicly named actor, the designation will be retired and the relevant The Hunters Ledger publications updated to reference the named actor instead. Defenders consuming The Hunters Ledger reports should treat UTA designations as a stable internal-tracking pointer, not as an external identifier.
+UTA designations (Unattributed Threat Actor) are internal tracking labels used by The Hunters Ledger to track threat actors observed in analysis that cannot yet be linked to a publicly named threat group. UTAs are numbered sequentially per calendar year. <a href="/actors/UTA-2026-015/">UTA-2026-015</a> is the fifteenth UTA designation assigned in 2026 by The Hunters Ledger. The designation is internal: it will not appear in external threat-intelligence feeds, vendor reports, or government attribution statements. If future evidence ties <a href="/actors/UTA-2026-015/">UTA-2026-015</a> activity to a publicly named actor, the designation will be retired and the relevant The Hunters Ledger publications updated to reference the named actor instead. Defenders consuming The Hunters Ledger reports should treat UTA designations as a stable internal-tracking pointer, not as an external identifier.
 
 ### Appendix B: Why This Report Is Capsule-Depth Rather Than Full-Length
 
@@ -558,7 +558,7 @@ Standard Hunters Ledger reports follow a multi-stage pipeline (malware analysis 
 - **No malware binary**: the artifact is a 442-byte text configuration file; no reverse engineering, sandbox detonation, or unpacking applies.
 - **Prior-art research is complete**: the parent umbrella already covers the OpenClaw distribution ecosystem, the dual-use framing, and the cross-case operator taxonomy; repeating it adds no value.
 - **Infrastructure has no pivot value**: a single residential Korea Telecom IP returns no actor-clustering signal, because residential blocks are shared by tens of thousands of unrelated subscribers.
-- **Attribution is already assigned**: UTA-2026-015 LOW 55% was determined in the parent investigation; the sub-report reflects it without re-running the workflow.
+- **Attribution is already assigned**: <a href="/actors/UTA-2026-015/">UTA-2026-015</a> LOW 55% was determined in the parent investigation; the sub-report reflects it without re-running the workflow.
 
 This compressed structure (artifact analysis + defender hunt anchors) suits single-case tradecraft-observation sub-reports of a multi-case parent. Readers wanting full-length malware-analysis depth should consult other Hunters Ledger publications.
 

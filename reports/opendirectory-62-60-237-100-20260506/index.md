@@ -307,14 +307,14 @@ process_tree:
 ## BLUF / Bottom Line Up Front
 {: .hl-tier-1}
 
-A live, 15-month-old multi-vector phishing campaign on OFAC-sanctioned bulletproof infrastructure (`62.60.237[.]100`, AS210644 AEZA, Finland) delivers a HijackLoader / Penguish / Rugmi loader chain that ends in an AsyncRAT-class .NET RAT beaconing to `185.241.208[.]129:56167` on Spamhaus DROP-listed AS210558 (1337 Services, Poland). The campaign is tracked here as **UTA-2026-007** *(an internal tracking label used by The Hunters Ledger, see Section 11)*. Threat level is **HIGH** (overall risk score 7.5/10). The multiplicity of evasion layers (multi-vendor camouflage bundle, hostname-keyed per-host KDF, renamed signed Qihoo binary as .NET injection host, legacy `.job` autorunsc blind spot) compresses time-to-detect from sample launch to first C2 beacon to ~43 seconds. The single highest-value durable defender signal is the **JA3 hash `07af4aa9e4d215a5ee63f9a0a277fbe3`**. It fingerprints the malware's TLS client behavior independently of the C2 IP and rotating-IP infrastructure cannot defeat it. Attribution to a publicly named threat group rests at LOW confidence (58%); Russian-speaking operator language attribution is HIGH confidence (90%).
+A live, 15-month-old multi-vector phishing campaign on OFAC-sanctioned bulletproof infrastructure (`62.60.237[.]100`, AS210644 AEZA, Finland) delivers a HijackLoader / Penguish / Rugmi loader chain that ends in an AsyncRAT-class .NET RAT beaconing to `185.241.208[.]129:56167` on Spamhaus DROP-listed AS210558 (1337 Services, Poland). The campaign is tracked here as **<a href="/actors/UTA-2026-007/">UTA-2026-007</a>** *(an internal tracking label used by The Hunters Ledger, see Section 11)*. Threat level is **HIGH** (overall risk score 7.5/10). The multiplicity of evasion layers (multi-vendor camouflage bundle, hostname-keyed per-host KDF, renamed signed Qihoo binary as .NET injection host, legacy `.job` autorunsc blind spot) compresses time-to-detect from sample launch to first C2 beacon to ~43 seconds. The single highest-value durable defender signal is the **JA3 hash `07af4aa9e4d215a5ee63f9a0a277fbe3`**. It fingerprints the malware's TLS client behavior independently of the C2 IP and rotating-IP infrastructure cannot defeat it. Attribution to a publicly named threat group rests at LOW confidence (58%); Russian-speaking operator language attribution is HIGH confidence (90%).
 
 ---
 
 ## 1. Executive Summary
 {: .hl-tier-1}
 
-A Russian-speaking commodity-malware operator, tracked here as **UTA-2026-007** *(an internal tracking label used by The Hunters Ledger, see Section 11)*, runs an end-to-end multi-vector phishing-to-RAT campaign that delivers a HijackLoader / Penguish / Rugmi loader chain into a .NET AsyncRAT-class final stealer. This report byte-confirms the full chain: Inno Setup dropper with Pascal-script anti-triage, LZNT1-chunked encrypted payload, eight embedded PE files, a multi-vendor camouflage bundle, and hollowing into a renamed signed third-party vendor binary (genuine Qihoo 360 PromoUtil dropped as `WVault.exe`) for .NET injection, all with PCAP, EVTX, memory forensics, and process-inspection evidence in one corpus. The campaign is live (DEFINITE: three independent network capture sources confirm active C2) and the operator's choice of OFAC-sanctioned plus Spamhaus DROP-listed dual-bulletproof hosting indicates a high risk-tolerance profile (HIGH confidence, per Section 8).
+A Russian-speaking commodity-malware operator, tracked here as **<a href="/actors/UTA-2026-007/">UTA-2026-007</a>** *(an internal tracking label used by The Hunters Ledger, see Section 11)*, runs an end-to-end multi-vector phishing-to-RAT campaign that delivers a HijackLoader / Penguish / Rugmi loader chain into a .NET AsyncRAT-class final stealer. This report byte-confirms the full chain: Inno Setup dropper with Pascal-script anti-triage, LZNT1-chunked encrypted payload, eight embedded PE files, a multi-vendor camouflage bundle, and hollowing into a renamed signed third-party vendor binary (genuine Qihoo 360 PromoUtil dropped as `WVault.exe`) for .NET injection, all with PCAP, EVTX, memory forensics, and process-inspection evidence in one corpus. The campaign is live (DEFINITE: three independent network capture sources confirm active C2) and the operator's choice of OFAC-sanctioned plus Spamhaus DROP-listed dual-bulletproof hosting indicates a high risk-tolerance profile (HIGH confidence, per Section 8).
 
 This report exists because existing public reporting on HijackLoader, Penguish and Rugmi, and on AsyncRAT-class downstream payloads, covers the individual stages of this kill chain in isolation. No public report links the full chain, the Inno Setup `InitializeSetup() returns False` distribution stealth, the multi-vendor genuine-binary co-location, the cross-campaign renamed-Qihoo-PromoUtil hollow host TTP cluster, and the per-host hostname-keyed KDF that resisted around 270 cryptographic recovery combinations, to the same campaign with end-to-end byte confirmation. This report fills that gap.
 
@@ -328,7 +328,7 @@ What I found is a 32+ artifact open directory at `62.60.237[.]100/Documents/` (A
 - **The renamed-Qihoo-PromoUtil hollow-host pattern reuses across 8+ campaigns since 2025**: defenders should detect the PATTERN (orphaned `WVault.exe` or any renamed `PromoUtil.exe` with `clr.dll!CreateAssemblyNameObject` thread start addresses) rather than specific hashes. The hash rotates per campaign; the pattern is durable.
 - **Time-to-detect window is ~43 seconds from sample launch to first C2 beacon.** File-based blocking must act inside this window OR behavioral detection at the orphan-`WVault.exe` stage is required. SIEM/EDR latency over ~60 seconds is too slow for prevention; only detection-and-response is feasible.
 - **The operator shows selective depth**: high-tier work in chosen areas (multi-vendor camouflage, three-layer wrapping, per-host KDF, cross-campaign hollow-host TTP) and commodity choices in others (near-stock Inno Setup wrapper, commodity HijackLoader, commodity Rugmi.HP cert installer). This is more diagnostic than uniform high-tier work. The profile is a MaaS-customer + bundle-camouflage integrator, NOT a custom-RAT or loader developer.
-- **Attribution to a publicly named actor rests at LOW confidence (58%).** TAG-150 / GrayBravo and TA544 / Narwhal Spider are both ruled out at INSUFFICIENT confidence; Russian-speaking operator language attribution is HIGH confidence (90%); cross-vector operator-fingerprint cluster is MODERATE confidence (75%) for distinct-operator. Treat UTA-2026-007 as a tracking label, not a public actor identity.
+- **Attribution to a publicly named actor rests at LOW confidence (58%).** TAG-150 / GrayBravo and TA544 / Narwhal Spider are both ruled out at INSUFFICIENT confidence; Russian-speaking operator language attribution is HIGH confidence (90%); cross-vector operator-fingerprint cluster is MODERATE confidence (75%) for distinct-operator. Treat <a href="/actors/UTA-2026-007/">UTA-2026-007</a> as a tracking label, not a public actor identity.
 
 **Key Risk Factors.**
 
@@ -353,17 +353,17 @@ What I found is a 32+ artifact open directory at `62.60.237[.]100/Documents/` (A
 
 The campaign scores 7.5 out of 10 overall, which is HIGH. Detection is feasible, because the durable signals listed in Key Takeaways above, the TLS fingerprint, the persistence file pattern and the hollow-host process tree, give multiple non-overlapping options, and the full detection package is in Section 10. The risk lies in the multiplicity of evasion layers and in the operator's selective depth, high-tier work in chosen areas like camouflage, the KDF and the hollow host, alongside commodity choices elsewhere like the Inno Setup wrapper and the commodity loader. This is a MaaS-customer and bundle-camouflage integrator profile, not a script kiddie.
 
-The threat actor is **UTA-2026-007**, tracked at three confidence levels, with the full assessment in Section 11:
+The threat actor is **<a href="/actors/UTA-2026-007/">UTA-2026-007</a>**, tracked at three confidence levels, with the full assessment in Section 11:
 - **Russian-speaking operator: HIGH confidence (90%)**: `VSEZBSRABOTAT.url` filename, Russian-language Kraken-exchange URL on second-stage IP, `busket/` Mega.io subdir typo (English-second-language tell), and SPecialiST RePack YARA hit on `NDA.doc`
 - **Distinct operator (not coincidental shared bulletproof tenancy): MODERATE confidence (75%)**: four cross-vector fingerprints stable across 15+ months and seven delivery vectors
-- **Publicly named actor link: LOW confidence (58%)**: TAG-150 / GrayBravo and TA544 / Narwhal Spider both ruled out at INSUFFICIENT confidence; treat UTA-2026-007 as a tracking label, not a public actor identity
+- **Publicly named actor link: LOW confidence (58%)**: TAG-150 / GrayBravo and TA544 / Narwhal Spider both ruled out at INSUFFICIENT confidence; treat <a href="/actors/UTA-2026-007/">UTA-2026-007</a> as a tracking label, not a public actor identity
 
 **For technical teams (operational hooks complementing the Key Takeaways above):**
 - Hunt for any `*.job` file creation in `C:\Windows\Tasks\` from non-system-installer parents. The legacy `.job` format is an autorunsc enumeration blind spot and is the campaign's primary persistence mechanism (Section 6.4).
 - Investigate any orphaned `WVault.exe` or `PromoUtil.exe` with `clr.dll!CreateAssemblyNameObject` thread start addresses + outbound TLSv1 traffic on non-standard high ports. This catches the cross-campaign hollow-host TTP cluster (Section 6.3).
 - Detection content (five YARA rules, nine Sigma rules, one Suricata signature) is published separately at `/hunting-detections/opendirectory-62-60-237-100-20260506-detections/` (raw file: `opendirectory-62-60-237-100-20260506-detections.md`).
 
-The remainder of this report walks the kill chain end-to-end (Section 3), documents the static and dynamic technical analysis (Sections 4-6), maps observed behaviors to MITRE ATT&CK (Section 7), summarizes the threat-actor assessment and the UTA-2026-007 designation (Section 11), and closes with the consolidated Detection & Response section (Section 10) and gap-and-assumption catalog (Section 15).
+The remainder of this report walks the kill chain end-to-end (Section 3), documents the static and dynamic technical analysis (Sections 4-6), maps observed behaviors to MITRE ATT&CK (Section 7), summarizes the threat-actor assessment and the <a href="/actors/UTA-2026-007/">UTA-2026-007</a> designation (Section 11), and closes with the consolidated Detection & Response section (Section 10) and gap-and-assumption catalog (Section 15).
 
 ### 1.1 Threat Intelligence Summary
 
@@ -1505,7 +1505,7 @@ Four typosquat domains co-resolving to a single staging IP is **DEFINITE single-
 
 ### 8.6 Shared Wondershare-Pack Staging: 80.253.249.186
 
-> **Analyst note:** This IP serves the legitimate Wondershare DLL pack used as camouflage by multiple HijackLoader campaigns leveraging the Wondershare side-load template. It is not specific to UTA-2026-007. It is shared infrastructure. Defenders observing connections to `80.253.249.186:5504/<DLL>` requests have a high-confidence indicator they are watching a Wondershare-side-load campaign, but not necessarily this specific operator. Use it as a pivot point that narrows the suspect set, not as a single-operator attribution signal.
+> **Analyst note:** This IP serves the legitimate Wondershare DLL pack used as camouflage by multiple HijackLoader campaigns leveraging the Wondershare side-load template. It is not specific to <a href="/actors/UTA-2026-007/">UTA-2026-007</a>. It is shared infrastructure. Defenders observing connections to `80.253.249.186:5504/<DLL>` requests have a high-confidence indicator they are watching a Wondershare-side-load campaign, but not necessarily this specific operator. Use it as a pivot point that narrows the suspect set, not as a single-operator attribution signal.
 
 | Field | Value |
 |---|---|
@@ -1617,11 +1617,11 @@ Defenders should assume a 43-second window from sample launch to first C2 beacon
 ## 11. Threat Actor Assessment
 {: .hl-tier-2}
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-007 is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. <a href="/actors/UTA-2026-007/">UTA-2026-007</a> is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
 
 ### 11.1 Conclusion
 
-**Weak indicators suggest a distinct Russian-speaking criminal operator (UTA-2026-007).** Attribution rests at LOW confidence (58%). The 58% confidence reflects:
+**Weak indicators suggest a distinct Russian-speaking criminal operator (<a href="/actors/UTA-2026-007/">UTA-2026-007</a>).** Attribution rests at LOW confidence (58%). The 58% confidence reflects:
 - HIGH confidence (90%) that the operator is Russian-speaking
 - MODERATE confidence (75%) that this is a distinct operator (not coincidental shared bulletproof tenancy)
 - LOW overall confidence (58%) that the distinct operator can be tracked as a single entity across the corpus
@@ -1686,7 +1686,7 @@ On sophistication the operator shows selective depth, high-tier work in chosen a
 
 <figure style="text-align: center; margin: 2em 0;">
  <img loading="lazy" src="{{ "/assets/images/opendirectory-62-60-237-100-20260506/hijackloader-issrc-build-pdb-leak.png" | relative_url }}" alt="String view of the Carriers.exe Pascal Script section showing a JSON-like structure with a 'file_paths' array containing entries for comctl32.dll, mpr.dll, netapi32.dll, netutils.dll, textshaping.dll, version.dll, winhttp.dll all loaded from %SystemRoot%\\system32. The bottom of the array, highlighted in green, shows the operator's local build path 'D:\\\\Coding\\\\Is\\\\issrc-build\\\\Components\\\\ChaCha20.pas', followed by '/DIR=\\\"x:\\\\dirname\\\"'.">
-  <figcaption><em>Figure 17: Operator build-environment leak inside <code>Carriers.exe</code>. The Pascal Script source path <code>D:\Coding\Is\issrc-build\Components\ChaCha20.pas</code> reveals the operator builds Inno Setup wrappers locally from the Inno Setup source tree (<code>issrc-build</code>) on a dedicated <code>D:\Coding\</code> volume. Combined with the <code>I:\CompanySource\Plowshare\</code> PDB path in <code>ExceptionHandler.dll</code>, this paints the picture of an organized multi-volume developer workspace, not a one-off MaaS-customer build, and the strongest single piece of evidence supporting the "distinct organized operator" assessment for UTA-2026-007.</em></figcaption>
+  <figcaption><em>Figure 17: Operator build-environment leak inside <code>Carriers.exe</code>. The Pascal Script source path <code>D:\Coding\Is\issrc-build\Components\ChaCha20.pas</code> reveals the operator builds Inno Setup wrappers locally from the Inno Setup source tree (<code>issrc-build</code>) on a dedicated <code>D:\Coding\</code> volume. Combined with the <code>I:\CompanySource\Plowshare\</code> PDB path in <code>ExceptionHandler.dll</code>, this paints the picture of an organized multi-volume developer workspace, not a one-off MaaS-customer build, and the strongest single piece of evidence supporting the "distinct organized operator" assessment for <a href="/actors/UTA-2026-007/">UTA-2026-007</a>.</em></figcaption>
 </figure>
 
 Their style is distinctive, uncommon English words mixed with technical-sounding codenames. **`Apophyge`**, an architectural term for the curve at the base of a column, is a particularly diagnostic signal, and suggests either an eclectic-vocabulary wordlist generator or a human author with unusual reading habits. That vocabulary signature is the strongest non-technical attribution lead in the corpus, though it has not been linkable to any known named actor in public reporting.
@@ -1701,7 +1701,7 @@ Their style is distinctive, uncommon English words mixed with technical-sounding
 | Operator forum / dark-web identity | Not identified |
 | Full sister-sample analysis on shared C2 | Not completed (5 sister samples on `185.241.208.129` not fully triaged) |
 
-If any of these gaps closes (especially code-similarity to a named actor or government attribution) the LOW confidence (58%) could rise to MODERATE or HIGH and the UTA-2026-007 designation could be retired in favor of the named actor.
+If any of these gaps closes (especially code-similarity to a named actor or government attribution) the LOW confidence (58%) could rise to MODERATE or HIGH and the <a href="/actors/UTA-2026-007/">UTA-2026-007</a> designation could be retired in favor of the named actor.
 
 ---
 
@@ -1744,13 +1744,13 @@ The most operationally critical findings carry DEFINITE confidence; the outstand
 ### MODERATE (Reasonable evidence, notable gaps)
 
 - **Per-host KDF structural pattern** (X65599 hostname-derived seed used as both PRNG seed and decryption key): static reverse identified the structure; Round 13 dynamic data invalidated the exact byte-level algorithm (no FLARE-derived seed produces `EUOJCZYGOUCUG` in 1M-seed brute force)
-- **Distinct operator (UTA-2026-007)**: 75% confidence; four cross-vector fingerprints (busket/, Plowshare PDB, GoProxy cert, per-host KDF) collectively support, but no public actor link
+- **Distinct operator (<a href="/actors/UTA-2026-007/">UTA-2026-007</a>)**: 75% confidence; four cross-vector fingerprints (busket/, Plowshare PDB, GoProxy cert, per-host KDF) collectively support, but no public actor link
 - **Operator role: MaaS-customer + bundle-camouflage integrator**: 78% confidence; based on commodity-loader use plus operator additions at the bundle layer
 - **AS210558 recurrence as operator-overlap signal**: 70%; shared bulletproof tenancy is plausible alternative explanation
 
 ### LOW (Weak / circumstantial evidence)
 
-- **UTA-2026-007 as a single trackable entity**: 58% confidence; no public actor link, no cross-investigation linkage of GoProxy cert thumbprint
+- **<a href="/actors/UTA-2026-007/">UTA-2026-007</a> as a single trackable entity**: 58% confidence; no public actor link, no cross-investigation linkage of GoProxy cert thumbprint
 - **Final-stage variant identification** (AsyncRAT vs DCRat vs zgRAT vs heavily modified): cipher unrecovered after 270 attempts; runtime evidence required
 - **Exfiltration over C2 channel (T1041)**: capability inferred from .NET RAT family characteristics; not directly observed in 5-min run
 
@@ -1776,11 +1776,11 @@ Check whether any host has connected to `185.241.208.129:56167` over TCP, or any
 **Q2. What confidence level is the attribution?**
 Three levels apply, with different confidence values (Section 11): the operator is Russian-speaking at HIGH confidence (90%); this is a distinct operator (not coincidental shared bulletproof tenancy) at MODERATE confidence (75%); the operator can be tracked as a single entity across the corpus at LOW confidence (58%). No link to any publicly named actor (TAG-150 / GrayBravo, TA544 / Narwhal Spider, etc.) has been established. Both candidates were ruled out at INSUFFICIENT confidence.
 
-**Q3. What is UTA-2026-007 and why does it matter?**
-"UTA" stands for Unattributed Threat Actor. UTA-2026-007 is an internal Hunters Ledger tracking designation used because no link to a publicly named threat group could be established (Section 11.1 explanatory blockquote). It is specific to this publication. It will not appear in external threat intelligence feeds or vendor reports. If future evidence links this activity to a known named actor, the designation will be retired.
+**Q3. What is <a href="/actors/UTA-2026-007/">UTA-2026-007</a> and why does it matter?**
+"UTA" stands for Unattributed Threat Actor. <a href="/actors/UTA-2026-007/">UTA-2026-007</a> is an internal Hunters Ledger tracking designation used because no link to a publicly named threat group could be established (Section 11.1 explanatory blockquote). It is specific to this publication. It will not appear in external threat intelligence feeds or vendor reports. If future evidence links this activity to a known named actor, the designation will be retired.
 
 **Q4. What if my SOC sees the JA3 hash `07af4aa9e4d215a5ee63f9a0a277fbe3` on a live host?**
-Treat this as a high-priority alert regardless of the specific campaign attribution. The JA3 fingerprint is on the Abuse.ch SSLBL list as an AsyncRAT-class indicator, and an active TLS handshake with this fingerprint indicates a .NET RAT actively beaconing from an infected host (Section 6.7). Verify the C2 destination IP and port, isolate the host from the network, and proceed with the artifacts in Section 10.4. If the destination IP/ASN matches `185.241.208.129` / AS210558, this is specifically UTA-2026-007. If the JA3 matches but the destination IP differs, the campaign is a different AsyncRAT-class operator. Treat the alert as equally high-priority because the same RAT class is active.
+Treat this as a high-priority alert regardless of the specific campaign attribution. The JA3 fingerprint is on the Abuse.ch SSLBL list as an AsyncRAT-class indicator, and an active TLS handshake with this fingerprint indicates a .NET RAT actively beaconing from an infected host (Section 6.7). Verify the C2 destination IP and port, isolate the host from the network, and proceed with the artifacts in Section 10.4. If the destination IP/ASN matches `185.241.208.129` / AS210558, this is specifically <a href="/actors/UTA-2026-007/">UTA-2026-007</a>. If the JA3 matches but the destination IP differs, the campaign is a different AsyncRAT-class operator. Treat the alert as equally high-priority because the same RAT class is active.
 
 **Q5. Will my DNS-based detection stack catch this campaign?**
 No. The C2 IP `185.241.208.129` is hardcoded in the loader/payload and never queried via DNS (Section 6.8: 49 DNS queries observed in the run, none point to operator infrastructure). DNS sinkholes, RPZ rules, and DGA-detection techniques will not catch this campaign. Detection must be IP-based, JA3-based, or behavioral.
@@ -1828,7 +1828,7 @@ These gaps and assumptions do not block publication. The story is coherent: HIGH
 3. **GoProxy CA cert install was not directly observed during behavioral sandbox analysis**: VT C2AE confirms the technique; dynamic analysis did not trigger it.
 4. **`WVault.exe` drop hash divergence**: bundle hash `ca9f859f…` vs runtime drop `c085a724…`. Possible explanations include a slightly different version selected at runtime, operator post-extraction modification, or one hash misread. Confidence in the divergence is HIGH; confidence in the underlying cause is INSUFFICIENT.
 5. **`pe_06` invocation mechanism**: process tree shows `Carriers.exe → Carriers.tmp → CrystSupervisor32.exe → ...` but does not show `pe_06`. The most likely explanation (per static analysis of the `_tiny_erase_` export pattern) is that `pe_06` is loaded as a DLL into one of the existing processes, confidence MODERATE.
-6. **Sister samples on `185.241.208.129`**: `Gdkmos.exe`, `KioskWindows_1.04.zip`, `detectrdps.exe`, `SSA-Statement.exe`, `Rjdfz.exe` are sister samples; further triage could confirm campaign clustering and/or expand the UTA-2026-007 footprint.
+6. **Sister samples on `185.241.208.129`**: `Gdkmos.exe`, `KioskWindows_1.04.zip`, `detectrdps.exe`, `SSA-Statement.exe`, `Rjdfz.exe` are sister samples; further triage could confirm campaign clustering and/or expand the <a href="/actors/UTA-2026-007/">UTA-2026-007</a> footprint.
 7. **GoProxy cert thumbprint `0174E68C97DDF1E0EEEA415EA336A163D2B61AFD` cross-campaign linkage**: not yet found in other Hunters Ledger investigations; would be a high-value cross-campaign linkage if observed.
 
 ### 15.2 Working assumptions

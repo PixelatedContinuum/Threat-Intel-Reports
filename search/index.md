@@ -102,6 +102,7 @@ description: "Full-text search across every published report, detection page, IO
       ['/hunting-detections/', 'detections', 'Detection Rules'],
       ['/ioc-feeds/',          'ioc',        'IOC Feed'],
       ['/stix/',               'stix',       'STIX'],
+      ['/actors/',             'actors',     'Threat Actor'],
       ['/wire/',               'wire',       'The Wire'],
       ['/behind-the-reports/', 'behind',     'Behind the Reports']
     ];

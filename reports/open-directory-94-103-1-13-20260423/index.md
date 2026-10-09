@@ -39,7 +39,7 @@ stix_bundle: /stix/open-directory-94-103-1-13-20260423.json
 ## 1. BLUF / Bottom Line Up Front
 {: .hl-tier-1}
 
-An open directory discovered on the Russian-registered bulletproof-adjacent VPS **94.103.1.13** (AS209207 Digital Hosting Provider LLC, upstream AS48014 AlbaHost) is hosting a pre-production cybercrime staging kit whose terminal payload is a **Chaos ransomware builder variant** configured as `.torbrowsertor`. The kit is operated by a financially-motivated actor tracked internally as **UTA-2026-005** *(an internal tracking label used by The Hunters Ledger, see Section 7)*. Attribution to any publicly named threat actor is **INSUFFICIENT (0%)**; family-level identification of the Chaos builder lineage is **DEFINITE (97%)**.
+An open directory discovered on the Russian-registered bulletproof-adjacent VPS **94.103.1.13** (AS209207 Digital Hosting Provider LLC, upstream AS48014 AlbaHost) is hosting a pre-production cybercrime staging kit whose terminal payload is a **Chaos ransomware builder variant** configured as `.torbrowsertor`. The kit is operated by a financially-motivated actor tracked internally as **<a href="/actors/UTA-2026-005/">UTA-2026-005</a>** *(an internal tracking label used by The Hunters Ledger, see Section 7)*. Attribution to any publicly named threat actor is **INSUFFICIENT (0%)**; family-level identification of the Chaos builder lineage is **DEFINITE (97%)**.
 
 The primary finding in this report is **not** the ransomware itself. The commodity Chaos builder is well documented. The primary finding is a **private five-stage batch-to-PowerShell-to-.NET crypter** (`mymain.bat` + `myfile.bat`) that the operator uses to deliver Chaos while evading static detection (VT 0/76 on both batch droppers at submission time) and sandbox analysis. That crypter exhibits four characteristics with **no located prior public reporting**:
 
@@ -52,7 +52,7 @@ The primary finding in this report is **not** the ransomware itself. The commodi
 
 The delivered payload (Chaos/TorBrowserTor Stage-5a) is Rijndael-256 CFB + RSA-2048 OAEP ransomware with removable-drive propagation, Volume Shadow Copy / BCDEdit / backup-catalog destruction, and a BTC clipboard hijacker. A parallel **Orcus RAT v7 (Wardow crack)** path provides the RAT/C2 foothold. Real C2 is hidden behind a `127.0.0.1:20268` loopback tunnel (chisel/plink stack); the upstream endpoint is **UNKNOWN** from static analysis alone.
 
-I walk the loader chain in defender-actionable detail and hand off a set of cross-build structural anchors (the Stage-4 mutex GUID `9f67b5ed-6c10-4c53-818b-8d26be0d1339`, the Stage-5b PE SHA256 `da302511…`, the cross-layer key-reuse pattern, and the tri-artifact gate) that future analysts can use to cluster additional UTA-2026-005 activity. Detection content is delivered separately in [open-directory-94-103-1-13-20260423-detections.md](/hunting-detections/open-directory-94-103-1-13-20260423-detections/); IOCs are delivered separately in [open-directory-94-103-1-13-20260423-iocs.json](/ioc-feeds/open-directory-94-103-1-13-20260423-iocs.json).
+I walk the loader chain in defender-actionable detail and hand off a set of cross-build structural anchors (the Stage-4 mutex GUID `9f67b5ed-6c10-4c53-818b-8d26be0d1339`, the Stage-5b PE SHA256 `da302511…`, the cross-layer key-reuse pattern, and the tri-artifact gate) that future analysts can use to cluster additional <a href="/actors/UTA-2026-005/">UTA-2026-005</a> activity. Detection content is delivered separately in [open-directory-94-103-1-13-20260423-detections.md](/hunting-detections/open-directory-94-103-1-13-20260423-detections/); IOCs are delivered separately in [open-directory-94-103-1-13-20260423-iocs.json](/ioc-feeds/open-directory-94-103-1-13-20260423-iocs.json).
 
 ---
 
@@ -62,7 +62,7 @@ I walk the loader chain in defender-actionable detail and hand off a set of cros
 - **The loader, not the ransomware, is the novel story.** Chaos/TorBrowserTor is well-documented commodity ransomware; its clipboard wallets and Telegram handle (`@TorBrowserTor`) are **Chaos builder defaults** with zero operator-specific attribution value. The defender-actionable novelty lives in the **private five-stage batch loader** (`mymain.bat`, `myfile.bat`) that delivers it.
 - **Four crypter-chain behaviors have no located prior public reporting:** the Console.Title launch-gate trick, the inverted tri-artifact anti-sandbox gate (`admin` + `%TEMP%\VBE\` + `%TEMP%\mapping.csv`), cross-layer AES+XOR key reuse as a builder fingerprint, and the specific Stage-5b UACME #41 AppInfo RPC bypass PE (byte-identical across both builds, 8/77 VT).
 - **Two cross-build invariants are the highest-value hunting anchors** this investigation produced: the Stage-4 mutex GUID `9f67b5ed-6c10-4c53-818b-8d26be0d1339` and the Stage-5b UAC bypass SHA256 `da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8`. Each has zero public hits prior to this publication and produces high-fidelity, zero-FP hunting queries.
-- **Attribution to a named actor is not possible.** Zero infrastructure overlaps, zero named-actor TTP matches, zero Tier-1/Tier-2 vendor attributions. The 2025 Cisco Talos "Chaos RaaS group" is **explicitly ruled out** as a distinct actor with a distinct codebase: do not conflate it with the 2021-origin Chaos builder this sample is built from. The operator is tracked internally as **UTA-2026-005**.
+- **Attribution to a named actor is not possible.** Zero infrastructure overlaps, zero named-actor TTP matches, zero Tier-1/Tier-2 vendor attributions. The 2025 Cisco Talos "Chaos RaaS group" is **explicitly ruled out** as a distinct actor with a distinct codebase: do not conflate it with the 2021-origin Chaos builder this sample is built from. The operator is tracked internally as **<a href="/actors/UTA-2026-005/">UTA-2026-005</a>**.
 - **Stage-4 persistence is a Defender-masquerade dual-anchor:** a scheduled task literally named `\Microsoft Defender` at the task-scheduler root path (BOOT trigger, Hidden, RunLevel HIGHEST) plus a 1.4 MB encoded payload stashed at `HKLM\Software\Microsoft Defender\Payload`. This masquerade is the single most productive threat-hunt anchor for any defender with Sysmon EID 12/13 coverage.
 - **Stage-1 batch files are static-evasion optimized.** `mymain.bat` (VT 0/76) and `myfile.bat` are 2.6 MB+ DOSfuscated batch droppers that force 32-bit `SysWOW64\WindowsPowerShell` execution, decode two chunks via alphabet-substitution Base64, and hand off to Assembly.Load. Traditional signature-based AV does not see them. Behavioral detection is the only reliable mitigation.
 - **The kit is operator-scale, not single-campaign.** Two independent builds (`mymain.bat` and `myfile.bat`) compiled the same day (2026-03-31), sharing invariants but rotating keys and resource names: evidence the operator has tooling maturity to repeatedly rebuild, not just a single weaponized sample.
@@ -97,7 +97,7 @@ Commodity Chaos ransomware is well-catalogued by WatchGuard, Malpedia, Trend Mic
 
 ### Threat Actor
 
-Named-actor attribution is INSUFFICIENT at 0 percent. There are zero infrastructure overlaps with any tracked cluster, zero named-actor TTP matches, and zero Tier-1 or Tier-2 attributions. I track the actor internally as **UTA-2026-005**, and Section 7 carries the full Threat Actor Assessment including the UTA-identifier explanatory note and the mandatory Chaos-builder-versus-Chaos-RaaS disambiguation.
+Named-actor attribution is INSUFFICIENT at 0 percent. There are zero infrastructure overlaps with any tracked cluster, zero named-actor TTP matches, and zero Tier-1 or Tier-2 attributions. I track the actor internally as **<a href="/actors/UTA-2026-005/">UTA-2026-005</a>**, and Section 7 carries the full Threat Actor Assessment including the UTA-identifier explanatory note and the mandatory Chaos-builder-versus-Chaos-RaaS disambiguation.
 
 Family-level identification is DEFINITE at 97 percent. This is the Chaos ransomware builder of 2021 origin, v1 to v5 lineage, configured as the TorBrowserTor variant, per WatchGuard, Malpedia, Trend Micro, Fortinet and Acronis, all B1 Admiralty. To rule explicitly, this is **NOT** the April 2025 Cisco Talos "Chaos RaaS group", which is a distinct named actor with a distinct codebase.
 
@@ -191,7 +191,7 @@ Historical resolution of `slayer.ktx.ro` (Romanian TLD) to 94.103.1.13 on 2025-1
 
 My assessment is that the operator's posture is mature, running parallel parasitic infrastructure rather than a single-campaign tool deployment. That reframes them from a Chaos ransomware distributor into a multi-campaign operator using Chaos as one of several concurrent monetization paths on the same host, and I hold it at HIGH.
 
-Defensively that means blocking only the Chaos-specific IOCs in this report will miss the operator's other campaigns on the same IP. Hunting teams should enumerate `forumrutor24.com`, `www.forumrutor24.com`, `gtanuncios.com`, `mail.gtanuncios.com`, `bulgainme.pro`, `mail.bulgainme.pro`, `94.103.1.13` and historical `slayer.ktx.ro` under the broader UTA-2026-005 cluster. The full set is published in the IOC feed.
+Defensively that means blocking only the Chaos-specific IOCs in this report will miss the operator's other campaigns on the same IP. Hunting teams should enumerate `forumrutor24.com`, `www.forumrutor24.com`, `gtanuncios.com`, `mail.gtanuncios.com`, `bulgainme.pro`, `mail.bulgainme.pro`, `94.103.1.13` and historical `slayer.ktx.ro` under the broader <a href="/actors/UTA-2026-005/">UTA-2026-005</a> cluster. The full set is published in the IOC feed.
 
 **VirusTotal refresh (2026-04-23): Cloudflare fronting validated:**
 
@@ -218,7 +218,7 @@ Three of six target IPs are on Ukrainian ASNs, consistent with opportunistic tar
 ### Research Gaps Carried Into This Report
 
 - **Real Orcus C2 upstream is UNKNOWN.** The RAT connects to `127.0.0.1:20268` on the infected host; that loopback address is one end of a chisel or plink tunnel whose external egress cannot be recovered from static analysis alone. Dynamic detonation with egress capture is needed.
-- **Operator identity is still INSUFFICIENT for named-actor attribution.** The `xiang xiang fan` / `lc1393353@gmail.com` / `+86 130 3255 6442` identity recorded as the pre-masking registrant of `gtanuncios.com` is most plausibly a **CN domain-reseller inventory identity**, not the operator. The aged-domain-purchase pattern (10-year-old legitimate classifieds domain acquired from this reseller in 2025-06-28, dormant for 10 months, then pivoted to operator IP in 2026-04-11) is documented attacker tradecraft for reputation laundering. This evidence does NOT upgrade named-actor attribution above INSUFFICIENT, but it is recorded in UTA-2026-005 as a tracked signal: if the same reseller-inventory identity appears on another operator-pivoted domain in the future, that would be a clustering signal.
+- **Operator identity is still INSUFFICIENT for named-actor attribution.** The `xiang xiang fan` / `lc1393353@gmail.com` / `+86 130 3255 6442` identity recorded as the pre-masking registrant of `gtanuncios.com` is most plausibly a **CN domain-reseller inventory identity**, not the operator. The aged-domain-purchase pattern (10-year-old legitimate classifieds domain acquired from this reseller in 2025-06-28, dormant for 10 months, then pivoted to operator IP in 2026-04-11) is documented attacker tradecraft for reputation laundering. This evidence does NOT upgrade named-actor attribution above INSUFFICIENT, but it is recorded in <a href="/actors/UTA-2026-005/">UTA-2026-005</a> as a tracked signal: if the same reseller-inventory identity appears on another operator-pivoted domain in the future, that would be a clustering signal.
 - **Wardow-Orcus crack has no Tier-1/Tier-2 vendor writeup**: used as a community-known identifier, not a cited vendor claim.
 - **Console.Title launch gate and the specific tri-artifact conjunction have no located prior public reporting.** The corpus surveyed is not exhaustive; "no located prior public reporting" is used throughout rather than "first of its kind" to reflect that honest scope.
 - **TorBrowserTor variant is only ~2 weeks into its public-reporting lifecycle.** This publication is among the earliest comprehensive writeups.
@@ -419,7 +419,7 @@ The only analysis paths that *do* trigger the full behavior are (a) running the 
 
 **Why this is distinctive (honest novelty framing).** `Console.Title` reads in malware are not new. They appear in a handful of red-team loaders and pentesting tools where they are used to plant a banner or confirm the execution environment. What has not been located in public reporting is this **specific** combination: `Console.Title` used as a dynamic dropper-path locator paired with `File.ReadLines(title).Last()` batch-line self-extraction, all on top of a fileless registry-blob persistence mechanism that requires the batch file's path to complete the install. Individually, each element has prior art. In combination, no documented public prior reporting has been found. The corpus survey is not exhaustive; a paywalled vendor report or APT-kit disclosure may cover it. Defenders should treat the technique as **uncommon and worth hunting for**, not as globally unprecedented.
 
-This matters beyond this specific kit. The value of documenting the technique is not just hunting UTA-2026-005, because the pattern ports trivially to any malware family that runs a .NET stage underneath a `cmd.exe` host, and any operator reading public writeups can copy the idea. Defenders who build a hunting rule for Console.Title-based self-extraction *generally*, rather than only for the specific IOCs in this kit, will catch future operators who borrow it. Specifically:
+This matters beyond this specific kit. The value of documenting the technique is not just hunting <a href="/actors/UTA-2026-005/">UTA-2026-005</a>, because the pattern ports trivially to any malware family that runs a .NET stage underneath a `cmd.exe` host, and any operator reading public writeups can copy the idea. Defenders who build a hunting rule for Console.Title-based self-extraction *generally*, rather than only for the specific IOCs in this kit, will catch future operators who borrow it. Specifically:
 
 - **Hunt for .NET processes reading `.bat` files from `%USERPROFILE%\Downloads`, `%TEMP%`, or other non-standard locations.** Sysmon file-open telemetry (EID 11 does not cover reads; EDR file-access hooks do) can key on `Image endswith powershell.exe` or `Image contains \.NET\` combined with `FileName endswith .bat`. This catches Stage 4 regardless of whether the operator rotates the mutex GUID, the Defender masquerade names, or the registry path.
 - **Hunt for `svchost.exe` → `cmd.exe` with a command line over 10,000 characters at boot.** This catches the boot reloader regardless of how the payload is obfuscated inside the blob.
@@ -500,7 +500,7 @@ The 8/77 VT detection gap matters. Most vendors detect the generic AppInfo RPC b
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/open-directory-94-103-1-13-20260423/stage5b-decryption-sha256-proof.png" | relative_url }}" alt="PowerShell console output from the Stage-5 decryption script showing two sequential invocations. The second invocation decrypts stage4_resource_HxBTHTPGSMVbIZYM.gz into stage5b_payload and reports Plaintext SHA256 da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8, Plaintext size 1,009,664 bytes, first 8 bytes 4d5a9000... (the PE MZ magic), with Assembly check PE/MZ detected.">
-  <figcaption><em>Figure 10: Stage-5 decryption output establishing the Stage-5b SHA256 `da302511…`, byte-identical across both mymain and myfile builds. The screenshot captures the single most productive hunting anchor in this report: any file on a victim endpoint with this SHA256 confirms UTA-2026-005 infection with effectively zero false-positive risk (the 1,009,664-byte UAC bypass PE is specific to this operator's pre-compiled module).</em></figcaption>
+  <figcaption><em>Figure 10: Stage-5 decryption output establishing the Stage-5b SHA256 `da302511…`, byte-identical across both mymain and myfile builds. The screenshot captures the single most productive hunting anchor in this report: any file on a victim endpoint with this SHA256 confirms <a href="/actors/UTA-2026-005/">UTA-2026-005</a> infection with effectively zero false-positive risk (the 1,009,664-byte UAC bypass PE is specific to this operator's pre-compiled module).</em></figcaption>
 </figure>
 
 ### 5.8 Supporting Toolkit: Orcus RAT v7, Privilege Escalation Chain, Tunneling Stack
@@ -645,7 +645,7 @@ Documenting only the commodity layer (Chaos ransomware, UACME #41, Perun's Fart,
 ## 7. Threat Actor Assessment
 {: .hl-tier-2}
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-005 is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. <a href="/actors/UTA-2026-005/">UTA-2026-005</a> is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
 
 ### 7.1 Attribution Conclusion
 
@@ -653,7 +653,7 @@ Named-actor attribution is INSUFFICIENT at 0 percent. There are zero infrastruct
 
 Family-level identification is DEFINITE at 97 percent. This is the Chaos ransomware builder of 2021 origin, v1 to v5 lineage, configured as the TorBrowserTor variant. That is a family-level identification rather than an actor attribution, because the Chaos builder is publicly available and shared by many unrelated operators.
 
-At operator level I track this as UTA-2026-005, a distinctive trackable cluster resting on a private five-stage crypter with cross-layer key reuse, a cross-build mutex GUID invariant, a byte-identical Stage-5b UAC bypass PE, and a tri-artifact anti-sandbox gate.
+At operator level I track this as <a href="/actors/UTA-2026-005/">UTA-2026-005</a>, a distinctive trackable cluster resting on a private five-stage crypter with cross-layer key reuse, a cross-build mutex GUID invariant, a byte-identical Stage-5b UAC bypass PE, and a tri-artifact anti-sandbox gate.
 
 ### 7.2 Chaos Builder vs Chaos RaaS Group (2025): Mandatory Disambiguation
 
@@ -663,10 +663,10 @@ This distinction is load-bearing for several reasons:
 
 - **Different codebase.** Talos's Chaos RaaS group uses a distinct codebase that does not share the `ConsoleApplication7` namespace, the `driveNotification` class, or the Rijndael-256 CFB + RSA-2048 OAEP encryption pipeline that the analyzed sample implements.
 - **Different TTPs.** Talos's group is reported in an affiliate RaaS model with specific entry patterns (compromised RMM, phishing-to-Cobalt-Strike pipelines) that do not appear in evidence recovered from 94.103.1.13.
-- **Different operator profile.** UTA-2026-005 runs a private crypter and a pre-production multi-campaign open directory; Talos's group operates an affiliate program with a different infrastructure pattern.
+- **Different operator profile.** <a href="/actors/UTA-2026-005/">UTA-2026-005</a> runs a private crypter and a pre-production multi-campaign open directory; Talos's group operates an affiliate program with a different infrastructure pattern.
 - **Same family name, different actors.** Just as "Mimikatz" identifies a tool used by many actors (not a single actor), "Chaos" identifies a ransomware family used by many actors. Confusing family with actor is a common attribution error this blockquote exists to prevent.
 
-H2 (the hypothesis that UTA-2026-005 is the Talos-named Chaos RaaS group) is therefore **explicitly ruled out** in the hypothesis analysis below.
+H2 (the hypothesis that <a href="/actors/UTA-2026-005/">UTA-2026-005</a> is the Talos-named Chaos RaaS group) is therefore **explicitly ruled out** in the hypothesis analysis below.
 
 ### 7.3 Alternative Hypothesis Analysis (ACH)
 
@@ -680,7 +680,7 @@ Winner: **H1 (Unattributed financially-motivated operator)**, confidence MODERAT
 
 ### 7.4 Key Operator Fingerprints (Hunting Anchors)
 
-These are the evidence points the UTA-2026-005 cluster is built on. Any future sample matching one or more of these strengthens the cluster and should be tagged UTA-2026-005 on sight.
+These are the evidence points the <a href="/actors/UTA-2026-005/">UTA-2026-005</a> cluster is built on. Any future sample matching one or more of these strengthens the cluster and should be tagged <a href="/actors/UTA-2026-005/">UTA-2026-005</a> on sight.
 
 | Anchor | Type | Strength |
 |---|---|---|
@@ -705,15 +705,15 @@ These are the evidence points the UTA-2026-005 cluster is built on. Any future s
 - **Multi-tenant operator host.** 94.103.1.13 concurrently serves at least three parallel parasitic campaigns alongside the Chaos distribution: `forumrutor24.com` (Russian forum theme, 34 days active), `gtanuncios.com` (aged 10-year classifieds domain acquired from a CN reseller, pivoted 2026-04-11), and `bulgainme.pro` (short-lived `.pro` with webmail). All three use Cloudflare fronting + mixed registrars + aged-domain-purchase tradecraft, see Section 4 Infrastructure Context subsection for full breakdown. This reframes the operator from a single-campaign Chaos distributor to a **multi-campaign operator** running parallel monetization paths on the same infrastructure.
 - **Historical operator rotation evidence.** `slayer.ktx.ro` resolved to 94.103.1.13 on 2025-12-18-19 (brief 36-minute burst, 8 resolutions): the IP has been in operator rotation approximately four months before the Chaos campaign, establishing a months-long cadence for operator activity on this host.
 - **Possible secondary: 172.86.76.198.** LOW confidence operator-controlled; observed in tunnel-script artifacts but role is ambiguous. Could be a relay, a staging host, or an unrelated pivot point, evidence is not strong enough to mark HIGH.
-- **Reseller-inventory identity (NOT operator attribution).** Pre-masking WHOIS for `gtanuncios.com` recorded registrant `xiang xiang fan`, email `lc1393353@gmail.com`, phone `+86 130 3255 6442`, city `lin fen` (Linfen, Shanxi, China). The ten-month dormant hold between domain transfer (2025-06-28) and operator pivot (2026-04-11) is consistent with CN domain-broker inventory rather than direct operator identity. This identity is **tracked in UTA-2026-005** for future cross-campaign correlation but does NOT elevate attribution above INSUFFICIENT.
+- **Reseller-inventory identity (NOT operator attribution).** Pre-masking WHOIS for `gtanuncios.com` recorded registrant `xiang xiang fan`, email `lc1393353@gmail.com`, phone `+86 130 3255 6442`, city `lin fen` (Linfen, Shanxi, China). The ten-month dormant hold between domain transfer (2025-06-28) and operator pivot (2026-04-11) is consistent with CN domain-broker inventory rather than direct operator identity. This identity is **tracked in <a href="/actors/UTA-2026-005/">UTA-2026-005</a>** for future cross-campaign correlation but does NOT elevate attribution above INSUFFICIENT.
 - **Bulletproof classification: SUSPECTED.** AS209207 is 3 months old (allocated 2026-01-19), Russia-registered, Albania-routed through a single upstream (AS48014 AlbaHost) with historical bogon announcements. The ASN's self-domain `dhost.su` uses a `.su` TLD typical of operator-friendly Russian-speaking hosting providers. Profile is consistent with bulletproof-adjacent hosting, but no named-BPH-database entry was located at the time of this writing.
 
 ### 7.6 Gaps That Would Strengthen or Resolve Attribution
 
 - A second sample containing the Stage-5b SHA256 `da302511…` or the mutex GUID `9f67b5ed-…` would permit high-confidence cross-campaign clustering.
-- A new build exhibiting the same cross-layer AES + XOR key-reuse pattern (any new passphrase/key pair reused at three crypter layers) would confirm the private crypter is a persistent builder (raising UTA-2026-005 confidence from MODERATE to HIGH).
+- A new build exhibiting the same cross-layer AES + XOR key-reuse pattern (any new passphrase/key pair reused at three crypter layers) would confirm the private crypter is a persistent builder (raising <a href="/actors/UTA-2026-005/">UTA-2026-005</a> confidence from MODERATE to HIGH).
 - Dynamic detonation capturing the real Orcus C2 endpoint behind `127.0.0.1:20268` would provide the first infrastructure pivot beyond the staging server.
-- Reappearance of the co-tenant triad (`forumrutor24.com`, `gtanuncios.com`, `bulgainme.pro`) on a different operator IP alongside Chaos-lineage samples would establish UTA-2026-005 continuity across infrastructure rotation.
+- Reappearance of the co-tenant triad (`forumrutor24.com`, `gtanuncios.com`, `bulgainme.pro`) on a different operator IP alongside Chaos-lineage samples would establish <a href="/actors/UTA-2026-005/">UTA-2026-005</a> continuity across infrastructure rotation.
 - Reappearance of the `xiang xiang fan` / `lc1393353@gmail.com` reseller-inventory identity on another aged-domain acquisition that subsequently pivots to operator infrastructure would elevate the "CN-broker-preference" signal from LOW to MODERATE.
 - Any language, locale, or developer-environment artifact in future decompiled builds would reduce geographic-attribution gaps.
 - A second open directory with overlapping scripts or overlapping tri-artifact gate coverage would strengthen the cluster.
@@ -725,7 +725,7 @@ Consolidated view of every major analytical claim in this report with its confid
 | Claim | Confidence | Evidence Basis |
 |---|---|---|
 | Chaos ransomware builder family (TorBrowserTor variant, v4/v5 lineage) | **DEFINITE (97%)** | 14 of 14 canonical Chaos v4/v5 feature-set matches in decompiled Stage-5a; byte-identical Stage-5b module across two builds; builder-default BTC wallets confirmed via WalletExplorer clustering |
-| UTA-2026-005 is a single operator cluster | **MODERATE (72%)** | Six distinctive characteristics (five technical, one infrastructure) reach B2 Admiralty threshold; cannot rule out tightly-cooperating operator duo sharing tooling |
+| <a href="/actors/UTA-2026-005/">UTA-2026-005</a> is a single operator cluster | **MODERATE (72%)** | Six distinctive characteristics (five technical, one infrastructure) reach B2 Admiralty threshold; cannot rule out tightly-cooperating operator duo sharing tooling |
 | Named-actor attribution | **INSUFFICIENT (0%)** | Zero infrastructure overlaps with named actor clusters, zero Tier-1/Tier-2 vendor attributions, zero named-actor TTP matches |
 | 2025 Talos "Chaos RaaS group", this activity | **RULED OUT** | Talos explicitly distinguishes the 2025 RaaS actor from the 2021-origin Chaos builder lineage; the sample is builder-variant, wrong codebase |
 | 94.103.1.13 is operator-controlled staging server | **HIGH** | Open directory contents directly align with loader chain artifacts (`t.ps1`/`t2.ps1`/`potato.ps1` hardcode this IP); multi-tenant co-tenancy pattern consistent with operator rotation |
@@ -745,7 +745,7 @@ Consolidated view of every major analytical claim in this report with its confid
 ## 8. Detection & Response
 {: .hl-tier-2}
 
-This section covers the minimum defender orientation for the UTA-2026-005 kit. Detection content (YARA, Sigma, Suricata, EDR queries) is delivered separately in [open-directory-94-103-1-13-20260423-detections.md](/hunting-detections/open-directory-94-103-1-13-20260423-detections/). This report does not duplicate those rules. What follows is the prioritized hunting and response orientation.
+This section covers the minimum defender orientation for the <a href="/actors/UTA-2026-005/">UTA-2026-005</a> kit. Detection content (YARA, Sigma, Suricata, EDR queries) is delivered separately in [open-directory-94-103-1-13-20260423-detections.md](/hunting-detections/open-directory-94-103-1-13-20260423-detections/). This report does not duplicate those rules. What follows is the prioritized hunting and response orientation.
 
 ### 8.1 Detection Priorities (hunt these first)
 
@@ -757,7 +757,7 @@ The two cross-build invariants are the highest-priority hunting anchors this inv
 
 ### 8.2 Persistence Targets (what to look for and remove)
 
-If incident response confirms a UTA-2026-005 infection, these are the artifacts defenders must enumerate and remediate. They are listed as *targets*, not as removal commands.
+If incident response confirms a <a href="/actors/UTA-2026-005/">UTA-2026-005</a> infection, these are the artifacts defenders must enumerate and remediate. They are listed as *targets*, not as removal commands.
 
 - Scheduled task `\Microsoft Defender` at task-scheduler root path (Hidden, RunLevel HIGHEST, BOOT trigger).
 - Registry value `HKLM\Software\Microsoft Defender\Payload` (the ~1.4 MB encoded blob).
@@ -818,11 +818,11 @@ Static signature-based AV scans for patterns in the file bytes. `mymain.bat` and
 
 SUSPECTED, not CONFIRMED. AS209207 is three months old (allocated 2026-01-19), Russia-registered, Albania-routed through a single upstream (AS48014 AlbaHost) with a history of announcing bogon networks. The profile is consistent with bulletproof-adjacent hosting (abuse-tolerant, short-lived infrastructure, non-cooperative registration) but no named-BPH-database entry was located, and the ASN is too new for a meaningful Spamhaus DROP/SBL listing history. No named-institution attribution is cited without a live source.
 
-**Q7: What would change my attribution assessment from UTA-2026-005 to a named actor?**
+**Q7: What would change my attribution assessment from <a href="/actors/UTA-2026-005/">UTA-2026-005</a> to a named actor?**
 
 (a) A Tier-1/Tier-2 vendor advisory linking this specific kit (private crypter, mutex GUID, Stage-5b PE hash, tri-artifact gate) to a named group; (b) passive DNS history for 94.103.1.13 showing prior named-actor use; (c) recovery of the real Orcus C2 upstream via dynamic detonation and correlation to a named-actor C2 pattern; or (d) a second campaign with the same cross-build invariants attributed by another vendor. None of these are currently available.
 
-**Q8: The sample's BTC wallets appear in older campaigns. Does that mean UTA-2026-005 is responsible for those older campaigns?**
+**Q8: The sample's BTC wallets appear in older campaigns. Does that mean <a href="/actors/UTA-2026-005/">UTA-2026-005</a> is responsible for those older campaigns?**
 
 No. The wallets `bc1qw0ll8p9m8uezhqhyd7z459ajrk722yn8c5j4fg` and `17CqMQFeuB3NTzJ2X28tfRmWaPyPQgvoHV` are **Chaos builder defaults**, hard-coded into the builder template and reused verbatim by many unrelated operators who use the same builder. WalletExplorer clustering (different cluster IDs, activity predating this campaign) confirms the shared-default pattern. Treat these wallets as family-level indicators, not operator fingerprints. See Section 4 (Wallets & Telegram subsection) for the full explanation.
 
@@ -840,7 +840,7 @@ The two most consequential gaps in this investigation are the unknown Orcus C2 u
 ### 10.1 Confirmed Gaps
 
 - **Real Orcus C2 upstream: UNKNOWN.** The RAT connects to `127.0.0.1:20268`; the external endpoint behind the chisel/plink tunnel cannot be recovered from static analysis. Dynamic detonation with egress capture is required.
-- **Operator identity: INSUFFICIENT for named-actor attribution.** The `xiang xiang fan` / `lc1393353@gmail.com` / `+86 130 3255 6442` identity recorded as pre-masking registrant of `gtanuncios.com` is most plausibly a CN domain-reseller inventory identity, not direct operator, ten-month dormant hold between acquisition (2025-06-28) and operator pivot (2026-04-11) is documented aged-domain-purchase tradecraft. Tracked in UTA-2026-005 for future correlation, not elevated to attribution.
+- **Operator identity: INSUFFICIENT for named-actor attribution.** The `xiang xiang fan` / `lc1393353@gmail.com` / `+86 130 3255 6442` identity recorded as pre-masking registrant of `gtanuncios.com` is most plausibly a CN domain-reseller inventory identity, not direct operator, ten-month dormant hold between acquisition (2025-06-28) and operator pivot (2026-04-11) is documented aged-domain-purchase tradecraft. Tracked in <a href="/actors/UTA-2026-005/">UTA-2026-005</a> for future correlation, not elevated to attribution.
 - **Wardow-Orcus crack authoritative attribution.** No Tier-1/Tier-2 vendor writeup exists for this specific crack. Wardow-crack identifiers are used as community-known identifiers, not vendor-sourced claims.
 - **Console.Title launch gate prior art.** No public reporting has been located describing the Console.Title + File.ReadLines batch-line self-extraction combination. The corpus surveyed is not exhaustive; absence of reporting is not proof of novelty.
 - **Tri-artifact gate prior art.** Similarly, no prior public reporting has been located for the specific `admin` + `%TEMP%\VBE\` + `%TEMP%\mapping.csv` conjunction. Combined multi-artifact gating in general is well-documented; this specific triple in the inverted direction is not.
@@ -854,19 +854,19 @@ The two most consequential gaps in this investigation are the unknown Orcus C2 u
 - **Stage-5b is a pre-compiled module, not per-build compiled.** Byte-identical SHA256 across both builds is the direct evidence. The builder bundles a single compiled Stage-5b rather than recompiling it per campaign: an operational trade-off that reduces unique samples but produces a high-value cross-build invariant hash.
 - **The tri-artifact gate is an operator-convenience check.** MODERATE-confidence interpretation. Static analysis cannot prove it is not a decoy; hypothesis 1 (convenience) is more parsimonious given the operator must maintain and use these tools, and the probability of self-infection is real.
 - **Real Orcus C2 is operator-controlled.** Analysis assumes the upstream endpoint behind the loopback tunnel is a server the operator controls (either self-hosted or on a third-party VPS). This is a conventional assumption for RAT infrastructure but cannot be verified from static analysis alone.
-- **UTA-2026-005 is a single operator cluster.** MODERATE confidence (72% per UTA file, updated after the 2026-04-23 multi-tenant-host finding). The six distinctive characteristics: five technical (private crypter, cross-build mutex, cross-build Stage-5b, tri-artifact gate, operator-scale parallel builds) and one infrastructure/contextual (multi-tenant operator host with concurrent parasitic co-tenant campaigns), collectively reach B2 Admiralty threshold, but two closely-cooperating operators sharing tooling cannot be ruled out. A second independent campaign would clarify.
+- **<a href="/actors/UTA-2026-005/">UTA-2026-005</a> is a single operator cluster.** MODERATE confidence (72% per UTA file, updated after the 2026-04-23 multi-tenant-host finding). The six distinctive characteristics: five technical (private crypter, cross-build mutex, cross-build Stage-5b, tri-artifact gate, operator-scale parallel builds) and one infrastructure/contextual (multi-tenant operator host with concurrent parasitic co-tenant campaigns), collectively reach B2 Admiralty threshold, but two closely-cooperating operators sharing tooling cannot be ruled out. A second independent campaign would clarify.
 
 ### 10.3 Evidence That Would Change the Assessment
 
 | Evidence | What it would change |
 |---|---|
-| A second sample with Stage-5b SHA256 `da302511…` | UTA-2026-005 confidence from MODERATE to HIGH |
+| A second sample with Stage-5b SHA256 `da302511…` | <a href="/actors/UTA-2026-005/">UTA-2026-005</a> confidence from MODERATE to HIGH |
 | A second sample with mutex GUID `9f67b5ed-…` | Same, cross-campaign cluster confirmed |
 | A Tier-1/Tier-2 vendor writeup linking this kit to a named group | Named-actor attribution from INSUFFICIENT to MODERATE/HIGH |
 | Passive DNS history tying 94.103.1.13 to named-actor infrastructure | Same, enables named-actor attribution |
 | Real Orcus C2 endpoint via dynamic detonation | Opens infrastructure pivot; may enable attribution if the endpoint matches known clusters |
 | A language/locale artifact in future decompiled builds | Enables geographic attribution |
-| Reappearance of the co-tenant triad (`forumrutor24.com` + `gtanuncios.com` + `bulgainme.pro`) on a different operator IP with Chaos-lineage samples | Establishes UTA-2026-005 continuity across infrastructure rotation |
+| Reappearance of the co-tenant triad (`forumrutor24.com` + `gtanuncios.com` + `bulgainme.pro`) on a different operator IP with Chaos-lineage samples | Establishes <a href="/actors/UTA-2026-005/">UTA-2026-005</a> continuity across infrastructure rotation |
 | Reappearance of `xiang xiang fan` / `lc1393353@gmail.com` reseller-inventory identity on another operator-pivoted aged-domain acquisition | Elevates the CN-broker-preference signal from LOW to MODERATE |
 | Confirmed victim telemetry | Shifts threat level from HIGH (capability-based) toward CRITICAL (impact-based) |
 | Spamhaus DROP/SBL listing for AS209207 | Upgrades bulletproof classification from SUSPECTED to CONFIRMED |

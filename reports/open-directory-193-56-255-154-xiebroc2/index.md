@@ -37,7 +37,7 @@ stix_bundle: /stix/open-directory-193-56-255-154-xiebroc2.json
 ## 1. Executive Summary
 {: .hl-tier-1}
 
-An open directory at `193.56.255.154` (AS9009 / M247, Singapore) exposed a complete multi-framework C2 toolkit, three distinct attack payloads publicly accessible on a Windows Server 2025 VPS. XiebroC2 v3.1 (Go implant, 36 post-exploitation commands, TCP port 4444) and two Covenant GruntStager builds (HTTP on port 443) both call back to the same server, giving the operator redundant access that survives single-vector blocking. Infrastructure pivoting identified a probable second server at `92.60.75.103` (MODERATE confidence, see Section 7) hosting a novel undocumented DLL beacon. The operator is tracked as UTA-2026-002 *(an internal tracking label used by The Hunters Ledger, see Section 6)* at MODERATE confidence (72%); seven simultaneous OPSEC failures rule out sophisticated nation-state involvement.
+An open directory at `193.56.255.154` (AS9009 / M247, Singapore) exposed a complete multi-framework C2 toolkit, three distinct attack payloads publicly accessible on a Windows Server 2025 VPS. XiebroC2 v3.1 (Go implant, 36 post-exploitation commands, TCP port 4444) and two Covenant GruntStager builds (HTTP on port 443) both call back to the same server, giving the operator redundant access that survives single-vector blocking. Infrastructure pivoting identified a probable second server at `92.60.75.103` (MODERATE confidence, see Section 7) hosting a novel undocumented DLL beacon. The operator is tracked as <a href="/actors/UTA-2026-002/">UTA-2026-002</a> *(an internal tracking label used by The Hunters Ledger, see Section 6)* at MODERATE confidence (72%); seven simultaneous OPSEC failures rule out sophisticated nation-state involvement.
 
 The hardcoded AES-128-ECB key `QWERt_CSDMAHUATW` lets defenders decrypt any captured XiebroC2 traffic offline. The shared Covenant session token `75db-99b1-25fe4e9afbe58696-320bea73` appears in every HTTP POST from either stager build. One network rule catches both delivery methods. Technical depth and detection coverage follow in Sections 4-9.
 
@@ -755,7 +755,7 @@ $bytes = New-Object IO.Compression.DeflateStream(
 ## 6. Threat Actor Assessment
 {: .hl-tier-2}
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-002 is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. <a href="/actors/UTA-2026-002/">UTA-2026-002</a> is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
 
 ## 6.1 Attribution Summary
 {: .hl-tier-2}
@@ -1253,7 +1253,7 @@ This section is a brief orientation for readers who need to understand what to a
 
 ### MODERATE (Reasonable Evidence, Notable Gaps)
 - Same-operator hypothesis linking 193.56.255.154 and 92.60.75.103 (operational pattern match; no cryptographic or certificate-level confirmation)
-- UTA-2026-002 as a distinct trackable operator (72% confidence; three distinguishing characteristics identified)
+- <a href="/actors/UTA-2026-002/">UTA-2026-002</a> as a distinct trackable operator (72% confidence; three distinguishing characteristics identified)
 - Operator profile: individual or very small team, Chinese-language environment, intermediate sophistication
 - SOCKS5 lateral movement risk (capability confirmed in code; no active session observed)
 

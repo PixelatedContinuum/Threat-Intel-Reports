@@ -109,9 +109,9 @@ I score the campaign 9.5 out of 10, which is CRITICAL, and that rests on the con
 
 ### Threat Actor Summary
 
-This is a **single-operator** case tracked as **UTA-2026-013** *(an internal tracking label used by The Hunters Ledger, see Section 9)*. This report is the first public attribution; no prior vendor coverage exists (full cross-vendor naming check in §9).
+This is a **single-operator** case tracked as **<a href="/actors/UTA-2026-013/">UTA-2026-013</a>** *(an internal tracking label used by The Hunters Ledger, see Section 9)*. This report is the first public attribution; no prior vendor coverage exists (full cross-vendor naming check in §9).
 
-- **UTA-2026-013**: high-MODERATE 78% within the canonical MODERATE band (70-85%). Turkish-speaking, Turkish-located, intra-Turkey single-thread operator. Five-axis Turkish convergence (language + handle + self-branding + target + residential ISP) is the strongest single-dimension attribution evidence in the entire parent campaign. Espionage tradecraft pattern at HIGH confidence (85%) based on 73+ day patient dwell + 780-file zero-monetization sweep across all operator artifacts. Sub-type classification: state-aligned-loosely-controlled (~40%) and political/factional intelligence (~35%) are tied at the MODERATE high-end within the band; commercial / hire-for-spy / insurance-fraud-prep / criminal-opportunist are effectively ruled out by the zero-monetization sweep. Real-world identity remains **INSUFFICIENT**, the public GitHub handle (`MehmetARPA`) is preserved as a behavioral IOC only and is not a real-name identification. The handle's surname is a real Turkish surname, "Mehmet" is among the most common Turkish given names, and `ARPA` is the operator's self-branded codename for the analytics platform; three competing handle-interpretation hypotheses remain indistinguishable from current evidence.
+- **<a href="/actors/UTA-2026-013/">UTA-2026-013</a>**: high-MODERATE 78% within the canonical MODERATE band (70-85%). Turkish-speaking, Turkish-located, intra-Turkey single-thread operator. Five-axis Turkish convergence (language + handle + self-branding + target + residential ISP) is the strongest single-dimension attribution evidence in the entire parent campaign. Espionage tradecraft pattern at HIGH confidence (85%) based on 73+ day patient dwell + 780-file zero-monetization sweep across all operator artifacts. Sub-type classification: state-aligned-loosely-controlled (~40%) and political/factional intelligence (~35%) are tied at the MODERATE high-end within the band; commercial / hire-for-spy / insurance-fraud-prep / criminal-opportunist are effectively ruled out by the zero-monetization sweep. Real-world identity remains **INSUFFICIENT**, the public GitHub handle (`MehmetARPA`) is preserved as a behavioral IOC only and is not a real-name identification. The handle's surname is a real Turkish surname, "Mehmet" is among the most common Turkish given names, and `ARPA` is the operator's self-branded codename for the analytics platform; three competing handle-interpretation hypotheses remain indistinguishable from current evidence.
 
 ### For Technical Teams
 
@@ -749,11 +749,11 @@ The full IOC feed is at [`/ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.
 ## 9. Threat Actor Assessment
 {: .hl-tier-2}
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-013 is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. <a href="/actors/UTA-2026-013/">UTA-2026-013</a> is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
 
 ### Attribution Conclusion
 
-The threat actor is UTA-2026-013, a Turkish-speaking, Turkish-located, intra-Turkey single-thread operator. I hold that at MODERATE, 78 percent, which is high-MODERATE within the 70-85% band.
+The threat actor is <a href="/actors/UTA-2026-013/">UTA-2026-013</a>, a Turkish-speaking, Turkish-located, intra-Turkey single-thread operator. I hold that at MODERATE, 78 percent, which is high-MODERATE within the 70-85% band.
 
 - **Why this confidence:** Five-axis Turkish geographic convergence (language + handle + self-branding + target + residential ISP) is the strongest single-dimension attribution evidence in the entire parent campaign; 73+ day patient dwell + 780-file zero-monetization sweep across all operator artifacts; espionage tradecraft pattern at HIGH confidence (85%); operator residential IP captured during active session 2026-05-20 21:22-21:30 UTC = late-evening Turkish local time.
 - **What's missing:** Zero Tier-2 vendor corroboration at investigation date. This is the first public attribution; real-world identity remains INSUFFICIENT (three competing handle-interpretation hypotheses); state-aligned-vs-political-factional sub-type discrimination INSUFFICIENT (both at MODERATE high-end within band).
@@ -773,7 +773,7 @@ This report is the **first public attribution** of this operator. Cross-vendor n
 | VirusTotal threat-actor associations | NONE, `209.38.205.158` is 0/91 clean with zero related threat actors; operator residential IP is also 0/91 clean |
 | MITRE ATT&CK Groups | NONE, no documented Turkish-government-aligned APT TTP-overlap (Sea Turtle / Teal Kurma / Marbled Dust have zero documented BFSI targeting and zero TTP overlap with this campaign) |
 
-**Publication-significance signal (not a confidence boost):** Sub-report 2 in this same parent series (Russian Gemini, UTA-2026-012) received Trend Micro Tier-2 corroboration three days before disclosure, which upgraded its attribution from MODERATE 75% to MODERATE 83%. This sub-report (Turkish ARPA, UTA-2026-013) has the opposite profile: zero prior public attribution exists. The absence of corroboration is a publication-significance signal (this is first-ever vendor attribution via UTA designation), **not** a confidence reduction relative to attribution-anchor evidence. Confidence remains at high-MODERATE 78% based on primary-source operator-filesystem evidence alone.
+**Publication-significance signal (not a confidence boost):** Sub-report 2 in this same parent series (Russian Gemini, <a href="/actors/UTA-2026-012/">UTA-2026-012</a>) received Trend Micro Tier-2 corroboration three days before disclosure, which upgraded its attribution from MODERATE 75% to MODERATE 83%. This sub-report (Turkish ARPA, <a href="/actors/UTA-2026-013/">UTA-2026-013</a>) has the opposite profile: zero prior public attribution exists. The absence of corroboration is a publication-significance signal (this is first-ever vendor attribution via UTA designation), **not** a confidence reduction relative to attribution-anchor evidence. Confidence remains at high-MODERATE 78% based on primary-source operator-filesystem evidence alone.
 
 ### Five-Axis Turkish Convergence
 
@@ -906,7 +906,7 @@ Findings organized by confidence level for the higher-level view:
 - OpenClaw upstream substrate (presence of `~/.openclaw/` and `~/.clawdbot/` directories on operator host)
 - Moonshot AI / Kimi LLM provider choice (operator's `IDENTITY.md` content reference + `ai_service.py` API binding)
 - Espionage tradecraft pattern (73+ day patient dwell + 780-file zero-monetization sweep)
-- UTA-2026-013 attribution at high-MODERATE 78% within MODERATE band (5-axis Turkish convergence)
+- <a href="/actors/UTA-2026-013/">UTA-2026-013</a> attribution at high-MODERATE 78% within MODERATE band (5-axis Turkish convergence)
 - Insider-recruitment third-party-detection-before-victim-org-internal-detection structural rarity (4-factor combination confirmed against 2024-2026 published corpus)
 - Reverse-SSH tunnel architecture documentation (mapping operator VPS `:18080` to insider workstation `localhost:8089`)
 
@@ -929,7 +929,7 @@ Findings organized by confidence level for the higher-level view:
 
 ### INSUFFICIENT (Cannot Assess)
 
-- Real-world identity of UTA-2026-013 operator (handle preserved as behavioral IOC only; not a real-name identification)
+- Real-world identity of <a href="/actors/UTA-2026-013/">UTA-2026-013</a> operator (handle preserved as behavioral IOC only; not a real-name identification)
 - State-aligned-vs-political-factional sub-type discrimination (both at MODERATE high-end with no ruling artifact)
 - Insider intent classification (cooperative / coerced / deceived / compromised-account)
 - Insider current employment status with the victim organization
@@ -1016,7 +1016,7 @@ The correct framing is that the JWT lifetime is set by the customer in their Ins
 
 ### Attribution Coverage Status: CONFIRMED
 
-I initially claimed UTA-2026-013 had zero prior public attribution across Trend Micro, Mandiant, CrowdStrike, Kaspersky, the Hunt.io threat-actor catalog, MITRE ATT&CK groups, and VirusTotal threat-actor associations.
+I initially claimed <a href="/actors/UTA-2026-013/">UTA-2026-013</a> had zero prior public attribution across Trend Micro, Mandiant, CrowdStrike, Kaspersky, the Hunt.io threat-actor catalog, MITRE ATT&CK groups, and VirusTotal threat-actor associations.
 
 After a full cross-vendor naming check that claim is CONFIRMED. Zero prior coverage exists across every reviewed source, and the cross-vendor naming table in Section 9 carries the detail. The absence of prior coverage is a publication-significance signal, **not** a confidence reduction.
 

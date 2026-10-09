@@ -25,14 +25,14 @@ test('a detection edit routes to the manifest AND the ATT&CK-table gate', functi
   // Both derive from the same markdown. The ATT&CK tables derive from the
   // manifest in turn, so an edit that moves one moves the other.
   var p = SG.plan(['hunting-detections/acme-detections.md']);
-  assert.deepEqual(ids(p), ['detection-attack', 'manifest']);
+  assert.deepEqual(ids(p), ['actors', 'detection-attack', 'manifest']);
 });
 
 test('a DELETED detection file still routes to the manifest gate', function () {
   // A deletion makes the manifest stale exactly as an edit does. Filtering
   // deletions out of the staged list would skip the check that catches it.
   var p = SG.plan(['hunting-detections/gone-detections.md'], { existing: [] });
-  assert.deepEqual(ids(p), ['detection-attack', 'manifest']);
+  assert.deepEqual(ids(p), ['actors', 'detection-attack', 'manifest']);
 });
 
 test('an IOC feed edit routes to the index, the viewer tables AND the safety gate',
@@ -49,7 +49,7 @@ test('a catalog edit routes to the index, the viewer tables AND the tag gate',
     // Publication status gates the first two; the tag vocabulary gates the third,
     // because the catalog is the only place a retired spelling can come back.
     var p = SG.plan(['_data/catalog.yml']);
-    assert.deepEqual(ids(p), ['ioc-index', 'ioc-tables', 'tags']);
+    assert.deepEqual(ids(p), ['actors', 'ioc-index', 'ioc-tables', 'tags']);
   });
 
 test('a vocabulary edit routes to the tag gate, not the catalog alone', function () {
@@ -64,7 +64,7 @@ test('A REPORT EDIT ROUTES TO THE VIEWER TABLES, because front matter is half th
     // `unlisted: true` is the other half of the publication signal. A go-live that
     // flips only the front matter must still reach the gate that would notice.
     var p = SG.plan(['reports/acme/index.md'], { existing: ['reports/acme/index.md'] });
-    assert.deepEqual(ids(p), ['embargo-artifacts', 'ioc-tables']);
+    assert.deepEqual(ids(p), ['actors', 'embargo-artifacts', 'ioc-tables']);
   });
 
 test('a surviving viewer stub routes to its own gate', function () {
@@ -82,7 +82,7 @@ test('staging a generated artifact by hand still gates it', function () {
   // An ATT&CK version bump rewrites the catalog and nothing else. Without this
   // route the 57 generated tables would go stale with every gate still green.
   assert.deepEqual(ids(SG.plan(['tools/report-tooling/data/attack-techniques.tsv'])),
-    ['detection-attack']);
+    ['actors', 'detection-attack']);
 });
 
 test('a wire data edit routes to the wire gate', function () {
@@ -129,7 +129,7 @@ test('one check is queued once however many files trigger it', function () {
     'hunting-detections/b-detections.md',
     'hunting-detections/c-detections.md'
   ]);
-  assert.deepEqual(ids(p), ['detection-attack', 'manifest']);
+  assert.deepEqual(ids(p), ['actors', 'detection-attack', 'manifest']);
 });
 
 test('a mixed commit queues every check it touches, deduplicated', function () {
@@ -144,7 +144,7 @@ test('a mixed commit queues every check it touches, deduplicated', function () {
     'README.md'
   ], { existing: ['reports/one/index.md', 'reports/two/index.md'] });
   assert.deepEqual(ids(p),
-    ['detection-attack', 'embargo-artifacts', 'feed-attack', 'feed-hygiene', 'ioc-index',
+    ['actors', 'detection-attack', 'embargo-artifacts', 'feed-attack', 'feed-hygiene', 'ioc-index',
      'ioc-tables', 'manifest', 'tags', 'wire']);
   assert.deepEqual(p.reports.sort(), ['reports/one/index.md', 'reports/two/index.md']);
   assert.equal(p.owed.length, 1);
@@ -158,7 +158,7 @@ test('every queued check carries the reason it was queued, for the hook output',
 
 test('backslash paths are accepted, since git on Windows can hand them over', function () {
   var p = SG.plan(['hunting-detections\\acme-detections.md']);
-  assert.deepEqual(ids(p), ['detection-attack', 'manifest']);
+  assert.deepEqual(ids(p), ['actors', 'detection-attack', 'manifest']);
 });
 
 /* --- STIX bundle safety trigger, 2026-09-14 ---------------------------------
@@ -200,6 +200,19 @@ test('a mixed commit still wants it exactly once, alongside everything else', fu
   ]);
   assert.equal(p.wantBundleSafety, true);
   assert.deepEqual(ids(p),
-    ['detection-attack', 'embargo-artifacts', 'feed-attack', 'feed-hygiene', 'ioc-index',
+    ['actors', 'detection-attack', 'embargo-artifacts', 'feed-attack', 'feed-hygiene', 'ioc-index',
      'ioc-tables', 'manifest', 'wire']);
+});
+
+test('the actor index routes on its record, its generated index, a stub page, the catalog, a report and a detection page', function () {
+  // Every input the index derives from, plus its own outputs, so a bare
+  // designation added to a report lands with its link rather than at the next
+  // campaign publish. A stylesheet edit does not route here.
+  ['_data/actors.yml', '_data/actors_index.yml', 'actors/UTA-2026-001/index.md',
+   '_data/catalog.yml', 'reports/acme/index.md', 'hunting-detections/acme-detections.md',
+   'tools/report-tooling/data/attack-techniques.tsv'].forEach(function (path) {
+    assert.ok(ids(SG.plan([path], { existing: [path] })).indexOf('actors') > -1, path);
+  });
+  assert.deepEqual(ids(SG.plan(['_data/actors.yml'])), ['actors']);
+  assert.deepEqual(ids(SG.plan(['actors/index.md', 'assets/css/custom.css'])), []);
 });

@@ -34,14 +34,14 @@ stix_bundle: /stix/new-files-found-20260408.json
 
 ---
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-004 is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. <a href="/actors/UTA-2026-004/">UTA-2026-004</a> is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
 
 ---
 
 ## 1. Executive Summary
 {: .hl-tier-1}
 
-A previously identified threat actor, UTA-2026-004 *(an internal tracking label used by The Hunters Ledger, see Section 8)*, was found staging a complete offensive toolkit across 106 files on the same open directory documented on 6 April 2026. The toolkit includes cracked Cobalt Strike 4.9.1, a four-generation custom implant development chain whose newest generation is still work-in-progress, and a Layer 2 network tunneling module. Overall risk is HIGH, 7.5 out of 10. I assess the toolkit as pre-deployment, with no confirmed victims. The highest-priority defensive finding is an EAX-redirect process injection technique that bypasses the detection logic most endpoint security products use for this attack class. 72 of the 98 samples submitted to VirusTotal had no prior submissions and no prior public reporting.
+A previously identified threat actor, <a href="/actors/UTA-2026-004/">UTA-2026-004</a> *(an internal tracking label used by The Hunters Ledger, see Section 8)*, was found staging a complete offensive toolkit across 106 files on the same open directory documented on 6 April 2026. The toolkit includes cracked Cobalt Strike 4.9.1, a four-generation custom implant development chain whose newest generation is still work-in-progress, and a Layer 2 network tunneling module. Overall risk is HIGH, 7.5 out of 10. I assess the toolkit as pre-deployment, with no confirmed victims. The highest-priority defensive finding is an EAX-redirect process injection technique that bypasses the detection logic most endpoint security products use for this attack class. 72 of the 98 samples submitted to VirusTotal had no prior submissions and no prior public reporting.
 
 **What Was Found**
 
@@ -57,7 +57,7 @@ Continued monitoring of the open directory at `172.105.0.126:8888` surfaced 106 
 
 **Why This Report Was Written**
 
-The original April 6 report documented the existence of OpenStrike and confirmed UTA-2026-004's custom implant development. It did not have visibility into the complete CS installation, the full beacon development chain from prototype to current work-in-progress, the CovertVPN network tunneling capability, or the EAX-redirect process hollowing technique embedded in the Artifact Kit service variant. This report closes those gaps.
+The original April 6 report documented the existence of OpenStrike and confirmed <a href="/actors/UTA-2026-004/">UTA-2026-004</a>'s custom implant development. It did not have visibility into the complete CS installation, the full beacon development chain from prototype to current work-in-progress, the CovertVPN network tunneling capability, or the EAX-redirect process hollowing technique embedded in the Artifact Kit service variant. This report closes those gaps.
 
 **Key Risk Factors**
 
@@ -98,14 +98,14 @@ The original April 6 report documented the existence of OpenStrike and confirmed
     <tr>
       <td><strong>Attribution Clarity</strong></td>
       <td class="medium">MEDIUM</td>
-      <td>INSUFFICIENT confidence for named actor attribution. UTA-2026-004 maintained. Operator sourced tools from Chinese-language cracked CS ecosystem (MODERATE confidence).</td>
+      <td>INSUFFICIENT confidence for named actor attribution. <a href="/actors/UTA-2026-004/">UTA-2026-004</a> maintained. Operator sourced tools from Chinese-language cracked CS ecosystem (MODERATE confidence).</td>
     </tr>
   </tbody>
 </table>
 
 **Overall Risk Score: 7.5/10, HIGH**
 
-The threat actor is UTA-2026-004, maintained from the April 6 report, and no attribution upgrade is warranted, see Section 8 for the full assessment.
+The threat actor is <a href="/actors/UTA-2026-004/">UTA-2026-004</a>, maintained from the April 6 report, and no attribution upgrade is warranted, see Section 8 for the full assessment.
 
 **For Technical Teams**
 
@@ -581,7 +581,7 @@ Step 9: ResumeThread
 
 **Why This Detection Gap Is Systematic:**
 
-The Cobalt Strike Artifact Kit service variant is a stock CS component, not a modification by UTA-2026-004. This means the EAX-redirect detection gap affects every CS deployment using the default Artifact Kit service template, not just this campaign. Organizations relying on NtUnmapViewOfSection monitoring for T1055.012 coverage should audit whether their EDR coverage extends to SetThreadContext-based variants.
+The Cobalt Strike Artifact Kit service variant is a stock CS component, not a modification by <a href="/actors/UTA-2026-004/">UTA-2026-004</a>. This means the EAX-redirect detection gap affects every CS deployment using the default Artifact Kit service template, not just this campaign. Organizations relying on NtUnmapViewOfSection monitoring for T1055.012 coverage should audit whether their EDR coverage extends to SetThreadContext-based variants.
 
 The two-stage RW→RX memory protection sequence additionally defeats single-stage RWX allocation detection rules, which commonly flag `VirtualAllocEx` with `PAGE_EXECUTE_READWRITE` as high-confidence malicious. This variant never creates a RWX region.
 
@@ -594,7 +594,7 @@ The two-stage RW→RX memory protection sequence additionally defeats single-sta
 
 **Named Pipe Default, Stock Indicator:**
 
-The named pipe `\\.\pipe\MSSE-%d-server` (where `%d` = GetTickCount() % 9898) is a well-documented default Artifact Kit indicator. CS hunting guides describe this as a "dead giveaway" for operators who deploy the Artifact Kit without modifying default configurations. UTA-2026-004 has not changed this default.
+The named pipe `\\.\pipe\MSSE-%d-server` (where `%d` = GetTickCount() % 9898) is a well-documented default Artifact Kit indicator. CS hunting guides describe this as a "dead giveaway" for operators who deploy the Artifact Kit without modifying default configurations. <a href="/actors/UTA-2026-004/">UTA-2026-004</a> has not changed this default.
 
 ---
 
@@ -826,7 +826,7 @@ One caveat on prevalence. Watermark 987654321 appears in hundreds of active CS d
 
 **Confidence: DEFINITE (95%) for technique classification**
 
-The EAX-redirect hollowing in the Artifact Kit service variant is stock CS behavior documented in Cobalt Strike's official blog ("Cobalt Strike's Process Injection: The Details"). The detection gap arises from the gap between what CS stock components do and what most EDR T1055.012 rules monitor. It is a systematic gap affecting all CS deployments using the Artifact Kit service template, not a UTA-2026-004-specific innovation.
+The EAX-redirect hollowing in the Artifact Kit service variant is stock CS behavior documented in Cobalt Strike's official blog ("Cobalt Strike's Process Injection: The Details"). The detection gap arises from the gap between what CS stock components do and what most EDR T1055.012 rules monitor. It is a systematic gap affecting all CS deployments using the Artifact Kit service template, not a <a href="/actors/UTA-2026-004/">UTA-2026-004</a>-specific innovation.
 
 CrowdStrike's 2024 research on HijackLoader confirmed that EAX register redirect (SetThreadContext without NtUnmapViewOfSection) is observed in modern crimeware and remains a detection gap in endpoint products that rely on traditional API-based hollowing signatures.
 
@@ -852,7 +852,7 @@ There is a developer ecosystem risk. OpenStrike is an undocumented custom implan
 
 CS 3.x + 4.4 + 4.9.1 co-existence with two RSA key ecosystems is characteristic of multi-distribution toolkit assembly over time. When a CS distribution is cracked and distributed, each distribution defines its own auth file, watermark, and RSA key pair. Mixing artifacts from two distributions creates the observable keypair mismatch documented here.
 
-The inference: UTA-2026-004 accumulated artifacts from CS 3.x-era material (pre-2016 watermark 0), CS 4.4-era material (2021-era, watermark 987654321), and the 4.9.1 "Pwn3rs" team server (2023-era), spanning participation in the cracked CS ecosystem over at least 2-3 years. The operator is a consumer of this ecosystem, not a producer.
+The inference: <a href="/actors/UTA-2026-004/">UTA-2026-004</a> accumulated artifacts from CS 3.x-era material (pre-2016 watermark 0), CS 4.4-era material (2021-era, watermark 987654321), and the 4.9.1 "Pwn3rs" team server (2023-era), spanning participation in the cracked CS ecosystem over at least 2-3 years. The operator is a consumer of this ecosystem, not a producer.
 
 ---
 
@@ -878,15 +878,15 @@ All 10 custom GCC 15 operator tools (including all four OpenStrike beacon genera
 
 > **Analyst note:** This section addresses who is behind this campaign and what we can and cannot determine about their identity. The short answer is: we cannot identify a specific named actor. The longer answer explains what the evidence does tell us, and why the evidence that might suggest a Chinese-linked actor is insufficient for that conclusion.
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-004 is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. <a href="/actors/UTA-2026-004/">UTA-2026-004</a> is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
 
-I maintain the UTA-2026-004 attribution, with no upgrade warranted, and named-actor confidence stays INSUFFICIENT below 50 percent.
+I maintain the <a href="/actors/UTA-2026-004/">UTA-2026-004</a> attribution, with no upgrade warranted, and named-actor confidence stays INSUFFICIENT below 50 percent.
 
 
 
 "Pwn3rs" as an actor persona is REJECTED. Pwn3rs and Pwn3rzs are cracked CS distribution branding originating from bbs.kanxue.com in October 2023, confirmed by multiple Tier 3 and forum-level sources. The name appears in team server logs because the cracked JAR's license emulation code generates it, not because the operator chose it.
 
-The "You Dun" attribution is INSUFFICIENT. The watermark 987654321 overlap with documented You Dun cases is explained by shared distribution availability, and six technical dimensions contradict a You Dun to UTA-2026-004 linkage, hosting geography, language artifacts, C2 architecture, compiler toolchain, RSA key sets, and operational timing.
+The "You Dun" attribution is INSUFFICIENT. The watermark 987654321 overlap with documented You Dun cases is explained by shared distribution availability, and six technical dimensions contradict a You Dun to <a href="/actors/UTA-2026-004/">UTA-2026-004</a> linkage, hosting geography, language artifacts, C2 architecture, compiler toolchain, RSA key sets, and operational timing.
 
 **Alternative Hypotheses:**
 
@@ -899,7 +899,7 @@ The "You Dun" attribution is INSUFFICIENT. The watermark 987654321 overlap with 
 
 H1/H2/H3 cannot be distinguished with available evidence. The pre-operational assessment (H1) is the most consistent with the full evidence set.
 
-**Updated UTA-2026-004 Actor Profile:**
+**Updated <a href="/actors/UTA-2026-004/">UTA-2026-004</a> Actor Profile:**
 
 Building on the April 6 profile, the following characteristics are now confirmed:
 - CS 4.9.1 Pwn3rzs distribution as current team server
@@ -1150,7 +1150,7 @@ Deploy both detection files for full campaign coverage. Review for deduplication
 
 The original April 6 report is at [/reports/open-directory-172-105-0-126-20260406/](/reports/open-directory-172-105-0-126-20260406/)
 
-The original investigation established the OpenStrike family name, the Trinity Protocol cryptographic architecture, UTA-2026-004 designation, and the initial infrastructure profile for 172.105.0.126. Both reports together constitute the complete public technical record of the OpenStrike campaign through April 8, 2026. Deploy IOC feeds and detection rules from both investigations for full coverage.
+The original investigation established the OpenStrike family name, the Trinity Protocol cryptographic architecture, <a href="/actors/UTA-2026-004/">UTA-2026-004</a> designation, and the initial infrastructure profile for 172.105.0.126. Both reports together constitute the complete public technical record of the OpenStrike campaign through April 8, 2026. Deploy IOC feeds and detection rules from both investigations for full coverage.
 
 ---
 

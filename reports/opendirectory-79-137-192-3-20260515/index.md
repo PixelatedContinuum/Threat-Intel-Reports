@@ -89,8 +89,8 @@ figure_nav:
 > **Investigation series, Open-Directory 79.137.192.3 (three-publication series):** This is the parent report of a three-publication series from a single investigation into the multi-tenant Aeza Group staging server at `79.137.192.3`. Each cluster is operationally separate (co-tenancy on the same bulletproof IP is not operator linkage) and the two non-Rhadamanthys clusters each have their own standalone deep-dive:
 >
 > - **[Parent (2026-05-15): Multi-Cluster Overview](/reports/opendirectory-79-137-192-3-20260515/)** *(this report)*, all three co-tenant clusters at boundary-level depth; establishes why they are *not* one operator; includes the Cluster C (Rhadamanthys MaaS customer) deep-dive.
-> - **[Cluster A (2026-05-16): BellaMain Turkish PhaaS](/reports/bellamain-turkish-phaas-79-137-192-3-20260516/)**, full PHP-source recovery of an operator-developed PhaaS panel + 7 Turkish-marketplace kits; UTA-2026-008.
-> - **[Cluster B (2026-05-16): Inkognito Russian VPN/Phishing](/reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/)**, 467+ brand-impersonation subdomain library bolted to a commercial VPN front; UTA-2026-009.
+> - **[Cluster A (2026-05-16): BellaMain Turkish PhaaS](/reports/bellamain-turkish-phaas-79-137-192-3-20260516/)**, full PHP-source recovery of an operator-developed PhaaS panel + 7 Turkish-marketplace kits; <a href="/actors/UTA-2026-008/">UTA-2026-008</a>.
+> - **[Cluster B (2026-05-16): Inkognito Russian VPN/Phishing](/reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/)**, 467+ brand-impersonation subdomain library bolted to a commercial VPN front; <a href="/actors/UTA-2026-009/">UTA-2026-009</a>.
 
 > **Risk vs. Campaign Threat Level:** The Cluster C Rhadamanthys MaaS-customer loader analyzed in this report scores **9.2/10 (CRITICAL)** based on a top-tier modern infostealer Stage-2, an active 34-month C2 (`79.133.180.168:3394`) that survived the November 2025 Operation Endgame Phase 3 takedown, and a mature anti-analysis stack (3-layer encrypted-blob synthesis + operator-modified Q3VM-derivative bytecode VM + EAX-redirect process hollowing into `InstallUtil.exe`). Clusters A (BellaMain Turkish PhaaS) and B (Inkognito VPN/phishing) score HIGH individually; the campaign-level CRITICAL rating is anchored on Cluster C.
 
@@ -103,9 +103,9 @@ Three findings in this report are absent from any reviewed Rhadamanthys public s
 
 Three new internal threat-actor designations are recommended:
 
-- **UTA-2026-008** *(an internal tracking label used by The Hunters Ledger, see Section 9)*, BellaMain Turkish PhaaS operator (Cluster A); MODERATE 75% distinct-actor confidence; INSUFFICIENT named-actor attribution (first public capture).
-- **UTA-2026-009** *(an internal tracking label used by The Hunters Ledger, see Section 9)*, Inkognito Russian VPN/phishing operator (Cluster B); MODERATE 78% distinct-actor confidence; INSUFFICIENT named-actor attribution (first public capture).
-- **UTA-2026-010** *(an internal tracking label used by The Hunters Ledger, see Section 9)*, Rhadamanthys MaaS customer (Cluster C); MODERATE 72% distinct-actor confidence; INSUFFICIENT named-actor attribution. **This designation tracks the customer-side operator only; the Rhadamanthys MaaS vendor itself is a separate threat-intel target with an existing published profile in public reporting and is NOT covered by UTA-2026-010.**
+- **<a href="/actors/UTA-2026-008/">UTA-2026-008</a>** *(an internal tracking label used by The Hunters Ledger, see Section 9)*, BellaMain Turkish PhaaS operator (Cluster A); MODERATE 75% distinct-actor confidence; INSUFFICIENT named-actor attribution (first public capture).
+- **<a href="/actors/UTA-2026-009/">UTA-2026-009</a>** *(an internal tracking label used by The Hunters Ledger, see Section 9)*, Inkognito Russian VPN/phishing operator (Cluster B); MODERATE 78% distinct-actor confidence; INSUFFICIENT named-actor attribution (first public capture).
+- **<a href="/actors/UTA-2026-010/">UTA-2026-010</a>** *(an internal tracking label used by The Hunters Ledger, see Section 9)*, Rhadamanthys MaaS customer (Cluster C); MODERATE 72% distinct-actor confidence; INSUFFICIENT named-actor attribution. **This designation tracks the customer-side operator only; the Rhadamanthys MaaS vendor itself is a separate threat-intel target with an existing published profile in public reporting and is NOT covered by <a href="/actors/UTA-2026-010/">UTA-2026-010</a>.**
 
 Because named-actor attribution is INSUFFICIENT for all three operators, the recommended defensive posture is **infrastructure-based blocking** (Aeza ASNs, active C2 IPs, kit URI patterns) and **behavioral detection** (see Section 10) rather than actor-tracking, behavioral detections remain valid regardless of whether attribution is ever resolved.
 
@@ -124,9 +124,9 @@ Because named-actor attribution is INSUFFICIENT for all three operators, the rec
 
 ### Threat Actors
 
-- **UTA-2026-010: Rhadamanthys MaaS customer (Cluster C, primary).** Single LLM-augmented amateur customer of a top-tier commodity MaaS stealer. Distinct-actor confidence MODERATE (72%); named-actor attribution INSUFFICIENT.
-- **UTA-2026-008: BellaMain Turkish PhaaS operator (Cluster A).** Single Turkish-speaking PhaaS operator/developer. Operator alias `@AresRS34`, developer alias `Wadanz`. Distinct-actor confidence MODERATE (75%); named-actor attribution INSUFFICIENT.
-- **UTA-2026-009: Inkognito Russian VPN/phishing operator (Cluster B).** Single Russian-speaking multi-product fraud operator. Self-identified parent brand "Inkognito" via `@inkconnectvpn` Telegram channel. Distinct-actor confidence MODERATE (78%); named-actor attribution INSUFFICIENT.
+- **<a href="/actors/UTA-2026-010/">UTA-2026-010</a>: Rhadamanthys MaaS customer (Cluster C, primary).** Single LLM-augmented amateur customer of a top-tier commodity MaaS stealer. Distinct-actor confidence MODERATE (72%); named-actor attribution INSUFFICIENT.
+- **<a href="/actors/UTA-2026-008/">UTA-2026-008</a>: BellaMain Turkish PhaaS operator (Cluster A).** Single Turkish-speaking PhaaS operator/developer. Operator alias `@AresRS34`, developer alias `Wadanz`. Distinct-actor confidence MODERATE (75%); named-actor attribution INSUFFICIENT.
+- **<a href="/actors/UTA-2026-009/">UTA-2026-009</a>: Inkognito Russian VPN/phishing operator (Cluster B).** Single Russian-speaking multi-product fraud operator. Self-identified parent brand "Inkognito" via `@inkconnectvpn` Telegram channel. Distinct-actor confidence MODERATE (78%); named-actor attribution INSUFFICIENT.
 
 ### For Technical Teams: Immediate Priorities
 
@@ -175,7 +175,7 @@ This framing controls the rest of the report. Clusters A, B, and C are presented
 | **Family Confidence** | DEFINITE (full source recovered) | DEFINITE (operator self-identification) | **DEFINITE 97% (Microsoft + CAPE + 48/63 VirusTotal vendors converge)** |
 | **Sophistication** | Intermediate | Intermediate-Advanced | **Vendor: HIGH PROFESSIONAL; Customer: MODERATE (LLM-augmented amateur)** |
 | **First Seen** | 2024-04 (kits VT first-seen); BellaMain.zip 2026-03 | 2023-06-08 (`vetcorbeanca.eu` BEC burn) | **Loader compile 2023-06-25; Stage-2 cluster ~34 months active** |
-| **Threat Actor (UTA)** | UTA-2026-008 | UTA-2026-009 | **UTA-2026-010 (customer only)** |
+| **Threat Actor (UTA)** | <a href="/actors/UTA-2026-008/">UTA-2026-008</a> | <a href="/actors/UTA-2026-009/">UTA-2026-009</a> | **<a href="/actors/UTA-2026-010/">UTA-2026-010</a> (customer only)** |
 | **Distinct Actor Confidence** | MODERATE (75%) | MODERATE (78%) | MODERATE (72%) |
 | **Named Actor Attribution** | INSUFFICIENT | INSUFFICIENT | INSUFFICIENT |
 | **Threat Level** | HIGH | HIGH | **CRITICAL** |
@@ -222,7 +222,7 @@ Multiple independent confirmations converge:
 
 ### Vendor versus customer: a critical distinction
 
-Rhadamanthys is a Malware-as-a-Service product. The **vendor** (the threat-intel target documented in Check Point Research v0.5.0/v0.7.0/v0.9.x, Outpost24, Zscaler, Recorded Future, and other public reporting) builds and sells the canonical Stage-2 to multiple **customers**, who each build their own loaders and operate their own C2 infrastructure. UTA-2026-010 in this report tracks the **customer-side operator only**, the LLM-augmented amateur who built `staticlittlesource.exe`, deployed it via cracked-software/game-cheat lures, and operates the Hostkey NL C2 at `79.133.180.168:3394`. The vendor is out of scope for this investigation and is not covered by UTA-2026-010.
+Rhadamanthys is a Malware-as-a-Service product. The **vendor** (the threat-intel target documented in Check Point Research v0.5.0/v0.7.0/v0.9.x, Outpost24, Zscaler, Recorded Future, and other public reporting) builds and sells the canonical Stage-2 to multiple **customers**, who each build their own loaders and operate their own C2 infrastructure. <a href="/actors/UTA-2026-010/">UTA-2026-010</a> in this report tracks the **customer-side operator only**, the LLM-augmented amateur who built `staticlittlesource.exe`, deployed it via cracked-software/game-cheat lures, and operates the Hostkey NL C2 at `79.133.180.168:3394`. The vendor is out of scope for this investigation and is not covered by <a href="/actors/UTA-2026-010/">UTA-2026-010</a>.
 
 This distinction is operationally important because the customer's loader and per-customer cipher fingerprints (the 16-byte CBC-XOR IV `f6358d79df69c577d9dce6bb77fa4fa7`, the 24-hex panel ID `e6d92c6b5b2a03bee7fbab40`, the InstallUtil LOLBin choice) are higher-fidelity detection primitives for **this specific customer's deployments** than vendor-side family markers. Vendor-side markers (`.frontb`, the import surface, the Q3VM magic) detect the entire Rhadamanthys MaaS ecosystem but do not differentiate between customers. Both layers of detection are valuable and are presented in Sections 5 and 9.
 
@@ -406,7 +406,7 @@ The encrypted Stage-2 PE lives in the loader's `.data` section. The loader walks
 
 <figure style="text-align: center; margin: 2em 0;">
  <img loading="lazy" src="{{ "/assets/images/opendirectory-79-137-192-3-20260515/loader-operator-strings-main.png" | relative_url }}" alt="Decompiler excerpt of the loader's main function showing the strings BombAUb23456, the 45-character credential Ahuh783bhASbsxAsiopJQAiwhhbchG ampersand asterisk hash U897u asterisk hash ampersand asterisk 473, and Cancel of card being passed to FUN_00404df0 and FUN_00405750.">
-  <figcaption><em>Figure 3: Operator-specific strings recovered from `main()` in the customer-built loader. Each string returned zero hits on public web search as of 2026-05-13, anchoring the customer-side attribution (UTA-2026-010). The 45-character credential is the highest-fidelity per-operator pivot, recovery of this exact string in any other infected host or sample would link unambiguously to this operator.</em></figcaption>
+  <figcaption><em>Figure 3: Operator-specific strings recovered from `main()` in the customer-built loader. Each string returned zero hits on public web search as of 2026-05-13, anchoring the customer-side attribution (<a href="/actors/UTA-2026-010/">UTA-2026-010</a>). The 45-character credential is the highest-fidelity per-operator pivot, recovery of this exact string in any other infected host or sample would link unambiguously to this operator.</em></figcaption>
 </figure>
 
 The combination, operator wraps a top-tier commodity stealer in a homebrew loader, prints debug strings to stdout from `main()`, uses a non-standard 31-byte RC4 key length, and includes English-language phrases like `take it everywhere` that read like LLM completions, anchors the LLM-augmented amateur attribution profile in Section 9.
@@ -876,7 +876,7 @@ For the complete validated indicator set with confidence levels and contextual m
 ## 9. Threat Actor Assessment
 {: .hl-tier-2}
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-008, UTA-2026-009 and UTA-2026-010 are tracking labels The Hunters Ledger assigns to actors I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use these labels; they are specific to this publication. If later evidence ties any of them to a named actor, I will retire that label and update the report.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. <a href="/actors/UTA-2026-008/">UTA-2026-008</a>, <a href="/actors/UTA-2026-009/">UTA-2026-009</a> and <a href="/actors/UTA-2026-010/">UTA-2026-010</a> are tracking labels The Hunters Ledger assigns to actors I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use these labels; they are specific to this publication. If later evidence ties any of them to a named actor, I will retire that label and update the report.
 
 This investigation surfaced **three operationally separate threat clusters** that share infrastructure (multi-tenant Aeza staging IP `79.137.192.3`) but exhibit **zero operator-level overlap** across seven dimensions tested (Telegram, pseudonyms, DNS/SOA, language, payments, malware family, production-C2 provider). Each cluster receives its own UTA designation. Cross-cluster linkage is rated **LOW (actively rebutted, not absent)**, anchored on Tier-1 OFAC documentation that the same Aeza infrastructure simultaneously hosts multiple unrelated actor ecosystems.
 
@@ -933,7 +933,7 @@ Named-actor attribution stays INSUFFICIENT because there is no prior public TI o
 
 ### 9.3 UTA-2026-010: Rhadamanthys MaaS customer (Cluster C, primary)
 
-> **Critical framing note:** UTA-2026-010 tracks the **customer-side operator only**, the LLM-augmented amateur who built `staticlittlesource.exe`, deployed it via cracked-software/game-cheat lures, and operates the Hostkey NL C2 at `79.133.180.168:3394`. The Rhadamanthys MaaS **vendor** is a separate threat-intel target with its own published profile in public Tier-2 reporting (Check Point Research, Outpost24, Recorded Future Insikt Group, etc.) and is **NOT** covered by UTA-2026-010. Conflating customer with vendor is a common error in MaaS attribution that this designation explicitly avoids.
+> **Critical framing note:** <a href="/actors/UTA-2026-010/">UTA-2026-010</a> tracks the **customer-side operator only**, the LLM-augmented amateur who built `staticlittlesource.exe`, deployed it via cracked-software/game-cheat lures, and operates the Hostkey NL C2 at `79.133.180.168:3394`. The Rhadamanthys MaaS **vendor** is a separate threat-intel target with its own published profile in public Tier-2 reporting (Check Point Research, Outpost24, Recorded Future Insikt Group, etc.) and is **NOT** covered by <a href="/actors/UTA-2026-010/">UTA-2026-010</a>. Conflating customer with vendor is a common error in MaaS attribution that this designation explicitly avoids.
 
 I hold distinct-actor confidence at MODERATE, 72 percent, family classification at DEFINITE, 97 percent, as a Rhadamanthys infostealer Stage-2 vendor product, and named-actor attribution at INSUFFICIENT, 30 percent.
 
@@ -954,7 +954,7 @@ Named-actor attribution stays INSUFFICIENT because no prior public TI matches th
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/opendirectory-79-137-192-3-20260515/rhadamanthys-maas-vendor-customer-architecture.svg" | relative_url }}" alt="Process-tree infographic of the Rhadamanthys MaaS vendor-customer architecture. Top center red side-rail card: Rhadamanthys MaaS Vendor: develops and sells canonical Stage-2 to multiple customers, VS2003 toolchain with Q3VM-derivative VM magic 0x14744214 and 3-layer encrypted-blob synthesis, marked as a SEPARATE threat-intel target tracked in Check Point, Outpost24, Recorded Future, and Operation Endgame Phase 3. Below the vendor a 3-way fanout splits into three customer cards. Left card red side-rail: Customer A (sibling Stage-2 bc9fe5e9...): different loader build, different operator strings, different RC4 key, different LOLBin choice, leading to a different C2 endpoint at 45.81.39.169 OCULUS US AS. Middle card highlighted with deep-red border and side-rail plus a star: UTA-2026-010, THIS REPORT: Cluster C, the staticlittlesource.exe loader (sha256 prefix 5c38a5dd, 1.39 MB) with operator strings BombAUb23456, DubzAias932, Ahuh783bh..., InstallUtil.exe LOLBin choice, leading to this customer's C2 at 79.133.180.168:3394 on Hostkey NL AS57043. Right card red side-rail: Customer B (sibling Stage-2 e827d13c... or 457aecd8...): different loader build, different operator strings, different RC4 key, different LOLBin choice, leading to a different C2 endpoint that was not extractable because VirusTotal sandbox emulation systematically fails across all sibling samples. At the bottom a grey side-rail band shows what all customers share: vendor-side .frontb section, Q3VM derivative VM magic 0x14744214, 3-layer synthesis, CBC-XOR cipher, FS container, XS1/XS2 plugins. Footer detection scope: this report's customer-side fingerprints catch this operator only; vendor-side fingerprints catch the entire Rhadamanthys customer population.">
-  <figcaption><em>Figure 17: The Rhadamanthys MaaS architecture and the per-customer separation that drives the UTA framing. UTA-2026-010 (highlighted center) is the customer-side operator The Hunters Ledger newly contributes to the public record; the vendor (top) is well-documented elsewhere and is explicitly out of scope for this UTA. The grey common-element band at the bottom shows what cross-customer detection content (Q3VM magic, .frontb, SibCode\sn) covers, versus the per-customer fingerprints (RC4 key, IV, panel ID, LOLBin, C2 IP) that are unique to this operator.</em></figcaption>
+  <figcaption><em>Figure 17: The Rhadamanthys MaaS architecture and the per-customer separation that drives the UTA framing. <a href="/actors/UTA-2026-010/">UTA-2026-010</a> (highlighted center) is the customer-side operator The Hunters Ledger newly contributes to the public record; the vendor (top) is well-documented elsewhere and is explicitly out of scope for this UTA. The grey common-element band at the bottom shows what cross-customer detection content (Q3VM magic, .frontb, SibCode\sn) covers, versus the per-customer fingerprints (RC4 key, IV, panel ID, LOLBin, C2 IP) that are unique to this operator.</em></figcaption>
 </figure>
 
 ### 9.4 Cross-cluster linkage assessment
@@ -1152,7 +1152,7 @@ Whether `79.133.180.168:3394` will remain active through the end of 2026 require
 
 ### 12.5 Rhadamanthys vendor post-Endgame status
 
-No confirmed reporting on the Rhadamanthys vendor's arrest or resumed operations under "RHAD Security" or "Mythical Origin Labs" branding after November 2025. This is vendor-side intel that is out of scope for UTA-2026-010 (which tracks the customer only) but is relevant context for the Rhadamanthys MaaS ecosystem trajectory.
+No confirmed reporting on the Rhadamanthys vendor's arrest or resumed operations under "RHAD Security" or "Mythical Origin Labs" branding after November 2025. This is vendor-side intel that is out of scope for <a href="/actors/UTA-2026-010/">UTA-2026-010</a> (which tracks the customer only) but is relevant context for the Rhadamanthys MaaS ecosystem trajectory.
 
 ---
 
@@ -1191,9 +1191,9 @@ This report draws on Tier-1 (government / authoritative), Tier-2 (major-vendor r
 
 ### Internal references
 
-- **The Hunters Ledger: UTA-2026-008** (BellaMain Turkish PhaaS operator), internal threat-actor file
-- **The Hunters Ledger: UTA-2026-009** (Inkognito Russian VPN/phishing operator), internal threat-actor file
-- **The Hunters Ledger: UTA-2026-010** (Rhadamanthys MaaS customer), internal threat-actor file
+- **The Hunters Ledger: <a href="/actors/UTA-2026-008/">UTA-2026-008</a>** (BellaMain Turkish PhaaS operator), internal threat-actor file
+- **The Hunters Ledger: <a href="/actors/UTA-2026-009/">UTA-2026-009</a>** (Inkognito Russian VPN/phishing operator), internal threat-actor file
+- **The Hunters Ledger: <a href="/actors/UTA-2026-010/">UTA-2026-010</a>** (Rhadamanthys MaaS customer), internal threat-actor file
 - **IOC feed:** [`/ioc-feeds/opendirectory-79-137-192-3-20260515-iocs.json`](/ioc-feeds/opendirectory-79-137-192-3-20260515-iocs.json)
 - **Detection rules:** [`/hunting-detections/opendirectory-79-137-192-3-20260515-detections/`](/hunting-detections/opendirectory-79-137-192-3-20260515-detections/)
 

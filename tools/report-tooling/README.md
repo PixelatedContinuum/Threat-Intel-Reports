@@ -101,4 +101,17 @@ feed under `ioc-feeds/<slug>/`, and REMOVES a stub whose feed is no longer publi
 page: the three embargoed campaigns keep their raw JSON, which is live-but-unlisted by
 design, and gain no rendered surface.
 
+`node generate-actors.js` writes `_data/actors_index.yml` and one stub page per designation
+under `actors/<id>/` from the hand-written `_data/actors.yml`, the catalog and the reports: every
+published report that names a designation, and the ATT&CK techniques the primary reports map
+(read with the same parser as the coverage strip). It REMOVES a stub whose designation left the
+data file. `node link-actors.js` turns every bare `UTA-YYYY-NNN` in a published report or
+detection page into a link to its actor page (idempotent; code, headings, tags and existing
+links are left alone). `node check-actors.js` gates all of it: regenerate-and-diff on the index
+and the stubs, a FAIL on a bare mention that has a page, and a FAIL on a designation a published
+report names with no entry. A designation whose only report is unlisted gets no entry and no
+page until go-live, and the gate names it as absent on purpose.
+
+| `_data/actors.yml`, `_data/actors_index.yml`, `actors/*/index.md`, `_data/catalog.yml`, `reports/*/index.md`, `hunting-detections/*.md` | `check-actors.js` | index or a page stale, a bare designation unlinked, a designation with no entry |
+
 Nothing here is published: `_config.yml` excludes `tools/*` from the Jekyll build.

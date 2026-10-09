@@ -81,8 +81,8 @@ figure_nav:
 > **Investigation series, Open-Directory 79.137.192.3 (three-publication series):** This report is one of three publications from a single investigation into the multi-tenant Aeza Group staging server at `79.137.192.3`. Each cluster is operationally separate (co-tenancy on the same bulletproof IP is not operator linkage) so each cluster has its own dedicated report:
 >
 > - **[Parent (2026-05-15): Multi-Cluster Overview](/reports/opendirectory-79-137-192-3-20260515/)**, all three co-tenant clusters at boundary-level depth; establishes why they are *not* one operator.
-> - **[Cluster A (2026-05-16): BellaMain Turkish PhaaS](/reports/bellamain-turkish-phaas-79-137-192-3-20260516/)**, full PHP-source recovery of an operator-developed PhaaS panel + 7 Turkish-marketplace kits; UTA-2026-008 *(an internal tracking label used by The Hunters Ledger)*.
-> - **[Cluster B (2026-05-16): Inkognito Russian VPN/Phishing](/reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/)** *(this report)*, 467+ brand-impersonation subdomain library bolted to a commercial VPN front; UTA-2026-009.
+> - **[Cluster A (2026-05-16): BellaMain Turkish PhaaS](/reports/bellamain-turkish-phaas-79-137-192-3-20260516/)**, full PHP-source recovery of an operator-developed PhaaS panel + 7 Turkish-marketplace kits; <a href="/actors/UTA-2026-008/">UTA-2026-008</a> *(an internal tracking label used by The Hunters Ledger)*.
+> - **[Cluster B (2026-05-16): Inkognito Russian VPN/Phishing](/reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/)** *(this report)*, 467+ brand-impersonation subdomain library bolted to a commercial VPN front; <a href="/actors/UTA-2026-009/">UTA-2026-009</a>.
 >
 > Cluster C (a Rhadamanthys MaaS customer at `79.133.180.168`) is covered only in the parent report.
 
@@ -95,7 +95,7 @@ figure_nav:
 
 This is the **first public cross-brand documentation** of the Inkognito operator. No prior Tier-1 or Tier-2 threat intelligence has tied the INK VPN, INK Lens, Bikaf VPN, CryptOne (`cryptone.bot`), unloki.ru, or `bigass.monster` brands together as a unified operator. The JS bundle hash (`8a69fe67…`), brand logo PNG (`d1ae63c9…`), and favicon SVG (`53b3515f…`) all return NOT FOUND on VirusTotal as of 2026-05-07. This report fills that gap. The 2026-05-15 multi-cluster publication at [`/reports/opendirectory-79-137-192-3-20260515/`](/reports/opendirectory-79-137-192-3-20260515/) covered Inkognito at one-paragraph summary depth as Cluster B of a co-tenancy investigation on Aeza staging IP `79.137.192.3`; this standalone publication goes deep on Inkognito only. Cluster A (BellaMain Turkish PhaaS) and Cluster C (Rhadamanthys MaaS customer) are out of scope here, see the parent report for those.
 
-The operator is tracked under the internal designation **UTA-2026-009** *(an internal tracking label used by The Hunters Ledger, see Section 9)*. Distinct-actor confidence is **MODERATE (78%)** based on a code-level custom authentication primitive, a unique cross-domain decommission tombstone, single-operator Google and Yandex Search Console account control across multiple brand domains, a single-tenant EspoCRM back-office, and consistent SOA fingerprints across three BEC burn domains. **Named-actor confidence is INSUFFICIENT (<50%)**, operator self-identification as "Inkognito" via the `@inkconnectvpn` Telegram channel is operator-asserted but has not been independently corroborated by any Tier-1, Tier-2, or Tier-3 source. We cannot attribute Inkognito to a publicly named actor at this time.
+The operator is tracked under the internal designation **<a href="/actors/UTA-2026-009/">UTA-2026-009</a>** *(an internal tracking label used by The Hunters Ledger, see Section 9)*. Distinct-actor confidence is **MODERATE (78%)** based on a code-level custom authentication primitive, a unique cross-domain decommission tombstone, single-operator Google and Yandex Search Console account control across multiple brand domains, a single-tenant EspoCRM back-office, and consistent SOA fingerprints across three BEC burn domains. **Named-actor confidence is INSUFFICIENT (<50%)**, operator self-identification as "Inkognito" via the `@inkconnectvpn` Telegram channel is operator-asserted but has not been independently corroborated by any Tier-1, Tier-2, or Tier-3 source. We cannot attribute Inkognito to a publicly named actor at this time.
 
 ### What Was Found
 
@@ -132,7 +132,7 @@ The risk is not a single act of intrusion. It is the **infrastructure surface** 
 
 ### Threat Actor
 
-- **UTA-2026-009: Inkognito Russian VPN/phishing operator.** Single Russian-speaking multi-product fraud operator. Self-identified parent brand "Inkognito" via the `@inkconnectvpn` Telegram channel (797 subscribers, first post 2026-03-18). Distinct-actor confidence **MODERATE (78%)**. Named-actor attribution **INSUFFICIENT (<50%)**, first public capture; no prior Tier-1/2/3 TI; resolution would require Russian payment-processor merchant ID lookup, paid Russian underground forum investigation, or Russian regulator action. This report **extends** the existing UTA-2026-009 file's Activity Log; it does not replace the originating characterization from the 2026-05-15 multi-cluster investigation. Net executive implication: Inkognito is a stable, professionally-operated commercial fraud business that should be tracked as a persistent infrastructure risk rather than as a discrete incident.
+- **<a href="/actors/UTA-2026-009/">UTA-2026-009</a>: Inkognito Russian VPN/phishing operator.** Single Russian-speaking multi-product fraud operator. Self-identified parent brand "Inkognito" via the `@inkconnectvpn` Telegram channel (797 subscribers, first post 2026-03-18). Distinct-actor confidence **MODERATE (78%)**. Named-actor attribution **INSUFFICIENT (<50%)**, first public capture; no prior Tier-1/2/3 TI; resolution would require Russian payment-processor merchant ID lookup, paid Russian underground forum investigation, or Russian regulator action. This report **extends** the existing <a href="/actors/UTA-2026-009/">UTA-2026-009</a> file's Activity Log; it does not replace the originating characterization from the 2026-05-15 multi-cluster investigation. Net executive implication: Inkognito is a stable, professionally-operated commercial fraud business that should be tracked as a persistent infrastructure risk rather than as a discrete incident.
 
 ### For Technical Teams: Immediate Priorities
 
@@ -148,9 +148,9 @@ The risk is not a single act of intrusion. It is the **infrastructure surface** 
 
 This report is a **standalone derivative** of the OpenDirectory 79.137.192.3 investigation published on 2026-05-15. The originating pivot was a single open-directory exposure on Aeza Group AS216246 staging IP `79.137.192.3` that surfaced three operationally separate threat clusters co-tenanted on the same multi-tenant bulletproof staging utility. That parent investigation, published at [`/reports/opendirectory-79-137-192-3-20260515/`](/reports/opendirectory-79-137-192-3-20260515/), covered:
 
-- **Cluster A: BellaMain Turkish Phishing-as-a-Service** (UTA-2026-008): operator `@AresRS34`, developer pseudonym `Wadanz`, PHP/MySQL phishing-kit panel targeting Turkish banking and marketplace brands.
-- **Cluster B: Inkognito Russian VPN/phishing operator** (UTA-2026-009): the subject of this report.
-- **Cluster C: Rhadamanthys MaaS customer** (UTA-2026-010): a customer-built loader (`staticlittlesource.exe`) wrapping a canonical Rhadamanthys Stage-2 with a Hostkey Netherlands C2 (`79.133.180.168:3394`) that survived the November 2025 Operation Endgame Phase 3 takedown.
+- **Cluster A: BellaMain Turkish Phishing-as-a-Service** (<a href="/actors/UTA-2026-008/">UTA-2026-008</a>): operator `@AresRS34`, developer pseudonym `Wadanz`, PHP/MySQL phishing-kit panel targeting Turkish banking and marketplace brands.
+- **Cluster B: Inkognito Russian VPN/phishing operator** (<a href="/actors/UTA-2026-009/">UTA-2026-009</a>): the subject of this report.
+- **Cluster C: Rhadamanthys MaaS customer** (<a href="/actors/UTA-2026-010/">UTA-2026-010</a>): a customer-built loader (`staticlittlesource.exe`) wrapping a canonical Rhadamanthys Stage-2 with a Hostkey Netherlands C2 (`79.133.180.168:3394`) that survived the November 2025 Operation Endgame Phase 3 takedown.
 
 In the parent report, Cluster B (Inkognito) received **one-paragraph summary depth** across Sections 4.5, 5.7, 6.6, 8.3, and 9.2, enough to establish the cluster boundary and risk classification but not enough to publish the brand-portfolio mapping, the operator-fingerprint pivots, or the detection content needed to act on the threat at scale. This standalone publication goes deep on Inkognito only. Cluster A and Cluster C content is **out of scope** here; cross-references to the parent publication are provided where the cluster-boundary context matters.
 
@@ -782,9 +782,9 @@ What the investigation does establish about exposure surface: the brand-imperson
 ## 9. Threat Actor Assessment
 {: .hl-tier-2}
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-009 is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. <a href="/actors/UTA-2026-009/">UTA-2026-009</a> is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
 
-> **UTA file lineage:** UTA-2026-009 was **originally created in the 2026-05-15 multi-cluster investigation** as one of three new UTAs (UTA-2026-008 BellaMain, UTA-2026-009 Inkognito, UTA-2026-010 Rhadamanthys MaaS customer) covering the OpenDirectory 79.137.192.3 co-tenancy. This standalone report **extends** the UTA-2026-009 Activity Log with deeper Inkognito-specific evidence; it does not create a new UTA and does not modify the originating distinguishing characteristics.
+> **UTA file lineage:** <a href="/actors/UTA-2026-009/">UTA-2026-009</a> was **originally created in the 2026-05-15 multi-cluster investigation** as one of three new UTAs (<a href="/actors/UTA-2026-008/">UTA-2026-008</a> BellaMain, <a href="/actors/UTA-2026-009/">UTA-2026-009</a> Inkognito, <a href="/actors/UTA-2026-010/">UTA-2026-010</a> Rhadamanthys MaaS customer) covering the OpenDirectory 79.137.192.3 co-tenancy. This standalone report **extends** the <a href="/actors/UTA-2026-009/">UTA-2026-009</a> Activity Log with deeper Inkognito-specific evidence; it does not create a new UTA and does not modify the originating distinguishing characteristics.
 
 ### 9.1 Attribution Conclusion
 
@@ -794,8 +794,8 @@ What the investigation does establish about exposure surface: the brand-imperson
 | **Named-actor attribution** (linkage to a publicly named actor) | **INSUFFICIENT (<50%)** | We **cannot attribute** Inkognito to a publicly named actor at this time. No prior Tier-1, Tier-2, or Tier-3 source documents the Inkognito brand portfolio. Operator self-identification via Telegram is operator-asserted, not independently corroborated. |
 | **Operator language inference** | HIGH | Russian (Telegram content, SBP/T-Pay integration, Russian-language marketing copy, Russian customer-base targeting). |
 | **Operator motivation** | HIGH | **Financial gain**, subscription VPN revenue + credential theft + fake-exchange theft + BEC campaigns. No state-actor indicators. |
-| **Cross-cluster linkage to UTA-2026-008 (BellaMain)** | **LOW** (actively rebutted) | Zero overlap on Telegram identifiers, developer pseudonyms, DNS/SOA/NS patterns, operator language, payment infrastructure, or production-C2 provider per parent investigation §22.9.1 / §23.12.7 reassessment. |
-| **Cross-cluster linkage to UTA-2026-010 (Rhadamanthys MaaS customer)** | **LOW** (actively rebutted) | Zero IOC overlap; different hoster (Hostkey NL vs Aeza/Timeweb); different toolchain (compiled C++ loader vs Vite/React SPA). |
+| **Cross-cluster linkage to <a href="/actors/UTA-2026-008/">UTA-2026-008</a> (BellaMain)** | **LOW** (actively rebutted) | Zero overlap on Telegram identifiers, developer pseudonyms, DNS/SOA/NS patterns, operator language, payment infrastructure, or production-C2 provider per parent investigation §22.9.1 / §23.12.7 reassessment. |
+| **Cross-cluster linkage to <a href="/actors/UTA-2026-010/">UTA-2026-010</a> (Rhadamanthys MaaS customer)** | **LOW** (actively rebutted) | Zero IOC overlap; different hoster (Hostkey NL vs Aeza/Timeweb); different toolchain (compiled C++ loader vs Vite/React SPA). |
 
 ### 9.2 Distinguishing Characteristics (per UTA-2026-009)
 
@@ -948,7 +948,7 @@ Findings organized by confidence level (per CLAUDE.md CONFIDENCE LEVELS framewor
 
 ### 12.1 Named-actor attribution
 
-Named-actor attribution for the operator behind UTA-2026-009 remains **INSUFFICIENT (30%)**. Zero Tier-1, Tier-2, or Tier-3 reporting names "Inkognito" or any of its sub-brands (INK VPN, INK Lens, CryptOne, Bikaf VPN, unloki). The operator has maintained 2 years 11 months of public stealth despite running commercial-grade infrastructure. Resolution paths:
+Named-actor attribution for the operator behind <a href="/actors/UTA-2026-009/">UTA-2026-009</a> remains **INSUFFICIENT (30%)**. Zero Tier-1, Tier-2, or Tier-3 reporting names "Inkognito" or any of its sub-brands (INK VPN, INK Lens, CryptOne, Bikaf VPN, unloki). The operator has maintained 2 years 11 months of public stealth despite running commercial-grade infrastructure. Resolution paths:
 - Russian underground forum cross-reference (Flashpoint, Intel 471, KELA monitoring of Russian-language fraud forums)
 - Russian payment-processor merchant ID lookup (SBP, T-Pay, Russian card networks), would identify the legal entity registered to receive INK VPN subscription revenue
 - Identification of principals behind the `@inkconnectvpn` Telegram channel
@@ -982,7 +982,7 @@ The 2-year-11-month stability of the operator's Stark TR / Worktitans NL BEC inf
 
 ### 12.7 Iranian-targeted `divar-irantop.shop` validation
 
-The Iranian-targeted `divar-irantop.shop` phishing domain briefly resolved to Aeza International Ltd in January 2024. Linkage to UTA-2026-009 is rated MODERATE in this report, confirmed Aeza co-residency in the operator's primary hosting tier, but no direct operator-side artifact links it specifically to the Inkognito brand portfolio. Resolution would require live operator artifact capture from the domain (no longer active post-2024-12).
+The Iranian-targeted `divar-irantop.shop` phishing domain briefly resolved to Aeza International Ltd in January 2024. Linkage to <a href="/actors/UTA-2026-009/">UTA-2026-009</a> is rated MODERATE in this report, confirmed Aeza co-residency in the operator's primary hosting tier, but no direct operator-side artifact links it specifically to the Inkognito brand portfolio. Resolution would require live operator artifact capture from the domain (no longer active post-2024-12).
 
 ### 12.8 Underground forum identity
 
@@ -996,9 +996,9 @@ The operator's underground forum identity (if any), alias on XSS, Exploit.in, BH
 ### 13.1 Parent Investigation and Cross-References
 
 - **2026-05-15 Multi-Cluster OpenDirectory 79.137.192.3 Report** ([`/reports/opendirectory-79-137-192-3-20260515/`](/reports/opendirectory-79-137-192-3-20260515/)): originating publication; covers all three clusters (BellaMain, Inkognito, Rhadamanthys MaaS customer); Cluster B (Inkognito) covered at one-paragraph summary depth across §4.5, §5.7, §6.6, §8.3, §9.2. This standalone report deepens Cluster B only.
-- **UTA-2026-008: BellaMain Turkish PhaaS operator**, Cluster A actor, operationally separate.
-- **UTA-2026-009: Inkognito Russian VPN/phishing operator** The subject of this report.
-- **UTA-2026-010: Rhadamanthys MaaS customer**, Cluster C actor, operationally separate.
+- **<a href="/actors/UTA-2026-008/">UTA-2026-008</a>: BellaMain Turkish PhaaS operator**, Cluster A actor, operationally separate.
+- **<a href="/actors/UTA-2026-009/">UTA-2026-009</a>: Inkognito Russian VPN/phishing operator** The subject of this report.
+- **<a href="/actors/UTA-2026-010/">UTA-2026-010</a>: Rhadamanthys MaaS customer**, Cluster C actor, operationally separate.
 
 ### 13.2 Tier-1 Authoritative Sources
 

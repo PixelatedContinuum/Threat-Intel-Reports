@@ -39,20 +39,20 @@ stix_bundle: /stix/shadow-xworm-opendirectory.json
 ## Bottom Line Up Front
 {: .hl-tier-1}
 
-An exposed open directory at `epgoldsecurity.com` revealed a financially-motivated threat actor (UTA-2026-003, an internal tracking label used by The Hunters Ledger) operating both Shadow RAT v2.6.4.0 and XWorm 3.0-5.0 against US victims during the 2026 tax season, with all four malware builds connecting to a single C2 server at 151.245.112.70. Shadow RAT is the primary risk: it disables Windows' two main malware detection mechanisms (AMSI and ETW) before any malicious activity begins, and carries a persistence capability that survives OS reinstallation, making detection and remediation significantly harder than a standard RAT infection. Both families must be fully removed for a confirmed infection to be cleared; removing one while the other persists leaves the attacker with full access. Block 151.245.112.70 immediately and check all endpoints for the persistence artifacts documented in Section 11.
+An exposed open directory at `epgoldsecurity.com` revealed a financially-motivated threat actor (<a href="/actors/UTA-2026-003/">UTA-2026-003</a>, an internal tracking label used by The Hunters Ledger) operating both Shadow RAT v2.6.4.0 and XWorm 3.0-5.0 against US victims during the 2026 tax season, with all four malware builds connecting to a single C2 server at 151.245.112.70. Shadow RAT is the primary risk: it disables Windows' two main malware detection mechanisms (AMSI and ETW) before any malicious activity begins, and carries a persistence capability that survives OS reinstallation, making detection and remediation significantly harder than a standard RAT infection. Both families must be fully removed for a confirmed infection to be cleared; removing one while the other persists leaves the attacker with full access. Block 151.245.112.70 immediately and check all endpoints for the persistence artifacts documented in Section 11.
 
 ---
 
 ## 1. Executive Summary
 {: .hl-tier-1}
 
-A single unattributed financially-motivated operator (UTA-2026-003 *(an internal tracking label used by The Hunters Ledger, see Section 8)*) ran Shadow RAT v2.6.4.0 and XWorm 3.0-5.0 against US victims during the 2026 tax season, with all four malware builds routing to one C2 server at 151.245.112.70. An exposed open directory at `epgoldsecurity.com` disclosed the full toolkit; configuration decryption of all four samples, static code examination, and passive DNS pivoting establish the findings throughout this report.
+A single unattributed financially-motivated operator (<a href="/actors/UTA-2026-003/">UTA-2026-003</a> *(an internal tracking label used by The Hunters Ledger, see Section 8)*) ran Shadow RAT v2.6.4.0 and XWorm 3.0-5.0 against US victims during the 2026 tax season, with all four malware builds routing to one C2 server at 151.245.112.70. An exposed open directory at `epgoldsecurity.com` disclosed the full toolkit; configuration decryption of all four samples, static code examination, and passive DNS pivoting establish the findings throughout this report.
 
 Shadow RAT (HIGH confidence: a private fork of Pulsar RAT, itself a Quasar RAT derivative) is the primary risk, a 50+ capability .NET RAT with AMSI/ETW bypass, HVNC, WinRE persistence that survives OS reinstallation, an integrated Kematian stealer, and AES-256-CBC encrypted C2. XWorm 3.0-5.0, a commercially available MaaS RAT, provides redundant access with triple persistence and a six-layer anti-analysis suite. Both families must be fully remediated together; removing one while the other persists leaves the attacker with full access.
 
 The dual bypass chain (AMSI blinds .NET in-memory scanning; ETW silences EDR telemetry pipelines) fires before any RAT functionality loads, creating a detection gap that signatures and behavioral baselines alone cannot close. WinRE persistence (command-activated by the operator) elevates the remediation complexity beyond a standard RAT removal. Kematian exfiltrates credentials through Shadow RAT's encrypted C2 channel rather than a Discord webhook, reducing its forensic footprint.
 
-UTA-2026-003 is assessed with LOW confidence (55%) as an independent MaaS consumer, not a named organized group, confirmed by zero named-actor infrastructure overlaps and OPSEC failures (stable C2 IP for 80+ days, exposed RDP/SMB/WinRM ports, unpatched CVE-2020-0796) inconsistent with organized tradecraft. Technical detection priorities and persistence artifact locations are in Sections 5-6; the full detection rule set (7 YARA, 10 Sigma, 6 Suricata) is at the linked detection file.
+<a href="/actors/UTA-2026-003/">UTA-2026-003</a> is assessed with LOW confidence (55%) as an independent MaaS consumer, not a named organized group, confirmed by zero named-actor infrastructure overlaps and OPSEC failures (stable C2 IP for 80+ days, exposed RDP/SMB/WinRM ports, unpatched CVE-2020-0796) inconsistent with organized tradecraft. Technical detection priorities and persistence artifact locations are in Sections 5-6; the full detection rule set (7 YARA, 10 Sigma, 6 Suricata) is at the linked detection file.
 
 **Key Risk Factors**
 
@@ -124,7 +124,7 @@ UTA-2026-003 is assessed with LOW confidence (55%) as an independent MaaS consum
 
 ### Understanding the Real-World Impact
 
-UTA-2026-003 built a functional malware operation using two RAT families running simultaneously on one server, two separate access tools under a single operator. Removing one leaves the other active. The attacker's goals, as evidenced by the tooling, are credential theft (banking, crypto wallets, Steam accounts, browser passwords), silent surveillance (keylogging, webcam, microphone, screen capture), and replacing cryptocurrency wallet addresses during transactions to redirect funds to the attacker.
+<a href="/actors/UTA-2026-003/">UTA-2026-003</a> built a functional malware operation using two RAT families running simultaneously on one server, two separate access tools under a single operator. Removing one leaves the other active. The attacker's goals, as evidenced by the tooling, are credential theft (banking, crypto wallets, Steam accounts, browser passwords), silent surveillance (keylogging, webcam, microphone, screen capture), and replacing cryptocurrency wallet addresses during transactions to redirect funds to the attacker.
 
 ### Impact Scenarios
 
@@ -806,13 +806,13 @@ These failures are consistent with an inexperienced individual operator rather t
 ## 8. Threat Actor Assessment
 {: .hl-tier-2}
 
-> **Analyst note:** This section covers what is known about the person or group operating this campaign. Because the domains use WHOIS privacy, no clear identity has been established. The designation "UTA-2026-003" is a tracking label used internally by this publication to refer to this unidentified operator.
+> **Analyst note:** This section covers what is known about the person or group operating this campaign. Because the domains use WHOIS privacy, no clear identity has been established. The designation "<a href="/actors/UTA-2026-003/">UTA-2026-003</a>" is a tracking label used internally by this publication to refer to this unidentified operator.
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-003 is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. <a href="/actors/UTA-2026-003/">UTA-2026-003</a> is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
 
 ### Attribution Statement
 
-The threat actor is unknown, designated UTA-2026-003. I hold that at LOW, 55 percent, and assess them as an independent, financially-motivated MaaS consumer operating alone.
+The threat actor is unknown, designated <a href="/actors/UTA-2026-003/">UTA-2026-003</a>. I hold that at LOW, 55 percent, and assess them as an independent, financially-motivated MaaS consumer operating alone.
 
 
 
@@ -863,7 +863,7 @@ What is missing is any operator handle, forum presence, or email reuse across do
 
 ### Operator Profile
 
-Based on the totality of evidence, UTA-2026-003 is assessed as a single individual or small group with the following profile:
+Based on the totality of evidence, <a href="/actors/UTA-2026-003/">UTA-2026-003</a> is assessed as a single individual or small group with the following profile:
 
 - **Motivation:** Financial gain through credential theft and cryptocurrency theft
 - **Capability level:** Low-to-intermediate, consumer of available tools, not a malware developer
@@ -968,7 +968,7 @@ Sources: G DATA EvilConwi campaign analysis (June 2025, Tier 2); Acronis TRU Scr
 
 **Confidence: HIGH (ANY.RUN 2025 Annual Report, Cyble, Malpedia, GitHub documentation)**
 
-This campaign is a concrete example of how the Malware-as-a-Service (MaaS) economy enables threat actors with limited technical capability to deploy sophisticated tooling. UTA-2026-003 assembled a multi-capability attack suite by combining three components, none of which required original malware development:
+This campaign is a concrete example of how the Malware-as-a-Service (MaaS) economy enables threat actors with limited technical capability to deploy sophisticated tooling. <a href="/actors/UTA-2026-003/">UTA-2026-003</a> assembled a multi-capability attack suite by combining three components, none of which required original malware development:
 
 - **Shadow RAT (Pulsar fork):** An open-source codebase forked and privately rebranded. The base capability set (AMSI/ETW bypass, HVNC, WinRE persistence, Kematian integration) was developed by KDot227 and made available publicly before being removed. Any actor with access to the source code can rename and rebuild it.
 - **XWorm:** A commercially sold builder-based RAT available for a flat fee, generating production-ready payloads with configurable C2 and encryption keys. The operator ran the XWorm builder twice, producing two differently-keyed variants, a standard consumer pattern requiring no technical expertise beyond purchasing access.
@@ -1382,7 +1382,7 @@ If an endpoint compromise is confirmed, the following response phases apply:
 - breakingsecurity.online purpose (Remcos impersonation consistent; specific use unconfirmed)
 
 ### LOW (Weak/circumstantial evidence)
-- UTA-2026-003 attribution as independent operator vs. known group (ZERO named-actor overlaps, but absence of evidence is not evidence of absence)
+- <a href="/actors/UTA-2026-003/">UTA-2026-003</a> attribution as independent operator vs. known group (ZERO named-actor overlaps, but absence of evidence is not evidence of absence)
 - XWorm exact version (range 3.0-5.0 inferred from feature set; version field obfuscated)
 
 ---

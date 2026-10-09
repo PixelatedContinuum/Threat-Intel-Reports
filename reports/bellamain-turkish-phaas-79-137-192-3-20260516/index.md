@@ -79,8 +79,8 @@ figure_nav:
 > **Investigation series, Open-Directory 79.137.192.3 (three-publication series):** This report is one of three publications from a single investigation into the multi-tenant Aeza Group staging server at `79.137.192.3`. Each cluster is operationally separate (co-tenancy on the same bulletproof IP is not operator linkage) so each cluster has its own dedicated report:
 >
 > - **[Parent (2026-05-15): Multi-Cluster Overview](/reports/opendirectory-79-137-192-3-20260515/)**, all three co-tenant clusters at boundary-level depth; establishes why they are *not* one operator.
-> - **[Cluster A (2026-05-16): BellaMain Turkish PhaaS](/reports/bellamain-turkish-phaas-79-137-192-3-20260516/)** *(this report)*, full PHP-source recovery of an operator-developed PhaaS panel + 7 Turkish-marketplace kits; UTA-2026-008.
-> - **[Cluster B (2026-05-16): Inkognito Russian VPN/Phishing](/reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/)**, 467+ brand-impersonation subdomain library bolted to a commercial VPN front; UTA-2026-009.
+> - **[Cluster A (2026-05-16): BellaMain Turkish PhaaS](/reports/bellamain-turkish-phaas-79-137-192-3-20260516/)** *(this report)*, full PHP-source recovery of an operator-developed PhaaS panel + 7 Turkish-marketplace kits; <a href="/actors/UTA-2026-008/">UTA-2026-008</a>.
+> - **[Cluster B (2026-05-16): Inkognito Russian VPN/Phishing](/reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/)**, 467+ brand-impersonation subdomain library bolted to a commercial VPN front; <a href="/actors/UTA-2026-009/">UTA-2026-009</a>.
 >
 > Cluster C (a Rhadamanthys MaaS customer at `79.133.180.168`) is covered only in the parent report.
 
@@ -89,7 +89,7 @@ figure_nav:
 
 **BellaMain is an operator-developed Turkish Phishing-as-a-Service (PhaaS) panel, recovered in full PHP source form from an open directory on OFAC-sanctioned Aeza Group hosting (`79.137.192.3`, AS216246, Moscow), that ships operator-grade anti-takedown tradecraft normally invisible to sample- or network-only analysis: a self-built USOM (Turkey CERT) blocklist monitor, four-bot Telegram C2 with deliberate identity-vs-card role separation, three Telegram-triggered TRUNCATE commands that wipe stolen credentials on demand, mysqldump-to-Telegram backup-as-exfil, a 70/30 TRX/TRON revenue split that uses the live Binance TRXTRY rate as a payout calculator, invite-only operator gating with one-time-consume referral codes, and a code-level `Wadanz` developer pseudonym hard-coded into the panel's session-encryption functions.** This report directly answers the primary intelligence question: *what does operator-grade Turkish-targeting PhaaS tradecraft look like at the source-code layer, and what unique tradecraft does full-source recovery surface that sample/network-only analysis cannot?* The seven kit RAR archives impersonate Dolap, Letgo, PTT AVM, Sahibinden, Shopier, Turkcell, and Yurtiçi Kargo, Turkey's highest-traffic consumer marketplaces and telecom, and capture not just payment cards but also Turkish national identity numbers (TC Kimlik Numarası) on a dedicated Telegram alerting channel.
 
-This activity is tracked as **UTA-2026-008** *(an internal tracking label used by The Hunters Ledger, see Section 9)*, the designation assigned in the [2026-05-15 multi-cluster report](/reports/opendirectory-79-137-192-3-20260515/). This report goes deeper on the operator's tradecraft; it surfaced no identity artifacts beyond those the parent report established.
+This activity is tracked as **<a href="/actors/UTA-2026-008/">UTA-2026-008</a>** *(an internal tracking label used by The Hunters Ledger, see Section 9)*, the designation assigned in the [2026-05-15 multi-cluster report](/reports/opendirectory-79-137-192-3-20260515/). This report goes deeper on the operator's tradecraft; it surfaced no identity artifacts beyond those the parent report established.
 
 This report is the **first public disclosure** of BellaMain as a named PhaaS family. The panel ZIP (`BellaMain.zip`, SHA256 `f791fae4...`) has never been submitted to VirusTotal. No prior Tier 1, Tier 2, or Tier 3 source documents BellaMain, the `Wadanz` developer pseudonym, or the `@AresRS34` operator Telegram alias as a recognized PhaaS service, panel, or operator. The seven kit RARs have circulated since at least 2024-04-18 (VT first-seen) but detection across all of them is near-zero (0-2 / 62 across all seven archives). Operators deploying BellaMain have, until now, had no reason to assume defenders knew the panel's internal command vocabulary, database schema, or anti-forensic capabilities. This investigation closes that gap.
 
@@ -131,7 +131,7 @@ Because this is a first public disclosure, the IOCs and detection signatures in 
 
 ### Threat Actor
 
-- **UTA-2026-008: BellaMain Turkish PhaaS operator.** Indicators suggest a single Turkish-speaking PhaaS developer/operator (or small operator team) is responsible for the BellaMain panel and its seven brand-impersonation phishing kits. Distinct-actor confidence **MODERATE (75%)**, supported by a code-level developer pseudonym (`Wadanz` function-name suffix), identical MySQL credentials across panel and all seven kits (incompatible with a shared/leaked multi-licensee template), identical canary Telegram bot embedded in all six kits' `girislog.php`, and idiomatic Turkish across the operator-facing strings (USOM polling, TRY-pegged payouts, native-fluent profanity in the anti-researcher canary). Named-actor attribution **INSUFFICIENT (<50%)**, first-capture documentation; zero Tier 1, Tier 2, or Tier 3 public sources surface BellaMain, `@AresRS34`, or `Wadanz` as a known operation, operator, or developer handle. We cannot attribute BellaMain to a publicly named threat actor at this time.
+- **<a href="/actors/UTA-2026-008/">UTA-2026-008</a>: BellaMain Turkish PhaaS operator.** Indicators suggest a single Turkish-speaking PhaaS developer/operator (or small operator team) is responsible for the BellaMain panel and its seven brand-impersonation phishing kits. Distinct-actor confidence **MODERATE (75%)**, supported by a code-level developer pseudonym (`Wadanz` function-name suffix), identical MySQL credentials across panel and all seven kits (incompatible with a shared/leaked multi-licensee template), identical canary Telegram bot embedded in all six kits' `girislog.php`, and idiomatic Turkish across the operator-facing strings (USOM polling, TRY-pegged payouts, native-fluent profanity in the anti-researcher canary). Named-actor attribution **INSUFFICIENT (<50%)**, first-capture documentation; zero Tier 1, Tier 2, or Tier 3 public sources surface BellaMain, `@AresRS34`, or `Wadanz` as a known operation, operator, or developer handle. We cannot attribute BellaMain to a publicly named threat actor at this time.
 
 ### For Technical Teams: Immediate Priorities
 
@@ -148,9 +148,9 @@ Because this is a first public disclosure, the IOCs and detection signatures in 
 
 This report is a **standalone derivative** of the OpenDirectory 79.137.192.3 investigation published on 2026-05-15. The originating pivot was a single open-directory exposure on Aeza Group AS216246 staging IP `79.137.192.3` that surfaced three operationally separate threat clusters co-tenanted on the same multi-tenant bulletproof staging utility. That parent investigation, published at [`/reports/opendirectory-79-137-192-3-20260515/`](/reports/opendirectory-79-137-192-3-20260515/), covered:
 
-- **Cluster A: BellaMain Turkish Phishing-as-a-Service** (UTA-2026-008): the subject of this report.
-- **Cluster B: Inkognito Russian VPN/phishing operator** (UTA-2026-009): documented at section-depth in a sibling standalone publication at [`/reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/`](/reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/).
-- **Cluster C: Rhadamanthys MaaS customer** (UTA-2026-010): a customer-built loader (`staticlittlesource.exe`) wrapping a canonical Rhadamanthys Stage-2 with a Hostkey Netherlands C2 surviving the November 2025 Operation Endgame Phase 3 takedown.
+- **Cluster A: BellaMain Turkish Phishing-as-a-Service** (<a href="/actors/UTA-2026-008/">UTA-2026-008</a>): the subject of this report.
+- **Cluster B: Inkognito Russian VPN/phishing operator** (<a href="/actors/UTA-2026-009/">UTA-2026-009</a>): documented at section-depth in a sibling standalone publication at [`/reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/`](/reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/).
+- **Cluster C: Rhadamanthys MaaS customer** (<a href="/actors/UTA-2026-010/">UTA-2026-010</a>): a customer-built loader (`staticlittlesource.exe`) wrapping a canonical Rhadamanthys Stage-2 with a Hostkey Netherlands C2 surviving the November 2025 Operation Endgame Phase 3 takedown.
 
 In the parent report, BellaMain (Cluster A) received **paragraph-depth coverage** across Sections 4.4, 5.7, 6.6, 8.3, and 9.1, enough to establish the cluster boundary and risk classification, but not enough to publish the full operator-tradecraft surface that source-code recovery makes visible. This standalone publication goes deep on Cluster A only.
 
@@ -226,7 +226,7 @@ BellaMain does not target ICS/OT, healthcare, or enterprise networks, and deploy
 - **Not a healthcare or medical-device threat.** No DICOM, HL7, PACS, or medical-platform targeting. No hospital, clinic, or healthcare-billing impersonation in the seven-kit set.
 - **Not an enterprise-network intrusion threat.** No endpoint malware deployment, no lateral movement, no privilege escalation, no Active Directory targeting. BellaMain is browser-based phishing against individual consumers: there is no host-malware payload at any stage of the victim funnel.
 - **Not a ransomware or destructive-payload threat.** The only "destruction" is operator-initiated TRUNCATE on the operator's own panel database for anti-forensic purposes. Victims do not experience data destruction.
-- **Not a known-named-actor operation.** First-capture documentation; no Tier 1-3 sources name BellaMain, `Wadanz`, or `@AresRS34` as a known operator. Tracked as UTA-2026-008.
+- **Not a known-named-actor operation.** First-capture documentation; no Tier 1-3 sources name BellaMain, `Wadanz`, or `@AresRS34` as a known operator. Tracked as <a href="/actors/UTA-2026-008/">UTA-2026-008</a>.
 
 ---
 
@@ -245,7 +245,7 @@ BellaMain does not target ICS/OT, healthcare, or enterprise networks, and deploy
 | **Monetization** | Direct: stolen Turkish payment cards (PAN/Expiry/CVV) and Turkish national identity numbers (TC Kimlik Numarası, 11-digit equivalent of US SSN). Indirect: 70/30 revenue split between operator and panel administrator. Payout currency: TRX (TRON) at live Binance TRXTRY rate. |
 | **C2 substrate** | Public Telegram Bot API (4 operator-configured bots per deployment + 1 hardcoded canary bot) + public Binance API for live rate lookup. No operator-controlled C2 servers beyond the panel itself. |
 | **Detection coverage** | Near-zero. Panel ZIP not in VT; kit RARs 0-2/62 on VT. `cryptone.bot` 0/92. The `79.137.192.3` IP scores 9/92 (driven by co-tenancy with BriansClub/CRD Club, not BellaMain itself). |
-| **UTA designation** | UTA-2026-008 (existing, extended by this report) |
+| **UTA designation** | <a href="/actors/UTA-2026-008/">UTA-2026-008</a> (existing, extended by this report) |
 
 ### 4.1 Why This Is a PhaaS, Not a Single Phishing Kit
 
@@ -263,7 +263,7 @@ The architectural fingerprint that makes the single-operator model directly obse
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/bellamain-turkish-phaas-79-137-192-3-20260516/bellamain-single-tenant-database.svg" | relative_url }}" alt="3-by-3 grid infographic titled 'Single-Tenant MySQL — 8 Apps, 1 Database.' Center cell is the deep-red MySQL database card labeled 'jakartaxdw' with credentials dbjakartaxdw and W!@25#8Tb2gxq15 hardcoded across 8 source files. The eight surrounding cells show the seven orange brand-impersonation kit cards (Dolap.rar SHA 2c656360, Letgo.rar SHA e21fb63a, Pttavm.rar SHA ee9d4fcc, sahibinden.rar SHA b2f4f161, shopier.rar SHA 504b1a30, turkcell.rar SHA 219cd4f6, Kargo.rar SHA 705793c0) plus the red BellaMain.zip panel card (SHA f791fae4). Each kit card lists the Turkish-brand category, points to its database/connect.php file, and repeats the same db/user pair. Footer states the attribution implication: identical MySQL credentials across panel and 7 kits indicate single-operator control rather than a leaked or licensed template; UTA-2026-008 distinct-actor confidence MODERATE 75 percent. Hunt anchor is the jakartaxdw database name plus dbjakartaxdw user plus W!@25#8Tb2gxq15 password appearing together in any PHP source file.">
-  <figcaption><em>Figure 1: Single-tenant MySQL architecture. Every kit and the panel hardcode the same `jakartaxdw` database credentials. A structural fingerprint that rules out the shared-template / multi-licensee hypothesis and anchors the UTA-2026-008 distinct-actor finding.</em></figcaption>
+  <figcaption><em>Figure 1: Single-tenant MySQL architecture. Every kit and the panel hardcode the same `jakartaxdw` database credentials. A structural fingerprint that rules out the shared-template / multi-licensee hypothesis and anchors the <a href="/actors/UTA-2026-008/">UTA-2026-008</a> distinct-actor finding.</em></figcaption>
 </figure>
 
 ### 4.2 What "Operator-Grade" Means Here
@@ -772,15 +772,15 @@ Checking tactic coverage, Reconnaissance, Privilege Escalation and Lateral Movem
 ## 9. Threat Actor Assessment
 {: .hl-tier-2}
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-008 is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. <a href="/actors/UTA-2026-008/">UTA-2026-008</a> is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
 
 ### 9.1 Conclusion
 
-The threat actor is UTA-2026-008, an existing designation this report extends. I hold distinct-actor confidence at MODERATE, 75 percent, unchanged from the parent UTA creation, and named-actor attribution stays INSUFFICIENT below 50 percent, also unchanged, as first-capture documentation.
+The threat actor is <a href="/actors/UTA-2026-008/">UTA-2026-008</a>, an existing designation this report extends. I hold distinct-actor confidence at MODERATE, 75 percent, unchanged from the parent UTA creation, and named-actor attribution stays INSUFFICIENT below 50 percent, also unchanged, as first-capture documentation.
 
 
 
-Indicators suggest the BellaMain Turkish PhaaS operation is run by a single Turkish-speaking PhaaS developer/operator (or small operator team) responsible for the BellaMain panel and its seven brand-impersonation phishing kits. We cannot attribute BellaMain to any publicly named threat actor at this time. UTA-2026-008 was originally created by the 2026-05-15 parent multi-cluster investigation from this same evidence base; this 2026-05-16 standalone report **extends** the UTA's Activity Log and Associated Reports, no new identity artifacts surfaced beyond the parent UTA's set, and confidence levels are unchanged.
+Indicators suggest the BellaMain Turkish PhaaS operation is run by a single Turkish-speaking PhaaS developer/operator (or small operator team) responsible for the BellaMain panel and its seven brand-impersonation phishing kits. We cannot attribute BellaMain to any publicly named threat actor at this time. <a href="/actors/UTA-2026-008/">UTA-2026-008</a> was originally created by the 2026-05-15 parent multi-cluster investigation from this same evidence base; this 2026-05-16 standalone report **extends** the UTA's Activity Log and Associated Reports, no new identity artifacts surfaced beyond the parent UTA's set, and confidence levels are unchanged.
 
 ### 9.2 Evidence Inventory
 

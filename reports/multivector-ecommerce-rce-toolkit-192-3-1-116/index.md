@@ -168,7 +168,7 @@ If you run internet-facing Java applications, the exposure classes this operator
 - Alert on a remote log-level change followed within minutes by a log-file read from the same source. That sequence manufactures the data an attacker then collects, and almost nobody instruments it. It is the highest-fidelity signal in this case.
 - Check whether your record identifiers are enumerable and whether short verification codes have real attempt limits. Both did work here that five exploitation chains could not.
 
-The actor stays unattributed. Every dimension that could produce a name is empty rather than merely thin, and the operation is tracked internally as **UTA-2026-019** *(an internal tracking label used by The Hunters Ledger, see Section 12)*. That is a claim about catalogs and not about the world, and Section 12 sets out why each dimension is structurally empty.
+The actor stays unattributed. Every dimension that could produce a name is empty rather than merely thin, and the operation is tracked internally as **<a href="/actors/UTA-2026-019/">UTA-2026-019</a>** *(an internal tracking label used by The Hunters Ledger, see Section 12)*. That is a claim about catalogs and not about the world, and Section 12 sets out why each dimension is structurally empty.
 
 Structured indicators are published in the machine-readable [IOC feed](/ioc-feeds/multivector-ecommerce-rce-toolkit-192-3-1-116-iocs.json). Detection content is published separately in the [detection rules file](/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/).
 
@@ -960,7 +960,7 @@ Nothing under Impact maps beyond T1531. There is no ransomware, no wiper, no des
 ## 12. Threat Actor Assessment
 {: .hl-tier-2}
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-019 is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. <a href="/actors/UTA-2026-019/">UTA-2026-019</a> is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
 
 No named threat actor can be attributed to this activity, and the reasoning behind that failure is itself worth publishing, because four separate attribution dimensions are not merely thin here, they are structurally empty.
 

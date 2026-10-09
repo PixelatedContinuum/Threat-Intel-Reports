@@ -69,6 +69,12 @@ var CHECKS = {
     cmd: 'check-detection-attack.js',
     why: 'hunting-detections/, its manifest, the ATT&CK tables or the catalog is staged'
   },
+  actors: {
+    id: 'actors',
+    label: 'threat actor index',
+    cmd: 'check-actors.js',
+    why: '_data/actors.yml, its generated index, an actor page, the catalog, a report or a detection page is staged'
+  },
   tags: {
     id: 'tags',
     label: 'catalog tags',
@@ -150,6 +156,18 @@ function plan(paths, opts) {
        Theft" while four published entries still said "Credential Theft", with
        the gate never asked. */
     if (p === '_data/catalog.yml' || p === '_data/tags.yml') want.tags = true;
+    /* The actor index derives from the hand-written record, the catalog (which
+       says which reports are published), every report (its mentions and its
+       ATT&CK table) and the detection pages (their mentions), and writes stub
+       pages of its own. A report edit that adds a bare designation, or a
+       catalog edit that publishes one, routes here so the link and the page
+       land with it rather than at the next campaign. */
+    if (p === '_data/actors.yml' || p === '_data/actors_index.yml' ||
+        /^actors\/[^/]+\/index\.md$/.test(p) || p === '_data/catalog.yml' ||
+        /^reports\/[^/]+\/index\.md$/.test(p) || /^hunting-detections\/.+\.md$/.test(p) ||
+        p === 'tools/report-tooling/data/attack-techniques.tsv') {
+      want.actors = true;
+    }
     if (p === '_data/glossary.yml' && owed.indexOf(OWED_GLOSSARY) === -1) owed.push(OWED_GLOSSARY);
 
     /* STIX bundle safety (2026-09-14): no value a feed marks unblockable may sit

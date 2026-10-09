@@ -8,7 +8,7 @@ thumbnail: /assets/images/cards/rovodev-mirai-matrix-c2-87.106.143.220.png
 hide: true
 ---
 
-**Campaign:** UTA-2026-014 / rovodev-mirai-matrix-c2-87.106.143.220
+**Campaign:** <a href="/actors/UTA-2026-014/">UTA-2026-014</a> / rovodev-mirai-matrix-c2-87.106.143.220
 **Date:** 2026-05-26
 **Author:** The Hunters Ledger
 **License:** CC BY 4.0
