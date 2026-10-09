@@ -52,9 +52,9 @@
 
 - Drawer open and close, the phone search field opening over the bar, the Pagefind UI
   theming. Joseph checked the phone once after the cache fix and liked it; no further report.
-- Pre-existing, not touched: the large vertical gaps between wrapped nav links on phones no
-  longer matter (links are in the drawer), but the old `.hl-nav__links` rules are still in
-  `custom.css` and could be deleted in a tidy-up.
+- Pre-existing: the large vertical gaps between wrapped nav links on phones no longer matter
+  (links are in the drawer); the old `.hl-nav__links` rules were deleted in the 2026-10-09
+  tidy-up (T-0198).
 
 ## Data points surfaced by the new IOC columns (author's call, not a bug in the viewer)
 
@@ -97,18 +97,68 @@
   layout if wanted. The ATT&CK section lists techniques per actor; the site-wide heatmap and
   Navigator layer belong to backlog item 2.
 
+## Shipped since: technique and family cross-reference pages, heatmap, Navigator layer (T-0198, 2026-10-09)
+
+- `/techniques/<id>/` (283 pages) lists every published report (with the confidence the report's
+  own table states and the tactic it filed the technique under), every detection page whose
+  coverage names it (with the rule names) and every tracked actor whose reports map it, plus the
+  MITRE link. `/techniques/` is the site-wide heatmap: the ATT&CK matrix in strip order, one cell
+  per technique shaded by score (reports plus rules, through two CSS custom properties, no
+  script), a filter, a most-mapped list, and the Navigator layer download at
+  `assets/data/attack-navigator-layer.json` (one entry per technique and tactic, scored, each
+  comment linking back to the page). Technique ids on actor profiles, in the detection pages'
+  coverage tables and in the coverage strip's chips now link to the technique page.
+- `/families/<slug>/` (46 pages) lists every report, YARA rule (by `family` metadata, rule names
+  shown), IOC feed (by `family` field) and actor profile (by `tooling`) that names the family, under
+  one canonical spelling. `/families/` is a card grid filterable by kind. The vocabulary is
+  `_data/families.yml` (hand-written: name, kind, aliases, optional catalog tags and a summary);
+  a label it does not know is listed under `unmapped` in `_data/family_index.yml` (44 today,
+  mostly operator-toolkit descriptions and exploit labels, which are not families), never guessed
+  into a page. Matching also strips parentheticals and splits a label on `/` or ` + ` when every
+  part is known, so `KAIDO (Quasar RAT fork)` and `NjRAT/XWorm` resolve without aliases.
+- Tooling: `tools/report-tooling/lib/xref.js` (pure, 11 tests), `generate-xref.js` (writes
+  `_data/attack_index.yml`, `_data/family_index.yml`, the stubs and the layer; removes a stub
+  nothing indexes), `check-xref.js` (regenerate-and-diff on all four outputs; a vocabulary entry
+  nothing published matches FAILS so an empty page never ships). Routed by `staged-gate.js` on
+  every input (reports, detection pages, feeds, catalog, actor data, detection ATT&CK tables, the
+  ATT&CK TSV, the vocabulary and its own outputs), in the pre-commit hook and the Actions `gates`
+  job. Published sources only, by construction: an unlisted report contributes nothing. Layouts
+  `_layouts/technique.html` and `_layouts/family.html`; accents amber (`#fb923c`) and teal
+  (`#2dd4bf`); search sections Techniques and Families; nav positions 2.8 and 2.9.
+- Publish step: `hunters-ledger-publish` Step 4g (ai-workflows), with a checklist item, a 1k
+  verify-table row, the staging list and the go-live flip updated. The only hand-written part is
+  a `_data/families.yml` entry or alias when a report names a family the vocabulary lacks.
+- Verified: 813 unit tests, both gates, a local github-pages build (every technique, family,
+  actor, report, detection and feed link on the built site resolves), Pagefind (552 pages),
+  Playwright desktop and iPhone 13 screenshots, the heatmap filter and the family kind chips
+  exercised, the strip chips confirmed as anchors. Actions run 22 green (cross-reference pages) and run 23 green (the three tidy-ups).
+- Left open: a per-actor Navigator layer download on the profile (the site-wide layer exists now,
+  so it is a small addition); a named-actor entry kind; `_data/families.yml` wants a glance
+  whenever a report names a family that is new to the site.
+
+## Shipped since: the tidy-ups (T-0198, 2026-10-09)
+
+- Dead `.hl-nav__links` rules deleted (five blocks). The nine PNG screenshots over 200 KB are
+  lossless WebP, pixel-identical to the PNGs (checked on all nine) and 2.2 MB down to 0.8 MB.
+  `assets/css/custom.css` is now `assets/css/custom.scss` with empty front matter, so Jekyll's
+  Sass converter (already `compressed` in `_config.yml`) writes the published
+  `/assets/css/custom.css` at 129 KB instead of 212 KB; the path and the link in `head.liquid`
+  are unchanged, the source is still plain CSS, and the two scripts and the test that read the
+  source now read the `.scss`. Verified by rule and media-query counts matching outside comments
+  and a report page rendering identically on desktop and phone.
+- Local build note, corrected: in this cloud container `jekyll build --safe` fails on the
+  `seo` tag and the remote theme's SCSS fails on the default locale; what works is
+  `github-pages build -d <scratch>/_site` with `LANG=C.UTF-8 LC_ALL=C.UTF-8 RUBYOPT=-Eutf-8`
+  and `PAGES_REPO_NWO` set (about 45 s).
+
 ## The backlog, ranked
 
 Each item is self-contained. The first three are the ones Joseph was leaning toward.
 
 1. **Threat actor index.** DONE 2026-10-09, see above. Left open: a named-actor entry kind,
    and a per-actor Navigator layer download once item 2 builds the site-wide layer.
-2. **Technique and family cross-reference pages.** `/techniques/T1190/` listing every report and
-   rule mapped to it (from `_data/detection_attack.yml` and the reports' ATT&CK tables parsed by
-   `assets/js/attack-coverage.js`; `lib/actors.js` `attackFor()` already runs that parser over a
-   report at build time and `_data/actors_index.yml` carries the per-actor result, so the
-   technique page can also list the actors mapped to it); `/families/<name>/` from the feeds' `primary_family`. Pure templating
-   over existing data, plus a site-wide ATT&CK heatmap and Navigator layer.
+2. **Technique and family cross-reference pages.** DONE 2026-10-09, see above. Left open: the
+   per-actor Navigator layer download.
 3. **Consolidated YARA and Sigma feeds**, modelled on `feeds/suricata/`: one file per engine
    with stable identifiers and a withdrawn-rule changelog, regenerated from
    `_data/detection_manifests.yml` (every rule already has a hash and tier there). Also a
@@ -121,9 +171,7 @@ Each item is self-contained. The first three are the ones Joseph was leaning tow
    page renders no chips for it) and a Wire-only RSS feed; per-report revision history (seven
    reports carry `last_updated` with nothing shown); a "cite this report" box; detections-only
    Atom feed and a JSON Feed; `Dataset` structured data on IOC and STIX pages.
-6. **Tidy-ups.** Delete the dead `.hl-nav__links` CSS; convert the handful of 200 KB+ PNG
-   screenshots to WebP; rename `custom.css` to `.scss` with empty front matter so Jekyll
-   minifies it (about 190 KB today).
+6. **Tidy-ups.** DONE 2026-10-09, see above.
 
 ## How to start the next session
 
