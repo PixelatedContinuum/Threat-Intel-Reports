@@ -133,6 +133,10 @@ jobs:
       - name: Build the search index
         run: |
           set -euo pipefail
+          # actions/jekyll-build-pages runs in a container as root, so _site comes
+          # back root-owned and Pagefind (running as the runner user) could not
+          # create _site/pagefind: "PermissionDenied" on the first run, 2026-10-09.
+          sudo chown -R "$(id -u):$(id -g)" _site
           npx --yes pagefind@1.3.0 --site _site 2>&1 | tee /tmp/pagefind.txt
 
       - name: Sanity-check the build
