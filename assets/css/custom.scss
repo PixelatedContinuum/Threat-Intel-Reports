@@ -1,3 +1,12 @@
+---
+---
+{%- comment -%}
+  Empty front matter so Jekyll runs this file through the Sass converter and
+  writes it as /assets/css/custom.css compressed (sass.style in _config.yml):
+  the published path and every reference to it are unchanged. The file is
+  plain CSS; keep it that way, since the Sass in GitHub Pages' build is the
+  older Ruby implementation and every rule here must survive it untouched.
+{%- endcomment -%}
 /* ============================================================
    The Hunter's Ledger — Design System
    ============================================================ */

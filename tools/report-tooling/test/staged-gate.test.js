@@ -16,7 +16,7 @@ var SG = require('../lib/staged-gate.js');
 function ids(p) { return p.checks.map(function (c) { return c.id; }).sort(); }
 
 test('a commit staging nothing relevant runs no checks', function () {
-  var p = SG.plan(['README.md', '_config.yml', 'assets/css/custom.css']);
+  var p = SG.plan(['README.md', '_config.yml', 'assets/css/custom.scss']);
   assert.deepEqual(p.checks, []);
   assert.deepEqual(p.reports, []);
 });
@@ -214,7 +214,7 @@ test('the actor index routes on its record, its generated index, a stub page, th
     assert.ok(ids(SG.plan([path], { existing: [path] })).indexOf('actors') > -1, path);
   });
   assert.deepEqual(ids(SG.plan(['_data/actors.yml'])), ['actors', 'xref']);
-  assert.deepEqual(ids(SG.plan(['actors/index.md', 'assets/css/custom.css'])), []);
+  assert.deepEqual(ids(SG.plan(['actors/index.md', 'assets/css/custom.scss'])), []);
 });
 
 test('the technique and family pages route on the vocabulary, their generated indexes, a stub, the layer, a feed and every actor-index input', function () {
@@ -232,5 +232,5 @@ test('the technique and family pages route on the vocabulary, their generated in
     assert.ok(ids(SG.plan([path], { existing: [path] })).indexOf('xref') > -1, path);
   });
   assert.deepEqual(ids(SG.plan(['_data/families.yml'])), ['xref']);
-  assert.deepEqual(ids(SG.plan(['techniques/index.md', 'families/index.md', 'assets/js/heatmap-filter.js'])), []);
+  assert.deepEqual(ids(SG.plan(['techniques/index.md', 'families/index.md', 'assets/js/heatmap-filter.js', 'assets/css/custom.scss'])), []);
 });

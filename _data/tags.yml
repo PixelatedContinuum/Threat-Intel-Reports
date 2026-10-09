@@ -9,7 +9,7 @@
 #
 # Every entry has a `tag` (the canonical spelling, exactly as it must appear in
 # the catalog), a `color` (one of blue, red, green, purple, yellow; the badge
-# palette in assets/css/custom.css), and optionally `aliases`: spellings that
+# palette in assets/css/custom.scss), and optionally `aliases`: spellings that
 # have appeared before and must NOT be used again. check-tags.js in
 # tools/report-tooling FAILS a commit whose catalog carries an alias, and warns
 # by name on a tag this file does not know, so a new tag is added here

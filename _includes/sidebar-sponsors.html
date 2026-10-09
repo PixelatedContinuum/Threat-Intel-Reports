@@ -2,7 +2,7 @@
   Left-margin Sponsors rail — renders monthly + active sponsors site-wide.
   Same filter as site-sponsors.html (footer). On desktop this is a fixed
   rail in the left margin; at <=1280px the CSS reflows it into a horizontal
-  strip under the navbar (see .hl-sponsor-rail in custom.css). Renders
+  strip under the navbar (see .hl-sponsor-rail in custom.scss). Renders
   nothing when there are no monthly+active sponsors.
 {%- endcomment -%}
 {% assign active_site_sponsors = site.data.sponsors.sponsors | where: "tier", "monthly" | where: "active", true %}

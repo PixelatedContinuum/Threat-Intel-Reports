@@ -18,7 +18,7 @@
 // collision does not fail the next publish.
 var STALE_HOURS = 4;
 var REQUIRED = ['title', 'url', 'source', 'date', 'kind'];
-// Hues defined in assets/css/custom.css as .hl-topic-c1 .. .hl-topic-c12.
+// Hues defined in assets/css/custom.scss as .hl-topic-c1 .. .hl-topic-c12.
 var PALETTE_SIZE = 12;
 // How many tags the page draws per item; the rest are never rendered.
 // Two, not three: three left 60% of rows wrapping their tags to a second line.

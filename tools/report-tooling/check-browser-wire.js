@@ -85,7 +85,7 @@ async function main() {
     built = HARNESS.build(JSDOM, {
       liveHtml: liveHtml,
       themeCss: themeCss,
-      customCss: fs.readFileSync(path.join(ROOT, 'assets', 'css', 'custom.css'), 'utf8'),
+      customCss: fs.readFileSync(path.join(ROOT, 'assets', 'css', 'custom.scss'), 'utf8'),
       filterJs: fs.readFileSync(path.join(ROOT, 'assets', 'js', 'listing-filter.js'), 'utf8')
     });
   } catch (e) {

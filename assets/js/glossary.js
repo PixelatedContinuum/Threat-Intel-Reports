@@ -22,7 +22,7 @@
   var INDICATOR_RE = /(\d{1,3}\[?\.\]?){3}\d{1,3}|\b[a-f0-9]{32,64}\b/i;
 
   // Must stay equal to the max-width in the .hl-gloss::after rule in
-  // assets/css/custom.css. Changing one without the other misplaces the flip.
+  // assets/css/custom.scss. Changing one without the other misplaces the flip.
   var TOOLTIP_MAX_PX = 320;
 
   function isExcluded(node) {

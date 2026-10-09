@@ -17,7 +17,7 @@
    rather than reporting a clean sweep of zero. See
    homelab-soc/docs/gate-honesty-contract.md. */
 
-// The badge palette tag-badge.html maps onto assets/css/custom.css. A colour
+// The badge palette tag-badge.html maps onto assets/css/custom.scss. A colour
 // outside this set renders a chip with no colour class: it still displays, it
 // just goes grey among coloured siblings.
 var COLORS = { blue: 1, red: 1, green: 1, purple: 1, yellow: 1 };
@@ -113,7 +113,7 @@ function check(catalogDoc, tagsDoc) {
       problems.push('tags.yml entry "' + name + '" has colour ' +
         JSON.stringify(t.color === undefined ? null : t.color) +
         ', which is not one of ' + Object.keys(COLORS).join(', ') +
-        ' (the badge palette in assets/css/custom.css)');
+        ' (the badge palette in assets/css/custom.scss)');
     }
     canonical[name] = 1;
     claim(name, name, false);

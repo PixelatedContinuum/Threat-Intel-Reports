@@ -46,6 +46,6 @@ Facebook Sharing Debugger) after deploy.
 ## Changing the design
 
 Palette / fonts / layout constants and `render_card` live in `cardlib.py` and mirror the
-site's `assets/css/custom.css` tokens. Edit, then `generate_card.py --all` to re-render.
+site's `assets/css/custom.scss` tokens. Edit, then `generate_card.py --all` to re-render.
 Reference mockups and the full design spec are in the workflow repo at
 `Projects/hunters-ledger-site/preview-mockups/`.

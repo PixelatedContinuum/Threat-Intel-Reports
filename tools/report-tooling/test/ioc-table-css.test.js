@@ -40,7 +40,7 @@ var path = require('node:path');
 var X = require('../lib/ioc-table-extract.js');
 
 var CSS = fs.readFileSync(
-  path.join(__dirname, '..', '..', '..', 'assets', 'css', 'custom.css'), 'utf8');
+  path.join(__dirname, '..', '..', '..', 'assets', 'css', 'custom.scss'), 'utf8');
 
 // The stretch of stylesheet this component owns, and ONLY that stretch.
 //
