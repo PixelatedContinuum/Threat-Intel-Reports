@@ -1,0 +1,620 @@
+{
+  "Event": {
+    "uuid": "7a1fc79b-257b-587d-9691-da866766d383",
+    "info": "Enough to Be Dangerous: The Mechanics of an LLM-Assisted Intrusion Campaign",
+    "date": "2026-07-21",
+    "threat_level_id": 1,
+    "analysis": 2,
+    "timestamp": 1791580400,
+    "publish_timestamp": 1791580400,
+    "published": true,
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"AI Abuse\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Open Dir\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Data Theft\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"E-Commerce\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"China\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data from Local System - T1005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Masquerading - T1036\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Network Service Discovery - T1046\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Unix Shell - T1059.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Python - T1059.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Valid Accounts - T1078\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"External Proxy - T1090.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"SSH Authorized Keys - T1098.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Bidirectional Communication - T1102.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Password Guessing - T1110.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Password Spraying - T1110.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Automated Collection - T1119\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploit Public-Facing Application - T1190\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data from Information Repositories - T1213\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Shell - T1505.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Software Discovery - T1518\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Account Access Removal - T1531\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials In Files - T1552.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Private Keys - T1552.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Cloud Instance Metadata API - T1552.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Phishing - T1566\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Protocol Tunneling - T1572\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Virtual Private Server - T1583.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Services - T1583.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Establish Accounts - T1585\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Search Victim-Owned Websites - T1594\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Vulnerability Scanning - T1595.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Scan Databases - T1596.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Cookies - T1606.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Upload Malware - T1608.001\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "Attribute": [
+      {
+        "uuid": "ea470c10-925c-5da2-a48e-60240947cc81",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/",
+        "to_ids": false,
+        "comment": "Detection rules, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "f5d43283-fff8-54e8-bac3-3302f31ae1d3",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/ioc-feeds/multivector-ecommerce-rce-toolkit-192-3-1-116-iocs.json",
+        "to_ids": false,
+        "comment": "IOC feed (JSON), The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "f9e09eb7-d158-5c4d-a422-91f52c2f3862",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/",
+        "to_ids": false,
+        "comment": "Report, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "4785ab33-668c-5252-bb55-340547f2f938",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/stix/multivector-ecommerce-rce-toolkit-192-3-1-116.json",
+        "to_ids": false,
+        "comment": "STIX 2.1 bundle, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "009011fe-bd44-5117-9445-e0d401a7cbe5",
+        "type": "vulnerability",
+        "category": "External analysis",
+        "value": "CVE-2021-42550",
+        "to_ids": false,
+        "comment": "Named in the report",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "0a2e3bae-7b64-52cc-9515-cd1632f26941",
+        "type": "vulnerability",
+        "category": "External analysis",
+        "value": "CVE-2022-1471",
+        "to_ids": false,
+        "comment": "Named in the report",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "0aa200d1-ea8a-5c5a-839a-c29e0c466441",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "vpn932081317.softether.net",
+        "to_ids": true,
+        "comment": "domain: vpn932081317.softether.net. SoftEther DDNS name for a VPN the operator self-hosts on 192.3.1.116; still resolves to that address. Operator OPSEC infrastructure. Note the parent domain softether.net is a legitimate DDNS service - only this specific hostname is the indicator. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "b0c8e9f5-5494-5f89-a25d-2c3fe0419f5c",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://192.3.1.116:7777/cmd.jsp",
+        "to_ids": true,
+        "comment": "url: http://192.3.1.116:7777/cmd.jsp. A functional generic bash-exec JSP web shell (reads a 'c' HTTP parameter, runs it via /bin/bash -c). DEFINITE that the file exists in the operator's own directory and is downloadable. UNCONFIRMED that it was ever deployed to any victim host. Port 7777 serves this file's source and does not execute it. [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "15c68266-f591-55ba-95d8-182f3646d170",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://192.3.1.116:7777/xstream_rce_success",
+        "to_ids": true,
+        "comment": "url: http://192.3.1.116:7777/xstream_rce_success. Never observed hit across approximately 17,000 lines of the operator's own port-7777 access log. MODERATE confidence the callback did not fire; the log window begins roughly 68-76 minutes after the engagement concluded, so an earlier hit cannot be ruled out. [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "b70cd92f-aded-5421-9170-5bbcba1bf42d",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://192.3.1.116:9876/rce_confirmed",
+        "to_ids": true,
+        "comment": "url: http://192.3.1.116:9876/rce_confirmed. No comprehensive port-9876 access log exists in the reviewed corpus, so this callback's outcome is fully open. Both logged LDAP engagements stalled at BindResponse without a SearchRequest. [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "0708bd36-6f60-57db-aad5-4bb7d0bf0d8d",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://192.3.1.116:9876/yaml_rce_proof",
+        "to_ids": true,
+        "comment": "url: http://192.3.1.116:9876/yaml_rce_proof. Embedded in poc.yml, a textbook ScriptEngineManager + URLClassLoader gadget chain of the CVE-2022-1471 family. [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "3632fba4-1edc-5f10-a8a3-19f12b7e4455",
+        "type": "url",
+        "category": "Network activity",
+        "value": "ldap://192.3.1.116:1389/cn=exploit",
+        "to_ids": true,
+        "comment": "url: ldap://192.3.1.116:1389/cn=exploit. The callback target of the crafted Logback insertFromJNDI payload (CVE-2021-42550). Backed by ldap_server.py, ldap_server_v2.py and setup_jndi.sh in the operator's directory. [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "49fd75a8-4d54-5ec4-b116-8b8276e502cb",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "192.3.1.116",
+        "to_ids": true,
+        "comment": "ipv4: 192.3.1.116. Primary operator infrastructure. Port 7777 is a plain Python static HTTP server serving the working directory; it does NOT execute the JSP web shell it hosts. Still live and growing as of 2026-07-21. A hosting-provider takedown request has been filed. [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "fc52e987-4147-58af-873d-734619c2adbc",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 Alibaba Druid Console Path Request (Flowbits Setter -- pairs with sid:1000011)\"; flow:established,to_server; http.uri; content:\"/druid/\"; flowbits:set,thl.mvec.druid.uri; flowbits:noalert; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-recon; sid:1000010; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)\nalert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 Unauthenticated External Access to Alibaba Druid Monitoring Console (requires flowbits setter sid:1000010)\"; flow:established,to_client; flowbits:isset,thl.mvec.druid.uri; http.stat_code; content:\"200\"; http.response_body; content:\"JavaClassPath\"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-recon; sid:1000011; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)",
+        "to_ids": true,
+        "comment": "Unauthenticated External Access to Alibaba Druid Monitoring Console (Network Layer, Flowbits Pair) | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1596.005 | rule hash bba86fc0 | https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "c894ccb8-1810-5bd5-9c54-b52f2c3ccc1a",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 Gopher-Scheme SSRF Protocol Smuggling in HTTP Request Body\"; flow:established,to_server; http.request_body; content:\"gopher://\"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:9301405; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)",
+        "to_ids": true,
+        "comment": "Gopher-Scheme SSRF Protocol Smuggling in HTTP Request Body | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1190 | rule hash 4f76b1ab | https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "e2fa0685-24b4-52d3-8cbe-7a6b2445ea3d",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 Gopher-Scheme SSRF Protocol Smuggling in HTTP URI\"; flow:established,to_server; http.uri; content:\"gopher://\"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:9301404; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)",
+        "to_ids": true,
+        "comment": "Gopher-Scheme SSRF Protocol Smuggling in HTTP URI | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1190 | rule hash d63a591b | https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "856a9d28-05d9-56bc-8df6-54007c622e54",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 JWT alg-none Authentication Bypass Attempt (Forged Token Header)\"; flow:established,to_server; http.header; content:\"Bearer eyJhbGciOiJub25lIn0\"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:1000009; rev:3; metadata:author The_Hunters_Ledger, date 2026-07-21;)",
+        "to_ids": true,
+        "comment": "JWT alg-none Authentication Bypass Attempt | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1606.001 | rule hash 8c948d5c | https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "3615799b-df93-5681-9e4d-9763618dbc8b",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 SSRF-to-Redis CONFIG/BGSAVE Command Sequence via HTTP (SSH Key Write Chain)\"; flow:established,to_server; http.request_body; content:\"CONFIG SET dir\"; content:\"BGSAVE\"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:9301406; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)",
+        "to_ids": true,
+        "comment": "SSRF-to-Redis CONFIG/BGSAVE Command Sequence via HTTP | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1190, T1098.004 | rule hash c5e0553b | https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "80747134-71a1-5056-89bd-3cb4c36e063d",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 SnakeYAML ScriptEngineManager Gadget Chain in HTTP Request Body (CVE-2022-1471 Family)\"; flow:established,to_server; http.request_body; content:\"!!javax.script.ScriptEngineManager\"; content:\"!!java.net.URLClassLoader\"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-user; sid:9301402; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)",
+        "to_ids": true,
+        "comment": "SnakeYAML Gadget Chain in HTTP Request Body | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1190 | rule hash 5c88bc5d | https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "155b7e27-307e-5fb1-bd5b-90ee98ce16f1",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 XXE Entity Declaration Targeting Cloud Metadata in Upload\"; flow:established,to_server; http.request_body; content:\"<!ENTITY\"; content:\"SYSTEM\"; content:\"169.254.169.254\"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:9301403; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)",
+        "to_ids": true,
+        "comment": "XXE Entity Declaration Targeting Cloud Metadata in Upload | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1190, T1552.005 | rule hash 438b1e20 | https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "254e0e01-e72b-5b1c-b3da-ba3a415defc3",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL HUNT MultiVector-192.3.1.116 Password-Reset Endpoint POST Burst (forgetPwd Verification-Code Brute-Force Indicator)\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"forgetPwd\"; nocase; threshold:type threshold,track by_src,count 50,seconds 600; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:9301413; rev:3; metadata:author The_Hunters_Ledger, date 2026-07-21;)",
+        "to_ids": false,
+        "comment": "Password-Reset Endpoint POST Burst (forgetPwd Variant) | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1110.001 | rule hash 319cdf0a | https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "b7e09249-1265-5dca-a9c7-1547ae9e974d",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL HUNT MultiVector-192.3.1.116 Password-Reset Endpoint POST Burst (restPassword Verification-Code Brute-Force Indicator)\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"restPassword\"; nocase; threshold:type threshold,track by_src,count 50,seconds 600; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:1000012; rev:3; metadata:author The_Hunters_Ledger, date 2026-07-21;)",
+        "to_ids": false,
+        "comment": "Password-Reset Endpoint POST Burst (restPassword Variant) | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1110.001 | rule hash 3e55a75f | https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "2c459181-1763-5ad2-84dd-dc9fb880b832",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 Eureka Apps-Delta Request (Flowbits Setter -- pairs with sid:1000008)\"; flow:established,to_server; http.uri; content:\"/eureka/apps/delta\"; flowbits:set,thl.mvec.eureka.delta; flowbits:noalert; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:trojan-activity; sid:9301407; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)\nalert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 Eureka Apps-Delta Response Containing XStream Gadget Markers (requires flowbits setter sid:9301407)\"; flow:established,to_client; flowbits:isset,thl.mvec.eureka.delta; http.response_body; content:\"java.lang.ProcessBuilder\"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:trojan-activity; sid:1000008; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)",
+        "to_ids": true,
+        "comment": "Eureka Apps-Delta Response Containing XStream Gadget Markers (Flowbits Pair) | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1190, T1105 | rule hash 230549cf | https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "dec05264-0b93-5155-a4ee-4f7797cc289a",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert tcp $HOME_NET any -> $EXTERNAL_NET [1389,1099] (msg:\"THL DETECT MultiVector-192.3.1.116 LDAP Anonymous BindRequest to Non-Standard Directory Port (JNDI Callback Indicator)\"; flow:established,to_server; content:\"|30 0c 02 01 01 60 07 02 01 03 04 00 80 00|\"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:9301401; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)",
+        "to_ids": true,
+        "comment": "LDAP Anonymous BindRequest to a Non-Standard Directory Port | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1190 | rule hash 7ea034a5 | https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "012a7740-83c5-5dce-981b-49d72868b1ab",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Application Account Registration Request\nid: e346cdb5-37c0-4bda-a4ad-2f36fe22c0e2\nname: account_registration_base\nstatus: experimental\ndescription: >-\n    Base rule (not alerting on its own): an HTTP request to an account\n    registration or signup endpoint. Ordinary and expected on any application\n    with self-service signup. Paired below with a rule for sensitive\n    administrative route probing and a correlation that flags the same\n    source registering an account and then probing administrative routes\n    within minutes, a standing technique observed reused across multiple\n    targets: register a throwaway account, then use its token to walk admin,\n    config and system-information routes.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-21'\ntags:\n    - attack.resource-development\n    - attack.t1585\nlogsource:\n    category: webserver\ndetection:\n    selection:\n        cs-method: POST\n        cs-uri-stem|contains:\n            - 'register'\n            - 'signup'\n    condition: selection\nfalsepositives:\n    - >-\n        Ordinary customer or user self-service account creation. Not\n        alerting on its own; reviewed only in combination with the\n        admin-route-probe rule via the correlation below.\nlevel: informational\n---\ntitle: HTTP Request to a Sensitive Administrative or System-Information Route\nid: bdad563c-44c7-45f1-9a39-d8a1d31081bf\nname: sensitive_admin_route_probe_base\nstatus: experimental\ndescription: >-\n    Base rule (not alerting on its own): an HTTP request to an\n    administrative, configuration, debug or system-information API route.\n    Legitimate admin users browse these routes routinely. Paired above with\n    the account registration rule and a correlation that flags the same\n    source registering a new account and then probing these routes within\n    minutes, since administrative routes should not be the first thing a\n    brand-new account touches.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-21'\ntags:\n    - attack.initial-access\n    - attack.stealth\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1078\nlogsource:\n    category: webserver\ndetection:\n    selection:\n        cs-uri-stem|contains:\n            - '/api/admin'\n            - '/api/users'\n            - '/api/config'\n            - '/api/system/info'\n            - '/api/debug'\n    condition: selection\nfalsepositives:\n    - >-\n        A legitimate administrator's normal use of the application's own\n        admin panel. Not alerting on its own; reviewed only in combination\n        with the preceding registration event via the correlation rule.\nlevel: informational\n---\ntitle: Newly Registered Account Probing Administrative Routes Within Minutes\nid: bd3e7b1b-7a0c-4713-8f2b-8dcece54d8de\nstatus: experimental\ndescription: >-\n    Fires when the same source registers an application account and then\n    requests an administrative, configuration, debug or system-information\n    route within 15 minutes. A brand-new self-service account has no\n    legitimate reason to immediately probe administrative surfaces; this\n    sequence was confirmed reused across multiple unrelated target platforms\n    by the same operator, making it a standing technique rather than a\n    one-off.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-21'\ntags:\n    - attack.resource-development\n    - attack.t1585\n    - attack.initial-access\n    - attack.stealth\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1078\ncorrelation:\n    type: temporal_ordered\n    rules:\n        - account_registration_base\n        - sensitive_admin_route_probe_base\n    group-by:\n        - c-ip\n    timespan: 15m\nfalsepositives:\n    - >-\n        A legitimate new employee or partner account being set up and then\n        immediately granted admin access by design. Uncommon for a genuine\n        self-service signup flow.\nlevel: high",
+        "to_ids": true,
+        "comment": "Newly Registered Account Probing Administrative Routes Within Minutes (Correlation) | TIER: Detection | robustness 2 | confidence HIGH (correlation) / LOW (either base rule alone) | ATT&CK T1585, T1078 | rule hash a4b81414 | https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "94305fd0-eb1c-5876-80ff-4906acbaa7b2",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: External Connection Attempt to a Service-Discovery-Profile Port\nid: a3f1f3b3-98a1-402a-a979-bce509a2bfb1\nname: firewall_scan_target_port_base\nstatus: experimental\ndescription: >-\n    Base rule (not alerting on its own): an inbound connection attempt on one\n    of a fixed 14-port profile this operator scans across multiple targets:\n    22, 80, 443, 3306, 6379, 8080, 8443, 8888, 9000, 9001, 9002, 9090, 8848\n    and 8157, a mix of standard admin, database and cache ports plus the\n    Nacos and Druid management consoles this operator specifically exploits\n    elsewhere. Paired below with a correlation that flags a single source\n    touching many distinct ports from this profile within a short window.\n    Connections the firewall rejected are excluded: an internet-facing\n    address is scanned continuously as a background condition, so counting\n    dropped packets makes the paired correlation fire indefinitely on traffic\n    that never reached a service. Restricting to connections the firewall\n    permitted changes the signal from \"someone scanned us\" to \"someone\n    scanned us and something answered\", which is the actionable form.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-21'\nmodified: '2026-07-30'\ntags:\n    - attack.discovery\n    - attack.t1046\nlogsource:\n    category: firewall\ndetection:\n    selection:\n        dst_port:\n            - 22\n            - 80\n            - 443\n            - 3306\n            - 6379\n            - 8080\n            - 8443\n            - 8888\n            - 9000\n            - 9001\n            - 9002\n            - 9090\n            - 8848\n            - 8157\n    filter_rejected:\n        action:\n            - 'block'\n            - 'blocked'\n            - 'deny'\n            - 'denied'\n            - 'drop'\n            - 'dropped'\n            - 'reject'\n    condition: selection and not filter_rejected\nfalsepositives:\n    - >-\n        Routine internal vulnerability scanning or asset-discovery tooling\n        covering the same common service ports. Not alerting on its own;\n        reviewed only through the distinct-port-count threshold in the\n        correlation rule below.\nlevel: informational\n---\ntitle: Single Source Touching Many Distinct Ports From a Fixed Service-Discovery Profile\nid: 3e5e5239-e952-41ef-a287-05ab2a6301fd\nstatus: experimental\ndescription: >-\n    Fires when one source touches 8 or more of the 14 profiled ports within 5\n    minutes, an aggressive, unstealthy service-discovery sweep rather than\n    incidental traffic on one or two of these common ports. Low\n    sophistication and easy to detect; useful as an early tripwire rather\n    than a high-confidence standalone alert, since the underlying ports are\n    also touched individually by ordinary traffic and legitimate scanning.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-21'\ntags:\n    - attack.discovery\n    - attack.t1046\ncorrelation:\n    type: value_count\n    rules:\n        - firewall_scan_target_port_base\n    group-by:\n        - src_ip\n    timespan: 5m\n    condition:\n        field: dst_port\n        gte: 8\nfalsepositives:\n    - >-\n        An authorized internal vulnerability scanner or asset-inventory tool\n        covering the same port profile. Confirm against known scanner IP\n        ranges before treating as hostile.\nlevel: medium",
+        "to_ids": false,
+        "comment": "Single Source Touching Many Distinct Ports From a Fixed Service-Discovery Profile (Correlation) | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1046 | rule hash 66471be9 | https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "19eea8de-825e-5c6e-b9ee-e392b092436c",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: External HTTP Request to Jolokia JMX Write Endpoint Targeting Logging Configuration\nid: 00a7fbb6-7f52-4153-96cd-41042f0090eb\nname: jolokia_logger_write_base\nstatus: experimental\ndescription: >-\n    Base rule (not alerting on its own): an external HTTP request to a Jolokia\n    (JMX-over-HTTP) write endpoint targeting a Logger or logging-level\n    attribute. Jolokia exposes JMX management operations over plain HTTP, and a\n    write operation against logging configuration lets a remote caller raise a\n    target application's log verbosity to manufacture sensitive data in the\n    log file for later retrieval. Paired below with a rule for the follow-on\n    actuator logfile read.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-21'\ntags:\n    - attack.initial-access\n    - attack.t1190\nlogsource:\n    category: webserver\ndetection:\n    selection_endpoint:\n        cs-uri-stem|contains: '/jolokia/write/'\n    selection_target:\n        cs-uri|contains:\n            - 'Logger'\n            - 'logging.level'\n    condition: selection_endpoint and selection_target\nfalsepositives:\n    - >-\n        Authorized internal application-performance-monitoring tooling that\n        manages Jolokia over HTTP from a trusted management network. Reviewed\n        only in combination with the follow-on logfile-read rule via the\n        correlation below.\nlevel: medium\n---\ntitle: External HTTP GET of the Spring Boot Actuator Log File Endpoint\nid: 9e4e2540-95c5-44a6-a433-add2bcba903f\nname: actuator_logfile_read_base\nstatus: experimental\ndescription: >-\n    Base rule (not alerting on its own): an external HTTP GET of the Spring\n    Boot Actuator logfile endpoint. Reading the live application log is\n    unremarkable in isolation, since operations teams do this routinely, but\n    paired with a preceding Jolokia logger-level write it is the retrieval\n    step of a log-manufacturing technique that turns verbose request and\n    response tracing into a harvestable data source.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-21'\ntags:\n    - attack.collection\n    - attack.t1213\nlogsource:\n    category: webserver\ndetection:\n    selection:\n        cs-uri-stem|contains: '/actuator/logfile'\n    selection_success:\n        sc-status: 200\n    condition: selection and selection_success\nfalsepositives:\n    - >-\n        Authorized operations or monitoring staff retrieving the log file from\n        an approved management network. Not alerting on its own; reviewed\n        only in combination with the preceding logger-level-write event via\n        the correlation rule.\nlevel: informational\n---\ntitle: Manufactured Log-Data Harvesting via Jolokia Logger Manipulation Then Actuator Logfile Read\nid: 9df4b43e-0124-4eff-b32c-b6cfbaddf527\nstatus: experimental\ndescription: >-\n    Fires when the same external source both writes a Jolokia logger or\n    logging-level attribute, raising verbosity to DEBUG or FULL, and retrieves\n    the actuator logfile within a short window. Neither event alone is\n    unusual; the sequence is the signature of an operator manufacturing\n    sensitive data in application logs and then reading it back out, rather\n    than a routine operations workflow.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-21'\ntags:\n    - attack.collection\n    - attack.t1213\n    - attack.initial-access\n    - attack.t1190\ncorrelation:\n    type: temporal_ordered\n    rules:\n        - jolokia_logger_write_base\n        - actuator_logfile_read_base\n    group-by:\n        - c-ip\n    timespan: 15m\nfalsepositives:\n    - >-\n        A single operations engineer using Jolokia for legitimate live\n        debugging from the same source IP as their log review, within the\n        same window. Uncommon outside a real incident-response or\n        troubleshooting session.\nlevel: high",
+        "to_ids": true,
+        "comment": "Manufactured Log-Data Harvesting via Jolokia Logger Manipulation Then Actuator Logfile Read (Correlation) | TIER: Detection | robustness 3 | confidence HIGH (correlation) / LOW (either base rule alone) | ATT&CK T1213, T1190 | rule hash 39bbbc38 | https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "0e8eb72a-fcd1-51b2-a3b1-679218a31697",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: HTTP POST to a Password-Reset or Verification-Code Endpoint\nid: fec7253f-ea82-48f6-97fb-b8ca61c293f8\nname: password_reset_endpoint_request_base\nstatus: experimental\ndescription: >-\n    Base rule (not alerting on its own): a single POST to a password-reset or\n    SMS/OTP verification-code endpoint. Ordinary and expected in isolation.\n    Paired below with a correlation that flags an abnormal volume of distinct\n    requests against the same endpoint in a short window, the shape of a\n    4-digit verification-code brute force run against one fixed context\n    token, as opposed to a user's occasional retry.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-21'\ntags:\n    - attack.credential-access\n    - attack.t1110.001\nlogsource:\n    category: webserver\ndetection:\n    selection:\n        cs-method: POST\n        cs-uri-stem|contains:\n            - 'restPassword'\n            - 'forgetPwd'\n    condition: selection\nfalsepositives:\n    - >-\n        A user repeatedly retrying a forgotten-password flow. Not alerting on\n        its own; reviewed only through the volume threshold in the\n        correlation rule below.\nlevel: informational\n---\ntitle: High-Volume Distinct Requests Against a Password-Reset or Verification-Code Endpoint\nid: 275a038d-07da-4c8c-9db0-fdf3f3a7106d\nstatus: experimental\ndescription: >-\n    Fires when 50 or more distinct query strings hit the same password-reset\n    or verification-code endpoint from one source within 10 minutes, the\n    volumetric shape of exhausting a short numeric code space such as all\n    10,000 four-digit combinations. This rule cannot confirm the ideal\n    discriminator, a constant verification-context token paired with only the\n    numeric code changing, because standard web-access-log telemetry does not\n    expose individual query parameters by name; volume against a fixed\n    endpoint is the available proxy. A defender with parsed API-gateway or WAF\n    logs exposing the context-token parameter directly should key on one\n    constant token value with many distinct code values instead, for\n    materially higher precision.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-21'\ntags:\n    - attack.credential-access\n    - attack.t1110.001\ncorrelation:\n    type: value_count\n    rules:\n        - password_reset_endpoint_request_base\n    group-by:\n        - c-ip\n        - cs-uri-stem\n    timespan: 10m\n    condition:\n        field: cs-uri-query\n        gte: 50\nfalsepositives:\n    - >-\n        A misbehaving client retry loop or a load-testing script exercising\n        the same endpoint. Uncommon in normal user behavior at this volume.\nlevel: high",
+        "to_ids": true,
+        "comment": "High-Volume Distinct Requests Against a Password-Reset or Verification-Code Endpoint (Correlation) | TIER: Detection | robustness 2 | confidence HIGH (correlation) / LOW (base rule alone) | ATT&CK T1110.001 | rule hash 2ae0713f | https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "fa1449fd-d422-5d10-84a4-22fdb3d6417e",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Successful External Retrieval of a Spring Boot Actuator Heap Dump\nid: f872347d-00cd-463e-9817-96d4ef96f205\nstatus: experimental\ndescription: >-\n    Detects a successful, large-bodied external response from the Spring Boot\n    Actuator heapdump endpoint, or a Jolokia HotSpotDiagnostic dumpHeap\n    invocation. A heap dump commonly contains in-memory credentials, session\n    tokens and business data; this rule keys on confirmed success, a 200\n    status with a large response body, rather than the request alone, since\n    the request is trivially made and often blocked by an auth filter.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-21'\ntags:\n    - attack.collection\n    - attack.t1005\n    - attack.credential-access\n    - attack.t1552.001\n    - stp.3\nlogsource:\n    category: webserver\ndetection:\n    selection_path:\n        cs-uri-stem|contains:\n            - '/actuator/heapdump'\n            - '/heapdump'\n    selection_jolokia_dumpheap:\n        cs-uri|contains: 'HotSpotDiagnostic'\n    selection_success:\n        sc-status: 200\n    selection_large_body:\n        sc-bytes|gte: 1000000\n    condition: (selection_path or selection_jolokia_dumpheap) and selection_success and selection_large_body\nfalsepositives:\n    - >-\n        Authorized developer or support engineer pulling a heap dump for\n        legitimate memory-leak diagnosis from an approved internal source.\nlevel: high",
+        "to_ids": true,
+        "comment": "Successful External Retrieval of a Spring Boot Actuator Heap Dump | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1005, T1552.001 | rule hash dd72df04 | https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "d5f0f898-68cf-5a02-8149-ba9f4b959645",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Unauthenticated External Access to an Alibaba Druid Monitoring Console\nid: b2857306-3872-446e-a6cf-f093e48e3252\nstatus: experimental\ndescription: >-\n    Detects a successful external request to an Alibaba Druid StatViewServlet\n    monitoring path. An unauthenticated Druid console exposes the production\n    JDBC connection string, full database schema and executed SQL statement\n    history to anyone who can reach it; a single request returning 200 on\n    these paths from outside the management network is a real\n    information-disclosure event regardless of who sent it. Frequently served\n    on a non-standard port, so this rule does not restrict to 80 or 443.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-21'\ntags:\n    - attack.reconnaissance\n    - attack.t1596.005\n    - stp.3\nlogsource:\n    category: webserver\ndetection:\n    selection_path:\n        cs-uri-stem|contains:\n            - '/druid/index.html'\n            - '/druid/basic.json'\n            - '/druid/sql.json'\n            - '/druid/weburi.json'\n            - '/druid/datasource.json'\n    selection_success:\n        sc-status: 200\n    condition: selection_path and selection_success\nfalsepositives:\n    - >-\n        Authorized internal monitoring dashboards or an approved\n        attack-surface-management scan intentionally checking for this\n        exposure. Any external hit on these paths still warrants confirming\n        the console is properly restricted.\nlevel: high",
+        "to_ids": true,
+        "comment": "Unauthenticated External Access to an Alibaba Druid Monitoring Console | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1596.005 | rule hash 9300f4fd | https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "015dc55f-7c52-5c99-8d4b-8653907f01b8",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "/*\n   Yara Rule Set\n   Identifier: Generic JSP Web Shell\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule WEBSHELL_Generic_JSP_Bash_Exec_Parameter {\n   meta:\n      description = \"Detects a minimal JSP web shell that reads a single HTTP request parameter and passes it directly to /bin/bash -c via Runtime.getRuntime().exec. The parameter name is kept generic since it varies by deployment; the proximity of getParameter to a bash -c exec call is the durable indicator of a functioning command-execution shell rather than legitimate application code.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\"\n      date = \"2026-07-21\"\n      family = \"Generic JSP Web Shell\"\n      malware_type = \"Web shell\"\n      id = \"61eeb62a-80ed-5a4d-b709-0ac11517a820\"\n   strings:\n      $getparam = /request\\.getParameter\\([^)]{0,40}\\)/ ascii\n      $exec = \"Runtime.getRuntime().exec\" ascii\n      $bash = \"/bin/bash\" ascii\n      $dashc = \"\\\"-c\\\"\" ascii\n   condition:\n      filesize < 30KB and\n      $getparam and $exec and $bash and $dashc\n}",
+        "to_ids": true,
+        "comment": "Generic JSP Web Shell (Bash-Exec via HTTP Parameter) | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1505.003 | rule hash 93a1918e | https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "91e646d9-709f-5a86-adfb-6dbb4aebafc7",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "/*\n   Yara Rule Set\n   Identifier: Logback FileAppender Arbitrary File Write\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule EXPL_Logback_FileAppender_JSP_ArbitraryWrite {\n   meta:\n      description = \"Detects a Logback XML configuration defining a FileAppender whose file destination ends in .jsp, an arbitrary-file-write technique that abuses a legitimate logging framework to drop a JSP web shell rather than using a conventional upload vector.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\"\n      date = \"2026-07-21\"\n      family = \"Logback FileAppender Arbitrary File Write\"\n      malware_type = \"Exploitation payload -- Java logging-framework arbitrary file write\"\n      id = \"37a281e7-61d6-5287-81af-9a6bcfd3a5b5\"\n   strings:\n      $config = \"<configuration\" ascii\n      $appender = \"ch.qos.logback.core.FileAppender\" ascii\n      $jsp_ext = /<file>[^<]{1,200}\\.jsp<\\/file>/ ascii\n   condition:\n      filesize < 50KB and\n      $config and $appender and $jsp_ext\n}",
+        "to_ids": true,
+        "comment": "Logback FileAppender Arbitrary File Write to JSP | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1190, T1505.003 | rule hash 11a1611c | https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "915bef33-ff3d-5e98-8050-d3e4f18295d1",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "/*\n   Yara Rule Set\n   Identifier: SnakeYAML Deserialization Gadget (CVE-2022-1471 family)\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule EXPL_SnakeYAML_ScriptEngineManager_Gadget_CVE_2022_1471_Family {\n   meta:\n      description = \"Detects a SnakeYAML unsafe-deserialization payload using the classic javax.script.ScriptEngineManager plus java.net.URLClassLoader gadget chain (the CVE-2022-1471 family) to achieve remote code execution from an untrusted YAML document.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\"\n      date = \"2026-07-21\"\n      family = \"SnakeYAML Deserialization Gadget (CVE-2022-1471 family)\"\n      malware_type = \"Exploitation payload -- Java deserialization RCE\"\n      id = \"914b2554-4595-586e-92e9-b29f6a9ec60e\"\n   strings:\n      $x1 = \"!!javax.script.ScriptEngineManager\" ascii\n      $x2 = \"!!java.net.URLClassLoader\" ascii\n      $x3 = \"!!java.net.URL\" ascii\n   condition:\n      filesize < 20KB and\n      all of ($x*)\n}",
+        "to_ids": true,
+        "comment": "SnakeYAML Deserialization Gadget (CVE-2022-1471 Family) | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1190 | rule hash f0a1ce0c | https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "76c75645-2dfc-5fd3-bfb1-81f407f55b6c",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "/*\n   Yara Rule Set\n   Identifier: XXE-to-SSRF Internal/Cloud-Metadata Probe\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule EXPL_XXE_SSRF_Cloud_Metadata_Internal_Service_Probe {\n   meta:\n      description = \"Detects an XML or SVG document declaring an external entity (XXE) that resolves to the cloud instance metadata service or a well-known internal service port, a server-side request forgery technique used to pivot from a file-upload or XML-parsing feature into internal-network and cloud-credential reconnaissance.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\"\n      date = \"2026-07-21\"\n      family = \"XXE-to-SSRF Internal/Cloud-Metadata Probe\"\n      malware_type = \"Exploitation payload -- XML External Entity SSRF\"\n      id = \"c643375b-9567-5b36-abf2-8db9880f4f5b\"\n   strings:\n      $entity = \"<!ENTITY\" ascii\n      $system = \"SYSTEM\" ascii\n      $meta = \"169.254.169.254\" ascii\n      $redis = \"127.0.0.1:6379\" ascii\n      $mysql = \"127.0.0.1:3306\" ascii\n      $actuator = \":8080/actuator\" ascii\n   condition:\n      filesize < 20KB and\n      $entity and $system and\n      1 of ($meta, $redis, $mysql, $actuator)\n}",
+        "to_ids": true,
+        "comment": "XXE-to-SSRF Internal/Cloud-Metadata Probe | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1190, T1552.005 | rule hash c4377df5 | https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "692c9e7a-b125-5706-a03b-9d01c542a3b4",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule EXPL_Logback_InsertFromJNDI_CVE_2021_42550 {\n   meta:\n      description = \"Detects a Logback XML configuration using insertFromJNDI to trigger a JNDI lookup against an ldap:// or rmi:// URI, the mechanism behind CVE-2021-42550. Corrected 2026-09-13: insertFromJNDI paired with a JNDI scheme in an env-entry-name attribute IS a pattern seen in legitimate Logback configuration (it is the feature's documented use); this rule cannot distinguish an attacker-controlled JNDI target from a legitimate internal one from file content alone, hence Hunting tier.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\"\n      date = \"2026-07-21\"\n      family = \"Logback insertFromJNDI RCE (CVE-2021-42550)\"\n      malware_type = \"Exploitation payload -- Java logging-framework RCE\"\n      id = \"ace3c6c6-23e3-500a-8ade-a75d8209a06b\"\n   strings:\n      $config = \"<configuration\" ascii\n      $jndi = \"insertFromJNDI\" ascii\n      $ldap = \"env-entry-name=\\\"ldap://\" ascii\n      $rmi = \"env-entry-name=\\\"rmi://\" ascii\n   condition:\n      filesize < 50KB and\n      $config and $jndi and\n      1 of ($ldap, $rmi)\n}",
+        "to_ids": false,
+        "comment": "Logback insertFromJNDI RCE (CVE-2021-42550) | TIER: Hunting | robustness 2 | confidence MODERATE (downgraded from HIGH 2026-09-13) | ATT&CK T1190 | rule hash 10316b61 | https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      }
+    ],
+    "Object": []
+  }
+}

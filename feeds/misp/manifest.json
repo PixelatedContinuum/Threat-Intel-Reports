@@ -1,0 +1,5941 @@
+{
+  "1f43fcef-df62-50b8-8069-16415d068ed7": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"ClickFix\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Stealer\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Loader\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"PowerShell\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over C2 Channel - T1041\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Browser Session Hijacking - T1185\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Malicious Copy and Paste - T1204.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Install Root Certificate - T1553.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Adversary-in-the-Middle - T1557\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "FACEIT ClickFix Pages Point CS2 Players to a Script URL That VirusTotal Ties to a Steam-Focused Executable",
+    "date": "2026-09-28",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "063ce33f-b7aa-5660-a9ff-f188850a7d87": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Cryptojacking\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Mass Exploitation\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"CVE-2026-42589\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"XMRig\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Resource Name or Location - T1036.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over C2 Channel - T1041\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Unix Shell - T1059.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Deobfuscate/Decode Files or Information - T1140\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploit Public-Facing Application - T1190\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Systemd Service - T1543.002\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Gotenberg CVE-2026-42589 Mass Exploitation and Cryptomining",
+    "date": "2026-09-16",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "656f5eb2-7add-5b5e-a771-c4310b4be6c9": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Sliver\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Post-Ex\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"EtherHiding\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Blockchain C2\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"LSASS Memory - T1003.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Security Account Manager - T1003.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"LSA Secrets - T1003.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data from Local System - T1005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Fallback Channels - T1008\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Network Configuration Discovery - T1016\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Desktop Protocol - T1021.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"SMB/Windows Admin Shares - T1021.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Remote Management - T1021.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information - T1027\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Owner/User Discovery - T1033\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Name or Location - T1036.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over C2 Channel - T1041\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Network Service Discovery - T1046\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Management Instrumentation - T1047\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Scheduled Task - T1053.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Injection - T1055\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Command Shell - T1059.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"JavaScript - T1059.007\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Privilege Escalation - T1068\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domain Groups - T1069.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"File Deletion - T1070.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Local Data Staging - T1074.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domain Accounts - T1078.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Information Discovery - T1082\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domain Account - T1087.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy - T1090\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Account Manipulation - T1098\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Dead Drop Resolver - T1102.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Multi-Stage Channels - T1104\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Native API - T1106\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Modify Registry - T1112\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Standard Encoding - T1132.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Token Impersonation/Theft - T1134.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Create Process with Token - T1134.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Network Share Discovery - T1135\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Local Account - T1136.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domain Account - T1136.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Deobfuscate/Decode Files or Information - T1140\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Msiexec - T1218.007\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domain Trust Discovery - T1482\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Security Software Discovery - T1518.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Bypass User Account Control - T1548.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Browsers - T1555.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"RDP Hijacking - T1563.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Lateral Tool Transfer - T1570\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Non-Standard Port - T1571\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Protocol Tunneling - T1572\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Asymmetric Cryptography - T1573.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Tool - T1588.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Upload Malware - T1608.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Reflective Code Loading - T1620\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify System Firewall - T1686\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17",
+    "date": "2026-09-07",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "61bf8b6f-e11d-50ac-8cae-d6e6afd6f5d5": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Telecom\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Cisco IOS-XE\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"WebLogic\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Cred Theft\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"OS Credential Dumping - T1003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Security Account Manager - T1003.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data from Local System - T1005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Rootkit - T1014\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Network Configuration Discovery - T1016\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"SMB/Windows Admin Shares - T1021.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"SSH - T1021.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Remote Management - T1021.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information - T1027\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Name or Location - T1036.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over C2 Channel - T1041\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Network Service Discovery - T1046\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over Unencrypted Non-C2 Protocol - T1048.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Command Shell - T1059.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Unix Shell - T1059.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Privilege Escalation - T1068\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Indicator Removal: File Deletion - T1070.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Indicator Removal: Timestomp - T1070.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Local Data Staging - T1074.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Valid Accounts - T1078\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Internal Proxy - T1090.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"External Proxy - T1090.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Account Manipulation - T1098\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Password Spraying - T1110.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Standard Encoding - T1132.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Local Account - T1136.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploit Public-Facing Application - T1190\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Trusted Relationship - T1199\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation of Remote Services - T1210\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Linux and Mac Permissions - T1222.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Shell - T1505.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Create or Modify System Process - T1543\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials In Files - T1552.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Private Keys - T1552.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Compromise Host Software Binary - T1554\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials from Password Stores - T1555\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Non-Standard Port - T1571\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Protocol Tunneling - T1572\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domains - T1583.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Virtual Private Server - T1583.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Develop Capabilities: Malware - T1587.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obtain Capabilities: Exploits - T1588.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Vulnerability Scanning - T1595.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Scan Databases - T1596.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Stage Capabilities: Upload Malware - T1608.001\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Carrier Credential Harvesting Through a Customer's Router",
+    "date": "2026-08-18",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "cd18797e-ccb1-5b3e-b32f-2b2aabf67d28": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Government\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Exploitation\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Open Dir\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"SE-Asia\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Masquerade Task or Service (second actor) - T1036.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over C2 Channel - T1041\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Cron (second actor) - T1053.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Unix Shell - T1059.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Valid Accounts - T1078\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"External Proxy - T1090.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Multi-hop Proxy - T1090.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"SSH Authorized Keys - T1098.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Service C2 (second actor) - T1102\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Password Guessing - T1110.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Automated Collection - T1119\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"External Remote Services - T1133\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploit Public-Facing Application - T1190\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data from Information Repositories - T1213\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Shell - T1505.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Steal Web Session Cookie - T1539\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Cloud Instance Metadata API - T1552.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Spearphishing Attachment - T1566.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Protocol Tunneling - T1572\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "The Middle Tier: A Non-APT Operator's Reach Into Four Southeast Asian Governments",
+    "date": "2026-08-13",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "7bd73cce-a068-5c73-a8f4-0e7b5d3e847e": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Toolkit\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"RAT\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Access Broker\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"SMB/Windows Admin Shares - T1021.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information - T1027\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Name or Location - T1036.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over C2 Channel - T1041\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Network Service Discovery - T1046\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Scheduled Task - T1053.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Injection - T1055\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Keylogging - T1056.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"JavaScript - T1059.007\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Indicator Removal - T1070\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"File Deletion - T1070.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Application Layer Protocol - T1071\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Information Discovery - T1082\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy - T1090\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Multi-hop Proxy (per-victim Tor hidden service) - T1090.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Replication Through Removable Media - T1091\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Account Manipulation - T1098\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Additional Local or Domain Groups - T1098.007\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Service (Telegram notify) - T1102\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Screen Capture - T1113\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Audio Capture - T1123\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Trusted Developer Utilities: MSBuild - T1127.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Network Share Discovery - T1135\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Create Account: Local Account - T1136.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Create Account: Domain Account - T1136.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Deobfuscate/Decode Files or Information - T1140\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Access Software - T1219\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Desktop Software - T1219.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Shell - T1505.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Service - T1543.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials from Web Browsers - T1555.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Hidden Users - T1564.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Non-Standard Port - T1571\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Reflective Code Loading - T1620\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "CloudSync: An Assembler's Intrusion Toolkit",
+    "date": "2026-08-03",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "7caf24f7-aaae-5cd6-8026-90cb081d8075": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Cryptojacking\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Open Dir\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"China\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"SMB / Windows Admin Shares - T1021.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Name or Location - T1036.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Management Instrumentation - T1047\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Cron - T1053.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Scheduled Task - T1053.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Visual Basic - T1059.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Python - T1059.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Default Accounts - T1078.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Deobfuscate/Decode Files or Information - T1140\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploit Public-Facing Application - T1190\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Compute Hijacking - T1496.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Shell - T1505.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Systemd Service - T1543.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys - T1547.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Hidden Files and Directories - T1564.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Lateral Tool Transfer - T1570\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Non-Standard Port - T1571\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Vulnerability Scanning - T1595.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Scan Databases (FOFA) - T1596.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "GOCLOUD Multi-Service Cryptojacking",
+    "date": "2026-07-26",
+    "analysis": 2,
+    "threat_level_id": 2,
+    "timestamp": 1791580400
+  },
+  "7a1fc79b-257b-587d-9691-da866766d383": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"AI Abuse\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Open Dir\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Data Theft\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"E-Commerce\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"China\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data from Local System - T1005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Masquerading - T1036\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Network Service Discovery - T1046\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Unix Shell - T1059.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Python - T1059.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Valid Accounts - T1078\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"External Proxy - T1090.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"SSH Authorized Keys - T1098.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Bidirectional Communication - T1102.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Password Guessing - T1110.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Password Spraying - T1110.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Automated Collection - T1119\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploit Public-Facing Application - T1190\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data from Information Repositories - T1213\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Shell - T1505.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Software Discovery - T1518\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Account Access Removal - T1531\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials In Files - T1552.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Private Keys - T1552.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Cloud Instance Metadata API - T1552.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Phishing - T1566\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Protocol Tunneling - T1572\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Virtual Private Server - T1583.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Services - T1583.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Establish Accounts - T1585\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Search Victim-Owned Websites - T1594\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Vulnerability Scanning - T1595.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Scan Databases - T1596.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Cookies - T1606.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Upload Malware - T1608.001\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Enough to Be Dangerous: The Mechanics of an LLM-Assisted Intrusion Campaign",
+    "date": "2026-07-21",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "eb873bde-1e1d-5a29-8b4c-dc02cedd1584": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Stealer\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"MaaS\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Builder\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Brazil\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"LSASS Memory - T1003.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information - T1027\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Masquerade Task or Service - T1036.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over C2 Channel - T1041\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Scheduled Task - T1053.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Hollowing - T1055.012\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Keylogging - T1056.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Non-Application Layer Protocol - T1095\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Screen Capture - T1113\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Audio Capture - T1123\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Video Capture - T1125\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Browser Session Hijacking - T1185\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Access Software - T1219\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Execution Guardrails - T1480\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Virtualization/Sandbox Evasion - T1497\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Steal Application Access Token - T1528\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Steal Web Session Cookie - T1539\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Mark-of-the-Web Bypass - T1553.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials from Web Browsers - T1555.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Hidden Files and Directories - T1564.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration to Cloud Storage - T1567.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obtain Capabilities: Tool - T1588.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Reflective Code Loading - T1620\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "EvilSoul-Engine: A Brazilian Stealer-Builder Malware-as-a-Service",
+    "date": "2026-07-03",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "4eed77fa-9767-536f-8fef-728b06ae1cb3": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"RAT\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"HVNC\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"MaaS\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Brazil\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Resource Name or Location - T1036.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Non-Application Layer Protocol - T1095\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Screen Capture - T1113\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Access Tools - T1219\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Virtualization/Sandbox Evasion - T1497\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Mark-of-the-Web Bypass - T1553.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Symmetric Cryptography - T1573.001\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "KAIDO: A Brazilian Quasar-Fork RAT with Hidden-Desktop Session Hijacking",
+    "date": "2026-07-03",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "207c913d-e57f-534b-ac8a-08e8ebf9933d": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"AI Abuse\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Multi-Family\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Threat\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Open Dir\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"OS Credential Dumping: SAM - T1003.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data from Local System - T1005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Rootkit - T1014\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote System Discovery - T1018\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Automated Exfiltration - T1020\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Desktop Protocol - T1021.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"SSH - T1021.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information - T1027\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Software Packing - T1027.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Name or Location - T1036.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"RC Scripts - T1037.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over C2 Channel - T1041\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Network Service Discovery - T1046\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Network Connections Discovery - T1049\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Cron - T1053.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Hollowing - T1055.012\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Keylogging - T1056.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Discovery - T1057\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Command Shell - T1059.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Unix Shell - T1059.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Python - T1059.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"JavaScript - T1059.007\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Clear Command History - T1070.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Valid Accounts - T1078\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domain Accounts - T1078.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Information Discovery - T1082\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"File and Directory Discovery - T1083\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Internal Proxy - T1090.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domain Fronting - T1090.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Non-Application Layer Protocol - T1095\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Service - T1102\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Bidirectional Communication - T1102.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Brute Force - T1110\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Password Spraying - T1110.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Screen Capture - T1113\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Automated Collection - T1119\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Standard Encoding - T1132.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"External Remote Services - T1133\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Deobfuscate/Decode Files or Information - T1140\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploit Public-Facing Application - T1190\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Trusted Relationship - T1199\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"User Execution: Malicious File - T1204.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Code Repositories - T1213.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Compute Hijacking - T1496.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Checks (Anti-VM) - T1497.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Network Denial of Service - T1498\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Reflection Amplification - T1498.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data from Cloud Storage Object - T1530\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Steal Web Session Cookie - T1539\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Systemd Service - T1543.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Unix Shell Configuration Modification - T1546.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"XDG Autostart Entries - T1547.013\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials in Files - T1552.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials from Password Stores - T1555\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Hide Artifacts: Hidden Files and Directories - T1564.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration to Cloud Storage - T1567.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Dynamic Resolution - T1568\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Service Execution - T1569.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Symmetric Cryptography - T1573.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Dynamic Linker Hijacking - T1574.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Virtual Private Server - T1583.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Server (Compromised, repurposed) - T1583.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Services (Cloudflare Tunnel) - T1583.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Establish Email Accounts - T1585.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Develop Capabilities - T1587\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Malware (Obtain Capabilities) - T1588.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Tool (Obtain Capabilities) - T1588.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Vulnerability Scanning - T1595.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Escape to Host - T1611\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Language Discovery - T1614.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Reflective Code Loading - T1620\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Financial Theft - T1657\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Hide Infrastructure - T1665\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Clear Linux or Mac System Logs - T1685.006\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Multi-Actor AI-Agent Framework Abuse (8 Operators)",
+    "date": "2026-06-16",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "611d3d52-2660-5a18-a27e-866a92ee221e": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Post-Ex\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Priv Esc\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"C2\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Open Dir\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Services - T1021\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Command Obfuscation - T1027.010\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Discovery - T1057\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Command Shell - T1059.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Visual Basic - T1059.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Privilege Escalation - T1068\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domain Accounts - T1078.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Information Discovery - T1082\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Non-Application Layer Protocol - T1095\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Token Impersonation/Theft - T1134.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Deobfuscate/Decode Files or Information - T1140\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploit Public-Facing Application - T1190\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"SQL Stored Procedures - T1505.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Shell - T1505.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Pass the Ticket - T1550.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Golden Ticket - T1558.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Kerberoasting - T1558.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Reflective Code Loading - T1620\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Flask C2 & MSSQL CLR Backdoor on a Windows Post-Exploitation Staging Host",
+    "date": "2026-06-12",
+    "analysis": 2,
+    "threat_level_id": 2,
+    "timestamp": 1791580400
+  },
+  "875094b8-c444-56b7-9af6-4524d0de89cc": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"AI Abuse\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Persistence\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Open Dir\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Unix Shell - T1059.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"JavaScript - T1059.007\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Internal Proxy - T1090.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Korean Claude Code + OpenClaw Operator (221.150.15.104)",
+    "date": "2026-05-27",
+    "analysis": 2,
+    "threat_level_id": 2,
+    "timestamp": 1791580400
+  },
+  "43b09f34-283d-5b09-84eb-a93df291c4c4": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"AI Abuse\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"C2\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Botnet\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Open Dir\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:actor=\"UTA-2026-014\"",
+        "colour": "#e879f9"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Rootkit - T1014\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Network Configuration Discovery - T1016\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information - T1027\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Embedded Payloads - T1027.009\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Name or Location - T1036.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"RC Scripts - T1037.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over C2 Channel - T1041\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Cron - T1053.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Discovery - T1057\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Unix Shell - T1059.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Python - T1059.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"JavaScript - T1059.007\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"File Deletion - T1070.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Default Accounts - T1078.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Information Discovery - T1082\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Internal Proxy - T1090.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Non-Application Layer Protocol - T1095\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Native API - T1106\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Password Guessing - T1110.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Automated Collection - T1119\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Standard Encoding - T1132.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"External Remote Services - T1133\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploit Public-Facing Application - T1190\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation of Remote Services - T1210\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data from Information Repositories - T1213\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Checks - T1497.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Direct Network Flood - T1498.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Reflection Amplification - T1498.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Endpoint Denial of Service - T1499\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Systemd Service - T1543.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Unix Shell Configuration Modification - T1546.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"XDG Autostart Entries - T1547.013\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials in Files - T1552.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Hidden Files and Directories - T1564.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Symmetric Cryptography - T1573.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Virtual Private Server - T1583.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Compromise Infrastructure: Server - T1584.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Develop Capabilities: Malware - T1587.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obtain Capabilities: Malware - T1588.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obtain Capabilities: Exploits - T1588.005\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Rovodev AI-Co-Authored Mirai Variant + Matrix C2 (87.106.143.220)",
+    "date": "2026-05-26",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "d368b117-5414-5c50-b434-c21cfb5f6797": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Cryptojacking\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Rootkit\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Toolkit\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Open Dir\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Rootkit - T1014\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote System Discovery - T1018\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Services: SSH - T1021.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information (deceptive PAM filename) - T1027\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Masquerading: Match Legitimate Name or Location - T1036.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Boot or Logon Initialization Scripts: RC Scripts - T1037.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Scheduled Task/Job: Cron - T1053.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Discovery - T1057\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Command and Scripting Interpreter: Unix Shell - T1059.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Command and Scripting Interpreter: Python - T1059.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Indicator Removal: Clear Command History - T1070.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Application Layer Protocol: Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Application Layer Protocol: DNS - T1071.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Information Discovery - T1082\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"File and Directory Discovery (container detection) - T1083\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy: Internal Proxy (self-hosted pool proxies) - T1090.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Service: Bidirectional Communication (dual Telegram bots) - T1102.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Shared Modules (LD_PRELOAD) - T1129\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploit Public-Facing Application - T1190\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"File and Directory Permissions Modification: Linux (chattr +i) - T1222.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Mutual Exclusion (anti_hisana competitor displacement) - T1480.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Resource Hijacking: Compute Hijacking (primary impact) - T1496.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Resource Hijacking: Bandwidth Hijacking (Hysteria) - T1496.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Create or Modify System Process: Systemd Service - T1543.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Boot or Logon Autostart Execution: XDG Autostart Entries - T1547.013\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Unsecured Credentials: Private Keys (SSH key harvest) - T1552.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Compromise Host Software Binary - T1554\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Hide Artifacts (ports via /proc/net/tcp fopen hook) - T1564\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Hide Artifacts: Hidden Files and Directories - T1564.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Non-Standard Port - T1571\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Protocol Tunneling (Hysteria v2 QUIC/UDP) - T1572\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Hijack Execution Flow: Dynamic Linker Hijacking - T1574.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Virtual Private Server - T1583.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Establish Accounts: Social Media - T1585.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Develop Capabilities: Malware - T1587.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Active Scanning: Vulnerability Scanning (ComfyUI port 8188) - T1595.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Escape to Host (4 container-escape variants) - T1611\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Reflective Code Loading (memfd_create) - T1620\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Clear Linux or Mac System Logs - T1685.006\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "GHOST Cryptojacker Kit — Vova75Rus Supply Chain (77.110.96.200)",
+    "date": "2026-05-25",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "897c4651-021d-5b44-a032-900b5676e247": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"AI Abuse\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Cred Theft\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"C2\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Open Dir\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"OS Credential Dumping: LSASS Memory - T1003.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"OS Credential Dumping: Security Account Manager - T1003.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data from Local System - T1005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote System Discovery - T1018\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Services: Remote Desktop Protocol - T1021.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Services: SSH - T1021.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Services: Windows Remote Management - T1021.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information - T1027\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Masquerading - T1036\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over C2 Channel - T1041\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Scheduled Task/Job: Scheduled Task - T1053.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Discovery - T1057\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Command and Scripting Interpreter: PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Command and Scripting Interpreter: Python - T1059.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Application Layer Protocol: Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Valid Accounts - T1078\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Information Discovery - T1082\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"File and Directory Discovery - T1083\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Account Discovery - T1087\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy - T1090\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy: Domain Fronting (Cloudflare Tunnel) - T1090.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Service - T1102\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Password Spraying - T1110.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Automated Collection - T1119\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data Encoding: Standard Encoding - T1132.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"External Remote Services - T1133\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Deobfuscate/Decode Files or Information - T1140\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploit Public-Facing Application - T1190\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data from Information Repositories - T1213\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Event Triggered Execution: WMI Event Subscription - T1546.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Boot or Logon Autostart Execution: Registry Run Keys - T1547.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Use Alternate Authentication Material: Pass the Hash - T1550.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Unsecured Credentials: Credentials In Files - T1552.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Unsecured Credentials: Private Keys - T1552.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials from Password Stores: Password Managers - T1555.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration to Cloud Storage - T1567.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Dynamic Resolution - T1568\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Protocol Tunneling - T1572\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Encrypted Channel: Asymmetric Cryptography - T1573.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Domains - T1583.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Virtual Private Server - T1583.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Web Services - T1583.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Establish Accounts: Email Accounts - T1585.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Develop Capabilities - T1587\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obtain Capabilities: Tool - T1588.002\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Russian Gemini CLI Credential Mill (213.165.51.115)",
+    "date": "2026-05-25",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "9efa73fb-800e-59f7-96f1-5a1b3e9216ef": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"AI Abuse\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Exfil\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Cred Theft\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Open Dir\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data from Local System - T1005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Automated Exfiltration - T1020\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"SSH - T1021.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over C2 Channel - T1041\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Network Service Discovery - T1046\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Python - T1059.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Valid Accounts - T1078\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"SSH Authorized Keys - T1098.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Automated Collection - T1119\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data from Information Repositories - T1213\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Systemd Service - T1543.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials In Files - T1552.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Service Execution - T1569.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Protocol Tunneling - T1572\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Develop Capabilities - T1587\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Turkish ARPA AI-Augmented Observability Compromise (209.38.205.158)",
+    "date": "2026-05-25",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "9cf6de91-da84-5074-bfca-e1f3961ed07c": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Exploitation\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Cred Theft\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Phishing\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Open Dir\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:actor=\"UTA-2026-011\"",
+        "colour": "#e879f9"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote System Discovery - T1018\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information - T1027\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over C2 Channel - T1041\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Input Capture: Web Portal Capture - T1056.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Command and Scripting Interpreter: Unix Shell - T1059.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Command and Scripting Interpreter: Python - T1059.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Application Layer Protocol: Web Protocols (Flask C2) - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Valid Accounts - T1078\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Information Discovery - T1082\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"File and Directory Discovery - T1083\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy: Internal Proxy (Cloudflare fronting) - T1090.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy: External Proxy (Cloudflare) - T1090.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"SSH Authorized Keys - T1098.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Account Manipulation: Device Registration - T1098.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Brute Force - T1110\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Brute Force: Password Spraying - T1110.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Create Account: Local Account - T1136.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploit Public-Facing Application - T1190\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Credential Access (CVE-2026-41940 mechanic) - T1212\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data from Information Repositories - T1213\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Access Software (OpenClaw AI platform installed) - T1219\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Execution Guardrails (TDS rickroll filter) - T1480\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Server Software Component: Web Shell - T1505.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Dynamic Resolution: Domain Generation Algorithms (kit-generated subdomain tokens) - T1568.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Domains - T1583.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Server - T1583.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Web Services (afraid.org FreeDNS abuse) - T1583.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Malvertising - T1583.008\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Develop Capabilities: Malware - T1587.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obtain Capabilities: Exploits - T1588.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Active Scanning: Scanning IP Blocks - T1595.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Active Scanning: Vulnerability Scanning - T1595.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Financial Theft - T1657\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "CVE-2026-41940 cPanel Harvester Toolkit (216.126.227.49)",
+    "date": "2026-05-17",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "82cbc83b-05d1-5a93-bb60-69c8c5f9aa04": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"PhaaS\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Phishing\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Cred Theft\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Open Dir\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information: Encrypted/Encoded File - T1027.013\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Masquerading: Match Legitimate Resource Name or Location - T1036.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over C2 Channel - T1041\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Input Capture - T1056\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Command and Scripting Interpreter: Unix Shell - T1059.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Indicator Removal - T1070\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Indicator Removal: File Deletion - T1070.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Application Layer Protocol: Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Service - T1102\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Service: Bidirectional Communication - T1102.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Automated Collection - T1119\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Access Software - T1219\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Execution Guardrails - T1480\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data Destruction (operator anti-forensics on own data) - T1485\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Virtualization / Sandbox Evasion (anti-research variant) - T1497\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Server Software Component: Web Shell - T1505.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Software Discovery: Security Software - T1518.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Archive Collected Data - T1560\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Phishing: Spearphishing Link - T1566.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration to Cloud Storage - T1567.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Domains - T1583.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Virtual Private Server - T1583.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Web Services - T1583.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Establish Accounts: Social Media Accounts - T1585.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Establish Accounts: Email Accounts - T1585.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Develop Capabilities: Malware - T1587.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Gather Victim Identity Information: Credentials - T1589.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Stage Capabilities: Link Target - T1608.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Financial Theft - T1657\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Impersonation - T1684.001\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "BellaMain Turkish PhaaS Panel (79.137.192.3)",
+    "date": "2026-05-16",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "93d0b666-26a5-57ab-a3dc-45f197c65e10": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Phishing\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Fraud\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"VPN Abuse\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Cred Theft\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information: Encrypted/Encoded File - T1027.013\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Masquerading: Match Legitimate Resource Name or Location - T1036.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Application Layer Protocol: Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy: External Proxy - T1090.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy: Multi-hop Proxy - T1090.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Service: Dead Drop Resolver - T1102.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Phishing: Spearphishing Link - T1566.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Phishing: Spearphishing via Service - T1566.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Domains - T1583.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Virtual Private Server - T1583.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Server - T1583.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Web Services - T1583.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Compromise Infrastructure: Domains - T1584.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Establish Accounts: Social Media Accounts - T1585.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Establish Accounts: Email Accounts - T1585.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Establish Accounts: Cloud Accounts - T1585.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Develop Capabilities: Malware - T1587.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Develop Capabilities: Code Signing Certificates - T1587.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Develop Capabilities: Digital Certificates - T1587.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obtain Capabilities: Digital Certificates - T1588.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Stage Capabilities: Upload Malware - T1608.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Stage Capabilities: Install Digital Certificate - T1608.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Stage Capabilities: Link Target - T1608.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Financial Theft - T1657\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Impersonation - T1684.001\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Inkognito Russian VPN/Phishing Operator (INK VPN / INK Lens)",
+    "date": "2026-05-16",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "3d46b2a8-dcd5-56e3-80f3-cc19a7369651": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"MaaS\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Stealer\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Loader\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Open Dir\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data from Local System - T1005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Application Window Discovery - T1010\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information - T1027\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Binary Padding - T1027.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Software Packing - T1027.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Indicator Removal from Tools - T1027.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Dynamic API Resolution - T1027.007\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Fileless Storage - T1027.011\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Encrypted/Encoded File - T1027.013\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over C2 Channel - T1041\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Hollowing - T1055.012\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Keylogging - T1056.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Discovery - T1057\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"File Deletion (memory variant) - T1070.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Mail Protocols - T1071.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Information Discovery - T1082\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"External Proxy - T1090.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Service (Telegram Bot API) - T1102\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Modify Registry - T1112\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Screen Capture - T1113\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Deobfuscate/Decode Files or Information - T1140\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"InstallUtil - T1218.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"InstallUtil - T1218.008\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Mutual Exclusion - T1480.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Virtualization/Sandbox Evasion - T1497\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Time Based Evasion - T1497.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Steal Web Session Cookie - T1539\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Service - T1543.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials from Web Browsers - T1555.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Password Managers - T1555.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Spearphishing Link - T1566.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration to Cloud Storage - T1567.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Dynamic Resolution - T1568\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Symmetric Cryptography - T1573.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Asymmetric Cryptography - T1573.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Virtual Private Server - T1583.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Services (brand-impersonation TLS certs) - T1583.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data from Configuration Repository - T1602.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Debugger Evasion - T1622\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Rhadamanthys MaaS Customer Deep-Dive (79.137.192.3)",
+    "date": "2026-05-15",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "7cf9b00a-7f3d-527a-81c3-cb42eaa2be96": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Loader\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"RAT\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"MaaS\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Open Dir\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information - T1027\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Software Packing - T1027.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Embedded Payloads - T1027.009\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Encrypted/Encoded File - T1027.013\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Right-to-Left Override - T1036.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Name or Location - T1036.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Double File Extension - T1036.007\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over C2 Channel - T1041\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Scheduled Task - T1053.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Portable Executable Injection - T1055.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Hollowing - T1055.012\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Keylogging - T1056.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Discovery - T1057\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Command and Scripting Interpreter - T1059\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Visual Basic - T1059.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"JavaScript - T1059.007\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Application Layer Protocol: Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Information Discovery - T1082\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"File and Directory Discovery - T1083\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"External Proxy - T1090.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Modify Registry - T1112\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Screen Capture - T1113\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Deobfuscate/Decode Files or Information - T1140\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Malicious File - T1204.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Mshta - T1218.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"MMC - T1218.014\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Execution Guardrails - T1480\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Checks (Sandbox Detection) - T1497.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Time-Based Evasion - T1497.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Install Root Certificate - T1553.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Inter-Process Communication - T1559\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Spearphishing Attachment - T1566.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Spearphishing Link - T1566.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Non-Standard Port - T1571\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Encrypted Channel: Symmetric Cryptography - T1573.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"DLL - T1574.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Reflective Code Loading - T1620\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campaign",
+    "date": "2026-05-06",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "5b9f3c7a-ce4f-5fde-afc7-221cd3f69ada": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"C2\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Toolkit\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Open Dir\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Multi-Family\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"OS Credential Dumping: LSASS Memory (mimikatz) - T1003.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"OS Credential Dumping: Security Account Manager (SharpSecDump) - T1003.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"OS Credential Dumping: NTDS (SharpSecDump) - T1003.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"OS Credential Dumping: DCSync (mimikatz) - T1003.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote System Discovery (SharpHound) - T1018\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information - T1027\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Injection (parent) - T1055\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Injection: Portable Executable Injection - T1055.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Input Capture: Keylogging (AdaptixC2 BOF) - T1056.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Discovery - T1057\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Command and Scripting Interpreter: PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Privilege Escalation (GodPotato/PrintSpoofer) - T1068\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Permission Groups Discovery: Domain Groups - T1069.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Application Layer Protocol: Web Protocols (AdaptixC2 HTTP C2) - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Information Discovery (Seatbelt/winpeas/linpeas) - T1082\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"File and Directory Discovery (Seatbelt/winpeas) - T1083\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Account Discovery: Domain Account (SharpHound/ADRecon/PowerView) - T1087.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy: Internal Proxy (Ligolo-ng v0.8.3) - T1090.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer (open directory hosts toolkit) - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data Encoding: Standard Encoding (Base64) - T1132.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Access Token Manipulation: Token Impersonation/Theft (GodPotato/PrintSpoofer) - T1134.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Access Token Manipulation: Create Process with Token (RunasCs) - T1134.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Deobfuscate/Decode Files or Information - T1140\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domain Trust Discovery (SharpHound/ADRecon) - T1482\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Software Discovery: Security Software Discovery (winpeas/Seatbelt) - T1518.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Unsecured Credentials: Private Keys (Certify) - T1552.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials from Password Stores (lazagne) - T1555\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials from Password Stores: Web Browsers (SharpDPAPI/lazagne) - T1555.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials from Password Stores: Windows Credential Manager (SharpDPAPI) - T1555.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Steal or Forge Kerberos Tickets: Kerberoasting (Rubeus) - T1558.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Steal or Forge Kerberos Tickets: AS-REP Roasting (Rubeus) - T1558.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Protocol Tunneling (Ligolo-ng + chisel) - T1572\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Encrypted Channel: Symmetric Cryptography (RC4-128) - T1573.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"DLL - T1574.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Virtual Private Server - T1583.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obtain Capabilities: Tool - T1588.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Reflective Code Loading - T1620\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Steal or Forge Authentication Certificates (Certify) - T1649\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "AdaptixC2 Open Directory Exposure (45.130.148.125)",
+    "date": "2026-04-30",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "ebc92dc3-8983-54dd-9caa-c6f17abe0517": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Ransomware\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Loader\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Evasion\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Open Dir\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"OS Credential Dumping: LSASS Memory (Mimikatz staged) - T1003.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information - T1027\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information: Dynamic API Resolution - T1027.007\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information: Fileless Storage - T1027.011\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Masquerading - T1036\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Masquerading: Match Legitimate Name or Location - T1036.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Network Service Discovery - T1046\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Scheduled Task/Job: Scheduled Task - T1053.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Input Capture: Keylogging (Orcus SetWindowsHookEx) - T1056.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Command and Scripting Interpreter: PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Command and Scripting Interpreter: Windows Command Shell - T1059.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Privilege Escalation (PrintNightmare + Potato family) - T1068\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Application Layer Protocol: Web Protocols (Orcus HTTP) - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Local Accounts - T1078.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy: Internal Proxy (Orcus 127.0.0.1:20268 loopback) - T1090.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Replication Through Removable Media - T1091\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Modify Registry (registry-blob persistence) - T1112\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Screen Capture (Orcus) - T1113\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Access Token Manipulation: Token Impersonation/Theft - T1134.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Access Token Manipulation: Create Process with Token - T1134.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Access Token Manipulation: Parent PID Spoofing - T1134.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Local Account - T1136.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Deobfuscate/Decode Files or Information - T1140\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploit Public-Facing Application (Exim/SnipeIT/SIP PBX scripts) - T1190\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data Encrypted for Impact - T1486\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Inhibit System Recovery - T1490\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Defacement: Internal Defacement - T1491.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Virtualization/Sandbox Evasion (tri-artifact gate) - T1497\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Virtualization/Sandbox Evasion: System Checks - T1497.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder - T1547.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Abuse Elevation Control Mechanism: Bypass UAC (AppInfo RPC / UACME #41) - T1548.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Hide Artifacts: Hidden Window / Hidden Task - T1564.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Protocol Tunneling (chisel/plink/Python tunnels) - T1572\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Encrypted Channel (Orcus Rijndael-256 CBC) - T1573\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Virtual Private Server (AS209207) - T1583.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Reflective Code Loading - T1620\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Financial Theft (BTC clipboard hijacker) - T1657\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Chaos Ransomware (TorBrowserTor) Multi-Stage Loader (94.103.1.13)",
+    "date": "2026-04-23",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "6f667981-4451-5004-a851-e42a3420ab88": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Exfil\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Cred Theft\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Open Dir\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Threat\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy: Multi-hop Proxy (Tor mirrors) - T1090.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Account Manipulation - T1098\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Supply Chain Compromise: Compromise Software Supply Chain - T1195.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data from Information Repositories - T1213\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data Destruction (adversary-side leak as punitive impact) - T1485\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Steal Application Access Token - T1528\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data from Cloud Storage - T1530\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Unsecured Credentials: Credentials In Files - T1552.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Phishing: Spearphishing Voice (vishing) - T1566.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over Web Service: to Cloud Storage - T1567.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Domains - T1583.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: VPS (bulletproof hosting) - T1583.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Financial Theft - T1657\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "ShinyHunters Data Leak Site (91.215.85.22)",
+    "date": "2026-04-17",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "8e859eb6-419c-5ddc-9d3c-dff1eafce995": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Toolkit\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"C2\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Injection\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Open Dir\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data from Local System - T1005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information - T1027\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Owner/User Discovery - T1033\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Masquerade Task or Service - T1036.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Name or Location - T1036.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over C2 Channel - T1041\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PE Injection - T1055.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Thread Execution Hijacking - T1055.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Hollowing - T1055.012\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Keylogging - T1056.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Discovery - T1057\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Command Shell - T1059.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"JavaScript - T1059.007\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Information Discovery - T1082\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"File and Directory Discovery - T1083\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Non-Application Layer Protocol - T1095\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Native API - T1106\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Modify Registry - T1112\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Shared Modules - T1129\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data Encoding: Standard Encoding - T1132.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Deobfuscate/Decode Files or Information - T1140\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Rundll32 - T1218.011\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Service - T1543.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Service Execution - T1569.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Protocol Tunneling - T1572\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Encrypted Channel: Symmetric Cryptography - T1573.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Asymmetric Cryptography - T1573.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Develop Capabilities: Malware - T1587.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Reflective Code Loading - T1620\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "OpenStrike Expanded Toolkit — 106 New Files (2026-04-08)",
+    "date": "2026-04-08",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "94be8f0c-229d-5120-8ec3-4a4b2eb759d2": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Toolkit\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"C2\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Open Dir\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Evasion\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information - T1027\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Software Packing - T1027.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Owner/User Discovery - T1033\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over C2 Channel - T1041\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Injection - T1055\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Discovery - T1057\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Command Shell - T1059.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Python - T1059.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Information Discovery - T1082\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"File and Directory Discovery - T1083\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Native API - T1106\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Shared Modules - T1129\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Non-Standard Encoding - T1132.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Deobfuscate/Decode Files or Information - T1140\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Checks - T1497.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Symmetric Cryptography - T1573.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Asymmetric Cryptography - T1573.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Develop Capabilities: Malware - T1587.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Reflective Code Loading - T1620\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Debugger Evasion - T1622\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "OpenStrike Beacon Toolkit (172.105.0.126)",
+    "date": "2026-04-06",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "940014f4-065e-5b01-9fbe-d4c28f766dae": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"RAT\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"MaaS\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"C2\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Multi-Family\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information - T1027\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Software Packing - T1027.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Scheduled Task - T1053.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Information Discovery - T1082\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Replication Through Removable Media - T1091\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Clipboard Data - T1115\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Checks - T1497.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Bootkit - T1542.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Shortcut Modification - T1547.009\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Mark-of-the-Web Bypass - T1553.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Symmetric Cryptography - T1573.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify System Firewall - T1686\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Host Firewall - T1686.003\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Shadow RAT & XWorm Open Directory Campaign",
+    "date": "2026-04-05",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "125e14b3-c05b-5d46-a15d-e4b86f112070": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"C2\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Multi-Family\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Open Dir\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Injection\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information - T1027\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Masquerading - T1036\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Injection - T1055\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Hollowing - T1055.012\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Command Shell - T1059.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Deobfuscate/Decode Files or Information - T1140\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Non-Standard Port - T1571\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Symmetric Cryptography - T1573.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Asymmetric Cryptography - T1573.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Reflective Code Loading - T1620\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Open Directory at 193.56.255.154 — XiebroC2 v3.1 & Covenant C2",
+    "date": "2026-04-03",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "48a52860-1656-5303-ad23-7aa117354f8b": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"MaaS\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"C2\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Open Dir\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Multi-Family\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Software Packing - T1027.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Fileless Storage - T1027.011\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Resource Name or Location - T1036.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Visual Basic - T1059.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Modify Registry - T1112\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Screen Capture - T1113\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Msiexec - T1218.007\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Access Tools - T1219\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Asymmetric Cryptography - T1573.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Reflective Code Loading - T1620\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "ZeroTrace Multi-Family MaaS Operation (74.0.42.25)",
+    "date": "2026-03-16",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "8cf95311-80b8-5a28-8132-7ffb8349c482": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"C2\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Loader\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Go\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Evasion\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Software Packing - T1027.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Encrypted/Encoded File - T1027.013\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Masquerading - T1036\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Resource Name or Location - T1036.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Hollowing - T1055.012\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Native API - T1106\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Parent PID Spoofing - T1134.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Code Signing - T1553.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Reflective Code Loading - T1620\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Sliver C2 Toolchain with ScareCrow Loader (45.94.31.220)",
+    "date": "2026-03-10",
+    "analysis": 2,
+    "threat_level_id": 2,
+    "timestamp": 1791580400
+  },
+  "e4a63f98-8afb-50e9-ad9a-4986fc498af9": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Toolkit\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Priv Esc\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"RCE\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\".NET\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"DNS - T1071.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Internal Proxy - T1090.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Non-Application Layer Protocol - T1095\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Token Impersonation/Theft - T1134.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Shell - T1505.003\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Webserver Compromise Kit (91.236.230.250)",
+    "date": "2026-02-20",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "ab0fd8fb-928e-585f-95d1-5a7f9983eacf": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"RAT\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Cred Theft\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Persistence\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Evasion\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Masquerading - T1036\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Injection - T1055\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Keylogging - T1056.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"File Deletion - T1070.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Screen Capture - T1113\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Clipboard Data - T1115\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Audio Capture - T1123\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Access Tools - T1219\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Steal Web Session Cookie - T1539\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Winlogon Helper DLL - T1547.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Bypass User Account Control - T1548.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials from Web Browsers - T1555.003\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Remcos RAT OpenDirectory Campaign",
+    "date": "2026-02-10",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "cf5676b3-13f1-5946-9f45-c9aa21c9bdba": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Cryptojacking\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Dropper\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Persistence\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Evasion\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"File Transfer Protocols - T1071.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Resource Hijacking - T1496\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "NsMiner: Multi-Stage Cryptojacking Operation",
+    "date": "2026-02-05",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "94c995c7-3161-5b68-9185-60ec73870738": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"RAT\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"C2\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Desktop Protocol - T1021.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Resource Name or Location - T1036.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Keylogging - T1056.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Service - T1543.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Encrypted Channel - T1573\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Debugger Evasion - T1622\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Arsenal-237: agent.exe (PoetRAT)",
+    "date": "2026-01-15",
+    "analysis": 2,
+    "threat_level_id": 2,
+    "timestamp": 1791580400
+  },
+  "a621bfc3-8efc-54bd-ace7-c4d50940fc7d": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"RAT\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"C2\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Standard Encoding - T1132.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Hidden Window - T1564.003\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Arsenal-237: agent_xworm.exe (XWorm RAT v6)",
+    "date": "2026-01-15",
+    "analysis": 2,
+    "threat_level_id": 2,
+    "timestamp": 1791580400
+  },
+  "aab2ba34-9ec2-5c61-948e-6a10c7b18488": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"RAT\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"C2\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Service Discovery - T1007\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Discovery - T1057\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Information Discovery - T1082\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Standard Encoding - T1132.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domain Trust Discovery - T1482\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Hidden Window - T1564.003\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)",
+    "date": "2026-01-15",
+    "analysis": 2,
+    "threat_level_id": 2,
+    "timestamp": 1791580400
+  },
+  "bf15ec86-d80c-5067-8f63-4c2f4186cda3": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"BYOVD\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Priv Esc\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Rootkit - T1014\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Privilege Escalation - T1068\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Kernel Modules and Extensions - T1547.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Arsenal-237 New Files: BdApiUtil64.sys (Vulnerable Baidu Driver)",
+    "date": "2026-01-15",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "59b99578-e9d7-5ba7-9a9c-5a6088427a92": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Cred Theft\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\".NET\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Dynamic-link Library Injection - T1055.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Native API - T1106\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials from Web Browsers - T1555.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Reflective Code Loading - T1620\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Arsenal-237 New Files: chromelevator.exe (Browser Credential Theft)",
+    "date": "2026-01-15",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "b3f1cee9-dc86-5d92-ae5e-b375141a3dde": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Ransomware\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Rust\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Command and Scripting Interpreter - T1059\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"File Deletion - T1070.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"File and Directory Discovery - T1083\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data Encrypted for Impact - T1486\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Arsenal-237 New Files: dec_fixed.exe (Ransomware Decryptor)",
+    "date": "2026-01-15",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "b021c858-4e87-550d-adc4-b56553cc8004": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Ransomware\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"C2\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Rust\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Multi-hop Proxy - T1090.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Malicious File - T1204.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data Encrypted for Impact - T1486\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Debugger Evasion - T1622\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Arsenal-237 New Files: enc_c2.exe (Rust Ransomware with Tor C2)",
+    "date": "2026-01-15",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "1c4057d8-6ee8-5c89-b45d-adc83d437048": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Ransomware\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Rust\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Network Share Discovery - T1135\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data Encrypted for Impact - T1486\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Arsenal-237 New Files: full_test_enc.exe (Advanced Rust Ransomware)",
+    "date": "2026-01-15",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "3a2e305f-b524-5b35-8fa8-54a3a55c08b1": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Evasion\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"BYOVD\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Privilege Escalation - T1068\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Arsenal-237 New Files: killer_crowdstrike.dll (CrowdStrike-Specific Termination)",
+    "date": "2026-01-15",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "8b4993d6-5ab8-5280-bfaa-f37bd2e53bd6": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"BYOVD\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Evasion\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information - T1027\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Embedded Payloads - T1027.009\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Privilege Escalation - T1068\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Service - T1543.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Arsenal-237 New Files: killer.dll (BYOVD Process Termination)",
+    "date": "2026-01-15",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "75ed19ed-9b89-5f63-a2ca-193a80458317": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Priv Esc\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Management Instrumentation - T1047\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Scheduled Task - T1053.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Token Impersonation/Theft - T1134.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Bypass User Account Control - T1548.002\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Arsenal-237 New Files: lpe.exe (Privilege Escalation)",
+    "date": "2026-01-15",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "bbb50559-558b-53f6-8a3a-19961ddf05ef": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"DLL Hijack\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Persistence\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Service Discovery - T1007\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Automated Exfiltration - T1020\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Information Discovery - T1082\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy - T1090\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Arsenal-237 New Files: nethost.dll (DLL Hijacking Persistence)",
+    "date": "2026-01-15",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "caefd6be-08dd-561f-86e2-b3b02308da81": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Ransomware\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Rust\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Scheduled Task - T1053.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Discovery - T1057\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Service Stop - T1489\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Inhibit System Recovery - T1490\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Checks - T1497.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Security Software Discovery - T1518.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Debugger Evasion - T1622\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Arsenal-237 New Files: new_enc.exe (Human-Operated Rust Ransomware)",
+    "date": "2026-01-15",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "e501fdef-3d5e-5128-b862-ad46cf063906": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Rootkit\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Evasion\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Injection - T1055\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Dynamic-link Library Injection - T1055.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Privilege Escalation - T1068\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Hidden Files and Directories - T1564.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Arsenal-237 New Files: rootkit.dll (Kernel-Mode Rootkit)",
+    "date": "2026-01-15",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "1f7ee918-f66f-5770-90bf-ff912bd48050": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Ransomware\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Rust\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data Encrypted for Impact - T1486\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Inhibit System Recovery - T1490\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Arsenal-237: enc/dec Ransomware Family",
+    "date": "2026-01-15",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "b64d8288-b76d-5380-af9b-4cbfa23ffe6b": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Dropper\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Persistence\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information - T1027\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Resource Name or Location - T1036.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Scheduled Task - T1053.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Injection - T1055\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"File Deletion - T1070.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Arsenal-237: FleetAgentAdvanced.exe",
+    "date": "2026-01-15",
+    "analysis": 2,
+    "threat_level_id": 2,
+    "timestamp": 1791580400
+  },
+  "f5f6f585-f601-5e0c-a7bc-b9e973ed73f0": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Dropper\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Evasion\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Owner/User Discovery - T1033\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Resource Name or Location - T1036.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Injection - T1055\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Information Discovery - T1082\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Clipboard Data - T1115\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Shared Modules - T1129\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Malicious File - T1204.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Arsenal-237: FleetAgentFUD.exe",
+    "date": "2026-01-15",
+    "analysis": 2,
+    "threat_level_id": 2,
+    "timestamp": 1791580400
+  },
+  "14e13c91-19dc-5501-978c-2729a8ef67eb": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Priv Esc\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Evasion\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Owner/User Discovery - T1033\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Bypass User Account Control - T1548.002\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Arsenal-237: uac_test.exe",
+    "date": "2026-01-15",
+    "analysis": 2,
+    "threat_level_id": 2,
+    "timestamp": 1791580400
+  },
+  "6b2ddd6b-2861-5626-b59e-9cf736ff2568": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"RAT\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Injection\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\".NET\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Cred Theft\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Scheduled Task - T1053.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Thread Execution Hijacking - T1055.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"File Deletion - T1070.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Non-Application Layer Protocol - T1095\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Dead Drop Resolver - T1102.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Video Capture - T1125\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Shortcut Modification - T1547.009\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Encrypted Channel - T1573\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Power Settings - T1653\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm",
+    "date": "2025-12-20",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "628d1b77-562f-5511-aa4b-e858e3c8527f": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"RAT\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Cred Theft\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Evasion\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\".NET\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Dead Drop Resolver - T1102.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Access Tools - T1219\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Firmware - T1542.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials from Web Browsers - T1555.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Hidden Window - T1564.003\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "PULSAR RAT (server.exe) — Technical Analysis & Business Risk Assessment",
+    "date": "2025-12-15",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "da83550d-5287-5e4b-8325-fdcd93e5018e": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Loader\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Stealer\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Cred Theft\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Evasion\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Resource Name or Location - T1036.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Debugger Evasion - T1622\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Hybrid Loader/Stealer Ecosystem Masquerading as Sogou",
+    "date": "2025-11-20",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "cb0d8c6e-7f98-5551-ac12-dc8ac8943286": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Loader\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Stealer\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Go\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Injection\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Invalid Code Signature - T1036.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Modify Registry - T1112\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Checks - T1497.001\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Houselet.exe — The Go-Based Loader Masquerading as PlayStation Remote Play",
+    "date": "2025-11-10",
+    "analysis": 2,
+    "threat_level_id": 2,
+    "timestamp": 1791580400
+  },
+  "d9ad5815-06a6-5ce7-a342-cd0019412f73": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Scanner\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Python\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Exploitation\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Password Guessing - T1110.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploit Public-Facing Application - T1190\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "AdvancedRouterScanner",
+    "date": "2025-10-20",
+    "analysis": 2,
+    "threat_level_id": 2,
+    "timestamp": 1791580400
+  },
+  "4581acf9-a066-5fa8-aaf4-d6edf9a3a867": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Webshell\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"PHP\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Exfil\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"C2\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy - T1090\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Local Account - T1136.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploit Public-Facing Application - T1190\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Shell - T1505.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration to Cloud Storage - T1567.002\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "From Webshells to The Cloud",
+    "date": "2025-10-15",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1791580400
+  },
+  "8975ee88-1a24-52cc-8c39-74ddf2741efb": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"RAT\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Loader\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"PowerShell\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Evasion\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Quasar + XWorm + PowerShell",
+    "date": "2025-10-10",
+    "analysis": 2,
+    "threat_level_id": 2,
+    "timestamp": 1791580400
+  }
+}

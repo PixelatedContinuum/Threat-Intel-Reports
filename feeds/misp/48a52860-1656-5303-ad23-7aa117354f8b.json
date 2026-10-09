@@ -1,0 +1,561 @@
+{
+  "Event": {
+    "uuid": "48a52860-1656-5303-ad23-7aa117354f8b",
+    "info": "ZeroTrace Multi-Family MaaS Operation (74.0.42.25)",
+    "date": "2026-03-16",
+    "threat_level_id": 1,
+    "analysis": 2,
+    "timestamp": 1791580400,
+    "publish_timestamp": 1791580400,
+    "published": true,
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"MaaS\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"C2\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Open Dir\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Multi-Family\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Software Packing - T1027.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Fileless Storage - T1027.011\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Resource Name or Location - T1036.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Visual Basic - T1059.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Modify Registry - T1112\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Screen Capture - T1113\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Msiexec - T1218.007\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Access Tools - T1219\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Asymmetric Cryptography - T1573.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Reflective Code Loading - T1620\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "Attribute": [
+      {
+        "uuid": "c2503504-1cf1-5be8-b3f5-623ee44b4aec",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/",
+        "to_ids": false,
+        "comment": "Detection rules, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "575ec4de-d9a4-58d7-b071-c7834ea5655f",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/ioc-feeds/opendirectory-74-0-42-25-20260316-iocs.json",
+        "to_ids": false,
+        "comment": "IOC feed (JSON), The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "5b8477b7-3f8b-57fe-a5ce-916444948f0a",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/reports/zerotrace-74-0-42-25-20260316/",
+        "to_ids": false,
+        "comment": "Report, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "cb908bc1-c36c-5aed-851b-33f557e9d9f0",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/stix/zerotrace-74-0-42-25-20260316.json",
+        "to_ids": false,
+        "comment": "STIX 2.1 bundle, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "4dccd53f-9d6d-5074-9c9f-6a05cec1342f",
+        "type": "vulnerability",
+        "category": "External analysis",
+        "value": "CVE-2025-30406",
+        "to_ids": false,
+        "comment": "Named in the report",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "37fc607b-a1d9-5571-ba2a-4bb3bed799f2",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "102eedd5355f9aca9b3f4714a3b106b00e6defd097a2e711f878d9633d1ae4fc",
+        "to_ids": true,
+        "comment": "sha256: 102eedd5355f9aca9b3f4714a3b106b00e6defd097a2e711f878d9633d1ae4fc. XWorm V5.6 client stub, VB.NET, 40960 bytes [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "749f455a-e134-5a6c-94fd-204c3057b0f2",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "205bffe1f49e256a8ec879667da1babbcf38b6e4d6600823012a68a8dda3c82d",
+        "to_ids": true,
+        "comment": "sha256: 205bffe1f49e256a8ec879667da1babbcf38b6e4d6600823012a68a8dda3c82d. XWorm V5.6 client stub, VB.NET, 36864 bytes [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "8f0685c7-3e83-5776-a9e7-891bb49cbd64",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "239858491f2a7c4cb5dd44967e364f57fcbefd850da987bb62f06bd58a1f78f9",
+        "to_ids": true,
+        "comment": "sha256: 239858491f2a7c4cb5dd44967e364f57fcbefd850da987bb62f06bd58a1f78f9. XWorm V5.6 client stub, VB.NET, 33280 bytes [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "ab13cc31-4eb1-53a6-8518-f7db2d106b2d",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "427f818131c9beb7f8a487cb28fe13e2699db844ac3c9e9ae613fd35113fe77f",
+        "to_ids": true,
+        "comment": "sha256: 427f818131c9beb7f8a487cb28fe13e2699db844ac3c9e9ae613fd35113fe77f. XWorm V5.6 client stub, primary analysis sample; C2 config fully decrypted [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "032cc00f-0bc9-51cd-bbed-f66e21e33b48",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "59e43c18ee26c1056efc9628de025e3026db63c9536f6cbd39de847762d2048e",
+        "to_ids": true,
+        "comment": "sha256: 59e43c18ee26c1056efc9628de025e3026db63c9536f6cbd39de847762d2048e. XWorm V5.6 client stub, VB.NET, 36864 bytes [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "58a24d71-0ed4-5860-bc70-d25ed5de50d1",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "61cc1fad658dd5f21e239a3767636da9038c4c08079596c6ab59d70506938b41",
+        "to_ids": true,
+        "comment": "sha256: 61cc1fad658dd5f21e239a3767636da9038c4c08079596c6ab59d70506938b41. XWorm V5.6 client stub, VB.NET, 36864 bytes [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "e8138456-88b5-5dc0-bf55-77e13782ad8d",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "90f58865f265722ab007abb25074b3fc4916e927402552c6be17ef9afac96405",
+        "to_ids": true,
+        "comment": "sha256: 90f58865f265722ab007abb25074b3fc4916e927402552c6be17ef9afac96405. XWorm V5.6 builder/server panel, 14.8MB VB.NET; ransomware module embedded; compile date 2024-03-08 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "90a4b245-9b7d-5537-80ff-b207f1ed46da",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "973d9f9faab19e9d9b9cc942bf48859166556eaa8e3cccbf491832e130a65392",
+        "to_ids": true,
+        "comment": "sha256: 973d9f9faab19e9d9b9cc942bf48859166556eaa8e3cccbf491832e130a65392. PureHVNC GUI, PureBasic + BoxedApp SDK + DNGuard (modified); internal name PureHVNC_GUI; 82892288 bytes [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "e93f5ac2-8d5b-5982-86b5-36d412bd7147",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "a11703fd47d16020fa099a95bb4e46247d32cf8821dc1826e77a971cdd3c4c55",
+        "to_ids": true,
+        "comment": "sha256: a11703fd47d16020fa099a95bb4e46247d32cf8821dc1826e77a971cdd3c4c55. XWorm operator support script, title 'XWorm - Fixer'; confirms active XWorm deployment; lodctr /r [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "d1329257-7c92-55b6-a547-71480316ed43",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "a616c5fd9cee76d2df4d2cfec8d8519e6fd2ad605c1942e1e1cbb99aa09a278d",
+        "to_ids": true,
+        "comment": "sha256: a616c5fd9cee76d2df4d2cfec8d8519e6fd2ad605c1942e1e1cbb99aa09a278d. Raven RAT client stub template, Delphi 12.0 Athens Enterprise; 3603968 bytes; C2 host placeholder [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "eda19326-537c-5591-99cb-7c9e7847a4cb",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "b34a0bb0c0ba24dae59b748f1e9dc70fc739c5d4300fe96e8ff66cf6166d3dd8",
+        "to_ids": true,
+        "comment": "sha256: b34a0bb0c0ba24dae59b748f1e9dc70fc739c5d4300fe96e8ff66cf6166d3dd8. Raven RAT C2 server panel (operator console accidentally uploaded), Delphi; port 8777; operator handle Steffz [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "0f439feb-ee94-5c2b-a11a-b0bb73cd5033",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "f57c6dbff5270b02651c2886771a8dd8cc40fcd23fa5e2902d26bb10be741bf2",
+        "to_ids": true,
+        "comment": "sha256: f57c6dbff5270b02651c2886771a8dd8cc40fcd23fa5e2902d26bb10be741bf2. XWorm V5.6 client stub, deceptive filename mimics Windows Calculator [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "6064c18b-4b0c-580c-94bd-ceb288ed2fb2",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "f5f14b9073f86da926a8ed319b3289b893442414d1511e45177f6915fb4e5478",
+        "to_ids": true,
+        "comment": "sha256: f5f14b9073f86da926a8ed319b3289b893442414d1511e45177f6915fb4e5478. Native C++ 11-stage reflective PE loader for XWorm; PEB-patching, LDR spoof; cipher NOT(byte)-0x3E [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "098f6ec2-3f02-507e-899e-6ce1d6c2ac14",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "fdca9ee6e64d67795cd48c5740fa54f509b00bff3e2e94d5f7863e21b23da7f6",
+        "to_ids": true,
+        "comment": "sha256: fdca9ee6e64d67795cd48c5740fa54f509b00bff3e2e94d5f7863e21b23da7f6. Phishing VBScript dropper, downloads ScreenConnect MSI from chainconnects.net; UAC elevation; SSA PDF decoy [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "10225928-3d66-5d20-a377-45e290911ccd",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "adminxyzhosting.com",
+        "to_ids": true,
+        "comment": "domain: adminxyzhosting.com. ScreenConnect relay server, attacker-registered; Hostinger/PrivacyProtect.org; active since 2024-10-23 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "e4749afd-da81-5dfe-a909-0597a323f2ab",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "chainconnects.net",
+        "to_ids": true,
+        "comment": "domain: chainconnects.net. ScreenConnect MSI distribution server, attacker-registered (re-registered 2025-02-16); same registrar/WHOIS/NS as adminxyzhosting.com [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "5611f458-9368-50f3-9d83-b71ab97603c6",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "ledno.net",
+        "to_ids": true,
+        "comment": "domain: ledno.net. Resolves to 74.0.42.25 open directory IP; appeared 2026-03-02 (10 days before discovery) [confidence 60/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "a90aba72-3dcd-54b4-87c8-da4c985dd2d6",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "wireon.work.gd",
+        "to_ids": true,
+        "comment": "domain: wireon.work.gd. Free subdomain resolving to 185.49.126.140; appeared 2025-09-03; MODERATE confidence PureRAT C2 fallback during adminxyzhosting.com downtime gap [confidence 60/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "145eb9e5-6c4a-5d04-9772-9b12fcd58a21",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "ziadverisontwo.com",
+        "to_ids": true,
+        "comment": "domain: ziadverisontwo.com. Co-hosted on 74.0.42.162 since 2026-02-08; 2573 passive DNS queries; possible Verizon typosquat; active at discovery [confidence 60/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "9095f0ab-b273-5f95-ab9c-7cabb7775aaf",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "ziadxyzhosting.com",
+        "to_ids": true,
+        "comment": "domain: ziadxyzhosting.com. Co-hosted on 74.0.42.162 since 2026-02-08; identical xyz+hosting naming pattern as adminxyzhosting.com [confidence 60/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "c42e1cee-b7e1-54a1-9314-2d62e491664b",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://adminxyzhosting.com/Bin/Update.Client.exe",
+        "to_ids": true,
+        "comment": "url: http://adminxyzhosting.com/Bin/Update.Client.exe. ScreenConnect session delivery URL base, 500 unique links in final_links.txt with s=[UUID] parameter [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "33096d62-dc1d-5a9f-a24e-ebf8adcc5a4e",
+        "type": "url",
+        "category": "Network activity",
+        "value": "https://chainconnects.net/Bin/support.ClientSetup.msi?e=Access&y=Guest",
+        "to_ids": true,
+        "comment": "url: https://chainconnects.net/Bin/support.ClientSetup.msi?e=Access&y=Guest. ScreenConnect client MSI download URL, hardcoded in Attachment.vbs [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "703ce183-9760-5cea-8784-3c9bdfe3c938",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "185.49.126.140",
+        "to_ids": true,
+        "comment": "ipv4: 185.49.126.140. PureHVNC C2, hardcoded in xh.exe (PHVNC.Stub.Program.Main()) | PureRAT v4.1.9 C2 port 1, varint-decoded from Faidowra.dll config blob ManageCombinedSystem field | PureRAT v4.1.9 C2 port 2, sequential fallback | PureRAT v4.1.9 C2 port 3, sequential fallback | ScreenConnect admin panel HTTPS, adminxyzhosting.com hosting IP | ScreenConnect relay port, victim ScreenConnect clients connect here | XWorm V5.6 C2, decrypted from XClient.exe Settings.Hosts; AES-encrypted comms; 10-15s beacon [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "a3d9356b-8bae-5e99-83d2-37419a6b3d69",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "185.49.126.97",
+        "to_ids": true,
+        "comment": "ipv4: 185.49.126.97. adminxyzhosting.com historical IP (2024-10-23 to 2025-01-09), ASN 199654 NL [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "025f660d-aab4-5686-9ef4-5258d368fe33",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "74.0.42.162",
+        "to_ids": true,
+        "comment": "ipv4: 74.0.42.162. chainconnects.net current hosting IP, same /24 as 74.0.42.25; ASN 40662 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "e8d3b1e8-9cf1-577b-b66c-7aae30952c39",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "74.0.42.25",
+        "to_ids": true,
+        "comment": "ipv4: 74.0.42.25. Open directory / malware staging server, ASN 40662 Layer7 Technologies NL; IPXO lease [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "ba29af3a-8ea8-5b02-917b-8ac7c4d42612",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "74.0.42.44",
+        "to_ids": true,
+        "comment": "ipv4: 74.0.42.44. chainconnects.net prior hosting IP (2026-01-29 to 2026-02-10), ASN 40662 [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "22360dde-b9db-5d9a-9fd0-bbb6160d9037",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert tcp $HOME_NET any -> $EXTERNAL_NET [56001,56002,56003] (msg:\"THL DETECT MaaS Toolkit PureRAT v4.1.9 Protocol Preamble Before TLS to Confirmed C2 Ports\"; flow:established,to_server; content:\"|04 00 00 00|\"; depth:4; threshold:type limit,track by_src,count 1,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/; classtype:trojan-activity; sid:9001002; rev:3; metadata:author The_Hunters_Ledger, date 2026-03-17;)",
+        "to_ids": true,
+        "comment": "PureRAT v4.1.9 Protocol Preamble Before TLS | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1573.002, T1071.001 | rule hash e4327c55 | https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "9dc3723a-0913-5e66-8287-98c58bc1aec8",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Fileless PowerShell PE Dropper ExecutionPolicy Bypass from Non-Standard Parent\nid: 945438df-0fc1-4861-9ed6-4c66ae11e700\nstatus: experimental\ndescription: >-\n    Detects execution of PowerShell with -ExecutionPolicy Bypass loading a .ps1 file from\n    non-standard parent processes, consistent with the puf.ps1 and sync.ps1 fileless PE dropper\n    chain used in this campaign. These droppers hex-decode an embedded 310KB .NET PE assembly and\n    load it entirely in memory via Assembly.Load with no disk write, bypassing file-based detection.\n    The rule targets PowerShell spawned by remote access tools, command shells, or scripting\n    interpreters not expected to launch PowerShell with policy bypass flags in normal operations.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/\nauthor: The Hunters Ledger\ndate: 2026-03-17\ntags:\n    - attack.execution\n    - attack.stealth\n    - attack.t1059.001\n    - attack.t1027.011\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        Image|endswith: '\\powershell.exe'\n        CommandLine|contains|all:\n            - '-ExecutionPolicy'\n            - 'Bypass'\n            - '.ps1'\n    selection_staging_path:\n        CommandLine|contains:\n            - '\\AppData\\'\n            - '\\Temp\\'\n            - '\\ProgramData\\'\n            - '\\Users\\Public\\'\n            - '\\Downloads\\'\n            - '\\$Recycle.Bin\\'\n    filter_standard_parents:\n        ParentImage|endswith:\n            - '\\explorer.exe'\n            - '\\services.exe'\n            - '\\svchost.exe'\n            - '\\msiexec.exe'\n    condition: selection and selection_staging_path and not filter_standard_parents\nfalsepositives:\n    - Software installers and updaters that stage a setup script under %TEMP% or %APPDATA% and invoke it with a policy bypass from a parent not on the standard-parent list\n    - Legitimate administrative scripts invoked via remote management tools, scheduled tasks, or software deployment systems; extend filter_standard_parents to include known-good deployment parent images in the target environment\nlevel: medium",
+        "to_ids": false,
+        "comment": "Fileless PowerShell PE Dropper ExecutionPolicy Bypass from Non-Standard Parent | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1059.001, T1027.011 | rule hash b777c322 | https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "ee0fc689-0a01-5769-ae5d-988bac27d128",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Raven RAT Persistence via WindowsService Run Key Masquerade\nid: 9ad1fd97-8a23-42fd-8ab6-210999dd6d9c\nstatus: experimental\ndescription: >-\n    Detects Raven RAT (custom Delphi RAT developed by the ZeroTrace cluster) establishing\n    persistence via a Run key entry named 'WindowsService' under\n    HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run. This value name is a deliberate\n    masquerade intended to appear as a legitimate Windows service entry to casual inspection.\n    Raven RAT provides keylogging, hidden VNC desktop creation, cryptocurrency wallet theft\n    (Exodus, Atomic Wallet, Guarda, Wasabi), and SOCKS proxy capabilities. The value name is a\n    generic literal an operator can trivially rename in a future build, so this rule is scoped\n    as a hunting lead rather than a high-fidelity alert.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/\nauthor: The Hunters Ledger\ndate: 2026-03-17\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.stealth\n    - attack.t1547.001\n    - attack.t1036.005\n    - detection.emerging-threats\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection:\n        TargetObject|contains: '\\CurrentVersion\\Run\\WindowsService'\n    filter_legitimate:\n        Details|startswith:\n            - 'C:\\Windows\\System32\\'\n            - 'C:\\Windows\\SysWOW64\\'\n    condition: selection and not filter_legitimate\nfalsepositives:\n    - Poorly named legitimate software that uses 'WindowsService' as a Run key value name; validate that the target binary path is outside System32 and Program Files before actioning\nlevel: medium",
+        "to_ids": false,
+        "comment": "Raven RAT Persistence via WindowsService Run Key Masquerade | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1547.001, T1036.005 | rule hash 4f3f25c5 | https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "d57f64d9-966e-5504-8fc4-af02245f5658",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: ScreenConnect Phishing VBScript Dropper Silent MSI Install Chain\nid: c48377bd-0066-4bb0-8cc7-4041cd0a0e54\nstatus: experimental\ndescription: >-\n    Detects the ScreenConnect phishing dropper chain where a VBScript (Attachment.vbs) spawns\n    msiexec.exe with silent install flags (/quiet ALLUSERS=2) to install ConnectWise ScreenConnect\n    without user interaction. The dropper downloads the MSI from the operator distribution domain\n    using MSXML2.ServerXMLHTTP.6.0 with SSL verification deliberately bypassed. wscript.exe\n    spawning msiexec.exe with ALLUSERS=2 is characteristic of this phishing dropper and is not\n    expected behavior in legitimate software deployment from this parent process.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/\nauthor: The Hunters Ledger\ndate: 2026-03-17\ntags:\n    - attack.execution\n    - attack.stealth\n    - attack.t1059.005\n    - attack.t1218.007\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_parent:\n        ParentImage|endswith: '\\wscript.exe'\n    selection_child:\n        Image|endswith: '\\msiexec.exe'\n        CommandLine|contains|all:\n            - '/quiet'\n            - 'ALLUSERS=2'\n    condition: selection_parent and selection_child\nfalsepositives:\n    - Legitimate software deployment scripts that invoke msiexec silently from wscript.exe; validate MSI download source URL and installation target domain against known-good deployment infrastructure\nlevel: high",
+        "to_ids": true,
+        "comment": "ScreenConnect Phishing VBScript Dropper Silent MSI Install Chain | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1059.005, T1218.007 | rule hash fa9c38d4 | https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "cb2be023-064f-536c-b2de-abd6ebc6e56e",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: XWorm V5.6 Operator Configuration Registry Key Write\nid: 2f4dafdd-6eb9-46f5-9ca6-ea704008f8da\nstatus: experimental\ndescription: >-\n    Detects registry write events targeting HKCU\\SOFTWARE\\XWorm, the key used by XWorm V5.6\n    to store operator-configured values including Telegram bot token, bot ID, and cryptocurrency\n    clipper wallet addresses (BTC, ETH, TRC20). Presence of this key indicates an active or\n    recently active XWorm V5.6 infection on the host.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/\nauthor: The Hunters Ledger\ndate: 2026-03-17\ntags:\n    - attack.defense-impairment\n    - attack.persistence\n    - attack.t1112\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection:\n        TargetObject|startswith: 'HKCU\\SOFTWARE\\XWorm'\n    condition: selection\nfalsepositives:\n    - Unlikely — no known legitimate software uses the HKCU\\SOFTWARE\\XWorm registry key path\nlevel: high",
+        "to_ids": true,
+        "comment": "XWorm V5.6 Operator Configuration Registry Key Write | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1112 | rule hash 5f7c5582 | https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "5e2eba8d-cb13-5dd7-8a5a-54f2d3d023fd",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: vlc_boxed.exe DGA Malware Run Key Persistence via VLC Name Masquerade\nid: e90b3fbd-823b-4218-a548-6c39376438f4\nstatus: experimental\ndescription: >-\n    Detects registry persistence write for vlc_boxed.exe, an Enigma Virtual Box-packed DGA-capable\n    malware family that masquerades as VLC Media Player. The malware creates a Run key value named\n    'vlctask' pointing to '%APPDATA%\\vlcapp\\vlc.exe' — a path not used by legitimate VLC\n    installations, which install to %ProgramFiles%. Presence of this key indicates successful\n    persistence establishment by an unidentified DGA-capable malware family confirmed in this campaign.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/\nauthor: The Hunters Ledger\ndate: 2026-03-17\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.stealth\n    - attack.t1547.001\n    - attack.t1036.005\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection:\n        TargetObject|contains: '\\CurrentVersion\\Run\\vlctask'\n    condition: selection\nfalsepositives:\n    - Unlikely — legitimate VLC Media Player does not use the vlctask Run key value name or the AppData\\vlcapp path\nlevel: high",
+        "to_ids": true,
+        "comment": "vlc_boxed.exe Run Key Persistence via VLC Name Masquerade | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1547.001, T1036.005 | rule hash edbbda8f | https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "8cd5e542-dfb0-5458-8d0b-ea55579e50ea",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "/*\n   Yara Rule Set\n   Identifier: OpenDirectory 74.0.42.25 — Multi-Family MaaS Toolkit\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule RAT_XWorm_V56_Stub {\n   meta:\n      description = \"Detects XWorm V5.6 VB.NET victim stub by plaintext mutex string, protocol packet delimiter, and distinctive Telegram notification typo strings characteristic of this builder version\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/\"\n      date = \"2026-03-17\"\n      hash1 = \"427f818131c9beb7f8a487cb28fe13e2699db844ac3c9e9ae613fd35113fe77f\"\n      hash2 = \"257b07c4b9eb72403769a12604e9ddb2bf5545fa\"\n      hash3 = \"f4b00fbc6a3ce80b474334a3ccaadcf0\"\n      family = \"XWorm\"\n      malware_type = \"RAT\"\n      campaign = \"ZeroTrace-MultiFamily-MaaS-74.0.42.25\"\n      id = \"75780e95-7bd7-5a15-9ed1-008b56fb6c44\"\n   strings:\n      $s1 = \"5tK099W0Z6AMZVxQ\" ascii wide\n      $s2 = \"<Xwormmm>\" ascii wide\n      $s3 = \"XWorm V5.6\" ascii wide\n      $s4 = \"New Clinet : \" ascii wide\n      $s5 = \"Groub : \" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 150KB and\n      ($s1 or ($s2 and $s3)) and\n      1 of ($s4, $s5)\n}",
+        "to_ids": true,
+        "comment": "XWorm V5.6 VB.NET Victim Stub | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1219 | rule hash 8a24c6f9 | https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "c14b6f58-507c-5c6e-ba0c-54bce2cdf2aa",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MALW_Aspdkzb_ConfuserEx_Loader {\n   meta:\n      description = \"Detects Aspdkzb-family ConfuserEx-protected fileless loader cluster delivering PureRAT v4.1.9 via three-stage in-memory Assembly.Load chain; matched by distinctive internal namespace strings from the loader stages\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/\"\n      date = \"2026-03-17\"\n      hash1 = \"978ead9671e59772eeeb73344fc3b0c068c5168de7f67f738269f5b59e681a9a\"\n      hash2 = \"1b14c09c6b5323b14102e2dc4080805fb2f12557\"\n      hash3 = \"554cbfabfb7bce86780241a0087d51fb\"\n      family = \"Aspdkzb\"\n      malware_type = \"Loader\"\n      campaign = \"ZeroTrace-MultiFamily-MaaS-74.0.42.25\"\n      id = \"bbdb528b-d1b0-5de1-ae13-d82b09742aea\"\n   strings:\n      $s1 = \"ConfuserEx\" ascii wide\n      $s2 = \"Faidowra\" ascii wide\n      $s3 = \"Zvafsyattl\" ascii wide\n      $s4 = \"Aspdkzb\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize >= 300KB and filesize <= 330KB and\n      $s1 and\n      1 of ($s2, $s3, $s4)\n}",
+        "to_ids": true,
+        "comment": "Aspdkzb ConfuserEx Fileless Loader Cluster | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1027.002 | rule hash a168b543 | https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "711d00b8-1960-50ca-9121-e00b272e309d",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MALW_XwormLoader_ReflectivePE {\n   meta:\n      description = \"Detects XwormLoader native C++ 11-stage reflective PE loader by NOT-minus-0x3E decryption opcode sequence, .NET Framework LDR path spoof string, and operator-authored decoy comment strings embedded in the binary\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/\"\n      date = \"2026-03-17\"\n      hash1 = \"f5f14b9073f86da926a8ed319b3289b893442414d1511e45177f6915fb4e5478\"\n      hash2 = \"93e4f301156d120a87fe2c4be3aaa28b9dfd1a8d\"\n      hash3 = \"9c9245810bad661af3d6efec543d34fd\"\n      family = \"XwormLoader\"\n      malware_type = \"Loader\"\n      campaign = \"ZeroTrace-MultiFamily-MaaS-74.0.42.25\"\n      id = \"05b1d15e-f524-5f59-9333-ecaec0c672be\"\n   strings:\n      $b1 = { F6 D0 2C 3E }\n      $s1 = \"C:\\\\Windows\\\\Microsoft.NET\\\\Framework\" wide\n      $s2 = \"This is garbage code #\" ascii\n      $s3 = \"Welcome to the random numbers generator!\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 600KB and\n      $b1 and\n      ($s1 or ($s2 and $s3))\n}",
+        "to_ids": true,
+        "comment": "XwormLoader Native Reflective PE Loader | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1620 | rule hash 926ec2e0 | https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "8e825e97-b385-51de-b4e7-fccc2afc6682",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule RAT_PureRAT_v419_Payload {\n   meta:\n      description = \"Detects PureRAT v4.1.9 final stage .NET Reactor-obfuscated payload (Faidowra.dll) by deobfuscated internal namespace strings and MaaS version string characteristic of the v4.1.9 build\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/\"\n      date = \"2026-03-17\"\n      hash1 = \"6b526c29a6961c1f03eeb1ec4ca3a0fdc5680e3f90db013dea8b27d8b63cce57\"\n      hash2 = \"4edc47021e17dd02d2b0c8b839a9dbd4da5949db\"\n      hash3 = \"fa9405a7c7bfca793f3f8c0c25dc9445\"\n      family = \"PureRAT\"\n      malware_type = \"RAT\"\n      campaign = \"ZeroTrace-MultiFamily-MaaS-74.0.42.25\"\n      id = \"18c2a2e2-1299-56a2-a0a4-7f466c1ef5ab\"\n   strings:\n      $s1 = \"Faidowra.IO.ModelConfiguration\" ascii wide\n      $s2 = \"ProtoBuf.Strategies.ServerModel\" ascii wide\n      $s3 = \"4.1.9\" ascii wide\n      $s4 = \"OrderChain\" ascii wide\n      $s5 = \"DefinitionChooser\" ascii wide\n      $s6 = \"ProcEnumerator\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 900KB and\n      (($s1 and $s2) or ($s3 and 2 of ($s4, $s5, $s6)))\n}",
+        "to_ids": true,
+        "comment": "PureRAT v4.1.9 .NET Reactor Payload | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1219 | rule hash f87dc8e1 | https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "bffb2ee2-e9d6-5f1c-88d6-746e8bae8e6e",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule RAT_RavenRAT_Stub {\n   meta:\n      description = \"Detects Raven RAT Delphi victim stub by hidden VNC class names from HVNC implementation and cryptocurrency wallet theft target strings; wallet names combined with Run key persistence value reduce false positive risk\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/\"\n      date = \"2026-03-17\"\n      hash1 = \"a616c5fd9cee76d2df4d2cfec8d8519e6fd2ad605c1942e1e1cbb99aa09a278d\"\n      hash2 = \"079afe270f2addfe137265d2322c22c50415c741\"\n      hash3 = \"0c4a765f0924b6867fb08407098327db\"\n      family = \"RavenRAT\"\n      malware_type = \"RAT\"\n      campaign = \"ZeroTrace-MultiFamily-MaaS-74.0.42.25\"\n      id = \"12163024-7850-5049-bcfa-c5151f1ed00f\"\n   strings:\n      $s1 = \"THiddenVNC\" ascii wide\n      $s2 = \"THiddenVNCThread\" ascii wide\n      $s3 = \"THVNCInputThread\" ascii wide\n      $s4 = \"Exodus\" ascii wide\n      $s5 = \"Atomic Wallet\" ascii wide\n      $s6 = \"Guarda\" ascii wide\n      $s7 = \"Wasabi\" ascii wide\n      $s8 = \"WindowsService\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 15MB and\n      (($s1 and $s2 and $s3) or (2 of ($s4, $s5, $s6, $s7) and $s8))\n}",
+        "to_ids": true,
+        "comment": "Raven RAT Delphi Victim Stub | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1219, T1113 | rule hash acf963f2 | https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "f898ed64-f28d-53f2-bf94-407c8df01472",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule TOOLKIT_XWorm_V56_Builder {\n   meta:\n      description = \"Detects XWorm V5.6 builder and C2 server panel by version string, Telegram skull emoji format string, and sandbox VM detection URL characteristic of the V5.6 build\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/\"\n      date = \"2026-03-17\"\n      hash1 = \"90f58865f265722ab007abb25074b3fc4916e927402552c6be17ef9afac96405\"\n      hash2 = \"5b01b90137871c3c8f0d04f510c4d56b23932cbc\"\n      hash3 = \"56ccb739926a725e78a7acf9af52c4bb\"\n      family = \"XWorm\"\n      malware_type = \"RAT Builder/Panel\"\n      campaign = \"ZeroTrace-MultiFamily-MaaS-74.0.42.25\"\n      id = \"cdacf530-e7c4-5ea8-b58c-f786f7be4a62\"\n   strings:\n      $s1 = \"XWorm V5.6\" ascii wide\n      $b1 = { E2 98 A0 20 5B 58 57 6F 72 6D 20 56 35 2E 36 5D }\n      $s2 = \"New Clinet : \" ascii wide\n      $s3 = \"Groub : \" ascii wide\n      $s4 = \"http://ip-api.com/line/?fields=hosting\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize > 1MB and filesize < 20MB and\n      3 of them\n}",
+        "to_ids": true,
+        "comment": "XWorm V5.6 Builder and C2 Panel | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1219 | rule hash cdf93088 | https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      }
+    ],
+    "Object": []
+  }
+}

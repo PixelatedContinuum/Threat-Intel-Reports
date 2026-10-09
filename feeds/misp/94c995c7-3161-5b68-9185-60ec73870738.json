@@ -1,0 +1,143 @@
+{
+  "Event": {
+    "uuid": "94c995c7-3161-5b68-9185-60ec73870738",
+    "info": "Arsenal-237: agent.exe (PoetRAT)",
+    "date": "2026-01-15",
+    "threat_level_id": 2,
+    "analysis": 2,
+    "timestamp": 1791580400,
+    "publish_timestamp": 1791580400,
+    "published": true,
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"RAT\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"C2\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Desktop Protocol - T1021.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Resource Name or Location - T1036.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Keylogging - T1056.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Service - T1543.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Encrypted Channel - T1573\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Debugger Evasion - T1622\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "Attribute": [
+      {
+        "uuid": "bdce5bc3-cd59-58ff-bfec-f6ce79e9dc7d",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/hunting-detections/agent-exe-detections/",
+        "to_ids": false,
+        "comment": "Detection rules, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "13656f2a-814f-526c-88a5-be8e488541ca",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/ioc-feeds/agent-exe.json",
+        "to_ids": false,
+        "comment": "IOC feed (JSON), The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "0b62a711-6027-564e-a1b0-b7bfd9b7a463",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: WinDefenderSvc.exe Startup Folder Drop (Base Rule)\nid: ca0e1263-d7d0-4c19-bdce-a837dfda222b\nname: windefendersvc_startup_drop\nstatus: experimental\ndescription: >-\n  Base rule (not alerting on its own): creation of a file named exactly\n  WinDefenderSvc.exe in a user Startup folder. Paired with the registry-write\n  base rule below via the correlation rule, which flags co-occurrence of both\n  PoetRAT-class dual-persistence artifacts on the same host.\nreferences:\n  - https://the-hunters-ledger.com/hunting-detections/agent-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n  - attack.persistence\n  - attack.privilege-escalation\n  - attack.stealth\n  - attack.t1547.001\n  - attack.t1036.005\n  - detection.emerging-threats\nlogsource:\n  product: windows\n  category: file_event\ndetection:\n  selection:\n    TargetFilename|endswith: '\\Start Menu\\Programs\\Startup\\WinDefenderSvc.exe'\n  condition: selection\nfalsepositives:\n  - >-\n    Legitimate software using this exact filename is not expected — Microsoft-signed\n    Defender components do not install here. Not alerting on its own; reviewed only\n    in combination with the paired registry-write base rule.\nlevel: informational\n---\ntitle: WindowsDefenderUpdate Registry Run Key Write (Base Rule)\nid: f3c242f1-521f-448b-9d7c-a613c9975090\nname: windowsdefenderupdate_run_key_write\nstatus: experimental\ndescription: >-\n  Base rule (not alerting on its own): creation of a CurrentVersion\\Run value\n  named WindowsDefenderUpdate whose data does not point at the legitimate\n  Windows Defender install path. Paired with the Startup-folder-drop base rule\n  above via the correlation rule below.\nreferences:\n  - https://the-hunters-ledger.com/hunting-detections/agent-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n  - attack.persistence\n  - attack.privilege-escalation\n  - attack.stealth\n  - attack.t1547.001\n  - attack.t1036.005\n  - detection.emerging-threats\nlogsource:\n  product: windows\n  category: registry_set\ndetection:\n  selection:\n    TargetObject|endswith: '\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\WindowsDefenderUpdate'\n  filter:\n    Details|contains: 'C:\\Program Files\\Windows Defender\\'\n  condition: selection and not filter\nfalsepositives:\n  - >-\n    Legitimate Windows Defender update mechanisms are not expected to use this value\n    path (extremely rare). Not alerting on its own; reviewed only in combination with\n    the paired Startup-folder base rule.\nlevel: informational\n---\ntitle: PoetRAT-Class Dual Persistence — Startup Drop + Run Key Write on Same Host\nid: 9ac725e3-2b02-488d-aef0-4e2bdb843ff1\nstatus: experimental\ndescription: >-\n  Fires when both the WinDefenderSvc.exe Startup-folder drop and the\n  WindowsDefenderUpdate Run-key write are observed on the same host within a\n  short window. Neither base signal alone is reliable (both are single,\n  attacker-chosen literal names that a rebrand trivially evades), but the\n  malware's own dual-persistence design — redundant survival so removing one\n  mechanism does not eliminate the other — means a genuine infection produces\n  both artifacts together, close in time, which a coincidental unrelated\n  installer would not.\nreferences:\n  - https://the-hunters-ledger.com/hunting-detections/agent-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n  - attack.persistence\n  - attack.privilege-escalation\n  - attack.stealth\n  - attack.t1547.001\n  - attack.t1036.005\n  - detection.emerging-threats\ncorrelation:\n  type: temporal\n  rules:\n    - windefendersvc_startup_drop\n    - windowsdefenderupdate_run_key_write\n  group-by:\n    - host.name\n  timespan: 10m\nfalsepositives:\n  - >-\n    A coordinated rebrand of both artifact names in a future build evades this\n    correlation entirely — both remain the same attacker-chosen naming\n    decision, so this is a scoping lead for this specific build family, not a\n    durable technique-level detector.\nlevel: medium",
+        "to_ids": false,
+        "comment": "PoetRAT Dual Persistence: Startup Drop + Registry Run Key Write (Correlation) | TIER: Hunting | robustness 2 | confidence LOW — both base signals are individually brittle single-literal selectors; the correlation adds real but limited value | ATT&CK T1547.001, T1036.005 | rule hash 9f2a4749 | https://the-hunters-ledger.com/hunting-detections/agent-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "89ab08be-8398-5725-8578-529808e85429",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "/*\n   Yara Rule Set\n   Identifier: Arsenal-237-109.230.231.37-Malware-Repository\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule TOOLKIT_PoetRAT_Golang_Multi_Signal_Combination {\n   meta:\n      description = \"Detects agent.exe-class PoetRAT-attributed Golang RAT samples via a multi-signal combination: Windows-Defender-masquerade persistence strings, Golang compilation artifacts, anti-debugging APIs, and cryptographic/network/surveillance capability imports. Also matches on the two known sample hashes directly.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/agent-exe-detections/\"\n      date = \"2026-01-12\"\n      family = \"PoetRAT\"\n      malware_type = \"RAT\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"cf6db0bf-fc1e-482b-a028-3dd99d2219e9\"\n      hash1 = \"e7f9a29dde307afff4191dbc14a974405f287b10f359a39305dccdc0ee949385\"\n      hash2 = \"4e856041018242c62b3848d63b94c3763beda01648d3139060700c11e9334ad1\"\n   strings:\n      $hash_agent = \"e7f9a29dde307afff4191dbc14a974405f287b10f359a39305dccdc0ee949385\" nocase\n      $hash_windefender = \"4e856041018242c62b3848d63b94c3763beda01648d3139060700c11e9334ad1\" nocase\n\n      $str_windefendersvc = \"WinDefenderSvc.exe\" ascii wide nocase\n      $str_defender_update = \"WindowsDefenderUpdate\" ascii wide nocase\n      $str_marker = \".wd_installed\" ascii wide\n\n      $golang_runtime1 = \"runtime.main\" ascii\n      $golang_runtime2 = \"runtime.goexit\" ascii\n      $golang_runtime3 = \"go.buildid\" ascii\n      $golang_runtime4 = \"runtime.morestack\" ascii\n\n      $antidebug1 = \"NtQueryInformationProcess\" ascii wide\n      $antidebug2 = \"SetConsoleCtrlHandler\" ascii wide\n      $antidebug3 = \"IsDebuggerPresent\" ascii wide\n\n      $crypto1 = \"crypto/aes\" ascii\n      $crypto2 = \"crypto/rsa\" ascii\n      $crypto3 = \"crypto/sha\" ascii\n      $crypto4 = \"chacha20\" ascii nocase\n      $crypto5 = \"golang.org/x/crypto\" ascii\n\n      $net1 = \"net.Listen\" ascii\n      $net2 = \"net.Dial\" ascii\n      $net3 = \"TCPConn\" ascii\n      $net4 = \"net/http\" ascii\n\n      $surv1 = \"GetAsyncKeyState\" ascii wide\n      $surv2 = \"SetWindowsHookEx\" ascii wide\n      $surv3 = \"GetForegroundWindow\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      (\n         any of ($hash_*) or\n         (\n            (2 of ($str_*)) and\n            (2 of ($golang_runtime*)) and\n            (1 of ($antidebug*)) and\n            (1 of ($crypto*))\n         ) or\n         (\n            (3 of ($golang_runtime*)) and\n            (2 of ($crypto*)) and\n            (1 of ($str_*)) and\n            (1 of ($net*)) and\n            (1 of ($surv*))\n         )\n      )\n}",
+        "to_ids": false,
+        "comment": "Golang RAT Multi-Signal Combination (Hash Match or Behavioral Combination) | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1036.005, T1622, T1056.001, T1573 | rule hash 2ffe0afe | https://the-hunters-ledger.com/hunting-detections/agent-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "60e99019-e5ef-58f2-88d6-8a1d203d1985",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule TOOLKIT_Golang_RAT_Generic_Capability_Combination {\n   meta:\n      description = \"Detects Golang-compiled executables combining input-capture/service-creation capability APIs with crypto and network stdlib imports — a broad toolkit-family heuristic for Golang RATs, not specific to any one campaign. Expect co-fire with legitimate Golang network/remote-access tooling.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/agent-exe-detections/\"\n      date = \"2026-01-12\"\n      family = \"Golang-RAT-Generic\"\n      malware_type = \"RAT\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"a65492ab-4dc6-481e-b4bf-29ca070acdae\"\n   strings:\n      $go_runtime1 = \"runtime.main\" ascii\n      $go_runtime2 = \"runtime.goexit\" ascii\n      $go_runtime3 = \"runtime.morestack\" ascii\n      $go_runtime4 = \"go.buildid\" ascii\n\n      $cap_keylog = \"GetAsyncKeyState\" ascii wide\n      $cap_keylog2 = \"SetWindowsHookEx\" ascii wide\n      $cap_rdp = \"TermService\" ascii wide nocase\n      $cap_ps = \"powershell\" ascii wide nocase\n      $cap_service = \"CreateService\" ascii wide\n\n      $crypto_aes = \"crypto/aes\" ascii\n      $crypto_tls = \"crypto/tls\" ascii\n      $crypto_modern = \"chacha20\" ascii nocase\n\n      $net_tcp = \"net.Dial\" ascii\n      $net_http = \"net/http\" ascii\n      $net_listen = \"net.Listen\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      (2 of ($go_runtime*)) and\n      (2 of ($cap_*)) and\n      (1 of ($crypto_*)) and\n      (1 of ($net_*))\n}",
+        "to_ids": false,
+        "comment": "Generic Golang RAT Capability Combination | TIER: Hunting | robustness 2 | confidence LOW | ATT&CK T1056.001, T1021.001, T1059.001, T1543.003, T1573 | rule hash 374b2a1a | https://the-hunters-ledger.com/hunting-detections/agent-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "523273a0-08bc-5d10-bb6d-3333f61bb739",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule TOOLKIT_PoetRAT_WinDefender_Masquerade_Persistence_Pair {\n   meta:\n      description = \"Detects PoetRAT-class droppers embedding the paired Windows-Defender-masquerade persistence artifact strings (WinDefenderSvc.exe + WindowsDefenderUpdate registry value, or the .wd_installed marker alongside Golang runtime strings). Brittle to a naming-convention rebrand — treat as a scoping lead, not an alert.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/agent-exe-detections/\"\n      date = \"2026-01-12\"\n      family = \"PoetRAT\"\n      malware_type = \"RAT-Persistence-Component\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"0c69a4b5-b6b2-44fd-baf2-36bddc32fe6f\"\n      hash1 = \"4e856041018242c62b3848d63b94c3763beda01648d3139060700c11e9334ad1\"\n   strings:\n      $defender_svc = \"WinDefenderSvc.exe\" ascii wide nocase\n      $defender_update = \"WindowsDefenderUpdate\" ascii wide nocase\n      $startup_path = \"Start Menu\\\\Programs\\\\Startup\" ascii wide nocase\n      $marker_file = \".wd_installed\" ascii wide\n\n      $go1 = \"Go build ID:\" ascii\n      $go2 = \"runtime.main\" ascii\n      $go3 = \"runtime.goexit\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      (\n         ($defender_svc and $defender_update) or\n         ($defender_svc and $startup_path) or\n         ($marker_file and any of ($go*))\n      )\n}",
+        "to_ids": false,
+        "comment": "WinDefenderSvc.exe + WindowsDefenderUpdate Masquerade Pair | TIER: Hunting | robustness 1 | confidence LOW | ATT&CK T1036.005, T1547.001 | rule hash a9a21222 | https://the-hunters-ledger.com/hunting-detections/agent-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      }
+    ],
+    "Object": []
+  }
+}

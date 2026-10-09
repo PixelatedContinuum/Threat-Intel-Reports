@@ -1,0 +1,894 @@
+{
+  "Event": {
+    "uuid": "3d46b2a8-dcd5-56e3-80f3-cc19a7369651",
+    "info": "Rhadamanthys MaaS Customer Deep-Dive (79.137.192.3)",
+    "date": "2026-05-15",
+    "threat_level_id": 1,
+    "analysis": 2,
+    "timestamp": 1791580400,
+    "publish_timestamp": 1791580400,
+    "published": true,
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"MaaS\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Stealer\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Loader\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Open Dir\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data from Local System - T1005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Application Window Discovery - T1010\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information - T1027\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Binary Padding - T1027.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Software Packing - T1027.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Indicator Removal from Tools - T1027.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Dynamic API Resolution - T1027.007\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Fileless Storage - T1027.011\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Encrypted/Encoded File - T1027.013\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over C2 Channel - T1041\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Hollowing - T1055.012\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Keylogging - T1056.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Discovery - T1057\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"File Deletion (memory variant) - T1070.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Mail Protocols - T1071.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Information Discovery - T1082\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"External Proxy - T1090.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Service (Telegram Bot API) - T1102\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Modify Registry - T1112\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Screen Capture - T1113\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Deobfuscate/Decode Files or Information - T1140\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"InstallUtil - T1218.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"InstallUtil - T1218.008\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Mutual Exclusion - T1480.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Virtualization/Sandbox Evasion - T1497\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Time Based Evasion - T1497.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Steal Web Session Cookie - T1539\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Service - T1543.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials from Web Browsers - T1555.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Password Managers - T1555.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Spearphishing Link - T1566.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration to Cloud Storage - T1567.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Dynamic Resolution - T1568\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Symmetric Cryptography - T1573.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Asymmetric Cryptography - T1573.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Virtual Private Server - T1583.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Services (brand-impersonation TLS certs) - T1583.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data from Configuration Repository - T1602.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Debugger Evasion - T1622\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "Attribute": [
+      {
+        "uuid": "7be1b083-728d-5c61-80b6-cd7a31be6998",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/",
+        "to_ids": false,
+        "comment": "Detection rules, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "425d1c55-1b21-5f94-84ce-72bfc11e4f59",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/ioc-feeds/opendirectory-79-137-192-3-20260515-iocs.json",
+        "to_ids": false,
+        "comment": "IOC feed (JSON), The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "2237a9ff-58f5-5f91-9846-be2e097692f8",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/reports/opendirectory-79-137-192-3-20260515/",
+        "to_ids": false,
+        "comment": "Report, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "9afbf8bb-404a-5873-acf7-f3ba3a6d33f3",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/stix/opendirectory-79-137-192-3-20260515.json",
+        "to_ids": false,
+        "comment": "STIX 2.1 bundle, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "cf6e82f6-524d-51a0-b22f-f58c66eb8e39",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "219cd4f6177a2358ec7f06b230d611f47e1049fcb3e2b44d06ec410b336382b0",
+        "to_ids": true,
+        "comment": "sha256: 219cd4f6177a2358ec7f06b230d611f47e1049fcb3e2b44d06ec410b336382b0 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "541f5640-6563-56c4-b369-4100840504c5",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "2c656360c4e58854dca35ff21b3fc62db41155ca76f8568ecc18fa52aa38fb31",
+        "to_ids": true,
+        "comment": "sha256: 2c656360c4e58854dca35ff21b3fc62db41155ca76f8568ecc18fa52aa38fb31. Hardcoded Telegram bot token 6797512084 + group -1002104835510 + admin alias @AresRS34 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "e2ae473a-2196-551f-b687-8a6707b76eaf",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "504b1a30ce7060eafa7b2a3f6249c954a0be6ce1d2930e03b030434cb232600a",
+        "to_ids": true,
+        "comment": "sha256: 504b1a30ce7060eafa7b2a3f6249c954a0be6ce1d2930e03b030434cb232600a [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "afc03ad7-4563-5b96-aed1-24dcd2bcc9b4",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "53b3515fda56dbbd1f8071a9ef3dc3be80cb7994df22ce8afc2e79147e899b70",
+        "to_ids": true,
+        "comment": "sha256: 53b3515fda56dbbd1f8071a9ef3dc3be80cb7994df22ce8afc2e79147e899b70 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "8025d384-4aef-56a6-900e-8d9724dce268",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "5c38a5dd3703b1c4b8c2466b18ce9f4c45ef4c9bf6c3096bee8b24d20ecd247a",
+        "to_ids": true,
+        "comment": "sha256: 5c38a5dd3703b1c4b8c2466b18ce9f4c45ef4c9bf6c3096bee8b24d20ecd247a. Customer-built loader with EAX-redirect process hollowing into InstallUtil.exe; RC4-decrypts embedded Stage-2 PE from .data section [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "eda284f3-ad88-5003-9ca1-14f428210648",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "705793c011fdfe17941700a3bf42eee0ba2ebdc04870ce19779ea528b3565fac",
+        "to_ids": true,
+        "comment": "sha256: 705793c011fdfe17941700a3bf42eee0ba2ebdc04870ce19779ea528b3565fac [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "d48bd72f-a8ff-5786-b331-df0284b09f2c",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "804f45487c1cda5b69c743f9eb691a12fe0fdcf0d3a9f32003898f1e3836af50",
+        "to_ids": true,
+        "comment": "sha256: 804f45487c1cda5b69c743f9eb691a12fe0fdcf0d3a9f32003898f1e3836af50. Canonical Rhadamanthys Stage-2 with 3-layer encrypted-blob synthesis (byte-emitters + fake-GUIDs + bit-packed) + CBC-XOR cipher + 'FS' container + Q3VM-derivative VM [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "2029021b-5804-55ce-82e4-6adc08980b8b",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "8a69fe67a7e9908aa1248c632ffd784033fc4dc613d0b5589279ccc62f717978",
+        "to_ids": true,
+        "comment": "sha256: 8a69fe67a7e9908aa1248c632ffd784033fc4dc613d0b5589279ccc62f717978. inkconnect.ru /assets/index-CoeWw2zM.js, strong code-level operator IOC for Inkognito cluster [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "b43ba973-997d-5f1f-a9e5-171dba9e9b10",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "b2f4f1617577d14612b30a54a733b15af809c399f325717b4329c13aaa4c915c",
+        "to_ids": true,
+        "comment": "sha256: b2f4f1617577d14612b30a54a733b15af809c399f325717b4329c13aaa4c915c [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "0b6fa711-fba0-5771-ac11-3738988101da",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "d1ae63c928fd07d51cf79c5165e4431765201ca04a2bee3c309dc00092c4de7c",
+        "to_ids": true,
+        "comment": "sha256: d1ae63c928fd07d51cf79c5165e4431765201ca04a2bee3c309dc00092c4de7c. inkconnect.ru /logo.png, visual brand IOC for Inkognito cluster; pivot opportunity via Censys/Shodan favicon search [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "d2f0dc51-04e1-5f78-bbe6-6e184d4eff9a",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "e21fb63a3b4d65a3d48dec1bf17a84a414482f819b93cb8d77a81852dc34c95f",
+        "to_ids": true,
+        "comment": "sha256: e21fb63a3b4d65a3d48dec1bf17a84a414482f819b93cb8d77a81852dc34c95f [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "51f776e9-fc1c-5027-84d0-f392d9281383",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "ee9d4fccebbf73fb33980da15142bc71e5d9661d1bc583c2b09b77490065efd9",
+        "to_ids": true,
+        "comment": "sha256: ee9d4fccebbf73fb33980da15142bc71e5d9661d1bc583c2b09b77490065efd9 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "63c9c701-54cc-5097-95c9-3cbd3d872d73",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "f791fae41cdd3f141221d1783ed4779c839de7fc834ff4fc80a5d7f74b11ff88",
+        "to_ids": true,
+        "comment": "sha256: f791fae41cdd3f141221d1783ed4779c839de7fc834ff4fc80a5d7f74b11ff88. Multi-tenant PhaaS panel with operator dashboard, Telegram exfil, MySQL DB, TRX payout workflow [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "62c1cdb9-25df-5ce5-9373-0cceccd530a5",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "00000xtrading.ru",
+        "to_ids": true,
+        "comment": "domain: 00000xtrading.ru. Inkognito operator EspoCRM back-office (May 2025, Apr 2026); decommissioned 2026-04-07 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "b67db3ce-d705-5cb9-af0d-90e4dcfc5309",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "a-loader.site",
+        "to_ids": true,
+        "comment": "domain: a-loader.site. Historical operator domain (Aug-Sep 2023, 19-day burn); shared Aeza DNS [confidence 60/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "24489369-7840-55aa-b189-a3e54b5c6277",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "aezadns.com",
+        "to_ids": true,
+        "comment": "domain: aezadns.com. Aeza managed-DNS used by operator (a-loader 2023, 00000xtrading 2025); ns1.aezadns.com (185.112.83.228), ns2.aezadns.com (78.153.130.34) | Aeza managed-DNS used by many customers; not unique to this operator [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "e81f17e6-ef9d-5f2e-8cf0-aa1173de49f7",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "akredup.ru",
+        "to_ids": true,
+        "comment": "domain: akredup.ru. Inkognito operator brand-portfolio domain (from detection-rule DNS query list; no further context captured) [confidence 60/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "38656048-eea4-5c7b-baf3-783c45d8288a",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "bigass.monster",
+        "to_ids": true,
+        "comment": "domain: bigass.monster. VPN brand front (Cloudflare-fronted; ger. sub on Aeza 79.137.203.87) [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "e107cea8-e54d-508d-bba0-22d51fc0e940",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "bikaf.ru",
+        "to_ids": true,
+        "comment": "domain: bikaf.ru. Bikaf VPN consumer brand (decommissioned Apr/May 2026, replaced by inkconnect.ru) [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "962fe9f0-85fc-5bb3-b63f-2afb290e3f30",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "catnpv.xyz",
+        "to_ids": true,
+        "comment": "domain: catnpv.xyz. Inkognito operator brand-portfolio domain (from detection-rule DNS query list; no further context captured) [confidence 60/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "72548e57-4b17-5ee3-813b-8bcdb63fe627",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "cryptone.bot",
+        "to_ids": true,
+        "comment": "domain: cryptone.bot. CryptOne fake crypto exchange (BTC/ETH/SOL/PEPE pairs, multilingual EN/TR/DE/RU) [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "e515bc6e-9525-565d-a5ab-251019127b27",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "divar-irantop.shop",
+        "to_ids": true,
+        "comment": "domain: divar-irantop.shop. Inkognito operator domain, briefly resolved via 91.108.241.156 / 94.228.168.80 (Jan 2024) [confidence 60/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "8c4596e8-d33a-58c5-9d3a-90fa38451380",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "evotoptan.com",
+        "to_ids": true,
+        "comment": "domain: evotoptan.com. Briefly hit 79.137.192.3 (2026-03-31, 22-min window); now Namecheap shared [confidence 60/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "1b543a22-367a-5501-a3eb-6c0e37870712",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "fi1.inklens.co.uk",
+        "to_ids": true,
+        "comment": "domain: fi1.inklens.co.uk. Inkognito operator's CURRENT back-office (Apr 2026, present) [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "fc44a134-057a-5c63-a9a0-c6c8a56af93c",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "inkconnect.ru",
+        "to_ids": true,
+        "comment": "domain: inkconnect.ru. INK VPN flagship brand (Inkognito parent), launched 2026-04-17 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "58859387-6e94-5b5b-9843-2efffe499308",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "inklens.co.uk",
+        "to_ids": true,
+        "comment": "domain: inklens.co.uk. Chameleon-decoy apex (redirects apex to GitHub then S3 to mislead recon); fi1. + de1. + marzban. + api. subdomains are operational [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "810ea5c2-07c7-54f3-8d25-28056da452b9",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "inklens.ru",
+        "to_ids": true,
+        "comment": "domain: inklens.ru. Inkognito primary phishing/proxy infrastructure (467 subdomains for brand impersonation) [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "a91ef6d8-c3ce-58c3-95b4-71186027d769",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "marzban.inklens.co.uk",
+        "to_ids": true,
+        "comment": "domain: marzban.inklens.co.uk. Marzban Xray/V2Ray VPN admin panel, operator's central node-management platform [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "5804a2e1-1599-5a99-8e24-94893c2f339a",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "petkovalegal.eu",
+        "to_ids": true,
+        "comment": "domain: petkovalegal.eu. Operator BEC burn domain (2023-06-22, Bulgarian/Russian legal practice theme), ~12-month operator control [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "519a7dd9-1eb4-5c89-982a-7dde415b3f32",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "unloki.ru",
+        "to_ids": true,
+        "comment": "domain: unloki.ru. Long-term VPN brand front (Outline-based, 2023-08, present) [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "c8099ed2-7b68-5de4-b576-1762839597ff",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "vagtec.eu",
+        "to_ids": true,
+        "comment": "domain: vagtec.eu. Operator BEC burn domain (2023-06-13, generic tech theme), ~12-month operator control [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "f416cfba-d77f-5431-9122-3a5babc7514d",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "vetcorbeanca.eu",
+        "to_ids": true,
+        "comment": "domain: vetcorbeanca.eu. Operator BEC burn domain (2023-06-08, earliest operator activity, Romanian veterinary clinic theme), 6-day apex burn [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "153eba13-c443-5d6e-afa9-f2194ee7c8d8",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "vivanoff.ru",
+        "to_ids": false,
+        "comment": "domain: vivanoff.ru. Single Russian domain, no further pivot evidence [confidence 40/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "b29fefd0-7c91-5e3a-8202-2cde0b6c6a1b",
+        "type": "url",
+        "category": "Network activity",
+        "value": "https://79.133.180.168/forwarding/fwmjd8fs.mqi5u",
+        "to_ids": true,
+        "comment": "url: https://79.133.180.168/forwarding/fwmjd8fs.mqi5u. Alternate URL prefix (2026-03-09, different URL scheme; possibly relay/forwarder endpoint or earlier Rhadamanthys URL scheme) [confidence 60/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "27b7e424-357b-5318-8e11-0aec5b412f3a",
+        "type": "url",
+        "category": "Network activity",
+        "value": "https://79.133.180.168:3394/e6d92c6b5b2a03bee7fbab40/icng5os4.lwcci",
+        "to_ids": true,
+        "comment": "url: https://79.133.180.168:3394/e6d92c6b5b2a03bee7fbab40/icng5os4.lwcci. Rhadamanthys beacon URL (2026-04-03, same panel ID, different terminal filename) [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "03b6f340-d241-5044-a28a-8e64352b6840",
+        "type": "url",
+        "category": "Network activity",
+        "value": "https://79.133.180.168:3394/e6d92c6b5b2a03bee7fbab40/rnvoxu7t.nnre7",
+        "to_ids": true,
+        "comment": "url: https://79.133.180.168:3394/e6d92c6b5b2a03bee7fbab40/rnvoxu7t.nnre7. Rhadamanthys beacon URL with customer panel ID (extracted 2026-05-13 from our Stage-2) [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "c32917d6-5598-5777-bf49-f4a5c31790ab",
+        "type": "url",
+        "category": "Network activity",
+        "value": "https://79.137.192.3/",
+        "to_ids": true,
+        "comment": "url: https://79.137.192.3/. Open directory root [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "453ac8bb-da7c-50bc-b125-5085fe64fad1",
+        "type": "url",
+        "category": "Network activity",
+        "value": "https://79.137.192.3/BellaMain/",
+        "to_ids": true,
+        "comment": "url: https://79.137.192.3/BellaMain/. BellaMain panel directory [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "a5e66dd9-6d17-5222-837f-57859b4a0d2d",
+        "type": "url",
+        "category": "Network activity",
+        "value": "https://79.137.192.3/cryptone/",
+        "to_ids": true,
+        "comment": "url: https://79.137.192.3/cryptone/. CryptOne staging/dev URL (live) [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "5a500172-49e4-5bca-a2c6-03d5cf859786",
+        "type": "url",
+        "category": "Network activity",
+        "value": "https://79.137.192.3/no/",
+        "to_ids": true,
+        "comment": "url: https://79.137.192.3/no/. Card phishing lure (live) [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "469deae1-5544-50a0-bc65-f05ba999bd26",
+        "type": "url",
+        "category": "Network activity",
+        "value": "https://cryptone.bot/",
+        "to_ids": true,
+        "comment": "url: https://cryptone.bot/. CryptOne production fake exchange (Cloudflare-fronted, origin hidden) [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "35459680-411c-5f2e-b084-f00110b82274",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "176.124.211.174",
+        "to_ids": true,
+        "comment": "ipv4: 176.124.211.174. Current Inkognito operator inklens.ru host (since 2026-04-02) [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "892c418b-dfc4-502d-bf62-51c572fc43f3",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "185.221.196.118",
+        "to_ids": true,
+        "comment": "ipv4: 185.221.196.118. Inkognito operator EspoCRM back-office (00000xtrading.ru → fi1.inklens.co.uk) [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "284aa9cc-3f91-5064-939f-9e0007ba4a98",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "193.46.56.182",
+        "to_ids": true,
+        "comment": "ipv4: 193.46.56.182. Long-term Inkognito operator VPN endpoint (since Nov 2023, 2.5+ years) [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "a975a18c-1f83-52f2-a299-5cd6e4fa8e46",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "45.81.39.169",
+        "to_ids": true,
+        "comment": "ipv4: 45.81.39.169. Different customer endpoint; proves multi-customer Rhadamanthys MaaS architecture [confidence 60/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "f9aeac51-31c8-5188-905a-a13ed9fd7ecd",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "77.239.101.23",
+        "to_ids": true,
+        "comment": "ipv4: 77.239.101.23. Secondary Inkognito operator phishing/proxy host (502 subs as of Mar 2026) [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "75661662-ed2c-5b81-aed1-0694e63d7219",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "79.133.180.168",
+        "to_ids": true,
+        "comment": "ipv4: 79.133.180.168. Rhadamanthys customer-side C2 listener (active 2023-06-13 → present, ~34 months) [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "e305b14e-e132-5c1f-aa57-72bbcf740506",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "79.137.192.3",
+        "to_ids": true,
+        "comment": "ipv4: 79.137.192.3. Multi-tenant Aeza bulletproof IP, also hosts Cluster C historical loader, Cluster B brief co-tenancy, BriansClub, CRD Club, RedLine, SmokeLoader, Tofsee tenants | Multi-tenant IP, connection alone is not cluster-attributable; cross-evidence with operator IOCs required [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "3d1a27ef-1bff-5b63-aeea-3c499884da01",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "79.137.203.87",
+        "to_ids": true,
+        "comment": "ipv4: 79.137.203.87. Inkognito secondary VPN node host (sister to BellaMain server) [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "68efcb69-e83e-5fb8-a8ab-6c91804aa131",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "8.212.46.227",
+        "to_ids": false,
+        "comment": "ipv4: 8.212.46.227. Tentative Rhadamanthys customer C2 (Alibaba US Technology Co. HK); appears in contacted_ips for sibling Stage-2 457aecd8... as only non-Microsoft/Akamai endpoint | Could be third customer's C2 OR benign Alibaba CDN; verify before action [confidence 40/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "df45939f-3930-5d46-a441-231ab25189a5",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "91.108.241.156",
+        "to_ids": true,
+        "comment": "ipv4: 91.108.241.156. divar-irantop.shop briefly Jan 2024 [confidence 60/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "fb5166fe-051e-5fe2-9bfa-630d71208dab",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "92.38.219.225",
+        "to_ids": true,
+        "comment": "ipv4: 92.38.219.225. bikaf.ru initial setup IP (Feb 21-25, 2026) [confidence 60/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "63e73622-ec21-5630-9b58-57b170592784",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "94.228.168.80",
+        "to_ids": true,
+        "comment": "ipv4: 94.228.168.80. divar-irantop.shop briefly Jan 2024 [confidence 60/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "24c210c7-5b24-5510-a235-6635bea20a72",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT OpenDirectory-79.137.192.3 Rhadamanthys MaaS-Customer Panel ID URL Pattern (C2 Transport Indicator)\"; flow:established,to_server; http.uri; content:\"/e6d92c6b5b2a03bee7fbab40/\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/; classtype:trojan-activity; sid:9300203; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-15;)",
+        "to_ids": true,
+        "comment": "Rhadamanthys Customer Panel-ID URL Pattern | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1071.001 | rule hash 65da39a1 | https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "a37558c5-662f-5ee0-9bba-49cb1ccad06d",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: BellaMain PhaaS Panel HTTP Request Patterns\nid: c7d4f0e1-5fab-6c1d-be4f-4e7fab0c1d23\nstatus: experimental\ndescription: >-\n  Detects HTTP requests to BellaMain panel administrative endpoints. The panel exposes a small fixed\n  set of PHP entry points (signin.php, dashboard.php, post.php, manager.php, cookie.php) that should\n  not appear on legitimate web traffic from internal endpoints. This selector is host-independent and\n  survives the panel being redeployed on new infrastructure. Pair with the IOC feed's blocklist for\n  79.137.192.3 and cryptone.bot for additional coverage of this specific deployment.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-15\ntags:\n    - attack.command-and-control\n    - attack.t1071.001\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: proxy\ndetection:\n    selection_uri:\n        cs-uri-stem|contains:\n            - '/BellaMain/signin.php'\n            - '/BellaMain/dashboard.php'\n            - '/BellaMain/database/post.php'\n            - '/BellaMain/manager.php'\n            - '/BellaMain/database/cookie.php'\n    condition: selection_uri\nfalsepositives:\n    - >-\n      Unlikely — the BellaMain panel PHP entry-point paths are bespoke and unlikely to\n      collide with legitimate proxy/web traffic.\nlevel: high",
+        "to_ids": true,
+        "comment": "BellaMain PhaaS Panel HTTP Request Patterns | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1071.001 | rule hash 50c1738e | https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "3f1ade28-3f72-5c95-a1ba-de6fdaf68651",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Rhadamanthys EAX-Redirect Process Hollowing Into InstallUtil.exe\nid: b5e2f3d9-4e8c-5a0b-ad3f-3d6f8a9b0c12\nstatus: experimental\ndescription: >-\n  Detects suspicious creation of InstallUtil.exe child process from a non-typical parent (loader binary\n  in user-writable location), a precursor to the EAX-redirect process hollowing technique used by this\n  Rhadamanthys customer's loader. EAX-redirect uses W^X memory transitions (RW then RX, never RWX) and\n  rewrites the entry point pointer in EAX rather than the classic SetThreadContext approach. Pair with\n  network telemetry to InstallUtil.exe outbound connections for high-confidence verdict.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-15\ntags:\n    - attack.stealth\n    - attack.privilege-escalation\n    - attack.t1218.008\n    - attack.t1055.012\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection_image:\n        Image|endswith: '\\InstallUtil.exe'\n        Image|contains: '\\Microsoft.NET\\Framework'\n    selection_parent_suspicious:\n        ParentImage|contains:\n            - '\\AppData\\Local\\Temp\\'\n            - '\\AppData\\Roaming\\'\n            - '\\Users\\Public\\'\n            - '\\ProgramData\\'\n    filter_legit_parent:\n        ParentImage|endswith:\n            - '\\msiexec.exe'\n            - '\\devenv.exe'\n            - '\\MSBuild.exe'\n    condition: selection_image and selection_parent_suspicious and not filter_legit_parent\nfalsepositives:\n    - >-\n      Legitimate developer or installer workflows that invoke InstallUtil.exe from temp\n      directories.\nlevel: high",
+        "to_ids": true,
+        "comment": "Rhadamanthys EAX-Redirect Process Hollowing Into InstallUtil.exe | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1218.004, T1055.012 | rule hash d5772ea7 | https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "1ae3725a-abd5-5a0f-b45c-ca64ed7efabb",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Rhadamanthys SibCode Software Registry Key Persistence Marker\nid: a4f1e2c8-3d7b-4f9a-9c2e-2c5e7f8d9a01\nstatus: experimental\ndescription: >-\n  Detects creation or modification of HKU\\<SID>\\Software\\SibCode\\sn registry value, a family-stable\n  Rhadamanthys execution marker observed across multiple sibling Stage-2 sandbox runs (Dapato dropper\n  variants e827d13c, 457aecd8, bc9fe5e9). Per-instance value is a license/build timestamp from the MaaS\n  panel. No known benign software writes this key.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-15\ntags:\n    - attack.persistence\n    - attack.defense-impairment\n    - attack.t1112\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: registry_set\ndetection:\n    selection:\n        TargetObject|contains: '\\Software\\SibCode\\sn'\n    condition: selection\nfalsepositives:\n    - >-\n      Unlikely. The SibCode\\sn key path has no documented benign software using it.\nlevel: high",
+        "to_ids": true,
+        "comment": "Rhadamanthys SibCode Software Registry Key Marker | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1112 | rule hash 62d4a16c | https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "5ecfac98-13e1-592f-a2b3-01394234ac4b",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "/*\n   Yara Rule Set\n   Identifier: Multi-Cluster Open-Directory 79.137.192.3 (Rhadamanthys MaaS / BellaMain PhaaS / Inkognito)\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nimport \"pe\"\n\nrule MALW_Rhadamanthys_FrontbSection\n{\n    meta:\n        description = \"Detects Rhadamanthys Stage-2 binaries by the family-stable .frontb PE section name (a pre-allocated empty runtime buffer for the decrypted Stage-2 payload). Anchored with a Roland decoy string from the Stage-2 plaintext to reduce false positives.\"\n        license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/\"\n        date = \"2026-05-15\"\n        hash1 = \"804f45487c1cda5b69c743f9eb691a12fe0fdcf0d3a9f32003898f1e3836af50\"\n        family = \"Rhadamanthys\"\n        cluster = \"C\"\n        threat_class = \"infostealer,maas\"\n        id = \"b64f32bc-0c99-582b-b1a0-8c3c569ef6d4\"\n\n    strings:\n        $s_roland = \"Roland\" ascii wide\n\n    condition:\n        uint16(0) == 0x5A4D\n        and filesize < 2MB\n        and for any i in (0 .. pe.number_of_sections - 1) : (\n            pe.sections[i].name == \".frontb\"\n        )\n        and $s_roland\n}",
+        "to_ids": true,
+        "comment": "Rhadamanthys .frontb Stage-2 Section Marker | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1027, T1140 | rule hash 165ad769 | https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "04e143a0-ecf6-5f7c-be37-1ba482265777",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "import \"pe\"\n\nrule MALW_Rhadamanthys_Stage2_ImportSurface\n{\n    meta:\n        description = \"Detects Rhadamanthys Stage-2 binaries by the distinctive minimal-import surface: USER32 GetDC/ReleaseDC/GetSystemMetrics + ADVAPI32 RegQueryValueExW combined with several distinctive GDI32 decoy imports. Stage-2 payloads avoid common crypto/network library imports — the absence of WS2_32 and CRYPT32 raises specificity.\"\n        license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/\"\n        date = \"2026-05-15\"\n        hash1 = \"804f45487c1cda5b69c743f9eb691a12fe0fdcf0d3a9f32003898f1e3836af50\"\n        family = \"Rhadamanthys\"\n        cluster = \"C\"\n        threat_class = \"infostealer,maas\"\n        fp_risk = \"MEDIUM — minimal-import surface alone could match unrelated GDI-heavy applications; pair with other Rhadamanthys rules for high-confidence verdict.\"\n        id = \"65d56771-90a6-5465-9bfd-8b247839e1e6\"\n\n    condition:\n        uint16(0) == 0x5A4D\n        and filesize < 2MB\n        and pe.imports(\"USER32.dll\", \"GetDC\")\n        and pe.imports(\"USER32.dll\", \"ReleaseDC\")\n        and pe.imports(\"USER32.dll\", \"GetSystemMetrics\")\n        and pe.imports(\"ADVAPI32.dll\", \"RegQueryValueExW\")\n        and pe.imports(\"GDI32.dll\", \"Ellipse\")\n        and pe.imports(\"GDI32.dll\", \"GetAspectRatioFilterEx\")\n        and not pe.imports(\"WS2_32.dll\")\n        and not pe.imports(\"CRYPT32.dll\")\n}",
+        "to_ids": false,
+        "comment": "Rhadamanthys Stage-2 Minimal Import Surface | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1027.002, T1140 | rule hash 25bed79d | https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "0c46b174-e994-5caa-9a6a-3a707d9d9288",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "import \"pe\"\n\nrule Tofsee_Bloater_2023_StaticTradecraft\n{\n    meta:\n        description = \"Detects Tofsee-family droppers exhibiting the 2023 build's anti-AV bloat + dynamic-API-resolution tradecraft. Triggers on PE-structure anomalies (huge virtual .data, single static WinHTTP import) + word-salad version metadata; family-bound, not campaign-bound. Co-tenant on 79.137.192.3 — operationally separate from BellaMain/Inkognito/Rhadamanthys clusters.\"\n        license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/\"\n        date = \"2026-05-08\"\n        hash1 = \"2910a52e0934c8f1cf247cf88d1fce010f2e52dfb1cf2f64ebf3dc53df4ef865\"\n        family = \"Tofsee\"\n        cluster = \"Co-tenant (separate from Clusters A/B/C)\"\n        threat_class = \"spam_botnet,downloader,injector\"\n        id = \"6dec01d5-e225-52b6-b3a1-c28325a70e99\"\n\n    strings:\n        $winhttp_only_writedata = \"WinHttpWriteData\" ascii\n\n        $rare_api_1 = \"GetConsoleAliasA\" ascii\n        $rare_api_2 = \"GetConsoleAliasExesLengthW\" ascii\n        $rare_api_3 = \"FindFirstVolumeMountPointA\" ascii\n        $rare_api_4 = \"GetNumaHighestNodeNumber\" ascii\n        $rare_api_5 = \"DeleteTimerQueueTimer\" ascii\n        $rare_api_6 = \"GlobalFindAtomA\" ascii\n        $rare_api_7 = \"SetCalendarInfoA\" ascii\n        $rare_api_8 = \"CreateHardLinkW\" ascii\n\n        $inject_1 = \"VirtualAllocEx\" ascii\n        $inject_2 = \"WriteProcessMemory\" ascii\n        $inject_3 = \"GetThreadContext\" ascii\n\n        $wordsalad_meta_marker_1 = \"Hole\" ascii wide\n        $wordsalad_meta_marker_2 = \"Bill\" ascii wide\n        $wordsalad_meta_marker_3 = \"Fire\" ascii wide\n        $wordsalad_meta_marker_4 = \"Selfie\" ascii wide\n\n    condition:\n        uint16(0) == 0x5A4D\n        and pe.is_pe\n        and pe.machine == pe.MACHINE_I386\n        and pe.subsystem == pe.SUBSYSTEM_WINDOWS_GUI\n        and pe.number_of_sections >= 4\n        and $winhttp_only_writedata\n        and pe.imports(\"WINHTTP.dll\", \"WinHttpWriteData\")\n        and not pe.imports(\"WINHTTP.dll\", \"WinHttpOpen\")\n        and not pe.imports(\"WINHTTP.dll\", \"WinHttpConnect\")\n        and not pe.imports(\"WINHTTP.dll\", \"WinHttpOpenRequest\")\n        and for any i in (0 .. pe.number_of_sections - 1) : (\n            pe.sections[i].name == \".data\" and\n            pe.sections[i].virtual_size > pe.sections[i].raw_data_size * 100\n        )\n        and all of ($inject_*)\n        and 5 of ($rare_api_*)\n        and 2 of ($wordsalad_meta_marker_*)\n}",
+        "to_ids": false,
+        "comment": "Tofsee 2023 Build Static Tradecraft (Co-Tenant Reference) | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1027.001, T1027.005, T1497, T1543.003, T1071.003, T1090.002 | rule hash 2aeaa90a | https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "bfa32718-9fbc-537e-b643-85fb5b00d5be",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MALW_BellaMain_PHPPanel\n{\n    meta:\n        description = \"Detects BellaMain Turkish PhaaS panel PHP source files by the Wadanz developer pseudonym function names (sifreleWadanz / sifrecozWadanz session encryption helpers) and the obfuscated admin directory name. Operator alias @AresRS34 alone is NOT sufficient to trigger — it's paired with a BellaMain-specific anchor to prevent false positives on threat intelligence reports about this actor.\"\n        license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/\"\n        date = \"2026-05-15\"\n        hash1 = \"f791fae41cdd3f141221d1783ed4779c839de7fc834ff4fc80a5d7f74b11ff88\"\n        family = \"BellaMain\"\n        cluster = \"A\"\n        threat_class = \"phaas,panel\"\n        id = \"1f58eaf6-b4d6-5e5d-b4a2-f481987b0684\"\n\n    strings:\n        $s_admindir = \"V5VgjLU0jsDe\" ascii\n        $s_aliasaresrs = \"@AresRS34\" ascii\n        $s_wadanz_enc = \"sifreleWadanz\" ascii\n        $s_wadanz_dec = \"sifrecozWadanz\" ascii\n        $s_dbname = \"jakartaxdw\" ascii\n\n    condition:\n        filesize < 500KB\n        and (\n            $s_admindir\n            or any of ($s_wadanz_enc, $s_wadanz_dec)\n            or ($s_aliasaresrs and any of ($s_wadanz_enc, $s_wadanz_dec, $s_dbname))\n        )\n}",
+        "to_ids": true,
+        "comment": "BellaMain PhaaS Panel PHP Source | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1071.001, T1102 | rule hash cd49d3d9 | https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "8a56f1b1-aa66-5cfe-93e5-e476fcd18f28",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MALW_Rhadamanthys_CustomerCBCXOR_IV\n{\n    meta:\n        description = \"Detects this specific Rhadamanthys MaaS customer's Stage-2 binaries by the customer-specific 16-byte CBC-XOR IV embedded in .rdata at offset 0x0001c434. Different MaaS customers use different IVs — this is the highest-value per-customer fingerprint in the package, though its stability across this customer's future rebuilds is inferred rather than confirmed by a second sample.\"\n        license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/\"\n        date = \"2026-05-15\"\n        hash1 = \"804f45487c1cda5b69c743f9eb691a12fe0fdcf0d3a9f32003898f1e3836af50\"\n        family = \"Rhadamanthys\"\n        cluster = \"C\"\n        threat_class = \"infostealer,maas,customer_specific\"\n        id = \"769462d4-efd8-52a6-8e6c-de4357bbbb21\"\n\n    strings:\n        $b_iv = { f6 35 8d 79 df 69 c5 77 d9 dc e6 bb 77 fa 4f a7 }\n\n    condition:\n        uint16(0) == 0x5A4D\n        and filesize < 2MB\n        and $b_iv\n}",
+        "to_ids": false,
+        "comment": "Rhadamanthys Customer-Specific Stage-2 CBC-XOR IV | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1027, T1140 | rule hash 44b6774b | https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "769c5619-271d-5cae-92dc-82d58eed51df",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MALW_Rhadamanthys_LoaderRC4Key\n{\n    meta:\n        description = \"Detects this specific Rhadamanthys customer's Stage-1 loader by the 31-byte RC4 key embedded at &DAT_00433820, used to decrypt the embedded Stage-2 PE at &DAT_00436a70. This is the loader-side counterpart to MALW_Rhadamanthys_CustomerCBCXOR_IV (which anchors on the Stage-2); cross-rebuild stability of this key is inferred rather than confirmed.\"\n        license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/\"\n        date = \"2026-05-15\"\n        hash1 = \"5c38a5dd3703b1c4b8c2466b18ce9f4c45ef4c9bf6c3096bee8b24d20ecd247a\"\n        family = \"Rhadamanthys\"\n        cluster = \"C\"\n        threat_class = \"loader,customer_specific\"\n        id = \"acb71818-6c54-56e7-a401-bd0151e8e4ff\"\n\n    strings:\n        $b_rc4_key = { e0 80 25 40 d0 2d 0f ea eb 27 7d c7 20 e3 90 b0 6d fd 64 d8 f8 10 4d 95 81 e7 88 e5 12 71 5b }\n\n    condition:\n        uint16(0) == 0x5A4D\n        and filesize < 5MB\n        and $b_rc4_key\n}",
+        "to_ids": false,
+        "comment": "Rhadamanthys Customer-Specific Loader RC4 Key | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1140, T1027.002 | rule hash 12a9e43c | https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "6c6963ad-59d2-5b37-b7c1-ac40c82cbdc5",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MALW_Rhadamanthys_OperatorLoaderStrings\n{\n    meta:\n        description = \"Detects this Rhadamanthys customer's Stage-1 loader by operator-specific build/campaign ID strings observed in std::cout output and operator credential strings. Requires 2-of-N matches to reduce false positives on any single string appearing in unrelated content.\"\n        license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/\"\n        date = \"2026-05-15\"\n        hash1 = \"5c38a5dd3703b1c4b8c2466b18ce9f4c45ef4c9bf6c3096bee8b24d20ecd247a\"\n        family = \"Rhadamanthys\"\n        cluster = \"C\"\n        threat_class = \"loader,operator_specific\"\n        id = \"76476cd6-5dc9-5c43-ae9b-22fc6f92ba0c\"\n\n    strings:\n        $s_id1 = \"BombAUb23456\" ascii fullword\n        $s_id2 = \"DubzAias932\" ascii fullword\n        $s_cred = \"Ahuh783bhASbsxAsiopJQAiwhhbchG&*#U897u*#&*473\" ascii\n        $s_panel_id = \"e6d92c6b5b2a03bee7fbab40\" ascii fullword\n\n    condition:\n        uint16(0) == 0x5A4D\n        and filesize < 5MB\n        and 2 of them\n}",
+        "to_ids": true,
+        "comment": "Rhadamanthys Operator Loader Build/Campaign Strings | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1027 | rule hash 4c3be308 | https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "589e9d76-dc17-5115-a32b-d3cd46c5ac68",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MALW_Rhadamanthys_Q3VMBytecodeModifiedMagic\n{\n    meta:\n        description = \"Detects Rhadamanthys Stage-2 binaries containing the operator-modified Q3VM derivative bytecode magic 0x14744214 (vs stock Q3VM 0x12721444). Anchored with a Roland decoy string co-condition because a 4-byte magic alone has unacceptable false-positive risk.\"\n        license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/\"\n        date = \"2026-05-15\"\n        hash1 = \"804f45487c1cda5b69c743f9eb691a12fe0fdcf0d3a9f32003898f1e3836af50\"\n        family = \"Rhadamanthys\"\n        cluster = \"C\"\n        threat_class = \"infostealer,maas,vm_obfuscation\"\n        id = \"b069b1e8-a290-58e7-b2be-12743835ba77\"\n\n    strings:\n        $b_magic_le = { 14 42 74 14 }\n        $s_roland = \"Roland\" ascii wide\n\n    condition:\n        uint16(0) == 0x5A4D\n        and filesize < 2MB\n        and $b_magic_le\n        and $s_roland\n}",
+        "to_ids": true,
+        "comment": "Rhadamanthys Operator-Modified Q3VM Bytecode Magic | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1027.013 | rule hash 26ca66aa | https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      }
+    ],
+    "Object": []
+  }
+}

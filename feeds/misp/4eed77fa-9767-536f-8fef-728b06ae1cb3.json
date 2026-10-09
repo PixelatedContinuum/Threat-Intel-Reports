@@ -1,0 +1,314 @@
+{
+  "Event": {
+    "uuid": "4eed77fa-9767-536f-8fef-728b06ae1cb3",
+    "info": "KAIDO: A Brazilian Quasar-Fork RAT with Hidden-Desktop Session Hijacking",
+    "date": "2026-07-03",
+    "threat_level_id": 1,
+    "analysis": 2,
+    "timestamp": 1791580400,
+    "publish_timestamp": 1791580400,
+    "published": true,
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"RAT\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"HVNC\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"MaaS\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Brazil\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Resource Name or Location - T1036.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Non-Application Layer Protocol - T1095\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Screen Capture - T1113\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Access Tools - T1219\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Virtualization/Sandbox Evasion - T1497\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Mark-of-the-Web Bypass - T1553.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Symmetric Cryptography - T1573.001\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "Attribute": [
+      {
+        "uuid": "f3bd8ff0-a747-56ab-b90e-ea16e348b54d",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/",
+        "to_ids": false,
+        "comment": "Detection rules, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "fba0cbe2-2f90-5790-8e0a-2572bfd202ac",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/ioc-feeds/kaido-quasar-rat-iocs.json",
+        "to_ids": false,
+        "comment": "IOC feed (JSON), The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "fd03e985-e4d9-5485-b01e-544770367a9f",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/reports/kaido-quasar-rat-144-172-109-203/",
+        "to_ids": false,
+        "comment": "Report, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "4ee48350-948b-580e-aebd-a8dcbb9e1381",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/stix/kaido-quasar-rat-144-172-109-203.json",
+        "to_ids": false,
+        "comment": "STIX 2.1 bundle, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "59a105bd-5d14-5bbf-9271-45164420ddc5",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "022944768c4326d611fa3edb100eb8277228717a220580e7ffce143341aa39fa",
+        "to_ids": true,
+        "comment": "sha256: 022944768c4326d611fa3edb100eb8277228717a220580e7ffce143341aa39fa. KAIDO Quasar RAT, low-detection sibling [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "aa15fc05-5082-598b-aa31-e0187bc54bec",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "385d20ca574976e3ba3f4f3079420f8a1c3935c0ab4a3f87063beea27d41e254",
+        "to_ids": true,
+        "comment": "sha256: 385d20ca574976e3ba3f4f3079420f8a1c3935c0ab4a3f87063beea27d41e254. KAIDO Quasar RAT, live-C2 sibling, c2.kaidoo.com.br:443 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "2e10e3b2-a912-590a-999a-a2b47ff80e81",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "c7542e8265f70d6c1dbf2e3cf6e81a90198cd157d3d6693c6d2a8a49d99a5b8d",
+        "to_ids": true,
+        "comment": "sha256: c7542e8265f70d6c1dbf2e3cf6e81a90198cd157d3d6693c6d2a8a49d99a5b8d. KAIDO Quasar RAT, tag 'breach', C2 kaidoo.com.br:4782 (richest sample, 14 Costura deps) [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "8fe5ce25-7286-5e18-afdc-4fb0b390e001",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "c2.kaidoo.com.br",
+        "to_ids": true,
+        "comment": "domain: c2.kaidoo.com.br. KAIDO Quasar RAT secondary C2 (port 443) [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "6ebf8d9f-39b2-55d4-b67d-52492514c691",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "choix-relay.com",
+        "to_ids": false,
+        "comment": "domain: choix-relay.com. French 'choix' domain co-resident on the Swiss KAIDO host (179.43.150.50); possible parallel phishing line, MODERATE-LOW [confidence 40/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "25d76bc7-e8a0-52c8-ae2f-cf924b8c6a8a",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "kaidoo.com.br",
+        "to_ids": true,
+        "comment": "domain: kaidoo.com.br. KAIDO Quasar RAT primary C2 (port 4782); DNS confirmed in contained detonation [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "eebd1a8f-52b1-5282-872e-6ccb5df7912b",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "www.kaidoo.com.br",
+        "to_ids": true,
+        "comment": "domain: www.kaidoo.com.br. KAIDO brand domain [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "5604c488-5e10-5cc2-a3b8-3d22de9032fa",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "144.172.109.203",
+        "to_ids": true,
+        "comment": "ipv4: 144.172.109.203. Live KAIDO Quasar RAT C2, AS14956 RouterHosting US; :8443 TeamKAIDO cert; :4782 Quasar protocol [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "9dab66e6-10dc-5f4f-bbf5-be60d537c127",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "179.43.150.50",
+        "to_ids": true,
+        "comment": "ipv4: 179.43.150.50. Current kaidoo.com.br A-record, AS51852 Private Layer CH; passive only. Do not probe [confidence 60/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "73821d33-9e77-5e44-97dd-f967234a43a0",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:\"THL HUNT KAIDO-EvilSoul-MaaS Quasar Binary Protocol C2 on TCP 4782 (RAT C2 Channel)\"; flow:established,to_server; dsize:>0; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/; classtype:trojan-activity; sid:9300801; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-03;)",
+        "to_ids": false,
+        "comment": "KAIDO Quasar Binary Protocol on TCP 4782 | TIER: Hunting | robustness 2 | confidence HIGH for the port/protocol pairing; the rule itself is a port-anchored lead | ATT&CK T1095 | rule hash c51b980f | https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "77d63d9c-6fd7-59f7-a27b-24e59a5aca4f",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT KAIDO-EvilSoul-MaaS TeamKAIDO C2 TLS Certificate Issuer (RAT C2 Fleet Indicator)\"; flow:established,to_server; tls.cert_issuer; content:\"TeamKAIDO\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/; classtype:trojan-activity; sid:9300802; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-03;)",
+        "to_ids": true,
+        "comment": "KAIDO TeamKAIDO C2 TLS Certificate Issuer | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1071.001, T1573.001 | rule hash f46f6753 | https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "3d187280-6a6a-5af8-a899-1c6e838e60e9",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: KAIDO RAT HVNC DXGI Named-Pipe Creation\nid: 6fadc50c-a64b-4120-b02e-f22516b0c815\nstatus: experimental\ndescription: >-\n  Detects creation of a named pipe matching the kaido_dxgi_ prefix used\n  by the KAIDO Quasar-fork RAT's HVNC module to stream DXGI-captured\n  hidden-desktop frames from the swap-chain hook to the operator's\n  reader thread. This pipe is created only when the HVNC capability is\n  actively invoked by the operator over C2.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/\nauthor: The Hunters Ledger\ndate: 2026-07-03\ntags:\n    - attack.command-and-control\n    - attack.t1219\n    - attack.collection\n    - attack.t1113\n    - detection.emerging-threats\nlogsource:\n    category: pipe_created\n    product: windows\ndetection:\n    selection:\n        PipeName|contains: '\\kaido_dxgi_'\n    condition: selection\nfalsepositives:\n    - >-\n      Unlikely — the kaido_dxgi_ pipe-name prefix has not been observed\n      in any legitimate Windows or third-party software to date\nlevel: medium",
+        "to_ids": false,
+        "comment": "KAIDO HVNC DXGI Named-Pipe Creation | TIER: Hunting | robustness 1 | confidence HIGH (structural anchor); underlying HVNC runtime behavior itself MODERATE (C2-gated, not dynamically triggered) | ATT&CK T1219, T1113 | rule hash 452ff0d4 | https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "09c2af32-a41c-5170-a284-6edf19619a4a",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: KAIDO RAT Self-Deletion of Zone.Identifier Alternate Data Stream\nid: d428415f-5926-466a-abcb-5cb91be4d187\nstatus: experimental\ndescription: >-\n  Detects a process deleting its own Zone.Identifier alternate data\n  stream shortly after launch, a Mark-of-the-Web bypass technique used\n  by the KAIDO Quasar-fork RAT to suppress SmartScreen re-checks on\n  subsequent executions. Anchored on the file-delete event rather than\n  file creation to avoid matching every downloaded file.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/\nauthor: The Hunters Ledger\ndate: 2026-07-03\ntags:\n    - attack.defense-impairment\n    - attack.t1553.005\n    - detection.emerging-threats\nlogsource:\n    category: file_delete\n    product: windows\ndetection:\n    selection:\n        TargetFilename|endswith: ':Zone.Identifier'\n    filter_legit_installer:\n        Image|contains:\n            - '\\Windows\\System32\\'\n            - '\\Program Files\\Windows Defender\\'\n    condition: selection and not filter_legit_installer\nfalsepositives:\n    - >-\n      Self-updating legitimate software (browsers, some installers) that\n      clears its own Zone.Identifier stream after a user-consented first run\n    - Administrative scripts that bulk-clear MOTW on downloaded files\nlevel: medium",
+        "to_ids": false,
+        "comment": "KAIDO Zone.Identifier ADS Self-Deletion (MOTW Bypass) | TIER: Hunting | robustness 2 | confidence HIGH (behavior) / triage required (attribution) | ATT&CK T1553.005 | rule hash bf7da171 | https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "5bce32e8-c0c2-577e-8c60-58b7ce6e38e4",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Process Named svchost.exe Executing from AppData Path\nid: 08e75208-eb8e-473d-9827-5a59ef4192db\nstatus: experimental\ndescription: >-\n  Detects a process named svchost.exe launching from a user-writable\n  %AppData% subdirectory rather than the legitimate %SystemRoot%\\System32\n  location. Observed as the install pattern used by the KAIDO Quasar-fork\n  RAT to masquerade as the Windows service host process, but this naming\n  and path pattern is also used by other unrelated malware families and\n  should be treated as a generic masquerade indicator rather than a\n  KAIDO-specific signal on its own.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-03'\ntags:\n    - attack.stealth\n    - attack.t1036.005\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1547.001\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        Image|endswith: '\\svchost.exe'\n        Image|contains: '\\AppData\\'\n    filter_parent_system:\n        ParentImage|startswith:\n            - 'C:\\Windows\\System32\\'\n            - 'C:\\Windows\\SysWOW64\\'\n    condition: selection and not filter_parent_system\nfalsepositives:\n    - >-\n      Rare legitimate portable or sideloaded applications that ship a\n      binary literally named svchost.exe in a user profile path\n      (unusual but not impossible for poorly-vetted freeware)\n    - Other unrelated malware families that reuse the same masquerade pattern\nlevel: medium",
+        "to_ids": false,
+        "comment": "KAIDO Install as svchost.exe by Non-System Parent Process | TIER: Hunting | robustness 2 | confidence MODERATE (install routine recovered from static analysis, not dynamically observed — the malware is C2-gated) | ATT&CK T1036.005, T1547.001 | rule hash 1f8a0248 | https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "6c3ece03-01ad-556f-a012-9c5c1d708c1b",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "/*\n   Yara Rule Set\n   Identifier: KAIDO Quasar-Fork RAT\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule RAT_KAIDO_Quasar_Fork_Namespace {\n   meta:\n      description = \"Detects the KAIDO Quasar-fork RAT via its rebranded namespace root Kaido.Common.Messages and Costura-embedded costura.kaido.common.dll asset, both of which survive the sample's obfuscation pass\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/\"\n      date = \"2026-07-03\"\n      hash1 = \"c7542e8265f70d6c1dbf2e3cf6e81a90198cd157d3d6693c6d2a8a49d99a5b8d\"\n      hash2 = \"928f2ffa7fc84b74941fb714455d7bc14847b3af\"\n      hash3 = \"20989b06f7c670ab973da6609855bcf9\"\n      family = \"KAIDO\"\n      malware_type = \"RAT\"\n      campaign = \"KAIDO-EvilSoul-Engine-MaaS-144.172.103.98\"\n      id = \"3c4d70e9-aaaf-50e7-b58b-a4b3595386e9\"\n   strings:\n      $ns1  = \"Kaido.Common.Messages\" ascii wide fullword\n      $ns2  = \"Kaido.Client.Helper.HVNC.ProcessController\" ascii wide\n      $cost = \"costura.kaido.common.dll\" ascii wide nocase\n      $desk = \"Default_runhost\" ascii wide fullword\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      2 of ($ns1, $ns2, $cost, $desk)\n}",
+        "to_ids": true,
+        "comment": "KAIDO Quasar-Fork Namespace + Costura Asset | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1219 | rule hash 65dbdb82 | https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "9ebc94f9-8cee-5b60-93f8-b1e8356c5e3e",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule RAT_KAIDO_AntiAnalysis_SleepObfuscation {\n   meta:\n      description = \"Detects the KAIDO RAT via its developer-left anti-analysis debug string referencing sleep obfuscation with mutex and stack detection, used to evade sandbox timing-based detonation checks\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/\"\n      date = \"2026-07-03\"\n      hash1 = \"022944768c4326d611fa3edb100eb8277228717a220580e7ffce143341aa39fa\"\n      hash2 = \"\"\n      hash3 = \"\"\n      family = \"KAIDO\"\n      malware_type = \"RAT\"\n      campaign = \"KAIDO-EvilSoul-Engine-MaaS-144.172.103.98\"\n      id = \"683cd96b-bebc-5bcc-8d4c-3aa380acd5d6\"\n   strings:\n      $anti = \"[ANTI] Sleep obfuscation ENABLED (fixed: mutex + stack detection + 32MB cap)\" ascii wide\n      $ns    = \"Kaido.Common.Messages\" ascii wide fullword\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      $anti and $ns\n}",
+        "to_ids": true,
+        "comment": "KAIDO Anti-Analysis Sleep Obfuscation + Config Crypto Framing | TIER: Detection | robustness 2 | confidence MODERATE | ATT&CK T1497, T1573.001 | rule hash 5ac7f97b | https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "c1e06f7b-478e-585c-9e75-549c0062a0b6",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule RAT_KAIDO_HVNC_DXGI_Pipe {\n   meta:\n      description = \"Detects the KAIDO RAT HVNC module via its DXGI-hook named-pipe transport strings (pipe prefix, env var, frame magic, reader-thread name) used to stream the hidden-desktop capture to the operator\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/\"\n      date = \"2026-07-03\"\n      hash1 = \"385d20ca574976e3ba3f4f3079420f8a1c3935c0ab4a3f87063beea27d41e254\"\n      hash2 = \"\"\n      hash3 = \"\"\n      family = \"KAIDO\"\n      malware_type = \"RAT\"\n      campaign = \"KAIDO-EvilSoul-Engine-MaaS-144.172.103.98\"\n      id = \"eb4ef7d6-e3f0-5eea-8211-654d9ccff6fa\"\n   strings:\n      $pipe   = \"kaido_dxgi_\" ascii wide nocase\n      $envvar = \"KAIDO_DXGI_PIPE\" ascii wide fullword\n      $rdr    = \"DXGI FrameReader\" ascii wide\n      $fbk    = \"HVNC Capture Loop\" ascii wide\n      $clone  = \"[BrowserClone] Using handle hijacking for locked files...\" ascii wide\n      $magic  = { 4B 81 3F 44 }\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      (2 of ($pipe, $envvar, $rdr, $fbk, $clone) or ($magic and 1 of ($pipe, $envvar)))\n}",
+        "to_ids": true,
+        "comment": "KAIDO HVNC DXGI Named-Pipe Transport | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1219, T1113 | rule hash a7994991 | https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      }
+    ],
+    "Object": []
+  }
+}

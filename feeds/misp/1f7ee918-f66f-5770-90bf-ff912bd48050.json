@@ -1,0 +1,119 @@
+{
+  "Event": {
+    "uuid": "1f7ee918-f66f-5770-90bf-ff912bd48050",
+    "info": "Arsenal-237: enc/dec Ransomware Family",
+    "date": "2026-01-15",
+    "threat_level_id": 1,
+    "analysis": 2,
+    "timestamp": 1791580400,
+    "publish_timestamp": 1791580400,
+    "published": true,
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Ransomware\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Rust\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data Encrypted for Impact - T1486\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Inhibit System Recovery - T1490\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "Attribute": [
+      {
+        "uuid": "6cf63a03-9c53-583a-ad47-c227738620be",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/hunting-detections/enc-dec-ransomware-family-detections/",
+        "to_ids": false,
+        "comment": "Detection rules, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "f04aff4f-a920-57ed-bfad-00759e3338b4",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/ioc-feeds/enc-dec-ransomware-family.json",
+        "to_ids": false,
+        "comment": "IOC feed (JSON), The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "1a29289c-25f9-59b7-b67e-86e715a87d10",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: enc/dec Ransomware VSS Deletion Activity\nid: ad52d938-ac86-4587-86c9-008ad0534b68\nstatus: experimental\ndescription: Detects Volume Shadow Copy deletion commands via vssadmin.exe or wmic.exe consistent with the enc/dec ransomware family's pre-encryption recovery-inhibition step.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/enc-dec-ransomware-family-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-18'\ntags:\n    - attack.impact\n    - attack.t1490\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_vssadmin:\n        CommandLine|contains|all:\n            - 'vssadmin'\n            - 'delete'\n            - 'shadows'\n            - '/all'\n    selection_wmic:\n        CommandLine|contains|all:\n            - 'wmic'\n            - 'shadowcopy'\n            - 'delete'\n    condition: selection_vssadmin or selection_wmic\nfalsepositives:\n    - Legitimate system maintenance (rare)\n    - Backup software uninstallation\nlevel: high",
+        "to_ids": true,
+        "comment": "enc/dec Ransomware VSS Deletion Activity | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1490 | rule hash 8e27b4ed | https://the-hunters-ledger.com/hunting-detections/enc-dec-ransomware-family-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "56a10ee9-d752-5b13-b809-5c6098547983",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "/*\n   Yara Rule Set\n   Identifier: Arsenal-237-109.230.231.37-Malware-Repository\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule MAL_EncDec_Rust_Ransomware_Artifacts {\n   meta:\n      description = \"Detects enc/dec Rust ransomware variants via project-specific Rust source debug paths or the combination of an embedded RSA public key with the family's encryption-status and key-generation console messages. Corrects a missing-parentheses precedence bug in the original rule that left one branch without a PE-header gate.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/enc-dec-ransomware-family-detections/\"\n      date = \"2026-01-18\"\n      family = \"EncDec-Ransomware\"\n      malware_type = \"Ransomware\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"8413bc6f-1109-4e62-a26b-f4e535c1c6ad\"\n   strings:\n      $rust_debug1 = \"chacha20_pervictim.rs\" ascii wide\n      $rust_debug2 = \"netusesrc/modules/disks.rs\" ascii wide\n      $rust_debug3 = \"/aead-0.5.2/src/lib.rs\" ascii wide\n      $rsa_key_marker = \"-----BEGIN PUBLIC KEY-----\" ascii wide\n      $enc_message = \"[*] Using RSA+ChaCha20 encryption\" ascii wide\n      $key_gen = \"[*] Generating unique encryption key\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      (\n         2 of ($rust_debug*) or\n         ($rsa_key_marker and ($enc_message or $key_gen))\n      )\n}",
+        "to_ids": true,
+        "comment": "Rust Ransomware Artifacts Combination | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1486 | rule hash a35a804e | https://the-hunters-ledger.com/hunting-detections/enc-dec-ransomware-family-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "5e651b8f-9c2d-5aa3-892c-8d3df3b4df23",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MAL_EncDec_ChaCha20_Constant {\n   meta:\n      description = \"Detects the RFC 8439 ChaCha20 initialization constant (expand 32-byte k) in a PE file, confirmed present in the enc/dec ransomware family's encryptor and decryptor variants. The same constant is required by any standard ChaCha20 implementation, including legitimate VPN and secure-messaging software, so treat a hit as a scoping lead rather than a standalone alert.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/enc-dec-ransomware-family-detections/\"\n      date = \"2026-01-18\"\n      family = \"EncDec-Ransomware\"\n      malware_type = \"Ransomware\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"d284edca-9974-4d43-8228-aa99da540697\"\n   strings:\n      $chacha20_constant = \"expand 32-byte k\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      $chacha20_constant\n}",
+        "to_ids": false,
+        "comment": "ChaCha20 Encryption Constant | TIER: Hunting | robustness 3 | confidence MODERATE | ATT&CK T1486 | rule hash f289ef0c | https://the-hunters-ledger.com/hunting-detections/enc-dec-ransomware-family-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "28f4c1e2-4cb6-560d-a3d3-2ac7f85b9673",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MAL_EncDec_VSS_Deletion_Concatenated_String {\n   meta:\n      description = \"Detects the enc/dec ransomware family's distinctive concatenated Volume Shadow Copy deletion string, observed packed with no separators in this family's builds. Most plausibly a string-table adjacency artifact of this family's Rust build toolchain rather than a runtime-constructed string, so it is not guaranteed to survive a future recompile.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/enc-dec-ransomware-family-detections/\"\n      date = \"2026-01-18\"\n      family = \"EncDec-Ransomware\"\n      malware_type = \"Ransomware\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"31ef0486-276c-41b3-8de7-3bb8df7eaaf3\"\n   strings:\n      $vss_sig = \"vssadmindeleteshadows/all/quietwmicshadowcopy\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      $vss_sig\n}",
+        "to_ids": false,
+        "comment": "VSS Deletion Concatenated String | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1490 | rule hash f8f2c10c | https://the-hunters-ledger.com/hunting-detections/enc-dec-ransomware-family-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      }
+    ],
+    "Object": []
+  }
+}

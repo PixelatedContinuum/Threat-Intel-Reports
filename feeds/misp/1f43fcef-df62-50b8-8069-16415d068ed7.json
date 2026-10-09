@@ -1,0 +1,319 @@
+{
+  "Event": {
+    "uuid": "1f43fcef-df62-50b8-8069-16415d068ed7",
+    "info": "FACEIT ClickFix Pages Point CS2 Players to a Script URL That VirusTotal Ties to a Steam-Focused Executable",
+    "date": "2026-09-28",
+    "threat_level_id": 1,
+    "analysis": 2,
+    "timestamp": 1791580400,
+    "publish_timestamp": 1791580400,
+    "published": true,
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"ClickFix\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Stealer\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Loader\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"PowerShell\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over C2 Channel - T1041\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Browser Session Hijacking - T1185\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Malicious Copy and Paste - T1204.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Install Root Certificate - T1553.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Adversary-in-the-Middle - T1557\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "Attribute": [
+      {
+        "uuid": "8a21c595-faf7-5cc2-9087-a01d6a57f977",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/",
+        "to_ids": false,
+        "comment": "Detection rules, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "c8f91ca3-1427-5129-9c8d-70486c6ac3e8",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/ioc-feeds/newdouble-clickfix-iocs.json",
+        "to_ids": false,
+        "comment": "IOC feed (JSON), The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "a524292c-ae7e-5080-906c-d06315fea52f",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/reports/newdouble-clickfix/",
+        "to_ids": false,
+        "comment": "Report, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "4e55fe61-3861-5322-926e-821e149883d7",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/stix/newdouble-clickfix.json",
+        "to_ids": false,
+        "comment": "STIX 2.1 bundle, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "914844ec-a58d-53f7-a526-1c17b34cba5b",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert dns $HOME_NET any -> any any (msg:\"THL HUNT newdouble-ClickFix Lure Domain DNS Query (Fake Verification Page)\"; dns.query; content:\"newdouble\"; nocase; content:\"authentification.com\"; nocase; distance:0; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:9302103; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)",
+        "to_ids": false,
+        "comment": "Lure Domain DNS Query (Fake Verification Page) | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1204.004 | rule hash d050e432 | https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "da9369d2-dd2c-5a95-8a3f-af095cc7f8f4",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT newdouble-ClickFix First-Stage Script Fetch (y.ps1 URI Path)\"; flow:established,to_server; http.method; content:\"GET\"; http.uri; content:\"/y/y.ps1\"; endswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:9302101; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)",
+        "to_ids": false,
+        "comment": "First-Stage Script Fetch (y.ps1 URI Path) | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1105 | rule hash 0d0ee677 | https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "da36dd90-8ca7-52fb-b5c1-e76c67284d11",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT newdouble-ClickFix Panel Import POST With X-Vac-Secret Header (Steam Account Data Upload)\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"/api/mafile/import\"; startswith; http.header; content:\"X-Vac-Secret|3a|\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:9302105; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)",
+        "to_ids": false,
+        "comment": "Panel Import POST With X-Vac-Secret Header | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1041 | rule hash c5347f94 | https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "8539e2c0-496c-516f-8cad-f05f08da7c2d",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> 202.71.14.31 any (msg:\"THL HUNT newdouble-ClickFix Second-Stage Executable Fetch (x.exe URI Path to Delivery Host)\"; flow:established,to_server; http.method; content:\"GET\"; http.uri; content:\"/x/x.exe\"; endswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:9302102; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)",
+        "to_ids": false,
+        "comment": "Second-Stage Executable Fetch (x.exe URI Path to Delivery Host) | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1105 | rule hash 41e80241 | https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "2588f5f5-72ba-5c86-9986-5ef6bc14c68d",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT newdouble-ClickFix Lure Domain TLS SNI (Fake Verification Page)\"; flow:established,to_server; tls.sni; content:\"newdouble\"; nocase; content:\"authentification.com\"; nocase; distance:0; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:9302104; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)",
+        "to_ids": false,
+        "comment": "Lure Domain TLS SNI (Fake Verification Page) | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1204.004 | rule hash cb158e96 | https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "b695ba66-8997-5aae-8647-083d4370cfc6",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: ClickFix PowerShell Stager Pasted Into Run Dialog Downloading a Script Then Running It\nid: a952ed07-5481-4776-aa2e-22187bb98c4a\nstatus: experimental\ndescription: >-\n    Detects a PowerShell command line launched by explorer.exe that downloads a\n    script with Invoke-WebRequest, saves it with -OutFile as a .ps1 file, and\n    runs it with -File in the same command. This is the shape of the command\n    a ClickFix fake-verification page places on the clipboard for the victim to\n    paste into the Windows Run dialog.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/\nauthor: The Hunters Ledger\ndate: 2026-09-28\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - attack.t1204.004\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: process_creation\n    product: windows\n    definition: 'Requires process creation logging that populates CommandLine and ParentImage, for example Sysmon EID 1 or Security EID 4688 with command line auditing enabled.'\ndetection:\n    selection_parent:\n        ParentImage|endswith: '\\explorer.exe'\n    selection_image:\n        Image|endswith:\n            - '\\powershell.exe'\n            - '\\pwsh.exe'\n    selection_download:\n        CommandLine|contains:\n            - 'iwr '\n            - 'Invoke-WebRequest'\n    selection_flow:\n        CommandLine|contains|all:\n            - '-OutFile'\n            - '.ps1'\n            - '-File'\n    condition: all of selection_*\nfalsepositives:\n    - An administrator pasting a download-and-run one-liner into the Run dialog\n    - Internal onboarding instructions that tell users to paste a script bootstrap command\nlevel: medium",
+        "to_ids": false,
+        "comment": "ClickFix PowerShell Stager Pasted Into Run Dialog Downloading a Script Then Running It | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1059.001, T1204.004 | rule hash b8585fef | https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "cd9b557d-6f2e-5ee5-8459-b0a6da9852b9",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Defender Path, Process and Extension Exclusions Set in One PowerShell Script Block\nid: 637cc940-8288-4050-942b-937f287507ab\nstatus: experimental\ndescription: >-\n    Detects a single PowerShell script block that calls Set-MpPreference or\n    Add-MpPreference with path, process and extension exclusion parameters\n    together. Setting all three exclusion classes in one call is the pattern used\n    by a ClickFix first-stage script that exempts powershell.exe, executables and\n    .ps1 files from Microsoft Defender before it downloads its next stage.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/\n    - https://learn.microsoft.com/en-us/powershell/module/defender/set-mppreference\nauthor: The Hunters Ledger\ndate: 2026-09-28\ntags:\n    - attack.defense-impairment\n    - attack.t1685\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: ps_script\n    product: windows\n    definition: 'Requires PowerShell Script Block Logging (Microsoft-Windows-PowerShell/Operational EID 4104) to be enabled.'\ndetection:\n    selection_cmdlet:\n        ScriptBlockText|contains:\n            - 'Set-MpPreference'\n            - 'Add-MpPreference'\n    selection_exclusions:\n        ScriptBlockText|contains|all:\n            - '-ExclusionPath'\n            - '-ExclusionProcess'\n            - '-ExclusionExtension'\n    condition: all of selection_*\nfalsepositives:\n    - Deployment or hardening scripts that set several Defender exclusion types in one call\n    - Software installers that register their own exclusions during setup\nlevel: medium",
+        "to_ids": false,
+        "comment": "Defender Path, Process and Extension Exclusions Set in One PowerShell Script Block | TIER: Hunting | robustness 2 | confidence HIGH | ATT&CK T1685 | rule hash ddb8aa7a | https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "5045b614-934c-5855-a492-9f3dee1de1fa",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Per-User Proxy or PAC Setting Changed by a Process Running From AppData\nid: a46ddda1-468c-4417-a38f-38ade5e69da6\nstatus: experimental\ndescription: >-\n    Detects a process running from a user AppData folder writing the ProxyServer,\n    ProxyEnable or AutoConfigURL value under the per-user Internet Settings key.\n    A Steam-focused executable delivered by a ClickFix chain changes these values\n    as part of a traffic-interception setup. The values it writes were not\n    recovered, so the rule keys on the writer and the setting, not the data.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/\nauthor: The Hunters Ledger\ndate: 2026-09-28\ntags:\n    - attack.credential-access\n    - attack.collection\n    - attack.t1557\n    - detection.emerging-threats\n    - stp.2\nlogsource:\n    category: registry_set\n    product: windows\n    definition: 'Requires Sysmon EID 13 (RegistryEvent value set) with the Internet Settings key path included in the registry monitoring config.'\ndetection:\n    selection:\n        TargetObject|contains: '\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\'\n        TargetObject|endswith:\n            - '\\ProxyServer'\n            - '\\ProxyEnable'\n            - '\\AutoConfigURL'\n        Image|contains: '\\AppData\\'\n    condition: selection\nfalsepositives:\n    - VPN, proxy and filtering clients installed under the user profile that manage the system proxy\n    - Developer proxy tools started from a user profile folder\nlevel: medium",
+        "to_ids": false,
+        "comment": "Per-User Proxy or PAC Setting Changed by a Process Running From AppData | TIER: Hunting | robustness 1 | confidence LOW | ATT&CK T1557 | rule hash eed728f0 | https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "8a8eca59-84fa-526e-987e-a606ceba1b83",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: PowerShell Writing a Script Into a Roaming Profile Subfolder\nid: 00e6aae1-d69f-473d-a5c9-c3520d170a31\nstatus: experimental\ndescription: >-\n    Detects powershell.exe creating a .ps1 file in a subfolder of the roaming\n    AppData directory. A ClickFix first-stage script copies itself to\n    %APPDATA%\\MyApp\\y.ps1 and relaunches from that copy. The folder name is\n    attacker-chosen, so the rule keys on the write pattern rather than the name.\n    This is a hunting lead, not an alert.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/\nauthor: The Hunters Ledger\ndate: 2026-09-28\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - detection.emerging-threats\n    - stp.2\nlogsource:\n    category: file_event\n    product: windows\n    definition: 'Requires Sysmon EID 11 (FileCreate) logging with Image populated.'\ndetection:\n    selection:\n        Image|endswith:\n            - '\\powershell.exe'\n            - '\\pwsh.exe'\n        TargetFilename|contains: '\\AppData\\Roaming\\'\n        TargetFilename|endswith: '.ps1'\n    condition: selection\nfalsepositives:\n    - PowerShell modules or profile scripts saved to the roaming profile by administrators\n    - Developer tooling that writes helper scripts under the roaming profile\nlevel: low",
+        "to_ids": false,
+        "comment": "PowerShell Writing a Script Into a Roaming Profile Subfolder | TIER: Hunting | robustness 1 | confidence LOW | ATT&CK T1059.001 | rule hash 90ec9aa1 | https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "5af34351-edd1-5a11-ba58-26c672c16784",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Root Certificate Added to the Machine Root Store by a Process Running From AppData\nid: ba366b18-496e-4ebe-8302-4bb4d305ee2a\nstatus: experimental\ndescription: >-\n    Detects a process running from a user AppData folder writing a certificate\n    blob under the machine (HKLM, LOCAL_MACHINE) Root certificate store. A certificate\n    written to the current user's Root store does not match. A Steam-focused executable\n    delivered by a ClickFix chain installs a root certificate as part of a\n    traffic-interception setup. Legitimate root additions normally come from\n    installers, group policy or management tooling, not from a binary in AppData.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/\nauthor: The Hunters Ledger\ndate: 2026-09-28\ntags:\n    - attack.defense-impairment\n    - attack.t1553.004\n    - detection.emerging-threats\n    - stp.2\nlogsource:\n    category: registry_set\n    product: windows\n    definition: 'Requires Sysmon EID 13 (RegistryEvent value set) with the SystemCertificates key path included in the registry monitoring config.'\ndetection:\n    selection:\n        TargetObject|startswith: 'HKLM\\SOFTWARE\\Microsoft\\SystemCertificates\\Root\\Certificates\\'\n        TargetObject|endswith: '\\Blob'\n        Image|contains: '\\AppData\\'\n    condition: selection\nfalsepositives:\n    - Local development tools that create and trust a local certificate authority from a user profile folder\n    - Per-user installers of filtering or inspection software\nlevel: medium",
+        "to_ids": false,
+        "comment": "Root Certificate Added to the Machine Root Store by a Process Running From AppData | TIER: Hunting | robustness 1 | confidence LOW | ATT&CK T1553.004 | rule hash a5bace13 | https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "d44b09fa-f54a-5575-bdb2-033ff25ffd6e",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Steam CEF Remote Debugging Marker File Created\nid: cdfa7e7b-3669-40ec-a423-a9f4e06bdb84\nstatus: experimental\ndescription: >-\n    Detects creation of the .cef-enable-remote-debugging marker file, which tells\n    the Steam client to expose its embedded browser debugging port. A Steam-focused\n    executable delivered by a ClickFix chain carries this filename and uses the\n    debugging port to drive the Steam interface. The filename is defined by Steam,\n    so it cannot be renamed while the technique works, but Steam interface\n    modding tools create it deliberately, so treat hits as leads.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/\nauthor: The Hunters Ledger\ndate: 2026-09-28\ntags:\n    - attack.collection\n    - attack.t1185\n    - detection.emerging-threats\n    - stp.4\nlogsource:\n    category: file_event\n    product: windows\n    definition: 'Requires Sysmon EID 11 (FileCreate) logging with Image populated.'\ndetection:\n    selection:\n        TargetFilename|endswith: '\\.cef-enable-remote-debugging'\n    condition: selection\nfalsepositives:\n    - Steam interface modding and theming tools that enable browser debugging on purpose\n    - Developers debugging Steam overlay or store pages\nlevel: medium",
+        "to_ids": false,
+        "comment": "Steam CEF Remote Debugging Marker File Created | TIER: Hunting | robustness 3 | confidence MODERATE | ATT&CK T1185 | rule hash 29a011d6 | https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "05ebdfcf-6a16-56ee-aa2c-5af73f8f54ee",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "import \"pe\"\n\nrule Newdouble_ClickFix_Berserk_Loader_Imphash_Or_Export {\n   meta:\n      description = \"Hunting rule for the newdouble ClickFix executable and rebuilds that keep its import table or the module name BERSERK.exe in the PE export directory\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/\"\n      date = \"2026-09-28\"\n      hash1 = \"1366b8ca7f315142ba9989241402758cf2a86e5568a28da0942e1810fe12c324\"\n      hash2 = \"f9d075fc57b6b27a6066734a9a9ba25d666ba9db\"\n      hash3 = \"405186a1740ede3e8c56bbf81c043e7e\"\n      family = \"newdouble ClickFix Steam-focused loader chain\"\n      id = \"d8deb920-6a28-5fa0-9d91-60ba1b54902e\"\n   condition:\n      uint16(0) == 0x5A4D and\n      uint32(uint32(0x3C)) == 0x00004550 and\n      filesize < 8MB and\n      ( pe.imphash() == \"87e8479ef75eb55bf7a09ca6b8a60c49\" or\n        pe.dll_name == \"BERSERK.exe\" )\n}",
+        "to_ids": false,
+        "comment": "Newdouble_ClickFix_Berserk_Loader_Imphash_Or_Export | TIER: Hunting | robustness 1 | confidence MODERATE | rule hash 01539ee3 | https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "73364a73-2daf-5e27-9db4-79289ea89ee8",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule Newdouble_ClickFix_Berserk_Embedded_DLL_PDB_Hooks {\n   meta:\n      description = \"Detects the Counter-Strike 2 overlay DLL carried inside the newdouble ClickFix executable, by its build PDB path together with its four hook-name strings and the matchmaking-penalty localisation token\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/\"\n      date = \"2026-09-28\"\n      hash1 = \"f6afe770a78d3655c367819b0c5e8afb623cf56b9922c179efbc89fea1a9ea86\"\n      hash2 = \"17602aa32d21a7bba16e1c657b4a818463fc560a\"\n      hash3 = \"83cb3b733cad23c702777baa42efaca3\"\n      family = \"newdouble ClickFix Steam-focused loader chain\"\n      id = \"c94f292f-ef23-5d7d-aee8-79aabc82bc7f\"\n   strings:\n      $x1 = \"D:\\\\PROJECTVS\\\\berserk_gamebaker\\\\x64\\\\Release\\\\berserkv2.pdb\" ascii wide\n      $s1 = \"hkantitamper\" ascii wide\n      $s2 = \"hkIsVacBanned\" ascii wide\n      $s3 = \"hkMMUpdate\" ascii wide\n      $s4 = \"hkStartMatchmaking\" ascii wide\n      $s5 = \"#SFUI_QMM_ERROR_1_PenaltySeconds\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      uint32(uint32(0x3C)) == 0x00004550 and\n      filesize < 8MB and\n      ( $x1 or 3 of ($s*) )\n}",
+        "to_ids": false,
+        "comment": "Newdouble_ClickFix_Berserk_Embedded_DLL_PDB_Hooks | TIER: Hunting | robustness 2 | confidence HIGH | rule hash 92aaf283 | https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "83ef1bef-5fdc-5ec7-82cc-13135c751344",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule Newdouble_ClickFix_SteamCDP_Loader_Strings {\n   meta:\n      description = \"Detects the Steam-focused x64 executable delivered by the newdouble ClickFix chain by its mutex-style name, its log banner, its panel upload path and header name, and the Steam CEF debugging marker file name\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/\"\n      date = \"2026-09-28\"\n      hash1 = \"1366b8ca7f315142ba9989241402758cf2a86e5568a28da0942e1810fe12c324\"\n      hash2 = \"f9d075fc57b6b27a6066734a9a9ba25d666ba9db\"\n      hash3 = \"405186a1740ede3e8c56bbf81c043e7e\"\n      family = \"newdouble ClickFix Steam-focused loader chain\"\n      id = \"bffecf94-dc62-549b-9111-8f6add7c93b9\"\n   strings:\n      $x1 = \"Global\\\\SteamCDP\" ascii wide\n      $x2 = \"=== BerserkCDP started ===\" ascii wide\n      $s1 = \"X-Vac-Secret\" ascii wide\n      $s2 = \"/api/mafile/import\" ascii wide\n      $s3 = \".cef-enable-remote-debugging\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      uint32(uint32(0x3C)) == 0x00004550 and\n      filesize < 8MB and\n      ( $x2 or ( $x1 and 1 of ($s*) ) or 3 of ($s*) )\n}",
+        "to_ids": false,
+        "comment": "Newdouble_ClickFix_SteamCDP_Loader_Strings | TIER: Hunting | robustness 2 | confidence HIGH | ATT&CK T1185, T1041 | rule hash 0ca53945 | https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      }
+    ],
+    "Object": []
+  }
+}

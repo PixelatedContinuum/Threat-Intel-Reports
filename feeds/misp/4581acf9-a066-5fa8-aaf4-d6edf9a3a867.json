@@ -1,0 +1,232 @@
+{
+  "Event": {
+    "uuid": "4581acf9-a066-5fa8-aaf4-d6edf9a3a867",
+    "info": "From Webshells to The Cloud",
+    "date": "2025-10-15",
+    "threat_level_id": 1,
+    "analysis": 2,
+    "timestamp": 1791580400,
+    "publish_timestamp": 1791580400,
+    "published": true,
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Webshell\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"PHP\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Exfil\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"C2\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy - T1090\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Local Account - T1136.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploit Public-Facing Application - T1190\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Shell - T1505.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration to Cloud Storage - T1567.002\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "Attribute": [
+      {
+        "uuid": "b3154f86-7cc0-5644-b31c-1bfa6e972b89",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/",
+        "to_ids": false,
+        "comment": "Detection rules, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "bbc610de-b5a2-5523-9d92-8c097bb1e36e",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/ioc-feeds/webshells-to-the-cloud.json",
+        "to_ids": false,
+        "comment": "IOC feed (JSON), The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "5f37f8f1-8153-5717-a594-e81d1143c49f",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/reports/webshells-to-the-cloud/",
+        "to_ids": false,
+        "comment": "Report, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "d18cad26-a8be-5f69-9bae-c17d5f7ec8cc",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/stix/webshells-to-the-cloud.json",
+        "to_ids": false,
+        "comment": "STIX 2.1 bundle, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "a69d335c-ba8f-5dce-9eab-3d2529fb95cd",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL HUNT Webshells-To-Cloud-Modular-Intrusion Suspicious mxx POST Parameter (Webshell Command Parameter Indicator)\"; flow:established,to_server; http.request_body; content:\"mxx=\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/; classtype:web-application-attack; sid:100002; rev:3; metadata:author The_Hunters_Ledger, date 2025-10-20;)",
+        "to_ids": false,
+        "comment": "Suspicious POST Parameter mxx | TIER: Hunting | robustness 1 | confidence HIGH | ATT&CK T1505.003 | rule hash 931f01d6 | https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "2d240e4e-56c7-5c65-8486-7555e128e5ef",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Dropbox API Traffic\nid: c9aac2c1-2261-4c14-ae47-bd9d193eb4bc\nstatus: experimental\ndescription: >-\n  Detects outbound traffic to the Dropbox API, used as an alternate cloud-storage exfiltration channel alongside rclone/S3 in the Webshells-to-the-Cloud campaign. Legitimate enterprise Dropbox integrations will require allowlist tuning.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/\nauthor: The Hunters Ledger\ndate: '2025-10-20'\ntags:\n    - attack.exfiltration\n    - attack.t1567.002\n    - detection.emerging-threats\nlogsource:\n    category: proxy\ndetection:\n    selection:\n        cs-host: 'api.dropboxapi.com'\n    condition: selection\nfalsepositives:\n    - Legitimate enterprise Dropbox integrations or file-sync clients (tune to server-class hosts or add known-good source allowlist)\nlevel: medium",
+        "to_ids": false,
+        "comment": "Dropbox API Traffic | TIER: Hunting | robustness 2 | confidence HIGH | ATT&CK T1567.002 | rule hash 4e169c94 | https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "6e697a10-f6ad-5305-804b-a4592a345bb3",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Nginx Configuration File Modified\nid: 4de0ab63-3b37-4203-ba70-721af47514f4\nstatus: experimental\ndescription: >-\n  Detects file writes under /etc/nginx/ made by a process in the web-server runtime\n  (nginx, php/php-fpm, httpd or apache2), consistent with a webshell rewriting its own\n  host's nginx config to add a malicious proxy_pass upstream. Writes by shells, package\n  managers and configuration-management agents run outside the web-server process context\n  and are not matched. A proxy_pass directive to an external host still requires a manual\n  content diff of the changed file to confirm intent.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/\nauthor: The Hunters Ledger\ndate: '2025-10-20'\nmodified: '2026-08-20'\ntags:\n    - attack.command-and-control\n    - attack.t1090\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: linux\ndetection:\n    selection_path:\n        TargetFilename|contains: '/etc/nginx/'\n    selection_web_runtime:\n        Image|contains:\n            - 'nginx'\n            - 'php'\n            - 'httpd'\n            - 'apache2'\n    condition: selection_path and selection_web_runtime\nfalsepositives:\n    - >-\n        Web-hosting control-panel software whose PHP backend legitimately writes nginx vhost\n        configuration in response to an administrator action, for example CloudPanel and similar\n        nginx plus PHP-FPM panels.\n    - >-\n        An nginx module or embedded scripting engine such as njs deliberately configured to rewrite\n        its own configuration.\nlevel: medium",
+        "to_ids": false,
+        "comment": "Nginx Configuration File Modified | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1090 | rule hash ef54c36e | https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "bc2b8f43-07c7-51be-b51e-0ef53dba6e2c",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Rclone Execution\nid: 960b3056-e0d5-4d0b-a422-f571d24a15cb\nstatus: experimental\ndescription: Detects execution of the rclone cloud-sync utility, used by the Webshells-to-the-Cloud campaign operator to stage and exfiltrate data to attacker-controlled cloud storage after webshell-based access.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/\nauthor: The Hunters Ledger\ndate: '2025-10-20'\ntags:\n    - attack.exfiltration\n    - attack.t1567.002\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        Image|endswith:\n            - '\\rclone.exe'\n    condition: selection\nfalsepositives:\n    - Legitimate IT administration or backup automation using rclone for authorized cloud-sync tasks\nlevel: medium",
+        "to_ids": false,
+        "comment": "Rclone Execution | TIER: Hunting | robustness 2 | confidence HIGH | ATT&CK T1567.002 | rule hash 565a03ab | https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "299907cb-379d-568d-933c-a1e5d191d5bb",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Suspicious Clp-Fm Cookie\nid: f3f41eba-22fa-464d-bbce-47ca27ce5a34\nstatus: experimental\ndescription: Detects the operator-distinctive clp-fm session cookie used by the file-manager webshell component of the Webshells-to-the-Cloud campaign to maintain authenticated access to the compromised backend.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/\nauthor: The Hunters Ledger\ndate: '2025-10-20'\ntags:\n    - attack.persistence\n    - attack.t1505.003\n    - detection.emerging-threats\nlogsource:\n    category: webserver\ndetection:\n    selection:\n        cs-cookie|contains: 'clp-fm='\n    condition: selection\nfalsepositives:\n    - Possible collision if CloudPanel's own File Manager feature uses a similarly-named session cookie on an unexploited instance\n    - Unlikely otherwise — this cookie name is not known to be used by other software\nlevel: medium",
+        "to_ids": false,
+        "comment": "Suspicious Clp-Fm Cookie | TIER: Hunting | robustness 1 | confidence HIGH | ATT&CK T1505.003 | rule hash bea7df54 | https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "1addd723-be49-5117-ae44-51d9f0e0bb43",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Suspicious File Manager Access\nid: 417a6801-8ed4-4a4c-b00a-5fb13005905e\nstatus: experimental\ndescription: Detects HTTP requests to exposed file-manager and phpMyAdmin backend paths commonly abused for initial access and file staging in the Webshells-to-the-Cloud campaign.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/\nauthor: The Hunters Ledger\ndate: '2025-10-20'\ntags:\n    - attack.initial-access\n    - attack.t1190\n    - detection.emerging-threats\nlogsource:\n    category: webserver\ndetection:\n    selection:\n        cs-uri-stem|contains:\n            - 'file-manager/backend/makefile'\n            - 'phpmyadmin/js/'\n    condition: selection\nfalsepositives:\n    - Routine JavaScript asset loading on a legitimately deployed phpMyAdmin instance\n    - Legitimate administrative access to a deployed file-manager instance predating compromise\nlevel: medium",
+        "to_ids": false,
+        "comment": "Suspicious File Manager / phpMyAdmin Access | TIER: Hunting | robustness 2 | confidence HIGH | ATT&CK T1190 | rule hash 7159a31f | https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "591648c2-9125-5d20-bfeb-55c13538a19e",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Suspicious User Creation\nid: 3dd2ccc6-76a3-4983-ae38-e76e4ef9922f\nstatus: experimental\ndescription: Detects creation of the operator-distinctive local account 'zeroday' via useradd, used as a persistence mechanism in the Webshells-to-the-Cloud campaign after initial webshell access.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/\nauthor: The Hunters Ledger\ndate: '2025-10-20'\ntags:\n    - attack.persistence\n    - attack.t1136.001\n    - detection.emerging-threats\nlogsource:\n    product: linux\n    service: auditd\ndetection:\n    selection:\n        type: 'SYSCALL'\n        exe|endswith: '/useradd'\n        a0: 'zeroday'\n    condition: selection\nfalsepositives:\n    - Legitimate administrator provisioning a local account that happens to share this name (verify against IT asset management)\nlevel: medium",
+        "to_ids": false,
+        "comment": "Suspicious User Creation (zeroday) | TIER: Hunting | robustness 1 | confidence HIGH | ATT&CK T1136.001 | rule hash c15667a9 | https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "d48c9743-7f78-529a-b592-225526029c05",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Suspicious WordPress Install\nid: 02dc195f-4f04-4fd9-9fe0-224e63e90560\nstatus: experimental\ndescription: Detects a POST request to the WordPress installer endpoint, consistent with the Webshells-to-the-Cloud campaign operator standing up a new WordPress instance on compromised infrastructure as part of automated infrastructure buildout.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/\nauthor: The Hunters Ledger\ndate: '2025-10-20'\ntags:\n    - attack.persistence\n    - attack.t1505.003\n    - detection.emerging-threats\nlogsource:\n    category: webserver\ndetection:\n    selection:\n        cs-uri-stem: '/wp-admin/install.php'\n        cs-method: 'POST'\n    condition: selection\nfalsepositives:\n    - Legitimate first-time setup of a new WordPress installation by an administrator\nlevel: medium",
+        "to_ids": false,
+        "comment": "Suspicious WordPress Install | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1505.003 | rule hash 70abc52d | https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "d67bc214-3e52-5222-bd9b-6f0ca1d77985",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Webshell File Creation\nid: 3e0b3119-6680-4972-bf69-9461c9eff56b\nstatus: experimental\ndescription: Detects creation of the operator-distinctive webshell file at the compromised application's public files directory, observed in the Webshells-to-the-Cloud campaign.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/\nauthor: The Hunters Ledger\ndate: '2025-10-20'\ntags:\n    - attack.persistence\n    - attack.t1505.003\n    - detection.emerging-threats\nlogsource:\n    product: linux\n    category: file_event\ndetection:\n    selection:\n        TargetFilename|endswith: '/htdocs/app/files/public/shell.php'\n    condition: selection\nfalsepositives:\n    - Unlikely — this exact file path is specific to the compromised application instance observed in this campaign\nlevel: medium",
+        "to_ids": false,
+        "comment": "Webshell File Creation | TIER: Hunting | robustness 1 | confidence HIGH | ATT&CK T1505.003 | rule hash 4caa060b | https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      }
+    ],
+    "Object": []
+  }
+}

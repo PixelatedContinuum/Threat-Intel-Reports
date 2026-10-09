@@ -1,0 +1,124 @@
+{
+  "Event": {
+    "uuid": "bbb50559-558b-53f6-8a3a-19961ddf05ef",
+    "info": "Arsenal-237 New Files: nethost.dll (DLL Hijacking Persistence)",
+    "date": "2026-01-15",
+    "threat_level_id": 1,
+    "analysis": 2,
+    "timestamp": 1791580400,
+    "publish_timestamp": 1791580400,
+    "published": true,
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"DLL Hijack\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Persistence\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Service Discovery - T1007\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Automated Exfiltration - T1020\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Information Discovery - T1082\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy - T1090\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "Attribute": [
+      {
+        "uuid": "da5c36cc-5488-5051-a225-d1d4b0b519cb",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/hunting-detections/arsenal-237-nethost-dll-detections/",
+        "to_ids": false,
+        "comment": "Detection rules, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "db8323d3-e610-5d23-ac55-74134fc1b00b",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/ioc-feeds/arsenal-237-nethost-dll.json",
+        "to_ids": false,
+        "comment": "IOC feed (JSON), The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "ac470e64-0d1f-5a5c-a8ac-da6c2c8abb66",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Arsenal-237 nethost.dll PowerShell Template Execution\nid: cac58909-f05e-45a7-b8b2-d0955ed5fdb0\nstatus: experimental\ndescription: >-\n  Detects PowerShell execution combining one of the Arsenal-237 nethost.dll C2\n  module's command-dispatch templates (service-status enumeration or file\n  download) with a parent process drawn from the module's observed launch\n  chain. Each CommandLine selector anchors on the stable prefix of its\n  template, so the match survives whatever value the C2 substitutes at\n  runtime.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-nethost-dll-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-27'\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    powershell_execution:\n        Image|endswith: powershell.exe\n    malware_templates:\n        CommandLine|contains:\n            - 'Get-Service|?{$_.Status -eq'\n            - 'Invoke-WebRequest -Uri'\n            - 'Select Name,Status|FT'\n    suspicious_parent:\n        ParentImage|endswith:\n            - rundll32.exe\n            - regsvcs.exe\n            - explorer.exe\n            - svchost.exe\n    condition: powershell_execution and malware_templates and suspicious_parent\nfalsepositives:\n    - >-\n      Legitimate system administration scripts that combine these exact\n      command fragments with a parent process from this specific list.\nlevel: high",
+        "to_ids": true,
+        "comment": "Arsenal-237 nethost.dll PowerShell Template Execution | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1059.001 | rule hash 5d0a936d | https://the-hunters-ledger.com/hunting-detections/arsenal-237-nethost-dll-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "a35a8399-e924-5efd-96dc-496521f51154",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "/*\n   Yara Rule Set\n   Identifier: Arsenal-237-New-Files-109.230.231.37\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule TOOLKIT_Arsenal237_NetHost_PowerShell_C2_Templates {\n   meta:\n      description = \"Detects the Arsenal-237 nethost.dll C2 module's embedded PowerShell command-dispatch templates: a service-status enumeration one-liner, a file-download one-liner, a base64 upload-path marker, and a concatenated C2 response-keyword string. Each template carries its unfilled placeholder syntax, distinguishing it from genuine ad hoc administrative scripting.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-nethost-dll-detections/\"\n      date = \"2026-01-27\"\n      family = \"Arsenal-237\"\n      malware_type = \"C2-Communication-Module\"\n      campaign = \"Arsenal-237-New-Files-109.230.231.37\"\n      id = \"25342642-c59c-491f-ad00-41779cc4c18f\"\n   strings:\n      $ps_service = \"Get-Service|?{$_.Status -eq ''}\" ascii\n      $ps_download = \"Invoke-WebRequest -Uri '' -OutFile ''\" ascii\n      $upload_prefix = \"pathB64:\" ascii\n      $response_keywords = \"resultmachine_idsuccess\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      3 of them\n}",
+        "to_ids": true,
+        "comment": "Arsenal-237 NetHost PowerShell C2 Command Templates | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1059.001, T1105, T1020, T1007 | rule hash 0859383e | https://the-hunters-ledger.com/hunting-detections/arsenal-237-nethost-dll-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "116cc1ad-218c-5fb1-99eb-d869383eb7f0",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule SUSP_Arsenal237_NetHost_Rust_C2_String_Combination {\n   meta:\n      description = \"Detects the Arsenal-237 nethost.dll C2 module by its embedded, build-specific hardcoded C2-target string (or an environment-discovery string) combined with Rust-runtime error handling and Winsock-initialization evidence. The c2_targets literal reflects this exact build's compiled hardcoded proxy configuration and breaks if the operator rotates infrastructure in a future compile — treat as a scoping lead for this build family, not a durable signature.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-nethost-dll-detections/\"\n      date = \"2026-01-27\"\n      family = \"Arsenal-237\"\n      malware_type = \"C2-Communication-Module\"\n      campaign = \"Arsenal-237-New-Files-109.230.231.37\"\n      id = \"32d2dfd4-59a3-400c-a31e-852fbc0ff5b9\"\n   strings:\n      $c2_targets = \"8.8.8.8:53127.0.0.1ntdll.dll\" ascii\n      $env_discovery = \"COMPUTERNAMEUSERNAME\" ascii\n      $rust_panic = \"runtime error\" ascii\n      $winsock_init = \"WSAStartup\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      ($c2_targets or $env_discovery) and\n      ($rust_panic or $winsock_init)\n}",
+        "to_ids": false,
+        "comment": "Arsenal-237 NetHost Rust C2 String Combination | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1071.001, T1090, T1082 | rule hash 7c283c87 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-nethost-dll-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      }
+    ],
+    "Object": []
+  }
+}

@@ -1,0 +1,239 @@
+{
+  "Event": {
+    "uuid": "e4a63f98-8afb-50e9-ad9a-4986fc498af9",
+    "info": "Webserver Compromise Kit (91.236.230.250)",
+    "date": "2026-02-20",
+    "threat_level_id": 1,
+    "analysis": 2,
+    "timestamp": 1791580400,
+    "publish_timestamp": 1791580400,
+    "published": true,
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Toolkit\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Priv Esc\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"RCE\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\".NET\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"DNS - T1071.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Internal Proxy - T1090.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Non-Application Layer Protocol - T1095\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Token Impersonation/Theft - T1134.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Shell - T1505.003\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "Attribute": [
+      {
+        "uuid": "d4c9d79a-70cc-5893-86e2-0a9e2ed94513",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/hunting-detections/webserver-compromise-kit-91-236-230-250-detections/",
+        "to_ids": false,
+        "comment": "Detection rules, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "b3841a56-d516-5869-8249-9d009de8175b",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/ioc-feeds/webserver-compromise-kit-91-236-230-250-iocs.json",
+        "to_ids": false,
+        "comment": "IOC feed (JSON), The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "96c02fea-bbe2-5684-af89-d750a12a971e",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/reports/webserver-compromise-kit-91-236-230-250/",
+        "to_ids": false,
+        "comment": "Report, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "a04fa5c5-5098-5c25-a1e3-935025727e53",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/stix/webserver-compromise-kit-91-236-230-250.json",
+        "to_ids": false,
+        "comment": "STIX 2.1 bundle, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "e4a2e1be-79bd-5cab-a6be-441859619d3e",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://91.236.230.250/",
+        "to_ids": true,
+        "comment": "url: http://91.236.230.250/. Hosts PrintSpoofer.exe, rev.exe, a.png reverse shell [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "475dbbe5-5a43-5bf3-a75d-618427bdbbb5",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "91.236.230.250",
+        "to_ids": true,
+        "comment": "ipv4: 91.236.230.250. Hardcoded in a.png reverse shell, hosts open directory with malware toolkit [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "1de61d1e-98db-5c56-a327-4805ccf7edb1",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT WebServer-Compromise-Kit Anachronistic IE11/Win7 User-Agent (Possible revsocks Proxy Traffic)\"; flow:to_server,established; http.user_agent; content:\"Windows NT 6.1|3b| Trident/7.0\"; nocase; threshold:type limit,track by_src,count 5,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/webserver-compromise-kit-91-236-230-250-detections/; classtype:policy-violation; sid:1000003; rev:3; metadata:author The_Hunters_Ledger, date 2026-02-08;)",
+        "to_ids": false,
+        "comment": "Anachronistic IE11/Win7 User-Agent (Possible revsocks) | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1071.001, T1090.001 | rule hash f8fc6d9c | https://the-hunters-ledger.com/hunting-detections/webserver-compromise-kit-91-236-230-250-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "c952579e-3a29-5789-8406-5156d0aa07a6",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT WebServer-Compromise-Kit ASP.NET Reverse Shell Spawn-Shell Banner (C2 Session Establishment)\"; flow:to_server,established; content:\"Spawn Shell\"; depth:20; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/webserver-compromise-kit-91-236-230-250-detections/; classtype:trojan-activity; sid:1000001; rev:3; metadata:author The_Hunters_Ledger, date 2026-02-08;)",
+        "to_ids": true,
+        "comment": "Reverse Shell \"Spawn Shell\" Banner | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1095 | rule hash 187a78b3 | https://the-hunters-ledger.com/hunting-detections/webserver-compromise-kit-91-236-230-250-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "b33c20ce-1943-5fc8-bf8d-2273867bbfee",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: IIS Worker Process Spawns Interactive Shell\nid: c4e3d3c7-9f89-4d1a-8b2c-3e5a6f7d8e9f\nstatus: experimental\ndescription: >-\n  Detects w3wp.exe (the IIS worker process) spawning a command or\n  scripting interpreter, a strong indicator of an active web shell\n  executing operator-supplied commands.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/webserver-compromise-kit-91-236-230-250-detections/\n    - https://the-hunters-ledger.com/reports/webserver-compromise-kit-91-236-230-250/\nauthor: The Hunters Ledger\ndate: 2026-02-08\ntags:\n    - attack.persistence\n    - attack.t1505.003\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        ParentImage|endswith: '\\w3wp.exe'\n        Image|endswith:\n            - '\\cmd.exe'\n            - '\\powershell.exe'\n            - '\\pwsh.exe'\n            - '\\wscript.exe'\n            - '\\cscript.exe'\n    condition: selection\nfalsepositives:\n    - Legitimate administrative scripts invoked through an IIS-hosted management interface (verify with process command line)\n    - Scheduled tasks or health-check scripts running under an IIS application-pool identity (rare)\nlevel: high",
+        "to_ids": true,
+        "comment": "IIS Worker Process Spawns Interactive Shell | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1505.003 | rule hash b4721e59 | https://the-hunters-ledger.com/hunting-detections/webserver-compromise-kit-91-236-230-250-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "d3fd8b1a-2505-53fd-89dd-a1653801eb9a",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Named Pipe Created Matching Print Spooler RPC Impersonation Pattern\nid: 3e096e9e-0f1a-4f5c-b7c3-2d4a55b3792f\nstatus: experimental\ndescription: >-\n  Detects creation of a named pipe ending in 'spoolss' by a process\n  other than the legitimate Print Spooler service, the named-pipe\n  impersonation trigger used by PrintSpoofer and related \"Potato\"-family\n  SeImpersonate privilege-escalation tools.\nreferences:\n    - https://github.com/itm4n/PrintSpoofer\n    - https://the-hunters-ledger.com/hunting-detections/webserver-compromise-kit-91-236-230-250-detections/\nauthor: The Hunters Ledger\ndate: 2026-02-08\ntags:\n    - attack.stealth\n    - attack.privilege-escalation\n    - attack.t1134.001\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: pipe_created\n    definition: 'Requires Sysmon Event ID 17 (Pipe Created)'\ndetection:\n    selection:\n        PipeName|endswith: '\\spoolss'\n    filter:\n        Image|endswith: '\\spoolsv.exe'\n    condition: selection and not filter\nfalsepositives:\n    - >-\n      Unlikely — this is a highly specific pattern with no known\n      legitimate cause outside the Print Spooler service itself,\n      which is explicitly excluded by the filter\nlevel: high",
+        "to_ids": true,
+        "comment": "Named Pipe Created Matching Print Spooler RPC Impersonation Pattern | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1134.001 | rule hash 95a5eea9 | https://the-hunters-ledger.com/hunting-detections/webserver-compromise-kit-91-236-230-250-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "bb480f0d-8a91-53e4-a6cf-474bd326fe41",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Reverse SOCKS Proxy Execution via Revsocks Command-Line Flags\nid: 58c6a530-eeea-47e4-98f6-c16d4911b54a\nstatus: experimental\ndescription: >-\n  Detects execution of revsocks or a tool sharing its reverse-proxy\n  command-line flag conventions, based on the co-occurrence of\n  connect+socks or dns+listen flag pairs.\nreferences:\n    - https://github.com/kost/revsocks\n    - https://the-hunters-ledger.com/hunting-detections/webserver-compromise-kit-91-236-230-250-detections/\nauthor: The Hunters Ledger\ndate: 2026-02-08\ntags:\n    - attack.command-and-control\n    - attack.t1090.001\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_flags:\n        CommandLine|contains|all:\n            - '-connect'\n            - '-socks'\n    selection_dns:\n        CommandLine|contains|all:\n            - '-dns'\n            - '-listen'\n    condition: selection_flags or selection_dns\nfalsepositives:\n    - Legitimate authorized red team or offensive-security exercises using revsocks under change control\n    - Authorized offensive-security assessments (verify against the engagement's rules of engagement)\nlevel: high",
+        "to_ids": true,
+        "comment": "Reverse SOCKS Proxy Execution via Revsocks Command-Line Flags | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1090.001 | rule hash a9b9332e | https://the-hunters-ledger.com/hunting-detections/webserver-compromise-kit-91-236-230-250-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "3fe6104a-75d1-54dc-a09b-9aff9c644178",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "/*\n   Yara Rule Set\n   Identifier: WebServer Compromise Kit - 91.236.230.250 Campaign\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule Webshell_ASPNET_InsomniaShell_Reverse {\n   meta:\n      description = \"Detects ASP.NET reverse shells using raw P/Invoke socket APIs combined with CreateProcess I/O-handle redirection inside genuine ASP.NET codebehind context, the pattern used by the InsomniaShell-variant webshell disguised as a.png\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/webserver-compromise-kit-91-236-230-250-detections/\"\n      date = \"2026-02-08\"\n      hash1 = \"238a9850787c9336ec56114f346e39088ad63de1c6a1d7d798292a7fb4577738\"\n      hash2 = \"\"\n      hash3 = \"\"\n      family = \"InsomniaShell\"\n      malware_type = \"Web Shell\"\n      campaign = \"WebServer-Compromise-Kit-91.236.230.250\"\n      id = \"88bfb597-bc7f-5c4b-ad3c-404493d47786\"\n   strings:\n      // P/Invoke signature for low-level networking\n      $pinvoke_ws2 = \"[DllImport(\\\"WS2_32.dll\\\"\" ascii wide\n      $pinvoke_kernel = \"[DllImport(\\\"kernel32.dll\\\"\" ascii wide\n\n      // Socket connection APIs\n      $api_wsasocket = \"WSASocket\" ascii wide\n      $api_connect = \"connect(\" ascii wide\n\n      // Process I/O redirection (hallmark of reverse shells)\n      $api_createprocess = \"CreateProcess\" ascii wide nocase\n      $io_redirect1 = \"hStdInput\" ascii wide\n      $io_redirect2 = \"hStdOutput\" ascii wide\n      $io_redirect3 = \"hStdError\" ascii wide\n\n      // ASP.NET context\n      $aspnet_page = \"Page_Load\" ascii wide\n      $aspnet_codebehind = \"CodeBehind=\" ascii wide nocase\n\n      // Common banner (optional but high confidence)\n      $banner = \"Spawn Shell\" ascii wide nocase\n\n   condition:\n      (\n         uint16(0) == 0x253C or // ASP tag\n         uint16(0) == 0x4D5A    // compiled DLL\n      ) and\n      filesize < 100KB and\n      (\n         (\n            ($pinvoke_ws2 or $pinvoke_kernel) and\n            ($api_wsasocket or $api_connect) and\n            $api_createprocess and\n            2 of ($io_redirect*)\n         ) or\n         (\n            $banner and\n            2 of ($io_redirect*)\n         )\n      ) and\n      (\n         $aspnet_page or $aspnet_codebehind\n      )\n}",
+        "to_ids": true,
+        "comment": "ASP.NET Reverse Shell (InsomniaShell P/Invoke Pattern) | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1505.003 | rule hash 03f068ce | https://the-hunters-ledger.com/hunting-detections/webserver-compromise-kit-91-236-230-250-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "f59ee827-a2c0-583b-a801-c0bdf5bd3ee3",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule PrivEsc_PrintSpoofer_SeImpersonate {\n   meta:\n      description = \"Detects PrintSpoofer and renamed/recompiled variants that abuse the Print Spooler RPC named-pipe impersonation trick for SeImpersonate-based privilege escalation to SYSTEM\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/webserver-compromise-kit-91-236-230-250-detections/\"\n      date = \"2026-02-08\"\n      hash1 = \"8524fbc0d73e711e69d60c64f1f1b7bef35c986705880643dd4d5e17779e586d\"\n      hash2 = \"188098b9caf3bc4d1b68dcad50d2e1cbd2e9d519\"\n      hash3 = \"108da75de148145b8f056ec0827f1665\"\n      family = \"PrintSpoofer\"\n      malware_type = \"Privilege Escalation Tool\"\n      campaign = \"WebServer-Compromise-Kit-91.236.230.250\"\n      id = \"3ce2dd4b-56b0-5fe0-bc09-e2886267f50f\"\n   strings:\n      // Privilege string (unique identifier)\n      $priv = \"SeImpersonatePrivilege\" ascii wide\n\n      // Named pipe pattern (exploitation signature)\n      $pipe_format = \"\\\\\\\\pipe\\\\\\\\%ws\\\\\\\\pipe\\\\\\\\spoolss\" ascii wide\n      $pipe_spoolss = \"\\\\pipe\\\\spoolss\" ascii wide\n\n      // Token manipulation APIs\n      $api_impersonate = \"ImpersonateNamedPipeClient\" ascii wide\n      $api_opentoken = \"OpenThreadToken\" ascii wide\n      $api_duptoken = \"DuplicateTokenEx\" ascii wide\n\n      // Process creation with stolen token\n      $api_createasuser = \"CreateProcessAsUserW\" ascii wide\n      $api_createwithtoken = \"CreateProcessWithTokenW\" ascii wide\n\n      // RPC functions (triggers Print Spooler)\n      $rpc1 = \"RpcOpenPrinter\" ascii wide nocase\n      $rpc2 = \"RpcRemoteFindFirstPrinterChangeNotification\" ascii wide nocase\n      $rpc3 = \"NdrClientCall3\" ascii wide\n\n      // Tool-specific strings\n      $tool_name = \"PrintSpoofer\" ascii wide nocase\n      $author_tag = \"@itm4n\" ascii wide\n\n      // Security descriptor for pipe (world-readable)\n      $sddl = \"D:(A;OICI;GA;;;WD)\" ascii wide\n\n   condition:\n      uint16(0) == 0x5A4D and // MZ header\n      filesize < 500KB and\n      (\n         // High confidence: Tool name + core APIs\n         (\n            ($tool_name or $author_tag) and\n            $priv and\n            $api_impersonate and\n            ($api_createasuser or $api_createwithtoken)\n         ) or\n         // Alternative: Pipe pattern + token APIs (survives rename)\n         (\n            ($pipe_format or ($pipe_spoolss and $sddl)) and\n            $api_impersonate and\n            $api_opentoken and\n            $api_duptoken and\n            2 of ($api_create*)\n         ) or\n         // Alternative: Print Spooler RPC trigger + token APIs (survives rename)\n         (\n            2 of ($rpc*) and\n            $api_impersonate and\n            ($api_createasuser or $api_createwithtoken)\n         )\n      )\n}",
+        "to_ids": true,
+        "comment": "PrintSpoofer Privilege Escalation Tool (SeImpersonate Abuse) | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1134.001 | rule hash 1dbe2a2e | https://the-hunters-ledger.com/hunting-detections/webserver-compromise-kit-91-236-230-250-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "7a844e5a-d9ec-5123-9606-5d08e865dae6",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule Proxy_Revsocks_Go_Binary {\n   meta:\n      description = \"Detects revsocks reverse SOCKS5 proxy Go binaries and rebranded forks via combinations of vendored tunneling-library import paths, characteristic CLI flag sets, the hardcoded anachronistic IE11/Win7 User-Agent, and DNS-tunneling flag pairs\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/webserver-compromise-kit-91-236-230-250-detections/\"\n      date = \"2026-02-08\"\n      hash1 = \"ffc6662c5d68db31b5d468460e4bc3be2090d7ba3ee1e47dbe2803217bf424a9\"\n      hash2 = \"c745d65554d946702f4484d47d6a4606c12c53e9\"\n      hash3 = \"032300082d8bc63b3d0a7f3f3f83f5d1\"\n      family = \"revsocks\"\n      malware_type = \"Reverse Proxy Tool\"\n      campaign = \"WebServer-Compromise-Kit-91.236.230.250\"\n      id = \"4587f937-0830-5331-a15b-517c42b3f271\"\n   strings:\n      // Go build path (high confidence identifier, paired with $version below)\n      $go_path = \"github.com/kost/revsocks\" ascii wide\n\n      // Imported tunneling libraries\n      $lib_chashell = \"github.com/kost/chashell\" ascii wide\n      $lib_dnstun = \"github.com/kost/dnstun\" ascii wide\n      $lib_socks5 = \"github.com/armon/go-socks5\" ascii wide\n      $lib_yamux = \"github.com/hashicorp/yamux\" ascii wide\n      $lib_ntlm = \"github.com/kost/go-ntlmssp\" ascii wide\n      $lib_websocket = \"nhooyr.io/websocket\" ascii wide\n\n      // Command-line flags (usage patterns)\n      $flag_connect = \"-connect\" ascii wide\n      $flag_listen = \"-listen\" ascii wide\n      $flag_socks = \"-socks\" ascii wide\n      $flag_dns = \"-dns\" ascii wide\n      $flag_ws = \"-ws\" ascii wide\n      $flag_pass = \"-pass\" ascii wide\n\n      // Characteristic User-Agent\n      $ua_ie11 = \"Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko\" ascii wide\n\n      // DNS tunneling artifacts\n      $dns_delay = \"-dnsdelay\" ascii wide\n      $dns_type = \"dnstype\" ascii wide\n\n      // Version string pattern\n      $version = /main\\.Version=\\d+\\.\\d+/ ascii\n\n   condition:\n      uint16(0) == 0x5A4D and // MZ header\n      filesize > 5MB and filesize < 15MB and // Go binaries are large\n      (\n         // Build-provenance identification (both artifacts required)\n         ($go_path and $version) or\n         // Library clustering (3+ libraries + 2+ flags = high confidence)\n         (\n            3 of ($lib_*) and\n            2 of ($flag_*)\n         ) or\n         // User-Agent + flags (behavioral pattern)\n         (\n            $ua_ie11 and\n            $flag_connect and\n            ($flag_socks or $flag_dns or $flag_ws)\n         ) or\n         // DNS tunneling artifacts (dnstun-specific configuration flags)\n         (\n            $flag_dns and\n            ($dns_delay or $dns_type)\n         )\n      )\n}",
+        "to_ids": true,
+        "comment": "revsocks Reverse SOCKS5 Proxy (Go Binary) | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1090.001, T1071.004 | rule hash 9fdfe817 | https://the-hunters-ledger.com/hunting-detections/webserver-compromise-kit-91-236-230-250-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      }
+    ],
+    "Object": []
+  }
+}

@@ -1,0 +1,720 @@
+{
+  "Event": {
+    "uuid": "93d0b666-26a5-57ab-a3dc-45f197c65e10",
+    "info": "Inkognito Russian VPN/Phishing Operator (INK VPN / INK Lens)",
+    "date": "2026-05-16",
+    "threat_level_id": 1,
+    "analysis": 2,
+    "timestamp": 1791580400,
+    "publish_timestamp": 1791580400,
+    "published": true,
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Phishing\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Fraud\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"VPN Abuse\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Cred Theft\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information: Encrypted/Encoded File - T1027.013\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Masquerading: Match Legitimate Resource Name or Location - T1036.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Application Layer Protocol: Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy: External Proxy - T1090.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy: Multi-hop Proxy - T1090.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Service: Dead Drop Resolver - T1102.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Phishing: Spearphishing Link - T1566.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Phishing: Spearphishing via Service - T1566.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Domains - T1583.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Virtual Private Server - T1583.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Server - T1583.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Web Services - T1583.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Compromise Infrastructure: Domains - T1584.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Establish Accounts: Social Media Accounts - T1585.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Establish Accounts: Email Accounts - T1585.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Establish Accounts: Cloud Accounts - T1585.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Develop Capabilities: Malware - T1587.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Develop Capabilities: Code Signing Certificates - T1587.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Develop Capabilities: Digital Certificates - T1587.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obtain Capabilities: Digital Certificates - T1588.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Stage Capabilities: Upload Malware - T1608.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Stage Capabilities: Install Digital Certificate - T1608.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Stage Capabilities: Link Target - T1608.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Financial Theft - T1657\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Impersonation - T1684.001\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "Attribute": [
+      {
+        "uuid": "845711f1-154b-5522-90b8-f1a62dc26947",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/",
+        "to_ids": false,
+        "comment": "Detection rules, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "d73d41e4-4610-578b-931a-513d657b2f52",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/ioc-feeds/inkognito-russian-vpn-phishing-185-221-196-118-20260516-iocs.json",
+        "to_ids": false,
+        "comment": "IOC feed (JSON), The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "6baa6933-b27e-598e-8742-cf66566314b5",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/",
+        "to_ids": false,
+        "comment": "Report, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "44892ebf-c0d9-5853-a42a-50c5ebcfc890",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/stix/inkognito-russian-vpn-phishing-185-221-196-118-20260516.json",
+        "to_ids": false,
+        "comment": "STIX 2.1 bundle, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "0eff6ea9-45e0-5a6a-a051-26cae4f19afe",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "00000xtrading.ru",
+        "to_ids": true,
+        "comment": "domain: 00000xtrading.ru. Former operator EspoCRM back-office (May 2025 → Apr 2026, ~353 days). Decommissioned 2026-04-07. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "a484941e-92f5-582e-994d-fb86857be9c3",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "a-loader.site",
+        "to_ids": false,
+        "comment": "domain: a-loader.site. Historical operator domain (Aug-Sep 2023, 19-day burn). Shared Aeza DNS (ns1.aezadns.com). Bridge IOC between Cluster A era and Cluster B operator (now downgraded to LOW per §22.9.1 cluster boundary). [confidence 40/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "7aac62b5-abac-5fe9-abcd-f00b2322e2f9",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "akredup.ru",
+        "to_ids": false,
+        "comment": "domain: akredup.ru. POSSIBLE only, co-residency on shared Timeweb hosting is the same evidence quality used to exclude bclub.mp. Treat as candidate, not confirmed. [confidence 40/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "70c275d1-4a6a-51c5-96ad-a0c431e0fafb",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "api.inkconnect.ru",
+        "to_ids": true,
+        "comment": "domain: api.inkconnect.ru. INK VPN backend API endpoint. CORS allows custom X-Admin-Token header, operator's custom auth primitive. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "62230ff4-1703-5cc1-ba42-00645167aaa8",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "api.inklens.co.uk",
+        "to_ids": true,
+        "comment": "domain: api.inklens.co.uk. API endpoint for the inklens.co.uk operational subdomain stack. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "17dac577-2aa7-5c05-b61e-4e9e80a719f9",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "authvpn.bikaf.ru",
+        "to_ids": true,
+        "comment": "domain: authvpn.bikaf.ru. Bikaf VPN auth backend. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "50f03cd7-a031-5abc-8efb-63d8595608f7",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "bigass.monster",
+        "to_ids": true,
+        "comment": "domain: bigass.monster. Drop-and-recapture tradecraft; post-2025-10-21 registrant 'REDACTED FOR PRIVACY' could plausibly be a different actor. Treat as probable-operator, not confirmed. [confidence 60/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "3fd5831d-2596-59f2-8b84-e221747c4c51",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "bikaf.ru",
+        "to_ids": true,
+        "comment": "domain: bikaf.ru. Bikaf VPN, operator's consumer VPN brand (Feb 2026). Decommissioned ~April 2026. Minimal MVP page with Google OAuth signin (contrasts with INK VPN's polished SPA). [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "9014d009-7268-5ce8-bc7d-7fc330a65dbe",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "cam.bikaf.ru",
+        "to_ids": true,
+        "comment": "domain: cam.bikaf.ru. CCTV/IP-camera subdomain under Bikaf VPN. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "610df042-baf4-547a-bb4a-f2f1717ccc5f",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "cam2.bikaf.ru",
+        "to_ids": true,
+        "comment": "domain: cam2.bikaf.ru. CCTV/IP-camera subdomain. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "d15ea9b4-bb09-5c99-b49f-80f01f39129e",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "cctv.bikaf.ru",
+        "to_ids": true,
+        "comment": "domain: cctv.bikaf.ru. CCTV subdomain. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "bcb0f917-4422-5ca2-8d49-e78cb69c6822",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "cryptone.bot",
+        "to_ids": true,
+        "comment": "domain: cryptone.bot. CryptOne fake crypto exchange, production frontend (Cloudflare-fronted, origin hidden). Live since 2026-03-05. Cluster B-controlled but also referenced from Cluster A's open directory at 79.137.192.3/cryptone/ staging path. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "d0f7eb30-457b-5737-b38c-ce0418c65df3",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "de1.inklens.co.uk",
+        "to_ids": true,
+        "comment": "domain: de1.inklens.co.uk. Germany VPN node (sister to fi1.inklens.co.uk). [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "949650e2-25ff-5388-95bf-bae0ce6bae53",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "divar-irantop.shop",
+        "to_ids": true,
+        "comment": "domain: divar-irantop.shop. Same brief-Aeza-co-residency evidence quality used to exclude bclub.mp. Naming theme strongly Iran-targeting but linkage to Cluster B is not conclusive. [confidence 60/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "b89639fb-b520-5853-8533-b9eb8dea5646",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "evotoptan.com",
+        "to_ids": true,
+        "comment": "domain: evotoptan.com. Briefly hit 79.137.192.3 for 22 minutes on 2026-03-31. Bridge IOC between Cluster A and Cluster B at MODERATE confidence, 22-min stay is consistent with config testing, accidental pointer, or deliberate panel import. [confidence 60/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "39112949-abdc-56ca-8a0e-048389e0b924",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "fi1.inklens.co.uk",
+        "to_ids": true,
+        "comment": "domain: fi1.inklens.co.uk. Operator's CURRENT back-office (Apr 2026 → present). Replaced 00000xtrading.ru with 30-hour overlap during migration. Resolves to 185.221.196.118 (Aeza IT). [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "909ff3ab-da0b-5369-b50f-f5757fc2a795",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "ger.bigass.monster",
+        "to_ids": true,
+        "comment": "domain: ger.bigass.monster. German VPN node on Aeza 79.137.203.87. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "469b65f3-7519-519c-979f-7f581ef108e5",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "gr.nodes.unloki.ru",
+        "to_ids": true,
+        "comment": "domain: gr.nodes.unloki.ru. Greece VPN node (Aeza-hosted via 79.137.203.87). [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "79fd7103-3727-53b0-a485-af19e55d2bb8",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "hikvision.bikaf.ru",
+        "to_ids": true,
+        "comment": "domain: hikvision.bikaf.ru. CCTV/IP-camera infrastructure subdomain under Bikaf VPN. Hikvision is the largest Chinese CCTV manufacturer, naming suggests surveillance-camera angle (compromised IP camera access or value-added stream bundling). [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "dfe2d696-3a78-522b-ac45-24c13fa60eff",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "ierkorprogramm.us",
+        "to_ids": false,
+        "comment": "domain: ierkorprogramm.us. Drop-caught aged domain (originally active 2018-2019 with 71+ rotating IPs). smtp.mail.ierkorprogramm.us co-resides on Timeweb 176.124.211.174. POSSIBLE email-sending infrastructure interpretation is speculative, co-residency on shared hosting is also consistent with a different Timeweb customer. [confidence 40/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "790e29b6-e5b1-5cd4-a704-07f89e12cf76",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "inkconnect.ru",
+        "to_ids": true,
+        "comment": "domain: inkconnect.ru. INK VPN flagship, operator's primary Russian consumer VPN brand. Registered REGRU-RU 2026-04-17 with 11-minute deployment-to-live window. React/Vite SPA frontend; nginx 1.29.8 + Caddy reverse proxy. Payment via SBP, T-Pay, card. Hosted Timeweb 176.124.211.174. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "23782f05-3bfc-5561-9ea6-5fcf6c32898b",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "inklens.co.uk",
+        "to_ids": true,
+        "comment": "domain: inklens.co.uk. Apex chameleon decoy, operator deliberately redirects apex to GitHub Pages (Apr 2026) then AmazonS3 (May 2026) so casual researchers see legitimate hosting. Operational subdomains (fi1, de1, marzban, api) run hidden underneath on Aeza IT. Registered Gandi (FR) 2026-03-19. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "44a90f09-8a30-56a9-86f6-944ec28dbcc6",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "inklens.ru",
+        "to_ids": true,
+        "comment": "domain: inklens.ru. INK Lens, operator's primary phishing/proxy infrastructure. 467+ brand-impersonation subdomains spoofing Wells Fargo, Accenture, Tencent, Sina, Tele2, AnyDesk, OWA 2013, Jenkins, MS Software Download Center, Asana, Siri, and others. Registered REGRU-RU 2026-03-18. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "81063c80-f23f-51c2-9006-cac69540450d",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "loadbalancer.bikaf.ru",
+        "to_ids": true,
+        "comment": "domain: loadbalancer.bikaf.ru. Bikaf VPN load balancer. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "9b3a99e8-af00-58dc-a147-25e5695275b6",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "marzban.inklens.co.uk",
+        "to_ids": true,
+        "comment": "domain: marzban.inklens.co.uk. Marzban (Xray/V2Ray) admin panel, operator's central VPN/proxy node-management platform. Marzban is open-source software for centrally managing self-hosted VPN/proxy fleets. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "5bb38ffb-5659-5f0e-8342-b1f7058bdd27",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "nat.bikaf.ru",
+        "to_ids": true,
+        "comment": "domain: nat.bikaf.ru. Bikaf VPN NAT backend. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "b63c8e52-c16a-5e22-9b0f-13bf5e4d6f31",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "petkovalegal.eu",
+        "to_ids": true,
+        "comment": "domain: petkovalegal.eu. Operator BEC burn domain (June 2023). Themed as Bulgarian/Russian-style legal practice ('Petkova Legal'). Operator-controlled period 2023-06-24 → 2024-06-18 (~12 months). Self-served mail.*, ns1.*, ns2.* on Stark 193.46.56.182. SOA admin@petkovalegal.eu. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "846123a7-d3fb-5766-8af5-ea40c66ad148",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "reverse-proxy.bikaf.ru",
+        "to_ids": true,
+        "comment": "domain: reverse-proxy.bikaf.ru. Bikaf VPN reverse proxy. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "f0a3a572-a959-5fdd-a30b-5c485f1b8064",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "unloki.ru",
+        "to_ids": true,
+        "comment": "domain: unloki.ru. Long-term operator VPN brand front (Outline-based for censored regions). Registered REGRU-RU 2023-08-31; on Stark Industries 193.46.56.182 since 2023-11-17 (2.5+ years continuous). [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "24778564-248a-59d8-a550-f34414d999e3",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "users.outline.unloki.ru",
+        "to_ids": true,
+        "comment": "domain: users.outline.unloki.ru. Outline VPN service for users in censored regions (Iran/RU/CN/etc.). Outline is Jigsaw/Google's open-source censorship-circumvention proxy tool. Operator runs an actual Outline server here. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "7548f605-7470-5866-8d3c-fa63194485e3",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "vagtec.eu",
+        "to_ids": true,
+        "comment": "domain: vagtec.eu. Operator BEC burn domain (June 2023). Generic tech-themed name. Operator-controlled period 2023-06-15 → 2024-06-06 (~12 months, much longer than initially assumed). Then drop-caught by Sedo/Bodis parking. Self-served mail.*, ns1.*, ns2.* on Stark 193.46.56.182. SOA admin@vagtec.eu. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "ac351365-a239-524f-a27a-833eccc8b2fb",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "vetcorbeanca.eu",
+        "to_ids": true,
+        "comment": "domain: vetcorbeanca.eu. Operator BEC burn domain (June 2023). Themed as Romanian veterinary clinic in Corbeanca (a real town near Bucharest). 6-day apex burn; self-served mail.*, ns1.*, ns2.* infrastructure on Stark 193.46.56.182. SOA admin@vetcorbeanca.eu. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "bbd4563d-6d29-53ce-abe6-df360b29aab7",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "video.bikaf.ru",
+        "to_ids": true,
+        "comment": "domain: video.bikaf.ru. Video-stream subdomain. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "38504015-ac11-5e03-b70b-a82e8d0dfc2c",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "vpn1.bikaf.ru",
+        "to_ids": true,
+        "comment": "domain: vpn1.bikaf.ru. Bikaf VPN backend infrastructure subdomain. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "bd024e07-bb53-5162-84f7-c0f912163da9",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "www.api.inklens.co.uk",
+        "to_ids": true,
+        "comment": "domain: www.api.inklens.co.uk. Alternate API hostname. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "f4659c0f-dc1c-52e5-a3b3-44c715bb9341",
+        "type": "url",
+        "category": "Network activity",
+        "value": "https://api.inkconnect.ru/",
+        "to_ids": true,
+        "comment": "url: https://api.inkconnect.ru/. INK VPN backend API root. Returns 404 to anonymous requests but exposes CORS configuration including custom X-Admin-Token header. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "2bc03bd4-cd70-5e3e-bfc4-c4fe2256dd51",
+        "type": "url",
+        "category": "Network activity",
+        "value": "https://cryptone.bot/",
+        "to_ids": true,
+        "comment": "url: https://cryptone.bot/. CryptOne fake crypto exchange production frontend. Cloudflare-fronted with Turnstile bot challenge. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "9a078e04-078a-5a12-91ef-d4c2d7962e78",
+        "type": "url",
+        "category": "Network activity",
+        "value": "https://inkconnect.ru/",
+        "to_ids": true,
+        "comment": "url: https://inkconnect.ru/. INK VPN consumer-facing landing page. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "e0c69d22-8f59-5e1c-838c-d827d6d15b73",
+        "type": "url",
+        "category": "Network activity",
+        "value": "https://inkconnect.ru/assets/index-CoeWw2zM.js",
+        "to_ids": true,
+        "comment": "url: https://inkconnect.ru/assets/index-CoeWw2zM.js. INK VPN main Vite/React JS bundle (261,587 bytes; SHA256 8a69fe67...). Hardcoded API endpoint paths and brand strings. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "1856068c-2d5d-5f1c-80c0-eb803fa92830",
+        "type": "url",
+        "category": "Network activity",
+        "value": "https://inkconnect.ru/favicon.svg",
+        "to_ids": true,
+        "comment": "url: https://inkconnect.ru/favicon.svg. INK VPN favicon SVG (SHA256 53b3515f...). [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "174e66da-aa1f-5b80-bfaf-d3e1ffb785a6",
+        "type": "url",
+        "category": "Network activity",
+        "value": "https://inkconnect.ru/logo.png",
+        "to_ids": true,
+        "comment": "url: https://inkconnect.ru/logo.png. Inkognito hooded-figure-with-eye brand logo PNG (SHA256 d1ae63c9...). [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "d9573581-97e2-58df-9cbb-40837a5f6187",
+        "type": "url",
+        "category": "Network activity",
+        "value": "https://t.me/inkconnectvpn",
+        "to_ids": true,
+        "comment": "url: https://t.me/inkconnectvpn. Telegram customer-support channel for INK VPN, operator's public-facing brand presence. 797 subscribers, first post 2026-03-18. Channel description self-identifies 'Inkognito' as parent brand. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "7d2fe06f-827f-5d4b-9b16-cc5ce41da2d5",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "176.124.211.174",
+        "to_ids": true,
+        "comment": "ipv4: 176.124.211.174. Operator's CURRENT primary phishing/proxy host. Hosts inklens.ru (165 subdomains post-migration), inkconnect.ru (INK VPN flagship), and adjacent operator domains. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "b3271b79-43fc-5bec-879d-45b36090b1a8",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "185.112.83.228",
+        "to_ids": true,
+        "comment": "ipv4: 185.112.83.228. ns1.aezadns.com nameserver IP, Aeza's managed-DNS service. Used by a-loader.site (2023) and 00000xtrading.ru (2025-2026). Caveat: Aeza managed-DNS is shared by many customers; not a unique operator fingerprint by itself. [confidence 60/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "7f045a07-6f50-513a-a1c1-9aabead0bdac",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "185.221.196.118",
+        "to_ids": true,
+        "comment": "ipv4: 185.221.196.118. Single-tenant operator IP per DomainTools reverse-PDNS; 9 historical resolutions are all operator-controlled domains. 0/92 VirusTotal detection. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "6d54d13e-9281-582a-ba8d-69e6b7217e51",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "193.46.56.182",
+        "to_ids": true,
+        "comment": "ipv4: 193.46.56.182. Stark Industries Solutions is a UK/EU-sanctioned bulletproof hosting provider per joint Five Eyes action against Russian-aligned bulletproof hosters. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "ce3735cf-87ed-542d-bf8d-afff1c71c20f",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "77.239.101.23",
+        "to_ids": true,
+        "comment": "ipv4: 77.239.101.23. Operator's previous primary phishing/proxy host (Mar 2026 → Apr 2026), held 502 unique operator subdomains across inklens.ru + bikaf.ru + inklens.co.uk before migration to Timeweb. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "ac19a7d6-a394-566f-b15b-9b8c60211e27",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "78.153.130.34",
+        "to_ids": true,
+        "comment": "ipv4: 78.153.130.34. ns2.aezadns.com nameserver IP. Same caveat as ns1. [confidence 60/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "b191af06-b189-5ef4-9581-d356f9b4e93c",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "79.137.203.87",
+        "to_ids": true,
+        "comment": "ipv4: 79.137.203.87. Secondary operator VPN node host (sister to BellaMain server at 79.137.192.3). Hosted ger.bigass.monster (German VPN node) Nov 2025 → Apr 2026, gr.nodes.unloki.ru (Greek VPN node) Feb-Oct 2025. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "8c217ce5-c706-589e-80f4-51e5f4014789",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "91.108.241.156",
+        "to_ids": true,
+        "comment": "ipv4: 91.108.241.156. Brief origin for divar-irantop.shop (Jan 2024). Aeza Intl ASN co-residency with operator back-office IP. [confidence 60/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "cca0f885-068b-5b1e-b984-2a989c858ae3",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "92.38.219.225",
+        "to_ids": true,
+        "comment": "ipv4: 92.38.219.225. Initial bikaf.ru setup IP (Feb 21-25, 2026) before migration to U1host. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "2f67af8d-fd86-5c4a-b7d9-72ca20298cd3",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "94.228.168.80",
+        "to_ids": true,
+        "comment": "ipv4: 94.228.168.80. Brief origin for divar-irantop.shop (Jan 2024). Aeza Intl ASN co-residency. [confidence 60/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "bb44994c-b85e-52ce-8100-936e0902711e",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL HUNT Inkognito X-Admin-Token in CORS Allow-Headers Response (Admin API Auth Primitive)\"; flow:established,to_client; http.header; content:\"Access-Control-Allow-Headers\"; nocase; content:\"X-Admin-Token\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/; classtype:trojan-activity; sid:9001004; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-16;)",
+        "to_ids": false,
+        "comment": "Inkognito X-Admin-Token in CORS Allow-Headers Response | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1071.001, T1583.004 | rule hash 9b30f497 | https://the-hunters-ledger.com/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "f717d48c-962b-563d-a788-98475a64ec26",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT Inkognito Custom X-Admin-Token Header in HTTP Request (Admin API Auth Primitive)\"; flow:established,to_server; http.header; content:\"X-Admin-Token\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/; classtype:trojan-activity; sid:9300303; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-16;)",
+        "to_ids": false,
+        "comment": "Inkognito Custom X-Admin-Token Header in HTTP Request | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1071.001, T1583.004 | rule hash 8ec4b983 | https://the-hunters-ledger.com/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "1c0e816f-2b1a-5ae4-b47c-bc2309e6a292",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Inkognito Brand-Impersonation Subdomain DNS Query\nid: 4a7b2e1d-8f3c-4a5b-9c0d-6e2f1a8b3c7d\nstatus: experimental\ndescription: >-\n  Detects DNS queries for any subdomain of inklens.ru, the Inkognito fraud\n  operator's (UTA-2026-009) dedicated brand-impersonation phishing platform.\n  The operator pre-stages 467+ subdomains targeting Wells Fargo, Tencent,\n  AnyDesk, Outlook Web Access 2013, Jenkins, Asana, Tele2, and other\n  enterprise/consumer brands, and adds new subdomains continuously.\n  Anchored on the wildcard parent zone rather than an enumerated subdomain\n  list so the rule survives new subdomain additions; a filter excludes the\n  operator's own internal DevOps tooling subdomains (argo-cd, redis-commander,\n  staging/uat/prod-prefixed hosts) hosted on the same zone.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-16\ntags:\n    - attack.initial-access\n    - attack.stealth\n    - attack.t1566.002\n    - attack.t1036.005\n    - detection.emerging-threats\n    - stp.1\nlogsource:\n    category: dns_query\n    product: windows\ndetection:\n    selection_inklens_subdomain:\n        QueryName|endswith: '.inklens.ru'\n    filter_operator_devops:\n        QueryName|startswith:\n            - 'argo-cd.'\n            - 'redis-commander.'\n            - 'redisinsight.'\n            - 'staging-agent.'\n            - 'staging-analytic.'\n            - 'uat-aka.'\n            - 'uat-dashboard.'\n            - 'prod-aka.'\n            - 'integration-cicd.'\n            - 'app-admin.'\n            - 'vfemea-admin.'\n    condition: selection_inklens_subdomain and not filter_operator_devops\nfalsepositives:\n    - Security researchers or threat hunters explicitly querying inklens.ru subdomains for investigation purposes\n    - Automated scanner infrastructure probing known-bad domain lists\nlevel: high",
+        "to_ids": false,
+        "comment": "Inkognito Brand-Impersonation Subdomain DNS Query (Wildcard) | TIER: Hunting | robustness 1 | confidence HIGH | ATT&CK T1566.002, T1684.001, T1036.005 | rule hash 838e8ec6 | https://the-hunters-ledger.com/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "5e779d4f-f303-5064-9a5e-a2ba6758c078",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "/*\n   Yara Rule Set\n   Identifier: Inkognito Fraud Operation — Web Asset Detection\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule MALW_Inkognito_JSBundle_VPN_SPA\n{\n    meta:\n        description = \"Detects the Inkognito INK VPN Vite/React SPA production JavaScript bundle via a combination of hardcoded API endpoint paths, operator brand strings, and a Russian-language tagline. Anchored on 5 of 6 non-build-specific markers so the rule survives routine Vite rebuilds (the content-hashed output filename changes every build) rather than only the exact bytes of one captured sample.\"\n        license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/\"\n        date = \"2026-05-16\"\n        hash1 = \"8a69fe67a7e9908aa1248c632ffd784033fc4dc613d0b5589279ccc62f717978\"\n        family = \"Inkognito-FraudOperation\"\n        malware_type = \"Web Application Fraud Infrastructure\"\n        campaign = \"Inkognito-Russian-VPN-Phishing-185.221.196.118-20260516\"\n        id = \"44286d43-385c-5646-afcc-1d855cb8dd6b\"\n    strings:\n        $api_auth     = \"/api/auth/login\" ascii\n        $api_vpn      = \"/api/vpn-hosts\" ascii\n        $api_sub      = \"/api/subscriptions\" ascii\n        $brand_ink    = \"INK VPN\" ascii\n        $brand_inkogn = \"Inkognito\" ascii\n        $bundle_name  = \"index-CoeWw2zM.js\" ascii\n        $tagline_ru   = \"\\xd0\\x9d\\xd0\\xb0\\xd0\\xb4\\xd0\\xb5\\xd0\\xb6\\xd0\\xbd\\xd1\\x8b\\xd0\\xb9 VPN \\xd0\\xbe\\xd1\\x82 Inkognito\" ascii\n    condition:\n        filesize < 700KB and\n        5 of ($api_auth, $api_vpn, $api_sub, $brand_ink, $brand_inkogn, $bundle_name, $tagline_ru)\n}",
+        "to_ids": true,
+        "comment": "Inkognito INK VPN JS Bundle (Brand/API String Combination) | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1036.005, T1608.005 | rule hash f55a50c2 | https://the-hunters-ledger.com/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "d346626e-07a7-58a1-b958-3c5b8cddf047",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "import \"hash\"\n\nrule MALW_Inkognito_Favicon_SVG\n{\n    meta:\n        description = \"Detects the INK VPN favicon SVG (inkconnect.ru/favicon.svg) by exact SHA256 hash OR, for modified variants, by the simultaneous presence of three Inkognito brand markers in the SVG content.\"\n        license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/\"\n        date = \"2026-05-16\"\n        hash1 = \"53b3515fda56dbbd1f8071a9ef3dc3be80cb7994df22ce8afc2e79147e899b70\"\n        family = \"Inkognito-FraudOperation\"\n        malware_type = \"Web Application Fraud Infrastructure\"\n        campaign = \"Inkognito-Russian-VPN-Phishing-185.221.196.118-20260516\"\n        id = \"60df7df5-6a62-58de-816b-8e7db27ba08d\"\n    strings:\n        $svg_open     = \"<svg\" ascii\n        $brand_inkogn = \"Inkognito\" ascii nocase\n        $brand_ink    = \"INK\" ascii\n        $inkconnect   = \"inkconnect\" ascii nocase\n    condition:\n        filesize < 100KB and\n        $svg_open at 0 and\n        (\n            hash.sha256(0, filesize) == \"53b3515fda56dbbd1f8071a9ef3dc3be80cb7994df22ce8afc2e79147e899b70\"\n            or\n            ($brand_inkogn and $brand_ink and $inkconnect)\n        )\n}",
+        "to_ids": true,
+        "comment": "Inkognito INK VPN Favicon SVG (Hash-or-Brand-String) | TIER: Detection | robustness 2 | confidence HIGH (hash branch) / MODERATE (string branch) | ATT&CK T1036.005 | rule hash dafe4c68 | https://the-hunters-ledger.com/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      }
+    ],
+    "Object": []
+  }
+}

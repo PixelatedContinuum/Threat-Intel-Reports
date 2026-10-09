@@ -1,0 +1,168 @@
+{
+  "Event": {
+    "uuid": "cb0d8c6e-7f98-5551-ac12-dc8ac8943286",
+    "info": "Houselet.exe — The Go-Based Loader Masquerading as PlayStation Remote Play",
+    "date": "2025-11-10",
+    "threat_level_id": 2,
+    "analysis": 2,
+    "timestamp": 1791580400,
+    "publish_timestamp": 1791580400,
+    "published": true,
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Loader\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Stealer\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Go\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Injection\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Invalid Code Signature - T1036.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Modify Registry - T1112\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Checks - T1497.001\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "Attribute": [
+      {
+        "uuid": "33ba7a22-6857-5a8f-a800-9c6e78bd364b",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/hunting-detections/malware-analysis-houselet-detections/",
+        "to_ids": false,
+        "comment": "Detection rules, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "fe21158d-3032-5e27-9508-71c43bbc2165",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/ioc-feeds/malware-analysis-houselet.json",
+        "to_ids": false,
+        "comment": "IOC feed (JSON), The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "ffb807e9-35e7-5312-8cb3-df10922986b0",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/reports/malware-analysis-houselet/",
+        "to_ids": false,
+        "comment": "Report, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "1282f3ee-4630-5da7-a71d-7325524379f6",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/stix/malware-analysis-houselet.json",
+        "to_ids": false,
+        "comment": "STIX 2.1 bundle, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "051b311b-fb5a-5a29-b3fd-31c92809a962",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Command Line Referencing Virtualization or Sandbox Artifacts\nid: 6c8e2a4f-3d1b-4e79-8c5a-2f9b7d1e4a6c\nstatus: experimental\ndescription: >-\n    Detects a process command line referencing common virtualization or\n    sandbox process/service names (VBoxService, vmtoolsd, qemu), excluding\n    the legitimate VM tooling's own process starting itself. Originally\n    observed as part of the Houselet loader's anti-VM sandbox-evasion\n    routine; broadened from a filename-anchored selector to this\n    technique-level pattern because houselet.exe's own launch command line\n    would not plausibly contain these substrings — the underlying behavior\n    is an internal process/service enumeration check, not a command-line\n    argument.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/malware-analysis-houselet-detections/\nauthor: The Hunters Ledger\ndate: '2025-11-17'\nmodified: '2026-09-30'\ntags:\n    - attack.stealth\n    - attack.discovery\n    - attack.t1497.001\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        CommandLine|contains:\n            - 'VBoxService'\n            - 'vmtoolsd'\n            - 'qemu'\n    filter_legit_vmtools:\n        Image|endswith:\n            - '\\VBoxService.exe'\n            - '\\vmtoolsd.exe'\n            - '\\qemu-ga.exe'\n    filter_virtualization_host:\n        Image|contains:\n            - '/qemu-system-'\n            - '/qemu-img'\n            - '/qemu-nbd'\n            - '/qemu-storage-daemon'\n            - '/swtpm'\n            - '/usr/bin/kvm'\n            - '/libvirtd'\n            - '/virt-'\n    filter_pve_management:\n        CommandLine|contains|all:\n            - '/nodes/'\n            - '/qemu'\n    filter_pve_helpers:\n        CommandLine|contains:\n            - '/usr/libexec/qemu-server/'\n            - '/run/pve/'\n    filter_pve_vm_state:\n        CommandLine|contains:\n            - '/etc/pve/qemu-server'\n            - '/var/run/qemu-server'\n    filter_xdg_desktop_entry_scan:\n        Image|endswith: '/grep'\n        ParentCommandLine|contains: '/xdg-settings '\n        CommandLine|contains|all:\n            - '^Exec'\n            - '/applications/qemu.desktop'\n    condition: selection and not 1 of filter_*\nfalsepositives:\n    - >-\n      IT inventory, monitoring, or provisioning scripts on virtualized\n      infrastructure that reference VBoxService, vmtoolsd, or qemu\n      process/service names\n    - >-\n      Legitimate VirtualBox/VMware/QEMU guest-tools management activity\n      beyond the tool's own process, such as a helper script checking\n      service status for health monitoring\n    - >-\n      Proxmox VE's own management CLI querying or snapshotting a QEMU-type VM\n      (pvesh get /nodes/<node>/qemu/<vmid>/snapshot, or the equivalent via qm),\n      invoked through its Perl interpreter or wrapped in bash -c. The REST path\n      itself contains \"qemu\" for any operation against a QEMU-type VM, so this\n      fires on routine hypervisor administration. Excluded at source by\n      filter_pve_management.\n    - >-\n      Proxmox VE helper scripts under /usr/libexec/qemu-server/ (pve-bridgedown\n      and siblings) and cloud-init image generation writing under /run/pve/.\n      Excluded at source by filter_pve_helpers.\n    - >-\n      Reading a Proxmox VE VM's own config or runtime PID file via ls, cat, grep\n      or stat (/etc/pve/qemu-server/<vmid>.conf, /var/run/qemu-server/<vmid>.pid).\n      These are vendor-defined paths present on every PVE install and are touched\n      by the most routine hypervisor administration, so the path appears as a\n      command argument without any virtualization binary being invoked. Excluded\n      at source by filter_pve_vm_state, which matches the directory without a\n      trailing slash so that a bare directory argument (find /etc/pve/lxc\n      /etc/pve/qemu-server) is covered as well.\n    - >-\n      The xdg-settings default-browser checks grepping qemu.desktop; excluded at\n      source by filter_xdg_desktop_entry_scan\n    - >-\n      A Linux package manager querying or removing a package whose NAME contains\n      a virtualization string (pacman -Qi qemu-system-x86, dpkg -l | grep qemu,\n      rpm -qa | grep -i virtualbox), or an awk/pactree/grep helper handed the same\n      package name as a label or search term. NOT excluded at source, deliberately -\n      see the 2026-08-27 note above. Scope these locally per host.\nlevel: medium",
+        "to_ids": false,
+        "comment": "Command Line Referencing Virtualization or Sandbox Artifacts | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1497.001 | rule hash d9702f50 | https://the-hunters-ledger.com/hunting-detections/malware-analysis-houselet-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "7426c509-82a6-56be-80e3-1b29960b2335",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: HTTP POST to PHP Endpoint With Missing User-Agent\nid: 8d4f6b2a-9c1e-4a75-8b3d-6e2a9f4c1d8b\nstatus: experimental\ndescription: >-\n    Detects an HTTP POST request to a .php URI with no User-Agent header\n    present. Houselet beacons to its command-and-control backend via POST\n    requests to a PHP-based endpoint without setting a User-Agent string;\n    legitimate browsers and most HTTP client libraries set a default\n    User-Agent unless deliberately suppressed, making the combination of a\n    PHP POST target and an absent User-Agent more distinctive than either\n    trait alone.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/malware-analysis-houselet-detections/\nauthor: The Hunters Ledger\ndate: '2025-11-17'\nmodified: '2026-07-12'\ntags:\n    - attack.command-and-control\n    - attack.t1071.001\n    - detection.emerging-threats\nlogsource:\n    category: proxy\ndetection:\n    selection:\n        c-uri|endswith: '.php'\n        cs-method: 'POST'\n        c-useragent: null\n    condition: selection\nfalsepositives:\n    - >-\n      Automated internal tooling, health-check scripts, or webhook\n      integrations that intentionally omit or blank the User-Agent header\n      when POSTing to PHP-based endpoints\n    - Lightweight HTTP client libraries or embedded/IoT devices configured with an empty User-Agent by default\nlevel: medium",
+        "to_ids": false,
+        "comment": "HTTP POST to PHP Endpoint With Missing User-Agent | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1071.001 | rule hash c0364123 | https://the-hunters-ledger.com/hunting-detections/malware-analysis-houselet-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "02aa6533-125d-55f1-891d-2311f8395097",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Internet Explorer ZoneMap Registry Modification\nid: 5f8b2d4e-3a7c-4e91-9b6d-1c4a8f2e6b7d\nstatus: experimental\ndescription: >-\n    Detects modification of Internet Explorer Internet Settings ZoneMap registry\n    keys. Houselet writes to these keys to weaken Internet Zone security\n    restrictions, easing follow-on download or execution steps.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/malware-analysis-houselet-detections/\nauthor: The Hunters Ledger\ndate: '2025-11-17'\ntags:\n    - attack.defense-impairment\n    - attack.persistence\n    - attack.t1112\n    - detection.emerging-threats\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection:\n        TargetObject|contains: 'HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\ZoneMap'\n    condition: selection\nfalsepositives:\n    - Administrative scripts or group policy that legitimately manage Internet Zone security settings\nlevel: medium",
+        "to_ids": false,
+        "comment": "Internet Explorer ZoneMap Registry Modification | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1112 | rule hash c59323e7 | https://the-hunters-ledger.com/hunting-detections/malware-analysis-houselet-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "73fbfe34-ab1c-53fb-932f-394bb769f1b3",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Internet Settings Proxy Registry Modification\nid: 2a6c8e4d-7b1f-4d93-8e5a-3f7c1b9d4e6a\nstatus: experimental\ndescription: >-\n    Detects modification of Internet Settings proxy-related registry keys.\n    Houselet alters these values to reroute or obscure the victim's outbound\n    web traffic.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/malware-analysis-houselet-detections/\nauthor: The Hunters Ledger\ndate: '2025-11-17'\ntags:\n    - attack.defense-impairment\n    - attack.persistence\n    - attack.t1112\n    - detection.emerging-threats\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection:\n        TargetObject|contains: 'HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Proxy'\n    condition: selection\nfalsepositives:\n    - Legitimate proxy configuration changes made by IT-managed software or the user\nlevel: medium",
+        "to_ids": false,
+        "comment": "Internet Settings Proxy Registry Modification | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1112 | rule hash 5e7c2129 | https://the-hunters-ledger.com/hunting-detections/malware-analysis-houselet-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "6ff6fad2-d7e1-5db2-91e8-e27bab10894c",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Unsigned Process With Sony Interactive Entertainment PE Description\nid: 4e6a8c2d-1f3b-4d57-9a6e-8b1d4f2a7c9e\nstatus: experimental\ndescription: >-\n    Detects a running process whose PE version-info Description field claims\n    Sony Interactive Entertainment authorship while the process is not signed\n    or carries an untrusted signature. Houselet is distributed as a fake\n    PlayStation Remote Play installer using this exact metadata combination\n    to appear legitimate at a glance.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/malware-analysis-houselet-detections/\nauthor: The Hunters Ledger\ndate: '2025-11-17'\ntags:\n    - attack.stealth\n    - attack.t1036.001\n    - detection.emerging-threats\nlogsource:\n    category: image_load\n    product: windows\ndetection:\n    selection:\n        Description|contains: 'Sony Interactive Entertainment'\n    filter_signed:\n        Signed: 'true'\n        SignatureStatus: 'Valid'\n    condition: selection and not filter_signed\nfalsepositives:\n    - A genuine Sony-signed binary evaluated in an environment where signature metadata is not populated or logged correctly\nlevel: medium",
+        "to_ids": true,
+        "comment": "Unsigned Process With Sony Interactive Entertainment PE Description | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1036.001 | rule hash 8873cdea | https://the-hunters-ledger.com/hunting-detections/malware-analysis-houselet-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      }
+    ],
+    "Object": []
+  }
+}

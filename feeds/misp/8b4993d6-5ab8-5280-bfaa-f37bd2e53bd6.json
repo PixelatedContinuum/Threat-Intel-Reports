@@ -1,0 +1,206 @@
+{
+  "Event": {
+    "uuid": "8b4993d6-5ab8-5280-bfaa-f37bd2e53bd6",
+    "info": "Arsenal-237 New Files: killer.dll (BYOVD Process Termination)",
+    "date": "2026-01-15",
+    "threat_level_id": 1,
+    "analysis": 2,
+    "timestamp": 1791580400,
+    "publish_timestamp": 1791580400,
+    "published": true,
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"BYOVD\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Evasion\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information - T1027\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Embedded Payloads - T1027.009\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Privilege Escalation - T1068\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Service - T1543.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "Attribute": [
+      {
+        "uuid": "17ac2bcb-5e42-559a-91cf-ef95c74de869",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-dll-detections/",
+        "to_ids": false,
+        "comment": "Detection rules, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "03d33697-b1f7-5a50-8e3a-a1176caeed11",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/ioc-feeds/arsenal-237-killer-dll.json",
+        "to_ids": false,
+        "comment": "IOC feed (JSON), The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "2b255779-6171-55bb-80c3-9be54d1019a7",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Baidu BdApiUtil Vulnerable Driver Load\nid: 3567b2e8-eec0-497d-910a-905cee6c0c03\nstatus: experimental\ndescription: >-\n    Detects loading of the Baidu Antivirus BdApiUtil64.sys kernel driver, a\n    legitimately-signed but vulnerable driver abused by the killer.dll BYOVD\n    module to issue kernel-mode process-termination IOCTLs against security\n    products.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-dll-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-25'\ntags:\n    - attack.privilege-escalation\n    - attack.t1068\n    - stp.3\nlogsource:\n    product: windows\n    category: driver_load\ndetection:\n    selection:\n        ImageLoaded|contains: 'BdApiUtil'\n    condition: selection\nfalsepositives:\n    - >-\n        Legitimate, currently-installed Baidu Antivirus software -- baseline as\n        expected in environments where this product is deployed; otherwise rare.\nlevel: high",
+        "to_ids": true,
+        "comment": "Baidu BdApiUtil Vulnerable Driver Load | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1068 | rule hash a6bf507c | https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-dll-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "491da3e0-42e8-5408-88ea-1bee22e17dc9",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Driver File (.sys) Created in Temp Directory\nid: 10eb1fbb-2be3-a09e-efb3-d97112e42bb4\nstatus: experimental\ndescription: >-\n  Detects .sys driver files created in temp directories, the killer.dll BYOVD\n  module's staging location for its randomized-filename embedded drivers\n  before installation as a kernel service.\nreferences:\n  - https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-dll-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-25'\ntags:\n  - attack.stealth\n  - attack.t1027\n  - attack.privilege-escalation\n  - attack.t1068\nlogsource:\n  product: windows\n  category: file_event\ndetection:\n  selection:\n    TargetFilename|contains:\n      - '\\AppData\\Local\\Temp\\'\n      - '\\Windows\\Temp\\'\n      - '\\Temp\\'\n    TargetFilename|endswith: '.sys'\n  filter_legitimate:\n    Image|contains:\n      - '\\Windows\\System32\\'\n      - '\\Program Files\\'\n      - '\\Program Files (x86)\\'\n      - '\\AMD\\'\n      - '\\NVIDIA\\'\n      - '\\Intel\\'\n  filter_winre_servicing:\n    Image|endswith: '\\DismHost.exe'\n    Image|contains: '\\$WinREAgent\\'\n    TargetFilename|contains: '\\WinSxS\\'\n  condition: selection and not 1 of filter_*\nfalsepositives:\n  - Legitimate driver installers using temp staging (should extract to System32\\Drivers)\n  - >-\n    Hardware and chipset vendor installers staging .sys files under their own\n    root-level directories or under Program Files (x86) before final\n    installation (AMD Software confirmed staging amdkmdag.sys via C:\\AMD\\;\n    NVIDIA and Intel packages follow the same mechanic). Review publisher\n    signatures for any vendor path not on the filter list.\n  - >-\n    A manually-run, downloaded driver installer executed directly from\n    Downloads/Temp/AppData is not excluded by the parent-image filter.\n  - >-\n    Windows Update and the Recovery Environment staging or removing inbox\n    drivers under the component store — DismHost.exe running out of\n    C:\\$WinREAgent\\Scratch\\ and writing to WinSxS\\Temp\\InFlight\\. Excluded at\n    source by filter_winre_servicing; see the rationale below.\nlevel: medium",
+        "to_ids": false,
+        "comment": "Driver File (.sys) Created in Temp Directory | TIER: Hunting | robustness 2 | confidence LOW | ATT&CK T1027, T1068 | rule hash 4031c559 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-dll-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "2942f3a1-9bc9-5e3f-962e-aa77b3cfd0c1",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Kernel Driver Service Creation by Rundll32 (Registry)\nid: 10eb1fbb-2be3-a09e-efb3-d97112e42bb0\nstatus: experimental\ndescription: >-\n    Detects kernel driver service creation by rundll32.exe, the BYOVD install-step\n    pattern used by the killer.dll defense-evasion module. rundll32.exe registering\n    a SERVICE_KERNEL_DRIVER-type service is a rare event outside this specific\n    technique -- legitimate driver installation goes through Plug-and-Play/INF setup\n    or a dedicated installer, not rundll32.exe.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-dll-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-25'\ntags:\n    - attack.defense-impairment\n    - attack.t1685\n    - attack.privilege-escalation\n    - attack.t1068\nlogsource:\n    product: windows\n    category: registry_set\ndetection:\n    selection_service_create:\n        TargetObject|contains: '\\System\\CurrentControlSet\\Services\\'\n        Details|contains: 'SERVICE_KERNEL_DRIVER'\n    selection_parent:\n        Image|endswith: '\\rundll32.exe'\n    filter_legitimate:\n        TargetObject|contains: '\\System32\\Drivers\\'\n    condition: selection_service_create and selection_parent and not filter_legitimate\nfalsepositives:\n    - Legitimate software installation via rundll32 (extremely rare for kernel drivers)\n    - Administrative scripts using rundll32 for driver deployment (should be reviewed)\nlevel: high",
+        "to_ids": true,
+        "comment": "Kernel Driver Service Creation by Rundll32 (Registry) | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1685, T1068 | rule hash 6f721289 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-dll-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "6e4cc0c9-9240-50af-98ed-e569a08ca6cc",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Kernel-Mode Driver Service Installed (Event 7045)\nid: 93cc54a3-4d1b-4218-ac73-098940b2b1b2\nstatus: experimental\ndescription: >-\n  Detects installation of a new kernel-mode driver service via the Service\n  Control Manager, the setup step of the killer.dll BYOVD module's\n  install-abuse-remove cleanup pattern. This event alone does not distinguish\n  a legitimate hardware or security-software driver install from the BYOVD\n  setup step; killer.dll's documented lifecycle removes the service within\n  roughly 20 seconds, but no concrete Sigma-expressible deletion-side\n  telemetry was available to correlate against (see Coverage Gaps), so this\n  remains a single-event hunting lead and is deliberately levelled below the\n  alerting threshold. Microsoft Defender's own dynamically-updated driver\n  folder is excluded, since only Defender writes there and it re-registers\n  those services on every boot.\nreferences:\n  - https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-dll-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-25'\nmodified: '2026-07-30'\ntags:\n  - attack.privilege-escalation\n  - attack.t1068\n  - attack.persistence\n  - attack.t1543.003\nlogsource:\n  product: windows\n  service: system\ndetection:\n  selection:\n    Provider_Name: 'Service Control Manager'\n    EventID: 7045\n    ServiceType: 'kernel mode driver'\n  filter_known_benign_driver_paths:\n    ImagePath|contains:\n      - '\\system32\\drivers\\wd\\'\n      - '\\elastic-endpoint-driver.sys'\n      - '\\ElasticElam.sys'\n  condition: selection and not filter_known_benign_driver_paths\nfalsepositives:\n  - Driver installation testing by IT staff (should be reviewed)\n  - Legitimate hardware or security-software driver installation\n  - >-\n    Reboot-driven re-registration of already-installed boot-start and\n    auto-start driver services, which emits this event for each one\nlevel: low",
+        "to_ids": false,
+        "comment": "Kernel-Mode Driver Service Installed (Event 7045) | TIER: Hunting | robustness 2 | confidence LOW | ATT&CK T1068, T1543.003 | rule hash 3e43f3c5 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-dll-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "e6f4715a-d948-59ef-a7c3-5b8326d171c7",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Security Product Process Termination (Base Rule)\nid: 1766d04f-4a4a-4e83-8052-de31857dd69c\nname: security_product_process_termination\nstatus: experimental\ndescription: >-\n    Base rule (not alerting on its own): termination of a single known\n    security-product process. Paired with the correlation rule below, which\n    flags 3 or more DISTINCT security-product terminations on the same host\n    within 60 seconds -- the killer.dll behavior of shutting down AV/EDR ahead\n    of payload deployment. The target list carries one representative process\n    per vendor by design: the correlation counts distinct process names as a\n    proxy for distinct products, so listing several processes belonging to the\n    same vendor would let one vendor's ordinary update cycle satisfy the\n    3-distinct threshold on its own.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-dll-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-25'\nmodified: '2026-07-30'\ntags:\n    - attack.defense-impairment\n    - attack.t1685\nlogsource:\n    product: windows\n    category: process_termination\ndetection:\n    selection:\n        Image|endswith:\n            - '\\MsMpEng.exe'\n            - '\\ekrn.exe'\n            - '\\avp.exe'\n            - '\\MBAMService.exe'\n            - '\\bdservicehost.exe'\n            - '\\avguard.exe'\n            - '\\NisSrv.exe'\n            - '\\vsserv.exe'\n            - '\\CSFalconService.exe'\n            - '\\ccSvcHst.exe'\n            - '\\SophosHealth.exe'\n    condition: selection\nfalsepositives:\n    - >-\n        Administrator manually stopping a single security service, or a legitimate\n        software update/uninstall. Not alerting on its own; reviewed only in\n        combination with 2 or more other distinct terminations via the correlation\n        rule.\nlevel: informational\n---\ntitle: Mass Security-Product Termination -- 3+ Distinct Products Within 60 Seconds\nid: a4d50dbc-8a4c-4c6a-9dd5-93f567651a29\nstatus: experimental\ndescription: >-\n    Fires when 3 or more DISTINCT security-product processes terminate on the\n    same host within 60 seconds. A single termination event cannot distinguish\n    an administrator stopping one product from a defense-evasion module shutting\n    down endpoint protection ahead of payload deployment; killer.dll terminates\n    its full target list in 2-8 seconds once active, so 3+ distinct vendors dying\n    together in a 60-second window is the discriminating signal.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-dll-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-25'\ntags:\n    - attack.defense-impairment\n    - attack.t1685\ncorrelation:\n    type: value_count\n    rules:\n        - security_product_process_termination\n    group-by:\n        - host.name\n    timespan: 60s\n    condition:\n        field: Image\n        gte: 3\nfalsepositives:\n    - >-\n        A coordinated, scripted replacement or migration of multiple third-party\n        security products in a single maintenance window -- uncommon outside a\n        planned AV/EDR migration.\nlevel: high",
+        "to_ids": true,
+        "comment": "Mass Security-Product Termination: 3+ Distinct Products Within 60 Seconds (Correlation) | TIER: Detection | robustness 3 | confidence HIGH (correlation) / LOW (base rule alone) | ATT&CK T1685 | rule hash e65644c8 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-dll-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "326fe4c9-3f31-5ba8-b39f-8001d023b57e",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Sysinternals ProcExp152 Vulnerable Driver Load\nid: 48de755d-dd78-4f51-a9b7-864aa0763161\nstatus: experimental\ndescription: >-\n  Detects loading of the Sysinternals Process Explorer PROCEXP152 kernel\n  driver, a legitimately Microsoft-signed but vulnerable driver abused by the\n  killer.dll BYOVD module. Process Explorer is an extremely widely deployed\n  IT/security utility, so this driver load also occurs during entirely\n  legitimate use -- treat as a hunting lead requiring host-context review, not\n  an alert.\nreferences:\n  - https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-dll-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-25'\ntags:\n  - attack.privilege-escalation\n  - attack.t1068\nlogsource:\n  product: windows\n  category: driver_load\ndetection:\n  selection:\n    ImageLoaded|contains: 'PROCEXP152'\n  condition: selection\nfalsepositives:\n  - >-\n    Legitimate, common use of Sysinternals Process Explorer (any version that\n    ships the PROCEXP152 driver, including version 17.0.7) -- correlate with\n    an actual IOCTL-abuse or mass-termination signal before treating a hit as\n    malicious.\nlevel: medium",
+        "to_ids": false,
+        "comment": "Sysinternals ProcExp152 Vulnerable Driver Load | TIER: Hunting | robustness 2 | confidence LOW | ATT&CK T1068 | rule hash 2846a04f | https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-dll-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "b000826e-d1dc-580f-b222-1f44b4d220aa",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "/*\n   Yara Rule Set\n   Identifier: Arsenal-237-109.230.231.37-Malware-Repository\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule MAL_Windows_KillerDLL_BYOVD_Dual_Driver_Embedding\n{\n   meta:\n      description = \"Detects the killer.dll BYOVD defense-evasion module via simultaneous embedding of two distinct legitimately-signed vulnerable drivers -- Baidu Antivirus's BdApiUtil64.sys and Sysinternals Process Explorer's ProcExpDriver.sys -- inside a single PE, alongside their kernel-mode IOCTL abuse codes. Pairing two unrelated vendors' vulnerable drivers together is not a pattern expected in legitimate software.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-dll-detections/\"\n      date = \"2026-01-25\"\n      family = \"Arsenal-237-BYOVD-Killer-DLL\"\n      malware_type = \"Defense-Evasion-Module\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"acc310db-6c58-4169-856d-629bab1adb6d\"\n      hash1 = \"10eb1fbb2be3a09eefb3d97112e42bb06cf029e6cac2a9fb891b8b89a25c788d\"\n   strings:\n      $baidu_path = \"\\\\SystemRoot\\\\System32\\\\Drivers\\\\BdApiUtil64.sys\" ascii wide nocase\n      $baidu_desc = \"Baidu Antivirus BdApi Driver\" ascii wide\n      $baidu_ver  = \"5.0.3.84333\" ascii wide\n      $baidu_dev  = \"\\\\\\\\.\\\\BdApiUtil\" ascii wide\n\n      $procexp_path = \"\\\\SystemRoot\\\\System32\\\\Drivers\\\\PROCEXP152.SYS\" ascii wide nocase\n      $procexp_ver  = \"17.0.7\" ascii wide\n      $procexp_dev  = \"\\\\\\\\.\\\\PROCEXP152\" ascii wide\n\n      $ioctl_baidu   = { B4 24 00 80 }\n      $ioctl_procexp = { 3C 00 35 83 }\n\n      $mz = \"MZ\"\n   condition:\n      uint16(0) == 0x5A4D and\n      #mz >= 2 and\n      (2 of ($baidu_*)) and\n      (2 of ($procexp_*)) and\n      (1 of ($ioctl_*))\n}",
+        "to_ids": true,
+        "comment": "BYOVD Dual Vulnerable-Driver Embedding (Baidu + Sysinternals ProcExp Combination) | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1027.009, T1068 | rule hash aa78faa6 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-dll-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "cdc0b2dc-4093-5740-882c-201201024151",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule SUSP_Windows_KillerDLL_SecurityProduct_Termination_IOCTL_Combo\n{\n   meta:\n      description = \"Detects a combination of targeted security-product process names, service-manipulation API imports, a killer.dll-class IOCTL byte code, and a Baidu/ProcExp driver-family reference. Broader than the dual-driver embedding rule -- the driver-family requirement can be satisfied by a generic vendor-name string alone. Hunting lead, not an alert.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-dll-detections/\"\n      date = \"2026-01-25\"\n      family = \"Arsenal-237-BYOVD-Killer-DLL\"\n      malware_type = \"Defense-Evasion-Module\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"c1b9b7e5-6058-4ee7-ae8f-c78d68db999c\"\n   strings:\n      $target1 = \"MsMpEng.exe\" ascii wide nocase\n      $target2 = \"ekrn.exe\" ascii wide nocase\n      $target3 = \"avp.exe\" ascii wide nocase\n      $target4 = \"MBAMService.exe\" ascii wide nocase\n      $target5 = \"bdservicehost.exe\" ascii wide nocase\n\n      $svc1 = \"CreateServiceW\" ascii wide\n      $svc2 = \"StartServiceW\" ascii wide\n      $svc3 = \"DeleteService\" ascii wide\n      $svc4 = \"NtUnloadDriver\" ascii wide\n\n      $ioctl_baidu   = { B4 24 00 80 }\n      $ioctl_procexp = { 3C 00 35 83 }\n\n      $baidu_ref   = \"Baidu, Inc.\" ascii wide\n      $procexp_ref = \"Sysinternals - www.sysinternals.com\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      (3 of ($target*)) and\n      (2 of ($svc*)) and\n      (1 of ($ioctl_baidu, $ioctl_procexp)) and\n      (1 of ($baidu_ref, $procexp_ref))\n}",
+        "to_ids": false,
+        "comment": "Security-Product Termination + IOCTL Behavioral Combination | TIER: Hunting | robustness 2 | confidence LOW | ATT&CK T1685, T1068 | rule hash 6f19f97b | https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-dll-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "decdce10-30f8-5279-b24a-0129a2d7d84b",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule SUSP_Windows_KillerDLL_Single_Vulnerable_Driver_Embedded\n{\n   meta:\n      description = \"Detects a single embedded Baidu BdApiUtil64.sys OR Sysinternals ProcExpDriver.sys vulnerable-driver reference alone, without requiring both families together. Broader and noisier than the dual-driver combination rule -- fires on legitimate, unmodified installations of either product, most notably Sysinternals Process Explorer, which bundles its own signed driver as an embedded PE resource. Hunting lead, not an alert.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-dll-detections/\"\n      date = \"2026-01-25\"\n      family = \"Arsenal-237-BYOVD-Killer-DLL\"\n      malware_type = \"Defense-Evasion-Module\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"23a3919b-51cc-45db-9f67-4d2e725da63c\"\n   strings:\n      $baidu_path    = \"\\\\SystemRoot\\\\System32\\\\Drivers\\\\BdApiUtil64.sys\" ascii wide nocase\n      $baidu_company = \"Baidu, Inc.\" ascii wide\n      $baidu_desc    = \"Baidu Antivirus BdApi Driver\" ascii wide\n      $baidu_ver     = \"5.0.3.84333\" ascii wide\n\n      $procexp_path    = \"\\\\SystemRoot\\\\System32\\\\Drivers\\\\PROCEXP152.SYS\" ascii wide nocase\n      $procexp_desc    = \"Process Explorer\" ascii wide\n      $procexp_company = \"Sysinternals - www.sysinternals.com\" ascii wide\n      $procexp_ver     = \"17.0.7\" ascii wide\n\n      $mz = \"MZ\"\n   condition:\n      uint16(0) == 0x5A4D and\n      #mz >= 2 and\n      (\n         (2 of ($baidu_*)) or\n         (2 of ($procexp_*))\n      )\n}",
+        "to_ids": false,
+        "comment": "Single Vulnerable-Driver Embedding (Baidu OR ProcExp Alone) | TIER: Hunting | robustness 2 | confidence LOW | ATT&CK T1027.009, T1068 | rule hash 5b07dfcb | https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-dll-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      }
+    ],
+    "Object": []
+  }
+}

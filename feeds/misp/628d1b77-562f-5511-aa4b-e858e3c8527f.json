@@ -1,0 +1,200 @@
+{
+  "Event": {
+    "uuid": "628d1b77-562f-5511-aa4b-e858e3c8527f",
+    "info": "PULSAR RAT (server.exe) — Technical Analysis & Business Risk Assessment",
+    "date": "2025-12-15",
+    "threat_level_id": 1,
+    "analysis": 2,
+    "timestamp": 1791580400,
+    "publish_timestamp": 1791580400,
+    "published": true,
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"RAT\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Cred Theft\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Evasion\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\".NET\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Dead Drop Resolver - T1102.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Access Tools - T1219\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Firmware - T1542.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials from Web Browsers - T1555.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Hidden Window - T1564.003\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "Attribute": [
+      {
+        "uuid": "ac83102e-847c-54ac-b055-f6f6b36ca143",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/hunting-detections/PULSAR-RAT-detections/",
+        "to_ids": false,
+        "comment": "Detection rules, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "3f33b449-5c17-54d7-a3ed-fced23694240",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/ioc-feeds/PULSAR-RAT.json",
+        "to_ids": false,
+        "comment": "IOC feed (JSON), The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "bb0c1c52-ff5c-5823-8865-2c963256f04b",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/reports/PULSAR-RAT/",
+        "to_ids": false,
+        "comment": "Report, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "58df1988-6265-5748-a43b-f294e25d96ad",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/stix/PULSAR-RAT.json",
+        "to_ids": false,
+        "comment": "STIX 2.1 bundle, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "ab12b4fc-7986-5e82-83e4-41a090158152",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "2c4387ce18be279ea735ec4f0092698534921030aaa69949ae880e41a5c73766",
+        "to_ids": true,
+        "comment": "sha256: 2c4387ce18be279ea735ec4f0092698534921030aaa69949ae880e41a5c73766 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "abe7adce-5712-5eac-a4f1-206326232826",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Connection to Public Paste-Hosting Service Domain\nid: d7120dfa-2ad3-4215-8262-09344861e858\nstatus: experimental\ndescription: >-\n  Detects a process connecting to a public paste-hosting service\n  (Pastebin, Paste.ee, Hastebin), consistent with the dead-drop resolver\n  pattern the Pulsar RAT campaign uses to retrieve its dynamic C2\n  configuration from an attacker-controlled paste. These services are\n  also used for entirely legitimate purposes (developers sharing code,\n  logs, or configuration snippets), so this is a broad hunting lead and\n  should be correlated with process context and repeated-access volume\n  rather than alerted on directly.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/PULSAR-RAT-detections/\nauthor: The Hunters Ledger\ndate: '2025-12-01'\ntags:\n    - attack.command-and-control\n    - attack.t1102.001\n    - detection.emerging-threats\nlogsource:\n    category: network_connection\n    product: windows\ndetection:\n    selection:\n        DestinationHostname|contains:\n            - 'pastebin.com'\n            - 'paste.ee'\n            - 'hastebin.com'\n    condition: selection\nfalsepositives:\n    - >-\n      Legitimate developer or administrative use of public paste\n      services to share code, logs, or configuration snippets\nlevel: low",
+        "to_ids": false,
+        "comment": "Connection to Public Paste-Hosting Service Domain | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1102.001 | rule hash 42eaaefc | https://the-hunters-ledger.com/hunting-detections/PULSAR-RAT-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "3513558a-05fe-53a1-b4b3-9f8ba7846c52",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Non-Browser Process Accessing Browser Credential Store Files\nid: b1990326-898e-4188-8336-6d3c1d990934\nstatus: experimental\ndescription: >-\n  Detects a process other than a known browser executable accessing a\n  browser credential-store file (Chromium Login Data or Firefox\n  logins.json/key4.db), consistent with credential-theft modules that\n  read these files directly rather than through the browser's own\n  process.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/PULSAR-RAT-detections/\nauthor: The Hunters Ledger\ndate: '2025-12-01'\ntags:\n    - attack.credential-access\n    - attack.t1555.003\n    - detection.emerging-threats\nlogsource:\n    category: file_access\n    product: windows\ndetection:\n    selection:\n        TargetFilename|endswith:\n            - '\\Login Data'\n            - '\\logins.json'\n            - '\\key4.db'\n    filter_browsers:\n        Image|endswith:\n            - '\\chrome.exe'\n            - '\\firefox.exe'\n            - '\\msedge.exe'\n            - '\\opera.exe'\n            - '\\brave.exe'\n    condition: selection and not filter_browsers\nfalsepositives:\n    - >-\n      Browser-sync, backup, profile-migration, or endpoint-security\n      scanning tools that legitimately read these credential-store\n      files\nlevel: medium",
+        "to_ids": false,
+        "comment": "Non-Browser Process Accessing Browser Credential Store Files | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1555.003 | rule hash 3c807240 | https://the-hunters-ledger.com/hunting-detections/PULSAR-RAT-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "d7e260b2-5289-5742-b2ab-523f35c589e6",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Registry RunOnce Key Value Set\nid: b585d269-f6ab-4f38-a982-9c7dddf7adaa\nstatus: experimental\ndescription: >-\n  Detects a value being set under a CurrentVersion\\RunOnce registry key,\n  consistent with the RunOnce-based persistence used by the Pulsar RAT\n  campaign for both system-wide and per-user autostart execution.\n  RunOnce keys are used by fewer legitimate installers than the standard\n  Run key, but some deployment and update tooling still uses them for\n  reboot-continuation actions, so this is a broad technique-level lead\n  rather than a family-specific signature.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/PULSAR-RAT-detections/\nauthor: The Hunters Ledger\ndate: '2025-12-01'\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1547.001\n    - detection.emerging-threats\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection:\n        TargetObject|contains: '\\CurrentVersion\\RunOnce\\'\n    filter_main_restart_manager:\n        Image: 'C:\\Windows\\System32\\csrss.exe'\n        TargetObject|contains: '\\RunOnce\\Application Restart #'\n    filter_main_edge_installer_cleanup:\n        Image|startswith:\n            - 'C:\\Program Files\\Microsoft\\Edge\\Application\\'\n            - 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\'\n            - 'C:\\Program Files\\Microsoft\\EdgeWebView\\Application\\'\n            - 'C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\'\n        Image|endswith: '\\Installer\\setup.exe'\n    condition: selection and not 1 of filter_main_*\nfalsepositives:\n    - >-\n      Software installers and deployment/update tooling that use\n      RunOnce for legitimate reboot-continuation actions, most often\n      MSI-based driver and application installers invoked through\n      msiexec.exe, which is deliberately not filtered because it is\n      also a living-off-the-land binary for delivering attacker-\n      controlled MSI packages\nlevel: medium",
+        "to_ids": false,
+        "comment": "Registry RunOnce Key Value Set | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1547.001 | rule hash 7d734ead | https://the-hunters-ledger.com/hunting-detections/PULSAR-RAT-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "df8da817-bfe6-53d5-bc39-8076e1ee32e0",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Windows Recovery Environment OEM Directory File Write\nid: 7845b2e3-1dea-4acf-8571-4ca3bc1981bc\nstatus: experimental\ndescription: >-\n  Detects a file being written into the Recovery\\OEM directory,\n  consistent with abuse of the Windows Recovery Environment (WinRE) for\n  persistence that survives standard registry-based remediation. This\n  path is not routinely written to outside OEM factory-imaging or\n  recovery-partition maintenance workflows.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/PULSAR-RAT-detections/\n    - https://the-hunters-ledger.com/reports/PULSAR-RAT/\nauthor: The Hunters Ledger\ndate: '2025-12-01'\ntags:\n    - attack.persistence\n    - attack.stealth\n    - attack.t1542.001\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: windows\ndetection:\n    selection:\n        TargetFilename|contains: '\\Recovery\\OEM\\'\n    condition: selection\nfalsepositives:\n    - >-\n      OEM factory-imaging or system-recovery tooling that legitimately\n      writes into the Recovery\\OEM path during authorized re-imaging or\n      recovery-partition maintenance\nlevel: high",
+        "to_ids": true,
+        "comment": "Windows Recovery Environment OEM Directory File Write | TIER: Detection | robustness 3 | confidence HIGH (string/path evidence is direct); underlying WinRE-write behavior itself MODERATE (the companion report rates it \"HIGHLY LIKELY\" rather than fully confirmed dynamically — the capability is inferred from static string evidence, not an independently triggered live partition write) | ATT&CK T1542.001 | rule hash 78174205 | https://the-hunters-ledger.com/hunting-detections/PULSAR-RAT-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "19a77a21-6ffd-5ace-a210-dcbb589cf5bc",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: cmd.exe Launched with Non-Standard /headless Argument\nid: 0d751112-ebbe-497a-af7d-32b4b2672f83\nstatus: experimental\ndescription: >-\n  Detects a cmd.exe command line carrying a /headless argument. cmd.exe\n  has no native /headless switch, so the string only appears where an\n  operator or script author placed it deliberately. The companion\n  conhost --headless selector was removed: ConPTY is now the standard\n  mechanism Windows Terminal, VS Code, SSH, WSL and most Electron-based\n  developer tools use to host a console, and measured telemetry showed\n  that branch firing exclusively on signed Microsoft conhost.exe spawned\n  by mainstream tooling.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/PULSAR-RAT-detections/\nauthor: The Hunters Ledger\ndate: '2025-12-01'\nmodified: '2026-08-07'\ntags:\n    - attack.stealth\n    - attack.t1564.003\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        CommandLine|contains|all:\n            - 'cmd.exe'\n            - '/headless'\n    condition: selection\nfalsepositives:\n    - >-\n      Not observed in production telemetry to date. A script or\n      documentation example referencing the literal string \"/headless\"\n      next to \"cmd.exe\" without executing it as a real argument could\n      still match\nlevel: low",
+        "to_ids": false,
+        "comment": "cmd.exe Launched with Non-Standard /headless Argument | TIER: Hunting | robustness 1 | confidence LOW | ATT&CK T1564.003 | rule hash 23360927 | https://the-hunters-ledger.com/hunting-detections/PULSAR-RAT-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "96d83024-4e24-5e4b-893a-9d2e9c351dc5",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "/*\n   Yara Rule Set\n   Identifier: Pulsar RAT (server.exe)\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule RAT_Pulsar_Critical_Variant {\n   meta:\n      description = \"Detects the Pulsar RAT .NET remote access trojan (server.exe) via a six-string combination anchored on its Pulsar.Common namespace root, HVNC/keylogger/credential modules, and WinRE Recovery\\\\OEM persistence path reference, combined with a PE32 filesize constraint calibrated to the analyzed 1.5MB build\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/PULSAR-RAT-detections/\"\n      date = \"2025-12-01\"\n      hash1 = \"2c4387ce18be279ea735ec4f0092698534921030aaa69949ae880e41a5c73766\"\n      hash2 = \"dc795961c8e63782fc0f53c08e7ca2e593df99fa\"\n      hash3 = \"b5491b58348600c2766f86a5af2b867f\"\n      family = \"Pulsar RAT\"\n      malware_type = \"RAT\"\n      campaign = \"PULSAR-RAT-185.208.159.182\"\n      id = \"fbc88eb4-454c-56dd-82cb-c3ff718f7291\"\n   strings:\n      $pulsar = \"Pulsar.Common\" ascii wide\n      $hvnc = \"HVNC\" ascii wide fullword\n      $keylog = \"KeyLogger\" ascii wide fullword\n      $msgpack = \"MessagePackSerializer\" ascii wide\n      $bcrypt = \"BCryptEncrypt\" ascii wide fullword\n      $winre = \"Recovery\\\\OEM\\\\\" ascii wide nocase\n      $remote_desktop = \"RemoteDesktop\" ascii wide fullword\n      $passwords = \"Passwords\" ascii wide fullword\n   condition:\n      uint16(0) == 0x5A4D and\n      uint32(uint32(0x3C)) == 0x00004550 and\n      filesize > 1MB and filesize < 2MB and\n      all of ($pulsar, $hvnc, $keylog, $msgpack, $bcrypt, $winre) and\n      2 of ($remote_desktop, $passwords)\n}",
+        "to_ids": true,
+        "comment": "Pulsar RAT Namespace + Module String Combination | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1219 | rule hash 6fea60d0 | https://the-hunters-ledger.com/hunting-detections/PULSAR-RAT-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      }
+    ],
+    "Object": []
+  }
+}

@@ -1,0 +1,180 @@
+{
+  "Event": {
+    "uuid": "cf5676b3-13f1-5946-9f45-c9aa21c9bdba",
+    "info": "NsMiner: Multi-Stage Cryptojacking Operation",
+    "date": "2026-02-05",
+    "threat_level_id": 1,
+    "analysis": 2,
+    "timestamp": 1791580400,
+    "publish_timestamp": 1791580400,
+    "published": true,
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Cryptojacking\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Dropper\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Persistence\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Evasion\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"File Transfer Protocols - T1071.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Resource Hijacking - T1496\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "Attribute": [
+      {
+        "uuid": "a617ee77-24a3-55c1-8407-e1c4f7614e90",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/hunting-detections/nsminer-cryptojacker-detections/",
+        "to_ids": false,
+        "comment": "Detection rules, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "9ca165e9-7949-539d-945d-5aaea60d64fe",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/ioc-feeds/nsminer-cryptojacker.json",
+        "to_ids": false,
+        "comment": "IOC feed (JSON), The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "ce7b8408-0cdf-586d-880c-03ddc4b7e215",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/reports/nsminer-cryptojacker/",
+        "to_ids": false,
+        "comment": "Report, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "e6392661-b78d-580d-9c34-6dcc16a4b5c2",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/stix/nsminer-cryptojacker.json",
+        "to_ids": false,
+        "comment": "STIX 2.1 bundle, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "2f5014ea-e1b3-5df5-8c25-59edd7fade49",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "hrtests.ru",
+        "to_ids": true,
+        "comment": "domain: hrtests.ru [confidence 60/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "7dc0f110-085b-5da0-b092-9816c9dbb26e",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "testswork.ru",
+        "to_ids": true,
+        "comment": "domain: testswork.ru [confidence 60/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "b7ba4b4f-c13f-507e-bf01-1b9ef8772df2",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://hrtests.ru/S.php",
+        "to_ids": true,
+        "comment": "url: http://hrtests.ru/S.php [confidence 60/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "fe366ae6-9ab8-54df-a049-f46b550b5841",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: NsMiner Persistence Directory Creation\nid: 4ecdd6e1-c381-4c53-a92f-a1e688accdfb\nstatus: experimental\ndescription: >-\n  Detects creation of a file within the NsMiner cryptojacker's persistence\n  directory in %AppData%\\Roaming. The directory name is derived from the\n  malware family's own branding and is not a location used by legitimate\n  software.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/nsminer-cryptojacker-detections/\nauthor: The Hunters Ledger\ndate: 2026-02-02\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1547.001\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: file_event\ndetection:\n    selection:\n        TargetFilename|contains: '\\AppData\\Roaming\\NsMiner\\'\n    condition: selection\nfalsepositives:\n    - >-\n      Unlikely — no legitimate software has been observed creating a\n      directory literally named NsMiner under %AppData%\\Roaming\nlevel: medium",
+        "to_ids": false,
+        "comment": "NsMiner Persistence Directory Creation | TIER: Hunting | robustness 1 | confidence HIGH (directory-creation behavior); MODERATE for the T1547.001 sub-technique mapping specifically. | ATT&CK T1547.001 | rule hash 57bf4361 | https://the-hunters-ledger.com/hunting-detections/nsminer-cryptojacker-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "e2098592-3fa2-504c-90e6-0db4cc2605c1",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Suspicious FTP Connection from Non-Standard Application\nid: ef8bac38-0045-4f03-abe3-dcd7c1389be7\nstatus: experimental\ndescription: >-\n  Detects outbound network connections to TCP port 21 (FTP) initiated by\n  processes other than common legitimate FTP clients. Observed as the\n  transport used by the NsMiner cryptojacker's tftp.exe downloader\n  component, which conducts credential-stuffing attacks against FTP\n  servers to stage payloads; this is a broad heuristic that also fires\n  on other applications using FTP for unrelated, legitimate purposes.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/nsminer-cryptojacker-detections/\nauthor: The Hunters Ledger\ndate: 2026-02-02\ntags:\n    - attack.command-and-control\n    - attack.t1071.002\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: network_connection\ndetection:\n    selection:\n        DestinationPort: 21\n        Initiated: 'true'\n    filter:\n        Image|endswith:\n            - '\\filezilla.exe'\n            - '\\winscp.exe'\n            - '\\explorer.exe'\n    condition: selection and not filter\nfalsepositives:\n    - >-\n      Legitimate FTP clients not covered by the filter exclusion list,\n      including the built-in Windows ftp.exe command-line client, browser\n      FTP support, and backup or file-sync software using FTP transport\n    - >-\n      Scripts, scheduled tasks, or automation tooling that use FTP for\n      legitimate file transfer\nlevel: medium",
+        "to_ids": false,
+        "comment": "Suspicious FTP Connection from Non-Standard Application | TIER: Hunting | robustness 2 | confidence HIGH for the technique pattern; the rule is a generic FTP-usage heuristic, not family-specific. | ATT&CK T1071.002 | rule hash 68a59b70 | https://the-hunters-ledger.com/hunting-detections/nsminer-cryptojacker-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "c2234051-0507-5b2d-bda7-509ae7ff649a",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "/*\n   Yara Rule Set\n   Identifier: NsMiner Cryptojacker\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule NsMiner_Dropper_Downloader {\n   meta:\n      description = \"Detects the NsMiner NSIS dropper (IMG001.exe) via its Nullsoft installer marker paired with the NsMiner branding string, and/or the FTP downloader component (tftp.exe) via its FTP/WinINet API usage combined with the hardcoded C2 URL and FTP credential strings\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/nsminer-cryptojacker-detections/\"\n      date = \"2026-02-02\"\n      hash1 = \"e06aa8ce984b22dd80a60c1f818b781b05d1c07facc91fec8637b312a728c145\"\n      hash2 = \"40fe74d3a1116ed8ca64c62feb694327a414059eeaef62c28bc5917e2e991b3d\"\n      family = \"NsMiner\"\n      malware_type = \"Cryptojacker\"\n      campaign = \"NsMiner-125.19.150.122-Cryptojacking\"\n      id = \"2c885404-1e39-5625-8669-655511ea27a5\"\n   strings:\n      // From IMG001.exe (NSIS Dropper)\n      $nsis1 = \"Nullsoft Scriptable Install System\" fullword ascii\n      $nsis2 = \"NsMiner\" fullword wide\n\n      // From tftp.exe (Downloader)\n      $ftp1 = \"FtpGetFileA\" fullword ascii\n      $ftp2 = \"InternetConnectA\" fullword ascii\n      $c2_http = \"http://hrtests.ru/S.php\" fullword ascii\n      $c2_ftp_user = \"DIOSESFIEL\" fullword ascii\n      $c2_ftp_pass = \"BLUEAIRWOLF\" fullword ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      (\n         (all of ($nsis*)) or\n         (2 of ($ftp*) and 2 of ($c2*))\n      )\n}",
+        "to_ids": true,
+        "comment": "NsMiner_Dropper_Downloader | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1105, T1071.002 | rule hash 1bb42458 | https://the-hunters-ledger.com/hunting-detections/nsminer-cryptojacker-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "ec13a434-5b0d-59e7-9af7-fb9cae95c34c",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule NsMiner_Persistence_Directory {\n   meta:\n      description = \"Detects PE files referencing the NsMiner persistence directory path in AppData\\\\Roaming combined with one of the family's shipped component filenames (the CryptoNight miner binaries or the FTP downloader)\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/nsminer-cryptojacker-detections/\"\n      date = \"2026-02-02\"\n      family = \"NsMiner\"\n      malware_type = \"Cryptojacker\"\n      campaign = \"NsMiner-125.19.150.122-Cryptojacking\"\n      id = \"cb48acba-6ef6-5170-9fac-a711dd034878\"\n   strings:\n      $path1 = \"\\\\AppData\\\\Roaming\\\\NsMiner\\\\\" wide ascii\n      $path2 = \"C:\\\\Users\\\\\" wide ascii\n      $file1 = \"NsCpuCNMiner32.exe\" fullword wide ascii\n      $file2 = \"NsCpuCNMiner64.exe\" fullword wide ascii\n      $file3 = \"tftp.exe\" fullword wide ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 10MB and\n      ($path1 and $path2 and ($file1 or $file2 or $file3))\n}",
+        "to_ids": true,
+        "comment": "NsMiner_Persistence_Directory | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1496 | rule hash b41eaaf7 | https://the-hunters-ledger.com/hunting-detections/nsminer-cryptojacker-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      }
+    ],
+    "Object": []
+  }
+}

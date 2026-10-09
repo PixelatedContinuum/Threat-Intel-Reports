@@ -15,6 +15,28 @@ redirect_from:
   <div class="hl-page-header__desc">Structured feeds ready for ingestion into your SIEM, EDR, or CTI platform. Licensed under <strong>CC BY 4.0</strong>. Already holding an indicator? Search it below to find the feed it belongs to.</div>
 </div>
 
+<details class="hl-feed">
+  <summary class="hl-feed__toggle">
+    <span aria-hidden="true">📡</span>
+    <span>Subscribe as a MISP feed (MISP, OpenCTI)</span>
+    <span class="hl-feed__chev" aria-hidden="true">▾</span>
+  </summary>
+  <div class="hl-feed__body">
+    <p class="hl-feed__desc">Every published campaign as one MISP event, carrying its indicators, its Suricata, YARA and Sigma rules, its CVEs and ATT&amp;CK galaxy tags. Static files in the MISP feed format: MISP pulls it natively and OpenCTI reads it through its MISP feed connector. Free under <strong>CC BY 4.0</strong>.</p>
+    <div class="hl-feed__cmd">
+      <code id="hl-misp-cmd">https://the-hunters-ledger.com/feeds/misp/</code>
+      <button type="button" class="hl-feed__copy" onclick="navigator.clipboard.writeText(document.getElementById('hl-misp-cmd').textContent);var b=this;b.textContent='Copied';setTimeout(function(){b.textContent='Copy';},1500);">Copy</button>
+    </div>
+    <p class="hl-feed__note">In MISP: Sync Actions, List Feeds, Add Feed, source format <strong>MISP feed</strong>, that URL. In OpenCTI: the <code>connector-misp-feed</code> connector with <code>MISP_FEED_URL</code> set to it.</p>
+    <div class="hl-feed__links">
+      <a href="/feeds/misp/">How to subscribe and what an event carries →</a>
+      <a href="/feeds/misp/manifest.json">manifest.json →</a>
+      <a href="/feeds/misp/changelog/">Changelog &amp; withdrawn events →</a>
+      <span class="hl-feed__meta">Auto-updates as campaigns publish</span>
+    </div>
+  </div>
+</details>
+
 <div class="hl-iocsearch">
   <textarea class="hl-iocsearch__in" rows="2" spellcheck="false" autocomplete="off"
     placeholder="Paste one indicator, or a whole list. IPs, domains, URLs and hashes, separated by commas, spaces or newlines."

@@ -1,0 +1,275 @@
+{
+  "Event": {
+    "uuid": "f5f6f585-f601-5e0c-a7bc-b9e973ed73f0",
+    "info": "Arsenal-237: FleetAgentFUD.exe",
+    "date": "2026-01-15",
+    "threat_level_id": 2,
+    "analysis": 2,
+    "timestamp": 1791580400,
+    "publish_timestamp": 1791580400,
+    "published": true,
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Dropper\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Evasion\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Owner/User Discovery - T1033\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Resource Name or Location - T1036.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Injection - T1055\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Information Discovery - T1082\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Clipboard Data - T1115\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Shared Modules - T1129\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Malicious File - T1204.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "Attribute": [
+      {
+        "uuid": "4cbb1cb0-5bda-551e-a27c-278223f4ede3",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/",
+        "to_ids": false,
+        "comment": "Detection rules, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "bff9a511-5762-5682-8d10-95ad1a3e15e3",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/ioc-feeds/fleetagentfud-exe.json",
+        "to_ids": false,
+        "comment": "IOC feed (JSON), The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "ffaf6d3e-05bf-5290-ada6-8039fdf09172",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT FleetAgentFUD X-Agent-Secret WebSocket Authentication Header (Custom C2 Protocol Indicator)\"; flow:established,to_server; http.header_names; content:\"X-Agent-Secret\"; reference:url,the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/; classtype:trojan-activity; sid:2100022; rev:2; metadata:author The_Hunters_Ledger, date 2026-01-12;)",
+        "to_ids": true,
+        "comment": "FleetAgentFUD X-Agent-Secret WebSocket Authentication Header | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1071.001 | rule hash 95d99bec | https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "8e3368b2-5e7f-5eb7-9a99-3611b2da90d8",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT FleetAgentFUD Default .NET WebClient User-Agent + WebSocket Upgrade (Custom C2 Client Indicator)\"; flow:established,to_server; http.user_agent; content:\"Mozilla/4.0 (compatible|3b| MSIE 6.0|3b| Windows NT 5.2|3b| .NET CLR\"; http.header; content:\"Connection|3a 20|Upgrade\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/; classtype:trojan-activity; sid:2100023; rev:2; metadata:author The_Hunters_Ledger, date 2026-01-12;)",
+        "to_ids": false,
+        "comment": "FleetAgentFUD Default .NET WebClient User-Agent + WebSocket Upgrade | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1071.001 | rule hash ad65c90f | https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "4a85424a-d293-5582-aac2-3952e7f0f53d",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: FleetAgentFUD File Download to Suspicious Locations\nid: 85477610-82e0-4256-8906-3fe3109937eb\nstatus: experimental\ndescription: Detects executable file creation in Public/Temp folders from AppData processes (FleetAgentFUD payload download)\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\nlogsource:\n    product: windows\n    category: file_event\ndetection:\n    selection_file:\n        TargetFilename|contains:\n            - 'C:\\Users\\Public\\'\n            - 'C:\\Windows\\Temp\\'\n        TargetFilename|endswith:\n            - '.exe'\n            - '.dll'\n            - '.scr'\n    selection_process:\n        Image|contains: '\\AppData\\'\n    condition: selection_file and selection_process\nfalsepositives:\n    - Software installers extracting temporary files\n    - Update mechanisms using Public/Temp folders (common for AppData-rooted auto-updaters)\nlevel: medium\ntags:\n    - attack.execution\n    - attack.t1204.002\n    - attack.command-and-control\n    - attack.t1105\n    - detection.emerging-threats",
+        "to_ids": false,
+        "comment": "FleetAgentFUD File Download to Suspicious Locations | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1105, T1204.002 | rule hash 4ddb6514 | https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "1d6e921d-d391-513b-9758-163ae39caca6",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: FleetAgentFUD Multi-Stage Attack Pattern Correlation\nid: cfe3cad4-9134-4d9e-8681-3199404e6170\nstatus: experimental\ndescription: >-\n  Detects PowerShell launched with an execution-policy bypass from a parent process\n  running under AppData. Functionally a broader subset of the Detection-tier\n  PowerShell Execution Policy Bypass from AppData rule (minus its hidden-window\n  requirement) — not an actual multi-source correlation, since Sigma's single-event-source\n  model cannot express the original three-stage (process + network + PowerShell)\n  design across separate log sources.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection_powershell:\n        Image|endswith: '\\powershell.exe'\n        CommandLine|contains: '-Exec Bypass'\n    selection_parent:\n        ParentImage|contains: '\\AppData\\'\n    condition: selection_powershell and selection_parent\nfalsepositives:\n    - Complex legitimate software launching PowerShell from user directories\n    - Broader population than the Detection-tier sibling rule (no hidden-window corroborator)\nlevel: medium\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - detection.emerging-threats",
+        "to_ids": false,
+        "comment": "FleetAgentFUD PowerShell Bypass from AppData Parent (Broad Variant) | TIER: Hunting | robustness 2 | confidence LOW | ATT&CK T1059.001 | rule hash f10f4fc1 | https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "c798ea88-a9a6-5dd5-ac44-b7a7163995bc",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: FleetAgentFUD PowerShell Execution Policy Bypass from AppData\nid: 662e65e5-b424-40e0-9630-af1d2ccf3b3f\nstatus: experimental\ndescription: Detects PowerShell execution with Execution Policy bypass from suspicious AppData locations (FleetAgentFUD RAT pattern)\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\nmodified: '2026-08-07'\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection_powershell:\n        Image|endswith: '\\powershell.exe'\n        CommandLine|contains|all:\n            - '-Exec'\n            - 'Bypass'\n    selection_parent:\n        ParentImage|contains: '\\AppData\\'\n    selection_hidden:\n        CommandLine|contains:\n            - '-W Hidden'\n            - '-WindowStyle Hidden'\n    filter_appx_management:\n        CommandLine|contains:\n            - 'Get-AppxPackage'\n            - 'Add-AppxPackage'\n            - 'Remove-AppxPackage'\n    condition: selection_powershell and selection_parent and selection_hidden and not filter_appx_management\nfalsepositives:\n    - Legitimate software installers using PowerShell from AppData (verify digital signature)\n    - Administrative scripts executed from user directories (review context)\n    - >-\n      AppX/MSIX package management invoked as a documented step inside a\n      self-updater's install flow, such as VS Code's\n      Get-AppxPackage/Add-AppxPackage/Remove-AppxPackage cleanup. Excluded at\n      source by filter_appx_management.\n    - >-\n      Squirrel- and Electron-style auto-updaters more generally (VS Code,\n      Discord, Slack, GitHub Desktop). These stage under %LocalAppData% and\n      launch a hidden bypass PowerShell as their normal update path, which is\n      the same four-condition shape this rule selects on. Only the AppX-cmdlet\n      subset is excluded at source; the rest still require local scoping.\nlevel: medium\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - attack.stealth\n    - attack.t1685\n    - attack.defense-impairment\n    - detection.emerging-threats",
+        "to_ids": false,
+        "comment": "FleetAgentFUD PowerShell Execution Policy Bypass from AppData | TIER: Hunting | robustness 2 | confidence LOW | ATT&CK T1059.001, T1685 | rule hash 5e68f602 | https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "9907e904-198b-50c4-9c4b-bd1fa5dbee50",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: FleetAgentFUD RWX Memory Allocation from .NET Executable\nid: 1e04bbc1-1f12-41c7-a11d-0cc31e963f60\nstatus: experimental\ndescription: Detects VirtualProtect API calls with RWX permissions from .NET executables (shellcode execution indicator)\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\nlogsource:\n    product: windows\n    category: api_call\ndetection:\n    selection:\n        CallTrace|contains: 'VirtualProtect'\n        Protection: 'PAGE_EXECUTE_READWRITE'\n        Image|contains: '\\AppData\\'\n    filter_legitimate:\n        Image|startswith:\n            - 'C:\\Program Files\\'\n            - 'C:\\Windows\\'\n    condition: selection and not filter_legitimate\nfalsepositives:\n    - .NET Just-In-Time (JIT) compilation (a normal, frequent part of CLR operation, not a rare exception)\n    - Legitimate .NET applications using dynamic code generation\nlevel: medium\ntags:\n    - attack.stealth\n    - attack.privilege-escalation\n    - attack.t1055\n    - detection.emerging-threats",
+        "to_ids": false,
+        "comment": "FleetAgentFUD RWX Memory Allocation from .NET Executable | TIER: Hunting | robustness 2 | confidence LOW | ATT&CK T1055 | rule hash b72c26b9 | https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "2c9474b0-8624-5be9-9423-b7624da1b408",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: FleetAgentFUD Rapid System Reconnaissance Command (Base Rule)\nid: 1316ab23-3a9b-40e7-a037-2ec3c4535404\nname: fleetagentfud_recon_command\nstatus: experimental\ndescription: >-\n  Base rule (not alerting on its own): a single system reconnaissance command\n  (sysinfo, processes, network, users, disk) typical of FleetAgentFUD automated\n  profiling, launched from a parent process rooted in AppData, Temp, or\n  Users\\Public — the FleetAgentFUD staging locations. Paired with the companion\n  Rapid System Reconnaissance Pattern correlation rule below, which flags 3 or\n  more distinct recon commands from the same host in a short window.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection_powershell:\n        Image|endswith: '\\powershell.exe'\n        CommandLine|contains:\n            - 'Get-WmiObject Win32_'\n            - 'Get-Process'\n            - 'Get-LocalUser'\n            - 'ipconfig /all'\n            - 'Win32_LogicalDisk'\n    selection_parent:\n        ParentImage|contains:\n            - '\\AppData\\'\n            - '\\Temp\\'\n            - '\\Users\\Public\\'\n    condition: selection_powershell and selection_parent\nfalsepositives:\n    - >-\n      System administration scripts launched from AppData/Temp (e.g. installer\n      post-run steps). Not alerting on its own; reviewed only in combination with\n      the correlation rule.\n    - IT inventory tools staged in Temp during deployment\nlevel: informational\ntags:\n    - attack.discovery\n    - attack.t1082\n    - attack.t1033\n    - detection.emerging-threats\n---\ntitle: FleetAgentFUD Rapid System Reconnaissance Pattern\nid: a7b8c9d0-a1b2-4c3d-9e4f-56a7b8c9d0e7\nstatus: experimental\ndescription: >-\n  Correlates 3 or more distinct system reconnaissance commands (sysinfo, processes,\n  network, users, disk) from the same host within a short window, typical of\n  FleetAgentFUD automated profiling. Individual commands are routine IT-administration\n  commands; the correlation adds real but limited scoping value.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ncorrelation:\n    type: event_count\n    rules:\n        - fleetagentfud_recon_command\n    group-by:\n        - ComputerName\n    timespan: 5m\n    condition:\n        gte: 3\nfalsepositives:\n    - System administration scripts\n    - IT inventory tools\nlevel: medium\ntags:\n    - attack.discovery\n    - attack.t1082\n    - attack.t1033\n    - detection.emerging-threats",
+        "to_ids": false,
+        "comment": "FleetAgentFUD Rapid System Reconnaissance (Correlation) | TIER: Hunting | robustness 2 | confidence LOW | ATT&CK T1082, T1033 | rule hash 0ceece95 | https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "ec1ef8e1-35ca-5ab9-8fc3-f3d918063da3",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: PowerShell Get-Clipboard Script Block Execution (Base Rule)\nid: b8eb1824-6711-4e88-ab71-46b63250b1a5\nstatus: experimental\ndescription: >-\n  Base rule (not alerting on its own): a single PowerShell Get-Clipboard script\n  block execution. Paired with the companion FleetAgentFUD Repeated Clipboard\n  Monitoring correlation rule below, which flags repeated executions indicating\n  clipboard data theft.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n    - attack.collection\n    - attack.t1115\n    - detection.emerging-threats\n\nlogsource:\n    product: windows\n    category: ps_script\ndetection:\n    selection:\n        ScriptBlockText|contains: 'Get-Clipboard'\n    condition: selection\nfalsepositives:\n    - >-\n      Legitimate clipboard management tools and user productivity automation scripts.\n      Not alerting on its own; reviewed only in combination with the correlation rule.\nlevel: informational\nname: powershell_get_clipboard_execution\n---\ntitle: FleetAgentFUD Repeated Clipboard Monitoring Correlation\nid: 75c96f1a-c463-4961-851e-a4ec93b4e5d1\nstatus: experimental\ndescription: >-\n  Correlates 10 or more PowerShell Get-Clipboard script block executions by the\n  same computer and user within one hour, indicating clipboard data theft\n  (FleetAgentFUD credential theft technique). Get-Clipboard is a legitimate,\n  non-renameable cmdlet name, giving this correlation real technique-level\n  durability beyond a simple literal match.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n    - attack.collection\n    - attack.t1115\n    - detection.emerging-threats\ncorrelation:\n    type: event_count\n    rules:\n        - powershell_get_clipboard_execution\n    group-by:\n        - ComputerName\n        - User\n    timespan: 1h\n    condition:\n        gte: 10\nfalsepositives:\n    - Legitimate clipboard management tools\n    - User productivity automation scripts (verify legitimacy)\nlevel: high",
+        "to_ids": true,
+        "comment": "FleetAgentFUD Repeated Clipboard Monitoring (Correlation) | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1115 | rule hash 847640af | https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "8ad22302-e250-5bb8-b231-9f737a741645",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "/*\n   Yara Rule Set\n   Identifier: Arsenal-237-109.230.231.37-Malware-Repository\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule FleetAgentFUD_WebSocket_C2_Pattern {\n   meta:\n      description = \"Detects FleetAgentFUD.exe WebSocket C2 implementation via protocol strings, RAT-style JSON registration fields, and the bespoke X-Agent-Secret authentication header. RFC 6455 handshake strings alone are shared by legitimate WebSocket applications — the X-Agent-Secret branch is the only high-confidence path.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/\"\n      date = \"2026-01-12\"\n      family = \"FleetAgentFUD\"\n      malware_type = \"RAT\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"ec392648-d132-4110-b47b-9e53d28f481d\"\n      hash1 = \"072ce701ec0252eeddd6a0501555296bce512a7b90422addbb6d3619ae10f4ff\"\n   strings:\n      // WebSocket handshake headers\n      $ws1 = \"Connection: Upgrade\" ascii wide\n      $ws2 = \"Sec-WebSocket-Key: \" ascii wide\n      $ws3 = \"Sec-WebSocket-Version: 13\" ascii wide\n      $ws4 = \"X-Agent-Secret: \" ascii wide\n\n      // WebSocket message types\n      $msg1 = \"\\\"type\\\":\\\"register\\\"\" ascii wide nocase\n      $msg2 = \"\\\"type\\\":\\\"heartbeat\\\"\" ascii wide nocase\n      $msg3 = \"machine_id\" ascii wide\n      $msg4 = \"hostname\" ascii wide\n      $msg5 = \"os_version\" ascii wide\n      $msg6 = \"agent_ver\" ascii wide\n\n      // Command types\n      $cmd1 = \"cmd_type\" ascii wide\n      $cmd2 = \"command_id\" ascii wide\n      $cmd3 = \"powershell\" ascii wide\n      $cmd4 = \"sysinfo\" ascii wide\n      $cmd5 = \"clipboard\" ascii wide\n\n      // .NET networking APIs\n      $api1 = \"System.Net.Sockets\" ascii\n      $api2 = \"TcpClient\" ascii\n      $api3 = \"NetworkStream\" ascii\n\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 50KB and\n      (\n         // Moderate match: generic WebSocket headers + registration fields (broad — see Rationale)\n         (3 of ($ws*) and 3 of ($msg*)) or\n\n         // Moderate match: WebSocket + command types\n         (2 of ($ws*) and 3 of ($cmd*)) or\n\n         // Higher confidence: bespoke X-Agent-Secret header required (all of $ws*) + .NET networking\n         (all of ($ws*) and any of ($api*))\n      )\n}",
+        "to_ids": false,
+        "comment": "FleetAgentFUD WebSocket C2 Signatures | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1071.001 | rule hash bf64fdcd | https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "da0bc75d-5098-58a0-8f59-fc7bc96d4130",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule FleetAgentFUD_FUD_RAT_Behavioral_Pattern {\n   meta:\n      description = \"Detects FUD RAT behavioral characteristics via a three-category combination: clipboard access, WebSocket usage, PowerShell execution, system reconnaissance, and file download. Each individual string is a common single word or short API reference — the three-category combination provides broad triage value, not high-confidence detection.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/\"\n      date = \"2026-01-12\"\n      family = \"FleetAgentFUD\"\n      malware_type = \"RAT\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"e123e941-8ccf-4856-abcd-b0e4e58da577\"\n   strings:\n      // Clipboard monitoring\n      $clip1 = \"Get-Clipboard\" ascii wide\n      $clip2 = \"clipboard\" ascii wide nocase\n\n      // WebSocket indicators\n      $ws1 = \"Sec-WebSocket-Key\" ascii wide\n      $ws2 = \"Connection: Upgrade\" ascii wide\n\n      // PowerShell execution\n      $ps1 = \"powershell\" ascii wide nocase\n      $ps2 = \"-Exec Bypass\" ascii wide\n      $ps3 = \"-ExecutionPolicy Bypass\" ascii wide\n\n      // System reconnaissance\n      $recon1 = \"sysinfo\" ascii wide\n      $recon2 = \"processes\" ascii wide\n      $recon3 = \"network\" ascii wide\n      $recon4 = \"users\" ascii wide\n\n      // File download capability\n      $dl1 = \"DownloadFile\" ascii wide\n      $dl2 = \"WebClient\" ascii wide\n\n      // Hidden window execution\n      $hide1 = \"ShowWindow\" ascii\n      $hide2 = \"WindowStyle Hidden\" ascii wide\n\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 50KB and // FUD optimization: small file size\n      (\n         // Clipboard + WebSocket + PowerShell\n         (any of ($clip*) and any of ($ws*) and any of ($ps*)) or\n\n         // WebSocket + Reconnaissance + Download\n         (any of ($ws*) and 2 of ($recon*) and any of ($dl*)) or\n\n         // PowerShell + Clipboard + Hidden Window\n         (any of ($ps*) and any of ($clip*) and any of ($hide*))\n      )\n}",
+        "to_ids": false,
+        "comment": "FleetAgentFUD FUD RAT Behavioral Pattern | TIER: Hunting | robustness 1 | confidence LOW | ATT&CK T1115, T1071.001, T1059.001, T1105, T1082 | rule hash 6b07322e | https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "9c081f6a-cafc-5850-970d-580dbeb0d64d",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule FleetAgentFUD_PowerShell_Bypass {\n   meta:\n      description = \"Detects FleetAgentFUD.exe PowerShell Execution Policy bypass command-line strings embedded in a .NET binary. The two exact-literal branches are distinctive; the third (bare powershell + bypass flag + hidden-window flag) overlaps with legitimate silent-installer PowerShell invocations.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/\"\n      date = \"2026-01-12\"\n      family = \"FleetAgentFUD\"\n      malware_type = \"RAT\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"f2387fca-b7b5-47ea-a65e-cf2b1ccb420b\"\n   strings:\n      // PowerShell bypass command-line\n      $ps1 = \"-NoP -NonI -W Hidden -Exec Bypass -C \" ascii wide\n      $ps2 = \"-NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass\" ascii wide\n\n      // PowerShell command variations\n      $ps3 = \"powershell\" ascii wide nocase\n\n      // Suspicious PowerShell usage combinations\n      $ps5 = \"-Exec Bypass\" ascii wide\n      $ps6 = \"-ExecutionPolicy Bypass\" ascii wide\n      $ps7 = \"-W Hidden\" ascii wide\n\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 100KB and\n      (\n         // Exact bypass string match\n         $ps1 or\n         $ps2 or\n\n         // PowerShell + bypass flags (broader — see Rationale)\n         ($ps3 and ($ps5 or $ps6) and $ps7)\n      )\n}",
+        "to_ids": false,
+        "comment": "FleetAgentFUD PowerShell Execution Policy Bypass Strings | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1685, T1059.001 | rule hash a6ad8ea1 | https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "1a8e5463-0653-5f89-9a2a-c6781e4a98f1",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule FleetAgent_Family_General {\n   meta:\n      description = \"Detects FleetAgent malware family characteristics (FUD and Advanced variants) via the family's own namespace/naming strings, configuration field + version pairing, and Microsoft.NET.Runtime masquerading combined with suspicious APIs. Every branch evades on a rebrand or namespace rename; the version-string branch also risks matching unrelated .NET software.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/\"\n      date = \"2026-01-12\"\n      family = \"FleetAgent\"\n      malware_type = \"RAT\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"dd7bcee3-74e4-407f-bfe5-fe12656ef66c\"\n      related_samples = \"FleetAgentAdvanced.exe, FleetAgentFUD.exe\"\n   strings:\n      // Family naming patterns\n      $name1 = \"FleetAgent\" ascii wide nocase\n      $name2 = \"FleetAgentFUD\" ascii wide\n      $name3 = \"FleetAgentAdvanced\" ascii wide\n      $name4 = \"Microsoft.NET.Runtime\" ascii wide // Common masquerading\n\n      // Agent version strings\n      $ver1 = \"agent_ver\" ascii wide\n      $ver2 = \"3.0.0\" ascii wide\n\n      // Configuration variables\n      $cfg1 = \"machine_id\" ascii wide\n      $cfg2 = \"hostname\" ascii wide\n      $cfg3 = \"agent_ver\" ascii wide\n\n      // Common APIs\n      $api1 = \"VirtualProtect\" ascii\n      $api2 = \"ToBase64String\" ascii\n      $api3 = \"GetProcAddress\" ascii\n\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 500KB and\n      (\n         // Direct family name match\n         any of ($name*) or\n\n         // Configuration + Version pattern (broad — see Rationale)\n         (2 of ($cfg*) and any of ($ver*)) or\n\n         // Microsoft.NET masquerading + suspicious APIs\n         ($name4 and 2 of ($api*))\n      )\n}",
+        "to_ids": false,
+        "comment": "FleetAgent Family Signature | TIER: Hunting | robustness 1 | confidence LOW | ATT&CK T1036.005, T1129 | rule hash 6f40ee11 | https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      }
+    ],
+    "Object": []
+  }
+}

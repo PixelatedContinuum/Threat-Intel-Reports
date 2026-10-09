@@ -1,0 +1,202 @@
+{
+  "Event": {
+    "uuid": "da83550d-5287-5e4b-8325-fdcd93e5018e",
+    "info": "Hybrid Loader/Stealer Ecosystem Masquerading as Sogou",
+    "date": "2025-11-20",
+    "threat_level_id": 1,
+    "analysis": 2,
+    "timestamp": 1791580400,
+    "publish_timestamp": 1791580400,
+    "published": true,
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Loader\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Stealer\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Cred Theft\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Evasion\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Resource Name or Location - T1036.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Debugger Evasion - T1622\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "Attribute": [
+      {
+        "uuid": "fe2e9439-3e8a-5a70-af44-96a41ad94f4d",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/",
+        "to_ids": false,
+        "comment": "Detection rules, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "5bc9f9be-6551-55b3-b555-7826990015d9",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/ioc-feeds/Hybrid-Loader-Stealer-Sogou.json",
+        "to_ids": false,
+        "comment": "IOC feed (JSON), The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "bd6ca7a6-90a8-5c58-a116-da537de1d5ff",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/reports/Hybrid-Loader-Stealer-Sogou/",
+        "to_ids": false,
+        "comment": "Report, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "b96f2467-b148-5193-bce7-cf1ce3776618",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/stix/Hybrid-Loader-Stealer-Sogou.json",
+        "to_ids": false,
+        "comment": "STIX 2.1 bundle, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "52174d05-96af-540c-8f1e-a42a928e09ff",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT SogouStealer-HybridLoader CGI1 C2 URI Pattern (C2 Transport Indicator)\"; flow:established,to_server; http.uri; content:\"/cgi1\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/; classtype:trojan-activity; sid:9300901; rev:2; metadata:author The_Hunters_Ledger, date 2025-11-21;)",
+        "to_ids": false,
+        "comment": "SogouStealer CGI1 C2 URI Pattern | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1071.001 | rule hash 0b58b2fc | https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "7f1318f8-d1de-5215-b4cf-6bc968e3c04b",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: SogouStealer Artifact Drop and Staging\nid: 1d3185d1-08ce-4956-91bd-f4ce70d10a46\nstatus: experimental\ndescription: Detects creation of known component files (loaders, downloaders, network helpers, signature databases) staged to disk by the SogouStealer ecosystem\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/\nauthor: The Hunters Ledger\ndate: '2025-11-21'\ntags:\n    - attack.command-and-control\n    - attack.t1105\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    product: windows\n    category: file_create\ndetection:\n    selection_names:\n        TargetFilename|endswith:\n            - '\\beacon_sdk.dll'\n            - '\\SGDownload.exe'\n            - '\\SGCurlHelper.dll'\n            - '\\userNetSchedule.exe'\n            - '\\UserExportDll.dll'\n            - '\\UrlSignatureV.dat'\n            - '\\pandorabox.cupf'\n            - '\\PersonalCenter.cupf'\n    condition: selection_names\nfalsepositives:\n    - Unlikely; these filenames are specific to this malware ecosystem\nlevel: high",
+        "to_ids": true,
+        "comment": "SogouStealer Artifact Drop and Staging | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1105 | rule hash 3d98d728 | https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "fcc28251-b37f-50da-abca-ad8332acfec9",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: SogouStealer Masquerading NSIS Installer Execution\nid: a078683b-110a-4973-86bb-1666dba668bf\nstatus: experimental\ndescription: Detects execution of suspected NSIS-based fake Sogou installers with cracked-build markers\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/\nauthor: The Hunters Ledger\ndate: '2025-11-21'\ntags:\n    - attack.stealth\n    - attack.t1036.005\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection_image:\n        Image|endswith:\n            - '\\installer.exe'\n            - '\\setup.exe'\n            - '\\install.exe'\n    selection_cmdline:\n        CommandLine|contains:\n            - 'NSIS'\n            - 'Nullsoft'\n            - 'Sogou'\n            - '拼音'\n            - '吾爱破解'\n            - 'v15.1.0.1570'\n    condition: selection_image and selection_cmdline\nfalsepositives:\n    - Legitimate NSIS-based installers whose command line coincidentally references the generic NSIS/Nullsoft build-tool strings\n    - Unlikely for the Chinese-language cracked-build markers or the specific version string, which are not generic NSIS artifacts\nlevel: medium",
+        "to_ids": false,
+        "comment": "SogouStealer Masquerading NSIS Installer Execution | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1036.005 | rule hash e533f085 | https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "62913690-7002-5c0e-9eae-7120441c3510",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: SogouStealer Persistence via Run Keys and LNK Modification\nid: 190b57f6-a8c3-4f45-a39d-ed7340d66b9a\nstatus: experimental\ndescription: Detects registry Run key entries referencing the SogouStealer ecosystem's own component filenames (beacon_sdk.dll, SGDownload.exe, userNetSchedule.exe)\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/\nauthor: The Hunters Ledger\ndate: '2025-11-21'\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1547.001\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    product: windows\n    category: registry_set\ndetection:\n    selection_run:\n        TargetObject|contains:\n            - '\\Software\\Microsoft\\Windows\\CurrentVersion\\Run'\n            - '\\Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce'\n        Details|contains:\n            - 'beacon_sdk.dll'\n            - 'SGDownload.exe'\n            - 'userNetSchedule.exe'\n    condition: selection_run\nfalsepositives:\n    - Unlikely; these filenames are specific to this malware ecosystem\nlevel: high",
+        "to_ids": true,
+        "comment": "SogouStealer Persistence via Run Keys | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1547.001 | rule hash 3b92a0a0 | https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "0ae8cca8-03f9-511d-b54d-433f12cc2dd5",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "/*\n   Yara Rule Set\n   Identifier: Sogou-Hybrid-Loader-Stealer-Ecosystem\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule SogouStealer_Ecosystem_Indicators {\n   meta:\n      description = \"Detects the SogouStealer hybrid loader/stealer ecosystem via a combination of disposable C2 domain fragments, anti-analysis/packing indicators, and its bespoke dropped-component filenames\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/\"\n      date = \"2025-11-21\"\n      hash1 = \"4e987719ab96064594c98b62000612f90fe4c34c08161c290ec3898f100f6891\"\n      hash2 = \"97f5b1508079584568d7f773d166d441097064b4\"\n      hash3 = \"259b7806c2c9cade90acb0f18d940197\"\n      family = \"SogouStealer\"\n      malware_type = \"Loader/Stealer\"\n      campaign = \"Sogou-Hybrid-Loader-Stealer-Ecosystem\"\n      id = \"6e3e7505-6247-5ec2-9df4-6afe7e01a155\"\n   strings:\n      $d1 = \"6.ar\" ascii nocase fullword\n      $d2 = \"J.im\" ascii nocase fullword\n      $d3 = \"5bNG.ar\" ascii nocase fullword\n      $d4 = \"B.tk\" ascii nocase fullword\n      $d5 = \"K.ct\" ascii nocase fullword\n      $d6 = \"Q.ar\" ascii nocase fullword\n      $d7 = \"rlh.cq\" ascii nocase fullword\n      $d8 = \"s0.ndf\" ascii nocase fullword\n      $d9 = \"vpl.gu\" ascii nocase fullword\n      $d10 = \"X.pg\" ascii nocase fullword\n      $tok = \"CGI1\" ascii fullword\n\n      $s1 = \"Sogou Input Method v15.1.0.1570\" wide ascii\n      $s2 = \"get.sogou.com\" ascii\n      $s3 = \"ping.pinyin.sogou.com\" ascii\n\n      $n1 = \"Nullsoft\" ascii\n      $n2 = \"NSIS\" ascii fullword\n      $enc1 = \"CRC32\" ascii fullword\n      $enc2 = \"XOR\" ascii fullword\n\n      $api1 = \"FindWindowExA\" ascii\n      $api2 = \"GetLastError\" ascii\n      $api3 = \"IShellLink\" ascii\n      $vm1  = \"Xen\" ascii fullword\n\n      $f1 = \"beacon_sdk.dll\" ascii\n      $f2 = \"SGDownload.exe\" ascii\n      $f3 = \"SGCurlHelper.dll\" ascii\n      $f4 = \"userNetSchedule.exe\" ascii\n      $f5 = \"UserExportDll.dll\" ascii\n      $f6 = \"UrlSignatureV.dat\" ascii\n      $f7 = \"pandorabox.cupf\" ascii\n      $f8 = \"PersonalCenter.cupf\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 20MB and\n      ( ($d1 or $d2) or (2 of ($d3,$d4,$d5,$d6,$d7,$d8,$d9,$d10)) ) and\n      ( 2 of ($api1,$api2,$api3,$vm1,$n1,$n2,$enc1,$enc2,$tok,$s1,$s2,$s3) ) and\n      ( 1 of ($f1,$f2,$f3,$f4,$f5,$f6,$f7,$f8) )\n}",
+        "to_ids": true,
+        "comment": "SogouStealer Ecosystem Indicators (Combined Fingerprint) | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1036.005 | rule hash 4c60f198 | https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "1b6d98ff-7409-5e4d-9789-7985a7a847e4",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule SogouStealer_C2_Scheduler_SignatureDB {\n   meta:\n      description = \"Detects the SogouStealer scheduler/C2-helper/signature-database component set via a required combination of two or more of its bespoke component filenames and CGI URI marker, surviving a single-component rename\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/\"\n      date = \"2025-11-21\"\n      hash1 = \"4e987719ab96064594c98b62000612f90fe4c34c08161c290ec3898f100f6891\"\n      hash2 = \"97f5b1508079584568d7f773d166d441097064b4\"\n      hash3 = \"259b7806c2c9cade90acb0f18d940197\"\n      family = \"SogouStealer\"\n      malware_type = \"Loader/Stealer\"\n      campaign = \"Sogou-Hybrid-Loader-Stealer-Ecosystem\"\n      id = \"8bf56993-bc5a-5706-b01e-9e8cfbdc970c\"\n   strings:\n      $sched = \"userNetSchedule.exe\" ascii\n      $curl  = \"SGCurlHelper.dll\" ascii\n      $sigdb = \"UrlSignatureV.dat\" ascii\n      $cgi   = \"/cgi1\" ascii fullword\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      2 of ($sched,$curl,$sigdb,$cgi)\n}",
+        "to_ids": true,
+        "comment": "SogouStealer C2 Scheduler and Signature-Database Components | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1071.001 | rule hash e382e30e | https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "1921014a-ac83-5eaa-8e42-a80d3b5000b7",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule SogouStealer_Loader_Downloader {\n   meta:\n      description = \"Detects standalone SogouStealer loader/downloader components (beacon_sdk.dll, SGDownload.exe) paired with anti-debug or overlay-packing indicators; broader and less specific than the combined ecosystem rule\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/\"\n      date = \"2025-11-21\"\n      hash1 = \"4e987719ab96064594c98b62000612f90fe4c34c08161c290ec3898f100f6891\"\n      hash2 = \"97f5b1508079584568d7f773d166d441097064b4\"\n      hash3 = \"259b7806c2c9cade90acb0f18d940197\"\n      family = \"SogouStealer\"\n      malware_type = \"Loader/Stealer\"\n      campaign = \"Sogou-Hybrid-Loader-Stealer-Ecosystem\"\n      id = \"a0f53ba5-82fe-54e4-ad59-f73c8af668a3\"\n   strings:\n      $loader = \"beacon_sdk.dll\" ascii\n      $down   = \"SGDownload.exe\" ascii\n      $anti1  = \"IsDebuggerPresent\" ascii\n      $anti2  = \"QueryPerformanceCounter\" ascii\n      $pack1  = \"overlay\" ascii fullword\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      ( $loader or $down ) and\n      ( 1 of ($anti1,$anti2,$pack1) )\n}",
+        "to_ids": false,
+        "comment": "SogouStealer Loader/Downloader Components | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1622 | rule hash 1742f6ff | https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      }
+    ],
+    "Object": []
+  }
+}

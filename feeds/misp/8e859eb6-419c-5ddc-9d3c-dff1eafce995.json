@@ -1,0 +1,538 @@
+{
+  "Event": {
+    "uuid": "8e859eb6-419c-5ddc-9d3c-dff1eafce995",
+    "info": "OpenStrike Expanded Toolkit — 106 New Files (2026-04-08)",
+    "date": "2026-04-08",
+    "threat_level_id": 1,
+    "analysis": 2,
+    "timestamp": 1791580400,
+    "publish_timestamp": 1791580400,
+    "published": true,
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Toolkit\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"C2\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Injection\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Open Dir\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data from Local System - T1005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information - T1027\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Owner/User Discovery - T1033\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Masquerade Task or Service - T1036.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Name or Location - T1036.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over C2 Channel - T1041\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PE Injection - T1055.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Thread Execution Hijacking - T1055.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Hollowing - T1055.012\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Keylogging - T1056.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Discovery - T1057\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Command Shell - T1059.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"JavaScript - T1059.007\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Information Discovery - T1082\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"File and Directory Discovery - T1083\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Non-Application Layer Protocol - T1095\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Native API - T1106\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Modify Registry - T1112\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Shared Modules - T1129\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data Encoding: Standard Encoding - T1132.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Deobfuscate/Decode Files or Information - T1140\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Rundll32 - T1218.011\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Service - T1543.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Service Execution - T1569.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Protocol Tunneling - T1572\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Encrypted Channel: Symmetric Cryptography - T1573.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Asymmetric Cryptography - T1573.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Develop Capabilities: Malware - T1587.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Reflective Code Loading - T1620\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "Attribute": [
+      {
+        "uuid": "35d49d22-0a3f-5891-878d-077f8172a97b",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/",
+        "to_ids": false,
+        "comment": "Detection rules, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "2dd6d0b2-91fc-5a3d-8c53-96a07a83d398",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/ioc-feeds/new-files-found-20260408-iocs.json",
+        "to_ids": false,
+        "comment": "IOC feed (JSON), The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "f2b4e21d-0b3f-5a1c-b132-fbe754cfbea0",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/reports/new-files-found-20260408/",
+        "to_ids": false,
+        "comment": "Report, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "4209afef-de3c-54db-99a6-0e2e95c1d532",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/stix/new-files-found-20260408.json",
+        "to_ids": false,
+        "comment": "STIX 2.1 bundle, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "423d9bf1-ab59-556d-b77e-b93c59eac0e4",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://172.105.0.126/au2U",
+        "to_ids": true,
+        "comment": "url: http://172.105.0.126/au2U. Stager shellcode download URI (EXE stager, port 80) [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "151a96bf-b911-5595-aec2-28111d4e23b1",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://172.105.0.126/en_US/all.js",
+        "to_ids": true,
+        "comment": "url: http://172.105.0.126/en_US/all.js. beacon80.dll Malleable C2 GET URI (task polling) [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "7c339593-d98f-5ff7-bc19-3ba01ce4960c",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://172.105.0.126/ga.js",
+        "to_ids": true,
+        "comment": "url: http://172.105.0.126/ga.js. Profile B Malleable C2 GET URI, Google Analytics masquerade (3 beacons) [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "cdb20f70-3e71-584b-abe8-6b589fea8cf1",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://172.105.0.126/msI4",
+        "to_ids": true,
+        "comment": "url: http://172.105.0.126/msI4. Stager shellcode download URI (PS1 stager, port 80) [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "d2ecf4eb-d1b4-538b-8ae6-e7ea2ed1da60",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://172.105.0.126/submit.php",
+        "to_ids": true,
+        "comment": "url: http://172.105.0.126/submit.php. beacon80.dll and Profile B Malleable C2 POST URI (output submission) [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "194b69d5-82b7-5c8c-91d5-d6b7ad73ddb9",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://172.105.0.126:809/ga.js",
+        "to_ids": true,
+        "comment": "url: http://172.105.0.126:809/ga.js. Profile B on port 809, debug/sniffer beacon configs [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "3c77ad36-12e6-5db6-8d1a-8b941f4660dd",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "172.105.0.126",
+        "to_ids": true,
+        "comment": "ipv4: 172.105.0.126. Additional C2 listener, debug and sniffer beacon configs (/ga.js) | C2 listener, stagers (/au2U, /msI4) and multiple beacon configs. NOTE: port 8443 C2 already in April 6 feed. | CS team server management port, if externally accessible, additional exposure vector | MODERATE - Linode shared hosting IP; block only in context of associated behavioral indicators [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "a71f0ee3-ff69-5f39-98a7-ca3a6fef2b22",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT Cobalt Strike Malleable C2 BOIE9 IE9 User-Agent Detected\"; flow:established,to_server; http.user_agent; content:\"BOIE9|3B|ENUSSEM)\"; endswith; nocase; reference:url,the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/; classtype:trojan-activity; sid:9002003; rev:2; metadata:author The_Hunters_Ledger, date 2026-04-08;)",
+        "to_ids": false,
+        "comment": "Cobalt Strike Malleable C2 BOIE9 IE9 User-Agent Detected | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1071.001 | rule hash 6f457a41 | https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "550d2a3a-98bc-514d-a24b-b65342f99e6b",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT CovertVPN HTTP Data Channel GET /receive Endpoint\"; flow:established,to_server; http.method; content:\"GET\"; http.uri; content:\"/receive\"; startswith; threshold:type limit,track by_src,count 3,seconds 60; reference:url,the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/; classtype:trojan-activity; sid:9002005; rev:2; metadata:author The_Hunters_Ledger, date 2026-04-08;)",
+        "to_ids": false,
+        "comment": "CovertVPN HTTP Data Channel GET /receive Endpoint | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1572, T1071.001 | rule hash e88205e8 | https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "4f121a48-ac59-5516-8f64-4984c44358dc",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT OpenStrike Gen4 Beacon Output Submission POST /submit?id=[hex8]\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"/submit?id=\"; pcre:\"/\\/submit\\?id=[0-9a-f]{8}$/U\"; threshold:type limit,track by_src,count 1,seconds 60; reference:url,the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/; classtype:trojan-activity; sid:9002002; rev:2; metadata:author The_Hunters_Ledger, date 2026-04-08;)",
+        "to_ids": false,
+        "comment": "OpenStrike Gen-4 Beacon Output Submission (POST /submit) | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1041, T1071.001 | rule hash 0a366690 | https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "ecbe3e7e-44b0-55fc-bf34-9199372a81d0",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT OpenStrike Gen4 Beacon Task Poll GET /updates?id=[hex8]\"; flow:established,to_server; http.method; content:\"GET\"; http.uri; content:\"/updates?id=\"; pcre:\"/\\/updates\\?id=[0-9a-f]{8}$/U\"; threshold:type limit,track by_src,count 1,seconds 30; reference:url,the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/; classtype:trojan-activity; sid:9002001; rev:2; metadata:author The_Hunters_Ledger, date 2026-04-08;)",
+        "to_ids": false,
+        "comment": "OpenStrike Gen-4 Beacon Network Task Poll (GET /updates) | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1071.001 | rule hash eff7f061 | https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "b09df999-a976-5b0f-a7b3-aeaa0a997638",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert icmp $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT CovertVPN ICMP Tunnel Oversized Payload with Data or Keepalive Marker\"; itype:8; dsize:>128; byte_test:1,=,0xDD,4; threshold:type limit,track by_src,count 5,seconds 60; reference:url,the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/; classtype:trojan-activity; sid:9002006; rev:2; metadata:author The_Hunters_Ledger, date 2026-04-08;)",
+        "to_ids": false,
+        "comment": "CovertVPN ICMP Tunnel Oversized Payload with Data or Keepalive Marker | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1095, T1572 | rule hash 5ae3817f | https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "e80a2300-5f5a-5cba-be66-54e45f9855b6",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Artifact Kit EAX-Redirect Process Hollowing via Rundll32 No Arguments\nid: a4f82c19-7b3e-4d56-9e1a-2c5f8b0d3e74\nstatus: experimental\ndescription: >-\n  Detects the Cobalt Strike Artifact Kit service variant EAX-redirect\n  process hollowing pattern where a Windows service process (services.exe\n  parent) spawns rundll32.exe with no command-line arguments. The Artifact\n  Kit then performs VirtualAllocEx, WriteProcessMemory, and\n  SetThreadContext on the suspended rundll32.exe to redirect execution to\n  shellcode via the EAX register. This technique bypasses\n  NtUnmapViewOfSection-anchored classic process hollowing detection\n  because the original PE is never unmapped.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-08\ntags:\n    - attack.privilege-escalation\n    - attack.t1055.003\n    - attack.stealth\n    - attack.t1218.011\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        ParentImage|endswith: '\\services.exe'\n        Image|endswith: '\\rundll32.exe'\n    filter_has_args:\n        CommandLine|contains: ' '\n    condition: selection and not filter_has_args\nfalsepositives:\n    - >-\n      Legitimate Windows services that invoke rundll32.exe without\n      arguments (extremely rare; verify by examining the parent service\n      binary path and cross-referencing against asset inventory)\nlevel: high",
+        "to_ids": true,
+        "comment": "Artifact Kit EAX-Redirect Process Hollowing via Rundll32 No Arguments | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1055.003, T1218.011 | rule hash 0b249108 | https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "48ac6b22-a2e9-5103-99f7-bf216ce76822",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Cobalt Strike Artifact Kit MSSE Named Pipe Creation\nid: b7c91d3e-5a20-4f88-b2d4-8e1c9a4f6b52\nstatus: experimental\ndescription: >-\n  Detects creation of the Cobalt Strike Artifact Kit default named pipe\n  pattern MSSE-[number]-server. The Artifact Kit service variant\n  (artifact32svc/artifact64svc) creates this pipe to transfer XOR-encoded\n  shellcode to the hollowing target via kernel pipe indirection as an AV\n  evasion technique. The pipe ID is derived from GetTickCount() modulo\n  9898, producing values in the range 0 to 9897. No legitimate Windows\n  component creates pipes with this naming pattern.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-08\ntags:\n    - attack.privilege-escalation\n    - attack.t1055.003\n    - attack.stealth\n    - detection.emerging-threats\nlogsource:\n    category: pipe_created\n    product: windows\ndetection:\n    selection:\n        PipeName|startswith: '\\MSSE-'\n        PipeName|endswith: '-server'\n    condition: selection\nfalsepositives:\n    - >-\n      Unlikely — MSSE-[0-9]+-server pipe naming is specific to the Cobalt\n      Strike Artifact Kit default configuration; no legitimate Windows\n      component uses this pattern\nlevel: high",
+        "to_ids": true,
+        "comment": "Cobalt Strike Artifact Kit MSSE Named Pipe Creation | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1055.003 | rule hash 76d8c79f | https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "29c72c04-8d60-5a6f-83c1-83d43926d7b8",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Cobalt Strike Beacon DLL Dropped to Windows Temp Directory\nid: e1f73b45-8d92-4c66-b3e7-4a9f5d1c8b27\nstatus: experimental\ndescription: >-\n  Detects creation of a file named beacon.dll in C:\\Windows\\Temp, the\n  hardcoded drop path used by OpenStrike dll_loader.exe. The loader uses\n  LoadLibraryA to load the Cobalt Strike beacon DLL from this exact path\n  and then enters an infinite Sleep(60000) keepalive loop. beacon.dll is\n  also the default Cobalt Strike Artifact Kit output filename used\n  broadly across unrelated deployments, so a hit should be treated as a\n  triage lead rather than a confirmed OpenStrike indicator on its own.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-08\ntags:\n    - attack.execution\n    - attack.t1129\n    - attack.stealth\n    - attack.t1036.005\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: windows\ndetection:\n    selection:\n        TargetFilename: 'C:\\Windows\\Temp\\beacon.dll'\n    condition: selection\nfalsepositives:\n    - >-\n      Unlikely — the filename beacon.dll at this exact path is not used\n      by any known legitimate software; however, beacon.dll is the\n      default Cobalt Strike Artifact Kit output filename, so any\n      unrelated Cobalt Strike deployment using the same default output\n      name and a similar drop path would also match\nlevel: medium",
+        "to_ids": false,
+        "comment": "Cobalt Strike Beacon DLL Dropped to Windows Temp Directory | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1129, T1036.005 | rule hash b73ec7aa | https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "e49335d6-9903-556f-8674-669ac1e22c9a",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Cobalt Strike Malleable C2 BOIE9 IE9 User-Agent in Proxy Traffic\nid: f4a82d61-3c57-4e88-9b2f-5e1a7c8d3f49\nstatus: experimental\ndescription: >-\n  Detects the Cobalt Strike beacon80.dll Malleable C2 profile User-Agent\n  containing the BOIE9;ENUSSEM suffix. The full user-agent string is\n  Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0;\n  BOIE9;ENUSSEM). This non-standard suffix is injected by the Malleable\n  C2 profile configuration and does not appear in genuine Internet\n  Explorer 9 browser traffic. This profile is distinct from the\n  MALC-suffix profile covered in the companion April 6 detection file.\n  The suffix is a profile-configuration value and may change in a future\n  deployment.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-08\ntags:\n    - attack.command-and-control\n    - attack.t1071.001\n    - detection.emerging-threats\nlogsource:\n    category: proxy\ndetection:\n    selection:\n        cs-user-agent|contains: 'BOIE9;ENUSSEM'\n    condition: selection\nfalsepositives:\n    - >-\n      Unlikely — BOIE9;ENUSSEM does not appear in any known legitimate\n      browser or application user-agent string; a future campaign using\n      a different Malleable C2 profile UA evades this rule entirely\nlevel: medium",
+        "to_ids": false,
+        "comment": "Cobalt Strike Malleable C2 BOIE9 IE9 User-Agent in Proxy Traffic | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1071.001 | rule hash cca74636 | https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "c1c162c5-333a-59c1-8641-069a06a59bee",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: CovertVPN WinPcap npf.sys Kernel Driver Loaded from Temp Directory\nid: d9e05a82-6c34-4b77-a1f5-3e8d2c7b4f01\nstatus: experimental\ndescription: >-\n  Detects loading of the npf.sys WinPcap kernel driver from a user\n  temporary directory. The Cobalt Strike CovertVPN Layer 2 bridge module\n  embeds WinPcap 4.1.3 components (npf.sys x86 and amd64, wpcap.dll,\n  Packet.dll) in its .data section and installs npf.sys as a kernel\n  driver service from %TEMP% to enable raw packet capture for its ICMP\n  and UDP transport channels. Legitimate WinPcap and Npcap installations\n  place the driver in System32\\drivers, not in user temp directories,\n  though some installers do briefly stage there before relocating it.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-08\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1543.003\n    - detection.emerging-threats\nlogsource:\n    category: driver_load\n    product: windows\ndetection:\n    selection:\n        ImageLoaded|endswith: '\\npf.sys'\n    filter_legitimate:\n        ImageLoaded|contains:\n            - '\\System32\\drivers\\'\n            - '\\SysWOW64\\drivers\\'\n    condition: selection and not filter_legitimate\nfalsepositives:\n    - >-\n      Legitimate WinPcap or Npcap installers that stage npf.sys in a\n      temporary directory before moving it to System32\\drivers\n      (uncommon; verify by checking for a subsequent persistent driver\n      installation in System32\\drivers)\nlevel: medium",
+        "to_ids": false,
+        "comment": "CovertVPN WinPcap npf.sys Kernel Driver Loaded from Temp Directory | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1543.003 | rule hash f926cc5f | https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "b9459452-3d0b-53e7-a602-059584f98c72",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: DceRpcSs Masquerading Service Installation\nid: c3d84e7f-2b61-4a99-8f3c-5d7e1b8c2a96\nstatus: experimental\ndescription: >-\n  Detects installation of a Windows service named DceRpcSs, which\n  masquerades as the legitimate RpcSs (Remote Procedure Call) service.\n  The Cobalt Strike Artifact Kit service variant registers under this\n  name to blend with built-in Windows services and survive casual\n  administrative review. The legitimate RpcSs service name does not\n  match DceRpcSs in any Windows version. The service name itself is an\n  operator-chosen value and may change in a future build or deployment.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-08\ntags:\n    - attack.persistence\n    - attack.t1036.005\n    - attack.stealth\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    service: system\ndetection:\n    selection:\n        EventID: 7045\n        ServiceName: 'DceRpcSs'\n    condition: selection\nfalsepositives:\n    - >-\n      Unlikely — DceRpcSs is not a legitimate Windows service name; a\n      future campaign or unrelated actor reusing this exact masquerade\n      name would also match, so treat a hit as a lead requiring\n      corroboration rather than an automatic incident\nlevel: medium",
+        "to_ids": false,
+        "comment": "DceRpcSs Masquerading Service Installation | TIER: Hunting | robustness 1 | confidence HIGH (behavior) / triage required (durability) | ATT&CK T1036.005 | rule hash 7ff6face | https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "46b40d33-04fb-59b3-804b-fea62b4df074",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: OpenStrike Gen-4 Beacon Output Submission HTTP POST to /submit with Hex Beacon ID\nid: b2e49c83-5f61-4a77-9d3e-2b8c1a4f7e52\nstatus: experimental\ndescription: >-\n  Detects the OpenStrike Generation 4 beacon output submission pattern —\n  HTTP POST to /submit with an 8-character lowercase hex beacon ID query\n  parameter. Command output is AES-128-CBC encrypted with PKCS7 padding,\n  then a 16-byte truncated HMAC-SHA256 tag is appended (Encrypt-then-MAC).\n  The beacon ID matches the corresponding GET to /updates?id=[same ID].\n  Correlating matched pairs of GET /updates and POST /submit with the\n  same 8-hex-digit ID provides higher-confidence identification of an\n  active gen-4 beacon session; standalone this rule has LOW-MEDIUM\n  precision.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-08\ntags:\n    - attack.exfiltration\n    - attack.t1041\n    - attack.command-and-control\n    - attack.t1071.001\n    - detection.emerging-threats\nlogsource:\n    category: proxy\ndetection:\n    selection:\n        cs-method: 'POST'\n        c-uri|re: '^/submit\\?id=[0-9a-f]{8}$'\n    condition: selection\nfalsepositives:\n    - >-\n      API endpoints using /submit with an id parameter of exactly 8 hex\n      characters accepting POST data (uncommon in enterprise\n      environments; correlate with matched GET to /updates?id= for the\n      same ID to confirm)\nlevel: medium",
+        "to_ids": false,
+        "comment": "OpenStrike Gen-4 Beacon Output Submission HTTP POST to /submit with Hex Beacon ID | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1041, T1071.001 | rule hash d8a14017 | https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "207893b0-0d9b-5f09-b9c5-fe0ac85395cd",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: OpenStrike Gen-4 Beacon Task Polling HTTP GET to /updates with Hex Beacon ID\nid: a8c35f72-4d19-4b83-9e6a-1c7d5e2b8f30\nstatus: experimental\ndescription: >-\n  Detects the OpenStrike Generation 4 beacon (beacon_windows_x64.exe)\n  task polling pattern — HTTP GET requests to /updates with an\n  8-character lowercase hex beacon ID query parameter. The beacon ID is\n  a djb2 hash variant (multiplier 0x1f) of ComputerName XOR'd with PID,\n  making it deterministic per host across process restarts. The\n  beaconing interval is approximately 5 seconds with 10 percent jitter\n  (4500-5500ms base). This rule alone has LOW-MEDIUM precision;\n  correlate with a corresponding POST to /submit?id=[same ID] and the\n  beaconing interval for high-confidence identification.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-08\ntags:\n    - attack.command-and-control\n    - attack.t1071.001\n    - detection.emerging-threats\nlogsource:\n    category: proxy\ndetection:\n    selection:\n        cs-method: 'GET'\n        c-uri|re: '^/updates\\?id=[0-9a-f]{8}$'\n    condition: selection\nfalsepositives:\n    - >-\n      Web applications using /updates as an API endpoint with an id\n      parameter of exactly 8 lowercase hex characters (uncommon in\n      enterprise environments; verify against known application\n      inventory and look for correlated POST to /submit?id=)\nlevel: medium",
+        "to_ids": false,
+        "comment": "OpenStrike Gen-4 Beacon Task Polling HTTP GET to /updates with Hex Beacon ID | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1071.001 | rule hash ff729920 | https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "d6d3372b-dfda-5c74-96f2-8eb674138b5d",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "/*\n    Yara Rule Set\n    Identifier: OpenStrike Gen-4 Beacon (beacon_windows_x64.exe)\n    Author: The Hunters Ledger\n    Source: https://the-hunters-ledger.com/\n    License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule TOOLKIT_OpenStrike_Gen4_Beacon\n{\n    meta:\n        description = \"Detects OpenStrike Generation 4 beacon (beacon_windows_x64.exe) by WinHTTP task-poll and output-submit URI format strings containing 8-hex-digit beacon IDs, the shared AES-128-CBC static IV, and the GCC 15.2.0 MinGW build artifact. Gen-4 is 10x smaller than gen-3 (30KB vs 299KB) with a correct Encrypt-then-MAC architecture and SHA256-based key derivation, though key exchange is absent confirming it is a development artifact.\"\n        license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/\"\n        date = \"2026-04-08\"\n        hash1 = \"042761408e83155d24884a72291d9f10803becd790fbcfa6ff65e9e72eb44446\"\n        hash2 = \"\"\n        hash3 = \"b6e01011e2d38855dd6a4b10a79acffe\"\n        family = \"OpenStrike\"\n        malware_type = \"Beacon\"\n        campaign = \"OpenStrike-CSBeacon-Toolkit-172.105.0.126\"\n        id = \"aa4bf345-4d6e-5228-9195-9c064fbdeaf7\"\n    strings:\n        $s1 = \"/updates?id=%08x\" ascii\n        $s2 = \"/submit?id=%08x\" ascii\n        $s3 = \"abcdefghijklmnop\" ascii\n        $s4 = \"ChainingModeCBC\" ascii\n        $s5 = \"cmd.exe /c %.*s\" ascii\n        $s6 = \"[*] OpenStrike Beacon starting...\" ascii\n        $s7 = \"GCC: (GNU) 15.2.0\" ascii\n    condition:\n        uint16(0) == 0x5A4D and\n        filesize < 102400 and\n        ($s6 or ($s1 and $s2)) and\n        ($s3 or $s4 or $s7 or $s5)\n}",
+        "to_ids": true,
+        "comment": "OpenStrike Gen-4 Beacon | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1071.001, T1573.001, T1041 | rule hash d768a46f | https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "f5a0e9db-4814-50a3-b314-f4828f823deb",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MALW_ArtifactKit_EAXRedirect_Svc\n{\n    meta:\n        description = \"Detects Cobalt Strike Artifact Kit service variant (artifact32svc.exe/artifact64svc.exe) that registers as the DceRpcSs service, creates a named pipe matching MSSE-[0-9]+-server for XOR-encoded shellcode delivery, and performs EAX-redirect thread hijacking of a suspended rundll32.exe process. Unlike classic process hollowing, this variant never calls NtUnmapViewOfSection — detection must anchor on SetThreadContext called on suspended threads, or on this binary's static strings.\"\n        license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/\"\n        date = \"2026-04-08\"\n        hash1 = \"701b4f60411a26abfb137f476c9328900843ee5a49780f2fcd23a5cb15498f16\"\n        hash2 = \"\"\n        hash3 = \"\"\n        family = \"CobaltStrike\"\n        malware_type = \"ArtifactKit-Service\"\n        campaign = \"OpenStrike-CSBeacon-Toolkit-172.105.0.126\"\n        id = \"951c6e9f-c54d-5e24-8456-8f79aa0411d2\"\n    strings:\n        $s1 = \"DceRpcSs\" ascii\n        $s2 = \"\\\\\\\\.\\\\pipe\\\\MSSE-%d-server\" ascii\n        $s3 = \"rundll32.exe\" ascii\n    condition:\n        uint16(0) == 0x5A4D and\n        filesize < 819200 and\n        $s1 and $s2 and $s3\n}",
+        "to_ids": true,
+        "comment": "Cobalt Strike Artifact Kit EAX-Redirect Service Variant | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1055.003, T1543.003, T1036.004, T1218.011 | rule hash ee4944ce | https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "6e6c4794-a863-58ef-933c-5d71b8a46dbe",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MALW_CovertVPN_L2Bridge\n{\n    meta:\n        description = \"Detects the Cobalt Strike CovertVPN Layer 2 bridge module (covertvpn.dll) by its unpatched 32-character AES key config placeholder (AAAABBBBCCCCDDDDEEEEFFFFGGGGHHHH), self-contained WinPcap 4.1.3 deployment strings (npf.sys, wpcap.dll), and HTTP data channel URI (/receive%s). The module embeds npf.sys as a kernel driver in its .data section (~556KB) and supports 5 transport channels: TCP connect/bind, UDP, HTTP, and ICMP echo with 0xDD/0xCC frame markers.\"\n        license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/\"\n        date = \"2026-04-08\"\n        hash1 = \"af688b120db0a3b324e2cd468cfead71b7895a3c815f4026d51ac7fca0cb8ab4\"\n        hash2 = \"\"\n        hash3 = \"3d60ae2e584a1be1c264cfdaa12a5e4d\"\n        family = \"CovertVPN\"\n        malware_type = \"Tunneling-Module\"\n        campaign = \"OpenStrike-CSBeacon-Toolkit-172.105.0.126\"\n        id = \"6a349a13-0b67-5316-9af2-d6d7773daf46\"\n    strings:\n        $s1 = \"AAAABBBBCCCCDDDDEEEEFFFFGGGGHHHH\" ascii\n        $s2 = \"npf.sys\" ascii\n        $s3 = \"wpcap.dll\" ascii\n        $s4 = \"/receive%s\" ascii\n    condition:\n        uint16(0) == 0x5A4D and\n        filesize < 2097152 and\n        $s1 and\n        ($s2 or $s3 or $s4)\n}",
+        "to_ids": true,
+        "comment": "CovertVPN Layer 2 Bridge Module | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1095, T1572, T1543.003 | rule hash 60ede716 | https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "df3e1e00-5560-5159-87eb-78adcbf5b230",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule TOOLKIT_OpenStrike_DllLoader\n{\n    meta:\n        description = \"Detects OpenStrike dll_loader.exe, a custom loader that loads a Cobalt Strike beacon DLL from the hardcoded path C:\\\\Windows\\\\Temp\\\\beacon.dll using LoadLibraryA, then enters an infinite Sleep(60000) keepalive loop. Unlike the five in-memory loader variants from the same GCC 15 codebase, this loader drops payload to disk rather than allocating RWX memory. Identified by the hardcoded path, operator diagnostic format strings, and GCC 15-win32 MinGW build artifact. The hardcoded drop path is the rule's primary discriminator and is trivially changed in a future build.\"\n        license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/\"\n        date = \"2026-04-08\"\n        hash1 = \"b0f0fe97b653e4564db8cf24cbd4cc2cad46f9c6629b67c2f147e647729f5b46\"\n        hash2 = \"811589e4982f25f92725e2bc6646d4e5d1e8b7be\"\n        hash3 = \"b5d391099c1376d81ebdc91b3fc55eae\"\n        family = \"OpenStrike\"\n        malware_type = \"Loader\"\n        campaign = \"OpenStrike-CSBeacon-Toolkit-172.105.0.126\"\n        id = \"567d09ec-d040-5c86-afb8-8b6fa860a6b2\"\n    strings:\n        $s1 = \"C:\\\\Windows\\\\Temp\\\\beacon.dll\" ascii\n        $s2 = \"DLL loaded at %p\" ascii\n        $s3 = \"LoadLibrary failed: %lu\" ascii\n        $s4 = \"GCC: (GNU) 15-win32\" ascii\n    condition:\n        uint16(0) == 0x5A4D and\n        filesize < 204800 and\n        $s1 and\n        ($s2 or $s3) and\n        $s4\n}",
+        "to_ids": false,
+        "comment": "OpenStrike DLL Loader | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1129, T1036.005 | rule hash 4a9fa1c0 | https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "c8e31d2a-c7bc-5d90-b49a-d0143c2007e0",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule TOOLKIT_OpenStrike_Proto_Beacons\n{\n    meta:\n        description = \"Detects OpenStrike Generation 1 (mini_beacon.exe) and Generation 2 (mini_beacon2.exe) prototype beacons. Gen-1 uses Cookie: SESSIONID=%d format for C2 host identification with no cryptography. Gen-2 adds RSA-1024 BCrypt CNG registration with a binary magic header (0xEFBE0000 big-endian) and host fingerprinting including process name masquerade as svchost.exe. The RSA-1024 modulus prefix is shared with the CS 4.4 Key B ecosystem.\"\n        license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/\"\n        date = \"2026-04-08\"\n        hash1 = \"03492f128fcc3910bda15f393c30ad3e04f5a50de36464d1e24038f49d889324\"\n        hash2 = \"\"\n        hash3 = \"\"\n        family = \"OpenStrike\"\n        malware_type = \"Beacon\"\n        campaign = \"OpenStrike-CSBeacon-Toolkit-172.105.0.126\"\n        id = \"4f1cd80b-4395-5c7d-b9c0-1df8d2a4febf\"\n    strings:\n        $s1 = \"Cookie: SESSIONID=%d\" ascii\n        $b1 = { 00 00 BE EF }\n        $s2 = \"008cadd72dbf3cc108\" ascii\n        $s3 = \"GCC: (GNU) 15-win32\" ascii\n    condition:\n        uint16(0) == 0x5A4D and\n        filesize < 102400 and\n        ($s1 or $b1 or $s2) and\n        $s3\n}",
+        "to_ids": true,
+        "comment": "OpenStrike Gen-1 and Gen-2 Prototype Beacons | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1071.001, T1573.002 | rule hash 7827a8d6 | https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      }
+    ],
+    "Object": []
+  }
+}

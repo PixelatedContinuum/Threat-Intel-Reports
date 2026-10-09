@@ -1,0 +1,324 @@
+{
+  "Event": {
+    "uuid": "94be8f0c-229d-5120-8ec3-4a4b2eb759d2",
+    "info": "OpenStrike Beacon Toolkit (172.105.0.126)",
+    "date": "2026-04-06",
+    "threat_level_id": 1,
+    "analysis": 2,
+    "timestamp": 1791580400,
+    "publish_timestamp": 1791580400,
+    "published": true,
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Toolkit\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"C2\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Open Dir\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Evasion\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information - T1027\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Software Packing - T1027.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Owner/User Discovery - T1033\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over C2 Channel - T1041\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Injection - T1055\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Discovery - T1057\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Command Shell - T1059.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Python - T1059.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Information Discovery - T1082\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"File and Directory Discovery - T1083\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Native API - T1106\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Shared Modules - T1129\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Non-Standard Encoding - T1132.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Deobfuscate/Decode Files or Information - T1140\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Checks - T1497.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Symmetric Cryptography - T1573.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Asymmetric Cryptography - T1573.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Develop Capabilities: Malware - T1587.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Reflective Code Loading - T1620\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Debugger Evasion - T1622\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "Attribute": [
+      {
+        "uuid": "056ef75b-73bd-5963-b20a-471c96969e72",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/hunting-detections/open-directory-172-105-0-126-20260406-detections/",
+        "to_ids": false,
+        "comment": "Detection rules, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "cbb40252-12f0-5da6-899d-0fb78e038fce",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/ioc-feeds/open-directory-172-105-0-126-20260406-iocs.json",
+        "to_ids": false,
+        "comment": "IOC feed (JSON), The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "53e21842-49be-5404-ac9d-33b16705d900",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/reports/open-directory-172-105-0-126-20260406/",
+        "to_ids": false,
+        "comment": "Report, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "5e585564-d64c-573a-a629-dbc3bf1caa8d",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/stix/open-directory-172-105-0-126-20260406.json",
+        "to_ids": false,
+        "comment": "STIX 2.1 bundle, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "0c2a54b2-adb1-5e10-8840-5d282ceab8cd",
+        "type": "url",
+        "category": "Network activity",
+        "value": "https://172.105.0.126:8443/qz99",
+        "to_ids": true,
+        "comment": "url: https://172.105.0.126:8443/qz99. Stage 1 shellcode download endpoint used by stager.exe - distinctive URI path [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "95b2a798-2b79-5306-852c-d091a8931bc0",
+        "type": "url",
+        "category": "Network activity",
+        "value": "https://172.105.0.126:8443/register",
+        "to_ids": true,
+        "comment": "url: https://172.105.0.126:8443/register. RSA-2048 registration handshake endpoint (beacon.exe, beacon_universal.py) [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "8db0fb7c-0c61-5116-b5c4-34b7d69aba47",
+        "type": "url",
+        "category": "Network activity",
+        "value": "https://172.105.0.126:8443/submit",
+        "to_ids": true,
+        "comment": "url: https://172.105.0.126:8443/submit. Output submission endpoint - POST with ?id=<beacon_id_hex8> query parameter [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "dafb304f-0a46-55d5-8fb0-47a45801d9a2",
+        "type": "url",
+        "category": "Network activity",
+        "value": "https://172.105.0.126:8443/submit.php",
+        "to_ids": true,
+        "comment": "url: https://172.105.0.126:8443/submit.php. Beacon output submission endpoint referenced via HTTP GET in network-layer detection content (Sigma/Suricata rules in open-directory-172-105-0-126-20260406-detections). Distinct from /submit (POST), the C beacon's documented output-submission path recorded above; attributed to the co-hosted Cobalt Strike DLL beacon's GET-based output-accumulator behavior against its Malleable C2 get_uri, and retained as a separate MODERATE-confidence indicator. [confidence 60/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "157edb8f-df51-5ccb-bff0-d91172be62bc",
+        "type": "url",
+        "category": "Network activity",
+        "value": "https://172.105.0.126:8443/updates",
+        "to_ids": true,
+        "comment": "url: https://172.105.0.126:8443/updates. Task polling endpoint - GET with ?id=<beacon_id_hex8> query parameter [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "9182653a-aac9-5d3c-aaeb-17f48d10d2c7",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "172.105.0.126",
+        "to_ids": true,
+        "comment": "ipv4: 172.105.0.126. Primary C2 server - hardcoded in beacon.exe, beacon_patched.x64.dll config, and stager.exe. Linode/Akamai hosted VPS. | MODERATE - Linode shared hosting IP; block only in context of associated behavioral indicators [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "365260df-8882-5a24-99fb-3a591e5c1d97",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT Cobalt Strike Malleable C2 MALC User-Agent Detected\"; flow:established,to_server; http.user_agent; content:\"MALC)\"; endswith; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/open-directory-172-105-0-126-20260406-detections/; classtype:trojan-activity; sid:9001003; rev:4; metadata:author The_Hunters_Ledger, date 2026-04-06;)",
+        "to_ids": true,
+        "comment": "Cobalt Strike Malleable C2 MALC User-Agent Detected | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1071.001 | rule hash baa60540 | https://the-hunters-ledger.com/hunting-detections/open-directory-172-105-0-126-20260406-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "ea2f25c1-2603-5129-8f82-261e8c61ecb9",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Cobalt Strike Malleable C2 Profile MALC User-Agent in Proxy Traffic\nid: 9e3c7a15-6f2b-4d84-a1c9-8b5e2d7f3a61\nstatus: experimental\ndescription: >-\n  Detects the Cobalt Strike 3.x Malleable C2 profile User-Agent string ending\n  in the MALC suffix (full string: Mozilla/5.0 (compatible; MSIE 9.0;\n  Windows NT 6.1; WOW64; Trident/5.0; MALC)). This non-standard suffix is a\n  distinctive indicator of a configured Malleable C2 profile and does not\n  appear in any known legitimate browser or application user-agent string.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/open-directory-172-105-0-126-20260406-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-06\ntags:\n    - attack.command-and-control\n    - attack.t1071.001\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: proxy\ndetection:\n    selection:\n        cs-user-agent|endswith: 'MALC)'\n    condition: selection\nfalsepositives:\n    - >-\n      Internal applications or monitoring tools with custom user-agent\n      strings ending in the substring MALC) (verify against known software\n      inventory before tuning out)\nlevel: high",
+        "to_ids": true,
+        "comment": "Cobalt Strike Malleable C2 Profile MALC User-Agent in Proxy Traffic | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1071.001 | rule hash 98a9f405 | https://the-hunters-ledger.com/hunting-detections/open-directory-172-105-0-126-20260406-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "ca582fbe-9064-5e2e-ae1c-c07359ec1f9d",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: OpenStrike Python Beacon Ctypes VirtualAlloc Shellcode Injection\nid: 1d6b4e82-9f3c-4a17-b5d8-2e7c9a6f1b34\nstatus: experimental\ndescription: >-\n  Detects a Python process with command-line arguments referencing ctypes\n  and VirtualAlloc, matching the OpenStrike beacon_universal.py\n  cross-platform shellcode injection pattern. The Python beacon uses\n  ctypes.windll to call VirtualAlloc for RWX memory allocation and\n  CreateThread for shellcode execution, enabling in-memory payload staging\n  without dropping a compiled binary.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/open-directory-172-105-0-126-20260406-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-06\ntags:\n    - attack.execution\n    - attack.t1059.006\n    - attack.stealth\n    - attack.t1620\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_proc:\n        Image|endswith: '\\python.exe'\n        CommandLine|contains|all:\n            - 'ctypes'\n            - 'VirtualAlloc'\n    condition: selection_proc\nfalsepositives:\n    - Security research tools or CTF scripts using ctypes with VirtualAlloc in Python\n    - Legitimate automation scripts performing memory-mapped operations via ctypes\nlevel: medium",
+        "to_ids": false,
+        "comment": "OpenStrike Python Beacon Ctypes VirtualAlloc Shellcode Injection | TIER: Hunting | robustness 2 | confidence HIGH for the technique pairing; MODERATE for false-positive discrimination | ATT&CK T1059.006, T1620 | rule hash 25f53adc | https://the-hunters-ledger.com/hunting-detections/open-directory-172-105-0-126-20260406-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "f88480b3-df8b-5fd3-b2d4-c727b7d1fd4c",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "/*\n   Yara Rule Set\n   Identifier: OpenStrike Beacon Toolkit + Cobalt Strike 3.x Tripwired Loader\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule RAT_OpenStrike_C_Beacon {\n   meta:\n      description = \"Detects the OpenStrike custom C C2 beacon (beacon.exe) via its operator-written startup/status debug strings, paired with AES-CBC/HMAC-SHA256 crypto function references and the shared MinGW GCC 15 build banner\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/open-directory-172-105-0-126-20260406-detections/\"\n      date = \"2026-04-06\"\n      hash1 = \"7d6a17754f086b53ee294f5ccd60b0127f921520ce7b64fea0aebb47114fb5d2\"\n      hash2 = \"5ee00147140b084f93d2144c2ee5c0d4d125ff1c\"\n      hash3 = \"96f9adb7ee00c44bc5f523d1f1dc8715\"\n      family = \"OpenStrike\"\n      malware_type = \"C2 Beacon\"\n      campaign = \"OpenStrike-CSBeacon-Toolkit-172.105.0.126\"\n      id = \"c5b35b66-2737-5545-a27e-b67969ef4f36\"\n   strings:\n      $s1 = \"[*] OpenStrike Beacon starting...\" ascii\n      $s2 = \"[+] Registration successful\" ascii\n      $s3 = \"beacon ready\" ascii\n      $s4 = \"abcdefghijklmnop\" ascii\n      $s5 = \"aes_cbc_encrypt\" ascii\n      $s6 = \"hmac_sha256\" ascii\n      $compiler = \"GCC: (GNU) 15-win32\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 409600 and\n      ($s1 or ($s2 and $s3)) and\n      ($s4 or $s5 or $s6 or $compiler)\n}",
+        "to_ids": true,
+        "comment": "OpenStrike C Beacon Debug Strings + AES/HMAC Crypto Constants | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1071.001, T1573.001 | rule hash 612b96af | https://the-hunters-ledger.com/hunting-detections/open-directory-172-105-0-126-20260406-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "e303f351-303d-57e0-a02b-fb12ddc5f12a",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MALW_CobaltStrike3x_TripwiredReflectiveLoader {\n   meta:\n      description = \"Detects the operator-modified Cobalt Strike 3.x DLL beacon (beacon_patched.x64.dll) sharing this campaign's Malleable C2 profile via its distinctive MALC User-Agent suffix, corroborated by the original DLL name, ReflectiveLoader export, sysnative rundll32 spawn-to path, the shared custom AES IV, or the entry-point tripwire bytes (66 90 CC / xchg ax,ax; int3) that redirect the ReflectiveLoader export RVA to crash standard reflective-injection tooling\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/open-directory-172-105-0-126-20260406-detections/\"\n      date = \"2026-04-06\"\n      hash1 = \"7a1a7659ec4201ecbca782bcedf9d4079265137279a490368309df3bd39297a4\"\n      hash2 = \"add3893c3652947ff821a6da5fad774cc041bb73\"\n      hash3 = \"2a6a3d499bb3c666f3b4bc5905a866f3\"\n      family = \"CobaltStrike\"\n      malware_type = \"C2 Beacon\"\n      campaign = \"OpenStrike-CSBeacon-Toolkit-172.105.0.126\"\n      id = \"23095eb8-e1a4-565d-a5c9-9c1f45ad4eaf\"\n   strings:\n      $reflective_export = \"ReflectiveLoader\" ascii\n      $original_name = \"beacon.x64.dll\" ascii\n      $tripwire = { 66 90 CC }\n      $ua = \"Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; MALC)\" ascii\n      $spawn = \"%windir%\\\\sysnative\\\\rundll32.exe\" ascii\n      $aes_iv = \"abcdefghijklmnop\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 409600 and\n      $ua and\n      2 of ($original_name, $reflective_export, $spawn, $aes_iv, $tripwire)\n}",
+        "to_ids": true,
+        "comment": "Cobalt Strike 3.x Tripwired ReflectiveLoader + MALC Malleable Profile | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1071.001, T1620 | rule hash 0d5fa5d2 | https://the-hunters-ledger.com/hunting-detections/open-directory-172-105-0-126-20260406-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "13e7ce93-3659-529e-82f7-c75f42bfbc2e",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule TOOLKIT_OpenStrike_Loader_Chain {\n   meta:\n      description = \"Detects OpenStrike's standalone shellcode loader chain (run.exe, sc_loader.exe, veh_loader.exe, dbg_loader.exe, stager.exe) via operator-written crash-handler and entry-point-discovery debug strings shared across the progressive SEH/VEH/INT3 capability chain, paired with the shared MinGW GCC 15 build banner\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/open-directory-172-105-0-126-20260406-detections/\"\n      date = \"2026-04-06\"\n      hash1 = \"821f815fab92fee03e2be44ad5370a953db085cd359a99519a2ddb7316b0d273\"\n      hash2 = \"720ea472060e080145927d33e18dca9b8b1eafa5\"\n      hash3 = \"d677794618461b3bf7d405a8297d5df4\"\n      family = \"OpenStrike\"\n      malware_type = \"Shellcode Loader\"\n      campaign = \"OpenStrike-CSBeacon-Toolkit-172.105.0.126\"\n      id = \"1c8e4dfb-3f93-5a20-ba24-9896e2c32761\"\n   strings:\n      $veh = \"[CRASH] code=0x%08lX RIP=0x%llX\" ascii\n      $seh = \"[!] EXCEPTION code=0x%08lX addr=%p (base+0x%llX)\" ascii\n      $dbg = \"[*] INT3 set at offset %lu (RVA 0x%llX)\" ascii\n      $run = \"[+] %lu @ %p exec\" ascii\n      $load = \"[*] Loading %s\" ascii\n      $compiler = \"GCC: (GNU) 15-win32\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 409600 and\n      (($veh and $load) or ($seh and $load) or ($dbg and $load) or ($run and $compiler))\n}",
+        "to_ids": true,
+        "comment": "OpenStrike Shellcode Loader Chain Debug Strings | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1620 | rule hash 4a0abc33 | https://the-hunters-ledger.com/hunting-detections/open-directory-172-105-0-126-20260406-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "30cf22e0-e184-5159-8fa4-5cd0ae1669f6",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule TOOLKIT_OpenStrike_Python_Beacon {\n   meta:\n      description = \"Detects the OpenStrike cross-platform Python beacon (beacon_universal.py) via its self-identification banner, corroborated by the distinctive /qz99 staging URI, the hardcoded RSA-2048 public key modulus prefix, or the paired bof_executor + shared AES IV strings\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/open-directory-172-105-0-126-20260406-detections/\"\n      date = \"2026-04-06\"\n      family = \"OpenStrike\"\n      malware_type = \"C2 Beacon\"\n      campaign = \"OpenStrike-CSBeacon-Toolkit-172.105.0.126\"\n      id = \"8064ca73-601a-5985-a11b-67d1fcd50397\"\n   strings:\n      $desc = \"OpenStrike Universal Beacon\" ascii\n      $bof_key = \"bof_executor\" ascii\n      $iv = \"abcdefghijklmnop\" ascii\n      $rsa_mod = \"9f12c9cb6582f379088600e6cdb7ac80\" ascii\n      $qz99 = \"/qz99\" ascii\n   condition:\n      filesize < 204800 and\n      $desc and\n      ($rsa_mod or $qz99 or ($bof_key and $iv))\n}",
+        "to_ids": true,
+        "comment": "OpenStrike Python Universal Beacon Self-Identification Banner | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1059.006, T1071.001 | rule hash 4f7edcee | https://the-hunters-ledger.com/hunting-detections/open-directory-172-105-0-126-20260406-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      }
+    ],
+    "Object": []
+  }
+}

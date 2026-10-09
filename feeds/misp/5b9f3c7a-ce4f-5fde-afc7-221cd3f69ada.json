@@ -1,0 +1,533 @@
+{
+  "Event": {
+    "uuid": "5b9f3c7a-ce4f-5fde-afc7-221cd3f69ada",
+    "info": "AdaptixC2 Open Directory Exposure (45.130.148.125)",
+    "date": "2026-04-30",
+    "threat_level_id": 1,
+    "analysis": 2,
+    "timestamp": 1791580400,
+    "publish_timestamp": 1791580400,
+    "published": true,
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"C2\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Toolkit\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Open Dir\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Multi-Family\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"OS Credential Dumping: LSASS Memory (mimikatz) - T1003.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"OS Credential Dumping: Security Account Manager (SharpSecDump) - T1003.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"OS Credential Dumping: NTDS (SharpSecDump) - T1003.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"OS Credential Dumping: DCSync (mimikatz) - T1003.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote System Discovery (SharpHound) - T1018\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information - T1027\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Injection (parent) - T1055\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Injection: Portable Executable Injection - T1055.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Input Capture: Keylogging (AdaptixC2 BOF) - T1056.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Discovery - T1057\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Command and Scripting Interpreter: PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Privilege Escalation (GodPotato/PrintSpoofer) - T1068\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Permission Groups Discovery: Domain Groups - T1069.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Application Layer Protocol: Web Protocols (AdaptixC2 HTTP C2) - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Information Discovery (Seatbelt/winpeas/linpeas) - T1082\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"File and Directory Discovery (Seatbelt/winpeas) - T1083\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Account Discovery: Domain Account (SharpHound/ADRecon/PowerView) - T1087.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy: Internal Proxy (Ligolo-ng v0.8.3) - T1090.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer (open directory hosts toolkit) - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data Encoding: Standard Encoding (Base64) - T1132.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Access Token Manipulation: Token Impersonation/Theft (GodPotato/PrintSpoofer) - T1134.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Access Token Manipulation: Create Process with Token (RunasCs) - T1134.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Deobfuscate/Decode Files or Information - T1140\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domain Trust Discovery (SharpHound/ADRecon) - T1482\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Software Discovery: Security Software Discovery (winpeas/Seatbelt) - T1518.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Unsecured Credentials: Private Keys (Certify) - T1552.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials from Password Stores (lazagne) - T1555\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials from Password Stores: Web Browsers (SharpDPAPI/lazagne) - T1555.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials from Password Stores: Windows Credential Manager (SharpDPAPI) - T1555.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Steal or Forge Kerberos Tickets: Kerberoasting (Rubeus) - T1558.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Steal or Forge Kerberos Tickets: AS-REP Roasting (Rubeus) - T1558.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Protocol Tunneling (Ligolo-ng + chisel) - T1572\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Encrypted Channel: Symmetric Cryptography (RC4-128) - T1573.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"DLL - T1574.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Virtual Private Server - T1583.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obtain Capabilities: Tool - T1588.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Reflective Code Loading - T1620\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Steal or Forge Authentication Certificates (Certify) - T1649\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "Attribute": [
+      {
+        "uuid": "2ce23ba5-34a9-593b-a8d8-d0e2611b900a",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/",
+        "to_ids": false,
+        "comment": "Detection rules, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "7c79a9eb-7024-5798-a5ca-13a1b98af92a",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/ioc-feeds/opendirectory-45-130-148-125-20260430-iocs.json",
+        "to_ids": false,
+        "comment": "IOC feed (JSON), The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "d09219c2-58ea-53d6-81f1-5ff9a2ea3932",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/",
+        "to_ids": false,
+        "comment": "Report, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "f1074b11-bab4-5fe9-8ebd-6985cdea6821",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/stix/opendirectory-45-130-148-125-20260430.json",
+        "to_ids": false,
+        "comment": "STIX 2.1 bundle, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "7c96af0e-7645-5c18-96cb-fe7e9278a0a1",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://45.130.148.125:80/api/v1/status",
+        "to_ids": true,
+        "comment": "url: http://45.130.148.125:80/api/v1/status. AdaptixC2 beacon C2 URL (POST). STOCK AdaptixC2 listener default URI. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "c994b5f7-0423-5778-88e9-f089ccb05d03",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://45.130.148.125:80/content.html",
+        "to_ids": true,
+        "comment": "url: http://45.130.148.125:80/content.html. AdaptixC2 beacon C2 URL (POST). STOCK AdaptixC2 listener default URI. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "5dc3f763-bb7b-5bee-a9f0-683b6d229ec9",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://45.130.148.125:80/jquery-3.3.1.min.js",
+        "to_ids": true,
+        "comment": "url: http://45.130.148.125:80/jquery-3.3.1.min.js. AdaptixC2 beacon C2 URL (POST). OPERATOR-ADDED beyond stock 3-URI default, extends the JS-asset masquerade theme. Detection rule must combine with destination IP to avoid FP on legitimate jQuery 3.3.1 traffic. | MODERATE, match in combination with destination IP 45.130.148.125 and either X-Beacon-Id header or Firefox 20 stock UA, NOT alone [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "aa718154-8618-51bf-9b40-29ae2b92dbbb",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://45.130.148.125:80/updates/check.php",
+        "to_ids": true,
+        "comment": "url: http://45.130.148.125:80/updates/check.php. AdaptixC2 beacon C2 URL (POST). STOCK AdaptixC2 listener default URI. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "2bc8d641-0e4d-502f-88a0-17c95980445e",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "45.130.148.125",
+        "to_ids": true,
+        "comment": "ipv4: 45.130.148.125. AdaptixC2 beacon C2 endpoint (HTTP plaintext, no TLS). Combined with open-directory staging on TCP/8888, same IP, two services. ASN AS35682 BEST INTERNET SOLUTION XK (Uzbekistan). | Open-directory staging endpoint (HTTP). Static-since-discovery for 80+ hours. Source of the entire toolkit. [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "ff3d36b1-3232-5375-9304-19dca7d7e7e3",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL HUNT AdaptixC2 Stock Listener Response Envelope (Server-Side Framework Default)\"; flow:established,to_client; file.data; content:\"{|22|status|22|: |22|ok|22|, |22|data|22|: |22|\"; content:\"|22|, |22|metrics|22|: |22|sync|22|}\"; distance:0; threshold:type limit,track by_dst,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/; classtype:trojan-activity; sid:5001007; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-12;)",
+        "to_ids": false,
+        "comment": "AdaptixC2 Stock Listener Response Envelope (Server-Side) | TIER: Hunting | robustness 2 | confidence MODERATE — high precision where response bodies are visible, but the template is operator-editable | ATT&CK T1071.001 | rule hash 370fc892 | https://the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "04012381-9ac6-5989-836a-4f80ba9b362a",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT - AdaptixC2 Default Listener X-Beacon-Id Heartbeat Header Detected\"; flow:established,to_server; http.header_names; content:\"X-Beacon-Id\"; nocase; reference:url,the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/; classtype:trojan-activity; sid:5001002; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-03;)",
+        "to_ids": true,
+        "comment": "AdaptixC2 Default Listener X-Beacon-Id Heartbeat Header (Broad, Any IP) | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1071.001 | rule hash 69f84c00 | https://the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "0fb92ce4-f6df-5ede-ab9b-5a8f0075d12c",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT AdaptixC2 Beacon Empty-Body POST Carrying X-Beacon-Id Header (Framework C2 Heartbeat)\"; flow:established,to_server; http.method; content:\"POST\"; http.header_names; content:\"X-Beacon-Id\"; nocase; http.header; content:\"Content-Length|3a| 0|0d 0a|\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/; classtype:trojan-activity; sid:5001006; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-12;)",
+        "to_ids": true,
+        "comment": "AdaptixC2 Beacon Empty-Body POST Carrying the X-Beacon-Id Header | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1071.001, T1573.001 | rule hash b8ab5279 | https://the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "37bc0443-dd99-5128-bf5b-e309b9365538",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT - AdaptixC2 Operator-Added jQuery URI with Firefox 20 UA\"; flow:established,to_server; http.user_agent; content:\"Mozilla/5.0 (Windows NT 6.2|3B| rv:20.0) Gecko/20121202 Firefox/20.0\"; endswith; http.method; content:\"POST\"; http.uri; content:\"/jquery-3.3.1.min.js\"; nocase; reference:url,the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/; classtype:trojan-activity; sid:5001004; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-03;)",
+        "to_ids": false,
+        "comment": "AdaptixC2 Operator-Added jQuery URI with Firefox 20 UA | TIER: Hunting | robustness 1 | confidence HIGH (current traffic); durability limited | ATT&CK T1071.001 | rule hash fab332c4 | https://the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "74fe019e-4a23-52fe-81b1-3ce3f3a92a4e",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT - AdaptixC2 Stock Listener URI Path with Firefox 20 UA\"; flow:established,to_server; http.user_agent; content:\"Mozilla/5.0 (Windows NT 6.2|3B| rv:20.0) Gecko/20121202 Firefox/20.0\"; endswith; http.method; content:\"POST\"; http.uri; content:\"/api/v1/status\"; nocase; reference:url,the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/; classtype:trojan-activity; sid:5001003; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-03;)",
+        "to_ids": false,
+        "comment": "AdaptixC2 Stock Listener URI /api/v1/status with Firefox 20 UA | TIER: Hunting | robustness 1 | confidence HIGH (current traffic); durability limited | ATT&CK T1071.001 | rule hash e5957007 | https://the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "f3cdd973-f83a-5fda-830e-cd213cdeef40",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: AdaptixC2 Beacon Stock URI POST Request\nid: 2e7f5a93-8c14-4b67-d259-1a3f6e8d0c52\nstatus: experimental\ndescription: Base selection for the AdaptixC2 fast-beacon callback pattern - HTTP POST requests to stock AdaptixC2 URI paths (/api/v1/status or /jquery-3.3.1.min.js). Paired with the correlation rule below, which flags more than five such requests from a single source within a 30-second window; the 4-5 second sleep with zero jitter this produces is highly anomalous for production traffic. Both URI paths are listener-profile fields the operator can change at will.\nreferences:\n    - https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/\nauthor: The Hunters Ledger\ndate: 2026-04-30\ntags:\n    - attack.command-and-control\n    - attack.t1071.001\n    - detection.emerging-threats\nlogsource:\n    category: proxy\ndetection:\n    selection:\n        cs-method: POST\n        cs-uri-stem|contains:\n            - '/api/v1/status'\n            - '/jquery-3.3.1.min.js'\n    condition: selection\nfalsepositives:\n    - Legitimate health-check endpoints polled at high frequency by infrastructure monitoring agents - add known monitoring source IPs to an allowlist filter\n    - CI/CD pipeline job runners issuing rapid POST requests to status endpoints during build phases\nlevel: low\n---\ntitle: AdaptixC2 Beacon - High-Frequency Deterministic HTTP POST Cadence to Stock URIs\nid: 8f4a1c93-6e27-4b58-a910-3d7c2f5b9e46\nstatus: experimental\ndescription: Detects the AdaptixC2 fast-beacon callback pattern - a source IP making more than five HTTP POST requests within 30 seconds to stock AdaptixC2 URI paths. Correlates the base selection rule (AdaptixC2 Beacon Stock URI POST Request, id 2e7f5a93-8c14-4b67-d259-1a3f6e8d0c52) by source IP over a 30-second sliding window; requires a Sigma backend with correlation-rule support.\nreferences:\n    - https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/\nauthor: The Hunters Ledger\ndate: 2026-04-30\ncorrelation:\n    type: event_count\n    rules:\n        - 2e7f5a93-8c14-4b67-d259-1a3f6e8d0c52\n    group-by:\n        - c-ip\n    timespan: 30s\n    condition:\n        gt: 5\nlevel: medium",
+        "to_ids": false,
+        "comment": "AdaptixC2 Beacon: High-Frequency Deterministic HTTP POST Cadence to Stock URIs | TIER: Hunting | robustness 1 | confidence MODERATE — timing patterns require log aggregation; FP possible from monitoring agents | ATT&CK T1071.001 | rule hash 85695108 | https://the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "c074195d-f103-5541-8f4c-49e8347476e6",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: AdaptixC2 Default Listener - Anomalous Firefox 20 User-Agent with X-Beacon-Id Header\nid: 7c9d4b81-3e62-4f08-a517-2d8e5a6c0b93\nstatus: experimental\ndescription: Detects outbound HTTP traffic matching the AdaptixC2 stock listener default profile. The Firefox 20 User-Agent (released February 2013) is anomalous in 2026 traffic and is the AdaptixC2 default listener UA string. The X-Beacon-Id header is the AdaptixC2 stock per-agent heartbeat header not used by any known legitimate browser or application, but standard proxy logsource fields do not expose arbitrary request headers, so this rule anchors on the User-Agent string alone; combine with the X-Beacon-Id header at the WAF or full-packet-capture layer for the highest-confidence match. The UA string is a listener-profile field the operator can change at will, so this is a hunting-grade lead rather than an alerting-grade signature on its own.\nreferences:\n    - https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/\nauthor: The Hunters Ledger\ndate: 2026-04-30\ntags:\n    - attack.command-and-control\n    - attack.t1071.001\n    - detection.emerging-threats\nlogsource:\n    category: proxy\ndetection:\n    selection:\n        cs-user-agent|contains: 'Firefox/20.0'\n    condition: selection\nfalsepositives:\n    - Legacy embedded systems or industrial control software using a hardcoded Firefox 20 UA string - cross-reference against known asset inventory to exclude\nlevel: medium",
+        "to_ids": false,
+        "comment": "AdaptixC2 Default Listener: Anomalous Firefox 20 User-Agent with X-Beacon-Id Header | TIER: Hunting | robustness 1 | confidence HIGH for the anomaly signal; catches any operator running the framework default, not this operator specifically | ATT&CK T1071.001, T1573.001 | rule hash 3d20033b | https://the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "c08a0b44-d836-5068-a92c-555ed4633d5f",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: AdaptixC2 PowerShell Loader - AMSI Bypass and SI Injector Invocation\nid: a3f1c8e2-7b45-4d91-b832-6e0d9f2c1a74\nstatus: experimental\ndescription: Detects execution of the AdaptixC2 operator beacon.ps1 PowerShell loader by matching the string-concatenated AMSI bypass marker combined with the operator-specific SI injector class invocation and an embedded base64 MZ PE prefix. The concatenation pattern amsi+Con+text evades static AV string signatures; [SI]::Inject( identifies the operator-custom .NET injector loaded in-memory. Co-occurrence of all three strings in a single script block is highly specific to this loader, but the SI class name is a renameable literal the operator controls in their own source - a rebuild that renames it evades the rule. Requires PowerShell Script Block Logging (Event ID 4104).\nreferences:\n    - https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/\nauthor: The Hunters Ledger\ndate: 2026-04-30\ntags:\n    - attack.execution\n    - attack.stealth\n    - attack.defense-impairment\n    - attack.t1059.001\n    - attack.t1685\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: ps_script\ndetection:\n    selection_amsi:\n        ScriptBlockText|contains: \"amsi'+'Con'+'text\"\n    selection_injector:\n        ScriptBlockText|contains: '[SI]::Inject('\n    selection_base64_mz:\n        ScriptBlockText|contains: 'TVqQAAMA'\n    condition: selection_amsi and selection_injector and selection_base64_mz\nfalsepositives:\n    - Custom internal PowerShell tooling that coincidentally uses both an AMSI bypass via string concatenation and a class named SI with an Inject method - considered highly unlikely outside of adversary tooling\nlevel: medium",
+        "to_ids": false,
+        "comment": "AdaptixC2 PowerShell Loader: AMSI Bypass and SI Injector Invocation | TIER: Hunting | robustness 1 | confidence HIGH | ATT&CK T1059.001, T1685, T1620 | rule hash 17fc42a0 | https://the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "26aeef54-5128-569c-9ed8-17bcc6e872c4",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Ligolo-ng Reverse Tunnel Agent Execution\nid: 3f7a2b58-9e04-4c83-a625-1d6b8f4e2a91\nstatus: experimental\ndescription: Detects execution of the Ligolo-ng reverse-tunneling agent by process image name or by command-line connect argument combined with the default port. Ligolo-ng is an open-source TLS-over-TCP reverse proxy tool used by threat actors to create tunnels from a compromised host into internal networks, enabling lateral movement without direct routing. The operator in this campaign deployed the stock upstream v0.8.3 release at commit 913fe64e088d5db2185d392965bf4cd3dd1d9495; the exact file hash for that build is tracked in the campaign IOC feed rather than in this rule's selection logic.\nreferences:\n    - https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/\n    - https://github.com/nicocha30/ligolo-ng\nauthor: The Hunters Ledger\ndate: 2026-04-30\ntags:\n    - attack.command-and-control\n    - attack.t1572\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection_name:\n        Image|endswith:\n            - '\\ligolo.exe'\n            - '\\ligolo-ng.exe'\n    selection_cmdline:\n        CommandLine|contains:\n            - '--connect'\n            - '-connect'\n    selection_port:\n        CommandLine|contains: ':11601'\n    condition: selection_name or (selection_cmdline and selection_port)\nfalsepositives:\n    - Authorized security assessment or network administration use of Ligolo-ng - correlate against authorized change records and known red team activity windows\n    - Security research and lab environments where Ligolo-ng is used for legitimate network tunneling evaluation\nlevel: high",
+        "to_ids": true,
+        "comment": "Ligolo-ng Reverse Tunnel Agent Execution | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1090.001, T1572 | rule hash 3f68e78a | https://the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "902559cc-56dc-5056-98c6-e4b9e1707f64",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Potential AMSI Bypass via Reflection Over Assembly Types and Private Field Zeroing\nid: 35c3f793-f035-4331-a6e0-53a4b0000421\nstatus: experimental\ndescription: >-\n    Detects the structural shape of an in-memory AMSI bypass in which a script enumerates the types of a loaded assembly, filters them with a wildcard rather than a literal name, then writes a zero into a NonPublic Static field. The AdaptixC2 operator loader observed at 45.130.148.125 uses exactly this form and deliberately emits neither AmsiUtils nor amsiInitFailed, assembling the field name from concatenated fragments and locating the type by a wildcard match on iUtils, so the two most widely deployed AMSI signatures do not fire on it. Matching the reflection shape instead of the strings survives both a rename of the target field and a re-split of the concatenation. This is a hunting rule because legitimate tooling also uses reflection to set private static fields.\nreferences:\n    - https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/\nauthor: The Hunters Ledger\ndate: 2026-08-12\ntags:\n    - attack.execution\n    - attack.stealth\n    - attack.defense-impairment\n    - attack.t1059.001\n    - attack.t1685\n    - detection.emerging-threats\nlogsource:\n    category: ps_script\n    product: windows\n    definition: Requires PowerShell Script Block Logging, Windows Event ID 4104\ndetection:\n    selection_reflection:\n        ScriptBlockText|contains: 'GetTypes()'\n    selection_private_field:\n        ScriptBlockText|contains:\n            - 'NonPublic,Static'\n            - \"NonPublic','Static\"\n            - 'NonPublic, Static'\n    selection_write:\n        ScriptBlockText|contains: 'SetValue'\n    condition: all of selection_*\nfalsepositives:\n    - Development, debugging and unit-test tooling that reflects over private static members of loaded assemblies\n    - Some administrative modules and application shims legitimately patch private static fields at runtime - baseline the calling script path and its signer before alerting\nlevel: medium",
+        "to_ids": false,
+        "comment": "Potential AMSI Bypass via Reflection Over Assembly Types and Private Field Zeroing | TIER: Hunting | robustness 2 | confidence MODERATE for the shape; HIGH that the shape is present in this loader | ATT&CK T1059.001, T1685 | rule hash 641f1675 | https://the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "39a98da7-939f-5c11-91e1-a9692b8730a6",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: PowerShell Creating a Remote Thread in a Long-Lived Windows Host Process\nid: 4f7db7ac-00df-47ae-9577-4452bfdc8910\nstatus: experimental\ndescription: >-\n    Detects powershell.exe creating a remote thread inside a long-lived Windows host process such as explorer.exe. This is the injection step of the AdaptixC2 operator loader observed at 45.130.148.125, which reflectively loads a .NET injector in memory, decodes its shellcode with a single-byte XOR, then calls CreateRemoteThread against the target so the beacon runs inside a trusted, network-active process with no on-disk DLL and no LoadLibrary event for an EDR to catch. A script interpreter creating a thread inside another process is not ordinary administrative behaviour, and because the source and target are both operating-system binaries rather than attacker-chosen names, the pattern survives a rebuild or a rename of the malware.\nreferences:\n    - https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/\nauthor: The Hunters Ledger\ndate: 2026-08-12\ntags:\n    - attack.stealth\n    - attack.privilege-escalation\n    - attack.t1055\n    - attack.t1055.002\n    - detection.emerging-threats\nlogsource:\n    category: create_remote_thread\n    product: windows\ndetection:\n    selection_source:\n        SourceImage|endswith: '\\powershell.exe'\n    selection_target:\n        TargetImage|endswith:\n            - '\\explorer.exe'\n            - '\\svchost.exe'\n            - '\\RuntimeBroker.exe'\n            - '\\dllhost.exe'\n            - '\\sihost.exe'\n            - '\\taskhostw.exe'\n    condition: selection_source and selection_target\nfalsepositives:\n    - Endpoint security agents and remote-management suites that instrument a running shell from a PowerShell host - baseline the injecting process path and its signing status, then exclude by signer rather than by image name\n    - Software deployment tooling that patches a running shell process, which is rare and should correlate with a change window\nlevel: high",
+        "to_ids": true,
+        "comment": "PowerShell Creating a Remote Thread in a Long-Lived Windows Host Process | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1055, T1055.002 | rule hash e718a263 | https://the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "c177cd4a-87ec-5538-9cd2-32fbbf56d27d",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Suspicious .NET Assembly Image Load with Operator si_build Build Fingerprint\nid: 5b8e2d47-1c93-4a76-f018-9b4d7e3c6f85\nstatus: experimental\ndescription: Detects PowerShell loading a .NET DLL image whose PE version metadata contains the operator build-placeholder string si_build. This string appears in CompanyName, FileDescription, InternalName, and OriginalFilename fields of the operator-written injector.dll found in this AdaptixC2 deployment. The string is a Linux-build artifact from /tmp/si_build/ left unredacted in the PE version resource and is not present in any known legitimate software, but it is a renameable literal the operator controls - a future build that changes the project name evades this rule.\nreferences:\n    - https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/\nauthor: The Hunters Ledger\ndate: 2026-04-30\ntags:\n    - attack.stealth\n    - attack.privilege-escalation\n    - attack.t1055\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: image_load\ndetection:\n    selection:\n        Image|endswith: '\\powershell.exe'\n        Description|contains: 'si_build'\n    filter_legitimate:\n        Signed: 'true'\n    condition: selection and not filter_legitimate\nfalsepositives:\n    - Internal developer tooling where a developer has named a build artifact si_build and loaded it via PowerShell - cross-reference against software asset inventory\nlevel: medium",
+        "to_ids": false,
+        "comment": "Suspicious .NET Assembly Image Load with Operator si_build Build Fingerprint | TIER: Hunting | robustness 1 | confidence HIGH | ATT&CK T1055, T1055.002, T1620 | rule hash 496df870 | https://the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "4902cd96-2c0c-55e9-aa3f-ea3fe2e62c67",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Suspicious Active Directory Reconnaissance Tool Execution\nid: 9a3c6f12-4d87-4e52-b741-8c5f2a9d0e67\nstatus: experimental\ndescription: Detects execution of common Active Directory enumeration tools observed in this AdaptixC2 operator toolkit - SharpHound for BloodHound attack-path mapping, PowerView for PowerSploit AD recon, and ADRecon for comprehensive AD data harvesting. These tools are commodity open-source utilities frequently used by threat actors to identify domain privilege escalation paths, enumerate domain accounts and groups, and map trust relationships prior to lateral movement, but they are equally common in legitimate red-team and penetration-testing engagements.\nreferences:\n    - https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/\n    - https://github.com/BloodHoundAD/BloodHound\n    - https://github.com/PowerShellMafia/PowerSploit\nauthor: The Hunters Ledger\ndate: 2026-04-30\ntags:\n    - attack.discovery\n    - attack.t1087.002\n    - attack.t1482\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection_sharphound:\n        Image|endswith: '\\SharpHound.exe'\n        CommandLine|contains:\n            - '-c All'\n            - '--CollectionMethods'\n            - '-CollectionMethod'\n    selection_powerview:\n        CommandLine|contains:\n            - 'Get-NetDomain'\n            - 'Get-NetForest'\n            - 'Invoke-BloodHound'\n            - 'Get-DomainTrust'\n            - 'Get-NetGroupMember'\n    selection_adrecon:\n        Image|endswith: '\\ADRecon.exe'\n    condition: selection_sharphound or selection_powerview or selection_adrecon\nfalsepositives:\n    - Authorized security assessment or red team exercises - correlate against change management records and authorized testing windows\n    - EDR or vulnerability assessment platforms that incorporate BloodHound data collection natively\nlevel: medium",
+        "to_ids": false,
+        "comment": "Suspicious Active Directory Reconnaissance Tool Execution | TIER: Hunting | robustness 2 | confidence HIGH | ATT&CK T1087.002, T1069.002, T1482 | rule hash d0a29130 | https://the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "5a154d98-541b-5212-828f-46a0fb6605c3",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "/*\n   Yara Rule Set\n   Identifier: AdaptixC2 Operator Toolkit — 45.130.148.125\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule MALW_AdaptixC2_Windows_Beacon_Stock\n{\n    meta:\n        description = \"Detects AdaptixC2 Windows beacon (DLL/EXE) by stock Itanium-ABI RTTI typeinfo strings, RDI loader export, and heartbeat header — catches any operator running stock AdaptixC2 with default connector names\"\n        license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/\"\n        date = \"2026-04-30\"\n        hash1 = \"358edb5d7e3e38c2da0a2ef323a281283aa96d47a8649014d114923b06866c12\"\n        hash2 = \"\"\n        hash3 = \"\"\n        family = \"AdaptixC2\"\n        malware_type = \"C2 Framework Beacon\"\n        campaign = \"AdaptixC2-OpenDirectory-Toolkit-45.130.148.125\"\n        id = \"952a09e1-dbbd-5758-ab76-bb9f215d96b5\"\n\n    strings:\n        $s1 = \"9Connector\" ascii\n        $s2 = \"13ConnectorHTTP\" ascii\n        $s3 = \"GetVersions\" ascii\n        $s4 = \"Mingw-w64 runtime failure:\" ascii\n        $s5 = \"X-Beacon-Id\" ascii\n\n    condition:\n        uint16(0) == 0x5A4D and\n        filesize < 300KB and\n        ($s1 and $s2) and\n        ($s3 or $s4) and\n        $s5\n}",
+        "to_ids": true,
+        "comment": "AdaptixC2 Windows Beacon: Stock Framework Fingerprint | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1071.001 | rule hash b59cdb7a | https://the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "752a2dde-6a77-5686-8500-bf87d3afa5c5",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MALW_AdaptixC2_Operator_Injector_SI\n{\n    meta:\n        description = \"Detects the operator-written .NET v4.7.2 SI class CRT injector (injector.dll) by Linux PDB path and build-name placeholder strings — actor-specific fingerprint not present in any AdaptixC2 stock component\"\n        license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/\"\n        date = \"2026-04-30\"\n        hash1 = \"5ea265ad3e6429cd2e8d9831360f7e2be9b8ba5a5b32a4a60c5c956a3f8fb285\"\n        hash2 = \"\"\n        hash3 = \"\"\n        family = \"AdaptixC2\"\n        malware_type = \"Process Injector (Operator-Authored)\"\n        campaign = \"AdaptixC2-OpenDirectory-Toolkit-45.130.148.125\"\n        id = \"1d62ef42-8771-50b6-a677-ebe27b2b60f6\"\n\n    strings:\n        $s1 = \"/tmp/si_build/obj/Release/net472/si_build.pdb\" ascii\n        $s2 = \"si_build\" ascii\n\n    condition:\n        uint16(0) == 0x5A4D and\n        filesize < 20KB and\n        $s1 and $s2\n}",
+        "to_ids": false,
+        "comment": "AdaptixC2 Operator .NET Injector: si_build Build Fingerprint | TIER: Hunting | robustness 1 | confidence HIGH (fingerprint) / MODERATE (forward attribution value) | ATT&CK T1055, T1055.002 | rule hash 9ae5dd83 | https://the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "036d681f-2fad-5417-bb26-62e85fd33f20",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MALW_AdaptixC2_PowerShell_Loader_BeaconPS1\n{\n    meta:\n        description = \"Detects the operator-written beacon.ps1 PowerShell delivery loader by concatenated AMSI bypass, SI injector invocation, and base64 MZ prefix for inline PE — all four elements must co-occur\"\n        license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/\"\n        date = \"2026-04-30\"\n        hash1 = \"b4ffd7ca8f5505fd7b71882c67712e896c9d170a3b3b581baba78ee5d1c2b858\"\n        hash2 = \"\"\n        hash3 = \"\"\n        family = \"AdaptixC2\"\n        malware_type = \"PowerShell Loader (Operator-Authored)\"\n        campaign = \"AdaptixC2-OpenDirectory-Toolkit-45.130.148.125\"\n        id = \"38a6c21a-688f-50cb-80aa-256367744425\"\n\n    strings:\n        $s1 = \"amsi'+'Con'+'text\" ascii nocase\n        $s2 = \"*iUtils\" ascii\n        $s3 = \"[SI]::Inject(\" ascii\n        $s4 = \"TVqQAAMA\" ascii\n\n    condition:\n        filesize < 512KB and\n        $s1 and $s2 and $s3 and $s4\n}",
+        "to_ids": false,
+        "comment": "AdaptixC2 PowerShell Loader: AMSI Bypass and SI Injector Invocation | TIER: Hunting | robustness 1 | confidence HIGH | ATT&CK T1059.001, T1685, T1620 | rule hash 8f48543e | https://the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "3f34cca5-3446-5fd3-a88d-05c9cc828af9",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MALW_Ligolo_ng_v083_Agent\n{\n    meta:\n        description = \"Detects Ligolo-ng v0.8.3 stock reverse-tunnel agent by embedded version string, Go package namespace, and upstream commit hash — operator bundled this for internal-network pivot\"\n        license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/\"\n        date = \"2026-04-30\"\n        hash1 = \"4b41f36f82db6da8767a0a1c2997c8242d80b2d10a8f1d28c252a9306ec152b5\"\n        hash2 = \"\"\n        hash3 = \"\"\n        family = \"Ligolo-ng\"\n        malware_type = \"Reverse Tunnel Agent\"\n        campaign = \"AdaptixC2-OpenDirectory-Toolkit-45.130.148.125\"\n        id = \"5f4a72f0-b98c-5719-bf40-edafeb7f7021\"\n\n    strings:\n        $s1 = \"nicocha30/ligolo-ng/pkg/\" ascii\n        $s2 = \"0.8.3\" ascii\n        $s3 = \"913fe64e088d5db2185d392965bf4cd3dd1d9495\" ascii\n\n    condition:\n        filesize < 15MB and\n        $s1 and\n        ($s2 or $s3)\n}",
+        "to_ids": true,
+        "comment": "Ligolo-ng v0.8.3 Reverse Tunnel Agent | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1090.001, T1572 | rule hash ea9dae9c | https://the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      }
+    ],
+    "Object": []
+  }
+}

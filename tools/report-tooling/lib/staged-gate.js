@@ -81,6 +81,18 @@ var CHECKS = {
     cmd: 'check-tags.js',
     why: '_data/catalog.yml or _data/tags.yml is staged'
   },
+  misp: {
+    id: 'misp',
+    label: 'MISP feed',
+    cmd: 'check-misp-feed.js',
+    why: 'feeds/misp/, a STIX bundle, a detection page, a report, the catalog or the ATT&CK catalog is staged'
+  },
+  'stix-manifest': {
+    id: 'stix-manifest',
+    label: 'STIX bundle manifest',
+    cmd: 'check-stix-manifest.js',
+    why: 'a STIX bundle, the bundles zip, stix/manifest.json or the catalog is staged'
+  },
   xref: {
     id: 'xref',
     label: 'technique and family pages',
@@ -188,6 +200,17 @@ function plan(paths, opts) {
         p === 'tools/report-tooling/data/attack-techniques.tsv') {
       want.xref = true;
     }
+    /* The MISP feed derives from the catalog, the reports' publication state,
+       the STIX bundles, the detection pages and the ATT&CK names, and writes
+       its own files under feeds/misp/; the STIX manifest from the bundles, the
+       zip and the catalog. Either input staged routes to its gate so a
+       subscriber's next pull never carries less than the site publishes. */
+    if (/^feeds\/misp\/[^/]+$/.test(p) || /^stix\/[^/]+\.json$/.test(p) || p === '_data/catalog.yml' ||
+        /^reports\/[^/]+\/index\.md$/.test(p) || /^hunting-detections\/.+\.md$/.test(p) ||
+        p === 'tools/report-tooling/data/attack-techniques.tsv') {
+      want.misp = true;
+    }
+    if (/^stix\/[^/]+\.(json|zip)$/.test(p) || p === '_data/catalog.yml') want['stix-manifest'] = true;
     if (p === '_data/glossary.yml' && owed.indexOf(OWED_GLOSSARY) === -1) owed.push(OWED_GLOSSARY);
 
     /* STIX bundle safety (2026-09-14): no value a feed marks unblockable may sit

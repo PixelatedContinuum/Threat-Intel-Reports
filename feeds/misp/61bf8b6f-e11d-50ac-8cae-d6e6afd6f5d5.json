@@ -1,0 +1,1490 @@
+{
+  "Event": {
+    "uuid": "61bf8b6f-e11d-50ac-8cae-d6e6afd6f5d5",
+    "info": "Carrier Credential Harvesting Through a Customer's Router",
+    "date": "2026-08-18",
+    "threat_level_id": 1,
+    "analysis": 2,
+    "timestamp": 1791580400,
+    "publish_timestamp": 1791580400,
+    "published": true,
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Telecom\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Cisco IOS-XE\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"WebLogic\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Cred Theft\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"OS Credential Dumping - T1003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Security Account Manager - T1003.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data from Local System - T1005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Rootkit - T1014\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Network Configuration Discovery - T1016\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"SMB/Windows Admin Shares - T1021.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"SSH - T1021.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Remote Management - T1021.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information - T1027\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Name or Location - T1036.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over C2 Channel - T1041\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Network Service Discovery - T1046\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over Unencrypted Non-C2 Protocol - T1048.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Command Shell - T1059.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Unix Shell - T1059.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Privilege Escalation - T1068\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Indicator Removal: File Deletion - T1070.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Indicator Removal: Timestomp - T1070.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Local Data Staging - T1074.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Valid Accounts - T1078\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Internal Proxy - T1090.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"External Proxy - T1090.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Account Manipulation - T1098\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Password Spraying - T1110.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Standard Encoding - T1132.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Local Account - T1136.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploit Public-Facing Application - T1190\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Trusted Relationship - T1199\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation of Remote Services - T1210\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Linux and Mac Permissions - T1222.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Shell - T1505.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Create or Modify System Process - T1543\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials In Files - T1552.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Private Keys - T1552.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Compromise Host Software Binary - T1554\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials from Password Stores - T1555\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Non-Standard Port - T1571\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Protocol Tunneling - T1572\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domains - T1583.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Virtual Private Server - T1583.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Develop Capabilities: Malware - T1587.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obtain Capabilities: Exploits - T1588.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Vulnerability Scanning - T1595.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Scan Databases - T1596.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Stage Capabilities: Upload Malware - T1608.001\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "Attribute": [
+      {
+        "uuid": "db31c20d-b1cc-532e-accc-33be50dced5b",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/",
+        "to_ids": false,
+        "comment": "Detection rules, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "9b6bde21-121c-532b-96da-2886853786ec",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/ioc-feeds/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-iocs.json",
+        "to_ids": false,
+        "comment": "IOC feed (JSON), The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "7ef7cbb0-c6a8-5e5b-971d-62b51b1da261",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/",
+        "to_ids": false,
+        "comment": "Report, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "d3047af5-9deb-5227-96af-fc500e1445a8",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/stix/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817.json",
+        "to_ids": false,
+        "comment": "STIX 2.1 bundle, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "53ee9804-edcb-56fe-b102-3fd292919af3",
+        "type": "vulnerability",
+        "category": "External analysis",
+        "value": "CVE-2020-14882",
+        "to_ids": false,
+        "comment": "Named in the report",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "44835e1a-056a-5935-8051-c7fe32ca9113",
+        "type": "vulnerability",
+        "category": "External analysis",
+        "value": "CVE-2020-2555",
+        "to_ids": false,
+        "comment": "Named in the report",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "a615d91d-45db-5279-aed7-739829d3c4e7",
+        "type": "vulnerability",
+        "category": "External analysis",
+        "value": "CVE-2021-44228",
+        "to_ids": false,
+        "comment": "Named in the report",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "bd3880b2-a27a-5e01-a629-26f49768d43c",
+        "type": "vulnerability",
+        "category": "External analysis",
+        "value": "CVE-2023-20198",
+        "to_ids": false,
+        "comment": "Named in the report",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "e009fc3b-0e92-5d5c-a4fc-db76b283583b",
+        "type": "vulnerability",
+        "category": "External analysis",
+        "value": "CVE-2023-20273",
+        "to_ids": false,
+        "comment": "Named in the report",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "d5017c96-2a62-51c9-aaec-088809228d46",
+        "type": "vulnerability",
+        "category": "External analysis",
+        "value": "CVE-2023-21839",
+        "to_ids": false,
+        "comment": "Named in the report",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "e9d8f559-8398-5b91-aba6-4ff21e27e3bb",
+        "type": "vulnerability",
+        "category": "External analysis",
+        "value": "CVE-2024-21182",
+        "to_ids": false,
+        "comment": "Named in the report",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "e0c4eeb4-3398-52d2-b89b-30192fc2f210",
+        "type": "vulnerability",
+        "category": "External analysis",
+        "value": "CVE-2024-36401",
+        "to_ids": false,
+        "comment": "Named in the report",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "e6367699-9326-5a52-b6e1-1a1c98c95212",
+        "type": "vulnerability",
+        "category": "External analysis",
+        "value": "CVE-2026-43284",
+        "to_ids": false,
+        "comment": "Named in the report",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "33b28f14-dc2f-51cf-87a3-505f677b6508",
+        "type": "vulnerability",
+        "category": "External analysis",
+        "value": "CVE-2026-43500",
+        "to_ids": false,
+        "comment": "Named in the report",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "8000ad6c-a630-54c1-9a6b-a07c15f2dce4",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "04dbe46cf060c2de75ff04a13b0f2b48253c1b03a638a2afdae3cccdeeae500c",
+        "to_ids": true,
+        "comment": "sha256: 04dbe46cf060c2de75ff04a13b0f2b48253c1b03a638a2afdae3cccdeeae500c [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "26b01a79-f77d-5b5a-a21d-4eaf757c7392",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "08ae961db6b2564e26ba55ebe8aaf31920dc418b55010b0a2401ed995552c347",
+        "to_ids": true,
+        "comment": "sha256: 08ae961db6b2564e26ba55ebe8aaf31920dc418b55010b0a2401ed995552c347 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "49ce0900-3aa3-59c6-9608-60d09ebf84d2",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "0a76c28f5452dbbc146752d0b4e28b10779a337091f59650b94f5e938545572c",
+        "to_ids": true,
+        "comment": "sha256: 0a76c28f5452dbbc146752d0b4e28b10779a337091f59650b94f5e938545572c. Chisel is a legitimate open-source tunnelling tool with genuine administrative uses. Detect the reverse-tunnel behaviour, not the hash alone [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "e85caaa0-051c-5f32-9302-51724bd2a895",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "1079a2f628fd6a33dae90515ecebecabf66eb3952c39635fd495dd3718173f64",
+        "to_ids": true,
+        "comment": "sha256: 1079a2f628fd6a33dae90515ecebecabf66eb3952c39635fd495dd3718173f64 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "ec994d1d-8e25-53f3-8b7b-08f35524a2eb",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "10ff5a12a4380e7e3209cd2c1cab14c1329160fb88d0ede2e4450e8ade6f4b79",
+        "to_ids": true,
+        "comment": "sha256: 10ff5a12a4380e7e3209cd2c1cab14c1329160fb88d0ede2e4450e8ade6f4b79 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "72655f36-de14-52d4-8611-e4a37d6b6b60",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "1351c03f626745cacd97f957419559da442264c0e0c4b100f496199dbd6301cc",
+        "to_ids": true,
+        "comment": "sha256: 1351c03f626745cacd97f957419559da442264c0e0c4b100f496199dbd6301cc [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "fcdadec6-7f79-578f-b42f-141a11720a69",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "1766fd750011ad5d3b4f98357acb418f8ee07587c558c7fbe5169b7f3d8285c0",
+        "to_ids": true,
+        "comment": "sha256: 1766fd750011ad5d3b4f98357acb418f8ee07587c558c7fbe5169b7f3d8285c0 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "aee1e114-2d09-5e6a-8c4d-b30950e2ab20",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "19957b57916b3133fd69ca925304b1260c92d1f3b6857bcb9b48606b583a6455",
+        "to_ids": true,
+        "comment": "sha256: 19957b57916b3133fd69ca925304b1260c92d1f3b6857bcb9b48606b583a6455 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "4b9fbd13-0998-51f6-82ce-3aa31e479c05",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "1f135e2ede4d2389e481d51d046e533ac485d15dc83396818d41bb81c7e84045",
+        "to_ids": true,
+        "comment": "sha256: 1f135e2ede4d2389e481d51d046e533ac485d15dc83396818d41bb81c7e84045 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "b5ea17d2-aa19-57de-aef8-6788d1f510b5",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "25e713913758006835da0c0aa3aa621c37e21498114dadc8c4a8c00d6997d99b",
+        "to_ids": true,
+        "comment": "sha256: 25e713913758006835da0c0aa3aa621c37e21498114dadc8c4a8c00d6997d99b [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "aa32f2a2-f531-56c1-98db-e82a1c72c8a6",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "35792ca59beddfc9905c06c1a22b35b367d4f39083a0e59aea3a197f33af36e0",
+        "to_ids": true,
+        "comment": "sha256: 35792ca59beddfc9905c06c1a22b35b367d4f39083a0e59aea3a197f33af36e0 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "e44fe4c2-eecf-5264-9194-7a5d346b764a",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "395d83618e1ad08a61a70405f9c41f38202ad273ec2f748017a934c5a5020a32",
+        "to_ids": true,
+        "comment": "sha256: 395d83618e1ad08a61a70405f9c41f38202ad273ec2f748017a934c5a5020a32 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "f3ef9bc1-910b-5a0d-b7da-883d78de0e8d",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "3fbfafab2e467055e22cf88719f081770fda732c278ad7244c938308f6b28c96",
+        "to_ids": true,
+        "comment": "sha256: 3fbfafab2e467055e22cf88719f081770fda732c278ad7244c938308f6b28c96 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "c6e4a5ab-33c5-563f-bf3c-95e90c43810c",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "403aad5736161e9b36c4f2c9a4451d0146b870c76627cc0afb28f2c038ab9af2",
+        "to_ids": true,
+        "comment": "sha256: 403aad5736161e9b36c4f2c9a4451d0146b870c76627cc0afb28f2c038ab9af2 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "4da24c4d-a912-5e89-ab44-eee683e2a043",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "4430563acc3e61903969f077fa2f868cc75158ec6719abb4031c115aa7e895ab",
+        "to_ids": true,
+        "comment": "sha256: 4430563acc3e61903969f077fa2f868cc75158ec6719abb4031c115aa7e895ab [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "aa3fcb51-5bc4-55b4-8e3d-1398dd83ee90",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "45534cd8555fb79ebae27aaea8a6fbaec70d41ef5d9bc0a9415ed72e7ad23b00",
+        "to_ids": true,
+        "comment": "sha256: 45534cd8555fb79ebae27aaea8a6fbaec70d41ef5d9bc0a9415ed72e7ad23b00 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "fda95d71-c75c-5b83-86de-ce1b77fda8d3",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "4bb64940f1f08d23a5b0733369a40f349dce28a8e677577e44dbf0d61ceb6faf",
+        "to_ids": true,
+        "comment": "sha256: 4bb64940f1f08d23a5b0733369a40f349dce28a8e677577e44dbf0d61ceb6faf [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "7a3f2e25-b716-5448-8845-2d547a263948",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "4d53fc510a54cc1d3f9f6e8c14cb62bb784267ebcf15b6fc4126901fd81c32cc",
+        "to_ids": true,
+        "comment": "sha256: 4d53fc510a54cc1d3f9f6e8c14cb62bb784267ebcf15b6fc4126901fd81c32cc [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "d9ae0a12-04e8-597c-ba58-dd33c7cc1530",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "4e722db95bf034806bf181f11065c6cb28578074b9fa613fd5018d1370db7ba2",
+        "to_ids": true,
+        "comment": "sha256: 4e722db95bf034806bf181f11065c6cb28578074b9fa613fd5018d1370db7ba2 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "be96663c-6765-5339-9926-27a9c5d395bd",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "5182ec0b8959cc554c8f3e06e8fad7a94b71f11de29d7c9c462fb500ef9d33bb",
+        "to_ids": true,
+        "comment": "sha256: 5182ec0b8959cc554c8f3e06e8fad7a94b71f11de29d7c9c462fb500ef9d33bb [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "6bc40959-5eb0-543c-83c2-4221729dfa74",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "53517fdc0d386c7dfd4546e9e83150f85dab0662dbcaf9bf0f9dd82fab3a07e9",
+        "to_ids": true,
+        "comment": "sha256: 53517fdc0d386c7dfd4546e9e83150f85dab0662dbcaf9bf0f9dd82fab3a07e9 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "c04030f7-2e1b-51d5-af06-9bd52b913724",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "57808e07ba7745a2d598f630db9c6a671fe5cca005c6dbf4239b8ad794277143",
+        "to_ids": true,
+        "comment": "sha256: 57808e07ba7745a2d598f630db9c6a671fe5cca005c6dbf4239b8ad794277143 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "881db3f7-4ca6-5339-8a3a-6a1a5dafc335",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "58475dcbda931c31e45a83884e366a28b34aaa9099bab8b2e38590824e3b61b3",
+        "to_ids": true,
+        "comment": "sha256: 58475dcbda931c31e45a83884e366a28b34aaa9099bab8b2e38590824e3b61b3 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "f46deea0-6f60-50df-a929-6e1bc91f01cd",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "5a8aa26793cc031314eba327f40e384e2e0d009a7183e344e5db11f2cd3b185f",
+        "to_ids": true,
+        "comment": "sha256: 5a8aa26793cc031314eba327f40e384e2e0d009a7183e344e5db11f2cd3b185f [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "0f2a5666-28d7-5287-bbdd-2ce7bb370675",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "5ce9cdc2d2d5f5fd053ef7438626a9c98bc92ecc1eb2960fc6cffdc94e0ab550",
+        "to_ids": true,
+        "comment": "sha256: 5ce9cdc2d2d5f5fd053ef7438626a9c98bc92ecc1eb2960fc6cffdc94e0ab550 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "37c844c8-a81e-5ed9-90a8-8bb89f0528c9",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "5f2efa79f548b648a318e6c6f3512581574002b79fab97cfec10b77feba177b8",
+        "to_ids": true,
+        "comment": "sha256: 5f2efa79f548b648a318e6c6f3512581574002b79fab97cfec10b77feba177b8 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "8e92343e-08d4-5f97-a7d8-7793fd059a5b",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "610ff467df7cf2ea672762f4fd63c9a817b7d5f18f290efe8bdf239ddc8031f7",
+        "to_ids": true,
+        "comment": "sha256: 610ff467df7cf2ea672762f4fd63c9a817b7d5f18f290efe8bdf239ddc8031f7 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "5df8d80b-ebc5-5c8d-98b4-b5e029535760",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "626856f44bba5e61c878c2e2be54f3aa12a2fdee602634706917bc77aaaa4ef5",
+        "to_ids": true,
+        "comment": "sha256: 626856f44bba5e61c878c2e2be54f3aa12a2fdee602634706917bc77aaaa4ef5 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "17ef9408-808a-5305-a55e-687d9be39b36",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "628e3af996c506671d978026496c28e2ec0b4bc3a91302257d3b508d1ebd61f6",
+        "to_ids": true,
+        "comment": "sha256: 628e3af996c506671d978026496c28e2ec0b4bc3a91302257d3b508d1ebd61f6 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "6e0598f4-3b23-5f82-8483-39d6e514715f",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "6457ff57de0ee5b12abf6e3c8291e69718ea6ded741af51807259c692e7071c5",
+        "to_ids": true,
+        "comment": "sha256: 6457ff57de0ee5b12abf6e3c8291e69718ea6ded741af51807259c692e7071c5 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "08403908-8e14-5ffc-961a-3c790d2c450a",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "65bd20aa232157ee4015e1d5b8939e953db0dd69a3c86a7387a33aedd2288b85",
+        "to_ids": true,
+        "comment": "sha256: 65bd20aa232157ee4015e1d5b8939e953db0dd69a3c86a7387a33aedd2288b85 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "1270d197-9fca-595a-8221-96a28234b6db",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "676437728db9710c645d509d7ccc517864a263914f9a152c1d49cad3106df900",
+        "to_ids": true,
+        "comment": "sha256: 676437728db9710c645d509d7ccc517864a263914f9a152c1d49cad3106df900 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "87fef190-57b3-548c-a992-65d8d9347ede",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "6ce28a27af3bf7732952461c6d6003c53ee0c367563f941b8dd481aefa2e7454",
+        "to_ids": true,
+        "comment": "sha256: 6ce28a27af3bf7732952461c6d6003c53ee0c367563f941b8dd481aefa2e7454 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "f7806d05-546a-5fb8-8ca9-00b1cb22e018",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "72c6383477bbcb93811fd837a9e4721cfddea0cd238eebe3012acc0e6a31c40e",
+        "to_ids": true,
+        "comment": "sha256: 72c6383477bbcb93811fd837a9e4721cfddea0cd238eebe3012acc0e6a31c40e [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "6dc286e2-df32-5ce7-8848-e24ee11619e0",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "7477eea61182c26fdd26e688bcc4f6ae87347e9a9290b81aae21b2fd71db0984",
+        "to_ids": true,
+        "comment": "sha256: 7477eea61182c26fdd26e688bcc4f6ae87347e9a9290b81aae21b2fd71db0984 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "1be12776-f964-5e04-a49e-d1e194dd03aa",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "75f99724611c680400f2ba567b71522a63122b0510ea7ef35c2696dd61666ecf",
+        "to_ids": true,
+        "comment": "sha256: 75f99724611c680400f2ba567b71522a63122b0510ea7ef35c2696dd61666ecf [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "3f7b0c0f-73f8-5951-8d6c-ea5c12cc132c",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "7b699b24025e3d71fd83dd766c7b842579cf28527f22a8fd5c9097ceaa7a013d",
+        "to_ids": true,
+        "comment": "sha256: 7b699b24025e3d71fd83dd766c7b842579cf28527f22a8fd5c9097ceaa7a013d [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "7c5d4524-03f7-5c1f-949e-47344f179158",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "80b9a4c5cde7f1793b4123662b2dddc2b3801e09fdc7ed8c295e10bad3397b9b",
+        "to_ids": true,
+        "comment": "sha256: 80b9a4c5cde7f1793b4123662b2dddc2b3801e09fdc7ed8c295e10bad3397b9b [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "a769cf1f-1ebc-5564-80e9-7853d824ce43",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "885cfb5bfd041b8efd885860add9661eeab6086d2eb91997fffc420738e42ade",
+        "to_ids": true,
+        "comment": "sha256: 885cfb5bfd041b8efd885860add9661eeab6086d2eb91997fffc420738e42ade [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "cb87aa89-9280-5078-a65d-6221849fe74b",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "891c4bb6b5c94b28867535c1ec71561be75b30da47554fbf6d55ae7f0d86be8b",
+        "to_ids": true,
+        "comment": "sha256: 891c4bb6b5c94b28867535c1ec71561be75b30da47554fbf6d55ae7f0d86be8b [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "25d57589-4c06-53ea-b2de-aad7b6480e6e",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "9251373f585c91b6bf7c407aa1a989e7cc596c4afc79a8573a18f858df9f014d",
+        "to_ids": true,
+        "comment": "sha256: 9251373f585c91b6bf7c407aa1a989e7cc596c4afc79a8573a18f858df9f014d [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "58759c41-8a14-5876-869a-f45eb9d40b2c",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "953b668e95e033b34de0373af354cfd1d5557edf8cdfa49887cabf2b44d67b65",
+        "to_ids": true,
+        "comment": "sha256: 953b668e95e033b34de0373af354cfd1d5557edf8cdfa49887cabf2b44d67b65 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "cfa9fdbe-cdda-5fdb-b839-95718bab3587",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "9bebcc8ccfb9207b8265c85a4896760b8adee5deea0c2f57e6b08fc56a29e2ec",
+        "to_ids": true,
+        "comment": "sha256: 9bebcc8ccfb9207b8265c85a4896760b8adee5deea0c2f57e6b08fc56a29e2ec [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "cebb6d45-772c-5759-bb3d-5360810b0cee",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "9e683ccc4baa5efdf4b643ade417cf56b729c5da1d351495d4317272b15f925f",
+        "to_ids": true,
+        "comment": "sha256: 9e683ccc4baa5efdf4b643ade417cf56b729c5da1d351495d4317272b15f925f [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "3db82658-9116-5561-a693-52a2c47ab1a8",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "9f2302cd9698895ac3d83e44fc0b3c99767cc1561bb18de6a2fb31acb5c15feb",
+        "to_ids": true,
+        "comment": "sha256: 9f2302cd9698895ac3d83e44fc0b3c99767cc1561bb18de6a2fb31acb5c15feb [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "146d5a41-caa5-547f-b234-9557fc396102",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "a133809a768c7c6b958d72ff6857677b14ed6bf284b99dc81a121442dfe04f90",
+        "to_ids": true,
+        "comment": "sha256: a133809a768c7c6b958d72ff6857677b14ed6bf284b99dc81a121442dfe04f90 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "f13a6c3b-e21d-5a93-8890-8363e795e524",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "a652e3ae426e614844a5970154cb2a2e1465ab6fe73bbd3df47abeb6bdf859eb",
+        "to_ids": true,
+        "comment": "sha256: a652e3ae426e614844a5970154cb2a2e1465ab6fe73bbd3df47abeb6bdf859eb [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "52ce0f96-dcf6-57ea-8547-12677f7b2b95",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "a71223b4b7d092f5a0cbcece6df94f907572f090c5db6bb68bcaaeb077c744d7",
+        "to_ids": true,
+        "comment": "sha256: a71223b4b7d092f5a0cbcece6df94f907572f090c5db6bb68bcaaeb077c744d7 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "feb05927-7ca9-550b-8bba-278f70dc387d",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "a93d8af6748c9c8ff1dbdffeed317cf81fe7777f25daf5c8feb44aa64d600463",
+        "to_ids": true,
+        "comment": "sha256: a93d8af6748c9c8ff1dbdffeed317cf81fe7777f25daf5c8feb44aa64d600463 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "94abae54-63e3-551a-9cbd-989214543f31",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "abcb8e8bd371549af056f973b95cceae9156b5b96e80facbc19db009347b2924",
+        "to_ids": true,
+        "comment": "sha256: abcb8e8bd371549af056f973b95cceae9156b5b96e80facbc19db009347b2924 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "4b575b26-4358-5c8c-a318-296de9b45a03",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "bfb79c2d47b7bbd0cfc17782014eb7a57b73834ab93d49d7dd1e6942693ac8f2",
+        "to_ids": true,
+        "comment": "sha256: bfb79c2d47b7bbd0cfc17782014eb7a57b73834ab93d49d7dd1e6942693ac8f2 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "f739cb55-c794-5dad-a282-469dc9ebe1ab",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "c17736b8535359e385fdc3e242d2a36c3b921469229c256947695a4716ad0e4d",
+        "to_ids": true,
+        "comment": "sha256: c17736b8535359e385fdc3e242d2a36c3b921469229c256947695a4716ad0e4d [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "cab172ed-95c6-55f4-ba53-c482c6577af8",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "ce2bb74025dc77d4d5c506b990633f526f4f3f4ca849db7c0025d42d10a8529a",
+        "to_ids": true,
+        "comment": "sha256: ce2bb74025dc77d4d5c506b990633f526f4f3f4ca849db7c0025d42d10a8529a [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "12687304-6064-5b29-aad4-542d4b98d124",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "d2ba9a1859464c4f08c47643d2e157400a94b31b429d4415acb4389944ee016a",
+        "to_ids": true,
+        "comment": "sha256: d2ba9a1859464c4f08c47643d2e157400a94b31b429d4415acb4389944ee016a [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "3512191f-111a-5e57-a92d-1fe2d75d3c0f",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "daee2d57566c88374b5de65ecc04e1321da4d5dc35b84a0eb98893afad9e2664",
+        "to_ids": true,
+        "comment": "sha256: daee2d57566c88374b5de65ecc04e1321da4d5dc35b84a0eb98893afad9e2664 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "a11b6aa4-117b-510f-ad15-8a7927ed6995",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "dbbdffa94caf45a4c1f9132fa7c5bfc6a4c20ee104440ba964cc99ea9850facb",
+        "to_ids": true,
+        "comment": "sha256: dbbdffa94caf45a4c1f9132fa7c5bfc6a4c20ee104440ba964cc99ea9850facb [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "5d68eb65-fe4b-5798-aa9d-a19b5429d8b5",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "dcd739dfe08285c08200be926905155576bedc4e5633b5f02561ec7f80d512f1",
+        "to_ids": true,
+        "comment": "sha256: dcd739dfe08285c08200be926905155576bedc4e5633b5f02561ec7f80d512f1 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "9f870a63-7107-54a9-acba-3abda4cfc156",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "e447cbfbb5e82bd6b924cd6d9265d022a9ab576898c34ee6b854b9269ff9e870",
+        "to_ids": true,
+        "comment": "sha256: e447cbfbb5e82bd6b924cd6d9265d022a9ab576898c34ee6b854b9269ff9e870 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "0dd6273c-83a9-5666-bd89-717fda4dfe57",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "e5621ffe4879f0ec39ed40f688db9399c2d43054d41ef14472fa335c4693b915",
+        "to_ids": true,
+        "comment": "sha256: e5621ffe4879f0ec39ed40f688db9399c2d43054d41ef14472fa335c4693b915. PuTTY plink is legitimate administrative software. Context is the external staging fetch onto a management host [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "60c4b009-a3cc-574e-846a-a8850b495b68",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "e74276ce204476787aaa65c0f0604707c918a06b724ceaa98eb57f2105c65157",
+        "to_ids": true,
+        "comment": "sha256: e74276ce204476787aaa65c0f0604707c918a06b724ceaa98eb57f2105c65157 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "bba6bfd8-e6f5-52e8-a814-8d99f60ba8d2",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "e788f829b1a0141a488afb5f82b94f13035623609ca3b83f0c6985919cd9e83b",
+        "to_ids": true,
+        "comment": "sha256: e788f829b1a0141a488afb5f82b94f13035623609ca3b83f0c6985919cd9e83b. Chisel is a legitimate open-source tunnelling tool with genuine administrative uses. Detect the reverse-tunnel behaviour and the staging fetch, not the hash alone [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "ff8200bf-65f6-5972-8543-9fd91d45737f",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "ee2d150a2f73a561983088a6b1a6a2b1c452777aaf03181387708c6907ac6dcd",
+        "to_ids": true,
+        "comment": "sha256: ee2d150a2f73a561983088a6b1a6a2b1c452777aaf03181387708c6907ac6dcd [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "2b48f2a1-06c6-5f28-841c-ac9603e6746f",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "f03e4111413befd8e44035c7fa56abf48fb12a0d03a6eda5662de33ffe47e2e7",
+        "to_ids": true,
+        "comment": "sha256: f03e4111413befd8e44035c7fa56abf48fb12a0d03a6eda5662de33ffe47e2e7 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "8012ac80-5303-5ce8-9c8f-2e26e3beddb7",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "fa433bbbc82c572c838ac6a9f0bdde3634c8fbae4178d3660bf0dcb1a958e262",
+        "to_ids": true,
+        "comment": "sha256: fa433bbbc82c572c838ac6a9f0bdde3634c8fbae4178d3660bf0dcb1a958e262 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "3c740221-b87c-5207-a6b4-f16701646934",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "fa434d13bee84e9a4ccfffbd8df2852d9d1238f8222bf806506b108d21924557",
+        "to_ids": true,
+        "comment": "sha256: fa434d13bee84e9a4ccfffbd8df2852d9d1238f8222bf806506b108d21924557 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "6b743588-b8fd-568c-85da-4ac15ff16e91",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "fa930afe099b266006f22fe75245f4d52b52a11de7280b6c2cff8e3a4e4b3e06",
+        "to_ids": true,
+        "comment": "sha256: fa930afe099b266006f22fe75245f4d52b52a11de7280b6c2cff8e3a4e4b3e06 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "9b9ab11e-33ae-5e74-8d25-101dc20cd87e",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "fae8fe13ac0e717d99f992fba9186aa37fb706058fe7762993717366f653d14a",
+        "to_ids": true,
+        "comment": "sha256: fae8fe13ac0e717d99f992fba9186aa37fb706058fe7762993717366f653d14a [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "5038a4a4-3fee-5a92-99b5-7fb50040bc24",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "fd628df5bf58c7abaebfca3ecfe504511080872bf1687ec2dd39d1d4cd3f0aab",
+        "to_ids": true,
+        "comment": "sha256: fd628df5bf58c7abaebfca3ecfe504511080872bf1687ec2dd39d1d4cd3f0aab [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "f38cd743-e286-5bdf-8733-7d8055e36658",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "radius-sync.com",
+        "to_ids": true,
+        "comment": "domain: radius-sync.com. Origin 13.140.145.210 unmasked from the operator's own capture log, which records Cloudflare edge addresses delivering Host: radius-sync.com and cf-ray headers to the VPS. VT 0/91. Named to impersonate telecom AAA infrastructure. WHOIS privacy applied approximately four minutes after registration [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "a530970a-be2d-5143-8064-cf41d2103612",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://13.140.145.210/",
+        "to_ids": true,
+        "comment": "url: http://13.140.145.210/. Operator VPS staging server root. Victim hosts fetched operator tooling (chisel_win.exe, plink.exe) from this origin. [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "97e646a6-bfce-5554-8445-4cf56807bc9a",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://13.140.145.210:4445/",
+        "to_ids": true,
+        "comment": "url: http://13.140.145.210:4445/. Beacon path form is /CLASS-RCE-$(whoami) [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "02aba81a-0bbe-566d-90fb-d95a8fb1ad3d",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://13.140.145.210:8888/",
+        "to_ids": true,
+        "comment": "url: http://13.140.145.210:8888/. Directory listing closed 2026-08-04 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "13f311cc-dcf7-5426-938d-df2494f7e939",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "13.140.145.210",
+        "to_ids": true,
+        "comment": "ipv4: 13.140.145.210. VT 0/91. Shodan geolocation for this address is wrong (reports US/Dallas/SoftLayer from a stale legacy registration on the 13.x block); VT, Censys and rDNS agree on Contabo France [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "f40eb450-fb4b-5521-8452-a5eb6d6b1fdd",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "95.214.114.37",
+        "to_ids": true,
+        "comment": "ipv4: 95.214.114.37. Attributed by the byte-identical double-encoded WSMA path appearing in the victim router's own nginx log on 2026-07-24. VT 1/91 | Commercial VPN/proxy egress range. Other tenants use the same infrastructure. Do not treat co-located activity as this operator's [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "dd43769a-0398-5d07-a957-796c8b6865d6",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT GENERIC-CVE-2023-20198 Cisco IOS-XE Forged Bare-Hex Authorization Token (Public Exploit Class)\"; flow:established,to_server; content:\"Authorization\"; http_header; pcre:\"/^Authorization:\\s*[a-f0-9]{18}\\s*$/mHi\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:web-application-attack; sid:9301804; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
+        "to_ids": true,
+        "comment": "GENERIC-CVE-2023-20198 Cisco IOS-XE Forged Bare-Hex Authorization Token | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1190 | rule hash 3d2d73ce | https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "0b6baf1e-389c-57d3-9c1e-6ed5a8663d63",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT GENERIC-CVE-2023-20198 Cisco IOS-XE WebUI Auth-Bypass Confirmation URI (Public Exploit Class, Not Operator-Specific)\"; flow:established,to_server; content:\"/webui/logoutconfirm.html\"; http_uri; content:\"logon_hash=1\"; http_uri; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:web-application-attack; sid:9301803; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
+        "to_ids": true,
+        "comment": "GENERIC-CVE-2023-20198 Cisco IOS-XE WebUI Auth-Bypass URI | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1190 | rule hash 5d7c42ae | https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "52677dc6-cb8a-5a92-9568-868a3f920df7",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT WebLogicTelecomHarvester Cisco IOS-XE Double-Encoded WSMA Path Bypass (CVE-2023-20273 Operator Fingerprint)\"; flow:established,to_server; content:\"%2577eb%2575i_%2577sma_Http\"; http_uri; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:9301802; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
+        "to_ids": true,
+        "comment": "Cisco IOS-XE Double-Encoded WSMA Path Bypass (Operator Fingerprint) | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1190 | rule hash f33a48f9 | https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "fb36559c-4c85-5271-8296-bbbf0240ee7e",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT WebLogicTelecomHarvester Cisco WSMA fileCopy Exfiltration Primitive to External dstURL\"; flow:established,to_server; content:\"urn:cisco:wsma-filesystem\"; http_client_body; content:\"fileCopy\"; http_client_body; content:\"dstURL=\"; http_client_body; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:9301805; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
+        "to_ids": true,
+        "comment": "Cisco WSMA fileCopy Exfiltration Primitive to External dstURL | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1048.003 | rule hash 3745f706 | https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "95fcdd81-ce21-5f65-869a-23a4f20eb826",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT WebLogicTelecomHarvester GeoServer OGC-Filter RCE via valueReference exec() (CVE-2024-36401)\"; flow:established,to_server; content:\"valueReference\"; http_uri; content:\"exec(\"; http_uri; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:web-application-attack; sid:9301809; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
+        "to_ids": true,
+        "comment": "GeoServer OGC-Filter RCE via valueReference exec() | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1190 | rule hash 92026f2a | https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "14a2ed8a-dd1e-5ed6-a4e3-06ebc4d24033",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT WebLogicTelecomHarvester PRTG Bulk Credential Extraction via getobjectproperty.htm\"; flow:established,to_server; content:\"getobjectproperty.htm\"; http_uri; content:\"passhash=\"; http_uri; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-recon; sid:9301811; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
+        "to_ids": true,
+        "comment": "PRTG Bulk Credential Extraction via getobjectproperty.htm | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1555 | rule hash 05939354 | https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "a0301ffe-89fc-5c97-ab6f-04fa5bc2d5b8",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL HUNT WebLogicTelecomHarvester Non-Standard X-CMD Webshell Dispatch Header\"; flow:established,to_server; content:\"X-CMD|3a|\"; http_header; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:9301810; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
+        "to_ids": false,
+        "comment": "Non-Standard X-CMD Webshell Dispatch Header | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1505.003 | rule hash 42393d7f | https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "a81d20ee-a4b7-5cdc-bbfd-58e01bd4c338",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL HUNT WebLogicTelecomHarvester PRTG Bulk Device Inventory Query via table.json (Broad, Legitimate Bulk Queries Exist)\"; flow:established,to_server; content:\"table.json\"; http_uri; content:\"content=devices\"; http_uri; content:\"count=500\"; http_uri; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-recon; sid:9301812; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
+        "to_ids": false,
+        "comment": "PRTG Bulk Device Inventory Query via table.json | TIER: Hunting | robustness 1 | confidence LOW | ATT&CK T1555 | rule hash 48a605bc | https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "c6b83d26-9ea9-56f8-a305-eac8776ad396",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT WebLogicTelecomHarvester Network-Device Self-Exfiltration Outbound PUT UA cisco-IOS (WSMA Abuse)\"; flow:established,to_server; content:\"PUT\"; http_method; content:\"cisco-IOS\"; http_user_agent; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:9301801; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
+        "to_ids": true,
+        "comment": "Network-Device Self-Exfiltration via Outbound PUT with User-Agent cisco-IOS | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1048.003, T1041 | rule hash cc61fb76 | https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "2b642503-4550-5177-ba20-3dd2bd73d81a",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT WebLogicTelecomHarvester Chisel-Style Reverse-Tunnel WebSocket Upgrade Handshake (Broad, Chisel Has Legitimate Uses)\"; flow:established,to_server; content:\"Upgrade|3a| websocket\"; http_header; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:9301808; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
+        "to_ids": false,
+        "comment": "Chisel-Style Reverse-Tunnel WebSocket Upgrade Handshake | TIER: Hunting | robustness 1 | confidence LOW | ATT&CK T1572 | rule hash 97a6db94 | https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "ec05c345-3d18-5352-bd7d-acf43d6c76f4",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert tcp $EXTERNAL_NET any -> $HOME_NET 7001 (msg:\"THL DETECT WebLogicTelecomHarvester WebLogic T3-IIOP JNDI OpaqueReference Injection (CVE-2023-21839/CVE-2024-21182)\"; flow:established,to_server; content:\"OpaqueReference\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-admin; sid:9301806; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
+        "to_ids": true,
+        "comment": "WebLogic T3/IIOP JNDI OpaqueReference Injection | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1190 | rule hash 8081a3d7 | https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "e76d0037-8444-5c9f-83c0-9fa796429c10",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT WebLogicTelecomHarvester Malicious LDAP-JNDI Callback Response (javaCodeBase/javaSerializedData)\"; flow:established,to_client; content:\"javaCodeBase\"; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-admin; sid:9301807; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
+        "to_ids": true,
+        "comment": "Malicious LDAP-JNDI Callback Response | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1190 | rule hash 40b58f28 | https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "e854bbd5-35fc-59ef-8f07-ff9b2a4ea1d6",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Chisel Client Establishing a Reverse SOCKS Tunnel\nid: 952efdf0-9d41-4d5b-a720-de3e66546fa1\nstatus: experimental\ndescription: >-\n    Detects execution of the chisel tunneling client with the reverse-SOCKS\n    shorthand flag, which turns an outbound HTTP/WebSocket connection to an\n    operator-controlled chisel server into a local SOCKS proxy usable for\n    internal-network pivoting.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\n    - https://github.com/jpillora/chisel\nauthor: The Hunters Ledger\ndate: 2026-08-17\ntags:\n    - attack.command-and-control\n    - attack.t1572\n    - stp.3\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_image:\n        Image|endswith:\n            - '\\chisel.exe'\n            - '\\chisel_win.exe'\n    selection_flag:\n        CommandLine|contains: 'r:socks'\n    condition: all of selection_*\nfalsepositives:\n    - Authorized use of chisel for legitimate remote-support or internal tunneling by an IT team\nlevel: high",
+        "to_ids": true,
+        "comment": "Chisel Client Establishing a Reverse SOCKS Tunnel | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1572 | rule hash 56dbb2fc | https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "fe4ace2d-dbaf-5519-9a73-8b44fbb6b245",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Chisel or PuTTY Plink Binary Written to Disk\nid: c6a0fca5-676f-46b7-b4db-bbfaa55a6352\nstatus: experimental\ndescription: >-\n    Detects a chisel or plink binary being written to disk. Both are\n    legitimate dual-use tools frequently repurposed by intruders for\n    reverse-SOCKS tunneling and SSH-based internal pivoting after an initial\n    foothold; review the file's origin before treating a hit as malicious,\n    since a fetch from an external HTTP server rather than an internal\n    software repository is the high-confidence variant of this behavior.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\nauthor: The Hunters Ledger\ndate: 2026-08-17\ntags:\n    - attack.command-and-control\n    - attack.t1105\nlogsource:\n    category: file_event\n    product: windows\ndetection:\n    selection:\n        TargetFilename|endswith:\n            - '\\chisel.exe'\n            - '\\chisel_win.exe'\n            - '\\plink.exe'\n    condition: selection\nfalsepositives:\n    - Legitimate administrative use of PuTTY plink for scripted SFTP/SCP or SSH automation\n    - Authorized use of chisel by an internal red team or IT support function\nlevel: medium",
+        "to_ids": false,
+        "comment": "Chisel or PuTTY Plink Binary Written to Disk | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1105 | rule hash 7e3c3198 | https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "223c31ef-f61d-5869-a8a6-96ded4d37e9e",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Command Shell Spawned by a Web Server or Application Server Process\nid: 06f9b3ec-3102-4abd-bc06-cbe8310a6495\nstatus: experimental\ndescription: >-\n    Detects cmd.exe or powershell.exe spawned directly by a web server or\n    Java application server process, consistent with a webshell or an\n    unauthenticated remote-code-execution vulnerability such as\n    CVE-2024-36401 in GeoServer being used to execute operating-system\n    commands.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\n    - https://nvd.nist.gov/vuln/detail/CVE-2024-36401\nauthor: The Hunters Ledger\ndate: 2026-08-17\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - attack.t1059.003\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_parent:\n        ParentImage|endswith:\n            - '\\httpd.exe'\n            - '\\java.exe'\n            - '\\javaw.exe'\n            - '\\w3wp.exe'\n    selection_child:\n        Image|endswith:\n            - '\\cmd.exe'\n            - '\\powershell.exe'\n    condition: all of selection_*\nfalsepositives:\n    - Application performance monitoring or health-check agents integrated into the web server that intentionally spawn a shell\n    - Legitimate administrative scripting hooked into an IIS or Java application-server deployment pipeline\nlevel: high",
+        "to_ids": true,
+        "comment": "Command Shell Spawned by a Web Server or Application Server Process | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1059.001, T1059.003 | rule hash eb1f3e97 | https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "beab7b76-4814-5754-99f1-58cc8d705c4f",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Content Change to /etc/passwd or /usr/bin/su by a Non-Package Account Tool\nid: 9d64a8dc-f752-4455-9329-73ff8738d150\nstatus: experimental\ndescription: >-\n    Detects a file-write event against /etc/passwd or /usr/bin/su, excluding\n    writes to /etc/passwd made by the known account-provisioning tools\n    systemd-sysusers, useradd, and chfn. Both files are the two overwrite\n    targets of a public Linux kernel local-privilege-escalation exploit chain\n    that patches the page cache via IPsec/XFRM or AF_RXRPC splice tricks to\n    create a uid-0 account or a backdoored su binary without any legitimate\n    package installation. This rule recognizes the invoking tool by binary\n    path, not whether a package manager actually triggered it, so it does not\n    correlate with an actual package transaction: every /usr/bin/su write\n    still alerts regardless of what wrote it. See the companion\n    process_creation rule, Useradd or Usermod Setting a Root-Equivalent or\n    Duplicate UID Outside a Known Package Manager\n    (ea34e2ee-aedb-4ead-a572-2fb6531e41a2), for coverage of these same account\n    tools when an attacker invokes them directly rather than through a\n    package's post-install hook.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\nauthor: The Hunters Ledger\ndate: 2026-08-17\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1098\n    - attack.defense-impairment\n    - attack.t1222.002\nlogsource:\n    category: file_event\n    product: linux\ndetection:\n    selection:\n        TargetFilename:\n            - '/etc/passwd'\n            - '/usr/bin/su'\n    filter_system_account_tools:\n        # sourced: measured 2026-09-02 on logs-endpoint.events.file-* over the full\n        # 55-day retained window - 4 of 4 lifetime alerts were legitimate account\n        # provisioning, reproduced independently via pacman's 20-systemd-sysusers.hook\n        # and dpkg's adduser --system (invoking useradd and chfn)\n        TargetFilename: '/etc/passwd'\n        Image|endswith:\n            - '/systemd-sysusers'\n            - '/useradd'\n            - '/chfn'\n    condition: selection and not filter_system_account_tools\nfalsepositives:\n    - >-\n        A package-manager transaction that patches /usr/bin/su by updating coreutils.\n        This arm is NOT filtered above (the exclusion is scoped to /etc/passwd only)\n        and should still be correlated and excluded before alerting.\n    - >-\n        Legitimate account provisioning against /etc/passwd via systemd-sysusers,\n        useradd, or chfn is excluded above and should not appear as an alert; if one\n        does, confirm the invoking binary path actually matches one of the three\n        filtered tools.\nlevel: high",
+        "to_ids": true,
+        "comment": "Content Change to /etc/passwd or /usr/bin/su by a Non-Package Account Tool | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1098, T1222.002 | rule hash dff7018f | https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "7408b195-cbff-588a-bd7b-5b893d184e34",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Content Change to a Core Process or Network Inspection Utility\nid: 2581fa99-4d4b-412d-a2b5-46a119e87aa5\nstatus: experimental\ndescription: >-\n    Detects a file-write event against one of the seven Linux binaries most\n    commonly replaced by a userland rootkit to hide processes, network\n    connections, files and package tampering (ps, top, pstree, netstat,\n    lsof, find, rpm). A single hit is common after routine package updates;\n    multiple hits across this set on the same host in a short window,\n    outside a package-manager transaction, is the high-confidence signature\n    and should be triaged as a probable rootkit install.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\nauthor: The Hunters Ledger\ndate: 2026-08-17\ntags:\n    - attack.stealth\n    - attack.t1014\nlogsource:\n    category: file_event\n    product: linux\ndetection:\n    selection:\n        TargetFilename:\n            - '/bin/ps'\n            - '/usr/bin/ps'\n            - '/bin/top'\n            - '/usr/bin/top'\n            - '/usr/bin/pstree'\n            - '/bin/netstat'\n            - '/usr/bin/netstat'\n            - '/usr/sbin/lsof'\n            - '/usr/bin/lsof'\n            - '/usr/bin/find'\n            - '/bin/find'\n            - '/bin/rpm'\n            - '/usr/bin/rpm'\n    condition: selection\nfalsepositives:\n    - Routine package-manager updates to procps, psmisc, findutils or rpm\n    - Operating-system or distribution upgrades that replace these utilities during a normal maintenance window\nlevel: medium",
+        "to_ids": false,
+        "comment": "Content Change to a Core Process or Network Inspection Utility | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1014 | rule hash 1479fb3b | https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "f15e691b-921e-596f-96bb-3a09180766df",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Creation or Modification of the safe_pollRadiusLog Watchdog Script\nid: 2f9c1dfd-3d00-402b-81ff-86e441136d3e\nstatus: experimental\ndescription: >-\n    Detects a file-write event against safe_pollRadiusLog.sh under\n    /usr/local/bin. In this campaign the operator rewrote this exact path\n    into a self-healing watchdog for a RADIUS statistics daemon on a\n    carrier AAA host, then backdated the file's modification time to\n    2010-10-07 to blend it in with genuinely old system files.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\nauthor: The Hunters Ledger\ndate: 2026-08-17\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1543\nlogsource:\n    category: file_event\n    product: linux\ndetection:\n    selection:\n        TargetFilename|endswith: '/safe_pollRadiusLog.sh'\n    condition: selection\nfalsepositives:\n    - Unlikely; this is a campaign-specific filename, and any legitimate script sharing it should be independently verified rather than excluded outright\nlevel: medium",
+        "to_ids": false,
+        "comment": "Creation or Modification of the safe_pollRadiusLog Watchdog Script | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1543, T1070.006 | rule hash be7775fc | https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "192e6a45-a90d-5bd5-a206-e48518799cec",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Java Process Spawns Unix Shell Following WebLogic JNDI Exploitation\nid: a14ad5ee-c455-49ce-8c4d-92064c64b03b\nstatus: experimental\ndescription: >-\n    Detects a Java application-server process directly spawning a Unix shell\n    with an inline command argument, consistent with WebLogic T3/IIOP JNDI\n    deserialization exploitation (CVE-2023-21839, CVE-2024-21182) reaching a\n    reverse-shell or beacon payload such as bash -i redirected to /dev/tcp or\n    a curl proof-of-execution callback.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\n    - https://nvd.nist.gov/vuln/detail/CVE-2023-21839\n    - https://nvd.nist.gov/vuln/detail/CVE-2024-21182\nauthor: The Hunters Ledger\ndate: 2026-08-17\ntags:\n    - attack.execution\n    - attack.t1059.004\nlogsource:\n    category: process_creation\n    product: linux\ndetection:\n    selection_parent:\n        ParentImage|contains: 'java'\n    selection_shell:\n        Image|endswith:\n            - '/bin/bash'\n            - '/bin/sh'\n            - '/bin/dash'\n    selection_flag:\n        CommandLine|contains: ' -c '\n    condition: all of selection_*\nfalsepositives:\n    - Java-based build, backup or health-check tooling that intentionally shells out to run a maintenance command\n    - Application servers configured to invoke OS-level scripts as part of legitimate scheduled jobs\nlevel: high",
+        "to_ids": true,
+        "comment": "Java Process Spawns Unix Shell Following WebLogic JNDI Exploitation | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1059.004 | rule hash c145748b | https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "f4832cb1-c1f9-5b11-83d8-07524a2955db",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Net Use Command Targeting an Administrative Share With Explicit Credentials\nid: 5d2247ea-b600-44f7-b87a-cb8759dcecff\nstatus: experimental\ndescription: >-\n    Detects a net use command mapping the IPC$ administrative share with an\n    explicit /user: credential argument, the command-line shape of a manual\n    credential-spray attempt against a single internal host rather than\n    routine drive mapping under the caller's own session credentials.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\nauthor: The Hunters Ledger\ndate: 2026-08-17\ntags:\n    - attack.lateral-movement\n    - attack.t1021.002\n    - stp.3\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_image:\n        Image|endswith: '\\net.exe'\n    selection_share:\n        CommandLine|contains: 'IPC$'\n    selection_cred:\n        CommandLine|contains: '/user:'\n    condition: all of selection_*\nfalsepositives:\n    - IT support scripts that intentionally authenticate to IPC$ with alternate credentials for administrative tasks\nlevel: high",
+        "to_ids": true,
+        "comment": "Net Use Command Targeting an Administrative Share With Explicit Credentials | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1021.002 | rule hash 6ce3b432 | https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "b0178307-4b59-5c67-ba5f-8b8342946346",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: PowerShell Remoting Session Establishment Command\nid: c838460c-7478-41e4-a9de-ee7d44391023\nstatus: experimental\ndescription: >-\n    Detects PowerShell command-line content establishing a WS-Management\n    remoting session (New-PSSession, Enter-PSSession or Test-WSMan),\n    observed in this campaign as the primary lateral-movement method used\n    from a compromised web application host against an internal target.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\nauthor: The Hunters Ledger\ndate: 2026-08-17\ntags:\n    - attack.lateral-movement\n    - attack.t1021.006\n    - stp.3\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_image:\n        Image|endswith: '\\powershell.exe'\n    selection_cmd:\n        CommandLine|contains:\n            - 'New-PSSession'\n            - 'Enter-PSSession'\n            - 'Test-WSMan'\n    condition: all of selection_*\nfalsepositives:\n    - Legitimate remote administration via PowerShell remoting, common where Ansible, DSC or SCOM manage the WinRM estate\nlevel: high",
+        "to_ids": true,
+        "comment": "PowerShell Remoting Session Establishment Command | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1021.006 | rule hash 2807734d | https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "3005505c-3d0f-5b74-90af-f6a0b01f3331",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Registry Hive Export of SAM or SYSTEM to a Non-Standard Location\nid: 70038c48-829c-4a9c-bab4-540720e0a9b6\nstatus: experimental\ndescription: >-\n    Detects reg.exe exporting the SAM or SYSTEM registry hive, the\n    credential-theft precursor to offline extraction of local password\n    hashes. Observed in this campaign with the destination inside a web\n    server document root so the dump could be retrieved over HTTP.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\nauthor: The Hunters Ledger\ndate: 2026-08-17\ntags:\n    - attack.credential-access\n    - attack.t1003.002\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_image:\n        Image|endswith: '\\reg.exe'\n    selection_cmd:\n        CommandLine|contains: 'save'\n    selection_hive:\n        CommandLine|contains:\n            - 'HKLM\\SAM'\n            - 'HKLM\\SYSTEM'\n    condition: all of selection_*\nfalsepositives:\n    - Scheduled or scripted backup jobs that export the SAM or SYSTEM hive to a controlled backup location\nlevel: high",
+        "to_ids": true,
+        "comment": "Registry Hive Export of SAM or SYSTEM to a Non-Standard Location | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1003.002 | rule hash 01f2ec31 | https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "9c00320c-94ae-58df-a7fe-bbdce4e64c35",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Useradd or Usermod Setting a Root-Equivalent or Duplicate UID Outside a Known Package Manager\nid: ea34e2ee-aedb-4ead-a572-2fb6531e41a2\nstatus: experimental\ndescription: >-\n    Detects useradd or usermod invoked with a flag that grants a root-\n    equivalent or duplicate UID/GID (-o, -u 0, -g 0, --non-unique, or their\n    long-form equivalents), where the parent process is not a known package\n    manager. This is the direct-invocation counterpart to Content Change to\n    /etc/passwd or /usr/bin/su by a Non-Package Account Tool\n    (9d64a8dc-f752-4455-9329-73ff8738d150): that rule excludes writes to\n    /etc/passwd made by these same account tools so it does not re-alert on\n    routine package-driven provisioning, and by construction cannot see the\n    tools invoked directly by an attacker, because file-write telemetry alone\n    carries no reliable process-ancestry field. This rule uses process-\n    creation telemetry instead, which does carry ParentImage, to restore that\n    direct-invocation coverage.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\nauthor: The Hunters Ledger\ndate: 2026-09-02\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1136.001\n    - attack.t1098\n    - stp.4\nlogsource:\n    category: process_creation\n    product: linux\n    definition: >-\n        Requires process-creation telemetry carrying both CommandLine and a\n        resolved ParentImage, for example Sysmon for Linux Event ID 1 or an\n        EDR agent process-creation event. Plain auditd EXECVE records alone\n        do not carry a resolved ParentImage field without additional PPID\n        correlation.\ndetection:\n    selection_tool:\n        Image|endswith:\n            - '/useradd'\n            - '/usermod'\n    selection_privileged_flags:\n        CommandLine|contains:\n            - ' -o '\n            - ' -u 0'\n            - ' -u0'\n            - ' --uid 0'\n            - ' --uid=0'\n            - ' -g 0'\n            - ' -g0'\n            - ' --gid 0'\n            - ' --gid=0'\n            - '--non-unique'\n    filter_parent_pkgmgr:\n        # sourced: documented platform default - the standard Linux package-manager\n        # binaries (dpkg/apt on Debian-family, rpm/yum/dnf on RHEL-family, pacman on\n        # Arch-family) that legitimately invoke useradd/usermod from postinst or hook\n        # scripts during package installation\n        ParentImage|endswith:\n            - '/dpkg'\n            - '/apt'\n            - '/apt-get'\n            - '/rpm'\n            - '/yum'\n            - '/dnf'\n            - '/pacman'\n            - '/systemd-sysusers'\n    condition: selection_tool and selection_privileged_flags and not filter_parent_pkgmgr\nfalsepositives:\n    - >-\n        A deliberately provisioned dual-root-equivalent service account on an\n        appliance or legacy application that documents a --non-unique or -u 0\n        requirement. Verify against change records before treating as a true\n        positive.\n    - >-\n        A configuration-management tool (Ansible, Puppet, Chef, cloud-init) that\n        shells out to useradd or usermod directly rather than through a package\n        manager. The parent-image filter above only excludes package-manager\n        parents, not provisioning frameworks, so an environment using one of\n        these should extend filter_parent_pkgmgr with its process name.\nlevel: high",
+        "to_ids": true,
+        "comment": "Useradd or Usermod Setting a Root-Equivalent or Duplicate UID Outside a Known Package Manager | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1136.001, T1098 | rule hash 39f8d703 | https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "cc90dc82-bec9-5207-b9a5-c1b7ed33ab59",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule GeoServer_CVE_2024_36401_ValueReference_Exec {\n   meta:\n      description = \"Detects a script or captured HTTP request implementing the CVE-2024-36401 GeoServer OGC-filter remote-code-execution payload, which passes exec(java.lang.Runtime.getRuntime(),'command') as a valueReference parameter against an unauthenticated ows endpoint\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\"\n      date = \"2026-08-17\"\n      hash1 = \"dcd739dfe08285c08200be926905155576bedc4e5633b5f02561ec7f80d512f1\"\n      family = \"Unknown - bespoke single-operator WebLogic/telecom intrusion toolkit\"\n      campaign = \"WebLogicDeserialization-TelecomHarvester-13.140.145.210\"\n      id = \"e997f10d-ad79-5abe-bf0b-7bd17a938f25\"\n   strings:\n      $payload = \"exec(java.lang.Runtime.getRuntime(),\" ascii\n      $endpoint = \"valueReference\" ascii\n   condition:\n      filesize < 1MB and\n      all of them\n}",
+        "to_ids": true,
+        "comment": "GeoServer_CVE_2024_36401_ValueReference_Exec | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1190 | rule hash 50798ff0 | https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "d8d7e2e8-2113-5a99-8609-6cd15c9a6f3c",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule PublicTool_CVE_2023_21839_WebLogic_GoExploit {\n   meta:\n      description = \"Detects the public Go implementation of the CVE-2023-21839 WebLogic T3/IIOP JNDI exploit by its build path and GIOP-request source file names. This detects the published open-source tool itself, not any operator-specific modification - a pristine build and a dirty-tree rebuild of the same tool differ only in 106 bytes of compiler metadata\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\"\n      date = \"2026-08-17\"\n      hash1 = \"953b668e95e033b34de0373af354cfd1d5557edf8cdfa49887cabf2b44d67b65\"\n      family = \"Public tool - CVE-2023-21839 Go exploit (not this operator's own code)\"\n      campaign = \"WebLogicDeserialization-TelecomHarvester-13.140.145.210\"\n      id = \"2a217b40-6e23-5f5a-9074-4590591d9e3f\"\n   strings:\n      $path = \"/tmp/CVE-2023-21839/\" ascii\n      $f1 = \"giop.go\" ascii\n      $f2 = \"locate_request.go\" ascii\n      $f3 = \"resolve_request.go\" ascii\n      $f4 = \"rebind_request.go\" ascii\n   condition:\n      uint32(0) == 0x464c457f and\n      filesize < 20MB and\n      $path and 1 of ($f1, $f2, $f3, $f4)\n}",
+        "to_ids": false,
+        "comment": "PublicTool_CVE_2023_21839_WebLogic_GoExploit | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1190, T1588.005 | rule hash f9e37c7c | https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "4300e305-cf4e-54aa-97b2-03796c19d0f4",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule PublicTool_DirtyFrag_LinuxKernel_LPE {\n   meta:\n      description = \"Detects the public Dirty Frag Linux kernel local-privilege-escalation exploit (CVE-2026-43284 and CVE-2026-43500), identified by its distinctive AF_ALG pcbc(fcrypt) cipher choice combined with its proof-of-concept environment-variable knobs. This detects the published open-source tool itself, not any operator-specific modification\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\"\n      date = \"2026-08-17\"\n      hash1 = \"a133809a768c7c6b958d72ff6857677b14ed6bf284b99dc81a121442dfe04f90\"\n      family = \"Public tool - Dirty Frag Linux kernel LPE (not this operator's own code)\"\n      campaign = \"WebLogicDeserialization-TelecomHarvester-13.140.145.210\"\n      id = \"de68b3f2-e38d-58ef-9878-2bd771b32462\"\n   strings:\n      $cipher = \"pcbc(fcrypt)\" ascii\n      $verbose = \"DIRTYFRAG_VERBOSE\" ascii\n      $seed = \"LPE_SEED\" ascii\n      $iters = \"LPE_MAX_ITERS\" ascii\n      $target = \"POC_TARGET_FILE\" ascii\n      $suoutput = \"/usr/bin/su page-cache patched (entry 0x%x = shellcode)\" ascii\n   condition:\n      filesize < 5MB and\n      3 of them\n}",
+        "to_ids": false,
+        "comment": "PublicTool_DirtyFrag_LinuxKernel_LPE | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1068 | rule hash 61da8b9a | https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "d4de148d-0d96-585c-b4a0-c4cff9fb7f0b",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule Rootkit_Userland_OriginalsBackup_TarSet {\n   meta:\n      description = \"Detects a tar archive whose member manifest is exactly the canonical userland-rootkit target set (ps, top, pstree, netstat, lsof, find, rpm), consistent with an operator staging pristine originals before trojanizing a Linux host's process, network, filesystem and package-integrity inspection tools. Hunting-tier: this exact manifest also matches an ordinary sysadmin backup with no malware present, confirmed by direct testing, so every hit needs analyst review\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\"\n      date = \"2026-08-17\"\n      hash1 = \"daee2d57566c88374b5de65ecc04e1321da4d5dc35b84a0eb98893afad9e2664\"\n      family = \"Unknown - bespoke single-operator WebLogic/telecom intrusion toolkit\"\n      campaign = \"WebLogicDeserialization-TelecomHarvester-13.140.145.210\"\n      id = \"ba89babd-e197-5073-9656-9654215ab3a1\"\n   strings:\n      $ustar = \"ustar\" ascii\n      $m1 = \"bin/ps\" ascii\n      $m2 = \"usr/bin/top\" ascii\n      $m3 = \"usr/bin/pstree\" ascii\n      $m4 = \"bin/netstat\" ascii\n      $m5 = \"usr/sbin/lsof\" ascii\n      $m6 = \"usr/bin/find\" ascii\n      $m7 = \"bin/rpm\" ascii\n   condition:\n      filesize < 5MB and\n      $ustar and all of ($m1, $m2, $m3, $m4, $m5, $m6, $m7)\n}",
+        "to_ids": false,
+        "comment": "Rootkit_Userland_OriginalsBackup_TarSet | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1554, T1014 | rule hash 633c9720 | https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "8263645e-7bbd-5ea2-b639-6443716b7c72",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule WSMA_CVE_2023_20198_DoubleEncode_Exfil {\n   meta:\n      description = \"Detects a script or captured log carrying the double-encoded Cisco IOS-XE WSMA path bypass combined with the WSMA fileCopy exfiltration primitive, the operator-specific mechanism that reads a router's own NVRAM and PUTs it out over HTTP\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\"\n      date = \"2026-08-17\"\n      hash1 = \"72c6383477bbcb93811fd837a9e4721cfddea0cd238eebe3012acc0e6a31c40e\"\n      family = \"Unknown - bespoke single-operator WebLogic/telecom intrusion toolkit\"\n      campaign = \"WebLogicDeserialization-TelecomHarvester-13.140.145.210\"\n      id = \"94efd4fe-4813-55a4-9b9a-3e4cc64b0d24\"\n   strings:\n      $path = \"%2577eb%2575i_%2577sma_Http\" ascii\n      $wsma = \"urn:cisco:wsma-filesystem\" ascii\n      $copy = \"fileCopy\" ascii\n      $token = \"0123456789abcdefab\" ascii\n   condition:\n      filesize < 10MB and\n      $path and 2 of ($wsma, $copy, $token)\n}",
+        "to_ids": true,
+        "comment": "WSMA_CVE_2023_20198_DoubleEncode_Exfil | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1190, T1048.003 | rule hash 42a0bbb2 | https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "5f399fab-de4b-53cc-a898-c57affe1b060",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule WebLogic_CVE_2024_21182_OpaqueReference_JNDI {\n   meta:\n      description = \"Detects Java source or compiled exploitation tooling implementing the CVE-2024-21182 WebLogic JNDI-injection primitive, which reflects an AggregatableOpaqueReference's private referent field to a spoofed MessageDestinationReference and resolves it through the ForeignOpaqueReference lookup path\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\"\n      date = \"2026-08-17\"\n      family = \"Unknown - bespoke single-operator WebLogic/telecom intrusion toolkit\"\n      campaign = \"WebLogicDeserialization-TelecomHarvester-13.140.145.210\"\n      id = \"33789184-a9c6-5a7a-80d9-0189c0707dcc\"\n   strings:\n      $ref1 = \"AggregatableOpaqueReference\" ascii\n      $ref2 = \"MessageDestinationReference\" ascii\n      $ref3 = \"ForeignOpaqueReference\" ascii\n   condition:\n      filesize < 5MB and\n      all of ($ref1, $ref2, $ref3)\n}",
+        "to_ids": true,
+        "comment": "WebLogic_CVE_2024_21182_OpaqueReference_JNDI | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1190 | rule hash d1f919e5 | https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "cfdc3be8-741c-57e9-a4b7-5ef43aed1791",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule WebLogic_JNDI_HelloFromLdap_CallbackMarker {\n   meta:\n      description = \"Detects the Java-serialized String hello_from_ldap used by this operator's hand-rolled 4-mode BER/LDAP exploitation server to validate a JNDI callback path before sending a live gadget chain\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\"\n      date = \"2026-08-17\"\n      hash1 = \"9251373f585c91b6bf7c407aa1a989e7cc596c4afc79a8573a18f858df9f014d\"\n      family = \"Unknown - bespoke single-operator WebLogic/telecom intrusion toolkit\"\n      campaign = \"WebLogicDeserialization-TelecomHarvester-13.140.145.210\"\n      id = \"15fe1607-d88a-51fa-82d1-f8153f3e94f3\"\n   strings:\n      $ser_hex = { AC ED 00 05 74 00 0F 68 65 6C 6C 6F 5F 66 72 6F 6D 5F 6C 64 61 70 }\n      $ser_ascii = \"hello_from_ldap\" ascii\n   condition:\n      filesize < 1MB and\n      1 of them\n}",
+        "to_ids": true,
+        "comment": "WebLogic_JNDI_HelloFromLdap_CallbackMarker | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1132.001 | rule hash a3295c40 | https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "3627f77c-5e74-5218-ba5a-1aa6ecea49d8",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule Webshell_PHP_XCMD_Header_Dispatcher {\n   meta:\n      description = \"Detects a PHP webshell that dispatches attacker commands by reading a non-standard X-CMD request header and passing its value directly to a shell-execution function, the pattern used by the persistent h.php dispatcher observed on a compromised WAMP host in this campaign\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\"\n      date = \"2026-08-17\"\n      family = \"Unknown - bespoke single-operator WebLogic/telecom intrusion toolkit\"\n      campaign = \"WebLogicDeserialization-TelecomHarvester-13.140.145.210\"\n      id = \"49e59582-4d7c-5675-ba0f-0de5de77183b\"\n   strings:\n      $php = \"<?php\" ascii\n      $hdr1 = \"X-CMD\" ascii nocase\n      $hdr2 = \"HTTP_X_CMD\" ascii\n      $exec1 = \"shell_exec\" ascii\n      $exec2 = \"system(\" ascii\n      $exec3 = \"passthru(\" ascii\n      $exec4 = \"exec(\" ascii\n   condition:\n      filesize < 200KB and\n      $php and\n      1 of ($hdr1, $hdr2) and\n      1 of ($exec1, $exec2, $exec3, $exec4)\n}",
+        "to_ids": true,
+        "comment": "Webshell_PHP_XCMD_Header_Dispatcher | TIER: Detection | robustness 2 | confidence MODERATE | ATT&CK T1505.003 | rule hash 0a9e60b8 | https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      }
+    ],
+    "Object": []
+  }
+}

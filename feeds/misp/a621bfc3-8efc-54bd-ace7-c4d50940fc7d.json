@@ -1,0 +1,161 @@
+{
+  "Event": {
+    "uuid": "a621bfc3-8efc-54bd-ace7-c4d50940fc7d",
+    "info": "Arsenal-237: agent_xworm.exe (XWorm RAT v6)",
+    "date": "2026-01-15",
+    "threat_level_id": 2,
+    "analysis": 2,
+    "timestamp": 1791580400,
+    "publish_timestamp": 1791580400,
+    "published": true,
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"RAT\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"C2\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Standard Encoding - T1132.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Hidden Window - T1564.003\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "Attribute": [
+      {
+        "uuid": "2df18a2f-6392-5e6b-8746-f6b4616df353",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/hunting-detections/agent-xworm-exe-detections/",
+        "to_ids": false,
+        "comment": "Detection rules, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "32d9d27c-c650-51d8-8d1b-11587d75ff21",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/ioc-feeds/agent-xworm-exe.json",
+        "to_ids": false,
+        "comment": "IOC feed (JSON), The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "f6ecb823-7a4c-57b6-baaa-c350c12a2378",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert tcp $HOME_NET any -> any any (msg:\"THL DETECT Arsenal-237 XWorm AgentSec Authentication Secret Pattern (C2 Handshake Indicator)\"; flow:to_server,established; content:\"AgentSec_\"; nocase; pcre:\"/AgentSec_[0-9A-Za-z]{40,50}/i\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/agent-xworm-exe-detections/; classtype:trojan-activity; sid:1000013; rev:2; metadata:author The_Hunters_Ledger, date 2026-01-12;)",
+        "to_ids": true,
+        "comment": "XWorm AgentSec Authentication Secret Pattern | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1071.001 | rule hash 20e1630f | https://the-hunters-ledger.com/hunting-detections/agent-xworm-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "438c354c-9916-56b5-b037-39a249e455c5",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: File Creation Matching XWorm Naming Convention\nid: 0ec3fca5-8ef8-f0d9-f098-cd749dd209aa\nstatus: experimental\ndescription: Detects creation of executable files matching XWorm's default/observed naming convention (xworm, xclient, agent_xworm). A single-literal naming pattern, trivially evaded by a custom builder output filename — retained as a scoping lead for unmodified or default-named deployments.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/agent-xworm-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n    - attack.command-and-control\n    - attack.t1105\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: file_event\ndetection:\n    selection:\n        TargetFilename|contains:\n            - 'xworm'\n            - 'xclient'\n            - 'agent_xworm'\n        TargetFilename|endswith: '.exe'\n    condition: selection\nfalsepositives:\n    - Security research and malware-analysis environments; a renamed build defeats this selector entirely.\nlevel: medium",
+        "to_ids": false,
+        "comment": "File Creation Matching XWorm Naming Convention | TIER: Hunting | robustness 1 | confidence LOW | ATT&CK T1105 | rule hash 7e2ce860 | https://the-hunters-ledger.com/hunting-detections/agent-xworm-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "20d6f9e7-4192-5834-b355-95c1a054ea39",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: PowerShell Execution from Suspicious .NET Process\nid: 01027829-5061-9820-bbcd-60efca256c90\nstatus: experimental\ndescription: Detects PowerShell execution from .NET binaries in user-writable directories, a pattern consistent with XWorm's embedded reconnaissance command execution.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/agent-xworm-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection_powershell:\n        Image|endswith: 'powershell.exe'\n        CommandLine|contains: '-NoP -C'\n    selection_parent:\n        ParentImage|contains:\n            - '\\AppData\\'\n            - '\\Temp\\'\n            - '\\Users\\'\n        ParentImage|endswith: '.exe'\n    filter:\n        ParentImage|contains:\n            - 'Microsoft'\n            - 'Visual Studio'\n    condition: selection_powershell and selection_parent and not filter\nfalsepositives:\n    - Legitimate development tools, software installers, and administrative scripts that invoke PowerShell with abbreviated flags from a user-profile path.\nlevel: medium",
+        "to_ids": false,
+        "comment": "PowerShell Execution from Suspicious .NET Process | TIER: Hunting | robustness 2 | confidence LOW | ATT&CK T1059.001 | rule hash b3a81e78 | https://the-hunters-ledger.com/hunting-detections/agent-xworm-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "79f414ac-e6d4-55e4-bcf8-f8af217b2c19",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "/*\n   Yara Rule Set\n   Identifier: Arsenal-237-109.230.231.37-Malware-Repository\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule MAL_Windows_XWorm_PowerShell_Recon_Templates {\n   meta:\n      description = \"Detects XWorm's embedded PowerShell reconnaissance one-liners: process/CPU enumeration, running-service enumeration, and domain-membership enumeration via WMI, all invoked with the abbreviated -NoP -C flag ordering.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/agent-xworm-exe-detections/\"\n      date = \"2026-01-12\"\n      family = \"XWorm\"\n      malware_type = \"RAT-Recon-Component\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"feb50486-2a18-4a49-94a1-17e2e6318018\"\n      hash1 = \"0ec3fca58ef8f0d9f098cd749dd209fccda7cbf68c1eecf836668e5dabd6f3bc\"\n   strings:\n      $ps1 = \"-NoP -C Get-Process|Sort CPU\" ascii wide\n      $ps2 = \"-NoP -C Get-Service|?{$_.Status -eq 'Running'}\" ascii wide\n      $ps3 = \"-NoP -C Get-WmiObject Win32_ComputerSystem\" ascii wide\n      $ps4 = \"PartOfDomain,Domain,DomainRole\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      2 of them\n}",
+        "to_ids": true,
+        "comment": "XWorm Embedded PowerShell Reconnaissance Templates | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1059.001 | rule hash b12db838 | https://the-hunters-ledger.com/hunting-detections/agent-xworm-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "2c31f25d-fa14-5011-9dfc-2cd421115b45",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MAL_Windows_XWorm_AgentSec_Authentication_Pattern {\n   meta:\n      description = \"Detects the AgentSec_ authentication-secret naming convention used by this XWorm build family's C2 handshake. Matches the naming pattern rather than one build's literal secret value, so it survives secret rotation across rebuilds.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/agent-xworm-exe-detections/\"\n      date = \"2026-01-12\"\n      family = \"XWorm\"\n      malware_type = \"RAT-Authentication-Pattern\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"c228a7b7-15c9-4b26-ab4c-09569a1d5ea0\"\n      hash1 = \"0ec3fca58ef8f0d9f098cd749dd209fccda7cbf68c1eecf836668e5dabd6f3bc\"\n   strings:\n      $pattern1 = /AgentSec_[0-9A-Za-z]{40,50}/ ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      $pattern1\n}",
+        "to_ids": true,
+        "comment": "XWorm AgentSec Authentication Pattern | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1071.001 | rule hash f9c1cf22 | https://the-hunters-ledger.com/hunting-detections/agent-xworm-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "9975a99e-3555-5273-a26f-eb69960aeb7d",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MAL_Windows_XWorm_RAT_Capability_Combination {\n   meta:\n      description = \"Detects XWorm RAT variants via a combination of family-specific constant/method names (HEARTBEAT_MS, RECONNECT_MS, SERVER_HOST, AGENT_SECRET, HandleCmd, GetMachineId, GetSysInfo, BuildFrame) and generic .NET networking/encoding/console-hiding strings. The generic-string branches are broad by design — expect co-fire with legitimate .NET remote-access and automation tooling.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/agent-xworm-exe-detections/\"\n      date = \"2026-01-12\"\n      family = \"XWorm\"\n      malware_type = \"RAT\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"70dc0a6e-4ca6-4028-bb23-09fdd34169df\"\n   strings:\n      // .NET framework indicators\n      $dotnet1 = \"System.Net.Sockets\" ascii wide\n      $dotnet2 = \"System.Diagnostics.Process\" ascii wide\n      $dotnet3 = \"System.Security.Cryptography\" ascii wide\n      $dotnet4 = \"mscorlib\" ascii wide\n\n      // XWorm configuration constants\n      $config1 = \"HEARTBEAT_MS\" ascii wide\n      $config2 = \"RECONNECT_MS\" ascii wide\n      $config3 = \"SERVER_HOST\" ascii wide\n      $config4 = \"AGENT_SECRET\" ascii wide\n\n      // XWorm command handlers\n      $cmd1 = \"HandleCmd\" ascii wide\n      $cmd2 = \"GetMachineId\" ascii wide\n      $cmd3 = \"GetSysInfo\" ascii wide\n      $cmd4 = \"BuildFrame\" ascii wide\n\n      // Stealth and encoding\n      $stealth1 = \"ShowWindow\" ascii wide\n      $stealth2 = \"GetConsoleWindow\" ascii wide\n      $encode1 = \"ToBase64String\" ascii wide\n      $encode2 = \"FromBase64String\" ascii wide\n\n      // Network operations\n      $net1 = \"TcpClient\" ascii wide\n      $net2 = \"NetworkStream\" ascii wide\n      $net3 = \"GetStream\" ascii wide\n      $net4 = \"_heartbeatThread\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 500KB and\n      (\n         // Strong XWorm signature: config + command handlers + network\n         (2 of ($config*) and 2 of ($cmd*) and 2 of ($net*)) or\n\n         // Alternative: .NET + stealth + encoding + network\n         (2 of ($dotnet*) and 1 of ($stealth*) and 1 of ($encode*) and 2 of ($net*)) or\n\n         // Authentication secret pattern (common across XWorm variants)\n         (1 of ($config*) and 1 of ($encode*) and $net4)\n      )\n}",
+        "to_ids": false,
+        "comment": "XWorm RAT Capability Combination | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1071.001, T1132.001, T1564.003 | rule hash c39bcc69 | https://the-hunters-ledger.com/hunting-detections/agent-xworm-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      }
+    ],
+    "Object": []
+  }
+}

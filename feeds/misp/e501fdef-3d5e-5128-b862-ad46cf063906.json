@@ -1,0 +1,180 @@
+{
+  "Event": {
+    "uuid": "e501fdef-3d5e-5128-b862-ad46cf063906",
+    "info": "Arsenal-237 New Files: rootkit.dll (Kernel-Mode Rootkit)",
+    "date": "2026-01-15",
+    "threat_level_id": 1,
+    "analysis": 2,
+    "timestamp": 1791580400,
+    "publish_timestamp": 1791580400,
+    "published": true,
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Rootkit\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Evasion\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Injection - T1055\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Dynamic-link Library Injection - T1055.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Privilege Escalation - T1068\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Hidden Files and Directories - T1564.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "Attribute": [
+      {
+        "uuid": "ac6abe8d-0e11-5f56-a58b-3e145567b69f",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/hunting-detections/arsenal-237-rootkit-dll-detections/",
+        "to_ids": false,
+        "comment": "Detection rules, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "52c282cd-743f-5f90-9449-dbbe681a4a21",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/ioc-feeds/arsenal-237-rootkit-dll.json",
+        "to_ids": false,
+        "comment": "IOC feed (JSON), The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "8c8f90f8-ffed-5756-b20e-b7d6b162fdfb",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Arsenal-237 BdApiUtil64.sys BYOVD Driver Loading\nid: a8c9d4e1-2f3b-4c5d-8e9f-1a2b3c4d5e6f\nstatus: experimental\ndescription: Detects loading of the BdApiUtil64.sys vulnerable driver used for BYOVD privilege escalation, matched on the driver's own filename or its file-hash triad.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-rootkit-dll-detections/\nauthor: The Hunters Ledger\ndate: 2026-01-26\ntags:\n    - attack.privilege-escalation\n    - attack.t1068\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: driver_load\ndetection:\n    selection_driver_name:\n        ImageLoaded|contains:\n            - 'BdApiUtil64.sys'\n            - 'BdApiUtil.sys'\n    selection_driver_hash:\n        Hashes|contains:\n            - 'MD5=ced47b89212f3260ebeb41682a4b95ec'\n            - 'SHA1=148c0cde4f2ef807aea77d7368f00f4c519f47ef'\n            - 'SHA256=47ec51b5f0ede1e70bd66f3f0152f9eb536d534565dbb7fcc3a05f542dbe4428'\n    condition: selection_driver_name or selection_driver_hash\nfalsepositives:\n    - Legitimate Baidu software installations (rare in enterprise environments)\nlevel: critical",
+        "to_ids": true,
+        "comment": "BdApiUtil64.sys BYOVD Driver Loading | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1068 | rule hash 5e4162df | https://the-hunters-ledger.com/hunting-detections/arsenal-237-rootkit-dll-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "d6f53b22-9410-51c8-bbeb-e7f07e9a8d7d",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: High-Privilege Process Access to Security Product Processes\nid: d2e3f4a5-6b7c-8d9e-0f1a-2b3c4d5e6f7a\nstatus: experimental\ndescription: Detects a process opening a handle to a named security-product process (Defender, CrowdStrike Falcon, ESET, Kaspersky) with full or memory-write access rights -- the access pattern that precedes API hooking or code injection into endpoint security software.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-rootkit-dll-detections/\nauthor: The Hunters Ledger\ndate: 2026-01-26\ntags:\n    - attack.stealth\n    - attack.privilege-escalation\n    - attack.t1055.001\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: process_access\ndetection:\n    selection_target_security:\n        TargetImage|endswith:\n            - '\\MsMpEng.exe'\n            - '\\CSFalconService.exe'\n            - '\\ekrn.exe'\n            - '\\avp.exe'\n    selection_access:\n        GrantedAccess:\n            - '0x1F0FFF'\n            - '0x1FFFFF'\n            - '0x1010'\n    condition: selection_target_security and selection_access\nfalsepositives:\n    - Security software performing legitimate cross-process monitoring of other installed security products\n    - Interactive debugging of a security-product process by an analyst or developer\nlevel: high",
+        "to_ids": true,
+        "comment": "High-Privilege Process Access to Security Product Processes | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1055.001 | rule hash 094554bb | https://the-hunters-ledger.com/hunting-detections/arsenal-237-rootkit-dll-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "75023bfc-87fa-5fc8-804b-e95232553056",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: PowerShell Execution with rootkit.dll on Parent Command Line\nid: e3f4a5b6-7c8d-9e0f-1a2b-3c4d5e6f7a8b\nstatus: experimental\ndescription: >-\n  Detects powershell.exe or pwsh.exe launched by a parent process whose command\n  line references rootkit.dll. rootkit.dll is this build's own filename and can\n  be renamed in a future build; treat this as a scoping lead for this specific\n  build family, not a durable technique-level detector.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-rootkit-dll-detections/\nauthor: The Hunters Ledger\ndate: 2026-01-26\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection_powershell:\n        Image|endswith:\n            - '\\powershell.exe'\n            - '\\pwsh.exe'\n    selection_parent:\n        ParentCommandLine|contains: 'rootkit.dll'\n    condition: selection_powershell and selection_parent\nfalsepositives:\n    - Legitimate software or scripts that happen to reference a file literally named rootkit.dll on a PowerShell parent command line (not expected, but not impossible)\nlevel: medium",
+        "to_ids": false,
+        "comment": "PowerShell Execution with rootkit.dll on Parent Command Line | TIER: Hunting | robustness 1 | confidence LOW | ATT&CK T1059.001 | rule hash 56ed998a | https://the-hunters-ledger.com/hunting-detections/arsenal-237-rootkit-dll-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "632f9b36-27dc-569e-aae6-0e7564c02484",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule Arsenal237_BYOVD_Baidu_Driver\n{\n    meta:\n        description = \"Detects embedded BdApiUtil64.sys driver for BYOVD attacks\"\n        author = \"The Hunters Ledger\"\n        date = \"2026-01-26\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-rootkit-dll-detections/\"\n        severity = \"critical\"\n        mitre_attack = \"T1068\"\n\n    strings:\n        $driver_name_1 = \"BdApiUtil64.sys\" wide ascii\n        $driver_name_2 = \"BdApiUtil\" wide ascii\n        $baidu_company = \"Baidu\" wide ascii nocase\n        $driver_signature = { 4D 5A 90 00 03 00 00 00 04 00 00 00 FF FF }\n\n        // Driver service registry paths\n        $reg_service_1 = \"SYSTEM\\\\CurrentControlSet\\\\Services\\\\BdApiUtil\" wide\n        $reg_service_2 = \"\\\\Registry\\\\Machine\\\\System\\\\CurrentControlSet\\\\Services\" wide\n\n        // IOCTL codes for driver communication\n        $ioctl_pattern = { 44 ?? ?? ?? ?? 00 22 00 00 }\n\n    condition:\n        uint16(0) == 0x5A4D and\n        (\n            (2 of ($driver_name_*) and $baidu_company) or\n            ($driver_signature and 1 of ($driver_name_*)) or\n            (1 of ($reg_service_*) and 1 of ($driver_name_*)) or\n            ($ioctl_pattern and 1 of ($driver_name_*))\n        )\n}",
+        "to_ids": true,
+        "comment": "BYOVD Baidu Driver Embedding | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1068 | rule hash 84dc264d | https://the-hunters-ledger.com/hunting-detections/arsenal-237-rootkit-dll-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "d12b144e-49aa-59be-8dc7-54cf4f25c0f1",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule Arsenal237_Rootkit_DLL_Comprehensive\n{\n    meta:\n        description = \"Detects Arsenal-237 rootkit.dll defense evasion framework\"\n        author = \"The Hunters Ledger\"\n        date = \"2026-01-26\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-rootkit-dll-detections/\"\n        hash_md5 = \"674795d4d4ec09372904704633ea0d86\"\n        hash_sha1 = \"483feeb4e391ae64a7d54637ea71d43a17d83c71\"\n        hash_sha256 = \"e71240f26af1052172b5864cdddb78fcb990d7a96d53b7d22d19f5dfccdf9012\"\n        severity = \"medium\"\n        mitre_attack = \"T1068, T1685, T1055.001, T1564.001\"\n\n    strings:\n        // Rust runtime signatures\n        $rust_panic = \"panicked at\" ascii\n        $rust_runtime = \"std::panicking::rust_panic\" ascii\n        $rust_thread = \"std::thread::Builder\" ascii\n\n        // Embedded Baidu driver indicators\n        $baidu_driver_1 = \"BdApiUtil64.sys\" wide ascii\n        $baidu_driver_2 = \"Baidu\" wide ascii nocase\n\n        // Security product process targets (Microsoft Defender)\n        $defender_1 = \"MsMpEng.exe\" wide ascii nocase\n        $defender_2 = \"MpCmdRun.exe\" wide ascii nocase\n        $defender_3 = \"SecurityHealthService.exe\" wide ascii nocase\n        $defender_4 = \"WdNisDrv.sys\" wide ascii nocase\n        $defender_5 = \"WdFilter.sys\" wide ascii nocase\n\n        // CrowdStrike targets\n        $crowdstrike_1 = \"CSFalconService.exe\" wide ascii nocase\n        $crowdstrike_2 = \"CSFalconContainer.exe\" wide ascii nocase\n        $crowdstrike_3 = \"csagent.sys\" wide ascii nocase\n\n        // Third-party AV targets\n        $av_eset = \"ekrn.exe\" wide ascii nocase\n        $av_kaspersky = \"avp.exe\" wide ascii nocase\n        $av_malwarebytes = \"MBAMService.exe\" wide ascii nocase\n        $av_symantec = \"ccSvcHst.exe\" wide ascii nocase\n        $av_webroot = \"WRSA.exe\" wide ascii nocase\n        $av_sophos = \"SophosHealth.exe\" wide ascii nocase\n        $av_cylance = \"CylanceSvc.exe\" wide ascii nocase\n        $av_sentinel = \"SentinelAgent.exe\" wide ascii nocase\n\n        // Analysis tool targets\n        $analysis_1 = \"procexp.exe\" wide ascii nocase\n        $analysis_2 = \"procmon.exe\" wide ascii nocase\n        $analysis_3 = \"Wireshark.exe\" wide ascii nocase\n        $analysis_4 = \"x64dbg.exe\" wide ascii nocase\n        $analysis_5 = \"volatility.exe\" wide ascii nocase\n\n        // Core defense evasion functions (hex patterns)\n        $func_dispatcher = { 48 83 EC 28 48 8B ?? 48 8B ?? 48 8B ?? 48 85 ?? 74 ?? FF D? }\n        $func_thread_create = { 48 89 5C 24 ?? 48 89 74 24 ?? 57 48 83 EC 20 48 8B D9 }\n\n        // API imports for defense evasion\n        $api_terminate = \"ZwTerminateProcess\" ascii\n        $api_openprocess = \"OpenProcess\" ascii\n        $api_createthread = \"CreateThread\" ascii\n        $api_loaddriver = \"ZwLoadDriver\" ascii\n\n    condition:\n        uint16(0) == 0x5A4D and\n        filesize < 500KB and\n        (\n            // Strong Rust + BYOVD signature\n            (2 of ($rust_*) and 1 of ($baidu_*)) or\n\n            // Multiple security product targets\n            (6 of ($defender_*, $crowdstrike_*, $av_*)) or\n\n            // Analysis tool targeting\n            (3 of ($analysis_*)) or\n\n            // Function patterns + API imports\n            (1 of ($func_*) and 2 of ($api_*)) or\n\n            // Comprehensive detection: Rust + targets + functions\n            (1 of ($rust_*) and 3 of ($defender_*, $crowdstrike_*, $av_*) and 1 of ($func_*))\n        )\n}",
+        "to_ids": false,
+        "comment": "Comprehensive Multi-Branch Combination | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1068, T1685, T1055.001, T1564.001 | rule hash ad98bcf4 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-rootkit-dll-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "23cb380d-1cc6-59eb-9fdc-7446d09defa0",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule Arsenal237_Rust_Compiled_Malware\n{\n    meta:\n        description = \"Detects Rust-compiled executables combining runtime evidence with process-manipulation or driver-loading APIs -- a broad toolkit-family heuristic, not specific to any one Arsenal-237 capability\"\n        author = \"The Hunters Ledger\"\n        date = \"2026-01-26\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-rootkit-dll-detections/\"\n        severity = \"medium\"\n        mitre_attack = \"T1055, T1068, T1685\"\n\n    strings:\n        $rust_panic = \"panicked at\" ascii\n        $rust_runtime_1 = \"std::panicking::rust_panic\" ascii\n        $rust_runtime_2 = \"std::panicking::begin_panic\" ascii\n        $rust_thread_1 = \"std::thread::Builder\" ascii\n        $rust_thread_2 = \"std::thread::spawn\" ascii\n        $rust_alloc = \"alloc::alloc::Global\" ascii\n        $rust_vec = \"alloc::vec::Vec\" ascii\n\n        // Cargo/rustc metadata\n        $cargo_metadata = \".cargo\" ascii\n        $rustc_version = \"rustc\" ascii\n\n        // Suspicious combinations\n        $suspicious_1 = \"OpenProcess\" ascii\n        $suspicious_2 = \"TerminateProcess\" ascii\n        $suspicious_3 = \"CreateRemoteThread\" ascii\n        $suspicious_4 = \"ZwLoadDriver\" ascii\n\n    condition:\n        uint16(0) == 0x5A4D and\n        (\n            // Rust signatures + suspicious APIs\n            (3 of ($rust_*) and 2 of ($suspicious_*)) or\n\n            // Cargo metadata + malicious APIs\n            ($cargo_metadata and $rustc_version and 2 of ($suspicious_*))\n        )\n}",
+        "to_ids": false,
+        "comment": "Rust Runtime Plus Process-Manipulation APIs | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1055, T1068, T1685 | rule hash 59be0b89 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-rootkit-dll-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "130c7722-131f-5d4b-9432-c5d083365596",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule Arsenal237_Security_Product_Killer\n{\n    meta:\n        description = \"Detects mass security product termination behavior\"\n        author = \"The Hunters Ledger\"\n        date = \"2026-01-26\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-rootkit-dll-detections/\"\n        severity = \"high\"\n        mitre_attack = \"T1685\"\n\n    strings:\n        // Microsoft Defender complete process list\n        $def_1 = \"MsMpEng.exe\" wide ascii nocase\n        $def_2 = \"MpCmdRun.exe\" wide ascii nocase\n        $def_3 = \"NisSrv.exe\" wide ascii nocase\n        $def_4 = \"SecurityHealthService.exe\" wide ascii nocase\n        $def_5 = \"smartscreen.exe\" wide ascii nocase\n        $def_6 = \"SgrmBroker.exe\" wide ascii nocase\n        $def_7 = \"MpSigStub.exe\" wide ascii nocase\n        $def_8 = \"wscsvc.exe\" wide ascii nocase\n        $def_9 = \"WdNisDrv.sys\" wide ascii nocase\n        $def_10 = \"WdFilter.sys\" wide ascii nocase\n\n        // CrowdStrike complete process list\n        $cs_1 = \"CSFalconService.exe\" wide ascii nocase\n        $cs_2 = \"CSFalconContainer.exe\" wide ascii nocase\n        $cs_3 = \"CSAgent.exe\" wide ascii nocase\n        $cs_4 = \"csagent.sys\" wide ascii nocase\n        $cs_5 = \"CSDeviceControl.exe\" wide ascii nocase\n        $cs_6 = \"CSNamedPipeProxy.exe\" wide ascii nocase\n\n        // Third-party AV products\n        $av_1 = \"ekrn.exe\" wide ascii nocase          // ESET\n        $av_2 = \"avp.exe\" wide ascii nocase            // Kaspersky\n        $av_3 = \"MBAMService.exe\" wide ascii nocase    // Malwarebytes\n        $av_4 = \"ccSvcHst.exe\" wide ascii nocase       // Symantec\n        $av_5 = \"WRSA.exe\" wide ascii nocase           // Webroot\n        $av_6 = \"SophosHealth.exe\" wide ascii nocase   // Sophos\n        $av_7 = \"CylanceSvc.exe\" wide ascii nocase     // Cylance\n        $av_8 = \"SentinelAgent.exe\" wide ascii nocase  // Sentinel One\n\n        // Termination APIs\n        $api_1 = \"ZwTerminateProcess\" ascii\n        $api_2 = \"TerminateProcess\" ascii\n        $api_3 = \"NtTerminateProcess\" ascii\n\n    condition:\n        uint16(0) == 0x5A4D and\n        (\n            // High confidence: Multiple vendor targets\n            (5 of ($def_*) and 3 of ($cs_*) and 3 of ($av_*)) or\n\n            // Medium confidence: One vendor complete + APIs\n            ((8 of ($def_*) or 4 of ($cs_*)) and 1 of ($api_*)) or\n\n            // Broad targeting across vendors\n            (3 of ($def_*) and 2 of ($cs_*) and 4 of ($av_*) and 1 of ($api_*))\n        )\n}",
+        "to_ids": true,
+        "comment": "Multi-Vendor Security Product Kill-List | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1685 | rule hash 6380496a | https://the-hunters-ledger.com/hunting-detections/arsenal-237-rootkit-dll-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      }
+    ],
+    "Object": []
+  }
+}

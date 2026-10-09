@@ -1,0 +1,111 @@
+{
+  "Event": {
+    "uuid": "d9ad5815-06a6-5ce7-a342-cd0019412f73",
+    "info": "AdvancedRouterScanner",
+    "date": "2025-10-20",
+    "threat_level_id": 2,
+    "analysis": 2,
+    "timestamp": 1791580400,
+    "publish_timestamp": 1791580400,
+    "published": true,
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Scanner\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Python\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Exploitation\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Password Guessing - T1110.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploit Public-Facing Application - T1190\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "Attribute": [
+      {
+        "uuid": "3804759a-4f27-5dfa-9fd3-90a02851d005",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/hunting-detections/AdvancedRouterScanner-detections/",
+        "to_ids": false,
+        "comment": "Detection rules, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "e7d7efdf-e431-5905-8097-7afc481ce17b",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/ioc-feeds/AdvancedRouterScanner.json",
+        "to_ids": false,
+        "comment": "IOC feed (JSON), The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "9bc28047-8857-5271-a088-0c1daac45b35",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/reports/AdvancedRouterScanner/",
+        "to_ids": false,
+        "comment": "Report, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "4a975d66-ea3b-5bb5-a6e8-04ee4f99fd4b",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/stix/AdvancedRouterScanner.json",
+        "to_ids": false,
+        "comment": "STIX 2.1 bundle, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "2932caab-9460-5f1e-a3c2-dc0de2ccb492",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Default Credential Brute Force\nid: b88fd219-6352-4cdb-9406-be4acdc7dfe8\nstatus: experimental\ndescription: >-\n    Detects authentication attempts using common default or weak\n    username/password pairs against router and IoT management interfaces,\n    consistent with automated credential brute-forcing tools.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/AdvancedRouterScanner-detections/\nauthor: The Hunters Ledger\ndate: '2025-10-25'\ntags:\n    - attack.credential-access\n    - attack.t1110.001\n    - detection.emerging-threats\nlogsource:\n    category: authentication\ndetection:\n    selection:\n        user|contains:\n            - \"admin\"\n            - \"root\"\n            - \"guest\"\n            - \"operator\"\n        password|contains:\n            - \"admin\"\n            - \"password\"\n            - \"1234\"\n            - \"changeme\"\n    condition: selection\nfalsepositives:\n    - Legitimate administrators using default credentials before hardening a new device\nlevel: medium",
+        "to_ids": false,
+        "comment": "Default Credential Brute Force | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1110.001 | rule hash ba91c32f | https://the-hunters-ledger.com/hunting-detections/AdvancedRouterScanner-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "bc34b58b-1c74-5499-9da8-26fe8116093e",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Suspicious Router CGI Access\nid: e5afdda0-43fc-42b1-b429-05cb0e0bd34e\nstatus: experimental\ndescription: >-\n    Detects HTTP requests to CGI endpoints and paths commonly exploited by\n    router/IoT scanning and exploitation tools to achieve command execution\n    or credential harvesting on embedded web management interfaces.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/AdvancedRouterScanner-detections/\nauthor: The Hunters Ledger\ndate: '2025-10-25'\ntags:\n    - attack.initial-access\n    - attack.t1190\n    - detection.emerging-threats\nlogsource:\n    category: webserver\ndetection:\n    selection:\n        cs-uri-stem|contains:\n            - \"/web_shell_cmd.gch\"\n            - \"/apply.cgi\"\n            - \"/boaform/admin/formLogin\"\n            - \"/cgi-bin/config.cgi\"\n            - \"/login.cgi\"\n            - \"/setup.cgi\"\n            - \"/system.cmd\"\n            - \"/shell?command=\"\n    condition: selection\nfalsepositives:\n    - Legitimate administrative access to router/IoT management interfaces\nlevel: medium",
+        "to_ids": false,
+        "comment": "Suspicious Router CGI Access | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1190 | rule hash beeec0e9 | https://the-hunters-ledger.com/hunting-detections/AdvancedRouterScanner-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      }
+    ],
+    "Object": []
+  }
+}

@@ -1,0 +1,229 @@
+{
+  "Event": {
+    "uuid": "b021c858-4e87-550d-adc4-b56553cc8004",
+    "info": "Arsenal-237 New Files: enc_c2.exe (Rust Ransomware with Tor C2)",
+    "date": "2026-01-15",
+    "threat_level_id": 1,
+    "analysis": 2,
+    "timestamp": 1791580400,
+    "publish_timestamp": 1791580400,
+    "published": true,
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Ransomware\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"C2\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Rust\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Multi-hop Proxy - T1090.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Malicious File - T1204.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data Encrypted for Impact - T1486\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Debugger Evasion - T1622\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "Attribute": [
+      {
+        "uuid": "740a5669-e703-5e88-ad4a-3005e96c1815",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/hunting-detections/arsenal-237-enc_c2-exe-detections/",
+        "to_ids": false,
+        "comment": "Detection rules, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "5c1ff02f-23db-54c3-9c48-ccb68dd6eadf",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/ioc-feeds/arsenal-237-enc_c2-exe.json",
+        "to_ids": false,
+        "comment": "IOC feed (JSON), The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "56798214-aef6-5b88-9e18-89be74271670",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT RANSOMWARE enc_c2.exe Tor C2 Beacon - POST /c2/beacon.php\"; flow:to_server,established; http.method; content:\"POST\"; http.uri; content:\"/c2/beacon.php\"; http.header; content:\"Content-Type: application/json\"; reference:url,the-hunters-ledger.com/hunting-detections/arsenal-237-enc_c2-exe-detections/; classtype:trojan-activity; metadata:author The_Hunters_Ledger, date 2026-01-26; sid:9301201; rev:3;)",
+        "to_ids": true,
+        "comment": "Tor C2 Beacon POST to /c2/beacon.php | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1071.001, T1090.003 | rule hash 33c30b54 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-enc_c2-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "f848519d-88cf-5bd2-b353-4f8c5141288d",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Network - HTTP POST to Tor Hidden-Service C2 Beacon Endpoint\nid: 0491b05a-d2d9-43e4-b1e5-5415c8b71788\nstatus: experimental\ndescription: Detects HTTP POST requests to a .onion hidden-service host targeting the Arsenal-237 ransomware's confirmed C2 beacon URI path. Anchored to the URI/method/host-suffix combination rather than a specific onion address, so it survives infrastructure rotation.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-enc_c2-exe-detections/\nauthor: The Hunters Ledger\ndate: 2026-01-26\ntags:\n    - attack.command-and-control\n    - attack.t1071.001\n    - attack.t1090.003\n    - stp.3\nlogsource:\n    product: firewall\n    category: http_request\ndetection:\n    selection:\n        http_method: POST\n        http_host|endswith: '.onion'\n        http_uri: '/c2/beacon.php'\n    condition: selection\nfalsepositives:\n    - Unlikely; requires a POST request to a .onion host at this exact URI path\nlevel: critical",
+        "to_ids": true,
+        "comment": "HTTP POST to Tor Hidden-Service C2 Beacon Endpoint | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1071.001, T1090.003 | rule hash 1300f7a6 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-enc_c2-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "6bd26741-0279-5d5c-8cb7-5c595109acf1",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Process - TEB Anti-Debug Sleep Loop Detection\nid: 72490224-3052-4aaf-adcb-38d4201e2d67\nstatus: experimental\ndescription: Detects repeated Sleep()/SleepEx() calls in the call trace of the enc_c2.exe process image, consistent with a TEB-based anti-debugging stall loop. Filename-anchored and requires call-stack-capable process_access telemetry; corroborates the same technique covered by the TEB anti-debug YARA rule.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-enc_c2-exe-detections/\nauthor: The Hunters Ledger\ndate: 2026-01-26\nlogsource:\n    product: windows\n    category: process_access\ndetection:\n    selection:\n        SourceImage|endswith: 'enc_c2.exe'\n        CallTrace|contains:\n            - 'Sleep'\n            - 'SleepEx'\n            - '0x3E8'  # 1000 milliseconds in hex\n    condition: selection\nfalsepositives:\n    - Legitimate applications with sleep loops (rate limiting, polling) that happen to be named/renamed to enc_c2.exe\nlevel: medium\ntags:\n    - attack.stealth\n    - attack.discovery\n    - attack.t1622",
+        "to_ids": false,
+        "comment": "TEB Anti-Debug Sleep Loop (Call-Stack Corroboration) | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1622 | rule hash a2e0aa22 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-enc_c2-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "3047c3c9-1389-5897-a2ab-5d023a856118",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Ransomware - File Creation with .locked Extension\nid: 9af9beea-9ea3-4e5b-ad1d-1bc229d936d0\nstatus: experimental\ndescription: Detects creation of files with a .locked extension appended, consistent with the Arsenal-237 ransomware's encryption output. Single-event trigger with no bulk-volume threshold; review for a genuine mass-encryption pattern rather than an isolated file.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-enc_c2-exe-detections/\nauthor: The Hunters Ledger\ndate: 2026-01-26\nlogsource:\n    product: windows\n    category: file_event\ndetection:\n    selection:\n        TargetFilename|endswith: '.locked'\n    filter_excludes:\n        TargetFilename|contains:\n            - '~$'\n            - 'Temp'\n    condition: selection and not filter_excludes\nfalsepositives:\n    - Legitimate software using a .locked extension for lock/marker files\n    - Isolated, non-bulk file renames\nlevel: medium\ntags:\n    - attack.impact\n    - attack.t1486",
+        "to_ids": false,
+        "comment": "Bulk-Capable File Creation with .locked Extension | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1486 | rule hash 16ffc834 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-enc_c2-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "dd6d9e68-7e0d-5968-b13e-6c0e8e33bfa1",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Registry - Persistence Key Referencing enc_c2/TEST_BUILD_001 Identifiers\nid: 0ee562b4-ef75-4801-961d-a3479f9a0237\nstatus: experimental\ndescription: Detects a Run/RunOnce/Winlogon registry write whose value data contains the malware's 'enc_c2' or 'TEST_BUILD_001' build identifiers. The confirmed sample uses a single-run model with no observed persistence; this rule covers a future variant that adds registry-based persistence, keyed on identifiers that change across builds.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-enc_c2-exe-detections/\nauthor: The Hunters Ledger\ndate: 2026-01-26\nlogsource:\n    product: windows\n    category: registry_event\ndetection:\n    selection:\n        TargetObject|contains:\n            - 'Software\\Microsoft\\Windows\\CurrentVersion\\Run'\n            - 'Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce'\n            - 'Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon'\n        Details|contains:\n            - 'enc_c2'\n            - 'TEST_BUILD_001'\n    condition: selection\nfalsepositives:\n    - Unlikely; keyed on build-specific malware identifiers that would not appear in unrelated registry writes\nlevel: medium\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1547.001",
+        "to_ids": false,
+        "comment": "Registry Persistence Key Referencing Build Identifiers | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1547.001 | rule hash 327ebd5d | https://the-hunters-ledger.com/hunting-detections/arsenal-237-enc_c2-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "f4578a2c-9937-5d1b-9fe0-0d64874e5209",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: enc_c2.exe Process Execution - Ransomware\nid: c38ece37-0b38-4844-aa71-41814663daaf\nstatus: experimental\ndescription: Detects execution of a process image or PE OriginalFileName matching enc_c2.exe. Filename-based; defeated by renaming the binary in a rebuilt variant — hunting signal, not a high-confidence alert.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-enc_c2-exe-detections/\nauthor: The Hunters Ledger\ndate: 2026-01-26\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection:\n        - Image|endswith: '\\enc_c2.exe'\n        - OriginalFileName: 'enc_c2.exe'\n    condition: selection\nfalsepositives:\n    - Unrelated software coincidentally named or renamed to enc_c2.exe\nlevel: medium\ntags:\n    - attack.execution\n    - attack.t1204.002",
+        "to_ids": false,
+        "comment": "enc_c2.exe Process Execution | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1204.002 | rule hash 89d530e9 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-enc_c2-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "9a5a3084-da59-5877-965a-16836b208f30",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule enc_c2_ransomware_operations {\n    meta:\n        description = \"Detects the Arsenal-237 ransomware's ransom note text combined with at least one supporting operational string (encrypted-file extension, ransom note filename, embedded process name, or HTTP client library)\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-enc_c2-exe-detections/\"\n        date = \"2026-01-26\"\n        malware_type = \"Ransomware\"\n        severity = \"MEDIUM\"\n\n    strings:\n        $ransom_msg = \"YOUR FILES HAVE BEEN ENCRYPTED!\" ascii\n        $ransom_note = \"README.txt\" ascii\n        $encrypted_extension = \".locked\" ascii\n        $enc_c2_executable = \"enc_c2.exe\" ascii\n        $http_client = \"ureq\" ascii\n\n    condition:\n        $ransom_msg and 1 of ($ransom_note, $encrypted_extension, $enc_c2_executable, $http_client)\n}",
+        "to_ids": false,
+        "comment": "Ransom Note Text with Supporting Ransomware Artifact | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1486 | rule hash cb20c2b5 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-enc_c2-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "115c775f-9c7b-519c-9848-d9abadcf8acf",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule raas_builder_tracking {\n    meta:\n        description = \"Detects the Arsenal-237 ransomware's RaaS builder/C2 JSON schema (builder_id, victim_id, encryption_key, machine_info) or the confirmed TEST_BUILD_001 builder identifier\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-enc_c2-exe-detections/\"\n        date = \"2026-01-26\"\n        malware_type = \"Ransomware (RaaS)\"\n        severity = \"HIGH\"\n\n    strings:\n        $builder_id_default = \"TEST_BUILD_001\" ascii\n        $builder_id_generic = \"builder_id\" ascii\n        $victim_id = \"victim_id\" ascii\n        $encryption_key = \"encryption_key\" ascii\n        $machine_info = \"machine_info\" ascii\n\n    condition:\n        (($builder_id_default and $builder_id_generic) or\n         ($builder_id_generic and $encryption_key and $victim_id and $machine_info))\n}",
+        "to_ids": true,
+        "comment": "RaaS Builder ID & C2 Beacon Schema Combination | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1071.001, T1486 | rule hash 20cad9a1 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-enc_c2-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "2100c59e-bc78-56ef-8fe2-559796339737",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule teb_anti_debug_detection {\n    meta:\n        description = \"Detects TEB (Thread Environment Block) stack-base validation anti-debugging combined with a Sleep-based stall loop, as used by the Arsenal-237 ransomware. Also matches other software using the same publicly documented anti-debug technique\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-enc_c2-exe-detections/\"\n        date = \"2026-01-26\"\n        malware_type = \"Anti-Analysis\"\n        severity = \"MEDIUM\"\n\n    strings:\n        $teb_api = \"NtCurrentTeb\" ascii\n        $stack_base = \"StackBase\" ascii\n        $sleep_loop = { 68 88 13 00 00 FF 15 } // Push 0x1388 (5000ms) / Call Sleep\n        $sleep_1000 = { 68 E8 03 00 00 FF 15 } // Push 0x3E8 (1000ms) / Call Sleep\n\n    condition:\n        ($teb_api and ($sleep_loop or $sleep_1000 or $stack_base))\n}",
+        "to_ids": false,
+        "comment": "TEB-Based Anti-Debug Stall Loop | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1622 | rule hash 59afa876 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-enc_c2-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "7cb35c9d-7656-5bf6-85e6-74a379793d0d",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule tor_hidden_service_c2_endpoint {\n    meta:\n        description = \"Detects the Arsenal-237 ransomware's C2 beacon endpoint path strings (Tor hidden-service JSON beacon). Renameable in a rebuilt binary; hunting signal, not a high-confidence alert\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-enc_c2-exe-detections/\"\n        date = \"2026-01-26\"\n        malware_type = \"C2 Infrastructure\"\n        severity = \"MEDIUM\"\n\n    strings:\n        $c2_endpoint = \"/c2/beacon.php\" ascii\n        $c2_protocol = \"POST /c2/beacon.php\" ascii\n\n    condition:\n        any of them\n}",
+        "to_ids": false,
+        "comment": "Tor C2 Beacon Endpoint Path | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1090.003, T1071.001 | rule hash 34586114 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-enc_c2-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      }
+    ],
+    "Object": []
+  }
+}

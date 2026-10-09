@@ -1,0 +1,89 @@
+{
+  "Event": {
+    "uuid": "3a2e305f-b524-5b35-8fa8-54a3a55c08b1",
+    "info": "Arsenal-237 New Files: killer_crowdstrike.dll (CrowdStrike-Specific Termination)",
+    "date": "2026-01-15",
+    "threat_level_id": 1,
+    "analysis": 2,
+    "timestamp": 1791580400,
+    "publish_timestamp": 1791580400,
+    "published": true,
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Evasion\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"BYOVD\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Privilege Escalation - T1068\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "Attribute": [
+      {
+        "uuid": "2c9438da-e3c7-569d-813b-db6f0e252c56",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-crowdstrike-dll-detections/",
+        "to_ids": false,
+        "comment": "Detection rules, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "6c28e7a8-5cbe-5389-a1fc-5e89651a712a",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/ioc-feeds/arsenal-237-killer-crowdstrike-dll.json",
+        "to_ids": false,
+        "comment": "IOC feed (JSON), The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "27b1352a-1c88-532a-93ec-11aab875611b",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: CrowdStrike Falcon Core Process Termination (Base Rule)\nid: 7aba482e-4b15-44ca-b9e3-c85733066ced\nname: crowdstrike_falcon_process_termination\nstatus: experimental\ndescription: >-\n    Base rule (not alerting on its own): termination of one of CrowdStrike\n    Falcon's three core processes (CSFalconService.exe, csagent.exe,\n    CSFalconContainer.exe). Sysmon's process-termination event (EventID 5)\n    is documented to carry only the Image field, with no parent-process or\n    user-context attribution, so this selector alone cannot distinguish a\n    forced kill from a routine Falcon restart or update. Paired with the\n    kernel-driver-service-creation base rule below via the correlation\n    rule, which flags co-occurrence of both BYOVD-EDR-kill artifacts on\n    the same host.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-crowdstrike-dll-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-25'\ntags:\n    - attack.defense-impairment\n    - attack.t1685\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: process_termination\ndetection:\n    selection:\n        Image|endswith:\n            - '\\CSFalconService.exe'\n            - '\\csagent.exe'\n            - '\\CSFalconContainer.exe'\n    condition: selection\nfalsepositives:\n    - >-\n        Legitimate CrowdStrike Falcon sensor restarts, version updates, and\n        administrator-initiated service stops all produce this same event.\n        Not alerting on its own; reviewed only in combination with the\n        paired driver-service-creation base rule.\nlevel: informational\n---\ntitle: Kernel-Mode Driver Service Creation (Base Rule)\nid: bb877b05-3f32-4437-8365-35cd3b58f35f\nname: kernel_driver_service_creation\nstatus: experimental\ndescription: >-\n    Base rule (not alerting on its own): installation of a new kernel-mode\n    driver service via the Service Control Manager, the mechanism the\n    BYOVD (Bring Your Own Vulnerable Driver) technique requires to load a\n    vulnerable driver at all. Rare on most endpoints, but common enough\n    alone (hardware installs, security-product updates) to need\n    corroboration before alerting. Paired with the CrowdStrike-termination\n    base rule above via the correlation rule below.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-crowdstrike-dll-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-25'\ntags:\n    - attack.privilege-escalation\n    - attack.t1068\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    service: system\ndetection:\n    selection:\n        Provider_Name: 'Service Control Manager'\n        EventID: 7045\n        ServiceType: 'kernel mode driver'\n    condition: selection\nfalsepositives:\n    - >-\n        Legitimate driver installation (new hardware, security or\n        monitoring software updates). Not alerting on its own; reviewed\n        only in combination with the paired CrowdStrike-termination base\n        rule.\nlevel: low\n---\ntitle: BYOVD Kernel Driver Install Followed by CrowdStrike Falcon Termination on Same Host\nid: e91a4c6d-7f28-4b53-a916-3d8f6c2b9e47\nstatus: experimental\ndescription: >-\n    Fires when a new kernel-mode driver service is installed and one of\n    CrowdStrike Falcon's core processes terminates on the same host within\n    a short window. Neither base signal is reliable alone: the\n    process-termination event carries no parent or user attribution to\n    separate a forced kill from a routine restart, and a kernel-driver\n    service install alone is common enough to need corroboration. This\n    toolkit's documented execution timeline runs from driver deployment\n    through security-product termination in well under a minute, so a\n    same-host co-occurrence within the correlation window is a\n    high-confidence pairing rather than two unrelated routine events.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-crowdstrike-dll-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-25'\ntags:\n    - attack.defense-impairment\n    - attack.t1685\n    - attack.privilege-escalation\n    - attack.t1068\n    - detection.emerging-threats\ncorrelation:\n    type: temporal\n    rules:\n        - crowdstrike_falcon_process_termination\n        - kernel_driver_service_creation\n    group-by:\n        - host.name\n    timespan: 60s\nfalsepositives:\n    - >-\n        A coordinated security-product migration (uninstalling CrowdStrike\n        while installing a different vendor's kernel-mode filter driver in\n        the same maintenance window) could produce both artifacts\n        together. Uncommon, and typically scheduled, documented change\n        activity.\nlevel: high",
+        "to_ids": true,
+        "comment": "BYOVD Kernel Driver Install + CrowdStrike Falcon Termination (Correlation) | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1685, T1068 | rule hash e41f84aa | https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-crowdstrike-dll-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "5f2d8eea-2c7c-5b75-8984-5ec0188f4160",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Known-Vulnerable Driver Loaded from Temporary Directory (BYOVD)\nid: fddb4e86-c31e-4ccd-86d3-788882ef3d20\nstatus: experimental\ndescription: >-\n    Detects loading of the BdApiUtil64.sys (Baidu Antivirus) or a\n    ProcExp-family (Sysinternals Process Explorer) driver from a Temp\n    directory, the BYOVD pattern this toolkit uses to disable EDR/AV\n    kernel hooks. Both drivers are legitimately signed products with a\n    known kernel vulnerability; loading either from a temporary directory\n    rather than a normal install path is this toolkit's own deployment\n    pattern.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-crowdstrike-dll-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-25'\ntags:\n    - attack.defense-impairment\n    - attack.t1685\n    - attack.privilege-escalation\n    - attack.t1068\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: driver_load\n    product: windows\ndetection:\n    selection_name:\n        ImageLoaded|contains:\n            - 'BdApiUtil64.sys'\n            - 'ProcExp'\n    selection_path:\n        ImageLoaded|contains: '\\Temp\\'\n    condition: selection_name and selection_path\nfalsepositives:\n    - Legitimate use of Process Explorer (ProcExp) run directly from a temporary or extraction directory rather than an installed path.\nlevel: high",
+        "to_ids": true,
+        "comment": "Known-Vulnerable Driver Loaded from Temporary Directory (BYOVD) | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1685, T1068 | rule hash 6f54407a | https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-crowdstrike-dll-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      }
+    ],
+    "Object": []
+  }
+}

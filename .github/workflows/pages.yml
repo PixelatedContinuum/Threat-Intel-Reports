@@ -161,6 +161,15 @@ jobs:
           fams=$(grep -o 'class="hl-card hl-catalog-card hl-family-card"' _site/families/index.html | wc -l)
           echo "family index renders $fams cards"
           test "$fams" -gt 0
+          test -f _site/feeds/misp/manifest.json
+          test -f _site/feeds/misp/hashes.csv
+          test -f _site/feeds/misp/index.html
+          test -f _site/feeds/misp/changelog/index.html
+          test -f _site/stix/manifest.json
+          events=$(ls _site/feeds/misp/ | grep -c -E '^[0-9a-f-]{36}\.json$')
+          echo "MISP feed publishes $events events"
+          test "$events" -gt 0
+          test ! -f _site/feeds/misp/_state.json
           test -f _site/pagefind/pagefind.js
           test -f _site/pagefind/pagefind-ui.js
           echo "search index: $(grep -m1 -o 'Indexed [0-9]* pages' /tmp/pagefind.txt || echo 'page count not reported')"
@@ -222,7 +231,8 @@ jobs:
           fail=0
           for g in check-detection-manifest.js check-detection-attack.js check-ioc-index.js \
                    check-ioc-tables.js check-ioc-feeds.js check-ioc-feeds-attack.js \
-                   check-embargo-artifacts.js check-tags.js check-actors.js check-xref.js; do
+                   check-embargo-artifacts.js check-tags.js check-actors.js check-xref.js \
+                   check-misp-feed.js check-stix-manifest.js; do
             echo "::group::$g"
             node "$g"; rc=$?
             echo "::endgroup::"
@@ -239,3 +249,16 @@ jobs:
           done
           echo "::endgroup::"
           exit $fail
+      - name: Validate the MISP feed with PyMISP
+        working-directory: tools/report-tooling
+        # The format's reference implementation loads every event, so a type or
+        # category MISP would reject fails here rather than on a subscriber's pull.
+        run: |
+          set -u
+          python3 -m pip install --quiet --disable-pip-version-check pymisp
+          python3 validate-misp-feed.py; rc=$?
+          case $rc in
+            0) echo "PASS         validate-misp-feed.py" ;;
+            2) echo "::warning::validate-misp-feed.py NOT CHECKED (exit 2); see its log above" ;;
+            *) echo "::error::validate-misp-feed.py FAILED (exit $rc)"; exit 1 ;;
+          esac

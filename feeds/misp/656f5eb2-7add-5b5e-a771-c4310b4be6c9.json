@@ -1,0 +1,1335 @@
+{
+  "Event": {
+    "uuid": "656f5eb2-7add-5b5e-a771-c4310b4be6c9",
+    "info": "Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17",
+    "date": "2026-09-07",
+    "threat_level_id": 1,
+    "analysis": 2,
+    "timestamp": 1791580400,
+    "publish_timestamp": 1791580400,
+    "published": true,
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Sliver\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Post-Ex\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"EtherHiding\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Blockchain C2\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"LSASS Memory - T1003.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Security Account Manager - T1003.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"LSA Secrets - T1003.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data from Local System - T1005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Fallback Channels - T1008\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Network Configuration Discovery - T1016\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Desktop Protocol - T1021.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"SMB/Windows Admin Shares - T1021.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Remote Management - T1021.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information - T1027\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Owner/User Discovery - T1033\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Name or Location - T1036.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over C2 Channel - T1041\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Network Service Discovery - T1046\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Management Instrumentation - T1047\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Scheduled Task - T1053.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Injection - T1055\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Command Shell - T1059.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"JavaScript - T1059.007\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Privilege Escalation - T1068\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domain Groups - T1069.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"File Deletion - T1070.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Local Data Staging - T1074.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domain Accounts - T1078.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Information Discovery - T1082\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domain Account - T1087.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy - T1090\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Account Manipulation - T1098\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Dead Drop Resolver - T1102.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Multi-Stage Channels - T1104\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Native API - T1106\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Modify Registry - T1112\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Standard Encoding - T1132.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Token Impersonation/Theft - T1134.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Create Process with Token - T1134.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Network Share Discovery - T1135\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Local Account - T1136.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domain Account - T1136.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Deobfuscate/Decode Files or Information - T1140\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Msiexec - T1218.007\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domain Trust Discovery - T1482\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Security Software Discovery - T1518.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Bypass User Account Control - T1548.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Browsers - T1555.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"RDP Hijacking - T1563.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Lateral Tool Transfer - T1570\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Non-Standard Port - T1571\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Protocol Tunneling - T1572\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Asymmetric Cryptography - T1573.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Tool - T1588.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Upload Malware - T1608.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Reflective Code Loading - T1620\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify System Firewall - T1686\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "Attribute": [
+      {
+        "uuid": "43824088-8ae4-567e-b02e-6f6207a4f1cd",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/",
+        "to_ids": false,
+        "comment": "Detection rules, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "4141d1e9-dc75-5350-bc9e-e10c8b67cf02",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/ioc-feeds/sliver-c2-windows-postex-staging-193-233-202-17-iocs.json",
+        "to_ids": false,
+        "comment": "IOC feed (JSON), The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "3399da50-3cc5-5796-bc2e-9e681fe94ae0",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/",
+        "to_ids": false,
+        "comment": "Report, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "a1db8e3e-dd3d-5c8d-bb63-0db4b1c6e002",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/stix/sliver-c2-windows-postex-staging-193-233-202-17.json",
+        "to_ids": false,
+        "comment": "STIX 2.1 bundle, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "3d31e0d2-a375-5edf-9020-1e444a57f360",
+        "type": "vulnerability",
+        "category": "External analysis",
+        "value": "CVE-2016-0099",
+        "to_ids": false,
+        "comment": "Named in the report",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "be1ccf3f-d98b-5e95-8152-26385c625bbb",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "06e29cf9ac468976f04208ea5e5563ce57f67ba42093750e967c87a14dad0978",
+        "to_ids": true,
+        "comment": "sha256: 06e29cf9ac468976f04208ea5e5563ce57f67ba42093750e967c87a14dad0978 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "25ffac96-5570-56a0-bb82-cc5bb49f04b3",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "0f56ff5ce9d6732eaa67688af2c94a8f320fb85bf4cb04ba372b735858b9d49c",
+        "to_ids": true,
+        "comment": "sha256: 0f56ff5ce9d6732eaa67688af2c94a8f320fb85bf4cb04ba372b735858b9d49c [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "e5b94702-e40d-5ac5-a82c-605f823b47c2",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "136dd810f217c0dd70f8352328c2ea6c43865f8ef79713d77d68c1d9bdbf822d",
+        "to_ids": true,
+        "comment": "sha256: 136dd810f217c0dd70f8352328c2ea6c43865f8ef79713d77d68c1d9bdbf822d [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "a57d2149-d4d2-5b27-b98e-e04148df7a08",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "15f69ef1918db303ca2f92eec7f99768adf1195e6f6fe56492fae37cc735216a",
+        "to_ids": true,
+        "comment": "sha256: 15f69ef1918db303ca2f92eec7f99768adf1195e6f6fe56492fae37cc735216a [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "99c03635-0bef-5b92-b678-e3e9e16dc001",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "173994299ea7cdf873fbbe1ec42953b8b45995f519f14bc702d0a7b9338efc32",
+        "to_ids": true,
+        "comment": "sha256: 173994299ea7cdf873fbbe1ec42953b8b45995f519f14bc702d0a7b9338efc32 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "7bea343a-35d6-506a-9db8-896a75949957",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "201bcb3d98923856227ed102b5f92c5ebd268e715a9bfc2e62ba1fe7faa0bc5f",
+        "to_ids": true,
+        "comment": "sha256: 201bcb3d98923856227ed102b5f92c5ebd268e715a9bfc2e62ba1fe7faa0bc5f [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "edc8f05d-9525-5813-abf7-32ff17040405",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "204affae86fda4fea1ceb24f3e95cd7ab457169d36e9df0f05775f123de2b31e",
+        "to_ids": true,
+        "comment": "sha256: 204affae86fda4fea1ceb24f3e95cd7ab457169d36e9df0f05775f123de2b31e [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "c90c444f-a64f-5680-82cc-0e1102aeadb9",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "28fad4e208ca97ba16180157bf7a565e1f6a40ebcb5900c0bda5a8947bafe66d",
+        "to_ids": true,
+        "comment": "sha256: 28fad4e208ca97ba16180157bf7a565e1f6a40ebcb5900c0bda5a8947bafe66d [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "cc6225bb-26b9-585c-a5e4-9d9a769ec746",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "294043345ec46527acf4c56635de6f781036aff1a1dbdc3925ba4525372633ee",
+        "to_ids": true,
+        "comment": "sha256: 294043345ec46527acf4c56635de6f781036aff1a1dbdc3925ba4525372633ee [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "7e87fc25-460e-5444-a497-6639dd1911ab",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "2c8df3fdb19ea1884d32457a10049cb6ca80498e0e162b3b34977ad2b82fe6ed",
+        "to_ids": true,
+        "comment": "sha256: 2c8df3fdb19ea1884d32457a10049cb6ca80498e0e162b3b34977ad2b82fe6ed [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "ed2505f2-7466-578a-a057-4c73fb880be1",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "2fc083274c15d5c87b3d769e797498f36e43dede21f48a21b53422c90d960f21",
+        "to_ids": true,
+        "comment": "sha256: 2fc083274c15d5c87b3d769e797498f36e43dede21f48a21b53422c90d960f21 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "025e1fc1-35b7-5756-a6da-b0164906e215",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "31332d7417c777e7e52bd4d9c491cb6213c97ab16e051bf29eaf8b2a18c06ef4",
+        "to_ids": true,
+        "comment": "sha256: 31332d7417c777e7e52bd4d9c491cb6213c97ab16e051bf29eaf8b2a18c06ef4 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "44c019cc-4742-5e9e-ad2d-299dcd557f40",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "318bb406f9cf61cf310c84706f090bdaad29d481a783a37be185bf709a791b4c",
+        "to_ids": true,
+        "comment": "sha256: 318bb406f9cf61cf310c84706f090bdaad29d481a783a37be185bf709a791b4c [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "d447f026-8b04-5a3c-ae80-589da7fcc359",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "3467dd1d846b46ab41dfc1111960f1a7ec54cf75d4a6339929d8448c477b0d35",
+        "to_ids": true,
+        "comment": "sha256: 3467dd1d846b46ab41dfc1111960f1a7ec54cf75d4a6339929d8448c477b0d35 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "f8b0c0ce-9a49-5a89-8e2d-85348cd0a430",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "35c419760696d9013b31dafc5b05682e38ffa5190f631d3a3c5f1c3a1ad85b61",
+        "to_ids": true,
+        "comment": "sha256: 35c419760696d9013b31dafc5b05682e38ffa5190f631d3a3c5f1c3a1ad85b61 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "8832a233-502a-5ede-91d7-c020c28627ff",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "37a28e5532cf7de88af570cdcbf6dc0db96b14c37ff84d285d89e6635ad91c05",
+        "to_ids": true,
+        "comment": "sha256: 37a28e5532cf7de88af570cdcbf6dc0db96b14c37ff84d285d89e6635ad91c05 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "21809653-5194-5f92-9a34-f8aba4b4d600",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "3953b770e1da9816e876e8df6b11e1e020e2f5cdad016da1d191e095ea628d80",
+        "to_ids": true,
+        "comment": "sha256: 3953b770e1da9816e876e8df6b11e1e020e2f5cdad016da1d191e095ea628d80 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "9ff908dd-c837-5bc9-ad4b-f5f05c68582b",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "39be3938eb198ab57802edcf67554dad007f01dd9148dadee39279bfd09cfee2",
+        "to_ids": true,
+        "comment": "sha256: 39be3938eb198ab57802edcf67554dad007f01dd9148dadee39279bfd09cfee2 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "edc3bbc2-2cbf-51af-a888-f31d58e3d490",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "3d531def7ecef3f29b4542eb28db21e7ebae4da29c77cd762147135f5a014f87",
+        "to_ids": true,
+        "comment": "sha256: 3d531def7ecef3f29b4542eb28db21e7ebae4da29c77cd762147135f5a014f87 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "9c0c2360-bb68-5013-b8a6-771bef00d398",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "4104ed9fe73c3b582f8366751ad7c496c2b0f7a4a6b3f069802b5af9b5bd44ba",
+        "to_ids": true,
+        "comment": "sha256: 4104ed9fe73c3b582f8366751ad7c496c2b0f7a4a6b3f069802b5af9b5bd44ba [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "61f7dfc7-1df0-5769-a635-480bf0e2076e",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "42d5fc0c36977e0a4ad40ba0771b3cdc9bdd9c73c89d68844bc8e510c0657226",
+        "to_ids": true,
+        "comment": "sha256: 42d5fc0c36977e0a4ad40ba0771b3cdc9bdd9c73c89d68844bc8e510c0657226 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "5a21b288-1047-5fc0-97b0-eccbfcf5653e",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "4352ad707e262d4913d690bc95eb3d38c72ff43100c9a7a96ce4cefa6705dabd",
+        "to_ids": true,
+        "comment": "sha256: 4352ad707e262d4913d690bc95eb3d38c72ff43100c9a7a96ce4cefa6705dabd [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "26d1e408-1c31-5bdd-bb07-4609bedc97ff",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "467cb247fc8545a5b6be227853252b46984f94a54e8c4260932573304d61f6ce",
+        "to_ids": true,
+        "comment": "sha256: 467cb247fc8545a5b6be227853252b46984f94a54e8c4260932573304d61f6ce [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "bb98f343-d46f-56a7-8897-c2262f556ed5",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "6016d1a56674d621dc8206c7162e3e30959f9bec930f30db2accf3601779bc9a",
+        "to_ids": true,
+        "comment": "sha256: 6016d1a56674d621dc8206c7162e3e30959f9bec930f30db2accf3601779bc9a [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "97d0c62e-a336-531f-95b1-ab8a4ec819f3",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "607e0456e7022e5f9f4829b0a2c658f0834fb642be3ab7ce68ed009b01e06f97",
+        "to_ids": true,
+        "comment": "sha256: 607e0456e7022e5f9f4829b0a2c658f0834fb642be3ab7ce68ed009b01e06f97 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "b00c3ffc-b594-5d1f-90bd-75e691cdcaed",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "61c0810a23580cf492a6ba4f7654566108331e7a4134c968c2d6a05261b2d8a1",
+        "to_ids": true,
+        "comment": "sha256: 61c0810a23580cf492a6ba4f7654566108331e7a4134c968c2d6a05261b2d8a1 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "09944f73-943c-53b6-acab-00b7ecd7710e",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "68675be7d0b110878c4fd7682e2e72911c66a9c2b43df91266a0e647067d4954",
+        "to_ids": true,
+        "comment": "sha256: 68675be7d0b110878c4fd7682e2e72911c66a9c2b43df91266a0e647067d4954 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "fa52d8f1-e52c-569a-9216-b1fdaadf73be",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "689036d2dc675b3d95a4139b8097685f6e2e5c8520e7a5a615801aba00a8b85a",
+        "to_ids": true,
+        "comment": "sha256: 689036d2dc675b3d95a4139b8097685f6e2e5c8520e7a5a615801aba00a8b85a [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "3a4196ab-078a-5a00-b838-e84808e8cec7",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "69cd12d92acf261c7f738c92d09e39dbcf60ec6ad66b261924b3dc93178b5ed3",
+        "to_ids": true,
+        "comment": "sha256: 69cd12d92acf261c7f738c92d09e39dbcf60ec6ad66b261924b3dc93178b5ed3 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "1415e911-1baf-580e-ae47-4d5a88368e3e",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "728c38979cdda97d5e82ece602698bf5132725f9f28b8cc0bc5fbd2316c9a044",
+        "to_ids": true,
+        "comment": "sha256: 728c38979cdda97d5e82ece602698bf5132725f9f28b8cc0bc5fbd2316c9a044 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "e2bcb051-38ca-5279-a10c-e2388c684a2b",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "731c9bfeb6816b6acb79cabf7edfeee3b7177c5f3dc76803c5907d7bf8cee808",
+        "to_ids": true,
+        "comment": "sha256: 731c9bfeb6816b6acb79cabf7edfeee3b7177c5f3dc76803c5907d7bf8cee808 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "204e4149-7ae3-5ba6-b362-fa7ed92763de",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "756c2096f54c5497110c9d854625c3ed592873e566d532077cd7adb4d10d4add",
+        "to_ids": true,
+        "comment": "sha256: 756c2096f54c5497110c9d854625c3ed592873e566d532077cd7adb4d10d4add [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "c5ecc06b-7a27-5c45-94ae-5ab111ce9823",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "7a1b0508afe806ce7f0ace0894cf46d159466f6874d5271a39e2c149c6ec4b9f",
+        "to_ids": true,
+        "comment": "sha256: 7a1b0508afe806ce7f0ace0894cf46d159466f6874d5271a39e2c149c6ec4b9f [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "615da79d-f63a-5c92-a3bd-192fa333c561",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "7f91141bba37457b09088b039e21d82abe420bdc3b585970dba71dfe5cbeb25d",
+        "to_ids": true,
+        "comment": "sha256: 7f91141bba37457b09088b039e21d82abe420bdc3b585970dba71dfe5cbeb25d [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "1bd640e8-323c-5ba5-8daa-e2d176469c32",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "81d5debff647121e47913098757214ddd163710a240224fa92a03af9623ecf81",
+        "to_ids": true,
+        "comment": "sha256: 81d5debff647121e47913098757214ddd163710a240224fa92a03af9623ecf81 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "6b11e734-1911-5899-aebd-4d558fab93af",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "8823f98a6774b1dc812687476e0866f31b1601f4c42b880bd9a7f57a309d27b4",
+        "to_ids": true,
+        "comment": "sha256: 8823f98a6774b1dc812687476e0866f31b1601f4c42b880bd9a7f57a309d27b4 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "d67fa532-761b-5a94-8cc6-accc89b26be6",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "88ad6a37051cbaef75de8c6e3fe22351df40ba064677a6a3f53d4cc156ad1eb6",
+        "to_ids": true,
+        "comment": "sha256: 88ad6a37051cbaef75de8c6e3fe22351df40ba064677a6a3f53d4cc156ad1eb6 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "4608a1bd-faff-5d4e-a753-6bc8a324c0aa",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "921376cf81f2a5eca3d9b44cdb6ff2df0a1a685bf47518d5f86e45576c997b60",
+        "to_ids": true,
+        "comment": "sha256: 921376cf81f2a5eca3d9b44cdb6ff2df0a1a685bf47518d5f86e45576c997b60 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "d4963753-21a6-51f2-8ca3-4552f3e997f1",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "978c9818e766f1df9c3e7b4ad3a3f2df4ef204524b9ad8e45154311148b057db",
+        "to_ids": true,
+        "comment": "sha256: 978c9818e766f1df9c3e7b4ad3a3f2df4ef204524b9ad8e45154311148b057db [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "a09b1e09-b7e5-5ef5-9072-f7a5b47e202c",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "9a8e9d587b570d4074f1c8317b163aa8d0c566efd88f294d9d85bc7776352a28",
+        "to_ids": true,
+        "comment": "sha256: 9a8e9d587b570d4074f1c8317b163aa8d0c566efd88f294d9d85bc7776352a28 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "c1bfb83d-665b-5314-82ac-e412b78b5704",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "9bc742d339a08ff88ae26363bd9b73cf027762f1856e0e7f30d86feccfb5c3ef",
+        "to_ids": true,
+        "comment": "sha256: 9bc742d339a08ff88ae26363bd9b73cf027762f1856e0e7f30d86feccfb5c3ef [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "0e0bc4a2-56f7-54eb-8e8a-0f5d526aa866",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "9e5f7294234e21b3be083bb875d27f51514cf158e507ae11594459d9cc879f58",
+        "to_ids": true,
+        "comment": "sha256: 9e5f7294234e21b3be083bb875d27f51514cf158e507ae11594459d9cc879f58 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "8a94eb95-ee0e-50f5-bd34-8e8d719622a8",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "a2363e2f464694cb4bb8f487d33ea378764790a1c742bce98a03db5f52f4cd06",
+        "to_ids": true,
+        "comment": "sha256: a2363e2f464694cb4bb8f487d33ea378764790a1c742bce98a03db5f52f4cd06 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "c495c724-f18b-52aa-98b0-aaae6c08ed81",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "a53150f1214665cf8122a3fa2f953c863be2f5c0f81a0d25f603a91689f713eb",
+        "to_ids": true,
+        "comment": "sha256: a53150f1214665cf8122a3fa2f953c863be2f5c0f81a0d25f603a91689f713eb [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "67d76a9f-8ff7-5a1b-a90f-5a82b7374c86",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "a95da28fd2c077f7bbafe536b3821efd55f7d73ade8a8b5337327f11c5ef44ca",
+        "to_ids": true,
+        "comment": "sha256: a95da28fd2c077f7bbafe536b3821efd55f7d73ade8a8b5337327f11c5ef44ca [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "b4911a9d-6369-5ec4-b2ea-214ca7011ecb",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "aaec49b549aecf2119e1d20bf6dd7efbd74cd2ed2f6aaefed39e780e0815b5d4",
+        "to_ids": true,
+        "comment": "sha256: aaec49b549aecf2119e1d20bf6dd7efbd74cd2ed2f6aaefed39e780e0815b5d4 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "3a36bbbe-8677-5ca6-8d1b-b51b391b5cea",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "acfe23f94e5b98a217a93bf414c8f1a99d0463b1d143fff7a3ab5dae436fe19c",
+        "to_ids": true,
+        "comment": "sha256: acfe23f94e5b98a217a93bf414c8f1a99d0463b1d143fff7a3ab5dae436fe19c [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "b878b888-bab3-517e-997b-6c820dea59e3",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "b0e31e430faecdb65f1df82502506f4b155e11c2f2bf53e5014ffb5ce1ed8f75",
+        "to_ids": true,
+        "comment": "sha256: b0e31e430faecdb65f1df82502506f4b155e11c2f2bf53e5014ffb5ce1ed8f75 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "381bd592-1a3e-52ff-8029-7b42b7ba4483",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "b5c056a04d77c781b06dd3f2c8cbc13fadcdd9d78644755d82f322d3b7806f70",
+        "to_ids": true,
+        "comment": "sha256: b5c056a04d77c781b06dd3f2c8cbc13fadcdd9d78644755d82f322d3b7806f70 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "e2c3a40d-372e-5b16-b859-83536b2e4753",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "bd61c2880920bbfb86c12df439dd1ca0258a10e532433698fd029aef2a5b33f2",
+        "to_ids": true,
+        "comment": "sha256: bd61c2880920bbfb86c12df439dd1ca0258a10e532433698fd029aef2a5b33f2 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "9b25da64-a4ae-57b3-a896-031e4a9e757f",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "c1761a1b640f2bb1a0140923e255f26ad9b79a9005475ff1551e9a297a48811c",
+        "to_ids": true,
+        "comment": "sha256: c1761a1b640f2bb1a0140923e255f26ad9b79a9005475ff1551e9a297a48811c [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "32398a59-8243-5969-a129-658378f33ca3",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "cef3e10ae4735a7017b3fe982d7385e3c3ce0cde286fb7572dbf885df73f8041",
+        "to_ids": true,
+        "comment": "sha256: cef3e10ae4735a7017b3fe982d7385e3c3ce0cde286fb7572dbf885df73f8041 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "c693bd48-8f61-5065-920d-c1659631cf22",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "d13c5f858a8add3ff968a382a85f2dbe8e9fb0283086163d27b69178e4d5ee36",
+        "to_ids": true,
+        "comment": "sha256: d13c5f858a8add3ff968a382a85f2dbe8e9fb0283086163d27b69178e4d5ee36 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "239df4c1-6c85-5d04-966e-0e02336c2a8b",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "d546e500ef662b2c0def984b233e37c4b11de28bf5280df24d1d3300a7fa7b84",
+        "to_ids": true,
+        "comment": "sha256: d546e500ef662b2c0def984b233e37c4b11de28bf5280df24d1d3300a7fa7b84 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "91f9d3e2-7aca-5fb7-840f-d73d5925b2e3",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "d7028280e815612b893c6f0620a4fa2ae63aa5c5bba9988b5223b81b7bf21798",
+        "to_ids": true,
+        "comment": "sha256: d7028280e815612b893c6f0620a4fa2ae63aa5c5bba9988b5223b81b7bf21798 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "10527197-2340-539e-a041-2cf2a36293a0",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "e122fb629f5f09789d83ef1b8b41238d329f7d8efd84d38080d01bef2bad5d8b",
+        "to_ids": true,
+        "comment": "sha256: e122fb629f5f09789d83ef1b8b41238d329f7d8efd84d38080d01bef2bad5d8b [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "48822f46-aeec-5e6e-bd5d-1a71c7e3e2a9",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "e788f829b1a0141a488afb5f82b94f13035623609ca3b83f0c6985919cd9e83b",
+        "to_ids": true,
+        "comment": "sha256: e788f829b1a0141a488afb5f82b94f13035623609ca3b83f0c6985919cd9e83b [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "265b2c48-54a9-597d-a99e-42386aa27869",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "eaec6a177523f2effbabbba6159fe886d284e246e7b1464eb137ae9481ed65ca",
+        "to_ids": true,
+        "comment": "sha256: eaec6a177523f2effbabbba6159fe886d284e246e7b1464eb137ae9481ed65ca [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "6b9a2bb7-9b49-5bc5-bd73-c8912ec4014e",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "ee6807a8abfabced22ee026e178a28da64d13cc3408e224394ff6e5782fb9e1d",
+        "to_ids": true,
+        "comment": "sha256: ee6807a8abfabced22ee026e178a28da64d13cc3408e224394ff6e5782fb9e1d [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "aaa2a843-51c1-516b-ad6b-15009c1c8e81",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "eee674bd0bcd2416367ad692e72122de31b710f13f35e2ceb8a52317920d00ca",
+        "to_ids": true,
+        "comment": "sha256: eee674bd0bcd2416367ad692e72122de31b710f13f35e2ceb8a52317920d00ca [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "ea62e35d-adbb-5fdc-b77f-10f6007505f7",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "f03e1d0951f4d0744939a0cc7da7730ab367ec9420c1a77cc7f97dc0932de652",
+        "to_ids": true,
+        "comment": "sha256: f03e1d0951f4d0744939a0cc7da7730ab367ec9420c1a77cc7f97dc0932de652 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "e54283ec-23aa-54fc-934a-517b94efdc80",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "f4c87a1df04274b7497cbf9a4619b946c915cf5210b6e2eaa2fee1629f4ff196",
+        "to_ids": true,
+        "comment": "sha256: f4c87a1df04274b7497cbf9a4619b946c915cf5210b6e2eaa2fee1629f4ff196 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "36e4387c-aa7b-5ab0-906a-84556f456004",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "f609621698eaad8c4683750fe8bd0e242349be3eea408da593151ff877ed8ab6",
+        "to_ids": true,
+        "comment": "sha256: f609621698eaad8c4683750fe8bd0e242349be3eea408da593151ff877ed8ab6 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "2ab15191-c6f2-518a-9b4b-c2cfd3bb186a",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "fa046adb30d00c56d640419a12deef8395ff5d40d6e083c1c8388ebd7b435ef4",
+        "to_ids": true,
+        "comment": "sha256: fa046adb30d00c56d640419a12deef8395ff5d40d6e083c1c8388ebd7b435ef4 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "de1c2af7-f0f6-5387-a25e-069f71935fd7",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "fdf0fae99d3b8ddd21aac288c2b38b6ac8a0e0eff99706b82ed5e921db9ddb0e",
+        "to_ids": true,
+        "comment": "sha256: fdf0fae99d3b8ddd21aac288c2b38b6ac8a0e0eff99706b82ed5e921db9ddb0e [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "3b1f97e2-16f7-54ca-afd4-ce8309c21eff",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "itemrange.com",
+        "to_ids": true,
+        "comment": "domain: itemrange.com. Current contract C2 value, set at block 25437624. Registered 2026-07-01 with a machine-generated registrant organisation 8fc09420615ed80d. 21 of 90 malicious, reputation -11 [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "7271563e-850a-51f5-80b1-c09a450c3d81",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "publisherresolution.com",
+        "to_ids": true,
+        "comment": "domain: publisherresolution.com. First value written to the Ethereum resolver contract at block 24783833. Also the domain the operator whitelisted through the victim's DNS filter and planted in internal DNS, which is what links the two campaign strands. 18 of 90 malicious [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "cac10216-047b-56dc-874d-d79a7340d646",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "resumeacceptable.com",
+        "to_ids": true,
+        "comment": "domain: resumeacceptable.com. Contract C2 value set at block 24980089. 17 of 90 malicious [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "d54b930c-1cc8-5be0-bf6a-59479857237e",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "simultaneouslypower.com",
+        "to_ids": true,
+        "comment": "domain: simultaneouslypower.com. Contract C2 value set at block 25302771. 18 of 90 malicious, reputation -11 [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "13afc796-eec4-59b2-8458-fd4a24192992",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "wiselystarting.com",
+        "to_ids": true,
+        "comment": "domain: wiselystarting.com. Contract C2 value set at block 25345369. 20 of 90 malicious, reputation -11 [confidence 80/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "4ae6b1ae-4dd0-51d0-b126-4a820811a9a8",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "www.itemrange.com",
+        "to_ids": true,
+        "comment": "domain: www.itemrange.com. Subdomain of the current C2 domain [confidence 60/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "17ccf3fa-0006-5a6e-b290-59f4216aa097",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://193.233.202.17:39287/cons_c1.0.1.msi",
+        "to_ids": true,
+        "comment": "url: http://193.233.202.17:39287/cons_c1.0.1.msi. MSI staging for silent msiexec deployment [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "c1792d39-79ba-5c9d-97be-f7d4a7bfebe2",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://193.233.202.17:42099/ws_new31847.exe",
+        "to_ids": true,
+        "comment": "url: http://193.233.202.17:42099/ws_new31847.exe. Implant staging for certutil-based mass deployment [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "0eac6422-9dad-5133-9de3-45e35239a7f9",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://193.233.202.17:42718/add_dns_from_37.ps1",
+        "to_ids": true,
+        "comment": "url: http://193.233.202.17:42718/add_dns_from_37.ps1. Script staging on the same operator port [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "260fdd93-2f98-5245-b8fe-3117329e536b",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://193.233.202.17:42718/gp.b64",
+        "to_ids": true,
+        "comment": "url: http://193.233.202.17:42718/gp.b64. Base64 .NET assembly fetched for reflective in-memory loading [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "dd095c34-8ac7-5576-849f-d2c73cd33c11",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://193.233.202.17:42718/task_39.ps1",
+        "to_ids": true,
+        "comment": "url: http://193.233.202.17:42718/task_39.ps1. Fileless weekly re-pull target of the capstone SYSTEM scheduled task [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "19b9fcc7-928d-5a74-a429-5adf1a08ddc5",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://193.233.202.17:44321/cons_c1.0.1.msi",
+        "to_ids": true,
+        "comment": "url: http://193.233.202.17:44321/cons_c1.0.1.msi. The same MSI served on a second port, redundancy or rotation [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "1735c4b2-51e5-5226-b7c8-f87c825b61b0",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://193.233.202.17:8080/",
+        "to_ids": true,
+        "comment": "url: http://193.233.202.17:8080/. The open directory that served the 81-file toolkit [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "0bb75332-035b-5c02-91f7-24d3ad545231",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://193.233.202.17:8088/",
+        "to_ids": true,
+        "comment": "url: http://193.233.202.17:8088/. The same directory served identically on a second port [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "725f3c79-7474-56d2-be17-5a4069159cb2",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://193.233.202.17:8088/slv_beacon_sc.bin",
+        "to_ids": true,
+        "comment": "url: http://193.233.202.17:8088/slv_beacon_sc.bin. Raw Sliver beacon shellcode fetched for in-memory injection, with the configured proxy explicitly bypassed [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "bfe98976-e03d-562f-b7f2-b2363754af3c",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "146.103.127.44",
+        "to_ids": true,
+        "comment": "ipv4: 146.103.127.44. Hardcoded as second-tier fallback in six binaries and independently corroborated by relationship data on two of them | The address was reassigned after the operator used it and the current occupant is unrelated. Treat as a historical indicator; blocking it today may affect a bystander tenant [confidence 60/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "0f02d74c-6e41-5ce6-a0c6-47262c1ec83c",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "193.233.202.17",
+        "to_ids": true,
+        "comment": "ipv4: 193.233.202.17. Confirmed dynamically as the beacon destination on both 80 and 443, and hardcoded in 22 recovered binaries. 15 of 90 engines malicious, reputation -12 as of 2026-09-06 [confidence 95/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "15f4216d-06f9-5fe1-8fea-11605227876b",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "38.110.228.125",
+        "to_ids": true,
+        "comment": "ipv4: 38.110.228.125. Resolved destination of the blockchain-resolved C2 domain | The certificate presented on this address is for an unrelated domain, so co-tenancy is possible and was not measured [confidence 60/100]",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "d98ecdd6-38f4-5533-800c-285ca5d79d07",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT Sliver-C2-WinPostEx-193-233-202-17 HTTP Client Claims Non-Existent Chrome 108 Build (Beacon User-Agent)\"; flow:established,to_server; http.user_agent; content:\"Chrome/108.0.6602.492\"; reference:url,the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/; classtype:trojan-activity; sid:9301902; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-06;)",
+        "to_ids": true,
+        "comment": "HTTP Client Claims A Non-Existent Chrome 108 Build | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1071.001 | rule hash a555081a | https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "37db5d35-eb19-5230-8668-02400b9fe873",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT Sliver-C2-WinPostEx-193-233-202-17 POST To Minified-Asset-Shaped Path With Single-Letter Query Parameter (C2 Beacon Check-in)\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"=\"; pcre:\"/^\\/(?:script|scripts|bundle|bundles|javascript|javascripts|route|array)(?:\\/[a-z]+){0,3}(?:\\.(?:min\\.js|min\\.php|js|php))?\\?[a-z]=[A-Za-z0-9]+$/\"; threshold:type limit,track by_src,count 1,seconds 60; reference:url,the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/; classtype:trojan-activity; sid:9301901; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-06;)",
+        "to_ids": true,
+        "comment": "HTTP POST To A Minified-Static-Asset-Shaped Path With A Single-Letter Query Parameter | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1071.001, T1132.001 | rule hash b38911a4 | https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "73d4f0d1-d6b4-562f-9854-64fffd148709",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Account Added To The Domain Admins Group\nid: 726b71d6-5aa6-4ab0-9f28-83eca3cdc5be\nstatus: experimental\ndescription: >-\n  Detects a security-enabled global group membership change adding an account to Domain\n  Admins, the persistence step this campaign's account-creation scripts perform\n  immediately after creating a backdoor domain account.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/\nauthor: The Hunters Ledger\ndate: '2026-09-06'\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1098\n    - attack.t1136.002\n    - stp.3\nlogsource:\n    product: windows\n    service: security\n    definition: 'Requires Windows Security auditing on the Account Management subcategory, \"Audit Security Group Management\" enabled, on a domain controller.'\ndetection:\n    selection:\n        EventID: 4728\n        TargetUserName: 'Domain Admins'\n    condition: selection\nfalsepositives:\n    - Change-controlled administrative promotion of a new Domain Admin by IT staff\nlevel: high",
+        "to_ids": true,
+        "comment": "Rapid Addition Of An Account To The Domain Admins Group | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1098, T1136.002 | rule hash 03ab6e8c | https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "c56ae50d-1e70-5617-aa25-8a710010ff12",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Certutil URLCache Download Or Remote WMIC-Invoked Certutil Download\nid: 934c780a-ed74-45d9-bbe8-c5540ed96f55\nstatus: experimental\ndescription: >-\n  Detects certutil invoked with -urlcache -split -f to fetch a remote file, either directly\n  or via a remote wmic process-call-create, the LOLBin ingress-tool-transfer pattern used\n  to stage payloads onto internal hosts from the operator's staging ports.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/\nauthor: The Hunters Ledger\ndate: '2026-09-06'\ntags:\n    - attack.command-and-control\n    - attack.t1105\n    - attack.lateral-movement\n    - attack.t1570\n    - stp.3\nlogsource:\n    category: process_creation\n    product: windows\n    definition: 'Requires process creation logging that populates CommandLine, for example Sysmon EID 1 or Security EID 4688 with command line auditing enabled.'\ndetection:\n    selection_direct:\n        Image|endswith: '\\certutil.exe'\n        CommandLine|contains|all:\n            - '-urlcache'\n            - '-split'\n            - '-f'\n    selection_remote:\n        Image|endswith: '\\WMIC.exe'\n        CommandLine|contains|all:\n            - 'process call create'\n            - 'certutil'\n    condition: selection_direct or selection_remote\nfalsepositives:\n    - Unlikely. certutil -urlcache -split -f has no common legitimate administrative use outside certificate-cache management, which does not use this flag combination.\nlevel: high",
+        "to_ids": true,
+        "comment": "certutil Or WMIC-Invoked certutil Downloading From A Bare IP High Port | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1105, T1570 | rule hash 65b6600f | https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "413986b4-d2f2-5f00-a718-bc86ac913683",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Curl Download Of Node.js Runtime Followed By Tar Extraction Into LOCALAPPDATA\nid: 32c19bc3-e8a6-430c-bb8b-b75943b93488\nstatus: experimental\ndescription: >-\n  Detects curl.exe fetching a Node.js distribution archive from nodejs.org followed by\n  tar.exe extracting it into %LOCALAPPDATA%, the bring-your-own-runtime bootstrap this\n  campaign's Node.js bot uses to obtain a signed, legitimate node.exe on a host with no\n  development toolchain.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/\nauthor: The Hunters Ledger\ndate: '2026-09-06'\ntags:\n    - attack.command-and-control\n    - attack.t1105\nlogsource:\n    category: process_creation\n    product: windows\n    definition: 'Requires process creation logging that populates CommandLine, for example Sysmon EID 1 or Security EID 4688 with command line auditing enabled.'\ndetection:\n    selection_curl:\n        Image|endswith: '\\curl.exe'\n        CommandLine|contains|all:\n            - 'nodejs.org/dist'\n            - '.zip'\n    selection_tar:\n        Image|endswith: '\\tar.exe'\n        CommandLine|contains: '\\AppData\\Local\\'\n    condition: selection_curl or selection_tar\nfalsepositives:\n    - A developer workstation or build server legitimately provisioning Node.js this same way\nlevel: low",
+        "to_ids": false,
+        "comment": "Node.js Runtime Fetched And Extracted On A Host With No Development Toolchain | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1105 | rule hash 1290cbfc | https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "6d338db0-b4b7-5ee0-8928-fe2e04334749",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Endpoint Protection Service Stopped Or Disabled\nid: 657adc6d-37b1-481d-8ff5-c13278c9c359\nstatus: experimental\ndescription: >-\n  Detects a Windows service-control-manager event stopping or disabling one of a set of\n  endpoint-protection service names. Individually common during legitimate maintenance;\n  several such events on one host within a short window is the actual campaign signature\n  and needs analyst correlation this single-event rule cannot perform.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/\nauthor: The Hunters Ledger\ndate: '2026-09-06'\ntags:\n    - attack.defense-impairment\n    - attack.t1685\nlogsource:\n    product: windows\n    service: system\n    definition: 'Requires the Windows System event log (Service Control Manager source), EventID 7036 (service entered stopped state) or 7040 (service start type changed).'\ndetection:\n    selection:\n        EventID:\n            - 7036\n            - 7040\n        Provider_Name: 'Service Control Manager'\n    condition: selection\nfalsepositives:\n    - Scheduled, change-controlled endpoint-agent maintenance, upgrade, or uninstall\nlevel: medium",
+        "to_ids": false,
+        "comment": "Multiple Endpoint Protection Services Stopped In A Short Window | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1685 | rule hash 8c73998e | https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "96f83503-eedf-53c3-bc72-470de4369d1c",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: File Named svchost.log Created In Roaming AppData\nid: fd7f5f03-27e5-45ab-af81-f8be388e8b5e\nstatus: experimental\ndescription: >-\n  Detects creation of a file literally named svchost.log inside a user's roaming AppData\n  profile, an operator artifact that borrows a system-process name for a log file in a\n  location no legitimate svchost.exe activity ever writes to.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/\nauthor: The Hunters Ledger\ndate: '2026-09-06'\ntags:\n    - attack.stealth\n    - attack.t1036.005\n    - stp.3\nlogsource:\n    category: file_event\n    product: windows\n    definition: 'Requires Sysmon Event ID 11 (FileCreate) or equivalent EDR file-creation telemetry.'\ndetection:\n    selection:\n        TargetFilename|endswith: '\\AppData\\Roaming\\svchost.log'\n    condition: selection\nfalsepositives:\n    - Unknown. No legitimate application is known to name a roaming-profile log file svchost.log.\nlevel: high",
+        "to_ids": true,
+        "comment": "Suspicious svchost.log File Created In Roaming AppData | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1036.005 | rule hash 95cdaf7a | https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "8032f043-bd23-5eba-b328-f93dbda3caba",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: PowerShell Reflective Assembly Load From Base64-Decoded String\nid: 5024b26b-169d-4ef8-8016-ca502a557d1b\nstatus: experimental\ndescription: >-\n  Detects a PowerShell script block combining Reflection.Assembly Load with a\n  Base64-decoded byte array, a common reflective in-memory execution pattern this\n  campaign uses for shellcode injection staging. Broadly used by legitimate tooling as\n  well, so this is a scoping signal rather than a high-confidence alert.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/\nauthor: The Hunters Ledger\ndate: '2026-09-06'\ntags:\n    - attack.stealth\n    - attack.t1620\n    - attack.t1027\nlogsource:\n    category: ps_script\n    product: windows\n    definition: 'Requires PowerShell Script Block Logging (Event ID 4104) enabled.'\ndetection:\n    selection:\n        ScriptBlockText|contains|all:\n            - '[System.Reflection.Assembly]::Load('\n            - 'FromBase64String'\n    condition: selection\nfalsepositives:\n    - Legitimate PowerShell modules and administrative tooling that reflectively load .NET assemblies from an embedded Base64 payload\nlevel: low",
+        "to_ids": false,
+        "comment": "Reflective .NET Assembly Load From A Base64-Encoded PowerShell String | TIER: Hunting | robustness 1 | confidence LOW | ATT&CK T1620, T1027 | rule hash e8b037c2 | https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "f12a26a9-9ac2-565d-ac29-4798963a453e",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Process Access To LSASS With A Dump-Capable Access Mask\nid: 504bf8d9-074c-497f-ac16-05da396b8637\nstatus: experimental\ndescription: >-\n  Detects a process opening a handle to lsass.exe with an access mask consistent with\n  memory dumping (read plus query information), the LSASS credential-access route used\n  alongside mimikatz and SAM/SYSTEM/SECURITY hive theft in this campaign.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/\nauthor: The Hunters Ledger\ndate: '2026-09-06'\ntags:\n    - attack.credential-access\n    - attack.t1003.001\n    - stp.3\nlogsource:\n    category: process_access\n    product: windows\n    definition: 'Requires Sysmon Event ID 10 (ProcessAccess) enabled and not filtered for lsass.exe as a target.'\ndetection:\n    selection:\n        TargetImage|endswith: '\\lsass.exe'\n        GrantedAccess:\n            - '0x1010'\n            - '0x1038'\n            - '0x1400'\n            - '0x1410'\n            - '0x1438'\n            - '0x143a'\n            - '0x1fffff'\n    condition: selection\nfalsepositives:\n    - Endpoint security or diagnostic tooling deliberately dumping LSASS for legitimate incident-response or troubleshooting purposes\nlevel: high",
+        "to_ids": true,
+        "comment": "LSASS Memory Access With A Dump-Capable Access Mask | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1003.001 | rule hash 0403b6a3 | https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "f18e4f0b-540c-5f9d-a351-116bcddb545e",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: RDP, UAC Or Token-Filter Registry Value Weakened\nid: b3cdcf57-b8dc-4f30-8420-1cbd8d0548f7\nstatus: experimental\ndescription: >-\n  Detects one of the registry value changes used to enable RDP without Network Level\n  Authentication or to weaken UAC and remote local-account token filtering. Two or more of\n  these on the same host in a short window is the actual campaign signature and needs\n  analyst correlation this single-event rule cannot perform.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/\nauthor: The Hunters Ledger\ndate: '2026-09-06'\ntags:\n    - attack.stealth\n    - attack.defense-impairment\n    - attack.persistence\n    - attack.t1112\n    - attack.privilege-escalation\n    - attack.t1548.002\nlogsource:\n    category: registry_set\n    product: windows\n    definition: 'Requires Sysmon Event ID 13 (RegistryEvent SetValue) or Security Event ID 4657 with value auditing enabled for the listed keys.'\ndetection:\n    sel_rdp_enable:\n        TargetObject|endswith: '\\Terminal Server\\fDenyTSConnections'\n        Details: 'DWORD (0x00000000)'\n    sel_nla_disable:\n        TargetObject|endswith: '\\WinStations\\RDP-Tcp\\UserAuthentication'\n        Details: 'DWORD (0x00000000)'\n    sel_tokenfilter:\n        TargetObject|endswith: '\\Policies\\System\\LocalAccountTokenFilterPolicy'\n        Details: 'DWORD (0x00000001)'\n    sel_uac_disable:\n        TargetObject|endswith: '\\Policies\\System\\EnableLUA'\n        Details: 'DWORD (0x00000000)'\n    condition: 1 of sel_*\nfalsepositives:\n    - Deliberate server provisioning or hardening review touching one or more of these values\nlevel: medium",
+        "to_ids": false,
+        "comment": "RDP, UAC Or Token-Filter Registry Value Weakened | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1112, T1548.002, T1021.001 | rule hash 1d4d6027 | https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "81e0a6af-9b2d-5fa6-884e-dc26b430b66b",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Registry Save Of SAM, SYSTEM Or SECURITY Hive To ProgramData\nid: 21265bec-0634-4d02-a3de-ddbba8f0ca89\nstatus: experimental\ndescription: >-\n  Detects reg.exe saving the SAM, SYSTEM, or SECURITY registry hives to a file under\n  C:\\ProgramData, the offline credential-extraction pattern used to recover local and\n  cached domain credentials without touching LSASS directly.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/\nauthor: The Hunters Ledger\ndate: '2026-09-06'\ntags:\n    - attack.credential-access\n    - attack.t1003.002\n    - attack.t1003.004\nlogsource:\n    category: process_creation\n    product: windows\n    definition: 'Requires process creation logging that populates CommandLine, for example Sysmon EID 1 or Security EID 4688 with command line auditing enabled.'\ndetection:\n    selection_image:\n        Image|endswith: '\\reg.exe'\n    selection_verb:\n        CommandLine|contains: 'save'\n    selection_hive:\n        CommandLine|contains:\n            - 'SAM'\n            - 'SYSTEM'\n            - 'SECURITY'\n    selection_dest:\n        CommandLine|contains: '\\ProgramData\\'\n    condition: selection_image and selection_verb and selection_hive and selection_dest\nfalsepositives:\n    - Authorized backup or disaster-recovery tooling that exports these hives, though the ProgramData destination is unusual for such tooling\nlevel: high",
+        "to_ids": true,
+        "comment": "Registry Hive Save Of SAM, SYSTEM Or SECURITY To ProgramData | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1003.002, T1003.004 | rule hash 25cf21d2 | https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "48828996-e61a-587d-8f14-16ee2711c323",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Run Key Value Launching Headless Node.js Against A .bak File\nid: 981da035-041b-434b-9db6-141c3c778534\nstatus: experimental\ndescription: >-\n  Detects a Run key registry value whose data begins conhost --headless and invokes\n  node.exe with a .bak-extension argument, the persistence mechanism used by an\n  EtherRAT-class Node.js bot that resolves its C2 address from an Ethereum smart contract.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/\nauthor: The Hunters Ledger\ndate: '2026-09-06'\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1547.001\nlogsource:\n    category: registry_set\n    product: windows\n    definition: 'Requires Sysmon Event ID 13 (RegistryEvent SetValue) with value auditing enabled for HKCU Run keys, or Security Event ID 4657.'\ndetection:\n    selection:\n        TargetObject|contains: '\\CurrentVersion\\Run\\'\n        Details|contains|all:\n            - 'conhost --headless'\n            - 'node.exe'\n    filter_extension:\n        Details|contains: '.bak'\n    condition: selection and filter_extension\nfalsepositives:\n    - Unknown. No legitimate Node.js packaging pattern matches this launcher-plus-extension combination.\nlevel: high",
+        "to_ids": true,
+        "comment": "EtherRAT Bot Run Key Launching node.exe Headless With A .bak Argument | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1547.001 | rule hash d562409d | https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "e5902f2b-8e4f-5b2a-bb58-2fe411ff10cf",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Scheduled PowerShell Re-Pull Of Remote Script Via IEX WebClient DownloadString\nid: 2875053e-f1d1-429d-bf6a-49ee74d7c6dd\nstatus: experimental\ndescription: >-\n  Detects a PowerShell process launched with a command line that downloads and immediately\n  executes a remote script via IEX and Net.WebClient.DownloadString, the pattern used by a\n  weekly SYSTEM scheduled task to re-pull the full attack chain fresh from C2 rather than\n  running a static payload.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/\nauthor: The Hunters Ledger\ndate: '2026-09-06'\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1053.005\n    - stp.3\nlogsource:\n    category: process_creation\n    product: windows\n    definition: 'Requires process creation logging that populates CommandLine, for example Sysmon EID 1 or Security EID 4688 with command line auditing enabled.'\ndetection:\n    selection_image:\n        Image|endswith: '\\powershell.exe'\n    selection_cmd:\n        CommandLine|contains|all:\n            - 'IEX'\n            - 'DownloadString'\n    condition: selection_image and selection_cmd\nfalsepositives:\n    - Internal automation tooling that intentionally downloads and executes a remote update script on a schedule\nlevel: high",
+        "to_ids": true,
+        "comment": "Weekly Scheduled Task Re-Pulling Attack Chain Via IEX WebClient DownloadString As SYSTEM | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1053.005 | rule hash 59c6dff6 | https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "fc534c68-98dd-509f-a42a-c9320882c615",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: node.exe Executing From A Vendor-Masquerading LOCALAPPDATA Path\nid: fd1ec736-e0fc-4440-a5c9-c6ec26246108\nstatus: experimental\ndescription: >-\n  Detects node.exe running from a %LOCALAPPDATA% subdirectory named after a well-known\n  vendor (Google, Microsoft, Windows, Extensions, Components, Modules, Packages, Programs,\n  Services, or Assemblies), the masquerading path this campaign's Node.js bot uses to blend\n  its runtime into a user profile with no legitimate development toolchain.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/\nauthor: The Hunters Ledger\ndate: '2026-09-06'\ntags:\n    - attack.stealth\n    - attack.t1036.005\n    - stp.3\nlogsource:\n    category: process_creation\n    product: windows\n    definition: 'Requires process creation logging that populates Image, for example Sysmon EID 1 or Security EID 4688.'\ndetection:\n    selection_image:\n        Image|endswith: '\\node.exe'\n    selection_path:\n        Image|contains:\n            - '\\AppData\\Local\\Google\\'\n            - '\\AppData\\Local\\Microsoft\\'\n            - '\\AppData\\Local\\Windows\\'\n            - '\\AppData\\Local\\Extensions\\'\n            - '\\AppData\\Local\\Components\\'\n            - '\\AppData\\Local\\Modules\\'\n            - '\\AppData\\Local\\Packages\\'\n            - '\\AppData\\Local\\Programs\\'\n            - '\\AppData\\Local\\Services\\'\n            - '\\AppData\\Local\\Assemblies\\'\n    condition: selection_image and selection_path\nfalsepositives:\n    - A legitimate per-user vendor product that bundles its own Node.js runtime under one of these directory names\nlevel: high",
+        "to_ids": true,
+        "comment": "node.exe Executing From A Vendor-Named LOCALAPPDATA Directory | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1036.005 | rule hash dbc92bf1 | https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "0c9ae53a-dc7e-5ee2-abc0-4b06ecc701ac",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "/*\n   Yara Rule Set\n   Identifier: Sliver-C2-Windows-PostEx-Staging-193.233.202.17\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule EtherRAT_NodeJS_Bot_Config_TheGentlemen {\n   meta:\n      description = \"Detects the decrypted EtherRAT-class Node.js bot configuration by its Ethereum smart-contract resolver constants, custom polling header, and identity-file naming, which do not change when the resolved C2 domain rotates\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17/\"\n      date = \"2026-09-06\"\n      hash1 = \"86881b8e9d197ac2f734792de48d5dfaebe7cafb6e35d49c5dd7fe6eb697230e\"\n      family = \"EtherRAT-class Node.js bot\"\n      id = \"4db421c9-d511-5bcb-95fa-bc53c5aa8517\"\n   strings:\n      $contract = \"0xb3f2897f2bc797e5b9033faef8c81e92b01cb831\" ascii nocase\n      $storage_key = \"0x40b57c3622c1CbfD699207F71F2dE5A8Fe256893\" ascii\n      $selector = \"0x7d434425\" ascii\n      $build_id = \"ff8fee46-5d21-4437-af5b-337434288cae\" ascii\n      $header = \"X-Bot-Server\" ascii fullword\n      $botid_file = \".node_bot_id\" ascii\n      $runkey = \"conhost --headless\" ascii\n   condition:\n      filesize < 5MB and 2 of them\n}",
+        "to_ids": true,
+        "comment": "EtherRAT-class Node.js Bot Configuration Constants | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1102.001, T1071.001 | rule hash 2c746be1 | https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "f62945ee-cb04-58e2-8cde-8a4b2fde7eea",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "/*\n   Yara Rule Set\n   Identifier: Sliver-C2-Windows-PostEx-Staging-193.233.202.17\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule Operator_AD_Deployment_Script_Markers_TheGentlemen {\n   meta:\n      description = \"Detects PowerShell/batch deployment scripts carrying this operator's plaintext success markers for domain-account creation, Domain Admins group addition, LSASS dumping, or the explicit corporate-proxy bypass used before beacon delivery\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17/\"\n      date = \"2026-09-06\"\n      hash1 = \"f609621698eaad8c4683750fe8bd0e242349be3eea408da593151ff877ed8ab6\"\n      family = \"Operator scripts and deployment\"\n      id = \"71770cb8-7a72-58c4-baab-84a9dcdfb80b\"\n   strings:\n      $m1 = \"USER_CREATED_OK\" ascii fullword\n      $m2 = \"ADDED_TO_DA_OK\" ascii fullword\n      $m3 = \"DUMP_OK:\" ascii\n      $m4 = \"GlobalProxySelection.GetEmptyWebProxy()\" ascii\n   condition:\n      filesize < 200KB and 1 of them\n}",
+        "to_ids": false,
+        "comment": "Operator AD Deployment Script Success Markers, The Gentlemen-Linked Toolkit | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1136.002, T1098, T1003.002 | rule hash 85727dfa | https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "06b8b614-dfaf-5c9f-94c5-7c781c3ca12d",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "/*\n   Yara Rule Set\n   Identifier: Sliver-C2-Windows-PostEx-Staging-193.233.202.17\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule Sliver_Beacon_Memory_Import_Path {\n   meta:\n      description = \"Detects the canonical Sliver C2 protobuf import path resident in process memory. Symbol obfuscation removes this string from the on-disk binary, so it recovers Sliver only from a live or dumped memory image, not a file scan\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17/\"\n      date = \"2026-09-06\"\n      hash1 = \"bd61c2880920bbfb86c12df439dd1ca0258a10e532433698fd029aef2a5b33f2\"\n      family = \"Sliver\"\n      id = \"075c07ad-7a6c-5b72-9a9c-97e80728ad79\"\n   strings:\n      $s1 = \"github.com/bishopfox/sliver/protobuf/sliverpb\" ascii\n   condition:\n      $s1\n}",
+        "to_ids": true,
+        "comment": "Sliver Beacon Canonical Import Path In Process Memory | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1071.001, T1102.001 | rule hash 4b9919e0 | https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "83fdb740-c6e7-530a-bdf2-92ae30660a1b",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "/*\n   Yara Rule Set\n   Identifier: Sliver-C2-Windows-PostEx-Staging-193.233.202.17\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule Sliver_Operator_Build_Artifacts_193_233_202_17 {\n   meta:\n      description = \"Detects Go binaries carrying this operator's /tmp/ source-path convention and/or the internally impossible Chrome/108.0.6602.492 User-Agent hardcoded into the beacon build profile\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17/\"\n      date = \"2026-09-06\"\n      hash1 = \"bd61c2880920bbfb86c12df439dd1ca0258a10e532433698fd029aef2a5b33f2\"\n      family = \"Sliver\"\n      id = \"b657aceb-8818-5c3a-ab12-e6bf82b80f1d\"\n   strings:\n      $ua = \"Chrome/108.0.6602.492\" ascii\n      $path1 = \"/tmp/revshell\" ascii\n      $path2 = \"/tmp/srv/ws_\" ascii\n      $path3 = \"/tmp/payloads/\" ascii\n      $path4 = \"/tmp/build_nc/main.go\" ascii\n      $path5 = \"/tmp/efspot/efspot.go\" ascii\n   condition:\n      uint16(0) == 0x5A4D and filesize < 25MB and 2 of them\n}",
+        "to_ids": true,
+        "comment": "Sliver Operator Build Artifacts, 193.233.202.17 Campaign | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1071.001 | rule hash 49d9305f | https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      }
+    ],
+    "Object": []
+  }
+}

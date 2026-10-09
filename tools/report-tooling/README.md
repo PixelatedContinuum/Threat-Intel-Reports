@@ -124,7 +124,28 @@ listed by name under `unresolved` and `unmapped`, never guessed into a page; a v
 nothing published matches FAILS, so an empty page never ships. `node check-xref.js` gates the two
 indexes, the layer and the stubs by regenerate-and-diff.
 
+`node generate-misp-feed.js` writes the MISP feed under `feeds/misp/`: `manifest.json`, one
+`<uuid>.json` per published campaign and `hashes.csv`, in the MISP feed format that MISP pulls
+natively and OpenCTI reads through its MISP feed connector. One event per catalog entry: the
+indicators from the campaign's STIX bundle (Indicator objects only; a bare observable, which is
+how a do-not-block value travels, is left out), the Suricata, YARA and Sigma rules from its
+detection page (through `lib/parse-detections.js`, the tier deciding `to_ids`), the CVEs the
+bundle names, links to the report, the detection page, the bundle and the IOC feed, and tags
+(`tlp:clear`, ATT&CK galaxy, catalog topics, UTA actors). UUIDs are UUIDv5 under one fixed
+namespace, derived from the slug and the attribute's type and value, so a rebuild never
+re-issues one. `feeds/misp/_state.json` (not published) keeps each event's content hash and
+last-changed timestamp; a timestamp moves only when the hash does, and a campaign that leaves
+the catalog is recorded as withdrawn there and must be itemised in `feeds/misp/changelog.md`.
+`node check-misp-feed.js` gates all of it; `validate-misp-feed.py` loads every event with
+PyMISP (the Actions `gates` job runs it; locally `pip install pymisp` first).
+
+`node generate-stix-manifest.js` writes `stix/manifest.json`: every published bundle with its
+URL, SHA-256, size, object and indicator counts and modified time, plus the zip, so a platform
+can poll one file and fetch only what changed. `node check-stix-manifest.js` gates it.
+
 | `_data/actors.yml`, `_data/actors_index.yml`, `actors/*/index.md`, `_data/catalog.yml`, `reports/*/index.md`, `hunting-detections/*.md` | `check-actors.js` | index or a page stale, a bare designation unlinked, a designation with no entry |
 | `_data/families.yml`, `_data/attack_index.yml`, `_data/family_index.yml`, `techniques/*/index.md`, `families/*/index.md`, `assets/data/attack-navigator-layer.json`, plus every input above and `ioc-feeds/*.json` | `check-xref.js` | an index, the layer or a page stale, a vocabulary entry nothing published matches |
+| `feeds/misp/*`, `stix/*.json`, `hunting-detections/*.md`, `reports/*/index.md`, `_data/catalog.yml`, the ATT&CK TSV | `check-misp-feed.js` | an event, the manifest or hashes.csv stale; content changed without its timestamp moving; a withdrawn event the changelog does not itemise |
+| `stix/*.json`, `stix/*.zip`, `stix/manifest.json`, `_data/catalog.yml` | `check-stix-manifest.js` | the manifest stale against a bundle, the zip or the catalog |
 
 Nothing here is published: `_config.yml` excludes `tools/*` from the Jekyll build.

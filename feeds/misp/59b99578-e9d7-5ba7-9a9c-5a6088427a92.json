@@ -1,0 +1,172 @@
+{
+  "Event": {
+    "uuid": "59b99578-e9d7-5ba7-9a9c-5a6088427a92",
+    "info": "Arsenal-237 New Files: chromelevator.exe (Browser Credential Theft)",
+    "date": "2026-01-15",
+    "threat_level_id": 1,
+    "analysis": 2,
+    "timestamp": 1791580400,
+    "publish_timestamp": 1791580400,
+    "published": true,
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Cred Theft\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\".NET\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Dynamic-link Library Injection - T1055.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Native API - T1106\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials from Web Browsers - T1555.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Reflective Code Loading - T1620\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "Attribute": [
+      {
+        "uuid": "e7f1355e-2a37-51ce-89ea-5a7cdb944f29",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/hunting-detections/arsenal-237-chromelevator-exe-detections/",
+        "to_ids": false,
+        "comment": "Detection rules, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "7359274f-79c1-5c86-9881-0b25414df521",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/ioc-feeds/arsenal-237-chromelevator-exe.json",
+        "to_ids": false,
+        "comment": "IOC feed (JSON), The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "77d6316f-df79-5581-81b2-92bbddf9eb00",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Suspicious Browser Credential Database Access\nid: 6c9e1d83-4b7f-4a2e-9c5d-3f8b2e6a1c05\nstatus: experimental\ndescription: >-\n        Detects access to Chrome/Brave/Edge credential databases by non-browser processes.\n        Restructured the original selection's invalid literal OR: subkey (not valid Sigma\n        syntax) into two named selections combined via the condition string; detection intent\n        is unchanged. The specific-path selector's TargetFilename patterns were also corrected\n        from double-escaped to single backslashes — the doubled backslashes, valid only inside\n        double-quoted YAML, could never match a real single-backslash Windows path when written\n        inside single-quoted scalars, which perform no escape processing at all.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-chromelevator-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-26'\ntags:\n    - attack.credential-access\n    - attack.t1555.003\n    - detection.emerging-threats\n    - stp.3\n\nlogsource:\n    product: windows\n    category: file_event\n\ndetection:\n    selection_browser_db_generic:\n        TargetFilename|contains|all:\n            - 'User Data'\n            - 'Login Data'\n\n    selection_browser_db_specific:\n        TargetFilename|contains:\n            - 'Chrome\\User Data\\Default\\Cookies'\n            - 'Brave-Browser\\User Data\\Default\\Cookies'\n            - 'Edge\\User Data\\Default\\Cookies'\n            - 'Google\\Chrome\\User Data\\Default\\Web Data'\n\n    selection_process_exclusion:\n        Image|endswith:\n            - 'chrome.exe'\n            - 'brave.exe'\n            - 'msedge.exe'\n            - 'firefox.exe'\n\n    filter_system_process:\n        User|contains: 'SYSTEM'\n\n    condition: (selection_browser_db_generic or selection_browser_db_specific) and not (selection_process_exclusion or filter_system_process)\n\nfalsepositives:\n    - Browser backup/sync tools\n    - Password managers accessing browser data\n    - System recovery tools\n\nlevel: high",
+        "to_ids": true,
+        "comment": "Non-Browser Process Access to Browser Credential Databases | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1555.003 | rule hash 480812bc | https://the-hunters-ledger.com/hunting-detections/arsenal-237-chromelevator-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "82d5bdeb-8661-5b86-bef8-fd7ed89fa0cf",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Suspicious Direct Syscall Usage - EDR Bypass\nid: 8f3a5c92-6d1e-4b7f-a3c9-5d2b8e4f7a06\ndescription: >-\n    Detects direct Zw* syscall invocation bypassing Windows API monitoring, targeting a\n    browser process. Consolidated onto process_access/CallTrace (the original rule's\n    EventID list spanned two distinct Sysmon categories — CreateRemoteThread and\n    ProcessAccess — with a non-Sysmon-native API field; process_access is the coherent,\n    reliably-mappable subset that preserves the same detection intent).\nreferences:\n  - https://the-hunters-ledger.com/hunting-detections/arsenal-237-chromelevator-exe-detections/\nstatus: experimental\nauthor: The Hunters Ledger\ndate: '2026-01-26'\ntags:\n  - attack.execution\n  - attack.stealth\n  - attack.discovery\n  - attack.t1106\n  - attack.t1622\n\nlogsource:\n  product: windows\n  category: process_access\n\ndetection:\n  selection_suspicious_syscalls:\n    CallTrace|contains:\n      - 'ZwAllocateVirtualMemory'\n      - 'ZwWriteVirtualMemory'\n      - 'ZwCreateThreadEx'\n      - 'ZwProtectVirtualMemory'\n      - 'ZwOpenProcess'\n\n  selection_target:\n    TargetImage|endswith:\n      - 'chrome.exe'\n      - 'brave.exe'\n      - 'msedge.exe'\n\n  condition: all of selection_*\n\nfalsepositives:\n  - System administration tools\n  - Debugging tools\n\nlevel: medium",
+        "to_ids": false,
+        "comment": "Direct Syscall Usage Targeting Browser Processes | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1106 | rule hash 298721f4 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-chromelevator-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "44ad270c-38cb-5fb2-a22a-2c17a7a20834",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Suspicious Process Creation - chromelevator.exe\nid: 5b6b41f8-1c8e-4a3e-9d3a-6c1f2b9e4a01\ndescription: Detects execution of chromelevator.exe browser credential extraction tool\nreferences:\n  - https://the-hunters-ledger.com/hunting-detections/arsenal-237-chromelevator-exe-detections/\nstatus: experimental\nauthor: The Hunters Ledger\ndate: '2026-01-26'\ntags:\n  - attack.credential-access\n  - attack.t1555.003\n  - attack.stealth\n  - detection.emerging-threats\nlogsource:\n  product: windows\n  category: process_creation\ndetection:\n  selection_image:\n    Image|endswith: 'chromelevator.exe'\n\n  selection_commandline:\n    CommandLine|contains:\n      - '--verbose'\n      - '--fingerprint'\n      - '--output-path'\n\n  condition: selection_image and selection_commandline\n\nfalsepositives:\n  - Legitimate browser management tools\n  - System administrators testing security\n\nlevel: medium",
+        "to_ids": false,
+        "comment": "chromelevator.exe Process Creation with Extraction Flags | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1555.003 | rule hash f0716cb6 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-chromelevator-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "bfc94dfe-7c32-574c-bdd7-4878af58f59f",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Suspicious Process Injection - Memory Allocation Pattern\nid: 4e8f2b71-9a3c-4d6e-8b1f-2e7a9c3d5f04\nstatus: experimental\ndescription: >-\n        Detects process injection through a memory allocation, write, protection-change, and\n        remote-thread-creation API sequence targeting a browser process. Consolidated to a\n        single process_access selection using CallTrace (the original rule mixed a\n        non-Sysmon EventType field alongside API and TargetImage across what would have been\n        two different, incompatible event sources; the CallTrace-based selection below is the\n        coherent, reliably-mappable subset that preserves the same detection intent).\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-chromelevator-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-26'\ntags:\n    - attack.execution\n    - attack.stealth\n    - attack.privilege-escalation\n    - attack.t1055.001\n    - stp.3\n\nlogsource:\n    product: windows\n    category: process_access\n\ndetection:\n    selection_target_processes:\n        TargetImage|endswith:\n            - 'chrome.exe'\n            - 'brave.exe'\n            - 'msedge.exe'\n            - 'firefox.exe'\n\n    selection_sequence:\n        CallTrace|contains|all:\n            - 'AllocateVirtualMemory'\n            - 'WriteVirtualMemory'\n            - 'ProtectVirtualMemory'\n            - 'CreateThreadEx'\n\n    condition: selection_target_processes and selection_sequence\n\nfalsepositives:\n    - Legitimate software using process injection (installers, debuggers)\n\nlevel: high",
+        "to_ids": true,
+        "comment": "Process Injection API Sequence Targeting Browser Processes | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1055.001 | rule hash 6d8fc9b9 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-chromelevator-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "5465844a-1184-53e2-8b35-1622c9f09871",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "/*\n   Yara Rule Set\n   Identifier: Arsenal-237-109.230.231.37-Malware-Repository\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule Arsenal237_Direct_Syscall_Framework {\n    meta:\n        description = \"Detects direct syscall implementation used by Arsenal-237 components\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-chromelevator-exe-detections/\"\n        date = \"2026-01-26\"\n        severity = \"HIGH\"\n        category = \"evasion\"\n\n    strings:\n        // Zw* syscall functions (EDR bypass)\n        $zw_alloc = \"ZwAllocateVirtualMemory\" nocase ascii\n        $zw_write = \"ZwWriteVirtualMemory\" nocase ascii\n        $zw_read = \"ZwReadVirtualMemory\" nocase ascii\n        $zw_protect = \"ZwProtectVirtualMemory\" nocase ascii\n        $zw_create_thread = \"ZwCreateThreadEx\" nocase ascii\n        $zw_open_proc = \"ZwOpenProcess\" nocase ascii\n        $zw_query_proc = \"ZwQueryInformationProcess\" nocase ascii\n        $zw_context = \"ZwGetContextThread\" nocase ascii\n        $zw_set_context = \"ZwSetContextThread\" nocase ascii\n        $zw_resume = \"ZwResumeThread\" nocase ascii\n\n        // Multiple syscalls indicate framework\n        $zw_pattern = /Zw[A-Z][a-zA-Z]+/\n\n    condition:\n        // Multiple critical syscalls indicate EDR bypass framework\n        (5 of ($zw_alloc, $zw_write, $zw_protect, $zw_create_thread, $zw_open_proc)) or\n\n        // Pattern-based detection of systematic syscall usage\n        (all of them and #zw_pattern >= 10)\n}",
+        "to_ids": true,
+        "comment": "Direct Syscall Framework (Native API / EDR Bypass) | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1106 | rule hash 4bc02fe7 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-chromelevator-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "9ee5b261-fef9-5dad-8389-e9b4574f09ea",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule Chromelevator_Browser_Credential_Extraction {\n    meta:\n        description = \"Detects chromelevator.exe browser credential extraction tool\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-chromelevator-exe-detections/\"\n        date = \"2026-01-26\"\n        severity = \"MEDIUM\"\n        category = \"trojan\"\n        family = \"Arsenal-237\"\n\n    strings:\n        // Primary identifiers\n        $filename = \"chromelevator.exe\" nocase ascii\n        $payload = \"PAYLOAD_DLL\" nocase ascii\n\n        // Browser targeting\n        $chrome = \"chrome.exe\" nocase ascii\n        $brave = \"brave.exe\" nocase ascii\n        $edge = \"msedge.exe\" nocase ascii\n\n        // Functional strings\n        $named_pipe = \"Named pipe server created\" nocase ascii\n        $reflective = \"ReflectiveLoader\" nocase ascii\n        $extraction = \"Extracted\" nocase ascii\n        $cookies = \"cookies\" nocase ascii\n        $passwords = \"passwords\" nocase ascii\n        $payments = \"payments\" nocase ascii\n\n        // Command-line arguments\n        $verbose = \"--verbose\" nocase ascii\n        $fingerprint = \"--fingerprint\" nocase ascii\n        $output = \"--output-path\" nocase ascii\n        $help = \"--help\" nocase ascii\n\n        // API calls\n        $create_pipe = \"CreateNamedPipeW\" nocase ascii\n        $connect_pipe = \"ConnectNamedPipe\" nocase ascii\n        $find_resource = \"FindResourceW\" nocase ascii\n        $load_resource = \"LoadResource\" nocase ascii\n\n    condition:\n        // Definite detection: filename + payload + extraction capability\n        ($filename and $payload and ($extraction or ($cookies and $passwords))) or\n\n        // Strong detection: multiple browser targets + extraction capability\n        (3 of ($chrome, $brave, $edge) and 2 of ($extraction, $cookies, $passwords, $payments)) or\n\n        // Behavioral detection: reflective loading + named pipe + browser targeting\n        ($reflective and $named_pipe and any of ($chrome, $brave, $edge)) or\n\n        // Command-line argument signature\n        (2 of ($verbose, $fingerprint, $output, $help) and any of ($chrome, $brave, $edge)) or\n\n        // API-level corroboration: named-pipe IPC + embedded-resource loading APIs\n        // alongside browser targeting (the payload DLL is staged as a PE resource and\n        // delivered to the target browser process over the named pipe)\n        (2 of ($create_pipe, $connect_pipe, $find_resource, $load_resource) and any of ($chrome, $brave, $edge))\n}",
+        "to_ids": false,
+        "comment": "Browser Credential Extraction Multi-Signal Combination | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1555.003, T1620 | rule hash c758672f | https://the-hunters-ledger.com/hunting-detections/arsenal-237-chromelevator-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "6fbeb4e3-8aed-5f34-9440-a412c56a048d",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule Reflective_DLL_Injection_Framework {\n    meta:\n        description = \"Detects reflective DLL injection implementation\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-chromelevator-exe-detections/\"\n        date = \"2026-01-26\"\n        severity = \"HIGH\"\n        category = \"execution\"\n\n    strings:\n        // PE header parsing\n        $dos_header = \"MZ\"\n        $nt_header = \"PE\"\n        $pe_sig = { 50 45 00 00 }  // \"PE\\x00\\x00\"\n\n        // Reflective loader\n        $reflective_loader = \"ReflectiveLoader\" nocase ascii\n        $reflective_export = \"reflective\" nocase ascii wide\n\n        // PE parsing functions\n        $dos_hdr = \"DOS\" nocase ascii\n        $file_hdr = \"File\" nocase ascii\n        $opt_hdr = \"Optional\" nocase ascii\n\n        // Memory injection indicators\n        $alloc = \"VirtualAllocEx\" nocase ascii\n        $write = \"WriteProcessMemory\" nocase ascii\n        $protect = \"VirtualProtectEx\" nocase ascii\n        $create_remote = \"CreateRemoteThread\" nocase ascii\n\n        // Direct syscall injection\n        $zw_alloc = \"ZwAllocateVirtualMemory\" nocase ascii\n        $zw_write = \"ZwWriteVirtualMemory\" nocase ascii\n        $zw_protect = \"ZwProtectVirtualMemory\" nocase ascii\n        $zw_create = \"ZwCreateThreadEx\" nocase ascii\n\n    condition:\n        // Reflective DLL loading pattern: MZ/PE header anchors at their canonical offsets,\n        // PE signature present, and PE-parsing-function strings alongside the reflective loader\n        ($reflective_loader and $dos_header at 0 and $nt_header at 60 and $pe_sig and\n         any of ($dos_hdr, $file_hdr, $opt_hdr)) or\n\n        // Reflective injection via direct syscalls\n        ($reflective_loader and all of ($zw_alloc, $zw_write, $zw_protect, $zw_create)) or\n\n        // Reflective injection via Windows APIs\n        ($reflective_loader and all of ($alloc, $write, $protect, $create_remote)) or\n\n        // Reflective export string as a standalone corroborating signal alongside memory injection APIs\n        ($reflective_export and any of ($alloc, $write, $protect, $create_remote))\n}",
+        "to_ids": true,
+        "comment": "Reflective DLL Injection Framework | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1620, T1055.001 | rule hash 0f7f5bfb | https://the-hunters-ledger.com/hunting-detections/arsenal-237-chromelevator-exe-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      }
+    ],
+    "Object": []
+  }
+}

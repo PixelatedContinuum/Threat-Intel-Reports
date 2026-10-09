@@ -1,0 +1,157 @@
+{
+  "Event": {
+    "uuid": "bf15ec86-d80c-5067-8f63-4c2f4186cda3",
+    "info": "Arsenal-237 New Files: BdApiUtil64.sys (Vulnerable Baidu Driver)",
+    "date": "2026-01-15",
+    "threat_level_id": 1,
+    "analysis": 2,
+    "timestamp": 1791580400,
+    "publish_timestamp": 1791580400,
+    "published": true,
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"BYOVD\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Priv Esc\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Rootkit - T1014\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Privilege Escalation - T1068\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Kernel Modules and Extensions - T1547.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "Attribute": [
+      {
+        "uuid": "423d79d3-be1c-54ce-9749-41b45cb3e3d5",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/hunting-detections/arsenal-237-BdApiUtil64-sys-detections/",
+        "to_ids": false,
+        "comment": "Detection rules, The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "6c1257e3-00c5-5ab9-a03e-112cbe27d7fb",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/ioc-feeds/arsenal-237-BdApiUtil64-sys.json",
+        "to_ids": false,
+        "comment": "IOC feed (JSON), The Hunters Ledger",
+        "timestamp": 1791580400
+      },
+      {
+        "uuid": "9e009490-e4b9-59e8-8b7b-aee33b4a71f6",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Baidu-Signed Driver Load Outside Legitimate Antivirus Installation (Base Rule)\nid: f3d8a726-4c1e-4a95-8b3d-6e2f9c7a1d40\nname: baidu_signed_driver_load\nstatus: experimental\ndescription: >-\n  Base rule (not alerting on its own): loading of a driver image whose filename\n  contains \"BdApiUtil\" and whose digital signature validates as issued to Baidu,\n  matching the legitimately-signed-but-weaponized BdApiUtil64.sys BYOVD driver.\n  Paired with the security-product-termination base rule below via the\n  correlation rule, which flags the two events occurring close together in\n  time -- the actual BYOVD kill-chain signal.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-BdApiUtil64-sys-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-26'\ntags:\n    - attack.privilege-escalation\n    - attack.t1068\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: driver_load\ndetection:\n    selection:\n        ImageLoaded|contains: 'BdApiUtil'\n        Signed: 'true'\n        Signature|contains: 'Baidu'\n    condition: selection\nfalsepositives:\n    - >-\n      Legitimate Baidu Antivirus installation (very rare in enterprise environments).\n      Not alerting on its own; reviewed only in combination with the paired\n      security-product-termination base rule.\nlevel: informational\n---\ntitle: BdApiUtil64.sys BYOVD Security Product Process Termination (Base Rule)\nid: a9c4e158-6b3f-4d72-9e1a-8c5d3f7b2e61\nname: security_product_termination\nstatus: experimental\ndescription: >-\n  Base rule (not alerting on its own): termination of a named security-product\n  process. Paired with the Baidu-signed-driver-load base rule above via the\n  correlation rule below, which flags co-occurrence of both events on the\n  same host -- the BYOVD kill pattern this campaign's driver is built to enable.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-BdApiUtil64-sys-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-26'\ntags:\n    - attack.defense-impairment\n    - attack.t1685\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: process_termination\ndetection:\n    selection:\n        Image|endswith:\n            - 'MsMpEng.exe'\n            - 'CSFalconService.exe'\n            - 'ekrn.exe'\n            - 'avp.exe'\n            - 'SophosHealth.exe'\n            - 'cb.exe'\n            - 'MBAMService.exe'\n    condition: selection\nfalsepositives:\n    - >-\n      Legitimate service restarts during updates. Not alerting on its own; reviewed\n      only in combination with the paired driver-load base rule.\nlevel: informational\n---\ntitle: BdApiUtil64.sys BYOVD Kill Pattern -- Driver Load Followed by Security-Product Termination on Same Host\nid: b2e7f043-9a5c-4e18-b6d2-4f8a1c3e7d95\nstatus: experimental\ndescription: >-\n  Fires when a Baidu-signed BdApiUtil-named driver load and a named\n  security-product process termination are observed on the same host within\n  60 seconds. Neither base signal is reliable alone, but this driver's\n  documented capability neutralizes a full security suite within 60 seconds\n  of load, so the close-in-time co-occurrence is the BYOVD kill-chain signal\n  a coincidental unrelated pairing would not produce.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-BdApiUtil64-sys-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-26'\ntags:\n    - attack.privilege-escalation\n    - attack.t1068\n    - attack.defense-impairment\n    - attack.t1685\n    - detection.emerging-threats\ncorrelation:\n    type: temporal\n    rules:\n        - baidu_signed_driver_load\n        - security_product_termination\n    group-by:\n        - host.name\n    timespan: 60s\nfalsepositives:\n    - >-\n      A coincidental Baidu Antivirus install combined with an unrelated security\n      product restart in the same 60-second window is highly unlikely but not\n      impossible -- review the specific driver file hash and signature timestamp\n      before dismissing.\nlevel: critical",
+        "to_ids": true,
+        "comment": "BdApiUtil64.sys BYOVD Kill Pattern: Driver Load Followed by Security-Product Termination (Correlation) | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1068, T1685 | rule hash 1dc0c5ba | https://the-hunters-ledger.com/hunting-detections/arsenal-237-BdApiUtil64-sys-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "8a8c876b-c64f-51ef-a7d0-bdf661aaec4c",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Suspicious Bprotect Service Creation (BdApiUtil64.sys)\nid: 3057b63c-4d7a-463b-aa1e-3252c63b0e9d\nstatus: experimental\ndescription: >-\n  Detects creation of a Windows service named Bprotect with an ImagePath\n  referencing BdApiUtil, the deployment pattern documented for the\n  BdApiUtil64.sys BYOVD driver. Both the service name and image path are\n  deployment-time choices rather than anchors embedded in the driver's own\n  code, so this is a hunting lead rather than a high-fidelity alert.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-BdApiUtil64-sys-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-26'\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1547.006\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    service: system\ndetection:\n    selection:\n        EventID: 7045\n        ServiceName: 'Bprotect'\n        ImagePath|contains: 'BdApiUtil'\n    condition: selection\nfalsepositives:\n    - Legitimate Baidu Antivirus installation using this exact service name (rare outside a genuine Baidu AV deployment).\nlevel: medium",
+        "to_ids": false,
+        "comment": "Bprotect Service Creation (BdApiUtil64.sys Deployment Marker) | TIER: Hunting | robustness 1 | confidence LOW | ATT&CK T1547.006 | rule hash 11e58701 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-BdApiUtil64-sys-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "a168ec0b-26c6-5397-b111-530f93bec109",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "/*\n   Yara Rule Set\n   Identifier: Arsenal-237-109.230.231.37-Malware-Repository\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule TOOLKIT_BdApiUtil64_Baidu_Driver_Identity {\n   meta:\n      description = \"Detects BdApiUtil64.sys, a legitimately-signed Baidu Antivirus kernel driver weaponized for BYOVD attacks, via its embedded PDB path, signer/product strings, and internal kernel object names. These anchors live inside the driver's own code and digital-signature block rather than in its on-disk filename, so the rule survives the driver being dropped or renamed to a different path.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-BdApiUtil64-sys-detections/\"\n      date = \"2026-01-26\"\n      family = \"Arsenal-237-BYOVD-Component\"\n      malware_type = \"Vulnerable-Driver-BYOVD\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"b4f2a891-3c6d-4e17-9a52-8d1f6c3e9a04\"\n      hash1 = \"47ec51b5f0ede1e70bd66f3f0152f9eb536d534565dbb7fcc3a05f542dbe4428\"\n   strings:\n      $pdb = \"D:\\\\jenkins\\\\workspace\\\\bav_5.0_workspace\\\\BavOutput\\\\Pdb\\\\Release\\\\BdApiUtil64.pdb\" ascii wide\n      $signer = \"Baidu Online Network Technology\" ascii wide\n      $product = \"Baidu Antivirus\" ascii wide\n      $device = \"\\\\Device\\\\BdApiUtil\" ascii wide\n      $service = \"Bprotect\" ascii wide\n      $callback = \"bdProtectExpCallBack\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      uint32(uint32(0x3C)) == 0x00004550 and\n      (2 of ($*))\n}",
+        "to_ids": true,
+        "comment": "BdApiUtil64.sys Baidu Driver Identity (Signer, PDB, and Internal Object Names) | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1068 | rule hash 6dd40dde | https://the-hunters-ledger.com/hunting-detections/arsenal-237-BdApiUtil64-sys-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "87445e95-a627-5783-b947-b998943186a5",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule SUSP_Kernel_Driver_Security_Process_Termination {\n   meta:\n      description = \"Detects kernel-mode drivers combining process-management APIs (PsLookupProcessByProcessId, ZwTerminateProcess, ObOpenObjectByPointer, ObDereferenceObject) with references to named AV/EDR process names, the pattern BdApiUtil64.sys uses to terminate security products from kernel mode. Not specific to this campaign's driver, and the same API combination is used by legitimate AV/EDR kernel components for their own process-monitoring and competitor-compatibility logic, so this is a technique-class hunting lead.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-BdApiUtil64-sys-detections/\"\n      date = \"2026-01-26\"\n      family = \"Kernel-Security-Process-Termination-Generic\"\n      malware_type = \"Rootkit-Technique-Pattern\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"e5b6c914-2f8a-4d37-b1e9-3a7c5d0f8b62\"\n   strings:\n      // Kernel APIs for process termination\n      $api1 = \"PsLookupProcessByProcessId\" ascii\n      $api2 = \"ZwTerminateProcess\" ascii\n      $api3 = \"ObOpenObjectByPointer\" ascii\n      $api4 = \"ObDereferenceObject\" ascii\n\n      // Target security products\n      $target1 = \"MsMpEng.exe\" ascii wide nocase\n      $target2 = \"CSFalconService.exe\" ascii wide nocase\n      $target3 = \"ekrn.exe\" ascii wide nocase\n      $target4 = \"avp.exe\" ascii wide nocase\n   condition:\n      uint16(0) == 0x5A4D and\n      3 of ($api*) and\n      2 of ($target*)\n}",
+        "to_ids": false,
+        "comment": "Kernel-Mode Security-Process Termination (Generic Rootkit Technique) | TIER: Hunting | robustness 2 | confidence LOW | ATT&CK T1685 | rule hash be6c6579 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-BdApiUtil64-sys-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "c5731c90-389c-5288-9740-41abd37cbfd5",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule SUSP_Kernel_SSDT_Bypass_Pattern {\n   meta:\n      description = \"Detects kernel-mode code implementing SSDT (System Service Descriptor Table) resolution combined with hook-detection and indirect-syscall lookup patterns, the EDR-evasion mechanism documented in the BdApiUtil64.sys driver. Not specific to this campaign's driver -- MmGetSystemRoutineAddress and RtlInitUnicodeString are near-universal kernel APIs also used by legitimate anti-cheat and security-research kernel drivers performing their own hook detection, so this is a technique-class hunting lead, not an alert.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-BdApiUtil64-sys-detections/\"\n      date = \"2026-01-26\"\n      family = \"Kernel-SSDT-Bypass-Generic\"\n      malware_type = \"Rootkit-Technique-Pattern\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"d1a83f5c-7e29-4b06-a3d5-9f6e2c8b1a47\"\n   strings:\n      $ssdt_string = \"KeServiceDescriptorTable\" ascii wide\n      $api1 = \"MmGetSystemRoutineAddress\" ascii wide\n      $api2 = \"RtlInitUnicodeString\" ascii wide\n\n      // Hook detection pattern (checking for 0xb8 opcode)\n      $hook_check = { 80 3? B8 }    // cmp byte ptr [reg], 0xb8\n\n      // SSDT lookup pattern\n      $ssdt_lookup = { 8B ?? ?? C1 E? 02 }    // mov reg, [reg+offset]; shl reg, 2\n   condition:\n      uint16(0) == 0x5A4D and\n      $ssdt_string and\n      all of ($api*) and\n      1 of ($hook_check, $ssdt_lookup)\n}",
+        "to_ids": false,
+        "comment": "Kernel SSDT Bypass Pattern (Generic Rootkit Technique) | TIER: Hunting | robustness 2 | confidence LOW | ATT&CK T1014 | rule hash 76fa3448 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-BdApiUtil64-sys-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "7a86c713-73e1-58f4-8348-beb544549128",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule TOOLKIT_BdApiUtil64_IOCTL_Abuse {\n   meta:\n      description = \"Detects tooling that calls DeviceIoControl against the BdApiUtil64.sys driver's device object using its documented IOCTL codes (direct termination, SSDT-bypass termination, service manipulation, file access). The device name and IOCTL codes are fixed properties of the target driver's own dispatch interface, not choices the calling malware's author controls, so this survives the caller being renamed or recompiled.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-BdApiUtil64-sys-detections/\"\n      date = \"2026-01-26\"\n      family = \"Arsenal-237-BYOVD-Component\"\n      malware_type = \"Vulnerable-Driver-BYOVD\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"c7e9d302-5a1b-4f83-8e64-1b9a7d4f2c56\"\n   strings:\n      // Primary IOCTL codes\n      $ioctl1 = { B4 24 00 80 }    // 0x800024b4 - Direct termination\n      $ioctl2 = { B8 24 00 80 }    // 0x800024b8 - SSDT bypass\n      $ioctl3 = { 24 23 00 80 }    // 0x80002324 - Service manipulation\n      $ioctl4 = { 48 26 00 80 }    // 0x80002648 - File access 1\n      $ioctl5 = { 4C 26 00 80 }    // 0x8000264c - File access 2\n\n      // DeviceIoControl API\n      $api = \"DeviceIoControl\" ascii wide\n\n      // Device name\n      $device = \"\\\\\\\\.\\\\BdApiUtil\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      $api and $device and\n      2 of ($ioctl*)\n}",
+        "to_ids": true,
+        "comment": "BdApiUtil64.sys IOCTL Abuse (DeviceIoControl + Documented IOCTL Codes) | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1685, T1068 | rule hash 18d888c7 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-BdApiUtil64-sys-detections/",
+        "timestamp": 1791580400,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      }
+    ],
+    "Object": []
+  }
+}
