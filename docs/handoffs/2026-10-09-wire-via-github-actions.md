@@ -2,7 +2,9 @@
 
 **Date:** 2026-10-09
 **Branch carrying the repo-side work:** `claude/gracious-curie-truz72`
-**Status:** repo side done and pushed; three steps remain, in three different places.
+**Status (updated 2026-10-09 16:45 UTC):** Steps 1 to 3 done. Pages deploys through Actions, the
+generator publishes to `wire-data` (first commit 16:39:27Z, run 4 built and deployed green). Step 4
+was done the same day.
 
 ---
 
@@ -17,6 +19,7 @@ After this change:
  LXC-102 (OpenCTI host)                 GitHub                                   Readers
  ─────────────────────                  ──────                                   ───────
  wire_export.py ──► wire.yml ──► force-push ONE orphan commit ──► branch wire-data
+                                 (wire.yml + a copy of pages.yml, so the push fires the workflow)
                                                                        │
                                                       push event ──────┤
  you push a report ────────────────────────────────► branch main       │
@@ -31,7 +34,10 @@ After this change:
 ```
 
 `main` becomes a history of the site. `wire-data` is a one-commit mailbox that is overwritten
-every hour and never grows. The Wire still updates hourly with nobody touching anything, and
+every hour and never grows. The commit carries `wire.yml` and a copy of `main`'s
+`.github/workflows/pages.yml`: GitHub only runs a push-triggered workflow that exists in the
+pushed commit's own tree, so a commit holding `wire.yml` alone started no build. Found and fixed
+at cutover (site commit f5d16d0); the publisher refuses to push if `main` has no workflow file. The Wire still updates hourly with nobody touching anything, and
 every push to `main` now gets a full build, the unit tests and the source-side gates run in CI.
 
 ---
@@ -132,7 +138,8 @@ key already has write access to the whole repo, which covers `wire-data`.
 Do **not** protect the `wire-data` branch: the publisher force-pushes it by design. Branch
 protection on `main` is irrelevant to it.
 
-### Step 4: clean up `main` (after Step 3 is verified)
+### Step 4: clean up `main` (done 2026-10-09, same day: the fallback was never needed once
+`wire-data` existed, and the removal is one `git revert` away)
 
 **Where:** this repository. A cloud session can do all of it.
 

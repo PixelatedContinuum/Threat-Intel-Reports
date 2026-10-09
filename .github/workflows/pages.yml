@@ -4,7 +4,8 @@
 # was a commit to main: 37 of the last 50 commits were "wire: refresh", which
 # buried the real history. This workflow builds the site from main but takes the
 # Wire data from a separate `wire-data` branch that the generator force-pushes as
-# a single orphan commit each hour. main stays a history of the site; the Wire
+# a single orphan commit each hour (wire.yml plus a copy of this file, because
+# GitHub runs a push event from the workflows in the pushed commit's own tree). main stays a history of the site; the Wire
 # still updates hourly with nobody touching anything.
 #
 # Triggers. A push to main (content, layouts, data) or to wire-data (an hourly
@@ -51,7 +52,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Always main, whichever branch's push woke us: a wire-data push must not
-      # build the wire-data tree (it holds one file).
+      # build the wire-data tree (it holds wire.yml and a copy of this workflow file,
+      # which is there only so GitHub fires the push event; see push-wire-data.sh).
       - name: Check out main
         uses: actions/checkout@v4
         with:

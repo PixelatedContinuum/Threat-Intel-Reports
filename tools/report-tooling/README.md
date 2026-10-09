@@ -60,6 +60,11 @@ It routes on staged paths, so a commit touching only prose runs nothing and says
 | `ioc-feeds/*.json`, `_data/catalog.yml`, `assets/data/ioc-index.json` | `check-ioc-index.js` | index stale, embargoed feed leaking |
 | `ioc-feeds/*.json`, `_data/catalog.yml`, `reports/*/index.md`, the stubs | `check-ioc-tables.js` | viewer tables stale, a stub surviving after re-embargo |
 | `_data/wire.yml` | `check-wire.js` | malformed or description-bearing wire data |
+
+`_data/wire.yml` is no longer committed (it lives on the `wire-data` branch and the Pages
+workflow copies it in at build time), so the wire gate and a local Jekyll preview both need
+`npm run wire:pull` first; without it the gate reports NOT CHECKED and the page renders as
+unavailable, neither of which is a defect.
 | `_data/catalog.yml`, `_data/tags.yml` | `check-tags.js` | a retired tag spelling, case drift, a tag the vocabulary does not know |
 | `reports/*/index.md` | `check-report.js` on the changed reports only | orphaned figure-nav anchors, partly-marked tiers, broken strip |
 | `_data/glossary.yml` | nothing runnable | prints the post-push sweep as owed |
