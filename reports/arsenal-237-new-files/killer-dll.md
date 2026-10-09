@@ -1,7 +1,7 @@
 ---
 title: killer.dll (BYOVD Defense Evasion Module) - Technical Analysis & Threat Intelligence Report
 date: '2026-01-24'
-detection_page: /hunting-detections/arsenal-237-killer-dll/
+detection_page: /hunting-detections/arsenal-237-killer-dll-detections/
 ioc_feed: /ioc-feeds/arsenal-237-killer-dll.json
 detection_sections:
   - label: "YARA Rules"
