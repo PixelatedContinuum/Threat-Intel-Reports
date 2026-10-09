@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-10-09T06:00:40Z
+generated_at: 2026-10-09T07:00:22Z
 window_days: 30
 counts:
   total: 606
-  research: 207
-  news: 399
+  research: 206
+  news: 400
 topics:
   - label: "vulnerabilities"
-    count: 144
+    count: 145
     color: 1
   - label: "malware"
     count: 114
@@ -20,7 +20,7 @@ topics:
     count: 90
     color: 3
   - label: "exploited"
-    count: 86
+    count: 85
     color: 4
   - label: "cybercrime"
     count: 81
@@ -93,7 +93,6 @@ label_colors:
   "amos": 6
   "android": 9
   "android banking trojan": 11
-  "anti-analysis": 11
   "anti-malware research": 1
   "anti-vm": 6
   "anydesk": 9
@@ -253,6 +252,7 @@ label_colors:
   "gigabud": 9
   "godzilla": 12
   "google": 7
+  "google pixel": 11
   "google tag manager abuse": 4
   "government": 9
   "government impersonation": 7
@@ -297,6 +297,7 @@ label_colors:
   "polinrider": 2
   "privacy": 12
   "public sector": 3
+  "pwn2own ireland": 8
   "ransomware": 7
   "ransomware as a service": 3
   "revolut": 5
@@ -326,6 +327,18 @@ label_colors:
   "x": 4
   "zero-day": 8
 items:
+  - title: "Google Pixel 10 Exploits Earned Hackers $560,000 at Pwn2Own"
+    url: "https://www.securityweek.com/google-pixel-10-exploits-earned-hackers-560000-at-pwn2own/"
+    source: "SecurityWeek"
+    date: 2026-10-09T06:39:55Z
+    kind: news
+    labels: ["google pixel", "pwn2own ireland", "pwn2own ireland 2026", "exploit", "pwn2own", "vulnerabilities"]
+  - title: "Hackers get $1,262,000 for 98 zero-days at Pwn2Own Ireland"
+    url: "https://www.bleepingcomputer.com/news/security/hackers-earn-1262000-for-98-zero-days-at-pwn2own-ireland/"
+    source: "BleepingComputer"
+    date: 2026-10-09T05:41:04Z
+    kind: news
+    labels: ["zero-day"]
   - title: "FBI disrupts Chinese hacking tools used to breach critical infrastructure"
     url: "https://www.bleepingcomputer.com/news/security/fbi-disrupts-chinese-hacking-tools-used-to-breach-critical-infrastructure/"
     source: "BleepingComputer"
@@ -3950,15 +3963,3 @@ items:
     date: 2026-09-09T07:30:15Z
     kind: news
     labels: ["zero-day", "microsoft"]
-  - title: "Peeling Back the Layers: Inside Vidar - From Virtualized Code to Stolen Credentials"
-    url: "https://www.splunk.com/en_us/blog/security/inside-vidar-from-virtualized-code-to-stolen-credentials.html"
-    source: "AlienVault"
-    date: 2026-09-09T06:38:56Z
-    kind: research
-    labels: ["infostealer", "anti-analysis", "azure tokens", "browser data exfiltration", "credential theft", "information stealer", "telegram c2", "vidar", "virtualization obfuscation"]
-  - title: "Google warns of new Chrome zero-day bug exploited in attacks"
-    url: "https://www.bleepingcomputer.com/news/security/google-patches-seventh-chrome-zero-day-exploited-in-attacks-this-year/"
-    source: "BleepingComputer"
-    date: 2026-09-09T06:25:48Z
-    kind: news
-    labels: ["zero-day", "exploited", "google"]
