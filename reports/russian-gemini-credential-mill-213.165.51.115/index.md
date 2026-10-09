@@ -6,7 +6,7 @@ permalink: /reports/russian-gemini-credential-mill-213.165.51.115/
 thumbnail: /assets/images/cards/russian-gemini-credential-mill-213.165.51.115.png
 hide: true
 sponsored_by: hunt-io
-category: "AI-Augmented Credential Mill"
+category: "AI-Augmented Operations"
 series: ai-agent-frameworks
 series_role: member
 series_order: 1

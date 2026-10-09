@@ -4,7 +4,7 @@ date: '2026-09-28'
 layout: post
 permalink: /reports/newdouble-clickfix/
 thumbnail: /assets/images/cards/newdouble-clickfix.png
-category: "ClickFix Delivery Chain"
+category: "Loader / Stealer"
 description: "Fake FACEIT verification pages direct CS2 players to run a PowerShell downloader that, as held by VirusTotal on September 25, 2026, downloaded an executable built for Steam account theft."
 hide: true
 detection_page: /hunting-detections/newdouble-clickfix-detections/

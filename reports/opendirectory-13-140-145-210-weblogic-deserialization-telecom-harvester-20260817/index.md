@@ -5,7 +5,7 @@ layout: post
 permalink: /reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/
 thumbnail: /assets/images/cards/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817.png
 hide: true
-category: "Telecom Intrusion Campaign"
+category: "Exploitation Campaign"
 description: "An operator reached an Ecuadorian carrier's AAA and provisioning secrets through one small business customer's carrier-managed Cisco router, making the device upload 424,946,514 bytes of its own firmware, crash dumps and configuration files."
 detection_page: /hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/
 ioc_feed: /ioc-feeds/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/

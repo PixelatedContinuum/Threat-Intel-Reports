@@ -21,8 +21,14 @@ color_image: /assets/images/lineart.png
 color_theme: dark
 
 # Features
-katex: true
-mermaid: default
+# KaTeX and Mermaid are OFF. No report, detection page or editorial page uses
+# either (checked across the corpus 2026-10-09: zero mermaid fences or classes,
+# zero math delimiters), and with them on the theme's head loaded three vendor
+# scripts on every page view for nothing. The theme's main.min.js has no
+# reference to either library, so nothing else depends on them. Flip one back
+# to `true` (katex) or `default` (mermaid) only when a page actually uses it.
+katex: false
+mermaid: false
 google_analytics:
 cookie_consent: false
 
@@ -48,6 +54,12 @@ paginate: 5
 #paginate_path: "/blog/page:num"
 
 # BUILD SETTINGS
+# Every Liquid date (report dates, Wire day headings, feed timestamps) is
+# formatted in this zone regardless of which machine builds the site. The Wire
+# generator already writes UTC, and listing-filter.js carries each row's day as
+# a precomputed string for the same reason; this closes the last gap.
+timezone: UTC
+
 sass:
   style: compressed
   quiet_deps: true

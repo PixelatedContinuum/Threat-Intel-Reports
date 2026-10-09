@@ -2,10 +2,19 @@
 layout: default
 ---
 {% if page.path contains "hunting-detections" %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+{%- comment -%}
+  highlight.js 11.9.0, self-hosted like every other vendor library on the site
+  (assets/js/vendor/, assets/css/vendor/; BSD-3 licence beside the script).
+  Loaded with `defer` so it no longer blocks first render on a detection page:
+  deferred scripts run before DOMContentLoaded fires, so the init handler below
+  still finds `hljs` defined. The browser build carries yaml, cpp and sql, which
+  are the three languages the aliases below resolve to.
+{%- endcomment -%}
+<link rel="stylesheet" href="{{ '/assets/css/vendor/atom-one-dark.min.css' | relative_url }}">
+<script defer src="{{ '/assets/js/vendor/highlight.min.js' | relative_url }}?v=11.9.0"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+  if (typeof hljs === 'undefined') return;
   hljs.registerAliases('yara', { languageName: 'cpp' });
   hljs.registerAliases('kql',  { languageName: 'sql' });
   hljs.highlightAll();
@@ -97,19 +106,74 @@ the coverage above is narrower than the rule set.</em></p>
 
 {% include support-cta.html %}
 
-{% assign rp_pool = site.pages | where: "layout", "post" | sort: "date" | reverse %}
-{% assign rp_list = "" | split: "" %}
-{% for rp in rp_pool %}{% unless rp.url == page.url or rp.path contains "hunting-detections" or rp.unlisted %}{% if rp_list.size < 2 %}{% assign rp_list = rp_list | push: rp %}{% endif %}{% endunless %}{% endfor %}
+{%- comment -%}
+  Continue Reading. Two reports related to THIS one, not the two newest.
+
+  Related means: a report in the same series first (that outranks everything),
+  then the reports sharing the most catalog tags with this campaign, newest
+  first among ties. Only when a page has no catalog entry (an embargoed or
+  preview report) or shares no tag with anything does it fall back to the two
+  newest reports, which is what every page showed before.
+
+  Driven by _data/catalog.yml rather than site.pages so it is public-only by
+  construction: an embargoed or unlisted campaign has no catalog entry and so
+  can never be recommended. A detection page resolves to its campaign through
+  detection_url (catalog form has no trailing slash, page.url has one).
+
+  Scoring in Liquid: each candidate becomes a sortable string
+  "SSSS|YYYYMMDD|index" (zero-padded score, date, position in rp_all), the
+  strings are sorted and reversed, and the top two indexes are read back.
+{%- endcomment -%}
+{%- assign rp_all = site.data.catalog.entries | where_exp: "e", "e.report_url" | sort: "date" | reverse -%}
+{%- assign rp_self = nil -%}
+{%- assign _det_url = page.url | remove: "/index.html" -%}
+{%- for e in rp_all -%}
+  {%- assign _d1 = e.detection_url | append: "/" -%}
+  {%- if e.report_url == page.url or e.detection_url == _det_url or _d1 == _det_url -%}
+    {%- assign rp_self = e -%}{%- break -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- assign rp_keys = "" | split: "" -%}
+{%- if rp_self -%}
+  {%- for e in rp_all -%}
+    {%- if e.report_url == rp_self.report_url -%}{%- continue -%}{%- endif -%}
+    {%- assign _score = 0 -%}
+    {%- if rp_self.series and e.series == rp_self.series -%}{%- assign _score = _score | plus: 1000 -%}{%- endif -%}
+    {%- for t in e.tags -%}{%- if rp_self.tags contains t -%}{%- assign _score = _score | plus: 10 -%}{%- endif -%}{%- endfor -%}
+    {%- if _score > 0 -%}
+      {%- assign _s = _score | prepend: "0000" | slice: -4, 4 -%}
+      {%- capture _k -%}{{ _s }}|{{ e.date | date: "%Y%m%d" }}|{{ forloop.index0 }}{%- endcapture -%}
+      {%- assign rp_keys = rp_keys | push: _k -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+{%- assign rp_keys = rp_keys | sort | reverse -%}
+{%- assign rp_list = "" | split: "" -%}
+{%- for k in rp_keys limit: 2 -%}
+  {%- assign _idx = k | split: "|" | last | plus: 0 -%}
+  {%- assign rp_list = rp_list | push: rp_all[_idx] -%}
+{%- endfor -%}
+{%- if rp_list.size < 2 -%}
+  {%- for e in rp_all -%}
+    {%- if rp_list.size >= 2 -%}{%- break -%}{%- endif -%}
+    {%- if rp_self and e.report_url == rp_self.report_url -%}{%- continue -%}{%- endif -%}
+    {%- if e.report_url == page.url -%}{%- continue -%}{%- endif -%}
+    {%- assign _dup = false -%}
+    {%- for r in rp_list -%}{%- if r.report_url == e.report_url -%}{%- assign _dup = true -%}{%- endif -%}{%- endfor -%}
+    {%- unless _dup -%}{%- assign rp_list = rp_list | push: e -%}{%- endunless -%}
+  {%- endfor -%}
+{%- endif -%}
 {% if rp_list.size > 0 %}
 <div class="hl-related">
   <div class="hl-related__heading">Continue Reading</div>
   <div class="hl-related__grid">
     {% for rp in rp_list %}
-    <a href="{{ rp.url | relative_url }}" class="hl-card">
+    {%- assign _sev = rp.severity | default: "info" -%}
+    <a href="{{ rp.report_url | relative_url }}" class="hl-card">
       <div class="hl-card__inner">
-        <div class="hl-card__bar hl-sev--info"></div>
+        <div class="hl-card__bar hl-sev--{{ _sev }}"></div>
         <div>
-          <div class="hl-card__meta">{{ rp.category | default: "Malware Analysis" }} · {{ rp.date | date: "%b %Y" }}</div>
+          <div class="hl-card__meta">{% if rp.series and rp_self and rp.series == rp_self.series %}Same series · {% endif %}{{ _sev | upcase }} · {{ rp.date | date: "%b %Y" }}</div>
           <div class="hl-card__title">{{ rp.title }}</div>
         </div>
       </div>

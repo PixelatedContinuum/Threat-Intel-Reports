@@ -1,7 +1,9 @@
 ---
 title: The Wire
+description: "Threat intelligence headlines from public research and news sources, refreshed hourly from a self-hosted OpenCTI instance. Links only, every item goes to the original publisher."
 layout: page
 permalink: /wire/
+thumbnail: /assets/images/cards/wire.png
 position: 2.5
 ---
 

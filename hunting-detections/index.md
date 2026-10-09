@@ -35,27 +35,6 @@ position: 3
   </div>
 </details>
 
-<style>
-.hl-feed{margin:0 0 22px;border:1px solid color-mix(in srgb,var(--hl-accent-green) 26%,transparent);border-radius:10px;background:color-mix(in srgb,var(--hl-accent-green) 6%,var(--hl-bg-card));overflow:hidden}
-.hl-feed__toggle{display:flex;align-items:center;gap:9px;cursor:pointer;padding:12px 16px;font-family:var(--hl-font-display);font-weight:700;font-size:.95em;color:var(--hl-accent-green);list-style:none;user-select:none}
-.hl-feed__toggle::-webkit-details-marker{display:none}
-.hl-feed__toggle:hover{background:color-mix(in srgb,var(--hl-accent-green) 10%,transparent)}
-.hl-feed__chev{margin-left:auto;opacity:.7;font-size:.85em;transition:transform .18s ease}
-.hl-feed[open] .hl-feed__chev{transform:rotate(180deg)}
-.hl-feed__body{padding:2px 16px 16px;border-top:1px solid color-mix(in srgb,var(--hl-accent-green) 16%,transparent)}
-.hl-feed__desc{color:var(--hl-text-primary);font-size:.9em;margin:12px 0}
-.hl-feed__cmd{display:flex;align-items:stretch;background:#0d0d0d;border:1px solid var(--hl-border-card);border-radius:6px;overflow:hidden}
-.hl-feed__cmd code{flex:1;min-width:0;padding:10px 12px;font-size:.78em;color:var(--hl-text-primary);overflow-x:auto;white-space:nowrap}
-.hl-feed__copy{flex-shrink:0;padding:0 14px;font-family:var(--hl-font-display);font-weight:600;font-size:.78em;background:color-mix(in srgb,var(--hl-accent-green) 14%,transparent);color:var(--hl-accent-green);border:none;border-left:1px solid var(--hl-border-card);cursor:pointer;transition:background .15s}
-.hl-feed__copy:hover{background:color-mix(in srgb,var(--hl-accent-green) 26%,transparent)}
-.hl-feed__note{color:var(--hl-text-muted);font-size:.8em;margin:9px 0 0;line-height:1.5}
-.hl-feed__note code{background:color-mix(in srgb,var(--hl-accent-green) 10%,transparent);padding:1px 5px;border-radius:3px;font-size:.95em}
-.hl-feed__alt{display:inline-block;margin-top:5px;overflow-wrap:anywhere}
-.hl-feed__links{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:11px;flex-wrap:wrap}
-.hl-feed__links a{color:var(--hl-accent-green);text-decoration:none;font-size:.85em;font-weight:600}
-.hl-feed__links a:hover{text-decoration:underline}
-.hl-feed__meta{color:var(--hl-text-muted);font-size:.78em}
-</style>
 
 {% assign det_entries = site.data.catalog.entries | where_exp: "e", "e.detection_url" | sort: "date" | reverse %}
 

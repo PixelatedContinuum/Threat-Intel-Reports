@@ -6,7 +6,7 @@ permalink: /reports/ghost-cryptojacker-vova75rus-77.110.96.200/
 thumbnail: /assets/images/cards/ghost-cryptojacker-vova75rus-77.110.96.200.png
 hide: true
 sponsored_by: hunt-io
-category: "Cryptojacking Kit"
+category: "Cryptojacking"
 series: ai-agent-frameworks
 series_role: member
 series_order: 5

@@ -1,5 +1,6 @@
 ---
 title: Report Format
+description: "The current report format for The Hunter's Ledger: the four files a published campaign needs, the front matter each one carries, and the house rules for indicators, categories and metadata."
 layout: page
 permalink: /report-templates/
 hide: true
@@ -70,13 +71,34 @@ ioc_highlights:                           # powers the blue IOC panel, 3 to 5 in
     note: "Primary C2 server"             # keep under 60 characters
 layout: post
 permalink: /reports/[slug]/
-category: "[Malware Category]"
+category: "[one of the twelve categories listed below]"
 hide: true
 description: "[1 to 2 sentence summary for social sharing previews]"
 ---
 ```
 
 `detection_page`, `ioc_feed`, `detection_sections` and `ioc_highlights` drive the report page's own sidebar panels. They do **not** create the listing cards. Only the catalog entry does that.
+
+### `category` is one of twelve values
+
+The category renders as the badge in the report header, as the `articleSection` in the page's structured data, and in the Continue Reading cards, so it has to group: a badge that is unique to one report says nothing. Pick the closest of these and do not invent a new one. If none fits, that is a conversation about the list, not a thirteenth value.
+
+| Category | Use it for |
+|---|---|
+| `Remote Access Trojan` | A RAT or RAT family is the primary payload |
+| `Loader / Stealer` | Loaders, droppers, stealers and the delivery chains (ClickFix and the like) that carry them |
+| `C2 Framework` | The finding is a C2 framework deployment: Sliver, AdaptixC2, XiebroC2, Cobalt Strike |
+| `Post-Exploitation Toolkit` | An operator's kit of post-access tooling, intrusion toolkits, access-broker staging |
+| `Ransomware Toolkit` | Ransomware builders, encryptors and their supporting tooling |
+| `Cryptojacking` | Mining is the objective |
+| `Exploitation Campaign` | Mass or targeted exploitation of a vulnerability or a server-side weakness, including webshell-led compromise |
+| `MaaS Operation` | A malware-as-a-service product, builder or operator ecosystem |
+| `Phishing and Fraud` | Phishing kits, phishing-as-a-service and fraud operations |
+| `AI-Augmented Operations` | The operator's use of LLMs or agent frameworks is the finding |
+| `Credential and Data Theft` | Interception platforms and harvesting operations where the stolen data is the finding |
+| `Actor Tooling and Infrastructure` | An operator's repository, leak site or scanner examined as infrastructure rather than as a single payload |
+
+Tags in the catalog entry carry the finer detail. They follow the controlled vocabulary in `_data/tags.yml`, which `check-tags.js` enforces at commit time, so a tag is never spelled two ways.
 
 Each `anchor` must match the anchor Jekyll generates from the heading: lowercased, spaces to hyphens, special characters stripped. Include only substantive rule sections and skip Overview, License, and summary sections.
 

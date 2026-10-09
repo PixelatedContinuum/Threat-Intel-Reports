@@ -16,7 +16,7 @@ entries:
   - title: "Gotenberg CVE-2026-42589 Mass Exploitation and Cryptomining"
     date: 2026-09-16
     severity: high
-    tags: [Cryptomining, Mass Exploitation, CVE-2026-42589, XMRig]
+    tags: [Cryptojacking, Mass Exploitation, CVE-2026-42589, XMRig]
     report_url: /reports/gotenberg-rce-cryptomining-107-175-69-137/
     stix_url: /stix/gotenberg-rce-cryptomining-107-175-69-137.json
     detection_url: /hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections
@@ -24,7 +24,7 @@ entries:
   - title: "Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17"
     date: 2026-09-07
     severity: high
-    tags: [Sliver, Post-Exploitation, EtherHiding, Blockchain C2]
+    tags: [Sliver, Post-Ex, EtherHiding, Blockchain C2]
     report_url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
     stix_url: /stix/sliver-c2-windows-postex-staging-193-233-202-17.json
     detection_url: /hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections
@@ -32,7 +32,7 @@ entries:
   - title: "Carrier Credential Harvesting Through a Customer's Router"
     date: 2026-08-18
     severity: high
-    tags: [Telecom, Cisco IOS-XE, WebLogic, Credential Theft]
+    tags: [Telecom, Cisco IOS-XE, WebLogic, Cred Theft]
     report_url: /reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/
     # Restored 2026-09-01: report-to-stix de-names every bundle it writes, so this copy and the
     # one OpenCTI imports are byte-identical and neither carries the 14 victim-bearing objects
@@ -46,7 +46,7 @@ entries:
   #  - title: "SSH Interception and Parasitic Credential Theft"
   #    date: 2026-08-12
   #    severity: high
-  #    tags: [Credential Theft, SSH, Tor, AI-Assisted]
+  #    tags: [Cred Theft, SSH, Tor, AI Abuse]
   #    report_url: /reports/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812/
   #    detection_url: /hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections
   #    ioc_url: /ioc-feeds/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-iocs.json
@@ -54,7 +54,7 @@ entries:
   - title: "CloudSync: An Assembler's Intrusion Toolkit"
     date: 2026-08-03
     severity: high
-    tags: [Intrusion Toolkit, RAT, Access Broker]
+    tags: [Toolkit, RAT, Access Broker]
     report_url: /reports/cloudsync-assembler-toolkit-91-197-98-188/
     stix_url: /stix/cloudsync-assembler-toolkit-91-197-98-188.json
     detection_url: /hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections
@@ -62,7 +62,7 @@ entries:
   - title: "GOCLOUD Multi-Service Cryptojacking"
     date: 2026-07-26
     severity: med
-    tags: [Cryptojacking, OpenDirectory, China]
+    tags: [Cryptojacking, Open Dir, China]
     report_url: /reports/gocloud-multiservice-cryptojacking-149-28-112-221/
     stix_url: /stix/gocloud-multiservice-cryptojacking-149-28-112-221.json
     detection_url: /hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections
@@ -70,7 +70,7 @@ entries:
   - title: "Enough to Be Dangerous: The Mechanics of an LLM-Assisted Intrusion Campaign"
     date: 2026-07-21
     severity: high
-    tags: [AI Abuse, OpenDirectory, DataTheft, E-Commerce, China]
+    tags: [AI Abuse, Open Dir, Data Theft, E-Commerce, China]
     report_url: /reports/multivector-ecommerce-rce-toolkit-192-3-1-116/
     stix_url: /stix/multivector-ecommerce-rce-toolkit-192-3-1-116.json
     detection_url: /hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections
@@ -79,7 +79,7 @@ entries:
   - title: "The Middle Tier: A Non-APT Operator's Reach Into Four Southeast Asian Governments"
     date: 2026-08-13
     severity: high
-    tags: [Government, Exploitation, OpenDirectory, SE-Asia]
+    tags: [Government, Exploitation, Open Dir, SE-Asia]
     report_url: /reports/seasia-gov-exploitation-toolkit-144-172-106-236/
     stix_url: /stix/seasia-gov-exploitation-toolkit-144-172-106-236.json
     detection_url: /hunting-detections/seasia-gov-exploitation-toolkit-144-172-106-236-detections
@@ -154,7 +154,7 @@ entries:
   - title: "GHOST Cryptojacker Kit — Vova75Rus Supply Chain (77.110.96.200)"
     date: 2026-05-25
     severity: high
-    tags: [Cryptominer, Rootkit, Toolkit, Open Dir]
+    tags: [Cryptojacking, Rootkit, Toolkit, Open Dir]
     series: ai-agent-frameworks
     series_order: 5
     report_url: /reports/ghost-cryptojacker-vova75rus-77.110.96.200/
@@ -191,7 +191,7 @@ entries:
   - title: "CVE-2026-41940 cPanel Harvester Toolkit (216.126.227.49)"
     date: 2026-05-17
     severity: high
-    tags: [CVE Exploit, Cred Theft, Phishing, Open Dir]
+    tags: [Exploitation, Cred Theft, Phishing, Open Dir]
     report_url: /reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/
     stix_url: /stix/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517.json
     detection_url: /hunting-detections/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections
@@ -360,7 +360,7 @@ entries:
   - title: "NsMiner: Multi-Stage Cryptojacking Operation"
     date: 2026-02-05
     severity: high
-    tags: [Cryptominer, Dropper, Persistence, Evasion]
+    tags: [Cryptojacking, Dropper, Persistence, Evasion]
     report_url: /reports/nsminer-cryptojacker/
     stix_url: /stix/nsminer-cryptojacker.json
     detection_url: /hunting-detections/nsminer-cryptojacker-detections

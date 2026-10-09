@@ -8,3 +8,8 @@
 # Headless-render screenshots from check-browser-report.js --shots. Measurement
 # artifacts, regenerable, and 6.6MB a run.
 tools/report-tooling/shots/
+
+# Local Jekyll build cache (a local build is now possible with the github-pages gem)
+.sass-cache/
+_site/
+.jekyll-cache/

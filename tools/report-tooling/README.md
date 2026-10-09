@@ -59,6 +59,7 @@ It routes on staged paths, so a commit touching only prose runs nothing and says
 | `ioc-feeds/*.json`, `_data/catalog.yml`, `assets/data/ioc-index.json` | `check-ioc-index.js` | index stale, embargoed feed leaking |
 | `ioc-feeds/*.json`, `_data/catalog.yml`, `reports/*/index.md`, the stubs | `check-ioc-tables.js` | viewer tables stale, a stub surviving after re-embargo |
 | `_data/wire.yml` | `check-wire.js` | malformed or description-bearing wire data |
+| `_data/catalog.yml`, `_data/tags.yml` | `check-tags.js` | a retired tag spelling, case drift, a tag the vocabulary does not know |
 | `reports/*/index.md` | `check-report.js` on the changed reports only | orphaned figure-nav anchors, partly-marked tiers, broken strip |
 | `_data/glossary.yml` | nothing runnable | prints the post-push sweep as owed |
 
@@ -78,6 +79,15 @@ them as owed rather than implying coverage.
 regenerates the manifest in memory and diffs it against the committed file, the same
 regenerate-and-diff approach `check-ioc-index.js` uses. Line endings and a trailing
 newline are not drift.
+
+`node check-tags.js` gates the catalog's `tags:` lists (and the `detection_tags` /
+`ioc_tags` / `stix_tags` overrides, when present) against the vocabulary in `_data/tags.yml`.
+The listing filter and the badge colour lookup both compare tag strings exactly, so
+"Open Dir" and "OpenDirectory" were two tags to the site and neither reached the chip
+threshold on its own. A retired alias, a case or whitespace drift on a canonical tag, or a
+tag listed twice on one entry FAILS and names the exact spelling to use. A tag the
+vocabulary does not know only WARNS, so a genuinely new tag can be typed first and added
+to `_data/tags.yml` deliberately rather than pushed into a near-miss of an existing one.
 
 `node generate-ioc-tables.js` writes `_data/ioc_tables.yml` and one stub page per PUBLISHED
 feed under `ioc-feeds/<slug>/`, and REMOVES a stub whose feed is no longer published.

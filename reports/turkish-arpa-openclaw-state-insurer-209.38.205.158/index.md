@@ -6,7 +6,7 @@ permalink: /reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/
 thumbnail: /assets/images/cards/turkish-arpa-openclaw-state-insurer-209.38.205.158.png
 hide: true
 sponsored_by: hunt-io
-category: "AI-Augmented Espionage"
+category: "AI-Augmented Operations"
 series: ai-agent-frameworks
 series_role: member
 series_order: 2

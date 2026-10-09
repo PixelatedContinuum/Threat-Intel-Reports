@@ -18,7 +18,7 @@ ioc_highlights:
 layout: post
 permalink: /reports/dual-rat-analysis/
 thumbnail: /assets/images/cards/dual-rat-analysis.png
-category: "Dual-RAT Analysis"
+category: "Remote Access Trojan"
 hide: true
 description: "Comparative technical analysis of Quasar RAT and NjRAT/XWorm discovered on the same infrastructure as PULSAR RAT (185.208.159.182). The two samples represent opposing operational philosophies, Quasar prioritizing stealth and espionage, NjRAT/XWorm prioritizing aggressive resilience for mass deployment, both achieving full system compromise via different architectural approaches."
 stix_bundle: /stix/dual-rat-analysis.json

@@ -44,11 +44,20 @@ test('an IOC feed edit routes to the index, the viewer tables AND the safety gat
       ['embargo-artifacts', 'feed-attack', 'feed-hygiene', 'ioc-index', 'ioc-tables']);
   });
 
-test('a catalog edit routes to both, because publication status gates both',
+test('a catalog edit routes to the index, the viewer tables AND the tag gate',
   function () {
+    // Publication status gates the first two; the tag vocabulary gates the third,
+    // because the catalog is the only place a retired spelling can come back.
     var p = SG.plan(['_data/catalog.yml']);
-    assert.deepEqual(ids(p), ['ioc-index', 'ioc-tables']);
+    assert.deepEqual(ids(p), ['ioc-index', 'ioc-tables', 'tags']);
   });
+
+test('a vocabulary edit routes to the tag gate, not the catalog alone', function () {
+  /* Retiring a spelling in _data/tags.yml is only true once every catalog entry
+     still carrying it has moved. Routing on the catalog alone would let the
+     vocabulary change land with the gate never asked. */
+  assert.deepEqual(ids(SG.plan(['_data/tags.yml'])), ['tags']);
+});
 
 test('A REPORT EDIT ROUTES TO THE VIEWER TABLES, because front matter is half the signal',
   function () {
@@ -136,7 +145,7 @@ test('a mixed commit queues every check it touches, deduplicated', function () {
   ], { existing: ['reports/one/index.md', 'reports/two/index.md'] });
   assert.deepEqual(ids(p),
     ['detection-attack', 'embargo-artifacts', 'feed-attack', 'feed-hygiene', 'ioc-index',
-     'ioc-tables', 'manifest', 'wire']);
+     'ioc-tables', 'manifest', 'tags', 'wire']);
   assert.deepEqual(p.reports.sort(), ['reports/one/index.md', 'reports/two/index.md']);
   assert.equal(p.owed.length, 1);
 });
@@ -167,7 +176,7 @@ test('an ioc-feeds edit wants the bundle-safety gate', function () {
 test('a stix bundle edit wants the bundle-safety gate too, not either alone', function () {
   var p = SG.plan(['stix/acme.json']);
   assert.equal(p.wantBundleSafety, true);
-  // stix/ alone triggers NOTHING else: none of the eight CHECKS regexes name it.
+  // stix/ alone triggers NOTHING else: none of the nine CHECKS regexes name it.
   assert.deepEqual(ids(p), []);
 });
 

@@ -4,7 +4,7 @@ date: '2026-01-12'
 layout: post
 permalink: /reports/109.230.231.37-Executive-Overview/
 thumbnail: /assets/images/cards/109.230.231.37-Executive-Overview.png
-category: "Threat Actor R&D"
+category: "Actor Tooling and Infrastructure"
 series: arsenal-237
 series_role: parent
 series_order: 0
