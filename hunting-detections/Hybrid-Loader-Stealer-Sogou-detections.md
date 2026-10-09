@@ -363,7 +363,7 @@ level: medium
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points; hunt-tune before alerting.
 
 ```suricata
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT SogouStealer-HybridLoader CGI1 C2 URI Pattern (C2 Transport Indicator)"; flow:established,to_server; http.uri; content:"/cgi1"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/; classtype:trojan-activity; sid:1000001; rev:2; metadata:author The_Hunters_Ledger, date 2025-11-21;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT SogouStealer-HybridLoader CGI1 C2 URI Pattern (C2 Transport Indicator)"; flow:established,to_server; http.uri; content:"/cgi1"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/; classtype:trojan-activity; sid:9300901; rev:2; metadata:author The_Hunters_Ledger, date 2025-11-21;)
 ```
 
 ---

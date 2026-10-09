@@ -79,7 +79,7 @@ Hybrid-Loader-Stealer-Sogou-detections:
     engine: suricata
     tier: Hunting
     fence: 6
-    hash: "7a556f18"
+    hash: "0b58b2fc"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 1
     confidence: "MODERATE"
@@ -562,7 +562,7 @@ arsenal-237-BdApiUtil64-sys-detections:
     engine: sigma
     tier: Detection
     fence: 4
-    hash: "7b1c3225"
+    hash: "1dc0c5ba"
     head: "title: Baidu-Signed Driver Load Outside Legitima"
     robustness: 2
     confidence: "HIGH"
@@ -763,7 +763,7 @@ arsenal-237-enc_c2-exe-detections:
     engine: suricata
     tier: Detection
     fence: 10
-    hash: "7e30a298"
+    hash: "33c30b54"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 2
     confidence: "HIGH"
@@ -1265,7 +1265,7 @@ bellamain-turkish-phaas-79-137-192-3-20260516-detections:
     engine: suricata
     tier: Hunting
     fence: 5
-    hash: "a2952ccb"
+    hash: "7a021f7d"
     head: "alert http $HOME_NET any -> any any (msg:\"THL HU"
     robustness: 1
     confidence: "MODERATE"
@@ -1500,7 +1500,7 @@ cloudsync-assembler-toolkit-91-197-98-188-detections:
     engine: suricata
     tier: Detection
     fence: 25
-    hash: "f8e66849"
+    hash: "1d1ce895"
     head: "alert tcp $HOME_NET any -> $EXTERNAL_NET any (ms"
     robustness: 3
     confidence: "HIGH"
@@ -1509,7 +1509,7 @@ cloudsync-assembler-toolkit-91-197-98-188-detections:
     engine: suricata
     tier: Detection
     fence: 26
-    hash: "08b2d336"
+    hash: "91f87a0a"
     head: "alert tcp $HOME_NET any -> $EXTERNAL_NET any (ms"
     robustness: 3
     confidence: "HIGH"
@@ -1518,7 +1518,7 @@ cloudsync-assembler-toolkit-91-197-98-188-detections:
     engine: suricata
     tier: Hunting
     fence: 27
-    hash: "956d5edf"
+    hash: "debda6c3"
     head: "alert tls $HOME_NET any -> $EXTERNAL_NET any (ms"
     robustness: 2
     confidence: "MODERATE"
@@ -1527,7 +1527,7 @@ cloudsync-assembler-toolkit-91-197-98-188-detections:
     engine: suricata
     tier: Hunting
     fence: 28
-    hash: "24d8b1bc"
+    hash: "e04ae698"
     head: "alert dns $HOME_NET any -> any any (msg:\"THL HUN"
     robustness: 2
     confidence: "MODERATE"
@@ -1890,7 +1890,7 @@ flaskc2-postex-toolkit-67-215-232-25-detections:
     engine: suricata
     tier: Detection
     fence: 10
-    hash: "cbb3c700"
+    hash: "ec6418f7"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 3
     confidence: "HIGH"
@@ -1899,7 +1899,7 @@ flaskc2-postex-toolkit-67-215-232-25-detections:
     engine: suricata
     tier: Hunting
     fence: 11
-    hash: "b6a13905"
+    hash: "7fe816a6"
     head: "alert http $HOME_NET any -> any any (msg:\"THL HU"
     robustness: 1
     confidence: "MODERATE"
@@ -1908,7 +1908,7 @@ flaskc2-postex-toolkit-67-215-232-25-detections:
     engine: suricata
     tier: Hunting
     fence: 12
-    hash: "d780e9d0"
+    hash: "7b05a617"
     head: "alert http $HOME_NET any -> any any (msg:\"THL HU"
     robustness: 1
     confidence: "MODERATE"
@@ -2452,7 +2452,7 @@ gocloud-multiservice-cryptojacking-149-28-112-221-detections:
     engine: suricata
     tier: Detection
     fence: 18
-    hash: "6535b20a"
+    hash: "49160973"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 2
     confidence: "HIGH"
@@ -2461,7 +2461,7 @@ gocloud-multiservice-cryptojacking-149-28-112-221-detections:
     engine: suricata
     tier: Detection
     fence: 19
-    hash: "b084ed0f"
+    hash: "4d1d98ee"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 2
     confidence: "HIGH"
@@ -2470,7 +2470,7 @@ gocloud-multiservice-cryptojacking-149-28-112-221-detections:
     engine: suricata
     tier: Detection
     fence: 20
-    hash: "efce1e18"
+    hash: "9f38b7c5"
     head: "alert tcp $HOME_NET any -> $EXTERNAL_NET any (ms"
     robustness: 2
     confidence: "HIGH"
@@ -2479,7 +2479,7 @@ gocloud-multiservice-cryptojacking-149-28-112-221-detections:
     engine: suricata
     tier: Detection
     fence: 21
-    hash: "8c0cea89"
+    hash: "3f8f7e7c"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 2
     confidence: "HIGH"
@@ -2488,7 +2488,7 @@ gocloud-multiservice-cryptojacking-149-28-112-221-detections:
     engine: suricata
     tier: Hunting
     fence: 22
-    hash: "99a39ac2"
+    hash: "53594553"
     head: "alert tcp any any -> any any (msg:\"THL HUNT GOCL"
     robustness: 2
     confidence: "MODERATE"
@@ -2561,7 +2561,7 @@ gotenberg-rce-cryptomining-107-175-69-137-detections:
     engine: suricata
     tier: Detection
     fence: 7
-    hash: "a326ad99"
+    hash: "b66c5244"
     head: "# LOAD-BEARING: the bytes |5c 6e| in the content"
     robustness: 3
     confidence: "HIGH"
@@ -2570,7 +2570,7 @@ gotenberg-rce-cryptomining-107-175-69-137-detections:
     engine: suricata
     tier: Hunting
     fence: 8
-    hash: "482ad990"
+    hash: "5c11ebc5"
     head: "alert http $HOME_NET any -> any any (msg:\"THL HU"
     robustness: 1
     confidence: "MODERATE"
@@ -2579,7 +2579,7 @@ gotenberg-rce-cryptomining-107-175-69-137-detections:
     engine: suricata
     tier: Hunting
     fence: 9
-    hash: "86560dff"
+    hash: "6fd6621e"
     head: "alert http $HOME_NET any -> any any (msg:\"THL HU"
     robustness: 1
     confidence: "HIGH that a hit is this toolkit's deploy channel; the literal is the operator's own verdict token, written by their deploy script"
@@ -2588,7 +2588,7 @@ gotenberg-rce-cryptomining-107-175-69-137-detections:
     engine: suricata
     tier: Hunting
     fence: 10
-    hash: "21db13da"
+    hash: "2bb604eb"
     head: "alert http $HOME_NET any -> any any (msg:\"THL HU"
     robustness: 1
     confidence: "MODERATE"
@@ -2625,7 +2625,7 @@ inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections:
     engine: suricata
     tier: Hunting
     fence: 3
-    hash: "eddb8ed4"
+    hash: "8ec4b983"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 2
     confidence: "MODERATE"
@@ -2698,7 +2698,7 @@ kaido-quasar-rat-detections:
     engine: suricata
     tier: Detection
     fence: 6
-    hash: "16dcac1c"
+    hash: "f46f6753"
     head: "alert tls $HOME_NET any -> $EXTERNAL_NET any (ms"
     robustness: 2
     confidence: "HIGH"
@@ -2707,7 +2707,7 @@ kaido-quasar-rat-detections:
     engine: suricata
     tier: Hunting
     fence: 7
-    hash: "942bcfbc"
+    hash: "c51b980f"
     head: "alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (m"
     robustness: 2
     confidence: "HIGH for the port/protocol pairing; the rule itself is a port-anchored lead"
@@ -2917,7 +2917,7 @@ multivector-ecommerce-rce-toolkit-192-3-1-116-detections:
     engine: suricata
     tier: Detection
     fence: 11
-    hash: "00eae343"
+    hash: "7ea034a5"
     head: "alert tcp $HOME_NET any -> $EXTERNAL_NET [1389,1"
     robustness: 3
     confidence: "HIGH"
@@ -2926,7 +2926,7 @@ multivector-ecommerce-rce-toolkit-192-3-1-116-detections:
     engine: suricata
     tier: Detection
     fence: 12
-    hash: "f2a638ef"
+    hash: "5c88bc5d"
     head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
     robustness: 3
     confidence: "HIGH"
@@ -2935,7 +2935,7 @@ multivector-ecommerce-rce-toolkit-192-3-1-116-detections:
     engine: suricata
     tier: Detection
     fence: 13
-    hash: "a6790846"
+    hash: "438b1e20"
     head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
     robustness: 3
     confidence: "HIGH"
@@ -2944,7 +2944,7 @@ multivector-ecommerce-rce-toolkit-192-3-1-116-detections:
     engine: suricata
     tier: Detection
     fence: 14
-    hash: "26d4a9e1"
+    hash: "d63a591b"
     head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
     robustness: 3
     confidence: "HIGH"
@@ -2953,7 +2953,7 @@ multivector-ecommerce-rce-toolkit-192-3-1-116-detections:
     engine: suricata
     tier: Detection
     fence: 15
-    hash: "cf90ed9d"
+    hash: "4f76b1ab"
     head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
     robustness: 3
     confidence: "HIGH"
@@ -2962,7 +2962,7 @@ multivector-ecommerce-rce-toolkit-192-3-1-116-detections:
     engine: suricata
     tier: Detection
     fence: 16
-    hash: "10ebbcf1"
+    hash: "c5e0553b"
     head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
     robustness: 3
     confidence: "HIGH"
@@ -2971,7 +2971,7 @@ multivector-ecommerce-rce-toolkit-192-3-1-116-detections:
     engine: suricata
     tier: Detection
     fence: 17
-    hash: "49747c3f"
+    hash: "230549cf"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 3
     confidence: "HIGH"
@@ -3007,7 +3007,7 @@ multivector-ecommerce-rce-toolkit-192-3-1-116-detections:
     engine: suricata
     tier: Hunting
     fence: 21
-    hash: "de536da4"
+    hash: "319cdf0a"
     head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
     robustness: 2
     confidence: "MODERATE"
@@ -3259,7 +3259,7 @@ newdouble-clickfix-detections:
     engine: suricata
     tier: Hunting
     fence: 9
-    hash: "5d86121a"
+    hash: "c5347f94"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 2
     confidence: "MODERATE"
@@ -3268,7 +3268,7 @@ newdouble-clickfix-detections:
     engine: suricata
     tier: Hunting
     fence: 10
-    hash: "50818f11"
+    hash: "0d0ee677"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 1
     confidence: "MODERATE"
@@ -3277,7 +3277,7 @@ newdouble-clickfix-detections:
     engine: suricata
     tier: Hunting
     fence: 11
-    hash: "f2bb8f9b"
+    hash: "41e80241"
     head: "alert http $HOME_NET any -> 202.71.14.31 any (ms"
     robustness: 1
     confidence: "MODERATE"
@@ -3286,7 +3286,7 @@ newdouble-clickfix-detections:
     engine: suricata
     tier: Hunting
     fence: 12
-    hash: "018dc9fc"
+    hash: "d050e432"
     head: "alert dns $HOME_NET any -> any any (msg:\"THL HUN"
     robustness: 1
     confidence: "MODERATE"
@@ -3295,7 +3295,7 @@ newdouble-clickfix-detections:
     engine: suricata
     tier: Hunting
     fence: 13
-    hash: "8afe3220"
+    hash: "cb158e96"
     head: "alert tls $HOME_NET any -> $EXTERNAL_NET any (ms"
     robustness: 1
     confidence: "MODERATE"
@@ -3657,7 +3657,7 @@ open-directory-94-103-1-13-20260423-detections:
     engine: suricata
     tier: Hunting
     fence: 17
-    hash: "866c96db"
+    hash: "c117ec99"
     head: "alert http $HOME_NET any -> any any (msg:\"THL HU"
     robustness: 2
     confidence: "MODERATE"
@@ -3838,7 +3838,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
     engine: suricata
     tier: Detection
     fence: 19
-    hash: "3ec263fc"
+    hash: "cc61fb76"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 3
     confidence: "HIGH"
@@ -3847,7 +3847,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
     engine: suricata
     tier: Detection
     fence: 20
-    hash: "da9f5627"
+    hash: "f33a48f9"
     head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
     robustness: 3
     confidence: "HIGH"
@@ -3856,7 +3856,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
     engine: suricata
     tier: Detection
     fence: 21
-    hash: "7ddea824"
+    hash: "5d7c42ae"
     head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
     robustness: 2
     confidence: "HIGH"
@@ -3865,7 +3865,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
     engine: suricata
     tier: Detection
     fence: 22
-    hash: "3b8e6e80"
+    hash: "3d2d73ce"
     head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
     robustness: 2
     confidence: "HIGH"
@@ -3874,7 +3874,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
     engine: suricata
     tier: Detection
     fence: 23
-    hash: "7beded8c"
+    hash: "3745f706"
     head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
     robustness: 3
     confidence: "HIGH"
@@ -3883,7 +3883,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
     engine: suricata
     tier: Detection
     fence: 24
-    hash: "11b4e059"
+    hash: "8081a3d7"
     head: "alert tcp $EXTERNAL_NET any -> $HOME_NET 7001 (m"
     robustness: 3
     confidence: "HIGH"
@@ -3892,7 +3892,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
     engine: suricata
     tier: Detection
     fence: 25
-    hash: "b296ee12"
+    hash: "40b58f28"
     head: "alert tcp $HOME_NET any -> $EXTERNAL_NET any (ms"
     robustness: 3
     confidence: "HIGH"
@@ -3901,7 +3901,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
     engine: suricata
     tier: Detection
     fence: 26
-    hash: "1f1497c0"
+    hash: "92026f2a"
     head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
     robustness: 3
     confidence: "HIGH"
@@ -3910,7 +3910,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
     engine: suricata
     tier: Hunting
     fence: 27
-    hash: "8842e071"
+    hash: "42393d7f"
     head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
     robustness: 2
     confidence: "MODERATE"
@@ -3919,7 +3919,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
     engine: suricata
     tier: Detection
     fence: 28
-    hash: "9c89797e"
+    hash: "05939354"
     head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
     robustness: 3
     confidence: "HIGH"
@@ -3928,7 +3928,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
     engine: suricata
     tier: Hunting
     fence: 29
-    hash: "761fe9da"
+    hash: "97a6db94"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 1
     confidence: "LOW"
@@ -3937,7 +3937,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
     engine: suricata
     tier: Hunting
     fence: 30
-    hash: "8cc5248a"
+    hash: "48a605bc"
     head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
     robustness: 1
     confidence: "LOW"
@@ -4100,7 +4100,7 @@ opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detect
     engine: suricata
     tier: Detection
     fence: 17
-    hash: "c9d29ba0"
+    hash: "5128feb3"
     head: "alert ssh $EXTERNAL_NET any -> $HOME_NET 22 (msg"
     robustness: 3
     confidence: "HIGH"
@@ -4109,7 +4109,7 @@ opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detect
     engine: suricata
     tier: Detection
     fence: 18
-    hash: "315b5c15"
+    hash: "094dc9ca"
     head: "alert tls $HOME_NET any -> $EXTERNAL_NET any (ms"
     robustness: 2
     confidence: "HIGH"
@@ -4118,7 +4118,7 @@ opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detect
     engine: suricata
     tier: Hunting
     fence: 19
-    hash: "c8f61a0a"
+    hash: "e27d6a75"
     head: "alert ssh $HOME_NET any <> $EXTERNAL_NET any (ms"
     robustness: 2
     confidence: "MODERATE"
@@ -4499,7 +4499,7 @@ opendirectory-62-60-237-100-20260506-detections:
     engine: suricata
     tier: Detection
     fence: 14
-    hash: "57b1b151"
+    hash: "520d364c"
     head: "alert tls $HOME_NET any -> any any (msg:\"THL DET"
     robustness: 2
     confidence: "HIGH"
@@ -4717,7 +4717,7 @@ opendirectory-79-137-192-3-20260515-detections:
     engine: suricata
     tier: Detection
     fence: 11
-    hash: "c3484cac"
+    hash: "65da39a1"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 2
     confidence: "HIGH"
@@ -4868,12 +4868,12 @@ remcos-opendirectory-detections:
     robustness: 2
     confidence: "MODERATE"
     attack: [T1055]
-  - name: "Non-Browser Process Accessing Browser Credential Store Files"
+  - name: "Remcos RAT Non-Browser Process Accessing Browser Credential Store Files"
     engine: sigma
     tier: Hunting
     fence: 14
-    hash: "0e80485c"
-    head: "title: Non-Browser Process Accessing Browser Cre"
+    hash: "4e5cbea2"
+    head: "title: Remcos RAT Non-Browser Process Accessing "
     robustness: 3
     confidence: "MODERATE"
     attack: [T1555.003, T1539]
@@ -5062,7 +5062,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
     engine: suricata
     tier: Detection
     fence: 20
-    hash: "48a7d026"
+    hash: "992a8707"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 2
     confidence: "HIGH"
@@ -5071,7 +5071,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
     engine: suricata
     tier: Detection
     fence: 21
-    hash: "7e5ccfaf"
+    hash: "70432092"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 2
     confidence: "HIGH"
@@ -5080,7 +5080,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
     engine: suricata
     tier: Hunting
     fence: 22
-    hash: "7567f126"
+    hash: "40808673"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 1
     confidence: "MODERATE"
@@ -5098,7 +5098,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
     engine: suricata
     tier: Hunting
     fence: 24
-    hash: "20bf62b1"
+    hash: "283dd604"
     head: "alert http $HOME_NET any -> any any (msg:\"THL HU"
     robustness: 1
     confidence: "MODERATE"
@@ -5514,7 +5514,7 @@ seasia-gov-exploitation-toolkit-144-172-106-236-detections:
     engine: suricata
     tier: Detection
     fence: 21
-    hash: "063a1ab1"
+    hash: "91c08b3e"
     head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
     robustness: 3
     confidence: "HIGH"
@@ -5523,7 +5523,7 @@ seasia-gov-exploitation-toolkit-144-172-106-236-detections:
     engine: suricata
     tier: Detection
     fence: 22
-    hash: "103eee9f"
+    hash: "8abd6630"
     head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
     robustness: 3
     confidence: "HIGH"
@@ -5532,7 +5532,7 @@ seasia-gov-exploitation-toolkit-144-172-106-236-detections:
     engine: suricata
     tier: Detection
     fence: 23
-    hash: "47c9ed7e"
+    hash: "5ae08615"
     head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
     robustness: 3
     confidence: "HIGH"
@@ -5577,7 +5577,7 @@ seasia-gov-exploitation-toolkit-144-172-106-236-detections:
     engine: suricata
     tier: Hunting
     fence: 28
-    hash: "ad7901cf"
+    hash: "c220af64"
     head: "alert tls $HOME_NET any -> any any (msg:\"THL HUN"
     robustness: 2
     confidence: "MODERATE"
@@ -5822,7 +5822,7 @@ shinyhunters-dls-91-215-85-22-20260417-detections:
     engine: suricata
     tier: Detection
     fence: 8
-    hash: "5c339836"
+    hash: "1d469b69"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 2
     confidence: "HIGH"
@@ -5840,7 +5840,7 @@ shinyhunters-dls-91-215-85-22-20260417-detections:
     engine: suricata
     tier: Hunting
     fence: 10
-    hash: "1a35cbc8"
+    hash: "4663cb77"
     head: "alert tls $HOME_NET any -> $EXTERNAL_NET any (ms"
     robustness: 1
     confidence: "HIGH"
@@ -5994,7 +5994,7 @@ sliver-c2-windows-postex-staging-193-233-202-17-detections:
     engine: suricata
     tier: Detection
     fence: 16
-    hash: "7b1934f1"
+    hash: "b38911a4"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 3
     confidence: "HIGH"
@@ -6003,7 +6003,7 @@ sliver-c2-windows-postex-staging-193-233-202-17-detections:
     engine: suricata
     tier: Detection
     fence: 17
-    hash: "b0a20477"
+    hash: "a555081a"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 3
     confidence: "HIGH"
@@ -6293,7 +6293,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     engine: suricata
     tier: Hunting
     fence: 20
-    hash: "d2eaabe9"
+    hash: "135486f9"
     head: "alert dns $HOME_NET any -> any any (msg:\"THL HUN"
     robustness: 1
     confidence: "MODERATE"

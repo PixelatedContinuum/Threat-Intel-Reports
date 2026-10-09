@@ -419,14 +419,14 @@ level: low
 **Robustness:** 2
 **ATT&CK Coverage:** T1657 (Financial Theft / Extortion)
 **Confidence:** HIGH
-**Rationale:** Originally anchored on destination IP `91.215.85.22` with a non-differentiating `http.method; content:"GET"` check — nearly all HTTP requests are GET, so the content check added no real filtering beyond the hardcoded IP (Robustness 0 as written). Salvaged by re-anchoring to the distinctive DLS content-directory URI path `/pay_or_leak/` in the `http.uri` buffer, which the actor would have to restructure their own site to change and which survives hosting-IP or domain rotation entirely. `rev` bumped to `2` to reflect the content change; `sid` preserved for feed-map continuity.
+**Rationale:** Originally anchored on destination IP `91.215.85.22` with a non-differentiating `http.method; content:"GET"` check — nearly all HTTP requests are GET, so the content check added no real filtering beyond the hardcoded IP (Robustness 0 as written). Salvaged by re-anchoring to the distinctive DLS content-directory URI path `/pay_or_leak/` in the `http.uri` buffer, which the actor would have to restructure their own site to change and which survives hosting-IP or domain rotation entirely. `rev` bumped to `2` to reflect the content change; `sid` was first preserved for feed-map continuity, then renumbered from 9001003 to 9300103 to remove a collision with rules in other reports.
 **False Positives:** None known — the path token is a distinctive multi-word string; coincidental collision with unrelated infrastructure is extremely unlikely.
 **Blind Spots:** Evaded if the actor restructures the DLS URL scheme; HTTPS traffic where the URI is only visible via TLS decryption/inspection.
 **Validation:** Replay a PCAP of an HTTP GET request with URI containing `/pay_or_leak/` — must alert; ordinary HTTP GET requests to unrelated paths must NOT.
 **Deployment:** Perimeter IDS/IPS; network tap on internet egress; NDR platform.
 
 ```suricata
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT ShinyHunters DLS - HTTP Request to DLS Content Path pay_or_leak"; flow:established,to_server; http.uri; content:"/pay_or_leak/"; reference:url,the-hunters-ledger.com/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/; classtype:trojan-activity; threshold:type limit,track by_src,count 1,seconds 300; sid:9001003; rev:3; metadata:author The_Hunters_Ledger, date 2026-04-17, attack_target Client_Endpoint, mitre_tactic_id TA0040, mitre_technique_id T1657;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT ShinyHunters DLS - HTTP Request to DLS Content Path pay_or_leak"; flow:established,to_server; http.uri; content:"/pay_or_leak/"; reference:url,the-hunters-ledger.com/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/; classtype:trojan-activity; threshold:type limit,track by_src,count 1,seconds 300; sid:9300103; rev:3; metadata:author The_Hunters_Ledger, date 2026-04-17, attack_target Client_Endpoint, mitre_tactic_id TA0040, mitre_technique_id T1657;)
 ```
 
 ### Hunting Rules
@@ -460,7 +460,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT ShinyHunters DLS - 
 **Deployment:** Network IDS/IPS at perimeter (Suricata/Snort); TLS-inspection proxy with Suricata integration; NDR platforms.
 
 ```suricata
-alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT ShinyHunters DLS - TLS SNI shinyhunte.rs"; flow:established,to_server; tls.sni; content:"shinyhunte.rs"; endswith; nocase; reference:url,the-hunters-ledger.com/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/; classtype:trojan-activity; sid:9001002; rev:2; metadata:author The_Hunters_Ledger, date 2026-04-17, attack_target Client_Endpoint, mitre_tactic_id TA0011, mitre_technique_id T1583.001;)
+alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT ShinyHunters DLS - TLS SNI shinyhunte.rs"; flow:established,to_server; tls.sni; content:"shinyhunte.rs"; endswith; nocase; reference:url,the-hunters-ledger.com/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/; classtype:trojan-activity; sid:9300102; rev:2; metadata:author The_Hunters_Ledger, date 2026-04-17, attack_target Client_Endpoint, mitre_tactic_id TA0011, mitre_technique_id T1583.001;)
 ```
 
 > **Community contribution:** The `any` destination port on this rule set was suggested by [Anthony Vigil](https://www.linkedin.com/in/anthony-vigil/), who noted that because app-layer protocol keywords (`http`, `tls`) invoke Suricata's parser by protocol recognition rather than by port, pinning to `80`/`443` adds no fidelity; `any` preserves coverage if the operator migrates the DLS to a non-standard port.
@@ -500,7 +500,7 @@ Three rules were salvaged rather than cut, re-anchoring away from a non-durable 
 
 - **YARA `MALW_ShinyHunters_PGP_Identity`** originally matched on any single one of four PGP fingerprints alone (a hash-style atomic: each fingerprint invalidates on the actor's next key rotation, and 2 of the 4 are already marked revoked). The fingerprint-alone branch was removed; the fingerprints remain available for exact-match lookups in the feed (`identity_artifacts.pgp_fingerprints`). The rule now requires the `shinyhunte.rs` domain AND the `Scattered LAPSUS$ Hunters` collective name to co-occur, a durable content combination, moving from a mixed-confidence rule to a clean Hunting-tier signal.
 - **Sigma "Web Proxy Hit on DLS Content Path"** originally OR'd a durable URI-path selection (`/pay_or_leak/`, `INFORMATION.txt`) with a bare-host selection (`91.215.85.22`, `shinyhunte.rs`) that duplicated the two retired atomic rules above. The host branch was removed; the rule now fires on the path tokens alone, which remain valid even if the DLS migrates to new hosting infrastructure.
-- **Suricata sid:9001003** originally keyed on destination IP `91.215.85.22` with an `http.method; content:"GET"` check that added no real filtering (nearly all HTTP requests are GET). Re-anchored to the `/pay_or_leak/` URI path in the `http.uri` buffer, which survives IP and domain rotation. `rev` bumped to `2` to reflect the content change; `sid` preserved for feed-map continuity.
+- **Suricata sid:9300103** (originally 9001003) originally keyed on destination IP `91.215.85.22` with an `http.method; content:"GET"` check that added no real filtering (nearly all HTTP requests are GET). Re-anchored to the `/pay_or_leak/` URI path in the `http.uri` buffer, which survives IP and domain rotation. `rev` bumped to `2` to reflect the content change; `sid` was first preserved for feed-map continuity, then renumbered from 9001003 to 9300103 to remove a collision with rules in other reports.
 
 The remaining findings below are unchanged from the original analysis and describe technique coverage that could not be expressed as a rule with available evidence.
 

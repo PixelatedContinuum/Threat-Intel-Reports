@@ -862,7 +862,7 @@ Each signature is one physical line and was accepted by the real `suricata -T` e
 **Deployment:** IDS / IPS at the network egress.
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT GOCLOUD-Cryptojacking XMRig Deployment Heartbeat GET (Fixed Parameter Order to Payload Host)"; flow:established,to_server; http.uri; content:"/r?host="; startswith; nocase; content:"&status=OK&ts="; distance:0; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:1000001; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-26;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT GOCLOUD-Cryptojacking XMRig Deployment Heartbeat GET (Fixed Parameter Order to Payload Host)"; flow:established,to_server; http.uri; content:"/r?host="; startswith; nocase; content:"&status=OK&ts="; distance:0; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:9301501; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-26;)
 ```
 
 #### GOCLOUD XMRig Worker-Label Heartbeat
@@ -877,7 +877,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT GOCLOUD-Cryptojac
 **Deployment:** IDS / IPS at the network egress.
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT GOCLOUD-Cryptojacking XMRig Worker-Label Heartbeat (gocloud_ or winjenkins_ Naming Convention)"; flow:established,to_server; http.uri; content:"worker="; nocase; pcre:"/worker=(gocloud|winjenkins)_/i"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:1000002; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-26;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT GOCLOUD-Cryptojacking XMRig Worker-Label Heartbeat (gocloud_ or winjenkins_ Naming Convention)"; flow:established,to_server; http.uri; content:"worker="; nocase; pcre:"/worker=(gocloud|winjenkins)_/i"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:9301502; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-26;)
 ```
 
 **GOCLOUD node-2 LAN probe**
@@ -894,7 +894,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT GOCLOUD-Cryptojac
 **Deployment:** IDS / IPS, internal segment monitoring.
 
 ```
-alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT GOCLOUD-Cryptojacking LAN Lateral-Movement Report Banner (=== ATTACK === Cleartext to Operator)"; flow:established,to_server; content:"=== ATTACK ==="; content:"OK!"; distance:0; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:1000003; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-26;)
+alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT GOCLOUD-Cryptojacking LAN Lateral-Movement Report Banner (=== ATTACK === Cleartext to Operator)"; flow:established,to_server; content:"=== ATTACK ==="; content:"OK!"; distance:0; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:9301503; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-26;)
 ```
 
 **GOCLOUD Windows worm (凌凯矿机)**
@@ -911,7 +911,7 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT GOCLOUD-Cryptojack
 **Deployment:** IDS / IPS at the network egress.
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT GOCLOUD-Cryptojacking Windows Worm Component Retrieval (worm.vbs over HTTP)"; flow:established,to_server; http.uri; content:"worm.vbs"; endswith; nocase; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:1000004; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-26;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT GOCLOUD-Cryptojacking Windows Worm Component Retrieval (worm.vbs over HTTP)"; flow:established,to_server; http.uri; content:"worm.vbs"; endswith; nocase; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:9301504; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-26;)
 ```
 
 ### Hunting Rules
@@ -928,7 +928,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT GOCLOUD-Cryptojac
 **Deployment:** IDS / IPS, analyst triage.
 
 ```
-alert tcp any any -> any any (msg:"THL HUNT GOCLOUD-Cryptojacking Linux Miner Delivery One-Liner (miner.sh Piped To Bash)"; flow:established; content:"miner.sh|7c|bash"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:1000005; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-26;)
+alert tcp any any -> any any (msg:"THL HUNT GOCLOUD-Cryptojacking Linux Miner Delivery One-Liner (miner.sh Piped To Bash)"; flow:established; content:"miner.sh|7c|bash"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:9301505; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-26;)
 ```
 
 ---

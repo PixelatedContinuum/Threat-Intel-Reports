@@ -278,7 +278,7 @@ level: high
 **Deployment:** Suricata IDS/IPS at perimeter or inline; tune to external-only traffic (exclude RFC1918 destinations) before considering promotion to alerting.
 
 ```suricata
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT Inkognito Custom X-Admin-Token Header in HTTP Request (Admin API Auth Primitive)"; flow:established,to_server; http.header; content:"X-Admin-Token"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/; classtype:trojan-activity; sid:9001003; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-16;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT Inkognito Custom X-Admin-Token Header in HTTP Request (Admin API Auth Primitive)"; flow:established,to_server; http.header; content:"X-Admin-Token"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/; classtype:trojan-activity; sid:9300303; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-16;)
 ```
 
 #### Inkognito X-Admin-Token in CORS Allow-Headers Response

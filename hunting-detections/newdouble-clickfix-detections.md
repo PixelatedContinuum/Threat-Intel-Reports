@@ -475,7 +475,7 @@ level: medium
 
 ## Suricata Signatures
 
-All five signatures are Hunting and use the local sids 1000001 to 1000005, which the feed generator remaps to its published block. The two delivery-path signatures and the two lure-domain signatures key on a single value the operator can change; the same indicators are in the IOC feed as historical hunt entries. The panel-import signature keys on a protocol path and header rather than an address, but it has never been run against traffic and its transport is unconfirmed, so it is Hunting as well.
+All five signatures are Hunting and use the local sids 9302101 to 9302105, which the feed generator remaps to its published block. The two delivery-path signatures and the two lure-domain signatures key on a single value the operator can change; the same indicators are in the IOC feed as historical hunt entries. The panel-import signature keys on a protocol path and header rather than an address, but it has never been run against traffic and its transport is unconfirmed, so it is Hunting as well.
 
 ### Hunting Rules
 
@@ -493,7 +493,7 @@ All five signatures are Hunting and use the local sids 1000001 to 1000005, which
 **Deployment:** Egress HTTP inspection, or TLS-terminating proxy logs replayed through the engine; hunting only.
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT newdouble-ClickFix Panel Import POST With X-Vac-Secret Header (Steam Account Data Upload)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/api/mafile/import"; startswith; http.header; content:"X-Vac-Secret|3a|"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:1000005; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT newdouble-ClickFix Panel Import POST With X-Vac-Secret Header (Steam Account Data Upload)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/api/mafile/import"; startswith; http.header; content:"X-Vac-Secret|3a|"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:9302105; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)
 ```
 
 #### First-Stage Script Fetch (y.ps1 URI Path)
@@ -508,7 +508,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT newdouble-ClickFix 
 **Deployment:** Egress HTTP inspection; hunting only.
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT newdouble-ClickFix First-Stage Script Fetch (y.ps1 URI Path)"; flow:established,to_server; http.method; content:"GET"; http.uri; content:"/y/y.ps1"; endswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:1000001; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT newdouble-ClickFix First-Stage Script Fetch (y.ps1 URI Path)"; flow:established,to_server; http.method; content:"GET"; http.uri; content:"/y/y.ps1"; endswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:9302101; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)
 ```
 
 #### Second-Stage Executable Fetch (x.exe URI Path to Delivery Host)
@@ -523,7 +523,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT newdouble-ClickFix 
 **Deployment:** Egress HTTP inspection; hunting only.
 
 ```
-alert http $HOME_NET any -> 202.71.14.31 any (msg:"THL HUNT newdouble-ClickFix Second-Stage Executable Fetch (x.exe URI Path to Delivery Host)"; flow:established,to_server; http.method; content:"GET"; http.uri; content:"/x/x.exe"; endswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:1000002; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)
+alert http $HOME_NET any -> 202.71.14.31 any (msg:"THL HUNT newdouble-ClickFix Second-Stage Executable Fetch (x.exe URI Path to Delivery Host)"; flow:established,to_server; http.method; content:"GET"; http.uri; content:"/x/x.exe"; endswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:9302102; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)
 ```
 
 #### Lure Domain DNS Query (Fake Verification Page)
@@ -538,7 +538,7 @@ alert http $HOME_NET any -> 202.71.14.31 any (msg:"THL HUNT newdouble-ClickFix S
 **Deployment:** DNS inspection or resolver logs replayed through the engine; hunting only.
 
 ```
-alert dns $HOME_NET any -> any any (msg:"THL HUNT newdouble-ClickFix Lure Domain DNS Query (Fake Verification Page)"; dns.query; content:"newdouble"; nocase; content:"authentification.com"; nocase; distance:0; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:1000003; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)
+alert dns $HOME_NET any -> any any (msg:"THL HUNT newdouble-ClickFix Lure Domain DNS Query (Fake Verification Page)"; dns.query; content:"newdouble"; nocase; content:"authentification.com"; nocase; distance:0; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:9302103; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)
 ```
 
 #### Lure Domain TLS SNI (Fake Verification Page)
@@ -553,7 +553,7 @@ alert dns $HOME_NET any -> any any (msg:"THL HUNT newdouble-ClickFix Lure Domain
 **Deployment:** TLS inspection; hunting only.
 
 ```
-alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT newdouble-ClickFix Lure Domain TLS SNI (Fake Verification Page)"; flow:established,to_server; tls.sni; content:"newdouble"; nocase; content:"authentification.com"; nocase; distance:0; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:1000004; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)
+alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT newdouble-ClickFix Lure Domain TLS SNI (Fake Verification Page)"; flow:established,to_server; tls.sni; content:"newdouble"; nocase; content:"authentification.com"; nocase; distance:0; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/; classtype:trojan-activity; sid:9302104; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-28;)
 ```
 
 ---
@@ -579,7 +579,7 @@ Each item below is behavior or infrastructure the analysis touched that I did no
 
 **Validation limits**
 
-- **Suricata replay is NOT CHECKED.** No capture of the fetch or upload traffic was available, so the five signatures are syntax-validated only. The sid 1000005 transport is unconfirmed and is most likely TLS; if it is, the HTTP buffers will not see it and the rule needs a decrypting sensor.
+- **Suricata replay is NOT CHECKED.** No capture of the fetch or upload traffic was available, so the five signatures are syntax-validated only. The sid 9302105 transport is unconfirmed and is most likely TLS; if it is, the HTTP buffers will not see it and the rule needs a decrypting sensor.
 - **Sigma positive-match testing is NOT CHECKED.** No telemetry from a run was available. No benign-log replay result is retained for any of the six rules, so none is cited, and that is why none is Detection tier.
 - **Sigma telemetry assumptions.** The proxy, root-store and marker-file rules need Sysmon registry and file-create events for the paths named in each rule's `logsource.definition`; without them the rules do not fire.
 - **Upstream coverage for the YARA and Suricata rules is NOT CHECKED.** No comparison against published rules was run for either language.

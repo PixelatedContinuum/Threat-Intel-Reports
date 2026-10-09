@@ -999,7 +999,7 @@ level: medium
 **Deployment:** Perimeter / egress sensor, prioritized on any network segment carrying traffic from carrier-managed customer-premises equipment
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT WebLogicTelecomHarvester Network-Device Self-Exfiltration Outbound PUT UA cisco-IOS (WSMA Abuse)"; flow:established,to_server; content:"PUT"; http_method; content:"cisco-IOS"; http_user_agent; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:1000001; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT WebLogicTelecomHarvester Network-Device Self-Exfiltration Outbound PUT UA cisco-IOS (WSMA Abuse)"; flow:established,to_server; content:"PUT"; http_method; content:"cisco-IOS"; http_user_agent; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:9301801; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
 ```
 
 #### Cisco IOS-XE Double-Encoded WSMA Path Bypass (Operator Fingerprint)
@@ -1014,7 +1014,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT WebLogicTelecomHa
 **Deployment:** Perimeter sensor in front of any IOS-XE WebUI management interface
 
 ```
-alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT WebLogicTelecomHarvester Cisco IOS-XE Double-Encoded WSMA Path Bypass (CVE-2023-20273 Operator Fingerprint)"; flow:established,to_server; content:"%2577eb%2575i_%2577sma_Http"; http_uri; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:1000002; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT WebLogicTelecomHarvester Cisco IOS-XE Double-Encoded WSMA Path Bypass (CVE-2023-20273 Operator Fingerprint)"; flow:established,to_server; content:"%2577eb%2575i_%2577sma_Http"; http_uri; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:9301802; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
 ```
 
 #### GENERIC-CVE-2023-20198 Cisco IOS-XE WebUI Auth-Bypass URI
@@ -1031,7 +1031,7 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT WebLogicTelecomHa
 **Deployment:** Perimeter sensor in front of any IOS-XE WebUI management interface
 
 ```
-alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT GENERIC-CVE-2023-20198 Cisco IOS-XE WebUI Auth-Bypass Confirmation URI (Public Exploit Class, Not Operator-Specific)"; flow:established,to_server; content:"/webui/logoutconfirm.html"; http_uri; content:"logon_hash=1"; http_uri; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:web-application-attack; sid:1000003; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT GENERIC-CVE-2023-20198 Cisco IOS-XE WebUI Auth-Bypass Confirmation URI (Public Exploit Class, Not Operator-Specific)"; flow:established,to_server; content:"/webui/logoutconfirm.html"; http_uri; content:"logon_hash=1"; http_uri; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:web-application-attack; sid:9301803; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
 ```
 
 #### GENERIC-CVE-2023-20198 Cisco IOS-XE Forged Bare-Hex Authorization Token
@@ -1048,7 +1048,7 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT GENERIC-CVE-2023-
 **Deployment:** Perimeter sensor in front of any IOS-XE WebUI management interface
 
 ```
-alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT GENERIC-CVE-2023-20198 Cisco IOS-XE Forged Bare-Hex Authorization Token (Public Exploit Class)"; flow:established,to_server; content:"Authorization"; http_header; pcre:"/^Authorization:\s*[a-f0-9]{18}\s*$/mHi"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:web-application-attack; sid:1000004; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT GENERIC-CVE-2023-20198 Cisco IOS-XE Forged Bare-Hex Authorization Token (Public Exploit Class)"; flow:established,to_server; content:"Authorization"; http_header; pcre:"/^Authorization:\s*[a-f0-9]{18}\s*$/mHi"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:web-application-attack; sid:9301804; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
 ```
 **Design note:** The `H` PCRE flag pins the match to the normalized HTTP header buffer, and the fixed `{18}` count (not a variable-length run) means this pattern cannot absorb the buffer's own CRLF line terminator the way a greedy quantifier could.
 
@@ -1064,7 +1064,7 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT GENERIC-CVE-2023-
 **Deployment:** Perimeter sensor in front of any Cisco IOS-XE device with WSMA enabled
 
 ```
-alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT WebLogicTelecomHarvester Cisco WSMA fileCopy Exfiltration Primitive to External dstURL"; flow:established,to_server; content:"urn:cisco:wsma-filesystem"; http_client_body; content:"fileCopy"; http_client_body; content:"dstURL="; http_client_body; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:1000005; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT WebLogicTelecomHarvester Cisco WSMA fileCopy Exfiltration Primitive to External dstURL"; flow:established,to_server; content:"urn:cisco:wsma-filesystem"; http_client_body; content:"fileCopy"; http_client_body; content:"dstURL="; http_client_body; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:9301805; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
 ```
 
 **WebLogic T3/JNDI Exploitation**
@@ -1081,7 +1081,7 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT WebLogicTelecomHa
 **Deployment:** Perimeter / internal segment sensor in front of any WebLogic T3 listener
 
 ```
-alert tcp $EXTERNAL_NET any -> $HOME_NET 7001 (msg:"THL DETECT WebLogicTelecomHarvester WebLogic T3-IIOP JNDI OpaqueReference Injection (CVE-2023-21839/CVE-2024-21182)"; flow:established,to_server; content:"OpaqueReference"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-admin; sid:1000006; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
+alert tcp $EXTERNAL_NET any -> $HOME_NET 7001 (msg:"THL DETECT WebLogicTelecomHarvester WebLogic T3-IIOP JNDI OpaqueReference Injection (CVE-2023-21839/CVE-2024-21182)"; flow:established,to_server; content:"OpaqueReference"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-admin; sid:9301806; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
 ```
 **Design note:** This rule matches on `OpaqueReference` as a suffix common to both `AggregatableOpaqueReference` and `ForeignOpaqueReference`, the two class names that co-occur in every observed variant of this exploitation chain.
 
@@ -1097,7 +1097,7 @@ alert tcp $EXTERNAL_NET any -> $HOME_NET 7001 (msg:"THL DETECT WebLogicTelecomHa
 **Deployment:** Egress sensor, prioritized on any segment where a Java application server can reach the internet
 
 ```
-alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT WebLogicTelecomHarvester Malicious LDAP-JNDI Callback Response (javaCodeBase/javaSerializedData)"; flow:established,to_client; content:"javaCodeBase"; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-admin; sid:1000007; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
+alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT WebLogicTelecomHarvester Malicious LDAP-JNDI Callback Response (javaCodeBase/javaSerializedData)"; flow:established,to_client; content:"javaCodeBase"; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-admin; sid:9301807; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
 ```
 
 **Internal Windows Post-Exploitation**
@@ -1114,7 +1114,7 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT WebLogicTelecomHar
 **Deployment:** Perimeter sensor in front of any GeoServer instance
 
 ```
-alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT WebLogicTelecomHarvester GeoServer OGC-Filter RCE via valueReference exec() (CVE-2024-36401)"; flow:established,to_server; content:"valueReference"; http_uri; content:"exec("; http_uri; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:web-application-attack; sid:1000009; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT WebLogicTelecomHarvester GeoServer OGC-Filter RCE via valueReference exec() (CVE-2024-36401)"; flow:established,to_server; content:"valueReference"; http_uri; content:"exec("; http_uri; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:web-application-attack; sid:9301809; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
 ```
 
 #### Non-Standard X-CMD Webshell Dispatch Header
@@ -1129,7 +1129,7 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT WebLogicTelecomHa
 **Deployment:** Perimeter sensor in front of the specific compromised web root, or broadly as a hunting sweep given the MODERATE confidence
 
 ```
-alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT WebLogicTelecomHarvester Non-Standard X-CMD Webshell Dispatch Header"; flow:established,to_server; content:"X-CMD|3a|"; http_header; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:1000010; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT WebLogicTelecomHarvester Non-Standard X-CMD Webshell Dispatch Header"; flow:established,to_server; content:"X-CMD|3a|"; http_header; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:9301810; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
 ```
 
 **Monitoring-Plane Credential Harvest (PRTG)**
@@ -1146,7 +1146,7 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT WebLogicTelecomHarv
 **Deployment:** Perimeter sensor in front of any PRTG instance, or internal segment sensor if PRTG management traffic is expected to stay internal
 
 ```
-alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT WebLogicTelecomHarvester PRTG Bulk Credential Extraction via getobjectproperty.htm"; flow:established,to_server; content:"getobjectproperty.htm"; http_uri; content:"passhash="; http_uri; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-recon; sid:1000011; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT WebLogicTelecomHarvester PRTG Bulk Credential Extraction via getobjectproperty.htm"; flow:established,to_server; content:"getobjectproperty.htm"; http_uri; content:"passhash="; http_uri; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-recon; sid:9301811; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
 ```
 
 ### Hunting Rules
@@ -1165,7 +1165,7 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT WebLogicTelecomHa
 **Deployment:** Egress sensor, hunting sweep rather than a blocking rule
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT WebLogicTelecomHarvester Chisel-Style Reverse-Tunnel WebSocket Upgrade Handshake (Broad, Chisel Has Legitimate Uses)"; flow:established,to_server; content:"Upgrade|3a| websocket"; http_header; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:1000008; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT WebLogicTelecomHarvester Chisel-Style Reverse-Tunnel WebSocket Upgrade Handshake (Broad, Chisel Has Legitimate Uses)"; flow:established,to_server; content:"Upgrade|3a| websocket"; http_header; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:9301808; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
 ```
 
 **Monitoring-Plane Credential Harvest (PRTG)**
@@ -1182,7 +1182,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT WebLogicTelecomHarv
 **Deployment:** Perimeter or internal sensor, hunting sweep rather than a blocking rule
 
 ```
-alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT WebLogicTelecomHarvester PRTG Bulk Device Inventory Query via table.json (Broad, Legitimate Bulk Queries Exist)"; flow:established,to_server; content:"table.json"; http_uri; content:"content=devices"; http_uri; content:"count=500"; http_uri; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-recon; sid:1000012; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT WebLogicTelecomHarvester PRTG Bulk Device Inventory Query via table.json (Broad, Legitimate Bulk Queries Exist)"; flow:established,to_server; content:"table.json"; http_uri; content:"content=devices"; http_uri; content:"count=500"; http_uri; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-recon; sid:9301812; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
 ```
 
 ---

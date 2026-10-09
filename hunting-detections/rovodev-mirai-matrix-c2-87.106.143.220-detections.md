@@ -1031,7 +1031,7 @@ level: low
 
 ## Suricata Signatures
 
-> **Metadata modernization note:** the original file's Suricata rules predate the `suricata-rule-formatting` skill and used a non-standard `metadata:` schema (`affected_product`/`attack_target`/`created_at`/`deployment`/`signature_severity`/`tag`) and a `"THL - "` (hyphenated) `msg` prefix. All rules below are reformatted to the canonical `metadata:author The_Hunters_Ledger, date, reference` schema and the `"THL <CampaignTag> ..."` `msg` convention. `sid` values are preserved unchanged from the original (9001002 to 9001014) to avoid retiring any existing feed-generator SID mapping; `rev` is bumped to `2` on every rule whose detection logic changed (destination broadened) and left at `1` where logic is unchanged. The withdrawn DNS rule (`sid:9001001`, commented out in the original file since 2026-06-19 for matching all `github.com` DNS lookups) remains withdrawn and is not reproduced here.
+> **Metadata modernization note:** the original file's Suricata rules predate the `suricata-rule-formatting` skill and used a non-standard `metadata:` schema (`affected_product`/`attack_target`/`created_at`/`deployment`/`signature_severity`/`tag`) and a `"THL - "` (hyphenated) `msg` prefix. All rules below are reformatted to the canonical `metadata:author The_Hunters_Ledger, date, reference` schema and the `"THL <CampaignTag> ..."` `msg` convention. `sid` values were preserved unchanged from the original (9001002 to 9001014) to avoid retiring any existing feed-generator SID mapping, and 9001002 to 9001005 were later renumbered to 9300502 to 9300505 to remove collisions with rules in other reports; `rev` is bumped to `2` on every rule whose detection logic changed (destination broadened) and left at `1` where logic is unchanged. The withdrawn DNS rule (`sid:9001001`, commented out in the original file since 2026-06-19 for matching all `github.com` DNS lookups) remains withdrawn and is not reproduced here.
 
 ### Detection Rules
 
@@ -1050,7 +1050,7 @@ level: low
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points.
 
 ```suricata
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT UTA-2026-014 Pandora-Mirai Naku Binary Distribution URI Path (IoT Botnet Payload Delivery)"; flow:established,to_server; http.uri; content:"/bins/Naku."; startswith; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:9001003; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT UTA-2026-014 Pandora-Mirai Naku Binary Distribution URI Path (IoT Botnet Payload Delivery)"; flow:established,to_server; http.uri; content:"/bins/Naku."; startswith; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:9300503; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)
 ```
 
 #### Pandora-Mirai Pandoras-Box Binary Distribution URI Path
@@ -1066,7 +1066,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT UTA-2026-014 Pand
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points.
 
 ```suricata
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT UTA-2026-014 Pandora-Mirai Pandoras-Box Binary Distribution URI Path (IoT Botnet Payload Delivery)"; flow:established,to_server; http.uri; content:"/Pandoras_Box/Pandora."; startswith; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:9001005; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT UTA-2026-014 Pandora-Mirai Pandoras-Box Binary Distribution URI Path (IoT Botnet Payload Delivery)"; flow:established,to_server; http.uri; content:"/Pandoras_Box/Pandora."; startswith; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:9300505; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)
 ```
 
 ### Hunting Rules
@@ -1084,7 +1084,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT UTA-2026-014 Pand
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points; hunt-tune before alerting.
 
 ```suricata
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT UTA-2026-014 Pandora-Mirai bot.sh Reseed Download URI Pattern (IoT Botnet Reseed Channel)"; flow:established,to_server; http.uri; content:"/bot.sh"; endswith; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:9001004; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT UTA-2026-014 Pandora-Mirai bot.sh Reseed Download URI Pattern (IoT Botnet Reseed Channel)"; flow:established,to_server; http.uri; content:"/bot.sh"; endswith; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:9300504; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)
 ```
 
 #### Naku Binary Reference in HTTP URI (Bare Substring)
@@ -1114,7 +1114,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT UTA-2026-014 Naku B
 **Deployment:** Network IDS/IPS at perimeter; primarily useful with TLS interception or proxy logging capability.
 
 ```suricata
-alert http $HOME_NET any -> any any (msg:"THL HUNT UTA-2026-014 keyosbuff C2-Leak Repository Reference in HTTP URI (Operator OPSEC Artifact)"; flow:established,to_server; http.uri; content:"keyosbuff"; nocase; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:9001002; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)
+alert http $HOME_NET any -> any any (msg:"THL HUNT UTA-2026-014 keyosbuff C2-Leak Repository Reference in HTTP URI (Operator OPSEC Artifact)"; flow:established,to_server; http.uri; content:"keyosbuff"; nocase; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:9300502; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)
 ```
 
 **Campaign-Level**

@@ -2591,12 +2591,12 @@
     - tactic: "Credential Access"
       id: "T1539"
       name: "Steal Web Session Cookie"
-      rules: "Non-Browser Process Accessing Browser Credential Store Files (SIGMA, Hunting)"
+      rules: "Remcos RAT Non-Browser Process Accessing Browser Credential Store Files (SIGMA, Hunting)"
       count: 1
     - tactic: "Credential Access"
       id: "T1555.003"
       name: "Credentials from Web Browsers"
-      rules: "Remcos RAT Family Detection (YARA, Detection); Remcos OpenDirectory Campaign Mutex and Install Artifacts (YARA, Detection); Non-Browser Process Accessing Browser Credential Store Files (SIGMA, Hunting)"
+      rules: "Remcos RAT Family Detection (YARA, Detection); Remcos OpenDirectory Campaign Mutex and Install Artifacts (YARA, Detection); Remcos RAT Non-Browser Process Accessing Browser Credential Store Files (SIGMA, Hunting)"
       count: 3
     - tactic: "Collection"
       id: "T1056.001"

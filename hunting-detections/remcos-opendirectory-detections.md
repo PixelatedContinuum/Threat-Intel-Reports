@@ -740,7 +740,7 @@ falsepositives:
 level: medium
 ```
 
-#### Non-Browser Process Accessing Browser Credential Store Files
+#### Remcos RAT Non-Browser Process Accessing Browser Credential Store Files
 
 **Tier:** Hunting
 **Robustness:** 3
@@ -751,7 +751,7 @@ level: medium
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (file-access telemetry); broader sweep, not for auto-block.
 
 ```yaml
-title: Non-Browser Process Accessing Browser Credential Store Files
+title: Remcos RAT Non-Browser Process Accessing Browser Credential Store Files
 id: 27e252f6-c5d9-4545-ab96-b180ab116a88
 status: experimental
 description: >-

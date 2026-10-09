@@ -822,7 +822,7 @@ Network-layer coverage below intentionally duplicates a few techniques already c
 **Deployment:** Network IDS at the network egress point, positioned to see outbound application-server traffic.
 
 ```
-alert tcp $HOME_NET any -> $EXTERNAL_NET [1389,1099] (msg:"THL DETECT MultiVector-192.3.1.116 LDAP Anonymous BindRequest to Non-Standard Directory Port (JNDI Callback Indicator)"; flow:established,to_server; content:"|30 0c 02 01 01 60 07 02 01 03 04 00 80 00|"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:1000001; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)
+alert tcp $HOME_NET any -> $EXTERNAL_NET [1389,1099] (msg:"THL DETECT MultiVector-192.3.1.116 LDAP Anonymous BindRequest to Non-Standard Directory Port (JNDI Callback Indicator)"; flow:established,to_server; content:"|30 0c 02 01 01 60 07 02 01 03 04 00 80 00|"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:9301401; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)
 ```
 
 #### SnakeYAML Gadget Chain in HTTP Request Body
@@ -837,7 +837,7 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET [1389,1099] (msg:"THL DETECT MultiVecto
 **Deployment:** Network IDS in front of Java application servers accepting YAML input.
 
 ```
-alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3.1.116 SnakeYAML ScriptEngineManager Gadget Chain in HTTP Request Body (CVE-2022-1471 Family)"; flow:established,to_server; http.request_body; content:"!!javax.script.ScriptEngineManager"; content:"!!java.net.URLClassLoader"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-user; sid:1000002; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3.1.116 SnakeYAML ScriptEngineManager Gadget Chain in HTTP Request Body (CVE-2022-1471 Family)"; flow:established,to_server; http.request_body; content:"!!javax.script.ScriptEngineManager"; content:"!!java.net.URLClassLoader"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-user; sid:9301402; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)
 ```
 
 #### XXE Entity Declaration Targeting Cloud Metadata in Upload
@@ -852,7 +852,7 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3
 **Deployment:** Network IDS in front of any file-upload feature accepting XML or SVG.
 
 ```
-alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3.1.116 XXE Entity Declaration Targeting Cloud Metadata in Upload"; flow:established,to_server; http.request_body; content:"<!ENTITY"; content:"SYSTEM"; content:"169.254.169.254"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:1000003; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3.1.116 XXE Entity Declaration Targeting Cloud Metadata in Upload"; flow:established,to_server; http.request_body; content:"<!ENTITY"; content:"SYSTEM"; content:"169.254.169.254"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:9301403; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)
 ```
 
 #### Gopher-Scheme SSRF Protocol Smuggling in HTTP URI
@@ -867,7 +867,7 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3
 **Deployment:** Network IDS in front of any application feature that accepts a URL as a parameter (SSRF-prone image fetchers, webhook validators, OCR/preview services).
 
 ```
-alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3.1.116 Gopher-Scheme SSRF Protocol Smuggling in HTTP URI"; flow:established,to_server; http.uri; content:"gopher://"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:1000004; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3.1.116 Gopher-Scheme SSRF Protocol Smuggling in HTTP URI"; flow:established,to_server; http.uri; content:"gopher://"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:9301404; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)
 ```
 
 #### Gopher-Scheme SSRF Protocol Smuggling in HTTP Request Body
@@ -882,7 +882,7 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3
 **Deployment:** Network IDS in front of any application feature that accepts a URL in a POST body.
 
 ```
-alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3.1.116 Gopher-Scheme SSRF Protocol Smuggling in HTTP Request Body"; flow:established,to_server; http.request_body; content:"gopher://"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:1000005; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3.1.116 Gopher-Scheme SSRF Protocol Smuggling in HTTP Request Body"; flow:established,to_server; http.request_body; content:"gopher://"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:9301405; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)
 ```
 
 #### SSRF-to-Redis CONFIG/BGSAVE Command Sequence via HTTP
@@ -897,7 +897,7 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3
 **Deployment:** Network IDS in front of any application feature with a known or suspected SSRF vector (URL fetchers, OCR/image services, webhook validators).
 
 ```
-alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3.1.116 SSRF-to-Redis CONFIG/BGSAVE Command Sequence via HTTP (SSH Key Write Chain)"; flow:established,to_server; http.request_body; content:"CONFIG SET dir"; content:"BGSAVE"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:1000006; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3.1.116 SSRF-to-Redis CONFIG/BGSAVE Command Sequence via HTTP (SSH Key Write Chain)"; flow:established,to_server; http.request_body; content:"CONFIG SET dir"; content:"BGSAVE"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:9301406; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)
 ```
 
 #### Eureka Apps-Delta Response Containing XStream Gadget Markers (Flowbits Pair)
@@ -909,11 +909,11 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3
 **False Positives:** None known. A legitimate Eureka service registry never returns `java.lang.ProcessBuilder` inside an `/eureka/apps/delta` response body; this string only appears as an XStream deserialization gadget marker.
 **Blind Spots:** Misses gadget chains built on a different marker class (`AnnotationInvocationHandler`, `PriorityQueue`, and others named in evidence but not repeated in this single rule); a defender should add those as OR'd companion rules for full coverage of the gadget-marker family.
 **Validation:** Replay an `/eureka/apps/delta` request followed by a same-flow response containing `java.lang.ProcessBuilder` in the body: the checker rule must fire; the response alone on a flow where the setter never matched, or the request alone with a clean response, must NOT fire.
-**Deployment:** Network IDS positioned to see traffic between an internal Eureka client and any Eureka registry, including external ones. **Ships as a linked flowbits pair, deploy both rules together.** `http.uri` (request-side) and `http.response_body` (response-side) cannot be combined in a single rule on the deployed Suricata engine (8.0.5), so the original single-rule design is split into a silent setter (sid:1000007, matches the `/eureka/apps/delta` request and sets flowbit `thl.mvec.eureka.delta`, `flowbits:noalert` so it never alerts on its own) and a checker (sid:1000008, matches the gadget marker in the response body of the same flow, but only if the setter's flowbit is set). **If sid:1000007 is not loaded, sid:1000008 will never fire**; it silently depends on its setter being present in the same ruleset.
+**Deployment:** Network IDS positioned to see traffic between an internal Eureka client and any Eureka registry, including external ones. **Ships as a linked flowbits pair, deploy both rules together.** `http.uri` (request-side) and `http.response_body` (response-side) cannot be combined in a single rule on the deployed Suricata engine (8.0.5), so the original single-rule design is split into a silent setter (sid:9301407, matches the `/eureka/apps/delta` request and sets flowbit `thl.mvec.eureka.delta`, `flowbits:noalert` so it never alerts on its own) and a checker (sid:1000008, matches the gadget marker in the response body of the same flow, but only if the setter's flowbit is set). **If sid:9301407 is not loaded, sid:1000008 will never fire**; it silently depends on its setter being present in the same ruleset.
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT MultiVector-192.3.1.116 Eureka Apps-Delta Request (Flowbits Setter -- pairs with sid:1000008)"; flow:established,to_server; http.uri; content:"/eureka/apps/delta"; flowbits:set,thl.mvec.eureka.delta; flowbits:noalert; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:trojan-activity; sid:1000007; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)
-alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3.1.116 Eureka Apps-Delta Response Containing XStream Gadget Markers (requires flowbits setter sid:1000007)"; flow:established,to_client; flowbits:isset,thl.mvec.eureka.delta; http.response_body; content:"java.lang.ProcessBuilder"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:trojan-activity; sid:1000008; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT MultiVector-192.3.1.116 Eureka Apps-Delta Request (Flowbits Setter -- pairs with sid:1000008)"; flow:established,to_server; http.uri; content:"/eureka/apps/delta"; flowbits:set,thl.mvec.eureka.delta; flowbits:noalert; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:trojan-activity; sid:9301407; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3.1.116 Eureka Apps-Delta Response Containing XStream Gadget Markers (requires flowbits setter sid:9301407)"; flow:established,to_client; flowbits:isset,thl.mvec.eureka.delta; http.response_body; content:"java.lang.ProcessBuilder"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:trojan-activity; sid:1000008; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)
 ```
 
 #### JWT alg-none Authentication Bypass Attempt
@@ -972,7 +972,7 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT MultiVector-192.3.1
 **Deployment:** Network IDS at the perimeter; review hits rather than auto-alert.
 
 ```
-alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT MultiVector-192.3.1.116 Password-Reset Endpoint POST Burst (forgetPwd Verification-Code Brute-Force Indicator)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"forgetPwd"; nocase; threshold:type threshold,track by_src,count 50,seconds 600; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:1000013; rev:3; metadata:author The_Hunters_Ledger, date 2026-07-21;)
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT MultiVector-192.3.1.116 Password-Reset Endpoint POST Burst (forgetPwd Verification-Code Brute-Force Indicator)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"forgetPwd"; nocase; threshold:type threshold,track by_src,count 50,seconds 600; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:9301413; rev:3; metadata:author The_Hunters_Ledger, date 2026-07-21;)
 ```
 
 ---

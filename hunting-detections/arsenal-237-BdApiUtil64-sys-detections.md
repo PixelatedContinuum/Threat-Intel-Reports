@@ -267,7 +267,7 @@ falsepositives:
       security-product-termination base rule.
 level: informational
 ---
-title: Security Product Process Termination (Base Rule)
+title: BdApiUtil64.sys BYOVD Security Product Process Termination (Base Rule)
 id: a9c4e158-6b3f-4d72-9e1a-8c5d3f7b2e61
 name: security_product_termination
 status: experimental

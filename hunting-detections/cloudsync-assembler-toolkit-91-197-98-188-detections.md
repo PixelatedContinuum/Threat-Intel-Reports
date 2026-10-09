@@ -1198,7 +1198,7 @@ level: medium
 **Deployment:** Network IDS/IPS at the perimeter or internal segmentation boundary; deliberately not IP/port-pinned so the rule survives infrastructure rotation
 
 ```
-alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT CloudSync-Assembler-Toolkit AUTO UPDATE C2 Registration Marker (C2 Registration)"; flow:established,to_server; content:"=== AUTO UPDATE ==="; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/; classtype:trojan-activity; sid:1000001; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-03;)
+alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT CloudSync-Assembler-Toolkit AUTO UPDATE C2 Registration Marker (C2 Registration)"; flow:established,to_server; content:"=== AUTO UPDATE ==="; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/; classtype:trojan-activity; sid:9301601; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-03;)
 ```
 
 #### CloudSync C2 Heartbeat And Terminator Marker
@@ -1213,7 +1213,7 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT CloudSync-Assemble
 **Deployment:** Network IDS/IPS at the perimeter or internal segmentation boundary
 
 ```
-alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT CloudSync-Assembler-Toolkit Shares Heartbeat Terminator Marker (C2 Heartbeat)"; flow:established,to_server; content:"[Shares]"; pcre:"/\[(C2_END|END)\]/"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/; classtype:trojan-activity; sid:1000002; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-03;)
+alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT CloudSync-Assembler-Toolkit Shares Heartbeat Terminator Marker (C2 Heartbeat)"; flow:established,to_server; content:"[Shares]"; pcre:"/\[(C2_END|END)\]/"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/; classtype:trojan-activity; sid:9301602; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-03;)
 ```
 
 **SentinelStealer (Sourced, Separate Tier)**
@@ -1230,7 +1230,7 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT CloudSync-Assemble
 **Deployment:** Network IDS/IPS at the perimeter; survives IP rotation since it matches on the TLS SNI rather than a destination address
 
 ```
-alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT CloudSync-Assembler-Toolkit SentinelStealer c3lestial.fun TLS SNI (Sourced Commodity Stealer C2)"; flow:established,to_server; tls.sni; content:"c3lestial.fun"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/; classtype:trojan-activity; sid:1000003; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-03;)
+alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT CloudSync-Assembler-Toolkit SentinelStealer c3lestial.fun TLS SNI (Sourced Commodity Stealer C2)"; flow:established,to_server; tls.sni; content:"c3lestial.fun"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/; classtype:trojan-activity; sid:9301603; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-03;)
 ```
 
 #### SentinelStealer c3lestial.fun DNS Query
@@ -1245,7 +1245,7 @@ alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT CloudSync-Assembler-
 **Deployment:** Network IDS/IPS or DNS sinkhole/monitoring at the perimeter
 
 ```
-alert dns $HOME_NET any -> any any (msg:"THL HUNT CloudSync-Assembler-Toolkit SentinelStealer c3lestial.fun DNS Query (Sourced Commodity Stealer C2)"; dns_query; content:"c3lestial.fun"; nocase; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/; classtype:trojan-activity; sid:1000004; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-03;)
+alert dns $HOME_NET any -> any any (msg:"THL HUNT CloudSync-Assembler-Toolkit SentinelStealer c3lestial.fun DNS Query (Sourced Commodity Stealer C2)"; dns_query; content:"c3lestial.fun"; nocase; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/; classtype:trojan-activity; sid:9301604; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-03;)
 ```
 
 ---
