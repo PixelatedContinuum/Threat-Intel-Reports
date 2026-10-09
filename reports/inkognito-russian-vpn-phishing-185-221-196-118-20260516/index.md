@@ -784,7 +784,7 @@ What the investigation does establish about exposure surface: the brand-imperson
 
 > **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-009 is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
 
-> **UTA file lineage:** UTA-2026-009 was **originally created in the 2026-05-15 multi-cluster investigation** as one of three new UTAs (UTA-2026-008 BellaMain, UTA-2026-009 Inkognito, UTA-2026-010 Rhadamanthys MaaS customer) covering the OpenDirectory 79.137.192.3 co-tenancy. This standalone report **extends** the UTA-2026-009 Activity Log with deeper Inkognito-specific evidence; it does not create a new UTA and does not modify the originating distinguishing characteristics. The canonical UTA file is at `threat-intel-vault/threat-actors/UTA-2026-009.md`.
+> **UTA file lineage:** UTA-2026-009 was **originally created in the 2026-05-15 multi-cluster investigation** as one of three new UTAs (UTA-2026-008 BellaMain, UTA-2026-009 Inkognito, UTA-2026-010 Rhadamanthys MaaS customer) covering the OpenDirectory 79.137.192.3 co-tenancy. This standalone report **extends** the UTA-2026-009 Activity Log with deeper Inkognito-specific evidence; it does not create a new UTA and does not modify the originating distinguishing characteristics.
 
 ### 9.1 Attribution Conclusion
 
@@ -996,9 +996,9 @@ The operator's underground forum identity (if any), alias on XSS, Exploit.in, BH
 ### 13.1 Parent Investigation and Cross-References
 
 - **2026-05-15 Multi-Cluster OpenDirectory 79.137.192.3 Report** ([`/reports/opendirectory-79-137-192-3-20260515/`](/reports/opendirectory-79-137-192-3-20260515/)): originating publication; covers all three clusters (BellaMain, Inkognito, Rhadamanthys MaaS customer); Cluster B (Inkognito) covered at one-paragraph summary depth across §4.5, §5.7, §6.6, §8.3, §9.2. This standalone report deepens Cluster B only.
-- **UTA-2026-008: BellaMain Turkish PhaaS operator** (`threat-intel-vault/threat-actors/UTA-2026-008.md`), Cluster A actor, operationally separate.
-- **UTA-2026-009: Inkognito Russian VPN/phishing operator** (`threat-intel-vault/threat-actors/UTA-2026-009.md`). The subject of this report; canonical UTA file extended by this publication.
-- **UTA-2026-010: Rhadamanthys MaaS customer** (`threat-intel-vault/threat-actors/UTA-2026-010.md`), Cluster C actor, operationally separate.
+- **UTA-2026-008: BellaMain Turkish PhaaS operator**, Cluster A actor, operationally separate.
+- **UTA-2026-009: Inkognito Russian VPN/phishing operator** The subject of this report.
+- **UTA-2026-010: Rhadamanthys MaaS customer**, Cluster C actor, operationally separate.
 
 ### 13.2 Tier-1 Authoritative Sources
 

@@ -743,8 +743,6 @@ Plan for persistence. The operator deliberately segments infrastructure across t
 
 **Investigation evidence base**
 
-Full investigation evidence (file inventory, victim tracker, ransom-note artifacts, neighbor-scan raw data, PGP key archives, attribution worksheets) is preserved at `threat-intel-vault/investigations/ShinyHunters DLS - 91.215.85.22/`.
-
 ---
 
 © 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.

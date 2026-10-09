@@ -76,7 +76,7 @@ A 3:00 AM read for the on-call SOC analyst, threat hunter, or detection engineer
 Active C2 status is UNKNOWN. The endpoint was reachable at analysis time but no live victim traffic was captured, so treat the capability scoring as an upper bound for now and revise after the one-week rescan target of 2026-05-06.
 
 The detection package carries YARA, Sigma, Suricata and EDR query content for both the framework and the operator fingerprints, along with the coverage gaps:
-[/hunting-detections/opendirectory-45-130-148-125-20260430-detections/](/hunting-detections/opendirectory-45-130-148-125-20260430-detections/) (source file: `threat-intel-vault/hunting-detections/opendirectory-45-130-148-125-20260430-detections.md`).
+[/hunting-detections/opendirectory-45-130-148-125-20260430-detections/](/hunting-detections/opendirectory-45-130-148-125-20260430-detections/).
 
 **IOC feed (full machine-readable list, 72 indicators):**
 [/ioc-feeds/opendirectory-45-130-148-125-20260430-iocs.json](/ioc-feeds/opendirectory-45-130-148-125-20260430-iocs.json).
@@ -900,8 +900,6 @@ UTA-2026-006 is supported by **seven distinctive characteristics** (five technic
 6. **Behavioral, OpSec pattern:** Sub-mature OpSec combination: PDB path leakage, plaintext build timestamps in PE headers, internal class names exposed in PowerShell loader, stock Firefox 20 UA unmodified, leftover `proxy_port = 3128` dev artifact in submitted dev build. Operator does not scrub build artifacts, does not customize listener defaults, and does not rotate infrastructure within the observation window.
 7. **Behavioral, Tradecraft:** Selective AV evasion, packing applied only to the most-signatured commodity tools (`SharpHound.exe` 86% high-entropy, `lazagne.exe` 10 MB variant 97% high-entropy) while the rest of the kit (mimikatz, Rubeus, SharpDPAPI, GodPotato) is unmodified. Selective rather than blanket evasion is a tradecraft signature.
 
-The complete UTA-2026-006 file (creation gate, distinguishing IOCs, merge candidates, gap analysis, and activity log) is maintained at `threat-intel-vault/threat-actors/UTA-2026-006.md` per the workflow's UTA lifecycle rules.
-
 ### 8.5 What would resolve attribution
 
 The following actions would materially increase attribution confidence:
@@ -954,7 +952,7 @@ The detection-engineering implication is significant: **defending against Adapti
 
 ### 10.1 Detection content (linked package)
 
-The complete detection rule set for this campaign is published as a separate file (source file: `threat-intel-vault/hunting-detections/opendirectory-45-130-148-125-20260430-detections.md`):
+The complete detection rule set for this campaign is published as a separate file:
 
 **[Detection rules and hunting queries → /hunting-detections/opendirectory-45-130-148-125-20260430-detections/](/hunting-detections/opendirectory-45-130-148-125-20260430-detections/)**
 
