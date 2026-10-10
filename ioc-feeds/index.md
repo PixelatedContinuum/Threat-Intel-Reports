@@ -44,6 +44,7 @@ redirect_from:
   <button type="button" class="hl-iocsearch__clear" hidden>Clear</button>
   <div class="hl-iocsearch__result" role="status" aria-live="polite"></div>
   <div class="hl-iocsearch__detail"></div>
+  <p class="hl-iocsearch__hint hl-xref__muted" data-pagefind-ignore>Link straight to an indicator: <code>/ioc-feeds/?q=&lt;indicator&gt;</code> opens this page with the search already run (several values separated by commas), and the address bar follows what you type.</p>
 </div>
 
 {% assign ioc_entries = site.data.catalog.entries | where_exp: "e", "e.ioc_url" | sort: "date" | reverse %}
@@ -64,4 +65,4 @@ redirect_from:
 </div>
 
 <script defer src="{{ '/assets/js/ioc-classify.js' | relative_url }}?v=1"></script>
-<script defer src="{{ '/assets/js/ioc-search.js' | relative_url }}?v=1"></script>
+<script defer src="{{ '/assets/js/ioc-search.js' | relative_url }}?v=2"></script>

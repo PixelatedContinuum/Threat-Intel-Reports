@@ -3944,6 +3944,8 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
    the theme sets body to 1.25em = 20px while `rem` resolves against the 16px
    root, which is what shipped the Wire 22% small. */
 .hl-iocsearch { margin: 0 0 1.1em; }
+.hl-iocsearch__hint { margin: .7em 0 0; }
+.hl-iocsearch__hint code { font-size: .95em; }
 /* A TEXTAREA, not an input: `<input type="text">` strips newlines out of a
    pasted list, which is how most people paste one, and that silently collapsed
    a whole list into one string.

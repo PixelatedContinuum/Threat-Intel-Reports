@@ -50,8 +50,8 @@ var PAGE =
     '<a class="hl-card hl-catalog-card" data-slug="gamma" data-title="gamma feed" data-tags=""></a>' +
   '</div>';
 
-function build() {
-  var dom = new JSDOM('<body>' + PAGE + '</body>', { runScripts: 'outside-only' });
+function build(url) {
+  var dom = new JSDOM('<body>' + PAGE + '</body>', { runScripts: 'outside-only', url: url || 'http://localhost/ioc-feeds/' });
   var w = dom.window;
   w.fetch = function () {
     return Promise.resolve({ ok: true, json: function () { return Promise.resolve(INDEX); } });
@@ -136,6 +136,48 @@ test('the Clear button restores every card', async function () {
   assert.equal(btn.hidden, false, 'Clear appears once there is something to clear');
   btn.dispatchEvent(new w.MouseEvent('click', { bubbles: true }));
   assert.deepEqual(visible(w), ['alpha', 'beta', 'gamma']);
+});
+
+test('a ?q= deep link lands with the search already run, so a tool can link one indicator', async function () {
+  var w = build('http://localhost/ioc-feeds/?q=185.38.150.7');
+  await new Promise(function (r) { setTimeout(r, 300); });
+  assert.equal(w.document.querySelector('.hl-iocsearch__in').value, '185.38.150.7');
+  assert.deepEqual(visible(w), ['alpha']);
+  assert.match(resultText(w), /appears in 1 feed/);
+  assert.equal(w.document.querySelector('.hl-iocsearch__clear').hidden, false);
+});
+
+test('a ?q= list is decoded (commas, %0A newlines, + for space) and searched in full', async function () {
+  // The hash's q= is the card-title filter (listing-filter.js); "feed" matches
+  // every card here, so the two q's coexist and the search still decides.
+  var w = build('http://localhost/ioc-feeds/?utm=x&q=185.38.150.7%2C%0Ashared.test+#q=feed');
+  await new Promise(function (r) { setTimeout(r, 300); });
+  assert.deepEqual(visible(w), ['alpha', 'beta']);
+  // Other parameters and the filter's own hash are left alone.
+  assert.equal(w.location.search, '?utm=x&q=185.38.150.7%2C%0Ashared.test');
+  assert.equal(w.location.hash, '#q=feed');
+  assert.equal(w.document.querySelector('.hl-filter__search').value, 'feed');
+});
+
+test('typing mirrors the box into ?q= and clearing drops it, so the address bar is always the link to copy', async function () {
+  var w = build();
+  assert.equal(w.location.search, '');
+  await type(w, 'shared.test');
+  assert.equal(w.location.search, '?q=shared.test');
+  assert.equal(w.history.length, 1, 'replaceState, never a history entry per keystroke');
+  await type(w, '');
+  assert.equal(w.location.search, '');
+  await type(w, '185.38.150.7');
+  w.document.querySelector('.hl-iocsearch__clear').dispatchEvent(new w.MouseEvent('click', { bubbles: true }));
+  assert.equal(w.location.search, '');
+  assert.deepEqual(visible(w), ['alpha', 'beta', 'gamma']);
+});
+
+test('a ?q= that is not an indicator says so rather than hiding cards', async function () {
+  var w = build('http://localhost/ioc-feeds/?q=hello%20there');
+  await new Promise(function (r) { setTimeout(r, 300); });
+  assert.deepEqual(visible(w), ['alpha', 'beta', 'gamma']);
+  assert.match(resultText(w), /Nothing in that text looks like/);
 });
 
 test('the name filter and the indicator search AND together', async function () {

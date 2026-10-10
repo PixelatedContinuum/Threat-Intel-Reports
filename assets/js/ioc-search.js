@@ -113,9 +113,45 @@
       rows.join('') + more + withheldRows.join('') + moreW + none + '</ul>';
   }
 
+  /* --- URL state: ?q= ---------------------------------------------------------
+
+     A tool or a person can deep-link an indicator, or a short list, as
+     /ioc-feeds/?q=<indicator>, and the page lands with the search already run.
+     The QUERY STRING, not the hash: listing-filter.js owns the hash (its own
+     `q=` there is the card-title filter) and it preserves location.search
+     when it writes, so the two never overwrite each other. The box is mirrored
+     back into ?q= as the reader types (replaceState, never pushState, for the
+     same reason the filter gives: a history entry per keystroke would make the
+     back button walk through the typing) and the parameter is dropped when the
+     box is empty, so the URL in the bar is always the one to copy. Several
+     values travel comma- or newline-separated; the classifier splits on both. */
+  var hasHistory = !!(window.history && window.history.replaceState);
+
+  function readQuery() {
+    var m = /[?&]q=([^&#]*)/.exec(String(window.location.search || ''));
+    if (!m) return '';
+    // A hand-edited `%` the browser cannot decode reads as nothing, not a throw.
+    try { return decodeURIComponent(m[1].replace(/\+/g, ' ')); } catch (e) { return ''; }
+  }
+
+  function writeQuery() {
+    if (!hasHistory) return;
+    var loc = window.location;
+    var term = (input.value || '').trim();
+    var keep = String(loc.search || '').replace(/^\?/, '').split('&')
+      .filter(function (part) { return part && part.indexOf('q=') !== 0; });
+    if (term) keep.push('q=' + encodeURIComponent(term));
+    var want = loc.pathname + (keep.length ? '?' + keep.join('&') : '') + loc.hash;
+    if (want === loc.pathname + loc.search + loc.hash) return;
+    // A URL the history API refuses (file://, a sandboxed frame) must not stop
+    // the search itself working; the link is a convenience on top of it.
+    try { window.history.replaceState(null, '', want); } catch (e) { /* see above */ }
+  }
+
   function run() {
     var raw = (input.value || '').trim();
     clear.hidden = !raw;
+    writeQuery();
     if (!raw) { clearAll(''); return; }
 
     load().then(function (idx) {
@@ -217,6 +253,11 @@
   clear.addEventListener('click', function () {
     input.value = '';
     clearAll('');
+    writeQuery();
     input.focus();
   });
+
+  // A shared link lands searched rather than showing the full grid first.
+  var linked = readQuery();
+  if (linked) { input.value = linked; run(); }
 })();
