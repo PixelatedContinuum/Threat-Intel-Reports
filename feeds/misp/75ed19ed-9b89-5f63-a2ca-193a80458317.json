@@ -5,8 +5,8 @@
     "date": "2026-01-15",
     "threat_level_id": 1,
     "analysis": 2,
-    "timestamp": 1791580400,
-    "publish_timestamp": 1791580400,
+    "timestamp": 1791592898,
+    "publish_timestamp": 1791592898,
     "published": true,
     "Orgc": {
       "name": "The Hunters Ledger",
@@ -46,7 +46,7 @@
         "value": "https://the-hunters-ledger.com/hunting-detections/arsenal-237-lpe-exe-detections/",
         "to_ids": false,
         "comment": "Detection rules, The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592898
       },
       {
         "uuid": "7236d4ee-9c5d-5f3f-bc62-9f5384d999f8",
@@ -55,7 +55,7 @@
         "value": "https://the-hunters-ledger.com/ioc-feeds/arsenal-237-lpe-exe.json",
         "to_ids": false,
         "comment": "IOC feed (JSON), The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592898
       },
       {
         "uuid": "11e97b5d-0edc-5706-9f9d-1196611136f7",
@@ -64,7 +64,7 @@
         "value": "title: Named Pipe Impersonation Attack (lpe.exe)\nid: 3a0e534f-01ba-4ef6-bdac-99a3528c5f3b\nstatus: experimental\ndescription: >-\n  Detects creation of a named pipe referencing the Print Spooler service pipe\n  name (spoolss), used to stage a token-impersonation privilege-escalation\n  attempt. PipeName-only telemetry cannot correlate which process or API\n  sequence created the pipe, so this is a hunting lead rather than an alert;\n  pair with process-access telemetry for higher confidence.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-lpe-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-25'\ntags:\n    - attack.privilege-escalation\n    - attack.stealth\n    - attack.t1134.001\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: pipe_created\ndetection:\n    selection:\n        PipeName|contains: 'spoolss'\n    condition: selection\nfalsepositives:\n    - Legitimate Print Spooler activity on hosts with print services enabled (common)\nlevel: medium",
         "to_ids": false,
         "comment": "Named Pipe Impersonation Attack | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1134.001 | rule hash f43732aa | https://the-hunters-ledger.com/hunting-detections/arsenal-237-lpe-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592898,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -79,7 +79,7 @@
         "value": "title: Privilege Escalation via Token Impersonation\nid: 41794664-1101-4fbf-a117-c8c1a1f7f473\nstatus: experimental\ndescription: >-\n  Detects a token-impersonation privilege-escalation sequence: process-access\n  events targeting a SYSTEM-privileged process (winlogon.exe, lsass.exe,\n  services.exe, csrss.exe) paired with the OpenProcessToken, DuplicateTokenEx,\n  and ImpersonateLoggedOnUser API call trace, characteristic of\n  Arsenal-237 privilege-escalation wrappers.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-lpe-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-25'\ntags:\n    - attack.privilege-escalation\n    - attack.stealth\n    - attack.t1134.001\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: process_access\ndetection:\n    selection_process_access:\n        TargetImage|endswith:\n            - '\\winlogon.exe'\n            - '\\lsass.exe'\n            - '\\services.exe'\n            - '\\csrss.exe'\n        GrantedAccess:\n            - '0x1410'\n            - '0x1000'\n    selection_api:\n        CallTrace|contains:\n            - 'OpenProcessToken'\n            - 'DuplicateTokenEx'\n            - 'ImpersonateLoggedOnUser'\n    condition: selection_process_access and selection_api\nfalsepositives:\n    - Legitimate administrative or EDR tooling performing token operations against these processes (rare)\nlevel: high",
         "to_ids": true,
         "comment": "Privilege Escalation via Token Impersonation | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1134.001 | rule hash f30a7c4d | https://the-hunters-ledger.com/hunting-detections/arsenal-237-lpe-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592898,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -94,7 +94,7 @@
         "value": "title: Scheduled Task Created as SYSTEM\nid: 19fbc402-5876-4f9b-905b-b5452dc7d634\nstatus: experimental\ndescription: >-\n  Detects scheduled task creation with SYSTEM privileges from a\n  non-administrative process via direct use of schtasks.exe. Task names are\n  likely randomized at runtime, so detection anchors on the /ru SYSTEM\n  parameter rather than any specific task name.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-lpe-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-25'\ntags:\n    - attack.privilege-escalation\n    - attack.execution\n    - attack.persistence\n    - attack.t1053.005\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection:\n        Image|endswith: '\\schtasks.exe'\n        CommandLine|contains|all:\n            - '/create'\n            - '/ru'\n            - 'SYSTEM'\n    filter_admin:\n        User|contains:\n            - 'SYSTEM'\n            - 'Administrator'\n    condition: selection and not filter_admin\nfalsepositives:\n    - System administrators manually creating SYSTEM tasks (should be reviewed)\n    - Legitimate administrative scripts using schtasks.exe\nlevel: high",
         "to_ids": true,
         "comment": "Scheduled Task Created as SYSTEM | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1053.005 | rule hash f072f5cf | https://the-hunters-ledger.com/hunting-detections/arsenal-237-lpe-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592898,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -109,7 +109,7 @@
         "value": "title: UAC Bypass via Ms-Settings Registry Hijack (lpe.exe)\nid: 78ff8cac-3e71-42c5-9fdf-acdb038ce94a\nstatus: experimental\ndescription: >-\n  Detects fodhelper.exe launched with reg.exe or lpe.exe as its parent\n  process, the process-creation signature of the ms-settings registry-hijack\n  UAC bypass. fodhelper.exe is a Microsoft-signed LOLBIN rarely spawned by\n  reg.exe or by an unsigned executable.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-lpe-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-25'\ntags:\n    - attack.privilege-escalation\n    - attack.stealth\n    - attack.t1548.002\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection:\n        Image|endswith: '\\fodhelper.exe'\n        ParentImage|endswith:\n            - '\\reg.exe'\n            - '\\lpe.exe'\n    condition: selection\nfalsepositives:\n    - Legitimate software installation (extremely rare)\nlevel: high",
         "to_ids": true,
         "comment": "UAC Bypass via Ms-Settings Registry Hijack | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1548.002 | rule hash f19eadae | https://the-hunters-ledger.com/hunting-detections/arsenal-237-lpe-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592898,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -124,7 +124,7 @@
         "value": "title: WMIC Process Creation for Privilege Escalation (lpe.exe)\nid: 7e7d8199-93c4-4f53-ad05-84c4f3a08a96\nstatus: experimental\ndescription: >-\n  Detects WMIC being used to create a process via the \"process call create\"\n  syntax from a non-administrative, non-SYSTEM user, a known LOLBin technique\n  for local or remote process creation that this wrapper uses as one of its\n  five escalation paths. WMIC process creation is also common in legitimate\n  remote-administration and deployment tooling, so this is a hunting lead\n  rather than an alert.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-lpe-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-25'\ntags:\n    - attack.execution\n    - attack.t1047\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection:\n        Image|endswith: '\\wmic.exe'\n        CommandLine|contains|all:\n            - 'process'\n            - 'call'\n            - 'create'\n    filter_admin:\n        User|contains:\n            - 'SYSTEM'\n            - 'Administrator'\n    condition: selection and not filter_admin\nfalsepositives:\n    - Legitimate administrative scripts and RMM/deployment tooling using WMIC (common)\nlevel: medium",
         "to_ids": false,
         "comment": "WMIC Process Creation for Privilege Escalation | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1047 | rule hash c6b009e1 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-lpe-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592898,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -139,7 +139,7 @@
         "value": "/*\n   Yara Rule Set\n   Identifier: Arsenal-237-109.230.231.37-Malware-Repository\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule Arsenal237_LPE_Token_Manipulation {\n   meta:\n      description = \"Detects lpe.exe-class Arsenal-237 privilege-escalation wrappers via the full six-API token-theft sequence (process enumeration through impersonation) combined with references to at least two SYSTEM-privileged target processes.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-lpe-exe-detections/\"\n      date = \"2026-01-25\"\n      hash1 = \"c4dda7b5c5f6eab49efc86091377ab08275aa951d956a5485665954830d1267e\"\n      family = \"Arsenal-237-LPE-Wrapper\"\n      malware_type = \"Privilege-Escalation-Wrapper\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"b3e63cd7-eb13-5f0d-ac24-a89c0c56aa01\"\n   strings:\n      $api1 = \"CreateToolhelp32Snapshot\" ascii wide\n      $api2 = \"OpenProcessToken\" ascii wide\n      $api3 = \"DuplicateTokenEx\" ascii wide\n      $api4 = \"ImpersonateLoggedOnUser\" ascii wide\n      $api5 = \"Process32FirstW\" ascii wide\n      $api6 = \"Process32NextW\" ascii wide\n\n      $process1 = \"winlogon.exe\" ascii wide nocase\n      $process2 = \"lsass.exe\" ascii wide nocase\n      $process3 = \"services.exe\" ascii wide nocase\n      $process4 = \"csrss.exe\" ascii wide nocase\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 1MB and\n      all of ($api*) and\n      2 of ($process*)\n}",
         "to_ids": true,
         "comment": "Token Manipulation API Sequence | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1134.001 | rule hash d5b38436 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-lpe-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592898,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -154,7 +154,7 @@
         "value": "rule Arsenal237_LPE_Named_Pipe_PS_Connector {\n   meta:\n      description = \"Detects a PowerShell named-pipe client connector pattern (powershell.exe references co-occurring with the .NET NamedPipeClientStream class name), an alternate path to lpe.exe's native named-pipe token-impersonation API sequence. Broader and noisier than the native API sequence; treat as a triage lead, not an alert.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-lpe-exe-detections/\"\n      date = \"2026-01-25\"\n      hash1 = \"c4dda7b5c5f6eab49efc86091377ab08275aa951d956a5485665954830d1267e\"\n      family = \"Arsenal-237-LPE-Wrapper\"\n      malware_type = \"Privilege-Escalation-Wrapper\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"484ff6f5-ebbd-5e4b-8901-2f341ed1080b\"\n   strings:\n      $ps = \"powershell\" ascii wide nocase\n      $ps_pipe = \"NamedPipeClientStream\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 1MB and\n      $ps and $ps_pipe\n}",
         "to_ids": false,
         "comment": "PowerShell Named Pipe Client Connector | TIER: Hunting | robustness 1 | confidence LOW | ATT&CK T1134.001 | rule hash d95e7e79 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-lpe-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592898,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -169,7 +169,7 @@
         "value": "rule Arsenal237_LPE_Named_Pipe_Token_Theft {\n   meta:\n      description = \"Detects lpe.exe-class Arsenal-237 privilege-escalation wrappers performing named-pipe token impersonation: the CreateNamedPipeW, ConnectNamedPipe, and ImpersonateNamedPipeClient API sequence together with the pipe namespace prefix and a Print Spooler (spoolss) pipe reference.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-lpe-exe-detections/\"\n      date = \"2026-01-25\"\n      hash1 = \"c4dda7b5c5f6eab49efc86091377ab08275aa951d956a5485665954830d1267e\"\n      family = \"Arsenal-237-LPE-Wrapper\"\n      malware_type = \"Privilege-Escalation-Wrapper\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"0f7e11be-769c-5dfe-b6f0-80c143501fcd\"\n   strings:\n      $pipe1 = \"CreateNamedPipeW\" ascii wide\n      $pipe2 = \"ImpersonateNamedPipeClient\" ascii wide\n      $pipe3 = \"ConnectNamedPipe\" ascii wide\n      $pipe4 = \"\\\\\\\\.\\\\pipe\\\\\" ascii wide\n      $pipe5 = \"spoolss\" ascii wide nocase\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 1MB and\n      all of ($pipe*)\n}",
         "to_ids": true,
         "comment": "Named Pipe Token Impersonation API Sequence | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1134.001 | rule hash 57f252cb | https://the-hunters-ledger.com/hunting-detections/arsenal-237-lpe-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592898,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -184,7 +184,7 @@
         "value": "rule Arsenal237_LPE_Schtasks {\n   meta:\n      description = \"Detects lpe.exe-class Arsenal-237 privilege-escalation wrappers building a schtasks.exe create-then-delete SYSTEM task lifecycle: the schtasks invocation, task-name flag, /ru SYSTEM run-as-SYSTEM parameter, and self-cleanup delete, all co-occurring as command-line fragments.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-lpe-exe-detections/\"\n      date = \"2026-01-25\"\n      hash1 = \"c4dda7b5c5f6eab49efc86091377ab08275aa951d956a5485665954830d1267e\"\n      family = \"Arsenal-237-LPE-Wrapper\"\n      malware_type = \"Privilege-Escalation-Wrapper\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"89cb74a1-93b5-5838-90e5-802877519e40\"\n   strings:\n      $schtasks1 = \"schtasks\" ascii wide nocase\n      $schtasks2 = \"/create\" ascii wide nocase\n      $schtasks3 = \"/tn\" ascii wide nocase\n      $schtasks4 = \"/ru SYSTEM\" ascii wide nocase\n      $schtasks5 = \"/delete\" ascii wide nocase\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 1MB and\n      all of ($schtasks*)\n}",
         "to_ids": true,
         "comment": "Scheduled Task SYSTEM Escalation Lifecycle | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1053.005 | rule hash 57097020 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-lpe-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592898,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -199,7 +199,7 @@
         "value": "rule Arsenal237_LPE_UAC_Bypass {\n   meta:\n      description = \"Detects lpe.exe-class Arsenal-237 privilege-escalation wrappers via the ms-settings Shell Open command registry-hijack UAC bypass: the registry path, DelegateExecute marker, reg add/delete command verbs, and fodhelper.exe target, all co-occurring.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-lpe-exe-detections/\"\n      date = \"2026-01-25\"\n      hash1 = \"c4dda7b5c5f6eab49efc86091377ab08275aa951d956a5485665954830d1267e\"\n      family = \"Arsenal-237-LPE-Wrapper\"\n      malware_type = \"Privilege-Escalation-Wrapper\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"ec1c0013-93e9-5955-b94e-1cc409fe54d9\"\n   strings:\n      $reg1 = \"HKCU\\\\Software\\\\Classes\\\\ms-settings\\\\Shell\\\\Open\\\\command\" ascii wide nocase\n      $reg2 = \"DelegateExecute\" ascii wide\n      $reg3 = \"reg add\" ascii wide nocase\n      $reg4 = \"fodhelper.exe\" ascii wide nocase\n      $reg5 = \"reg delete\" ascii wide nocase\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 1MB and\n      all of ($reg*)\n}",
         "to_ids": true,
         "comment": "UAC Bypass via ms-settings Registry Hijack | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1548.002 | rule hash 10857f38 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-lpe-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592898,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -214,7 +214,7 @@
         "value": "rule Arsenal237_LPE_WMIC {\n   meta:\n      description = \"Detects WMIC process-creation command fragments (wmic, process, call, create) co-occurring as embedded strings, a broad, campaign-agnostic lead for the 'wmic process call create' LOLBin process-creation technique this wrapper uses as one of its five escalation paths.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-lpe-exe-detections/\"\n      date = \"2026-01-25\"\n      hash1 = \"c4dda7b5c5f6eab49efc86091377ab08275aa951d956a5485665954830d1267e\"\n      family = \"Arsenal-237-LPE-Wrapper\"\n      malware_type = \"Privilege-Escalation-Wrapper\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"0d20a570-6dfd-5817-ace4-4f2608e98c0d\"\n   strings:\n      $wmic1 = \"wmic\" ascii wide nocase\n      $wmic2 = \"process\" ascii wide nocase\n      $wmic3 = \"call\" ascii wide nocase\n      $wmic4 = \"create\" ascii wide nocase\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 1MB and\n      all of ($wmic*)\n}",
         "to_ids": false,
         "comment": "Generic WMIC Process Creation Combination | TIER: Hunting | robustness 1 | confidence LOW | ATT&CK T1047 | rule hash eedd9bd6 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-lpe-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592898,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",

@@ -5,8 +5,8 @@
     "date": "2026-05-25",
     "threat_level_id": 1,
     "analysis": 2,
-    "timestamp": 1791580400,
-    "publish_timestamp": 1791580400,
+    "timestamp": 1791592938,
+    "publish_timestamp": 1791592938,
     "published": true,
     "Orgc": {
       "name": "The Hunters Ledger",
@@ -110,7 +110,7 @@
         "value": "https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/",
         "to_ids": false,
         "comment": "Detection rules, The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592938
       },
       {
         "uuid": "9d928a07-4ccf-5624-871b-c2842b183696",
@@ -119,7 +119,7 @@
         "value": "https://the-hunters-ledger.com/ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json",
         "to_ids": false,
         "comment": "IOC feed (JSON), The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592938
       },
       {
         "uuid": "3c211b8d-a9f9-5b55-9f4e-f95aa20dac65",
@@ -128,7 +128,7 @@
         "value": "https://the-hunters-ledger.com/reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/",
         "to_ids": false,
         "comment": "Report, The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592938
       },
       {
         "uuid": "6abb2dc0-66ec-573b-8203-5934a35c6565",
@@ -137,7 +137,7 @@
         "value": "https://the-hunters-ledger.com/stix/turkish-arpa-openclaw-state-insurer-209.38.205.158.json",
         "to_ids": false,
         "comment": "STIX 2.1 bundle, The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592938
       },
       {
         "uuid": "97b5cc24-34f5-539e-b64f-2fad91ee85ce",
@@ -146,7 +146,7 @@
         "value": "2736b72ed047fb4d593d2e919c58b25db1a669faa51e630360c2825409bf4011",
         "to_ids": true,
         "comment": "sha256: 2736b72ed047fb4d593d2e919c58b25db1a669faa51e630360c2825409bf4011. Operator-authored Python topology DB analysis script; flagged IndentationError-prone (AI Copy-Paste Indentation Decay sub-signature) [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592938
       },
       {
         "uuid": "46cda99f-a431-573b-bd4d-7781b2de1eff",
@@ -155,7 +155,7 @@
         "value": "29d1221c9e305374a78d17c01ea20a211d59427f789ed01e653341db51bf4c06",
         "to_ids": true,
         "comment": "sha256: 29d1221c9e305374a78d17c01ea20a211d59427f789ed01e653341db51bf4c06. Operator-authored Python API patch script (Hunt classifier flagged MALICIOUS; Turkish comments) [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592938
       },
       {
         "uuid": "dc1ac517-1d95-5721-9d17-4784bf7e97a3",
@@ -164,7 +164,7 @@
         "value": "2dca67a8be5cd89863ab60a2351a553954afd641c8e6f6219785707276f0e8e3",
         "to_ids": true,
         "comment": "sha256: 2dca67a8be5cd89863ab60a2351a553954afd641c8e6f6219785707276f0e8e3. Operator-authored Python underlying correlations API implementation [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592938
       },
       {
         "uuid": "2c384468-efb5-523a-9efe-80785cf79a50",
@@ -173,7 +173,7 @@
         "value": "402422a918dc037e00aea323e2ab1ca3e758459d4cd5e620a4433e3c346c52f8",
         "to_ids": true,
         "comment": "sha256: 402422a918dc037e00aea323e2ab1ca3e758459d4cd5e620a4433e3c346c52f8. Operator-authored Python DB schema patch; only file in cluster with try/except defensive pattern [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592938
       },
       {
         "uuid": "ec02d030-b360-5c62-a17c-57881d71a938",
@@ -182,7 +182,7 @@
         "value": "5a58c88c64e3e54c874645fc5b32f12163e1901fe1b3fb7a3bc1d52c434b1c62",
         "to_ids": true,
         "comment": "sha256: 5a58c88c64e3e54c874645fc5b32f12163e1901fe1b3fb7a3bc1d52c434b1c62. Operator-authored Python API patch script (re.replace variant) [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592938
       },
       {
         "uuid": "7f8d542a-6dfc-50ac-acaa-b5fda90803e0",
@@ -191,7 +191,7 @@
         "value": "65d2eb26067c3df4b139b02145bdba2065be5a403f38ad096f886230b41fda9b",
         "to_ids": true,
         "comment": "sha256: 65d2eb26067c3df4b139b02145bdba2065be5a403f38ad096f886230b41fda9b. Operator-authored Python cross-source correlation engine v3; opens with operator self-branding docstring ARPA Korelasyon Motoru v3 - Temporal Focus [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592938
       },
       {
         "uuid": "3e1f0bc2-f65c-5ff0-9c29-13aeb05007af",
@@ -200,7 +200,7 @@
         "value": "6d4eb14e08e742ce6adabc355855c5e80c6b84e6969b0a3cc58367e0f4babfd0",
         "to_ids": true,
         "comment": "sha256: 6d4eb14e08e742ce6adabc355855c5e80c6b84e6969b0a3cc58367e0f4babfd0. Operator-authored Python API patch script (variant 1); emits emoji-in-output bleed [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592938
       },
       {
         "uuid": "c7d9d762-1d44-5cc3-baa2-f8d2191d8286",
@@ -209,7 +209,7 @@
         "value": "9928277dbbfbdf95a5f4e98ef99e55b7d87093982dbdd298be16b232bfc39c77",
         "to_ids": true,
         "comment": "sha256: 9928277dbbfbdf95a5f4e98ef99e55b7d87093982dbdd298be16b232bfc39c77. Operator-authored Python event collector v4 (iteration marker); same the victim organization JWT [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592938
       },
       {
         "uuid": "7b3fa92b-b88b-5266-8d86-636316176a71",
@@ -218,7 +218,7 @@
         "value": "a05b40ceb17e6277ca39f99433910c359764be0e0a42377686abb7fb1e7da410",
         "to_ids": true,
         "comment": "sha256: a05b40ceb17e6277ca39f99433910c359764be0e0a42377686abb7fb1e7da410. Operator-authored Python correlation DB query script; Turkish output SON 5 KORELASYON [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592938
       },
       {
         "uuid": "26d1b146-9dc8-51c9-aceb-cf99cba9a306",
@@ -227,7 +227,7 @@
         "value": "a4b39f13d17ae3ff7a0adb2cf1df459a72425513f392a1d8fc469f8f2e123de5",
         "to_ids": true,
         "comment": "sha256: a4b39f13d17ae3ff7a0adb2cf1df459a72425513f392a1d8fc469f8f2e123de5. Operator-authored Python Flask API routes for correlations/events; Turkish comments throughout [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592938
       },
       {
         "uuid": "862b3bb6-c562-5085-a274-38fadb28bfc7",
@@ -236,7 +236,7 @@
         "value": "c66a2561fdacb5997c4fa0501da8ef1639d429d22668bfba7cb2f5f9e97a2a6e",
         "to_ids": true,
         "comment": "sha256: c66a2561fdacb5997c4fa0501da8ef1639d429d22668bfba7cb2f5f9e97a2a6e. Operator-authored Python API patch script (minimal variant) [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592938
       },
       {
         "uuid": "46863cae-9eb5-51cb-ab88-45bfcafce028",
@@ -245,7 +245,7 @@
         "value": "ee5428e9b47fd102d27d3dcc804b10512100acd21399969efe39e201e61cbf79",
         "to_ids": true,
         "comment": "sha256: ee5428e9b47fd102d27d3dcc804b10512100acd21399969efe39e201e61cbf79. Operator-authored Python Instana topology collector; hardcoded the victim organization JWT + production URL; Turkish docstring [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592938
       },
       {
         "uuid": "ad04c55a-bbaf-5997-98fa-a71538353ec1",
@@ -254,7 +254,7 @@
         "value": "docs.openclaw.ai",
         "to_ids": true,
         "comment": "domain: docs.openclaw.ai. OpenClaw documentation domain [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592938
       },
       {
         "uuid": "82d6026d-5fd3-5bf5-9eff-e7a65d792386",
@@ -263,7 +263,7 @@
         "value": "lightmake.site",
         "to_ids": true,
         "comment": "domain: lightmake.site. OpenClaw developer brand domain (vendor identifier) [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592938
       },
       {
         "uuid": "1e317b76-4667-55ab-9a62-04e5135d6546",
@@ -272,7 +272,7 @@
         "value": "openclaw.ai",
         "to_ids": true,
         "comment": "domain: openclaw.ai. OpenClaw distribution domain, operator framework provider; ecosystem watch for related operators using same framework | OpenClaw is also used legitimately by developers, so this domain carries a MEDIUM false-positive risk. [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592938
       },
       {
         "uuid": "45c7fd26-cc26-5b7d-b723-8c8bc4d9e634",
@@ -281,7 +281,7 @@
         "value": "skillhub-1388575217.cos.ap-guangzhou.myqcloud.com",
         "to_ids": true,
         "comment": "domain: skillhub-1388575217.cos.ap-guangzhou.myqcloud.com. Tencent COS bucket, OpenClaw shared skill marketplace; egress from non-developer environments is OpenClaw-presence signal | MEDIUM, legitimate Tencent Cloud Object Storage bucket; also used by OpenClaw developers [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592938
       },
       {
         "uuid": "4bd430e2-aae3-5008-8f4a-1ae8f7aeb79d",
@@ -290,7 +290,7 @@
         "value": "http://209.38.205.158:8090/",
         "to_ids": true,
         "comment": "url: http://209.38.205.158:8090/. Operator ARPA v2.1.0 dashboard; publicly reachable; serves /data/ directory listing with 780 entries of exfiltrated the victim organization data + /logs/ directory listing [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592938
       },
       {
         "uuid": "02786bb8-3287-5417-bed8-01b30af4019c",
@@ -299,7 +299,7 @@
         "value": "http://209.38.205.158:8095/api/topology/unified",
         "to_ids": true,
         "comment": "url: http://209.38.205.158:8095/api/topology/unified. Operator unified topology endpoint; degraded to 404 on all paths as of 2026-05-24 but port still TCP-accepting [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592938
       },
       {
         "uuid": "12a60854-5cfe-5171-a7cd-c588e1ac3382",
@@ -308,7 +308,7 @@
         "value": "http://209.38.205.158:8096/api/ingest/instana",
         "to_ids": true,
         "comment": "url: http://209.38.205.158:8096/api/ingest/instana. Operator ARPA C2 ingestion endpoint; HTTP cleartext; accepts Instana event payloads in operator normalized schema; no authentication [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592938
       },
       {
         "uuid": "33721fcd-3546-52a9-8296-0aac8591daf6",
@@ -317,7 +317,7 @@
         "value": "https://github.com/MehmetARPA/ARPA",
         "to_ids": true,
         "comment": "url: https://github.com/MehmetARPA/ARPA. Operator public GitHub repository; same project codename as embedded in operator code; identity artifact. Account suspended by GitHub T&S 2026-05-25, URL now returns HTTP 404; preserve as evidence IOC [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592938
       },
       {
         "uuid": "7a710d75-ce0e-5c64-85e4-c69ee77b5d18",
@@ -326,7 +326,7 @@
         "value": "209.38.205.158",
         "to_ids": true,
         "comment": "ipv4: 209.38.205.158. Operator C2 host (DigitalOcean); ARPA platform; ports 8090 dashboard, 8095 degraded topology, 8096 ingestion endpoint, 8098 closed since 2026-03-14 [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592938
       },
       {
         "uuid": "4bd4c85b-a628-5736-bca7-1d524c7c6481",
@@ -335,7 +335,7 @@
         "value": "alert dns $HOME_NET any -> any any (msg:\"THL HUNT Turkish-ARPA-State-Insurer DNS Query to Victim Instana OCP Tenant (Potential Unauthorized Collector Activity)\"; dns.query; content:\"ocpinstana.[victim-domain].com.tr\"; nocase; threshold:type limit,track by_src,count 1,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/; classtype:policy-violation; sid:9300601; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)",
         "to_ids": false,
         "comment": "DNS Query Egress to the Victim Organization Instana Tenant | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1071.001, T1078 | rule hash 135486f9 | https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592938,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -350,7 +350,7 @@
         "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT Turkish-ARPA-State-Insurer HTTP POST to ARPA Instana Ingestion Endpoint (Observability Data Exfiltration)\"; http.method; content:\"POST\"; http.uri; content:\"/api/ingest/instana\"; startswith; flow:to_server,established; reference:url,the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/; classtype:trojan-activity; sid:9001005; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)",
         "to_ids": true,
         "comment": "HTTP POST to ARPA Instana Ingestion Endpoint (IP-Agnostic) | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1020, T1041, T1071.001 | rule hash cd816ae5 | https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592938,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -365,7 +365,7 @@
         "value": "title: Instana Stolen JWT or Long-Lived API Token Detected in Audit Log\nid: d4398d0e-e7ea-4b8d-a838-8b2a760fc468\nstatus: experimental\ndescription: >-\n  Detects use of the specific stolen the victim organization Instana JWT (jti 022a1b74) in API calls,\n  or flags any Instana API token with an expiration lifetime exceeding 1 year — a governance\n  defect that enabled the Turkish ARPA operator to maintain persistent access over a multi-year\n  window using a single stolen credential. This is not an IBM Instana CVE; it is a victim-side\n  token management defect. Sigma rule targets Instana audit log telemetry exported to SIEM.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.credential-access\n    - attack.stealth\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.initial-access\n    - attack.t1078\n    - attack.t1552.001\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    product: ibm_instana\n    service: audit_log\ndetection:\n    selection_stolen_jti:\n        jwt_jti: '022a1b74-2332-4df5-a76b-60225ffa7ae3'\n    selection_stolen_tenant:\n        tenant: '[victim-tenant]'\n    filter_internal_source:\n        source_ip|cidr:\n            - '10.0.0.0/8'\n            - '172.16.0.0/12'\n            - '192.168.0.0/16'\n    condition: selection_stolen_jti or (selection_stolen_tenant and not filter_internal_source)\nfalsepositives:\n    - Authorized Instana admin tools accessing the tenant from external IPs (verify against operations team allow-list)\n    - Token rotation scripts running from external orchestration infrastructure\nlevel: high",
         "to_ids": true,
         "comment": "Sigma Rule 6: Long-Lived Instana JWT Detected in Audit Logs (Governance Baseline) | TIER: Detection | robustness 2 | confidence HIGH (for the specific stolen JWT); MODERATE (for the generic long-lived-token governance branch) | ATT&CK T1078, T1552.001 | rule hash ab554a27 | https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592938,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -380,7 +380,7 @@
         "value": "title: Non-Splunk Process Connecting to Localhost Port 8089 on Enterprise Host\nid: 47e5169f-572c-4d87-9fda-578a23e58beb\nstatus: experimental\ndescription: >-\n  Detects processes other than Splunk (which legitimately uses port 8089 for management)\n  initiating TCP connections to localhost port 8089 on enterprise hosts. Port 8089\n  is the insider-side tunnel bind point in the Turkish ARPA operator's reverse SSH tunnel\n  architecture: traffic from localhost:8089 on the insider's machine is forwarded through\n  the SSH reverse tunnel to the operator's listener on port 18080 at 209.38.205.158.\n  Non-Splunk processes binding or connecting to this port in an enterprise context indicate\n  tunnel activity, but the port is not unique to this campaign and requires triage.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.command-and-control\n    - attack.t1572\n    - attack.lateral-movement\n    - attack.t1021.004\n    - detection.emerging-threats\nlogsource:\n    category: network_connection\n    product: windows\ndetection:\n    selection:\n        DestinationIp:\n            - '127.0.0.1'\n            - '::1'\n        DestinationPort: 8089\n    filter_splunk:\n        Image|endswith:\n            - '\\Splunk\\bin\\splunkd.exe'\n            - '\\Splunk\\bin\\splunk.exe'\n            - '\\SplunkUniversalForwarder\\bin\\splunkd.exe'\n            - '\\SplunkUniversalForwarder\\bin\\splunk.exe'\n            - '/opt/splunk/bin/splunkd'\n            - '/opt/splunk/bin/splunk'\n            - '/opt/splunkforwarder/bin/splunkd'\n            - '/opt/splunkforwarder/bin/splunk'\n    filter_razer:\n        Image|contains: '\\Razer\\RazerAppEngine\\'\n        Image|endswith: '\\razerappengine.exe'\n    condition: selection and not 1 of filter_*\nfalsepositives:\n    - >-\n        Razer App Engine (razerappengine.exe), which binds an unrelated local IPC service to port 8089.\n        Excluded above. Measured at 4,402 alerts over 14 days from a single host with no tunnel present.\n        Razer peripheral software is stock consumer tooling, so this collision occurs on any fleet that\n        permits the hardware.\n    - >-\n        Any other vendor or line-of-business software that binds port 8089 for its own local IPC. The port\n        is a Splunk convention, not a reservation, so this class is open-ended and the exclusion list will\n        need extending as new collisions are observed.\n    - Custom internal web services or developer tooling binding to port 8089 (verify against IT asset management)\n    - Other monitoring agents that use 8089 as a secondary management port\n    - >-\n        A single hit with no corresponding SSH, PuTTY or Plink reverse-tunnel establishment on the same host\n        (Sigma rule d49b3f9d-31e8-4ed8-8c62-87aba3aedd66). Treat as informational until corroborated.\nlevel: low",
         "to_ids": false,
         "comment": "Sigma Rule 10: Non-Splunk Process Connecting to Localhost Port 8089 | TIER: Hunting | robustness 1 | confidence MODERATE — port 8089 is not uniquely operator-specific. | ATT&CK T1572, T1021.004 | rule hash 571b7217 | https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592938,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -395,7 +395,7 @@
         "value": "title: Observability Platform API Authentication Event (Cross-Source Burst Building Block)\nid: b5756186-42bf-480c-b343-423a35d27336\nstatus: experimental\ndescription: >-\n  Detects an authentication event against one of four enterprise observability platforms\n  (IBM Instana, SolarWinds Orion, Zabbix, VMware Aria). This is a single-event building block:\n  the Turkish ARPA operator's Observability-Tool Reverse Pipeline TTP is defined by the SAME\n  source IP authenticating against 2 or more of these platforms within a 10-minute window,\n  which requires cross-event correlation that this per-event Sigma rule cannot itself express.\n  Deploy alongside a SIEM-native correlation counting distinct EventSource values per source IP\n  within a 10-minute window; a single match on this rule alone is common and not indicative of\n  malicious activity. (Corrected from the original rule, whose condition ANDed together four\n  selections that each require a different, mutually exclusive EventSource value on the SAME\n  event record — logic that could never evaluate true on any single log event.)\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.collection\n    - attack.t1119\n    - attack.credential-access\n    - attack.discovery\n    - attack.t1046\n    - detection.emerging-threats\nlogsource:\n    product: generic\n    service: observability_audit\ndetection:\n    selection_instana:\n        EventSource: 'ibm_instana'\n        EventType: 'api_authentication'\n    selection_solarwinds:\n        EventSource: 'solarwinds_orion'\n        EventType: 'api_authentication'\n    selection_zabbix:\n        EventSource: 'zabbix'\n        EventType: 'api_login'\n    selection_vmware_aria:\n        EventSource: 'vmware_aria'\n        EventType: 'api_authentication'\n    condition: 1 of selection_*\nfalsepositives:\n    - Legitimate SIEM/SOAR platforms collecting from multiple APM sources via centralized service accounts — a single hit is common and requires the companion cross-source correlation before treating as suspicious\n    - Any single legitimate authentication event to one of these platforms — this rule is a building block and should not be alerted on standalone\nlevel: low",
         "to_ids": false,
         "comment": "Sigma Rule 7: Observability Platform Authentication Event (Cross-Source Burst Indicator) | TIER: Hunting | robustness 1 | confidence MODERATE — requires SIEM correlation across multiple observability platform audit feeds to realize the full novel-TTP detection value. | ATT&CK T1078, T1119, T1046 | rule hash 6eb36137 | https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592938,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -410,7 +410,7 @@
         "value": "title: Operator-Supplied SSH Key File Created in User SSH Directory\nid: f9b8ab33-5436-4f3a-a996-f737e54a3d37\nstatus: experimental\ndescription: >-\n  Detects creation of the Turkish ARPA operator-supplied SSH key files (rca_key.pem for\n  OpenSSH, rca_key.ppk for PuTTY) in any Windows user's .ssh directory. The operator\n  distributed these specific key files to the victim-side insider (the victim organization Windows\n  AD user [employee ID — suppressed]) as part of the tunnel-deployment toolkit documented in the operator's\n  Turkish-language insider-recruitment handoff documents. Presence of these filenames in\n  any user's .ssh directory indicates insider toolkit deployment regardless of the containing\n  user account.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1098.004\n    - attack.command-and-control\n    - attack.t1572\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: file_event\n    product: windows\ndetection:\n    selection:\n        TargetFilename|contains: '\\.ssh\\'\n        TargetFilename|endswith:\n            - '\\rca_key.pem'\n            - '\\rca_key.ppk'\n    condition: selection\nfalsepositives:\n    - Legitimate administrators who happen to name their SSH keys rca_key (verify key fingerprint and origin against CA records)\nlevel: high",
         "to_ids": true,
         "comment": "Sigma Rule 9: Operator-Supplied SSH Key File in User `.ssh` Directory | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1098.004, T1572 | rule hash 5994ec3c | https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592938,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -425,7 +425,7 @@
         "value": "title: Outbound HTTPS to the Victim Organization OCP Instana Tenant\nid: 024cd785-789d-4a99-8098-439f87c1df17\nstatus: experimental\ndescription: >-\n  Detects outbound HTTPS connections to the the victim organization OCP-hosted Instana tenant\n  wildcard domain (*.ocpinstana.[victim-domain].com.tr). The Turkish ARPA operator harvested\n  victim observability data from this endpoint using a stolen 10-year-lifetime JWT. This\n  selection has no host-based filter — it fires identically for designated Instana operations\n  hosts and for unauthorized hosts — so hits must be triaged against the operations team\n  allow-list before escalation. Scoped to the victim organization's own environment; the\n  underlying hostname is excluded from the public IOC feed per the campaign's disclosure policy.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.command-and-control\n    - attack.t1071.001\n    - attack.stealth\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.initial-access\n    - attack.t1078\n    - detection.emerging-threats\nlogsource:\n    category: network_connection\n    product: windows\ndetection:\n    selection:\n        DestinationHostname|endswith: '.ocpinstana.[victim-domain].com.tr'\n        DestinationPort: 443\n    condition: selection\nfalsepositives:\n    - Designated Instana operations team hosts performing authorized API queries — this rule does not distinguish them from unauthorized hosts and requires analyst triage against the allow-list\n    - Automated monitoring tools with legitimate access to the Instana tenant\nlevel: medium",
         "to_ids": false,
         "comment": "Sigma Rule 2: Outbound HTTPS to the Victim Organization Instana Tenant | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1071.001, T1078 | rule hash 6432a4e0 | https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592938,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -440,7 +440,7 @@
         "value": "title: PowerShell Instana API Call with Stored JWT Token from Unauthorized Host\nid: ba31534e-e868-47fc-bfcd-4c5a4ce0b85d\nstatus: experimental\ndescription: >-\n  Detects PowerShell processes invoking the Instana API endpoint for a specific OCP-hosted\n  tenant with a stored JWT bearer token and certificate validation disabled (-SkipCertificateCheck).\n  This pattern matches the Turkish ARPA operator's victim-side collector (instana_local_collector.ps1)\n  targeting the the victim organization Instana tenant. Any host not designated as an Instana operations\n  system triggering this pattern should be treated as a true positive for credential-based\n  observability data exfiltration.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - attack.credential-access\n    - attack.t1552.001\n    - attack.command-and-control\n    - attack.t1071.001\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_ps:\n        Image|endswith:\n            - '\\powershell.exe'\n            - '\\pwsh.exe'\n    selection_instana:\n        CommandLine|contains:\n            - 'ocpinstana'\n            - 'api/ingest/instana'\n    selection_flags:\n        CommandLine|contains:\n            - '-SkipCertificateCheck'\n    condition: selection_ps and selection_instana and selection_flags\nfalsepositives:\n    - Legitimate Instana operations team scripts that use -SkipCertificateCheck for OCP self-signed certificates\n    - Authorized PowerShell monitoring automation targeting the same tenant endpoint\nlevel: high",
         "to_ids": true,
         "comment": "Sigma Rule 1: PowerShell Process Invoking Instana API with Stored JWT Bearer Token | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1059.001, T1552.001, T1071.001 | rule hash b8127a1c | https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592938,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -455,7 +455,7 @@
         "value": "title: PuTTY Saved Session Created with ARPA Tunnel Naming Convention\nid: 785967aa-4fba-4679-8209-53c0f22b0631\nstatus: experimental\ndescription: >-\n  Detects creation of PuTTY saved sessions in the Windows registry with operator-distinctive\n  naming patterns. The Turkish ARPA operator instructed the victim-side insider to create a\n  PuTTY saved session named 'ARPA_Tunnel' targeting operator VPS 209.38.205.158 with\n  operator-supplied private key (rca_key.ppk). Registry creation of a PuTTY session named\n  ARPA_Tunnel or containing the operator IP is a definitive indicator of the insider\n  deployment phase of this campaign.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.command-and-control\n    - attack.t1572\n    - attack.lateral-movement\n    - attack.t1021.004\n    - detection.emerging-threats\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection_putty_path:\n        TargetObject|contains: '\\Software\\SimonTatham\\PuTTY\\Sessions\\'\n    selection_arpa_session:\n        TargetObject|contains: 'ARPA_Tunnel'\n    condition: selection_putty_path and selection_arpa_session\nfalsepositives:\n    - Legitimate administrators creating PuTTY sessions for authorized remote management with similar names (verify session destination and key file)\nlevel: high",
         "to_ids": true,
         "comment": "Sigma Rule 5: PuTTY Saved Session Created with Tunnel or ARPA Name | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1572, T1021.004 | rule hash b3103e75 | https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592938,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -470,7 +470,7 @@
         "value": "title: Rapid Instana Topology API Enumeration Requests from Single Source\nid: 43f7b91b-3870-4bd1-93c2-d364c8504a2e\nstatus: experimental\ndescription: >-\n  Detects requests to IBM Instana topology and event APIs, the endpoints targeted by the\n  Turkish ARPA operator's multi-worker polling pattern. A single request is not by itself\n  anomalous; the operator's ARPA ETL platform runs 5 parallel systemd workers each polling\n  the Instana API at 5-minute cadence, producing a burst that exceeds 10 requests per minute\n  from a single source IP — well above normal interactive or single-agent query rates. This\n  rule surfaces the underlying event for rate-based correlation in the SIEM layer — deploy\n  alongside a per-source-IP request-rate threshold (10+/min) since Sigma's non-correlation\n  rule format cannot itself express a count-over-time aggregation.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.collection\n    - attack.t1119\n    - attack.t1213\n    - attack.discovery\n    - attack.t1046\n    - detection.emerging-threats\nlogsource:\n    product: ibm_instana\n    service: api_access_log\ndetection:\n    selection:\n        RequestPath|startswith:\n            - '/api/events'\n            - '/api/topology'\n            - '/api/applications'\n    condition: selection\nfalsepositives:\n    - Authorized Instana integrations with high query frequency (verify against operations team allow-list)\n    - Load testing or API validation tooling during maintenance windows\n    - Any single legitimate topology or event API query — this rule requires rate-based correlation (10+ requests/min from one source IP) to distinguish enumeration activity from normal API use\nlevel: medium",
         "to_ids": false,
         "comment": "Sigma Rule 8: Rapid Instana Topology API Enumeration from Single Source | TIER: Hunting | robustness 1 | confidence MODERATE — a single request is not by itself anomalous. | ATT&CK T1046, T1213, T1119 | rule hash 53c05081 | https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592938,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -485,7 +485,7 @@
         "value": "title: Reverse SSH Tunnel Established from Windows Host to ARPA Operator Infrastructure\nid: 6465d373-414d-461d-8624-11153cc64d9c\nstatus: experimental\ndescription: >-\n  Detects the establishment of a reverse SSH tunnel from a victim-side Windows host to the\n  Turkish ARPA operator's DigitalOcean VPS (209.38.205.158). The operator provided the\n  victim-side insider (Windows AD user [employee ID — suppressed]) with SSH keys (rca_key.pem / rca_key.ppk)\n  and instructions to deploy -R 18080:localhost:8089 tunnels. This gives the operator live\n  network access inside the victim's perimeter. SSH with reverse-forwarding flags initiated\n  from an enterprise Windows workstation to any external IP is abnormal; the specific\n  operator IP makes this a definitive true positive.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.command-and-control\n    - attack.t1572\n    - attack.lateral-movement\n    - attack.t1021.004\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1098.004\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_ssh:\n        Image|endswith:\n            - '\\ssh.exe'\n            - '\\putty.exe'\n            - '\\plink.exe'\n    selection_tunnel:\n        CommandLine|contains:\n            - '-R 18080'\n            - '18080:localhost:8089'\n            - '209.38.205.158'\n    selection_arpa_session:\n        CommandLine|contains:\n            - 'ARPA_Tunnel'\n            - 'rca_key'\n    condition: selection_ssh and (selection_tunnel or selection_arpa_session)\nfalsepositives:\n    - Authorized developer tunneling tools with similar flag patterns (verify against endpoint management)\n    - Legitimate reverse-tunnel software for remote support (verify endpoint ownership and destination IP)\nlevel: high",
         "to_ids": true,
         "comment": "Sigma Rule 4: Reverse SSH Tunnel Registration from Windows AD User Host to Operator IP | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1572, T1021.004, T1098.004 | rule hash c09e0307 | https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592938,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -500,7 +500,7 @@
         "value": "title: SSH Reverse Tunnel Established from Enterprise AD-Joined Windows Workstation\nid: d49b3f9d-31e8-4ed8-8c62-87aba3aedd66\nstatus: experimental\ndescription: >-\n  Detects SSH or PuTTY processes on enterprise AD-joined Windows workstations establishing\n  reverse tunnel connections (-R flag) to external IP addresses. In the Turkish ARPA\n  operator campaign, an insider (Windows AD user [employee ID — suppressed]) was supplied with operator-provided\n  SSH keys and instructions to establish reverse tunnels from inside the victim organization's\n  network to 209.38.205.158:18080. Reverse SSH tunnels from enterprise workstations to\n  external IPs are a hunting-grade indicator of insider-facilitated external access\n  regardless of the specific destination IP, but require triage against authorized\n  developer tunneling use.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.command-and-control\n    - attack.t1572\n    - attack.lateral-movement\n    - attack.t1021.004\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_ssh_tools:\n        Image|endswith:\n            - '\\ssh.exe'\n            - '\\putty.exe'\n            - '\\plink.exe'\n    selection_reverse_flag:\n        CommandLine|contains:\n            - ' -R '\n    filter_authorized_infra:\n        CommandLine|contains:\n            - '10.'\n            - '172.'\n            - '192.168.'\n    condition: selection_ssh_tools and selection_reverse_flag and not filter_authorized_infra\nfalsepositives:\n    - Authorized developers using reverse SSH tunnels for remote development (verify against IT-authorized tunneling policy and destination IP allow-list)\n    - Remote support tools using SSH tunneling to authorized jump hosts\nlevel: medium",
         "to_ids": false,
         "comment": "Sigma Rule 12: Insider Deploying Outbound SSH Tunnel from Enterprise AD-Joined Workstation | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1572, T1021.004 | rule hash 3c310546 | https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592938,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -515,7 +515,7 @@
         "value": "title: Systemd Unit File Created with ARPA Platform Service Naming Convention\nid: 4c27b8f2-a383-4cf0-a20a-21f8681231fa\nstatus: experimental\ndescription: >-\n  Detects creation of systemd unit files matching the Turkish ARPA operator's distinctive\n  arpa-* naming pattern in /etc/systemd/system/. The operator deployed five service units\n  (arpa-autolearn, arpa-continuous, arpa-daemon, arpa-instana-api, arpa-parallel) to persist\n  the ARPA observability-harvester platform across reboots. This naming pattern has not been\n  observed in legitimate software in any known deployment context. File creation events matching\n  this pattern on any Linux host are high-confidence indicators of ARPA platform deployment.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1543.002\n    - attack.execution\n    - attack.t1569.002\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: linux\ndetection:\n    selection:\n        TargetFilename|startswith: '/etc/systemd/system/arpa-'\n        TargetFilename|endswith: '.service'\n    condition: selection\nfalsepositives:\n    - Custom in-house monitoring software using the arpa- service name prefix (unlikely; verify with IT asset management)\n    - Legitimate open-source software with arpa- prefixed services (no known examples as of 2026-05-26)\nlevel: high",
         "to_ids": true,
         "comment": "Sigma Rule 3: Systemd Unit Creation Matching `arpa-*` Naming Pattern | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1543.002, T1569.002 | rule hash d4d4ee8f | https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592938,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -530,7 +530,7 @@
         "value": "/*\n   Yara Rule Set\n   Identifier: Turkish-ARPA-OpenClaw-State-Insurer-209.38.205.158\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule MAL_PowerShell_Instana_Local_Collector_Family {\n   meta:\n      description = \"Detects the Turkish ARPA operator's victim-side PowerShell collector that exfiltrates IBM Instana APM events from the victim organization's OCP-hosted Instana tenant to operator C2 at 209.38.205.158. Indicators: hardcoded victim Instana endpoint, stolen JWT delivery, Turkish-language operational comments, and POST to operator ARPA ingestion endpoint.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\"\n      date = \"2026-05-26\"\n      family = \"ARPA-observability-harvester\"\n      malware_type = \"observability-credential-harvester\"\n      campaign = \"Turkish-ARPA-State-Insurer-209.38.205.158\"\n      id = \"8fd415cd-73c0-5027-b5e3-be299bbec061\"\n   strings:\n      $victim_endpoint = \"ocpinstana.[victim-domain].com.tr\" ascii wide\n      $operator_c2 = \"api/ingest/instana\" ascii wide fullword\n      $skip_cert = \"-SkipCertificateCheck\" ascii wide fullword\n      $turkish_comment = \"Bu script local Windows makinede\" ascii wide\n      $arpa_server = \"ARPA sunucusuna gonderiliyor\" ascii wide\n      $event_schema = \"entity_type\" ascii wide fullword\n   condition:\n      filesize < 50KB and\n      $victim_endpoint and $operator_c2 and $skip_cert and\n      (1 of ($turkish_comment, $arpa_server) or $event_schema)\n}",
         "to_ids": true,
         "comment": "Rule 1: PowerShell Instana Local Collector | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1059.001, T1552.001, T1020, T1071.001 | rule hash fc279909 | https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592938,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -545,7 +545,7 @@
         "value": "rule MAL_Markdown_ARPA_OperatorNote_Family {\n   meta:\n      description = \"Detects Turkish ARPA operator-authored operational Markdown notes (GERCEK_API_BULUNDU.md, INSTANA_INTEGRATION_SUMMARY.md class). Operator documents the discovery of victim Instana endpoints, integration steps, and references the public MehmetARPA/ARPA GitHub repository. Turkish-language operational narrative combined with victim-specific API references is operator-distinctive.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\"\n      date = \"2026-05-26\"\n      family = \"ARPA-observability-harvester\"\n      malware_type = \"operator-ops-note\"\n      campaign = \"Turkish-ARPA-State-Insurer-209.38.205.158\"\n      id = \"3369e5c8-06a2-5589-87c2-e26074c0dca3\"\n   strings:\n      $gercek = \"GERCEK_API_BULUNDU\" ascii wide\n      $github_ref = \"MehmetARPA/ARPA\" ascii wide\n      $instana_summary = \"INSTANA_INTEGRATION_SUMMARY\" ascii wide\n      $instana_port = \"INSTANA_PORT_TEST\" ascii wide\n      $victim_ref = \"[victim-tenant]\" ascii wide nocase\n      $api_token_label = \"apiToken\" ascii wide fullword\n      $turkish_label = \"Instana API Test\" ascii wide\n   condition:\n      filesize < 200KB and\n      ($gercek or $instana_summary or $github_ref or $instana_port) and\n      ($victim_ref or $api_token_label or $turkish_label)\n}",
         "to_ids": true,
         "comment": "Rule 7: ARPA Operator Ops Notes Markdown Family | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1587, T1552.001 | rule hash a54c9dcc | https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592938,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -560,7 +560,7 @@
         "value": "rule MAL_PSScript_Insider_TunnelSetup_Turkish {\n   meta:\n      description = \"Detects operator-authored Turkish-language insider-recruitment tunnel-setup documents (PUTTY_TUNNEL_DETAY.md, TUNNEL_RESTART.md, SSH_KEY_COZUM.md class). Operator instructs victim-side insider (the victim organization Windows AD user [employee ID — suppressed]) how to deploy reverse SSH tunnels from inside the victim network. Keyword combination is specific to this operator campaign.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\"\n      date = \"2026-05-26\"\n      family = \"ARPA-observability-harvester\"\n      malware_type = \"insider-recruitment-document\"\n      campaign = \"Turkish-ARPA-State-Insurer-209.38.205.158\"\n      id = \"3f787a25-bfd5-5e85-9009-0cedba0a5c1d\"\n   strings:\n      $tk1 = \"ARPA_Tunnel\" ascii wide fullword\n      $tk2 = \"rca_key.ppk\" ascii wide fullword\n      $tk3 = \"rca_key.pem\" ascii wide fullword\n      $tk4 = \"209.38.205.158\" ascii wide\n      $tk5 = \"18080:localhost:8089\" ascii wide\n      $tk6 = \"SSH_KEY_COZUM\" ascii wide\n      $tk7 = \"PUTTY_TUNNEL_DETAY\" ascii wide\n      $tk8 = \"WINDOWS_VPN_TUNNEL\" ascii wide\n      $tk9 = \"GERCEK_API_BULUNDU\" ascii wide\n   condition:\n      filesize < 200KB and\n      2 of ($tk1, $tk2, $tk3, $tk4, $tk5) and\n      1 of ($tk6, $tk7, $tk8, $tk9)\n}",
         "to_ids": true,
         "comment": "Rule 3: Insider Tunnel-Setup Turkish-Language Operator Document | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1572, T1098.004, T1021.004 | rule hash 6d4132bd | https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592938,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -575,7 +575,7 @@
         "value": "rule MAL_Python_ARPA_AI_Service_NaturalLanguage_Query {\n   meta:\n      description = \"Detects the Turkish ARPA operator's AI-augmented natural-language query interface over stolen observability data (ai_service.py + ai_assistant.db). Architecture: events table populated from stolen Instana monitoring data, situations table for AI root-cause analysis, ai_training_log table for conversation feedback. Candidate novel TTP: AI-Augmented Infrastructure Reconnaissance Using Stolen APM Credentials.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\"\n      date = \"2026-05-26\"\n      family = \"ARPA-observability-harvester\"\n      malware_type = \"ai-augmented-reconnaissance\"\n      campaign = \"Turkish-ARPA-State-Insurer-209.38.205.158\"\n      id = \"bcc21a4e-4647-57ec-be62-c2c1b1d055c4\"\n   strings:\n      $ai_db = \"ai_assistant.db\" ascii wide fullword\n      $ai_service = \"ai_service.py\" ascii wide fullword\n      $data_retrieval = \"data_retrieval.py\" ascii wide fullword\n      $handler1 = \"_handle_event_query\" ascii wide fullword\n      $handler2 = \"_handle_general_query\" ascii wide fullword\n      $ai_training = \"ai_training_log\" ascii wide fullword\n      $situations = \"situations\" ascii wide fullword\n      $arpa_path = \"/opt/ARPA/ai/\" ascii wide\n   condition:\n      filesize < 500KB and\n      $ai_db and\n      ($handler1 or $handler2 or $ai_training or $situations) and\n      ($arpa_path or $data_retrieval or $ai_service)\n}",
         "to_ids": false,
         "comment": "Rule 5: ARPA AI Service Natural-Language Query Interface | TIER: Hunting | robustness 2 | confidence MODERATE — the AI service was observed in a broken/dev state on the single analyzed host; the pattern may not have replicated to other deployments. | ATT&CK T1059.006, T1213 | rule hash 457b900a | https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592938,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -590,7 +590,7 @@
         "value": "rule MAL_Python_ARPA_CrossSource_Correlation_ETL {\n   meta:\n      description = \"Detects the Turkish ARPA operator's cross-source correlation ETL engine (correlation_v3.py and variants). Operator self-branded docstring 'ARPA Korelasyon Motoru v3 - Temporal Focus', Turkish-language diagnostic output, and API endpoint dispatch patterns uniquely identify this component of the ARPA platform.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\"\n      date = \"2026-05-26\"\n      family = \"ARPA-observability-harvester\"\n      malware_type = \"observability-credential-harvester\"\n      campaign = \"Turkish-ARPA-State-Insurer-209.38.205.158\"\n      id = \"c6216184-81e7-5bf2-bd8b-4177ed18a036\"\n   strings:\n      $docstring = \"ARPA Korelasyon Motoru v3\" ascii wide\n      $turkish_diag = \"=== SON 5 KORELASYON ===\" ascii wide\n      $endpoint_dispatch = \"/api/correlations/\" ascii wide fullword\n      $temporal = \"Temporal Focus\" ascii wide fullword\n      $topology_fn = \"topology_mapper.py\" ascii wide fullword\n      $extract_fn = \"extract_host_from_label\" ascii wide fullword\n      $turkish_extract = \"Service label\" ascii wide\n   condition:\n      filesize < 2MB and\n      ($docstring or $turkish_diag) and\n      ($endpoint_dispatch or $topology_fn or ($extract_fn and $turkish_extract) or ($docstring and $temporal))\n}",
         "to_ids": true,
         "comment": "Rule 6: ARPA Cross-Source Correlation ETL Engine | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1059.006, T1119, T1005 | rule hash 91bb1669 | https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592938,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -605,7 +605,7 @@
         "value": "rule MAL_Python_ARPA_Observability_Harvester_Platform {\n   meta:\n      description = \"Detects the Turkish ARPA operator's multi-source observability-harvester Python platform (ARPA Korelasyon Motoru). Targets the operator self-branding docstring, dashboard footer, and multi-source ingestion patterns that identify this platform across source files, SQLite stores, and HTML dashboard responses.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\"\n      date = \"2026-05-26\"\n      family = \"ARPA-observability-harvester\"\n      malware_type = \"observability-credential-harvester\"\n      campaign = \"Turkish-ARPA-State-Insurer-209.38.205.158\"\n      id = \"6ffe1dfa-a552-578c-b83c-1330dab61d55\"\n   strings:\n      $brand1 = \"ARPA Korelasyon Motoru\" ascii wide\n      $brand2 = \"ARPA \\xC2\\xA9 2026\" ascii wide\n      $brand3 = \"Read-Only Compliance\" ascii wide fullword\n      $mock_data = \"Mock Data: \\xE2\\x9D\\x8C\" ascii\n      $db_collector = \"/opt/ARPA/data/collector.db\" ascii wide\n      $db_ai = \"ai_assistant.db\" ascii wide fullword\n      $corr_endpoint = \"/api/correlations/\" ascii wide fullword\n      $topology_endpoint = \"/api/topology/unified\" ascii wide\n   condition:\n      filesize < 5MB and\n      (\n         ($brand2 and $brand3 and $mock_data) or\n         (\n            ($brand1 or $brand2) and\n            ($corr_endpoint or $topology_endpoint or $db_collector or $db_ai)\n         )\n      )\n}",
         "to_ids": true,
         "comment": "Rule 2: ARPA Observability Harvester Platform | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1059.006, T1119, T1543.002, T1071.001 | rule hash 4be48da4 | https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592938,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -620,7 +620,7 @@
         "value": "rule MAL_Python_Instana_SolarWinds_Zabbix_VMwareAria_Polling {\n   meta:\n      description = \"Detects Python scripts implementing multi-source observability polling targeting IBM Instana, SolarWinds Orion, Zabbix, and VMware Aria from a single codebase — the core of the Turkish ARPA operator's Observability-Tool Reverse Pipeline TTP. Hardcoded victim Instana tenant and 5-minute cadence markers identify operator-authored vs legitimate cross-monitoring tools.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\"\n      date = \"2026-05-26\"\n      family = \"ARPA-observability-harvester\"\n      malware_type = \"observability-credential-harvester\"\n      campaign = \"Turkish-ARPA-State-Insurer-209.38.205.158\"\n      id = \"7b048278-a144-592a-ac98-b703145488ca\"\n   strings:\n      $instana_tenant = \"[victim-tenant]\" ascii wide fullword\n      $instana_api = \"api/events?from=\" ascii wide\n      $zabbix_ref = \"zabbix\" ascii wide nocase fullword\n      $solarwinds_ref = \"solarwinds\" ascii wide nocase fullword\n      $vmware_aria = \"vmware\" ascii wide nocase fullword\n      $cadence = \"5min\" ascii wide fullword\n      $jwt_jti = \"022a1b74-2332-4df5-a76b-60225ffa7ae3\" ascii wide\n      $last_fetch = \"get_last_fetch_time\" ascii wide fullword\n   condition:\n      filesize < 500KB and\n      $instana_tenant and\n      (\n         $jwt_jti or\n         ($instana_api and 2 of ($zabbix_ref, $solarwinds_ref, $vmware_aria)) or\n         ($cadence and $last_fetch)\n      )\n}",
         "to_ids": true,
         "comment": "Rule 4: Multi-Source Observability Polling Python Script | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1059.006, T1046, T1119, T1078 | rule hash cd15bd9f | https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592938,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -635,7 +635,7 @@
         "value": "rule MAL_SystemdUnit_ARPA_Platform_Services {\n   meta:\n      description = \"Detects the Turkish ARPA operator's systemd service unit files persisting the ARPA observability-harvester platform (arpa-autolearn, arpa-continuous, arpa-daemon, arpa-instana-api, arpa-parallel). Presence of this naming cluster in /etc/systemd/system/ indicates ARPA platform deployment on the target host.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\"\n      date = \"2026-05-26\"\n      family = \"ARPA-observability-harvester\"\n      malware_type = \"observability-credential-harvester\"\n      campaign = \"Turkish-ARPA-State-Insurer-209.38.205.158\"\n      id = \"4e1c0388-5ccf-57e5-bbfe-06500eaf6974\"\n   strings:\n      $svc1 = \"arpa-autolearn\" ascii wide fullword\n      $svc2 = \"arpa-continuous\" ascii wide fullword\n      $svc3 = \"arpa-daemon\" ascii wide fullword\n      $svc4 = \"arpa-instana-api\" ascii wide fullword\n      $svc5 = \"arpa-parallel\" ascii wide fullword\n      $execstart = \"ExecStart=\" ascii wide\n      $opt_arpa = \"/opt/ARPA/\" ascii wide\n   condition:\n      filesize < 10KB and\n      2 of ($svc1, $svc2, $svc3, $svc4, $svc5) and\n      ($execstart or $opt_arpa)\n}",
         "to_ids": true,
         "comment": "Rule 8: ARPA Platform Systemd Service Units | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1543.002, T1569.002 | rule hash 80c34228 | https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592938,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",

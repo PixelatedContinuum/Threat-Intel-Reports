@@ -5,8 +5,8 @@
     "date": "2026-01-15",
     "threat_level_id": 1,
     "analysis": 2,
-    "timestamp": 1791580400,
-    "publish_timestamp": 1791580400,
+    "timestamp": 1791592893,
+    "publish_timestamp": 1791592893,
     "published": true,
     "Orgc": {
       "name": "The Hunters Ledger",
@@ -50,7 +50,7 @@
         "value": "https://the-hunters-ledger.com/hunting-detections/arsenal-237-dec_fixed-exe-detections/",
         "to_ids": false,
         "comment": "Detection rules, The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592893
       },
       {
         "uuid": "93253c42-c254-5727-af6f-158d57083e62",
@@ -59,7 +59,7 @@
         "value": "https://the-hunters-ledger.com/ioc-feeds/arsenal-237-dec_fixed-exe.json",
         "to_ids": false,
         "comment": "IOC feed (JSON), The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592893
       },
       {
         "uuid": "f5f52af9-f6f4-584f-ba6c-0988fa781653",
@@ -68,7 +68,7 @@
         "value": "title: Arsenal-237 dec_fixed.exe Decryptor Execution with Folder-A Parameter\nid: f84722fb-218a-40e4-a976-18d6db0cec9b\nstatus: experimental\ndescription: >-\n  Detects execution of the Arsenal-237 dec_fixed.exe per-victim ransomware decryptor\n  with its --folder-a batch-decryption parameter. A positive hit indicates victim-side\n  recovery activity following a prior Arsenal-237 ransomware infection and ransom\n  payment, not an active intrusion.\nreferences:\n  - https://the-hunters-ledger.com/hunting-detections/arsenal-237-dec_fixed-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-27'\ntags:\n  - attack.execution\n  - attack.discovery\n  - attack.t1059\n  - attack.t1083\n  - detection.emerging-threats\nlogsource:\n  product: windows\n  category: process_creation\ndetection:\n  selection:\n    Image|endswith: '\\dec_fixed.exe'\n    CommandLine|contains: '--folder-a'\n  condition: selection\nfalsepositives:\n  - Legitimate victim-side decryption operations by IT/incident-response staff (low probability, but the tool's designed use case).\n  - Manual testing of a recovered decryptor sample by an analyst.\nlevel: medium",
         "to_ids": false,
         "comment": "dec_fixed.exe Execution with --folder-a Parameter | TIER: Hunting | robustness 1 | confidence LOW | ATT&CK T1059, T1083 | rule hash af5e4282 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-dec_fixed-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592893,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -83,7 +83,7 @@
         "value": "title: Arsenal-237 readme.txt Ransom-Note Deletion by dec_fixed.exe\nid: 1a079f87-721d-4bb4-a4c7-c43e5939c1ab\nstatus: experimental\ndescription: >-\n  Detects deletion of a file named readme.txt specifically by the Arsenal-237\n  dec_fixed.exe decryptor process, consistent with the tool's documented\n  post-decryption ransom-note cleanup behavior. Narrowed from a broader original\n  selector that also matched readme.txt deletion by cmd.exe or powershell.exe —\n  see Coverage Gaps.\nreferences:\n  - https://the-hunters-ledger.com/hunting-detections/arsenal-237-dec_fixed-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-27'\ntags:\n  - attack.stealth\n  - attack.t1070.004\n  - detection.emerging-threats\nlogsource:\n  product: windows\n  category: file_delete\ndetection:\n  selection:\n    TargetFilename|endswith: 'readme.txt'\n    Image|endswith: '\\dec_fixed.exe'\n  condition: selection\nfalsepositives:\n  - A rebuild of the decryptor under a different process name would evade this exact selector while still performing the same cleanup; readme.txt is otherwise a common filename.\nlevel: low",
         "to_ids": false,
         "comment": "readme.txt Ransom-Note Deletion by dec_fixed.exe | TIER: Hunting | robustness 1 | confidence LOW | ATT&CK T1070.004 | rule hash 84dd5548 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-dec_fixed-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592893,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -98,7 +98,7 @@
         "value": "/*\n   Yara Rule Set\n   Identifier: Arsenal-237-New-Files-109.230.231.37\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule TOOLKIT_Arsenal237_ChaCha20_Poly1305_Decryptor {\n   meta:\n      description = \"Detects Arsenal-237 ransomware decryptor tools implementing ChaCha20-Poly1305 AEAD decryption. Requires the RFC 7539 ChaCha20 constant alongside at least one of the tool's own bespoke decryption-failure error strings, distinguishing it from generic ChaCha20 implementations.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-dec_fixed-exe-detections/\"\n      date = \"2026-01-27\"\n      family = \"Arsenal-237\"\n      malware_type = \"Ransomware-Decryptor\"\n      campaign = \"Arsenal-237-New-Files-109.230.231.37\"\n      id = \"34144aa0-31ce-46e0-a11e-37d129acb214\"\n      hash1 = \"d73c4f127c5c0a7f9bf0f398e95dd55c7e8f6f6a5783c8cb314bd99c2d1c9802\"\n   strings:\n      $constant1 = \"expand 32-byte k\" nocase\n      $error1 = \"Decryption failed - wrong key or corrupted file\"\n      $error2 = \"File corrupted - encrypted size mismatch\"\n   condition:\n      uint16(0) == 0x5A4D and\n      $constant1 and\n      any of ($error*)\n}",
         "to_ids": true,
         "comment": "ChaCha20-Poly1305 AEAD Decryption Implementation | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1486 | rule hash e3f0edfa | https://the-hunters-ledger.com/hunting-detections/arsenal-237-dec_fixed-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592893,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -113,7 +113,7 @@
         "value": "rule TOOLKIT_Arsenal237_Decryptor_CLI_Combination {\n   meta:\n      description = \"Detects the Arsenal-237 dec_fixed.exe-class decryptor tool via its distinctive --folder-a batch-decryption CLI flag combined with the tool's own file-format validation error strings and its readme.txt ransom-note cleanup marker.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-dec_fixed-exe-detections/\"\n      date = \"2026-01-27\"\n      family = \"Arsenal-237\"\n      malware_type = \"Ransomware-Decryptor\"\n      campaign = \"Arsenal-237-New-Files-109.230.231.37\"\n      id = \"9a04aca8-2158-4e46-b232-672b78e0fff2\"\n      hash1 = \"d73c4f127c5c0a7f9bf0f398e95dd55c7e8f6f6a5783c8cb314bd99c2d1c9802\"\n   strings:\n      $cmd1 = \"--folder-a\"\n      $error1 = \"File too small\"\n      $error2 = \"Could not find filename\"\n      $error3 = \"Invalid victim key hex\"\n      $cleanup = \"readme.txt\"\n   condition:\n      uint16(0) == 0x5A4D and\n      $cmd1 and\n      2 of ($error*) and\n      $cleanup\n}",
         "to_ids": true,
         "comment": "Decryptor CLI + Error + Cleanup Combination | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1059, T1083, T1070.004 | rule hash f75a257b | https://the-hunters-ledger.com/hunting-detections/arsenal-237-dec_fixed-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592893,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",

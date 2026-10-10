@@ -5,8 +5,8 @@
     "date": "2026-01-15",
     "threat_level_id": 2,
     "analysis": 2,
-    "timestamp": 1791580400,
-    "publish_timestamp": 1791580400,
+    "timestamp": 1791592939,
+    "publish_timestamp": 1791592939,
     "published": true,
     "Orgc": {
       "name": "The Hunters Ledger",
@@ -42,7 +42,7 @@
         "value": "https://the-hunters-ledger.com/hunting-detections/uac-test-exe-detections/",
         "to_ids": false,
         "comment": "Detection rules, The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592939
       },
       {
         "uuid": "49d003f5-93aa-5224-a77d-788394ed1ae4",
@@ -51,7 +51,7 @@
         "value": "https://the-hunters-ledger.com/ioc-feeds/uac-test-exe.json",
         "to_ids": false,
         "comment": "IOC feed (JSON), The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592939
       },
       {
         "uuid": "55b32d4b-72d4-5e9b-8159-4b974f3376ed",
@@ -60,7 +60,7 @@
         "value": "title: DllHost.exe Spawning Process at High Integrity Level (Potential COM Elevation Abuse)\nid: 09f06ca8-fc43-4c53-a868-3c65eaf85c11\nstatus: experimental\ndescription: >-\n  Hunting selector for DllHost.exe spawning a child process at High integrity level, with no\n  further discriminator. This is the broad half of the source rule's combined CMSTPLUA\n  selector; the narrow, CLSID-anchored half is retiered separately as a Detection rule (see\n  the Sigma Detection Rules above). DllHost.exe legitimately hosts numerous elevated COM\n  scenarios; expect co-fire with benign activity, including some Windows Update components.\nreferences:\n  - https://the-hunters-ledger.com/hunting-detections/uac-test-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n  - attack.privilege-escalation\n  - attack.stealth\n  - attack.t1548.002\n  - detection.emerging-threats\nlogsource:\n  category: process_creation\n  product: windows\ndetection:\n  selection:\n    ParentImage|endswith: '\\DllHost.exe'\n    IntegrityLevel: 'High'\n  condition: selection\nfalsepositives:\n  - Legitimate COM-based elevation by trusted Windows components\n  - Some Windows update processes\nlevel: medium",
         "to_ids": false,
         "comment": "DllHost.exe Spawning Process at High Integrity Level (Potential COM Elevation Abuse) | TIER: Hunting | robustness 1 | confidence LOW | ATT&CK T1548.002 | rule hash 9da220f9 | https://the-hunters-ledger.com/hunting-detections/uac-test-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592939,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -75,7 +75,7 @@
         "value": "title: Suspicious Child Process Spawned by fodhelper.exe\nid: 2a3b4c5d-6e7f-8a9b-0c1d-2e3f4a5b6c7d\nstatus: experimental\ndescription: >-\n    Detects fodhelper.exe spawning a child process other than the Settings host binaries it\n    normally launches. fodhelper.exe reads HKCU\\Software\\Classes\\ms-settings\\shell\\open\\command\n    and executes whatever it finds there at its own already-elevated integrity level; an\n    unexpected child process is the execution-time signature of the Fodhelper UAC bypass.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/uac-test-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n    - attack.privilege-escalation\n    - attack.stealth\n    - attack.t1548.002\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        ParentImage|endswith: '\\fodhelper.exe'\n    filter_legitimate:\n        Image|endswith:\n            - '\\SystemSettings.exe'\n            - '\\SettingsPageHost.exe'\n    condition: selection and not filter_legitimate\nfalsepositives:\n    - Windows Settings application launching legitimate components\nlevel: high",
         "to_ids": true,
         "comment": "Suspicious Child Process Spawned by fodhelper.exe | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1548.002 | rule hash 5589b4dc | https://the-hunters-ledger.com/hunting-detections/uac-test-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592939,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -90,7 +90,7 @@
         "value": "title: UAC Bypass via CMSTPLUA COM Interface CLSID in Process Command Line\nid: 7b3c6d9e-4f2a-5e8b-9c1d-2a3e4f5a6b7c\nstatus: experimental\ndescription: >-\n    Detects the CMSTPLUA/ICMLuaUtil interface CLSID ({6EDD6D74-C007-4E75-B76A-E5740995E24C})\n    appearing literally in a process command line, characteristic of script- or one-liner-based\n    invocations of the CMSTPLUA UAC bypass technique. Split from the source rule's broader\n    DllHost.exe/IntegrityLevel selector, which is retiered separately as a Hunting rule; see\n    Coverage Gaps.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/uac-test-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n    - attack.privilege-escalation\n    - attack.stealth\n    - attack.t1548.002\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_clsid:\n        CommandLine|contains: '{6EDD6D74-C007-4E75-B76A-E5740995E24C}'\n    condition: selection_clsid\nfalsepositives:\n    - Legitimate COM-based elevation by trusted Windows components is not expected to pass this CLSID as literal command-line text (extremely rare).\nlevel: high",
         "to_ids": true,
         "comment": "UAC Bypass via CMSTPLUA COM Interface CLSID in Process Command Line | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1548.002 | rule hash 07d4dcee | https://the-hunters-ledger.com/hunting-detections/uac-test-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592939,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -105,7 +105,7 @@
         "value": "title: UAC Bypass via Fodhelper Registry Hijacking\nid: 9a2c5b8f-3d1e-4f5a-8c9b-1a2d3e4f5a6b\nstatus: experimental\ndescription: >-\n    Detects creation of registry keys under HKCU\\Software\\Classes\\ms-settings\\shell\\open\\command,\n    the exact key the Fodhelper UAC bypass technique hijacks. fodhelper.exe reads this key on\n    launch and executes its DelegateExecute/default value at the caller's already-elevated\n    integrity level, without a UAC prompt. A write to this key from any process other than\n    fodhelper.exe or the Settings app itself is a strong indicator of this technique in use.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/uac-test-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n    - attack.privilege-escalation\n    - attack.stealth\n    - attack.t1548.002\n    - detection.emerging-threats\nlogsource:\n    category: registry_event\n    product: windows\n    definition: 'Sysmon Event ID 13 (Registry Value Set)'\ndetection:\n    selection:\n        TargetObject|contains: '\\Software\\Classes\\ms-settings\\shell\\open\\command'\n    filter_legitimate:\n        Image|endswith:\n            - '\\fodhelper.exe'\n            - '\\SystemSettings.exe'\n    condition: selection and not filter_legitimate\nfalsepositives:\n    - Legitimate system administration or registry cleanup tools (extremely rare)\n    - Windows Settings application legitimate use\nlevel: high",
         "to_ids": true,
         "comment": "UAC Bypass via Fodhelper Registry Hijacking | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1548.002 | rule hash aea199cf | https://the-hunters-ledger.com/hunting-detections/uac-test-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592939,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -120,7 +120,7 @@
         "value": "/*\n   Yara Rule Set\n   Identifier: Arsenal-237-109.230.231.37-Malware-Repository\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule HKTOOL_UAC_Bypass_CMSTPLUA_Fodhelper_Generic {\n   meta:\n      description = \"Detects generic CMSTPLUA COM interface abuse and Fodhelper registry hijacking UAC bypass techniques via the OS-level CLSIDs and registry path the techniques require, combined with supporting COM/registry API or filename strings. Technique-level: also matches other tools implementing the same two bypass methods, not only uac_test.exe.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/uac-test-exe-detections/\"\n      date = \"2026-01-12\"\n      family = \"UAC-Bypass-PoC\"\n      malware_type = \"UAC-Bypass-Tool\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"08c799ca-815c-441d-ae91-fe745f4bac6e\"\n   strings:\n      $cmstplua_clsid = \"{6EDD6D74-C007-4E75-B76A-E5740995E24C}\" nocase\n\n      $fodhelper_reg1 = \"ms-settings\\\\shell\\\\open\\\\command\" ascii wide nocase\n      $fodhelper_reg2 = \"Software\\\\Classes\\\\ms-settings\" ascii wide nocase\n\n      $bypass_clsid1 = \"{3E5FC7F9-9A51-4367-9063-A120244FBEC7}\" nocase\n      $bypass_clsid2 = \"{D2E7041B-2927-42FB-8E9F-7CE93B6DC937}\" nocase\n\n      $exe_fodhelper = \"fodhelper.exe\" ascii wide nocase\n      $exe_slui = \"slui.exe\" ascii wide nocase\n\n      $reg_api1 = \"RegCreateKeyEx\" ascii wide\n      $reg_api2 = \"RegSetValueEx\" ascii wide\n      $reg_api3 = \"RegOpenKeyEx\" ascii wide\n\n      $com_api1 = \"CoGetObject\" ascii wide\n      $com_api2 = \"CoCreateInstance\" ascii wide\n      $com_api3 = \"CoInitializeEx\" ascii wide\n\n   condition:\n      uint16(0) == 0x5A4D and\n      (\n         ($cmstplua_clsid and (1 of ($com_api*))) or\n         (($fodhelper_reg1 or $fodhelper_reg2) and (1 of ($reg_api*))) or\n         ((1 of ($bypass_clsid*)) and (1 of ($exe_*)) and (1 of ($reg_api*)))\n      )\n}",
         "to_ids": true,
         "comment": "Generic CMSTPLUA/Fodhelper UAC Bypass Technique Combination | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1548.002 | rule hash 4490b0e5 | https://the-hunters-ledger.com/hunting-detections/uac-test-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592939,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -135,7 +135,7 @@
         "value": "rule HKTOOL_Rust_Compiled_UAC_Bypass {\n   meta:\n      description = \"Detects Rust-compiled UAC bypass tools via Rust runtime/compiler artifacts combined with either the CMSTPLUA/Fodhelper technique anchors or a broader combination of UAC/elevation/administrator/bypass terminology and privilege-check APIs. The generic-terminology branch is common in legitimate Rust admin tooling; expect co-fire with benign software. Not for alerting.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/uac-test-exe-detections/\"\n      date = \"2026-01-12\"\n      family = \"UAC-Bypass-PoC\"\n      malware_type = \"UAC-Bypass-Tool\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"999a63f6-e957-406a-8752-f44887e4d579\"\n   strings:\n      $rust1 = \"/rustc/\" ascii\n      $rust2 = \"library\\\\core\\\\src\" ascii\n      $rust3 = \"library\\\\alloc\\\\src\" ascii\n      $rust4 = \"library\\\\std\\\\src\" ascii\n      $rust5 = \"rust_panic\" ascii\n      $rust6 = \"std::panicking\" ascii\n\n      $uac1 = \"UAC\" nocase\n      $uac2 = \"elevation\" nocase\n      $uac3 = \"administrator\" nocase\n      $uac4 = \"bypass\" nocase\n\n      $bypass_clsid = \"{6EDD6D74-C007-4E75-B76A-E5740995E24C}\" nocase\n      $bypass_reg = \"ms-settings\\\\shell\\\\open\\\\command\" ascii wide nocase\n\n      $priv_api1 = \"CheckTokenMembership\" ascii wide\n      $priv_api2 = \"GetTokenInformation\" ascii wide\n      $priv_api3 = \"OpenProcessToken\" ascii wide\n\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 1MB and\n      (2 of ($rust*)) and\n      (\n         ($bypass_clsid or $bypass_reg) or\n         ((2 of ($uac*)) and (1 of ($priv_api*)))\n      )\n}",
         "to_ids": false,
         "comment": "Rust-Compiled UAC Bypass Tool (Generic Capability Combination) | TIER: Hunting | robustness 2 | confidence LOW | ATT&CK T1548.002, T1033 | rule hash 38835cf0 | https://the-hunters-ledger.com/hunting-detections/uac-test-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592939,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -150,7 +150,7 @@
         "value": "rule HKTOOL_UAC_Test_PoC_Comprehensive {\n   meta:\n      description = \"Detects uac_test.exe and close derivatives via exact hash match or a multi-signal combination of CMSTPLUA/Fodhelper bypass technique anchors, this build's own console/status-message strings, and Rust compilation artifacts. The status-message dependency means a rebuild with console output stripped defeats every behavioral branch; see Coverage Gaps.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/uac-test-exe-detections/\"\n      date = \"2026-01-12\"\n      family = \"UAC-Bypass-PoC\"\n      malware_type = \"UAC-Bypass-Tool\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"b20d328c-f9af-47fa-acb3-e3ad6d28b130\"\n      hash1 = \"18da271868c434494a68937fa12cb302d37b14849c4c0fc1db4007ac13c5b760\"\n   strings:\n      $hash = \"18da271868c434494a68937fa12cb302d37b14849c4c0fc1db4007ac13c5b760\" nocase\n\n      $clsid_cmstplua = \"{6EDD6D74-C007-4E75-B76A-E5740995E24C}\" nocase\n      $elevation_moniker = \"Elevation:Administrator!new:{3E5FC7F9-9A51-4367-9063-A120244FBEC7}\" ascii wide nocase\n\n      $reg_fodhelper = \"Software\\\\Classes\\\\ms-settings\\\\shell\\\\open\\\\command\" ascii wide nocase\n\n      $msg_uac_test = \"UAC Bypass Test - Rust Implementation\" ascii\n      $msg_admin_already = \"[+] Already running as administrator!\" ascii\n      $msg_no_bypass = \"[+] No UAC bypass needed.\" ascii\n      $msg_com_bypass = \"[+] COM bypass executed!\" ascii\n      $msg_com_attempt = \"[1] Testing COM-based UAC Bypass (CMSTPLUA)\" ascii\n      $msg_reg_bypass = \"[+] Registry bypass triggered!\" ascii\n      $msg_reg_attempt = \"[2] Testing Registry-based UAC Bypass (fodhelper)\" ascii\n      $msg_com_success = \"[+] *** COM UAC BYPASS SUCCESS! ***\" ascii\n      $msg_reg_success = \"[+] *** REGISTRY UAC BYPASS SUCCESS! ***\" ascii\n\n      $com_init = \"[*] Initializing COM...\" ascii\n      $com_moniker = \"[*] Creating elevation moniker...\" ascii\n      $com_cogetobject = \"[*] Calling CoGetObject with elevation moniker...\" ascii\n      $com_interface = \"[+] Got ICMLuaUtil interface!\" ascii\n      $com_shellexec = \"[*] Calling ShellExec to run elevated command...\" ascii\n\n      $rust_lib1 = \"library\\\\alloc\\\\src\\\\string.rs\" ascii\n      $rust_lib2 = \"library\\\\core\\\\src\\\\slice\\\\memchr.rs\" ascii\n      $rust_lib3 = \"/rustc/\" ascii\n      $rust_lib4 = \"library\\\\std\\\\src\\\\panicking.rs\" ascii\n\n      $token1 = \"CheckTokenMembership\" ascii wide\n      $token2 = \"AllocateAndInitializeSid\" ascii wide\n      $token3 = \"FreeSid\" ascii wide\n\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 500KB and\n      (\n         $hash or\n         (\n            ($clsid_cmstplua and ($elevation_moniker or $com_init or $com_moniker)) and\n            (2 of ($msg_*)) and\n            (1 of ($rust_lib*))\n         ) or\n         (\n            ($reg_fodhelper) and\n            (2 of ($msg_*)) and\n            (1 of ($rust_lib*))\n         ) or\n         (\n            (4 of ($msg_*)) and\n            (2 of ($rust_lib*)) and\n            (1 of ($token*))\n         ) or\n         (\n            ($clsid_cmstplua or $elevation_moniker) and\n            (3 of ($com_*)) and\n            (2 of ($msg_*))\n         )\n      )\n}",
         "to_ids": false,
         "comment": "uac_test.exe Comprehensive Multi-Signal Combination (Hash Match or Behavioral Combination) | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1548.002 | rule hash 9ca8818f | https://the-hunters-ledger.com/hunting-detections/uac-test-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592939,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",

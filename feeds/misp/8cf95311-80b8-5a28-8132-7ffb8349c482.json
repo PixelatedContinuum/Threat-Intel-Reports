@@ -5,8 +5,8 @@
     "date": "2026-03-10",
     "threat_level_id": 2,
     "analysis": 2,
-    "timestamp": 1791580400,
-    "publish_timestamp": 1791580400,
+    "timestamp": 1791592937,
+    "publish_timestamp": 1791592937,
     "published": true,
     "Orgc": {
       "name": "The Hunters Ledger",
@@ -94,7 +94,7 @@
         "value": "https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/",
         "to_ids": false,
         "comment": "Detection rules, The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592937
       },
       {
         "uuid": "1903bbb7-1d0a-5d05-99f3-9dc13f6e77db",
@@ -103,7 +103,7 @@
         "value": "https://the-hunters-ledger.com/ioc-feeds/sliver-open-directory-iocs.json",
         "to_ids": false,
         "comment": "IOC feed (JSON), The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592937
       },
       {
         "uuid": "5ad82a91-6c61-5a2e-a62b-7aede8a2103c",
@@ -112,7 +112,7 @@
         "value": "https://the-hunters-ledger.com/reports/sliver-open-directory/",
         "to_ids": false,
         "comment": "Report, The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592937
       },
       {
         "uuid": "0674ea0b-7caa-5687-a041-5356cdad19b0",
@@ -121,7 +121,7 @@
         "value": "https://the-hunters-ledger.com/stix/sliver-open-directory.json",
         "to_ids": false,
         "comment": "STIX 2.1 bundle, The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592937
       },
       {
         "uuid": "ddbdcbda-9f67-5206-a9fe-e34cb59298d8",
@@ -130,7 +130,7 @@
         "value": "d94c74a6cd6629be66898eaab03ce0446f655689e28e08f0c166eaf4af9d04ea",
         "to_ids": true,
         "comment": "sha256: d94c74a6cd6629be66898eaab03ce0446f655689e28e08f0c166eaf4af9d04ea. Same C2 configuration as OneDriveSync.exe. Compression ratio indicates 50% size reduction; use for bandwidth-constrained delivery scenarios. [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592937
       },
       {
         "uuid": "c4aa5d41-5f81-5a60-9acb-9de9a9317187",
@@ -139,7 +139,7 @@
         "value": "e2ad6f8202994058cc987cc971698238c2dc63a951dd1e43063cc9b8b138713b",
         "to_ids": true,
         "comment": "sha256: e2ad6f8202994058cc987cc971698238c2dc63a951dd1e43063cc9b8b138713b. Polymorphic builds may produce different hashes; use certificate serial (659EEB5AA4A489FB238993AF259D23F057F6D6D6) as more durable indicator. File can be executed to trigger full kill chain but requires elevated privileges for some evasion techniques. [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592937
       },
       {
         "uuid": "9dcde901-0be4-505d-bb8f-4649d0fe0ff2",
@@ -148,7 +148,7 @@
         "value": "mailmassange.duckdns.org",
         "to_ids": true,
         "comment": "domain: mailmassange.duckdns.org. DuckDNS subdomains can be rapidly re-assigned to new attacker infrastructure. Detect by behavioral pattern (Sliver beacon heartbeat) rather than domain alone. [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592937
       },
       {
         "uuid": "de856a57-971c-53b5-8ee5-bd5a7c86ae83",
@@ -157,7 +157,7 @@
         "value": "mailuxe.net",
         "to_ids": true,
         "comment": "domain: mailuxe.net. If domain is sinkholed by defensive parties, check for fallback to mailmassange.duckdns.org [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592937
       },
       {
         "uuid": "58957a9b-8d1e-54af-8405-d88df72c1dcf",
@@ -166,7 +166,7 @@
         "value": "http://45.94.31.220:8000/",
         "to_ids": true,
         "comment": "url: http://45.94.31.220:8000/. Directory exposure is the event that enabled recovery of full attacker toolkit. Third-party scanner at port 8080 had already applied malware/exploit tags to multiple artifacts before our analysis. [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592937
       },
       {
         "uuid": "8e5fdb29-043f-58bf-862a-e4db006a3d77",
@@ -175,7 +175,7 @@
         "value": "http://45.94.31.220:8000/OneDriveSync.exe",
         "to_ids": true,
         "comment": "url: http://45.94.31.220:8000/OneDriveSync.exe. HTTP (not HTTPS) indicates payload delivery prioritizes availability over encryption. Wireshark/network sensors will capture full payload during download. [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592937
       },
       {
         "uuid": "13717e16-10ff-5480-8240-112741b187ac",
@@ -184,7 +184,7 @@
         "value": "45.94.31.220",
         "to_ids": true,
         "comment": "ipv4: 45.94.31.220. Open directory indexed at 21:45 UTC on 2026-02-14 (6.75 hours post-build). Infrastructure may have been re-established with new IOCs if operator became aware of exposure. Monitor for similar hosting patterns. [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592937
       },
       {
         "uuid": "84ad0308-ddb5-534b-b6bd-e2a8ada9e49d",
@@ -193,7 +193,7 @@
         "value": "title: PowerShell Drops Executable to TEMP Directory\nid: c2e5a8f3-7b1d-4c9e-8a4f-3e7b2d9c5f16\nstatus: experimental\ndescription: >-\n  Detects PowerShell creating an executable file in the user TEMP\n  directory, matching the payload-staging behavior of the stager\n  component in the WebServer-Compromise-Kit-45.94.31.220 Sliver C2\n  campaign — the stager writes OneDriveSync.exe to %TEMP%\\update.exe\n  before execution. This rule implements only the file-write event; the\n  campaign's stager also opens a network connection immediately\n  beforehand and launches the dropped file with a hidden window, but\n  neither of those events is correlated here, so this selector alone is\n  broader than the full three-event chain and is scoped as a hunting\n  lead rather than an alerting rule.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/\nauthor: The Hunters Ledger\ndate: 2026-02-28\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - attack.command-and-control\n    - attack.t1105\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: windows\ndetection:\n    selection_ps_exe_drop:\n        Image|endswith: '\\powershell.exe'\n        TargetFilename|contains: '\\AppData\\Local\\Temp\\'\n        TargetFilename|endswith: '.exe'\n    filter_known_installers:\n        TargetFilename|contains:\n            - '\\AppData\\Local\\Temp\\chocolatey'\n            - '\\AppData\\Local\\Temp\\scoop'\n            - '\\AppData\\Local\\Temp\\winget'\n    condition: selection_ps_exe_drop and not filter_known_installers\nfalsepositives:\n    - >-\n      Legitimate software deployment scripts that use PowerShell to\n      download and stage installers to TEMP\n    - >-\n      Package manager scripts (Chocolatey, Scoop, winget) that stage\n      executables during installation\n    - >-\n      IT automation frameworks (Ansible, Salt, Puppet) that deploy via\n      PowerShell to TEMP paths\nlevel: medium",
         "to_ids": false,
         "comment": "PowerShell Drops Executable to TEMP Directory | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1059.001, T1105 | rule hash e48551fd | https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592937,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -208,7 +208,7 @@
         "value": "title: PowerShell WebClient DownloadFile Execution (Sliver Stager Download Pattern)\nid: 7d3f9a52-1c6e-4b8d-9a3f-5e8c2d4b7f91\nstatus: experimental\ndescription: >-\n  Detects PowerShell using Net.WebClient.DownloadFile, matching the\n  payload retrieval technique used by the stager component of the\n  WebServer-Compromise-Kit-45.94.31.220 Sliver C2 campaign. Split out\n  from the campaign's original combined AMSI-bypass-or-download rule\n  because the download pattern alone is common to many legitimate\n  PowerShell deployment and automation scripts; use for hunting and\n  triage, not alerting.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/\nauthor: The Hunters Ledger\ndate: 2026-02-28\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - attack.command-and-control\n    - attack.t1105\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    service: powershell\n    definition: 'Requires PowerShell Script Block Logging (Event ID 4104).'\ndetection:\n    selection_download:\n        EventID: 4104\n        ScriptBlockText|contains|all:\n            - 'DownloadFile'\n            - 'Net.WebClient'\n    filter_legitimate:\n        ScriptBlockText|contains:\n            - 'WindowsDefenderApplicationGuard'\n    condition: selection_download and not filter_legitimate\nfalsepositives:\n    - >-\n      Automated patching, deployment, or CI/CD scripts that use\n      Net.WebClient.DownloadFile to retrieve legitimate installers or\n      updates\n    - >-\n      IT automation frameworks that stage files via PowerShell WebClient\nlevel: medium",
         "to_ids": false,
         "comment": "PowerShell WebClient DownloadFile Execution (Sliver Stager Download Pattern) | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1059.001, T1105 | rule hash e7e52f9c | https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592937,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -223,7 +223,7 @@
         "value": "title: Process Claims MicrosoftEdgeUpdate Identity from Non-Standard Location\nid: 9d3e7a1f-4b8c-4e2a-b6d9-5c1f8e3a7b4d\nstatus: experimental\ndescription: >-\n  Detects a process whose reported CommandLine references\n  MicrosoftEdgeUpdate.exe while its Image path does not correspond to a\n  legitimate Microsoft Edge update installation directory. The\n  arg_spoof.C module in the WebServer-Compromise-Kit-45.94.31.220\n  toolkit overwrites the PEB CommandLine buffer with the hardcoded\n  string 'MicrosoftEdgeUpdate.exe --update-check --silent' to spoof\n  process-tree viewers and EDR rules that inspect CommandLine without\n  cross-referencing the true binary path. Generalized from the\n  campaign's exact hardcoded argument string to the broader\n  CommandLine-vs-Image mismatch pattern so the rule also covers a\n  rebuild that keeps the masquerade but changes the arguments; this\n  trades some campaign specificity for durability, so it is scoped as a\n  hunting lead rather than an alerting rule.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/\nauthor: The Hunters Ledger\ndate: 2026-02-28\ntags:\n    - attack.stealth\n    - attack.t1036\n    - attack.t1036.005\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_spoof_cmdline:\n        CommandLine|contains: 'MicrosoftEdgeUpdate.exe'\n    filter_legitimate_edge_update:\n        Image|contains:\n            - '\\Microsoft\\EdgeUpdate\\'\n            - '\\Microsoft\\Edge\\Application\\'\n            - '\\Microsoft\\Temp\\EU'\n    condition: selection_spoof_cmdline and not filter_legitimate_edge_update\nfalsepositives:\n    - >-\n      Legitimate Microsoft Edge update processes running from\n      non-standard installation paths (uncommon but possible in\n      enterprise repackaging scenarios)\n    - >-\n      Security tooling that simulates Edge update processes for testing\n      purposes\n    - >-\n      Any process whose command-line arguments happen to reference\n      MicrosoftEdgeUpdate.exe as a string without impersonating it\n      (rare)\nlevel: medium",
         "to_ids": false,
         "comment": "Process Claims MicrosoftEdgeUpdate Identity from Non-Standard Location | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1036, T1036.005 | rule hash 5d2ae816 | https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592937,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -238,7 +238,7 @@
         "value": "title: Sliver Stager PowerShell AMSI Bypass via Reflection\nid: 3a7f2c91-5e4b-4d8a-b1c9-6f2e1a3d8b07\nstatus: experimental\ndescription: >-\n  Detects the PowerShell AMSI-bypass technique used by the stager\n  component of the WebServer-Compromise-Kit-45.94.31.220 Sliver C2\n  campaign. The stager uses .NET reflection to set the private static\n  amsiInitFailed field to true, disabling AMSI for the PowerShell session.\n  PowerShell Script Block Logging (Event ID 4104) captures the full\n  stager content even though the bypass fires after the script block is\n  logged.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/\nauthor: The Hunters Ledger\ndate: 2026-02-28\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - attack.defense-impairment\n    - attack.t1685\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    service: powershell\n    definition: >-\n      Requires PowerShell Script Block Logging (Event ID 4104). Enable via\n      GPO Computer Configuration, Administrative Templates, Windows\n      Components, Windows PowerShell, Turn on PowerShell Script Block\n      Logging.\ndetection:\n    selection_amsi_bypass:\n        EventID: 4104\n        ScriptBlockText|contains|all:\n            - 'amsiInitFailed'\n            - 'NonPublic,Static'\n            - 'SetValue'\n    filter_legitimate:\n        ScriptBlockText|contains:\n            - 'WindowsDefenderApplicationGuard'\n    condition: selection_amsi_bypass and not filter_legitimate\nfalsepositives:\n    - >-\n      Security research or authorized offensive-security assessment\n      scripts using reflection-based AMSI bypass in authorized\n      environments\n    - Red team exercises where PowerShell stagers are simulated\nlevel: high",
         "to_ids": true,
         "comment": "Sliver Stager PowerShell AMSI Bypass via Reflection | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1059.001, T1685 | rule hash b6e98413 | https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592937,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -253,7 +253,7 @@
         "value": "title: Windows Defender Real-Time Protection Disabled\nid: 8b4e1f72-9c3a-4e7d-a5b8-2d6f9c1e4a83\nstatus: experimental\ndescription: >-\n  Detects Windows Defender real-time protection being disabled (Event ID\n  5001), matching the defense-impairment step used by the stager\n  component of the WebServer-Compromise-Kit-45.94.31.220 Sliver C2\n  campaign, which calls Set-MpPreference -DisableRealtimeMonitoring $true\n  from PowerShell. The event fires regardless of which process disabled\n  protection, so this rule covers the technique generally rather than\n  only the PowerShell vector observed in this campaign.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/\nauthor: The Hunters Ledger\ndate: 2026-02-28\ntags:\n    - attack.defense-impairment\n    - attack.t1685\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    service: windefend\ndetection:\n    selection_defender_disabled:\n        EventID: 5001\n    filter_admin_tools:\n        ProcessName|endswith:\n            - '\\MpCmdRun.exe'\n            - '\\msiexec.exe'\n    condition: selection_defender_disabled and not filter_admin_tools\nfalsepositives:\n    - >-\n      Legitimate administrative scripts disabling Defender as part of\n      authorized software installation\n    - >-\n      Enterprise management platforms (SCCM, Intune) disabling Defender\n      via PowerShell during provisioning\n    - Security testing in authorized environments\nlevel: high",
         "to_ids": true,
         "comment": "Windows Defender Real-Time Protection Disabled | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1685 | rule hash 5cbfa8c0 | https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592937,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -268,7 +268,7 @@
         "value": "title: sihost.exe Initiating Anomalous Outbound Network Connection\nid: 6f1d4b8e-3c2a-4f7b-9e5d-8a1c3f6b9e2d\nstatus: experimental\ndescription: >-\n  Detects sihost.exe (Shell Infrastructure Host) initiating outbound\n  network connections to non-Microsoft destinations on ports 443 or 8443,\n  indicating successful C2 beacon injection via process hollowing. The\n  WebServer-Compromise-Kit-45.94.31.220 build pipeline explicitly targets\n  sihost.exe for process hollowing; the injected Sliver beacon used this\n  technique to beacon out over HTTPS/mTLS. Legitimate sihost.exe does not\n  initiate outbound HTTPS connections to arbitrary external addresses, so\n  this rule generalizes to any injected beacon using the same injection\n  target, not only this campaign's specific C2 domains.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/\nauthor: The Hunters Ledger\ndate: 2026-02-28\ntags:\n    - attack.stealth\n    - attack.t1055.012\n    - attack.privilege-escalation\n    - attack.t1620\n    - attack.t1134.004\n    - attack.command-and-control\n    - attack.t1071.001\n    - detection.emerging-threats\nlogsource:\n    category: network_connection\n    product: windows\ndetection:\n    selection_sihost_network:\n        Image|endswith: '\\sihost.exe'\n        Initiated: 'true'\n        DestinationPort:\n            - 443\n            - 8443\n    filter_microsoft_infra:\n        DestinationHostname|endswith:\n            - '.microsoft.com'\n            - '.windows.com'\n            - '.windowsupdate.com'\n            - '.msftconnecttest.com'\n    condition: selection_sihost_network and not filter_microsoft_infra\nfalsepositives:\n    - >-\n      Custom enterprise environments where sihost.exe behavior has been\n      modified by legitimate software\n    - >-\n      Proxy or network security software that injects monitoring DLLs\n      into sihost.exe, causing unusual network calls\nlevel: high",
         "to_ids": true,
         "comment": "sihost.exe Initiating Anomalous Outbound Network Connection | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1055.012, T1620, T1134.004, T1071.001 | rule hash d7536b9c | https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592937,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -283,7 +283,7 @@
         "value": "/*\n   Yara Rule Set\n   Identifier: Sliver C2 / ScareCrow Loader Open Directory Kit\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule MALW_ScareCrow_Go_Loader_OneDriveSync {\n   meta:\n      description = \"Detects the ScareCrow-wrapped Go loader used in the WebServer-Compromise-Kit-45.94.31.220 campaign. Matches on Go build metadata preserved post-symbol-stripping, the SysWhispers3 HalosGate hash seed compiled into the syscall resolution module, and the XZ stream header pattern used by the ScareCrow injection mode dispatcher.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/\"\n      date = \"2026-02-28\"\n      hash1 = \"e2ad6f8202994058cc987cc971698238c2dc63a951dd1e43063cc9b8b138713b\"\n      hash2 = \"67bb390c2dad7ebd9e9f706a6f2ba42e4cbcbee7\"\n      hash3 = \"9559366a6f6874ad914e308a34903c77\"\n      family = \"Sliver\"\n      malware_type = \"C2 Beacon / Loader\"\n      campaign = \"WebServer-Compromise-Kit-45.94.31.220\"\n      id = \"97119e1c-a746-54b7-b127-9ef332b9246f\"\n   strings:\n      $go_build_meta_1 = \"-buildmode=exe\" ascii wide\n      $go_build_meta_2 = \"-compiler=gc\" ascii wide\n      $go_build_meta_3 = \"-trimpath=true\" ascii wide\n\n      $sw3_seed = { 94 8D EA 9D }\n\n      $xz_hollowing_header = { FD 37 7A 58 5A 00 00 04 E6 D6 B4 46 }\n\n      $peb_spoof_string = \"MicrosoftEdgeUpdate.exe --update-check --silent\" wide\n\n   condition:\n      uint16(0) == 0x5A4D\n      and uint32(uint32(0x3C)) == 0x00004550\n      and uint8(uint32(0x3C) + 24) == 0x64\n      and filesize > 25MB\n      and filesize < 40MB\n      and all of ($go_build_meta_*)\n      and (\n         $sw3_seed\n         or $xz_hollowing_header\n         or $peb_spoof_string\n      )\n}",
         "to_ids": true,
         "comment": "ScareCrow Go Loader (OneDriveSync.exe) | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1027.002, T1055.012, T1027.013, T1106 | rule hash 21bf6c00 | https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592937,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -298,7 +298,7 @@
         "value": "rule MALW_Fraudulent_VMware_CodeSign_Cert_PE {\n   meta:\n      description = \"Detects PE binaries signed with the fraudulent self-signed VMware, Inc. Code Signing certificate identity used in the WebServer-Compromise-Kit-45.94.31.220 campaign, either via the known certificate serial or via the self-signed VMware/Redmond subject-field fraud pattern alone, which survives certificate regeneration from the same template\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/\"\n      date = \"2026-02-28\"\n      hash1 = \"e2ad6f8202994058cc987cc971698238c2dc63a951dd1e43063cc9b8b138713b\"\n      family = \"Sliver\"\n      malware_type = \"C2 Beacon / Code-Signing Fraud\"\n      campaign = \"WebServer-Compromise-Kit-45.94.31.220\"\n      id = \"751f1fad-4d99-5c21-a1a1-c04dae743f81\"\n   strings:\n      $cert_serial = { 65 9E EB 5A A4 A4 89 FB 23 89 93 AF 25 9D 23 F0 57 F6 D6 D6 }\n      $subject_cn  = \"VMware, Inc. Code Signing\" ascii\n      $subject_l   = \"Redmond\" ascii\n      $subject_o   = \"VMware, Inc.\" ascii\n   condition:\n      uint16(0) == 0x5A4D\n      and filesize < 100MB\n      and (\n         ($cert_serial and 1 of ($subject_cn, $subject_l, $subject_o))\n         or (2 of ($subject_cn, $subject_l, $subject_o))\n      )\n}",
         "to_ids": true,
         "comment": "Fraudulent VMware Code-Signing Certificate (PE-Embedded) | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1553.002 | rule hash f31acbe2 | https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592937,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -313,7 +313,7 @@
         "value": "rule MALW_Fraudulent_VMware_CodeSign_Cert_PEM {\n   meta:\n      description = \"Detects the raw PEM-format fraudulent VMware code-signing certificate and private key artifacts from the WebServer-Compromise-Kit-45.94.31.220 campaign, recovered unencrypted from the attacker's open directory alongside the signed binaries\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/\"\n      date = \"2026-02-28\"\n      family = \"Sliver\"\n      malware_type = \"Code-Signing Fraud Artifact\"\n      campaign = \"WebServer-Compromise-Kit-45.94.31.220\"\n      id = \"69d3d214-5285-5614-8f41-e1a05f369d22\"\n   strings:\n      $pem_header     = \"-----BEGIN CERTIFICATE-----\" ascii\n      $subject_cn     = \"VMware, Inc. Code Signing\" ascii\n      $subject_l      = \"Redmond\" ascii\n      $privkey_header = \"-----BEGIN PRIVATE KEY-----\" ascii\n   condition:\n      filesize < 10KB\n      and (\n         ($pem_header and $subject_cn and $subject_l)\n         or ($privkey_header and ($subject_cn or $subject_l))\n      )\n}",
         "to_ids": true,
         "comment": "Fraudulent VMware Code-Signing Certificate (Raw PEM Artifact) | TIER: Detection | robustness 3 | confidence DEFINITE | ATT&CK T1553.002 | rule hash bc7c85d8 | https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592937,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -328,7 +328,7 @@
         "value": "rule MALW_UPX_Packed_Sliver_Variant {\n   meta:\n      description = \"Detects the UPX 5.0.2-packed Sliver C2 beacon variant recovered from the WebServer-Compromise-Kit-45.94.31.220 campaign (compressed.exe). Matches on UPX section naming, Go build metadata present in the unpacked payload, and the packed file size fingerprint; UPX packing is common in legitimate software so this is a hunting-tier lead, not an alerting rule\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/\"\n      date = \"2026-02-28\"\n      hash1 = \"d94c74a6cd6629be66898eaab03ce0446f655689e28e08f0c166eaf4af9d04ea\"\n      hash2 = \"8f27695dfd4f29e872c1661cdf225120182dd05b\"\n      hash3 = \"f587753c0a46688af2ffea00573192e2\"\n      family = \"Sliver\"\n      malware_type = \"C2 Beacon (UPX-packed variant)\"\n      campaign = \"WebServer-Compromise-Kit-45.94.31.220\"\n      id = \"45a1d524-05ea-5875-9ad3-609a4fe78278\"\n   strings:\n      $upx0 = \"UPX0\" ascii\n      $upx1 = \"UPX1\" ascii\n      $upx_ver = \"UPX 5.0.2\" ascii\n      $go_build_1 = \"-buildmode=exe\" ascii wide\n      $go_build_2 = \"-compiler=gc\" ascii wide\n      $upx_lzma_marker = { 03 05 }\n   condition:\n      uint16(0) == 0x5A4D\n      and filesize > 13MB\n      and filesize < 18MB\n      and $upx0\n      and $upx1\n      and ($upx_ver or $upx_lzma_marker)\n      and all of ($go_build_*)\n}",
         "to_ids": false,
         "comment": "UPX-Packed Sliver Beacon Variant (compressed.exe) | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1027.002 | rule hash ce588275 | https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592937,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -343,7 +343,7 @@
         "value": "rule TOOLKIT_ScareCrow_Build_Pipeline_Source_Artifacts {\n   meta:\n      description = \"Hunt rule detecting source code and pre-assembled stub artifacts from the ScareCrow/SysWhispers3 build pipeline used in the WebServer-Compromise-Kit-45.94.31.220 campaign: the XOR_KEY 0x42 define paired with the SysWhispers3 SW3_SEED hash constant from string_obf.C/syscalls.C, or the compiled 10-byte Heaven's Gate far-return stub. Presence indicates the offensive build pipeline has been deployed to or is in use on the scanned host\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/\"\n      date = \"2026-02-28\"\n      family = \"ScareCrow Build Pipeline\"\n      malware_type = \"Offensive Toolchain Source Artifacts\"\n      campaign = \"WebServer-Compromise-Kit-45.94.31.220\"\n      id = \"e38d897c-a2bf-5731-b1e0-1e00d4eecb75\"\n   strings:\n      $xor_key_define = \"#define XOR_KEY 0x42\" ascii\n      $sw3_seed_define = \"0x9DEA8D94\" ascii\n      $sw3_seed_name   = \"SW3_SEED\" ascii\n      $heavens_gate_stub = { E8 00 00 00 00 83 04 24 05 CB }\n   condition:\n      filesize < 5MB\n      and (\n         ($xor_key_define and $sw3_seed_define and $sw3_seed_name)\n         or ($heavens_gate_stub and filesize < 100)\n      )\n}",
         "to_ids": false,
         "comment": "ScareCrow Build Pipeline Source Code Artifacts | TIER: Hunting | robustness 2 | confidence HIGH for the source-code markers matched; this is IR/forensic triage content, not malware-sample detection | ATT&CK T1027.013, T1106 | rule hash ba710f8d | https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592937,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",

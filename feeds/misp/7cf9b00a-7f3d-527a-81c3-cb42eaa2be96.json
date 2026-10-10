@@ -5,8 +5,8 @@
     "date": "2026-05-06",
     "threat_level_id": 1,
     "analysis": 2,
-    "timestamp": 1791592076,
-    "publish_timestamp": 1791592076,
+    "timestamp": 1791592927,
+    "publish_timestamp": 1791592927,
     "published": true,
     "Orgc": {
       "name": "The Hunters Ledger",
@@ -202,7 +202,7 @@
         "value": "https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/",
         "to_ids": false,
         "comment": "Detection rules, The Hunters Ledger",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "0b913686-9f3a-5e02-b5ba-54d737a6cf3f",
@@ -211,7 +211,7 @@
         "value": "https://the-hunters-ledger.com/ioc-feeds/opendirectory-62-60-237-100-20260506-iocs.json",
         "to_ids": false,
         "comment": "IOC feed (JSON), The Hunters Ledger",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "0dd2e77a-8e92-5d30-ad6c-d9e1ed2ddf58",
@@ -220,7 +220,7 @@
         "value": "https://the-hunters-ledger.com/reports/opendirectory-62-60-237-100-20260506/",
         "to_ids": false,
         "comment": "Report, The Hunters Ledger",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "1d11b927-ec3c-5cd7-becd-2f2c458bb544",
@@ -229,7 +229,7 @@
         "value": "https://the-hunters-ledger.com/stix/opendirectory-62-60-237-100-20260506.json",
         "to_ids": false,
         "comment": "STIX 2.1 bundle, The Hunters Ledger",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "4a748ba6-5632-579b-b612-cae8c70c54df",
@@ -238,7 +238,7 @@
         "value": "2d8728f0f371107ff124a39b3c9f624cae115f8b6cc6ec87fbeb96fc8c2b51e6",
         "to_ids": true,
         "comment": "sha256: 2d8728f0f371107ff124a39b3c9f624cae115f8b6cc6ec87fbeb96fc8c2b51e6. Operator-bespoke bundle-cleanup helper; NOT on VT (campaign-unique); same _tiny_erase_ export name as pe_06; manifest with filenames [confidence 80/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "b34fabc3-94c2-510f-89e9-e25589c5d94f",
@@ -247,7 +247,7 @@
         "value": "3480d0478d35d8a12331b97769401e16e4956bdc24b9a7175ae08e2c9e9acf8f",
         "to_ids": true,
         "comment": "sha256: 3480d0478d35d8a12331b97769401e16e4956bdc24b9a7175ae08e2c9e9acf8f. Operator-rebuilt Wondershare AudioClip service; campaign-bespoke hash but no operator code modifications observed; pure decoy [confidence 60/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "2956d694-d954-5156-aaf0-440d37d42c55",
@@ -256,7 +256,7 @@
         "value": "585f41db259ff0150f717e0862dcc4c6df91b1b5624439037420736d1d35c80b",
         "to_ids": true,
         "comment": "sha256: 585f41db259ff0150f717e0862dcc4c6df91b1b5624439037420736d1d35c80b. Operator config blob (27 KB, mixed entropy 5.48); never on VT; contains relocation header + tapisrv.dll string + 5808-byte stage-2 shellcode [confidence 95/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "c75e735c-618f-5d0d-b183-18d1fe17914c",
@@ -265,7 +265,7 @@
         "value": "68bee500e0080f21c003126e73b6d07804d23ac98b2376a8b76c26297d467abe",
         "to_ids": true,
         "comment": "sha256: 68bee500e0080f21c003126e73b6d07804d23ac98b2376a8b76c26297d467abe. GoProxy CA cert installer; Microsoft Trojan:Win32/Rugmi.HP!MTB; VT 50/71; export _tiny_erase_ via rundll32 [confidence 95/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "0ef5a5a9-786e-59fb-96b5-4e769476ffd8",
@@ -274,7 +274,7 @@
         "value": "68fb61225b457172368d43af7ec2afe48f59404089d095584944edbfd0171feb",
         "to_ids": true,
         "comment": "sha256: 68fb61225b457172368d43af7ec2afe48f59404089d095584944edbfd0171feb. HijackLoader/Penguish/Rugmi/GhostPulse proper; Microsoft TrojanDownloader:Win64/Rugmi.HNL!MTB; VT 52/70; uses ntdll!RtlHashUnicodeString as API hash function (rare TTP) [confidence 95/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "e6b61714-2bef-59c2-8df0-d374b5beb3c6",
@@ -283,7 +283,7 @@
         "value": "7e2000ceb89574fe95e819f5f47da346119b666b7f64e8b5b01e5152e37d76cf",
         "to_ids": true,
         "comment": "sha256: 7e2000ceb89574fe95e819f5f47da346119b666b7f64e8b5b01e5152e37d76cf. Operator encrypted Stage-3 LZNT1 carrier (2.6 MB, entropy 7.88); never on VT before this investigation; PNG-IDAT framed + 4-byte XOR 0xE1D5B4A2 + LZNT1 chunked [confidence 95/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "f9919f60-1a29-5497-b8f1-4602b1dde33d",
@@ -292,7 +292,7 @@
         "value": "microsoft.com-app.cc",
         "to_ids": true,
         "comment": "domain: microsoft.com-app.cc. Subdomain typosquat (apex app.cc); resolves to 62.60.237.100; hosts WebDAV path /download/6f14/ (the '6f14' likely a campaign/victim ID) [confidence 80/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "1778902c-31ce-5ad5-a04f-7f435d541a24",
@@ -301,7 +301,7 @@
         "value": "onedrive.to",
         "to_ids": true,
         "comment": "domain: onedrive.to. Microsoft typosquat created 2025-12-20; Spaceship registrar; Cloudflare-fronted; resolves to 62.60.237.100; hosts WebDAV paths /DavWWWRoot/Carriers/ and /download/Documents/ [confidence 95/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "bd7a5005-a5a0-5141-8562-51a0b04a5f00",
@@ -310,7 +310,7 @@
         "value": "www-microsoft.live",
         "to_ids": true,
         "comment": "domain: www-microsoft.live. Typosquat; historical resolution to 62.60.237.100 (2025-10-03); discovered via VT historical pDNS; same operator as the other two typosquats [confidence 80/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "6ca686d5-ea5f-5961-b9df-a2be6ff0b8fa",
@@ -319,7 +319,7 @@
         "value": "http://109.120.137.6/PUTTY.exe",
         "to_ids": true,
         "comment": "url: http://109.120.137.6/PUTTY.exe. Second-stage payload, invoked by embedded shell-redirect commands containing post-fetch -OutFile and ren/del operations [confidence 80/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "a4d19e77-49b2-53eb-a690-414d1a45b719",
@@ -328,7 +328,7 @@
         "value": "http://62.60.237.100:80/Documents/",
         "to_ids": true,
         "comment": "url: http://62.60.237.100:80/Documents/. Primary staging open directory [confidence 95/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "977d85da-32b4-5851-855e-c9ae2a1affd9",
@@ -337,7 +337,7 @@
         "value": "http://62.60.237.100:80/Documents/Carriers.exe",
         "to_ids": true,
         "comment": "url: http://62.60.237.100:80/Documents/Carriers.exe. Direct payload URL [confidence 80/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "8198233e-204e-571c-b14d-616f9c2b4b77",
@@ -346,7 +346,7 @@
         "value": "http://62.60.237.100:80/download/Documents/",
         "to_ids": true,
         "comment": "url: http://62.60.237.100:80/download/Documents/. Mirror staging open directory [confidence 95/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "eb23ebed-2540-5408-9477-8d72117a1ddc",
@@ -355,7 +355,7 @@
         "value": "http://80.253.249.186:5504/BugSplat.dll",
         "to_ids": true,
         "comment": "url: http://80.253.249.186:5504/BugSplat.dll. Shared-staging Wondershare DLL pack download URL pattern [confidence 80/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "2e73a283-8012-5d31-89c8-8ee2a17216a1",
@@ -364,7 +364,7 @@
         "value": "http://80.253.249.186:5504/COMSupport.dll",
         "to_ids": true,
         "comment": "url: http://80.253.249.186:5504/COMSupport.dll. Shared-staging download [confidence 80/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "213f6bc2-68d3-5205-884f-88202aed0825",
@@ -373,7 +373,7 @@
         "value": "http://80.253.249.186:5504/DBGHelp.dll",
         "to_ids": true,
         "comment": "url: http://80.253.249.186:5504/DBGHelp.dll. Shared-staging download [confidence 80/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "eef35b66-d7a7-5727-8f68-c134af0eebe1",
@@ -382,7 +382,7 @@
         "value": "http://80.253.249.186:5504/DVDSetting.dll",
         "to_ids": true,
         "comment": "url: http://80.253.249.186:5504/DVDSetting.dll. Shared-staging download [confidence 80/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "3a39e136-97a1-514b-9253-b99f3359136b",
@@ -391,7 +391,7 @@
         "value": "http://80.253.249.186:5504/NLEResource.dll",
         "to_ids": true,
         "comment": "url: http://80.253.249.186:5504/NLEResource.dll. Shared-staging download [confidence 80/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "05a2ffc4-ce3b-5509-b2c2-972c25dd8c89",
@@ -400,7 +400,7 @@
         "value": "http://80.253.249.186:5504/NLETransitionMgr.dll",
         "to_ids": true,
         "comment": "url: http://80.253.249.186:5504/NLETransitionMgr.dll. Shared-staging download [confidence 80/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "a50e1492-326f-5f98-9cea-c67482406feb",
@@ -409,7 +409,7 @@
         "value": "http://80.253.249.186:5504/WSUtilities.dll",
         "to_ids": true,
         "comment": "url: http://80.253.249.186:5504/WSUtilities.dll. Shared-staging download [confidence 80/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "1795b3de-e0df-5f91-85ab-60fbe0e41344",
@@ -418,7 +418,7 @@
         "value": "http://80.253.249.186:5504/WS_ImageProc.dll",
         "to_ids": true,
         "comment": "url: http://80.253.249.186:5504/WS_ImageProc.dll. Shared-staging download [confidence 80/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "bb8946f9-e3bc-562f-9400-82e4195fe927",
@@ -427,7 +427,7 @@
         "value": "http://80.253.249.186:5504/WS_Log.dll",
         "to_ids": true,
         "comment": "url: http://80.253.249.186:5504/WS_Log.dll. Shared-staging download [confidence 80/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "6300a19a-a1f0-5f3f-852d-1ea1d7491183",
@@ -436,7 +436,7 @@
         "value": "http://80.253.249.186:5504/WsBurn.dll",
         "to_ids": true,
         "comment": "url: http://80.253.249.186:5504/WsBurn.dll. Shared-staging download [confidence 80/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "1fb01f30-c946-5ce1-b81b-384c251f6da1",
@@ -445,7 +445,7 @@
         "value": "https://s3.g.s4.mega.io/aileqac3yep7oqdhygjpberqqnk2zrnhck2lx/busket/Bravo/vida/NGZTDICF.exe",
         "to_ids": true,
         "comment": "url: https://s3.g.s4.mega.io/aileqac3yep7oqdhygjpberqqnk2zrnhck2lx/busket/Bravo/vida/NGZTDICF.exe. Mega.io payload, NDA-themed (NDA.doc); 'Bravo/vida' is operator NDA campaign codename [confidence 80/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "c5ebfc8e-c154-5b04-8791-10770bd0f83a",
@@ -454,7 +454,7 @@
         "value": "https://s3.g.s4.mega.io/aileqac3yep7oqdhygjpberqqnk2zrnhck2lx/busket/putty.exe",
         "to_ids": true,
         "comment": "url: https://s3.g.s4.mega.io/aileqac3yep7oqdhygjpberqqnk2zrnhck2lx/busket/putty.exe. Mega.io payload, Tier-1 MSC chain [confidence 80/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "3979b661-8f86-5bc9-8ed5-4d7405277669",
@@ -463,7 +463,7 @@
         "value": "https://s3.g.s4.mega.io/aileqac3yep7oqdhygjpberqqnk2zrnhck2lx/busket/putty2.exe",
         "to_ids": true,
         "comment": "url: https://s3.g.s4.mega.io/aileqac3yep7oqdhygjpberqqnk2zrnhck2lx/busket/putty2.exe. Mega.io payload, Price-themed (Price5.docm, Price6.doc, Price4.xls) [confidence 80/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "89f9de45-3089-5efe-8e81-31c98e5e0e7c",
@@ -472,7 +472,7 @@
         "value": "109.120.137.6",
         "to_ids": true,
         "comment": "ipv4: 109.120.137.6. Second-stage payload server; H2nexus Ltd Germany; hosts PUTTY.exe, RDP.exe, RMS.exe, Glovo.exe; Russian-language URL 'mozhno-li-vyvesti-dengi-s-krakena.html' historically observed; VT 6/91 malicious [confidence 80/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "edf71142-a6a3-5bc1-8ed6-bc44a60e41d5",
@@ -481,7 +481,7 @@
         "value": "185.241.208.129",
         "to_ids": true,
         "comment": "ipv4: 185.241.208.129. C2 server confirmed via Suricata flow + Noriben + netstat (PID 2596 WVault.exe); AS210558 1337 Services GmbH (Poland); Spamhaus DROP listed; ET DROP rule 2400036 fired; VT confirms Carriers.exe as known communicating file [confidence 95/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "d64ed301-4265-5872-ae3d-af89a749418b",
@@ -490,7 +490,7 @@
         "value": "62.60.237.100",
         "to_ids": true,
         "comment": "ipv4: 62.60.237.100. Primary staging server; AEZA Finland; Apache/2.4.58 (Ubuntu); /Documents/ and /download/Documents/ open directories with 32+ phishing artifacts; VT 5/91 malicious [confidence 95/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "f58fd9b6-6a85-5c90-a224-1a777573b9e6",
@@ -499,7 +499,7 @@
         "value": "80.253.249.186",
         "to_ids": true,
         "comment": "ipv4: 80.253.249.186. Shared malware-staging infrastructure; serves the legit Wondershare DLL pack (BugSplat.dll, COMSupport.dll, etc.); QWINS LTD Germany; VT 11/47 malicious; useful pivot for tracking other operators using the same side-loading template [confidence 80/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592927
       },
       {
         "uuid": "89bcb0a0-0636-56fb-82dc-44e161c618ea",
@@ -508,7 +508,7 @@
         "value": "alert tls $HOME_NET any -> any any (msg:\"THL DETECT HijackLoader-Penguish-Rugmi AsyncRAT SSL JA3 Fingerprint 07af4aa9e4d215a5ee63f9a0a277fbe3 (RAT C2 Fleet Indicator)\"; flow:established,to_server; ja3.hash; content:\"07af4aa9e4d215a5ee63f9a0a277fbe3\"; endswith; threshold:type limit,track by_src,count 3,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/; classtype:trojan-activity; sid:9301101; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-06;)",
         "to_ids": true,
         "comment": "AsyncRAT SSL JA3 Fingerprint 07af4aa9e4d215a5ee63f9a0a277fbe3 | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1071.001, T1573.001 | rule hash 520d364c | https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/",
-        "timestamp": 1791592076,
+        "timestamp": 1791592927,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -523,7 +523,7 @@
         "value": "title: HijackLoader Covert IPC Named Pipe WondershareCrashServices Created\nid: 7c9d4b1a-e832-4f67-b52a-901c3d8e5f24\nstatus: experimental\ndescription: >-\n  Detects creation of the named pipe \\.\\pipe\\WondershareCrashServices used\n  by the HijackLoader operator-modified ExceptionHandler.dll as a covert\n  inter-process communication channel between loader stages. The pipe name\n  mimics the legitimate Wondershare Breakpad crash-reporting IPC channel\n  but is created by the operator's modified dispatcher DLL (PDB path\n  I:\\CompanySource\\Plowshare\\) to coordinate stage-1 through stage-3\n  execution. Legitimate Wondershare software creates this pipe only from\n  signed Wondershare binaries installed under Program Files.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-06\ntags:\n    - attack.stealth\n    - attack.execution\n    - attack.t1036.005\n    - attack.t1559\n    - detection.emerging-threats\nlogsource:\n    category: pipe_created\n    product: windows\ndetection:\n    selection:\n        PipeName|endswith: '\\WondershareCrashServices'\n    filter_legit_wondershare:\n        Image|startswith:\n            - 'C:\\Program Files\\Wondershare\\'\n            - 'C:\\Program Files (x86)\\Wondershare\\'\n    condition: selection and not filter_legit_wondershare\nfalsepositives:\n    - >-\n      Legitimate Wondershare DVD Creator or SlideShow Editor installations\n      where ExceptionHandler.dll creates this pipe from a genuine Program\n      Files install path (filtered by the legit Wondershare path exclusion above)\n    - Security testing tools that explicitly simulate Wondershare crash-reporter IPC\nlevel: medium",
         "to_ids": false,
         "comment": "HijackLoader Covert IPC Named Pipe WondershareCrashServices Created | TIER: Hunting | robustness 1 | confidence HIGH | ATT&CK T1559, T1036.005 | rule hash 102c07e6 | https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/",
-        "timestamp": 1791592076,
+        "timestamp": 1791592927,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -538,7 +538,7 @@
         "value": "title: HijackLoader GrimResource MMC Spawning Mshta or Rundll32 for Payload Execution\nid: b81e4c29-53a7-4d02-8f9e-2a7d6c4b1e35\nstatus: experimental\ndescription: >-\n  Detects MMC (Microsoft Management Console) spawning mshta.exe, rundll32.exe,\n  or a generic script/command interpreter as part of the GrimResource MSC file\n  weaponization technique used by the HijackLoader campaign. The observed MSC\n  files (1.msc, Price2.pdf.msc, MSCFile.msc) use the res://apds.dll/redirect.html\n  XSL redirect to execute javascript:eval(), which launches an interpreter from\n  mmc.exe as a parent. This parent-child relationship is abnormal — legitimate\n  MMC snap-ins do not spawn these interpreters.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-06\ntags:\n    - attack.execution\n    - attack.stealth\n    - attack.t1218.014\n    - attack.t1059\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        ParentImage|endswith: '\\mmc.exe'\n        Image|endswith:\n            - '\\mshta.exe'\n            - '\\rundll32.exe'\n            - '\\wscript.exe'\n            - '\\cscript.exe'\n            - '\\cmd.exe'\n            - '\\powershell.exe'\n            - '\\pwsh.exe'\n    filter_legitimate_mmc:\n        CommandLine|contains:\n            - 'eventvwr.msc'\n            - 'compmgmt.msc'\n            - 'devmgmt.msc'\n            - 'diskmgmt.msc'\n    condition: selection and not filter_legitimate_mmc\nfalsepositives:\n    - >-\n      Custom enterprise MMC snap-ins that legitimately spawn PowerShell or\n      cmd.exe for administrative actions (rare — verify the specific MSC\n      file source and the spawned command line for administrative context)\n    - Security monitoring tools that invoke MMC snap-ins programmatically\nlevel: high",
         "to_ids": true,
         "comment": "HijackLoader GrimResource MMC Spawning Mshta or Rundll32 for Payload Execution | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1218.014, T1059 | rule hash 25a92fcb | https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/",
-        "timestamp": 1791592076,
+        "timestamp": 1791592927,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -553,7 +553,7 @@
         "value": "title: HijackLoader GrimResource MMC Spawning PowerShell Adding Defender Exclusion\nid: e73a1b48-c926-4e85-9fd2-6b8d3e4a7c19\nstatus: experimental\ndescription: >-\n  Detects the HijackLoader GrimResource MSC file execution chain where mmc.exe\n  spawns cmd.exe or powershell.exe that subsequently invokes Add-MpPreference\n  with -ExclusionExtension or -ExclusionPath to disable Windows Defender\n  real-time protection for the operator's persistence directory. In the\n  observed campaign, the MSC files execute XSL -> VBScript -> PowerShell to\n  add C:\\ProgramData\\adv_ctrl to Defender exclusions before dropping the\n  loader chain. This mmc.exe -> PowerShell -> Add-MpPreference combination is\n  not a legitimate administrative pattern.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-06\ntags:\n    - attack.stealth\n    - attack.execution\n    - attack.defense-impairment\n    - attack.t1218.014\n    - attack.t1059.001\n    - attack.t1685\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_parent:\n        ParentImage|endswith: '\\mmc.exe'\n        Image|endswith:\n            - '\\powershell.exe'\n            - '\\pwsh.exe'\n            - '\\cmd.exe'\n    selection_cmdline:\n        CommandLine|contains:\n            - 'Add-MpPreference'\n            - 'ExclusionExtension'\n            - 'ExclusionPath'\n            - 'Set-MpPreference'\n    condition: selection_parent and selection_cmdline\nfalsepositives:\n    - >-\n      Security administrators who open MMC snap-ins and then separately run\n      PowerShell to manage Defender exclusions in the same session (extremely\n      unlikely as a process-parent relationship: MMC does not propagate as\n      the parent for manually opened PowerShell windows)\n    - Automated endpoint management solutions that use MMC-based snap-ins to\n      deliver Defender configuration changes (verify via change-management records)\nlevel: high",
         "to_ids": true,
         "comment": "HijackLoader GrimResource MMC Spawning PowerShell Adding Defender Exclusion | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1218.014, T1685, T1059.001 | rule hash 19eda484 | https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/",
-        "timestamp": 1791592076,
+        "timestamp": 1791592927,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -568,7 +568,7 @@
         "value": "title: HijackLoader Inno Setup Wrapper Spawning CrystSupervisor32 and WVault Process Chain\nid: 3a7f1e92-bb04-4d85-9c3e-f6a820d14c73\nstatus: experimental\ndescription: >-\n  Detects the HijackLoader/Penguish/Rugmi loader chain initiated by an Inno\n  Setup wrapper using the Pascal Script InitializeSetup->WinExec->return\n  False anti-triage technique. The wrapper drops and immediately launches\n  CrystSupervisor32.exe (renamed genuine Wondershare SlideShowEditor.exe)\n  from a temporary is-*.tmp directory. The chain continues through\n  WVault.exe (renamed signed Qihoo 360 PromoUtil.exe) used as the hollow\n  host for an injected .NET AsyncRAT-class RAT. The installer exits\n  silently with no wizard UI, defeating sandboxes that wait for\n  wizard-completion or [Run] section events.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-06\ntags:\n    - attack.execution\n    - attack.stealth\n    - attack.t1036.005\n    - attack.t1574.001\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_crystsupervisor:\n        Image|endswith: '\\CrystSupervisor32.exe'\n        ParentImage|contains: '\\is-'\n    selection_wvault_child:\n        Image|endswith: '\\WVault.exe'\n        ParentImage|endswith: '\\CrystSupervisor32.exe'\n    selection_wvault_parent_temp:\n        Image|endswith: '\\WVault.exe'\n        ParentCommandLine|contains: 'is-'\n    condition: selection_crystsupervisor or selection_wvault_child or selection_wvault_parent_temp\nfalsepositives:\n    - >-\n      Legitimate Wondershare software installers that use CrystSupervisor32.exe\n      as part of genuine DVD Creator or SlideShow Editor installation (verify\n      Authenticode chain and parent install path matches official Wondershare\n      installer, not a temp directory)\n    - >-\n      Qihoo 360 software installations where PromoUtil.exe is legitimately\n      renamed (verify install path is under Program Files, not C:\\ProgramData\\)\nlevel: medium",
         "to_ids": false,
         "comment": "HijackLoader Inno Setup Wrapper Spawning CrystSupervisor32 and WVault Process Chain | TIER: Hunting | robustness 1 | confidence HIGH (for this build wave) | ATT&CK T1036.005, T1574.001 | rule hash 6ae58ac4 | https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/",
-        "timestamp": 1791592076,
+        "timestamp": 1791592927,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -583,7 +583,7 @@
         "value": "title: HijackLoader Operator Persistence Directory adv_ctrl Created Under ProgramData\nid: f2a85c3d-16b7-4e09-a74f-3c9b7d2e8a15\nstatus: experimental\ndescription: >-\n  Detects creation of the operator-codename persistence directory adv_ctrl\n  under C:\\ProgramData\\ or %APPDATA%\\, used by the HijackLoader/Penguish/Rugmi\n  campaign to stage the Crisp.exe side-load host and the WVault.exe hollow\n  host, and to receive a Windows Defender real-time exclusion. The codename\n  adv_ctrl is one of several operator persistence directory names observed\n  across campaign variants (others: brokerbg, exttracer_net48,\n  thread_adapter, Sulfathiazole) — a sixth wave will very likely introduce\n  a new, uncovered codename.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-06\ntags:\n    - attack.persistence\n    - attack.stealth\n    - attack.t1036.005\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: windows\ndetection:\n    selection_adv_ctrl:\n        TargetFilename|contains: '\\adv_ctrl\\'\n        TargetFilename|startswith:\n            - 'C:\\ProgramData\\'\n            - 'C:\\Users\\'\n    selection_siblings:\n        TargetFilename|contains:\n            - '\\brokerbg\\'\n            - '\\exttracer_net48\\'\n            - '\\thread_adapter\\'\n            - '\\Sulfathiazole\\'\n        TargetFilename|startswith:\n            - 'C:\\ProgramData\\'\n            - 'C:\\Users\\'\n    condition: selection_adv_ctrl or selection_siblings\nfalsepositives:\n    - >-\n      Legitimate software installers that coincidentally use a directory\n      named adv_ctrl (extremely unlikely — this is a distinctive operator\n      codename, not a standard Windows or common third-party path component)\n    - Security tools or EDR agents using similarly named directories for internal state\nlevel: medium",
         "to_ids": false,
         "comment": "HijackLoader Operator Persistence Directory adv_ctrl Created Under ProgramData | TIER: Hunting | robustness 1 | confidence HIGH | ATT&CK T1036.005 | rule hash 26434a10 | https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/",
-        "timestamp": 1791592076,
+        "timestamp": 1791592927,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -598,7 +598,7 @@
         "value": "title: HijackLoader WVault.exe Hollow-Host Launched Directly from Inno Setup Temp Directory\nid: c45f9d2e-8b16-4c53-a97b-7e3f1d9c6b42\nstatus: experimental\ndescription: >-\n  Detects WVault.exe (renamed, signed Qihoo 360 PromoUtil.exe used as a\n  hollow host for an injected .NET AsyncRAT-class RAT) launched with a\n  parent process image path containing the Inno Setup temp-extraction\n  marker \"is-\", indicating a direct launch from an is-*.tmp\\ directory\n  rather than the campaign's persistent C:\\ProgramData\\adv_ctrl\\ location.\n  This is a distinct chain link from — not a duplicate of — the broader\n  Inno Setup process-tree rule, which also covers WVault.exe as a direct\n  child of CrystSupervisor32.exe.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-06\ntags:\n    - attack.stealth\n    - attack.privilege-escalation\n    - attack.t1055.012\n    - attack.t1036.005\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        Image|endswith: '\\WVault.exe'\n        ParentImage|contains: 'is-'\n    condition: selection\nfalsepositives:\n    - >-\n      Legitimate Wondershare software chains where a similarly-launched\n      process runs from an Inno Setup temp directory in genuine DVD\n      Creator workflows (verify the file hashes and install path: the\n      legitimate chain runs from Program Files, not is-*.tmp or\n      C:\\ProgramData\\adv_ctrl\\)\nlevel: medium",
         "to_ids": false,
         "comment": "HijackLoader WVault.exe Hollow-Host Launched Directly from Inno Setup Temp Directory | TIER: Hunting | robustness 1 | confidence HIGH (structural); the underlying per-host environment-variable IPC mechanism itself is not observable via this selector | ATT&CK T1055.012, T1036.005 | rule hash 884a14d1 | https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/",
-        "timestamp": 1791592076,
+        "timestamp": 1791592927,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -613,7 +613,7 @@
         "value": "title: Legacy .job Scheduled Task File Created in Windows Tasks Directory\nid: 9e6b3f17-d452-4a08-c91d-8b7e2f5a3c06\nstatus: experimental\ndescription: >-\n  Detects creation of any legacy .job-format scheduled task file under\n  C:\\Windows\\Tasks\\, a known blind spot in autorunsc (Sysinternals Autoruns)\n  enumeration that does not parse this path by default. Modern Windows\n  writes XML-format scheduled tasks to C:\\Windows\\System32\\Tasks\\ instead,\n  so a write to the legacy path is uncommon outside of older third-party\n  installers or enterprise deployment tooling. Observed in the\n  HijackLoader/Penguish/Rugmi campaign as the watchermgmt.job persistence\n  artifact, auto-migrated to an XML-format task by the Windows Schedule\n  service within 90ms of the legacy write; broadened here to cover any\n  legacy .job write regardless of task name or dropping process.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-06\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.execution\n    - attack.t1053.005\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: windows\ndetection:\n    selection:\n        TargetFilename|startswith: 'C:\\Windows\\Tasks\\'\n        TargetFilename|endswith: '.job'\n    condition: selection\nfalsepositives:\n    - >-\n      Legacy scheduled tasks created by third-party software installers\n      writing .job files to C:\\Windows\\Tasks\\ (uncommon in modern\n      environments — legacy .job format is rarely used by legitimate\n      software after Windows Vista)\n    - >-\n      Enterprise management tools (SCCM, Ansible, PDQ) that use legacy\n      .job format for scheduled task deployment (verify parent process chain)\nlevel: medium",
         "to_ids": false,
         "comment": "Legacy .job Scheduled Task File Created in Windows\\Tasks (Autorunsc Blind Spot) | TIER: Hunting | robustness 2 | confidence HIGH (technique-level); MODERATE that any single hit is this specific campaign | ATT&CK T1053.005 | rule hash f85a84c7 | https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/",
-        "timestamp": 1791592076,
+        "timestamp": 1791592927,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -628,7 +628,7 @@
         "value": "title: Office VBA Macro Security Disabled via Registry VBAWarnings Set to 1\nid: 4d2c8e5b-7f91-4b36-a82e-5d9c1f7e3a08\nstatus: experimental\ndescription: >-\n  Detects a registry write setting\n  HKCU\\Software\\Microsoft\\Office\\<version>\\<app>\\Security\\VBAWarnings to 1\n  (enable all macros without notification), which disables Office macro\n  security controls. In the HijackLoader campaign, this is performed by\n  Excel_2016_Windows.bat via PowerShell or a direct registry write, used\n  to pre-condition victim workstations before delivering macro-enabled\n  Office lure documents (Price5.docm, Price6.doc, NDA.doc, Price4.xls).\n  The registry path covers both Office 16.0 (2016/2019/365) and 19.0\n  variant keys.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-06\ntags:\n    - attack.defense-impairment\n    - attack.persistence\n    - attack.execution\n    - attack.t1112\n    - attack.t1204.002\n    - detection.emerging-threats\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection:\n        TargetObject|contains: '\\Security\\VBAWarnings'\n        TargetObject|contains:\n            - '\\Microsoft\\Office\\16.'\n            - '\\Microsoft\\Office\\19.'\n        Details: 'DWORD (0x00000001)'\n    condition: selection\nfalsepositives:\n    - >-\n      Legitimate IT administrators deploying macro-enabled Office solutions\n      who intentionally set VBAWarnings=1 via GPO or management scripts\n      (correlate with change management records and deploying user account)\n    - Software developers testing Office VBA macros in a development environment\n    - >-\n      Enterprise Office deployments that centrally manage macro trust\n      settings (these should be deployed via GPO, not per-user registry\n      write from cmd.exe/PowerShell)\nlevel: medium",
         "to_ids": false,
         "comment": "Office VBA Macro Security Disabled via Registry VBAWarnings Set to 1 | TIER: Hunting | robustness 2 | confidence HIGH | ATT&CK T1112, T1204.002 | rule hash a9ab0465 | https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/",
-        "timestamp": 1791592076,
+        "timestamp": 1791592927,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -643,7 +643,7 @@
         "value": "title: WVault.exe or Renamed Vendor Binary Executing from Non-Standard ProgramData Path\nid: 6684f300-fac8-4477-9d8a-c33b1c724155\nstatus: experimental\ndescription: >-\n  Detects a process named WVault.exe executing from C:\\ProgramData\\, the\n  non-standard drop path used by the HijackLoader/Penguish/Rugmi campaign\n  for a renamed, genuine signed Qihoo 360 PromoUtil.exe used as a hollow\n  host for injected .NET RAT payloads. WVault.exe is not a filename used\n  by any known legitimate software; this cross-campaign TTP cluster\n  (renaming a signed vendor binary as an injection host) has been observed\n  across 8+ unrelated campaigns since 2025, so a hit should be correlated\n  with family-specific indicators before attribution.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-06\ntags:\n    - attack.stealth\n    - attack.t1036.005\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        Image|endswith: '\\WVault.exe'\n        Image|contains: '\\ProgramData\\'\n    condition: selection\nfalsepositives:\n    - >-\n      Rare legitimate portable or sideloaded applications that ship a\n      binary literally named WVault.exe in a user-writable path (no known\n      legitimate software uses this exact name)\n    - >-\n      Other unrelated malware families that reuse the identical\n      rename-a-signed-vendor-binary masquerade pattern\nlevel: medium",
         "to_ids": false,
         "comment": "WVault.exe or Renamed Vendor Binary Executing from Non-Standard ProgramData Path | TIER: Hunting | robustness 1 | confidence HIGH | ATT&CK T1036.005 | rule hash 09638712 | https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/",
-        "timestamp": 1791592076,
+        "timestamp": 1791592927,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -658,7 +658,7 @@
         "value": "/*\n   Yara Rule Set\n   Identifier: HijackLoader / Penguish / Rugmi — AsyncRAT Campaign Detection Suite\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule MALW_HijackLoader_ExceptionHandler_Plowshare_Dispatcher {\n   meta:\n      description = \"Detects operator-modified Wondershare Plowshare crash reporter (ExceptionHandler.dll) used as the HijackLoader stage-1 dispatcher, identified by its operator PDB path, bespoke payload filenames, and Wondershare-mimicking named pipe\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\"\n      date = \"2026-05-06\"\n      hash1 = \"a3d0a9c71be732cdaafc7c1a9ef00c2a5a01e93b4a29c8944f8ea14a79f52ce0\"\n      family = \"HijackLoader\"\n      malware_type = \"Loader\"\n      campaign = \"OpenDirectory-MultiFamily-MaaS-62.60.237.100\"\n      id = \"725513e0-5d7a-5bd3-9bb6-1283484913d7\"\n   strings:\n      $pdb        = \"I:\\\\CompanySource\\\\Plowshare\\\\Src\\\\Symbol\\\\Release\\\\ExceptionHandler.pdb\" ascii\n      $payload1   = \"networkspec17.log\" ascii wide\n      $payload2   = \"shadermgr93.rc\" ascii wide\n      $pipe       = \"WondershareCrashServices\" ascii wide\n      $codename   = \"Plowshare\" ascii fullword\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 2MB and\n      ($pdb or ($payload1 and $payload2 and $pipe) or ($codename and $pipe))\n}",
         "to_ids": true,
         "comment": "ExceptionHandler.dll Plowshare Dispatcher | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1574.001, T1055.012, T1027 | rule hash f468fe10 | https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/",
-        "timestamp": 1791592076,
+        "timestamp": 1791592927,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -673,7 +673,7 @@
         "value": "rule MALW_HijackLoader_InnoSetup_AntiTriage_Wrapper {\n   meta:\n      description = \"Detects this build wave of the HijackLoader Inno Setup 6.5+ wrapper using the Pascal Script InitializeSetup->WinExec->return False anti-triage pattern, identified by the operator codenames Apophyge (AppName), Veteran (DefaultDirName), the campaign AppId GUID, and the renamed loader filename CrystSupervisor32.exe\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\"\n      date = \"2026-05-06\"\n      hash1 = \"1afbe5d960af45832539b11e92a09b808f0c3868ab437a7ef1b5d1bd5e16d0c3\"\n      family = \"HijackLoader\"\n      malware_type = \"Loader\"\n      campaign = \"OpenDirectory-MultiFamily-MaaS-62.60.237.100\"\n      id = \"2bfaff71-9aa6-5e70-a180-cce9faaa32f2\"\n   strings:\n      $inno_magic = { 49 6E 6E 6F 53 65 74 75 70 20 53 65 74 75 70 20 44 61 74 61 }\n      $appid      = \"{1F2952E4-FC07-4482-B9E6-E795507DA7D2}\" ascii wide\n      $appname    = \"Apophyge\" ascii wide\n      $dirname    = \"Veteran\" ascii wide\n      $loader     = \"CrystSupervisor32.exe\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 20MB and\n      $inno_magic and\n      (($appid) or ($appname and $dirname) or ($loader and ($appid or $appname)))\n}",
         "to_ids": false,
         "comment": "Inno Setup Pascal Anti-Triage Wrapper | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1027.009, T1204.002, T1036.005 | rule hash 0bb413fd | https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/",
-        "timestamp": 1791592076,
+        "timestamp": 1791592927,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -688,7 +688,7 @@
         "value": "rule MALW_HijackLoader_MultiVector_Lure_GrimResource_MSC {\n   meta:\n      description = \"Detects MSC GrimResource weaponized files used in the HijackLoader campaign via the res://apds.dll/redirect.html XSL-redirect abuse pattern embedded in an MMC snap-in .msc file, or via the campaign's Mega.io staging bucket path paired with a scripting/obfuscation corroborator (covers macro-document lures fetching from the same bucket)\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\"\n      date = \"2026-05-06\"\n      hash1 = \"3480d0478d35d8a12331b97769401e16e4956bdc24b9a7175ae08e2c9e9acf8f\"\n      family = \"HijackLoader\"\n      malware_type = \"Loader\"\n      campaign = \"OpenDirectory-MultiFamily-MaaS-62.60.237.100\"\n      id = \"6a42e21f-3581-54ab-b461-f64733fdb4af\"\n   strings:\n      $grimres    = \"res://apds.dll/redirect.html\" ascii wide nocase\n      $js_eval    = \"javascript:eval(\" ascii wide nocase\n      $mmc_root   = \"<MMC_ConsoleFile\" ascii wide\n      $mega_path  = \"aileqac3yep7oqdhygjpberqqnk2zrnhck2lx/busket/\" ascii wide nocase\n      $macro_rev  = \"[array]::Reverse($\" ascii wide\n   condition:\n      filesize < 5MB and\n      (\n         $grimres or\n         ($mega_path and ($macro_rev or $js_eval or $mmc_root))\n      )\n}",
         "to_ids": true,
         "comment": "Multi-Vector Lure: GrimResource MSC + Mega.io Payload Fetch | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1218.014, T1059.005, T1059.007, T1105 | rule hash 8d16e8bd | https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/",
-        "timestamp": 1791592076,
+        "timestamp": 1791592927,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -703,7 +703,7 @@
         "value": "rule MALW_HijackLoader_NetworkSpec17_IDAT_Carrier {\n   meta:\n      description = \"Detects the HijackLoader stage-3 payload carrier file networkspec17.log by its operator-distinctive PNG-IDAT framing header: a 4-byte chunk-type marker at offset 0 and a 4-byte XOR key at offset 4, both baked into the loader's own multi-layer encoding scheme (PNG IDAT framing + 4-byte XOR + LZNT1 chunked decompression)\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\"\n      date = \"2026-05-06\"\n      hash1 = \"7e2000ceb89574fe95e819f5f47da346119b666b7f64e8b5b01e5152e37d76cf\"\n      family = \"HijackLoader\"\n      malware_type = \"Loader\"\n      campaign = \"OpenDirectory-MultiFamily-MaaS-62.60.237.100\"\n      id = \"ad9cb357-4a89-549a-8d23-7b7116a64f46\"\n   strings:\n      $idat_marker   = { C6 A5 79 EA }\n      $xor_key       = { E1 D5 B4 A2 }\n      $idat_sentinel = { 49 44 41 54 }\n      $iend_sentinel = { 49 45 4E 44 }\n      $filename      = \"networkspec17.log\" ascii wide\n   condition:\n      filesize < 10MB and\n      $idat_marker at 0 and\n      ($xor_key at 4 or ($idat_sentinel and $iend_sentinel) or ($filename and $xor_key))\n}",
         "to_ids": true,
         "comment": "networkspec17.log PNG-IDAT Carrier | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1027.013, T1027.009 | rule hash 0e611937 | https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/",
-        "timestamp": 1791592076,
+        "timestamp": 1791592927,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -718,7 +718,7 @@
         "value": "rule MALW_HijackLoader_Penguish_Stage3_Loader_PE {\n   meta:\n      description = \"Detects the HijackLoader/Penguish/Rugmi stage-3 loader PE (pe_03) by its API hash table values using the X65599/RtlHashUnicodeString polynomial to resolve kernel32/ntdll APIs at runtime with an empty import table\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\"\n      date = \"2026-05-06\"\n      hash1 = \"68fb61225b457172368d43af7ec2afe48f59404089d095584944edbfd0171feb\"\n      family = \"HijackLoader\"\n      malware_type = \"Loader\"\n      campaign = \"OpenDirectory-MultiFamily-MaaS-62.60.237.100\"\n      id = \"046a3e85-6250-5fa4-93aa-55f66ce22d4c\"\n   strings:\n      $hash_gcnw  = { BB 5A B3 CB }\n      $hash_zqip  = { 8E 04 7B 9C }\n      $hash_rdb   = { 2D B6 03 B4 }\n      $hash_zde   = { 32 FB 7E 6A }\n      $hash_zqsi  = { D2 E6 69 AE }\n      $qihoo_pdb  = \"C:\\\\vmagent_new\\\\bin\\\\joblist\\\\881673\\\\out\\\\Release\\\\PromoUtil.pdb\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      (\n         (3 of ($hash_*)) or\n         ($qihoo_pdb and 1 of ($hash_*))\n      )\n}",
         "to_ids": true,
         "comment": "pe_03 HijackLoader Stage-3 Loader (API Hash Table) | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1620, T1055.012, T1480, T1027 | rule hash 9f434bd1 | https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/",
-        "timestamp": 1791592076,
+        "timestamp": 1791592927,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",

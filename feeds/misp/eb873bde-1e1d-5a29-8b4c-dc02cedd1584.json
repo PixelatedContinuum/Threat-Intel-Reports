@@ -5,8 +5,8 @@
     "date": "2026-07-03",
     "threat_level_id": 1,
     "analysis": 2,
-    "timestamp": 1791592076,
-    "publish_timestamp": 1791592076,
+    "timestamp": 1791592906,
+    "publish_timestamp": 1791592906,
     "published": true,
     "Orgc": {
       "name": "The Hunters Ledger",
@@ -150,7 +150,7 @@
         "value": "https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/",
         "to_ids": false,
         "comment": "Detection rules, The Hunters Ledger",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "b6a6375d-b9e7-53a9-bb8d-2f8ad69122ac",
@@ -159,7 +159,7 @@
         "value": "https://the-hunters-ledger.com/ioc-feeds/evilsoul-engine-stealer-maas-iocs.json",
         "to_ids": false,
         "comment": "IOC feed (JSON), The Hunters Ledger",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "54becf46-76b6-550f-8dd7-b7a14f7770ad",
@@ -168,7 +168,7 @@
         "value": "https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/",
         "to_ids": false,
         "comment": "Report, The Hunters Ledger",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "ea88a639-bcb0-5df4-b6fa-66cafdd7e087",
@@ -177,7 +177,7 @@
         "value": "https://the-hunters-ledger.com/stix/evilsoul-engine-stealer-maas-144-172-103-98.json",
         "to_ids": false,
         "comment": "STIX 2.1 bundle, The Hunters Ledger",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "41b691c6-08b7-5008-8758-803f8b818897",
@@ -186,7 +186,7 @@
         "value": "022944768c4326d611fa3edb100eb8277228717a220580e7ffce143341aa39fa",
         "to_ids": true,
         "comment": "sha256: 022944768c4326d611fa3edb100eb8277228717a220580e7ffce143341aa39fa. KAIDO Quasar RAT, low-detection sibling (PART A) [confidence 95/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "7254e13a-28fc-500e-8cae-9d74c57925c5",
@@ -195,7 +195,7 @@
         "value": "19e970052401aa72aa3d5a1145fbef9ac57a6d3a39f47e618b575ff88283797a",
         "to_ids": true,
         "comment": "sha256: 19e970052401aa72aa3d5a1145fbef9ac57a6d3a39f47e618b575ff88283797a. EvilSoul builder_index.js (Builder API) (PART B) [confidence 95/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "4c81a335-b1bb-51e3-8673-bb767f32772a",
@@ -204,7 +204,7 @@
         "value": "299a2e7fa8a69c495ec19fecf55d93bb766addaa78e89a4e1ad78a9cea59b31c",
         "to_ids": true,
         "comment": "sha256: 299a2e7fa8a69c495ec19fecf55d93bb766addaa78e89a4e1ad78a9cea59b31c. EvilSoul Socket.IO WebPanel RAT build (81.9 MB pkg-Node), C2 evilsoul.cc (PART B) [confidence 95/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "46323923-348d-50ff-9b90-0f02ea51eb13",
@@ -213,7 +213,7 @@
         "value": "2b23eed25f5885ca2652fde9f277b295de6ef0dbcdcce0826c4fd734b34dc0b8",
         "to_ids": true,
         "comment": "sha256: 2b23eed25f5885ca2652fde9f277b295de6ef0dbcdcce0826c4fd734b34dc0b8. EvilSoul index.js orchestrator (forks 4 services) (PART B) [confidence 95/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "201e803a-f4a4-547e-989f-6a8a42e927e2",
@@ -222,7 +222,7 @@
         "value": "385d20ca574976e3ba3f4f3079420f8a1c3935c0ab4a3f87063beea27d41e254",
         "to_ids": true,
         "comment": "sha256: 385d20ca574976e3ba3f4f3079420f8a1c3935c0ab4a3f87063beea27d41e254. KAIDO Quasar RAT, live-C2 sibling, c2.kaidoo.com.br:443 (PART A) [confidence 95/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "0e9f6ccd-3299-5e34-bd11-37bcb74e0e4e",
@@ -231,7 +231,7 @@
         "value": "763303b69ad589bef248b66d1db93d5e567d9d60f95511806289289ff42a548e",
         "to_ids": true,
         "comment": "sha256: 763303b69ad589bef248b66d1db93d5e567d9d60f95511806289289ff42a548e. Maploot.msi EvilSoul Electron stealer (172 MB) (PART B) [confidence 95/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "f69648ce-32ca-5a9e-9e12-fe14b307b489",
@@ -240,7 +240,7 @@
         "value": "940bdf8421ace41cd9a93957122feed9faf0db02016c4b9daf4aeac7c0c794ed",
         "to_ids": true,
         "comment": "sha256: 940bdf8421ace41cd9a93957122feed9faf0db02016c4b9daf4aeac7c0c794ed. EvilSoul obfuscator.js (js-confuser+AES-GCM+XOR packer) (PART B) [confidence 95/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "c86b5329-5352-5221-8589-146de0687075",
@@ -249,7 +249,7 @@
         "value": "b90100d58b5807139eec66ed4e414bfcecdc369ddd5307e8d0fe2be90dcccde5",
         "to_ids": true,
         "comment": "sha256: b90100d58b5807139eec66ed4e414bfcecdc369ddd5307e8d0fe2be90dcccde5. EvilSoul stealer.js (0xK41) payload source (PART B) [confidence 95/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "52fbcbb6-0403-53f6-b4f3-b3a491af0c0d",
@@ -258,7 +258,7 @@
         "value": "c7542e8265f70d6c1dbf2e3cf6e81a90198cd157d3d6693c6d2a8a49d99a5b8d",
         "to_ids": true,
         "comment": "sha256: c7542e8265f70d6c1dbf2e3cf6e81a90198cd157d3d6693c6d2a8a49d99a5b8d. KAIDO Quasar RAT, tag 'breach', C2 kaidoo.com.br:4782 (PART A) [confidence 95/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "cd578703-fc7e-57b9-95f1-376c10b4e5e3",
@@ -267,7 +267,7 @@
         "value": "dd08fe79932b83890eb7811b59fe8bed37423384194cd9537ef4d8ab27b99b99",
         "to_ids": true,
         "comment": "sha256: dd08fe79932b83890eb7811b59fe8bed37423384194cd9537ef4d8ab27b99b99. EvilSoul panel.exe WebPanel (pkg-Node) (PART B) [confidence 95/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "0182c954-6d0b-5a44-a578-cfa8682b46b2",
@@ -276,7 +276,7 @@
         "value": "fe55908030318879f08b185b9c5b6e6f9d6f691154c361d60cce80162d844212",
         "to_ids": true,
         "comment": "sha256: fe55908030318879f08b185b9c5b6e6f9d6f691154c361d60cce80162d844212. Tinarox.msi EvilSoul Electron stealer (Maploot twin) (PART B) [confidence 95/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "71a20dd9-2bf5-5acb-8289-475740eb798a",
@@ -285,7 +285,7 @@
         "value": "c2.kaidoo.com.br",
         "to_ids": true,
         "comment": "domain: c2.kaidoo.com.br. KAIDO Quasar RAT secondary C2 (port 443) (PART A) [confidence 95/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "f37bc516-0225-5b16-8985-f15fdcc5f0b8",
@@ -294,7 +294,7 @@
         "value": "choix-relay.com",
         "to_ids": false,
         "comment": "domain: choix-relay.com. French 'choix' domain co-resident on the Swiss KAIDO host; possible parallel phishing line (PART A/B), MODERATE-LOW [confidence 40/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "5e9e8398-5bcf-50d7-8db5-778f74e2b257",
@@ -303,7 +303,7 @@
         "value": "evilsoul.cc",
         "to_ids": true,
         "comment": "domain: evilsoul.cc. EvilSoul Socket.IO C2 (299a2e7f build); DNS confirmed in detonation (PART B) [confidence 95/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "3d2f2d8e-7c15-5395-ad87-13c5eae26baf",
@@ -312,7 +312,7 @@
         "value": "evilsoul.xyz",
         "to_ids": true,
         "comment": "domain: evilsoul.xyz. Maploot/Tinarox primary backend (/dcinjection-send, /upload-txts, /download/panel, /download/decrypter) (PART B) [confidence 95/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "29b59317-a5f3-5136-b4ff-6bf6c6f7bf77",
@@ -321,7 +321,7 @@
         "value": "evilsoul1337.xyz",
         "to_ids": true,
         "comment": "domain: evilsoul1337.xyz. 'EvilSoul Panel' domain, MagnoHost BR (PART B) [confidence 60/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "d85c1fd8-d7ff-5c6b-b4ea-117577c70c63",
@@ -330,7 +330,7 @@
         "value": "kaidoo.com.br",
         "to_ids": true,
         "comment": "domain: kaidoo.com.br. KAIDO Quasar RAT primary C2 (port 4782); DNS confirmed in detonation (PART A) [confidence 95/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "fafeb8ef-93c8-5b76-9a53-1d9a559ad4b2",
@@ -339,7 +339,7 @@
         "value": "pay.x4m1k.com",
         "to_ids": true,
         "comment": "domain: pay.x4m1k.com. 0xK41 MaaS sales/payment page (Cloudflare) (PART B) [confidence 80/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "26fdb0bc-c9e8-5f14-806a-92987fd73707",
@@ -348,7 +348,7 @@
         "value": "systemtools.dev",
         "to_ids": true,
         "comment": "domain: systemtools.dev. Decoy cover-identity homepage injected into built payloads (PART B) [confidence 60/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "ce616823-5322-5080-880d-2f81955216b5",
@@ -357,7 +357,7 @@
         "value": "www.kaidoo.com.br",
         "to_ids": true,
         "comment": "domain: www.kaidoo.com.br. KAIDO brand domain (PART A) [confidence 80/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "c48a6e55-b572-520c-86f8-73bedfad08ce",
@@ -366,7 +366,7 @@
         "value": "x4m1k.com",
         "to_ids": true,
         "comment": "domain: x4m1k.com. '0xK41 Panel' control-plane front, A-record to origin 144.172.103.98 (PART B) [confidence 80/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "2fd5ab26-825f-5d1b-bac5-8ad5e1153722",
@@ -375,7 +375,7 @@
         "value": "http://198.1.195.210:3000/tralalero",
         "to_ids": true,
         "comment": "url: http://198.1.195.210:3000/tralalero. EvilSoul webhook-resolution relay; POSTs {key} receives {webhook} (PART B) [confidence 95/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "274f6d0a-2134-54d1-bc28-38e0ea880c0b",
@@ -384,7 +384,7 @@
         "value": "http://evilsoul.cc/socket.io/?EIO=4&transport=polling",
         "to_ids": true,
         "comment": "url: http://evilsoul.cc/socket.io/?EIO=4&transport=polling. EvilSoul Socket.IO v4 C2 handshake (299a2e7f) (PART B) [confidence 95/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "fee5d961-3310-5c54-8c1a-aa6b15afd5d3",
@@ -393,7 +393,7 @@
         "value": "http://evilsoul.xyz/download/decrypter/chrome_inject.exe",
         "to_ids": true,
         "comment": "url: http://evilsoul.xyz/download/decrypter/chrome_inject.exe. EvilSoul backend's own Chrome ABE-bypass injector (Maploot analog) (PART B) [confidence 80/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "62e50258-4474-51c6-bdff-53adcacc4d6c",
@@ -402,7 +402,7 @@
         "value": "https://acf02ac96211.ngrok-free.app",
         "to_ids": true,
         "comment": "url: https://acf02ac96211.ngrok-free.app. Operator ngrok tunnel for panel download (shared across Maploot+Tinarox) | MODERATE, ngrok-free.app is a shared tunneling service; the specific subdomain is operator-unique (PART B) [confidence 95/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "d462c3e8-44df-52fd-9c58-491b18837898",
@@ -411,7 +411,7 @@
         "value": "https://github.com/sqlban/configs/raw/refs/heads/main/chrome_decrypt.dll",
         "to_ids": true,
         "comment": "url: https://github.com/sqlban/configs/raw/refs/heads/main/chrome_decrypt.dll. Chrome ABE-bypass DLL download (299a2e7f supply chain); account now 404 (PART B) [confidence 95/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "1979e3a9-b3fd-57ad-8fc6-dfc7944ee554",
@@ -420,7 +420,7 @@
         "value": "https://github.com/sqlban/configs/raw/refs/heads/main/chromelevator.exe",
         "to_ids": true,
         "comment": "url: https://github.com/sqlban/configs/raw/refs/heads/main/chromelevator.exe. Chrome ABE-bypass tool download (299a2e7f supply chain); account now 404 (PART B) [confidence 95/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "2767963e-ac3e-56b9-9de7-ad3fe1dde485",
@@ -429,7 +429,7 @@
         "value": "https://store8.gofile.io/uploadFile",
         "to_ids": true,
         "comment": "url: https://store8.gofile.io/uploadFile. Loot-zip upload sink (Maploot/Tinarox/299a2e7f) | HIGH, gofile.io is a shared legitimate file-hosting service; pin on the full upload behavior + accompanying IOCs, not the domain alone (PART B) [confidence 95/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "55efa331-6b62-5b4e-8c60-52c8443f0677",
@@ -438,7 +438,7 @@
         "value": "144.172.103.98",
         "to_ids": true,
         "comment": "ipv4: 144.172.103.98. Origin open directory (KAIDO Services), AS14956 RouterHosting US, DEAD as of 2026-06-27 [confidence 95/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "4fdafb2c-791c-51bd-9784-3b5d7edc6dbf",
@@ -447,7 +447,7 @@
         "value": "144.172.109.203",
         "to_ids": true,
         "comment": "ipv4: 144.172.109.203. Live KAIDO Quasar RAT C2, AS14956 RouterHosting US; :8443 TeamKAIDO cert; :4782 Quasar protocol (PART A) [confidence 95/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "500ae19d-c347-5e5d-a2b9-d86405797fd1",
@@ -456,7 +456,7 @@
         "value": "179.43.150.50",
         "to_ids": true,
         "comment": "ipv4: 179.43.150.50. Current kaidoo.com.br A-record, AS51852 Private Layer CH; passive only. Do not probe (PART A) [confidence 60/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "097f9158-8296-598b-9367-6c180bf0d89f",
@@ -465,7 +465,7 @@
         "value": "198.1.195.207",
         "to_ids": true,
         "comment": "ipv4: 198.1.195.207. EvilSoul builder default panel, AS210554 Meteor Cloud / MagnoHost BR (PART B) [confidence 80/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "e20a328e-49c1-5ad0-af2e-a454438fbd1e",
@@ -474,7 +474,7 @@
         "value": "198.1.195.210",
         "to_ids": true,
         "comment": "ipv4: 198.1.195.210. EvilSoul webhook-resolution relay /tralalero + evilsoul.cc historical A-record host, MagnoHost BR (PART B) [confidence 95/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "9a4d234c-17e9-5ae1-8e48-8dad7c5cdff4",
@@ -483,7 +483,7 @@
         "value": "198.89.99.163",
         "to_ids": true,
         "comment": "ipv4: 198.89.99.163. Old evilsoul1337.xyz host, MagnoHost BR; co-hosts a Brazilian CPF/name doxing API and romahosting Pterodactyl panel (PART B) [confidence 60/100]",
-        "timestamp": 1791592076
+        "timestamp": 1791592906
       },
       {
         "uuid": "37eb92ca-bb9a-5f49-80de-6a49c38b8dad",
@@ -492,7 +492,7 @@
         "value": "alert http $HOME_NET any -> any any (msg:\"THL DETECT EvilSoul-Engine Webhook-Resolution Relay POST /tralalero (299a2e7f License-Gated C2)\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"/tralalero\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/; classtype:trojan-activity; sid:1000002; rev:3; metadata:author The_Hunters_Ledger, date 2026-07-03;)",
         "to_ids": true,
         "comment": "EvilSoul-Engine Webhook-Resolution Relay POST /tralalero | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1071.001, T1041 | rule hash fcfaad8e | https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/",
-        "timestamp": 1791592076,
+        "timestamp": 1791592906,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -507,7 +507,7 @@
         "value": "title: Browser Relaunched with Remote Debugging and Headless Flags by Non-Browser Parent\nid: b788a75b-a966-47d5-b91b-5fb92b2e9571\nstatus: experimental\ndescription: >-\n  Detects a Chromium-based browser process launched with --remote-debugging-port,\n  --headless, and --user-data-dir simultaneously by a parent process that is not a\n  known browser or developer-automation binary. This flag combination is used by the\n  EvilSoul-Engine stealer-builder MaaS and its bundled xaitax ChromElevator tool to\n  relaunch the victim's own browser under CDP control and pull already-decrypted\n  cookies via Network.getAllCookies, bypassing Chrome App-Bound Encryption without\n  administrator rights.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/\n    - https://github.com/xaitax/Chrome-App-Bound-Encryption-Decryption\nauthor: The Hunters Ledger\ndate: '2026-07-03'\ntags:\n    - attack.credential-access\n    - attack.t1539\n    - attack.collection\n    - attack.t1185\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_flags:\n        CommandLine|contains|all:\n            - '--remote-debugging-port'\n            - '--headless'\n            - '--user-data-dir'\n    filter_main_browser_parent:\n        ParentImage|endswith:\n            - '\\chrome.exe'\n            - '\\msedge.exe'\n            - '\\brave.exe'\n            - '\\explorer.exe'\n    filter_dev_tooling_parent:\n        ParentImage|endswith:\n            - '\\node.exe'\n            - '\\python.exe'\n            - '\\pythonw.exe'\n    condition: selection_flags and not 1 of filter_*\nfalsepositives:\n    - Legitimate browser automation frameworks (Selenium, Puppeteer, Playwright) launched from a known developer-tooling parent process\n    - QA/CI pipelines that headlessly drive a browser for testing\nlevel: high",
         "to_ids": true,
         "comment": "Browser Relaunched with CDP Debugging by Non-Browser Parent | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1185, T1539 | rule hash 2e08a84b | https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/",
-        "timestamp": 1791592076,
+        "timestamp": 1791592906,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -522,7 +522,7 @@
         "value": "title: ChromElevator ABE-Bypass Tool Dropped to TEMP Executor Directory\nid: 2d54e3fa-a90b-4709-9521-b7a4ab95e76a\nstatus: experimental\ndescription: >-\n  Detects file creation of chromelevator.exe or chrome_decrypt.dll under a\n  TEMP\\executor\\ path, matching the staging location used by the EvilSoul-Engine\n  299a2e7f Socket.IO WebPanel build when it downloads the xaitax\n  Chrome-App-Bound-Encryption-Decryption tool pair from a GitHub supply-chain\n  mirror at runtime.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/\n    - https://github.com/xaitax/Chrome-App-Bound-Encryption-Decryption\nauthor: The Hunters Ledger\ndate: '2026-07-03'\ntags:\n    - attack.command-and-control\n    - attack.t1105\n    - attack.credential-access\n    - attack.t1555.003\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: windows\ndetection:\n    selection:\n        TargetFilename|contains: '\\executor\\'\n        TargetFilename|endswith:\n            - '\\chromelevator.exe'\n            - '\\chrome_decrypt.dll'\n    condition: selection\nfalsepositives:\n    - Extremely unlikely — these are operator-chosen filenames with no legitimate software collision\nlevel: medium",
         "to_ids": false,
         "comment": "ChromElevator ABE-Bypass Tool Dropped to TEMP Executor Directory | TIER: Hunting | robustness 1 | confidence HIGH (string match) / durability LOW (renameable filenames + directory) | ATT&CK T1105, T1555.003 | rule hash 8ba3d1e8 | https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/",
-        "timestamp": 1791592076,
+        "timestamp": 1791592906,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -537,7 +537,7 @@
         "value": "title: EvilSoul-Engine Watchdog Persistence Files Created in TEMP or Startup\nid: 5f925688-77fd-410a-9c8a-83ca801a5013\nstatus: experimental\ndescription: >-\n  Detects file creation of the specific watchdog and persistence-chain\n  filenames used by the EvilSoul-Engine 299a2e7f build's redundant\n  persistence-of-persistence mechanism, including updatesystem.cmd,\n  watcher.vbs, and update.bat, which are subsequently attribute-flagged\n  hidden to survive casual folder inspection.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-03'\ntags:\n    - attack.stealth\n    - attack.t1564.001\n    - attack.persistence\n    - attack.execution\n    - attack.privilege-escalation\n    - attack.t1053.005\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: windows\ndetection:\n    selection:\n        TargetFilename|endswith:\n            - '\\updatesystem.cmd'\n            - '\\watcher.vbs'\n            - '\\update.bat'\n    filter_common_update_paths:\n        TargetFilename|contains:\n            - '\\Windows\\System32\\'\n            - '\\Program Files\\'\n    condition: selection and not filter_common_update_paths\nfalsepositives:\n    - Legitimate software update scripts that happen to share these generic filenames outside protected system directories\n    - Custom internal IT automation using similarly named watchdog scripts\nlevel: medium",
         "to_ids": false,
         "comment": "EvilSoul-Engine Watchdog Persistence Files Created in TEMP or Startup | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1564.001, T1053.005 | rule hash 014b2156 | https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/",
-        "timestamp": 1791592076,
+        "timestamp": 1791592906,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -552,7 +552,7 @@
         "value": "title: Python Process Opens LSASS Handle (ABE Decryptor Pattern)\nid: e2ccff6f-eec8-4a34-a78e-4ac4bf5d50f3\nstatus: experimental\ndescription: >-\n  Detects a python.exe or pythonw.exe process that opens a handle to lsass.exe.\n  This is the process-access signature of the EvilSoul-Engine stealer.js build's\n  LSASS-impersonation App-Bound-Encryption decryptor, which is launched with a\n  stdin-piped script (-u - flag, no script file argument) and enables\n  SeDebugPrivilege to impersonate the lsass.exe token and decrypt Chrome's\n  app-bound key via Windows CNG, leaving no decryptor script on disk. This rule\n  matches on the LSASS handle-access behavior alone; it does not inspect the\n  parent process's launch flags.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-03'\ntags:\n    - attack.credential-access\n    - attack.t1003.001\n    - attack.t1539\n    - detection.emerging-threats\nlogsource:\n    category: process_access\n    product: windows\ndetection:\n    selection_access:\n        TargetImage|endswith: '\\lsass.exe'\n        SourceImage|endswith:\n            - '\\python.exe'\n            - '\\pythonw.exe'\n    condition: selection_access\nfalsepositives:\n    - EDR or security-research tooling written in Python that legitimately inspects LSASS\n    - Authorized credential-recovery or forensic tooling in incident-response workflows\nlevel: high",
         "to_ids": true,
         "comment": "Python Process Opens LSASS Handle (ABE Decryptor Pattern) | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1003.001, T1539 | rule hash d07fc05f | https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/",
-        "timestamp": 1791592076,
+        "timestamp": 1791592906,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -567,7 +567,7 @@
         "value": "title: Scheduled Task Created with Microsoft Corporation Author and Hidden Flag\nid: c69291c1-70a6-4aa1-835f-bc26d4afcc2f\nstatus: experimental\ndescription: >-\n  Detects creation of a new scheduled task whose Task XML Author field is set\n  to the literal string \"Microsoft Corporation\" combined with the hidden\n  flag enabled. This is the EvilSoul-Engine stealer.js build's persistence\n  masquerade, designed to blend into Task Scheduler listings next to genuine\n  Microsoft-authored tasks; legitimate Microsoft tasks are installed by the\n  OS image or Windows Update rather than created at runtime.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-03'\ntags:\n    - attack.persistence\n    - attack.execution\n    - attack.privilege-escalation\n    - attack.t1053.005\n    - attack.stealth\n    - attack.t1036.004\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    service: security\n    definition: 'Requires Task Scheduler operational logging or Security auditing of Task Scheduler object creation (Event ID 4698) with TaskContent captured'\ndetection:\n    selection:\n        EventID: 4698\n        TaskContent|contains:\n            - '<Author>Microsoft Corporation</Author>'\n            - '<Hidden>true</Hidden>'\n    condition: selection\nfalsepositives:\n    - Unlikely — genuine Microsoft Corporation-authored tasks are pre-installed by the OS, not created via runtime Event ID 4698 registration by a user-context process\nlevel: high",
         "to_ids": true,
         "comment": "Scheduled Task Created with Microsoft Corporation Author and Hidden Flag | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1053.005, T1036.004 | rule hash 0a4a50e2 | https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/",
-        "timestamp": 1791592076,
+        "timestamp": 1791592906,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -582,7 +582,7 @@
         "value": "title: Whole-Drive Windows Defender Exclusion Combined with Real-Time Monitoring Disable\nid: fde077ad-0afc-4158-bff6-f4c80604d461\nstatus: experimental\ndescription: >-\n  Detects PowerShell script block content that both adds a whole-drive\n  (C:\\) Windows Defender exclusion path and disables real-time monitoring in\n  the same execution context. This is the AV/Defender-suppression chain used\n  by the EvilSoul-Engine 299a2e7f Socket.IO WebPanel build's DisableProtections\n  function, which also disables behavior monitoring and the Windows Firewall\n  before running noisy credential-theft operations.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-03'\ntags:\n    - attack.stealth\n    - attack.t1685\n    - attack.defense-impairment\n    - detection.emerging-threats\nlogsource:\n    category: ps_script\n    product: windows\ndetection:\n    selection_exclusion:\n        ScriptBlockText|contains:\n            - \"Add-MpPreference -ExclusionPath 'C:\\\\'\"\n            - 'Add-MpPreference -ExclusionPath \"C:\\\\\"'\n    selection_disable:\n        ScriptBlockText|contains:\n            - 'Set-MpPreference -DisableRealtimeMonitoring $true'\n            - 'Set-MpPreference -DisableBehaviorMonitoring $true'\n    condition: selection_exclusion and selection_disable\nfalsepositives:\n    - IT-administration deployment scripts that legitimately exclude C:\\ during imaging or migration (uncommon but not impossible)\nlevel: high",
         "to_ids": true,
         "comment": "Whole-Drive Defender Exclusion Combined with Real-Time Monitoring Disable | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1685 | rule hash 8ac158f7 | https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/",
-        "timestamp": 1791592076,
+        "timestamp": 1791592906,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -597,7 +597,7 @@
         "value": "/*\n   Yara Rule Set\n   Identifier: EvilSoul-Engine Stealer-Builder MaaS - 299a2e7f Socket.IO WebPanel Variant\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule EvilSoul_Engine_299a2e7f_SocketIO_WebPanel {\n   meta:\n      description = \"Detects the EvilSoul-Engine 299a2e7f Socket.IO WebPanel RAT build via its distinctive args-file suffix, WebPanel embed title, and webhook-resolution relay endpoint string, all recovered from the build's runtime memory; the relay IP:port string is required in combination with another anchor rather than as a standalone trigger so the rule does not fire on the IP literal alone\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/\"\n      date = \"2026-07-03\"\n      hash1 = \"299a2e7fa8a69c495ec19fecf55d93bb766addaa78e89a4e1ad78a9cea59b31c\"\n      family = \"EvilSoul-Engine\"\n      malware_type = \"Stealer + Interactive RAT (Socket.IO)\"\n      campaign = \"EvilSoul-Engine-Stealer-MaaS-144.172.103.98\"\n      id = \"3e7ee8e6-dfb5-5e12-a5c4-60d1db53ee2b\"\n   strings:\n      $argsfile = \"evilsoulblockkstarjkjaksghjhsjkahjskjak81929ijsahsjkj\" ascii wide fullword\n      $panel = \"EvilSoul ~ (WebPanel)\" ascii wide\n      $handle = \"@evilsoulstealer\" ascii wide\n      $relay = \"198.1.195.210:3000/tralalero\" ascii wide\n      $fallback_key = \"6D479A7E665F\" ascii wide fullword\n      $update_cmd = \"updatesystem.cmd\" ascii wide fullword\n   condition:\n      filesize < 100MB and\n      ($argsfile or 2 of ($panel, $handle, $relay, $fallback_key, $update_cmd))\n}",
         "to_ids": true,
         "comment": "EvilSoul-Engine 299a2e7f Socket.IO WebPanel Build | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1071.001, T1105 | rule hash ed36b761 | https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/",
-        "timestamp": 1791592076,
+        "timestamp": 1791592906,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -612,7 +612,7 @@
         "value": "/*\n   Yara Rule Set\n   Identifier: EvilSoul-Engine Stealer-Builder MaaS - Kit-Wide Obfuscator Anchors\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule EvilSoul_Engine_Obfuscator_XOR_Key {\n   meta:\n      description = \"Detects EvilSoul-Engine stealer-builder MaaS output via the operator's hardcoded obfuscator XOR key constant and catchphrase comment, which survive js-confuser because they reside in the loader stage rather than the packed payload\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/\"\n      date = \"2026-07-03\"\n      hash1 = \"940bdf8421ace41cd9a93957122feed9faf0db02016c4b9daf4aeac7c0c794ed\"\n      family = \"EvilSoul-Engine\"\n      malware_type = \"Stealer-Builder\"\n      campaign = \"EvilSoul-Engine-Stealer-MaaS-144.172.103.98\"\n      id = \"5dddfdb6-6a13-54aa-83ed-65e27f52ac3b\"\n   strings:\n      $xor_key = \"see-you-in-the-hellwizard-1082@239$328927bA\" ascii wide\n      $catchphrase = \"wizard see you in the hell\" ascii wide\n      $debug_file = \"kaido_debug.txt\" ascii wide fullword\n      $token_decoder = \"D2VGTBwNZh8zV2A=\" ascii wide\n   condition:\n      filesize < 200MB and\n      ($xor_key or ($catchphrase and 1 of ($debug_file, $token_decoder)))\n}",
         "to_ids": true,
         "comment": "EvilSoul-Engine Obfuscator XOR Key and Catchphrase | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1027, T1588.002 | rule hash cda96c66 | https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/",
-        "timestamp": 1791592076,
+        "timestamp": 1791592906,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -627,7 +627,7 @@
         "value": "/*\n   Yara Rule Set\n   Identifier: EvilSoul-Engine Stealer-Builder MaaS - Kit-Wide Obfuscator Anchors\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule EvilSoul_Engine_SplitDomain_AntiGrep {\n   meta:\n      description = \"Detects EvilSoul-Engine's split-string anti-grep evasion of its own backend domain, where 'evilsoul.xyz' is constructed at runtime as the concatenation 'evilso' + 'ul.xyz' to defeat static string-grep hunting for the plaintext domain\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/\"\n      date = \"2026-07-03\"\n      hash1 = \"763303b69ad589bef248b66d1db93d5e567d9d60f95511806289289ff42a548e\"\n      family = \"EvilSoul-Engine\"\n      malware_type = \"Stealer-Builder\"\n      campaign = \"EvilSoul-Engine-Stealer-MaaS-144.172.103.98\"\n      id = \"b840f5f4-2278-5334-9567-825b5491553c\"\n   strings:\n      $split1 = \"'evilso'+'ul.xyz'\" ascii wide\n      $split2 = \"\\\"evilso\\\"+\\\"ul.xyz\\\"\" ascii wide\n      $split3 = \"'evilso' + 'ul.xyz'\" ascii wide\n      $split4 = \"\\\"evilso\\\" + \\\"ul.xyz\\\"\" ascii wide\n   condition:\n      filesize < 200MB and\n      1 of them\n}",
         "to_ids": false,
         "comment": "EvilSoul-Engine Split-Domain Anti-Grep Pattern | TIER: Hunting | robustness 1 | confidence HIGH (string match) / durability LOW (tied to one domain) | ATT&CK T1027 | rule hash d2eb4967 | https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/",
-        "timestamp": 1791592076,
+        "timestamp": 1791592906,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -642,7 +642,7 @@
         "value": "/*\n   Yara Rule Set\n   Identifier: EvilSoul-Engine Stealer-Builder MaaS - Maploot/Tinarox Electron Builds\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule EvilSoul_Engine_Maploot_Tinarox_Embed_Titles {\n   meta:\n      description = \"Detects EvilSoul-Engine Maploot/Tinarox Electron stealer builds via their branded Discord-embed exfil title strings, confirmed byte-for-byte shared across both game-masquerade builds after webcrack de-obfuscation\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/\"\n      date = \"2026-07-03\"\n      hash1 = \"763303b69ad589bef248b66d1db93d5e567d9d60f95511806289289ff42a548e\"\n      hash2 = \"fe55908030318879f08b185b9c5b6e6f9d6f691154c361d60cce80162d844212\"\n      family = \"EvilSoul-Engine\"\n      malware_type = \"Stealer (Electron)\"\n      campaign = \"EvilSoul-Engine-Stealer-MaaS-144.172.103.98\"\n      id = \"7c0ba54a-cfe9-5363-b03c-52a5b183535e\"\n   strings:\n      $embed1 = \"EvilSoul Stealer - (Discord ~\" ascii wide\n      $embed2 = \"EvilSoul Stealer - (BrowserData ~\" ascii wide\n      $embed3 = \"EvilSoul (Exodus Session and BruteForce)\" ascii wide\n      $embed4 = \"EvilSoul (Steam Session)\" ascii wide\n      $embed5 = \"EvilSoul (Minecraft Session)\" ascii wide\n      $masquerade = \"Unreal Game Inc.\" ascii wide\n      $endpoint1 = \"dcinjection-send\" ascii wide\n      $endpoint2 = \"upload-txts\" ascii wide\n   condition:\n      filesize < 250MB and\n      (2 of ($embed*) or (1 of ($embed*) and ($masquerade or 1 of ($endpoint*))))\n}",
         "to_ids": true,
         "comment": "EvilSoul-Engine Maploot/Tinarox Discord-Embed Exfil Titles | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1555.003, T1539 | rule hash 4a1d0b3c | https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/",
-        "timestamp": 1791592076,
+        "timestamp": 1791592906,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -657,7 +657,7 @@
         "value": "/*\n   Yara Rule Set\n   Identifier: EvilSoul-Engine Supply Chain - xaitax ChromElevator ABE-Bypass Fork\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule Tool_xaitax_ChromElevator_EvilSoul_Fork {\n   meta:\n      description = \"Detects the @breakingupslow-forked build of the public xaitax Chrome-App-Bound-Encryption-Decryption (ChromElevator) tool pair, adopted by the EvilSoul-Engine operator as a runtime-fetched ABE-bypass supply-chain component; anchors on fork-specific attribution strings rather than the stock upstream tool's generic decryption logic\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/\"\n      date = \"2026-07-03\"\n      hash1 = \"dd97278cc64d0a8fbdb66f177367c29d2557dd445b306e922e9ad5660ea233e2\"\n      hash2 = \"928f2ffa7fc84b74941fb714455d7bc14847b3af\"\n      hash3 = \"a567eab759a390a00b4605ea7d161b26\"\n      family = \"EvilSoul-Engine (xaitax ChromElevator fork)\"\n      malware_type = \"HackTool (ABE Bypass)\"\n      campaign = \"EvilSoul-Engine-Stealer-MaaS-144.172.103.98\"\n      id = \"69fc6b2f-9058-5fb8-802a-5e0559c9d881\"\n   strings:\n      $banner = \" by @xaitax / @breakingupslow\" ascii wide\n      $hollow_str = \" Direct Syscall-Based Reflective Hollowing\" ascii wide\n      $pipe = \"__DLL_PIPE_COMPLETION_SIGNAL__\" ascii wide fullword\n      $key_str = \"\\\"app_bound_encrypted_key\\\":\\\"\" ascii\n      $gcm = \"ChainingModeGCM\" ascii wide fullword\n      $copyright = \"# Copyright (https://t.me/evilsoulstealer/)\" ascii wide\n      $resource = \"PAYLOAD_DLL\" ascii fullword\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      ($banner or $copyright or 2 of ($hollow_str, $pipe, $key_str, $gcm, $resource))\n}",
         "to_ids": true,
         "comment": "xaitax ChromElevator ABE-Bypass Tool: @breakingupslow Fork | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1555.003, T1539, T1055.012, T1620 | rule hash 45128954 | https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/",
-        "timestamp": 1791592076,
+        "timestamp": 1791592906,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",

@@ -119,7 +119,12 @@ function run(opts) {
   if (problems.length) return Object.assign({ status: 'FAIL', reason: null }, empty, { problems: problems, notes: notes });
   if (!events.length) return Object.assign({ status: 'NOT CHECKED', reason: 'no published campaign carries an indicator or a rule' }, empty);
 
-  var st = M.stamp(events, readState(), now);
+  var st = M.stamp(events, readState(), now, { restampAll: !!opts.restampAll });
+  if (st.duplicateTimestamps.length) {
+    return Object.assign({ status: 'FAIL', reason: null }, empty, { notes: notes, problems: [
+      'events share a timestamp, so OpenCTI\'s MISP-feed connector would import only the first of each group: ' +
+      st.duplicateTimestamps.join(', ') + '. Run `node generate-misp-feed.js --restamp-all` once.'] });
+  }
   var files = {};
   files['manifest.json'] = JSON.stringify(M.manifest(st.events), null, 2) + '\n';
   files['hashes.csv'] = M.hashesCsv(st.events);
@@ -145,7 +150,7 @@ function run(opts) {
     status: 'PASS', reason: null, problems: [], notes: notes,
     events: st.events.length, attributes: attributes, files: files, stateText: stateText, state: st.state,
     changed: st.changed, added: st.added, newlyWithdrawn: st.newlyWithdrawn, withdrawn: st.withdrawn,
-    removed: removed, orphans: orphans, skippedUnpublished: skipped
+    removed: removed, orphans: orphans, skippedUnpublished: skipped, restamped: st.restamped
   };
 }
 
@@ -153,9 +158,10 @@ module.exports = { run: run, KEEP: KEEP, existingEventFiles: existingEventFiles 
 
 if (require.main === module) {
   var dry = process.argv.indexOf('--dry-run') !== -1;
-  var r = run({ dryRun: dry });
+  var r = run({ dryRun: dry, restampAll: process.argv.indexOf('--restamp-all') !== -1 });
   if (r.status === 'NOT CHECKED') { console.log('NOT CHECKED  ' + r.reason); process.exit(2); }
   console.log(r.status + '   ' + r.events + ' events, ' + r.attributes + ' attributes' + (dry ? '   (dry run, nothing written)' : ''));
+  if (r.restamped) console.log('   restamped (unique timestamps, content unchanged): ' + r.restamped + ' events');
   if (r.added.length) console.log('   added (new timestamp): ' + r.added.join(', '));
   if (r.changed.length) console.log('   changed (timestamp bumped): ' + r.changed.join(', '));
   if (r.newlyWithdrawn.length) console.log('   WITHDRAWN this run, itemise in feeds/misp/changelog.md: ' + r.newlyWithdrawn.join(', '));

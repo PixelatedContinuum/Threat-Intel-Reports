@@ -5,8 +5,8 @@
     "date": "2026-01-15",
     "threat_level_id": 2,
     "analysis": 2,
-    "timestamp": 1791580400,
-    "publish_timestamp": 1791580400,
+    "timestamp": 1791592889,
+    "publish_timestamp": 1791592889,
     "published": true,
     "Orgc": {
       "name": "The Hunters Ledger",
@@ -66,7 +66,7 @@
         "value": "https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/",
         "to_ids": false,
         "comment": "Detection rules, The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592889
       },
       {
         "uuid": "38702084-23f7-5748-93cd-db20614669c0",
@@ -75,7 +75,7 @@
         "value": "https://the-hunters-ledger.com/ioc-feeds/agent-xworm-v2-exe.json",
         "to_ids": false,
         "comment": "IOC feed (JSON), The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592889
       },
       {
         "uuid": "166239d1-5301-5c11-868b-1ab132708880",
@@ -84,7 +84,7 @@
         "value": "alert tcp $HOME_NET any -> any any (msg:\"THL HUNT XWormV2-109.230.231.37 AgentSec Authentication Secret Pattern in TCP Payload (Unconfirmed Wire Encoding)\"; flow:established,to_server; content:\"AgentSec_\"; nocase; pcre:\"/AgentSec_[0-9A-Za-z]{40,50}/i\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/; classtype:trojan-activity; sid:1000023; rev:2; metadata:author The_Hunters_Ledger, date 2026-01-12;)",
         "to_ids": false,
         "comment": "XWorm AgentSec Authentication Secret Pattern in TCP Payload | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1071.001 | rule hash 2d7a787b | https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592889,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -99,7 +99,7 @@
         "value": "title: PowerShell Execution from .NET Process in User-Writable Directory\nid: caaeb533-e084-40bc-a870-81f8b6c5c4a7\nstatus: experimental\ndescription: >-\n  Detects PowerShell execution using the abbreviated -NoP -C flag combination\n  from a parent .exe running in a user-writable directory (AppData, Temp, or\n  Users), excluding Microsoft- and Visual-Studio-signed paths. This process\n  ancestry pattern matches XWorm RAT v2.x's execution style but is not\n  XWorm-specific - legitimate Electron-based application updaters and RMM\n  tooling commonly spawn PowerShell the same way, so hits require analyst\n  review.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection_powershell:\n        Image|endswith: 'powershell.exe'\n        CommandLine|contains: '-NoP -C'\n    selection_parent:\n        ParentImage|contains:\n            - '\\AppData\\'\n            - '\\Temp\\'\n            - '\\Users\\'\n        ParentImage|endswith: '.exe'\n    filter:\n        ParentImage|contains:\n            - 'Microsoft'\n            - 'Visual Studio'\n    condition: selection_powershell and selection_parent and not filter\nfalsepositives:\n    - >-\n      Legitimate Electron-based application auto-updaters (Slack, Discord, Teams,\n      VS Code extensions), RMM tooling, and software installers routinely spawn\n      PowerShell with abbreviated flags from AppData or Temp.\nlevel: medium",
         "to_ids": false,
         "comment": "PowerShell Execution from .NET Process in User-Writable Directory | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1059.001 | rule hash c52e83ae | https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592889,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -114,7 +114,7 @@
         "value": "title: XWorm RAT v2.x PowerShell Reconnaissance Process Launch - Get-Process Enumeration (Base Rule)\nid: 6fd742c2-b2cd-4c83-be66-06dd562e200d\nname: xworm_v2_recon_getprocess\nstatus: experimental\ndescription: >-\n    Base rule (not alerting on its own): PowerShell process launched with the\n    -NoP -C Get-Process|Sort CPU command-line fragment. Paired with two other\n    base rules via the correlation rule below, which flags all three of XWorm\n    RAT v2.x's embedded reconnaissance commands launching on the same host in\n    a short window.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - attack.discovery\n    - attack.t1057\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection:\n        Image|endswith: '\\powershell.exe'\n        CommandLine|contains: '-NoP -C Get-Process|Sort CPU'\n    condition: selection\nfalsepositives:\n    - >-\n        Legitimate inventory or RMM scripting using this exact literal command\n        fragment is uncommon but not impossible. Not alerting on its own; reviewed\n        only in combination with the two paired base rules.\nlevel: informational\n---\ntitle: XWorm RAT v2.x PowerShell Reconnaissance Process Launch - Get-Service Enumeration (Base Rule)\nid: 7632ad33-882e-4595-8bf6-42cfbeeef52c\nname: xworm_v2_recon_getservice\nstatus: experimental\ndescription: >-\n    Base rule (not alerting on its own): PowerShell process launched with the\n    -NoP -C Get-Service command-line fragment. Paired with two other base rules\n    via the correlation rule below.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - attack.discovery\n    - attack.t1007\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection:\n        Image|endswith: '\\powershell.exe'\n        CommandLine|contains: '-NoP -C Get-Service|?{$_.Status -eq'\n    condition: selection\nfalsepositives:\n    - >-\n        Legitimate inventory or RMM scripting using this exact literal command\n        fragment is uncommon but not impossible. Not alerting on its own; reviewed\n        only in combination with the two paired base rules.\nlevel: informational\n---\ntitle: XWorm RAT v2.x PowerShell Reconnaissance Process Launch - Domain Role Enumeration (Base Rule)\nid: 7540e848-d3a6-43de-90b7-f55c30b3ffc8\nname: xworm_v2_recon_domainrole\nstatus: experimental\ndescription: >-\n    Base rule (not alerting on its own): PowerShell process launched with the\n    -NoP -C Get-WmiObject Win32_ComputerSystem command-line fragment. Paired\n    with two other base rules via the correlation rule below.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - attack.discovery\n    - attack.t1482\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection:\n        Image|endswith: '\\powershell.exe'\n        CommandLine|contains: '-NoP -C Get-WmiObject Win32_ComputerSystem'\n    condition: selection\nfalsepositives:\n    - >-\n        Legitimate inventory or RMM scripting using this exact literal command\n        fragment is uncommon but not impossible. Not alerting on its own; reviewed\n        only in combination with the two paired base rules.\nlevel: informational\n---\ntitle: XWorm RAT v2.x Full PowerShell Reconnaissance Sequence on Same Host\nid: 4b27faae-f708-4555-930c-c2054c9f060b\nstatus: experimental\ndescription: >-\n    Fires when all three of XWorm RAT v2.x's embedded PowerShell reconnaissance\n    commands (process enumeration, service enumeration, and domain-role\n    discovery via WMI) launch as separate processes on the same host within a\n    short window. Each command is a distinct powershell.exe invocation using\n    the abbreviated -NoP -C flag combination, matching the malware's documented\n    embedded reconnaissance templates. No individual command is alerting-grade\n    alone, but a legitimate administrative workflow launching all three of\n    these exact literal one-liners together within 5 minutes is implausible.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - attack.discovery\n    - attack.t1082\n    - detection.emerging-threats\ncorrelation:\n    type: temporal\n    rules:\n        - xworm_v2_recon_getprocess\n        - xworm_v2_recon_getservice\n        - xworm_v2_recon_domainrole\n    group-by:\n        - host.name\n    timespan: 5m\nfalsepositives:\n    - >-\n        A coordinated administrative script deliberately running all three\n        literal one-liners together within 5 minutes is implausible outside\n        this malware's embedded reconnaissance routine.\nlevel: high",
         "to_ids": true,
         "comment": "XWorm v2.x Full PowerShell Reconnaissance Sequence on Same Host | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1059.001, T1082, T1057, T1007, T1482 | rule hash e451332a | https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592889,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -129,7 +129,7 @@
         "value": "/*\n   Yara Rule Set\n   Identifier: XWorm-RAT-v2.4.0-OpenDirectory-109.230.231.37\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule MAL_XWorm_V2_PowerShell_Recon_Templates {\n   meta:\n      description = \"Detects agent_xworm_v2.exe-class XWorm RAT v2.4.0 samples via embedded PowerShell reconnaissance command templates - literal, abbreviated-flag ('-NoP -C') one-liners for process, service, and domain-role enumeration baked into the binary as string constants.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/\"\n      date = \"2026-01-12\"\n      hash1 = \"f8e7e73bf2b26635800a042e7890a35f7376508f288a1ced3d3e12b173c5cb7e\"\n      hash2 = \"7c624e0b11c817d516f9411972191c4627fd2e53\"\n      hash3 = \"4164a1945d8373255a5cb7e42f05c259\"\n      family = \"XWorm\"\n      malware_type = \"RAT\"\n      campaign = \"XWorm-RAT-v2.4.0-OpenDirectory-109.230.231.37\"\n      id = \"1c927802-6eb2-5209-af09-3590a2c9cbf3\"\n   strings:\n      $ps1 = \"-NoP -C Get-Process|Sort CPU\" ascii wide\n      $ps2 = \"-NoP -C Get-Service|?{$_.Status -eq 'Running'}\" ascii wide\n      $ps3 = \"-NoP -C Get-WmiObject Win32_ComputerSystem\" ascii wide\n      $ps4 = \"PartOfDomain,Domain,DomainRole\" ascii wide\n      $ps5 = \"Select -First 20 Name,Id,CPU,WS\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 100KB and\n      3 of them\n}",
         "to_ids": true,
         "comment": "XWorm v2.x Embedded PowerShell Reconnaissance Command Templates | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1059.001, T1082, T1482, T1057, T1007 | rule hash 3b3d18c3 | https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592889,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -144,7 +144,7 @@
         "value": "rule MAL_XWorm_AgentSec_Secret_Pattern {\n   meta:\n      description = \"Detects the XWorm AgentSec_ authentication-secret naming pattern - a 9-character literal prefix followed by a 40-50 character alphanumeric secret value, used as this operator's shared C2 authentication credential. Generalizes beyond the specific secret instance observed in agent_xworm_v2.exe to catch future builds sharing this naming convention.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/\"\n      date = \"2026-01-12\"\n      hash1 = \"f8e7e73bf2b26635800a042e7890a35f7376508f288a1ced3d3e12b173c5cb7e\"\n      family = \"XWorm\"\n      malware_type = \"RAT\"\n      campaign = \"XWorm-RAT-v2.4.0-OpenDirectory-109.230.231.37\"\n      id = \"9438bdfd-1af1-5dfa-b0ba-d7ed7ecacd58\"\n   strings:\n      $pattern1 = /AgentSec_[0-9A-Za-z]{40,50}/ ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      $pattern1\n}",
         "to_ids": false,
         "comment": "XWorm AgentSec Authentication Secret Pattern | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1071.001 | rule hash e2f70392 | https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592889,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -159,7 +159,7 @@
         "value": "rule MAL_XWorm_V2_Family_Combination {\n   meta:\n      description = \"Detects XWorm RAT v2.x variants via a combination of the operator's AgentSec_ authentication-secret naming convention, WebSocket C2 namespace usage, and a broader fallback combination of .NET framework markers, PowerShell reconnaissance API references, hidden-window stealth calls, and Base64 encoding. The fallback branches are individually common in unrelated .NET software - treat hits outside the AgentSec_/WebSocket branch as lower-confidence.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/\"\n      date = \"2026-01-12\"\n      hash1 = \"f8e7e73bf2b26635800a042e7890a35f7376508f288a1ced3d3e12b173c5cb7e\"\n      family = \"XWorm\"\n      malware_type = \"RAT\"\n      campaign = \"XWorm-RAT-v2.4.0-OpenDirectory-109.230.231.37\"\n      id = \"121d800f-9d9a-5289-9bc6-3884e2f89e9b\"\n   strings:\n      $dotnet1 = \"System.Net.WebSockets\" ascii wide\n      $dotnet2 = \"System.Diagnostics.Process\" ascii wide\n      $dotnet3 = \"System.Security.Cryptography\" ascii wide\n      $dotnet4 = \"mscorlib\" ascii wide\n\n      $version_pattern = /2\\.[0-9]\\.[0-9]/ ascii wide\n      $websocket = \"WebSocket\" ascii wide nocase\n      $agent_sec = \"AgentSec_\" ascii wide\n\n      $ps1 = \"Get-Process\" ascii wide nocase\n      $ps2 = \"Get-Service\" ascii wide nocase\n      $ps3 = \"Win32_ComputerSystem\" ascii wide\n\n      $stealth1 = \"ShowWindow\" ascii wide\n      $stealth2 = \"GetConsoleWindow\" ascii wide\n      $encode = \"ToBase64String\" ascii wide\n\n      $md5 = \"MD5\" ascii wide\n      $hash = \"ComputeHash\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 500KB and\n      (\n         ($dotnet1 and $websocket and $agent_sec and $version_pattern) or\n         (2 of ($dotnet*) and 2 of ($ps*) and 1 of ($stealth*) and $encode) or\n         ($md5 and $hash and $websocket and 1 of ($ps*))\n      )\n}",
         "to_ids": false,
         "comment": "XWorm v2.x Family Multi-Signal Combination | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1071.001, T1057, T1007, T1564.003 | rule hash 8f0f6683 | https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592889,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -174,7 +174,7 @@
         "value": "rule SUSP_XWorm_V2_WebSocket_Generic_Combination {\n   meta:\n      description = \"Detects .NET executables combining WebSocket client API usage with C2-adjacent terminology (Heartbeat/Reconnect/Frame) - a broad toolkit-family heuristic matching XWorm v2.x's WebSocket C2 implementation style. Not specific to XWorm; expect co-fire with legitimate .NET WebSocket applications.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/\"\n      date = \"2026-01-12\"\n      hash1 = \"f8e7e73bf2b26635800a042e7890a35f7376508f288a1ced3d3e12b173c5cb7e\"\n      family = \"XWorm\"\n      malware_type = \"RAT\"\n      campaign = \"XWorm-RAT-v2.4.0-OpenDirectory-109.230.231.37\"\n      id = \"95dd3d1d-0d7b-51c2-a09c-ebd45e04b1af\"\n   strings:\n      $ws1 = \"System.Net.WebSockets\" ascii wide\n      $ws2 = \"WebSocketState\" ascii wide\n      $ws3 = \"SendAsync\" ascii wide\n      $ws4 = \"ReceiveAsync\" ascii wide\n\n      $c2_1 = \"Heartbeat\" ascii wide nocase\n      $c2_2 = \"Reconnect\" ascii wide nocase\n      $c2_3 = \"Frame\" ascii wide\n\n      $dotnet = \"mscorlib\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 200KB and\n      $dotnet and\n      3 of ($ws*) and\n      2 of ($c2_*)\n}",
         "to_ids": false,
         "comment": "Generic .NET WebSocket C2 Capability Combination | TIER: Hunting | robustness 1 | confidence LOW | ATT&CK T1071.001, T1132.001 | rule hash 2475b510 | https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592889,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",

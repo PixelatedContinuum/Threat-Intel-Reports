@@ -5,8 +5,8 @@
     "date": "2026-01-15",
     "threat_level_id": 1,
     "analysis": 2,
-    "timestamp": 1791580400,
-    "publish_timestamp": 1791580400,
+    "timestamp": 1791592900,
+    "publish_timestamp": 1791592900,
     "published": true,
     "Orgc": {
       "name": "The Hunters Ledger",
@@ -62,7 +62,7 @@
         "value": "https://the-hunters-ledger.com/hunting-detections/arsenal-237-new_enc-exe-detections/",
         "to_ids": false,
         "comment": "Detection rules, The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592900
       },
       {
         "uuid": "b35e2dcb-e61b-5c90-927c-e6701195c1b6",
@@ -71,7 +71,7 @@
         "value": "https://the-hunters-ledger.com/ioc-feeds/arsenal-237-new_enc-exe.json",
         "to_ids": false,
         "comment": "IOC feed (JSON), The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592900
       },
       {
         "uuid": "29feab27-319d-5316-957d-cd7a4fc703cd",
@@ -80,7 +80,7 @@
         "value": "title: Backup-Related Windows Service Stop Event (Base Rule)\nid: c3f6f8f1-2716-4cc1-8eb6-12b9c3bf2c61\nname: arsenal237_backup_service_stop\nstatus: experimental\ndescription: >-\n  Base rule (not alerting on its own): a Service Control Manager event\n  recording that a backup-related service (Commvault agents, Veeam,\n  or the Windows Volume Shadow Copy service) has stopped. Paired with the\n  value-count correlation rule below, which flags 3 or more distinct\n  backup-related services stopping on the same host within a short window --\n  the original rule intent this file's source draft could not express as a\n  single-event Sigma selection.\nreferences:\n  - https://the-hunters-ledger.com/hunting-detections/arsenal-237-new_enc-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-27'\ntags:\n  - attack.impact\n  - attack.t1489\n  - detection.emerging-threats\nlogsource:\n  product: windows\n  service: system\ndetection:\n  selection:\n    EventID: 7036\n    Provider_Name: 'Service Control Manager'\n    param1|contains:\n      - 'GxVss'\n      - 'GxBlr'\n      - 'GxFWD'\n      - 'GxCVD'\n      - 'GxCIMgr'\n      - 'veeam'\n      - 'vss'\n    param2: 'stopped'\n  condition: selection\nfalsepositives:\n  - >-\n    Legitimate service maintenance or scheduled backup-system restarts. Not\n    alerting on its own -- reviewed only when 3 or more distinct matching\n    services stop on the same host within the correlation window.\nlevel: informational\n---\ntitle: 3+ Distinct Backup Services Stopped on Same Host Within 5 Minutes\nid: d0d88f82-c8e3-42e5-a3c3-34cb8a5fec1b\nstatus: experimental\ndescription: >-\n  Fires when 3 or more distinct backup-related services (Commvault agents,\n  Veeam, or VSS) stop on the same host within 5 minutes.\n  Operationalizes this ransomware's own documented multi-stage\n  service-termination sequence -- a single service stop is common maintenance\n  noise, but 3 or more distinct backup services stopping together in a tight\n  window is a recognized ransomware precursor to encryption.\nreferences:\n  - https://the-hunters-ledger.com/hunting-detections/arsenal-237-new_enc-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-27'\ntags:\n  - attack.impact\n  - attack.t1489\n  - detection.emerging-threats\ncorrelation:\n  type: value_count\n  rules:\n    - arsenal237_backup_service_stop\n  group-by:\n    - host.name\n  timespan: 5m\n  condition:\n    field: param1\n    gte: 3\nfalsepositives:\n  - >-\n    A coordinated, legitimate backup-infrastructure maintenance window that\n    restarts 3 or more backup-related services within 5 minutes (e.g. a\n    scheduled patch cycle across Commvault/Veeam/VSS components).\nlevel: medium",
         "to_ids": false,
         "comment": "Arsenal-237 Backup Service Multi-Termination (Correlation) | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1489 | rule hash 90a3009f | https://the-hunters-ledger.com/hunting-detections/arsenal-237-new_enc-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592900,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -95,7 +95,7 @@
         "value": "title: Database-Related Windows Service Stop Event (Base Rule)\nid: f06d6f95-2946-4bb9-b0ff-49921d91922e\nname: arsenal237_database_service_stop\nstatus: experimental\ndescription: >-\n  Base rule (not alerting on its own): a Service Control Manager event\n  recording that a SQL Server or Oracle database-related service has stopped.\n  Paired with the value-count correlation rule below, which flags 2 or more\n  distinct database services stopping on the same host within a short window.\nreferences:\n  - https://the-hunters-ledger.com/hunting-detections/arsenal-237-new_enc-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-27'\ntags:\n  - attack.impact\n  - attack.t1489\n  - detection.emerging-threats\nlogsource:\n  product: windows\n  service: system\ndetection:\n  selection:\n    EventID: 7036\n    Provider_Name: 'Service Control Manager'\n    param1|contains:\n      - 'sql'\n      - 'oracle'\n      - 'ocssd'\n      - 'dbsnmp'\n    param2: 'stopped'\n  condition: selection\nfalsepositives:\n  - >-\n    Legitimate database maintenance or scheduled restarts, including routine\n    patch cycles. Not alerting on its own -- reviewed only when 2 or more\n    distinct matching services stop on the same host within the correlation\n    window.\nlevel: informational\n---\ntitle: 2+ Distinct Database Services Stopped on Same Host Within 10 Minutes\nid: a88a8604-f07b-452b-821e-ecd610edd063\nstatus: experimental\ndescription: >-\n  Fires when 2 or more distinct SQL Server or Oracle database-related\n  services stop on the same host within 10 minutes. Operationalizes this\n  ransomware's documented database-service-termination stage, run to release\n  file locks on database files before encryption. Generic service-name\n  substrings (\"sql\", \"oracle\") carry a real legitimate-maintenance false\n  positive population, so this is a hunting lead rather than an\n  alerting-grade correlation.\nreferences:\n  - https://the-hunters-ledger.com/hunting-detections/arsenal-237-new_enc-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-27'\ntags:\n  - attack.impact\n  - attack.t1489\n  - detection.emerging-threats\ncorrelation:\n  type: value_count\n  rules:\n    - arsenal237_database_service_stop\n  group-by:\n    - host.name\n  timespan: 10m\n  condition:\n    field: param1\n    gte: 2\nfalsepositives:\n  - >-\n    Coordinated, legitimate database maintenance (e.g. a Windows Update or\n    SQL Server patch cycle that restarts the database engine and agent\n    services together) within the same 10-minute window.\nlevel: medium",
         "to_ids": false,
         "comment": "Arsenal-237 Database Service Multi-Termination (Correlation) | TIER: Hunting | robustness 2 | confidence LOW | ATT&CK T1489 | rule hash d73c6c18 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-new_enc-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592900,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -110,7 +110,7 @@
         "value": "title: RustRansomNoteTask Scheduled Task File Creation\nid: e803d43f-6b5a-48e1-b25f-9da5e74bca63\nstatus: experimental\ndescription: >-\n  Detects creation of a file whose name contains RustRansomNoteTask -- the\n  scheduled-task marker this Arsenal-237 build creates for persistent\n  re-display of its ransom note across user logons. A single, attacker-chosen\n  literal specific to this build; a naming-convention rebrand evades it\n  entirely.\nreferences:\n  - https://the-hunters-ledger.com/hunting-detections/arsenal-237-new_enc-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-27'\ntags:\n  - attack.execution\n  - attack.persistence\n  - attack.privilege-escalation\n  - attack.t1053.005\n  - detection.emerging-threats\nlogsource:\n  product: windows\n  category: file_event\ndetection:\n  selection:\n    TargetFilename|contains: 'RustRansomNoteTask'\n    TargetFilename|startswith: 'C:\\Windows\\System32\\Tasks\\'\n  condition: selection\nfalsepositives:\n  - Legitimate system tasks with similar naming are not expected but cannot be fully ruled out.\nlevel: medium",
         "to_ids": false,
         "comment": "RustRansomNoteTask Scheduled Task File Creation | TIER: Hunting | robustness 1 | confidence LOW | ATT&CK T1053.005 | rule hash 8e0df272 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-new_enc-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592900,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -125,7 +125,7 @@
         "value": "title: Volume Shadow Copy Deletion via Vssadmin (Ransomware Anti-Recovery Indicator)\nid: b8961351-34c4-4a6e-b031-16a6368ae15f\nstatus: experimental\ndescription: >-\n    Detects execution of vssadmin with delete and shadows present in the command\n    line -- the canonical Volume Shadow Copy Service anti-recovery command used\n    by ransomware, including this Arsenal-237 build, to eliminate Windows'\n    built-in file-recovery mechanism before encryption begins.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-new_enc-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-27'\ntags:\n    - attack.impact\n    - attack.t1490\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        CommandLine|contains|all:\n            - 'vssadmin'\n            - 'delete'\n            - 'shadows'\n    condition: selection\nfalsepositives:\n    - Legitimate backup, disk-space-management, or system-restore maintenance scripts that invoke vssadmin delete shadows.\nlevel: high",
         "to_ids": true,
         "comment": "Volume Shadow Copy Deletion via Vssadmin | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1490 | rule hash e17bdd9d | https://the-hunters-ledger.com/hunting-detections/arsenal-237-new_enc-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592900,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -140,7 +140,7 @@
         "value": "rule TOOLKIT_Arsenal237_Analysis_Tool_Process_Awareness {\n   meta:\n      description = \"Detects co-occurrence of at least 6 of 9 named reverse-engineering/network-analysis tool references (procmon, wireshark, x64dbg, ida.exe, ida64.exe, ghidra, dnspy, fiddler, processhacker) -- a broad anti-analysis technique-class heuristic common across commodity malware generally and not specific to this family.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-new_enc-exe-detections/\"\n      date = \"2026-01-27\"\n      family = \"Arsenal-237\"\n      malware_type = \"Ransomware\"\n      campaign = \"Arsenal-237-Backup-Targeting-Ransomware\"\n      id = \"f1b62d4e-3f81-4c92-8e17-5d9a2c60f1b4\"\n      hash1 = \"90d223b70448d68f7f48397df6a9e57de3a6b389d5d8dc0896be633ca95720f2\"\n   strings:\n      $procmon = \"procmon\" ascii wide nocase\n      $wireshark = \"wireshark\" ascii wide nocase\n      $x64dbg = \"x64dbg\" ascii wide nocase\n      $ida_exe = \"ida.exe\" ascii wide nocase\n      $ida64_exe = \"ida64.exe\" ascii wide nocase\n      $ghidra = \"ghidra\" ascii wide nocase\n      $dnspy = \"dnspy\" ascii wide nocase\n      $fiddler = \"fiddler\" ascii wide nocase\n      $processhacker = \"processhacker\" ascii wide nocase\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      6 of them\n}",
         "to_ids": false,
         "comment": "Analysis Tool Process Awareness | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1518.001, T1057 | rule hash 15dc8685 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-new_enc-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592900,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -155,7 +155,7 @@
         "value": "rule TOOLKIT_Arsenal237_AntiAnalysis_Sandbox_Combination {\n   meta:\n      description = \"Detects a combination of anti-analysis indicators: 3 of 5 hypervisor/VM vendor name strings, both sandbox-context keywords together, the BIOS-registry check paired with a VM-vendor string or the IsDebuggerPresent API, or the debugger-presence check paired with a VM-vendor or sandbox-context string. Restructured from a source rule that let the BIOS-registry path and the IsDebuggerPresent API string each trigger the whole rule alone -- both are individually common in legitimate hardware-detection and anti-tamper/licensing code.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-new_enc-exe-detections/\"\n      date = \"2026-01-27\"\n      family = \"Arsenal-237\"\n      malware_type = \"Ransomware\"\n      campaign = \"Arsenal-237-Backup-Targeting-Ransomware\"\n      id = \"e5d84f60-5103-4eb4-a039-7fb4e82b3d16\"\n      hash1 = \"90d223b70448d68f7f48397df6a9e57de3a6b389d5d8dc0896be633ca95720f2\"\n   strings:\n      $vm_vbox = \"VBOX\" ascii wide nocase\n      $vm_vmware = \"VMWARE\" ascii wide nocase\n      $vm_qemu = \"QEMU\" ascii wide nocase\n      $vm_xen = \"XEN\" ascii wide nocase\n      $vm_hyperv = \"HYPERV\" ascii wide nocase\n\n      $sandbox_cuckoo = \"cuckoo\" ascii wide nocase\n      $sandbox_malware = \"malware\" ascii wide nocase\n\n      $bios_registry1 = \"HARDWARE\\\\DESCRIPTION\\\\System\\\\BIOS\" ascii wide nocase\n      $bios_registry2 = \"HARDWARE\\\\\\\\DESCRIPTION\\\\\\\\System\\\\\\\\BIOS\" ascii wide nocase\n\n      $debugger_check = \"IsDebuggerPresent\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      (\n         (3 of ($vm_*)) or\n         (all of ($sandbox_*)) or\n         (($bios_registry1 or $bios_registry2) and (1 of ($vm_*) or $debugger_check)) or\n         ($debugger_check and (1 of ($vm_*) or all of ($sandbox_*)))\n      )\n}",
         "to_ids": false,
         "comment": "Anti-Analysis / Anti-Sandbox Combination | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1497.001, T1622 | rule hash 2755e194 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-new_enc-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592900,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -170,7 +170,7 @@
         "value": "rule TOOLKIT_Arsenal237_RustRansomNoteTask_Persistence_Marker {\n   meta:\n      description = \"Detects the RustRansomNoteTask scheduled-task name string used by this ransomware build to re-display its ransom note persistently across user logons. Salvaged from a broader source rule that also let a single-build campaign-tracking ID and a single-release version string trigger the same rule alone -- both pure per-build atomics, already carried in the IOC feed.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-new_enc-exe-detections/\"\n      date = \"2026-01-27\"\n      family = \"Arsenal-237\"\n      malware_type = \"Ransomware\"\n      campaign = \"Arsenal-237-Backup-Targeting-Ransomware\"\n      id = \"d3f8a1c2-6b4e-4a91-9c73-1d5e8f2a6b91\"\n      hash1 = \"90d223b70448d68f7f48397df6a9e57de3a6b389d5d8dc0896be633ca95720f2\"\n   strings:\n      $ransom_task = \"RustRansomNoteTask\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      $ransom_task\n}",
         "to_ids": false,
         "comment": "RustRansomNoteTask Persistence Marker | TIER: Hunting | robustness 1 | confidence LOW | ATT&CK T1053.005 | rule hash 84b403a6 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-new_enc-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592900,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -185,7 +185,7 @@
         "value": "rule TOOLKIT_Arsenal237_Rust_ChaCha20_Implementation_Fingerprint {\n   meta:\n      description = \"Detects the Chacha_256_constant symbol name from this ransomware's Rust ChaCha20 implementation, required together with at least one generic Rust-compilation marker (core::panicking or cargo). Restructured from a source rule whose 'any 2 of 3' condition let the two generic Rust-compiler markers alone satisfy the rule with no ChaCha-specific evidence, a combination present in effectively any Rust-compiled executable.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-new_enc-exe-detections/\"\n      date = \"2026-01-27\"\n      family = \"Arsenal-237\"\n      malware_type = \"Ransomware\"\n      campaign = \"Arsenal-237-Backup-Targeting-Ransomware\"\n      id = \"a6e95071-6214-4fc5-b14a-80c5f93c4e27\"\n      hash1 = \"90d223b70448d68f7f48397df6a9e57de3a6b389d5d8dc0896be633ca95720f2\"\n   strings:\n      $chacha_const = \"Chacha_256_constant\" ascii wide\n      $rust_std = \"core::panicking\" ascii wide\n      $cargo = \"cargo\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      $chacha_const and\n      1 of ($rust_std, $cargo)\n}",
         "to_ids": false,
         "comment": "Rust ChaCha20 Implementation Fingerprint | TIER: Hunting | robustness 1 | confidence LOW | rule hash 6751e772 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-new_enc-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592900,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -200,7 +200,7 @@
         "value": "rule TOOLKIT_Arsenal237_VSS_Shadow_Copy_Deletion_Command {\n   meta:\n      description = \"Detects the exact 'vssadmin delete shadows /all /quiet' command string, or the vssadmin and delete-shadows substrings co-occurring -- the canonical Volume Shadow Copy Service anti-recovery command used to eliminate Windows' built-in file-recovery mechanism prior to ransomware encryption.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-new_enc-exe-detections/\"\n      date = \"2026-01-27\"\n      family = \"Arsenal-237\"\n      malware_type = \"Ransomware\"\n      campaign = \"Arsenal-237-Backup-Targeting-Ransomware\"\n      id = \"c9c4d7e2-5f13-48b6-a1d9-2e6b8c4f0a73\"\n      hash1 = \"90d223b70448d68f7f48397df6a9e57de3a6b389d5d8dc0896be633ca95720f2\"\n   strings:\n      $vss_delete = \"vssadmin delete shadows /all /quiet\" ascii wide nocase\n      $vss_pattern = \"vssadmin\" ascii wide nocase\n      $delete_shadows = \"delete shadows\" ascii wide nocase\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      ($vss_delete or ($vss_pattern and $delete_shadows))\n}",
         "to_ids": true,
         "comment": "Volume Shadow Copy Deletion Command | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1490 | rule hash 2a522fe1 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-new_enc-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592900,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -215,7 +215,7 @@
         "value": "rule TOOLKIT_Arsenal237_Veeam_Backup_Reference {\n   meta:\n      description = \"Detects a bare, case-insensitive reference to 'veeam' with no word boundary -- a weaker standalone signal than the Veritas Gx-service combination, retained as a hunting lead given this ransomware's documented enterprise-backup-disablement behavior.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-new_enc-exe-detections/\"\n      date = \"2026-01-27\"\n      family = \"Arsenal-237\"\n      malware_type = \"Ransomware\"\n      campaign = \"Arsenal-237-Backup-Targeting-Ransomware\"\n      id = \"b7e2a9d4-1f83-46c5-b2e9-4a7c1e9d3f58\"\n      hash1 = \"90d223b70448d68f7f48397df6a9e57de3a6b389d5d8dc0896be633ca95720f2\"\n   strings:\n      $veeam = \"veeam\" ascii wide nocase\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      $veeam\n}",
         "to_ids": false,
         "comment": "Veeam Backup Software Bareword Reference | TIER: Hunting | robustness 1 | confidence LOW | ATT&CK T1489 | rule hash 7fea324f | https://the-hunters-ledger.com/hunting-detections/arsenal-237-new_enc-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592900,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -230,7 +230,7 @@
         "value": "rule TOOLKIT_Arsenal237_Veritas_BackupExec_Multi_Service_Targeting {\n   meta:\n      description = \"Detects Arsenal-237 ransomware's targeting of a backup product's agent services via co-occurrence of at least 3 of 5 distinct internal service short-names (GxVss, GxBlr, GxFWD, GxCVD, GxCIMgr), referenced ahead of service termination to disable enterprise backup and recovery capability before encryption. Corrected 2026-09-13: these are Commvault's own product-internal service names (confirmed against Commvault's own documentation), not Veritas's as originally published; the rule name is kept for now to avoid breaking existing references, but the vendor named in the rule's own identifier is wrong.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/arsenal-237-new_enc-exe-detections/\"\n      date = \"2026-01-27\"\n      family = \"Arsenal-237\"\n      malware_type = \"Ransomware\"\n      campaign = \"Arsenal-237-Backup-Targeting-Ransomware\"\n      id = \"a3f81c2e-4b6d-4a91-8c73-1e5f8a2b6c90\"\n      hash1 = \"90d223b70448d68f7f48397df6a9e57de3a6b389d5d8dc0896be633ca95720f2\"\n   strings:\n      $gx1 = \"GxVss\" ascii wide\n      $gx2 = \"GxBlr\" ascii wide\n      $gx3 = \"GxFWD\" ascii wide\n      $gx4 = \"GxCVD\" ascii wide\n      $gx5 = \"GxCIMgr\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      3 of ($gx*)\n}",
         "to_ids": false,
         "comment": "Commvault Backup Service Targeting (misattributed as Veritas at authoring) | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1489, T1490 | rule hash 115b1d37 | https://the-hunters-ledger.com/hunting-detections/arsenal-237-new_enc-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592900,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",

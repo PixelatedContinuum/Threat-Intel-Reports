@@ -5,8 +5,8 @@
     "date": "2026-06-12",
     "threat_level_id": 2,
     "analysis": 2,
-    "timestamp": 1791580400,
-    "publish_timestamp": 1791580400,
+    "timestamp": 1791592907,
+    "publish_timestamp": 1791592907,
     "published": true,
     "Orgc": {
       "name": "The Hunters Ledger",
@@ -122,7 +122,7 @@
         "value": "https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/",
         "to_ids": false,
         "comment": "Detection rules, The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592907
       },
       {
         "uuid": "b85dcac6-0dde-5bf4-85ab-3896cf664a22",
@@ -131,7 +131,7 @@
         "value": "https://the-hunters-ledger.com/ioc-feeds/flaskc2-postex-toolkit-67-215-232-25-iocs.json",
         "to_ids": false,
         "comment": "IOC feed (JSON), The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592907
       },
       {
         "uuid": "bce1446a-a88b-549a-bcef-4433dc49ab3a",
@@ -140,7 +140,7 @@
         "value": "https://the-hunters-ledger.com/reports/flaskc2-postex-toolkit-67-215-232-25/",
         "to_ids": false,
         "comment": "Report, The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592907
       },
       {
         "uuid": "abcf6b7f-e17a-52d3-9299-1e3ce468bba3",
@@ -149,7 +149,7 @@
         "value": "https://the-hunters-ledger.com/stix/flaskc2-postex-toolkit-67-215-232-25.json",
         "to_ids": false,
         "comment": "STIX 2.1 bundle, The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592907
       },
       {
         "uuid": "6b32419e-3759-5961-aa45-e002cd80d41d",
@@ -158,7 +158,7 @@
         "value": "CVE-2026-20817",
         "to_ids": false,
         "comment": "Named in the report",
-        "timestamp": 1791580400
+        "timestamp": 1791592907
       },
       {
         "uuid": "6455d0c6-48ce-5444-b249-61c46ae6fe74",
@@ -167,7 +167,7 @@
         "value": "a7029ef2b6a541ef2b7508e1316d3c2efd3493108975ee457bcdb73043a25262",
         "to_ids": true,
         "comment": "sha256: a7029ef2b6a541ef2b7508e1316d3c2efd3493108975ee457bcdb73043a25262. BESPOKE MSSQL SQL-CLR reverse-shell backdoor; [SqlProcedure] reverse_shell(ip,port) -> cmd.exe /c. Specific operator build (compile 2026-03-21). VT 32 malicious; Zenbox harmless 98% (sandbox-resistant), Microsoft+Kaspersky clean. [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592907
       },
       {
         "uuid": "360005c4-1068-5415-83a8-af1b813b1fbe",
@@ -176,7 +176,7 @@
         "value": "http://67.215.232.25:1337/",
         "to_ids": true,
         "comment": "url: http://67.215.232.25:1337/. Stages the 17-file post-exploitation toolkit for retrieval onto victims (T1105). [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592907
       },
       {
         "uuid": "d8a27be4-5829-5bd7-b015-eeca1d9f9c90",
@@ -185,7 +185,7 @@
         "value": "http://67.215.232.25:5000/",
         "to_ids": true,
         "comment": "url: http://67.215.232.25:5000/. Same Werkzeug stack as :8080; all 38 probed routes 404 (non-guessable routing). Role undetermined. [confidence 60/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592907
       },
       {
         "uuid": "8e110fe4-c5e0-52df-bfcd-ca8041a9ecab",
@@ -194,7 +194,7 @@
         "value": "http://67.215.232.25:8080/api/heartbeat",
         "to_ids": true,
         "comment": "url: http://67.215.232.25:8080/api/heartbeat. One of only 3 routes on the C2. [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592907
       },
       {
         "uuid": "81f09703-63bd-5b69-8d82-896468065cdd",
@@ -203,7 +203,7 @@
         "value": "http://67.215.232.25:8080/api/report",
         "to_ids": true,
         "comment": "url: http://67.215.232.25:8080/api/report. One of only 3 routes on the C2. Beacons termed 'servers'. [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592907
       },
       {
         "uuid": "474aa8fc-2550-5d86-8c6b-c7d53f07b8e6",
@@ -212,7 +212,7 @@
         "value": "http://67.215.232.25:8080/health",
         "to_ids": true,
         "comment": "url: http://67.215.232.25:8080/health. Returns JSON field-combo active_servers/pending_commands/completed_commands/status/timestamp on Werkzeug/3.1.6 Python/3.12.3. Idle: all counters 0. [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592907
       },
       {
         "uuid": "31d6869a-ea96-554b-8da8-c1419c8726c6",
@@ -221,7 +221,7 @@
         "value": "67.215.232.25",
         "to_ids": true,
         "comment": "ipv4: 67.215.232.25. VT 15/91 malicious, reputation -1. communicating_files=0 (beacon implant unrecovered). IP-only (no domain), fully blockable at the IP. No sibling C2 found (5 convergent negative pivots). [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592907
       },
       {
         "uuid": "d13af6e7-1ad5-567e-8a7f-5f53f7ec5fdd",
@@ -230,7 +230,7 @@
         "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT FlaskC2-PostEx C2 Health Endpoint Response - Bespoke Flask C2 Active\"; flow:established,to_client; file_data; content:\"active_servers\"; nocase; content:\"pending_commands\"; nocase; distance:0; content:\"completed_commands\"; nocase; distance:0; content:\"status\"; nocase; distance:0; content:\"timestamp\"; nocase; distance:0; reference:url,the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/; classtype:trojan-activity; sid:9300701; rev:3; metadata:author The_Hunters_Ledger, date 2026-06-12;)",
         "to_ids": true,
         "comment": "Flask C2 Health Endpoint: Distinctive JSON Field-Combo | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1071.001, T1105 | rule hash ec6418f7 | https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592907,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -245,7 +245,7 @@
         "value": "alert http $HOME_NET any -> any any (msg:\"THL HUNT FlaskC2-PostEx C2 Beacon POST to /api/heartbeat\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"/api/heartbeat\"; nocase; reference:url,the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/; classtype:trojan-activity; sid:9300703; rev:3; metadata:author The_Hunters_Ledger, date 2026-06-12;)",
         "to_ids": false,
         "comment": "Flask C2 Beacon Endpoint: POST to /api/heartbeat | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1071.001, T1095 | rule hash 7b05a617 | https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592907,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -260,7 +260,7 @@
         "value": "alert http $HOME_NET any -> any any (msg:\"THL HUNT FlaskC2-PostEx C2 Beacon POST to /api/report\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"/api/report\"; nocase; reference:url,the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/; classtype:trojan-activity; sid:9300702; rev:3; metadata:author The_Hunters_Ledger, date 2026-06-12;)",
         "to_ids": false,
         "comment": "Flask C2 Beacon Endpoint: POST to /api/report | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1071.001, T1095 | rule hash 7fe816a6 | https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592907,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -275,7 +275,7 @@
         "value": "title: CVE-2026-20817 WER LPE PoC Token Inspection of WerFault.exe\nid: ff8ee6c2-d705-4ebf-98bd-6ead3d775ae0\nstatus: experimental\ndescription: >-\n  Detects process access events targeting WerFault.exe with token query rights,\n  consistent with the CVE-2026-20817 WER ALPC local-privilege-escalation PoC\n  present in the FlaskC2-PostEx-Toolkit campaign. The PoC enumerates processes\n  looking for WerFault.exe and inspects its token privileges. This rule is\n  relevant only on hosts missing the January 2026 Windows cumulative update;\n  the sample analyzed is non-weaponized and does not achieve elevation.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/\n    - https://github.com/oxfemale/CVE-2026-20817\n    - https://itm4n.github.io/cve-2026-20817-wersvc-eop/\nauthor: The Hunters Ledger\ndate: '2026-06-12'\ntags:\n    - attack.privilege-escalation\n    - attack.t1068\n    - detection.emerging-threats\nlogsource:\n    category: process_access\n    product: windows\ndetection:\n    selection:\n        TargetImage|endswith: '\\WerFault.exe'\n        GrantedAccess|contains: '0x20'\n    filter_system:\n        SourceImage|endswith:\n            - '\\WerMgr.exe'\n            - '\\svchost.exe'\n            - '\\MsMpEng.exe'\n    condition: selection and not filter_system\nfalsepositives:\n    - EDR and security tooling that monitors WerFault.exe token state\n    - Crash reporting integrations that inspect WerFault process state\n    - Only deploy on unpatched hosts (pre-January 2026 Windows cumulative update)\nlevel: low",
         "to_ids": false,
         "comment": "CVE-2026-20817 WER LPE PoC: Anomalous WerFault.exe Token Inspection | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1068 | rule hash ddcc4dd9 | https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592907,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -290,7 +290,7 @@
         "value": "title: Ghost Webshell Aatrox Eval Gadget Parameter in IIS Request\nid: f2509a7c-9505-4b23-a2b4-b7619999f327\nstatus: experimental\ndescription: >-\n  Detects the Aatrox eval gadget parameter in the query string of IIS\n  web requests to .asp files, indicating interaction with the Ghost\n  xiao-zu ASP webshell (miss.asp) as staged in the FlaskC2-PostEx-Toolkit\n  campaign. The webshell stores and executes arbitrary VBScript via\n  Execute Session(\"Aatrox\") when the Aatrox parameter is present.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/\nauthor: The Hunters Ledger\ndate: '2026-06-12'\ntags:\n    - attack.persistence\n    - attack.t1505.003\n    - attack.stealth\n    - attack.t1027.010\n    - detection.emerging-threats\nlogsource:\n    category: webserver\n    product: iis\ndetection:\n    selection:\n        cs-uri-stem|endswith: '.asp'\n        cs-uri-query|contains: 'Aatrox'\n    condition: selection\nfalsepositives:\n    - >-\n      Aatrox is a League of Legends champion name and could theoretically\n      appear in legitimate gaming-related web content; highly anomalous\n      as a query parameter against a corporate IIS .asp endpoint\nlevel: medium",
         "to_ids": false,
         "comment": "Webshell Eval Gadget: Aatrox Query Parameter | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1505.003, T1027.010 | rule hash 89a17b32 | https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592907,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -305,7 +305,7 @@
         "value": "title: IIS Webshell Execution via w3wp.exe Spawning Shell Process\nid: bb2d9a6a-be5b-47e2-9902-ebbdc4831aa6\nstatus: experimental\ndescription: >-\n  Detects IIS worker process (w3wp.exe) spawning cmd.exe or wscript.exe, which\n  indicates webshell-based command execution. In the FlaskC2-PostEx-Toolkit\n  campaign, both miss.asp (Ghost xiao-zu ASP webshell via WScript.Shell) and\n  NPCInfoList1.aspx (Godzilla-style .NET loader) run under w3wp.exe and can\n  spawn shell processes when executing operator commands.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/\nauthor: The Hunters Ledger\ndate: '2026-06-12'\ntags:\n    - attack.persistence\n    - attack.t1505.003\n    - attack.execution\n    - attack.t1059.003\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        ParentImage|endswith: '\\w3wp.exe'\n        Image|endswith:\n            - '\\cmd.exe'\n            - '\\wscript.exe'\n            - '\\cscript.exe'\n            - '\\powershell.exe'\n    condition: selection\nfalsepositives:\n    - Legacy web applications that intentionally invoke shell processes — baseline expected patterns\n    - Authorized IIS management scripts running under the application pool identity\nlevel: high",
         "to_ids": true,
         "comment": "IIS Webshell Execution: w3wp.exe Spawning cmd.exe or WScript | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1505.003, T1059.003, T1059.005 | rule hash e462a061 | https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592907,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -320,7 +320,7 @@
         "value": "title: MSSQL CLR Backdoor Execution via sqlservr.exe Child cmd.exe\nid: 124c3140-63a5-4f3c-9700-c3893edd971b\nstatus: experimental\ndescription: >-\n  Detects cmd.exe spawned as a child of sqlservr.exe, indicating execution of a\n  SQL Server CLR stored procedure that runs shell commands. This is the primary\n  behavioral signature of the cmd_exec.dll MSSQL CLR reverse-shell backdoor,\n  which evades generic sandboxes and most AV engines.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/\n    - https://github.com/evi1ox/MSSQL_BackDoor\nauthor: The Hunters Ledger\ndate: '2026-06-12'\ntags:\n    - attack.persistence\n    - attack.t1505.001\n    - attack.execution\n    - attack.t1059.003\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        ParentImage|endswith: '\\sqlservr.exe'\n        Image|endswith: '\\cmd.exe'\n    condition: selection\nfalsepositives:\n    - Legitimate administrative use of xp_cmdshell — baseline and exclude authorized instances\n    - SQL Server maintenance jobs that intentionally invoke cmd.exe via CLR or job steps\nlevel: high",
         "to_ids": true,
         "comment": "MSSQL CLR Backdoor: sqlservr.exe Spawning cmd.exe Child | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1505.001, T1059.003 | rule hash 45ba0d87 | https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592907,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -335,7 +335,7 @@
         "value": "title: MSSQL CLR Backdoor Installation via CREATE ASSEMBLY and Reverse Shell Procedure\nid: 68e96847-afed-4fbd-843f-952e22e89f97\nstatus: experimental\ndescription: >-\n  Detects SQL Server CLR backdoor installation indicators: enabling CLR\n  execution via sp_configure, or registering a stored procedure named\n  reverse_shell via EXTERNAL NAME. The reverse_shell procedure name has\n  no legitimate use and is a direct indicator of cmd_exec.dll\n  installation; CLR enablement alone is rare in production and disabled\n  by default.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/\n    - https://www.netspi.com/blog/technical/network-penetration-testing/attacking-sql-server-clr-assemblies/\nauthor: The Hunters Ledger\ndate: '2026-06-12'\ntags:\n    - attack.persistence\n    - attack.t1505.001\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    product: windows\n    service: application\ndetection:\n    selection_clr:\n        Provider_Name|contains: 'MSSQL'\n        EventID: 15457\n        Message|contains: 'clr enabled'\n    selection_reverse_shell:\n        Provider_Name|contains: 'MSSQL'\n        Message|contains: 'reverse_shell'\n    condition: selection_clr or selection_reverse_shell\nfalsepositives:\n    - Authorized .NET CLR assembly deployment by DBAs — correlate with change management tickets\n    - Development environments where CLR assemblies are used legitimately\nlevel: high",
         "to_ids": true,
         "comment": "MSSQL CLR Assembly Enablement and Reverse-Shell Procedure Registration | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1505.001 | rule hash e4d5f2fa | https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592907,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -350,7 +350,7 @@
         "value": "title: MSSQL sqlservr.exe Initiating Outbound TCP Connection to External Host\nid: d04749cf-8423-4bbb-9fdc-cc5035787772\nstatus: experimental\ndescription: >-\n  Detects SQL Server process (sqlservr.exe) initiating outbound TCP connections\n  to external hosts. In the FlaskC2-PostEx-Toolkit campaign, cmd_exec.dll opens\n  a raw reverse-TCP shell from within sqlservr.exe to operator-supplied IP and\n  port parameters. Legitimate outbound connections from sqlservr.exe should be\n  baselined and filtered.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/\nauthor: The Hunters Ledger\ndate: '2026-06-12'\ntags:\n    - attack.persistence\n    - attack.t1505.001\n    - attack.command-and-control\n    - attack.t1095\n    - detection.emerging-threats\nlogsource:\n    category: network_connection\n    product: windows\ndetection:\n    selection:\n        Image|endswith: '\\sqlservr.exe'\n        Initiated: 'true'\n    filter_loopback:\n        DestinationIp|startswith:\n            - '127.'\n            - '::1'\n            - '10.'\n            - '172.16.'\n            - '172.17.'\n            - '172.18.'\n            - '172.19.'\n            - '172.20.'\n            - '172.21.'\n            - '172.22.'\n            - '172.23.'\n            - '172.24.'\n            - '172.25.'\n            - '172.26.'\n            - '172.27.'\n            - '172.28.'\n            - '172.29.'\n            - '172.30.'\n            - '172.31.'\n            - '192.168.'\n    condition: selection and not filter_loopback\nfalsepositives:\n    - SQL Server linked servers pointing to external databases\n    - Database Mail (SMTP outbound) — filter by port 25/587\n    - SQL Server replication to external publishers — baseline expected destination IPs\nlevel: medium",
         "to_ids": false,
         "comment": "MSSQL CLR Backdoor: Outbound TCP Connection from sqlservr.exe | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1505.001, T1095 | rule hash 4397d8fc | https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592907,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -365,7 +365,7 @@
         "value": "/*\n   Yara Rule Set\n   Identifier: FlaskC2-PostEx-Toolkit-67.215.232.25 — MSSQL CLR Backdoor + Webshells\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule MSSQL_CLR_Backdoor_CmdExec_Banner {\n   meta:\n      description = \"Detects custom MSSQL SQL-CLR reverse-shell backdoor (cmd_exec.dll) based on operator-specific banner string combined with SQLCLR assembly markers and reverse-shell plumbing strings\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/\"\n      date = \"2026-06-12\"\n      hash1 = \"a7029ef2b6a541ef2b7508e1316d3c2efd3493108975ee457bcdb73043a25262\"\n      family = \"MSSQL CLR Backdoor\"\n      malware_type = \"Backdoor\"\n      campaign = \"FlaskC2-PostEx-Toolkit-67.215.232.25\"\n      id = \"4952ff03-a98c-54d3-9157-3a501e676b81\"\n   strings:\n      $banner   = \"[*] Connected to SQL Server CLR backdoor\" ascii wide\n      $sqlclr1  = \"StoredProcedures\" ascii wide\n      $sqlclr2  = \"Microsoft.SqlServer.Server\" ascii wide\n      $tcpcli   = \"TcpClient\" ascii wide\n      $cmdexec  = \"ExecuteCommand\" ascii wide\n      $slashc   = \"cmd.exe\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 64KB and\n      $banner and\n      2 of ($sqlclr1, $sqlclr2, $tcpcli, $cmdexec, $slashc)\n}",
         "to_ids": true,
         "comment": "cmd_exec.dll: MSSQL CLR Backdoor (Banner Anchor) | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1505.001, T1095 | rule hash dec75c58 | https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592907,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -380,7 +380,7 @@
         "value": "rule MSSQL_CLR_Backdoor_CmdExec_Assembly_Strings {\n   meta:\n      description = \"Detects MSSQL SQL-CLR reverse-shell assemblies using the stored-procedure-exposed cmd-execution pattern, covering cmd_exec.dll variants where the banner string may be changed\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/\"\n      date = \"2026-06-12\"\n      hash1 = \"a7029ef2b6a541ef2b7508e1316d3c2efd3493108975ee457bcdb73043a25262\"\n      family = \"MSSQL CLR Backdoor\"\n      malware_type = \"Backdoor\"\n      campaign = \"FlaskC2-PostEx-Toolkit-67.215.232.25\"\n      id = \"ad2ab99c-79cd-5cd1-9592-a91cd00c8334\"\n   strings:\n      $sqlclr1  = \"Microsoft.SqlServer.Server\" ascii wide\n      $sqlclr2  = \"SqlProcedureAttribute\" ascii wide\n      $method1  = \"reverse_shell\" ascii wide\n      $method2  = \"cmd_exec\" ascii wide\n      $method3  = \"ExecuteCommand\" ascii wide\n      $tcpcli   = \"TcpClient\" ascii wide\n      $netstr   = \"NetworkStream\" ascii wide\n      $procsi   = \"ProcessStartInfo\" ascii wide\n      $redir    = \"RedirectStandardOutput\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 256KB and\n      ($sqlclr1 or $sqlclr2) and\n      ($method1 or $method2 or $method3) and\n      ($tcpcli or $netstr) and\n      ($procsi or $redir)\n}",
         "to_ids": false,
         "comment": "cmd_exec.dll: MSSQL CLR Backdoor (Assembly Structure) | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1505.001, T1059.003, T1095 | rule hash e9a68269 | https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592907,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -395,7 +395,7 @@
         "value": "rule Webshell_Ghost_Aatrox_ASP {\n   meta:\n      description = \"Detects Ghost small-group (Ghost xiao-zu) ASP webshell variant configured with Aatrox password and eval gadget, as staged in the FlaskC2-PostEx-Toolkit-67.215.232.25 campaign\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/\"\n      date = \"2026-06-12\"\n      hash1 = \"30a11ac0b6828fd1c808c46d1c5ae9a4050b48a2fa7e860d146d871bc7c9bb98\"\n      family = \"Ghost ASP Webshell\"\n      malware_type = \"Webshell\"\n      campaign = \"FlaskC2-PostEx-Toolkit-67.215.232.25\"\n      id = \"33fc80d4-77b7-5790-8ecf-85379a0ddcbb\"\n   strings:\n      $ghost    = \"Ghost\" ascii wide nocase\n      $eval1    = \"Execute Session(\\\"Aatrox\\\")\" ascii wide\n      $eval2    = \"UserPass=\\\"Aatrox\\\"\" ascii wide\n      $wshhell  = \"WScript.Shell\" ascii wide\n      $fso      = \"Scripting.FileSystemObject\" ascii wide\n   condition:\n      filesize < 200KB and\n      ($eval1 or $eval2) and\n      ($ghost or $wshhell or $fso)\n}",
         "to_ids": false,
         "comment": "miss.asp: Ghost小组 ASP Webshell (Aatrox Eval Gadget) | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1505.003, T1059.005, T1027.010 | rule hash 8f074fb7 | https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592907,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -410,7 +410,7 @@
         "value": "rule Webshell_NPCInfoList1_AES_Loader {\n   meta:\n      description = \"Detects NPCInfoList1.aspx Godzilla-style AES .NET loader webshell based on hardcoded AES-128 key=IV value ca63457538b9b1e0 used for both key and initialization vector\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/\"\n      date = \"2026-06-12\"\n      hash1 = \"eb689aea9673cc025f91d8376da07e849519d19071609a60c193776d8eca8b54\"\n      family = \"Godzilla-style .NET loader webshell\"\n      malware_type = \"Webshell\"\n      campaign = \"FlaskC2-PostEx-Toolkit-67.215.232.25\"\n      id = \"c8c8d323-6db6-565a-a13a-0fd9e927c655\"\n   strings:\n      $aeskey   = \"ca63457538b9b1e0\" ascii wide\n      $asmload  = \"Assembly.Load\" ascii wide\n      $createi  = \"CreateInstance\" ascii wide\n      $aescbc   = \"RijndaelManaged\" ascii wide\n   condition:\n      filesize < 32KB and\n      $aeskey and\n      ($asmload or $createi or $aescbc)\n}",
         "to_ids": true,
         "comment": "NPCInfoList1.aspx: AES .NET Loader Webshell (Godzilla-Style) | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1505.003, T1620, T1140 | rule hash 138cad83 | https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592907,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",

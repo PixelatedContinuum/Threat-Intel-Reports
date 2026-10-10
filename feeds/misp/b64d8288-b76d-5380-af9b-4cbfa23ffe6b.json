@@ -5,8 +5,8 @@
     "date": "2026-01-15",
     "threat_level_id": 2,
     "analysis": 2,
-    "timestamp": 1791580400,
-    "publish_timestamp": 1791580400,
+    "timestamp": 1791592908,
+    "publish_timestamp": 1791592908,
     "published": true,
     "Orgc": {
       "name": "The Hunters Ledger",
@@ -58,7 +58,7 @@
         "value": "https://the-hunters-ledger.com/hunting-detections/fleetagentadvanced-exe-detections/",
         "to_ids": false,
         "comment": "Detection rules, The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592908
       },
       {
         "uuid": "f006ed12-34a2-51fc-9c98-b9c949b3e157",
@@ -67,7 +67,7 @@
         "value": "https://the-hunters-ledger.com/ioc-feeds/fleetagentadvanced-exe.json",
         "to_ids": false,
         "comment": "IOC feed (JSON), The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592908
       },
       {
         "uuid": "3679cbe2-6414-53d5-b8fc-ad3b22299ad5",
@@ -76,7 +76,7 @@
         "value": "title: .NET Dropper with Base64 Embedded Payload Execution\nid: d45cafee-0934-456d-9471-1cefbe03602a\nstatus: experimental\ndescription: >-\n  Detects .NET executables decoding Base64 payloads and writing the decoded\n  bytes to disk within the same process-access call trace — a common pattern\n  for dropping an embedded secondary payload, also used by legitimate\n  installers unpacking bundled resources.\nreferences:\n  - https://the-hunters-ledger.com/hunting-detections/fleetagentadvanced-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n  - attack.stealth\n  - attack.t1027\n  - detection.emerging-threats\nlogsource:\n  category: process_access\n  product: windows\ndetection:\n  selection:\n    CallTrace|contains|all:\n      - 'FromBase64String'\n      - 'WriteAllBytes'\n    SourceImage|contains: '.exe'\n  filter_legitimate:\n    SourceImage|startswith:\n      - 'C:\\Program Files\\'\n      - 'C:\\Windows\\'\n  condition: selection and not filter_legitimate\nfalsepositives:\n  - Legitimate installers using Base64-encoded resources\nlevel: medium",
         "to_ids": false,
         "comment": ".NET Dropper with Base64 Embedded Payload Execution | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1027 | rule hash 341be545 | https://the-hunters-ledger.com/hunting-detections/fleetagentadvanced-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592908,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -91,7 +91,7 @@
         "value": "title: FleetAgentAdvanced Persistence with Microsoft .NET Masquerading\nid: ccf14e14-5328-4d1b-98b9-27088663076e\nstatus: experimental\ndescription: >-\n  Detects creation of a Registry Run-key value whose data references Microsoft,\n  .NET, and Runtime branding together while pointing at an executable in\n  AppData — a location legitimate Microsoft .NET Runtime components never use.\n  Hunting-tier: the masquerade branding is attacker-chosen and renameable, and\n  the AppData-location half of the check is common among legitimate consumer\n  auto-start software on its own.\nreferences:\n  - https://the-hunters-ledger.com/hunting-detections/fleetagentadvanced-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n  - attack.persistence\n  - attack.privilege-escalation\n  - attack.stealth\n  - attack.t1547.001\n  - attack.t1036.005\n  - detection.emerging-threats\nlogsource:\n  category: registry_set\n  product: windows\ndetection:\n  selection:\n    TargetObject|contains: '\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\'\n    Details|contains|all:\n      - 'Microsoft'\n      - '.NET'\n      - 'Runtime'\n    Details|contains: '\\AppData\\'\n  condition: selection\nfalsepositives:\n  - Unsigned .NET development tools using Microsoft/.NET/Runtime naming in AppData (verify legitimacy)\nlevel: medium",
         "to_ids": false,
         "comment": "FleetAgentAdvanced Persistence with Microsoft .NET Masquerading | TIER: Hunting | robustness 1 | confidence LOW | ATT&CK T1547.001, T1036.005 | rule hash a6c38367 | https://the-hunters-ledger.com/hunting-detections/fleetagentadvanced-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592908,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -106,7 +106,7 @@
         "value": "title: FleetAgentAdvanced Process Injection from .NET Executable\nid: 1ca5cfa6-f7af-4dde-80b1-87edbf3c637b\nstatus: experimental\ndescription: >-\n    Detects the VirtualAllocEx, WriteProcessMemory, CreateRemoteThread process\n    injection API sequence in a process-access call trace where the source image\n    runs from AppData rather than Program Files.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/fleetagentadvanced-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n    - attack.privilege-escalation\n    - attack.stealth\n    - attack.t1055\n    - detection.emerging-threats\nlogsource:\n    category: process_access\n    product: windows\ndetection:\n    selection:\n        SourceImage|contains: '\\AppData\\'\n        CallTrace|contains|all:\n            - 'VirtualAllocEx'\n            - 'WriteProcessMemory'\n            - 'CreateRemoteThread'\n    filter_legitimate:\n        SourceImage|contains:\n            - '\\Program Files\\'\n            - '\\Program Files (x86)\\'\n    condition: selection and not filter_legitimate\nfalsepositives:\n    - Legitimate development tools and debuggers from AppData\nlevel: high",
         "to_ids": true,
         "comment": "FleetAgentAdvanced Process Injection from .NET Executable | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1055 | rule hash 772b4bba | https://the-hunters-ledger.com/hunting-detections/fleetagentadvanced-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592908,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -121,7 +121,7 @@
         "value": "title: FleetAgentAdvanced-Style .NET Runtime Optimization Scheduled Task Creation (Base Rule)\nid: 2e8398f6-7a6a-4a8d-8aa2-f0cbbb346af5\nname: fleetagentadvanced_schtasks_masquerade_create\nstatus: experimental\ndescription: >-\n  Base rule (not alerting on its own): schtasks.exe invoked with /create and a\n  command line referencing the \".NET Runtime Optimization\" masquerade phrase.\n  Paired with the task.xml-deletion base rule below via the correlation rule,\n  which flags the create-then-delete anti-forensics sequence characteristic of\n  this dropper family.\nreferences:\n  - https://the-hunters-ledger.com/hunting-detections/fleetagentadvanced-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n  - attack.persistence\n  - attack.privilege-escalation\n  - attack.execution\n  - attack.t1053.005\n  - detection.emerging-threats\nlogsource:\n  category: process_creation\n  product: windows\ndetection:\n  selection:\n    Image|endswith: '\\schtasks.exe'\n    CommandLine|contains|all:\n      - '/create'\n      - '.NET Runtime Optimization'\n  condition: selection\nfalsepositives:\n  - >-\n    Legitimate .NET Framework maintenance tasks using this exact phrase are not\n    expected — verify digital signature if reviewed in isolation. Not alerting\n    on its own; reviewed only in combination with the paired task.xml-deletion\n    base rule.\nlevel: informational\n---\ntitle: task.xml Deletion by Non-System Process (Base Rule)\nid: 047f19e5-e1a1-484c-b825-24fb822125a5\nname: fleetagentadvanced_taskxml_deletion\nstatus: experimental\ndescription: >-\n  Base rule (not alerting on its own): deletion of a file named exactly\n  task.xml by a process outside System32/SysWOW64. Paired with the\n  scheduled-task-creation base rule above via the correlation rule below.\nreferences:\n  - https://the-hunters-ledger.com/hunting-detections/fleetagentadvanced-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n  - attack.stealth\n  - attack.t1070.004\n  - detection.emerging-threats\nlogsource:\n  category: file_delete\n  product: windows\ndetection:\n  selection:\n    TargetFilename|endswith: '\\task.xml'\n    Image|contains: '.exe'\n  filter_legitimate:\n    Image|contains:\n      - '\\System32\\'\n      - '\\SysWOW64\\'\n  condition: selection and not filter_legitimate\nfalsepositives:\n  - >-\n    Legitimate installers or maintenance scripts that export and then delete a\n    scheduled-task XML file named task.xml (uncommon). Not alerting on its\n    own; reviewed only in combination with the paired scheduled-task-creation\n    base rule.\nlevel: informational\n---\ntitle: FleetAgentAdvanced-Class Scheduled Task Create-Then-Delete Anti-Forensics Sequence\nid: 049f9083-fc9c-4c12-94d0-13538a2cc3cc\nstatus: experimental\ndescription: >-\n  Fires when both the \".NET Runtime Optimization\" masquerade scheduled-task\n  creation and a task.xml deletion by a non-system process are observed on the\n  same host within a short window. Neither base signal alone is reliable — the\n  masquerade phrase is attacker-chosen and renameable, and a bare task.xml\n  deletion has no inherent malicious meaning — but this dropper family creates\n  the scheduled task and deletes its exported task.xml within roughly 120\n  milliseconds as a deliberate anti-forensics step, a sequence a coincidental\n  unrelated program is not expected to reproduce.\nreferences:\n  - https://the-hunters-ledger.com/hunting-detections/fleetagentadvanced-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n  - attack.persistence\n  - attack.privilege-escalation\n  - attack.execution\n  - attack.stealth\n  - attack.t1053.005\n  - attack.t1070.004\n  - detection.emerging-threats\ncorrelation:\n  type: temporal\n  rules:\n    - fleetagentadvanced_schtasks_masquerade_create\n    - fleetagentadvanced_taskxml_deletion\n  group-by:\n    - host.name\n  timespan: 5m\nfalsepositives:\n  - >-\n    A future build renaming both the masquerade phrase and the exported XML\n    filename evades this correlation entirely — both remain the same\n    attacker-chosen naming decision, so this is a scoping lead for this\n    specific build family, not a durable technique-level detector.\nlevel: medium",
         "to_ids": false,
         "comment": "FleetAgentAdvanced Scheduled-Task Masquerade Creation and task.xml Deletion (Correlation) | TIER: Hunting | robustness 2 | confidence LOW — both base signals are individually brittle, masquerade-literal-dependent selectors; the correlation adds real but limited value | ATT&CK T1053.005, T1070.004 | rule hash 08f39845 | https://the-hunters-ledger.com/hunting-detections/fleetagentadvanced-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592908,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -136,7 +136,7 @@
         "value": "/*\n   Yara Rule Set\n   Identifier: Arsenal-237-109.230.231.37-Malware-Repository\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\nimport \"hash\"\n\nrule MAL_FleetAgentAdvanced_Dropper_Hash_Function_Combo {\n   meta:\n      description = \"Detects FleetAgentAdvanced.exe dropper via exact file hash, or via a combination of at least 3 of 6 distinctive, operator-coined internal .NET method names (DropEmbeddedAgent, SetPersistence, CreateShortcut, StartWatchdog, RunWatchdog, InjectIntoProcess) that survive a masquerade-branding rebrand.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/fleetagentadvanced-exe-detections/\"\n      date = \"2026-01-12\"\n      hash1 = \"172258e53b9506a7671deab25d2ad360cd833a4942609f1a4836d305ffe4578b\"\n      family = \"FleetAgentAdvanced\"\n      malware_type = \"Dropper-Trojan\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"bf7dbbc0-99af-557d-96a8-69a6247efa88\"\n   strings:\n      $func1 = \"DropEmbeddedAgent\" ascii wide\n      $func2 = \"SetPersistence\" ascii wide\n      $func3 = \"CreateShortcut\" ascii wide\n      $func4 = \"StartWatchdog\" ascii wide\n      $func5 = \"RunWatchdog\" ascii wide\n      $func6 = \"InjectIntoProcess\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 500KB and\n      (\n         hash.sha256(0, filesize) == \"172258e53b9506a7671deab25d2ad360cd833a4942609f1a4836d305ffe4578b\" or\n         3 of ($func*)\n      )\n}",
         "to_ids": true,
         "comment": "FleetAgentAdvanced Dropper Hash and Coined Function-Name Combination | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1027, T1547.001, T1053.005, T1055 | rule hash 43d9bfe3 | https://the-hunters-ledger.com/hunting-detections/fleetagentadvanced-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592908,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -151,7 +151,7 @@
         "value": "rule SUSP_FleetAgentAdvanced_NET_Masquerade_Combination {\n   meta:\n      description = \"Detects .NET executables combining FleetAgentAdvanced-style configuration variable names (WATCHDOG_MUTEX, AGENT_SECRET, EMBEDDED_AGENT, etc.) or generic process-injection API references with the Microsoft .NET Runtime Optimization masquerade strings. Brittle to a masquerade-naming rebrand — treat as a scoping lead, not an alert.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/fleetagentadvanced-exe-detections/\"\n      date = \"2026-01-12\"\n      family = \"FleetAgentAdvanced\"\n      malware_type = \"Dropper-Trojan-Masquerade-Component\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"4a8d104a-d581-5c8b-bd16-1c72215b0e87\"\n   strings:\n      $config1 = \"EMBEDDED_AGENT\" ascii wide\n      $config2 = \"INSTALL_NAME\" ascii wide\n      $config3 = \"STARTUP_NAME\" ascii wide\n      $config4 = \"WATCHDOG_MUTEX\" ascii wide\n      $config5 = \"MUTEX_NAME\" ascii wide\n      $config6 = \"SERVER_HOST\" ascii wide\n      $config7 = \"AGENT_SECRET\" ascii wide\n\n      $persist1 = \"RuntimeOptimization.exe\" ascii wide\n      $persist2 = \"Microsoft .NET Runtime Optimization\" ascii wide\n      $persist3 = \"Microsoft\\\\CLR\" ascii wide\n\n      $api1 = \"VirtualAllocEx\" ascii\n      $api2 = \"WriteProcessMemory\" ascii\n      $api3 = \"CreateRemoteThread\" ascii\n      $api4 = \"NtUnmapViewOfSection\" ascii\n      $api5 = \"PAGE_EXECUTE_READWRITE\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 500KB and\n      (\n         (2 of ($config*) and any of ($persist*)) or\n         (any of ($api*) and any of ($persist*))\n      )\n}",
         "to_ids": false,
         "comment": "FleetAgentAdvanced .NET Masquerade Configuration and API Combination | TIER: Hunting | robustness 1 | confidence LOW | ATT&CK T1036.005, T1055 | rule hash 5857b4dc | https://the-hunters-ledger.com/hunting-detections/fleetagentadvanced-exe-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592908,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",

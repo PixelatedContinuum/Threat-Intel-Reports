@@ -283,21 +283,41 @@ function contentHash(ev) {
 /* events: buildEvent() results; state: the parsed _state.json or null; now:
    unix seconds for anything that changed. Returns the stamped events, the new
    state, which events changed, and which state entries are now withdrawn. */
-function stamp(events, state, now) {
+/* Every event in the feed carries a timestamp no other event shares, and every
+   event stamped in a run is newer than anything already in the feed. OpenCTI's
+   MISP-feed connector walks the manifest in timestamp order and processes an
+   event only when its timestamp is strictly greater than the last one it took,
+   so two events on one timestamp means the second is never imported (seen
+   2026-10-10, T-0204: 2 of 59 imported). opts.restampAll gives every event a new
+   unique timestamp once, for a feed written before this rule. */
+function stamp(events, state, now, opts) {
+  opts = opts || {};
   var prev = (state && state.events) || {};
   var withdrawnPrev = (state && state.withdrawn) || {};
-  var nextEvents = {}, changed = [], unchanged = [], added = [];
+  var nextEvents = {}, changed = [], unchanged = [], added = [], restamp = [];
+  var prevMax = 0;
+  Object.keys(prev).forEach(function (u) { if (prev[u].timestamp > prevMax) prevMax = prev[u].timestamp; });
+  Object.keys(withdrawnPrev).forEach(function (u) { if (withdrawnPrev[u].last_timestamp > prevMax) prevMax = withdrawnPrev[u].last_timestamp; });
   events.forEach(function (ev) {
     var h = contentHash(ev);
     var p = prev[ev.uuid];
-    if (p && p.hash === h) {
+    ev._hash = h;
+    if (p && p.hash === h && !opts.restampAll) {
       ev.timestamp = p.timestamp;
       unchanged.push(ev.slug);
     } else {
-      ev.timestamp = now;
-      (p ? changed : added).push(ev.slug);
+      restamp.push(ev);
+      if (p && p.hash === h) unchanged.push(ev.slug);
+      else (p ? changed : added).push(ev.slug);
     }
-    nextEvents[ev.uuid] = { slug: ev.slug, hash: h, timestamp: ev.timestamp, first_published: (p && p.first_published) || dateOf(now) };
+  });
+  var base = Math.max(now, prevMax + 1);
+  restamp.sort(function (a, b) { return a.slug < b.slug ? -1 : a.slug > b.slug ? 1 : 0; });
+  restamp.forEach(function (ev, i) { ev.timestamp = base + i; });
+  events.forEach(function (ev) {
+    var p = prev[ev.uuid];
+    nextEvents[ev.uuid] = { slug: ev.slug, hash: ev._hash, timestamp: ev.timestamp, first_published: (p && p.first_published) || dateOf(now) };
+    delete ev._hash;
   });
   var withdrawn = {};
   Object.keys(withdrawnPrev).forEach(function (u) { withdrawn[u] = withdrawnPrev[u]; });
@@ -311,11 +331,21 @@ function stamp(events, state, now) {
     events: events,
     state: { namespace: NAMESPACE, orgc: ORGC, events: nextEvents, withdrawn: withdrawn },
     changed: changed, added: added, unchanged: unchanged, newlyWithdrawn: newlyWithdrawn,
+    restamped: opts.restampAll ? restamp.length : 0, duplicateTimestamps: duplicateTimestamps(events),
     withdrawn: Object.keys(withdrawn).map(function (u) { return Object.assign({ uuid: u }, withdrawn[u]); })
   };
 }
 
 function dateOf(unix) { return new Date(unix * 1000).toISOString().slice(0, 10); }
+
+/* Slugs of events whose timestamp another event also carries. */
+function duplicateTimestamps(events) {
+  var by = {};
+  events.forEach(function (ev) { (by[ev.timestamp] = by[ev.timestamp] || []).push(ev.slug); });
+  var out = [];
+  Object.keys(by).forEach(function (t) { if (by[t].length > 1) out = out.concat(by[t]); });
+  return out.sort();
+}
 
 function manifest(events) {
   var out = {};

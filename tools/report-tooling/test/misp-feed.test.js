@@ -204,3 +204,26 @@ test('safeText marks characters outside the BMP; comments and titles carry the m
   assert.equal(ev.info, 'T [U+1F525]');
   assert.equal(d.value, 'x.test');
 });
+
+test('stamp gives events changed in one run distinct timestamps above the feed maximum, and restampAll clears legacy collisions', function () {
+  const a = { uuid: 'u-a', slug: 'a', info: 'A', date: '2026-01-01', threat_level_id: 1, analysis: 2, tags: [], attributes: [] };
+  const b = Object.assign({}, a, { uuid: 'u-b', slug: 'b', info: 'B' });
+  const c = Object.assign({}, a, { uuid: 'u-c', slug: 'c', info: 'C' });
+  const first = M.stamp([a, b, c].map(function (x) { return Object.assign({}, x); }), null, 1000);
+  assert.deepEqual(first.events.map(function (e) { return e.timestamp; }), [1000, 1001, 1002]);
+  assert.deepEqual(first.duplicateTimestamps, []);
+  // A run whose clock is behind the feed still stamps above the maximum.
+  const b2 = Object.assign({}, b, { info: 'B changed' });
+  const second = M.stamp([Object.assign({}, a), b2, Object.assign({}, c)], first.state, 900);
+  assert.equal(second.events[1].timestamp, 1003);
+  assert.equal(second.events[0].timestamp, 1000);
+  // A legacy state where everything shares one timestamp is flagged, then fixed by restampAll.
+  const legacy = JSON.parse(JSON.stringify(first.state));
+  Object.keys(legacy.events).forEach(function (u) { legacy.events[u].timestamp = 500; });
+  const flagged = M.stamp([a, b, c].map(function (x) { return Object.assign({}, x); }), legacy, 2000);
+  assert.deepEqual(flagged.duplicateTimestamps, ['a', 'b', 'c']);
+  const fixed = M.stamp([a, b, c].map(function (x) { return Object.assign({}, x); }), legacy, 2000, { restampAll: true });
+  assert.deepEqual(fixed.events.map(function (e) { return e.timestamp; }), [2000, 2001, 2002]);
+  assert.equal(fixed.restamped, 3);
+  assert.deepEqual(fixed.duplicateTimestamps, []);
+});
