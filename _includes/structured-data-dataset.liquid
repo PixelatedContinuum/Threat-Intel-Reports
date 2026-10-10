@@ -1,0 +1,114 @@
+{%- comment -%}
+  schema.org Dataset JSON-LD for the machine-readable surfaces, so a dataset
+  search or a crawler sees the IOC feeds and the STIX bundles as data, not as
+  articles. Included from default/head.liquid for three page shapes:
+
+  - an IOC viewer page (layout ioc-table): one Dataset for that campaign's
+    feed, read from _data/ioc_tables.yml (title, date, counts, the raw JSON
+    download, the report it comes from);
+  - /ioc-feeds/: a DataCatalog listing every published feed as a Dataset
+    (the catalog's ioc_url entries, so an embargoed feed is absent by
+    construction);
+  - /stix/: a DataCatalog listing every published bundle as a Dataset (the
+    catalog's stix_url entries) plus the zip of all of them.
+
+  Everything is derived from data the page already renders. Every string is
+  jsonified, so a title with a quote stays valid JSON; the Actions sanity
+  check parses the output of all three shapes.
+{%- endcomment -%}
+{%- assign _ds_licence = 'https://creativecommons.org/licenses/by/4.0/' -%}
+{%- assign _ds_author = '/about-me/' | absolute_url -%}
+{%- if page.layout == 'ioc-table' -%}
+{%- assign t = site.data.ioc_tables[page.ioc_slug] -%}
+{%- if t -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "name": {{ t.title | append: ": indicators of compromise" | jsonify }},
+  "description": {{ t.total | append: " typed indicators (" | append: t.untyped | append: " further untyped values) extracted from the investigation's IOC feed, with type, confidence, action and false-positive risk where the feed records them. Licensed CC BY 4.0." | jsonify }},
+  "url": {{ page.url | absolute_url | jsonify }},
+  "identifier": {{ t.feed_url | absolute_url | jsonify }},
+  "license": {{ _ds_licence | jsonify }},
+  "isAccessibleForFree": true,
+  "datePublished": {{ t.date | date_to_xmlschema | jsonify }},
+  "keywords": [{{ "indicators of compromise" | jsonify }}, {{ "threat intelligence" | jsonify }}{% for c in t.counts %}, {{ c[0] | jsonify }}{% endfor %}],
+  "variableMeasured": [{% for c in t.counts %}{ "@type": "PropertyValue", "name": {{ c[0] | jsonify }}, "value": {{ c[1] }} }{% unless forloop.last %}, {% endunless %}{% endfor %}],
+  "distribution": [
+    { "@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": {{ t.feed_url | absolute_url | jsonify }} },
+    { "@type": "DataDownload", "encodingFormat": "text/html", "contentUrl": {{ page.url | absolute_url | jsonify }} }
+  ],
+  {%- if t.report_url %}
+  "isBasedOn": {{ t.report_url | absolute_url | jsonify }},
+  {%- endif %}
+  "includedInDataCatalog": { "@type": "DataCatalog", "name": "The Hunter's Ledger IOC Feeds", "url": {{ '/ioc-feeds/' | absolute_url | jsonify }} },
+  "creator": { "@type": "Person", "name": "Joseph Harrison", "url": {{ _ds_author | jsonify }} },
+  "publisher": { "@type": "Organization", "name": "The Hunter's Ledger", "url": {{ site.url | jsonify }} }
+}
+</script>
+{%- endif -%}
+{%- elsif page.url == '/ioc-feeds/' -%}
+{%- assign _feeds = site.data.catalog.entries | where_exp: "e", "e.ioc_url" | sort: "date" | reverse -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "DataCatalog",
+  "name": "The Hunter's Ledger IOC Feeds",
+  "description": {{ page.description | jsonify }},
+  "url": {{ page.url | absolute_url | jsonify }},
+  "license": {{ _ds_licence | jsonify }},
+  "creator": { "@type": "Person", "name": "Joseph Harrison", "url": {{ _ds_author | jsonify }} },
+  "publisher": { "@type": "Organization", "name": "The Hunter's Ledger", "url": {{ site.url | jsonify }} },
+  "dataset": [
+    {%- for e in _feeds %}
+    {%- assign _slug = e.ioc_url | split: '/' | last | remove: '-iocs.json' -%}
+    {%- assign _tbl = site.data.ioc_tables[_slug] %}
+    {
+      "@type": "Dataset",
+      "name": {{ e.ioc_title | default: e.title | append: ": indicators of compromise" | jsonify }},
+      "url": {% if _tbl %}{{ _tbl.page_url | absolute_url | jsonify }}{% else %}{{ e.ioc_url | absolute_url | jsonify }}{% endif %},
+      "datePublished": {{ e.date | date_to_xmlschema | jsonify }},
+      "license": {{ _ds_licence | jsonify }},
+      "isAccessibleForFree": true,
+      "keywords": [{{ "indicators of compromise" | jsonify }}{% assign _tags = e.ioc_tags | default: e.tags %}{% for tg in _tags %}, {{ tg | jsonify }}{% endfor %}],
+      "distribution": [{ "@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": {{ e.ioc_url | absolute_url | jsonify }} }]{% if e.report_url %},
+      "isBasedOn": {{ e.report_url | absolute_url | jsonify }}{% endif %}
+    }{% unless forloop.last %},{% endunless %}
+    {%- endfor %}
+  ]
+}
+</script>
+{%- elsif page.url == '/stix/' -%}
+{%- assign _bundles = site.data.catalog.entries | where_exp: "e", "e.stix_url" | sort: "date" | reverse -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "DataCatalog",
+  "name": "The Hunter's Ledger STIX 2.1 Bundles",
+  "description": {{ page.description | jsonify }},
+  "url": {{ page.url | absolute_url | jsonify }},
+  "license": {{ _ds_licence | jsonify }},
+  "creator": { "@type": "Person", "name": "Joseph Harrison", "url": {{ _ds_author | jsonify }} },
+  "publisher": { "@type": "Organization", "name": "The Hunter's Ledger", "url": {{ site.url | jsonify }} },
+  "distribution": [
+    { "@type": "DataDownload", "name": "Every bundle, zipped", "encodingFormat": "application/zip", "contentUrl": {{ '/stix/hunters-ledger-stix-bundles.zip' | absolute_url | jsonify }} },
+    { "@type": "DataDownload", "name": "Bundle manifest (URL, SHA-256, size, modified time per bundle)", "encodingFormat": "application/json", "contentUrl": {{ '/stix/manifest.json' | absolute_url | jsonify }} }
+  ],
+  "dataset": [
+    {%- for e in _bundles %}
+    {
+      "@type": "Dataset",
+      "name": {{ e.stix_title | default: e.title | append: ": STIX 2.1 bundle" | jsonify }},
+      "url": {{ e.stix_url | absolute_url | jsonify }},
+      "datePublished": {{ e.date | date_to_xmlschema | jsonify }},
+      "license": {{ _ds_licence | jsonify }},
+      "isAccessibleForFree": true,
+      "keywords": [{{ "STIX 2.1" | jsonify }}, {{ "threat intelligence" | jsonify }}{% assign _tags = e.stix_tags | default: e.tags %}{% for tg in _tags %}, {{ tg | jsonify }}{% endfor %}],
+      "distribution": [{ "@type": "DataDownload", "encodingFormat": "application/stix+json", "contentUrl": {{ e.stix_url | absolute_url | jsonify }} }]{% if e.report_url %},
+      "isBasedOn": {{ e.report_url | absolute_url | jsonify }}{% endif %}
+    }{% unless forloop.last %},{% endunless %}
+    {%- endfor %}
+  ]
+}
+</script>
+{%- endif -%}

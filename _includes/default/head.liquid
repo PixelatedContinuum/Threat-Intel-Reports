@@ -88,6 +88,7 @@
     {%- capture _seo %}{% seo %}{% endcapture -%}
     {{ _seo | replace: '<meta name="twitter:card" content="summary" />', '' }}
     {% if page.layout == "post" %}{% if page.url contains "/reports/" or page.url contains "/hunting-detections/" %}{% include structured-data.liquid %}{% endif %}{% endif %}
+    {%- if page.layout == "ioc-table" or page.url == "/ioc-feeds/" or page.url == "/stix/" %}{% include structured-data-dataset.liquid %}{% endif %}
 
     <!-- RSS -->
     <link rel="alternate" type="application/atom+xml" title="{{ site.title | default: 'Title' }}" href="{{ 'feed.xml' | absolute_url }}"/>
