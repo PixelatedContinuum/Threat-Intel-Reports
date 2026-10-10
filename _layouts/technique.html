@@ -71,7 +71,7 @@ layout: page
   <ul class="hl-xref__actors">
     {%- for id in t.actors -%}
     {%- assign a = site.data.actors.actors | where: "id", id | first -%}
-    <li><a href="{{ id | prepend: '/actors/' | append: '/' | relative_url }}">{{ id }}</a>{% if a %}: {{ a.type }}{% endif %}</li>
+    <li><a href="{{ id | prepend: '/actors/' | append: '/' | relative_url }}">{% if a and a.name %}{{ a.name }}{% else %}{{ id }}{% endif %}</a>{% if a %}: {{ a.type }}{% endif %}</li>
     {%- endfor -%}
   </ul>
   {%- endif -%}

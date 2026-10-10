@@ -742,11 +742,12 @@ techniques:
       - UTA-2026-021
       - UTA-2026-023
       - UTA-2026-024
+      - n-3-xl
     url: /techniques/T1005/
     mitre_url: https://attack.mitre.org/techniques/T1005/
     report_count: 11
     rule_count: 3
-    actor_count: 10
+    actor_count: 11
     score: 14
   - id: T1007
     name: System Service Discovery
@@ -897,11 +898,12 @@ techniques:
       - UTA-2026-016
       - UTA-2026-017
       - UTA-2026-023
+      - vova75rus
     url: /techniques/T1014/
     mitre_url: https://attack.mitre.org/techniques/T1014/
     report_count: 2
     rule_count: 11
-    actor_count: 4
+    actor_count: 5
     score: 13
   - id: T1016
     name: System Network Configuration Discovery
@@ -1000,11 +1002,12 @@ techniques:
       - UTA-2026-016
       - UTA-2026-017
       - UTA-2026-023
+      - vova75rus
     url: /techniques/T1018/
     mitre_url: https://attack.mitre.org/techniques/T1018/
     report_count: 3
     rule_count: 1
-    actor_count: 5
+    actor_count: 6
     score: 4
   - id: T1020
     name: Automated Exfiltration
@@ -1465,11 +1468,13 @@ techniques:
       - UTA-2026-021
       - UTA-2026-023
       - UTA-2026-024
+      - n-3-xl
+      - vova75rus
     url: /techniques/T1027/
     mitre_url: https://attack.mitre.org/techniques/T1027/
     report_count: 19
     rule_count: 22
-    actor_count: 17
+    actor_count: 19
     score: 41
   - id: T1027.001
     name: Binary Padding
@@ -2048,11 +2053,12 @@ techniques:
     actors:
       - UTA-2026-004
       - UTA-2026-018
+      - n-3-xl
     url: /techniques/T1036.004/
     mitre_url: https://attack.mitre.org/techniques/T1036/004/
     report_count: 4
     rule_count: 5
-    actor_count: 2
+    actor_count: 3
     score: 9
   - id: T1036.005
     name: Match Legitimate Resource Name or Location
@@ -2251,11 +2257,13 @@ techniques:
       - UTA-2026-021
       - UTA-2026-023
       - UTA-2026-024
+      - n-3-xl
+      - vova75rus
     url: /techniques/T1036.005/
     mitre_url: https://attack.mitre.org/techniques/T1036/005/
     report_count: 14
     rule_count: 32
-    actor_count: 13
+    actor_count: 15
     score: 46
   - id: T1036.007
     name: Double File Extension
@@ -2491,11 +2499,12 @@ techniques:
       - UTA-2026-021
       - UTA-2026-023
       - UTA-2026-024
+      - n-3-xl
     url: /techniques/T1041/
     mitre_url: https://attack.mitre.org/techniques/T1041/
     report_count: 17
     rule_count: 12
-    actor_count: 13
+    actor_count: 14
     score: 29
   - id: T1046
     name: Network Service Discovery
@@ -2863,11 +2872,12 @@ techniques:
       - UTA-2026-020
       - UTA-2026-021
       - UTA-2026-024
+      - n-3-xl
     url: /techniques/T1053.005/
     mitre_url: https://attack.mitre.org/techniques/T1053/005/
     report_count: 10
     rule_count: 16
-    actor_count: 6
+    actor_count: 7
     score: 26
   - id: T1055
     name: Process Injection
@@ -2967,11 +2977,12 @@ techniques:
       - UTA-2026-007
       - UTA-2026-021
       - UTA-2026-024
+      - n-3-xl
     url: /techniques/T1055/
     mitre_url: https://attack.mitre.org/techniques/T1055/
     report_count: 10
     rule_count: 9
-    actor_count: 6
+    actor_count: 7
     score: 19
   - id: T1055.001
     name: Dynamic-link Library Injection
@@ -3191,11 +3202,12 @@ techniques:
       - UTA-2026-008
       - UTA-2026-009
       - UTA-2026-010
+      - n-3-xl
     url: /techniques/T1055.012/
     mitre_url: https://attack.mitre.org/techniques/T1055/012/
     report_count: 8
     rule_count: 8
-    actor_count: 8
+    actor_count: 9
     score: 16
   - id: T1055.015
     name: ListPlanting
@@ -3326,11 +3338,12 @@ techniques:
       - UTA-2026-009
       - UTA-2026-010
       - UTA-2026-021
+      - n-3-xl
     url: /techniques/T1056.001/
     mitre_url: https://attack.mitre.org/techniques/T1056/001/
     report_count: 11
     rule_count: 4
-    actor_count: 8
+    actor_count: 9
     score: 15
   - id: T1056.002
     name: GUI Input Capture
@@ -3708,11 +3721,12 @@ techniques:
       - UTA-2026-021
       - UTA-2026-023
       - UTA-2026-024
+      - n-3-xl
     url: /techniques/T1059.001/
     mitre_url: https://attack.mitre.org/techniques/T1059/001/
     report_count: 15
     rule_count: 21
-    actor_count: 12
+    actor_count: 13
     score: 36
   - id: T1059.003
     name: Windows Command Shell
@@ -3836,11 +3850,12 @@ techniques:
       - UTA-2026-021
       - UTA-2026-023
       - UTA-2026-024
+      - n-3-xl
     url: /techniques/T1059.003/
     mitre_url: https://attack.mitre.org/techniques/T1059/003/
     report_count: 15
     rule_count: 6
-    actor_count: 9
+    actor_count: 10
     score: 21
   - id: T1059.004
     name: Unix Shell
@@ -3951,11 +3966,12 @@ techniques:
       - UTA-2026-019
       - UTA-2026-020
       - UTA-2026-023
+      - vova75rus
     url: /techniques/T1059.004/
     mitre_url: https://attack.mitre.org/techniques/T1059/004/
     report_count: 7
     rule_count: 21
-    actor_count: 10
+    actor_count: 11
     score: 28
   - id: T1059.005
     name: Visual Basic
@@ -4029,11 +4045,12 @@ techniques:
       - UTA-2026-007
       - UTA-2026-020
       - UTA-2026-021
+      - n-3-xl
     url: /techniques/T1059.005/
     mitre_url: https://attack.mitre.org/techniques/T1059/005/
     report_count: 7
     rule_count: 5
-    actor_count: 3
+    actor_count: 4
     score: 12
   - id: T1059.006
     name: Python
@@ -4143,11 +4160,12 @@ techniques:
       - UTA-2026-018
       - UTA-2026-019
       - UTA-2026-020
+      - vova75rus
     url: /techniques/T1059.006/
     mitre_url: https://attack.mitre.org/techniques/T1059/006/
     report_count: 5
     rule_count: 24
-    actor_count: 10
+    actor_count: 11
     score: 29
   - id: T1059.007
     name: JavaScript
@@ -4210,11 +4228,12 @@ techniques:
       - UTA-2026-015
       - UTA-2026-021
       - UTA-2026-024
+      - n-3-xl
     url: /techniques/T1059.007/
     mitre_url: https://attack.mitre.org/techniques/T1059/007/
     report_count: 5
     rule_count: 6
-    actor_count: 6
+    actor_count: 7
     score: 11
   - id: T1068
     name: Exploitation for Privilege Escalation
@@ -4920,11 +4939,12 @@ techniques:
       - UTA-2026-020
       - UTA-2026-023
       - UTA-2026-024
+      - n-3-xl
     url: /techniques/T1071.001/
     mitre_url: https://attack.mitre.org/techniques/T1071/001/
     report_count: 28
     rule_count: 86
-    actor_count: 18
+    actor_count: 19
     score: 114
   - id: T1071.002
     name: File Transfer Protocols
@@ -4996,12 +5016,13 @@ techniques:
         report_url: /reports/webserver-compromise-kit-91-236-230-250/
         rules: revsocks Reverse SOCKS5 Proxy (Go Binary) (YARA, Detection)
         count: 1
-    actors: []
+    actors:
+      - n-3-xl
     url: /techniques/T1071.004/
     mitre_url: https://attack.mitre.org/techniques/T1071/004/
     report_count: 2
     rule_count: 1
-    actor_count: 0
+    actor_count: 1
     score: 3
   - id: T1074.001
     name: Local Data Staging
@@ -5338,11 +5359,12 @@ techniques:
       - UTA-2026-021
       - UTA-2026-023
       - UTA-2026-024
+      - n-3-xl
     url: /techniques/T1082/
     mitre_url: https://attack.mitre.org/techniques/T1082/
     report_count: 21
     rule_count: 1
-    actor_count: 14
+    actor_count: 15
     score: 22
   - id: T1083
     name: File and Directory Discovery
@@ -5401,11 +5423,12 @@ techniques:
       - UTA-2026-006
       - UTA-2026-007
       - UTA-2026-011
+      - n-3-xl
     url: /techniques/T1083/
     mitre_url: https://attack.mitre.org/techniques/T1083/
     report_count: 9
     rule_count: 0
-    actor_count: 4
+    actor_count: 5
     score: 9
   - id: T1087
     name: Account Discovery
@@ -5875,11 +5898,12 @@ techniques:
     actors:
       - UTA-2026-004
       - UTA-2026-014
+      - n-3-xl
     url: /techniques/T1095/
     mitre_url: https://attack.mitre.org/techniques/T1095/
     report_count: 4
     rule_count: 15
-    actor_count: 2
+    actor_count: 3
     score: 19
   - id: T1098
     name: Account Manipulation
@@ -6203,11 +6227,12 @@ techniques:
       - UTA-2026-016
       - UTA-2026-017
       - UTA-2026-019
+      - vova75rus
     url: /techniques/T1102.002/
     mitre_url: https://attack.mitre.org/techniques/T1102/002/
     report_count: 2
     rule_count: 3
-    actor_count: 4
+    actor_count: 5
     score: 5
   - id: T1104
     name: Multi-Stage Channels
@@ -6457,11 +6482,13 @@ techniques:
       - UTA-2026-021
       - UTA-2026-023
       - UTA-2026-024
+      - n-3-xl
+      - vova75rus
     url: /techniques/T1105/
     mitre_url: https://attack.mitre.org/techniques/T1105/
     report_count: 17
     rule_count: 26
-    actor_count: 14
+    actor_count: 16
     score: 43
   - id: T1106
     name: Native API
@@ -6529,11 +6556,12 @@ techniques:
       - UTA-2026-004
       - UTA-2026-021
       - UTA-2026-024
+      - n-3-xl
     url: /techniques/T1106/
     mitre_url: https://attack.mitre.org/techniques/T1106/
     report_count: 9
     rule_count: 2
-    actor_count: 5
+    actor_count: 6
     score: 11
   - id: T1110
     name: Brute Force
@@ -6884,11 +6912,12 @@ techniques:
       - UTA-2026-009
       - UTA-2026-010
       - UTA-2026-021
+      - n-3-xl
     url: /techniques/T1113/
     mitre_url: https://attack.mitre.org/techniques/T1113/
     report_count: 13
     rule_count: 6
-    actor_count: 8
+    actor_count: 9
     score: 19
   - id: T1115
     name: Clipboard Data
@@ -7046,11 +7075,12 @@ techniques:
     actors:
       - UTA-2026-003
       - UTA-2026-021
+      - n-3-xl
     url: /techniques/T1123/
     mitre_url: https://attack.mitre.org/techniques/T1123/
     report_count: 6
     rule_count: 1
-    actor_count: 2
+    actor_count: 3
     score: 7
   - id: T1125
     name: Video Capture
@@ -7094,11 +7124,12 @@ techniques:
         count: 1
     actors:
       - UTA-2026-003
+      - n-3-xl
     url: /techniques/T1125/
     mitre_url: https://attack.mitre.org/techniques/T1125/
     report_count: 5
     rule_count: 1
-    actor_count: 1
+    actor_count: 2
     score: 6
   - id: T1127.001
     name: MSBuild
@@ -8569,11 +8600,12 @@ techniques:
       - UTA-2026-008
       - UTA-2026-011
       - UTA-2026-021
+      - n-3-xl
     url: /techniques/T1219/
     mitre_url: https://attack.mitre.org/techniques/T1219/
     report_count: 7
     rule_count: 9
-    actor_count: 4
+    actor_count: 5
     score: 16
   - id: T1219.002
     name: Remote Desktop Software
@@ -8620,11 +8652,12 @@ techniques:
     actors:
       - UTA-2026-016
       - UTA-2026-017
+      - vova75rus
     url: /techniques/T1222.002/
     mitre_url: https://attack.mitre.org/techniques/T1222/002/
     report_count: 0
     rule_count: 2
-    actor_count: 2
+    actor_count: 3
     score: 2
   - id: T1480
     name: Execution Guardrails
@@ -8669,11 +8702,12 @@ techniques:
       - UTA-2026-007
       - UTA-2026-008
       - UTA-2026-011
+      - n-3-xl
     url: /techniques/T1480/
     mitre_url: https://attack.mitre.org/techniques/T1480/
     report_count: 5
     rule_count: 1
-    actor_count: 4
+    actor_count: 5
     score: 6
   - id: T1480.002
     name: Mutual Exclusion
@@ -8699,11 +8733,12 @@ techniques:
       - UTA-2026-010
       - UTA-2026-016
       - UTA-2026-017
+      - vova75rus
     url: /techniques/T1480.002/
     mitre_url: https://attack.mitre.org/techniques/T1480/002/
     report_count: 1
     rule_count: 1
-    actor_count: 5
+    actor_count: 6
     score: 2
   - id: T1482
     name: Domain Trust Discovery
@@ -8833,11 +8868,12 @@ techniques:
     detections: []
     actors:
       - UTA-2026-021
+      - n-3-xl
     url: /techniques/T1489/
     mitre_url: https://attack.mitre.org/techniques/T1489/
     report_count: 4
     rule_count: 0
-    actor_count: 1
+    actor_count: 2
     score: 4
   - id: T1490
     name: Inhibit System Recovery
@@ -8979,11 +9015,12 @@ techniques:
       - UTA-2026-016
       - UTA-2026-017
       - UTA-2026-020
+      - vova75rus
     url: /techniques/T1496.001/
     mitre_url: https://attack.mitre.org/techniques/T1496/001/
     report_count: 1
     rule_count: 11
-    actor_count: 3
+    actor_count: 4
     score: 12
   - id: T1497
     name: Virtualization/Sandbox Evasion
@@ -9053,11 +9090,12 @@ techniques:
       - UTA-2026-009
       - UTA-2026-010
       - UTA-2026-021
+      - n-3-xl
     url: /techniques/T1497/
     mitre_url: https://attack.mitre.org/techniques/T1497/
     report_count: 6
     rule_count: 4
-    actor_count: 5
+    actor_count: 6
     score: 10
   - id: T1497.001
     name: System Checks
@@ -9554,12 +9592,13 @@ techniques:
           ShinyHunters DLS: Salesforce Bulk Export OAuth App Authorization (SIGMA, Hunting);
           ShinyHunters DLS: Okta MFA Factor Deactivation or Unexpected Enrollment (SIGMA, Hunting)
         count: 2
-    actors: []
+    actors:
+      - n-3-xl
     url: /techniques/T1528/
     mitre_url: https://attack.mitre.org/techniques/T1528/
     report_count: 2
     rule_count: 2
-    actor_count: 0
+    actor_count: 1
     score: 4
   - id: T1529
     name: System Shutdown/Reboot
@@ -9583,12 +9622,13 @@ techniques:
         tactic: Impact
         confidence: HIGH
     detections: []
-    actors: []
+    actors:
+      - n-3-xl
     url: /techniques/T1529/
     mitre_url: https://attack.mitre.org/techniques/T1529/
     report_count: 3
     rule_count: 0
-    actor_count: 0
+    actor_count: 1
     score: 3
   - id: T1530
     name: Data from Cloud Storage
@@ -9739,11 +9779,12 @@ techniques:
       - UTA-2026-010
       - UTA-2026-018
       - UTA-2026-021
+      - n-3-xl
     url: /techniques/T1539/
     mitre_url: https://attack.mitre.org/techniques/T1539/
     report_count: 6
     rule_count: 5
-    actor_count: 5
+    actor_count: 6
     score: 11
   - id: T1542.001
     name: System Firmware
@@ -9902,11 +9943,12 @@ techniques:
       - UTA-2026-016
       - UTA-2026-017
       - UTA-2026-020
+      - vova75rus
     url: /techniques/T1543.002/
     mitre_url: https://attack.mitre.org/techniques/T1543/002/
     report_count: 2
     rule_count: 13
-    actor_count: 5
+    actor_count: 6
     score: 15
   - id: T1543.003
     name: Windows Service
@@ -9970,11 +10012,12 @@ techniques:
     actors:
       - UTA-2026-004
       - UTA-2026-021
+      - n-3-xl
     url: /techniques/T1543.003/
     mitre_url: https://attack.mitre.org/techniques/T1543/003/
     report_count: 6
     rule_count: 5
-    actor_count: 2
+    actor_count: 3
     score: 11
   - id: T1546.004
     name: Unix Shell Configuration Modification
@@ -10199,11 +10242,12 @@ techniques:
       - UTA-2026-020
       - UTA-2026-021
       - UTA-2026-024
+      - n-3-xl
     url: /techniques/T1547.001/
     mitre_url: https://attack.mitre.org/techniques/T1547/001/
     report_count: 15
     rule_count: 17
-    actor_count: 6
+    actor_count: 7
     score: 32
   - id: T1547.004
     name: Winlogon Helper DLL
@@ -10472,11 +10516,12 @@ techniques:
       - UTA-2026-013
       - UTA-2026-019
       - UTA-2026-023
+      - n-3-xl
     url: /techniques/T1552.001/
     mitre_url: https://attack.mitre.org/techniques/T1552/001/
     report_count: 4
     rule_count: 8
-    actor_count: 4
+    actor_count: 5
     score: 12
   - id: T1552.004
     name: Private Keys
@@ -10642,11 +10687,12 @@ techniques:
         count: 1
     actors:
       - UTA-2026-003
+      - n-3-xl
     url: /techniques/T1553.005/
     mitre_url: https://attack.mitre.org/techniques/T1553/005/
     report_count: 2
     rule_count: 2
-    actor_count: 1
+    actor_count: 2
     score: 4
   - id: T1554
     name: Compromise Host Software Binary
@@ -10680,11 +10726,12 @@ techniques:
       - UTA-2026-016
       - UTA-2026-017
       - UTA-2026-023
+      - vova75rus
     url: /techniques/T1554/
     mitre_url: https://attack.mitre.org/techniques/T1554/
     report_count: 1
     rule_count: 4
-    actor_count: 3
+    actor_count: 4
     score: 5
   - id: T1555
     name: Credentials from Password Stores
@@ -10815,11 +10862,12 @@ techniques:
       - UTA-2026-010
       - UTA-2026-021
       - UTA-2026-024
+      - n-3-xl
     url: /techniques/T1555.003/
     mitre_url: https://attack.mitre.org/techniques/T1555/003/
     report_count: 11
     rule_count: 7
-    actor_count: 7
+    actor_count: 8
     score: 18
   - id: T1555.004
     name: Windows Credential Manager
@@ -11103,11 +11151,13 @@ techniques:
       - UTA-2026-016
       - UTA-2026-017
       - UTA-2026-020
+      - n-3-xl
+      - vova75rus
     url: /techniques/T1564.001/
     mitre_url: https://attack.mitre.org/techniques/T1564/001/
     report_count: 4
     rule_count: 7
-    actor_count: 4
+    actor_count: 6
     score: 11
   - id: T1564.002
     name: Hidden Users
@@ -11392,11 +11442,12 @@ techniques:
       - UTA-2026-008
       - UTA-2026-009
       - UTA-2026-010
+      - n-3-xl
     url: /techniques/T1567.002/
     mitre_url: https://attack.mitre.org/techniques/T1567/002/
     report_count: 4
     rule_count: 2
-    actor_count: 3
+    actor_count: 4
     score: 6
   - id: T1568
     name: Dynamic Resolution
@@ -11627,11 +11678,13 @@ techniques:
       - UTA-2026-021
       - UTA-2026-023
       - UTA-2026-024
+      - n-3-xl
+      - vova75rus
     url: /techniques/T1571/
     mitre_url: https://attack.mitre.org/techniques/T1571/
     report_count: 10
     rule_count: 9
-    actor_count: 11
+    actor_count: 13
     score: 19
   - id: T1572
     name: Protocol Tunneling
@@ -11771,11 +11824,12 @@ techniques:
       - UTA-2026-021
       - UTA-2026-023
       - UTA-2026-024
+      - vova75rus
     url: /techniques/T1572/
     mitre_url: https://attack.mitre.org/techniques/T1572/
     report_count: 10
     rule_count: 22
-    actor_count: 14
+    actor_count: 15
     score: 32
   - id: T1573
     name: Encrypted Channel
@@ -11931,11 +11985,12 @@ techniques:
       - UTA-2026-008
       - UTA-2026-009
       - UTA-2026-010
+      - n-3-xl
     url: /techniques/T1573.001/
     mitre_url: https://attack.mitre.org/techniques/T1573/001/
     report_count: 9
     rule_count: 10
-    actor_count: 8
+    actor_count: 9
     score: 19
   - id: T1573.002
     name: Asymmetric Cryptography
@@ -12077,11 +12132,12 @@ techniques:
     actors:
       - UTA-2026-016
       - UTA-2026-017
+      - vova75rus
     url: /techniques/T1574.006/
     mitre_url: https://attack.mitre.org/techniques/T1574/006/
     report_count: 0
     rule_count: 14
-    actor_count: 2
+    actor_count: 3
     score: 14
   - id: T1583.001
     name: Domains
@@ -12779,11 +12835,12 @@ techniques:
       - UTA-2026-020
       - UTA-2026-023
       - UTA-2026-024
+      - n-3-xl
     url: /techniques/T1588.002/
     mitre_url: https://attack.mitre.org/techniques/T1588/002/
     report_count: 9
     rule_count: 2
-    actor_count: 8
+    actor_count: 9
     score: 11
   - id: T1588.004
     name: Digital Certificates
@@ -13051,11 +13108,12 @@ techniques:
       - UTA-2026-019
       - UTA-2026-020
       - UTA-2026-023
+      - vova75rus
     url: /techniques/T1595.002/
     mitre_url: https://attack.mitre.org/techniques/T1595/002/
     report_count: 6
     rule_count: 3
-    actor_count: 7
+    actor_count: 8
     score: 9
   - id: T1595.003
     name: Wordlist Scanning
@@ -13331,11 +13389,12 @@ techniques:
     actors:
       - UTA-2026-016
       - UTA-2026-017
+      - vova75rus
     url: /techniques/T1611/
     mitre_url: https://attack.mitre.org/techniques/T1611/
     report_count: 0
     rule_count: 2
-    actor_count: 2
+    actor_count: 3
     score: 2
   - id: T1614
     name: System Location Discovery
@@ -13356,11 +13415,12 @@ techniques:
     detections: []
     actors:
       - UTA-2026-021
+      - n-3-xl
     url: /techniques/T1614/
     mitre_url: https://attack.mitre.org/techniques/T1614/
     report_count: 2
     rule_count: 0
-    actor_count: 1
+    actor_count: 2
     score: 2
   - id: T1620
     name: Reflective Code Loading
@@ -13530,11 +13590,13 @@ techniques:
       - UTA-2026-017
       - UTA-2026-021
       - UTA-2026-024
+      - n-3-xl
+      - vova75rus
     url: /techniques/T1620/
     mitre_url: https://attack.mitre.org/techniques/T1620/
     report_count: 13
     rule_count: 20
-    actor_count: 10
+    actor_count: 12
     score: 33
   - id: T1622
     name: Debugger Evasion
@@ -13937,11 +13999,12 @@ techniques:
       - UTA-2026-020
       - UTA-2026-021
       - UTA-2026-024
+      - n-3-xl
     url: /techniques/T1685/
     mitre_url: https://attack.mitre.org/techniques/T1685/
     report_count: 13
     rule_count: 25
-    actor_count: 9
+    actor_count: 10
     score: 38
   - id: T1686
     name: Disable or Modify System Firewall
@@ -13974,11 +14037,12 @@ techniques:
     actors:
       - UTA-2026-003
       - UTA-2026-024
+      - n-3-xl
     url: /techniques/T1686/
     mitre_url: https://attack.mitre.org/techniques/T1686/
     report_count: 3
     rule_count: 1
-    actor_count: 2
+    actor_count: 3
     score: 4
   - id: T1686.003
     name: Windows Host Firewall

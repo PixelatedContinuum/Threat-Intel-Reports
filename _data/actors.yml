@@ -47,6 +47,17 @@
 #                  PUBLISHED reports, so the page never carries an unpublished claim and
 #                  (since every published report already cleared the victim-naming gate)
 #                  never a victim's identifier. A value the report withholds stays off.
+#   kind           uta (default) | named. A named actor is one a published report
+#                  attributes to a self-identifying handle at HIGH or DEFINITE, so no
+#                  UTA was assigned. Its id is a lowercase slug, `name` is the handle as
+#                  the report prints it, and `mentions` (optional, default the name) lists
+#                  the exact strings the generator counts to discover which published
+#                  reports name it. Prose is never rewritten to link a handle.
+#                  confidence.named_actor is the attribution figure and MUST be HIGH or
+#                  DEFINITE; named_actor_pct carries the percentage; distinct_actor is
+#                  optional. primary_host is optional: the reports anchor a named actor on
+#                  accounts, not a host. Everything else, the identifiers rule included,
+#                  is the same as for a designation.
 actors:
 - id: UTA-2026-001
   status: active
@@ -698,6 +709,8 @@ actors:
   related:
   - id: UTA-2026-017
     relation: Sibling customer of the same kit; same-individual question unresolved at about one in five.
+  - id: vova75rus
+    relation: Customer of the kit this named author sells; the author's OWNER bot is baked into the deployment.
 - id: UTA-2026-017
   status: active
   first_observed: 2026-05-25
@@ -736,6 +749,8 @@ actors:
   related:
   - id: UTA-2026-016
     relation: Sibling customer of the same kit; different OPSEC tier argues different operators.
+  - id: vova75rus
+    relation: Customer of the kit this named author sells, separated from the author by a per-customer configuration delta.
 - id: UTA-2026-018
   status: active
   first_observed: 2026-07-17
@@ -989,3 +1004,93 @@ actors:
   reports:
     primary:
     - /reports/sliver-c2-windows-postex-staging-193-233-202-17/
+# ---- Named actors: a report attributes the activity to a self-identifying handle at
+# HIGH or above, so no UTA designation was assigned. Same rules as above.
+- id: vova75rus
+  kind: named
+  name: Vova75Rus
+  status: active
+  first_observed: 2026-05-25
+  last_updated: 2026-06-04
+  type: GHOST cryptojacker kit author, selling a ComfyUI exploitation and mining kit to customer operators with
+    a monitoring bot baked into every deployment
+  motivation: Financial, kit sales to cryptojacking operators
+  language: Russian (a Russian-language dedication page; region code 75 in the handle read as Zabaykalsky Krai, probable)
+  targeting:
+    note: Sells the kit rather than running it; the customers' targeting (exposed ComfyUI and GPU-cloud hosts) is on
+      their own pages.
+  confidence:
+    named_actor: HIGH
+    named_actor_pct: 88
+  summary: The author of the GHOST cryptojacker kit, identified through a five-year GitHub account whose repositories
+    the kit pulls from, a supply-chain monitoring Telegram bot present in every customer deployment, and a
+    byte-identical rootkit binary across two customer hosts. GitHub suspended the account at the account level
+    the day the report published. The real-world identity behind the handle is not established, which is what
+    keeps the figure below DEFINITE.
+  tooling:
+  - GHOST cryptojacker kit
+  - ComfyUI-Shell-Executor
+  identifiers:
+  - kind: handle
+    value: Vova75Rus
+    context: GitHub handle the kit's payload repository and nine others were published under
+  - kind: account-id
+    value: '73169104'
+    context: GitHub user id behind the handle, carried in every commit's noreply address
+  - kind: bot
+    value: '8415540095'
+    context: OWNER Telegram bot baked into every customer deployment as the author's supply-chain monitor
+  reports:
+    primary:
+    - /reports/ghost-cryptojacker-vova75rus-77.110.96.200/
+  related:
+  - id: UTA-2026-016
+    relation: Customer operator A of the kit; distinguishable from the author and from the sibling customer.
+  - id: UTA-2026-017
+    relation: Customer operator B of the kit; host abandoned after disclosure.
+- id: n-3-xl
+  kind: named
+  name: n_3_xl
+  mentions:
+  - n_3_xl
+  - '@govbrasil'
+  status: active
+  first_observed: 2026-07-03
+  last_updated: 2026-07-03
+  type: Brazilian commodity-malware vendor running the KAIDO product line and a recovered EvilSoul-Engine
+    stealer-builder deployment
+  motivation: Financial, malware-as-a-service sales rather than targeted intrusion
+  language: Portuguese (Brazil), corroborated six ways in the report
+  targeting:
+    note: A MaaS vendor; the built stealers target Discord accounts, browser credentials and payment data on
+      whoever the customers deliver them to, with no sector or region of its own.
+  confidence:
+    named_actor: HIGH
+    named_actor_pct: 85
+  alias: KAIDO / 0xK41
+  summary: A self-identified Brazilian operator whose stealer-builder configuration names the operator contact,
+    whose support handle's bio names the brand, and whose Quasar-fork RAT resolves to operator-branded
+    infrastructure. Assessed a customer, reseller or affiliate of the separate EvilSoul-Engine developer at
+    MODERATE, not the same person. The attribution is self-attested from the kit's own configuration, which
+    is what holds it at HIGH rather than DEFINITE.
+  tooling:
+  - EvilSoul-Engine
+  - KAIDO
+  - Quasar RAT
+  identifiers:
+  - kind: handle
+    value: n_3_xl
+    context: operator contact named in the stealer-builder's own configuration, a Telegram channel titled KAIDO
+  - kind: handle
+    value: '@govbrasil'
+    context: Telegram support handle whose bio names the brand and the maldev handle
+  - kind: brand
+    value: 0xK41
+    context: product brand on the KAIDO line
+  - kind: domain
+    value: kaidoo[.]com[.]br
+    context: operator-branded domain the KAIDO RAT resolves to
+  reports:
+    primary:
+    - /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+    - /reports/kaido-quasar-rat-144-172-109-203/

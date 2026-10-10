@@ -107,7 +107,10 @@ under `actors/<id>/` and, beside each stub, that actor's ATT&CK Navigator layer
 scored by how many reports about the actor map each technique) from the hand-written
 `_data/actors.yml`, the catalog and the reports: every published report that names a
 designation, and the ATT&CK techniques the primary reports map (read with the same parser as
-the coverage strip). It REMOVES a stub, with its layer, whose designation left the data file. `node link-actors.js` turns every bare `UTA-YYYY-NNN` in a published report or
+the coverage strip). It REMOVES a stub, with its layer, whose designation left the data file. An entry with
+`kind: named` is an actor a report attributes to a self-identifying handle at HIGH or DEFINITE
+(so no UTA was assigned): slug id, `name` as the report prints it, mentions found by exact
+strings and never linked in prose, same identifiers rule. `node link-actors.js` turns every bare `UTA-YYYY-NNN` in a published report or
 detection page into a link to its actor page (idempotent; code, headings, tags and existing
 links are left alone). `node check-actors.js` gates all of it: regenerate-and-diff on the index,
 the stubs and the layers, a FAIL on a bare mention that has a page, and a FAIL on a designation a published

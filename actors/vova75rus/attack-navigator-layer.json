@@ -1,0 +1,160 @@
+{
+  "name": "The Hunter’s Ledger: Vova75Rus",
+  "domain": "enterprise-attack",
+  "description": "ATT&CK techniques mapped by the published reports about Vova75Rus on the-hunters-ledger.com (3 report(s), 20 technique(s)). Score is the number of reports about the actor mapping the technique. Profile: https://the-hunters-ledger.com/actors/vova75rus/",
+  "versions": {
+    "attack": "19",
+    "navigator": "4.9.0",
+    "layer": "4.5"
+  },
+  "techniques": [
+    {
+      "techniqueID": "T1014",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Rootkit. 1 report(s) about Vova75Rus, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections. https://the-hunters-ledger.com/actors/vova75rus/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1018",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Remote System Discovery. 1 report(s) about Vova75Rus, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections. https://the-hunters-ledger.com/actors/vova75rus/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1027",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Obfuscated Files or Information. 1 report(s) about Vova75Rus, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections. https://the-hunters-ledger.com/actors/vova75rus/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1036.005",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Match Legitimate Resource Name or Location. 1 report(s) about Vova75Rus, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections. https://the-hunters-ledger.com/actors/vova75rus/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.004",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Unix Shell. 1 report(s) about Vova75Rus, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections. https://the-hunters-ledger.com/actors/vova75rus/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.006",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Python. 1 report(s) about Vova75Rus, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections. https://the-hunters-ledger.com/actors/vova75rus/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1102.002",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Bidirectional Communication. 1 report(s) about Vova75Rus, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections. https://the-hunters-ledger.com/actors/vova75rus/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1105",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Ingress Tool Transfer. 1 report(s) about Vova75Rus, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections. https://the-hunters-ledger.com/actors/vova75rus/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1222.002",
+      "tactic": "defense-impairment",
+      "score": 1,
+      "comment": "Linux and Mac Permissions. 1 report(s) about Vova75Rus, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections. https://the-hunters-ledger.com/actors/vova75rus/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1480.002",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Mutual Exclusion. 1 report(s) about Vova75Rus, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections. https://the-hunters-ledger.com/actors/vova75rus/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1496.001",
+      "tactic": "impact",
+      "score": 1,
+      "comment": "Compute Hijacking. 1 report(s) about Vova75Rus, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections. https://the-hunters-ledger.com/actors/vova75rus/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1543.002",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Systemd Service. 1 report(s) about Vova75Rus, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections. https://the-hunters-ledger.com/actors/vova75rus/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1554",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Compromise Host Software Binary. 1 report(s) about Vova75Rus, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections. https://the-hunters-ledger.com/actors/vova75rus/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1564.001",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Hidden Files and Directories. 1 report(s) about Vova75Rus, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections. https://the-hunters-ledger.com/actors/vova75rus/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1571",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Non-Standard Port. 1 report(s) about Vova75Rus, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections. https://the-hunters-ledger.com/actors/vova75rus/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1572",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Protocol Tunneling. 1 report(s) about Vova75Rus, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections. https://the-hunters-ledger.com/actors/vova75rus/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1574.006",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Dynamic Linker Hijacking. 1 report(s) about Vova75Rus, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections. https://the-hunters-ledger.com/actors/vova75rus/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1595.002",
+      "tactic": "reconnaissance",
+      "score": 1,
+      "comment": "Vulnerability Scanning. 1 report(s) about Vova75Rus, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections. https://the-hunters-ledger.com/actors/vova75rus/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1611",
+      "tactic": "privilege-escalation",
+      "score": 1,
+      "comment": "Escape to Host. 1 report(s) about Vova75Rus, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections. https://the-hunters-ledger.com/actors/vova75rus/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1620",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Reflective Code Loading. 1 report(s) about Vova75Rus, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections. https://the-hunters-ledger.com/actors/vova75rus/",
+      "enabled": true
+    }
+  ],
+  "gradient": {
+    "colors": [
+      "#fbe7fd",
+      "#e879f9"
+    ],
+    "minValue": 0,
+    "maxValue": 1
+  }
+}

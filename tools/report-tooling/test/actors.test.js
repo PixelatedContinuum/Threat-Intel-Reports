@@ -193,6 +193,84 @@ test('navigatorLayer carries one entry per technique, scored by report count, wi
   assert.ok(A.layerPath('UTA-2026-001').endsWith('/actors/UTA-2026-001/attack-navigator-layer.json'));
 });
 
+/* ---- named actors ----------------------------------------------------- */
+
+const NAMED = GOOD + `
+  - id: kit-author
+    kind: named
+    name: KitAuthor
+    status: active
+    first_observed: 2026-03-01
+    last_updated: 2026-03-01
+    type: Kit author
+    motivation: Financial
+    targeting: { note: Sells the kit. }
+    confidence: { named_actor: HIGH, named_actor_pct: 88 }
+    summary: Named.
+    tooling: [Kit]
+    identifiers:
+      - { kind: handle, value: KitAuthor, context: the handle }
+    reports:
+      primary: [/reports/one/]
+    related:
+      - id: UTA-2026-001
+        relation: Customer of the kit.
+`;
+
+test('a named actor parses with a slug id, a name and a HIGH or DEFINITE attribution, and nothing less', () => {
+  const ok = A.parseActors(NAMED);
+  assert.deepEqual(ok.problems, []);
+  assert.equal(ok.actors[2].kind, 'named');
+  assert.equal(ok.actors[0].kind, 'uta', 'the default kind');
+
+  const bad = A.parseActors(NAMED
+    .replace('id: kit-author', 'id: UTA-2026-009')
+    .replace('name: KitAuthor', 'name: ""')
+    .replace('named_actor: HIGH', 'named_actor: MODERATE'));
+  const text = bad.problems.join('\n');
+  assert.match(text, /named actor's id must be a lowercase slug/);
+  assert.match(text, /needs name/);
+  assert.match(text, /attributes at DEFINITE or HIGH; at MODERATE/);
+
+  const uta = A.parseActors(GOOD.replace('type: Sliver operator', 'type: Sliver operator\n    name: Nope'));
+  assert.match(uta.problems.join(' '), /name and mentions belong to a named actor only/);
+});
+
+test('a named actor is found by its exact strings, never the UTA pattern, and a UTA may relate to it', () => {
+  const actors = A.parseActors(NAMED).actors;
+  const cat = A.parseCatalog(CATALOG);
+  const reports = [
+    report('one', 'UTA-2026-001 SELFBRAND and the kit author KitAuthor, KitAuthor again'),
+    report('two', 'UTA-2026-002 mentions kitauthor in a url slug only /reports/kitauthor-kit/')
+  ];
+  const ix = A.build(actors, reports, cat, { attack: () => [] });
+  assert.deepEqual(ix.problems, []);
+  const named = ix.entries[2];
+  assert.equal(named.kind, 'named');
+  assert.equal(named.name, 'KitAuthor');
+  assert.deepEqual(named.reports.map(r => r.url + ':' + r.role + ':' + r.mentions), ['/reports/one/:primary:2'],
+    'the lowercase slug in report two is not a mention');
+  // The layer and the stub use the display name.
+  assert.match(A.navigatorLayer(named).name, /KitAuthor$/);
+  assert.match(A.stub(actors[2]), /title: "KitAuthor"/);
+  assert.match(A.stub(actors[2]), /permalink: \/actors\/kit-author\//);
+  // A UTA entry may point at the named actor and the generated yaml carries kind and name.
+  assert.match(A.toYaml(ix), /kind: named/);
+  // Linking never touches a handle: only the designation is linked.
+  const linked = A.linkify('KitAuthor sold to UTA-2026-001.', { 'UTA-2026-001': true });
+  assert.equal(linked.count, 1);
+  assert.doesNotMatch(linked.text, /actors\/kit-author/);
+});
+
+test('a named actor whose primary report never names it fails, and its identifiers follow the printed rule', () => {
+  const actors = A.parseActors(NAMED).actors;
+  const cat = A.parseCatalog(CATALOG);
+  const ix = A.build(actors, [report('one', 'UTA-2026-001 SELFBRAND only'), report('two', 'UTA-2026-002')], cat, { attack: () => [] });
+  const text = ix.problems.join('\n');
+  assert.match(text, /kit-author: primary report \/reports\/one\/ never names the actor/);
+  assert.match(text, /kit-author: identifier "KitAuthor" is not printed/);
+});
+
 test('linkify links bare mentions of known designations and nothing else', () => {
   const known = { 'UTA-2026-001': true };
   const md = [

@@ -1,0 +1,328 @@
+{
+  "name": "The Hunter’s Ledger: n_3_xl",
+  "domain": "enterprise-attack",
+  "description": "ATT&CK techniques mapped by the published reports about n_3_xl on the-hunters-ledger.com (2 report(s), 44 technique(s)). Score is the number of reports about the actor mapping the technique. Profile: https://the-hunters-ledger.com/actors/n-3-xl/",
+  "versions": {
+    "attack": "19",
+    "navigator": "4.9.0",
+    "layer": "4.5"
+  },
+  "techniques": [
+    {
+      "techniqueID": "T1005",
+      "tactic": "collection",
+      "score": 1,
+      "comment": "Data from Local System. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1027",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Obfuscated Files or Information. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1036.004",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Masquerade Task or Service. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1036.005",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Match Legitimate Resource Name or Location. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/kaido-quasar-rat-144-172-109-203/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1041",
+      "tactic": "exfiltration",
+      "score": 2,
+      "comment": "Exfiltration Over C2 Channel. 2 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1053.005",
+      "tactic": "persistence",
+      "score": 2,
+      "comment": "Scheduled Task. 2 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1055",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Process Injection. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/kaido-quasar-rat-144-172-109-203/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1055.012",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Process Hollowing. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1056.001",
+      "tactic": "collection",
+      "score": 1,
+      "comment": "Keylogging. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/kaido-quasar-rat-144-172-109-203/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.001",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "PowerShell. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.003",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Windows Command Shell. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.005",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Visual Basic. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.007",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "JavaScript. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1071.001",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Web Protocols. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1071.004",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "DNS. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/kaido-quasar-rat-144-172-109-203/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1082",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "System Information Discovery. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1083",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "File and Directory Discovery. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1095",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Non-Application Layer Protocol. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/kaido-quasar-rat-144-172-109-203/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1105",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Ingress Tool Transfer. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1106",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Native API. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1113",
+      "tactic": "collection",
+      "score": 2,
+      "comment": "Screen Capture. 2 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1123",
+      "tactic": "collection",
+      "score": 1,
+      "comment": "Audio Capture. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/kaido-quasar-rat-144-172-109-203/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1125",
+      "tactic": "collection",
+      "score": 1,
+      "comment": "Video Capture. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/kaido-quasar-rat-144-172-109-203/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1219",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Remote Access Tools. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/kaido-quasar-rat-144-172-109-203/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1480",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Execution Guardrails. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/kaido-quasar-rat-144-172-109-203/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1489",
+      "tactic": "impact",
+      "score": 1,
+      "comment": "Service Stop. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1497",
+      "tactic": "stealth",
+      "score": 2,
+      "comment": "Virtualization/Sandbox Evasion. 2 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1528",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Steal Application Access Token. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1529",
+      "tactic": "impact",
+      "score": 1,
+      "comment": "System Shutdown/Reboot. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1539",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Steal Web Session Cookie. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1543.003",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Windows Service. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/kaido-quasar-rat-144-172-109-203/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1547.001",
+      "tactic": "persistence",
+      "score": 2,
+      "comment": "Registry Run Keys / Startup Folder. 2 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1552.001",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Credentials In Files. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1553.005",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Mark-of-the-Web Bypass. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/kaido-quasar-rat-144-172-109-203/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1555.003",
+      "tactic": "credential-access",
+      "score": 2,
+      "comment": "Credentials from Web Browsers. 2 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1564.001",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Hidden Files and Directories. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1567.002",
+      "tactic": "exfiltration",
+      "score": 1,
+      "comment": "Exfiltration to Cloud Storage. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1571",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Non-Standard Port. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1573.001",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Symmetric Cryptography. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/kaido-quasar-rat-144-172-109-203/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1588.002",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Tool. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1614",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "System Location Discovery. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1620",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Reflective Code Loading. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1685",
+      "tactic": "defense-impairment",
+      "score": 1,
+      "comment": "Disable or Modify Tools. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1686",
+      "tactic": "defense-impairment",
+      "score": 1,
+      "comment": "Disable or Modify System Firewall. 1 report(s) about n_3_xl, mapped in https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/. https://the-hunters-ledger.com/actors/n-3-xl/",
+      "enabled": true
+    }
+  ],
+  "gradient": {
+    "colors": [
+      "#fbe7fd",
+      "#e879f9"
+    ],
+    "minValue": 0,
+    "maxValue": 2
+  }
+}

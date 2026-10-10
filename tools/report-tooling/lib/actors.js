@@ -34,6 +34,17 @@ var ID_SHAPE = /^UTA-\d{4}-\d{3}$/;
 var STATUSES = ['active', 'merged', 'retired'];
 var LEVELS = ['DEFINITE', 'HIGH', 'MODERATE', 'LOW', 'INSUFFICIENT'];
 
+/* Two kinds of entry. A `uta` entry (the default) is a designation this
+   publication assigned; its mentions are found by the UTA pattern and linked
+   in prose. A `named` entry is an actor a published report attributes to a
+   self-identified handle at HIGH or DEFINITE, so no UTA was assigned: its id
+   is a slug, `name` is the handle as the report prints it, and its mentions
+   are found by exact strings (`mentions`, default the name) and NEVER linked
+   in prose, since a handle is an ordinary word in a way a designation is not. */
+var KINDS = ['uta', 'named'];
+var NAMED_ID_SHAPE = /^[a-z0-9][a-z0-9-]{1,40}$/;
+var NAMED_LEVELS = ['DEFINITE', 'HIGH'];
+
 /* The generated stub is recognised by this marker, so a hand-authored page
    under actors/ is never deleted by the generator. */
 var STUB_MARKER = 'layout: actor';
@@ -59,7 +70,21 @@ function parseActors(text) {
   var actors = doc.actors.map(function (a, i) {
     var where = 'actors[' + i + ']' + (a && a.id ? ' (' + a.id + ')' : '');
     if (!a || typeof a !== 'object') { problems.push(where + ' is not a mapping'); return null; }
-    if (!ID_SHAPE.test(String(a.id || ''))) problems.push(where + ': id must look like UTA-YYYY-NNN');
+    if (a.kind == null) a.kind = 'uta';
+    if (KINDS.indexOf(a.kind) === -1) problems.push(where + ': kind must be one of ' + KINDS.join(', '));
+    if (a.kind === 'named') {
+      if (!NAMED_ID_SHAPE.test(String(a.id || '')) || ID_SHAPE.test(String(a.id || ''))) {
+        problems.push(where + ': a named actor\'s id must be a lowercase slug (letters, digits, hyphens), never a UTA designation');
+      }
+      if (!a.name || typeof a.name !== 'string') problems.push(where + ': a named actor needs name, the handle as the report prints it');
+      if (a.mentions != null && (!Array.isArray(a.mentions) || !a.mentions.length ||
+          a.mentions.some(function (m) { return typeof m !== 'string' || !m.trim(); }))) {
+        problems.push(where + ': mentions must be a non-empty list of exact strings');
+      }
+    } else {
+      if (!ID_SHAPE.test(String(a.id || ''))) problems.push(where + ': id must look like UTA-YYYY-NNN');
+      if (a.name != null || a.mentions != null) problems.push(where + ': name and mentions belong to a named actor only');
+    }
     if (seen[a.id]) problems.push(where + ': duplicate id');
     seen[a.id] = true;
     if (STATUSES.indexOf(a.status) === -1) problems.push(where + ': status must be one of ' + STATUSES.join(', '));
@@ -73,9 +98,15 @@ function parseActors(text) {
     }
     if (LEVELS.indexOf(c.named_actor) === -1) {
       problems.push(where + ': confidence.named_actor must be one of ' + LEVELS.join(', '));
+    } else if (a.kind === 'named' && NAMED_LEVELS.indexOf(c.named_actor) === -1) {
+      problems.push(where + ': a named actor is one a report attributes at ' + NAMED_LEVELS.join(' or ') +
+        '; at ' + c.named_actor + ' the report would have assigned a UTA');
     }
     if (c.distinct_actor_pct != null && !(c.distinct_actor_pct >= 1 && c.distinct_actor_pct <= 100)) {
       problems.push(where + ': confidence.distinct_actor_pct must be 1 to 100 or null');
+    }
+    if (c.named_actor_pct != null && !(c.named_actor_pct >= 1 && c.named_actor_pct <= 100)) {
+      problems.push(where + ': confidence.named_actor_pct must be 1 to 100 or null');
     }
     var primary = a.reports && a.reports.primary;
     if (!Array.isArray(primary) || !primary.length) {
@@ -86,7 +117,9 @@ function parseActors(text) {
       });
     }
     (a.related || []).forEach(function (r) {
-      if (!r || !ID_SHAPE.test(String(r.id || '')) || !r.relation) {
+      // A related id may be a designation or a named actor's slug; the pass
+      // below checks it names an entry, which is the rule that matters.
+      if (!r || !r.id || !r.relation) {
         problems.push(where + ': every related entry needs an id and a relation');
       }
     });
@@ -175,6 +208,19 @@ function mentions(body) {
   return out;
 }
 
+/* Occurrences of each exact string in the body, case-sensitive, so a named
+   actor's handle in a URL slug (lowercased) or inside another word is not a
+   mention. Summed across the strings. */
+function namedMentions(body, terms) {
+  var text = String(body);
+  return (terms || []).reduce(function (n, t) {
+    if (!t) return n;
+    var i = 0, c = 0;
+    while ((i = text.indexOf(t, i)) !== -1) { c++; i += t.length; }
+    return n + c;
+  }, 0);
+}
+
 /* One report as the index needs it. `md` is the file text, `slug` the directory. */
 function describeReport(slug, md) {
   var p = frontMatter(md);
@@ -254,10 +300,13 @@ function build(actors, reports, catalogByUrl, opts) {
   var published = {};
   actors.forEach(function (a) {
     var rows = {};
+    var named = a.kind === 'named';
+    var terms = named ? (a.mentions || [a.name]) : null;
+    function count(r) { return named ? namedMentions(r.body, terms) : (r.mentions[a.id] || 0); }
     (a.reports.primary || []).forEach(function (u) {
       var r = byUrl[u];
       if (!r) { problems.push(a.id + ': primary report ' + u + ' does not exist under reports/'); return; }
-      if (!r.mentions[a.id]) problems.push(a.id + ': primary report ' + u + ' never names the designation');
+      if (!count(r)) problems.push(a.id + ': primary report ' + u + ' never names the ' + (named ? 'actor' : 'designation'));
       if (status[u] !== 'published') {
         problems.push(a.id + ': primary report ' + u + ' is ' + status[u] + ', so this actor cannot ' +
           'have a page yet. Comment the entry out until the report goes live.');
@@ -265,7 +314,7 @@ function build(actors, reports, catalogByUrl, opts) {
       rows[u] = { role: 'primary' };
     });
     reports.forEach(function (r) {
-      if (!r.mentions[a.id] || rows[r.url] || status[r.url] !== 'published') return;
+      if (!count(r) || rows[r.url] || status[r.url] !== 'published') return;
       rows[r.url] = { role: 'mentions' };
     });
     var list = Object.keys(rows).map(function (u) {
@@ -278,7 +327,7 @@ function build(actors, reports, catalogByUrl, opts) {
         date: c.date ? dateStr(c.date) : r.date,
         severity: c.severity || null,
         role: rows[u].role,
-        mentions: r.mentions[a.id] || 0,
+        mentions: count(r),
         detection_url: c.detection_url || null,
         ioc_url: c.ioc_url || null,
         stix_url: c.stix_url || null
@@ -351,6 +400,8 @@ function build(actors, reports, catalogByUrl, opts) {
     var totalMentions = list.reduce(function (n, r) { return n + r.mentions; }, 0);
     var entry = {
       id: a.id,
+      kind: a.kind,
+      name: named ? a.name : a.id,
       url: actorUrl(a.id),
       reports: list,
       report_count: list.length,
@@ -404,7 +455,8 @@ function toYaml(index) {
     '# _data/actors.yml, _data/catalog.yml and the reports. Do NOT edit by hand;\n' +
     '# re-run the generator. Per designation: every PUBLISHED report that names\n' +
     '# it (primary first, then by date), and the ATT&CK techniques the primary\n' +
-    "# reports' mapping tables carry. An actor whose reports are unlisted is absent.\n";
+    "# reports' mapping tables carry. An actor whose reports are unlisted is absent.\n" +
+    '# A named actor (kind: named) is found by its exact strings, never the UTA pattern.\n';
   var body = yaml.dump({ actors: index.entries }, { lineWidth: 100, noRefs: true, sortKeys: false });
   return head + body;
 }
@@ -428,16 +480,16 @@ function navigatorLayer(entry, opts) {
     var row = { techniqueID: t.id };
     if (t.tactic) row.tactic = slug(t.tactic);
     row.score = score;
-    row.comment = (t.name ? t.name + '. ' : '') + score + ' report(s) about ' + entry.id +
+    row.comment = (t.name ? t.name + '. ' : '') + score + ' report(s) about ' + (entry.name || entry.id) +
       (t.source === 'detections' ? ', mapped on the detection page ' : ', mapped in ') + site + t.link +
       '. ' + site + entry.url;
     row.enabled = true;
     return row;
   });
   return {
-    name: 'The Hunter\u2019s Ledger: ' + entry.id,
+    name: 'The Hunter\u2019s Ledger: ' + (entry.name || entry.id),
     domain: 'enterprise-attack',
-    description: 'ATT&CK techniques mapped by the published reports about ' + entry.id + ' on ' +
+    description: 'ATT&CK techniques mapped by the published reports about ' + (entry.name || entry.id) + ' on ' +
       site.replace(/^https?:\/\//, '') + ' (' + entry.report_count + ' report(s), ' + techniques.length +
       ' technique(s)). Score is the number of reports about the actor mapping the technique. Profile: ' +
       site + entry.url,
@@ -451,9 +503,10 @@ function layerJson(entry, opts) { return JSON.stringify(navigatorLayer(entry, op
 
 function stub(actor) {
   var id = actor.id;
+  var title = actor.kind === 'named' ? String(actor.name) : id;
   return '---\n' +
     'layout: actor\n' +
-    'title: "' + id + '"\n' +
+    'title: "' + title.replace(/"/g, '\\"') + '"\n' +
     'actor_id: "' + id + '"\n' +
     'permalink: ' + actorUrl(id) + '\n' +
     'description: "' + String(actor.type).replace(/"/g, '\\"') + '. Threat actor profile from The Hunters Ledger."\n' +
@@ -562,6 +615,7 @@ module.exports = {
   ROOT: ROOT, ACTORS_FILE: ACTORS_FILE, INDEX_FILE: INDEX_FILE, CATALOG_FILE: CATALOG_FILE,
   REPORT_DIR: REPORT_DIR, DETECTION_DIR: DETECTION_DIR, ACTOR_DIR: ACTOR_DIR,
   STUB_MARKER: STUB_MARKER, LAYER_NAME: LAYER_NAME, SITE: SITE, ID_RE: ID_RE, ID_SHAPE: ID_SHAPE,
+  KINDS: KINDS, NAMED_ID_SHAPE: NAMED_ID_SHAPE, namedMentions: namedMentions,
   actorUrl: actorUrl, layerUrl: layerUrl, layerPath: layerPath, parseActors: parseActors, parseCatalog: parseCatalog,
   frontMatter: frontMatter, mentions: mentions, describeReport: describeReport,
   readReports: readReports, publication: publication, attackFor: attackFor,

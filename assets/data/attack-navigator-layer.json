@@ -61,7 +61,7 @@
       "techniqueID": "T1005",
       "tactic": "collection",
       "score": 14,
-      "comment": "11 report(s), 3 rule(s), actors UTA-2026-004 UTA-2026-008 UTA-2026-009 UTA-2026-010 UTA-2026-012 UTA-2026-013 UTA-2026-019 UTA-2026-021 UTA-2026-023 UTA-2026-024. https://the-hunters-ledger.com/techniques/T1005/",
+      "comment": "11 report(s), 3 rule(s), actors UTA-2026-004 UTA-2026-008 UTA-2026-009 UTA-2026-010 UTA-2026-012 UTA-2026-013 UTA-2026-019 UTA-2026-021 UTA-2026-023 UTA-2026-024 n-3-xl. https://the-hunters-ledger.com/techniques/T1005/",
       "enabled": true
     },
     {
@@ -96,7 +96,7 @@
       "techniqueID": "T1014",
       "tactic": "stealth",
       "score": 13,
-      "comment": "2 report(s), 11 rule(s), actors UTA-2026-014 UTA-2026-016 UTA-2026-017 UTA-2026-023. https://the-hunters-ledger.com/techniques/T1014/",
+      "comment": "2 report(s), 11 rule(s), actors UTA-2026-014 UTA-2026-016 UTA-2026-017 UTA-2026-023 vova75rus. https://the-hunters-ledger.com/techniques/T1014/",
       "enabled": true
     },
     {
@@ -117,7 +117,7 @@
       "techniqueID": "T1018",
       "tactic": "discovery",
       "score": 4,
-      "comment": "3 report(s), 1 rule(s), actors UTA-2026-006 UTA-2026-011 UTA-2026-016 UTA-2026-017 UTA-2026-023. https://the-hunters-ledger.com/techniques/T1018/",
+      "comment": "3 report(s), 1 rule(s), actors UTA-2026-006 UTA-2026-011 UTA-2026-016 UTA-2026-017 UTA-2026-023 vova75rus. https://the-hunters-ledger.com/techniques/T1018/",
       "enabled": true
     },
     {
@@ -173,7 +173,7 @@
       "techniqueID": "T1027",
       "tactic": "stealth",
       "score": 41,
-      "comment": "19 report(s), 22 rule(s), actors UTA-2026-002 UTA-2026-003 UTA-2026-004 UTA-2026-005 UTA-2026-006 UTA-2026-007 UTA-2026-008 UTA-2026-009 UTA-2026-010 UTA-2026-011 UTA-2026-014 UTA-2026-016 UTA-2026-017 UTA-2026-018 UTA-2026-021 UTA-2026-023 UTA-2026-024. https://the-hunters-ledger.com/techniques/T1027/",
+      "comment": "19 report(s), 22 rule(s), actors UTA-2026-002 UTA-2026-003 UTA-2026-004 UTA-2026-005 UTA-2026-006 UTA-2026-007 UTA-2026-008 UTA-2026-009 UTA-2026-010 UTA-2026-011 UTA-2026-014 UTA-2026-016 UTA-2026-017 UTA-2026-018 UTA-2026-021 UTA-2026-023 UTA-2026-024 n-3-xl vova75rus. https://the-hunters-ledger.com/techniques/T1027/",
       "enabled": true
     },
     {
@@ -271,14 +271,14 @@
       "techniqueID": "T1036.004",
       "tactic": "stealth",
       "score": 9,
-      "comment": "4 report(s), 5 rule(s), actors UTA-2026-004 UTA-2026-018. https://the-hunters-ledger.com/techniques/T1036.004/",
+      "comment": "4 report(s), 5 rule(s), actors UTA-2026-004 UTA-2026-018 n-3-xl. https://the-hunters-ledger.com/techniques/T1036.004/",
       "enabled": true
     },
     {
       "techniqueID": "T1036.005",
       "tactic": "stealth",
       "score": 46,
-      "comment": "14 report(s), 32 rule(s), actors UTA-2026-001 UTA-2026-004 UTA-2026-005 UTA-2026-007 UTA-2026-008 UTA-2026-009 UTA-2026-016 UTA-2026-017 UTA-2026-018 UTA-2026-020 UTA-2026-021 UTA-2026-023 UTA-2026-024. https://the-hunters-ledger.com/techniques/T1036.005/",
+      "comment": "14 report(s), 32 rule(s), actors UTA-2026-001 UTA-2026-004 UTA-2026-005 UTA-2026-007 UTA-2026-008 UTA-2026-009 UTA-2026-016 UTA-2026-017 UTA-2026-018 UTA-2026-020 UTA-2026-021 UTA-2026-023 UTA-2026-024 n-3-xl vova75rus. https://the-hunters-ledger.com/techniques/T1036.005/",
       "enabled": true
     },
     {
@@ -313,7 +313,7 @@
       "techniqueID": "T1041",
       "tactic": "exfiltration",
       "score": 29,
-      "comment": "17 report(s), 12 rule(s), actors UTA-2026-002 UTA-2026-004 UTA-2026-008 UTA-2026-009 UTA-2026-010 UTA-2026-011 UTA-2026-012 UTA-2026-013 UTA-2026-018 UTA-2026-020 UTA-2026-021 UTA-2026-023 UTA-2026-024. https://the-hunters-ledger.com/techniques/T1041/",
+      "comment": "17 report(s), 12 rule(s), actors UTA-2026-002 UTA-2026-004 UTA-2026-008 UTA-2026-009 UTA-2026-010 UTA-2026-011 UTA-2026-012 UTA-2026-013 UTA-2026-018 UTA-2026-020 UTA-2026-021 UTA-2026-023 UTA-2026-024 n-3-xl. https://the-hunters-ledger.com/techniques/T1041/",
       "enabled": true
     },
     {
@@ -369,35 +369,35 @@
       "techniqueID": "T1053.005",
       "tactic": "execution",
       "score": 26,
-      "comment": "10 report(s), 16 rule(s), actors UTA-2026-003 UTA-2026-005 UTA-2026-007 UTA-2026-020 UTA-2026-021 UTA-2026-024. https://the-hunters-ledger.com/techniques/T1053.005/",
+      "comment": "10 report(s), 16 rule(s), actors UTA-2026-003 UTA-2026-005 UTA-2026-007 UTA-2026-020 UTA-2026-021 UTA-2026-024 n-3-xl. https://the-hunters-ledger.com/techniques/T1053.005/",
       "enabled": true
     },
     {
       "techniqueID": "T1053.005",
       "tactic": "persistence",
       "score": 26,
-      "comment": "10 report(s), 16 rule(s), actors UTA-2026-003 UTA-2026-005 UTA-2026-007 UTA-2026-020 UTA-2026-021 UTA-2026-024. https://the-hunters-ledger.com/techniques/T1053.005/",
+      "comment": "10 report(s), 16 rule(s), actors UTA-2026-003 UTA-2026-005 UTA-2026-007 UTA-2026-020 UTA-2026-021 UTA-2026-024 n-3-xl. https://the-hunters-ledger.com/techniques/T1053.005/",
       "enabled": true
     },
     {
       "techniqueID": "T1053.005",
       "tactic": "privilege-escalation",
       "score": 26,
-      "comment": "10 report(s), 16 rule(s), actors UTA-2026-003 UTA-2026-005 UTA-2026-007 UTA-2026-020 UTA-2026-021 UTA-2026-024. https://the-hunters-ledger.com/techniques/T1053.005/",
+      "comment": "10 report(s), 16 rule(s), actors UTA-2026-003 UTA-2026-005 UTA-2026-007 UTA-2026-020 UTA-2026-021 UTA-2026-024 n-3-xl. https://the-hunters-ledger.com/techniques/T1053.005/",
       "enabled": true
     },
     {
       "techniqueID": "T1055",
       "tactic": "stealth",
       "score": 19,
-      "comment": "10 report(s), 9 rule(s), actors UTA-2026-002 UTA-2026-004 UTA-2026-006 UTA-2026-007 UTA-2026-021 UTA-2026-024. https://the-hunters-ledger.com/techniques/T1055/",
+      "comment": "10 report(s), 9 rule(s), actors UTA-2026-002 UTA-2026-004 UTA-2026-006 UTA-2026-007 UTA-2026-021 UTA-2026-024 n-3-xl. https://the-hunters-ledger.com/techniques/T1055/",
       "enabled": true
     },
     {
       "techniqueID": "T1055",
       "tactic": "privilege-escalation",
       "score": 19,
-      "comment": "10 report(s), 9 rule(s), actors UTA-2026-002 UTA-2026-004 UTA-2026-006 UTA-2026-007 UTA-2026-021 UTA-2026-024. https://the-hunters-ledger.com/techniques/T1055/",
+      "comment": "10 report(s), 9 rule(s), actors UTA-2026-002 UTA-2026-004 UTA-2026-006 UTA-2026-007 UTA-2026-021 UTA-2026-024 n-3-xl. https://the-hunters-ledger.com/techniques/T1055/",
       "enabled": true
     },
     {
@@ -460,14 +460,14 @@
       "techniqueID": "T1055.012",
       "tactic": "stealth",
       "score": 16,
-      "comment": "8 report(s), 8 rule(s), actors UTA-2026-001 UTA-2026-002 UTA-2026-003 UTA-2026-004 UTA-2026-007 UTA-2026-008 UTA-2026-009 UTA-2026-010. https://the-hunters-ledger.com/techniques/T1055.012/",
+      "comment": "8 report(s), 8 rule(s), actors UTA-2026-001 UTA-2026-002 UTA-2026-003 UTA-2026-004 UTA-2026-007 UTA-2026-008 UTA-2026-009 UTA-2026-010 n-3-xl. https://the-hunters-ledger.com/techniques/T1055.012/",
       "enabled": true
     },
     {
       "techniqueID": "T1055.012",
       "tactic": "privilege-escalation",
       "score": 16,
-      "comment": "8 report(s), 8 rule(s), actors UTA-2026-001 UTA-2026-002 UTA-2026-003 UTA-2026-004 UTA-2026-007 UTA-2026-008 UTA-2026-009 UTA-2026-010. https://the-hunters-ledger.com/techniques/T1055.012/",
+      "comment": "8 report(s), 8 rule(s), actors UTA-2026-001 UTA-2026-002 UTA-2026-003 UTA-2026-004 UTA-2026-007 UTA-2026-008 UTA-2026-009 UTA-2026-010 n-3-xl. https://the-hunters-ledger.com/techniques/T1055.012/",
       "enabled": true
     },
     {
@@ -502,14 +502,14 @@
       "techniqueID": "T1056.001",
       "tactic": "collection",
       "score": 15,
-      "comment": "11 report(s), 4 rule(s), actors UTA-2026-003 UTA-2026-005 UTA-2026-006 UTA-2026-007 UTA-2026-008 UTA-2026-009 UTA-2026-010 UTA-2026-021. https://the-hunters-ledger.com/techniques/T1056.001/",
+      "comment": "11 report(s), 4 rule(s), actors UTA-2026-003 UTA-2026-005 UTA-2026-006 UTA-2026-007 UTA-2026-008 UTA-2026-009 UTA-2026-010 UTA-2026-021 n-3-xl. https://the-hunters-ledger.com/techniques/T1056.001/",
       "enabled": true
     },
     {
       "techniqueID": "T1056.001",
       "tactic": "credential-access",
       "score": 15,
-      "comment": "11 report(s), 4 rule(s), actors UTA-2026-003 UTA-2026-005 UTA-2026-006 UTA-2026-007 UTA-2026-008 UTA-2026-009 UTA-2026-010 UTA-2026-021. https://the-hunters-ledger.com/techniques/T1056.001/",
+      "comment": "11 report(s), 4 rule(s), actors UTA-2026-003 UTA-2026-005 UTA-2026-006 UTA-2026-007 UTA-2026-008 UTA-2026-009 UTA-2026-010 UTA-2026-021 n-3-xl. https://the-hunters-ledger.com/techniques/T1056.001/",
       "enabled": true
     },
     {
@@ -558,42 +558,42 @@
       "techniqueID": "T1059.001",
       "tactic": "execution",
       "score": 36,
-      "comment": "15 report(s), 21 rule(s), actors UTA-2026-001 UTA-2026-002 UTA-2026-004 UTA-2026-005 UTA-2026-006 UTA-2026-007 UTA-2026-012 UTA-2026-013 UTA-2026-020 UTA-2026-021 UTA-2026-023 UTA-2026-024. https://the-hunters-ledger.com/techniques/T1059.001/",
+      "comment": "15 report(s), 21 rule(s), actors UTA-2026-001 UTA-2026-002 UTA-2026-004 UTA-2026-005 UTA-2026-006 UTA-2026-007 UTA-2026-012 UTA-2026-013 UTA-2026-020 UTA-2026-021 UTA-2026-023 UTA-2026-024 n-3-xl. https://the-hunters-ledger.com/techniques/T1059.001/",
       "enabled": true
     },
     {
       "techniqueID": "T1059.003",
       "tactic": "execution",
       "score": 21,
-      "comment": "15 report(s), 6 rule(s), actors UTA-2026-002 UTA-2026-003 UTA-2026-004 UTA-2026-005 UTA-2026-007 UTA-2026-020 UTA-2026-021 UTA-2026-023 UTA-2026-024. https://the-hunters-ledger.com/techniques/T1059.003/",
+      "comment": "15 report(s), 6 rule(s), actors UTA-2026-002 UTA-2026-003 UTA-2026-004 UTA-2026-005 UTA-2026-007 UTA-2026-020 UTA-2026-021 UTA-2026-023 UTA-2026-024 n-3-xl. https://the-hunters-ledger.com/techniques/T1059.003/",
       "enabled": true
     },
     {
       "techniqueID": "T1059.004",
       "tactic": "execution",
       "score": 28,
-      "comment": "7 report(s), 21 rule(s), actors UTA-2026-008 UTA-2026-011 UTA-2026-014 UTA-2026-015 UTA-2026-016 UTA-2026-017 UTA-2026-018 UTA-2026-019 UTA-2026-020 UTA-2026-023. https://the-hunters-ledger.com/techniques/T1059.004/",
+      "comment": "7 report(s), 21 rule(s), actors UTA-2026-008 UTA-2026-011 UTA-2026-014 UTA-2026-015 UTA-2026-016 UTA-2026-017 UTA-2026-018 UTA-2026-019 UTA-2026-020 UTA-2026-023 vova75rus. https://the-hunters-ledger.com/techniques/T1059.004/",
       "enabled": true
     },
     {
       "techniqueID": "T1059.005",
       "tactic": "execution",
       "score": 12,
-      "comment": "7 report(s), 5 rule(s), actors UTA-2026-007 UTA-2026-020 UTA-2026-021. https://the-hunters-ledger.com/techniques/T1059.005/",
+      "comment": "7 report(s), 5 rule(s), actors UTA-2026-007 UTA-2026-020 UTA-2026-021 n-3-xl. https://the-hunters-ledger.com/techniques/T1059.005/",
       "enabled": true
     },
     {
       "techniqueID": "T1059.006",
       "tactic": "execution",
       "score": 29,
-      "comment": "5 report(s), 24 rule(s), actors UTA-2026-004 UTA-2026-011 UTA-2026-012 UTA-2026-013 UTA-2026-014 UTA-2026-016 UTA-2026-017 UTA-2026-018 UTA-2026-019 UTA-2026-020. https://the-hunters-ledger.com/techniques/T1059.006/",
+      "comment": "5 report(s), 24 rule(s), actors UTA-2026-004 UTA-2026-011 UTA-2026-012 UTA-2026-013 UTA-2026-014 UTA-2026-016 UTA-2026-017 UTA-2026-018 UTA-2026-019 UTA-2026-020 vova75rus. https://the-hunters-ledger.com/techniques/T1059.006/",
       "enabled": true
     },
     {
       "techniqueID": "T1059.007",
       "tactic": "execution",
       "score": 11,
-      "comment": "5 report(s), 6 rule(s), actors UTA-2026-004 UTA-2026-007 UTA-2026-014 UTA-2026-015 UTA-2026-021 UTA-2026-024. https://the-hunters-ledger.com/techniques/T1059.007/",
+      "comment": "5 report(s), 6 rule(s), actors UTA-2026-004 UTA-2026-007 UTA-2026-014 UTA-2026-015 UTA-2026-021 UTA-2026-024 n-3-xl. https://the-hunters-ledger.com/techniques/T1059.007/",
       "enabled": true
     },
     {
@@ -642,7 +642,7 @@
       "techniqueID": "T1071.001",
       "tactic": "command-and-control",
       "score": 114,
-      "comment": "28 report(s), 86 rule(s), actors UTA-2026-001 UTA-2026-002 UTA-2026-003 UTA-2026-004 UTA-2026-005 UTA-2026-006 UTA-2026-007 UTA-2026-008 UTA-2026-009 UTA-2026-010 UTA-2026-011 UTA-2026-012 UTA-2026-013 UTA-2026-014 UTA-2026-019 UTA-2026-020 UTA-2026-023 UTA-2026-024. https://the-hunters-ledger.com/techniques/T1071.001/",
+      "comment": "28 report(s), 86 rule(s), actors UTA-2026-001 UTA-2026-002 UTA-2026-003 UTA-2026-004 UTA-2026-005 UTA-2026-006 UTA-2026-007 UTA-2026-008 UTA-2026-009 UTA-2026-010 UTA-2026-011 UTA-2026-012 UTA-2026-013 UTA-2026-014 UTA-2026-019 UTA-2026-020 UTA-2026-023 UTA-2026-024 n-3-xl. https://the-hunters-ledger.com/techniques/T1071.001/",
       "enabled": true
     },
     {
@@ -663,7 +663,7 @@
       "techniqueID": "T1071.004",
       "tactic": "command-and-control",
       "score": 3,
-      "comment": "2 report(s), 1 rule(s). https://the-hunters-ledger.com/techniques/T1071.004/",
+      "comment": "2 report(s), 1 rule(s), actors n-3-xl. https://the-hunters-ledger.com/techniques/T1071.004/",
       "enabled": true
     },
     {
@@ -817,14 +817,14 @@
       "techniqueID": "T1082",
       "tactic": "discovery",
       "score": 22,
-      "comment": "21 report(s), 1 rule(s), actors UTA-2026-001 UTA-2026-002 UTA-2026-003 UTA-2026-004 UTA-2026-006 UTA-2026-007 UTA-2026-008 UTA-2026-009 UTA-2026-010 UTA-2026-011 UTA-2026-020 UTA-2026-021 UTA-2026-023 UTA-2026-024. https://the-hunters-ledger.com/techniques/T1082/",
+      "comment": "21 report(s), 1 rule(s), actors UTA-2026-001 UTA-2026-002 UTA-2026-003 UTA-2026-004 UTA-2026-006 UTA-2026-007 UTA-2026-008 UTA-2026-009 UTA-2026-010 UTA-2026-011 UTA-2026-020 UTA-2026-021 UTA-2026-023 UTA-2026-024 n-3-xl. https://the-hunters-ledger.com/techniques/T1082/",
       "enabled": true
     },
     {
       "techniqueID": "T1083",
       "tactic": "discovery",
       "score": 9,
-      "comment": "9 report(s), 0 rule(s), actors UTA-2026-004 UTA-2026-006 UTA-2026-007 UTA-2026-011. https://the-hunters-ledger.com/techniques/T1083/",
+      "comment": "9 report(s), 0 rule(s), actors UTA-2026-004 UTA-2026-006 UTA-2026-007 UTA-2026-011 n-3-xl. https://the-hunters-ledger.com/techniques/T1083/",
       "enabled": true
     },
     {
@@ -894,7 +894,7 @@
       "techniqueID": "T1095",
       "tactic": "command-and-control",
       "score": 19,
-      "comment": "4 report(s), 15 rule(s), actors UTA-2026-004 UTA-2026-014. https://the-hunters-ledger.com/techniques/T1095/",
+      "comment": "4 report(s), 15 rule(s), actors UTA-2026-004 UTA-2026-014 n-3-xl. https://the-hunters-ledger.com/techniques/T1095/",
       "enabled": true
     },
     {
@@ -971,7 +971,7 @@
       "techniqueID": "T1102.002",
       "tactic": "command-and-control",
       "score": 5,
-      "comment": "2 report(s), 3 rule(s), actors UTA-2026-008 UTA-2026-016 UTA-2026-017 UTA-2026-019. https://the-hunters-ledger.com/techniques/T1102.002/",
+      "comment": "2 report(s), 3 rule(s), actors UTA-2026-008 UTA-2026-016 UTA-2026-017 UTA-2026-019 vova75rus. https://the-hunters-ledger.com/techniques/T1102.002/",
       "enabled": true
     },
     {
@@ -985,14 +985,14 @@
       "techniqueID": "T1105",
       "tactic": "command-and-control",
       "score": 43,
-      "comment": "17 report(s), 26 rule(s), actors UTA-2026-001 UTA-2026-002 UTA-2026-004 UTA-2026-006 UTA-2026-007 UTA-2026-012 UTA-2026-016 UTA-2026-017 UTA-2026-018 UTA-2026-019 UTA-2026-020 UTA-2026-021 UTA-2026-023 UTA-2026-024. https://the-hunters-ledger.com/techniques/T1105/",
+      "comment": "17 report(s), 26 rule(s), actors UTA-2026-001 UTA-2026-002 UTA-2026-004 UTA-2026-006 UTA-2026-007 UTA-2026-012 UTA-2026-016 UTA-2026-017 UTA-2026-018 UTA-2026-019 UTA-2026-020 UTA-2026-021 UTA-2026-023 UTA-2026-024 n-3-xl vova75rus. https://the-hunters-ledger.com/techniques/T1105/",
       "enabled": true
     },
     {
       "techniqueID": "T1106",
       "tactic": "execution",
       "score": 11,
-      "comment": "9 report(s), 2 rule(s), actors UTA-2026-001 UTA-2026-002 UTA-2026-004 UTA-2026-021 UTA-2026-024. https://the-hunters-ledger.com/techniques/T1106/",
+      "comment": "9 report(s), 2 rule(s), actors UTA-2026-001 UTA-2026-002 UTA-2026-004 UTA-2026-021 UTA-2026-024 n-3-xl. https://the-hunters-ledger.com/techniques/T1106/",
       "enabled": true
     },
     {
@@ -1041,7 +1041,7 @@
       "techniqueID": "T1113",
       "tactic": "collection",
       "score": 19,
-      "comment": "13 report(s), 6 rule(s), actors UTA-2026-002 UTA-2026-003 UTA-2026-005 UTA-2026-007 UTA-2026-008 UTA-2026-009 UTA-2026-010 UTA-2026-021. https://the-hunters-ledger.com/techniques/T1113/",
+      "comment": "13 report(s), 6 rule(s), actors UTA-2026-002 UTA-2026-003 UTA-2026-005 UTA-2026-007 UTA-2026-008 UTA-2026-009 UTA-2026-010 UTA-2026-021 n-3-xl. https://the-hunters-ledger.com/techniques/T1113/",
       "enabled": true
     },
     {
@@ -1062,14 +1062,14 @@
       "techniqueID": "T1123",
       "tactic": "collection",
       "score": 7,
-      "comment": "6 report(s), 1 rule(s), actors UTA-2026-003 UTA-2026-021. https://the-hunters-ledger.com/techniques/T1123/",
+      "comment": "6 report(s), 1 rule(s), actors UTA-2026-003 UTA-2026-021 n-3-xl. https://the-hunters-ledger.com/techniques/T1123/",
       "enabled": true
     },
     {
       "techniqueID": "T1125",
       "tactic": "collection",
       "score": 6,
-      "comment": "5 report(s), 1 rule(s), actors UTA-2026-003. https://the-hunters-ledger.com/techniques/T1125/",
+      "comment": "5 report(s), 1 rule(s), actors UTA-2026-003 n-3-xl. https://the-hunters-ledger.com/techniques/T1125/",
       "enabled": true
     },
     {
@@ -1356,7 +1356,7 @@
       "techniqueID": "T1219",
       "tactic": "command-and-control",
       "score": 16,
-      "comment": "7 report(s), 9 rule(s), actors UTA-2026-003 UTA-2026-008 UTA-2026-011 UTA-2026-021. https://the-hunters-ledger.com/techniques/T1219/",
+      "comment": "7 report(s), 9 rule(s), actors UTA-2026-003 UTA-2026-008 UTA-2026-011 UTA-2026-021 n-3-xl. https://the-hunters-ledger.com/techniques/T1219/",
       "enabled": true
     },
     {
@@ -1370,21 +1370,21 @@
       "techniqueID": "T1222.002",
       "tactic": "defense-impairment",
       "score": 2,
-      "comment": "0 report(s), 2 rule(s), actors UTA-2026-016 UTA-2026-017. https://the-hunters-ledger.com/techniques/T1222.002/",
+      "comment": "0 report(s), 2 rule(s), actors UTA-2026-016 UTA-2026-017 vova75rus. https://the-hunters-ledger.com/techniques/T1222.002/",
       "enabled": true
     },
     {
       "techniqueID": "T1480",
       "tactic": "stealth",
       "score": 6,
-      "comment": "5 report(s), 1 rule(s), actors UTA-2026-003 UTA-2026-007 UTA-2026-008 UTA-2026-011. https://the-hunters-ledger.com/techniques/T1480/",
+      "comment": "5 report(s), 1 rule(s), actors UTA-2026-003 UTA-2026-007 UTA-2026-008 UTA-2026-011 n-3-xl. https://the-hunters-ledger.com/techniques/T1480/",
       "enabled": true
     },
     {
       "techniqueID": "T1480.002",
       "tactic": "stealth",
       "score": 2,
-      "comment": "1 report(s), 1 rule(s), actors UTA-2026-008 UTA-2026-009 UTA-2026-010 UTA-2026-016 UTA-2026-017. https://the-hunters-ledger.com/techniques/T1480.002/",
+      "comment": "1 report(s), 1 rule(s), actors UTA-2026-008 UTA-2026-009 UTA-2026-010 UTA-2026-016 UTA-2026-017 vova75rus. https://the-hunters-ledger.com/techniques/T1480.002/",
       "enabled": true
     },
     {
@@ -1412,7 +1412,7 @@
       "techniqueID": "T1489",
       "tactic": "impact",
       "score": 4,
-      "comment": "4 report(s), 0 rule(s), actors UTA-2026-021. https://the-hunters-ledger.com/techniques/T1489/",
+      "comment": "4 report(s), 0 rule(s), actors UTA-2026-021 n-3-xl. https://the-hunters-ledger.com/techniques/T1489/",
       "enabled": true
     },
     {
@@ -1440,21 +1440,21 @@
       "techniqueID": "T1496.001",
       "tactic": "impact",
       "score": 12,
-      "comment": "1 report(s), 11 rule(s), actors UTA-2026-016 UTA-2026-017 UTA-2026-020. https://the-hunters-ledger.com/techniques/T1496.001/",
+      "comment": "1 report(s), 11 rule(s), actors UTA-2026-016 UTA-2026-017 UTA-2026-020 vova75rus. https://the-hunters-ledger.com/techniques/T1496.001/",
       "enabled": true
     },
     {
       "techniqueID": "T1497",
       "tactic": "stealth",
       "score": 10,
-      "comment": "6 report(s), 4 rule(s), actors UTA-2026-005 UTA-2026-008 UTA-2026-009 UTA-2026-010 UTA-2026-021. https://the-hunters-ledger.com/techniques/T1497/",
+      "comment": "6 report(s), 4 rule(s), actors UTA-2026-005 UTA-2026-008 UTA-2026-009 UTA-2026-010 UTA-2026-021 n-3-xl. https://the-hunters-ledger.com/techniques/T1497/",
       "enabled": true
     },
     {
       "techniqueID": "T1497",
       "tactic": "discovery",
       "score": 10,
-      "comment": "6 report(s), 4 rule(s), actors UTA-2026-005 UTA-2026-008 UTA-2026-009 UTA-2026-010 UTA-2026-021. https://the-hunters-ledger.com/techniques/T1497/",
+      "comment": "6 report(s), 4 rule(s), actors UTA-2026-005 UTA-2026-008 UTA-2026-009 UTA-2026-010 UTA-2026-021 n-3-xl. https://the-hunters-ledger.com/techniques/T1497/",
       "enabled": true
     },
     {
@@ -1545,14 +1545,14 @@
       "techniqueID": "T1528",
       "tactic": "credential-access",
       "score": 4,
-      "comment": "2 report(s), 2 rule(s). https://the-hunters-ledger.com/techniques/T1528/",
+      "comment": "2 report(s), 2 rule(s), actors n-3-xl. https://the-hunters-ledger.com/techniques/T1528/",
       "enabled": true
     },
     {
       "techniqueID": "T1529",
       "tactic": "impact",
       "score": 3,
-      "comment": "3 report(s), 0 rule(s). https://the-hunters-ledger.com/techniques/T1529/",
+      "comment": "3 report(s), 0 rule(s), actors n-3-xl. https://the-hunters-ledger.com/techniques/T1529/",
       "enabled": true
     },
     {
@@ -1587,7 +1587,7 @@
       "techniqueID": "T1539",
       "tactic": "credential-access",
       "score": 11,
-      "comment": "6 report(s), 5 rule(s), actors UTA-2026-008 UTA-2026-009 UTA-2026-010 UTA-2026-018 UTA-2026-021. https://the-hunters-ledger.com/techniques/T1539/",
+      "comment": "6 report(s), 5 rule(s), actors UTA-2026-008 UTA-2026-009 UTA-2026-010 UTA-2026-018 UTA-2026-021 n-3-xl. https://the-hunters-ledger.com/techniques/T1539/",
       "enabled": true
     },
     {
@@ -1636,28 +1636,28 @@
       "techniqueID": "T1543.002",
       "tactic": "persistence",
       "score": 15,
-      "comment": "2 report(s), 13 rule(s), actors UTA-2026-013 UTA-2026-014 UTA-2026-016 UTA-2026-017 UTA-2026-020. https://the-hunters-ledger.com/techniques/T1543.002/",
+      "comment": "2 report(s), 13 rule(s), actors UTA-2026-013 UTA-2026-014 UTA-2026-016 UTA-2026-017 UTA-2026-020 vova75rus. https://the-hunters-ledger.com/techniques/T1543.002/",
       "enabled": true
     },
     {
       "techniqueID": "T1543.002",
       "tactic": "privilege-escalation",
       "score": 15,
-      "comment": "2 report(s), 13 rule(s), actors UTA-2026-013 UTA-2026-014 UTA-2026-016 UTA-2026-017 UTA-2026-020. https://the-hunters-ledger.com/techniques/T1543.002/",
+      "comment": "2 report(s), 13 rule(s), actors UTA-2026-013 UTA-2026-014 UTA-2026-016 UTA-2026-017 UTA-2026-020 vova75rus. https://the-hunters-ledger.com/techniques/T1543.002/",
       "enabled": true
     },
     {
       "techniqueID": "T1543.003",
       "tactic": "persistence",
       "score": 11,
-      "comment": "6 report(s), 5 rule(s), actors UTA-2026-004 UTA-2026-021. https://the-hunters-ledger.com/techniques/T1543.003/",
+      "comment": "6 report(s), 5 rule(s), actors UTA-2026-004 UTA-2026-021 n-3-xl. https://the-hunters-ledger.com/techniques/T1543.003/",
       "enabled": true
     },
     {
       "techniqueID": "T1543.003",
       "tactic": "privilege-escalation",
       "score": 11,
-      "comment": "6 report(s), 5 rule(s), actors UTA-2026-004 UTA-2026-021. https://the-hunters-ledger.com/techniques/T1543.003/",
+      "comment": "6 report(s), 5 rule(s), actors UTA-2026-004 UTA-2026-021 n-3-xl. https://the-hunters-ledger.com/techniques/T1543.003/",
       "enabled": true
     },
     {
@@ -1692,14 +1692,14 @@
       "techniqueID": "T1547.001",
       "tactic": "persistence",
       "score": 32,
-      "comment": "15 report(s), 17 rule(s), actors UTA-2026-003 UTA-2026-005 UTA-2026-012 UTA-2026-020 UTA-2026-021 UTA-2026-024. https://the-hunters-ledger.com/techniques/T1547.001/",
+      "comment": "15 report(s), 17 rule(s), actors UTA-2026-003 UTA-2026-005 UTA-2026-012 UTA-2026-020 UTA-2026-021 UTA-2026-024 n-3-xl. https://the-hunters-ledger.com/techniques/T1547.001/",
       "enabled": true
     },
     {
       "techniqueID": "T1547.001",
       "tactic": "privilege-escalation",
       "score": 32,
-      "comment": "15 report(s), 17 rule(s), actors UTA-2026-003 UTA-2026-005 UTA-2026-012 UTA-2026-020 UTA-2026-021 UTA-2026-024. https://the-hunters-ledger.com/techniques/T1547.001/",
+      "comment": "15 report(s), 17 rule(s), actors UTA-2026-003 UTA-2026-005 UTA-2026-012 UTA-2026-020 UTA-2026-021 UTA-2026-024 n-3-xl. https://the-hunters-ledger.com/techniques/T1547.001/",
       "enabled": true
     },
     {
@@ -1769,7 +1769,7 @@
       "techniqueID": "T1552.001",
       "tactic": "credential-access",
       "score": 12,
-      "comment": "4 report(s), 8 rule(s), actors UTA-2026-012 UTA-2026-013 UTA-2026-019 UTA-2026-023. https://the-hunters-ledger.com/techniques/T1552.001/",
+      "comment": "4 report(s), 8 rule(s), actors UTA-2026-012 UTA-2026-013 UTA-2026-019 UTA-2026-023 n-3-xl. https://the-hunters-ledger.com/techniques/T1552.001/",
       "enabled": true
     },
     {
@@ -1804,14 +1804,14 @@
       "techniqueID": "T1553.005",
       "tactic": "defense-impairment",
       "score": 4,
-      "comment": "2 report(s), 2 rule(s), actors UTA-2026-003. https://the-hunters-ledger.com/techniques/T1553.005/",
+      "comment": "2 report(s), 2 rule(s), actors UTA-2026-003 n-3-xl. https://the-hunters-ledger.com/techniques/T1553.005/",
       "enabled": true
     },
     {
       "techniqueID": "T1554",
       "tactic": "persistence",
       "score": 5,
-      "comment": "1 report(s), 4 rule(s), actors UTA-2026-016 UTA-2026-017 UTA-2026-023. https://the-hunters-ledger.com/techniques/T1554/",
+      "comment": "1 report(s), 4 rule(s), actors UTA-2026-016 UTA-2026-017 UTA-2026-023 vova75rus. https://the-hunters-ledger.com/techniques/T1554/",
       "enabled": true
     },
     {
@@ -1825,7 +1825,7 @@
       "techniqueID": "T1555.003",
       "tactic": "credential-access",
       "score": 18,
-      "comment": "11 report(s), 7 rule(s), actors UTA-2026-003 UTA-2026-006 UTA-2026-008 UTA-2026-009 UTA-2026-010 UTA-2026-021 UTA-2026-024. https://the-hunters-ledger.com/techniques/T1555.003/",
+      "comment": "11 report(s), 7 rule(s), actors UTA-2026-003 UTA-2026-006 UTA-2026-008 UTA-2026-009 UTA-2026-010 UTA-2026-021 UTA-2026-024 n-3-xl. https://the-hunters-ledger.com/techniques/T1555.003/",
       "enabled": true
     },
     {
@@ -1902,7 +1902,7 @@
       "techniqueID": "T1564.001",
       "tactic": "stealth",
       "score": 11,
-      "comment": "4 report(s), 7 rule(s), actors UTA-2026-014 UTA-2026-016 UTA-2026-017 UTA-2026-020. https://the-hunters-ledger.com/techniques/T1564.001/",
+      "comment": "4 report(s), 7 rule(s), actors UTA-2026-014 UTA-2026-016 UTA-2026-017 UTA-2026-020 n-3-xl vova75rus. https://the-hunters-ledger.com/techniques/T1564.001/",
       "enabled": true
     },
     {
@@ -1972,7 +1972,7 @@
       "techniqueID": "T1567.002",
       "tactic": "exfiltration",
       "score": 6,
-      "comment": "4 report(s), 2 rule(s), actors UTA-2026-008 UTA-2026-009 UTA-2026-010. https://the-hunters-ledger.com/techniques/T1567.002/",
+      "comment": "4 report(s), 2 rule(s), actors UTA-2026-008 UTA-2026-009 UTA-2026-010 n-3-xl. https://the-hunters-ledger.com/techniques/T1567.002/",
       "enabled": true
     },
     {
@@ -2007,14 +2007,14 @@
       "techniqueID": "T1571",
       "tactic": "command-and-control",
       "score": 19,
-      "comment": "10 report(s), 9 rule(s), actors UTA-2026-002 UTA-2026-003 UTA-2026-004 UTA-2026-007 UTA-2026-016 UTA-2026-017 UTA-2026-018 UTA-2026-020 UTA-2026-021 UTA-2026-023 UTA-2026-024. https://the-hunters-ledger.com/techniques/T1571/",
+      "comment": "10 report(s), 9 rule(s), actors UTA-2026-002 UTA-2026-003 UTA-2026-004 UTA-2026-007 UTA-2026-016 UTA-2026-017 UTA-2026-018 UTA-2026-020 UTA-2026-021 UTA-2026-023 UTA-2026-024 n-3-xl vova75rus. https://the-hunters-ledger.com/techniques/T1571/",
       "enabled": true
     },
     {
       "techniqueID": "T1572",
       "tactic": "command-and-control",
       "score": 32,
-      "comment": "10 report(s), 22 rule(s), actors UTA-2026-002 UTA-2026-003 UTA-2026-004 UTA-2026-005 UTA-2026-006 UTA-2026-012 UTA-2026-013 UTA-2026-016 UTA-2026-017 UTA-2026-018 UTA-2026-019 UTA-2026-021 UTA-2026-023 UTA-2026-024. https://the-hunters-ledger.com/techniques/T1572/",
+      "comment": "10 report(s), 22 rule(s), actors UTA-2026-002 UTA-2026-003 UTA-2026-004 UTA-2026-005 UTA-2026-006 UTA-2026-012 UTA-2026-013 UTA-2026-016 UTA-2026-017 UTA-2026-018 UTA-2026-019 UTA-2026-021 UTA-2026-023 UTA-2026-024 vova75rus. https://the-hunters-ledger.com/techniques/T1572/",
       "enabled": true
     },
     {
@@ -2028,7 +2028,7 @@
       "techniqueID": "T1573.001",
       "tactic": "command-and-control",
       "score": 19,
-      "comment": "9 report(s), 10 rule(s), actors UTA-2026-002 UTA-2026-003 UTA-2026-004 UTA-2026-006 UTA-2026-007 UTA-2026-008 UTA-2026-009 UTA-2026-010. https://the-hunters-ledger.com/techniques/T1573.001/",
+      "comment": "9 report(s), 10 rule(s), actors UTA-2026-002 UTA-2026-003 UTA-2026-004 UTA-2026-006 UTA-2026-007 UTA-2026-008 UTA-2026-009 UTA-2026-010 n-3-xl. https://the-hunters-ledger.com/techniques/T1573.001/",
       "enabled": true
     },
     {
@@ -2056,14 +2056,14 @@
       "techniqueID": "T1574.006",
       "tactic": "stealth",
       "score": 14,
-      "comment": "0 report(s), 14 rule(s), actors UTA-2026-016 UTA-2026-017. https://the-hunters-ledger.com/techniques/T1574.006/",
+      "comment": "0 report(s), 14 rule(s), actors UTA-2026-016 UTA-2026-017 vova75rus. https://the-hunters-ledger.com/techniques/T1574.006/",
       "enabled": true
     },
     {
       "techniqueID": "T1574.006",
       "tactic": "execution",
       "score": 14,
-      "comment": "0 report(s), 14 rule(s), actors UTA-2026-016 UTA-2026-017. https://the-hunters-ledger.com/techniques/T1574.006/",
+      "comment": "0 report(s), 14 rule(s), actors UTA-2026-016 UTA-2026-017 vova75rus. https://the-hunters-ledger.com/techniques/T1574.006/",
       "enabled": true
     },
     {
@@ -2189,7 +2189,7 @@
       "techniqueID": "T1588.002",
       "tactic": "resource-development",
       "score": 11,
-      "comment": "9 report(s), 2 rule(s), actors UTA-2026-001 UTA-2026-004 UTA-2026-006 UTA-2026-018 UTA-2026-019 UTA-2026-020 UTA-2026-023 UTA-2026-024. https://the-hunters-ledger.com/techniques/T1588.002/",
+      "comment": "9 report(s), 2 rule(s), actors UTA-2026-001 UTA-2026-004 UTA-2026-006 UTA-2026-018 UTA-2026-019 UTA-2026-020 UTA-2026-023 UTA-2026-024 n-3-xl. https://the-hunters-ledger.com/techniques/T1588.002/",
       "enabled": true
     },
     {
@@ -2259,7 +2259,7 @@
       "techniqueID": "T1595.002",
       "tactic": "reconnaissance",
       "score": 9,
-      "comment": "6 report(s), 3 rule(s), actors UTA-2026-011 UTA-2026-016 UTA-2026-017 UTA-2026-018 UTA-2026-019 UTA-2026-020 UTA-2026-023. https://the-hunters-ledger.com/techniques/T1595.002/",
+      "comment": "6 report(s), 3 rule(s), actors UTA-2026-011 UTA-2026-016 UTA-2026-017 UTA-2026-018 UTA-2026-019 UTA-2026-020 UTA-2026-023 vova75rus. https://the-hunters-ledger.com/techniques/T1595.002/",
       "enabled": true
     },
     {
@@ -2329,21 +2329,21 @@
       "techniqueID": "T1611",
       "tactic": "privilege-escalation",
       "score": 2,
-      "comment": "0 report(s), 2 rule(s), actors UTA-2026-016 UTA-2026-017. https://the-hunters-ledger.com/techniques/T1611/",
+      "comment": "0 report(s), 2 rule(s), actors UTA-2026-016 UTA-2026-017 vova75rus. https://the-hunters-ledger.com/techniques/T1611/",
       "enabled": true
     },
     {
       "techniqueID": "T1614",
       "tactic": "discovery",
       "score": 2,
-      "comment": "2 report(s), 0 rule(s), actors UTA-2026-021. https://the-hunters-ledger.com/techniques/T1614/",
+      "comment": "2 report(s), 0 rule(s), actors UTA-2026-021 n-3-xl. https://the-hunters-ledger.com/techniques/T1614/",
       "enabled": true
     },
     {
       "techniqueID": "T1620",
       "tactic": "stealth",
       "score": 33,
-      "comment": "13 report(s), 20 rule(s), actors UTA-2026-001 UTA-2026-002 UTA-2026-004 UTA-2026-005 UTA-2026-006 UTA-2026-007 UTA-2026-016 UTA-2026-017 UTA-2026-021 UTA-2026-024. https://the-hunters-ledger.com/techniques/T1620/",
+      "comment": "13 report(s), 20 rule(s), actors UTA-2026-001 UTA-2026-002 UTA-2026-004 UTA-2026-005 UTA-2026-006 UTA-2026-007 UTA-2026-016 UTA-2026-017 UTA-2026-021 UTA-2026-024 n-3-xl vova75rus. https://the-hunters-ledger.com/techniques/T1620/",
       "enabled": true
     },
     {
@@ -2399,14 +2399,14 @@
       "techniqueID": "T1685",
       "tactic": "defense-impairment",
       "score": 38,
-      "comment": "13 report(s), 25 rule(s), actors UTA-2026-001 UTA-2026-003 UTA-2026-005 UTA-2026-006 UTA-2026-007 UTA-2026-015 UTA-2026-020 UTA-2026-021 UTA-2026-024. https://the-hunters-ledger.com/techniques/T1685/",
+      "comment": "13 report(s), 25 rule(s), actors UTA-2026-001 UTA-2026-003 UTA-2026-005 UTA-2026-006 UTA-2026-007 UTA-2026-015 UTA-2026-020 UTA-2026-021 UTA-2026-024 n-3-xl. https://the-hunters-ledger.com/techniques/T1685/",
       "enabled": true
     },
     {
       "techniqueID": "T1686",
       "tactic": "defense-impairment",
       "score": 4,
-      "comment": "3 report(s), 1 rule(s), actors UTA-2026-003 UTA-2026-024. https://the-hunters-ledger.com/techniques/T1686/",
+      "comment": "3 report(s), 1 rule(s), actors UTA-2026-003 UTA-2026-024 n-3-xl. https://the-hunters-ledger.com/techniques/T1686/",
       "enabled": true
     },
     {

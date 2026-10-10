@@ -3,8 +3,11 @@
 # re-run the generator. Per designation: every PUBLISHED report that names
 # it (primary first, then by date), and the ATT&CK techniques the primary
 # reports' mapping tables carry. An actor whose reports are unlisted is absent.
+# A named actor (kind: named) is found by its exact strings, never the UTA pattern.
 actors:
   - id: UTA-2026-001
+    kind: uta
+    name: UTA-2026-001
     url: /actors/UTA-2026-001/
     reports:
       - url: /reports/sliver-open-directory/
@@ -220,6 +223,8 @@ actors:
       - Discovery
       - Command and Control
   - id: UTA-2026-002
+    kind: uta
+    name: UTA-2026-002
     url: /actors/UTA-2026-002/
     reports:
       - url: /reports/open-directory-193-56-255-154-xiebroc2/
@@ -410,6 +415,8 @@ actors:
       - Command and Control
       - Exfiltration
   - id: UTA-2026-003
+    kind: uta
+    name: UTA-2026-003
     url: /actors/UTA-2026-003/
     reports:
       - url: /reports/shadow-xworm-opendirectory/
@@ -651,6 +658,8 @@ actors:
       - Collection
       - Command and Control
   - id: UTA-2026-004
+    kind: uta
+    name: UTA-2026-004
     url: /actors/UTA-2026-004/
     reports:
       - url: /reports/new-files-found-20260408/
@@ -975,6 +984,8 @@ actors:
       - Command and Control
       - Exfiltration
   - id: UTA-2026-005
+    kind: uta
+    name: UTA-2026-005
     url: /actors/UTA-2026-005/
     reports:
       - url: /reports/open-directory-94-103-1-13-20260423/
@@ -1249,6 +1260,8 @@ actors:
       - Command and Control
       - Impact
   - id: UTA-2026-006
+    kind: uta
+    name: UTA-2026-006
     url: /actors/UTA-2026-006/
     reports:
       - url: /reports/opendirectory-45-130-148-125-20260430/
@@ -1548,6 +1561,8 @@ actors:
       - Collection
       - Command and Control
   - id: UTA-2026-007
+    kind: uta
+    name: UTA-2026-007
     url: /actors/UTA-2026-007/
     reports:
       - url: /reports/opendirectory-62-60-237-100-20260506/
@@ -1853,6 +1868,8 @@ actors:
       - Collection
       - Command and Control
   - id: UTA-2026-008
+    kind: uta
+    name: UTA-2026-008
     url: /actors/UTA-2026-008/
     reports:
       - url: /reports/bellamain-turkish-phaas-79-137-192-3-20260516/
@@ -2310,6 +2327,8 @@ actors:
       - Exfiltration
       - Impact
   - id: UTA-2026-009
+    kind: uta
+    name: UTA-2026-009
     url: /actors/UTA-2026-009/
     reports:
       - url: /reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/
@@ -2747,6 +2766,8 @@ actors:
       - Exfiltration
       - Impact
   - id: UTA-2026-010
+    kind: uta
+    name: UTA-2026-010
     url: /actors/UTA-2026-010/
     reports:
       - url: /reports/opendirectory-79-137-192-3-20260515/
@@ -3075,6 +3096,8 @@ actors:
       - Command and Control
       - Exfiltration
   - id: UTA-2026-011
+    kind: uta
+    name: UTA-2026-011
     url: /actors/UTA-2026-011/
     reports:
       - url: /reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/
@@ -3327,6 +3350,8 @@ actors:
       - Exfiltration
       - Impact
   - id: UTA-2026-012
+    kind: uta
+    name: UTA-2026-012
     url: /actors/UTA-2026-012/
     reports:
       - url: /reports/russian-gemini-credential-mill-213.165.51.115/
@@ -3527,6 +3552,8 @@ actors:
       - Command and Control
       - Exfiltration
   - id: UTA-2026-013
+    kind: uta
+    name: UTA-2026-013
     url: /actors/UTA-2026-013/
     reports:
       - url: /reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/
@@ -3690,6 +3717,8 @@ actors:
       - Command and Control
       - Exfiltration
   - id: UTA-2026-014
+    kind: uta
+    name: UTA-2026-014
     url: /actors/UTA-2026-014/
     reports:
       - url: /reports/rovodev-mirai-matrix-c2-87.106.143.220/
@@ -3856,6 +3885,8 @@ actors:
       - Command and Control
       - Impact
   - id: UTA-2026-015
+    kind: uta
+    name: UTA-2026-015
     url: /actors/UTA-2026-015/
     reports:
       - url: /reports/korean-claude-openclaw-221.150.15.104/
@@ -3912,6 +3943,8 @@ actors:
       - Defense Impairment
       - Command and Control
   - id: UTA-2026-016
+    kind: uta
+    name: UTA-2026-016
     url: /actors/UTA-2026-016/
     reports:
       - url: /reports/ghost-cryptojacker-vova75rus-77.110.96.200/
@@ -4095,6 +4128,8 @@ actors:
       - Command and Control
       - Impact
   - id: UTA-2026-017
+    kind: uta
+    name: UTA-2026-017
     url: /actors/UTA-2026-017/
     reports:
       - url: /reports/ghost-cryptojacker-vova75rus-77.110.96.200/
@@ -4278,6 +4313,8 @@ actors:
       - Command and Control
       - Impact
   - id: UTA-2026-018
+    kind: uta
+    name: UTA-2026-018
     url: /actors/UTA-2026-018/
     reports:
       - url: /reports/seasia-gov-exploitation-toolkit-144-172-106-236/
@@ -4529,6 +4566,8 @@ actors:
       - Command and Control
       - Exfiltration
   - id: UTA-2026-019
+    kind: uta
+    name: UTA-2026-019
     url: /actors/UTA-2026-019/
     reports:
       - url: /reports/multivector-ecommerce-rce-toolkit-192-3-1-116/
@@ -4808,6 +4847,8 @@ actors:
       - Command and Control
       - Impact
   - id: UTA-2026-020
+    kind: uta
+    name: UTA-2026-020
     url: /actors/UTA-2026-020/
     reports:
       - url: /reports/gocloud-multiservice-cryptojacking-149-28-112-221/
@@ -5095,6 +5136,8 @@ actors:
       - Exfiltration
       - Impact
   - id: UTA-2026-021
+    kind: uta
+    name: UTA-2026-021
     url: /actors/UTA-2026-021/
     reports:
       - url: /reports/cloudsync-assembler-toolkit-91-197-98-188/
@@ -5502,6 +5545,8 @@ actors:
       - Exfiltration
       - Impact
   - id: UTA-2026-023
+    kind: uta
+    name: UTA-2026-023
     url: /actors/UTA-2026-023/
     reports:
       - url: /reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/
@@ -5998,6 +6043,8 @@ actors:
       - Command and Control
       - Exfiltration
   - id: UTA-2026-024
+    kind: uta
+    name: UTA-2026-024
     url: /actors/UTA-2026-024/
     reports:
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
@@ -6431,3 +6478,540 @@ actors:
       - Collection
       - Command and Control
       - Exfiltration
+  - id: vova75rus
+    kind: named
+    name: Vova75Rus
+    url: /actors/vova75rus/
+    reports:
+      - url: /reports/ghost-cryptojacker-vova75rus-77.110.96.200/
+        title: GHOST Cryptojacker Kit — Vova75Rus Supply Chain (77.110.96.200)
+        date: '2026-05-25'
+        severity: high
+        role: primary
+        mentions: 42
+        detection_url: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+        ioc_url: /ioc-feeds/ghost-cryptojacker-vova75rus-77.110.96.200-iocs.json
+        stix_url: /stix/ghost-cryptojacker-vova75rus-77.110.96.200.json
+      - url: /reports/ai-agent-frameworks-2026-05-23/
+        title: Multi-Actor AI-Agent Framework Abuse (8 Operators)
+        date: '2026-06-16'
+        severity: high
+        role: mentions
+        mentions: 40
+        detection_url: /hunting-detections/ai-agent-frameworks-2026-05-23-detections
+        ioc_url: /ioc-feeds/ai-agent-frameworks-2026-05-23-iocs.json
+        stix_url: /stix/ai-agent-frameworks-2026-05-23.json
+      - url: /reports/russian-gemini-credential-mill-213.165.51.115/
+        title: Russian Gemini CLI Credential Mill (213.165.51.115)
+        date: '2026-05-25'
+        severity: critical
+        role: mentions
+        mentions: 1
+        detection_url: /hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections
+        ioc_url: /ioc-feeds/russian-gemini-credential-mill-213.165.51.115-iocs.json
+        stix_url: /stix/russian-gemini-credential-mill-213.165.51.115.json
+    report_count: 3
+    mention_count: 83
+    attack:
+      - id: T1014
+        name: Rootkit
+        tactic: Stealth
+        source: detections
+        link: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+        reports:
+          - /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+      - id: T1018
+        name: Remote System Discovery
+        tactic: Discovery
+        source: detections
+        link: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+        reports:
+          - /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+      - id: T1027
+        name: Obfuscated Files or Information
+        tactic: Stealth
+        source: detections
+        link: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+        reports:
+          - /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+      - id: T1036.005
+        name: Match Legitimate Resource Name or Location
+        tactic: Stealth
+        source: detections
+        link: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+        reports:
+          - /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+      - id: T1059.004
+        name: Unix Shell
+        tactic: Execution
+        source: detections
+        link: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+        reports:
+          - /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+      - id: T1059.006
+        name: Python
+        tactic: Execution
+        source: detections
+        link: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+        reports:
+          - /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+      - id: T1102.002
+        name: Bidirectional Communication
+        tactic: Command and Control
+        source: detections
+        link: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+        reports:
+          - /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+      - id: T1105
+        name: Ingress Tool Transfer
+        tactic: Command and Control
+        source: detections
+        link: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+        reports:
+          - /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+      - id: T1222.002
+        name: Linux and Mac Permissions
+        tactic: Defense Impairment
+        source: detections
+        link: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+        reports:
+          - /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+      - id: T1480.002
+        name: Mutual Exclusion
+        tactic: Stealth
+        source: detections
+        link: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+        reports:
+          - /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+      - id: T1496.001
+        name: Compute Hijacking
+        tactic: Impact
+        source: detections
+        link: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+        reports:
+          - /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+      - id: T1543.002
+        name: Systemd Service
+        tactic: Persistence
+        source: detections
+        link: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+        reports:
+          - /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+      - id: T1554
+        name: Compromise Host Software Binary
+        tactic: Persistence
+        source: detections
+        link: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+        reports:
+          - /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+      - id: T1564.001
+        name: Hidden Files and Directories
+        tactic: Stealth
+        source: detections
+        link: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+        reports:
+          - /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+      - id: T1571
+        name: Non-Standard Port
+        tactic: Command and Control
+        source: detections
+        link: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+        reports:
+          - /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+      - id: T1572
+        name: Protocol Tunneling
+        tactic: Command and Control
+        source: detections
+        link: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+        reports:
+          - /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+      - id: T1574.006
+        name: Dynamic Linker Hijacking
+        tactic: Stealth
+        source: detections
+        link: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+        reports:
+          - /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+      - id: T1595.002
+        name: Vulnerability Scanning
+        tactic: Reconnaissance
+        source: detections
+        link: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+        reports:
+          - /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+      - id: T1611
+        name: Escape to Host
+        tactic: Privilege Escalation
+        source: detections
+        link: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+        reports:
+          - /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+      - id: T1620
+        name: Reflective Code Loading
+        tactic: Stealth
+        source: detections
+        link: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+        reports:
+          - /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+    tactics:
+      - Reconnaissance
+      - Execution
+      - Persistence
+      - Privilege Escalation
+      - Stealth
+      - Defense Impairment
+      - Discovery
+      - Command and Control
+      - Impact
+  - id: n-3-xl
+    kind: named
+    name: n_3_xl
+    url: /actors/n-3-xl/
+    reports:
+      - url: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+        title: 'EvilSoul-Engine: A Brazilian Stealer-Builder Malware-as-a-Service'
+        date: '2026-07-03'
+        severity: high
+        role: primary
+        mentions: 34
+        detection_url: /hunting-detections/evilsoul-engine-stealer-maas-detections
+        ioc_url: /ioc-feeds/evilsoul-engine-stealer-maas-iocs.json
+        stix_url: /stix/evilsoul-engine-stealer-maas-144-172-103-98.json
+      - url: /reports/kaido-quasar-rat-144-172-109-203/
+        title: 'KAIDO: A Brazilian Quasar-Fork RAT with Hidden-Desktop Session Hijacking'
+        date: '2026-07-03'
+        severity: high
+        role: primary
+        mentions: 25
+        detection_url: /hunting-detections/kaido-quasar-rat-detections
+        ioc_url: /ioc-feeds/kaido-quasar-rat-iocs.json
+        stix_url: /stix/kaido-quasar-rat-144-172-109-203.json
+    report_count: 2
+    mention_count: 59
+    attack:
+      - id: T1005
+        name: Data from Local System
+        tactic: Collection
+        source: report
+        link: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+        reports:
+          - /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+      - id: T1027
+        name: Obfuscated Files or Information
+        tactic: Stealth
+        source: report
+        link: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+        reports:
+          - /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+      - id: T1036.004
+        name: Masquerade Task or Service
+        tactic: Stealth
+        source: report
+        link: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+        reports:
+          - /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+      - id: T1036.005
+        name: Match Legitimate Resource Name or Location
+        tactic: Stealth
+        source: report
+        link: /reports/kaido-quasar-rat-144-172-109-203/
+        reports:
+          - /reports/kaido-quasar-rat-144-172-109-203/
+      - id: T1041
+        name: Exfiltration Over C2 Channel
+        tactic: Exfiltration
+        source: report
+        link: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+        reports:
+          - /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+          - /reports/kaido-quasar-rat-144-172-109-203/
+      - id: T1053.005
+        name: Scheduled Task
+        tactic: Persistence
+        source: report
+        link: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+        reports:
+          - /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+          - /reports/kaido-quasar-rat-144-172-109-203/
+      - id: T1055
+        name: Process Injection
+        tactic: Stealth
+        source: report
+        link: /reports/kaido-quasar-rat-144-172-109-203/
+        reports:
+          - /reports/kaido-quasar-rat-144-172-109-203/
+      - id: T1055.012
+        name: Process Hollowing
+        tactic: Stealth
+        source: report
+        link: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+        reports:
+          - /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+      - id: T1056.001
+        name: Keylogging
+        tactic: Collection
+        source: report
+        link: /reports/kaido-quasar-rat-144-172-109-203/
+        reports:
+          - /reports/kaido-quasar-rat-144-172-109-203/
+      - id: T1059.001
+        name: PowerShell
+        tactic: Execution
+        source: report
+        link: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+        reports:
+          - /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+      - id: T1059.003
+        name: Windows Command Shell
+        tactic: Execution
+        source: report
+        link: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+        reports:
+          - /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+      - id: T1059.005
+        name: Visual Basic
+        tactic: Execution
+        source: report
+        link: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+        reports:
+          - /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+      - id: T1059.007
+        name: JavaScript
+        tactic: Execution
+        source: report
+        link: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+        reports:
+          - /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+      - id: T1071.001
+        name: Web Protocols
+        tactic: Command and Control
+        source: report
+        link: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+        reports:
+          - /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+      - id: T1071.004
+        name: DNS
+        tactic: Command and Control
+        source: report
+        link: /reports/kaido-quasar-rat-144-172-109-203/
+        reports:
+          - /reports/kaido-quasar-rat-144-172-109-203/
+      - id: T1082
+        name: System Information Discovery
+        tactic: Discovery
+        source: report
+        link: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+        reports:
+          - /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+      - id: T1083
+        name: File and Directory Discovery
+        tactic: Discovery
+        source: report
+        link: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+        reports:
+          - /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+      - id: T1095
+        name: Non-Application Layer Protocol
+        tactic: Command and Control
+        source: report
+        link: /reports/kaido-quasar-rat-144-172-109-203/
+        reports:
+          - /reports/kaido-quasar-rat-144-172-109-203/
+      - id: T1105
+        name: Ingress Tool Transfer
+        tactic: Command and Control
+        source: report
+        link: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+        reports:
+          - /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+      - id: T1106
+        name: Native API
+        tactic: Execution
+        source: report
+        link: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+        reports:
+          - /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+      - id: T1113
+        name: Screen Capture
+        tactic: Collection
+        source: report
+        link: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+        reports:
+          - /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+          - /reports/kaido-quasar-rat-144-172-109-203/
+      - id: T1123
+        name: Audio Capture
+        tactic: Collection
+        source: report
+        link: /reports/kaido-quasar-rat-144-172-109-203/
+        reports:
+          - /reports/kaido-quasar-rat-144-172-109-203/
+      - id: T1125
+        name: Video Capture
+        tactic: Collection
+        source: report
+        link: /reports/kaido-quasar-rat-144-172-109-203/
+        reports:
+          - /reports/kaido-quasar-rat-144-172-109-203/
+      - id: T1219
+        name: Remote Access Tools
+        tactic: Command and Control
+        source: report
+        link: /reports/kaido-quasar-rat-144-172-109-203/
+        reports:
+          - /reports/kaido-quasar-rat-144-172-109-203/
+      - id: T1480
+        name: Execution Guardrails
+        tactic: Stealth
+        source: report
+        link: /reports/kaido-quasar-rat-144-172-109-203/
+        reports:
+          - /reports/kaido-quasar-rat-144-172-109-203/
+      - id: T1489
+        name: Service Stop
+        tactic: Impact
+        source: report
+        link: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+        reports:
+          - /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+      - id: T1497
+        name: Virtualization/Sandbox Evasion
+        tactic: Stealth
+        source: report
+        link: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+        reports:
+          - /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+          - /reports/kaido-quasar-rat-144-172-109-203/
+      - id: T1528
+        name: Steal Application Access Token
+        tactic: Credential Access
+        source: report
+        link: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+        reports:
+          - /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+      - id: T1529
+        name: System Shutdown/Reboot
+        tactic: Impact
+        source: report
+        link: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+        reports:
+          - /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+      - id: T1539
+        name: Steal Web Session Cookie
+        tactic: Credential Access
+        source: report
+        link: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+        reports:
+          - /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+      - id: T1543.003
+        name: Windows Service
+        tactic: Persistence
+        source: report
+        link: /reports/kaido-quasar-rat-144-172-109-203/
+        reports:
+          - /reports/kaido-quasar-rat-144-172-109-203/
+      - id: T1547.001
+        name: Registry Run Keys / Startup Folder
+        tactic: Persistence
+        source: report
+        link: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+        reports:
+          - /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+          - /reports/kaido-quasar-rat-144-172-109-203/
+      - id: T1552.001
+        name: Credentials In Files
+        tactic: Credential Access
+        source: report
+        link: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+        reports:
+          - /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+      - id: T1553.005
+        name: Mark-of-the-Web Bypass
+        tactic: Stealth
+        source: report
+        link: /reports/kaido-quasar-rat-144-172-109-203/
+        reports:
+          - /reports/kaido-quasar-rat-144-172-109-203/
+      - id: T1555.003
+        name: Credentials from Web Browsers
+        tactic: Credential Access
+        source: report
+        link: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+        reports:
+          - /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+          - /reports/kaido-quasar-rat-144-172-109-203/
+      - id: T1564.001
+        name: Hidden Files and Directories
+        tactic: Stealth
+        source: report
+        link: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+        reports:
+          - /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+      - id: T1567.002
+        name: Exfiltration to Cloud Storage
+        tactic: Exfiltration
+        source: report
+        link: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+        reports:
+          - /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+      - id: T1571
+        name: Non-Standard Port
+        tactic: Command and Control
+        source: report
+        link: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+        reports:
+          - /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+      - id: T1573.001
+        name: Symmetric Cryptography
+        tactic: Command and Control
+        source: report
+        link: /reports/kaido-quasar-rat-144-172-109-203/
+        reports:
+          - /reports/kaido-quasar-rat-144-172-109-203/
+      - id: T1588.002
+        name: Tool
+        tactic: Resource Development
+        source: report
+        link: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+        reports:
+          - /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+      - id: T1614
+        name: System Location Discovery
+        tactic: Discovery
+        source: report
+        link: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+        reports:
+          - /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+      - id: T1620
+        name: Reflective Code Loading
+        tactic: Stealth
+        source: report
+        link: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+        reports:
+          - /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+      - id: T1685
+        name: Disable or Modify Tools
+        tactic: Defense Impairment
+        source: report
+        link: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+        reports:
+          - /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+      - id: T1686
+        name: Disable or Modify System Firewall
+        tactic: Defense Impairment
+        source: report
+        link: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+        reports:
+          - /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+    tactics:
+      - Resource Development
+      - Execution
+      - Persistence
+      - Stealth
+      - Defense Impairment
+      - Credential Access
+      - Discovery
+      - Collection
+      - Command and Control
+      - Exfiltration
+      - Impact

@@ -481,12 +481,14 @@ families:
         date: '2025-12-20'
         report_url: /reports/dual-rat-analysis/
         label: Quasar RAT
-    actors: []
-    tooling_labels: []
+    actors:
+      - n-3-xl
+    tooling_labels:
+      - Quasar RAT
     report_count: 2
     rule_count: 2
     feed_count: 1
-    actor_count: 0
+    actor_count: 1
   - name: KAIDO
     slug: kaido
     url: /families/kaido/
@@ -528,12 +530,14 @@ families:
         date: '2026-07-03'
         report_url: /reports/kaido-quasar-rat-144-172-109-203/
         label: KAIDO (rebranded 64-bit Quasar RAT fork, v2.4.5) + HVNC + full-spectrum surveillance
-    actors: []
-    tooling_labels: []
+    actors:
+      - n-3-xl
+    tooling_labels:
+      - KAIDO
     report_count: 2
     rule_count: 3
     feed_count: 2
-    actor_count: 0
+    actor_count: 1
   - name: NjRAT
     slug: njrat
     url: /families/njrat/
@@ -1037,12 +1041,14 @@ families:
         date: '2026-07-03'
         report_url: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
         label: KAIDO (Quasar RAT fork) + EvilSoul-Engine (Node/Electron stealer-builder)
-    actors: []
-    tooling_labels: []
+    actors:
+      - n-3-xl
+    tooling_labels:
+      - EvilSoul-Engine
     report_count: 1
     rule_count: 5
     feed_count: 1
-    actor_count: 0
+    actor_count: 1
   - name: HijackLoader
     slug: hijackloader
     url: /families/hijackloader/
@@ -1210,12 +1216,13 @@ families:
     actors:
       - UTA-2026-016
       - UTA-2026-017
+      - vova75rus
     tooling_labels:
       - GHOST cryptojacker kit
     report_count: 2
     rule_count: 11
     feed_count: 1
-    actor_count: 2
+    actor_count: 3
   - name: GOCLOUD
     slug: gocloud
     url: /families/gocloud/

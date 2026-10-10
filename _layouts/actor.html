@@ -15,10 +15,15 @@ layout: page
 {%- endcomment -%}
 {%- assign a = site.data.actors.actors | where: "id", page.actor_id | first -%}
 {%- assign ix = site.data.actors_index.actors | where: "id", page.actor_id | first -%}
+{%- comment -%} A `kind: named` entry is an actor a report attributes to a self-identifying
+  handle at HIGH or DEFINITE, so no UTA was assigned: the title is the handle, the UTA note
+  gives way to a named-actor note, and the attribution row shows the named figure. {%- endcomment -%}
 
+{%- assign named = false -%}{%- if a.kind == 'named' %}{% assign named = true %}{% endif -%}
+{%- assign shown = page.actor_id -%}{%- if named %}{% assign shown = a.name %}{% endif -%}
 <div class="hl-page-header" style="--ph-accent: #e879f9;">
-  <div class="hl-page-header__label">Threat Actor</div>
-  <div class="hl-page-header__title">{{ page.actor_id }}{% if a.alias %} <span class="hl-actor__alias">{{ a.alias }}</span>{% endif %}</div>
+  <div class="hl-page-header__label">{% if named %}Named Actor{% else %}Threat Actor{% endif %}</div>
+  <div class="hl-page-header__title">{{ shown }}{% if a.alias %} <span class="hl-actor__alias">{{ a.alias }}</span>{% endif %}</div>
   <div class="hl-page-header__desc">{% if a %}{{ a.type }}{% else %}This designation's data is missing from <code>_data/actors.yml</code>. Re-run <code>generate-actors.js</code>.{% endif %}</div>
 </div>
 
@@ -27,8 +32,13 @@ layout: page
 
   <dl class="hl-actor__facts">
     <div><dt>Status</dt><dd><span class="hl-actor__status hl-actor__status--{{ a.status }}">{{ a.status | capitalize }}</span></dd></div>
+    {%- if named -%}
+    <div><dt>Attribution to this handle</dt><dd><span class="hl-actor__conf hl-actor__conf--{{ a.confidence.named_actor | downcase }}">{{ a.confidence.named_actor }}</span>{% if a.confidence.named_actor_pct %} <span class="hl-actor__pct">{{ a.confidence.named_actor_pct }}%</span>{% endif %}</dd></div>
+    {%- if a.confidence.distinct_actor %}<div><dt>Distinct actor</dt><dd><span class="hl-actor__conf hl-actor__conf--{{ a.confidence.distinct_actor | downcase }}">{{ a.confidence.distinct_actor }}</span>{% if a.confidence.distinct_actor_pct %} <span class="hl-actor__pct">{{ a.confidence.distinct_actor_pct }}%</span>{% endif %}</dd></div>{% endif -%}
+    {%- else -%}
     <div><dt>Distinct actor</dt><dd>{% if a.confidence.distinct_actor %}<span class="hl-actor__conf hl-actor__conf--{{ a.confidence.distinct_actor | downcase }}">{{ a.confidence.distinct_actor }}</span>{% if a.confidence.distinct_actor_pct %} <span class="hl-actor__pct">{{ a.confidence.distinct_actor_pct }}%</span>{% endif %}{% else %}<span class="hl-actor__muted">Tracked as a cluster; no figure published</span>{% endif %}</dd></div>
     <div><dt>Named actor</dt><dd><span class="hl-actor__conf hl-actor__conf--{{ a.confidence.named_actor | downcase }}">{{ a.confidence.named_actor }}</span></dd></div>
+    {%- endif -%}
     <div><dt>First observed</dt><dd>{{ a.first_observed | date: "%-d %b %Y" }}</dd></div>
     <div><dt>Last updated</dt><dd>{{ a.last_updated | date: "%-d %b %Y" }}</dd></div>
     {%- if a.language %}<div><dt>Operator language</dt><dd>{{ a.language }}</dd></div>{% endif -%}
@@ -36,9 +46,15 @@ layout: page
     {%- if a.alias %}<div><dt>Also tracked as</dt><dd>{{ a.alias }}</dd></div>{% endif -%}
   </dl>
 
+  {%- if named -%}
+  <blockquote class="hl-actor__note">
+    <strong>Note on named actors:</strong> {{ a.name }} is a self-identifying handle, not a real-world identity. The linked report attributes the activity to this handle at {{ a.confidence.named_actor }} confidence on the evidence it sets out, and says what would raise or lower that figure. No UTA designation was assigned because the attribution clears the bar for naming; the person behind the handle is not established.
+  </blockquote>
+  {%- else -%}
   <blockquote class="hl-actor__note">
     <strong>Note on UTA identifiers:</strong> "UTA" stands for Unattributed Threat Actor. {{ page.actor_id }} is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
   </blockquote>
+  {%- endif -%}
 
   <h2 id="summary">Summary</h2>
   <p class="hl-actor__summary">{{ a.summary }}</p>
@@ -98,7 +114,11 @@ layout: page
 
   <h2 id="infrastructure">Infrastructure and tooling</h2>
   <dl class="hl-actor__facts hl-actor__facts--wide">
+    {%- if a.primary_host -%}
     <div><dt>Primary host</dt><dd><code>{{ a.primary_host }}</code> <span class="hl-actor__muted">(the operator-controlled host the assigning report is named for; the full indicator set, with its caveats, is in each report's IOC feed)</span></dd></div>
+    {%- elsif named -%}
+    <div><dt>Primary host</dt><dd><span class="hl-actor__muted">None: the reports anchor this actor on the accounts and artifacts above, not on a host. Hosts belong to the customer operators' pages where the report separates them.</span></dd></div>
+    {%- endif -%}
     {%- if a.tooling and a.tooling.size > 0 -%}
     <div><dt>Tooling</dt><dd><span class="hl-tags">{% for t in a.tooling %}<span class="hl-tag hl-tag--blue">{{ t }}</span>{% endfor %}</span></dd></div>
     {%- endif -%}
@@ -129,7 +149,7 @@ layout: page
   <ul class="hl-actor__related">
     {%- for r in a.related -%}
     {%- assign rr = site.data.actors.actors | where: "id", r.id | first -%}
-    <li>{% if rr %}<a href="{{ r.id | prepend: '/actors/' | append: '/' | relative_url }}">{{ r.id }}</a>{% else %}{{ r.id }}{% endif %}: {{ r.relation }}</li>
+    <li>{% if rr %}<a href="{{ r.id | prepend: '/actors/' | append: '/' | relative_url }}">{{ rr.name | default: r.id }}</a>{% else %}{{ r.id }}{% endif %}: {{ r.relation }}</li>
     {%- endfor -%}
   </ul>
   {%- endif -%}

@@ -51,8 +51,10 @@ function run(opts) {
   var index = A.build(parsed.actors, reports, catalog);
   if (index.problems.length) return { status: 'FAIL', problems: index.problems, files: [] };
 
+  // Designations only. A named actor's handle is an ordinary word in prose
+  // and is never rewritten into a link (lib/actors.js says why).
   var known = {};
-  index.entries.forEach(function (e) { known[e.id] = true; });
+  index.entries.forEach(function (e) { if (e.kind !== 'named') known[e.id] = true; });
 
   var files = [];
   pageFiles().forEach(function (f) {
