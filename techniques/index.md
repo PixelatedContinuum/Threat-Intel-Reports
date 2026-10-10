@@ -49,4 +49,4 @@ position: 2.8
 
 <p class="hl-xref__licence">MITRE ATT&amp;CK&reg; is a registered trademark of The MITRE Corporation. The heatmap is built from each report's own ATT&amp;CK mapping table and each detection page's coverage lines; it is this publication's reading of its own evidence, not a measure of how common a technique is in the wild.</p>
 
-<script defer src="{{ '/assets/js/heatmap-filter.js' | relative_url }}?v=1"></script>
+<script defer src="{{ '/assets/js/heatmap-filter.js' | relative_url }}?v=2"></script>
