@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--01f3c4de-e49a-4bee-aed3-b9346d3f250f",
+    "id": "bundle--6b1c615c-0f55-4e7c-87f0-7adc533d1c66",
     "objects": [
         {
             "type": "identity",
@@ -10923,7 +10923,7 @@
             "id": "report--9aa555ca-d9d6-51c3-8af0-af351596d438",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.787945Z",
-            "modified": "2026-10-01T19:54:13.787945Z",
+            "modified": "2026-10-10T13:40:55.72586Z",
             "name": "GHOST Cryptojacker Kit Family — Vova75Rus Kit-Author Supply Chain",
             "report_types": [
                 "threat-report"
@@ -11683,7 +11683,7 @@
                 "relationship--f928c99e-15bb-5773-a72d-84787845d9b7"
             ],
             "labels": [
-                "Cryptominer",
+                "Cryptojacking",
                 "Rootkit",
                 "Toolkit",
                 "Open Dir"

@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--19c94c88-5a81-4113-85ab-44a49ce6fad6",
+    "id": "bundle--48421ee1-1482-453a-94ec-426b4c8e40b2",
     "objects": [
         {
             "type": "identity",
@@ -341,7 +341,7 @@
             "id": "report--7963499f-e9ec-5e0b-848a-8473bdffa3d2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.355435Z",
-            "modified": "2026-10-09T13:20:05.685047Z",
+            "modified": "2026-10-10T13:40:56.565138Z",
             "name": "Gotenberg CVE-2026-42589 Mass Exploitation and Cryptomining",
             "report_types": [
                 "threat-report"
@@ -369,7 +369,7 @@
                 "vulnerability--a6c33c6c-c120-5cd2-a8af-226c473b54df"
             ],
             "labels": [
-                "Cryptomining",
+                "Cryptojacking",
                 "Mass Exploitation",
                 "CVE-2026-42589",
                 "XMRig"

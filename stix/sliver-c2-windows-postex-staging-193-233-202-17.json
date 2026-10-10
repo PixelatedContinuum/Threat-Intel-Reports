@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--7236e113-2ae8-4d17-b011-5a98b351d3b1",
+    "id": "bundle--d4d91df9-623c-4404-9a08-e12ce5bfeb95",
     "objects": [
         {
             "type": "identity",
@@ -69452,7 +69452,7 @@
             "id": "report--9f175132-e498-5e02-9c9c-b1ab5dff72db",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:21.026096Z",
-            "modified": "2026-10-01T19:54:21.026096Z",
+            "modified": "2026-10-10T13:41:00.589039Z",
             "name": "Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17",
             "description": "Derived from 81 files captured from an open directory, 77 static triage reports, one contained behavioural analysis and one statically decrypted installer chain. This infrastructure was previously published by Hunt.io on 2026-08-04 and the primary address was flagged by Huntress on 2026-05-21; the file hashes below are not first observations. Victim-side data is deliberately absent: no victim domain, hostname, account, credential or internal address appears anywhere in this feed. `metadata.victim_names` above is a vault-only annotation for the check_victim_naming.py gate and must never be copied into the site copy of this feed.",
             "report_types": [
@@ -74378,7 +74378,7 @@
             ],
             "labels": [
                 "Sliver",
-                "Post-Exploitation",
+                "Post-Ex",
                 "EtherHiding",
                 "Blockchain C2"
             ],

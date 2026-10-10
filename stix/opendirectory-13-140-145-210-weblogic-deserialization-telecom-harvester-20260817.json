@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--6e093c2c-583a-4a5b-80b4-5bce359ae295",
+    "id": "bundle--01653f89-bf62-4db9-9199-24bb47c928db",
     "objects": [
         {
             "type": "identity",
@@ -58045,7 +58045,7 @@
             "id": "report--2aa3b7a4-9d57-5059-94af-58ae5009f969",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:16.728288Z",
-            "modified": "2026-10-01T19:54:16.728288Z",
+            "modified": "2026-10-10T13:40:57.638049Z",
             "name": "Carrier Credential Harvesting Through a Customer's Router",
             "report_types": [
                 "threat-report"
@@ -62140,7 +62140,7 @@
                 "Telecom",
                 "Cisco IOS-XE",
                 "WebLogic",
-                "Credential Theft"
+                "Cred Theft"
             ],
             "external_references": [
                 {

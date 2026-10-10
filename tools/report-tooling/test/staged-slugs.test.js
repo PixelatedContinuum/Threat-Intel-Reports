@@ -30,6 +30,11 @@ test('the hunters-ledger-stix-bundles directory is never treated as a campaign',
   assert.deepEqual(Object.keys(slugs), []);
 });
 
+test('stix/manifest.json, the bundle index, is never treated as a campaign', function () {
+  var slugs = SS.campaignSlugs(['stix/manifest.json'], { exists: noArtifacts });
+  assert.deepEqual(Object.keys(slugs), []);
+});
+
 // The regression: an images directory that resolves to nothing is not a campaign.
 test('assets/images/<name>/ with no artifact anywhere is NOT treated as a campaign', function () {
   var slugs = SS.campaignSlugs(

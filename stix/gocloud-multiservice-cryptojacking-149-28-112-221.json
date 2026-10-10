@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--29185711-8715-4cf1-b919-58a23a46893b",
+    "id": "bundle--06a808d3-7a06-4c65-82a3-cddb83c650f5",
     "objects": [
         {
             "type": "identity",
@@ -3286,7 +3286,7 @@
             "id": "report--f600aa39-9356-5b94-8a65-4b8d27c6ba2e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.142347Z",
-            "modified": "2026-10-01T19:54:14.142347Z",
+            "modified": "2026-10-10T13:40:56.262416Z",
             "name": "GOCLOUD: A Commodity Cryptojacking Operation, Captured Whole",
             "description": "Two-node commodity cryptojacking operation bound by a shared FOFA API key and Monero wallet. THIRD-PARTY VICTIM INDICATORS ARE DELIBERATELY WITHHELD from this published feed (heartbeat-confirmed mining hosts, the Redis-verified host, and the hardcoded Jenkins re-attack targets are routed to a CERT-disclosure track, not the public feed). An operator account-identifier string paired with the FOFA key is also withheld: it traces to an unrelated third party's published tooling and is assessed as copied residue, not operator identity, so the finding is published without naming the person. The FOFA key VALUE is retained as an operator IOC. Excluded as non-operator: experimentaldumain.com and all historical domain resolutions on node 1 (prior-tenant recycled-IP artifacts; this is a pure raw-IP operation). The node-2 /xmrig ELF is the stock XMRig Linux binary; ignore any Mirai tag as a loose-signature false positive.",
             "report_types": [
@@ -3533,7 +3533,7 @@
             ],
             "labels": [
                 "Cryptojacking",
-                "OpenDirectory",
+                "Open Dir",
                 "China"
             ],
             "external_references": [

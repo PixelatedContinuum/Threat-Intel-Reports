@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--e6ce9fc0-19d3-42ec-ad11-eca9ac3a6f1d",
+    "id": "bundle--01d1de3f-0298-42ee-8713-bdae19d9d2bc",
     "objects": [
         {
             "type": "identity",
@@ -3095,7 +3095,7 @@
             "id": "report--9e9a2d1e-2840-51a5-af43-b5ef11a64213",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.739212Z",
-            "modified": "2026-10-01T19:54:12.739212Z",
+            "modified": "2026-10-10T13:40:55.359569Z",
             "name": "CloudSync: An Assembler's Intrusion Toolkit",
             "description": "Assembled 22-sample intrusion toolkit staged on a live open directory. Operator estate and the sourced commodity-stealer service are kept in SEPARATE tiers so they are never read as one infrastructure. Credentials are defanged to first-8+last-4 (disclosure hazard); the Telegram chat id 8116056430 is retained whole as the attribution artifact. Network IOCs are NOT defanged. The 22-file set is a snapshot of what was staged, not the operator's complete toolkit (one panel port, 91.92.43.221:5003, is live with no matching build in hand).",
             "report_types": [
@@ -3307,7 +3307,7 @@
                 "relationship--c0bb2292-a594-5e7a-8c9f-665f5b4b0dc0"
             ],
             "labels": [
-                "Intrusion Toolkit",
+                "Toolkit",
                 "RAT",
                 "Access Broker"
             ],

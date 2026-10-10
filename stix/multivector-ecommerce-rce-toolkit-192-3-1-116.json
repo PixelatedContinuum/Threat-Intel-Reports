@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--700f29e1-b8cb-4187-980e-4e5e5753cf3c",
+    "id": "bundle--9a5cf513-a06a-4363-abbc-2dff343da842",
     "objects": [
         {
             "type": "identity",
@@ -1373,7 +1373,7 @@
             "id": "report--d2cbc7b4-0c74-5743-bbb9-91e98e6c514c",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.012674Z",
-            "modified": "2026-10-09T13:20:06.172203Z",
+            "modified": "2026-10-10T13:40:56.811103Z",
             "name": "Enough to Be Dangerous: The Mechanics of an LLM-Assisted Intrusion Campaign",
             "description": "Exposed operator open directory holding a multi-vector offensive toolkit. There is no malware sample, no implant and no malware family, so this feed carries no file_hashes. Four categories are deliberately excluded: believed-real victim credentials, the operator's live reconnaissance-API subscription key, all raw JWTs, and all victim personal data. Post-discovery crawler and scanner addresses are listed under non_indicators.",
             "report_types": [
@@ -1458,8 +1458,8 @@
             ],
             "labels": [
                 "AI Abuse",
-                "OpenDirectory",
-                "DataTheft",
+                "Open Dir",
+                "Data Theft",
                 "E-Commerce",
                 "China"
             ],

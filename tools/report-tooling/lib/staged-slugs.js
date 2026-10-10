@@ -84,7 +84,8 @@ function campaignSlugs(paths, opts) {
       var im = /^assets\/images\/([^/]+)\//.exec(p);
       if (im && resolvesToCampaign(im[1], exists, catalogText)) slug = im[1];
     }
-    if (slug && slug !== 'hunters-ledger-stix-bundles') {
+    // Neither the bundles zip nor stix/manifest.json (the bundle index, T-0200) is a campaign.
+    if (slug && !(p.indexOf('stix/') === 0 && (slug === 'hunters-ledger-stix-bundles' || slug === 'manifest'))) {
       (slugPaths[slug] = slugPaths[slug] || []).push(p);
     }
   });

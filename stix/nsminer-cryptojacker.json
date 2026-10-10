@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--3cd61a58-4dff-4888-a56f-c3af4f2f82c8",
+    "id": "bundle--eb7a7b8b-1d75-4077-8823-d78ded0d0027",
     "objects": [
         {
             "type": "identity",
@@ -352,7 +352,7 @@
             "id": "report--f5cf2d3d-4ab7-5767-8849-d0cbf388e3c2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-09-19T20:27:57.517409Z",
-            "modified": "2026-09-19T20:27:57.517409Z",
+            "modified": "2026-10-10T13:40:57.046519Z",
             "name": "NsMiner: Multi-Stage Operation",
             "report_types": [
                 "threat-report"
@@ -386,7 +386,7 @@
                 "infrastructure--d9b882ee-1e8d-56f0-9646-12417ee055a0"
             ],
             "labels": [
-                "Cryptominer",
+                "Cryptojacking",
                 "Dropper",
                 "Persistence",
                 "Evasion"
