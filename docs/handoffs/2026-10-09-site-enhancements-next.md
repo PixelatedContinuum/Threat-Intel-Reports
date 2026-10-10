@@ -270,10 +270,10 @@ the element; that is the capture, not the page.
   HIGH 85, two primary reports). The EvilSoul developer `@breakingupslow` has no entry: no report
   is about that person. 25 actor pages and layers now.
 
-Still open: a `/changes/` page and feed built on the revision lists; a link from each report to its
-MISP event (needs a generated `_data/misp_events.yml`); the five older reports' revision lists
-(Joseph's memory); the IOC column findings above; the tier-order advisories; and one live-site
-browser sweep from Joseph's host.
+Open work is no longer listed here. Every item from this list is a task in the ai-workflows
+tracker under the `hunters-ledger-site` project (`task.py list --project hunters-ledger-site`),
+filed 2026-10-10 under T-0208 so this document is not a second tracker. This file keeps how the
+site builds and ships, and the record of what shipped.
 
 ## The backlog, ranked
 
