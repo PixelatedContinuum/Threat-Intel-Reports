@@ -28,12 +28,17 @@ position: 5
     <span class="hl-feed-url__val">https://the-hunters-ledger.com/feed.xml</span>
     <button class="hl-feed-url__copy" type="button" data-copy="https://the-hunters-ledger.com/feed.xml">COPY</button>
   </div>
+  <div class="hl-feed-url" style="--acc: #4ade80;">
+    <span class="hl-feed-url__label">Detections</span>
+    <span class="hl-feed-url__val">https://the-hunters-ledger.com/hunting-detections/feed.xml</span>
+    <button class="hl-feed-url__copy" type="button" data-copy="https://the-hunters-ledger.com/hunting-detections/feed.xml">COPY</button>
+  </div>
   <div class="hl-feed-url" style="--acc: #58a6ff;">
     <span class="hl-feed-url__label">The Wire</span>
     <span class="hl-feed-url__val">https://the-hunters-ledger.com/wire/feed.xml</span>
     <button class="hl-feed-url__copy" type="button" data-copy="https://the-hunters-ledger.com/wire/feed.xml">COPY</button>
   </div>
-  <p class="hl-panel__desc" style="margin-top:10px;">The second feed is <a href="/wire/">The Wire</a> on its own: the hourly headlines from other publishers, links only, kept apart from the reports so a reader can take either without the other.</p>
+  <p class="hl-panel__desc" style="margin-top:10px;">Three feeds, so a reader can take any without the others: the reports, the <a href="/hunting-detections/">detection library</a> on its own (a new page of Sigma, YARA and Suricata rules per campaign), and <a href="/wire/">The Wire</a> on its own (the hourly headlines from other publishers, links only). The reports and detections feeds are also <a href="https://www.jsonfeed.org/">JSON Feed</a>: <a href="/feed.json">/feed.json</a> and <a href="/hunting-detections/feed.json">/hunting-detections/feed.json</a>.</p>
 </div>
 
 <div class="hl-panel" style="--acc: #58a6ff;">

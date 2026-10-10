@@ -1,0 +1,46 @@
+---
+layout: none
+permalink: /hunting-detections/feed.json
+sitemap: false
+---
+{%- comment -%}
+  JSON Feed 1.1 (jsonfeed.org): the same entries as the Atom feed beside it,
+  for readers and scripts that take JSON. Same publication rule: site.pages
+  under /hunting-detections/, never an unlisted page. Every string goes through
+  jsonify, so a title with a quote or a backslash stays valid JSON.
+{%- endcomment -%}
+{%- assign feed_sponsors = site.data.sponsors.sponsors | where: "tier", "monthly" | where: "active", true -%}
+{%- assign items = site.pages
+   | where_exp: "page", "page.url contains '/hunting-detections/'"
+   | where_exp: "page", "page.layout == 'post'"
+   | where_exp: "page", "page.title != nil"
+   | where_exp: "page", "page.date != nil"
+   | where_exp: "page", "page.unlisted != true"
+   | sort: "date" | reverse -%}
+{
+  "version": "https://jsonfeed.org/version/1.1",
+  "title": {{ "The Hunter's Ledger: Detection Rules" | jsonify }},
+  "home_page_url": "{{ site.url }}/hunting-detections/",
+  "feed_url": "{{ site.url }}/hunting-detections/feed.json",
+  "description": {{ "Sigma, YARA and Suricata detection rules from original research, one page per campaign, licensed CC BY 4.0." | jsonify }},
+  "icon": "{{ '/assets/images/apple-touch-icon.png' | absolute_url }}",
+  "favicon": "{{ '/assets/images/favicon.svg' | absolute_url }}",
+  "language": "en",
+  "authors": [{ "name": "The Hunter's Ledger", "url": "{{ site.url }}" }],
+  "items": [
+    {%- for p in items limit: 20 %}
+    {
+      "id": "{{ site.url }}{{ p.url }}",
+      "url": "{{ site.url }}{{ p.url }}",
+      "title": {{ p.title | jsonify }},
+      "summary": {% if p.description %}{{ p.description | jsonify }}{% else %}{{ p.content | strip_html | truncate: 500 | jsonify }}{% endif %},
+      "content_text": {% if p.description %}{{ p.description | jsonify }}{% else %}{{ p.content | strip_html | truncate: 500 | jsonify }}{% endif %},
+      "date_published": {{ p.date | date_to_xmlschema | jsonify }},
+      "date_modified": {{ p.last_updated | default: p.date | date_to_xmlschema | jsonify }}{% if p.thumbnail %},
+      "image": "{{ p.thumbnail | absolute_url }}"{% endif %}{% if p.category %},
+      "tags": [{{ p.category | jsonify }}]{% endif %},
+      "authors": [{ "name": "Joseph Harrison", "url": "{{ '/about-me/' | absolute_url }}" }]
+    }{% unless forloop.last %},{% endunless %}
+    {%- endfor %}
+  ]
+}
