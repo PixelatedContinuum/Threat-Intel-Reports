@@ -1,0 +1,244 @@
+{
+  "name": "The Hunter’s Ledger: UTA-2026-018",
+  "domain": "enterprise-attack",
+  "description": "ATT&CK techniques mapped by the published reports about UTA-2026-018 on the-hunters-ledger.com (1 report(s), 32 technique(s)). Score is the number of reports about the actor mapping the technique. Profile: https://the-hunters-ledger.com/actors/UTA-2026-018/",
+  "versions": {
+    "attack": "19",
+    "navigator": "4.9.0",
+    "layer": "4.5"
+  },
+  "techniques": [
+    {
+      "techniqueID": "T1027",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Obfuscated Files or Information. 1 report(s) about UTA-2026-018, mapped in https://the-hunters-ledger.com/reports/seasia-gov-exploitation-toolkit-144-172-106-236/. https://the-hunters-ledger.com/actors/UTA-2026-018/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1036.004",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Masquerade Task or Service. 1 report(s) about UTA-2026-018, mapped in https://the-hunters-ledger.com/reports/seasia-gov-exploitation-toolkit-144-172-106-236/. https://the-hunters-ledger.com/actors/UTA-2026-018/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1036.005",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Match Legitimate Resource Name or Location. 1 report(s) about UTA-2026-018, mapped in https://the-hunters-ledger.com/reports/seasia-gov-exploitation-toolkit-144-172-106-236/. https://the-hunters-ledger.com/actors/UTA-2026-018/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1041",
+      "tactic": "exfiltration",
+      "score": 1,
+      "comment": "Exfiltration Over C2 Channel. 1 report(s) about UTA-2026-018, mapped in https://the-hunters-ledger.com/reports/seasia-gov-exploitation-toolkit-144-172-106-236/. https://the-hunters-ledger.com/actors/UTA-2026-018/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1046",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Network Service Discovery. 1 report(s) about UTA-2026-018, mapped in https://the-hunters-ledger.com/reports/seasia-gov-exploitation-toolkit-144-172-106-236/. https://the-hunters-ledger.com/actors/UTA-2026-018/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1053.003",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Cron. 1 report(s) about UTA-2026-018, mapped in https://the-hunters-ledger.com/reports/seasia-gov-exploitation-toolkit-144-172-106-236/. https://the-hunters-ledger.com/actors/UTA-2026-018/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.004",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Unix Shell. 1 report(s) about UTA-2026-018, mapped in https://the-hunters-ledger.com/reports/seasia-gov-exploitation-toolkit-144-172-106-236/. https://the-hunters-ledger.com/actors/UTA-2026-018/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.006",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Python. 1 report(s) about UTA-2026-018, mapped in https://the-hunters-ledger.com/reports/seasia-gov-exploitation-toolkit-144-172-106-236/. https://the-hunters-ledger.com/actors/UTA-2026-018/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1070.004",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "File Deletion. 1 report(s) about UTA-2026-018, mapped in https://the-hunters-ledger.com/reports/seasia-gov-exploitation-toolkit-144-172-106-236/. https://the-hunters-ledger.com/actors/UTA-2026-018/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1078",
+      "tactic": "initial-access",
+      "score": 1,
+      "comment": "Valid Accounts. 1 report(s) about UTA-2026-018, mapped in https://the-hunters-ledger.com/reports/seasia-gov-exploitation-toolkit-144-172-106-236/. https://the-hunters-ledger.com/actors/UTA-2026-018/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1090",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Proxy. 1 report(s) about UTA-2026-018, mapped in https://the-hunters-ledger.com/reports/seasia-gov-exploitation-toolkit-144-172-106-236/. https://the-hunters-ledger.com/actors/UTA-2026-018/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1090.003",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Multi-hop Proxy. 1 report(s) about UTA-2026-018, mapped in https://the-hunters-ledger.com/reports/seasia-gov-exploitation-toolkit-144-172-106-236/. https://the-hunters-ledger.com/actors/UTA-2026-018/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1098.004",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "SSH Authorized Keys. 1 report(s) about UTA-2026-018, mapped in https://the-hunters-ledger.com/reports/seasia-gov-exploitation-toolkit-144-172-106-236/. https://the-hunters-ledger.com/actors/UTA-2026-018/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1102",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Web Service. 1 report(s) about UTA-2026-018, mapped in https://the-hunters-ledger.com/reports/seasia-gov-exploitation-toolkit-144-172-106-236/. https://the-hunters-ledger.com/actors/UTA-2026-018/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1105",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Ingress Tool Transfer. 1 report(s) about UTA-2026-018, mapped in https://the-hunters-ledger.com/reports/seasia-gov-exploitation-toolkit-144-172-106-236/. https://the-hunters-ledger.com/actors/UTA-2026-018/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1110.001",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Password Guessing. 1 report(s) about UTA-2026-018, mapped in https://the-hunters-ledger.com/reports/seasia-gov-exploitation-toolkit-144-172-106-236/. https://the-hunters-ledger.com/actors/UTA-2026-018/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1110.003",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Password Spraying. 1 report(s) about UTA-2026-018, mapped in https://the-hunters-ledger.com/reports/seasia-gov-exploitation-toolkit-144-172-106-236/. https://the-hunters-ledger.com/actors/UTA-2026-018/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1119",
+      "tactic": "collection",
+      "score": 1,
+      "comment": "Automated Collection. 1 report(s) about UTA-2026-018, mapped in https://the-hunters-ledger.com/reports/seasia-gov-exploitation-toolkit-144-172-106-236/. https://the-hunters-ledger.com/actors/UTA-2026-018/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1133",
+      "tactic": "initial-access",
+      "score": 1,
+      "comment": "External Remote Services. 1 report(s) about UTA-2026-018, mapped in https://the-hunters-ledger.com/reports/seasia-gov-exploitation-toolkit-144-172-106-236/. https://the-hunters-ledger.com/actors/UTA-2026-018/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1140",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Deobfuscate/Decode Files or Information. 1 report(s) about UTA-2026-018, mapped in https://the-hunters-ledger.com/reports/seasia-gov-exploitation-toolkit-144-172-106-236/. https://the-hunters-ledger.com/actors/UTA-2026-018/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1190",
+      "tactic": "initial-access",
+      "score": 1,
+      "comment": "Exploit Public-Facing Application. 1 report(s) about UTA-2026-018, mapped in https://the-hunters-ledger.com/reports/seasia-gov-exploitation-toolkit-144-172-106-236/. https://the-hunters-ledger.com/actors/UTA-2026-018/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1213",
+      "tactic": "collection",
+      "score": 1,
+      "comment": "Data from Information Repositories. 1 report(s) about UTA-2026-018, mapped in https://the-hunters-ledger.com/reports/seasia-gov-exploitation-toolkit-144-172-106-236/. https://the-hunters-ledger.com/actors/UTA-2026-018/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1505.003",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Web Shell. 1 report(s) about UTA-2026-018, mapped in https://the-hunters-ledger.com/reports/seasia-gov-exploitation-toolkit-144-172-106-236/. https://the-hunters-ledger.com/actors/UTA-2026-018/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1539",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Steal Web Session Cookie. 1 report(s) about UTA-2026-018, mapped in https://the-hunters-ledger.com/reports/seasia-gov-exploitation-toolkit-144-172-106-236/. https://the-hunters-ledger.com/actors/UTA-2026-018/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1552.005",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Cloud Instance Metadata API. 1 report(s) about UTA-2026-018, mapped in https://the-hunters-ledger.com/reports/seasia-gov-exploitation-toolkit-144-172-106-236/. https://the-hunters-ledger.com/actors/UTA-2026-018/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1566.001",
+      "tactic": "initial-access",
+      "score": 1,
+      "comment": "Spearphishing Attachment. 1 report(s) about UTA-2026-018, mapped in https://the-hunters-ledger.com/reports/seasia-gov-exploitation-toolkit-144-172-106-236/. https://the-hunters-ledger.com/actors/UTA-2026-018/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1571",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Non-Standard Port. 1 report(s) about UTA-2026-018, mapped in https://the-hunters-ledger.com/reports/seasia-gov-exploitation-toolkit-144-172-106-236/. https://the-hunters-ledger.com/actors/UTA-2026-018/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1572",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Protocol Tunneling. 1 report(s) about UTA-2026-018, mapped in https://the-hunters-ledger.com/reports/seasia-gov-exploitation-toolkit-144-172-106-236/. https://the-hunters-ledger.com/actors/UTA-2026-018/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1583.003",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Virtual Private Server. 1 report(s) about UTA-2026-018, mapped in https://the-hunters-ledger.com/reports/seasia-gov-exploitation-toolkit-144-172-106-236/. https://the-hunters-ledger.com/actors/UTA-2026-018/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1587.004",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Exploits. 1 report(s) about UTA-2026-018, mapped in https://the-hunters-ledger.com/reports/seasia-gov-exploitation-toolkit-144-172-106-236/. https://the-hunters-ledger.com/actors/UTA-2026-018/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1588.002",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Tool. 1 report(s) about UTA-2026-018, mapped in https://the-hunters-ledger.com/reports/seasia-gov-exploitation-toolkit-144-172-106-236/. https://the-hunters-ledger.com/actors/UTA-2026-018/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1595.002",
+      "tactic": "reconnaissance",
+      "score": 1,
+      "comment": "Vulnerability Scanning. 1 report(s) about UTA-2026-018, mapped in https://the-hunters-ledger.com/reports/seasia-gov-exploitation-toolkit-144-172-106-236/. https://the-hunters-ledger.com/actors/UTA-2026-018/",
+      "enabled": true
+    }
+  ],
+  "gradient": {
+    "colors": [
+      "#fbe7fd",
+      "#e879f9"
+    ],
+    "minValue": 0,
+    "maxValue": 1
+  }
+}

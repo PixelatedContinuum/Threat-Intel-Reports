@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 'use strict';
 
-/* Gates the threat actor index: _data/actors_index.yml and the stub pages
+/* Gates the threat actor index: _data/actors_index.yml, the stub pages and
+   the per-actor Navigator layers (actors/<id>/attack-navigator-layer.json)
    against _data/actors.yml, the catalog and the reports, by regenerate-and-diff
    (the approach check-ioc-tables.js and check-detection-manifest.js use), and
    the reports against the index: a bare designation that has a page but is not
@@ -56,6 +57,10 @@ if (gen.status !== 'FAIL') {
   (gen.stubs || []).forEach(function (s) {
     problems.push('actor page for ' + s + ' is missing or stale: a link to it would 404 or ' +
       'render the wrong page. Run `node generate-actors.js`.');
+  });
+  (gen.layers || []).forEach(function (s) {
+    problems.push('Navigator layer for ' + s + ' is missing or stale: the download on its profile ' +
+      'would 404 or carry the wrong techniques. Run `node generate-actors.js`.');
   });
   (gen.removed || []).forEach(function (s) {
     problems.push('DISCLOSURE: a page for ' + s + ' is still on disk but the designation is no ' +

@@ -1,0 +1,426 @@
+{
+  "name": "The Hunter’s Ledger: UTA-2026-023",
+  "domain": "enterprise-attack",
+  "description": "ATT&CK techniques mapped by the published reports about UTA-2026-023 on the-hunters-ledger.com (1 report(s), 58 technique(s)). Score is the number of reports about the actor mapping the technique. Profile: https://the-hunters-ledger.com/actors/UTA-2026-023/",
+  "versions": {
+    "attack": "19",
+    "navigator": "4.9.0",
+    "layer": "4.5"
+  },
+  "techniques": [
+    {
+      "techniqueID": "T1003",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "OS Credential Dumping. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1003.002",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Security Account Manager. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1005",
+      "tactic": "collection",
+      "score": 1,
+      "comment": "Data from Local System. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1014",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Rootkit. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1016",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "System Network Configuration Discovery. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1018",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Remote System Discovery. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1021.002",
+      "tactic": "lateral-movement",
+      "score": 1,
+      "comment": "SMB/Windows Admin Shares. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1021.004",
+      "tactic": "lateral-movement",
+      "score": 1,
+      "comment": "SSH. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1021.006",
+      "tactic": "lateral-movement",
+      "score": 1,
+      "comment": "Windows Remote Management. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1027",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Obfuscated Files or Information. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1036.005",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Match Legitimate Resource Name or Location. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1041",
+      "tactic": "exfiltration",
+      "score": 1,
+      "comment": "Exfiltration Over C2 Channel. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1046",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Network Service Discovery. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1048.003",
+      "tactic": "exfiltration",
+      "score": 1,
+      "comment": "Exfiltration Over Unencrypted Non-C2 Protocol. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1049",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "System Network Connections Discovery. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.001",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "PowerShell. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.003",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Windows Command Shell. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.004",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Unix Shell. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1068",
+      "tactic": "privilege-escalation",
+      "score": 1,
+      "comment": "Exploitation for Privilege Escalation. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1070.004",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "File Deletion. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1070.006",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Timestomp. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1071.001",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Web Protocols. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1074.001",
+      "tactic": "collection",
+      "score": 1,
+      "comment": "Local Data Staging. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1078",
+      "tactic": "initial-access",
+      "score": 1,
+      "comment": "Valid Accounts. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1082",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "System Information Discovery. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1087",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Account Discovery. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1090.001",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Internal Proxy. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1090.002",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "External Proxy. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1098",
+      "tactic": "privilege-escalation",
+      "score": 1,
+      "comment": "Account Manipulation. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1105",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Ingress Tool Transfer. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1110.003",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Password Spraying. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1132.001",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Standard Encoding. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1190",
+      "tactic": "initial-access",
+      "score": 1,
+      "comment": "Exploit Public-Facing Application. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1199",
+      "tactic": "initial-access",
+      "score": 1,
+      "comment": "Trusted Relationship. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1210",
+      "tactic": "lateral-movement",
+      "score": 1,
+      "comment": "Exploitation of Remote Services. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1212",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Exploitation for Credential Access. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1505.003",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Web Shell. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1543",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Create or Modify System Process. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1548.001",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Setuid and Setgid. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1552.001",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Credentials In Files. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1552.004",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Private Keys. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1554",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Compromise Host Software Binary. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1555",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Credentials from Password Stores. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1571",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Non-Standard Port. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1572",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Protocol Tunneling. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1583.001",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Domains. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1583.003",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Virtual Private Server. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1587.001",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Malware. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1587.003",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Digital Certificates. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1588.002",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Tool. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1588.005",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Exploits. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1589",
+      "tactic": "reconnaissance",
+      "score": 1,
+      "comment": "Gather Victim Identity Information. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1589.001",
+      "tactic": "reconnaissance",
+      "score": 1,
+      "comment": "Credentials. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1590.005",
+      "tactic": "reconnaissance",
+      "score": 1,
+      "comment": "IP Addresses. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1592.004",
+      "tactic": "reconnaissance",
+      "score": 1,
+      "comment": "Client Configurations. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1595.002",
+      "tactic": "reconnaissance",
+      "score": 1,
+      "comment": "Vulnerability Scanning. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1596.005",
+      "tactic": "reconnaissance",
+      "score": 1,
+      "comment": "Scan Databases. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1608.001",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Upload Malware. 1 report(s) about UTA-2026-023, mapped in https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/. https://the-hunters-ledger.com/actors/UTA-2026-023/",
+      "enabled": true
+    }
+  ],
+  "gradient": {
+    "colors": [
+      "#fbe7fd",
+      "#e879f9"
+    ],
+    "minValue": 0,
+    "maxValue": 1
+  }
+}

@@ -1,0 +1,244 @@
+{
+  "name": "The Hunter’s Ledger: UTA-2026-011",
+  "domain": "enterprise-attack",
+  "description": "ATT&CK techniques mapped by the published reports about UTA-2026-011 on the-hunters-ledger.com (1 report(s), 32 technique(s)). Score is the number of reports about the actor mapping the technique. Profile: https://the-hunters-ledger.com/actors/UTA-2026-011/",
+  "versions": {
+    "attack": "19",
+    "navigator": "4.9.0",
+    "layer": "4.5"
+  },
+  "techniques": [
+    {
+      "techniqueID": "T1018",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Remote System Discovery. 1 report(s) about UTA-2026-011, mapped in https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/. https://the-hunters-ledger.com/actors/UTA-2026-011/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1027",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Obfuscated Files or Information. 1 report(s) about UTA-2026-011, mapped in https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/. https://the-hunters-ledger.com/actors/UTA-2026-011/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1041",
+      "tactic": "exfiltration",
+      "score": 1,
+      "comment": "Exfiltration Over C2 Channel. 1 report(s) about UTA-2026-011, mapped in https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/. https://the-hunters-ledger.com/actors/UTA-2026-011/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1056.003",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Web Portal Capture. 1 report(s) about UTA-2026-011, mapped in https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/. https://the-hunters-ledger.com/actors/UTA-2026-011/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.004",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Unix Shell. 1 report(s) about UTA-2026-011, mapped in https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/. https://the-hunters-ledger.com/actors/UTA-2026-011/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.006",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Python. 1 report(s) about UTA-2026-011, mapped in https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/. https://the-hunters-ledger.com/actors/UTA-2026-011/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1071.001",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Web Protocols. 1 report(s) about UTA-2026-011, mapped in https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/. https://the-hunters-ledger.com/actors/UTA-2026-011/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1078",
+      "tactic": "initial-access",
+      "score": 1,
+      "comment": "Valid Accounts. 1 report(s) about UTA-2026-011, mapped in https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/. https://the-hunters-ledger.com/actors/UTA-2026-011/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1082",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "System Information Discovery. 1 report(s) about UTA-2026-011, mapped in https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/. https://the-hunters-ledger.com/actors/UTA-2026-011/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1083",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "File and Directory Discovery. 1 report(s) about UTA-2026-011, mapped in https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/. https://the-hunters-ledger.com/actors/UTA-2026-011/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1090.001",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Internal Proxy. 1 report(s) about UTA-2026-011, mapped in https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/. https://the-hunters-ledger.com/actors/UTA-2026-011/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1090.002",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "External Proxy. 1 report(s) about UTA-2026-011, mapped in https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/. https://the-hunters-ledger.com/actors/UTA-2026-011/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1098.005",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Device Registration. 1 report(s) about UTA-2026-011, mapped in https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/. https://the-hunters-ledger.com/actors/UTA-2026-011/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1110",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Brute Force. 1 report(s) about UTA-2026-011, mapped in https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/. https://the-hunters-ledger.com/actors/UTA-2026-011/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1110.003",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Password Spraying. 1 report(s) about UTA-2026-011, mapped in https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/. https://the-hunters-ledger.com/actors/UTA-2026-011/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1136.001",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Local Account. 1 report(s) about UTA-2026-011, mapped in https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/. https://the-hunters-ledger.com/actors/UTA-2026-011/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1190",
+      "tactic": "initial-access",
+      "score": 1,
+      "comment": "Exploit Public-Facing Application. 1 report(s) about UTA-2026-011, mapped in https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/. https://the-hunters-ledger.com/actors/UTA-2026-011/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1212",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Exploitation for Credential Access. 1 report(s) about UTA-2026-011, mapped in https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/. https://the-hunters-ledger.com/actors/UTA-2026-011/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1213",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Data from Information Repositories. 1 report(s) about UTA-2026-011, mapped in https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/. https://the-hunters-ledger.com/actors/UTA-2026-011/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1219",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Remote Access Tools. 1 report(s) about UTA-2026-011, mapped in https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/. https://the-hunters-ledger.com/actors/UTA-2026-011/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1480",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Execution Guardrails. 1 report(s) about UTA-2026-011, mapped in https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/. https://the-hunters-ledger.com/actors/UTA-2026-011/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1505.003",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Web Shell. 1 report(s) about UTA-2026-011, mapped in https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/. https://the-hunters-ledger.com/actors/UTA-2026-011/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1568.002",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Domain Generation Algorithms. 1 report(s) about UTA-2026-011, mapped in https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/. https://the-hunters-ledger.com/actors/UTA-2026-011/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1583.001",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Domains. 1 report(s) about UTA-2026-011, mapped in https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/. https://the-hunters-ledger.com/actors/UTA-2026-011/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1583.004",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Server. 1 report(s) about UTA-2026-011, mapped in https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/. https://the-hunters-ledger.com/actors/UTA-2026-011/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1583.006",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Web Services. 1 report(s) about UTA-2026-011, mapped in https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/. https://the-hunters-ledger.com/actors/UTA-2026-011/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1583.008",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Malvertising. 1 report(s) about UTA-2026-011, mapped in https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/. https://the-hunters-ledger.com/actors/UTA-2026-011/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1587.001",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Malware. 1 report(s) about UTA-2026-011, mapped in https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/. https://the-hunters-ledger.com/actors/UTA-2026-011/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1588.005",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Exploits. 1 report(s) about UTA-2026-011, mapped in https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/. https://the-hunters-ledger.com/actors/UTA-2026-011/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1595.001",
+      "tactic": "reconnaissance",
+      "score": 1,
+      "comment": "Scanning IP Blocks. 1 report(s) about UTA-2026-011, mapped in https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/. https://the-hunters-ledger.com/actors/UTA-2026-011/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1595.002",
+      "tactic": "reconnaissance",
+      "score": 1,
+      "comment": "Vulnerability Scanning. 1 report(s) about UTA-2026-011, mapped in https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/. https://the-hunters-ledger.com/actors/UTA-2026-011/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1657",
+      "tactic": "impact",
+      "score": 1,
+      "comment": "Financial Theft. 1 report(s) about UTA-2026-011, mapped in https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/. https://the-hunters-ledger.com/actors/UTA-2026-011/",
+      "enabled": true
+    }
+  ],
+  "gradient": {
+    "colors": [
+      "#fbe7fd",
+      "#e879f9"
+    ],
+    "minValue": 0,
+    "maxValue": 1
+  }
+}

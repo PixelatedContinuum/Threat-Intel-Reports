@@ -155,6 +155,44 @@ test('toYaml is deterministic and carries the generated marker; stub carries the
   assert.match(s, /actor_id: "UTA-2026-001"/);
 });
 
+test('navigatorLayer carries one entry per technique, scored by report count, with the profile url and the layer path', () => {
+  const actors = A.parseActors(GOOD).actors;
+  const cat = A.parseCatalog(CATALOG);
+  const reports = [report('one', 'UTA-2026-001 SELFBRAND'), report('two', 'UTA-2026-002')];
+  const ix = A.build(actors, reports, cat, {
+    attack: body => body.indexOf('UTA-2026-001') > -1
+      ? [{ id: 'T1059.001', tactic: 'Execution', name: 'PowerShell' }, { id: 'T1027', tactic: 'Defense Evasion', name: 'Obfuscated Files' }]
+      : [],
+    catalogNames: { 'T1059.001': 'Command and Scripting Interpreter: PowerShell' }
+  });
+  const layer = A.navigatorLayer(ix.entries[0], { site: 'https://example.test', attackVersion: '19.1' });
+  assert.equal(layer.domain, 'enterprise-attack');
+  assert.equal(layer.versions.attack, '19');
+  assert.match(layer.name, /UTA-2026-001$/);
+  assert.match(layer.description, /https:\/\/example\.test\/actors\/UTA-2026-001\//);
+  assert.equal(layer.techniques.length, 2);
+  const ps = layer.techniques[0];
+  assert.equal(ps.techniqueID, 'T1027', 'the index sorts by id, so the layer does');
+  assert.equal(ps.tactic, 'defense-evasion', 'the default slug is the tactic name lowercased and hyphenated');
+  assert.equal(ps.score, 1, 'one primary report maps it');
+  assert.match(ps.comment, /Obfuscated Files\. 1 report\(s\) about UTA-2026-001, mapped in https:\/\/example\.test\/reports\/one\//);
+  assert.match(ps.comment, /https:\/\/example\.test\/actors\/UTA-2026-001\/$/);
+  assert.equal(layer.gradient.maxValue, 1);
+  // A supplied slug function wins, as the site-wide layer's does.
+  const slugged = A.navigatorLayer(ix.entries[0], { tacticSlug: t => t === 'Defense Evasion' ? 'stealth' : 'x' });
+  assert.equal(slugged.techniques[0].tactic, 'stealth');
+  assert.match(slugged.description, /the-hunters-ledger\.com/);
+  // An actor whose primary reports map nothing still gets a well-formed, empty layer.
+  const empty = A.navigatorLayer(ix.entries[1]);
+  assert.deepEqual(empty.techniques, []);
+  assert.equal(empty.gradient.maxValue, 1);
+  // Serialised deterministically, with the trailing newline the generator writes.
+  assert.equal(A.layerJson(ix.entries[0]), A.layerJson(ix.entries[0]));
+  assert.match(A.layerJson(ix.entries[0]), /\n$/);
+  assert.equal(A.layerUrl('UTA-2026-001'), '/actors/UTA-2026-001/attack-navigator-layer.json');
+  assert.ok(A.layerPath('UTA-2026-001').endsWith('/actors/UTA-2026-001/attack-navigator-layer.json'));
+});
+
 test('linkify links bare mentions of known designations and nothing else', () => {
   const known = { 'UTA-2026-001': true };
   const md = [

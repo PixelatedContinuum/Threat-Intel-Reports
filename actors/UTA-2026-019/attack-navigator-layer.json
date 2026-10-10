@@ -1,0 +1,272 @@
+{
+  "name": "The Hunter’s Ledger: UTA-2026-019",
+  "domain": "enterprise-attack",
+  "description": "ATT&CK techniques mapped by the published reports about UTA-2026-019 on the-hunters-ledger.com (1 report(s), 36 technique(s)). Score is the number of reports about the actor mapping the technique. Profile: https://the-hunters-ledger.com/actors/UTA-2026-019/",
+  "versions": {
+    "attack": "19",
+    "navigator": "4.9.0",
+    "layer": "4.5"
+  },
+  "techniques": [
+    {
+      "techniqueID": "T1005",
+      "tactic": "collection",
+      "score": 1,
+      "comment": "Data from Local System. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1036",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Masquerading. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1046",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Network Service Discovery. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.004",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Unix Shell. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.006",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Python. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1071.001",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Web Protocols. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1078",
+      "tactic": "initial-access",
+      "score": 1,
+      "comment": "Valid Accounts. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1090.002",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "External Proxy. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1098.004",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "SSH Authorized Keys. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1102.002",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Bidirectional Communication. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1105",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Ingress Tool Transfer. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1110.001",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Password Guessing. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1110.003",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Password Spraying. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1119",
+      "tactic": "collection",
+      "score": 1,
+      "comment": "Automated Collection. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1190",
+      "tactic": "initial-access",
+      "score": 1,
+      "comment": "Exploit Public-Facing Application. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1213",
+      "tactic": "collection",
+      "score": 1,
+      "comment": "Data from Information Repositories. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1505.003",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Web Shell. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1518",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Software Discovery. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1531",
+      "tactic": "impact",
+      "score": 1,
+      "comment": "Account Access Removal. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1552.001",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Credentials In Files. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1552.004",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Private Keys. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1552.005",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Cloud Instance Metadata API. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1566",
+      "tactic": "initial-access",
+      "score": 1,
+      "comment": "Phishing. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1572",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Protocol Tunneling. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1583.003",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Virtual Private Server. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1583.006",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Web Services. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1585",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Establish Accounts. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1588.002",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Tool. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1593.002",
+      "tactic": "reconnaissance",
+      "score": 1,
+      "comment": "Search Engines. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1594",
+      "tactic": "reconnaissance",
+      "score": 1,
+      "comment": "Search Victim-Owned Websites. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1595.002",
+      "tactic": "reconnaissance",
+      "score": 1,
+      "comment": "Vulnerability Scanning. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1595.003",
+      "tactic": "reconnaissance",
+      "score": 1,
+      "comment": "Wordlist Scanning. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1596.003",
+      "tactic": "reconnaissance",
+      "score": 1,
+      "comment": "Digital Certificates. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1596.005",
+      "tactic": "reconnaissance",
+      "score": 1,
+      "comment": "Scan Databases. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1606.001",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Web Cookies. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1608.001",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Upload Malware. 1 report(s) about UTA-2026-019, mapped in https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/. https://the-hunters-ledger.com/actors/UTA-2026-019/",
+      "enabled": true
+    }
+  ],
+  "gradient": {
+    "colors": [
+      "#fbe7fd",
+      "#e879f9"
+    ],
+    "minValue": 0,
+    "maxValue": 1
+  }
+}

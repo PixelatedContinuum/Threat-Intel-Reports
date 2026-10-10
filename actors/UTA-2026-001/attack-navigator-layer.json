@@ -1,0 +1,202 @@
+{
+  "name": "The Hunter’s Ledger: UTA-2026-001",
+  "domain": "enterprise-attack",
+  "description": "ATT&CK techniques mapped by the published reports about UTA-2026-001 on the-hunters-ledger.com (2 report(s), 26 technique(s)). Score is the number of reports about the actor mapping the technique. Profile: https://the-hunters-ledger.com/actors/UTA-2026-001/",
+  "versions": {
+    "attack": "19",
+    "navigator": "4.9.0",
+    "layer": "4.5"
+  },
+  "techniques": [
+    {
+      "techniqueID": "T1027.002",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Software Packing. 1 report(s) about UTA-2026-001, mapped in https://the-hunters-ledger.com/reports/sliver-open-directory/. https://the-hunters-ledger.com/actors/UTA-2026-001/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1027.008",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Stripped Payloads. 1 report(s) about UTA-2026-001, mapped in https://the-hunters-ledger.com/reports/sliver-open-directory/. https://the-hunters-ledger.com/actors/UTA-2026-001/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1027.013",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Encrypted/Encoded File. 1 report(s) about UTA-2026-001, mapped in https://the-hunters-ledger.com/reports/sliver-open-directory/. https://the-hunters-ledger.com/actors/UTA-2026-001/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1036",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Masquerading. 1 report(s) about UTA-2026-001, mapped in https://the-hunters-ledger.com/reports/sliver-open-directory/. https://the-hunters-ledger.com/actors/UTA-2026-001/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1036.005",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Match Legitimate Resource Name or Location. 1 report(s) about UTA-2026-001, mapped in https://the-hunters-ledger.com/reports/sliver-open-directory/. https://the-hunters-ledger.com/actors/UTA-2026-001/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1055.008",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Ptrace System Calls. 1 report(s) about UTA-2026-001, mapped in https://the-hunters-ledger.com/reports/sliver-open-directory/. https://the-hunters-ledger.com/actors/UTA-2026-001/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1055.012",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Process Hollowing. 1 report(s) about UTA-2026-001, mapped in https://the-hunters-ledger.com/reports/sliver-open-directory/. https://the-hunters-ledger.com/actors/UTA-2026-001/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1055.015",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "ListPlanting. 1 report(s) about UTA-2026-001, mapped in https://the-hunters-ledger.com/reports/sliver-open-directory/. https://the-hunters-ledger.com/actors/UTA-2026-001/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1057",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Process Discovery. 1 report(s) about UTA-2026-001, mapped in https://the-hunters-ledger.com/reports/sliver-open-directory/. https://the-hunters-ledger.com/actors/UTA-2026-001/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.001",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "PowerShell. 1 report(s) about UTA-2026-001, mapped in https://the-hunters-ledger.com/reports/sliver-open-directory/. https://the-hunters-ledger.com/actors/UTA-2026-001/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1070",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Indicator Removal. 1 report(s) about UTA-2026-001, mapped in https://the-hunters-ledger.com/reports/sliver-open-directory/. https://the-hunters-ledger.com/actors/UTA-2026-001/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1071.001",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Web Protocols. 1 report(s) about UTA-2026-001, mapped in https://the-hunters-ledger.com/reports/sliver-open-directory/. https://the-hunters-ledger.com/actors/UTA-2026-001/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1082",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "System Information Discovery. 1 report(s) about UTA-2026-001, mapped in https://the-hunters-ledger.com/reports/sliver-open-directory/. https://the-hunters-ledger.com/actors/UTA-2026-001/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1105",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Ingress Tool Transfer. 1 report(s) about UTA-2026-001, mapped in https://the-hunters-ledger.com/reports/sliver-open-directory/. https://the-hunters-ledger.com/actors/UTA-2026-001/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1106",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Native API. 1 report(s) about UTA-2026-001, mapped in https://the-hunters-ledger.com/reports/sliver-open-directory/. https://the-hunters-ledger.com/actors/UTA-2026-001/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1134.004",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Parent PID Spoofing. 1 report(s) about UTA-2026-001, mapped in https://the-hunters-ledger.com/reports/sliver-open-directory/. https://the-hunters-ledger.com/actors/UTA-2026-001/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1140",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Deobfuscate/Decode Files or Information. 1 report(s) about UTA-2026-001, mapped in https://the-hunters-ledger.com/reports/sliver-open-directory/. https://the-hunters-ledger.com/actors/UTA-2026-001/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1204.002",
+      "tactic": "initial-access",
+      "score": 1,
+      "comment": "Malicious File. 1 report(s) about UTA-2026-001, mapped in https://the-hunters-ledger.com/reports/sliver-open-directory/. https://the-hunters-ledger.com/actors/UTA-2026-001/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1497.001",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "System Checks. 1 report(s) about UTA-2026-001, mapped in https://the-hunters-ledger.com/reports/sliver-open-directory/. https://the-hunters-ledger.com/actors/UTA-2026-001/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1497.003",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Time Based Checks. 1 report(s) about UTA-2026-001, mapped in https://the-hunters-ledger.com/reports/sliver-open-directory/. https://the-hunters-ledger.com/actors/UTA-2026-001/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1553.002",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Code Signing. 1 report(s) about UTA-2026-001, mapped in https://the-hunters-ledger.com/reports/sliver-open-directory/. https://the-hunters-ledger.com/actors/UTA-2026-001/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1573.002",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Asymmetric Cryptography. 1 report(s) about UTA-2026-001, mapped in https://the-hunters-ledger.com/reports/sliver-open-directory/. https://the-hunters-ledger.com/actors/UTA-2026-001/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1587.002",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Code Signing Certificates. 1 report(s) about UTA-2026-001, mapped in https://the-hunters-ledger.com/reports/sliver-open-directory/. https://the-hunters-ledger.com/actors/UTA-2026-001/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1588.002",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Tool. 1 report(s) about UTA-2026-001, mapped in https://the-hunters-ledger.com/reports/sliver-open-directory/. https://the-hunters-ledger.com/actors/UTA-2026-001/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1620",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Reflective Code Loading. 1 report(s) about UTA-2026-001, mapped in https://the-hunters-ledger.com/reports/sliver-open-directory/. https://the-hunters-ledger.com/actors/UTA-2026-001/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1685",
+      "tactic": "defense-impairment",
+      "score": 1,
+      "comment": "Disable or Modify Tools. 1 report(s) about UTA-2026-001, mapped in https://the-hunters-ledger.com/reports/sliver-open-directory/. https://the-hunters-ledger.com/actors/UTA-2026-001/",
+      "enabled": true
+    }
+  ],
+  "gradient": {
+    "colors": [
+      "#fbe7fd",
+      "#e879f9"
+    ],
+    "minValue": 0,
+    "maxValue": 1
+  }
+}

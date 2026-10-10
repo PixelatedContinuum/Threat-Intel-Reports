@@ -1,0 +1,279 @@
+{
+  "name": "The Hunter’s Ledger: UTA-2026-020",
+  "domain": "enterprise-attack",
+  "description": "ATT&CK techniques mapped by the published reports about UTA-2026-020 on the-hunters-ledger.com (1 report(s), 37 technique(s)). Score is the number of reports about the actor mapping the technique. Profile: https://the-hunters-ledger.com/actors/UTA-2026-020/",
+  "versions": {
+    "attack": "19",
+    "navigator": "4.9.0",
+    "layer": "4.5"
+  },
+  "techniques": [
+    {
+      "techniqueID": "T1016",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "System Network Configuration Discovery. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1021.002",
+      "tactic": "lateral-movement",
+      "score": 1,
+      "comment": "SMB/Windows Admin Shares. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1021.006",
+      "tactic": "lateral-movement",
+      "score": 1,
+      "comment": "Windows Remote Management. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1027.010",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Command Obfuscation. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1036.005",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Match Legitimate Resource Name or Location. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1041",
+      "tactic": "exfiltration",
+      "score": 1,
+      "comment": "Exfiltration Over C2 Channel. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1046",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Network Service Discovery. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1047",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Windows Management Instrumentation. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1053.003",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Cron. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1053.005",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Scheduled Task. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1057",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Process Discovery. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.001",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "PowerShell. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.003",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Windows Command Shell. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.004",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Unix Shell. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.005",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Visual Basic. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.006",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Python. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1070.004",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "File Deletion. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1071.001",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Web Protocols. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1078.001",
+      "tactic": "initial-access",
+      "score": 1,
+      "comment": "Default Accounts. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1082",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "System Information Discovery. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1105",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Ingress Tool Transfer. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1132.001",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Standard Encoding. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1140",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Deobfuscate/Decode Files or Information. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1190",
+      "tactic": "initial-access",
+      "score": 1,
+      "comment": "Exploit Public-Facing Application. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1496.001",
+      "tactic": "impact",
+      "score": 1,
+      "comment": "Compute Hijacking. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1543.002",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Systemd Service. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1547.001",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Registry Run Keys / Startup Folder. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1564.001",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Hidden Files and Directories. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1570",
+      "tactic": "lateral-movement",
+      "score": 1,
+      "comment": "Lateral Tool Transfer. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1571",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Non-Standard Port. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1583.003",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Virtual Private Server. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1588.002",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Tool. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1588.005",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Exploits. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1595.002",
+      "tactic": "reconnaissance",
+      "score": 1,
+      "comment": "Vulnerability Scanning. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1596.005",
+      "tactic": "reconnaissance",
+      "score": 1,
+      "comment": "Scan Databases. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1608.001",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Upload Malware. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1685",
+      "tactic": "defense-impairment",
+      "score": 1,
+      "comment": "Disable or Modify Tools. 1 report(s) about UTA-2026-020, mapped in https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/. https://the-hunters-ledger.com/actors/UTA-2026-020/",
+      "enabled": true
+    }
+  ],
+  "gradient": {
+    "colors": [
+      "#fbe7fd",
+      "#e879f9"
+    ],
+    "minValue": 0,
+    "maxValue": 1
+  }
+}

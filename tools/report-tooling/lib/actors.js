@@ -38,7 +38,14 @@ var LEVELS = ['DEFINITE', 'HIGH', 'MODERATE', 'LOW', 'INSUFFICIENT'];
    under actors/ is never deleted by the generator. */
 var STUB_MARKER = 'layout: actor';
 
+/* The per-actor ATT&CK Navigator layer sits beside the stub, so it is served
+   at /actors/<id>/attack-navigator-layer.json and leaves with the page. */
+var LAYER_NAME = 'attack-navigator-layer.json';
+var SITE = 'https://the-hunters-ledger.com';
+
 function actorUrl(id) { return '/actors/' + id + '/'; }
+function layerUrl(id) { return actorUrl(id) + LAYER_NAME; }
+function layerPath(id) { return path.join(ACTOR_DIR, id, LAYER_NAME); }
 
 /* ---- _data/actors.yml --------------------------------------------------- */
 
@@ -402,6 +409,46 @@ function toYaml(index) {
   return head + body;
 }
 
+/* One ATT&CK Navigator layer per actor, from the index entry's technique
+   list, which is already published-sources-only (the primary reports' own
+   mapping tables, or the companion detection page's). Same shape and versions
+   as the site-wide layer in lib/xref.js. Score is the number of reports about
+   the actor that map the technique, so a single-report actor's layer is flat
+   at 1 and the gradient still renders; the comment names the technique, where
+   it was mapped and the profile. A technique with no tactic (a table that gave
+   none) is listed without one, which Navigator accepts. */
+function navigatorLayer(entry, opts) {
+  opts = opts || {};
+  var site = opts.site || SITE;
+  var slug = opts.tacticSlug || function (t) { return String(t).toLowerCase().trim().replace(/\s+/g, '-'); };
+  var max = 1;
+  var techniques = (entry.attack || []).map(function (t) {
+    var score = t.reports && t.reports.length ? t.reports.length : 1;
+    if (score > max) max = score;
+    var row = { techniqueID: t.id };
+    if (t.tactic) row.tactic = slug(t.tactic);
+    row.score = score;
+    row.comment = (t.name ? t.name + '. ' : '') + score + ' report(s) about ' + entry.id +
+      (t.source === 'detections' ? ', mapped on the detection page ' : ', mapped in ') + site + t.link +
+      '. ' + site + entry.url;
+    row.enabled = true;
+    return row;
+  });
+  return {
+    name: 'The Hunter\u2019s Ledger: ' + entry.id,
+    domain: 'enterprise-attack',
+    description: 'ATT&CK techniques mapped by the published reports about ' + entry.id + ' on ' +
+      site.replace(/^https?:\/\//, '') + ' (' + entry.report_count + ' report(s), ' + techniques.length +
+      ' technique(s)). Score is the number of reports about the actor mapping the technique. Profile: ' +
+      site + entry.url,
+    versions: { attack: opts.attackVersion ? String(opts.attackVersion).split('.')[0] : '19', navigator: '4.9.0', layer: '4.5' },
+    techniques: techniques,
+    gradient: { colors: ['#fbe7fd', '#e879f9'], minValue: 0, maxValue: max }
+  };
+}
+
+function layerJson(entry, opts) { return JSON.stringify(navigatorLayer(entry, opts), null, 2) + '\n'; }
+
 function stub(actor) {
   var id = actor.id;
   return '---\n' +
@@ -514,9 +561,10 @@ function linkLine(line, known, state) {
 module.exports = {
   ROOT: ROOT, ACTORS_FILE: ACTORS_FILE, INDEX_FILE: INDEX_FILE, CATALOG_FILE: CATALOG_FILE,
   REPORT_DIR: REPORT_DIR, DETECTION_DIR: DETECTION_DIR, ACTOR_DIR: ACTOR_DIR,
-  STUB_MARKER: STUB_MARKER, ID_RE: ID_RE, ID_SHAPE: ID_SHAPE,
-  actorUrl: actorUrl, parseActors: parseActors, parseCatalog: parseCatalog,
+  STUB_MARKER: STUB_MARKER, LAYER_NAME: LAYER_NAME, SITE: SITE, ID_RE: ID_RE, ID_SHAPE: ID_SHAPE,
+  actorUrl: actorUrl, layerUrl: layerUrl, layerPath: layerPath, parseActors: parseActors, parseCatalog: parseCatalog,
   frontMatter: frontMatter, mentions: mentions, describeReport: describeReport,
   readReports: readReports, publication: publication, attackFor: attackFor,
-  build: build, toYaml: toYaml, stub: stub, linkify: linkify, dateStr: dateStr
+  build: build, toYaml: toYaml, stub: stub, navigatorLayer: navigatorLayer, layerJson: layerJson,
+  linkify: linkify, dateStr: dateStr
 };

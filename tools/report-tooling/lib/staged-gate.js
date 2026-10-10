@@ -73,7 +73,7 @@ var CHECKS = {
     id: 'actors',
     label: 'threat actor index',
     cmd: 'check-actors.js',
-    why: '_data/actors.yml, its generated index, an actor page, the catalog, a report or a detection page is staged'
+    why: '_data/actors.yml, its generated index, an actor page or its Navigator layer, the catalog, a report or a detection page is staged'
   },
   tags: {
     id: 'tags',
@@ -181,7 +181,8 @@ function plan(paths, opts) {
        catalog edit that publishes one, routes here so the link and the page
        land with it rather than at the next campaign. */
     if (p === '_data/actors.yml' || p === '_data/actors_index.yml' ||
-        /^actors\/[^/]+\/index\.md$/.test(p) || p === '_data/catalog.yml' ||
+        /^actors\/[^/]+\/index\.md$/.test(p) || /^actors\/[^/]+\/attack-navigator-layer\.json$/.test(p) ||
+        p === '_data/catalog.yml' ||
         /^reports\/[^/]+\/index\.md$/.test(p) || /^hunting-detections\/.+\.md$/.test(p) ||
         p === 'tools/report-tooling/data/attack-techniques.tsv') {
       want.actors = true;

@@ -1,0 +1,188 @@
+{
+  "name": "The Hunter’s Ledger: UTA-2026-002",
+  "domain": "enterprise-attack",
+  "description": "ATT&CK techniques mapped by the published reports about UTA-2026-002 on the-hunters-ledger.com (1 report(s), 24 technique(s)). Score is the number of reports about the actor mapping the technique. Profile: https://the-hunters-ledger.com/actors/UTA-2026-002/",
+  "versions": {
+    "attack": "19",
+    "navigator": "4.9.0",
+    "layer": "4.5"
+  },
+  "techniques": [
+    {
+      "techniqueID": "T1016",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "System Network Configuration Discovery. 1 report(s) about UTA-2026-002, mapped in https://the-hunters-ledger.com/reports/open-directory-193-56-255-154-xiebroc2/. https://the-hunters-ledger.com/actors/UTA-2026-002/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1027",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Obfuscated Files or Information. 1 report(s) about UTA-2026-002, mapped in https://the-hunters-ledger.com/reports/open-directory-193-56-255-154-xiebroc2/. https://the-hunters-ledger.com/actors/UTA-2026-002/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1033",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "System Owner/User Discovery. 1 report(s) about UTA-2026-002, mapped in https://the-hunters-ledger.com/reports/open-directory-193-56-255-154-xiebroc2/. https://the-hunters-ledger.com/actors/UTA-2026-002/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1036",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Masquerading. 1 report(s) about UTA-2026-002, mapped in https://the-hunters-ledger.com/reports/open-directory-193-56-255-154-xiebroc2/. https://the-hunters-ledger.com/actors/UTA-2026-002/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1041",
+      "tactic": "exfiltration",
+      "score": 1,
+      "comment": "Exfiltration Over C2 Channel. 1 report(s) about UTA-2026-002, mapped in https://the-hunters-ledger.com/reports/open-directory-193-56-255-154-xiebroc2/. https://the-hunters-ledger.com/actors/UTA-2026-002/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1055",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Process Injection. 1 report(s) about UTA-2026-002, mapped in https://the-hunters-ledger.com/reports/open-directory-193-56-255-154-xiebroc2/. https://the-hunters-ledger.com/actors/UTA-2026-002/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1055.012",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Process Hollowing. 1 report(s) about UTA-2026-002, mapped in https://the-hunters-ledger.com/reports/open-directory-193-56-255-154-xiebroc2/. https://the-hunters-ledger.com/actors/UTA-2026-002/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1057",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Process Discovery. 1 report(s) about UTA-2026-002, mapped in https://the-hunters-ledger.com/reports/open-directory-193-56-255-154-xiebroc2/. https://the-hunters-ledger.com/actors/UTA-2026-002/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.001",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "PowerShell. 1 report(s) about UTA-2026-002, mapped in https://the-hunters-ledger.com/reports/open-directory-193-56-255-154-xiebroc2/. https://the-hunters-ledger.com/actors/UTA-2026-002/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.003",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Windows Command Shell. 1 report(s) about UTA-2026-002, mapped in https://the-hunters-ledger.com/reports/open-directory-193-56-255-154-xiebroc2/. https://the-hunters-ledger.com/actors/UTA-2026-002/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1070.004",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "File Deletion. 1 report(s) about UTA-2026-002, mapped in https://the-hunters-ledger.com/reports/open-directory-193-56-255-154-xiebroc2/. https://the-hunters-ledger.com/actors/UTA-2026-002/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1071.001",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Web Protocols. 1 report(s) about UTA-2026-002, mapped in https://the-hunters-ledger.com/reports/open-directory-193-56-255-154-xiebroc2/. https://the-hunters-ledger.com/actors/UTA-2026-002/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1082",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "System Information Discovery. 1 report(s) about UTA-2026-002, mapped in https://the-hunters-ledger.com/reports/open-directory-193-56-255-154-xiebroc2/. https://the-hunters-ledger.com/actors/UTA-2026-002/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1105",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Ingress Tool Transfer. 1 report(s) about UTA-2026-002, mapped in https://the-hunters-ledger.com/reports/open-directory-193-56-255-154-xiebroc2/. https://the-hunters-ledger.com/actors/UTA-2026-002/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1106",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Native API. 1 report(s) about UTA-2026-002, mapped in https://the-hunters-ledger.com/reports/open-directory-193-56-255-154-xiebroc2/. https://the-hunters-ledger.com/actors/UTA-2026-002/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1113",
+      "tactic": "collection",
+      "score": 1,
+      "comment": "Screen Capture. 1 report(s) about UTA-2026-002, mapped in https://the-hunters-ledger.com/reports/open-directory-193-56-255-154-xiebroc2/. https://the-hunters-ledger.com/actors/UTA-2026-002/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1132",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Data Encoding. 1 report(s) about UTA-2026-002, mapped in https://the-hunters-ledger.com/reports/open-directory-193-56-255-154-xiebroc2/. https://the-hunters-ledger.com/actors/UTA-2026-002/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1140",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Deobfuscate/Decode Files or Information. 1 report(s) about UTA-2026-002, mapped in https://the-hunters-ledger.com/reports/open-directory-193-56-255-154-xiebroc2/. https://the-hunters-ledger.com/actors/UTA-2026-002/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1560",
+      "tactic": "collection",
+      "score": 1,
+      "comment": "Archive Collected Data. 1 report(s) about UTA-2026-002, mapped in https://the-hunters-ledger.com/reports/open-directory-193-56-255-154-xiebroc2/. https://the-hunters-ledger.com/actors/UTA-2026-002/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1571",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Non-Standard Port. 1 report(s) about UTA-2026-002, mapped in https://the-hunters-ledger.com/reports/open-directory-193-56-255-154-xiebroc2/. https://the-hunters-ledger.com/actors/UTA-2026-002/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1572",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Protocol Tunneling. 1 report(s) about UTA-2026-002, mapped in https://the-hunters-ledger.com/reports/open-directory-193-56-255-154-xiebroc2/. https://the-hunters-ledger.com/actors/UTA-2026-002/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1573.001",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Symmetric Cryptography. 1 report(s) about UTA-2026-002, mapped in https://the-hunters-ledger.com/reports/open-directory-193-56-255-154-xiebroc2/. https://the-hunters-ledger.com/actors/UTA-2026-002/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1573.002",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Asymmetric Cryptography. 1 report(s) about UTA-2026-002, mapped in https://the-hunters-ledger.com/reports/open-directory-193-56-255-154-xiebroc2/. https://the-hunters-ledger.com/actors/UTA-2026-002/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1620",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Reflective Code Loading. 1 report(s) about UTA-2026-002, mapped in https://the-hunters-ledger.com/reports/open-directory-193-56-255-154-xiebroc2/. https://the-hunters-ledger.com/actors/UTA-2026-002/",
+      "enabled": true
+    }
+  ],
+  "gradient": {
+    "colors": [
+      "#fbe7fd",
+      "#e879f9"
+    ],
+    "minValue": 0,
+    "maxValue": 1
+  }
+}

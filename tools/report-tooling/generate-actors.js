@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 'use strict';
 
-/* Writes _data/actors_index.yml and one stub page per actor in _data/actors.yml,
-   and REMOVES a stub whose designation is no longer in the data file or whose
-   reports are no longer published. Same shape as generate-ioc-tables.js: the
+/* Writes _data/actors_index.yml, one stub page per actor in _data/actors.yml
+   and one ATT&CK Navigator layer beside each stub (actors/<id>/attack-navigator-layer.json,
+   the per-actor counterpart of assets/data/attack-navigator-layer.json), and
+   REMOVES a stub, with its layer, whose designation is no longer in the data
+   file or whose reports are no longer published. Same shape as generate-ioc-tables.js: the
    hand-written record is the input, the derived index and the pages are output,
    and check-actors.js gates both by regenerate-and-diff.
 
@@ -54,7 +56,7 @@ function existingStubs() {
 
 function run(opts) {
   opts = opts || {};
-  var empty = { tables: 0, yaml: null, stubs: [], removed: [], embargoed: [], actors: 0, techniques: 0 };
+  var empty = { tables: 0, yaml: null, stubs: [], layers: [], removed: [], embargoed: [], actors: 0, techniques: 0 };
   if (depsReason) {
     return Object.assign({ status: 'NOT CHECKED', reason: 'ATT&CK parsing is unavailable: ' + depsReason +
       '. Run `npm ci` in tools/report-tooling.', problems: [] }, empty);
@@ -95,8 +97,12 @@ function run(opts) {
 
   var text = A.toYaml(index);
   var have = existingStubs();
-  var wanted = {}, wrote = [], removed = [];
+  var wanted = {}, wrote = [], layers = [], removed = [];
   parsed.actors.forEach(function (a) { wanted[a.id] = a; });
+  var layerOpts = { site: A.SITE, tacticSlug: deps.AC.tacticSlug, attackVersion: deps.catalog.version };
+  var layerFor = {};
+  index.entries.forEach(function (e) { layerFor[e.id] = A.layerJson(e, layerOpts); });
+  function readOr(p) { try { return fs.readFileSync(p, 'utf8'); } catch (e) { return null; } }
 
   if (!opts.dryRun) {
     fs.writeFileSync(A.INDEX_FILE, text, 'utf8');
@@ -104,9 +110,13 @@ function run(opts) {
       var dir = path.join(A.ACTOR_DIR, a.id);
       var p = path.join(dir, 'index.md');
       var body = A.stub(a);
-      var cur = null;
-      try { cur = fs.readFileSync(p, 'utf8'); } catch (e) { cur = null; }
-      if (cur === body) return;
+      var layer = layerFor[a.id];
+      if (readOr(A.layerPath(a.id)) !== layer) {
+        fs.mkdirSync(dir, { recursive: true });
+        fs.writeFileSync(A.layerPath(a.id), layer, 'utf8');
+        layers.push(a.id);
+      }
+      if (readOr(p) === body) return;
       fs.mkdirSync(dir, { recursive: true });
       fs.writeFileSync(p, body, 'utf8');
       wrote.push(a.id);
@@ -118,10 +128,8 @@ function run(opts) {
     });
   } else {
     parsed.actors.forEach(function (a) {
-      var p = path.join(A.ACTOR_DIR, a.id, 'index.md');
-      var cur = null;
-      try { cur = fs.readFileSync(p, 'utf8'); } catch (e) { cur = null; }
-      if (cur !== A.stub(a)) wrote.push(a.id);
+      if (readOr(path.join(A.ACTOR_DIR, a.id, 'index.md')) !== A.stub(a)) wrote.push(a.id);
+      if (readOr(A.layerPath(a.id)) !== layerFor[a.id]) layers.push(a.id);
     });
     Object.keys(have).forEach(function (s) { if (!wanted[s]) removed.push(s); });
   }
@@ -130,7 +138,7 @@ function run(opts) {
   return {
     status: 'PASS', reason: null, problems: [],
     actors: index.entries.length, techniques: techniques, yaml: text,
-    stubs: wrote, removed: removed, embargoed: index.embargoed
+    stubs: wrote, layers: layers, removed: removed, embargoed: index.embargoed
   };
 }
 
@@ -146,6 +154,7 @@ if (require.main === module) {
     console.log('   absent on purpose (named only in unlisted reports): ' + r.embargoed.join(', '));
   }
   if (r.stubs && r.stubs.length) console.log('   stubs written: ' + r.stubs.join(', '));
+  if (r.layers && r.layers.length) console.log('   Navigator layers written: ' + r.layers.join(', '));
   if (r.removed && r.removed.length) console.log('   stubs REMOVED (no longer in the data file): ' + r.removed.join(', '));
   r.problems.forEach(function (p) { console.log('   FAIL  ' + p); });
   process.exit(r.status === 'PASS' ? 0 : 1);

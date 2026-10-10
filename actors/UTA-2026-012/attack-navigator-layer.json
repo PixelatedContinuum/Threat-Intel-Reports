@@ -1,0 +1,167 @@
+{
+  "name": "The Hunter’s Ledger: UTA-2026-012",
+  "domain": "enterprise-attack",
+  "description": "ATT&CK techniques mapped by the published reports about UTA-2026-012 on the-hunters-ledger.com (4 report(s), 21 technique(s)). Score is the number of reports about the actor mapping the technique. Profile: https://the-hunters-ledger.com/actors/UTA-2026-012/",
+  "versions": {
+    "attack": "19",
+    "navigator": "4.9.0",
+    "layer": "4.5"
+  },
+  "techniques": [
+    {
+      "techniqueID": "T1003.001",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "LSASS Memory. 1 report(s) about UTA-2026-012, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections. https://the-hunters-ledger.com/actors/UTA-2026-012/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1003.002",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Security Account Manager. 1 report(s) about UTA-2026-012, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections. https://the-hunters-ledger.com/actors/UTA-2026-012/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1005",
+      "tactic": "collection",
+      "score": 1,
+      "comment": "Data from Local System. 1 report(s) about UTA-2026-012, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections. https://the-hunters-ledger.com/actors/UTA-2026-012/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1021.001",
+      "tactic": "lateral-movement",
+      "score": 1,
+      "comment": "Remote Desktop Protocol. 1 report(s) about UTA-2026-012, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections. https://the-hunters-ledger.com/actors/UTA-2026-012/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1021.004",
+      "tactic": "lateral-movement",
+      "score": 1,
+      "comment": "SSH. 1 report(s) about UTA-2026-012, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections. https://the-hunters-ledger.com/actors/UTA-2026-012/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1036",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Masquerading. 1 report(s) about UTA-2026-012, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections. https://the-hunters-ledger.com/actors/UTA-2026-012/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1041",
+      "tactic": "exfiltration",
+      "score": 1,
+      "comment": "Exfiltration Over C2 Channel. 1 report(s) about UTA-2026-012, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections. https://the-hunters-ledger.com/actors/UTA-2026-012/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.001",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "PowerShell. 1 report(s) about UTA-2026-012, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections. https://the-hunters-ledger.com/actors/UTA-2026-012/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.006",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Python. 1 report(s) about UTA-2026-012, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections. https://the-hunters-ledger.com/actors/UTA-2026-012/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1071.001",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Web Protocols. 1 report(s) about UTA-2026-012, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections. https://the-hunters-ledger.com/actors/UTA-2026-012/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1078",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Valid Accounts. 1 report(s) about UTA-2026-012, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections. https://the-hunters-ledger.com/actors/UTA-2026-012/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1087",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Account Discovery. 1 report(s) about UTA-2026-012, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections. https://the-hunters-ledger.com/actors/UTA-2026-012/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1090.004",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Domain Fronting. 1 report(s) about UTA-2026-012, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections. https://the-hunters-ledger.com/actors/UTA-2026-012/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1105",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Ingress Tool Transfer. 1 report(s) about UTA-2026-012, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections. https://the-hunters-ledger.com/actors/UTA-2026-012/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1110.003",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Password Spraying. 1 report(s) about UTA-2026-012, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections. https://the-hunters-ledger.com/actors/UTA-2026-012/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1132.001",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Standard Encoding. 1 report(s) about UTA-2026-012, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections. https://the-hunters-ledger.com/actors/UTA-2026-012/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1547.001",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Registry Run Keys / Startup Folder. 1 report(s) about UTA-2026-012, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections. https://the-hunters-ledger.com/actors/UTA-2026-012/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1552.001",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Credentials In Files. 1 report(s) about UTA-2026-012, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections. https://the-hunters-ledger.com/actors/UTA-2026-012/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1555.005",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Password Managers. 1 report(s) about UTA-2026-012, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections. https://the-hunters-ledger.com/actors/UTA-2026-012/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1572",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Protocol Tunneling. 1 report(s) about UTA-2026-012, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections. https://the-hunters-ledger.com/actors/UTA-2026-012/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1587",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Develop Capabilities. 1 report(s) about UTA-2026-012, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections. https://the-hunters-ledger.com/actors/UTA-2026-012/",
+      "enabled": true
+    }
+  ],
+  "gradient": {
+    "colors": [
+      "#fbe7fd",
+      "#e879f9"
+    ],
+    "minValue": 0,
+    "maxValue": 1
+  }
+}

@@ -1,0 +1,426 @@
+{
+  "name": "The Hunter’s Ledger: UTA-2026-024",
+  "domain": "enterprise-attack",
+  "description": "ATT&CK techniques mapped by the published reports about UTA-2026-024 on the-hunters-ledger.com (1 report(s), 58 technique(s)). Score is the number of reports about the actor mapping the technique. Profile: https://the-hunters-ledger.com/actors/UTA-2026-024/",
+  "versions": {
+    "attack": "19",
+    "navigator": "4.9.0",
+    "layer": "4.5"
+  },
+  "techniques": [
+    {
+      "techniqueID": "T1003.001",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "LSASS Memory. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1003.002",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Security Account Manager. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1003.004",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "LSA Secrets. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1005",
+      "tactic": "collection",
+      "score": 1,
+      "comment": "Data from Local System. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1008",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Fallback Channels. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1016",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "System Network Configuration Discovery. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1021.001",
+      "tactic": "lateral-movement",
+      "score": 1,
+      "comment": "Remote Desktop Protocol. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1021.002",
+      "tactic": "lateral-movement",
+      "score": 1,
+      "comment": "SMB/Windows Admin Shares. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1021.006",
+      "tactic": "lateral-movement",
+      "score": 1,
+      "comment": "Windows Remote Management. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1027",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Obfuscated Files or Information. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1033",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "System Owner/User Discovery. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1036.005",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Match Legitimate Resource Name or Location. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1041",
+      "tactic": "exfiltration",
+      "score": 1,
+      "comment": "Exfiltration Over C2 Channel. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1046",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Network Service Discovery. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1047",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Windows Management Instrumentation. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1053.005",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Scheduled Task. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1055",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Process Injection. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.001",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "PowerShell. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.003",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Windows Command Shell. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.007",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "JavaScript. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1068",
+      "tactic": "privilege-escalation",
+      "score": 1,
+      "comment": "Exploitation for Privilege Escalation. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1069.002",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Domain Groups. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1070.004",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "File Deletion. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1071.001",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Web Protocols. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1074.001",
+      "tactic": "collection",
+      "score": 1,
+      "comment": "Local Data Staging. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1078.002",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Domain Accounts. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1082",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "System Information Discovery. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1087.002",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Domain Account. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1090",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Proxy. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1098",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Account Manipulation. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1102.001",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Dead Drop Resolver. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1104",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Multi-Stage Channels. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1105",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Ingress Tool Transfer. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1106",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Native API. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1112",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Modify Registry. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1132.001",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Standard Encoding. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1134.001",
+      "tactic": "privilege-escalation",
+      "score": 1,
+      "comment": "Token Impersonation/Theft. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1134.002",
+      "tactic": "privilege-escalation",
+      "score": 1,
+      "comment": "Create Process with Token. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1135",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Network Share Discovery. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1136.001",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Local Account. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1136.002",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Domain Account. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1140",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Deobfuscate/Decode Files or Information. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1218.007",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Msiexec. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1482",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Domain Trust Discovery. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1518.001",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Security Software Discovery. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1547.001",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Registry Run Keys / Startup Folder. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1548.002",
+      "tactic": "privilege-escalation",
+      "score": 1,
+      "comment": "Bypass User Account Control. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1555.003",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Credentials from Web Browsers. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1563.002",
+      "tactic": "lateral-movement",
+      "score": 1,
+      "comment": "RDP Hijacking. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1570",
+      "tactic": "lateral-movement",
+      "score": 1,
+      "comment": "Lateral Tool Transfer. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1571",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Non-Standard Port. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1572",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Protocol Tunneling. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1573.002",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Asymmetric Cryptography. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1588.002",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Tool. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1608.001",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Upload Malware. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1620",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Reflective Code Loading. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1685",
+      "tactic": "defense-impairment",
+      "score": 1,
+      "comment": "Disable or Modify Tools. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1686",
+      "tactic": "defense-impairment",
+      "score": 1,
+      "comment": "Disable or Modify System Firewall. 1 report(s) about UTA-2026-024, mapped in https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/. https://the-hunters-ledger.com/actors/UTA-2026-024/",
+      "enabled": true
+    }
+  ],
+  "gradient": {
+    "colors": [
+      "#fbe7fd",
+      "#e879f9"
+    ],
+    "minValue": 0,
+    "maxValue": 1
+  }
+}

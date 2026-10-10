@@ -205,11 +205,13 @@ test('a mixed commit still wants it exactly once, alongside everything else', fu
      'ioc-tables', 'manifest', 'misp', 'stix-manifest', 'wire', 'xref']);
 });
 
-test('the actor index routes on its record, its generated index, a stub page, the catalog, a report and a detection page', function () {
-  // Every input the index derives from, plus its own outputs, so a bare
-  // designation added to a report lands with its link rather than at the next
-  // campaign publish. A stylesheet edit does not route here.
+test('the actor index routes on its record, its generated index, a stub page, its Navigator layer, the catalog, a report and a detection page', function () {
+  // Every input the index derives from, plus its own outputs (the index, the
+  // stub and the per-actor layer), so a bare designation added to a report
+  // lands with its link rather than at the next campaign publish. A stylesheet
+  // edit does not route here.
   ['_data/actors.yml', '_data/actors_index.yml', 'actors/UTA-2026-001/index.md',
+   'actors/UTA-2026-001/attack-navigator-layer.json',
    '_data/catalog.yml', 'reports/acme/index.md', 'hunting-detections/acme-detections.md',
    'tools/report-tooling/data/attack-techniques.tsv'].forEach(function (path) {
     assert.ok(ids(SG.plan([path], { existing: [path] })).indexOf('actors') > -1, path);

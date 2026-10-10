@@ -1,0 +1,398 @@
+{
+  "name": "The Hunter’s Ledger: UTA-2026-021",
+  "domain": "enterprise-attack",
+  "description": "ATT&CK techniques mapped by the published reports about UTA-2026-021 on the-hunters-ledger.com (1 report(s), 54 technique(s)). Score is the number of reports about the actor mapping the technique. Profile: https://the-hunters-ledger.com/actors/UTA-2026-021/",
+  "versions": {
+    "attack": "19",
+    "navigator": "4.9.0",
+    "layer": "4.5"
+  },
+  "techniques": [
+    {
+      "techniqueID": "T1005",
+      "tactic": "collection",
+      "score": 1,
+      "comment": "Data from Local System. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1021.002",
+      "tactic": "lateral-movement",
+      "score": 1,
+      "comment": "SMB/Windows Admin Shares. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1027",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Obfuscated Files or Information. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1036.005",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Match Legitimate Resource Name or Location. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1041",
+      "tactic": "exfiltration",
+      "score": 1,
+      "comment": "Exfiltration Over C2 Channel. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1046",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Network Service Discovery. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1047",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Windows Management Instrumentation. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1049",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "System Network Connections Discovery. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1053.005",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Scheduled Task. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1055",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Process Injection. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1056.001",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Keylogging. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1057",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Process Discovery. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.001",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "PowerShell. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.003",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Windows Command Shell. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.005",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Visual Basic. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.007",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "JavaScript. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1068",
+      "tactic": "privilege-escalation",
+      "score": 1,
+      "comment": "Exploitation for Privilege Escalation. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1070",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Indicator Removal. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1071",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Application Layer Protocol. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1078.002",
+      "tactic": "privilege-escalation",
+      "score": 1,
+      "comment": "Domain Accounts. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1082",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "System Information Discovery. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1090",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Proxy. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1090.003",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Multi-hop Proxy. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1091",
+      "tactic": "initial-access",
+      "score": 1,
+      "comment": "Replication Through Removable Media. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1098",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Account Manipulation. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1102",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Web Service. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1105",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Ingress Tool Transfer. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1106",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Native API. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1110",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Brute Force. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1112",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Modify Registry. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1113",
+      "tactic": "collection",
+      "score": 1,
+      "comment": "Screen Capture. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1123",
+      "tactic": "collection",
+      "score": 1,
+      "comment": "Audio Capture. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1127.001",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "MSBuild. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1133",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "External Remote Services. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1134",
+      "tactic": "privilege-escalation",
+      "score": 1,
+      "comment": "Access Token Manipulation. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1135",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Network Share Discovery. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1136.001",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Local Account. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1136.002",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Domain Account. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1140",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Deobfuscate/Decode Files or Information. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1219",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Remote Access Tools. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1489",
+      "tactic": "impact",
+      "score": 1,
+      "comment": "Service Stop. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1497",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Virtualization/Sandbox Evasion. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1505.003",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Web Shell. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1539",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Steal Web Session Cookie. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1543.003",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Windows Service. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1547.001",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Registry Run Keys / Startup Folder. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1555.003",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Credentials from Web Browsers. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1564.002",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Hidden Users. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1570",
+      "tactic": "lateral-movement",
+      "score": 1,
+      "comment": "Lateral Tool Transfer. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1571",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Non-Standard Port. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1572",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Protocol Tunneling. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1614",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "System Location Discovery. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1620",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Reflective Code Loading. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1685",
+      "tactic": "defense-impairment",
+      "score": 1,
+      "comment": "Disable or Modify Tools. 1 report(s) about UTA-2026-021, mapped in https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/. https://the-hunters-ledger.com/actors/UTA-2026-021/",
+      "enabled": true
+    }
+  ],
+  "gradient": {
+    "colors": [
+      "#fbe7fd",
+      "#e879f9"
+    ],
+    "minValue": 0,
+    "maxValue": 1
+  }
+}

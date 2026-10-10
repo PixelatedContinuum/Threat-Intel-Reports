@@ -1,0 +1,48 @@
+{
+  "name": "The Hunter’s Ledger: UTA-2026-015",
+  "domain": "enterprise-attack",
+  "description": "ATT&CK techniques mapped by the published reports about UTA-2026-015 on the-hunters-ledger.com (2 report(s), 4 technique(s)). Score is the number of reports about the actor mapping the technique. Profile: https://the-hunters-ledger.com/actors/UTA-2026-015/",
+  "versions": {
+    "attack": "19",
+    "navigator": "4.9.0",
+    "layer": "4.5"
+  },
+  "techniques": [
+    {
+      "techniqueID": "T1059.004",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Unix Shell. 1 report(s) about UTA-2026-015, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections. https://the-hunters-ledger.com/actors/UTA-2026-015/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.007",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "JavaScript. 1 report(s) about UTA-2026-015, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections. https://the-hunters-ledger.com/actors/UTA-2026-015/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1090.001",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Internal Proxy. 1 report(s) about UTA-2026-015, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections. https://the-hunters-ledger.com/actors/UTA-2026-015/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1685",
+      "tactic": "defense-impairment",
+      "score": 1,
+      "comment": "Disable or Modify Tools. 1 report(s) about UTA-2026-015, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections. https://the-hunters-ledger.com/actors/UTA-2026-015/",
+      "enabled": true
+    }
+  ],
+  "gradient": {
+    "colors": [
+      "#fbe7fd",
+      "#e879f9"
+    ],
+    "minValue": 0,
+    "maxValue": 1
+  }
+}

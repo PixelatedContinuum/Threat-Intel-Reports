@@ -1,0 +1,153 @@
+{
+  "name": "The Hunter’s Ledger: UTA-2026-014",
+  "domain": "enterprise-attack",
+  "description": "ATT&CK techniques mapped by the published reports about UTA-2026-014 on the-hunters-ledger.com (2 report(s), 19 technique(s)). Score is the number of reports about the actor mapping the technique. Profile: https://the-hunters-ledger.com/actors/UTA-2026-014/",
+  "versions": {
+    "attack": "19",
+    "navigator": "4.9.0",
+    "layer": "4.5"
+  },
+  "techniques": [
+    {
+      "techniqueID": "T1014",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Rootkit. 1 report(s) about UTA-2026-014, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections. https://the-hunters-ledger.com/actors/UTA-2026-014/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1027",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Obfuscated Files or Information. 1 report(s) about UTA-2026-014, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections. https://the-hunters-ledger.com/actors/UTA-2026-014/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1037.004",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "RC Scripts. 1 report(s) about UTA-2026-014, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections. https://the-hunters-ledger.com/actors/UTA-2026-014/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1053.003",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Cron. 1 report(s) about UTA-2026-014, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections. https://the-hunters-ledger.com/actors/UTA-2026-014/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.004",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Unix Shell. 1 report(s) about UTA-2026-014, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections. https://the-hunters-ledger.com/actors/UTA-2026-014/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.006",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Python. 1 report(s) about UTA-2026-014, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections. https://the-hunters-ledger.com/actors/UTA-2026-014/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.007",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "JavaScript. 1 report(s) about UTA-2026-014, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections. https://the-hunters-ledger.com/actors/UTA-2026-014/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1071.001",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Web Protocols. 1 report(s) about UTA-2026-014, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections. https://the-hunters-ledger.com/actors/UTA-2026-014/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1095",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Non-Application Layer Protocol. 1 report(s) about UTA-2026-014, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections. https://the-hunters-ledger.com/actors/UTA-2026-014/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1190",
+      "tactic": "initial-access",
+      "score": 1,
+      "comment": "Exploit Public-Facing Application. 1 report(s) about UTA-2026-014, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections. https://the-hunters-ledger.com/actors/UTA-2026-014/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1497.001",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "System Checks. 1 report(s) about UTA-2026-014, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections. https://the-hunters-ledger.com/actors/UTA-2026-014/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1498.001",
+      "tactic": "impact",
+      "score": 1,
+      "comment": "Direct Network Flood. 1 report(s) about UTA-2026-014, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections. https://the-hunters-ledger.com/actors/UTA-2026-014/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1498.002",
+      "tactic": "impact",
+      "score": 1,
+      "comment": "Reflection Amplification. 1 report(s) about UTA-2026-014, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections. https://the-hunters-ledger.com/actors/UTA-2026-014/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1543.002",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Systemd Service. 1 report(s) about UTA-2026-014, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections. https://the-hunters-ledger.com/actors/UTA-2026-014/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1546.004",
+      "tactic": "privilege-escalation",
+      "score": 1,
+      "comment": "Unix Shell Configuration Modification. 1 report(s) about UTA-2026-014, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections. https://the-hunters-ledger.com/actors/UTA-2026-014/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1564.001",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Hidden Files and Directories. 1 report(s) about UTA-2026-014, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections. https://the-hunters-ledger.com/actors/UTA-2026-014/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1584.004",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Server. 1 report(s) about UTA-2026-014, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections. https://the-hunters-ledger.com/actors/UTA-2026-014/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1587.001",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Malware. 1 report(s) about UTA-2026-014, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections. https://the-hunters-ledger.com/actors/UTA-2026-014/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1588.001",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Malware. 1 report(s) about UTA-2026-014, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections. https://the-hunters-ledger.com/actors/UTA-2026-014/",
+      "enabled": true
+    }
+  ],
+  "gradient": {
+    "colors": [
+      "#fbe7fd",
+      "#e879f9"
+    ],
+    "minValue": 0,
+    "maxValue": 1
+  }
+}

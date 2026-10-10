@@ -1,0 +1,139 @@
+{
+  "name": "The Hunter’s Ledger: UTA-2026-013",
+  "domain": "enterprise-attack",
+  "description": "ATT&CK techniques mapped by the published reports about UTA-2026-013 on the-hunters-ledger.com (3 report(s), 17 technique(s)). Score is the number of reports about the actor mapping the technique. Profile: https://the-hunters-ledger.com/actors/UTA-2026-013/",
+  "versions": {
+    "attack": "19",
+    "navigator": "4.9.0",
+    "layer": "4.5"
+  },
+  "techniques": [
+    {
+      "techniqueID": "T1005",
+      "tactic": "collection",
+      "score": 1,
+      "comment": "Data from Local System. 1 report(s) about UTA-2026-013, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections. https://the-hunters-ledger.com/actors/UTA-2026-013/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1020",
+      "tactic": "exfiltration",
+      "score": 1,
+      "comment": "Automated Exfiltration. 1 report(s) about UTA-2026-013, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections. https://the-hunters-ledger.com/actors/UTA-2026-013/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1021.004",
+      "tactic": "lateral-movement",
+      "score": 1,
+      "comment": "SSH. 1 report(s) about UTA-2026-013, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections. https://the-hunters-ledger.com/actors/UTA-2026-013/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1041",
+      "tactic": "exfiltration",
+      "score": 1,
+      "comment": "Exfiltration Over C2 Channel. 1 report(s) about UTA-2026-013, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections. https://the-hunters-ledger.com/actors/UTA-2026-013/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1046",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Network Service Discovery. 1 report(s) about UTA-2026-013, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections. https://the-hunters-ledger.com/actors/UTA-2026-013/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.001",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "PowerShell. 1 report(s) about UTA-2026-013, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections. https://the-hunters-ledger.com/actors/UTA-2026-013/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.006",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Python. 1 report(s) about UTA-2026-013, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections. https://the-hunters-ledger.com/actors/UTA-2026-013/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1071.001",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Web Protocols. 1 report(s) about UTA-2026-013, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections. https://the-hunters-ledger.com/actors/UTA-2026-013/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1078",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Valid Accounts. 1 report(s) about UTA-2026-013, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections. https://the-hunters-ledger.com/actors/UTA-2026-013/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1098.004",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "SSH Authorized Keys. 1 report(s) about UTA-2026-013, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections. https://the-hunters-ledger.com/actors/UTA-2026-013/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1119",
+      "tactic": "collection",
+      "score": 1,
+      "comment": "Automated Collection. 1 report(s) about UTA-2026-013, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections. https://the-hunters-ledger.com/actors/UTA-2026-013/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1213",
+      "tactic": "collection",
+      "score": 1,
+      "comment": "Data from Information Repositories. 1 report(s) about UTA-2026-013, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections. https://the-hunters-ledger.com/actors/UTA-2026-013/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1543.002",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Systemd Service. 1 report(s) about UTA-2026-013, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections. https://the-hunters-ledger.com/actors/UTA-2026-013/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1552.001",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Credentials In Files. 1 report(s) about UTA-2026-013, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections. https://the-hunters-ledger.com/actors/UTA-2026-013/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1569.002",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Service Execution. 1 report(s) about UTA-2026-013, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections. https://the-hunters-ledger.com/actors/UTA-2026-013/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1572",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Protocol Tunneling. 1 report(s) about UTA-2026-013, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections. https://the-hunters-ledger.com/actors/UTA-2026-013/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1587",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Develop Capabilities. 1 report(s) about UTA-2026-013, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections. https://the-hunters-ledger.com/actors/UTA-2026-013/",
+      "enabled": true
+    }
+  ],
+  "gradient": {
+    "colors": [
+      "#fbe7fd",
+      "#e879f9"
+    ],
+    "minValue": 0,
+    "maxValue": 1
+  }
+}

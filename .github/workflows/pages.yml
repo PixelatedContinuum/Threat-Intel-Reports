@@ -152,6 +152,9 @@ jobs:
           actors=$(grep -o 'class="hl-card hl-catalog-card hl-actor-card"' _site/actors/index.html | wc -l)
           echo "actor index renders $actors cards"
           test "$actors" -gt 0
+          layers=$(ls _site/actors/*/attack-navigator-layer.json | wc -l)
+          echo "actor profiles publish $layers Navigator layers"
+          test "$layers" -eq "$actors"
           test -f _site/techniques/index.html
           test -f _site/families/index.html
           test -f _site/assets/data/attack-navigator-layer.json

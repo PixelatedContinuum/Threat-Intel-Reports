@@ -1,0 +1,293 @@
+{
+  "name": "The Hunter’s Ledger: UTA-2026-006",
+  "domain": "enterprise-attack",
+  "description": "ATT&CK techniques mapped by the published reports about UTA-2026-006 on the-hunters-ledger.com (1 report(s), 39 technique(s)). Score is the number of reports about the actor mapping the technique. Profile: https://the-hunters-ledger.com/actors/UTA-2026-006/",
+  "versions": {
+    "attack": "19",
+    "navigator": "4.9.0",
+    "layer": "4.5"
+  },
+  "techniques": [
+    {
+      "techniqueID": "T1003.001",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "LSASS Memory. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1003.002",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Security Account Manager. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1003.003",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "NTDS. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1003.006",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "DCSync. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1018",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Remote System Discovery. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1027",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Obfuscated Files or Information. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1055",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Process Injection. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1055.002",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Portable Executable Injection. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1056.001",
+      "tactic": "collection",
+      "score": 1,
+      "comment": "Keylogging. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1057",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Process Discovery. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.001",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "PowerShell. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1068",
+      "tactic": "privilege-escalation",
+      "score": 1,
+      "comment": "Exploitation for Privilege Escalation. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1069.002",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Domain Groups. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1071.001",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Web Protocols. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1082",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "System Information Discovery. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1083",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "File and Directory Discovery. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1087.002",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Domain Account. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1090.001",
+      "tactic": "lateral-movement",
+      "score": 1,
+      "comment": "Internal Proxy. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1105",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Ingress Tool Transfer. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1132.001",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Standard Encoding. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1134.001",
+      "tactic": "privilege-escalation",
+      "score": 1,
+      "comment": "Token Impersonation/Theft. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1134.002",
+      "tactic": "privilege-escalation",
+      "score": 1,
+      "comment": "Create Process with Token. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1140",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Deobfuscate/Decode Files or Information. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1482",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Domain Trust Discovery. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1518.001",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Security Software Discovery. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1552.004",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Private Keys. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1555",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Credentials from Password Stores. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1555.003",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Credentials from Web Browsers. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1555.004",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Windows Credential Manager. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1558.003",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Kerberoasting. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1558.004",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "AS-REP Roasting. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1572",
+      "tactic": "lateral-movement",
+      "score": 1,
+      "comment": "Protocol Tunneling. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1573.001",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Symmetric Cryptography. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1574.001",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "DLL. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1583.003",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Virtual Private Server. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1588.002",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Tool. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1620",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Reflective Code Loading. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1649",
+      "tactic": "privilege-escalation",
+      "score": 1,
+      "comment": "Steal or Forge Authentication Certificates. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1685",
+      "tactic": "defense-impairment",
+      "score": 1,
+      "comment": "Disable or Modify Tools. 1 report(s) about UTA-2026-006, mapped in https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/. https://the-hunters-ledger.com/actors/UTA-2026-006/",
+      "enabled": true
+    }
+  ],
+  "gradient": {
+    "colors": [
+      "#fbe7fd",
+      "#e879f9"
+    ],
+    "minValue": 0,
+    "maxValue": 1
+  }
+}

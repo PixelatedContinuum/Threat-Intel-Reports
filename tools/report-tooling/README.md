@@ -101,14 +101,16 @@ feed under `ioc-feeds/<slug>/`, and REMOVES a stub whose feed is no longer publi
 page: the three embargoed campaigns keep their raw JSON, which is live-but-unlisted by
 design, and gain no rendered surface.
 
-`node generate-actors.js` writes `_data/actors_index.yml` and one stub page per designation
-under `actors/<id>/` from the hand-written `_data/actors.yml`, the catalog and the reports: every
-published report that names a designation, and the ATT&CK techniques the primary reports map
-(read with the same parser as the coverage strip). It REMOVES a stub whose designation left the
-data file. `node link-actors.js` turns every bare `UTA-YYYY-NNN` in a published report or
+`node generate-actors.js` writes `_data/actors_index.yml`, one stub page per designation
+under `actors/<id>/` and, beside each stub, that actor's ATT&CK Navigator layer
+(`actors/<id>/attack-navigator-layer.json`, the per-actor counterpart of the site-wide layer,
+scored by how many reports about the actor map each technique) from the hand-written
+`_data/actors.yml`, the catalog and the reports: every published report that names a
+designation, and the ATT&CK techniques the primary reports map (read with the same parser as
+the coverage strip). It REMOVES a stub, with its layer, whose designation left the data file. `node link-actors.js` turns every bare `UTA-YYYY-NNN` in a published report or
 detection page into a link to its actor page (idempotent; code, headings, tags and existing
-links are left alone). `node check-actors.js` gates all of it: regenerate-and-diff on the index
-and the stubs, a FAIL on a bare mention that has a page, and a FAIL on a designation a published
+links are left alone). `node check-actors.js` gates all of it: regenerate-and-diff on the index,
+the stubs and the layers, a FAIL on a bare mention that has a page, and a FAIL on a designation a published
 report names with no entry. A designation whose only report is unlisted gets no entry and no
 page until go-live, and the gate names it as absent on purpose.
 
@@ -143,7 +145,7 @@ PyMISP (the Actions `gates` job runs it; locally `pip install pymisp` first).
 URL, SHA-256, size, object and indicator counts and modified time, plus the zip, so a platform
 can poll one file and fetch only what changed. `node check-stix-manifest.js` gates it.
 
-| `_data/actors.yml`, `_data/actors_index.yml`, `actors/*/index.md`, `_data/catalog.yml`, `reports/*/index.md`, `hunting-detections/*.md` | `check-actors.js` | index or a page stale, a bare designation unlinked, a designation with no entry |
+| `_data/actors.yml`, `_data/actors_index.yml`, `actors/*/index.md`, `actors/*/attack-navigator-layer.json`, `_data/catalog.yml`, `reports/*/index.md`, `hunting-detections/*.md` | `check-actors.js` | index, a page or a layer stale, a bare designation unlinked, a designation with no entry |
 | `_data/families.yml`, `_data/attack_index.yml`, `_data/family_index.yml`, `techniques/*/index.md`, `families/*/index.md`, `assets/data/attack-navigator-layer.json`, plus every input above and `ioc-feeds/*.json` | `check-xref.js` | an index, the layer or a page stale, a vocabulary entry nothing published matches |
 | `feeds/misp/*`, `stix/*.json`, `hunting-detections/*.md`, `reports/*/index.md`, `_data/catalog.yml`, the ATT&CK TSV | `check-misp-feed.js` | an event, the manifest or hashes.csv stale; content changed without its timestamp moving; a withdrawn event the changelog does not itemise |
 | `stix/*.json`, `stix/*.zip`, `stix/manifest.json`, `_data/catalog.yml` | `check-stix-manifest.js` | the manifest stale against a bundle, the zip or the catalog |
