@@ -1,6 +1,6 @@
 # Hand-off: site enhancements, where things stand and what is next
 
-**Date:** 2026-10-09, end of the first enhancement session
+**Date:** 2026-10-09, end of the first enhancement session; updated 2026-10-10 (T-0202)
 **Site repo:** `PixelatedContinuum/Threat-Intel-Reports`, work goes straight to `main` (Joseph, 2026-10-09)
 **Tracker:** `PixelatedContinuum/ai-workflows`, `tasks/`; the next session's task is filed there and points here
 
@@ -26,7 +26,7 @@
   from inside `_site`. Use `devices['iPhone 13']` for a real phone render; a desktop viewport at
   phone width is NOT a phone render. Stop the server with `fuser -k <port>/tcp`, not `pkill -f`
   (that matches and kills the calling shell).
-- **Tests and gates:** `cd tools/report-tooling && npm test` (790 tests) and
+- **Tests and gates:** `cd tools/report-tooling && npm test` (837 tests at 2026-10-10) and
   `node tools/git-hooks/precommit.js` after `git add -A`. Both must be green before a push.
 - **Cache-busting is load-bearing.** Markup and script ship as pairs: `listing-filter.js?v=11`,
   `ioc-table.js?v=3`, `nav-drawer.js?v=1`; bump the number when the script changes. The
@@ -194,23 +194,73 @@
 - Backlog item 3 (consolidated YARA and Sigma feeds) was scrapped by Joseph: neither engine has
   a feed mechanism, so this feed is the subscribe-able output for all three engines.
 
+## Shipped since: the per-actor Navigator layer and the item 5 quick wins (T-0202, 2026-10-10)
+
+Seven commits to site main, one per item, each verified the same way (unit tests, the gates,
+a local github-pages build, Pagefind, Playwright desktop and iPhone 13, Actions green):
+
+- **Per-actor Navigator layer** (fd3440d, run 32). `actors/<id>/attack-navigator-layer.json`
+  beside every stub, written by `generate-actors.js` (`lib/actors.js` `navigatorLayer`, pure),
+  gated by `check-actors.js` (a missing or stale layer FAILs), routed by `staged-gate.js`, counted
+  by the Actions sanity check (one layer per actor card). Score is the number of reports about the
+  actor that map the technique; the profile's ATT&CK section links it beside the site-wide layer.
+  Publish skill Step 4f, row 1j and the Step 5 staging note name it (stage `actors/` whole: a report
+  that adds a technique to an existing actor rewrites that actor's layer).
+- **IOC deep link** (a761a9a, run 33). `/ioc-feeds/?q=<indicator>` lands with the search run and
+  the grid narrowed; comma or newline lists work; the box mirrors back into `?q=` (replaceState,
+  dropped when empty). Query string, not hash: `listing-filter.js` owns the hash and preserves the
+  search string. `ioc-search.js?v=2`. Four jsdom tests.
+- **Wire chips and feed** (904792d, run 34). Research and News chips on the existing `data-kind`
+  axis (`kind=` in the hash, counts from `wire.counts`, chips carry the row marker glyph);
+  `/wire/feed.xml`, Atom, newest 200, links and publisher only, valid and empty without Wire data,
+  in the Wire page head and on `/subscribe/`.
+- **Revision history** (217269b, run 35). `revisions:` in a report's front matter, a list of
+  `{ date, note }`, rendered as a collapsed block at the top of the body (the header's Updated date
+  links to `#revisions`), publication date last. `check-report.js` gained a `revisions` verdict
+  (`lib/check-revisions.js`): `last_updated` must equal the newest revision date, no date before
+  publication, no empty note or list. The seven `last_updated`-only reports render one honest
+  unitemised row; ShinyHunters DLS and the 172.105.0.126 open directory carry itemised lists taken
+  from what their text already documents. Nothing is derived from git. `feed.xml` entry `<updated>`
+  follows `last_updated`. Documented on `/report-templates/`, in the skill's Step 1 block and
+  `front-matter-fields.md`: on every revision, append an entry AND bump `last_updated`; never a
+  victim's name in a note.
+- **Cite box** (d15edb7, run 36). At the end of every report and detection page: a citation line
+  with Copy, the CC BY 4.0 sentence, and BibTeX in a collapsed details (it gets the code-block Copy
+  button). Built from the page's own front matter and the structured data's author.
+- **Detections Atom feed and JSON Feeds** (265d1f4, run 37). `/hunting-detections/feed.xml`
+  (published detection pages only), `/feed.json` and `/hunting-detections/feed.json` (JSON Feed
+  1.1). Head discovery links, library panel links, `/subscribe/` lists all; the Actions sanity
+  check parses all five feeds.
+- **Dataset structured data** (10cc7d5, run 39; rebased onto 277055f, T-0204, which landed mid-session and whose own run 38 was superseded by run 39 on the same tree). A schema.org `Dataset` on every IOC viewer page
+  (`_includes/structured-data-dataset.liquid`: typed counts as `variableMeasured`, JSON and page as
+  distributions, `isBasedOn` the report), a `DataCatalog` on `/ioc-feeds/` and `/stix/` (the STIX one
+  lists the zip and the manifest). From the catalog and `_data/ioc_tables.yml`, so an embargoed
+  campaign is absent by construction; the Actions sanity check parses the JSON-LD on all 61 pages.
+
+Nothing in item 5 needs a publish-time regeneration step: every surface is Liquid over data the
+publish already writes, so Steps 4f to 4h are unchanged apart from the layer note in 4f.
+
+Noticed and left alone: the theme head emits the site Atom feed link twice on every page (the
+hand-written `<link>` in `head.liquid` plus `{% feed_meta %}`); harmless, one line to drop if wanted.
+The Playwright element screenshot of a phone render can show the fixed mobile Contents bar over
+the element; that is the capture, not the page.
+
 ## The backlog, ranked
 
 Each item is self-contained. The first three are the ones Joseph was leaning toward.
 
-1. **Threat actor index.** DONE 2026-10-09, see above. Left open: a named-actor entry kind,
-   and a per-actor Navigator layer download once item 2 builds the site-wide layer.
-2. **Technique and family cross-reference pages.** DONE 2026-10-09, see above. Left open: the
-   per-actor Navigator layer download.
+1. **Threat actor index.** DONE 2026-10-09, see above. Left open: a named-actor entry kind.
+   The per-actor Navigator layer download shipped 2026-10-10 (T-0202).
+2. **Technique and family cross-reference pages.** DONE 2026-10-09, see above. The per-actor
+   Navigator layer download shipped 2026-10-10 (T-0202).
 3. **Consolidated YARA and Sigma feeds.** SCRAPPED 2026-10-09 (Joseph): no feed mechanism
    exists for either engine; the MISP feed carries all three engines' rules instead.
 4. **MISP feed and STIX manifest.** DONE 2026-10-09, see above. Left open: the first real pull
    from Joseph's MISP, and whatever it shows.
-5. **Quick wins.** `?q=` on the IOC Feeds page so a tool can deep-link one indicator; Research
-   versus News chips on the Wire (listing-filter.js already supports a `data-kind` axis, the
-   page renders no chips for it) and a Wire-only RSS feed; per-report revision history (seven
-   reports carry `last_updated` with nothing shown); a "cite this report" box; detections-only
-   Atom feed and a JSON Feed; `Dataset` structured data on IOC and STIX pages.
+5. **Quick wins.** DONE 2026-10-10 (T-0202), see above: `?q=` IOC deep link, Wire Research and
+   News chips and the Wire-only Atom feed, per-report revision history, the cite box, the
+   detections-only Atom feed and the two JSON Feeds, `Dataset` structured data on IOC and STIX
+   pages. The per-actor Navigator layer left open by items 1 and 2 shipped with it.
 6. **Tidy-ups.** DONE 2026-10-09, see above.
 
 ## How to start the next session
