@@ -254,17 +254,33 @@ the element; that is the capture, not the page.
 - The heatmap filter on `/techniques/` is mirrored into `#q=`, same rules as the listing filter;
   `heatmap-filter.js?v=2`, four jsdom tests (a761c3d).
 
-Still open from the T-0202 close: a `/changes/` page and feed built on the revision lists; a link
-from each report to its MISP event (needs a generated `_data/misp_events.yml`); the named-actor
-entry kind; the five older reports' revision lists (Joseph's memory); the IOC column findings
-above; the tier-order advisories; and one live-site browser sweep from Joseph's host.
+## Shipped since: the named-actor entry kind (T-0206, 2026-10-10)
+
+- `_data/actors.yml` takes `kind: named`: an actor a report attributes to a self-identifying
+  handle at HIGH or DEFINITE, so no UTA was assigned. Slug `id`, `name` as the report prints it,
+  optional `mentions` (exact strings the generator counts to find which reports name it; the UTA
+  pattern is never used and prose is never rewritten to link a handle), `confidence.named_actor`
+  HIGH or DEFINITE with `named_actor_pct`, `primary_host` optional. Everything else, the
+  identifiers rule included, is the same as a designation. `lib/actors.js` validates it,
+  `link-actors.js` links designations only, the layouts show the handle (profile label Named
+  Actor, a named-actor note in place of the UTA note, UTA and Named chips on `/actors/`,
+  technique, family and related lists by name). Publish skill Step 4f has the paragraph.
+- Two entries: `vova75rus` (the GHOST kit author, HIGH 88, related to its customer operators
+  UTA-2026-016 and 017, which point back) and `n-3-xl` (the KAIDO and EvilSoul-Engine operator,
+  HIGH 85, two primary reports). The EvilSoul developer `@breakingupslow` has no entry: no report
+  is about that person. 25 actor pages and layers now.
+
+Still open: a `/changes/` page and feed built on the revision lists; a link from each report to its
+MISP event (needs a generated `_data/misp_events.yml`); the five older reports' revision lists
+(Joseph's memory); the IOC column findings above; the tier-order advisories; and one live-site
+browser sweep from Joseph's host.
 
 ## The backlog, ranked
 
 Each item is self-contained. The first three are the ones Joseph was leaning toward.
 
-1. **Threat actor index.** DONE 2026-10-09, see above. Left open: a named-actor entry kind.
-   The per-actor Navigator layer download shipped 2026-10-10 (T-0202).
+1. **Threat actor index.** DONE 2026-10-09, see above. The per-actor Navigator layer download
+   (T-0202) and the named-actor entry kind (T-0206) shipped 2026-10-10.
 2. **Technique and family cross-reference pages.** DONE 2026-10-09, see above. The per-actor
    Navigator layer download shipped 2026-10-10 (T-0202).
 3. **Consolidated YARA and Sigma feeds.** SCRAPPED 2026-10-09 (Joseph): no feed mechanism
