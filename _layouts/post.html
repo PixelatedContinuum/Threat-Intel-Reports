@@ -125,6 +125,39 @@ the coverage above is narrower than the rule set.</em></p>
   {%- endif -%}
 {%- endif %}
     {{ content }}
+{%- comment -%}
+  Cite this report. A ready citation line and a BibTeX record, both built
+  from the front matter the page already carries (title, date, last_updated,
+  url) and the author the structured data names, so nothing here can drift
+  from the page. The BibTeX sits in a pre inside the content column, which is
+  what gives it the same Copy button every code block gets; the citation line
+  gets its own button in the script at the end of this layout. Shown on
+  reports and detection pages alike, each under its own title.
+{%- endcomment -%}
+{%- assign _is_det = false -%}{%- if page.path contains 'hunting-detections' %}{% assign _is_det = true %}{% endif -%}
+{%- assign _cite_url = page.url | absolute_url -%}
+{%- assign _cite_key = page.url | split: '/' | last | slugify -%}
+{%- assign _cite_title = page.title | replace: '&', '\&' | replace: '%', '\%' | replace: '#', '\#' -%}
+<div class="hl-cite" id="cite" data-pagefind-ignore>
+  <div class="hl-cite__head">Cite this {% if _is_det %}detection page{% else %}report{% endif %}</div>
+  <p class="hl-cite__text" id="hl-cite-text">Harrison, J. ({{ page.date | date: "%Y" }}). <em>{{ page.title }}</em>. The Hunter's Ledger. {{ _cite_url }}. Published {{ page.date | date: "%-d %B %Y" }}{% if page.last_updated %}, revised {{ page.last_updated | date: "%-d %B %Y" }}{% endif %}.</p>
+  <div class="hl-cite__actions">
+    <button type="button" class="hl-cite__btn" data-cite-copy="hl-cite-text">Copy citation</button>
+    <span class="hl-cite__licence">CC BY 4.0: free to reuse, including commercially, with attribution and a link to this page.{% if page.last_updated %} Cite the revision date; the <a href="#revisions">revision history</a> says what changed.{% endif %}</span>
+  </div>
+  <details class="hl-cite__bibtex">
+    <summary>BibTeX</summary>
+<pre><code class="language-bibtex">@misc{hunters-ledger-{{ _cite_key }},
+  author       = {Harrison, Joseph},
+  title        = { {{- _cite_title -}} },
+  howpublished = {The Hunter's Ledger},
+  year         = { {{- page.date | date: "%Y" -}} },
+  month        = { {{- page.date | date: "%b" | downcase -}} },
+  url          = { {{- _cite_url -}} },
+  note         = {Published {{ page.date | date: "%-d %B %Y" }}{% if page.last_updated %}; revised {{ page.last_updated | date: "%-d %B %Y" }}{% endif %}. Licensed CC BY 4.0.}
+}</code></pre>
+  </details>
+</div>
   </div>
   <aside class="hl-post-toc" id="hl-toc" aria-label="Table of contents" data-pagefind-ignore>
     <div class="hl-post-toc__heading">Contents</div>
@@ -392,6 +425,21 @@ the coverage above is narrower than the rule set.</em></p>
     });
     eyebrow.appendChild(shareBtn);
   }
+
+  // --- Copy citation (the BibTeX pre gets the code-block button below) ---
+  document.querySelectorAll('[data-cite-copy]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var src = document.getElementById(btn.getAttribute('data-cite-copy'));
+      if (!src) return;
+      navigator.clipboard.writeText(src.textContent.replace(/\s+/g, ' ').trim()).then(function () {
+        btn.textContent = 'Copied!';
+        setTimeout(function () { btn.textContent = 'Copy citation'; }, 2000);
+      }).catch(function () {
+        btn.textContent = 'Error';
+        setTimeout(function () { btn.textContent = 'Copy citation'; }, 2000);
+      });
+    });
+  });
 
   // --- Copy buttons on code blocks ---
   content.querySelectorAll('pre').forEach(function (pre) {

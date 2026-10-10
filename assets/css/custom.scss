@@ -1475,6 +1475,45 @@ main.content {
 a.hl-last-updated { text-decoration: none; border-bottom: 1px dotted currentColor; }
 a.hl-last-updated:hover { opacity: 1; }
 
+/* Cite this report: a boxed citation line, a copy button and the BibTeX in
+   a collapsed details, at the end of the content column. */
+.hl-cite {
+  margin: 2.2em 0 0.4em;
+  padding: 14px 16px 12px;
+  border: 1px solid var(--hl-border-card);
+  border-left: 3px solid var(--hl-accent-blue);
+  border-radius: 6px;
+  background: var(--hl-bg-card);
+  font-size: 0.82em;
+}
+.hl-cite__head {
+  font-size: 0.78em;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--hl-text-muted);
+  margin-bottom: 6px;
+}
+.hl-post-content .hl-cite__text { margin: 0 0 10px; line-height: 1.6; color: var(--hl-text-primary); font-size: 1em; overflow-wrap: anywhere; }
+.hl-cite__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+.hl-cite__btn {
+  background: none;
+  border: 1px solid var(--hl-border-row);
+  border-radius: 4px;
+  color: var(--hl-text-dim);
+  cursor: pointer;
+  font-size: 0.9em;
+  font-family: inherit;
+  padding: 3px 10px;
+  line-height: 1.6;
+  transition: color 0.15s, border-color 0.15s;
+}
+.hl-cite__btn:hover { color: var(--hl-accent-blue); border-color: var(--hl-accent-blue); }
+.hl-cite__licence { color: var(--hl-text-muted); font-size: 0.9em; }
+.hl-cite__bibtex { margin-top: 10px; }
+.hl-cite__bibtex > summary { cursor: pointer; color: var(--hl-text-muted); font-size: 0.9em; }
+.hl-cite__bibtex > summary:hover { color: var(--hl-text-primary); }
+.hl-post-content .hl-cite__bibtex pre { margin: 8px 0 0; font-size: 0.9em; }
+
 /* --- Share button in post eyebrow --------------------------- */
 .hl-share-btn {
   margin-left: auto;
