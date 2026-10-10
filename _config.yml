@@ -49,10 +49,6 @@ cloudflare_analytics_token: "d2247d7d41d343ae8916378d68d0da25"
 google_site_verification: ""
 bing_site_verification: ""
 
-# PAGINATION
-paginate: 5
-#paginate_path: "/blog/page:num"
-
 # BUILD SETTINGS
 # Every Liquid date (report dates, Wire day headings, feed timestamps) is
 # formatted in this zone regardless of which machine builds the site. The Wire
