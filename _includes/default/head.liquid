@@ -100,7 +100,10 @@
     <link rel="alternate" type="application/atom+xml" title="{{ site.title | default: 'Title' }}: Detection Rules" href="{{ 'hunting-detections/feed.xml' | absolute_url }}"/>
     <link rel="alternate" type="application/feed+json" title="{{ site.title | default: 'Title' }}: Detection Rules" href="{{ 'hunting-detections/feed.json' | absolute_url }}"/>
     {%- endif %}
-    {% feed_meta %}
+    {%- comment -%} jekyll-feed's {% feed_meta %} used to follow here and wrote the site feed
+    link a second time (the hand-written one above is the one with the title and the
+    siblings). Removed 2026-10-10; the plugin still does nothing else here because the
+    hand-written feed.xml takes precedence over the one it would generate. {%- endcomment -%}
 
     {%- comment -%} Twitter/X card. `twitter:title` comes from jekyll-seo-tag above; the
     `summary` card it also writes is stripped there, so these are the only card, description
