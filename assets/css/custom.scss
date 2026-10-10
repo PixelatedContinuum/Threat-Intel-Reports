@@ -3904,6 +3904,23 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 }
 .hl-chip-btn__n { opacity: 0.6; font-size: 0.85em; margin-left: 3px; }
 
+/* The kind row: the chips carry the row marker's own glyph (solid dot for
+   research, ring for news, see .hl-wire__src::before) so the legend is the
+   control. Same spacing as the detection library's tier row. */
+.hl-filter__chips--kind { margin-top: 9px; align-items: center; }
+.hl-chip-btn--kind::before {
+  content: "";
+  display: inline-block;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  margin-right: 6px;
+  background: currentColor;
+}
+.hl-chip-btn--news::before {
+  background: transparent;
+  box-shadow: inset 0 0 0 2px currentColor;
+}
+
 /* Chip sizing is scoped to the Wire. `.hl-chip-btn` is shared with four other
    listing pages and is set in rem, so it renders 12.8px against this page's
    20px body. Changing the shared rule would resize every listing at once. */

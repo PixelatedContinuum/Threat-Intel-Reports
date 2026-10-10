@@ -91,6 +91,9 @@
 
     <!-- RSS -->
     <link rel="alternate" type="application/atom+xml" title="{{ site.title | default: 'Title' }}" href="{{ 'feed.xml' | absolute_url }}"/>
+    {%- if page.url == '/wire/' %}
+    <link rel="alternate" type="application/atom+xml" title="{{ site.title | default: 'Title' }}: The Wire" href="{{ 'wire/feed.xml' | absolute_url }}"/>
+    {%- endif %}
     {% feed_meta %}
 
     {%- comment -%} Twitter/X card. `twitter:title` comes from jekyll-seo-tag above; the

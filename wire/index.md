@@ -16,7 +16,7 @@ position: 2.5
 {%- assign wire = site.data.wire -%}
 {%- if wire and wire.items and wire.items != empty -%}
 
-<p class="hl-wire__freshness">Updated {{ wire.generated_at | date: "%-d %B %Y, %H:%M" }} UTC &middot; {{ wire.counts.total }} items from the last {{ wire.window_days }} days</p>
+<p class="hl-wire__freshness">Updated {{ wire.generated_at | date: "%-d %B %Y, %H:%M" }} UTC &middot; {{ wire.counts.total }} items from the last {{ wire.window_days }} days &middot; <a href="{{ '/wire/feed.xml' | relative_url }}">Atom feed</a></p>
 
 <details class="hl-wire__prov">
   <summary>Generated from my own OpenCTI instance, not scraped</summary>
@@ -43,6 +43,19 @@ position: 2.5
     <button type="button" class="hl-chip-btn is-on" data-tag="">All</button>
     {%- for t in wire.topics -%}<button type="button" class="hl-chip-btn hl-chip-btn--topic hl-topic-c{{ t.color }}" data-tag="{{ t.label }}">{{ t.label }} <span class="hl-chip-btn__n">{{ t.count }}</span></button>{%- endfor -%}
   </div>
+  {%- comment -%}
+    The second axis listing-filter.js already supports (data-kind, hash key
+    kind=). Research is a vendor or researcher write-up, News a press report;
+    the generator sets the kind, and every item carries one (check-wire.js).
+    The chips echo the row marker: a solid dot is research, a ring is news.
+    The two axes AND together, so a topic plus a kind narrows to both.
+  {%- endcomment -%}
+  <div class="hl-filter__chips hl-filter__chips--kind">
+    <span class="hl-filter__dim">Kind</span>
+    <button type="button" class="hl-chip-btn is-on" data-kind="">All</button>
+    <button type="button" class="hl-chip-btn hl-chip-btn--kind hl-chip-btn--research" data-kind="research">Research <span class="hl-chip-btn__n">{{ wire.counts.research }}</span></button>
+    <button type="button" class="hl-chip-btn hl-chip-btn--kind hl-chip-btn--news" data-kind="news">News <span class="hl-chip-btn__n">{{ wire.counts.news }}</span></button>
+  </div>
   <div class="hl-filter__date">
     <label class="hl-filter__dim" for="hl-wire-date">Date</label>
     <input class="hl-filter__dateinput" type="date" id="hl-wire-date" data-filter-date aria-label="Show only headlines from this date">
@@ -68,7 +81,7 @@ position: 2.5
 
 {%- else -%}
 
-<p class="hl-wire__freshness">The Wire is not currently available. The feed is regenerated every hour; if this persists, the generator needs attention.</p>
+<p class="hl-wire__freshness">The Wire is not currently available. The feed is regenerated every hour; if this persists, the generator needs attention. The <a href="{{ '/wire/feed.xml' | relative_url }}">Atom feed</a> carries the same headlines and is empty while this is the case.</p>
 
 {%- endif %}
 

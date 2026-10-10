@@ -1,0 +1,48 @@
+---
+layout: none
+permalink: /wire/feed.xml
+sitemap: false
+---
+<?xml version="1.0" encoding="UTF-8"?>
+{%- comment -%}
+  The Wire as an Atom feed: the same headlines /wire/ renders, from the same
+  _data/wire.yml the deploy workflow copies in from the wire-data branch,
+  newest first, capped so a reader fetching hourly is never handed the whole
+  30-day window. Headlines and links only, exactly as the page: every entry's
+  link is the publisher's, the author is the publisher, and there is no body
+  to copy. The ids are the publisher URLs, which is what a reader dedupes on.
+  Without Wire data (no wire-data branch yet, or the gate dropped a malformed
+  file) this is a valid, empty feed rather than a 404.
+{%- endcomment -%}
+{%- assign wire = site.data.wire %}
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>{{ site.title | xml_escape }}: The Wire</title>
+  <subtitle>Threat intelligence headlines from public research and news sources, refreshed hourly. Links only; every entry goes to the original publisher. Original research is in the main feed.</subtitle>
+  <link href="{{ site.url }}/wire/feed.xml" rel="self" type="application/atom+xml"/>
+  <link href="{{ site.url }}/wire/" rel="alternate" type="text/html"/>
+  <link href="{{ site.url }}/feed.xml" rel="related" type="application/atom+xml" title="{{ site.title | xml_escape }}: reports"/>
+  <updated>{% if wire and wire.generated_at %}{{ wire.generated_at | date_to_xmlschema }}{% else %}{{ site.time | date_to_xmlschema }}{% endif %}</updated>
+  <id>{{ site.url }}/wire/</id>
+  <author>
+    <name>{{ site.title | xml_escape }}</name>
+    <uri>{{ site.url }}</uri>
+  </author>
+  <rights>Headlines and links are the property of their publishers and appear here as attributed links.</rights>
+{%- if wire and wire.items and wire.items != empty %}
+  {%- for i in wire.items limit: 200 %}
+  <entry>
+    <title>{{ i.title | xml_escape }}</title>
+    <link href="{{ i.url | xml_escape }}" rel="alternate" type="text/html"/>
+    <id>{{ i.url | xml_escape }}</id>
+    <published>{{ i.date | date_to_xmlschema }}</published>
+    <updated>{{ i.date | date_to_xmlschema }}</updated>
+    <author><name>{{ i.source | xml_escape }}</name></author>
+    <category term="{{ i.kind | xml_escape }}" label="{{ i.kind | capitalize | xml_escape }}"/>
+    {%- for l in i.labels %}
+    <category term="{{ l | xml_escape }}"/>
+    {%- endfor %}
+    <summary type="text">{{ i.source | xml_escape }} ({{ i.kind }}). Headline and link only; read it at the publisher.</summary>
+  </entry>
+  {%- endfor %}
+{%- endif %}
+</feed>

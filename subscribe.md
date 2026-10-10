@@ -28,6 +28,12 @@ position: 5
     <span class="hl-feed-url__val">https://the-hunters-ledger.com/feed.xml</span>
     <button class="hl-feed-url__copy" type="button" data-copy="https://the-hunters-ledger.com/feed.xml">COPY</button>
   </div>
+  <div class="hl-feed-url" style="--acc: #58a6ff;">
+    <span class="hl-feed-url__label">The Wire</span>
+    <span class="hl-feed-url__val">https://the-hunters-ledger.com/wire/feed.xml</span>
+    <button class="hl-feed-url__copy" type="button" data-copy="https://the-hunters-ledger.com/wire/feed.xml">COPY</button>
+  </div>
+  <p class="hl-panel__desc" style="margin-top:10px;">The second feed is <a href="/wire/">The Wire</a> on its own: the hourly headlines from other publishers, links only, kept apart from the reports so a reader can take either without the other.</p>
 </div>
 
 <div class="hl-panel" style="--acc: #58a6ff;">
