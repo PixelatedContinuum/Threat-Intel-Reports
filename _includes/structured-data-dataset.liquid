@@ -10,7 +10,11 @@
     (the catalog's ioc_url entries, so an embargoed feed is absent by
     construction);
   - /stix/: a DataCatalog listing every published bundle as a Dataset (the
-    catalog's stix_url entries) plus the zip of all of them.
+    catalog's stix_url entries) plus the zip of all of them;
+  - /feeds/misp/: one Dataset for the MISP feed (manifest and hashes.csv as
+    downloads);
+  - /hunting-detections/: one Dataset for the consolidated Suricata ruleset
+    (the rules file and the changelog as downloads, the home metrics count).
 
   Everything is derived from data the page already renders. Every string is
   jsonified, so a title with a quote stays valid JSON; the Actions sanity
@@ -76,6 +80,50 @@
     }{% unless forloop.last %},{% endunless %}
     {%- endfor %}
   ]
+}
+</script>
+{%- elsif page.url == '/feeds/misp/' -%}
+{%- comment -%} No event count here: the catalog entry count is not the event
+  count (a campaign with neither a bundle nor a detection page has no event),
+  and the manifest the generator writes is not readable from Liquid. {%- endcomment -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "name": "The Hunter's Ledger MISP feed",
+  "description": {{ page.description | jsonify }},
+  "url": {{ page.url | absolute_url | jsonify }},
+  "identifier": {{ '/feeds/misp/manifest.json' | absolute_url | jsonify }},
+  "license": {{ _ds_licence | jsonify }},
+  "isAccessibleForFree": true,
+  "keywords": [{{ "MISP feed" | jsonify }}, {{ "indicators of compromise" | jsonify }}, {{ "Suricata" | jsonify }}, {{ "YARA" | jsonify }}, {{ "Sigma" | jsonify }}, {{ "threat intelligence" | jsonify }}],
+  "distribution": [
+    { "@type": "DataDownload", "name": "MISP feed manifest", "encodingFormat": "application/json", "contentUrl": {{ '/feeds/misp/manifest.json' | absolute_url | jsonify }} },
+    { "@type": "DataDownload", "name": "Attribute hashes for incremental pulls", "encodingFormat": "text/csv", "contentUrl": {{ '/feeds/misp/hashes.csv' | absolute_url | jsonify }} }
+  ],
+  "creator": { "@type": "Person", "name": "Joseph Harrison", "url": {{ _ds_author | jsonify }} },
+  "publisher": { "@type": "Organization", "name": "The Hunter's Ledger", "url": {{ site.url | jsonify }} }
+}
+</script>
+{%- elsif page.url == '/hunting-detections/' -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "name": "The Hunter's Ledger Suricata ruleset",
+  "description": "Every published Suricata detection consolidated into one auto-updating ruleset, an official suricata-update source (the-hunters-ledger/open) with the registered SID block 3500000-3509999. Licensed CC BY 4.0.",
+  "url": {{ page.url | absolute_url | jsonify }},
+  "identifier": {{ '/feeds/suricata/hunters-ledger.rules' | absolute_url | jsonify }},
+  "license": {{ _ds_licence | jsonify }},
+  "isAccessibleForFree": true,
+  "keywords": [{{ "Suricata" | jsonify }}, {{ "IDS rules" | jsonify }}, {{ "detection rules" | jsonify }}, {{ "threat intelligence" | jsonify }}],
+  "variableMeasured": [{ "@type": "PropertyValue", "name": "rules", "value": {{ site.data.metrics.suricata | default: 0 }} }],
+  "distribution": [
+    { "@type": "DataDownload", "name": "Ruleset", "encodingFormat": "text/plain", "contentUrl": {{ '/feeds/suricata/hunters-ledger.rules' | absolute_url | jsonify }} },
+    { "@type": "DataDownload", "name": "Changelog and withdrawn SIDs", "encodingFormat": "text/html", "contentUrl": {{ '/feeds/suricata/changelog/' | absolute_url | jsonify }} }
+  ],
+  "creator": { "@type": "Person", "name": "Joseph Harrison", "url": {{ _ds_author | jsonify }} },
+  "publisher": { "@type": "Organization", "name": "The Hunter's Ledger", "url": {{ site.url | jsonify }} }
 }
 </script>
 {%- elsif page.url == '/stix/' -%}
