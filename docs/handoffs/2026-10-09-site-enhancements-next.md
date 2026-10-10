@@ -240,10 +240,24 @@ a local github-pages build, Pagefind, Playwright desktop and iPhone 13, Actions 
 Nothing in item 5 needs a publish-time regeneration step: every surface is Liquid over data the
 publish already writes, so Steps 4f to 4h are unchanged apart from the layer note in 4f.
 
-Noticed and left alone: the theme head emits the site Atom feed link twice on every page (the
-hand-written `<link>` in `head.liquid` plus `{% feed_meta %}`); harmless, one line to drop if wanted.
 The Playwright element screenshot of a phone render can show the fixed mobile Contents bar over
 the element; that is the capture, not the page.
+
+## Shipped since: four quick fixes (T-0205, 2026-10-10)
+
+- `{% feed_meta %}` removed from `head.liquid`: the site feed link is written once (cdc0d8b).
+- `paginate: 5` dropped from `_config.yml`; the build no longer warns about a missing template (93fb9cb).
+- Dataset JSON-LD on `/feeds/misp/` (manifest and hashes.csv as downloads; no event count, since
+  Liquid cannot read the manifest and the catalog entry count is not the event count) and on
+  `/hunting-detections/` for the Suricata ruleset (count from `_data/metrics.yml`); the Actions
+  check parses 63 pages (41c04a9).
+- The heatmap filter on `/techniques/` is mirrored into `#q=`, same rules as the listing filter;
+  `heatmap-filter.js?v=2`, four jsdom tests (a761c3d).
+
+Still open from the T-0202 close: a `/changes/` page and feed built on the revision lists; a link
+from each report to its MISP event (needs a generated `_data/misp_events.yml`); the named-actor
+entry kind; the five older reports' revision lists (Joseph's memory); the IOC column findings
+above; the tier-order advisories; and one live-site browser sweep from Joseph's host.
 
 ## The backlog, ranked
 
