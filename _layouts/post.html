@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
       <span class="hl-post-header__badge hl-post-header__badge--report">{{ page.category | default: "Malware Analysis" }}</span>
     {% endif %}
     <span class="hl-post-header__sep">·</span>
-    <span class="hl-post-header__date">{{ page.date | date: "%B %d, %Y" }}{% if page.last_updated %} · <span class="hl-last-updated">Updated {{ page.last_updated | date: "%b %d, %Y" }}</span>{% endif %}</span>
+    <span class="hl-post-header__date">{{ page.date | date: "%B %d, %Y" }}{% if page.last_updated %} · <a class="hl-last-updated" href="#revisions" title="Revision history">Updated {{ page.last_updated | date: "%b %d, %Y" }}</a>{% endif %}</span>
   </div>
   <h1 class="hl-post-header__title">{{ page.title }}</h1>
 </div>
@@ -55,6 +55,36 @@ document.addEventListener('DOMContentLoaded', function () {
   </details>
   <div id="hl-toc-spacer" aria-hidden="true"></div>
   <div class="hl-post-content">
+{%- comment -%}
+  Revision history, on a report that has been revised since publication. The
+  record is the front matter: `revisions`, a list of { date, note }, newest
+  last as written, rendered newest first, with `last_updated` equal to the
+  newest date (check-report.js fails a mismatch, so the header and the history
+  can never disagree). A report that carries only `last_updated`, which is how
+  the seven reports revised before this block existed were recorded, gets one
+  honest row: revised on that date, change not itemised at the time. Nothing
+  here is derived from git: a site-wide tidy-up is not a revision of the
+  report, and the author decides what was. A detection page carries neither
+  field and so shows nothing.
+{%- endcomment -%}
+{%- if page.last_updated or page.revisions -%}
+{%- assign rev_count = page.revisions | default: empty | size -%}
+{%- if rev_count == 0 %}{% assign rev_count = 1 %}{% endif -%}
+<details class="hl-revisions" id="revisions" data-pagefind-ignore>
+  <summary>Revision history: {{ rev_count }} revision{% if rev_count != 1 %}s{% endif %} since publication, last {{ page.last_updated | default: page.date | date: "%-d %B %Y" }}</summary>
+  <ol class="hl-revisions__list" reversed>
+    {%- if page.revisions and page.revisions.size > 0 -%}
+    {%- assign revs = page.revisions | sort: "date" | reverse -%}
+    {%- for r in revs -%}
+    <li><time datetime="{{ r.date }}">{{ r.date | date: "%-d %B %Y" }}</time> <span class="hl-revisions__note">{{ r.note }}</span></li>
+    {%- endfor -%}
+    {%- else -%}
+    <li><time datetime="{{ page.last_updated }}">{{ page.last_updated | date: "%-d %B %Y" }}</time> <span class="hl-revisions__note">Revised. The change was not itemised at the time; revisions from here on are listed with what changed.</span></li>
+    {%- endif -%}
+    <li><time datetime="{{ page.date }}">{{ page.date | date: "%-d %B %Y" }}</time> <span class="hl-revisions__note">Published.</span></li>
+  </ol>
+</details>
+{%- endif %}
 {%- comment -%}
   ATT&CK coverage table for a detection page, generated into
   _data/detection_attack.yml from the (already gated) detection manifest.

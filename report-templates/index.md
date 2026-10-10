@@ -56,7 +56,10 @@ Do not hand-edit `reports/index.md`, `hunting-detections/index.md`, `ioc-feeds/i
 ---
 title: "[Report Title]"
 date: 'YYYY-MM-DD'
-last_updated: 'YYYY-MM-DD'               # only when revised after publish
+last_updated: 'YYYY-MM-DD'               # only when revised after publish; equals the newest revisions date
+revisions:                                # optional, one entry per revision; rendered as the report's revision history
+  - date: 'YYYY-MM-DD'
+    note: "What changed, in one or two sentences."
 detection_page: /hunting-detections/[slug]-detections/
 ioc_feed: /ioc-feeds/[slug]-iocs.json
 detection_sections:                       # powers the green Detection panel

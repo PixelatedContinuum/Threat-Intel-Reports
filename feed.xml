@@ -27,7 +27,7 @@ layout: none
     <title>{{ report.title | xml_escape }}</title>
     <link href="{{ site.url }}{{ report.url }}" rel="alternate" type="text/html"/>
     <published>{{ report.date | date_to_xmlschema }}</published>
-    <updated>{{ report.date | date_to_xmlschema }}</updated>
+    <updated>{{ report.last_updated | default: report.date | date_to_xmlschema }}</updated>
     <id>{{ site.url }}{{ report.url }}</id>
     <author>
       <name>{{ site.title | xml_escape }}</name>

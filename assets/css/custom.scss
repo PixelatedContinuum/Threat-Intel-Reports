@@ -1427,6 +1427,54 @@ main.content {
   opacity: 0.75;
 }
 
+/* Revision history on a revised report: a collapsed details block at the top
+   of the body, same idiom as the Wire's provenance note. The header's
+   "Updated" link lands here. */
+.hl-revisions {
+  margin: 0 0 1.4em;
+  font-size: 0.78em;
+  color: var(--hl-text-muted);
+}
+.hl-revisions > summary {
+  cursor: pointer;
+  list-style: none;
+  display: inline-block;
+  color: var(--hl-text-muted);
+  border-bottom: 1px dotted var(--hl-border-card);
+  transition: color 0.12s;
+}
+.hl-revisions > summary::-webkit-details-marker { display: none; }
+.hl-revisions > summary::before {
+  content: '▸';
+  display: inline-block;
+  margin-right: 0.45em;
+  transition: transform 0.15s;
+}
+.hl-revisions[open] > summary::before { transform: rotate(90deg); }
+.hl-revisions > summary:hover { color: var(--hl-text-primary); }
+.hl-revisions__list {
+  margin: 0.6em 0 0;
+  padding-left: 1.2em;
+  list-style: none;
+  max-width: 70ch;
+}
+.hl-revisions__list li {
+  margin: 0 0 0.45em;
+  line-height: 1.55;
+  padding-left: 0.9em;
+  border-left: 2px solid var(--hl-border-card);
+}
+.hl-revisions__list time {
+  display: inline-block;
+  min-width: 8.5em;
+  color: var(--hl-accent-blue);
+  font-variant-numeric: tabular-nums;
+}
+.hl-revisions__note { color: var(--hl-text-primary); }
+.hl-revisions:target > summary { color: var(--hl-text-primary); }
+a.hl-last-updated { text-decoration: none; border-bottom: 1px dotted currentColor; }
+a.hl-last-updated:hover { opacity: 1; }
+
 /* --- Share button in post eyebrow --------------------------- */
 .hl-share-btn {
   margin-left: auto;

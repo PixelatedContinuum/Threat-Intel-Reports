@@ -134,6 +134,70 @@ test('bold tactic cells parse, so the table keeps every technique', () => {
   );
 });
 
+/* ---- the revision record -------------------------------------------- */
+
+function withFront(front, body) {
+  return '---\n' + front + '\n---\n' + (body || GOOD) + '\n';
+}
+
+test('a report never revised passes the revision check with nothing to check, and says so', () => {
+  const r = checkMarkdown(withFront("title: X\ndate: '2026-03-01'"), 'x.md');
+  assert.strictEqual(r.status, 'PASS');
+  assert.strictEqual(r.revisions.status, 'PASS');
+  assert.match(r.revisions.reason, /never revised/);
+});
+
+test('last_updated alone passes and is reported as one unitemised revision', () => {
+  const r = checkMarkdown(withFront("title: X\ndate: '2026-03-01'\nlast_updated: '2026-03-04'"), 'x.md');
+  assert.strictEqual(r.status, 'PASS');
+  assert.strictEqual(r.revisions.revisions, 0);
+  assert.match(r.revisions.reason, /unitemised/);
+});
+
+test('a well-formed revisions list with last_updated on its newest date passes', () => {
+  const r = checkMarkdown(withFront([
+    "title: X", "date: '2026-03-01'", "last_updated: '2026-03-09'",
+    "revisions:",
+    "  - date: '2026-03-04'", "    note: \"Section 4 corrected.\"",
+    "  - date: '2026-03-09'", "    note: \"Section 13 added.\""
+  ].join('\n')), 'x.md');
+  assert.strictEqual(r.status, 'PASS', r.problems.join('; '));
+  assert.strictEqual(r.revisions.revisions, 2);
+});
+
+test('the header and the history can never disagree: last_updated must be the newest revision date', () => {
+  const r = checkMarkdown(withFront([
+    "title: X", "date: '2026-03-01'", "last_updated: '2026-03-04'",
+    "revisions:", "  - date: '2026-03-04'", "    note: a", "  - date: '2026-03-09'", "    note: b"
+  ].join('\n')), 'x.md');
+  assert.strictEqual(r.status, 'FAIL');
+  assert.match(r.problems.join(' '), /last_updated 2026-03-04 is not the newest revision date 2026-03-09/);
+
+  const missing = checkMarkdown(withFront("title: X\ndate: '2026-03-01'\nrevisions:\n  - date: '2026-03-04'\n    note: a"), 'x.md');
+  assert.strictEqual(missing.status, 'FAIL');
+  assert.match(missing.problems.join(' '), /last_updated is missing/);
+});
+
+test('a revision needs a real date, a note, and cannot predate publication; an empty list fails', () => {
+  const r = checkMarkdown(withFront([
+    "title: X", "date: '2026-03-01'", "last_updated: '2026-03-04'",
+    "revisions:", "  - date: '2026-03-04'", "    note: ''", "  - date: 'March 2'", "    note: b", "  - date: '2026-02-20'", "    note: c"
+  ].join('\n')), 'x.md');
+  assert.strictEqual(r.status, 'FAIL');
+  const text = r.problems.join(' ');
+  assert.match(text, /revisions\[0\]: note must say what changed/);
+  assert.match(text, /revisions\[1\]: date must be YYYY-MM-DD/);
+  assert.match(text, /revisions\[2\]: 2026-02-20 is earlier than the publication date/);
+
+  const empty = checkMarkdown(withFront("title: X\ndate: '2026-03-01'\nrevisions: []"), 'x.md');
+  assert.strictEqual(empty.status, 'FAIL');
+  assert.match(empty.problems.join(' '), /not a non-empty list/);
+
+  const early = checkMarkdown(withFront("title: X\ndate: '2026-03-01'\nlast_updated: '2026-02-01'"), 'x.md');
+  assert.strictEqual(early.status, 'FAIL');
+  assert.match(early.problems.join(' '), /earlier than the publication date/);
+});
+
 test('IDs mentioned in prose outside any table are not a mapping-table gap', () => {
   const r = checkMarkdown(GOOD + '\n\nStray mention of T9999.001 outside any table.\n', 'x.md');
   assert.strictEqual(r.status, 'PASS');

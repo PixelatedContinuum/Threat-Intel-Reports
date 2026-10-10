@@ -2,6 +2,9 @@
 title: "OpenStrike Beacon Toolkit — Open Directory 172.105.0.126"
 date: '2026-04-06'
 last_updated: '2026-04-07'
+revisions:
+  - date: '2026-04-07'
+    note: "Section 13 added: a follow-up review of the directory found 116 further files, a complete Cobalt Strike operator deployment, triaged and recorded as under investigation; the investigation status line in the summary updated."
 layout: post
 permalink: /reports/open-directory-172-105-0-126-20260406/
 thumbnail: /assets/images/cards/open-directory-172-105-0-126-20260406.png

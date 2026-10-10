@@ -2,6 +2,11 @@
 title: "ShinyHunters Data Leak Site at 91.215.85.22 — Infrastructure, Victims, and Attribution"
 date: '2026-04-17'
 last_updated: '2026-04-24'
+revisions:
+  - date: '2026-04-20'
+    note: "Outreach window closed; the disclosure status table in section 4.2 updated to the state as of 20 April."
+  - date: '2026-04-24'
+    note: "Re-scan of the DLS: seven additional named victims and one add-then-remove event recorded in a new section 4.7 (post-publication additions, 21 to 24 April), the executive summary carries an update note, and one row of the roster table in section 4.1 corrected."
 detection_page: /hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/
 ioc_feed: /ioc-feeds/shinyhunters-dls-91-215-85-22-20260417/
 ioc_highlights:

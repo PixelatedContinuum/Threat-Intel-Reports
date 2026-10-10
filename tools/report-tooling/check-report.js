@@ -130,13 +130,25 @@ function tiersNotChecked(reason) {
            byTier: { 1: 0, 2: 0, 3: 0 } };
 }
 
+/* The revision record (last_updated and the revisions list) gets its own too.
+   It needs js-yaml, which the actor and cross-reference tooling already carry. */
+var CREV = null;
+var REV_REASON = null;
+try { CREV = require('./lib/check-revisions.js'); }
+catch (e) { REV_REASON = dependencyReason(e); }
+
+function revisionsNotChecked(reason) {
+  return { status: 'NOT CHECKED', reason: reason, problems: [], revisions: 0 };
+}
+
 /* Reported against whichever path the caller asked about, so the operator sees
    what was skipped as well as why. */
 function depsNotChecked(p) {
   return { status: 'NOT CHECKED', path: p, reason: DEPS_REASON, problems: [], missing: [],
            glossary: glossaryNotChecked('gate dependencies did not load, so nothing was verified'),
            figureNav: figureNavNotChecked('gate dependencies did not load, so nothing was verified'),
-           tiers: tiersNotChecked('gate dependencies did not load, so nothing was verified') };
+           tiers: tiersNotChecked('gate dependencies did not load, so nothing was verified'),
+           revisions: revisionsNotChecked('gate dependencies did not load, so nothing was verified') };
 }
 
 var TECH_RE = /\bT\d{4}(?:\.\d{3})?\b/g;
@@ -332,6 +344,13 @@ function checkMarkdown(md, label) {
     r.status = 'FAIL';
     r.problems = (r.problems || []).concat(r.tiers.problems);
   }
+
+  /* The revision record is front matter too, so it is complete on this path. */
+  r.revisions = REV_REASON ? revisionsNotChecked(REV_REASON) : CREV.checkMarkdown(md);
+  if (r.revisions.status === 'FAIL') {
+    r.status = 'FAIL';
+    r.problems = (r.problems || []).concat(r.revisions.problems);
+  }
   return r;
 }
 
@@ -342,7 +361,8 @@ function checkFile(file) {
   catch (e) { return { status: 'NOT CHECKED', path: file, reason: e.message, problems: [], missing: [],
                        glossary: glossaryNotChecked('report could not be read'),
                        figureNav: figureNavNotChecked('report could not be read'),
-                       tiers: tiersNotChecked('report could not be read') }; }
+                       tiers: tiersNotChecked('report could not be read'),
+                       revisions: revisionsNotChecked('report could not be read') }; }
   return checkMarkdown(md, file);
 }
 
@@ -413,6 +433,8 @@ async function checkUrl(url) {
       r.problems = r.problems.concat(r.tiers.problems);
     }
   }
+  // The front matter is not in the rendered page; the markdown path checks it.
+  r.revisions = revisionsNotChecked('the revision record is front matter, checked on the markdown path only');
   return r;
 }
 
@@ -437,7 +459,8 @@ if (require.main === module) {
         : r.status === 'PASS' ? r.tables + ' tables, ' + r.techniques + ' techniques, ' +
             r.unmapped + ' unmapped, glossary ' + gloss.status +
             ', figure-nav ' + (r.figureNav || {}).status +
-            ', tiers ' + (r.tiers || {}).status
+            ', tiers ' + (r.tiers || {}).status +
+            ', revisions ' + (r.revisions || {}).status
         : r.problems.join('; ');
       console.log(r.status.padEnd(12) + r.path + '   ' + tail);
       if (verbose && r.problems.length) r.problems.forEach(function (p) { console.log('    ' + p); });
