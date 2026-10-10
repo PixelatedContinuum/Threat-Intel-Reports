@@ -82,6 +82,20 @@ function slugOf(entry) {
 }
 function tag(name, colour) { return { name: name, colour: colour }; }
 
+/* A character outside the Basic Multilingual Plane (an emoji, say) takes four
+   bytes in UTF-8, and a MISP whose tables are utf8 rather than utf8mb4 refuses
+   the whole attribute and every attribute after it in the event (seen on the
+   first real pull, 2026-10-09: two events stopped part way on an emoji in a
+   comment). Free text the feed writes itself (comments, titles) carries such a
+   character as a [U+1F525] marker instead. Values are never rewritten, since
+   that would change a rule or an indicator; hasAstral lets the generator refuse
+   one instead. */
+var ASTRAL = /[\u{10000}-\u{10FFFF}]/gu;
+function safeText(s) {
+  return String(s).replace(ASTRAL, function (c) { return '[U+' + c.codePointAt(0).toString(16).toUpperCase() + ']'; });
+}
+function hasAstral(s) { ASTRAL.lastIndex = 0; var r = ASTRAL.test(String(s)); ASTRAL.lastIndex = 0; return r; }
+
 /* ---- the STIX bundle ---------------------------------------------------- */
 
 var STIX_PATTERN = /^\[(file:hashes\.'([^']+)'|domain-name:value|url:value|ipv4-addr:value|ipv6-addr:value|email-addr:value)\s*=\s*'((?:[^'\\]|\\.)*)'\]$/;
@@ -171,7 +185,7 @@ function attributesFromRules(rules, pageUrl, attackNames) {
    event without timestamps; stamp() adds them from the state. */
 function buildEvent(src) {
   var e = src.entry, slug = src.slug;
-  var notes = { unmapped: [], skipped: [] };
+  var notes = { unmapped: [], skipped: [], galaxyMissing: [] };
   var attrs = [];
   var links = [];
   if (e.report_url) links.push({ url: SITE + e.report_url, what: 'Report' });
@@ -214,22 +228,31 @@ function buildEvent(src) {
     if (oa !== ob) return oa - ob;
     return a.value < b.value ? -1 : a.value > b.value ? 1 : 0;
   });
-  attrs.forEach(function (a) { a.uuid = attributeUuid(slug, a.type, a.value); });
+  attrs.forEach(function (a) { a.uuid = attributeUuid(slug, a.type, a.value); a.comment = safeText(a.comment); });
 
   var tags = [tag('tlp:clear', TAG_COLOURS.tlp)];
   (e.tags || []).forEach(function (t) { tags.push(tag('hunters-ledger:topic="' + String(t) + '"', TAG_COLOURS.topic)); });
   actors.forEach(function (a) { tags.push(tag('hunters-ledger:actor="' + a + '"', TAG_COLOURS.actor)); });
+  /* The galaxy tag value must be MISP's own cluster value or MISP never links
+     it to the technique, so it comes from the pinned galaxy file by technique
+     id (src.galaxyNames). The report's wording is the fallback only when the
+     galaxy has no such id, and that case is noted (the generator fails on it). */
   Object.keys(attack).sort().forEach(function (id) {
-    var name = attack[id] || (src.attackNames && src.attackNames[id]);
-    if (!name) { notes.unmapped.push('ATT&CK ' + id + ' has no name in the catalog, so no galaxy tag'); return; }
-    tags.push(tag('misp-galaxy:mitre-attack-pattern="' + name + ' - ' + id + '"', TAG_COLOURS.galaxy));
+    var value = src.galaxyNames && src.galaxyNames[id];
+    if (!value) {
+      var name = attack[id] || (src.attackNames && src.attackNames[id]);
+      if (!name) { notes.unmapped.push('ATT&CK ' + id + ' has no name in the catalog, so no galaxy tag'); return; }
+      value = name + ' - ' + id;
+      if (src.galaxyNames) notes.galaxyMissing.push(id);
+    }
+    tags.push(tag('misp-galaxy:mitre-attack-pattern="' + value + '"', TAG_COLOURS.galaxy));
   });
 
   var sev = String(e.severity || '').toLowerCase();
   return {
     uuid: eventUuid(slug),
     slug: slug,
-    info: String(e.title),
+    info: safeText(e.title),
     date: dateStr(e.date),
     threat_level_id: THREAT_LEVEL[sev] || 4,
     analysis: 2,
@@ -361,6 +384,17 @@ function uniq(list) {
   return out;
 }
 
+/* data/misp-galaxy-attack-pattern.tsv as {technique id -> cluster value}. */
+function readGalaxyNames(text) {
+  var out = {};
+  String(text || '').split('\n').forEach(function (line) {
+    if (!line || line.charAt(0) === '#') return;
+    var i = line.indexOf('\t');
+    if (i > 0) out[line.slice(0, i)] = line.slice(i + 1).replace(/\r$/, '');
+  });
+  return out;
+}
+
 /* A withdrawn event is itemised when the changelog names its slug. */
 function changelogCovers(changelogText, slug) {
   return String(changelogText || '').indexOf(slug) > -1;
@@ -371,6 +405,8 @@ module.exports = {
   HASHES_FILE: HASHES_FILE, CHANGELOG_FILE: CHANGELOG_FILE, STIX_DIR: STIX_DIR,
   SITE: SITE, NAMESPACE: NAMESPACE, ORGC: ORGC, IDS_SCORE: IDS_SCORE,
   uuid5: uuid5, eventUuid: eventUuid, attributeUuid: attributeUuid, md5: md5, slugOf: slugOf,
+  safeText: safeText, hasAstral: hasAstral, GALAXY_FILE: path.join(__dirname, '..', 'data', 'misp-galaxy-attack-pattern.tsv'),
+  readGalaxyNames: readGalaxyNames,
   attributesFromStix: attributesFromStix, attributesFromRules: attributesFromRules,
   buildEvent: buildEvent, contentHash: contentHash, stamp: stamp,
   manifest: manifest, eventJson: eventJson, hashesCsv: hashesCsv, changelogCovers: changelogCovers

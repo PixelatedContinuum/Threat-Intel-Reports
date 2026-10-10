@@ -196,7 +196,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Name or Location - T1036.005\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Resource Name or Location - T1036.005\"",
         "colour": "#0088cc"
       },
       {
@@ -340,7 +340,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Web Browsers - T1555.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials from Web Browsers - T1555.003\"",
         "colour": "#0088cc"
       },
       {
@@ -388,7 +388,7 @@
     "date": "2026-09-07",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791580400
+    "timestamp": 1791592076
   },
   "61bf8b6f-e11d-50ac-8cae-d6e6afd6f5d5": {
     "Orgc": {
@@ -453,7 +453,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Name or Location - T1036.005\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Resource Name or Location - T1036.005\"",
         "colour": "#0088cc"
       },
       {
@@ -485,11 +485,11 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Indicator Removal: File Deletion - T1070.004\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"File Deletion - T1070.004\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Indicator Removal: Timestomp - T1070.006\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Timestomp - T1070.006\"",
         "colour": "#0088cc"
       },
       {
@@ -589,11 +589,11 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Develop Capabilities: Malware - T1587.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Malware - T1587.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Obtain Capabilities: Exploits - T1588.005\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploits - T1588.005\"",
         "colour": "#0088cc"
       },
       {
@@ -605,7 +605,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Stage Capabilities: Upload Malware - T1608.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Upload Malware - T1608.001\"",
         "colour": "#0088cc"
       }
     ],
@@ -613,7 +613,7 @@
     "date": "2026-08-18",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791580400
+    "timestamp": 1791592076
   },
   "cd18797e-ccb1-5b3e-b32f-2b2aabf67d28": {
     "Orgc": {
@@ -642,7 +642,7 @@
         "colour": "#58a6ff"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Masquerade Task or Service (second actor) - T1036.004\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Masquerade Task or Service - T1036.004\"",
         "colour": "#0088cc"
       },
       {
@@ -650,7 +650,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Cron (second actor) - T1053.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Cron - T1053.003\"",
         "colour": "#0088cc"
       },
       {
@@ -674,7 +674,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Web Service C2 (second actor) - T1102\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Service - T1102\"",
         "colour": "#0088cc"
       },
       {
@@ -726,7 +726,7 @@
     "date": "2026-08-13",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791580400
+    "timestamp": 1791592076
   },
   "7bd73cce-a068-5c73-a8f4-0e7b5d3e847e": {
     "Orgc": {
@@ -759,7 +759,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Name or Location - T1036.005\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Resource Name or Location - T1036.005\"",
         "colour": "#0088cc"
       },
       {
@@ -815,7 +815,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Multi-hop Proxy (per-victim Tor hidden service) - T1090.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Multi-hop Proxy - T1090.003\"",
         "colour": "#0088cc"
       },
       {
@@ -831,7 +831,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Web Service (Telegram notify) - T1102\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Service - T1102\"",
         "colour": "#0088cc"
       },
       {
@@ -847,7 +847,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Trusted Developer Utilities: MSBuild - T1127.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"MSBuild - T1127.001\"",
         "colour": "#0088cc"
       },
       {
@@ -855,11 +855,11 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Create Account: Local Account - T1136.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Local Account - T1136.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Create Account: Domain Account - T1136.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domain Account - T1136.002\"",
         "colour": "#0088cc"
       },
       {
@@ -867,7 +867,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Access Software - T1219\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Access Tools - T1219\"",
         "colour": "#0088cc"
       },
       {
@@ -911,7 +911,7 @@
     "date": "2026-08-03",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791580400
+    "timestamp": 1791592076
   },
   "7caf24f7-aaae-5cd6-8026-90cb081d8075": {
     "Orgc": {
@@ -936,11 +936,11 @@
         "colour": "#58a6ff"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"SMB / Windows Admin Shares - T1021.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"SMB/Windows Admin Shares - T1021.002\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Name or Location - T1036.005\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Resource Name or Location - T1036.005\"",
         "colour": "#0088cc"
       },
       {
@@ -1000,7 +1000,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys - T1547.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
         "colour": "#0088cc"
       },
       {
@@ -1020,7 +1020,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Scan Databases (FOFA) - T1596.005\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Scan Databases - T1596.005\"",
         "colour": "#0088cc"
       },
       {
@@ -1032,7 +1032,7 @@
     "date": "2026-07-26",
     "analysis": 2,
     "threat_level_id": 2,
-    "timestamp": 1791580400
+    "timestamp": 1791592076
   },
   "7a1fc79b-257b-587d-9691-da866766d383": {
     "Orgc": {
@@ -1282,7 +1282,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Access Software - T1219\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Access Tools - T1219\"",
         "colour": "#0088cc"
       },
       {
@@ -1322,7 +1322,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Obtain Capabilities: Tool - T1588.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Tool - T1588.002\"",
         "colour": "#0088cc"
       },
       {
@@ -1338,7 +1338,7 @@
     "date": "2026-07-03",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791580400
+    "timestamp": 1791592076
   },
   "4eed77fa-9767-536f-8fef-728b06ae1cb3": {
     "Orgc": {
@@ -1436,7 +1436,7 @@
         "colour": "#58a6ff"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"OS Credential Dumping: SAM - T1003.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Security Account Manager - T1003.002\"",
         "colour": "#0088cc"
       },
       {
@@ -1472,7 +1472,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Name or Location - T1036.005\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Resource Name or Location - T1036.005\"",
         "colour": "#0088cc"
       },
       {
@@ -1612,7 +1612,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"User Execution: Malicious File - T1204.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Malicious File - T1204.002\"",
         "colour": "#0088cc"
       },
       {
@@ -1624,7 +1624,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"System Checks (Anti-VM) - T1497.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Checks - T1497.001\"",
         "colour": "#0088cc"
       },
       {
@@ -1636,7 +1636,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Data from Cloud Storage Object - T1530\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data from Cloud Storage - T1530\"",
         "colour": "#0088cc"
       },
       {
@@ -1656,7 +1656,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials in Files - T1552.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials In Files - T1552.001\"",
         "colour": "#0088cc"
       },
       {
@@ -1664,7 +1664,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Hide Artifacts: Hidden Files and Directories - T1564.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Hidden Files and Directories - T1564.001\"",
         "colour": "#0088cc"
       },
       {
@@ -1692,15 +1692,15 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Server (Compromised, repurposed) - T1583.004\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Server - T1583.004\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Web Services (Cloudflare Tunnel) - T1583.006\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Services - T1583.006\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Establish Email Accounts - T1585.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Email Accounts - T1585.002\"",
         "colour": "#0088cc"
       },
       {
@@ -1708,11 +1708,11 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Malware (Obtain Capabilities) - T1588.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Malware - T1588.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Tool (Obtain Capabilities) - T1588.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Tool - T1588.002\"",
         "colour": "#0088cc"
       },
       {
@@ -1752,7 +1752,7 @@
     "date": "2026-06-16",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791580400
+    "timestamp": 1791592076
   },
   "611d3d52-2660-5a18-a27e-866a92ee221e": {
     "Orgc": {
@@ -1959,7 +1959,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Name or Location - T1036.004\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Masquerade Task or Service - T1036.004\"",
         "colour": "#0088cc"
       },
       {
@@ -2075,7 +2075,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials in Files - T1552.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials In Files - T1552.001\"",
         "colour": "#0088cc"
       },
       {
@@ -2087,23 +2087,23 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Virtual Private Server - T1583.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Virtual Private Server - T1583.003\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Compromise Infrastructure: Server - T1584.004\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Server - T1584.004\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Develop Capabilities: Malware - T1587.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Malware - T1587.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Obtain Capabilities: Malware - T1588.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Malware - T1588.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Obtain Capabilities: Exploits - T1588.005\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploits - T1588.005\"",
         "colour": "#0088cc"
       }
     ],
@@ -2111,7 +2111,7 @@
     "date": "2026-05-26",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791580400
+    "timestamp": 1791592076
   },
   "d368b117-5414-5c50-b434-c21cfb5f6797": {
     "Orgc": {
@@ -2148,23 +2148,23 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Services: SSH - T1021.004\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"SSH - T1021.004\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information (deceptive PAM filename) - T1027\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information - T1027\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Masquerading: Match Legitimate Name or Location - T1036.005\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Resource Name or Location - T1036.005\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Boot or Logon Initialization Scripts: RC Scripts - T1037.004\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"RC Scripts - T1037.004\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Scheduled Task/Job: Cron - T1053.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Cron - T1053.003\"",
         "colour": "#0088cc"
       },
       {
@@ -2172,23 +2172,23 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Command and Scripting Interpreter: Unix Shell - T1059.004\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Unix Shell - T1059.004\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Command and Scripting Interpreter: Python - T1059.006\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Python - T1059.006\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Indicator Removal: Clear Command History - T1070.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Clear Command History - T1070.003\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Application Layer Protocol: Web Protocols - T1071.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Application Layer Protocol: DNS - T1071.004\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"DNS - T1071.004\"",
         "colour": "#0088cc"
       },
       {
@@ -2196,15 +2196,15 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"File and Directory Discovery (container detection) - T1083\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"File and Directory Discovery - T1083\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy: Internal Proxy (self-hosted pool proxies) - T1090.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Internal Proxy - T1090.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Web Service: Bidirectional Communication (dual Telegram bots) - T1102.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Bidirectional Communication - T1102.002\"",
         "colour": "#0088cc"
       },
       {
@@ -2212,7 +2212,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Shared Modules (LD_PRELOAD) - T1129\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Shared Modules - T1129\"",
         "colour": "#0088cc"
       },
       {
@@ -2220,31 +2220,31 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"File and Directory Permissions Modification: Linux (chattr +i) - T1222.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Linux and Mac Permissions - T1222.002\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Mutual Exclusion (anti_hisana competitor displacement) - T1480.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Mutual Exclusion - T1480.002\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Resource Hijacking: Compute Hijacking (primary impact) - T1496.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Compute Hijacking - T1496.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Resource Hijacking: Bandwidth Hijacking (Hysteria) - T1496.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Bandwidth Hijacking - T1496.002\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Create or Modify System Process: Systemd Service - T1543.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Systemd Service - T1543.002\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Boot or Logon Autostart Execution: XDG Autostart Entries - T1547.013\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"XDG Autostart Entries - T1547.013\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Unsecured Credentials: Private Keys (SSH key harvest) - T1552.004\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Private Keys - T1552.004\"",
         "colour": "#0088cc"
       },
       {
@@ -2252,11 +2252,11 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Hide Artifacts (ports via /proc/net/tcp fopen hook) - T1564\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Hide Artifacts - T1564\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Hide Artifacts: Hidden Files and Directories - T1564.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Hidden Files and Directories - T1564.001\"",
         "colour": "#0088cc"
       },
       {
@@ -2264,35 +2264,35 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Protocol Tunneling (Hysteria v2 QUIC/UDP) - T1572\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Protocol Tunneling - T1572\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Hijack Execution Flow: Dynamic Linker Hijacking - T1574.006\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Dynamic Linker Hijacking - T1574.006\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Virtual Private Server - T1583.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Virtual Private Server - T1583.003\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Establish Accounts: Social Media - T1585.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Social Media Accounts - T1585.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Develop Capabilities: Malware - T1587.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Malware - T1587.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Active Scanning: Vulnerability Scanning (ComfyUI port 8188) - T1595.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Vulnerability Scanning - T1595.002\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Escape to Host (4 container-escape variants) - T1611\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Escape to Host - T1611\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Reflective Code Loading (memfd_create) - T1620\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Reflective Code Loading - T1620\"",
         "colour": "#0088cc"
       },
       {
@@ -2304,7 +2304,7 @@
     "date": "2026-05-25",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791580400
+    "timestamp": 1791592076
   },
   "897c4651-021d-5b44-a032-900b5676e247": {
     "Orgc": {
@@ -2333,11 +2333,11 @@
         "colour": "#58a6ff"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"OS Credential Dumping: LSASS Memory - T1003.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"LSASS Memory - T1003.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"OS Credential Dumping: Security Account Manager - T1003.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Security Account Manager - T1003.002\"",
         "colour": "#0088cc"
       },
       {
@@ -2349,15 +2349,15 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Services: Remote Desktop Protocol - T1021.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Desktop Protocol - T1021.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Services: SSH - T1021.004\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"SSH - T1021.004\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Services: Windows Remote Management - T1021.006\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Remote Management - T1021.006\"",
         "colour": "#0088cc"
       },
       {
@@ -2373,7 +2373,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Scheduled Task/Job: Scheduled Task - T1053.005\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Scheduled Task - T1053.005\"",
         "colour": "#0088cc"
       },
       {
@@ -2381,15 +2381,15 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Command and Scripting Interpreter: PowerShell - T1059.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Command and Scripting Interpreter: Python - T1059.006\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Python - T1059.006\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Application Layer Protocol: Web Protocols - T1071.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
         "colour": "#0088cc"
       },
       {
@@ -2413,7 +2413,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy: Domain Fronting (Cloudflare Tunnel) - T1090.004\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domain Fronting - T1090.004\"",
         "colour": "#0088cc"
       },
       {
@@ -2433,7 +2433,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Data Encoding: Standard Encoding - T1132.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Standard Encoding - T1132.001\"",
         "colour": "#0088cc"
       },
       {
@@ -2453,27 +2453,27 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Event Triggered Execution: WMI Event Subscription - T1546.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Management Instrumentation Event Subscription - T1546.003\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Boot or Logon Autostart Execution: Registry Run Keys - T1547.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Use Alternate Authentication Material: Pass the Hash - T1550.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Pass the Hash - T1550.002\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Unsecured Credentials: Credentials In Files - T1552.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials In Files - T1552.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Unsecured Credentials: Private Keys - T1552.004\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Private Keys - T1552.004\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials from Password Stores: Password Managers - T1555.005\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Password Managers - T1555.005\"",
         "colour": "#0088cc"
       },
       {
@@ -2489,23 +2489,23 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Encrypted Channel: Asymmetric Cryptography - T1573.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Asymmetric Cryptography - T1573.002\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Domains - T1583.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domains - T1583.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Virtual Private Server - T1583.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Virtual Private Server - T1583.003\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Web Services - T1583.006\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Services - T1583.006\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Establish Accounts: Email Accounts - T1585.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Email Accounts - T1585.002\"",
         "colour": "#0088cc"
       },
       {
@@ -2513,7 +2513,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Obtain Capabilities: Tool - T1588.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Tool - T1588.002\"",
         "colour": "#0088cc"
       }
     ],
@@ -2521,7 +2521,7 @@
     "date": "2026-05-25",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791580400
+    "timestamp": 1791592076
   },
   "9efa73fb-800e-59f7-96f1-5a1b3e9216ef": {
     "Orgc": {
@@ -2667,19 +2667,19 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Input Capture: Web Portal Capture - T1056.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Portal Capture - T1056.003\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Command and Scripting Interpreter: Unix Shell - T1059.004\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Unix Shell - T1059.004\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Command and Scripting Interpreter: Python - T1059.006\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Python - T1059.006\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Application Layer Protocol: Web Protocols (Flask C2) - T1071.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
         "colour": "#0088cc"
       },
       {
@@ -2695,11 +2695,11 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy: Internal Proxy (Cloudflare fronting) - T1090.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Internal Proxy - T1090.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy: External Proxy (Cloudflare) - T1090.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"External Proxy - T1090.002\"",
         "colour": "#0088cc"
       },
       {
@@ -2707,7 +2707,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Account Manipulation: Device Registration - T1098.005\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Device Registration - T1098.005\"",
         "colour": "#0088cc"
       },
       {
@@ -2715,11 +2715,11 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Brute Force: Password Spraying - T1110.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Password Spraying - T1110.003\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Create Account: Local Account - T1136.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Local Account - T1136.001\"",
         "colour": "#0088cc"
       },
       {
@@ -2727,7 +2727,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Credential Access (CVE-2026-41940 mechanic) - T1212\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Credential Access - T1212\"",
         "colour": "#0088cc"
       },
       {
@@ -2735,51 +2735,51 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Access Software (OpenClaw AI platform installed) - T1219\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Access Tools - T1219\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Execution Guardrails (TDS rickroll filter) - T1480\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Execution Guardrails - T1480\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Server Software Component: Web Shell - T1505.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Shell - T1505.003\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Dynamic Resolution: Domain Generation Algorithms (kit-generated subdomain tokens) - T1568.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domain Generation Algorithms - T1568.002\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Domains - T1583.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domains - T1583.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Server - T1583.004\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Server - T1583.004\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Web Services (afraid.org FreeDNS abuse) - T1583.006\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Services - T1583.006\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Malvertising - T1583.008\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Malvertising - T1583.008\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Develop Capabilities: Malware - T1587.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Malware - T1587.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Obtain Capabilities: Exploits - T1588.005\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploits - T1588.005\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Active Scanning: Scanning IP Blocks - T1595.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Scanning IP Blocks - T1595.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Active Scanning: Vulnerability Scanning - T1595.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Vulnerability Scanning - T1595.002\"",
         "colour": "#0088cc"
       },
       {
@@ -2791,7 +2791,7 @@
     "date": "2026-05-17",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791580400
+    "timestamp": 1791592076
   },
   "82cbc83b-05d1-5a93-bb60-69c8c5f9aa04": {
     "Orgc": {
@@ -2820,11 +2820,11 @@
         "colour": "#58a6ff"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information: Encrypted/Encoded File - T1027.013\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Encrypted/Encoded File - T1027.013\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Masquerading: Match Legitimate Resource Name or Location - T1036.005\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Resource Name or Location - T1036.005\"",
         "colour": "#0088cc"
       },
       {
@@ -2836,7 +2836,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Command and Scripting Interpreter: Unix Shell - T1059.004\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Unix Shell - T1059.004\"",
         "colour": "#0088cc"
       },
       {
@@ -2844,11 +2844,11 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Indicator Removal: File Deletion - T1070.004\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"File Deletion - T1070.004\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Application Layer Protocol: Web Protocols - T1071.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
         "colour": "#0088cc"
       },
       {
@@ -2856,7 +2856,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Web Service: Bidirectional Communication - T1102.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Bidirectional Communication - T1102.002\"",
         "colour": "#0088cc"
       },
       {
@@ -2864,7 +2864,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Access Software - T1219\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Access Tools - T1219\"",
         "colour": "#0088cc"
       },
       {
@@ -2872,19 +2872,19 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Data Destruction (operator anti-forensics on own data) - T1485\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data Destruction - T1485\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Virtualization / Sandbox Evasion (anti-research variant) - T1497\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Virtualization/Sandbox Evasion - T1497\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Server Software Component: Web Shell - T1505.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Shell - T1505.003\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Software Discovery: Security Software - T1518.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Security Software Discovery - T1518.001\"",
         "colour": "#0088cc"
       },
       {
@@ -2892,7 +2892,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Phishing: Spearphishing Link - T1566.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Spearphishing Link - T1566.002\"",
         "colour": "#0088cc"
       },
       {
@@ -2900,35 +2900,35 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Domains - T1583.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domains - T1583.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Virtual Private Server - T1583.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Virtual Private Server - T1583.003\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Web Services - T1583.006\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Services - T1583.006\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Establish Accounts: Social Media Accounts - T1585.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Social Media Accounts - T1585.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Establish Accounts: Email Accounts - T1585.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Email Accounts - T1585.002\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Develop Capabilities: Malware - T1587.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Malware - T1587.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Gather Victim Identity Information: Credentials - T1589.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials - T1589.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Stage Capabilities: Link Target - T1608.005\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Link Target - T1608.005\"",
         "colour": "#0088cc"
       },
       {
@@ -2944,7 +2944,7 @@
     "date": "2026-05-16",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791580400
+    "timestamp": 1791592076
   },
   "93d0b666-26a5-57ab-a3dc-45f197c65e10": {
     "Orgc": {
@@ -2973,95 +2973,95 @@
         "colour": "#58a6ff"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information: Encrypted/Encoded File - T1027.013\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Encrypted/Encoded File - T1027.013\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Masquerading: Match Legitimate Resource Name or Location - T1036.005\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Resource Name or Location - T1036.005\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Application Layer Protocol: Web Protocols - T1071.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy: External Proxy - T1090.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"External Proxy - T1090.002\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy: Multi-hop Proxy - T1090.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Multi-hop Proxy - T1090.003\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Web Service: Dead Drop Resolver - T1102.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Dead Drop Resolver - T1102.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Phishing: Spearphishing Link - T1566.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Spearphishing Link - T1566.002\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Phishing: Spearphishing via Service - T1566.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Spearphishing via Service - T1566.003\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Domains - T1583.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domains - T1583.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Virtual Private Server - T1583.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Virtual Private Server - T1583.003\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Server - T1583.004\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Server - T1583.004\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Web Services - T1583.006\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Services - T1583.006\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Compromise Infrastructure: Domains - T1584.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domains - T1584.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Establish Accounts: Social Media Accounts - T1585.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Social Media Accounts - T1585.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Establish Accounts: Email Accounts - T1585.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Email Accounts - T1585.002\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Establish Accounts: Cloud Accounts - T1585.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Cloud Accounts - T1585.003\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Develop Capabilities: Malware - T1587.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Malware - T1587.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Develop Capabilities: Code Signing Certificates - T1587.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Code Signing Certificates - T1587.002\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Develop Capabilities: Digital Certificates - T1587.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Digital Certificates - T1587.003\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Obtain Capabilities: Digital Certificates - T1588.004\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Digital Certificates - T1588.004\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Stage Capabilities: Upload Malware - T1608.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Upload Malware - T1608.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Stage Capabilities: Install Digital Certificate - T1608.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Install Digital Certificate - T1608.003\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Stage Capabilities: Link Target - T1608.005\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Link Target - T1608.005\"",
         "colour": "#0088cc"
       },
       {
@@ -3077,7 +3077,7 @@
     "date": "2026-05-16",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791580400
+    "timestamp": 1791592076
   },
   "3d46b2a8-dcd5-56e3-80f3-cc19a7369651": {
     "Orgc": {
@@ -3158,7 +3158,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"File Deletion (memory variant) - T1070.004\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"File Deletion - T1070.004\"",
         "colour": "#0088cc"
       },
       {
@@ -3178,7 +3178,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Web Service (Telegram Bot API) - T1102\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Service - T1102\"",
         "colour": "#0088cc"
       },
       {
@@ -3198,7 +3198,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"InstallUtil - T1218.008\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Odbcconf - T1218.008\"",
         "colour": "#0088cc"
       },
       {
@@ -3210,7 +3210,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Time Based Evasion - T1497.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Time Based Checks - T1497.003\"",
         "colour": "#0088cc"
       },
       {
@@ -3254,11 +3254,11 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Web Services (brand-impersonation TLS certs) - T1583.006\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Services - T1583.006\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Data from Configuration Repository - T1602.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Network Device Configuration Dump - T1602.002\"",
         "colour": "#0088cc"
       },
       {
@@ -3270,7 +3270,7 @@
     "date": "2026-05-15",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791580400
+    "timestamp": 1791592076
   },
   "7cf9b00a-7f3d-527a-81c3-cb42eaa2be96": {
     "Orgc": {
@@ -3319,7 +3319,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Name or Location - T1036.005\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Resource Name or Location - T1036.005\"",
         "colour": "#0088cc"
       },
       {
@@ -3367,7 +3367,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Application Layer Protocol: Web Protocols - T1071.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
         "colour": "#0088cc"
       },
       {
@@ -3415,11 +3415,11 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"System Checks (Sandbox Detection) - T1497.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Checks - T1497.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Time-Based Evasion - T1497.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Time Based Checks - T1497.003\"",
         "colour": "#0088cc"
       },
       {
@@ -3443,7 +3443,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Encrypted Channel: Symmetric Cryptography - T1573.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Symmetric Cryptography - T1573.001\"",
         "colour": "#0088cc"
       },
       {
@@ -3463,7 +3463,7 @@
     "date": "2026-05-06",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791580400
+    "timestamp": 1791592076
   },
   "5b9f3c7a-ce4f-5fde-afc7-221cd3f69ada": {
     "Orgc": {
@@ -3492,23 +3492,23 @@
         "colour": "#58a6ff"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"OS Credential Dumping: LSASS Memory (mimikatz) - T1003.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"LSASS Memory - T1003.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"OS Credential Dumping: Security Account Manager (SharpSecDump) - T1003.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Security Account Manager - T1003.002\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"OS Credential Dumping: NTDS (SharpSecDump) - T1003.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"NTDS - T1003.003\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"OS Credential Dumping: DCSync (mimikatz) - T1003.006\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"DCSync - T1003.006\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Remote System Discovery (SharpHound) - T1018\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote System Discovery - T1018\"",
         "colour": "#0088cc"
       },
       {
@@ -3516,15 +3516,15 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Process Injection (parent) - T1055\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Injection - T1055\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Process Injection: Portable Executable Injection - T1055.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Portable Executable Injection - T1055.002\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Input Capture: Keylogging (AdaptixC2 BOF) - T1056.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Keylogging - T1056.001\"",
         "colour": "#0088cc"
       },
       {
@@ -3532,51 +3532,51 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Command and Scripting Interpreter: PowerShell - T1059.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Privilege Escalation (GodPotato/PrintSpoofer) - T1068\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Privilege Escalation - T1068\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Permission Groups Discovery: Domain Groups - T1069.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domain Groups - T1069.002\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Application Layer Protocol: Web Protocols (AdaptixC2 HTTP C2) - T1071.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"System Information Discovery (Seatbelt/winpeas/linpeas) - T1082\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Information Discovery - T1082\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"File and Directory Discovery (Seatbelt/winpeas) - T1083\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"File and Directory Discovery - T1083\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Account Discovery: Domain Account (SharpHound/ADRecon/PowerView) - T1087.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domain Account - T1087.002\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy: Internal Proxy (Ligolo-ng v0.8.3) - T1090.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Internal Proxy - T1090.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer (open directory hosts toolkit) - T1105\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Data Encoding: Standard Encoding (Base64) - T1132.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Standard Encoding - T1132.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Access Token Manipulation: Token Impersonation/Theft (GodPotato/PrintSpoofer) - T1134.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Token Impersonation/Theft - T1134.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Access Token Manipulation: Create Process with Token (RunasCs) - T1134.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Create Process with Token - T1134.002\"",
         "colour": "#0088cc"
       },
       {
@@ -3584,43 +3584,43 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Domain Trust Discovery (SharpHound/ADRecon) - T1482\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domain Trust Discovery - T1482\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Software Discovery: Security Software Discovery (winpeas/Seatbelt) - T1518.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Security Software Discovery - T1518.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Unsecured Credentials: Private Keys (Certify) - T1552.004\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Private Keys - T1552.004\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials from Password Stores (lazagne) - T1555\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials from Password Stores - T1555\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials from Password Stores: Web Browsers (SharpDPAPI/lazagne) - T1555.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials from Web Browsers - T1555.003\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials from Password Stores: Windows Credential Manager (SharpDPAPI) - T1555.004\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Credential Manager - T1555.004\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Steal or Forge Kerberos Tickets: Kerberoasting (Rubeus) - T1558.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Kerberoasting - T1558.003\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Steal or Forge Kerberos Tickets: AS-REP Roasting (Rubeus) - T1558.004\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"AS-REP Roasting - T1558.004\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Protocol Tunneling (Ligolo-ng + chisel) - T1572\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Protocol Tunneling - T1572\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Encrypted Channel: Symmetric Cryptography (RC4-128) - T1573.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Symmetric Cryptography - T1573.001\"",
         "colour": "#0088cc"
       },
       {
@@ -3628,11 +3628,11 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Virtual Private Server - T1583.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Virtual Private Server - T1583.003\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Obtain Capabilities: Tool - T1588.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Tool - T1588.002\"",
         "colour": "#0088cc"
       },
       {
@@ -3640,7 +3640,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Steal or Forge Authentication Certificates (Certify) - T1649\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Steal or Forge Authentication Certificates - T1649\"",
         "colour": "#0088cc"
       },
       {
@@ -3652,7 +3652,7 @@
     "date": "2026-04-30",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791580400
+    "timestamp": 1791592076
   },
   "ebc92dc3-8983-54dd-9caa-c6f17abe0517": {
     "Orgc": {
@@ -3681,7 +3681,7 @@
         "colour": "#58a6ff"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"OS Credential Dumping: LSASS Memory (Mimikatz staged) - T1003.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"LSASS Memory - T1003.001\"",
         "colour": "#0088cc"
       },
       {
@@ -3689,11 +3689,11 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information: Dynamic API Resolution - T1027.007\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Dynamic API Resolution - T1027.007\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information: Fileless Storage - T1027.011\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Fileless Storage - T1027.011\"",
         "colour": "#0088cc"
       },
       {
@@ -3701,7 +3701,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Masquerading: Match Legitimate Name or Location - T1036.005\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Resource Name or Location - T1036.005\"",
         "colour": "#0088cc"
       },
       {
@@ -3709,27 +3709,27 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Scheduled Task/Job: Scheduled Task - T1053.005\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Scheduled Task - T1053.005\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Input Capture: Keylogging (Orcus SetWindowsHookEx) - T1056.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Keylogging - T1056.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Command and Scripting Interpreter: PowerShell - T1059.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Command and Scripting Interpreter: Windows Command Shell - T1059.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Command Shell - T1059.003\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Privilege Escalation (PrintNightmare + Potato family) - T1068\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Privilege Escalation - T1068\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Application Layer Protocol: Web Protocols (Orcus HTTP) - T1071.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
         "colour": "#0088cc"
       },
       {
@@ -3737,7 +3737,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy: Internal Proxy (Orcus 127.0.0.1:20268 loopback) - T1090.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Internal Proxy - T1090.001\"",
         "colour": "#0088cc"
       },
       {
@@ -3749,23 +3749,23 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Modify Registry (registry-blob persistence) - T1112\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Modify Registry - T1112\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Screen Capture (Orcus) - T1113\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Screen Capture - T1113\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Access Token Manipulation: Token Impersonation/Theft - T1134.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Token Impersonation/Theft - T1134.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Access Token Manipulation: Create Process with Token - T1134.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Create Process with Token - T1134.002\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Access Token Manipulation: Parent PID Spoofing - T1134.004\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Parent PID Spoofing - T1134.004\"",
         "colour": "#0088cc"
       },
       {
@@ -3777,7 +3777,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Exploit Public-Facing Application (Exim/SnipeIT/SIP PBX scripts) - T1190\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploit Public-Facing Application - T1190\"",
         "colour": "#0088cc"
       },
       {
@@ -3789,39 +3789,39 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Defacement: Internal Defacement - T1491.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Internal Defacement - T1491.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Virtualization/Sandbox Evasion (tri-artifact gate) - T1497\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Virtualization/Sandbox Evasion - T1497\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Virtualization/Sandbox Evasion: System Checks - T1497.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Checks - T1497.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder - T1547.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Abuse Elevation Control Mechanism: Bypass UAC (AppInfo RPC / UACME #41) - T1548.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Bypass User Account Control - T1548.002\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Hide Artifacts: Hidden Window / Hidden Task - T1564.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Hidden Window - T1564.003\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Protocol Tunneling (chisel/plink/Python tunnels) - T1572\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Protocol Tunneling - T1572\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Encrypted Channel (Orcus Rijndael-256 CBC) - T1573\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Encrypted Channel - T1573\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Virtual Private Server (AS209207) - T1583.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Virtual Private Server - T1583.003\"",
         "colour": "#0088cc"
       },
       {
@@ -3829,7 +3829,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Financial Theft (BTC clipboard hijacker) - T1657\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Financial Theft - T1657\"",
         "colour": "#0088cc"
       },
       {
@@ -3841,7 +3841,7 @@
     "date": "2026-04-23",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791580400
+    "timestamp": 1791592076
   },
   "6f667981-4451-5004-a851-e42a3420ab88": {
     "Orgc": {
@@ -3870,7 +3870,7 @@
         "colour": "#58a6ff"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy: Multi-hop Proxy (Tor mirrors) - T1090.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Multi-hop Proxy - T1090.003\"",
         "colour": "#0088cc"
       },
       {
@@ -3878,7 +3878,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Supply Chain Compromise: Compromise Software Supply Chain - T1195.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Compromise Software Supply Chain - T1195.002\"",
         "colour": "#0088cc"
       },
       {
@@ -3886,7 +3886,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Data Destruction (adversary-side leak as punitive impact) - T1485\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data Destruction - T1485\"",
         "colour": "#0088cc"
       },
       {
@@ -3898,23 +3898,23 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Unsecured Credentials: Credentials In Files - T1552.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials In Files - T1552.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Phishing: Spearphishing Voice (vishing) - T1566.004\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Spearphishing Voice - T1566.004\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over Web Service: to Cloud Storage - T1567.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration to Cloud Storage - T1567.002\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Domains - T1583.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domains - T1583.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: VPS (bulletproof hosting) - T1583.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Virtual Private Server - T1583.003\"",
         "colour": "#0088cc"
       },
       {
@@ -3926,7 +3926,7 @@
     "date": "2026-04-17",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791580400
+    "timestamp": 1791592076
   },
   "8e859eb6-419c-5ddc-9d3c-dff1eafce995": {
     "Orgc": {
@@ -3971,7 +3971,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Name or Location - T1036.005\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Resource Name or Location - T1036.005\"",
         "colour": "#0088cc"
       },
       {
@@ -3979,7 +3979,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"PE Injection - T1055.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Portable Executable Injection - T1055.002\"",
         "colour": "#0088cc"
       },
       {
@@ -4043,7 +4043,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Data Encoding: Standard Encoding - T1132.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Standard Encoding - T1132.001\"",
         "colour": "#0088cc"
       },
       {
@@ -4067,7 +4067,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Encrypted Channel: Symmetric Cryptography - T1573.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Symmetric Cryptography - T1573.001\"",
         "colour": "#0088cc"
       },
       {
@@ -4075,7 +4075,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Develop Capabilities: Malware - T1587.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Malware - T1587.001\"",
         "colour": "#0088cc"
       },
       {
@@ -4087,7 +4087,7 @@
     "date": "2026-04-08",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791580400
+    "timestamp": 1791592076
   },
   "94be8f0c-229d-5120-8ec3-4a4b2eb759d2": {
     "Orgc": {
@@ -4192,7 +4192,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Develop Capabilities: Malware - T1587.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Malware - T1587.001\"",
         "colour": "#0088cc"
       },
       {
@@ -4208,7 +4208,7 @@
     "date": "2026-04-06",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791580400
+    "timestamp": 1791592076
   },
   "940014f4-065e-5b01-9fbe-d4c28f766dae": {
     "Orgc": {

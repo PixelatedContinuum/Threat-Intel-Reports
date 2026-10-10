@@ -173,3 +173,34 @@ test('changelogCovers is a plain slug search', function () {
   assert.equal(M.changelogCovers('## 2026-10-09: withdrew example\n', 'example'), true);
   assert.equal(M.changelogCovers('', 'example'), false);
 });
+
+test('galaxy tags take MISP\'s cluster value by technique id; a missing id falls back and is noted', function () {
+  const GAL = { 'T1059.001': 'PowerShell - T1059.001', 'T1105': 'Ingress Tool Transfer - T1105' };
+  const bundle = Object.assign({}, BUNDLE, { objects: BUNDLE.objects.map(function (o) {
+    return o.type === 'attack-pattern' ? Object.assign({}, o, { name: 'Command and Scripting Interpreter: PowerShell' }) : o;
+  }) });
+  const ev = M.buildEvent({ entry: ENTRY, slug: 'example', bundle: bundle, rules: RULES, attackNames: NAMES, galaxyNames: GAL });
+  const g = ev.tags.map(function (t) { return t.name; }).filter(function (n) { return /mitre-attack-pattern/.test(n); });
+  assert.deepEqual(g, ['misp-galaxy:mitre-attack-pattern="PowerShell - T1059.001"', 'misp-galaxy:mitre-attack-pattern="Ingress Tool Transfer - T1105"']);
+  assert.deepEqual(ev.notes.galaxyMissing, []);
+  const ev2 = M.buildEvent({ entry: ENTRY, slug: 'example', bundle: bundle, rules: RULES, attackNames: NAMES, galaxyNames: { 'T1105': 'Ingress Tool Transfer - T1105' } });
+  assert.deepEqual(ev2.notes.galaxyMissing, ['T1059.001']);
+  assert.ok(ev2.tags.some(function (t) { return t.name === 'misp-galaxy:mitre-attack-pattern="Command and Scripting Interpreter: PowerShell - T1059.001"'; }));
+});
+
+test('readGalaxyNames parses the pinned TSV and skips comments', function () {
+  assert.deepEqual(M.readGalaxyNames('# head\n# id\tvalue\nT1105\tIngress Tool Transfer - T1105\nT1219\tRemote Access Tools - T1219\r\n'),
+    { 'T1105': 'Ingress Tool Transfer - T1105', 'T1219': 'Remote Access Tools - T1219' });
+});
+
+test('safeText marks characters outside the BMP; comments and titles carry the marker, values are untouched', function () {
+  assert.equal(M.safeText('fire \u{1F525} ok \u00e9'), 'fire [U+1F525] ok \u00e9');
+  assert.equal(M.hasAstral('a\u{1F496}'), true);
+  assert.equal(M.hasAstral('plain \u00e9 \u2014'), false);
+  const b = { type: 'bundle', objects: [{ type: 'indicator', pattern_type: 'stix', name: 'Lure \u{1F680}', pattern: "[domain-name:value = 'x.test']", x_opencti_score: 90 }] };
+  const ev = M.buildEvent({ entry: Object.assign({}, ENTRY, { title: 'T \u{1F525}' }), slug: 'example', bundle: b, rules: null, attackNames: {}, galaxyNames: {} });
+  const d = ev.attributes.find(function (a) { return a.type === 'domain'; });
+  assert.equal(d.comment.indexOf('[U+1F680]') > -1, true);
+  assert.equal(ev.info, 'T [U+1F525]');
+  assert.equal(d.value, 'x.test');
+});

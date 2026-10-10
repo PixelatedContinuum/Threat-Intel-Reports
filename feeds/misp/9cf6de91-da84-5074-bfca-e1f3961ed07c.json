@@ -5,8 +5,8 @@
     "date": "2026-05-17",
     "threat_level_id": 1,
     "analysis": 2,
-    "timestamp": 1791580400,
-    "publish_timestamp": 1791580400,
+    "timestamp": 1791592076,
+    "publish_timestamp": 1791592076,
     "published": true,
     "Orgc": {
       "name": "The Hunters Ledger",
@@ -50,19 +50,19 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Input Capture: Web Portal Capture - T1056.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Portal Capture - T1056.003\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Command and Scripting Interpreter: Unix Shell - T1059.004\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Unix Shell - T1059.004\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Command and Scripting Interpreter: Python - T1059.006\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Python - T1059.006\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Application Layer Protocol: Web Protocols (Flask C2) - T1071.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
         "colour": "#0088cc"
       },
       {
@@ -78,11 +78,11 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy: Internal Proxy (Cloudflare fronting) - T1090.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Internal Proxy - T1090.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy: External Proxy (Cloudflare) - T1090.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"External Proxy - T1090.002\"",
         "colour": "#0088cc"
       },
       {
@@ -90,7 +90,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Account Manipulation: Device Registration - T1098.005\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Device Registration - T1098.005\"",
         "colour": "#0088cc"
       },
       {
@@ -98,11 +98,11 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Brute Force: Password Spraying - T1110.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Password Spraying - T1110.003\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Create Account: Local Account - T1136.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Local Account - T1136.001\"",
         "colour": "#0088cc"
       },
       {
@@ -110,7 +110,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Credential Access (CVE-2026-41940 mechanic) - T1212\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Credential Access - T1212\"",
         "colour": "#0088cc"
       },
       {
@@ -118,51 +118,51 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Access Software (OpenClaw AI platform installed) - T1219\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Access Tools - T1219\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Execution Guardrails (TDS rickroll filter) - T1480\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Execution Guardrails - T1480\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Server Software Component: Web Shell - T1505.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Shell - T1505.003\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Dynamic Resolution: Domain Generation Algorithms (kit-generated subdomain tokens) - T1568.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domain Generation Algorithms - T1568.002\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Domains - T1583.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domains - T1583.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Server - T1583.004\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Server - T1583.004\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Web Services (afraid.org FreeDNS abuse) - T1583.006\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Services - T1583.006\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Malvertising - T1583.008\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Malvertising - T1583.008\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Develop Capabilities: Malware - T1587.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Malware - T1587.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Obtain Capabilities: Exploits - T1588.005\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploits - T1588.005\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Active Scanning: Scanning IP Blocks - T1595.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Scanning IP Blocks - T1595.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Active Scanning: Vulnerability Scanning - T1595.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Vulnerability Scanning - T1595.002\"",
         "colour": "#0088cc"
       },
       {
@@ -178,7 +178,7 @@
         "value": "https://the-hunters-ledger.com/hunting-detections/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections/",
         "to_ids": false,
         "comment": "Detection rules, The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "f6e6134a-5d03-5b5d-82dd-b39b7104f933",
@@ -187,7 +187,7 @@
         "value": "https://the-hunters-ledger.com/ioc-feeds/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-iocs.json",
         "to_ids": false,
         "comment": "IOC feed (JSON), The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "545e0422-8e91-5184-8ae7-73457336e4e6",
@@ -196,7 +196,7 @@
         "value": "https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/",
         "to_ids": false,
         "comment": "Report, The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "521efe96-b4a6-57ae-9a21-26edcda9c1c0",
@@ -205,7 +205,7 @@
         "value": "https://the-hunters-ledger.com/stix/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517.json",
         "to_ids": false,
         "comment": "STIX 2.1 bundle, The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "b70322fd-37e0-54e7-a2b2-9054b583b81c",
@@ -214,7 +214,7 @@
         "value": "CVE-2017-0199",
         "to_ids": false,
         "comment": "Named in the report",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "eece9462-a558-5afe-af2f-1c39b5ed3899",
@@ -223,7 +223,7 @@
         "value": "CVE-2026-41940",
         "to_ids": false,
         "comment": "Named in the report",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "baa6b876-63a1-5a57-a3d8-6bef08db6c9d",
@@ -232,7 +232,7 @@
         "value": "adorarama.com",
         "to_ids": true,
         "comment": "domain: adorarama.com. TDS landing parent on Parklogic [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "f3490632-e1b1-501a-b766-bd86b8d8b869",
@@ -241,7 +241,7 @@
         "value": "checkwithsec.online",
         "to_ids": true,
         "comment": "domain: checkwithsec.online. Security-service spoof (locks to eps-soltec via NameCheap org) [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "89a77a05-0dde-5fcf-a8f4-c6aee38ea661",
@@ -250,7 +250,7 @@
         "value": "coinbase-co.cc",
         "to_ids": true,
         "comment": "domain: coinbase-co.cc. Coinbase spoof (15/92 VT malicious) [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "b6b9a195-40e9-561b-8abb-7cc53939c396",
@@ -259,7 +259,7 @@
         "value": "eps-soltec.cloud",
         "to_ids": true,
         "comment": "domain: eps-soltec.cloud. Office 365 phishing (officebyt.e56sutx.eps-soltec.cloud) [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "493a7d1f-b24f-5527-bcf7-b92ab3408917",
@@ -268,7 +268,7 @@
         "value": "gocomper.com",
         "to_ids": true,
         "comment": "domain: gocomper.com. TDS landing parent on Parklogic [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "9d5850a6-85da-5b88-af7d-7fb6ab3240be",
@@ -277,7 +277,7 @@
         "value": "groundsstudio.com",
         "to_ids": true,
         "comment": "domain: groundsstudio.com. Operator wildcard-DNS abuse (kjeywrgo.groundsstudio.com, _dmarc.qavfcyopzp.groundsstudio.com) [confidence 60/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "bd033782-e338-5302-b373-1eada0185b81",
@@ -286,7 +286,7 @@
         "value": "kucoinsgem.xyz",
         "to_ids": true,
         "comment": "domain: kucoinsgem.xyz. KuCoin spoof (operator brand-spoof in TDS chain) [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "0fadcc89-4a72-5487-bd05-87bc62ed3ba2",
@@ -295,7 +295,7 @@
         "value": "kwpbby.in",
         "to_ids": true,
         "comment": "domain: kwpbby.in. Disposable .in TLD; Pornography/Scam categorization [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "52c4b679-1855-5d20-9dc1-2ebd49510b56",
@@ -304,7 +304,7 @@
         "value": "ltamaeropromoweb-ecuador-travel.shop",
         "to_ids": true,
         "comment": "domain: ltamaeropromoweb-ecuador-travel.shop. Ecuador-travel-themed scam (LATAM Airlines spoof) on operator IP 216.126.227.148 [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "ba9d4f76-6c1a-51b5-a1eb-127a22d9c95a",
@@ -313,7 +313,7 @@
         "value": "mail.hcjs2.jlengineering.se",
         "to_ids": true,
         "comment": "domain: mail.hcjs2.jlengineering.se. Do NOT blocklist apex jlengineering.se - it is a multi-tenant donor domain [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "9176a581-ee2d-5303-84a7-14c8769aab65",
@@ -322,7 +322,7 @@
         "value": "mailmanagement.cfd",
         "to_ids": true,
         "comment": "domain: mailmanagement.cfd. Email-management phishing (10/92 VT malicious) [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "c9808f44-9670-54a8-8078-890c90aab54e",
@@ -331,7 +331,7 @@
         "value": "mmnsdvrt8.eps-soltec.cloud",
         "to_ids": true,
         "comment": "domain: mmnsdvrt8.eps-soltec.cloud. Operator kit-generated random subdomain (hosted on 144.172.116.74) [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "7ab8c0ff-c510-5e88-810a-4a2bac140500",
@@ -340,7 +340,7 @@
         "value": "mrrbno.shop",
         "to_ids": true,
         "comment": "domain: mrrbno.shop. Current cert subject on operator IP 144.172.116.74 [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "578c3672-20ac-50d8-9b51-eae6ff37f9a7",
@@ -349,7 +349,7 @@
         "value": "mx.plingest.com",
         "to_ids": true,
         "comment": "domain: mx.plingest.com. Operator MX hostname - shared across supportsite.info, adorarama.com, gocomper.com [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "02697f68-1920-50f8-b4ea-a5d69114ee25",
@@ -358,7 +358,7 @@
         "value": "officebyt.e56sutx.eps-soltec.cloud",
         "to_ids": true,
         "comment": "domain: officebyt.e56sutx.eps-soltec.cloud. Operator Office 365 phishing subdomain [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "9e4c1fd8-f003-56f1-8e86-abe2bc1a1178",
@@ -367,7 +367,7 @@
         "value": "pernex.online",
         "to_ids": true,
         "comment": "domain: pernex.online. Current operator ops domain - cert subject on 216.126.227.49 [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "0134d5cb-13df-5c77-b100-8a5fc1368e49",
@@ -376,7 +376,7 @@
         "value": "plingest.com",
         "to_ids": true,
         "comment": "domain: plingest.com. Operator MX backend host (mx.plingest.com) [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "3d653486-73e6-5f57-8f2e-5121fd69a389",
@@ -385,7 +385,7 @@
         "value": "promo-de-natal-livelo.com",
         "to_ids": true,
         "comment": "domain: promo-de-natal-livelo.com. Brazilian Livelo rewards spoof; resolves to operator MX backend [confidence 60/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "27cd1230-a12d-54ab-a261-02b0c6699292",
@@ -394,7 +394,7 @@
         "value": "quick-barber.com",
         "to_ids": true,
         "comment": "domain: quick-barber.com. Brand-new local-business spoof (registered 2026-05-02) [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "df82a5e3-116e-5899-849d-6d782fda103f",
@@ -403,7 +403,7 @@
         "value": "receita-federal.com",
         "to_ids": true,
         "comment": "domain: receita-federal.com. Brazilian Federal Revenue spoof [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "f7d278da-35b0-5305-85ed-93e754007f70",
@@ -412,7 +412,7 @@
         "value": "runwaylander.com",
         "to_ids": true,
         "comment": "domain: runwaylander.com. TDS landing parent on Parklogic [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "b595ac13-d37c-58f8-912b-e1b43485d000",
@@ -421,7 +421,7 @@
         "value": "runwaylanderhome.com",
         "to_ids": true,
         "comment": "domain: runwaylanderhome.com. TDS landing parent on Parklogic [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "243e89ad-f0ec-5cdc-8217-3171c5b7e358",
@@ -430,7 +430,7 @@
         "value": "runwaylanderlights.com",
         "to_ids": true,
         "comment": "domain: runwaylanderlights.com. TDS landing parent on Parklogic [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "2105bd19-60bf-5930-80aa-66425c3634e5",
@@ -439,7 +439,7 @@
         "value": "runwaylanderplace.com",
         "to_ids": true,
         "comment": "domain: runwaylanderplace.com. TDS landing parent on Parklogic [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "d1b5066e-4559-5b99-8e3b-2c3598bad614",
@@ -448,7 +448,7 @@
         "value": "runwaylanderspot.com",
         "to_ids": true,
         "comment": "domain: runwaylanderspot.com. TDS landing parent (98 historical subdomains including ~30 operator kit-pattern UUID-format) on Parklogic [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "28260d56-9a8a-53d3-b256-9177460a4fc0",
@@ -457,7 +457,7 @@
         "value": "runwaylanderstreet.com",
         "to_ids": true,
         "comment": "domain: runwaylanderstreet.com. TDS landing parent on Parklogic [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "0784784d-c6d5-5400-b867-6a4d132a1185",
@@ -466,7 +466,7 @@
         "value": "runwayparking.com",
         "to_ids": true,
         "comment": "domain: runwayparking.com. TDS landing parent on Parklogic [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "51726d81-30f3-5b9b-9d6d-f87a486bedbd",
@@ -475,7 +475,7 @@
         "value": "supportsite.info",
         "to_ids": true,
         "comment": "domain: supportsite.info. Tech-support scam + Amazon spoof + M365 (12/92 VT malicious) [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "2bc9ed89-349a-5289-bbd8-b5cde18c45fd",
@@ -484,7 +484,7 @@
         "value": "tesaco.sbs",
         "to_ids": true,
         "comment": "domain: tesaco.sbs. Staged for next campaign (parked on 127.0.0.1) [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "38c43fdf-02e8-5354-aa7b-7cefde8bb274",
@@ -493,7 +493,7 @@
         "value": "yahoohelp.com",
         "to_ids": true,
         "comment": "domain: yahoohelp.com. Yahoo support spoof (HIGH-MONETIZED, ownership ambiguous - full operator infra pattern but Rebel org-hash differs) [confidence 60/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "f5f8494e-1c76-5301-9b7e-383714e50d54",
@@ -502,7 +502,7 @@
         "value": "http://216.126.224.181/22/evc/goodpeopleswellmeans.hta",
         "to_ids": true,
         "comment": "url: http://216.126.224.181/22/evc/goodpeopleswellmeans.hta. HTA dropper on Gen-1 box [confidence 60/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "ffe27022-f974-5409-9db4-43708e7d6e51",
@@ -511,7 +511,7 @@
         "value": "http://216.126.224.181/23/goodpersonforbetterthings.hta",
         "to_ids": true,
         "comment": "url: http://216.126.224.181/23/goodpersonforbetterthings.hta. HTA dropper on Gen-1 box [confidence 60/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "ce302e3a-601a-54a3-9e6c-035ec06f6772",
@@ -520,7 +520,7 @@
         "value": "http://216.126.224.181/wem/img_191738.png",
         "to_ids": true,
         "comment": "url: http://216.126.224.181/wem/img_191738.png. Phishing asset / tracking pixel on Gen-1 box [confidence 60/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "c1c5c95f-42a4-56ac-9040-018a57b0d8e8",
@@ -529,7 +529,7 @@
         "value": "https://216.126.224.181/24/mkaingbestchoiceforme.hta",
         "to_ids": true,
         "comment": "url: https://216.126.224.181/24/mkaingbestchoiceforme.hta. HTA dropper on Gen-1 box [confidence 60/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "0fbecbd5-8c30-5a68-896d-4ac047d2966c",
@@ -538,7 +538,7 @@
         "value": "https://mgcountyks.invoicerequests.net/",
         "to_ids": true,
         "comment": "url: https://mgcountyks.invoicerequests.net/. Operator-attribution via IP co-tenancy at 45.61.128.128 only [confidence 60/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "c7663c10-dcac-5cbb-8d89-1e95d8dbbbe0",
@@ -547,7 +547,7 @@
         "value": "https://officebyt.e56sutx.eps-soltec.cloud/f/d6aba322369c",
         "to_ids": true,
         "comment": "url: https://officebyt.e56sutx.eps-soltec.cloud/f/d6aba322369c. Office 365 phishing payload-fetch URL (/f/<12-hex> kit pattern) [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "9e8e92c4-4522-526b-a0f9-570d16d39977",
@@ -556,7 +556,7 @@
         "value": "144.172.103.253",
         "to_ids": true,
         "comment": "ipv4: 144.172.103.253. Current operator Office 365 phishing host [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "e89eb246-611e-5135-9778-047da5053674",
@@ -565,7 +565,7 @@
         "value": "144.172.105.176",
         "to_ids": true,
         "comment": "ipv4: 144.172.105.176. Prior operator host (Gen-1) [confidence 60/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "f506a992-614b-583c-bad9-10d3f48e4c5c",
@@ -574,7 +574,7 @@
         "value": "144.172.116.74",
         "to_ids": true,
         "comment": "ipv4: 144.172.116.74. Operator IP - hosts mmnsdvrt8.eps-soltec.cloud + mrrbno.shop [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "924dff78-5411-518d-ac62-58c9cc13d462",
@@ -583,7 +583,7 @@
         "value": "144.172.122.226",
         "to_ids": true,
         "comment": "ipv4: 144.172.122.226. Earliest mailmanagement.cfd host [confidence 60/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "2691f6f6-5ec9-5b39-8365-bdf4ebd07b73",
@@ -592,7 +592,7 @@
         "value": "144.172.97.151",
         "to_ids": true,
         "comment": "ipv4: 144.172.97.151. Prior operator host (supportsite.info Sep 2025 + current mailmanagement.cfd) [confidence 60/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "aaed6428-3bdc-5193-a420-c9f194a763c3",
@@ -601,7 +601,7 @@
         "value": "172.234.24.120",
         "to_ids": true,
         "comment": "ipv4: 172.234.24.120. Parklogic shared TDS landing infrastructure family member | HIGH - shared Parklogic infrastructure [confidence 60/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "ee108c18-4740-56f9-94fc-a36f702eb094",
@@ -610,7 +610,7 @@
         "value": "216.126.224.181",
         "to_ids": true,
         "comment": "ipv4: 216.126.224.181. April 2026 commodity-malware activity (Urcbadur/Alien/ADKP via CVE-2017-0199) on this IP is LOW-MODERATE operator-attributable; likely different tenant [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "83b90dc9-a3c4-5984-82b5-b5f5453c55da",
@@ -619,7 +619,7 @@
         "value": "216.126.227.148",
         "to_ids": true,
         "comment": "ipv4: 216.126.227.148. Operator IP - hosts www.supportsite.info + ltamaeropromoweb-ecuador-travel.shop [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "068f7530-3241-5aa8-b5b9-392fb52c7076",
@@ -628,7 +628,7 @@
         "value": "216.126.227.49",
         "to_ids": true,
         "comment": "ipv4: 216.126.227.49. Active C2; also TCP/22 SSH open [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "dc47e548-dfbe-59ce-90b0-44fe4700ec45",
@@ -637,7 +637,7 @@
         "value": "38.143.66.193",
         "to_ids": true,
         "comment": "ipv4: 38.143.66.193. Treat any inbound email originating from this MX as high-risk [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "39271e60-6676-5aa4-9e83-8da4501da4e0",
@@ -646,7 +646,7 @@
         "value": "45.61.128.128",
         "to_ids": true,
         "comment": "ipv4: 45.61.128.128. Early operator IP (supportsite.info Feb-May 2025); medical/government BEC subdomains under *.invoicerequests.net may be different tenant [confidence 60/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "34e4f9fd-e4ff-5629-8fe9-8b47794c1a2e",
@@ -655,7 +655,7 @@
         "value": "alert http any any -> any any (msg:\"THL DETECT CVE-2026-41940 cPanel WHM CRLF Auth Bypass Attempt - Control Char in Authorization Basic\"; flow:established,to_server; content:\"Authorization|3a 20|Basic \"; http_header; pcre:\"/Authorization:\\s*Basic\\s+[A-Za-z0-9+\\/=]+(?:\\x00|%00|%0[aAdD])/Hi\"; reference:cve,2026-41940; reference:url,the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections/; classtype:web-application-attack; sid:9100101; rev:4; metadata:author The_Hunters_Ledger, date 2026-05-17;)",
         "to_ids": true,
         "comment": "CVE-2026-41940 Raw CRLF/Null-Byte Injection in Authorization Header | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1212, T1190 | rule hash 7c210c77 | https://the-hunters-ledger.com/hunting-detections/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -670,7 +670,7 @@
         "value": "alert http any any -> any any (msg:\"THL HUNT CVE-2026-41940 Operator Flask C2 Dashboard - Werkzeug/3.1.8 Banner with /login-2fa Redirect\"; flow:established,to_client; http.server; content:\"Werkzeug/3.1.8 Python/3.13.12\"; endswith; nocase; http.header; content:\"Location|3a 20|/login-2fa\"; nocase; reference:url,the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections/; classtype:trojan-activity; sid:9100102; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-17;)",
         "to_ids": false,
         "comment": "Operator Flask C2 Dashboard Banner Hunt: Werkzeug/3.1.8 + /login-2fa | TIER: Hunting | robustness 2 | confidence HIGH for the banner match today; durability is limited (see Rationale) | ATT&CK T1071.001 | rule hash 3f4a99ed | https://the-hunters-ledger.com/hunting-detections/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -685,7 +685,7 @@
         "value": "title: CVE-2026-41940 cPanel WHM CRLF Auth Bypass - Expired Session Token in Authorization Header\nid: a4c8e17b-3f92-4d6e-b08a-5c2d9e4f1a73\nstatus: experimental\ndescription: >-\n  Detects the string 'expired=1' in a request URI query string directed at a cPanel/WHM host,\n  the CVE-2026-41940 PoC-exact token normally injected into the Authorization: Basic header\n  credential portion to trigger the CRLF auth bypass (matching the canonical public PoC and\n  the operator toolkit at 216.126.227.49). Raw Authorization header content is not exposed as\n  a standard webserver logsource field, so this rule instead matches the same marker if it\n  surfaces in the URI query string, which some reverse proxies log alongside the header\n  injection attempt; 'expired=1' is also a generic session-timeout query parameter used by\n  unrelated web applications, so treat matches as a triage lead rather than a confirmed hit.\nreferences:\n    - https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/\n    - https://nvd.nist.gov/vuln/detail/CVE-2026-41940\nauthor: The Hunters Ledger\ndate: 2026-05-17\ntags:\n    - attack.initial-access\n    - attack.t1190\n    - attack.credential-access\n    - attack.t1212\n    - detection.emerging-threats\nlogsource:\n    category: webserver\ndetection:\n    selection_expired_token:\n        cs-uri-query|contains: 'expired=1'\n    condition: selection_expired_token\nfalsepositives:\n    - Unrelated web applications using 'expired=1' as a generic session-timeout query parameter\n    - Authorized security scanning tools probing cPanel installations\nlevel: medium",
         "to_ids": false,
         "comment": "CVE-2026-41940 Expired-Session Token Marker in Query String | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1190, T1212 | rule hash 3a8f1686 | https://the-hunters-ledger.com/hunting-detections/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -700,7 +700,7 @@
         "value": "title: CVE-2026-41940 cPanel WHM CRLF Auth Bypass - Successful Exploitation Confirmation Response\nid: 2e8b5d9f-71a3-4c8e-a25b-6f0d3c7e9b12\nstatus: experimental\ndescription: >-\n  Detects HTTP 200 responses to the CVE-2026-41940 proxy-subdomain admin path markers, used\n  as a coarse proxy for the server-side confirmation string 'msg_code:[expired_session]' that\n  cPanel/WHM returns in the response body after a successful CRLF auth bypass. Standard\n  webserver logsource fields do not expose raw response-body content, so the exact\n  confirmation string cannot be matched here — deploy a response-body string match at the\n  application or WAF layer for high-confidence exploitation confirmation, and use this rule\n  only to narrow the candidate set for that manual or WAF-layer review.\nreferences:\n    - https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/\n    - https://nvd.nist.gov/vuln/detail/CVE-2026-41940\nauthor: The Hunters Ledger\ndate: 2026-05-17\ntags:\n    - attack.initial-access\n    - attack.t1190\n    - attack.credential-access\n    - attack.t1212\n    - detection.emerging-threats\nlogsource:\n    category: webserver\ndetection:\n    selection_auth_bypass_path:\n        cs-uri-stem|contains:\n            - '/___proxy_subdomain_whm'\n            - '/___proxy_subdomain_cpanel'\n    selection_success_status:\n        sc-status: 200\n    condition: selection_auth_bypass_path and selection_success_status\nfalsepositives:\n    - >-\n      Any successful request to the proxy-subdomain path markers — this rule cannot isolate\n      the response-body confirmation string without response-body visibility; treat matches\n      as candidates for manual or WAF-layer confirmation, not standalone high-confidence alerts\nlevel: low",
         "to_ids": false,
         "comment": "CVE-2026-41940 Successful Auth-Bypass Response Confirmation | TIER: Hunting | robustness 2 | confidence LOW | ATT&CK T1190, T1212 | rule hash 11479a3e | https://the-hunters-ledger.com/hunting-detections/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -715,7 +715,7 @@
         "value": "title: CVE-2026-41940 cPanel WHM CRLF Auth Bypass Attempt - Null Byte in Authorization Header\nid: 7f3a2c91-e8d4-4b5a-9c1f-3e6d7a2b0f84\nstatus: experimental\ndescription: >-\n  Detects reconnaissance or exploitation attempts against the CVE-2026-41940 proxy-subdomain\n  admin paths, a CVSS 9.8 pre-authentication CRLF injection vulnerability in cPanel and WHM\n  (disclosed 2026-04-28). The operator toolkit file pipeline-41940.sh at 216.126.227.49\n  directly encodes this CVE. Raw Authorization header content, where the actual null-byte or\n  CRLF injection occurs, is not exposed as a standard webserver logsource field, so this rule\n  anchors on the fixed cPanel/WHM proxy-subdomain path markers the exploit chain targets\n  instead — it flags any request to these paths for analyst triage, not a confirmed injection.\nreferences:\n    - https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/\n    - https://nvd.nist.gov/vuln/detail/CVE-2026-41940\nauthor: The Hunters Ledger\ndate: 2026-05-17\ntags:\n    - attack.initial-access\n    - attack.t1190\n    - attack.credential-access\n    - attack.t1212\n    - detection.emerging-threats\nlogsource:\n    category: webserver\ndetection:\n    selection_auth_null:\n        cs-uri-stem|contains:\n            - '/___proxy_subdomain_whm'\n            - '/___proxy_subdomain_cpanel'\n    condition: selection_auth_null\nfalsepositives:\n    - >-\n      Legitimate administrator or monitoring traffic to the WHM/cPanel proxy-subdomain\n      admin interface on hosts where the feature is enabled and internet-reachable\n    - Authorized security assessment tools (Burp Suite, Nuclei, Metasploit) running assessments against cPanel infrastructure\n    - Security researchers probing CVE-2026-41940 in controlled environments\nlevel: medium",
         "to_ids": false,
         "comment": "CVE-2026-41940 Proxy-Subdomain Admin Path Access Attempt | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1190, T1212 | rule hash c92ba651 | https://the-hunters-ledger.com/hunting-detections/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -730,7 +730,7 @@
         "value": "title: Operator Flask C2 Dashboard - Werkzeug 3.1.8 Banner with /login-2fa Redirect\nid: 5c7d1e4a-9b83-4f2c-8e67-1a3f5c8d2b90\nstatus: experimental\ndescription: >-\n  Detects requests to the /login-2fa path, the redirect target of the Flask C2 dashboard\n  operated by the CVE-2026-41940 cPanel harvester cluster (216.126.227.49). The server\n  presents HTTP Server: Werkzeug/3.1.8 Python/3.13.12 with a 302 redirect to /login-2fa on\n  the initial unauthenticated request; the Werkzeug development server on an internet-facing\n  port combined with this custom path fingerprints the operator's deployment pattern.\n  Standard proxy logsource fields do not expose response headers (Server banner, Location\n  redirect target), so this rule matches the client-request path itself, without host\n  scoping — it is intended for peer-C2 discovery across a monitored proxy segment, not as a\n  host-specific alert; retain the Shodan/Censys Werkzeug-banner pivot as a complementary\n  out-of-band OSINT hunting technique.\nreferences:\n    - https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/\nauthor: The Hunters Ledger\ndate: 2026-05-17\ntags:\n    - attack.command-and-control\n    - attack.t1071.001\n    - detection.emerging-threats\nlogsource:\n    category: proxy\ndetection:\n    selection_login2fa_path:\n        c-uri|contains: '/login-2fa'\n    condition: selection_login2fa_path\nfalsepositives:\n    - >-\n      Legitimate Flask developers running a login route named /login-2fa on a monitored\n      proxy segment (uncommon; verify destination host against confirmed operator infrastructure)\n    - Security researchers replicating the operator's C2 in a lab environment\nlevel: medium",
         "to_ids": false,
         "comment": "Operator Flask C2 Dashboard /login-2fa Redirect Path | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1071.001 | rule hash 8ff1b0c8 | https://the-hunters-ledger.com/hunting-detections/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -745,7 +745,7 @@
         "value": "title: Operator TDS Landing URL Pattern - Parklogic Source-Referer Shape with Campaign Hash\nid: 3d6c9a7e-2f41-4b8d-c53e-9a1b7f3e5d28\nstatus: experimental\ndescription: >-\n  Detects the URL pattern used by the CVE-2026-41940 cPanel harvester operator's Parklogic\n  TDS traffic distribution system. The shape is /?d=<source-domain>&a=2143526812&s=<64-hex>\n  where d= is the source/referrer domain, a= is the operator's Parklogic affiliate account\n  ID (constant: 2143526812), and s= is a per-source-domain campaign hash (64 hex characters).\n  This shape routes victims from compromised or spoof landing pages through to phishing\n  destinations. The account ID is the sole discriminator that ties this shape to this specific\n  operator rather than any other Parklogic customer; without it the /?d=&s=<64-hex> shape\n  alone is generic Parklogic platform traffic.\nreferences:\n    - https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/\nauthor: The Hunters Ledger\ndate: 2026-05-17\ntags:\n    - attack.resource-development\n    - attack.t1583.008\n    - detection.emerging-threats\nlogsource:\n    category: proxy\ndetection:\n    selection_tds_shape:\n        c-uri-query|contains|all:\n            - 'a=2143526812'\n            - '&s='\n    selection_s_param_length:\n        c-uri-query|re: '[?&]s=[a-f0-9]{64}(&|$)'\n    condition: selection_tds_shape and selection_s_param_length\nfalsepositives:\n    - Other Parklogic customers using the same platform with different a= values (filtered by the a=2143526812 requirement)\n    - Security researchers reproducing the operator's TDS chain in testing environments\nlevel: medium",
         "to_ids": false,
         "comment": "Operator Parklogic TDS Landing URL Shape | TIER: Hunting | robustness 2 | confidence HIGH | ATT&CK T1583.008 | rule hash 0b0f57d8 | https://the-hunters-ledger.com/hunting-detections/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -760,7 +760,7 @@
         "value": "title: Post-CVE-2026-41940 Exploitation - New cPanel Account Created Outside Admin Session\nid: 1b7e3f8a-5c4d-4e9b-a17c-8f2b6e4d0c39\nstatus: experimental\ndescription: >-\n  Detects creation of new cPanel/WHM user account files in /var/cpanel/users/, documented\n  post-exploitation persistence and monetization tradecraft following a CVE-2026-41940 CRLF\n  auth bypass. The operator toolkit at 216.126.227.49 includes gen-cpanel-access.py (6070\n  bytes, hash unavailable) which is inferred — not directly observed — to generate cPanel\n  access artifacts post-compromise; treat matches as a triage lead requiring correlation with\n  reseller/customer signup records, not a standalone high-confidence indicator.\nreferences:\n    - https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/\n    - https://nvd.nist.gov/vuln/detail/CVE-2026-41940\nauthor: The Hunters Ledger\ndate: 2026-05-17\ntags:\n    - attack.persistence\n    - attack.t1136.001\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: linux\ndetection:\n    selection_cpanel_user_create:\n        TargetFilename|startswith: '/var/cpanel/users/'\n    filter_whm_admin:\n        Image|contains:\n            - '/usr/local/cpanel/'\n            - '/usr/local/whm/'\n    condition: selection_cpanel_user_create and not filter_whm_admin\nfalsepositives:\n    - >-\n      Legitimate new customer account creation by authorized resellers (correlate against\n      reseller activity logs and customer signup records)\n    - Automated cPanel processes creating internal system accounts\n    - Routine cPanel upgrades creating new system user files\nlevel: medium",
         "to_ids": false,
         "comment": "Post-Exploitation New cPanel Account Creation | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1136.001 | rule hash e9e361a1 | https://the-hunters-ledger.com/hunting-detections/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -775,7 +775,7 @@
         "value": "title: Post-CVE-2026-41940 Exploitation - Unauthorized SSH Authorized Keys Modification on cPanel Host\nid: 6a4f8e2b-1c95-4d7a-f38d-2e9b0c6a5f17\nstatus: experimental\ndescription: >-\n  Detects modifications to SSH authorized_keys files on Linux cPanel/WHM hosts, documented\n  post-exploitation persistence tradecraft following a CVE-2026-41940 CRLF auth bypass. This\n  is a generic Linux persistence primitive inferred from standard post-WHM-root tradecraft,\n  not directly observed in the operator's recovered toolkit source, and is most actionable\n  when correlated with a prior CVE-2026-41940 exploitation attempt in web access logs for\n  the same host.\nreferences:\n    - https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/\n    - https://nvd.nist.gov/vuln/detail/CVE-2026-41940\nauthor: The Hunters Ledger\ndate: 2026-05-17\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1098.004\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: linux\ndetection:\n    selection_ssh_keys:\n        TargetFilename|re: '^(/root|/home[0-9]*/[^/]+)/\\.ssh/authorized_keys$'\n    filter_admin_tools:\n        Image|contains:\n            - '/usr/sbin/sshd'\n            - '/usr/bin/ssh-copy-id'\n    condition: selection_ssh_keys and not filter_admin_tools\nfalsepositives:\n    - >-\n      Legitimate administrator key management via ssh-copy-id or direct authorized_keys\n      editing (use change-management correlation to exclude)\n    - Automated configuration management tools (Ansible, Puppet, Chef) managing SSH keys\n    - CI/CD pipeline deployment keys being rotated\nlevel: medium",
         "to_ids": false,
         "comment": "Post-Exploitation SSH Authorized_Keys Modification on cPanel Host | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1098.004 | rule hash 14470cde | https://the-hunters-ledger.com/hunting-detections/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -790,7 +790,7 @@
         "value": "/*\n   Yara Rule Set\n   Identifier: cPanel Harvester Toolkit — CVE-2026-41940 Operator Files\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule TOOLKIT_CpanelHarvester41940_KnownFiles {\n   meta:\n      description = \"Detects the operator-built cPanel/WHM credential-harvester toolkit (CVE-2026-41940 exploitation cluster, 216.126.227.49) via a required combination of two or more bespoke, operator-coined component filenames referenced in the toolkit's own orchestrator source or captured in directory-listing/log content. File-hash matching for the eight highest-value toolkit files is carried in the campaign IOC feed, not this rule\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections/\"\n      date = \"2026-05-17\"\n      hash1 = \"4b054892b4a5d7811f57562552d1ea0e8ea5bfbf705ceb71e91126482b650a47\"\n      family = \"cPanel-Harvester-Toolkit-CVE-2026-41940\"\n      malware_type = \"Credential Harvester / Exploitation Toolkit\"\n      campaign = \"OpenDirectory-CVE-2026-41940-cPanel-Harvester-216.126.227.49\"\n      id = \"f0965e55-2c67-5830-bed9-0d228e6cff14\"\n   strings:\n      $fn_pipeline    = \"pipeline-41940\" ascii wide\n      $fn_live_dash   = \"live-dashboard-v10\" ascii wide\n      $fn_whm_hunter  = \"whm-hunter\" ascii wide\n      $fn_beast_dash  = \"beast-dashboard\" ascii wide\n      $fn_beast_page  = \"gen-beast-page\" ascii wide\n      $fn_megahunt    = \"megahunt-fast\" ascii wide\n      $fn_toolkit_dir = \"cpanel-toolkit-export\" ascii wide\n   condition:\n      filesize < 50KB and\n      2 of ($fn_pipeline, $fn_live_dash, $fn_whm_hunter, $fn_beast_dash,\n            $fn_beast_page, $fn_megahunt, $fn_toolkit_dir)\n}",
         "to_ids": true,
         "comment": "CVE-2026-41940 cPanel Harvester Toolkit: Bespoke Component Filenames | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1587.001, T1588.005 | rule hash e35970b4 | https://the-hunters-ledger.com/hunting-detections/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",

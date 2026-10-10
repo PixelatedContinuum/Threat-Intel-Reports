@@ -5,8 +5,8 @@
     "date": "2026-07-26",
     "threat_level_id": 2,
     "analysis": 2,
-    "timestamp": 1791580400,
-    "publish_timestamp": 1791580400,
+    "timestamp": 1791592076,
+    "publish_timestamp": 1791592076,
     "published": true,
     "Orgc": {
       "name": "The Hunters Ledger",
@@ -30,11 +30,11 @@
         "colour": "#58a6ff"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"SMB / Windows Admin Shares - T1021.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"SMB/Windows Admin Shares - T1021.002\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Name or Location - T1036.005\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Resource Name or Location - T1036.005\"",
         "colour": "#0088cc"
       },
       {
@@ -94,7 +94,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys - T1547.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
         "colour": "#0088cc"
       },
       {
@@ -114,7 +114,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Scan Databases (FOFA) - T1596.005\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Scan Databases - T1596.005\"",
         "colour": "#0088cc"
       },
       {
@@ -130,7 +130,7 @@
         "value": "https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/",
         "to_ids": false,
         "comment": "Detection rules, The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "4771f514-fb5a-5dc9-ac80-e68ad7be33d5",
@@ -139,7 +139,7 @@
         "value": "https://the-hunters-ledger.com/ioc-feeds/gocloud-multiservice-cryptojacking-149-28-112-221-iocs.json",
         "to_ids": false,
         "comment": "IOC feed (JSON), The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "266cf4c8-f415-504b-b183-e2c5dc273594",
@@ -148,7 +148,7 @@
         "value": "https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/",
         "to_ids": false,
         "comment": "Report, The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "f9185e7e-aae8-527d-bc8c-1db689c30e8d",
@@ -157,7 +157,7 @@
         "value": "https://the-hunters-ledger.com/stix/gocloud-multiservice-cryptojacking-149-28-112-221.json",
         "to_ids": false,
         "comment": "STIX 2.1 bundle, The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "4ed66f96-3db0-5d3a-8a5c-8e6fb05f1300",
@@ -166,7 +166,7 @@
         "value": "CVE-2022-26134",
         "to_ids": false,
         "comment": "Named in the report",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "98f8450b-4468-53dc-b989-6e9d31179954",
@@ -175,7 +175,7 @@
         "value": "CVE-2023-38646",
         "to_ids": false,
         "comment": "Named in the report",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "8d198092-10ba-5105-b91a-16c72b2918ed",
@@ -184,7 +184,7 @@
         "value": "auto.c3pool.org",
         "to_ids": true,
         "comment": "domain: auto.c3pool.org. Third-party public Monero mining pool (c3pool). Mining destination, not operator-owned; hunt/monitor rather than block outright. [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "aa866484-e1c8-5898-b906-a8af9b8feb3b",
@@ -193,7 +193,7 @@
         "value": "download.c3pool.org",
         "to_ids": true,
         "comment": "domain: download.c3pool.org. c3pool official installer host (setup_c3pool_miner.sh/.bat) abused by allinone.ps1 and omnihunter.py. Legitimate service; monitor context only. [confidence 60/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "767496a0-1ad6-527b-b87a-30f2b9517793",
@@ -202,7 +202,7 @@
         "value": "pool.supportxmr.com",
         "to_ids": true,
         "comment": "domain: pool.supportxmr.com. Third-party public Monero pool; used by the Windows worm branch. Not operator-owned. [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "a41a5749-b0b5-58eb-aecd-4edaa01ece85",
@@ -211,7 +211,7 @@
         "value": "xmrpool.eu",
         "to_ids": true,
         "comment": "domain: xmrpool.eu. Third-party public Monero pool; used by the Windows worm branch. Not operator-owned. [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "be4be0ac-2022-5439-b6d5-fbe83ed3ef59",
@@ -220,7 +220,7 @@
         "value": "http://149.28.112.221:8080/allinone.ps1",
         "to_ids": true,
         "comment": "url: http://149.28.112.221:8080/allinone.ps1. One-click Windows deploy (iex cradle) [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "66e53443-8281-5d1a-ac6a-1b603a8bded6",
@@ -229,7 +229,7 @@
         "value": "http://149.28.112.221:8080/config.json",
         "to_ids": true,
         "comment": "url: http://149.28.112.221:8080/config.json. Served XMRig config (pass=WORKER placeholder) [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "6acfc953-4bda-5fca-8008-e5cc2360db85",
@@ -238,7 +238,7 @@
         "value": "http://149.28.112.221:8080/deploy.bat",
         "to_ids": true,
         "comment": "url: http://149.28.112.221:8080/deploy.bat. Windows worm entry dropper (certutil-fetched) [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "b96b77fe-7dc5-545d-825c-c438a038d2db",
@@ -247,7 +247,7 @@
         "value": "http://149.28.112.221:8080/deploy.ps1",
         "to_ids": true,
         "comment": "url: http://149.28.112.221:8080/deploy.ps1. Windows worm main deploy + LAN spread [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "517bb1c4-4546-5837-8abc-81c2cb5d03f6",
@@ -256,7 +256,7 @@
         "value": "http://149.28.112.221:8080/infect.ps1",
         "to_ids": true,
         "comment": "url: http://149.28.112.221:8080/infect.ps1. Windows per-target infection engine [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "092d21fa-b1de-58be-817a-40176f156b0d",
@@ -265,7 +265,7 @@
         "value": "http://149.28.112.221:8080/miner.sh",
         "to_ids": true,
         "comment": "url: http://149.28.112.221:8080/miner.sh. Linux miner delivery [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "456d77fc-d97a-5cc8-afd9-5aa522cc5e38",
@@ -274,7 +274,7 @@
         "value": "http://149.28.112.221:8080/worm.vbs",
         "to_ids": true,
         "comment": "url: http://149.28.112.221:8080/worm.vbs. Windows worm propagation core [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "87b6d990-61dd-59c4-a237-2c0a85a50da9",
@@ -283,7 +283,7 @@
         "value": "http://149.28.112.221:8080/xmrig-win64.zip",
         "to_ids": true,
         "comment": "url: http://149.28.112.221:8080/xmrig-win64.zip. Windows miner binary [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "cc28ad47-d707-5b45-98bd-ec49361b753a",
@@ -292,7 +292,7 @@
         "value": "http://149.28.112.221:8080/xmrig.zip",
         "to_ids": true,
         "comment": "url: http://149.28.112.221:8080/xmrig.zip. Windows XMRig fallback download [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "fd5419c4-2a13-5489-b7f6-5f0a9f32dfe2",
@@ -301,7 +301,7 @@
         "value": "122.51.91.77",
         "to_ids": true,
         "comment": "ipv4: 122.51.91.77. AS45090 Tencent Cloud (Shenzhen, CN). Ports :9998 payload/open-dir, :4444 C2 callback, :9997 unauthenticated control plane, :8081 xmrig dir. Fully unreachable since mid-June. [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "56352b65-f35b-512c-b408-a6c89ca8f579",
@@ -310,7 +310,7 @@
         "value": "149.28.112.221",
         "to_ids": true,
         "comment": "ipv4: 149.28.112.221. AS20473 Vultr, US. Ports :80 bootstrap payloads, :1389 LDAP/JNDI, :8080 miner hosting + heartbeat, :8081 telemetry, :8888 C2 dashboard, :9999 Log4Shell stub. Mature-generation ports unreachable since mid-June. [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "bb1c48d2-c105-53ce-8c30-0398d9d69bda",
@@ -319,7 +319,7 @@
         "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT GOCLOUD-Cryptojacking Windows Worm Component Retrieval (worm.vbs over HTTP)\"; flow:established,to_server; http.uri; content:\"worm.vbs\"; endswith; nocase; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:9301504; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-26;)",
         "to_ids": true,
         "comment": "GOCLOUD Windows Worm Component Retrieval | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1105 | rule hash 3f8f7e7c | https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -334,7 +334,7 @@
         "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT GOCLOUD-Cryptojacking XMRig Deployment Heartbeat GET (Fixed Parameter Order to Payload Host)\"; flow:established,to_server; http.uri; content:\"/r?host=\"; startswith; nocase; content:\"&status=OK&ts=\"; distance:0; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:9301501; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-26;)",
         "to_ids": true,
         "comment": "GOCLOUD XMRig Heartbeat, Fixed Parameter Order | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1071.001 | rule hash 49160973 | https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -349,7 +349,7 @@
         "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT GOCLOUD-Cryptojacking XMRig Worker-Label Heartbeat (gocloud_ or winjenkins_ Naming Convention)\"; flow:established,to_server; http.uri; content:\"worker=\"; nocase; pcre:\"/worker=(gocloud|winjenkins)_/i\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:9301502; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-26;)",
         "to_ids": true,
         "comment": "GOCLOUD XMRig Worker-Label Heartbeat | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1071.001 | rule hash 4d1d98ee | https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -364,7 +364,7 @@
         "value": "alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT GOCLOUD-Cryptojacking LAN Lateral-Movement Report Banner (=== ATTACK === Cleartext to Operator)\"; flow:established,to_server; content:\"=== ATTACK ===\"; content:\"OK!\"; distance:0; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:9301503; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-26;)",
         "to_ids": true,
         "comment": "GOCLOUD LAN Lateral-Movement Report Banner | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1021.002, T1570 | rule hash 9f38b7c5 | https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -379,7 +379,7 @@
         "value": "alert tcp any any -> any any (msg:\"THL HUNT GOCLOUD-Cryptojacking Linux Miner Delivery One-Liner (miner.sh Piped To Bash)\"; flow:established; content:\"miner.sh|7c|bash\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:9301505; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-26;)",
         "to_ids": false,
         "comment": "GOCLOUD Linux Miner Delivery One-Liner | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1105 | rule hash 53594553 | https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -394,7 +394,7 @@
         "value": "title: Certutil Download Cradle Fetching Remote Payload\nid: 28a3b008-b1d3-4eab-bb33-d31c35e62973\nstatus: experimental\ndescription: >-\n    Detects certutil.exe used as a download cradle with the urlcache and split flags to fetch\n    a remote file over HTTP. The GOCLOUD Windows worm uses this to pull deploy.bat to the temp\n    directory during WMI-based LAN propagation.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/\nauthor: The Hunters Ledger\ndate: 2026-07-26\ntags:\n    - attack.command-and-control\n    - attack.stealth\n    - attack.t1105\n    - attack.t1140\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_img:\n        - Image|endswith: '\\certutil.exe'\n        - OriginalFileName: 'CertUtil.exe'\n    selection_urlcache:\n        CommandLine|contains:\n            - '-urlcache'\n            - '/urlcache'\n    selection_split:\n        CommandLine|contains:\n            - '-split'\n            - '/split'\n    selection_http:\n        CommandLine|contains: 'http'\n    condition: selection_img and selection_urlcache and selection_split and selection_http\nfalsepositives:\n    - Rare administrative use of certutil to retrieve certificate revocation data\nlevel: high",
         "to_ids": true,
         "comment": "Certutil Download Cradle Fetching Remote Payload | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1105, T1140 | rule hash 50345801 | https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -409,7 +409,7 @@
         "value": "title: Defender Real-Time Monitoring Disabled With Exclusion Added\nid: 11c51f72-48bd-43d5-9a5d-2d0da40f5ccf\nstatus: experimental\ndescription: >-\n    Detects a PowerShell script block that both disables Windows Defender real-time monitoring\n    and adds a scan exclusion path. The GOCLOUD Windows miner performs both actions before any\n    payload download so the miner it drops is never scanned.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/\nauthor: The Hunters Ledger\ndate: 2026-07-26\ntags:\n    - attack.defense-impairment\n    - attack.t1685\nlogsource:\n    category: ps_script\n    product: windows\n    definition: 'Requirements: Script Block Logging must be enabled'\ndetection:\n    selection_disable:\n        ScriptBlockText|contains: 'Set-MpPreference -DisableRealtimeMonitoring'\n    selection_exclude:\n        ScriptBlockText|contains: 'Add-MpPreference -ExclusionPath'\n    condition: all of selection_*\nfalsepositives:\n    - Endpoint-management scripts that intentionally reconfigure Defender\nlevel: high",
         "to_ids": true,
         "comment": "Defender Real-Time Monitoring Disabled With Exclusion Added | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1685 | rule hash a8d173b8 | https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -424,7 +424,7 @@
         "value": "title: Hidden And System Attributes Set On User AppData Path\nid: c9ae87a9-4e58-4daf-8f9c-a8bd074d0510\nstatus: experimental\ndescription: >-\n    Detects attrib.exe applying the hidden and system attributes to a path under the user\n    AppData tree. The GOCLOUD miner conceals its dropped TimeService directory this way. Broad\n    enough that it is intended for hunting rather than direct alerting.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/\nauthor: The Hunters Ledger\ndate: 2026-07-26\ntags:\n    - attack.stealth\n    - attack.t1564.001\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_img:\n        - Image|endswith: '\\attrib.exe'\n        - OriginalFileName: 'ATTRIB.EXE'\n    selection_hidden:\n        CommandLine|contains: '+h'\n    selection_system:\n        CommandLine|contains: '+s'\n    selection_path:\n        CommandLine|contains: '\\AppData\\'\n    condition: selection_img and selection_hidden and selection_system and selection_path\nfalsepositives:\n    - Some legitimate applications hide per-user data directories\nlevel: medium",
         "to_ids": false,
         "comment": "Hidden And System Attributes Set On User AppData Path | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1564.001 | rule hash bab17c93 | https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -439,7 +439,7 @@
         "value": "title: Net Use Mapping Administrative Share With Explicit Credential\nid: 4e1b4b06-a18b-46f4-8eed-d1f7baf9e61e\nstatus: experimental\ndescription: >-\n    Detects net.exe mapping an administrative share (C$, ADMIN$, IPC$) with an explicit\n    credential. The GOCLOUD infect.ps1 and node-2 a.py probe test flat LANs for a shared\n    blank-password local administrator before dropping the miner. Broad; intended for hunting.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/\nauthor: The Hunters Ledger\ndate: 2026-07-26\ntags:\n    - attack.lateral-movement\n    - attack.t1021.002\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_img:\n        - Image|endswith: '\\net.exe'\n        - Image|endswith: '\\net1.exe'\n    selection_use:\n        CommandLine|contains: ' use '\n    selection_share:\n        CommandLine|contains:\n            - 'C$'\n            - 'ADMIN$'\n            - 'IPC$'\n    selection_cred:\n        CommandLine|contains: '/u:'\n    condition: all of selection_*\nfalsepositives:\n    - Administrative scripts mapping admin shares for legitimate management\nlevel: medium",
         "to_ids": false,
         "comment": "Net Use Mapping Administrative Share With Explicit Credential | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1021.002 | rule hash c61f77ea | https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -454,7 +454,7 @@
         "value": "title: PowerShell IEX Download Cradle From Remote Host\nid: d8c4a085-a8d2-44ae-a76c-eb509ca19067\nstatus: experimental\ndescription: >-\n    Detects a PowerShell download-and-execute cradle combining Invoke-Expression with a web\n    request. The GOCLOUD one-click installer uses an iex plus Invoke-WebRequest cradle to pull\n    and run allinone.ps1. Broad; intended for hunting.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/\nauthor: The Hunters Ledger\ndate: 2026-07-26\ntags:\n    - attack.execution\n    - attack.command-and-control\n    - attack.t1059.001\n    - attack.t1105\nlogsource:\n    category: ps_script\n    product: windows\n    definition: 'Requirements: Script Block Logging must be enabled'\ndetection:\n    selection_iex:\n        ScriptBlockText|contains:\n            - 'IEX '\n            - 'Invoke-Expression'\n    selection_web:\n        ScriptBlockText|contains:\n            - 'iwr '\n            - 'Invoke-WebRequest'\n            - 'DownloadString'\n    condition: all of selection_*\nfalsepositives:\n    - Provisioning scripts that fetch and run remote code\nlevel: medium",
         "to_ids": false,
         "comment": "PowerShell IEX Download Cradle From Remote Host | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1059.001, T1105 | rule hash 27ba6b4a | https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -469,7 +469,7 @@
         "value": "title: Process Executed From X11-Socket-Lookalike Temp Directory\nid: 03268048-2fb3-40e2-9c26-b3afd233005c\nstatus: experimental\ndescription: >-\n    Detects a process executing from a /tmp/.X11-unix. directory carrying a random suffix.\n    Legitimate X11 uses the exact directory name without a trailing dot and suffix, so the\n    dot-suffixed variant is the GOCLOUD Linux miner hiding location for its XMRig binary.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/\nauthor: The Hunters Ledger\ndate: 2026-07-26\ntags:\n    - attack.stealth\n    - attack.impact\n    - attack.t1564.001\n    - attack.t1496.001\n    - stp.3\nlogsource:\n    category: process_creation\n    product: linux\ndetection:\n    selection:\n        Image|contains: '/tmp/.X11-unix.'\n    condition: selection\nfalsepositives:\n    - Unlikely; the standard X11 socket directory does not carry a dot suffix\nlevel: high",
         "to_ids": true,
         "comment": "Process Executed From X11-Socket-Lookalike Temp Directory | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1564.001, T1496.001 | rule hash da2d6a79 | https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -484,7 +484,7 @@
         "value": "title: Remote Scheduled Task Creation Running As SYSTEM\nid: 95400021-9144-4baf-9e25-6519fe2ef868\nstatus: experimental\ndescription: >-\n    Detects creation of a scheduled task on a remote host running as SYSTEM via schtasks with\n    the remote server and run-as SYSTEM flags. The GOCLOUD Windows worm registers a SYSTEM task\n    on each freshly reached LAN host and immediately runs it to spread the miner.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/\nauthor: The Hunters Ledger\ndate: 2026-07-26\ntags:\n    - attack.execution\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1053.005\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_img:\n        - Image|endswith: '\\schtasks.exe'\n        - OriginalFileName: 'schtasks.exe'\n    selection_create:\n        CommandLine|contains: '/create'\n    selection_remote:\n        CommandLine|contains: '/s '\n    selection_system:\n        CommandLine|contains: '/ru SYSTEM'\n    condition: all of selection_*\nfalsepositives:\n    - Enterprise administration tools that provision SYSTEM scheduled tasks on remote hosts\nlevel: high",
         "to_ids": true,
         "comment": "Remote Scheduled Task Creation Running As SYSTEM | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1053.005 | rule hash f36aec0d | https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -499,7 +499,7 @@
         "value": "title: Scheduled Task Registering SYSTEM Action In User AppData\nid: ec66df96-4699-45b5-9edd-fbf21d195240\nstatus: experimental\ndescription: >-\n    Detects schtasks creating a task whose action runs a binary under a user AppData path with\n    SYSTEM privileges. The GOCLOUD miner persists as WindowsTimeSync or WindowsWatchdog pointing\n    at a renamed XMRig under the AppData TimeService folder running as SYSTEM.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/\nauthor: The Hunters Ledger\ndate: 2026-07-26\ntags:\n    - attack.execution\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.stealth\n    - attack.t1053.005\n    - attack.t1036.005\n    - stp.3\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_img:\n        - Image|endswith: '\\schtasks.exe'\n        - OriginalFileName: 'schtasks.exe'\n    selection_create:\n        CommandLine|contains: '/create'\n    selection_action:\n        CommandLine|contains:\n            - '\\AppData\\'\n            - '%APPDATA%'\n    selection_system:\n        CommandLine|contains: '/ru SYSTEM'\n    condition: all of selection_*\nfalsepositives:\n    - Unusual installers that register SYSTEM tasks pointing at per-user AppData paths\nlevel: high",
         "to_ids": true,
         "comment": "Scheduled Task Registering SYSTEM Action In User AppData | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1053.005, T1036.005 | rule hash 511e8c09 | https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -514,7 +514,7 @@
         "value": "title: Script Host Executing VBScript From Windows Temp\nid: 5a64b8ea-2ab7-49f8-a202-f4d3b9f2bbc6\nstatus: experimental\ndescription: >-\n    Detects wscript.exe or cscript.exe running a VBScript from the Windows Temp folder or a\n    public directory. The GOCLOUD worm launches worm.vbs from the Windows Temp folder for its\n    subnet LAN sweep. Broad; intended for hunting.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/\nauthor: The Hunters Ledger\ndate: 2026-07-26\ntags:\n    - attack.execution\n    - attack.t1059.005\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_img:\n        - Image|endswith: '\\wscript.exe'\n        - Image|endswith: '\\cscript.exe'\n    selection_path:\n        CommandLine|contains:\n            - '\\Windows\\Temp\\'\n            - '\\Users\\Public\\'\n    selection_ext:\n        CommandLine|contains: '.vbs'\n    condition: all of selection_*\nfalsepositives:\n    - Legitimate setup scripts staged in temporary directories\nlevel: medium",
         "to_ids": false,
         "comment": "Script Host Executing VBScript From Windows Temp | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1059.005 | rule hash b648db42 | https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -529,7 +529,7 @@
         "value": "title: Svchost.EXE Executed From Non-System Directory\nid: d1fb7553-97d4-45f2-a10b-3f36ed4a242b\nstatus: experimental\ndescription: >-\n    Detects svchost.exe executing from a path outside System32 or SysWOW64. The GOCLOUD\n    cryptojacking toolkit renames its XMRig miner to svchost.exe and runs it from a\n    TimeService folder under the user AppData tree, a masquerade legitimate Windows service\n    host processes never perform.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/\nauthor: The Hunters Ledger\ndate: 2026-07-26\ntags:\n    - attack.stealth\n    - attack.t1036.005\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        Image|endswith: '\\svchost.exe'\n    filter_main_legit_path:\n        Image|contains:\n            - ':\\Windows\\System32\\'\n            - ':\\Windows\\SysWOW64\\'\n            - ':\\Windows\\WinSxS\\'\n    condition: selection and not filter_main_legit_path\nfalsepositives:\n    - Third-party software that ships a bundled binary named svchost.exe outside the system tree\nlevel: high",
         "to_ids": true,
         "comment": "Svchost Executed From Non-System Directory | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1036.005 | rule hash 81104a8e | https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -544,7 +544,7 @@
         "value": "title: Systemd Or Cron Executing Binary From Tmp\nid: db92c228-ae52-4960-9957-0a8474cdf072\nstatus: experimental\ndescription: >-\n    Detects a process launched directly from /tmp by systemd or cron. The GOCLOUD Linux miner\n    persists as a systemd unit and an @reboot crontab entry whose action points at an XMRig\n    binary under /tmp. Broad; intended for hunting.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/\nauthor: The Hunters Ledger\ndate: 2026-07-26\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.impact\n    - attack.t1543.002\n    - attack.t1496.001\nlogsource:\n    category: process_creation\n    product: linux\ndetection:\n    selection:\n        ParentImage|endswith:\n            - '/systemd'\n            - '/cron'\n            - '/crond'\n        Image|startswith: '/tmp/'\n    condition: selection\nfalsepositives:\n    - Some legitimate software executes helper binaries from /tmp\nlevel: medium",
         "to_ids": false,
         "comment": "Systemd Or Cron Executing Binary From Tmp | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1543.002, T1496.001 | rule hash 59269a7a | https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -559,7 +559,7 @@
         "value": "rule GOCLOUD_BatchExploit_Dispatcher {\n   meta:\n      description = \"Detects the GOCLOUD BatchExploit central exploit dispatcher and its FOFA targeting engine (batch_exploit.py / fofa_batch.py) by the self-brand string, the operator's live FOFA API key, the ex_ prefixed exploit function family, and the miner.sh|bash delivery one-liner\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/\"\n      date = \"2026-07-26\"\n      hash1 = \"55aec7f75af2e0489ff72c28322eccdfbc946cc00f539c2051382877cac03426\"\n      hash2 = \"a4f85666972d0d2714153df0e74e3547ae304f3d\"\n      hash3 = \"03164fbe18dde4df7d2838875de0b3f3\"\n      family = \"GOCLOUD\"\n      malware_type = \"Mass-exploitation dispatcher\"\n      id = \"7500809e-561b-5ad7-99e7-5b77da81cce5\"\n   strings:\n      $brand   = \"GOCLOUD BatchExploit\" ascii\n      $fofakey = \"b435f2336553ea069d3848ac2c4574aa\" ascii\n      $ex1     = \"def ex_redis\" ascii\n      $ex2     = \"def ex_jenkins\" ascii\n      $deliver = \"miner.sh|bash\" ascii\n      $dict    = \"EXPLOIT = {\" ascii\n      $cn      = \"country=\\\"CN\\\"\" ascii\n   condition:\n      filesize < 200KB and\n      ( $brand or $fofakey ) and\n      2 of ($ex1, $ex2, $deliver, $dict, $cn)\n}",
         "to_ids": true,
         "comment": "GOCLOUD_BatchExploit_Dispatcher | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1190, T1596.005, T1059.006, T1105 | rule hash 5190e639 | https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -574,7 +574,7 @@
         "value": "rule GOCLOUD_LAN_Probe_Attack_Banner {\n   meta:\n      description = \"Detects the GOCLOUD node-2 LAN lateral-movement probe (a.py) by its cleartext === ATTACK === report banner, the SMB / WMI / SCHTASKS OK result markers it posts back to the operator, and its sequential net use against C$ / ADMIN$ / IPC$ administrative shares\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/\"\n      date = \"2026-07-26\"\n      hash1 = \"44a14aafec8482f691801e28a3893c1ae1fdfbbed4dce963b002b7095f6cb120\"\n      family = \"GOCLOUD\"\n      malware_type = \"LAN lateral-movement probe\"\n      id = \"e8cbbcc2-83b7-59dd-8e4e-b80ea72a5a4f\"\n   strings:\n      $banner = \"=== ATTACK ===\" ascii\n      $smb    = \"SMB\" ascii\n      $wmi    = \"WMI\" ascii\n      $sch    = \"SCHTASKS\" ascii\n      $ok     = \"OK!\" ascii\n      $c      = \"ADMIN$\" ascii\n      $ipc    = \"IPC$\" ascii\n   condition:\n      filesize < 60KB and\n      $banner and 3 of ($smb, $wmi, $sch, $ok, $c, $ipc)\n}",
         "to_ids": true,
         "comment": "GOCLOUD_LAN_Probe_Attack_Banner | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1021.002, T1570 | rule hash 4e014c24 | https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -589,7 +589,7 @@
         "value": "rule GOCLOUD_Linux_Miner_v7 {\n   meta:\n      description = \"Detects the GOCLOUD miner.sh Linux XMRig deployer (GOCLOUD miner v7) by its self-branded banner, the /tmp/.X11-unix. dot-suffixed X11-socket-lookalike hiding directory, the c3pool_miner.service persistence unit, the gocloud_ worker-label convention, and the fixed-order /r?host= heartbeat\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/\"\n      date = \"2026-07-26\"\n      hash1 = \"5194aa67974a69549f1f839c973ca17cc0ce8c6ca41ab199d74599befba08db7\"\n      hash2 = \"5fe34b31fe3e3c741456ae6d3c55677cd1aff608\"\n      hash3 = \"6177ab813f6bfeba9c3ec6aeeeb5780a\"\n      family = \"GOCLOUD\"\n      malware_type = \"Cryptojacking deployer\"\n      id = \"fd42d64a-f3ac-51b4-b450-523467161f37\"\n   strings:\n      $banner = \"GOCLOUD miner v7\" ascii nocase\n      $x11    = \"/tmp/.X11-unix.\" ascii\n      $svc    = \"c3pool_miner.service\" ascii\n      $worker = \"gocloud_\" ascii\n      $hb     = \"/r?host=\" ascii\n      $pool   = \"auto.c3pool.org:19999\" ascii nocase\n   condition:\n      filesize < 40KB and\n      ( ( $x11 and 2 of them ) or ( 4 of them ) )\n}",
         "to_ids": true,
         "comment": "GOCLOUD_Linux_Miner_v7 | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1543.002, T1564.001, T1071.001, T1496.001 | rule hash a93edce0 | https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -604,7 +604,7 @@
         "value": "rule GOCLOUD_Listener2_Control_Plane {\n   meta:\n      description = \"Detects the GOCLOUD node-2 reverse-shell control plane (listener2.py) by its unauthenticated CONTROL_PORT 9997 operator interface, the list / all: broadcast verbs, the fixed 4444-8888 shell-catch port set, and the id command auto-pushed on every reverse-shell connect\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/\"\n      date = \"2026-07-26\"\n      hash1 = \"f800c809dfdc0ce22be0fe638734212380d99293fc466242b3fea6e6e858e9df\"\n      family = \"GOCLOUD\"\n      malware_type = \"Reverse-shell C2 controller\"\n      id = \"986a37d8-3e5f-511e-b6f7-3569e89a1c54\"\n   strings:\n      $ctl     = \"CONTROL_PORT\" ascii\n      $port    = \"9997\" ascii\n      $verb1   = \"all:\" ascii\n      $verb2   = \"list\" ascii\n      $ports   = \"4444\" ascii\n      $auto    = \"id\\\\n\" ascii\n   condition:\n      filesize < 60KB and\n      $ctl and $port and 2 of ($verb1, $verb2, $ports, $auto)\n}",
         "to_ids": true,
         "comment": "GOCLOUD_Listener2_Control_Plane | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1571, T1059.006, T1105 | rule hash 80eadf9c | https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -619,7 +619,7 @@
         "value": "rule GOCLOUD_OmniHunter_v4_Orchestrator {\n   meta:\n      description = \"Detects the GOCLOUD OmniHunter v4 exploitation orchestrator (omnihunter.py, node 2) by its self-brand, the operator's shared FOFA API key, the tomcatwar.jsp webshell filename, the hardcoded Hikvision iSecure session cookie, and the rce_ prefixed module naming that distinguishes it from the ex_ GOCLOUD dispatcher\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/\"\n      date = \"2026-07-26\"\n      hash1 = \"cee14e449b9da683734b1f4122a40f1d6e478fe93015702137b62a79a5414ad3\"\n      family = \"GOCLOUD\"\n      malware_type = \"Mass-exploitation orchestrator\"\n      id = \"feb7afed-e952-5d6f-9b20-ff4e070e0bf6\"\n   strings:\n      $brand   = \"OmniHunter\" ascii\n      $fofakey = \"b435f2336553ea069d3848ac2c4574aa\" ascii\n      $shell   = \"tomcatwar.jsp\" ascii nocase\n      $hik     = \"ISMS_8700_Sessionname=ABCB193BD9D82CC2D6094F6ED4D81169\" ascii\n      $rce     = \"def rce_\" ascii\n      $meta    = \"def rce_metabase\" ascii\n   condition:\n      filesize < 200KB and\n      $brand and\n      2 of ($fofakey, $shell, $hik, $rce, $meta)\n}",
         "to_ids": true,
         "comment": "GOCLOUD_OmniHunter_v4_Orchestrator | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1190, T1596.005, T1505.003 | rule hash 2c9def5d | https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -634,7 +634,7 @@
         "value": "rule GOCLOUD_Windows_Deploy_Worm_Lingkai {\n   meta:\n      description = \"Detects the GOCLOUD Windows internet-cafe miner deployment and LAN-propagation scripts (deploy.ps1 / allinone.ps1 / setup.bat, self-branded 凌凯矿机 v3.0) by the combination of the operator's mining-estate brand, its svchost/TimeService masquerade triad, and the checksum-invalid typo Monero wallet live in the runtime config\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/\"\n      date = \"2026-07-26\"\n      hash1 = \"f4c5ab27bceb6ab6c6ec8f48b3b84701a0ba6966e30042bf5765a5d97018b5d2\"\n      hash2 = \"f42af99f65f1edeb5ed13b3f68643e7d8abacfceb878ba7e79581caedbd7f09f\"\n      hash3 = \"6780e9cc6cad66975bb7d895cd0944b72c5a843b80f6c4fef3cc4ebeb1ce628a\"\n      family = \"GOCLOUD\"\n      malware_type = \"Cryptojacking deployer / LAN worm\"\n      id = \"5fec8734-b59b-5046-9a52-36e8061fb674\"\n   strings:\n      $brand    = \"凌凯矿机\" ascii wide\n      $netbar   = \"网吧\" ascii wide\n      $task1    = \"WindowsTimeSync\" ascii wide fullword\n      $task2    = \"WindowsWatchdog\" ascii wide fullword\n      $path     = \"Microsoft\\\\Windows\\\\TimeService\" ascii wide nocase\n      $wallettp = \"42CThVKA9SxeeQDT8EcBK7UHNFFREDw3q7W5ZyyoGvGufDVPbKzYb3Bap9z9qor7jwAU23r3jKHyoZCSYH8eK4a9BUyTRrE\" ascii wide\n      $pool     = \"pool.supportxmr.com:443\" ascii wide nocase\n      $attr     = \"attrib +H +S\" ascii wide nocase\n   condition:\n      filesize < 80KB and\n      ( $wallettp or 3 of them )\n}",
         "to_ids": true,
         "comment": "GOCLOUD_Windows_Deploy_Worm_Lingkai | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1036.005, T1053.005, T1021.002, T1496.001 | rule hash 7c3acf7e | https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -649,7 +649,7 @@
         "value": "rule GOCLOUD_Windows_Miner_WinJenkins {\n   meta:\n      description = \"Detects the GOCLOUD winminer.ps1 Windows XMRig deployer by its WinJenkinsHeartbeat scheduled-task persistence, the per-host win_jenkins_ pool-password convention, pre-download Defender real-time-monitoring disable, and the fixed-order /r?host= mining heartbeat\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/\"\n      date = \"2026-07-26\"\n      hash1 = \"004315d53cc4e68b16f0a1acb1f09d9501ea26e6fde1686b2018cd677a346c5c\"\n      hash2 = \"446fedd99169500bbd34de06bc5890de445d7280\"\n      hash3 = \"dbfc0b53520ad8ef434b38f322a91388\"\n      family = \"GOCLOUD\"\n      malware_type = \"Cryptojacking deployer\"\n      id = \"2bf3f5bb-c1e9-5399-836e-8d4ed6b0bf60\"\n   strings:\n      $task   = \"WinJenkinsHeartbeat\" ascii wide fullword\n      $pass   = \"win_jenkins_\" ascii wide\n      $defoff = \"Set-MpPreference -DisableRealtimeMonitoring\" ascii wide nocase\n      $hb     = \"/r?host=\" ascii wide\n      $worker = \"winjenkins_\" ascii wide\n      $donate = \"\\\"donate-level\\\": 0\" ascii wide\n   condition:\n      filesize < 40KB and\n      3 of them\n}",
         "to_ids": true,
         "comment": "GOCLOUD_Windows_Miner_WinJenkins | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1053.005, T1685, T1071.001, T1496.001 | rule hash 22198790 | https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",

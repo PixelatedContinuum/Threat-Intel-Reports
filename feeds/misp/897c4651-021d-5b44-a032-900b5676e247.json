@@ -5,8 +5,8 @@
     "date": "2026-05-25",
     "threat_level_id": 1,
     "analysis": 2,
-    "timestamp": 1791580400,
-    "publish_timestamp": 1791580400,
+    "timestamp": 1791592076,
+    "publish_timestamp": 1791592076,
     "published": true,
     "Orgc": {
       "name": "The Hunters Ledger",
@@ -34,11 +34,11 @@
         "colour": "#58a6ff"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"OS Credential Dumping: LSASS Memory - T1003.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"LSASS Memory - T1003.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"OS Credential Dumping: Security Account Manager - T1003.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Security Account Manager - T1003.002\"",
         "colour": "#0088cc"
       },
       {
@@ -50,15 +50,15 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Services: Remote Desktop Protocol - T1021.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Desktop Protocol - T1021.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Services: SSH - T1021.004\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"SSH - T1021.004\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Services: Windows Remote Management - T1021.006\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Remote Management - T1021.006\"",
         "colour": "#0088cc"
       },
       {
@@ -74,7 +74,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Scheduled Task/Job: Scheduled Task - T1053.005\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Scheduled Task - T1053.005\"",
         "colour": "#0088cc"
       },
       {
@@ -82,15 +82,15 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Command and Scripting Interpreter: PowerShell - T1059.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Command and Scripting Interpreter: Python - T1059.006\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Python - T1059.006\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Application Layer Protocol: Web Protocols - T1071.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
         "colour": "#0088cc"
       },
       {
@@ -114,7 +114,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy: Domain Fronting (Cloudflare Tunnel) - T1090.004\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domain Fronting - T1090.004\"",
         "colour": "#0088cc"
       },
       {
@@ -134,7 +134,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Data Encoding: Standard Encoding - T1132.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Standard Encoding - T1132.001\"",
         "colour": "#0088cc"
       },
       {
@@ -154,27 +154,27 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Event Triggered Execution: WMI Event Subscription - T1546.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Management Instrumentation Event Subscription - T1546.003\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Boot or Logon Autostart Execution: Registry Run Keys - T1547.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Use Alternate Authentication Material: Pass the Hash - T1550.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Pass the Hash - T1550.002\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Unsecured Credentials: Credentials In Files - T1552.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials In Files - T1552.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Unsecured Credentials: Private Keys - T1552.004\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Private Keys - T1552.004\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials from Password Stores: Password Managers - T1555.005\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Password Managers - T1555.005\"",
         "colour": "#0088cc"
       },
       {
@@ -190,23 +190,23 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Encrypted Channel: Asymmetric Cryptography - T1573.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Asymmetric Cryptography - T1573.002\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Domains - T1583.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domains - T1583.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Virtual Private Server - T1583.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Virtual Private Server - T1583.003\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Web Services - T1583.006\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Services - T1583.006\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Establish Accounts: Email Accounts - T1585.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Email Accounts - T1585.002\"",
         "colour": "#0088cc"
       },
       {
@@ -214,7 +214,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Obtain Capabilities: Tool - T1588.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Tool - T1588.002\"",
         "colour": "#0088cc"
       }
     ],
@@ -226,7 +226,7 @@
         "value": "https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/",
         "to_ids": false,
         "comment": "Detection rules, The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "afdd87c3-f622-579c-b516-a38308fa0596",
@@ -235,7 +235,7 @@
         "value": "https://the-hunters-ledger.com/ioc-feeds/russian-gemini-credential-mill-213.165.51.115-iocs.json",
         "to_ids": false,
         "comment": "IOC feed (JSON), The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "75222178-61a5-5428-9b81-aaaeabf7eefe",
@@ -244,7 +244,7 @@
         "value": "https://the-hunters-ledger.com/reports/russian-gemini-credential-mill-213.165.51.115/",
         "to_ids": false,
         "comment": "Report, The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "e9d683f6-64c3-5ad9-9e47-57a57ea080f8",
@@ -253,7 +253,7 @@
         "value": "https://the-hunters-ledger.com/stix/russian-gemini-credential-mill-213.165.51.115.json",
         "to_ids": false,
         "comment": "STIX 2.1 bundle, The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "1397c0e0-e315-522b-8573-19a2135fee26",
@@ -262,7 +262,7 @@
         "value": "10101.tralalarkefe.com",
         "to_ids": true,
         "comment": "domain: 10101.tralalarkefe.com. Tunnel alias for payload server at 127.0.0.1:10101 [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "1f0373cd-a7fe-507e-9730-2c293c623154",
@@ -271,7 +271,7 @@
         "value": "antipublic.one",
         "to_ids": true,
         "comment": "domain: antipublic.one. Russian credential-DB service; operator's mass_wp_mutator.py integrates via API key. Outbound from server-class non-research hosts is high-confidence operator signal. [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "d3b35815-f2da-567d-a402-c302ff424bf1",
@@ -280,7 +280,7 @@
         "value": "c2.tralalarkefe.com",
         "to_ids": true,
         "comment": "domain: c2.tralalarkefe.com. Operator C2 command channel; Cloudflare Tunnel-fronted; requires Mozilla/5.0 User-Agent + X-Agent-ID header [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "1db008b7-a23a-5b01-91a0-1b5ab3a0bb47",
@@ -289,7 +289,7 @@
         "value": "catchall1.tralalarkefe.com",
         "to_ids": true,
         "comment": "domain: catchall1.tralalarkefe.com. Operator Mailpit catch-all email interface (GCP 35.192.41.201); receives all email to *@tralalarkefe.com for burner account registration [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "3d89042a-5fba-5623-8450-600d2b753c6e",
@@ -298,7 +298,7 @@
         "value": "gil_dr1.tralalarkefe.com",
         "to_ids": true,
         "comment": "domain: gil_dr1.tralalarkefe.com. healthcare victim Doctor's PC (the Doctor's PC) Cloudflare Tunnel for operator's SSH access (plaintext password [redacted] in operator notes) [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "efae8971-c83a-5dfc-a41f-52a811a633c3",
@@ -307,7 +307,7 @@
         "value": "payloads.tralalarkefe.com",
         "to_ids": true,
         "comment": "domain: payloads.tralalarkefe.com. Operator payload distribution channel; serves run_bg.ps1, agent_final.ps1, stealth.ps1 PowerShell payloads [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "c6980c9a-7ab1-5d51-a80e-7876d0aa3106",
@@ -316,7 +316,7 @@
         "value": "tenant-upcoming-great-descending.trycloudflare.com",
         "to_ids": true,
         "comment": "domain: tenant-upcoming-great-descending.trycloudflare.com. Operator's one-time C2-bundle bootstrap tunnel (Cloudflare quick-tunnel address; ephemeral but documented in install_c2_bundle.sh) [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "954180a3-71ef-5268-893a-190c828293ca",
@@ -325,7 +325,7 @@
         "value": "tralalarkefe.com",
         "to_ids": true,
         "comment": "domain: tralalarkefe.com. Operator-controlled root domain; all subdomains operator-bound [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "2915065d-0b55-5c68-a2e1-138b96ec227a",
@@ -334,7 +334,7 @@
         "value": "windows_server.tralalarkefe.com",
         "to_ids": true,
         "comment": "domain: windows_server.tralalarkefe.com. healthcare victim Windows Server (Win 11 Pro, internal IP [victim internal host, redacted], AD domain [victim AD domain, redacted]) Cloudflare Tunnel for operator's WinRM + NetSupport Manager access [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "4cf7a83e-d126-5c42-8a38-a26240f6e8da",
@@ -343,7 +343,7 @@
         "value": "https://antipublic.one/api/v2/search",
         "to_ids": true,
         "comment": "url: https://antipublic.one/api/v2/search. Operator's mass_wp_mutator.py AntiPublic credential-DB lookup endpoint [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "13a65a6d-6c90-550f-80f8-534f2994fdd4",
@@ -352,7 +352,7 @@
         "value": "https://c2.tralalarkefe.com/api/v1/agents",
         "to_ids": true,
         "comment": "url: https://c2.tralalarkefe.com/api/v1/agents. Operator C2 agent enumeration endpoint (defender-takeover endpoint, unauthenticated GET returns full beacon list to any caller) [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "5ca7107b-6c60-5a0f-9cf0-914938dc74ab",
@@ -361,7 +361,7 @@
         "value": "https://c2.tralalarkefe.com/api/v1/get_results",
         "to_ids": true,
         "comment": "url: https://c2.tralalarkefe.com/api/v1/get_results. Client-called endpoint NOT implemented server-side at capture (iterative-dev evidence; missing endpoint indicates operator's C2 codebase is in-progress) [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "46d95232-b9c9-5a81-a7e5-616f9a0254d5",
@@ -370,7 +370,7 @@
         "value": "https://c2.tralalarkefe.com/api/v1/interact",
         "to_ids": true,
         "comment": "url: https://c2.tralalarkefe.com/api/v1/interact. Operator C2 command-submission endpoint (POST with agent_id + base64(UTF-16LE) task) [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "face03e7-1474-5679-8823-5803b6767e5a",
@@ -379,7 +379,7 @@
         "value": "https://c2.tralalarkefe.com/api/v1/telemetry",
         "to_ids": true,
         "comment": "url: https://c2.tralalarkefe.com/api/v1/telemetry. Operator C2 beacon result-return endpoint (POST with base64(UTF-16LE) results) [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "43b72c43-40a5-52c7-a858-14aaa5008e71",
@@ -388,7 +388,7 @@
         "value": "https://c2.tralalarkefe.com/api/v1/update",
         "to_ids": true,
         "comment": "url: https://c2.tralalarkefe.com/api/v1/update. Operator C2 beacon check-in endpoint (GET with X-Agent-ID header) [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "b6341cc2-93fa-5292-99c2-98552a324108",
@@ -397,7 +397,7 @@
         "value": "https://payloads.tralalarkefe.com/run_bg.ps1",
         "to_ids": true,
         "comment": "url: https://payloads.tralalarkefe.com/run_bg.ps1. Operator's stager PowerShell, first stage of universal infection one-liner [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "3c308ef0-4ece-5773-9a20-2ecee6b69a5b",
@@ -406,7 +406,7 @@
         "value": "213.165.51.115",
         "to_ids": true,
         "comment": "ipv4: 213.165.51.115. Primary operator host, AEZA GROUP LLC bulletproof hosting; serves :8082 open directory exposing the entire arsenal/; Hunt first-seen 2026-03-30 [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "a6e562f4-5c35-5b67-a4b8-8d40c3ee02cc",
@@ -415,7 +415,7 @@
         "value": "34.34.57.141",
         "to_ids": true,
         "comment": "ipv4: 34.34.57.141. Operator Ghost Proxy, GCP project, Netherlands; Dante SOCKS5 server on port 1080; all system logs/journald/VPC Flow logs disabled (operator-OPSEC pure passthrough) [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "6abfe5d5-05e1-555b-be24-30d99c9f39b5",
@@ -424,7 +424,7 @@
         "value": "34.34.81.129",
         "to_ids": true,
         "comment": "ipv4: 34.34.81.129. Operator Windows C2 fallback, GCP project, europe-west4-a Netherlands; 10 vCPU/40 GB RAM/200 GB SSD; RDP user 'admin'; provisioned 2026-03-25 [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "9c799c94-3b04-5391-9d23-1152af0e3656",
@@ -433,7 +433,7 @@
         "value": "35.192.41.201",
         "to_ids": true,
         "comment": "ipv4: 35.192.41.201. Operator Mailpit catch-all, GCP; receives all email to *@tralalarkefe.com; interface at catchall1.tralalarkefe.com [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "8cbc0740-b7a5-5ce9-9308-8ad02f3f0a43",
@@ -442,7 +442,7 @@
         "value": "85.17.70.56",
         "to_ids": true,
         "comment": "ipv4: 85.17.70.56. Second Webshare proxy IP used by ai_sniper_brute.py (port 13400, Dutch datacenter range). Operator-shared infrastructure, not operator-owned. [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "8097619f-a834-55c8-ad47-005cc71293c3",
@@ -451,7 +451,7 @@
         "value": "95.211.175.167",
         "to_ids": true,
         "comment": "ipv4: 95.211.175.167. Webshare proxy IP used by ai_sniper_brute.py for WP brute-force proxy rotation (port 13400, Dutch datacenter range). Operator-shared infrastructure, not operator-owned. [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "559be816-d6e4-5c09-92aa-4b2e0b36acbb",
@@ -460,7 +460,7 @@
         "value": "alert http $HOME_NET any -> any any (msg:\"THL DETECT - A2A C2 Beacon POST to Operator C2 Endpoint with X-Agent-ID Header\"; flow:established,to_server; http.method; content:\"POST\"; http.header_names; content:\"X-Agent-ID\"; nocase; http.uri; content:\"/api/v1/\"; pcre:\"/\\/api\\/v1\\/(update|interact|telemetry|get_results)/\"; reference:url,the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/; classtype:trojan-activity; sid:9000003; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-25;)",
         "to_ids": true,
         "comment": "A2A C2 Beacon POST to Operator Endpoint with X-Agent-ID Header | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1071.001, T1132.001, T1041 | rule hash cd9df180 | https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -475,7 +475,7 @@
         "value": "alert udp $HOME_NET any -> $EXTERNAL_NET 7844 (msg:\"THL HUNT - cloudflared Tunnel QUIC Egress to Cloudflare Edge (UDP 7844 Hunting)\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/; classtype:policy-violation; sid:9000006; rev:4; metadata:author The_Hunters_Ledger, date 2026-05-25;)",
         "to_ids": false,
         "comment": "cloudflared Tunnel QUIC Egress to Cloudflare Edge (UDP 7844) | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1572, T1090.004 | rule hash 75b7a678 | https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -490,7 +490,7 @@
         "value": "title: 1Password Vault Export File Created or Accessed by Non-1Password Process\nid: 0ced06f4-f028-44fa-b7fc-4f1a96c3076d\nstatus: experimental\ndescription: >-\n  Detects creation or access of 1Password vault export files (.1pux, .1pif) by processes\n  other than the 1Password application. The UTA-2026-012 operator's credential ledger\n  (CREDENTIALS.md) references a complete 1Password vault export dated 2026-03-20 from an\n  unidentified victim, indicating successful extraction of a victim's entire password manager\n  vault via stolen access. Accessing process being Python or PowerShell rather than 1Password\n  is the key discrimination signal.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-25'\ntags:\n    - attack.credential-access\n    - attack.t1555.005\n    - attack.collection\n    - attack.t1005\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: file_event\n    product: windows\ndetection:\n    selection_vault_files:\n        TargetFilename|endswith:\n            - '.1pux'\n            - '.1pif'\n            - '1Password Export'\n    filter_legitimate_1password:\n        Image|endswith:\n            - '\\1Password.exe'\n            - '\\1Password 7.exe'\n            - '\\1Password 8.exe'\n    condition: selection_vault_files and not filter_legitimate_1password\nfalsepositives:\n    - Legitimate authorized 1Password vault migration or backup workflows by IT staff\n    - 1Password CLI (op.exe) used for authorized scripted access — allowlist op.exe Image path\nlevel: high",
         "to_ids": true,
         "comment": "1Password Vault Export File Created or Accessed by Non-1Password Process | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1555.005, T1005 | rule hash 5d4246ec | https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -505,7 +505,7 @@
         "value": "title: AI Operator Handoff Document Bespoke Filename Created on Server Filesystem\nid: 0532e874-0106-4db7-9fc7-2e44939eae23\nstatus: experimental\ndescription: >-\n  Detects file creation events matching the UTA-2026-012 operator's two confirmed\n  bespoke AI Operator Handoff Document filenames: C2_MIGRATION_GUIDE.md (Russian-language\n  C2 redeployment guide for new Gemini CLI sessions) and C2_INFRA_TRANSFER.md (explicit\n  To/From Gemini CLI header — AI-to-AI knowledge transfer). Neither filename has a known\n  legitimate-software use. Split from the original combined rule during tiering to isolate\n  this no-known-collision branch from the broader ~/.gemini/ directory-context branch,\n  which includes the standard legitimate Gemini CLI config filenames GEMINI.md/SKILL.md\n  and carries meaningfully higher false-positive risk (see the companion Hunting rule).\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-25'\ntags:\n    - attack.resource-development\n    - attack.t1587\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: file_event\n    product: linux\ndetection:\n    selection_specific_names:\n        TargetFilename|endswith:\n            - '/C2_MIGRATION_GUIDE.md'\n            - '/C2_INFRA_TRANSFER.md'\n    condition: selection_specific_names\nfalsepositives:\n    - Unlikely — C2_MIGRATION_GUIDE.md and C2_INFRA_TRANSFER.md have no known legitimate use; investigate any match\nlevel: high",
         "to_ids": true,
         "comment": "AI Operator Handoff Document Bespoke Filename Created on Server Filesystem | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1587 | rule hash f7779934 | https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -520,7 +520,7 @@
         "value": "title: AI Operator Handoff Filename Created in Gemini CLI Config Directory\nid: b7d2e4f1-9a3c-4e58-b1d6-3f8a2c5e9d74\nstatus: experimental\ndescription: >-\n  Detects file creation matching the UTA-2026-012 operator's AI Operator Handoff Document\n  naming convention inside a Gemini CLI configuration directory: DEPLOYED_TOOLS.md (a\n  start-of-session load directive) and CLOUDFLARE_INFRA.md. The SKILL.md and GEMINI.md\n  arms were removed on 2026-09-07 because they are the tool's own standard filenames and\n  were byte-identical to the same arms in the companion executable-content rule, so they\n  produced duplicate alerts and no unique detections. Operator-authored SKILL.md and\n  GEMINI.md remain covered by that companion rule, which excludes the vendor trees.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-25'\nmodified: '2026-09-07'\ntags:\n    - attack.resource-development\n    - attack.t1587\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: linux\n    definition: >-\n      Requires file-creation telemetry on Linux carrying the full target path, such as\n      Elastic Defend file events, auditd watches on the user home, or Sysmon for Linux\n      FileCreate.\ndetection:\n    selection_gemini_dir_context:\n        TargetFilename|contains: '/.gemini/'\n        TargetFilename|endswith:\n            - 'DEPLOYED_TOOLS.md'\n            - 'CLOUDFLARE_INFRA.md'\n    condition: selection_gemini_dir_context\nfalsepositives:\n    - >-\n      A project genuinely tracking deployed tooling or Cloudflare infrastructure notes\n      under the agent config directory; confirm the file content and author\nlevel: medium",
         "to_ids": false,
         "comment": "AI Operator Handoff Filename Created in Gemini CLI Config Directory | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1587 | rule hash 8e36e4ad | https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -535,7 +535,7 @@
         "value": "title: Cloudflared Access TCP Tunnel to Potentially Unauthorized Hostname\nid: 57ce00ce-d1ee-4621-9654-cefb4bf3b60d\nstatus: experimental\ndescription: >-\n  Detects cloudflared access tcp invocations on Linux server-class hosts referencing hostnames\n  outside an organizational allowlist. The UTA-2026-012 operator used cloudflared access tcp\n  --hostname windows_server.tralalarkefe.com and --hostname gil_dr1.tralalarkefe.com to\n  maintain persistent reverse-TCP tunnels to the victim machines for RDP and SSH.\n  This pattern allows persistent victim access without victim-side firewall rule changes.\n  Tune by adding your organization's known legitimate Cloudflare Tunnel hostnames to the\n  allowlist filter below.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-25'\ntags:\n    - attack.command-and-control\n    - attack.t1090.004\n    - attack.t1572\n    - attack.lateral-movement\n    - attack.t1021.001\n    - attack.t1021.004\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: linux\ndetection:\n    selection:\n        Image|endswith: '/cloudflared'\n        CommandLine|contains|all:\n            - 'access'\n            - 'tcp'\n            - '--hostname'\n    filter_known_legit:\n        CommandLine|contains: 'your-org-tunnel.example.com'  # REPLACE with org's known CF Tunnel hostnames\n    condition: selection and not filter_known_legit\nfalsepositives:\n    - Legitimate organizational Cloudflare Tunnel deployments — populate the allowlist filter with known tunnel hostnames\n    - Developer workstations running cloudflared for legitimate service exposure\nlevel: medium",
         "to_ids": false,
         "comment": "Cloudflared Access TCP Tunnel to Potentially Unauthorized Hostname | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1090.004, T1572, T1021.001, T1021.004 | rule hash 77b4c4ea | https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -550,7 +550,7 @@
         "value": "title: Executable Script or Skill File Created in Gemini CLI Config Directory\nid: dca5d3c0-5b22-453e-a36f-7696d927a739\nstatus: experimental\ndescription: >-\n  Detects creation of executable scripts (.sh, .py, .ps1) or agent-priming documents\n  (GEMINI.md, SKILL.md) inside a Gemini CLI configuration directory, excluding the\n  vendor-managed skill and plugin trees the tool populates itself. The UTA-2026-012\n  operator stores C2 management skills (~/.gemini/skills/cf-c2-manager/SKILL.md), session\n  handoff documents (~/.gemini/GEMINI.md), and Gemini CLI session JSONs\n  (~/.gemini/tmp/root/chats/) on the C2 server itself. Operator-authored content lands\n  outside the vendor trees, which is what this rule keys on.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-25'\nmodified: '2026-09-07'\ntags:\n    - attack.resource-development\n    - attack.t1587\n    - attack.execution\n    - attack.t1059.006\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: linux\n    definition: >-\n      Requires file-creation telemetry on Linux carrying the full target path, such as\n      Elastic Defend file events, auditd watches on the user home, or Sysmon for Linux\n      FileCreate. Paths are matched verbatim, so a bulk filesystem copy or restore that\n      replays a home directory will produce matches for the copied tree.\ndetection:\n    selection_gemini_dir:\n        TargetFilename|contains: '/.gemini/'\n    selection_executable:\n        TargetFilename|endswith:\n            - '.sh'\n            - '.py'\n            - '.ps1'\n            - 'GEMINI.md'\n            - 'SKILL.md'\n    filter_vendor_trees:\n        TargetFilename|contains:\n            - '/.gemini/*/builtin/'\n            - '/.gemini/*/plugins/'\n            - '/.gemini/extensions/'\n    condition: selection_gemini_dir and selection_executable and not filter_vendor_trees\nfalsepositives:\n    - >-\n      Operator-authored hook scripts under the CLI's own hook directory, which is a\n      supported feature; allowlist the specific hook filenames in use\n    - >-\n      A filesystem-level copy, migration or restore of a home directory, which replays\n      every path in the copied tree through file-creation telemetry\nlevel: medium",
         "to_ids": false,
         "comment": "Executable Script or Skill File Created in Gemini CLI Config Directory | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1587, T1059.006 | rule hash 9161558b | https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -565,7 +565,7 @@
         "value": "title: Python HTTP Server on Non-Standard Port with UTF-16LE Encoding (A2A C2 Pattern)\nid: 253e1a6a-f4f3-4227-9106-94e9fdb4f949\nstatus: experimental\ndescription: >-\n  Detects Python processes launching HTTP servers on non-standard ports (8081, 8090, 10101)\n  co-occurring with utf-16le string in command line or script path — runtime signature of the\n  UTA-2026-012 operator's c2_server.py BaseHTTPServer deployment. The UTF-16LE encoding is the\n  C2's body encoding scheme for PowerShell beacon commands. Non-standard ports (8081/8090/10101)\n  are the operator's documented multi-instance deployment pattern from c2_server.log filenames.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-25'\ntags:\n    - attack.command-and-control\n    - attack.t1071.001\n    - attack.t1132.001\n    - attack.execution\n    - attack.t1059.006\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: linux\ndetection:\n    selection_python:\n        Image|endswith:\n            - '/python3'\n            - '/python'\n    selection_c2_server:\n        CommandLine|contains:\n            - 'c2_server'\n            - 'BaseHTTPServer'\n    condition: selection_python and selection_c2_server\nfalsepositives:\n    - Legitimate Python web services on non-standard ports (Django dev server, Flask, etc.) — tune by excluding known-legitimate service paths and process owners\n    - Security testing frameworks (Impacket, Responder) that use similar port patterns\nlevel: low",
         "to_ids": false,
         "comment": "Python HTTP Server on Non-Standard Port with UTF-16LE Encoding (A2A C2 Pattern) | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1071.001, T1132.001, T1059.006 | rule hash fb567d60 | https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -580,7 +580,7 @@
         "value": "title: Suspicious LSASS Process Access via High-Privilege GrantedAccess Mask\nid: f4e6c9ce-7511-4e5e-9e52-adba3f0ae030\nstatus: experimental\ndescription: >-\n  Detects LSASS process access using GrantedAccess masks associated with credential-dumping\n  tooling (0x1010, 0x1410, 0x1fffff). This is the first stage of a sequence observed in the\n  UTA-2026-012 healthcare-victim compromise, where local SAM NTLM hashes were dumped and then\n  exfiltrated via Cloudflare Tunnel C2 — confirmed by the operator's own credential ledger\n  containing plaintext NTLM hashes from two internal subnets. This rule captures only the\n  LSASS-access stage; the follow-on Cloudflare Tunnel egress requires a separate SIEM temporal\n  join (not expressible in a single non-correlation Sigma selection) — see the companion\n  report's Coverage Gaps.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-25'\ntags:\n    - attack.credential-access\n    - attack.t1003.001\n    - attack.t1003.002\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: process_access\n    product: windows\ndetection:\n    selection_lsass_access:\n        TargetImage|endswith: '\\lsass.exe'\n        GrantedAccess|contains:\n            - '0x1010'\n            - '0x1410'\n            - '0x1fffff'\n    condition: selection_lsass_access\nfalsepositives:\n    - Legitimate AV/EDR processes accessing lsass.exe for telemetry — filter by trusted Image paths (CrowdStrike, Defender, Carbon Black sensors)\n    - Domain controller synchronization operations\nlevel: high",
         "to_ids": true,
         "comment": "Suspicious LSASS Process Access via High-Privilege GrantedAccess Mask | TIER: Detection | robustness 2 | confidence MODERATE | ATT&CK T1003.001, T1003.002 | rule hash 7aa2fd47 | https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -595,7 +595,7 @@
         "value": "title: WindowsUpdateManager PowerShell Beacon Registry Run Key Persistence\nid: 833c2659-c255-4e42-a6b8-2cfd8b0b8ac1\nstatus: experimental\ndescription: >-\n  Detects registry write to HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\WindowsUpdateManager\n  pointing to %LOCALAPPDATA%\\Microsoft\\WindowsUpdateManager.ps1 — the operator-bespoke\n  victim-side persistence mechanism for the UTA-2026-012 PowerShell C2 beacon documented\n  in C2_INFRA_TRANSFER.md. Legitimate Windows Update components do not create HKCU Run keys.\n  The WindowsUpdateManager value name is the operator's deliberate masquerade of Windows Update,\n  but is a single renameable literal with no fallback anchor in this selection — a rebuild\n  that renames the value evades detection entirely, so this is scoped as a Hunting signal\n  rather than a Detection one despite today's low false-positive rate.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-25'\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1547.001\n    - attack.stealth\n    - attack.t1036\n    - detection.emerging-threats\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection:\n        TargetObject|contains:\n            - '\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\WindowsUpdateManager'\n    condition: selection\nfalsepositives:\n    - Unlikely today — WindowsUpdateManager is not a legitimate Windows Update component registry value; a future rebuild renaming this value would evade rather than false-positive\nlevel: medium",
         "to_ids": false,
         "comment": "WindowsUpdateManager PowerShell Beacon Registry Run Key Persistence | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1547.001, T1036 | rule hash f5326cd9 | https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -610,7 +610,7 @@
         "value": "title: WordPress wp-login.php POST Request (Correlation Base)\nid: c6ff58ec-caa8-43e8-a73d-7869abcae0eb\nstatus: experimental\ndescription: >-\n  Base selection for the Mass WordPress Credential Validation Rate correlation rule below.\n  Matches individual HTTP POST requests to /wp-login.php — not alerting-grade on its own\n  (a single login POST is ordinary WordPress traffic); tier Hunting/informational, serves\n  only as the correlation's input event.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-25'\ntags:\n    - attack.credential-access\n    - attack.t1110.003\n    - detection.emerging-threats\nlogsource:\n    category: webserver\ndetection:\n    selection:\n        cs-uri-stem|contains: '/wp-login.php'\n        cs-method: 'POST'\n    condition: selection\nfalsepositives:\n    - Any single legitimate login attempt to a WordPress site — not anomalous in isolation; see the correlation rule for the rate-based signal\nlevel: informational\n---\ntitle: Mass WordPress wp-login.php Credential Validation Rate Exceeded — Possible A2A Credential Mill\nid: a3f5c8e2-6b4d-4a91-8f2e-5d7c9b1a4e63\nstatus: experimental\ndescription: >-\n  Fires when the base wp-login.php POST selection exceeds 500 events from a single source IP\n  within a 60-second window — the mass-credential-validation signature of mass_wp_mutator.py\n  and the operator's nuclei wp_admin_hunter.yaml template for UTA-2026-012 credential\n  validation at scale (driven by a ThreadPoolExecutor 3-worker pipeline against target lists\n  of 30,000+ WordPress sites). Replaces the original non-aggregating selection, which fired\n  on any single POST and had no meaningful precision without this threshold.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-25'\ntags:\n    - attack.credential-access\n    - attack.t1110.003\n    - detection.emerging-threats\ncorrelation:\n    type: event_count\n    rules:\n        - c6ff58ec-caa8-43e8-a73d-7869abcae0eb\n    group-by:\n        - c-ip\n    timespan: 60s\n    condition:\n        gte: 500\nfalsepositives:\n    - Authorized load-testing or authorized offensive-security assessments against WordPress installations at or above the threshold\n    - WordPress security scanner tools (WPScan, Jetpack Protect) — these generally use lower rates than 500/60s\nlevel: high",
         "to_ids": true,
         "comment": "Mass WordPress wp-login.php Credential Validation Rate Exceeded (Correlation) | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1110.003, T1059.006 | rule hash 31662b16 | https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -625,7 +625,7 @@
         "value": "/*\n   Yara Rule Set\n   Identifier: Russian Gemini Credential Mill — UTA-2026-012 (Case 1, ai-agent-frameworks-2026-05-23)\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule MAL_Python_LLMPersonalized_Credential_Mutator_Family {\n   meta:\n      description = \"Detects ai_sniper_brute.py-class Python scripts using Gemini API for LLM-personalized per-target password mutation — verbatim role-priming prompt + AI_SNIPER output naming convention captured from UTA-2026-012 open-directory 213.165.51.115\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/\"\n      date = \"2026-05-25\"\n      family = \"LLM-Personalized-Credential-Mutator\"\n      campaign = \"OpenDirectory-RussianGeminiCredentialMill-213.165.51.115\"\n      id = \"be090723-71dc-5fb3-955b-c006a4228b56\"\n   strings:\n      $gemini_import  = \"google.generativeai\" ascii\n      $role_prime     = \"Act as an expert red-team password analyst\" ascii\n      $prompt_field1  = \"Most Recent Password from dump:\" ascii\n      $prompt_field2  = \"generate exactly 20 likely current mutations\" ascii\n      $output_sniper  = \"AI_SNIPER_GOODS\" ascii\n      $output_mutants = \"AI_ADMIN_MUTANTS\" ascii\n      $target_file    = \"ULTRA_GOLD_TARGETS\" ascii\n      $success_fmt    = \"[+++ AI SUPER GOOD +++]\" ascii\n   condition:\n      filesize < 1MB and\n      $gemini_import and\n      ($role_prime or $prompt_field1 or $prompt_field2) and\n      1 of ($output_sniper, $output_mutants, $target_file, $success_fmt)\n}",
         "to_ids": true,
         "comment": "LLM-Personalized Credential Mutator Family | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1110.003, T1059.006, T1587 | rule hash 1685b96b | https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -640,7 +640,7 @@
         "value": "rule MAL_Markdown_AI_Operator_Handoff_Document_Family {\n   meta:\n      description = \"Detects operator-authored AI Operator Handoff Documents — Markdown files containing session-start load directives co-occurring with C2 endpoint references or credential-table patterns. Three exemplars from UTA-2026-012: C2_MIGRATION_GUIDE.md, C2_INFRA_TRANSFER.md, DEPLOYED_TOOLS.md\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/\"\n      date = \"2026-05-25\"\n      family = \"AI-Operator-Handoff-Document\"\n      campaign = \"OpenDirectory-RussianGeminiCredentialMill-213.165.51.115\"\n      id = \"5cc8d013-d78a-5b62-982a-b92fc7ff0a55\"\n   strings:\n      $session_directive  = \"When starting a new session, refer to this file\" ascii nocase\n      $knowledge_xfer     = \"KNOWLEDGE TRANSFER:\" ascii nocase\n      $to_gemini_cli      = \"**To:** Gemini CLI\" ascii\n      $from_gemini_cli    = \"**From:** Gemini CLI\" ascii\n      $migration_guide    = \"C2_MIGRATION_GUIDE\" ascii\n      $infra_transfer     = \"C2_INFRA_TRANSFER\" ascii\n      $deployed_tools     = \"DEPLOYED_TOOLS\" ascii\n      $api_v1_update      = \"/api/v1/update\" ascii\n      $api_v1_interact    = \"/api/v1/interact\" ascii\n      $cf_tunnel_pattern  = \"cloudflared access tcp\" ascii\n      $agent_id_format    = \"X-Agent-ID\" ascii\n   condition:\n      filesize < 100KB and\n      (\n         ($to_gemini_cli and $from_gemini_cli) or\n         $session_directive or\n         ($knowledge_xfer and ($migration_guide or $infra_transfer or $deployed_tools))\n      ) and\n      1 of ($api_v1_update, $api_v1_interact, $cf_tunnel_pattern, $agent_id_format)\n}",
         "to_ids": true,
         "comment": "AI Operator Handoff Document Family | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1587, T1071.001 | rule hash 64b5a868 | https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -655,7 +655,7 @@
         "value": "rule MAL_Markdown_C2_INFRA_TRANSFER_Pattern {\n   meta:\n      description = \"Narrow high-fidelity detection on the explicit 'To: Gemini CLI / From: Gemini CLI' header convention from C2_INFRA_TRANSFER.md — first-publication YARA signature for the AI Operator Handoff Document TTP (UTA-2026-012)\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/\"\n      date = \"2026-05-25\"\n      family = \"AI-Operator-Handoff-Document\"\n      campaign = \"OpenDirectory-RussianGeminiCredentialMill-213.165.51.115\"\n      id = \"e1a18404-2ded-5aec-93f6-33180c0f5499\"\n   strings:\n      $to_gemini   = \"**To:** Gemini CLI\" ascii\n      $from_gemini = \"**From:** Gemini CLI\" ascii\n      $subject_kw  = \"**Subject:**\" ascii\n      $new_session = \"When starting a new session\" ascii\n      $bro_ru      = \"\\xd0\\x91\\xd1\\x80\\xd0\\xbe\" /* \"Бро\" UTF-8 */ ascii wide\n   condition:\n      filesize < 100KB and\n      (\n         ($to_gemini and $from_gemini) or\n         ($new_session and ($to_gemini or $from_gemini or $subject_kw)) or\n         ($bro_ru and ($to_gemini or $from_gemini or $subject_kw))\n      )\n}",
         "to_ids": true,
         "comment": "C2_INFRA_TRANSFER Explicit AI-to-AI Header (Narrow / Highest Fidelity) | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1587, T1071.001 | rule hash f67fe006 | https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -670,7 +670,7 @@
         "value": "rule MAL_PowerShell_WindowsUpdateManager_Stealer_Loader {\n   meta:\n      description = \"Detects WindowsUpdateManager.ps1 — operator-bespoke persistence script masquerading as Windows Update component; HKCU Run key value + %LOCALAPPDATA%\\\\Microsoft\\\\ path + Cloudflare Tunnel C2 callback to tralalarkefe.com — UTA-2026-012\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/\"\n      date = \"2026-05-25\"\n      family = \"A2A-C2-PowerShell-Loader\"\n      campaign = \"OpenDirectory-RussianGeminiCredentialMill-213.165.51.115\"\n      id = \"e7afacdf-0b30-5da9-830f-e8a17a4d7214\"\n   strings:\n      $reg_value       = \"WindowsUpdateManager\" ascii wide fullword\n      $local_path      = \"Microsoft\\\\WindowsUpdateManager.ps1\" ascii wide\n      $run_key         = \"CurrentVersion\\\\Run\" ascii wide\n      $c2_domain       = \"tralalarkefe.com\" ascii wide\n      $payload_domain  = \"payloads.tralalarkefe.com\" ascii wide\n      $tls12_set       = \"SecurityProtocol\" ascii wide\n      $invoke_rest     = \"Invoke-RestMethod\" ascii wide\n      $agent_id_hdr    = \"X-Agent-ID\" ascii wide\n      $update_endpoint = \"/api/v1/update\" ascii wide\n   condition:\n      filesize < 2MB and\n      $reg_value and\n      ($local_path or $run_key) and\n      1 of ($c2_domain, $payload_domain, $update_endpoint, $agent_id_hdr) and\n      ($tls12_set or $invoke_rest)\n}",
         "to_ids": true,
         "comment": "PowerShell WindowsUpdateManager Stealer Loader | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1547.001, T1036, T1105, T1059.001 | rule hash d8ff1d53 | https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -685,7 +685,7 @@
         "value": "rule MAL_Python_A2A_C2_Client_Console {\n   meta:\n      description = \"Detects console.py/exec.py-class operator-side C2 client tools — X-Agent-ID header, HOSTNAME_user agent-ID format, base64+UTF-16LE command encoding, /api/v1/interact POST + /api/v1/get_results polling — A2A C2 framework from UTA-2026-012\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/\"\n      date = \"2026-05-25\"\n      family = \"A2A-C2-Client-Console\"\n      campaign = \"OpenDirectory-RussianGeminiCredentialMill-213.165.51.115\"\n      id = \"a96925a2-ef70-50d3-ab9b-1bd8581523e3\"\n   strings:\n      $agent_id_header   = \"X-Agent-ID\" ascii fullword\n      $encode_utf16le    = \"encode('utf-16le')\" ascii\n      $ep_interact       = \"/api/v1/interact\" ascii\n      $ep_get_results    = \"/api/v1/get_results\" ascii\n      $ep_agents         = \"/api/v1/agents\" ascii\n      $banner            = \"A2A C2 MULTI-AGENT CONSOLE\" ascii\n      $hostname_user_fmt = \"HOSTNAME_user\" ascii\n      $poll_sleep        = \"time.sleep(2)\" ascii\n   condition:\n      filesize < 200KB and\n      $agent_id_header and\n      ($encode_utf16le or $ep_interact or $ep_get_results) and\n      1 of ($banner, $hostname_user_fmt, $ep_agents, $poll_sleep)\n}",
         "to_ids": true,
         "comment": "A2A C2 Client Console / Exec Tool | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1071.001, T1132.001, T1059.006 | rule hash c5c89870 | https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -700,7 +700,7 @@
         "value": "rule MAL_Python_A2A_C2_Server_Unauthenticated {\n   meta:\n      description = \"Detects c2_server.py-class Python stdlib unauthenticated C2 servers — BaseHTTPRequestHandler with /api/v1/{update,agents,interact,telemetry} endpoints, base64+UTF-16LE body decoding, zero auth — operator-built A2A C2 framework from UTA-2026-012\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/\"\n      date = \"2026-05-25\"\n      family = \"A2A-C2-Server-Unauthenticated\"\n      campaign = \"OpenDirectory-RussianGeminiCredentialMill-213.165.51.115\"\n      id = \"a153389d-4f2f-5432-888b-f920813c333a\"\n   strings:\n      $banner        = \"A2A C2 MULTI-AGENT CONSOLE\" ascii fullword\n      $handler_base  = \"BaseHTTPRequestHandler\" ascii\n      $ep_update     = \"/api/v1/update\" ascii\n      $ep_agents     = \"/api/v1/agents\" ascii\n      $ep_interact   = \"/api/v1/interact\" ascii\n      $ep_telemetry  = \"/api/v1/telemetry\" ascii\n      $ep_results    = \"/api/v1/get_results\" ascii\n      $utf16_decode  = \"decode('utf-16le')\" ascii\n      $b64_decode    = \"base64.b64decode\" ascii\n      $payload_dir   = \"PAYLOAD_DIR\" ascii\n   condition:\n      filesize < 500KB and\n      ($banner or ($handler_base and 3 of ($ep_update, $ep_agents, $ep_interact, $ep_telemetry, $ep_results))) and\n      ($utf16_decode or $b64_decode) and\n      1 of ($ep_update, $ep_agents, $ep_interact, $ep_telemetry) and\n      ($payload_dir or $handler_base)\n}",
         "to_ids": true,
         "comment": "A2A C2 Server (Unauthenticated Python stdlib) | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1071.001, T1132.001, T1087 | rule hash c5f86d15 | https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -715,7 +715,7 @@
         "value": "rule MAL_Python_Stolen_LLM_Key_Validator {\n   meta:\n      description = \"Detects check_keys.py-class Python scripts: bulk Gemini API key inventory (AIzaSy-prefixed keys in block string) validated against generativelanguage.googleapis.com/v1beta/models — stolen-key validation pipeline from UTA-2026-012\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/\"\n      date = \"2026-05-25\"\n      family = \"Stolen-LLM-Key-Validator\"\n      campaign = \"OpenDirectory-RussianGeminiCredentialMill-213.165.51.115\"\n      id = \"37ec0969-e2c8-5e91-b5a1-40d75c43d590\"\n   strings:\n      $key_prefix_re    = \"AIzaSy[0-9a-zA-Z_-]\" ascii\n      $raw_keys_block   = \"raw_keys\" ascii fullword\n      $validation_ep    = \"generativelanguage.googleapis.com/v1beta/models\" ascii\n      $findall_pattern  = \"re.findall\" ascii\n      $valid_keys_out   = \"valid_gemini_keys\" ascii\n      $openai_key       = \"sk-proj-\" ascii\n      $venice_key       = \"VENICE_ADMIN_KEY\" ascii\n      $retest_pattern   = \"retest_keys\" ascii\n   condition:\n      filesize < 500KB and\n      $key_prefix_re and\n      ($raw_keys_block or $findall_pattern) and\n      ($validation_ep or $valid_keys_out or $retest_pattern) and\n      2 of ($key_prefix_re, $raw_keys_block, $validation_ep, $valid_keys_out, $openai_key, $venice_key, $retest_pattern)\n}",
         "to_ids": true,
         "comment": "Stolen LLM API Key Validator | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1078, T1059.006, T1552.001 | rule hash 5d1ea2ea | https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -730,7 +730,7 @@
         "value": "rule MAL_Russian_Operator_Persona_Strings {\n   meta:\n      description = \"Detects UTA-2026-012 operator-authored files via Cyrillic persona strings (Братух/Бро addressing of Gemini, Комп Доктора victim-machine reference) co-occurring with C2 endpoint or API key indicators — high-specificity attribution aid for post-incident forensics\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/\"\n      date = \"2026-05-25\"\n      family = \"A2A-C2-Operator-Attribution\"\n      campaign = \"OpenDirectory-RussianGeminiCredentialMill-213.165.51.115\"\n      id = \"cc850da5-6d7d-51f3-8d01-7c5024b30ba1\"\n   strings:\n      /* Cyrillic persona strings — UTF-8 encoded */\n      $bro_bratukh     = \"\\xd0\\x91\\xd1\\x80\\xd0\\xb0\\xd1\\x82\\xd1\\x83\\xd1\\x85\" /* \"Братух\" */\n      $comp_doktora    = \"\\xd0\\x9a\\xd0\\xbe\\xd0\\xbc\\xd0\\xbf \\xd0\\x94\\xd0\\xbe\\xd0\\xba\\xd1\\x82\\xd0\\xbe\\xd1\\x80\\xd0\\xb0\" /* \"Комп Доктора\" */\n      $pognali         = \"\\xd0\\x9f\\xd0\\xbe\\xd0\\xb3\\xd0\\xbd\\xd0\\xb0\\xd0\\xbb\\xd0\\xb8\" /* \"Погнали\" */\n      $quantum_patriot = \"quantum_patriot\" ascii\n      $gemini_api_key  = \"AIzaSy\" ascii\n      $api_endpoint    = \"/api/v1/\" ascii\n      $cf_tunnel       = \"tralalarkefe.com\" ascii\n      $sniper_goods    = \"AI_SNIPER_GOODS\" ascii\n   condition:\n      filesize < 5MB and\n      1 of ($bro_bratukh, $comp_doktora, $pognali) and\n      1 of ($gemini_api_key, $api_endpoint, $cf_tunnel, $sniper_goods, $quantum_patriot)\n}",
         "to_ids": false,
         "comment": "Russian Operator Persona Strings | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1587 | rule hash 637d6f96 | https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",

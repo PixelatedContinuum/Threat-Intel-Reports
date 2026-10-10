@@ -5,8 +5,8 @@
     "date": "2026-04-23",
     "threat_level_id": 1,
     "analysis": 2,
-    "timestamp": 1791580400,
-    "publish_timestamp": 1791580400,
+    "timestamp": 1791592076,
+    "publish_timestamp": 1791592076,
     "published": true,
     "Orgc": {
       "name": "The Hunters Ledger",
@@ -34,7 +34,7 @@
         "colour": "#58a6ff"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"OS Credential Dumping: LSASS Memory (Mimikatz staged) - T1003.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"LSASS Memory - T1003.001\"",
         "colour": "#0088cc"
       },
       {
@@ -42,11 +42,11 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information: Dynamic API Resolution - T1027.007\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Dynamic API Resolution - T1027.007\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information: Fileless Storage - T1027.011\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Fileless Storage - T1027.011\"",
         "colour": "#0088cc"
       },
       {
@@ -54,7 +54,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Masquerading: Match Legitimate Name or Location - T1036.005\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Resource Name or Location - T1036.005\"",
         "colour": "#0088cc"
       },
       {
@@ -62,27 +62,27 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Scheduled Task/Job: Scheduled Task - T1053.005\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Scheduled Task - T1053.005\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Input Capture: Keylogging (Orcus SetWindowsHookEx) - T1056.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Keylogging - T1056.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Command and Scripting Interpreter: PowerShell - T1059.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Command and Scripting Interpreter: Windows Command Shell - T1059.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Command Shell - T1059.003\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Privilege Escalation (PrintNightmare + Potato family) - T1068\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Privilege Escalation - T1068\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Application Layer Protocol: Web Protocols (Orcus HTTP) - T1071.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
         "colour": "#0088cc"
       },
       {
@@ -90,7 +90,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy: Internal Proxy (Orcus 127.0.0.1:20268 loopback) - T1090.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Internal Proxy - T1090.001\"",
         "colour": "#0088cc"
       },
       {
@@ -102,23 +102,23 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Modify Registry (registry-blob persistence) - T1112\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Modify Registry - T1112\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Screen Capture (Orcus) - T1113\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Screen Capture - T1113\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Access Token Manipulation: Token Impersonation/Theft - T1134.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Token Impersonation/Theft - T1134.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Access Token Manipulation: Create Process with Token - T1134.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Create Process with Token - T1134.002\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Access Token Manipulation: Parent PID Spoofing - T1134.004\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Parent PID Spoofing - T1134.004\"",
         "colour": "#0088cc"
       },
       {
@@ -130,7 +130,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Exploit Public-Facing Application (Exim/SnipeIT/SIP PBX scripts) - T1190\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploit Public-Facing Application - T1190\"",
         "colour": "#0088cc"
       },
       {
@@ -142,39 +142,39 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Defacement: Internal Defacement - T1491.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Internal Defacement - T1491.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Virtualization/Sandbox Evasion (tri-artifact gate) - T1497\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Virtualization/Sandbox Evasion - T1497\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Virtualization/Sandbox Evasion: System Checks - T1497.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Checks - T1497.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder - T1547.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Abuse Elevation Control Mechanism: Bypass UAC (AppInfo RPC / UACME #41) - T1548.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Bypass User Account Control - T1548.002\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Hide Artifacts: Hidden Window / Hidden Task - T1564.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Hidden Window - T1564.003\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Protocol Tunneling (chisel/plink/Python tunnels) - T1572\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Protocol Tunneling - T1572\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Encrypted Channel (Orcus Rijndael-256 CBC) - T1573\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Encrypted Channel - T1573\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Virtual Private Server (AS209207) - T1583.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Virtual Private Server - T1583.003\"",
         "colour": "#0088cc"
       },
       {
@@ -182,7 +182,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Financial Theft (BTC clipboard hijacker) - T1657\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Financial Theft - T1657\"",
         "colour": "#0088cc"
       },
       {
@@ -198,7 +198,7 @@
         "value": "https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/",
         "to_ids": false,
         "comment": "Detection rules, The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "0282e2c6-5250-5a24-b5dc-231610649028",
@@ -207,7 +207,7 @@
         "value": "https://the-hunters-ledger.com/ioc-feeds/open-directory-94-103-1-13-20260423-iocs.json",
         "to_ids": false,
         "comment": "IOC feed (JSON), The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "958ba353-0065-504f-99e6-ef9eb5ea13ae",
@@ -216,7 +216,7 @@
         "value": "https://the-hunters-ledger.com/reports/open-directory-94-103-1-13-20260423/",
         "to_ids": false,
         "comment": "Report, The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "014bcd6a-0910-5a8c-9838-04b80802eea8",
@@ -225,7 +225,7 @@
         "value": "https://the-hunters-ledger.com/stix/open-directory-94-103-1-13-20260423.json",
         "to_ids": false,
         "comment": "STIX 2.1 bundle, The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "f4321596-18f5-58cd-b049-fd8a7e747abe",
@@ -234,7 +234,7 @@
         "value": "CVE-2021-1675",
         "to_ids": false,
         "comment": "Named in the report",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "280b3914-6c68-57d2-87f8-2c77c362aa5b",
@@ -243,7 +243,7 @@
         "value": "06f6df0f5e37620beb9e3e24a8d0f7742e7d5db7d0f8c1bd4fc10a869443e4e4",
         "to_ids": true,
         "comment": "sha256: 06f6df0f5e37620beb9e3e24a8d0f7742e7d5db7d0f8c1bd4fc10a869443e4e4. FINAL RANSOMWARE PAYLOAD (mymain build). 25,088 bytes .NET x86, ConsoleApplication7 assembly. Rijndael-256 CFB + RSA-2048 OAEP, .torbrowsertor extension. VT 57/77 ransomware.msil. Public sibling d0c78ca7... confirms Chaos/TorBrowserTor identity (multi-vendor signature match). VT known-name indf.exe. [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "7e9114bf-d5fa-57ea-8f2f-49eadd020943",
@@ -252,7 +252,7 @@
         "value": "13665bd2b75f8ff7d51e6e7d1d5213f4e1143aedf995258117d3e603e5c69d1c",
         "to_ids": true,
         "comment": "sha256: 13665bd2b75f8ff7d51e6e7d1d5213f4e1143aedf995258117d3e603e5c69d1c. REBUILT PER-CAMPAIGN. 25,088 bytes .NET x86 (same size as mymain Stage-5a, different hash). Assembly name fudkk. Rotated config: spreadName='Recieve please.exe' (typo), processName='projectxx.exe', new RSA-2048 keypair. Unchanged: BTC wallets, Telegram, file extension, namespace. Source-code-level structural identity confirmed via grep-based dnSpy diff (session 12), same exact source tree, only config field values rotate. [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "d073ff0d-2baf-5d4a-8e01-b71633a38ca1",
@@ -261,7 +261,7 @@
         "value": "36dc72542530ff9707e4c2dcd935edac71129fcb9b7122502a8295264e86a504",
         "to_ids": true,
         "comment": "sha256: 36dc72542530ff9707e4c2dcd935edac71129fcb9b7122502a8295264e86a504. Persistence installer + Stage-5 loader, .NET x86, 1.08 MB, assembly HQpmBSUELAUUTkvFfUDMffBkXlu. VT 47/77. Installs \\Microsoft Defender scheduled task + HKLM\\Software\\Microsoft Defender\\Payload registry blob. [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "2497818a-4338-50fe-ac6b-4448857b45e9",
@@ -270,7 +270,7 @@
         "value": "3b5d30e35f8e4f31a3e70d3754d02d0f045e39b6e0cfde22b1754667b7eb60a4",
         "to_ids": true,
         "comment": "sha256: 3b5d30e35f8e4f31a3e70d3754d02d0f045e39b6e0cfde22b1754667b7eb60a4. 2.6 MB DOSfuscated multi-stage loader, Stage 1 dropper for Chaos/TorBrowserTor delivery chain. VT 0/76 at time of submission. [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "fbcd8af2-e6d8-5c02-8ede-92dc881e4dd8",
@@ -279,7 +279,7 @@
         "value": "4430a828f2b19bc729b2eea0405b27d19c568a769b12f0731c720a0ed888de1b",
         "to_ids": true,
         "comment": "sha256: 4430a828f2b19bc729b2eea0405b27d19c568a769b12f0731c720a0ed888de1b. AMSI/ETW bypass + ntdll unhook stub (Perun's Fart), .NET x86, 33 KB, assembly ZuJkzPEbpOBiWdtBk, compiled 2026-03-31 19:59:02 UTC. VT 40/77. [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "4c6a14c8-7b28-5b38-80e9-a37af4394e6f",
@@ -288,7 +288,7 @@
         "value": "4b4418928f1b445d555ded02a34ff3f378809d5aeb9da10649cc3562eaa2e5c0",
         "to_ids": true,
         "comment": "sha256: 4b4418928f1b445d555ded02a34ff3f378809d5aeb9da10649cc3562eaa2e5c0. Nested crypter shell (myfile build), .NET x86, 1,045,504 bytes. Executes inner AES-ECB → XOR → GZip pipeline to Assembly.Load Stage-4. [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "1f70a07c-6206-5fb2-9bd0-68d41c6e487d",
@@ -297,7 +297,7 @@
         "value": "58592e4b16f28cbcca420ab96f9303f71ba0062260a6eb71ebf0b1e34f3ca3d7",
         "to_ids": true,
         "comment": "sha256: 58592e4b16f28cbcca420ab96f9303f71ba0062260a6eb71ebf0b1e34f3ca3d7. Perun's Fart ntdll unhook stub (myfile build), .NET x86, 32,768 bytes. Same builder template as mymain chunk 0, different build artifact. [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "5b101e81-566d-5f70-8604-6f0945df12d1",
@@ -306,7 +306,7 @@
         "value": "5b0f529d2834ddb678a309954476a113b1d77ea19bd2b30d299ceee6b06d55b9",
         "to_ids": true,
         "comment": "sha256: 5b0f529d2834ddb678a309954476a113b1d77ea19bd2b30d299ceee6b06d55b9. Persistence installer + Stage-5 loader (myfile build). .NET x86, 1,082,880 bytes, assembly mmZsNTboIPHyckaNPhEDqCUpPiUHq. Functionally equivalent to mymain Stage-4. Same cross-build mutex GUID. [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "f3268388-dbcf-5633-8d24-9276e04fbc38",
@@ -315,7 +315,7 @@
         "value": "8c3ef59cbc6f44ee96d6e5746fafb2288df3868c5fffa87dc7af24b302a45430",
         "to_ids": true,
         "comment": "sha256: 8c3ef59cbc6f44ee96d6e5746fafb2288df3868c5fffa87dc7af24b302a45430. Nested crypter Stage 3, .NET x86, 1.04 MB, assembly KevRPkjGQnsrQuDEGVu, compiled 2026-03-31 19:59:17 UTC. VT 49/77 (Lionic XWorm flag is generic shared-crypter-DNA, not actual XWorm). [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "7a2efd14-b38e-598f-9154-5546e9ce6b1e",
@@ -324,7 +324,7 @@
         "value": "b9ffbeed12325c450ba0f3c55cdcd243cdb704115aa3aee784bbdee3243f84e5",
         "to_ids": true,
         "comment": "sha256: b9ffbeed12325c450ba0f3c55cdcd243cdb704115aa3aee784bbdee3243f84e5. Custom PrintSpoofer-class .NET x64 SpoolSS coercion + named-pipe impersonation (6.6 KB, compiled 2026-03-31 17:00:09 UTC) [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "7b650fa6-eaa2-5c99-ad7f-e8c72ab54b41",
@@ -333,7 +333,7 @@
         "value": "da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8",
         "to_ids": true,
         "comment": "sha256: da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8. BYTE-IDENTICAL across mymain AND myfile builds. 1,009,664 bytes .NET x86 'UACbypass'. AppInfo RPC AiEnableDesktopRpcInterface GUID 201ef99a-7fa0-444c-9399-19ba84f12a1a via NtApiDotNet + PPID spoof via elevated taskmgr. UACME #41 family. VT 8/77. The detection-gap hero of this investigation. Kaspersky HEUR:Exploit.MSIL.Inpat.gen is the most specific signature. Any host with this hash = this builder. [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "9b065c03-c12a-5ae0-be50-6368cbef76b1",
@@ -342,7 +342,7 @@
         "value": "f7a4fe18d838e9d87db2db6378ffb21b90c3881d28d70871b8c2a661c6a78a6a",
         "to_ids": true,
         "comment": "sha256: f7a4fe18d838e9d87db2db6378ffb21b90c3881d28d70871b8c2a661c6a78a6a. Orcus RAT v7 Wardow crack, primary sample, 865 KB .NET [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "2dd80fa1-404d-583e-a885-1a8849418886",
@@ -351,7 +351,7 @@
         "value": "f90fd97e5cdc1dd6262df9f56068b6ccb753268eaea5a06178856c35f57eeaad",
         "to_ids": true,
         "comment": "sha256: f90fd97e5cdc1dd6262df9f56068b6ccb753268eaea5a06178856c35f57eeaad. Stage-2 operator controller (951 bytes Python). Connects to local listener 127.0.0.1:4444, performs canonical PowerShell AMSI bypass (amsiInitFailed flip), then downloads http://94.103.1.13/gp.xor, single-byte XOR-decodes with key 0x42, reflectively loads as .NET assembly via [Reflection.Assembly]::Load, and invokes EntryPoint with -cmd \"net user pentest Qwerty12345 /add\" to create a hardcoded backdoor Administrator account. VT 18/63, Microsoft Trojan:Python/Multiverze!rfn, Kaspersky HEUR:Trojan-Downloader.PowerShell.Agent.gen, Symantec Trojan.Gen.NPE. First seen on VT 2026-04-21. Added in 2026-05-02 follow-up; see report §12.2. [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "872f598b-0518-58e3-961c-48774e538d22",
@@ -360,7 +360,7 @@
         "value": "fb39fa0dd70a8c7bee8c3b68d8ee2d93aa7ed34f358dd5174c8492bc0d3af316",
         "to_ids": true,
         "comment": "sha256: fb39fa0dd70a8c7bee8c3b68d8ee2d93aa7ed34f358dd5174c8492bc0d3af316. 2.65 MB DOSfuscated multi-stage loader, sibling build of mymain.bat (same builder, per-campaign key rotation) [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "9c7af052-5c8b-5b20-ba1d-1d4c267e15da",
@@ -369,7 +369,7 @@
         "value": "bulgainme.pro",
         "to_ids": true,
         "comment": "domain: bulgainme.pro. Co-tenant domain on 94.103.1.13, unknown purpose, short-lived .pro TLD registered 2026-02-23, activated with mail server pointing at 94.103.1.13 on 2026-04-11 18:42:23Z. Cloudflare DNS (dana+ethan, rotated to amber). SSL churn on 2026-04-10 17:57-17:59 (3 certs in 2 minutes) indicates rapid operator setup burst. 32 pDNS resolutions over 13 days. Not a direct Chaos IOC; treat as operator-controlled parallel campaign. Source: DomainTools Iris pDNS + domain-history 2026-04-23. [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "3b0655e0-3b67-562c-992a-c50f95c6c94b",
@@ -378,7 +378,7 @@
         "value": "forumrutor24.com",
         "to_ids": true,
         "comment": "domain: forumrutor24.com. Co-tenant domain on 94.103.1.13, Russian forum theme (rutor = RuTor torrent family reference). Registered 2025-07-27 via Mat Bao (Vietnam), Cloudflare DNS (fay+quinton). Resolved to 94.103.1.13 from 2026-03-20 to 2026-04-23 (34 days, 183 pDNS resolutions). Not a direct Chaos IOC, represents parallel operator campaign sharing the same staging host. Treat as operator-controlled infrastructure indicator, not as C2. Source: DomainTools Iris pDNS export 2026-04-23. [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "9c9c7202-e7e2-5aa5-b791-18db14bccacd",
@@ -387,7 +387,7 @@
         "value": "gtanuncios.com",
         "to_ids": true,
         "comment": "domain: gtanuncios.com. Co-tenant domain on 94.103.1.13, Portuguese/Spanish classifieds theme (anuncios = advertisements). Aged domain (created 2015-05-16, acquired by CN broker identity xiang xiang fan on 2025-06-28, held dormant 10 months). Pivoted from Cloudflare 104.21.56.197 to 94.103.1.13 on 2026-04-11 15:09:21Z, classic aged-domain-purchase operator tradecraft. Resolved to 94.103.1.13 from 2026-04-10 to 2026-04-23 (13 days, 114 pDNS resolutions). Not a direct Chaos IOC. WHOIS privacy-masked 2026-04-24 00:39:01Z. Source: DomainTools Iris pDNS + domain-history 2026-04-23. [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "60b573d8-1fd8-542f-b08b-360e8078717c",
@@ -396,7 +396,7 @@
         "value": "mail.bulgainme.pro",
         "to_ids": true,
         "comment": "domain: mail.bulgainme.pro. Mail subdomain of bulgainme.pro co-tenant, operator webmail. 25 pDNS resolutions over ~13 days. Paired with mail.gtanuncios.com suggests operator is running webmail for multiple concurrent campaigns on this host. [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "1c81a829-8a0b-5252-984f-77658373885f",
@@ -405,7 +405,7 @@
         "value": "mail.gtanuncios.com",
         "to_ids": true,
         "comment": "domain: mail.gtanuncios.com. Mail subdomain of gtanuncios.com co-tenant, operator running webmail infrastructure on 94.103.1.13. 14 pDNS resolutions over 8 days. Monitor for outbound SMTP originating from hosts that resolved this FQDN. [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "f7bfe5f0-5b44-5a70-bd0d-bf83309fd434",
@@ -414,7 +414,7 @@
         "value": "slayer.ktx.ro",
         "to_ids": false,
         "comment": "domain: slayer.ktx.ro. Historical co-tenant on 94.103.1.13, brief burst 2025-12-18 to 2025-12-19 (8 pDNS resolutions over 36 minutes). Romanian .ro TLD. Indicates the IP was in operator rotation approximately 4 months before the current Chaos campaign. Likely a prior throwaway campaign; insufficient duration/volume for confident operator attribution alone but consistent with the multi-tenant pattern. Source: DomainTools Iris pDNS export 2026-04-23. | Brief burst only; could also be a reseller test or unrelated one-off use. Use for threat-hunting context rather than blocking. [confidence 40/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "12748f31-cd73-50dc-b83c-eea53062d906",
@@ -423,7 +423,7 @@
         "value": "www.forumrutor24.com",
         "to_ids": true,
         "comment": "domain: www.forumrutor24.com. WWW subdomain of forumrutor24.com co-tenant (see parent entry). [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "408890d9-0214-5e8b-9497-35eff182e5ec",
@@ -432,7 +432,7 @@
         "value": "http://94.103.1.13/gp.xor",
         "to_ids": true,
         "comment": "url: http://94.103.1.13/gp.xor. XOR-encoded GodPotato payload hosted on staging server (port 80, distinct from the 7777 open-directory port). Single-byte XOR with key 0x42; pulled by interact.py (see file_indicators sha256 f90fd97e...) via DownloadData → in-memory bxor 0x42 decode → [Reflection.Assembly]::Load → EntryPoint.Invoke. As of 2026-05-02 the host is offline globally; URL retained for derivative-loader hunting (any script performing DownloadData against an HTTP target named *.xor followed by Reflection.Assembly.Load is a high-fidelity hunt for this loader pattern regardless of operator infrastructure rotation). [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "79157b25-80bb-5f17-a5e4-7875242eac3f",
@@ -441,7 +441,7 @@
         "value": "94.103.1.13",
         "to_ids": true,
         "comment": "ipv4: 94.103.1.13. Operator staging / open-directory payload host. ASN209207 Digital Hosting Provider LLC (NL-routed, RU-registered), single upstream AS48014 AlbaHost. ASN assigned 2026-01-19. VT 5/94 malicious + 1 suspicious (Criminal IP, BitDefender phishing, CRDF, CyRadar phishing, ESET suspicious). All samples in this investigation pulled from here via t.ps1/t2.ps1/potato.ps1/interact.py. | Staging host used as hostname in download cradles (treated as literal string in t.ps1/t2.ps1) [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "df6ef186-e5c3-5b5a-8d24-b0a2726049b2",
@@ -450,7 +450,7 @@
         "value": "alert http $HOME_NET any -> any any (msg:\"THL HUNT OpenDirectory-94.103.1.13 XOR-Encoded Payload Staging Download via .xor URI Suffix (Loader Staging Indicator)\"; flow:established,to_server; http.method; content:\"GET\"; http.uri; content:\".xor\"; endswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/; classtype:trojan-activity; sid:9301001; rev:2; metadata:author The_Hunters_Ledger, date 2026-04-23;)",
         "to_ids": false,
         "comment": "XOR-Encoded Payload Staging Download (.xor URI Suffix) | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1105, T1071.001 | rule hash c117ec99 | https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -465,7 +465,7 @@
         "value": "title: Chaos Loader Operator Tri-Artifact Anti-Sandbox Gate Artefacts Present\nid: c4f7b2a9-6d3e-4c8f-d1a5-7b9e4f2c6a18\nstatus: experimental\ndescription: >-\n  Detects simultaneous presence of the three artefacts checked by the\n  Chaos/TorBrowserTor crypter's inverted anti-sandbox gate — a process\n  running as 'admin' combined with creation of %TEMP%\\VBE\\ or\n  %TEMP%\\mapping.csv. The gate exits the dropper silently when all three\n  match, suggesting this is the operator's own development host\n  signature rather than a victim-side artefact. Alert on the combination,\n  not individual artefacts.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-23\ntags:\n    - attack.stealth\n    - attack.discovery\n    - attack.execution\n    - attack.t1497\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: windows\ndetection:\n    selection_mapping_csv:\n        User|contains: 'admin'\n        TargetFilename|endswith: '\\mapping.csv'\n        TargetFilename|contains: '\\AppData\\Local\\Temp\\'\n    selection_vbe_dir:\n        User|contains: 'admin'\n        TargetFilename|contains:\n            - '\\AppData\\Local\\Temp\\VBE\\'\n    condition: selection_mapping_csv or selection_vbe_dir\nfalsepositives:\n    - >-\n      Legitimate VBScript Editor (VBE) installations on administrator\n      accounts may create %TEMP%\\VBE\\ directories\n    - Administrative accounts using tools that generate mapping.csv files in TEMP\n    - Tune by excluding known-good admin workstations and software deployment systems\nlevel: medium",
         "to_ids": false,
         "comment": "Operator Tri-Artifact Anti-Sandbox Gate Artefacts Present | TIER: Hunting | robustness 1 | confidence HIGH | ATT&CK T1497, T1036 | rule hash bf7e1452 | https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -480,7 +480,7 @@
         "value": "title: Chaos Loader Stage-2 Operator Backdoor Account 'Pentest' Created\nid: 5e8c4f1b-2a9d-47b6-9c3e-7d1f8a2e6b54\nstatus: experimental\ndescription: >-\n  Detects the hardcoded backdoor account creation command embedded in\n  interact.py, the Stage-2 operator controller in the Chaos/TorBrowserTor\n  multi-stage loader campaign at 94.103.1.13. The script downloads an\n  XOR-encoded GodPotato assembly, decodes it with a single-byte XOR key,\n  reflectively loads it as a .NET assembly, and invokes its EntryPoint\n  with the argument string 'net user pentest Qwerty12345 /add' — running\n  as NT AUTHORITY\\SYSTEM via GodPotato impersonation. Detection keys on\n  the literal username/password combination in the net.exe command line,\n  observed hardcoded in one operator controller script; reuse across\n  additional campaigns has not yet been confirmed.\nreferences:\n    - https://the-hunters-ledger.com/reports/open-directory-94-103-1-13-20260423/#12-addendum-2026-05-02-follow-up\n    - https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-02\ntags:\n    - attack.persistence\n    - attack.stealth\n    - attack.privilege-escalation\n    - attack.initial-access\n    - attack.t1136.001\n    - attack.t1078.003\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_image:\n        Image|endswith:\n            - '\\net.exe'\n            - '\\net1.exe'\n    selection_cmdline:\n        CommandLine|contains|all:\n            - 'user'\n            - 'pentest'\n            - 'Qwerty12345'\n            - '/add'\n    condition: selection_image and selection_cmdline\nfalsepositives:\n    - >-\n      Implausible — exact username 'pentest' paired with password\n      'Qwerty12345' is operator-specific and has been observed in only\n      one controller script to date\nlevel: medium",
         "to_ids": false,
         "comment": "Stage-2 Operator Backdoor Account \"pentest\" Created | TIER: Hunting | robustness 1 | confidence HIGH (behavior) / single-observation (durability) | ATT&CK T1136.001, T1078.003 | rule hash 7f7e8983 | https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -495,7 +495,7 @@
         "value": "title: Chaos Loader Stage-4 Fileless Payload Written to Masquerade Registry Key\nid: 2d8b4e7f-a3c9-4f6b-b5d2-1e9a7c3f8b04\nstatus: experimental\ndescription: >-\n  Detects a registry write to HKLM\\Software\\Microsoft Defender\\Payload,\n  which is the Stage-4 fileless storage location used by the\n  Chaos/TorBrowserTor private crypter. The legitimate Windows Defender\n  registry path is HKLM\\Software\\Microsoft\\Windows Defender (note the\n  extra \\Windows\\ path level). Stage-4 writes approximately 1.4 MB of\n  encoded payload data to this masquerade key; the boot re-loader reads\n  it back on every system startup. The masquerade path name is\n  attacker-chosen and may rotate in a future build.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-23\ntags:\n    - attack.persistence\n    - attack.stealth\n    - attack.defense-impairment\n    - attack.t1112\n    - attack.t1027.011\n    - attack.t1036.005\n    - detection.emerging-threats\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection:\n        TargetObject|contains: '\\Software\\Microsoft Defender\\Payload'\n    filter_legitimate:\n        TargetObject|contains: '\\Software\\Microsoft\\Windows Defender\\'\n    condition: selection and not filter_legitimate\nfalsepositives:\n    - >-\n      No known legitimate software writes to this registry path for THIS\n      build; a future build renaming the masquerade key would evade this\n      rule entirely\nlevel: medium",
         "to_ids": false,
         "comment": "Stage-4 Fileless Payload Written to Masquerade Registry Key | TIER: Hunting | robustness 1 | confidence DEFINITE (for this build) / build-specific (durability) | ATT&CK T1027.011, T1112, T1036.005 | rule hash b7520b2e | https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -510,7 +510,7 @@
         "value": "title: Chaos Loader Stage-4 Masquerade Scheduled Task Created at Root Path\nid: 7a3f9c12-e4b8-4d7a-a1f3-8c6e2b0d5f91\nstatus: experimental\ndescription: >-\n  Detects creation of a scheduled task named 'Microsoft Defender' at the\n  task-scheduler root path (\\), which is the Stage-4 persistence\n  mechanism of the Chaos/TorBrowserTor private crypter. Legitimate\n  Windows Defender tasks reside at \\Microsoft\\Windows\\Windows Defender\\\n  — a task at the root path with this name is always malicious for this\n  build. The task is configured with a BOOT trigger, RunLevel HIGHEST,\n  and Hidden=true to survive reboots and maintain elevated persistence.\n  The task name is attacker-chosen and may rotate in a future build.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-23\ntags:\n    - attack.persistence\n    - attack.stealth\n    - attack.privilege-escalation\n    - attack.execution\n    - attack.t1053.005\n    - attack.t1036.005\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    service: security\ndetection:\n    selection:\n        EventID: 4698\n        TaskName: '\\Microsoft Defender'\n    filter_legitimate:\n        TaskName|contains:\n            - '\\Microsoft\\Windows\\Windows Defender\\'\n            - '\\Microsoft\\Windows Defender\\'\n    condition: selection and not filter_legitimate\nfalsepositives:\n    - >-\n      No known legitimate software creates a root-path scheduled task\n      named Microsoft Defender for THIS build; a future build renaming\n      the masquerade task name would evade this rule entirely\nlevel: medium",
         "to_ids": false,
         "comment": "Stage-4 Masquerade Scheduled Task Created at Root Path | TIER: Hunting | robustness 1 | confidence DEFINITE (for this build) / build-specific (durability) | ATT&CK T1053.005, T1036.005 | rule hash a4853377 | https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -525,7 +525,7 @@
         "value": "title: Chaos Loader Stage-5b UAC Bypass via PPID Spoof — Conhost Child of Taskmgr\nid: 5e1a8d4c-b7f2-4a3e-c9d6-3f2b7e5a1c84\nstatus: experimental\ndescription: >-\n  Detects the Stage-5b UAC bypass used by the Chaos/TorBrowserTor private\n  crypter, which spawns conhost.exe with the --headless argument as a\n  child of elevated taskmgr.exe. The parent-child relationship is\n  established via PPID spoofing against an auto-elevated taskmgr.exe\n  instance, and the conhost process in turn launches cmd.exe re-executing\n  the dropper chain at HIGH integrity without triggering a UAC prompt.\n  This is a UACME technique #41 family implementation with only 8/77 VT\n  detections on the bypass module.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\n    - https://github.com/hfiref0x/UACME\nauthor: The Hunters Ledger\ndate: 2026-04-23\ntags:\n    - attack.stealth\n    - attack.privilege-escalation\n    - attack.t1548.002\n    - attack.t1134.004\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        ParentImage|endswith: '\\taskmgr.exe'\n        Image|endswith: '\\conhost.exe'\n        CommandLine|contains: '--headless'\n    condition: selection\nfalsepositives:\n    - >-\n      No known legitimate software spawns conhost.exe --headless as a\n      child of taskmgr.exe; treat any match as a high-confidence UAC\n      bypass event\nlevel: high",
         "to_ids": true,
         "comment": "Stage-5b UAC Bypass via PPID Spoof: Conhost Child of Taskmgr | TIER: Detection | robustness 3 | confidence DEFINITE | ATT&CK T1548.002, T1134.004 | rule hash 0276d031 | https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -540,7 +540,7 @@
         "value": "title: Chaos TorBrowserTor Ransomware Encrypted File Extension Created\nname: chaos_torbrowsertor_extension_created\nid: 3faf111a-bcf8-479e-9e7c-7e0ae94e0483\nstatus: experimental\ndescription: >-\n  Detects creation of a file with the .torbrowsertor extension, the\n  encrypted-file marker appended by Chaos/TorBrowserTor ransomware during\n  its encryption routine. This extension is a Chaos-builder-configuration\n  invariant confirmed on a public sibling sample, not specific to this\n  operator, and has no legitimate use.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-23\ntags:\n    - attack.impact\n    - attack.t1486\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: windows\ndetection:\n    selection:\n        TargetFilename|endswith: '.torbrowsertor'\n    condition: selection\nfalsepositives:\n    - Unlikely — .torbrowsertor is not a legitimate file extension\nlevel: high\n---\ntitle: Chaos TorBrowserTor Anti-Recovery / Shadow Copy Deletion Commands Executed\nname: chaos_antirecovery_commands\nid: 3b7e9f4a-c2d8-4b5e-e7a1-6c4f9b2e8d37\nstatus: experimental\ndescription: >-\n  Detects execution of shadow-copy or backup-catalog deletion commands\n  (vssadmin delete shadows, wmic shadowcopy delete, wbadmin delete\n  catalog, bcdedit recoveryenabled no) associated with Stage-5a\n  Chaos/TorBrowserTor ransomware anti-recovery behavior. Tier: Hunting\n  standalone (see the Hunting Rules subsection below for the full\n  Rationale/False Positives writeup) — a generic command pattern shared\n  with legitimate backup tooling and most other ransomware families.\n  Co-located in this YAML block, rather than presented only in the\n  Hunting section, because the correlation rule that follows must\n  resolve this rule by name within the same Sigma document.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-23\ntags:\n    - attack.impact\n    - attack.t1490\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_antirecovery:\n        CommandLine|contains:\n            - 'vssadmin delete shadows'\n            - 'wmic shadowcopy delete'\n            - 'wbadmin delete catalog'\n            - 'bcdedit /set'\n            - 'recoveryenabled no'\n    condition: selection_antirecovery\nfalsepositives:\n    - >-\n      Legitimate backup software cleanup operations (vssadmin, wbadmin)\n      — correlate with concurrent .torbrowsertor file creation events for\n      confirmation\n    - System administrators running manual shadow copy management\nlevel: medium\n---\ntitle: Chaos TorBrowserTor Ransomware Active Encryption — Extension and Anti-Recovery Command Correlation\nid: ba89a60f-33f2-45aa-8a49-3beacdc24917\nstatus: experimental\ndescription: >-\n  Correlates creation of .torbrowsertor-extension files with execution of\n  shadow-copy or backup-catalog deletion commands on the same host within\n  a 10-minute window, indicating active Chaos/TorBrowserTor ransomware\n  encryption combined with anti-recovery measures. Either signal alone is\n  a Hunting-tier lead (see the standalone base rules); the combination is\n  Detection-grade.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-23\ntags:\n    - attack.impact\n    - attack.t1486\n    - attack.t1490\n    - detection.emerging-threats\ncorrelation:\n    type: temporal\n    rules:\n        - chaos_torbrowsertor_extension_created\n        - chaos_antirecovery_commands\n    group-by:\n        - Computer\n    timespan: 10m\nlevel: high",
         "to_ids": true,
         "comment": "Encrypted File Extension Created + Anti-Recovery Command Correlation | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1486, T1490 | rule hash 7148d04b | https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -555,7 +555,7 @@
         "value": "title: Chaos TorBrowserTor Stage-5a Disables Task Manager via Registry Policy\nid: f1d4a8c3-7e2b-4f9a-b8d6-4a3c7f1e9b52\nstatus: experimental\ndescription: >-\n  Detects Stage-5a Chaos/TorBrowserTor ransomware writing DisableTaskMgr=1\n  to HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System to\n  prevent the victim from using Task Manager to terminate the ransomware\n  process. This value can be set legitimately by Group Policy; however,\n  when written by a process running from %APPDATA% outside of a GPO\n  context, it indicates active ransomware defense impairment. Correlate\n  the writing process image path with %APPDATA% to confirm malicious\n  origin.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-23\ntags:\n    - attack.defense-impairment\n    - attack.t1685\n    - detection.emerging-threats\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection:\n        TargetObject|contains: '\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\DisableTaskMgr'\n        Details: 1\n    filter_gpo:\n        Image|contains:\n            - '\\Windows\\System32\\svchost.exe'\n            - '\\Windows\\System32\\GroupPolicy'\n    condition: selection and not filter_gpo\nfalsepositives:\n    - >-\n      Group Policy enforcing kiosk or restricted desktop configurations\n      that disable Task Manager\n    - >-\n      Enterprise endpoint management software applying policy-based\n      restrictions through a deployment path not covered by filter_gpo\nlevel: medium",
         "to_ids": false,
         "comment": "Task Manager Disabled via Registry Policy | TIER: Hunting | robustness 2 | confidence HIGH | ATT&CK T1685 | rule hash 7b740cec | https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -570,7 +570,7 @@
         "value": "title: Chaos TorBrowserTor Stage-5a Masquerade Persistence via Run Key Microsoft Store\nid: 8f2c5a1e-d4b7-4e9c-a6f3-2d8b1e7c4f96\nstatus: experimental\ndescription: >-\n  Detects Stage-5a Chaos/TorBrowserTor ransomware persistence via a Run\n  key value named 'Microsoft Store' under\n  HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run, pointing to\n  svchost.exe or projectxx.exe in %APPDATA%. The mymain build copies\n  itself to %APPDATA%\\svchost.exe and the myfile build to\n  %APPDATA%\\projectxx.exe. Both the value name and the self-copy\n  filenames are build-specific and may rotate in a future release.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-23\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.stealth\n    - attack.t1547.001\n    - attack.t1036.005\n    - detection.emerging-threats\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection:\n        TargetObject|contains:\n            - '\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\Microsoft Store'\n        Details|contains:\n            - '\\AppData\\Roaming\\svchost.exe'\n            - '\\AppData\\Roaming\\projectxx.exe'\n    condition: selection\nfalsepositives:\n    - >-\n      No known legitimate software creates a Run key named 'Microsoft\n      Store' pointing to svchost.exe or projectxx.exe in %APPDATA% for\n      these builds; a future build renaming either value evades this rule\nlevel: medium",
         "to_ids": false,
         "comment": "Masquerade Persistence via Run Key \"Microsoft Store\" | TIER: Hunting | robustness 1 | confidence HIGH (for these builds) / build-specific (durability) | ATT&CK T1547.001, T1036.005 | rule hash 14585ad6 | https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -585,7 +585,7 @@
         "value": "title: Orcus RAT Wardow Crack Loopback C2 Connection on Port 20268\nid: a9c6e3f8-b1d4-4a7c-c5e9-8f3b2d7a6c41\nstatus: experimental\ndescription: >-\n  Detects Orcus RAT v7 Wardow crack initiating a loopback TCP connection\n  to 127.0.0.1:20268, the tunneled C2 configuration observed in this\n  campaign at 94.103.1.13. The real upstream C2 is hidden behind a\n  chisel/plink SSH or HTTP tunnel; the Orcus client connects to the\n  loopback listener which relays traffic externally. The port number is\n  an operator-configured value for this campaign, not a crack-tool-wide\n  constant, and may differ in another deployment.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-23\ntags:\n    - attack.command-and-control\n    - attack.t1090.001\n    - attack.t1071.001\n    - detection.emerging-threats\nlogsource:\n    category: network_connection\n    product: windows\ndetection:\n    selection:\n        DestinationIp: '127.0.0.1'\n        DestinationPort: 20268\n        Initiated: 'true'\n    filter_system:\n        Image|contains:\n            - '\\Windows\\System32\\'\n            - '\\Windows\\SysWOW64\\'\n    condition: selection and not filter_system\nfalsepositives:\n    - Local development services on port 20268 in developer environments\n    - Automated testing frameworks using this loopback port\n    - >-\n      Tune by restricting to process images outside System32/SysWOW64;\n      the port is operator-configured and may differ in other campaigns\nlevel: medium",
         "to_ids": false,
         "comment": "Loopback C2 Connection on Port 20268 | TIER: Hunting | robustness 1 | confidence HIGH (for this campaign) / port is campaign-configured, not crack-tool-hardcoded | ATT&CK T1090.001, T1071.001 | rule hash e98f661a | https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -600,7 +600,7 @@
         "value": "rule MALW_ChaosLoader_BatchDropper_StructuralAnchors {\n   meta:\n      description = \"Detects on-disk DOSfuscated batch droppers from the Chaos/TorBrowserTor private crypter family (mymain.bat / myfile.bat and future builds sharing the same decode pipeline). Anchors on the forced 32-bit SysWOW64 PowerShell silent launch, the Console.Title-based self-read dropper technique, the magic-marker StartsWith/Substring(32) sentinel, and a filesize above 1 MB characteristic of these oversized encoded-payload carriers\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\"\n      date = \"2026-04-23\"\n      hash1 = \"3b5d30e35f8e4f31a3e70d3754d02d0f045e39b6e0cfde22b1754667b7eb60a4\"\n      family = \"Chaos-TorBrowserTor-Crypter\"\n      id = \"d5623640-8394-5151-881a-f3c38ac12bcb\"\n   strings:\n      $ps32_launch  = \"SysWOW64\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe -WindowStyle Hidden -NoProfile\" ascii wide\n      $title_read   = \"$host.UI.RawUI.WindowTitle\" ascii wide\n      $marker_strip = \"StartsWith(\" ascii wide\n      $substr32     = \"Substring(32)\" ascii wide\n      $alpha_sub    = \".Replace('@','A').Replace('#','/')\" ascii wide\n   condition:\n      filesize > 1MB and\n      filesize < 5MB and\n      $ps32_launch and\n      ($title_read or ($marker_strip and $substr32)) and\n      $alpha_sub\n}",
         "to_ids": true,
         "comment": "Batch Dropper Structural Anchors | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1059.001, T1059.003, T1027, T1140 | rule hash 862d4eef | https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -615,7 +615,7 @@
         "value": "rule MALW_ChaosLoader_Stage4_MutexGUID_CrossBuildInvariant {\n   meta:\n      description = \"Detects Stage-4 persistence installer of the Chaos/TorBrowserTor private crypter via its cross-build-invariant mutex GUID 9f67b5ed-6c10-4c53-818b-8d26be0d1339. This GUID is identical across all observed builds from this crypter, guards single-instance execution, and has zero public prior documentation\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\"\n      date = \"2026-04-23\"\n      hash1 = \"36dc72542530ff9707e4c2dcd935edac71129fcb9b7122502a8295264e86a504\"\n      family = \"Chaos-TorBrowserTor-Crypter\"\n      id = \"7f048cca-1b0f-5c3e-8304-944fde6d4063\"\n   strings:\n      $mutex_guid  = \"9f67b5ed-6c10-4c53-818b-8d26be0d1339\" ascii wide\n      $task_name   = \"Microsoft Defender\" ascii wide\n      $reg_payload = \"Microsoft Defender\\\\Payload\" ascii wide\n   condition:\n      $mutex_guid and\n      (\n         (uint16(0) == 0x5A4D and filesize < 3MB and 1 of ($task_name, $reg_payload)) or\n         ($mutex_guid and not uint16(0) == 0x5A4D)\n      )\n}",
         "to_ids": true,
         "comment": "Stage-4 Mutex GUID (Cross-Build Invariant) | TIER: Detection | robustness 2 | confidence DEFINITE | ATT&CK T1027.011, T1053.005, T1112 | rule hash e123dbd7 | https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -630,7 +630,7 @@
         "value": "rule MALW_ChaosLoader_Stage5b_UACBypass_CrossBuildInvariant {\n   meta:\n      description = \"Detects the Stage-5b UAC bypass PE used by the Chaos/TorBrowserTor private crypter. This 986 KB .NET binary is byte-identical across both observed builds (mymain and myfile), implements UACME technique #41 via AppInfo RPC AiEnableDesktopRpcInterface with PPID spoofing off elevated taskmgr.exe, and has only 8/77 VT detections as of 2026-04-23\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\"\n      date = \"2026-04-23\"\n      hash1 = \"da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8\"\n      family = \"Chaos-TorBrowserTor-Crypter\"\n      id = \"c285c670-de23-5ad9-b45b-3939751f50c2\"\n   strings:\n      $appinfo_guid = \"201ef99a-7fa0-444c-9399-19ba84f12a1a\" ascii wide\n      $rpc_iface    = \"AiEnableDesktopRpcInterface\" ascii wide\n      $ppid_anchor  = \"IColorDataProxy\" ascii wide\n      $conhost_arg  = \"--headless\" ascii wide\n      $ntapi        = \"NtApiDotNet\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 2MB and\n      $appinfo_guid and\n      $rpc_iface and\n      2 of ($ppid_anchor, $conhost_arg, $ntapi)\n}",
         "to_ids": false,
         "comment": "Stage-5b UAC Bypass PE (Cross-Build Invariant) | TIER: Hunting | robustness 2 | confidence MODERATE (downgraded from DEFINITE 2026-09-13) | ATT&CK T1548.002, T1134.004 | rule hash 82fc4925 | https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -645,7 +645,7 @@
         "value": "rule MALW_ChaosLoader_myfile_InMemory_CrypterKeys {\n   meta:\n      description = \"Detects in-memory presence of the myfile build of the Chaos/TorBrowserTor private crypter via its AES passphrase (jttZjrlmkrBAtCBAMjkbThHsSjVNMjLLyONafxIj), XOR key (cjJaThUwfQKxnHBm), and PS1 magic marker (HPGDxAzpymskcRJvELNmhQkWaTXguERQ). The assembly name 'fudkk' and USB-spread typo filename 'Recieve please.exe' are secondary anchors exclusive to this build. Strings are in-memory only — not present in the on-disk .bat dropper\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\"\n      date = \"2026-04-23\"\n      hash1 = \"5b0f529d2834ddb678a309954476a113b1d77ea19bd2b30d299ceee6b06d55b9\"\n      family = \"Chaos-TorBrowserTor-Crypter\"\n      id = \"4c682cce-4c58-5a0f-b1c5-4f53afa5724e\"\n   strings:\n      $aes_pass     = \"jttZjrlmkrBAtCBAMjkbThHsSjVNMjLLyONafxIj\" ascii wide\n      $xor_key      = \"cjJaThUwfQKxnHBm\" ascii wide\n      $magic_marker = \"HPGDxAzpymskcRJvELNmhQkWaTXguERQ\" ascii wide\n      $s5a_asm      = \"fudkk\" ascii wide\n      $usb_typo     = \"Recieve please.exe\" ascii wide\n   condition:\n      2 of ($aes_pass, $xor_key, $magic_marker, $s5a_asm, $usb_typo)\n}",
         "to_ids": false,
         "comment": "myfile Build In-Memory Crypter Keys | TIER: Hunting | robustness 1 | confidence DEFINITE (behavior) / build-specific (durability) | ATT&CK T1027, T1140, T1620 | rule hash 139f7c5e | https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -660,7 +660,7 @@
         "value": "rule MALW_ChaosLoader_mymain_InMemory_CrypterKeys {\n   meta:\n      description = \"Detects in-memory presence of the mymain build of the Chaos/TorBrowserTor private crypter via its triple-layer-reused AES passphrase (qDqHmNfeSyWJoyxDzR), XOR key (giXXxwxDxGrFeUjlxqLaLcb), and PS1 magic marker (aEVMeKDApIQzumcyjwpFSfqzEImqRdPQ). These strings are present only in the decrypted runtime stages, not in the on-disk .bat dropper, and are specific to this build — a future build would likely regenerate them\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\"\n      date = \"2026-04-23\"\n      hash1 = \"36dc72542530ff9707e4c2dcd935edac71129fcb9b7122502a8295264e86a504\"\n      family = \"Chaos-TorBrowserTor-Crypter\"\n      id = \"7d4d1020-ee25-5033-85c6-0d865e59a31a\"\n   strings:\n      $aes_pass     = \"qDqHmNfeSyWJoyxDzR\" ascii wide\n      $xor_key      = \"giXXxwxDxGrFeUjlxqLaLcb\" ascii wide\n      $magic_marker = \"aEVMeKDApIQzumcyjwpFSfqzEImqRdPQ\" ascii wide\n      $s4_asm_name  = \"HQpmBSUELAUUTkvFfUDMffBkXlu\" ascii wide\n   condition:\n      2 of ($aes_pass, $xor_key, $magic_marker, $s4_asm_name)\n}",
         "to_ids": false,
         "comment": "mymain Build In-Memory Crypter Keys | TIER: Hunting | robustness 1 | confidence DEFINITE (behavior) / build-specific (durability) | ATT&CK T1027, T1140, T1620 | rule hash 9a460779 | https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -675,7 +675,7 @@
         "value": "rule RANSOM_ChaosBuilder_TorBrowserTor_FilesystemArtefacts {\n   meta:\n      description = \"Detects filesystem artefacts of Chaos/TorBrowserTor ransomware: the .torbrowsertor encrypted file extension, the READ ME PLEASE.txt ransom note, the @TorBrowserTor Telegram contact handle, and the two Chaos-builder default BTC wallets used by the clipboard hijacker. Useful for post-compromise triage when a decrypted PE is unavailable\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\"\n      date = \"2026-04-23\"\n      hash1 = \"06f6df0f5e37620beb9e3e24a8d0f7742e7d5db7d0f8c1bd4fc10a869443e4e4\"\n      family = \"Chaos-TorBrowserTor\"\n      id = \"0e5f3296-dc2e-52ab-b565-d74d2fb92e3b\"\n   strings:\n      $ext         = \".torbrowsertor\" ascii wide\n      $ransom_note = \"READ ME PLEASE.txt\" ascii wide\n      $telegram    = \"@TorBrowserTor\" ascii wide\n      $btc1        = \"bc1qw0ll8p9m8uezhqhyd7z459ajrk722yn8c5j4fg\" ascii wide\n      $btc2        = \"17CqMQFeuB3NTzJ2X28tfRmWaPyPQgvoHV\" ascii wide\n   condition:\n      $ext and\n      ($ransom_note or $telegram or 1 of ($btc1, $btc2))\n}",
         "to_ids": true,
         "comment": "Filesystem Artefacts (Post-Encryption) | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1486, T1491.001 | rule hash 5021bd88 | https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -690,7 +690,7 @@
         "value": "rule RANSOM_ChaosBuilder_TorBrowserTor_Stage5a {\n   meta:\n      description = \"Detects the Chaos ransomware Stage-5a payload (TorBrowserTor variant) via builder-template namespace 'ConsoleApplication7', clipboard-hijacker class 'driveNotification', encrypted file extension '.torbrowsertor', and ransom note filename 'READ ME PLEASE.txt'. Both mymain and myfile builds share these strings, and a public sibling sample confirms they are invariant across Chaos/TorBrowserTor-configured builder outputs generally, not unique to this operator\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\"\n      date = \"2026-04-23\"\n      hash1 = \"06f6df0f5e37620beb9e3e24a8d0f7742e7d5db7d0f8c1bd4fc10a869443e4e4\"\n      family = \"Chaos-TorBrowserTor\"\n      id = \"56ac337e-11e3-5cff-bfff-7a58bf113951\"\n   strings:\n      $ns_template = \"ConsoleApplication7\" ascii wide\n      $clip_class  = \"driveNotification\" ascii wide\n      $ext         = \".torbrowsertor\" ascii wide\n      $ransom_note = \"READ ME PLEASE.txt\" ascii wide\n      $telegram    = \"@TorBrowserTor\" ascii wide\n      $vss_del     = \"vssadmin delete shadows\" ascii wide nocase\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 500KB and\n      $ns_template and\n      $clip_class and\n      2 of ($ext, $ransom_note, $telegram, $vss_del)\n}",
         "to_ids": true,
         "comment": "Stage-5a Ransomware Payload | TIER: Detection | robustness 2 | confidence DEFINITE | ATT&CK T1486, T1490, T1547.001, T1657 | rule hash a37b3210 | https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -705,7 +705,7 @@
         "value": "rule RAT_OrcusRAT_v7_WardowCrack {\n   meta:\n      description = \"Detects Orcus RAT v7 cracked by 'Wardow' via three hardcoded crack-tool-wide secrets: AES key 'CrackedByWardow', fixed Rijndael-256 CBC IV '0sjufcjbsoyzube6', and keyleak backdoor magic filename 'e3c6cefd462d48f0b30a5ebcd238b5b1'. All three strings are present in every Wardow-cracked Orcus v7 instance regardless of operator configuration. The keyleak filename represents a supply-chain backdoor — the operator using this crack may themselves be compromised\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\"\n      date = \"2026-04-23\"\n      hash1 = \"f7a4fe18d838e9d87db2db6378ffb21b90c3881d28d70871b8c2a661c6a78a6a\"\n      hash2 = \"1e68314f5a42897cea61456add6ffdd6048a9c99\"\n      hash3 = \"76007508b8317dd76e31996c6adc875a\"\n      family = \"OrcusRAT-WardowCrack\"\n      id = \"df88eae9-5f1a-5a5a-a162-643f53ce2ab8\"\n   strings:\n      $crack_key    = \"CrackedByWardow\" ascii wide\n      $fixed_iv     = \"0sjufcjbsoyzube6\" ascii wide\n      $keyleak_file = \"e3c6cefd462d48f0b30a5ebcd238b5b1\" ascii wide\n      $namespace    = \"Orcus.Service\" ascii wide\n      $interface    = \"IServicePipe\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 2MB and\n      $crack_key and\n      ($fixed_iv or $keyleak_file) and\n      1 of ($namespace, $interface)\n}",
         "to_ids": true,
         "comment": "Orcus RAT v7 Wardow Crack | TIER: Detection | robustness 3 | confidence DEFINITE | ATT&CK T1573, T1056.001, T1113, T1071.001 | rule hash 4f57dd16 | https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",

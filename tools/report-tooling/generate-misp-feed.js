@@ -10,7 +10,8 @@
    Inputs, all already gated elsewhere: _data/catalog.yml (which campaigns are
    published and what they link), the reports' front matter (unlisted), the
    STIX bundles (indicators, actors, CVEs, ATT&CK), the detection pages (rules)
-   and the ATT&CK catalog TSV (technique names for the galaxy tags).
+   the ATT&CK catalog TSV (technique names) and the pinned MISP galaxy TSV
+   (data/misp-galaxy-attack-pattern.tsv, the exact tag values MISP resolves).
 
    Exit codes: 0 PASS, 1 FAIL, 2 NOT CHECKED. */
 
@@ -50,7 +51,7 @@ function run(opts) {
   var now = opts.now || Math.floor(Date.now() / 1000);
   var empty = { events: 0, attributes: 0, files: {}, changed: [], added: [], newlyWithdrawn: [], withdrawn: [],
     removed: [], orphans: [], notes: [], problems: [], state: null, skippedUnpublished: [] };
-  var catText, reports, catalog, attackNames = {};
+  var catText, reports, catalog, attackNames = {}, galaxyNames = {};
   try {
     catText = fs.readFileSync(A.CATALOG_FILE, 'utf8');
     reports = A.readReports(A.REPORT_DIR);
@@ -58,6 +59,8 @@ function run(opts) {
     catalog = doc.entries || [];
     var cat = CAT.load();
     Object.keys(cat.byId).forEach(function (id) { attackNames[id] = cat.byId[id].name; });
+    galaxyNames = M.readGalaxyNames(fs.readFileSync(M.GALAXY_FILE, 'utf8'));
+    if (!Object.keys(galaxyNames).length) throw new Error(M.GALAXY_FILE + ' holds no technique');
   } catch (e) {
     return Object.assign({ status: 'NOT CHECKED', reason: 'could not read the corpus: ' + e.message }, empty);
   }
@@ -94,11 +97,21 @@ function run(opts) {
       }
       rules = parsed.rules;
     }
-    var ev = M.buildEvent({ entry: e, slug: slug, bundle: bundle, rules: rules, attackNames: attackNames });
+    var ev = M.buildEvent({ entry: e, slug: slug, bundle: bundle, rules: rules, attackNames: attackNames, galaxyNames: galaxyNames });
     if (!ev.attributes.some(function (a) { return a.type !== 'link'; })) {
       notes.push(slug + ': no indicator or rule to carry, so no event');
       return;
     }
+    if (ev.notes.galaxyMissing.length) {
+      problems.push(slug + ': ATT&CK ' + ev.notes.galaxyMissing.join(', ') + ' not in the pinned MISP galaxy, so MISP would not link the tag. ' +
+        'Rerun generate-misp-galaxy-names.py, or correct the technique id.');
+    }
+    ev.attributes.forEach(function (a) {
+      if (M.hasAstral(a.value)) {
+        problems.push(slug + ': a ' + a.type + ' value carries a character outside the BMP (an emoji?), which a utf8 MISP rejects ' +
+          'along with every later attribute in the event. Fix it at the source.');
+      }
+    });
     ev.notes.unmapped.forEach(function (u) { notes.push(slug + ': kept whole as stix2-pattern or untagged: ' + u); });
     ev.notes.skipped.forEach(function (s) { notes.push(slug + ': rule without a fence of its own, not shipped: ' + s); });
     events.push(ev);

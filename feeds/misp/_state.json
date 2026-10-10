@@ -19,26 +19,26 @@
     },
     "656f5eb2-7add-5b5e-a771-c4310b4be6c9": {
       "slug": "sliver-c2-windows-postex-staging-193-233-202-17",
-      "hash": "97ac6b6ca1b029d8d8e86d79dc98d1a171bcc91921a6bdad018d179a707a7362",
-      "timestamp": 1791580400,
+      "hash": "56c8e066a65552baf4e8295dac1a2d81812d8164b8ec1bf62751bcab147195bb",
+      "timestamp": 1791592076,
       "first_published": "2026-10-09"
     },
     "61bf8b6f-e11d-50ac-8cae-d6e6afd6f5d5": {
       "slug": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
-      "hash": "89f01939cad724c01c71b1c07f7569c4aa7e7091620c7b003f9fe66657a5831a",
-      "timestamp": 1791580400,
+      "hash": "65318abc00f421fa7ee0ae5e92737d61a676106cacf09cf351a20ed6bcfb886e",
+      "timestamp": 1791592076,
       "first_published": "2026-10-09"
     },
     "7bd73cce-a068-5c73-a8f4-0e7b5d3e847e": {
       "slug": "cloudsync-assembler-toolkit-91-197-98-188",
-      "hash": "a2e519346b70ea664cdf3c0f612fe1df2180a62e910ed75676ae822542a82a9b",
-      "timestamp": 1791580400,
+      "hash": "f41bbf557c3b6c5e895da012b1c57e493d8cf75547ca4956c09976b9cf93297c",
+      "timestamp": 1791592076,
       "first_published": "2026-10-09"
     },
     "7caf24f7-aaae-5cd6-8026-90cb081d8075": {
       "slug": "gocloud-multiservice-cryptojacking-149-28-112-221",
-      "hash": "c279c6cba26a60035c213bee6d322e397f2b85b4486834b1de96fd0f6c7318e0",
-      "timestamp": 1791580400,
+      "hash": "387880b5853eee007cf86d9ca359e60077fe9fdad9d71da8c3a0ab79992a50ee",
+      "timestamp": 1791592076,
       "first_published": "2026-10-09"
     },
     "7a1fc79b-257b-587d-9691-da866766d383": {
@@ -49,8 +49,8 @@
     },
     "cd18797e-ccb1-5b3e-b32f-2b2aabf67d28": {
       "slug": "seasia-gov-exploitation-toolkit-144-172-106-236",
-      "hash": "3428cb5b321c1205cbce5b736b5a3ab70d6e56236e533d193313db7a89b252e5",
-      "timestamp": 1791580400,
+      "hash": "e38f8aad1b717758959e19232a9648c0b35f812a3f9de5916fc663dae9539e11",
+      "timestamp": 1791592076,
       "first_published": "2026-10-09"
     },
     "4eed77fa-9767-536f-8fef-728b06ae1cb3": {
@@ -61,8 +61,8 @@
     },
     "eb873bde-1e1d-5a29-8b4c-dc02cedd1584": {
       "slug": "evilsoul-engine-stealer-maas-144-172-103-98",
-      "hash": "8136153badc4b726c6ff51eff0f5cc500bce62d46f4f09b8b8095d229eacf98c",
-      "timestamp": 1791580400,
+      "hash": "64a7e8b4c773c36b3f1868a77c6ae55cc972bd8108d122fb5e0a83be5c65684c",
+      "timestamp": 1791592076,
       "first_published": "2026-10-09"
     },
     "611d3d52-2660-5a18-a27e-866a92ee221e": {
@@ -73,14 +73,14 @@
     },
     "207c913d-e57f-534b-ac8a-08e8ebf9933d": {
       "slug": "ai-agent-frameworks-2026-05-23",
-      "hash": "8660ad6435de8670c1a2e005972c3b8a67d68973a043622a21fbb4a99f881ed2",
-      "timestamp": 1791580400,
+      "hash": "83be8a1fa05c3fab2b5689687b5499c7eac95ae009eae2b0e90f3af0f40fdf6d",
+      "timestamp": 1791592076,
       "first_published": "2026-10-09"
     },
     "897c4651-021d-5b44-a032-900b5676e247": {
       "slug": "russian-gemini-credential-mill-213.165.51.115",
-      "hash": "b66ddd7f7e63e688b7144028d9a2e1da4d7e1e83ff3cee6ff73f9e9929bdd5c9",
-      "timestamp": 1791580400,
+      "hash": "bc5ea7f44098916b8e9ae085678cb03eefda9d93ad59afff9c0441833886e879",
+      "timestamp": 1791592076,
       "first_published": "2026-10-09"
     },
     "9efa73fb-800e-59f7-96f1-5a1b3e9216ef": {
@@ -91,14 +91,14 @@
     },
     "d368b117-5414-5c50-b434-c21cfb5f6797": {
       "slug": "ghost-cryptojacker-vova75rus-77.110.96.200",
-      "hash": "95a28b85d7427fe61ce97c6dd173778bc88176f6602785b18494ea6c3c98983f",
-      "timestamp": 1791580400,
+      "hash": "c361c0c89493cb04e80e444a9d9beebb1278cde7d01ff46500df3eeadf875028",
+      "timestamp": 1791592076,
       "first_published": "2026-10-09"
     },
     "43b09f34-283d-5b09-84eb-a93df291c4c4": {
       "slug": "rovodev-mirai-matrix-c2-87.106.143.220",
-      "hash": "72b062219891109d5ed25ac05d88a0e2f7eeab28ff3eb36a5cb0273dc83fc6a5",
-      "timestamp": 1791580400,
+      "hash": "7e85382f32a8c9213c140adb2593a20d84068b80487b57a1c1007631119b9e93",
+      "timestamp": 1791592076,
       "first_published": "2026-10-09"
     },
     "875094b8-c444-56b7-9af6-4524d0de89cc": {
@@ -109,62 +109,62 @@
     },
     "9cf6de91-da84-5074-bfca-e1f3961ed07c": {
       "slug": "opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517",
-      "hash": "efa04e9abd2af06507a9fa2711facdeee29db66e1f04b6ae1ace39cde533a75a",
-      "timestamp": 1791580400,
+      "hash": "d55b5ac3ded270fa85f34bb6042647bb46fbad569c858148ea675b9c5e36677b",
+      "timestamp": 1791592076,
       "first_published": "2026-10-09"
     },
     "82cbc83b-05d1-5a93-bb60-69c8c5f9aa04": {
       "slug": "bellamain-turkish-phaas-79-137-192-3-20260516",
-      "hash": "31088e66d0369c24f76e5b36b41f3af37f3ea6ede9b26139290488b2750b51d6",
-      "timestamp": 1791580400,
+      "hash": "49c76b87f136b52a1cce6f16c42007c6384219f40d196c022015090ba5e4d363",
+      "timestamp": 1791592076,
       "first_published": "2026-10-09"
     },
     "93d0b666-26a5-57ab-a3dc-45f197c65e10": {
       "slug": "inkognito-russian-vpn-phishing-185-221-196-118-20260516",
-      "hash": "d0a167c45b981e62b21e0947b05684e42b550f600e7c391434bfc2ccf9ca4af4",
-      "timestamp": 1791580400,
+      "hash": "735db11a41bcef8d9b5e377c105f0b6a19d87af9dca70d3ce8c501d3523ce349",
+      "timestamp": 1791592076,
       "first_published": "2026-10-09"
     },
     "3d46b2a8-dcd5-56e3-80f3-cc19a7369651": {
       "slug": "opendirectory-79-137-192-3-20260515",
-      "hash": "4b1ed9b180b7588bfc8ac9eb1cb8c7a283e38cb6addb72a8069768b7cb2214ec",
-      "timestamp": 1791580400,
+      "hash": "cb3fa46dbeed451392e472650b7b0e627f4e2ca9ee30ced00d11f6a3af7e9077",
+      "timestamp": 1791592076,
       "first_published": "2026-10-09"
     },
     "7cf9b00a-7f3d-527a-81c3-cb42eaa2be96": {
       "slug": "opendirectory-62-60-237-100-20260506",
-      "hash": "306874c2bbbd1eaa3bd1cdae7517ca336cd3bcb749203b3322116ec478e48426",
-      "timestamp": 1791580400,
+      "hash": "e825243e04f3043ba680f8ffd8732aba54746b61fb8771a2b1050b05e91f5261",
+      "timestamp": 1791592076,
       "first_published": "2026-10-09"
     },
     "5b9f3c7a-ce4f-5fde-afc7-221cd3f69ada": {
       "slug": "opendirectory-45-130-148-125-20260430",
-      "hash": "7a8d13d093a97f24718f529f8633f1ffe61c9a5bc875dc5560e2e0af1bbdbfce",
-      "timestamp": 1791580400,
+      "hash": "f4c14f920f6a26191a638d1dfc21e42e6a4ade90f2ca6be6d215b3a982e7dceb",
+      "timestamp": 1791592076,
       "first_published": "2026-10-09"
     },
     "ebc92dc3-8983-54dd-9caa-c6f17abe0517": {
       "slug": "open-directory-94-103-1-13-20260423",
-      "hash": "b8dddc392b3540a6487b1367c0baefda0c3050a86fccab5d98f861f2c8f64c36",
-      "timestamp": 1791580400,
+      "hash": "9d3afed3c566d091d1c08a677fd60c914564362e77bfeb8523e8c72ef2447945",
+      "timestamp": 1791592076,
       "first_published": "2026-10-09"
     },
     "6f667981-4451-5004-a851-e42a3420ab88": {
       "slug": "shinyhunters-dls-91-215-85-22-20260417",
-      "hash": "38a16c0e1631e0004c0241ac00cbe793b87713f26cf7127f38bf4eb5ddd77faf",
-      "timestamp": 1791580400,
+      "hash": "f3c50849c29f4c51d788f4922b0b256c254dd7a54f501be4941bfb40eff6497a",
+      "timestamp": 1791592076,
       "first_published": "2026-10-09"
     },
     "8e859eb6-419c-5ddc-9d3c-dff1eafce995": {
       "slug": "new-files-found-20260408",
-      "hash": "bea9b5c6fe147e268b995e4e73bed9b4dcb83f50ce9e9744085e712d6d29dd5d",
-      "timestamp": 1791580400,
+      "hash": "f86f002de3e1f814a11314176949e00132b2aa486007c309cd2385369e775530",
+      "timestamp": 1791592076,
       "first_published": "2026-10-09"
     },
     "94be8f0c-229d-5120-8ec3-4a4b2eb759d2": {
       "slug": "open-directory-172-105-0-126-20260406",
-      "hash": "5db84c0d863e5065e92d60638d2e89af26840b878a39b9df48c60b76299cc1e1",
-      "timestamp": 1791580400,
+      "hash": "beba8257c3e7049cc6f0c86a8561167edd671b597f98fb96f1b7f8128fae259a",
+      "timestamp": 1791592076,
       "first_published": "2026-10-09"
     },
     "940014f4-065e-5b01-9fbe-d4c28f766dae": {

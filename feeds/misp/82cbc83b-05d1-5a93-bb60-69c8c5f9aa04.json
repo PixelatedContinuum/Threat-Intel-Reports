@@ -5,8 +5,8 @@
     "date": "2026-05-16",
     "threat_level_id": 1,
     "analysis": 2,
-    "timestamp": 1791580400,
-    "publish_timestamp": 1791580400,
+    "timestamp": 1791592076,
+    "publish_timestamp": 1791592076,
     "published": true,
     "Orgc": {
       "name": "The Hunters Ledger",
@@ -34,11 +34,11 @@
         "colour": "#58a6ff"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information: Encrypted/Encoded File - T1027.013\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Encrypted/Encoded File - T1027.013\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Masquerading: Match Legitimate Resource Name or Location - T1036.005\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Resource Name or Location - T1036.005\"",
         "colour": "#0088cc"
       },
       {
@@ -50,7 +50,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Command and Scripting Interpreter: Unix Shell - T1059.004\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Unix Shell - T1059.004\"",
         "colour": "#0088cc"
       },
       {
@@ -58,11 +58,11 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Indicator Removal: File Deletion - T1070.004\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"File Deletion - T1070.004\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Application Layer Protocol: Web Protocols - T1071.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
         "colour": "#0088cc"
       },
       {
@@ -70,7 +70,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Web Service: Bidirectional Communication - T1102.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Bidirectional Communication - T1102.002\"",
         "colour": "#0088cc"
       },
       {
@@ -78,7 +78,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Access Software - T1219\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Access Tools - T1219\"",
         "colour": "#0088cc"
       },
       {
@@ -86,19 +86,19 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Data Destruction (operator anti-forensics on own data) - T1485\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data Destruction - T1485\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Virtualization / Sandbox Evasion (anti-research variant) - T1497\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Virtualization/Sandbox Evasion - T1497\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Server Software Component: Web Shell - T1505.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Shell - T1505.003\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Software Discovery: Security Software - T1518.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Security Software Discovery - T1518.001\"",
         "colour": "#0088cc"
       },
       {
@@ -106,7 +106,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Phishing: Spearphishing Link - T1566.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Spearphishing Link - T1566.002\"",
         "colour": "#0088cc"
       },
       {
@@ -114,35 +114,35 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Domains - T1583.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domains - T1583.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Virtual Private Server - T1583.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Virtual Private Server - T1583.003\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure: Web Services - T1583.006\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Services - T1583.006\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Establish Accounts: Social Media Accounts - T1585.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Social Media Accounts - T1585.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Establish Accounts: Email Accounts - T1585.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Email Accounts - T1585.002\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Develop Capabilities: Malware - T1587.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Malware - T1587.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Gather Victim Identity Information: Credentials - T1589.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials - T1589.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Stage Capabilities: Link Target - T1608.005\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Link Target - T1608.005\"",
         "colour": "#0088cc"
       },
       {
@@ -162,7 +162,7 @@
         "value": "https://the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/",
         "to_ids": false,
         "comment": "Detection rules, The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "f38f2d5e-6b6f-5c73-a407-18264e2e7397",
@@ -171,7 +171,7 @@
         "value": "https://the-hunters-ledger.com/ioc-feeds/bellamain-turkish-phaas-79-137-192-3-20260516-iocs.json",
         "to_ids": false,
         "comment": "IOC feed (JSON), The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "2cccc040-aa35-5ce5-89a2-2e2d325829fd",
@@ -180,7 +180,7 @@
         "value": "https://the-hunters-ledger.com/reports/bellamain-turkish-phaas-79-137-192-3-20260516/",
         "to_ids": false,
         "comment": "Report, The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "26c54f0c-2ed8-5631-a356-9af7df551ea2",
@@ -189,7 +189,7 @@
         "value": "https://the-hunters-ledger.com/stix/bellamain-turkish-phaas-79-137-192-3-20260516.json",
         "to_ids": false,
         "comment": "STIX 2.1 bundle, The Hunters Ledger",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "e1344658-1164-5a8d-ba2f-4330512d8992",
@@ -198,7 +198,7 @@
         "value": "219cd4f6177a2358ec7f06b230d611f47e1049fcb3e2b44d06ec410b336382b0",
         "to_ids": true,
         "comment": "sha256: 219cd4f6177a2358ec7f06b230d611f47e1049fcb3e2b44d06ec410b336382b0. Turkcell (telecommunications) phishing kit [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "64e6783a-c4ae-5b05-9042-2d42d3a6edd4",
@@ -207,7 +207,7 @@
         "value": "2c656360c4e58854dca35ff21b3fc62db41155ca76f8568ecc18fa52aa38fb31",
         "to_ids": true,
         "comment": "sha256: 2c656360c4e58854dca35ff21b3fc62db41155ca76f8568ecc18fa52aa38fb31. Dolap (Turkish secondhand marketplace) phishing kit [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "2c1eda82-ec22-54c9-8bf5-df8e814ae47d",
@@ -216,7 +216,7 @@
         "value": "504b1a30ce7060eafa7b2a3f6249c954a0be6ce1d2930e03b030434cb232600a",
         "to_ids": true,
         "comment": "sha256: 504b1a30ce7060eafa7b2a3f6249c954a0be6ce1d2930e03b030434cb232600a. Shopier (e-commerce) phishing kit [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "b5adbe99-9c43-525d-9d45-d2c80e6f8715",
@@ -225,7 +225,7 @@
         "value": "705793c011fdfe17941700a3bf42eee0ba2ebdc04870ce19779ea528b3565fac",
         "to_ids": true,
         "comment": "sha256: 705793c011fdfe17941700a3bf42eee0ba2ebdc04870ce19779ea528b3565fac. Yurtici Kargo (cargo tracking) phishing kit [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "41252533-32bc-5ff7-bf5e-7b0085be7a12",
@@ -234,7 +234,7 @@
         "value": "b2f4f1617577d14612b30a54a733b15af809c399f325717b4329c13aaa4c915c",
         "to_ids": true,
         "comment": "sha256: b2f4f1617577d14612b30a54a733b15af809c399f325717b4329c13aaa4c915c. Sahibinden (classifieds / real estate) phishing kit [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "e205249b-8b53-5189-a495-63467bfb4db4",
@@ -243,7 +243,7 @@
         "value": "e21fb63a3b4d65a3d48dec1bf17a84a414482f819b93cb8d77a81852dc34c95f",
         "to_ids": true,
         "comment": "sha256: e21fb63a3b4d65a3d48dec1bf17a84a414482f819b93cb8d77a81852dc34c95f. Letgo (classifieds) phishing kit [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "c28f7669-d680-53e5-b745-106e46b01036",
@@ -252,7 +252,7 @@
         "value": "ee9d4fccebbf73fb33980da15142bc71e5d9661d1bc583c2b09b77490065efd9",
         "to_ids": true,
         "comment": "sha256: ee9d4fccebbf73fb33980da15142bc71e5d9661d1bc583c2b09b77490065efd9. PTT AVM (postal e-commerce) phishing kit [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "3b524745-5d7a-515b-981c-630946c083a1",
@@ -261,7 +261,7 @@
         "value": "f791fae41cdd3f141221d1783ed4779c839de7fc834ff4fc80a5d7f74b11ff88",
         "to_ids": true,
         "comment": "sha256: f791fae41cdd3f141221d1783ed4779c839de7fc834ff4fc80a5d7f74b11ff88. PhaaS panel backend, 65 PHP files + 14 directories; first public disclosure [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "383cc977-d447-5cef-ab51-549544fa49a7",
@@ -270,7 +270,7 @@
         "value": "cryptone.bot",
         "to_ids": true,
         "comment": "domain: cryptone.bot. CryptOne fake crypto exchange production domain (Cloudflare-fronted, origin hidden) [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "cf3912b3-248d-5002-89cb-56cf1bfe382f",
@@ -279,7 +279,7 @@
         "value": "evotoptan.com",
         "to_ids": true,
         "comment": "domain: evotoptan.com. Listed as evotoptan/ subdirectory on BellaMain server. Briefly resolved to 79.137.192.3 on 2026-03-31 (22-minute window). Now Namecheap shared (68.65.121.242) | MEDIUM (Namecheap shared hosting hosts many unrelated sites, combine with kit landing-page URL pattern) [confidence 60/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "fab4c285-1a43-5fe4-9cc1-8e5494744554",
@@ -288,7 +288,7 @@
         "value": "https://79.137.192.3/",
         "to_ids": true,
         "comment": "url: https://79.137.192.3/. Open-directory root listing [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "e101b1c7-c252-5f72-bd8a-5478a14a0b81",
@@ -297,7 +297,7 @@
         "value": "https://79.137.192.3/BellaMain/",
         "to_ids": true,
         "comment": "url: https://79.137.192.3/BellaMain/. BellaMain panel directory [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "928c057c-3da4-539e-8686-d6ea18c6d4d5",
@@ -306,7 +306,7 @@
         "value": "https://79.137.192.3/cryptone/",
         "to_ids": true,
         "comment": "url: https://79.137.192.3/cryptone/. CryptOne fake-exchange staging path (LIVE) [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "ae91a0d9-2983-55b3-844c-b87db959bf0d",
@@ -315,7 +315,7 @@
         "value": "https://79.137.192.3/no/",
         "to_ids": true,
         "comment": "url: https://79.137.192.3/no/. Card phishing SPA lure (LIVE), hash routes #kart, #avantajlar, #sss [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "5cb58207-a88d-522d-8bf2-f48b3fa603d8",
@@ -324,7 +324,7 @@
         "value": "https://api.binance.com/api/v3/ticker/price?symbol=TRXTRY",
         "to_ids": true,
         "comment": "url: https://api.binance.com/api/v3/ticker/price?symbol=TRXTRY. Live TRX/TRY rate query in BellaMain cekimbot.php for payout calculation | HIGH, legitimate crypto applications also query Binance API. Detection value is operator-side context. [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "7c5a5e62-16d0-5686-8e2d-108d68b2db0e",
@@ -333,7 +333,7 @@
         "value": "https://cryptone.bot/",
         "to_ids": true,
         "comment": "url: https://cryptone.bot/. CryptOne production fake-exchange (Cloudflare-fronted) [confidence 80/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "00636aaf-60ba-51f9-9e72-3909da17b94d",
@@ -342,7 +342,7 @@
         "value": "https://www.usom.gov.tr/url-list.txt",
         "to_ids": true,
         "comment": "url: https://www.usom.gov.tr/url-list.txt. USOM blocklist endpoint polled by panel usmcheck.php, operator-side outbound call | HIGH. This is a legitimate Turkish CERT URL; legitimate security tools also fetch it. Detection value is in seeing this fetch FROM a non-Turkish-CERT-affiliated PHP host. [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "4c650e1d-9b9b-5a9f-9547-1e3c440fa5b5",
@@ -351,7 +351,7 @@
         "value": "79.137.192.3",
         "to_ids": true,
         "comment": "ipv4: 79.137.192.3. BellaMain panel + 7 phishing kits + CryptOne staging path. Apache/2.4.58 (Win64) OpenSSL/3.1.3 PHP/8.2.12 with self-signed TLS | Newly active in 2026-05-07 re-triage (previously HTTPS-only). Exposes /upload/ (stale 2022 marketplace JPGs) and /assets/css/, /assets/js/ (modified 2026-03-19) [confidence 95/100]",
-        "timestamp": 1791580400
+        "timestamp": 1791592076
       },
       {
         "uuid": "e2424242-49b1-5261-a583-4da482f9fe2d",
@@ -360,7 +360,7 @@
         "value": "alert http $HOME_NET any -> any any (msg:\"THL HUNT BellaMain-PhaaS USOM Blocklist Poll from Web Server (Security Tool Discovery Indicator)\"; flow:established,to_server; http.host; content:\"usom.gov.tr\"; endswith; http.uri; content:\"url-list.txt\"; nocase; threshold:type limit,track by_src,count 1,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/; classtype:policy-violation; sid:9300404; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-16;)",
         "to_ids": false,
         "comment": "BellaMain USOM Blocklist Poll from Web Server (Network Layer) | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1518.001 | rule hash 7a021f7d | https://the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -375,7 +375,7 @@
         "value": "title: BellaMain PhaaS Mysqldump Invocation by PHP Web Process\nid: c914e7a2-5b36-4f87-b3d8-2a1e9c047f83\nstatus: experimental\ndescription: >-\n  Detects mysqldump invoked with a plaintext -p password argument by a PHP or\n  web server parent process. BellaMain's /yedek Telegram command executes\n  mysqldump via PHP shell_exec() to produce a SQL backup that is then sent to\n  the operator's Telegram channel via sendDocument. Legitimate database backup\n  jobs run under dedicated service accounts with credential files rather than\n  plaintext -p arguments spawned from a web-server process. This combination\n  of parent process (php/php-fpm/apache2/nginx) and mysqldump child with a\n  -p flag is a strong behavioral indicator that does not depend on any single\n  renameable literal.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-16'\ntags:\n    - attack.collection\n    - attack.t1560\n    - attack.stealth\n    - attack.t1070\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: linux\ndetection:\n    selection_parent:\n        ParentImage|contains:\n            - 'php'\n            - 'apache2'\n            - 'nginx'\n            - 'httpd'\n    selection_child:\n        Image|endswith: 'mysqldump'\n        CommandLine|contains: '-p'\n    condition: selection_parent and selection_child\nfalsepositives:\n    - >-\n      Legitimate PHP-based database management tools (phpMyAdmin export\n      function) invoked by an administrator — correlate with legitimate admin\n      session timestamps and exclude known-good source IPs\n    - >-\n      Automated backup scripts incorrectly launched from web process context\n      during provisioning or testing\nlevel: high",
         "to_ids": true,
         "comment": "BellaMain Mysqldump Invocation by PHP Web Process | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1560, T1070 | rule hash 8ab97472 | https://the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -390,7 +390,7 @@
         "value": "title: BellaMain PhaaS USOM Blocklist Poll from Web Server\nid: 7c1bb0ba-7d15-4969-a8dd-529d3b6294b9\nstatus: experimental\ndescription: >-\n  Detects an HTTP request to the Turkish CERT USOM URL blocklist endpoint\n  (www.usom.gov.tr/url-list.txt) originating from a web-server host.\n  BellaMain's usmcheck.php polls this list to detect when its own phishing\n  kit domains have been blocklisted, then triggers a Telegram kill-switch\n  notification. Polling USOM alone is common, legitimate behavior performed\n  by CERT partners and security tooling and carries high false-positive risk\n  on its own — this base event is intended to feed the paired temporal\n  correlation rule (BellaMain PhaaS USOM Poll and Telegram Bot Outbound\n  Correlation), which raises confidence only when the same source also\n  contacts the Telegram Bot API within a following time window.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/\n    - https://www.usom.gov.tr/\nauthor: The Hunters Ledger\ndate: '2026-05-16'\ntags:\n    - attack.discovery\n    - attack.t1518.001\n    - detection.emerging-threats\nlogsource:\n    category: proxy\n    product: zeek\ndetection:\n    selection:\n        cs-host|contains: 'usom.gov.tr'\n        cs-uri-stem|contains: 'url-list.txt'\n    condition: selection\nfalsepositives:\n    - >-\n      Turkish CERT partner organizations, security researchers, or security\n      products that legitimately poll the USOM blocklist — this is expected,\n      common behavior on its own; the paired correlation rule is required to\n      raise confidence\nlevel: low\n---\ntitle: BellaMain PhaaS High-Frequency Multi-Bot Telegram Outbound\nid: e5f2b847-3a1c-4d96-8e04-7c9d3f2a1b56\nstatus: experimental\ndescription: >-\n  Detects an individual outbound HTTPS request to api.telegram.org/bot* from\n  a source host. This base event feeds two paired correlation rules: the\n  burst-correlation rule below (five or more such requests from a single\n  source host within a 60-second window) and the USOM-poll correlation\n  below. BellaMain fires multiple specialized bots on each credential hit:\n  the admin bot receives the raw credential set, vergibot receives\n  national-ID data, and dekontbot and cekimbot handle approval workflows.\n  On its own, a single request to the Telegram Bot API is common,\n  legitimate traffic produced by many unrelated notification integrations.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-16'\ntags:\n    - attack.command-and-control\n    - attack.t1102.002\n    - detection.emerging-threats\nlogsource:\n    category: proxy\n    product: zeek\ndetection:\n    selection:\n        cs-host: 'api.telegram.org'\n        cs-uri-stem|startswith: '/bot'\n    condition: selection\nfalsepositives:\n    - >-\n      Any web application with a legitimate Telegram bot integration (order\n      notifications, monitoring alerts, CI/CD pipelines) — this is common,\n      everyday behavior on many web servers\nlevel: low\n---\ntitle: BellaMain PhaaS USOM Poll and Telegram Bot Outbound Correlation\nid: 5a705984-73aa-47db-b19e-5b0f45b14d0c\nstatus: experimental\ncorrelation:\n    type: temporal\n    rules:\n        - 7c1bb0ba-7d15-4969-a8dd-529d3b6294b9\n        - e5f2b847-3a1c-4d96-8e04-7c9d3f2a1b56\n    group-by:\n        - src_ip\n    timespan: 5m\ndescription: >-\n  Correlates a USOM blocklist poll with a Telegram Bot API request from the\n  same source host within a 5-minute window. Neither event alone is a\n  reliable indicator — USOM polling is legitimate CERT/security-tool\n  behavior, and a single Telegram Bot API call is common on hosts running\n  legitimate notification integrations — but a web server exhibiting both\n  behaviors together is the operational fingerprint of BellaMain's\n  usmcheck.php blocklist monitor and its Telegram kill-switch notification\n  chain.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-16'\ntags:\n    - attack.discovery\n    - attack.t1518.001\n    - attack.command-and-control\n    - attack.t1102.002\n    - detection.emerging-threats\nfalsepositives:\n    - >-\n      A host that legitimately both monitors the USOM blocklist and operates\n      an unrelated Telegram notification bot within the same time window —\n      tune by excluding known-legitimate source IPs\nlevel: medium\n---\ntitle: BellaMain PhaaS High-Frequency Multi-Bot Telegram Outbound — Burst Correlation\nid: f4c1a936-2d7e-4b58-9a03-6e1f8c52d7ab\nstatus: experimental\ncorrelation:\n  type: event_count\n  rules:\n    - e5f2b847-3a1c-4d96-8e04-7c9d3f2a1b56\n  group-by:\n    - src_ip\n  timespan: 60s\n  condition:\n    gte: 5\ndescription: >-\n  Correlates the base rule BellaMain PhaaS High-Frequency Multi-Bot Telegram\n  Outbound to fire when a single source host generates five or more matching\n  outbound requests to api.telegram.org/bot* within a 60-second window — a\n  volumetric anomaly consistent with BellaMain's automated four-bot exfil\n  burst, though the underlying count does not distinguish distinct bot\n  tokens from repeated calls to one bot, so a legitimate high-volume\n  notification integration can trigger this identically.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-16'\ntags:\n    - attack.command-and-control\n    - attack.t1102.002\n    - attack.exfiltration\n    - attack.t1041\n    - attack.collection\n    - attack.t1119\n    - detection.emerging-threats\nfalsepositives:\n    - >-\n      Web application platforms with legitimate high-frequency Telegram\n      notification integrations (e.g., e-commerce order-notification bots)\n      firing on concurrent order events — tune threshold or scope to\n      web-server segments not expected to run application-layer Telegram\n      integrations\nlevel: medium",
         "to_ids": false,
         "comment": "BellaMain USOM Poll, Telegram Bot Outbound, and Correlations | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1518.001, T1102.002, T1041, T1119 | rule hash 6f515f49 | https://the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Hunting\"",
@@ -405,7 +405,7 @@
         "value": "/*\n   Yara Rule Set\n   Identifier: BellaMain Turkish PhaaS Panel\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule TOOLKIT_BellaMain_WadanzFunctions {\n   meta:\n      description = \"Detects BellaMain Turkish PhaaS panel PHP source files containing the author-pseudonym session-cipher function pair sifreleWadanz and sifrecozWadanz in database/fonk.php or any forked copy. The Wadanz suffix is a developer-chosen code identifier that persists across redeployments of this codebase.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/\"\n      date = \"2026-05-16\"\n      hash1 = \"f791fae41cdd3f141221d1783ed4779c839de7fc834ff4fc80a5d7f74b11ff88\"\n      family = \"BellaMain\"\n      malware_type = \"PhaaS Panel\"\n      campaign = \"BellaMain-TurkishPhaaS-79.137.192.3\"\n      id = \"d9dcf08f-9d66-5b41-a9db-57fe529d3780\"\n   strings:\n      $func_enc = \"sifreleWadanz\" ascii fullword\n      $func_dec = \"sifrecozWadanz\" ascii fullword\n      $db_user  = \"dbjakartaxdw\" ascii fullword\n      $db_name  = \"jakartaxdw\" ascii fullword\n   condition:\n      filesize < 512KB and\n      $func_enc and $func_dec and\n      1 of ($db_user, $db_name)\n}",
         "to_ids": true,
         "comment": "BellaMain Wadanz Author Functions | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1505.003, T1027.013 | rule hash 37a1ac56 | https://the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -420,7 +420,7 @@
         "value": "rule TOOLKIT_BellaMain_AdminPanel {\n   meta:\n      description = \"Detects BellaMain Turkish PhaaS panel PHP source via two independent anchors: two or more of the Telegram-bot evidence-destruction command strings (/hesapsil, /kartsil, /girislogsil) hardcoded in the bot command-dispatch logic, OR the co-occurrence of the obfuscated admin directory path V5VgjLU0jsDe with the shared MySQL database user dbjakartaxdw. The command-string branch survives a redeploy that regenerates the admin path and database credentials; the second branch confirms an exact copy of this deployment.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/\"\n      date = \"2026-05-16\"\n      hash1 = \"705793c011fdfe17941700a3bf42eee0ba2ebdc04870ce19779ea528b3565fac\"\n      family = \"BellaMain\"\n      malware_type = \"PhaaS Panel\"\n      campaign = \"BellaMain-TurkishPhaaS-79.137.192.3\"\n      id = \"07c349cc-223e-5d46-a6e7-ffcfc7116f99\"\n   strings:\n      $admin_path = \"V5VgjLU0jsDe\" ascii\n      $db_user    = \"dbjakartaxdw\" ascii fullword\n      $cmd_del1   = \"/hesapsil\" ascii fullword\n      $cmd_del2   = \"/kartsil\" ascii fullword\n      $cmd_del3   = \"/girislogsil\" ascii fullword\n   condition:\n      filesize < 512KB and\n      ( 2 of ($cmd_del1, $cmd_del2, $cmd_del3) or ($admin_path and $db_user) )\n}",
         "to_ids": true,
         "comment": "BellaMain Admin Panel and Evidence-Destruction Commands | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1505.003, T1070 | rule hash fb9a8adb | https://the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
@@ -435,7 +435,7 @@
         "value": "rule TOOLKIT_BellaMain_AntiResearcherCanary {\n   meta:\n      description = \"Detects BellaMain Turkish PhaaS kit girislog.php files containing the anti-researcher canary string cluster. The ?lg= GET parameter triggers these strings, causing the kit to fire a Telegram alert with the researcher's IP and user-agent and return a Turkish-language troll response. Presence in a PHP file confirms BellaMain kit provenance regardless of active-deployment status.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/\"\n      date = \"2026-05-16\"\n      hash1 = \"219cd4f6177a2358ec7f06b230d611f47e1049fcb3e2b44d06ec410b336382b0\"\n      family = \"BellaMain\"\n      malware_type = \"PhaaS Kit\"\n      campaign = \"BellaMain-TurkishPhaaS-79.137.192.3\"\n      id = \"e107e6db-0ca3-5521-9c94-360c9ff55dce\"\n   strings:\n      $sazan_ip    = \"Sazan IP\" ascii\n      $sazan_kod   = \"Sazan Kod\" ascii\n      $sazan_cihaz = \"Sazan Cihaz\" ascii\n      $usom_msg    = \"Usom Yedik Atis Stop\" ascii\n      $ares_alias  = \"@AresRS34\" ascii\n      $lg_param    = \"?lg=\" ascii\n   condition:\n      filesize < 512KB and\n      2 of ($sazan_ip, $sazan_kod, $sazan_cihaz, $usom_msg) and\n      1 of ($ares_alias, $lg_param)\n}",
         "to_ids": true,
         "comment": "BellaMain Anti-Researcher Canary Strings | TIER: Detection | robustness 3 | confidence HIGH | ATT&CK T1497 | rule hash 203a82ef | https://the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/",
-        "timestamp": 1791580400,
+        "timestamp": 1791592076,
         "Tag": [
           {
             "name": "hunters-ledger:tier=\"Detection\"",
