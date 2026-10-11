@@ -439,8 +439,8 @@ alert tls $HOME_NET any -> any any (msg:"THL DETECT HijackLoader-Penguish-Rugmi 
 # opendirectory-74-0-42-25-20260316 (orig sid:9001002)
 #   TIER: Detection  |  robustness 3  |  confidence HIGH
 #   rate-limited
-#   FP: None known — the specific 4-byte preamble immediately before a TLS ClientHello on these three non-standard ports is not observed in legitimate...
-alert tcp $HOME_NET any -> $EXTERNAL_NET [56001,56002,56003] (msg:"THL DETECT MaaS Toolkit PureRAT v4.1.9 Protocol Preamble Before TLS to Confirmed C2 Ports"; flow:established,to_server; content:"|04 00 00 00|"; depth:4; threshold:type limit,track by_src,count 1,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/; classtype:trojan-activity; sid:3500071; rev:3; metadata:author The_Hunters_Ledger, date 2026-03-17;)
+#   FP: None known from the evidence; no benign traffic corpus was tested. Any other protocol that opens with the same four bytes (04 00 00 00, a...
+alert tcp $HOME_NET any -> $EXTERNAL_NET [56001,56002,56003] (msg:"THL DETECT MaaS Toolkit PureRAT v4.1.9 Four-Byte Preamble on Ports 56001 to 56003 (C2 Protocol Framing)"; flow:established,to_server; content:"|04 00 00 00|"; depth:4; threshold:type limit,track by_src,count 1,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/; classtype:trojan-activity; sid:3500071; rev:4; metadata:author The_Hunters_Ledger, date 2026-03-17;)
 # opendirectory-79-137-192-3-20260515 (orig sid:9300203)
 #   TIER: Detection  |  robustness 2  |  confidence HIGH
 #   rate-limited
@@ -493,8 +493,8 @@ alert http $HOME_NET any -> any any (msg:"THL DETECT - A2A C2 Beacon POST to Ope
 # russian-gemini-credential-mill-213.165.51.115 (orig sid:9000006)
 #   TIER: Hunting  |  robustness 2  |  confidence MODERATE  |  BROAD - triage before alerting
 #   rate-limited
-#   FP: Legitimate Cloudflare Tunnel deployments also use UDP 7844.
-alert udp $HOME_NET any -> $EXTERNAL_NET 7844 (msg:"THL HUNT - cloudflared Tunnel QUIC Egress to Cloudflare Edge (UDP 7844 Hunting)"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/; classtype:policy-violation; sid:3500096; rev:4; metadata:author The_Hunters_Ledger, date 2026-05-25;)
+#   FP: Legitimate Cloudflare Tunnel deployments also use UDP 7844, and so can any other service that uses that destination port.
+alert udp $HOME_NET any -> $EXTERNAL_NET 7844 (msg:"THL HUNT - cloudflared Tunnel Port Egress (UDP 7844 to Any External Host)"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/; classtype:policy-violation; sid:3500096; rev:5; metadata:author The_Hunters_Ledger, date 2026-05-25;)
 # seasia-gov-exploitation-toolkit-144-172-106-236 (orig sid:9301301)
 #   TIER: Detection  |  robustness 3  |  confidence HIGH
 #   FP: Unlikely outside authorized vulnerability scanning against unpatched Ivanti Connect Secure appliances.

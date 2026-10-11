@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--72f41cf1-9adc-4417-822e-8999a4275eb7",
+    "id": "bundle--d25dd480-5114-490a-89ba-963b6fc87750",
     "objects": [
         {
             "type": "identity",
@@ -1251,36 +1251,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--445ff094-6f4b-57ef-bd58-3fcbf9f94822",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:18.396735Z",
-            "modified": "2026-10-01T19:54:18.396735Z",
-            "name": "MALW_HijackLoader_ExceptionHandler_Plowshare_Dispatcher",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "/*\n   Yara Rule Set\n   Identifier: HijackLoader / Penguish / Rugmi — AsyncRAT Campaign Detection Suite\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule MALW_HijackLoader_ExceptionHandler_Plowshare_Dispatcher {\n   meta:\n      description = \"Detects operator-modified Wondershare Plowshare crash reporter (ExceptionHandler.dll) used as the HijackLoader stage-1 dispatcher, identified by its operator PDB path, bespoke payload filenames, and Wondershare-mimicking named pipe\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\"\n      date = \"2026-05-06\"\n      hash1 = \"a3d0a9c71be732cdaafc7c1a9ef00c2a5a01e93b4a29c8944f8ea14a79f52ce0\"\n      family = \"HijackLoader\"\n      malware_type = \"Loader\"\n      campaign = \"OpenDirectory-MultiFamily-MaaS-62.60.237.100\"\n      id = \"725513e0-5d7a-5bd3-9bb6-1283484913d7\"\n   strings:\n      $pdb        = \"I:\\\\CompanySource\\\\Plowshare\\\\Src\\\\Symbol\\\\Release\\\\ExceptionHandler.pdb\" ascii\n      $payload1   = \"networkspec17.log\" ascii wide\n      $payload2   = \"shadermgr93.rc\" ascii wide\n      $pipe       = \"WondershareCrashServices\" ascii wide\n      $codename   = \"Plowshare\" ascii fullword\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 2MB and\n      ($pdb or ($payload1 and $payload2 and $pipe) or ($codename and $pipe))\n}",
-            "pattern_type": "yara",
-            "valid_from": "2026-05-06T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "indicator",
-            "spec_version": "2.1",
             "id": "indicator--d0dbdfb0-b49f-545b-b830-c520fa3d9b02",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.396854Z",
-            "modified": "2026-10-01T19:54:18.396854Z",
+            "modified": "2026-10-11T06:31:44.741433Z",
             "name": "MALW_HijackLoader_NetworkSpec17_IDAT_Carrier",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule MALW_HijackLoader_NetworkSpec17_IDAT_Carrier {\n   meta:\n      description = \"Detects the HijackLoader stage-3 payload carrier file networkspec17.log by its operator-distinctive PNG-IDAT framing header: a 4-byte chunk-type marker at offset 0 and a 4-byte XOR key at offset 4, both baked into the loader's own multi-layer encoding scheme (PNG IDAT framing + 4-byte XOR + LZNT1 chunked decompression)\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\"\n      date = \"2026-05-06\"\n      hash1 = \"7e2000ceb89574fe95e819f5f47da346119b666b7f64e8b5b01e5152e37d76cf\"\n      family = \"HijackLoader\"\n      malware_type = \"Loader\"\n      campaign = \"OpenDirectory-MultiFamily-MaaS-62.60.237.100\"\n      id = \"ad9cb357-4a89-549a-8d23-7b7116a64f46\"\n   strings:\n      $idat_marker   = { C6 A5 79 EA }\n      $xor_key       = { E1 D5 B4 A2 }\n      $idat_sentinel = { 49 44 41 54 }\n      $iend_sentinel = { 49 45 4E 44 }\n      $filename      = \"networkspec17.log\" ascii wide\n   condition:\n      filesize < 10MB and\n      $idat_marker at 0 and\n      ($xor_key at 4 or ($idat_sentinel and $iend_sentinel) or ($filename and $xor_key))\n}",
+            "pattern": "rule MALW_HijackLoader_NetworkSpec17_IDAT_Carrier {\n   meta:\n      description = \"Detects the HijackLoader stage-3 payload carrier file networkspec17.log by its operator-distinctive PNG-IDAT framing header: a 4-byte chunk-type marker at offset 0 (required) plus any one of: the 4-byte XOR key at offset 4, both IDAT and IEND sentinels, or the filename with the key at any offset; the marker and key are baked into the loader's own multi-layer encoding scheme (PNG IDAT framing + 4-byte XOR + LZNT1 chunked decompression)\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\"\n      date = \"2026-05-06\"\n      hash1 = \"7e2000ceb89574fe95e819f5f47da346119b666b7f64e8b5b01e5152e37d76cf\"\n      family = \"HijackLoader\"\n      malware_type = \"Loader\"\n      campaign = \"OpenDirectory-MultiFamily-MaaS-62.60.237.100\"\n      id = \"ad9cb357-4a89-549a-8d23-7b7116a64f46\"\n   strings:\n      $idat_marker   = { C6 A5 79 EA }\n      $xor_key       = { E1 D5 B4 A2 }\n      $idat_sentinel = { 49 44 41 54 }\n      $iend_sentinel = { 49 45 4E 44 }\n      $filename      = \"networkspec17.log\" ascii wide\n   condition:\n      filesize < 10MB and\n      $idat_marker at 0 and\n      ($xor_key at 4 or ($idat_sentinel and $iend_sentinel) or ($filename and $xor_key))\n}",
             "pattern_type": "yara",
             "valid_from": "2026-05-06T00:00:00Z",
             "labels": [
@@ -1317,12 +1296,12 @@
             "id": "indicator--40d31f26-e15d-5e32-9818-16a1732d4ce2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.397022Z",
-            "modified": "2026-10-01T19:54:18.397022Z",
+            "modified": "2026-10-11T06:31:44.741778Z",
             "name": "MALW_HijackLoader_MultiVector_Lure_GrimResource_MSC",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule MALW_HijackLoader_MultiVector_Lure_GrimResource_MSC {\n   meta:\n      description = \"Detects MSC GrimResource weaponized files used in the HijackLoader campaign via the res://apds.dll/redirect.html XSL-redirect abuse pattern embedded in an MMC snap-in .msc file, or via the campaign's Mega.io staging bucket path paired with a scripting/obfuscation corroborator (covers macro-document lures fetching from the same bucket)\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\"\n      date = \"2026-05-06\"\n      hash1 = \"3480d0478d35d8a12331b97769401e16e4956bdc24b9a7175ae08e2c9e9acf8f\"\n      family = \"HijackLoader\"\n      malware_type = \"Loader\"\n      campaign = \"OpenDirectory-MultiFamily-MaaS-62.60.237.100\"\n      id = \"6a42e21f-3581-54ab-b461-f64733fdb4af\"\n   strings:\n      $grimres    = \"res://apds.dll/redirect.html\" ascii wide nocase\n      $js_eval    = \"javascript:eval(\" ascii wide nocase\n      $mmc_root   = \"<MMC_ConsoleFile\" ascii wide\n      $mega_path  = \"aileqac3yep7oqdhygjpberqqnk2zrnhck2lx/busket/\" ascii wide nocase\n      $macro_rev  = \"[array]::Reverse($\" ascii wide\n   condition:\n      filesize < 5MB and\n      (\n         $grimres or\n         ($mega_path and ($macro_rev or $js_eval or $mmc_root))\n      )\n}",
+            "pattern": "rule MALW_HijackLoader_MultiVector_Lure_GrimResource_MSC {\n   meta:\n      description = \"Detects files containing the GrimResource res://apds.dll/redirect.html XSL-redirect abuse string (the campaign delivers it in MMC snap-in .msc files, but the rule does not require the MMC structure), or via the campaign's Mega.io staging bucket path paired with a scripting/obfuscation corroborator (covers macro-document lures fetching from the same bucket)\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\"\n      date = \"2026-05-06\"\n      hash1 = \"3480d0478d35d8a12331b97769401e16e4956bdc24b9a7175ae08e2c9e9acf8f\"\n      family = \"HijackLoader\"\n      malware_type = \"Loader\"\n      campaign = \"OpenDirectory-MultiFamily-MaaS-62.60.237.100\"\n      id = \"6a42e21f-3581-54ab-b461-f64733fdb4af\"\n   strings:\n      $grimres    = \"res://apds.dll/redirect.html\" ascii wide nocase\n      $js_eval    = \"javascript:eval(\" ascii wide nocase\n      $mmc_root   = \"<MMC_ConsoleFile\" ascii wide\n      $mega_path  = \"aileqac3yep7oqdhygjpberqqnk2zrnhck2lx/busket/\" ascii wide nocase\n      $macro_rev  = \"[array]::Reverse($\" ascii wide\n   condition:\n      filesize < 5MB and\n      (\n         $grimres or\n         ($mega_path and ($macro_rev or $js_eval or $mmc_root))\n      )\n}",
             "pattern_type": "yara",
             "valid_from": "2026-05-06T00:00:00Z",
             "labels": [
@@ -1344,6 +1323,27 @@
                 "malicious-activity"
             ],
             "pattern": "rule MALW_HijackLoader_InnoSetup_AntiTriage_Wrapper {\n   meta:\n      description = \"Detects this build wave of the HijackLoader Inno Setup 6.5+ wrapper using the Pascal Script InitializeSetup->WinExec->return False anti-triage pattern, identified by the operator codenames Apophyge (AppName), Veteran (DefaultDirName), the campaign AppId GUID, and the renamed loader filename CrystSupervisor32.exe\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\"\n      date = \"2026-05-06\"\n      hash1 = \"1afbe5d960af45832539b11e92a09b808f0c3868ab437a7ef1b5d1bd5e16d0c3\"\n      family = \"HijackLoader\"\n      malware_type = \"Loader\"\n      campaign = \"OpenDirectory-MultiFamily-MaaS-62.60.237.100\"\n      id = \"2bfaff71-9aa6-5e70-a180-cce9faaa32f2\"\n   strings:\n      $inno_magic = { 49 6E 6E 6F 53 65 74 75 70 20 53 65 74 75 70 20 44 61 74 61 }\n      $appid      = \"{1F2952E4-FC07-4482-B9E6-E795507DA7D2}\" ascii wide\n      $appname    = \"Apophyge\" ascii wide\n      $dirname    = \"Veteran\" ascii wide\n      $loader     = \"CrystSupervisor32.exe\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 20MB and\n      $inno_magic and\n      (($appid) or ($appname and $dirname) or ($loader and ($appid or $appname)))\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-05-06T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--445ff094-6f4b-57ef-bd58-3fcbf9f94822",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-01T19:54:18.396735Z",
+            "modified": "2026-10-11T06:31:44.742007Z",
+            "name": "MALW_HijackLoader_ExceptionHandler_Plowshare_Dispatcher",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: HijackLoader / Penguish / Rugmi — AsyncRAT Campaign Detection Suite\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule MALW_HijackLoader_ExceptionHandler_Plowshare_Dispatcher {\n   meta:\n      description = \"Hunting rule for the operator-modified Wondershare Plowshare crash reporter (ExceptionHandler.dll) used as the HijackLoader stage-1 dispatcher: matches the Plowshare PDB path alone, or both operator payload filenames with the Wondershare-style pipe name, or the Plowshare codename with the pipe name; the PDB, codename and pipe strings are also expected in the unmodified vendor DLL\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\"\n      date = \"2026-05-06\"\n      hash1 = \"a3d0a9c71be732cdaafc7c1a9ef00c2a5a01e93b4a29c8944f8ea14a79f52ce0\"\n      family = \"HijackLoader\"\n      malware_type = \"Loader\"\n      campaign = \"OpenDirectory-MultiFamily-MaaS-62.60.237.100\"\n      id = \"725513e0-5d7a-5bd3-9bb6-1283484913d7\"\n   strings:\n      $pdb        = \"I:\\\\CompanySource\\\\Plowshare\\\\Src\\\\Symbol\\\\Release\\\\ExceptionHandler.pdb\" ascii\n      $payload1   = \"networkspec17.log\" ascii wide\n      $payload2   = \"shadermgr93.rc\" ascii wide\n      $pipe       = \"WondershareCrashServices\" ascii wide\n      $codename   = \"Plowshare\" ascii fullword\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 2MB and\n      ($pdb or ($payload1 and $payload2 and $pipe) or ($codename and $pipe))\n}",
             "pattern_type": "yara",
             "valid_from": "2026-05-06T00:00:00Z",
             "labels": [
@@ -1380,12 +1380,12 @@
             "id": "indicator--974131f9-b3f8-598a-88b0-9e72ea246b05",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.397243Z",
-            "modified": "2026-10-01T19:54:18.397243Z",
+            "modified": "2026-10-11T06:31:44.742217Z",
             "name": "HijackLoader GrimResource MMC Spawning PowerShell Adding Defender Exclusion",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: HijackLoader GrimResource MMC Spawning PowerShell Adding Defender Exclusion\nid: e73a1b48-c926-4e85-9fd2-6b8d3e4a7c19\nstatus: experimental\ndescription: >-\n  Detects the HijackLoader GrimResource MSC file execution chain where mmc.exe\n  spawns cmd.exe or powershell.exe that subsequently invokes Add-MpPreference\n  with -ExclusionExtension or -ExclusionPath to disable Windows Defender\n  real-time protection for the operator's persistence directory. In the\n  observed campaign, the MSC files execute XSL -> VBScript -> PowerShell to\n  add C:\\ProgramData\\adv_ctrl to Defender exclusions before dropping the\n  loader chain. This mmc.exe -> PowerShell -> Add-MpPreference combination is\n  not a legitimate administrative pattern.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-06\ntags:\n    - attack.stealth\n    - attack.execution\n    - attack.defense-impairment\n    - attack.t1218.014\n    - attack.t1059.001\n    - attack.t1685\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_parent:\n        ParentImage|endswith: '\\mmc.exe'\n        Image|endswith:\n            - '\\powershell.exe'\n            - '\\pwsh.exe'\n            - '\\cmd.exe'\n    selection_cmdline:\n        CommandLine|contains:\n            - 'Add-MpPreference'\n            - 'ExclusionExtension'\n            - 'ExclusionPath'\n            - 'Set-MpPreference'\n    condition: selection_parent and selection_cmdline\nfalsepositives:\n    - >-\n      Security administrators who open MMC snap-ins and then separately run\n      PowerShell to manage Defender exclusions in the same session (extremely\n      unlikely as a process-parent relationship: MMC does not propagate as\n      the parent for manually opened PowerShell windows)\n    - Automated endpoint management solutions that use MMC-based snap-ins to\n      deliver Defender configuration changes (verify via change-management records)\nlevel: high",
+            "pattern": "title: HijackLoader GrimResource MMC Spawning PowerShell Adding Defender Exclusion\nid: e73a1b48-c926-4e85-9fd2-6b8d3e4a7c19\nstatus: experimental\ndescription: >-\n  Detects mmc.exe spawning cmd.exe, powershell.exe or pwsh.exe with a command\n  line that contains Add-MpPreference and either ExclusionExtension or\n  ExclusionPath, the Defender exclusion step of the HijackLoader GrimResource\n  MSC chain. The report records that the Tier-2 MSC files (Price2.pdf.msc,\n  MSCFile.msc) run XSL -> VBScript -> PowerShell and add six Defender\n  exclusion paths and a wildcard extension exclusion before downloading the\n  payload. The rule tests the parent and the command-line tokens only, not\n  which paths or extensions are excluded. This mmc.exe -> PowerShell ->\n  Add-MpPreference combination is unusual for administration, though the\n  false-positive list below names management tooling that can produce it.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-06\ntags:\n    - attack.stealth\n    - attack.execution\n    - attack.defense-impairment\n    - attack.t1218.014\n    - attack.t1059.001\n    - attack.t1685\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_parent:\n        ParentImage|endswith: '\\mmc.exe'\n        Image|endswith:\n            - '\\powershell.exe'\n            - '\\pwsh.exe'\n            - '\\cmd.exe'\n    selection_add:\n        CommandLine|contains: 'Add-MpPreference'\n    selection_exclusion:\n        CommandLine|contains:\n            - 'ExclusionExtension'\n            - 'ExclusionPath'\n    condition: selection_parent and selection_add and selection_exclusion\nfalsepositives:\n    - >-\n      Security administrators who open MMC snap-ins and then separately run\n      PowerShell to manage Defender exclusions in the same session (extremely\n      unlikely as a process-parent relationship: MMC does not propagate as\n      the parent for manually opened PowerShell windows)\n    - Automated endpoint management solutions that use MMC-based snap-ins to\n      deliver Defender configuration changes (verify via change-management records)\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-05-06T00:00:00Z",
             "labels": [
@@ -1398,15 +1398,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--672cef43-3fc1-55e0-8297-bb5aea4c591a",
+            "id": "indicator--b941c09b-19ac-5ce9-9e35-3cafe0934e37",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:18.397317Z",
-            "modified": "2026-10-01T19:54:18.397317Z",
-            "name": "HijackLoader Inno Setup Wrapper Spawning CrystSupervisor32 and WVault Process Chain",
+            "created": "2026-10-11T06:31:44.742319Z",
+            "modified": "2026-10-11T06:31:44.742319Z",
+            "name": "HijackLoader CrystSupervisor32 or WVault Renamed Vendor Binary Process Creation",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: HijackLoader Inno Setup Wrapper Spawning CrystSupervisor32 and WVault Process Chain\nid: 3a7f1e92-bb04-4d85-9c3e-f6a820d14c73\nstatus: experimental\ndescription: >-\n  Detects the HijackLoader/Penguish/Rugmi loader chain initiated by an Inno\n  Setup wrapper using the Pascal Script InitializeSetup->WinExec->return\n  False anti-triage technique. The wrapper drops and immediately launches\n  CrystSupervisor32.exe (renamed genuine Wondershare SlideShowEditor.exe)\n  from a temporary is-*.tmp directory. The chain continues through\n  WVault.exe (renamed signed Qihoo 360 PromoUtil.exe) used as the hollow\n  host for an injected .NET AsyncRAT-class RAT. The installer exits\n  silently with no wizard UI, defeating sandboxes that wait for\n  wizard-completion or [Run] section events.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-06\ntags:\n    - attack.execution\n    - attack.stealth\n    - attack.t1036.005\n    - attack.t1574.001\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_crystsupervisor:\n        Image|endswith: '\\CrystSupervisor32.exe'\n        ParentImage|contains: '\\is-'\n    selection_wvault_child:\n        Image|endswith: '\\WVault.exe'\n        ParentImage|endswith: '\\CrystSupervisor32.exe'\n    selection_wvault_parent_temp:\n        Image|endswith: '\\WVault.exe'\n        ParentCommandLine|contains: 'is-'\n    condition: selection_crystsupervisor or selection_wvault_child or selection_wvault_parent_temp\nfalsepositives:\n    - >-\n      Legitimate Wondershare software installers that use CrystSupervisor32.exe\n      as part of genuine DVD Creator or SlideShow Editor installation (verify\n      Authenticode chain and parent install path matches official Wondershare\n      installer, not a temp directory)\n    - >-\n      Qihoo 360 software installations where PromoUtil.exe is legitimately\n      renamed (verify install path is under Program Files, not C:\\ProgramData\\)\nlevel: medium",
+            "pattern": "title: HijackLoader CrystSupervisor32 or WVault Renamed Vendor Binary Process Creation\nid: 3a7f1e92-bb04-4d85-9c3e-f6a820d14c73\nstatus: experimental\ndescription: >-\n  Detects any one of three process-creation shapes from the HijackLoader/\n  Penguish/Rugmi loader chain, which the report describes as starting with an\n  Inno Setup wrapper (Pascal Script InitializeSetup->WinExec->return False)\n  that launches CrystSupervisor32.exe (renamed genuine Wondershare\n  SlideShowEditor.exe) from a temporary is-*.tmp directory, after which\n  WVault.exe (renamed signed Qihoo 360 PromoUtil.exe) serves as the hollow\n  host for an injected .NET AsyncRAT-class RAT. The three shapes are\n  CrystSupervisor32.exe with a parent image path containing \\is-,\n  WVault.exe with CrystSupervisor32.exe as its parent, and WVault.exe whose\n  parent command line contains \\is-. They are alternatives: the rule does\n  not require the chain, the Inno Setup wrapper or both binaries to appear.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-06\ntags:\n    - attack.execution\n    - attack.stealth\n    - attack.t1036.005\n    - attack.t1574.001\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_crystsupervisor:\n        Image|endswith: '\\CrystSupervisor32.exe'\n        ParentImage|contains: '\\is-'\n    selection_wvault_child:\n        Image|endswith: '\\WVault.exe'\n        ParentImage|endswith: '\\CrystSupervisor32.exe'\n    selection_wvault_parent_temp:\n        Image|endswith: '\\WVault.exe'\n        ParentCommandLine|contains: '\\is-'\n    condition: selection_crystsupervisor or selection_wvault_child or selection_wvault_parent_temp\nfalsepositives:\n    - >-\n      Legitimate Wondershare software installers that use CrystSupervisor32.exe\n      as part of genuine DVD Creator or SlideShow Editor installation (verify\n      Authenticode chain and parent install path matches official Wondershare\n      installer, not a temp directory)\n    - >-\n      Qihoo 360 software installations where PromoUtil.exe is legitimately\n      renamed (verify install path is under Program Files, not C:\\ProgramData\\)\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-05-06T00:00:00Z",
             "labels": [
@@ -1440,15 +1440,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--e7c9ebc3-0da3-5a4b-b84f-c44cd9b6eb85",
+            "id": "indicator--a9c1002f-2e25-59ba-9749-163e03257906",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:18.397462Z",
-            "modified": "2026-10-01T19:54:18.397462Z",
-            "name": "HijackLoader Operator Persistence Directory adv_ctrl Created Under ProgramData",
+            "created": "2026-10-11T06:31:44.742518Z",
+            "modified": "2026-10-11T06:31:44.742518Z",
+            "name": "HijackLoader Operator Persistence Directory Codename File Written Under ProgramData or Users",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: HijackLoader Operator Persistence Directory adv_ctrl Created Under ProgramData\nid: f2a85c3d-16b7-4e09-a74f-3c9b7d2e8a15\nstatus: experimental\ndescription: >-\n  Detects creation of the operator-codename persistence directory adv_ctrl\n  under C:\\ProgramData\\ or %APPDATA%\\, used by the HijackLoader/Penguish/Rugmi\n  campaign to stage the Crisp.exe side-load host and the WVault.exe hollow\n  host, and to receive a Windows Defender real-time exclusion. The codename\n  adv_ctrl is one of several operator persistence directory names observed\n  across campaign variants (others: brokerbg, exttracer_net48,\n  thread_adapter, Sulfathiazole) — a sixth wave will very likely introduce\n  a new, uncovered codename.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-06\ntags:\n    - attack.persistence\n    - attack.stealth\n    - attack.t1036.005\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: windows\ndetection:\n    selection_adv_ctrl:\n        TargetFilename|contains: '\\adv_ctrl\\'\n        TargetFilename|startswith:\n            - 'C:\\ProgramData\\'\n            - 'C:\\Users\\'\n    selection_siblings:\n        TargetFilename|contains:\n            - '\\brokerbg\\'\n            - '\\exttracer_net48\\'\n            - '\\thread_adapter\\'\n            - '\\Sulfathiazole\\'\n        TargetFilename|startswith:\n            - 'C:\\ProgramData\\'\n            - 'C:\\Users\\'\n    condition: selection_adv_ctrl or selection_siblings\nfalsepositives:\n    - >-\n      Legitimate software installers that coincidentally use a directory\n      named adv_ctrl (extremely unlikely — this is a distinctive operator\n      codename, not a standard Windows or common third-party path component)\n    - Security tools or EDR agents using similarly named directories for internal state\nlevel: medium",
+            "pattern": "title: HijackLoader Operator Persistence Directory Codename File Written Under ProgramData or Users\nid: f2a85c3d-16b7-4e09-a74f-3c9b7d2e8a15\nstatus: experimental\ndescription: >-\n  Detects a file event (Sysmon file creation) whose path has a directory\n  component named adv_ctrl, brokerbg, exttracer_net48, thread_adapter or\n  Sulfathiazole under C:\\ProgramData\\ or any path starting C:\\Users\\.\n  adv_ctrl is the persistence directory the HijackLoader/Penguish/Rugmi\n  campaign uses to stage the Crisp.exe side-load host and the WVault.exe\n  hollow host; the other four are operator persistence directory names the\n  report records for other campaign variants. The rule fires on any file\n  written inside such a directory, not on the directory being created, and it\n  does not test which file it is. A sixth wave will very likely introduce a\n  new, uncovered codename.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-06\ntags:\n    - attack.persistence\n    - attack.stealth\n    - attack.t1036.005\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: windows\ndetection:\n    selection_adv_ctrl:\n        TargetFilename|contains: '\\adv_ctrl\\'\n        TargetFilename|startswith:\n            - 'C:\\ProgramData\\'\n            - 'C:\\Users\\'\n    selection_siblings:\n        TargetFilename|contains:\n            - '\\brokerbg\\'\n            - '\\exttracer_net48\\'\n            - '\\thread_adapter\\'\n            - '\\Sulfathiazole\\'\n        TargetFilename|startswith:\n            - 'C:\\ProgramData\\'\n            - 'C:\\Users\\'\n    condition: selection_adv_ctrl or selection_siblings\nfalsepositives:\n    - >-\n      Legitimate software installers that coincidentally use a directory\n      named adv_ctrl (extremely unlikely — this is a distinctive operator\n      codename, not a standard Windows or common third-party path component)\n    - Security tools or EDR agents using similarly named directories for internal state\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-05-06T00:00:00Z",
             "labels": [
@@ -1524,15 +1524,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--08c892e7-621e-55c8-b026-4b1fb6dfdd76",
+            "id": "indicator--354e871b-1376-5cf6-ab0b-0ee1a427a570",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:18.39775Z",
-            "modified": "2026-10-01T19:54:18.39775Z",
-            "name": "WVault.exe or Renamed Vendor Binary Executing from Non-Standard ProgramData Path",
+            "created": "2026-10-11T06:31:44.742932Z",
+            "modified": "2026-10-11T06:31:44.742932Z",
+            "name": "WVault.exe Process Executing From a ProgramData Path",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: WVault.exe or Renamed Vendor Binary Executing from Non-Standard ProgramData Path\nid: 6684f300-fac8-4477-9d8a-c33b1c724155\nstatus: experimental\ndescription: >-\n  Detects a process named WVault.exe executing from C:\\ProgramData\\, the\n  non-standard drop path used by the HijackLoader/Penguish/Rugmi campaign\n  for a renamed, genuine signed Qihoo 360 PromoUtil.exe used as a hollow\n  host for injected .NET RAT payloads. WVault.exe is not a filename used\n  by any known legitimate software; this cross-campaign TTP cluster\n  (renaming a signed vendor binary as an injection host) has been observed\n  across 8+ unrelated campaigns since 2025, so a hit should be correlated\n  with family-specific indicators before attribution.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-06\ntags:\n    - attack.stealth\n    - attack.t1036.005\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        Image|endswith: '\\WVault.exe'\n        Image|contains: '\\ProgramData\\'\n    condition: selection\nfalsepositives:\n    - >-\n      Rare legitimate portable or sideloaded applications that ship a\n      binary literally named WVault.exe in a user-writable path (no known\n      legitimate software uses this exact name)\n    - >-\n      Other unrelated malware families that reuse the identical\n      rename-a-signed-vendor-binary masquerade pattern\nlevel: medium",
+            "pattern": "title: WVault.exe Process Executing From a ProgramData Path\nid: 6684f300-fac8-4477-9d8a-c33b1c724155\nstatus: experimental\ndescription: >-\n  Detects a process whose image name is WVault.exe and whose image path\n  contains \\ProgramData\\, the drop path used by the HijackLoader/Penguish/\n  Rugmi campaign for a renamed, genuine signed Qihoo 360 PromoUtil.exe used\n  as a hollow host for injected .NET RAT payloads. The report records\n  WVault.exe as a name that cross-campaign pivoting found in 8+ campaigns\n  since 2025 and names no legitimate software that uses it. The rule tests\n  the file name and the folder only: it does not detect other renamed vendor\n  binaries, and a hit should be correlated with family-specific indicators\n  before attribution.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-06\ntags:\n    - attack.stealth\n    - attack.t1036.005\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        Image|endswith: '\\WVault.exe'\n        Image|contains: '\\ProgramData\\'\n    condition: selection\nfalsepositives:\n    - >-\n      Rare legitimate portable or sideloaded applications that ship a\n      binary literally named WVault.exe in a user-writable path (no known\n      legitimate software uses this exact name)\n    - >-\n      Other unrelated malware families that reuse the identical\n      rename-a-signed-vendor-binary masquerade pattern\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-05-06T00:00:00Z",
             "labels": [
@@ -3390,20 +3390,6 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--a204c914-9712-5b2d-94d4-5596b449385a",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:18.407634Z",
-            "modified": "2026-10-01T19:54:18.407634Z",
-            "relationship_type": "indicates",
-            "source_ref": "indicator--445ff094-6f4b-57ef-bd58-3fcbf9f94822",
-            "target_ref": "malware--f849e2b2-dd59-5cb6-9031-52bb5e4edecc",
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "relationship",
-            "spec_version": "2.1",
             "id": "relationship--5e4826fd-26f6-5dbf-b210-8bc0f890ec80",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.407694Z",
@@ -3460,6 +3446,20 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
+            "id": "relationship--a204c914-9712-5b2d-94d4-5596b449385a",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-01T19:54:18.407634Z",
+            "modified": "2026-10-01T19:54:18.407634Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--445ff094-6f4b-57ef-bd58-3fcbf9f94822",
+            "target_ref": "malware--f849e2b2-dd59-5cb6-9031-52bb5e4edecc",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
             "id": "relationship--198fefd6-3df3-53f8-acc9-54aba17fd9ee",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.407939Z",
@@ -3488,12 +3488,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--e0094942-62b7-5e6e-99a3-add0da77a5e4",
+            "id": "relationship--9295b3b5-ad54-5126-8bcc-3f82f047e631",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:18.40806Z",
-            "modified": "2026-10-01T19:54:18.40806Z",
+            "created": "2026-10-11T06:31:44.757164Z",
+            "modified": "2026-10-11T06:31:44.757164Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--672cef43-3fc1-55e0-8297-bb5aea4c591a",
+            "source_ref": "indicator--b941c09b-19ac-5ce9-9e35-3cafe0934e37",
             "target_ref": "malware--f849e2b2-dd59-5cb6-9031-52bb5e4edecc",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -3516,12 +3516,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--92bcb094-337d-57e7-ad09-821c4b583e5c",
+            "id": "relationship--e142048e-3e3e-5dcb-b8ac-9a3b975c61be",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:18.408179Z",
-            "modified": "2026-10-01T19:54:18.408179Z",
+            "created": "2026-10-11T06:31:44.757327Z",
+            "modified": "2026-10-11T06:31:44.757327Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--e7c9ebc3-0da3-5a4b-b84f-c44cd9b6eb85",
+            "source_ref": "indicator--a9c1002f-2e25-59ba-9749-163e03257906",
             "target_ref": "malware--f849e2b2-dd59-5cb6-9031-52bb5e4edecc",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -3572,12 +3572,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--dc7a3cc6-5c39-57b6-b80f-7783d881c9bc",
+            "id": "relationship--476f21dc-0024-5591-a8fd-5b56b4cb054b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:18.408422Z",
-            "modified": "2026-10-01T19:54:18.408422Z",
+            "created": "2026-10-11T06:31:44.757657Z",
+            "modified": "2026-10-11T06:31:44.757657Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--08c892e7-621e-55c8-b026-4b1fb6dfdd76",
+            "source_ref": "indicator--354e871b-1376-5cf6-ab0b-0ee1a427a570",
             "target_ref": "malware--f849e2b2-dd59-5cb6-9031-52bb5e4edecc",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -10715,7 +10715,7 @@
             "id": "report--aeece79f-37fb-57b6-9eac-f7fa0ff37e78",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.439627Z",
-            "modified": "2026-10-01T19:54:18.439627Z",
+            "modified": "2026-10-11T06:31:44.803065Z",
             "name": "HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campaign",
             "report_types": [
                 "threat-report"
@@ -10826,20 +10826,20 @@
                 "domain-name--d2b1ae76-95ce-5aaa-942d-c14ec1f5dbe6",
                 "domain-name--e076ecd5-a0c3-51bb-9e8a-4f76cc3ed3e4",
                 "domain-name--2e5828ec-0694-5440-ad64-0688c84cb5ae",
-                "indicator--445ff094-6f4b-57ef-bd58-3fcbf9f94822",
                 "indicator--d0dbdfb0-b49f-545b-b830-c520fa3d9b02",
                 "indicator--b8bda084-70e2-5458-8384-7fee99fa776f",
                 "indicator--40d31f26-e15d-5e32-9818-16a1732d4ce2",
                 "indicator--70dc9732-3d50-503e-8e77-b81896962762",
+                "indicator--445ff094-6f4b-57ef-bd58-3fcbf9f94822",
                 "indicator--16466b02-e8ca-5045-8b38-6a4659660328",
                 "indicator--974131f9-b3f8-598a-88b0-9e72ea246b05",
-                "indicator--672cef43-3fc1-55e0-8297-bb5aea4c591a",
+                "indicator--b941c09b-19ac-5ce9-9e35-3cafe0934e37",
                 "indicator--1119d3a8-1e89-56a1-97e4-cfbe5a9c7d90",
-                "indicator--e7c9ebc3-0da3-5a4b-b84f-c44cd9b6eb85",
+                "indicator--a9c1002f-2e25-59ba-9749-163e03257906",
                 "indicator--c9909d4b-1034-58d0-abd7-588ee3b22336",
                 "indicator--d017fac2-8720-543a-b767-6716a4e8520a",
                 "indicator--830e08f1-449a-57a0-b6e4-04f31fa01f79",
-                "indicator--08c892e7-621e-55c8-b026-4b1fb6dfdd76",
+                "indicator--354e871b-1376-5cf6-ab0b-0ee1a427a570",
                 "indicator--a5eb9d7c-a205-58f9-9317-e4b046750290",
                 "malware--7d5d50a1-171a-5ad8-b68e-de54e261c3df",
                 "malware--cdb21214-5e8e-5518-bd8a-68a1130db879",
@@ -10962,20 +10962,20 @@
                 "relationship--00876b01-b61f-5239-b294-8a7111af79ab",
                 "relationship--4f4b4b6d-7c24-51f1-9fb9-a5d5e07a8ad5",
                 "relationship--3f65c14d-55a7-594c-a1d7-16becf5cd0bb",
-                "relationship--a204c914-9712-5b2d-94d4-5596b449385a",
                 "relationship--5e4826fd-26f6-5dbf-b210-8bc0f890ec80",
                 "relationship--b51a8680-da44-5f9e-ade7-a784ec496e9c",
                 "relationship--ccd1d057-09f5-5951-b256-8aebfb4bf743",
                 "relationship--7aec9f74-d78d-5882-936f-da08a60bd484",
+                "relationship--a204c914-9712-5b2d-94d4-5596b449385a",
                 "relationship--198fefd6-3df3-53f8-acc9-54aba17fd9ee",
                 "relationship--e5a58048-9de5-5dbb-8aaa-dcf765511016",
-                "relationship--e0094942-62b7-5e6e-99a3-add0da77a5e4",
+                "relationship--9295b3b5-ad54-5126-8bcc-3f82f047e631",
                 "relationship--1ca9a975-2eb2-54a9-9a93-ebd7a0310217",
-                "relationship--92bcb094-337d-57e7-ad09-821c4b583e5c",
+                "relationship--e142048e-3e3e-5dcb-b8ac-9a3b975c61be",
                 "relationship--c0ea95fd-4111-5c59-94d3-9abf219cd1cf",
                 "relationship--2dbecd24-81aa-5871-906b-6b49b9000a6d",
                 "relationship--d9e064ad-8b56-583a-9bfc-ef8ef621b815",
-                "relationship--dc7a3cc6-5c39-57b6-b80f-7783d881c9bc",
+                "relationship--476f21dc-0024-5591-a8fd-5b56b4cb054b",
                 "relationship--1749048f-ae10-58ea-9e2b-e4d8966b815d",
                 "relationship--f7e989d1-93cf-52ea-aace-cabbae6add7f",
                 "relationship--1cbc12a4-60ee-58e5-a031-2bcb4e0918df",

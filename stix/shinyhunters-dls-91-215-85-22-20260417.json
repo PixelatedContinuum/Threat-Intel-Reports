@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--aa1e05e8-85e8-451e-8ce0-cf8c591d2e65",
+    "id": "bundle--075ae513-f8da-4cb6-a383-b2eb59eef7fb",
     "objects": [
         {
             "type": "identity",
@@ -301,12 +301,12 @@
             "id": "indicator--db177dd3-3823-541f-ba0d-1adfaf07b99e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.487741Z",
-            "modified": "2026-10-01T19:54:20.487741Z",
+            "modified": "2026-10-11T06:31:48.254169Z",
             "name": "MALW_ShinyHunters_RansomNote",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "/*\n   Yara Rule Set\n   Identifier: ShinyHunters DLS — Ransom Note and Identity Artifacts\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule MALW_ShinyHunters_RansomNote {\n   meta:\n      description = \"Detects the ShinyHunters Data Leak Site ransom note (INFORMATION.txt) by exact opening phrase and .onion mirror references distributed in actor ransom packages; presence on an enterprise file share is a high-confidence exfiltration indicator\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/\"\n      date = \"2026-04-17\"\n      family = \"ShinyHunters-DLS\"\n      malware_type = \"Extortion/DLS\"\n      campaign = \"ShinyHunters-DLS-91.215.85.22-20260417\"\n      id = \"cec16fca-e975-5ff5-9802-824fd6b03228\"\n   strings:\n      $s1 = \"This file has been downloaded from the ShinyHunters Data Leak Site (DLS)\" ascii\n      $s2 = \"leaked on the ShinyHunters DLS because the victim did not pay a ransom\" ascii\n      $s3 = \"shnyhntww34phqoa6dcgnvps2yu7dlwzmy5lkvejwjdo6z7bmgshzayd.onion\" ascii\n      $s4 = \"shinypogk4jjniry5qi7247tznop6mxdrdte2k6pdu5cyo43vdzmrwid.onion\" ascii\n      $s5 = \"toolatedhs5dtr2pv6h5kdraneak5gs3sxrecqhoufc5e45edior7mqd.onion\" ascii\n      $s6 = \"pay_or_leak\" ascii\n   condition:\n      filesize < 500KB and\n      ($s1 or $s2) and\n      (1 of ($s3, $s4, $s5) or $s6)\n}",
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: ShinyHunters DLS — Ransom Note and Identity Artifacts\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule MALW_ShinyHunters_RansomNote {\n   meta:\n      description = \"Detects the ShinyHunters Data Leak Site ransom note (INFORMATION.txt) by one of two verbatim phrases (the DLS download sentence or the leaked-because-the-victim-did-not-pay sentence) together with one of three .onion mirror addresses or the pay_or_leak path token, as distributed in actor ransom packages; presence on an enterprise file share is a high-confidence exfiltration indicator\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/\"\n      date = \"2026-04-17\"\n      family = \"ShinyHunters-DLS\"\n      malware_type = \"Extortion/DLS\"\n      campaign = \"ShinyHunters-DLS-91.215.85.22-20260417\"\n      id = \"cec16fca-e975-5ff5-9802-824fd6b03228\"\n   strings:\n      $s1 = \"This file has been downloaded from the ShinyHunters Data Leak Site (DLS)\" ascii\n      $s2 = \"leaked on the ShinyHunters DLS because the victim did not pay a ransom\" ascii\n      $s3 = \"shnyhntww34phqoa6dcgnvps2yu7dlwzmy5lkvejwjdo6z7bmgshzayd.onion\" ascii\n      $s4 = \"shinypogk4jjniry5qi7247tznop6mxdrdte2k6pdu5cyo43vdzmrwid.onion\" ascii\n      $s5 = \"toolatedhs5dtr2pv6h5kdraneak5gs3sxrecqhoufc5e45edior7mqd.onion\" ascii\n      $s6 = \"pay_or_leak\" ascii\n   condition:\n      filesize < 500KB and\n      ($s1 or $s2) and\n      (1 of ($s3, $s4, $s5) or $s6)\n}",
             "pattern_type": "yara",
             "valid_from": "2026-04-17T00:00:00Z",
             "labels": [
@@ -364,12 +364,12 @@
             "id": "indicator--5f6554f3-5bdd-505f-b876-be9d45b926c1",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.488043Z",
-            "modified": "2026-10-01T19:54:20.488043Z",
+            "modified": "2026-10-11T06:31:48.254611Z",
             "name": "MALW_ShinyHunters_DLS_HTML",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule MALW_ShinyHunters_DLS_HTML {\n   meta:\n      description = \"Detects ShinyHunters clearnet identity page (shinyhunte.rs) HTML artifacts by page title, full PGP URL path, and .onion mirror references co-occurring in HTML content; intended for threat-intel collection review, proxy-cache hunting, and CASB alerting rather than production endpoint blocking\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/\"\n      date = \"2026-04-17\"\n      family = \"ShinyHunters-DLS\"\n      malware_type = \"Extortion/DLS\"\n      campaign = \"ShinyHunters-DLS-91.215.85.22-20260417\"\n      id = \"ae8d24ef-9ee5-5611-9165-f27338ffde7a\"\n   strings:\n      $s1 = \"Scattered LAPSUS$ Hunters | DLS\" ascii\n      $s2 = \"ShinyHunters Data Leak Site\" ascii\n      $s3 = \"shinyhunte.rs/newpgp\" ascii\n      $s4 = \"shnyhntww34phqoa6dcgnvps2yu7dlwzmy5lkvejwjdo6z7bmgshzayd\" ascii\n      $s5 = \"/pay_or_leak/\" ascii\n   condition:\n      filesize < 2MB and\n      ($s1 or $s2) and\n      1 of ($s3, $s4, $s5)\n}",
+            "pattern": "rule MALW_ShinyHunters_DLS_HTML {\n   meta:\n      description = \"Detects ShinyHunters clearnet identity page (shinyhunte.rs) HTML artifacts by one of two page-title strings together with at least one of the PGP URL path, the main .onion mirror address or the /pay_or_leak/ path; intended for threat-intel collection review, proxy-cache hunting, and CASB alerting rather than production endpoint blocking\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/\"\n      date = \"2026-04-17\"\n      family = \"ShinyHunters-DLS\"\n      malware_type = \"Extortion/DLS\"\n      campaign = \"ShinyHunters-DLS-91.215.85.22-20260417\"\n      id = \"ae8d24ef-9ee5-5611-9165-f27338ffde7a\"\n   strings:\n      $s1 = \"Scattered LAPSUS$ Hunters | DLS\" ascii\n      $s2 = \"ShinyHunters Data Leak Site\" ascii\n      $s3 = \"shinyhunte.rs/newpgp\" ascii\n      $s4 = \"shnyhntww34phqoa6dcgnvps2yu7dlwzmy5lkvejwjdo6z7bmgshzayd\" ascii\n      $s5 = \"/pay_or_leak/\" ascii\n   condition:\n      filesize < 2MB and\n      ($s1 or $s2) and\n      1 of ($s3, $s4, $s5)\n}",
             "pattern_type": "yara",
             "valid_from": "2026-04-17T00:00:00Z",
             "labels": [

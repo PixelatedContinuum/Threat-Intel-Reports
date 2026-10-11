@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--2cf6d574-9d11-468f-943f-afefdf3ea30e",
+    "id": "bundle--7e9fdb46-a487-4d9f-b183-8276b5b89191",
     "objects": [
         {
             "type": "identity",
@@ -1152,33 +1152,12 @@
             "id": "indicator--c5b12693-57ce-5f1d-9db2-ce9a17f52fe1",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.816427Z",
-            "modified": "2026-10-01T19:54:22.816427Z",
+            "modified": "2026-10-11T06:31:51.273012Z",
             "name": "vlc_boxed.exe DGA Malware Run Key Persistence via VLC Name Masquerade",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: vlc_boxed.exe DGA Malware Run Key Persistence via VLC Name Masquerade\nid: e90b3fbd-823b-4218-a548-6c39376438f4\nstatus: experimental\ndescription: >-\n    Detects registry persistence write for vlc_boxed.exe, an Enigma Virtual Box-packed DGA-capable\n    malware family that masquerades as VLC Media Player. The malware creates a Run key value named\n    'vlctask' pointing to '%APPDATA%\\vlcapp\\vlc.exe' — a path not used by legitimate VLC\n    installations, which install to %ProgramFiles%. Presence of this key indicates successful\n    persistence establishment by an unidentified DGA-capable malware family confirmed in this campaign.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/\nauthor: The Hunters Ledger\ndate: 2026-03-17\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.stealth\n    - attack.t1547.001\n    - attack.t1036.005\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection:\n        TargetObject|contains: '\\CurrentVersion\\Run\\vlctask'\n    condition: selection\nfalsepositives:\n    - Unlikely — legitimate VLC Media Player does not use the vlctask Run key value name or the AppData\\vlcapp path\nlevel: high",
-            "pattern_type": "sigma",
-            "valid_from": "2026-03-16T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "indicator",
-            "spec_version": "2.1",
-            "id": "indicator--bc68b312-306a-54fe-8d28-0703c85f896f",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:22.81651Z",
-            "modified": "2026-10-01T19:54:22.81651Z",
-            "name": "ScreenConnect Phishing VBScript Dropper Silent MSI Install Chain",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "title: ScreenConnect Phishing VBScript Dropper Silent MSI Install Chain\nid: c48377bd-0066-4bb0-8cc7-4041cd0a0e54\nstatus: experimental\ndescription: >-\n    Detects the ScreenConnect phishing dropper chain where a VBScript (Attachment.vbs) spawns\n    msiexec.exe with silent install flags (/quiet ALLUSERS=2) to install ConnectWise ScreenConnect\n    without user interaction. The dropper downloads the MSI from the operator distribution domain\n    using MSXML2.ServerXMLHTTP.6.0 with SSL verification deliberately bypassed. wscript.exe\n    spawning msiexec.exe with ALLUSERS=2 is characteristic of this phishing dropper and is not\n    expected behavior in legitimate software deployment from this parent process.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/\nauthor: The Hunters Ledger\ndate: 2026-03-17\ntags:\n    - attack.execution\n    - attack.stealth\n    - attack.t1059.005\n    - attack.t1218.007\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_parent:\n        ParentImage|endswith: '\\wscript.exe'\n    selection_child:\n        Image|endswith: '\\msiexec.exe'\n        CommandLine|contains|all:\n            - '/quiet'\n            - 'ALLUSERS=2'\n    condition: selection_parent and selection_child\nfalsepositives:\n    - Legitimate software deployment scripts that invoke msiexec silently from wscript.exe; validate MSI download source URL and installation target domain against known-good deployment infrastructure\nlevel: high",
+            "pattern": "title: vlc_boxed.exe DGA Malware Run Key Persistence via VLC Name Masquerade\nid: e90b3fbd-823b-4218-a548-6c39376438f4\nstatus: experimental\ndescription: >-\n    Detects registry persistence write for vlc_boxed.exe, an Enigma Virtual Box-packed DGA-capable\n    malware family that masquerades as VLC Media Player. The malware creates a Run key value named\n    'vlctask' pointing to '%APPDATA%\\vlcapp\\vlc.exe' — a path not used by legitimate VLC\n    installations, which install to %ProgramFiles%. Presence of this key indicates successful\n    persistence establishment by an unidentified DGA-capable malware family confirmed in this campaign.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/\nauthor: The Hunters Ledger\ndate: 2026-03-17\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.stealth\n    - attack.t1547.001\n    - attack.t1036.005\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection_value_name:\n        TargetObject|contains: '\\CurrentVersion\\Run\\vlctask'\n    selection_target:\n        Details|contains: '\\vlcapp\\vlc.exe'\n    condition: selection_value_name and selection_target\nfalsepositives:\n    - Unlikely — legitimate VLC Media Player does not use the vlctask Run key value name or the AppData\\vlcapp path\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-03-16T00:00:00Z",
             "labels": [
@@ -1194,12 +1173,12 @@
             "id": "indicator--9e604559-a28b-5b80-87b4-58b9cba0471f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.816593Z",
-            "modified": "2026-10-01T19:54:22.816593Z",
+            "modified": "2026-10-11T06:31:51.273111Z",
             "name": "Raven RAT Persistence via WindowsService Run Key Masquerade",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Raven RAT Persistence via WindowsService Run Key Masquerade\nid: 9ad1fd97-8a23-42fd-8ab6-210999dd6d9c\nstatus: experimental\ndescription: >-\n    Detects Raven RAT (custom Delphi RAT developed by the ZeroTrace cluster) establishing\n    persistence via a Run key entry named 'WindowsService' under\n    HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run. This value name is a deliberate\n    masquerade intended to appear as a legitimate Windows service entry to casual inspection.\n    Raven RAT provides keylogging, hidden VNC desktop creation, cryptocurrency wallet theft\n    (Exodus, Atomic Wallet, Guarda, Wasabi), and SOCKS proxy capabilities. The value name is a\n    generic literal an operator can trivially rename in a future build, so this rule is scoped\n    as a hunting lead rather than a high-fidelity alert.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/\nauthor: The Hunters Ledger\ndate: 2026-03-17\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.stealth\n    - attack.t1547.001\n    - attack.t1036.005\n    - detection.emerging-threats\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection:\n        TargetObject|contains: '\\CurrentVersion\\Run\\WindowsService'\n    filter_legitimate:\n        Details|startswith:\n            - 'C:\\Windows\\System32\\'\n            - 'C:\\Windows\\SysWOW64\\'\n    condition: selection and not filter_legitimate\nfalsepositives:\n    - Poorly named legitimate software that uses 'WindowsService' as a Run key value name; validate that the target binary path is outside System32 and Program Files before actioning\nlevel: medium",
+            "pattern": "title: Raven RAT Persistence via WindowsService Run Key Masquerade\nid: 9ad1fd97-8a23-42fd-8ab6-210999dd6d9c\nstatus: experimental\ndescription: >-\n    Detects Raven RAT (custom Delphi RAT developed by the ZeroTrace cluster) establishing\n    persistence via a Run key entry named 'WindowsService' under\n    HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run (Sysmon renders the per-user hive\n    as HKU\\<SID>, which the rule tests). This value name is a deliberate\n    masquerade intended to appear as a legitimate Windows service entry to casual inspection.\n    Raven RAT provides keylogging, hidden VNC desktop creation, cryptocurrency wallet theft\n    (Exodus, Atomic Wallet, Guarda, Wasabi), and SOCKS proxy capabilities. The value name is a\n    generic literal an operator can trivially rename in a future build, so this rule is scoped\n    as a hunting lead rather than a high-fidelity alert.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/\nauthor: The Hunters Ledger\ndate: 2026-03-17\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.stealth\n    - attack.t1547.001\n    - attack.t1036.005\n    - detection.emerging-threats\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection_value_name:\n        TargetObject|contains: '\\CurrentVersion\\Run\\WindowsService'\n    selection_hive:\n        TargetObject|startswith: 'HKU\\'\n    filter_legitimate:\n        Details|startswith:\n            - 'C:\\Windows\\System32\\'\n            - 'C:\\Windows\\SysWOW64\\'\n    condition: selection_value_name and selection_hive and not filter_legitimate\nfalsepositives:\n    - Poorly named legitimate software that uses 'WindowsService' as a Run key value name; validate that the target binary path is outside System32 and Program Files before actioning\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-03-16T00:00:00Z",
             "labels": [
@@ -1212,15 +1191,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--30fad187-fc69-5c20-911b-e4fad35f3e7a",
+            "id": "indicator--94c01b5c-823e-5e6a-91b4-0ba3a0c81303",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:22.816675Z",
-            "modified": "2026-10-01T19:54:22.816675Z",
-            "name": "Fileless PowerShell PE Dropper ExecutionPolicy Bypass from Non-Standard Parent",
+            "created": "2026-10-11T06:31:51.27321Z",
+            "modified": "2026-10-11T06:31:51.27321Z",
+            "name": "PowerShell ExecutionPolicy Bypass With a .ps1 Under a User-Writable Path From a Non-Standard Parent",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Fileless PowerShell PE Dropper ExecutionPolicy Bypass from Non-Standard Parent\nid: 945438df-0fc1-4861-9ed6-4c66ae11e700\nstatus: experimental\ndescription: >-\n    Detects execution of PowerShell with -ExecutionPolicy Bypass loading a .ps1 file from\n    non-standard parent processes, consistent with the puf.ps1 and sync.ps1 fileless PE dropper\n    chain used in this campaign. These droppers hex-decode an embedded 310KB .NET PE assembly and\n    load it entirely in memory via Assembly.Load with no disk write, bypassing file-based detection.\n    The rule targets PowerShell spawned by remote access tools, command shells, or scripting\n    interpreters not expected to launch PowerShell with policy bypass flags in normal operations.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/\nauthor: The Hunters Ledger\ndate: 2026-03-17\ntags:\n    - attack.execution\n    - attack.stealth\n    - attack.t1059.001\n    - attack.t1027.011\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        Image|endswith: '\\powershell.exe'\n        CommandLine|contains|all:\n            - '-ExecutionPolicy'\n            - 'Bypass'\n            - '.ps1'\n    selection_staging_path:\n        CommandLine|contains:\n            - '\\AppData\\'\n            - '\\Temp\\'\n            - '\\ProgramData\\'\n            - '\\Users\\Public\\'\n            - '\\Downloads\\'\n            - '\\$Recycle.Bin\\'\n    filter_standard_parents:\n        ParentImage|endswith:\n            - '\\explorer.exe'\n            - '\\services.exe'\n            - '\\svchost.exe'\n            - '\\msiexec.exe'\n    condition: selection and selection_staging_path and not filter_standard_parents\nfalsepositives:\n    - Software installers and updaters that stage a setup script under %TEMP% or %APPDATA% and invoke it with a policy bypass from a parent not on the standard-parent list\n    - Legitimate administrative scripts invoked via remote management tools, scheduled tasks, or software deployment systems; extend filter_standard_parents to include known-good deployment parent images in the target environment\nlevel: medium",
+            "pattern": "title: PowerShell ExecutionPolicy Bypass With a .ps1 Under a User-Writable Path From a Non-Standard Parent\nid: 945438df-0fc1-4861-9ed6-4c66ae11e700\nstatus: experimental\ndescription: >-\n    Detects powershell.exe whose command line contains -ExecutionPolicy, Bypass and .ps1 together\n    with a user-writable staging directory (AppData, Temp, ProgramData, Users\\Public, Downloads,\n    $Recycle.Bin) anywhere in the command line, when the parent is not explorer.exe, services.exe,\n    svchost.exe or msiexec.exe. The puf.ps1 and sync.ps1 droppers in this campaign hex-decode an\n    embedded .NET PE assembly and load it in memory via Assembly.Load, but the rule tests none of\n    that: no in-memory loading, no PE and no Assembly.Load appear in a process-creation event, and\n    the staging-directory test is a substring of the whole command line, not a check of the\n    script's own path. The report does not say where puf.ps1 and sync.ps1 were run from.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/\nauthor: The Hunters Ledger\ndate: 2026-03-17\ntags:\n    - attack.execution\n    - attack.stealth\n    - attack.t1059.001\n    - attack.t1027.011\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        Image|endswith: '\\powershell.exe'\n        CommandLine|contains|all:\n            - '-ExecutionPolicy'\n            - 'Bypass'\n            - '.ps1'\n    selection_staging_path:\n        CommandLine|contains:\n            - '\\AppData\\'\n            - '\\Temp\\'\n            - '\\ProgramData\\'\n            - '\\Users\\Public\\'\n            - '\\Downloads\\'\n            - '\\$Recycle.Bin\\'\n    filter_standard_parents:\n        ParentImage|endswith:\n            - '\\explorer.exe'\n            - '\\services.exe'\n            - '\\svchost.exe'\n            - '\\msiexec.exe'\n    condition: selection and selection_staging_path and not filter_standard_parents\nfalsepositives:\n    - Software installers and updaters that stage a setup script under %TEMP% or %APPDATA% and invoke it with a policy bypass from a parent not on the standard-parent list\n    - Legitimate administrative scripts invoked via remote management tools, scheduled tasks, or software deployment systems; extend filter_standard_parents to include known-good deployment parent images in the target environment\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-03-16T00:00:00Z",
             "labels": [
@@ -1233,15 +1212,36 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--bfa14d7e-0d6c-5b99-9869-496e136b403d",
+            "id": "indicator--41c06762-b19d-5c84-b077-ae2683ed5a11",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:22.816758Z",
-            "modified": "2026-10-01T19:54:22.816758Z",
-            "name": "THL DETECT MaaS Toolkit PureRAT v4.1.9 Protocol Preamble Before TLS to Confirmed C2 Ports",
+            "created": "2026-10-11T06:31:51.273309Z",
+            "modified": "2026-10-11T06:31:51.273309Z",
+            "name": "WScript Spawning Msiexec Silent Install With ALLUSERS=2 (ScreenConnect Dropper Pattern)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET [56001,56002,56003] (msg:\"THL DETECT MaaS Toolkit PureRAT v4.1.9 Protocol Preamble Before TLS to Confirmed C2 Ports\"; flow:established,to_server; content:\"|04 00 00 00|\"; depth:4; threshold:type limit,track by_src,count 1,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/; classtype:trojan-activity; sid:9001002; rev:3; metadata:author The_Hunters_Ledger, date 2026-03-17;)",
+            "pattern": "title: WScript Spawning Msiexec Silent Install With ALLUSERS=2 (ScreenConnect Dropper Pattern)\nid: c48377bd-0066-4bb0-8cc7-4041cd0a0e54\nstatus: experimental\ndescription: >-\n    Detects wscript.exe spawning msiexec.exe with both /quiet and ALLUSERS=2 in the command line,\n    the installer step of the ScreenConnect phishing dropper in this campaign: the report records\n    that Attachment.vbs downloads the ScreenConnect MSI with MSXML2.ServerXMLHTTP.6.0 and SSL\n    verification deliberately bypassed, then runs msiexec /i with /quiet and ALLUSERS=2. The rule\n    tests the parent image and those two command-line tokens only. It does not identify the MSI,\n    its source or ScreenConnect, and a legitimate deployment script that installs silently from\n    wscript.exe matches the same way, so a hit is a hunting lead and not a ScreenConnect finding.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/\nauthor: The Hunters Ledger\ndate: 2026-03-17\ntags:\n    - attack.execution\n    - attack.stealth\n    - attack.t1059.005\n    - attack.t1218.007\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_parent:\n        ParentImage|endswith: '\\wscript.exe'\n    selection_child:\n        Image|endswith: '\\msiexec.exe'\n        CommandLine|contains|all:\n            - '/quiet'\n            - 'ALLUSERS=2'\n    condition: selection_parent and selection_child\nfalsepositives:\n    - Legitimate software deployment scripts that invoke msiexec silently from wscript.exe; validate MSI download source URL and installation target domain against known-good deployment infrastructure\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-03-16T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--d2f05264-98a3-50cf-9df5-8d84760c3143",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-11T06:31:51.273409Z",
+            "modified": "2026-10-11T06:31:51.273409Z",
+            "name": "THL DETECT MaaS Toolkit PureRAT v4.1.9 Four-Byte Preamble on Ports 56001 to 56003 (C2 Protocol Framing)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET [56001,56002,56003] (msg:\"THL DETECT MaaS Toolkit PureRAT v4.1.9 Four-Byte Preamble on Ports 56001 to 56003 (C2 Protocol Framing)\"; flow:established,to_server; content:\"|04 00 00 00|\"; depth:4; threshold:type limit,track by_src,count 1,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/; classtype:trojan-activity; sid:9001002; rev:4; metadata:author The_Hunters_Ledger, date 2026-03-17;)",
             "pattern_type": "suricata",
             "valid_from": "2026-03-16T00:00:00Z",
             "labels": [
@@ -2271,20 +2271,6 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--38ea8b4f-de25-5ed4-9268-398559f6fd13",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:22.823242Z",
-            "modified": "2026-10-01T19:54:22.823242Z",
-            "relationship_type": "indicates",
-            "source_ref": "indicator--bc68b312-306a-54fe-8d28-0703c85f896f",
-            "target_ref": "malware--edd2227f-6e9c-52c1-b7d6-e456aff9f6a1",
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "relationship",
-            "spec_version": "2.1",
             "id": "relationship--f81ef77f-7e2b-588d-96b6-a746679d1672",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.823309Z",
@@ -2299,12 +2285,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--5421eafc-48a5-527c-b899-2cb3f3fb7ae8",
+            "id": "relationship--bbe096a7-b0ae-58a1-bde2-b9913d025fa1",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:22.823376Z",
-            "modified": "2026-10-01T19:54:22.823376Z",
+            "created": "2026-10-11T06:31:51.281043Z",
+            "modified": "2026-10-11T06:31:51.281043Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--30fad187-fc69-5c20-911b-e4fad35f3e7a",
+            "source_ref": "indicator--94c01b5c-823e-5e6a-91b4-0ba3a0c81303",
             "target_ref": "malware--edd2227f-6e9c-52c1-b7d6-e456aff9f6a1",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -2313,12 +2299,26 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--f82b458d-6c29-5dd0-8dcb-d710e25e78d0",
+            "id": "relationship--90c3633c-27ea-5418-9394-4691e27d1cf6",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:22.823442Z",
-            "modified": "2026-10-01T19:54:22.823442Z",
+            "created": "2026-10-11T06:31:51.281121Z",
+            "modified": "2026-10-11T06:31:51.281121Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--bfa14d7e-0d6c-5b99-9869-496e136b403d",
+            "source_ref": "indicator--41c06762-b19d-5c84-b077-ae2683ed5a11",
+            "target_ref": "malware--edd2227f-6e9c-52c1-b7d6-e456aff9f6a1",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--a7b217a5-8380-5562-9cfc-41a7f3865a90",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-11T06:31:51.281199Z",
+            "modified": "2026-10-11T06:31:51.281199Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--d2f05264-98a3-50cf-9df5-8d84760c3143",
             "target_ref": "malware--edd2227f-6e9c-52c1-b7d6-e456aff9f6a1",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -3002,7 +3002,7 @@
             "id": "report--6a5d5aeb-1950-5205-a90e-967908691438",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.827099Z",
-            "modified": "2026-10-01T19:54:22.827099Z",
+            "modified": "2026-10-11T06:31:51.285899Z",
             "name": "ZeroTrace Multi-Family MaaS Operation, Open Directory Exposure at 74.0.42.25",
             "report_types": [
                 "threat-report"
@@ -3092,10 +3092,10 @@
                 "indicator--79b3c1fe-e79f-5061-8721-ece313caad13",
                 "indicator--214dab3b-a6a8-5097-9c5d-9398b59eef78",
                 "indicator--c5b12693-57ce-5f1d-9db2-ce9a17f52fe1",
-                "indicator--bc68b312-306a-54fe-8d28-0703c85f896f",
                 "indicator--9e604559-a28b-5b80-87b4-58b9cba0471f",
-                "indicator--30fad187-fc69-5c20-911b-e4fad35f3e7a",
-                "indicator--bfa14d7e-0d6c-5b99-9869-496e136b403d",
+                "indicator--94c01b5c-823e-5e6a-91b4-0ba3a0c81303",
+                "indicator--41c06762-b19d-5c84-b077-ae2683ed5a11",
+                "indicator--d2f05264-98a3-50cf-9df5-8d84760c3143",
                 "tool--bc5539c6-9831-5db9-a93b-d181e0311bc8",
                 "malware--1acc6657-08e1-561c-96b4-1a81b2c2569e",
                 "malware--6b449def-f384-5e5b-b910-a189a0626375",
@@ -3167,10 +3167,10 @@
                 "relationship--a14aece0-d46a-5d44-97e4-3b035e8d54b1",
                 "relationship--a8b96c09-cd91-5b4c-b03e-c218a7f07090",
                 "relationship--93fff54f-64da-5d83-ac88-f5011d7629e6",
-                "relationship--38ea8b4f-de25-5ed4-9268-398559f6fd13",
                 "relationship--f81ef77f-7e2b-588d-96b6-a746679d1672",
-                "relationship--5421eafc-48a5-527c-b899-2cb3f3fb7ae8",
-                "relationship--f82b458d-6c29-5dd0-8dcb-d710e25e78d0",
+                "relationship--bbe096a7-b0ae-58a1-bde2-b9913d025fa1",
+                "relationship--90c3633c-27ea-5418-9394-4691e27d1cf6",
+                "relationship--a7b217a5-8380-5562-9cfc-41a7f3865a90",
                 "relationship--0063c5bd-77e6-5f78-b5cd-3da2b39b67dc",
                 "relationship--c1bda464-bcf4-5691-bd5d-e3ea655b87d3",
                 "relationship--f0c038fb-ba9a-5601-b027-5a93dbd34742",

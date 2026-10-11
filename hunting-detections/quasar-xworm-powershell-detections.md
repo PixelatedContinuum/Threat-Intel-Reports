@@ -37,13 +37,14 @@ This campaign chains a VBScript dropper, a PowerShell loader that pulls a payloa
 
 ### Hunting Rules
 
-#### PowerShell Microsoft Defender Exclusion Script
+#### PowerShell Defender Exclusion Script Naming update.png
 
 **Tier:** Hunting
-**Robustness:** 2
+**Robustness:** 1
 **ATT&CK Coverage:** T1685 (Disable or Modify Tools)
 **Confidence:** MODERATE
-**Rationale:** Matches a PowerShell script that adds Microsoft Defender exclusions for the payload path and the loader's helper processes. The `Add-MpPreference -ExclusionPath` / `-ExclusionProcess` combination is a real Defender-tampering technique, but it is also used by legitimate administrators and security tooling, so it is a broad hunting lead rather than a family-specific alerting signature. The build-specific `update.png` literal narrows the current sample but is trivially renamed, so the rule keys on the technique, not the campaign.
+**Rationale:** Matches a file that holds `Add-MpPreference`, `-ExclusionPath`, `-ExclusionProcess` and the string `update.png`, all four required (`all of them`). The first three together are a real Defender-tampering technique that legitimate administrators and security tooling also use. *Wording fix 2026-10-11:* the earlier text said the rule keys on the technique and not the campaign, but the `update.png` literal is required, so a generic exclusion script without it does not match; the literal is the campaign's payload file name, is trivially renamed, and it is also what makes the rule narrow today. It is therefore a campaign-bound Hunting rule with a technique-level core, and no file-size bound is applied, so any file of any size holding the four strings matches.
+**Blind Spots:** A build that renames `update.png` evades although it still uses the technique; an exclusion script that uses `Set-MpPreference` or splits the cmdlet and parameter names across string concatenation evades; the rule does not read which paths or processes are excluded.
 **False Positives:**
 - Legitimate administrator or endpoint-management scripts that add Defender exclusions for approved software.
 - Security or backup products that register their own process/path exclusions during installation.
@@ -60,7 +61,7 @@ This campaign chains a VBScript dropper, a PowerShell loader that pulls a payloa
 
 rule PS_Defender_Exclusion_Quasar_Xworm {
    meta:
-      description = "Detects a PowerShell Microsoft Defender exclusion script used by the QuasarRAT/Xworm PowerShell loader campaign to whitelist the payload path and loader helper processes (powershell.exe, wscript.exe, cmd.exe, cvtres.exe)"
+      description = "Detects a file containing all of Add-MpPreference, -ExclusionPath, -ExclusionProcess and the build-specific string update.png (any case, ASCII or UTF-16), the Defender exclusion step of the QuasarRAT/Xworm PowerShell loader campaign; the report records exclusions for the C:\\ drive and the processes powershell.exe, wscript.exe, cmd.exe and cvtres.exe, which the rule does not test"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/quasar-xworm-powershell-detections/"

@@ -48,16 +48,16 @@ This campaign distributes two unrelated RAT families from one open-directory ser
 
 **Shadow RAT v2.6.4.0**
 
-#### Shadow RAT v2.6.4.0 Client: Namespace + Costura Fingerprint
+#### Shadow RAT Client: Namespace Strings, Version and Mutex Fingerprint
 
 **Tier:** Detection
 **Robustness:** 3
 **ATT&CK Coverage:** T1027.002 (Software Packing — .NET Reactor), T1573.001 (Symmetric Cryptography — AES-256 encrypted C2)
 **Confidence:** HIGH
-**Rationale:** `Shadow.Common.*` is the namespace root of this Quasar-fork codebase and survives the sample's .NET Reactor packing pass intact; renaming it would require re-architecting the client across every message-handling class. The Costura.Fody marker, the pinned version constant, and the single-instance mutex GUID provide three independent corroborating anchors, so no single renameable literal carries the rule alone.
-**False Positives:** None known — the `Shadow.Common.*` namespace hierarchy and `costura.shadow.common.dll.compressed` asset name are distinctive compiled identifiers not present in any known legitimate .NET software.
+**Rationale:** `Shadow.Common.*` is the namespace root of this Quasar-fork codebase and survives the sample's .NET Reactor packing pass intact. The rule has three branches: three of four strings from the three namespace names and the Costura asset name; the `2.6.4.0` version constant together with the single-instance mutex GUID; or `Shadow Client` plus `Shadow Client Startup` plus one namespace name. Every branch needs at least two strings, so no single renameable literal carries the rule alone. *Rename and wording fix 2026-10-11:* the heading and rule name said v2.6.4.0 and promised a namespace plus Costura fingerprint, but the version is tested only by the second branch and the Costura asset is optional in the first, so the heading and rule name (`RAT_ShadowRAT_v2640_Client`, now `RAT_ShadowRAT_Client_Namespace_Version_Mutex`, with the matching deterministic `id`) no longer name a version or promise the Costura asset.
+**False Positives:** None known. The `Shadow.Common.*` namespace hierarchy and the `costura.shadow.common.dll.compressed` asset name are distinctive compiled identifiers not seen in any known legitimate .NET software; the version-plus-mutex branch rests on the GUID, since `2.6.4.0` alone is an ordinary version string. Not goodware-validated.
 **Blind Spots:** A full rebrand that renames the `Shadow.*` namespace root and the Costura asset simultaneously would evade; the rule targets the on-disk/in-memory client, not a hypothetical script-only loader.
-**Validation:** Scan a Shadow RAT client build (either `hash1` below) — the namespace/version/mutex combination must match; a benign Costura-packed .NET application must NOT fire.
+**Validation:** Scan a Shadow RAT client build (either `hash1` below): at least one of the three branches must match; a benign Costura-packed .NET application must NOT fire.
 **Deployment:** Endpoint AV/EDR file scan, memory scanner, email gateway attachment scan.
 
 ```yara
@@ -69,9 +69,9 @@ This campaign distributes two unrelated RAT families from one open-directory ser
    License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/
 */
 
-rule RAT_ShadowRAT_v2640_Client {
+rule RAT_ShadowRAT_Client_Namespace_Version_Mutex {
    meta:
-      description = "Detects Shadow RAT v2.6.4.0 client based on characteristic namespace strings, version constant, and Costura.Fody embedded assembly markers. Shadow RAT is a heavily modified Quasar RAT fork with HVNC, WinRE persistence, crypto clipper, and Kematian stealer integration."
+      description = "Detects the Shadow RAT client by any one of three string combinations: three of the Shadow.Common.Messages, Shadow.Common.Cryptography, Shadow.Client.Steam and costura.shadow.common.dll.compressed strings; the 2.6.4.0 version constant with the single-instance mutex GUID; or the Shadow Client and Shadow Client Startup strings with one Shadow namespace string. Only the second branch tests the version, and no branch requires the Costura asset. Shadow RAT is a heavily modified Quasar RAT fork with HVNC, WinRE persistence, crypto clipper, and Kematian stealer integration."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/shadow-xworm-opendirectory-detections/"
@@ -82,7 +82,7 @@ rule RAT_ShadowRAT_v2640_Client {
       family = "ShadowRAT"
       malware_type = "RAT"
       campaign = "OpenDirectory-DualRAT-MaaS-151.245.112.70"
-      id = "70a5875f-aff5-5059-8daa-5bede1500425"
+      id = "b5534e60-539d-5b22-bd1b-8fe7af7936d0"
    strings:
       $s1 = "Shadow.Common.Messages" ascii wide
       $s2 = "Shadow.Common.Cryptography" ascii wide
@@ -143,22 +143,22 @@ rule RAT_ShadowRAT_CommonDLL {
 }
 ```
 
-#### Shadow RAT v2.6.4.0: AMSI + ETW Bypass Chain
+#### Shadow RAT AMSI Patch Shellcode or Asterisk-Padded AMSI and ETW String Fragments
 
 **Tier:** Detection
 **Robustness:** 3
 **ATT&CK Coverage:** T1685 (Disable or Modify Tools — AMSI + ETW bypass), T1027 (Obfuscated Files or Information — asterisk-padding obfuscation)
 **Confidence:** HIGH
-**Rationale:** The 15-byte AMSI patch shellcode is a technique chokepoint (the exact bytes needed to make `AmsiScanBuffer` return `E_INVALIDARG`) — legitimate software never embeds this sequence. The two OR'd string-combination branches add corroborating coverage from the asterisk-padding deobfuscation pattern used to hide the `amsi`/`Buffer`/`EtwEv`/`ntdll` literals from static string scanners.
-**False Positives:** None known from the byte pattern itself. The third branch (`.Replace("*","") + "EtwEv" + "ntdll"`) carries modest residual risk since `ntdll` alone is a common substring in P/Invoke-heavy .NET code, but requiring all three terms together makes an incidental benign collision unlikely.
+**Rationale:** The 15-byte AMSI patch shellcode is a technique chokepoint (the exact bytes needed to make `AmsiScanBuffer` return `E_INVALIDARG`). The two OR'd string-combination branches add corroborating coverage from the asterisk-padding deobfuscation pattern used to hide the `amsi`/`Buffer`/`EtwEv`/`ntdll` literals from static string scanners. *Rename and wording fix 2026-10-11:* the heading and rule name said Shadow RAT v2.6.4.0 and an AMSI + ETW chain, but each of the three branches fires alone, so a file with only the AMSI half or only the ETW half matches, and nothing ties a match to Shadow RAT or its version; the rule name is now `RAT_ShadowRAT_AMSI_Patch_Or_Padded_Bypass_Strings` with the matching deterministic `id`. The claim that legitimate software never embeds the shellcode bytes was not tested: a security tool or another malware family that reuses the same patch would match the first branch.
+**False Positives:** None known from the byte pattern in this sample set; not goodware-validated, and another tool or family that reuses the same AMSI patch bytes would match. The third branch (`.Replace("*","") + "EtwEv" + "ntdll"`) carries modest residual risk since `ntdll` alone is a common substring in P/Invoke-heavy .NET code, but requiring all three terms together makes an incidental benign collision unlikely.
 **Blind Spots:** A build using a different register/opcode encoding to achieve the same `E_INVALIDARG` return, or one that strips the asterisk-obfuscated literals entirely, evades the corresponding branch (though the byte pattern branch stands independently).
 **Validation:** Scan a Shadow RAT client build (`hash1` below) — the shellcode bytes or the obfuscated-string combination must match; a benign .NET binary referencing `ntdll.dll` in ordinary P/Invoke declarations must NOT fire on that branch alone (it also requires `.Replace("*","")` and `EtwEv`).
 **Deployment:** Endpoint AV/EDR file scan, memory scanner.
 
 ```yara
-rule RAT_ShadowRAT_AMSI_ETW_Bypass {
+rule RAT_ShadowRAT_AMSI_Patch_Or_Padded_Bypass_Strings {
    meta:
-      description = "Detects Shadow RAT v2.6.4.0 AMSI and ETW bypass chain. AMSI bypass patches AmsiScanBuffer with a 15-byte shellcode returning E_INVALIDARG (0x80070057). ETW bypass patches EtwEventWrite with a single RET instruction. Both API names are obfuscated using asterisk-padding with runtime Replace() deobfuscation to evade static analysis."
+      description = "Detects the Shadow RAT AMSI and ETW bypass artifacts by any one of three branches: the 15-byte shellcode that patches AmsiScanBuffer to return E_INVALIDARG (0x80070057), or the Replace(\"*\", \"\") deobfuscation string with the padded amsi.dll and AmsiScanBuffer fragments, or the same string with the EtwEv and ntdll fragments (the ETW patch is a single RET over EtwEventWrite). Each branch fires on its own; the rule does not test the Shadow namespace or version and does not require the AMSI and ETW halves together."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/shadow-xworm-opendirectory-detections/"
@@ -169,7 +169,7 @@ rule RAT_ShadowRAT_AMSI_ETW_Bypass {
       family = "ShadowRAT"
       malware_type = "RAT"
       campaign = "OpenDirectory-DualRAT-MaaS-151.245.112.70"
-      id = "ea233024-9c51-5881-a0a3-482fac88cb2f"
+      id = "41b37a99-0a66-5368-823f-567390fca6a7"
    strings:
       // AMSI bypass shellcode: mov eax,0x80070057; mov rax,[rsp]; add rsp,8; jmp rsp
       $b1 = { B8 57 00 07 80 48 8B 04 24 48 83 C4 08 FF E4 }
@@ -381,29 +381,31 @@ rule RAT_XWorm_Rijndael256ECB_Crypto {
 
 **XWorm 3.0-5.0**
 
-#### XWorm Scheduled Task Persistence with One-Minute Execution Interval
+#### One-Minute Highest-Privilege Scheduled Task With an AppData Roaming Path (XWorm Persistence Pattern)
 
 **Tier:** Detection
 **Robustness:** 3
 **ATT&CK Coverage:** T1053.005 (Scheduled Task)
 **Confidence:** HIGH
-**Rationale:** The combination of a 1-minute recurrence interval, HIGHEST privilege level, and execution from a user-writable AppData path is a technique-level chokepoint that does not depend on any XWorm-specific literal — no task name, mutex, or install filename is required. An attacker would have to abandon the near-instant-respawn design itself, not merely rename a string, to evade this rule.
-**False Positives:** No known legitimate software creates a one-minute-interval, HIGHEST-privilege scheduled task launching a binary from `AppData\Roaming`; IT deployment tools that use short-interval tasks typically run from Program Files, not AppData.
-**Blind Spots:** A slower respawn interval or a lower privilege level evades this specific rule (though doing so would also blunt the malware's own persistence goal); does not cover persistence mechanisms other than scheduled tasks.
+**Rationale:** The combination of a 1-minute recurrence interval, HIGHEST privilege level, and a user-writable AppData path on the `schtasks.exe` command line is a technique-level chokepoint that does not depend on any XWorm-specific literal — no task name, mutex, or install filename is required. An attacker would have to abandon the near-instant-respawn design itself, not merely rename a string, to evade this rule. *Wording and boundary fix 2026-10-11:* the title and description named XWorm, but nothing in the selection is XWorm-specific, so they now describe the pattern. The interval test was the substring `/mo 1`, which also matches `/mo 10`, `/mo 15` and `/mo 1440`, so a 15-minute task passed as a one-minute task; it is now `/mo 1 ` with a trailing space.
+**False Positives:** No legitimate software known to the report creates a one-minute-interval, HIGHEST-privilege scheduled task launching a binary from `AppData\Roaming`; IT deployment tools that use short-interval tasks typically run from Program Files, not AppData. This was not measured against a goodware corpus.
+**Blind Spots:** A slower respawn interval or a lower privilege level evades this specific rule (though doing so would also blunt the malware's own persistence goal); switches written with a dash (`-sc`, `-mo`) or in long form, or `/mo 1` at the very end of the line, evade; does not cover persistence mechanisms other than scheduled tasks.
 **Validation:** Trigger the malware's persistence routine — the `schtasks.exe` invocation must match; a legitimate IT deployment script scheduling a task from Program Files at a longer interval must NOT fire.
 **Deployment:** SIEM (Sysmon Event ID 1 / process_creation), EDR.
 
 ```yaml
-title: XWorm Scheduled Task Persistence with One-Minute Execution Interval
+title: One-Minute Highest-Privilege Scheduled Task With an AppData Roaming Path (XWorm Persistence Pattern)
 id: 94b6c01a-db65-4aa1-82c5-46eebc0c8ee5
 status: experimental
 description: |
-    Detects XWorm 3.0-5.0 creating a scheduled task that runs every one minute at HIGHEST
-    privilege level. This is the most aggressive of XWorm's three redundant persistence
-    mechanisms — the one-minute interval provides near-instant re-execution after process
-    termination and the HIGHEST privilege flag requests elevated execution context. The task
-    name is derived from the install filename (typically "XWormClient") and the action points
-    to the malware binary in %AppData%.
+    Detects a schtasks.exe command line that creates a task (/create) every minute (/sc minute
+    with /mo 1 followed by a space) at highest privilege (/rl highest) where the command line
+    contains \AppData\Roaming\. The report records this as the most aggressive of XWorm 3.0-5.0's
+    three redundant persistence mechanisms: the one-minute interval gives near-instant re-execution
+    after process termination, the highest-privilege flag requests an elevated context, the task
+    name is derived from the install filename (typically "XWormClient") and the action points to the
+    malware binary in %AppData%. The rule tests none of the task name, the action or the binary, and
+    the AppData\Roaming path may appear anywhere in the command line.
 references:
     - https://the-hunters-ledger.com/hunting-detections/shadow-xworm-opendirectory-detections/
 author: The Hunters Ledger
@@ -423,7 +425,7 @@ detection:
         CommandLine|contains|all:
             - '/create'
             - '/sc minute'
-            - '/mo 1'
+            - '/mo 1 '
             - '/rl highest'
     selection_path:
         CommandLine|contains:
@@ -444,8 +446,8 @@ level: high
 **Robustness:** 1
 **ATT&CK Coverage:** T1547.001 (Registry Run Keys / Startup Folder)
 **Confidence:** HIGH (behavior); brittle as a rule
-**Rationale:** The registry value name `Shadow Client Startup` and the `\SubDir\` install-path fragment are each single build-chosen literals joined by OR, not AND — either alone is sufficient to fire, and a rebuild that renames either the value name or the install directory evades. Durability governs over the rule's currently clean false-positive profile, so this is a Hunting anchor rather than a Detection one.
-**False Positives:** Unlikely today — no known legitimate software uses the value name "Shadow Client Startup" or a "\SubDir\" install path in this combination; a future rebuild renaming either evades entirely.
+**Rationale:** The registry value name `Shadow Client Startup` and the `\SubDir\` install-path fragment are each single build-chosen literals joined by OR, not AND: either alone is sufficient to fire, so a rebuild must rename both the value name and the install directory to evade. Durability governs over the rule's currently clean false-positive profile, so this is a Hunting anchor rather than a Detection one. *Logic and wording fix 2026-10-11:* the earlier description required the Run value name, but the install-path branch fired on a write to any registry key whose data held `\SubDir\Client.exe`; that branch now also requires a `\CurrentVersion\Run\` key, and the description states both alternatives. The earlier Rationale also said renaming either literal evades; with an OR it takes both.
+**False Positives:** Unlikely today — no known legitimate software uses the value name "Shadow Client Startup" or a "\SubDir\" install path in this combination; a rebuild renaming both evades entirely.
 **Deployment:** SIEM (Sysmon Event ID 13 / registry_set), EDR registry monitoring.
 
 ```yaml
@@ -453,11 +455,13 @@ title: Shadow RAT Registry Run Key Persistence
 id: ff8d332d-4f1f-44d7-89ac-5d4373f4a341
 status: experimental
 description: |
-    Detects Shadow RAT v2.6.4.0 creating a registry Run key for persistence with the
-    characteristic value name "Shadow Client Startup". This value points to the malware
-    install path at %APPDATA%\SubDir\Client.exe or %APPDATA%\SubDir\$77Client.exe depending
-    on the build variant (staging vs production). Presence of this key indicates an active
-    Shadow RAT infection with established persistence.
+    Detects a registry write for Shadow RAT v2.6.4.0 persistence by either of two alternatives: a
+    Run key value named "Shadow Client Startup", or any value under a CurrentVersion\Run key whose data
+    contains \SubDir\Client.exe or \SubDir\$77Client.exe (the report records the install path at
+    %APPDATA%\SubDir\Client.exe or %APPDATA%\SubDir\$77Client.exe, depending on the build variant,
+    staging or production). Either alternative alone fires, so the install-path alternative matches
+    under a different value name. A hit indicates Shadow RAT persistence on the strength of those two
+    build-chosen literals.
 references:
     - https://the-hunters-ledger.com/hunting-detections/shadow-xworm-opendirectory-detections/
 author: The Hunters Ledger
@@ -477,33 +481,37 @@ detection:
         Details|contains:
             - '\SubDir\Client.exe'
             - '\SubDir\$77Client.exe'
-    condition: selection_key or selection_data
+    selection_run_key:
+        TargetObject|contains: '\CurrentVersion\Run\'
+    condition: selection_key or (selection_data and selection_run_key)
 falsepositives:
     - No known legitimate software uses the registry value name "Shadow Client Startup"
 level: medium
 ```
 
-#### AMSI Bypass via Suspicious amsi.dll Load from Non-Standard Path
+#### AMSI Library Load by a Process Outside System32, Program Files and Common Interpreters (AMSI Patching Pattern)
 
 **Tier:** Hunting
 **Robustness:** 3
 **ATT&CK Coverage:** T1685 (Disable or Modify Tools — AMSI Bypass)
 **Confidence:** HIGH (technique); MEDIUM precision as written
-**Rationale:** This rule keys on no Shadow-RAT-specific literal at all — it is a durable, generic technique signal (any non-standard process loading `amsi.dll`) that would also catch other AMSI-patching malware. Durability is high, but the process exclusion list does not filter the many legitimate developer tools, custom .NET applications, and non-Program-Files installs that load `amsi.dll` during ordinary work, so this is a meaningfully noisy selector requiring analyst triage rather than auto-alerting.
+**Rationale:** This rule keys on no Shadow-RAT-specific literal at all: it is a durable, generic technique signal (a process outside the filtered locations loading `amsi.dll`) that would also catch other AMSI-patching malware. Durability is high, but the process exclusion list does not filter the many legitimate developer tools, custom .NET applications, and non-Program-Files installs that load `amsi.dll` during ordinary work, so this is a meaningfully noisy selector requiring analyst triage rather than auto-alerting. *Wording fix 2026-10-11:* the title and description said amsi.dll was loaded from a non-standard path, but the two filters test the loading process's image path and `ImageLoaded` is matched on the file name only; the malware loads the genuine System32 amsi.dll, so a path test on the DLL would not catch it.
 **False Positives:** Custom development tools, non-standard .NET installations, or portable applications built by developers running from user profile paths; security research tools that explicitly load `amsi.dll` for testing purposes.
 **Deployment:** SIEM (Sysmon Event ID 7 / image_load), EDR.
 
 ```yaml
-title: AMSI Bypass via Suspicious amsi.dll Load from Non-Standard Path
+title: AMSI Library Load by a Process Outside System32, Program Files and Common Interpreters (AMSI Patching Pattern)
 id: b02fa532-5fdd-4307-9a33-0d5935ffc4d0
 status: experimental
 description: |
-    Detects potential AMSI bypass attempts where a process loads amsi.dll from outside standard
-    system directories. Shadow RAT v2.6.4.0 loads amsi.dll to resolve and patch AmsiScanBuffer
-    with 15-byte shellcode returning E_INVALIDARG (0x80070057), effectively blinding in-memory
-    .NET scanning. Legitimate AMSI consumers (PowerShell, .NET host processes) load amsi.dll
-    from System32 or are explicitly filtered; a non-system, non-IDE process loading amsi.dll
-    from a user-writable path is a strong indicator of an AMSI patching attempt.
+    Detects a process loading a DLL named amsi.dll (from any path) when the loading process's
+    own image is not one of powershell.exe, pwsh.exe, dotnet.exe, csc.exe or msbuild.exe and is
+    not under C:\Windows\System32\, C:\Windows\SysWOW64\, C:\Program Files\ or
+    C:\Program Files (x86)\. Shadow RAT v2.6.4.0 loads amsi.dll to resolve and patch
+    AmsiScanBuffer with 15-byte shellcode returning E_INVALIDARG (0x80070057), effectively
+    blinding in-memory .NET scanning. The path test is on the loading process, not on where
+    amsi.dll was loaded from, so the genuine System32 amsi.dll loaded by an unexpected process
+    matches; a hit is a hunting lead for an AMSI patching attempt, not proof of one.
 references:
     - https://the-hunters-ledger.com/hunting-detections/shadow-xworm-opendirectory-detections/
 author: The Hunters Ledger
@@ -742,7 +750,7 @@ level: medium
 **Robustness:** 2
 **ATT&CK Coverage:** T1497.001 (Virtualization/Sandbox Evasion: System Checks)
 **Confidence:** HIGH (behavior — this URL/parameter combination is documented XWorm 3.0-5.0 builder behavior); the campaign's own IOC feed independently flags the domain as high FP risk
-**Rationale:** `ip-api.com` is a popular free geolocation API used broadly by legitimate scripts, monitoring tools, and desktop applications. DNS-layer visibility cannot see the `/line/?fields=hosting` path that narrows the companion Suricata signature for the same behavior, so a browser-only exclusion filter leaves substantial non-browser legitimate traffic unfiltered.
+**Rationale:** `ip-api.com` is a popular free geolocation API used broadly by legitimate scripts, monitoring tools, and desktop applications. DNS-layer visibility cannot see the `/line/?fields=hosting` path that narrows the companion Suricata signature for the same behavior, so a browser-only exclusion filter leaves substantial non-browser legitimate traffic unfiltered. *Logic and wording fix 2026-10-11:* the earlier description also excluded network tools, but only six browsers are filtered; and the name test was the substring `ip-api.com`, which also matched `notip-api.com` and `ip-api.com.example.net`, so it is now the exact name or a name ending `.ip-api.com`.
 **False Positives:** Legitimate applications using ip-api.com for geolocation or network diagnostics; network monitoring and IT asset management tools that use ip-api.com as a data source; weather, travel, or location-aware desktop applications performing connectivity checks.
 **Deployment:** SIEM (Sysmon Event ID 22 / dns_query), EDR, DNS monitoring.
 
@@ -751,12 +759,14 @@ title: Non-Browser Process DNS Query to ip-api.com Hosting Detection Endpoint
 id: ce5a51b5-1221-4843-ac57-3fa2b15ffb69
 status: experimental
 description: |
-    Detects a non-browser process resolving ip-api.com, consistent with XWorm's anti-analysis
-    hosting detection check. XWorm 3.0-5.0 queries http://ip-api.com/line/?fields=hosting at
-    startup to determine whether the infected machine runs on hosting or datacenter infrastructure.
+    Detects a process other than chrome.exe, firefox.exe, msedge.exe, iexplore.exe, brave.exe or
+    opera.exe resolving the name ip-api.com or a name ending .ip-api.com, consistent with XWorm's
+    anti-analysis hosting detection check. XWorm 3.0-5.0 queries http://ip-api.com/line/?fields=hosting
+    at startup to determine whether the infected machine runs on hosting or datacenter infrastructure.
     If the API returns "true", the malware silently exits via Environment.Exit(0) to evade sandbox
-    and researcher environments. A non-browser, non-network-tool process querying this specific
-    API is a strong indicator of sandbox evasion behavior.
+    and researcher environments. A DNS query shows only the host name, not the /line/?fields=hosting
+    path, and network tools, monitoring agents and other applications that use ip-api.com are not
+    filtered, so a hit is a hunting lead and not proof of sandbox evasion.
 references:
     - https://the-hunters-ledger.com/hunting-detections/shadow-xworm-opendirectory-detections/
 author: The Hunters Ledger
@@ -770,8 +780,10 @@ logsource:
     category: dns_query
     product: windows
 detection:
-    selection:
-        QueryName|contains: 'ip-api.com'
+    selection_exact:
+        QueryName: 'ip-api.com'
+    selection_sub:
+        QueryName|endswith: '.ip-api.com'
     filter_browser:
         Image|endswith:
             - '\chrome.exe'
@@ -780,7 +792,7 @@ detection:
             - '\iexplore.exe'
             - '\brave.exe'
             - '\opera.exe'
-    condition: selection and not filter_browser
+    condition: (selection_exact or selection_sub) and not filter_browser
 falsepositives:
     - Legitimate applications using ip-api.com for geolocation or network diagnostics
     - Network monitoring and IT asset management tools that use ip-api.com as a data source
@@ -838,23 +850,27 @@ level: medium
 
 **Campaign-Level**
 
-#### Zone.Identifier Alternate Data Stream Removal for SmartScreen Bypass
+#### Zone.Identifier Stream Deleted From an Executable (.exe) by a Process Outside Browser and System Paths
 
 **Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1553.005 (Subvert Trust Controls: Mark-of-the-Web Bypass)
 **Confidence:** HIGH (behavior, both families); logsource category corrected from the original
-**Rationale:** Re-anchored on the **deletion** event (`category: file_delete`, corrected from the original rule's `file_event`/creation category) — a plain `:Zone.Identifier` file-creation selector matches every downloaded file system-wide, since Windows creates this ADS automatically on every download, and is pure baseline noise. Scoping to deletion turns this into a genuine hunting lead for MOTW-clearing behavior specifically, though self-updating legitimate software also clears its own MOTW, so an analyst triages the hits.
+**Rationale:** Re-anchored on the **deletion** event (`category: file_delete`, corrected from the original rule's `file_event`/creation category) — a plain `:Zone.Identifier` file-creation selector matches every downloaded file system-wide, since Windows creates this ADS automatically on every download, and is pure baseline noise. Scoping to deletion turns this into a genuine hunting lead for MOTW-clearing behavior specifically, though self-updating legitimate software also clears its own MOTW, so an analyst triages the hits. *Logic and wording fix 2026-10-11:* the description said executable files, but the selection matched the stream of any file; it now requires the file name to end `.exe`, which is what the report records for both families (they clear the MOTW on their own executables). The telemetry assumption is stated in `logsource.definition`.
 **False Positives:** Self-updating legitimate software (browsers, some installers) that clears its own Zone.Identifier stream after a user-consented first run; administrative scripts that bulk-clear MOTW on downloaded files; software deployment and packaging tools that remove MOTW from downloaded installers during staging.
+**Blind Spots:** Needs file-delete telemetry that reports alternate data streams; where the sensor does not, the rule never fires. A malware copy renamed to another extension, a `.dll`, or a clearing process under `C:\Windows\` or `C:\Program Files\` or a browser name is not seen.
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (FileDelete telemetry), correlated with process creation for the same image.
 
 ```yaml
-title: Zone.Identifier Alternate Data Stream Removal for SmartScreen Bypass
+title: Zone.Identifier Stream Deleted From an Executable (.exe) by a Process Outside Browser and System Paths
 id: b78a5718-03c3-4e99-ab50-7fd048a70872
 status: experimental
 description: |
-    Detects deletion of the Zone.Identifier alternate data stream (ADS) from executable files
-    by non-browser, non-system processes. Both Shadow RAT and XWorm remove the Mark-of-the-Web
+    Detects a file-delete event for the Zone.Identifier alternate data stream (ADS) of a file whose
+    name ends .exe, by a process whose image is not chrome.exe, firefox.exe, msedge.exe or
+    iexplore.exe and is not under C:\Windows\ or C:\Program Files\ (other browsers such as Brave
+    and Opera are not excluded, and other executable extensions such as .dll, .scr and .msi are not
+    covered). Both Shadow RAT and XWorm remove the Mark-of-the-Web
     (MOTW) from their own executables after installation to suppress Windows SmartScreen warnings
     on subsequent executions. Shadow RAT uses FileHelper.DeleteZoneIdentifier; XWorm performs a
     direct ADS stream deletion. Anchored on the file-delete event rather than file creation —
@@ -871,9 +887,10 @@ tags:
 logsource:
     category: file_delete
     product: windows
+    definition: 'Requires Sysmon file-delete events (EID 23 FileDelete or EID 26 FileDeleteDetected). Whether a deleted alternate data stream is reported as a TargetFilename ending in :Zone.Identifier depends on the Sysmon build and configuration and was not tested here.'
 detection:
     selection:
-        TargetFilename|endswith: ':Zone.Identifier'
+        TargetFilename|endswith: '.exe:Zone.Identifier'
     filter_browser:
         Image|endswith:
             - '\chrome.exe'

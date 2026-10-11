@@ -3947,7 +3947,7 @@ opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detect
     engine: yara
     tier: Detection
     fence: 0
-    hash: "f8d0e945"
+    hash: "1c7fa1a4"
     head: "/* Yara Rule Set Identifier: SSH Interception an"
     robustness: 2
     confidence: "HIGH"
@@ -3956,7 +3956,7 @@ opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detect
     engine: yara
     tier: Detection
     fence: 1
-    hash: "6cfc3446"
+    hash: "0d250507"
     head: "rule MITM_Receiver_SourceStrings { meta: descrip"
     robustness: 2
     confidence: "HIGH"
@@ -3965,7 +3965,7 @@ opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detect
     engine: yara
     tier: Detection
     fence: 2
-    hash: "9f15ede2"
+    hash: "99187cb5"
     head: "rule MITM_Orchestrator_SourceStrings { meta: des"
     robustness: 2
     confidence: "HIGH"
@@ -3974,7 +3974,7 @@ opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detect
     engine: yara
     tier: Detection
     fence: 3
-    hash: "51340c58"
+    hash: "3717c943"
     head: "rule MITM_Payload_Perl_Fingerprint { meta: descr"
     robustness: 2
     confidence: "HIGH"
@@ -3983,7 +3983,7 @@ opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detect
     engine: yara
     tier: Detection
     fence: 4
-    hash: "daf671d1"
+    hash: "722d0ed2"
     head: "rule MITM_Deploy_Firewall_Script { meta: descrip"
     robustness: 2
     confidence: "HIGH"
@@ -3992,7 +3992,7 @@ opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detect
     engine: yara
     tier: Detection
     fence: 5
-    hash: "ff7689f4"
+    hash: "09bd24cb"
     head: "rule MITM_Leaked_Session_Recording { meta: descr"
     robustness: 2
     confidence: "HIGH"
@@ -4001,7 +4001,7 @@ opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detect
     engine: sigma
     tier: Detection
     fence: 6
-    hash: "3d40cdaf"
+    hash: "579e748c"
     head: "title: Netfilter Loop-Prevention Mark Consistent"
     robustness: 2
     confidence: "HIGH"
@@ -4010,7 +4010,7 @@ opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detect
     engine: sigma
     tier: Detection
     fence: 7
-    hash: "b6bf58ba"
+    hash: "542924c3"
     head: "title: Ipset Exclusion Set Named mitm_exclude Cr"
     robustness: 2
     confidence: "HIGH"
@@ -4019,7 +4019,7 @@ opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detect
     engine: sigma
     tier: Detection
     fence: 8
-    hash: "94c15041"
+    hash: "b3db91ac"
     head: "title: Iptables NAT Redirect of Outbound SSH Tra"
     robustness: 3
     confidence: "HIGH"
@@ -4028,7 +4028,7 @@ opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detect
     engine: sigma
     tier: Detection
     fence: 9
-    hash: "e505edbe"
+    hash: "58ebb11e"
     head: "title: Command Line Consistent With SSH Intercep"
     robustness: 2
     confidence: "HIGH"
@@ -4037,7 +4037,7 @@ opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detect
     engine: sigma
     tier: Detection
     fence: 10
-    hash: "2d223529"
+    hash: "be729c56"
     head: "title: Distinctive Dot-Prefixed Artifacts Writte"
     robustness: 2
     confidence: "HIGH"
@@ -4046,7 +4046,7 @@ opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detect
     engine: sigma
     tier: Detection
     fence: 11
-    hash: "d3faeaf8"
+    hash: "80fc7119"
     head: "title: Paramiko Pip Install Base id: 13df30b5-cc"
     robustness: 1
     confidence: "MODERATE"
@@ -4055,7 +4055,7 @@ opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detect
     engine: sigma
     tier: Detection
     fence: 12
-    hash: "3972c5a8"
+    hash: "808c873b"
     head: "title: Bare Uname Fingerprint Command Base id: a"
     robustness: 1
     confidence: "MODERATE"
@@ -4064,7 +4064,7 @@ opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detect
     engine: sigma
     tier: Hunting
     fence: 13
-    hash: "a76c7f05"
+    hash: "f4ec8bbb"
     head: "title: Python Interpreter Directly Executing exc"
     robustness: 1
     confidence: "MODERATE"
@@ -4073,7 +4073,7 @@ opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detect
     engine: sigma
     tier: Hunting
     fence: 14
-    hash: "cd34c6ed"
+    hash: "57fec314"
     head: "title: Iptables INPUT Drop Hiding a Non-Loopback"
     robustness: 1
     confidence: "MODERATE"
@@ -4082,7 +4082,7 @@ opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detect
     engine: sigma
     tier: Hunting
     fence: 15
-    hash: "4a133217"
+    hash: "eb5c2246"
     head: "title: Hidden Staging Directories or Files Creat"
     robustness: 1
     confidence: "MODERATE"
@@ -4091,7 +4091,7 @@ opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detect
     engine: sigma
     tier: Hunting
     fence: 16
-    hash: "942dc632"
+    hash: "1210f9eb"
     head: "title: Python Process Establishing Outbound HTTP"
     robustness: 1
     confidence: "LOW alone; raised by combining with the process-launch and file-artifact indicators above"
@@ -4369,20 +4369,11 @@ opendirectory-45-130-148-125-20260430-detections:
     confidence: "MODERATE — high precision where response bodies are visible, but the template is operator-editable"
     attack: [T1071.001]
 opendirectory-62-60-237-100-20260506-detections:
-  - name: "ExceptionHandler.dll Plowshare Dispatcher"
-    engine: yara
-    tier: Detection
-    fence: 0
-    hash: "f468fe10"
-    head: "/* Yara Rule Set Identifier: HijackLoader / Peng"
-    robustness: 2
-    confidence: "HIGH"
-    attack: [T1574.001, T1055.012, T1027]
   - name: "networkspec17.log PNG-IDAT Carrier"
     engine: yara
     tier: Detection
-    fence: 1
-    hash: "0e611937"
+    fence: 0
+    hash: "8a0abff4"
     head: "rule MALW_HijackLoader_NetworkSpec17_IDAT_Carrie"
     robustness: 2
     confidence: "HIGH"
@@ -4390,7 +4381,7 @@ opendirectory-62-60-237-100-20260506-detections:
   - name: "pe_03 HijackLoader Stage-3 Loader (API Hash Table)"
     engine: yara
     tier: Detection
-    fence: 2
+    fence: 1
     hash: "9f434bd1"
     head: "rule MALW_HijackLoader_Penguish_Stage3_Loader_PE"
     robustness: 3
@@ -4399,8 +4390,8 @@ opendirectory-62-60-237-100-20260506-detections:
   - name: "Multi-Vector Lure: GrimResource MSC + Mega.io Payload Fetch"
     engine: yara
     tier: Detection
-    fence: 3
-    hash: "8d16e8bd"
+    fence: 2
+    hash: "9dad86c4"
     head: "rule MALW_HijackLoader_MultiVector_Lure_GrimReso"
     robustness: 2
     confidence: "HIGH"
@@ -4408,12 +4399,21 @@ opendirectory-62-60-237-100-20260506-detections:
   - name: "Inno Setup Pascal Anti-Triage Wrapper"
     engine: yara
     tier: Hunting
-    fence: 4
+    fence: 3
     hash: "0bb413fd"
     head: "rule MALW_HijackLoader_InnoSetup_AntiTriage_Wrap"
     robustness: 1
     confidence: "MODERATE"
     attack: [T1027.009, T1204.002, T1036.005]
+  - name: "ExceptionHandler.dll Plowshare Dispatcher"
+    engine: yara
+    tier: Hunting
+    fence: 4
+    hash: "e3aa5562"
+    head: "/* Yara Rule Set Identifier: HijackLoader / Peng"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1574.001, T1055.012, T1027]
   - name: "HijackLoader GrimResource MMC Spawning Mshta or Rundll32 for Payload Execution"
     engine: sigma
     tier: Detection
@@ -4427,17 +4427,17 @@ opendirectory-62-60-237-100-20260506-detections:
     engine: sigma
     tier: Detection
     fence: 6
-    hash: "19eda484"
+    hash: "807bc9f9"
     head: "title: HijackLoader GrimResource MMC Spawning Po"
     robustness: 3
     confidence: "HIGH"
     attack: [T1218.014, T1685, T1059.001]
-  - name: "HijackLoader Inno Setup Wrapper Spawning CrystSupervisor32 and WVault Process Chain"
+  - name: "HijackLoader CrystSupervisor32 or WVault Renamed Vendor Binary Process Creation"
     engine: sigma
     tier: Hunting
     fence: 7
-    hash: "6ae58ac4"
-    head: "title: HijackLoader Inno Setup Wrapper Spawning "
+    hash: "7135dc36"
+    head: "title: HijackLoader CrystSupervisor32 or WVault "
     robustness: 1
     confidence: "HIGH (for this build wave)"
     attack: [T1036.005, T1574.001]
@@ -4450,11 +4450,11 @@ opendirectory-62-60-237-100-20260506-detections:
     robustness: 1
     confidence: "HIGH"
     attack: [T1559, T1036.005]
-  - name: "HijackLoader Operator Persistence Directory adv_ctrl Created Under ProgramData"
+  - name: "HijackLoader Operator Persistence Directory Codename File Written Under ProgramData or Users"
     engine: sigma
     tier: Hunting
     fence: 9
-    hash: "26434a10"
+    hash: "c4659962"
     head: "title: HijackLoader Operator Persistence Directo"
     robustness: 1
     confidence: "HIGH"
@@ -4486,12 +4486,12 @@ opendirectory-62-60-237-100-20260506-detections:
     robustness: 1
     confidence: "HIGH (structural); the underlying per-host environment-variable IPC mechanism itself is not observable via this selector"
     attack: [T1055.012, T1036.005]
-  - name: "WVault.exe or Renamed Vendor Binary Executing from Non-Standard ProgramData Path"
+  - name: "WVault.exe Process Executing From a ProgramData Path"
     engine: sigma
     tier: Hunting
     fence: 13
-    hash: "09638712"
-    head: "title: WVault.exe or Renamed Vendor Binary Execu"
+    hash: "9770a557"
+    head: "title: WVault.exe Process Executing From a Progr"
     robustness: 1
     confidence: "HIGH"
     attack: [T1036.005]
@@ -4572,43 +4572,43 @@ opendirectory-74-0-42-25-20260316-detections:
     engine: sigma
     tier: Detection
     fence: 8
-    hash: "edbbda8f"
+    hash: "baeac07a"
     head: "title: vlc_boxed.exe DGA Malware Run Key Persist"
     robustness: 2
     confidence: "HIGH"
     attack: [T1547.001, T1036.005]
-  - name: "ScreenConnect Phishing VBScript Dropper Silent MSI Install Chain"
-    engine: sigma
-    tier: Detection
-    fence: 9
-    hash: "fa9c38d4"
-    head: "title: ScreenConnect Phishing VBScript Dropper S"
-    robustness: 2
-    confidence: "HIGH"
-    attack: [T1059.005, T1218.007]
   - name: "Raven RAT Persistence via WindowsService Run Key Masquerade"
     engine: sigma
     tier: Hunting
-    fence: 10
-    hash: "4f3f25c5"
+    fence: 9
+    hash: "2f344147"
     head: "title: Raven RAT Persistence via WindowsService "
     robustness: 1
     confidence: "MODERATE"
     attack: [T1547.001, T1036.005]
-  - name: "Fileless PowerShell PE Dropper ExecutionPolicy Bypass from Non-Standard Parent"
+  - name: "PowerShell ExecutionPolicy Bypass With a .ps1 Under a User-Writable Path From a Non-Standard Parent"
     engine: sigma
     tier: Hunting
-    fence: 11
-    hash: "b777c322"
-    head: "title: Fileless PowerShell PE Dropper ExecutionP"
+    fence: 10
+    hash: "e312fc36"
+    head: "title: PowerShell ExecutionPolicy Bypass With a "
     robustness: 2
     confidence: "MODERATE"
     attack: [T1059.001, T1027.011]
-  - name: "PureRAT v4.1.9 Protocol Preamble Before TLS"
+  - name: "WScript Spawning Msiexec Silent Install With ALLUSERS=2 (ScreenConnect Dropper Pattern)"
+    engine: sigma
+    tier: Hunting
+    fence: 11
+    hash: "36a0a92f"
+    head: "title: WScript Spawning Msiexec Silent Install W"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1059.005, T1218.007]
+  - name: "PureRAT v4.1.9 Four-Byte Preamble on Ports 56001 to 56003"
     engine: suricata
     tier: Detection
     fence: 12
-    hash: "e4327c55"
+    hash: "d3e6fada"
     head: "alert tcp $HOME_NET any -> $EXTERNAL_NET [56001,"
     robustness: 3
     confidence: "HIGH"
@@ -4681,7 +4681,7 @@ opendirectory-79-137-192-3-20260515-detections:
     engine: yara
     tier: Hunting
     fence: 7
-    hash: "2aeaa90a"
+    hash: "501e4d22"
     head: "import \"pe\" rule Tofsee_Bloater_2023_StaticTrade"
     robustness: 2
     confidence: "MODERATE"
@@ -4690,7 +4690,7 @@ opendirectory-79-137-192-3-20260515-detections:
     engine: sigma
     tier: Detection
     fence: 8
-    hash: "62d4a16c"
+    hash: "689a9176"
     head: "title: Rhadamanthys SibCode Software Registry Ke"
     robustness: 3
     confidence: "HIGH"
@@ -4723,13 +4723,13 @@ opendirectory-79-137-192-3-20260515-detections:
     confidence: "HIGH"
     attack: [T1071.001]
 quasar-xworm-powershell-detections:
-  - name: "PowerShell Microsoft Defender Exclusion Script"
+  - name: "PowerShell Defender Exclusion Script Naming update.png"
     engine: yara
     tier: Hunting
     fence: 0
-    hash: "475ffb26"
+    hash: "90001df6"
     head: "/* Yara Rule Set Identifier: QuasarRAT / Xworm P"
-    robustness: 2
+    robustness: 1
     confidence: "MODERATE"
     attack: [T1685]
   - name: "VBScript-Spawned PowerShell In-Memory Payload Download"
@@ -4746,7 +4746,7 @@ remcos-opendirectory-detections:
     engine: yara
     tier: Detection
     fence: 0
-    hash: "d0ecc0fc"
+    hash: "f60fb9fd"
     head: "/* Yara Rule Set Identifier: Remcos RAT OpenDire"
     robustness: 2
     confidence: "HIGH"
@@ -4805,12 +4805,12 @@ remcos-opendirectory-detections:
     robustness: 1
     confidence: "MODERATE"
     attack: [T1056.001, T1113, T1123]
-  - name: "Remcos RAT UAC Bypass via EnableLUA Registry Modification (Process)"
+  - name: "UAC Disabled by reg.exe Setting EnableLUA to 0 From cmd.exe (Remcos Behavior)"
     engine: sigma
     tier: Detection
     fence: 7
-    hash: "69c8f2c5"
-    head: "title: Remcos RAT UAC Bypass via EnableLUA Regis"
+    hash: "7adb7ef5"
+    head: "title: UAC Disabled by reg.exe Setting EnableLUA"
     robustness: 3
     confidence: "HIGH"
     attack: [T1548.002]
@@ -4818,7 +4818,7 @@ remcos-opendirectory-detections:
     engine: sigma
     tier: Detection
     fence: 8
-    hash: "722ea709"
+    hash: "486f1c7c"
     head: "title: Remcos RAT Winlogon Userinit Persistence "
     robustness: 3
     confidence: "HIGH"
@@ -4832,21 +4832,21 @@ remcos-opendirectory-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1548.002]
-  - name: "Remcos RAT File Melting Behavior via install.bat"
+  - name: "Remcos RAT Inline Self-Deletion cmd.exe Command Line (PING, DEL, Start and Remcos Folder)"
     engine: sigma
     tier: Detection
     fence: 10
-    hash: "f9ab65fe"
-    head: "title: Remcos RAT File Melting Behavior via inst"
+    hash: "19c99239"
+    head: "title: Remcos RAT Inline Self-Deletion cmd.exe C"
     robustness: 2
-    confidence: "HIGH"
+    confidence: "MODERATE"
     attack: [T1070.004]
-  - name: "Remcos RAT Execution via Winlogon Userinit Hijack (Child Process)"
+  - name: "winlogon.exe Child Process Running From an AppData Path (Userinit Hijack Pattern)"
     engine: sigma
     tier: Detection
     fence: 11
-    hash: "fa6a58eb"
-    head: "title: Remcos RAT Execution via Winlogon Userini"
+    hash: "6a429b62"
+    head: "title: winlogon.exe Child Process Running From a"
     robustness: 3
     confidence: "HIGH"
     attack: [T1547.004]
@@ -4863,17 +4863,17 @@ remcos-opendirectory-detections:
     engine: sigma
     tier: Hunting
     fence: 13
-    hash: "b0c642ce"
+    hash: "3cea196a"
     head: "title: Suspicious Process Access from AppData to"
     robustness: 2
     confidence: "MODERATE"
     attack: [T1055]
-  - name: "Remcos RAT Non-Browser Process Accessing Browser Credential Store Files"
+  - name: "Non-Browser Process Accessing Chrome or Firefox Credential Store Files (Remcos Credential Theft Pattern)"
     engine: sigma
     tier: Hunting
     fence: 14
-    hash: "4e5cbea2"
-    head: "title: Remcos RAT Non-Browser Process Accessing "
+    hash: "a77b115c"
+    head: "title: Non-Browser Process Accessing Chrome or F"
     robustness: 3
     confidence: "MODERATE"
     attack: [T1555.003, T1539]
@@ -4923,12 +4923,12 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1587.001]
-  - name: "MAL_Python_Persistent_Bot_DualChannel_CNC"
+  - name: "MAL_Bash_Persistent_Bot_DualChannel_CNC"
     engine: yara
     tier: Detection
     fence: 5
-    hash: "ea7ed994"
-    head: "rule MAL_Python_Persistent_Bot_DualChannel_CNC {"
+    hash: "79858470"
+    head: "rule MAL_Bash_Persistent_Bot_DualChannel_CNC { m"
     robustness: 2
     confidence: "HIGH"
     attack: [T1037.004, T1053.003, T1059.004, T1071.001, T1543.002, T1546.004]
@@ -4941,12 +4941,12 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
     robustness: 2
     confidence: "MODERATE (HIGH for the universal-subset criteria as a class; MODERATE for any individual file match without corroborating context)"
     attack: [T1059.006, T1587.001]
-  - name: "MAL_Python_StealthAgent_AntiDebug_AntiVM_AI_Authored"
+  - name: "MAL_Python_StealthAgent_AntiAnalysis_Keyword_Bucket"
     engine: yara
     tier: Hunting
     fence: 7
-    hash: "caf3e698"
-    head: "rule MAL_Python_StealthAgent_AntiDebug_AntiVM_AI"
+    hash: "f4971a05"
+    head: "rule MAL_Python_StealthAgent_AntiAnalysis_Keywor"
     robustness: 2
     confidence: "MODERATE"
     attack: [T1014, T1059.006, T1497.001, T1587.001]
@@ -4954,7 +4954,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
     engine: yara
     tier: Hunting
     fence: 8
-    hash: "820513cc"
+    hash: "6cd794c9"
     head: "rule MAL_Markdown_Rovodev_WhatINeed_OperatorProm"
     robustness: 1
     confidence: "HIGH for this operator's specific artifact; MODERATE for class-level detection"
@@ -4968,12 +4968,12 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
     robustness: 1
     confidence: "HIGH for the artifact itself; the underlying pivot value degrades if the operator rotates the Discord account"
     attack: [T1584.004]
-  - name: "ELF IoT Arch-Tagged Filename Execution on Linux Server: Naku/Pandora Mirai Family"
+  - name: "Naku or Pandora Mirai Arch-Tagged Binary Name or Pandora-Mirai Command-Line Token on Linux"
     engine: sigma
     tier: Detection
     fence: 10
-    hash: "b1d821c0"
-    head: "title: ELF IoT Arch-Tagged Filename Execution on"
+    hash: "cd259afd"
+    head: "title: Naku or Pandora Mirai Arch-Tagged Binary "
     robustness: 2
     confidence: "HIGH"
     attack: [T1059.004, T1190]
@@ -5031,30 +5031,30 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
     robustness: 1
     confidence: "HIGH for the artifact; narrow applicability"
     attack: [T1027, T1095]
-  - name: "Discord Bot API Egress with Attack-Method Dispatch Payload from Server Host"
+  - name: "Linux Process Connecting to discord.com on Port 443 Outside node_modules or discord.js Paths (Matrix C2 Bot Pattern)"
     engine: sigma
     tier: Hunting
     fence: 17
-    hash: "a6317f52"
-    head: "title: Discord Bot API Egress with Attack-Method"
+    hash: "13a39460"
+    head: "title: Linux Process Connecting to discord.com o"
     robustness: 2
     confidence: "MODERATE"
     attack: [T1059.007, T1498.001]
-  - name: "Rovodev AI Agent Sessions Directory Creation on Server Host: Potential AI-Augmented Offensive Operations"
+  - name: "Rovodev AI Agent Sessions Directory or Session Context File Created on a Linux Host"
     engine: sigma
     tier: Hunting
     fence: 18
-    hash: "b8e2ccbb"
-    head: "title: Rovodev AI Agent Sessions Directory Creat"
+    hash: "d545ae71"
+    head: "title: Rovodev AI Agent Sessions Directory or Se"
     robustness: 2
     confidence: "MODERATE"
     attack: [T1587.001]
-  - name: "Rovodev Log File_Write Tool-Call Pattern: AI-Augmented Offensive Operations Evidence"
+  - name: "Rovodev Runtime Log rovodev.log Created on a Linux Host (Scoping Lead for AI-Augmented Offensive Operations)"
     engine: sigma
     tier: Hunting
     fence: 19
-    hash: "6230de1d"
-    head: "title: Rovodev Log File_Write Tool-Call Pattern "
+    hash: "3094869b"
+    head: "title: Rovodev Runtime Log rovodev.log Created o"
     robustness: 1
     confidence: "MODERATE"
     attack: [T1587.001]
@@ -5153,7 +5153,7 @@ russian-gemini-credential-mill-213.165.51.115-detections:
     engine: yara
     tier: Detection
     fence: 0
-    hash: "1685b96b"
+    hash: "01cf08c7"
     head: "/* Yara Rule Set Identifier: Russian Gemini Cred"
     robustness: 2
     confidence: "HIGH"
@@ -5162,7 +5162,7 @@ russian-gemini-credential-mill-213.165.51.115-detections:
     engine: yara
     tier: Detection
     fence: 1
-    hash: "64b5a868"
+    hash: "16d2e7e8"
     head: "rule MAL_Markdown_AI_Operator_Handoff_Document_F"
     robustness: 2
     confidence: "HIGH"
@@ -5180,7 +5180,7 @@ russian-gemini-credential-mill-213.165.51.115-detections:
     engine: yara
     tier: Detection
     fence: 3
-    hash: "c5c89870"
+    hash: "dc974e26"
     head: "rule MAL_Python_A2A_C2_Client_Console { meta: de"
     robustness: 3
     confidence: "HIGH"
@@ -5189,7 +5189,7 @@ russian-gemini-credential-mill-213.165.51.115-detections:
     engine: yara
     tier: Detection
     fence: 4
-    hash: "f67fe006"
+    hash: "8d0fd60f"
     head: "rule MAL_Markdown_C2_INFRA_TRANSFER_Pattern { me"
     robustness: 2
     confidence: "HIGH"
@@ -5230,19 +5230,10 @@ russian-gemini-credential-mill-213.165.51.115-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1555.005, T1005]
-  - name: "Suspicious LSASS Process Access via High-Privilege GrantedAccess Mask"
-    engine: sigma
-    tier: Detection
-    fence: 9
-    hash: "7aa2fd47"
-    head: "title: Suspicious LSASS Process Access via High-"
-    robustness: 2
-    confidence: "MODERATE"
-    attack: [T1003.001, T1003.002]
   - name: "AI Operator Handoff Document Bespoke Filename Created on Server Filesystem"
     engine: sigma
     tier: Detection
-    fence: 10
+    fence: 9
     hash: "f7779934"
     head: "title: AI Operator Handoff Document Bespoke File"
     robustness: 2
@@ -5251,7 +5242,7 @@ russian-gemini-credential-mill-213.165.51.115-detections:
   - name: "Mass WordPress wp-login.php Credential Validation Rate Exceeded (Correlation)"
     engine: sigma
     tier: Detection
-    fence: 11
+    fence: 10
     hash: "31662b16"
     head: "title: WordPress wp-login.php POST Request (Corr"
     robustness: 2
@@ -5260,7 +5251,7 @@ russian-gemini-credential-mill-213.165.51.115-detections:
   - name: "Executable Script or Skill File Created in Gemini CLI Config Directory"
     engine: sigma
     tier: Hunting
-    fence: 12
+    fence: 11
     hash: "9161558b"
     head: "title: Executable Script or Skill File Created i"
     robustness: 2
@@ -5269,7 +5260,7 @@ russian-gemini-credential-mill-213.165.51.115-detections:
   - name: "Cloudflared Access TCP Tunnel to Potentially Unauthorized Hostname"
     engine: sigma
     tier: Hunting
-    fence: 13
+    fence: 12
     hash: "77b4c4ea"
     head: "title: Cloudflared Access TCP Tunnel to Potentia"
     robustness: 2
@@ -5278,30 +5269,39 @@ russian-gemini-credential-mill-213.165.51.115-detections:
   - name: "WindowsUpdateManager PowerShell Beacon Registry Run Key Persistence"
     engine: sigma
     tier: Hunting
-    fence: 14
-    hash: "f5326cd9"
+    fence: 13
+    hash: "2d160e62"
     head: "title: WindowsUpdateManager PowerShell Beacon Re"
     robustness: 1
     confidence: "MODERATE"
     attack: [T1547.001, T1036]
-  - name: "Python HTTP Server on Non-Standard Port with UTF-16LE Encoding (A2A C2 Pattern)"
+  - name: "Python Process With c2_server or BaseHTTPServer in the Command Line (A2A C2 Server Pattern)"
     engine: sigma
     tier: Hunting
-    fence: 15
-    hash: "fb567d60"
-    head: "title: Python HTTP Server on Non-Standard Port w"
+    fence: 14
+    hash: "5d058961"
+    head: "title: Python Process With c2_server or BaseHTTP"
     robustness: 1
     confidence: "MODERATE"
     attack: [T1071.001, T1132.001, T1059.006]
   - name: "AI Operator Handoff Filename Created in Gemini CLI Config Directory"
     engine: sigma
     tier: Hunting
-    fence: 16
+    fence: 15
     hash: "8e36e4ad"
     head: "title: AI Operator Handoff Filename Created in G"
     robustness: 1
     confidence: "MODERATE"
     attack: [T1587]
+  - name: "LSASS Process Access With a Credential-Dumping GrantedAccess Mask and No Source Process Filter"
+    engine: sigma
+    tier: Hunting
+    fence: 16
+    hash: "ae320334"
+    head: "title: LSASS Process Access With a Credential-Du"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1003.001, T1003.002]
   - name: "A2A C2 Beacon POST to Operator Endpoint with X-Agent-ID Header"
     engine: suricata
     tier: Detection
@@ -5311,11 +5311,11 @@ russian-gemini-credential-mill-213.165.51.115-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1071.001, T1132.001, T1041]
-  - name: "cloudflared Tunnel QUIC Egress to Cloudflare Edge (UDP 7844)"
+  - name: "cloudflared Tunnel Port Egress (UDP 7844 to Any External Host)"
     engine: suricata
     tier: Hunting
     fence: 18
-    hash: "75b7a678"
+    hash: "fc15e2ae"
     head: "alert udp $HOME_NET any -> $EXTERNAL_NET 7844 (m"
     robustness: 2
     confidence: "MODERATE"
@@ -5583,11 +5583,11 @@ seasia-gov-exploitation-toolkit-144-172-106-236-detections:
     confidence: "MODERATE"
     attack: [T1105]
 shadow-xworm-opendirectory-detections:
-  - name: "Shadow RAT v2.6.4.0 Client: Namespace + Costura Fingerprint"
+  - name: "Shadow RAT Client: Namespace Strings, Version and Mutex Fingerprint"
     engine: yara
     tier: Detection
     fence: 0
-    hash: "bad6d4e5"
+    hash: "362804f7"
     head: "/* Yara Rule Set Identifier: Shadow RAT v2.6.4.0"
     robustness: 3
     confidence: "HIGH"
@@ -5601,12 +5601,12 @@ shadow-xworm-opendirectory-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1573.001, T1542.003]
-  - name: "Shadow RAT v2.6.4.0: AMSI + ETW Bypass Chain"
+  - name: "Shadow RAT AMSI Patch Shellcode or Asterisk-Padded AMSI and ETW String Fragments"
     engine: yara
     tier: Detection
     fence: 2
-    hash: "82ec17cd"
-    head: "rule RAT_ShadowRAT_AMSI_ETW_Bypass { meta: descr"
+    hash: "812dcbc4"
+    head: "rule RAT_ShadowRAT_AMSI_Patch_Or_Padded_Bypass_S"
     robustness: 3
     confidence: "HIGH"
     attack: [T1685, T1027]
@@ -5646,12 +5646,12 @@ shadow-xworm-opendirectory-detections:
     robustness: 2
     confidence: "MODERATE"
     attack: [T1027, T1497.001]
-  - name: "XWorm Scheduled Task Persistence with One-Minute Execution Interval"
+  - name: "One-Minute Highest-Privilege Scheduled Task With an AppData Roaming Path (XWorm Persistence Pattern)"
     engine: sigma
     tier: Detection
     fence: 7
-    hash: "b0c11cda"
-    head: "title: XWorm Scheduled Task Persistence with One"
+    hash: "57d6283b"
+    head: "title: One-Minute Highest-Privilege Scheduled Ta"
     robustness: 3
     confidence: "HIGH"
     attack: [T1053.005]
@@ -5659,17 +5659,17 @@ shadow-xworm-opendirectory-detections:
     engine: sigma
     tier: Hunting
     fence: 8
-    hash: "8d1c9d52"
+    hash: "29543f75"
     head: "title: Shadow RAT Registry Run Key Persistence i"
     robustness: 1
     confidence: "HIGH (behavior); brittle as a rule"
     attack: [T1547.001]
-  - name: "AMSI Bypass via Suspicious amsi.dll Load from Non-Standard Path"
+  - name: "AMSI Library Load by a Process Outside System32, Program Files and Common Interpreters (AMSI Patching Pattern)"
     engine: sigma
     tier: Hunting
     fence: 9
-    hash: "73964462"
-    head: "title: AMSI Bypass via Suspicious amsi.dll Load "
+    hash: "7c8ae43c"
+    head: "title: AMSI Library Load by a Process Outside Sy"
     robustness: 3
     confidence: "HIGH (technique); MEDIUM precision as written"
     attack: [T1685]
@@ -5713,7 +5713,7 @@ shadow-xworm-opendirectory-detections:
     engine: sigma
     tier: Hunting
     fence: 14
-    hash: "0e73f35b"
+    hash: "e9f7b841"
     head: "title: Non-Browser Process DNS Query to ip-api.c"
     robustness: 2
     confidence: "HIGH (behavior — this URL/parameter combination is documented XWorm 3.0-5.0 builder behavior); the campaign's own IOC feed independently flags the domain as high FP risk"
@@ -5727,12 +5727,12 @@ shadow-xworm-opendirectory-detections:
     robustness: 2
     confidence: "MODERATE"
     attack: [T1497.001, T1082]
-  - name: "Zone.Identifier Alternate Data Stream Removal for SmartScreen Bypass"
+  - name: "Zone.Identifier Stream Deleted From an Executable (.exe) by a Process Outside Browser and System Paths"
     engine: sigma
     tier: Hunting
     fence: 16
-    hash: "b72c343b"
-    head: "title: Zone.Identifier Alternate Data Stream Rem"
+    hash: "2888b8f3"
+    head: "title: Zone.Identifier Stream Deleted From an Ex"
     robustness: 2
     confidence: "HIGH (behavior, both families); logsource category corrected from the original"
     attack: [T1553.005]
@@ -5750,7 +5750,7 @@ shinyhunters-dls-91-215-85-22-20260417-detections:
     engine: yara
     tier: Detection
     fence: 0
-    hash: "5cffc583"
+    hash: "566dbc9e"
     head: "/* Yara Rule Set Identifier: ShinyHunters DLS — "
     robustness: 3
     confidence: "HIGH"
@@ -5777,7 +5777,7 @@ shinyhunters-dls-91-215-85-22-20260417-detections:
     engine: yara
     tier: Hunting
     fence: 3
-    hash: "ec6d09f6"
+    hash: "cd9251dd"
     head: "rule MALW_ShinyHunters_DLS_HTML { meta: descript"
     robustness: 2
     confidence: "HIGH"
@@ -5850,7 +5850,7 @@ sliver-c2-windows-postex-staging-193-233-202-17-detections:
     engine: yara
     tier: Detection
     fence: 0
-    hash: "4b9919e0"
+    hash: "861a1b0f"
     head: "/* Yara Rule Set Identifier: Sliver-C2-Windows-P"
     robustness: 3
     confidence: "HIGH"
@@ -5859,7 +5859,7 @@ sliver-c2-windows-postex-staging-193-233-202-17-detections:
     engine: yara
     tier: Detection
     fence: 1
-    hash: "49d9305f"
+    hash: "81875d5a"
     head: "/* Yara Rule Set Identifier: Sliver-C2-Windows-P"
     robustness: 2
     confidence: "HIGH"
@@ -5868,7 +5868,7 @@ sliver-c2-windows-postex-staging-193-233-202-17-detections:
     engine: yara
     tier: Detection
     fence: 2
-    hash: "2c746be1"
+    hash: "9bd73fea"
     head: "/* Yara Rule Set Identifier: Sliver-C2-Windows-P"
     robustness: 3
     confidence: "HIGH"
@@ -5877,7 +5877,7 @@ sliver-c2-windows-postex-staging-193-233-202-17-detections:
     engine: yara
     tier: Hunting
     fence: 3
-    hash: "85727dfa"
+    hash: "47e65cbb"
     head: "/* Yara Rule Set Identifier: Sliver-C2-Windows-P"
     robustness: 2
     confidence: "MODERATE"

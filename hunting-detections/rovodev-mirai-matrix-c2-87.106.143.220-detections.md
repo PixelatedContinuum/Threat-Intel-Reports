@@ -182,7 +182,7 @@ rule MAL_Bash_Pandora_Dropper_Family {
 **ATT&CK Coverage:** T1059.006 (Python), T1498.001 (Direct Network Flood), T1498.002 (Reflection Amplification), T1587.001 (Develop Capabilities: Malware)
 **Confidence:** HIGH
 **Rationale:** Direct AI-authored strings captured from Rovodev session_context.json file_write payloads. The MATRIX C2 ASCII-banner header, `mass_infection` docstring, emoji-branded attack-method names, and the operator-marketing `50Gbps+` comment form multiple independent phrase anchors — no single renameable literal carries the rule. Unchanged from the original file.
-**False Positives:** None known — the banner + emoji-branded attack-method names + `50Gbps+` marketing comment combination is specific to this operator's framework; no known legitimate tool uses this combination.
+**False Positives:** None known. Every branch needs at least two of the strings, and the banner, the emoji-branded method names and the `50Gbps+` marketing comment are never required together: the banner with the mass-infection docstring or the LLM closing phrase; the `50Gbps+` comment with either emoji-branded method name; the two deployment markers `FINAL_DEPLOYMENT_COMPLETE` and `ULTIMATE_DEPLOYMENT` (generic AI-agent file markers); or two of the three method-name literals with the `50Gbps+` comment or the docstring. Not goodware-validated. *Wording fix 2026-10-11:* the earlier line described a banner + emoji + marketing-comment combination that no branch requires.
 **Blind Spots:** A full source rewrite that strips all banner/docstring/emoji strings would evade; targets on-disk/in-memory Python source, not compiled/obfuscated builds.
 **Validation:** Scan `master_control.py` / `attack_engine.py` / `multi_vector_agent.py` (hashes below) — at least one condition branch must match; unrelated legitimate DDoS-testing or load-testing tools must NOT fire.
 **Deployment:** Linux filesystem scanner (Python scripts), network sandbox detonation, SIEM content search on analyst workstations.
@@ -231,8 +231,8 @@ rule MAL_Python_Matrix_C2_Framework_Family {
 **Robustness:** 3
 **ATT&CK Coverage:** T1059.007 (JavaScript), T1498.001 (Direct Network Flood), T1498.002 (Reflection Amplification)
 **Confidence:** HIGH
-**Rationale:** The JavaScript attack-method dispatch table requires renaming or removing most of an 8-entry bespoke method catalog (`udp-star`, `syn-storm`, `tcp-matrix`, `tcp-rst`, `udp-bypass`, `icmp-hell`, `multi-vector`, `http-flood`, `mass_infection`, `frag-storm`, `dns-rain`, `ovh-nuke`, `http-star`) plus the tier/GBPS/emoji branding to evade — a substantial rewrite. Unchanged from the original file.
-**False Positives:** None known — the specific combination of 13+ DDoS attack-method names with VIP tier model and GBPS estimates is not found in legitimate Discord bots; emoji branding narrows further.
+**Rationale:** The JavaScript attack-method dispatch table is a 13-entry bespoke catalog (`udp-star`, `syn-storm`, `tcp-matrix`, `tcp-rst`, `udp-bypass`, `icmp-hell`, `multi-vector`, `http-flood`, `mass_infection`, `frag-storm`, `dns-rain`, `ovh-nuke`, `http-star`). The rule has three branches: 4 of the 13 names plus a `vip: true` or `vip: false` tier string; 3 of the names plus the `gbps:` field plus an emoji-branded method name; or the `ovh-nuke`, `frag-storm` and `mass_infection` names plus `vip: true`. Only the second branch needs the GBPS and emoji branding; the first and third need neither. Evading all three requires renaming or removing most of the catalog. *Wording fix 2026-10-11:* the earlier text called the catalog 8 entries while listing 13, and said the tier, GBPS and emoji branding were all part of the match.
+**False Positives:** None known. The first branch, 4 of 13 bespoke attack-method names plus a `vip` tier string, is the loosest and needs no GBPS or emoji branding; the 13-name catalog is not found in legitimate Discord bots. Not goodware-validated.
 **Blind Spots:** A full dispatch-table rewrite under new method names would evade; targets the on-disk/in-memory JS source.
 **Validation:** Scan the Discord bot JS source (`hash1` below) — at least one condition branch must match; unrelated legitimate Discord moderation/utility bots must NOT fire.
 **Deployment:** JavaScript/Node.js file scanner, Discord bot code review, web application code analysis.
@@ -324,20 +324,20 @@ rule MAL_JSON_Rovodev_SessionContext_FileWrite_Authoring {
 }
 ```
 
-#### MAL_Python_Persistent_Bot_DualChannel_CNC
+#### MAL_Bash_Persistent_Bot_DualChannel_CNC
 
 **Tier:** Detection
 **Robustness:** 2
 **ATT&CK Coverage:** T1037.004 (RC Scripts), T1053.003 (Cron), T1059.004 (Unix Shell), T1071.001 (Web Protocols), T1543.002 (Systemd Service), T1546.004 (Unix Shell Configuration Modification)
 **Confidence:** HIGH
-**Rationale:** Multi-branch rule where 3 of 5 branches (hidden cron entry + masquerade init.d/systemd names; heartbeat message + port + hidden cron; JSON field-name structure) carry no dependency on the operator's C2 IP, so the rule survives infrastructure rotation even though two branches additionally reference the hardcoded IP as a strengthening (not sole) anchor. Unchanged from the original file.
+**Rationale:** Multi-branch rule where 3 of 5 branches (hidden cron entry + masquerade init.d/systemd names; heartbeat message + port + hidden cron; JSON field-name structure) carry no dependency on the operator's C2 IP, so the rule survives infrastructure rotation even though two branches additionally reference the hardcoded IP as a strengthening (not sole) anchor. *Rename 2026-10-11:* the rule was named `MAL_Python_Persistent_Bot_DualChannel_CNC`, but every string it matches is a shell-script artifact (`persistent_bot.sh`: cron, init.d and systemd paths, `wget`, `pkill`, JSON built in shell variables), and nothing tests for Python, so the name is now `MAL_Bash_Persistent_Bot_DualChannel_CNC` with the matching deterministic `id`.
 **False Positives:** None known — the hidden `.cache_update` cron filename, the `sysupdate`/`system-update.service` masquerade pair, and the `bot_register`/`arch`/`vendor` JSON wire-format fields have no plausible legitimate collision in combination.
 **Blind Spots:** A rebuild that renames the masquerade persistence files AND changes the JSON wire-format field names would evade; targets the on-disk installer script.
 **Validation:** Scan `persistent_bot.sh` (hash below) — at least one condition branch must match; a benign system-update or configuration-management script must NOT fire.
 **Deployment:** Linux filesystem scanner (bash scripts), EDR persistence monitoring for cron/init.d/systemd creation events.
 
 ```yara
-rule MAL_Python_Persistent_Bot_DualChannel_CNC {
+rule MAL_Bash_Persistent_Bot_DualChannel_CNC {
    meta:
       description = "Detects persistent_bot.sh-class operator scripts implementing 5-vector Linux persistence and dual-channel CNC architecture. Identifies operator-specific JSON wire format (bot_register + heartbeat messages with bot_type/arch/vendor fields), hidden cron entry /etc/cron.d/.cache_update, and masquerade persistence (sysupdate init.d service + system-update.service systemd unit)."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
@@ -348,7 +348,7 @@ rule MAL_Python_Persistent_Bot_DualChannel_CNC {
       family = "Matrix C2"
       malware_type = "Persistence Installer (AI-authored)"
       campaign = "UTA-2026-014"
-      id = "91f7bf1a-6620-50cf-81c0-ff7faf1328e3"
+      id = "936f6b1b-3b1e-5122-8a5d-cf26a94d774f"
    strings:
       $wire_reg   = "\"type\":\"bot_register\"" ascii
       $wire_arch  = "\"arch\":\"$arch\"" ascii
@@ -432,20 +432,20 @@ rule MAL_Python_AIGenerated_OffensiveCode_Universal_Subset {
 }
 ```
 
-#### MAL_Python_StealthAgent_AntiDebug_AntiVM_AI_Authored
+#### MAL_Python_StealthAgent_AntiAnalysis_Keyword_Bucket
 
 **Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1014 (Rootkit), T1059.006 (Python), T1497.001 (System Checks — MODERATE), T1587.001 (Develop Capabilities: Malware)
 **Confidence:** MODERATE
-**Rationale:** Salvaged from the original — the condition mandated the hardcoded C2 endpoint `87.106.143.220` as an AND-gate across every branch, so the rule died the instant the operator rotated infrastructure (the IP is already carried in the IOC feed). Removed the IP/port strings and condition dependency entirely, leaving a pure anti-analysis feature-bucket signature (anti_debug + anti_vm + sandbox keyword co-occurrence with rootkit/self-destruct, or the AES-GCM+PBKDF2+handshake crypto framing, or polymorphic+bare-except). These are generic English feature-name strings individually (per the "no generic API-name `any of them`" YARA anti-pattern), so co-occurrence is required but the combination is still not goodware-validated to zero FP — Hunting, not Detection.
+**Rationale:** Salvaged from the original — the condition mandated the hardcoded C2 endpoint `87.106.143.220` as an AND-gate across every branch, so the rule died the instant the operator rotated infrastructure (the IP is already carried in the IOC feed). Removed the IP/port strings and condition dependency entirely, leaving a pure anti-analysis feature-bucket signature of three branches (two of the anti-debug, anti-VM and sandbox words with rootkit or self-destruct; or the AES-GCM+PBKDF2+handshake crypto framing; or polymorphic+bare-except). These are generic English feature-name strings individually (per the "no generic API-name `any of them`" YARA anti-pattern), so co-occurrence is required but the combination is still not goodware-validated to zero FP — Hunting, not Detection. *Rename and wording fix 2026-10-11:* the rule was named for anti-debug plus anti-VM, but only the first branch uses those words and it needs just two of three, and the other two branches need neither, so the name now says anti-analysis keyword bucket.
 **False Positives:** Legitimate Python security/red-team tooling that legitimately implements anti-debug/anti-VM checks alongside self-destruct or rootkit-adjacent terminology (uncommon but not impossible); the AES-GCM+PBKDF2+handshake branch alone is common to many encrypted-messaging implementations.
 **Deployment:** Linux filesystem scanner (Python scripts), EDR behavioral monitoring for Python processes with anti-VM API calls; corroborate with the family-specific YARA/Sigma rules above before high-confidence attribution.
 
 ```yara
-rule MAL_Python_StealthAgent_AntiDebug_AntiVM_AI_Authored {
+rule MAL_Python_StealthAgent_AntiAnalysis_Keyword_Bucket {
    meta:
-      description = "Detects stealth_agent.py-class AI-authored Python backdoors combining anti-debug, anti-VM, sandbox evasion, process hiding, rootkit install, systemd/cron persistence, self-destruct, and polymorphic payload generation with bare-except AI-code signature. Family-generic anti-analysis feature bucket — deploy as a hunting/triage lead, not standalone attribution."
+      description = "Hunting keyword bucket for stealth_agent.py-class AI-authored Python backdoors. Matches any one of three branches: two of the words anti_debug, anti_vm and sandbox together with rootkit or self_destruct; AES-256-GCM with PBKDF2 and handshake; or polymorphic with a bare except: statement. It does not test that the file is Python and does not require both anti-debug and anti-VM. Family-generic anti-analysis feature bucket — deploy as a hunting/triage lead, not standalone attribution."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/"
@@ -454,7 +454,7 @@ rule MAL_Python_StealthAgent_AntiDebug_AntiVM_AI_Authored {
       family = "Matrix C2"
       malware_type = "Stealth Agent (AI-authored backdoor)"
       campaign = "UTA-2026-014"
-      id = "d4482d80-a943-5693-86d2-773c22063b33"
+      id = "e343ba70-f35d-55d3-878e-487f588a78ab"
    strings:
       $anti_debug = "anti_debug" ascii nocase
       $anti_vm    = "anti_vm" ascii nocase
@@ -485,13 +485,13 @@ rule MAL_Python_StealthAgent_AntiDebug_AntiVM_AI_Authored {
 **ATT&CK Coverage:** T1587.001 (Develop Capabilities: Malware), T1059.006 (Python)
 **Confidence:** HIGH for this operator's specific artifact; MODERATE for class-level detection
 **Rationale:** Detects the literal phrasing of one operator's natural-language prompt file to Rovodev. The value here is narrow-but-real pivot/hunting utility (re-uploads of this exact artifact, or this operator reusing phrasing elsewhere) rather than a generalizable technique — a different operator phrasing an equivalent request would not match. Retiered to Hunting per the single-artifact durability profile; the original author's own MEDIUM detection-priority framing already signaled this. Unchanged detection logic.
-**False Positives:** Low but not zero — the combination of C2-debugging + credential-harvesting + Discord-integration phrasing in one file is not a legitimate developer pattern, but this rule cannot generalize past this operator's specific artifact.
+**False Positives:** Low but not zero. Each branch needs two or three of the operator's phrases (C2-debug with the C2-Leak reference; the credential-harvest request with the Discord request; the Discord user ID with the cleanup request; or the C2-debug, credential-harvest and `make it stronger` phrases together), and no branch needs the C2-debugging, credential-harvesting and Discord themes all at once. The combination is not a legitimate developer pattern, but this rule cannot generalize past this operator's specific artifact. Not goodware-validated.
 **Deployment:** Filesystem scanner on suspected operator hosts, web crawler for open-directory detection (pivot/hunting use, not automated alerting).
 
 ```yara
 rule MAL_Markdown_Rovodev_WhatINeed_OperatorPrompt {
    meta:
-      description = "Detects whatineed.txt-class operator natural-language prompts to AI coding agents specifying offensive capability development. Pattern includes C2 debugging request, GitHub C2-leak repository reference, automatic credential harvesting ('automatic give me login'), Discord integration request, and operator user-ID disclosure. This operator's exact file captured from 87.106.143.220 open-directory."
+      description = "Detects whatineed.txt-class operator natural-language prompts to AI coding agents specifying offensive capability development. Matches any one of four phrase combinations drawn from: a C2 debugging request, a GitHub C2-leak repository reference, automatic credential harvesting ('automatic give me login'), a Discord integration request, the operator's Discord user ID with a cleanup request, and 'make it stronger'. This operator's exact file captured from 87.106.143.220 open-directory."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/"
@@ -569,24 +569,24 @@ rule MAL_Discord_OperatorID_Snowflake_PandoraNet {
 
 **Pandora-Mirai (Naku ELF Bot Suite)**
 
-#### ELF IoT Arch-Tagged Filename Execution on Linux Server: Naku/Pandora Mirai Family
+#### Naku or Pandora Mirai Arch-Tagged Binary Name or Pandora-Mirai Command-Line Token on Linux
 
 **Tier:** Detection
 **Robustness:** 2
 **ATT&CK Coverage:** T1059.004 (Unix Shell), T1190 (Exploit Public-Facing Application)
 **Confidence:** HIGH
-**Rationale:** IoT-targeted architecture-tag suffixes (`.arm5`, `.m68k`, `.mpsl`, `.spc`, etc.) on ELF binaries executing on a Linux SERVER host are never a legitimate pattern — arch-tagged filenames only make sense on IoT/embedded build or distribution systems. Evading requires renaming the entire 11-binary set, which raises the bar beyond a single literal. Unchanged from the original file.
+**Rationale:** The rule matches specific file names (`Naku.*` and `pandora.*` with an architecture suffix) in the image path, or four command-line tokens, not IoT architecture-tag suffixes in general. Evading requires renaming the whole 11-binary set and changing the command-line tokens, which raises the bar beyond a single literal. *Wording fix 2026-10-11:* the earlier title and Rationale called every arch-tagged ELF on a Linux server illegitimate and described a filename-only rule; the selection also fires on command-line text with no filename at all, and tests neither ELF format nor host role.
 **False Positives:** Cross-compilation test environments deploying IoT firmware — limit to production server hosts and IoT-adjacent network segments; IoT development workstations building multi-arch toolchains.
-**Blind Spots:** A rename of the entire arch-tagged binary set evades; scoped to `product: linux` process_creation telemetry only.
+**Blind Spots:** A rename of the arch-tagged binary set and of the command-line tokens evades; no ELF check, so a non-ELF file with a matching name fires; no host-role test; scoped to `product: linux` process_creation telemetry only.
 **Validation:** Execute a Naku/Pandora binary with an arch-tag filename on a monitored Linux host — must match; a legitimate cross-compilation toolchain building the same arch set under different naming must NOT fire.
 **Deployment:** EDR/Sysmon-equivalent process-creation telemetry on Linux server fleets and IoT-adjacent segments.
 
 ```yaml
-title: ELF IoT Arch-Tagged Filename Execution on Linux Server — Naku/Pandora Mirai Family
+title: Naku or Pandora Mirai Arch-Tagged Binary Name or Pandora-Mirai Command-Line Token on Linux
 id: c4495249-9b11-406c-b4ca-5c099eb8ca81
 status: experimental
 description: >-
-  Detects execution of ELF binaries with IoT-targeted architecture-tag suffixes (arm5, arm6, arm7, m68k, mips, mpsl, ppc, sh4, spc) associated with the Naku/Pandora-Mirai 11-architecture IoT botnet family (UTA-2026-014). These filenames (Naku.{arch}, pandora.{arch}, nig) are specific to the Pandora-Mirai dropper's payload distribution and execution pattern. Execution of such binaries on server-class hosts indicates active compromise and botnet payload staging.
+  Detects a Linux process-creation event matching either of two alternatives for the Naku/Pandora-Mirai 11-architecture IoT botnet family (UTA-2026-014): an Image path containing one of the file names Naku.arm, Naku.m68k, Naku.mips, Naku.mpsl, Naku.ppc, Naku.sh4, Naku.spc, Naku.x86, pandora.arm, pandora.m68k, pandora.mips, pandora.mpsl, pandora.sh4 or pandora.spc, or a command line containing PandoraNet, './nig realtek', './nig huawei' or pandora_bot. The rule tests names and command-line text only: it does not check that the file is an ELF, and it has no host-role test, so a hit on a server and a hit on an IoT build workstation look the same. Either alternative alone fires.
 references:
     - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
     - https://vms.drweb.com/virus/?i=22410691&lng=en
@@ -1006,22 +1006,22 @@ level: medium
 
 **Matrix C2 Framework**
 
-#### Discord Bot API Egress with Attack-Method Dispatch Payload from Server Host
+#### Linux Process Connecting to discord.com on Port 443 Outside node_modules or discord.js Paths (Matrix C2 Bot Pattern)
 
 **Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1059.007 (JavaScript), T1498.001 (Direct Network Flood)
 **Confidence:** MODERATE
-**Rationale:** `discord.com` is a stable, non-operator-controlled domain (durable — Discord will not relocate it), but this is fundamentally a "legitimate SaaS egress from an unusual host class" anomaly rule: Discord bot hosting on servers is common in legitimate developer/SaaS environments, and the original author explicitly notes MEDIUM FP risk requiring process context to disambiguate. Unchanged detection logic.
+**Rationale:** `discord.com` is a stable, non-operator-controlled domain (durable — Discord will not relocate it), but this is fundamentally a "legitimate SaaS egress from an unusual host class" anomaly rule: Discord bot hosting on servers is common in legitimate developer/SaaS environments, and the original author explicitly notes MEDIUM FP risk requiring process context to disambiguate. *Logic and wording fix 2026-10-11:* the earlier title claimed an attack-method dispatch payload, which a connection event cannot show, and the host test was the substring `discord.com`, which also matches `notdiscord.com` and `discord.com.example.net`; it is now the exact name `discord.com` or a name ending `.discord.com`. The `discordapp.com` and `gateway.discord.gg` hosts are not covered.
 **False Positives:** Legitimate Discord bots hosted on server infrastructure — all Discord bot deployments on production servers; SaaS applications integrating Discord notifications; developer environments testing Discord integrations.
 **Deployment:** Network/EDR telemetry correlating egress with process context; requires tuning `filter_known_dev` to your environment's legitimate Discord bot inventory before triage.
 
 ```yaml
-title: Discord Bot API Egress with Attack-Method Dispatch Payload from Server Host
+title: Linux Process Connecting to discord.com on Port 443 Outside node_modules or discord.js Paths (Matrix C2 Bot Pattern)
 id: 7e3175bc-9a74-4c93-b358-de78d84250f4
 status: experimental
 description: >-
-  Detects Discord API (discord.com/api/v9/) egress traffic from non-developer server hosts, indicative of the Matrix C2 DDoS-as-a-Service Discord-bot customer interface (UTA-2026-014). The Discord bot dispatches DDoS attack commands on behalf of paying customers via a JavaScript bot running on the operator's VPS. Discord bot traffic from production server hosts in non-developer environments is anomalous and warrants investigation, but Discord bot hosting is also a common legitimate pattern — treat as a hunting lead requiring process-context correlation, not a standalone alert.
+  Detects an initiated connection from a Linux process to the hostname discord.com or a subdomain of it on port 443 where the process image path contains neither /node_modules/ nor discord.js. The Matrix C2 DDoS-as-a-Service Discord-bot customer interface (UTA-2026-014) is a JavaScript bot on the operator's VPS that dispatches attack commands for paying customers; a connection event carries no URL path and no payload, so the rule cannot see the API path or any attack-method dispatch, and it has no host-role test. Discord bot hosting is a common legitimate pattern — treat a hit as a hunting lead requiring process-context correlation, not a standalone alert.
 references:
     - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
 author: The Hunters Ledger
@@ -1037,15 +1037,18 @@ logsource:
     category: network_connection
     product: linux
 detection:
-    selection_discord:
-        DestinationHostname|contains: 'discord.com'
+    selection_discord_exact:
+        DestinationHostname: 'discord.com'
+    selection_discord_sub:
+        DestinationHostname|endswith: '.discord.com'
+    selection_conn:
         DestinationPort: 443
         Initiated: 'true'
     filter_known_dev:
         Image|contains:
             - '/node_modules/'
             - 'discord.js'
-    condition: selection_discord and not filter_known_dev
+    condition: (selection_discord_exact or selection_discord_sub) and selection_conn and not filter_known_dev
 falsepositives:
     - Legitimate Discord bots hosted on server infrastructure — all Discord bot deployments on production servers
     - SaaS applications integrating Discord notifications
@@ -1055,22 +1058,22 @@ level: medium
 
 **Rovodev Operator Artifacts**
 
-#### Rovodev AI Agent Sessions Directory Creation on Server Host: Potential AI-Augmented Offensive Operations
+#### Rovodev AI Agent Sessions Directory or Session Context File Created on a Linux Host
 
 **Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1587.001 (Develop Capabilities: Malware)
 **Confidence:** MODERATE
-**Rationale:** Detects the mere presence of a legitimate Atlassian Rovodev AI agent session on a server host, with no malicious-content qualifier in the detection logic — Rovodev is a legitimate enterprise product, and the original author explicitly notes MEDIUM FP risk (DevOps automation use is real). This is a scoping/inventory lead ("who is running Rovodev on server infrastructure"), not an alerting-grade signal. Unchanged detection logic.
+**Rationale:** Detects the mere presence of a legitimate Atlassian Rovodev AI agent session on a host, with no malicious-content qualifier in the detection logic — Rovodev is a legitimate enterprise product, and the original author explicitly notes MEDIUM FP risk (DevOps automation use is real). This is a scoping/inventory lead ("who is running Rovodev on server infrastructure"), not an alerting-grade signal. *Wording fix 2026-10-11:* the description used to say session_context.json files exceeding 100KB, but no size test exists and the second selection matches the file name alone, so the claim and the "server host" wording came out. The detection logic is unchanged.
 **False Positives:** Legitimate DevOps teams using Rovodev on server hosts for infrastructure automation; CI/CD pipeline hosts running Rovodev for code generation tasks; developer workstations (this rule is most useful on production server hosts; tune to exclude known developer environments).
 **Deployment:** EDR/Sysmon-equivalent file-creation telemetry; pair a hit with content inspection of the session artifact before escalation.
 
 ```yaml
-title: Rovodev AI Agent Sessions Directory Creation on Server Host — Potential AI-Augmented Offensive Operations
+title: Rovodev AI Agent Sessions Directory or Session Context File Created on a Linux Host
 id: 273f8eea-72b3-48c7-a134-cdc5a65064d7
 status: experimental
 description: >-
-  Detects creation of Atlassian Rovodev AI coding agent session artifacts (~/.rovodev/sessions/ directory, session_context.json files exceeding 100KB) on server hosts. In the UTA-2026-014 case, the operator used Rovodev on their VPS to author a complete offensive framework (Matrix C2). Rovodev session directories on production server hosts outside of known DevOps pipelines warrant investigation, particularly when co-located with an offensive-framework-looking working directory, but Rovodev is a legitimate enterprise product — treat as a scoping/inventory lead.
+  Detects a file-creation event for either a path containing /.rovodev/sessions/ or a file named session_context.json at any path, on a Linux host. In the UTA-2026-014 case, the operator used Rovodev on their VPS to author a complete offensive framework (Matrix C2), and the report records two session_context.json files under .rovodev/sessions/ (1.24 MB and 176 KB); the rule has no file-size test and no host-role test, and the second alternative fires on that file name anywhere. Rovodev session artifacts on production server hosts outside of known DevOps pipelines warrant investigation, particularly when co-located with an offensive-framework-looking working directory, but Rovodev is a legitimate enterprise product — treat as a scoping/inventory lead.
 references:
     - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
 author: The Hunters Ledger
@@ -1095,18 +1098,18 @@ falsepositives:
 level: medium
 ```
 
-#### Rovodev Log File_Write Tool-Call Pattern: AI-Augmented Offensive Operations Evidence
+#### Rovodev Runtime Log rovodev.log Created on a Linux Host (Scoping Lead for AI-Augmented Offensive Operations)
 
 **Tier:** Hunting
 **Robustness:** 1
 **ATT&CK Coverage:** T1587.001 (Develop Capabilities: Malware)
 **Confidence:** MODERATE
-**Rationale:** Fires on the mere presence of `rovodev.log` — every Rovodev installation generates this file, malicious or benign, so the rule has essentially zero standalone discriminating power. Retained as a Hunting-tier scoping lead (inventorying every host running Rovodev is a legitimate step when hunting for AI-agent-assisted offensive activity in this investigation), consistent with the original author's already-honest `level: low`. Unchanged detection logic.
+**Rationale:** Fires on the mere presence of `rovodev.log`: every Rovodev installation generates this file, malicious or benign, so the rule has essentially zero standalone discriminating power. Retained as a Hunting-tier scoping lead (inventorying every host running Rovodev is a legitimate step when hunting for AI-agent-assisted offensive activity in this investigation), consistent with the original author's already-honest `level: low`. *Wording fix 2026-10-11:* the earlier title named a file_write tool-call pattern and offensive-operations evidence; the rule sees only a file name, and the file_write calls are in the log's content, which no file-creation event shows. The detection logic is unchanged.
 **False Positives:** All Rovodev installations generate rovodev.log — this rule fires on any host running Rovodev; tune to server hosts outside known DevOps pipelines; CI/CD pipeline hosts running Rovodev legitimately.
 **Deployment:** EDR/Sysmon-equivalent file-creation telemetry; use strictly as a starting point for subsequent log-content inspection, never as a standalone alert.
 
 ```yaml
-title: Rovodev Log File_Write Tool-Call Pattern — AI-Augmented Offensive Operations Evidence
+title: Rovodev Runtime Log rovodev.log Created on a Linux Host (Scoping Lead for AI-Augmented Offensive Operations)
 id: 817e5ca2-7265-41b3-b344-bbf36afc3193
 status: experimental
 description: >-

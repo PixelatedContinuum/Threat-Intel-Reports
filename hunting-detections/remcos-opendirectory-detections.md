@@ -48,7 +48,7 @@ Remcos is a commercially-sold remote access trojan (Breaking-Security.Net) widel
 **ATT&CK Coverage:** T1219 (Remote Access Software), T1056.001 (Keylogging), T1555.003 (Web Browsers), T1113 (Screen Capture)
 **ATT&CK Note:** T1219 is the primary mapping; T1056.001, T1555.003, and T1113 are secondary coverage.
 **Confidence:** HIGH
-**False Positives:** None known — every OR-branch requires either the family mutex, the paired product banner + developer string, or a multi-string combination from the RAT's internal C2/keylogging/credential-theft protocol vocabulary; the loosest branch (`8 of them`) still requires at least 3 distinctive Remcos-specific tokens given only 5 of the 22 declared strings are generic Windows terms.
+**False Positives:** None known. Every OR-branch requires either the family mutex, the paired product banner + developer string, or a multi-string combination from the RAT's internal C2/keylogging/credential-theft protocol vocabulary. *Logic fix 2026-10-11:* the loosest branch used to be `8 of them`, and 7 of the 24 declared strings are generic Windows terms (`Userinit`, `install.bat`, `EnableLUA`, `VirtualAllocEx`, `WriteProcessMemory`, `GdipSaveImageToStream`, `waveInOpen`), so a binary holding all seven plus one Remcos string satisfied it; the branch now also requires 3 of the 17 Remcos-vocabulary strings (mutex, banner, developer, C2, keylogging, credential and command strings). Not goodware-validated.
 **Blind Spots:** A fully re-branded fork that strips the banner/developer strings, randomizes the mutex, and reworks the internal log/command vocabulary would evade this rule; targets on-disk/in-memory binaries, not network traffic.
 **Validation:** Scan either analyzed sample (`hash1`/`hash3` below) — must match via the mutex branch alone; a benign, unrelated Windows executable must NOT fire.
 **Deployment:** Endpoint AV/EDR file scan, memory scanning.
@@ -116,7 +116,7 @@ rule RAT_Remcos_Family_Detection {
          (3 of ($c2_*)) or
          (2 of ($keylog_*) and 2 of ($api_*)) or
          (2 of ($cred_*)) or
-         (8 of them)
+         (8 of them and 3 of ($mutex, $banner, $developer, $c2_*, $keylog_*, $cred_*, $cmd_*))
       )
 }
 ```
@@ -176,8 +176,8 @@ rule RAT_Remcos_OpenDirectory_Mutex_Install {
 **Robustness:** 2
 **ATT&CK Coverage:** T1548.002 (Bypass User Account Control), T1547.001 (Registry Run Keys / Startup Folder), T1547.004 (Winlogon Helper DLL)
 **Confidence:** HIGH
-**Rationale:** Every OR-branch requires either the family mutex or the literal `remcos` substring in the install path — none of the five branches can fire on the generic `Software\...\Run` string alone. Fixed a real defect from the original: the condition had no `filesize` constraint at all.
-**False Positives:** None known — the generic `Software\Microsoft\Windows\CurrentVersion\Run` string only contributes when paired with the campaign install path or two other persistence-path strings plus that same install path.
+**Rationale:** Every OR-branch requires either the family mutex or the literal `AppData\Roaming\remcos\remcos.exe` install path; none of the five branches can fire on the generic `Software\...\Run` string alone. The branches are: a UAC command string plus the install path; three persistence-path strings plus the install path; the Userinit path, the install path and the mutex; the mutex plus two persistence-path strings plus a UAC command string (this one needs no install path); and the PING and `install.bat` melting strings plus the install path. Fixed a real defect from the original: the condition had no `filesize` constraint at all. *Wording fix 2026-10-11:* the earlier text said the Run string only contributes with the install path, which is untrue of the mutex branch.
+**False Positives:** None known. The generic `Software\Microsoft\Windows\CurrentVersion\Run` string only contributes when paired with the campaign install path, or (the fourth branch) with the family mutex plus a second persistence-path string plus a UAC command string; it never fires alone. Not goodware-validated.
 **Blind Spots:** A build using a differently-named install folder AND a randomized mutex evades every branch; targets on-disk artifacts only.
 **Validation:** Scan either analyzed sample — must match via the mutex + Winlogon-path branch; a legitimate administrative script referencing the Run key alone (without the campaign install path) must NOT fire.
 **Deployment:** Endpoint AV/EDR file scan.
@@ -400,25 +400,30 @@ rule RAT_Remcos_Surveillance_Generic_API_Cluster {
 
 ### Detection Rules
 
-#### Remcos RAT UAC Bypass via EnableLUA Registry Modification (Process)
+#### UAC Disabled by reg.exe Setting EnableLUA to 0 From cmd.exe (Remcos Behavior)
 
 **Tier:** Detection
 **Robustness:** 3
 **ATT&CK Coverage:** T1548.002 (Bypass User Account Control)
 **Confidence:** HIGH
+**Rationale:** *Wording and logic fix 2026-10-11:* the earlier title said Remcos RAT, but nothing in the selection is Remcos-specific, so the title and description now name the behavior. The value test was the bare substring `/d 0`, which also matches `/d 0x1` (UAC enabled); it is now `/d 0 ` in the middle of the line or `/d 0` at its end.
 **False Positives:** Legitimate system administration (rare); enterprise management tools (SCCM, Intune) performing scripted UAC changes — verify digital signature before treating as benign.
-**Blind Spots:** Misses a UAC-disable performed by a process other than `reg.exe` (e.g. PowerShell `Set-ItemProperty`) — see the companion registry-state rule below for that angle.
+**Blind Spots:** Misses a UAC-disable performed by a process other than `reg.exe` (e.g. PowerShell `Set-ItemProperty`) or launched by a parent other than `cmd.exe`; misses the data written in another spelling (`/d 0x0`, `/d 00`, `/d 0x00000000`); see the companion registry-state rule below for the registry-write angle.
 **Validation:** Trigger the malware's UAC-bypass routine — the reg.exe command line must match; unrelated administrative reg.exe usage that doesn't target this exact key/value combination must NOT fire.
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (process-creation telemetry).
 
 ```yaml
-title: Remcos RAT UAC Bypass via EnableLUA Registry Modification
+title: UAC Disabled by reg.exe Setting EnableLUA to 0 From cmd.exe (Remcos Behavior)
 id: 482a813a-346e-450c-8ff7-4b449a26ad7d
 status: experimental
 description: >-
-  Detects UAC bypass by setting the EnableLUA registry value to 0 via
-  reg.exe, a technique used by Remcos RAT to disable User Account
-  Control ahead of persistence installation
+  Detects reg.exe, launched by cmd.exe, adding the HKLM Policies\System
+  EnableLUA value as REG_DWORD with data 0 (the value written as /d 0 followed
+  by a space or ending the line), which disables User Account Control. The
+  report records Remcos doing this ahead of persistence installation. The
+  rule has no Remcos-specific test: any cmd.exe-launched reg.exe that turns
+  UAC off matches, and so does the same change made by an administrator or a
+  management tool.
 references:
     - https://the-hunters-ledger.com/hunting-detections/remcos-opendirectory-detections/
 author: The Hunters Ledger
@@ -441,10 +446,13 @@ detection:
             - 'Policies\System'
             - 'EnableLUA'
             - 'REG_DWORD'
-            - '/d 0'
+    selection_value_mid:
+        CommandLine|contains: '/d 0 '
+    selection_value_end:
+        CommandLine|endswith: '/d 0'
     selection_parent:
         ParentImage|endswith: '\cmd.exe'
-    condition: all of selection_*
+    condition: selection_img and selection_cli and (selection_value_mid or selection_value_end) and selection_parent
 falsepositives:
     - Legitimate system administration (rare)
     - Enterprise management tools (SCCM, Intune) - verify digital signature
@@ -457,9 +465,10 @@ level: high
 **Robustness:** 3
 **ATT&CK Coverage:** T1547.004 (Winlogon Helper DLL)
 **Confidence:** HIGH
-**False Positives:** Unlikely — no legitimate process modifies this value outside OS installation.
-**Blind Spots:** None significant for this exact technique; a persistence mechanism that avoids Userinit entirely (e.g. a Run key alone) is not covered by this rule.
-**Validation:** Trigger the malware's persistence routine — the registry write appending a second executable path must match; the legitimate single-value `userinit.exe` write during OS install must NOT fire.
+**Rationale:** *Wording fix 2026-10-11:* the earlier description said the rule detects an appended executable path, but the selection fires on any Userinit data other than the exact default string, which includes a replaced value; the description, false positives and validation now say so.
+**False Positives:** Unlikely. The report names no legitimate writer of this value outside OS installation; a management tool or an administrator that rewrites it also matches, and so does a legitimate spelling of the default that differs from the filtered string.
+**Blind Spots:** A persistence mechanism that avoids Userinit entirely (e.g. a Run key alone) is not covered. The default-value filter is one literal string; a differently formatted default would be reported as a modification.
+**Validation:** Trigger the malware's persistence routine: the registry write appending a second executable path must match; a write that leaves the value as the default `userinit.exe,` must NOT fire, and a write that replaces it with another value does fire.
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (registry telemetry).
 
 ```yaml
@@ -467,10 +476,13 @@ title: Remcos RAT Winlogon Userinit Persistence via Registry Modification
 id: 208b4736-f00a-44bd-b71e-1230ece13876
 status: experimental
 description: >-
-  Detects modification of the Winlogon Userinit registry value to
-  append an additional executable path, a rare persistence technique
-  used by Remcos RAT that runs the payload at every user logon before
-  the desktop loads
+  Detects a write to the Winlogon Userinit registry value whose data is
+  anything other than the default C:\WINDOWS\system32\userinit.exe, (with
+  the trailing comma). The report records Remcos RAT appending its own
+  executable path after the default, a rare persistence technique that runs
+  the payload at every user logon before the desktop loads. The rule tests
+  only that the value differs from the default, so an appended path, a
+  replaced value and any other change all match.
 references:
     - https://the-hunters-ledger.com/hunting-detections/remcos-opendirectory-detections/
 author: The Hunters Ledger
@@ -543,27 +555,30 @@ falsepositives:
 level: high
 ```
 
-#### Remcos RAT File Melting Behavior via install.bat
+#### Remcos RAT Inline Self-Deletion cmd.exe Command Line (PING, DEL, Start and Remcos Folder)
 
 **Tier:** Detection
 **Robustness:** 2
 **ATT&CK Coverage:** T1070.004 (File Deletion)
-**Confidence:** HIGH
+**Confidence:** MODERATE
 **False Positives:** Custom administrative scripts that happen to reference the same folder name (very rare pattern).
-**Blind Spots:** A build using a differently-named install folder evades the `AppData\Roaming\remcos` requirement; misses file-melting performed via a mechanism other than `cmd.exe`.
-**Validation:** Trigger the malware's self-deletion routine — the full command-line combination must match; a benign script that pings localhost or deletes files without ALSO referencing this exact folder must NOT fire.
+**Blind Spots:** A cmd.exe started on the script file (`cmd /c %TEMP%\install.bat`) carries none of the four tokens in its command line and evades; whether the observed run passes the commands inline is NOT CHECKED (the report documents the script content, not the invocation). A build using a differently-named install folder evades the `AppData\Roaming\remcos` requirement; misses file-melting performed through a mechanism other than `cmd.exe`.
+**Validation:** Run a cmd.exe whose command line holds `PING 127.0.0.1`, `DEL`, `start` and `AppData\Roaming\remcos`: it must match. A benign script that pings localhost or deletes files without ALSO referencing this exact folder must NOT fire, and `cmd /c install.bat` must NOT fire (the script body is not on the command line).
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (process-creation telemetry).
 
 ```yaml
-title: Remcos RAT File Melting Behavior via install.bat
+title: Remcos RAT Inline Self-Deletion cmd.exe Command Line (PING, DEL, Start and Remcos Folder)
 id: 62f7d36c-2d5d-4f21-a6c9-71589b95ddb0
 status: experimental
 description: >-
-  Detects the Remcos RAT self-deletion ("file melting") sequence - a
-  cmd.exe command line combining a PING-based delay, a DEL command, a
-  start command, and a reference to the campaign's remcos install
-  folder, used to remove the install.bat staging script after
-  installation completes
+  Detects a cmd.exe command line that itself contains a PING 127.0.0.1
+  delay, a DEL, a start and the AppData\Roaming\remcos folder, the form of
+  the Remcos RAT self-deletion ("file melting") sequence in which the
+  commands are passed on the command line. The report records the sequence
+  as the content of the %TEMP%\install.bat staging script and does not say how
+  cmd.exe was started, so a run that executes install.bat from a file shows
+  only the script path on the command line and does not match. The rule does
+  not test install.bat.
 references:
     - https://the-hunters-ledger.com/hunting-detections/remcos-opendirectory-detections/
 author: The Hunters Ledger
@@ -591,26 +606,28 @@ falsepositives:
 level: high
 ```
 
-#### Remcos RAT Execution via Winlogon Userinit Hijack (Child Process)
+#### winlogon.exe Child Process Running From an AppData Path (Userinit Hijack Pattern)
 
 **Tier:** Detection
 **Robustness:** 3
 **ATT&CK Coverage:** T1547.004 (Winlogon Helper DLL)
 **Confidence:** HIGH
-**False Positives:** Unlikely — `winlogon.exe` legitimately spawns only a small, fixed set of OS helper processes, all excluded by the filter.
+**Rationale:** *Wording and level fix 2026-10-11:* the earlier title said Remcos RAT and the description called any such child a strong indicator of the Remcos technique, but the selection is any `winlogon.exe` child with an AppData image path that is not on a three-name filter list; the title and description now say that. `level` goes from critical to high, because critical is reserved for never-false-positive logic and this is a path-and-parent test with a short exclusion list.
+**False Positives:** Unlikely. A winlogon.exe child with an AppData image path is not part of normal logon, and the three filtered names (`userinit.exe`, `LogonUI.exe`, `dwm.exe`) are excluded, but the filter is a list of three names and not an inventory of everything `winlogon.exe` starts, so a legitimate child outside the list that runs from AppData would match.
 **Blind Spots:** A future OS update introducing a new legitimate `winlogon.exe` child not in the filter list could false-positive until the filter is updated.
 **Validation:** Trigger the malware's Userinit-hijack persistence — the AppData-sourced child of `winlogon.exe` must match; the three known-legitimate children (`userinit.exe`, `LogonUI.exe`, `dwm.exe`) must NOT fire.
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (process-creation telemetry).
 
 ```yaml
-title: Remcos RAT Execution via Winlogon Userinit Hijack
+title: winlogon.exe Child Process Running From an AppData Path (Userinit Hijack Pattern)
 id: 78fef00f-cd92-4dcd-8413-c3ed49b56aab
 status: experimental
 description: >-
-  Detects a child process of winlogon.exe launching from %AppData% -
-  winlogon.exe legitimately spawns only a small, fixed set of OS helper
-  processes, so any other AppData-sourced child is a strong indicator
-  of the Userinit-hijack persistence technique used by Remcos RAT
+  Detects a child process of winlogon.exe whose image path contains \AppData\,
+  other than userinit.exe, LogonUI.exe and dwm.exe. The report records Remcos
+  RAT launching its AppData copy through a hijacked Winlogon Userinit value,
+  but the rule has no Remcos-specific test: it matches any AppData-sourced
+  winlogon.exe child that is not on the three-name filter list
 references:
     - https://the-hunters-ledger.com/hunting-detections/remcos-opendirectory-detections/
 author: The Hunters Ledger
@@ -635,7 +652,7 @@ detection:
     condition: selection and not filter_legitimate
 falsepositives:
     - Unlikely
-level: critical
+level: high
 ```
 
 ### Hunting Rules
@@ -694,8 +711,8 @@ level: medium
 **Robustness:** 2
 **ATT&CK Coverage:** T1055 (Process Injection)
 **Confidence:** MODERATE
-**Rationale:** A real, technique-level process-access pattern (broad or write-capable access rights from a user-writable location into a browser or `explorer.exe`), but the `%AppData%` source scope is common to a large amount of legitimate consumer software, and the target/access-rights combination is not Remcos-specific. Demoted from `high` given the acknowledged FP scenarios below.
-**False Positives:** Legitimate software updates from AppData; development/debugging tools.
+**Rationale:** A real, technique-level process-access pattern (full-access rights from a user-writable location into a browser or `explorer.exe`), but the `%AppData%` source scope is common to a large amount of legitimate consumer software, and the target/access-rights combination is not Remcos-specific. Demoted from `high` given the acknowledged FP scenarios below. *Logic fix 2026-10-11:* the access list also held `0x1000` (`PROCESS_QUERY_LIMITED_INFORMATION`, a read-only right that browsers and shell tooling request routinely), which contradicted the "broad or write-capable" description and added no injection signal; it is removed, leaving the two full-access masks `0x1F0FFF` and `0x1FFFFF`.
+**False Positives:** Legitimate software updates from AppData; development/debugging tools; software that opens a full-access handle to `explorer.exe` or a browser for automation or accessibility.
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (process-access telemetry); broader sweep, not for auto-block.
 
 ```yaml
@@ -736,7 +753,6 @@ detection:
         GrantedAccess:
             - '0x1F0FFF'
             - '0x1FFFFF'
-            - '0x1000'
     condition: all of selection_*
 falsepositives:
     - Legitimate software updates from AppData
@@ -744,7 +760,7 @@ falsepositives:
 level: medium
 ```
 
-#### Remcos RAT Non-Browser Process Accessing Browser Credential Store Files
+#### Non-Browser Process Accessing Chrome or Firefox Credential Store Files (Remcos Credential Theft Pattern)
 
 **Tier:** Hunting
 **Robustness:** 3
@@ -752,19 +768,21 @@ level: medium
 **Confidence:** MODERATE
 **Rationale:** A durable, family-agnostic technique detector (accessing Chrome/Firefox credential and cookie files from a non-browser process is a genuine chokepoint), but the campaign's own false-positive list names specific, common categories of legitimate software — password managers and backup tools — that are expected to trigger it. Demoted from `high` to reflect that acknowledged, non-trivial FP volume; the underlying technique detection itself remains high-confidence.
 **False Positives:** Password managers (1Password, Bitwarden, LastPass) importing saved browser credentials; backup software performing full user-profile backups.
-**Deployment:** Endpoint EDR / Sysmon-fed SIEM (file-access telemetry); broader sweep, not for auto-block.
+**Deployment:** Endpoint EDR with file-read telemetry, or Windows object-access auditing (Security EID 4663) with SACLs on the browser profile files; stock Sysmon does not log file reads. Broader sweep, not for auto-block.
 
 ```yaml
-title: Remcos RAT Non-Browser Process Accessing Browser Credential Store Files
+title: Non-Browser Process Accessing Chrome or Firefox Credential Store Files (Remcos Credential Theft Pattern)
 id: 27e252f6-c5d9-4545-ab96-b180ab116a88
 status: experimental
 description: >-
-  Detects access to Chrome or Firefox credential and cookie database
-  files by a process other than the browser itself - the technique
-  used by the Remcos RAT credential-theft module in this campaign.
-  This is a family-agnostic technique detector; legitimate password
-  managers and backup software are known to trigger it, so it is
-  tiered for hunting rather than direct alerting.
+  Detects access to Chrome (default profile Login Data and Cookies) or
+  Firefox (logins.json and cookies.sqlite under a Profiles folder)
+  credential and cookie database files by a process other than chrome.exe,
+  firefox.exe or msedge.exe - the technique used by the Remcos RAT
+  credential-theft module in this campaign. This is a family-agnostic
+  technique detector with no Remcos-specific test; legitimate password
+  managers and backup software are known to trigger it, so it is tiered for
+  hunting rather than direct alerting.
 references:
     - https://the-hunters-ledger.com/hunting-detections/remcos-opendirectory-detections/
 author: The Hunters Ledger
@@ -777,6 +795,7 @@ tags:
 logsource:
     category: file_access
     product: windows
+    definition: 'Requires file read-access telemetry for the browser profile files, for example Security EID 4663 with an audit SACL on them or an EDR file-access sensor; stock Sysmon does not log file reads.'
 detection:
     selection_chrome:
         TargetFilename|contains:

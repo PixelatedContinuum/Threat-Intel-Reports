@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--f525fd93-f5d5-4efb-abae-d0366ce8e01c",
+    "id": "bundle--19727471-402c-4f48-ade9-959b025b3193",
     "objects": [
         {
             "type": "identity",
@@ -2686,12 +2686,12 @@
             "id": "indicator--53da4f5a-bd11-5652-814f-8d75b782b648",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.718674Z",
-            "modified": "2026-10-01T19:54:20.718674Z",
+            "modified": "2026-10-11T06:31:48.606281Z",
             "name": "Sliver_Beacon_Memory_Import_Path",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "/*\n   Yara Rule Set\n   Identifier: Sliver-C2-Windows-PostEx-Staging-193.233.202.17\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule Sliver_Beacon_Memory_Import_Path {\n   meta:\n      description = \"Detects the canonical Sliver C2 protobuf import path resident in process memory. Symbol obfuscation removes this string from the on-disk binary, so it recovers Sliver only from a live or dumped memory image, not a file scan\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17/\"\n      date = \"2026-09-06\"\n      hash1 = \"bd61c2880920bbfb86c12df439dd1ca0258a10e532433698fd029aef2a5b33f2\"\n      family = \"Sliver\"\n      id = \"075c07ad-7a6c-5b72-9a9c-97e80728ad79\"\n   strings:\n      $s1 = \"github.com/bishopfox/sliver/protobuf/sliverpb\" ascii\n   condition:\n      $s1\n}",
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: Sliver-C2-Windows-PostEx-Staging-193.233.202.17\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule Sliver_Beacon_Memory_Import_Path {\n   meta:\n      description = \"Detects the canonical Sliver C2 protobuf import path resident in process memory. Symbol obfuscation removes this string from the on-disk binary, so it recovers Sliver only from a live or dumped memory image, not a file scan\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/\"\n      date = \"2026-09-06\"\n      hash1 = \"bd61c2880920bbfb86c12df439dd1ca0258a10e532433698fd029aef2a5b33f2\"\n      family = \"Sliver\"\n      id = \"075c07ad-7a6c-5b72-9a9c-97e80728ad79\"\n   strings:\n      $s1 = \"github.com/bishopfox/sliver/protobuf/sliverpb\" ascii\n   condition:\n      $s1\n}",
             "pattern_type": "yara",
             "valid_from": "2026-09-07T00:00:00Z",
             "labels": [
@@ -2707,12 +2707,12 @@
             "id": "indicator--1f3ec16c-d3e5-5cc5-af56-7bea1ba8751b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.718793Z",
-            "modified": "2026-10-01T19:54:20.718793Z",
+            "modified": "2026-10-11T06:31:48.606516Z",
             "name": "Sliver_Operator_Build_Artifacts_193_233_202_17",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "/*\n   Yara Rule Set\n   Identifier: Sliver-C2-Windows-PostEx-Staging-193.233.202.17\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule Sliver_Operator_Build_Artifacts_193_233_202_17 {\n   meta:\n      description = \"Detects Go binaries carrying this operator's /tmp/ source-path convention and/or the internally impossible Chrome/108.0.6602.492 User-Agent hardcoded into the beacon build profile\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17/\"\n      date = \"2026-09-06\"\n      hash1 = \"bd61c2880920bbfb86c12df439dd1ca0258a10e532433698fd029aef2a5b33f2\"\n      family = \"Sliver\"\n      id = \"b657aceb-8818-5c3a-ab12-e6bf82b80f1d\"\n   strings:\n      $ua = \"Chrome/108.0.6602.492\" ascii\n      $path1 = \"/tmp/revshell\" ascii\n      $path2 = \"/tmp/srv/ws_\" ascii\n      $path3 = \"/tmp/payloads/\" ascii\n      $path4 = \"/tmp/build_nc/main.go\" ascii\n      $path5 = \"/tmp/efspot/efspot.go\" ascii\n   condition:\n      uint16(0) == 0x5A4D and filesize < 25MB and 2 of them\n}",
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: Sliver-C2-Windows-PostEx-Staging-193.233.202.17\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule Sliver_Operator_Build_Artifacts_193_233_202_17 {\n   meta:\n      description = \"Detects Go binaries carrying this operator's /tmp/ source-path convention and/or the internally impossible Chrome/108.0.6602.492 User-Agent hardcoded into the beacon build profile\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/\"\n      date = \"2026-09-06\"\n      hash1 = \"bd61c2880920bbfb86c12df439dd1ca0258a10e532433698fd029aef2a5b33f2\"\n      family = \"Sliver\"\n      id = \"b657aceb-8818-5c3a-ab12-e6bf82b80f1d\"\n   strings:\n      $ua = \"Chrome/108.0.6602.492\" ascii\n      $path1 = \"/tmp/revshell\" ascii\n      $path2 = \"/tmp/srv/ws_\" ascii\n      $path3 = \"/tmp/payloads/\" ascii\n      $path4 = \"/tmp/build_nc/main.go\" ascii\n      $path5 = \"/tmp/efspot/efspot.go\" ascii\n   condition:\n      uint16(0) == 0x5A4D and filesize < 25MB and 2 of them\n}",
             "pattern_type": "yara",
             "valid_from": "2026-09-07T00:00:00Z",
             "labels": [
@@ -2728,12 +2728,12 @@
             "id": "indicator--e6748937-2c04-54d1-a2be-b0c4e6c9bbcf",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.718897Z",
-            "modified": "2026-10-01T19:54:20.718897Z",
+            "modified": "2026-10-11T06:31:48.606654Z",
             "name": "EtherRAT_NodeJS_Bot_Config_TheGentlemen",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "/*\n   Yara Rule Set\n   Identifier: Sliver-C2-Windows-PostEx-Staging-193.233.202.17\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule EtherRAT_NodeJS_Bot_Config_TheGentlemen {\n   meta:\n      description = \"Detects the decrypted EtherRAT-class Node.js bot configuration by its Ethereum smart-contract resolver constants, custom polling header, and identity-file naming, which do not change when the resolved C2 domain rotates\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17/\"\n      date = \"2026-09-06\"\n      hash1 = \"86881b8e9d197ac2f734792de48d5dfaebe7cafb6e35d49c5dd7fe6eb697230e\"\n      family = \"EtherRAT-class Node.js bot\"\n      id = \"4db421c9-d511-5bcb-95fa-bc53c5aa8517\"\n   strings:\n      $contract = \"0xb3f2897f2bc797e5b9033faef8c81e92b01cb831\" ascii nocase\n      $storage_key = \"0x40b57c3622c1CbfD699207F71F2dE5A8Fe256893\" ascii\n      $selector = \"0x7d434425\" ascii\n      $build_id = \"ff8fee46-5d21-4437-af5b-337434288cae\" ascii\n      $header = \"X-Bot-Server\" ascii fullword\n      $botid_file = \".node_bot_id\" ascii\n      $runkey = \"conhost --headless\" ascii\n   condition:\n      filesize < 5MB and 2 of them\n}",
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: Sliver-C2-Windows-PostEx-Staging-193.233.202.17\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule EtherRAT_NodeJS_Bot_Config_TheGentlemen {\n   meta:\n      description = \"Detects the decrypted EtherRAT-class Node.js bot configuration by its Ethereum smart-contract resolver constants, custom polling header, and identity-file naming, which do not change when the resolved C2 domain rotates\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/\"\n      date = \"2026-09-06\"\n      hash1 = \"86881b8e9d197ac2f734792de48d5dfaebe7cafb6e35d49c5dd7fe6eb697230e\"\n      family = \"EtherRAT-class Node.js bot\"\n      id = \"4db421c9-d511-5bcb-95fa-bc53c5aa8517\"\n   strings:\n      $contract = \"0xb3f2897f2bc797e5b9033faef8c81e92b01cb831\" ascii nocase\n      $storage_key = \"0x40b57c3622c1CbfD699207F71F2dE5A8Fe256893\" ascii\n      $selector = \"0x7d434425\" ascii\n      $build_id = \"ff8fee46-5d21-4437-af5b-337434288cae\" ascii\n      $header = \"X-Bot-Server\" ascii fullword\n      $botid_file = \".node_bot_id\" ascii\n      $runkey = \"conhost --headless\" ascii\n   condition:\n      filesize < 5MB and 2 of them\n}",
             "pattern_type": "yara",
             "valid_from": "2026-09-07T00:00:00Z",
             "labels": [
@@ -2749,12 +2749,12 @@
             "id": "indicator--426fe2f2-f9c5-5ea8-a63c-d7ffac2f49cc",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.718982Z",
-            "modified": "2026-10-01T19:54:20.718982Z",
+            "modified": "2026-10-11T06:31:48.606769Z",
             "name": "Operator_AD_Deployment_Script_Markers_TheGentlemen",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "/*\n   Yara Rule Set\n   Identifier: Sliver-C2-Windows-PostEx-Staging-193.233.202.17\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule Operator_AD_Deployment_Script_Markers_TheGentlemen {\n   meta:\n      description = \"Detects PowerShell/batch deployment scripts carrying this operator's plaintext success markers for domain-account creation, Domain Admins group addition, LSASS dumping, or the explicit corporate-proxy bypass used before beacon delivery\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17/\"\n      date = \"2026-09-06\"\n      hash1 = \"f609621698eaad8c4683750fe8bd0e242349be3eea408da593151ff877ed8ab6\"\n      family = \"Operator scripts and deployment\"\n      id = \"71770cb8-7a72-58c4-baab-84a9dcdfb80b\"\n   strings:\n      $m1 = \"USER_CREATED_OK\" ascii fullword\n      $m2 = \"ADDED_TO_DA_OK\" ascii fullword\n      $m3 = \"DUMP_OK:\" ascii\n      $m4 = \"GlobalProxySelection.GetEmptyWebProxy()\" ascii\n   condition:\n      filesize < 200KB and 1 of them\n}",
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: Sliver-C2-Windows-PostEx-Staging-193.233.202.17\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule Operator_AD_Deployment_Script_Markers_TheGentlemen {\n   meta:\n      description = \"Detects PowerShell/batch deployment scripts carrying this operator's plaintext success markers for domain-account creation, Domain Admins group addition, LSASS dumping, or the explicit corporate-proxy bypass used before beacon delivery\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/\"\n      date = \"2026-09-06\"\n      hash1 = \"f609621698eaad8c4683750fe8bd0e242349be3eea408da593151ff877ed8ab6\"\n      family = \"Operator scripts and deployment\"\n      id = \"71770cb8-7a72-58c4-baab-84a9dcdfb80b\"\n   strings:\n      $m1 = \"USER_CREATED_OK\" ascii fullword\n      $m2 = \"ADDED_TO_DA_OK\" ascii fullword\n      $m3 = \"DUMP_OK:\" ascii\n      $m4 = \"GlobalProxySelection.GetEmptyWebProxy()\" ascii\n   condition:\n      filesize < 200KB and 1 of them\n}",
             "pattern_type": "yara",
             "valid_from": "2026-09-07T00:00:00Z",
             "labels": [

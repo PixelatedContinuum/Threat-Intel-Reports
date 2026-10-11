@@ -23,7 +23,7 @@ This open-directory exposure carried a seven-component multi-family MaaS toolkit
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 6 | 0 | T1219, T1620, T1027.002, T1113 | 0 |
-| Sigma | 3 | 2 | T1112, T1547.001, T1036.005, T1059.005, T1218.007, T1059.001, T1027.011 | 2 |
+| Sigma | 2 | 3 | T1112, T1547.001, T1036.005, T1059.005, T1218.007, T1059.001, T1027.011 | 2 |
 | Suricata | 1 | 0 | T1573.002, T1071.001 | 2 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
@@ -389,10 +389,10 @@ level: high
 **Robustness:** 2
 **ATT&CK Coverage:** T1547.001 (Registry Run Keys / Startup Folder), T1036.005 (Match Legitimate Name or Location)
 **Confidence:** HIGH
-**Rationale:** The Run key value name `vlctask` and target path `%APPDATA%\vlcapp\vlc.exe` are both specific to this malware's masquerade — legitimate VLC Media Player installs to %ProgramFiles% and never registers a Run key named `vlctask`. The path+value combination requires the operator to change two coordinated strings to evade.
+**Rationale:** The Run key value name `vlctask` and the target path `%APPDATA%\vlcapp\vlc.exe` are both specific to this malware's masquerade: legitimate VLC Media Player installs to %ProgramFiles% and never registers a Run key named `vlctask`. *Logic fix 2026-10-11:* the rule used to test the value name alone, so renaming the target directory or pointing `vlctask` anywhere else still fired and the two-string claim was untrue; it now requires both the value name in the key path and `\vlcapp\vlc.exe` in the written value data (`Details`). The path+value combination requires the operator to change two coordinated strings to evade.
 **False Positives:** Unlikely — legitimate VLC Media Player does not use the vlctask Run key value name or the AppData\vlcapp path.
-**Blind Spots:** A rebrand renaming both the Run key value name and the target directory evades; only covers this specific masquerade, not a future build imitating a different application.
-**Validation:** Trigger the malware's persistence routine — the registry write must match; a genuine VLC Media Player installation must NOT fire.
+**Blind Spots:** A rebrand renaming either the Run key value name or the target directory evades (the rule needs both); a value written without data in the event, or a sensor that does not report `Details`, never fires; only covers this specific masquerade, not a future build imitating a different application.
+**Validation:** Trigger the malware's persistence routine: a Run-key write of value `vlctask` with data ending `\vlcapp\vlc.exe` must match; a `vlctask` value pointing elsewhere, and a genuine VLC Media Player installation, must NOT fire.
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (registry telemetry).
 
 ```yaml
@@ -421,64 +421,13 @@ logsource:
     category: registry_set
     product: windows
 detection:
-    selection:
+    selection_value_name:
         TargetObject|contains: '\CurrentVersion\Run\vlctask'
-    condition: selection
+    selection_target:
+        Details|contains: '\vlcapp\vlc.exe'
+    condition: selection_value_name and selection_target
 falsepositives:
     - Unlikely — legitimate VLC Media Player does not use the vlctask Run key value name or the AppData\vlcapp path
-level: high
-```
-
-**ScreenConnect Abuse**
-
-#### ScreenConnect Phishing VBScript Dropper Silent MSI Install Chain
-
-**Tier:** Detection
-**Robustness:** 2
-**ATT&CK Coverage:** T1059.005 (Visual Basic), T1218.007 (Msiexec)
-**Confidence:** HIGH
-**Rationale:** The parent-child pairing of `wscript.exe` spawning `msiexec.exe` with both `/quiet` and `ALLUSERS=2` is a durable technique-level chokepoint for this silent-install delivery method — an operator would need to change the entire installer invocation mechanism, not just a filename, to evade. Dropped the unsupported `attack.initial-access` tactic tag carried in the original rule (no accompanying T1566 technique tag was present).
-**False Positives:** Legitimate software deployment scripts that invoke msiexec silently from wscript.exe; validate MSI download source URL and installation target domain against known-good deployment infrastructure.
-**Blind Spots:** A dropper using a different scripting engine (JScript, PowerShell) to launch the same silent MSI install evades the `wscript.exe` parent requirement; misses installs that omit `ALLUSERS=2`.
-**Validation:** Trigger the phishing dropper chain — the parent-child-cmdline combination must match; a legitimate silent MSI deployment from a different parent process must NOT fire.
-**Deployment:** Endpoint EDR / Sysmon-fed SIEM (process-creation telemetry).
-
-```yaml
-title: ScreenConnect Phishing VBScript Dropper Silent MSI Install Chain
-id: c48377bd-0066-4bb0-8cc7-4041cd0a0e54
-status: experimental
-description: >-
-    Detects the ScreenConnect phishing dropper chain where a VBScript (Attachment.vbs) spawns
-    msiexec.exe with silent install flags (/quiet ALLUSERS=2) to install ConnectWise ScreenConnect
-    without user interaction. The dropper downloads the MSI from the operator distribution domain
-    using MSXML2.ServerXMLHTTP.6.0 with SSL verification deliberately bypassed. wscript.exe
-    spawning msiexec.exe with ALLUSERS=2 is characteristic of this phishing dropper and is not
-    expected behavior in legitimate software deployment from this parent process.
-references:
-    - https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/
-author: The Hunters Ledger
-date: 2026-03-17
-tags:
-    - attack.execution
-    - attack.stealth
-    - attack.t1059.005
-    - attack.t1218.007
-    - detection.emerging-threats
-    - stp.3
-logsource:
-    category: process_creation
-    product: windows
-detection:
-    selection_parent:
-        ParentImage|endswith: '\wscript.exe'
-    selection_child:
-        Image|endswith: '\msiexec.exe'
-        CommandLine|contains|all:
-            - '/quiet'
-            - 'ALLUSERS=2'
-    condition: selection_parent and selection_child
-falsepositives:
-    - Legitimate software deployment scripts that invoke msiexec silently from wscript.exe; validate MSI download source URL and installation target domain against known-good deployment infrastructure
 level: high
 ```
 
@@ -492,8 +441,9 @@ level: high
 **Robustness:** 1
 **ATT&CK Coverage:** T1547.001 (Registry Run Keys / Startup Folder), T1036.005 (Match Legitimate Name or Location)
 **Confidence:** MODERATE
-**Rationale:** Demoted from the original `level: high` — "WindowsService" is a generic, operator-chosen Run-key value name rather than a family-specific artifact: trivially renamed in a future build and not costly for the operator to change, so durability is low even though today's collision rate with legitimate software is limited. The existing System32/SysWOW64 path filter reduces some obvious FPs but does not address poorly-installed legitimate software using the same generic value name, so this remains an analyst-triaged hunting lead rather than an alerting-grade rule.
+**Rationale:** Demoted from the original `level: high`: "WindowsService" is a generic, operator-chosen Run-key value name rather than a family-specific artifact: trivially renamed in a future build and not costly for the operator to change, so durability is low even though today's collision rate with legitimate software is limited. The existing System32/SysWOW64 path filter reduces some obvious FPs but does not address poorly-installed legitimate software using the same generic value name, so this remains an analyst-triaged hunting lead rather than an alerting-grade rule. *Logic fix 2026-10-11:* the description names the per-user key (`HKCU`), but the selection was the key-path substring alone, so a machine-wide `HKLM` or `Wow6432Node` Run value of the same name matched too; the rule now also requires the `HKU\` hive prefix Sysmon uses for a per-user key. The report records the value under both the unqualified `SOFTWARE\Microsoft\Windows\CurrentVersion\Run` path (section 5) and `HKCU` (IOC lists), so a machine-wide write is a documented gap and not covered.
 **False Positives:** Poorly named legitimate software that uses 'WindowsService' as a Run key value name in a non-System32/SysWOW64 install path.
+**Blind Spots:** A machine-wide (`HKLM`) Run value with this name no longer matches; the report does not settle which hive the sample writes (the IOC list says `HKCU`). The value name is a single literal.
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (registry telemetry); correlate hits against the process image path and known-software inventory before escalating.
 
 ```yaml
@@ -503,7 +453,8 @@ status: experimental
 description: >-
     Detects Raven RAT (custom Delphi RAT developed by the ZeroTrace cluster) establishing
     persistence via a Run key entry named 'WindowsService' under
-    HKCU\Software\Microsoft\Windows\CurrentVersion\Run. This value name is a deliberate
+    HKCU\Software\Microsoft\Windows\CurrentVersion\Run (Sysmon renders the per-user hive
+    as HKU\<SID>, which the rule tests). This value name is a deliberate
     masquerade intended to appear as a legitimate Windows service entry to casual inspection.
     Raven RAT provides keylogging, hidden VNC desktop creation, cryptocurrency wallet theft
     (Exodus, Atomic Wallet, Guarda, Wasabi), and SOCKS proxy capabilities. The value name is a
@@ -524,13 +475,15 @@ logsource:
     category: registry_set
     product: windows
 detection:
-    selection:
+    selection_value_name:
         TargetObject|contains: '\CurrentVersion\Run\WindowsService'
+    selection_hive:
+        TargetObject|startswith: 'HKU\'
     filter_legitimate:
         Details|startswith:
             - 'C:\Windows\System32\'
             - 'C:\Windows\SysWOW64\'
-    condition: selection and not filter_legitimate
+    condition: selection_value_name and selection_hive and not filter_legitimate
 falsepositives:
     - Poorly named legitimate software that uses 'WindowsService' as a Run key value name; validate that the target binary path is outside System32 and Program Files before actioning
 level: medium
@@ -538,29 +491,31 @@ level: medium
 
 **PowerShell Fileless Droppers**
 
-#### Fileless PowerShell PE Dropper ExecutionPolicy Bypass from Non-Standard Parent
+#### PowerShell ExecutionPolicy Bypass With a .ps1 Under a User-Writable Path From a Non-Standard Parent
 
 **Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1059.001 (PowerShell), T1027.011 (Fileless Storage)
 **Confidence:** MODERATE
-**Rationale:** `-ExecutionPolicy Bypass` loading a `.ps1` file is common in both malicious and legitimate administrative tooling. The rule originally narrowed on nothing but a four-entry denylist of standard parent processes, which is a broad NOT-filter rather than a positive behavioral anchor, so every developer tool, CI agent, package manager and automation framework that launches PowerShell this way passed straight through. `selection_staging_path` adds the missing positive anchor by requiring the script to live in a user-writable staging directory, which is where a dropper puts it and where routine tooling generally does not: an installer or a build system usually runs its scripts from an install directory or a source checkout. Repository- and Program-Files-resident automation therefore no longer matches, while the puf.ps1 and sync.ps1 chain still does.
+**Rationale:** `-ExecutionPolicy Bypass` loading a `.ps1` file is common in both malicious and legitimate administrative tooling. The rule originally narrowed on nothing but a four-entry denylist of standard parent processes, which is a broad NOT-filter rather than a positive behavioral anchor, so every developer tool, CI agent, package manager and automation framework that launches PowerShell this way passed straight through. `selection_staging_path` adds a positive anchor by requiring one of six user-writable staging directory names to appear in the command line, which is where a dropper puts its script and where routine tooling generally does not. *Wording fix 2026-10-11:* the staging test is a substring over the whole `CommandLine`, so any argument containing `\Temp\` satisfies it, not only the script path, and the report does not record where `puf.ps1` and `sync.ps1` ran from, so that anchor is not tied to the campaign. The old title's "fileless PE dropper" is the campaign behavior the report describes (`Assembly.Load` in memory, no disk write), and nothing in the query tests it, so the title now names what is tested. A parent-image denylist is environment-specific and belongs in local tuning; this remains a hunting rule.
 
 Note that this narrows on the *script's* location, not the parent process, deliberately: a parent-image denylist is environment-specific and belongs in local tuning, whereas the staging-directory anchor travels to any environment. The title's "fileless PE dropper" framing still describes the campaign behavior rather than anything the query itself tests, so this remains a hunting rule.
 **False Positives:** Software installers and updaters that stage a setup script under `%TEMP%` or `%APPDATA%` and invoke it with a policy bypass; legitimate administrative scripts run from a user-writable path via remote management tools, scheduled tasks, or deployment systems not on the standard-parent denylist.
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM; tune the filter_standard_parents list per environment before using for anything beyond hunting.
 
 ```yaml
-title: Fileless PowerShell PE Dropper ExecutionPolicy Bypass from Non-Standard Parent
+title: PowerShell ExecutionPolicy Bypass With a .ps1 Under a User-Writable Path From a Non-Standard Parent
 id: 945438df-0fc1-4861-9ed6-4c66ae11e700
 status: experimental
 description: >-
-    Detects execution of PowerShell with -ExecutionPolicy Bypass loading a .ps1 file from
-    non-standard parent processes, consistent with the puf.ps1 and sync.ps1 fileless PE dropper
-    chain used in this campaign. These droppers hex-decode an embedded 310KB .NET PE assembly and
-    load it entirely in memory via Assembly.Load with no disk write, bypassing file-based detection.
-    The rule targets PowerShell spawned by remote access tools, command shells, or scripting
-    interpreters not expected to launch PowerShell with policy bypass flags in normal operations.
+    Detects powershell.exe whose command line contains -ExecutionPolicy, Bypass and .ps1 together
+    with a user-writable staging directory (AppData, Temp, ProgramData, Users\Public, Downloads,
+    $Recycle.Bin) anywhere in the command line, when the parent is not explorer.exe, services.exe,
+    svchost.exe or msiexec.exe. The puf.ps1 and sync.ps1 droppers in this campaign hex-decode an
+    embedded .NET PE assembly and load it in memory via Assembly.Load, but the rule tests none of
+    that: no in-memory loading, no PE and no Assembly.Load appear in a process-creation event, and
+    the staging-directory test is a substring of the whole command line, not a check of the
+    script's own path. The report does not say where puf.ps1 and sync.ps1 were run from.
 references:
     - https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/
 author: The Hunters Ledger
@@ -602,6 +557,60 @@ falsepositives:
 level: medium
 ```
 
+**ScreenConnect Abuse**
+
+#### WScript Spawning Msiexec Silent Install With ALLUSERS=2 (ScreenConnect Dropper Pattern)
+
+**Tier:** Hunting
+**Robustness:** 2
+**ATT&CK Coverage:** T1059.005 (Visual Basic), T1218.007 (Msiexec)
+**Confidence:** MODERATE
+**Rationale:** The parent-child pairing of `wscript.exe` spawning `msiexec.exe` with both `/quiet` and `ALLUSERS=2` is the installer step of the ScreenConnect phishing dropper described in the report (`Attachment.vbs` downloads the MSI and runs `msiexec /i [msi] /quiet ALLUSERS=2`). *Wording and tier fix 2026-10-11:* the earlier heading and description presented a ScreenConnect chain, but the rule tests only the parent image and two command-line tokens: it does not identify the MSI, its download source or ScreenConnect, and its own false-positive entry concedes that legitimate deployment scripts install silently from `wscript.exe`, which contradicted the description's "not expected behavior" sentence. A rule whose false-positive list admits the benign form is Hunting, so it moves from Detection and `level` from high to medium. Dropped the unsupported `attack.initial-access` tactic tag carried in the original rule (no accompanying T1566 technique tag was present).
+**False Positives:** Legitimate software deployment scripts that invoke msiexec silently from wscript.exe with `ALLUSERS=2`, the benign form the rule's own false-positive entry has always conceded; validate the MSI path, its download source and the installed product against known-good deployment infrastructure.
+**Blind Spots:** A dropper using a different scripting engine (JScript, PowerShell, `cscript.exe`) to launch the same silent MSI install evades the `wscript.exe` parent requirement; misses installs that omit `ALLUSERS=2` or `/quiet`; a command line holding the flags in a different form (`/qn`) evades.
+**Validation:** Trigger the phishing dropper chain: the parent-child-cmdline combination must match; a silent MSI deployment from a different parent process must NOT fire. A silent install launched by an administrator's own VBScript matches too and is the known benign form, so a hit proves the pattern and not ScreenConnect.
+**Deployment:** Endpoint EDR / Sysmon-fed SIEM (process-creation telemetry).
+
+```yaml
+title: WScript Spawning Msiexec Silent Install With ALLUSERS=2 (ScreenConnect Dropper Pattern)
+id: c48377bd-0066-4bb0-8cc7-4041cd0a0e54
+status: experimental
+description: >-
+    Detects wscript.exe spawning msiexec.exe with both /quiet and ALLUSERS=2 in the command line,
+    the installer step of the ScreenConnect phishing dropper in this campaign: the report records
+    that Attachment.vbs downloads the ScreenConnect MSI with MSXML2.ServerXMLHTTP.6.0 and SSL
+    verification deliberately bypassed, then runs msiexec /i with /quiet and ALLUSERS=2. The rule
+    tests the parent image and those two command-line tokens only. It does not identify the MSI,
+    its source or ScreenConnect, and a legitimate deployment script that installs silently from
+    wscript.exe matches the same way, so a hit is a hunting lead and not a ScreenConnect finding.
+references:
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/
+author: The Hunters Ledger
+date: 2026-03-17
+tags:
+    - attack.execution
+    - attack.stealth
+    - attack.t1059.005
+    - attack.t1218.007
+    - detection.emerging-threats
+    - stp.3
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_parent:
+        ParentImage|endswith: '\wscript.exe'
+    selection_child:
+        Image|endswith: '\msiexec.exe'
+        CommandLine|contains|all:
+            - '/quiet'
+            - 'ALLUSERS=2'
+    condition: selection_parent and selection_child
+falsepositives:
+    - Legitimate software deployment scripts that invoke msiexec silently from wscript.exe; validate MSI download source URL and installation target domain against known-good deployment infrastructure
+level: medium
+```
+
 ---
 
 ## Suricata Signatures
@@ -610,20 +619,20 @@ level: medium
 
 **PureRAT v4.1.9**
 
-#### PureRAT v4.1.9 Protocol Preamble Before TLS
+#### PureRAT v4.1.9 Four-Byte Preamble on Ports 56001 to 56003
 
 **Tier:** Detection
 **Robustness:** 3
 **ATT&CK Coverage:** T1573.002 (Asymmetric Cryptography), T1071.001 (Web Protocols)
 **Confidence:** HIGH
-**Rationale:** The published 4-byte `04 00 00 00` preamble immediately preceding the TLS ClientHello on PureRAT v4.1.9's non-standard ports (56001-56003) is a protocol-framing artifact independently confirmed from binary analysis and external research — a technique-level chokepoint the operator cannot change without breaking the malware's own handshake logic. Salvaged from the original IP-pinned rule by widening the destination from a single hardcoded C2 IP to `$EXTERNAL_NET`: the content anchor and non-standard port combination now survive infrastructure rotation, which the original single-IP version could not. `rev` bumped to 2 to reflect the destination-scope change.
-**False Positives:** None known — the specific 4-byte preamble immediately before a TLS ClientHello on these three non-standard ports is not observed in legitimate traffic; ordinary TLS services do not prepend this framing.
-**Blind Spots:** A future PureRAT build that changes the preamble value or moves off these three ports evades; TLS payload after the preamble is opaque to the sensor.
-**Validation:** Replay a PCAP of PureRAT v4.1.9's handshake on ports 56001-56003 — must alert; ordinary TLS traffic on unrelated ports must NOT.
+**Rationale:** The published 4-byte `04 00 00 00` preamble that PureRAT v4.1.9 sends on its non-standard C2 ports (56001-56003) before the TLS handshake is a protocol-framing artifact recorded in the report from binary analysis and attributed to external research (Netresec, August 2025). Salvaged from the original IP-pinned rule by widening the destination from a single hardcoded C2 IP to `$EXTERNAL_NET`: the content anchor and port combination now survive infrastructure rotation, which the original single-IP version could not. `rev` bumped to 2 for that change. *Wording fix 2026-10-11 (rev 4):* the earlier heading and `msg` said "Before TLS", but the rule matches the four bytes at the start of the client's stream payload on those three ports (`depth:4`) and never looks at a TLS ClientHello, so it fires on any TCP flow to those ports that opens with those bytes; the heading and `msg` now say what is matched. "Confirmed C2 Ports" dropped from the `msg` because the ports are confirmed for one C2 and the destination is no longer pinned to it.
+**False Positives:** None known from the evidence; no benign traffic corpus was tested. Any other protocol that opens with the same four bytes (`04 00 00 00`, a little-endian length of 4) on destination ports 56001 to 56003 would match, because the rule does not check for a TLS ClientHello after the preamble.
+**Blind Spots:** A future PureRAT build that changes the preamble value or moves off these three ports evades; the TLS payload after the preamble is opaque to the sensor, so the rule cannot confirm that a handshake follows.
+**Validation:** Replay a PCAP of PureRAT v4.1.9's handshake on ports 56001-56003 (none was available to this lane): it must alert. Ordinary TLS traffic on unrelated ports must NOT; a TLS ClientHello sent to these ports with no preamble must NOT.
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points.
 
 ```suricata
-alert tcp $HOME_NET any -> $EXTERNAL_NET [56001,56002,56003] (msg:"THL DETECT MaaS Toolkit PureRAT v4.1.9 Protocol Preamble Before TLS to Confirmed C2 Ports"; flow:established,to_server; content:"|04 00 00 00|"; depth:4; threshold:type limit,track by_src,count 1,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/; classtype:trojan-activity; sid:9001002; rev:3; metadata:author The_Hunters_Ledger, date 2026-03-17;)
+alert tcp $HOME_NET any -> $EXTERNAL_NET [56001,56002,56003] (msg:"THL DETECT MaaS Toolkit PureRAT v4.1.9 Four-Byte Preamble on Ports 56001 to 56003 (C2 Protocol Framing)"; flow:established,to_server; content:"|04 00 00 00|"; depth:4; threshold:type limit,track by_src,count 1,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/; classtype:trojan-activity; sid:9001002; rev:4; metadata:author The_Hunters_Ledger, date 2026-03-17;)
 ```
 
 ---

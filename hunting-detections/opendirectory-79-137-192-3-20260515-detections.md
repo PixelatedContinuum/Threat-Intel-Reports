@@ -347,8 +347,8 @@ rule MALW_Rhadamanthys_LoaderRC4Key
 **Robustness:** 2
 **ATT&CK Coverage:** T1027.001 (Binary Padding), T1027.005 (Indicator Removal from Tools), T1497 (Virtualization/Sandbox Evasion), T1543.003 (Windows Service), T1071.003 (Mail Protocols), T1090.002 (External Proxy)
 **Confidence:** MODERATE
-**Rationale:** Tofsee is an unrelated spam-botnet family that co-tenants `79.137.192.3` — it is not part of the Rhadamanthys/BellaMain/Inkognito campaign investigated here, retained as an analyst reference. The rule is explicitly family-bound (not campaign-bound): a broad structural + behavioral combination (anomalous WinHTTP import shape, injection API triad, rare-API bucket, word-salad version metadata) intended for hunting sweeps against this 2023 Tofsee build lineage, not for blocking actions.
-**False Positives:** Some legitimate heavily-packed or obfuscated software with similarly unusual import shapes could coincidentally match individual clauses; the full multi-clause combination is narrow but not goodware-validated to zero FP.
+**Rationale:** Tofsee is an unrelated spam-botnet family that co-tenants `79.137.192.3`; it is not part of the Rhadamanthys/BellaMain/Inkognito campaign investigated here, retained as an analyst reference. The rule is explicitly family-bound (not campaign-bound): a broad structural + behavioral combination (anomalous WinHTTP import shape, injection API triad, rare-API bucket, and two of four short English words standing in for the build's word-salad version metadata) intended for hunting sweeps against this 2023 Tofsee build lineage, not for blocking actions. *Wording fix 2026-10-11:* the description and this sentence used to say the rule triggers on word-salad version metadata; the condition counts the strings `Hole`, `Bill`, `Fire` and `Selfie` (ASCII or UTF-16) anywhere in the file and never reads the version resource (no `pe.version_info` test), so those words in code, data or an unrelated resource satisfy it. The draft this rule was lifted from says the word-salad strings are build-specific and can vary.
+**False Positives:** Some legitimate heavily-packed or obfuscated software with similarly unusual import shapes could coincidentally match individual clauses; the word clause is weak (two common four- to six-letter English words anywhere in a PE), so the narrowing comes from the import-shape, section-size, injection-API and rare-API clauses together. The full combination is narrow but not goodware-validated to zero FP.
 **Deployment:** Endpoint AV/EDR file scan; hunting sweep for this specific Tofsee build lineage.
 
 ```yara
@@ -357,7 +357,7 @@ import "pe"
 rule Tofsee_Bloater_2023_StaticTradecraft
 {
     meta:
-        description = "Detects Tofsee-family droppers exhibiting the 2023 build's anti-AV bloat + dynamic-API-resolution tradecraft. Triggers on PE-structure anomalies (huge virtual .data, single static WinHTTP import) + word-salad version metadata; family-bound, not campaign-bound. Co-tenant on 79.137.192.3 — operationally separate from BellaMain/Inkognito/Rhadamanthys clusters."
+        description = "Detects Tofsee-family droppers exhibiting the 2023 build's anti-AV bloat + dynamic-API-resolution tradecraft. Triggers on PE-structure anomalies (virtual .data more than 100 times its raw size, WinHttpWriteData as the only static WinHTTP import), the injection API triad, five of eight rare API names, and two of four short English words (Hole, Bill, Fire, Selfie) found anywhere in the file; the word test is not restricted to the version resource. Family-bound, not campaign-bound. Co-tenant on 79.137.192.3 — operationally separate from BellaMain/Inkognito/Rhadamanthys clusters."
         license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
         author = "The Hunters Ledger"
         reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/"
@@ -422,9 +422,9 @@ rule Tofsee_Bloater_2023_StaticTradecraft
 **Robustness:** 3
 **ATT&CK Coverage:** T1112 (Modify Registry)
 **Confidence:** HIGH
-**Rationale:** Confirmed across four independent sibling Stage-2 sandbox runs (this sample plus three others), not a single-sample artifact — a family-wide execution marker with no known benign collision. Tags verified against the current ATT&CK technique-tactic data via `sigma check`: T1112 (Modify Registry) requires its `attack.persistence` and/or `attack.defense-impairment` tactic tag(s) present — both are carried below, matching the original tagging.
+**Rationale:** Confirmed across four independent sibling Stage-2 sandbox runs (this sample plus three others), not a single-sample artifact: a family-wide execution marker with no known benign collision. *Logic fix 2026-10-11:* the description names `HKU\<SID>\Software\SibCode\sn` (the per-user hive, which is how the report records the write), but the selection was the key-path substring alone, so a machine-wide `HKLM\SOFTWARE\SibCode\sn` write matched as well; the rule now also requires the `HKU\` prefix Sysmon renders for a per-user key. Tags verified against the current ATT&CK technique-tactic data via `sigma check`: T1112 (Modify Registry) requires its `attack.persistence` and/or `attack.defense-impairment` tactic tag(s) present; both are carried below, matching the original tagging.
 **False Positives:** None known — the `SibCode\sn` key path has no documented benign software using it.
-**Blind Spots:** A future build that writes this marker under a different registry path would evade; this is a footprint/marker, not a blocking control on its own.
+**Blind Spots:** A future build that writes this marker under a different registry path would evade. The report ties the marker to pre-v0.9.1 builds (the developer removed it in v0.9.1 per the cited Check Point changelog), so newer builds do not write it and the rule covers the older lineage only. This is a footprint/marker, not a blocking control on its own.
 **Validation:** Trigger execution of a Rhadamanthys Stage-2 sample — the registry write must match; unrelated software's registry activity must NOT fire.
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (registry telemetry).
 
@@ -450,9 +450,11 @@ logsource:
     product: windows
     category: registry_set
 detection:
-    selection:
+    selection_key:
         TargetObject|contains: '\Software\SibCode\sn'
-    condition: selection
+    selection_hive:
+        TargetObject|startswith: 'HKU\'
+    condition: selection_key and selection_hive
 falsepositives:
     - >-
       Unlikely. The SibCode\sn key path has no documented benign software using it.

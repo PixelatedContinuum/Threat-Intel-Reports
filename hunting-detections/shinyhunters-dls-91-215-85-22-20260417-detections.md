@@ -42,8 +42,8 @@ This is a Data Leak Site / extortion infrastructure investigation; there are no 
 **Robustness:** 3
 **ATT&CK Coverage:** T1657 (Financial Theft / Extortion), T1583.001 (Acquire Infrastructure: Domains)
 **Confidence:** HIGH
-**Rationale:** Exact verbatim phrases from the actor-authored INFORMATION.txt ransom note, combined with .onion mirror addresses or the `pay_or_leak` path token. This wording has persisted unchanged across every analyzed dump and through three PGP key-rotation events (2020–2026) — the actor would have to rewrite their own canonical ransom note to evade it, a materially higher cost than renaming a single binary.
-**False Positives:** None known — the verbatim DLS opening phrase is exclusive to ShinyHunters infrastructure. Combining it with the .onion addresses or `pay_or_leak` path eliminates any residual ambiguity.
+**Rationale:** Exact verbatim phrases from the actor-authored INFORMATION.txt ransom note (either of two sentences), combined with any one of three .onion mirror addresses or the bare `pay_or_leak` path token. The condition does not require an .onion address: a phrase plus `pay_or_leak` alone fires. This wording has persisted unchanged across every analyzed dump and through three PGP key-rotation events (2020–2026) — the actor would have to rewrite their own canonical ransom note to evade it, a materially higher cost than renaming a single binary. *Wording fix 2026-10-11:* the description used to say the exact opening phrase and the .onion references; the second phrase is not the opening one and the .onion addresses are one of two alternatives.
+**False Positives:** None known — the verbatim DLS phrases are exclusive to ShinyHunters infrastructure as far as the report records. Combining a phrase with an .onion address or the `pay_or_leak` path token removes most residual ambiguity, but a write-up or archive that quotes the note matches as well. Not goodware-validated.
 **Blind Spots:** A full rewrite of the canonical ransom note text would evade this rule; it detects the note file itself, not the exfiltration or delivery mechanism that placed it.
 **Validation:** Scan a copy of the DLS INFORMATION.txt ransom note — must match; scan an unrelated ransomware note or generic text file — must NOT match.
 **Deployment:** Endpoint AV/EDR on-access scan; CASB / DLP file-content inspection on shared drives and cloud-sync folders; email attachment scanning; forensic memory/disk triage on suspected victim hosts.
@@ -59,7 +59,7 @@ This is a Data Leak Site / extortion infrastructure investigation; there are no 
 
 rule MALW_ShinyHunters_RansomNote {
    meta:
-      description = "Detects the ShinyHunters Data Leak Site ransom note (INFORMATION.txt) by exact opening phrase and .onion mirror references distributed in actor ransom packages; presence on an enterprise file share is a high-confidence exfiltration indicator"
+      description = "Detects the ShinyHunters Data Leak Site ransom note (INFORMATION.txt) by one of two verbatim phrases (the DLS download sentence or the leaked-because-the-victim-did-not-pay sentence) together with one of three .onion mirror addresses or the pay_or_leak path token, as distributed in actor ransom packages; presence on an enterprise file share is a high-confidence exfiltration indicator"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/"
@@ -159,14 +159,14 @@ rule MALW_ShinyHunters_PGP_Identity {
 **Robustness:** 2
 **ATT&CK Coverage:** T1583.001 (Acquire Infrastructure: Domains)
 **Confidence:** HIGH
-**Rationale:** The shinyhunte.rs clearnet identity page carries distinctive co-occurring markers — the self-styled page title, the full PGP URL path, and the main .onion mirror address. Designed for proxy-cache review, threat-intel collection pipeline scanning, and CASB inspection of cached web content, not real-time endpoint scanning, since web crawlers and researcher browser caches produce meaningful FP volume.
+**Rationale:** The shinyhunte.rs clearnet identity page carries distinctive markers. The rule requires one of two page-title strings (`Scattered LAPSUS$ Hunters | DLS` or `ShinyHunters Data Leak Site`) together with at least one of the PGP URL path, the main .onion mirror address or the `/pay_or_leak/` path; it does not require all three. *Wording fix 2026-10-11:* the earlier text said the title, the PGP path and the mirror address all co-occur. Designed for proxy-cache review, threat-intel collection pipeline scanning, and CASB inspection of cached web content, not real-time endpoint scanning, since web crawlers and researcher browser caches produce meaningful FP volume.
 **False Positives:** Web crawlers, threat-intel platforms, and browser-cached content from security researchers; scope deployment to threat-intel collection systems and proxy cache archives rather than production endpoint scanning.
 **Deployment:** Threat-intel collection pipeline; proxy cache and TLS-inspection archive review; CASB web-content scanning; SOC web-browsing anomaly investigation.
 
 ```yara
 rule MALW_ShinyHunters_DLS_HTML {
    meta:
-      description = "Detects ShinyHunters clearnet identity page (shinyhunte.rs) HTML artifacts by page title, full PGP URL path, and .onion mirror references co-occurring in HTML content; intended for threat-intel collection review, proxy-cache hunting, and CASB alerting rather than production endpoint blocking"
+      description = "Detects ShinyHunters clearnet identity page (shinyhunte.rs) HTML artifacts by one of two page-title strings together with at least one of the PGP URL path, the main .onion mirror address or the /pay_or_leak/ path; intended for threat-intel collection review, proxy-cache hunting, and CASB alerting rather than production endpoint blocking"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/"

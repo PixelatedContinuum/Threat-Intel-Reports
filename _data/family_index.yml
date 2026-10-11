@@ -263,8 +263,8 @@ families:
         rules:
           - MAL_Python_Matrix_C2_Framework_Family
           - MAL_Discord_Bot_DDoSasService_Customer_Interface
-          - MAL_Python_Persistent_Bot_DualChannel_CNC
-          - MAL_Python_StealthAgent_AntiDebug_AntiVM_AI_Authored
+          - MAL_Bash_Persistent_Bot_DualChannel_CNC
+          - MAL_Python_StealthAgent_AntiAnalysis_Keyword_Bucket
     feeds:
       - url: /ioc-feeds/rovodev-mirai-matrix-c2-87.106.143.220-iocs.json
         title: Rovodev AI-Co-Authored Mirai Variant + Matrix C2 (87.106.143.220)
@@ -595,9 +595,9 @@ families:
         report_url: /reports/shadow-xworm-opendirectory/
         label: ShadowRAT
         rules:
-          - RAT_ShadowRAT_v2640_Client
+          - RAT_ShadowRAT_Client_Namespace_Version_Mutex
           - RAT_ShadowRAT_CommonDLL
-          - RAT_ShadowRAT_AMSI_ETW_Bypass
+          - RAT_ShadowRAT_AMSI_Patch_Or_Padded_Bypass_Strings
           - RAT_ShadowRAT_Crypto_Clipper
           - RAT_ShadowRAT_WinRE_Persistence
     feeds: []
@@ -1069,11 +1069,11 @@ families:
         report_url: /reports/opendirectory-62-60-237-100-20260506/
         label: HijackLoader
         rules:
-          - MALW_HijackLoader_ExceptionHandler_Plowshare_Dispatcher
           - MALW_HijackLoader_NetworkSpec17_IDAT_Carrier
           - MALW_HijackLoader_Penguish_Stage3_Loader_PE
           - MALW_HijackLoader_MultiVector_Lure_GrimResource_MSC
           - MALW_HijackLoader_InnoSetup_AntiTriage_Wrapper
+          - MALW_HijackLoader_ExceptionHandler_Plowshare_Dispatcher
     feeds: []
     actors:
       - UTA-2026-007

@@ -19,8 +19,8 @@
     },
     "656f5eb2-7add-5b5e-a771-c4310b4be6c9": {
       "slug": "sliver-c2-windows-postex-staging-193-233-202-17",
-      "hash": "198a0b1858a97594e668af87969e9813681e380a2af87eea6bc18591a225c6ff",
-      "timestamp": 1791695339,
+      "hash": "d27d108dc0544c276937e0cbe418aac678df95e53501a8682eaef32ae8593965",
+      "timestamp": 1791700336,
       "first_published": "2026-10-09"
     },
     "61bf8b6f-e11d-50ac-8cae-d6e6afd6f5d5": {
@@ -79,8 +79,8 @@
     },
     "897c4651-021d-5b44-a032-900b5676e247": {
       "slug": "russian-gemini-credential-mill-213.165.51.115",
-      "hash": "d1fa9753c739dcb731c668079a220400a91247224c94c83d40f5a2f8387f7d6a",
-      "timestamp": 1791690200,
+      "hash": "64a215dad09691cef96a4cde335fd3a76fa26534cb85003adb3fc9303e2bf84c",
+      "timestamp": 1791700333,
       "first_published": "2026-10-09"
     },
     "9efa73fb-800e-59f7-96f1-5a1b3e9216ef": {
@@ -97,8 +97,8 @@
     },
     "43b09f34-283d-5b09-84eb-a93df291c4c4": {
       "slug": "rovodev-mirai-matrix-c2-87.106.143.220",
-      "hash": "8ace8f2eb68a871b2b7ea0b3b5553d252d8a929213504053125197b0474cc94b",
-      "timestamp": 1791688044,
+      "hash": "3fc57e4b2a3b0a4836fd8c8936a2873fa0c036a792777adc070e3daee5a94b8a",
+      "timestamp": 1791700332,
       "first_published": "2026-10-09"
     },
     "875094b8-c444-56b7-9af6-4524d0de89cc": {
@@ -127,14 +127,14 @@
     },
     "3d46b2a8-dcd5-56e3-80f3-cc19a7369651": {
       "slug": "opendirectory-79-137-192-3-20260515",
-      "hash": "cb3fa46dbeed451392e472650b7b0e627f4e2ca9ee30ced00d11f6a3af7e9077",
-      "timestamp": 1791592928,
+      "hash": "6d184cb3341ae3700b2193bdc5da9e0346a568c66acd926d8e87a12a455e2a63",
+      "timestamp": 1791700329,
       "first_published": "2026-10-09"
     },
     "7cf9b00a-7f3d-527a-81c3-cb42eaa2be96": {
       "slug": "opendirectory-62-60-237-100-20260506",
-      "hash": "b75e60cc0bdd03ff829ce1bde63f0abc9d0b0c54fe373680b2f1228db3180310",
-      "timestamp": 1791695337,
+      "hash": "a32a6075646154de71b2d1dd4c1f32e783c1db8e558abec44a0aeafd26552c1f",
+      "timestamp": 1791700328,
       "first_published": "2026-10-09"
     },
     "5b9f3c7a-ce4f-5fde-afc7-221cd3f69ada": {
@@ -151,8 +151,8 @@
     },
     "6f667981-4451-5004-a851-e42a3420ab88": {
       "slug": "shinyhunters-dls-91-215-85-22-20260417",
-      "hash": "f3c50849c29f4c51d788f4922b0b256c254dd7a54f501be4941bfb40eff6497a",
-      "timestamp": 1791592935,
+      "hash": "242816cb5826df25fd90c08f95646c397acdff06faba6e32685a2d16268e40e4",
+      "timestamp": 1791700335,
       "first_published": "2026-10-09"
     },
     "8e859eb6-419c-5ddc-9d3c-dff1eafce995": {
@@ -169,8 +169,8 @@
     },
     "940014f4-065e-5b01-9fbe-d4c28f766dae": {
       "slug": "shadow-xworm-opendirectory",
-      "hash": "a53b21cb99588375f294fd476b9f4eb6cf023b2c73063ce081dbec62743e56e8",
-      "timestamp": 1791592934,
+      "hash": "0f6c156a5b57ca418a0896075c08e53af37f0863f10cac9b9fe29cbaa966a474",
+      "timestamp": 1791700334,
       "first_published": "2026-10-09"
     },
     "125e14b3-c05b-5d46-a15d-e4b86f112070": {
@@ -181,8 +181,8 @@
     },
     "48a52860-1656-5303-ad23-7aa117354f8b": {
       "slug": "zerotrace-74-0-42-25-20260316",
-      "hash": "511198a77d2034be412287382d7131d591ec43c735a891a4982d6a5b939be10c",
-      "timestamp": 1791695340,
+      "hash": "f3078380bb114103a5e4e353b886c5d2a1be8905de420ec6efdf9410b0802826",
+      "timestamp": 1791700337,
       "first_published": "2026-10-09"
     },
     "8cf95311-80b8-5a28-8132-7ffb8349c482": {
@@ -199,8 +199,8 @@
     },
     "ab0fd8fb-928e-585f-95d1-5a7f9983eacf": {
       "slug": "remcos-opendirectory",
-      "hash": "4f24f946ce3aea00289d9a5f69aaf97ee515724e82aae332fc2efc8e3a6aa185",
-      "timestamp": 1791695338,
+      "hash": "9a35cd0f88c0740e9a4f3a285435b93e515ba7a98b1913122238489e70d02510",
+      "timestamp": 1791700331,
       "first_published": "2026-10-09"
     },
     "cf5676b3-13f1-5946-9f45-c9aa21c9bdba": {
@@ -247,8 +247,8 @@
     },
     "8975ee88-1a24-52cc-8c39-74ddf2741efb": {
       "slug": "quasar-xworm-powershell",
-      "hash": "8c4746bddee5e1ac4a265c13f21947210b90819d3f99e8e4d71b2ab17b983035",
-      "timestamp": 1791592929,
+      "hash": "beb6eb02b5e1b6c18c50331fce3b505b11e2936f72ed26bc7a513e178e1f91cc",
+      "timestamp": 1791700330,
       "first_published": "2026-10-09"
     },
     "1c4057d8-6ee8-5c89-b45d-adc83d437048": {

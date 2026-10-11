@@ -66,7 +66,7 @@ rule MITM_Interceptor_SourceStrings {
       description = "Detects the Python interceptor component of a self-hosted SSH adversary-in-the-middle platform, based on its startup log line, host-key pool warmup message, loop-prevention SO_MARK constant, and the plaintext-password title format written into its session recordings"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812/"
+      reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/"
       date = "2026-08-12"
       hash1 = "44e259bef730a408bbdb0e07d3c421439fe30c9a2b8a27019b1b40fe6d031013"
       family = "SSH MITM Interception Platform"
@@ -104,7 +104,7 @@ rule MITM_Receiver_SourceStrings {
       description = "Detects the Python receiver component of a self-hosted SSH adversary-in-the-middle platform, based on its single shared static-token authentication check, its exact unauthenticated JSON error response, and the database table names it creates for harvested public keys and fake host keys"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812/"
+      reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/"
       date = "2026-08-12"
       hash1 = "16ecc69027371c47a27296702c78dbd48013a98605989d5e5c2c4cc8159020ef"
       hash3 = "fae41061a152b85bceaa6ca4482bf7ca"
@@ -140,7 +140,7 @@ rule MITM_Orchestrator_SourceStrings {
       description = "Detects the orchestrator component of a self-hosted SSH adversary-in-the-middle platform, which tails the interceptor's capture log and automatically replays each captured credential against its own target before delivering a fingerprinting payload"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812/"
+      reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/"
       date = "2026-08-12"
       hash1 = "bd028737b383dc15e8524074892497660acb2d4dcb33aab91a096a2419b4780d"
       family = "SSH MITM Interception Platform"
@@ -176,7 +176,7 @@ rule MITM_Payload_Perl_Fingerprint {
       description = "Detects the small Perl fingerprinting payload delivered over the SSH exec channel immediately after an automated credential replay succeeds, which reports only whether root SSH keys are present without exfiltrating their contents"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812/"
+      reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/"
       date = "2026-08-12"
       hash1 = "ad3f7e4835e91de5e237c319550450815ec5b8b42bbcfc6c1eccdd7bf7b5f933"
       hash2 = "356a8a171e96f5c69e4e2bb1d778f10909632df69663947d1887f4a6f6cd37ba"
@@ -210,7 +210,7 @@ rule MITM_Deploy_Firewall_Script {
       description = "Detects the shell deployment script that installs the netfilter rule chain of a self-hosted SSH adversary-in-the-middle platform: a loop-prevention mark exemption, an exclusion-list ipset, and a delayed self-wipe of the staging directory"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812/"
+      reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/"
       date = "2026-08-12"
       family = "SSH MITM Interception Platform"
       malware_type = "Deployment and firewall-installation script"
@@ -244,7 +244,7 @@ rule MITM_Leaked_Session_Recording {
       description = "Detects a leaked or persisted asciinema session recording from a self-hosted SSH adversary-in-the-middle platform, whose title field embeds the plaintext intercepted credential in a fixed MITM client-target-user-password format. By design the platform gzips, base64-encodes, ships, and deletes this file within the session's lifetime, so a match indicates a copy that escaped that cleanup"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812/"
+      reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/"
       date = "2026-08-12"
       family = "SSH MITM Interception Platform"
       malware_type = "Leaked session-capture artifact (asciinema v2)"
@@ -289,7 +289,7 @@ description: >-
   adversary-in-the-middle platform exempting its own upstream validation connections
   from its own transparent redirect of port 22.
 references:
-    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812/
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/
 author: The Hunters Ledger
 date: 2026-08-12
 tags:
@@ -337,7 +337,7 @@ description: >-
   has no known legitimate use and functions as an execution guardrail limiting which
   destinations the platform acts against.
 references:
-    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812/
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/
 author: The Hunters Ledger
 date: 2026-08-12
 tags:
@@ -385,7 +385,7 @@ description: >-
   vary by deployment scheme, so this anchors on the REDIRECT-of-port-22 mechanism itself
   rather than a fixed port number.
 references:
-    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812/
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/
 author: The Hunters Ledger
 date: 2026-08-12
 tags:
@@ -422,7 +422,7 @@ level: high
 **ATT&CK Coverage:** T1059.006 (Python), T1557 (Adversary-in-the-Middle)
 **Confidence:** HIGH
 **False Positives:** Unlikely. The interceptor selector requires the script to be the interpreter's direct execution target rather than merely present on the command line, and the sniffer selector's flag combination is specific to this toolkit.
-**Blind Spots:** The interceptor selector keys on a filename the operator can rename on redeploy; only the sniffer selector's flag combination survives that. Both components are double-forked and daemonized after this initial launch, so this rule only has one moment (the original `execve`) to catch them; a process-creation feed with gaps will miss it. Requiring the script to be the interpreter's direct positional target also means a shell-wrapped launch, such as `sh -c "python3 mitm_local.py"` where the top-level command line begins with `sh` rather than `python3`, will not fire. The interceptor selector also requires the interpreter to appear as `python3` specifically, consistent with every observed launch; a bare `python` symlink or a differently named interpreter binary would not match.
+**Blind Spots:** The interceptor selector keys on a filename the operator can rename on redeploy; only the sniffer selector's flag combination survives that. Both components are double-forked and daemonized after this initial launch, so this rule only has one moment (the original `execve`) to catch them; a process-creation feed with gaps will miss it. Requiring the script to be the interpreter's direct positional target also means a shell-wrapped launch, such as `sh -c "python3 mitm_local.py"` where the top-level command line begins with `sh` rather than `python3`, will not fire. The interceptor selector also requires the interpreter to appear as `python3` specifically, consistent with every observed launch; a bare `python` symlink or a differently named interpreter binary would not match. *Regex fix 2026-10-11:* on Elastic a `|re` value must match the whole field and this pattern began with `python`, so an interpreter started by absolute path (`/usr/bin/python3 -u mitm_local.py`) did not match; the pattern now accepts an optional leading path before `python`, and a launch through a wrapper such as `env`, `sh -c` or `nohup` still does not match.
 **Validation:** Trigger `sel_interceptor` by launching `python3 -u mitm_local.py` or `python3 /dev/shm/.x9k2/mitm_local.py` on a lab host and confirm it fires; trigger `sel_sniffer` separately with `python3 -u sniffer.py --iface eth0 --mitm-port 19923 --skip-ports 22 --own-ips 10.0.0.5 --output-only --backend auto` and confirm it fires. A command line that only references the interceptor's filename without executing it as the interpreter's direct target, such as `python3 pyc_strings.py ./mitm_local.py`, `sha256sum mitm_local.py`, or `cp mitm_local.py /tmp/`, must not fire; nor must an unrelated Python script that happens to share one sniffer flag (`--output-only`, for instance) but not the full three-flag combination.
 **Deployment:** Linux EDR or SIEM ingesting normalized process-creation telemetry (auditd, Sysmon for Linux, or an EDR's native process feed).
 
@@ -439,7 +439,7 @@ description: >-
   The sniffer selector anchors on its flag combination rather than its filename, since a
   filename alone is trivial for an operator to rename on redeploy.
 references:
-    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812/
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/
 author: The Hunters Ledger
 date: 2026-08-12
 tags:
@@ -455,7 +455,7 @@ logsource:
 detection:
     sel_interceptor:
         Image|contains: 'python3'
-        CommandLine|re: 'python[0-9.]*( -[^ ]+)* [^ ]*mitm_local\.py( .*)?'
+        CommandLine|re: '([^ ]*/)?python[0-9.]*( -[^ ]+)* [^ ]*mitm_local\.py( .*)?'
     sel_sniffer:
         CommandLine|contains|all:
             - '--skip-ports 22'
@@ -492,7 +492,7 @@ description: >-
   distinctive enough on their own that no combination requirement is needed; each has no
   known legitimate use.
 references:
-    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812/
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/
 author: The Hunters Ledger
 date: 2026-08-12
 tags:
@@ -553,7 +553,7 @@ description: >-
   automation tooling installs paramiko this way too, so this selector is broad on its own;
   see the paired correlation rule for the higher-confidence combined signal.
 references:
-    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812/
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/
 author: The Hunters Ledger
 date: 2026-08-12
 tags:
@@ -582,7 +582,7 @@ description: >-
   ipset has legitimate uses, so this selector is broad on its own; see the paired
   correlation rule for the higher-confidence combined signal.
 references:
-    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812/
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/
 author: The Hunters Ledger
 date: 2026-08-12
 tags:
@@ -616,7 +616,7 @@ description: >-
   artifacts confirmed to survive a reboot, which makes this correlation valuable evidence
   after the volatile tmpfs artifacts are gone.
 references:
-    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812/
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/
 author: The Hunters Ledger
 date: 2026-08-12
 tags:
@@ -679,7 +679,7 @@ description: >-
   scripts also run bare uname -a, so this selector alone is broad; see the paired
   correlation rule for the higher-confidence combined signal.
 references:
-    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812/
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/
 author: The Hunters Ledger
 date: 2026-08-12
 tags:
@@ -708,7 +708,7 @@ description: >-
   A bare perl invocation is uncommon but not unique to this activity, so this selector
   alone is broad; see the paired correlation rule for the higher-confidence combined signal.
 references:
-    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812/
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/
 author: The Hunters Ledger
 date: 2026-08-12
 tags:
@@ -739,7 +739,7 @@ description: >-
   is visible to the victim's own host telemetry regardless of which relay, proxy, or exit
   node the connection transited.
 references:
-    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812/
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/
 author: The Hunters Ledger
 date: 2026-08-12
 tags:
@@ -775,7 +775,7 @@ The four base selectors that feed the two correlation rules above (paramiko pip 
 **ATT&CK Coverage:** T1059.006 (Python), T1557 (Adversary-in-the-Middle)
 **Confidence:** MODERATE
 **False Positives:** The exclude_puller.py filename is generic and plausible for unrelated exclusion-list or allow-list tooling outside this platform; requiring genuine execution rather than a mere reference on the command line removes the noisiest source of false hits but does not remove the risk of a name collision with unrelated software using the same filename.
-**Blind Spots:** Keys on a filename the operator can rename on redeploy, unlike the sniffer's flag-combination anchor in the companion Detection-tier rule above. This component is also double-forked and daemonized shortly after launch, so this rule only has one moment (the original `execve`) to catch it.
+**Blind Spots:** Keys on a filename the operator can rename on redeploy, unlike the sniffer's flag-combination anchor in the companion Detection-tier rule above. This component is also double-forked and daemonized shortly after launch, so this rule only has one moment (the original `execve`) to catch it. *Regex fix 2026-10-11:* on Elastic a `|re` value must match the whole field and this pattern began with `python`, so an interpreter started by absolute path (`/usr/bin/python3 -u mitm_local.py`) did not match; the pattern now accepts an optional leading path before `python`, and a launch through a wrapper such as `env`, `sh -c` or `nohup` still does not match.
 **Deployment:** Linux EDR or SIEM ingesting normalized process-creation telemetry (auditd, Sysmon for Linux, or an EDR's native process feed); review hits manually rather than routing to automated response.
 
 ```yaml
@@ -792,7 +792,7 @@ description: >-
   than a high-confidence one; see the companion Detection-tier rule for the platform's
   interceptor and sniffer components.
 references:
-    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812/
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/
 author: The Hunters Ledger
 date: 2026-08-12
 tags:
@@ -807,7 +807,7 @@ logsource:
 detection:
     sel_puller:
         Image|contains: 'python3'
-        CommandLine|re: 'python[0-9.]*( -[^ ]+)* [^ ]*exclude_puller\.py( .*)?'
+        CommandLine|re: '([^ ]*/)?python[0-9.]*( -[^ ]+)* [^ ]*exclude_puller\.py( .*)?'
     condition: sel_puller
 falsepositives:
     - >-
@@ -842,7 +842,7 @@ description: >-
   than alerting. It gains precision when the dropped port matches a port seen in a
   companion REDIRECT --to-port rule on the same host.
 references:
-    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812/
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/
 author: The Hunters Ledger
 date: 2026-08-12
 tags:
@@ -890,7 +890,7 @@ description: >-
   also creates short dot-prefixed entries at the root of /dev/shm (most notably browser
   shared-memory segments), so review each hit rather than alert on it directly.
 references:
-    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812/
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/
 author: The Hunters Ledger
 date: 2026-08-12
 tags:
@@ -938,7 +938,7 @@ description: >-
   process-attribution context (a python3 process with no on-disk backing script, per the
   companion host-side indicators) is what raises confidence on a given hit.
 references:
-    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812/
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/
 author: The Hunters Ledger
 date: 2026-08-12
 tags:

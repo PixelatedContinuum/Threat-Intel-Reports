@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--c18d353c-7dbd-4aec-b7e2-aa63283381de",
+    "id": "bundle--ef7068e2-7631-4070-abf1-a89a2a7aebca",
     "objects": [
         {
             "type": "identity",
@@ -116,12 +116,12 @@
             "id": "indicator--9143bb13-7f75-5800-9b75-d8aaa29df852",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-09-19T20:28:01.29658Z",
-            "modified": "2026-09-19T20:28:01.29658Z",
+            "modified": "2026-10-11T06:31:45.992653Z",
             "name": "PS_Defender_Exclusion_Quasar_Xworm",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "/*\n   Yara Rule Set\n   Identifier: QuasarRAT / Xworm PowerShell Loader\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule PS_Defender_Exclusion_Quasar_Xworm {\n   meta:\n      description = \"Detects a PowerShell Microsoft Defender exclusion script used by the QuasarRAT/Xworm PowerShell loader campaign to whitelist the payload path and loader helper processes (powershell.exe, wscript.exe, cmd.exe, cvtres.exe)\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/quasar-xworm-powershell-detections/\"\n      date = \"2025-10-17\"\n      hash1 = \"4ae132de21ab60da7d562f4c2d1f6d26650bbc0c80c542537bc7eb973d05f127\"\n      hash2 = \"153a6d225dffd61913f37ac68d19eb61c1c35374f03b9f94faf28a9bb16ede4b\"\n      family = \"QuasarRAT/Xworm\"\n      malware_type = \"Loader\"\n      campaign = \"QuasarRAT-Xworm-PowerShell-Loader-193.233.164.21\"\n      id = \"31039cfb-dcf2-4e86-87c2-bf063031b16e\"\n   strings:\n      $a = \"Add-MpPreference\" ascii wide nocase\n      $b = \"-ExclusionPath\" ascii wide nocase\n      $c = \"-ExclusionProcess\" ascii wide nocase\n      $d = \"update.png\" ascii wide nocase\n   condition:\n      all of them\n}",
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: QuasarRAT / Xworm PowerShell Loader\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule PS_Defender_Exclusion_Quasar_Xworm {\n   meta:\n      description = \"Detects a file containing all of Add-MpPreference, -ExclusionPath, -ExclusionProcess and the build-specific string update.png (any case, ASCII or UTF-16), the Defender exclusion step of the QuasarRAT/Xworm PowerShell loader campaign; the report records exclusions for the C:\\\\ drive and the processes powershell.exe, wscript.exe, cmd.exe and cvtres.exe, which the rule does not test\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/quasar-xworm-powershell-detections/\"\n      date = \"2025-10-17\"\n      hash1 = \"4ae132de21ab60da7d562f4c2d1f6d26650bbc0c80c542537bc7eb973d05f127\"\n      hash2 = \"153a6d225dffd61913f37ac68d19eb61c1c35374f03b9f94faf28a9bb16ede4b\"\n      family = \"QuasarRAT/Xworm\"\n      malware_type = \"Loader\"\n      campaign = \"QuasarRAT-Xworm-PowerShell-Loader-193.233.164.21\"\n      id = \"31039cfb-dcf2-4e86-87c2-bf063031b16e\"\n   strings:\n      $a = \"Add-MpPreference\" ascii wide nocase\n      $b = \"-ExclusionPath\" ascii wide nocase\n      $c = \"-ExclusionProcess\" ascii wide nocase\n      $d = \"update.png\" ascii wide nocase\n   condition:\n      all of them\n}",
             "pattern_type": "yara",
             "valid_from": "2025-10-17T00:00:00Z",
             "labels": [

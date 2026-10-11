@@ -516,7 +516,9 @@ techniques:
         title: Russian Gemini CLI Credential Mill (213.165.51.115)
         date: '2026-05-25'
         report_url: /reports/russian-gemini-credential-mill-213.165.51.115/
-        rules: Suspicious LSASS Process Access via High-Privilege GrantedAccess Mask (SIGMA, Detection)
+        rules: >-
+          LSASS Process Access With a Credential-Dumping GrantedAccess Mask and No Source Process
+          Filter (SIGMA, Hunting)
         count: 1
     actors:
       - UTA-2026-005
@@ -570,7 +572,9 @@ techniques:
         title: Russian Gemini CLI Credential Mill (213.165.51.115)
         date: '2026-05-25'
         report_url: /reports/russian-gemini-credential-mill-213.165.51.115/
-        rules: Suspicious LSASS Process Access via High-Privilege GrantedAccess Mask (SIGMA, Detection)
+        rules: >-
+          LSASS Process Access With a Credential-Dumping GrantedAccess Mask and No Source Process
+          Filter (SIGMA, Hunting)
         count: 1
     actors:
       - UTA-2026-006
@@ -882,9 +886,8 @@ techniques:
         date: '2026-05-26'
         report_url: /reports/rovodev-mirai-matrix-c2-87.106.143.220/
         rules: >-
-          MAL_Python_StealthAgent_AntiDebug_AntiVM_AI_Authored (YARA, Hunting); Process Launched
-          with /dev/watchdog on the Command Line, Mirai-Canonical Persistence Tactic (SIGMA,
-          Hunting)
+          MAL_Python_StealthAgent_AntiAnalysis_Keyword_Bucket (YARA, Hunting); Process Launched with
+          /dev/watchdog on the Command Line, Mirai-Canonical Persistence Tactic (SIGMA, Hunting)
         count: 2
       - url: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
         title: GHOST Cryptojacker Kit — Vova75Rus Supply Chain (77.110.96.200)
@@ -1427,8 +1430,8 @@ techniques:
         date: '2026-05-06'
         report_url: /reports/opendirectory-62-60-237-100-20260506/
         rules: >-
-          ExceptionHandler.dll Plowshare Dispatcher (YARA, Detection); pe_03 HijackLoader Stage-3
-          Loader (API Hash Table) (YARA, Detection)
+          pe_03 HijackLoader Stage-3 Loader (API Hash Table) (YARA, Detection); ExceptionHandler.dll
+          Plowshare Dispatcher (YARA, Hunting)
         count: 2
       - url: /hunting-detections/open-directory-94-103-1-13-20260423-detections
         title: Chaos Ransomware (TorBrowserTor) Multi-Stage Loader (94.103.1.13)
@@ -1443,9 +1446,9 @@ techniques:
         date: '2026-04-05'
         report_url: /reports/shadow-xworm-opendirectory/
         rules: >-
-          Shadow RAT v2.6.4.0: AMSI + ETW Bypass Chain (YARA, Detection); XWorm 3.0-5.0: Config and
-          Builder Markers (YARA, Detection); XWorm 3.0-5.0: Rijndael-256-ECB Config Crypto Pattern
-          (YARA, Hunting)
+          Shadow RAT AMSI Patch Shellcode or Asterisk-Padded AMSI and ETW String Fragments (YARA,
+          Detection); XWorm 3.0-5.0: Config and Builder Markers (YARA, Detection); XWorm 3.0-5.0:
+          Rijndael-256-ECB Config Crypto Pattern (YARA, Hunting)
         count: 3
       - url: /hunting-detections/open-directory-193-56-255-154-xiebroc2-detections
         title: Open Directory at 193.56.255.154 — XiebroC2 v3.1 & Covenant C2
@@ -1553,7 +1556,7 @@ techniques:
         title: Shadow RAT & XWorm Open Directory Campaign
         date: '2026-04-05'
         report_url: /reports/shadow-xworm-opendirectory/
-        rules: 'Shadow RAT v2.6.4.0 Client: Namespace + Costura Fingerprint (YARA, Detection)'
+        rules: 'Shadow RAT Client: Namespace Strings, Version and Mutex Fingerprint (YARA, Detection)'
         count: 1
       - url: /hunting-detections/opendirectory-74-0-42-25-20260316-detections
         title: ZeroTrace Multi-Family MaaS Operation (74.0.42.25)
@@ -1753,8 +1756,8 @@ techniques:
         date: '2026-03-16'
         report_url: /reports/zerotrace-74-0-42-25-20260316/
         rules: >-
-          Fileless PowerShell PE Dropper ExecutionPolicy Bypass from Non-Standard Parent (SIGMA,
-          Hunting)
+          PowerShell ExecutionPolicy Bypass With a .ps1 Under a User-Writable Path From a
+          Non-Standard Parent (SIGMA, Hunting)
         count: 1
     actors:
       - UTA-2026-005
@@ -2201,13 +2204,12 @@ techniques:
         date: '2026-05-06'
         report_url: /reports/opendirectory-62-60-237-100-20260506/
         rules: >-
-          Inno Setup Pascal Anti-Triage Wrapper (YARA, Hunting); HijackLoader Inno Setup Wrapper
-          Spawning CrystSupervisor32 and WVault Process Chain (SIGMA, Hunting); HijackLoader Covert
-          IPC Named Pipe WondershareCrashServices Created (SIGMA, Hunting); HijackLoader Operator
-          Persistence Directory adv_ctrl Created Under ProgramData (SIGMA, Hunting); HijackLoader
-          WVault.exe Hollow-Host Launched Directly from Inno Setup Temp Directory (SIGMA, Hunting);
-          WVault.exe or Renamed Vendor Binary Executing from Non-Standard ProgramData Path (SIGMA,
-          Hunting)
+          Inno Setup Pascal Anti-Triage Wrapper (YARA, Hunting); HijackLoader CrystSupervisor32 or
+          WVault Renamed Vendor Binary Process Creation (SIGMA, Hunting); HijackLoader Covert IPC
+          Named Pipe WondershareCrashServices Created (SIGMA, Hunting); HijackLoader Operator
+          Persistence Directory Codename File Written Under ProgramData or Users (SIGMA, Hunting);
+          HijackLoader WVault.exe Hollow-Host Launched Directly from Inno Setup Temp Directory
+          (SIGMA, Hunting); WVault.exe Process Executing From a ProgramData Path (SIGMA, Hunting)
         count: 6
       - url: /hunting-detections/open-directory-94-103-1-13-20260423-detections
         title: Chaos Ransomware (TorBrowserTor) Multi-Stage Loader (94.103.1.13)
@@ -2322,9 +2324,9 @@ techniques:
         date: '2026-05-26'
         report_url: /reports/rovodev-mirai-matrix-c2-87.106.143.220/
         rules: >-
-          MAL_Bash_Pandora_Dropper_Family (YARA, Detection);
-          MAL_Python_Persistent_Bot_DualChannel_CNC (YARA, Detection); Pandora-Mirai Persistence
-          Pattern: Multi-Mechanism Installer (Init.d, Systemd, Hidden Cron) (SIGMA, Hunting)
+          MAL_Bash_Pandora_Dropper_Family (YARA, Detection); MAL_Bash_Persistent_Bot_DualChannel_CNC
+          (YARA, Detection); Pandora-Mirai Persistence Pattern: Multi-Mechanism Installer (Init.d,
+          Systemd, Hidden Cron) (SIGMA, Hunting)
         count: 3
     actors:
       - UTA-2026-014
@@ -2729,12 +2731,11 @@ techniques:
         date: '2026-05-26'
         report_url: /reports/rovodev-mirai-matrix-c2-87.106.143.220/
         rules: >-
-          MAL_Bash_Pandora_Dropper_Family (YARA, Detection);
-          MAL_Python_Persistent_Bot_DualChannel_CNC (YARA, Detection); Hidden-Prefix Cron Entry
-          Creation in /etc/cron.d: Pandora-Mirai Persistence Pattern (SIGMA, Detection);
-          Pandora-Mirai Persistence Pattern: Multi-Mechanism Installer (Init.d, Systemd, Hidden
-          Cron) (SIGMA, Hunting); Process Launched with /dev/watchdog on the Command Line,
-          Mirai-Canonical Persistence Tactic (SIGMA, Hunting)
+          MAL_Bash_Pandora_Dropper_Family (YARA, Detection); MAL_Bash_Persistent_Bot_DualChannel_CNC
+          (YARA, Detection); Hidden-Prefix Cron Entry Creation in /etc/cron.d: Pandora-Mirai
+          Persistence Pattern (SIGMA, Detection); Pandora-Mirai Persistence Pattern: Multi-Mechanism
+          Installer (Init.d, Systemd, Hidden Cron) (SIGMA, Hunting); Process Launched with
+          /dev/watchdog on the Command Line, Mirai-Canonical Persistence Tactic (SIGMA, Hunting)
         count: 5
     actors:
       - UTA-2026-014
@@ -2858,8 +2859,8 @@ techniques:
         date: '2026-04-05'
         report_url: /reports/shadow-xworm-opendirectory/
         rules: >-
-          XWorm 3.0-5.0: Config and Builder Markers (YARA, Detection); XWorm Scheduled Task
-          Persistence with One-Minute Execution Interval (SIGMA, Detection)
+          XWorm 3.0-5.0: Config and Builder Markers (YARA, Detection); One-Minute Highest-Privilege
+          Scheduled Task With an AppData Roaming Path (XWorm Persistence Pattern) (SIGMA, Detection)
         count: 2
       - url: /hunting-detections/dual-rat-analysis-detections
         title: 'Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm'
@@ -3180,8 +3181,8 @@ techniques:
         date: '2026-05-06'
         report_url: /reports/opendirectory-62-60-237-100-20260506/
         rules: >-
-          ExceptionHandler.dll Plowshare Dispatcher (YARA, Detection); pe_03 HijackLoader Stage-3
-          Loader (API Hash Table) (YARA, Detection); HijackLoader WVault.exe Hollow-Host Launched
+          pe_03 HijackLoader Stage-3 Loader (API Hash Table) (YARA, Detection); ExceptionHandler.dll
+          Plowshare Dispatcher (YARA, Hunting); HijackLoader WVault.exe Hollow-Host Launched
           Directly from Inno Setup Temp Directory (SIGMA, Hunting)
         count: 3
       - url: /hunting-detections/open-directory-193-56-255-154-xiebroc2-detections
@@ -3695,8 +3696,8 @@ techniques:
         date: '2026-03-16'
         report_url: /reports/zerotrace-74-0-42-25-20260316/
         rules: >-
-          Fileless PowerShell PE Dropper ExecutionPolicy Bypass from Non-Standard Parent (SIGMA,
-          Hunting)
+          PowerShell ExecutionPolicy Bypass With a .ps1 Under a User-Writable Path From a
+          Non-Standard Parent (SIGMA, Hunting)
         count: 1
       - url: /hunting-detections/sliver-open-directory-detections
         title: Sliver C2 Toolchain with ScareCrow Loader (45.94.31.220)
@@ -3940,11 +3941,11 @@ techniques:
         date: '2026-05-26'
         report_url: /reports/rovodev-mirai-matrix-c2-87.106.143.220/
         rules: >-
-          MAL_Bash_Pandora_Dropper_Family (YARA, Detection);
-          MAL_Python_Persistent_Bot_DualChannel_CNC (YARA, Detection); ELF IoT Arch-Tagged Filename
-          Execution on Linux Server: Naku/Pandora Mirai Family (SIGMA, Detection); BusyBox SORA
-          Marker Execution: Sora-Derivative Mirai-Fork Active on Host (SIGMA, Detection); PandoraNet
-          Botnet ID in Process Command Line: Active Pandora-Mirai Infection (SIGMA, Hunting)
+          MAL_Bash_Pandora_Dropper_Family (YARA, Detection); MAL_Bash_Persistent_Bot_DualChannel_CNC
+          (YARA, Detection); Naku or Pandora Mirai Arch-Tagged Binary Name or Pandora-Mirai
+          Command-Line Token on Linux (SIGMA, Detection); BusyBox SORA Marker Execution:
+          Sora-Derivative Mirai-Fork Active on Host (SIGMA, Detection); PandoraNet Botnet ID in
+          Process Command Line: Active Pandora-Mirai Infection (SIGMA, Hunting)
         count: 5
       - url: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
         title: GHOST Cryptojacker Kit — Vova75Rus Supply Chain (77.110.96.200)
@@ -4044,7 +4045,9 @@ techniques:
         title: ZeroTrace Multi-Family MaaS Operation (74.0.42.25)
         date: '2026-03-16'
         report_url: /reports/zerotrace-74-0-42-25-20260316/
-        rules: ScreenConnect Phishing VBScript Dropper Silent MSI Install Chain (SIGMA, Detection)
+        rules: >-
+          WScript Spawning Msiexec Silent Install With ALLUSERS=2 (ScreenConnect Dropper Pattern)
+          (SIGMA, Hunting)
         count: 1
     actors:
       - UTA-2026-007
@@ -4113,7 +4116,7 @@ techniques:
         rules: >-
           MAL_Python_Matrix_C2_Framework_Family (YARA, Detection);
           MAL_Python_AIGenerated_OffensiveCode_Universal_Subset (YARA, Hunting);
-          MAL_Python_StealthAgent_AntiDebug_AntiVM_AI_Authored (YARA, Hunting);
+          MAL_Python_StealthAgent_AntiAnalysis_Keyword_Bucket (YARA, Hunting);
           MAL_Markdown_Rovodev_WhatINeed_OperatorPrompt (YARA, Hunting)
         count: 4
       - url: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
@@ -4133,8 +4136,8 @@ techniques:
           Tool (YARA, Detection); Stolen LLM API Key Validator (YARA, Hunting); Mass WordPress
           wp-login.php Credential Validation Rate Exceeded (Correlation) (SIGMA, Detection);
           Executable Script or Skill File Created in Gemini CLI Config Directory (SIGMA, Hunting);
-          Python HTTP Server on Non-Standard Port with UTF-16LE Encoding (A2A C2 Pattern) (SIGMA,
-          Hunting)
+          Python Process With c2_server or BaseHTTPServer in the Command Line (A2A C2 Server
+          Pattern) (SIGMA, Hunting)
         count: 6
       - url: /hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections
         title: Turkish ARPA AI-Augmented Observability Compromise (209.38.205.158)
@@ -4215,10 +4218,11 @@ techniques:
         date: '2026-05-26'
         report_url: /reports/rovodev-mirai-matrix-c2-87.106.143.220/
         rules: >-
-          MAL_Discord_Bot_DDoSasService_Customer_Interface (YARA, Detection); Discord Bot API Egress
-          with Attack-Method Dispatch Payload from Server Host (SIGMA, Hunting); Matrix C2 Discord
-          Bot Attack-Method Dispatch: ovh-nuke (SURICATA, Hunting); Matrix C2 Discord Bot
-          Attack-Method Dispatch: syn-storm/frag-storm/udp-bypass/icmp-hell (SURICATA, Hunting)
+          MAL_Discord_Bot_DDoSasService_Customer_Interface (YARA, Detection); Linux Process
+          Connecting to discord.com on Port 443 Outside node_modules or discord.js Paths (Matrix C2
+          Bot Pattern) (SIGMA, Hunting); Matrix C2 Discord Bot Attack-Method Dispatch: ovh-nuke
+          (SURICATA, Hunting); Matrix C2 Discord Bot Attack-Method Dispatch:
+          syn-storm/frag-storm/udp-bypass/icmp-hell (SURICATA, Hunting)
         count: 4
       - url: /hunting-detections/opendirectory-62-60-237-100-20260506-detections
         title: HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campaign
@@ -4460,7 +4464,8 @@ techniques:
         report_url: /reports/remcos-opendirectory/
         rules: >-
           Remcos OpenDirectory Campaign Mutex and Install Artifacts (YARA, Detection); Remcos RAT
-          File Melting Behavior via install.bat (SIGMA, Detection)
+          Inline Self-Deletion cmd.exe Command Line (PING, DEL, Start and Remcos Folder) (SIGMA,
+          Detection)
         count: 2
       - url: /hunting-detections/dual-rat-analysis-detections
         title: 'Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm'
@@ -4765,7 +4770,7 @@ techniques:
         date: '2026-05-26'
         report_url: /reports/rovodev-mirai-matrix-c2-87.106.143.220/
         rules: >-
-          MAL_Python_Persistent_Bot_DualChannel_CNC (YARA, Detection); Pandora-Mirai Naku Binary
+          MAL_Bash_Persistent_Bot_DualChannel_CNC (YARA, Detection); Pandora-Mirai Naku Binary
           Distribution URI Path (SURICATA, Detection); Pandora-Mirai Pandoras-Box Binary
           Distribution URI Path (SURICATA, Detection); Pandora-Mirai bot.sh Reseed Download URI
           Pattern (SURICATA, Hunting); Naku Binary Reference in HTTP URI (Bare Substring) (SURICATA,
@@ -4781,9 +4786,9 @@ techniques:
           AI Operator Handoff Document Family (YARA, Detection); A2A C2 Server (Unauthenticated
           Python stdlib) (YARA, Detection); A2A C2 Client Console / Exec Tool (YARA, Detection);
           C2_INFRA_TRANSFER Explicit AI-to-AI Header (Narrow / Highest Fidelity) (YARA, Detection);
-          Python HTTP Server on Non-Standard Port with UTF-16LE Encoding (A2A C2 Pattern) (SIGMA,
-          Hunting); A2A C2 Beacon POST to Operator Endpoint with X-Agent-ID Header (SURICATA,
-          Detection)
+          Python Process With c2_server or BaseHTTPServer in the Command Line (A2A C2 Server
+          Pattern) (SIGMA, Hunting); A2A C2 Beacon POST to Operator Endpoint with X-Agent-ID Header
+          (SURICATA, Detection)
         count: 6
       - url: /hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections
         title: Turkish ARPA AI-Augmented Observability Compromise (209.38.205.158)
@@ -4891,7 +4896,7 @@ techniques:
         title: ZeroTrace Multi-Family MaaS Operation (74.0.42.25)
         date: '2026-03-16'
         report_url: /reports/zerotrace-74-0-42-25-20260316/
-        rules: PureRAT v4.1.9 Protocol Preamble Before TLS (SURICATA, Detection)
+        rules: PureRAT v4.1.9 Four-Byte Preamble on Ports 56001 to 56003 (SURICATA, Detection)
         count: 1
       - url: /hunting-detections/sliver-open-directory-detections
         title: Sliver C2 Toolchain with ScareCrow Loader (45.94.31.220)
@@ -5768,7 +5773,7 @@ techniques:
         report_url: /reports/russian-gemini-credential-mill-213.165.51.115/
         rules: >-
           Cloudflared Access TCP Tunnel to Potentially Unauthorized Hostname (SIGMA, Hunting);
-          cloudflared Tunnel QUIC Egress to Cloudflare Edge (UDP 7844) (SURICATA, Hunting)
+          cloudflared Tunnel Port Egress (UDP 7844 to Any External Host) (SURICATA, Hunting)
         count: 2
     actors:
       - UTA-2026-012
@@ -7289,9 +7294,9 @@ techniques:
         report_url: /reports/russian-gemini-credential-mill-213.165.51.115/
         rules: >-
           A2A C2 Server (Unauthenticated Python stdlib) (YARA, Detection); A2A C2 Client Console /
-          Exec Tool (YARA, Detection); Python HTTP Server on Non-Standard Port with UTF-16LE
-          Encoding (A2A C2 Pattern) (SIGMA, Hunting); A2A C2 Beacon POST to Operator Endpoint with
-          X-Agent-ID Header (SURICATA, Detection)
+          Exec Tool (YARA, Detection); Python Process With c2_server or BaseHTTPServer in the
+          Command Line (A2A C2 Server Pattern) (SIGMA, Hunting); A2A C2 Beacon POST to Operator
+          Endpoint with X-Agent-ID Header (SURICATA, Detection)
         count: 4
     actors:
       - UTA-2026-004
@@ -8015,10 +8020,10 @@ techniques:
         date: '2026-05-26'
         report_url: /reports/rovodev-mirai-matrix-c2-87.106.143.220/
         rules: >-
-          ELF IoT Arch-Tagged Filename Execution on Linux Server: Naku/Pandora Mirai Family (SIGMA,
-          Detection); Naku Binary Fetch URI Pattern: Historical Aruba Distribution Convention
-          (SURICATA, Hunting); Naku Binary Fetch URI Pattern: Historical Aruba Backup Distribution
-          Convention (SURICATA, Hunting)
+          Naku or Pandora Mirai Arch-Tagged Binary Name or Pandora-Mirai Command-Line Token on Linux
+          (SIGMA, Detection); Naku Binary Fetch URI Pattern: Historical Aruba Distribution
+          Convention (SURICATA, Hunting); Naku Binary Fetch URI Pattern: Historical Aruba Backup
+          Distribution Convention (SURICATA, Hunting)
         count: 3
       - url: >-
           /hunting-detections/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections
@@ -8443,7 +8448,9 @@ techniques:
         title: ZeroTrace Multi-Family MaaS Operation (74.0.42.25)
         date: '2026-03-16'
         report_url: /reports/zerotrace-74-0-42-25-20260316/
-        rules: ScreenConnect Phishing VBScript Dropper Silent MSI Install Chain (SIGMA, Detection)
+        rules: >-
+          WScript Spawning Msiexec Silent Install With ALLUSERS=2 (ScreenConnect Dropper Pattern)
+          (SIGMA, Hunting)
         count: 1
     actors:
       - UTA-2026-024
@@ -9181,7 +9188,7 @@ techniques:
         title: Rovodev AI-Co-Authored Mirai Variant + Matrix C2 (87.106.143.220)
         date: '2026-05-26'
         report_url: /reports/rovodev-mirai-matrix-c2-87.106.143.220/
-        rules: MAL_Python_StealthAgent_AntiDebug_AntiVM_AI_Authored (YARA, Hunting)
+        rules: MAL_Python_StealthAgent_AntiAnalysis_Keyword_Bucket (YARA, Hunting)
         count: 1
       - url: /hunting-detections/shadow-xworm-opendirectory-detections
         title: Shadow RAT & XWorm Open Directory Campaign
@@ -9292,10 +9299,10 @@ techniques:
         rules: >-
           MAL_ELF_Naku_Pandora_Mirai_Family (YARA, Detection); MAL_Python_Matrix_C2_Framework_Family
           (YARA, Detection); MAL_Discord_Bot_DDoSasService_Customer_Interface (YARA, Detection);
-          Discord Bot API Egress with Attack-Method Dispatch Payload from Server Host (SIGMA,
-          Hunting); Matrix C2 Discord Bot Attack-Method Dispatch: ovh-nuke (SURICATA, Hunting);
-          Matrix C2 Discord Bot Attack-Method Dispatch: syn-storm/frag-storm/udp-bypass/icmp-hell
-          (SURICATA, Hunting)
+          Linux Process Connecting to discord.com on Port 443 Outside node_modules or discord.js
+          Paths (Matrix C2 Bot Pattern) (SIGMA, Hunting); Matrix C2 Discord Bot Attack-Method
+          Dispatch: ovh-nuke (SURICATA, Hunting); Matrix C2 Discord Bot Attack-Method Dispatch:
+          syn-storm/frag-storm/udp-bypass/icmp-hell (SURICATA, Hunting)
         count: 6
     actors:
       - UTA-2026-014
@@ -9788,7 +9795,9 @@ techniques:
         title: Remcos RAT OpenDirectory Campaign
         date: '2026-02-10'
         report_url: /reports/remcos-opendirectory/
-        rules: Remcos RAT Non-Browser Process Accessing Browser Credential Store Files (SIGMA, Hunting)
+        rules: >-
+          Non-Browser Process Accessing Chrome or Firefox Credential Store Files (Remcos Credential
+          Theft Pattern) (SIGMA, Hunting)
         count: 1
     actors:
       - UTA-2026-008
@@ -9934,7 +9943,7 @@ techniques:
         date: '2026-05-26'
         report_url: /reports/rovodev-mirai-matrix-c2-87.106.143.220/
         rules: >-
-          MAL_Python_Persistent_Bot_DualChannel_CNC (YARA, Detection); Pandora-Mirai Persistence
+          MAL_Bash_Persistent_Bot_DualChannel_CNC (YARA, Detection); Pandora-Mirai Persistence
           Pattern: Multi-Mechanism Installer (Init.d, Systemd, Hidden Cron) (SIGMA, Hunting)
         count: 2
       - url: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
@@ -10048,7 +10057,7 @@ techniques:
         title: Rovodev AI-Co-Authored Mirai Variant + Matrix C2 (87.106.143.220)
         date: '2026-05-26'
         report_url: /reports/rovodev-mirai-matrix-c2-87.106.143.220/
-        rules: MAL_Python_Persistent_Bot_DualChannel_CNC (YARA, Detection)
+        rules: MAL_Bash_Persistent_Bot_DualChannel_CNC (YARA, Detection)
         count: 1
     actors:
       - UTA-2026-014
@@ -10286,8 +10295,8 @@ techniques:
         report_url: /reports/remcos-opendirectory/
         rules: >-
           Remcos UAC Bypass and Persistence (YARA, Detection); Remcos RAT Winlogon Userinit
-          Persistence via Registry Modification (SIGMA, Detection); Remcos RAT Execution via
-          Winlogon Userinit Hijack (Child Process) (SIGMA, Detection)
+          Persistence via Registry Modification (SIGMA, Detection); winlogon.exe Child Process
+          Running From an AppData Path (Userinit Hijack Pattern) (SIGMA, Detection)
         count: 3
     actors: []
     url: /techniques/T1547.004/
@@ -10441,9 +10450,9 @@ techniques:
         report_url: /reports/remcos-opendirectory/
         rules: >-
           Remcos OpenDirectory Campaign Mutex and Install Artifacts (YARA, Detection); Remcos UAC
-          Bypass and Persistence (YARA, Detection); Remcos RAT UAC Bypass via EnableLUA Registry
-          Modification (Process) (SIGMA, Detection); EnableLUA Registry Value Set to Disable User
-          Account Control (Registry State) (SIGMA, Detection)
+          Bypass and Persistence (YARA, Detection); UAC Disabled by reg.exe Setting EnableLUA to 0
+          From cmd.exe (Remcos Behavior) (SIGMA, Detection); EnableLUA Registry Value Set to Disable
+          User Account Control (Registry State) (SIGMA, Detection)
         count: 4
     actors:
       - UTA-2026-005
@@ -10706,7 +10715,9 @@ techniques:
         title: Shadow RAT & XWorm Open Directory Campaign
         date: '2026-04-05'
         report_url: /reports/shadow-xworm-opendirectory/
-        rules: Zone.Identifier Alternate Data Stream Removal for SmartScreen Bypass (SIGMA, Hunting)
+        rules: >-
+          Zone.Identifier Stream Deleted From an Executable (.exe) by a Process Outside Browser and
+          System Paths (SIGMA, Hunting)
         count: 1
     actors:
       - UTA-2026-003
@@ -10868,8 +10879,8 @@ techniques:
         report_url: /reports/remcos-opendirectory/
         rules: >-
           Remcos RAT Family Detection (YARA, Detection); Remcos OpenDirectory Campaign Mutex and
-          Install Artifacts (YARA, Detection); Remcos RAT Non-Browser Process Accessing Browser
-          Credential Store Files (SIGMA, Hunting)
+          Install Artifacts (YARA, Detection); Non-Browser Process Accessing Chrome or Firefox
+          Credential Store Files (Remcos Credential Theft Pattern) (SIGMA, Hunting)
         count: 3
       - url: /hunting-detections/PULSAR-RAT-detections
         title: PULSAR RAT (server.exe) — Technical Analysis & Business Risk Assessment
@@ -11799,7 +11810,7 @@ techniques:
         report_url: /reports/russian-gemini-credential-mill-213.165.51.115/
         rules: >-
           Cloudflared Access TCP Tunnel to Potentially Unauthorized Hostname (SIGMA, Hunting);
-          cloudflared Tunnel QUIC Egress to Cloudflare Edge (UDP 7844) (SURICATA, Hunting)
+          cloudflared Tunnel Port Egress (UDP 7844 to Any External Host) (SURICATA, Hunting)
         count: 2
       - url: /hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections
         title: Turkish ARPA AI-Augmented Observability Compromise (209.38.205.158)
@@ -11987,8 +11998,8 @@ techniques:
         date: '2026-04-05'
         report_url: /reports/shadow-xworm-opendirectory/
         rules: >-
-          Shadow RAT v2.6.4.0 Client: Namespace + Costura Fingerprint (YARA, Detection); Shadow RAT
-          v2.6.4.0: Shadow.Common.dll Shared Library (YARA, Detection)
+          Shadow RAT Client: Namespace Strings, Version and Mutex Fingerprint (YARA, Detection);
+          Shadow RAT v2.6.4.0: Shadow.Common.dll Shared Library (YARA, Detection)
         count: 2
       - url: /hunting-detections/open-directory-193-56-255-154-xiebroc2-detections
         title: Open Directory at 193.56.255.154 — XiebroC2 v3.1 & Covenant C2
@@ -12065,7 +12076,7 @@ techniques:
         title: ZeroTrace Multi-Family MaaS Operation (74.0.42.25)
         date: '2026-03-16'
         report_url: /reports/zerotrace-74-0-42-25-20260316/
-        rules: PureRAT v4.1.9 Protocol Preamble Before TLS (SURICATA, Detection)
+        rules: PureRAT v4.1.9 Four-Byte Preamble on Ports 56001 to 56003 (SURICATA, Detection)
         count: 1
     actors:
       - UTA-2026-001
@@ -12104,8 +12115,8 @@ techniques:
         date: '2026-05-06'
         report_url: /reports/opendirectory-62-60-237-100-20260506/
         rules: >-
-          ExceptionHandler.dll Plowshare Dispatcher (YARA, Detection); HijackLoader Inno Setup
-          Wrapper Spawning CrystSupervisor32 and WVault Process Chain (SIGMA, Hunting)
+          ExceptionHandler.dll Plowshare Dispatcher (YARA, Hunting); HijackLoader CrystSupervisor32
+          or WVault Renamed Vendor Binary Process Creation (SIGMA, Hunting)
         count: 2
     actors:
       - UTA-2026-006
@@ -12650,11 +12661,11 @@ techniques:
           MAL_Bash_Pandora_Dropper_Family (YARA, Detection); MAL_Python_Matrix_C2_Framework_Family
           (YARA, Detection); MAL_JSON_Rovodev_SessionContext_FileWrite_Authoring (YARA, Detection);
           MAL_Python_AIGenerated_OffensiveCode_Universal_Subset (YARA, Hunting);
-          MAL_Python_StealthAgent_AntiDebug_AntiVM_AI_Authored (YARA, Hunting);
+          MAL_Python_StealthAgent_AntiAnalysis_Keyword_Bucket (YARA, Hunting);
           MAL_Markdown_Rovodev_WhatINeed_OperatorPrompt (YARA, Hunting); Rovodev AI Agent Sessions
-          Directory Creation on Server Host: Potential AI-Augmented Offensive Operations (SIGMA,
-          Hunting); Rovodev Log File_Write Tool-Call Pattern: AI-Augmented Offensive Operations
-          Evidence (SIGMA, Hunting); Pandora-Mirai Naku Binary Distribution URI Path (SURICATA,
+          Directory or Session Context File Created on a Linux Host (SIGMA, Hunting); Rovodev
+          Runtime Log rovodev.log Created on a Linux Host (Scoping Lead for AI-Augmented Offensive
+          Operations) (SIGMA, Hunting); Pandora-Mirai Naku Binary Distribution URI Path (SURICATA,
           Detection); Pandora-Mirai Pandoras-Box Binary Distribution URI Path (SURICATA, Detection);
           Pandora-Mirai bot.sh Reseed Download URI Pattern (SURICATA, Hunting); Naku Binary
           Reference in HTTP URI (Bare Substring) (SURICATA, Hunting)
@@ -13993,8 +14004,9 @@ techniques:
         date: '2026-04-05'
         report_url: /reports/shadow-xworm-opendirectory/
         rules: >-
-          Shadow RAT v2.6.4.0: AMSI + ETW Bypass Chain (YARA, Detection); AMSI Bypass via Suspicious
-          amsi.dll Load from Non-Standard Path (SIGMA, Hunting); ETW Bypass via Process Access to
+          Shadow RAT AMSI Patch Shellcode or Asterisk-Padded AMSI and ETW String Fragments (YARA,
+          Detection); AMSI Library Load by a Process Outside System32, Program Files and Common
+          Interpreters (AMSI Patching Pattern) (SIGMA, Hunting); ETW Bypass via Process Access to
           ntdll.dll Memory Region (SIGMA, Hunting)
         count: 3
       - url: /hunting-detections/sliver-open-directory-detections
@@ -14009,7 +14021,7 @@ techniques:
         title: Quasar + XWorm + PowerShell
         date: '2025-10-10'
         report_url: /reports/quasar-xworm-powershell/
-        rules: PowerShell Microsoft Defender Exclusion Script (YARA, Hunting)
+        rules: PowerShell Defender Exclusion Script Naming update.png (YARA, Hunting)
         count: 1
     actors:
       - UTA-2026-001
