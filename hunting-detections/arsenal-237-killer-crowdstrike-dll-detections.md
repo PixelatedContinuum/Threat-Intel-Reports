@@ -45,7 +45,7 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 **Robustness:** 3 (correlation) / 1 (Falcon-termination base) / 2 (driver-service-creation base)
 **ATT&CK Coverage:** T1685 (Disable or Modify Tools), T1068 (Exploitation for Privilege Escalation)
 **Confidence:** HIGH
-**Rationale:** Neither base signal is reliable alone. *Fix applied during retiering:* the Falcon-termination rule's original `filter_legitimate` clause checked `ParentImage` and `User` against the `process_termination` logsource, but Sysmon's process-termination event (EventID 5) is documented to carry only the `Image` field, with no parent-process or user-context attribution, so that filter cannot reliably separate a forced kill from a routine Falcon restart on this logsource. The driver-service-creation rule's own description already stated that its intended correlation with a CrowdStrike termination "within 60 seconds" had been dropped because "single-event Sigma rules cannot express cross-event correlation." Both problems share one fix: rebuilding the pairing as a genuine Sigma temporal correlation. Kernel-mode driver service registration is the mechanism BYOVD requires to load a vulnerable driver at all, and this toolkit's own documented execution timeline runs from driver deployment through security-product termination in well under a minute, so a same-host co-occurrence within the correlation window is a high-confidence pairing rather than two unrelated routine events.
+**Rationale:** Neither base signal is reliable alone. *Fix applied during retiering:* the Falcon-termination rule's original `filter_legitimate` clause checked `ParentImage` and `User` against the `process_termination` logsource, but Sysmon's process-termination event (EventID 5) is documented to carry only the `Image` field, with no parent-process or user-context attribution, so that filter cannot reliably separate a forced kill from a routine Falcon restart on this logsource. The driver-service-creation rule's own description already stated that its intended correlation with a CrowdStrike termination "within 60 seconds" had been dropped because "single-event Sigma rules cannot express cross-event correlation." Both problems share one fix: rebuilding the pairing as a genuine Sigma temporal correlation. Kernel-mode driver service registration is the mechanism BYOVD requires to load a vulnerable driver at all, and this toolkit's own documented execution timeline runs from driver deployment through security-product termination in well under a minute, so a same-host co-occurrence within the correlation window is a high-confidence pairing rather than two unrelated routine events. *Logic fix 2026-10-10:* the correlation was `type: temporal`, which matches the two events in either order, but the title, description and Validation say the driver install comes first. It is now `temporal_ordered`, with the driver-service-creation base rule listed first.
 **False Positives:** A coordinated security-product migration (uninstalling CrowdStrike while installing a different vendor's kernel-mode filter driver in the same maintenance window) could produce both artifacts together. Uncommon, and typically scheduled, documented change activity rather than silent background noise.
 **Blind Spots:** A driver-mapping technique that loads the vulnerable driver without registering it as an SCM service (bypassing the classic CreateService/StartService BYOVD pattern) evades the driver-service-creation base entirely, defeating the correlation. Events spanning a host reboot or exceeding the 60-second window also evade.
 **Validation:** Trigger a kernel-mode driver service installation (EventID 7045, ServiceType kernel mode driver) followed within 60 seconds by termination of csagent.exe, CSFalconService.exe, or CSFalconContainer.exe on the same host: the correlation must fire. A CrowdStrike sensor update or restart alone, or a routine third-party driver install alone, must NOT fire the correlation.
@@ -147,6 +147,7 @@ references:
     - https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-crowdstrike-dll-detections/
 author: The Hunters Ledger
 date: '2026-01-25'
+modified: '2026-10-10'
 tags:
     - attack.defense-impairment
     - attack.t1685
@@ -154,10 +155,10 @@ tags:
     - attack.t1068
     - detection.emerging-threats
 correlation:
-    type: temporal
+    type: temporal_ordered
     rules:
-        - crowdstrike_falcon_process_termination
         - kernel_driver_service_creation
+        - crowdstrike_falcon_process_termination
     group-by:
         - host.name
     timespan: 60s

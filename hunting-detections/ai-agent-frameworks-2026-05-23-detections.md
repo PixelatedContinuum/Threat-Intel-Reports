@@ -57,7 +57,7 @@ This campaign spans 8 operator cases rather than distinct malware families, so r
 **ATT&CK Coverage:** T1587 (Develop Capabilities), T1059.006 (Python)
 **ATT&CK Note:** Novel TTP; no dedicated MITRE sub-technique exists for this specific behavior.
 **Confidence:** HIGH
-**Rationale:** First-documented artifact class — operator-authored Markdown files written FOR AI agent consumption to re-prime new sessions (Case 1 Russian Gemini operator: `C2_MIGRATION_GUIDE.md`; Case 3 Rovodev operator: 22+ documents at `/root/matrix/`). *Fix applied during retiering:* the original condition let the bare domain string `tralalarkefe.com` ($i4) trigger the rule alone, an atomic-only path; it now requires the domain to co-occur with an AI-addressing header, session-priming directive, or infrastructure marker — the domain itself is already in the IOC feed.
+**Rationale:** First-documented artifact class — operator-authored Markdown files written FOR AI agent consumption to re-prime new sessions (Case 1 Russian Gemini operator: `C2_MIGRATION_GUIDE.md`; Case 3 Rovodev operator: 22+ documents at `/root/matrix/`). *Fix applied during retiering:* the original condition let the bare domain string `tralalarkefe.com` ($i4) trigger the rule alone, an atomic-only path; it now requires the domain to co-occur with an AI-addressing header, session-priming directive, or infrastructure marker — the domain itself is already in the IOC feed. *Logic fix 2026-10-10:* `$h4` ("To: Claude") is a substring of `$h3` ("To: Claude Code"), so one "To: Claude Code" line satisfied the `2 of ($h*)` branch alone, which is the header-only match the Blind Spots below say is not covered. That branch now counts only distinct header forms (`$h1`, `$h2`, `$h3`, `$h5`, `$h6`); `$h4` still counts as a header in the branch that pairs a header with a directive.
 **False Positives:** None known — the combination of AI-tool-addressed headers ("To: Gemini CLI", "To: Claude Code") with session-priming directives is not present in legitimate documentation workflows.
 **Blind Spots:** An operator who stops using this exact heading/directive convention evades; single-criterion matches (header OR directive alone) are lower confidence and not covered here.
 **Validation:** Scan a captured operator handoff document (e.g. `C2_MIGRATION_GUIDE.md`) — must match; a legitimate project README or runbook must NOT fire.
@@ -79,6 +79,7 @@ rule TOOLKIT_AI_Operator_Handoff_Document {
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/"
       date = "2026-05-25"
+      modified = "2026-10-10"
       family = "AI-Operator-Handoff-Document"
       malware_type = "Operator-TTP-Artifact"
       campaign = "AI-Agent-Framework-Abuse-MultiActor-2026-05-23"
@@ -103,7 +104,7 @@ rule TOOLKIT_AI_Operator_Handoff_Document {
       filesize < 500KB and
       (
          (1 of ($h*) and 1 of ($d*)) or
-         (2 of ($h*)) or
+         (2 of ($h1, $h2, $h3, $h5, $h6)) or
          (1 of ($i1, $i2, $i3) and 1 of ($d*)) or
          ($i4 and (1 of ($h*) or 1 of ($d*) or 1 of ($i1, $i2, $i3)))
       )
@@ -118,7 +119,7 @@ rule TOOLKIT_AI_Operator_Handoff_Document {
 **ATT&CK Note:** Novel TTP.
 **Confidence:** HIGH
 **Rationale:** First qualitative change in credential-mutation tradecraft since the hashcat-rules era (~2015). `russian-ai_sniper_brute.py` invokes Gemini 2.5 Flash with a red-team password analyst prompt to generate 20 per-target mutations from email+domain+last-known-password — the prompt fragments and operator output filenames are distinctive and require no single renameable literal alone.
-**False Positives:** None known — the combination of LLM API invocation, password-mutation prompt language, and the "Output ONLY the 20 passwords" output-format constraint is not present in legitimate penetration-testing frameworks.
+**False Positives:** None known. The rule fires on any two of the six prompt fragments, on one of the three operator output filenames together with a Gemini API string, or on one prompt fragment together with a Gemini API string and a WordPress login string; it does not require the LLM API call, the prompt and the "Output ONLY the 20 passwords" constraint together. These prompt fragments and filenames are not expected in legitimate penetration-testing frameworks.
 **Blind Spots:** A rebuild using different prompt wording or a different LLM SDK evades; the rule targets on-disk script artifacts, not in-memory-only execution.
 **Validation:** Scan the captured `russian-ai_sniper_brute.py`-class script — must match; a benign password-policy or generic LLM-integration script must NOT fire.
 **Deployment:** Filesystem scan on suspicious server hosts, DLP scanning for operator tool repositories, sandbox detonation of suspicious Python scripts.
@@ -131,6 +132,7 @@ rule TOOLKIT_LLM_Personalized_Credential_Mutator {
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/"
       date = "2026-05-25"
+      modified = "2026-10-10"
       family = "LLM-Credential-Mutator"
       malware_type = "Credential-Theft-Tool"
       campaign = "AI-Agent-Framework-Abuse-MultiActor-2026-05-23"
@@ -362,7 +364,7 @@ rule MAL_Linux_Pandora_Mirai_Naku_Suite {
 **ATT&CK Coverage:** T1059.006 (Python), T1071.001 (Web Protocols), T1132.001 (Standard Encoding)
 **ATT&CK Note:** Novel TTP: operator-built, unauthenticated Python-stdlib C2.
 **Confidence:** HIGH
-**Rationale:** `c2_server.py` uses Python stdlib `BaseHTTPRequestHandler` with zero authentication across 5 endpoints, the operator banner "A2A C2 MULTI-AGENT CONSOLE", and an `X-Agent-ID` self-assertion header. *Fix applied during retiering:* the original condition let a bare match on either C2 domain (`c2.tralalarkefe.com` / `payloads.tralalarkefe.com` — both already in the IOC feed) trigger the rule alone; the domain-only path now requires co-occurrence with at least one API endpoint string.
+**Rationale:** `c2_server.py` uses Python stdlib `BaseHTTPRequestHandler` with zero authentication across 5 endpoints, the operator banner "A2A C2 MULTI-AGENT CONSOLE", and an `X-Agent-ID` self-assertion header. *Fix applied during retiering:* the original condition let a bare match on either C2 domain (`c2.tralalarkefe.com` / `payloads.tralalarkefe.com` — both already in the IOC feed) trigger the rule alone; the domain-only path now requires co-occurrence with at least one API endpoint string. *Logic fix 2026-10-10:* the heading and rule name claim a Python-stdlib `BaseHTTPServer` implementation, but no branch tested for it (the operator banner alone fired). Every branch now also requires the `BaseHTTPRequestHandler` string, which the captured `c2_server.py` subclasses (see the Russian Gemini credential-mill report). This was not re-run against the captured file, which is not held on the workstation.
 **False Positives:** None known — the "A2A C2 MULTI-AGENT CONSOLE" banner is operator-bespoke, and the combination of `BaseHTTPRequestHandler` + unauthenticated `/api/v1/` endpoints + `X-Agent-ID` header + base64/UTF-16LE encoding is not present in legitimate server-management frameworks.
 **Blind Spots:** A rebuild dropping the banner string and renaming all endpoints/header would evade; targets on-disk Python source, not a compiled/obfuscated variant.
 **Validation:** Scan the captured `c2_server.py` — must match; unrelated Python HTTP servers must NOT fire.
@@ -376,11 +378,13 @@ rule MAL_Python_Russian_A2A_C2_BaseHTTPServer {
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/"
       date = "2026-05-25"
+      modified = "2026-10-10"
       family = "Russian-A2A-C2"
       malware_type = "Custom-C2-Backend"
       campaign = "AI-Agent-Framework-Abuse-MultiActor-2026-05-23"
       id = "943da3bd-c273-5e48-829e-1ec1389fd48a"
    strings:
+      $py1 = "BaseHTTPRequestHandler" ascii
       $b1 = "A2A C2 MULTI-AGENT CONSOLE" ascii
       $e1 = "/api/v1/update" ascii
       $e2 = "/api/v1/agents" ascii
@@ -394,6 +398,7 @@ rule MAL_Python_Russian_A2A_C2_BaseHTTPServer {
       $d3 = "payloads.tralalarkefe.com" ascii
    condition:
       filesize < 1MB and
+      $py1 and
       (
          $b1 or
          (3 of ($e*) and $h1) or
@@ -414,18 +419,19 @@ rule MAL_Python_Russian_A2A_C2_BaseHTTPServer {
 **ATT&CK Coverage:** T1587 (Develop Capabilities), T1059.006 (Python)
 **ATT&CK Note:** Novel TTP: AI-generated code structural signature.
 **Confidence:** MODERATE (each criterion alone is low-confidence; the combination is higher)
-**Rationale:** Cross-operator validated across three independent operators' Python attack code (Case 1, Case 2, Case 3). The co-occurrence of verbose docstrings + bare-except + defensive try/except + educational variable names + zero anti-analysis is common in benign, actively-developed Python, so this is explicitly not suitable for automated alerting alone.
+**Rationale:** Cross-operator validated across three independent operators' Python attack code (Case 1, Case 2, Case 3). The co-occurrence of verbose docstrings + bare-except or defensive try/except (the condition accepts either handler form, 2026-10-10 wording fix) + educational variable names + zero anti-analysis is common in benign, actively-developed Python, so this is explicitly not suitable for automated alerting alone.
 **False Positives:** Legitimate Python developers routinely write verbose docstrings and defensive error handling; the FP rate increases meaningfully in active development environments.
 **Deployment:** Hunting/hypothesis generation on suspicious server hosts; combine with operator-adjacent artifact signals (credential files, C2 artifacts, scanning tools) before treating a hit as actionable.
 
 ```yara
 rule SUSP_AI_Generated_Offensive_Code_Python {
    meta:
-      description = "Detects Python offensive tools bearing the structural signature of AI-generated code: verbose docstrings co-occurring with bare-except handlers, defensive try/except wrapping, and educational variable names. Confirmed cross-operator across 3 independent actors (Case 1 Russian, Case 2 Turkish ARPA, Case 3 Rovodev)."
+      description = "Detects Python offensive tools bearing the structural signature of AI-generated code: verbose docstrings co-occurring with a bare `except:` handler or a defensive `except Exception as e:` handler (either one satisfies the rule), educational variable names, and offensive-tool terms. Confirmed cross-operator across 3 independent actors (Case 1 Russian, Case 2 Turkish ARPA, Case 3 Rovodev)."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/"
       date = "2026-05-25"
+      modified = "2026-10-10"
       family = "AI-Generated-Offensive-Code"
       malware_type = "Offensive-Tool-Structural-Pattern"
       campaign = "AI-Agent-Framework-Abuse-MultiActor-2026-05-23"
@@ -579,7 +585,7 @@ level: high
 **Robustness:** 2
 **ATT&CK Coverage:** T1543.002 (Systemd Service — Python module persistence analog), T1496.001 (Compute Hijacking)
 **Confidence:** HIGH
-**Rationale:** "PerformanceMonitor" is not present in any legitimate ComfyUI custom node package; the display name "GPU Performance Monitor" plus installation from the kit-author's now-suspended GitHub repos is distinctly malicious. *Tag fix applied during retiering:* added the missing `attack.t1496.001` technique tag.
+**Rationale:** "PerformanceMonitor" is not present in any legitimate ComfyUI custom node package; the display name "GPU Performance Monitor" plus installation from the kit-author's now-suspended GitHub repos is distinctly malicious. *Tag fix applied during retiering:* added the missing `attack.t1496.001` technique tag. *Description fix 2026-10-10:* the description also claimed process-creation detection of the pip install, but the logsource is `file_event` and both selections test `TargetFilename`; the description now says file creation only.
 **False Positives:** No known legitimate ComfyUI custom node uses the PerformanceMonitor node name.
 **Blind Spots:** A rebrand of the fake node's name would evade; the kit-author repos are now suspended (new pip installs fail) but locally cached copies may persist on already-infected hosts.
 **Validation:** Trigger the ComfyUI custom-node installation step — must match; installation of an unrelated, legitimately-named ComfyUI node must NOT fire.
@@ -593,13 +599,15 @@ description: >-
     Detects registration of the GHOST cryptojacker kit's fake ComfyUI custom node
     "PerformanceMonitor" (display name "GPU Performance Monitor") used to establish
     persistence on ComfyUI-hosting AI inference servers. The fake node is installed via
-    pip from the kit-author's GitHub repos. Detection via file creation under ComfyUI's
-    custom_nodes directory matching the PerformanceMonitor pattern, or process creation
-    showing pip installing from the kit-author repos.
+    pip from the kit-author's GitHub repos. Detection is by file creation only: a file under
+    ComfyUI's custom_nodes directory matching the PerformanceMonitor or kit-author node
+    names, or a created file whose path contains a kit-author repo name. The rule does not
+    inspect process creation, so a pip command line is not matched.
 references:
     - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/
 author: The Hunters Ledger
 date: '2026-05-25'
+modified: '2026-10-10'
 tags:
     - attack.persistence
     - attack.impact
@@ -630,20 +638,20 @@ level: high
 
 **Campaign Infrastructure Artifacts**
 
-#### Cloudflared Access TCP Tunnel Registration to Non-Allowlisted Hostname
+#### Cloudflared Access TCP Tunnel Registration
 
 **Tier:** Detection
 **Robustness:** 2
 **ATT&CK Coverage:** T1090.004 (Domain Fronting), T1021.001 (RDP), T1021.004 (SSH)
 **Confidence:** HIGH
-**Rationale:** The exact combination of the `cloudflared` binary with `access`, `tcp`, and `--hostname` flags is a specific, narrow command pattern rarely used outside a formally managed Cloudflare Zero Trust deployment; the Russian operator (Case 1) used it to maintain persistent RDP/SSH access to a US healthcare victim. *Tag fix applied during retiering:* added the missing `attack.t1090.004` technique tag.
+**Rationale:** The exact combination of the `cloudflared` binary with `access`, `tcp`, and `--hostname` flags is a specific, narrow command pattern rarely used outside a formally managed Cloudflare Zero Trust deployment; the Russian operator (Case 1) used it to maintain persistent RDP/SSH access to a US healthcare victim. *Tag fix applied during retiering:* added the missing `attack.t1090.004` technique tag. *Title fix 2026-10-10:* the title said "to Non-Allowlisted Hostname", but the rule has no hostname allowlist and matches any `cloudflared access tcp --hostname` invocation; the title now says that, and the allowlist stays a local tuning step.
 **False Positives:** Legitimate Cloudflare Zero Trust TCP application proxies configured by network administrators — allowlist known deployment hostnames.
 **Blind Spots:** Legitimate enterprise Zero Trust deployments using this exact command are a real, if allowlist-manageable, population; the rule does not itself enforce a hostname allowlist (Sigma has no environment-aware NOT-IN-list mechanism).
 **Validation:** Trigger a `cloudflared access tcp --hostname <host> --url localhost:<port>` command — must match; a plain `cloudflared tunnel run` (no `access tcp`) must NOT fire.
 **Deployment:** Sysmon process creation, auditd execve, Linux endpoint agent.
 
 ```yaml
-title: Cloudflared Access TCP Tunnel Registration to Non-Allowlisted Hostname
+title: Cloudflared Access TCP Tunnel Registration
 id: 0d88f829-c8e3-42e5-a3c3-34cb8a5fec1a
 status: experimental
 description: >-
@@ -658,6 +666,7 @@ references:
     - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/
 author: The Hunters Ledger
 date: '2026-05-25'
+modified: '2026-10-10'
 tags:
     - attack.command-and-control
     - attack.lateral-movement
@@ -685,13 +694,13 @@ falsepositives:
 level: high
 ```
 
-#### Instana API Enumeration via Stolen JWT (ARPA Observability Harvester, Case 2)
+#### Instana API Enumeration Script via -SkipCertificateCheck to an ocpinstana Endpoint (ARPA Observability Harvester, Case 2)
 
 **Tier:** Detection
 **Robustness:** 2
 **ATT&CK Coverage:** T1119 (Automated Collection), T1530 (Data from Cloud Storage Object — MODERATE)
 **Confidence:** HIGH (PowerShell Script Block Logging detection); MODERATE (network-side proxy detection)
-**Rationale:** The specific combination of `-SkipCertificateCheck` with `ocpinstana` endpoint references in a PowerShell script block is characteristic of the Turkish ARPA operator's `instana_local_collector.ps1`. *Fixes applied during retiering:* removed a bare `apiToken` OR-path (an extremely common, generic variable/header name in legitimate API scripts that would have fired this HIGH-level rule on ordinary REST-API automation) and a literal, never-filled-in placeholder string `'[victim-tenant]'` that could never match real telemetry. The stolen JWT JTI remains available in the IOC feed as a victim indicator rather than as a rule OR-path.
+**Rationale:** The specific combination of `-SkipCertificateCheck` with `ocpinstana` endpoint references in a PowerShell script block is characteristic of the Turkish ARPA operator's `instana_local_collector.ps1`. *Fixes applied during retiering:* removed a bare `apiToken` OR-path (an extremely common, generic variable/header name in legitimate API scripts that would have fired this HIGH-level rule on ordinary REST-API automation) and a literal, never-filled-in placeholder string `'[victim-tenant]'` that could never match real telemetry. The stolen JWT JTI remains available in the IOC feed as a victim indicator rather than as a rule OR-path. *Title fix 2026-10-10:* the title claimed detection "via Stolen JWT from Non-Management-Platform Source", but the logic is two `ScriptBlockText` substrings with no token or source-host test; the title now describes those substrings.
 **False Positives:** Legitimate Instana API clients that use `-SkipCertificateCheck` for internal OCP self-signed certificates — narrow by source host.
 **Blind Spots:** A script avoiding `-SkipCertificateCheck` (e.g. using a properly-trusted cert) evades; PowerShell Script Block Logging must be enabled for this telemetry to exist at all.
 **Validation:** Trigger a PowerShell script combining `-SkipCertificateCheck` and an `ocpinstana`-referencing endpoint — must match; an unrelated PowerShell script using `-SkipCertificateCheck` alone (e.g. against a different internal API) must NOT fire.
@@ -699,8 +708,8 @@ level: high
 
 ```yaml
 title: >-
-    Instana API Enumeration via Stolen JWT from Non-Management-Platform Source
-    (ARPA Observability Harvester)
+    Instana API Enumeration Script via -SkipCertificateCheck to an Ocpinstana
+    Endpoint (ARPA Observability Harvester)
 id: f9c5ebeb-d6b8-4425-bb85-bfa4d30e28ac
 status: experimental
 description: >-
@@ -710,11 +719,13 @@ description: >-
     10-minute-window GET /api/events requests with a stolen 10-year Instana JWT to
     exfiltrate observability telemetry to the attacker's ARPA platform. Detection from
     PowerShell Script Block Logging is highly reliable when -SkipCertificateCheck appears
-    alongside Instana endpoint strings.
+    alongside Instana endpoint strings. The rule matches those two strings in the script block
+    text; it does not inspect the JWT or the source host.
 references:
     - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/
 author: The Hunters Ledger
 date: '2026-05-25'
+modified: '2026-10-10'
 tags:
     - attack.collection
     - attack.exfiltration
@@ -747,26 +758,27 @@ level: high
 **Robustness:** 2 (correlation) / 1 (each base rule individually)
 **ATT&CK Coverage:** T1587 (Develop Capabilities), T1588.002 (Obtain Capabilities: Tool)
 **Confidence:** MODERATE — co-presence of AI tools and offensive tooling on a server host warrants investigation but is not conclusive by itself
-**Rationale:** Neither base selector is meaningful alone — AI coding-agent execution and generic scanning/tunneling tool execution are both common on legitimate developer and security-research hosts. The temporal correlation (both signals on the *same host* within 24 hours) is what discriminated the real Case 7 (Weevely+frp+Claude) operator from two demoted false positives (a legitimate SaaS-security consultant and a HuggingFace researcher) where only one signal type was present. *Tag fixes applied during retiering:* added the missing technique-ID tags to all three rules (`attack.t1587` on both the AI-tool base and the correlation; `attack.t1588.002` on both the offensive-tool base and the correlation).
+**Rationale:** Neither base selector is meaningful alone — AI coding-agent execution and generic scanning/tunneling tool execution are both common on legitimate developer and security-research hosts. The temporal correlation (both signals on the *same host* within 24 hours) is what discriminated the real Case 7 (Weevely+frp+Claude) operator from two demoted false positives (a legitimate SaaS-security consultant and a HuggingFace researcher) where only one signal type was present. *Title fix 2026-10-10:* the two base rules were titled "on Server Host", but no selection tests host role (Sigma has no such field), so they now say "on a Linux Host"; scoping to server-class hosts is done in the SIEM correlation engine, as the Deployment line says. *Tag fixes applied during retiering:* added the missing technique-ID tags to all three rules (`attack.t1587` on both the AI-tool base and the correlation; `attack.t1588.002` on both the offensive-tool base and the correlation).
 **False Positives:** The two base rules alone are extremely broad (any AI-coding-agent user; any admin running `nmap`/`masscan`). The correlation rule itself: "a host legitimately used both for AI-assisted development and authorized security testing" — narrower, but real in security-research environments.
 **Blind Spots:** An operator running AI-tool and offensive-tool sessions more than 24 hours apart, or split across separate hosts, evades the correlation.
 **Validation:** Replay both base selectors against the same `host.name` within the 24-hour window — the correlation must fire; a host showing only one signal type must NOT trigger the correlation.
 **Deployment:** Endpoint agent filesystem/process scanning with host-role classification feeding a SIEM correlation engine (24h temporal join on `host.name`).
 
 ```yaml
-title: AI Coding-Agent Binary Execution on Server Host
+title: AI Coding-Agent Binary Execution on a Linux Host
 id: 67cd7a66-7487-4bc2-94b5-2db9ffbf2080
 name: ai_agent_tooling_exec_serverhost
 status: experimental
 description: >-
     Base rule (not alerting on its own): execution of an AI coding-agent binary
     from its state directory (Claude Code, Gemini CLI, RovoDev, OpenClaw) on a
-    server host. Paired with the correlation rule below, which flags co-location
+    Linux host; the rule does not test whether the host is a server. Paired with the correlation rule below, which flags co-location
     with offensive tooling.
 references:
     - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/
 author: The Hunters Ledger
 date: '2026-05-25'
+modified: '2026-10-10'
 tags:
     - attack.resource-development
     - attack.t1587
@@ -786,7 +798,7 @@ falsepositives:
     - Legitimate developer or operator use of AI coding agents on the host
 level: informational
 ---
-title: Offensive Tooling Execution on Server Host
+title: Offensive Tooling Execution on a Linux Host
 id: 2fa74c68-e65d-46b3-b516-cc12400ddaee
 name: offensive_tooling_exec_serverhost
 status: experimental
@@ -797,6 +809,7 @@ references:
     - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/
 author: The Hunters Ledger
 date: '2026-05-25'
+modified: '2026-10-10'
 tags:
     - attack.resource-development
     - attack.t1588.002
@@ -828,6 +841,7 @@ references:
     - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/
 author: The Hunters Ledger
 date: '2026-05-25'
+modified: '2026-10-10'
 tags:
     - attack.resource-development
     - attack.t1587
@@ -998,22 +1012,22 @@ level: medium
 
 **Campaign-Level: Operator Infrastructure Egress**
 
-#### Trycloudflare.com Quick-Tunnel Egress from Server Host
+#### Trycloudflare.com Quick-Tunnel DNS Query
 
 **Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1090.004 (Domain Fronting)
 **Confidence:** MODERATE
-**Rationale:** The `*.trycloudflare.com` suffix keys on Cloudflare's ephemeral-tunnel *service* rather than a rotatable attacker-owned domain, so it survives subdomain rotation — but it is also Cloudflare's genuinely free, widely-used developer tunnel product, so a meaningful legitimate population exists. *Retiered from Detection to Hunting during this pass:* the original `level: high` overstated confidence — Sigma has no host-role field to restrict this selector to server-class hosts, so as written it fires identically on any developer or CI host using the same free service; demoted to `level: medium`. Tag fix: added the missing `attack.t1090.004` technique tag.
+**Rationale:** The `*.trycloudflare.com` suffix keys on Cloudflare's ephemeral-tunnel *service* rather than a rotatable attacker-owned domain, so it survives subdomain rotation — but it is also Cloudflare's genuinely free, widely-used developer tunnel product, so a meaningful legitimate population exists. *Retiered from Detection to Hunting during this pass:* the original `level: high` overstated confidence — Sigma has no host-role field to restrict this selector to server-class hosts, so as written it fires identically on any developer or CI host using the same free service; demoted to `level: medium`. Tag fix: added the missing `attack.t1090.004` technique tag. *Title fix 2026-10-10:* the title still said "from Non-Developer Server Host" and the description claimed process-creation coverage; the logic is one `dns_query` selection, so both now say DNS query on any Linux host.
 **False Positives:** Developers and CI/CD pipelines using Cloudflare Tunnel for local development exposure (ngrok-alternative use case) — exempt known developer/CI hosts by hostname or subnet.
 **Deployment:** DNS query logs, network proxy/firewall egress, Sysmon process creation for `cloudflared` binary execution.
 
 ```yaml
-title: Trycloudflare.com Quick-Tunnel Egress from Non-Developer Server Host
+title: Trycloudflare.com Quick-Tunnel DNS Query
 id: 5581299d-e9a1-4a83-b85c-8d68a93fd03b
 status: experimental
 description: >-
-  Detects DNS queries or process creation events for trycloudflare.com ephemeral tunnels.
+  Detects DNS queries for trycloudflare.com ephemeral tunnels from any Linux host (the rule has no host-role or developer-host test, and does not inspect process creation).
   Threat actors (Case 1 Russian Gemini operator) use Cloudflare quick-tunnels to proxy
   C2 traffic through Cloudflare infrastructure, disguising the true C2 IP and bypassing
   egress firewall rules. Trycloudflare subdomains are ephemeral and randomly generated
@@ -1022,6 +1036,7 @@ references:
   - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/
 author: The Hunters Ledger
 date: '2026-05-25'
+modified: '2026-10-10'
 tags:
   - attack.command-and-control
   - attack.t1090.004
@@ -1169,18 +1184,18 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT AI-Agent-Campaign
 
 **Campaign-Level: Operator Infrastructure Egress**
 
-#### trycloudflare.com DNS Query Egress from Server Hosts
+#### trycloudflare.com DNS Query Egress
 
 **Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1583.006 (Web Services — Cloudflare Tunnel), T1090.004 (Domain Fronting)
 **Confidence:** MODERATE
-**Rationale:** Keys on Cloudflare's ephemeral-tunnel service suffix rather than an attacker-rotatable literal, so it survives subdomain rotation — but the same free service is widely used by legitimate developers and CI/CD pipelines.
+**Rationale:** Keys on Cloudflare's ephemeral-tunnel service suffix rather than an attacker-rotatable literal, so it survives subdomain rotation — but the same free service is widely used by legitimate developers and CI/CD pipelines. *Title fix 2026-10-10:* the heading and `msg` said "from Server Hosts", but a Suricata rule on `$HOME_NET` cannot tell a server from a workstation; both now describe the DNS query only, and server scope comes from where the sensor sits (see Deployment). `rev` 2 to 3.
 **False Positives:** Developer and CI/CD hosts legitimately using `trycloudflare.com` for temporary exposure of local services.
 **Deployment:** Network IDS/IPS on server-segment egress, DNS monitoring.
 
 ```
-alert dns $HOME_NET any -> any any (msg:"THL HUNT AI-Agent-Campaign trycloudflare.com Quick-Tunnel DNS Query from Server Host (C2 Transport Indicator)"; dns_query; content:"trycloudflare.com"; nocase; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/; classtype:trojan-activity; sid:9200000; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-25;)
+alert dns $HOME_NET any -> any any (msg:"THL HUNT AI-Agent-Campaign trycloudflare.com Quick-Tunnel DNS Query (C2 Transport Indicator)"; dns_query; content:"trycloudflare.com"; nocase; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/; classtype:trojan-activity; sid:9200000; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-25;)
 ```
 
 **GHOST Kit + libpam_cache Rootkit (Case 9)**

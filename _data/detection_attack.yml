@@ -16,7 +16,7 @@
     - tactic: "Credential Access"
       id: "T1110.001"
       name: "Password Guessing"
-      rules: "Default Credential Brute Force (SIGMA, Hunting)"
+      rules: "Authentication Attempt Using a Default-Style Credential Pair (SIGMA, Hunting)"
       count: 1
 "Hybrid-Loader-Stealer-Sogou-detections":
   total: 5
@@ -106,12 +106,12 @@
     - tactic: "Stealth"
       id: "T1036.005"
       name: "Match Legitimate Resource Name or Location"
-      rules: "Golang RAT Multi-Signal Combination (Hash Match or Behavioral Combination) (YARA, Hunting); WinDefenderSvc.exe + WindowsDefenderUpdate Masquerade Pair (YARA, Hunting); PoetRAT Dual Persistence: Startup Drop + Registry Run Key Write (Correlation) (SIGMA, Hunting)"
+      rules: "Golang RAT Multi-Signal Combination (Behavioral Combination) (YARA, Hunting); WinDefenderSvc.exe + WindowsDefenderUpdate Masquerade Pair (YARA, Hunting); PoetRAT Dual Persistence: Startup Drop + Registry Run Key Write (Correlation) (SIGMA, Hunting)"
       count: 3
     - tactic: "Stealth"
       id: "T1622"
       name: "Debugger Evasion"
-      rules: "Golang RAT Multi-Signal Combination (Hash Match or Behavioral Combination) (YARA, Hunting)"
+      rules: "Golang RAT Multi-Signal Combination (Behavioral Combination) (YARA, Hunting)"
       count: 1
     - tactic: "Lateral Movement"
       id: "T1021.001"
@@ -121,12 +121,12 @@
     - tactic: "Collection"
       id: "T1056.001"
       name: "Keylogging"
-      rules: "Golang RAT Multi-Signal Combination (Hash Match or Behavioral Combination) (YARA, Hunting); Generic Golang RAT Capability Combination (YARA, Hunting)"
+      rules: "Golang RAT Multi-Signal Combination (Behavioral Combination) (YARA, Hunting); Generic Golang RAT Capability Combination (YARA, Hunting)"
       count: 2
     - tactic: "Command and Control"
       id: "T1573"
       name: "Encrypted Channel"
-      rules: "Golang RAT Multi-Signal Combination (Hash Match or Behavioral Combination) (YARA, Hunting); Generic Golang RAT Capability Combination (YARA, Hunting)"
+      rules: "Golang RAT Multi-Signal Combination (Behavioral Combination) (YARA, Hunting); Generic Golang RAT Capability Combination (YARA, Hunting)"
       count: 2
 "agent-xworm-exe-detections":
   total: 5
@@ -136,7 +136,7 @@
     - tactic: "Execution"
       id: "T1059.001"
       name: "PowerShell"
-      rules: "XWorm Embedded PowerShell Reconnaissance Templates (YARA, Detection); PowerShell Execution from Suspicious .NET Process (SIGMA, Hunting)"
+      rules: "XWorm Embedded PowerShell Reconnaissance Templates (YARA, Detection); PowerShell Execution from a Parent Process in a User-Writable Directory (SIGMA, Hunting)"
       count: 2
     - tactic: "Stealth"
       id: "T1564.003"
@@ -166,7 +166,7 @@
     - tactic: "Execution"
       id: "T1059.001"
       name: "PowerShell"
-      rules: "XWorm v2.x Embedded PowerShell Reconnaissance Command Templates (YARA, Detection); XWorm v2.x Full PowerShell Reconnaissance Sequence on Same Host (SIGMA, Detection); PowerShell Execution from .NET Process in User-Writable Directory (SIGMA, Hunting)"
+      rules: "XWorm v2.x Embedded PowerShell Reconnaissance Command Templates (YARA, Detection); XWorm v2.x Full PowerShell Reconnaissance Sequence on Same Host (SIGMA, Detection); PowerShell Execution from a Parent Process in a User-Writable Directory (SIGMA, Hunting)"
       count: 3
     - tactic: "Stealth"
       id: "T1564.003"
@@ -216,7 +216,7 @@
     - tactic: "Resource Development"
       id: "T1583.006"
       name: "Web Services"
-      rules: "trycloudflare.com DNS Query Egress from Server Hosts (SURICATA, Hunting)"
+      rules: "trycloudflare.com DNS Query Egress (SURICATA, Hunting)"
       count: 1
     - tactic: "Resource Development"
       id: "T1587"
@@ -291,22 +291,22 @@
     - tactic: "Lateral Movement"
       id: "T1021.001"
       name: "Remote Desktop Protocol"
-      rules: "Cloudflared Access TCP Tunnel Registration to Non-Allowlisted Hostname (SIGMA, Detection)"
+      rules: "Cloudflared Access TCP Tunnel Registration (SIGMA, Detection)"
       count: 1
     - tactic: "Lateral Movement"
       id: "T1021.004"
       name: "SSH"
-      rules: "Cloudflared Access TCP Tunnel Registration to Non-Allowlisted Hostname (SIGMA, Detection)"
+      rules: "Cloudflared Access TCP Tunnel Registration (SIGMA, Detection)"
       count: 1
     - tactic: "Collection"
       id: "T1119"
       name: "Automated Collection"
-      rules: "ARPA Observability Harvester Systemd Service Pattern (YARA, Detection); Instana API Enumeration via Stolen JWT (ARPA Observability Harvester, Case 2) (SIGMA, Detection)"
+      rules: "ARPA Observability Harvester Systemd Service Pattern (YARA, Detection); Instana API Enumeration Script via -SkipCertificateCheck to an ocpinstana Endpoint (ARPA Observability Harvester, Case 2) (SIGMA, Detection)"
       count: 2
     - tactic: "Collection"
       id: "T1530"
       name: "Data from Cloud Storage"
-      rules: "Instana API Enumeration via Stolen JWT (ARPA Observability Harvester, Case 2) (SIGMA, Detection)"
+      rules: "Instana API Enumeration Script via -SkipCertificateCheck to an ocpinstana Endpoint (ARPA Observability Harvester, Case 2) (SIGMA, Detection)"
       count: 1
     - tactic: "Command and Control"
       id: "T1071.001"
@@ -316,7 +316,7 @@
     - tactic: "Command and Control"
       id: "T1090.004"
       name: "Domain Fronting"
-      rules: "Cloudflared Access TCP Tunnel Registration to Non-Allowlisted Hostname (SIGMA, Detection); Trycloudflare.com Quick-Tunnel Egress from Server Host (SIGMA, Hunting); trycloudflare.com DNS Query Egress from Server Hosts (SURICATA, Hunting); Hysteria v2 QUIC bing.com SNI Masquerade Detection (Case 9) (SURICATA, Hunting)"
+      rules: "Cloudflared Access TCP Tunnel Registration (SIGMA, Detection); Trycloudflare.com Quick-Tunnel DNS Query (SIGMA, Hunting); trycloudflare.com DNS Query Egress (SURICATA, Hunting); Hysteria v2 QUIC bing.com SNI Masquerade Detection (Case 9) (SURICATA, Hunting)"
       count: 4
     - tactic: "Command and Control"
       id: "T1132.001"
@@ -426,7 +426,7 @@
     - tactic: "Impact"
       id: "T1486"
       name: "Data Encrypted for Impact"
-      rules: "ChaCha20-Poly1305 AEAD Decryption Implementation (YARA, Detection)"
+      rules: "ChaCha20 Constant with Arsenal-237 Decryptor Error Strings (Poly1305 Tag-Failure Message) (YARA, Detection)"
       count: 1
 "arsenal-237-enc_c2-exe-detections":
   total: 6
@@ -446,7 +446,7 @@
     - tactic: "Stealth"
       id: "T1622"
       name: "Debugger Evasion"
-      rules: "TEB-Based Anti-Debug Stall Loop (YARA, Hunting); TEB Anti-Debug Sleep Loop (Call-Stack Corroboration) (SIGMA, Hunting)"
+      rules: "TEB-Based Anti-Debug Stall Loop (YARA, Hunting); enc_c2.exe Process Access with Sleep in the Call Trace (Call-Stack Corroboration) (SIGMA, Hunting)"
       count: 2
     - tactic: "Command and Control"
       id: "T1071.001"
@@ -531,7 +531,7 @@
     - tactic: "Execution"
       id: "T1047"
       name: "Windows Management Instrumentation"
-      rules: "Generic WMIC Process Creation Combination (YARA, Hunting); WMIC Process Creation for Privilege Escalation (SIGMA, Hunting)"
+      rules: "Generic WMIC Process Creation Combination (YARA, Hunting); WMIC Process Call Create by a User Not Named SYSTEM or Administrator (SIGMA, Hunting)"
       count: 2
     - tactic: "Execution"
       id: "T1053.005"
@@ -546,7 +546,7 @@
     - tactic: "Stealth"
       id: "T1134.001"
       name: "Token Impersonation/Theft"
-      rules: "Token Manipulation API Sequence (YARA, Detection); Named Pipe Token Impersonation API Sequence (YARA, Detection); PowerShell Named Pipe Client Connector (YARA, Hunting); Privilege Escalation via Token Impersonation (SIGMA, Detection); Named Pipe Impersonation Attack (SIGMA, Hunting)"
+      rules: "Token Manipulation API Sequence (YARA, Detection); Named Pipe Token Impersonation API Sequence (YARA, Detection); PowerShell Named Pipe Client Connector (YARA, Hunting); Privilege Escalation via Token Impersonation (SIGMA, Detection); Print Spooler Named Pipe Creation (Possible Token-Impersonation Staging) (SIGMA, Hunting)"
       count: 5
 "arsenal-237-nethost-dll-detections":
   total: 7
@@ -2651,7 +2651,7 @@
     - tactic: "Execution"
       id: "T1053.003"
       name: "Cron"
-      rules: "MAL_Bash_Pandora_Dropper_Family (YARA, Detection); MAL_Python_Persistent_Bot_DualChannel_CNC (YARA, Detection); Hidden-Prefix Cron Entry Creation in /etc/cron.d: Pandora-Mirai Persistence Pattern (SIGMA, Detection); Pandora-Mirai Persistence Pattern: Multi-Mechanism Installer (Init.d, Systemd, Hidden Cron) (SIGMA, Detection); Non-Watchdog Process Opening /dev/watchdog: Mirai-Canonical Persistence Tactic (SIGMA, Hunting)"
+      rules: "MAL_Bash_Pandora_Dropper_Family (YARA, Detection); MAL_Python_Persistent_Bot_DualChannel_CNC (YARA, Detection); Hidden-Prefix Cron Entry Creation in /etc/cron.d: Pandora-Mirai Persistence Pattern (SIGMA, Detection); Pandora-Mirai Persistence Pattern: Multi-Mechanism Installer (Init.d, Systemd, Hidden Cron) (SIGMA, Hunting); Process Launched with /dev/watchdog on the Command Line, Mirai-Canonical Persistence Tactic (SIGMA, Hunting)"
       count: 5
     - tactic: "Execution"
       id: "T1059.004"
@@ -2671,12 +2671,12 @@
     - tactic: "Persistence"
       id: "T1037.004"
       name: "RC Scripts"
-      rules: "MAL_Bash_Pandora_Dropper_Family (YARA, Detection); MAL_Python_Persistent_Bot_DualChannel_CNC (YARA, Detection); Pandora-Mirai Persistence Pattern: Multi-Mechanism Installer (Init.d, Systemd, Hidden Cron) (SIGMA, Detection)"
+      rules: "MAL_Bash_Pandora_Dropper_Family (YARA, Detection); MAL_Python_Persistent_Bot_DualChannel_CNC (YARA, Detection); Pandora-Mirai Persistence Pattern: Multi-Mechanism Installer (Init.d, Systemd, Hidden Cron) (SIGMA, Hunting)"
       count: 3
     - tactic: "Persistence"
       id: "T1543.002"
       name: "Systemd Service"
-      rules: "MAL_Python_Persistent_Bot_DualChannel_CNC (YARA, Detection); Pandora-Mirai Persistence Pattern: Multi-Mechanism Installer (Init.d, Systemd, Hidden Cron) (SIGMA, Detection)"
+      rules: "MAL_Python_Persistent_Bot_DualChannel_CNC (YARA, Detection); Pandora-Mirai Persistence Pattern: Multi-Mechanism Installer (Init.d, Systemd, Hidden Cron) (SIGMA, Hunting)"
       count: 2
     - tactic: "Privilege Escalation"
       id: "T1546.004"
@@ -2686,7 +2686,7 @@
     - tactic: "Stealth"
       id: "T1014"
       name: "Rootkit"
-      rules: "MAL_Python_StealthAgent_AntiDebug_AntiVM_AI_Authored (YARA, Hunting); Non-Watchdog Process Opening /dev/watchdog: Mirai-Canonical Persistence Tactic (SIGMA, Hunting)"
+      rules: "MAL_Python_StealthAgent_AntiDebug_AntiVM_AI_Authored (YARA, Hunting); Process Launched with /dev/watchdog on the Command Line, Mirai-Canonical Persistence Tactic (SIGMA, Hunting)"
       count: 2
     - tactic: "Stealth"
       id: "T1027"

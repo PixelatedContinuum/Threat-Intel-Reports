@@ -144,8 +144,8 @@ rule MAL_Markdown_AI_Operator_Handoff_Document_Family {
 **Robustness:** 2
 **ATT&CK Coverage:** T1078 (Valid Accounts — stolen API keys), T1059.006 (Python), T1552.001 (Unsecured Credentials in Files)
 **Confidence:** HIGH
-**Rationale:** Requires the `AIzaSy` key-prefix regex literal AND a bulk-storage or search marker (`raw_keys`/`re.findall`) AND a validation-pipeline marker (the models endpoint, a valid-keys output, or a retest marker), with a 2-of-N reinforcement across all seven anchors. A single-key legitimate SDK usage cannot satisfy this combination — bulk-key validators are themselves malicious tooling regardless of family.
-**False Positives:** None known — a script containing 40+ Gemini API keys in a block string with a validation loop against Google's models endpoint is not a legitimate development pattern.
+**Rationale:** *Logic fix 2026-10-10:* the key test was the literal text `AIzaSy[0-9a-zA-Z_-]` (brackets included), which is regex source text and cannot match an actual `AIzaSy` key, although the description says the script holds the keys in a block string. The rule now accepts either that literal pattern text (a script that carries the key-prefix regex) or an actual key shape (`AIzaSy` followed by 33 key characters). The captured `check_keys.py` was not re-scanned in this pass, so it is not confirmed which form it contains. Requires the `AIzaSy` key-prefix pattern text or key shape AND a bulk-storage or search marker (`raw_keys`/`re.findall`) AND a validation-pipeline marker (the models endpoint, a valid-keys output, or a retest marker), with a 2-of-N reinforcement across all seven anchors. A single-key legitimate SDK usage cannot satisfy this combination — bulk-key validators are themselves malicious tooling regardless of family.
+**False Positives:** None known. The rule does not count keys: it fires on the `AIzaSy` pattern text or one key-shaped string, a bulk-storage or search marker, and a validation-pipeline marker together. A script holding 40+ Gemini API keys in a block string with a validation loop against Google's models endpoint, which is the documented tool, is not a legitimate development pattern.
 **Blind Spots:** A rewrite that stores keys in a different structure (e.g., one per line in an external file, loaded without the `raw_keys`/`findall` marker in-code) evades the second clause.
 **Validation:** Scan `check_keys.py` or a functional equivalent — all four condition clauses must be satisfied; a legitimate single-key SDK integration must NOT fire.
 **Deployment:** Endpoint AV/EDR file scan, SIEM file-creation monitoring, developer workstation endpoint protection, CI/CD secret scanning.
@@ -158,11 +158,13 @@ rule MAL_Python_Stolen_LLM_Key_Validator {
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/"
       date = "2026-05-25"
+      modified = "2026-10-10"
       family = "Stolen-LLM-Key-Validator"
       campaign = "OpenDirectory-RussianGeminiCredentialMill-213.165.51.115"
       id = "37ec0969-e2c8-5e91-b5a1-40d75c43d590"
    strings:
       $key_prefix_re    = "AIzaSy[0-9a-zA-Z_-]" ascii
+      $key_shape        = /AIzaSy[0-9A-Za-z_-]{33}/ ascii
       $raw_keys_block   = "raw_keys" ascii fullword
       $validation_ep    = "generativelanguage.googleapis.com/v1beta/models" ascii
       $findall_pattern  = "re.findall" ascii
@@ -172,10 +174,10 @@ rule MAL_Python_Stolen_LLM_Key_Validator {
       $retest_pattern   = "retest_keys" ascii
    condition:
       filesize < 500KB and
-      $key_prefix_re and
+      ($key_prefix_re or $key_shape) and
       ($raw_keys_block or $findall_pattern) and
       ($validation_ep or $valid_keys_out or $retest_pattern) and
-      2 of ($key_prefix_re, $raw_keys_block, $validation_ep, $valid_keys_out, $openai_key, $venice_key, $retest_pattern)
+      2 of ($key_prefix_re, $key_shape, $raw_keys_block, $validation_ep, $valid_keys_out, $openai_key, $venice_key, $retest_pattern)
 }
 ```
 

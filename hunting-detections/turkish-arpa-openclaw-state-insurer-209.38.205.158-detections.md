@@ -242,7 +242,7 @@ rule MAL_Python_Instana_SolarWinds_Zabbix_VMwareAria_Polling {
 **Confidence:** HIGH
 **Rationale:** Anchored on the operator's versioned, self-branded docstring (`ARPA Korelasyon Motoru v3 - Temporal Focus`) and Turkish-language diagnostic output (`=== SON 5 KORELASYON ===`) — no legitimate monitoring software emits Turkish-language diagnostic labels under this self-branding.
 **False Positives:** None known — the version-numbered self-branding and Turkish-language output are specific to this operator's toolkit.
-**Blind Spots:** A future version bump that also drops the Turkish-language diagnostic strings (an English-only refactor) would fall back to the weaker `extract_host_from_label` + `Service label` combination.
+**Blind Spots:** A future version bump that drops both the versioned docstring and the Turkish-language diagnostic string (an English-only refactor) evades the rule. The `extract_host_from_label` + `Service label` pair is only a secondary qualifier and does not fire without one of those two primary strings, so it is not a fallback. *Description fix 2026-10-10:* this line previously described that pair as a fallback match.
 **Validation:** Scan the correlation engine script — must match the docstring or Turkish diagnostic string; unrelated correlation/ETL tooling must NOT fire.
 **Deployment:** Linux server file scanning, code-repository scanning for publicly exposed operator code.
 
@@ -254,6 +254,7 @@ rule MAL_Python_ARPA_CrossSource_Correlation_ETL {
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/"
       date = "2026-05-26"
+      modified = "2026-10-10"
       family = "ARPA-observability-harvester"
       malware_type = "observability-credential-harvester"
       campaign = "Turkish-ARPA-State-Insurer-209.38.205.158"

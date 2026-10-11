@@ -138,18 +138,19 @@ rule TOOLKIT_BdApiUtil64_IOCTL_Abuse {
 **Robustness:** 2
 **ATT&CK Coverage:** T1014 (Rootkit)
 **Confidence:** LOW
-**Rationale:** This rule targets the SSDT (System Service Descriptor Table) resolution, hook-detection, and indirect-syscall lookup pattern documented in BdApiUtil64.sys's advanced termination path, but the underlying strings are not specific to this campaign's driver. `MmGetSystemRoutineAddress` and `RtlInitUnicodeString` are near-universal kernel-driver imports, and legitimate kernel-mode anti-cheat and security-research tooling performs its own SSDT hook detection for defensive purposes using the same API combination. The two byte patterns add a technique signal (a hook-check comparison against `0xb8`, and a shift-by-2 array-indexing sequence typical of SSDT lookups) but both are short, generic instruction shapes that also occur outside SSDT-specific code. Durable in the sense that no campaign-specific literal is required, but not precise enough for alerting.
+**Rationale:** This rule targets the SSDT (System Service Descriptor Table) resolution, hook-detection, and indirect-syscall lookup pattern documented in BdApiUtil64.sys's advanced termination path, but the underlying strings are not specific to this campaign's driver. `MmGetSystemRoutineAddress` and `RtlInitUnicodeString` are near-universal kernel-driver imports, and legitimate kernel-mode anti-cheat and security-research tooling performs its own SSDT hook detection for defensive purposes using the same API combination. The two byte patterns add a technique signal (a hook-check comparison against `0xb8`, and a shift-by-2 array-indexing sequence typical of SSDT lookups) but both are short, generic instruction shapes that also occur outside SSDT-specific code. Durable in the sense that no campaign-specific literal is required, but not precise enough for alerting. *Description fix 2026-10-10:* the meta description said the rule combines hook-detection AND indirect-syscall lookup, but the condition is `1 of ($hook_check, $ssdt_lookup)`, so either byte pattern is enough alongside the SSDT string and both APIs; the description now says so.
 **False Positives:** Expected against legitimate kernel-mode anti-cheat and security-research tooling that performs its own SSDT hook detection; `MmGetSystemRoutineAddress` and `RtlInitUnicodeString` are routine imports across a wide range of unrelated kernel drivers, and the byte patterns are generic instruction shapes rather than anything unique to malicious SSDT bypass.
 **Deployment:** Broad kernel-driver scanning sweep, IR artifact triage; treat hits as triage candidates requiring analyst review of the driver's signer and provenance, not alerts.
 
 ```yara
 rule SUSP_Kernel_SSDT_Bypass_Pattern {
    meta:
-      description = "Detects kernel-mode code implementing SSDT (System Service Descriptor Table) resolution combined with hook-detection and indirect-syscall lookup patterns, the EDR-evasion mechanism documented in the BdApiUtil64.sys driver. Not specific to this campaign's driver -- MmGetSystemRoutineAddress and RtlInitUnicodeString are near-universal kernel APIs also used by legitimate anti-cheat and security-research kernel drivers performing their own hook detection, so this is a technique-class hunting lead, not an alert."
+      description = "Detects kernel-mode code implementing SSDT (System Service Descriptor Table) resolution combined with at least one of two instruction patterns (a hook-detection compare or an indirect-syscall lookup), the EDR-evasion mechanism documented in the BdApiUtil64.sys driver. Not specific to this campaign's driver -- MmGetSystemRoutineAddress and RtlInitUnicodeString are near-universal kernel APIs also used by legitimate anti-cheat and security-research kernel drivers performing their own hook detection, so this is a technique-class hunting lead, not an alert."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/arsenal-237-BdApiUtil64-sys-detections/"
       date = "2026-01-26"
+      modified = "2026-10-10"
       family = "Kernel-SSDT-Bypass-Generic"
       malware_type = "Rootkit-Technique-Pattern"
       campaign = "Arsenal-237-109.230.231.37-Malware-Repository"
@@ -178,11 +179,13 @@ rule SUSP_Kernel_SSDT_Bypass_Pattern {
 **Robustness:** 2
 **ATT&CK Coverage:** T1685 (Disable or Modify Tools)
 **Confidence:** LOW
-**Rationale:** This rule targets the process-management API combination (`PsLookupProcessByProcessId`, `ZwTerminateProcess`, `ObOpenObjectByPointer`, `ObDereferenceObject`) BdApiUtil64.sys uses to terminate security products from kernel mode, paired with named AV/EDR process strings. It is not specific to this campaign's driver, and the same four APIs are routinely imported by legitimate AV/EDR kernel components themselves for their own process-monitoring and competitor-compatibility logic — an EDR driver enumerating and inspecting process objects, including competitor products by name, is standard behavior for that product category, not a malicious tell on its own.
+**Rationale:** This rule targets the process-management API combination (`PsLookupProcessByProcessId`, `ZwTerminateProcess`, `ObOpenObjectByPointer`, `ObDereferenceObject`) BdApiUtil64.sys uses to terminate security products from kernel mode, paired with named AV/EDR process strings. It is not specific to this campaign's driver, and the same four APIs are routinely imported by legitimate AV/EDR kernel components themselves for their own process-monitoring and competitor-compatibility logic — an EDR driver enumerating and inspecting process objects, including competitor products by name, is standard behavior for that product category, not a malicious tell on its own. *Logic fix 2026-10-10:* the description said "kernel-mode drivers" but the condition tested only the MZ header, so any user-mode PE with the four API names and two product names matched. It now also requires the PE subsystem to be Native, which is what a Windows kernel driver carries.
 **False Positives:** Expected against legitimate AV/EDR kernel components, which routinely import all four process-management APIs for their own process-monitoring logic and may reference competitor product names for compatibility or conflict-detection purposes.
 **Deployment:** Broad kernel-driver scanning sweep, IR artifact triage; treat hits as triage candidates, not alerts.
 
 ```yara
+import "pe"
+
 rule SUSP_Kernel_Driver_Security_Process_Termination {
    meta:
       description = "Detects kernel-mode drivers combining process-management APIs (PsLookupProcessByProcessId, ZwTerminateProcess, ObOpenObjectByPointer, ObDereferenceObject) with references to named AV/EDR process names, the pattern BdApiUtil64.sys uses to terminate security products from kernel mode. Not specific to this campaign's driver, and the same API combination is used by legitimate AV/EDR kernel components for their own process-monitoring and competitor-compatibility logic, so this is a technique-class hunting lead."
@@ -190,6 +193,7 @@ rule SUSP_Kernel_Driver_Security_Process_Termination {
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/arsenal-237-BdApiUtil64-sys-detections/"
       date = "2026-01-26"
+      modified = "2026-10-10"
       family = "Kernel-Security-Process-Termination-Generic"
       malware_type = "Rootkit-Technique-Pattern"
       campaign = "Arsenal-237-109.230.231.37-Malware-Repository"
@@ -208,6 +212,7 @@ rule SUSP_Kernel_Driver_Security_Process_Termination {
       $target4 = "avp.exe" ascii wide nocase
    condition:
       uint16(0) == 0x5A4D and
+      pe.subsystem == pe.SUBSYSTEM_NATIVE and
       3 of ($api*) and
       2 of ($target*)
 }
@@ -225,7 +230,7 @@ rule SUSP_Kernel_Driver_Security_Process_Termination {
 **Robustness:** 2 (correlation) — 2 for the driver-load base rule (anchored on signature identity), 1 for the termination base rule individually (anchored on a renameable process-name list)
 **ATT&CK Coverage:** T1068 (Exploitation for Privilege Escalation — BYOVD), T1685 (Disable or Modify Tools)
 **Confidence:** HIGH
-**Rationale:** Neither base signal is reliable alone — a Baidu-signed driver load can, rarely, reflect a genuine Baidu Antivirus install, and named security-product terminations happen during routine updates and uninstalls. But this driver's documented capability neutralizes a full security suite within 60 seconds of load, so the two events occurring on the same host inside that window is a BYOVD kill-chain signal a coincidental unrelated pairing would not produce. This operationalizes a correlation the source draft's own equivalent rule explicitly could not express in a single Sigma condition and left as a manual-correlation instruction to the analyst ("must manually correlate against a preceding BdApiUtil/Baidu driver load... within a short window"). *Retiering fixes applied:* the source draft's driver-load selector included a bare hash-match OR-branch (three hashes, already present in the IOC feed) that would trigger the rule alone with no behavioral corroboration — removed, since it added nothing beyond the feed entry. The same selector also carried a `selection_expired` branch that, despite its name, never actually tested certificate expiration (it checked `SignatureStatus: Valid`, not a date) and was otherwise a strictly broader, weaker duplicate of the signature-identity branch (`ImageLoaded endswith '.sys'` is true of every driver-load event) — merged away. See Coverage Gaps for full detail.
+**Rationale:** Neither base signal is reliable alone — a Baidu-signed driver load can, rarely, reflect a genuine Baidu Antivirus install, and named security-product terminations happen during routine updates and uninstalls. But this driver's documented capability neutralizes a full security suite within 60 seconds of load, so the two events occurring on the same host inside that window is a BYOVD kill-chain signal a coincidental unrelated pairing would not produce. This operationalizes a correlation the source draft's own equivalent rule explicitly could not express in a single Sigma condition and left as a manual-correlation instruction to the analyst ("must manually correlate against a preceding BdApiUtil/Baidu driver load... within a short window"). *Retiering fixes applied:* the source draft's driver-load selector included a bare hash-match OR-branch (three hashes, already present in the IOC feed) that would trigger the rule alone with no behavioral corroboration — removed, since it added nothing beyond the feed entry. The same selector also carried a `selection_expired` branch that, despite its name, never actually tested certificate expiration (it checked `SignatureStatus: Valid`, not a date) and was otherwise a strictly broader, weaker duplicate of the signature-identity branch (`ImageLoaded endswith '.sys'` is true of every driver-load event) — merged away. See Coverage Gaps for full detail. *Logic fix 2026-10-10:* the correlation was `type: temporal`, which matches the two events in either order, but the title and description say the driver load comes first. It is now `temporal_ordered`, with the driver-load base rule listed first.
 **False Positives:** A coincidental Baidu Antivirus install combined with an unrelated security-product restart in the same 60-second window is possible but highly unlikely — review the specific driver file hash and signature timestamp before dismissing a hit.
 **Blind Spots:** An operator who first strips the driver's identifying signature/name strings (defeating the driver-load base rule — see the corresponding YARA rule's Blind Spots) or who spaces the two events more than 60 seconds apart evades the correlation.
 **Validation:** Replay both base selectors against the same `host.name` within the 60-second window — the correlation must fire; a host showing only one signal type, or the two signals more than 60 seconds apart, must NOT trigger the correlation.
@@ -318,6 +323,7 @@ references:
     - https://the-hunters-ledger.com/hunting-detections/arsenal-237-BdApiUtil64-sys-detections/
 author: The Hunters Ledger
 date: '2026-01-26'
+modified: '2026-10-10'
 tags:
     - attack.privilege-escalation
     - attack.t1068
@@ -325,7 +331,7 @@ tags:
     - attack.t1685
     - detection.emerging-threats
 correlation:
-    type: temporal
+    type: temporal_ordered
     rules:
         - baidu_signed_driver_load
         - security_product_termination

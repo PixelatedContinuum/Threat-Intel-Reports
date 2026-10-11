@@ -832,6 +832,7 @@ level: high
 **Robustness:** 3
 **ATT&CK Coverage:** T1564.002 (Hidden Users)
 **Confidence:** HIGH
+**Logic fix 2026-10-10:** the selector was `TargetObject|endswith: '\SpecialAccounts\UserList'`. A registry value write reports the key path followed by the value name (`...\SpecialAccounts\UserList\<account>`), so a path ending at `UserList` could never match the write that hides an account, which is the event the Validation line tells the reader to trigger. It now matches the `Winlogon\SpecialAccounts\UserList\` path segment.
 **False Positives:** Deliberate administrative hiding of a legitimate local service account from the logon screen
 **Blind Spots:** None significant, this key is written almost exclusively for account-hiding purposes; requires registry-value telemetry on the relevant Winlogon hive path
 **Validation:** Write any value under `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\UserList` on a test host and confirm the alert fires. Registry writes elsewhere under `Winlogon\` that do not touch `SpecialAccounts\UserList` must NOT fire.
@@ -851,6 +852,7 @@ references:
     - https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/
 author: The Hunters Ledger
 date: 2026-08-03
+modified: 2026-10-10
 tags:
     - attack.stealth
     - attack.t1564.002
@@ -859,7 +861,7 @@ logsource:
     product: windows
 detection:
     selection:
-        TargetObject|endswith: '\SpecialAccounts\UserList'
+        TargetObject|contains: '\Winlogon\SpecialAccounts\UserList\'
     condition: selection
 falsepositives:
     - Deliberate administrative hiding of a legitimate local service account from the logon screen

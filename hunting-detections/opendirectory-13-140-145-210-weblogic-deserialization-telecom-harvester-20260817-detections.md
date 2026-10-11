@@ -1097,8 +1097,9 @@ alert tcp $EXTERNAL_NET any -> $HOME_NET 7001 (msg:"THL DETECT WebLogicTelecomHa
 **Deployment:** Egress sensor, prioritized on any segment where a Java application server can reach the internet
 
 ```
-alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT WebLogicTelecomHarvester Malicious LDAP-JNDI Callback Response (javaCodeBase/javaSerializedData)"; flow:established,to_client; content:"javaCodeBase"; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-admin; sid:9301807; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
+alert tcp $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT WebLogicTelecomHarvester Malicious LDAP-JNDI Callback Response (javaCodeBase/javaSerializedData)"; flow:established,to_client; content:"javaCodeBase"; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-admin; sid:9301807; rev:3; metadata:author The_Hunters_Ledger, date 2026-08-17;)
 ```
+**Direction fix 2026-10-10:** the header read `$HOME_NET any -> $EXTERNAL_NET any` with `flow:established,to_client`. `to_client` selects packets sent by the server of the flow, so that pairing matched an internal host answering an external client, not an external callback server answering the victim. The attacker-side LDAP server is the `$EXTERNAL_NET` source and the Java application server is the `$HOME_NET` destination, so the header is now `$EXTERNAL_NET any -> $HOME_NET any`; `rev` 2 to 3. This was not replayed against a capture in this pass.
 
 **Internal Windows Post-Exploitation**
 

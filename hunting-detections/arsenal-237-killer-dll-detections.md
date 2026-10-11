@@ -203,10 +203,10 @@ rule SUSP_Windows_KillerDLL_SecurityProduct_Termination_IOCTL_Combo
 **Robustness:** 3
 **ATT&CK Coverage:** T1685 (Disable or Modify Tools), T1068 (Exploitation for Privilege Escalation)
 **Confidence:** HIGH
-**Rationale:** `rundll32.exe` registering a `SERVICE_KERNEL_DRIVER`-type service is a rare, technique-level chokepoint for the BYOVD install step — legitimate driver installation goes through Plug-and-Play/INF-based setup or a dedicated installer executable, essentially never through `rundll32.exe`. Durable: keys on the parent-process/service-type pairing, not on killer.dll's name or hash. *Retiering note:* demoted from the source's `level: critical` to `high` — the rule's own documented false positives ("administrative scripts using rundll32 for driver deployment") mean this isn't strictly never-FP, and the project convention caps most Detection-tier rules at `high`.
+**Rationale:** `rundll32.exe` registering a `SERVICE_KERNEL_DRIVER`-type service is a rare, technique-level chokepoint for the BYOVD install step — legitimate driver installation goes through Plug-and-Play/INF-based setup or a dedicated installer executable, essentially never through `rundll32.exe`. Durable: keys on the parent-process/service-type pairing, not on killer.dll's name or hash. *Retiering note:* demoted from the source's `level: critical` to `high` — the rule's own documented false positives ("administrative scripts using rundll32 for driver deployment") mean this isn't strictly never-FP, and the project convention caps most Detection-tier rules at `high`. *Logic fix 2026-10-10:* the rule carried a `filter_legitimate` clause testing `TargetObject` for `\System32\Drivers\`, which the Blind Spots said excluded drivers staged there; `TargetObject` is the `Services\<name>` registry key, which does not contain a driver file path, so the clause excluded nothing. It has been removed, and the Blind Spots and Validation text corrected to say the rule has no driver-path test.
 **False Positives:** Legitimate software installation via rundll32 (extremely rare for kernel drivers); administrative scripts using rundll32 for driver deployment (should be reviewed).
-**Blind Spots:** An installer that stages the driver directly under `System32\Drivers` is excluded by the legitimate-path filter by design; a rebuild avoiding `rundll32.exe` as the registering process evades. The `Details|contains: 'SERVICE_KERNEL_DRIVER'` selector assumes the registry-value telemetry renders the service Type as this symbolic string rather than a raw DWORD — confirm this against your specific registry-event data source before relying on this rule for alerting (see Coverage Gaps).
-**Validation:** Trigger the killer.dll service-creation step (or a synthetic equivalent — rundll32.exe registering a kernel-driver-type service outside System32\Drivers) — must match; a signed installer registering a driver from its own Program Files path must NOT fire.
+**Blind Spots:** The rule cannot see the driver file path, because a service's `ImagePath` is written as a separate registry value from the type value this selector reads, so it makes no distinction between a driver staged under `System32\Drivers` and one staged elsewhere; a rebuild avoiding `rundll32.exe` as the registering process evades. The `Details|contains: 'SERVICE_KERNEL_DRIVER'` selector assumes the registry-value telemetry renders the service Type as this symbolic string rather than a raw DWORD — confirm this against your specific registry-event data source before relying on this rule for alerting (see Coverage Gaps).
+**Validation:** Trigger the killer.dll service-creation step (or a synthetic equivalent — rundll32.exe registering a kernel-driver-type service) — must match; a signed installer registering a driver from its own Program Files path must NOT fire.
 **Deployment:** Sysmon/EDR registry-event monitoring (Sysmon Event ID 13), Windows Event Log auditing on the Services registry hive.
 
 ```yaml
@@ -223,6 +223,7 @@ references:
     - https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-dll-detections/
 author: The Hunters Ledger
 date: '2026-01-25'
+modified: '2026-10-10'
 tags:
     - attack.defense-impairment
     - attack.t1685
@@ -237,9 +238,7 @@ detection:
         Details|contains: 'SERVICE_KERNEL_DRIVER'
     selection_parent:
         Image|endswith: '\rundll32.exe'
-    filter_legitimate:
-        TargetObject|contains: '\System32\Drivers\'
-    condition: selection_service_create and selection_parent and not filter_legitimate
+    condition: selection_service_create and selection_parent
 falsepositives:
     - Legitimate software installation via rundll32 (extremely rare for kernel drivers)
     - Administrative scripts using rundll32 for driver deployment (should be reviewed)

@@ -43,7 +43,7 @@ AdvancedRouterScanner is a purpose-built exploitation framework targeting embedd
 **Robustness:** 2
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application)
 **Confidence:** MODERATE
-**Rationale:** The selector list mixes genuinely malicious-only paths (`/web_shell_cmd.gch`, `/system.cmd`, `/shell?command=` — command-injection/webshell markers with no legitimate use) with core router administrative-UI endpoints (`/apply.cgi`, `/boaform/admin/formLogin`, `/cgi-bin/config.cgi`, `/login.cgi`, `/setup.cgi`) that see routine legitimate admin traffic. Because the selection is OR-matched, a hit on any administrative-surface path fires the rule exactly like a hit on a high-fidelity exploit path, so `level: high` on the combined selector overstated confidence — demoted to `medium` and scoped to Hunting. The endpoint set itself is durable (inherent to the vulnerable device's web application layout, not something the operator can rename), which keeps it a useful triage lead regardless of infrastructure rotation.
+**Rationale:** The selector list mixes genuinely malicious-only paths (`/web_shell_cmd.gch`, `/system.cmd`, `/shell?command=` — command-injection/webshell markers with no legitimate use) with core router administrative-UI endpoints (`/apply.cgi`, `/boaform/admin/formLogin`, `/cgi-bin/config.cgi`, `/login.cgi`, `/setup.cgi`) that see routine legitimate admin traffic. Because the selection is OR-matched, a hit on any administrative-surface path fires the rule exactly like a hit on a high-fidelity exploit path, so `level: high` on the combined selector overstated confidence — demoted to `medium` and scoped to Hunting. The endpoint set itself is durable (inherent to the vulnerable device's web application layout, not something the operator can rename), which keeps it a useful triage lead regardless of infrastructure rotation. *Logic fix 2026-10-10:* the `/shell?command=` entry was listed under `cs-uri-stem`, which holds the path only and never the query string, so that entry could not match. It is now tested as a `/shell` stem plus a `command=` query, which is the request shape the entry describes.
 **False Positives:**
 - Legitimate administrative logins and configuration changes via `/login.cgi`, `/setup.cgi`, `/apply.cgi`, and `/boaform/admin/formLogin` on the router's own management interface.
 - Vulnerability scanners and asset-inventory tools that probe the same CGI paths for version fingerprinting.
@@ -61,6 +61,7 @@ references:
     - https://the-hunters-ledger.com/hunting-detections/AdvancedRouterScanner-detections/
 author: The Hunters Ledger
 date: '2025-10-25'
+modified: '2026-10-10'
 tags:
     - attack.initial-access
     - attack.t1190
@@ -68,7 +69,7 @@ tags:
 logsource:
     category: webserver
 detection:
-    selection:
+    selection_stem:
         cs-uri-stem|contains:
             - "/web_shell_cmd.gch"
             - "/apply.cgi"
@@ -77,37 +78,43 @@ detection:
             - "/login.cgi"
             - "/setup.cgi"
             - "/system.cmd"
-            - "/shell?command="
-    condition: selection
+    selection_shell_command:
+        cs-uri-stem|endswith: "/shell"
+        cs-uri-query|contains: "command="
+    condition: 1 of selection_*
 falsepositives:
     - Legitimate administrative access to router/IoT management interfaces
 level: medium
 ```
 
-#### Default Credential Brute Force
+#### Authentication Attempt Using a Default-Style Credential Pair
 
 **Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1110.001 (Password Guessing)
 **Confidence:** MODERATE
-**Rationale:** The rule requires both a default-style username AND a default-style password from small curated lists, a genuinely tight AND-based match — but it evaluates a single authentication event with no count or threshold aggregation, so it detects "an auth attempt used default-like credentials," not literally repeated brute-force attempts as the title implies. Default credentials remain in active legitimate use on unhardened router/IoT fleets — the exact device category this campaign targets — so this is a real, recurring benign-hit scenario rather than a one-time setup artifact. `level` demoted from `high` to `medium` and scoped to Hunting accordingly; the durable, technique-level signal (an attacker enumerating known default credentials against the auth surface) still makes it a valuable triage lead.
+**Rationale:** The rule requires both a default-style username AND a default-style password from small curated lists, a genuinely tight AND-based match — but it evaluates a single authentication event with no count or threshold aggregation, so it detects "an auth attempt used default-like credentials," not repeated brute-force attempts. The rule was retitled on 2026-10-10 from "Default Credential Brute Force" to say what the logic tests; a brute-force reading comes from counting hits per source in the SIEM. Default credentials remain in active legitimate use on unhardened router/IoT fleets — the exact device category this campaign targets — so this is a real, recurring benign-hit scenario rather than a one-time setup artifact. `level` demoted from `high` to `medium` and scoped to Hunting accordingly; the durable, technique-level signal (an attacker enumerating known default credentials against the auth surface) still makes it a valuable triage lead.
 **False Positives:**
 - Legitimate administrators authenticating to routers/IoT devices that were never hardened off default credentials.
 - Automated asset-inventory or compliance-scanning tools that intentionally test for default-credential exposure.
 **Deployment:** Authentication log monitoring at the router/IoT fleet management plane; pair hits with a device-hardening audit rather than blind alerting.
 
 ```yaml
-title: Default Credential Brute Force
+title: Authentication Attempt Using a Default-Style Credential Pair
 id: b88fd219-6352-4cdb-9406-be4acdc7dfe8
 status: experimental
 description: >-
-    Detects authentication attempts using common default or weak
-    username/password pairs against router and IoT management interfaces,
-    consistent with automated credential brute-forcing tools.
+    Detects a single authentication event whose username and password both
+    match short lists of common default values (admin, root, guest, operator
+    and admin, password, 1234, changeme) against router and IoT management
+    interfaces. The rule counts nothing, so repeated attempts from one source,
+    which is what automated credential brute-forcing looks like, show up as
+    many hits and need to be aggregated per source in the SIEM.
 references:
     - https://the-hunters-ledger.com/hunting-detections/AdvancedRouterScanner-detections/
 author: The Hunters Ledger
 date: '2025-10-25'
+modified: '2026-10-10'
 tags:
     - attack.credential-access
     - attack.t1110.001

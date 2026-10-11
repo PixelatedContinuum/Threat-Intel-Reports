@@ -39,13 +39,13 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 
 ### Detection Rules
 
-#### ChaCha20-Poly1305 AEAD Decryption Implementation
+#### ChaCha20 Constant with Arsenal-237 Decryptor Error Strings (Poly1305 Tag-Failure Message)
 
 **Tier:** Detection
 **Robustness:** 2
 **ATT&CK Coverage:** T1486 (Data Encrypted for Impact — decryption/reversal context)
 **Confidence:** HIGH
-**Rationale:** Requires the RFC 7539 ChaCha20 256-bit-key constant (`expand 32-byte k`) together with at least one of the tool's own bespoke decryption-failure error strings. The constant alone is common to any ChaCha20 implementation (WireGuard, TLS 1.3, numerous legitimate secure-communication and backup tools); requiring co-occurrence with the specific, developer-written error phrasing narrows the match to this tool family. The combination survives a rebuild that only rotates the embedded victim key — the crypto constant and error-handling text are unrelated to per-victim key material.
+**Rationale:** Requires the RFC 7539 ChaCha20 256-bit-key constant (`expand 32-byte k`) together with at least one of the tool's own bespoke decryption-failure error strings. The constant alone is common to any ChaCha20 implementation (WireGuard, TLS 1.3, numerous legitimate secure-communication and backup tools); requiring co-occurrence with the specific, developer-written error phrasing narrows the match to this tool family. The combination survives a rebuild that only rotates the embedded victim key — the crypto constant and error-handling text are unrelated to per-victim key material. *Heading fix 2026-10-10:* the heading read "ChaCha20-Poly1305 AEAD Decryption Implementation", but the logic matches the ChaCha20 constant and two error strings and has no Poly1305 or AEAD element; the heading now says that. The tool is ChaCha20-Poly1305 in the companion report, and `Decryption failed - wrong key or corrupted file` is its Poly1305 tag-failure message.
 **False Positives:** None known for the full combination. The ChaCha20 constant by itself is ubiquitous, which is why the rule never matches on it alone.
 **Blind Spots:** A source-level rebuild using different (e.g., localized) error message text would evade; a match does not by itself confirm coverage of the related encryptor variants unless they share this exact error phrasing.
 **Validation:** Scan dec_fixed.exe (hash below) — must match; a generic ChaCha20/libsodium/WireGuard binary without this tool's specific error phrasing must NOT fire.
@@ -62,11 +62,12 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 
 rule TOOLKIT_Arsenal237_ChaCha20_Poly1305_Decryptor {
    meta:
-      description = "Detects Arsenal-237 ransomware decryptor tools implementing ChaCha20-Poly1305 AEAD decryption. Requires the RFC 7539 ChaCha20 constant alongside at least one of the tool's own bespoke decryption-failure error strings, distinguishing it from generic ChaCha20 implementations."
+      description = "Detects Arsenal-237 ransomware decryptor tools by the RFC 7539 ChaCha20 constant alongside at least one of the tool's own bespoke decryption-failure error strings, distinguishing it from generic ChaCha20 implementations. The tool is documented as ChaCha20-Poly1305 and its first error string is its Poly1305 tag-verification failure message, but the rule does not test for any Poly1305 or AEAD code."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/arsenal-237-dec_fixed-exe-detections/"
       date = "2026-01-27"
+      modified = "2026-10-10"
       family = "Arsenal-237"
       malware_type = "Ransomware-Decryptor"
       campaign = "Arsenal-237-New-Files-109.230.231.37"

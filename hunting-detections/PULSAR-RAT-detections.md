@@ -109,7 +109,7 @@ rule RAT_Pulsar_Critical_Variant {
 **Rationale:** The `\Recovery\OEM\` path is the OS-defined location this specific persistence technique depends on — not a renameable literal but the structural chokepoint of WinRE abuse itself, so the rule survives infrastructure and build changes. The original SPL query also matched a bare `mountvol`-plus-path command-line reference as an independent OR leg; that leg is redundant here, since any command line containing both `mountvol` and a `Recovery\OEM` reference already contains the `Recovery\OEM` substring the file-write rule below keys on. The companion report documents this as the campaign's most difficult-to-remediate persistence mechanism, since it survives standard registry-based cleanup.
 **False Positives:** OEM factory-imaging or recovery-partition maintenance tooling that legitimately writes into `Recovery\OEM\` during authorized re-imaging (very low volume on already-deployed production fleets).
 **Blind Spots:** A command-line-only reference to `Recovery\OEM` (for example, `mountvol` used to list or navigate the partition without writing a file) is not captured by this file-write-scoped rule; a variant that stages its payload under a differently-named recovery-adjacent directory would also evade it.
-**Validation:** Trigger by writing a file into `%SYSTEMDRIVE%\Recovery\OEM\` from a non-OEM-imaging process — must alert; a Windows Update or OEM recovery-tool-initiated write during an authorized re-imaging workflow must NOT fire.
+**Validation:** Trigger by writing a file into `%SYSTEMDRIVE%\Recovery\OEM\` — must alert. The selection tests the path only and has no writing-process filter, so a write by Windows Update or an OEM recovery tool during an authorized re-imaging workflow also alerts; those are the false positives listed above, and they are separated from malicious writes by looking at the writing process in the alert, not by the rule.
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (FileCreate telemetry); prioritize for immediate triage given the CRITICAL severity and very low expected false-positive volume.
 
 ```yaml
@@ -127,6 +127,7 @@ references:
     - https://the-hunters-ledger.com/reports/PULSAR-RAT/
 author: The Hunters Ledger
 date: '2025-12-01'
+modified: '2026-10-10'
 tags:
     - attack.persistence
     - attack.stealth
@@ -220,7 +221,7 @@ level: medium
 
 A salvage rewrite was considered and rejected. Re-anchoring on parent-process trust would need either an open-ended denylist of legitimate ConPTY consumers, which will always lag new software, or an unsigned-parent requirement, which abandons the flag as the discriminator and converges on a more general "unsigned binary executes something" technique that belongs in a different rule. The original analysis had already noted it could not find a campaign-specific parent anchor; that gap is real and this rule stops pretending otherwise.
 
-What survives is the `cmd.exe` plus `/headless` selector. `cmd.exe` has no native `/headless` switch, so the string only appears where an operator or script author placed it deliberately. That branch matched nothing in the same window, which is the intended state for a narrow anomaly selector. Robustness drops 2 to 1 and confidence MODERATE to LOW to reflect that this now rests on a single decorative flag with no corroborating anchor.
+What survives is the `cmd.exe` plus `/headless` selector. *Logic fix 2026-10-10:* it was written as two independent command-line substrings (`cmd.exe` and `/headless`), so any process whose command line mentioned both fired, not only `cmd.exe` being launched. It now tests the process image (`\cmd.exe`) and the `/headless` argument. `cmd.exe` has no native `/headless` switch, so the string only appears where an operator or script author placed it deliberately. That branch matched nothing in the same window, which is the intended state for a narrow anomaly selector. Robustness drops 2 to 1 and confidence MODERATE to LOW to reflect that this now rests on a single decorative flag with no corroborating anchor.
 **False Positives:** None observed in the measured window. The retired `conhost` branch carried the entire false-positive burden.
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (process_creation with command line); analyst review, prioritizing hits with an unusual parent process or an accompanying network connection.
 **Coverage gap:** A durable "hidden console execution" detection needs parent-process trust context this campaign's analysis never confirmed, or a process-creation show-window / `CREATE_NO_WINDOW` flag if the telemetry source exposes one. Either would be a materially more durable anchor than string-matching ConPTY's own implementation-detail argument.
@@ -242,7 +243,7 @@ references:
     - https://the-hunters-ledger.com/hunting-detections/PULSAR-RAT-detections/
 author: The Hunters Ledger
 date: '2025-12-01'
-modified: '2026-08-07'
+modified: '2026-10-10'
 tags:
     - attack.stealth
     - attack.t1564.003
@@ -252,9 +253,8 @@ logsource:
     product: windows
 detection:
     selection:
-        CommandLine|contains|all:
-            - 'cmd.exe'
-            - '/headless'
+        Image|endswith: '\cmd.exe'
+        CommandLine|contains: '/headless'
     condition: selection
 falsepositives:
     - >-

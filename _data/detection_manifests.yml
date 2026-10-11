@@ -6,17 +6,17 @@ AdvancedRouterScanner-detections:
     engine: sigma
     tier: Hunting
     fence: 0
-    hash: "beeec0e9"
+    hash: "236afd6a"
     head: "title: Suspicious Router CGI Access id: e5afdda0"
     robustness: 2
     confidence: "MODERATE"
     attack: [T1190]
-  - name: "Default Credential Brute Force"
+  - name: "Authentication Attempt Using a Default-Style Credential Pair"
     engine: sigma
     tier: Hunting
     fence: 1
-    hash: "ba91c32f"
-    head: "title: Default Credential Brute Force id: b88fd2"
+    hash: "6fae60c8"
+    head: "title: Authentication Attempt Using a Default-St"
     robustness: 2
     confidence: "MODERATE"
     attack: [T1110.001]
@@ -52,8 +52,8 @@ Hybrid-Loader-Stealer-Sogou-detections:
     engine: sigma
     tier: Detection
     fence: 3
-    hash: "3b92a0a0"
-    head: "title: SogouStealer Persistence via Run Keys and"
+    hash: "e0b2a00b"
+    head: "title: SogouStealer Persistence via Run Keys id:"
     robustness: 2
     confidence: "HIGH"
     attack: [T1547.001]
@@ -70,7 +70,7 @@ Hybrid-Loader-Stealer-Sogou-detections:
     engine: sigma
     tier: Hunting
     fence: 5
-    hash: "e533f085"
+    hash: "2bdbe4fb"
     head: "title: SogouStealer Masquerading NSIS Installer "
     robustness: 2
     confidence: "MODERATE"
@@ -98,7 +98,7 @@ PULSAR-RAT-detections:
     engine: sigma
     tier: Detection
     fence: 1
-    hash: "78174205"
+    hash: "b6629f44"
     head: "title: Windows Recovery Environment OEM Director"
     robustness: 3
     confidence: "HIGH (string/path evidence is direct); underlying WinRE-write behavior itself MODERATE (the companion report rates it \"HIGHLY LIKELY\" rather than fully confirmed dynamically — the capability is inferred from static string evidence, not an independently triggered live partition write)"
@@ -116,7 +116,7 @@ PULSAR-RAT-detections:
     engine: sigma
     tier: Hunting
     fence: 3
-    hash: "23360927"
+    hash: "e89f5da4"
     head: "title: cmd.exe Launched with Non-Standard /headl"
     robustness: 1
     confidence: "LOW"
@@ -140,11 +140,11 @@ PULSAR-RAT-detections:
     confidence: "MODERATE"
     attack: [T1102.001]
 agent-exe-detections:
-  - name: "Golang RAT Multi-Signal Combination (Hash Match or Behavioral Combination)"
+  - name: "Golang RAT Multi-Signal Combination (Behavioral Combination)"
     engine: yara
     tier: Hunting
     fence: 0
-    hash: "2ffe0afe"
+    hash: "a5ee6a4b"
     head: "/* Yara Rule Set Identifier: Arsenal-237-109.230"
     robustness: 2
     confidence: "MODERATE"
@@ -153,7 +153,7 @@ agent-exe-detections:
     engine: yara
     tier: Hunting
     fence: 1
-    hash: "a9a21222"
+    hash: "619ca027"
     head: "rule TOOLKIT_PoetRAT_WinDefender_Masquerade_Pers"
     robustness: 1
     confidence: "LOW"
@@ -204,12 +204,12 @@ agent-xworm-exe-detections:
     robustness: 2
     confidence: "MODERATE"
     attack: [T1071.001, T1132.001, T1564.003]
-  - name: "PowerShell Execution from Suspicious .NET Process"
+  - name: "PowerShell Execution from a Parent Process in a User-Writable Directory"
     engine: sigma
     tier: Hunting
     fence: 3
-    hash: "b3a81e78"
-    head: "title: PowerShell Execution from Suspicious .NET"
+    hash: "47bac2b0"
+    head: "title: PowerShell Execution from a Parent Proces"
     robustness: 2
     confidence: "LOW"
     attack: [T1059.001]
@@ -277,12 +277,12 @@ agent-xworm-v2-exe-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1059.001, T1082, T1057, T1007, T1482]
-  - name: "PowerShell Execution from .NET Process in User-Writable Directory"
+  - name: "PowerShell Execution from a Parent Process in a User-Writable Directory"
     engine: sigma
     tier: Hunting
     fence: 5
-    hash: "c52e83ae"
-    head: "title: PowerShell Execution from .NET Process in"
+    hash: "c34d4772"
+    head: "title: PowerShell Execution from a Parent Proces"
     robustness: 2
     confidence: "MODERATE"
     attack: [T1059.001]
@@ -300,7 +300,7 @@ ai-agent-frameworks-2026-05-23-detections:
     engine: yara
     tier: Detection
     fence: 0
-    hash: "bd10db08"
+    hash: "2df49ac9"
     head: "/* Yara Rule Set Identifier: AI-Agent-Framework-"
     robustness: 2
     confidence: "HIGH"
@@ -309,7 +309,7 @@ ai-agent-frameworks-2026-05-23-detections:
     engine: yara
     tier: Detection
     fence: 1
-    hash: "d6765465"
+    hash: "8a53c8d7"
     head: "rule TOOLKIT_LLM_Personalized_Credential_Mutator"
     robustness: 3
     confidence: "HIGH"
@@ -354,7 +354,7 @@ ai-agent-frameworks-2026-05-23-detections:
     engine: yara
     tier: Detection
     fence: 6
-    hash: "4d002523"
+    hash: "fcddc9ce"
     head: "rule MAL_Python_Russian_A2A_C2_BaseHTTPServer { "
     robustness: 3
     confidence: "HIGH"
@@ -363,7 +363,7 @@ ai-agent-frameworks-2026-05-23-detections:
     engine: yara
     tier: Hunting
     fence: 7
-    hash: "3a641281"
+    hash: "5735e9d1"
     head: "rule SUSP_AI_Generated_Offensive_Code_Python { m"
     robustness: 2
     confidence: "MODERATE (each criterion alone is low-confidence; the combination is higher)"
@@ -390,26 +390,26 @@ ai-agent-frameworks-2026-05-23-detections:
     engine: sigma
     tier: Detection
     fence: 10
-    hash: "9068cda4"
+    hash: "b5f64fad"
     head: "title: GHOST Kit ComfyUI Fake Custom Node Perfor"
     robustness: 2
     confidence: "HIGH"
     attack: [T1543.002, T1496.001]
-  - name: "Cloudflared Access TCP Tunnel Registration to Non-Allowlisted Hostname"
+  - name: "Cloudflared Access TCP Tunnel Registration"
     engine: sigma
     tier: Detection
     fence: 11
-    hash: "f4df5937"
+    hash: "819baa8c"
     head: "title: Cloudflared Access TCP Tunnel Registratio"
     robustness: 2
     confidence: "HIGH"
     attack: [T1090.004, T1021.001, T1021.004]
-  - name: "Instana API Enumeration via Stolen JWT (ARPA Observability Harvester, Case 2)"
+  - name: "Instana API Enumeration Script via -SkipCertificateCheck to an ocpinstana Endpoint (ARPA Observability Harvester, Case 2)"
     engine: sigma
     tier: Detection
     fence: 12
-    hash: "fceb16e0"
-    head: "title: >- Instana API Enumeration via Stolen JWT"
+    hash: "2b51c8f3"
+    head: "title: >- Instana API Enumeration Script via -Sk"
     robustness: 2
     confidence: "HIGH (PowerShell Script Block Logging detection); MODERATE (network-side proxy detection)"
     attack: [T1119, T1530]
@@ -417,8 +417,8 @@ ai-agent-frameworks-2026-05-23-detections:
     engine: sigma
     tier: Detection
     fence: 13
-    hash: "0b8b1faa"
-    head: "title: AI Coding-Agent Binary Execution on Serve"
+    hash: "547ea714"
+    head: "title: AI Coding-Agent Binary Execution on a Lin"
     robustness: 2
     confidence: "MODERATE — co-presence of AI tools and offensive tooling on a server host warrants investigation but is not conclusive by itself"
     attack: [T1587, T1588.002]
@@ -449,12 +449,12 @@ ai-agent-frameworks-2026-05-23-detections:
     robustness: 1
     confidence: "MODERATE — the `.rovodev/` directory alone could appear on any host where a developer legitimately uses Rovodev"
     attack: [T1587]
-  - name: "Trycloudflare.com Quick-Tunnel Egress from Server Host"
+  - name: "Trycloudflare.com Quick-Tunnel DNS Query"
     engine: sigma
     tier: Hunting
     fence: 17
-    hash: "b43c8cdd"
-    head: "title: Trycloudflare.com Quick-Tunnel Egress fro"
+    hash: "8586ee42"
+    head: "title: Trycloudflare.com Quick-Tunnel DNS Query "
     robustness: 2
     confidence: "MODERATE"
     attack: [T1090.004]
@@ -485,11 +485,11 @@ ai-agent-frameworks-2026-05-23-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1071.001, T1132.001]
-  - name: "trycloudflare.com DNS Query Egress from Server Hosts"
+  - name: "trycloudflare.com DNS Query Egress"
     engine: suricata
     tier: Hunting
     fence: 21
-    hash: "2f3c6ec5"
+    hash: "3d995969"
     head: "alert dns $HOME_NET any -> any any (msg:\"THL HUN"
     robustness: 2
     confidence: "MODERATE"
@@ -544,7 +544,7 @@ arsenal-237-BdApiUtil64-sys-detections:
     engine: yara
     tier: Hunting
     fence: 2
-    hash: "76fa3448"
+    hash: "ceb1fc77"
     head: "rule SUSP_Kernel_SSDT_Bypass_Pattern { meta: des"
     robustness: 2
     confidence: "LOW"
@@ -553,8 +553,8 @@ arsenal-237-BdApiUtil64-sys-detections:
     engine: yara
     tier: Hunting
     fence: 3
-    hash: "be6c6579"
-    head: "rule SUSP_Kernel_Driver_Security_Process_Termina"
+    hash: "39398eaa"
+    head: "import \"pe\" rule SUSP_Kernel_Driver_Security_Pro"
     robustness: 2
     confidence: "LOW"
     attack: [T1685]
@@ -562,7 +562,7 @@ arsenal-237-BdApiUtil64-sys-detections:
     engine: sigma
     tier: Detection
     fence: 4
-    hash: "1dc0c5ba"
+    hash: "b2380abf"
     head: "title: Baidu-Signed Driver Load Outside Legitima"
     robustness: 2
     confidence: "HIGH"
@@ -626,7 +626,7 @@ arsenal-237-chromelevator-exe-detections:
     engine: sigma
     tier: Hunting
     fence: 5
-    hash: "f0716cb6"
+    hash: "29187e89"
     head: "title: Suspicious Process Creation - chromelevat"
     robustness: 1
     confidence: "MODERATE"
@@ -641,11 +641,11 @@ arsenal-237-chromelevator-exe-detections:
     confidence: "MODERATE"
     attack: [T1106]
 arsenal-237-dec_fixed-exe-detections:
-  - name: "ChaCha20-Poly1305 AEAD Decryption Implementation"
+  - name: "ChaCha20 Constant with Arsenal-237 Decryptor Error Strings (Poly1305 Tag-Failure Message)"
     engine: yara
     tier: Detection
     fence: 0
-    hash: "e3f0edfa"
+    hash: "923c2900"
     head: "/* Yara Rule Set Identifier: Arsenal-237-New-Fil"
     robustness: 2
     confidence: "HIGH"
@@ -709,7 +709,7 @@ arsenal-237-enc_c2-exe-detections:
     engine: yara
     tier: Hunting
     fence: 4
-    hash: "59afa876"
+    hash: "00b5725b"
     head: "rule teb_anti_debug_detection { meta: descriptio"
     robustness: 2
     confidence: "MODERATE"
@@ -750,12 +750,12 @@ arsenal-237-enc_c2-exe-detections:
     robustness: 1
     confidence: "MODERATE"
     attack: [T1547.001]
-  - name: "TEB Anti-Debug Sleep Loop (Call-Stack Corroboration)"
+  - name: "enc_c2.exe Process Access with Sleep in the Call Trace (Call-Stack Corroboration)"
     engine: sigma
     tier: Hunting
     fence: 9
-    hash: "a2e0aa22"
-    head: "title: Process - TEB Anti-Debug Sleep Loop Detec"
+    hash: "efabf27a"
+    head: "title: Process - enc_c2.exe Process Access with "
     robustness: 1
     confidence: "MODERATE"
     attack: [T1622]
@@ -791,7 +791,7 @@ arsenal-237-full_test_enc-exe-detections:
     engine: yara
     tier: Hunting
     fence: 2
-    hash: "dda037b2"
+    hash: "1549ecce"
     head: "rule TOOLKIT_Arsenal237_RustCrypto_ChaCha20_RSA_"
     robustness: 2
     confidence: "MODERATE"
@@ -828,7 +828,7 @@ arsenal-237-killer-crowdstrike-dll-detections:
     engine: sigma
     tier: Detection
     fence: 0
-    hash: "e41f84aa"
+    hash: "e2760f9b"
     head: "title: CrowdStrike Falcon Core Process Terminati"
     robustness: 3
     confidence: "HIGH"
@@ -874,7 +874,7 @@ arsenal-237-killer-dll-detections:
     engine: sigma
     tier: Detection
     fence: 3
-    hash: "6f721289"
+    hash: "408be0ac"
     head: "title: Kernel Driver Service Creation by Rundll3"
     robustness: 3
     confidence: "HIGH"
@@ -983,7 +983,7 @@ arsenal-237-lpe-exe-detections:
     engine: sigma
     tier: Detection
     fence: 6
-    hash: "f30a7c4d"
+    hash: "4d194673"
     head: "title: Privilege Escalation via Token Impersonat"
     robustness: 3
     confidence: "HIGH"
@@ -1001,26 +1001,26 @@ arsenal-237-lpe-exe-detections:
     engine: sigma
     tier: Detection
     fence: 8
-    hash: "f072f5cf"
+    hash: "fb3563c5"
     head: "title: Scheduled Task Created as SYSTEM id: 19fb"
     robustness: 3
     confidence: "HIGH"
     attack: [T1053.005]
-  - name: "Named Pipe Impersonation Attack"
+  - name: "Print Spooler Named Pipe Creation (Possible Token-Impersonation Staging)"
     engine: sigma
     tier: Hunting
     fence: 9
-    hash: "f43732aa"
-    head: "title: Named Pipe Impersonation Attack (lpe.exe)"
+    hash: "0eff31c2"
+    head: "title: Print Spooler Named Pipe Creation (Possib"
     robustness: 2
     confidence: "MODERATE"
     attack: [T1134.001]
-  - name: "WMIC Process Creation for Privilege Escalation"
+  - name: "WMIC Process Call Create by a User Not Named SYSTEM or Administrator"
     engine: sigma
     tier: Hunting
     fence: 10
-    hash: "c6b009e1"
-    head: "title: WMIC Process Creation for Privilege Escal"
+    hash: "86ca5224"
+    head: "title: WMIC Process Call Create by a User Not Na"
     robustness: 2
     confidence: "MODERATE"
     attack: [T1047]
@@ -1428,7 +1428,7 @@ cloudsync-assembler-toolkit-91-197-98-188-detections:
     engine: sigma
     tier: Detection
     fence: 17
-    hash: "10fe562a"
+    hash: "a04d8bb1"
     head: "title: Winlogon SpecialAccounts UserList Registr"
     robustness: 3
     confidence: "HIGH"
@@ -3892,8 +3892,8 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
     engine: suricata
     tier: Detection
     fence: 25
-    hash: "40b58f28"
-    head: "alert tcp $HOME_NET any -> $EXTERNAL_NET any (ms"
+    hash: "d54abf25"
+    head: "alert tcp $EXTERNAL_NET any -> $HOME_NET any (ms"
     robustness: 3
     confidence: "HIGH"
     attack: [T1190]
@@ -4936,7 +4936,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
     engine: yara
     tier: Hunting
     fence: 6
-    hash: "9d18ae46"
+    hash: "b33fda68"
     head: "rule MAL_Python_AIGenerated_OffensiveCode_Univer"
     robustness: 2
     confidence: "MODERATE (HIGH for the universal-subset criteria as a class; MODERATE for any individual file match without corroborating context)"
@@ -4988,12 +4988,12 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
     attack: [T1053.003, T1564.001]
   - name: "Pandora-Mirai Persistence Pattern: Multi-Mechanism Installer (Init.d, Systemd, Hidden Cron)"
     engine: sigma
-    tier: Detection
+    tier: Hunting
     fence: 12
-    hash: "cec3f141"
-    head: "title: Pandora-Mirai Persistence Pattern — Multi"
+    hash: "93a3275c"
+    head: "title: Pandora-Mirai Persistence - Masquerade In"
     robustness: 2
-    confidence: "HIGH"
+    confidence: "HIGH (correlation) / MODERATE (each base rule)"
     attack: [T1037.004, T1053.003, T1543.002]
   - name: "BusyBox SORA Marker Execution: Sora-Derivative Mirai-Fork Active on Host"
     engine: sigma
@@ -5013,13 +5013,13 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
     robustness: 1
     confidence: "HIGH for the artifact; retiered on durability"
     attack: [T1095, T1059.004]
-  - name: "Non-Watchdog Process Opening /dev/watchdog: Mirai-Canonical Persistence Tactic"
+  - name: "Process Launched with /dev/watchdog on the Command Line, Mirai-Canonical Persistence Tactic"
     engine: sigma
     tier: Hunting
     fence: 15
-    hash: "2723f613"
-    head: "title: Non-Watchdog Process Opening /dev/watchdo"
-    robustness: 3
+    hash: "c07f1ecb"
+    head: "title: Process Launched with /dev/watchdog on th"
+    robustness: 2
     confidence: "HIGH"
     attack: [T1014, T1053.003]
   - name: "Naku/Pandora-Mirai Operator-Bespoke 22-Char Charset String: Family Tracking Signature"
@@ -5171,7 +5171,7 @@ russian-gemini-credential-mill-213.165.51.115-detections:
     engine: yara
     tier: Detection
     fence: 2
-    hash: "5d1ea2ea"
+    hash: "221bd8a2"
     head: "rule MAL_Python_Stolen_LLM_Key_Validator { meta:"
     robustness: 2
     confidence: "HIGH"
@@ -5904,7 +5904,7 @@ sliver-c2-windows-postex-staging-193-233-202-17-detections:
     engine: sigma
     tier: Detection
     fence: 6
-    hash: "0403b6a3"
+    hash: "d814ab30"
     head: "title: Process Access To LSASS With A Dump-Capab"
     robustness: 2
     confidence: "HIGH"
@@ -6149,7 +6149,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     engine: yara
     tier: Detection
     fence: 4
-    hash: "91bb1669"
+    hash: "f197cf2b"
     head: "rule MAL_Python_ARPA_CrossSource_Correlation_ETL"
     robustness: 3
     confidence: "HIGH"

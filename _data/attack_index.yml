@@ -880,8 +880,9 @@ techniques:
         date: '2026-05-26'
         report_url: /reports/rovodev-mirai-matrix-c2-87.106.143.220/
         rules: >-
-          MAL_Python_StealthAgent_AntiDebug_AntiVM_AI_Authored (YARA, Hunting); Non-Watchdog Process
-          Opening /dev/watchdog: Mirai-Canonical Persistence Tactic (SIGMA, Hunting)
+          MAL_Python_StealthAgent_AntiDebug_AntiVM_AI_Authored (YARA, Hunting); Process Launched
+          with /dev/watchdog on the Command Line, Mirai-Canonical Persistence Tactic (SIGMA,
+          Hunting)
         count: 2
       - url: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
         title: GHOST Cryptojacker Kit — Vova75Rus Supply Chain (77.110.96.200)
@@ -1088,7 +1089,7 @@ techniques:
         title: Multi-Actor AI-Agent Framework Abuse (8 Operators)
         date: '2026-06-16'
         report_url: /reports/ai-agent-frameworks-2026-05-23/
-        rules: Cloudflared Access TCP Tunnel Registration to Non-Allowlisted Hostname (SIGMA, Detection)
+        rules: Cloudflared Access TCP Tunnel Registration (SIGMA, Detection)
         count: 1
       - url: /hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections
         title: Russian Gemini CLI Credential Mill (213.165.51.115)
@@ -1177,7 +1178,7 @@ techniques:
         title: Multi-Actor AI-Agent Framework Abuse (8 Operators)
         date: '2026-06-16'
         report_url: /reports/ai-agent-frameworks-2026-05-23/
-        rules: Cloudflared Access TCP Tunnel Registration to Non-Allowlisted Hostname (SIGMA, Detection)
+        rules: Cloudflared Access TCP Tunnel Registration (SIGMA, Detection)
         count: 1
       - url: /hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections
         title: Russian Gemini CLI Credential Mill (213.165.51.115)
@@ -2319,7 +2320,7 @@ techniques:
         rules: >-
           MAL_Bash_Pandora_Dropper_Family (YARA, Detection);
           MAL_Python_Persistent_Bot_DualChannel_CNC (YARA, Detection); Pandora-Mirai Persistence
-          Pattern: Multi-Mechanism Installer (Init.d, Systemd, Hidden Cron) (SIGMA, Detection)
+          Pattern: Multi-Mechanism Installer (Init.d, Systemd, Hidden Cron) (SIGMA, Hunting)
         count: 3
     actors:
       - UTA-2026-014
@@ -2728,8 +2729,8 @@ techniques:
           MAL_Python_Persistent_Bot_DualChannel_CNC (YARA, Detection); Hidden-Prefix Cron Entry
           Creation in /etc/cron.d: Pandora-Mirai Persistence Pattern (SIGMA, Detection);
           Pandora-Mirai Persistence Pattern: Multi-Mechanism Installer (Init.d, Systemd, Hidden
-          Cron) (SIGMA, Detection); Non-Watchdog Process Opening /dev/watchdog: Mirai-Canonical
-          Persistence Tactic (SIGMA, Hunting)
+          Cron) (SIGMA, Hunting); Process Launched with /dev/watchdog on the Command Line,
+          Mirai-Canonical Persistence Tactic (SIGMA, Hunting)
         count: 5
     actors:
       - UTA-2026-014
@@ -5748,10 +5749,9 @@ techniques:
         date: '2026-06-16'
         report_url: /reports/ai-agent-frameworks-2026-05-23/
         rules: >-
-          Cloudflared Access TCP Tunnel Registration to Non-Allowlisted Hostname (SIGMA, Detection);
-          Trycloudflare.com Quick-Tunnel Egress from Server Host (SIGMA, Hunting); trycloudflare.com
-          DNS Query Egress from Server Hosts (SURICATA, Hunting); Hysteria v2 QUIC bing.com SNI
-          Masquerade Detection (Case 9) (SURICATA, Hunting)
+          Cloudflared Access TCP Tunnel Registration (SIGMA, Detection); Trycloudflare.com
+          Quick-Tunnel DNS Query (SIGMA, Hunting); trycloudflare.com DNS Query Egress (SURICATA,
+          Hunting); Hysteria v2 QUIC bing.com SNI Masquerade Detection (Case 9) (SURICATA, Hunting)
         count: 4
       - url: /hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections
         title: Russian Gemini CLI Credential Mill (213.165.51.115)
@@ -6633,7 +6633,7 @@ techniques:
         title: AdvancedRouterScanner
         date: '2025-10-20'
         report_url: /reports/AdvancedRouterScanner/
-        rules: Default Credential Brute Force (SIGMA, Hunting)
+        rules: Authentication Attempt Using a Default-Style Credential Pair (SIGMA, Hunting)
         count: 1
     actors:
       - UTA-2026-018
@@ -6999,7 +6999,8 @@ techniques:
         report_url: /reports/ai-agent-frameworks-2026-05-23/
         rules: >-
           ARPA Observability Harvester Systemd Service Pattern (YARA, Detection); Instana API
-          Enumeration via Stolen JWT (ARPA Observability Harvester, Case 2) (SIGMA, Detection)
+          Enumeration Script via -SkipCertificateCheck to an ocpinstana Endpoint (ARPA Observability
+          Harvester, Case 2) (SIGMA, Detection)
         count: 2
       - url: /hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections
         title: Turkish ARPA AI-Augmented Observability Compromise (209.38.205.158)
@@ -9647,8 +9648,8 @@ techniques:
         date: '2026-06-16'
         report_url: /reports/ai-agent-frameworks-2026-05-23/
         rules: >-
-          Instana API Enumeration via Stolen JWT (ARPA Observability Harvester, Case 2) (SIGMA,
-          Detection)
+          Instana API Enumeration Script via -SkipCertificateCheck to an ocpinstana Endpoint (ARPA
+          Observability Harvester, Case 2) (SIGMA, Detection)
         count: 1
     actors: []
     url: /techniques/T1530/
@@ -9918,7 +9919,7 @@ techniques:
         report_url: /reports/rovodev-mirai-matrix-c2-87.106.143.220/
         rules: >-
           MAL_Python_Persistent_Bot_DualChannel_CNC (YARA, Detection); Pandora-Mirai Persistence
-          Pattern: Multi-Mechanism Installer (Init.d, Systemd, Hidden Cron) (SIGMA, Detection)
+          Pattern: Multi-Mechanism Installer (Init.d, Systemd, Hidden Cron) (SIGMA, Hunting)
         count: 2
       - url: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
         title: GHOST Cryptojacker Kit — Vova75Rus Supply Chain (77.110.96.200)
@@ -12352,7 +12353,7 @@ techniques:
         title: Multi-Actor AI-Agent Framework Abuse (8 Operators)
         date: '2026-06-16'
         report_url: /reports/ai-agent-frameworks-2026-05-23/
-        rules: trycloudflare.com DNS Query Egress from Server Hosts (SURICATA, Hunting)
+        rules: trycloudflare.com DNS Query Egress (SURICATA, Hunting)
         count: 1
     actors:
       - UTA-2026-008

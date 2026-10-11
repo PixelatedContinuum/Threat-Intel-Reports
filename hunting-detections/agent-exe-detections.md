@@ -39,14 +39,14 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 
 ### Hunting Rules
 
-#### Golang RAT Multi-Signal Combination (Hash Match or Behavioral Combination)
+#### Golang RAT Multi-Signal Combination (Behavioral Combination)
 
 **Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1036.005 (Match Legitimate Resource Name or Location), T1622 (Debugger Evasion), T1056.001 (Input Capture: Keylogging), T1573 (Encrypted Channel)
 **Confidence:** MODERATE
-**Rationale:** This rule fixes a hard compile error in the original "comprehensive" rule — its condition referenced `$antidebug_*`, `$crypto_*`, `$net_*`, and `$surv_*`, wildcard prefixes that match none of the rule's actual string identifiers (`$antidebug1`, `$crypto1`, `$net1`, `$surv1` — no underscore before the number). The real `yarac` compiler rejects this outright (`undefined string "$antidebug_*"`); as published, the rule never loaded at all. The wildcard references have been corrected to restore the intended logic: a fast-path exact-hash match, or one of two combinations requiring Golang runtime evidence plus crypto imports plus anti-debug or surveillance APIs, each also requiring at least one of the WinDefenderSvc.exe / WindowsDefenderUpdate / .wd_installed masquerade strings. Both behavioral branches still depend on that masquerade-string family, so a naming-convention rebrand defeats every non-hash path — that renameable dependency, not the richness of the combination, is why this sits at Hunting rather than Detection.
-**False Positives:** None known for the hash-match branch (exact-file equality). The Golang-plus-crypto-plus-anti-debug combination alone is common in legitimate Go network tooling, but both behavioral branches require it to co-occur with a Windows-Defender-masquerade literal, which is not expected in unrelated software; residual risk is a coincidental unrelated tool reusing the same masquerade filename or registry value name.
+**Rationale:** This rule fixes a hard compile error in the original "comprehensive" rule — its condition referenced `$antidebug_*`, `$crypto_*`, `$net_*`, and `$surv_*`, wildcard prefixes that match none of the rule's actual string identifiers (`$antidebug1`, `$crypto1`, `$net1`, `$surv1` — no underscore before the number). The real `yarac` compiler rejects this outright (`undefined string "$antidebug_*"`); as published, the rule never loaded at all. The wildcard references have been corrected to restore the intended logic: one of two combinations requiring Golang runtime evidence plus crypto imports plus anti-debug or surveillance APIs, each also requiring at least one of the WinDefenderSvc.exe / WindowsDefenderUpdate / .wd_installed masquerade strings. Both behavioral branches still depend on that masquerade-string family, so a naming-convention rebrand defeats every non-hash path — that renameable dependency, not the richness of the combination, is why this sits at Hunting rather than Detection. *Logic fix 2026-10-10:* the rule also carried two "hash match" branches that were hex-text strings searched for inside the file bytes. A sample does not contain its own SHA-256, so those branches could not fire on a real file, and they have been removed. Exact-file matching on the two sample hashes belongs to the IOC feed (the two SHA-256 values are in [`agent-exe.json`](/ioc-feeds/agent-exe.json)), per the project rule that a hash is an IOC and not a YARA string; the hashes stay in the rule's `hash1`/`hash2` meta fields as provenance.
+**False Positives:** The Golang-plus-crypto-plus-anti-debug combination alone is common in legitimate Go network tooling, but both behavioral branches require it to co-occur with a Windows-Defender-masquerade literal, which is not expected in unrelated software; residual risk is a coincidental unrelated tool reusing the same masquerade filename or registry value name.
 **Deployment:** Endpoint AV/EDR file scanning, email gateway attachment scanning, retroactive scan of file shares, IR artifact triage on hosts that resolved 109.230.231.37.
 
 ```yara
@@ -60,11 +60,12 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 
 rule TOOLKIT_PoetRAT_Golang_Multi_Signal_Combination {
    meta:
-      description = "Detects agent.exe-class PoetRAT-attributed Golang RAT samples via a multi-signal combination: Windows-Defender-masquerade persistence strings, Golang compilation artifacts, anti-debugging APIs, and cryptographic/network/surveillance capability imports. Also matches on the two known sample hashes directly."
+      description = "Detects agent.exe-class PoetRAT-attributed Golang RAT samples via a multi-signal combination: Windows-Defender-masquerade persistence strings, Golang compilation artifacts, anti-debugging APIs, and cryptographic/network/surveillance capability imports. The two known sample hashes are in the meta fields as provenance and in the IOC feed for exact matching; the rule logic does not test them."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/agent-exe-detections/"
       date = "2026-01-12"
+      modified = "2026-10-10"
       family = "PoetRAT"
       malware_type = "RAT"
       campaign = "Arsenal-237-109.230.231.37-Malware-Repository"
@@ -72,9 +73,6 @@ rule TOOLKIT_PoetRAT_Golang_Multi_Signal_Combination {
       hash1 = "e7f9a29dde307afff4191dbc14a974405f287b10f359a39305dccdc0ee949385"
       hash2 = "4e856041018242c62b3848d63b94c3763beda01648d3139060700c11e9334ad1"
    strings:
-      $hash_agent = "e7f9a29dde307afff4191dbc14a974405f287b10f359a39305dccdc0ee949385" nocase
-      $hash_windefender = "4e856041018242c62b3848d63b94c3763beda01648d3139060700c11e9334ad1" nocase
-
       $str_windefendersvc = "WinDefenderSvc.exe" ascii wide nocase
       $str_defender_update = "WindowsDefenderUpdate" ascii wide nocase
       $str_marker = ".wd_installed" ascii wide
@@ -105,7 +103,6 @@ rule TOOLKIT_PoetRAT_Golang_Multi_Signal_Combination {
    condition:
       uint16(0) == 0x5A4D and
       (
-         any of ($hash_*) or
          (
             (2 of ($str_*)) and
             (2 of ($golang_runtime*)) and
@@ -129,18 +126,19 @@ rule TOOLKIT_PoetRAT_Golang_Multi_Signal_Combination {
 **Robustness:** 1
 **ATT&CK Coverage:** T1036.005 (Match Legitimate Resource Name or Location), T1547.001 (Registry Run Keys / Startup Folder)
 **Confidence:** LOW
-**Rationale:** Requires two independently attacker-chosen literal strings — the WinDefenderSvc.exe filename plus the WindowsDefenderUpdate registry value name, or the .wd_installed marker plus generic Golang runtime evidence — to co-occur inside the same file. That is a step above a single atomic (an unrelated program embedding one string by coincidence is far less likely to also embed the other), but every discriminating literal here is an attacker-chosen masquerade artifact rather than a technique-level chokepoint, so a naming-convention rebrand defeats every branch. Kept as a Hunting lead for recurrence of this specific dropper/build family, not promoted to Detection.
+**Rationale:** Requires two independently attacker-chosen literal strings — the WinDefenderSvc.exe filename plus the WindowsDefenderUpdate registry value name, the WinDefenderSvc.exe filename plus the `Start Menu\Programs\Startup` path string (the second persistence location the sample uses, see the companion report), or the .wd_installed marker plus generic Golang runtime evidence — to co-occur inside the same file. That is a step above a single atomic (an unrelated program embedding one string by coincidence is far less likely to also embed the other), but every discriminating literal here is an attacker-chosen masquerade artifact rather than a technique-level chokepoint, so a naming-convention rebrand defeats every branch. Kept as a Hunting lead for recurrence of this specific dropper/build family, not promoted to Detection.
 **False Positives:** Unlikely for the exact two-literal pairing, but not zero. The `.wd_installed`-plus-Golang-runtime branch effectively reduces to the marker filename alone, since "any Golang binary" is close to a universal condition that adds no real discriminating power.
 **Deployment:** Endpoint AV/EDR file scanning, IR artifact triage, retroactive scan of file shares.
 
 ```yara
 rule TOOLKIT_PoetRAT_WinDefender_Masquerade_Persistence_Pair {
    meta:
-      description = "Detects PoetRAT-class droppers embedding the paired Windows-Defender-masquerade persistence artifact strings (WinDefenderSvc.exe + WindowsDefenderUpdate registry value, or the .wd_installed marker alongside Golang runtime strings). Brittle to a naming-convention rebrand — treat as a scoping lead, not an alert."
+      description = "Detects PoetRAT-class droppers embedding the paired Windows-Defender-masquerade persistence artifact strings (WinDefenderSvc.exe + WindowsDefenderUpdate registry value, WinDefenderSvc.exe + the Startup-folder path string, or the .wd_installed marker alongside Golang runtime strings). Brittle to a naming-convention rebrand — treat as a scoping lead, not an alert."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/agent-exe-detections/"
       date = "2026-01-12"
+      modified = "2026-10-10"
       family = "PoetRAT"
       malware_type = "RAT-Persistence-Component"
       campaign = "Arsenal-237-109.230.231.37-Malware-Repository"

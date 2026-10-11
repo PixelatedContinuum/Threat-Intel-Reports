@@ -395,6 +395,7 @@ rule MAL_Python_AIGenerated_OffensiveCode_Universal_Subset {
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/"
       date = "2026-05-26"
+      modified = "2026-10-10"
       hash1 = "64ca12cae6f5e520abb4158da3bbc14e909c2128748ae0c5806fa4206cc14260"
       family = "AI-Generated Offensive Code"
       malware_type = "Offensive Python (AI-authored)"
@@ -404,10 +405,10 @@ rule MAL_Python_AIGenerated_OffensiveCode_Universal_Subset {
       $bare_except1 = "except:" ascii
       $bare_except2 = "except Exception:" ascii
       $bare_pass    = /except[^\n]*:\s*\n\s*pass/ ascii
-      $doc_attack   = /def \w+_attack\w*\(.*\):\s*\n\s+\"\"\"/ ascii
-      $doc_flood    = /def \w+_flood\w*\(.*\):\s*\n\s+\"\"\"/ ascii
-      $doc_scan     = /def \w+_scan\w*\(.*\):\s*\n\s+\"\"\"/ ascii
-      $doc_infect   = /def \w+_infect\w*\(.*\):\s*\n\s+\"\"\"/ ascii
+      $doc_attack   = /def \w+_attack\w*\(.*\):\s*\n\s+\x22\x22\x22/ ascii
+      $doc_flood    = /def \w+_flood\w*\(.*\):\s*\n\s+\x22\x22\x22/ ascii
+      $doc_scan     = /def \w+_scan\w*\(.*\):\s*\n\s+\x22\x22\x22/ ascii
+      $doc_infect   = /def \w+_infect\w*\(.*\):\s*\n\s+\x22\x22\x22/ ascii
       $emoji_fire   = "\xf0\x9f\x94\xa5" ascii
       $emoji_rocket = "\xf0\x9f\x9a\x80" ascii
       $emoji_check  = "\xe2\x9c\x85"     ascii
@@ -680,26 +681,134 @@ level: high
 
 #### Pandora-Mirai Persistence Pattern: Multi-Mechanism Installer (Init.d, Systemd, Hidden Cron)
 
-**Tier:** Detection
-**Robustness:** 2
+**Tier:** Hunting (3 base rules) / Detection (correlation), co-located in one fence because Sigma correlation syntax requires the referenced base rules to be evaluated alongside the correlation
+**Robustness:** 2 (correlation: three independently renameable masquerade artifacts written together by one installer run) / 1 (each base rule individually: one renameable path)
 **ATT&CK Coverage:** T1037.004 (RC Scripts), T1053.003 (Cron), T1543.002 (Systemd Service)
-**Confidence:** HIGH
-**Rationale:** Salvaged from the original — the original rule OR'd in `/etc/rc.local` as a fourth persistence vector, but `/etc/rc.local` modification is routine for many legitimate deployment/provisioning tools and contributed no discriminating value on its own, while the rule's stated "60-second time window" was never actually implemented in the Sigma `condition` (a static OR of pairs has no timeframe). Removed the rc.local vector and the un-implemented timing claim from the description; retiered to require 2-of-3 of the three genuinely distinctive persistence artifacts (masquerade init.d name, masquerade systemd unit name, hidden cron entry).
-**False Positives:** Legitimate system update scripts that use similar naming — verify service content references known-good update infrastructure; security tooling (OSSEC, Wazuh agent) that creates init.d and systemd units at install time.
-**Blind Spots:** A rebuild that renames two or more of the three masquerade/hidden-persistence artifacts evades; no time-window correlation is implemented, so the three artifacts may be observed across a broad search window rather than a tight installer-execution burst.
-**Validation:** Trigger `persistent_bot.sh` — at least 2 of the 3 vectors must be created and match; a host running only one of the three (e.g., just a `sysupdate` init.d script from unrelated legitimate tooling) must NOT fire.
-**Deployment:** EDR/Sysmon-equivalent file-creation telemetry on Linux hosts.
+**Confidence:** HIGH (correlation) / MODERATE (each base rule)
+**Rationale:** Salvaged from the original, which also matched `/etc/rc.local` as a fourth persistence vector. That vector was dropped because `/etc/rc.local` modification is routine for many legitimate deployment and provisioning tools and added no discriminating value. *Logic fix 2026-10-10:* the previous version expressed "2 of the 3 artifacts" as ANDs of different `TargetFilename` values inside a single `file_event` selection. One file-creation event carries one `TargetFilename`, so no event could satisfy two of those values at once and the rule could never fire. It is rebuilt as three single-artifact base rules (masquerade init.d script, masquerade systemd unit, hidden dot-prefix cron entry), each a Hunting-tier lead on its own, plus a `temporal` correlation that fires when all three are created on the same host inside 10 minutes. The companion report documents that the `persistent_bot.sh` installer writes all of these artifacts in one run (section 5.2: `/etc/cron.d/.cache_update`, `/etc/init.d/sysupdate`, `/etc/systemd/system/system-update.service`). The "2 of 3" wording is dropped because Sigma's `temporal` correlation requires every referenced rule to match; a 2-of-3 threshold would need one pairwise correlation per pair, which this pass did not add. The earlier "60-second window" claim was already removed before this fix.
+**False Positives:** Base rules: legitimate update scripts that happen to use the `sysupdate` or `system-update.service` names, and security tooling (OSSEC, Wazuh agent) that creates init.d and systemd units at install time. Correlation: all three artifacts created on one host within 10 minutes by something other than this installer is not expected.
+**Blind Spots:** A rebuild that renames any one of the three masquerade or hidden-persistence artifacts, or an installer run that creates fewer than all three, evades the correlation and leaves only the individual Hunting-tier base rules. Converted with `sigma convert -t eql`, a `temporal` correlation becomes a `sample` query grouped by `host.name` with no `maxspan`, so on an Elastic EQL deployment the 10-minute window is not enforced; backends that implement `timespan` do enforce it. The installer's `/etc/rc.local` and shell-profile vectors are not covered.
+**Validation:** Run `persistent_bot.sh` in the lab: all three file creations must produce base-rule hits and the correlation must fire. A host that only receives one of the three (for example a `sysupdate` init.d script from unrelated legitimate tooling) must fire at most the corresponding Hunting-tier base rule and must NOT fire the correlation.
+**Deployment:** EDR or Sysmon-for-Linux file-creation telemetry feeding a SIEM correlation engine that supports Sigma `temporal` correlation.
 
 ```yaml
-title: Pandora-Mirai Persistence Pattern — Multi-Mechanism Installer (Init.d, Systemd, Hidden Cron)
-id: 311787eb-af20-4ec5-90b3-ef3cb6797771
+title: Pandora-Mirai Persistence - Masquerade Init.d Script Sysupdate (Base Rule)
+id: d8addeca-63c4-4bed-a2d7-5b07f785f794
+name: pandora_persist_initd_sysupdate
 status: experimental
 description: >-
-  Detects 2-of-3 co-occurrence of the distinctive Linux persistence vectors used by the Pandora-Mirai (UTA-2026-014) persistent_bot.sh installer — masquerade-named init.d service (/etc/init.d/sysupdate), masquerade systemd unit (/etc/systemd/system/system-update.service), and a hidden dot-prefix cron entry under /etc/cron.d/. Corrected from the original: the ubiquitous /etc/rc.local vector was removed (routine target for many legitimate deployment tools with no discriminating value alone), and the rule no longer claims an un-implemented 60-second time-window correlation.
+  Base rule (hunting lead, informational on its own): creation of
+  /etc/init.d/sysupdate, the masquerade-named System V service written by the
+  Pandora-Mirai (UTA-2026-014) persistent_bot.sh installer. Evaluated together
+  with the systemd-unit and hidden-cron base rules by the correlation rule
+  below.
 references:
     - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
 author: The Hunters Ledger
 date: '2026-05-26'
+modified: '2026-10-10'
+tags:
+    - attack.persistence
+    - attack.privilege-escalation
+    - attack.t1037.004
+    - detection.emerging-threats
+    - stp.2
+logsource:
+    category: file_event
+    product: linux
+detection:
+    selection:
+        TargetFilename: '/etc/init.d/sysupdate'
+    condition: selection
+falsepositives:
+    - Legitimate system update scripts that use the same init.d name, verify the script content references known-good update infrastructure
+    - Security tooling (OSSEC, Wazuh agent) that creates init.d units at install time
+level: low
+---
+title: Pandora-Mirai Persistence - Masquerade Systemd Unit system-update.service (Base Rule)
+id: 30fd3414-b559-4cc2-a1fe-c6cbe8be5be4
+name: pandora_persist_systemd_system_update
+status: experimental
+description: >-
+  Base rule (hunting lead, informational on its own): creation of
+  /etc/systemd/system/system-update.service, the masquerade-named systemd unit
+  written by the Pandora-Mirai (UTA-2026-014) persistent_bot.sh installer.
+  Evaluated together with the init.d and hidden-cron base rules by the
+  correlation rule below.
+references:
+    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
+author: The Hunters Ledger
+date: '2026-05-26'
+modified: '2026-10-10'
+tags:
+    - attack.persistence
+    - attack.privilege-escalation
+    - attack.t1543.002
+    - detection.emerging-threats
+    - stp.2
+logsource:
+    category: file_event
+    product: linux
+detection:
+    selection:
+        TargetFilename: '/etc/systemd/system/system-update.service'
+    condition: selection
+falsepositives:
+    - Legitimate system update units that use the same unit name, verify the unit content references known-good update infrastructure
+    - Security tooling (OSSEC, Wazuh agent) that creates systemd units at install time
+level: low
+---
+title: Pandora-Mirai Persistence - Hidden Dot-Prefix Cron Entry in /etc/cron.d (Base Rule)
+id: 87ad8798-c538-412a-8c09-1284e13f64bf
+name: pandora_persist_cron_hidden
+status: experimental
+description: >-
+  Base rule (hunting lead, informational on its own): creation of a
+  dot-prefix (hidden) file under /etc/cron.d/, the form of the
+  /etc/cron.d/.cache_update entry written by the Pandora-Mirai (UTA-2026-014)
+  persistent_bot.sh installer. Evaluated together with the init.d and systemd
+  base rules by the correlation rule below.
+references:
+    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
+author: The Hunters Ledger
+date: '2026-05-26'
+modified: '2026-10-10'
+tags:
+    - attack.persistence
+    - attack.execution
+    - attack.privilege-escalation
+    - attack.t1053.003
+    - detection.emerging-threats
+    - stp.2
+logsource:
+    category: file_event
+    product: linux
+detection:
+    selection:
+        TargetFilename|startswith: '/etc/cron.d/.'
+    condition: selection
+falsepositives:
+    - Configuration management tools (Puppet, Chef, Ansible) deploying hidden cron entries, verify against known CM policy
+    - Rare administration scripts that use dot-prefix cron files
+level: low
+---
+title: Pandora-Mirai Persistence Pattern - Multi-Mechanism Installer (Init.d, Systemd, Hidden Cron)
+id: 311787eb-af20-4ec5-90b3-ef3cb6797771
+status: experimental
+description: >-
+  Detects the init.d, systemd and hidden-cron persistence artifacts of the
+  Pandora-Mirai (UTA-2026-014) persistent_bot.sh installer all being created on
+  the same host within 10 minutes: the masquerade-named init.d service
+  (/etc/init.d/sysupdate), the masquerade systemd unit
+  (/etc/systemd/system/system-update.service) and a hidden dot-prefix cron entry
+  under /etc/cron.d/. All three base rules must match; a host showing only one
+  or two of them does not fire this correlation. The ubiquitous /etc/rc.local
+  vector is not part of the rule.
+references:
+    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
+author: The Hunters Ledger
+date: '2026-05-26'
+modified: '2026-10-10'
 tags:
     - attack.persistence
     - attack.execution
@@ -709,23 +818,17 @@ tags:
     - attack.t1543.002
     - detection.emerging-threats
     - stp.3
-logsource:
-    category: file_event
-    product: linux
-detection:
-    selection_sysupdate:
-        TargetFilename: '/etc/init.d/sysupdate'
-    selection_systemd:
-        TargetFilename: '/etc/systemd/system/system-update.service'
-    selection_cron_hidden:
-        TargetFilename|startswith: '/etc/cron.d/.'
-    condition: >-
-        (selection_sysupdate and selection_systemd) or
-        (selection_sysupdate and selection_cron_hidden) or
-        (selection_systemd and selection_cron_hidden)
+correlation:
+    type: temporal
+    rules:
+        - pandora_persist_initd_sysupdate
+        - pandora_persist_systemd_system_update
+        - pandora_persist_cron_hidden
+    group-by:
+        - host.name
+    timespan: 10m
 falsepositives:
-    - Legitimate system update scripts that use similar naming — verify service content references known-good update infrastructure
-    - Security tooling (OSSEC, Wazuh agent) that creates init.d and systemd units at install time
+    - A host where unrelated tooling creates all three artifacts within 10 minutes is not expected
 level: high
 ```
 
@@ -812,26 +915,28 @@ falsepositives:
 level: medium
 ```
 
-#### Non-Watchdog Process Opening /dev/watchdog: Mirai-Canonical Persistence Tactic
+#### Process Launched with /dev/watchdog on the Command Line, Mirai-Canonical Persistence Tactic
 
 **Tier:** Hunting
-**Robustness:** 3
+**Robustness:** 2
 **ATT&CK Coverage:** T1014 (Rootkit), T1053.003 (Cron)
 **Confidence:** HIGH
-**Rationale:** A fully behavioral, zero-literal technique signal — a technique chokepoint by Gate 1's own definition (highest durability tier). Retained at Hunting rather than promoted to Detection: the honest false-positive assessment is genuinely mixed across deployment context (LOW on server hosts, MEDIUM on IoT-class devices with legitimate custom watchdog daemons the 3-name `filter_legit` list cannot exhaustively cover), and the rule's own `level: medium` reflects that — per level-discipline, a rule that honestly sits at medium belongs in Hunting. Unchanged detection logic.
+**Rationale:** *Title and scope fix 2026-10-10:* the rule was titled "Non-Watchdog Process Opening /dev/watchdog", but it reads `process_creation` events and tests the command line, so it fires when a launched process names the device path in its arguments (for example a shell command or helper that touches `/dev/watchdog`). A bot that calls `open()` on the device from inside its own process, which is what the companion report documents for Naku.arm, creates no process-creation event and is not seen by this rule; seeing the open itself needs file-access or syscall telemetry, which this rule does not use. The device path is OS-defined, but the rule observes it only as a command-line substring, so Robustness is lowered from 3 to 2. Retained at Hunting rather than promoted to Detection: the honest false-positive assessment is genuinely mixed across deployment context (LOW on server hosts, MEDIUM on IoT-class devices with legitimate custom watchdog daemons the 3-name `filter_legit` list cannot exhaustively cover), and the rule's own `level: medium` reflects that — per level-discipline, a rule that honestly sits at medium belongs in Hunting.
 **False Positives:** Embedded system watchdog management tools on IoT/embedded Linux — tune `filter_legit` for your environment; custom watchdog wrapper scripts in industrial control environments; hardware monitoring agents on servers with watchdog hardware support.
+**Blind Spots:** A process that opens `/dev/watchdog` or `/dev/misc/watchdog` with `open()` and no command-line mention, which is the Naku.arm behavior in the companion report, is invisible to this rule.
 **Deployment:** EDR/Sysmon-equivalent process-creation telemetry; highest-confidence on server-class hosts where the FP scenarios above are least likely.
 
 ```yaml
-title: Non-Watchdog Process Opening /dev/watchdog — Mirai-Canonical Persistence Tactic
+title: Process Launched with /dev/watchdog on the Command Line, Mirai-Canonical Persistence Tactic
 id: 716bce61-4dcb-4479-b815-1391f5c7cd43
 status: experimental
 description: >-
-  Detects processes other than known watchdog daemons (watchdogd, systemd-watchdog) opening /dev/watchdog or /dev/misc/watchdog. This is a canonical Mirai botnet persistence mechanism — the bot opens the watchdog device and continuously pets it (ioctl WDIOC_KEEPALIVE) to prevent IoT device auto-reboot, keeping the infection persistent across watchdog-triggered reset cycles. Observed in Naku.arm (Pandora-Mirai family, UTA-2026-014) and generic to all Mirai/Sora derivative bots. FP profile varies by deployment context (low on servers, higher on IoT/embedded hosts) — deploy as a hunting lead.
+  Detects process creation, other than by known watchdog daemons (watchdogd, systemd, busybox), whose command line references /dev/watchdog or /dev/misc/watchdog. The rule reads command lines and cannot see an open() call made from inside an already running process. The device is a canonical Mirai botnet persistence mechanism — the bot opens the watchdog device and continuously pets it (ioctl WDIOC_KEEPALIVE) to prevent IoT device auto-reboot, keeping the infection persistent across watchdog-triggered reset cycles. Observed in Naku.arm (Pandora-Mirai family, UTA-2026-014) and generic to all Mirai/Sora derivative bots. FP profile varies by deployment context (low on servers, higher on IoT/embedded hosts) — deploy as a hunting lead.
 references:
     - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
 author: The Hunters Ledger
 date: '2026-05-26'
+modified: '2026-10-10'
 tags:
     - attack.stealth
     - attack.t1014

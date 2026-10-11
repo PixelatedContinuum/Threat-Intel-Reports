@@ -145,18 +145,19 @@ rule TOOLKIT_Arsenal237_Ransomware_Comprehensive_Indicators {
 **Robustness:** 2
 **ATT&CK Coverage:** T1486 (Data Encrypted for Impact)
 **Confidence:** MODERATE
-**Rationale:** Requires 3 of 6 versioned crate-path strings from the RustCrypto ecosystem (chacha20, rsa, aead, cipher, digest, rand), combined with a >10MB PE size gate. The combination is distinctive enough to be a real, if imperfect, lead — but chacha20/rsa/aead/cipher/digest/rand are the RustCrypto organization's own standard, widely-used crate family, routinely bundled together by any legitimate Rust software implementing hybrid encryption (password managers, backup tools, encrypted-file utilities). No goodware-corpus validation has been performed against that population, so this does not clear the Detection precision bar on its own.
+**Rationale:** Requires both the chacha20 and rsa versioned crate-path strings plus at least 1 of the 4 others from the RustCrypto ecosystem (aead, cipher, digest, rand), combined with a >10MB PE size gate. *Logic fix 2026-10-10:* the condition was `3 of them`, so aead, cipher and digest alone passed without a chacha20 or rsa path, which contradicted the heading and rule name. The combination is distinctive enough to be a real, if imperfect, lead — but chacha20/rsa/aead/cipher/digest/rand are the RustCrypto organization's own standard, widely-used crate family, routinely bundled together by any legitimate Rust software implementing hybrid encryption (password managers, backup tools, encrypted-file utilities). No goodware-corpus validation has been performed against that population, so this does not clear the Detection precision bar on its own.
 **False Positives:** Realistic overlap with legitimate Rust software built on the same RustCrypto crate family and performing similar hybrid ChaCha20+RSA encryption; not characterized against a broad clean-software corpus.
 **Deployment:** Broad endpoint/EDR scanning sweep, retroactive hunt across file shares; treat hits as triage candidates pending goodware validation, not alerts.
 
 ```yara
 rule TOOLKIT_Arsenal237_RustCrypto_ChaCha20_RSA_Combination {
    meta:
-      description = "Detects Rust binaries embedding at least 3 of 6 versioned RustCrypto crate-path strings (chacha20, rsa, aead, cipher, digest, rand) observed in the Arsenal-237 ransomware's crypto stack. The RustCrypto crate family is also used by unrelated legitimate Rust encryption software; not goodware-validated."
+      description = "Detects Rust binaries embedding the versioned RustCrypto chacha20 and rsa crate-path strings plus at least one of four others (aead, cipher, digest, rand) observed in the Arsenal-237 ransomware's crypto stack. The RustCrypto crate family is also used by unrelated legitimate Rust encryption software; not goodware-validated."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/arsenal-237-full_test_enc-exe-detections/"
       date = "2026-01-27"
+      modified = "2026-10-10"
       family = "Arsenal-237"
       malware_type = "Ransomware"
       campaign = "Arsenal-237-Lockbox-Ransomware"
@@ -172,7 +173,8 @@ rule TOOLKIT_Arsenal237_RustCrypto_ChaCha20_RSA_Combination {
    condition:
       uint16(0) == 0x5A4D and
       filesize > 10MB and
-      3 of them
+      $chacha20 and $rsa and
+      1 of ($aead, $cipher, $digest, $rand)
 }
 ```
 

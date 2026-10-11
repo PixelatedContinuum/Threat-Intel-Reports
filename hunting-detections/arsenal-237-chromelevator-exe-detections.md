@@ -375,8 +375,8 @@ level: high
 **Robustness:** 1
 **ATT&CK Coverage:** T1555.003 (Credentials from Web Browsers)
 **Confidence:** MODERATE
-**Rationale:** Both selectors, the filename and the three command-line flags, are choices the operator made for this specific build and can be changed on a rebuild without affecting functionality; the combination narrows false positives today but does not survive a rename.
-**False Positives:** Low today given the specific flag combination, but any internal tool or script that happens to reuse flags named --verbose/--fingerprint/--output-path would also match.
+**Rationale:** Both selectors, the filename and the three command-line flags, are choices the operator made for this specific build and can be changed on a rebuild without affecting functionality; the image name together with any one of the flags narrows false positives today but does not survive a rename.
+**False Positives:** Low today given the `chromelevator.exe` image name, but the command-line test is an OR over `--verbose`, `--fingerprint` and `--output-path`, so one of them alone is enough with that image name (the tool accepts each flag on its own, per the companion report); any renamed internal tool that reuses one of those flag names would also match.
 **Deployment:** Scoping and retroactive hunting for this specific build; not a durable signal for the campaign once the operator renames the binary.
 
 ```yaml
@@ -388,6 +388,7 @@ references:
 status: experimental
 author: The Hunters Ledger
 date: '2026-01-26'
+modified: '2026-10-10'
 tags:
   - attack.credential-access
   - attack.t1555.003

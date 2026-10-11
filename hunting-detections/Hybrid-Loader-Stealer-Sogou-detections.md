@@ -212,14 +212,14 @@ rule SogouStealer_Loader_Downloader {
 **Robustness:** 2
 **ATT&CK Coverage:** T1547.001 (Registry Run Keys / Startup Folder)
 **Confidence:** HIGH
-**Rationale:** Requires the registry value location to be a genuine Run/RunOnce autostart key AND the written value data to reference one of three bespoke component filenames — a combination an operator cannot satisfy without both persisting via this technique and retaining a recognizable component name. The `attack.t1547.009` LNK-modification tag on the original rule has been removed: the detection logic is registry-only and never evaluates shortcut files, despite the rule title referencing "LNK Modification" (see Coverage Gaps).
+**Rationale:** Requires the registry value location to be a genuine Run/RunOnce autostart key AND the written value data to reference one of three bespoke component filenames — a combination an operator cannot satisfy without both persisting via this technique and retaining a recognizable component name. The `attack.t1547.009` LNK-modification tag on the original rule has been removed: the detection logic is registry-only and never evaluates shortcut files, and the YAML title, which still read "and LNK Modification", was corrected on 2026-10-10 to match the heading and the logic (see Coverage Gaps).
 **False Positives:** None known — `beacon_sdk.dll`, `SGDownload.exe`, and `userNetSchedule.exe` are bespoke filenames with no plausible legitimate collision in a Run/RunOnce value.
 **Blind Spots:** A rebuild that renames all three referenced components evades; persistence via a different mechanism (scheduled task, service, LNK modification — none of which this rule inspects) is not covered.
 **Validation:** Trigger the malware's persistence routine — the registry write must match; a legitimate application's unrelated Run-key entry must NOT fire.
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (registry telemetry).
 
 ```yaml
-title: SogouStealer Persistence via Run Keys and LNK Modification
+title: SogouStealer Persistence via Run Keys
 id: 190b57f6-a8c3-4f45-a39d-ed7340d66b9a
 status: experimental
 description: Detects registry Run key entries referencing the SogouStealer ecosystem's own component filenames (beacon_sdk.dll, SGDownload.exe, userNetSchedule.exe)
@@ -227,6 +227,7 @@ references:
     - https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/
 author: The Hunters Ledger
 date: '2025-11-21'
+modified: '2026-10-10'
 tags:
     - attack.persistence
     - attack.privilege-escalation
@@ -313,11 +314,16 @@ level: high
 title: SogouStealer Masquerading NSIS Installer Execution
 id: a078683b-110a-4973-86bb-1666dba668bf
 status: experimental
-description: Detects execution of suspected NSIS-based fake Sogou installers with cracked-build markers
+description: >-
+    Detects execution of an installer-named process (setup.exe, install.exe or installer.exe) whose command line
+    carries NSIS, Nullsoft, Sogou, or one of the cracked-build markers (拼音, 吾爱破解, v15.1.0.1570). The command-line
+    terms are OR-matched, so the generic NSIS, Nullsoft and Sogou terms fire without a cracked-build marker; hits that
+    carry a marker are the high-value ones.
 references:
     - https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/
 author: The Hunters Ledger
 date: '2025-11-21'
+modified: '2026-10-10'
 tags:
     - attack.stealth
     - attack.t1036.005
@@ -376,7 +382,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT SogouStealer-Hybrid
 
 **Mutex value not captured.** The underlying IOC feed records that "a mutex string was identified in the binary" for single-instance enforcement, but does not carry the actual mutex string, only the observation that one exists. No YARA string match or Sigma `process_creation`/`CreateMutex` rule can be written without the literal value. **What would enable a rule:** the specific mutex name from static or dynamic analysis of the installer.
 
-**LNK/shortcut persistence referenced but not detected.** The original "Persistence via Run Keys and LNK Modification" rule title (preserved above) implies the malware also modifies Windows shortcut (`.lnk`) files as a persistence vector, but the rule's detection logic is registry-only. It never evaluates shortcut files, and no shortcut-target, icon-path, or working-directory artifact was captured in the underlying evidence to build a dedicated rule. **What would enable a rule:** the specific `.lnk` file path and the exact field(s) modified (target, icon, working directory) from static or dynamic analysis.
+**LNK/shortcut persistence referenced but not detected.** The original rule title, "Persistence via Run Keys and LNK Modification" (corrected on 2026-10-10 to "Persistence via Run Keys"), implied the malware also modifies Windows shortcut (`.lnk`) files as a persistence vector, but the rule's detection logic is registry-only. It never evaluates shortcut files, and no shortcut-target, icon-path, or working-directory artifact was captured in the underlying evidence to build a dedicated rule. **What would enable a rule:** the specific `.lnk` file path and the exact field(s) modified (target, icon, working directory) from static or dynamic analysis.
 
 **Credential-theft and IPTV-piracy components out of scope for this file.** The associated report documents browser-data and JD.com credential theft and a separate IPTV-piracy component as part of the same ecosystem, but neither is represented in any rule in this file (original or current), no API sequence, file path, or network indicator specific to credential harvesting or IPTV streaming was carried into the detection-authoring evidence. **What would enable a rule:** the specific browser-data-access API sequence or file paths (e.g. a Chromium `Login Data` access pattern) and the IPTV component's distinct network/file signature.
 

@@ -288,10 +288,10 @@ rule Arsenal237_LPE_WMIC {
 **Robustness:** 3
 **ATT&CK Coverage:** T1134.001 (Token Impersonation/Theft)
 **Confidence:** HIGH
-**Rationale:** Requires a process-access event targeting one of four SYSTEM-privileged processes (`winlogon.exe`, `lsass.exe`, `services.exe`, `csrss.exe`) with a token-query/duplicate `GrantedAccess` mask, paired with the `OpenProcessToken`/`DuplicateTokenEx`/`ImpersonateLoggedOnUser` call-trace sequence. Both selectors target fixed OS artifacts (the SYSTEM-holding process set and the Win32 token API sequence), not renameable literals, and the pairing is the technique itself, not a coincidental combination. Retiering fix: level recalibrated from `critical` to `high`. Gate 4 reserves `critical` for near-certain, effectively FP-free detections; the rule's own false-positives entry documents rare legitimate administrative-tool overlap, which caps it at `high`.
+**Rationale:** Requires a process-access event targeting one of four SYSTEM-privileged processes (`winlogon.exe`, `lsass.exe`, `services.exe`, `csrss.exe`) with a token-query/duplicate `GrantedAccess` mask, paired with a call trace that names at least one of `OpenProcessToken`, `DuplicateTokenEx` or `ImpersonateLoggedOnUser`. *Description fix 2026-10-10:* this line, the Validation and the YAML description said the three-API sequence, but the call-trace test is an OR over the three names, so one name is enough and neither co-occurrence nor order is tested. Both selectors target fixed OS artifacts (the SYSTEM-holding process set and the Win32 token API sequence), not renameable literals, and the pairing is the technique itself, not a coincidental combination. Retiering fix: level recalibrated from `critical` to `high`. Gate 4 reserves `critical` for near-certain, effectively FP-free detections; the rule's own false-positives entry documents rare legitimate administrative-tool overlap, which caps it at `high`.
 **False Positives:** Legitimate administrative or EDR tooling performing token operations against these processes (rare).
 **Blind Spots:** A rewrite performing token theft via direct syscalls, or targeting a SYSTEM-privileged process outside this four-item list, evades this rule.
-**Validation:** Replay the process-access plus API call-trace sequence against one of the four listed processes; must fire. A legitimate administrative tool accessing `services.exe` alone, without the paired API call trace, must NOT fire.
+**Validation:** Replay the process-access plus API call-trace sequence against one of the four listed processes; must fire. A legitimate administrative tool accessing `services.exe` without any of the three API names in the call trace must NOT fire.
 **Deployment:** Sysmon Event ID 10 (Process Access) telemetry, EDR process-access monitoring.
 
 ```yaml
@@ -301,13 +301,15 @@ status: experimental
 description: >-
   Detects a token-impersonation privilege-escalation sequence: process-access
   events targeting a SYSTEM-privileged process (winlogon.exe, lsass.exe,
-  services.exe, csrss.exe) paired with the OpenProcessToken, DuplicateTokenEx,
-  and ImpersonateLoggedOnUser API call trace, characteristic of
-  Arsenal-237 privilege-escalation wrappers.
+  services.exe, csrss.exe) paired with a call trace naming at least one of
+  OpenProcessToken, DuplicateTokenEx or ImpersonateLoggedOnUser (OR-matched,
+  so neither the full three-API sequence nor its order is required),
+  characteristic of Arsenal-237 privilege-escalation wrappers.
 references:
     - https://the-hunters-ledger.com/hunting-detections/arsenal-237-lpe-exe-detections/
 author: The Hunters Ledger
 date: '2026-01-25'
+modified: '2026-10-10'
 tags:
     - attack.privilege-escalation
     - attack.stealth
@@ -389,10 +391,10 @@ level: high
 **Robustness:** 3
 **ATT&CK Coverage:** T1053.005 (Scheduled Task)
 **Confidence:** HIGH
-**Rationale:** `schtasks.exe` invoked with `/create`, `/ru`, and `SYSTEM` together, from a user account that is not itself SYSTEM or an administrator, is the exact command syntax needed to escalate via this LOLBin; a rename of the calling binary does not change what `schtasks.exe` requires on its own command line. Retiering fix: the source rule's `references:` field held a plain-text caveat ("Task names are likely randomized...") instead of a URL, which is a SigmaHQ field-type violation; the caveat has been moved into this Rationale/Blind Spots prose and `references:` now points to this detection page.
+**Rationale:** `schtasks.exe` invoked with `/create`, `/ru`, and `SYSTEM` together, by an account whose name does not contain SYSTEM or Administrator, is the exact command syntax needed to escalate via this LOLBin; a rename of the calling binary does not change what `schtasks.exe` requires on its own command line. Retiering fix: the source rule's `references:` field held a plain-text caveat ("Task names are likely randomized...") instead of a URL, which is a SigmaHQ field-type violation; the caveat has been moved into this Rationale/Blind Spots prose and `references:` now points to this detection page.
 **False Positives:** System administrators manually creating SYSTEM tasks (should be reviewed); legitimate administrative scripts using `schtasks.exe`.
 **Blind Spots:** Task names are likely randomized at runtime and are not hardcoded in the malware, so detection deliberately does not rely on any specific task name; a build that creates the task without the literal `/ru SYSTEM` parameter (for example via a different privilege-specification syntax) evades this rule.
-**Validation:** Run `schtasks /create /tn <any> /ru SYSTEM` as a non-admin, non-SYSTEM user; must fire. The same command run by an account already in the `Administrators` group must NOT fire.
+**Validation:** Run `schtasks /create /tn <any> /ru SYSTEM` as a user whose account name contains neither SYSTEM nor Administrator; must fire. The same command run by an account named Administrator or SYSTEM must NOT fire. The filter matches on the account name only, so a member of the `Administrators` group with another name does fire.
 **Deployment:** Sysmon Event ID 1 (Process Creation) telemetry, EDR process-creation monitoring, Windows Security Event ID 4698.
 
 ```yaml
@@ -400,14 +402,17 @@ title: Scheduled Task Created as SYSTEM
 id: 19fbc402-5876-4f9b-905b-b5452dc7d634
 status: experimental
 description: >-
-  Detects scheduled task creation with SYSTEM privileges from a
-  non-administrative process via direct use of schtasks.exe. Task names are
+  Detects scheduled task creation with SYSTEM privileges via direct use of
+  schtasks.exe by an account whose name contains neither SYSTEM nor
+  Administrator (the rule matches the account name and does not test
+  membership in the Administrators group). Task names are
   likely randomized at runtime, so detection anchors on the /ru SYSTEM
   parameter rather than any specific task name.
 references:
     - https://the-hunters-ledger.com/hunting-detections/arsenal-237-lpe-exe-detections/
 author: The Hunters Ledger
 date: '2026-01-25'
+modified: '2026-10-10'
 tags:
     - attack.privilege-escalation
     - attack.execution
@@ -437,30 +442,32 @@ level: high
 
 ### Hunting Rules
 
-#### Named Pipe Impersonation Attack
+#### Print Spooler Named Pipe Creation (Possible Token-Impersonation Staging)
 
 **Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1134.001 (Token Impersonation/Theft)
 **Confidence:** MODERATE
-**Rationale:** `spoolss` is the real Print Spooler named-pipe name, a fixed OS artifact rather than an attacker-chosen literal, so it survives a rename of the malware binary. Retiering fix: the source selector was `PipeName|contains: ['spoolss', 'pipe']`; the bare `pipe` branch is a near-unconstrained substring match (most legitimate named pipes contain the word "pipe") that would fire on routine, unrelated IPC activity with no discriminating value, so it has been removed, leaving `spoolss` as the sole selector, with the single-item list converted to a scalar per SigmaHQ convention. Retagged from the source's T1055.001 (Dynamic-link Library Injection, unrelated to named-pipe impersonation) to T1134.001, the technique this behavior actually maps to. PipeName-only telemetry cannot correlate which process or API sequence created the pipe, so even the tightened selector stays Hunting rather than Detection; pair with process-access telemetry (see the Detection-tier Token Impersonation rule above) for higher confidence.
+**Rationale:** *Title fix 2026-10-10:* the rule was titled "Named Pipe Impersonation Attack (lpe.exe)", but the selection is a pipe-name substring with no process or image test, so any process creating a `spoolss` pipe fires it; the title and heading now say that. `spoolss` is the real Print Spooler named-pipe name, a fixed OS artifact rather than an attacker-chosen literal, so it survives a rename of the malware binary. Retiering fix: the source selector was `PipeName|contains: ['spoolss', 'pipe']`; the bare `pipe` branch is a near-unconstrained substring match (most legitimate named pipes contain the word "pipe") that would fire on routine, unrelated IPC activity with no discriminating value, so it has been removed, leaving `spoolss` as the sole selector, with the single-item list converted to a scalar per SigmaHQ convention. Retagged from the source's T1055.001 (Dynamic-link Library Injection, unrelated to named-pipe impersonation) to T1134.001, the technique this behavior actually maps to. PipeName-only telemetry cannot correlate which process or API sequence created the pipe, so even the tightened selector stays Hunting rather than Detection; pair with process-access telemetry (see the Detection-tier Token Impersonation rule above) for higher confidence.
 **False Positives:** Legitimate Print Spooler activity on hosts with print services enabled (common).
 **Deployment:** Sysmon Event ID 17/18 (Pipe Created/Connected) telemetry; correlate with process-access events on the same host for triage.
 
 ```yaml
-title: Named Pipe Impersonation Attack (lpe.exe)
+title: Print Spooler Named Pipe Creation (Possible Token-Impersonation Staging)
 id: 3a0e534f-01ba-4ef6-bdac-99a3528c5f3b
 status: experimental
 description: >-
-  Detects creation of a named pipe referencing the Print Spooler service pipe
-  name (spoolss), used to stage a token-impersonation privilege-escalation
-  attempt. PipeName-only telemetry cannot correlate which process or API
+  Detects creation of a named pipe whose name contains the Print Spooler
+  service pipe name (spoolss), which the lpe.exe wrapper's token-impersonation
+  staging is associated with. The rule tests the pipe name only and does not
+  identify the creating process, so it is not specific to lpe.exe. PipeName-only telemetry cannot correlate which process or API
   sequence created the pipe, so this is a hunting lead rather than an alert;
   pair with process-access telemetry for higher confidence.
 references:
     - https://the-hunters-ledger.com/hunting-detections/arsenal-237-lpe-exe-detections/
 author: The Hunters Ledger
 date: '2026-01-25'
+modified: '2026-10-10'
 tags:
     - attack.privilege-escalation
     - attack.stealth
@@ -478,31 +485,33 @@ falsepositives:
 level: medium
 ```
 
-#### WMIC Process Creation for Privilege Escalation
+#### WMIC Process Call Create by a User Not Named SYSTEM or Administrator
 
 **Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1047 (Windows Management Instrumentation)
 **Confidence:** MODERATE
-**Rationale:** `wmic.exe` invoked with the `process call create` syntax is a fixed, durable LOLBin command pattern, and the user filter narrows out the accounts that would legitimately run it as an administrative action. The pattern is also common in legitimate remote-administration and deployment tooling, so it does not clear the Detection bar on precision even though it is level-honest already at `medium`; carried forward as Hunting.
+**Rationale:** *Title fix 2026-10-10:* the rule was titled "for Privilege Escalation (lpe.exe)", but the selection is `wmic.exe process call create` from any account not named SYSTEM or Administrator, with no lpe.exe or escalation test; the title and heading now say that. `wmic.exe` invoked with the `process call create` syntax is a fixed, durable LOLBin command pattern, and the user filter narrows out the accounts that would legitimately run it as an administrative action. The pattern is also common in legitimate remote-administration and deployment tooling, so it does not clear the Detection bar on precision even though it is level-honest already at `medium`; carried forward as Hunting.
 **False Positives:** Legitimate administrative scripts and RMM/deployment tooling using WMIC (common); review context before treating a hit as malicious.
 **Deployment:** Sysmon Event ID 1 (Process Creation) telemetry, EDR process-creation monitoring.
 
 ```yaml
-title: WMIC Process Creation for Privilege Escalation (lpe.exe)
+title: WMIC Process Call Create by a User Not Named SYSTEM or Administrator
 id: 7e7d8199-93c4-4f53-ad05-84c4f3a08a96
 status: experimental
 description: >-
   Detects WMIC being used to create a process via the "process call create"
-  syntax from a non-administrative, non-SYSTEM user, a known LOLBin technique
-  for local or remote process creation that this wrapper uses as one of its
-  five escalation paths. WMIC process creation is also common in legitimate
+  syntax from a user whose name contains neither SYSTEM nor Administrator, a
+  known LOLBin technique for local or remote process creation that the lpe.exe
+  wrapper uses as one of its five escalation paths. The rule does not identify
+  the calling process, so it is not specific to lpe.exe. WMIC process creation is also common in legitimate
   remote-administration and deployment tooling, so this is a hunting lead
   rather than an alert.
 references:
     - https://the-hunters-ledger.com/hunting-detections/arsenal-237-lpe-exe-detections/
 author: The Hunters Ledger
 date: '2026-01-25'
+modified: '2026-10-10'
 tags:
     - attack.execution
     - attack.t1047

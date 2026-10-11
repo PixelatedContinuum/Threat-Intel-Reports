@@ -323,7 +323,7 @@ level: high
 **Confidence:** HIGH
 **False Positives:** Endpoint security products and some legitimate diagnostic tools (Task Manager's "Create dump file", ProcDump run deliberately by an administrator) open LSASS with a broad access mask; baselining against known-good process names in the environment is expected.
 **Blind Spots:** Misses a technique that reads LSASS memory through a driver or an indirect handle duplication from another process that already holds a handle, rather than opening it directly.
-**Validation:** Trigger by opening a handle to `lsass.exe` with `PROCESS_VM_READ` and `PROCESS_QUERY_INFORMATION` from an unsigned or unexpected process. A benign case that must NOT fire: Windows Defender or an EDR agent's own routine LSASS protection scan.
+**Validation:** Trigger by opening a handle to `lsass.exe` from an unsigned or unexpected process with an access mask that Sysmon reports as one of the exact `GrantedAccess` values in the selection (for example `0x1410`). The rule compares the granted mask for equality against that list, so a requested mask of `PROCESS_VM_READ | PROCESS_QUERY_INFORMATION` (`0x0410`) does not fire unless the granted value reported by Sysmon is in the list; confirm the reported mask before treating a miss as a rule failure. A benign case that must NOT fire: Windows Defender or an EDR agent's own routine LSASS protection scan.
 **Deployment:** Endpoint EDR with Sysmon Event ID 10 (process access) enabled.
 
 ```yaml
@@ -338,6 +338,7 @@ references:
     - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/
 author: The Hunters Ledger
 date: '2026-09-06'
+modified: '2026-10-10'
 tags:
     - attack.credential-access
     - attack.t1003.001
