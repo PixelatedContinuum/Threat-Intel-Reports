@@ -306,7 +306,7 @@ tags:
 logsource:
     product: linux
     service: auditd
-    definition: 'Requires auditd with an execve audit rule installed so iptables invocations are logged as type=EXECVE records. Raw EXECVE records carry each argument in its own aN field; this rule tests single tokens, so it does not depend on argv reconstruction.'
+    definition: 'Requires auditd with an execve audit rule installed so iptables invocations are logged as type=EXECVE records. Raw EXECVE records carry each argument in its own aN field; this rule tests single tokens, so it does not depend on argv reconstruction. The rule also tests `a0` (the executable name) with `a0|endswith`, so the joining pipeline must keep the `a0` field next to the joined string; a pipeline that replaces the argument fields with one string and drops `a0` does not match. Whether the SOC pipeline keeps `a0` is NOT CHECKED.'
 detection:
     cmd:
         type: 'EXECVE'
@@ -720,7 +720,7 @@ tags:
 logsource:
     product: linux
     service: auditd
-    definition: 'Requires auditd with an execve audit rule installed, and a pipeline that joins the EXECVE argument vector into one command-line string. Raw EXECVE records carry each argument in its own aN field (--dport and 22 separately), where the multi-token string in this rule does not occur. No such profile has been demonstrated for this rule.'
+    definition: 'Requires auditd with an execve audit rule installed, and a pipeline that joins the EXECVE argument vector into one command-line string. Raw EXECVE records carry each argument in its own aN field (--dport and 22 separately), where the multi-token string in this rule does not occur. No such profile has been demonstrated for this rule. The rule also tests `a0` (the executable name) with `a0|endswith`, so the joining pipeline must keep the `a0` field next to the joined string; a pipeline that replaces the argument fields with one string and drops `a0` does not match. Whether the SOC pipeline keeps `a0` is NOT CHECKED.'
 detection:
     cmd:
         type: 'EXECVE'
@@ -774,6 +774,7 @@ tags:
 logsource:
     product: linux
     service: auditd
+    definition: 'Requires auditd with an execve audit rule installed so ipset invocations are logged as type=EXECVE records. The rule matches the tokens create and mitm_exclude separately, so it does not depend on argv reconstruction. The rule also tests `a0` (the executable name) with `a0|endswith`, so the joining pipeline must keep the `a0` field next to the joined string; a pipeline that replaces the argument fields with one string and drops `a0` does not match. Whether the SOC pipeline keeps `a0` is NOT CHECKED.'
 detection:
     cmd:
         type: 'EXECVE'
@@ -857,8 +858,8 @@ title: Iptables INPUT Drop Rule for Non-Loopback Traffic to a Specific Port
 id: 1ced014b-28fa-4ead-af00-af46a1b931c9
 status: experimental
 description: >-
-  Detects an iptables command line adding an INPUT-chain DROP with a --dport match and a
-  non-loopback input-interface match (! -i lo), the shape of a rule that drops all
+  Detects an iptables command line containing an INPUT-chain DROP with a --dport match and a
+  non-loopback input-interface match (! -i lo); no -A or -I verb is tested, so a deletion (-D) or check (-C) of such a rule matches too, the shape of a rule that drops all
   non-loopback traffic to a specific port. The port number, and whether it is a high
   port, are not tested. This is the exact mechanism a self-hosted SSH interception platform uses to keep its
   redirect-target listener invisible to external port scanning while still accepting the
@@ -876,7 +877,7 @@ tags:
 logsource:
     product: linux
     service: auditd
-    definition: 'Requires auditd with an execve audit rule installed, and a pipeline that joins the EXECVE argument vector into one command-line string. Raw EXECVE records carry each argument in its own aN field (-j and DROP separately, ! -i lo as three fields), where the multi-token strings in this rule do not occur. No such profile has been demonstrated for this rule.'
+    definition: 'Requires auditd with an execve audit rule installed, and a pipeline that joins the EXECVE argument vector into one command-line string. Raw EXECVE records carry each argument in its own aN field (-j and DROP separately, ! -i lo as three fields), where the multi-token strings in this rule do not occur. No such profile has been demonstrated for this rule. The rule also tests `a0` (the executable name) with `a0|endswith`, so the joining pipeline must keep the `a0` field next to the joined string; a pipeline that replaces the argument fields with one string and drops `a0` does not match. Whether the SOC pipeline keeps `a0` is NOT CHECKED.'
 detection:
     cmd:
         type: 'EXECVE'
@@ -950,7 +951,7 @@ level: medium
 **ATT&CK Coverage:** T1571 (Non-Standard Port)
 **ATT&CK Note:** The event carries no protocol or TLS field, so Web Protocols (T1071.001) is not claimed.
 **Confidence:** LOW alone; raised by combining with the process-launch and file-artifact indicators above
-**False Positives:** Any legitimate Python service or client communicating with an unrelated API or management interface bound to port 8443 or 8444. These are common enough alternate HTTPS ports that this selector is broad by design; any TCP connection to them matches, TLS or not.
+**False Positives:** Any legitimate Python service or client communicating with an unrelated API or management interface bound to port 8443 or 8444. These are common enough alternate HTTPS ports that this selector is broad by design; any outbound connection event to them matches, whatever the transport protocol (the event carries no protocol test) and whether or not TLS follows.
 **Blind Spots:** Cannot see the `X-Token` header, the request body, or the specific endpoint path, since those sit inside the TLS payload; this rule sees only that a Python process initiated a connection to one of two ports; whether TLS follows is not tested. It also cannot see the reporting cadence (roughly 300 seconds for a heartbeat, 600 seconds for an exclusion-list poll), which would otherwise raise confidence, because that requires longer-window correlation this rule does not attempt.
 **Deployment:** Linux EDR or SIEM with process-to-network correlation; use as a pivot alongside the process-launch and file-artifact rules above rather than as a standalone alert.
 
@@ -959,7 +960,7 @@ title: Python Process Making an Outbound Connection to a Non-Standard High Port
 id: 770ec23a-3204-437f-8560-c8610c68e2b0
 status: experimental
 description: >-
-  Detects a python3 process initiating an outbound connection to destination port 8443 or
+  Detects a process whose image path contains python3 (python3.11 and a directory named python3 also match) initiating an outbound connection to destination port 8443 or
   8444 (the event does not show whether TLS follows), consistent with a relay component of a self-hosted SSH interception
   platform reporting captured credentials to its receiver and polling for target and
   exclusion-list updates. This selector is intentionally broad, since many legitimate

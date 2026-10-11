@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--7cd45efe-4405-4098-9d89-9daa859447a5",
+    "id": "bundle--d9c81902-2192-4a8d-89d9-d592bf39f82a",
     "objects": [
         {
             "type": "identity",
@@ -232,15 +232,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--387eed33-5331-55e3-ba82-1a1a5a62cc69",
+            "id": "indicator--f488892b-b696-59e0-b1bd-084652280101",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-11T07:42:12.135423Z",
-            "modified": "2026-10-11T07:42:12.135423Z",
-            "name": "UAC Disabling Attempt by reg.exe Setting EnableLUA to 0 From cmd.exe (Remcos Behavior)",
+            "created": "2026-10-11T08:16:39.055534Z",
+            "modified": "2026-10-11T08:16:39.055534Z",
+            "name": "UAC Disabling Attempt by reg.exe Setting EnableLUA to 0 From cmd.exe",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: UAC Disabling Attempt by reg.exe Setting EnableLUA to 0 From cmd.exe (Remcos Behavior)\nid: 482a813a-346e-450c-8ff7-4b449a26ad7d\nstatus: experimental\ndescription: >-\n  Detects reg.exe, launched by cmd.exe, adding the HKLM Policies\\System\n  EnableLUA value as REG_DWORD with data 0 (the value written as /d 0 followed\n  by a space or ending the line), an attempt to disable User Account Control (the event is the command line, not the resulting registry state; see the companion registry-state rule). The\n  report records Remcos doing this ahead of persistence installation. The\n  rule has no Remcos-specific test: any cmd.exe-launched reg.exe that turns\n  UAC off matches, and so does the same change made by an administrator or a\n  management tool.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/remcos-opendirectory-detections/\nauthor: The Hunters Ledger\ndate: '2026-02-04'\ntags:\n    - attack.privilege-escalation\n    - attack.t1548.002\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_img:\n        - Image|endswith: '\\reg.exe'\n        - OriginalFileName: 'reg.exe'\n    selection_cli:\n        CommandLine|contains|all:\n            - 'ADD'\n            - 'HKLM'\n            - 'REG_DWORD'\n    selection_key:\n        CommandLine|contains:\n            - '\\Policies\\System /v EnableLUA '\n            - '\\Policies\\System\" /v EnableLUA '\n    selection_value_mid:\n        CommandLine|contains: '/d 0 '\n    selection_value_end:\n        CommandLine|endswith: '/d 0'\n    selection_parent:\n        ParentImage|endswith: '\\cmd.exe'\n    condition: selection_img and selection_cli and selection_key and (selection_value_mid or selection_value_end) and selection_parent\nfalsepositives:\n    - Legitimate system administration (rare)\n    - Enterprise management tools (SCCM, Intune) - verify digital signature\nlevel: high",
+            "pattern": "title: UAC Disabling Attempt by reg.exe Setting EnableLUA to 0 From cmd.exe\nid: 482a813a-346e-450c-8ff7-4b449a26ad7d\nstatus: experimental\ndescription: >-\n  Detects reg.exe, launched by cmd.exe, adding the HKLM Policies\\System\n  EnableLUA value as REG_DWORD with data 0 (the value written as /d 0 followed\n  by a space or ending the line), an attempt to disable User Account Control (the event is the command line, not the resulting registry state; see the companion registry-state rule). The\n  report records Remcos doing this ahead of persistence installation. The\n  rule has no Remcos-specific test: any cmd.exe-launched reg.exe that turns\n  UAC off matches, and so does the same change made by an administrator or a\n  management tool.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/remcos-opendirectory-detections/\nauthor: The Hunters Ledger\ndate: '2026-02-04'\ntags:\n    - attack.privilege-escalation\n    - attack.t1548.002\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_img:\n        - Image|endswith: '\\reg.exe'\n        - OriginalFileName: 'reg.exe'\n    selection_cli:\n        CommandLine|contains|all:\n            - 'ADD'\n            - 'HKLM'\n            - 'REG_DWORD'\n    selection_key:\n        CommandLine|contains:\n            - '\\Policies\\System /v EnableLUA '\n            - '\\Policies\\System\" /v EnableLUA '\n    selection_value_mid:\n        CommandLine|contains: '/d 0 '\n    selection_value_end:\n        CommandLine|endswith: '/d 0'\n    selection_parent:\n        ParentImage|endswith: '\\cmd.exe'\n    condition: selection_img and selection_cli and selection_key and (selection_value_mid or selection_value_end) and selection_parent\nfalsepositives:\n    - Legitimate system administration (rare)\n    - Enterprise management tools (SCCM, Intune) - verify digital signature\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-02-04T00:00:00Z",
             "labels": [
@@ -253,15 +253,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--4893705e-4028-5690-9cf0-6c33f4b76116",
+            "id": "indicator--17548ba3-2ffd-5627-9559-889c8f218355",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-11T07:42:12.135511Z",
-            "modified": "2026-10-11T07:42:12.135511Z",
-            "name": "Winlogon Userinit Registry Value Changed From the Default (Remcos Persistence Pattern)",
+            "created": "2026-10-11T08:16:39.055625Z",
+            "modified": "2026-10-11T08:16:39.055625Z",
+            "name": "Winlogon Userinit Registry Value Changed From the Default",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Winlogon Userinit Registry Value Changed From the Default (Remcos Persistence Pattern)\nid: 208b4736-f00a-44bd-b71e-1230ece13876\nstatus: experimental\ndescription: >-\n  Detects a write to the Winlogon Userinit registry value whose data is\n  anything other than the default C:\\WINDOWS\\system32\\userinit.exe, (with\n  the trailing comma). The report records Remcos RAT appending its own\n  executable path after the default, a rare persistence technique that runs\n  the payload at every user logon before the desktop loads. The rule tests\n  only that the value differs from the default, so an appended path, a\n  replaced value and any other change all match.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/remcos-opendirectory-detections/\nauthor: The Hunters Ledger\ndate: '2026-02-04'\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1547.004\n    - detection.emerging-threats\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection:\n        TargetObject|endswith: '\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\Userinit'\n    filter_legitimate:\n        Details: 'C:\\WINDOWS\\system32\\userinit.exe,'\n    condition: selection and not filter_legitimate\nfalsepositives:\n    - Administrators or management tools that rewrite the Userinit value\n    - A legitimate spelling of the default that differs from the filtered string (case, or a missing trailing comma)\nlevel: high",
+            "pattern": "title: Winlogon Userinit Registry Value Changed From the Default\nid: 208b4736-f00a-44bd-b71e-1230ece13876\nstatus: experimental\ndescription: >-\n  Detects a write to the Winlogon Userinit registry value whose data is\n  anything other than the default C:\\WINDOWS\\system32\\userinit.exe, (with\n  the trailing comma). The report records Remcos RAT appending its own\n  executable path after the default, a rare persistence technique that runs\n  the payload at every user logon before the desktop loads. The rule tests\n  only that the value differs from the default, so an appended path, a\n  replaced value and any other change all match.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/remcos-opendirectory-detections/\nauthor: The Hunters Ledger\ndate: '2026-02-04'\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1547.004\n    - detection.emerging-threats\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection:\n        TargetObject|endswith: '\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\Userinit'\n    filter_legitimate:\n        Details: 'C:\\WINDOWS\\system32\\userinit.exe,'\n    condition: selection and not filter_legitimate\nfalsepositives:\n    - Administrators or management tools that rewrite the Userinit value\n    - A legitimate spelling of the default that differs from the filtered string (case, or a missing trailing comma)\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-02-04T00:00:00Z",
             "labels": [
@@ -562,12 +562,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--3fe3ab91-4ff5-5928-86bb-a666cfac1b9d",
+            "id": "relationship--72a7b8f3-b5a1-5fbf-a13f-efb584937960",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-11T07:42:12.137373Z",
-            "modified": "2026-10-11T07:42:12.137373Z",
+            "created": "2026-10-11T08:16:39.057437Z",
+            "modified": "2026-10-11T08:16:39.057437Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--387eed33-5331-55e3-ba82-1a1a5a62cc69",
+            "source_ref": "indicator--f488892b-b696-59e0-b1bd-084652280101",
             "target_ref": "malware--cb6b9f0e-67c7-5303-9a9f-caa8d412d9f5",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -576,12 +576,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--717dbd00-7a47-5354-ae50-0b41b5e34caf",
+            "id": "relationship--ff22c02e-b707-5913-a6d2-799f2ac44271",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-11T07:42:12.13745Z",
-            "modified": "2026-10-11T07:42:12.13745Z",
+            "created": "2026-10-11T08:16:39.057509Z",
+            "modified": "2026-10-11T08:16:39.057509Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--4893705e-4028-5690-9cf0-6c33f4b76116",
+            "source_ref": "indicator--17548ba3-2ffd-5627-9559-889c8f218355",
             "target_ref": "malware--cb6b9f0e-67c7-5303-9a9f-caa8d412d9f5",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -677,7 +677,7 @@
             "id": "report--cfe4d76a-a030-5b5a-874a-5f584b6c436b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-09-19T20:28:01.356702Z",
-            "modified": "2026-10-11T07:42:12.138186Z",
+            "modified": "2026-10-11T08:16:39.058291Z",
             "name": "Remcos OpenDirectory Campaign",
             "report_types": [
                 "threat-report"
@@ -695,8 +695,8 @@
                 "indicator--2c1310a1-3b0d-552c-b40b-c620735ed29a",
                 "indicator--079f43e5-a0ae-574b-a7c7-68fffc2fa464",
                 "indicator--23bb637b-379c-52d8-b1fb-f7491476ba0c",
-                "indicator--387eed33-5331-55e3-ba82-1a1a5a62cc69",
-                "indicator--4893705e-4028-5690-9cf0-6c33f4b76116",
+                "indicator--f488892b-b696-59e0-b1bd-084652280101",
+                "indicator--17548ba3-2ffd-5627-9559-889c8f218355",
                 "indicator--2772273f-81ac-5f2f-857d-1c6306d4dadf",
                 "indicator--7b519eee-1bdb-5792-afc2-2909817d8e4b",
                 "indicator--00879627-3e5c-5e9e-bd99-a1d3b6d340ab",
@@ -714,8 +714,8 @@
                 "relationship--88b20c66-9316-5985-b9df-a1abecd00695",
                 "relationship--8ecac126-b91e-57c3-ba31-12a7fc911930",
                 "relationship--78d56699-61d8-5fc4-ad13-f4868a546a78",
-                "relationship--3fe3ab91-4ff5-5928-86bb-a666cfac1b9d",
-                "relationship--717dbd00-7a47-5354-ae50-0b41b5e34caf",
+                "relationship--72a7b8f3-b5a1-5fbf-a13f-efb584937960",
+                "relationship--ff22c02e-b707-5913-a6d2-799f2ac44271",
                 "relationship--0a7a25dc-10c6-59ab-bebf-3285f933c4ea",
                 "relationship--9c8747c8-dce8-5415-86c7-58609c993e62",
                 "relationship--8ddd20f5-fbba-5875-aa08-0179d73f3905",

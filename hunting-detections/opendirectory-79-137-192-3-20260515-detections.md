@@ -539,7 +539,7 @@ level: high
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (registry telemetry).
 
 ```yaml
-title: Rhadamanthys SibCode Software Registry Key Persistence Marker
+title: Rhadamanthys SibCode Software Registry Key Marker
 id: a4f1e2c8-3d7b-4f9a-9c2e-2c5e7f8d9a01
 status: experimental
 description: >-

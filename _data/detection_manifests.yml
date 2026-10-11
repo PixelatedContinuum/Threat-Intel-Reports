@@ -3999,7 +3999,7 @@ opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detect
     engine: sigma
     tier: Detection
     fence: 6
-    hash: "2c398124"
+    hash: "a7abd2d7"
     head: "title: Netfilter Loop-Prevention Mark Consistent"
     robustness: 2
     confidence: "HIGH"
@@ -4044,7 +4044,7 @@ opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detect
     engine: sigma
     tier: Hunting
     fence: 11
-    hash: "058df8db"
+    hash: "beff1668"
     head: "title: Iptables NAT Redirect of Destination Port"
     robustness: 2
     confidence: "MODERATE"
@@ -4053,7 +4053,7 @@ opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detect
     engine: sigma
     tier: Hunting
     fence: 12
-    hash: "6cbb4a10"
+    hash: "efb012f2"
     head: "title: Ipset Named mitm_exclude Created id: 580b"
     robustness: 1
     confidence: "MODERATE"
@@ -4071,7 +4071,7 @@ opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detect
     engine: sigma
     tier: Hunting
     fence: 14
-    hash: "b3e7ea5e"
+    hash: "66fd33f4"
     head: "title: Iptables INPUT Drop Rule for Non-Loopback"
     robustness: 1
     confidence: "MODERATE"
@@ -4089,7 +4089,7 @@ opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detect
     engine: sigma
     tier: Hunting
     fence: 16
-    hash: "acb3d02f"
+    hash: "72024a61"
     head: "title: Python Process Making an Outbound Connect"
     robustness: 1
     confidence: "LOW alone; raised by combining with the process-launch and file-artifact indicators above"
@@ -4385,7 +4385,7 @@ opendirectory-62-60-237-100-20260506-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1620, T1055.012, T1480, T1027]
-  - name: "Multi-Vector Lure: GrimResource MSC + Mega.io Payload Fetch"
+  - name: "Multi-Vector Lure: GrimResource Redirect String or Mega.io Bucket Path With a Corroborator"
     engine: yara
     tier: Hunting
     fence: 2
@@ -4706,7 +4706,7 @@ opendirectory-79-137-192-3-20260515-detections:
     engine: sigma
     tier: Hunting
     fence: 10
-    hash: "04255a80"
+    hash: "22060b51"
     head: "title: Rhadamanthys SibCode Software Registry Ke"
     robustness: 1
     confidence: "HIGH"
@@ -4803,20 +4803,20 @@ remcos-opendirectory-detections:
     robustness: 1
     confidence: "MODERATE"
     attack: [T1056.001, T1113, T1123]
-  - name: "UAC Disabling Attempt by reg.exe Setting EnableLUA to 0 From cmd.exe (Remcos Behavior)"
+  - name: "UAC Disabling Attempt by reg.exe Setting EnableLUA to 0 From cmd.exe"
     engine: sigma
     tier: Detection
     fence: 7
-    hash: "38da94f4"
+    hash: "3e055762"
     head: "title: UAC Disabling Attempt by reg.exe Setting "
     robustness: 3
     confidence: "HIGH"
     attack: [T1548.002]
-  - name: "Winlogon Userinit Registry Value Changed From the Default (Remcos Persistence Pattern)"
+  - name: "Winlogon Userinit Registry Value Changed From the Default"
     engine: sigma
     tier: Detection
     fence: 8
-    hash: "c6da3360"
+    hash: "16647587"
     head: "title: Winlogon Userinit Registry Value Changed "
     robustness: 3
     confidence: "HIGH"
@@ -4939,12 +4939,12 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
     robustness: 2
     confidence: "MODERATE (HIGH for the universal-subset criteria as a class; MODERATE for any individual file match without corroborating context)"
     attack: [T1059.006, T1587.001]
-  - name: "MAL_Python_StealthAgent_AntiAnalysis_Keyword_Bucket"
+  - name: "MAL_StealthAgent_AntiAnalysis_Keyword_Bucket"
     engine: yara
     tier: Hunting
     fence: 7
-    hash: "f4971a05"
-    head: "rule MAL_Python_StealthAgent_AntiAnalysis_Keywor"
+    hash: "44bb2391"
+    head: "rule MAL_StealthAgent_AntiAnalysis_Keyword_Bucke"
     robustness: 2
     confidence: "MODERATE"
     attack: [T1014, T1059.006, T1497.001, T1587.001]
@@ -5317,7 +5317,7 @@ russian-gemini-credential-mill-213.165.51.115-detections:
     head: "alert udp $HOME_NET any -> $EXTERNAL_NET 7844 (m"
     robustness: 1
     confidence: "MODERATE"
-    attack: [T1572, T1090.004]
+    attack: [T1572]
 seasia-gov-exploitation-toolkit-144-172-106-236-detections:
   - name: "Zimbra Web Shell Decoy Banner (webshell_zimbra_security_monitor_jsp)"
     engine: yara
@@ -5648,7 +5648,7 @@ shadow-xworm-opendirectory-detections:
     engine: sigma
     tier: Detection
     fence: 7
-    hash: "b85087d3"
+    hash: "69796cfb"
     head: "title: One-Minute Highest-Privilege Scheduled Ta"
     robustness: 2
     confidence: "HIGH"
@@ -5666,7 +5666,7 @@ shadow-xworm-opendirectory-detections:
     engine: sigma
     tier: Hunting
     fence: 9
-    hash: "99e18beb"
+    hash: "59fb6550"
     head: "title: AMSI Library Load by a Process Outside Sy"
     robustness: 3
     confidence: "HIGH (technique); MEDIUM precision as written"

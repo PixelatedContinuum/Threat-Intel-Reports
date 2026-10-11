@@ -2276,12 +2276,12 @@
     - tactic: "Execution"
       id: "T1059.005"
       name: "Visual Basic"
-      rules: "Multi-Vector Lure: GrimResource MSC + Mega.io Payload Fetch (YARA, Hunting)"
+      rules: "Multi-Vector Lure: GrimResource Redirect String or Mega.io Bucket Path With a Corroborator (YARA, Hunting)"
       count: 1
     - tactic: "Execution"
       id: "T1059.007"
       name: "JavaScript"
-      rules: "Multi-Vector Lure: GrimResource MSC + Mega.io Payload Fetch (YARA, Hunting)"
+      rules: "Multi-Vector Lure: GrimResource Redirect String or Mega.io Bucket Path With a Corroborator (YARA, Hunting)"
       count: 1
     - tactic: "Execution"
       id: "T1204.002"
@@ -2321,7 +2321,7 @@
     - tactic: "Stealth"
       id: "T1218.014"
       name: "MMC"
-      rules: "Multi-Vector Lure: GrimResource MSC + Mega.io Payload Fetch (YARA, Hunting); HijackLoader GrimResource MMC Spawning Mshta or Rundll32 for Payload Execution (SIGMA, Detection); HijackLoader GrimResource MMC Spawning PowerShell Adding Defender Exclusion (SIGMA, Detection)"
+      rules: "Multi-Vector Lure: GrimResource Redirect String or Mega.io Bucket Path With a Corroborator (YARA, Hunting); HijackLoader GrimResource MMC Spawning Mshta or Rundll32 for Payload Execution (SIGMA, Detection); HijackLoader GrimResource MMC Spawning PowerShell Adding Defender Exclusion (SIGMA, Detection)"
       count: 3
     - tactic: "Stealth"
       id: "T1480"
@@ -2356,7 +2356,7 @@
     - tactic: "Command and Control"
       id: "T1105"
       name: "Ingress Tool Transfer"
-      rules: "Multi-Vector Lure: GrimResource MSC + Mega.io Payload Fetch (YARA, Hunting)"
+      rules: "Multi-Vector Lure: GrimResource Redirect String or Mega.io Bucket Path With a Corroborator (YARA, Hunting)"
       count: 1
     - tactic: "Command and Control"
       id: "T1573.001"
@@ -2516,12 +2516,12 @@
     - tactic: "Persistence"
       id: "T1547.004"
       name: "Winlogon Helper DLL"
-      rules: "Remcos UAC Bypass and Persistence (YARA, Detection); Winlogon Userinit Registry Value Changed From the Default (Remcos Persistence Pattern) (SIGMA, Detection); winlogon.exe Child Process Running From an AppData Path (Userinit Hijack Pattern) (SIGMA, Detection)"
+      rules: "Remcos UAC Bypass and Persistence (YARA, Detection); Winlogon Userinit Registry Value Changed From the Default (SIGMA, Detection); winlogon.exe Child Process Running From an AppData Path (Userinit Hijack Pattern) (SIGMA, Detection)"
       count: 3
     - tactic: "Privilege Escalation"
       id: "T1548.002"
       name: "Bypass User Account Control"
-      rules: "Remcos OpenDirectory Campaign Mutex and Install Artifacts (YARA, Detection); Remcos UAC Bypass and Persistence (YARA, Detection); UAC Disabling Attempt by reg.exe Setting EnableLUA to 0 From cmd.exe (Remcos Behavior) (SIGMA, Detection); EnableLUA Registry Value Set to Disable User Account Control (Registry State) (SIGMA, Detection)"
+      rules: "Remcos OpenDirectory Campaign Mutex and Install Artifacts (YARA, Detection); Remcos UAC Bypass and Persistence (YARA, Detection); UAC Disabling Attempt by reg.exe Setting EnableLUA to 0 From cmd.exe (SIGMA, Detection); EnableLUA Registry Value Set to Disable User Account Control (Registry State) (SIGMA, Detection)"
       count: 4
     - tactic: "Stealth"
       id: "T1036"
@@ -2586,7 +2586,7 @@
     - tactic: "Resource Development"
       id: "T1587.001"
       name: "Malware"
-      rules: "MAL_Bash_Pandora_Dropper_Family (YARA, Detection); MAL_JSON_Rovodev_SessionContext_FileWrite_Authoring (YARA, Detection); MAL_Python_Matrix_C2_Framework_Family (YARA, Hunting); MAL_Python_AIGenerated_OffensiveCode_Universal_Subset (YARA, Hunting); MAL_Python_StealthAgent_AntiAnalysis_Keyword_Bucket (YARA, Hunting); MAL_Markdown_Rovodev_WhatINeed_OperatorPrompt (YARA, Hunting); Rovodev AI Agent Sessions Directory or Session Context File Created on a Linux Host (SIGMA, Hunting); Rovodev Runtime Log rovodev.log Created on a Linux Host (Scoping Lead for AI-Augmented Offensive Operations) (SIGMA, Hunting); Pandora-Mirai Naku Binary Distribution URI Path (SURICATA, Detection); Pandora-Mirai Pandoras-Box Binary Distribution URI Path (SURICATA, Detection); Pandora-Mirai bot.sh Reseed Download URI Pattern (SURICATA, Hunting); Naku Binary Reference in HTTP URI (Bare Substring) (SURICATA, Hunting)"
+      rules: "MAL_Bash_Pandora_Dropper_Family (YARA, Detection); MAL_JSON_Rovodev_SessionContext_FileWrite_Authoring (YARA, Detection); MAL_Python_Matrix_C2_Framework_Family (YARA, Hunting); MAL_Python_AIGenerated_OffensiveCode_Universal_Subset (YARA, Hunting); MAL_StealthAgent_AntiAnalysis_Keyword_Bucket (YARA, Hunting); MAL_Markdown_Rovodev_WhatINeed_OperatorPrompt (YARA, Hunting); Rovodev AI Agent Sessions Directory or Session Context File Created on a Linux Host (SIGMA, Hunting); Rovodev Runtime Log rovodev.log Created on a Linux Host (Scoping Lead for AI-Augmented Offensive Operations) (SIGMA, Hunting); Pandora-Mirai Naku Binary Distribution URI Path (SURICATA, Detection); Pandora-Mirai Pandoras-Box Binary Distribution URI Path (SURICATA, Detection); Pandora-Mirai bot.sh Reseed Download URI Pattern (SURICATA, Hunting); Naku Binary Reference in HTTP URI (Bare Substring) (SURICATA, Hunting)"
       count: 12
     - tactic: "Resource Development"
       id: "T1588.001"
@@ -2611,7 +2611,7 @@
     - tactic: "Execution"
       id: "T1059.006"
       name: "Python"
-      rules: "MAL_Python_Matrix_C2_Framework_Family (YARA, Hunting); MAL_Python_AIGenerated_OffensiveCode_Universal_Subset (YARA, Hunting); MAL_Python_StealthAgent_AntiAnalysis_Keyword_Bucket (YARA, Hunting); MAL_Markdown_Rovodev_WhatINeed_OperatorPrompt (YARA, Hunting)"
+      rules: "MAL_Python_Matrix_C2_Framework_Family (YARA, Hunting); MAL_Python_AIGenerated_OffensiveCode_Universal_Subset (YARA, Hunting); MAL_StealthAgent_AntiAnalysis_Keyword_Bucket (YARA, Hunting); MAL_Markdown_Rovodev_WhatINeed_OperatorPrompt (YARA, Hunting)"
       count: 4
     - tactic: "Execution"
       id: "T1059.007"
@@ -2631,7 +2631,7 @@
     - tactic: "Stealth"
       id: "T1014"
       name: "Rootkit"
-      rules: "MAL_Python_StealthAgent_AntiAnalysis_Keyword_Bucket (YARA, Hunting); Process Launched with /dev/watchdog on the Command Line, Mirai-Canonical Persistence Tactic (SIGMA, Hunting)"
+      rules: "MAL_StealthAgent_AntiAnalysis_Keyword_Bucket (YARA, Hunting); Process Launched with /dev/watchdog on the Command Line, Mirai-Canonical Persistence Tactic (SIGMA, Hunting)"
       count: 2
     - tactic: "Stealth"
       id: "T1027"
@@ -2641,7 +2641,7 @@
     - tactic: "Stealth"
       id: "T1497.001"
       name: "System Checks"
-      rules: "MAL_Python_StealthAgent_AntiAnalysis_Keyword_Bucket (YARA, Hunting)"
+      rules: "MAL_StealthAgent_AntiAnalysis_Keyword_Bucket (YARA, Hunting)"
       count: 1
     - tactic: "Stealth"
       id: "T1564.001"
@@ -2756,8 +2756,8 @@
     - tactic: "Command and Control"
       id: "T1090.004"
       name: "Domain Fronting"
-      rules: "Cloudflared Access TCP Tunnel to Potentially Unauthorized Hostname (SIGMA, Hunting); cloudflared Tunnel Port Egress (UDP 7844 to Any External Host) (SURICATA, Hunting)"
-      count: 2
+      rules: "Cloudflared Access TCP Tunnel to Potentially Unauthorized Hostname (SIGMA, Hunting)"
+      count: 1
     - tactic: "Command and Control"
       id: "T1105"
       name: "Ingress Tool Transfer"

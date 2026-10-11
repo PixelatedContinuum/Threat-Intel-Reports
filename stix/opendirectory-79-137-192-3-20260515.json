@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--244d627e-21a1-4059-bf80-37e93e923982",
+    "id": "bundle--ca7f739d-7940-4dde-97a1-4de27a41c7d6",
     "objects": [
         {
             "type": "identity",
@@ -1823,15 +1823,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--d723a7c6-e7b1-551f-8759-1695ed3535b4",
+            "id": "indicator--0256338d-196e-533b-9faa-09d7d47cc2af",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:18.788284Z",
-            "modified": "2026-10-11T07:42:11.272105Z",
-            "name": "Rhadamanthys SibCode Software Registry Key Persistence Marker",
+            "created": "2026-10-11T08:16:38.227874Z",
+            "modified": "2026-10-11T08:16:38.227874Z",
+            "name": "Rhadamanthys SibCode Software Registry Key Marker",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Rhadamanthys SibCode Software Registry Key Persistence Marker\nid: a4f1e2c8-3d7b-4f9a-9c2e-2c5e7f8d9a01\nstatus: experimental\ndescription: >-\n  Detects creation or modification of HKU\\<SID>\\Software\\SibCode\\sn registry value, a family-stable\n  Rhadamanthys execution marker observed across multiple sibling Stage-2 sandbox runs (Dapato dropper\n  variants e827d13c, 457aecd8, bc9fe5e9). Per-instance value is a license/build timestamp from the MaaS\n  panel. No known benign software writes this key.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-15\ntags:\n    - attack.persistence\n    - attack.defense-impairment\n    - attack.t1112\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: registry_set\ndetection:\n    selection_key:\n        TargetObject|endswith: '\\Software\\SibCode\\sn'\n    selection_hive:\n        TargetObject|startswith: 'HKU\\'\n    condition: selection_key and selection_hive\nfalsepositives:\n    - >-\n      Unlikely. The SibCode\\sn key path has no documented benign software using it.\nlevel: medium",
+            "pattern": "title: Rhadamanthys SibCode Software Registry Key Marker\nid: a4f1e2c8-3d7b-4f9a-9c2e-2c5e7f8d9a01\nstatus: experimental\ndescription: >-\n  Detects creation or modification of HKU\\<SID>\\Software\\SibCode\\sn registry value, a family-stable\n  Rhadamanthys execution marker observed across multiple sibling Stage-2 sandbox runs (Dapato dropper\n  variants e827d13c, 457aecd8, bc9fe5e9). Per-instance value is a license/build timestamp from the MaaS\n  panel. No known benign software writes this key.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-15\ntags:\n    - attack.persistence\n    - attack.defense-impairment\n    - attack.t1112\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: registry_set\ndetection:\n    selection_key:\n        TargetObject|endswith: '\\Software\\SibCode\\sn'\n    selection_hive:\n        TargetObject|startswith: 'HKU\\'\n    condition: selection_key and selection_hive\nfalsepositives:\n    - >-\n      Unlikely. The SibCode\\sn key path has no documented benign software using it.\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-05-15T00:00:00Z",
             "labels": [
@@ -3730,12 +3730,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--534bed90-2fd5-5b52-b8d1-c92637925e97",
+            "id": "relationship--a2a16573-638d-52c2-8a34-0e0263956ec5",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:18.800465Z",
-            "modified": "2026-10-01T19:54:18.800465Z",
+            "created": "2026-10-11T08:16:38.239833Z",
+            "modified": "2026-10-11T08:16:38.239833Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--d723a7c6-e7b1-551f-8759-1695ed3535b4",
+            "source_ref": "indicator--0256338d-196e-533b-9faa-09d7d47cc2af",
             "target_ref": "malware--eddf9215-1ace-5eed-ad46-bba0f13b9bdf",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -11657,7 +11657,7 @@
             "id": "report--11bf7544-c216-50a4-bf64-e2aa27a28014",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.840576Z",
-            "modified": "2026-10-11T07:42:11.331432Z",
+            "modified": "2026-10-11T08:16:38.284584Z",
             "name": "Multi-Cluster Open-Directory Tenancy on 79.137.192.3 — Rhadamanthys MaaS Customer Loader, BellaMain Turkish PhaaS, and Inkognito VPN/Phishing",
             "report_types": [
                 "threat-report"
@@ -11784,7 +11784,7 @@
                 "indicator--d7f658f8-9a24-51c7-8f79-cf000e21e932",
                 "indicator--e4d406c5-b7e4-5b72-9422-e4bf412b674f",
                 "indicator--65ac2665-af16-5b66-9e9c-c146faeb1c37",
-                "indicator--d723a7c6-e7b1-551f-8759-1695ed3535b4",
+                "indicator--0256338d-196e-533b-9faa-09d7d47cc2af",
                 "indicator--295cf947-463c-55e5-a83f-487396eee11e",
                 "malware--91ba3c3b-736b-57de-a453-6960c6e35a35",
                 "malware--7ad52e88-ac07-5498-b1a3-c10a4a88bf63",
@@ -11904,7 +11904,7 @@
                 "relationship--0ff45a44-f53d-5f4d-be5e-af1fb09910a0",
                 "relationship--cb5b91ec-d5b0-59dc-b5c9-34d91715d61b",
                 "relationship--d5189bcb-b486-5417-8641-c28d68ddcf2f",
-                "relationship--534bed90-2fd5-5b52-b8d1-c92637925e97",
+                "relationship--a2a16573-638d-52c2-8a34-0e0263956ec5",
                 "relationship--5f037223-038c-5d04-bace-a69d1f44b77e",
                 "relationship--597664a5-b24d-5e2a-8f97-9d2b1fa46f18",
                 "relationship--2a346054-ff2f-5fcd-91e5-e25fdfae33da",

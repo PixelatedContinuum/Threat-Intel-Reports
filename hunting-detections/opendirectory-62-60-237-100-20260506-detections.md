@@ -85,10 +85,10 @@ rule MALW_HijackLoader_NetworkSpec17_IDAT_Carrier {
 **Robustness:** 3
 **ATT&CK Coverage:** T1620 (Reflective Code Loading), T1055.012 (Process Hollowing), T1480 (Execution Guardrails), T1027 (Obfuscated Files)
 **Confidence:** HIGH
-**Rationale:** Anchored on the loader's API-hash table — deterministic hash constants (X65599/`RtlHashUnicodeString` polynomial) applied to the specific Windows API names the loader must resolve to function. This is a technique chokepoint the loader cannot avoid executing, not an operator-editable config value, and the rule requires 3 of 5 matching constants.
+**Rationale:** Anchored on the loader's API-hash table — deterministic hash constants (X65599/`RtlHashUnicodeString` polynomial) applied to the specific Windows API names the loader must resolve to function. This is a technique chokepoint the loader cannot avoid executing, not an operator-editable config value, and the first branch requires 3 of 5 matching constants; a second branch fires on the Qihoo PDB string plus one constant.
 **False Positives:** None known — hash DWORDs for this specific hash algorithm and API-name set have no known legitimate collision; the 3-of-5 threshold rules out coincidental single-value matches.
 **Blind Spots:** A rebuild that changes the hash algorithm or the resolved API set evades this rule; the Qihoo-PDB fallback branch (paired with only 1 hash match) is weaker and included only as a corroborating signal.
-**Validation:** Scan pe_03 or a sibling stage-3 loader build — at least 3 of 5 hash DWORDs must match; unrelated PE files using a different hash-based API resolution scheme must NOT fire.
+**Validation:** Scan pe_03 or a sibling stage-3 loader build — either at least 3 of 5 hash DWORDs, or the Qihoo PDB string with one hash DWORD, must match; unrelated PE files using a different hash-based API resolution scheme must NOT fire.
 **Deployment:** Endpoint AV/EDR, saved-dump scanning, sandbox detonation. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
@@ -123,7 +123,7 @@ rule MALW_HijackLoader_Penguish_Stage3_Loader_PE {
 
 ### Hunting Rules
 
-#### Multi-Vector Lure: GrimResource MSC + Mega.io Payload Fetch
+#### Multi-Vector Lure: GrimResource Redirect String or Mega.io Bucket Path With a Corroborator
 
 **Tier:** Hunting
 **Robustness:** 2

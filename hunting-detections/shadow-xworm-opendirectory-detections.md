@@ -435,7 +435,7 @@ detection:
             - '\AppData\Roaming\'
     condition: selection_cmd and (selection_mo_mid or selection_mo_end) and selection_path
 falsepositives:
-    - No known legitimate software creates one-minute interval scheduled tasks at HIGHEST privilege from AppData
+    - No known legitimate software creates one-minute interval scheduled tasks at HIGHEST privilege whose command line contains AppData\Roaming (the path is tested anywhere on the command line, not as the task action)
 level: high
 ```
 
@@ -546,7 +546,7 @@ detection:
             - 'C:\Program Files (x86)\'
     condition: selection and not (filter_legitimate or filter_system)
 falsepositives:
-    - Legitimate .NET applications or IDE tooling loading amsi.dll from non-standard installation paths
+    - Legitimate .NET applications or IDE tooling running from non-standard installation paths (outside System32, Program Files and the listed interpreters) that load amsi.dll
     - Custom development environments or build pipelines running outside Program Files
     - Security research tools that explicitly load amsi.dll for testing purposes
 level: medium

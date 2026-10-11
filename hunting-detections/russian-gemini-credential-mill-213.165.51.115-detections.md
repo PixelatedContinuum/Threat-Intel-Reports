@@ -26,7 +26,7 @@ This operator runs a custom Python A2A ("agent-to-agent") C2 stack combined with
 |---|---|---|---|---|
 | YARA | 4 | 4 | T1110.003, T1059.006, T1587, T1078, T1552.001, T1071.001, T1132.001, T1087, T1547.001, T1036 | 0 |
 | Sigma | 4 documents (1 bundle) | 6 documents | T1555.005, T1005, T1003.001, T1587, T1071.001, T1090.004, T1572, T1036.005, T1547.001, T1059.001, T1110.003 | 3 |
-| Suricata | 1 | 1 | T1071.001, T1132.001, T1041, T1090.004, T1572 | 4 |
+| Suricata | 1 | 1 | T1071.001, T1132.001, T1041, T1572 | 4 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
 
@@ -926,7 +926,8 @@ alert http $HOME_NET any -> any any (msg:"THL DETECT - A2A C2 Beacon POST to Ope
 
 **Tier:** Hunting
 **Robustness:** 1
-**ATT&CK Coverage:** T1572 (Protocol Tunneling), T1090.004 (Domain Fronting)
+**ATT&CK Coverage:** T1572 (Protocol Tunneling)
+**ATT&CK Note:** The rule sees a destination port only (no SNI, Host header or domain), so Domain Fronting (T1090.004) is not claimed, and a Cloudflare Tunnel is not domain fronting.
 **Confidence:** MODERATE
 **Rationale:** Cloudflare Tunnel's control-plane connects to Cloudflare's edge over UDP/TCP 7844 specifically — Cloudflare's dedicated tunnel port, not general web QUIC (443) — so this is meaningfully narrower than matching all UDP/443 and does not fire on ordinary browsing or Cloudflare WARP. *Wording fix 2026-10-11 (rev 5):* the earlier heading and `msg` said QUIC egress to the Cloudflare edge, but the rule matches any UDP packet from `$HOME_NET` to any `$EXTERNAL_NET` address on destination port 7844 (rate-limited per source): it has no Cloudflare address range and no QUIC check. It is a port-based signal that any Cloudflare Tunnel deployment that uses UDP 7844 (legitimate or not), and any other service using UDP 7844, will trigger, and a tunnel that uses TCP 7844 instead does not match this rule, so it stays a hunting lead rather than an alert. *Robustness fix 2026-10-11 (round 2):* scored 1, not 2: one destination port is the only anchor.
 **False Positives:** Legitimate Cloudflare Tunnel deployments also use UDP 7844, and so can any other service that uses that destination port.

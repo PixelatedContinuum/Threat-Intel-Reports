@@ -5,8 +5,8 @@
   "zip": {
     "file": "hunters-ledger-stix-bundles.zip",
     "url": "https://the-hunters-ledger.com/stix/hunters-ledger-stix-bundles.zip",
-    "sha256": "d2691003360ff600fa2a04627e8d309845b1945012d3debd2b4363ac651cc0bd",
-    "bytes": 1912134
+    "sha256": "38ec46c94426c5c7a65c9bf8dfe9437803d90e7f60541d89bbb30268dd1a203c",
+    "bytes": 1912227
   },
   "bundles": [
     {
@@ -211,13 +211,13 @@
       "file": "rovodev-mirai-matrix-c2-87.106.143.220.json",
       "url": "https://the-hunters-ledger.com/stix/rovodev-mirai-matrix-c2-87.106.143.220.json",
       "report_url": "https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/",
-      "bundle_id": "bundle--86add36c-708f-47f8-97ca-4d67f553bbd2",
+      "bundle_id": "bundle--3981f127-628a-44be-a790-ab1f4b935229",
       "report_id": "report--d6a3df6a-be77-50bd-8c19-3b3a9455ec93",
-      "sha256": "218e026f3803a5f2def4130a44348e1e37236bc35838f2737e6bf2dcba8b8cbe",
-      "bytes": 1211866,
+      "sha256": "1ba9d86e4e6f8b0370fb2a4758b63660160cb3c87b12f53b2cf45b6e7374d3ba",
+      "bytes": 1211852,
       "objects": 1549,
       "indicators": 61,
-      "modified": "2026-10-11T07:42:13.459967Z"
+      "modified": "2026-10-11T08:16:40.399912Z"
     },
     {
       "slug": "ghost-cryptojacker-vova75rus-77.110.96.200",
@@ -316,13 +316,13 @@
       "file": "opendirectory-79-137-192-3-20260515.json",
       "url": "https://the-hunters-ledger.com/stix/opendirectory-79-137-192-3-20260515.json",
       "report_url": "https://the-hunters-ledger.com/reports/opendirectory-79-137-192-3-20260515/",
-      "bundle_id": "bundle--244d627e-21a1-4059-bf80-37e93e923982",
+      "bundle_id": "bundle--ca7f739d-7940-4dde-97a1-4de27a41c7d6",
       "report_id": "report--11bf7544-c216-50a4-bf64-e2aa27a28014",
-      "sha256": "35bf9b2b896ac687f420c06a9a9c2d39a72eebc2cb078480937bd80b3ba7a659",
-      "bytes": 618602,
+      "sha256": "f4f49291305edfd5e19b381bf3fc3c279200c57da0b698bcf6c37ab64a10392c",
+      "bytes": 618578,
       "objects": 809,
       "indicators": 65,
-      "modified": "2026-10-11T07:42:11.331432Z"
+      "modified": "2026-10-11T08:16:38.284584Z"
     },
     {
       "slug": "opendirectory-62-60-237-100-20260506",
@@ -421,13 +421,13 @@
       "file": "shadow-xworm-opendirectory.json",
       "url": "https://the-hunters-ledger.com/stix/shadow-xworm-opendirectory.json",
       "report_url": "https://the-hunters-ledger.com/reports/shadow-xworm-opendirectory/",
-      "bundle_id": "bundle--df5e3142-e64a-4f95-8e83-bc427d471a04",
+      "bundle_id": "bundle--c621d925-5058-450c-9077-d8074c5aec03",
       "report_id": "report--d362fb2d-05fc-5938-936e-670754d7a6d8",
-      "sha256": "462c76f3f61f6373ca759980606c8d2b33d9db9922ea7250da7d7741a293f1ca",
-      "bytes": 67362,
+      "sha256": "f72f9bb5b4e3eee4f82608e48aee0ecc4d2de80b2e9dc63ed7c84d86b1f7fbba",
+      "bytes": 67540,
       "objects": 51,
       "indicators": 27,
-      "modified": "2026-10-11T07:42:16.018595Z"
+      "modified": "2026-10-11T08:16:41.524024Z"
     },
     {
       "slug": "open-directory-193-56-255-154-xiebroc2",
@@ -496,13 +496,13 @@
       "file": "remcos-opendirectory.json",
       "url": "https://the-hunters-ledger.com/stix/remcos-opendirectory.json",
       "report_url": "https://the-hunters-ledger.com/reports/remcos-opendirectory/",
-      "bundle_id": "bundle--7cd45efe-4405-4098-9d89-9daa859447a5",
+      "bundle_id": "bundle--d9c81902-2192-4a8d-89d9-d592bf39f82a",
       "report_id": "report--cfe4d76a-a030-5b5a-874a-5f584b6c436b",
-      "sha256": "3b5c103ca8e6e39f6d1149cf4bee1221e0b98fac2cbc3d3e61e50b099bac5509",
-      "bytes": 57085,
+      "sha256": "800ae186c756017230a9b0064b96b9d57c8c038192bb39870592c027300e4707",
+      "bytes": 56993,
       "objects": 41,
       "indicators": 17,
-      "modified": "2026-10-11T07:42:12.138186Z"
+      "modified": "2026-10-11T08:16:39.058291Z"
     },
     {
       "slug": "nsminer-cryptojacker",

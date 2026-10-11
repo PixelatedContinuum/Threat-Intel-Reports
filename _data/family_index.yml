@@ -264,7 +264,7 @@ families:
           - MAL_Discord_Bot_DDoSasService_Customer_Interface
           - MAL_Bash_Persistent_Bot_DualChannel_CNC
           - MAL_Python_Matrix_C2_Framework_Family
-          - MAL_Python_StealthAgent_AntiAnalysis_Keyword_Bucket
+          - MAL_StealthAgent_AntiAnalysis_Keyword_Bucket
     feeds:
       - url: /ioc-feeds/rovodev-mirai-matrix-c2-87.106.143.220-iocs.json
         title: Rovodev AI-Co-Authored Mirai Variant + Matrix C2 (87.106.143.220)

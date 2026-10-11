@@ -433,18 +433,18 @@ rule MAL_Python_AIGenerated_OffensiveCode_Universal_Subset {
 }
 ```
 
-#### MAL_Python_StealthAgent_AntiAnalysis_Keyword_Bucket
+#### MAL_StealthAgent_AntiAnalysis_Keyword_Bucket
 
 **Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1014 (Rootkit), T1059.006 (Python), T1497.001 (System Checks — MODERATE), T1587.001 (Develop Capabilities: Malware)
 **Confidence:** MODERATE
-**Rationale:** Salvaged from the original — the condition mandated the hardcoded C2 endpoint `87.106.143.220` as an AND-gate across every branch, so the rule died the instant the operator rotated infrastructure (the IP is already carried in the IOC feed). Removed the IP/port strings and condition dependency entirely, leaving a pure anti-analysis feature-bucket signature of three branches (two of the anti-debug, anti-VM and sandbox words with rootkit or self-destruct; or the AES-GCM+PBKDF2+handshake crypto framing; or polymorphic+bare-except). These are generic English feature-name strings individually (per the "no generic API-name `any of them`" YARA anti-pattern), so co-occurrence is required but the combination is still not goodware-validated to zero FP — Hunting, not Detection. *Rename and wording fix 2026-10-11:* the rule was named for anti-debug plus anti-VM, but only the first branch uses those words and it needs just two of three, and the other two branches need neither, so the name now says anti-analysis keyword bucket. `Python` in the name refers to the sample family (`stealth_agent.py`), not to a file-type test.
+**Rationale:** Salvaged from the original — the condition mandated the hardcoded C2 endpoint `87.106.143.220` as an AND-gate across every branch, so the rule died the instant the operator rotated infrastructure (the IP is already carried in the IOC feed). Removed the IP/port strings and condition dependency entirely, leaving a pure anti-analysis feature-bucket signature of three branches (two of the anti-debug, anti-VM and sandbox words with rootkit or self-destruct; or the AES-GCM+PBKDF2+handshake crypto framing; or polymorphic+bare-except). These are generic English feature-name strings individually (per the "no generic API-name `any of them`" YARA anti-pattern), so co-occurrence is required but the combination is still not goodware-validated to zero FP — Hunting, not Detection. *Rename and wording fix 2026-10-11:* the rule was named for anti-debug plus anti-VM, but only the first branch uses those words and it needs just two of three, and the other two branches need neither, so the name now says anti-analysis keyword bucket. The rule was named `MAL_Python_StealthAgent_AntiAnalysis_Keyword_Bucket` until this round; `Python` is dropped from the name (and the deterministic `id` re-derived) because nothing in the rule tests that the file is Python.
 **False Positives:** Legitimate Python security/red-team tooling that legitimately implements anti-debug/anti-VM checks alongside self-destruct or rootkit-adjacent terminology (uncommon but not impossible); the AES-GCM+PBKDF2+handshake branch alone is common to many encrypted-messaging implementations.
 **Deployment:** Linux filesystem scanner (Python scripts) and content scanning of captured source. The rule matches strings in a file and observes no process behavior or API calls, so EDR monitoring of Python processes is a separate corroborating check, not a deployment source for it; corroborate with the family-specific YARA/Sigma rules above before high-confidence attribution.
 
 ```yara
-rule MAL_Python_StealthAgent_AntiAnalysis_Keyword_Bucket {
+rule MAL_StealthAgent_AntiAnalysis_Keyword_Bucket {
    meta:
       description = "Hunting keyword bucket for stealth_agent.py-class AI-authored Python backdoors. Matches any one of three branches: two of the words anti_debug, anti_vm and sandbox together with rootkit or self_destruct; AES-256-GCM with PBKDF2 and handshake; or polymorphic with a bare except: statement. It does not test that the file is Python and does not require both anti-debug and anti-VM. Family-generic anti-analysis feature bucket — deploy as a hunting/triage lead, not standalone attribution."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
@@ -455,7 +455,7 @@ rule MAL_Python_StealthAgent_AntiAnalysis_Keyword_Bucket {
       family = "Matrix C2"
       malware_type = "Stealth Agent (AI-authored backdoor)"
       campaign = "UTA-2026-014"
-      id = "e343ba70-f35d-55d3-878e-487f588a78ab"
+      id = "0d468698-0a95-5c09-8f09-825c96597c38"
    strings:
       $anti_debug = "anti_debug" ascii nocase
       $anti_vm    = "anti_vm" ascii nocase
@@ -823,7 +823,7 @@ level: high
 **Rationale:** The rule matches 14 file-name strings (`Naku.*` and `pandora.*` with an architecture suffix) as substrings anywhere in the image path, or four command-line tokens, not IoT architecture-tag suffixes in general. The two alternatives evade separately: renaming the binaries evades the image alternative, and changing the four command-line tokens evades the command-line alternative, so the rule keeps matching while either survives. *Tier fix 2026-10-11 (round 2):* each alternative is an independently mutable name or token, so the rule is Hunting, Robustness 1, level medium (it was Detection, Robustness 2, level high), and the image test is a path substring, so `Naku.arm` also matches `/opt/Naku.arm7` or a directory named `Naku.arm.bak`. *Wording fix 2026-10-11:* the earlier title and Rationale called every arch-tagged ELF on a Linux server illegitimate and described a filename-only rule; the selection also fires on command-line text with no filename at all, and tests neither ELF format nor host role.
 **False Positives:** Cross-compilation test environments deploying IoT firmware — limit to production server hosts and IoT-adjacent network segments; IoT development workstations building multi-arch toolchains.
 **Blind Spots:** Renaming the binaries evades only the image alternative and changing the command-line tokens evades only the command-line alternative; the image test is a substring of the whole path, not an exact basename; no ELF check, so a non-ELF file with a matching name fires; no host-role test; scoped to `product: linux` process_creation telemetry only.
-**Validation:** Execute a Naku/Pandora binary with an arch-tag filename on a monitored Linux host — must match; a legitimate cross-compilation toolchain building the same arch set under different naming must NOT fire.
+**Validation:** Execute a binary named one of the 14 listed files (for example `Naku.arm` or `pandora.spc`) on a monitored Linux host — must match; a Naku/pandora name outside the list (for example `pandora.x86`) does not; a legitimate cross-compilation toolchain building the same arch set under different naming must NOT fire.
 **Deployment:** EDR/Sysmon-equivalent process-creation telemetry on Linux server fleets and IoT-adjacent segments.
 
 ```yaml

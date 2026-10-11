@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--86add36c-708f-47f8-97ca-4d67f553bbd2",
+    "id": "bundle--3981f127-628a-44be-a790-ab1f4b935229",
     "objects": [
         {
             "type": "identity",
@@ -1213,15 +1213,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--3d0a2437-9423-5fc7-b0a7-9f21b773c68b",
+            "id": "indicator--1999f91a-662f-5f38-9624-eeb71c22c764",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-11T06:31:46.515455Z",
-            "modified": "2026-10-11T06:31:46.515455Z",
-            "name": "MAL_Python_StealthAgent_AntiAnalysis_Keyword_Bucket",
+            "created": "2026-10-11T08:16:40.273404Z",
+            "modified": "2026-10-11T08:16:40.273404Z",
+            "name": "MAL_StealthAgent_AntiAnalysis_Keyword_Bucket",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule MAL_Python_StealthAgent_AntiAnalysis_Keyword_Bucket {\n   meta:\n      description = \"Hunting keyword bucket for stealth_agent.py-class AI-authored Python backdoors. Matches any one of three branches: two of the words anti_debug, anti_vm and sandbox together with rootkit or self_destruct; AES-256-GCM with PBKDF2 and handshake; or polymorphic with a bare except: statement. It does not test that the file is Python and does not require both anti-debug and anti-VM. Family-generic anti-analysis feature bucket — deploy as a hunting/triage lead, not standalone attribution.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/\"\n      date = \"2026-05-26\"\n      hash1 = \"d1086ab3c06764ffd81492b4c723bda83bac19dc101c8542bc566e5888c92da3\"\n      family = \"Matrix C2\"\n      malware_type = \"Stealth Agent (AI-authored backdoor)\"\n      campaign = \"UTA-2026-014\"\n      id = \"e343ba70-f35d-55d3-878e-487f588a78ab\"\n   strings:\n      $anti_debug = \"anti_debug\" ascii nocase\n      $anti_vm    = \"anti_vm\" ascii nocase\n      $sandbox_chk = \"sandbox\" ascii nocase\n      $rootkit    = \"rootkit\" ascii nocase\n      $self_dest  = \"self_destruct\" ascii nocase\n      $polymorphic = \"polymorphic\" ascii nocase\n      $aes_gcm    = \"AES-256-GCM\" ascii\n      $pbkdf2     = \"PBKDF2\" ascii\n      $handshake  = \"handshake\" ascii nocase\n      $bare_exc   = \"except:\" ascii\n   condition:\n      filesize < 500KB and\n      (\n         (2 of ($anti_debug, $anti_vm, $sandbox_chk) and ($rootkit or $self_dest)) or\n         ($aes_gcm and $pbkdf2 and $handshake) or\n         ($polymorphic and $bare_exc)\n      )\n}",
+            "pattern": "rule MAL_StealthAgent_AntiAnalysis_Keyword_Bucket {\n   meta:\n      description = \"Hunting keyword bucket for stealth_agent.py-class AI-authored Python backdoors. Matches any one of three branches: two of the words anti_debug, anti_vm and sandbox together with rootkit or self_destruct; AES-256-GCM with PBKDF2 and handshake; or polymorphic with a bare except: statement. It does not test that the file is Python and does not require both anti-debug and anti-VM. Family-generic anti-analysis feature bucket — deploy as a hunting/triage lead, not standalone attribution.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/\"\n      date = \"2026-05-26\"\n      hash1 = \"d1086ab3c06764ffd81492b4c723bda83bac19dc101c8542bc566e5888c92da3\"\n      family = \"Matrix C2\"\n      malware_type = \"Stealth Agent (AI-authored backdoor)\"\n      campaign = \"UTA-2026-014\"\n      id = \"0d468698-0a95-5c09-8f09-825c96597c38\"\n   strings:\n      $anti_debug = \"anti_debug\" ascii nocase\n      $anti_vm    = \"anti_vm\" ascii nocase\n      $sandbox_chk = \"sandbox\" ascii nocase\n      $rootkit    = \"rootkit\" ascii nocase\n      $self_dest  = \"self_destruct\" ascii nocase\n      $polymorphic = \"polymorphic\" ascii nocase\n      $aes_gcm    = \"AES-256-GCM\" ascii\n      $pbkdf2     = \"PBKDF2\" ascii\n      $handshake  = \"handshake\" ascii nocase\n      $bare_exc   = \"except:\" ascii\n   condition:\n      filesize < 500KB and\n      (\n         (2 of ($anti_debug, $anti_vm, $sandbox_chk) and ($rootkit or $self_dest)) or\n         ($aes_gcm and $pbkdf2 and $handshake) or\n         ($polymorphic and $bare_exc)\n      )\n}",
             "pattern_type": "yara",
             "valid_from": "2026-05-26T00:00:00Z",
             "labels": [
@@ -3704,12 +3704,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--3c478e36-e3fc-574a-97fb-b28a318699af",
+            "id": "relationship--67dc3a6a-da5a-5c0d-9f09-3831bb8962cd",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-11T06:31:46.534307Z",
-            "modified": "2026-10-11T06:31:46.534307Z",
+            "created": "2026-10-11T08:16:40.289581Z",
+            "modified": "2026-10-11T08:16:40.289581Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--3d0a2437-9423-5fc7-b0a7-9f21b773c68b",
+            "source_ref": "indicator--1999f91a-662f-5f38-9624-eeb71c22c764",
             "target_ref": "malware--e1ff3c5a-931c-52e6-af27-abf72a92bc1f",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -22173,7 +22173,7 @@
             "id": "report--d6a3df6a-be77-50bd-8c19-3b3a9455ec93",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.297515Z",
-            "modified": "2026-10-11T07:42:13.459967Z",
+            "modified": "2026-10-11T08:16:40.399912Z",
             "name": "Rovodev AI Co-Authored Mirai Variant + Matrix C2 Framework — UTA-2026-014 (Pandora 11-Arch IoT Botnet + DDoS-as-a-Service)",
             "report_types": [
                 "threat-report"
@@ -22261,7 +22261,7 @@
                 "indicator--1e19db49-ecaf-52a7-98d9-8e1f22b71c37",
                 "indicator--cc3f380d-3be9-5c85-a6a2-0e61e9947461",
                 "indicator--11971737-7145-51a3-aa91-758c1786accc",
-                "indicator--3d0a2437-9423-5fc7-b0a7-9f21b773c68b",
+                "indicator--1999f91a-662f-5f38-9624-eeb71c22c764",
                 "indicator--0ca74fef-4a2d-5938-b239-55e83dcf00b9",
                 "indicator--316051bb-937d-5a1e-ab0d-0c575e5e14e6",
                 "indicator--5f27cbd1-b0e1-5a47-8bbd-eeda913d66b6",
@@ -22407,7 +22407,7 @@
                 "relationship--43030629-bdf8-503e-8f9f-3ca2753d4d7e",
                 "relationship--f63ee44b-b7de-5a00-ba59-e4ac87a08c8d",
                 "relationship--57b853b1-333d-59ca-8c08-856607e5467c",
-                "relationship--3c478e36-e3fc-574a-97fb-b28a318699af",
+                "relationship--67dc3a6a-da5a-5c0d-9f09-3831bb8962cd",
                 "relationship--8376b8c7-4596-5670-99fd-ab5a37054a1a",
                 "relationship--7084e6bc-d53f-5d01-841f-dc55b94a40de",
                 "relationship--d19f1477-1440-5225-8914-39b6105da936",

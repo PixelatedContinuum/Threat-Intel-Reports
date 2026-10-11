@@ -858,8 +858,8 @@
     {
       "techniqueID": "T1090.004",
       "tactic": "command-and-control",
-      "score": 6,
-      "comment": "0 report(s), 6 rule(s), actors UTA-2026-012. https://the-hunters-ledger.com/techniques/T1090.004/",
+      "score": 5,
+      "comment": "0 report(s), 5 rule(s), actors UTA-2026-012. https://the-hunters-ledger.com/techniques/T1090.004/",
       "enabled": true
     },
     {

@@ -128,7 +128,7 @@ rule RAT_Remcos_Family_Detection {
 **ATT&CK Coverage:** T1548.002 (Bypass User Account Control), T1555.003 (Web Browsers), T1070.004 (File Deletion)
 **Confidence:** HIGH
 **Rationale:** Salvaged from the original campaign-specific rule, which OR'd the durable mutex against the generic window class name `MsgWindowClass` (the underlying IOC feed itself documents this window class as "false_positive_risk: High... confidence: LOW"). Tightened so `$mutex` is now a mandatory AND-term rather than an optional OR-branch, and the two exact-hash OR-clauses were removed — both hashes are already recorded in this rule's own `hash1`/`hash3` meta fields and in the IOC feed, so a redundant in-condition hash check added nothing (see the yara-rule-formatting skill's hash guidance).
-**False Positives:** None known — every surviving branch requires the family mutex plus at least one campaign-specific artifact (the literal `remcos` install-path substring, or the exact UAC-bypass command fragment).
+**False Positives:** None known — every surviving branch requires the family mutex plus one of four campaign-specific combinations: the `remcos` install path with the dropped temp DLL name, the Chrome and Firefox profile paths together, `install.bat` with the ping delay, or the exact UAC-bypass command fragment.
 **Blind Spots:** A build that randomizes the mutex evades entirely; the install-path/temp-DLL/install.bat branches are brittle on their own (operator-configurable) but are gated behind the mutex requirement here.
 **Validation:** Scan either analyzed sample — must match; a benign binary that coincidentally references `EnableLUA` or a Chrome/Firefox path (e.g. a legitimate browser-migration tool) must NOT fire absent the mutex.
 **Deployment:** Endpoint AV/EDR file scan, scanning of saved dumps. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
@@ -400,7 +400,7 @@ rule RAT_Remcos_Surveillance_Generic_API_Cluster {
 
 ### Detection Rules
 
-#### UAC Disabling Attempt by reg.exe Setting EnableLUA to 0 From cmd.exe (Remcos Behavior)
+#### UAC Disabling Attempt by reg.exe Setting EnableLUA to 0 From cmd.exe
 
 **Tier:** Detection
 **Robustness:** 3
@@ -413,7 +413,7 @@ rule RAT_Remcos_Surveillance_Generic_API_Cluster {
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (process-creation telemetry).
 
 ```yaml
-title: UAC Disabling Attempt by reg.exe Setting EnableLUA to 0 From cmd.exe (Remcos Behavior)
+title: UAC Disabling Attempt by reg.exe Setting EnableLUA to 0 From cmd.exe
 id: 482a813a-346e-450c-8ff7-4b449a26ad7d
 status: experimental
 description: >-
@@ -461,7 +461,7 @@ falsepositives:
 level: high
 ```
 
-#### Winlogon Userinit Registry Value Changed From the Default (Remcos Persistence Pattern)
+#### Winlogon Userinit Registry Value Changed From the Default
 
 **Tier:** Detection
 **Robustness:** 3
@@ -474,7 +474,7 @@ level: high
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (registry telemetry).
 
 ```yaml
-title: Winlogon Userinit Registry Value Changed From the Default (Remcos Persistence Pattern)
+title: Winlogon Userinit Registry Value Changed From the Default
 id: 208b4736-f00a-44bd-b71e-1230ece13876
 status: experimental
 description: >-

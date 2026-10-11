@@ -401,7 +401,7 @@ tactics:
       - T1665
     technique_count: 30
     report_count: 144
-    rule_count: 227
+    rule_count: 226
   - name: Exfiltration
     slug: exfiltration
     techniques:
@@ -873,7 +873,7 @@ techniques:
         date: '2026-05-26'
         report_url: /reports/rovodev-mirai-matrix-c2-87.106.143.220/
         rules: >-
-          MAL_Python_StealthAgent_AntiAnalysis_Keyword_Bucket (YARA, Hunting); Process Launched with
+          MAL_StealthAgent_AntiAnalysis_Keyword_Bucket (YARA, Hunting); Process Launched with
           /dev/watchdog on the Command Line, Mirai-Canonical Persistence Tactic (SIGMA, Hunting)
         count: 2
       - url: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
@@ -3990,7 +3990,9 @@ techniques:
         title: HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campaign
         date: '2026-05-06'
         report_url: /reports/opendirectory-62-60-237-100-20260506/
-        rules: 'Multi-Vector Lure: GrimResource MSC + Mega.io Payload Fetch (YARA, Hunting)'
+        rules: >-
+          Multi-Vector Lure: GrimResource Redirect String or Mega.io Bucket Path With a Corroborator
+          (YARA, Hunting)
         count: 1
       - url: /hunting-detections/opendirectory-74-0-42-25-20260316-detections
         title: ZeroTrace Multi-Family MaaS Operation (74.0.42.25)
@@ -4067,7 +4069,7 @@ techniques:
         rules: >-
           MAL_Python_Matrix_C2_Framework_Family (YARA, Hunting);
           MAL_Python_AIGenerated_OffensiveCode_Universal_Subset (YARA, Hunting);
-          MAL_Python_StealthAgent_AntiAnalysis_Keyword_Bucket (YARA, Hunting);
+          MAL_StealthAgent_AntiAnalysis_Keyword_Bucket (YARA, Hunting);
           MAL_Markdown_Rovodev_WhatINeed_OperatorPrompt (YARA, Hunting)
         count: 4
       - url: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
@@ -4177,7 +4179,9 @@ techniques:
         title: HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campaign
         date: '2026-05-06'
         report_url: /reports/opendirectory-62-60-237-100-20260506/
-        rules: 'Multi-Vector Lure: GrimResource MSC + Mega.io Payload Fetch (YARA, Hunting)'
+        rules: >-
+          Multi-Vector Lure: GrimResource Redirect String or Mega.io Bucket Path With a Corroborator
+          (YARA, Hunting)
         count: 1
     actors:
       - UTA-2026-004
@@ -5690,18 +5694,16 @@ techniques:
         title: Russian Gemini CLI Credential Mill (213.165.51.115)
         date: '2026-05-25'
         report_url: /reports/russian-gemini-credential-mill-213.165.51.115/
-        rules: >-
-          Cloudflared Access TCP Tunnel to Potentially Unauthorized Hostname (SIGMA, Hunting);
-          cloudflared Tunnel Port Egress (UDP 7844 to Any External Host) (SURICATA, Hunting)
-        count: 2
+        rules: Cloudflared Access TCP Tunnel to Potentially Unauthorized Hostname (SIGMA, Hunting)
+        count: 1
     actors:
       - UTA-2026-012
     url: /techniques/T1090.004/
     mitre_url: https://attack.mitre.org/techniques/T1090/004/
     report_count: 0
-    rule_count: 6
+    rule_count: 5
     actor_count: 1
-    score: 6
+    score: 5
   - id: T1091
     name: Replication Through Removable Media
     tactic: Lateral Movement
@@ -6372,7 +6374,9 @@ techniques:
         title: HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campaign
         date: '2026-05-06'
         report_url: /reports/opendirectory-62-60-237-100-20260506/
-        rules: 'Multi-Vector Lure: GrimResource MSC + Mega.io Payload Fetch (YARA, Hunting)'
+        rules: >-
+          Multi-Vector Lure: GrimResource Redirect String or Mega.io Bucket Path With a Corroborator
+          (YARA, Hunting)
         count: 1
       - url: /hunting-detections/open-directory-94-103-1-13-20260423-detections
         title: Chaos Ransomware (TorBrowserTor) Multi-Stage Loader (94.103.1.13)
@@ -8460,10 +8464,10 @@ techniques:
         date: '2026-05-06'
         report_url: /reports/opendirectory-62-60-237-100-20260506/
         rules: >-
-          Multi-Vector Lure: GrimResource MSC + Mega.io Payload Fetch (YARA, Hunting); HijackLoader
-          GrimResource MMC Spawning Mshta or Rundll32 for Payload Execution (SIGMA, Detection);
-          HijackLoader GrimResource MMC Spawning PowerShell Adding Defender Exclusion (SIGMA,
-          Detection)
+          Multi-Vector Lure: GrimResource Redirect String or Mega.io Bucket Path With a Corroborator
+          (YARA, Hunting); HijackLoader GrimResource MMC Spawning Mshta or Rundll32 for Payload
+          Execution (SIGMA, Detection); HijackLoader GrimResource MMC Spawning PowerShell Adding
+          Defender Exclusion (SIGMA, Detection)
         count: 3
     actors:
       - UTA-2026-007
@@ -9110,7 +9114,7 @@ techniques:
         title: Rovodev AI-Co-Authored Mirai Variant + Matrix C2 (87.106.143.220)
         date: '2026-05-26'
         report_url: /reports/rovodev-mirai-matrix-c2-87.106.143.220/
-        rules: MAL_Python_StealthAgent_AntiAnalysis_Keyword_Bucket (YARA, Hunting)
+        rules: MAL_StealthAgent_AntiAnalysis_Keyword_Bucket (YARA, Hunting)
         count: 1
       - url: /hunting-detections/shadow-xworm-opendirectory-detections
         title: Shadow RAT & XWorm Open Directory Campaign
@@ -10186,8 +10190,8 @@ techniques:
         report_url: /reports/remcos-opendirectory/
         rules: >-
           Remcos UAC Bypass and Persistence (YARA, Detection); Winlogon Userinit Registry Value
-          Changed From the Default (Remcos Persistence Pattern) (SIGMA, Detection); winlogon.exe
-          Child Process Running From an AppData Path (Userinit Hijack Pattern) (SIGMA, Detection)
+          Changed From the Default (SIGMA, Detection); winlogon.exe Child Process Running From an
+          AppData Path (Userinit Hijack Pattern) (SIGMA, Detection)
         count: 3
     actors: []
     url: /techniques/T1547.004/
@@ -10342,8 +10346,8 @@ techniques:
         rules: >-
           Remcos OpenDirectory Campaign Mutex and Install Artifacts (YARA, Detection); Remcos UAC
           Bypass and Persistence (YARA, Detection); UAC Disabling Attempt by reg.exe Setting
-          EnableLUA to 0 From cmd.exe (Remcos Behavior) (SIGMA, Detection); EnableLUA Registry Value
-          Set to Disable User Account Control (Registry State) (SIGMA, Detection)
+          EnableLUA to 0 From cmd.exe (SIGMA, Detection); EnableLUA Registry Value Set to Disable
+          User Account Control (Registry State) (SIGMA, Detection)
         count: 4
     actors:
       - UTA-2026-005
@@ -12538,7 +12542,7 @@ techniques:
           MAL_JSON_Rovodev_SessionContext_FileWrite_Authoring (YARA, Detection);
           MAL_Python_Matrix_C2_Framework_Family (YARA, Hunting);
           MAL_Python_AIGenerated_OffensiveCode_Universal_Subset (YARA, Hunting);
-          MAL_Python_StealthAgent_AntiAnalysis_Keyword_Bucket (YARA, Hunting);
+          MAL_StealthAgent_AntiAnalysis_Keyword_Bucket (YARA, Hunting);
           MAL_Markdown_Rovodev_WhatINeed_OperatorPrompt (YARA, Hunting); Rovodev AI Agent Sessions
           Directory or Session Context File Created on a Linux Host (SIGMA, Hunting); Rovodev
           Runtime Log rovodev.log Created on a Linux Host (Scoping Lead for AI-Augmented Offensive
