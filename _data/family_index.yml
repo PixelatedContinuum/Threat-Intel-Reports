@@ -30,8 +30,8 @@ families:
         report_url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         label: Sliver
         rules:
-          - Sliver_Beacon_Memory_Import_Path
           - Sliver_Operator_Build_Artifacts_193_233_202_17
+          - Sliver_Beacon_Memory_Import_Path
       - url: /hunting-detections/sliver-open-directory-detections
         title: Sliver C2 Toolchain with ScareCrow Loader (45.94.31.220)
         date: '2026-03-10'
@@ -261,9 +261,9 @@ families:
         report_url: /reports/rovodev-mirai-matrix-c2-87.106.143.220/
         label: Matrix C2
         rules:
-          - MAL_Python_Matrix_C2_Framework_Family
           - MAL_Discord_Bot_DDoSasService_Customer_Interface
           - MAL_Bash_Persistent_Bot_DualChannel_CNC
+          - MAL_Python_Matrix_C2_Framework_Family
           - MAL_Python_StealthAgent_AntiAnalysis_Keyword_Bucket
     feeds:
       - url: /ioc-feeds/rovodev-mirai-matrix-c2-87.106.143.220-iocs.json
@@ -788,9 +788,9 @@ families:
         label: CloudSync
         rules:
           - RAT_CloudSync_TorPanel_NetscanBuild
-          - RAT_CloudSync_C2Protocol_DualBuild
           - Loader_ABExe_DeploymentOrchestrator_Banners
           - Loader_CtBat_ProxyAwareUSBWormStub
+          - RAT_CloudSync_C2Protocol_DualBuild
           - RAT_CloudSync_PublicWorkdir_Artifacts
     feeds:
       - url: /ioc-feeds/cloudsync-assembler-toolkit-91-197-98-188-iocs.json

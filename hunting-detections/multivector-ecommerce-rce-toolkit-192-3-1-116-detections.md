@@ -141,7 +141,7 @@ rule EXPL_SnakeYAML_ScriptEngineManager_Gadget_CVE_2022_1471_Family {
 
 rule WEBSHELL_Generic_JSP_Bash_Exec_Parameter {
    meta:
-      description = "Detects a small JSP (under 30 KB) that contains a request.getParameter call, Runtime.getRuntime().exec, /bin/bash and a quoted -c, the pieces of a minimal command-execution shell such as cmd.jsp. The parameter name is kept generic since it varies by deployment. The rule tests no order or distance between the strings, so it does not show that the parameter reaches the exec call."
+      description = "Detects a file under 30 KB (no JSP marker is tested, so a Java source file or a document also matches) that contains a request.getParameter call, Runtime.getRuntime().exec, /bin/bash and a quoted -c, the pieces of a minimal command-execution shell such as cmd.jsp. The parameter name is kept generic since it varies by deployment. The rule tests no order or distance between the strings, so it does not show that the parameter reaches the exec call."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/"

@@ -52,9 +52,9 @@ KAIDO is a rebranded 64-bit fork of the open-source Quasar RAT carrying an HVNC 
 **Confidence:** HIGH
 **Rationale:** *Logic fix 2026-10-11:* the heading and description require a namespace and a Costura asset, but the condition was `2 of ($ns1, $ns2, $cost, $desk)`, so the second namespace string and the `Default_runhost` literal satisfied it with no Costura asset. It is now the Costura asset name plus one of the two namespace strings; the HVNC hidden-desktop literal was dropped from the rule. A fixture with `$ns2` and `Default_runhost` only matched the old rule and does not match the new one. `Kaido.Common.Messages` is the namespace root of the rebranded Quasar fork and survives the sample's obfuscation pass intact (no literal `Quasar` string remains); paired with the Costura-embedded asset name, this combination is specific to this build lineage in the samples examined. Round 2 (2026-10-11): the earlier text said the operator cannot rename it without re-architecting the codebase, which the Blind Spots below contradict (a rebrand of the `Kaido.*` namespaces and the asset name evades the rule); the identifiers are operator-chosen strings and the rule is durable only until a rebuild renames them. Either of the two namespace strings, with the asset name, matches; the `Kaido.Common.Messages` root is not required by itself.
 **False Positives:** None known — `Kaido.Common.Messages` and `costura.kaido.common.dll` are distinctive compiled identifiers not present in legitimate .NET software; `fullword` further reduces substring-collision risk.
-**Blind Spots:** A full rebrand that renames the `Kaido.*` namespace root would evade this rule; a memory-only variant that never lands on disk needs the memory-scan deployment path.
+**Blind Spots:** A full rebrand that renames the `Kaido.*` namespace root would evade this rule; a memory-only variant that never lands on disk is not covered by a live process-memory scan, because the `filesize` test cannot match there (a saved dump written to a file can be scanned).
 **Validation:** Scan a KAIDO sample (e.g. `hash1` below) — the namespace + Costura asset must match; a benign Costura-packed .NET application must NOT fire. A file with the asset name and only the HVNC helper namespace also fires.
-**Deployment:** Endpoint AV/EDR file scan, memory scanning of `svchost.exe`-masquerading processes, static triage of unknown MSIL binaries.
+**Deployment:** Endpoint AV/EDR file scan, scanning of saved dumps of `svchost.exe`-masquerading processes, static triage of unknown MSIL binaries. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
 /*
@@ -101,7 +101,7 @@ rule RAT_KAIDO_Quasar_Fork_Namespace {
 **False Positives:** None known — `KAIDO_DXGI_PIPE`, `kaido_dxgi_`, and the paired thread names are family-specific compiled strings; the hex frame magic is combined with string context rather than used alone.
 **Blind Spots:** Misses a variant that renames all four HVNC transport strings *and* changes the frame magic; the DXGI capture path only exists in builds carrying the HVNC module.
 **Validation:** Scan a KAIDO HVNC-capable sample — ≥2 transport strings must match; a benign screen-capture or remote-desktop tool must NOT fire.
-**Deployment:** Endpoint AV/EDR file scan, memory scanning during suspected HVNC activity.
+**Deployment:** Endpoint AV/EDR file scan, scanning of saved dumps taken during suspected HVNC activity. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
 rule RAT_KAIDO_HVNC_DXGI_Pipe {

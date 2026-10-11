@@ -22,7 +22,7 @@ Multi-stage commodity loader chain (HijackLoader / Penguish / Rugmi) delivering 
 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
-| YARA | 3 | 2 | T1027.009, T1204.002, T1036.005, T1574.001, T1055.012, T1027, T1027.013, T1620, T1480, T1218.014, T1059.005, T1059.007, T1105 | 0 |
+| YARA | 2 | 3 | T1027.009, T1204.002, T1036.005, T1574.001, T1055.012, T1027, T1027.013, T1620, T1480, T1218.014, T1059.005, T1059.007, T1105 | 0 |
 | Sigma | 2 | 7 | T1218.014, T1059.005, T1059.007, T1685, T1059.001, T1204.002, T1574.001, T1055.012, T1036.005, T1053.005, T1112, T1480 | 0 |
 | Suricata | 1 | 0 | T1071.001, T1573.001, T1571 | 3 |
 
@@ -51,7 +51,7 @@ Multi-stage commodity loader chain (HijackLoader / Penguish / Rugmi) delivering 
 **False Positives:** None known — no legitimate file format begins with this 4-byte marker (the genuine PNG signature is entirely different).
 **Blind Spots:** A new first-chunk marker evades every branch. A new XOR key alone does not: with the marker unchanged the `IDAT` and `IEND` sentinel branch still matches. The rule targets this loader family's stage-3 carrier format, not the decoded payload.
 **Validation:** Scan a networkspec17.log-equivalent carrier: the marker at offset 0 must match together with the XOR key at offset 4, or with both sentinels; a legitimate PNG file (signature `89 50 4E 47`) must NOT fire, and neither must a file that has the sentinels but not the marker at offset 0.
-**Deployment:** File-system hunting, email gateway scanning, endpoint memory scanner.
+**Deployment:** File-system hunting and email gateway attachment scanning, of files or saved dumps. Memory scanning is not covered: the condition tests `filesize`, which is undefined in a libyara process-memory scan. `$idat_marker at 0` also needs the start of a file, which a memory block does not provide.
 
 ```yara
 rule MALW_HijackLoader_NetworkSpec17_IDAT_Carrier {
@@ -89,7 +89,7 @@ rule MALW_HijackLoader_NetworkSpec17_IDAT_Carrier {
 **False Positives:** None known — hash DWORDs for this specific hash algorithm and API-name set have no known legitimate collision; the 3-of-5 threshold rules out coincidental single-value matches.
 **Blind Spots:** A rebuild that changes the hash algorithm or the resolved API set evades this rule; the Qihoo-PDB fallback branch (paired with only 1 hash match) is weaker and included only as a corroborating signal.
 **Validation:** Scan pe_03 or a sibling stage-3 loader build — at least 3 of 5 hash DWORDs must match; unrelated PE files using a different hash-based API resolution scheme must NOT fire.
-**Deployment:** Endpoint AV/EDR, memory scanner, sandbox detonation.
+**Deployment:** Endpoint AV/EDR, saved-dump scanning, sandbox detonation. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
 rule MALW_HijackLoader_Penguish_Stage3_Loader_PE {
@@ -121,17 +121,19 @@ rule MALW_HijackLoader_Penguish_Stage3_Loader_PE {
 }
 ```
 
+### Hunting Rules
+
 #### Multi-Vector Lure: GrimResource MSC + Mega.io Payload Fetch
 
-**Tier:** Detection
+**Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1218.014 (MMC), T1059.005 (Visual Basic), T1059.007 (JavaScript), T1105 (Ingress Tool Transfer)
-**Confidence:** HIGH
+**Confidence:** MODERATE
 **Rationale:** Anchored on the GrimResource technique's own `res://apds.dll/redirect.html` redirect string, a publicly documented technique marker and not an operator-chosen literal. *Wording fix 2026-10-11:* the string alone, with the size limit, matches any file that contains it; the rule does not require the MMC snap-in structure (`<MMC_ConsoleFile`), which only the second branch lists as one of three optional corroborators. The Mega.io staging-bucket branch (already IOC-feed-tracked) matches the bucket path together with the PowerShell array-reverse, `javascript:eval(` or MMC root string, and gives independent coverage of the campaign's macro-document lures that fetch from the same bucket without GrimResource.
 **False Positives:** None known from the evidence. The GrimResource string has no documented legitimate use, but the rule does not require it to sit inside an .msc file, so a write-up, a test file or a detection corpus that quotes the string matches as well. The bucket branch matches any file that holds the bucket path with one of its three corroborators.
-**Blind Spots:** A different code-execution technique inside an .msc file (not GrimResource) evades entirely; a rebuild targeting a different COM redirect endpoint evades; the bucket branch needs the bucket path, which is a per-wave value.
+**Blind Spots:** Each branch evades separately. A different code-execution technique inside an .msc file (not GrimResource), or a rebuild targeting a different COM redirect endpoint, evades the GrimResource branch only; the bucket branch does not depend on GrimResource and still matches, but needs the bucket path, which is a per-wave value, plus one of three corroborators. The GrimResource string is publicly documented, so reports, test files and detection corpora that quote it also match (the reason this is a Hunting rule).
 **Validation:** Scan a GrimResource-weaponized .msc file: the resource string must match; a legitimate/benign .msc administrative console file without the string must NOT fire.
-**Deployment:** Email gateway, endpoint file-system scanning, web proxy URL inspection.
+**Deployment:** Email gateway attachment scanning and endpoint file-system scanning. A web proxy applies it only if it scans the downloaded content body; a URL-only proxy rule cannot satisfy the content corroborators. Memory scanning is not covered: the condition tests `filesize`, which is undefined in a libyara process-memory scan.
 
 ```yara
 rule MALW_HijackLoader_MultiVector_Lure_GrimResource_MSC {
@@ -160,8 +162,6 @@ rule MALW_HijackLoader_MultiVector_Lure_GrimResource_MSC {
       )
 }
 ```
-
-### Hunting Rules
 
 #### Inno Setup Pascal Anti-Triage Wrapper
 
@@ -210,7 +210,7 @@ rule MALW_HijackLoader_InnoSetup_AntiTriage_Wrapper {
 **False Positives:** The PDB branch and the codename-plus-pipe branch can match an unmodified Wondershare crash reporter that carries the same PDB path, codename and pipe name; this was not tested (no vendor sample). The filename branch (`networkspec17.log`, `shadermgr93.rc` and the pipe name together) is specific to this operator's wave.
 **Blind Spots:** A rebuild with a different PDB path and a different pipe name evades all three branches; a rebuild that keeps the vendor strings but renames the two payload files still matches the PDB and codename branches, which is also why those branches cannot tell it from the vendor's file.
 **Validation:** Scan the ExceptionHandler.dll dropped artifact; it must match. An unmodified Wondershare crash reporter is expected to match the PDB or codename branch as well and has not been tested, so it is not a valid negative control; a benign DLL without any of the strings must NOT fire.
-**Deployment:** Endpoint AV/EDR on-access scanner, memory scanner, file-system hunting.
+**Deployment:** Endpoint AV/EDR on-access scanner and file-system hunting, of files or saved dumps. Memory scanning is not covered: the condition tests `filesize`, which is undefined in a libyara process-memory scan.
 
 ```yara
 /*
@@ -326,7 +326,7 @@ level: high
 **False Positives:** Automated endpoint management solutions that use MMC-based snap-ins to deliver Defender configuration changes (verify via change-management records); security administrators who open MMC snap-ins and separately run PowerShell to manage Defender exclusions in the same session are extremely unlikely to reproduce this exact process-parent relationship (MMC does not propagate as the parent for manually opened PowerShell windows).
 **Blind Spots:** An operator technique that disables Defender via a non-PowerShell/cmd mechanism (direct registry write, WMI), or through `Set-MpPreference`, evades the command-line clause; an encoded command (`-EncodedCommand`) hides the tokens from a `CommandLine` test; an operator that drops the MMC-chain entirely (different initial-access vector) evades both clauses.
 **Validation:** Detonate the Tier-2 GrimResource `.msc` chain: both the `mmc.exe` parent and a command line holding `Add-MpPreference` with `ExclusionPath` or `ExclusionExtension` must be present; an `mmc.exe` child that runs only `Set-MpPreference`, and an unrelated legitimate PowerShell Defender-configuration session (not parented by `mmc.exe`), must NOT fire.
-**Deployment:** EDR process-creation monitoring, SIEM Sysmon EID 1, PowerShell-Operational EID 4104.
+**Deployment:** EDR process-creation monitoring and SIEM Sysmon EID 1: the selection needs ParentImage, Image and CommandLine from one process-creation event. PowerShell-Operational EID 4104 does not carry the parent or image and would need a separate selector, so it is not a deployment source for this rule.
 
 ```yaml
 title: HijackLoader GrimResource MMC Spawning PowerShell Adding Defender Exclusion
@@ -392,7 +392,7 @@ level: high
 **ATT&CK Coverage:** T1036.005 (Match Legitimate Name or Location), T1574.001 (DLL)
 **Confidence:** HIGH (for this build wave)
 **Rationale:** All three selectors hinge entirely on `Image|endswith` matching this wave's operator-renamed filenames (`CrystSupervisor32.exe`, `WVault.exe`), precisely the pattern the tiering standard names as disqualifying for Detection. The condition is an OR of three selections, so any one of them fires and none requires the Inno wrapper to be the parent of the whole chain. The `is-*.tmp\` Inno Setup extraction path is common to every Inno Setup installer, legitimate or malicious, and adds no discrimination on its own. *Logic fix 2026-10-11:* the third selection used to test the parent command line for the bare substring `is-`, which matches any word ending in `is-` (`this-`, `analysis-`); it now tests `\is-`, the extraction directory component. Demoted from the original Detection classification for the filename reason.
-**False Positives:** Reused only if an unrelated benign actor coincidentally adopts these exact renamed filenames (very unlikely); genuine Wondershare/Qihoo software runs under the original filenames (`SlideShowEditor.exe` / `PromoUtil.exe`), not these renamed ones.
+**False Positives:** Not settled. The report calls `CrystSupervisor32.exe` both a renamed Wondershare `SlideShowEditor.exe` and the genuine signed Wondershare side-load host, so whether a legitimate Wondershare installer uses this exact name was not established, and the `falsepositives` field in the YAML below keeps that possibility (and legitimate Qihoo installs of `PromoUtil.exe`) open. Both names are untested against a clean Wondershare or Qihoo install; treat a hit as a lead until the Authenticode chain and install path are checked.
 **Deployment:** EDR process-creation monitoring, SIEM Sysmon EID 1; treat hits as leads for this build wave, not a durable family detector.
 
 ```yaml

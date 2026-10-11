@@ -52,9 +52,9 @@ OpenStrike is a bespoke Cobalt Strike-derivative toolkit combining a custom-buil
 **Confidence:** HIGH
 **Rationale:** The `/updates?id=%08x` and `/submit?id=%08x` URI format strings and the `[*] OpenStrike Beacon starting...` banner are unique to the gen-4 WinHTTP beacon rewrite and do not appear in any known legitimate software; the condition requires either the banner alone or both URI format strings together, plus one of four corroborating build/crypto artifacts. No single renameable literal carries the rule.
 **False Positives:** None known — URI format strings with 8-hex-digit IDs and the OpenStrike banner string are specific to this beacon; `ChainingModeCBC` is a BCrypt mode string that does appear in other software but only functions here as corroboration alongside the primary URI/banner anchors.
-**Blind Spots:** A full source-level rewrite of the URI scheme and removal of the startup banner would evade this rule; the rule targets the on-disk/in-memory binary, not network traffic (see the companion Suricata/Sigma URI rules for that layer).
+**Blind Spots:** A full source-level rewrite of the URI scheme and removal of the startup banner would evade this rule; the rule targets the on-disk binary or a saved dump, not network traffic (see the companion Suricata/Sigma URI rules for that layer).
 **Validation:** Scan `beacon_windows_x64.exe` (hash1 below) — must match; a benign WinHTTP-based application must NOT fire.
-**Deployment:** Endpoint AV/EDR file scan, memory scanner, gateway content inspection.
+**Deployment:** Endpoint AV/EDR file scan, scanner for saved dumps, gateway content inspection. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
 /*
@@ -106,7 +106,7 @@ rule TOOLKIT_OpenStrike_Gen4_Beacon
 **False Positives:** None known — `Cookie: SESSIONID=%d` is specific to the gen-1 prototype; the RSA modulus prefix could theoretically appear in other RSA-1024 software but is always corroborated by the GCC 15 compiler string in this rule's condition.
 **Blind Spots:** A build using a different compiler toolchain (no `GCC: (GNU) 15-win32` string) evades the rule even if the protocol markers are present.
 **Validation:** Scan `mini_beacon.exe` or `mini_beacon2.exe` (hash1 below) — must match; a benign RSA-1024 CNG application built with a different toolchain must NOT fire.
-**Deployment:** Endpoint AV/EDR file scan, memory scanner.
+**Deployment:** Endpoint AV/EDR file scan, scanner for saved dumps. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
 rule TOOLKIT_OpenStrike_Proto_Beacons
@@ -147,7 +147,7 @@ rule TOOLKIT_OpenStrike_Proto_Beacons
 **False Positives:** None known — `DceRpcSs` is not a legitimate Windows service name; `MSSE-%d-server` is the Artifact Kit default; no legitimate Windows binary combines both.
 **Blind Spots:** An Artifact Kit build with source-level customization of the service name and pipe-format string evades this rule; the rule targets the on-disk service binary, not the runtime hollowing behavior itself (see the companion Sigma rules for that layer).
 **Validation:** Scan `artifact32svc.exe` / `artifact64svc.exe` (hash1 below) — must match; an unrelated legitimate Windows service binary must NOT fire.
-**Deployment:** Endpoint AV/EDR file scan, memory scanner.
+**Deployment:** Endpoint AV/EDR file scan, scanner for saved dumps. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
 rule MALW_ArtifactKit_EAXRedirect_Svc
@@ -186,7 +186,7 @@ rule MALW_ArtifactKit_EAXRedirect_Svc
 **False Positives:** None known — the 32-character AAAA...HHHH AES placeholder is a development artifact unique to this module; `wpcap.dll` embedded in a non-WinPcap installer binary is anomalous.
 **Blind Spots:** A production build that patches the placeholder with a randomized AES key would evade this rule; the rule targets the on-disk module, not the ICMP/TCP/UDP transport channels themselves.
 **Validation:** Scan `covertvpn.dll` (hash1 below) — must match; a legitimate WinPcap-based application must NOT fire (it will not carry the AES placeholder).
-**Deployment:** Endpoint AV/EDR file scan, memory scanner, DLP gateway.
+**Deployment:** Endpoint AV/EDR file scan, scanner for saved dumps, DLP gateway. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
 rule MALW_CovertVPN_L2Bridge
@@ -227,7 +227,7 @@ rule MALW_CovertVPN_L2Bridge
 **Confidence:** MODERATE
 **Rationale:** Retiered from Detection. The rule's real discriminating power rests on the single hardcoded path `C:\Windows\Temp\beacon.dll` — a one-line source edit in a future build fully evades it. The paired diagnostic format strings (`DLL loaded at %p`, `LoadLibrary failed: %lu`) and the GCC 15-win32 compiler string add negligible durability of their own: both are generic-enough developer print statements and a shared toolchain artifact respectively, so with the path removed the rule would fire on very little that is distinctive. Per the tiering rubric, a rule whose low false-positive rate today derives from one renameable literal is scored on durability, not as-written precision.
 **False Positives:** Low today — no legitimate software is known to hardcode a `beacon.dll` load target in `C:\Windows\Temp`; a future OpenStrike build that renames the drop path or the DLL evades entirely.
-**Deployment:** Endpoint AV/EDR file scan, memory scanner; treat as a triage lead requiring confirmation from the companion Detection-tier rules or the file-path IOC feed entry.
+**Deployment:** Endpoint AV/EDR file scan, scanner for saved dumps; treat as a triage lead requiring confirmation from the companion Detection-tier rules or the file-path IOC feed entry. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
 rule TOOLKIT_OpenStrike_DllLoader

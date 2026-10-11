@@ -49,9 +49,9 @@ Remcos is a commercially-sold remote access trojan (Breaking-Security.Net) widel
 **ATT&CK Note:** T1219 is the primary mapping; T1056.001, T1555.003, and T1113 are secondary coverage.
 **Confidence:** HIGH
 **False Positives:** None known. Every OR-branch requires either the family mutex, the paired product banner + developer string, or a multi-string combination from the RAT's internal C2/keylogging/credential-theft protocol vocabulary. *Logic fix 2026-10-11:* the loosest branch used to be `8 of them`, and 7 of the 24 declared strings are generic Windows terms (`Userinit`, `install.bat`, `EnableLUA`, `VirtualAllocEx`, `WriteProcessMemory`, `GdipSaveImageToStream`, `waveInOpen`), so a binary holding all seven plus one Remcos string satisfied it; the branch now also requires 3 of the 17 Remcos-vocabulary strings (mutex, banner, developer, C2, keylogging, credential and command strings). Not goodware-validated.
-**Blind Spots:** A fully re-branded fork that strips the banner/developer strings, randomizes the mutex, and reworks the internal log/command vocabulary would evade this rule; targets on-disk/in-memory binaries, not network traffic.
-**Validation:** Scan either analyzed sample (`hash1`/`hash3` below) — must match via the mutex branch alone; a benign, unrelated Windows executable must NOT fire.
-**Deployment:** Endpoint AV/EDR file scan, memory scanning.
+**Blind Spots:** A fully re-branded fork that strips the banner/developer strings, randomizes the mutex, and reworks the internal log/command vocabulary would evade this rule; targets files and saved dumps, not network traffic; the condition tests `filesize` and an MZ header, which a libyara live process-memory scan cannot satisfy.
+**Validation:** Scan either analyzed sample (`hash1`/`hash3` below) — must match via the mutex branch alone (replay against the samples is NOT CHECKED); a benign, unrelated Windows executable must NOT fire.
+**Deployment:** Endpoint AV/EDR file scan, of files or saved dumps. Live process-memory scanning is not covered: the `filesize` test is undefined there.
 
 ```yara
 /*
@@ -64,7 +64,7 @@ Remcos is a commercially-sold remote access trojan (Breaking-Security.Net) widel
 
 rule RAT_Remcos_Family_Detection {
    meta:
-      description = "Detects Remcos RAT via its mutex, C2 protocol banner, and internal log/command strings - a multi-branch fingerprint covering the commercial Remcos RAT family regardless of build customization"
+      description = "Detects Remcos RAT via its mutex, C2 protocol banner, and internal log/command strings - a multi-branch fingerprint of the Remcos family's mutex, banner, C2, keylogging, credential and command strings, which matches only while at least one branch's strings survive in the build"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/remcos-opendirectory-detections/"
@@ -131,7 +131,7 @@ rule RAT_Remcos_Family_Detection {
 **False Positives:** None known — every surviving branch requires the family mutex plus at least one campaign-specific artifact (the literal `remcos` install-path substring, or the exact UAC-bypass command fragment).
 **Blind Spots:** A build that randomizes the mutex evades entirely; the install-path/temp-DLL/install.bat branches are brittle on their own (operator-configurable) but are gated behind the mutex requirement here.
 **Validation:** Scan either analyzed sample — must match; a benign binary that coincidentally references `EnableLUA` or a Chrome/Firefox path (e.g. a legitimate browser-migration tool) must NOT fire absent the mutex.
-**Deployment:** Endpoint AV/EDR file scan, memory scanning.
+**Deployment:** Endpoint AV/EDR file scan, scanning of saved dumps. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
 rule RAT_Remcos_OpenDirectory_Mutex_Install {
@@ -179,7 +179,7 @@ rule RAT_Remcos_OpenDirectory_Mutex_Install {
 **Rationale:** Every OR-branch requires either the family mutex or the literal `AppData\Roaming\remcos\remcos.exe` install path; none of the five branches can fire on the generic `Software\...\Run` string alone. The branches are: a UAC command string plus the install path; three persistence-path strings plus the install path; the Userinit path, the install path and the mutex; the mutex plus two persistence-path strings plus a UAC command string (this one needs no install path); and the PING and `install.bat` melting strings plus the install path. Fixed a real defect from the original: the condition had no `filesize` constraint at all. *Wording fix 2026-10-11:* the earlier text said the Run string only contributes with the install path, which is untrue of the mutex branch.
 **False Positives:** None known. The generic `Software\Microsoft\Windows\CurrentVersion\Run` string only contributes when paired with the campaign install path, or (the fourth branch) with the family mutex plus a second persistence-path string plus a UAC command string; it never fires alone. Not goodware-validated.
 **Blind Spots:** A build using a differently-named install folder AND a randomized mutex evades every branch; targets on-disk artifacts only.
-**Validation:** Scan either analyzed sample — must match via the mutex + Winlogon-path branch; a legitimate administrative script referencing the Run key alone (without the campaign install path) must NOT fire.
+**Validation:** Scan either analyzed sample — it must satisfy at least one of the five branches, for example the Userinit path, the install path and the mutex together (the mutex and the Userinit path alone are not enough, and replay against the samples is NOT CHECKED); a legitimate administrative script referencing the Run key alone (without the campaign install path) must NOT fire.
 **Deployment:** Endpoint AV/EDR file scan.
 
 ```yara
@@ -230,7 +230,7 @@ rule RAT_Remcos_UAC_Bypass_Persistence {
 **False Positives:** None known — the mutex is a distinctive family identifier not shared with legitimate software.
 **Blind Spots:** A build that randomizes the mutex evades this rule (the Hunting-tier generic-API companion below still applies, with higher noise).
 **Validation:** Scan either analyzed sample — must match; a legitimate debugger or EDR agent using the same injection APIs but lacking the mutex must NOT fire.
-**Deployment:** Endpoint AV/EDR file scan, memory scanning.
+**Deployment:** Endpoint AV/EDR file scan, scanning of saved dumps. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
 rule RAT_Remcos_Process_Injection_Mutex_Anchored {
@@ -400,26 +400,26 @@ rule RAT_Remcos_Surveillance_Generic_API_Cluster {
 
 ### Detection Rules
 
-#### UAC Disabled by reg.exe Setting EnableLUA to 0 From cmd.exe (Remcos Behavior)
+#### UAC Disabling Attempt by reg.exe Setting EnableLUA to 0 From cmd.exe (Remcos Behavior)
 
 **Tier:** Detection
 **Robustness:** 3
 **ATT&CK Coverage:** T1548.002 (Bypass User Account Control)
 **Confidence:** HIGH
-**Rationale:** *Wording and logic fix 2026-10-11:* the earlier title said Remcos RAT, but nothing in the selection is Remcos-specific, so the title and description now name the behavior. The value test was the bare substring `/d 0`, which also matches `/d 0x1` (UAC enabled); it is now `/d 0 ` in the middle of the line or `/d 0` at its end.
+**Rationale:** *Wording and logic fix 2026-10-11:* the earlier title said Remcos RAT, but nothing in the selection is Remcos-specific, so the title and description now name the behavior. The value test was the bare substring `/d 0`, which also matches `/d 0x1` (UAC enabled); it is now `/d 0 ` in the middle of the line or `/d 0` at its end. *Boundary fix 2026-10-11 (round 2):* the key and value tests were five unordered substrings, so `Policies\SystemBackup` or a value named `EnableLUABackup` also matched; the key and value must now appear as the exact sequence `\Policies\System /v EnableLUA ` (also accepted with a closing quote after `System`), so the argument order key then `/v` is required.
 **False Positives:** Legitimate system administration (rare); enterprise management tools (SCCM, Intune) performing scripted UAC changes — verify digital signature before treating as benign.
-**Blind Spots:** Misses a UAC-disable performed by a process other than `reg.exe` (e.g. PowerShell `Set-ItemProperty`) or launched by a parent other than `cmd.exe`; misses the data written in another spelling (`/d 0x0`, `/d 00`, `/d 0x00000000`); see the companion registry-state rule below for the registry-write angle.
-**Validation:** Trigger the malware's UAC-bypass routine — the reg.exe command line must match; unrelated administrative reg.exe usage that doesn't target this exact key/value combination must NOT fire.
+**Blind Spots:** Misses a UAC-disable performed by a process other than `reg.exe` (e.g. PowerShell `Set-ItemProperty`) or launched by a parent other than `cmd.exe`; misses the data written in another spelling (`/d 0x0`, `/d 00`, `/d 0x00000000`) and a command line that puts `/v EnableLUA` before the key; the event is an attempted change and is not proof the value was written; see the companion registry-state rule below for the registry-write angle.
+**Validation:** Trigger the malware's UAC-bypass routine — the reg.exe command line must match; unrelated administrative reg.exe usage that doesn't target this exact key/value combination (including `Policies\SystemBackup` and a value named `EnableLUABackup`) must NOT fire.
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (process-creation telemetry).
 
 ```yaml
-title: UAC Disabled by reg.exe Setting EnableLUA to 0 From cmd.exe (Remcos Behavior)
+title: UAC Disabling Attempt by reg.exe Setting EnableLUA to 0 From cmd.exe (Remcos Behavior)
 id: 482a813a-346e-450c-8ff7-4b449a26ad7d
 status: experimental
 description: >-
   Detects reg.exe, launched by cmd.exe, adding the HKLM Policies\System
   EnableLUA value as REG_DWORD with data 0 (the value written as /d 0 followed
-  by a space or ending the line), which disables User Account Control. The
+  by a space or ending the line), an attempt to disable User Account Control (the event is the command line, not the resulting registry state; see the companion registry-state rule). The
   report records Remcos doing this ahead of persistence installation. The
   rule has no Remcos-specific test: any cmd.exe-launched reg.exe that turns
   UAC off matches, and so does the same change made by an administrator or a
@@ -443,36 +443,38 @@ detection:
         CommandLine|contains|all:
             - 'ADD'
             - 'HKLM'
-            - 'Policies\System'
-            - 'EnableLUA'
             - 'REG_DWORD'
+    selection_key:
+        CommandLine|contains:
+            - '\Policies\System /v EnableLUA '
+            - '\Policies\System" /v EnableLUA '
     selection_value_mid:
         CommandLine|contains: '/d 0 '
     selection_value_end:
         CommandLine|endswith: '/d 0'
     selection_parent:
         ParentImage|endswith: '\cmd.exe'
-    condition: selection_img and selection_cli and (selection_value_mid or selection_value_end) and selection_parent
+    condition: selection_img and selection_cli and selection_key and (selection_value_mid or selection_value_end) and selection_parent
 falsepositives:
     - Legitimate system administration (rare)
     - Enterprise management tools (SCCM, Intune) - verify digital signature
 level: high
 ```
 
-#### Remcos RAT Winlogon Userinit Persistence via Registry Modification
+#### Winlogon Userinit Registry Value Changed From the Default (Remcos Persistence Pattern)
 
 **Tier:** Detection
 **Robustness:** 3
 **ATT&CK Coverage:** T1547.004 (Winlogon Helper DLL)
 **Confidence:** HIGH
-**Rationale:** *Wording fix 2026-10-11:* the earlier description said the rule detects an appended executable path, but the selection fires on any Userinit data other than the exact default string, which includes a replaced value; the description, false positives and validation now say so.
+**Rationale:** *Round 2 fixes 2026-10-11:* the value test was `contains`, so a value named `UserinitBackup` matched; it is now `endswith`, which makes the value name exact. `level` is lowered from `critical` to `high` because the false-positive list admits administrators and management tools, and the YAML `falsepositives` entry that called the value untouched by legitimate processes is replaced to match. The title no longer names Remcos, since nothing in the selection is Remcos-specific. *Wording fix 2026-10-11:* the earlier description said the rule detects an appended executable path, but the selection fires on any Userinit data other than the exact default string, which includes a replaced value; the description, false positives and validation now say so.
 **False Positives:** Unlikely. The report names no legitimate writer of this value outside OS installation; a management tool or an administrator that rewrites it also matches, and so does a legitimate spelling of the default that differs from the filtered string.
 **Blind Spots:** A persistence mechanism that avoids Userinit entirely (e.g. a Run key alone) is not covered. The default-value filter is one literal string; a differently formatted default would be reported as a modification.
 **Validation:** Trigger the malware's persistence routine: the registry write appending a second executable path must match; a write that leaves the value as the default `userinit.exe,` must NOT fire, and a write that replaces it with another value does fire.
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (registry telemetry).
 
 ```yaml
-title: Remcos RAT Winlogon Userinit Persistence via Registry Modification
+title: Winlogon Userinit Registry Value Changed From the Default (Remcos Persistence Pattern)
 id: 208b4736-f00a-44bd-b71e-1230ece13876
 status: experimental
 description: >-
@@ -497,13 +499,14 @@ logsource:
     product: windows
 detection:
     selection:
-        TargetObject|contains: '\Microsoft\Windows NT\CurrentVersion\Winlogon\Userinit'
+        TargetObject|endswith: '\Microsoft\Windows NT\CurrentVersion\Winlogon\Userinit'
     filter_legitimate:
         Details: 'C:\WINDOWS\system32\userinit.exe,'
     condition: selection and not filter_legitimate
 falsepositives:
-    - Unlikely (no legitimate process modifies this value outside OS installation)
-level: critical
+    - Administrators or management tools that rewrite the Userinit value
+    - A legitimate spelling of the default that differs from the filtered string (case, or a missing trailing comma)
+level: high
 ```
 
 #### EnableLUA Registry Value Set to Disable User Account Control (Registry State)
@@ -760,18 +763,18 @@ falsepositives:
 level: medium
 ```
 
-#### Non-Browser Process Accessing Chrome or Firefox Credential Store Files (Remcos Credential Theft Pattern)
+#### Non-Browser Process Accessing Chrome or Firefox Credential Store Files
 
 **Tier:** Hunting
 **Robustness:** 3
 **ATT&CK Coverage:** T1555.003 (Web Browsers), T1539 (Steal Web Session Cookie)
 **Confidence:** MODERATE
-**Rationale:** A durable, family-agnostic technique detector (accessing Chrome/Firefox credential and cookie files from a non-browser process is a genuine chokepoint), but the campaign's own false-positive list names specific, common categories of legitimate software — password managers and backup tools — that are expected to trigger it. Demoted from `high` to reflect that acknowledged, non-trivial FP volume; the underlying technique detection itself remains high-confidence.
+**Rationale:** *Round 2 fixes 2026-10-11:* the Chrome tests were `contains`, so `Cookies Backup`-style names such as `...\Default\CookiesBackup` or a longer name under that path matched; they are now `endswith`, like the Firefox branch, so the file name is exact. The title no longer names Remcos, since nothing in the selection is Remcos-specific. A durable, family-agnostic technique detector (accessing Chrome/Firefox credential and cookie files from a non-browser process is a genuine chokepoint), but the campaign's own false-positive list names specific, common categories of legitimate software — password managers and backup tools — that are expected to trigger it. Demoted from `high` to reflect that acknowledged, non-trivial FP volume; the underlying technique detection itself remains high-confidence.
 **False Positives:** Password managers (1Password, Bitwarden, LastPass) importing saved browser credentials; backup software performing full user-profile backups.
 **Deployment:** Endpoint EDR with file-read telemetry, or Windows object-access auditing (Security EID 4663) with SACLs on the browser profile files; stock Sysmon does not log file reads. Broader sweep, not for auto-block.
 
 ```yaml
-title: Non-Browser Process Accessing Chrome or Firefox Credential Store Files (Remcos Credential Theft Pattern)
+title: Non-Browser Process Accessing Chrome or Firefox Credential Store Files
 id: 27e252f6-c5d9-4545-ab96-b180ab116a88
 status: experimental
 description: >-
@@ -798,7 +801,7 @@ logsource:
     definition: 'Requires file read-access telemetry for the browser profile files, for example Security EID 4663 with an audit SACL on them or an EDR file-access sensor; stock Sysmon does not log file reads.'
 detection:
     selection_chrome:
-        TargetFilename|contains:
+        TargetFilename|endswith:
             - '\Google\Chrome\User Data\Default\Login Data'
             - '\Google\Chrome\User Data\Default\Cookies'
     selection_firefox:

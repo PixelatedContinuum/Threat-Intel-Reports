@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--59a73364-d533-4e12-b315-ffc5239a0d71",
+    "id": "bundle--9b86ff4c-5c13-4f73-b983-87d18c266a85",
     "objects": [
         {
             "type": "identity",
@@ -311,27 +311,6 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--3832238b-e9ff-5b1b-9c62-6315c3bd64e2",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:12.722385Z",
-            "modified": "2026-10-11T07:05:19.196155Z",
-            "name": "RAT_CloudSync_C2Protocol_DualBuild",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "rule RAT_CloudSync_C2Protocol_DualBuild {\n   meta:\n      description = \"Detects CloudSync's cleartext TCP C2 registration/heartbeat protocol strings across both observed build generations, which differ in message terminator ([C2_END] vs [END]) and registration field names\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\"\n      date = \"2026-08-03\"\n      hash1 = \"9744c12a06b4562e175d4aeb7b8fd5c1e1877ac30222af8243eeaae16df324b0\"\n      family = \"CloudSync\"\n      malware_type = \"RAT\"\n      campaign = \"CloudSync-Assembler-Toolkit-91.197.98.188\"\n      id = \"df292c17-07ad-5292-9f33-206ab7582bdd\"\n   strings:\n      $autoupd = \"=== AUTO UPDATE ===\" ascii\n      $heartbeat = \"[Shares]\" ascii\n      $term1 = \"[C2_END]\" ascii\n      $term2 = \"[END]\" ascii\n      $field1 = \"AnyDesk Pass:\" ascii\n      $field2 = \"AD Pwd:\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 60MB and\n      2 of them\n}",
-            "pattern_type": "yara",
-            "valid_from": "2026-08-03T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "indicator",
-            "spec_version": "2.1",
             "id": "indicator--f482c958-8d70-57c2-9dad-cd0c7c24061b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.722538Z",
@@ -404,6 +383,27 @@
                 "malicious-activity"
             ],
             "pattern": "rule Loader_CtBat_ProxyAwareUSBWormStub {\n   meta:\n      description = \"Detects the ct.bat infection stub via a combination of its distinctive command fragments: proxy-credential-inheriting WebClient download, USB drive enumeration for its worm loop, autorun.inf propagation, and its AMSI-bypass field name\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\"\n      date = \"2026-08-03\"\n      hash1 = \"0ff0cee1fbf1050fbe3ab91918e56334a93269265e5614717ec0441baa8c42df\"\n      family = \"CloudSync\"\n      malware_type = \"Loader\"\n      campaign = \"CloudSync-Assembler-Toolkit-91.197.98.188\"\n      id = \"21d45221-9c71-50e5-89fa-a7b3d0ea4e76\"\n   strings:\n      $proxy = \"DefaultCredentials\" ascii\n      $wmic = \"wmic logicaldisk where\" ascii\n      $autorun = \"autorun.inf\" ascii\n      $amsi = \"amsiInitFailed\" ascii\n      $sysupd = \"SystemUpdate\" ascii\n   condition:\n      filesize < 5KB and\n      2 of them\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-08-03T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--3832238b-e9ff-5b1b-9c62-6315c3bd64e2",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-01T19:54:12.722385Z",
+            "modified": "2026-10-11T07:05:19.196155Z",
+            "name": "RAT_CloudSync_C2Protocol_DualBuild",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule RAT_CloudSync_C2Protocol_DualBuild {\n   meta:\n      description = \"Detects CloudSync's cleartext TCP C2 registration/heartbeat protocol strings across both observed build generations, which differ in message terminator ([C2_END] vs [END]) and registration field names\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\"\n      date = \"2026-08-03\"\n      hash1 = \"9744c12a06b4562e175d4aeb7b8fd5c1e1877ac30222af8243eeaae16df324b0\"\n      family = \"CloudSync\"\n      malware_type = \"RAT\"\n      campaign = \"CloudSync-Assembler-Toolkit-91.197.98.188\"\n      id = \"df292c17-07ad-5292-9f33-206ab7582bdd\"\n   strings:\n      $autoupd = \"=== AUTO UPDATE ===\" ascii\n      $heartbeat = \"[Shares]\" ascii\n      $term1 = \"[C2_END]\" ascii\n      $term2 = \"[END]\" ascii\n      $field1 = \"AnyDesk Pass:\" ascii\n      $field2 = \"AD Pwd:\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 60MB and\n      2 of them\n}",
             "pattern_type": "yara",
             "valid_from": "2026-08-03T00:00:00Z",
             "labels": [
@@ -3095,7 +3095,7 @@
             "id": "report--9e9a2d1e-2840-51a5-af43-b5ef11a64213",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.739212Z",
-            "modified": "2026-10-11T04:24:13.531469Z",
+            "modified": "2026-10-11T07:42:04.007596Z",
             "name": "CloudSync: An Assembler's Intrusion Toolkit",
             "description": "Assembled 22-sample intrusion toolkit staged on a live open directory. Operator estate and the sourced commodity-stealer service are kept in SEPARATE tiers so they are never read as one infrastructure. Credentials are defanged to first-8+last-4 (disclosure hazard); the Telegram chat id 8116056430 is retained whole as the attribution artifact. Network IOCs are NOT defanged. The 22-file set is a snapshot of what was staged, not the operator's complete toolkit (one panel port, 91.92.43.221:5003, is live with no matching build in hand).",
             "report_types": [
@@ -3130,11 +3130,11 @@
                 "domain-name--1762c3f1-a178-5df6-b19d-917879ddb911",
                 "domain-name--d4295e7a-eedc-57b2-ae1f-5a8afd168cac",
                 "indicator--78b34948-9a84-548e-b370-cd602bfd3367",
-                "indicator--3832238b-e9ff-5b1b-9c62-6315c3bd64e2",
                 "indicator--f482c958-8d70-57c2-9dad-cd0c7c24061b",
                 "indicator--905535be-fa82-5642-80b4-d05d43708b7e",
                 "indicator--57ed259c-002b-5786-96ce-12fd1fb8d493",
                 "indicator--4d5b2dde-07e9-5752-89df-4d26f63d2131",
+                "indicator--3832238b-e9ff-5b1b-9c62-6315c3bd64e2",
                 "indicator--1432aab7-b938-55b1-82d9-f5f25a0114ca",
                 "indicator--a235c665-2aab-5d95-a724-38e6eca63144",
                 "indicator--59ba7a73-34c5-5942-a725-fa753d9071b4",

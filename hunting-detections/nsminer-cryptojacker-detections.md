@@ -104,7 +104,7 @@ rule NsMiner_Dropper_Downloader {
 **False Positives:** None known — no legitimate software embeds the literal path `\AppData\Roaming\NsMiner\` combined with one of the three family-specific filenames; the generic `C:\Users\` clause is required alongside the distinctive path and adds negligible additional risk on its own.
 **Blind Spots:** Requires both the `NsMiner`-branded persistence path and at least one of the three shipped filenames (`NsCpuCNMiner32.exe`, `NsCpuCNMiner64.exe`, `tftp.exe`) to survive unmodified — a rebrand that renames both the install directory and every shipped binary would evade this rule. The generic `C:\Users\` clause contributes no real specificity on its own.
 **Validation:** Scan the analyzed dropper referencing the persistence path — must match; a benign installer writing to an unrelated `%AppData%` subdirectory must NOT fire.
-**Deployment:** Endpoint AV/EDR file scan, memory scanning of processes referencing the NsMiner install path.
+**Deployment:** Endpoint AV/EDR file scan, scanning of saved dumps of processes referencing the NsMiner install path. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
 rule NsMiner_Persistence_Directory {

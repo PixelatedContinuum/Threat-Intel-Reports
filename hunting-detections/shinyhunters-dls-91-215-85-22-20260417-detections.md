@@ -39,14 +39,14 @@ This is a Data Leak Site / extortion infrastructure investigation; there are no 
 #### ShinyHunters DLS Ransom Note (INFORMATION.txt)
 
 **Tier:** Detection
-**Robustness:** 3
+**Robustness:** 2
 **ATT&CK Coverage:** T1657 (Financial Theft / Extortion), T1583.001 (Acquire Infrastructure: Domains)
 **Confidence:** HIGH
-**Rationale:** Exact verbatim phrases from the actor-authored INFORMATION.txt ransom note (either of two sentences), combined with any one of three .onion mirror addresses or the bare `pay_or_leak` path token. The condition does not require an .onion address: a phrase plus `pay_or_leak` alone fires. This wording has persisted unchanged across every analyzed dump and through three PGP key-rotation events (2020–2026) — the actor would have to rewrite their own canonical ransom note to evade it, a materially higher cost than renaming a single binary. *Wording fix 2026-10-11:* the description used to say the exact opening phrase and the .onion references; the second phrase is not the opening one and the .onion addresses are one of two alternatives.
-**False Positives:** None known — the verbatim DLS phrases are exclusive to ShinyHunters infrastructure as far as the report records. Combining a phrase with an .onion address or the `pay_or_leak` path token removes most residual ambiguity, but a write-up or archive that quotes the note matches as well. Not goodware-validated.
+**Rationale:** Exact verbatim phrases from the actor-authored INFORMATION.txt ransom note (either of two sentences), combined with any one of three .onion mirror addresses or the bare `pay_or_leak` path token. The condition does not require an .onion address: a phrase plus `pay_or_leak` alone fires. This wording has persisted unchanged across every analyzed dump and through three PGP key-rotation events (2020–2026) — the actor would have to rewrite their own canonical ransom note to evade it, a materially higher cost than renaming a single binary. *Round 2 fix 2026-10-11:* scored 2, not 3: the phrase, address and path token are a mutable artifact combination, not a technique invariant, and the match shows a copy of the note and nothing about exfiltration. *Wording fix 2026-10-11:* the description used to say the exact opening phrase and the .onion references; the second phrase is not the opening one and the .onion addresses are one of two alternatives.
+**False Positives:** None known — the verbatim DLS phrases are exclusive to ShinyHunters infrastructure as far as the report records. Combining a phrase with an .onion address or the `pay_or_leak` path token removes most residual ambiguity, but a write-up or archive that quotes the note matches as well. The note ships inside the leak archives the leak site serves, so a copy on an enterprise share can come from someone who downloaded a leak (a researcher or an incident responder) and does not show that the organization was a victim. Not goodware-validated.
 **Blind Spots:** A full rewrite of the canonical ransom note text would evade this rule; it detects the note file itself, not the exfiltration or delivery mechanism that placed it.
 **Validation:** Scan a copy of the DLS INFORMATION.txt ransom note — must match; scan an unrelated ransomware note or generic text file — must NOT match.
-**Deployment:** Endpoint AV/EDR on-access scan; CASB / DLP file-content inspection on shared drives and cloud-sync folders; email attachment scanning; forensic memory/disk triage on suspected victim hosts.
+**Deployment:** Endpoint AV/EDR on-access scan; CASB / DLP file-content inspection on shared drives and cloud-sync folders; email attachment scanning; forensic disk triage and saved dumps scanned as files on suspected victim hosts (live process-memory scanning is not covered: the `filesize` test is undefined there).
 
 ```yara
 /*
@@ -59,7 +59,7 @@ This is a Data Leak Site / extortion infrastructure investigation; there are no 
 
 rule MALW_ShinyHunters_RansomNote {
    meta:
-      description = "Detects the ShinyHunters Data Leak Site ransom note (INFORMATION.txt) by one of two verbatim phrases (the DLS download sentence or the leaked-because-the-victim-did-not-pay sentence) together with one of three .onion mirror addresses or the pay_or_leak path token, as distributed in actor ransom packages; presence on an enterprise file share is a high-confidence exfiltration indicator"
+      description = "Detects the ShinyHunters Data Leak Site ransom note (INFORMATION.txt) by one of two verbatim phrases (the DLS download sentence or the leaked-because-the-victim-did-not-pay sentence) together with one of three .onion mirror addresses or the pay_or_leak path token, as served from every directory of the actor's leak site and so present in downloaded leak archives; a match is a copy of the note text, which also sits in researcher copies and write-ups, and is not by itself evidence that this host's data was exfiltrated"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/"

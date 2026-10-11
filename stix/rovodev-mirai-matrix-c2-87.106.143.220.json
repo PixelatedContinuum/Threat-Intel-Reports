@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--26d51571-82ba-4df4-b645-0806a88ffc8e",
+    "id": "bundle--86add36c-708f-47f8-97ca-4d67f553bbd2",
     "objects": [
         {
             "type": "identity",
@@ -1108,36 +1108,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--cc3f380d-3be9-5c85-a6a2-0e61e9947461",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:19.203345Z",
-            "modified": "2026-10-01T19:54:19.203345Z",
-            "name": "MAL_Python_Matrix_C2_Framework_Family",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "rule MAL_Python_Matrix_C2_Framework_Family {\n   meta:\n      description = \"Detects Matrix C2 Python DDoS-as-a-Service framework files authored via Atlassian Rovodev AI coding agent. Identifies master_control.py, attack_engine.py, and multi_vector_agent.py via AI-generated banner strings, operator-marketing comments, emoji-branded attack method catalog entries, and mass-infection docstring captured directly from Rovodev session file_write tool call payloads.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/\"\n      date = \"2026-05-26\"\n      hash1 = \"e9e0eafc89e4a9db796c63bb4fdc5c0fd1106f8b9c234fb57e51a7934f2b8d8e\"\n      hash2 = \"921e4c1d86813838d40010e82a8f374a70b91f06008db5182d1ec6c2da672c09\"\n      hash3 = \"a19b972688158e361e8646ec17556ec46bf84f0cd24fb8707e4df85cb9d9a6d2\"\n      family = \"Matrix C2\"\n      malware_type = \"DDoS-as-a-Service Framework\"\n      campaign = \"UTA-2026-014\"\n      id = \"d804ea26-cbfc-5194-854c-228ee9cfc434\"\n   strings:\n      $banner     = \"MATRIX C2 - IMPLEMENTATION PLAN\" ascii\n      $docstring  = \"Launch mass infection campaign\" ascii\n      $emoji_icmp = \"\\xf0\\x9f\\x94\\xa5 ICMP Hell\" ascii\n      $emoji_udp  = \"\\xf0\\x9f\\x9a\\x80 UDP Bypass\" ascii\n      $gbps_claim = \"Increased default threads for 50Gbps+\" ascii\n      $final_doc  = \"FINAL_DEPLOYMENT_COMPLETE\" ascii\n      $ultimate   = \"ULTIMATE_DEPLOYMENT\" ascii\n      $llm_close  = \"Let me start Phase 1 now\" ascii\n      $method_udp = \"'udp-star'\" ascii\n      $method_syn = \"'syn-storm'\" ascii\n      $method_ovh = \"'ovh-nuke'\" ascii\n   condition:\n      filesize < 2MB and\n      (\n         ($banner and ($docstring or $llm_close)) or\n         ($gbps_claim and ($emoji_icmp or $emoji_udp)) or\n         ($final_doc and $ultimate) or\n         (2 of ($method_udp, $method_syn, $method_ovh) and ($gbps_claim or $docstring))\n      )\n}",
-            "pattern_type": "yara",
-            "valid_from": "2026-05-26T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "indicator",
-            "spec_version": "2.1",
             "id": "indicator--1de8572f-2eec-5f52-94e0-72c0699dcc66",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.203426Z",
-            "modified": "2026-10-01T19:54:19.203426Z",
+            "modified": "2026-10-11T07:42:13.335473Z",
             "name": "MAL_Discord_Bot_DDoSasService_Customer_Interface",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule MAL_Discord_Bot_DDoSasService_Customer_Interface {\n   meta:\n      description = \"Detects Matrix C2 Discord-bot customer interface JavaScript dispatch table for DDoS-as-a-Service. Identifies the 13-attack-method catalog (udp-star, syn-storm, tcp-matrix, tcp-rst, udp-bypass, icmp-hell, multi-vector, http-flood, mass_infection, frag-storm, dns-rain, ovh-nuke, http-star) combined with VIP/free tier branding, GBPS capability estimates, and AI-Generated Code Signature emoji branding.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/\"\n      date = \"2026-05-26\"\n      hash1 = \"81748f0236319c678db39945ec77fffe1b33e84ffa9731b2836b911f8e83a5cc\"\n      family = \"Matrix C2\"\n      malware_type = \"DDoS-as-a-Service Bot Interface\"\n      campaign = \"UTA-2026-014\"\n      id = \"0f9967aa-bd3f-5fba-be62-bf75b119989b\"\n   strings:\n      $m_udpstar  = \"'udp-star'\" ascii\n      $m_synstorm = \"'syn-storm'\" ascii\n      $m_tcpmat   = \"'tcp-matrix'\" ascii\n      $m_tcprst   = \"'tcp-rst'\" ascii\n      $m_bypass   = \"'udp-bypass'\" ascii\n      $m_icmp     = \"'icmp-hell'\" ascii\n      $m_multi    = \"'multi-vector'\" ascii\n      $m_http     = \"'http-flood'\" ascii\n      $m_infect   = \"'mass_infection'\" ascii\n      $m_frag     = \"'frag-storm'\" ascii\n      $m_dns      = \"'dns-rain'\" ascii\n      $m_ovh      = \"'ovh-nuke'\" ascii\n      $m_httpstar = \"'http-star'\" ascii\n      $tier_vip   = \"vip: true\" ascii\n      $tier_free  = \"vip: false\" ascii\n      $gbps_field = \"gbps:\" ascii\n      $emoji_icmp = \"\\xf0\\x9f\\x94\\xa5 ICMP Hell\" ascii\n      $emoji_udp  = \"\\xf0\\x9f\\x9a\\x80 UDP Bypass\" ascii\n   condition:\n      filesize < 500KB and\n      (\n         (4 of ($m_*) and ($tier_vip or $tier_free)) or\n         (3 of ($m_*) and $gbps_field and ($emoji_icmp or $emoji_udp)) or\n         ($m_ovh and $m_frag and $m_infect and $tier_vip)\n      )\n}",
+            "pattern": "rule MAL_Discord_Bot_DDoSasService_Customer_Interface {\n   meta:\n      description = \"Detects Matrix C2 Discord-bot customer interface JavaScript dispatch table for DDoS-as-a-Service. Matches any one of three branches over the 13-attack-method catalog (udp-star, syn-storm, tcp-matrix, tcp-rst, udp-bypass, icmp-hell, multi-vector, http-flood, mass_infection, frag-storm, dns-rain, ovh-nuke, http-star): four of the names with a VIP/free tier string; three of the names with a gbps: field and an emoji-branded method name; or ovh-nuke, frag-storm and mass_infection with the VIP tier string. Only the second branch needs the GBPS field and the emoji branding.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/\"\n      date = \"2026-05-26\"\n      hash1 = \"81748f0236319c678db39945ec77fffe1b33e84ffa9731b2836b911f8e83a5cc\"\n      family = \"Matrix C2\"\n      malware_type = \"DDoS-as-a-Service Bot Interface\"\n      campaign = \"UTA-2026-014\"\n      id = \"0f9967aa-bd3f-5fba-be62-bf75b119989b\"\n   strings:\n      $m_udpstar  = \"'udp-star'\" ascii\n      $m_synstorm = \"'syn-storm'\" ascii\n      $m_tcpmat   = \"'tcp-matrix'\" ascii\n      $m_tcprst   = \"'tcp-rst'\" ascii\n      $m_bypass   = \"'udp-bypass'\" ascii\n      $m_icmp     = \"'icmp-hell'\" ascii\n      $m_multi    = \"'multi-vector'\" ascii\n      $m_http     = \"'http-flood'\" ascii\n      $m_infect   = \"'mass_infection'\" ascii\n      $m_frag     = \"'frag-storm'\" ascii\n      $m_dns      = \"'dns-rain'\" ascii\n      $m_ovh      = \"'ovh-nuke'\" ascii\n      $m_httpstar = \"'http-star'\" ascii\n      $tier_vip   = \"vip: true\" ascii\n      $tier_free  = \"vip: false\" ascii\n      $gbps_field = \"gbps:\" ascii\n      $emoji_icmp = \"\\xf0\\x9f\\x94\\xa5 ICMP Hell\" ascii\n      $emoji_udp  = \"\\xf0\\x9f\\x9a\\x80 UDP Bypass\" ascii\n   condition:\n      filesize < 500KB and\n      (\n         (4 of ($m_*) and ($tier_vip or $tier_free)) or\n         (3 of ($m_*) and $gbps_field and ($emoji_icmp or $emoji_udp)) or\n         ($m_ovh and $m_frag and $m_infect and $tier_vip)\n      )\n}",
             "pattern_type": "yara",
             "valid_from": "2026-05-26T00:00:00Z",
             "labels": [
@@ -1174,12 +1153,33 @@
             "id": "indicator--1e19db49-ecaf-52a7-98d9-8e1f22b71c37",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-11T06:31:46.515244Z",
-            "modified": "2026-10-11T06:31:46.515244Z",
+            "modified": "2026-10-11T07:42:13.335666Z",
             "name": "MAL_Bash_Persistent_Bot_DualChannel_CNC",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule MAL_Bash_Persistent_Bot_DualChannel_CNC {\n   meta:\n      description = \"Detects persistent_bot.sh-class operator scripts implementing 5-vector Linux persistence and dual-channel CNC architecture. Identifies operator-specific JSON wire format (bot_register + heartbeat messages with bot_type/arch/vendor fields), hidden cron entry /etc/cron.d/.cache_update, and masquerade persistence (sysupdate init.d service + system-update.service systemd unit).\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/\"\n      date = \"2026-05-26\"\n      hash1 = \"4809a7ee9f5dbcbe86cfbd77a45e2a268a37bcc947e8e1621164df653597948b\"\n      family = \"Matrix C2\"\n      malware_type = \"Persistence Installer (AI-authored)\"\n      campaign = \"UTA-2026-014\"\n      id = \"936f6b1b-3b1e-5122-8a5d-cf26a94d774f\"\n   strings:\n      $wire_reg   = \"\\\"type\\\":\\\"bot_register\\\"\" ascii\n      $wire_arch  = \"\\\"arch\\\":\\\"$arch\\\"\" ascii\n      $wire_vendor = \"\\\"vendor\\\":\\\"$vendor\\\"\" ascii\n      $wire_hb    = \"\\\"type\\\":\\\"heartbeat\\\"\" ascii\n      $cnc_ep     = \"87.106.143.220\" ascii\n      $cnc_port   = \"1337\" ascii\n      $cron_hidden = \"/etc/cron.d/.cache_update\" ascii\n      $initd_mask  = \"/etc/init.d/sysupdate\" ascii\n      $systemd_mask = \"/etc/systemd/system/system-update.service\" ascii\n      $reseed     = \"wget -qO- http://87.106.143.220/bot.sh\" ascii\n      $kill_comp  = \"pkill -9 -f \\\"(mirai|qbot|tsunami|gafgyt|bashlite|kaiten)\\\"\" ascii\n   condition:\n      filesize < 50KB and\n      (\n         ($wire_reg and $cnc_ep) or\n         ($cron_hidden and ($initd_mask or $systemd_mask)) or\n         ($reseed and $kill_comp) or\n         ($wire_hb and $cnc_port and $cron_hidden) or\n         ($wire_arch and $wire_vendor and ($wire_reg or $wire_hb))\n      )\n}",
+            "pattern": "rule MAL_Bash_Persistent_Bot_DualChannel_CNC {\n   meta:\n      description = \"Detects persistent_bot.sh-class operator scripts implementing 5-vector Linux persistence and dual-channel CNC architecture. Identifies operator-specific JSON wire format (bot_register and heartbeat `type` values, with the arch and vendor fields), hidden cron entry /etc/cron.d/.cache_update, and masquerade persistence (sysupdate init.d service + system-update.service systemd unit).\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/\"\n      date = \"2026-05-26\"\n      hash1 = \"4809a7ee9f5dbcbe86cfbd77a45e2a268a37bcc947e8e1621164df653597948b\"\n      family = \"Matrix C2\"\n      malware_type = \"Persistence Installer (AI-authored)\"\n      campaign = \"UTA-2026-014\"\n      id = \"936f6b1b-3b1e-5122-8a5d-cf26a94d774f\"\n   strings:\n      $wire_reg   = \"\\\"type\\\":\\\"bot_register\\\"\" ascii\n      $wire_arch  = \"\\\"arch\\\":\\\"$arch\\\"\" ascii\n      $wire_vendor = \"\\\"vendor\\\":\\\"$vendor\\\"\" ascii\n      $wire_hb    = \"\\\"type\\\":\\\"heartbeat\\\"\" ascii\n      $cnc_ep     = \"87.106.143.220\" ascii\n      $cnc_port   = \"1337\" ascii\n      $cron_hidden = \"/etc/cron.d/.cache_update\" ascii\n      $initd_mask  = \"/etc/init.d/sysupdate\" ascii\n      $systemd_mask = \"/etc/systemd/system/system-update.service\" ascii\n      $reseed     = \"wget -qO- http://87.106.143.220/bot.sh\" ascii\n      $kill_comp  = \"pkill -9 -f \\\"(mirai|qbot|tsunami|gafgyt|bashlite|kaiten)\\\"\" ascii\n   condition:\n      filesize < 50KB and\n      (\n         ($wire_reg and $cnc_ep) or\n         ($cron_hidden and ($initd_mask or $systemd_mask)) or\n         ($reseed and $kill_comp) or\n         ($wire_hb and $cnc_port and $cron_hidden) or\n         ($wire_arch and $wire_vendor and ($wire_reg or $wire_hb))\n      )\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-05-26T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--cc3f380d-3be9-5c85-a6a2-0e61e9947461",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-01T19:54:19.203345Z",
+            "modified": "2026-10-01T19:54:19.203345Z",
+            "name": "MAL_Python_Matrix_C2_Framework_Family",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule MAL_Python_Matrix_C2_Framework_Family {\n   meta:\n      description = \"Detects Matrix C2 Python DDoS-as-a-Service framework files authored via Atlassian Rovodev AI coding agent. Identifies master_control.py, attack_engine.py, and multi_vector_agent.py via AI-generated banner strings, operator-marketing comments, emoji-branded attack method catalog entries, and mass-infection docstring captured directly from Rovodev session file_write tool call payloads.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/\"\n      date = \"2026-05-26\"\n      hash1 = \"e9e0eafc89e4a9db796c63bb4fdc5c0fd1106f8b9c234fb57e51a7934f2b8d8e\"\n      hash2 = \"921e4c1d86813838d40010e82a8f374a70b91f06008db5182d1ec6c2da672c09\"\n      hash3 = \"a19b972688158e361e8646ec17556ec46bf84f0cd24fb8707e4df85cb9d9a6d2\"\n      family = \"Matrix C2\"\n      malware_type = \"DDoS-as-a-Service Framework\"\n      campaign = \"UTA-2026-014\"\n      id = \"d804ea26-cbfc-5194-854c-228ee9cfc434\"\n   strings:\n      $banner     = \"MATRIX C2 - IMPLEMENTATION PLAN\" ascii\n      $docstring  = \"Launch mass infection campaign\" ascii\n      $emoji_icmp = \"\\xf0\\x9f\\x94\\xa5 ICMP Hell\" ascii\n      $emoji_udp  = \"\\xf0\\x9f\\x9a\\x80 UDP Bypass\" ascii\n      $gbps_claim = \"Increased default threads for 50Gbps+\" ascii\n      $final_doc  = \"FINAL_DEPLOYMENT_COMPLETE\" ascii\n      $ultimate   = \"ULTIMATE_DEPLOYMENT\" ascii\n      $llm_close  = \"Let me start Phase 1 now\" ascii\n      $method_udp = \"'udp-star'\" ascii\n      $method_syn = \"'syn-storm'\" ascii\n      $method_ovh = \"'ovh-nuke'\" ascii\n   condition:\n      filesize < 2MB and\n      (\n         ($banner and ($docstring or $llm_close)) or\n         ($gbps_claim and ($emoji_icmp or $emoji_udp)) or\n         ($final_doc and $ultimate) or\n         (2 of ($method_udp, $method_syn, $method_ovh) and ($gbps_claim or $docstring))\n      )\n}",
             "pattern_type": "yara",
             "valid_from": "2026-05-26T00:00:00Z",
             "labels": [
@@ -1276,27 +1276,6 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--e723de0e-857e-51da-a702-25de79a86359",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-11T06:31:46.515779Z",
-            "modified": "2026-10-11T06:31:46.515779Z",
-            "name": "Naku or Pandora Mirai Arch-Tagged Binary Name or Pandora-Mirai Command-Line Token on Linux",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "title: Naku or Pandora Mirai Arch-Tagged Binary Name or Pandora-Mirai Command-Line Token on Linux\nid: c4495249-9b11-406c-b4ca-5c099eb8ca81\nstatus: experimental\ndescription: >-\n  Detects a Linux process-creation event matching either of two alternatives for the Naku/Pandora-Mirai 11-architecture IoT botnet family (UTA-2026-014): an Image path containing one of the file names Naku.arm, Naku.m68k, Naku.mips, Naku.mpsl, Naku.ppc, Naku.sh4, Naku.spc, Naku.x86, pandora.arm, pandora.m68k, pandora.mips, pandora.mpsl, pandora.sh4 or pandora.spc, or a command line containing PandoraNet, './nig realtek', './nig huawei' or pandora_bot. The rule tests names and command-line text only: it does not check that the file is an ELF, and it has no host-role test, so a hit on a server and a hit on an IoT build workstation look the same. Either alternative alone fires.\nreferences:\n    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/\n    - https://vms.drweb.com/virus/?i=22410691&lng=en\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.execution\n    - attack.t1059.004\n    - attack.initial-access\n    - attack.t1190\n    - attack.command-and-control\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: process_creation\n    product: linux\ndetection:\n    selection_naku:\n        Image|contains:\n            - 'Naku.arm'\n            - 'Naku.m68k'\n            - 'Naku.mips'\n            - 'Naku.mpsl'\n            - 'Naku.ppc'\n            - 'Naku.sh4'\n            - 'Naku.spc'\n            - 'Naku.x86'\n            - 'pandora.arm'\n            - 'pandora.m68k'\n            - 'pandora.mips'\n            - 'pandora.mpsl'\n            - 'pandora.sh4'\n            - 'pandora.spc'\n    selection_argv:\n        CommandLine|contains:\n            - 'PandoraNet'\n            - './nig realtek'\n            - './nig huawei'\n            - 'pandora_bot'\n    condition: 1 of selection_*\nfalsepositives:\n    - Cross-compilation test environments deploying IoT firmware — limit to production server hosts and IoT-adjacent network segments\n    - IoT development workstations building multi-arch toolchains\nlevel: high",
-            "pattern_type": "sigma",
-            "valid_from": "2026-05-26T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "indicator",
-            "spec_version": "2.1",
             "id": "indicator--5f27cbd1-b0e1-5a47-8bbd-eeda913d66b6",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.204022Z",
@@ -1348,6 +1327,27 @@
                 "malicious-activity"
             ],
             "pattern": "title: BusyBox SORA Marker Execution — Sora-Derivative Mirai-Fork Active on Host\nid: 625a0af0-2c6e-48b5-89ea-0c7e6b191147\nstatus: experimental\ndescription: >-\n  Detects execution of the '/bin/busybox SORA' command, which is the Sora-fork Mirai-derivative lineage signature. Decoded from XOR-0x54 region in all 11 Naku/Pandora-Mirai architectures (UTA-2026-014), replacing stock Mirai's '/bin/busybox MIRAI'. The Mirai bot calls this as part of its process enumeration and competitor-kill routine. Any process executing '/bin/busybox SORA' indicates active Sora-derivative bot execution on the host.\nreferences:\n    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.execution\n    - attack.t1059.004\n    - attack.command-and-control\n    - attack.t1095\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: process_creation\n    product: linux\ndetection:\n    selection:\n        CommandLine|contains: '/bin/busybox SORA'\n    condition: selection\nfalsepositives:\n    - Unlikely — '/bin/busybox SORA' is not a valid busybox applet call and has no legitimate use\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-05-26T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--e723de0e-857e-51da-a702-25de79a86359",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-11T06:31:46.515779Z",
+            "modified": "2026-10-11T07:42:13.33652Z",
+            "name": "Naku or Pandora Mirai Arch-Tagged Binary Name or Pandora-Mirai Command-Line Token on Linux",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Naku or Pandora Mirai Arch-Tagged Binary Name or Pandora-Mirai Command-Line Token on Linux\nid: c4495249-9b11-406c-b4ca-5c099eb8ca81\nstatus: experimental\ndescription: >-\n  Detects a Linux process-creation event matching either of two alternatives for the Naku/Pandora-Mirai 11-architecture IoT botnet family (UTA-2026-014): an Image path containing one of the file names Naku.arm, Naku.m68k, Naku.mips, Naku.mpsl, Naku.ppc, Naku.sh4, Naku.spc, Naku.x86, pandora.arm, pandora.m68k, pandora.mips, pandora.mpsl, pandora.sh4 or pandora.spc, or a command line containing PandoraNet, './nig realtek', './nig huawei' or pandora_bot. The rule tests names and command-line text only: it does not check that the file is an ELF, and it has no host-role test, so a hit on a server and a hit on an IoT build workstation look the same. Either alternative alone fires.\nreferences:\n    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/\n    - https://vms.drweb.com/virus/?i=22410691&lng=en\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.execution\n    - attack.t1059.004\n    - attack.initial-access\n    - attack.t1190\n    - attack.command-and-control\n    - detection.emerging-threats\n    - stp.2\nlogsource:\n    category: process_creation\n    product: linux\ndetection:\n    selection_naku:\n        Image|contains:\n            - 'Naku.arm'\n            - 'Naku.m68k'\n            - 'Naku.mips'\n            - 'Naku.mpsl'\n            - 'Naku.ppc'\n            - 'Naku.sh4'\n            - 'Naku.spc'\n            - 'Naku.x86'\n            - 'pandora.arm'\n            - 'pandora.m68k'\n            - 'pandora.mips'\n            - 'pandora.mpsl'\n            - 'pandora.sh4'\n            - 'pandora.spc'\n    selection_argv:\n        CommandLine|contains:\n            - 'PandoraNet'\n            - './nig realtek'\n            - './nig huawei'\n            - 'pandora_bot'\n    condition: 1 of selection_*\nfalsepositives:\n    - Cross-compilation test environments deploying IoT firmware — limit to production server hosts and IoT-adjacent network segments\n    - IoT development workstations building multi-arch toolchains\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-05-26T00:00:00Z",
             "labels": [
@@ -1426,12 +1426,12 @@
             "id": "indicator--07670bbb-8400-5bbd-ac2f-5f648791920f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-11T06:31:46.516567Z",
-            "modified": "2026-10-11T06:31:46.516567Z",
+            "modified": "2026-10-11T07:42:13.336904Z",
             "name": "Linux Process Connecting to discord.com on Port 443 Outside node_modules or discord.js Paths (Matrix C2 Bot Pattern)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Linux Process Connecting to discord.com on Port 443 Outside node_modules or discord.js Paths (Matrix C2 Bot Pattern)\nid: 7e3175bc-9a74-4c93-b358-de78d84250f4\nstatus: experimental\ndescription: >-\n  Detects an initiated connection from a Linux process to the hostname discord.com or a subdomain of it on port 443 where the process image path contains neither /node_modules/ nor discord.js. The Matrix C2 DDoS-as-a-Service Discord-bot customer interface (UTA-2026-014) is a JavaScript bot on the operator's VPS that dispatches attack commands for paying customers; a connection event carries no URL path and no payload, so the rule cannot see the API path or any attack-method dispatch, and it has no host-role test. Discord bot hosting is a common legitimate pattern — treat a hit as a hunting lead requiring process-context correlation, not a standalone alert.\nreferences:\n    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.command-and-control\n    - attack.impact\n    - attack.t1498.001\n    - attack.execution\n    - attack.t1059.007\n    - detection.emerging-threats\nlogsource:\n    category: network_connection\n    product: linux\ndetection:\n    selection_discord_exact:\n        DestinationHostname: 'discord.com'\n    selection_discord_sub:\n        DestinationHostname|endswith: '.discord.com'\n    selection_conn:\n        DestinationPort: 443\n        Initiated: 'true'\n    filter_known_dev:\n        Image|contains:\n            - '/node_modules/'\n            - 'discord.js'\n    condition: (selection_discord_exact or selection_discord_sub) and selection_conn and not filter_known_dev\nfalsepositives:\n    - Legitimate Discord bots hosted on server infrastructure — all Discord bot deployments on production servers\n    - SaaS applications integrating Discord notifications\n    - Developer environments testing Discord integrations\nlevel: medium",
+            "pattern": "title: Linux Process Connecting to discord.com on Port 443 Outside node_modules or discord.js Paths (Matrix C2 Bot Pattern)\nid: 7e3175bc-9a74-4c93-b358-de78d84250f4\nstatus: experimental\ndescription: >-\n  Detects an initiated connection from a Linux process to the hostname discord.com or a subdomain of it on port 443 where the process image path contains neither /node_modules/ nor discord.js. The Matrix C2 DDoS-as-a-Service Discord-bot customer interface (UTA-2026-014) is a JavaScript bot on the operator's VPS that dispatches attack commands for paying customers; a connection event carries no URL path and no payload, so the rule cannot see the API path or any attack-method dispatch, and it has no host-role test. Discord bot hosting is a common legitimate pattern — treat a hit as a hunting lead requiring process-context correlation, not a standalone alert.\nreferences:\n    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.command-and-control\n    - attack.t1102\n    - detection.emerging-threats\nlogsource:\n    category: network_connection\n    product: linux\ndetection:\n    selection_discord_exact:\n        DestinationHostname: 'discord.com'\n    selection_discord_sub:\n        DestinationHostname|endswith: '.discord.com'\n    selection_conn:\n        DestinationPort: 443\n        Initiated: 'true'\n    filter_known_dev:\n        Image|contains:\n            - '/node_modules/'\n            - 'discord.js'\n    condition: (selection_discord_exact or selection_discord_sub) and selection_conn and not filter_known_dev\nfalsepositives:\n    - Legitimate Discord bots hosted on server infrastructure — all Discord bot deployments on production servers\n    - SaaS applications integrating Discord notifications\n    - Developer environments testing Discord integrations\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-05-26T00:00:00Z",
             "labels": [
@@ -3634,20 +3634,6 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--f63ee44b-b7de-5a00-ba59-e4ac87a08c8d",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:19.216046Z",
-            "modified": "2026-10-01T19:54:19.216046Z",
-            "relationship_type": "indicates",
-            "source_ref": "indicator--cc3f380d-3be9-5c85-a6a2-0e61e9947461",
-            "target_ref": "malware--e1ff3c5a-931c-52e6-af27-abf72a92bc1f",
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "relationship",
-            "spec_version": "2.1",
             "id": "relationship--f3ee8f89-fc33-589c-98c7-3f4c0d30db8e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.216105Z",
@@ -3682,6 +3668,20 @@
             "modified": "2026-10-11T06:31:46.53414Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--1e19db49-ecaf-52a7-98d9-8e1f22b71c37",
+            "target_ref": "malware--e1ff3c5a-931c-52e6-af27-abf72a92bc1f",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--f63ee44b-b7de-5a00-ba59-e4ac87a08c8d",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-01T19:54:19.216046Z",
+            "modified": "2026-10-01T19:54:19.216046Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--cc3f380d-3be9-5c85-a6a2-0e61e9947461",
             "target_ref": "malware--e1ff3c5a-931c-52e6-af27-abf72a92bc1f",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -3746,20 +3746,6 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--6e8f6053-3e55-5c3c-8d3b-31fc3917a114",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-11T06:31:46.534562Z",
-            "modified": "2026-10-11T06:31:46.534562Z",
-            "relationship_type": "indicates",
-            "source_ref": "indicator--e723de0e-857e-51da-a702-25de79a86359",
-            "target_ref": "malware--e1ff3c5a-931c-52e6-af27-abf72a92bc1f",
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "relationship",
-            "spec_version": "2.1",
             "id": "relationship--d19f1477-1440-5225-8914-39b6105da936",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.216578Z",
@@ -3794,6 +3780,20 @@
             "modified": "2026-10-01T19:54:19.216695Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--71cbcb9f-6aef-5935-972c-14c7144d2978",
+            "target_ref": "malware--e1ff3c5a-931c-52e6-af27-abf72a92bc1f",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--6e8f6053-3e55-5c3c-8d3b-31fc3917a114",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-11T06:31:46.534562Z",
+            "modified": "2026-10-11T06:31:46.534562Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--e723de0e-857e-51da-a702-25de79a86359",
             "target_ref": "malware--e1ff3c5a-931c-52e6-af27-abf72a92bc1f",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -22173,7 +22173,7 @@
             "id": "report--d6a3df6a-be77-50bd-8c19-3b3a9455ec93",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.297515Z",
-            "modified": "2026-10-11T06:31:46.64947Z",
+            "modified": "2026-10-11T07:42:13.459967Z",
             "name": "Rovodev AI Co-Authored Mirai Variant + Matrix C2 Framework — UTA-2026-014 (Pandora 11-Arch IoT Botnet + DDoS-as-a-Service)",
             "report_types": [
                 "threat-report"
@@ -22256,18 +22256,18 @@
                 "indicator--7f1f011b-a5e3-5390-9197-47506c84c148",
                 "indicator--b5edd3d6-548e-50e6-b560-01578db3b113",
                 "indicator--1db870aa-d146-5e1a-ac3e-0e2278763572",
-                "indicator--cc3f380d-3be9-5c85-a6a2-0e61e9947461",
                 "indicator--1de8572f-2eec-5f52-94e0-72c0699dcc66",
                 "indicator--ea46ebd6-e86b-5bc7-9816-26048fd4b8a2",
                 "indicator--1e19db49-ecaf-52a7-98d9-8e1f22b71c37",
+                "indicator--cc3f380d-3be9-5c85-a6a2-0e61e9947461",
                 "indicator--11971737-7145-51a3-aa91-758c1786accc",
                 "indicator--3d0a2437-9423-5fc7-b0a7-9f21b773c68b",
                 "indicator--0ca74fef-4a2d-5938-b239-55e83dcf00b9",
                 "indicator--316051bb-937d-5a1e-ab0d-0c575e5e14e6",
-                "indicator--e723de0e-857e-51da-a702-25de79a86359",
                 "indicator--5f27cbd1-b0e1-5a47-8bbd-eeda913d66b6",
                 "indicator--348ba86b-de48-5691-b514-c955691988a9",
                 "indicator--71cbcb9f-6aef-5935-972c-14c7144d2978",
+                "indicator--e723de0e-857e-51da-a702-25de79a86359",
                 "indicator--4da6c2a5-f0df-59b0-9856-94942d275229",
                 "indicator--f27dbb2c-e66c-57d2-a898-88ec5c0d1e86",
                 "indicator--25ca63e0-4b15-5dea-aa67-bf46f23f0b62",
@@ -22402,18 +22402,18 @@
                 "relationship--20ebbed2-a5aa-5803-9f57-4519a74ca204",
                 "relationship--5f604215-e2af-5178-b1d6-c79aedc9a33c",
                 "relationship--09fe594d-c8c7-58e1-ad7c-e97a913fe57a",
-                "relationship--f63ee44b-b7de-5a00-ba59-e4ac87a08c8d",
                 "relationship--f3ee8f89-fc33-589c-98c7-3f4c0d30db8e",
                 "relationship--ee93e431-a9e1-551e-9513-a0b5a672966c",
                 "relationship--43030629-bdf8-503e-8f9f-3ca2753d4d7e",
+                "relationship--f63ee44b-b7de-5a00-ba59-e4ac87a08c8d",
                 "relationship--57b853b1-333d-59ca-8c08-856607e5467c",
                 "relationship--3c478e36-e3fc-574a-97fb-b28a318699af",
                 "relationship--8376b8c7-4596-5670-99fd-ab5a37054a1a",
                 "relationship--7084e6bc-d53f-5d01-841f-dc55b94a40de",
-                "relationship--6e8f6053-3e55-5c3c-8d3b-31fc3917a114",
                 "relationship--d19f1477-1440-5225-8914-39b6105da936",
                 "relationship--f704ba2d-289c-52bc-99d8-3d930c7d16e3",
                 "relationship--9c9c6d56-7c31-542e-9ac3-0d93a90ee2b1",
+                "relationship--6e8f6053-3e55-5c3c-8d3b-31fc3917a114",
                 "relationship--fda2f2cf-81ba-570b-b105-1d9026242eb3",
                 "relationship--ff741318-7677-538a-8dda-f76f5b614e7b",
                 "relationship--1d2028c1-3b38-5ae5-abea-c933b2614724",

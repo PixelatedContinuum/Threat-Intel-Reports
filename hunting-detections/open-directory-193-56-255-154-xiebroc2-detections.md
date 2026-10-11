@@ -22,8 +22,8 @@ This open directory hosted three malicious payloads from a single staging server
 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
-| YARA | 3 | 1 | T1027, T1036, T1055, T1055.012, T1059.001, T1071.001, T1140, T1571, T1573.001, T1573.002, T1620 | 0 |
-| Sigma | 1 | 3 | T1059.001, T1059.003, T1071.001, T1140, T1620 | 1 |
+| YARA | 3 | 1 | T1027, T1055, T1055.012, T1059.001, T1071.001, T1140, T1573.001, T1620 | 0 |
+| Sigma | 0 | 4 | T1059.001, T1059.003, T1071.001, T1140, T1620 | 1 |
 | Suricata | 2 | 0 | T1036, T1071.001, T1571 | 1 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
@@ -109,12 +109,13 @@ rule RAT_XiebroC2_v31_Go_TCP_Implant {
 
 **Tier:** Detection
 **Robustness:** 2
-**ATT&CK Coverage:** T1071.001 (Web Protocols — HTTP C2), T1036 (Masquerading — Chrome 41 UA), T1573.002 (Asymmetric Cryptography — RSA key exchange, MODERATE)
+**ATT&CK Coverage:** T1071.001 (Web Protocols — HTTP C2)
+**ATT&CK Note:** The strings are a session token, a build ID and four Covenant identifiers (including the `SESSIONID=` cookie fragment). None is a User-Agent or a key-exchange string, so Masquerading (T1036) and Asymmetric Cryptography (T1573.002) are not claimed.
 **Confidence:** HIGH
 **False Positives:** None known — the session token and build ID are GUID/hex-format values unique to this Covenant listener; no legitimate software embeds them.
 **Blind Spots:** A newly-configured Covenant listener with a different session token and build ID evades this rule entirely; targets on-disk .NET PE files, not memory-only Grunt payloads that never touch disk.
 **Validation:** Scan either GruntStager build — both must match on the shared token+build-ID pair; an unrelated legitimate .NET PE must NOT fire.
-**Deployment:** Endpoint AV/EDR disk scan targeting .NET PE files; memory scanner targeting .NET processes performing `Assembly.Load()`.
+**Deployment:** Endpoint AV/EDR disk scan targeting .NET PE files; scanner for saved dumps of .NET processes performing `Assembly.Load()`. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
 rule RAT_Covenant_GruntStager_OpenDirectory {
@@ -153,7 +154,7 @@ rule RAT_Covenant_GruntStager_OpenDirectory {
 **ATT&CK Coverage:** T1059.001 (PowerShell), T1027 (Obfuscated Files — Base64+Deflate payload), T1140 (Deobfuscate/Decode Files or Information), T1620 (Reflective Code Loading)
 **Confidence:** HIGH
 **False Positives:** None known — the session token is a unique GUID-format value; legitimate PowerShell scripts do not embed Covenant session tokens.
-**Blind Spots:** A newly-configured Covenant listener with a different session token evades this exact rule (the four generic decode/load strings alone are still a Hunting-grade technique lead — see the Sigma coverage below); targets `.ps1` script files specifically.
+**Blind Spots:** A newly-configured Covenant listener with a different session token evades this exact rule (the four generic decode/load strings alone are still a Hunting-grade technique lead — see the Sigma coverage below); tests no file name or extension, so any file under 100 KB holding the token and the four strings matches, whatever its type.
 **Validation:** Scan `GruntHTTP.ps1` or an equivalent loader from the same listener — must match; a legitimate PowerShell deployment script that happens to combine Deflate decompression with `Reflection.Assembly::Load()` (rare, but possible) warrants manual review before dismissal.
 **Deployment:** Endpoint AV/EDR scan targeting `.ps1` files; AMSI telemetry; PowerShell ScriptBlock logging (Event ID 4104).
 
@@ -193,16 +194,17 @@ rule MALW_Covenant_PSFilelessLoader_GruntHTTP {
 
 **Tier:** Hunting
 **Robustness:** 2
-**ATT&CK Coverage:** T1571 (Non-Standard Port — C2 endpoint embedded in binary-patchable config)
+**ATT&CK Coverage:** None
+**ATT&CK Note:** The rule matches a space-padded IPv4 string and tests no port, so Non-Standard Port (T1571) is not claimed; the padded field is how XiebroC2 3.1 stores its C2 address.
 **Confidence:** MODERATE
-**Rationale:** The original rule keyed solely on the literal `193.56.255.154` padded to a fixed width — since that IP is already an atomic in the IOC feed, and the rule would evade entirely if the operator redeployed with a new C2 host, it failed the durability gate as written. Rewritten as a structural regex matching any dotted-quad IPv4 literal followed by 20+ trailing padding spaces (the actual binary-patchable config technique XiebroC2 3.1 uses so operators can repoint the C2 address without recompiling), paired with a family-specific anchor to hold precision. This version survives a C2 IP change; it is Hunting rather than Detection because the regex has not been validated against a broad goodware corpus.
+**Rationale:** The original rule keyed solely on the literal `193.56.255.154` padded to a fixed width — since that IP is already an atomic in the IOC feed, and the rule would evade entirely if the operator redeployed with a new C2 host, it failed the durability gate as written. Rewritten as a structural regex matching any dotted-quad IPv4 literal followed by 20+ trailing padding spaces (the actual binary-patchable config technique XiebroC2 3.1 uses so operators can repoint the C2 address without recompiling), paired with one of two source-artifact strings to hold precision. *Round 3 fix 2026-10-11:* only `main/Helper/sysinfo.WindosVersion` is family-specific; `github.com/Ne0nd0g/go-clr` is a public library path that other Go tools carry (the sibling CLR rule says so), so the go-clr anchor alone does not make the pairing family-specific. This version survives a C2 IP change; it is Hunting rather than Detection because the regex has not been validated against a broad goodware corpus.
 **False Positives:** Unlikely but unverified — the padded-IPv4 + trailing-space pattern combined with a XiebroC2 source artifact has not been tested against a broad goodware corpus; a benign installer that happens to embed a long space-padded dotted-quad string is theoretically possible.
-**Deployment:** Endpoint disk scan; also effective as a memory scan on running Go processes; intended to catch future XiebroC2 3.1-lineage builds regardless of the operator's chosen C2 IP.
+**Deployment:** Endpoint disk scan; also usable on saved dumps of Go processes; intended to catch future XiebroC2 3.1-lineage builds regardless of the operator's chosen C2 IP. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
 rule RAT_XiebroC2_v31_PaddedConfig_Structural {
    meta:
-      description = "Detects XiebroC2 v3.1's binary-patchable configuration format — a space-padded fixed-width IPv4 literal (20+ trailing spaces) paired with a family-specific source artifact. XiebroC2 stores its C2 address as a fixed-width field so operators can binary-patch a new IP into a compiled build without recompilation; this structural pattern is independent of any single C2 IP value and survives infrastructure rotation, unlike a rule anchored on 193.56.255.154 alone."
+      description = "Detects XiebroC2 v3.1's binary-patchable configuration format — a space-padded fixed-width IPv4 literal (20+ trailing spaces) paired with one of two source-artifact strings (the `main/Helper/sysinfo.WindosVersion` symbol, or the public go-clr library path that other Go tools also carry). XiebroC2 stores its C2 address as a fixed-width field so operators can binary-patch a new IP into a compiled build without recompilation; this structural pattern is independent of any single C2 IP value and survives infrastructure rotation, unlike a rule anchored on 193.56.255.154 alone."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/open-directory-193-56-255-154-xiebroc2-detections/"
@@ -226,20 +228,18 @@ rule RAT_XiebroC2_v31_PaddedConfig_Structural {
 
 ## Sigma Rules
 
-### Detection Rules
-
-**XiebroC2 v3.1**
+### Hunting Rules
 
 #### Covenant C2 GruntStager HTTP Beacon: Campaign Session Token Detected
 
-**Tier:** Detection
-**Robustness:** 2
+**Tier:** Hunting
+**Robustness:** 1
 **ATT&CK Coverage:** T1071.001 (Application Layer Protocol: Web Protocols)
-**Confidence:** HIGH
+**Confidence:** LOW
 **False Positives:** None known — the session token is a GUID-format value unique to this Covenant listener; it will not appear in legitimate HTTP/proxy traffic.
-**Blind Spots:** A newly-configured Covenant listener with a different session token evades this rule; requires proxy logging of the URI query string (not all proxies log this by default).
-**Validation:** Replay a captured GruntStager beacon POST — must fire; ordinary HTTP/HTTPS proxy traffic without the token must NOT fire.
-**Deployment:** HTTP proxy logs (Squid, Bluecoat, Zscaler, etc.); web gateway telemetry; requires proxy logging of the request URI query string.
+**Blind Spots:** The report places the token in the POST body, which proxy query-string fields do not log, so this selector is expected to miss the observed traffic (hence Hunting, Robustness 1, Confidence LOW); it is useful only where the token reaches the query string. A newly-configured Covenant listener with a different session token evades this rule; requires proxy logging of the URI query string (not all proxies log this by default).
+**Validation:** Not replayed. The report records the token in the POST body (`i=<build id>&data=<base64>&session=<token>`), and a proxy `c-uri-query` field carries the query string, not the body, so the recorded POST is not expected to fire this selector; it fires on a request whose query string holds `session=<token>`. The POST body is what the Suricata rule on this page (sid 9000101) inspects. Ordinary HTTP/HTTPS proxy traffic without the token must NOT fire.
+**Deployment:** HTTP proxy logs (Squid, Bluecoat, Zscaler, etc.); web gateway telemetry; requires proxy logging of the request URI query string. A body-level check needs the Suricata rule on this page or a proxy that logs request bodies.
 
 Corrected from the original: the condition was `1 of (selection_session_token, selection_ua)`, an OR that let a bare sighting of the Chrome 41/Windows 7 User-Agent *alone*, with no URI or token match, fire the rule at `level: high`. That UA can appear on any legacy enterprise endpoint unrelated to this campaign, so the OR-combination understated the true false-positive rate of the weaker branch. Narrowed to the session-token clause alone (near-zero FP on its own); the UA pattern is retained as corroborating context in the description rather than a live alerting condition. The invalid `product: windows` paired with `category: proxy` (proxy logs are network-appliance logs, not Windows host logs) is also removed, and the field name is corrected from `cs-uri-query` to the real SigmaHQ `category: proxy` taxonomy field `c-uri-query` (confirmed against published proxy rules, `sigma check` rejects the `cs-` prefix as a non-existent field for this logsource).
 
@@ -248,7 +248,7 @@ title: Covenant C2 GruntStager HTTP Beacon — Campaign Session Token Detected
 id: d9a4b257-3f81-4e7c-b5d8-6c2e9f0a4b73
 status: experimental
 description: >-
-  Detects HTTP requests containing the Covenant C2 listener session token
+  Detects HTTP requests whose query string contains the Covenant C2 listener session token
   75db-99b1-25fe4e9afbe58696-320bea73, hardcoded in both GruntHTTP.exe
   (Build 1) and the PE embedded in GruntHTTP.ps1 (Build 2). This token is a
   listener-level constant that appears in every registration and
@@ -277,8 +277,6 @@ falsepositives:
     - No legitimate proxy traffic is expected to contain this specific session token value
 level: high
 ```
-
-### Hunting Rules
 
 **XiebroC2 v3.1**
 
@@ -359,8 +357,10 @@ description: >-
   Detects PowerShell ScriptBlocks combining Base64 decoding, Deflate
   decompression via System.IO.DeflateStream, and reflective in-memory
   execution via Reflection.Assembly::Load() — the technique used by the
-  GruntHTTP.ps1 Covenant delivery wrapper analyzed in this campaign. This
-  three-stage chain is a durable technique fingerprint independent of any
+  GruntHTTP.ps1 Covenant delivery wrapper analyzed in this campaign. The
+  rule tests four substrings in one ScriptBlock (DeflateStream, Reflection.Assembly,
+  FromBase64String and MemoryStream); it does not test the Load call itself. The
+  combination is a durable technique fingerprint independent of any
   specific Covenant listener configuration, but legitimate software
   deployment tooling occasionally combines the same primitives, so this is
   a Hunting-tier lead requiring analyst triage rather than a high-confidence
@@ -463,6 +463,7 @@ detection:
             - '\PresentationHost.exe'
     condition: selection and not filter_legitimate_dotnet_hosts
 falsepositives:
+    - Any managed (.NET Framework) application whose image is not in the filter list, which is most managed desktop and service software
     - Legitimate applications built with Go that embed .NET interop via documented COM interop mechanisms (rare but possible in enterprise software)
     - Custom in-house Go tooling that intentionally hosts the CLR for legitimate automation purposes
     - Security research tools or red team frameworks other than XiebroC2 that use go-clr

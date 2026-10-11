@@ -77,7 +77,7 @@ GHOST is a commodity Linux cryptojacker kit distributed by kit-author Vova75Rus 
 **False Positives:** None known — the specific combination of `readdir`/`fopen` libc exports plus GHOST-specific hide-list strings (`khugepaged_`, `nv_uvm_`, `inotify_guard`, `libpam_cache`) does not appear in any legitimate shared library.
 **Blind Spots:** A full kit-source recompile that renames every hide-list entry and hook export would evade; the rule targets the on-disk shared object, not a memory-only injected variant.
 **Validation:** Scan the analyzed sample (`hash1` below) — all clauses must match; a legitimate PAM module or unrelated shared library must NOT fire.
-**Deployment:** Linux endpoint AV/EDR file scanning, memory scanner, auditd-triggered on-write scan of `/lib/security/`.
+**Deployment:** Linux endpoint AV/EDR file scanning, auditd-triggered on-write scan of `/lib/security/`. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
 rule MAL_Linux_GHOST_libpam_cache_Rootkit_Family {

@@ -23,14 +23,14 @@ Three operationally-separate clusters shared the multi-tenant Aeza bulletproof I
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 4 | 4 | T1027, T1027.002, T1027.013, T1071.001, T1102, T1140 | 1 |
-| Sigma | 3 | 0 | T1112, T1218.008, T1055.012, T1071.001 | 1 |
+| Sigma | 2 | 1 | T1112, T1218.008, T1055.012, T1071.001 | 1 |
 | Suricata | 1 | 0 | T1071.001 | 4 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
 
 **Highest-confidence anchors:**
 - The `.frontb` PE section name + `Roland` decoy string, and the operator-modified Q3VM bytecode magic `0x14744214` + `Roland` (both YARA Detection) are family-wide Rhadamanthys structural indicators. They are expected to generalize beyond this one MaaS customer.
-- The `HKU\<SID>\Software\SibCode\sn` registry marker (Sigma Detection) is confirmed across four independent sibling Stage-2 sandbox runs, not just this customer's sample.
+- The `HKU\<SID>\Software\SibCode\sn` registry marker (Sigma Hunting) is confirmed across four independent sibling Stage-2 sandbox runs, not just this customer's sample; it covers pre-0.9.1 builds only.
 - The BellaMain panel's bespoke PHP admin-endpoint paths (YARA + Sigma Detection) and the Rhadamanthys customer panel-ID URL token `e6d92c6b5b2a03bee7fbab40` (Suricata Detection) both survive infrastructure rotation. Each keys on an operator/developer artifact, not the current IP or domain.
 
 **Atomics routed to the IOC feed:** six of the original package's rules keyed solely on a hard-coded IP, a domain list, or a hash/imphash/PDB-path combination, with no behavior surviving once the literal is removed. The Rhadamanthys C2 IP `79.133.180.168:3394` (a direct TCP match and a second rule using it as a hardcoded TLS SNI content match), the BellaMain staging IP `79.137.192.3` (HTTP Host match), the 17-domain Inkognito brand-portfolio list (a Sigma `dns` selection and a Suricata PCRE with no content prefilter), and the Tofsee co-tenant's SHA256/imphash/PDB-path fingerprint. All values are carried in [`opendirectory-79-137-192-3-20260515-iocs.json`](/ioc-feeds/opendirectory-79-137-192-3-20260515-iocs.json); three domains referenced only in the original rules (`akredup.ru`, `divar-irantop.shop`, `catnpv.xyz`) were not yet in the feed and have been added.
@@ -114,7 +114,7 @@ rule MALW_Rhadamanthys_FrontbSection
 **False Positives:** None known — the modified magic value does not occur outside a Rhadamanthys Stage-2 build of this lineage.
 **Blind Spots:** A future Rhadamanthys build that changes the modified-magic value (or reverts to stock Q3VM) would evade.
 **Validation:** Scan the reference Stage-2 sample — the 4-byte magic and the Roland string must both match; a file embedding only stock Q3VM (`0x12721444`) must NOT fire.
-**Deployment:** Endpoint AV/EDR file scan, memory scanning of unpacked Stage-2.
+**Deployment:** Endpoint AV/EDR file scan, scanning of a saved dump of the unpacked Stage-2. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
 rule MALW_Rhadamanthys_Q3VMBytecodeModifiedMagic
@@ -345,9 +345,10 @@ rule MALW_Rhadamanthys_LoaderRC4Key
 
 **Tier:** Hunting
 **Robustness:** 2
-**ATT&CK Coverage:** T1027.001 (Binary Padding), T1027.005 (Indicator Removal from Tools), T1497 (Virtualization/Sandbox Evasion), T1543.003 (Windows Service), T1071.003 (Mail Protocols), T1090.002 (External Proxy)
+**ATT&CK Coverage:** T1027.001 (Binary Padding)
+**ATT&CK Note:** The condition tests PE shape (section sizes, the WinHTTP import shape, three injection API names), eight rare API names and four English words. Service creation (T1543.003), mail protocols (T1071.003), external proxy (T1090.002), sandbox evasion (T1497) and indicator removal (T1027.005) are what the investigation draft records for the Tofsee family; no string in this rule tests them, so they are not claimed.
 **Confidence:** MODERATE
-**Rationale:** Tofsee is an unrelated spam-botnet family that co-tenants `79.137.192.3`; it is not part of the Rhadamanthys/BellaMain/Inkognito campaign investigated here, retained as an analyst reference. The rule is explicitly family-bound (not campaign-bound): a broad structural + behavioral combination (anomalous WinHTTP import shape, injection API triad, rare-API bucket, and two of four short English words standing in for the build's word-salad version metadata) intended for hunting sweeps against this 2023 Tofsee build lineage, not for blocking actions. *Wording fix 2026-10-11:* the description and this sentence used to say the rule triggers on word-salad version metadata; the condition counts the strings `Hole`, `Bill`, `Fire` and `Selfie` (ASCII or UTF-16) anywhere in the file and never reads the version resource (no `pe.version_info` test), so those words in code, data or an unrelated resource satisfy it. The draft this rule was lifted from says the word-salad strings are build-specific and can vary.
+**Rationale:** Tofsee is an unrelated spam-botnet family that co-tenants `79.137.192.3`; it is not part of the Rhadamanthys/BellaMain/Inkognito campaign investigated here, retained as an analyst reference. The rule is explicitly family-bound (not campaign-bound): a broad structural + behavioral combination (import shape in which `WinHttpWriteData` is imported while `WinHttpOpen`, `WinHttpConnect` and `WinHttpOpenRequest` are not, injection API triad, rare-API bucket, and two of four short English words standing in for the build's word-salad version metadata) intended for hunting sweeps against this 2023 Tofsee build lineage, not for blocking actions. *Wording fix 2026-10-11:* the description and this sentence used to say the rule triggers on word-salad version metadata; the condition counts the strings `Hole`, `Bill`, `Fire` and `Selfie` (ASCII or UTF-16) anywhere in the file and never reads the version resource (no `pe.version_info` test), so those words in code, data or an unrelated resource satisfy it. The draft this rule was lifted from says the word-salad strings are build-specific and can vary.
 **False Positives:** Some legitimate heavily-packed or obfuscated software with similarly unusual import shapes could coincidentally match individual clauses; the word clause is weak (two common four- to six-letter English words anywhere in a PE), so the narrowing comes from the import-shape, section-size, injection-API and rare-API clauses together. The full combination is narrow but not goodware-validated to zero FP.
 **Deployment:** Endpoint AV/EDR file scan; hunting sweep for this specific Tofsee build lineage.
 
@@ -357,7 +358,7 @@ import "pe"
 rule Tofsee_Bloater_2023_StaticTradecraft
 {
     meta:
-        description = "Detects Tofsee-family droppers exhibiting the 2023 build's anti-AV bloat + dynamic-API-resolution tradecraft. Triggers on PE-structure anomalies (virtual .data more than 100 times its raw size, WinHttpWriteData as the only static WinHTTP import), the injection API triad, five of eight rare API names, and two of four short English words (Hole, Bill, Fire, Selfie) found anywhere in the file; the word test is not restricted to the version resource. Family-bound, not campaign-bound. Co-tenant on 79.137.192.3 — operationally separate from BellaMain/Inkognito/Rhadamanthys clusters."
+        description = "Detects Tofsee-family droppers exhibiting the 2023 build's anti-AV bloat + dynamic-API-resolution tradecraft. Triggers on PE-structure anomalies (virtual .data more than 100 times its raw size, `WinHttpWriteData` imported while `WinHttpOpen`, `WinHttpConnect` and `WinHttpOpenRequest` are all absent from the imports (other WinHTTP imports are not excluded)), the injection API triad, five of eight rare API names, and two of four short English words (Hole, Bill, Fire, Selfie) found anywhere in the file; the word test is not restricted to the version resource. Family-bound, not campaign-bound. Co-tenant on 79.137.192.3 — operationally separate from BellaMain/Inkognito/Rhadamanthys clusters."
         license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
         author = "The Hunters Ledger"
         reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/"
@@ -415,51 +416,6 @@ rule Tofsee_Bloater_2023_StaticTradecraft
 ## Sigma Rules
 
 ### Detection Rules
-
-#### Rhadamanthys SibCode Software Registry Key Marker
-
-**Tier:** Detection
-**Robustness:** 3
-**ATT&CK Coverage:** T1112 (Modify Registry)
-**Confidence:** HIGH
-**Rationale:** Confirmed across four independent sibling Stage-2 sandbox runs (this sample plus three others), not a single-sample artifact: a family-wide execution marker with no known benign collision. *Logic fix 2026-10-11:* the description names `HKU\<SID>\Software\SibCode\sn` (the per-user hive, which is how the report records the write), but the selection was the key-path substring alone, so a machine-wide `HKLM\SOFTWARE\SibCode\sn` write matched as well; the rule now also requires the `HKU\` prefix Sysmon renders for a per-user key. Tags verified against the current ATT&CK technique-tactic data via `sigma check`: T1112 (Modify Registry) requires its `attack.persistence` and/or `attack.defense-impairment` tactic tag(s) present; both are carried below, matching the original tagging.
-**False Positives:** None known — the `SibCode\sn` key path has no documented benign software using it.
-**Blind Spots:** A future build that writes this marker under a different registry path would evade. The report ties the marker to pre-v0.9.1 builds (the developer removed it in v0.9.1 per the cited Check Point changelog), so newer builds do not write it and the rule covers the older lineage only. This is a footprint/marker, not a blocking control on its own.
-**Validation:** Trigger execution of a Rhadamanthys Stage-2 sample — the registry write must match; unrelated software's registry activity must NOT fire.
-**Deployment:** Endpoint EDR / Sysmon-fed SIEM (registry telemetry).
-
-```yaml
-title: Rhadamanthys SibCode Software Registry Key Persistence Marker
-id: a4f1e2c8-3d7b-4f9a-9c2e-2c5e7f8d9a01
-status: experimental
-description: >-
-  Detects creation or modification of HKU\<SID>\Software\SibCode\sn registry value, a family-stable
-  Rhadamanthys execution marker observed across multiple sibling Stage-2 sandbox runs (Dapato dropper
-  variants e827d13c, 457aecd8, bc9fe5e9). Per-instance value is a license/build timestamp from the MaaS
-  panel. No known benign software writes this key.
-references:
-    - https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/
-author: The Hunters Ledger
-date: 2026-05-15
-tags:
-    - attack.persistence
-    - attack.defense-impairment
-    - attack.t1112
-    - detection.emerging-threats
-logsource:
-    product: windows
-    category: registry_set
-detection:
-    selection_key:
-        TargetObject|contains: '\Software\SibCode\sn'
-    selection_hive:
-        TargetObject|startswith: 'HKU\'
-    condition: selection_key and selection_hive
-falsepositives:
-    - >-
-      Unlikely. The SibCode\sn key path has no documented benign software using it.
-level: high
-```
 
 #### Rhadamanthys EAX-Redirect Process Hollowing Into InstallUtil.exe
 
@@ -566,6 +522,53 @@ falsepositives:
       Unlikely — the BellaMain panel PHP entry-point paths are bespoke and unlikely to
       collide with legitimate proxy/web traffic.
 level: high
+```
+
+### Hunting Rules
+
+#### Rhadamanthys SibCode Software Registry Key Marker
+
+**Tier:** Hunting
+**Robustness:** 1
+**ATT&CK Coverage:** T1112 (Modify Registry)
+**Confidence:** HIGH
+**Rationale:** Confirmed across four independent sibling Stage-2 sandbox runs (this sample plus three others), not a single-sample artifact: a family-wide execution marker with no known benign collision. *Tier fix 2026-10-11 (round 2):* it is one registry value name that the developer removed in v0.9.1, so it identifies the older lineage only and a rename costs the operator nothing; Robustness 1, Hunting, level medium (it was Detection, Robustness 3). *Boundary fix 2026-10-11 (round 2):* the key-path test was `contains`, so `SibCode\snBackup` matched too; the Sysmon `TargetObject` for a value write ends with the value name, so the test is now `endswith`. *Logic fix 2026-10-11:* the description names `HKU\<SID>\Software\SibCode\sn` (the per-user hive, which is how the report records the write), but the selection was the key-path substring alone, so a machine-wide `HKLM\SOFTWARE\SibCode\sn` write matched as well; the rule now also requires the `HKU\` prefix Sysmon renders for a per-user key. Tags verified against the current ATT&CK technique-tactic data via `sigma check`: T1112 (Modify Registry) requires its `attack.persistence` and/or `attack.defense-impairment` tactic tag(s) present; both are carried below, matching the original tagging.
+**False Positives:** None known — the `SibCode\sn` key path has no documented benign software using it.
+**Blind Spots:** A future build that writes this marker under a different registry path would evade. The report ties the marker to pre-v0.9.1 builds (the developer removed it in v0.9.1 per the cited Check Point changelog), so newer builds do not write it and the rule covers the older lineage only. This is a footprint/marker, not a blocking control on its own.
+**Validation:** Trigger execution of a Rhadamanthys Stage-2 sample — the registry write must match; unrelated software's registry activity must NOT fire.
+**Deployment:** Endpoint EDR / Sysmon-fed SIEM (registry telemetry).
+
+```yaml
+title: Rhadamanthys SibCode Software Registry Key Persistence Marker
+id: a4f1e2c8-3d7b-4f9a-9c2e-2c5e7f8d9a01
+status: experimental
+description: >-
+  Detects creation or modification of HKU\<SID>\Software\SibCode\sn registry value, a family-stable
+  Rhadamanthys execution marker observed across multiple sibling Stage-2 sandbox runs (Dapato dropper
+  variants e827d13c, 457aecd8, bc9fe5e9). Per-instance value is a license/build timestamp from the MaaS
+  panel. No known benign software writes this key.
+references:
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/
+author: The Hunters Ledger
+date: 2026-05-15
+tags:
+    - attack.persistence
+    - attack.defense-impairment
+    - attack.t1112
+    - detection.emerging-threats
+logsource:
+    product: windows
+    category: registry_set
+detection:
+    selection_key:
+        TargetObject|endswith: '\Software\SibCode\sn'
+    selection_hive:
+        TargetObject|startswith: 'HKU\'
+    condition: selection_key and selection_hive
+falsepositives:
+    - >-
+      Unlikely. The SibCode\sn key path has no documented benign software using it.
+level: medium
 ```
 
 ---

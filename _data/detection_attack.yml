@@ -821,7 +821,7 @@
     - tactic: "Command and Control"
       id: "T1071"
       name: "Application Layer Protocol"
-      rules: "CloudSync C2 Protocol: Dual Build Coverage (YARA, Detection); CloudSync C2 Registration Marker (SURICATA, Detection); CloudSync C2 Heartbeat And Terminator Marker (SURICATA, Detection)"
+      rules: "CloudSync C2 Protocol: Dual Build Coverage (YARA, Hunting); CloudSync C2 Registration Marker (SURICATA, Detection); CloudSync C2 Heartbeat And Terminator Marker (SURICATA, Detection)"
       count: 3
     - tactic: "Command and Control"
       id: "T1071.001"
@@ -851,7 +851,7 @@
     - tactic: "Command and Control"
       id: "T1571"
       name: "Non-Standard Port"
-      rules: "CloudSync C2 Protocol: Dual Build Coverage (YARA, Detection); CloudSync C2 Registration Marker (SURICATA, Detection); CloudSync C2 Heartbeat And Terminator Marker (SURICATA, Detection)"
+      rules: "CloudSync C2 Protocol: Dual Build Coverage (YARA, Hunting); CloudSync C2 Registration Marker (SURICATA, Detection); CloudSync C2 Heartbeat And Terminator Marker (SURICATA, Detection)"
       count: 3
 "dual-rat-analysis-detections":
   total: 11
@@ -1769,7 +1769,7 @@
       rules: "OpenStrike C Beacon Debug Strings Plus One Secondary Marker (YARA, Detection)"
       count: 1
 "open-directory-193-56-255-154-xiebroc2-detections":
-  total: 12
+  total: 10
   tactics: 3
   unresolved: []
   rows:
@@ -1791,8 +1791,8 @@
     - tactic: "Stealth"
       id: "T1036"
       name: "Masquerading"
-      rules: "Covenant C2 GruntStager Combined Build Detection (YARA, Detection); Covenant GruntStager Masquerade: Chrome 41 Windows 7 UA With /en-us/ URI (SURICATA, Detection)"
-      count: 2
+      rules: "Covenant GruntStager Masquerade: Chrome 41 Windows 7 UA With /en-us/ URI (SURICATA, Detection)"
+      count: 1
     - tactic: "Stealth"
       id: "T1055"
       name: "Process Injection"
@@ -1816,22 +1816,12 @@
     - tactic: "Command and Control"
       id: "T1071.001"
       name: "Web Protocols"
-      rules: "Covenant C2 GruntStager Combined Build Detection (YARA, Detection); Covenant C2 GruntStager HTTP Beacon: Campaign Session Token Detected (SIGMA, Detection); Covenant GruntStager C2 Beacon: Campaign Session Token in HTTP POST (SURICATA, Detection); Covenant GruntStager Masquerade: Chrome 41 Windows 7 UA With /en-us/ URI (SURICATA, Detection)"
+      rules: "Covenant C2 GruntStager Combined Build Detection (YARA, Detection); Covenant C2 GruntStager HTTP Beacon: Campaign Session Token Detected (SIGMA, Hunting); Covenant GruntStager C2 Beacon: Campaign Session Token in HTTP POST (SURICATA, Detection); Covenant GruntStager Masquerade: Chrome 41 Windows 7 UA With /en-us/ URI (SURICATA, Detection)"
       count: 4
-    - tactic: "Command and Control"
-      id: "T1571"
-      name: "Non-Standard Port"
-      rules: "XiebroC2 v3.1 Binary-Patchable Config: Padded-IPv4 Structural Pattern (YARA, Hunting)"
-      count: 1
     - tactic: "Command and Control"
       id: "T1573.001"
       name: "Symmetric Cryptography"
       rules: "XiebroC2 v3.1 Go TCP Implant: Source-Code Artifact Combination (YARA, Detection)"
-      count: 1
-    - tactic: "Command and Control"
-      id: "T1573.002"
-      name: "Asymmetric Cryptography"
-      rules: "Covenant C2 GruntStager Combined Build Detection (YARA, Detection)"
       count: 1
 "open-directory-94-103-1-13-20260423-detections":
   total: 26
@@ -2101,7 +2091,7 @@
     - tactic: "Stealth"
       id: "T1480"
       name: "Execution Guardrails"
-      rules: "Ipset Exclusion Set Named mitm_exclude Created and Wired Before a Redirect Rule (SIGMA, Detection)"
+      rules: "Ipset Named mitm_exclude Created (SIGMA, Hunting)"
       count: 1
     - tactic: "Stealth"
       id: "T1564.001"
@@ -2111,22 +2101,22 @@
     - tactic: "Defense Impairment"
       id: "T1686"
       name: "Disable or Modify System Firewall"
-      rules: "MITM_Deploy_Firewall_Script (YARA, Detection); Netfilter Loop-Prevention Mark Consistent with Self-Hosted SSH Interception (SIGMA, Detection); Iptables INPUT Drop Hiding a Non-Loopback High Port (SIGMA, Hunting)"
+      rules: "MITM_Deploy_Firewall_Script (YARA, Detection); Netfilter Loop-Prevention Mark Consistent with Self-Hosted SSH Interception (SIGMA, Detection); Iptables INPUT Drop Rule for Non-Loopback Traffic to a Specific Port (SIGMA, Hunting)"
       count: 3
-    - tactic: "Credential Access"
-      id: "T1552.004"
-      name: "Private Keys"
-      rules: "MITM_Payload_Perl_Fingerprint (YARA, Detection)"
-      count: 1
     - tactic: "Credential Access"
       id: "T1557"
       name: "Adversary-in-the-Middle"
-      rules: "MITM_Interceptor_SourceStrings (YARA, Detection); Netfilter Loop-Prevention Mark Consistent with Self-Hosted SSH Interception (SIGMA, Detection); Iptables NAT Redirect of Outbound SSH Traffic to a Local Listener (SIGMA, Detection); Command Line Consistent With SSH Interceptor Component Launch (SIGMA, Detection); Python Interpreter Directly Executing exclude_puller.py (SIGMA, Hunting); THL HUNT SSH-MITM-ParasiticCredentialTheft Paramiko Server Banner On Standard SSH Port (SURICATA, Detection); THL HUNT SSH-MITM-ParasiticCredentialTheft Self-Signed CN=receiver Certificate (SURICATA, Detection); THL HUNT SSH-MITM-ParasiticCredentialTheft Paramiko SSH Banner Either Direction On Any Port (SURICATA, Hunting)"
+      rules: "MITM_Interceptor_SourceStrings (YARA, Detection); Netfilter Loop-Prevention Mark Consistent with Self-Hosted SSH Interception (SIGMA, Detection); Command Line Consistent With SSH Interceptor Component Launch (SIGMA, Detection); Iptables NAT Redirect of Destination Port 22 to a Local Listener (SIGMA, Hunting); Python Interpreter Directly Executing exclude_puller.py (SIGMA, Hunting); THL HUNT SSH-MITM-ParasiticCredentialTheft Paramiko Server Banner On Standard SSH Port (SURICATA, Detection); THL HUNT SSH-MITM-ParasiticCredentialTheft Self-Signed CN=receiver Certificate (SURICATA, Detection); THL HUNT SSH-MITM-ParasiticCredentialTheft Paramiko SSH Banner Either Direction On Any Port (SURICATA, Hunting)"
       count: 8
     - tactic: "Discovery"
       id: "T1082"
       name: "System Information Discovery"
-      rules: "Automated Credential Re-Use Signature (Fingerprint Then Stdin Payload Seconds After Login) (SIGMA, Detection)"
+      rules: "Bare Uname and Bare Perl Command Lines on One Host (Possible Automated Credential Re-Use) (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Discovery"
+      id: "T1083"
+      name: "File and Directory Discovery"
+      rules: "MITM_Payload_Perl_Fingerprint (YARA, Detection)"
       count: 1
     - tactic: "Lateral Movement"
       id: "T1021.004"
@@ -2141,17 +2131,17 @@
     - tactic: "Command and Control"
       id: "T1071.001"
       name: "Web Protocols"
-      rules: "MITM_Receiver_SourceStrings (YARA, Detection); Python Process Establishing Outbound HTTPS to a Non-Standard High Port (SIGMA, Hunting)"
-      count: 2
+      rules: "MITM_Receiver_SourceStrings (YARA, Detection)"
+      count: 1
     - tactic: "Command and Control"
       id: "T1105"
       name: "Ingress Tool Transfer"
-      rules: "Paramiko and Ipset Installed in Quick Succession (Reboot-Surviving Toolkit Setup) (SIGMA, Detection)"
+      rules: "Paramiko and Ipset Install Commands on One Host (Reboot-Surviving Toolkit Setup) (SIGMA, Hunting)"
       count: 1
     - tactic: "Command and Control"
       id: "T1571"
       name: "Non-Standard Port"
-      rules: "Python Process Establishing Outbound HTTPS to a Non-Standard High Port (SIGMA, Hunting)"
+      rules: "Python Process Making an Outbound Connection to a Non-Standard High Port (SIGMA, Hunting)"
       count: 1
 "opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections":
   total: 8
@@ -2286,12 +2276,12 @@
     - tactic: "Execution"
       id: "T1059.005"
       name: "Visual Basic"
-      rules: "Multi-Vector Lure: GrimResource MSC + Mega.io Payload Fetch (YARA, Detection)"
+      rules: "Multi-Vector Lure: GrimResource MSC + Mega.io Payload Fetch (YARA, Hunting)"
       count: 1
     - tactic: "Execution"
       id: "T1059.007"
       name: "JavaScript"
-      rules: "Multi-Vector Lure: GrimResource MSC + Mega.io Payload Fetch (YARA, Detection)"
+      rules: "Multi-Vector Lure: GrimResource MSC + Mega.io Payload Fetch (YARA, Hunting)"
       count: 1
     - tactic: "Execution"
       id: "T1204.002"
@@ -2331,7 +2321,7 @@
     - tactic: "Stealth"
       id: "T1218.014"
       name: "MMC"
-      rules: "Multi-Vector Lure: GrimResource MSC + Mega.io Payload Fetch (YARA, Detection); HijackLoader GrimResource MMC Spawning Mshta or Rundll32 for Payload Execution (SIGMA, Detection); HijackLoader GrimResource MMC Spawning PowerShell Adding Defender Exclusion (SIGMA, Detection)"
+      rules: "Multi-Vector Lure: GrimResource MSC + Mega.io Payload Fetch (YARA, Hunting); HijackLoader GrimResource MMC Spawning Mshta or Rundll32 for Payload Execution (SIGMA, Detection); HijackLoader GrimResource MMC Spawning PowerShell Adding Defender Exclusion (SIGMA, Detection)"
       count: 3
     - tactic: "Stealth"
       id: "T1480"
@@ -2366,7 +2356,7 @@
     - tactic: "Command and Control"
       id: "T1105"
       name: "Ingress Tool Transfer"
-      rules: "Multi-Vector Lure: GrimResource MSC + Mega.io Payload Fetch (YARA, Detection)"
+      rules: "Multi-Vector Lure: GrimResource MSC + Mega.io Payload Fetch (YARA, Hunting)"
       count: 1
     - tactic: "Command and Control"
       id: "T1573.001"
@@ -2374,14 +2364,14 @@
       rules: "AsyncRAT SSL JA3 Fingerprint 07af4aa9e4d215a5ee63f9a0a277fbe3 (SURICATA, Detection)"
       count: 1
 "opendirectory-74-0-42-25-20260316-detections":
-  total: 13
+  total: 12
   tactics: 6
   unresolved: []
   rows:
     - tactic: "Execution"
       id: "T1059.001"
       name: "PowerShell"
-      rules: "PowerShell ExecutionPolicy Bypass With a .ps1 Under a User-Writable Path From a Non-Standard Parent (SIGMA, Hunting)"
+      rules: "PowerShell ExecutionPolicy Bypass, a .ps1 and a User-Writable Path in the Command Line From a Non-Standard Parent (SIGMA, Hunting)"
       count: 1
     - tactic: "Execution"
       id: "T1059.005"
@@ -2397,11 +2387,6 @@
       id: "T1027.002"
       name: "Software Packing"
       rules: "Aspdkzb ConfuserEx Fileless Loader Cluster (YARA, Detection)"
-      count: 1
-    - tactic: "Stealth"
-      id: "T1027.011"
-      name: "Fileless Storage"
-      rules: "PowerShell ExecutionPolicy Bypass With a .ps1 Under a User-Writable Path From a Non-Standard Parent (SIGMA, Hunting)"
       count: 1
     - tactic: "Stealth"
       id: "T1036.005"
@@ -2444,15 +2429,10 @@
       rules: "PureRAT v4.1.9 Four-Byte Preamble on Ports 56001 to 56003 (SURICATA, Detection)"
       count: 1
 "opendirectory-79-137-192-3-20260515-detections":
-  total: 15
-  tactics: 4
+  total: 10
+  tactics: 3
   unresolved: []
   rows:
-    - tactic: "Persistence"
-      id: "T1543.003"
-      name: "Windows Service"
-      rules: "Tofsee 2023 Build Static Tradecraft (Co-Tenant Reference) (YARA, Hunting)"
-      count: 1
     - tactic: "Stealth"
       id: "T1027"
       name: "Obfuscated Files or Information"
@@ -2468,11 +2448,6 @@
       name: "Software Packing"
       rules: "Rhadamanthys Stage-2 Minimal Import Surface (YARA, Hunting); Rhadamanthys Customer-Specific Loader RC4 Key (YARA, Hunting)"
       count: 2
-    - tactic: "Stealth"
-      id: "T1027.005"
-      name: "Indicator Removal from Tools"
-      rules: "Tofsee 2023 Build Static Tradecraft (Co-Tenant Reference) (YARA, Hunting)"
-      count: 1
     - tactic: "Stealth"
       id: "T1027.013"
       name: "Encrypted/Encoded File"
@@ -2493,31 +2468,16 @@
       name: "InstallUtil"
       rules: "Rhadamanthys EAX-Redirect Process Hollowing Into InstallUtil.exe (SIGMA, Detection)"
       count: 1
-    - tactic: "Stealth"
-      id: "T1497"
-      name: "Virtualization/Sandbox Evasion"
-      rules: "Tofsee 2023 Build Static Tradecraft (Co-Tenant Reference) (YARA, Hunting)"
-      count: 1
     - tactic: "Defense Impairment"
       id: "T1112"
       name: "Modify Registry"
-      rules: "Rhadamanthys SibCode Software Registry Key Marker (SIGMA, Detection)"
+      rules: "Rhadamanthys SibCode Software Registry Key Marker (SIGMA, Hunting)"
       count: 1
     - tactic: "Command and Control"
       id: "T1071.001"
       name: "Web Protocols"
       rules: "BellaMain PhaaS Panel PHP Source (YARA, Detection); BellaMain PhaaS Panel HTTP Request Patterns (SIGMA, Detection); Rhadamanthys Customer Panel-ID URL Pattern (SURICATA, Detection)"
       count: 3
-    - tactic: "Command and Control"
-      id: "T1071.003"
-      name: "Mail Protocols"
-      rules: "Tofsee 2023 Build Static Tradecraft (Co-Tenant Reference) (YARA, Hunting)"
-      count: 1
-    - tactic: "Command and Control"
-      id: "T1090.002"
-      name: "External Proxy"
-      rules: "Tofsee 2023 Build Static Tradecraft (Co-Tenant Reference) (YARA, Hunting)"
-      count: 1
     - tactic: "Command and Control"
       id: "T1102"
       name: "Web Service"
@@ -2556,12 +2516,12 @@
     - tactic: "Persistence"
       id: "T1547.004"
       name: "Winlogon Helper DLL"
-      rules: "Remcos UAC Bypass and Persistence (YARA, Detection); Remcos RAT Winlogon Userinit Persistence via Registry Modification (SIGMA, Detection); winlogon.exe Child Process Running From an AppData Path (Userinit Hijack Pattern) (SIGMA, Detection)"
+      rules: "Remcos UAC Bypass and Persistence (YARA, Detection); Winlogon Userinit Registry Value Changed From the Default (Remcos Persistence Pattern) (SIGMA, Detection); winlogon.exe Child Process Running From an AppData Path (Userinit Hijack Pattern) (SIGMA, Detection)"
       count: 3
     - tactic: "Privilege Escalation"
       id: "T1548.002"
       name: "Bypass User Account Control"
-      rules: "Remcos OpenDirectory Campaign Mutex and Install Artifacts (YARA, Detection); Remcos UAC Bypass and Persistence (YARA, Detection); UAC Disabled by reg.exe Setting EnableLUA to 0 From cmd.exe (Remcos Behavior) (SIGMA, Detection); EnableLUA Registry Value Set to Disable User Account Control (Registry State) (SIGMA, Detection)"
+      rules: "Remcos OpenDirectory Campaign Mutex and Install Artifacts (YARA, Detection); Remcos UAC Bypass and Persistence (YARA, Detection); UAC Disabling Attempt by reg.exe Setting EnableLUA to 0 From cmd.exe (Remcos Behavior) (SIGMA, Detection); EnableLUA Registry Value Set to Disable User Account Control (Registry State) (SIGMA, Detection)"
       count: 4
     - tactic: "Stealth"
       id: "T1036"
@@ -2581,12 +2541,12 @@
     - tactic: "Credential Access"
       id: "T1539"
       name: "Steal Web Session Cookie"
-      rules: "Non-Browser Process Accessing Chrome or Firefox Credential Store Files (Remcos Credential Theft Pattern) (SIGMA, Hunting)"
+      rules: "Non-Browser Process Accessing Chrome or Firefox Credential Store Files (SIGMA, Hunting)"
       count: 1
     - tactic: "Credential Access"
       id: "T1555.003"
       name: "Credentials from Web Browsers"
-      rules: "Remcos RAT Family Detection (YARA, Detection); Remcos OpenDirectory Campaign Mutex and Install Artifacts (YARA, Detection); Non-Browser Process Accessing Chrome or Firefox Credential Store Files (Remcos Credential Theft Pattern) (SIGMA, Hunting)"
+      rules: "Remcos RAT Family Detection (YARA, Detection); Remcos OpenDirectory Campaign Mutex and Install Artifacts (YARA, Detection); Non-Browser Process Accessing Chrome or Firefox Credential Store Files (SIGMA, Hunting)"
       count: 3
     - tactic: "Collection"
       id: "T1056.001"
@@ -2615,7 +2575,7 @@
       count: 1
 "rovodev-mirai-matrix-c2-87.106.143.220-detections":
   total: 19
-  tactics: 8
+  tactics: 7
   unresolved: []
   rows:
     - tactic: "Resource Development"
@@ -2626,7 +2586,7 @@
     - tactic: "Resource Development"
       id: "T1587.001"
       name: "Malware"
-      rules: "MAL_Bash_Pandora_Dropper_Family (YARA, Detection); MAL_Python_Matrix_C2_Framework_Family (YARA, Detection); MAL_JSON_Rovodev_SessionContext_FileWrite_Authoring (YARA, Detection); MAL_Python_AIGenerated_OffensiveCode_Universal_Subset (YARA, Hunting); MAL_Python_StealthAgent_AntiAnalysis_Keyword_Bucket (YARA, Hunting); MAL_Markdown_Rovodev_WhatINeed_OperatorPrompt (YARA, Hunting); Rovodev AI Agent Sessions Directory or Session Context File Created on a Linux Host (SIGMA, Hunting); Rovodev Runtime Log rovodev.log Created on a Linux Host (Scoping Lead for AI-Augmented Offensive Operations) (SIGMA, Hunting); Pandora-Mirai Naku Binary Distribution URI Path (SURICATA, Detection); Pandora-Mirai Pandoras-Box Binary Distribution URI Path (SURICATA, Detection); Pandora-Mirai bot.sh Reseed Download URI Pattern (SURICATA, Hunting); Naku Binary Reference in HTTP URI (Bare Substring) (SURICATA, Hunting)"
+      rules: "MAL_Bash_Pandora_Dropper_Family (YARA, Detection); MAL_JSON_Rovodev_SessionContext_FileWrite_Authoring (YARA, Detection); MAL_Python_Matrix_C2_Framework_Family (YARA, Hunting); MAL_Python_AIGenerated_OffensiveCode_Universal_Subset (YARA, Hunting); MAL_Python_StealthAgent_AntiAnalysis_Keyword_Bucket (YARA, Hunting); MAL_Markdown_Rovodev_WhatINeed_OperatorPrompt (YARA, Hunting); Rovodev AI Agent Sessions Directory or Session Context File Created on a Linux Host (SIGMA, Hunting); Rovodev Runtime Log rovodev.log Created on a Linux Host (Scoping Lead for AI-Augmented Offensive Operations) (SIGMA, Hunting); Pandora-Mirai Naku Binary Distribution URI Path (SURICATA, Detection); Pandora-Mirai Pandoras-Box Binary Distribution URI Path (SURICATA, Detection); Pandora-Mirai bot.sh Reseed Download URI Pattern (SURICATA, Hunting); Naku Binary Reference in HTTP URI (Bare Substring) (SURICATA, Hunting)"
       count: 12
     - tactic: "Resource Development"
       id: "T1588.001"
@@ -2636,7 +2596,7 @@
     - tactic: "Initial Access"
       id: "T1190"
       name: "Exploit Public-Facing Application"
-      rules: "Naku or Pandora Mirai Arch-Tagged Binary Name or Pandora-Mirai Command-Line Token on Linux (SIGMA, Detection); Naku Binary Fetch URI Pattern: Historical Aruba Distribution Convention (SURICATA, Hunting); Naku Binary Fetch URI Pattern: Historical Aruba Backup Distribution Convention (SURICATA, Hunting)"
+      rules: "Naku or Pandora Mirai Arch-Tagged Binary Name or Pandora-Mirai Command-Line Token on Linux (SIGMA, Hunting); Naku Binary Fetch URI Pattern: Historical Aruba Distribution Convention (SURICATA, Hunting); Naku Binary Fetch URI Pattern: Historical Aruba Backup Distribution Convention (SURICATA, Hunting)"
       count: 3
     - tactic: "Execution"
       id: "T1053.003"
@@ -2646,18 +2606,18 @@
     - tactic: "Execution"
       id: "T1059.004"
       name: "Unix Shell"
-      rules: "MAL_Bash_Pandora_Dropper_Family (YARA, Detection); MAL_Bash_Persistent_Bot_DualChannel_CNC (YARA, Detection); Naku or Pandora Mirai Arch-Tagged Binary Name or Pandora-Mirai Command-Line Token on Linux (SIGMA, Detection); BusyBox SORA Marker Execution: Sora-Derivative Mirai-Fork Active on Host (SIGMA, Detection); PandoraNet Botnet ID in Process Command Line: Active Pandora-Mirai Infection (SIGMA, Hunting)"
+      rules: "MAL_Bash_Pandora_Dropper_Family (YARA, Detection); MAL_Bash_Persistent_Bot_DualChannel_CNC (YARA, Detection); BusyBox SORA Marker Execution: Sora-Derivative Mirai-Fork Active on Host (SIGMA, Detection); Naku or Pandora Mirai Arch-Tagged Binary Name or Pandora-Mirai Command-Line Token on Linux (SIGMA, Hunting); PandoraNet Botnet ID in Process Command Line: Active Pandora-Mirai Infection (SIGMA, Hunting)"
       count: 5
     - tactic: "Execution"
       id: "T1059.006"
       name: "Python"
-      rules: "MAL_Python_Matrix_C2_Framework_Family (YARA, Detection); MAL_Python_AIGenerated_OffensiveCode_Universal_Subset (YARA, Hunting); MAL_Python_StealthAgent_AntiAnalysis_Keyword_Bucket (YARA, Hunting); MAL_Markdown_Rovodev_WhatINeed_OperatorPrompt (YARA, Hunting)"
+      rules: "MAL_Python_Matrix_C2_Framework_Family (YARA, Hunting); MAL_Python_AIGenerated_OffensiveCode_Universal_Subset (YARA, Hunting); MAL_Python_StealthAgent_AntiAnalysis_Keyword_Bucket (YARA, Hunting); MAL_Markdown_Rovodev_WhatINeed_OperatorPrompt (YARA, Hunting)"
       count: 4
     - tactic: "Execution"
       id: "T1059.007"
       name: "JavaScript"
-      rules: "MAL_Discord_Bot_DDoSasService_Customer_Interface (YARA, Detection); Linux Process Connecting to discord.com on Port 443 Outside node_modules or discord.js Paths (Matrix C2 Bot Pattern) (SIGMA, Hunting); Matrix C2 Discord Bot Attack-Method Dispatch: ovh-nuke (SURICATA, Hunting); Matrix C2 Discord Bot Attack-Method Dispatch: syn-storm/frag-storm/udp-bypass/icmp-hell (SURICATA, Hunting)"
-      count: 4
+      rules: "MAL_Discord_Bot_DDoSasService_Customer_Interface (YARA, Detection); Matrix C2 Discord Bot Attack-Method Dispatch: ovh-nuke (SURICATA, Hunting); Matrix C2 Discord Bot Attack-Method Dispatch: syn-storm/frag-storm/udp-bypass/icmp-hell (SURICATA, Hunting)"
+      count: 3
     - tactic: "Persistence"
       id: "T1037.004"
       name: "RC Scripts"
@@ -2668,11 +2628,6 @@
       name: "Systemd Service"
       rules: "MAL_Bash_Persistent_Bot_DualChannel_CNC (YARA, Detection); Pandora-Mirai Persistence Pattern: Multi-Mechanism Installer (Init.d, Systemd, Hidden Cron) (SIGMA, Hunting)"
       count: 2
-    - tactic: "Privilege Escalation"
-      id: "T1546.004"
-      name: "Unix Shell Configuration Modification"
-      rules: "MAL_Bash_Persistent_Bot_DualChannel_CNC (YARA, Detection)"
-      count: 1
     - tactic: "Stealth"
       id: "T1014"
       name: "Rootkit"
@@ -2703,25 +2658,30 @@
       name: "Non-Application Layer Protocol"
       rules: "MAL_ELF_Naku_Pandora_Mirai_Family (YARA, Detection); BusyBox SORA Marker Execution: Sora-Derivative Mirai-Fork Active on Host (SIGMA, Detection); PandoraNet Botnet ID in Process Command Line: Active Pandora-Mirai Infection (SIGMA, Hunting); Naku/Pandora-Mirai Operator-Bespoke 22-Char Charset String: Family Tracking Signature (SIGMA, Hunting); Naku-Pandora Mirai Operator-Bespoke CNC Protocol (Length-Prefixed String Option Keys) (SURICATA, Hunting)"
       count: 5
+    - tactic: "Command and Control"
+      id: "T1102"
+      name: "Web Service"
+      rules: "Linux Process Connecting to discord.com on Port 443 Outside node_modules or discord.js Paths (Matrix C2 Bot Pattern) (SIGMA, Hunting)"
+      count: 1
     - tactic: "Impact"
       id: "T1498.001"
       name: "Direct Network Flood"
-      rules: "MAL_ELF_Naku_Pandora_Mirai_Family (YARA, Detection); MAL_Python_Matrix_C2_Framework_Family (YARA, Detection); MAL_Discord_Bot_DDoSasService_Customer_Interface (YARA, Detection); Linux Process Connecting to discord.com on Port 443 Outside node_modules or discord.js Paths (Matrix C2 Bot Pattern) (SIGMA, Hunting); Matrix C2 Discord Bot Attack-Method Dispatch: ovh-nuke (SURICATA, Hunting); Matrix C2 Discord Bot Attack-Method Dispatch: syn-storm/frag-storm/udp-bypass/icmp-hell (SURICATA, Hunting)"
-      count: 6
+      rules: "MAL_ELF_Naku_Pandora_Mirai_Family (YARA, Detection); MAL_Discord_Bot_DDoSasService_Customer_Interface (YARA, Detection); MAL_Python_Matrix_C2_Framework_Family (YARA, Hunting); Matrix C2 Discord Bot Attack-Method Dispatch: ovh-nuke (SURICATA, Hunting); Matrix C2 Discord Bot Attack-Method Dispatch: syn-storm/frag-storm/udp-bypass/icmp-hell (SURICATA, Hunting)"
+      count: 5
     - tactic: "Impact"
       id: "T1498.002"
       name: "Reflection Amplification"
-      rules: "MAL_Python_Matrix_C2_Framework_Family (YARA, Detection); MAL_Discord_Bot_DDoSasService_Customer_Interface (YARA, Detection)"
+      rules: "MAL_Discord_Bot_DDoSasService_Customer_Interface (YARA, Detection); MAL_Python_Matrix_C2_Framework_Family (YARA, Hunting)"
       count: 2
 "russian-gemini-credential-mill-213.165.51.115-detections":
-  total: 21
+  total: 20
   tactics: 10
   unresolved: []
   rows:
     - tactic: "Resource Development"
       id: "T1587"
       name: "Develop Capabilities"
-      rules: "LLM-Personalized Credential Mutator Family (YARA, Detection); AI Operator Handoff Document Family (YARA, Detection); C2_INFRA_TRANSFER Explicit AI-to-AI Header (Narrow / Highest Fidelity) (YARA, Detection); Russian Operator Persona Strings (YARA, Hunting); AI Operator Handoff Document Bespoke Filename Created on Server Filesystem (SIGMA, Detection); Executable Script or Skill File Created in Gemini CLI Config Directory (SIGMA, Hunting); AI Operator Handoff Filename Created in Gemini CLI Config Directory (SIGMA, Hunting)"
+      rules: "LLM-Personalized Credential Mutator Family (YARA, Detection); C2_INFRA_TRANSFER Explicit AI-to-AI Header Pair (Narrow) (YARA, Hunting); AI Operator Handoff Document Family (YARA, Hunting); Russian Operator Persona Strings (YARA, Hunting); AI Operator Handoff Document Bespoke Filename Created on Server Filesystem (SIGMA, Detection); Executable Script or Skill File Created in Gemini CLI Config Directory (SIGMA, Hunting); AI Operator Handoff Filename Created in Gemini CLI Config Directory (SIGMA, Hunting)"
       count: 7
     - tactic: "Execution"
       id: "T1059.001"
@@ -2751,11 +2711,6 @@
     - tactic: "Credential Access"
       id: "T1003.001"
       name: "LSASS Memory"
-      rules: "LSASS Process Access With a Credential-Dumping GrantedAccess Mask and No Source Process Filter (SIGMA, Hunting)"
-      count: 1
-    - tactic: "Credential Access"
-      id: "T1003.002"
-      name: "Security Account Manager"
       rules: "LSASS Process Access With a Credential-Dumping GrantedAccess Mask and No Source Process Filter (SIGMA, Hunting)"
       count: 1
     - tactic: "Credential Access"
@@ -2796,8 +2751,8 @@
     - tactic: "Command and Control"
       id: "T1071.001"
       name: "Web Protocols"
-      rules: "AI Operator Handoff Document Family (YARA, Detection); A2A C2 Server (Unauthenticated Python stdlib) (YARA, Detection); A2A C2 Client Console / Exec Tool (YARA, Detection); C2_INFRA_TRANSFER Explicit AI-to-AI Header (Narrow / Highest Fidelity) (YARA, Detection); Python Process With c2_server or BaseHTTPServer in the Command Line (A2A C2 Server Pattern) (SIGMA, Hunting); A2A C2 Beacon POST to Operator Endpoint with X-Agent-ID Header (SURICATA, Detection)"
-      count: 6
+      rules: "A2A C2 Server (Unauthenticated Python stdlib) (YARA, Detection); A2A C2 Client Console / Exec Tool (YARA, Detection); AI Operator Handoff Document Family (YARA, Hunting); Python Process With c2_server or BaseHTTPServer in the Command Line (A2A C2 Server Pattern) (SIGMA, Hunting); A2A C2 Beacon POST to Operator Endpoint with X-Agent-ID Header (SURICATA, Detection)"
+      count: 5
     - tactic: "Command and Control"
       id: "T1090.004"
       name: "Domain Fronting"
@@ -2831,7 +2786,7 @@
     - tactic: "Initial Access"
       id: "T1190"
       name: "Exploit Public-Facing Application"
-      rules: "Zimbra Web Shell Decoy Banner (webshell_zimbra_security_monitor_jsp) (YARA, Detection); GIF89a-Polyglot PHP Web Shell (webshell_gif89a_php_polyglot) (YARA, Detection); Ivanti Connect Secure Auth-Bypass Path Traversal to System Information (SIGMA, Detection); Exchange ProxyLogon SSRF Cookie Header on Autodiscover (SIGMA, Detection); Tableau Server Vizportal SSRF via getViewThumbnail or fetchBinary (SIGMA, Detection); GenAI Chatbot API SSRF to Cloud Instance Metadata Service (SIGMA, Detection); Moodle Managefiles Plugin Local File Inclusion Attempt (SIGMA, Detection); Zimbra JSP Web Shell Dropped via Amavis Cpio Path Traversal (SIGMA, Detection); Ivanti Connect Secure CVE-2023-46805 Auth-Bypass Path Traversal (SURICATA, Detection); Ivanti Connect Secure CVE-2024-21887 Command Injection via cac/status (SURICATA, Detection); Exchange ProxyLogon CVE-2021-26855 SSRF Cookie Header on Autodiscover (SURICATA, Detection)"
+      rules: "Zimbra Web Shell Decoy Banner (webshell_zimbra_security_monitor_jsp) (YARA, Detection); GIF89a-Polyglot PHP Web Shell (webshell_gif89a_php_polyglot) (YARA, Detection); Ivanti Connect Secure Path Traversal to System Information or Command Substitution in cac/status (SIGMA, Detection); Exchange ProxyLogon SSRF Cookie Header on Autodiscover (SIGMA, Detection); Tableau Server Vizportal SSRF via getViewThumbnail or fetchBinary (SIGMA, Detection); GenAI Chatbot API SSRF to Cloud Instance Metadata Service (SIGMA, Detection); Moodle Managefiles Plugin Local File Inclusion Attempt (SIGMA, Detection); Zimbra JSP Web Shell Dropped via Amavis Cpio Path Traversal (SIGMA, Detection); Ivanti Connect Secure CVE-2023-46805 Auth-Bypass Path Traversal (SURICATA, Detection); Ivanti Connect Secure CVE-2024-21887 Command Injection via cac/status (SURICATA, Detection); Exchange ProxyLogon CVE-2021-26855 SSRF Cookie Header on Autodiscover (SURICATA, Detection)"
       count: 11
     - tactic: "Execution"
       id: "T1053.003"
@@ -2926,7 +2881,7 @@
     - tactic: "Stealth"
       id: "T1497.001"
       name: "System Checks"
-      rules: "XWorm 3.0-5.0: Config and Builder Markers (YARA, Detection); XWorm 3.0-5.0: Rijndael-256-ECB Config Crypto Pattern (YARA, Hunting); Non-Browser Process DNS Query to ip-api.com Hosting Detection Endpoint (SIGMA, Hunting); WMI Win32_ComputerSystem Query from User-Writable Directory (SIGMA, Hunting); XWorm Anti-Analysis Hosting Detection via ip-api.com (SURICATA, Hunting)"
+      rules: "XWorm 3.0-5.0: Config and Builder Markers (YARA, Detection); XWorm 3.0-5.0: Rijndael-256-ECB Config Crypto Pattern (YARA, Hunting); Non-Browser Process DNS Query to ip-api.com (Host Name Used by XWorm's Hosting Check) (SIGMA, Hunting); WMI Win32_ComputerSystem Query from User-Writable Directory (SIGMA, Hunting); XWorm Anti-Analysis Hosting Detection via ip-api.com (SURICATA, Hunting)"
       count: 5
     - tactic: "Stealth"
       id: "T1542.003"
@@ -3106,12 +3061,12 @@
     - tactic: "Command and Control"
       id: "T1071.001"
       name: "Web Protocols"
-      rules: "Sliver Beacon Canonical Import Path In Process Memory (YARA, Detection); Sliver Operator Build Artifacts, 193.233.202.17 Campaign (YARA, Detection); EtherRAT-class Node.js Bot Configuration Constants (YARA, Detection); HTTP POST To A Minified-Static-Asset-Shaped Path With A Single-Letter Query Parameter (SURICATA, Detection); HTTP Client Claims A Non-Existent Chrome 108 Build (SURICATA, Detection)"
+      rules: "Sliver Operator Build Artifacts, 193.233.202.17 Campaign (YARA, Detection); EtherRAT-class Node.js Bot Configuration Constants (YARA, Detection); Sliver Canonical Protobuf Import Path String (Seen in Process Memory of the Analyzed Build) (YARA, Hunting); HTTP POST To A Minified-Static-Asset-Shaped Path With A Single-Letter Query Parameter (SURICATA, Detection); HTTP Client Claims A Non-Existent Chrome 108 Build (SURICATA, Detection)"
       count: 5
     - tactic: "Command and Control"
       id: "T1102.001"
       name: "Dead Drop Resolver"
-      rules: "Sliver Beacon Canonical Import Path In Process Memory (YARA, Detection); EtherRAT-class Node.js Bot Configuration Constants (YARA, Detection)"
+      rules: "EtherRAT-class Node.js Bot Configuration Constants (YARA, Detection); Sliver Canonical Protobuf Import Path String (Seen in Process Memory of the Analyzed Build) (YARA, Hunting)"
       count: 2
     - tactic: "Command and Control"
       id: "T1105"

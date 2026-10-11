@@ -22,8 +22,8 @@ hide: true
 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
-| YARA | 6 | 4 | T1014, T1027, T1037.004, T1053.003, T1059.004, T1059.006, T1059.007, T1071.001, T1095, T1497.001, T1498.001, T1498.002, T1543.002, T1546.004, T1584.004, T1587.001 | 0 |
-| Sigma | 4 | 6 | T1014, T1027, T1037.004, T1053.003, T1059.004, T1059.007, T1095, T1190, T1498.001, T1543.002, T1546.004, T1564.001, T1587.001 | 2 |
+| YARA | 5 | 5 | T1014, T1027, T1037.004, T1053.003, T1059.004, T1059.006, T1059.007, T1071.001, T1095, T1497.001, T1498.001, T1498.002, T1543.002, T1584.004, T1587.001 | 0 |
+| Sigma | 3 | 7 | T1014, T1027, T1037.004, T1053.003, T1059.004, T1095, T1190, T1543.002, T1564.001, T1587.001, T1102 | 2 |
 | Suricata | 2 | 8 | T1027, T1059.007, T1071.001, T1095, T1190, T1498.001, T1584.004, T1587.001, T1588.001 | 3 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
@@ -69,9 +69,9 @@ This campaign spans three operator-artifact groups, each labeled inline within t
 **Confidence:** HIGH
 **Rationale:** The operator-bespoke 22-char charset `1gba4cdom53nhp12ei0kfj` is present in all 11 architectures; combined with the Sora-fork `/bin/busybox SORA` marker, the `PandoraNet` botnet ID, and canonical Mirai debug symbols (`add_auth_entry`, `resolve_cnc_addr`), no single renameable literal carries the rule — an operator would need to regenerate the charset, rename the Sora-fork marker, and strip debug symbols simultaneously to evade. Unchanged from the original file.
 **False Positives:** None known — the 22-char charset is operator-bespoke and not found on any other host in Hunt.io's 365-day index; `/bin/busybox SORA` is Sora-fork-specific and absent from stock Mirai or generic IoT tools; `PandoraNet` is unique to this operator.
-**Blind Spots:** A full rebrand that regenerates the charset AND renames the Sora-fork marker AND strips debug symbols would evade; targets on-disk/in-memory ELF, not a live network capture.
+**Blind Spots:** A full rebrand that regenerates the charset AND renames the Sora-fork marker AND strips debug symbols would evade; targets on-disk ELF files or saved dumps, not a live network capture.
 **Validation:** Scan a Naku/Pandora-Mirai sample across any of the 11 architectures — at least one condition branch must match; a benign or stock-Mirai ELF binary must NOT fire.
-**Deployment:** Endpoint ELF scanner, network sandbox detonation, IoT device firmware scanner, memory scanner on compromised Linux hosts.
+**Deployment:** Endpoint ELF scanner, network sandbox detonation, IoT device firmware scanner, scanning of saved dumps from compromised Linux hosts. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
 /*
@@ -175,72 +175,22 @@ rule MAL_Bash_Pandora_Dropper_Family {
 
 **Matrix C2 Framework**
 
-#### MAL_Python_Matrix_C2_Framework_Family
-
-**Tier:** Detection
-**Robustness:** 3
-**ATT&CK Coverage:** T1059.006 (Python), T1498.001 (Direct Network Flood), T1498.002 (Reflection Amplification), T1587.001 (Develop Capabilities: Malware)
-**Confidence:** HIGH
-**Rationale:** Direct AI-authored strings captured from Rovodev session_context.json file_write payloads. The MATRIX C2 ASCII-banner header, `mass_infection` docstring, emoji-branded attack-method names, and the operator-marketing `50Gbps+` comment form multiple independent phrase anchors — no single renameable literal carries the rule. Unchanged from the original file.
-**False Positives:** None known. Every branch needs at least two of the strings, and the banner, the emoji-branded method names and the `50Gbps+` marketing comment are never required together: the banner with the mass-infection docstring or the LLM closing phrase; the `50Gbps+` comment with either emoji-branded method name; the two deployment markers `FINAL_DEPLOYMENT_COMPLETE` and `ULTIMATE_DEPLOYMENT` (generic AI-agent file markers); or two of the three method-name literals with the `50Gbps+` comment or the docstring. Not goodware-validated. *Wording fix 2026-10-11:* the earlier line described a banner + emoji + marketing-comment combination that no branch requires.
-**Blind Spots:** A full source rewrite that strips all banner/docstring/emoji strings would evade; targets on-disk/in-memory Python source, not compiled/obfuscated builds.
-**Validation:** Scan `master_control.py` / `attack_engine.py` / `multi_vector_agent.py` (hashes below) — at least one condition branch must match; unrelated legitimate DDoS-testing or load-testing tools must NOT fire.
-**Deployment:** Linux filesystem scanner (Python scripts), network sandbox detonation, SIEM content search on analyst workstations.
-
-```yara
-rule MAL_Python_Matrix_C2_Framework_Family {
-   meta:
-      description = "Detects Matrix C2 Python DDoS-as-a-Service framework files authored via Atlassian Rovodev AI coding agent. Identifies master_control.py, attack_engine.py, and multi_vector_agent.py via AI-generated banner strings, operator-marketing comments, emoji-branded attack method catalog entries, and mass-infection docstring captured directly from Rovodev session file_write tool call payloads."
-      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
-      author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/"
-      date = "2026-05-26"
-      hash1 = "e9e0eafc89e4a9db796c63bb4fdc5c0fd1106f8b9c234fb57e51a7934f2b8d8e"
-      hash2 = "921e4c1d86813838d40010e82a8f374a70b91f06008db5182d1ec6c2da672c09"
-      hash3 = "a19b972688158e361e8646ec17556ec46bf84f0cd24fb8707e4df85cb9d9a6d2"
-      family = "Matrix C2"
-      malware_type = "DDoS-as-a-Service Framework"
-      campaign = "UTA-2026-014"
-      id = "d804ea26-cbfc-5194-854c-228ee9cfc434"
-   strings:
-      $banner     = "MATRIX C2 - IMPLEMENTATION PLAN" ascii
-      $docstring  = "Launch mass infection campaign" ascii
-      $emoji_icmp = "\xf0\x9f\x94\xa5 ICMP Hell" ascii
-      $emoji_udp  = "\xf0\x9f\x9a\x80 UDP Bypass" ascii
-      $gbps_claim = "Increased default threads for 50Gbps+" ascii
-      $final_doc  = "FINAL_DEPLOYMENT_COMPLETE" ascii
-      $ultimate   = "ULTIMATE_DEPLOYMENT" ascii
-      $llm_close  = "Let me start Phase 1 now" ascii
-      $method_udp = "'udp-star'" ascii
-      $method_syn = "'syn-storm'" ascii
-      $method_ovh = "'ovh-nuke'" ascii
-   condition:
-      filesize < 2MB and
-      (
-         ($banner and ($docstring or $llm_close)) or
-         ($gbps_claim and ($emoji_icmp or $emoji_udp)) or
-         ($final_doc and $ultimate) or
-         (2 of ($method_udp, $method_syn, $method_ovh) and ($gbps_claim or $docstring))
-      )
-}
-```
-
 #### MAL_Discord_Bot_DDoSasService_Customer_Interface
 
 **Tier:** Detection
-**Robustness:** 3
+**Robustness:** 2
 **ATT&CK Coverage:** T1059.007 (JavaScript), T1498.001 (Direct Network Flood), T1498.002 (Reflection Amplification)
 **Confidence:** HIGH
-**Rationale:** The JavaScript attack-method dispatch table is a 13-entry bespoke catalog (`udp-star`, `syn-storm`, `tcp-matrix`, `tcp-rst`, `udp-bypass`, `icmp-hell`, `multi-vector`, `http-flood`, `mass_infection`, `frag-storm`, `dns-rain`, `ovh-nuke`, `http-star`). The rule has three branches: 4 of the 13 names plus a `vip: true` or `vip: false` tier string; 3 of the names plus the `gbps:` field plus an emoji-branded method name; or the `ovh-nuke`, `frag-storm` and `mass_infection` names plus `vip: true`. Only the second branch needs the GBPS and emoji branding; the first and third need neither. Evading all three requires renaming or removing most of the catalog. *Wording fix 2026-10-11:* the earlier text called the catalog 8 entries while listing 13, and said the tier, GBPS and emoji branding were all part of the match.
+**Rationale:** The JavaScript attack-method dispatch table is a 13-entry bespoke catalog (`udp-star`, `syn-storm`, `tcp-matrix`, `tcp-rst`, `udp-bypass`, `icmp-hell`, `multi-vector`, `http-flood`, `mass_infection`, `frag-storm`, `dns-rain`, `ovh-nuke`, `http-star`). The rule has three branches: 4 of the 13 names plus a `vip: true` or `vip: false` tier string; 3 of the names plus the `gbps:` field plus an emoji-branded method name; or the `ovh-nuke`, `frag-storm` and `mass_infection` names plus `vip: true`. Only the second branch needs the GBPS and emoji branding; the first and third need neither. Evading all three requires renaming or removing most of the catalog. *Robustness fix 2026-10-11 (round 2):* scored 2, not 3: a freely renamed method catalog and tier vocabulary is a family string combination, not a technique invariant. *Wording fix 2026-10-11:* the earlier text called the catalog 8 entries while listing 13, and said the tier, GBPS and emoji branding were all part of the match.
 **False Positives:** None known. The first branch, 4 of 13 bespoke attack-method names plus a `vip` tier string, is the loosest and needs no GBPS or emoji branding; the 13-name catalog is not found in legitimate Discord bots. Not goodware-validated.
-**Blind Spots:** A full dispatch-table rewrite under new method names would evade; targets the on-disk/in-memory JS source.
+**Blind Spots:** A full dispatch-table rewrite under new method names would evade; targets JS source in files or saved dumps. The condition tests `filesize`, which is undefined in a libyara live process-memory scan, so the rule matches files and saved dumps only.
 **Validation:** Scan the Discord bot JS source (`hash1` below) — at least one condition branch must match; unrelated legitimate Discord moderation/utility bots must NOT fire.
 **Deployment:** JavaScript/Node.js file scanner, Discord bot code review, web application code analysis.
 
 ```yara
 rule MAL_Discord_Bot_DDoSasService_Customer_Interface {
    meta:
-      description = "Detects Matrix C2 Discord-bot customer interface JavaScript dispatch table for DDoS-as-a-Service. Identifies the 13-attack-method catalog (udp-star, syn-storm, tcp-matrix, tcp-rst, udp-bypass, icmp-hell, multi-vector, http-flood, mass_infection, frag-storm, dns-rain, ovh-nuke, http-star) combined with VIP/free tier branding, GBPS capability estimates, and AI-Generated Code Signature emoji branding."
+      description = "Detects Matrix C2 Discord-bot customer interface JavaScript dispatch table for DDoS-as-a-Service. Matches any one of three branches over the 13-attack-method catalog (udp-star, syn-storm, tcp-matrix, tcp-rst, udp-bypass, icmp-hell, multi-vector, http-flood, mass_infection, frag-storm, dns-rain, ovh-nuke, http-star): four of the names with a VIP/free tier string; three of the names with a gbps: field and an emoji-branded method name; or ovh-nuke, frag-storm and mass_infection with the VIP tier string. Only the second branch needs the GBPS field and the emoji branding."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/"
@@ -328,18 +278,19 @@ rule MAL_JSON_Rovodev_SessionContext_FileWrite_Authoring {
 
 **Tier:** Detection
 **Robustness:** 2
-**ATT&CK Coverage:** T1037.004 (RC Scripts), T1053.003 (Cron), T1059.004 (Unix Shell), T1071.001 (Web Protocols), T1543.002 (Systemd Service), T1546.004 (Unix Shell Configuration Modification)
+**ATT&CK Coverage:** T1037.004 (RC Scripts), T1053.003 (Cron), T1059.004 (Unix Shell), T1071.001 (Web Protocols), T1543.002 (Systemd Service)
+**ATT&CK Note:** Unix Shell Configuration Modification (T1546.004) is withdrawn: no string names `.bashrc`, `.profile` or another shell configuration file; the cron, init.d and systemd paths support T1053.003, T1037.004 and T1543.002.
 **Confidence:** HIGH
 **Rationale:** Multi-branch rule where 3 of 5 branches (hidden cron entry + masquerade init.d/systemd names; heartbeat message + port + hidden cron; JSON field-name structure) carry no dependency on the operator's C2 IP, so the rule survives infrastructure rotation even though two branches additionally reference the hardcoded IP as a strengthening (not sole) anchor. *Rename 2026-10-11:* the rule was named `MAL_Python_Persistent_Bot_DualChannel_CNC`, but every string it matches is a shell-script artifact (`persistent_bot.sh`: cron, init.d and systemd paths, `wget`, `pkill`, JSON built in shell variables), and nothing tests for Python, so the name is now `MAL_Bash_Persistent_Bot_DualChannel_CNC` with the matching deterministic `id`.
 **False Positives:** None known — the hidden `.cache_update` cron filename, the `sysupdate`/`system-update.service` masquerade pair, and the `bot_register`/`arch`/`vendor` JSON wire-format fields have no plausible legitimate collision in combination.
-**Blind Spots:** A rebuild that renames the masquerade persistence files AND changes the JSON wire-format field names would evade; targets the on-disk installer script.
+**Blind Spots:** The five branches fail independently. Renaming the cron, init.d and systemd persistence paths removes branch 2; rotating the C2 IP removes branches 1 and 3; changing the `bot_register` and `heartbeat` type strings removes branches 1, 4 and 5. The reseed URL plus kill-pattern branch (3) survives every JSON and path rename while the IP and those command texts stay unchanged, so a rebuild evades only when it breaks all five. Targets the installer script text in a file or saved dump. The condition tests `filesize`, which is undefined in a libyara live process-memory scan, so the rule matches files and saved dumps only.
 **Validation:** Scan `persistent_bot.sh` (hash below) — at least one condition branch must match; a benign system-update or configuration-management script must NOT fire.
-**Deployment:** Linux filesystem scanner (bash scripts), EDR persistence monitoring for cron/init.d/systemd creation events.
+**Deployment:** Linux filesystem scanner (bash scripts) and content scanning of captured scripts. EDR events for cron, init.d and systemd creation are a separate corroborating source: they do not supply the script text this rule matches.
 
 ```yara
 rule MAL_Bash_Persistent_Bot_DualChannel_CNC {
    meta:
-      description = "Detects persistent_bot.sh-class operator scripts implementing 5-vector Linux persistence and dual-channel CNC architecture. Identifies operator-specific JSON wire format (bot_register + heartbeat messages with bot_type/arch/vendor fields), hidden cron entry /etc/cron.d/.cache_update, and masquerade persistence (sysupdate init.d service + system-update.service systemd unit)."
+      description = "Detects persistent_bot.sh-class operator scripts implementing 5-vector Linux persistence and dual-channel CNC architecture. Identifies operator-specific JSON wire format (bot_register and heartbeat `type` values, with the arch and vendor fields), hidden cron entry /etc/cron.d/.cache_update, and masquerade persistence (sysupdate init.d service + system-update.service systemd unit)."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/"
@@ -376,6 +327,56 @@ rule MAL_Bash_Persistent_Bot_DualChannel_CNC {
 ### Hunting Rules
 
 **Matrix C2 Framework**
+
+#### MAL_Python_Matrix_C2_Framework_Family
+
+**Tier:** Hunting
+**Robustness:** 2
+**ATT&CK Coverage:** T1059.006 (Python), T1498.001 (Direct Network Flood), T1498.002 (Reflection Amplification), T1587.001 (Develop Capabilities: Malware)
+**Confidence:** MODERATE
+**Rationale:** Direct AI-authored strings captured from Rovodev session_context.json file_write payloads. The MATRIX C2 ASCII-banner header, `mass_infection` docstring, emoji-branded attack-method names, and the operator-marketing `50Gbps+` comment form multiple independent phrase anchors — no single renameable literal carries the rule. *Tier fix 2026-10-11 (round 2):* the branch that needs only `FINAL_DEPLOYMENT_COMPLETE` and `ULTIMATE_DEPLOYMENT` matches an ordinary AI-agent project-completion note with no Python or DDoS content, so the rule is Hunting, Robustness 2, rather than Detection, Robustness 3.
+**False Positives:** The `FINAL_DEPLOYMENT_COMPLETE` plus `ULTIMATE_DEPLOYMENT` branch fires on any file holding both generic markers, for example a benign project completion note, with no Python, DDoS method, banner or marketing text. Every branch needs at least two of the strings, and the banner, the emoji-branded method names and the `50Gbps+` marketing comment are never required together: the banner with the mass-infection docstring or the LLM closing phrase; the `50Gbps+` comment with either emoji-branded method name; the two deployment markers `FINAL_DEPLOYMENT_COMPLETE` and `ULTIMATE_DEPLOYMENT` (generic AI-agent file markers); or two of the three method-name literals with the `50Gbps+` comment or the docstring. Not goodware-validated. *Wording fix 2026-10-11:* the earlier line described a banner + emoji + marketing-comment combination that no branch requires.
+**Blind Spots:** A full source rewrite that strips all banner/docstring/emoji strings would evade; targets Python source in files or saved dumps, not compiled/obfuscated builds. The condition tests `filesize`, which is undefined in a libyara live process-memory scan, so the rule matches files and saved dumps only.
+**Validation:** Scan `master_control.py` / `attack_engine.py` / `multi_vector_agent.py` (hashes below) — at least one condition branch must match; unrelated legitimate DDoS-testing or load-testing tools must NOT fire. An ordinary project completion note that contains both `FINAL_DEPLOYMENT_COMPLETE` and `ULTIMATE_DEPLOYMENT` WILL fire (a known positive of the generic-marker branch; replay against the captured files is NOT CHECKED).
+**Deployment:** Linux filesystem scanner (Python scripts), network sandbox detonation, SIEM content search on analyst workstations.
+
+```yara
+rule MAL_Python_Matrix_C2_Framework_Family {
+   meta:
+      description = "Detects Matrix C2 Python DDoS-as-a-Service framework files authored via Atlassian Rovodev AI coding agent. Identifies master_control.py, attack_engine.py, and multi_vector_agent.py via AI-generated banner strings, operator-marketing comments, emoji-branded attack method catalog entries, and mass-infection docstring captured directly from Rovodev session file_write tool call payloads."
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
+      author = "The Hunters Ledger"
+      reference = "https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/"
+      date = "2026-05-26"
+      hash1 = "e9e0eafc89e4a9db796c63bb4fdc5c0fd1106f8b9c234fb57e51a7934f2b8d8e"
+      hash2 = "921e4c1d86813838d40010e82a8f374a70b91f06008db5182d1ec6c2da672c09"
+      hash3 = "a19b972688158e361e8646ec17556ec46bf84f0cd24fb8707e4df85cb9d9a6d2"
+      family = "Matrix C2"
+      malware_type = "DDoS-as-a-Service Framework"
+      campaign = "UTA-2026-014"
+      id = "d804ea26-cbfc-5194-854c-228ee9cfc434"
+   strings:
+      $banner     = "MATRIX C2 - IMPLEMENTATION PLAN" ascii
+      $docstring  = "Launch mass infection campaign" ascii
+      $emoji_icmp = "\xf0\x9f\x94\xa5 ICMP Hell" ascii
+      $emoji_udp  = "\xf0\x9f\x9a\x80 UDP Bypass" ascii
+      $gbps_claim = "Increased default threads for 50Gbps+" ascii
+      $final_doc  = "FINAL_DEPLOYMENT_COMPLETE" ascii
+      $ultimate   = "ULTIMATE_DEPLOYMENT" ascii
+      $llm_close  = "Let me start Phase 1 now" ascii
+      $method_udp = "'udp-star'" ascii
+      $method_syn = "'syn-storm'" ascii
+      $method_ovh = "'ovh-nuke'" ascii
+   condition:
+      filesize < 2MB and
+      (
+         ($banner and ($docstring or $llm_close)) or
+         ($gbps_claim and ($emoji_icmp or $emoji_udp)) or
+         ($final_doc and $ultimate) or
+         (2 of ($method_udp, $method_syn, $method_ovh) and ($gbps_claim or $docstring))
+      )
+}
+```
 
 #### MAL_Python_AIGenerated_OffensiveCode_Universal_Subset
 
@@ -438,9 +439,9 @@ rule MAL_Python_AIGenerated_OffensiveCode_Universal_Subset {
 **Robustness:** 2
 **ATT&CK Coverage:** T1014 (Rootkit), T1059.006 (Python), T1497.001 (System Checks — MODERATE), T1587.001 (Develop Capabilities: Malware)
 **Confidence:** MODERATE
-**Rationale:** Salvaged from the original — the condition mandated the hardcoded C2 endpoint `87.106.143.220` as an AND-gate across every branch, so the rule died the instant the operator rotated infrastructure (the IP is already carried in the IOC feed). Removed the IP/port strings and condition dependency entirely, leaving a pure anti-analysis feature-bucket signature of three branches (two of the anti-debug, anti-VM and sandbox words with rootkit or self-destruct; or the AES-GCM+PBKDF2+handshake crypto framing; or polymorphic+bare-except). These are generic English feature-name strings individually (per the "no generic API-name `any of them`" YARA anti-pattern), so co-occurrence is required but the combination is still not goodware-validated to zero FP — Hunting, not Detection. *Rename and wording fix 2026-10-11:* the rule was named for anti-debug plus anti-VM, but only the first branch uses those words and it needs just two of three, and the other two branches need neither, so the name now says anti-analysis keyword bucket.
+**Rationale:** Salvaged from the original — the condition mandated the hardcoded C2 endpoint `87.106.143.220` as an AND-gate across every branch, so the rule died the instant the operator rotated infrastructure (the IP is already carried in the IOC feed). Removed the IP/port strings and condition dependency entirely, leaving a pure anti-analysis feature-bucket signature of three branches (two of the anti-debug, anti-VM and sandbox words with rootkit or self-destruct; or the AES-GCM+PBKDF2+handshake crypto framing; or polymorphic+bare-except). These are generic English feature-name strings individually (per the "no generic API-name `any of them`" YARA anti-pattern), so co-occurrence is required but the combination is still not goodware-validated to zero FP — Hunting, not Detection. *Rename and wording fix 2026-10-11:* the rule was named for anti-debug plus anti-VM, but only the first branch uses those words and it needs just two of three, and the other two branches need neither, so the name now says anti-analysis keyword bucket. `Python` in the name refers to the sample family (`stealth_agent.py`), not to a file-type test.
 **False Positives:** Legitimate Python security/red-team tooling that legitimately implements anti-debug/anti-VM checks alongside self-destruct or rootkit-adjacent terminology (uncommon but not impossible); the AES-GCM+PBKDF2+handshake branch alone is common to many encrypted-messaging implementations.
-**Deployment:** Linux filesystem scanner (Python scripts), EDR behavioral monitoring for Python processes with anti-VM API calls; corroborate with the family-specific YARA/Sigma rules above before high-confidence attribution.
+**Deployment:** Linux filesystem scanner (Python scripts) and content scanning of captured source. The rule matches strings in a file and observes no process behavior or API calls, so EDR monitoring of Python processes is a separate corroborating check, not a deployment source for it; corroborate with the family-specific YARA/Sigma rules above before high-confidence attribution.
 
 ```yara
 rule MAL_Python_StealthAgent_AntiAnalysis_Keyword_Bucket {
@@ -568,70 +569,6 @@ rule MAL_Discord_OperatorID_Snowflake_PandoraNet {
 ### Detection Rules
 
 **Pandora-Mirai (Naku ELF Bot Suite)**
-
-#### Naku or Pandora Mirai Arch-Tagged Binary Name or Pandora-Mirai Command-Line Token on Linux
-
-**Tier:** Detection
-**Robustness:** 2
-**ATT&CK Coverage:** T1059.004 (Unix Shell), T1190 (Exploit Public-Facing Application)
-**Confidence:** HIGH
-**Rationale:** The rule matches specific file names (`Naku.*` and `pandora.*` with an architecture suffix) in the image path, or four command-line tokens, not IoT architecture-tag suffixes in general. Evading requires renaming the whole 11-binary set and changing the command-line tokens, which raises the bar beyond a single literal. *Wording fix 2026-10-11:* the earlier title and Rationale called every arch-tagged ELF on a Linux server illegitimate and described a filename-only rule; the selection also fires on command-line text with no filename at all, and tests neither ELF format nor host role.
-**False Positives:** Cross-compilation test environments deploying IoT firmware — limit to production server hosts and IoT-adjacent network segments; IoT development workstations building multi-arch toolchains.
-**Blind Spots:** A rename of the arch-tagged binary set and of the command-line tokens evades; no ELF check, so a non-ELF file with a matching name fires; no host-role test; scoped to `product: linux` process_creation telemetry only.
-**Validation:** Execute a Naku/Pandora binary with an arch-tag filename on a monitored Linux host — must match; a legitimate cross-compilation toolchain building the same arch set under different naming must NOT fire.
-**Deployment:** EDR/Sysmon-equivalent process-creation telemetry on Linux server fleets and IoT-adjacent segments.
-
-```yaml
-title: Naku or Pandora Mirai Arch-Tagged Binary Name or Pandora-Mirai Command-Line Token on Linux
-id: c4495249-9b11-406c-b4ca-5c099eb8ca81
-status: experimental
-description: >-
-  Detects a Linux process-creation event matching either of two alternatives for the Naku/Pandora-Mirai 11-architecture IoT botnet family (UTA-2026-014): an Image path containing one of the file names Naku.arm, Naku.m68k, Naku.mips, Naku.mpsl, Naku.ppc, Naku.sh4, Naku.spc, Naku.x86, pandora.arm, pandora.m68k, pandora.mips, pandora.mpsl, pandora.sh4 or pandora.spc, or a command line containing PandoraNet, './nig realtek', './nig huawei' or pandora_bot. The rule tests names and command-line text only: it does not check that the file is an ELF, and it has no host-role test, so a hit on a server and a hit on an IoT build workstation look the same. Either alternative alone fires.
-references:
-    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
-    - https://vms.drweb.com/virus/?i=22410691&lng=en
-author: The Hunters Ledger
-date: '2026-05-26'
-tags:
-    - attack.execution
-    - attack.t1059.004
-    - attack.initial-access
-    - attack.t1190
-    - attack.command-and-control
-    - detection.emerging-threats
-    - stp.3
-logsource:
-    category: process_creation
-    product: linux
-detection:
-    selection_naku:
-        Image|contains:
-            - 'Naku.arm'
-            - 'Naku.m68k'
-            - 'Naku.mips'
-            - 'Naku.mpsl'
-            - 'Naku.ppc'
-            - 'Naku.sh4'
-            - 'Naku.spc'
-            - 'Naku.x86'
-            - 'pandora.arm'
-            - 'pandora.m68k'
-            - 'pandora.mips'
-            - 'pandora.mpsl'
-            - 'pandora.sh4'
-            - 'pandora.spc'
-    selection_argv:
-        CommandLine|contains:
-            - 'PandoraNet'
-            - './nig realtek'
-            - './nig huawei'
-            - 'pandora_bot'
-    condition: 1 of selection_*
-falsepositives:
-    - Cross-compilation test environments deploying IoT firmware — limit to production server hosts and IoT-adjacent network segments
-    - IoT development workstations building multi-arch toolchains
-level: high
-```
 
 #### Hidden-Prefix Cron Entry Creation in /etc/cron.d: Pandora-Mirai Persistence Pattern
 
@@ -877,6 +814,70 @@ level: high
 
 **Pandora-Mirai (Naku ELF Bot Suite)**
 
+#### Naku or Pandora Mirai Arch-Tagged Binary Name or Pandora-Mirai Command-Line Token on Linux
+
+**Tier:** Hunting
+**Robustness:** 1
+**ATT&CK Coverage:** T1059.004 (Unix Shell), T1190 (Exploit Public-Facing Application)
+**Confidence:** HIGH
+**Rationale:** The rule matches 14 file-name strings (`Naku.*` and `pandora.*` with an architecture suffix) as substrings anywhere in the image path, or four command-line tokens, not IoT architecture-tag suffixes in general. The two alternatives evade separately: renaming the binaries evades the image alternative, and changing the four command-line tokens evades the command-line alternative, so the rule keeps matching while either survives. *Tier fix 2026-10-11 (round 2):* each alternative is an independently mutable name or token, so the rule is Hunting, Robustness 1, level medium (it was Detection, Robustness 2, level high), and the image test is a path substring, so `Naku.arm` also matches `/opt/Naku.arm7` or a directory named `Naku.arm.bak`. *Wording fix 2026-10-11:* the earlier title and Rationale called every arch-tagged ELF on a Linux server illegitimate and described a filename-only rule; the selection also fires on command-line text with no filename at all, and tests neither ELF format nor host role.
+**False Positives:** Cross-compilation test environments deploying IoT firmware — limit to production server hosts and IoT-adjacent network segments; IoT development workstations building multi-arch toolchains.
+**Blind Spots:** Renaming the binaries evades only the image alternative and changing the command-line tokens evades only the command-line alternative; the image test is a substring of the whole path, not an exact basename; no ELF check, so a non-ELF file with a matching name fires; no host-role test; scoped to `product: linux` process_creation telemetry only.
+**Validation:** Execute a Naku/Pandora binary with an arch-tag filename on a monitored Linux host — must match; a legitimate cross-compilation toolchain building the same arch set under different naming must NOT fire.
+**Deployment:** EDR/Sysmon-equivalent process-creation telemetry on Linux server fleets and IoT-adjacent segments.
+
+```yaml
+title: Naku or Pandora Mirai Arch-Tagged Binary Name or Pandora-Mirai Command-Line Token on Linux
+id: c4495249-9b11-406c-b4ca-5c099eb8ca81
+status: experimental
+description: >-
+  Detects a Linux process-creation event matching either of two alternatives for the Naku/Pandora-Mirai 11-architecture IoT botnet family (UTA-2026-014): an Image path containing one of the file names Naku.arm, Naku.m68k, Naku.mips, Naku.mpsl, Naku.ppc, Naku.sh4, Naku.spc, Naku.x86, pandora.arm, pandora.m68k, pandora.mips, pandora.mpsl, pandora.sh4 or pandora.spc, or a command line containing PandoraNet, './nig realtek', './nig huawei' or pandora_bot. The rule tests names and command-line text only: it does not check that the file is an ELF, and it has no host-role test, so a hit on a server and a hit on an IoT build workstation look the same. Either alternative alone fires.
+references:
+    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
+    - https://vms.drweb.com/virus/?i=22410691&lng=en
+author: The Hunters Ledger
+date: '2026-05-26'
+tags:
+    - attack.execution
+    - attack.t1059.004
+    - attack.initial-access
+    - attack.t1190
+    - attack.command-and-control
+    - detection.emerging-threats
+    - stp.2
+logsource:
+    category: process_creation
+    product: linux
+detection:
+    selection_naku:
+        Image|contains:
+            - 'Naku.arm'
+            - 'Naku.m68k'
+            - 'Naku.mips'
+            - 'Naku.mpsl'
+            - 'Naku.ppc'
+            - 'Naku.sh4'
+            - 'Naku.spc'
+            - 'Naku.x86'
+            - 'pandora.arm'
+            - 'pandora.m68k'
+            - 'pandora.mips'
+            - 'pandora.mpsl'
+            - 'pandora.sh4'
+            - 'pandora.spc'
+    selection_argv:
+        CommandLine|contains:
+            - 'PandoraNet'
+            - './nig realtek'
+            - './nig huawei'
+            - 'pandora_bot'
+    condition: 1 of selection_*
+falsepositives:
+    - Cross-compilation test environments deploying IoT firmware — limit to production server hosts and IoT-adjacent network segments
+    - IoT development workstations building multi-arch toolchains
+level: medium
+```
+
 #### PandoraNet Botnet ID in Process Command Line: Active Pandora-Mirai Infection
 
 **Tier:** Hunting
@@ -1010,7 +1011,8 @@ level: medium
 
 **Tier:** Hunting
 **Robustness:** 2
-**ATT&CK Coverage:** T1059.007 (JavaScript), T1498.001 (Direct Network Flood)
+**ATT&CK Coverage:** T1102 (Web Service)
+**ATT&CK Note:** JavaScript execution (T1059.007) and Direct Network Flood (T1498.001) describe what the Matrix C2 bot does elsewhere in the report; a connection event to discord.com tests neither and the rule says it cannot see attack dispatch, so they are not claimed.
 **Confidence:** MODERATE
 **Rationale:** `discord.com` is a stable, non-operator-controlled domain (durable — Discord will not relocate it), but this is fundamentally a "legitimate SaaS egress from an unusual host class" anomaly rule: Discord bot hosting on servers is common in legitimate developer/SaaS environments, and the original author explicitly notes MEDIUM FP risk requiring process context to disambiguate. *Logic and wording fix 2026-10-11:* the earlier title claimed an attack-method dispatch payload, which a connection event cannot show, and the host test was the substring `discord.com`, which also matches `notdiscord.com` and `discord.com.example.net`; it is now the exact name `discord.com` or a name ending `.discord.com`. The `discordapp.com` and `gateway.discord.gg` hosts are not covered.
 **False Positives:** Legitimate Discord bots hosted on server infrastructure — all Discord bot deployments on production servers; SaaS applications integrating Discord notifications; developer environments testing Discord integrations.
@@ -1028,10 +1030,7 @@ author: The Hunters Ledger
 date: '2026-05-26'
 tags:
     - attack.command-and-control
-    - attack.impact
-    - attack.t1498.001
-    - attack.execution
-    - attack.t1059.007
+    - attack.t1102
     - detection.emerging-threats
 logsource:
     category: network_connection

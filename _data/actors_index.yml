@@ -3400,13 +3400,6 @@ actors:
         link: /hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections
         reports:
           - /hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections
-      - id: T1003.002
-        name: Security Account Manager
-        tactic: Credential Access
-        source: detections
-        link: /hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections
-        reports:
-          - /hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections
       - id: T1005
         name: Data from Local System
         tactic: Collection
@@ -3805,6 +3798,13 @@ actors:
         link: /hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections
         reports:
           - /hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections
+      - id: T1102
+        name: Web Service
+        tactic: Command and Control
+        source: detections
+        link: /hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections
+        reports:
+          - /hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections
       - id: T1190
         name: Exploit Public-Facing Application
         tactic: Initial Access
@@ -3836,13 +3836,6 @@ actors:
       - id: T1543.002
         name: Systemd Service
         tactic: Persistence
-        source: detections
-        link: /hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections
-        reports:
-          - /hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections
-      - id: T1546.004
-        name: Unix Shell Configuration Modification
-        tactic: Privilege Escalation
         source: detections
         link: /hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections
         reports:
@@ -3880,7 +3873,6 @@ actors:
       - Initial Access
       - Execution
       - Persistence
-      - Privilege Escalation
       - Stealth
       - Command and Control
       - Impact

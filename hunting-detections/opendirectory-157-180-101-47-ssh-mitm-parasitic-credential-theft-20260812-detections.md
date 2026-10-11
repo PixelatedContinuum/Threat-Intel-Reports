@@ -23,8 +23,8 @@ unlisted: true
 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
-| YARA | 6 | 0 | T1557, T1071.001, T1021.004, T1552.004, T1686, T1056 | 9 |
-| Sigma | 7 documents (2 bundles) | 8 documents (2 bundles) | T1557, T1686, T1480, T1059.006, T1105, T1082, T1059, T1021.004, T1564.001, T1071.001, T1571 | 0 |
+| YARA | 6 | 0 | T1557, T1071.001, T1021.004, T1083, T1686, T1056 | 9 |
+| Sigma | 3 documents | 12 documents (2 bundles) | T1557, T1686, T1480, T1059.006, T1105, T1082, T1059, T1564.001, T1571 | 0 |
 | Suricata | 2 | 1 | T1557, T1071.001 | 11 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting, and the hits need review.
@@ -37,7 +37,7 @@ Two constraints govern every rule in this file. The 41 relays are externally sil
 
 ## YARA Rules
 
-All six rules below target the platform's own Python, Perl, and shell source, or a leaked copy of its session-recording output. This is a source-available, operator-written toolkit rather than a packed or obfuscated binary, so PE/ELF structural checks do not apply; every condition below is a filesize bound plus a specific string combination instead. Each rule is written to be evaluated against a captured file (a forensic disk image, a paste-cache export, a `/dev/shm` snapshot taken before the platform's own three-second self-wipe) or against live process memory, since the same source text is what the interpreter holds in memory while the component runs.
+All six rules below target the platform's own Python, Perl, and shell source, or a leaked copy of its session-recording output. This is a source-available, operator-written toolkit rather than a packed or obfuscated binary, so PE/ELF structural checks do not apply; every condition below is a filesize bound plus a specific string combination instead. Each rule is written to be evaluated against a captured file (a forensic disk image, a paste-cache export, a `/dev/shm` snapshot taken before the platform's own three-second self-wipe, or a process-memory dump saved as a file). Every condition tests `filesize`, which is undefined in a libyara live process-memory scan, so none of these rules matches a live process; scan a saved dump instead.
 
 ### Detection Rules
 
@@ -48,9 +48,9 @@ All six rules below target the platform's own Python, Perl, and shell source, or
 **ATT&CK Coverage:** T1557 (Adversary-in-the-Middle)
 **Confidence:** HIGH
 **False Positives:** None known. Every anchor string is either a literal constant unique to this codebase (the `0x4D49544D` SO_MARK value, which has no legitimate use anywhere) or a log/webhook string with no plausible collision in unrelated software.
-**Blind Spots:** Requires 4 of 7 anchors to survive in whatever is being scanned, so a heavily truncated memory region or a hand-edited fork that renames its log strings can evade this. Fires only on the interceptor component itself, not on the receiver, orchestrator, or payload scripts (see the companion rules below).
-**Validation:** Run against a full copy of the interceptor source (captured from `/dev/shm` before the self-wipe, from a paste-cache export, or from process memory) and confirm at least 4 of the 7 strings match. A clean host running an unrelated Python SSH tool, including the public `ssh-mitm` project this platform's log paths echo, must not fire, since none of those tools use this SO_MARK value or these exact log-line formats.
-**Deployment:** Forensic scanning of captured filesystem images and `/dev/shm` snapshots; live process-memory scanning via EDR or Velociraptor on hosts already suspected of compromise.
+**Blind Spots:** Requires 4 of 7 anchors to survive in whatever is being scanned, so a heavily truncated capture or a hand-edited fork that renames its log strings can evade this. Fires only on the interceptor component itself, not on the receiver, orchestrator, or payload scripts (see the companion rules below). The condition tests `filesize`, which is undefined in a libyara process-memory scan, so the rule matches files and saved dumps only and never a live process.
+**Validation:** Run against a full copy of the interceptor source (captured from `/dev/shm` before the self-wipe, from a paste-cache export, or from a process-memory dump saved as a file) and confirm at least 4 of the 7 strings match. A clean host running an unrelated Python SSH tool, including the public `ssh-mitm` project this platform's log paths echo, must not fire, since none of those tools use this SO_MARK value or these exact log-line formats.
+**Deployment:** Forensic scanning of captured filesystem images and `/dev/shm` snapshots; scanning of process-memory dumps saved as files on hosts already suspected of compromise. Live process-memory scanning is not covered, because the `filesize` test cannot match there.
 
 ```yara
 /*
@@ -93,9 +93,9 @@ rule MITM_Interceptor_SourceStrings {
 **Robustness:** 2
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
 **Confidence:** HIGH
-**False Positives:** None known. `self.headers.get('X-Token', '')` alone is a common enough auth idiom that it is never used as a standalone anchor here; the condition requires it alongside the receiver's exact 22-byte forbidden response and its distinctive table names.
+**False Positives:** None known. `self.headers.get('X-Token', '')` alone is a common auth idiom, so it cannot fire the rule alone. The condition is `3 of them` over four strings and does not make the X-Token line mandatory: the forbidden response plus both table names also fires with no auth string, and the X-Token line plus any two others fires too. The two table names (`pubkey_probes`, `hostkeys`) carry the specificity.
 **Blind Spots:** Targets the receiver's own source, which sits on operator-owned infrastructure rather than a victim host, so this rule is most useful for confirming a suspected receiver or finding a successor deployed with the same code rather than for triaging a compromised relay.
-**Validation:** Run against a captured copy of the receiver script and confirm at least 3 of the 4 strings match. A generic Python HTTP server implementing unrelated bearer-token auth must not fire, since the table-name strings (`pubkey_probes`, `hostkeys`) are specific to this schema.
+**Validation:** Run against a captured copy of the receiver script and confirm at least 3 of the 4 strings match. A generic Python HTTP server implementing unrelated bearer-token auth must not fire: the auth idiom and a forbidden response are only two of the four strings, and the table-name strings (`pubkey_probes`, `hostkeys`) are specific to this schema. A file holding the forbidden response and both table names with no auth line is a deliberate positive.
 **Deployment:** Forensic scanning of infrastructure suspected of hosting a receiver or successor receiver; not applicable to relay-side triage.
 
 ```yara
@@ -129,9 +129,9 @@ rule MITM_Receiver_SourceStrings {
 **Robustness:** 2
 **ATT&CK Coverage:** T1021.004 (SSH)
 **Confidence:** HIGH
-**False Positives:** None known. `PERL_SCRIPT`, `black_auto.ip`, and `pwned.log` together have no plausible legitimate collision; requiring 3 of 5 anchors tolerates partial capture without opening up to generic administrative tooling.
-**Blind Spots:** Detects the orchestrator's source, not its runtime behavior; a copy that never executes still matches. Says nothing about how many credentials were actually replayed.
-**Validation:** Run against a captured copy of the orchestrator script and confirm at least 3 of the 5 strings match. A generic SSH automation script (Ansible, Fabric, a homegrown fleet tool) must not fire, since the combination of `seen.db` dedup state, a `black_auto.ip` blacklist file, and a `pwned.log` success log is specific to this tool's exact design.
+**False Positives:** None known. `PERL_SCRIPT`, `seen.db` and `MAX_PARALLEL` are generic names, so the condition requires three of the five strings and at least one of the two family-specific names, `black_auto.ip` or `pwned.log`; three generic names alone no longer fire. A partial capture that lost both specific names does not match.
+**Blind Spots:** Detects the orchestrator's source, not its runtime behavior; a copy that never executes still matches. A capture missing both `black_auto.ip` and `pwned.log` evades. Says nothing about how many credentials were actually replayed.
+**Validation:** Run against a captured copy of the orchestrator script and confirm at least 3 of the 5 strings match, including `black_auto.ip` or `pwned.log` (replay against the captured script is NOT CHECKED). A generic SSH automation script (Ansible, Fabric, a homegrown fleet tool) must not fire; a file holding only `PERL_SCRIPT`, `seen.db` and `MAX_PARALLEL` is the negative case.
 **Deployment:** Forensic scanning of infrastructure suspected of running the automated credential re-use step; relevant to operator-side infrastructure rather than relay triage.
 
 ```yara
@@ -155,7 +155,8 @@ rule MITM_Orchestrator_SourceStrings {
       $s5 = "MAX_PARALLEL" ascii fullword
    condition:
       filesize < 30KB and
-      3 of them
+      3 of them and
+      ($s3 or $s4)
 }
 ```
 
@@ -163,12 +164,13 @@ rule MITM_Orchestrator_SourceStrings {
 
 **Tier:** Detection
 **Robustness:** 2
-**ATT&CK Coverage:** T1552.004 (Private Keys)
+**ATT&CK Coverage:** T1083 (File and Directory Discovery)
+**ATT&CK Note:** The payload checks whether `/root/.ssh/authorized_keys` has content and reports `ssh_keys=yes` or `ssh_keys=none`. That file holds public authorization keys, so Private Keys (T1552.004) is not claimed.
 **Confidence:** HIGH
 **False Positives:** None known. The full command text `authorized_keys 2>/dev/null | head -3` is distinctive enough on its own; requiring it alongside the `ssh_keys=` output-flag string leaves essentially no room for accidental collision.
-**Blind Spots:** At 597 to 598 bytes this script is trivial to rewrite; an operator who changes the output-flag naming or the exact head command defeats this rule immediately. It also cannot distinguish the two variants (root-privileged `payload.pl` versus unprivileged `payload_user.pl`) from each other, though it does not need to for detection purposes.
-**Validation:** Run against a captured copy of either payload script and confirm both strings match. A generic system-fingerprinting one-liner that happens to read `authorized_keys` for an unrelated reason (a key-audit script, for instance) is very unlikely to also emit a `ssh_keys=` flag in this exact form.
-**Deployment:** Forensic scanning of `/dev/shm` snapshots and any staging location on a relay; scanning of captured payloads recovered from network capture or process memory during an active session.
+**Blind Spots:** At 597 to 598 bytes this script is trivial to rewrite; an operator who changes the output-flag naming or the exact head command defeats this rule immediately. It covers only the root-privileged `payload.pl`: the unprivileged `payload_user.pl` is described in the report as omitting `authorized_keys` and `ssh_keys`, so it does not match.
+**Validation:** Run against a captured copy of the privileged `payload.pl` and confirm both strings match; `payload_user.pl` should not match (neither claim has been run against a captured copy, NOT CHECKED). A generic system-fingerprinting one-liner that happens to read `authorized_keys` for an unrelated reason (a key-audit script, for instance) is very unlikely to also emit a `ssh_keys=` flag in this exact form.
+**Deployment:** Forensic scanning of `/dev/shm` snapshots and any staging location on a relay; scanning of captured payloads recovered from network capture or a saved process-memory dump, written out as files.
 
 ```yara
 rule MITM_Payload_Perl_Fingerprint {
@@ -200,7 +202,7 @@ rule MITM_Payload_Perl_Fingerprint {
 **ATT&CK Coverage:** T1686 (Disable or Modify System Firewall)
 **Confidence:** HIGH
 **False Positives:** None known. All four anchors are exact, multi-token command lines; requiring only 2 of 4 tolerates a deploy script edited to add or reorder VPN-scheme branches without losing detection, while still needing genuine overlap with this exact firewall sequence.
-**Blind Spots:** The deploy script is a small shell file that is trivial to reword without changing its effect (renaming variables, reordering the `iptables` and `ipset` lines, or splitting them across functions). This rule catches the script text as currently written, not the underlying technique; see the companion Sigma rules for a technique-level detection that survives this kind of rewrite.
+**Blind Spots:** The deploy script is a small shell file that is trivial to reword without changing its effect. The four strings are unordered literals matched anywhere in the file, so reordering the lines or splitting them across functions does not evade; changing the text of a line does (a different mark value, set name, `maxelem` or find expression removes that line's match), and rewording three of the four lines drops the file below the 2-of-4 threshold. This rule catches the script text as currently written, not the underlying technique; the companion Sigma rules look at the executed commands instead.
 **Validation:** Run against a captured copy of the deploy or self-wipe script and confirm at least 2 of the 4 lines match verbatim. A generic firewall-hardening script that happens to use `iptables` and `ipset` in the same file must not fire, since the exact mark value, exclusion-set name, and self-wipe find command are specific to this tool.
 **Deployment:** Forensic scanning of `/dev/shm` snapshots taken before the self-wipe runs, paste-cache exports, and any staging location recovered from a relay under active investigation.
 
@@ -233,15 +235,15 @@ rule MITM_Deploy_Firewall_Script {
 **Robustness:** 2
 **ATT&CK Coverage:** T1056 (Input Capture)
 **Confidence:** HIGH
-**False Positives:** None known structurally. A JSON-lines file whose title field matches `MITM <ip> -> <ip>:<port> <user>:<password>` is not a pattern any unrelated software produces by coincidence.
-**Blind Spots:** This is the one rule in the set whose operational value is conditional rather than routine. The platform gzips, base64-encodes, ships, and unlinks every recording within the session's lifetime by design, so a match requires a copy that escaped that cleanup: a crash before the unlink, a copy pulled from swap, a backup snapshot that captured `/dev/shm`, or a dump of the receiver's own `sessions` table. On a healthy production relay, this rule will usually find nothing to find.
-**Validation:** Construct a synthetic asciinema v2 file with a title line in the exact `MITM client -> target:port user:password` shape and confirm it matches; confirm an ordinary asciinema recording from an unrelated terminal session does not.
+**False Positives:** Unrelated software does not produce the `MITM <ip> -> <ip>:<port> <user>:<password>` title shape by coincidence, but the rule tests only that substring, with no asciinema header or JSON-lines structure, so a report, ticket, paste or rule file that quotes the format also matches. Treat a hit as a title-format lead and establish provenance independently before calling it a leaked recording.
+**Blind Spots:** This is the one rule in the set whose operational value is conditional rather than routine. The platform gzips, base64-encodes, ships, and unlinks every recording within the session's lifetime by design, so a match requires a copy that escaped that cleanup: a crash before the unlink, a copy pulled from swap, a backup snapshot that captured `/dev/shm`, or a dump of the receiver's own `sessions` table. On a healthy production relay, this rule will usually find nothing to find. A live recording that exists during a session also matches. The scan reads plaintext only; the gzip plus base64 form the platform ships needs extraction first.
+**Validation:** Construct a synthetic asciinema v2 file with a title line in the exact `MITM client -> target:port user:password` shape and confirm it matches; confirm an ordinary asciinema recording from an unrelated terminal session does not. A text file that merely quotes the title format is a known positive.
 **Deployment:** Forensic scanning of `/dev/shm` snapshots, swap and hibernation files, backup archives, and any recovered copy of the receiver's session-recording storage.
 
 ```yara
 rule MITM_Leaked_Session_Recording {
    meta:
-      description = "Detects a leaked or persisted asciinema session recording from a self-hosted SSH adversary-in-the-middle platform, whose title field embeds the plaintext intercepted credential in a fixed MITM client-target-user-password format. By design the platform gzips, base64-encodes, ships, and deletes this file within the session's lifetime, so a match indicates a copy that escaped that cleanup"
+      description = "Detects plaintext containing the title-field format that a self-hosted SSH adversary-in-the-middle platform writes into its asciinema session recordings, where the plaintext intercepted credential is embedded in a fixed MITM client-target-user-password format. The platform gzips, base64-encodes, ships, and deletes each recording within the session's lifetime, so a match on a real recording is a copy that escaped that cleanup or a live copy caught during the session; the rule tests only the title-shaped text, so documents that quote the format also match"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/"
@@ -275,8 +277,8 @@ Two rules use Sigma's `correlation` type to combine a pair of individually broad
 **ATT&CK Coverage:** T1686 (Disable or Modify System Firewall), T1557 (Adversary-in-the-Middle)
 **Confidence:** HIGH
 **False Positives:** Unlikely. This exact mark value (`0x4D49544D`, ASCII "MITM") has no known legitimate use; a host using SO_MARK-based policy routing for its own purposes would use a value tied to that scheme, not this one.
-**Blind Spots:** Requires the operator to keep this exact mark value. He has already rotated other configuration values (his reporting token) once; if he rotates this too on a future rebuild, this specific rule stops matching even though the mechanism (a loop-prevention exemption paired with a self-redirect) persists. Requires auditd `execve` visibility into `iptables` invocations; a host without command-line auditing enabled produces nothing for this rule to see.
-**Validation:** Trigger by running the exact deploy sequence documented in this campaign against a lab host and confirming the rule fires on the `iptables -t nat -I OUTPUT 1 -m mark --mark 0x4D49544D -j RETURN` invocation. An unrelated host running ordinary firewall administration (accepting, dropping, or NATing traffic without this mark value) must not fire.
+**Blind Spots:** Requires the operator to keep this exact mark value. He has already rotated other configuration values (his reporting token) once; if he rotates this too on a future rebuild, this specific rule stops matching even though the mechanism (a loop-prevention exemption paired with a self-redirect) persists. Requires auditd `execve` visibility into `iptables` invocations; a host without command-line auditing enabled produces nothing for this rule to see. The mark value and `RETURN` are matched as separate tokens, so the rule works on raw auditd EXECVE records (one argument per aN field) as well as on a joined command line, but it does not bind the mark to `--mark` or `RETURN` to `-j`.
+**Validation:** Trigger by running the exact deploy sequence documented in this campaign against a lab host and confirming the rule fires on the `iptables -t nat -I OUTPUT 1 -m mark --mark 0x4D49544D -j RETURN` invocation (not replayed on a lab host, NOT CHECKED). An unrelated host running ordinary firewall administration (accepting, dropping, or NATing traffic without this mark value) must not fire.
 **Deployment:** Linux EDR or SIEM ingesting auditd `execve` records; periodic `iptables -t nat -S OUTPUT` config inventory as a complementary check that does not depend on audit coverage.
 
 ```yaml
@@ -284,10 +286,12 @@ title: Netfilter Loop-Prevention Mark Consistent with Self-Hosted SSH Intercepti
 id: b48cef4b-c00a-455f-85a8-b9f0fac6f618
 status: experimental
 description: >-
-  Detects an iptables nat OUTPUT rule that exempts a specific firewall mark value from
-  further processing via a RETURN target, consistent with a self-hosted SSH
-  adversary-in-the-middle platform exempting its own upstream validation connections
-  from its own transparent redirect of port 22.
+  Detects an iptables command line carrying the firewall mark value 0x4D49544D together
+  with a RETURN target, consistent with the nat OUTPUT exemption a self-hosted SSH
+  adversary-in-the-middle platform installs so its own upstream validation connections
+  skip its own transparent redirect of port 22. The mark value and the word RETURN are
+  tested as separate tokens; the rule does not test the nat table, the OUTPUT chain, or
+  that the mark is passed to a mark match.
 references:
     - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/
 author: The Hunters Ledger
@@ -302,6 +306,7 @@ tags:
 logsource:
     product: linux
     service: auditd
+    definition: 'Requires auditd with an execve audit rule installed so iptables invocations are logged as type=EXECVE records. Raw EXECVE records carry each argument in its own aN field; this rule tests single tokens, so it does not depend on argv reconstruction.'
 detection:
     cmd:
         type: 'EXECVE'
@@ -309,109 +314,10 @@ detection:
     kw_mark:
         - '0x4D49544D'
     kw_return:
-        - '-j RETURN'
+        - 'RETURN'
     condition: cmd and kw_mark and kw_return
 falsepositives:
     - Unlikely, this mark value has no known legitimate use
-level: high
-```
-
-#### Ipset Exclusion Set Named mitm_exclude Created and Wired Before a Redirect Rule
-
-**Tier:** Detection
-**Robustness:** 2
-**ATT&CK Coverage:** T1480 (Execution Guardrails)
-**Confidence:** HIGH
-**False Positives:** Unlikely. `mitm_exclude` is not a standard or default set name used by any known legitimate firewall or DDoS-mitigation tool.
-**Blind Spots:** Depends on the operator keeping this set name; a rename on redeploy defeats it. Requires auditd visibility into `ipset` invocations.
-**Validation:** Trigger by running `ipset create mitm_exclude hash:ip maxelem 1000000 -exist` on a lab host and confirming the rule fires. A host provisioning an unrelated ipset for legitimate routing or mitigation purposes, using any other set name, must not fire.
-**Deployment:** Linux EDR or SIEM ingesting auditd `execve` records; periodic `ipset list` config inventory.
-
-```yaml
-title: Ipset Exclusion Set Named mitm_exclude Created and Wired Before a Redirect Rule
-id: 580b377c-7566-4bc9-a78b-546c7c273ac5
-status: experimental
-description: >-
-  Detects creation of an ipset named mitm_exclude, an exclusion list observed gating a
-  self-hosted SSH interception platform so specific destinations are skipped. The set name
-  has no known legitimate use and functions as an execution guardrail limiting which
-  destinations the platform acts against.
-references:
-    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/
-author: The Hunters Ledger
-date: 2026-08-12
-tags:
-    - attack.stealth
-    - attack.t1480
-    - stp.3
-logsource:
-    product: linux
-    service: auditd
-detection:
-    cmd:
-        type: 'EXECVE'
-        a0|endswith: 'ipset'
-    kw_create:
-        - 'create'
-    kw_name:
-        - 'mitm_exclude'
-    condition: cmd and kw_create and kw_name
-falsepositives:
-    - Unlikely, this ipset name is not a standard or default name used by any known legitimate tool
-level: high
-```
-
-#### Iptables NAT Redirect of Outbound SSH Traffic to a Local Listener
-
-**Tier:** Detection
-**Robustness:** 3
-**ATT&CK Coverage:** T1557 (Adversary-in-the-Middle)
-**Confidence:** HIGH
-**False Positives:** Legitimate SSH port remapping for load balancing or protocol inspection exists, but redirecting destination port 22 specifically to a listener on the *same* host (rather than to a different host) is unusual outside an intentional interception or debugging proxy.
-**Blind Spots:** Requires auditd visibility into `iptables` invocations; a host without command-line auditing produces nothing to see. Does not by itself distinguish this platform from a legitimate local SSH-inspection proxy a defender set up deliberately.
-**Validation:** Trigger on a lab host with any of the eleven observed deployment schemes (the base OUTPUT-chain redirect, or a VPN/container variant using PREROUTING on `wg0`/`tun0`/`awg0`/`docker0`) and confirm the rule fires regardless of which local port is the redirect target. A rule that only matched the specific port 19923 would miss every scheme that uses a different target port; this one does not, because it anchors on the REDIRECT-of-port-22 mechanism rather than a fixed destination.
-**Deployment:** Linux EDR or SIEM ingesting auditd `execve` records; periodic `iptables -t nat -S` config inventory as a complementary check.
-
-```yaml
-title: Iptables NAT Redirect of Outbound SSH Traffic to a Local Listener
-id: 481b1e63-bd30-4fcb-ab4f-ef3a902c19bb
-status: experimental
-description: >-
-  Detects an iptables nat rule redirecting destination port 22 traffic to a local port on
-  the same host. Observed as the core mechanism of a self-hosted, transparent SSH
-  adversary-in-the-middle platform that intercepts a host's own outbound SSH sessions
-  into a local fake server before forwarding validated credentials upstream. The
-  redirect target port and chain (OUTPUT, or PREROUTING on a VPN or container interface)
-  vary by deployment scheme, so this anchors on the REDIRECT-of-port-22 mechanism itself
-  rather than a fixed port number.
-references:
-    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/
-author: The Hunters Ledger
-date: 2026-08-12
-tags:
-    - attack.credential-access
-    - attack.collection
-    - attack.t1557
-logsource:
-    product: linux
-    service: auditd
-detection:
-    cmd:
-        type: 'EXECVE'
-        a0|endswith: 'iptables'
-    kw_dport:
-        - '--dport 22'
-    kw_redirect:
-        - 'REDIRECT'
-    kw_toport:
-        - '--to-port'
-    condition: cmd and kw_dport and kw_redirect and kw_toport
-falsepositives:
-    - >-
-      Legitimate SSH port remapping for load balancing or protocol inspection, though
-      redirecting port 22 specifically to a LOCAL listener on the same host (rather than
-      to a different host) is unusual outside of an intentional interception or debugging
-      proxy
 level: high
 ```
 
@@ -421,9 +327,9 @@ level: high
 **Robustness:** 2
 **ATT&CK Coverage:** T1059.006 (Python), T1557 (Adversary-in-the-Middle)
 **Confidence:** HIGH
-**False Positives:** Unlikely. The interceptor selector requires the script to be the interpreter's direct execution target rather than merely present on the command line, and the sniffer selector's flag combination is specific to this toolkit.
-**Blind Spots:** The interceptor selector keys on a filename the operator can rename on redeploy; only the sniffer selector's flag combination survives that. Both components are double-forked and daemonized after this initial launch, so this rule only has one moment (the original `execve`) to catch them; a process-creation feed with gaps will miss it. Requiring the script to be the interpreter's direct positional target also means a shell-wrapped launch, such as `sh -c "python3 mitm_local.py"` where the top-level command line begins with `sh` rather than `python3`, will not fire. The interceptor selector also requires the interpreter to appear as `python3` specifically, consistent with every observed launch; a bare `python` symlink or a differently named interpreter binary would not match. *Regex fix 2026-10-11:* on Elastic a `|re` value must match the whole field and this pattern began with `python`, so an interpreter started by absolute path (`/usr/bin/python3 -u mitm_local.py`) did not match; the pattern now accepts an optional leading path before `python`, and a launch through a wrapper such as `env`, `sh -c` or `nohup` still does not match.
-**Validation:** Trigger `sel_interceptor` by launching `python3 -u mitm_local.py` or `python3 /dev/shm/.x9k2/mitm_local.py` on a lab host and confirm it fires; trigger `sel_sniffer` separately with `python3 -u sniffer.py --iface eth0 --mitm-port 19923 --skip-ports 22 --own-ips 10.0.0.5 --output-only --backend auto` and confirm it fires. A command line that only references the interceptor's filename without executing it as the interpreter's direct target, such as `python3 pyc_strings.py ./mitm_local.py`, `sha256sum mitm_local.py`, or `cp mitm_local.py /tmp/`, must not fire; nor must an unrelated Python script that happens to share one sniffer flag (`--output-only`, for instance) but not the full three-flag combination.
+**False Positives:** Unlikely. The interceptor selector requires the script to be the interpreter's direct execution target rather than merely present on the command line, and the sniffer selector's flag combination is specific to this toolkit, though it tests only command text (no Image) and matches in any process.
+**Blind Spots:** The interceptor selector keys on a filename the operator can rename on redeploy; only the sniffer selector's flag combination survives that. Both components are double-forked and daemonized after this initial launch, so this rule only has one moment (the original `execve`) to catch them; a process-creation feed with gaps will miss it. Requiring the script to be the interpreter's direct positional target also means a shell-wrapped launch, such as `sh -c "python3 mitm_local.py"` where the top-level command line begins with `sh` rather than `python3`, will not fire. The interceptor selector also requires the Image to contain `python3` (so `python3.11` matches; an Image path without `python3`, such as a bare `python` symlink, does not). *Regex fixes 2026-10-11:* on Elastic a `|re` value must match the whole field and the pattern began with `python`, so an interpreter started by absolute path (`/usr/bin/python3 -u mitm_local.py`) did not match; the pattern now accepts an optional leading path before `python`. A second pass made the script a path-bounded basename (so `python3 notmitm_local.py` no longer matches) and excluded `-c` and `-m` as the first option (so `python3 -c mitm_local.py` no longer matches); a flag cluster that contains `c` or `m` later, such as `-Bc`, is not excluded. A launch through a wrapper such as `env`, `sh -c` or `nohup` still does not match. The sniffer selector has no Image test, so an `sh -c` wrapper around the sniffer does match it.
+**Validation:** Trigger `sel_interceptor` by launching `python3 -u mitm_local.py` or `python3 /dev/shm/.x9k2/mitm_local.py` on a lab host and confirm it fires; trigger `sel_sniffer` separately with `python3 -u sniffer.py --iface eth0 --mitm-port 19923 --skip-ports 22 --own-ips 10.0.0.5 --output-only --backend auto` and confirm it fires. A command line that only references the interceptor's filename without executing it as the interpreter's direct target, such as `python3 pyc_strings.py ./mitm_local.py`, `sha256sum mitm_local.py`, or `cp mitm_local.py /tmp/`, must not fire; nor must `python3 -c mitm_local.py` or `python3 notmitm_local.py`, nor an unrelated Python script that happens to share one sniffer flag (`--output-only`, for instance) but not the full three-flag combination.
 **Deployment:** Linux EDR or SIEM ingesting normalized process-creation telemetry (auditd, Sysmon for Linux, or an EDR's native process feed).
 
 ```yaml
@@ -433,11 +339,14 @@ status: experimental
 description: >-
   Detects process launch command lines matching the interceptor or sniffer components of
   a self-hosted SSH adversary-in-the-middle platform observed deployed fileless from tmpfs.
-  The interceptor selector requires a Python interpreter to execute the script directly, as
-  its own positional target, rather than merely mentioning the filename elsewhere on the
-  command line, which is what a file read, hash, or copy operation would otherwise trigger.
-  The sniffer selector anchors on its flag combination rather than its filename, since a
-  filename alone is trivial for an operator to rename on redeploy.
+  The interceptor selector requires a Python interpreter to execute mitm_local.py directly,
+  as its own positional script argument (an optional leading path, and not through -c or -m,
+  and not as the tail of a longer file name), rather than merely mentioning the filename
+  elsewhere on the command line, which is what a file read, hash, or copy operation would
+  otherwise trigger. The sniffer selector anchors on its flag combination rather than its
+  filename, since a filename alone is trivial for an operator to rename on redeploy; it
+  tests no Image, so it is a command-text lead that matches the flag combination in any
+  process's command line.
 references:
     - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/
 author: The Hunters Ledger
@@ -455,7 +364,7 @@ logsource:
 detection:
     sel_interceptor:
         Image|contains: 'python3'
-        CommandLine|re: '([^ ]*/)?python[0-9.]*( -[^ ]+)* [^ ]*mitm_local\.py( .*)?'
+        CommandLine|re: '([^ ]*/)?python[0-9.]*( -(-[^ ]*|[^\-cm ][^ ]*))* ([^ ]*/)?mitm_local\.py( .*)?'
     sel_sniffer:
         CommandLine|contains|all:
             - '--skip-ports 22'
@@ -466,7 +375,8 @@ falsepositives:
     - >-
       Unlikely. The interceptor selector requires the script to be the interpreter's
       direct execution target rather than merely present on the command line, and the
-      sniffer selector's flag combination is specific to this toolkit
+      sniffer selector's flag combination is specific to this toolkit, though it tests
+      only command text (no Image) and matches in any process
 level: high
 ```
 
@@ -477,8 +387,8 @@ level: high
 **ATT&CK Coverage:** T1564.001 (Hidden Files and Directories)
 **Confidence:** HIGH
 **False Positives:** Unlikely. None of these three names are standard or default artifact names produced by any known legitimate tool.
-**Blind Spots:** Everything under `/dev/shm` is gone at reboot, so this rule only has a window between artifact creation and the platform's own three-second self-wipe (for `.payload.pl`/`.payload_user.pl`) or until the operator runs `stop.sh` (for `.ipt.bak`, which persists for the life of the deployment). File-creation telemetry with a gap around the moment of compromise will miss the transient artifacts entirely.
-**Validation:** Trigger by creating a file at `/dev/shm/.ipt.bak`, `/dev/shm/.payload.pl`, or `/dev/shm/.payload_user.pl` on a lab host and confirm the rule fires on each. Ordinary tmpfs usage by browsers, databases, or IPC mechanisms, none of which use these three names, must not fire.
+**Blind Spots:** Everything under `/dev/shm` is gone at reboot. The report's tmpfs artifact map shows all three named files sitting at the root of `/dev/shm`, outside the staging directory the three-second self-wipe deletes, and surviving that wipe; the transient files are the ones inside the staging directory, which this rule does not cover (see the hidden-staging rule). The match is on the exact full path, so a copy of the same name in another directory, or a renamed file, does not fire. File-creation telemetry with a gap around the moment of compromise will miss the creation event itself.
+**Validation:** Trigger by creating a file at `/dev/shm/.ipt.bak`, `/dev/shm/.payload.pl`, or `/dev/shm/.payload_user.pl` on a lab host and confirm the rule fires on each. Ordinary tmpfs usage by browsers, databases, or IPC mechanisms, none of which use these three names, must not fire; neither must a file named `.payload.pl` anywhere other than the root of `/dev/shm`.
 **Deployment:** Linux EDR or SIEM ingesting file-creation telemetry with tmpfs coverage (many default configurations exclude `/dev/shm` from file-integrity monitoring, so confirm coverage before relying on this rule).
 
 ```yaml
@@ -504,144 +414,21 @@ logsource:
     product: linux
 detection:
     selection:
-        TargetFilename|endswith:
-            - '/.ipt.bak'
-            - '/.payload.pl'
-            - '/.payload_user.pl'
+        TargetFilename:
+            - '/dev/shm/.ipt.bak'
+            - '/dev/shm/.payload.pl'
+            - '/dev/shm/.payload_user.pl'
     condition: selection
 falsepositives:
     - Unlikely, these are not standard or default artifact names produced by any known legitimate tool
 level: high
 ```
 
-#### Paramiko and Ipset Installed in Quick Succession (Reboot-Surviving Toolkit Setup)
+### Hunting Rules
 
-This heading covers three co-located Sigma documents in one YAML block: two Hunting-tier base selectors and the Detection-tier correlation that combines them. SigmaHQ's correlation syntax resolves a correlation's base rules by `id` from within the same document collection, so the three are kept together here rather than split across the Detection and Hunting subsections.
+#### Bare Uname and Bare Perl Command Lines on One Host (Possible Automated Credential Re-Use)
 
-**Base rule: Paramiko Pip Install**
-**Tier:** Hunting
-**Robustness:** 1
-**ATT&CK Coverage:** T1105 (Ingress Tool Transfer)
-**Confidence:** MODERATE
-**False Positives:** Ansible control nodes, network-automation scripts, and other legitimate tooling installing paramiko on a PEP 668 externally-managed Python environment. Not intended to be alerted on alone; see the correlation below.
-
-**Base rule: Ipset Package Install**
-**Tier:** Hunting
-**Robustness:** 1
-**ATT&CK Coverage:** T1105 (Ingress Tool Transfer)
-**Confidence:** MODERATE
-**False Positives:** Legitimate provisioning of ipset for firewall, routing, or DDoS-mitigation tooling unrelated to this platform. Not intended to be alerted on alone; see the correlation below.
-
-**Correlation: Paramiko and Ipset Installed in Quick Succession**
-**Tier:** Detection
-**Robustness:** 2
-**ATT&CK Coverage:** T1105 (Ingress Tool Transfer)
-**Confidence:** HIGH for the correlated pair; each base alone is only MODERATE
-**False Positives:** A host being freshly provisioned by legitimate configuration-management tooling that happens to install both packages as part of an unrelated baseline image build. This is the only rule in the set built specifically because it survives what nothing else here does: a reboot. Everything else in this platform lives in tmpfs and is gone the moment the host restarts; the pip and package-manager traces are the two exceptions, which is exactly why this pairing matters most to a provider investigating a customer report days after the fact.
-**Blind Spots:** The 5-minute correlation window is a judgment call. The two installs happen within the same shell script in practice, so they should land far inside that window, but a slower package-manager run (a cold apt cache, a busy host) could in principle push the gap wider than modeled here.
-**Validation:** Trigger by running `pip3 install paramiko --break-system-packages -q` followed within a few minutes by `apt-get install -y ipset` (or the `yum`/`dnf` equivalent) on a lab host and confirm the correlation fires. A host installing only one of the two packages, or installing both more than five minutes apart, must not trigger the correlation (though each base selector may still fire individually as a lower-confidence Hunting lead).
-**Deployment:** Linux EDR or SIEM with process-creation telemetry and Sigma correlation support; this is the rule to run first against a host suspected of compromise where the volatile tmpfs evidence is already gone.
-
-```yaml
-title: Paramiko Pip Install Base
-id: 13df30b5-cc29-4786-a170-3375899bb175
-status: experimental
-description: >-
-  Base rule (Hunting alone) detecting a pip installation of the paramiko library using
-  break-system-packages, one of two artifacts observed surviving a reboot in a self-hosted
-  SSH interception platform that is otherwise deployed entirely from tmpfs. Legitimate
-  automation tooling installs paramiko this way too, so this selector is broad on its own;
-  see the paired correlation rule for the higher-confidence combined signal.
-references:
-    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/
-author: The Hunters Ledger
-date: 2026-08-12
-tags:
-    - attack.command-and-control
-    - attack.t1105
-logsource:
-    category: process_creation
-    product: linux
-detection:
-    selection:
-        CommandLine|contains|all:
-            - 'paramiko'
-            - '--break-system-packages'
-    condition: selection
-falsepositives:
-    - Ansible control nodes, network-automation scripts, and other legitimate tooling installing paramiko on a PEP 668 externally-managed Python environment
-level: low
----
-title: Ipset Package Install Base
-id: d4215f8e-80b1-4de6-9d7e-251c8dc80d98
-status: experimental
-description: >-
-  Base rule (Hunting alone) detecting installation of the ipset package via a system
-  package manager, the second of two artifacts observed surviving a reboot in a
-  self-hosted SSH interception platform that is otherwise deployed entirely from tmpfs.
-  ipset has legitimate uses, so this selector is broad on its own; see the paired
-  correlation rule for the higher-confidence combined signal.
-references:
-    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/
-author: The Hunters Ledger
-date: 2026-08-12
-tags:
-    - attack.command-and-control
-    - attack.t1105
-logsource:
-    category: process_creation
-    product: linux
-detection:
-    selection:
-        Image|endswith:
-            - '/apt-get'
-            - '/apt'
-            - '/yum'
-            - '/dnf'
-        CommandLine|contains: 'ipset'
-    condition: selection
-falsepositives:
-    - Legitimate provisioning of ipset for firewall, routing, or DDoS-mitigation tooling unrelated to this platform
-level: low
----
-title: Paramiko and Ipset Installed in Quick Succession (Reboot-Surviving Toolkit Setup)
-id: 83e569b9-7383-453e-938d-cf887e516580
-status: experimental
-description: >-
-  Correlates a paramiko pip install with an ipset package install on the same host within
-  a short window. Neither action alone is unusual, but a host that acquires both a
-  paramiko-based SSH library and ipset in quick succession matches the dependency-install
-  step of a self-hosted SSH adversary-in-the-middle platform observed deploying every
-  other component fileless from tmpfs. These two package-manager traces are the only
-  artifacts confirmed to survive a reboot, which makes this correlation valuable evidence
-  after the volatile tmpfs artifacts are gone.
-references:
-    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/
-author: The Hunters Ledger
-date: 2026-08-12
-tags:
-    - attack.command-and-control
-    - attack.t1105
-correlation:
-    type: temporal
-    rules:
-        - 13df30b5-cc29-4786-a170-3375899bb175
-        - d4215f8e-80b1-4de6-9d7e-251c8dc80d98
-    group-by:
-        - Hostname
-    timespan: 5m
-    condition:
-        gte: 2
-falsepositives:
-    - >-
-      A host being freshly provisioned by legitimate configuration-management tooling
-      that happens to install both packages as part of an unrelated baseline image build
-level: high
-```
-
-#### Automated Credential Re-Use Signature (Fingerprint Then Stdin Payload Seconds After Login)
-
-This heading covers three co-located Sigma documents in one YAML block: two Hunting-tier base selectors and the Detection-tier correlation that combines them, kept together for the same rule-resolution reason as the group above.
+This heading covers three co-located Sigma documents in one YAML block: two Hunting-tier base selectors and the correlation that combines them, which is also Hunting-tier, kept together for the same rule-resolution reason as the group above.
 
 **Base rule: Bare Uname Fingerprint Command**
 **Tier:** Hunting
@@ -657,23 +444,25 @@ This heading covers three co-located Sigma documents in one YAML block: two Hunt
 **Confidence:** MODERATE
 **False Positives:** Interactive debugging or configuration-management tooling that legitimately pipes a Perl script to a remote interpreter over stdin. Not intended to be alerted on alone; see the correlation below.
 
-**Correlation: Automated Credential Re-Use Signature**
-**Tier:** Detection
-**Robustness:** 3 (technique-level: this describes the automated verification step regardless of which relay or address performed it)
-**ATT&CK Coverage:** T1021.004 (SSH), T1082 (System Information Discovery)
-**Confidence:** HIGH for the correlated pair; each base alone is only MODERATE
-**False Positives:** A configuration-management run that happens to execute both a bare `uname -a` check and a separate bare Perl invocation against the same host within the correlation window. This is the one signature in the whole platform visible to a victim's own host telemetry regardless of which relay, proxy, or Tor exit the connection transited, because it happens on the target being re-used, not on the interception infrastructure.
-**Blind Spots:** Depends on the target host having process-creation visibility into non-interactive SSH exec sessions, which not every environment logs by default. The 30-second window matches the observed "seconds after" timing of the automated re-use, but a slower automation pipeline elsewhere could exceed it.
-**Validation:** Trigger by running `ssh user@target 'uname -a'` immediately followed by piping a small script into `ssh user@target perl` on the same target within 30 seconds, and confirm the correlation fires. A single bare `uname -a` health check with no companion bare-Perl invocation in the window, or vice versa, must not trigger the correlation.
-**Deployment:** Linux EDR or SIEM on the potential *target* of credential reuse (not the relay), with process-creation telemetry and Sigma correlation support. This is the rule most likely to catch the platform's activity from the receiving end of a re-use attempt, when a defender has no visibility at all into the relay that originated it.
+**Correlation: Bare Uname and Bare Perl Command Lines on One Host**
+**Tier:** Hunting
+**Robustness:** 1
+**ATT&CK Coverage:** T1082 (System Information Discovery)
+**ATT&CK Note:** The rule tests no SSH login, session or user, so Remote Services: SSH (T1021.004) is not claimed; the automated re-use that the report describes is context for the pairing.
+**Confidence:** MODERATE
+**False Positives:** A configuration-management run that happens to execute both a bare `uname -a` check and a separate bare Perl invocation against the same host, and any unrelated activity on a shared host (a typed `uname -a`, a cron job, a Perl one-liner) that lands in the same search interval; neither command line is tied to an SSH session. This is the one pairing in the whole platform that is visible to a victim's own host telemetry regardless of which relay, proxy, or Tor exit the connection transited, because it happens on the target being re-used, not on the interception infrastructure.
+**Blind Spots:** Depends on the target host having process-creation visibility into non-interactive SSH exec sessions, which not every environment logs by default. The rule tests neither an SSH login, a user or session, the order of the two commands, nor the stdin contents; the 30-second window is Sigma-level semantics that the converted EQL (an unordered `sample by Hostname` with no time bound) does not apply, and Lucene has no correlation support. The window matches the observed "seconds after" timing of the automated re-use, but a slower automation pipeline elsewhere could exceed it.
+**Validation:** Trigger by running `ssh user@target 'uname -a'` immediately followed by piping a small script into `ssh user@target perl` on the same target within 30 seconds, and confirm the correlation fires (a backend that applies the 30-second `timespan` is needed for the window to hold). A single bare `uname -a` health check with no companion bare-Perl invocation on the host, or vice versa, must not trigger the correlation. An unordered pair with no SSH involved also fires; that is a known limit, not a negative case.
+**Deployment:** Linux EDR or SIEM on the potential *target* of credential reuse (not the relay), with process-creation telemetry and a backend that applies Sigma's correlation `timespan`. It is a lead from the receiving end of a possible re-use attempt, when a defender has no visibility at all into the relay that originated it; a hit needs SSH session context from elsewhere before it is read as credential re-use.
 
 ```yaml
 title: Bare Uname Fingerprint Command Base
 id: a8cd99d8-af90-4376-a003-4f13836e56b2
 status: experimental
 description: >-
-  Base rule (Hunting alone) detecting a non-interactive SSH exec session whose entire
-  command is exactly "uname -a" with no other arguments or pipeline. Observed as the
+  Base rule (Hunting alone) detecting a process whose entire command line is exactly
+  "uname -a" (the rule tests no SSH session, parent or user, so a typed or cron uname -a
+  also matches). Observed in the platform as the
   fingerprinting step an automated credential-verification tool runs immediately after
   replaying a captured password against a target. Legitimate health-check and inventory
   scripts also run bare uname -a, so this selector alone is broad; see the paired
@@ -705,8 +494,9 @@ description: >-
   than read from disk. Observed as the payload-delivery step immediately following a
   successful automated credential-verification connection, where a small fingerprinting
   script is piped to a remote perl on the exec channel rather than written to disk first.
-  A bare perl invocation is uncommon but not unique to this activity, so this selector
-  alone is broad; see the paired correlation rule for the higher-confidence combined signal.
+  The rule tests only the bare command line (Image ending /perl, command line exactly
+  perl), not that anything is on stdin. A bare perl invocation is uncommon but not unique
+  to this activity, so this selector alone is broad; see the paired correlation rule for the higher-confidence combined signal.
 references:
     - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/
 author: The Hunters Ledger
@@ -726,25 +516,24 @@ falsepositives:
     - Interactive debugging or configuration-management tooling that legitimately pipes a Perl script to a remote interpreter over stdin
 level: low
 ---
-title: Automated Credential Re-Use Signature (Fingerprint Then Stdin Payload Seconds After Login)
+title: Bare Uname and Bare Perl Command Lines on One Host (Possible Automated Credential Re-Use)
 id: 14a09f4a-e4c6-47c9-9a1a-70f841c0fd58
 status: experimental
 description: >-
-  Correlates a bare "uname -a" fingerprinting command with a bare perl interpreter reading
-  from stdin on the same host within a short window. Individually both are common enough
-  to be unremarkable, but the pairing, arriving within seconds and carrying no other
-  interactive activity, matches an automated tool that replays a just-captured credential,
+  Correlates a bare "uname -a" command line with a bare perl command line on the same host
+  (Sigma semantics: within 30 seconds, unordered; the converted EQL is a sample by Hostname
+  with no time bound, and Lucene has no correlation support). The rule tests no SSH login,
+  user, session or stdin contents. Individually both are common enough to be unremarkable;
+  the pairing is the shape of an automated tool that replays a just-captured credential,
   fingerprints the target, and pipes a small reconnaissance payload to a remote interpreter
-  on the same non-interactive exec channel. This is the one signature in this platform that
-  is visible to the victim's own host telemetry regardless of which relay, proxy, or exit
-  node the connection transited.
+  on the same non-interactive exec channel, but unrelated activity on a shared host can
+  satisfy it too. It is a lead visible to the victim's own host telemetry regardless of
+  which relay, proxy, or exit node the connection transited.
 references:
     - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/
 author: The Hunters Ledger
 date: 2026-08-12
 tags:
-    - attack.lateral-movement
-    - attack.t1021.004
     - attack.discovery
     - attack.t1082
 correlation:
@@ -761,10 +550,243 @@ falsepositives:
     - >-
       A configuration-management run that happens to execute both a bare uname -a check and
       a separate bare Perl invocation against the same host within the correlation window
-level: high
+level: medium
 ```
 
-### Hunting Rules
+#### Paramiko and Ipset Install Commands on One Host (Reboot-Surviving Toolkit Setup)
+
+This heading covers three co-located Sigma documents in one YAML block: two Hunting-tier base selectors and the correlation that combines them, which is also Hunting-tier. SigmaHQ's correlation syntax resolves a correlation's base rules by `id` from within the same document collection, so the three are kept together here rather than split across the Detection and Hunting subsections.
+
+**Base rule: Paramiko Pip Install**
+**Tier:** Hunting
+**Robustness:** 1
+**ATT&CK Coverage:** T1105 (Ingress Tool Transfer)
+**Confidence:** MODERATE
+**False Positives:** Ansible control nodes, network-automation scripts, and other legitimate tooling installing paramiko on a PEP 668 externally-managed Python environment. Not intended to be alerted on alone; see the correlation below.
+
+**Base rule: Ipset Package Install**
+**Tier:** Hunting
+**Robustness:** 1
+**ATT&CK Coverage:** T1105 (Ingress Tool Transfer)
+**Confidence:** MODERATE
+**False Positives:** Legitimate provisioning of ipset for firewall, routing, or DDoS-mitigation tooling unrelated to this platform. Not intended to be alerted on alone; see the correlation below.
+
+**Correlation: Paramiko and Ipset Install Commands on One Host**
+**Tier:** Hunting
+**Robustness:** 1
+**ATT&CK Coverage:** T1105 (Ingress Tool Transfer)
+**Confidence:** MODERATE
+**False Positives:** A host being freshly provisioned by legitimate configuration-management tooling that happens to install both packages as part of an unrelated baseline image build. This is the only rule in the set built specifically because it survives what nothing else here does: a reboot. Everything else in this platform lives in tmpfs and is gone the moment the host restarts; the pip and package-manager traces are the two exceptions, which is exactly why this pairing matters most to a provider investigating a customer report days after the fact.
+**Blind Spots:** The 5-minute correlation window is a judgment call and applies only where the backend honours Sigma's `timespan`. The converted EQL is an unordered `sample by Hostname` with no time bound, so on that backend any host with both command lines inside the searched interval qualifies; the Lucene converter does not support correlation rules. The two installs happen within the same shell script in practice, so they should land far inside the window, but a slower package-manager run (a cold apt cache, a busy host) could push the gap wider than modeled here. Each base rule tests command-line text (the word `install` between spaces, plus the package name), not that the install succeeded; `uninstall` and `reinstall` do not match.
+**Validation:** Trigger by running `pip3 install paramiko --break-system-packages -q` followed within a few minutes by `apt-get install -y ipset` (or the `yum`/`dnf` equivalent) on a lab host and confirm the correlation fires. A host installing only one of the two packages must not trigger the correlation (though each base selector may still fire individually as a lower-confidence Hunting lead), and `apt-get remove ipset` must not fire the ipset base rule. Installs more than five minutes apart do not trigger the correlation only on a backend that applies the `timespan`; the converted EQL does not.
+**Deployment:** Linux EDR or SIEM with process-creation telemetry and a backend that applies Sigma's correlation `timespan` (the converted EQL does not); this is the lead to run first against a host suspected of compromise where the volatile tmpfs evidence is already gone.
+
+```yaml
+title: Paramiko Pip Install Base
+id: 13df30b5-cc29-4786-a170-3375899bb175
+status: experimental
+description: >-
+  Base rule (Hunting alone) detecting a command line that contains install, paramiko and
+  --break-system-packages (no pip image is tested), one of two artifacts observed surviving a reboot in a self-hosted
+  SSH interception platform that is otherwise deployed entirely from tmpfs. Legitimate
+  automation tooling installs paramiko this way too, so this selector is broad on its own;
+  see the paired correlation rule for the higher-confidence combined signal.
+references:
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/
+author: The Hunters Ledger
+date: 2026-08-12
+tags:
+    - attack.command-and-control
+    - attack.t1105
+logsource:
+    category: process_creation
+    product: linux
+detection:
+    selection:
+        CommandLine|contains|all:
+            - ' install '
+            - 'paramiko'
+            - '--break-system-packages'
+    condition: selection
+falsepositives:
+    - Ansible control nodes, network-automation scripts, and other legitimate tooling installing paramiko on a PEP 668 externally-managed Python environment
+level: low
+---
+title: Ipset Package Install Base
+id: d4215f8e-80b1-4de6-9d7e-251c8dc80d98
+status: experimental
+description: >-
+  Base rule (Hunting alone) detecting an apt, apt-get, yum or dnf command line that
+  contains install and ipset, the second of two artifacts observed surviving a reboot in a
+  self-hosted SSH interception platform that is otherwise deployed entirely from tmpfs.
+  ipset has legitimate uses, so this selector is broad on its own; see the paired
+  correlation rule for the higher-confidence combined signal.
+references:
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/
+author: The Hunters Ledger
+date: 2026-08-12
+tags:
+    - attack.command-and-control
+    - attack.t1105
+logsource:
+    category: process_creation
+    product: linux
+detection:
+    selection:
+        Image|endswith:
+            - '/apt-get'
+            - '/apt'
+            - '/yum'
+            - '/dnf'
+        CommandLine|contains|all:
+            - ' install '
+            - 'ipset'
+    condition: selection
+falsepositives:
+    - Legitimate provisioning of ipset for firewall, routing, or DDoS-mitigation tooling unrelated to this platform
+level: low
+---
+title: Paramiko and Ipset Install Commands on One Host (Reboot-Surviving Toolkit Setup)
+id: 83e569b9-7383-453e-938d-cf887e516580
+status: experimental
+description: >-
+  Correlates the paramiko install command line with the ipset install command line on the
+  same host (Sigma semantics: within 5 minutes; the converted EQL is an unordered sample
+  by Hostname with no time bound, and Lucene has no correlation support). Neither action alone is unusual, but a host that acquires both a
+  paramiko-based SSH library and ipset in quick succession matches the dependency-install
+  step of a self-hosted SSH adversary-in-the-middle platform observed deploying every
+  other component fileless from tmpfs. These two package-manager traces are the only
+  artifacts confirmed to survive a reboot, which makes this correlation valuable evidence
+  after the volatile tmpfs artifacts are gone.
+references:
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/
+author: The Hunters Ledger
+date: 2026-08-12
+tags:
+    - attack.command-and-control
+    - attack.t1105
+correlation:
+    type: temporal
+    rules:
+        - 13df30b5-cc29-4786-a170-3375899bb175
+        - d4215f8e-80b1-4de6-9d7e-251c8dc80d98
+    group-by:
+        - Hostname
+    timespan: 5m
+    condition:
+        gte: 2
+falsepositives:
+    - >-
+      A host being freshly provisioned by legitimate configuration-management tooling
+      that happens to install both packages as part of an unrelated baseline image build
+level: medium
+```
+
+#### Iptables NAT Redirect of Destination Port 22 to a Local Listener
+
+**Tier:** Hunting
+**Robustness:** 2
+**ATT&CK Coverage:** T1557 (Adversary-in-the-Middle)
+**Confidence:** MODERATE
+**False Positives:** Legitimate SSH port remapping for load balancing or protocol inspection exists, and a deliberate local SSH-inspection proxy produces the same command line; redirecting destination port 22 specifically to a listener on the *same* host is unusual outside an intentional interception or debugging proxy, which is why this is a Hunting lead rather than an alert.
+**Blind Spots:** Requires auditd visibility into `iptables` invocations and a pipeline that joins the argument vector into one string; raw auditd EXECVE records split `--dport` and `22` into separate fields and do not match. The `--dport 22 ` token is followed by a space, so it does not match `--dport 2222`, but a `22` that ends the command line would not match either (REDIRECT and `--to-port` always follow in practice). The chain and direction are not tested. Does not by itself distinguish this platform from a legitimate local SSH-inspection proxy a defender set up deliberately.
+**Validation:** Trigger on a lab host with any of the eleven observed deployment schemes (the base OUTPUT-chain redirect, or a VPN/container variant using PREROUTING on `wg0`/`tun0`/`awg0`/`docker0`) and confirm the rule fires regardless of which local port is the redirect target (not replayed, NOT CHECKED; requires the argument-joining pipeline named above). A rule that only matched the specific port 19923 would miss every scheme that uses a different target port; this one does not, because it anchors on the REDIRECT-of-port-22 mechanism rather than a fixed destination.
+**Deployment:** Linux EDR or SIEM that joins auditd `execve` arguments into one command-line string; periodic `iptables -t nat -S` config inventory as a complementary check that does not depend on audit coverage.
+
+```yaml
+title: Iptables NAT Redirect of Destination Port 22 to a Local Listener
+id: 481b1e63-bd30-4fcb-ab4f-ef3a902c19bb
+status: experimental
+description: >-
+  Detects an iptables command line that adds a REDIRECT with a --dport 22 match and a
+  --to-port, which redirects destination port 22 traffic to a local port on the same host
+  (REDIRECT exists only in the nat table, so the table is implied). It does not test the
+  chain or the direction, and it cannot tell this platform from a deliberate local
+  SSH-inspection proxy. Observed as the core mechanism of a self-hosted, transparent SSH
+  adversary-in-the-middle platform that intercepts a host's own outbound SSH sessions
+  into a local fake server before forwarding validated credentials upstream. The
+  redirect target port and chain (OUTPUT, or PREROUTING on a VPN or container interface)
+  vary by deployment scheme, so this anchors on the REDIRECT-of-port-22 mechanism itself
+  rather than a fixed port number.
+references:
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/
+author: The Hunters Ledger
+date: 2026-08-12
+tags:
+    - attack.credential-access
+    - attack.collection
+    - attack.t1557
+    - stp.3
+logsource:
+    product: linux
+    service: auditd
+    definition: 'Requires auditd with an execve audit rule installed, and a pipeline that joins the EXECVE argument vector into one command-line string. Raw EXECVE records carry each argument in its own aN field (--dport and 22 separately), where the multi-token string in this rule does not occur. No such profile has been demonstrated for this rule.'
+detection:
+    cmd:
+        type: 'EXECVE'
+        a0|endswith: 'iptables'
+    kw_dport:
+        - '--dport 22 '
+    kw_redirect:
+        - 'REDIRECT'
+    kw_toport:
+        - '--to-port'
+    condition: cmd and kw_dport and kw_redirect and kw_toport
+falsepositives:
+    - >-
+      Legitimate SSH port remapping for load balancing or protocol inspection, though
+      redirecting port 22 specifically to a LOCAL listener on the same host (rather than
+      to a different host) is unusual outside of an intentional interception or debugging
+      proxy
+level: medium
+```
+
+#### Ipset Named mitm_exclude Created
+
+**Tier:** Hunting
+**Robustness:** 1
+**ATT&CK Coverage:** T1480 (Execution Guardrails)
+**Confidence:** MODERATE
+**False Positives:** Unlikely. `mitm_exclude` is not a standard or default set name used by any known legitimate firewall or DDoS-mitigation tool.
+**Blind Spots:** Depends on the operator keeping this set name; a rename on redeploy defeats it, and one freely renamed literal is the only discriminator, which is why this is a Hunting lead rather than a durable Detection. The rule sees one ipset invocation: the iptables rule that references the set, the redirect, and their order are not tested (the deploy script establishes that sequence, see `MITM_Deploy_Firewall_Script`). Requires auditd visibility into `ipset` invocations.
+**Validation:** Trigger by running `ipset create mitm_exclude hash:ip maxelem 1000000 -exist` on a lab host and confirming the rule fires. A host provisioning an unrelated ipset for legitimate routing or mitigation purposes, using any other set name, must not fire.
+**Deployment:** Linux EDR or SIEM ingesting auditd `execve` records; periodic `ipset list` config inventory.
+
+```yaml
+title: Ipset Named mitm_exclude Created
+id: 580b377c-7566-4bc9-a78b-546c7c273ac5
+status: experimental
+description: >-
+  Detects an ipset command line that contains create and the set name mitm_exclude, the
+  exclusion list a self-hosted SSH interception platform checks before its redirect so
+  specific destinations are skipped. The rule tests that one ipset invocation only: the
+  iptables rule that references the set, the redirect, and their order are not tested.
+  The name is operator-chosen and has no known legitimate use, but it can be changed on
+  redeploy.
+references:
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/
+author: The Hunters Ledger
+date: 2026-08-12
+tags:
+    - attack.stealth
+    - attack.t1480
+    - stp.2
+logsource:
+    product: linux
+    service: auditd
+detection:
+    cmd:
+        type: 'EXECVE'
+        a0|endswith: 'ipset'
+    kw_create:
+        - 'create'
+    kw_name:
+        - 'mitm_exclude'
+    condition: cmd and kw_create and kw_name
+falsepositives:
+    - Unlikely, this ipset name is not a standard or default name used by any known legitimate tool
+level: medium
+```
 
 The four base selectors that feed the two correlation rules above (paramiko pip install, ipset package install, bare `uname -a`, bare `perl`) are Hunting-grade in their own right, but they are co-located with their correlations in the Detection subsection above rather than repeated here, because SigmaHQ's correlation syntax resolves its base rules by `id` from within the same document collection. The four rules below are the platform's remaining standalone Hunting-tier coverage.
 
@@ -775,7 +797,7 @@ The four base selectors that feed the two correlation rules above (paramiko pip 
 **ATT&CK Coverage:** T1059.006 (Python), T1557 (Adversary-in-the-Middle)
 **Confidence:** MODERATE
 **False Positives:** The exclude_puller.py filename is generic and plausible for unrelated exclusion-list or allow-list tooling outside this platform; requiring genuine execution rather than a mere reference on the command line removes the noisiest source of false hits but does not remove the risk of a name collision with unrelated software using the same filename.
-**Blind Spots:** Keys on a filename the operator can rename on redeploy, unlike the sniffer's flag-combination anchor in the companion Detection-tier rule above. This component is also double-forked and daemonized shortly after launch, so this rule only has one moment (the original `execve`) to catch it. *Regex fix 2026-10-11:* on Elastic a `|re` value must match the whole field and this pattern began with `python`, so an interpreter started by absolute path (`/usr/bin/python3 -u mitm_local.py`) did not match; the pattern now accepts an optional leading path before `python`, and a launch through a wrapper such as `env`, `sh -c` or `nohup` still does not match.
+**Blind Spots:** Keys on a filename the operator can rename on redeploy, unlike the sniffer's flag-combination anchor in the companion Detection-tier rule above. This component is also double-forked and daemonized shortly after launch, so this rule only has one moment (the original `execve`) to catch it. *Regex fixes 2026-10-11:* on Elastic a `|re` value must match the whole field and the pattern began with `python`, so an interpreter started by absolute path (`/usr/bin/python3 -u exclude_puller.py`) did not match; the pattern now accepts an optional leading path before `python`. A second pass made the script a path-bounded basename (so `python3 notexclude_puller.py` no longer matches) and excluded `-c` and `-m` as the first option (so `python3 -c exclude_puller.py` no longer matches); a flag cluster that contains `c` or `m` later, such as `-Bc`, is not excluded. A launch through a wrapper such as `env`, `sh -c` or `nohup` still does not match.
 **Deployment:** Linux EDR or SIEM ingesting normalized process-creation telemetry (auditd, Sysmon for Linux, or an EDR's native process feed); review hits manually rather than routing to automated response.
 
 ```yaml
@@ -786,8 +808,9 @@ description: >-
   Detects a Python interpreter executing exclude_puller.py as its direct target,
   observed as the exclusion-list poller component of a self-hosted SSH
   adversary-in-the-middle platform that otherwise deploys fileless from tmpfs.
-  Requiring genuine execution rather than a mere reference on the command line
-  removes hits from tooling that reads, hashes, or copies the file by name, but the
+  Requiring the script as the interpreter's own positional argument rather than a mere
+  reference on the command line (not through -c or -m, and not as the tail of a longer
+  file name) removes hits from tooling that reads, hashes, or copies the file by name, but the
   filename itself is generic enough that this remains a hunting-grade selector rather
   than a high-confidence one; see the companion Detection-tier rule for the platform's
   interceptor and sniffer components.
@@ -807,7 +830,7 @@ logsource:
 detection:
     sel_puller:
         Image|contains: 'python3'
-        CommandLine|re: '([^ ]*/)?python[0-9.]*( -[^ ]+)* [^ ]*exclude_puller\.py( .*)?'
+        CommandLine|re: '([^ ]*/)?python[0-9.]*( -(-[^ ]*|[^\-cm ][^ ]*))* ([^ ]*/)?exclude_puller\.py( .*)?'
     condition: sel_puller
 falsepositives:
     - >-
@@ -819,23 +842,25 @@ falsepositives:
 level: medium
 ```
 
-#### Iptables INPUT Drop Hiding a Non-Loopback High Port
+#### Iptables INPUT Drop Rule for Non-Loopback Traffic to a Specific Port
 
 **Tier:** Hunting
 **Robustness:** 1 standalone (gains precision when correlated locally against a matching REDIRECT target port)
 **ATT&CK Coverage:** T1686 (Disable or Modify System Firewall)
 **Confidence:** MODERATE
 **False Positives:** Deliberate loopback-only hardening of an internal admin or monitoring service using DROP-based iptables rules rather than a bind-to-127.0.0.1 restriction. This is a real and not-uncommon pattern outside this platform, which is why this rule is Hunting rather than Detection.
-**Blind Spots:** Says nothing about *which* port is being hidden; an analyst reviewing a hit should cross-reference it against the REDIRECT rule detected by the earlier `Iptables NAT Redirect of Outbound SSH Traffic to a Local Listener` rule to confirm the two share the same target port before treating a hit as high-confidence.
-**Deployment:** Linux EDR or SIEM ingesting auditd `execve` records; review hits manually rather than routing to automated response.
+**Blind Spots:** Needs the argument-joining pipeline named in the logsource definition (raw auditd EXECVE records split `-j` and `DROP` into separate fields and do not match). Tests that a `--dport` match is present but not its value, so says nothing about *which* port is being hidden; an analyst reviewing a hit should cross-reference it against the REDIRECT rule detected by the earlier `Iptables NAT Redirect of Destination Port 22 to a Local Listener` rule to confirm the two share the same target port before treating a hit as high-confidence.
+**Deployment:** Linux EDR or SIEM that joins auditd `execve` arguments into one command-line string; review hits manually rather than routing to automated response.
 
 ```yaml
-title: Iptables INPUT Drop Hiding a Non-Loopback High Port
+title: Iptables INPUT Drop Rule for Non-Loopback Traffic to a Specific Port
 id: 1ced014b-28fa-4ead-af00-af46a1b931c9
 status: experimental
 description: >-
-  Detects an iptables INPUT rule that drops all non-loopback traffic to a specific port,
-  which is the exact mechanism a self-hosted SSH interception platform uses to keep its
+  Detects an iptables command line adding an INPUT-chain DROP with a --dport match and a
+  non-loopback input-interface match (! -i lo), the shape of a rule that drops all
+  non-loopback traffic to a specific port. The port number, and whether it is a high
+  port, are not tested. This is the exact mechanism a self-hosted SSH interception platform uses to keep its
   redirect-target listener invisible to external port scanning while still accepting the
   host's own locally redirected connections. This selector alone is broad, since internal-only
   service hardening can produce a similar rule shape, so it is tiered for hunting rather
@@ -851,17 +876,20 @@ tags:
 logsource:
     product: linux
     service: auditd
+    definition: 'Requires auditd with an execve audit rule installed, and a pipeline that joins the EXECVE argument vector into one command-line string. Raw EXECVE records carry each argument in its own aN field (-j and DROP separately, ! -i lo as three fields), where the multi-token strings in this rule do not occur. No such profile has been demonstrated for this rule.'
 detection:
     cmd:
         type: 'EXECVE'
         a0|endswith: 'iptables'
     kw_input:
         - 'INPUT'
+    kw_dport:
+        - '--dport'
     kw_drop:
         - '-j DROP'
     kw_notlo:
         - '! -i lo'
-    condition: cmd and kw_input and kw_drop and kw_notlo
+    condition: cmd and kw_input and kw_dport and kw_drop and kw_notlo
 falsepositives:
     - Deliberate loopback-only hardening of an internal admin or monitoring service using DROP-based iptables rules rather than a bind-to-127.0.0.1 restriction
 level: medium
@@ -915,23 +943,24 @@ falsepositives:
 level: medium
 ```
 
-#### Python Process Establishing Outbound HTTPS to a Non-Standard High Port
+#### Python Process Making an Outbound Connection to a Non-Standard High Port
 
 **Tier:** Hunting
 **Robustness:** 1
-**ATT&CK Coverage:** T1071.001 (Web Protocols), T1571 (Non-Standard Port)
+**ATT&CK Coverage:** T1571 (Non-Standard Port)
+**ATT&CK Note:** The event carries no protocol or TLS field, so Web Protocols (T1071.001) is not claimed.
 **Confidence:** LOW alone; raised by combining with the process-launch and file-artifact indicators above
-**False Positives:** Any legitimate Python service or client communicating with an unrelated API or management interface bound to port 8443 or 8444. These are common enough alternate HTTPS ports that this selector is broad by design.
-**Blind Spots:** Cannot see the `X-Token` header, the request body, or the specific endpoint path, since those sit inside the TLS payload; this rule sees only that a Python process reached one of two ports over an established TLS connection. It also cannot see the reporting cadence (roughly 300 seconds for a heartbeat, 600 seconds for an exclusion-list poll), which would otherwise raise confidence, because that requires longer-window correlation this rule does not attempt.
+**False Positives:** Any legitimate Python service or client communicating with an unrelated API or management interface bound to port 8443 or 8444. These are common enough alternate HTTPS ports that this selector is broad by design; any TCP connection to them matches, TLS or not.
+**Blind Spots:** Cannot see the `X-Token` header, the request body, or the specific endpoint path, since those sit inside the TLS payload; this rule sees only that a Python process initiated a connection to one of two ports; whether TLS follows is not tested. It also cannot see the reporting cadence (roughly 300 seconds for a heartbeat, 600 seconds for an exclusion-list poll), which would otherwise raise confidence, because that requires longer-window correlation this rule does not attempt.
 **Deployment:** Linux EDR or SIEM with process-to-network correlation; use as a pivot alongside the process-launch and file-artifact rules above rather than as a standalone alert.
 
 ```yaml
-title: Python Process Establishing Outbound HTTPS to a Non-Standard High Port
+title: Python Process Making an Outbound Connection to a Non-Standard High Port
 id: 770ec23a-3204-437f-8560-c8610c68e2b0
 status: experimental
 description: >-
-  Detects a python3 process establishing an outbound TLS connection to destination port
-  8443 or 8444, consistent with a relay component of a self-hosted SSH interception
+  Detects a python3 process initiating an outbound connection to destination port 8443 or
+  8444 (the event does not show whether TLS follows), consistent with a relay component of a self-hosted SSH interception
   platform reporting captured credentials to its receiver and polling for target and
   exclusion-list updates. This selector is intentionally broad, since many legitimate
   services and management APIs also run on these ports, so it is tiered for hunting;
@@ -943,7 +972,6 @@ author: The Hunters Ledger
 date: 2026-08-12
 tags:
     - attack.command-and-control
-    - attack.t1071.001
     - attack.t1571
 logsource:
     category: network_connection

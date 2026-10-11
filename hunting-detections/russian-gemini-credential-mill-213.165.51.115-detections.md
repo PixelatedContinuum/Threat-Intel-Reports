@@ -24,8 +24,8 @@ This operator runs a custom Python A2A ("agent-to-agent") C2 stack combined with
 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
-| YARA | 6 | 2 | T1110.003, T1059.006, T1587, T1078, T1552.001, T1071.001, T1132.001, T1087, T1547.001, T1036 | 0 |
-| Sigma | 4 documents (1 bundle) | 6 documents | T1555.005, T1005, T1003.001, T1003.002, T1587, T1071.001, T1090.004, T1572, T1036.005, T1547.001, T1059.001, T1110.003 | 3 |
+| YARA | 4 | 4 | T1110.003, T1059.006, T1587, T1078, T1552.001, T1071.001, T1132.001, T1087, T1547.001, T1036 | 0 |
+| Sigma | 4 documents (1 bundle) | 6 documents | T1555.005, T1005, T1003.001, T1587, T1071.001, T1090.004, T1572, T1036.005, T1547.001, T1059.001, T1110.003 | 3 |
 | Suricata | 1 | 1 | T1071.001, T1132.001, T1041, T1090.004, T1572 | 4 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
@@ -50,9 +50,9 @@ This operator runs a custom Python A2A ("agent-to-agent") C2 stack combined with
 **Robustness:** 2
 **ATT&CK Coverage:** T1110.003 (Password Spraying), T1059.006 (Python), T1587 (Develop Capabilities)
 **Confidence:** HIGH
-**Rationale:** Requires the Gemini API import AND one of three verbatim prompt fragments (the role-priming sentence, the `Most Recent Password from dump:` field name, or the `generate exactly 20 likely current mutations` instruction) AND one of four operator-bespoke markers (the output names `AI_SNIPER_GOODS` and `AI_ADMIN_MUTANTS`, the target-file name `ULTRA_GOLD_TARGETS`, or the success-line format `[+++ AI SUPER GOOD +++]`). The prompt wording and markers are bespoke enough that no legitimate software plausibly combines them with a Gemini API import; an operator would need to both reword every prompt fragment and rename every marker to evade. *Wording fix 2026-10-11:* the description used to pair the role-priming prompt with the `AI_SNIPER` naming, but the role-priming sentence is only one of three alternatives and `AI_SNIPER_GOODS` only one of four.
+**Rationale:** Requires the Gemini API import AND one of three verbatim prompt fragments (the role-priming sentence, the `Most Recent Password from dump:` field name, or the `generate exactly 20 likely current mutations` instruction) AND one of four operator-bespoke markers (the output names `AI_SNIPER_GOODS` and `AI_ADMIN_MUTANTS`, the target-file name `ULTRA_GOLD_TARGETS`, or the success-line format `[+++ AI SUPER GOOD +++]`). The prompt wording and markers are bespoke enough that no legitimate software plausibly combines them with a Gemini API import; the rule fails as soon as any one of its three mandatory groups fails: dropping the `google.generativeai` reference, rewording all three prompt fragments, or renaming all four markers each evades on its own. *Wording fix 2026-10-11:* the description used to pair the role-priming prompt with the `AI_SNIPER` naming, but the role-priming sentence is only one of three alternatives and `AI_SNIPER_GOODS` only one of four.
 **False Positives:** None known: the combination of a Gemini API client reference, one of three bespoke prompt fragments and one of four bespoke output or target markers has negligible legitimate-software overlap. Not goodware-validated.
-**Blind Spots:** A full prompt rewrite plus output-filename rename evades detection; the rule targets on-disk Python source, not an in-memory or compiled variant.
+**Blind Spots:** The three clauses are ANDed, so any one of them failing evades: dropping or renaming the `google.generativeai` reference, rewording all three prompt fragments (without the role-priming sentence, the `Most Recent Password from dump:` field and the `generate exactly 20 likely current mutations` instruction), or renaming all four operator markers; the rule targets Python source in files, not a compiled variant.
 **Validation:** Scan `ai_sniper_brute.py` or a functional equivalent — the three-clause combination must match; a benign script that merely imports `google.generativeai` (with no role-priming prompt or bespoke output filename) must NOT fire.
 **Deployment:** Endpoint AV/EDR file scan, SIEM file-creation alert, git-hook pre-commit scan on CI/CD pipelines, developer workstation endpoint protection.
 
@@ -89,52 +89,6 @@ rule MAL_Python_LLMPersonalized_Credential_Mutator_Family {
       $gemini_import and
       ($role_prime or $prompt_field1 or $prompt_field2) and
       1 of ($output_sniper, $output_mutants, $target_file, $success_fmt)
-}
-```
-
-#### AI Operator Handoff Document Family
-
-**Tier:** Detection
-**Robustness:** 2
-**ATT&CK Coverage:** T1587 (Develop Capabilities), T1071.001 (Web Protocols — C2 endpoint references within the document)
-**Confidence:** HIGH
-**Rationale:** Requires a session-priming marker (the To/From Gemini CLI header pair, a session-start load directive, or a knowledge-transfer marker paired with a named handoff-document filename) AND co-occurrence with at least one of four C2 artifact strings: `/api/v1/update`, `/api/v1/interact`, the `cloudflared access tcp` fragment, or the `X-Agent-ID` header. The co-occurrence requirement is what keeps this Detection-eligible despite the broader "AI-assisted documentation" surface being real. *Wording fix 2026-10-11:* the description named credential-table patterns, which no string tests, and the second clause is one string, not a C2 endpoint pattern.
-**False Positives:** AI-augmented developer documentation (e.g., a project's own `CLAUDE.md`) can contain a session-start directive; it would also need one of the four C2 strings, so the co-occurrence suppresses most of that class. Documentation that quotes `cloudflared access tcp` or `X-Agent-ID`, or an API guide with a generic `/api/v1/update` path, alongside a session-start sentence would still match. Not goodware-validated.
-**Blind Spots:** A handoff document that omits all four C2-artifact strings (e.g., references C2 infrastructure only by IP, with no `/api/v1/` path or bespoke header) evades the second clause.
-**Validation:** Scan a captured AI Operator Handoff Document (`C2_INFRA_TRANSFER.md`, `DEPLOYED_TOOLS.md`) — both clauses must match; a legitimate `CLAUDE.md`/`AGENTS.md` project file with no C2 content must NOT fire.
-**Deployment:** Endpoint file-creation monitoring, filesystem hunt on server-class Linux hosts, git-repo secret-scanning pipeline. Recommended additional scoping: prioritize `.md` files under `~/.gemini/`, `~/.claude/`, `~/.codex/` on server-class hosts over developer workstations.
-
-```yara
-rule MAL_Markdown_AI_Operator_Handoff_Document_Family {
-   meta:
-      description = "Detects operator-authored AI Operator Handoff Documents — Markdown files (under 100 KB) holding a session-priming marker (the To and From Gemini CLI header pair, a session-start load directive, or KNOWLEDGE TRANSFER: with a named handoff-document filename) and at least one C2 artifact string (/api/v1/update, /api/v1/interact, cloudflared access tcp or X-Agent-ID). The rule has no credential-table test. Three exemplars from UTA-2026-012: C2_MIGRATION_GUIDE.md, C2_INFRA_TRANSFER.md, DEPLOYED_TOOLS.md"
-      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
-      author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/"
-      date = "2026-05-25"
-      family = "AI-Operator-Handoff-Document"
-      campaign = "OpenDirectory-RussianGeminiCredentialMill-213.165.51.115"
-      id = "5cc8d013-d78a-5b62-982a-b92fc7ff0a55"
-   strings:
-      $session_directive  = "When starting a new session, refer to this file" ascii nocase
-      $knowledge_xfer     = "KNOWLEDGE TRANSFER:" ascii nocase
-      $to_gemini_cli      = "**To:** Gemini CLI" ascii
-      $from_gemini_cli    = "**From:** Gemini CLI" ascii
-      $migration_guide    = "C2_MIGRATION_GUIDE" ascii
-      $infra_transfer     = "C2_INFRA_TRANSFER" ascii
-      $deployed_tools     = "DEPLOYED_TOOLS" ascii
-      $api_v1_update      = "/api/v1/update" ascii
-      $api_v1_interact    = "/api/v1/interact" ascii
-      $cf_tunnel_pattern  = "cloudflared access tcp" ascii
-      $agent_id_format    = "X-Agent-ID" ascii
-   condition:
-      filesize < 100KB and
-      (
-         ($to_gemini_cli and $from_gemini_cli) or
-         $session_directive or
-         ($knowledge_xfer and ($migration_guide or $infra_transfer or $deployed_tools))
-      ) and
-      1 of ($api_v1_update, $api_v1_interact, $cf_tunnel_pattern, $agent_id_format)
 }
 ```
 
@@ -184,13 +138,13 @@ rule MAL_Python_A2A_C2_Server_Unauthenticated {
 #### A2A C2 Client Console / Exec Tool
 
 **Tier:** Detection
-**Robustness:** 3
+**Robustness:** 2
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1132.001 (Standard Encoding), T1059.006 (Python)
 **Confidence:** HIGH
-**Rationale:** The `X-Agent-ID` bespoke header is required, together with any one of the UTF-16LE `encode('utf-16le')` call, the `/api/v1/interact` endpoint or the `/api/v1/get_results` endpoint, and any one of four corroborating operator-specific markers (the console banner, the `HOSTNAME_user` agent-ID format, the `/api/v1/agents` endpoint or `time.sleep(2)`). *Wording fix 2026-10-11:* the earlier text said the header, UTF-16LE encoding and `get_results` polling are all required; the condition accepts any one of the three, and the UTF-16LE call is not required. This header-plus-endpoint pattern is not found in common legitimate Python HTTP client libraries, but it was not goodware-validated.
+**Rationale:** The `X-Agent-ID` bespoke header is required, together with any one of the UTF-16LE `encode('utf-16le')` call, the `/api/v1/interact` endpoint or the `/api/v1/get_results` endpoint, and any one of four corroborating operator-specific markers (the console banner, the `HOSTNAME_user` agent-ID format, the `/api/v1/agents` endpoint or `time.sleep(2)`). *Wording fix 2026-10-11:* the earlier text said the header, UTF-16LE encoding and `get_results` polling are all required; the condition accepts any one of the three, and the UTF-16LE call is not required. This header-plus-endpoint pattern is not found in common legitimate Python HTTP client libraries, but it was not goodware-validated. *Robustness fix 2026-10-11 (round 2):* scored 2, not 3: the mandatory `X-Agent-ID` string is a renameable header name and the optional pair (the UTF-16LE call and the endpoint names) is generic, so this is a family string combination, not a technique invariant.
 **False Positives:** None known; not goodware-validated. The weakest path is the `X-Agent-ID` header, one of the three client strings and the generic `time.sleep(2)`.
 **Blind Spots:** A rewrite that renames the header evades, whatever else it keeps; a rewrite that drops the three client strings (UTF-16LE call and both endpoints) evades.
-**Validation:** Scan `console.py`/`exec.py` or a functional equivalent — the header clause plus one corroborating marker must match; a generic Python HTTP client with a custom header name (but not `X-Agent-ID` specifically) must NOT fire.
+**Validation:** Scan `console.py`/`exec.py` or a functional equivalent — all three clauses must be present to match: the header, one of the UTF-16LE call or the two endpoints, and one corroborating marker (replay is NOT CHECKED); a generic Python HTTP client with a custom header name (but not `X-Agent-ID` specifically) must NOT fire.
 **Deployment:** Endpoint AV/EDR file scan, server-side file integrity monitoring, threat hunting on Linux operator-side hosts.
 
 ```yara
@@ -218,38 +172,6 @@ rule MAL_Python_A2A_C2_Client_Console {
       $agent_id_header and
       ($encode_utf16le or $ep_interact or $ep_get_results) and
       1 of ($banner, $hostname_user_fmt, $ep_agents, $poll_sleep)
-}
-```
-
-#### C2_INFRA_TRANSFER Explicit AI-to-AI Header (Narrow / Highest Fidelity)
-
-**Tier:** Detection
-**Robustness:** 2
-**ATT&CK Coverage:** T1587 (Develop Capabilities), T1071.001 (Web Protocols — C2 references)
-**Confidence:** HIGH
-**Rationale:** The literal `**To:** Gemini CLI` / `**From:** Gemini CLI` header combination on a Markdown file has no known use in legitimate Gemini CLI documentation, Google SDK examples, or standard developer workflow. First-publication signature for the AI Operator Handoff Document TTP. *Logic fix 2026-10-11:* the rule used to carry two more branches, `When starting a new session` with either header or `**Subject:**`, and a Cyrillic persona marker with either header or `**Subject:**`, so a file with neither the pair nor both headers fired; the heading and Blind Spots called the rule narrow and said the session-start directive is covered by the Family rule, so those branches are removed and the condition is the header pair alone.
-**False Positives:** None known.
-**Blind Spots:** A reformatted handoff document that drops the exact `**To:**`/`**From:**` bold-markdown convention evades this narrow rule (the broader Family rule above provides fallback coverage via the session-start directive).
-**Validation:** Scan `C2_INFRA_TRANSFER.md` or a functional equivalent — the header pair must match; unrelated Markdown documentation referencing "Gemini CLI" in prose (not as a To/From header) must NOT fire.
-**Deployment:** Endpoint file-creation monitoring, SIEM filesystem alert, threat hunting in `~/.gemini/`, `~/.claude/`, `~/.codex/` directories on server-class hosts.
-
-```yara
-rule MAL_Markdown_C2_INFRA_TRANSFER_Pattern {
-   meta:
-      description = "Narrow detection requiring both the 'To: Gemini CLI' and 'From: Gemini CLI' header lines from C2_INFRA_TRANSFER.md — first-publication YARA signature for the AI Operator Handoff Document TTP (UTA-2026-012)"
-      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
-      author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/"
-      date = "2026-05-25"
-      family = "AI-Operator-Handoff-Document"
-      campaign = "OpenDirectory-RussianGeminiCredentialMill-213.165.51.115"
-      id = "e1a18404-2ded-5aec-93f6-33180c0f5499"
-   strings:
-      $to_gemini   = "**To:** Gemini CLI" ascii
-      $from_gemini = "**From:** Gemini CLI" ascii
-   condition:
-      filesize < 100KB and
-      $to_gemini and $from_gemini
 }
 ```
 
@@ -296,6 +218,85 @@ rule MAL_PowerShell_WindowsUpdateManager_Stealer_Loader {
 ```
 
 ### Hunting Rules
+
+#### C2_INFRA_TRANSFER Explicit AI-to-AI Header Pair (Narrow)
+
+**Tier:** Hunting
+**Robustness:** 1
+**ATT&CK Coverage:** T1587 (Develop Capabilities)
+**ATT&CK Note:** The rule tests two header strings and no C2 content, so Web Protocols (T1071.001) is not claimed.
+**Confidence:** MODERATE
+**Rationale:** The rule tests two literal strings, `**To:** Gemini CLI` and `**From:** Gemini CLI`, anywhere in a file under 100 KB, with no line boundary, no Markdown structure and no C2 content. The captured operator handoff carries both, but a legitimate Gemini-to-Gemini build handoff written the same way matches too, and no corpus was measured, so nothing here claims the pair is unique to this operator or first published. *Logic fix 2026-10-11:* the rule used to carry two more branches, `When starting a new session` with either header or `**Subject:**`, and a Cyrillic persona marker with either header or `**Subject:**`, so a file with neither the pair nor both headers fired; the heading and Blind Spots called the rule narrow and said the session-start directive is covered by the Family rule, so those branches are removed and the condition is the header pair alone.
+**False Positives:** A routine handoff note between two Gemini CLI sessions that uses the same bold-markdown To/From convention; any document that quotes both literals. No benign corpus was scanned.
+**Blind Spots:** A reformatted handoff document that drops the exact `**To:**`/`**From:**` bold-markdown convention evades this narrow rule (the broader Family rule above provides fallback coverage via the session-start directive).
+**Validation:** Scan `C2_INFRA_TRANSFER.md` or a functional equivalent — the header pair must match; unrelated Markdown documentation referencing "Gemini CLI" in prose (not as a To/From header) must NOT fire, while a routine Gemini-to-Gemini handoff using both headers WILL fire (a known positive).
+**Deployment:** Endpoint file-creation monitoring, SIEM filesystem alert, threat hunting in `~/.gemini/`, `~/.claude/`, `~/.codex/` directories on server-class hosts.
+
+```yara
+rule MAL_Markdown_C2_INFRA_TRANSFER_Pattern {
+   meta:
+      description = "Hunting rule requiring both the '**To:** Gemini CLI' and '**From:** Gemini CLI' literals from C2_INFRA_TRANSFER.md anywhere in a file under 100 KB (UTA-2026-012); it tests no C2 content and matches any document carrying both"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
+      author = "The Hunters Ledger"
+      reference = "https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/"
+      date = "2026-05-25"
+      family = "AI-Operator-Handoff-Document"
+      campaign = "OpenDirectory-RussianGeminiCredentialMill-213.165.51.115"
+      id = "e1a18404-2ded-5aec-93f6-33180c0f5499"
+   strings:
+      $to_gemini   = "**To:** Gemini CLI" ascii
+      $from_gemini = "**From:** Gemini CLI" ascii
+   condition:
+      filesize < 100KB and
+      $to_gemini and $from_gemini
+}
+```
+
+#### AI Operator Handoff Document Family
+
+**Tier:** Hunting
+**Robustness:** 2
+**ATT&CK Coverage:** T1587 (Develop Capabilities), T1071.001 (Web Protocols — C2 endpoint references within the document)
+**Confidence:** MODERATE
+**Rationale:** Requires a session-priming marker (the To/From Gemini CLI header pair, a session-start load directive, or a knowledge-transfer marker paired with a named handoff-document filename) AND co-occurrence with at least one of four C2 artifact strings: `/api/v1/update`, `/api/v1/interact`, the `cloudflared access tcp` fragment, or the `X-Agent-ID` header. The co-occurrence requirement narrows the broad "AI-assisted documentation" surface but does not remove it. *Tier fix 2026-10-11 (round 2):* a project's own session-start directive plus an ordinary `/api/v1/update` API guide or a `cloudflared access tcp` command satisfies the condition with no operator or C2 content, so the rule is Hunting: the matched text is a lead to read, not proof that these generic strings are C2 artifacts. *Wording fix 2026-10-11:* the description named credential-table patterns, which no string tests, and the second clause is one string, not a C2 endpoint pattern.
+**False Positives:** AI-augmented developer documentation (e.g., a project's own `CLAUDE.md`) can contain a session-start directive; it would also need one of the four C2 strings, so the co-occurrence suppresses most of that class. Documentation that quotes `cloudflared access tcp` or `X-Agent-ID`, or an API guide with a generic `/api/v1/update` path, alongside a session-start sentence would still match. Not goodware-validated.
+**Blind Spots:** A handoff document that omits all four C2-artifact strings (e.g., references C2 infrastructure only by IP, with no `/api/v1/` path or bespoke header) evades the second clause.
+**Validation:** Scan a captured AI Operator Handoff Document (`C2_INFRA_TRANSFER.md`, `DEPLOYED_TOOLS.md`) — both clauses must match (replay is NOT CHECKED); a legitimate `CLAUDE.md`/`AGENTS.md` project file with no C2 content must NOT fire, while one holding a session-start directive and an ordinary `/api/v1/update` API guide WILL fire (a known positive).
+**Deployment:** Endpoint file-creation monitoring, filesystem hunt on server-class Linux hosts, git-repo secret-scanning pipeline. Recommended additional scoping: prioritize `.md` files under `~/.gemini/`, `~/.claude/`, `~/.codex/` on server-class hosts over developer workstations.
+
+```yara
+rule MAL_Markdown_AI_Operator_Handoff_Document_Family {
+   meta:
+      description = "Detects operator-authored AI Operator Handoff Documents — files under 100 KB (no extension or Markdown structure is tested) holding a session-priming marker (the To and From Gemini CLI header pair, a session-start load directive, or KNOWLEDGE TRANSFER: with a named handoff-document filename) and at least one C2 artifact string (/api/v1/update, /api/v1/interact, cloudflared access tcp or X-Agent-ID). The rule has no credential-table test. Three exemplars from UTA-2026-012: C2_MIGRATION_GUIDE.md, C2_INFRA_TRANSFER.md, DEPLOYED_TOOLS.md"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
+      author = "The Hunters Ledger"
+      reference = "https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/"
+      date = "2026-05-25"
+      family = "AI-Operator-Handoff-Document"
+      campaign = "OpenDirectory-RussianGeminiCredentialMill-213.165.51.115"
+      id = "5cc8d013-d78a-5b62-982a-b92fc7ff0a55"
+   strings:
+      $session_directive  = "When starting a new session, refer to this file" ascii nocase
+      $knowledge_xfer     = "KNOWLEDGE TRANSFER:" ascii nocase
+      $to_gemini_cli      = "**To:** Gemini CLI" ascii
+      $from_gemini_cli    = "**From:** Gemini CLI" ascii
+      $migration_guide    = "C2_MIGRATION_GUIDE" ascii
+      $infra_transfer     = "C2_INFRA_TRANSFER" ascii
+      $deployed_tools     = "DEPLOYED_TOOLS" ascii
+      $api_v1_update      = "/api/v1/update" ascii
+      $api_v1_interact    = "/api/v1/interact" ascii
+      $cf_tunnel_pattern  = "cloudflared access tcp" ascii
+      $agent_id_format    = "X-Agent-ID" ascii
+   condition:
+      filesize < 100KB and
+      (
+         ($to_gemini_cli and $from_gemini_cli) or
+         $session_directive or
+         ($knowledge_xfer and ($migration_guide or $infra_transfer or $deployed_tools))
+      ) and
+      1 of ($api_v1_update, $api_v1_interact, $cf_tunnel_pattern, $agent_id_format)
+}
+```
 
 #### Russian Operator Persona Strings
 
@@ -691,9 +692,9 @@ level: medium
 **Robustness:** 1
 **ATT&CK Coverage:** T1547.001 (Registry Run Keys), T1036 (Masquerading)
 **Confidence:** MODERATE
-**Rationale:** Keyed on two operator-chosen literals, the `WindowsUpdateManager` masquerade value name and the `WindowsUpdateManager.ps1` file name in the value data, with no combinatorial fallback in the Sigma logic itself (unlike the YARA loader rule, which pairs this same value name with an additional C2-artifact clause). A rebuild that renames either one fully evades. Today's false-positive rate is low (no legitimate Windows component uses this exact value name), but durability, not current precision, caps the tier here — **level recalibrated from the original `high` to `medium`** to match the Hunting tier per the level-discipline gate, since the rule does not survive a rename. *Logic fix 2026-10-11:* the title and description say the Run value points to the PowerShell script and is a per-user key, but the selection was the value-name substring alone, so a machine-wide `HKLM` value of that name matched and no PowerShell script was tested; the rule now also requires the `HKU\` hive prefix and `WindowsUpdateManager.ps1` in `Details`.
+**Rationale:** Keyed on two operator-chosen literals, the `WindowsUpdateManager` masquerade value name and the `WindowsUpdateManager.ps1` file name in the value data, with no combinatorial fallback in the Sigma logic itself (unlike the YARA loader rule, which pairs this same value name with an additional C2-artifact clause). A rebuild that renames either one fully evades. Today's false-positive rate is low (no legitimate Windows component uses this exact value name), but durability, not current precision, caps the tier here — **level recalibrated from the original `high` to `medium`** to match the Hunting tier per the level-discipline gate, since the rule does not survive a rename. *Logic fix 2026-10-11:* the title and description say the Run value points to the PowerShell script and is a per-user key, but the selection was the value-name substring alone, so a machine-wide `HKLM` value of that name matched and no PowerShell script was tested; the rule now also requires the `HKU\` hive prefix and `WindowsUpdateManager.ps1` in `Details`. *Boundary fix 2026-10-11 (round 2):* the value-name test was `contains`, so a value named `WindowsUpdateManagerBackup` matched; it is now `endswith`, which makes the value name exact. A hit is a configured Run value that names the script; it is not proof that the unextracted beacon ran.
 **False Positives:** None known today — `WindowsUpdateManager` is not a legitimate Windows Update component registry value; risk is entirely in the rule going stale after a rebuild, not in false alarms against current builds. A machine-wide (`HKLM`) value of the same name no longer matches.
-**Deployment:** Sysmon Event ID 13 (registry value set), Windows Event ID 4657, EDR registry monitoring. Pair with the YARA PowerShell-loader rule (which requires a corroborating C2-artifact clause) for higher-confidence composite alerting.
+**Deployment:** Sysmon Event ID 13 (registry value set) and EDR registry monitoring that reports `TargetObject` and `Details`. Windows Event ID 4657 carries `ObjectName` and `NewValue` instead and would need a field mapping this rule does not declare, so it is not a deployment source as written. Pair with the YARA PowerShell-loader rule (which requires a corroborating C2-artifact clause) for higher-confidence composite alerting.
 
 ```yaml
 title: WindowsUpdateManager PowerShell Beacon Registry Run Key Persistence
@@ -727,7 +728,7 @@ logsource:
     product: windows
 detection:
     selection_value_name:
-        TargetObject|contains: '\Software\Microsoft\Windows\CurrentVersion\Run\WindowsUpdateManager'
+        TargetObject|endswith: '\Software\Microsoft\Windows\CurrentVersion\Run\WindowsUpdateManager'
     selection_hive:
         TargetObject|startswith: 'HKU\'
     selection_script:
@@ -848,9 +849,10 @@ level: medium
 
 **Tier:** Hunting
 **Robustness:** 2
-**ATT&CK Coverage:** T1003.001 (LSASS Memory), T1003.002 (SAM)
+**ATT&CK Coverage:** T1003.001 (LSASS Memory)
+**ATT&CK Note:** Security Account Manager (T1003.002) is withdrawn: the report records local SAM hashes in the operator's ledger, not an LSASS process-access event, and this rule tests LSASS access only.
 **Confidence:** MODERATE
-**Rationale:** **Retitled during tiering**: the original title ("NTLM Hash Dump Followed by Cloudflare Tunnel Exfiltration Within 10 Minutes") described a two-stage correlation, but the YAML logic below only ever implemented the first stage (LSASS process-access with credential-dumping-associated `GrantedAccess` masks); the Cloudflare Tunnel egress half was never encoded and would require a separate SIEM temporal join (see Coverage Gaps). The GrantedAccess-mask pattern itself is a well-established LSASS-credential-access signature independent of this campaign's specific infrastructure. *Tier, level and boundary fix 2026-10-11:* the rule ships no source-process filter, and its own false-positive list names AV/EDR sensors and domain controller synchronization as expected hits, so it cannot alert unattended and moves from Detection to Hunting, with `level` from high to medium. The Validation line used to promise that a trusted sensor does not fire because of an Image filter, but no filter exists. The mask test was a substring (`|contains`), which also matched longer values that start with these digits; it is now an exact match on each of the three masks.
+**Rationale:** **Retitled during tiering**: the original title ("NTLM Hash Dump Followed by Cloudflare Tunnel Exfiltration Within 10 Minutes") described a two-stage correlation, but the YAML logic below only ever implemented the first stage (LSASS process-access with credential-dumping-associated `GrantedAccess` masks); the Cloudflare Tunnel egress half was never encoded and would require a separate SIEM temporal join (see Coverage Gaps). The GrantedAccess-mask pattern itself is a well-established LSASS-credential-access signature independent of this campaign's specific infrastructure. *Round 2 fix 2026-10-11:* the description no longer calls this the first stage of an observed sequence and the SAM technique (T1003.002) is not claimed, because the report records captured SAM hashes and no LSASS access event. *Tier, level and boundary fix 2026-10-11:* the rule ships no source-process filter, and its own false-positive list names AV/EDR sensors and domain controller synchronization as expected hits, so it cannot alert unattended and moves from Detection to Hunting, with `level` from high to medium. The Validation line used to promise that a trusted sensor does not fire because of an Image filter, but no filter exists. The mask test was a substring (`|contains`), which also matched longer values that start with these digits; it is now an exact match on each of the three masks.
 **False Positives:** Legitimate AV/EDR processes accessing lsass.exe for telemetry (no source-process filter ships with the rule, so these match until the deployer excludes them by `SourceImage`); domain controller synchronization operations.
 **Blind Spots:** Captures only the LSASS-access stage; does not by itself confirm exfiltration occurred. Credential-dumping tools that request a narrower access mask than the three listed evade this rule.
 **Validation:** Run a credential-dumping tool against `lsass.exe`: if it requests one of the three listed masks the rule must fire. A security sensor that opens `lsass.exe` with one of those masks also fires, since the rule has no source-process filter; exclude your deployed sensors by `SourceImage` before using it for anything beyond hunting.
@@ -864,13 +866,12 @@ description: >-
   Detects a process-access event whose target is lsass.exe and whose GrantedAccess is exactly
   0x1010, 0x1410 or 0x1fffff, masks associated with credential-dumping tooling. The rule has no
   source-process filter, so security agents and other software that open lsass.exe with these
-  masks match too. This is the first stage of a sequence observed in the
-  UTA-2026-012 healthcare-victim compromise, where local SAM NTLM hashes were dumped and then
-  exfiltrated via Cloudflare Tunnel C2 — confirmed by the operator's own credential ledger
-  containing plaintext NTLM hashes from two internal subnets. This rule captures only the
-  LSASS-access stage; the follow-on Cloudflare Tunnel egress requires a separate SIEM temporal
-  join (not expressible in a single non-correlation Sigma selection) — see the companion
-  report's Coverage Gaps.
+  masks match too. The report records plaintext local SAM NTLM hashes from two
+  internal subnets in the UTA-2026-012 operator's credential ledger for the healthcare victim,
+  but it records no LSASS process-access event for that compromise, so whether this access
+  occurred there is NOT CHECKED. The rule tests only LSASS access; a follow-on Cloudflare Tunnel
+  egress would need a separate SIEM temporal join (not expressible in a single
+  non-correlation Sigma selection) — see the companion report's Coverage Gaps.
 references:
     - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
 author: The Hunters Ledger
@@ -878,7 +879,6 @@ date: '2026-05-25'
 tags:
     - attack.credential-access
     - attack.t1003.001
-    - attack.t1003.002
     - detection.emerging-threats
     - stp.3
 logsource:
@@ -925,10 +925,10 @@ alert http $HOME_NET any -> any any (msg:"THL DETECT - A2A C2 Beacon POST to Ope
 #### cloudflared Tunnel Port Egress (UDP 7844 to Any External Host)
 
 **Tier:** Hunting
-**Robustness:** 2
+**Robustness:** 1
 **ATT&CK Coverage:** T1572 (Protocol Tunneling), T1090.004 (Domain Fronting)
 **Confidence:** MODERATE
-**Rationale:** Cloudflare Tunnel's control-plane connects to Cloudflare's edge over UDP/TCP 7844 specifically — Cloudflare's dedicated tunnel port, not general web QUIC (443) — so this is meaningfully narrower than matching all UDP/443 and does not fire on ordinary browsing or Cloudflare WARP. *Wording fix 2026-10-11 (rev 5):* the earlier heading and `msg` said QUIC egress to the Cloudflare edge, but the rule matches any UDP packet from `$HOME_NET` to any `$EXTERNAL_NET` address on destination port 7844 (rate-limited per source): it has no Cloudflare address range and no QUIC check. It is a port-based signal that any Cloudflare Tunnel deployment (legitimate or not), and any other service using UDP 7844, will trigger, so it stays a hunting lead rather than an alert.
+**Rationale:** Cloudflare Tunnel's control-plane connects to Cloudflare's edge over UDP/TCP 7844 specifically — Cloudflare's dedicated tunnel port, not general web QUIC (443) — so this is meaningfully narrower than matching all UDP/443 and does not fire on ordinary browsing or Cloudflare WARP. *Wording fix 2026-10-11 (rev 5):* the earlier heading and `msg` said QUIC egress to the Cloudflare edge, but the rule matches any UDP packet from `$HOME_NET` to any `$EXTERNAL_NET` address on destination port 7844 (rate-limited per source): it has no Cloudflare address range and no QUIC check. It is a port-based signal that any Cloudflare Tunnel deployment that uses UDP 7844 (legitimate or not), and any other service using UDP 7844, will trigger, and a tunnel that uses TCP 7844 instead does not match this rule, so it stays a hunting lead rather than an alert. *Robustness fix 2026-10-11 (round 2):* scored 1, not 2: one destination port is the only anchor.
 **False Positives:** Legitimate Cloudflare Tunnel deployments also use UDP 7844, and so can any other service that uses that destination port.
 **Deployment:** Network flow telemetry / IDS on egress; Zeek conn.log with a UDP/7844 filter. Corroborate with DNS visibility for `*.tralalarkefe.com` and the campaign's Cloudflare quick-tunnel subdomain (both carried in the IOC feed) and/or scope the source to segments where Cloudflare Tunnel is not expected.
 

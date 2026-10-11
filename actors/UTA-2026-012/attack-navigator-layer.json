@@ -1,7 +1,7 @@
 {
   "name": "The Hunter’s Ledger: UTA-2026-012",
   "domain": "enterprise-attack",
-  "description": "ATT&CK techniques mapped by the published reports about UTA-2026-012 on the-hunters-ledger.com (4 report(s), 21 technique(s)). Score is the number of reports about the actor mapping the technique. Profile: https://the-hunters-ledger.com/actors/UTA-2026-012/",
+  "description": "ATT&CK techniques mapped by the published reports about UTA-2026-012 on the-hunters-ledger.com (4 report(s), 20 technique(s)). Score is the number of reports about the actor mapping the technique. Profile: https://the-hunters-ledger.com/actors/UTA-2026-012/",
   "versions": {
     "attack": "19",
     "navigator": "4.9.0",
@@ -13,13 +13,6 @@
       "tactic": "credential-access",
       "score": 1,
       "comment": "LSASS Memory. 1 report(s) about UTA-2026-012, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections. https://the-hunters-ledger.com/actors/UTA-2026-012/",
-      "enabled": true
-    },
-    {
-      "techniqueID": "T1003.002",
-      "tactic": "credential-access",
-      "score": 1,
-      "comment": "Security Account Manager. 1 report(s) about UTA-2026-012, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections. https://the-hunters-ledger.com/actors/UTA-2026-012/",
       "enabled": true
     },
     {

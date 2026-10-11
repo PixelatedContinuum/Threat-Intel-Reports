@@ -437,7 +437,7 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT AdaptixC2 Stock Lis
 #   FP: JA3 hash collisions across unrelated TLS client implementations that happen to share the same library/cipher-suite/extension configuration are a...
 alert tls $HOME_NET any -> any any (msg:"THL DETECT HijackLoader-Penguish-Rugmi AsyncRAT SSL JA3 Fingerprint 07af4aa9e4d215a5ee63f9a0a277fbe3 (RAT C2 Fleet Indicator)"; flow:established,to_server; ja3.hash; content:"07af4aa9e4d215a5ee63f9a0a277fbe3"; endswith; threshold:type limit,track by_src,count 3,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/; classtype:trojan-activity; sid:3500150; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-06;)
 # opendirectory-74-0-42-25-20260316 (orig sid:9001002)
-#   TIER: Detection  |  robustness 3  |  confidence HIGH
+#   TIER: Detection  |  robustness 2  |  confidence HIGH
 #   rate-limited
 #   FP: None known from the evidence; no benign traffic corpus was tested. Any other protocol that opens with the same four bytes (04 00 00 00, a...
 alert tcp $HOME_NET any -> $EXTERNAL_NET [56001,56002,56003] (msg:"THL DETECT MaaS Toolkit PureRAT v4.1.9 Four-Byte Preamble on Ports 56001 to 56003 (C2 Protocol Framing)"; flow:established,to_server; content:"|04 00 00 00|"; depth:4; threshold:type limit,track by_src,count 1,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/; classtype:trojan-activity; sid:3500071; rev:4; metadata:author The_Hunters_Ledger, date 2026-03-17;)
@@ -491,7 +491,7 @@ alert http $HOME_NET any -> any any (msg:"THL HUNT UTA-2026-014 Matrix C2 Discor
 #   FP: None known — the combination of /api/v1/update or /api/v1/interact paths with the X-Agent-ID header is operator-bespoke and has no known...
 alert http $HOME_NET any -> any any (msg:"THL DETECT - A2A C2 Beacon POST to Operator C2 Endpoint with X-Agent-ID Header"; flow:established,to_server; http.method; content:"POST"; http.header_names; content:"X-Agent-ID"; nocase; http.uri; content:"/api/v1/"; pcre:"/\/api\/v1\/(update|interact|telemetry|get_results)/"; reference:url,the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/; classtype:trojan-activity; sid:3500093; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-25;)
 # russian-gemini-credential-mill-213.165.51.115 (orig sid:9000006)
-#   TIER: Hunting  |  robustness 2  |  confidence MODERATE  |  BROAD - triage before alerting
+#   TIER: Hunting  |  robustness 1  |  confidence MODERATE  |  BROAD - triage before alerting
 #   rate-limited
 #   FP: Legitimate Cloudflare Tunnel deployments also use UDP 7844, and so can any other service that uses that destination port.
 alert udp $HOME_NET any -> $EXTERNAL_NET 7844 (msg:"THL HUNT - cloudflared Tunnel Port Egress (UDP 7844 to Any External Host)"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/; classtype:policy-violation; sid:3500096; rev:5; metadata:author The_Hunters_Ledger, date 2026-05-25;)

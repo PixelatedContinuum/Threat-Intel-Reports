@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--6621b13d-b1eb-460b-b1ea-576d3aca1117",
+    "id": "bundle--09736ecc-e800-4ba7-b135-33dcc8498b0d",
     "objects": [
         {
             "type": "identity",
@@ -2290,12 +2290,12 @@
             "id": "indicator--159d320b-1091-589f-b388-69ca7d99e46c",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:16.469448Z",
-            "modified": "2026-10-11T07:05:22.26722Z",
+            "modified": "2026-10-11T07:42:07.441918Z",
             "name": "WebLogic_CVE_2024_21182_OpaqueReference_JNDI",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule WebLogic_CVE_2024_21182_OpaqueReference_JNDI {\n   meta:\n      description = \"Detects Java source or compiled exploitation tooling implementing the CVE-2024-21182 WebLogic JNDI-injection primitive, which reflects an AggregatableOpaqueReference's private referent field to a spoofed MessageDestinationReference and resolves it through the ForeignOpaqueReference lookup path\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/\"\n      date = \"2026-08-17\"\n      family = \"Unknown - bespoke single-operator WebLogic/telecom intrusion toolkit\"\n      campaign = \"WebLogicDeserialization-TelecomHarvester-13.140.145.210\"\n      id = \"33789184-a9c6-5a7a-80d9-0189c0707dcc\"\n   strings:\n      $ref1 = \"AggregatableOpaqueReference\" ascii\n      $ref2 = \"MessageDestinationReference\" ascii\n      $ref3 = \"ForeignOpaqueReference\" ascii\n   condition:\n      filesize < 5MB and\n      all of ($ref1, $ref2, $ref3)\n}",
+            "pattern": "rule WebLogic_CVE_2024_21182_OpaqueReference_JNDI {\n   meta:\n      description = \"Detects Java source or compiled tooling that holds the three class names AggregatableOpaqueReference, MessageDestinationReference and ForeignOpaqueReference together, the classes the report names in the CVE-2024-21182 WebLogic JNDI-injection primitive (the operator's code reflects the first class's referent field to a spoofed MessageDestinationReference and resolves it through the ForeignOpaqueReference lookup path); the rule tests only the three class-name strings, with no reflection call, field name or spoofing\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/\"\n      date = \"2026-08-17\"\n      family = \"Unknown - bespoke single-operator WebLogic/telecom intrusion toolkit\"\n      campaign = \"WebLogicDeserialization-TelecomHarvester-13.140.145.210\"\n      id = \"33789184-a9c6-5a7a-80d9-0189c0707dcc\"\n   strings:\n      $ref1 = \"AggregatableOpaqueReference\" ascii\n      $ref2 = \"MessageDestinationReference\" ascii\n      $ref3 = \"ForeignOpaqueReference\" ascii\n   condition:\n      filesize < 5MB and\n      all of ($ref1, $ref2, $ref3)\n}",
             "pattern_type": "yara",
             "valid_from": "2026-08-18T00:00:00Z",
             "labels": [
@@ -2353,12 +2353,12 @@
             "id": "indicator--7b5a210b-f12b-5dfe-8a12-242f7bc6bbee",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:16.469699Z",
-            "modified": "2026-10-11T07:05:22.267538Z",
+            "modified": "2026-10-11T07:42:07.442241Z",
             "name": "GeoServer_CVE_2024_36401_ValueReference_Exec",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule GeoServer_CVE_2024_36401_ValueReference_Exec {\n   meta:\n      description = \"Detects a script or captured HTTP request implementing the CVE-2024-36401 GeoServer OGC-filter remote-code-execution payload, which passes exec(java.lang.Runtime.getRuntime(),'command') as a valueReference parameter against an unauthenticated ows endpoint\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/\"\n      date = \"2026-08-17\"\n      hash1 = \"dcd739dfe08285c08200be926905155576bedc4e5633b5f02561ec7f80d512f1\"\n      family = \"Unknown - bespoke single-operator WebLogic/telecom intrusion toolkit\"\n      campaign = \"WebLogicDeserialization-TelecomHarvester-13.140.145.210\"\n      id = \"e997f10d-ad79-5abe-bf0b-7bd17a938f25\"\n   strings:\n      $payload = \"exec(java.lang.Runtime.getRuntime(),\" ascii\n      $endpoint = \"valueReference\" ascii\n   condition:\n      filesize < 1MB and\n      all of them\n}",
+            "pattern": "rule GeoServer_CVE_2024_36401_ValueReference_Exec {\n   meta:\n      description = \"Detects a script or captured HTTP request implementing the CVE-2024-36401 GeoServer OGC-filter remote-code-execution payload, which passes exec(java.lang.Runtime.getRuntime(),'command') as a valueReference parameter (the report places it against GeoServer's ows endpoint; the rule tests only the two strings, no endpoint path and no authentication state)\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/\"\n      date = \"2026-08-17\"\n      hash1 = \"dcd739dfe08285c08200be926905155576bedc4e5633b5f02561ec7f80d512f1\"\n      family = \"Unknown - bespoke single-operator WebLogic/telecom intrusion toolkit\"\n      campaign = \"WebLogicDeserialization-TelecomHarvester-13.140.145.210\"\n      id = \"e997f10d-ad79-5abe-bf0b-7bd17a938f25\"\n   strings:\n      $payload = \"exec(java.lang.Runtime.getRuntime(),\" ascii\n      $valueref = \"valueReference\" ascii\n   condition:\n      filesize < 1MB and\n      all of them\n}",
             "pattern_type": "yara",
             "valid_from": "2026-08-18T00:00:00Z",
             "labels": [
@@ -2500,12 +2500,12 @@
             "id": "indicator--2d098228-f9ec-59f2-ae70-0249b1895f83",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:16.4703Z",
-            "modified": "2026-10-11T07:05:22.268225Z",
+            "modified": "2026-10-11T07:42:07.442912Z",
             "name": "PowerShell Remoting Session Establishment Command",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: PowerShell Remoting Session Establishment Command\nid: c838460c-7478-41e4-a9de-ee7d44391023\nstatus: experimental\ndescription: >-\n    Detects PowerShell command-line content establishing a WS-Management\n    remoting session (New-PSSession, Enter-PSSession or Test-WSMan),\n    observed in this campaign as the primary lateral-movement method used\n    from a compromised web application host against an internal target.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/\nauthor: The Hunters Ledger\ndate: 2026-08-17\ntags:\n    - attack.lateral-movement\n    - attack.t1021.006\n    - stp.3\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_image:\n        Image|endswith: '\\powershell.exe'\n    selection_cmd:\n        CommandLine|contains:\n            - 'New-PSSession'\n            - 'Enter-PSSession'\n            - 'Test-WSMan'\n    condition: all of selection_*\nfalsepositives:\n    - Legitimate remote administration via PowerShell remoting, common where Ansible, DSC or SCOM manage the WinRM estate\nlevel: high",
+            "pattern": "title: PowerShell Remoting Session Establishment Command\nid: c838460c-7478-41e4-a9de-ee7d44391023\nstatus: experimental\ndescription: >-\n    Detects powershell.exe command lines that contain New-PSSession,\n    Enter-PSSession or Test-WSMan (the first two open a WS-Management remoting\n    session; Test-WSMan only probes a WinRM listener and opens none, yet it\n    satisfies the selection),\n    observed in this campaign as the primary lateral-movement method used\n    from a compromised web application host against an internal target.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/\nauthor: The Hunters Ledger\ndate: 2026-08-17\ntags:\n    - attack.lateral-movement\n    - attack.t1021.006\n    - stp.3\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_image:\n        Image|endswith: '\\powershell.exe'\n    selection_cmd:\n        CommandLine|contains:\n            - 'New-PSSession'\n            - 'Enter-PSSession'\n            - 'Test-WSMan'\n    condition: all of selection_*\nfalsepositives:\n    - Legitimate remote administration via PowerShell remoting, common where Ansible, DSC or SCOM manage the WinRM estate\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-08-18T00:00:00Z",
             "labels": [

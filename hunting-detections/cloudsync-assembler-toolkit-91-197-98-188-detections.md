@@ -20,7 +20,7 @@ hide: true
 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
-| YARA | 6 | 1 | T1046, T1055, T1620, T1027, T1140, T1136.002, T1098, T1105, T1091, T1071, T1571, T1090.003, T1036.005 | 14 |
+| YARA | 5 | 2 | T1046, T1055, T1620, T1027, T1140, T1136.002, T1098, T1105, T1091, T1071, T1571, T1090.003, T1036.005 | 14 |
 | Sigma | 17 | 1 | T1136.001, T1543.003, T1090.003, T1036.005, T1127.001, T1055, T1685, T1053.005, T1070.004, T1136.002, T1098.007, T1564.002, T1505.003, T1059.001, T1219.002, T1090, T1547.001 | 3 |
 | Suricata | 2 | 2 | T1071, T1571, T1071.001 | 2 |
 
@@ -58,10 +58,10 @@ Rules covering behavior common to more than one component are labeled at the cam
 **Robustness:** 3
 **ATT&CK Coverage:** T1046 (Network Service Discovery)
 **Confidence:** HIGH
-**False Positives:** None known, this exact combination of panel API route and CIDR-scanner placeholder text is unique to the later CloudSync build generation
+**False Positives:** None known. The five strings are the netscan panel's API route and HTML markup, but the condition is `3 of them`, so three HTML markers satisfy it with neither the API route nor the CIDR placeholder text; the strings are not known to occur together outside the later CloudSync build generation, which was not measured against a goodware corpus
 **Blind Spots:** Misses the earlier CloudSync build generation entirely (`bk.exe`/`svhost4.exe`), which does not carry a network-scanner panel tab at all, see the companion C2-protocol rule below for coverage of that generation
 **Validation:** Scan the binary directly; a genuine hit requires 3 of the 5 embedded panel strings to be present anywhere in the PE; the rule reads the whole file and does not test that they sit in the resource section. A clean Windows or third-party remote-access tool installer must not fire.
-**Deployment:** Endpoint AV/EDR file scan, memory scanning of the implant process, scanning of any recovered staging directory
+**Deployment:** Endpoint AV/EDR file scan, scanning of a saved dump of the implant process, scanning of any recovered staging directory. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
 /*
@@ -98,46 +98,6 @@ rule RAT_CloudSync_TorPanel_NetscanBuild {
 }
 ```
 
-#### CloudSync C2 Protocol: Dual Build Coverage
-
-**Tier:** Detection
-**Robustness:** 3
-**ATT&CK Coverage:** T1071 (Application Layer Protocol), T1571 (Non-Standard Port)
-**Confidence:** HIGH
-**False Positives:** None known, the combination of two or more of these six strings is not expected in unrelated software; the AUTO UPDATE banner and bracketed terminators are CloudSync-specific
-**Blind Spots:** A future CloudSync build that changes both the terminator tokens and every field name simultaneously would evade this rule; it does not detect the protocol on the wire (see the companion Suricata rules for network-layer coverage of the same protocol)
-**Validation:** Confirm on both `svhost4.exe` (uses `[C2_END]`) and `bk.exe` (uses `[END]`) that at least 2 of the 6 strings are present. A benign network utility or Tor client alone must not fire.
-**Deployment:** Endpoint AV/EDR file scan, memory scanning of the dropped implant process
-
-```yara
-rule RAT_CloudSync_C2Protocol_DualBuild {
-   meta:
-      description = "Detects CloudSync's cleartext TCP C2 registration/heartbeat protocol strings across both observed build generations, which differ in message terminator ([C2_END] vs [END]) and registration field names"
-      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
-      author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/"
-      date = "2026-08-03"
-      hash1 = "9744c12a06b4562e175d4aeb7b8fd5c1e1877ac30222af8243eeaae16df324b0"
-      family = "CloudSync"
-      malware_type = "RAT"
-      campaign = "CloudSync-Assembler-Toolkit-91.197.98.188"
-      id = "df292c17-07ad-5292-9f33-206ab7582bdd"
-   strings:
-      $autoupd = "=== AUTO UPDATE ===" ascii
-      $heartbeat = "[Shares]" ascii
-      $term1 = "[C2_END]" ascii
-      $term2 = "[END]" ascii
-      $field1 = "AnyDesk Pass:" ascii
-      $field2 = "AD Pwd:" ascii
-   condition:
-      uint16(0) == 0x5A4D and
-      filesize < 60MB and
-      2 of them
-}
-```
-
-**SvchostPayload / .NET RAT Chain**
-
 #### Paralell Injector and SvchostPayload Type Names
 
 **Tier:** Detection
@@ -145,9 +105,9 @@ rule RAT_CloudSync_C2Protocol_DualBuild {
 **ATT&CK Coverage:** T1055 (Process Injection), T1620 (Reflective Code Loading)
 **Confidence:** HIGH
 **False Positives:** None known, the debug PDB path fragment is a build-specific artifact, and the obfuscated member names (`VoidNexus`, `ShadowWeave`, `CrystalCore`, `UmbraGate`) are not generic .NET or Crypto Obfuscator output
-**Blind Spots:** A rebuild that strips debug information or renames the obfuscated members would defeat this rule; it applies most directly to the on-disk `cls.exe` sibling build, the in-memory `Crystal-Monk.dll`/`SvchostPayload` assemblies require a memory-resident scan to reach, since they never touch disk on a victim
+**Blind Spots:** A rebuild that strips debug information or renames the obfuscated members would defeat this rule; it applies most directly to the on-disk `cls.exe` sibling build, the in-memory `Crystal-Monk.dll`/`SvchostPayload` assemblies never touch disk on a victim and are reached only through a saved dump written out as a file, because a live process-memory scan cannot satisfy the `filesize` test
 **Validation:** Confirm the rule fires on `cls.exe`. A generic Crypto-Obfuscator-protected .NET binary unrelated to this toolkit must not fire, since the match requires the PDB fragment or 2 of the 7 distinctive member-name strings together.
-**Deployment:** Endpoint AV/EDR file scan, memory scanning of `MSBuild.exe` process space during or after a suspected injection event
+**Deployment:** Endpoint AV/EDR file scan, scanning of a saved dump of `MSBuild.exe` process space taken during or after a suspected injection event. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
 rule RAT_SvchostPayload_ParalellInjector_TypeNames {
@@ -221,7 +181,7 @@ rule Loader_SvchostJS_CustomAlphabet {
 **Robustness:** 3
 **ATT&CK Coverage:** T1136.002 (Create Account: Domain Account), T1098 (Account Manipulation)
 **Confidence:** HIGH
-**False Positives:** None known, the fixed console-banner sequence and the combination of `New-ADUser`/`Guest$` with German-localized privileged-group names is not expected in legitimate deployment tooling
+**False Positives:** None known, not measured against a goodware corpus. The condition is `3 of them` over ten strings and enforces neither the banner sequence nor the AD/German-group combination: three console banners fire, and so do `New-ADUser`, `Guest$` and `Administratoren` with no banner at all
 **Blind Spots:** A recompiled orchestrator with reworded banners or a different target-locale group-name set would evade this rule; it does not fire on the AD/web-shell/AnyDesk actions themselves, see the companion Sigma rules for that behavioral coverage
 **Validation:** Confirm the rule fires on `ab.exe`. A generic PowerShell AD-administration script that references `New-ADUser` alone, without the console banners or German group names, must not fire (the rule requires 3 of 10 strings together).
 **Deployment:** Endpoint AV/EDR file scan, download/attachment gateway scanning
@@ -265,9 +225,9 @@ rule Loader_ABExe_DeploymentOrchestrator_Banners {
 **Robustness:** 2
 **ATT&CK Coverage:** T1105 (Ingress Tool Transfer), T1091 (Replication Through Removable Media)
 **Confidence:** HIGH
-**False Positives:** None known in combination, any single one of the five strings could plausibly appear in unrelated scripts, but 2 or more together inside a file under 5 KB is not an expected legitimate pattern
+**False Positives:** Any single one of the five strings could plausibly appear in unrelated scripts, and any two of them satisfy the condition, including generic pairs such as `DefaultCredentials` with `SystemUpdate`; two or more together inside a file under 5 KB is not a pattern known from legitimate software, but its specificity was not measured
 **Blind Spots:** A trivially reworded stub (renamed Run value, restructured WMIC query) would evade this rule; it does not require the AMSI-bypass string, which is present but not solely relied upon given the type-name reversal noted in the companion Sigma rule
-**Validation:** Confirm the rule fires on `ct.bat`. A benign proxy-aware PowerShell download script that does not also reference USB enumeration or autorun.inf must not fire on its own.
+**Validation:** Confirm the rule fires on `ct.bat`. The condition is `2 of them`, so `DefaultCredentials` plus `SystemUpdate` (or `amsiInitFailed`) fires with no USB enumeration or autorun string; a benign proxy-aware download script that holds only `DefaultCredentials` and none of the other four must not fire.
 **Deployment:** Email/web gateway attachment scanning, endpoint AV/EDR file scan, USB-drop analysis
 
 ```yara
@@ -297,6 +257,46 @@ rule Loader_CtBat_ProxyAwareUSBWormStub {
 
 ### Hunting Rules
 
+#### CloudSync C2 Protocol: Dual Build Coverage
+
+**Tier:** Hunting
+**Robustness:** 2
+**ATT&CK Coverage:** T1071 (Application Layer Protocol), T1571 (Non-Standard Port)
+**Confidence:** MODERATE
+**False Positives:** The condition is `2 of them` over six strings, and two of them are generic: `[Shares]` and `[END]` together fire with no CloudSync-specific marker, so any PE under 60 MB that holds both matches. The `=== AUTO UPDATE ===` banner, the `[C2_END]` terminator and the two registration field names are the CloudSync-specific strings, and none of them is required. For that reason the rule is Hunting, Robustness 2, not Detection (it was Detection, Robustness 3); no logic change was made because no sample is on the workstation to confirm which two strings the earlier `bk.exe` build holds
+**Blind Spots:** A future CloudSync build that changes both the terminator tokens and every field name simultaneously would evade this rule; it does not detect the protocol on the wire (see the companion Suricata rules for network-layer coverage of the same protocol)
+**Validation:** Confirm on both `svhost4.exe` (uses `[C2_END]`) and `bk.exe` (uses `[END]`) that at least 2 of the 6 strings are present. A benign network utility or Tor client alone must not fire.
+**Deployment:** Endpoint AV/EDR file scan, scanning of a saved dump of the dropped implant process. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
+
+```yara
+rule RAT_CloudSync_C2Protocol_DualBuild {
+   meta:
+      description = "Detects CloudSync's cleartext TCP C2 registration/heartbeat protocol strings across both observed build generations, which differ in message terminator ([C2_END] vs [END]) and registration field names"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
+      author = "The Hunters Ledger"
+      reference = "https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/"
+      date = "2026-08-03"
+      hash1 = "9744c12a06b4562e175d4aeb7b8fd5c1e1877ac30222af8243eeaae16df324b0"
+      family = "CloudSync"
+      malware_type = "RAT"
+      campaign = "CloudSync-Assembler-Toolkit-91.197.98.188"
+      id = "df292c17-07ad-5292-9f33-206ab7582bdd"
+   strings:
+      $autoupd = "=== AUTO UPDATE ===" ascii
+      $heartbeat = "[Shares]" ascii
+      $term1 = "[C2_END]" ascii
+      $term2 = "[END]" ascii
+      $field1 = "AnyDesk Pass:" ascii
+      $field2 = "AD Pwd:" ascii
+   condition:
+      uint16(0) == 0x5A4D and
+      filesize < 60MB and
+      2 of them
+}
+```
+
+**SvchostPayload / .NET RAT Chain**
+
 **CloudSync**
 
 #### CloudSync Public-Profile Working Directory Artifacts
@@ -305,7 +305,7 @@ rule Loader_CtBat_ProxyAwareUSBWormStub {
 **Robustness:** 2
 **ATT&CK Coverage:** T1090.003 (Multi-hop Proxy), T1036.005 (Match Legitimate Name or Location)
 **Confidence:** MODERATE
-**False Positives:** The individual strings (`config.json`, `first_run.flag`, generic path fragments) are common enough in isolation that this rule is scoped to hunting rather than alerting; review each hit rather than auto-blocking
+**False Positives:** The individual strings (`hidden_service`, `taskhostw.exe`, `first_run.flag`, the `C:\Users\Public` path fragments) are common enough in isolation that this rule is scoped to hunting rather than alerting; review each hit rather than auto-blocking
 **Blind Spots:** Broader and lower-precision than the dedicated panel and protocol Detection rules above by design, intended to catch variants that changed the panel markup or protocol strings but kept the working-directory and mutex conventions
 **Validation:** Confirm the rule fires on `bk.exe`. Run against a sample of benign software installers to confirm the 3-of-7 threshold does not fire on unrelated Windows utilities that happen to reference `C:\Users\Public\`.
 **Deployment:** Threat hunting sweep across endpoint file inventories; not recommended for auto-block

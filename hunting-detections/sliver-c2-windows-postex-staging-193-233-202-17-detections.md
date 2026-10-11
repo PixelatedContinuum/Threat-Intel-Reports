@@ -20,7 +20,7 @@ hide: true
 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
-| YARA | 3 | 1 | T1071.001, T1102.001, T1547.001 | 0 (already in IOC feed) |
+| YARA | 2 | 2 | T1071.001, T1102.001, T1547.001 | 0 (already in IOC feed) |
 | Sigma | 7 | 5 | T1053.005, T1003.001, T1003.002, T1003.004, T1112, T1021.001, T1548.002, T1098, T1136.002, T1547.001, T1036.005, T1105, T1685, T1059.007, T1620, T1027 | 0 (already in IOC feed) |
 | Suricata | 2 | 0 | T1071.001 | 0 (already in IOC feed) |
 
@@ -42,52 +42,15 @@ This campaign runs two hard-linked strands: a **Sliver** beacon plus supporting 
 
 **Sliver**
 
-#### Sliver Beacon Canonical Import Path In Process Memory
-
-**Tier:** Detection
-**Robustness:** 3
-**ATT&CK Coverage:** T1071.001 (Web Protocols), T1102.001 (Dead Drop Resolver, campaign-level)
-**Confidence:** HIGH
-**False Positives:** An authorized red-team or penetration-testing engagement running an unmodified, unobfuscated Sliver implant against the same host during a live memory scan. No legitimate production software carries this string.
-**Blind Spots:** Symbol obfuscation strips this path from the on-disk binary entirely (confirmed on the analyzed sample), so this rule only fires against a live or dumped process memory image, never a file scan of the packed executable. Misses any Sliver build that further obfuscates or removes this specific protobuf package path.
-**Validation:** Trigger by scanning the memory of a running, unmodified Sliver beacon process (any build, this campaign's operator-specific artifacts are not required). A benign case that must NOT fire: scanning memory of `svchost.exe`, `explorer.exe`, or any other unrelated Windows process on a clean host.
-**Deployment:** Live process memory scanning, memory-forensics triage of a suspected-compromised host, EDR memory-scan modules.
-
-```yara
-/*
-   Yara Rule Set
-   Identifier: Sliver-C2-Windows-PostEx-Staging-193.233.202.17
-   Author: The Hunters Ledger
-   Source: https://the-hunters-ledger.com/
-   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/
-*/
-
-rule Sliver_Beacon_Memory_Import_Path {
-   meta:
-      description = "Detects the canonical Sliver C2 protobuf import path resident in process memory. Symbol obfuscation removes this string from the on-disk binary, so it recovers Sliver only from a live or dumped memory image, not a file scan"
-      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
-      author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/"
-      date = "2026-09-06"
-      hash1 = "bd61c2880920bbfb86c12df439dd1ca0258a10e532433698fd029aef2a5b33f2"
-      family = "Sliver"
-      id = "075c07ad-7a6c-5b72-9a9c-97e80728ad79"
-   strings:
-      $s1 = "github.com/bishopfox/sliver/protobuf/sliverpb" ascii
-   condition:
-      $s1
-}
-```
-
 #### Sliver Operator Build Artifacts, 193.233.202.17 Campaign
 
 **Tier:** Detection
 **Robustness:** 2
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
 **Confidence:** HIGH
-**False Positives:** None known for the `/tmp/` operator source paths, which are not standard Go toolchain output. The `Chrome/108.0.6602.492` string alone is a build-profile constant that could theoretically be copy-pasted into an unrelated tool, so the rule requires two independent strings before it fires.
-**Blind Spots:** Misses a rebuild where the operator changes both the source directory convention and the hardcoded User-Agent. Does not fire on the Sliver beacon's own shellcode blob (`slv_beacon_sc.bin`), which yielded nothing to static string analysis.
-**Validation:** Trigger by scanning any of the operator's numbered per-target Go builds (e.g. `da_shell_39.exe`, `ws37.exe`) or `svchost_update.exe`. A benign case that must NOT fire: a clean Windows PE, or a legitimately compiled Go binary that happens to embed a real, internally consistent Chrome User-Agent string.
+**False Positives:** None known for the `/tmp/` operator source paths, which are not standard Go toolchain output, except that `/tmp/payloads/` is a generic directory name that is not campaign-exclusive, so two generic `/tmp/` strings from unrelated tooling can satisfy the condition. The `Chrome/108.0.6602.492` string alone is a build-profile constant that could theoretically be copy-pasted into an unrelated tool, so the rule requires two independent strings before it fires.
+**Blind Spots:** Misses any build that holds fewer than two of the six strings: changing the source-directory convention so that only the User-Agent remains already misses, and so does changing the User-Agent while leaving only one path. Does not fire on the Sliver beacon's own shellcode blob (`slv_beacon_sc.bin`), which yielded nothing to static string analysis.
+**Validation:** A build matches only if it holds two of the six strings. The report describes small reverse shells with individual `/tmp/` paths and a separate beacon with the User-Agent, so which of the operator's named builds (e.g. `da_shell_39.exe`, `ws37.exe`, `svchost_update.exe`) hold two anchors is not established, and sample recall is NOT CHECKED. A benign case that must NOT fire: a clean Windows PE, or a legitimately compiled Go binary that happens to embed a real, internally consistent Chrome User-Agent string.
 **Deployment:** Endpoint file scan, static triage of samples pulled from staging infrastructure.
 
 ```yara
@@ -101,7 +64,7 @@ rule Sliver_Beacon_Memory_Import_Path {
 
 rule Sliver_Operator_Build_Artifacts_193_233_202_17 {
    meta:
-      description = "Detects Go binaries carrying this operator's /tmp/ source-path convention and/or the internally impossible Chrome/108.0.6602.492 User-Agent hardcoded into the beacon build profile"
+      description = "Detects PE files (MZ header, under 25MB; no Go marker is tested) that hold at least two of six strings: five of this operator's /tmp/ source-path strings and the internally impossible Chrome/108.0.6602.492 User-Agent hardcoded into the beacon build profile. The User-Agent alone, or one path alone, does not fire"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/"
@@ -126,13 +89,13 @@ rule Sliver_Operator_Build_Artifacts_193_233_202_17 {
 #### EtherRAT-class Node.js Bot Configuration Constants
 
 **Tier:** Detection
-**Robustness:** 3
+**Robustness:** 2
 **ATT&CK Coverage:** T1102.001 (Dead Drop Resolver), T1071.001 (Web Protocols)
 **Confidence:** HIGH
-**False Positives:** None known. The Ethereum contract address, storage key, and ABI selector are cryptographic constants specific to this operator's deployed resolver; the build id is a UUID; none of these values occur in unrelated software by chance.
-**Blind Spots:** Requires the decrypted or deobfuscated bot configuration to be present in the scanned content; will not fire against the still-encrypted MSI payload before extraction. A future build using a different resolver contract (a genuine redeploy, not merely a C2 rotation) would need a new rule.
+**False Positives:** None known. The condition needs two of the seven strings and at least one of the four resolver constants (contract address, storage key, ABI selector, build id), so the header, the identity-file name and the Run-key string alone no longer fire. The contract address, storage key and build id are specific to this operator's deployed resolver; the selector `0x7d434425` is a short value that another contract or a write-up can contain, so the selector plus `.node_bot_id` would fire. Not goodware-validated, and scored Robustness 2 because the configuration constants are a mutable family combination.
+**Blind Spots:** Requires at least one resolver constant and a second configuration string to be present in the scanned content, so a decrypted or deobfuscated configuration is needed; will not fire against the still-encrypted MSI payload before extraction. A future build using a different resolver contract (a genuine redeploy, not merely a C2 rotation) would need a new rule.
 **Validation:** Trigger by scanning the decrypted Node.js bot stage 3 artifact or its extracted configuration. A benign case that must NOT fire: any unrelated Node.js application, including ones that legitimately call public Ethereum RPC endpoints.
-**Deployment:** Endpoint file scan, memory scan of a running `node.exe` process matching the persistence pattern below.
+**Deployment:** Endpoint file scan, of files or saved dumps. The condition tests `filesize`, which is undefined in a libyara live process-memory scan, so the rule matches files and saved dumps only.
 
 ```yara
 /*
@@ -162,11 +125,51 @@ rule EtherRAT_NodeJS_Bot_Config_TheGentlemen {
       $botid_file = ".node_bot_id" ascii
       $runkey = "conhost --headless" ascii
    condition:
-      filesize < 5MB and 2 of them
+      filesize < 5MB and 2 of them and
+      1 of ($contract, $storage_key, $selector, $build_id)
 }
 ```
 
 ### Hunting Rules
+
+**Sliver**
+
+#### Sliver Canonical Protobuf Import Path String (Seen in Process Memory of the Analyzed Build)
+
+**Tier:** Hunting
+**Robustness:** 1
+**ATT&CK Coverage:** T1071.001 (Web Protocols), T1102.001 (Dead Drop Resolver, campaign-level)
+**Confidence:** MODERATE
+**False Positives:** Anything that holds the string, in a file or a memory image: an unmodified (unobfuscated) Sliver implant or server, an authorized red-team engagement, security tooling and signature sets that carry Sliver indicators, repositories that vendor the Sliver protobuf definitions, and write-ups such as this one. No legitimate production software is known to carry it as part of its own function, but that was not measured against a goodware corpus. One literal and no size or format test make this a content lead, not an alert (Robustness 1).
+**Blind Spots:** In the analyzed, symbol-obfuscated build the path is absent from the on-disk binary (confirmed on that sample) and present in the running process, so against that build the rule matches a process-memory image or dump and not the packed file. The rule itself cannot tell memory from file input: an unobfuscated build carries the path on disk and matches a file scan too. Only the one analyzed sample was observed, so memory coverage of other builds is not shown. Misses any build that obfuscates or removes this specific protobuf package path in memory as well.
+**Validation:** Trigger by scanning the memory image or a dump of the analyzed, obfuscated beacon process; the string should be found (replay against the sample is NOT CHECKED, and other builds are not tested). A benign case that must NOT fire: scanning memory of `svchost.exe`, `explorer.exe`, or any other unrelated Windows process on a clean host. An unobfuscated Sliver binary, or any document that quotes the path, WILL fire.
+**Deployment:** Live process memory scanning, memory-forensics triage of a suspected-compromised host, EDR memory-scan modules (the condition has no `filesize` test, so it can match a live process); file scans match unobfuscated builds and copies of the string.
+
+```yara
+/*
+   Yara Rule Set
+   Identifier: Sliver-C2-Windows-PostEx-Staging-193.233.202.17
+   Author: The Hunters Ledger
+   Source: https://the-hunters-ledger.com/
+   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/
+*/
+
+rule Sliver_Beacon_Memory_Import_Path {
+   meta:
+      description = "Detects the canonical Sliver C2 protobuf import path as a string in whatever is scanned. In the analyzed build, symbol obfuscation removed it from the on-disk binary while it was present in process memory; the rule cannot tell memory from file input and also matches unobfuscated builds, signature sets and write-ups"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
+      author = "The Hunters Ledger"
+      reference = "https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/"
+      date = "2026-09-06"
+      hash1 = "bd61c2880920bbfb86c12df439dd1ca0258a10e532433698fd029aef2a5b33f2"
+      family = "Sliver"
+      id = "075c07ad-7a6c-5b72-9a9c-97e80728ad79"
+   strings:
+      $s1 = "github.com/bishopfox/sliver/protobuf/sliverpb" ascii
+   condition:
+      $s1
+}
+```
 
 **Operator scripts and deployment**
 
@@ -176,8 +179,8 @@ rule EtherRAT_NodeJS_Bot_Config_TheGentlemen {
 **Robustness:** 2
 **ATT&CK Coverage:** T1136.002 (Domain Account), T1098 (Account Manipulation), T1003.002 (Security Account Manager)
 **Confidence:** MODERATE
-**False Positives:** These are operator-authored success markers in plaintext PowerShell, not a compiled binary's internal constants, so a copy of this exact toolkit reused by a different operator, or a leaked/shared script, would also match. Tiered Hunting rather than Detection for that reason, even though each marker is individually distinctive and not generic.
-**Blind Spots:** Misses any rebuild of the deployment scripts that renames these markers. Does not fire on the compiled implants, only on the PowerShell/batch deployment layer.
+**False Positives:** These are operator-authored success markers in plaintext PowerShell, not a compiled binary's internal constants, so a copy of this exact toolkit reused by a different operator, or a leaked/shared script, would also match. Tiered Hunting rather than Detection for that reason, even though the markers are operator-authored plaintext; `DUMP_OK:` is a short echo-style token that other scripts can print, so each marker is a content lead and not a proven operator signature. The condition is `1 of` the three markers.
+**Blind Spots:** Misses any rebuild of the deployment scripts that renames these markers. The report records the markers in the PowerShell/batch deployment layer; the rule tests no file type, so any file under 200 KB that holds a marker matches, and the compiled implants are not matched unless they embed a marker. The corporate-proxy bypass call is no longer covered.
 **Validation:** Trigger by scanning `adduser.ps1`-class account-creation scripts or the LSASS/hive-dump scripts recovered from this campaign's staging directory. A benign case that must NOT fire: unrelated Active Directory administration scripts that do not echo these specific literal markers.
 **Deployment:** Endpoint and file-share scanning for staged or dropped PowerShell/batch scripts; useful as a triage signal on any host serving similar staging content.
 
@@ -192,7 +195,7 @@ rule EtherRAT_NodeJS_Bot_Config_TheGentlemen {
 
 rule Operator_AD_Deployment_Script_Markers_TheGentlemen {
    meta:
-      description = "Detects PowerShell/batch deployment scripts carrying this operator's plaintext success markers for domain-account creation, Domain Admins group addition, LSASS dumping, or the explicit corporate-proxy bypass used before beacon delivery"
+      description = "Detects files (no script type, extension or header is tested) carrying one of this operator's plaintext success markers for domain-account creation, Domain Admins group addition or LSASS dumping. The generic .NET proxy-bypass call GlobalProxySelection.GetEmptyWebProxy() was removed as a standalone marker because ordinary administration scripts contain it"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/"
@@ -204,7 +207,6 @@ rule Operator_AD_Deployment_Script_Markers_TheGentlemen {
       $m1 = "USER_CREATED_OK" ascii fullword
       $m2 = "ADDED_TO_DA_OK" ascii fullword
       $m3 = "DUMP_OK:" ascii
-      $m4 = "GlobalProxySelection.GetEmptyWebProxy()" ascii
    condition:
       filesize < 200KB and 1 of them
 }

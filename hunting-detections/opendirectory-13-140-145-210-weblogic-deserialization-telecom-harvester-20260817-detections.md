@@ -102,14 +102,14 @@ rule WSMA_CVE_2023_20198_DoubleEncode_Exfil {
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application)
 **Confidence:** HIGH
 **False Positives:** None known outside WebLogic/JNDI internals. The three class-name strings co-occurring is specific to the CVE-2024-21182 OpaqueReference exploitation chain, not general WebLogic administration code
-**Blind Spots:** Misses variants that reach the same primitive through different class names, or that exploit the underlying JNDI weakness purely over the T3/IIOP wire protocol without ever appearing as Java source or bytecode
+**Blind Spots:** The three class names are tested as strings only, so WebLogic internals, advisories and write-ups that name all three also match. Misses variants that reach the same primitive through different class names, or that exploit the underlying JNDI weakness purely over the T3/IIOP wire protocol without ever appearing as Java source or bytecode
 **Validation:** Scan the operator's Java source (any of the seven byte-identical copies of the reflection block); a legitimate WebLogic JNDI administration utility must NOT fire
 **Deployment:** Source-code and bytecode scanning of recovered operator tooling, static-analysis pipelines ingesting suspected exploit code
 
 ```yara
 rule WebLogic_CVE_2024_21182_OpaqueReference_JNDI {
    meta:
-      description = "Detects Java source or compiled exploitation tooling implementing the CVE-2024-21182 WebLogic JNDI-injection primitive, which reflects an AggregatableOpaqueReference's private referent field to a spoofed MessageDestinationReference and resolves it through the ForeignOpaqueReference lookup path"
+      description = "Detects Java source or compiled tooling that holds the three class names AggregatableOpaqueReference, MessageDestinationReference and ForeignOpaqueReference together, the classes the report names in the CVE-2024-21182 WebLogic JNDI-injection primitive (the operator's code reflects the first class's referent field to a spoofed MessageDestinationReference and resolves it through the ForeignOpaqueReference lookup path); the rule tests only the three class-name strings, with no reflection call, field name or spoofing"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/"
@@ -208,7 +208,7 @@ rule Webshell_PHP_XCMD_Header_Dispatcher {
 **Robustness:** 3
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application)
 **Confidence:** HIGH
-**False Positives:** None known. Legitimate GeoServer OGC-filter requests do not construct a `valueReference` parameter that literally invokes `Runtime.getRuntime()` via `exec()`
+**False Positives:** None known from legitimate GeoServer traffic: OGC-filter requests do not construct a `valueReference` parameter that literally invokes `Runtime.getRuntime()` via `exec()`. The rule reads file or captured-request content, so a proof-of-concept write-up, advisory or scanner template that quotes the payload also matches
 **Blind Spots:** Misses variants of the CVE-2024-36401 payload that use a different Java reflection or execution primitive (for example `ProcessBuilder` instead of `Runtime.exec`), or that obfuscate the payload string
 **Validation:** Scan a captured exploitation script or logged request body containing the literal `exec(java.lang.Runtime.getRuntime(),` payload; a benign OGC filter request using `valueReference` for an unrelated property lookup must NOT fire
 **Deployment:** File and log scanning, WAF/API-gateway content inspection
@@ -216,7 +216,7 @@ rule Webshell_PHP_XCMD_Header_Dispatcher {
 ```yara
 rule GeoServer_CVE_2024_36401_ValueReference_Exec {
    meta:
-      description = "Detects a script or captured HTTP request implementing the CVE-2024-36401 GeoServer OGC-filter remote-code-execution payload, which passes exec(java.lang.Runtime.getRuntime(),'command') as a valueReference parameter against an unauthenticated ows endpoint"
+      description = "Detects a script or captured HTTP request implementing the CVE-2024-36401 GeoServer OGC-filter remote-code-execution payload, which passes exec(java.lang.Runtime.getRuntime(),'command') as a valueReference parameter (the report places it against GeoServer's ows endpoint; the rule tests only the two strings, no endpoint path and no authentication state)"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/"
@@ -227,7 +227,7 @@ rule GeoServer_CVE_2024_36401_ValueReference_Exec {
       id = "e997f10d-ad79-5abe-bf0b-7bd17a938f25"
    strings:
       $payload = "exec(java.lang.Runtime.getRuntime()," ascii
-      $endpoint = "valueReference" ascii
+      $valueref = "valueReference" ascii
    condition:
       filesize < 1MB and
       all of them
@@ -530,8 +530,10 @@ title: PowerShell Remoting Session Establishment Command
 id: c838460c-7478-41e4-a9de-ee7d44391023
 status: experimental
 description: >-
-    Detects PowerShell command-line content establishing a WS-Management
-    remoting session (New-PSSession, Enter-PSSession or Test-WSMan),
+    Detects powershell.exe command lines that contain New-PSSession,
+    Enter-PSSession or Test-WSMan (the first two open a WS-Management remoting
+    session; Test-WSMan only probes a WinRM listener and opens none, yet it
+    satisfies the selection),
     observed in this campaign as the primary lateral-movement method used
     from a compromised web application host against an internal target.
 references:
@@ -616,7 +618,7 @@ level: high
 **False Positives:** Legitimate account provisioning against `/etc/passwd` via `systemd-sysusers`, `useradd`, or `chfn` is excluded above (`filter_system_account_tools`); this closed 4 of 4 lifetime alerts, all reproduced legitimate provisioning. A package-manager transaction that patches `/usr/bin/su` by updating `coreutils` is NOT filtered and should still be correlated and excluded before alerting.
 **Blind Spots:** Misses privilege escalation that creates a new uid-0 account elsewhere in `/etc/passwd` rather than overwriting line 1, or that patches a different SUID binary instead of `/usr/bin/su`. `filter_system_account_tools` also recognizes the invoking tool by binary path, not whether a package manager actually triggered it: an attacker who runs the genuine `useradd`, `chfn`, or `systemd-sysusers` binary directly against `/etc/passwd`, with no package transaction involved at all, is now silently excluded here too. That gap is exactly what the companion process_creation rule below targets, by watching argument shapes and process ancestry rather than tool identity.
 **Validation:** Overwrite `/usr/bin/su` directly, or touch `/etc/passwd` from a process whose image path does not end in `/systemd-sysusers`, `/useradd`, or `/chfn`; both must fire. Run `systemd-sysusers`, `useradd`, or `chfn` against `/etc/passwd` (or trigger the pacman `20-systemd-sysusers.hook` or a dpkg `adduser --system` post-install path) and confirm it does NOT fire, while a parallel `/usr/bin/su` overwrite in the same test still fires, confirming the filter is scoped to the `/etc/passwd` arm only.
-**Deployment:** Linux EDR / Sysmon for Linux / auditd, all hosts, prioritized on any host exposed to a page-cache-write kernel exploit. Deploy alongside the companion process_creation rule below, which restores the direct-invocation coverage this rule's package-tool exclusion gives up.
+**Deployment:** Linux EDR / Sysmon for Linux file events (the measured deployment used Elastic Endpoint file events), all hosts, prioritized on any host exposed to a page-cache-write kernel exploit. Raw auditd is not a source as written: it splits the path (PATH record) from the executable (SYSCALL record), and this rule needs `TargetFilename` and `Image` in one event, which needs a normalisation pipeline the rule does not declare. Deploy alongside the companion process_creation rule below, which restores the direct-invocation coverage this rule's package-tool exclusion gives up.
 
 *Fixed 2026-09-02 (measured on `logs-endpoint.events.file-*` over the full 55-day retained window).* The rule's original title claimed detection "outside a package transaction", which the query never implemented: `selection` matched any write to `/etc/passwd` or `/usr/bin/su` with no correlation to package-manager activity at all, so every legitimate account-provisioning write also alerted. Measured lifetime: 4 of 4 alerts were legitimate provisioning, reproduced independently on two unrelated package ecosystems, pacman's `20-systemd-sysusers.hook` on one host and dpkg's `adduser --system` (invoking `useradd` and `chfn`) on another. A genuine package-transaction correlation is not achievable with this telemetry: Elastic Endpoint file events carry no `process.parent.name` or `process.parent.executable`, only an opaque `process.parent.entity_id`, and the cross-index join needed to resolve the invoking process returns zero hits on one host and only a generic `perl` interpreter on the other, neither of which identifies a package transaction. `filter_system_account_tools` therefore excludes by invoking-tool identity instead, scoped to `/etc/passwd` only so `/usr/bin/su` keeps full, unfiltered coverage. Measured 4 to 0, with a residual check confirming zero other `/etc/passwd` or `/usr/bin/su` events in the 55-day corpus. The coverage this costs, an attacker running the genuine account tools directly with no package transaction involved, is accepted deliberately and mitigated by the companion rule below (`ea34e2ee-aedb-4ead-a572-2fb6531e41a2`).
 

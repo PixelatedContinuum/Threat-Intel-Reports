@@ -72,6 +72,13 @@
       "enabled": true
     },
     {
+      "techniqueID": "T1102",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Web Service. 1 report(s) about UTA-2026-014, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections. https://the-hunters-ledger.com/actors/UTA-2026-014/",
+      "enabled": true
+    },
+    {
       "techniqueID": "T1190",
       "tactic": "initial-access",
       "score": 1,
@@ -104,13 +111,6 @@
       "tactic": "persistence",
       "score": 1,
       "comment": "Systemd Service. 1 report(s) about UTA-2026-014, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections. https://the-hunters-ledger.com/actors/UTA-2026-014/",
-      "enabled": true
-    },
-    {
-      "techniqueID": "T1546.004",
-      "tactic": "privilege-escalation",
-      "score": 1,
-      "comment": "Unix Shell Configuration Modification. 1 report(s) about UTA-2026-014, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections. https://the-hunters-ledger.com/actors/UTA-2026-014/",
       "enabled": true
     },
     {

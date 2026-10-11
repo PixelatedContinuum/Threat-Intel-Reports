@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--7e9fdb46-a487-4d9f-b183-8276b5b89191",
+    "id": "bundle--c7518c27-088b-475b-9e39-bcae2ce8c700",
     "objects": [
         {
             "type": "identity",
@@ -1152,12 +1152,12 @@
             "id": "indicator--c5b12693-57ce-5f1d-9db2-ce9a17f52fe1",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.816427Z",
-            "modified": "2026-10-11T06:31:51.273012Z",
+            "modified": "2026-10-11T07:42:22.287648Z",
             "name": "vlc_boxed.exe DGA Malware Run Key Persistence via VLC Name Masquerade",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: vlc_boxed.exe DGA Malware Run Key Persistence via VLC Name Masquerade\nid: e90b3fbd-823b-4218-a548-6c39376438f4\nstatus: experimental\ndescription: >-\n    Detects registry persistence write for vlc_boxed.exe, an Enigma Virtual Box-packed DGA-capable\n    malware family that masquerades as VLC Media Player. The malware creates a Run key value named\n    'vlctask' pointing to '%APPDATA%\\vlcapp\\vlc.exe' — a path not used by legitimate VLC\n    installations, which install to %ProgramFiles%. Presence of this key indicates successful\n    persistence establishment by an unidentified DGA-capable malware family confirmed in this campaign.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/\nauthor: The Hunters Ledger\ndate: 2026-03-17\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.stealth\n    - attack.t1547.001\n    - attack.t1036.005\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection_value_name:\n        TargetObject|contains: '\\CurrentVersion\\Run\\vlctask'\n    selection_target:\n        Details|contains: '\\vlcapp\\vlc.exe'\n    condition: selection_value_name and selection_target\nfalsepositives:\n    - Unlikely — legitimate VLC Media Player does not use the vlctask Run key value name or the AppData\\vlcapp path\nlevel: high",
+            "pattern": "title: vlc_boxed.exe DGA Malware Run Key Persistence via VLC Name Masquerade\nid: e90b3fbd-823b-4218-a548-6c39376438f4\nstatus: experimental\ndescription: >-\n    Detects registry persistence write for vlc_boxed.exe, an Enigma Virtual Box-packed DGA-capable\n    malware family that masquerades as VLC Media Player. The malware creates a Run key value named\n    'vlctask' pointing to '%APPDATA%\\vlcapp\\vlc.exe' — a path not used by legitimate VLC\n    installations, which install to %ProgramFiles%. Presence of this key indicates\n    a configured Run-key persistence value written by an unidentified DGA-capable malware family confirmed\n    in this campaign. In the report's sandbox run the target binary was not dropped (C2 gating), so\n    a hit shows persistence was set up, not that a working implant is present.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/\nauthor: The Hunters Ledger\ndate: 2026-03-17\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.stealth\n    - attack.t1547.001\n    - attack.t1036.005\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection_value_name:\n        TargetObject|endswith: '\\CurrentVersion\\Run\\vlctask'\n    selection_target:\n        Details|endswith: '\\vlcapp\\vlc.exe'\n    condition: selection_value_name and selection_target\nfalsepositives:\n    - Unlikely — legitimate VLC Media Player does not use the vlctask Run key value name or the AppData\\vlcapp path\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-03-16T00:00:00Z",
             "labels": [
@@ -1173,12 +1173,12 @@
             "id": "indicator--9e604559-a28b-5b80-87b4-58b9cba0471f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.816593Z",
-            "modified": "2026-10-11T06:31:51.273111Z",
+            "modified": "2026-10-11T07:42:22.287738Z",
             "name": "Raven RAT Persistence via WindowsService Run Key Masquerade",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Raven RAT Persistence via WindowsService Run Key Masquerade\nid: 9ad1fd97-8a23-42fd-8ab6-210999dd6d9c\nstatus: experimental\ndescription: >-\n    Detects Raven RAT (custom Delphi RAT developed by the ZeroTrace cluster) establishing\n    persistence via a Run key entry named 'WindowsService' under\n    HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run (Sysmon renders the per-user hive\n    as HKU\\<SID>, which the rule tests). This value name is a deliberate\n    masquerade intended to appear as a legitimate Windows service entry to casual inspection.\n    Raven RAT provides keylogging, hidden VNC desktop creation, cryptocurrency wallet theft\n    (Exodus, Atomic Wallet, Guarda, Wasabi), and SOCKS proxy capabilities. The value name is a\n    generic literal an operator can trivially rename in a future build, so this rule is scoped\n    as a hunting lead rather than a high-fidelity alert.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/\nauthor: The Hunters Ledger\ndate: 2026-03-17\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.stealth\n    - attack.t1547.001\n    - attack.t1036.005\n    - detection.emerging-threats\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection_value_name:\n        TargetObject|contains: '\\CurrentVersion\\Run\\WindowsService'\n    selection_hive:\n        TargetObject|startswith: 'HKU\\'\n    filter_legitimate:\n        Details|startswith:\n            - 'C:\\Windows\\System32\\'\n            - 'C:\\Windows\\SysWOW64\\'\n    condition: selection_value_name and selection_hive and not filter_legitimate\nfalsepositives:\n    - Poorly named legitimate software that uses 'WindowsService' as a Run key value name; validate that the target binary path is outside System32 and Program Files before actioning\nlevel: medium",
+            "pattern": "title: Raven RAT Persistence via WindowsService Run Key Masquerade\nid: 9ad1fd97-8a23-42fd-8ab6-210999dd6d9c\nstatus: experimental\ndescription: >-\n    Detects Raven RAT (custom Delphi RAT developed by the ZeroTrace cluster) establishing\n    persistence via a Run key entry named 'WindowsService' under\n    HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run (Sysmon renders the per-user hive\n    as HKU\\<SID>, which the rule tests). This value name is a deliberate\n    masquerade intended to appear as a legitimate Windows service entry to casual inspection.\n    Raven RAT provides keylogging, hidden VNC desktop creation, cryptocurrency wallet theft\n    (Exodus, Atomic Wallet, Guarda, Wasabi), and SOCKS proxy capabilities. The value name is a\n    generic literal an operator can trivially rename in a future build, so this rule is scoped\n    as a hunting lead rather than a high-fidelity alert.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/\nauthor: The Hunters Ledger\ndate: 2026-03-17\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.stealth\n    - attack.t1547.001\n    - attack.t1036.005\n    - detection.emerging-threats\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection_value_name:\n        TargetObject|endswith: '\\CurrentVersion\\Run\\WindowsService'\n    selection_hive:\n        TargetObject|startswith: 'HKU\\'\n    filter_legitimate:\n        Details|startswith:\n            - 'C:\\Windows\\System32\\'\n            - 'C:\\Windows\\SysWOW64\\'\n    condition: selection_value_name and selection_hive and not filter_legitimate\nfalsepositives:\n    - Poorly named legitimate software that uses 'WindowsService' as a Run key value name; validate that the target binary path is outside System32 and Program Files before actioning\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-03-16T00:00:00Z",
             "labels": [
@@ -1191,15 +1191,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--94c01b5c-823e-5e6a-91b4-0ba3a0c81303",
+            "id": "indicator--bd9df9bf-e678-5f2c-a466-f5a2cf086b56",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-11T06:31:51.27321Z",
-            "modified": "2026-10-11T06:31:51.27321Z",
-            "name": "PowerShell ExecutionPolicy Bypass With a .ps1 Under a User-Writable Path From a Non-Standard Parent",
+            "created": "2026-10-11T07:42:22.287864Z",
+            "modified": "2026-10-11T07:42:22.287864Z",
+            "name": "PowerShell ExecutionPolicy Bypass, a .ps1 and a User-Writable Path in the Command Line From a Non-Standard Parent",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: PowerShell ExecutionPolicy Bypass With a .ps1 Under a User-Writable Path From a Non-Standard Parent\nid: 945438df-0fc1-4861-9ed6-4c66ae11e700\nstatus: experimental\ndescription: >-\n    Detects powershell.exe whose command line contains -ExecutionPolicy, Bypass and .ps1 together\n    with a user-writable staging directory (AppData, Temp, ProgramData, Users\\Public, Downloads,\n    $Recycle.Bin) anywhere in the command line, when the parent is not explorer.exe, services.exe,\n    svchost.exe or msiexec.exe. The puf.ps1 and sync.ps1 droppers in this campaign hex-decode an\n    embedded .NET PE assembly and load it in memory via Assembly.Load, but the rule tests none of\n    that: no in-memory loading, no PE and no Assembly.Load appear in a process-creation event, and\n    the staging-directory test is a substring of the whole command line, not a check of the\n    script's own path. The report does not say where puf.ps1 and sync.ps1 were run from.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/\nauthor: The Hunters Ledger\ndate: 2026-03-17\ntags:\n    - attack.execution\n    - attack.stealth\n    - attack.t1059.001\n    - attack.t1027.011\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        Image|endswith: '\\powershell.exe'\n        CommandLine|contains|all:\n            - '-ExecutionPolicy'\n            - 'Bypass'\n            - '.ps1'\n    selection_staging_path:\n        CommandLine|contains:\n            - '\\AppData\\'\n            - '\\Temp\\'\n            - '\\ProgramData\\'\n            - '\\Users\\Public\\'\n            - '\\Downloads\\'\n            - '\\$Recycle.Bin\\'\n    filter_standard_parents:\n        ParentImage|endswith:\n            - '\\explorer.exe'\n            - '\\services.exe'\n            - '\\svchost.exe'\n            - '\\msiexec.exe'\n    condition: selection and selection_staging_path and not filter_standard_parents\nfalsepositives:\n    - Software installers and updaters that stage a setup script under %TEMP% or %APPDATA% and invoke it with a policy bypass from a parent not on the standard-parent list\n    - Legitimate administrative scripts invoked via remote management tools, scheduled tasks, or software deployment systems; extend filter_standard_parents to include known-good deployment parent images in the target environment\nlevel: medium",
+            "pattern": "title: PowerShell ExecutionPolicy Bypass, a .ps1 and a User-Writable Path in the Command Line From a Non-Standard Parent\nid: 945438df-0fc1-4861-9ed6-4c66ae11e700\nstatus: experimental\ndescription: >-\n    Detects powershell.exe whose command line contains -ExecutionPolicy, Bypass and .ps1 together\n    with a user-writable staging directory (AppData, Temp, ProgramData, Users\\Public, Downloads,\n    $Recycle.Bin) anywhere in the command line, when the parent is not explorer.exe, services.exe,\n    svchost.exe or msiexec.exe. The puf.ps1 and sync.ps1 droppers in this campaign hex-decode an\n    embedded .NET PE assembly and load it in memory via Assembly.Load, but the rule tests none of\n    that: no in-memory loading, no PE and no Assembly.Load appear in a process-creation event, and\n    the staging-directory test is a substring of the whole command line, not a check of the\n    script's own path. The report does not say where puf.ps1 and sync.ps1 were run from.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/\nauthor: The Hunters Ledger\ndate: 2026-03-17\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        Image|endswith: '\\powershell.exe'\n        CommandLine|contains|all:\n            - '-ExecutionPolicy'\n            - 'Bypass'\n            - '.ps1'\n    selection_staging_path:\n        CommandLine|contains:\n            - '\\AppData\\'\n            - '\\Temp\\'\n            - '\\ProgramData\\'\n            - '\\Users\\Public\\'\n            - '\\Downloads\\'\n            - '\\$Recycle.Bin\\'\n    filter_standard_parents:\n        ParentImage|endswith:\n            - '\\explorer.exe'\n            - '\\services.exe'\n            - '\\svchost.exe'\n            - '\\msiexec.exe'\n    condition: selection and selection_staging_path and not filter_standard_parents\nfalsepositives:\n    - Software installers and updaters that stage a setup script under %TEMP% or %APPDATA% and invoke it with a policy bypass from a parent not on the standard-parent list\n    - Legitimate administrative scripts invoked via remote management tools, scheduled tasks, or software deployment systems; extend filter_standard_parents to include known-good deployment parent images in the target environment\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-03-16T00:00:00Z",
             "labels": [
@@ -2285,12 +2285,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--bbe096a7-b0ae-58a1-bde2-b9913d025fa1",
+            "id": "relationship--e06528e3-b879-5daf-8770-f017f11dbe4e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-11T06:31:51.281043Z",
-            "modified": "2026-10-11T06:31:51.281043Z",
+            "created": "2026-10-11T07:42:22.295458Z",
+            "modified": "2026-10-11T07:42:22.295458Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--94c01b5c-823e-5e6a-91b4-0ba3a0c81303",
+            "source_ref": "indicator--bd9df9bf-e678-5f2c-a466-f5a2cf086b56",
             "target_ref": "malware--edd2227f-6e9c-52c1-b7d6-e456aff9f6a1",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -3002,7 +3002,7 @@
             "id": "report--6a5d5aeb-1950-5205-a90e-967908691438",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.827099Z",
-            "modified": "2026-10-11T06:31:51.285899Z",
+            "modified": "2026-10-11T07:42:22.299724Z",
             "name": "ZeroTrace Multi-Family MaaS Operation, Open Directory Exposure at 74.0.42.25",
             "report_types": [
                 "threat-report"
@@ -3093,7 +3093,7 @@
                 "indicator--214dab3b-a6a8-5097-9c5d-9398b59eef78",
                 "indicator--c5b12693-57ce-5f1d-9db2-ce9a17f52fe1",
                 "indicator--9e604559-a28b-5b80-87b4-58b9cba0471f",
-                "indicator--94c01b5c-823e-5e6a-91b4-0ba3a0c81303",
+                "indicator--bd9df9bf-e678-5f2c-a466-f5a2cf086b56",
                 "indicator--41c06762-b19d-5c84-b077-ae2683ed5a11",
                 "indicator--d2f05264-98a3-50cf-9df5-8d84760c3143",
                 "tool--bc5539c6-9831-5db9-a93b-d181e0311bc8",
@@ -3168,7 +3168,7 @@
                 "relationship--a8b96c09-cd91-5b4c-b03e-c218a7f07090",
                 "relationship--93fff54f-64da-5d83-ac88-f5011d7629e6",
                 "relationship--f81ef77f-7e2b-588d-96b6-a746679d1672",
-                "relationship--bbe096a7-b0ae-58a1-bde2-b9913d025fa1",
+                "relationship--e06528e3-b879-5daf-8770-f017f11dbe4e",
                 "relationship--90c3633c-27ea-5418-9394-4691e27d1cf6",
                 "relationship--a7b217a5-8380-5562-9cfc-41a7f3865a90",
                 "relationship--0063c5bd-77e6-5f78-b5cd-3da2b39b67dc",

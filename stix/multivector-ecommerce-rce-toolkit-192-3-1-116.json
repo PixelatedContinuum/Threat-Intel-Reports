@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--99ea4f9b-7a34-427e-8d83-7b97a870e75e",
+    "id": "bundle--f380ebe0-d422-4798-a573-839608dc2e93",
     "objects": [
         {
             "type": "identity",
@@ -291,12 +291,12 @@
             "id": "indicator--bea9eb10-5d1d-5d01-a246-3d6595a4858c",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.007779Z",
-            "modified": "2026-10-11T05:44:21.620415Z",
+            "modified": "2026-10-11T07:42:04.567064Z",
             "name": "WEBSHELL_Generic_JSP_Bash_Exec_Parameter",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "/*\n   Yara Rule Set\n   Identifier: Generic JSP Web Shell\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule WEBSHELL_Generic_JSP_Bash_Exec_Parameter {\n   meta:\n      description = \"Detects a small JSP (under 30 KB) that contains a request.getParameter call, Runtime.getRuntime().exec, /bin/bash and a quoted -c, the pieces of a minimal command-execution shell such as cmd.jsp. The parameter name is kept generic since it varies by deployment. The rule tests no order or distance between the strings, so it does not show that the parameter reaches the exec call.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\"\n      date = \"2026-07-21\"\n      family = \"Generic JSP Web Shell\"\n      malware_type = \"Web shell\"\n      id = \"61eeb62a-80ed-5a4d-b709-0ac11517a820\"\n   strings:\n      $getparam = /request\\.getParameter\\([^)]{0,40}\\)/ ascii\n      $exec = \"Runtime.getRuntime().exec\" ascii\n      $bash = \"/bin/bash\" ascii\n      $dashc = \"\\\"-c\\\"\" ascii\n   condition:\n      filesize < 30KB and\n      $getparam and $exec and $bash and $dashc\n}",
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: Generic JSP Web Shell\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule WEBSHELL_Generic_JSP_Bash_Exec_Parameter {\n   meta:\n      description = \"Detects a file under 30 KB (no JSP marker is tested, so a Java source file or a document also matches) that contains a request.getParameter call, Runtime.getRuntime().exec, /bin/bash and a quoted -c, the pieces of a minimal command-execution shell such as cmd.jsp. The parameter name is kept generic since it varies by deployment. The rule tests no order or distance between the strings, so it does not show that the parameter reaches the exec call.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\"\n      date = \"2026-07-21\"\n      family = \"Generic JSP Web Shell\"\n      malware_type = \"Web shell\"\n      id = \"61eeb62a-80ed-5a4d-b709-0ac11517a820\"\n   strings:\n      $getparam = /request\\.getParameter\\([^)]{0,40}\\)/ ascii\n      $exec = \"Runtime.getRuntime().exec\" ascii\n      $bash = \"/bin/bash\" ascii\n      $dashc = \"\\\"-c\\\"\" ascii\n   condition:\n      filesize < 30KB and\n      $getparam and $exec and $bash and $dashc\n}",
             "pattern_type": "yara",
             "valid_from": "2026-07-21T00:00:00Z",
             "labels": [

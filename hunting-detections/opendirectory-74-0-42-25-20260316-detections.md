@@ -23,7 +23,7 @@ This open-directory exposure carried a seven-component multi-family MaaS toolkit
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 6 | 0 | T1219, T1620, T1027.002, T1113 | 0 |
-| Sigma | 2 | 3 | T1112, T1547.001, T1036.005, T1059.005, T1218.007, T1059.001, T1027.011 | 2 |
+| Sigma | 2 | 3 | T1112, T1547.001, T1036.005, T1059.005, T1218.007, T1059.001 | 2 |
 | Suricata | 1 | 0 | T1573.002, T1071.001 | 2 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
@@ -251,7 +251,7 @@ rule MALW_Aspdkzb_ConfuserEx_Loader {
 **False Positives:** None known — the Faidowra-branded namespace strings are unique to this campaign; the fallback branch's internal names (`OrderChain`, `DefinitionChooser`, `ProcEnumerator`) have no plausible legitimate collision when combined with the pinned version string.
 **Blind Spots:** A build that both strips all Faidowra branding AND renames the version string and two of the three fallback method names would evade; the rule targets the extracted/unpacked .NET Reactor payload, not the outer obfuscated loader stages.
 **Validation:** Scan the extracted PureRAT v4.1.9 payload (`hash1` below) — one of the two branches must match; an unrelated .NET Reactor-protected application must NOT fire.
-**Deployment:** Endpoint AV/EDR file scan, memory scanning during suspected in-memory payload extraction.
+**Deployment:** Endpoint AV/EDR file scan, scanning of saved dumps taken during suspected in-memory payload extraction. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
 rule RAT_PureRAT_v419_Payload {
@@ -389,10 +389,10 @@ level: high
 **Robustness:** 2
 **ATT&CK Coverage:** T1547.001 (Registry Run Keys / Startup Folder), T1036.005 (Match Legitimate Name or Location)
 **Confidence:** HIGH
-**Rationale:** The Run key value name `vlctask` and the target path `%APPDATA%\vlcapp\vlc.exe` are both specific to this malware's masquerade: legitimate VLC Media Player installs to %ProgramFiles% and never registers a Run key named `vlctask`. *Logic fix 2026-10-11:* the rule used to test the value name alone, so renaming the target directory or pointing `vlctask` anywhere else still fired and the two-string claim was untrue; it now requires both the value name in the key path and `\vlcapp\vlc.exe` in the written value data (`Details`). The path+value combination requires the operator to change two coordinated strings to evade.
+**Rationale:** The Run key value name `vlctask` and the target path `%APPDATA%\vlcapp\vlc.exe` are both specific to this malware's masquerade: legitimate VLC Media Player installs to %ProgramFiles% and never registers a Run key named `vlctask`. *Logic fix 2026-10-11:* the rule used to test the value name alone, so renaming the target directory or pointing `vlctask` anywhere else still fired and the two-string claim was untrue; it now requires both the value name at the end of the key path and a value data (`Details`) that ends in `\vlcapp\vlc.exe`. *Boundary fix 2026-10-11 (round 2):* both tests were `contains`, so a value named `vlctaskBackup` or data ending `vlc.exe.bak` also matched; both are now `endswith`. Both strings are required (AND), so changing either one is enough to evade.
 **False Positives:** Unlikely — legitimate VLC Media Player does not use the vlctask Run key value name or the AppData\vlcapp path.
-**Blind Spots:** A rebrand renaming either the Run key value name or the target directory evades (the rule needs both); a value written without data in the event, or a sensor that does not report `Details`, never fires; only covers this specific masquerade, not a future build imitating a different application.
-**Validation:** Trigger the malware's persistence routine: a Run-key write of value `vlctask` with data ending `\vlcapp\vlc.exe` must match; a `vlctask` value pointing elsewhere, and a genuine VLC Media Player installation, must NOT fire.
+**Blind Spots:** A rebrand renaming either the Run key value name or the target directory evades, because the rule needs both; data that does not end in `\vlcapp\vlc.exe` (a quoted path or trailing arguments) does not match; a value written without data in the event, or a sensor that does not report `Details`, never fires; only covers this specific masquerade, not a future build imitating a different application.
+**Validation:** Trigger the malware's persistence routine: a Run-key write of value `vlctask` with data ending `\vlcapp\vlc.exe` must match; a `vlctask` value pointing elsewhere, a value named `vlctaskBackup`, data ending `vlc.exe.bak`, and a genuine VLC Media Player installation, must NOT fire.
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (registry telemetry).
 
 ```yaml
@@ -403,8 +403,10 @@ description: >-
     Detects registry persistence write for vlc_boxed.exe, an Enigma Virtual Box-packed DGA-capable
     malware family that masquerades as VLC Media Player. The malware creates a Run key value named
     'vlctask' pointing to '%APPDATA%\vlcapp\vlc.exe' — a path not used by legitimate VLC
-    installations, which install to %ProgramFiles%. Presence of this key indicates successful
-    persistence establishment by an unidentified DGA-capable malware family confirmed in this campaign.
+    installations, which install to %ProgramFiles%. Presence of this key indicates
+    a configured Run-key persistence value written by an unidentified DGA-capable malware family confirmed
+    in this campaign. In the report's sandbox run the target binary was not dropped (C2 gating), so
+    a hit shows persistence was set up, not that a working implant is present.
 references:
     - https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/
 author: The Hunters Ledger
@@ -422,9 +424,9 @@ logsource:
     product: windows
 detection:
     selection_value_name:
-        TargetObject|contains: '\CurrentVersion\Run\vlctask'
+        TargetObject|endswith: '\CurrentVersion\Run\vlctask'
     selection_target:
-        Details|contains: '\vlcapp\vlc.exe'
+        Details|endswith: '\vlcapp\vlc.exe'
     condition: selection_value_name and selection_target
 falsepositives:
     - Unlikely — legitimate VLC Media Player does not use the vlctask Run key value name or the AppData\vlcapp path
@@ -441,7 +443,7 @@ level: high
 **Robustness:** 1
 **ATT&CK Coverage:** T1547.001 (Registry Run Keys / Startup Folder), T1036.005 (Match Legitimate Name or Location)
 **Confidence:** MODERATE
-**Rationale:** Demoted from the original `level: high`: "WindowsService" is a generic, operator-chosen Run-key value name rather than a family-specific artifact: trivially renamed in a future build and not costly for the operator to change, so durability is low even though today's collision rate with legitimate software is limited. The existing System32/SysWOW64 path filter reduces some obvious FPs but does not address poorly-installed legitimate software using the same generic value name, so this remains an analyst-triaged hunting lead rather than an alerting-grade rule. *Logic fix 2026-10-11:* the description names the per-user key (`HKCU`), but the selection was the key-path substring alone, so a machine-wide `HKLM` or `Wow6432Node` Run value of the same name matched too; the rule now also requires the `HKU\` hive prefix Sysmon uses for a per-user key. The report records the value under both the unqualified `SOFTWARE\Microsoft\Windows\CurrentVersion\Run` path (section 5) and `HKCU` (IOC lists), so a machine-wide write is a documented gap and not covered.
+**Rationale:** Demoted from the original `level: high`: "WindowsService" is a generic, operator-chosen Run-key value name rather than a family-specific artifact: trivially renamed in a future build and not costly for the operator to change, so durability is low even though today's collision rate with legitimate software is limited. The existing System32/SysWOW64 path filter reduces some obvious FPs but does not address poorly-installed legitimate software using the same generic value name, so this remains an analyst-triaged hunting lead rather than an alerting-grade rule. *Logic fix 2026-10-11:* the description names the per-user key (`HKCU`), but the selection was the key-path substring alone, so a machine-wide `HKLM` or `Wow6432Node` Run value of the same name matched too; the rule now also requires the `HKU\` hive prefix Sysmon uses for a per-user key. The report records the value under both the unqualified `SOFTWARE\Microsoft\Windows\CurrentVersion\Run` path (section 5) and `HKCU` (IOC lists), so a machine-wide write is a documented gap and not covered. *Boundary fix 2026-10-11 (round 2):* the value-name test was `contains`, so a value named `WindowsServiceHelper` or `WindowsServiceBackup` matched; it is now `endswith`, which makes the value name exact.
 **False Positives:** Poorly named legitimate software that uses 'WindowsService' as a Run key value name in a non-System32/SysWOW64 install path.
 **Blind Spots:** A machine-wide (`HKLM`) Run value with this name no longer matches; the report does not settle which hive the sample writes (the IOC list says `HKCU`). The value name is a single literal.
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (registry telemetry); correlate hits against the process image path and known-software inventory before escalating.
@@ -476,7 +478,7 @@ logsource:
     product: windows
 detection:
     selection_value_name:
-        TargetObject|contains: '\CurrentVersion\Run\WindowsService'
+        TargetObject|endswith: '\CurrentVersion\Run\WindowsService'
     selection_hive:
         TargetObject|startswith: 'HKU\'
     filter_legitimate:
@@ -491,20 +493,21 @@ level: medium
 
 **PowerShell Fileless Droppers**
 
-#### PowerShell ExecutionPolicy Bypass With a .ps1 Under a User-Writable Path From a Non-Standard Parent
+#### PowerShell ExecutionPolicy Bypass, a .ps1 and a User-Writable Path in the Command Line From a Non-Standard Parent
 
 **Tier:** Hunting
 **Robustness:** 2
-**ATT&CK Coverage:** T1059.001 (PowerShell), T1027.011 (Fileless Storage)
+**ATT&CK Coverage:** T1059.001 (PowerShell)
+**ATT&CK Note:** Fileless Storage (T1027.011) is the campaign behavior the report describes for `puf.ps1` and `sync.ps1`; nothing in a process-creation event tests it, so it is not claimed here.
 **Confidence:** MODERATE
 **Rationale:** `-ExecutionPolicy Bypass` loading a `.ps1` file is common in both malicious and legitimate administrative tooling. The rule originally narrowed on nothing but a four-entry denylist of standard parent processes, which is a broad NOT-filter rather than a positive behavioral anchor, so every developer tool, CI agent, package manager and automation framework that launches PowerShell this way passed straight through. `selection_staging_path` adds a positive anchor by requiring one of six user-writable staging directory names to appear in the command line, which is where a dropper puts its script and where routine tooling generally does not. *Wording fix 2026-10-11:* the staging test is a substring over the whole `CommandLine`, so any argument containing `\Temp\` satisfies it, not only the script path, and the report does not record where `puf.ps1` and `sync.ps1` ran from, so that anchor is not tied to the campaign. The old title's "fileless PE dropper" is the campaign behavior the report describes (`Assembly.Load` in memory, no disk write), and nothing in the query tests it, so the title now names what is tested. A parent-image denylist is environment-specific and belongs in local tuning; this remains a hunting rule.
 
-Note that this narrows on the *script's* location, not the parent process, deliberately: a parent-image denylist is environment-specific and belongs in local tuning, whereas the staging-directory anchor travels to any environment. The title's "fileless PE dropper" framing still describes the campaign behavior rather than anything the query itself tests, so this remains a hunting rule.
-**False Positives:** Software installers and updaters that stage a setup script under `%TEMP%` or `%APPDATA%` and invoke it with a policy bypass; legitimate administrative scripts run from a user-writable path via remote management tools, scheduled tasks, or deployment systems not on the standard-parent denylist.
+The staging anchor is command-text co-occurrence over the whole `CommandLine`, not the script's own path: a system script given a `\Temp\` data argument also matches, and the position of the `.ps1` relative to the staging directory is not tested. The parent-image denylist is applied as a NOT filter and is environment-specific; it belongs in local tuning. The campaign's "fileless PE dropper" behavior is not tested, so this remains a hunting rule.
+**False Positives:** Software installers and updaters that stage a setup script under `%TEMP%` or `%APPDATA%` and invoke it with a policy bypass; any PowerShell command line that contains a `.ps1`, the bypass flag and one of the staging directory names anywhere (a system script with a user-path data argument); legitimate administrative scripts run from a user-writable path via remote management tools, scheduled tasks, or deployment systems not on the standard-parent denylist.
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM; tune the filter_standard_parents list per environment before using for anything beyond hunting.
 
 ```yaml
-title: PowerShell ExecutionPolicy Bypass With a .ps1 Under a User-Writable Path From a Non-Standard Parent
+title: PowerShell ExecutionPolicy Bypass, a .ps1 and a User-Writable Path in the Command Line From a Non-Standard Parent
 id: 945438df-0fc1-4861-9ed6-4c66ae11e700
 status: experimental
 description: >-
@@ -522,9 +525,7 @@ author: The Hunters Ledger
 date: 2026-03-17
 tags:
     - attack.execution
-    - attack.stealth
     - attack.t1059.001
-    - attack.t1027.011
     - detection.emerging-threats
 logsource:
     category: process_creation
@@ -622,12 +623,12 @@ level: medium
 #### PureRAT v4.1.9 Four-Byte Preamble on Ports 56001 to 56003
 
 **Tier:** Detection
-**Robustness:** 3
+**Robustness:** 2
 **ATT&CK Coverage:** T1573.002 (Asymmetric Cryptography), T1071.001 (Web Protocols)
 **Confidence:** HIGH
-**Rationale:** The published 4-byte `04 00 00 00` preamble that PureRAT v4.1.9 sends on its non-standard C2 ports (56001-56003) before the TLS handshake is a protocol-framing artifact recorded in the report from binary analysis and attributed to external research (Netresec, August 2025). Salvaged from the original IP-pinned rule by widening the destination from a single hardcoded C2 IP to `$EXTERNAL_NET`: the content anchor and port combination now survive infrastructure rotation, which the original single-IP version could not. `rev` bumped to 2 for that change. *Wording fix 2026-10-11 (rev 4):* the earlier heading and `msg` said "Before TLS", but the rule matches the four bytes at the start of the client's stream payload on those three ports (`depth:4`) and never looks at a TLS ClientHello, so it fires on any TCP flow to those ports that opens with those bytes; the heading and `msg` now say what is matched. "Confirmed C2 Ports" dropped from the `msg` because the ports are confirmed for one C2 and the destination is no longer pinned to it.
+**Rationale:** The published 4-byte `04 00 00 00` preamble that PureRAT v4.1.9 sends on its non-standard C2 ports (56001-56003) before the TLS handshake is a protocol-framing artifact recorded in the report from binary analysis and attributed to external research (Netresec, August 2025). Salvaged from the original IP-pinned rule by widening the destination from a single hardcoded C2 IP to `$EXTERNAL_NET`: the content anchor and port combination now survive infrastructure rotation, which the original single-IP version could not. `rev` bumped to 2 for that change. *Wording fix 2026-10-11 (rev 4):* the earlier heading and `msg` said "Before TLS", but the rule matches the four bytes in the first four bytes of the payload buffer Suricata inspects on those three ports (`depth:4` is an absolute bound from the start of that buffer; this rule has no stream-start constraint, so it is not shown to mean the first bytes of the connection) and never looks at a TLS ClientHello, so it fires on any TCP flow to those ports that opens with those bytes; the heading and `msg` now say what is matched. *Robustness fix 2026-10-11 (round 2):* scored 2, not 3: the three destination ports are configurable and the preamble is a 4-byte little-endian length of 4, which the family's framing uses but another tool could too, so the rule is a protocol-framing fingerprint of this family on selected ports, not a technique invariant. "Confirmed C2 Ports" dropped from the `msg` because the ports are confirmed for one C2 and the destination is no longer pinned to it.
 **False Positives:** None known from the evidence; no benign traffic corpus was tested. Any other protocol that opens with the same four bytes (`04 00 00 00`, a little-endian length of 4) on destination ports 56001 to 56003 would match, because the rule does not check for a TLS ClientHello after the preamble.
-**Blind Spots:** A future PureRAT build that changes the preamble value or moves off these three ports evades; the TLS payload after the preamble is opaque to the sensor, so the rule cannot confirm that a handshake follows.
+**Blind Spots:** The rule matches the four bytes at the start of an inspected payload buffer, so a later segment that opens with the same bytes also matches, and a first message that is split or prefixed differently is not matched; no replay was run. A future PureRAT build that changes the preamble value or moves off these three ports evades; the TLS payload after the preamble is opaque to the sensor, so the rule cannot confirm that a handshake follows.
 **Validation:** Replay a PCAP of PureRAT v4.1.9's handshake on ports 56001-56003 (none was available to this lane): it must alert. Ordinary TLS traffic on unrelated ports must NOT; a TLS ClientHello sent to these ports with no preamble must NOT.
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points.
 
