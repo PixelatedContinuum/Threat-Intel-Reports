@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--7984aed4-da7a-43f6-a7c6-5c27194a952b",
+    "id": "bundle--cd870918-f0f8-4cf6-a463-a51d3468e3d5",
     "objects": [
         {
             "type": "identity",
@@ -1031,12 +1031,12 @@
             "id": "indicator--0b2abd83-408d-5507-b85e-bbffaaa202e7",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.744545Z",
-            "modified": "2026-10-01T19:54:13.744545Z",
+            "modified": "2026-10-11T14:08:24.270743Z",
             "name": "MAL_Linux_GHOST_libpam_cache_Rootkit_Family",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule MAL_Linux_GHOST_libpam_cache_Rootkit_Family {\n   meta:\n      description = \"Detects GHOST cryptojacker kit LD_PRELOAD rootkit libpam_cache.so — ELF64 shared object hooking readdir/readdir64/fopen/fopen64 to hide miner processes, kit paths, and operator wallet prefixes from /proc listings; byte-identical across all known GHOST kit customer deployments\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/\"\n      date = \"2026-05-25\"\n      hash1 = \"eaaa10c840de23335abae1a9ead0a6a7fb7be5187cd19ad05137feab12bb7301\"\n      hash2 = \"edafde0d33ff1a169c0c4eeaeec12d1759818c7cf4950fcee91c687e811e6cff\"\n      hash3 = \"296a800564111b0bad9fe63faf4e63ba\"\n      family = \"GHOST-cryptojacker-kit\"\n      malware_type = \"LD_PRELOAD Rootkit\"\n      campaign = \"OpenDirectory-GHOST-Cryptojacker-Vova75Rus-77.110.96.200\"\n      id = \"ca987dcd-ca0e-5e71-a3b1-cab19fd7a851\"\n   strings:\n      // Hook function exports — the four libc symbols this .so overrides\n      $export_readdir    = \"readdir\" ascii fullword\n      $export_fopen      = \"fopen\" ascii fullword\n      // GHOST-specific hide-list strings from H[] array — operator-deployment-path artifacts\n      $hide_khugepaged   = \"khugepaged_\" ascii\n      $hide_nv_uvm       = \"nv_uvm_\" ascii\n      $hide_inotify      = \"inotify_guard\" ascii fullword\n      $hide_libpam_self  = \"libpam_cache\" ascii\n      $hide_fontcpu      = \"fontconfig/.cpu\" ascii\n      $hide_fontgpu      = \"fontconfig/.gpu\" ascii\n      $hide_pid_guard    = \".pid_guard\" ascii\n      $hide_ghost_sh     = \"ghost.sh\" ascii fullword\n      // LD_PRELOAD removal constructor — unsetenv called at load time\n      $unsetenv_preload  = \"LD_PRELOAD\" ascii fullword\n      // Port-filter format string — uppercase hex zero-padded matching /proc/net/tcp native format\n      $port_fmt          = \":%04X\" ascii\n      // /proc hooking targets\n      $proc_net_tcp      = \"/proc/net/tcp\" ascii\n      $proc_cmdline      = \"/proc/%s/cmdline\" ascii\n      $proc_exe          = \"/proc/%s/exe\" ascii\n      // ELF magic bytes for shared object detection (7f 45 4c 46 = ELF magic)\n      $elf_magic         = { 7F 45 4C 46 02 01 01 00 }\n   condition:\n      // ELF64 shared object (magic + ELFCLASS64 + ELFDATA2LSB)\n      $elf_magic at 0 and\n      // File size: 14,568 bytes exact for known sample; allow up to 50KB for compiled variants\n      filesize < 50KB and\n      // Require hook exports + multiple hide-list strings + port format string + proc hooks\n      ($export_readdir and $export_fopen) and\n      $port_fmt and\n      ($proc_net_tcp or $proc_cmdline or $proc_exe) and\n      ($unsetenv_preload) and\n      3 of ($hide_*)\n}",
+            "pattern": "rule MAL_Linux_GHOST_libpam_cache_Rootkit_Family {\n   meta:\n      description = \"Detects GHOST cryptojacker kit LD_PRELOAD rootkit libpam_cache.so — ELF64 file carrying the readdir and fopen hook exports (the 64-bit variants readdir64 and fopen64 are not tested) plus the hide-list strings used to hide miner processes, kit paths, and operator wallet prefixes from /proc listings; byte-identical across all known GHOST kit customer deployments\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/\"\n      date = \"2026-05-25\"\n      hash1 = \"eaaa10c840de23335abae1a9ead0a6a7fb7be5187cd19ad05137feab12bb7301\"\n      hash2 = \"edafde0d33ff1a169c0c4eeaeec12d1759818c7cf4950fcee91c687e811e6cff\"\n      hash3 = \"296a800564111b0bad9fe63faf4e63ba\"\n      family = \"GHOST-cryptojacker-kit\"\n      malware_type = \"LD_PRELOAD Rootkit\"\n      campaign = \"OpenDirectory-GHOST-Cryptojacker-Vova75Rus-77.110.96.200\"\n      id = \"ca987dcd-ca0e-5e71-a3b1-cab19fd7a851\"\n   strings:\n      // Hook function exports — the four libc symbols this .so overrides\n      $export_readdir    = \"readdir\" ascii fullword\n      $export_fopen      = \"fopen\" ascii fullword\n      // GHOST-specific hide-list strings from H[] array — operator-deployment-path artifacts\n      $hide_khugepaged   = \"khugepaged_\" ascii\n      $hide_nv_uvm       = \"nv_uvm_\" ascii\n      $hide_inotify      = \"inotify_guard\" ascii fullword\n      $hide_libpam_self  = \"libpam_cache\" ascii\n      $hide_fontcpu      = \"fontconfig/.cpu\" ascii\n      $hide_fontgpu      = \"fontconfig/.gpu\" ascii\n      $hide_pid_guard    = \".pid_guard\" ascii\n      $hide_ghost_sh     = \"ghost.sh\" ascii fullword\n      // LD_PRELOAD removal constructor — unsetenv called at load time\n      $unsetenv_preload  = \"LD_PRELOAD\" ascii fullword\n      // Port-filter format string — uppercase hex zero-padded matching /proc/net/tcp native format\n      $port_fmt          = \":%04X\" ascii\n      // /proc hooking targets\n      $proc_net_tcp      = \"/proc/net/tcp\" ascii\n      $proc_cmdline      = \"/proc/%s/cmdline\" ascii\n      $proc_exe          = \"/proc/%s/exe\" ascii\n      // ELF magic bytes for shared object detection (7f 45 4c 46 = ELF magic)\n      $elf_magic         = { 7F 45 4C 46 02 01 01 00 }\n   condition:\n      // ELF64 little-endian file (magic + ELFCLASS64 + ELFDATA2LSB); e_type is not tested\n      $elf_magic at 0 and\n      // File size: 14,568 bytes exact for known sample; allow up to 50KB for compiled variants\n      filesize < 50KB and\n      // Require hook exports + multiple hide-list strings + port format string + proc hooks\n      ($export_readdir and $export_fopen) and\n      $port_fmt and\n      ($proc_net_tcp or $proc_cmdline or $proc_exe) and\n      ($unsetenv_preload) and\n      3 of ($hide_*)\n}",
             "pattern_type": "yara",
             "valid_from": "2026-05-25T00:00:00Z",
             "labels": [
@@ -1199,12 +1199,12 @@
             "id": "indicator--dce86bf3-3e8c-506b-ae70-83f378e532d6",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.745202Z",
-            "modified": "2026-10-01T19:54:13.745202Z",
+            "modified": "2026-10-11T14:08:24.271839Z",
             "name": "MAL_Linux_GHOST_get_all_ranges_CloudEnumerator",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule MAL_Linux_GHOST_get_all_ranges_CloudEnumerator {\n   meta:\n      description = \"Detects GHOST cryptojacker kit cloud-provider IP-range enumeration script get_all_ranges.sh — Bash script querying bgpview.io ASN API for 14+ cloud providers including ML-GPU-specific providers (Lambda Labs, Nebius, Datacrunch); reconnaissance prequel to ComfyUI exploitation pipeline targeting GPU-cloud environments\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/\"\n      date = \"2026-05-25\"\n      family = \"GHOST-cryptojacker-kit\"\n      malware_type = \"Cloud IP-Range Enumerator\"\n      campaign = \"OpenDirectory-GHOST-Cryptojacker-Vova75Rus-77.110.96.200\"\n      id = \"61f9da50-05bf-5c1c-933a-2a65a73eeae3\"\n   strings:\n      // bgpview.io API source (used for ASN-to-IP-range lookups)\n      $bgpview_api        = \"bgpview.io\" ascii\n      // ML-GPU-cloud-specific providers — GHOST-kit targeting signature\n      // These rarely appear together in legitimate IP-range tools\n      $provider_lambda    = \"Lambda Labs\" ascii\n      $provider_nebius    = \"Nebius\" ascii\n      $provider_datacrunch = \"Datacrunch\" ascii\n      // Additional providers from get_all_ranges.sh ASN list\n      $provider_contabo   = \"Contabo\" ascii\n      $provider_hetzner   = \"Hetzner\" ascii\n      // bgpview.io API structure specific to this script\n      $bgpview_ips_prefix = \"bgpview.io/asn/\" ascii\n   condition:\n      filesize < 15KB and\n      $bgpview_api and\n      $bgpview_ips_prefix and\n      2 of ($provider_*)\n}",
+            "pattern": "rule MAL_Linux_GHOST_get_all_ranges_CloudEnumerator {\n   meta:\n      description = \"Detects GHOST cryptojacker kit cloud-provider IP-range enumeration script get_all_ranges.sh — text file under 15 KB naming bgpview.io, its /asn/ path and at least two of five cloud-provider names (Lambda Labs, Nebius, Datacrunch, Contabo, Hetzner); the sample queries 14+ providers including GPU-cloud ones, but any two of the five names satisfy the rule (Contabo and Hetzner alone do); reconnaissance prequel to ComfyUI exploitation pipeline targeting GPU-cloud environments\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/\"\n      date = \"2026-05-25\"\n      family = \"GHOST-cryptojacker-kit\"\n      malware_type = \"Cloud IP-Range Enumerator\"\n      campaign = \"OpenDirectory-GHOST-Cryptojacker-Vova75Rus-77.110.96.200\"\n      id = \"61f9da50-05bf-5c1c-933a-2a65a73eeae3\"\n   strings:\n      // bgpview.io API source (used for ASN-to-IP-range lookups)\n      $bgpview_api        = \"bgpview.io\" ascii\n      // Provider names from the sample's ASN list (the first three are GPU-cloud providers);\n      // any two of the five names satisfy the condition, so this is not a GPU-cloud-specific test\n      $provider_lambda    = \"Lambda Labs\" ascii\n      $provider_nebius    = \"Nebius\" ascii\n      $provider_datacrunch = \"Datacrunch\" ascii\n      // Additional providers from get_all_ranges.sh ASN list\n      $provider_contabo   = \"Contabo\" ascii\n      $provider_hetzner   = \"Hetzner\" ascii\n      // bgpview.io API structure specific to this script\n      $bgpview_ips_prefix = \"bgpview.io/asn/\" ascii\n   condition:\n      filesize < 15KB and\n      $bgpview_api and\n      $bgpview_ips_prefix and\n      2 of ($provider_*)\n}",
             "pattern_type": "yara",
             "valid_from": "2026-05-25T00:00:00Z",
             "labels": [
@@ -1259,15 +1259,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--787f82f6-889c-5924-9474-a2e3926991d6",
+            "id": "indicator--0f66f4ac-ff48-52cf-a0a0-f877dc42b4a4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:13.745561Z",
-            "modified": "2026-10-01T19:54:13.745561Z",
-            "name": "GHOST Kit Systemd Camouflage Service Unit Creation",
+            "created": "2026-10-11T14:08:24.272138Z",
+            "modified": "2026-10-11T14:08:24.272138Z",
+            "name": "GHOST Kit Camouflage Name in a Created File Path (Systemd Unit Names and inotify_guard)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: GHOST Kit Systemd Camouflage Service Unit Creation\nid: 16fce30a-b59f-461c-87fc-89ae2d736527\nstatus: experimental\ndescription: >-\n    Detects creation of systemd service unit files using GHOST cryptojacker kit\n    camouflage names. The GHOST kit installs fontconfig-cache.service (user-level\n    systemd persistence disguised as fontconfig caching) and systemd-journal-flush\n    override; operator processes are renamed to dbus-session-monitor (xmrig) and\n    gnome-shell-ext-updater (lolMiner). Creation of unit files with these names\n    by non-package-manager processes indicates GHOST kit systemd persistence.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-25\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.stealth\n    - attack.t1543.002\n    - attack.t1036.005\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: file_event\n    product: linux\ndetection:\n    selection_ghost_unit_names:\n        TargetFilename|contains:\n            - 'fontconfig-cache.service'\n            - 'inotify_guard'\n            - 'dbus-session-monitor.service'\n            - 'gnome-shell-ext-updater.service'\n            - 'archivist-daemon.service'\n            - 'journald-svc.service'\n            - 'systemd-guard.service'\n    condition: selection_ghost_unit_names\nfalsepositives:\n    - >-\n      Custom legitimate service deployments using similar names (extremely\n      unlikely for fontconfig-cache.service or gnome-shell-ext-updater.service\n      as systemd units)\n    - >-\n      Desktop environment package that legitimately provides\n      gnome-shell-ext-updater (verify package manager ownership with dpkg -S\n      or rpm -qf)\nlevel: medium",
+            "pattern": "title: GHOST Kit Camouflage Name in a Created File Path (Systemd Unit Names and inotify_guard)\nid: 16fce30a-b59f-461c-87fc-89ae2d736527\nstatus: experimental\ndescription: >-\n    Detects creation of a file whose path contains one of seven GHOST cryptojacker\n    kit camouflage names. Six are `.service` unit names (the kit installs\n    fontconfig-cache.service as user-level systemd persistence disguised as\n    fontconfig caching; operator processes are renamed to dbus-session-monitor\n    (xmrig) and gnome-shell-ext-updater (lolMiner)). The seventh, inotify_guard,\n    is the kit's watchdog process name; with no suffix or directory test it\n    matches any created file path that contains it. The rule has no process or\n    package-manager filter, so a package manager creating one of these files also\n    matches. The kit's system unit systemd-journal-flush.service uses the name of\n    a real systemd unit and is not matched.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-25\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.stealth\n    - attack.t1543.002\n    - attack.t1036.005\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: file_event\n    product: linux\ndetection:\n    selection_ghost_unit_names:\n        TargetFilename|contains:\n            - 'fontconfig-cache.service'\n            - 'inotify_guard'\n            - 'dbus-session-monitor.service'\n            - 'gnome-shell-ext-updater.service'\n            - 'archivist-daemon.service'\n            - 'journald-svc.service'\n            - 'systemd-guard.service'\n    condition: selection_ghost_unit_names\nfalsepositives:\n    - >-\n      Custom legitimate service deployments using similar names (extremely\n      unlikely for fontconfig-cache.service or gnome-shell-ext-updater.service\n      as systemd units)\n    - >-\n      Desktop environment package that legitimately provides\n      gnome-shell-ext-updater (verify package manager ownership with dpkg -S\n      or rpm -qf)\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-05-25T00:00:00Z",
             "labels": [
@@ -1469,15 +1469,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--5e5923ce-0e72-5ce6-8203-5e543d07a12b",
+            "id": "indicator--30384888-d981-5a3b-a864-0bef5c3c22ad",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:13.746144Z",
-            "modified": "2026-10-01T19:54:13.746144Z",
-            "name": "THL HUNT GHOST Cryptojacker Kit Hysteria v2 QUIC Initial Inbound to Victim-Hosted Listener Ports (Hunt Lead, Corroborate Before Escalating)",
+            "created": "2026-10-11T14:08:24.273122Z",
+            "modified": "2026-10-11T14:08:24.273122Z",
+            "name": "THL HUNT GHOST Cryptojacker Kit QUIC v1 Initial Inbound to Candidate Hysteria Listener Ports 14433-14444 (Hunt Lead, Corroborate Before Escalating)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert udp $EXTERNAL_NET any -> $HOME_NET 14433:14444 (msg:\"THL HUNT GHOST Cryptojacker Kit Hysteria v2 QUIC Initial Inbound to Victim-Hosted Listener Ports (Hunt Lead, Corroborate Before Escalating)\"; dsize:>=1200; byte_test:1,=,0xC,0,bitmask 0xF0; content:\"|00 00 00 01|\"; offset:1; depth:4; threshold:type limit,track by_dst,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/; classtype:policy-violation; sid:9100109; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-30, signature_severity Minor, tag Backdoor, tag GHOST_kit, tag Hysteria_v2;)",
+            "pattern": "alert udp $EXTERNAL_NET any -> $HOME_NET 14433:14444 (msg:\"THL HUNT GHOST Cryptojacker Kit QUIC v1 Initial Inbound to Candidate Hysteria Listener Ports 14433-14444 (Hunt Lead, Corroborate Before Escalating)\"; dsize:>=1200; byte_test:1,=,0xC,0,bitmask 0xF0; content:\"|00 00 00 01|\"; offset:1; depth:4; threshold:type limit,track by_dst,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/; classtype:policy-violation; sid:9100109; rev:3; metadata:author The_Hunters_Ledger, date 2026-09-30, signature_severity Minor, tag Backdoor, tag GHOST_kit, tag Hysteria_v2;)",
             "pattern_type": "suricata",
             "valid_from": "2026-05-25T00:00:00Z",
             "labels": [
@@ -3094,12 +3094,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--e5207b02-3a0d-5804-a999-22ad1cec0edf",
+            "id": "relationship--312c3b2b-cbdf-5e5a-9ab0-6ec78333c340",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:13.754252Z",
-            "modified": "2026-10-01T19:54:13.754252Z",
+            "created": "2026-10-11T14:08:24.284353Z",
+            "modified": "2026-10-11T14:08:24.284353Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--787f82f6-889c-5924-9474-a2e3926991d6",
+            "source_ref": "indicator--0f66f4ac-ff48-52cf-a0a0-f877dc42b4a4",
             "target_ref": "malware--e50e9e2e-408e-52fd-ad9a-7871c902a999",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -3234,12 +3234,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--ac9980d1-5eae-5704-8be5-625cd92fb7ef",
+            "id": "relationship--ebf236f3-9cf3-5757-afb6-c4ab7652aa54",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:13.754724Z",
-            "modified": "2026-10-01T19:54:13.754724Z",
+            "created": "2026-10-11T14:08:24.285187Z",
+            "modified": "2026-10-11T14:08:24.285187Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--5e5923ce-0e72-5ce6-8203-5e543d07a12b",
+            "source_ref": "indicator--30384888-d981-5a3b-a864-0bef5c3c22ad",
             "target_ref": "malware--e50e9e2e-408e-52fd-ad9a-7871c902a999",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -10923,7 +10923,7 @@
             "id": "report--9aa555ca-d9d6-51c3-8af0-af351596d438",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.787945Z",
-            "modified": "2026-10-11T07:05:19.593524Z",
+            "modified": "2026-10-11T14:08:24.334038Z",
             "name": "GHOST Cryptojacker Kit Family — Vova75Rus Kit-Author Supply Chain",
             "report_types": [
                 "threat-report"
@@ -11012,7 +11012,7 @@
                 "indicator--dce86bf3-3e8c-506b-ae70-83f378e532d6",
                 "indicator--a484fc2f-55e0-5e06-9140-470c6da5d93f",
                 "indicator--a1f7f480-7372-5967-950f-f5d9b8c4728c",
-                "indicator--787f82f6-889c-5924-9474-a2e3926991d6",
+                "indicator--0f66f4ac-ff48-52cf-a0a0-f877dc42b4a4",
                 "indicator--9fae4a61-8e3a-5de2-9212-f438f5be456f",
                 "indicator--5956f922-e13f-5a7e-962b-b6d0f2d499b8",
                 "indicator--56a586e2-920f-5244-878c-6685f27aebd5",
@@ -11022,7 +11022,7 @@
                 "indicator--8489f391-5119-54e4-b79a-1c4fad695970",
                 "indicator--1bfe229f-9656-57a6-bf96-7c53c78d776d",
                 "indicator--4004ac82-6f13-5504-8b3f-0805cc63a58d",
-                "indicator--5e5923ce-0e72-5ce6-8203-5e543d07a12b",
+                "indicator--30384888-d981-5a3b-a864-0bef5c3c22ad",
                 "indicator--2beb4dc7-06d9-5c7f-8570-934e77fc5a4a",
                 "malware--8eebd6d2-26d2-53fd-98c4-6e2b47107a7b",
                 "malware--2ae744cc-d429-562c-b3ff-20af345c49c8",
@@ -11122,7 +11122,7 @@
                 "relationship--4b43eb00-7033-5719-be45-097407cb420e",
                 "relationship--a1c8538d-49df-5647-8463-fdea84ad28bb",
                 "relationship--1682d665-6069-5278-86cd-fd33ec29f33f",
-                "relationship--e5207b02-3a0d-5804-a999-22ad1cec0edf",
+                "relationship--312c3b2b-cbdf-5e5a-9ab0-6ec78333c340",
                 "relationship--697c58a5-b5f5-5b89-b658-73cb6d00e490",
                 "relationship--633c1fe1-bbad-55b4-8d3f-5442b5d4fbdb",
                 "relationship--5e70bae7-6700-5e7a-8ef1-9b62953cc0bb",
@@ -11132,7 +11132,7 @@
                 "relationship--7e3d060a-6dd7-5dbc-a933-be9cd44d1bd3",
                 "relationship--41040516-e978-5967-a5b6-0d0d930b4ea4",
                 "relationship--000e6520-a77b-5fdf-9fc0-38889e70d83b",
-                "relationship--ac9980d1-5eae-5704-8be5-625cd92fb7ef",
+                "relationship--ebf236f3-9cf3-5757-afb6-c4ab7652aa54",
                 "relationship--3203b5ce-7f1f-5acc-8989-31dbc3f069c5",
                 "relationship--9d19763e-e274-5fd1-9ec2-cd112b87dc26",
                 "relationship--63edcfdb-1ec3-5016-887d-6e99c7e7a4a9",

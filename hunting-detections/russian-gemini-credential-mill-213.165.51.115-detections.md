@@ -98,16 +98,16 @@ rule MAL_Python_LLMPersonalized_Credential_Mutator_Family {
 **Robustness:** 3
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1132.001 (Standard Encoding), T1087 (Account Discovery — `/api/v1/agents` dumps all beacons)
 **Confidence:** HIGH
-**Rationale:** The operator's own banner string ("A2A C2 MULTI-AGENT CONSOLE"), or the combination of `BaseHTTPRequestHandler` with three of five bespoke `/api/v1/` endpoint paths, is essentially a fingerprint of this specific framework — no legitimate web application framework pairs `BaseHTTPServer.BaseHTTPRequestHandler` with this exact endpoint set and UTF-16LE body decoding.
+**Rationale:** The operator's own banner string ("A2A C2 MULTI-AGENT CONSOLE"), or the combination of `BaseHTTPRequestHandler` with three of five bespoke `/api/v1/` endpoint paths, is essentially a fingerprint of this specific framework — no legitimate web application framework pairs `BaseHTTPServer.BaseHTTPRequestHandler` with this endpoint set. The decode clause is satisfied by either `base64.b64decode` or `decode('utf-16le')`, so UTF-16LE decoding is not required, and the endpoint clause is three of five paths.
 **False Positives:** None known.
 **Blind Spots:** A rewrite onto a different HTTP framework (Flask/FastAPI) with renamed endpoints and a dropped banner string evades detection.
-**Validation:** Scan `c2_server.py` or a functional equivalent — the banner or endpoint-combination clause, plus the encoding clause, must both match; an unrelated `BaseHTTPRequestHandler`-based Python service with different endpoints must NOT fire.
+**Validation:** Scan `c2_server.py` or a functional equivalent — the banner or endpoint-combination clause, plus a decode string (`base64.b64decode` alone is enough), must both match; an unrelated `BaseHTTPRequestHandler`-based Python service with different endpoints must NOT fire.
 **Deployment:** Endpoint AV/EDR file scan, server-side file integrity monitoring, threat hunting on Linux server filesystems.
 
 ```yara
 rule MAL_Python_A2A_C2_Server_Unauthenticated {
    meta:
-      description = "Detects c2_server.py-class Python stdlib unauthenticated C2 servers — BaseHTTPRequestHandler with /api/v1/{update,agents,interact,telemetry} endpoints, base64+UTF-16LE body decoding, zero auth — operator-built A2A C2 framework from UTA-2026-012"
+      description = "Detects c2_server.py-class Python stdlib C2 servers (operator-built A2A C2 framework from UTA-2026-012): either the banner A2A C2 MULTI-AGENT CONSOLE, or BaseHTTPRequestHandler with three of the five /api/v1/ endpoint paths (update, agents, interact, telemetry, get_results), together with at least one of the update, agents, interact or telemetry paths, a decode string (base64.b64decode or decode(utf-16le), either one), and PAYLOAD_DIR or BaseHTTPRequestHandler. The sample was unauthenticated, but the rule does not test authentication."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/"
@@ -181,16 +181,16 @@ rule MAL_Python_A2A_C2_Client_Console {
 **Robustness:** 2
 **ATT&CK Coverage:** T1547.001 (Registry Run Keys), T1036 (Masquerading), T1105 (Ingress Tool Transfer), T1059.001 (PowerShell)
 **Confidence:** HIGH
-**Rationale:** Requires the `WindowsUpdateManager` masquerade value name AND a corroborating path/key context AND one of four C2-artifact markers (domain, payload-domain, endpoint path, or bespoke header — three of which do not depend on the operator's specific domain) AND a PowerShell networking primitive. Because the C2-artifact clause has non-domain fallback options, the rule still fires after full domain rotation.
-**False Positives:** None known — `WindowsUpdateManager` as an HKCU\Run value name combined with any of the four C2-artifact markers is not a pattern found in any legitimate Windows Update or Windows Defender component.
+**Rationale:** Requires the `WindowsUpdateManager` masquerade value name AND a corroborating path/key context AND one of four C2-artifact markers (domain, payload-domain, endpoint path, or bespoke header — two of which, the endpoint path and the header, do not depend on the operator's specific domain) AND a PowerShell networking primitive. Because the C2-artifact clause has non-domain fallback options, the rule still fires after full domain rotation.
+**False Positives:** None known — the `WindowsUpdateManager` string combined with a Run-key text or script-path string and any of the four C2-artifact markers is not a pattern found in any legitimate Windows Update or Windows Defender component. No hive is tested, and the script-path string alone satisfies the Run-key clause.
 **Blind Spots:** A rebuild that renames the registry value AND replaces all four C2-artifact markers with something outside this anchor set evades detection.
 **Validation:** Scan `WindowsUpdateManager.ps1` or a functional equivalent — all four clauses must match; a legitimate PowerShell script using `Invoke-RestMethod` with no `WindowsUpdateManager` reference must NOT fire.
-**Deployment:** Endpoint AV/EDR file scan, PowerShell script-block logging (Event 4104), file integrity monitoring on `%LOCALAPPDATA%\Microsoft\`.
+**Deployment:** Endpoint AV/EDR file scan and file integrity monitoring on `%LOCALAPPDATA%\Microsoft\`. Script text recovered from PowerShell script-block logging (Event 4104) can be scanned as a file; the rule does not read events itself.
 
 ```yara
 rule MAL_PowerShell_WindowsUpdateManager_Stealer_Loader {
    meta:
-      description = "Detects WindowsUpdateManager.ps1 — operator-bespoke persistence script masquerading as Windows Update component; HKCU Run key value + %LOCALAPPDATA%\\Microsoft\\ path + Cloudflare Tunnel C2 callback to tralalarkefe.com — UTA-2026-012"
+      description = "Detects WindowsUpdateManager.ps1 — operator-bespoke persistence script masquerading as Windows Update component (UTA-2026-012). Requires the WindowsUpdateManager name, the text CurrentVersion\\Run or the path Microsoft\\WindowsUpdateManager.ps1 (no hive is tested), one of four C2 markers (tralalarkefe.com, payloads.tralalarkefe.com, /api/v1/update or X-Agent-ID), and SecurityProtocol or Invoke-RestMethod"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/"
@@ -311,7 +311,7 @@ rule MAL_Markdown_AI_Operator_Handoff_Document_Family {
 ```yara
 rule MAL_Russian_Operator_Persona_Strings {
    meta:
-      description = "Detects UTA-2026-012 operator-authored files via Cyrillic persona strings (Братух/Бро addressing of Gemini, Комп Доктора victim-machine reference) co-occurring with C2 endpoint or API key indicators — high-specificity attribution aid for post-incident forensics"
+      description = "Detects UTA-2026-012 operator-authored files via Cyrillic persona strings (Братух addressing of Gemini, Комп Доктора victim-machine reference, Погнали session-start idiom) co-occurring with C2 endpoint or API key indicators — an attribution aid for post-incident forensics; two of the five operational markers are generic, so triage every hit"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/"
@@ -385,29 +385,30 @@ rule MAL_Python_Stolen_LLM_Key_Validator {
 
 ### Detection Rules
 
-#### 1Password Vault Export File Created or Accessed by Non-1Password Process
+#### 1Password Vault Export File Written by a Non-1Password Process
 
 **Tier:** Detection
 **Robustness:** 2
 **ATT&CK Coverage:** T1555.005 (Credentials from Password Stores — Password Managers), T1005 (Data from Local System)
 **Confidence:** HIGH
-**Rationale:** Requires a 1Password vault-export file extension/name pattern AND a filter excluding the legitimate 1Password application images. This combination — export artifact plus a non-1Password accessing process — is a durable technique signal independent of any campaign-specific domain or filename.
+**Rationale:** Requires a 1Password vault-export file extension/name pattern AND a filter excluding the legitimate 1Password application images. This combination — export artifact plus a non-1Password writing process — is a durable technique signal independent of any campaign-specific domain or filename.
 **False Positives:** Legitimate authorized 1Password vault migration or backup workflows by IT staff; the 1Password CLI (`op.exe`) used for authorized scripted access is not excluded by the current filter and should be allowlisted per-deployment.
 **Blind Spots:** A theft routine that renames the exported file before it touches disk (avoiding the `.1pux`/`.1pif`/`1Password Export` pattern) evades detection.
-**Validation:** Trigger a 1Password vault export from a non-1Password process (e.g., a Python script reading the export directory) — must match; a export created and immediately handled by `1Password.exe` itself must NOT fire.
+**Validation:** Trigger a 1Password vault export from a non-1Password process (e.g., a Python script writing or copying an export file) — must match; a export created and immediately handled by `1Password.exe` itself must NOT fire.
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (file-creation telemetry).
 
 ```yaml
-title: 1Password Vault Export File Created or Accessed by Non-1Password Process
+title: 1Password Vault Export File Written by a Non-1Password Process
 id: 0ced06f4-f028-44fa-b7fc-4f1a96c3076d
 status: experimental
 description: >-
-  Detects creation or access of 1Password vault export files (.1pux, .1pif) by processes
-  other than the 1Password application. The UTA-2026-012 operator's credential ledger
+  Detects a file event that creates or writes a 1Password vault export file (a name ending
+  .1pux, .1pif or 1Password Export) from a process other than the 1Password application.
+  A file event records creation or write, never a read, so access is not covered. The UTA-2026-012 operator's credential ledger
   (CREDENTIALS.md) references a complete 1Password vault export dated 2026-03-20 from an
   unidentified victim, indicating successful extraction of a victim's entire password manager
-  vault via stolen access. Accessing process being Python or PowerShell rather than 1Password
-  is the key discrimination signal.
+  vault via stolen access. The writing process being anything other than the 1Password application
+  images is the discrimination signal; Python or PowerShell are the cases of interest.
 references:
     - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
 author: The Hunters Ledger
@@ -639,17 +640,19 @@ level: medium
 **Robustness:** 2
 **ATT&CK Coverage:** T1090.004 (Domain Fronting), T1572 (Protocol Tunneling), T1021.001 (RDP via tunnel), T1021.004 (SSH via tunnel)
 **Confidence:** MODERATE
-**Rationale:** Anchored on the technique (`cloudflared access tcp --hostname`, the interactive reverse-tunnel-to-arbitrary-host command form) rather than any specific domain, so it survives full rotation of the operator's infrastructure — but it requires an organization-specific allowlist to be populated before deployment, and ships with only a placeholder value.
+**Rationale:** Anchored on the technique (`cloudflared access tcp --hostname`, the command form the operator used; the rule tests `access`, `tcp` and `--hostname` as three unordered substrings) rather than any specific domain, so it survives full rotation of the operator's infrastructure — but it requires an organization-specific allowlist to be populated before deployment, and ships with only a placeholder value.
 **False Positives:** Organizations with legitimate Cloudflare Tunnel deployments using the `access tcp` command form (as opposed to the more common `tunnel run` service registration); developer workstations running cloudflared for legitimate service exposure.
-**Deployment:** auditd execve, Sysmon (Linux), EDR process-creation on server-class hosts. Populate `filter_known_legit` with your organization's known Cloudflare Tunnel hostnames before deployment.
+**Deployment:** Sysmon for Linux or EDR process-creation events that supply `Image` and `CommandLine`, on server-class hosts. Raw auditd EXECVE records carry neither field in normalised form and would need normalising first; this page declares no such normalisation. Populate `filter_known_legit` with your organization's known Cloudflare Tunnel hostnames before deployment.
 
 ```yaml
 title: Cloudflared Access TCP Tunnel to Potentially Unauthorized Hostname
 id: 57ce00ce-d1ee-4621-9654-cefb4bf3b60d
 status: experimental
 description: >-
-  Detects cloudflared access tcp invocations on Linux server-class hosts referencing hostnames
-  outside an organizational allowlist. The UTA-2026-012 operator used cloudflared access tcp
+  Detects Linux process creation of cloudflared whose command line contains access, tcp and
+  --hostname (three substrings, in any order), unless it also contains the allowlist hostname.
+  The shipped allowlist holds only a placeholder, so until a deployment adds its known
+  hostnames every such invocation fires, and no host role is tested. The UTA-2026-012 operator used cloudflared access tcp
   --hostname windows_server.tralalarkefe.com and --hostname gil_dr1.tralalarkefe.com to
   maintain persistent reverse-TCP tunnels to the victim machines for RDP and SSH.
   This pattern allows persistent victim access without victim-side firewall rule changes.
@@ -670,6 +673,7 @@ tags:
 logsource:
     category: process_creation
     product: linux
+    definition: 'Requires Linux process-creation events with Image and CommandLine populated, for example Sysmon for Linux EID 1 or an EDR process feed. Raw auditd EXECVE records need normalising first.'
 detection:
     selection:
         Image|endswith: '/cloudflared'
@@ -911,7 +915,7 @@ level: medium
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1132.001 (Standard Encoding), T1041 (Exfiltration Over C2 Channel)
 **Confidence:** HIGH
 **Rationale:** Anchors on the operator-bespoke `X-Agent-ID` header name, the POST method, and the `/api/v1/` endpoint family — none of which reference the operator's specific domain, so the rule survives complete infrastructure rotation. No legitimate web application framework uses this header name in this endpoint naming pattern. Added a literal `content` prefilter ahead of the URI `pcre` (not present in the original) so the regex is gated behind a content match per current formatting standards.
-**False Positives:** None known — the combination of `/api/v1/update` or `/api/v1/interact` paths with the `X-Agent-ID` header is operator-bespoke and has no known legitimate-software counterpart.
+**False Positives:** None known — the combination of any of the four paths `/api/v1/update`, `/api/v1/interact`, `/api/v1/telemetry` or `/api/v1/get_results` with the `X-Agent-ID` header is operator-bespoke and has no known legitimate-software counterpart.
 **Blind Spots:** A rewrite that renames the header and endpoint family evades detection; TLS-encrypted traffic without inline decryption is not inspectable at the HTTP layer by this signature alone (pair with the TLS/JA-fingerprint layer if available).
 **Validation:** Replay a PCAP of an A2A C2 beacon check-in — must alert; an unrelated HTTP POST carrying neither the header nor the endpoint pattern must NOT fire.
 **Deployment:** Inline or passive HTTP inspection, Zeek http.log, WAF/proxy with content inspection.

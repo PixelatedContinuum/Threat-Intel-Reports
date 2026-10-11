@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--1b6394a4-fd9b-4cba-bb64-9b4c1325b5fb",
+    "id": "bundle--b00e5913-e79d-4380-8eea-75246fdfaf3b",
     "objects": [
         {
             "type": "identity",
@@ -901,15 +901,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--d36c8055-09c3-5542-a8f8-653728f43ca4",
+            "id": "indicator--e686fb10-dd74-5606-9ae8-74c768796823",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:14.130964Z",
-            "modified": "2026-10-01T19:54:14.130964Z",
-            "name": "GOCLOUD_Listener2_Control_Plane",
+            "created": "2026-10-01T19:54:14.131037Z",
+            "modified": "2026-10-11T14:08:25.269597Z",
+            "name": "GOCLOUD_LAN_Probe_Attack_Banner",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule GOCLOUD_Listener2_Control_Plane {\n   meta:\n      description = \"Detects the GOCLOUD node-2 reverse-shell control plane (listener2.py) by its unauthenticated CONTROL_PORT 9997 operator interface, the list / all: broadcast verbs, the fixed 4444-8888 shell-catch port set, and the id command auto-pushed on every reverse-shell connect\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/\"\n      date = \"2026-07-26\"\n      hash1 = \"f800c809dfdc0ce22be0fe638734212380d99293fc466242b3fea6e6e858e9df\"\n      family = \"GOCLOUD\"\n      malware_type = \"Reverse-shell C2 controller\"\n      id = \"986a37d8-3e5f-511e-b6f7-3569e89a1c54\"\n   strings:\n      $ctl     = \"CONTROL_PORT\" ascii\n      $port    = \"9997\" ascii\n      $verb1   = \"all:\" ascii\n      $verb2   = \"list\" ascii\n      $ports   = \"4444\" ascii\n      $auto    = \"id\\\\n\" ascii\n   condition:\n      filesize < 60KB and\n      $ctl and $port and 2 of ($verb1, $verb2, $ports, $auto)\n}",
+            "pattern": "rule GOCLOUD_LAN_Probe_Attack_Banner {\n   meta:\n      description = \"Detects the GOCLOUD node-2 LAN lateral-movement probe (a.py) by its cleartext === ATTACK === report banner plus any three of six bare tokens (SMB, WMI, SCHTASKS, OK!, ADMIN$, IPC$) taken from the result markers it posts back to the operator and the administrative share names it uses; the rule does not test for net use, share order or the C$ share, and does not pair a marker with OK!\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/\"\n      date = \"2026-07-26\"\n      hash1 = \"44a14aafec8482f691801e28a3893c1ae1fdfbbed4dce963b002b7095f6cb120\"\n      family = \"GOCLOUD\"\n      malware_type = \"LAN lateral-movement probe\"\n      id = \"e8cbbcc2-83b7-59dd-8e4e-b80ea72a5a4f\"\n   strings:\n      $banner = \"=== ATTACK ===\" ascii\n      $smb    = \"SMB\" ascii\n      $wmi    = \"WMI\" ascii\n      $sch    = \"SCHTASKS\" ascii\n      $ok     = \"OK!\" ascii\n      $c      = \"ADMIN$\" ascii\n      $ipc    = \"IPC$\" ascii\n   condition:\n      filesize < 60KB and\n      $banner and 3 of ($smb, $wmi, $sch, $ok, $c, $ipc)\n}",
             "pattern_type": "yara",
             "valid_from": "2026-07-26T00:00:00Z",
             "labels": [
@@ -922,15 +922,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--e686fb10-dd74-5606-9ae8-74c768796823",
+            "id": "indicator--d36c8055-09c3-5542-a8f8-653728f43ca4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:14.131037Z",
-            "modified": "2026-10-01T19:54:14.131037Z",
-            "name": "GOCLOUD_LAN_Probe_Attack_Banner",
+            "created": "2026-10-01T19:54:14.130964Z",
+            "modified": "2026-10-11T14:08:25.269705Z",
+            "name": "GOCLOUD_Listener2_Control_Plane",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule GOCLOUD_LAN_Probe_Attack_Banner {\n   meta:\n      description = \"Detects the GOCLOUD node-2 LAN lateral-movement probe (a.py) by its cleartext === ATTACK === report banner, the SMB / WMI / SCHTASKS OK result markers it posts back to the operator, and its sequential net use against C$ / ADMIN$ / IPC$ administrative shares\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/\"\n      date = \"2026-07-26\"\n      hash1 = \"44a14aafec8482f691801e28a3893c1ae1fdfbbed4dce963b002b7095f6cb120\"\n      family = \"GOCLOUD\"\n      malware_type = \"LAN lateral-movement probe\"\n      id = \"e8cbbcc2-83b7-59dd-8e4e-b80ea72a5a4f\"\n   strings:\n      $banner = \"=== ATTACK ===\" ascii\n      $smb    = \"SMB\" ascii\n      $wmi    = \"WMI\" ascii\n      $sch    = \"SCHTASKS\" ascii\n      $ok     = \"OK!\" ascii\n      $c      = \"ADMIN$\" ascii\n      $ipc    = \"IPC$\" ascii\n   condition:\n      filesize < 60KB and\n      $banner and 3 of ($smb, $wmi, $sch, $ok, $c, $ipc)\n}",
+            "pattern": "rule GOCLOUD_Listener2_Control_Plane {\n   meta:\n      description = \"Detects the GOCLOUD node-2 reverse-shell control plane (listener2.py) by the CONTROL_PORT constant and the control port number 9997 of its unauthenticated operator interface, plus any two of four supporting strings: the all: broadcast verb, the list verb, the shell-catch port 4444 (the report's catch-port set is 4444 to 8888, but only 4444 is tested) and the id command text pushed on every reverse-shell connect\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/\"\n      date = \"2026-07-26\"\n      modified = \"2026-10-11\"\n      hash1 = \"f800c809dfdc0ce22be0fe638734212380d99293fc466242b3fea6e6e858e9df\"\n      family = \"GOCLOUD\"\n      malware_type = \"Reverse-shell C2 controller\"\n      id = \"986a37d8-3e5f-511e-b6f7-3569e89a1c54\"\n   strings:\n      $ctl     = \"CONTROL_PORT\" ascii\n      $port    = \"9997\" ascii\n      $verb1   = \"all:\" ascii\n      $verb2   = \"list\" ascii\n      $ports   = \"4444\" ascii\n      $auto    = \"id\\\\n\" ascii\n   condition:\n      filesize < 60KB and\n      $ctl and $port and 2 of ($verb1, $verb2, $ports, $auto)\n}",
             "pattern_type": "yara",
             "valid_from": "2026-07-26T00:00:00Z",
             "labels": [
@@ -946,12 +946,12 @@
             "id": "indicator--b449a6e9-9f27-5a0e-8ddf-5934bf3e6321",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.131173Z",
-            "modified": "2026-10-01T19:54:14.131173Z",
+            "modified": "2026-10-11T14:08:25.269823Z",
             "name": "Svchost.EXE Executed From Non-System Directory",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Svchost.EXE Executed From Non-System Directory\nid: d1fb7553-97d4-45f2-a10b-3f36ed4a242b\nstatus: experimental\ndescription: >-\n    Detects svchost.exe executing from a path outside System32 or SysWOW64. The GOCLOUD\n    cryptojacking toolkit renames its XMRig miner to svchost.exe and runs it from a\n    TimeService folder under the user AppData tree, a masquerade legitimate Windows service\n    host processes never perform.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/\nauthor: The Hunters Ledger\ndate: 2026-07-26\ntags:\n    - attack.stealth\n    - attack.t1036.005\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        Image|endswith: '\\svchost.exe'\n    filter_main_legit_path:\n        Image|contains:\n            - ':\\Windows\\System32\\'\n            - ':\\Windows\\SysWOW64\\'\n            - ':\\Windows\\WinSxS\\'\n    condition: selection and not filter_main_legit_path\nfalsepositives:\n    - Third-party software that ships a bundled binary named svchost.exe outside the system tree\nlevel: high",
+            "pattern": "title: Svchost.EXE Executed From Non-System Directory\nid: d1fb7553-97d4-45f2-a10b-3f36ed4a242b\nstatus: experimental\ndescription: >-\n    Detects svchost.exe executing from a path that does not contain the drive-rooted Windows System32, SysWOW64 or WinSxS directory (a path under any subdirectory of those three also counts as inside and does not match). The GOCLOUD\n    cryptojacking toolkit renames its XMRig miner to svchost.exe and runs it from a\n    TimeService folder under the user AppData tree, a masquerade legitimate Windows service\n    host processes never perform.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/\nauthor: The Hunters Ledger\ndate: 2026-07-26\ntags:\n    - attack.stealth\n    - attack.t1036.005\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        Image|endswith: '\\svchost.exe'\n    filter_main_legit_path:\n        Image|contains:\n            - ':\\Windows\\System32\\'\n            - ':\\Windows\\SysWOW64\\'\n            - ':\\Windows\\WinSxS\\'\n    condition: selection and not filter_main_legit_path\nfalsepositives:\n    - Third-party software that ships a bundled binary named svchost.exe outside the system tree\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-07-26T00:00:00Z",
             "labels": [
@@ -3286,7 +3286,7 @@
             "id": "report--f600aa39-9356-5b94-8a65-4b8d27c6ba2e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.142347Z",
-            "modified": "2026-10-11T05:07:59.680259Z",
+            "modified": "2026-10-11T14:08:25.285121Z",
             "name": "GOCLOUD: A Commodity Cryptojacking Operation, Captured Whole",
             "description": "Two-node commodity cryptojacking operation bound by a shared FOFA API key and Monero wallet. THIRD-PARTY VICTIM INDICATORS ARE DELIBERATELY WITHHELD from this published feed (heartbeat-confirmed mining hosts, the Redis-verified host, and the hardcoded Jenkins re-attack targets are routed to a CERT-disclosure track, not the public feed). An operator account-identifier string paired with the FOFA key is also withheld: it traces to an unrelated third party's published tooling and is assessed as copied residue, not operator identity, so the finding is published without naming the person. The FOFA key VALUE is retained as an operator IOC. Excluded as non-operator: experimentaldumain.com and all historical domain resolutions on node 1 (prior-tenant recycled-IP artifacts; this is a pure raw-IP operation). The node-2 /xmrig ELF is the stock XMRig Linux binary; ignore any Mirai tag as a loose-signature false positive.",
             "report_types": [
@@ -3371,8 +3371,8 @@
                 "indicator--2499b0e1-3893-5e8d-a19c-fb3791f619bb",
                 "indicator--ca3de1fd-2477-5cf5-82ea-90a25897c375",
                 "indicator--25efeb92-5d0d-5adc-93ac-6e35a3c8578a",
-                "indicator--d36c8055-09c3-5542-a8f8-653728f43ca4",
                 "indicator--e686fb10-dd74-5606-9ae8-74c768796823",
+                "indicator--d36c8055-09c3-5542-a8f8-653728f43ca4",
                 "indicator--b449a6e9-9f27-5a0e-8ddf-5934bf3e6321",
                 "indicator--0f7d4ae9-b9bc-55be-a830-02ecbebcc3eb",
                 "indicator--ed8ccdde-637f-571a-9349-7c54001be07f",

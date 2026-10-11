@@ -22,8 +22,8 @@ Three operationally-separate clusters shared the multi-tenant Aeza bulletproof I
 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
-| YARA | 4 | 4 | T1027, T1027.002, T1027.013, T1071.001, T1102, T1140 | 1 |
-| Sigma | 2 | 1 | T1112, T1218.008, T1055.012, T1071.001 | 1 |
+| YARA | 4 | 4 | T1027, T1027.001, T1027.002, T1027.013, T1140 | 1 |
+| Sigma | 1 | 2 | T1112, T1218.004, T1071.001 | 1 |
 | Suricata | 1 | 0 | T1071.001 | 4 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
@@ -31,7 +31,7 @@ Three operationally-separate clusters shared the multi-tenant Aeza bulletproof I
 **Highest-confidence anchors:**
 - The `.frontb` PE section name + `Roland` decoy string, and the operator-modified Q3VM bytecode magic `0x14744214` + `Roland` (both YARA Detection) are family-wide Rhadamanthys structural indicators. They are expected to generalize beyond this one MaaS customer.
 - The `HKU\<SID>\Software\SibCode\sn` registry marker (Sigma Hunting) is confirmed across four independent sibling Stage-2 sandbox runs, not just this customer's sample; it covers pre-0.9.1 builds only.
-- The BellaMain panel's bespoke PHP admin-endpoint paths (YARA + Sigma Detection) and the Rhadamanthys customer panel-ID URL token `e6d92c6b5b2a03bee7fbab40` (Suricata Detection) both survive infrastructure rotation. Each keys on an operator/developer artifact, not the current IP or domain.
+- The BellaMain panel's bespoke admin-directory and function-name strings (YARA Detection) and admin-endpoint request paths (Sigma Detection), and the Rhadamanthys customer panel-ID URL token `e6d92c6b5b2a03bee7fbab40` (Suricata Detection), survive infrastructure rotation. Each keys on an operator/developer artifact, not the current IP or domain.
 
 **Atomics routed to the IOC feed:** six of the original package's rules keyed solely on a hard-coded IP, a domain list, or a hash/imphash/PDB-path combination, with no behavior surviving once the literal is removed. The Rhadamanthys C2 IP `79.133.180.168:3394` (a direct TCP match and a second rule using it as a hardcoded TLS SNI content match), the BellaMain staging IP `79.137.192.3` (HTTP Host match), the 17-domain Inkognito brand-portfolio list (a Sigma `dns` selection and a Suricata PCRE with no content prefilter), and the Tofsee co-tenant's SHA256/imphash/PDB-path fingerprint. All values are carried in [`opendirectory-79-137-192-3-20260515-iocs.json`](/ioc-feeds/opendirectory-79-137-192-3-20260515-iocs.json); three domains referenced only in the original rules (`akredup.ru`, `divar-irantop.shop`, `catnpv.xyz`) were not yet in the feed and have been added.
 
@@ -43,7 +43,7 @@ This detection package targets three operationally-separate operators that share
 
 | Cluster | Family / Operator | Surviving Rules (post-tiering) | Defender Priority |
 |---|---|---|---|
-| **C** | Rhadamanthys MaaS-customer (loader + Stage-2) | 6 YARA (3 Detection, 3 Hunting) + 2 Sigma Detection + 1 Suricata Detection | **PRIMARY** — broadly applicable, Tier-1 commodity stealer |
+| **C** | Rhadamanthys MaaS-customer (loader + Stage-2) | 6 YARA (3 Detection, 3 Hunting) + 2 Sigma Hunting + 1 Suricata Detection | **PRIMARY** — broadly applicable, Tier-1 commodity stealer |
 | A | BellaMain Turkish PhaaS panel | 1 YARA Detection + 1 Sigma Detection | Regional (Turkish marketplace targets) |
 | B | Inkognito brand portfolio (VPN/phishing/CryptOne) | 0 — coverage is IOC-feed-only (17 domains); no durable behavioral/structural indicator was available in the underlying evidence | Regional (Russian-speaking + EU phishing) — block via feed |
 | (Co-tenant) | Tofsee spam-botnet | 1 YARA Hunting (family-bound reference rule) | General — family-stable rule, not campaign-bound |
@@ -150,8 +150,8 @@ rule MALW_Rhadamanthys_Q3VMBytecodeModifiedMagic
 **ATT&CK Coverage:** T1027 (Obfuscated Files or Information)
 **Confidence:** HIGH
 **Rationale:** Requires 2-of-4 operator-specific strings: two build/campaign ID literals, a 45-character operator credential/token, and the customer panel ID also used in the Suricata URI-path rule below. The panel ID was independently observed stable across two beacons roughly 40 days apart, giving this combination real cross-time durability evidence beyond a single sample.
-**False Positives:** None known — all four strings are operator-chosen values with no legitimate-software collision; the 2-of-4 threshold means an operator must rotate at least two of the four to evade.
-**Blind Spots:** A loader rebuild that rotates 2+ of the four strings evades; does not generalize to other MaaS customers (these are this operator's own values).
+**False Positives:** None known — all four strings are operator-chosen values with no legitimate-software collision; the 2-of-4 threshold means an operator must rotate at least three of the four to evade, since any two remaining strings still match.
+**Blind Spots:** A loader rebuild must rotate at least three of the four strings to evade (any two remaining strings still satisfy `2 of them`); the rule does not generalize to other MaaS customers (these are this operator's own values).
 **Validation:** Scan the reference loader sample — at least 2 of the 4 strings must match; unrelated software must NOT fire.
 **Deployment:** Endpoint AV/EDR file scan, static triage of loader binaries.
 
@@ -183,14 +183,15 @@ rule MALW_Rhadamanthys_OperatorLoaderStrings
 }
 ```
 
-#### BellaMain PhaaS Panel PHP Source
+#### BellaMain PhaaS Panel Source Strings (Admin Directory, Wadanz Functions, Alias)
 
 **Tier:** Detection
 **Robustness:** 2
-**ATT&CK Coverage:** T1071.001 (Web Protocols), T1102 (Web Service)
+**ATT&CK Coverage:** None
+**ATT&CK Note:** The rule is a static string match on panel files and observes no technique. The report maps the kit's Telegram Bot API exfiltration to T1102 and its phishing pages to T1566.002; those are behaviours of the kit, not events this rule tests.
 **Confidence:** HIGH
 **Rationale:** Requires the obfuscated admin-directory name, or the Wadanz developer's session-encryption function names, or the operator alias combined with a secondary anchor. The Wadanz function names are a developer-signature artifact — durable across panel redeployments and potentially useful for pivoting to other panels by the same developer.
-**False Positives:** None known — the admin directory string and Wadanz function names have no legitimate-software collision.
+**False Positives:** None known — the admin directory string and Wadanz function names have no legitimate-software collision. The rule has no PHP marker or file-extension test, so any file under 500 KB that holds one of those strings matches, including a threat-report or analysis note that quotes them.
 **Blind Spots:** A future BellaMain build from a different developer (no Wadanz function names, different admin directory) would evade.
 **Validation:** Scan the BellaMain panel archive/PHP source — the admin dir string or Wadanz function names must match; unrelated PHP source must NOT fire.
 **Deployment:** Web-server file-integrity scanning, hosting-provider abuse triage, static triage of seized panel archives.
@@ -199,7 +200,7 @@ rule MALW_Rhadamanthys_OperatorLoaderStrings
 rule MALW_BellaMain_PHPPanel
 {
     meta:
-        description = "Detects BellaMain Turkish PhaaS panel PHP source files by the Wadanz developer pseudonym function names (sifreleWadanz / sifrecozWadanz session encryption helpers) and the obfuscated admin directory name. Operator alias @AresRS34 alone is NOT sufficient to trigger — it's paired with a BellaMain-specific anchor to prevent false positives on threat intelligence reports about this actor."
+        description = "Detects files under 500 KB holding BellaMain Turkish PhaaS panel strings (the panel source is PHP, but the rule has no PHP marker or extension test): the Wadanz developer pseudonym function names (sifreleWadanz / sifrecozWadanz session encryption helpers) and the obfuscated admin directory name. Operator alias @AresRS34 alone is NOT sufficient to trigger — it's paired with a BellaMain-specific anchor to prevent false positives on threat intelligence reports about this actor."
         license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
         author = "The Hunters Ledger"
         reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/"
@@ -229,13 +230,14 @@ rule MALW_BellaMain_PHPPanel
 
 ### Hunting Rules
 
-#### Rhadamanthys Stage-2 Minimal Import Surface
+#### Rhadamanthys Stage-2 Import Combination (USER32, ADVAPI32 and GDI32 Imports, No WS2_32 or CRYPT32)
 
 **Tier:** Hunting
 **Robustness:** 2
-**ATT&CK Coverage:** T1027.002 (Software Packing), T1140 (Deobfuscate/Decode Files or Information)
+**ATT&CK Coverage:** None
+**ATT&CK Note:** An import-table test observes no technique. The report maps the Stage-2 packing and decode behaviour to T1027.002 and T1140; the rule tests neither.
 **Confidence:** MODERATE
-**Rationale:** The absence of WS2_32/CRYPT32 imports combined with a minimal GDI/USER32/ADVAPI32 import set is a durable structural pattern for this Stage-2 build, but — as flagged in the original analysis — a minimal-import-surface signal alone can match unrelated GDI-heavy applications. Intended as a corroborating signal alongside the other Rhadamanthys rules in this file, not a standalone alert.
+**Rationale:** The rule requires six named imports (three from USER32, one from ADVAPI32, two from GDI32) and the absence of any WS2_32 or CRYPT32 import. It does not count imports or limit the import table to those six, so a binary with many other imports also matches. That combination is a structural pattern for this Stage-2 build, but — as flagged in the original analysis — a minimal-import-surface signal alone can match unrelated GDI-heavy applications. Intended as a corroborating signal alongside the other Rhadamanthys rules in this file, not a standalone alert.
 **False Positives:** Unrelated GDI-heavy applications with a similarly minimal import table could coincidentally match; not intended for standalone alerting.
 **Deployment:** Endpoint AV/EDR file scan as a secondary/corroborating signal only — pair with another Rhadamanthys Detection-tier rule before treating a hit as high-confidence.
 
@@ -245,7 +247,7 @@ import "pe"
 rule MALW_Rhadamanthys_Stage2_ImportSurface
 {
     meta:
-        description = "Detects Rhadamanthys Stage-2 binaries by the distinctive minimal-import surface: USER32 GetDC/ReleaseDC/GetSystemMetrics + ADVAPI32 RegQueryValueExW combined with several distinctive GDI32 decoy imports. Stage-2 payloads avoid common crypto/network library imports — the absence of WS2_32 and CRYPT32 raises specificity."
+        description = "Detects Rhadamanthys Stage-2 binaries by an import combination: USER32 GetDC/ReleaseDC/GetSystemMetrics + ADVAPI32 RegQueryValueExW combined with two GDI32 imports (Ellipse and GetAspectRatioFilterEx), and no WS2_32 or CRYPT32 import. The rule does not cap the total number of imports. Stage-2 payloads avoid common crypto/network library imports — the absence of WS2_32 and CRYPT32 raises specificity."
         license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
         author = "The Hunters Ledger"
         reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/"
@@ -417,64 +419,6 @@ rule Tofsee_Bloater_2023_StaticTradecraft
 
 ### Detection Rules
 
-#### Rhadamanthys EAX-Redirect Process Hollowing Into InstallUtil.exe
-
-**Tier:** Detection
-**Robustness:** 3
-**ATT&CK Coverage:** T1218.004 (InstallUtil), T1055.012 (Process Hollowing)
-**Confidence:** HIGH
-**Rationale:** The LOLBin-abuse pattern (InstallUtil.exe spawned from a suspicious user-writable parent path) is a durable technique signal independent of any specific sample — it survives recompiles since it describes how the malware launches, not a malware-specific string. The explicit filter for common legitimate developer/installer parents (msiexec, devenv, MSBuild) keeps precision high.
-**False Positives:** Legitimate developer or installer workflows that invoke InstallUtil.exe from temp directories.
-**Blind Spots:** A future build that hollows a different LOLBin, or launches InstallUtil.exe from a parent path not in the suspicious-path list, would evade.
-**Validation:** Trigger the loader's hollowing routine — the child-process creation must match; msiexec/devenv/MSBuild-spawned InstallUtil.exe must NOT fire.
-**Deployment:** Endpoint EDR / Sysmon-fed SIEM (process-creation telemetry).
-
-```yaml
-title: Rhadamanthys EAX-Redirect Process Hollowing Into InstallUtil.exe
-id: b5e2f3d9-4e8c-5a0b-ad3f-3d6f8a9b0c12
-status: experimental
-description: >-
-  Detects suspicious creation of InstallUtil.exe child process from a non-typical parent (loader binary
-  in user-writable location), a precursor to the EAX-redirect process hollowing technique used by this
-  Rhadamanthys customer's loader. EAX-redirect uses W^X memory transitions (RW then RX, never RWX) and
-  rewrites the entry point pointer in EAX rather than the classic SetThreadContext approach. Pair with
-  network telemetry to InstallUtil.exe outbound connections for high-confidence verdict.
-references:
-    - https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/
-author: The Hunters Ledger
-date: 2026-05-15
-tags:
-    - attack.stealth
-    - attack.privilege-escalation
-    - attack.t1218.008
-    - attack.t1055.012
-    - detection.emerging-threats
-logsource:
-    product: windows
-    category: process_creation
-detection:
-    selection_image:
-        Image|endswith: '\InstallUtil.exe'
-        Image|contains: '\Microsoft.NET\Framework'
-    selection_parent_suspicious:
-        ParentImage|contains:
-            - '\AppData\Local\Temp\'
-            - '\AppData\Roaming\'
-            - '\Users\Public\'
-            - '\ProgramData\'
-    filter_legit_parent:
-        ParentImage|endswith:
-            - '\msiexec.exe'
-            - '\devenv.exe'
-            - '\MSBuild.exe'
-    condition: selection_image and selection_parent_suspicious and not filter_legit_parent
-falsepositives:
-    - >-
-      Legitimate developer or installer workflows that invoke InstallUtil.exe from temp
-      directories.
-level: high
-```
-
 #### BellaMain PhaaS Panel HTTP Request Patterns
 
 **Tier:** Detection
@@ -525,6 +469,66 @@ level: high
 ```
 
 ### Hunting Rules
+
+#### InstallUtil.exe Spawned by a Process in a User-Writable Path (Rhadamanthys Hollowing Precursor)
+
+**Tier:** Hunting
+**Robustness:** 2
+**ATT&CK Coverage:** T1218.004 (InstallUtil)
+**ATT&CK Note:** The report maps the loader's EAX-redirect hollowing to T1055.012; this rule sees only the creation of the host process and not the hollowing, so that technique is not tagged. The report's own table writes InstallUtil as T1218.008, which ATT&CK v19.2 defines as Odbcconf; InstallUtil is T1218.004.
+**Confidence:** MODERATE
+**Rationale:** The LOLBin-abuse pattern (InstallUtil.exe spawned from a user-writable parent path) survives recompiles because it describes how the loader launches, not a malware-specific string, which gives Robustness 2. It carries no family-specific test and tests no hollowing, memory or thread-context behaviour, and the only exclusions are msiexec, devenv and MSBuild, so installers and updaters that run from AppData or ProgramData and call InstallUtil are not excluded. For that reason it is a Hunting lead (level medium) and is not alert-grade; it was Detection, Robustness 3, level high before the 2026-10-11 review.
+**False Positives:** Legitimate developer or installer workflows that invoke InstallUtil.exe from temp directories, and installers or updaters that run from AppData\Roaming, Users\Public or ProgramData and use InstallUtil (none of the latter observed in this corpus).
+**Blind Spots:** A future build that hollows a different LOLBin, or launches InstallUtil.exe from a parent path not in the suspicious-path list, would evade. The rule tests only the creation of the InstallUtil.exe process, so it cannot tell a hollowed instance from a benign one.
+**Validation:** Trigger the loader's launch of InstallUtil.exe — the child-process creation must match (only the creation is tested, not the hollowing); msiexec/devenv/MSBuild-spawned InstallUtil.exe must NOT fire.
+**Deployment:** Endpoint EDR / Sysmon-fed SIEM (process-creation telemetry).
+
+```yaml
+title: InstallUtil.exe Spawned by a Process in a User-Writable Path (Rhadamanthys Hollowing Precursor)
+id: b5e2f3d9-4e8c-5a0b-ad3f-3d6f8a9b0c12
+status: experimental
+description: >-
+  Detects creation of an InstallUtil.exe process from the .NET Framework directory whose parent runs from
+  AppData\Local\Temp, AppData\Roaming, Users\Public or ProgramData, unless the parent is msiexec, devenv
+  or MSBuild. This Rhadamanthys customer's loader creates InstallUtil.exe suspended and then hollows it
+  with an EAX-redirect (W^X memory transitions, entry point set in EAX); the hollowing happens after
+  process creation and this rule does not observe it, so a match is the precursor only. Installers and
+  developer tooling that run from those paths can spawn InstallUtil.exe too. Pair with network telemetry
+  for InstallUtil.exe outbound connections for a higher-confidence verdict.
+references:
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/
+author: The Hunters Ledger
+date: 2026-05-15
+tags:
+    - attack.stealth
+    - attack.t1218.004
+    - detection.emerging-threats
+    - stp.3
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_image:
+        Image|endswith: '\InstallUtil.exe'
+        Image|contains: '\Microsoft.NET\Framework'
+    selection_parent_suspicious:
+        ParentImage|contains:
+            - '\AppData\Local\Temp\'
+            - '\AppData\Roaming\'
+            - '\Users\Public\'
+            - '\ProgramData\'
+    filter_legit_parent:
+        ParentImage|endswith:
+            - '\msiexec.exe'
+            - '\devenv.exe'
+            - '\MSBuild.exe'
+    condition: selection_image and selection_parent_suspicious and not filter_legit_parent
+falsepositives:
+    - >-
+      Legitimate developer or installer workflows that invoke InstallUtil.exe from temp
+      directories, and installers or updaters that run from the listed paths.
+level: medium
+```
 
 #### Rhadamanthys SibCode Software Registry Key Marker
 
@@ -613,7 +617,7 @@ The following areas were considered for detection coverage but excluded. Defende
 
 **6. CryptOne fake exchange detection.** The cryptone.bot domain is Cloudflare-fronted and the origin IP is hidden. DNS query detection is provided via the IOC feed but the exchange page itself appears legitimate to most fraud-detection heuristics, defenders relying on URL reputation feeds may not see this domain flagged for some time.
 
-**7. Stage-1 pre-execution detection.** This customer's loader uses MSVC2019 + standard libraries with no obvious packer signature. Pre-execution AV detection relies on cloud-side hash matching once the file has been seen and submitted. The YARA rules above are best deployed in EDR memory scanning or post-extraction hunting, not as pre-execution AV signatures.
+**7. Stage-1 pre-execution detection.** This customer's loader uses MSVC2019 + standard libraries with no obvious packer signature. Pre-execution AV detection relies on cloud-side hash matching once the file has been seen and submitted. The YARA rules above are best deployed as file scans of extracted or dumped payloads and in post-extraction hunting, not as pre-execution AV signatures. Each Rhadamanthys rule tests `filesize`, which is undefined in a live process-memory scan, so a memory image has to be saved to a file before these rules can match it.
 
 **8. Atomics routed to the IOC feed (6 of the original package's 18 rules).** The Rhadamanthys C2 IP `79.133.180.168:3394` (a direct TCP match and a second rule using it as a hardcoded TLS SNI content match), the BellaMain staging IP `79.137.192.3` (an HTTP Host match), the 17-domain Inkognito brand-portfolio list (a Sigma `dns` selection and a Suricata PCRE with no content prefilter), and the Tofsee co-tenant's SHA256/imphash/PDB-path combination all keyed solely on a hard-coded literal with no behavior surviving its removal, per the tiering rubric's routing test, these are IOC-feed entries, not rules. All values are in [`opendirectory-79-137-192-3-20260515-iocs.json`](/ioc-feeds/opendirectory-79-137-192-3-20260515-iocs.json); three domains (`akredup.ru`, `divar-irantop.shop`, `catnpv.xyz`) were referenced only in the original rules and have been added to the feed's domain list.
 

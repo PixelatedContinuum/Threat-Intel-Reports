@@ -40,7 +40,7 @@ alert tcp $HOME_NET any -> any any (msg:"THL HUNT XWormV2-109.230.231.37 AgentSe
 #   TIER: Detection  |  robustness 2  |  confidence HIGH
 #   rate-limited
 #   FP: None known — X-Agent-Id is not a standard or common custom header name; /api/v1/ alone is generic but is never the sole anchor in this rule.
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT AI-Agent-Campaign Russian A2A C2 X-Agent-Id Header + API Endpoint (Case 1 C2 Protocol Indicator)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/api/v1/"; http.header_names; content:"X-Agent-Id"; nocase; reference:url,the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/; classtype:trojan-activity; threshold:type limit,track by_src,count 3,seconds 3600; sid:3500145; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-25;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT AI-Agent-Campaign Russian A2A C2 X-Agent-Id Header + API Endpoint (Case 1 C2 Protocol Indicator)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/api/v1/"; startswith; http.header_names; content:"X-Agent-Id"; nocase; reference:url,the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/; classtype:trojan-activity; threshold:type limit,track by_src,count 3,seconds 3600; sid:3500145; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-25;)
 # ai-agent-frameworks-2026-05-23 (orig sid:9200000)
 #   TIER: Hunting  |  robustness 2  |  confidence MODERATE  |  BROAD - triage before alerting
 #   rate-limited
@@ -49,8 +49,8 @@ alert dns $HOME_NET any -> any any (msg:"THL HUNT AI-Agent-Campaign trycloudflar
 # ai-agent-frameworks-2026-05-23 (orig sid:9200001)
 #   TIER: Hunting  |  robustness 2  |  confidence MODERATE  |  BROAD - triage before alerting
 #   rate-limited
-#   FP: Any legitimate, consented use of the Kryptex platform (a real consumer mining service) from a corporate network would also match — uncommon outside a...
-alert dns $HOME_NET any -> any any (msg:"THL HUNT AI-Agent-Campaign Kryptex Mining Pool DNS Query — GHOST Cryptojacker Kit Pool (cfx.kryptex.network / etc.kryptex.network)"; dns_query; content:"kryptex.network"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/; classtype:trojan-activity; sid:3500001; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-25;)
+#   FP: The rule matches any subdomain of kryptex.network (a query for cfx.kryptex.network, etc.kryptex.network or www.kryptex.network all fire; the bare...
+alert dns $HOME_NET any -> any any (msg:"THL HUNT AI-Agent-Campaign Kryptex Mining Pool DNS Query (Any kryptex.network Subdomain, Includes cfx. and etc. Pool Hosts)"; dns_query; content:".kryptex.network"; nocase; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/; classtype:trojan-activity; sid:3500001; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-25;)
 # ai-agent-frameworks-2026-05-23 (orig sid:9200002)
 #   TIER: Hunting  |  robustness 2  |  confidence MODERATE — GENERIC CRYPTOMINING INDICATOR NOT TIED TO A SPECIFIC KIT FAMILY; BOTH THE GHOST KIT AND UNRELATED CRYPTOJACKERS USE THESE PUBLIC POOLS AS FALLBACK DESTINATIONS  |  BROAD - triage before alerting
 #   rate-limited
@@ -75,11 +75,11 @@ alert dns $HOME_NET any -> any any (msg:"THL HUNT AI-Agent-Campaign hashvault.pr
 #   TIER: Hunting  |  robustness 1  |  confidence MODERATE  |  BROAD - triage before alerting
 #   rate-limited
 #   FP: Low as of rev 2. Previously Medium, and in practice worse than that: with no destination constraint the rule matched every legitimate bing.com QUIC...
-alert quic $HOME_NET any -> any [14433,14444] (msg:"THL HUNT AI-Agent-Campaign Hysteria v2 QUIC bing.com SNI Masquerade on GHOST Kit Operator Ports"; flow:to_server; quic.sni; content:"bing.com"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/; classtype:trojan-activity; sid:3500146; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-25, modified 2026-08-20;)
+alert quic $HOME_NET any -> any [14433,14444] (msg:"THL HUNT AI-Agent-Campaign QUIC SNI Containing bing.com on GHOST Kit Operator Ports 14433 and 14444 (Hysteria v2 Masquerade Lead)"; flow:to_server; quic.sni; content:"bing.com"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/; classtype:trojan-activity; sid:3500146; rev:4; metadata:author The_Hunters_Ledger, date 2026-05-25, modified 2026-08-20;)
 # arsenal-237-enc_c2-exe (orig sid:9301201)
 #   TIER: Detection  |  robustness 2  |  confidence HIGH
-#   FP: Unlikely; requires a POST to this exact URI path with a JSON content type.
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT RANSOMWARE enc_c2.exe Tor C2 Beacon - POST /c2/beacon.php"; flow:to_server,established; http.method; content:"POST"; http.uri; content:"/c2/beacon.php"; http.header; content:"Content-Type: application/json"; reference:url,the-hunters-ledger.com/hunting-detections/arsenal-237-enc_c2-exe-detections/; classtype:trojan-activity; metadata:author The_Hunters_Ledger, date 2026-01-26; sid:3500153; rev:3;)
+#   FP: Unlikely; requires a POST whose URI contains /c2/beacon.php (an unanchored substring, so a longer path or a query string that contains it also...
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT RANSOMWARE enc_c2.exe C2 Beacon - POST /c2/beacon.php (Host Not Tested)"; flow:to_server,established; http.method; content:"POST"; http.uri; content:"/c2/beacon.php"; http.header; content:"Content-Type: application/json"; reference:url,the-hunters-ledger.com/hunting-detections/arsenal-237-enc_c2-exe-detections/; classtype:trojan-activity; metadata:author The_Hunters_Ledger, date 2026-01-26; sid:3500153; rev:4;)
 # bellamain-turkish-phaas-79-137-192-3-20260516 (orig sid:9300404)
 #   TIER: Hunting  |  robustness 1  |  confidence MODERATE  |  BROAD - triage before alerting
 #   rate-limited
@@ -88,7 +88,7 @@ alert http $HOME_NET any -> any any (msg:"THL HUNT BellaMain-PhaaS USOM Blocklis
 # cloudsync-assembler-toolkit-91-197-98-188 (orig sid:9301601)
 #   TIER: Detection  |  robustness 3  |  confidence HIGH
 #   rate-limited
-#   FP: None known, this exact 20-character banner is not expected in unrelated TCP traffic
+#   FP: None known, this exact 19-character banner is not expected in unrelated TCP traffic
 alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT CloudSync-Assembler-Toolkit AUTO UPDATE C2 Registration Marker (C2 Registration)"; flow:established,to_server; content:"=== AUTO UPDATE ==="; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/; classtype:trojan-activity; sid:3500181; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-03;)
 # cloudsync-assembler-toolkit-91-197-98-188 (orig sid:9301602)
 #   TIER: Detection  |  robustness 3  |  confidence HIGH
@@ -106,15 +106,15 @@ alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT CloudSync-Assembler-
 #   FP: Same shared-hosting caveat as the TLS SNI rule above; DNS resolution alone is a slightly weaker signal than a completed TLS session since it does not...
 alert dns $HOME_NET any -> any any (msg:"THL HUNT CloudSync-Assembler-Toolkit SentinelStealer c3lestial.fun DNS Query (Sourced Commodity Stealer C2)"; dns.query; dotprefix; content:".c3lestial.fun"; nocase; endswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/; classtype:trojan-activity; sid:3500184; rev:3; metadata:author The_Hunters_Ledger, date 2026-08-03;)
 # dual-rat-analysis (orig sid:2100001)
-#   TIER: Hunting  |  robustness 2  |  confidence MODERATE  |  BROAD - triage before alerting
+#   TIER: Hunting  |  robustness 1  |  confidence MODERATE  |  BROAD - triage before alerting
 #   rate-limited
 #   FP: Any legitimate or unrelated service that happens to use TCP/4782 (uncommon but not impossible); the threshold limits alert volume per source.
-alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:"THL HUNT Dual-RAT-Quasar-NjRAT Quasar Binary Protocol C2 on TCP 4782 (RAT C2 Channel)"; flow:established,to_server; dsize:>0; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/; classtype:trojan-activity; sid:3500118; rev:3; metadata:author The_Hunters_Ledger, date 2025-12-06;)
+alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:"THL HUNT Dual-RAT-Quasar-NjRAT Outbound TCP Payload to Port 4782 (Quasar Default Port, Port-Only Lead)"; flow:established,to_server; dsize:>0; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/; classtype:trojan-activity; sid:3500118; rev:4; metadata:author The_Hunters_Ledger, date 2025-12-06;)
 # dual-rat-analysis (orig sid:2100004)
 #   TIER: Hunting  |  robustness 2  |  confidence MODERATE  |  BROAD - triage before alerting
 #   rate-limited
 #   FP: A corporate proxy or testing tool that rewrites/replays an old, fixed iPhone Safari User-Agent string for unrelated reasons (uncommon).
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT Dual-RAT-Quasar-NjRAT NjRAT-XWorm Spoofed Mobile Safari User-Agent (Dead-Drop C2 Resolution Indicator)"; flow:established,to_server; http.user_agent; content:"iPhone OS 11_4_1 like Mac OS X"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/; classtype:trojan-activity; sid:3500147; rev:3; metadata:author The_Hunters_Ledger, date 2025-12-06;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT Dual-RAT-Quasar-NjRAT HTTP User-Agent Containing iPhone OS 11_4_1 (Value Reported in NjRAT-XWorm Traffic, Not Family-Specific)"; flow:established,to_server; http.user_agent; content:"iPhone OS 11_4_1 like Mac OS X"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/; classtype:trojan-activity; sid:3500147; rev:4; metadata:author The_Hunters_Ledger, date 2025-12-06;)
 # evilsoul-engine-stealer-maas (orig sid:1000002)
 #   TIER: Detection  |  robustness 2  |  confidence HIGH
 #   rate-limited
@@ -123,15 +123,17 @@ alert http $HOME_NET any -> any any (msg:"THL DETECT EvilSoul-Engine Webhook-Res
 # flaskc2-postex-toolkit-67-215-232-25 (orig sid:9300701)
 #   TIER: Detection  |  robustness 3  |  confidence HIGH
 #   FP: None known — the specific combination of all five JSON field names in a single response is uniquely characteristic of this C2 implementation.
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT FlaskC2-PostEx C2 Health Endpoint Response - Bespoke Flask C2 Active"; flow:established,to_client; file_data; content:"active_servers"; nocase; content:"pending_commands"; nocase; distance:0; content:"completed_commands"; nocase; distance:0; content:"status"; nocase; distance:0; content:"timestamp"; nocase; distance:0; reference:url,the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/; classtype:trojan-activity; sid:3500017; rev:3; metadata:author The_Hunters_Ledger, date 2026-06-12;)
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT FlaskC2-PostEx C2 Health Endpoint Response - Bespoke Flask C2 Active"; flow:established,to_client; file_data; content:"active_servers"; nocase; content:"completed_commands"; nocase; content:"pending_commands"; nocase; content:"status"; nocase; content:"timestamp"; nocase; reference:url,the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/; classtype:trojan-activity; sid:3500017; rev:4; metadata:author The_Hunters_Ledger, date 2026-06-12;)
 # flaskc2-postex-toolkit-67-215-232-25 (orig sid:9300702)
 #   TIER: Hunting  |  robustness 1  |  confidence MODERATE  |  BROAD - triage before alerting
+#   rate-limited
 #   FP: Any legitimate application whose API exposes a /api/report POST endpoint (common naming convention for telemetry/error-reporting); the threshold...
-alert http $HOME_NET any -> any any (msg:"THL HUNT FlaskC2-PostEx C2 Beacon POST to /api/report"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/api/report"; nocase; reference:url,the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/; classtype:trojan-activity; sid:3500018; rev:3; metadata:author The_Hunters_Ledger, date 2026-06-12;)
+alert http $HOME_NET any -> any any (msg:"THL HUNT FlaskC2-PostEx C2 Beacon POST to /api/report"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/api/report"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/; classtype:trojan-activity; sid:3500018; rev:4; metadata:author The_Hunters_Ledger, date 2026-06-12;)
 # flaskc2-postex-toolkit-67-215-232-25 (orig sid:9300703)
 #   TIER: Hunting  |  robustness 1  |  confidence MODERATE  |  BROAD - triage before alerting
+#   rate-limited
 #   FP: Any legitimate application's heartbeat/keepalive POST endpoint — this is one of the most common REST API path conventions in use; the threshold...
-alert http $HOME_NET any -> any any (msg:"THL HUNT FlaskC2-PostEx C2 Beacon POST to /api/heartbeat"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/api/heartbeat"; nocase; reference:url,the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/; classtype:trojan-activity; sid:3500019; rev:3; metadata:author The_Hunters_Ledger, date 2026-06-12;)
+alert http $HOME_NET any -> any any (msg:"THL HUNT FlaskC2-PostEx C2 Beacon POST to /api/heartbeat"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/api/heartbeat"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/; classtype:trojan-activity; sid:3500019; rev:4; metadata:author The_Hunters_Ledger, date 2026-06-12;)
 # fleetagentfud-exe (orig sid:2100022)
 #   TIER: Detection  |  robustness 2  |  confidence HIGH
 #   FP: None known — no legitimate framework or library sends a header with this exact name.
@@ -154,7 +156,7 @@ alert udp $HOME_NET any -> $EXTERNAL_NET 14433:14444 (msg:"THL HUNT GHOST Crypto
 #   TIER: Hunting  |  robustness 2  |  confidence LOW  |  BROAD - triage before alerting
 #   rate-limited
 #   FP: Any legitimate QUIC v1 client (HTTP/3 browsers and apps, or another Hysteria, MASQUE or QUIC-based VPN or tunnel product) that connects from outside...
-alert udp $EXTERNAL_NET any -> $HOME_NET 14433:14444 (msg:"THL HUNT GHOST Cryptojacker Kit Hysteria v2 QUIC Initial Inbound to Victim-Hosted Listener Ports (Hunt Lead, Corroborate Before Escalating)"; dsize:>=1200; byte_test:1,=,0xC,0,bitmask 0xF0; content:"|00 00 00 01|"; offset:1; depth:4; threshold:type limit,track by_dst,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/; classtype:policy-violation; sid:3500211; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-30, signature_severity Minor, tag Backdoor, tag GHOST_kit, tag Hysteria_v2;)
+alert udp $EXTERNAL_NET any -> $HOME_NET 14433:14444 (msg:"THL HUNT GHOST Cryptojacker Kit QUIC v1 Initial Inbound to Candidate Hysteria Listener Ports 14433-14444 (Hunt Lead, Corroborate Before Escalating)"; dsize:>=1200; byte_test:1,=,0xC,0,bitmask 0xF0; content:"|00 00 00 01|"; offset:1; depth:4; threshold:type limit,track by_dst,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/; classtype:policy-violation; sid:3500211; rev:3; metadata:author The_Hunters_Ledger, date 2026-09-30, signature_severity Minor, tag Backdoor, tag GHOST_kit, tag Hysteria_v2;)
 # ghost-cryptojacker-vova75rus-77.110.96.200 (orig sid:9100108)
 #   TIER: Hunting  |  robustness 1  |  confidence LOW–MODERATE  |  BROAD - triage before alerting
 #   rate-limited
@@ -261,12 +263,12 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3
 alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3.1.116 JWT alg-none Authentication Bypass Attempt (Forged Token Header)"; flow:established,to_server; http.header; content:"Bearer eyJhbGciOiJub25lIn0"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:3500164; rev:3; metadata:author The_Hunters_Ledger, date 2026-07-21;)
 # multivector-ecommerce-rce-toolkit-192-3-1-116 (orig sid:1000010)
 #   TIER: Detection  |  robustness 2  |  confidence HIGH
-#   FP: Authorized internal monitoring dashboards or an approved attack-surface scan. The JavaClassPath response-body check narrows this considerably...
+#   FP: Authorized internal monitoring dashboards reached from a public address, an administrator who logged in to a console meant to be reachable, or an...
 alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3.1.116 Alibaba Druid Console Path Request (Flowbits Setter -- pairs with sid:3500165)"; flow:established,to_server; http.uri; content:"/druid/"; flowbits:set,thl.mvec.druid.uri; flowbits:noalert; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-recon; sid:3500166; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)
 # multivector-ecommerce-rce-toolkit-192-3-1-116 (orig sid:1000011)
 #   TIER: Detection  |  robustness 2  |  confidence HIGH
-#   FP: Authorized internal monitoring dashboards or an approved attack-surface scan. The JavaClassPath response-body check narrows this considerably...
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT MultiVector-192.3.1.116 Unauthenticated External Access to Alibaba Druid Monitoring Console (requires flowbits setter sid:3500166)"; flow:established,to_client; flowbits:isset,thl.mvec.druid.uri; http.stat_code; content:"200"; http.response_body; content:"JavaClassPath"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-recon; sid:3500165; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)
+#   FP: Authorized internal monitoring dashboards reached from a public address, an administrator who logged in to a console meant to be reachable, or an...
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT MultiVector-192.3.1.116 Alibaba Druid Monitoring Console Served to an External Client (requires flowbits setter sid:3500166)"; flow:established,to_client; flowbits:isset,thl.mvec.druid.uri; http.stat_code; content:"200"; http.response_body; content:"JavaClassPath"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-recon; sid:3500165; rev:3; metadata:author The_Hunters_Ledger, date 2026-07-21;)
 # multivector-ecommerce-rce-toolkit-192-3-1-116 (orig sid:1000012)
 #   TIER: Hunting  |  robustness 2  |  confidence MODERATE  |  BROAD - triage before alerting
 #   rate-limited
@@ -300,7 +302,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT CovertVPN HTTP Data
 #   TIER: Hunting  |  robustness 2  |  confidence MODERATE  |  BROAD - triage before alerting
 #   rate-limited
 #   FP: Legitimate network diagnostic tooling generating large ICMP echo payloads (e.g., ping -l on Windows, MTU path discovery) whose payload happens to...
-alert icmp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT CovertVPN ICMP Tunnel Oversized Payload with Data or Keepalive Marker"; itype:8; dsize:>128; byte_test:1,=,0xDD,4; threshold:type limit,track by_src,count 5,seconds 60; reference:url,the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/; classtype:trojan-activity; sid:3500049; rev:2; metadata:author The_Hunters_Ledger, date 2026-04-08;)
+alert icmp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT CovertVPN ICMP Tunnel Oversized Payload with Data-Frame Marker 0xDD"; itype:8; dsize:>128; byte_test:1,=,0xDD,4; threshold:type limit,track by_src,count 5,seconds 60; reference:url,the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/; classtype:trojan-activity; sid:3500049; rev:3; metadata:author The_Hunters_Ledger, date 2026-04-08;)
 # newdouble-clickfix (orig sid:9302105)
 #   TIER: Hunting  |  robustness 2  |  confidence MODERATE  |  BROAD - triage before alerting
 #   rate-limited
@@ -432,7 +434,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT - AdaptixC2 Operato
 #   FP: A JSON API that happens to emit the same three keys in the same order with the same spacing. Rare, but the rule matches on structure rather than on...
 alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT AdaptixC2 Stock Listener Response Envelope (Server-Side Framework Default)"; flow:established,to_client; file.data; content:"{|22|status|22|: |22|ok|22|, |22|data|22|: |22|"; content:"|22|, |22|metrics|22|: |22|sync|22|}"; distance:0; threshold:type limit,track by_dst,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/; classtype:trojan-activity; sid:3500186; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-12;)
 # opendirectory-62-60-237-100-20260506 (orig sid:9301101)
-#   TIER: Detection  |  robustness 2  |  confidence HIGH
+#   TIER: Detection  |  robustness 2  |  confidence MODERATE (HIGH THAT THE ANALYSED SAMPLE PRODUCED THIS JA3; MODERATE THAT OTHER TLS CLIENTS DO NOT SHARE IT, WHICH WAS NOT MEASURED)
 #   rate-limited
 #   FP: JA3 hash collisions across unrelated TLS client implementations that happen to share the same library/cipher-suite/extension configuration are a...
 alert tls $HOME_NET any -> any any (msg:"THL DETECT HijackLoader-Penguish-Rugmi AsyncRAT SSL JA3 Fingerprint 07af4aa9e4d215a5ee63f9a0a277fbe3 (RAT C2 Fleet Indicator)"; flow:established,to_server; ja3.hash; content:"07af4aa9e4d215a5ee63f9a0a277fbe3"; endswith; threshold:type limit,track by_src,count 3,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/; classtype:trojan-activity; sid:3500150; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-06;)
@@ -460,19 +462,19 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT UTA-2026-014 Pand
 alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT UTA-2026-014 Pandora-Mirai bot.sh Reseed Download URI Pattern (IoT Botnet Reseed Channel)"; flow:established,to_server; http.uri; content:"/bot.sh"; endswith; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:3500080; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)
 # rovodev-mirai-matrix-c2-87.106.143.220 (orig sid:9001006)
 #   TIER: Hunting  |  robustness 1  |  confidence LOW–MODERATE  |  BROAD - triage before alerting
-#   FP: Any unrelated URI path or query string containing the 4-character substring "Naku." (uncommon but not impossible).
+#   FP: Any unrelated URI path or query string containing the 5-character substring "Naku." (the dot included) (uncommon but not impossible).
 alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT UTA-2026-014 Naku Binary Reference in HTTP URI - Backup Channel Convention (Bare Substring Anchor)"; flow:established,to_server; http.uri; content:"Naku."; nocase; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:3500082; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)
 # rovodev-mirai-matrix-c2-87.106.143.220 (orig sid:9300502)
 #   TIER: Hunting  |  robustness 1  |  confidence MODERATE  |  BROAD - triage before alerting
 #   FP: Any unrelated HTTP traffic referencing the keyosbuff GitHub handle for a different (non-C2-Leak) reason.
-alert http $HOME_NET any -> any any (msg:"THL HUNT UTA-2026-014 keyosbuff C2-Leak Repository Reference in HTTP URI (Operator OPSEC Artifact)"; flow:established,to_server; http.uri; content:"keyosbuff"; nocase; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:3500078; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)
+alert http $HOME_NET any -> any any (msg:"THL HUNT UTA-2026-014 keyosbuff Handle Substring in HTTP URI (C2-Leak Repository Owner Lead)"; flow:established,to_server; http.uri; content:"keyosbuff"; nocase; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:3500078; rev:4; metadata:author The_Hunters_Ledger, date 2026-05-26;)
 # rovodev-mirai-matrix-c2-87.106.143.220 (orig sid:9001008)
 #   TIER: Hunting  |  robustness 1  |  confidence LOW–MODERATE  |  BROAD - triage before alerting
-#   FP: Any unrelated URI path or query string containing the 4-character substring "Naku." (uncommon but not impossible).
+#   FP: Any unrelated URI path or query string containing the 5-character substring "Naku." (the dot included) (uncommon but not impossible).
 alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT UTA-2026-014 Naku Binary Fetch URI Pattern - Historical Aruba Primary Distribution Convention (Bare Substring Anchor)"; flow:established,to_server; http.uri; content:"Naku."; nocase; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:3500084; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)
 # rovodev-mirai-matrix-c2-87.106.143.220 (orig sid:9001009)
 #   TIER: Hunting  |  robustness 1  |  confidence LOW–MODERATE  |  BROAD - triage before alerting
-#   FP: Any unrelated URI path or query string containing the 4-character substring "Naku." (uncommon but not impossible).
+#   FP: Any unrelated URI path or query string containing the 5-character substring "Naku." (the dot included) (uncommon but not impossible).
 alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT UTA-2026-014 Naku Binary Fetch URI Pattern - Historical Aruba Backup Distribution Convention (Bare Substring Anchor)"; flow:established,to_server; http.uri; content:"Naku."; nocase; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:3500085; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)
 # rovodev-mirai-matrix-c2-87.106.143.220 (orig sid:9001010)
 #   TIER: Hunting  |  robustness 2  |  confidence MODERATE — HEURISTIC, UNVALIDATED AGAINST LIVE TRAFFIC  |  BROAD - triage before alerting
@@ -488,7 +490,7 @@ alert http $HOME_NET any -> any any (msg:"THL HUNT UTA-2026-014 Matrix C2 Discor
 alert http $HOME_NET any -> any any (msg:"THL HUNT UTA-2026-014 Matrix C2 Discord Bot Attack-Method Dispatch syn-storm-frag-storm (DDoS-as-a-Service Customer Interface, Requires TLS Interception)"; flow:established,to_server; http.host; content:"discord.com"; http.request_body; pcre:"/(?:syn-storm|frag-storm|udp-bypass|icmp-hell)/i"; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:3500088; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)
 # russian-gemini-credential-mill-213.165.51.115 (orig sid:9000003)
 #   TIER: Detection  |  robustness 3  |  confidence HIGH
-#   FP: None known — the combination of /api/v1/update or /api/v1/interact paths with the X-Agent-ID header is operator-bespoke and has no known...
+#   FP: None known — the combination of any of the four paths /api/v1/update, /api/v1/interact, /api/v1/telemetry or /api/v1/get_results with the X-Agent-ID...
 alert http $HOME_NET any -> any any (msg:"THL DETECT - A2A C2 Beacon POST to Operator C2 Endpoint with X-Agent-ID Header"; flow:established,to_server; http.method; content:"POST"; http.header_names; content:"X-Agent-ID"; nocase; http.uri; content:"/api/v1/"; pcre:"/\/api\/v1\/(update|interact|telemetry|get_results)/"; reference:url,the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/; classtype:trojan-activity; sid:3500093; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-25;)
 # russian-gemini-credential-mill-213.165.51.115 (orig sid:9000006)
 #   TIER: Hunting  |  robustness 1  |  confidence MODERATE  |  BROAD - triage before alerting
@@ -573,10 +575,10 @@ alert dns $HOME_NET any -> any any (msg:"THL HUNT Turkish-ARPA-State-Insurer DNS
 #   FP: None known — the literal phrase "Spawn Shell" within the first 20 bytes of an established outbound TCP session to an external host is not observed in...
 alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT WebServer-Compromise-Kit ASP.NET Reverse Shell Spawn-Shell Banner (C2 Session Establishment)"; flow:to_server,established; content:"Spawn Shell"; depth:20; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/webserver-compromise-kit-91-236-230-250-detections/; classtype:trojan-activity; sid:3500114; rev:3; metadata:author The_Hunters_Ledger, date 2026-02-08;)
 # webserver-compromise-kit-91-236-230-250 (orig sid:1000003)
-#   TIER: Hunting  |  robustness 2  |  confidence MODERATE  |  BROAD - triage before alerting
+#   TIER: Hunting  |  robustness 1  |  confidence MODERATE  |  BROAD - triage before alerting
 #   rate-limited
 #   FP: Genuine (if increasingly rare) traffic from actual Windows 7/IE11 endpoints, particularly in long-lifecycle industrial-control or medical-device...
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT WebServer-Compromise-Kit Anachronistic IE11/Win7 User-Agent (Possible revsocks Proxy Traffic)"; flow:to_server,established; http.user_agent; content:"Windows NT 6.1|3b| Trident/7.0"; nocase; threshold:type limit,track by_src,count 5,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/webserver-compromise-kit-91-236-230-250-detections/; classtype:policy-violation; sid:3500116; rev:3; metadata:author The_Hunters_Ledger, date 2026-02-08;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT WebServer-Compromise-Kit Anachronistic IE11/Win7 User-Agent (Possible revsocks Proxy Traffic)"; flow:to_server,established; http.user_agent; content:"Mozilla/5.0 (Windows NT 6.1|3b| Trident/7.0|3b| rv:11.0) like Gecko"; startswith; endswith; threshold:type limit,track by_src,count 5,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/webserver-compromise-kit-91-236-230-250-detections/; classtype:policy-violation; sid:3500116; rev:4; metadata:author The_Hunters_Ledger, date 2026-02-08;)
 # webshells-to-the-cloud (orig sid:100002)
 #   TIER: Hunting  |  robustness 1  |  confidence HIGH  |  BROAD - triage before alerting
 #   rate-limited

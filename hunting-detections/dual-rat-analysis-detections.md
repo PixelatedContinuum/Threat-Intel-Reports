@@ -23,14 +23,14 @@ This campaign covers two distinct .NET RAT families recovered from the same infr
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 1 | 2 | T1053.005, T1547.001, T1547.009, T1070.004, T1125, T1653, T1102.001 | 0 |
-| Sigma | 6 documents (1 bundle) | 5 documents (1 bundle) | T1053.005, T1055.003, T1070.004, T1071.001, T1573, T1547.001, T1547.009, T1102.001 | 0 |
-| Suricata | 0 | 2 | T1095, T1573, T1071.001 | 2 |
+| Sigma | 5 documents (1 bundle) | 6 documents (1 bundle) | T1053.005, T1055, T1070.004, T1071.001, T1573, T1547.001, T1547.009, T1102.001 | 0 |
+| Suricata | 0 | 2 | T1095, T1071.001 | 2 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
 
 **Highest-confidence anchors:**
 - The NjRAT/XWorm triple-persistence YARA signature (all five literal artifacts, `conhost`, `minute /mo 1`, the Run-key path, `Startup\conhost.lnk`, and `schtasks /create`, co-present) and its Sigma correlation counterpart (all three mechanisms on the same host within a 10-minute window) are the strongest static and behavioral leads in the campaign.
-- On the Quasar RAT side, `Client.exe` reliably anchors four separate Detection-tier Sigma rules (scheduled-task creation, remote thread creation into system processes, Zone.Identifier deletion, and C2 connection on TCP 4782). This filename is the stock output of the public Quasar builder and is retained by unsophisticated operators more often than not.
+- On the Quasar RAT side, `Client.exe` reliably anchors three separate Detection-tier Sigma rules (scheduled-task creation, Zone.Identifier deletion, and C2 connection on TCP 4782) and a Hunting-tier lead for remote thread creation into system processes. This filename is the stock output of the public Quasar builder and is retained by unsophisticated operators more often than not.
 
 **Atomics already in the feed:** the C2 IP `185.208.159.182`, port `4782`, the reconnaissance domains (`ipwho.is`, `api.ipify.org`), and the Pastebin dead-drop URL (`https://pastebin.com/raw/bzg5zj8n`) were already present in [`dual-rat-analysis-iocs.json`](/ioc-feeds/dual-rat-analysis-iocs.json) prior to this pass. Two Suricata rules that matched solely on the generic recon domains / the bare Pastebin host (see Coverage Gaps) are counted as atomics routed to that existing feed coverage rather than published as standalone signatures; no new feed entries were required.
 
@@ -253,60 +253,6 @@ falsepositives:
       Legitimate system administration scripts that create a scheduled
       task literally named "RuntimeBroker" with an ONLOGON trigger
       pointing at a file named Client.exe (unlikely combination)
-level: high
-```
-
-#### Quasar RAT Remote Thread Creation Into System Processes
-
-**Tier:** Detection
-**Robustness:** 2
-**ATT&CK Coverage:** T1055.003 (Thread Execution Hijacking)
-**Confidence:** HIGH
-**Rationale:** Corrected from the original rule, which selected on `category: process_creation` with `ParentImage` ending `\Client.exe`, `Image` matching a system-process name, and `CommandLine|contains: 'inject'` — a combination that has no realistic basis (classic thread injection does not spawn a new, literally-named child process with an "inject" command-line argument; `CreateRemoteThread` takes no command-line parameter at all). Re-anchored on the `create_remote_thread` category (Sysmon Event ID 8), which is the log source that genuinely captures this technique, with `SourceImage` ending `\Client.exe` and `TargetImage` matching one of the three process names referenced in the original evidence.
-**False Positives:** Legitimate software coincidentally named Client.exe that legitimately injects into explorer.exe, svchost.exe, or dllhost.exe (architecturally possible, not observed).
-**Blind Spots:** A rebuild that renames Client.exe evades; does not cover injection into other target processes.
-**Validation:** Trigger the malware's injection routine — the create_remote_thread event with this source/target pairing must match; unrelated remote-thread creation must NOT fire.
-**Deployment:** Endpoint EDR / Sysmon-fed SIEM (Sysmon Event ID 8 telemetry).
-
-```yaml
-title: Quasar RAT Remote Thread Creation Into System Processes
-id: 6e1ad431-a53d-49ab-b6b0-0f6fb647d3a1
-status: experimental
-description: >-
-  Detects Client.exe (the Quasar RAT sample analyzed in this campaign)
-  creating a remote thread in explorer.exe, svchost.exe, or dllhost.exe
-  for process-injection-based defense evasion. Corrected from the
-  original rule, which selected on the process_creation category with
-  a CommandLine "inject" filter - a combination that does not
-  correspond to how thread-injection APIs actually generate telemetry;
-  re-anchored on the create_remote_thread category (Sysmon Event ID 8),
-  which is what genuinely captures this technique.
-references:
-    - https://the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/
-author: The Hunters Ledger
-date: '2025-12-06'
-tags:
-    - attack.stealth
-    - attack.privilege-escalation
-    - attack.t1055.003
-    - detection.emerging-threats
-    - stp.3
-logsource:
-    category: create_remote_thread
-    product: windows
-detection:
-    selection:
-        SourceImage|endswith: '\Client.exe'
-        TargetImage|endswith:
-            - '\explorer.exe'
-            - '\svchost.exe'
-            - '\dllhost.exe'
-    condition: selection
-falsepositives:
-    - >-
-      Legitimate software coincidentally named Client.exe that
-      legitimately injects into explorer.exe, svchost.exe, or
-      dllhost.exe (not observed, but architecturally possible)
 level: high
 ```
 
@@ -612,6 +558,64 @@ tags:
 
 ### Hunting Rules
 
+**Quasar RAT**
+
+#### Quasar RAT Remote Thread Creation Into System Processes
+
+**Tier:** Hunting
+**Robustness:** 1
+**ATT&CK Coverage:** T1055 (Process Injection)
+**ATT&CK Note:** Sysmon event 8 records the creation of a remote thread in another process, which several process-injection sub-techniques use (DLL injection and portable executable injection among them). The event does not identify which one, so the parent technique is tagged. T1055.003 (Thread Execution Hijacking) suspends and redirects an existing thread and is not what this event logs.
+**Confidence:** HIGH
+**Rationale:** Re-tiered from Detection to Hunting on 2026-10-11: the one source-process anchor is a generic, renameable filename (Robustness 1), the durability of a value the tool happens to use rather than of the injection behaviour. Corrected from the original rule, which selected on `category: process_creation` with `ParentImage` ending `\Client.exe`, `Image` matching a system-process name, and `CommandLine|contains: 'inject'` — a combination that has no realistic basis (classic thread injection does not spawn a new, literally-named child process with an "inject" command-line argument; `CreateRemoteThread` takes no command-line parameter at all). Re-anchored on the `create_remote_thread` category (Sysmon Event ID 8), which is the log source that genuinely captures this technique, with `SourceImage` ending `\Client.exe` and `TargetImage` matching one of the three process names referenced in the original evidence.
+**False Positives:** Legitimate software coincidentally named Client.exe that legitimately injects into explorer.exe, svchost.exe, or dllhost.exe (architecturally possible, not observed).
+**Blind Spots:** The only Quasar-specific anchor is the source filename `Client.exe`, which the operator can change in a rebuild, so a rename evades; does not cover injection into other target processes.
+**Validation:** Trigger the malware's injection routine — the create_remote_thread event with this source/target pairing must match; unrelated remote-thread creation must NOT fire.
+**Deployment:** Endpoint EDR / Sysmon-fed SIEM (Sysmon Event ID 8 telemetry).
+
+```yaml
+title: Quasar RAT Remote Thread Creation Into System Processes
+id: 6e1ad431-a53d-49ab-b6b0-0f6fb647d3a1
+status: experimental
+description: >-
+  Detects Client.exe (the Quasar RAT sample analyzed in this campaign)
+  creating a remote thread in explorer.exe, svchost.exe, or dllhost.exe
+  for process-injection-based defense evasion. Corrected from the
+  original rule, which selected on the process_creation category with
+  a CommandLine "inject" filter - a combination that does not
+  correspond to how thread-injection APIs actually generate telemetry;
+  re-anchored on the create_remote_thread category (Sysmon Event ID 8),
+  which is what genuinely captures this technique.
+references:
+    - https://the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/
+author: The Hunters Ledger
+date: '2025-12-06'
+modified: '2026-10-11'
+tags:
+    - attack.stealth
+    - attack.privilege-escalation
+    - attack.t1055
+    - detection.emerging-threats
+    - stp.2
+logsource:
+    category: create_remote_thread
+    product: windows
+detection:
+    selection:
+        SourceImage|endswith: '\Client.exe'
+        TargetImage|endswith:
+            - '\explorer.exe'
+            - '\svchost.exe'
+            - '\dllhost.exe'
+    condition: selection
+falsepositives:
+    - >-
+      Legitimate software coincidentally named Client.exe that
+      legitimately injects into explorer.exe, svchost.exe, or
+      dllhost.exe (not observed, but architecturally possible)
+level: medium
+```
+
 **Campaign-Level**
 
 #### Suspicious Access to Dead-Drop Services from a Non-Browser Process
@@ -671,7 +675,8 @@ tags:
 
 **Tier:** Hunting
 **Robustness:** 2
-**ATT&CK Coverage:** T1055.003 (Thread Execution Hijacking)
+**ATT&CK Coverage:** T1055 (Process Injection)
+**ATT&CK Note:** Sysmon event 8 records the creation of a remote thread in another process, which several process-injection sub-techniques use (DLL injection and portable executable injection among them). The event does not identify which one, so the parent technique is tagged. T1055.003 (Thread Execution Hijacking) suspends and redirects an existing thread and is not what this event logs.
 **Confidence:** MODERATE
 **Rationale:** Corrected from the original rule, which declared a non-existent `api_call` logsource category with a `CallTrace` field searched for the literal string "CreateRemoteThread" — no such category exists in SigmaHQ, and standard Windows telemetry does not expose arbitrary API calls this way (`CallTrace` is populated only by Sysmon Event ID 8 CreateRemoteThread and Event ID 10 ProcessAccess, neither of which records the literal function name as searchable text). Re-anchored on the `create_remote_thread` category, which is the real source for this event. No target-process constraint is carried from the original evidence, so this remains a behavioral heuristic rather than a family-specific rule, and the title no longer claims NjRAT/XWorm attribution the logic cannot support.
 **Retiering note (2026-07-30):** the selector was narrowed from `\AppData\` to `\AppData\Roaming\` and `\AppData\Local\Temp\`. The unqualified AppData match swept in `\AppData\Local\Programs\`, the canonical per-user install root for a large population of ordinary signed applications (editors, chat clients, browsers, developer tooling) whose updaters legitimately create remote threads. Measured against live telemetry the original selector produced tens of thousands of fires per endpoint at a very high benign rate, which is a false-positive profile no environment permitting per-user installs can absorb. Roaming and Local Temp are where the campaign's implants actually resided, so the narrowing preserves the intended coverage while removing the dominant benign population.
@@ -705,7 +710,7 @@ modified: '2026-07-30'
 tags:
     - attack.stealth
     - attack.privilege-escalation
-    - attack.t1055.003
+    - attack.t1055
     - detection.emerging-threats
 logsource:
     category: create_remote_thread
@@ -732,23 +737,24 @@ level: medium
 
 **Quasar RAT**
 
-#### Quasar RAT Binary Protocol on TCP 4782
+#### Outbound TCP Payload to Port 4782 (Quasar Default Port, Port-Only Lead)
 
 **Tier:** Hunting
-**Robustness:** 2
-**ATT&CK Coverage:** T1095 (Non-Application Layer Protocol), T1573 (Encrypted Channel)
+**Robustness:** 1
+**ATT&CK Coverage:** T1095 (Non-Application Layer Protocol)
+**ATT&CK Note:** The report records the Quasar binary protocol over raw TCP on port 4782 (T1095) and its custom encryption (T1573). The rule tests only an established TCP flow with payload to port 4782 and inspects no payload, so T1095 is the technique the port is a lead for and T1573 is not listed.
 **Confidence:** MODERATE
-**Rationale:** Corrected from the original rule, whose `content` match was the file's own SHA256 hash string converted pairs-of-hex-digits into raw bytes and searched for in network traffic — a file digest has no reason to appear in the malware's actual protocol bytes, so that condition could never legitimately fire. No genuine protocol byte pattern was captured in the underlying evidence (only the port and "custom encryption" are documented), so the content match has been removed rather than replaced with another guess. TCP/4782 is the Quasar-family default port, a real but coarse tool-family artifact: anything else on that port also matches.
+**Rationale:** Corrected from the original rule, whose `content` match was the file's own SHA256 hash string converted pairs-of-hex-digits into raw bytes and searched for in network traffic — a file digest has no reason to appear in the malware's actual protocol bytes, so that condition could never legitimately fire. No genuine protocol byte pattern was captured in the underlying evidence (only the port and "custom encryption" are documented), so the content match has been removed rather than replaced with another guess. TCP/4782 is the Quasar-family default port, but a port is configurable and the port number is the rule's only discriminator, so it scores Robustness 1 and makes no claim of a protocol fingerprint: anything else on that port also matches.
 **False Positives:** Any legitimate or unrelated service that happens to use TCP/4782 (uncommon but not impossible); the `threshold` limits alert volume per source.
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points; hunt-tune before alerting.
 
 ```
-alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:"THL HUNT Dual-RAT-Quasar-NjRAT Quasar Binary Protocol C2 on TCP 4782 (RAT C2 Channel)"; flow:established,to_server; dsize:>0; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/; classtype:trojan-activity; sid:2100001; rev:3; metadata:author The_Hunters_Ledger, date 2025-12-06;)
+alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:"THL HUNT Dual-RAT-Quasar-NjRAT Outbound TCP Payload to Port 4782 (Quasar Default Port, Port-Only Lead)"; flow:established,to_server; dsize:>0; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/; classtype:trojan-activity; sid:2100001; rev:4; metadata:author The_Hunters_Ledger, date 2025-12-06;)
 ```
 
 **NjRAT/XWorm**
 
-#### NjRAT/XWorm Spoofed Mobile Safari User-Agent
+#### HTTP User-Agent Containing iPhone OS 11_4_1 (Value Reported in NjRAT/XWorm Traffic)
 
 **Tier:** Hunting
 **Robustness:** 2
@@ -759,7 +765,7 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:"THL HUNT Dual-RAT-Quasar-NjR
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points; hunt-tune before alerting.
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT Dual-RAT-Quasar-NjRAT NjRAT-XWorm Spoofed Mobile Safari User-Agent (Dead-Drop C2 Resolution Indicator)"; flow:established,to_server; http.user_agent; content:"iPhone OS 11_4_1 like Mac OS X"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/; classtype:trojan-activity; sid:2100004; rev:3; metadata:author The_Hunters_Ledger, date 2025-12-06;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT Dual-RAT-Quasar-NjRAT HTTP User-Agent Containing iPhone OS 11_4_1 (Value Reported in NjRAT-XWorm Traffic, Not Family-Specific)"; flow:established,to_server; http.user_agent; content:"iPhone OS 11_4_1 like Mac OS X"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/; classtype:trojan-activity; sid:2100004; rev:4; metadata:author The_Hunters_Ledger, date 2025-12-06;)
 ```
 
 ---

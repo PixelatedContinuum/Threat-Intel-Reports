@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--7179665f-793f-4688-9c4d-3a79ee68970b",
+    "id": "bundle--93e97f33-2303-4de3-8169-5c6aa09815db",
     "objects": [
         {
             "type": "identity",
@@ -316,12 +316,12 @@
             "id": "indicator--19f77272-bf46-5fed-8166-a49356cfb2c0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.819541Z",
-            "modified": "2026-10-01T19:54:14.819541Z",
+            "modified": "2026-10-11T14:08:26.709384Z",
             "name": "RAT_KAIDO_HVNC_DXGI_Pipe",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule RAT_KAIDO_HVNC_DXGI_Pipe {\n   meta:\n      description = \"Detects the KAIDO RAT HVNC module via its DXGI-hook named-pipe transport strings (pipe prefix, env var, frame magic, reader-thread name) used to stream the hidden-desktop capture to the operator\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/\"\n      date = \"2026-07-03\"\n      hash1 = \"385d20ca574976e3ba3f4f3079420f8a1c3935c0ab4a3f87063beea27d41e254\"\n      hash2 = \"\"\n      hash3 = \"\"\n      family = \"KAIDO\"\n      malware_type = \"RAT\"\n      campaign = \"KAIDO-EvilSoul-Engine-MaaS-144.172.103.98\"\n      id = \"eb4ef7d6-e3f0-5eea-8211-654d9ccff6fa\"\n   strings:\n      $pipe   = \"kaido_dxgi_\" ascii wide nocase\n      $envvar = \"KAIDO_DXGI_PIPE\" ascii wide fullword\n      $rdr    = \"DXGI FrameReader\" ascii wide\n      $fbk    = \"HVNC Capture Loop\" ascii wide\n      $clone  = \"[BrowserClone] Using handle hijacking for locked files...\" ascii wide\n      $magic  = { 4B 81 3F 44 }\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      (2 of ($pipe, $envvar, $rdr, $fbk, $clone) or ($magic and 1 of ($pipe, $envvar)))\n}",
+            "pattern": "rule RAT_KAIDO_HVNC_DXGI_Pipe {\n   meta:\n      description = \"Detects the KAIDO RAT HVNC module via its DXGI-hook named-pipe transport strings (pipe prefix, env var, frame magic, reader and capture-loop thread names) and the BrowserClone log message; two of the five strings, or the frame magic with the pipe prefix or env var, are required\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/\"\n      date = \"2026-07-03\"\n      hash1 = \"385d20ca574976e3ba3f4f3079420f8a1c3935c0ab4a3f87063beea27d41e254\"\n      hash2 = \"\"\n      hash3 = \"\"\n      family = \"KAIDO\"\n      malware_type = \"RAT\"\n      campaign = \"KAIDO-EvilSoul-Engine-MaaS-144.172.103.98\"\n      id = \"eb4ef7d6-e3f0-5eea-8211-654d9ccff6fa\"\n   strings:\n      $pipe   = \"kaido_dxgi_\" ascii wide nocase\n      $envvar = \"KAIDO_DXGI_PIPE\" ascii wide fullword\n      $rdr    = \"DXGI FrameReader\" ascii wide\n      $fbk    = \"HVNC Capture Loop\" ascii wide\n      $clone  = \"[BrowserClone] Using handle hijacking for locked files...\" ascii wide\n      $magic  = { 4B 81 3F 44 }\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      (2 of ($pipe, $envvar, $rdr, $fbk, $clone) or ($magic and 1 of ($pipe, $envvar)))\n}",
             "pattern_type": "yara",
             "valid_from": "2026-07-03T00:00:00Z",
             "labels": [
@@ -400,12 +400,12 @@
             "id": "indicator--a3121d92-1965-5c21-a5f6-cc523d810126",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.819928Z",
-            "modified": "2026-10-01T19:54:14.819928Z",
+            "modified": "2026-10-11T14:08:26.709793Z",
             "name": "Process Named svchost.exe Executing from AppData Path",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Process Named svchost.exe Executing from AppData Path\nid: 08e75208-eb8e-473d-9827-5a59ef4192db\nstatus: experimental\ndescription: >-\n  Detects a process named svchost.exe launching from a user-writable\n  %AppData% subdirectory rather than the legitimate %SystemRoot%\\System32\n  location. Observed as the install pattern used by the KAIDO Quasar-fork\n  RAT to masquerade as the Windows service host process, but this naming\n  and path pattern is also used by other unrelated malware families and\n  should be treated as a generic masquerade indicator rather than a\n  KAIDO-specific signal on its own.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-03'\ntags:\n    - attack.stealth\n    - attack.t1036.005\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1547.001\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        Image|endswith: '\\svchost.exe'\n        Image|contains: '\\AppData\\'\n    filter_parent_system:\n        ParentImage|startswith:\n            - 'C:\\Windows\\System32\\'\n            - 'C:\\Windows\\SysWOW64\\'\n    condition: selection and not filter_parent_system\nfalsepositives:\n    - >-\n      Rare legitimate portable or sideloaded applications that ship a\n      binary literally named svchost.exe in a user profile path\n      (unusual but not impossible for poorly-vetted freeware)\n    - Other unrelated malware families that reuse the same masquerade pattern\nlevel: medium",
+            "pattern": "title: Process Named svchost.exe Executing from AppData Path\nid: 08e75208-eb8e-473d-9827-5a59ef4192db\nstatus: experimental\ndescription: >-\n  Detects a process named svchost.exe launching from a user-writable\n  %AppData% subdirectory rather than the legitimate %SystemRoot%\\System32\n  location, unless its parent image sits under C:\\Windows\\System32\\ or\n  C:\\Windows\\SysWOW64\\. The KAIDO Quasar-fork RAT's install routine\n  (recovered from static analysis, not observed running) uses this\n  pattern to masquerade as the Windows service host process, but the\n  rule tests no KAIDO marker, and this naming and path pattern is also\n  used by other unrelated malware families, so it should be treated as\n  a generic masquerade indicator rather than a KAIDO-specific signal.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-03'\ntags:\n    - attack.stealth\n    - attack.t1036.005\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        Image|endswith: '\\svchost.exe'\n        Image|contains: '\\AppData\\'\n    filter_parent_system:\n        ParentImage|startswith:\n            - 'C:\\Windows\\System32\\'\n            - 'C:\\Windows\\SysWOW64\\'\n    condition: selection and not filter_parent_system\nfalsepositives:\n    - >-\n      Rare legitimate portable or sideloaded applications that ship a\n      binary literally named svchost.exe in a user profile path\n      (unusual but not impossible for poorly-vetted freeware)\n    - Other unrelated malware families that reuse the same masquerade pattern\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-07-03T00:00:00Z",
             "labels": [

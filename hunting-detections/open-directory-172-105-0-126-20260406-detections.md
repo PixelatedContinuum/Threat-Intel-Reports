@@ -278,26 +278,29 @@ level: high
 
 **OpenStrike**
 
-#### OpenStrike Python Beacon Ctypes VirtualAlloc Shellcode Injection
+#### Python Interpreter With Ctypes and VirtualAlloc on the Command Line (OpenStrike Beacon Technique)
 
 **Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1059.006 (Python), T1620 (Reflective Code Loading)
 **Confidence:** HIGH for the technique pairing; MODERATE for false-positive discrimination
-**Rationale:** Python interpreter execution combined with command-line references to both `ctypes` and `VirtualAlloc` is a durable technique-level combination — it survives the malware being renamed or rewritten, since it is keyed on the in-memory shellcode-staging technique rather than a filename. Legitimate security-research and automation tooling produce the same combination often enough that it needs analyst triage rather than blind alerting, so `level` is set to medium and the rule sits in Hunting rather than Detection.
+**Rationale:** The rule carries no OpenStrike marker. A `python.exe`, `pythonw.exe` or `python3.exe` process whose own command line names both `ctypes` and `VirtualAlloc` (inline code or an argument, not a script's contents) is a durable technique-level combination — it survives the malware being renamed or rewritten, since it is keyed on the in-memory shellcode-staging technique rather than a filename. Legitimate security-research and automation tooling produce the same combination often enough that it needs analyst triage rather than blind alerting, so `level` is set to medium and the rule sits in Hunting rather than Detection.
+**Blind Spots:** Fires only when `ctypes` and `VirtualAlloc` appear in the command line itself, as with `python -c` or an inline argument. A Python beacon started from a script file, such as `python beacon_universal.py`, puts neither string on the command line and is not matched; only the interpreter names `python.exe`, `pythonw.exe` and `python3.exe` are tested, so a renamed or embedded interpreter is also missed.
 **False Positives:**
 - Security research tools or CTF scripts using ctypes with VirtualAlloc in Python.
 - Legitimate automation scripts performing memory-mapped operations via ctypes.
 **Deployment:** Endpoint EDR (Sysmon Event ID 1), script block logging, SIEM; analyst review of hits, filtering by script path or user account in high-noise environments.
 
 ```yaml
-title: OpenStrike Python Beacon Ctypes VirtualAlloc Shellcode Injection
+title: Python Interpreter With Ctypes and VirtualAlloc on the Command Line
 id: 1d6b4e82-9f3c-4a17-b5d8-2e7c9a6f1b34
 status: experimental
 description: >-
-  Detects a Python process with command-line arguments referencing ctypes
-  and VirtualAlloc, matching the OpenStrike beacon_universal.py
-  cross-platform shellcode injection pattern. The Python beacon uses
+  Detects a python.exe, pythonw.exe or python3.exe process whose command line
+  references both ctypes and VirtualAlloc, the calls the OpenStrike
+  beacon_universal.py cross-platform shellcode injection pattern relies on.
+  The rule carries no OpenStrike marker and does not see a beacon run from a
+  script file, which keeps both strings off the command line. The Python beacon uses
   ctypes.windll to call VirtualAlloc for RWX memory allocation and
   CreateThread for shellcode execution, enabling in-memory payload staging
   without dropping a compiled binary.
@@ -316,7 +319,10 @@ logsource:
     product: windows
 detection:
     selection_proc:
-        Image|endswith: '\python.exe'
+        Image|endswith:
+            - '\python.exe'
+            - '\pythonw.exe'
+            - '\python3.exe'
         CommandLine|contains|all:
             - 'ctypes'
             - 'VirtualAlloc'

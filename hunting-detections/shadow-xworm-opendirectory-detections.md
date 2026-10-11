@@ -331,28 +331,29 @@ rule RAT_XWorm_30_50_Config {
 
 **XWorm 3.0-5.0**
 
-#### XWorm 3.0-5.0: Rijndael-256-ECB Config Crypto Pattern
+#### .NET Rijndael, ECB, MD5 and Anti-Analysis String Combination (XWorm Config Crypto Lead)
 
 **Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1027 (Obfuscated Files or Information — config encryption), T1497.001 (Virtualization/Sandbox Evasion: System Checks — anti-analysis checks)
 **Confidence:** MODERATE
-**Rationale:** All four mandatory strings (`RijndaelManaged`, `ECB`, `MD5CryptoServiceProvider`, `FromBase64String`) are standard .NET Framework class/method names used by countless legitimate and unrelated malicious crypto implementations — this is a common "insecure but simple" pattern copied broadly across many code bases, not a Shadow/XWorm-specific construction on its own. Two of the three corroborating anti-analysis strings (`Win32_ComputerSystem`, `IsAttached`) are themselves generic terms; only `SbieDll` is genuinely distinctive. This durable-but-generic technique pattern belongs in Hunting, matching the original analysis's own framing as a supporting indicator.
+**Rationale:** All four mandatory strings (`RijndaelManaged`, `ECB`, `MD5CryptoServiceProvider`, `FromBase64String`) are standard .NET Framework class/method names used by countless legitimate and unrelated malicious crypto implementations — this is a common "insecure but simple" pattern copied broadly across many code bases, not a Shadow/XWorm-specific construction on its own. Two of the three corroborating anti-analysis strings (`Win32_ComputerSystem`, `IsAttached`) are themselves generic terms; only `SbieDll` is genuinely distinctive. This durable-but-generic technique pattern belongs in Hunting, matching the original analysis's own framing as a supporting indicator. The rule identifier keeps the original `Rijndael256ECB` and `XWorm` wording (renaming would re-derive its `id` and change the deployed artifact's rule name): the 256-bit block size and the XWorm attribution come from the report's account of the sample, and the rule tests neither, so read the name as the lead it was written for and the `family` field as a lead label, not an attribution.
 **False Positives:** Individual strings appear routinely in legitimate .NET applications using cryptography or WMI/system queries; the combination is more distinctive but not unique — any application combining basic AES/MD5 crypto with a WMI computer-system check and an unrelated "IsAttached" property could coincidentally satisfy this rule.
 **Deployment:** Endpoint AV/EDR file scan; treat as a supporting/corroborating indicator alongside the Detection-tier XWorm config rule above, not as standalone confirmation.
 
 ```yara
 rule RAT_XWorm_Rijndael256ECB_Crypto {
    meta:
-      description = "Detects XWorm 3.0-5.0 variants using the characteristic Rijndael-256-ECB config encryption with non-standard overlapping MD5 key derivation, combined with anti-analysis indicators. The MD5 hash is copied to a 32-byte key array at offsets 0 and 15 with a single overlap byte — a distinctive non-standard construction consistent across XWorm 3.0-5.0 variants."
+      description = "Hunting rule for a PE file under 500 KB that holds the strings RijndaelManaged, ECB, MD5CryptoServiceProvider and FromBase64String together with two of Win32_ComputerSystem, SbieDll and IsAttached. The report documents XWorm's config encryption as Rijndael-256-ECB keyed from an MD5 hash copied into a 32-byte array at offsets 0 and 15 with one overlapping byte; this rule tests none of that construction, no block size, no XWorm-specific string and no version, so it matches any small program carrying those names."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/shadow-xworm-opendirectory-detections/"
       date = "2026-04-04"
+      modified = "2026-10-11"
       hash1 = "b7fa1e5cefb7f5ad367271f29bde8558566c17da169b5dac797c79beb3fc4531"
       hash2 = "e69e32522835f37f18095e219385057b6bbdc959"
       hash3 = "7e2fe58934874e442cfa183a34ceb24c"
-      family = "XWorm"
+      family = "Generic-NET-Crypto-XWorm-Lead"
       malware_type = "RAT"
       campaign = "OpenDirectory-DualRAT-MaaS-151.245.112.70"
       id = "7c53be1a-c635-593f-9763-1e81230698ee"
@@ -558,7 +559,7 @@ level: medium
 **Robustness:** 2
 **ATT&CK Coverage:** T1685 (Disable or Modify Tools — ETW Bypass)
 **Confidence:** HIGH (technique); LOW precision as written
-**Rationale:** Full-rights process access (`PROCESS_ALL_ACCESS`) with `ntdll.dll` in the call trace is the correct mechanism for ETW patching, but `ntdll.dll` routes almost every `OpenProcess` call on Windows, so the `CallTrace` clause has close to zero discriminating power on its own; the 5-name source-image exclusion list does not filter EDR/AV agents, debuggers, or process-inspection tools, all of which routinely acquire full access to other processes. This selector would very likely fire on ordinary endpoint activity — a broad hunting lead for injection/ETW-patching activity, not an alerting-grade signal by itself.
+**Rationale:** Full-rights process access (`PROCESS_ALL_ACCESS`) with `ntdll.dll` in the call trace is the correct mechanism for ETW patching, but `ntdll.dll` routes almost every `OpenProcess` call on Windows, so the `CallTrace` clause has close to zero discriminating power on its own; the six-name source-image exclusion list (`svchost.exe`, `lsass.exe`, `csrss.exe`, `services.exe`, `winlogon.exe`, `wininit.exe`) matches on the file name alone, so a process of one of those names started from any directory is excluded too, and it does not filter EDR/AV agents, debuggers, or process-inspection tools, all of which routinely acquire full access to other processes. This selector would very likely fire on ordinary endpoint activity — a broad hunting lead for injection/ETW-patching activity, not an alerting-grade signal by itself.
 **False Positives:** EDR/antivirus agents, debugging tools and performance profilers, and process-inspection tools (Process Explorer, Task Manager "show details") that legitimately request full process access as part of normal operation; application compatibility shims that modify ntdll behavior at runtime.
 **Deployment:** SIEM (Sysmon Event ID 10 / process_access), EDR — correlate with other Shadow RAT indicators before treating a hit as confirmed.
 

@@ -62,7 +62,7 @@
     "date": "2026-09-28",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791702378
+    "timestamp": 1791727779
   },
   "063ce33f-b7aa-5660-a9ff-f188850a7d87": {
     "Orgc": {
@@ -388,7 +388,7 @@
     "date": "2026-09-07",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791704590
+    "timestamp": 1791727791
   },
   "61bf8b6f-e11d-50ac-8cae-d6e6afd6f5d5": {
     "Orgc": {
@@ -434,6 +434,10 @@
       },
       {
         "name": "misp-galaxy:mitre-attack-pattern=\"System Network Configuration Discovery - T1016\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote System Discovery - T1018\"",
         "colour": "#0088cc"
       },
       {
@@ -613,7 +617,7 @@
     "date": "2026-08-18",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791704581
+    "timestamp": 1791727783
   },
   "cd18797e-ccb1-5b3e-b32f-2b2aabf67d28": {
     "Orgc": {
@@ -911,7 +915,7 @@
     "date": "2026-08-03",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791704578
+    "timestamp": 1791727766
   },
   "7caf24f7-aaae-5cd6-8026-90cb081d8075": {
     "Orgc": {
@@ -941,6 +945,10 @@
       },
       {
         "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Resource Name or Location - T1036.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over C2 Channel - T1041\"",
         "colour": "#0088cc"
       },
       {
@@ -1032,7 +1040,7 @@
     "date": "2026-07-26",
     "analysis": 2,
     "threat_level_id": 2,
-    "timestamp": 1791695334
+    "timestamp": 1791727773
   },
   "7a1fc79b-257b-587d-9691-da866766d383": {
     "Orgc": {
@@ -1197,7 +1205,7 @@
     "date": "2026-07-21",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791704579
+    "timestamp": 1791727777
   },
   "eb873bde-1e1d-5a29-8b4c-dc02cedd1584": {
     "Orgc": {
@@ -1391,10 +1399,6 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
-        "colour": "#0088cc"
-      },
-      {
         "name": "misp-galaxy:mitre-attack-pattern=\"Mark-of-the-Web Bypass - T1553.005\"",
         "colour": "#0088cc"
       },
@@ -1407,7 +1411,7 @@
     "date": "2026-07-03",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791702374
+    "timestamp": 1791727775
   },
   "207c913d-e57f-534b-ac8a-08e8ebf9933d": {
     "Orgc": {
@@ -1752,7 +1756,7 @@
     "date": "2026-06-16",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791690193
+    "timestamp": 1791727756
   },
   "611d3d52-2660-5a18-a27e-866a92ee221e": {
     "Orgc": {
@@ -1790,6 +1794,10 @@
       },
       {
         "name": "misp-galaxy:mitre-attack-pattern=\"Process Discovery - T1057\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
         "colour": "#0088cc"
       },
       {
@@ -1865,7 +1873,7 @@
     "date": "2026-06-12",
     "analysis": 2,
     "threat_level_id": 2,
-    "timestamp": 1791692753
+    "timestamp": 1791727769
   },
   "875094b8-c444-56b7-9af6-4524d0de89cc": {
     "Orgc": {
@@ -1894,11 +1902,11 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"JavaScript - T1059.007\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Internal Proxy - T1090.001\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Internal Proxy - T1090.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
         "colour": "#0088cc"
       },
       {
@@ -1910,7 +1918,7 @@
     "date": "2026-05-27",
     "analysis": 2,
     "threat_level_id": 2,
-    "timestamp": 1791702375
+    "timestamp": 1791727776
   },
   "43b09f34-283d-5b09-84eb-a93df291c4c4": {
     "Orgc": {
@@ -2115,7 +2123,7 @@
     "date": "2026-05-26",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791706632
+    "timestamp": 1791727788
   },
   "d368b117-5414-5c50-b434-c21cfb5f6797": {
     "Orgc": {
@@ -2308,7 +2316,7 @@
     "date": "2026-05-25",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791702373
+    "timestamp": 1791727772
   },
   "897c4651-021d-5b44-a032-900b5676e247": {
     "Orgc": {
@@ -2525,7 +2533,7 @@
     "date": "2026-05-25",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791706633
+    "timestamp": 1791727789
   },
   "9efa73fb-800e-59f7-96f1-5a1b3e9216ef": {
     "Orgc": {
@@ -2626,7 +2634,7 @@
     "date": "2026-05-25",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791687678
+    "timestamp": 1791727793
   },
   "9cf6de91-da84-5074-bfca-e1f3961ed07c": {
     "Orgc": {
@@ -2795,7 +2803,7 @@
     "date": "2026-05-17",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791702383
+    "timestamp": 1791727784
   },
   "82cbc83b-05d1-5a93-bb60-69c8c5f9aa04": {
     "Orgc": {
@@ -2948,7 +2956,7 @@
     "date": "2026-05-16",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791697517
+    "timestamp": 1791727765
   },
   "93d0b666-26a5-57ab-a3dc-45f197c65e10": {
     "Orgc": {
@@ -3081,7 +3089,7 @@
     "date": "2026-05-16",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791692759
+    "timestamp": 1791727774
   },
   "3d46b2a8-dcd5-56e3-80f3-cc19a7369651": {
     "Orgc": {
@@ -3258,7 +3266,7 @@
     "date": "2026-05-15",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791706630
+    "timestamp": 1791727787
   },
   "7cf9b00a-7f3d-527a-81c3-cb42eaa2be96": {
     "Orgc": {
@@ -3451,7 +3459,7 @@
     "date": "2026-05-06",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791706629
+    "timestamp": 1791727786
   },
   "5b9f3c7a-ce4f-5fde-afc7-221cd3f69ada": {
     "Orgc": {
@@ -3640,7 +3648,7 @@
     "date": "2026-04-30",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791702384
+    "timestamp": 1791727785
   },
   "ebc92dc3-8983-54dd-9caa-c6f17abe0517": {
     "Orgc": {
@@ -3825,7 +3833,7 @@
     "date": "2026-04-23",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791702381
+    "timestamp": 1791727782
   },
   "6f667981-4451-5004-a851-e42a3420ab88": {
     "Orgc": {
@@ -4071,7 +4079,7 @@
     "date": "2026-04-08",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791702377
+    "timestamp": 1791727778
   },
   "94be8f0c-229d-5120-8ec3-4a4b2eb759d2": {
     "Orgc": {
@@ -4192,7 +4200,7 @@
     "date": "2026-04-06",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791702379
+    "timestamp": 1791727781
   },
   "940014f4-065e-5b01-9fbe-d4c28f766dae": {
     "Orgc": {
@@ -4285,7 +4293,7 @@
     "date": "2026-04-05",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791706634
+    "timestamp": 1791727790
   },
   "125e14b3-c05b-5d46-a15d-e4b86f112070": {
     "Orgc": {
@@ -4439,7 +4447,7 @@
     "date": "2026-03-16",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791704591
+    "timestamp": 1791727797
   },
   "8cf95311-80b8-5a28-8132-7ffb8349c482": {
     "Orgc": {
@@ -4504,15 +4512,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Parent PID Spoofing - T1134.004\"",
-        "colour": "#0088cc"
-      },
-      {
         "name": "misp-galaxy:mitre-attack-pattern=\"Code Signing - T1553.002\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Reflective Code Loading - T1620\"",
         "colour": "#0088cc"
       },
       {
@@ -4524,7 +4524,7 @@
     "date": "2026-03-10",
     "analysis": 2,
     "threat_level_id": 2,
-    "timestamp": 1791592937
+    "timestamp": 1791727792
   },
   "e4a63f98-8afb-50e9-ad9a-4986fc498af9": {
     "Orgc": {
@@ -4557,10 +4557,6 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"DNS - T1071.004\"",
-        "colour": "#0088cc"
-      },
-      {
         "name": "misp-galaxy:mitre-attack-pattern=\"Internal Proxy - T1090.001\"",
         "colour": "#0088cc"
       },
@@ -4581,7 +4577,7 @@
     "date": "2026-02-20",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791592940
+    "timestamp": 1791727795
   },
   "ab0fd8fb-928e-585f-95d1-5a7f9983eacf": {
     "Orgc": {
@@ -4705,17 +4701,13 @@
       {
         "name": "misp-galaxy:mitre-attack-pattern=\"Resource Hijacking - T1496\"",
         "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
-        "colour": "#0088cc"
       }
     ],
     "info": "NsMiner: Multi-Stage Cryptojacking Operation",
     "date": "2026-02-05",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791697524
+    "timestamp": 1791727780
   },
   "94c995c7-3161-5b68-9185-60ec73870738": {
     "Orgc": {
@@ -4797,7 +4789,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Non-Application Layer Protocol - T1095\"",
         "colour": "#0088cc"
       },
       {
@@ -4817,7 +4809,7 @@
     "date": "2026-01-15",
     "analysis": 2,
     "threat_level_id": 2,
-    "timestamp": 1791690191
+    "timestamp": 1791727755
   },
   "aab2ba34-9ec2-5c61-948e-6a10c7b18488": {
     "Orgc": {
@@ -4956,7 +4948,7 @@
     "date": "2026-01-15",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791690194
+    "timestamp": 1791727757
   },
   "b3f1cee9-dc86-5d92-ae5e-b375141a3dde": {
     "Orgc": {
@@ -5050,7 +5042,7 @@
     "date": "2026-01-15",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791690195
+    "timestamp": 1791727758
   },
   "1c4057d8-6ee8-5c89-b45d-adc83d437048": {
     "Orgc": {
@@ -5083,7 +5075,7 @@
     "date": "2026-01-15",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791687669
+    "timestamp": 1791727759
   },
   "3a2e305f-b524-5b35-8fa8-54a3a55c08b1": {
     "Orgc": {
@@ -5161,7 +5153,7 @@
     "date": "2026-01-15",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791695326
+    "timestamp": 1791727760
   },
   "75ed19ed-9b89-5f63-a2ca-193a80458317": {
     "Orgc": {
@@ -5198,7 +5190,7 @@
     "date": "2026-01-15",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791690197
+    "timestamp": 1791727761
   },
   "bbb50559-558b-53f6-8a3a-19961ddf05ef": {
     "Orgc": {
@@ -5251,7 +5243,7 @@
     "date": "2026-01-15",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791692747
+    "timestamp": 1791727762
   },
   "caefd6be-08dd-561f-86e2-b3b02308da81": {
     "Orgc": {
@@ -5304,7 +5296,7 @@
     "date": "2026-01-15",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791592900
+    "timestamp": 1791727763
   },
   "e501fdef-3d5e-5128-b862-ad46cf063906": {
     "Orgc": {
@@ -5353,7 +5345,7 @@
     "date": "2026-01-15",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791695327
+    "timestamp": 1791727764
   },
   "1f7ee918-f66f-5770-90bf-ff912bd48050": {
     "Orgc": {
@@ -5386,7 +5378,7 @@
     "date": "2026-01-15",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791592905
+    "timestamp": 1791727768
   },
   "b64d8288-b76d-5380-af9b-4cbfa23ffe6b": {
     "Orgc": {
@@ -5435,7 +5427,7 @@
     "date": "2026-01-15",
     "analysis": 2,
     "threat_level_id": 2,
-    "timestamp": 1791695331
+    "timestamp": 1791727770
   },
   "f5f6f585-f601-5e0c-a7bc-b9e973ed73f0": {
     "Orgc": {
@@ -5504,7 +5496,7 @@
     "date": "2026-01-15",
     "analysis": 2,
     "threat_level_id": 2,
-    "timestamp": 1791695332
+    "timestamp": 1791727771
   },
   "14e13c91-19dc-5501-978c-2729a8ef67eb": {
     "Orgc": {
@@ -5537,7 +5529,7 @@
     "date": "2026-01-15",
     "analysis": 2,
     "threat_level_id": 2,
-    "timestamp": 1791592939
+    "timestamp": 1791727794
   },
   "6b2ddd6b-2861-5626-b59e-9cf736ff2568": {
     "Orgc": {
@@ -5570,7 +5562,7 @@
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Thread Execution Hijacking - T1055.003\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Injection - T1055\"",
         "colour": "#0088cc"
       },
       {
@@ -5614,7 +5606,7 @@
     "date": "2025-12-20",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791692751
+    "timestamp": 1791727767
   },
   "628d1b77-562f-5511-aa4b-e858e3c8527f": {
     "Orgc": {
@@ -5671,7 +5663,7 @@
     "date": "2025-12-15",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791687660
+    "timestamp": 1791727754
   },
   "da83550d-5287-5e4b-8325-fdcd93e5018e": {
     "Orgc": {
@@ -5714,17 +5706,13 @@
       {
         "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
         "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Debugger Evasion - T1622\"",
-        "colour": "#0088cc"
       }
     ],
     "info": "Hybrid Loader/Stealer Ecosystem Masquerading as Sogou",
     "date": "2025-11-20",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791687659
+    "timestamp": 1791727753
   },
   "cb0d8c6e-7f98-5551-ac12-dc8ac8943286": {
     "Orgc": {
@@ -5863,7 +5851,7 @@
     "date": "2025-10-15",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791592941
+    "timestamp": 1791727796
   },
   "8975ee88-1a24-52cc-8c39-74ddf2741efb": {
     "Orgc": {

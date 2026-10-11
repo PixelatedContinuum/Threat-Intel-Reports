@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--c621d925-5058-450c-9077-d8074c5aec03",
+    "id": "bundle--01f104cd-cd1c-4980-bce5-a23b2c549742",
     "objects": [
         {
             "type": "identity",
@@ -461,12 +461,12 @@
             "id": "indicator--7f7af980-e0d7-5536-b5a8-eb288c4b9b04",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.312752Z",
-            "modified": "2026-10-01T19:54:20.312752Z",
+            "modified": "2026-10-11T14:08:42.42321Z",
             "name": "RAT_XWorm_Rijndael256ECB_Crypto",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule RAT_XWorm_Rijndael256ECB_Crypto {\n   meta:\n      description = \"Detects XWorm 3.0-5.0 variants using the characteristic Rijndael-256-ECB config encryption with non-standard overlapping MD5 key derivation, combined with anti-analysis indicators. The MD5 hash is copied to a 32-byte key array at offsets 0 and 15 with a single overlap byte — a distinctive non-standard construction consistent across XWorm 3.0-5.0 variants.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/shadow-xworm-opendirectory-detections/\"\n      date = \"2026-04-04\"\n      hash1 = \"b7fa1e5cefb7f5ad367271f29bde8558566c17da169b5dac797c79beb3fc4531\"\n      hash2 = \"e69e32522835f37f18095e219385057b6bbdc959\"\n      hash3 = \"7e2fe58934874e442cfa183a34ceb24c\"\n      family = \"XWorm\"\n      malware_type = \"RAT\"\n      campaign = \"OpenDirectory-DualRAT-MaaS-151.245.112.70\"\n      id = \"7c53be1a-c635-593f-9763-1e81230698ee\"\n   strings:\n      $s1 = \"RijndaelManaged\" ascii wide\n      $s2 = \"ECB\" ascii wide\n      $s3 = \"MD5CryptoServiceProvider\" ascii wide\n      $s4 = \"FromBase64String\" ascii wide\n      // Anti-analysis check strings\n      $s5 = \"Win32_ComputerSystem\" ascii wide\n      $s6 = \"SbieDll\" ascii wide\n      $s7 = \"IsAttached\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 500KB and\n      $s1 and $s2 and $s3 and $s4 and\n      2 of ($s5, $s6, $s7)\n}",
+            "pattern": "rule RAT_XWorm_Rijndael256ECB_Crypto {\n   meta:\n      description = \"Hunting rule for a PE file under 500 KB that holds the strings RijndaelManaged, ECB, MD5CryptoServiceProvider and FromBase64String together with two of Win32_ComputerSystem, SbieDll and IsAttached. The report documents XWorm's config encryption as Rijndael-256-ECB keyed from an MD5 hash copied into a 32-byte array at offsets 0 and 15 with one overlapping byte; this rule tests none of that construction, no block size, no XWorm-specific string and no version, so it matches any small program carrying those names.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/shadow-xworm-opendirectory-detections/\"\n      date = \"2026-04-04\"\n      modified = \"2026-10-11\"\n      hash1 = \"b7fa1e5cefb7f5ad367271f29bde8558566c17da169b5dac797c79beb3fc4531\"\n      hash2 = \"e69e32522835f37f18095e219385057b6bbdc959\"\n      hash3 = \"7e2fe58934874e442cfa183a34ceb24c\"\n      family = \"Generic-NET-Crypto-XWorm-Lead\"\n      malware_type = \"RAT\"\n      campaign = \"OpenDirectory-DualRAT-MaaS-151.245.112.70\"\n      id = \"7c53be1a-c635-593f-9763-1e81230698ee\"\n   strings:\n      $s1 = \"RijndaelManaged\" ascii wide\n      $s2 = \"ECB\" ascii wide\n      $s3 = \"MD5CryptoServiceProvider\" ascii wide\n      $s4 = \"FromBase64String\" ascii wide\n      // Anti-analysis check strings\n      $s5 = \"Win32_ComputerSystem\" ascii wide\n      $s6 = \"SbieDll\" ascii wide\n      $s7 = \"IsAttached\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 500KB and\n      $s1 and $s2 and $s3 and $s4 and\n      2 of ($s5, $s6, $s7)\n}",
             "pattern_type": "yara",
             "valid_from": "2026-04-04T00:00:00Z",
             "labels": [

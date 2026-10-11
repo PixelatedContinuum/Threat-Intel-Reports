@@ -25,7 +25,7 @@ KAIDO is a rebranded 64-bit fork of the open-source Quasar RAT carrying an HVNC 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 3 | 0 | T1219, T1113, T1497 | 0 |
-| Sigma | 0 | 3 | T1553.005, T1219, T1113, T1036.005, T1547.001 | 0 |
+| Sigma | 0 | 3 | T1553.005, T1219, T1113, T1036.005 | 0 |
 | Suricata | 1 | 1 | T1071.001, T1573.001, T1095 | 1 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
@@ -97,16 +97,16 @@ rule RAT_KAIDO_Quasar_Fork_Namespace {
 **Robustness:** 3
 **ATT&CK Coverage:** T1219 (Remote Access Software), T1113 (Screen Capture — MODERATE, static-only)
 **Confidence:** HIGH
-**Rationale:** The DXGI-hook HVNC frame transport uses a distinctive pipe-name prefix, environment variable, frame magic value, and reader-thread name — none generic Windows or .NET runtime terms. The rule requires two of these (or the frame magic plus one), so no single renameable literal carries it.
-**False Positives:** None known — `KAIDO_DXGI_PIPE`, `kaido_dxgi_`, and the paired thread names are family-specific compiled strings; the hex frame magic is combined with string context rather than used alone.
-**Blind Spots:** Misses a variant that renames all four HVNC transport strings *and* changes the frame magic; the DXGI capture path only exists in builds carrying the HVNC module.
-**Validation:** Scan a KAIDO HVNC-capable sample — ≥2 transport strings must match; a benign screen-capture or remote-desktop tool must NOT fire.
+**Rationale:** The DXGI-hook HVNC frame transport uses a distinctive pipe-name prefix, environment variable, frame magic value, and reader and capture-loop thread names, and the browser-clone code adds a log message — none generic Windows or .NET runtime terms. The rule requires two of the five strings (the pipe prefix, the environment variable, the two thread names and the BrowserClone message count equally toward the two), or the frame magic together with the pipe prefix or the environment variable, so no single renameable literal carries it.
+**False Positives:** None known — `KAIDO_DXGI_PIPE`, `kaido_dxgi_`, and the paired thread names are family-specific compiled strings; the hex frame magic fires only together with the pipe prefix or the environment variable, never alone.
+**Blind Spots:** Misses a build in which fewer than two of the five strings survive and the frame magic is not paired with the pipe prefix or the environment variable. Renaming the pipe prefix, the environment variable and the two thread names is enough on its own, because the BrowserClone message is then a single string and the frame magic alone does not match. The DXGI capture path only exists in builds carrying the HVNC module.
+**Validation:** Scan a KAIDO HVNC-capable sample — at least two of the five strings (pipe prefix, environment variable, the two thread names, the BrowserClone message), or the frame magic with the pipe prefix or the environment variable, must match; a benign screen-capture or remote-desktop tool must NOT fire.
 **Deployment:** Endpoint AV/EDR file scan, scanning of saved dumps taken during suspected HVNC activity. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
 rule RAT_KAIDO_HVNC_DXGI_Pipe {
    meta:
-      description = "Detects the KAIDO RAT HVNC module via its DXGI-hook named-pipe transport strings (pipe prefix, env var, frame magic, reader-thread name) used to stream the hidden-desktop capture to the operator"
+      description = "Detects the KAIDO RAT HVNC module via its DXGI-hook named-pipe transport strings (pipe prefix, env var, frame magic, reader and capture-loop thread names) and the BrowserClone log message; two of the five strings, or the frame magic with the pipe prefix or env var, are required"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/"
@@ -274,13 +274,14 @@ falsepositives:
 level: medium
 ```
 
-#### KAIDO Install as svchost.exe by Non-System Parent Process
+#### Process Named svchost.exe Running From an AppData Path With a Parent Outside System32 and SysWOW64
 
 **Tier:** Hunting
 **Robustness:** 2
-**ATT&CK Coverage:** T1036.005 (Match Legitimate Name or Location), T1547.001 (Registry Run Keys / Startup Folder — related persistence, MODERATE)
+**ATT&CK Coverage:** T1036.005 (Match Legitimate Name or Location)
+**ATT&CK Note:** T1547.001 (Registry Run Keys / Startup Folder) was listed here as related persistence and is withdrawn: the rule tests a process-creation event for an image name, an AppData path and the parent's directory, and nothing in it observes a Run key or a Startup folder. The Coverage Gaps section already records that no persistence artifact was observed.
 **Confidence:** MODERATE (install routine recovered from static analysis, not dynamically observed — the malware is C2-gated)
-**Rationale:** The RAT installs into `%AppData%\<subdir>\svchost.exe`, masquerading as the Windows service host from a user-writable path. The svchost-in-AppData masquerade is a durable technique pattern, but it is used by many unrelated families and carries a meaningful benign FP, so it is a generic masquerade *hunting* indicator, not a KAIDO-specific detection on its own.
+**Rationale:** The RAT installs into `%AppData%\<subdir>\svchost.exe`, masquerading as the Windows service host from a user-writable path. The rule carries no KAIDO marker: it matches any process whose image ends in `\svchost.exe` under an `\AppData\` path and whose parent image is not under `C:\Windows\System32\` or `C:\Windows\SysWOW64\` (a parent such as `C:\Windows\explorer.exe` is therefore not excluded). The svchost-in-AppData masquerade is a durable technique pattern, but it is used by many unrelated families and carries a meaningful benign FP, so it is a generic masquerade *hunting* indicator, not a KAIDO-specific detection on its own.
 **False Positives:**
 - Rare legitimate portable or sideloaded applications that ship a binary literally named `svchost.exe` in a user profile path (unusual but not impossible for poorly-vetted freeware).
 - Other unrelated malware families that reuse the same masquerade pattern.
@@ -293,11 +294,13 @@ status: experimental
 description: >-
   Detects a process named svchost.exe launching from a user-writable
   %AppData% subdirectory rather than the legitimate %SystemRoot%\System32
-  location. Observed as the install pattern used by the KAIDO Quasar-fork
-  RAT to masquerade as the Windows service host process, but this naming
-  and path pattern is also used by other unrelated malware families and
-  should be treated as a generic masquerade indicator rather than a
-  KAIDO-specific signal on its own.
+  location, unless its parent image sits under C:\Windows\System32\ or
+  C:\Windows\SysWOW64\. The KAIDO Quasar-fork RAT's install routine
+  (recovered from static analysis, not observed running) uses this
+  pattern to masquerade as the Windows service host process, but the
+  rule tests no KAIDO marker, and this naming and path pattern is also
+  used by other unrelated malware families, so it should be treated as
+  a generic masquerade indicator rather than a KAIDO-specific signal.
 references:
     - https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/
 author: The Hunters Ledger
@@ -305,9 +308,6 @@ date: '2026-07-03'
 tags:
     - attack.stealth
     - attack.t1036.005
-    - attack.persistence
-    - attack.privilege-escalation
-    - attack.t1547.001
     - detection.emerging-threats
 logsource:
     category: process_creation

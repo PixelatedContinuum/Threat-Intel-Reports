@@ -125,8 +125,8 @@ rule MAL_EncDec_ChaCha20_Constant {
 **Robustness:** 1
 **ATT&CK Coverage:** T1490 (Inhibit System Recovery)
 **Confidence:** MODERATE
-**Rationale:** This 47-byte string is not a command the malware issues as written — a real process-creation call to vssadmin/wmic requires space-delimited argv tokens, not a gapless concatenation. The more plausible explanation is that this reflects several short, adjacent string-table constants (`vssadmin`, `delete`, `shadows`, `/all`, `/quiet`, `wmic`, `shadowcopy`) packed back-to-back with no separating bytes by this family's Rust build toolchain, which a naive string-extraction pass then reads as one contiguous run. That gives it real value for recognizing this specific build lineage today, but a toolchain change, added dependency, or reordered source could shift the layout and break the exact match — it is not guaranteed to survive a genuine recompile the way the command-line-level Sigma detection below does, which is why the same underlying technique is carried at Detection tier there instead.
-**False Positives:** None known — the exact 47-byte gapless concatenation of these seven tokens is not expected in unrelated software.
+**Rationale:** This 45-byte string is not a command the malware issues as written — a real process-creation call to vssadmin/wmic requires space-delimited argv tokens, not a gapless concatenation. The more plausible explanation is that this reflects several short, adjacent string-table constants (`vssadmin`, `delete`, `shadows`, `/all`, `/quiet`, `wmic`, `shadowcopy`) packed back-to-back with no separating bytes by this family's Rust build toolchain, which a naive string-extraction pass then reads as one contiguous run. That gives it real value for recognizing this specific build lineage today, but a toolchain change, added dependency, or reordered source could shift the layout and break the exact match — it is not guaranteed to survive a genuine recompile the way the command-line-level Sigma detection below does, which is why the same underlying technique is carried at Detection tier there instead.
+**False Positives:** None known — the exact 45-byte gapless concatenation of these seven tokens is not expected in unrelated software.
 **Deployment:** Endpoint AV/EDR static file scanning, retroactive scan of file shares, IR artifact triage for recurrence of this specific build family.
 
 ```yara
@@ -155,23 +155,23 @@ rule MAL_EncDec_VSS_Deletion_Concatenated_String {
 
 ### Detection Rules
 
-#### enc/dec Ransomware VSS Deletion Activity
+#### Volume Shadow Copy Deletion via Vssadmin or Wmic (Generic Ransomware Precursor, Seen in the enc/dec Family)
 
 **Tier:** Detection
 **Robustness:** 3
 **ATT&CK Coverage:** T1490 (Inhibit System Recovery)
 **Confidence:** HIGH
 **Rationale:** *Fixes applied during retiering:* `level` demoted from `critical` to `high` — the rule's own false-positive list concedes VSS deletion occurs, rarely, during legitimate system maintenance and backup-software uninstallation, which is inconsistent with `critical`'s never-FP bar; `high` ("rare FP after baselining; manual review") is the honest level. `status` changed from `stable` to `experimental` per project convention for a freshly-retiered rule. A `references:` entry pointing at this file was added — the original carried none. The underlying technique — invoking vssadmin.exe or wmic.exe with this specific delete-shadows/shadowcopy-delete argument combination — is a technique-level chokepoint for this recovery-inhibition mechanism: an attacker cannot rename vssadmin.exe's command syntax, so this survives infrastructure rotation and binary rebuilds untouched.
-**False Positives:** Legitimate system maintenance and backup-software uninstallation routines occasionally invoke VSS deletion with these exact commands, though this is rare in most environments; review the parent process before treating a hit as confirmed malicious.
+**False Positives:** Legitimate system maintenance and backup-software uninstallation routines occasionally invoke VSS deletion with these exact commands, though this is rare in most environments; review the parent process before treating a hit as confirmed malicious. The rule carries no enc/dec-specific indicator, so a hit does not attribute the activity to this family.
 **Blind Spots:** Misses VSS deletion via PowerShell cmdlets, direct COM/WMI API calls that bypass vssadmin.exe/wmic.exe process creation, or a custom VSS-deletion implementation that does not shell out to either tool.
 **Validation:** Trigger `vssadmin delete shadows /all /quiet` or `wmic shadowcopy delete` — must match; an unrelated vssadmin invocation without the delete-shadows/all combination (e.g., `vssadmin list shadows`) must NOT fire.
 **Deployment:** SIEM/EDR process-creation telemetry (Sysmon Event ID 1, Windows Security 4688), real-time alerting — a well-established, high-value ransomware precursor signal.
 
 ```yaml
-title: enc/dec Ransomware VSS Deletion Activity
+title: Volume Shadow Copy Deletion via Vssadmin or Wmic (Generic Ransomware Precursor, Seen in the enc/dec Family)
 id: ad52d938-ac86-4587-86c9-008ad0534b68
 status: experimental
-description: Detects Volume Shadow Copy deletion commands via vssadmin.exe or wmic.exe consistent with the enc/dec ransomware family's pre-encryption recovery-inhibition step.
+description: Detects command lines that delete Volume Shadow Copies through vssadmin or wmic. The enc/dec ransomware family issues this pre-encryption recovery-inhibition step, but the rule has no family string, hash, path or parent-process test, so it matches the same command from any tool or administrator.
 references:
     - https://the-hunters-ledger.com/hunting-detections/enc-dec-ransomware-family-detections/
 author: The Hunters Ledger
@@ -209,7 +209,7 @@ level: high
 ### Retiering Fixes Applied
 
 - **YARA operator-precedence bug fixed (Rust Ransomware Artifacts rule).** The original condition read `uint16(0) == 0x5A4D and 2 of ($rust_debug*) or ($rsa_key_marker and ($enc_message or $key_gen))`. YARA's `and` binds tighter than `or`, so this parsed as `(uint16(0)==0x5A4D and 2 of ($rust_debug*)) or ($rsa_key_marker and (...))`. The second branch carried no PE-header gate at all and could in principle match a non-PE file. Explicit parentheses now apply the MZ check to both branches; the corrected rule compiles cleanly against the real `yarac` engine.
-- **Sigma level demoted, status corrected, reference added (VSS Deletion Activity rule).** See that rule's own Rationale above for the full reasoning.
+- **Sigma level demoted, status corrected, reference added (the VSS deletion command-line rule).** See that rule's own Rationale above for the full reasoning.
 
 ### Cut Rules (This Pass, Genuine Noise / Unfireable)
 
@@ -233,7 +233,7 @@ This family's only network artifact is the distribution IP itself; no C2 protoco
 - **Goodware corpus validation** for the ChaCha20 constant rule, a documented zero-FP result against a broad clean-software corpus (VPN clients, TLS stacks, secure-messaging apps) is the explicit precondition for reconsidering Detection tier.
 - **Fresh disassembly of the anti-debugging stack-check routine**. A byte-level or API-hook-based signature derived from validated x64 disassembly would restore T1622 coverage.
 - **Observed C2 traffic**. Protocol structure from an active session would enable a genuine Suricata signature beyond the feed-only IP coverage.
-- **Build-to-build reproducibility check on the VSS-deletion concatenated string**, confirming the exact 47-byte sequence survives a toolchain or dependency change would support reconsidering that rule's durability score.
+- **Build-to-build reproducibility check on the VSS-deletion concatenated string**, confirming the exact 45-byte sequence survives a toolchain or dependency change would support reconsidering that rule's durability score.
 
 ---
 

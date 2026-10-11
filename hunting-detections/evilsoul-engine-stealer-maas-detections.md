@@ -54,10 +54,10 @@ EvilSoul-Engine is a Node/Electron stealer-builder MaaS kit distributed under mu
 **ATT&CK Coverage:** T1027 (Obfuscated Files or Information), T1588.002 (Obtain Capabilities: Tool)
 **Confidence:** HIGH
 **Rationale:** The obfuscator's XOR key literal `see-you-in-the-hellwizard-1082@239$328927bA` and catchphrase comment live in the loader stage, which every EvilSoul-Engine build carries pre-packing. They survive the js-confuser layer because the loader is what invokes the obfuscated payload, not what gets obfuscated itself — an operator would have to modify the obfuscator's own source to evade, not just repack a build. Combined with the split-domain anti-grep pattern (Hunting rule below), this is the single most durable EvilSoul-Engine anchor across all product tiers (`stealer.js`, `299a2e7f`, Maploot, Tinarox).
-**False Positives:** None known — the XOR key string is a 44-character operator-chosen literal with zero plausible legitimate-software collision; the catchphrase comment is similarly distinctive.
-**Blind Spots:** A rewrite of the obfuscator itself (new XOR key, new catchphrase) evades this rule; memory-only variants that never touch disk need the memory-scan deployment path.
+**False Positives:** None known — the XOR key string is a 43-character operator-chosen literal with zero plausible legitimate-software collision; the catchphrase comment is similarly distinctive.
+**Blind Spots:** A rewrite of the obfuscator itself (new XOR key, new catchphrase) evades this rule; memory-only variants that never touch disk are reached only through a saved dump written to a file, because a live process-memory scan cannot satisfy the `filesize` test.
 **Validation:** Scan a recovered EvilSoul-Engine loader stage (e.g. `hash1` below) — the XOR key or the catchphrase-plus-secondary-anchor combination must match; a benign obfuscated JS bundle from an unrelated project must NOT fire.
-**Deployment:** Endpoint file scan on staged/dropped JS, Electron `app.asar` archives, memory scanning during detonation.
+**Deployment:** Endpoint file scan on staged/dropped JS and Electron `app.asar` archives, scanning of a saved dump taken during detonation. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
 /*
@@ -102,10 +102,10 @@ rule EvilSoul_Engine_Obfuscator_XOR_Key {
 **ATT&CK Coverage:** T1555.003 (Credentials from Web Browsers), T1539 (Steal Web Session Cookie)
 **Confidence:** HIGH
 **Rationale:** The Maploot/Tinarox embed-title strings are the literal text sent to the operator's Discord webhook as embed titles for each exfil category (Discord tokens, browser data, Exodus wallet, Steam session, Minecraft session). Independently confirmed byte-for-byte identical between the two "twin" builds after de-obfuscation, meaning they are compiled into the product line's source rather than randomized per build — an operator would have to rebrand the entire product line to evade.
-**False Positives:** LOW — "EvilSoul Stealer -" is a distinctive branded string with no legitimate-software collision risk.
+**False Positives:** LOW — the branded embed-title strings ("EvilSoul Stealer - (Discord ~" and "EvilSoul Stealer - (BrowserData ~", plus the three "EvilSoul (...)" titles) are distinctive, with no legitimate-software collision risk.
 **Blind Spots:** A full rebrand of the Electron product line (new embed titles, new masquerade name) evades this rule; targets on-disk `app.asar` archives, not memory-only variants.
 **Validation:** Scan a Maploot or Tinarox `app.asar`/`resources/app` extraction — 2 of the embed-title strings, or 1 plus the masquerade/endpoint context, must match; a legitimate Electron game or utility must NOT fire.
-**Deployment:** Endpoint file scan on Electron `app.asar` / unpacked `resources/app` directories, memory scanning during detonation.
+**Deployment:** Endpoint file scan on Electron `app.asar` / unpacked `resources/app` directories, scanning of a saved dump taken during detonation. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
 /*
@@ -156,9 +156,9 @@ rule EvilSoul_Engine_Maploot_Tinarox_Embed_Titles {
 **Confidence:** HIGH
 **Rationale:** The args-file suffix `evilsoulblockkstarjkjaksghjhsjkahjskjak81929ijsahsjkj` is a deliberately long, high-entropy operator-chosen string hardcoded into the 299a2e7f build's argument-passing convention — near-zero collision risk and present in every build sharing this codebase. The condition was tightened during this review: the originally-published rule let the webhook-relay IP:port string (`198.1.195.210:3000/tralalero`) trigger the rule on its own, which is an IP-anchored atomic that would break on relay-infrastructure rotation and fails durability (Gate 1) as a standalone trigger. It now only counts as one member of the multi-string combination requirement, so the rule can never fire on the bare IP literal alone.
 **False Positives:** LOW — the args-file suffix is a long, operator-unique, non-dictionary token; the panel/handle/relay/fallback-key/update-cmd combination requires 2 independent matches.
-**Blind Spots:** A rebuild that changes the args-file suffix convention evades the primary anchor; the secondary combination would need 2 of 5 members renamed simultaneously to fully evade.
-**Validation:** Scan a 299a2e7f pkg-Node build or its runtime memory — the args-file suffix, or 2 of the secondary combination, must match; an unrelated Node.js single-EXE application must NOT fire.
-**Deployment:** Endpoint file scan (temp directories, staged payloads), memory scanning during detonation of pkg-Node single-EXE builds.
+**Blind Spots:** A rebuild that changes the args-file suffix convention evades the primary anchor; the secondary combination fires while any 2 of its 5 members remain, so evading it also needs at least 4 of the 5 renamed or removed on top of changing the args-file suffix.
+**Validation:** Scan a 299a2e7f pkg-Node build or a saved dump of its process memory written to a file — the args-file suffix, or 2 of the secondary combination, must match; an unrelated Node.js single-EXE application must NOT fire.
+**Deployment:** Endpoint file scan (temp directories, staged payloads), scanning of a saved dump taken during detonation of pkg-Node single-EXE builds. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
 /*
@@ -208,7 +208,7 @@ rule EvilSoul_Engine_299a2e7f_SocketIO_WebPanel {
 **False Positives:** LOW — the co-credit banner and copyright-notice strings are specific to this fork; generic ABE-tool detection is intentionally avoided by anchoring on the fork attribution text rather than the underlying decryption logic (public prior art that would over-match on every xaitax fork).
 **Blind Spots:** A rebuild that strips the banner/copyright strings (reverting to stock xaitax or a differently-attributed fork) evades this specific rule; targets the on-disk EXE/DLL pair, not memory-only injection artifacts beyond what the combination strings capture.
 **Validation:** Scan the analyzed `chromelevator.exe`/`chrome_decrypt.dll` pair — the banner or the copyright string must match; the stock upstream xaitax build without fork attribution must NOT fire.
-**Deployment:** Endpoint AV/EDR scan on `%TEMP%\executor\`, memory scanning during detonation.
+**Deployment:** Endpoint AV/EDR scan on `%TEMP%\executor\`, scanning of a saved dump taken during detonation. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
 /*
@@ -659,7 +659,7 @@ level: medium
 **Robustness:** 2
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1041 (Exfiltration Over C2 Channel)
 **Confidence:** HIGH
-**Rationale:** The `299a2e7f` build hardcodes no Discord webhook directly — instead it POSTs `{key: <licenseKey>}` to a relay and receives the actual webhook URL back at runtime. `/tralalero` is a distinctive, non-dictionary URI path with no legitimate-traffic collision risk. **Corrected during this review:** the originally-published rule pinned the destination to the single relay IP (`198.1.195.210`), which is an atomic that breaks the moment the operator moves the relay; the destination has been loosened to `$EXTERNAL_NET` so the rule survives relay-IP rotation while still keying on the durable URI content. `rev` bumped to 2 to reflect the change.
+**Rationale:** The `299a2e7f` build hardcodes no Discord webhook directly — instead it POSTs `{key: <licenseKey>}` to a relay and receives the actual webhook URL back at runtime. `/tralalero` is a distinctive, non-dictionary URI path with no legitimate-traffic collision risk. **Corrected during this review:** the originally-published rule pinned the destination to the single relay IP (`198.1.195.210`), which is an atomic that breaks the moment the operator moves the relay; the destination is now `any` (the header reads `$HOME_NET any -> any any`), so the rule survives relay-IP rotation while still keying on the durable URI content; because the destination is not limited to external hosts, a POST from one internal host to another also matches. The `/tralalero` test is an unanchored `contains` on the URI, so a longer path that includes it matches too. `rev` bumped to 2 to reflect the change.
 **False Positives:** None known — `/tralalero` combined with an HTTP POST method is not a pattern seen in legitimate web traffic.
 **Blind Spots:** Misses the relay entirely if the operator changes the URI convention in a future build; does not by itself confirm which license key or webhook was resolved (see the IOC feed for the specific relay IP and license-key values).
 **Validation:** Replay a POST request to any host with `/tralalero` in the URI — must alert; unrelated POST traffic to the same or a different host without that URI must NOT fire.

@@ -25,9 +25,9 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
-| YARA | 2 | 1 | T1059.001, T1071.001, T1132.001, T1564.003 | 1 |
+| YARA | 2 | 1 | T1059.001, T1095, T1132.001, T1564.003 | 1 |
 | Sigma | 0 | 2 | T1059.001, T1105 | 1 |
-| Suricata | 1 | 0 | T1071.001 | 2 |
+| Suricata | 1 | 0 | T1095 | 2 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
 
@@ -87,7 +87,8 @@ rule MAL_Windows_XWorm_PowerShell_Recon_Templates {
 
 **Tier:** Detection
 **Robustness:** 2
-**ATT&CK Coverage:** T1071.001 (Web Protocols)
+**ATT&CK Coverage:** T1095 (Non-Application Layer Protocol)
+**ATT&CK Note:** T1071.001 (Web Protocols) is withdrawn. The report records a `System.Net.Sockets.TcpClient` connection with a heartbeat, Base64 framing and a shared secret, and no HTTP; the YARA rule matches an on-disk string of the C2 authentication secret. T1095 (Non-Application Layer Protocol) is the closer fit, MODERATE, because no live capture of the protocol exists (the C2 was offline at discovery).
 **Confidence:** HIGH
 **Rationale:** A capability-abstraction of this build's literal authentication secret: rather than matching the exact 40-character value (a hash-equivalent — see Coverage Gaps), this regex matches the `AgentSec_` naming *convention* plus a length constraint. A future build with a freshly-generated secret still matches; only a rebrand of the prefix itself evades it.
 **False Positives:** None known — `AgentSec_` is not a standard credential- or variable-naming convention outside this build family.
@@ -122,7 +123,8 @@ rule MAL_Windows_XWorm_AgentSec_Authentication_Pattern {
 
 **Tier:** Hunting
 **Robustness:** 2
-**ATT&CK Coverage:** T1071.001 (Web Protocols), T1132.001 (Standard Encoding), T1564.003 (Hide Artifacts: Hidden Window)
+**ATT&CK Coverage:** T1095 (Non-Application Layer Protocol), T1132.001 (Standard Encoding), T1564.003 (Hide Artifacts: Hidden Window)
+**ATT&CK Note:** T1071.001 (Web Protocols) is withdrawn. The report records a `System.Net.Sockets.TcpClient` connection with a heartbeat, Base64 framing and a shared secret, and no HTTP; the rule's networking branch tests the `System.Net.Sockets` and `TcpClient` strings. T1095 (Non-Application Layer Protocol) is the closer fit, MODERATE, because no live capture of the protocol exists (the C2 was offline at discovery).
 **Confidence:** MODERATE
 **Rationale:** Three OR'd branches combine XWorm-specific constant/method names (`HEARTBEAT_MS`, `RECONNECT_MS`, `SERVER_HOST`, `AGENT_SECRET`; `HandleCmd`, `GetMachineId`, `GetSysInfo`, `BuildFrame`) with generic .NET framework and WinAPI strings (`System.Net.Sockets`, `ToBase64String`, `ShowWindow`, `TcpClient`). The first branch (config+cmd+net combination) is reasonably distinctive; the second (.NET+stealth+encode+net) leans almost entirely on framework-ubiquitous strings — console-hiding plus Base64 plus TCP networking describes a wide population of legitimate remote-support and automation tooling, not just this family. None of the three branches has been run against a broad clean-software corpus, the explicit precondition for Detection tier on a combination rule this broad. Retained as a Hunting-tier toolkit signature rather than promoted on the strength of the narrower first branch alone.
 **False Positives:** Branch 1 (config+cmd+net) is the tightest and least likely to false-positive on unrelated software; Branch 2 (.NET+stealth+encode+net) is expected to co-fire with legitimate .NET remote-access, monitoring, or silent-install tooling that hides its console and communicates over TCP with Base64 framing — a combination not unique to XWorm.
@@ -291,7 +293,8 @@ level: medium
 
 **Tier:** Detection
 **Robustness:** 2
-**ATT&CK Coverage:** T1071.001 (Web Protocols)
+**ATT&CK Coverage:** T1095 (Non-Application Layer Protocol)
+**ATT&CK Note:** T1071.001 (Web Protocols) is withdrawn. The report records a `System.Net.Sockets.TcpClient` connection with a heartbeat, Base64 framing and a shared secret, and no HTTP; this signature is `alert tcp ... any any` with `content` and `pcre` on the raw payload and no HTTP keyword or buffer. T1095 (Non-Application Layer Protocol) is the closer fit, MODERATE, because no live capture of the protocol exists (the C2 was offline at discovery).
 **Confidence:** HIGH
 **Rationale:** The network-observable form of the same `AgentSec_` naming-convention pattern salvaged in the YARA rule above — the malware's authentication handshake transmits this secret over the wire, per its own C2-authentication design. `content:"AgentSec_"` (9 bytes, bespoke prefix) gates the PCRE rather than the PCRE running unprefiltered, and the pattern survives secret rotation (a fresh per-build secret still matches the prefix-plus-length structure) and C2 IP rotation entirely (no destination anchor).
 **False Positives:** None known — `AgentSec_` is not a standard protocol token; the rule does not depend on the current, possibly-offline C2 IP.

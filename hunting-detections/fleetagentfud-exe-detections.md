@@ -39,13 +39,13 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 
 ### Hunting Rules
 
-#### FleetAgentFUD WebSocket C2 Signatures
+#### WebSocket Handshake, Registration-Field and Command-String Combinations (FleetAgentFUD Reference Sample)
 
 **Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1071.001 (Application Layer Protocol: Web Protocols)
 **Confidence:** MODERATE
-**Rationale:** Two of the condition's three branches rely only on RFC 6455-mandated WebSocket handshake strings (`Connection: Upgrade`, `Sec-WebSocket-Key`, `Sec-WebSocket-Version: 13`) combined with moderately generic JSON registration-field names (`machine_id`, `hostname`, `os_version`, `agent_ver`) — none of which are unique to this family, since any .NET application using a WebSocket library emits the same handshake strings. Only the third branch (`all of ($ws*) and any of ($api*)`) forces co-occurrence with the genuinely bespoke `X-Agent-Secret` custom header, but a YARA `or` condition's precision is bounded by its weakest branch, not its strongest — an unrelated WebSocket-using .NET application with basic telemetry fields could satisfy branch one or two without ever touching the distinguishing header. Scored on the logic as written, not the title's "C2 Pattern" claim.
+**Rationale:** Two of the condition's three branches rely on RFC 6455-mandated WebSocket handshake strings (`Connection: Upgrade`, `Sec-WebSocket-Key`, `Sec-WebSocket-Version: 13`) combined with generic strings. Branch one pairs 3 of the four `$ws*` strings with 3 of the six message strings (`"type":"register"`, `"type":"heartbeat"`, `machine_id`, `hostname`, `os_version`, `agent_ver`); branch two pairs 2 of the four `$ws*` strings with 3 of the five command strings (`cmd_type`, `command_id`, `powershell`, `sysinfo`, `clipboard`), which are command names and not registration fields. None of these is unique to this family, since any .NET application using a WebSocket library emits the same handshake strings. Only the third branch (`all of ($ws*) and any of ($api*)`) forces co-occurrence with the genuinely bespoke `X-Agent-Secret` custom header, but a YARA `or` condition's precision is bounded by its weakest branch, not its strongest — an unrelated WebSocket-using .NET application with basic telemetry fields could satisfy branch one or two without ever touching the distinguishing header. Scored on the logic as written, not the title's "C2 Pattern" claim.
 **False Positives:** Legitimate .NET applications using WebSocket-based telemetry, chat, or remote-support features (a real and not-uncommon population) can satisfy the first two branches without any malicious behavior.
 **Deployment:** Broad endpoint/EDR scanning sweep, retroactive hunt across file shares; treat hits as triage candidates and prioritize review of the `X-Agent-Secret`-corroborated branch.
 
@@ -120,13 +120,13 @@ rule FleetAgentFUD_WebSocket_C2_Pattern {
 **ATT&CK Coverage:** T1685 (Disable or Modify Tools), T1059.001 (PowerShell)
 **Confidence:** MODERATE
 **Rationale:** The two exact-literal branches (`$ps1`, `$ps2`) are distinctive, low-FP command-line templates. The third branch (`$ps3 and ($ps5 or $ps6) and $ps7`) combines three individually common tokens — bare `powershell` (nocase), a bypass flag, and `-W Hidden` — and a YARA `or` condition's overall precision is bounded by its weakest branch. Legitimate software installers and silent-update mechanisms are documented (by this same file's own Sigma rule 1 false-positives list) to launch PowerShell hidden with an execution-policy bypass for routine background tasks, and would embed the identical command-line string as a literal in their own binary.
-**False Positives:** Legitimate installers/updaters that silently invoke `powershell -ExecutionPolicy Bypass -WindowStyle Hidden` for background maintenance tasks — a documented, non-trivial population in enterprise Windows environments.
+**False Positives:** Legitimate installers/updaters that silently invoke `powershell -ExecutionPolicy Bypass -WindowStyle Hidden` for background maintenance tasks — a documented, non-trivial population in enterprise Windows environments. The rule tests no .NET marker and no FleetAgentFUD string, so any PE under 100 KB carrying the strings matches.
 **Deployment:** Broad endpoint/EDR scanning sweep, retroactive hunt across file shares; treat hits as triage candidates, not alerts.
 
 ```yara
 rule FleetAgentFUD_PowerShell_Bypass {
    meta:
-      description = "Detects FleetAgentFUD.exe PowerShell Execution Policy bypass command-line strings embedded in a .NET binary. The two exact-literal branches are distinctive; the third (bare powershell + bypass flag + hidden-window flag) overlaps with legitimate silent-installer PowerShell invocations."
+      description = "Detects PowerShell Execution Policy bypass command-line strings of the kind embedded in FleetAgentFUD.exe, in any PE file under 100 KB (the rule has no .NET marker and no FleetAgentFUD string, so a native PE carrying the strings also matches). The two exact-literal branches are distinctive; the third (bare powershell + bypass flag + hidden-window flag) overlaps with legitimate silent-installer PowerShell invocations."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/"
@@ -168,8 +168,8 @@ rule FleetAgentFUD_PowerShell_Bypass {
 **Robustness:** 1
 **ATT&CK Coverage:** T1115 (Clipboard Data), T1071.001 (Web Protocols), T1059.001 (PowerShell), T1105 (Ingress Tool Transfer), T1082 (System Information Discovery)
 **Confidence:** LOW
-**Rationale:** All three branches are built from single common English words or short generic phrases (`clipboard`, `network`, `users`, `processes`, `ShowWindow`) combined via `any of` bucket matching — the weakest possible internal requirement per bucket. None of the three categories (clipboard/WebSocket/PowerShell, WebSocket/recon/download, PowerShell/clipboard/hidden-window) forces a genuinely distinctive string; each is satisfiable by common single-word API/string references that also appear across large amounts of unrelated software (e.g. `ShowWindow` is a near-ubiquitous Win32 GUI import; `network`/`users`/`processes` are near-universal substrings). The three-category combination still filters out most unrelated software, which preserves some triage value, but the rule does not clear the bar for a "sound combination" per the YARA Detection checklist.
-**False Positives:** Plausible against legitimate remote-support, clipboard-sync, or IT-automation tooling that combines any two of the three behavior categories (e.g. a WebSocket-based remote-support client with PowerShell remoting).
+**Rationale:** All three branches are built from single common English words or short generic phrases (`clipboard`, `network`, `users`, `processes`, `ShowWindow`) combined via bucket matching (`any of` for every bucket except `2 of ($recon*)` in the second branch) — the weakest possible internal requirement per bucket. None of the three categories (clipboard/WebSocket/PowerShell, WebSocket/recon/download, PowerShell/clipboard/hidden-window) forces a genuinely distinctive string; each is satisfiable by common single-word API/string references that also appear across large amounts of unrelated software (e.g. `ShowWindow` is a near-ubiquitous Win32 GUI import; `network`/`users`/`processes` are near-universal substrings). The three-category combination still filters out most unrelated software, which preserves some triage value, but the rule does not clear the bar for a "sound combination" per the YARA Detection checklist.
+**False Positives:** Plausible against legitimate remote-support, clipboard-sync, or IT-automation tooling that satisfies all three buckets of one branch (clipboard, WebSocket and PowerShell; or WebSocket, reconnaissance and download; or PowerShell, clipboard and hidden-window), for example a WebSocket-based remote-support client with clipboard sync and PowerShell remoting. Two buckets alone fire nothing.
 **Deployment:** Broad endpoint/EDR scanning sweep, retroactive hunt across file shares; treat hits as triage candidates, not alerts.
 
 ```yara

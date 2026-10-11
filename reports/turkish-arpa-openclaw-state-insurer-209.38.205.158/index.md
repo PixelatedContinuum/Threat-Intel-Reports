@@ -120,7 +120,7 @@ Full detection-coverage map and response orientation are in §10 and the linked 
 - **Detection:** the multi-platform cross-source authentication pattern (same source IP against ≥2 observability platforms in a short window) is the diagnostic signature of the Observability-Tool Reverse Pipeline TTP, `Sigma rule 7` + `Suricata rule 2`. Operator self-branding string `ARPA Korelasyon Motoru` is a near-zero-FP YARA detection (`YARA rule 1`).
 - **Hunt:** `/opt/ARPA/` filesystem tree; co-located `~/.openclaw/` + `~/.clawdbot/` (discriminator from legitimate OpenClaw dev environments); `arpa-*.service` unit files; JWT jti `022a1b74-2332-4df5-a76b-60225ffa7ae3` in any artifact; PowerShell `Invoke-RestMethod -SkipCertificateCheck` against `ocpinstana.[victim-domain].com.tr`.
 - **Victim mitigation:** rotate all four observability credential sources in parallel; segregate and forensically review the named insider account; block egress to `209.38.205.158` ports 22, 8089, 8090, 8095, 8096.
-- **Broader-customer governance:** audit long-lived monitoring API tokens (`Sigma rule 6` flags JWTs with `exp ≥ 1 year`); review audit logs for any source-IP authenticating against multiple observability platforms from outside the admin allow-list.
+- **Broader-customer governance:** audit long-lived monitoring API tokens (`Sigma rule 6` matches audit events that carry the stolen token's `jti` or reach the victim tenant from outside the private ranges, and reads no expiry field, so token lifetime has to be audited separately); review audit logs for any source-IP authenticating against multiple observability platforms from outside the admin allow-list.
 
 For executives reading only this section: the ARPA platform is a textbook case of **stolen monitoring credentials weaponized as intelligence-collection infrastructure against the victim itself**. The takeaway is not "block AI" or "block observability" (both are legitimate tools) but **treat monitoring-platform credentials as crown-jewel-class secrets with admin-token-grade rotation and source-IP allow-listing**.
 
@@ -864,7 +864,7 @@ For SOC analysts and threat hunters: the four detection rules below are the high
 
 1. **YARA rule 1: ARPA Korelasyon Motoru self-branding detection.** Targets the operator self-branded strings in any file. Near-zero false-positive risk because the operator's project codename does not occur in legitimate software.
 2. **Sigma rule 7: Multi-source observability cross-platform authentication.** Targets the diagnostic signature of the Observability-Tool Reverse Pipeline TTP, same source IP authenticating against ≥2 of {Instana, SolarWinds, Zabbix, Datadog, NewRelic, VMware Aria, Dynatrace, Prometheus} within a short time window. This rule covers a TTP with no existing published detection guidance.
-3. **Sigma rule 6: Long-lived observability JWT detection.** Governance baseline rule for Instana customers, flags JWTs with `exp` claim ≥ 1 year. Not a direct attack-detection rule but a governance hygiene rule that would have surfaced the victim organization 10-year JWT defect (HIGH-confidence assessment: the rule fires deterministically on the captured JWT's `exp` claim of approximately 2034-02, which exceeds any reasonable 1-year threshold by 9+ years) before the operator weaponized it.
+3. **Sigma rule 6: Stolen-JWT and external-source tenant access.** Hunting rule for Instana audit logs. It matches an event that carries the stolen token's `jti`, or any audit event for the victim tenant whose source address is outside the RFC1918 ranges. It reads no `exp` or lifetime field, so it does not identify long-lived tokens in general; the roughly ten-year lifetime (`exp` of approximately 2034-02) is a finding from the analysis, not something the rule tests.
 4. **Suricata rule 2: Multi-platform observability authentication egress.** Network-layer companion to Sigma rule 7, detects outbound HTTPS to multiple observability platform domains from the same source IP within a short time window.
 
 ### Response Orientation (Brief)
@@ -1041,7 +1041,7 @@ Hunt strategies and hardening guidance for adjacent observability-platform custo
 
 **IBM Instana customers (any tenant):**
 - Governance audit: review all Instana API tokens for `exp` claim. Rotate any token with `exp ≥ 1 year`.
-- Detection: deploy Sigma rule 6 (long-lived observability JWT detection) as a baseline governance signal.
+- Hunting: deploy Sigma rule 6 (stolen-JWT and external-source tenant access) to surface use of the stolen token; the rule reads no expiry field, so token lifetime has to be audited separately.
 - Cross-platform monitoring: deploy Sigma rule 7 (multi-source observability cross-platform authentication) to detect the broader Observability-Tool Reverse Pipeline TTP class.
 
 **SolarWinds Orion customers:**

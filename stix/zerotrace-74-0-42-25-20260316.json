@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--c7518c27-088b-475b-9e39-bcae2ce8c700",
+    "id": "bundle--f8f0c6bb-335f-4cb3-a2e2-8d9aa73de00e",
     "objects": [
         {
             "type": "identity",
@@ -1005,12 +1005,12 @@
             "id": "indicator--d61ac17a-456d-5130-b12f-108cb5019def",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.815666Z",
-            "modified": "2026-10-01T19:54:22.815666Z",
+            "modified": "2026-10-11T14:08:53.084802Z",
             "name": "RAT_XWorm_V56_Stub",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "/*\n   Yara Rule Set\n   Identifier: OpenDirectory 74.0.42.25 — Multi-Family MaaS Toolkit\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule RAT_XWorm_V56_Stub {\n   meta:\n      description = \"Detects XWorm V5.6 VB.NET victim stub by plaintext mutex string, protocol packet delimiter, and distinctive Telegram notification typo strings characteristic of this builder version\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/\"\n      date = \"2026-03-17\"\n      hash1 = \"427f818131c9beb7f8a487cb28fe13e2699db844ac3c9e9ae613fd35113fe77f\"\n      hash2 = \"257b07c4b9eb72403769a12604e9ddb2bf5545fa\"\n      hash3 = \"f4b00fbc6a3ce80b474334a3ccaadcf0\"\n      family = \"XWorm\"\n      malware_type = \"RAT\"\n      campaign = \"ZeroTrace-MultiFamily-MaaS-74.0.42.25\"\n      id = \"75780e95-7bd7-5a15-9ed1-008b56fb6c44\"\n   strings:\n      $s1 = \"5tK099W0Z6AMZVxQ\" ascii wide\n      $s2 = \"<Xwormmm>\" ascii wide\n      $s3 = \"XWorm V5.6\" ascii wide\n      $s4 = \"New Clinet : \" ascii wide\n      $s5 = \"Groub : \" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 150KB and\n      ($s1 or ($s2 and $s3)) and\n      1 of ($s4, $s5)\n}",
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: OpenDirectory 74.0.42.25 — Multi-Family MaaS Toolkit\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule RAT_XWorm_V56_Stub {\n   meta:\n      description = \"Detects an XWorm V5.6 victim stub (a PE under 150 KB) by its plaintext mutex string, or by the strings <Xwormmm> and XWorm V5.6 together, in every case with at least one of the panel typo strings 'New Clinet : ' and 'Groub : '; the rule does not test the language or any protocol framing\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/\"\n      date = \"2026-03-17\"\n      modified = \"2026-10-11\"\n      hash1 = \"427f818131c9beb7f8a487cb28fe13e2699db844ac3c9e9ae613fd35113fe77f\"\n      hash2 = \"257b07c4b9eb72403769a12604e9ddb2bf5545fa\"\n      hash3 = \"f4b00fbc6a3ce80b474334a3ccaadcf0\"\n      family = \"XWorm\"\n      malware_type = \"RAT\"\n      campaign = \"ZeroTrace-MultiFamily-MaaS-74.0.42.25\"\n      id = \"75780e95-7bd7-5a15-9ed1-008b56fb6c44\"\n   strings:\n      $s1 = \"5tK099W0Z6AMZVxQ\" ascii wide\n      $s2 = \"<Xwormmm>\" ascii wide\n      $s3 = \"XWorm V5.6\" ascii wide\n      $s4 = \"New Clinet : \" ascii wide\n      $s5 = \"Groub : \" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 150KB and\n      ($s1 or ($s2 and $s3)) and\n      1 of ($s4, $s5)\n}",
             "pattern_type": "yara",
             "valid_from": "2026-03-16T00:00:00Z",
             "labels": [

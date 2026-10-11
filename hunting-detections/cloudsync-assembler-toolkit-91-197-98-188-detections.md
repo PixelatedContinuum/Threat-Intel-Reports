@@ -181,15 +181,15 @@ rule Loader_SvchostJS_CustomAlphabet {
 **Robustness:** 3
 **ATT&CK Coverage:** T1136.002 (Create Account: Domain Account), T1098 (Account Manipulation)
 **Confidence:** HIGH
-**False Positives:** None known, not measured against a goodware corpus. The condition is `3 of them` over ten strings and enforces neither the banner sequence nor the AD/German-group combination: three console banners fire, and so do `New-ADUser`, `Guest$` and `Administratoren` with no banner at all
+**False Positives:** None known, not measured against a goodware corpus. The condition is `3 of them` over ten strings plus at least one console banner, and it enforces neither the banner sequence nor the AD/German-group combination: three console banners fire, and so does one banner with `New-ADUser` and `Guest$`; `New-ADUser`, `Guest$` and `Administratoren` with no banner no longer fire (they did before 2026-10-11)
 **Blind Spots:** A recompiled orchestrator with reworded banners or a different target-locale group-name set would evade this rule; it does not fire on the AD/web-shell/AnyDesk actions themselves, see the companion Sigma rules for that behavioral coverage
-**Validation:** Confirm the rule fires on `ab.exe`. A generic PowerShell AD-administration script that references `New-ADUser` alone, without the console banners or German group names, must not fire (the rule requires 3 of 10 strings together).
+**Validation:** Confirm the rule fires on `ab.exe`. A generic PowerShell AD-administration script that references `New-ADUser` alone, without the console banners or German group names, must not fire (the rule requires at least one console banner and 3 of 10 strings together).
 **Deployment:** Endpoint AV/EDR file scan, download/attachment gateway scanning
 
 ```yara
 rule Loader_ABExe_DeploymentOrchestrator_Banners {
    meta:
-      description = "Detects the ab.exe post-compromise deployment orchestrator via its fixed-sequence console banner strings and the German-localized Active Directory privileged-group names it targets when creating a hidden backdoor account"
+      description = "Detects the ab.exe post-compromise deployment orchestrator via at least one of its five console banner strings (the sequence is not enforced) together with two more strings drawn from the banners, the German-localized Active Directory privileged-group names it targets, New-ADUser and Guest$ when it creates a hidden backdoor account"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/"
@@ -213,6 +213,7 @@ rule Loader_ABExe_DeploymentOrchestrator_Banners {
    condition:
       uint16(0) == 0x5A4D and
       filesize < 2MB and
+      1 of ($b*) and
       3 of them
 }
 ```
@@ -233,7 +234,7 @@ rule Loader_ABExe_DeploymentOrchestrator_Banners {
 ```yara
 rule Loader_CtBat_ProxyAwareUSBWormStub {
    meta:
-      description = "Detects the ct.bat infection stub via a combination of its distinctive command fragments: proxy-credential-inheriting WebClient download, USB drive enumeration for its worm loop, autorun.inf propagation, and its AMSI-bypass field name"
+      description = "Detects the ct.bat infection stub when any two of five of its distinctive command fragments co-occur in a file under 5 KB: proxy-credential-inheriting WebClient download (DefaultCredentials), USB drive enumeration for its worm loop (wmic logicaldisk where), autorun.inf propagation, its AMSI-bypass field name (amsiInitFailed) and the SystemUpdate value name"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/"
@@ -299,7 +300,7 @@ rule RAT_CloudSync_C2Protocol_DualBuild {
 
 **CloudSync**
 
-#### CloudSync Public-Profile Working Directory Artifacts
+#### CloudSync Working-Directory, Dropped-Tor-Binary and Mutex String Artifacts (Any Three of Seven)
 
 **Tier:** Hunting
 **Robustness:** 2
@@ -307,7 +308,7 @@ rule RAT_CloudSync_C2Protocol_DualBuild {
 **Confidence:** MODERATE
 **False Positives:** The individual strings (`hidden_service`, `taskhostw.exe`, `first_run.flag`, the `C:\Users\Public` path fragments) are common enough in isolation that this rule is scoped to hunting rather than alerting; review each hit rather than auto-blocking
 **Blind Spots:** Broader and lower-precision than the dedicated panel and protocol Detection rules above by design, intended to catch variants that changed the panel markup or protocol strings but kept the working-directory and mutex conventions
-**Validation:** Confirm the rule fires on `bk.exe`. Run against a sample of benign software installers to confirm the 3-of-7 threshold does not fire on unrelated Windows utilities that happen to reference `C:\Users\Public\`.
+**Validation:** Confirm the rule fires on `bk.exe`. Three of the seven strings fire; only two are path strings (`C:\Users\Public\fs\`, `C:\Users\Public\filesystem`), so a hit does not by itself show a Public-profile working directory. Run against a sample of benign software installers to confirm the 3-of-7 threshold does not fire on unrelated Windows utilities that happen to reference `C:\Users\Public\`.
 **Deployment:** Threat hunting sweep across endpoint file inventories; not recommended for auto-block
 
 ```yara
@@ -564,7 +565,7 @@ title: MSBuild Process Making a Direct Outbound Network Connection
 id: 9629ebb5-35e9-4e2c-b209-c66eee51f0ea
 status: experimental
 description: >-
-    Detects MSBuild.exe itself initiating an outbound TCP connection. MSBuild does
+    Detects MSBuild.exe itself initiating an outbound network connection (no protocol test is made, so a UDP connection also matches). MSBuild does
     not make direct network connections as part of normal build activity (NuGet
     restore and package operations run through separate client processes); an
     outbound connection from MSBuild.exe is consistent with a RAT running inside an
@@ -1071,7 +1072,7 @@ falsepositives:
 level: high
 ```
 
-#### AMSI Bypass Via AmsiUtils AmsiInitFailed Field SetValue
+#### AMSI Bypass Command Line With amsiInitFailed, SetValue and NonPublic Reflection Strings
 
 **Tier:** Detection
 **Robustness:** 2
@@ -1080,17 +1081,19 @@ level: high
 **False Positives:** Unlikely, legitimate scripts do not reflectively clear the AMSI initialization-failed field
 **Blind Spots:** Deliberately does NOT key on the literal "AmsiUtils" type-name string, since this campaign's stub constructs that string from a reversed literal specifically to evade signature matching on it; a variant that also renames or obfuscates the field name "amsiInitFailed" itself would evade this rule
 **Validation:** Run a PowerShell one-liner combining `amsiInitFailed`, `SetValue`, and `NonPublic` (the standard AMSI-bypass-via-reflection shape) on a test host and confirm the alert fires. Unrelated PowerShell reflection code that does not touch AMSI must NOT fire.
-**Deployment:** Endpoint process-creation telemetry (Sysmon Event ID 1 or equivalent); PowerShell Script Block Logging (Event ID 4104) is a useful supplementary source for heavily obfuscated variants
+**Deployment:** Endpoint process-creation telemetry with CommandLine populated (Sysmon Event ID 1 or Security 4688 with command-line auditing). PowerShell Script Block Logging (Event ID 4104) holds the script text in `ScriptBlockText`, a different field this rule does not read, so it does not extend this rule to obfuscated variants
 
 ```yaml
-title: AMSI Bypass Via AmsiUtils AmsiInitFailed Field SetValue
+title: AMSI Bypass Command Line With amsiInitFailed, SetValue and NonPublic Reflection Strings
 id: f539cc09-bd50-4675-9119-08c09fb2ac24
 status: experimental
 description: >-
-    Detects a PowerShell command that reflects into the AmsiUtils type and calls
-    SetValue against a non-public static field to blind in-process AMSI scanning.
-    Matched on the amsiInitFailed field name and the SetValue/NonPublic reflection
-    call shape rather than the AmsiUtils type-name string, since the deployment stub
+    Detects a process command line that contains the amsiInitFailed field name together
+    with the SetValue and NonPublic reflection strings, the shape of the reflective
+    AMSI-initialization-failed bypass that blinds in-process AMSI scanning. The rule
+    tests those three substrings only: neither the AmsiUtils type name nor a static
+    binding flag is tested, and no PowerShell Image is required. The AmsiUtils type-name
+    string is deliberately not matched, since the deployment stub
     observed in this campaign constructs that type name from a reversed string
     literal specifically to evade signature matching on the literal "AmsiUtils"
     substring.
@@ -1106,6 +1109,7 @@ tags:
 logsource:
     category: process_creation
     product: windows
+    definition: 'Requires process-creation events with CommandLine populated, for example Sysmon EID 1 or Security EID 4688 with command-line auditing enabled.'
 detection:
     selection:
         CommandLine|contains|all:
@@ -1223,7 +1227,7 @@ level: medium
 **Robustness:** 3
 **ATT&CK Coverage:** T1071 (Application Layer Protocol), T1571 (Non-Standard Port)
 **Confidence:** HIGH
-**False Positives:** None known, this exact 20-character banner is not expected in unrelated TCP traffic
+**False Positives:** None known, this exact 19-character banner is not expected in unrelated TCP traffic
 **Blind Spots:** Detects only the registration/auto-update message type; does not fire on heartbeat-only traffic (see the companion heartbeat rule below), and is defeated entirely if the operator moves the protocol behind TLS
 **Validation:** Confirmed via the real rule-parsing engine against a captured session containing the literal string. A benign TLS or unrelated cleartext TCP session must not contain this exact banner.
 **Deployment:** Network IDS/IPS at the perimeter or internal segmentation boundary; deliberately not IP/port-pinned so the rule survives infrastructure rotation

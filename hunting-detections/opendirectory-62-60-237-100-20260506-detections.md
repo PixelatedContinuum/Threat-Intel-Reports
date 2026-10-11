@@ -86,7 +86,7 @@ rule MALW_HijackLoader_NetworkSpec17_IDAT_Carrier {
 **ATT&CK Coverage:** T1620 (Reflective Code Loading), T1055.012 (Process Hollowing), T1480 (Execution Guardrails), T1027 (Obfuscated Files)
 **Confidence:** HIGH
 **Rationale:** Anchored on the loader's API-hash table — deterministic hash constants (X65599/`RtlHashUnicodeString` polynomial) applied to the specific Windows API names the loader must resolve to function. This is a technique chokepoint the loader cannot avoid executing, not an operator-editable config value, and the first branch requires 3 of 5 matching constants; a second branch fires on the Qihoo PDB string plus one constant.
-**False Positives:** None known — hash DWORDs for this specific hash algorithm and API-name set have no known legitimate collision; the 3-of-5 threshold rules out coincidental single-value matches.
+**False Positives:** None known — hash DWORDs for this specific hash algorithm and API-name set have no known legitimate collision; the first branch's 3-of-5 threshold rules out coincidental single-value matches; the second branch accepts a single hash DWORD, so the Qihoo PDB string carries that branch.
 **Blind Spots:** A rebuild that changes the hash algorithm or the resolved API set evades this rule; the Qihoo-PDB fallback branch (paired with only 1 hash match) is weaker and included only as a corroborating signal.
 **Validation:** Scan pe_03 or a sibling stage-3 loader build — either at least 3 of 5 hash DWORDs, or the Qihoo PDB string with one hash DWORD, must match; unrelated PE files using a different hash-based API resolution scheme must NOT fire.
 **Deployment:** Endpoint AV/EDR, saved-dump scanning, sandbox detonation. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
@@ -163,20 +163,20 @@ rule MALW_HijackLoader_MultiVector_Lure_GrimResource_MSC {
 }
 ```
 
-#### Inno Setup Pascal Anti-Triage Wrapper
+#### Inno Setup Wrapper Build Wave (Operator Codenames, AppId and Loader Filename)
 
 **Tier:** Hunting
 **Robustness:** 1
 **ATT&CK Coverage:** T1027.009 (Embedded Payloads), T1204.002 (Malicious File), T1036.005 (Match Legitimate Name or Location)
 **Confidence:** MODERATE
-**Rationale:** Every anchor (the campaign AppId GUID, the `Apophyge`/`Veteran` Inno Setup script codenames, and the renamed loader filename `CrystSupervisor32.exe`) is an Inno Setup build-script value the operator sets in a single `.iss` line and can change on any rebuild — the same durability class as a mutex or drop-path chosen per build, not a technique-level invariant (this is why it is demoted from the original Detection classification). The anti-triage *technique* itself (Pascal Script `InitializeSetup`→`WinExec`→return `False`) is separately covered behaviorally by the Sigma process-tree rule below.
+**Rationale:** Every anchor (the campaign AppId GUID, the `Apophyge`/`Veteran` Inno Setup script codenames, and the renamed loader filename `CrystSupervisor32.exe`) is an Inno Setup build-script value the operator sets in a single `.iss` line and can change on any rebuild — the same durability class as a mutex or drop-path chosen per build, not a technique-level invariant (this is why it is demoted from the original Detection classification). The rule name keeps the original `AntiTriage` wording (renaming would re-derive its `id`) but no Pascal Script test is made. The anti-triage *technique* itself (Pascal Script `InitializeSetup`→`WinExec`→return `False`) is separately covered behaviorally by the Sigma process-tree rule below.
 **False Positives:** None known against unrelated legitimate software today — but the same build-specific anchors are exactly what the operator is most likely to change in the next campaign wave, which is the reason for the Hunting tier rather than a precision concern.
 **Deployment:** Endpoint AV/EDR on-access scanner, gateway sandboxing, email attachment scanning. Treat hits as leads for this specific build wave and its direct siblings, not a durable family detector.
 
 ```yara
 rule MALW_HijackLoader_InnoSetup_AntiTriage_Wrapper {
    meta:
-      description = "Detects this build wave of the HijackLoader Inno Setup 6.5+ wrapper using the Pascal Script InitializeSetup->WinExec->return False anti-triage pattern, identified by the operator codenames Apophyge (AppName), Veteran (DefaultDirName), the campaign AppId GUID, and the renamed loader filename CrystSupervisor32.exe"
+      description = "Detects this build wave of the HijackLoader Inno Setup wrapper, identified by the Inno Setup Setup Data magic (which carries no version, so 6.5+ is not tested) together with the operator codenames Apophyge (AppName), Veteran (DefaultDirName), the campaign AppId GUID, or the renamed loader filename CrystSupervisor32.exe. The Pascal Script InitializeSetup->WinExec->return False anti-triage pattern the report describes is not tested; the rule matches these build-script values only"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/"
@@ -252,20 +252,20 @@ rule MALW_HijackLoader_ExceptionHandler_Plowshare_Dispatcher {
 
 ### Detection Rules
 
-#### HijackLoader GrimResource MMC Spawning Mshta or Rundll32 for Payload Execution
+#### MMC Spawning Mshta, Rundll32 or a Script or Command Interpreter (GrimResource Pattern Seen in HijackLoader)
 
 **Tier:** Detection
 **Robustness:** 3
 **ATT&CK Coverage:** T1218.014 (MMC), T1059 (Command and Scripting Interpreter)
 **Confidence:** HIGH
 **Rationale:** `mmc.exe` spawning a script/command interpreter is a family-agnostic technique chokepoint for GrimResource — MMC must spawn something to execute the XSL-redirected payload, so this signal survives any operator rebrand and depends on no campaign-specific filename or codename. Corrected from the original: the ATT&CK Coverage previously over-claimed VBScript/JavaScript sub-techniques the selection logic does not actually distinguish (the Image list mixes `mshta.exe`, `rundll32.exe`, and generic shells); retagged to the parent T1059 alongside T1218.014.
-**False Positives:** Custom enterprise MMC snap-ins that legitimately spawn PowerShell or cmd.exe for administrative actions (rare — verify the specific MSC file source and the spawned command line for administrative context); the filter excludes the four most common legitimate `.msc` snap-ins.
+**False Positives:** Custom enterprise MMC snap-ins that legitimately spawn PowerShell or cmd.exe for administrative actions (rare — verify the specific MSC file source and the spawned command line for administrative context); the filter excludes children of an `mmc.exe` whose own command line carries one of the four most common legitimate snap-ins from `System32` (`eventvwr.msc`, `compmgmt.msc`, `devmgmt.msc`, `diskmgmt.msc`). It tests the parent's command line, not the child's, and the `System32` path means a weaponised file outside a `System32` directory that merely carries one of those names is not excluded.
 **Blind Spots:** An operator technique change that avoids spawning a new process (in-process script execution) evades; the legitimate-snap-in filter list is not exhaustive.
 **Validation:** Detonate a GrimResource-weaponized `.msc` file — `mmc.exe` must spawn one of the listed interpreters; opening `eventvwr.msc`/`compmgmt.msc`/`devmgmt.msc`/`diskmgmt.msc` normally must NOT fire.
 **Deployment:** EDR process-creation monitoring, SIEM Sysmon EID 1.
 
 ```yaml
-title: HijackLoader GrimResource MMC Spawning Mshta or Rundll32 for Payload Execution
+title: MMC Spawning Mshta, Rundll32 or a Script or Command Interpreter (GrimResource Pattern Seen in HijackLoader)
 id: b81e4c29-53a7-4d02-8f9e-2a7d6c4b1e35
 status: experimental
 description: >-
@@ -289,6 +289,7 @@ tags:
 logsource:
     category: process_creation
     product: windows
+    definition: 'Requires process-creation events that carry ParentCommandLine, for example Sysmon EID 1. Security EID 4688 has no parent command line.'
 detection:
     selection:
         ParentImage|endswith: '\mmc.exe'
@@ -300,12 +301,12 @@ detection:
             - '\cmd.exe'
             - '\powershell.exe'
             - '\pwsh.exe'
-    filter_legitimate_mmc:
-        CommandLine|contains:
-            - 'eventvwr.msc'
-            - 'compmgmt.msc'
-            - 'devmgmt.msc'
-            - 'diskmgmt.msc'
+    filter_legitimate_mmc:  # sourced: documented platform default, Windows ships these four snap-ins in System32 and opens them as mmc.exe <path>.msc
+        ParentCommandLine|contains:
+            - '\System32\eventvwr.msc'
+            - '\System32\compmgmt.msc'
+            - '\System32\devmgmt.msc'
+            - '\System32\diskmgmt.msc'
     condition: selection and not filter_legitimate_mmc
 falsepositives:
     - >-
@@ -690,7 +691,7 @@ level: medium
 **Robustness:** 1
 **ATT&CK Coverage:** T1055.012 (Process Hollowing), T1036.005 (Match Legitimate Name or Location)
 **Confidence:** HIGH (structural); the underlying per-host environment-variable IPC mechanism itself is not observable via this selector
-**Rationale:** Retitled and trimmed from the original "per-host environment variable IPC pattern" framing. Sysmon does not log the per-host env-var IPC mechanism by default (the original rule's own documentation acknowledged this), so the `detection:` block never actually inspected environment-variable content — only process ancestry. Removed a reversed `CrystSupervisor32.exe`-child-of-`WVault.exe` branch with no support in the documented process tree (`WVault.exe` is always the descendant, never the ancestor, of `CrystSupervisor32.exe`), and removed a `WVault.exe`-child-of-`CrystSupervisor32.exe` branch that fully duplicated the Inno Setup process-tree rule above. What remains is the one genuinely distinct selector: `WVault.exe` launched with a parent image path containing `is-`, catching the direct `is-*.tmp\`→`WVault.exe` hollow-host launch — a shorter chain link than the process-tree rule's coverage. Still rename-brittle (Robustness 1), same as the process-tree rule.
+**Rationale:** Retitled and trimmed from the original "per-host environment variable IPC pattern" framing. Sysmon does not log the per-host env-var IPC mechanism by default (the original rule's own documentation acknowledged this), so the `detection:` block never actually inspected environment-variable content — only process ancestry. Removed a reversed `CrystSupervisor32.exe`-child-of-`WVault.exe` branch with no support in the documented process tree (`WVault.exe` is always the descendant, never the ancestor, of `CrystSupervisor32.exe`), and removed a `WVault.exe`-child-of-`CrystSupervisor32.exe` branch that fully duplicated the Inno Setup process-tree rule above. What remains is the one genuinely distinct selector: `WVault.exe` launched with a parent image that sits directly in an `is-XXXXX.tmp\` directory (a whole-field regex written without `^` or `$`, which Elastic's regex engine would read as literals; case-sensitive, matching Inno's lowercase `is-` and `.tmp`), catching the direct `is-*.tmp\`→`WVault.exe` hollow-host launch — a shorter chain link than the process-tree rule's coverage. Still rename-brittle (Robustness 1), same as the process-tree rule.
 **False Positives:** Legitimate Wondershare software chains where a similarly-launched process runs from an Inno Setup temp directory in genuine DVD Creator workflows (verify the file hashes and install path — the legitimate chain runs from Program Files, not `is-*.tmp` or `C:\ProgramData\adv_ctrl\`).
 **Deployment:** EDR process-creation monitoring, SIEM Sysmon EID 1.
 
@@ -701,8 +702,9 @@ status: experimental
 description: >-
   Detects WVault.exe (renamed, signed Qihoo 360 PromoUtil.exe used as a
   hollow host for an injected .NET AsyncRAT-class RAT) launched with a
-  parent process image path containing the Inno Setup temp-extraction
-  marker "is-", indicating a direct launch from an is-*.tmp\ directory
+  parent process image sitting directly in an Inno Setup temp-extraction directory
+  (a path component is-<letters or digits>.tmp, then a file name), indicating a direct
+  launch from an is-*.tmp\ directory
   rather than the campaign's persistent C:\ProgramData\adv_ctrl\ location.
   This is a distinct chain link from — not a duplicate of — the broader
   Inno Setup process-tree rule, which also covers WVault.exe as a direct
@@ -723,7 +725,7 @@ logsource:
 detection:
     selection:
         Image|endswith: '\WVault.exe'
-        ParentImage|contains: 'is-'
+        ParentImage|re: '.*\\is-[0-9A-Za-z]+\.tmp\\[^\\]+'
     condition: selection
 falsepositives:
     - >-
@@ -798,9 +800,9 @@ level: medium
 **Tier:** Detection
 **Robustness:** 2
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1573.001 (Symmetric Cryptography)
-**Confidence:** HIGH
-**Rationale:** JA3 is a TLS-client fingerprint reflecting the RAT client's own TLS stack (library, cipher-suite, and extension ordering) — destination-IP-independent and unaffected by C2 infrastructure rotation. It is a documented AsyncRAT/zgRAT signature on Abuse.ch SSLBL, meaning it is not even unique to this one campaign; any host running the same RAT client build will match regardless of which C2 IP it is configured against. The strongest network-layer rule in this set.
-**False Positives:** JA3 hash collisions across unrelated TLS client implementations that happen to share the same library/cipher-suite/extension configuration are a known general limitation of JA3 fingerprinting; the `count 3 / seconds 300` threshold plus the specific SSLBL-documented match keep this risk low in practice.
+**Confidence:** MODERATE (HIGH that the analysed sample produced this JA3; MODERATE that other TLS clients do not share it, which was not measured)
+**Rationale:** JA3 is a TLS-client fingerprint reflecting the RAT client's own TLS stack (library, cipher-suite, and extension ordering) — destination-IP-independent and unaffected by C2 infrastructure rotation. VirusTotal's IDS ruleset labels this JA3 `Malicious JA3 SSL-Client Fingerprint detected (AsyncRAT)` and attributes the rule to Abuse.ch SSLBL (the report cites that label); on 2026-10-11 the hash was not in the SSLBL JA3 blacklist CSV (106 rows, last updated 2021-08-03) and its SSLBL fingerprint page showed no records, so the SSLBL listing itself is NOT CHECKED against the primary source. The fingerprint is not unique to this one campaign; any host running the same RAT client build will match regardless of which C2 IP it is configured against. The strongest network-layer rule in this set.
+**False Positives:** JA3 hash collisions across unrelated TLS client implementations that happen to share the same library/cipher-suite/extension configuration are a known general limitation of JA3 fingerprinting; the `count 3 / seconds 300` threshold (`type limit`) only caps repeat alerts at three per source per five minutes and does not require three matches, so it does not lower false positives. Whether benign TLS clients on a similar Windows TLS configuration produce this hash was not measured.
 **Blind Spots:** A RAT-builder update that changes the underlying TLS library or cipher-suite ordering changes the JA3 hash and evades this rule; does not cover non-TLS C2 channels.
 **Validation:** Replay a PCAP of this RAT's TLS handshake — the JA3 must match; ordinary enterprise TLS traffic must NOT match this specific hash.
 **Deployment:** Network IDS on internal LAN segments, perimeter TAP; complements the destination-IP indicator carried in the IOC feed.

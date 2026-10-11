@@ -22,16 +22,16 @@ An exposed open directory at 45.94.31.220 yielded a complete attacker build work
 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
-| YARA | 3 | 2 | T1027.002, T1027.013, T1055.012, T1106, T1553.002 | 0 |
-| Sigma | 3 | 3 | T1059.001, T1685, T1105, T1055.012, T1620, T1134.004, T1071.001, T1036, T1036.005 | 0 |
+| YARA | 2 | 3 | T1027.002, T1027.013, T1055.012, T1106, T1553.002 | 0 |
+| Sigma | 2 | 4 | T1059.001, T1685, T1105, T1055.012, T1071.001, T1036, T1036.005 | 0 |
 | Suricata | 0 | 0 | — | 0 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
 
 **Highest-confidence anchors:**
-- `sihost.exe` initiating an outbound HTTPS connection to a non-Microsoft destination. A Shell Infrastructure Host process has no legitimate reason to do this, so any hit is a high-confidence indicator of an injected C2 beacon (Sigma Detection).
-- The fraudulent self-signed "VMware, Inc. Code Signing" certificate fraud pattern (CA:TRUE, Redmond location, issuer = subject), survives the operator regenerating a new certificate serial from the same template (YARA Detection).
-- Go build metadata combined with the SysWhispers3 syscall-hash seed or the ScareCrow XZ-mode header, architectural constants that survive ScareCrow's per-build polymorphic obfuscation (YARA Detection).
+- `sihost.exe` initiating an outbound connection on port 443 or 8443 to a destination outside four listed Microsoft hostname suffixes. A Shell Infrastructure Host process has no known reason to do this, so a hit on a host without the documented false-positive software is a lead for an injected C2 beacon (Sigma Detection, Robustness 2; this campaign's own callback was configured but never observed).
+- The fraudulent "VMware, Inc. Code Signing" subject paired with a Redmond location in a PE file, which still matches a regenerated certificate serial if the template keeps both strings (YARA Detection, Robustness 2). The rule tests those two subject strings and the certificate serial; it does not test the self-signed or CA:TRUE properties.
+- Go build metadata combined with the SysWhispers3 syscall-hash seed or the ScareCrow XZ-mode header, build constants that survived ScareCrow's per-build polymorphic obfuscation in the analyzed sample, though an operator who changes the payload anchors evades the rule, and the four-byte seed branch can match unrelated Go programs (YARA Hunting, Robustness 1).
 
 **Rule reorganized during this pass:** the original "AMSI Bypass and Payload Download" Sigma rule OR'd two selections of very different precision, a rare reflection-based AMSI-bypass technique, and a common `Net.WebClient` download pattern, under one `level: high` rule. It has been split into a Detection-tier AMSI-bypass-only rule and a Hunting-tier download-pattern rule so the download selection's higher false-positive rate is reflected honestly.
 
@@ -43,83 +43,22 @@ An exposed open directory at 45.94.31.220 yielded a complete attacker build work
 
 ### Detection Rules
 
-#### ScareCrow Go Loader (OneDriveSync.exe)
-
-**Tier:** Detection
-**Robustness:** 3
-**ATT&CK Coverage:** T1027.002 (Software Packing), T1055.012 (Process Hollowing), T1027.013 (Encrypted/Encoded File), T1106 (Native API via SysWhispers3)
-**Confidence:** HIGH
-**Rationale:** Requires Go build metadata — present even after ScareCrow's polymorphic obfuscation, since it lives in the Go runtime metadata section rather than the encrypted payload body — plus at least one of three payload-specific anchors: the SysWhispers3 syscall-hash seed, the ScareCrow XZ-mode header byte, or the hardcoded PEB CommandLine spoof string. No single renameable literal carries the rule; an operator would need to strip Go build metadata (breaking the toolchain) to fully evade.
-**False Positives:** None known — the SysWhispers3 seed `0x9DEA8D94` combined with Go build strings is not expected in legitimate software; the XZ mode byte `0x04` alone is common, but the full 12-byte XZ header pattern combined with the Go build requirement is distinctive.
-**Blind Spots:** A rebuild that strips Go build metadata entirely (unlikely — breaks the toolchain) or swaps SysWhispers3/XZ/PEB-spoof for different techniques evades this rule; targets on-disk PE files, not memory-only variants.
-**Validation:** Scan the analyzed sample (`hash1` below) — all conditions must match; an unrelated Go-compiled binary without SysWhispers3/ScareCrow/PEB-spoofing must NOT fire.
-**Deployment:** Endpoint AV/EDR on-access scan, retrospective scan of EDR file inventory, memory scanner targeting anonymous private regions >15MB.
-
-```yara
-/*
-   Yara Rule Set
-   Identifier: Sliver C2 / ScareCrow Loader Open Directory Kit
-   Author: The Hunters Ledger
-   Source: https://the-hunters-ledger.com/
-   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/
-*/
-
-rule MALW_ScareCrow_Go_Loader_OneDriveSync {
-   meta:
-      description = "Detects the ScareCrow-wrapped Go loader used in the WebServer-Compromise-Kit-45.94.31.220 campaign. Matches on Go build metadata preserved post-symbol-stripping, the SysWhispers3 HalosGate hash seed compiled into the syscall resolution module, and the XZ stream header pattern used by the ScareCrow injection mode dispatcher."
-      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
-      author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/"
-      date = "2026-02-28"
-      hash1 = "e2ad6f8202994058cc987cc971698238c2dc63a951dd1e43063cc9b8b138713b"
-      hash2 = "67bb390c2dad7ebd9e9f706a6f2ba42e4cbcbee7"
-      hash3 = "9559366a6f6874ad914e308a34903c77"
-      family = "Sliver"
-      malware_type = "C2 Beacon / Loader"
-      campaign = "WebServer-Compromise-Kit-45.94.31.220"
-      id = "97119e1c-a746-54b7-b127-9ef332b9246f"
-   strings:
-      $go_build_meta_1 = "-buildmode=exe" ascii wide
-      $go_build_meta_2 = "-compiler=gc" ascii wide
-      $go_build_meta_3 = "-trimpath=true" ascii wide
-
-      $sw3_seed = { 94 8D EA 9D }
-
-      $xz_hollowing_header = { FD 37 7A 58 5A 00 00 04 E6 D6 B4 46 }
-
-      $peb_spoof_string = "MicrosoftEdgeUpdate.exe --update-check --silent" wide
-
-   condition:
-      uint16(0) == 0x5A4D
-      and uint32(uint32(0x3C)) == 0x00004550
-      and uint8(uint32(0x3C) + 24) == 0x64
-      and filesize > 25MB
-      and filesize < 40MB
-      and all of ($go_build_meta_*)
-      and (
-         $sw3_seed
-         or $xz_hollowing_header
-         or $peb_spoof_string
-      )
-}
-```
-
 #### Fraudulent VMware Code-Signing Certificate (PE-Embedded)
 
 **Tier:** Detection
-**Robustness:** 3
+**Robustness:** 2
 **ATT&CK Coverage:** T1553.002 (Subvert Trust Controls: Code Signing)
 **Confidence:** HIGH
-**Rationale:** Salvage-rewritten from the original serial-only condition: the rule now fires on EITHER the exact known certificate serial plus one corroborating subject field, OR two of three subject fields alone (`VMware, Inc. Code Signing` + `Redmond` + `VMware, Inc.`) independent of serial. The subject-field combination is itself a fraud tell — no legitimate VMware certificate is self-signed with CA:TRUE, and no legitimate VMware entity is headquartered in Redmond (Microsoft's HQ, not VMware's) — so the rule survives the operator regenerating a new self-signed certificate from the same template, not only re-use of this exact serial.
-**False Positives:** None known — the compound phrase "VMware, Inc. Code Signing" paired with "Redmond" is not expected to co-occur in legitimate software.
+**Rationale:** Salvage-rewritten from the original serial-only condition: the rule now fires on EITHER the exact known certificate serial plus one corroborating subject string (`VMware, Inc. Code Signing` or `Redmond`), OR both of those two strings together (`VMware, Inc. Code Signing` + `Redmond`) independent of serial. The CN-plus-Redmond pairing is itself a fraud tell: no legitimate VMware certificate is self-signed with CA:TRUE, and no legitimate VMware entity is headquartered in Redmond (Microsoft's HQ, not VMware's), so the rule still matches an operator-regenerated certificate if that certificate keeps both subject strings, not only a re-use of this exact serial. Robustness is 2: it is a combination of mutable certificate-template strings, and a regenerated certificate that changes either one evades the non-serial branch. The bare organisation string `VMware, Inc.` is no longer counted as a third field: it is a substring of the CN, so one occurrence of the CN used to satisfy two of the three fields and fire without Redmond, and a file carrying only `VMware, Inc.` and the word `Redmond` fired as well. The rule tests these strings and the serial anywhere in a PE file; it does not parse the certificate or test the self-signed or CA:TRUE properties.
+**False Positives:** None known, but the rule matches three alternatives: the CN `VMware, Inc. Code Signing` with `Redmond`; the exact certificate serial with the CN; or the exact serial with `Redmond` (the serial branch needs only one of the two strings, so the CN and `Redmond` do not have to appear together there). The pairing of the CN with `Redmond` is not expected to co-occur in legitimate software, and a file carrying the shorter `VMware, Inc.` with `Redmond`, or the CN alone, does not match (checked with constructed fixtures). No Windows goodware corpus was scanned, so a measured benign-hit rate is NOT CHECKED.
 **Blind Spots:** A rebuild using a wholly different impersonated vendor identity (not VMware/Redmond) evades this rule; targets on-disk PE files, not memory-only variants.
-**Validation:** Scan the analyzed sample (`hash1` below) — must match via the serial+subject path; a legitimately-signed VMware binary (issued by an actual CA, not self-signed) must NOT fire.
+**Validation:** Scan the analyzed sample (`hash1` below) — must match via the serial+subject path. A binary signed by a legitimate VMware certificate is not expected to fire, because that certificate would not carry both `Redmond` and the CN or the fraudulent serial, but the rule does not parse the certificate or test who issued it, so that expectation is untested and a file that merely quotes the strings (a report, a rule file) would match.
 **Deployment:** Endpoint AV/EDR on-access scan, email gateway attachment scanning, file server retrospective scan, network IDS/DLP for binary downloads.
 
 ```yara
 rule MALW_Fraudulent_VMware_CodeSign_Cert_PE {
    meta:
-      description = "Detects PE binaries signed with the fraudulent self-signed VMware, Inc. Code Signing certificate identity used in the WebServer-Compromise-Kit-45.94.31.220 campaign, either via the known certificate serial or via the self-signed VMware/Redmond subject-field fraud pattern alone, which survives certificate regeneration from the same template"
+      description = "Detects PE files that contain certificate strings of the fraudulent VMware, Inc. Code Signing identity used in the WebServer-Compromise-Kit-45.94.31.220 campaign: the CN VMware, Inc. Code Signing with Redmond, or the known certificate serial bytes with either the CN or Redmond. A string-level lead, not a certificate parse: it does not test who signed or issued the file."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/"
@@ -133,13 +72,12 @@ rule MALW_Fraudulent_VMware_CodeSign_Cert_PE {
       $cert_serial = { 65 9E EB 5A A4 A4 89 FB 23 89 93 AF 25 9D 23 F0 57 F6 D6 D6 }
       $subject_cn  = "VMware, Inc. Code Signing" ascii
       $subject_l   = "Redmond" ascii
-      $subject_o   = "VMware, Inc." ascii
    condition:
       uint16(0) == 0x5A4D
       and filesize < 100MB
       and (
-         ($cert_serial and 1 of ($subject_cn, $subject_l, $subject_o))
-         or (2 of ($subject_cn, $subject_l, $subject_o))
+         ($cert_serial and ($subject_cn or $subject_l))
+         or ($subject_cn and $subject_l)
       )
 }
 ```
@@ -184,20 +122,81 @@ rule MALW_Fraudulent_VMware_CodeSign_Cert_PEM {
 
 ### Hunting Rules
 
-#### UPX-Packed Sliver Beacon Variant (compressed.exe)
+#### ScareCrow Go Loader (OneDriveSync.exe)
 
 **Tier:** Hunting
-**Robustness:** 2
+**Robustness:** 1
+**ATT&CK Coverage:** T1027.002 (Software Packing), T1055.012 (Process Hollowing), T1027.013 (Encrypted/Encoded File), T1106 (Native API via SysWhispers3)
+**Confidence:** MODERATE
+**Rationale:** Re-tiered from Detection to Hunting in round 2: no Windows goodware check was available for the four-byte seed branch, which can match unrelated Go PE64 programs, so the rule cannot be called precise, and its weakest branch is one operator-chosen constant (Robustness 1). Requires Go build metadata — present even after ScareCrow's polymorphic obfuscation, since it lives in the Go runtime metadata section rather than the encrypted payload body — plus at least one of three payload-specific anchors: the SysWhispers3 syscall-hash seed, the ScareCrow XZ-mode header byte, or the hardcoded PEB CommandLine spoof string. The strongest branches (the 12-byte XZ header, the PEB spoof string) would be a tool and build fingerprint (Robustness 2), but the rule is scored on its weakest branch: the Go build metadata is a common requirement that many unrelated trimmed Go builds also carry, so the three payload-specific anchors do the discriminating work, and an operator who changes all three (a different syscall seed, a different compression header, a different spoofed command line) evades it without touching the Go metadata. The PE check requires a PE32+ optional header (magic `0x020B`), since the report records the loader as PE64; an earlier revision compared that offset to `0x64`, which is not a value a PE32+ header holds there, so the rule could not match a PE64 file. Sample replay of the corrected header test is NOT CHECKED.
+**False Positives:** None observed, but Windows goodware is unmeasured: the 6,035-file workstation corpus holds no Windows Go binaries (0 hits there with a known-positive fixture passing). The seed branch is the weakest anchor, a four-byte value (`0x9DEA8D94`) that by byte-count arithmetic for random data appears in a given 25 to 40 MB file with probability near 0.7 percent, and the three Go build strings are carried by many trimmed Go builds, so unrelated PE64 Go programs in that size band can match through the seed branch. The 12-byte XZ header pattern and the PEB spoof string are longer anchors. Before the PE32+ header correction this rule could not match any PE64 file, so it has no field exposure history either way.
+**Blind Spots:** A rebuild that swaps the SysWhispers3 seed, the XZ header and the PEB spoof string for different values evades this rule without touching the Go metadata (a rebuild that strips the Go build metadata entirely would also evade it); a 32-bit build fails the PE32+ header test; targets on-disk PE files, not memory-only variants.
+**Validation:** Scan the analyzed sample (`hash1` below), which must match because the file is PE64 of 25 to 40 MB, carries all three build flags and at least one of the three anchors (the sample was not available to replay: NOT CHECKED); an unrelated Go-compiled binary without SysWhispers3/ScareCrow/PEB-spoofing must NOT fire.
+**Deployment:** Endpoint AV/EDR on-access scan and retrospective scan of EDR file inventory (files on disk, and saved binary copies). The condition tests `filesize` and PE header offsets, which a live process-memory scan does not provide, so the rule does not apply to a memory scanner.
+
+```yara
+/*
+   Yara Rule Set
+   Identifier: Sliver C2 / ScareCrow Loader Open Directory Kit
+   Author: The Hunters Ledger
+   Source: https://the-hunters-ledger.com/
+   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/
+*/
+
+rule MALW_ScareCrow_Go_Loader_OneDriveSync {
+   meta:
+      description = "Detects the ScareCrow-wrapped Go loader used in the WebServer-Compromise-Kit-45.94.31.220 campaign: a PE32+ file of 25 to 40 MB carrying three Go build-flag strings plus at least one of the SysWhispers3 HalosGate hash seed, the XZ stream header pattern of the ScareCrow injection mode dispatcher, or the hardcoded PEB command-line spoof string."
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
+      author = "The Hunters Ledger"
+      reference = "https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/"
+      date = "2026-02-28"
+      hash1 = "e2ad6f8202994058cc987cc971698238c2dc63a951dd1e43063cc9b8b138713b"
+      hash2 = "67bb390c2dad7ebd9e9f706a6f2ba42e4cbcbee7"
+      hash3 = "9559366a6f6874ad914e308a34903c77"
+      family = "Sliver"
+      malware_type = "C2 Beacon / Loader"
+      campaign = "WebServer-Compromise-Kit-45.94.31.220"
+      id = "97119e1c-a746-54b7-b127-9ef332b9246f"
+   strings:
+      $go_build_meta_1 = "-buildmode=exe" ascii wide
+      $go_build_meta_2 = "-compiler=gc" ascii wide
+      $go_build_meta_3 = "-trimpath=true" ascii wide
+
+      $sw3_seed = { 94 8D EA 9D }
+
+      $xz_hollowing_header = { FD 37 7A 58 5A 00 00 04 E6 D6 B4 46 }
+
+      $peb_spoof_string = "MicrosoftEdgeUpdate.exe --update-check --silent" wide
+
+   condition:
+      uint16(0) == 0x5A4D
+      and uint32(uint32(0x3C)) == 0x00004550
+      and uint16(uint32(0x3C) + 24) == 0x020B // PE32+ optional header magic
+      and filesize > 25MB
+      and filesize < 40MB
+      and all of ($go_build_meta_*)
+      and (
+         $sw3_seed
+         or $xz_hollowing_header
+         or $peb_spoof_string
+      )
+}
+```
+
+#### UPX-Packed Go Binary in the 13-18MB Band (Shape of the Sliver compressed.exe)
+
+**Tier:** Hunting
+**Robustness:** 1
 **ATT&CK Coverage:** T1027.002 (Software Packing)
 **Confidence:** MODERATE
-**Rationale:** UPX section markers alone match a large population of legitimate UPX-packed software; the combination with Go build strings and a narrow file-size band raises specificity, but UPX packing of Go binaries in this size range is not rare enough for alert-grade precision. The original analysis explicitly rated this rule MODERATE confidence and MEDIUM false-positive risk — that assessment is preserved rather than inflated.
-**False Positives:** UPX is widely used by legitimate software developers; a Go binary packed with UPX 5.0.2 in the 13-18MB range can occur outside this campaign.
+**Rationale:** UPX section markers alone match a large population of legitimate UPX-packed software; the combination with Go build strings and a narrow file-size band raises specificity, but UPX packing of Go binaries in this size range is not rare enough for alert-grade precision. The original analysis explicitly rated this rule MODERATE confidence and MEDIUM false-positive risk — that assessment is preserved rather than inflated. One of the `UPX 5.0.2` version string or the two-byte value `{ 03 05 }` is required. The two-byte value is so short that almost any high-entropy file of this size contains it, so in practice the rule is the `UPX0` and `UPX1` literals (the condition tests those strings, it does not parse PE sections), the two Go build-flag strings and the 13-18MB size band; a file with neither the version string nor the two-byte value (a zero-padded fixture, for example) does not match. Nothing in the condition names Sliver, the file name `compressed.exe` or the packed sample's configuration, which is why the heading no longer does and the robustness is scored 1. The rule scans the packed file, and whether the Go build-flag strings are visible inside the UPX-compressed sample was not re-checked here (the sample is not on the workstation): NOT CHECKED.
+**False Positives:** UPX is widely used by legitimate software developers; a Go binary packed with UPX (any version) in the 13-18MB range can occur outside this campaign.
 **Deployment:** Endpoint AV/EDR on-access scan (investigate, do not auto-quarantine); network gateway inspection for downloads >10MB.
 
 ```yara
 rule MALW_UPX_Packed_Sliver_Variant {
    meta:
-      description = "Detects the UPX 5.0.2-packed Sliver C2 beacon variant recovered from the WebServer-Compromise-Kit-45.94.31.220 campaign (compressed.exe). Matches on UPX section naming, Go build metadata present in the unpacked payload, and the packed file size fingerprint; UPX packing is common in legitimate software so this is a hunting-tier lead, not an alerting rule"
+      description = "Detects a UPX-packed Go binary of 13-18MB, the shape of the UPX 5.0.2-packed Sliver C2 beacon variant (compressed.exe) recovered from the WebServer-Compromise-Kit-45.94.31.220 campaign. Matches on the literals UPX0 and UPX1, the Go build-flag strings -buildmode=exe and -compiler=gc, the packed file size band, and either the UPX 5.0.2 version string or a two-byte value that almost any high-entropy file of this size contains. Not specific to Sliver; UPX packing is common in legitimate software so this is a hunting-tier lead, not an alerting rule"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/"
@@ -233,14 +232,14 @@ rule MALW_UPX_Packed_Sliver_Variant {
 **Robustness:** 2
 **ATT&CK Coverage:** T1027.013 (Encrypted/Encoded File), T1106 (Native API)
 **Confidence:** HIGH for the source-code markers matched; this is IR/forensic triage content, not malware-sample detection
-**Rationale:** Targets source-code and pre-assembled-stub artifacts from the build toolchain itself (the XOR key + SysWhispers3 seed defines together, or the Heaven's Gate compiled stub) — for scanning developer workstations, build servers, or forensic images, a different use case from detecting the compiled malware. The original rule's standalone build-workspace-path trigger branch (a per-build, non-durable literal) has been removed and routed to the IOC feed instead — see Coverage Gaps.
-**False Positives:** Low for the two remaining combination branches — the XOR_KEY/SW3_SEED define-name pairing and the Heaven's Gate opcode sequence are specific to this toolchain; a coincidental match would require both a matching define name and a matching hash seed, or the exact compiled stub bytes.
+**Rationale:** Targets source-code and pre-assembled-stub artifacts from the build toolchain itself (the XOR key + SysWhispers3 seed defines together, or a standalone Heaven's Gate stub file of under 100 bytes), for scanning developer workstations, build servers, or forensic images, a different use case from detecting the compiled malware. The stub alternative matches a tiny standalone file such as the 34-byte `heavens_gate.bin` recovered from the workspace; the `filesize < 100` gate means a copy of the stub embedded in a larger loader or binary does not match. The original rule's standalone build-workspace-path trigger branch (a per-build, non-durable literal) has been removed and routed to the IOC feed instead — see Coverage Gaps.
+**False Positives:** Low for the source branch: the XOR_KEY/SW3_SEED define-name pairing is specific to this toolchain, and a coincidental match would require a matching define name, a matching hash seed and the seed's name. The stub branch is a generic 10-byte call/add/far-return trampoline kept narrow only by its size gate: any file of under 100 bytes that contains those bytes matches, whatever tool produced it, and a larger file never does.
 **Deployment:** Forensic disk image scan, incident response triage of suspect hosts, threat hunting scan of developer workstations and build servers.
 
 ```yara
 rule TOOLKIT_ScareCrow_Build_Pipeline_Source_Artifacts {
    meta:
-      description = "Hunt rule detecting source code and pre-assembled stub artifacts from the ScareCrow/SysWhispers3 build pipeline used in the WebServer-Compromise-Kit-45.94.31.220 campaign: the XOR_KEY 0x42 define paired with the SysWhispers3 SW3_SEED hash constant from string_obf.C/syscalls.C, or the compiled 10-byte Heaven's Gate far-return stub. Presence indicates the offensive build pipeline has been deployed to or is in use on the scanned host"
+      description = "Hunt rule detecting source code and pre-assembled stub artifacts from the ScareCrow/SysWhispers3 build pipeline used in the WebServer-Compromise-Kit-45.94.31.220 campaign: the XOR_KEY 0x42 define paired with the SysWhispers3 SW3_SEED hash constant from string_obf.C/syscalls.C, or a standalone file of under 100 bytes holding the compiled 10-byte Heaven's Gate far-return stub (the heavens_gate.bin artifact); a stub embedded in a larger file does not match. A source-file hit indicates the build pipeline source is present on the scanned host; the stub alternative matches only a tiny standalone shellcode file"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/"
@@ -269,27 +268,31 @@ rule TOOLKIT_ScareCrow_Build_Pipeline_Source_Artifacts {
 
 ### Detection Rules
 
-#### Sliver Stager PowerShell AMSI Bypass via Reflection
+#### PowerShell AMSI Bypass via amsiInitFailed Reflection
 
 **Tier:** Detection
 **Robustness:** 3
 **ATT&CK Coverage:** T1059.001 (PowerShell), T1685 (Disable or Modify Tools)
 **Confidence:** HIGH
-**Rationale:** Split out from the campaign's original combined "AMSI bypass or download" rule, which OR'd this selection with a much more common download pattern under one `level: high` verdict. Isolated on its own, the reflection-based AMSI bypass — setting the private static `amsiInitFailed` field via `NonPublic,Static` binding flags and `SetValue` — is a distinctive technique combination that is genuinely rare outside AMSI-bypass tooling, purely behavioral, and independent of any campaign-specific artifact.
+**Rationale:** Split out from the campaign's original combined "AMSI bypass or download" rule, which OR'd this selection with a much more common download pattern under one `level: high` verdict. Isolated on its own, script text that names the private static `amsiInitFailed` field together with the `NonPublic,Static` binding flags and `SetValue` is a distinctive combination that is genuinely rare outside AMSI-bypass tooling and independent of any campaign-specific artifact. The three strings are tested independently: they do not prove that the field is set, or set to true (the stager's example sets it to true, but that argument and data flow are not selected). A script block that also contains the string `WindowsDefenderApplicationGuard` is excluded by the filter even when it holds a complete bypass. The selection carries no Sliver or campaign marker, so it matches this bypass wherever it appears and the rule is titled for the technique, not for the Sliver stager that used it in this campaign.
 **False Positives:** Security research or authorized offensive-security assessment scripts using reflection-based AMSI bypass in authorized environments; red team exercises where PowerShell stagers are simulated.
-**Blind Spots:** Requires PowerShell Script Block Logging (Event ID 4104) to be enabled; misses AMSI bypasses that use a different technique (patching `amsi.dll` in memory rather than the reflection field, for example).
-**Validation:** Trigger the reflection-based bypass in a test PowerShell session with Script Block Logging enabled — must fire; ordinary PowerShell scripts with no AMSI interaction must NOT fire.
+**Blind Spots:** Requires PowerShell Script Block Logging (Event ID 4104) to be enabled; a script block that also contains the string `WindowsDefenderApplicationGuard` is suppressed by the filter, so a bypass pasted into or beside text holding that string is missed; misses AMSI bypasses that use a different technique (patching `amsi.dll` in memory rather than the reflection field, for example).
+**Validation:** Trigger the reflection-based bypass in a test PowerShell session with Script Block Logging enabled — must fire, provided the script block does not also contain the string `WindowsDefenderApplicationGuard`; ordinary PowerShell scripts with no AMSI interaction must NOT fire. The rule matches the three strings in any order and place, so it cannot tell a script that sets the field from one that only mentions it.
 **Deployment:** Windows PowerShell Script Block Logging (Event ID 4104); requires Script Block Logging enabled via GPO.
 
 ```yaml
-title: Sliver Stager PowerShell AMSI Bypass via Reflection
+title: PowerShell AMSI Bypass via amsiInitFailed Reflection
 id: 3a7f2c91-5e4b-4d8a-b1c9-6f2e1a3d8b07
 status: experimental
 description: >-
-  Detects the PowerShell AMSI-bypass technique used by the stager
-  component of the WebServer-Compromise-Kit-45.94.31.220 Sliver C2
-  campaign. The stager uses .NET reflection to set the private static
-  amsiInitFailed field to true, disabling AMSI for the PowerShell session.
+  Detects a PowerShell script block whose text contains amsiInitFailed,
+  NonPublic,Static and SetValue, the text pattern of the reflection-based
+  AMSI bypass used by the stager component of the
+  WebServer-Compromise-Kit-45.94.31.220 Sliver C2 campaign. The three strings
+  are tested independently, so the rule does not prove the field is set or
+  set to true, and a script block that also contains
+  WindowsDefenderApplicationGuard is excluded. The selection is
+  technique-level: nothing in it is specific to that campaign or to Sliver.
   PowerShell Script Block Logging (Event ID 4104) captures the full
   stager content even though the bypass fires after the script block is
   logged.
@@ -331,70 +334,17 @@ falsepositives:
 level: high
 ```
 
-#### Windows Defender Real-Time Protection Disabled
-
-**Tier:** Detection
-**Robustness:** 3
-**ATT&CK Coverage:** T1685 (Disable or Modify Tools)
-**Confidence:** HIGH
-**Rationale:** Retitled from the original "...by PowerShell Process" — the underlying selection matches Event ID 5001 regardless of which process disabled protection, so it was never actually scoped to PowerShell as the title claimed. Kept as a general defense-impairment detector rather than narrowed to PowerShell, since an attacker disabling Defender by any other means is equally suspicious; disabling real-time protection is a rare, security-relevant event in a properly managed environment and does not depend on any campaign-specific artifact.
-**False Positives:** Legitimate administrative scripts disabling Defender as part of authorized software installation; enterprise management platforms (SCCM, Intune) disabling Defender via PowerShell during provisioning; security testing in authorized environments.
-**Blind Spots:** Requires the Windows Defender Operational event log; an attacker who disables protection via a method that does not generate Event ID 5001 (e.g., a driver-level tamper) evades this rule.
-**Validation:** Disable real-time protection in a test environment — Event ID 5001 must fire and the rule must match; routine Defender scan/update events must NOT fire.
-**Deployment:** Windows Defender Operational event log; no additional configuration required.
-
-```yaml
-title: Windows Defender Real-Time Protection Disabled
-id: 8b4e1f72-9c3a-4e7d-a5b8-2d6f9c1e4a83
-status: experimental
-description: >-
-  Detects Windows Defender real-time protection being disabled (Event ID
-  5001), matching the defense-impairment step used by the stager
-  component of the WebServer-Compromise-Kit-45.94.31.220 Sliver C2
-  campaign, which calls Set-MpPreference -DisableRealtimeMonitoring $true
-  from PowerShell. The event fires regardless of which process disabled
-  protection, so this rule covers the technique generally rather than
-  only the PowerShell vector observed in this campaign.
-references:
-    - https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/
-author: The Hunters Ledger
-date: 2026-02-28
-tags:
-    - attack.defense-impairment
-    - attack.t1685
-    - detection.emerging-threats
-logsource:
-    product: windows
-    service: windefend
-detection:
-    selection_defender_disabled:
-        EventID: 5001
-    filter_admin_tools:
-        ProcessName|endswith:
-            - '\MpCmdRun.exe'
-            - '\msiexec.exe'
-    condition: selection_defender_disabled and not filter_admin_tools
-falsepositives:
-    - >-
-      Legitimate administrative scripts disabling Defender as part of
-      authorized software installation
-    - >-
-      Enterprise management platforms (SCCM, Intune) disabling Defender
-      via PowerShell during provisioning
-    - Security testing in authorized environments
-level: high
-```
-
 #### sihost.exe Initiating Anomalous Outbound Network Connection
 
 **Tier:** Detection
-**Robustness:** 3
-**ATT&CK Coverage:** T1055.012 (Process Hollowing), T1620 (Reflective Code Loading), T1134.004 (Parent PID Spoofing), T1071.001 (Web Protocols)
+**Robustness:** 2
+**ATT&CK Coverage:** T1055.012 (Process Hollowing), T1071.001 (Web Protocols)
+**ATT&CK Note:** The build chain behind the hollowing target also uses reflective code loading (T1620) and parent PID spoofing (T1134.004), but a network-connection event observes neither, so neither id is claimed here or in the tags. T1055.012 stays because the rule keys on the process the campaign hollows.
 **Confidence:** HIGH
-**Rationale:** `sihost.exe` (Shell Infrastructure Host) has no legitimate reason to initiate outbound HTTPS connections to arbitrary external destinations. The build pipeline explicitly targets `sihost.exe` for process hollowing; this rule generalizes to any injected beacon using the same injection target, not only this campaign's specific C2 domains, so it survives full infrastructure rotation.
-**False Positives:** Custom enterprise environments where `sihost.exe` behavior has been modified by legitimate software; proxy or network security software that injects monitoring DLLs into `sihost.exe`, causing unusual network calls.
+**Rationale:** `sihost.exe` (Shell Infrastructure Host) has no known reason to initiate outbound connections on 443 or 8443 to destinations outside Microsoft's own hostnames. The build pipeline explicitly targets `sihost.exe` for process hollowing; this rule generalizes to any injected beacon using the same injection target, not only this campaign's specific C2 domains, so it survives full infrastructure rotation. The campaign's own network realization was not observed: the C2 was offline before the beacon connected, and the report records the callback behavior as configured, not observed, so no live `sihost.exe` connection from this campaign backs the rule. Robustness is 2: the hollowing target is an implementation choice of this build (an operator can pick another process or another port), not an invariant of the technique. The Microsoft exclusion is a list of four hostname suffixes (`.microsoft.com`, `.windows.com`, `.windowsupdate.com`, `.msftconnecttest.com`) tested against `DestinationHostname`, not a test of who owns the destination: a connection to any other hostname fires, including other Microsoft-operated hostnames, and a connection whose hostname was not resolved (empty `DestinationHostname`) is not excluded and fires.
+**False Positives:** Custom enterprise environments where `sihost.exe` behavior has been modified by legitimate software; proxy or network security software that injects monitoring DLLs into `sihost.exe`, causing unusual network calls; `sihost.exe` connections to Microsoft-operated hostnames outside the four excluded suffixes, or logged without a hostname.
 **Blind Spots:** Misses injection into a different target process; misses a beacon configured to use ports other than 443/8443; requires Sysmon or equivalent network-connection telemetry with process attribution.
-**Validation:** Trigger process hollowing of `sihost.exe` with an outbound connection on 443/8443 — must fire; ordinary `sihost.exe` activity and connections to Microsoft-owned domains must NOT fire.
+**Validation:** Trigger process hollowing of `sihost.exe` with an outbound connection on 443/8443 to a hostname outside the four listed suffixes: must fire; ordinary `sihost.exe` activity and connections to hostnames ending in one of the four listed Microsoft suffixes must NOT fire. A connection to a Microsoft-operated hostname outside those four suffixes, or one logged with no hostname, fires by design; extend the exclusion list from your own baseline.
 **Deployment:** Sysmon Event ID 3 (network connection) or equivalent EDR network telemetry.
 
 ```yaml
@@ -402,15 +352,20 @@ title: sihost.exe Initiating Anomalous Outbound Network Connection
 id: 6f1d4b8e-3c2a-4f7b-9e5d-8a1c3f6b9e2d
 status: experimental
 description: >-
-  Detects sihost.exe (Shell Infrastructure Host) initiating outbound
-  network connections to non-Microsoft destinations on ports 443 or 8443,
-  indicating successful C2 beacon injection via process hollowing. The
+  Detects sihost.exe (Shell Infrastructure Host) initiating a network
+  connection on port 443 or 8443 to a destination whose hostname does not
+  end in .microsoft.com, .windows.com, .windowsupdate.com or
+  .msftconnecttest.com (a connection with no logged hostname is not
+  excluded). That is the pattern expected from a C2 beacon injected into
+  sihost.exe by process hollowing. The
   WebServer-Compromise-Kit-45.94.31.220 build pipeline explicitly targets
-  sihost.exe for process hollowing; the injected Sliver beacon used this
-  technique to beacon out over HTTPS/mTLS. Legitimate sihost.exe does not
-  initiate outbound HTTPS connections to arbitrary external addresses, so
-  this rule generalizes to any injected beacon using the same injection
-  target, not only this campaign's specific C2 domains.
+  sihost.exe for process hollowing and the beacon is configured to call out
+  over HTTPS/mTLS, but the C2 was offline and no external connection was
+  observed, so this is an anomaly lead and not a recorded campaign event.
+  Legitimate sihost.exe is not
+  known to connect to arbitrary external addresses, so this rule
+  generalizes to any injected beacon using the same injection target, not
+  only this campaign's specific C2 domains.
 references:
     - https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/
 author: The Hunters Ledger
@@ -419,8 +374,6 @@ tags:
     - attack.stealth
     - attack.t1055.012
     - attack.privilege-escalation
-    - attack.t1620
-    - attack.t1134.004
     - attack.command-and-control
     - attack.t1071.001
     - detection.emerging-threats
@@ -452,6 +405,59 @@ level: high
 ```
 
 ### Hunting Rules
+
+#### Windows Defender Real-Time Protection Disabled
+
+**Tier:** Hunting
+**Robustness:** 2
+**ATT&CK Coverage:** T1685 (Disable or Modify Tools)
+**Confidence:** MODERATE
+**Rationale:** Retitled from the original "...by PowerShell Process": the selection is Event ID 5001 alone, so it fires whichever process or action disabled protection and was never scoped to PowerShell as the title claimed. An earlier revision also excluded `ProcessName` values ending in `\MpCmdRun.exe` or `\msiexec.exe`; Event ID 5001 does not carry a process name (SigmaHQ's own rule for this event notes that it "doesn't contain a lot of information on who initiated this action"), so that filter never evaluated true and was removed, which leaves the rule's behaviour unchanged. Re-tiered from Detection to Hunting, and `level` lowered from `high` to `medium`: the event shows only that real-time protection went off, from any cause, and the false-positive list below names routine causes (software installation, provisioning by management platforms, authorized testing) that the rule cannot tell apart from an attacker. It is a scoping lead for defense-impairment hunting, to be read beside the PowerShell script-block hits for `Set-MpPreference`, not an alert.
+**False Positives:** Legitimate administrative scripts disabling Defender as part of authorized software installation; enterprise management platforms (SCCM, Intune) disabling Defender via PowerShell during provisioning; security testing in authorized environments. The rule cannot distinguish these from an attacker because the event carries no initiator.
+**Blind Spots:** Requires the Windows Defender Operational event log; an attacker who disables protection via a method that does not generate Event ID 5001 (e.g., a driver-level tamper) evades this rule.
+**Validation:** Disable real-time protection in a test environment: Event ID 5001 must fire and the rule must match; routine Defender scan/update events must NOT fire. A disable performed by any process or by an administrator through the Defender settings also fires; that is expected.
+**Deployment:** Windows Defender Operational event log; no additional configuration required. Hunting lead for scoping, not an alerting rule.
+
+```yaml
+title: Windows Defender Real-Time Protection Disabled
+id: 8b4e1f72-9c3a-4e7d-a5b8-2d6f9c1e4a83
+status: experimental
+description: >-
+  Detects Windows Defender real-time protection being disabled (Event ID
+  5001), matching the defense-impairment step used by the stager
+  component of the WebServer-Compromise-Kit-45.94.31.220 Sliver C2
+  campaign, which calls Set-MpPreference -DisableRealtimeMonitoring $true
+  from PowerShell. Event ID 5001 carries no initiator, so the rule fires
+  regardless of which process or person disabled protection and covers the
+  technique generally rather than only the PowerShell vector observed in
+  this campaign. Administrative and management-platform disables also
+  fire, so use it for hunting and triage, not alerting.
+references:
+    - https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/
+author: The Hunters Ledger
+date: 2026-02-28
+modified: 2026-10-11
+tags:
+    - attack.defense-impairment
+    - attack.t1685
+    - detection.emerging-threats
+logsource:
+    product: windows
+    service: windefend
+detection:
+    selection_defender_disabled:
+        EventID: 5001
+    condition: selection_defender_disabled
+falsepositives:
+    - >-
+      Legitimate administrative scripts disabling Defender as part of
+      authorized software installation
+    - >-
+      Enterprise management platforms (SCCM, Intune) disabling Defender
+      via PowerShell during provisioning
+    - Security testing in authorized environments
+level: medium
+```
 
 #### PowerShell WebClient DownloadFile Execution (Sliver Stager Download Pattern)
 
@@ -577,8 +583,8 @@ level: medium
 **Robustness:** 2
 **ATT&CK Coverage:** T1036 (Masquerading), T1036.005 (Match Legitimate Name or Location)
 **Confidence:** MODERATE
-**Rationale:** Salvage-rewritten from the original exact-argument match (`CommandLine|contains|all` on the full hardcoded spoof string). The original condition's true discriminator was a single hardcoded literal — trivially changed in a rebuild. Generalized to match any CommandLine referencing `MicrosoftEdgeUpdate.exe` while the Image path is not a legitimate Edge update location, so the rule also covers a rebuild that keeps the masquerade but changes the arguments. This trades campaign-specific precision for durability; kept at `level: medium` (not promoted to Detection) since the broader match increases the false-positive surface relative to the exact-string original.
-**False Positives:** Security tooling that simulates Edge update processes for testing; any process whose command-line arguments happen to reference MicrosoftEdgeUpdate.exe as a string without impersonating it (rare). Note the third filter path: Edge's own updater self-stages a copy into `C:\Program Files (x86)\Microsoft\Temp\EU<hex>.tmp\MicrosoftEdgeUpdate.exe` and runs it from there during an updater refresh, launched by the signed `MicrosoftEdgeUpdateSetup_X86_*.exe` under `\Microsoft\EdgeUpdate\Install\`. That path is neither of the two obvious install directories, so a version of this rule filtering only those two fires on every Windows host each time Edge updates its updater. The staging directory sits under `Program Files (x86)` and so requires administrative rights to write, which keeps it a reasonable filter rather than a trivial bypass.
+**Rationale:** Salvage-rewritten from the original exact-argument match (`CommandLine|contains|all` on the full hardcoded spoof string). The original condition's true discriminator was a single hardcoded literal — trivially changed in a rebuild. Generalized to match any CommandLine referencing `MicrosoftEdgeUpdate.exe` while the Image path does not start with one of the machine-wide Edge update roots listed in the filter, so the rule also covers a rebuild that keeps the masquerade but changes the arguments. The filter paths are anchored at the start of the Image path (`C:\Program Files (x86)\...` and `C:\Program Files\...`); the original filter used unanchored substrings, so a user-writable path that merely contained `\Microsoft\Temp\EU` or `\Microsoft\EdgeUpdate\` was excluded as well. This trades campaign-specific precision for durability; kept at `level: medium` (not promoted to Detection) since the broader match increases the false-positive surface relative to the exact-string original.
+**False Positives:** Security tooling that simulates Edge update processes for testing; any process whose command-line arguments happen to reference MicrosoftEdgeUpdate.exe as a string without impersonating it (rare). Note the third filter path: Edge's own updater self-stages a copy into `C:\Program Files (x86)\Microsoft\Temp\EU<hex>.tmp\MicrosoftEdgeUpdate.exe` and runs it from there during an updater refresh, launched by the signed `MicrosoftEdgeUpdateSetup_X86_*.exe` under `\Microsoft\EdgeUpdate\Install\`. That path is neither of the two obvious install directories, so a version of this rule filtering only those two fires on every Windows host each time Edge updates its updater. The staging directory sits under `Program Files (x86)` and so requires administrative rights to write; because the filter is now anchored at `C:\Program Files (x86)\Microsoft\Temp\EU` rather than matching the segment anywhere in the path, a user-writable directory that only contains that segment is no longer excluded. The anchoring assumes Windows is installed on `C:`, and a per-user Edge or EdgeUpdate install under a profile directory is not excluded: both fire and need a local tuning entry.
 **Deployment:** Sysmon Event ID 1 (process creation) with CommandLine logging, or equivalent EDR process-tree telemetry.
 
 ```yaml
@@ -587,8 +593,9 @@ id: 9d3e7a1f-4b8c-4e2a-b6d9-5c1f8e3a7b4d
 status: experimental
 description: >-
   Detects a process whose reported CommandLine references
-  MicrosoftEdgeUpdate.exe while its Image path does not correspond to a
-  legitimate Microsoft Edge update installation directory. The
+  MicrosoftEdgeUpdate.exe while its Image path does not start with one of
+  the machine-wide Microsoft Edge update installation directories under
+  C:\Program Files (x86) or C:\Program Files. The
   arg_spoof.C module in the WebServer-Compromise-Kit-45.94.31.220
   toolkit overwrites the PEB CommandLine buffer with the hardcoded
   string 'MicrosoftEdgeUpdate.exe --update-check --silent' to spoof
@@ -603,6 +610,7 @@ references:
     - https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/
 author: The Hunters Ledger
 date: 2026-02-28
+modified: 2026-10-11
 tags:
     - attack.stealth
     - attack.t1036
@@ -615,16 +623,21 @@ detection:
     selection_spoof_cmdline:
         CommandLine|contains: 'MicrosoftEdgeUpdate.exe'
     filter_legitimate_edge_update:
-        Image|contains:
-            - '\Microsoft\EdgeUpdate\'
-            - '\Microsoft\Edge\Application\'
-            - '\Microsoft\Temp\EU'
+        Image|startswith:
+            # sourced: documented platform default, machine-wide Edge and EdgeUpdate install roots
+            - 'C:\Program Files (x86)\Microsoft\EdgeUpdate\'
+            - 'C:\Program Files (x86)\Microsoft\Edge\Application\'
+            - 'C:\Program Files\Microsoft\EdgeUpdate\'
+            - 'C:\Program Files\Microsoft\Edge\Application\'
+            # sourced: Edge updater self-staging path described in the false-positive note above
+            - 'C:\Program Files (x86)\Microsoft\Temp\EU'
     condition: selection_spoof_cmdline and not filter_legitimate_edge_update
 falsepositives:
     - >-
       Legitimate Microsoft Edge update processes running from
-      non-standard installation paths (uncommon but possible in
-      enterprise repackaging scenarios)
+      non-standard installation paths, including a per-user install under
+      a profile directory or Windows installed on a drive other than C:
+      (uncommon but possible in enterprise repackaging scenarios)
     - >-
       Security tooling that simulates Edge update processes for testing
       purposes

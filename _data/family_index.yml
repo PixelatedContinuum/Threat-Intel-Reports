@@ -38,9 +38,9 @@ families:
         report_url: /reports/sliver-open-directory/
         label: Sliver
         rules:
-          - MALW_ScareCrow_Go_Loader_OneDriveSync
           - MALW_Fraudulent_VMware_CodeSign_Cert_PE
           - MALW_Fraudulent_VMware_CodeSign_Cert_PEM
+          - MALW_ScareCrow_Go_Loader_OneDriveSync
           - MALW_UPX_Packed_Sliver_Variant
     feeds: []
     actors:
@@ -394,7 +394,6 @@ families:
         label: XWorm
         rules:
           - RAT_XWorm_30_50_Config
-          - RAT_XWorm_Rijndael256ECB_Crypto
       - url: /hunting-detections/opendirectory-74-0-42-25-20260316-detections
         title: ZeroTrace Multi-Family MaaS Operation (74.0.42.25)
         date: '2026-03-16'
@@ -436,7 +435,7 @@ families:
     tooling_labels:
       - XWorm
     report_count: 4
-    rule_count: 8
+    rule_count: 7
     feed_count: 1
     actor_count: 1
   - name: Quasar RAT
@@ -1250,8 +1249,8 @@ families:
           - GOCLOUD_Linux_Miner_v7
           - GOCLOUD_BatchExploit_Dispatcher
           - GOCLOUD_OmniHunter_v4_Orchestrator
-          - GOCLOUD_Listener2_Control_Plane
           - GOCLOUD_LAN_Probe_Attack_Banner
+          - GOCLOUD_Listener2_Control_Plane
     feeds: []
     actors:
       - UTA-2026-020
@@ -1781,10 +1780,10 @@ families:
           - MAL_PowerShell_Instana_Local_Collector_Family
           - MAL_Python_ARPA_Observability_Harvester_Platform
           - MAL_PSScript_Insider_TunnelSetup_Turkish
-          - MAL_Python_Instana_SolarWinds_Zabbix_VMwareAria_Polling
           - MAL_Python_ARPA_CrossSource_Correlation_ETL
           - MAL_Markdown_ARPA_OperatorNote_Family
           - MAL_SystemdUnit_ARPA_Platform_Services
+          - MAL_Python_Instana_SolarWinds_Zabbix_VMwareAria_Polling
           - MAL_Python_ARPA_AI_Service_NaturalLanguage_Query
     feeds:
       - url: /ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json
@@ -1838,6 +1837,9 @@ unmapped:
   - label: Generic JSP Web Shell
     where:
       - detection multivector-ecommerce-rce-toolkit-192-3-1-116-detections
+  - label: Generic-NET-Crypto-XWorm-Lead
+    where:
+      - detection shadow-xworm-opendirectory-detections
   - label: Ghost ASP Webshell
     where:
       - detection flaskc2-postex-toolkit-67-215-232-25-detections

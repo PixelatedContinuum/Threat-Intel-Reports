@@ -22,9 +22,9 @@ GOCLOUD is a two-node commodity cryptojacking operation: a payload host and expl
 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
-| YARA | 7 | 0 | T1036.005, T1564.001, T1496.001, T1071.001, T1190, T1596.005, T1021.002, T1053.005, T1543.002, T1571, T1685, T1105 | 40+ file hashes |
+| YARA | 6 | 1 | T1036.005, T1564.001, T1496.001, T1071.001, T1190, T1596.005, T1021.002, T1053.005, T1543.002, T1571, T1685, T1105 | 40+ file hashes |
 | Sigma | 6 | 5 | T1036.005, T1685, T1105, T1140, T1053.005, T1564.001, T1496.001, T1059.005, T1021.002, T1059.001, T1543.002 | task names, Run key, dropped paths |
-| Suricata | 4 | 1 | T1071.001, T1021.002, T1570, T1105 | 2 operator IPs, 9 URLs, 4 pool domains |
+| Suricata | 4 | 1 | T1071.001, T1041, T1105 | 2 operator IPs, 9 URLs, 4 pool domains |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting, and expect to review the hits.
 
@@ -258,49 +258,13 @@ rule GOCLOUD_OmniHunter_v4_Orchestrator {
 
 **GOCLOUD node-2 C2 + LAN probe**
 
-#### GOCLOUD_Listener2_Control_Plane
-
-**Tier:** Detection
-**Robustness:** 2
-**ATT&CK Coverage:** T1571 (Non-Standard Port), T1059.006 (Python), T1105 (Ingress Tool Transfer)
-**Confidence:** HIGH
-**False Positives:** None known. The CONTROL_PORT 9997 interface with `list` / `all:` broadcast verbs and the auto-pushed `id` on connect is distinctive controller code.
-**Blind Spots:** Misses the co-resident listener variants (`listener.py`, `fast_listener.py`) that were never captured, and any rewrite that changes the control port and verbs.
-**Validation:** Fire it against `listener2.py`; a benign netcat-style listener must NOT fire.
-**Deployment:** Server-side file scan on suspected C2 hosts.
-
-```yara
-rule GOCLOUD_Listener2_Control_Plane {
-   meta:
-      description = "Detects the GOCLOUD node-2 reverse-shell control plane (listener2.py) by its unauthenticated CONTROL_PORT 9997 operator interface, the list / all: broadcast verbs, the fixed 4444-8888 shell-catch port set, and the id command auto-pushed on every reverse-shell connect"
-      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
-      author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/"
-      date = "2026-07-26"
-      hash1 = "f800c809dfdc0ce22be0fe638734212380d99293fc466242b3fea6e6e858e9df"
-      family = "GOCLOUD"
-      malware_type = "Reverse-shell C2 controller"
-      id = "986a37d8-3e5f-511e-b6f7-3569e89a1c54"
-   strings:
-      $ctl     = "CONTROL_PORT" ascii
-      $port    = "9997" ascii
-      $verb1   = "all:" ascii
-      $verb2   = "list" ascii
-      $ports   = "4444" ascii
-      $auto    = "id\\n" ascii
-   condition:
-      filesize < 60KB and
-      $ctl and $port and 2 of ($verb1, $verb2, $ports, $auto)
-}
-```
-
 #### GOCLOUD_LAN_Probe_Attack_Banner
 
 **Tier:** Detection
 **Robustness:** 2
 **ATT&CK Coverage:** T1021.002 (SMB Admin Shares), T1570 (Lateral Tool Transfer)
 **Confidence:** HIGH
-**False Positives:** None known. The cleartext `=== ATTACK ===` banner with SMB / WMI / SCHTASKS result markers is unique to this probe.
+**False Positives:** None known. The cleartext `=== ATTACK ===` banner is required and is unique to this probe; the other six tokens (`SMB`, `WMI`, `SCHTASKS`, `OK!`, `ADMIN$`, `IPC$`) are bare strings, any three of which suffice, so the banner carries the specificity.
 **Blind Spots:** `a.py` writes only canary payloads (`calc.exe`, text files), so a match confirms the probe, not an active miner drop; a renamed banner would not match.
 **Validation:** Fire it against `a.py`; a benign SMB administration script must NOT fire.
 **Deployment:** Server-side file scan, retro-hunt across script corpora.
@@ -308,7 +272,7 @@ rule GOCLOUD_Listener2_Control_Plane {
 ```yara
 rule GOCLOUD_LAN_Probe_Attack_Banner {
    meta:
-      description = "Detects the GOCLOUD node-2 LAN lateral-movement probe (a.py) by its cleartext === ATTACK === report banner, the SMB / WMI / SCHTASKS OK result markers it posts back to the operator, and its sequential net use against C$ / ADMIN$ / IPC$ administrative shares"
+      description = "Detects the GOCLOUD node-2 LAN lateral-movement probe (a.py) by its cleartext === ATTACK === report banner plus any three of six bare tokens (SMB, WMI, SCHTASKS, OK!, ADMIN$, IPC$) taken from the result markers it posts back to the operator and the administrative share names it uses; the rule does not test for net use, share order or the C$ share, and does not pair a marker with OK!"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/"
@@ -331,6 +295,48 @@ rule GOCLOUD_LAN_Probe_Attack_Banner {
 }
 ```
 
+### Hunting Rules
+
+**GOCLOUD node-2 C2 + LAN probe**
+
+#### GOCLOUD_Listener2_Control_Plane
+
+**Tier:** Hunting
+**Robustness:** 1
+**ATT&CK Coverage:** T1571 (Non-Standard Port), T1059.006 (Python), T1105 (Ingress Tool Transfer)
+**Confidence:** MODERATE
+**Rationale:** Re-tiered from Detection to Hunting on 2026-10-11: both required anchors are operator-chosen constants (the `CONTROL_PORT` name and the number 9997), and the four supporting tokens are short and common, so one edit to either constant defeats the rule. That is the durability of a value the tool happens to use, not of the tool's behaviour (Robustness 1). No goodware corpus was run, so treat hits as leads.
+**False Positives:** None known. The rule requires the strings `CONTROL_PORT` and `9997`, plus any two of `all:`, `list`, `4444` and `id\n`; the last four are short common tokens, so a small script that holds a `CONTROL_PORT` constant set to 9997 together with any two of them would also match (none seen). Of the controller behaviour in the report, only that constant and port are required; the `list` and `all:` verbs, the 4444 shell-catch port and the `id` command pushed on connect are each optional.
+**Blind Spots:** Misses the co-resident listener variants (`listener.py`, `fast_listener.py`) that were never captured, and any rewrite that changes the control port or the `CONTROL_PORT` constant name. The report's shell-catch port set is 4444, 5555, 6666, 7777 and 8888; the rule tests only the literal `4444`.
+**Validation:** Fire it against `listener2.py`; a benign netcat-style listener must NOT fire.
+**Deployment:** Server-side file scan on suspected C2 hosts.
+
+```yara
+rule GOCLOUD_Listener2_Control_Plane {
+   meta:
+      description = "Detects the GOCLOUD node-2 reverse-shell control plane (listener2.py) by the CONTROL_PORT constant and the control port number 9997 of its unauthenticated operator interface, plus any two of four supporting strings: the all: broadcast verb, the list verb, the shell-catch port 4444 (the report's catch-port set is 4444 to 8888, but only 4444 is tested) and the id command text pushed on every reverse-shell connect"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
+      author = "The Hunters Ledger"
+      reference = "https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/"
+      date = "2026-07-26"
+      modified = "2026-10-11"
+      hash1 = "f800c809dfdc0ce22be0fe638734212380d99293fc466242b3fea6e6e858e9df"
+      family = "GOCLOUD"
+      malware_type = "Reverse-shell C2 controller"
+      id = "986a37d8-3e5f-511e-b6f7-3569e89a1c54"
+   strings:
+      $ctl     = "CONTROL_PORT" ascii
+      $port    = "9997" ascii
+      $verb1   = "all:" ascii
+      $verb2   = "list" ascii
+      $ports   = "4444" ascii
+      $auto    = "id\\n" ascii
+   condition:
+      filesize < 60KB and
+      $ctl and $port and 2 of ($verb1, $verb2, $ports, $auto)
+}
+```
+
 ---
 
 ## Sigma Rules
@@ -348,7 +354,7 @@ All rules use ATT&CK v19 tactic tags and pass SigmaHQ `sigma check` with 0 issue
 **ATT&CK Coverage:** T1036.005 (Match Legitimate Name or Location)
 **Confidence:** HIGH
 **False Positives:** Rare third-party software that ships a bundled binary literally named svchost.exe outside the system tree.
-**Blind Spots:** Misses a miner that keeps the binary inside System32 or masquerades under a different system-process name.
+**Blind Spots:** Misses a miner that keeps the binary inside System32, SysWOW64 or WinSxS (the filter is a `contains` test on the drive-rooted directory, so any subdirectory of the three is excluded too) or masquerades under a different system-process name.
 **Validation:** Run a renamed XMRig from `%APPDATA%\Microsoft\Windows\TimeService\svchost.exe` and confirm it fires; a genuine `C:\Windows\System32\svchost.exe` must NOT fire.
 **Deployment:** EDR / Sysmon Event ID 1.
 
@@ -357,7 +363,7 @@ title: Svchost.EXE Executed From Non-System Directory
 id: d1fb7553-97d4-45f2-a10b-3f36ed4a242b
 status: experimental
 description: >-
-    Detects svchost.exe executing from a path outside System32 or SysWOW64. The GOCLOUD
+    Detects svchost.exe executing from a path that does not contain the drive-rooted Windows System32, SysWOW64 or WinSxS directory (a path under any subdirectory of those three also counts as inside and does not match). The GOCLOUD
     cryptojacking toolkit renames its XMRig miner to svchost.exe and runs it from a
     TimeService folder under the user AppData tree, a masquerade legitimate Windows service
     host processes never perform.
@@ -893,7 +899,8 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT GOCLOUD-Cryptojac
 
 **Tier:** Detection
 **Robustness:** 2
-**ATT&CK Coverage:** T1021.002 (SMB / Windows Admin Shares), T1570 (Lateral Tool Transfer)
+**ATT&CK Coverage:** T1041 (Exfiltration Over C2 Channel)
+**ATT&CK Note:** The rule sees only the cleartext result report that `a.py` sends to the operator. The report maps the probe's SMB admin-share use and canary file copy to T1021.002 and T1570; those are the probe's behaviours (the YARA rule on the script fingerprints the file that performs them), and this network rule does not observe them, so they are not listed here.
 **Confidence:** HIGH
 **False Positives:** None known. The literal `=== ATTACK ===` banner followed by an `OK!` result marker is unique to the `a.py` probe.
 **Blind Spots:** Covers only the cleartext report path; an encrypted or reformatted banner evades.

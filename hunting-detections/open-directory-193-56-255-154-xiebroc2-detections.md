@@ -113,9 +113,9 @@ rule RAT_XiebroC2_v31_Go_TCP_Implant {
 **ATT&CK Note:** The strings are a session token, a build ID and four Covenant identifiers (including the `SESSIONID=` cookie fragment). None is a User-Agent or a key-exchange string, so Masquerading (T1036) and Asymmetric Cryptography (T1573.002) are not claimed.
 **Confidence:** HIGH
 **False Positives:** None known — the session token and build ID are GUID/hex-format values unique to this Covenant listener; no legitimate software embeds them.
-**Blind Spots:** A newly-configured Covenant listener with a different session token and build ID evades this rule entirely; targets on-disk .NET PE files, not memory-only Grunt payloads that never touch disk.
+**Blind Spots:** A newly-configured Covenant listener with a different session token and build ID evades this rule entirely; targets on-disk PE files under 50 KB (the condition tests the MZ header and size, not a .NET/CLR header), not memory-only Grunt payloads that never touch disk, and a build larger than 50 KB is missed.
 **Validation:** Scan either GruntStager build — both must match on the shared token+build-ID pair; an unrelated legitimate .NET PE must NOT fire.
-**Deployment:** Endpoint AV/EDR disk scan targeting .NET PE files; scanner for saved dumps of .NET processes performing `Assembly.Load()`. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
+**Deployment:** Endpoint AV/EDR disk scan of PE files under 50 KB (no .NET/CLR header test); scanner for saved dumps of .NET processes performing `Assembly.Load()`. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
 rule RAT_Covenant_GruntStager_OpenDirectory {

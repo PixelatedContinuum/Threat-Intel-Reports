@@ -26,7 +26,7 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 2 | 1 | T1555.003, T1620, T1055.001, T1106 | 0 |
-| Sigma | 2 | 2 | T1555.003, T1055.001, T1106 | 0 |
+| Sigma | 1 | 3 | T1555.003, T1055.001, T1106 | 0 |
 | Suricata | 0 | 0 | — | 0 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
@@ -297,29 +297,33 @@ falsepositives:
 level: high
 ```
 
-#### Non-Browser Process Access to Browser Credential Databases
+### Hunting Rules
 
-**Tier:** Detection
-**Robustness:** 2
+#### Non-Browser Process Creating Files at Browser Credential Database Paths
+
+**Tier:** Hunting
+**Robustness:** 1
 **ATT&CK Coverage:** T1555.003 (Credentials from Web Browsers)
-**Confidence:** HIGH
-**Rationale:** Keys on the browser profile file paths that any credential-theft tool must read regardless of its own name, a technique chokepoint that survives the operator renaming or rebuilding the tool. The specific-path selector's double-escaped backslashes have been corrected (see Coverage Gaps) so it now actually matches Cookies and Web Data access in addition to the generic Login Data path the original still caught.
-**False Positives:** Browser backup/sync tools, password managers, and system-recovery or migration tooling legitimately read the same files; the process and SYSTEM-user exclusions narrow this but do not eliminate it.
-**Blind Spots:** A process that spoofs or masquerades under one of the four excluded browser executable names, or credential theft performed by loading directly inside the browser process itself (see the Process Injection rule above, which is designed to catch that path instead), evades this file-access selector.
-**Validation:** Confirm the rule fires when a non-browser process reads Login Data, Cookies, or Web Data under a Chrome/Brave/Edge profile directory, and does not fire on the browsers' own processes or SYSTEM-context activity.
+**ATT&CK Note:** The rule observes a file-creation event at a browser credential-store path, not a read of the store, so T1555.003 names what the tool is after and not something the event proves.
+**Confidence:** MODERATE
+**Rationale:** The rule matches Sysmon `file_event` records (file creation or overwrite) whose path is a Chrome, Brave or Edge credential database (`Login Data` in any `User Data` directory, plus `Cookies`, `Network\Cookies` and `Web Data` under each browser's `Default` profile), written by a process that is not one of four browser executables and is not a SYSTEM-user process. A file-creation event does not record a read, and the page's summary describes this tool as injecting a payload into the browser process and extracting the stores from within it (its own memory space and SQLite stores), so the access that steals credentials is not visible to this rule. What the rule can see is a non-browser process creating or overwriting a file at those paths (a restore, a profile import or migration, or a side file such as `Login Data-journal`, which the generic branch also matches). That makes it a hunting lead and not the technique chokepoint the earlier text claimed: it moves from Detection to Hunting and from `level: high` to `medium`. The specific-path selector's double-escaped backslashes were corrected earlier (see Coverage Gaps), and this revision also adds `Web Data` for Brave and Edge and the `Network\Cookies` location that current Chromium builds use.
+**False Positives:** Browser backup and sync tools, password managers, profile migration or restore tools, and system-recovery tooling write into these paths; the browser-name and SYSTEM-user exclusions narrow this but do not eliminate it.
+**Blind Spots:** Does not see reads: a tool that opens or copies a credential database elsewhere, or that extracts the stores from the browser's own memory (the injection route documented for this tool; see the Process Injection rule above), creates no event at these paths. The image exclusion is by file name (`\chrome.exe`, `\brave.exe`, `\msedge.exe`, `\firefox.exe`), so a process of one of those names started from any directory is excluded too. Firefox profiles are not covered by the path selectors. The SYSTEM exclusion works only where the file-create event carries the `User` field (see `logsource.definition`).
+**Validation:** From a non-browser process, create `Login Data`, `Cookies` (also under `Network\`) or `Web Data` under the `Default` profile of Chrome, Brave or Edge: the rule must fire. The same file created by the browser's own process, or by a SYSTEM-user process, must NOT fire, and a process that only reads the file produces no event and does not fire.
+**Deployment:** Endpoint EDR (Sysmon Event ID 11 file creation), SIEM.
 
 ```yaml
-title: Suspicious Browser Credential Database Access
+title: Non-Browser Process File Creation at a Browser Credential Database Path
 id: 6c9e1d83-4b7f-4a2e-9c5d-3f8b2e6a1c05
 status: experimental
 description: >-
-        Detects access to Chrome/Brave/Edge credential databases by non-browser processes.
-        Restructured the original selection's invalid literal OR: subkey (not valid Sigma
-        syntax) into two named selections combined via the condition string; detection intent
-        is unchanged. The specific-path selector's TargetFilename patterns were also corrected
-        from double-escaped to single backslashes — the doubled backslashes, valid only inside
-        double-quoted YAML, could never match a real single-backslash Windows path when written
-        inside single-quoted scalars, which perform no escape processing at all.
+        Detects Sysmon file-creation events (file_event) at browser credential database
+        paths (Login Data, Cookies, Web Data) under Chrome, Brave and Edge profile
+        directories when the creating process is not one of the four browser executables
+        and not a SYSTEM-user process. A file_event records creation or overwrite, not
+        reads, so a tool that only reads these files is not seen. The specific-path
+        selector uses single backslashes: an earlier double-escaped form could never
+        match a real Windows path.
 references:
     - https://the-hunters-ledger.com/hunting-detections/arsenal-237-chromelevator-exe-detections/
 author: The Hunters Ledger
@@ -328,11 +332,15 @@ tags:
     - attack.credential-access
     - attack.t1555.003
     - detection.emerging-threats
-    - stp.3
+    - stp.2
 
 logsource:
     product: windows
     category: file_event
+    definition: >-
+        Requires Sysmon file-create events (Event ID 11) with the User field populated; where
+        User is absent the SYSTEM exclusion never applies. File creation and overwrite only:
+        reads of these files are not logged.
 
 detection:
     selection_browser_db_generic:
@@ -343,31 +351,35 @@ detection:
     selection_browser_db_specific:
         TargetFilename|contains:
             - 'Chrome\User Data\Default\Cookies'
+            - 'Chrome\User Data\Default\Network\Cookies'
+            - 'Chrome\User Data\Default\Web Data'
             - 'Brave-Browser\User Data\Default\Cookies'
+            - 'Brave-Browser\User Data\Default\Network\Cookies'
+            - 'Brave-Browser\User Data\Default\Web Data'
             - 'Edge\User Data\Default\Cookies'
-            - 'Google\Chrome\User Data\Default\Web Data'
+            - 'Edge\User Data\Default\Network\Cookies'
+            - 'Edge\User Data\Default\Web Data'
 
     selection_process_exclusion:
         Image|endswith:
-            - 'chrome.exe'
-            - 'brave.exe'
-            - 'msedge.exe'
-            - 'firefox.exe'
+            - '\chrome.exe'
+            - '\brave.exe'
+            - '\msedge.exe'
+            - '\firefox.exe'
 
     filter_system_process:
-        User|contains: 'SYSTEM'
+        # sourced: documented platform default (NT AUTHORITY\SYSTEM is the Windows service account; the exclusion is not from the report)
+        User|endswith: '\SYSTEM'
 
     condition: (selection_browser_db_generic or selection_browser_db_specific) and not (selection_process_exclusion or filter_system_process)
 
 falsepositives:
     - Browser backup/sync tools
-    - Password managers accessing browser data
-    - System recovery tools
+    - Password managers writing browser data
+    - System recovery and profile migration tools
 
-level: high
+level: medium
 ```
-
-### Hunting Rules
 
 #### chromelevator.exe Process Creation with Extraction Flags
 
@@ -491,16 +503,16 @@ No Detection or Hunting Suricata coverage is published for this campaign. chrome
 
 No network-based detection exists for this campaign because no network C2 channel has been observed; all inter-process communication runs over a local named pipe between chromelevator.exe and its injected payload. If a future Arsenal-237 component is confirmed to exfiltrate the extracted credentials over the network, network coverage should be revisited against that component's actual traffic rather than against chromelevator.exe itself.
 
-Rule conservation: the original draft contained 3 YARA, 5 Sigma, and 2 Suricata rules (10 total). This pass produced 4 Detection (2 YARA, 2 Sigma), 3 Hunting (1 YARA, 2 Sigma), and 3 Cut (1 Sigma, 2 Suricata), with 0 rules demoted to new IOC-feed atomics; 4 + 3 + 3 = 10.
+Rule conservation: the original draft contained 3 YARA, 5 Sigma, and 2 Suricata rules (10 total). This pass produced 3 Detection (2 YARA, 1 Sigma), 4 Hunting (1 YARA, 3 Sigma), and 3 Cut (1 Sigma, 2 Suricata), with 0 rules demoted to new IOC-feed atomics; 3 + 4 + 3 = 10. (The credential-database file-event Sigma rule was moved from Detection to Hunting in the 2026-10-11 consistency pass: a file-creation event does not see reads.)
 
 ### Retiering Fixes Applied
 
 - **Goodware-collision risk documented (YARA, Browser Credential Extraction Multi-Signal Combination):** the branch `3 of (chrome.exe, brave.exe, msedge.exe) and 2 of (Extracted, cookies, passwords, payments)` can be satisfied by a legitimate Chromium-based browser binary: Chrome/Brave/Edge ship an import-from-other-browser feature that references sibling browser executable names, and their own Settings UI contains the literal strings "cookies", "passwords", and "payments". This keeps the rule at Hunting; the filename+payload branch remains the reliable path to a true positive. See the rule's False Positives field above for the full reasoning.
-- **Over-escaped backslash bug fixed (Sigma, Non-Browser Process Access to Browser Credential Databases):** the `selection_browser_db_specific` list originally used doubled backslashes (`'Chrome\\User Data\\Default\\Cookies'`) inside single-quoted YAML scalars. Single-quoted YAML performs no escape processing, so the doubled backslashes were literal, and the selector was searching for a double-backslash path that never appears in a real Windows path. In practice the rule still caught password-database access via the generic `selection_browser_db_generic` branch (which only requires the substrings "User Data" and "Login Data"), but Cookies and Web Data access, the browser's session-token and payment-data stores, were silently unreachable through the specific-path branch. Corrected to single backslashes so the specific-path branch now matches as originally intended.
+- **Over-escaped backslash bug fixed (Sigma, Non-Browser Process Creating Files at Browser Credential Database Paths):** the `selection_browser_db_specific` list originally used doubled backslashes (`'Chrome\\User Data\\Default\\Cookies'`) inside single-quoted YAML scalars. Single-quoted YAML performs no escape processing, so the doubled backslashes were literal, and the selector was searching for a double-backslash path that never appears in a real Windows path. In practice the rule still caught password-database access via the generic `selection_browser_db_generic` branch (which only requires the substrings "User Data" and "Login Data"), but Cookies and Web Data access, the browser's session-token and payment-data stores, were silently unreachable through the specific-path branch. Corrected to single backslashes so the specific-path branch now matches as originally intended.
 - **ATT&CK retag (Sigma, Direct Syscall Usage Targeting Browser Processes):** the rule detects direct Zw*/Nt* syscall invocation, which maps primarily to T1106 (Native API); the original tag set carried only attack.t1622 (Debugger Evasion), a plausible secondary effect but not the primary technique. Added attack.t1106 alongside the existing tag rather than replacing it.
 - **Two Suricata network signatures cut:** "Named Pipe C2 Communication Pattern" (sid 1000001) matched the literal string "VERBOSE_" in `file_data` over any TCP connection in either direction, a signature with no basis in the malware's documented behavior (named pipes are local IPC and do not traverse TCP/IP; no source string resembling "VERBOSE_" appears anywhere else in the sample's documented strings). "Potential Credential Exfiltration - Large Data Transfer" (sid 1000002) matched any HTTP POST whose URI contains "credentials", explicitly flagged in the original draft's own text as speculative ("would detect C2 communication... if integrated with other campaign components") rather than based on observed traffic, and broad enough to match ubiquitous legitimate API endpoints (password-reset flows, credential-management REST APIs). Both fail Gate 2 on ungrounded/overbroad grounds and were cut outright; neither had an atomic IP, domain, or URI to route to the feed instead.
 - **Sigma "Named Pipe Creation - Reflective Injection C2" cut:** `PipeName|contains: '\\.\pipe\'` matches the standard prefix present on essentially every Windows named pipe, and the source-process selector (`chromelevator.exe` OR `explorer.exe` OR `svchost.exe`) includes two of the most common pipe-creating processes on any healthy system as part of normal service and shell operation. The four-entry exclusion list (lsass/winlogon/winspool/netdde) does not come close to covering the legitimate universe of svchost.exe/explorer.exe pipe creation, so the rule as published would fire continuously in production. The narrow chromelevator.exe-only sub-case adds no detection value beyond the Process Creation rule above, which already covers that process's execution.
-- **Severity/level recalibration:** the original draft marked every YARA rule "CRITICAL" and most Sigma rules "critical" regardless of documented false-positive exposure. Per Gate 4 (critical = never-FP + high relevance), every surviving rule was recalibrated against its actual FP profile: the two Detection-tier YARA rules moved from CRITICAL to HIGH, the Hunting-tier YARA rule moved from CRITICAL to MEDIUM, and the two Hunting-tier Sigma rules moved from critical to medium. The two Detection-tier Sigma rules were already at the appropriate `high` and needed no change.
+- **Severity/level recalibration:** the original draft marked every YARA rule "CRITICAL" and most Sigma rules "critical" regardless of documented false-positive exposure. Per Gate 4 (critical = never-FP + high relevance), every surviving rule was recalibrated against its actual FP profile: the two Detection-tier YARA rules moved from CRITICAL to HIGH, the Hunting-tier YARA rule moved from CRITICAL to MEDIUM, and the two Hunting-tier Sigma rules moved from critical to medium. The two Detection-tier Sigma rules were already at the appropriate `high` and needed no change at that time (the credential-database file-event rule was later moved to Hunting at `medium`).
 
 ---
 

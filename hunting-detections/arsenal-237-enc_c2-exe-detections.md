@@ -56,14 +56,14 @@ Coverage below is retiered from the original draft against the project's Detecti
 **ATT&CK Coverage:** T1071.001 (Web Protocols — C2 JSON schema), T1486 (Data Encrypted for Impact — `encryption_key` field)
 **Confidence:** HIGH
 **Rationale:** The rule ORs two branches. The second — `builder_id` + `encryption_key` + `victim_id` + `machine_info` co-occurring — is the malware's specific C2/builder-tracking JSON field-name schema; this four-way combination survives a rebuild with a different builder ID, a different onion address, or a renamed binary, since it doesn't depend on any of those. The first branch (`TEST_BUILD_001` + `builder_id`) is weaker in isolation but only widens coverage for this specific beta build without weakening the combination's overall precision.
-**False Positives:** None expected; unrelated software would need to coincidentally embed all four exact JSON field-name strings together, which is not a pattern seen outside this RaaS builder's schema.
+**False Positives:** None expected for the four-field branch: unrelated software would need to coincidentally embed `builder_id`, `victim_id`, `encryption_key` and `machine_info` together, which is not a pattern seen outside this RaaS builder's schema. The first branch needs only `TEST_BUILD_001` and `builder_id`. The rule has no file-type or size gate, so any file that holds those strings matches, including a report or analysis note that quotes the schema.
 **Blind Spots:** Won't match a build that obfuscates or encrypts its JSON field-name strings, or that replaces the JSON/serde schema with a binary serialization format.
 **Validation:** Verified against the confirmed sample's embedded C2 beacon schema (`builder_id`, `victim_id`, `encryption_key`, `machine_info` fields) and the `TEST_BUILD_001` identifier documented in static analysis.
 
 ```yara
 rule raas_builder_tracking {
     meta:
-        description = "Detects the Arsenal-237 ransomware's RaaS builder/C2 JSON schema (builder_id, victim_id, encryption_key, machine_info) or the confirmed TEST_BUILD_001 builder identifier"
+        description = "Detects the Arsenal-237 ransomware's RaaS builder/C2 JSON schema (builder_id, victim_id, encryption_key, machine_info) or the confirmed TEST_BUILD_001 builder identifier together with the builder_id field name"
         author = "The Hunters Ledger"
         reference = "https://the-hunters-ledger.com/hunting-detections/arsenal-237-enc_c2-exe-detections/"
         date = "2026-01-26"
@@ -394,19 +394,19 @@ tags:
 
 ### Detection Rules
 
-#### Tor C2 Beacon POST to /c2/beacon.php
+#### C2 Beacon POST to /c2/beacon.php (Host Not Tested)
 
 **Tier:** Detection
 **Robustness:** 2
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1090.003 (Multi-hop Proxy)
 **Confidence:** HIGH
 **Rationale:** The published rule matched `.onion` in the `http_uri` buffer, but a standard request to this C2 (`POST /c2/beacon.php` with the domain in the `Host` header) never places `.onion` in the URI, so the AND-combined content match could not fire against the malware's own documented traffic shape — and there was no content match for `/c2/beacon.php` at all despite it being named in `msg`. Rewritten to match the actual beacon path in the URI buffer and drop the redundant exact-domain `http_host` match (already carried in the IOC feed), which also makes the signature resilient to onion-address rotation.
-**False Positives:** Unlikely; requires a POST to this exact URI path with a JSON content type.
-**Blind Spots:** Same Tor-visibility requirement as the Sigma equivalent — needs a sensor that resolves the HTTP layer of Tor-hidden-service traffic; anchored to the `/c2/beacon.php` URI convention, so a rebuilt variant using a different endpoint path evades it.
+**False Positives:** Unlikely; requires a POST whose URI contains `/c2/beacon.php` (an unanchored substring, so a longer path or a query string that contains it also matches) and a header block containing `Content-Type: application/json`.
+**Blind Spots:** The rule tests no `.onion` host and no Tor marker: it fires on a POST to `/c2/beacon.php` with a JSON `Content-Type` to any external host, so a Tor hit and an ordinary-web hit look the same to it. It only sees traffic on a sensor that resolves the HTTP layer, which for a Tor-hidden-service C2 means a Tor-aware proxy or onion-resolving sensor, as for the Sigma equivalent. It is anchored to the `/c2/beacon.php` URI convention, so a rebuilt variant using a different endpoint path evades it.
 **Validation:** Verified against the confirmed C2 beacon's HTTP method, URI, and Content-Type header as documented in static analysis.
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT RANSOMWARE enc_c2.exe Tor C2 Beacon - POST /c2/beacon.php"; flow:to_server,established; http.method; content:"POST"; http.uri; content:"/c2/beacon.php"; http.header; content:"Content-Type: application/json"; reference:url,the-hunters-ledger.com/hunting-detections/arsenal-237-enc_c2-exe-detections/; classtype:trojan-activity; metadata:author The_Hunters_Ledger, date 2026-01-26; sid:9301201; rev:3;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT RANSOMWARE enc_c2.exe C2 Beacon - POST /c2/beacon.php (Host Not Tested)"; flow:to_server,established; http.method; content:"POST"; http.uri; content:"/c2/beacon.php"; http.header; content:"Content-Type: application/json"; reference:url,the-hunters-ledger.com/hunting-detections/arsenal-237-enc_c2-exe-detections/; classtype:trojan-activity; metadata:author The_Hunters_Ledger, date 2026-01-26; sid:9301201; rev:4;)
 ```
 
 ---

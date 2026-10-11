@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--3981f127-628a-44be-a790-ab1f4b935229",
+    "id": "bundle--1b09f678-022b-4fcf-982c-ad9fcb5e1ca3",
     "objects": [
         {
             "type": "identity",
@@ -1132,12 +1132,12 @@
             "id": "indicator--ea46ebd6-e86b-5bc7-9816-26048fd4b8a2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.203501Z",
-            "modified": "2026-10-01T19:54:19.203501Z",
+            "modified": "2026-10-11T14:08:39.531856Z",
             "name": "MAL_JSON_Rovodev_SessionContext_FileWrite_Authoring",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule MAL_JSON_Rovodev_SessionContext_FileWrite_Authoring {\n   meta:\n      description = \"Detects operator-exposed Atlassian Rovodev AI coding agent session artifacts (session_context.json / rovodev.log) containing file_write tool calls with offensive Python initial_content payloads, gated on a co-occurring Matrix C2 content marker to exclude benign Rovodev sessions.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/\"\n      date = \"2026-05-26\"\n      hash1 = \"9eece9f46bc420b53884d4292622621c9960459c1d7a73635420771e7d0aa1fa\"\n      family = \"Rovodev Operator Artifacts\"\n      malware_type = \"AI Coding Agent Session Artifact\"\n      campaign = \"UTA-2026-014\"\n      id = \"826c0fe7-b1fc-5689-9fd7-69e2abc40277\"\n   strings:\n      $session_key = \"session_context\" ascii\n      $tool_call   = \"file_write\" ascii\n      $init_content = \"initial_content\" ascii\n      $rovo_log    = \"rovodev.log\" ascii\n      $py_shebang  = \"#!/usr/bin/env python3\" ascii\n      $mass_infect = \"Launch mass infection campaign\" ascii\n      $c2_header   = \"MATRIX C2\" ascii\n   condition:\n      filesize < 2MB and\n      (\n         ($session_key and $tool_call and $init_content and $py_shebang and ($mass_infect or $c2_header)) or\n         ($tool_call and $mass_infect) or\n         ($rovo_log and $c2_header)\n      )\n}",
+            "pattern": "rule MAL_JSON_Rovodev_SessionContext_FileWrite_Authoring {\n   meta:\n      description = \"Detects operator-exposed Atlassian Rovodev AI coding agent session artifacts that carry a Matrix C2 content marker (the phrase Launch mass infection campaign, or the banner MATRIX C2) in one of three combinations: a session_context file with a file_write tool call, an initial_content payload and a Python shebang; the phrase together with file_write (no session_context or payload test); or rovodev.log together with the MATRIX C2 banner. Only the first combination requires the file_write initial_content payload. A marker is always required, which excludes benign Rovodev sessions.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/\"\n      date = \"2026-05-26\"\n      hash1 = \"9eece9f46bc420b53884d4292622621c9960459c1d7a73635420771e7d0aa1fa\"\n      family = \"Rovodev Operator Artifacts\"\n      malware_type = \"AI Coding Agent Session Artifact\"\n      campaign = \"UTA-2026-014\"\n      id = \"826c0fe7-b1fc-5689-9fd7-69e2abc40277\"\n   strings:\n      $session_key = \"session_context\" ascii\n      $tool_call   = \"file_write\" ascii\n      $init_content = \"initial_content\" ascii\n      $rovo_log    = \"rovodev.log\" ascii\n      $py_shebang  = \"#!/usr/bin/env python3\" ascii\n      $mass_infect = \"Launch mass infection campaign\" ascii\n      $c2_header   = \"MATRIX C2\" ascii\n   condition:\n      filesize < 2MB and\n      (\n         ($session_key and $tool_call and $init_content and $py_shebang and ($mass_infect or $c2_header)) or\n         ($tool_call and $mass_infect) or\n         ($rovo_log and $c2_header)\n      )\n}",
             "pattern_type": "yara",
             "valid_from": "2026-05-26T00:00:00Z",
             "labels": [
@@ -1195,12 +1195,12 @@
             "id": "indicator--11971737-7145-51a3-aa91-758c1786accc",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.203648Z",
-            "modified": "2026-10-11T03:15:40.184646Z",
+            "modified": "2026-10-11T14:08:39.532159Z",
             "name": "MAL_Python_AIGenerated_OffensiveCode_Universal_Subset",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule MAL_Python_AIGenerated_OffensiveCode_Universal_Subset {\n   meta:\n      description = \"Cross-operator detection for AI-generated offensive Python code using the 5-criteria universal subset confirmed across 3 independent operators (Russian Gemini, Turkish ARPA, English Rovodev). Detects co-occurrence of verbose docstrings, bare-except handlers, educational variable naming, emoji-in-output bleed, and version-numbered iteration chains. High FP risk in isolation; requires multi-criteria co-occurrence gate — analyst triage, not automated block.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/\"\n      date = \"2026-05-26\"\n      modified = \"2026-10-10\"\n      hash1 = \"64ca12cae6f5e520abb4158da3bbc14e909c2128748ae0c5806fa4206cc14260\"\n      family = \"AI-Generated Offensive Code\"\n      malware_type = \"Offensive Python (AI-authored)\"\n      campaign = \"ai-agent-frameworks-2026-05-23\"\n      id = \"38aeca8a-3dad-5b61-9787-a14edf92a250\"\n   strings:\n      $bare_except1 = \"except:\" ascii\n      $bare_except2 = \"except Exception:\" ascii\n      $bare_pass    = /except[^\\n]*:\\s*\\n\\s*pass/ ascii\n      $doc_attack   = /def \\w+_attack\\w*\\(.*\\):\\s*\\n\\s+\\x22\\x22\\x22/ ascii\n      $doc_flood    = /def \\w+_flood\\w*\\(.*\\):\\s*\\n\\s+\\x22\\x22\\x22/ ascii\n      $doc_scan     = /def \\w+_scan\\w*\\(.*\\):\\s*\\n\\s+\\x22\\x22\\x22/ ascii\n      $doc_infect   = /def \\w+_infect\\w*\\(.*\\):\\s*\\n\\s+\\x22\\x22\\x22/ ascii\n      $emoji_fire   = \"\\xf0\\x9f\\x94\\xa5\" ascii\n      $emoji_rocket = \"\\xf0\\x9f\\x9a\\x80\" ascii\n      $emoji_check  = \"\\xe2\\x9c\\x85\"     ascii\n      $ver_chain_v2 = \"_v2.\" ascii\n      $ver_chain_v3 = \"_v3.\" ascii\n      $ver_chain_v4 = \"_v4.\" ascii\n      $ctx_ddos  = \"ddos\" nocase ascii\n      $ctx_flood = \"flood\" nocase ascii\n      $ctx_brute = \"brute\" nocase ascii\n      $ctx_infect = \"infect\" nocase ascii\n      $ctx_cnc   = \"cnc\" nocase ascii\n   condition:\n      filesize < 500KB and\n      (uint16(0) == 0x2123 or $bare_except1 or $bare_except2) and\n      (1 of ($ctx_*)) and\n      (\n         ($bare_pass and 1 of ($doc_*)) or\n         (1 of ($emoji_*) and 1 of ($doc_*)) or\n         (2 of ($ver_chain_v2, $ver_chain_v3, $ver_chain_v4) and 1 of ($doc_*))\n      )\n}",
+            "pattern": "rule MAL_Python_AIGenerated_OffensiveCode_Universal_Subset {\n   meta:\n      description = \"Cross-operator hunting rule for AI-generated offensive Python, drawn from the 5-criteria universal subset confirmed across 3 independent operators (Russian Gemini, Turkish ARPA, English Rovodev). Requires a DDoS-style context word (ddos, flood, brute, infect or cnc) and a function named *_attack, *_flood, *_scan or *_infect whose body opens with a docstring, plus one of three corroborators: a bare except handler followed by pass, an emoji (fire, rocket or check mark), or two of the version-numbered file-name markers _v2., _v3. and _v4. A file that starts with a shebang satisfies the bare-except clause without any except string. Educational variable naming, one of the five criteria, has no string and is not tested. High FP risk in isolation; analyst triage, not automated block.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/\"\n      date = \"2026-05-26\"\n      modified = \"2026-10-10\"\n      hash1 = \"64ca12cae6f5e520abb4158da3bbc14e909c2128748ae0c5806fa4206cc14260\"\n      family = \"AI-Generated Offensive Code\"\n      malware_type = \"Offensive Python (AI-authored)\"\n      campaign = \"ai-agent-frameworks-2026-05-23\"\n      id = \"38aeca8a-3dad-5b61-9787-a14edf92a250\"\n   strings:\n      $bare_except1 = \"except:\" ascii\n      $bare_except2 = \"except Exception:\" ascii\n      $bare_pass    = /except[^\\n]*:\\s*\\n\\s*pass/ ascii\n      $doc_attack   = /def \\w+_attack\\w*\\(.*\\):\\s*\\n\\s+\\x22\\x22\\x22/ ascii\n      $doc_flood    = /def \\w+_flood\\w*\\(.*\\):\\s*\\n\\s+\\x22\\x22\\x22/ ascii\n      $doc_scan     = /def \\w+_scan\\w*\\(.*\\):\\s*\\n\\s+\\x22\\x22\\x22/ ascii\n      $doc_infect   = /def \\w+_infect\\w*\\(.*\\):\\s*\\n\\s+\\x22\\x22\\x22/ ascii\n      $emoji_fire   = \"\\xf0\\x9f\\x94\\xa5\" ascii\n      $emoji_rocket = \"\\xf0\\x9f\\x9a\\x80\" ascii\n      $emoji_check  = \"\\xe2\\x9c\\x85\"     ascii\n      $ver_chain_v2 = \"_v2.\" ascii\n      $ver_chain_v3 = \"_v3.\" ascii\n      $ver_chain_v4 = \"_v4.\" ascii\n      $ctx_ddos  = \"ddos\" nocase ascii\n      $ctx_flood = \"flood\" nocase ascii\n      $ctx_brute = \"brute\" nocase ascii\n      $ctx_infect = \"infect\" nocase ascii\n      $ctx_cnc   = \"cnc\" nocase ascii\n   condition:\n      filesize < 500KB and\n      (uint16(0) == 0x2123 or $bare_except1 or $bare_except2) and\n      (1 of ($ctx_*)) and\n      (\n         ($bare_pass and 1 of ($doc_*)) or\n         (1 of ($emoji_*) and 1 of ($doc_*)) or\n         (2 of ($ver_chain_v2, $ver_chain_v3, $ver_chain_v4) and 1 of ($doc_*))\n      )\n}",
             "pattern_type": "yara",
             "valid_from": "2026-05-26T00:00:00Z",
             "labels": [
@@ -1321,12 +1321,12 @@
             "id": "indicator--71cbcb9f-6aef-5935-972c-14c7144d2978",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.204171Z",
-            "modified": "2026-10-01T19:54:19.204171Z",
+            "modified": "2026-10-11T14:08:39.532768Z",
             "name": "BusyBox SORA Marker Execution — Sora-Derivative Mirai-Fork Active on Host",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: BusyBox SORA Marker Execution — Sora-Derivative Mirai-Fork Active on Host\nid: 625a0af0-2c6e-48b5-89ea-0c7e6b191147\nstatus: experimental\ndescription: >-\n  Detects execution of the '/bin/busybox SORA' command, which is the Sora-fork Mirai-derivative lineage signature. Decoded from XOR-0x54 region in all 11 Naku/Pandora-Mirai architectures (UTA-2026-014), replacing stock Mirai's '/bin/busybox MIRAI'. The Mirai bot calls this as part of its process enumeration and competitor-kill routine. Any process executing '/bin/busybox SORA' indicates active Sora-derivative bot execution on the host.\nreferences:\n    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.execution\n    - attack.t1059.004\n    - attack.command-and-control\n    - attack.t1095\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: process_creation\n    product: linux\ndetection:\n    selection:\n        CommandLine|contains: '/bin/busybox SORA'\n    condition: selection\nfalsepositives:\n    - Unlikely — '/bin/busybox SORA' is not a valid busybox applet call and has no legitimate use\nlevel: high",
+            "pattern": "title: BusyBox SORA Marker Execution — Sora-Derivative Mirai-Fork Active on Host\nid: 625a0af0-2c6e-48b5-89ea-0c7e6b191147\nstatus: experimental\ndescription: >-\n  Detects execution of the '/bin/busybox SORA' command, which is the Sora-fork Mirai-derivative lineage signature. Decoded from XOR-0x54 region in all 11 Naku/Pandora-Mirai architectures (UTA-2026-014), replacing stock Mirai's '/bin/busybox MIRAI'. The Mirai bot calls this as part of its process enumeration and competitor-kill routine. Any process executing '/bin/busybox SORA' indicates active Sora-derivative bot execution on the host.\nreferences:\n    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.execution\n    - attack.t1059.004\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: process_creation\n    product: linux\ndetection:\n    selection:\n        CommandLine|contains: '/bin/busybox SORA'\n    condition: selection\nfalsepositives:\n    - Unlikely — '/bin/busybox SORA' is not a valid busybox applet call and has no legitimate use\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-05-26T00:00:00Z",
             "labels": [
@@ -1405,12 +1405,12 @@
             "id": "indicator--25ca63e0-4b15-5dea-aa67-bf46f23f0b62",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.204389Z",
-            "modified": "2026-10-01T19:54:19.204389Z",
+            "modified": "2026-10-11T14:08:39.53319Z",
             "name": "Naku/Pandora-Mirai Operator-Bespoke 22-Char Charset String — Family Tracking Signature",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Naku/Pandora-Mirai Operator-Bespoke 22-Char Charset String — Family Tracking Signature\nid: c9d201aa-2fbb-4e1e-b269-76cf28670998\nstatus: experimental\ndescription: >-\n  Detects the operator-bespoke 22-character random-string charset '1gba4cdom53nhp12ei0kfj' in process command lines. This string is present in all 11 architectures of the Naku/Pandora-Mirai ELF botnet (UTA-2026-014) — both XOR-0x54 encoded in stripped production builds and in plaintext in the arm7 debug build. It is not observed in any other host in threat intelligence indexing, but is a single-build constant that a future release would regenerate, and its practical appearance in a literal process command line (versus binary content) is unconfirmed — treat as a hunting lead; the companion YARA rule is the primary detection surface.\nreferences:\n    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.stealth\n    - attack.t1027\n    - attack.command-and-control\n    - attack.t1095\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: linux\ndetection:\n    selection:\n        CommandLine|contains: '1gba4cdom53nhp12ei0kfj'\n    condition: selection\nfalsepositives:\n    - Unlikely — this string is operator-bespoke and not used in any known legitimate software\nlevel: medium",
+            "pattern": "title: Naku/Pandora-Mirai Operator-Bespoke 22-Char Charset String — Family Tracking Signature\nid: c9d201aa-2fbb-4e1e-b269-76cf28670998\nstatus: experimental\ndescription: >-\n  Detects the operator-bespoke 22-character random-string charset '1gba4cdom53nhp12ei0kfj' in process command lines. This string is present in all 11 architectures of the Naku/Pandora-Mirai ELF botnet (UTA-2026-014) — both XOR-0x54 encoded in stripped production builds and in plaintext in the arm7 debug build. It is not observed in any other host in threat intelligence indexing, but is a single-build constant that a future release would regenerate, and its practical appearance in a literal process command line (versus binary content) is unconfirmed — treat as a hunting lead; the companion YARA rule is the primary detection surface.\nreferences:\n    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - detection.emerging-threats\n    - stp.2\nlogsource:\n    category: process_creation\n    product: linux\ndetection:\n    selection:\n        CommandLine|contains: '1gba4cdom53nhp12ei0kfj'\n    condition: selection\nfalsepositives:\n    - Unlikely — this string is operator-bespoke and not used in any known legitimate software\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-05-26T00:00:00Z",
             "labels": [
@@ -1570,15 +1570,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--692ed72a-edc8-5895-9fd4-fdd30214dff0",
+            "id": "indicator--697d4839-5efa-5496-9503-63cc7160e42e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:19.204976Z",
-            "modified": "2026-10-09T13:20:11.325765Z",
-            "name": "THL HUNT UTA-2026-014 keyosbuff C2-Leak Repository Reference in HTTP URI (Operator OPSEC Artifact)",
+            "created": "2026-10-11T14:08:39.534053Z",
+            "modified": "2026-10-11T14:08:39.534053Z",
+            "name": "THL HUNT UTA-2026-014 keyosbuff Handle Substring in HTTP URI (C2-Leak Repository Owner Lead)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> any any (msg:\"THL HUNT UTA-2026-014 keyosbuff C2-Leak Repository Reference in HTTP URI (Operator OPSEC Artifact)\"; flow:established,to_server; http.uri; content:\"keyosbuff\"; nocase; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:9300502; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)",
+            "pattern": "alert http $HOME_NET any -> any any (msg:\"THL HUNT UTA-2026-014 keyosbuff Handle Substring in HTTP URI (C2-Leak Repository Owner Lead)\"; flow:established,to_server; http.uri; content:\"keyosbuff\"; nocase; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:9300502; rev:4; metadata:author The_Hunters_Ledger, date 2026-05-26;)",
             "pattern_type": "suricata",
             "valid_from": "2026-05-26T00:00:00Z",
             "labels": [
@@ -3942,12 +3942,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--d1a83c8d-5fae-5ba8-b081-16385416b4c1",
+            "id": "relationship--0532518a-537c-54c1-b2a3-fbe24052d39f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:19.217351Z",
-            "modified": "2026-10-01T19:54:19.217351Z",
+            "created": "2026-10-11T14:08:39.55245Z",
+            "modified": "2026-10-11T14:08:39.55245Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--692ed72a-edc8-5895-9fd4-fdd30214dff0",
+            "source_ref": "indicator--697d4839-5efa-5496-9503-63cc7160e42e",
             "target_ref": "malware--e1ff3c5a-931c-52e6-af27-abf72a92bc1f",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -22173,7 +22173,7 @@
             "id": "report--d6a3df6a-be77-50bd-8c19-3b3a9455ec93",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.297515Z",
-            "modified": "2026-10-11T08:16:40.399912Z",
+            "modified": "2026-10-11T14:08:39.683597Z",
             "name": "Rovodev AI Co-Authored Mirai Variant + Matrix C2 Framework — UTA-2026-014 (Pandora 11-Arch IoT Botnet + DDoS-as-a-Service)",
             "report_types": [
                 "threat-report"
@@ -22278,7 +22278,7 @@
                 "indicator--f8803dfb-8ead-5ba8-be9e-bfce4b8a02a5",
                 "indicator--6b1af4f8-309f-5b33-82b6-2d673a7e0b1d",
                 "indicator--cd8a9b6d-462b-5ad3-b8bd-a88be1c1a2b2",
-                "indicator--692ed72a-edc8-5895-9fd4-fdd30214dff0",
+                "indicator--697d4839-5efa-5496-9503-63cc7160e42e",
                 "indicator--b8e90a8f-5e03-5af6-862f-5cb8c530c828",
                 "indicator--492667a7-75ef-51c7-bc2b-a0bfd74e201e",
                 "indicator--ab653c7e-4e3a-542b-8863-6fa1513035b0",
@@ -22424,7 +22424,7 @@
                 "relationship--b38f26c7-5b46-5f40-ac2e-2a52e19e302a",
                 "relationship--ffd1df1d-1e5c-5fd9-af81-64a7e8be94b3",
                 "relationship--1fead28e-b803-53d6-96a4-66261d1d4390",
-                "relationship--d1a83c8d-5fae-5ba8-b081-16385416b4c1",
+                "relationship--0532518a-537c-54c1-b2a3-fbe24052d39f",
                 "relationship--318b1da9-2f14-57a9-a29c-3d9dee6e4d94",
                 "relationship--cb9803c1-634b-5079-a9d7-e42909973fca",
                 "relationship--71032ad1-02ed-551b-8f60-e0d6ece425e2",

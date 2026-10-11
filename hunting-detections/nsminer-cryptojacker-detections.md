@@ -24,7 +24,7 @@ NsMiner is a multi-stage cryptojacking operation delivered via a trojanized NSIS
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 2 | 0 | T1105, T1071.002, T1496 | 0 |
-| Sigma | 0 | 2 | T1547.001, T1071.002 | 1 |
+| Sigma | 0 | 2 | T1071.002 | 1 |
 | Suricata | 0 | 0 | — | 0 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
@@ -137,23 +137,24 @@ rule NsMiner_Persistence_Directory {
 
 ### Hunting Rules
 
-#### NsMiner Persistence Directory Creation
+#### File Event Under the NsMiner AppData Roaming Directory
 
 **Tier:** Hunting
 **Robustness:** 1
-**ATT&CK Coverage:** T1547.001 (Registry Run Keys / Startup Folder — MODERATE; only the persistence-staging directory is confirmed, the specific autostart mechanism was not directly observed)
-**Confidence:** HIGH (directory-creation behavior); MODERATE for the T1547.001 sub-technique mapping specifically.
+**ATT&CK Coverage:** None
+**ATT&CK Note:** T1547.001 (Registry Run Keys / Startup Folder) was listed here at MODERATE and is withdrawn. The rule tests a file event under a family-branded directory; nothing in it observes a Run key or a Startup folder, and the specific autostart mechanism was never observed (see Coverage Gaps). The rule keeps the persistence tactic tag only, for the report's staging-directory finding, without a technique.
+**Confidence:** HIGH (a file event under the NsMiner directory is observed); the autostart mechanism is not covered.
 **Rationale:** `\AppData\Roaming\NsMiner\` is a distinctive, family-branded path with near-zero FP today, but it is a single operator-chosen literal — any rebuild that renames the install directory evades this rule entirely. Durability governs over as-written precision, so this is a Hunting anchor rather than a Detection one.
-**False Positives:** Unlikely — no legitimate software has been observed creating a directory literally named `NsMiner` under `%AppData%\Roaming`.
+**False Positives:** Unlikely — no legitimate software has been observed writing a file under a directory literally named `NsMiner` in `%AppData%\Roaming`. The rule matches any file event whose path contains `\AppData\Roaming\NsMiner\`; it does not test that a directory was created, only that a file was written there.
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (Event ID 11 File Creation telemetry).
 
 ```yaml
-title: NsMiner Persistence Directory Creation
+title: File Event Under the NsMiner AppData Roaming Directory
 id: 4ecdd6e1-c381-4c53-a92f-a1e688accdfb
 status: experimental
 description: >-
-  Detects creation of a file within the NsMiner cryptojacker's persistence
-  directory in %AppData%\Roaming. The directory name is derived from the
+  Detects a file event (file creation or overwrite) within the NsMiner
+  cryptojacker's staging directory in %AppData%\Roaming. The directory name is derived from the
   malware family's own branding and is not a location used by legitimate
   software.
 references:
@@ -162,8 +163,6 @@ author: The Hunters Ledger
 date: 2026-02-02
 tags:
     - attack.persistence
-    - attack.privilege-escalation
-    - attack.t1547.001
     - detection.emerging-threats
 logsource:
     product: windows
@@ -174,8 +173,8 @@ detection:
     condition: selection
 falsepositives:
     - >-
-      Unlikely — no legitimate software has been observed creating a
-      directory literally named NsMiner under %AppData%\Roaming
+      Unlikely — no legitimate software has been observed writing a file
+      under a directory literally named NsMiner in %AppData%\Roaming
 level: medium
 ```
 

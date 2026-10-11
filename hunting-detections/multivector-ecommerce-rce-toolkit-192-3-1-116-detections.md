@@ -23,8 +23,8 @@ hide: true
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 4 | 1 | T1190, T1505.003, T1552.005 | 0 (all atomics already carried in the campaign IOC feed) |
-| Sigma | 5 documents (3 bundles) | 7 documents (4 bundles) | T1190, T1213, T1596.005, T1005, T1552.001, T1110.001, T1078, T1585, T1046 | 0 (all atomics already carried in the campaign IOC feed) |
-| Suricata | 9 | 2 | T1190, T1552.005, T1098.004, T1105, T1606.001, T1596.005, T1110.001 | 0 (all atomics already carried in the campaign IOC feed) |
+| Sigma | 5 documents (3 bundles) | 7 documents (4 bundles) | T1190, T1213, T1005, T1552.001, T1110.001, T1078, T1585, T1046 | 0 (all atomics already carried in the campaign IOC feed) |
+| Suricata | 9 | 2 | T1190, T1552.005, T1098.004, T1105, T1606.001, T1213, T1110.001 | 0 (all atomics already carried in the campaign IOC feed) |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting: expect to review the hits. Several Sigma rules below are **base rules that do not alert on their own**; they exist to feed a correlation rule that fires on the sequence or volume of events, and are explicitly labeled Hunting/informational in isolation. The correlation built from them is the alerting-grade Detection rule.
 
@@ -374,39 +374,45 @@ falsepositives:
 level: high
 ```
 
-#### Unauthenticated External Access to an Alibaba Druid Monitoring Console
+#### Successful Request From a Non-Private Client Address to an Alibaba Druid Monitoring Console Path
 
 **Tier:** Detection
 **Robustness:** 2
-**ATT&CK Coverage:** T1596.005 (Scan Databases)
+**ATT&CK Coverage:** T1213 (Data from Information Repositories)
+**ATT&CK Note:** T1596.005 (Scan Databases) is withdrawn: it describes searching reconnaissance databases, not an HTTP request to the console. The report maps the operator's reading of the exposed Druid console to T1213 (schema, endpoints and SQL history), which is what a successful request returns.
 **Confidence:** HIGH
-**False Positives:** Authorized internal monitoring dashboards or an approved attack-surface-management scan intentionally checking for this exposure. Any external hit on these paths still warrants confirming the console is properly restricted.
-**Blind Spots:** Misses the exposure if the console is mounted under a non-default path, or if the environment logs status codes as a string field the ingestion pipeline doesn't map cleanly to `sc-status`.
-**Validation:** Replay an external GET to `/druid/index.html` (or the other listed paths) that returns 200: the rule must fire; the same request returning 401/403/404 must NOT fire.
+**False Positives:** Authorized internal monitoring dashboards reached through a public address, an administrator who has logged in to a console that is meant to be reachable, or an approved attack-surface-management scan intentionally checking for this exposure. The rule tests the response code and the client address, not authentication, so a 200 from a logged-in session matches as well as one from an open console. Any hit still warrants confirming the console is properly restricted.
+**Blind Spots:** Misses the exposure if the console is mounted under a non-default path, or if the environment logs status codes as a string field the ingestion pipeline doesn't map cleanly to `sc-status`. Where a reverse proxy or load balancer terminates the connection and the web log records the proxy's private address in `c-ip`, every request looks private and the rule never fires. Clients on carrier-grade NAT (`100.64.0.0/10`) are treated as non-private.
+**Validation:** Replay a GET from a public address to `/druid/index.html` (or the other listed paths) that returns 200: the rule must fire; the same request returning 401/403/404, or the same 200 from an RFC 1918 or loopback client address, must NOT fire.
 **Deployment:** Web/proxy access-log ingestion, WAF log ingestion.
 
 ```yaml
-title: Unauthenticated External Access to an Alibaba Druid Monitoring Console
+title: Successful Request From a Non-Private Client Address to an Alibaba Druid Console Path
 id: b2857306-3872-446e-a6cf-f093e48e3252
 status: experimental
 description: >-
-    Detects a successful external request to an Alibaba Druid StatViewServlet
-    monitoring path. An unauthenticated Druid console exposes the production
+    Detects a request that returned 200 on an Alibaba Druid StatViewServlet
+    monitoring path from a client address outside the private, loopback and
+    link-local ranges. An unauthenticated Druid console exposes the production
     JDBC connection string, full database schema and executed SQL statement
-    history to anyone who can reach it; a single request returning 200 on
-    these paths from outside the management network is a real
-    information-disclosure event regardless of who sent it. Frequently served
-    on a non-standard port, so this rule does not restrict to 80 or 443.
+    history to anyone who can reach it; a 200 on these paths for a public
+    client address means the console served that client, and the rule does not
+    test whether the client authenticated. Frequently served on a non-standard
+    port, so this rule does not restrict to 80 or 443.
 references:
     - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/
 author: The Hunters Ledger
 date: '2026-07-21'
 tags:
-    - attack.reconnaissance
-    - attack.t1596.005
+    - attack.collection
+    - attack.t1213
     - stp.3
 logsource:
     category: webserver
+    definition: >-
+        Requires a web-server or reverse-proxy access log that records the client address
+        in c-ip. Behind a proxy or load balancer that logs its own private address, every
+        request looks private and the rule cannot fire.
 detection:
     selection_path:
         cs-uri-stem|contains:
@@ -417,12 +423,24 @@ detection:
             - '/druid/datasource.json'
     selection_success:
         sc-status: 200
-    condition: selection_path and selection_success
+    filter_private_client:
+        # sourced: documented platform default (RFC 1918, loopback, link-local and unique-local address ranges; the exclusion is not from the report)
+        c-ip|cidr:
+            - '10.0.0.0/8'
+            - '172.16.0.0/12'
+            - '192.168.0.0/16'
+            - '127.0.0.0/8'
+            - '169.254.0.0/16'
+            - '::1/128'
+            - 'fc00::/7'
+            - 'fe80::/10'
+    condition: selection_path and selection_success and not filter_private_client
 falsepositives:
     - >-
-        Authorized internal monitoring dashboards or an approved
-        attack-surface-management scan intentionally checking for this
-        exposure. Any external hit on these paths still warrants confirming
+        Authorized internal monitoring dashboards reached through a public
+        address, a logged-in administrator on a console meant to be reachable,
+        or an approved attack-surface-management scan intentionally checking
+        for this exposure. Any hit on these paths still warrants confirming
         the console is properly restricted.
 level: high
 ```
@@ -949,20 +967,21 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3
 alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3.1.116 JWT alg-none Authentication Bypass Attempt (Forged Token Header)"; flow:established,to_server; http.header; content:"Bearer eyJhbGciOiJub25lIn0"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:1000009; rev:3; metadata:author The_Hunters_Ledger, date 2026-07-21;)
 ```
 
-#### Unauthenticated External Access to Alibaba Druid Monitoring Console (Network Layer, Flowbits Pair)
+#### Alibaba Druid Monitoring Console Served to an External Client (Network Layer, Flowbits Pair)
 
 **Tier:** Detection
 **Robustness:** 2
-**ATT&CK Coverage:** T1596.005 (Scan Databases)
+**ATT&CK Coverage:** T1213 (Data from Information Repositories)
+**ATT&CK Note:** T1596.005 (Scan Databases) is withdrawn for the same reason as on the Sigma rule above: it describes searching reconnaissance databases, not an HTTP request to the console.
 **Confidence:** HIGH
-**False Positives:** Authorized internal monitoring dashboards or an approved attack-surface scan. The `JavaClassPath` response-body check narrows this considerably compared to a bare URI match.
+**False Positives:** Authorized internal monitoring dashboards reached from a public address, an administrator who logged in to a console meant to be reachable, or an approved attack-surface scan. The `JavaClassPath` response-body check narrows this considerably compared to a bare URI match. The signature does not test authentication: it fires when the console's own content is returned to a client outside `$HOME_NET`, whether or not that client logged in.
 **Blind Spots:** Misses the exposure if the console is mounted under a non-default path, or if a proxy strips/alters the response body before it reaches the sensor.
 **Validation:** Replay a GET to a `/druid/` path on a flow that then returns HTTP 200 with `JavaClassPath` in the response body: the checker rule must fire; the same request blocked with 401/403, or a `/druid/` request on a flow that never sets the setter's flowbit, must NOT fire.
 **Deployment:** Network IDS at the perimeter, as a complement to the Sigma access-log rule for environments without centralized web-log ingestion. **Ships as a linked flowbits pair, deploy both rules together.** `http.uri` (request-side) and `http.response_body` (response-side) cannot be combined in a single rule on the deployed Suricata engine (8.0.5), so the original single-rule design is split into a silent setter (sid:1000010, matches the external `/druid/` request and sets flowbit `thl.mvec.druid.uri`, `flowbits:noalert` so it never alerts on its own) and a checker (sid:1000011, matches the 200-status, `JavaClassPath`-bearing response on the same flow, but only if the setter's flowbit is set). **If sid:1000010 is not loaded, sid:1000011 will never fire**; it silently depends on its setter being present in the same ruleset. This split also corrects a directionality slip in the original single-rule version, which mixed a request-only buffer into a response-direction (`to_client`) declaration; the setter below correctly matches the external client's request (`to_server`, since the victim's Druid console is the TCP server) and the checker matches the victim's response (`to_client`).
 
 ```
 alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3.1.116 Alibaba Druid Console Path Request (Flowbits Setter -- pairs with sid:1000011)"; flow:established,to_server; http.uri; content:"/druid/"; flowbits:set,thl.mvec.druid.uri; flowbits:noalert; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-recon; sid:1000010; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT MultiVector-192.3.1.116 Unauthenticated External Access to Alibaba Druid Monitoring Console (requires flowbits setter sid:1000010)"; flow:established,to_client; flowbits:isset,thl.mvec.druid.uri; http.stat_code; content:"200"; http.response_body; content:"JavaClassPath"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-recon; sid:1000011; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT MultiVector-192.3.1.116 Alibaba Druid Monitoring Console Served to an External Client (requires flowbits setter sid:1000010)"; flow:established,to_client; flowbits:isset,thl.mvec.druid.uri; http.stat_code; content:"200"; http.response_body; content:"JavaClassPath"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-recon; sid:1000011; rev:3; metadata:author The_Hunters_Ledger, date 2026-07-21;)
 ```
 
 ### Hunting Rules

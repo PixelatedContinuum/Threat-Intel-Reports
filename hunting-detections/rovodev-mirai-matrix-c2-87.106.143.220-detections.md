@@ -22,9 +22,9 @@ hide: true
 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
-| YARA | 5 | 5 | T1014, T1027, T1037.004, T1053.003, T1059.004, T1059.006, T1059.007, T1071.001, T1095, T1497.001, T1498.001, T1498.002, T1543.002, T1584.004, T1587.001 | 0 |
-| Sigma | 3 | 7 | T1014, T1027, T1037.004, T1053.003, T1059.004, T1095, T1190, T1543.002, T1564.001, T1587.001, T1102 | 2 |
-| Suricata | 2 | 8 | T1027, T1059.007, T1071.001, T1095, T1190, T1498.001, T1584.004, T1587.001, T1588.001 | 3 |
+| YARA | 5 | 5 | T1014, T1027, T1037.004, T1053.003, T1059.004, T1059.006, T1059.007, T1071.001, T1095, T1497.001, T1498.001, T1498.002, T1543.002, T1587.001 | 0 |
+| Sigma | 3 | 7 | T1014, T1037.004, T1053.003, T1059.004, T1095, T1190, T1543.002, T1564.001, T1587.001, T1102 | 2 |
+| Suricata | 2 | 8 | T1027, T1059.007, T1071.001, T1095, T1498.001 | 3 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
 
@@ -237,16 +237,16 @@ rule MAL_Discord_Bot_DDoSasService_Customer_Interface {
 **Robustness:** 2
 **ATT&CK Coverage:** T1587.001 (Develop Capabilities: Malware)
 **Confidence:** HIGH
-**Rationale:** Salvaged from the original — one condition branch matched on either of two literal Rovodev session UUIDs alone (`257b6faf-...` / `8b911ec6-...`), a single-sample identifier with zero generalizability (equivalent to a hash match, not a signature). Removed that branch and tightened the remaining "session artifact" branch to require a malicious-content marker (`mass_infection` docstring or `MATRIX C2` header) rather than firing on any Rovodev session that merely writes a Python file — the untightened version would have matched any benign Rovodev coding session.
-**False Positives:** Low — `session_context`/`file_write`/`initial_content`/`rovodev.log` are all legitimate Atlassian Rovodev artifact names, but every surviving condition branch requires a co-occurring malicious content marker (`Launch mass infection campaign` docstring or `MATRIX C2` banner), which have no legitimate collision.
-**Blind Spots:** A future AI-authoring session that produces equivalent malicious capability without ever writing the exact `mass_infection`/`MATRIX C2` phrases would evade; requires the operator's OPSEC failure of exposing the session artifact.
+**Rationale:** Salvaged from the original — one condition branch matched on either of two literal Rovodev session UUIDs alone (`257b6faf-...` / `8b911ec6-...`), a single-sample identifier with zero generalizability (equivalent to a hash match, not a signature). Removed that branch and tightened the remaining "session artifact" branch to require a malicious-content marker (`Launch mass infection campaign` docstring or `MATRIX C2` header) rather than firing on any Rovodev session that merely writes a Python file — the untightened version would have matched any benign Rovodev coding session.
+**False Positives:** Low — `session_context`/`file_write`/`initial_content`/`rovodev.log` are all legitimate Atlassian Rovodev artifact names, but every surviving condition branch requires a co-occurring malicious content marker (`Launch mass infection campaign` docstring or `MATRIX C2` banner), which have no legitimate collision. Two of the three branches test strings only, so a write-up or notes file that quotes `file_write` with the `Launch mass infection campaign` phrase, or `rovodev.log` with `MATRIX C2`, also fires (this report and its working notes are such files).
+**Blind Spots:** A future AI-authoring session that produces equivalent malicious capability without ever writing the exact `Launch mass infection campaign` / `MATRIX C2` strings would evade; requires the operator's OPSEC failure of exposing the session artifact.
 **Validation:** Scan an exposed Rovodev session_context.json/rovodev.log containing the Matrix C2 authoring session — must match; a benign Rovodev session writing unrelated Python code must NOT fire.
 **Deployment:** Web crawler for open-directory detection, filesystem scanner on suspected operator hosts.
 
 ```yara
 rule MAL_JSON_Rovodev_SessionContext_FileWrite_Authoring {
    meta:
-      description = "Detects operator-exposed Atlassian Rovodev AI coding agent session artifacts (session_context.json / rovodev.log) containing file_write tool calls with offensive Python initial_content payloads, gated on a co-occurring Matrix C2 content marker to exclude benign Rovodev sessions."
+      description = "Detects operator-exposed Atlassian Rovodev AI coding agent session artifacts that carry a Matrix C2 content marker (the phrase Launch mass infection campaign, or the banner MATRIX C2) in one of three combinations: a session_context file with a file_write tool call, an initial_content payload and a Python shebang; the phrase together with file_write (no session_context or payload test); or rovodev.log together with the MATRIX C2 banner. Only the first combination requires the file_write initial_content payload. A marker is always required, which excludes benign Rovodev sessions."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/"
@@ -384,14 +384,14 @@ rule MAL_Python_Matrix_C2_Framework_Family {
 **Robustness:** 2
 **ATT&CK Coverage:** T1059.006 (Python), T1587.001 (Develop Capabilities: Malware)
 **Confidence:** MODERATE (HIGH for the universal-subset criteria as a class; MODERATE for any individual file match without corroborating context)
-**Rationale:** Cross-3-operator confirmed universal subset (verbose docstrings, bare-except handlers, educational variable names, emoji-in-output bleed, version-numbered file chains) of the AI-Generated Code Structural Signature. The structural criteria are durable (survive renaming, target code structure not literal names), but verbose docstrings and bare-except are common in legitimate Python code — the original author explicitly flagged this for analyst triage rather than automated block, which is the definition of the Hunting tier. Unchanged from the original file.
-**False Positives:** Verbose docstrings and bare-except handlers are common in legitimate Python code; the multi-criteria co-occurrence gate reduces but does not eliminate this. Deploy for analyst triage, not automated block.
+**Rationale:** Drawn from the cross-3-operator confirmed universal subset (verbose docstrings, bare-except handlers, educational variable names, emoji-in-output bleed, version-numbered file chains) of the AI-Generated Code Structural Signature. The rule tests four of the five criteria in three ORed branches that each need an attack-named function with a docstring; educational variable naming has no string and is not tested. The criteria target code structure rather than family names, but every branch still needs one literal context word (ddos, flood, brute, infect or cnc) and a function named `*_attack`, `*_flood`, `*_scan` or `*_infect` with a docstring, so code that avoids those words or names its functions differently is not matched; verbose docstrings and bare-except are common in legitimate Python code — the original author explicitly flagged this for analyst triage rather than automated block, which is the definition of the Hunting tier. Unchanged from the original file.
+**False Positives:** Verbose docstrings and bare-except handlers are common in legitimate Python code; the three-branch gate (context word, docstring in an attack-named function, plus one corroborator) reduces but does not eliminate this. Deploy for analyst triage, not automated block.
 **Deployment:** Code repository scanner, Python script analyst triage, threat hunting in developer-accessible environments. Do NOT deploy as automated block.
 
 ```yara
 rule MAL_Python_AIGenerated_OffensiveCode_Universal_Subset {
    meta:
-      description = "Cross-operator detection for AI-generated offensive Python code using the 5-criteria universal subset confirmed across 3 independent operators (Russian Gemini, Turkish ARPA, English Rovodev). Detects co-occurrence of verbose docstrings, bare-except handlers, educational variable naming, emoji-in-output bleed, and version-numbered iteration chains. High FP risk in isolation; requires multi-criteria co-occurrence gate — analyst triage, not automated block."
+      description = "Cross-operator hunting rule for AI-generated offensive Python, drawn from the 5-criteria universal subset confirmed across 3 independent operators (Russian Gemini, Turkish ARPA, English Rovodev). Requires a DDoS-style context word (ddos, flood, brute, infect or cnc) and a function named *_attack, *_flood, *_scan or *_infect whose body opens with a docstring, plus one of three corroborators: a bare except handler followed by pass, an emoji (fire, rocket or check mark), or two of the version-numbered file-name markers _v2., _v3. and _v4. A file that starts with a shebang satisfies the bare-except clause without any except string. Educational variable naming, one of the five criteria, has no string and is not tested. High FP risk in isolation; analyst triage, not automated block."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/"
@@ -525,10 +525,11 @@ rule MAL_Markdown_Rovodev_WhatINeed_OperatorPrompt {
 
 **Tier:** Hunting
 **Robustness:** 1
-**ATT&CK Coverage:** T1584.004 (Compromise Infrastructure: Server)
+**ATT&CK Coverage:** None
+**ATT&CK Note:** T1584.004 (Compromise Infrastructure: Server) was withdrawn: the rule matches static strings in an exposed file and observes no compromise of infrastructure.
 **Confidence:** HIGH for the artifact itself; the underlying pivot value degrades if the operator rotates the Discord account
 **Rationale:** The rule's primary discriminator is the operator's literal 19-digit Discord snowflake ID (`1441591352927326259`) — a single-account artifact an operator can abandon at will (Gate 1 durability: mutex/ID-class single literal). The original author's own rationale already framed this as "a pivot/hunting rule rather than high-confidence detection," which is the Hunting-tier definition; retained here unchanged.
-**False Positives:** Low — the specific 19-digit snowflake combined with `PandoraNet` or the operator's IONOS IPs reduces FP surface to near-zero for this operator's artifacts, but the rule has no value once the operator rotates identity.
+**False Positives:** Low — three of the four branches pair the specific 19-digit snowflake with the phrase `my user ID is`, with `PandoraNet`, or with either operator IONOS IP, which leaves near-zero FP surface for this operator's artifacts; the fourth branch needs no snowflake (`PandoraNet` with an IONOS IP and the word `discord`). The snowflake branches have no value once the operator rotates identity.
 **Deployment:** Filesystem scanner on suspected operator hosts, open-directory crawler, OSINT pivot hunting.
 
 ```yara
@@ -773,7 +774,8 @@ level: high
 
 **Tier:** Detection
 **Robustness:** 2
-**ATT&CK Coverage:** T1059.004 (Unix Shell), T1095 (Non-Application Layer Protocol)
+**ATT&CK Coverage:** T1059.004 (Unix Shell)
+**ATT&CK Note:** T1095 (Non-Application Layer Protocol) was withdrawn: the rule matches a process command line and observes no network protocol.
 **Confidence:** HIGH
 **Rationale:** `/bin/busybox SORA` is not a valid busybox applet invocation and has no legitimate use — it is a Sora-lineage self-identification marker used by this operator's Naku/Pandora build and by other Sora-derivative Mirai forks generally, making it a tool-family artifact rather than a single-build literal (an operator would need to recompile from a divergent source tree to remove it, which most downstream Sora-lineage adopters do not do). Unchanged from the original file.
 **False Positives:** Unlikely — `/bin/busybox SORA` is not a valid busybox applet call and has no legitimate use.
@@ -794,8 +796,6 @@ date: '2026-05-26'
 tags:
     - attack.execution
     - attack.t1059.004
-    - attack.command-and-control
-    - attack.t1095
     - detection.emerging-threats
     - stp.3
 logsource:
@@ -971,7 +971,8 @@ level: medium
 
 **Tier:** Hunting
 **Robustness:** 1
-**ATT&CK Coverage:** T1027 (Obfuscated Files or Information), T1095 (Non-Application Layer Protocol)
+**ATT&CK Coverage:** None
+**ATT&CK Note:** T1027 (Obfuscated Files or Information) and T1095 (Non-Application Layer Protocol) were withdrawn: a command-line literal match observes neither string obfuscation inside the binary nor a network protocol.
 **Confidence:** HIGH for the artifact; narrow applicability
 **Rationale:** The 22-char charset is a single-build random-string constant (Gate 1: mutex/charset-class single literal → Robustness 1) — a future build regenerating the charset evades entirely. It is also questionable whether this internally-used obfuscation constant would ever literally surface in a process `CommandLine` (as opposed to binary content, which the companion YARA rule already covers); this Sigma rule has narrower practical hit-rate than its YARA counterpart. Demoted level from `high` to `medium` and retiered to Hunting.
 **False Positives:** Unlikely — this specific character set in this order is operator-bespoke and not found in any other host in Hunt.io's 365-day index; near-zero probability of accidental match. Practical yield may be low if the string never appears in a literal command line.
@@ -988,11 +989,8 @@ references:
 author: The Hunters Ledger
 date: '2026-05-26'
 tags:
-    - attack.stealth
-    - attack.t1027
-    - attack.command-and-control
-    - attack.t1095
     - detection.emerging-threats
+    - stp.2
 logsource:
     category: process_creation
     product: linux
@@ -1148,7 +1146,8 @@ level: low
 
 **Tier:** Detection
 **Robustness:** 2
-**ATT&CK Coverage:** T1071.001 (Web Protocols), T1587.001 (Develop Capabilities: Malware)
+**ATT&CK Coverage:** T1071.001 (Web Protocols)
+**ATT&CK Note:** T1587.001 (Develop Capabilities: Malware) was withdrawn: it is a Resource Development action by the operator, and a URI-path rule on network traffic cannot observe it.
 **Confidence:** HIGH
 **Rationale:** Salvaged from the original — the rule required the destination to be the operator's specific IONOS IP (`87.106.143.220`), so it would stop firing the moment the operator rotated VPS. Broadened destination to `$EXTERNAL_NET`, keeping the distinctive `/bins/Naku.` URI-path content anchor (a bespoke arch-tagged binary distribution convention, not a generic path). Survives infrastructure rotation while retaining meaningful precision.
 **False Positives:** None known — `/bins/Naku.` as a URI path prefix has no plausible legitimate collision.
@@ -1164,7 +1163,8 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT UTA-2026-014 Pand
 
 **Tier:** Detection
 **Robustness:** 2
-**ATT&CK Coverage:** T1071.001 (Web Protocols), T1587.001 (Develop Capabilities: Malware)
+**ATT&CK Coverage:** T1071.001 (Web Protocols)
+**ATT&CK Note:** T1587.001 (Develop Capabilities: Malware) was withdrawn: it is a Resource Development action by the operator, and a URI-path rule on network traffic cannot observe it.
 **Confidence:** HIGH
 **Rationale:** Same salvage as the Naku URI-path rule above — broadened from a hardcoded IONOS destination to `$EXTERNAL_NET`, retaining the bespoke `/Pandoras_Box/Pandora.` URI-path content anchor.
 **False Positives:** None known — `/Pandoras_Box/Pandora.` as a URI path prefix has no plausible legitimate collision.
@@ -1184,7 +1184,8 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT UTA-2026-014 Pand
 
 **Tier:** Hunting
 **Robustness:** 1
-**ATT&CK Coverage:** T1071.001 (Web Protocols), T1587.001 (Develop Capabilities: Malware)
+**ATT&CK Coverage:** T1071.001 (Web Protocols)
+**ATT&CK Note:** T1587.001 (Develop Capabilities: Malware) was withdrawn: it is a Resource Development action by the operator, and a URI-path rule on network traffic cannot observe it.
 **Confidence:** MODERATE
 **Rationale:** Salvaged (destination broadened from the hardcoded IONOS IP to `$EXTERNAL_NET`), but `bot.sh` is a widely-reused generic dropper/reseed script filename across the broader Mirai-fork ecosystem, not bespoke to this operator — the content anchor alone carries meaningfully less discriminating power than the Naku/Pandoras_Box path rules above.
 **False Positives:** Any unrelated Mirai-fork or generic IoT dropper reusing the common `bot.sh` filename convention (uncommon collision with unrelated legitimate software, but not campaign-specific).
@@ -1198,10 +1199,11 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT UTA-2026-014 Pandor
 
 **Tier:** Hunting
 **Robustness:** 1
-**ATT&CK Coverage:** T1071.001 (Web Protocols), T1587.001 (Develop Capabilities: Malware)
+**ATT&CK Coverage:** T1071.001 (Web Protocols)
+**ATT&CK Note:** T1587.001 (Develop Capabilities: Malware) was withdrawn: it is a Resource Development action by the operator, and a URI-path rule on network traffic cannot observe it.
 **Confidence:** LOW–MODERATE
 **Rationale:** Salvaged (destination broadened from the hardcoded backup IONOS IP to `$EXTERNAL_NET`), but the content anchor is a bare, unqualified `"Naku."` substring with no `startswith`/`endswith` path qualifier — the weakest anchor among this campaign's Naku-related Suricata rules. Retained as a distinct Hunting entry (rather than merged with the Aruba-distribution variants below) to preserve rule-count accounting for this revision; a future revision should consider consolidating all three bare-`"Naku."` rules into one.
-**False Positives:** Any unrelated URI path or query string containing the 4-character substring "Naku." (uncommon but not impossible).
+**False Positives:** Any unrelated URI path or query string containing the 5-character substring "Naku." (the dot included) (uncommon but not impossible).
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points; hunt-tune before alerting.
 
 ```suricata
@@ -1210,18 +1212,19 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT UTA-2026-014 Naku B
 
 **Rovodev Operator Artifacts**
 
-#### keyosbuff C2-Leak Repository Reference in HTTP URI
+#### keyosbuff Handle Substring in HTTP URI (C2-Leak Repository Owner Lead)
 
 **Tier:** Hunting
 **Robustness:** 1
-**ATT&CK Coverage:** T1588.001 (Obtain Capabilities: Malware), T1584.004 (Compromise Infrastructure: Server)
+**ATT&CK Coverage:** None
+**ATT&CK Note:** T1588.001 (Obtain Capabilities: Malware) and T1584.004 (Compromise Infrastructure: Server) were withdrawn: they are Resource Development actions that a URI substring match cannot observe.
 **Confidence:** MODERATE
 **Rationale:** Single-literal GitHub-handle anchor (`keyosbuff`) with an acknowledged practical detection gap — GitHub is TLS-terminated, so the URL path is normally invisible to a network sensor without TLS interception; this rule only fires on unusual non-TLS references to the handle. Narrow pivot value, not alerting-grade.
 **False Positives:** Any unrelated HTTP traffic referencing the `keyosbuff` GitHub handle for a different (non-C2-Leak) reason.
 **Deployment:** Network IDS/IPS at perimeter; primarily useful with TLS interception or proxy logging capability.
 
 ```suricata
-alert http $HOME_NET any -> any any (msg:"THL HUNT UTA-2026-014 keyosbuff C2-Leak Repository Reference in HTTP URI (Operator OPSEC Artifact)"; flow:established,to_server; http.uri; content:"keyosbuff"; nocase; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:9300502; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-26;)
+alert http $HOME_NET any -> any any (msg:"THL HUNT UTA-2026-014 keyosbuff Handle Substring in HTTP URI (C2-Leak Repository Owner Lead)"; flow:established,to_server; http.uri; content:"keyosbuff"; nocase; reference:url,the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/; classtype:trojan-activity; sid:9300502; rev:4; metadata:author The_Hunters_Ledger, date 2026-05-26;)
 ```
 
 **Campaign-Level**
@@ -1230,10 +1233,11 @@ alert http $HOME_NET any -> any any (msg:"THL HUNT UTA-2026-014 keyosbuff C2-Lea
 
 **Tier:** Hunting
 **Robustness:** 1
-**ATT&CK Coverage:** T1071.001 (Web Protocols), T1190 (Exploit Public-Facing Application)
+**ATT&CK Coverage:** T1071.001 (Web Protocols)
+**ATT&CK Note:** T1190 (Exploit Public-Facing Application) was withdrawn: the rule matches an outbound binary-fetch URI and observes no exploitation of a public-facing application.
 **Confidence:** LOW–MODERATE
 **Rationale:** Salvaged (destination broadened from the hardcoded Aruba Italy primary distribution IP to `$EXTERNAL_NET`), but shares the same bare unqualified `"Naku."` substring weakness as the backup-channel rule above; both Aruba distribution servers were confirmed offline/dark as of the underlying investigation, further limiting current operational value beyond the pattern's reuse potential if the operator revives a similar distribution convention.
-**False Positives:** Any unrelated URI path or query string containing the 4-character substring "Naku." (uncommon but not impossible).
+**False Positives:** Any unrelated URI path or query string containing the 5-character substring "Naku." (the dot included) (uncommon but not impossible).
 **Deployment:** Network IDS/IPS at perimeter; hunt-tune before alerting.
 
 ```suricata
@@ -1244,10 +1248,11 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT UTA-2026-014 Naku B
 
 **Tier:** Hunting
 **Robustness:** 1
-**ATT&CK Coverage:** T1071.001 (Web Protocols), T1190 (Exploit Public-Facing Application)
+**ATT&CK Coverage:** T1071.001 (Web Protocols)
+**ATT&CK Note:** T1190 (Exploit Public-Facing Application) was withdrawn: the rule matches an outbound binary-fetch URI and observes no exploitation of a public-facing application.
 **Confidence:** LOW–MODERATE
 **Rationale:** Same salvage and weak-anchor profile as the Aruba primary rule above, against the sibling backup distribution IP (now also confirmed dark).
-**False Positives:** Any unrelated URI path or query string containing the 4-character substring "Naku." (uncommon but not impossible).
+**False Positives:** Any unrelated URI path or query string containing the 5-character substring "Naku." (the dot included) (uncommon but not impossible).
 **Deployment:** Network IDS/IPS at perimeter; hunt-tune before alerting.
 
 ```suricata

@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--117f3708-9dd4-4bb4-be25-4cb7a3a6936f",
+    "id": "bundle--1a9713af-77c0-4958-ae4d-c149163182d3",
     "objects": [
         {
             "type": "identity",
@@ -470,12 +470,12 @@
             "id": "indicator--dd31edf5-cbef-5ef9-b868-7910f61c49ac",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.11322Z",
-            "modified": "2026-10-01T19:54:18.11322Z",
+            "modified": "2026-10-11T14:08:31.74403Z",
             "name": "MALW_Ligolo_ng_v083_Agent",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule MALW_Ligolo_ng_v083_Agent\n{\n    meta:\n        description = \"Detects Ligolo-ng v0.8.3 stock reverse-tunnel agent by embedded version string, Go package namespace, and upstream commit hash — operator bundled this for internal-network pivot\"\n        license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/\"\n        date = \"2026-04-30\"\n        hash1 = \"4b41f36f82db6da8767a0a1c2997c8242d80b2d10a8f1d28c252a9306ec152b5\"\n        hash2 = \"\"\n        hash3 = \"\"\n        family = \"Ligolo-ng\"\n        malware_type = \"Reverse Tunnel Agent\"\n        campaign = \"AdaptixC2-OpenDirectory-Toolkit-45.130.148.125\"\n        id = \"5f4a72f0-b98c-5719-bf40-edafeb7f7021\"\n\n    strings:\n        $s1 = \"nicocha30/ligolo-ng/pkg/\" ascii\n        $s2 = \"0.8.3\" ascii\n        $s3 = \"913fe64e088d5db2185d392965bf4cd3dd1d9495\" ascii\n\n    condition:\n        filesize < 15MB and\n        $s1 and\n        ($s2 or $s3)\n}",
+            "pattern": "rule MALW_Ligolo_ng_v083_Agent\n{\n    meta:\n        description = \"Detects Ligolo-ng v0.8.3 stock reverse-tunnel agent by its Go package namespace together with either the version string 0.8.3 or one upstream commit hash — operator bundled this for internal-network pivot\"\n        license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/\"\n        date = \"2026-04-30\"\n        hash1 = \"4b41f36f82db6da8767a0a1c2997c8242d80b2d10a8f1d28c252a9306ec152b5\"\n        hash2 = \"\"\n        hash3 = \"\"\n        family = \"Ligolo-ng\"\n        malware_type = \"Reverse Tunnel Agent\"\n        campaign = \"AdaptixC2-OpenDirectory-Toolkit-45.130.148.125\"\n        id = \"5f4a72f0-b98c-5719-bf40-edafeb7f7021\"\n\n    strings:\n        $s1 = \"nicocha30/ligolo-ng/pkg/\" ascii\n        $s2 = \"0.8.3\" ascii\n        $s3 = \"913fe64e088d5db2185d392965bf4cd3dd1d9495\" ascii\n\n    condition:\n        filesize < 15MB and\n        $s1 and\n        ($s2 or $s3)\n}",
             "pattern_type": "yara",
             "valid_from": "2026-04-30T00:00:00Z",
             "labels": [

@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--cab4a821-2860-4fd4-8f0f-56be432fb148",
+    "id": "bundle--75e31b0a-b3ce-434f-9efd-2ba2b605b253",
     "objects": [
         {
             "type": "identity",
@@ -408,15 +408,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--1109f2e3-cbe7-54d3-bae0-c4a0e379f657",
+            "id": "indicator--10f1abe9-6ea3-5972-81b7-118c20aa2908",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:15.594015Z",
-            "modified": "2026-10-01T19:54:15.594015Z",
-            "name": "OpenStrike Python Beacon Ctypes VirtualAlloc Shellcode Injection",
+            "created": "2026-10-11T14:08:29.825857Z",
+            "modified": "2026-10-11T14:08:29.825857Z",
+            "name": "Python Interpreter With Ctypes and VirtualAlloc on the Command Line",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: OpenStrike Python Beacon Ctypes VirtualAlloc Shellcode Injection\nid: 1d6b4e82-9f3c-4a17-b5d8-2e7c9a6f1b34\nstatus: experimental\ndescription: >-\n  Detects a Python process with command-line arguments referencing ctypes\n  and VirtualAlloc, matching the OpenStrike beacon_universal.py\n  cross-platform shellcode injection pattern. The Python beacon uses\n  ctypes.windll to call VirtualAlloc for RWX memory allocation and\n  CreateThread for shellcode execution, enabling in-memory payload staging\n  without dropping a compiled binary.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/open-directory-172-105-0-126-20260406-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-06\ntags:\n    - attack.execution\n    - attack.t1059.006\n    - attack.stealth\n    - attack.t1620\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_proc:\n        Image|endswith: '\\python.exe'\n        CommandLine|contains|all:\n            - 'ctypes'\n            - 'VirtualAlloc'\n    condition: selection_proc\nfalsepositives:\n    - Security research tools or CTF scripts using ctypes with VirtualAlloc in Python\n    - Legitimate automation scripts performing memory-mapped operations via ctypes\nlevel: medium",
+            "pattern": "title: Python Interpreter With Ctypes and VirtualAlloc on the Command Line\nid: 1d6b4e82-9f3c-4a17-b5d8-2e7c9a6f1b34\nstatus: experimental\ndescription: >-\n  Detects a python.exe, pythonw.exe or python3.exe process whose command line\n  references both ctypes and VirtualAlloc, the calls the OpenStrike\n  beacon_universal.py cross-platform shellcode injection pattern relies on.\n  The rule carries no OpenStrike marker and does not see a beacon run from a\n  script file, which keeps both strings off the command line. The Python beacon uses\n  ctypes.windll to call VirtualAlloc for RWX memory allocation and\n  CreateThread for shellcode execution, enabling in-memory payload staging\n  without dropping a compiled binary.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/open-directory-172-105-0-126-20260406-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-06\ntags:\n    - attack.execution\n    - attack.t1059.006\n    - attack.stealth\n    - attack.t1620\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_proc:\n        Image|endswith:\n            - '\\python.exe'\n            - '\\pythonw.exe'\n            - '\\python3.exe'\n        CommandLine|contains|all:\n            - 'ctypes'\n            - 'VirtualAlloc'\n    condition: selection_proc\nfalsepositives:\n    - Security research tools or CTF scripts using ctypes with VirtualAlloc in Python\n    - Legitimate automation scripts performing memory-mapped operations via ctypes\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-04-06T00:00:00Z",
             "labels": [
@@ -1713,7 +1713,7 @@
             "id": "report--275b389e-e02e-5042-8cc9-f20b55d10b10",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.600274Z",
-            "modified": "2026-10-11T05:44:22.693506Z",
+            "modified": "2026-10-11T14:08:29.834217Z",
             "name": "OpenStrike Beacon Toolkit — Open Directory 172.105.0.126",
             "report_types": [
                 "threat-report"
@@ -1750,7 +1750,7 @@
                 "indicator--c82deec6-386a-575b-81ce-c05c915ecc68",
                 "indicator--bf8476f9-048b-55b3-91a6-8d3c92e66ca5",
                 "indicator--0f6627e9-c513-5f19-bbb8-382993ac7595",
-                "indicator--1109f2e3-cbe7-54d3-bae0-c4a0e379f657",
+                "indicator--10f1abe9-6ea3-5972-81b7-118c20aa2908",
                 "indicator--fc9bd18a-3438-5bff-9528-974ac25dd306",
                 "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
                 "malware--fca8d0e7-6e2f-5581-a0cb-9c2a8a5f72ed",

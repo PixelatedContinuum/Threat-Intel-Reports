@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--291231a5-c7a5-4be9-95f7-5faf3b4b3f8f",
+    "id": "bundle--ad008a50-9108-4da3-9608-ec802d772d27",
     "objects": [
         {
             "type": "identity",
@@ -2078,12 +2078,12 @@
             "id": "indicator--60933099-3faf-543b-b495-cce090ad6d64",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.667629Z",
-            "modified": "2026-10-01T19:54:11.667629Z",
+            "modified": "2026-10-11T14:08:19.475747Z",
             "name": "MAL_Linux_GHOST_LDPreload_Rootkit_Family",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "import \"elf\"\n\nrule MAL_Linux_GHOST_LDPreload_Rootkit_Family {\n   meta:\n      description = \"Detects the libpam_cache.so LD_PRELOAD userland rootkit shipped with the GHOST v5.1/v6.0 cryptojacker kit. Hooks readdir/readdir64/fopen/fopen64 to hide cryptominer processes and listening ports. Uses deceptive PAM-style filename camouflage. Constructor calls unsetenv('LD_PRELOAD') to defeat env-variable detection. Observed byte-identical across at least 2 customer deployments.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/\"\n      date = \"2026-05-25\"\n      hash1 = \"eaaa10c840de23335abae1a9ead0a6a7fb7be5187cd19ad05137feab12bb7301\"\n      hash3 = \"296a800564111b0bad9fe63faf4e63ba\"\n      family = \"GHOST-Cryptojacker-LDPreload-Rootkit\"\n      malware_type = \"Rootkit\"\n      campaign = \"AI-Agent-Framework-Abuse-MultiActor-2026-05-23\"\n      id = \"33629b27-5b2f-5982-b950-b610a07ab9e6\"\n   strings:\n      $s1 = \"xmrig\" ascii fullword\n      $s2 = \"lolMiner\" ascii fullword\n      $s3 = \"khugepaged_\" ascii\n      $s4 = \"inotify_guard\" ascii fullword\n      $p1 = \"fontconfig/.cpu\" ascii\n      $p2 = \"fontconfig/.gpu\" ascii\n      $p3 = \".pid_guard\" ascii\n      $h1 = \"/proc/net/tcp\" ascii\n      $h2 = \"/proc/%s/cmdline\" ascii\n      $h3 = \":%04X\" ascii\n      $c1 = \"LD_PRELOAD\" ascii fullword\n      $f1 = \"libpam_cache\" ascii\n   condition:\n      uint32(0) == 0x464c457f and\n      uint8(4) == 2 and\n      filesize < 100KB and\n      elf.dynsym_entries > 12 and\n      for any sym in elf.dynsym : (sym.name == \"readdir\" and sym.type == elf.STT_FUNC and sym.shndx > 0) and\n      for any sym in elf.dynsym : (sym.name == \"fopen\" and sym.type == elf.STT_FUNC and sym.shndx > 0) and\n      3 of ($s*) and\n      2 of ($p*) and\n      all of ($h*) and\n      $c1 and\n      $f1\n}",
+            "pattern": "import \"elf\"\n\nrule MAL_Linux_GHOST_LDPreload_Rootkit_Family {\n   meta:\n      description = \"Detects the libpam_cache.so LD_PRELOAD userland rootkit shipped with the GHOST v5.1/v6.0 cryptojacker kit. Matches an ELF64 file under 100 KB that defines readdir and fopen as dynamic-symbol functions and holds the kit's miner-hiding strings, miner path strings and /proc net-hook strings, plus LD_PRELOAD and libpam_cache. The report describes the sample as also hooking readdir64 and fopen64 and calling unsetenv('LD_PRELOAD') in a constructor; the rule tests neither. Observed byte-identical across at least 2 customer deployments.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/\"\n      date = \"2026-05-25\"\n      modified = \"2026-10-11\"\n      hash1 = \"eaaa10c840de23335abae1a9ead0a6a7fb7be5187cd19ad05137feab12bb7301\"\n      hash3 = \"296a800564111b0bad9fe63faf4e63ba\"\n      family = \"GHOST-Cryptojacker-LDPreload-Rootkit\"\n      malware_type = \"Rootkit\"\n      campaign = \"AI-Agent-Framework-Abuse-MultiActor-2026-05-23\"\n      id = \"33629b27-5b2f-5982-b950-b610a07ab9e6\"\n   strings:\n      $s1 = \"xmrig\" ascii fullword\n      $s2 = \"lolMiner\" ascii fullword\n      $s3 = \"khugepaged_\" ascii\n      $s4 = \"inotify_guard\" ascii fullword\n      $p1 = \"fontconfig/.cpu\" ascii\n      $p2 = \"fontconfig/.gpu\" ascii\n      $p3 = \".pid_guard\" ascii\n      $h1 = \"/proc/net/tcp\" ascii\n      $h2 = \"/proc/%s/cmdline\" ascii\n      $h3 = \":%04X\" ascii\n      $c1 = \"LD_PRELOAD\" ascii fullword\n      $f1 = \"libpam_cache\" ascii\n   condition:\n      uint32(0) == 0x464c457f and\n      uint8(4) == 2 and\n      filesize < 100KB and\n      elf.dynsym_entries > 12 and\n      for any sym in elf.dynsym : (sym.name == \"readdir\" and sym.type == elf.STT_FUNC and sym.shndx > 0) and\n      for any sym in elf.dynsym : (sym.name == \"fopen\" and sym.type == elf.STT_FUNC and sym.shndx > 0) and\n      3 of ($s*) and\n      2 of ($p*) and\n      all of ($h*) and\n      $c1 and\n      $f1\n}",
             "pattern_type": "yara",
             "valid_from": "2026-06-04T00:00:00Z",
             "labels": [
@@ -2120,12 +2120,12 @@
             "id": "indicator--69d47b83-c935-52ff-b920-05565c84948f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.667792Z",
-            "modified": "2026-10-01T19:54:11.667792Z",
+            "modified": "2026-10-11T14:08:19.475997Z",
             "name": "MAL_Linux_ARPA_Observability_Harvester_Systemd",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule MAL_Linux_ARPA_Observability_Harvester_Systemd {\n   meta:\n      description = \"Detects the Turkish ARPA operator's observability-harvester platform based on distinctive systemd service unit filenames and operator self-branding strings. ARPA ingests stolen observability telemetry (IBM Instana + SolarWinds + Zabbix + VMware Aria via stolen API tokens) into a TimescaleDB+Neo4j+Redis stack.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/\"\n      date = \"2026-05-25\"\n      family = \"ARPA-Observability-Harvester\"\n      malware_type = \"Data-Harvesting-Platform\"\n      campaign = \"AI-Agent-Framework-Abuse-MultiActor-2026-05-23\"\n      id = \"08b8e947-a673-53c1-9303-6843c8e8ec50\"\n   strings:\n      $svc1 = \"arpa-instana-api.service\" ascii\n      $svc2 = \"arpa-autolearn.service\" ascii\n      $svc3 = \"arpa-continuous.service\" ascii\n      $svc4 = \"arpa-daemon.service\" ascii\n      $svc5 = \"arpa-parallel.service\" ascii\n      $b1 = \"ARPA Korelasyon Motoru\" ascii\n      $b2 = \"ARPA \\xc2\\xa9 2026\" ascii\n      $e1 = \"/api/ingest/instana\" ascii\n   condition:\n      filesize < 5MB and\n      (\n         (2 of ($svc*)) or\n         (1 of ($b*)) or\n         ($e1 and 1 of ($svc*))\n      )\n}",
+            "pattern": "rule MAL_Linux_ARPA_Observability_Harvester_Systemd {\n   meta:\n      description = \"Detects the Turkish ARPA operator's observability-harvester platform based on distinctive systemd service unit filenames and operator self-branding strings. ARPA ingests stolen observability telemetry (IBM Instana + SolarWinds + Zabbix + VMware Aria via stolen API tokens) into a TimescaleDB+Neo4j+Redis stack.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/\"\n      date = \"2026-05-25\"\n      family = \"ARPA-Observability-Harvester\"\n      malware_type = \"Data-Harvesting-Platform\"\n      campaign = \"AI-Agent-Framework-Abuse-MultiActor-2026-05-23\"\n      id = \"08b8e947-a673-53c1-9303-6843c8e8ec50\"\n   strings:\n      $svc1 = \"arpa-instana-api.service\" ascii\n      $svc2 = \"arpa-autolearn.service\" ascii\n      $svc3 = \"arpa-continuous.service\" ascii\n      $svc4 = \"arpa-daemon.service\" ascii\n      $svc5 = \"arpa-parallel.service\" ascii\n      $b1 = \"ARPA Korelasyon Motoru\" ascii\n      $b2 = \"ARPA \\xc2\\xa9 2026\" ascii\n      $e1 = \"/api/ingest/instana\" ascii\n   condition:\n      filesize < 5MB and\n      (\n         (2 of ($svc*)) or\n         $b1 or\n         (1 of ($svc*) and ($e1 or $b2))\n      )\n}",
             "pattern_type": "yara",
             "valid_from": "2026-06-04T00:00:00Z",
             "labels": [
@@ -2162,12 +2162,12 @@
             "id": "indicator--68f1b1db-b41f-52ad-a936-107a361bba36",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.667947Z",
-            "modified": "2026-10-11T03:15:35.686737Z",
+            "modified": "2026-10-11T14:08:19.476203Z",
             "name": "MAL_Python_Russian_A2A_C2_BaseHTTPServer",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule MAL_Python_Russian_A2A_C2_BaseHTTPServer {\n   meta:\n      description = \"Detects the Russian Gemini operator's custom A2A (Agent-to-Agent) C2 backend built on Python stdlib BaseHTTPServer. Features zero authentication on all 5 API endpoints, a path-traversal-vulnerable file server, base64+UTF-16LE encoding (matching PowerShell EncodedCommand format), and Cloudflare Tunnel transport.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/\"\n      date = \"2026-05-25\"\n      modified = \"2026-10-10\"\n      family = \"Russian-A2A-C2\"\n      malware_type = \"Custom-C2-Backend\"\n      campaign = \"AI-Agent-Framework-Abuse-MultiActor-2026-05-23\"\n      id = \"943da3bd-c273-5e48-829e-1ec1389fd48a\"\n   strings:\n      $py1 = \"BaseHTTPRequestHandler\" ascii\n      $b1 = \"A2A C2 MULTI-AGENT CONSOLE\" ascii\n      $e1 = \"/api/v1/update\" ascii\n      $e2 = \"/api/v1/agents\" ascii\n      $e3 = \"/api/v1/interact\" ascii\n      $e4 = \"/api/v1/telemetry\" ascii\n      $e5 = \"/api/v1/get_results\" ascii\n      $h1 = \"X-Agent-ID\" ascii\n      $enc1 = \"decode('utf-16le')\" ascii\n      $enc2 = \"base64.b64decode\" ascii\n      $d2 = \"c2.tralalarkefe.com\" ascii\n      $d3 = \"payloads.tralalarkefe.com\" ascii\n   condition:\n      filesize < 1MB and\n      $py1 and\n      (\n         $b1 or\n         (3 of ($e*) and $h1) or\n         ($enc1 and $enc2 and 2 of ($e*)) or\n         (($d2 or $d3) and 1 of ($e*))\n      )\n}",
+            "pattern": "rule MAL_Python_Russian_A2A_C2_BaseHTTPServer {\n   meta:\n      description = \"Detects the Russian Gemini operator's custom A2A (Agent-to-Agent) C2 backend built on Python stdlib BaseHTTPServer: the string BaseHTTPRequestHandler together with the banner A2A C2 MULTI-AGENT CONSOLE, or three of the five /api/v1/ endpoint paths with the X-Agent-ID header, or the decode strings decode('utf-16le') and base64.b64decode with two endpoint paths, or a C2 domain with one endpoint path. The report describes the sample as unauthenticated on all 5 endpoints, with a path-traversal-vulnerable file server and Cloudflare Tunnel transport; the rule tests none of that.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/\"\n      date = \"2026-05-25\"\n      modified = \"2026-10-11\"\n      family = \"Russian-A2A-C2\"\n      malware_type = \"Custom-C2-Backend\"\n      campaign = \"AI-Agent-Framework-Abuse-MultiActor-2026-05-23\"\n      id = \"943da3bd-c273-5e48-829e-1ec1389fd48a\"\n   strings:\n      $py1 = \"BaseHTTPRequestHandler\" ascii\n      $b1 = \"A2A C2 MULTI-AGENT CONSOLE\" ascii\n      $e1 = \"/api/v1/update\" ascii\n      $e2 = \"/api/v1/agents\" ascii\n      $e3 = \"/api/v1/interact\" ascii\n      $e4 = \"/api/v1/telemetry\" ascii\n      $e5 = \"/api/v1/get_results\" ascii\n      $h1 = \"X-Agent-ID\" ascii\n      $enc1 = \"decode('utf-16le')\" ascii\n      $enc2 = \"base64.b64decode\" ascii\n      $d2 = \"c2.tralalarkefe.com\" ascii\n      $d3 = \"payloads.tralalarkefe.com\" ascii\n   condition:\n      filesize < 1MB and\n      $py1 and\n      (\n         $b1 or\n         (3 of ($e*) and $h1) or\n         ($enc1 and $enc2 and 2 of ($e*)) or\n         (($d2 or $d3) and 1 of ($e*))\n      )\n}",
             "pattern_type": "yara",
             "valid_from": "2026-06-04T00:00:00Z",
             "labels": [
@@ -2246,12 +2246,12 @@
             "id": "indicator--36068d20-a213-5bfc-96a0-59e4aa8696d3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.668169Z",
-            "modified": "2026-10-01T19:54:11.668169Z",
+            "modified": "2026-10-11T14:08:19.476744Z",
             "name": "Cryptojacker LD_PRELOAD Rootkit Drop to /lib/security (PAM-Style Camouflage Naming)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Cryptojacker LD_PRELOAD Rootkit Drop to /lib/security (PAM-Style Camouflage Naming)\nid: 6c7e9d33-7dc3-411b-994f-37d431e05907\nstatus: experimental\ndescription: >-\n  Detects file creation in /lib/security or multiarch equivalents of .so files matching\n  the GHOST cryptojacker kit's deceptive PAM-style naming convention (libpam_cache*).\n  Once loaded, the rootkit hides its own filename from readdir output, making\n  filesystem-level detection via ls unreliable. This rule targets the write event\n  before the rootkit activates.\nreferences:\n    - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/\nauthor: The Hunters Ledger\ndate: '2026-05-25'\ntags:\n    - attack.persistence\n    - attack.stealth\n    - attack.execution\n    - attack.t1574.006\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    product: linux\n    category: file_event\ndetection:\n    selection_path:\n        TargetFilename|contains:\n            - /lib/security/\n            - /lib/x86_64-linux-gnu/security/\n            - /usr/lib/security/\n            - /usr/lib/x86_64-linux-gnu/security/\n    selection_name:\n        TargetFilename|contains: libpam_cache\n    condition: selection_path and selection_name\nfalsepositives:\n    - >-\n      Legitimate distro packages installing PAM modules — verify parent process is\n      apt/dpkg/rpm/yum and not a shell or unknown binary. No legitimate Linux distribution\n      ships a libpam_cache.so PAM module.\nlevel: high",
+            "pattern": "title: Cryptojacker LD_PRELOAD Rootkit Drop to /lib/security (PAM-Style Camouflage Naming)\nid: 6c7e9d33-7dc3-411b-994f-37d431e05907\nstatus: experimental\ndescription: >-\n  Detects a Linux file event whose path contains one of the PAM module directories\n  (/lib/security/, /usr/lib/security/ or their x86_64-linux-gnu variants) and the string\n  libpam_cache, the GHOST cryptojacker kit's deceptive PAM-style name. The rule tests\n  two path substrings only: no .so extension, no test that libpam_cache starts the file\n  name, and any file event on the path (create or write) counts.\n  Once loaded, the rootkit hides its own filename from readdir output, making\n  filesystem-level detection via ls unreliable. This rule targets the write event\n  before the rootkit activates.\nreferences:\n    - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/\nauthor: The Hunters Ledger\ndate: '2026-05-25'\ntags:\n    - attack.persistence\n    - attack.stealth\n    - attack.execution\n    - attack.t1574.006\n    - attack.t1036.005\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    product: linux\n    category: file_event\n    definition: 'Requires Linux file events that carry the full path in TargetFilename, for example Sysmon for Linux file creation or an EDR file-event feed. Raw auditd watch records need normalising to a full-path field first.'\ndetection:\n    selection_path:\n        TargetFilename|contains:\n            - /lib/security/\n            - /lib/x86_64-linux-gnu/security/\n            - /usr/lib/security/\n            - /usr/lib/x86_64-linux-gnu/security/\n    selection_name:\n        TargetFilename|contains: libpam_cache\n    condition: selection_path and selection_name\nfalsepositives:\n    - >-\n      Legitimate distro packages installing PAM modules — verify parent process is\n      apt/dpkg/rpm/yum and not a shell or unknown binary. No legitimate Linux distribution\n      ships a libpam_cache.so PAM module.\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-06-04T00:00:00Z",
             "labels": [
@@ -2369,15 +2369,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--bc9f9255-e040-597f-b7c4-1e13d7e13eaf",
+            "id": "indicator--b227de58-6574-50b0-9931-e2d1b9da2ba3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:11.668611Z",
-            "modified": "2026-10-01T19:54:11.668611Z",
-            "name": "Outbound Gemini API Traffic from Non-AI-Workload Server Host (Stolen Key Validation)",
+            "created": "2026-10-11T14:08:19.477371Z",
+            "modified": "2026-10-11T14:08:19.477371Z",
+            "name": "Linux DNS Query to the Gemini API or AI Studio Domain (Hunting Lead)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Outbound Gemini API Traffic from Non-AI-Workload Server Host (Stolen Key Validation)\nid: 06d6f95f-2946-4bb9-b0ff-49921d91922f\nstatus: experimental\ndescription: >-\n  Detects outbound DNS queries to generativelanguage.googleapis.com from server-class\n  hosts without a legitimate AI-application workload designation. Case 1 (Russian\n  Gemini operator) uses stolen Gemini API keys validated via check_keys.py, and the\n  same endpoint is used by the LLM-personalized credential mutation script to invoke\n  Gemini 2.5 Flash for per-target password generation at attack time.\nreferences:\n  - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/\nauthor: The Hunters Ledger\ndate: '2026-05-25'\ntags:\n  - attack.credential-access\n  - attack.t1552.001\n  - detection.emerging-threats\nlogsource:\n  category: dns_query\n  product: linux\ndetection:\n  selection:\n    query|contains:\n      - generativelanguage.googleapis.com\n      - aistudio.google.com\n  condition: selection\nfalsepositives:\n  - >-\n    Legitimate AI applications and developer tools that use the Gemini API. Requires\n    host-role classification to be effective — suppress on designated AI application\n    servers and developer workstations.\nlevel: low",
+            "pattern": "title: Linux DNS Query to the Gemini API or AI Studio Domain (Hunting Lead)\nid: 06d6f95f-2946-4bb9-b0ff-49921d91922f\nstatus: experimental\ndescription: >-\n  Detects DNS queries from Linux hosts for generativelanguage.googleapis.com or\n  aistudio.google.com. The rule has no host-role field and no view of what a query is\n  for, so it fires on every Linux host that resolves either name and cannot show that a\n  key was validated. Case 1 (Russian Gemini operator) uses stolen Gemini API keys\n  validated via check_keys.py, and the same endpoint is used by the LLM-personalized\n  credential mutation script to invoke Gemini 2.5 Flash for per-target password\n  generation at attack time. A deployment that knows which hosts have an expected AI\n  workload scopes those out locally.\nreferences:\n  - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/\nauthor: The Hunters Ledger\ndate: '2026-05-25'\ntags:\n  - detection.emerging-threats\nlogsource:\n  category: dns_query\n  product: linux\ndetection:\n  selection:\n    query|contains:\n      - generativelanguage.googleapis.com\n      - aistudio.google.com\n  condition: selection\nfalsepositives:\n  - >-\n    Legitimate AI applications and developer tools that use the Gemini API. Requires\n    host-role classification to be effective — suppress on designated AI application\n    servers and developer workstations.\nlevel: low",
             "pattern_type": "sigma",
             "valid_from": "2026-06-04T00:00:00Z",
             "labels": [
@@ -2390,15 +2390,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--dd156542-2481-552e-934a-bfa91199d482",
+            "id": "indicator--e8d4ad90-3a7a-5eee-a30c-3fb379d64173",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:11.668684Z",
-            "modified": "2026-10-01T19:54:11.668684Z",
-            "name": "Rovodev AI Agent Directory Creation on Server Infrastructure Host",
+            "created": "2026-10-11T14:08:19.47747Z",
+            "modified": "2026-10-11T14:08:19.47747Z",
+            "name": "Linux File Event Under a .rovodev Directory (Atlassian Rovodev Agent Presence Lead)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Rovodev AI Agent Directory Creation on Server Infrastructure Host\nid: c88a8604-f07b-452b-821e-ecd610edd062\nstatus: experimental\ndescription: >-\n  Detects creation of ~/.rovodev/ directories on server-class hosts, indicating the\n  presence of the Atlassian Rovodev AI coding agent. While Rovodev is a legitimate\n  enterprise product, its presence on server infrastructure co-located with offensive\n  tooling indicates an AI-integrated threat operator. Case 3 (Rovodev/Pandora operator)\n  had ~/.rovodev/sessions/ containing 1.24 MB AI-authoring session JSONs.\nreferences:\n  - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/\nauthor: The Hunters Ledger\ndate: '2026-05-25'\ntags:\n  - attack.resource-development\n  - attack.t1587\n  - detection.emerging-threats\nlogsource:\n  category: file_event\n  product: linux\ndetection:\n  selection:\n    TargetFilename|contains: /.rovodev/\n  condition: selection\nfalsepositives:\n  - >-\n    Legitimate Atlassian Rovodev users on developer workstations and Atlassian-licensed\n    development servers. Apply host-role classification.\nlevel: medium",
+            "pattern": "title: Linux File Event Under a .rovodev Directory (Atlassian Rovodev Agent Presence Lead)\nid: c88a8604-f07b-452b-821e-ecd610edd062\nstatus: experimental\ndescription: >-\n  Detects any Linux file event whose path contains /.rovodev/, the directory where the\n  Atlassian Rovodev AI coding agent keeps its state. The rule tests the path substring\n  only: no directory-creation event, no home-directory anchor and no host role. While\n  Rovodev is a legitimate enterprise product, its presence on server infrastructure co-located with offensive\n  tooling indicates an AI-integrated threat operator. Case 3 (Rovodev/Pandora operator)\n  had ~/.rovodev/sessions/ containing 1.24 MB AI-authoring session JSONs.\nreferences:\n  - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/\nauthor: The Hunters Ledger\ndate: '2026-05-25'\ntags:\n  - detection.emerging-threats\nlogsource:\n  category: file_event\n  product: linux\ndetection:\n  selection:\n    TargetFilename|contains: /.rovodev/\n  condition: selection\nfalsepositives:\n  - >-\n    Legitimate Atlassian Rovodev users on developer workstations and Atlassian-licensed\n    development servers. Apply host-role classification.\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-06-04T00:00:00Z",
             "labels": [
@@ -2432,15 +2432,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--635f6bc1-9c61-551a-91bb-07ade09eecb5",
+            "id": "indicator--2da67b8a-9a9e-5a63-a36f-4e0207dc041d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:11.668833Z",
-            "modified": "2026-10-01T19:54:11.668833Z",
-            "name": "Egress to AEZA/Contabo/DigitalOcean-SG/IONOS/Korea-Telecom from Production Server (Hunting)",
+            "created": "2026-10-11T14:08:19.477667Z",
+            "modified": "2026-10-11T14:08:19.477667Z",
+            "name": "Egress to AEZA/Contabo/DigitalOcean-SG/IONOS/Korea-Telecom Address Ranges from a Linux Host (Hunting)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Egress to AEZA/Contabo/DigitalOcean-SG/IONOS/Korea-Telecom from Production Server (Hunting)\nid: bb917d1e-bb95-48d2-bb19-505cd6655456\nstatus: experimental\ndescription: >-\n  Hunting rule flagging outbound connections from production server hosts to IP ranges\n  associated with the campaign's operator-hosting ASNs: AEZA International Group (Case 1\n  + Case 9), Contabo GmbH (Cases 5/6 demoted but infra tracked), DigitalOcean Frankfurt/\n  Singapore (Case 2 Turkish ARPA), 1&1 IONOS (Case 3 Pandora botnet), Korea Telecom\n  (Case 4 Korean operator). High FP rate as a standalone rule — combine with destination\n  port specificity to raise confidence.\nreferences:\n  - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/\nauthor: The Hunters Ledger\ndate: '2026-05-25'\ntags:\n  - attack.resource-development\n  - attack.t1583.003\n  - detection.emerging-threats\nlogsource:\n  category: network_connection\n  product: linux\ndetection:\n  selection_high_risk_asn:\n    DestinationIp|cidr:\n      - 213.165.0.0/16\n      - 77.110.0.0/16\n      - 209.38.0.0/16\n      - 87.106.0.0/16\n      - 221.150.0.0/16\n  condition: selection_high_risk_asn\nfalsepositives:\n  - >-\n    CDN egress, legitimate cloud API traffic, third-party service integrations. Use as\n    a hunting pivot combined with destination port filters (mining ports, C2 elite ports).\nlevel: low",
+            "pattern": "title: Egress to AEZA/Contabo/DigitalOcean-SG/IONOS/Korea-Telecom Address Ranges from a Linux Host (Hunting)\nid: bb917d1e-bb95-48d2-bb19-505cd6655456\nstatus: experimental\ndescription: >-\n  Hunting rule flagging outbound connections from any Linux host to IP ranges\n  associated with the campaign's operator-hosting ASNs (the selection has no source-host\n  or host-role filter, so limiting it to production servers is a deployment scoping\n  decision, not a test in the rule): AEZA International Group (Case 1\n  + Case 9), Contabo GmbH (Cases 5/6 demoted but infra tracked), DigitalOcean Frankfurt/\n  Singapore (Case 2 Turkish ARPA), 1&1 IONOS (Case 3 Pandora botnet), Korea Telecom\n  (Case 4 Korean operator). High FP rate as a standalone rule — combine with destination\n  port specificity to raise confidence.\nreferences:\n  - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/\nauthor: The Hunters Ledger\ndate: '2026-05-25'\ntags:\n  - attack.resource-development\n  - attack.t1583.003\n  - detection.emerging-threats\nlogsource:\n  category: network_connection\n  product: linux\ndetection:\n  selection_high_risk_asn:\n    DestinationIp|cidr:\n      - 213.165.0.0/16\n      - 77.110.0.0/16\n      - 209.38.0.0/16\n      - 87.106.0.0/16\n      - 221.150.0.0/16\n  condition: selection_high_risk_asn\nfalsepositives:\n  - >-\n    CDN egress, legitimate cloud API traffic, third-party service integrations. Use as\n    a hunting pivot combined with destination port filters (mining ports, C2 elite ports).\nlevel: low",
             "pattern_type": "sigma",
             "valid_from": "2026-06-04T00:00:00Z",
             "labels": [
@@ -2453,15 +2453,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--172779e8-c47e-5789-9a84-31ea36d60648",
+            "id": "indicator--a0ec0b34-a060-5c31-8189-e49af5e8d393",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:11.668907Z",
-            "modified": "2026-10-01T19:54:11.668907Z",
-            "name": "Suspected AI-Orchestrated Multi-Stage API Attack Sequence (Machine-Speed Window)",
+            "created": "2026-10-11T14:08:19.477766Z",
+            "modified": "2026-10-11T14:08:19.477766Z",
+            "name": "Web Request to API, Auth, Payment or Transaction URI Path (Machine-Speed Sequence Building Block)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Suspected AI-Orchestrated Multi-Stage API Attack Sequence (Machine-Speed Window)\nid: f8fbdc2e-b653-4b9c-b56d-2c004c202ea5\nstatus: experimental\ndescription: >-\n  Detects requests to payment/authentication/transaction API endpoints characteristic of\n  the reconnaissance and exploitation stages in a machine-speed, multi-stage API attack\n  sequence tied to LLM-orchestrated attack tooling. Case 8 documented a 6-stage payment\n  API exploitation completed in under 60 seconds. This selection-only rule flags\n  individual requests; operationalizing the full 60-second/4+-endpoint velocity\n  signature requires a SIEM correlation search across API access logs, not expressible\n  as a single Sigma detection rule. Hunting leads only.\nreferences:\n  - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/\nauthor: The Hunters Ledger\ndate: '2026-05-25'\ntags:\n  - attack.impact\n  - attack.t1657\n  - detection.emerging-threats\nlogsource:\n  category: webserver\n  product: linux\ndetection:\n  selection:\n    cs-uri-stem|contains:\n      - /api/\n      - /auth/\n      - /payment/\n      - /transaction/\n  condition: selection\nfalsepositives:\n  - >-\n    Legitimate payment processing automation, API health check systems, and load\n    balancer probe sequences. A 30-day API call velocity baseline per source IP is\n    recommended before operationalizing.\nlevel: low",
+            "pattern": "title: Web Request to API, Auth, Payment or Transaction URI Path (Machine-Speed Sequence Building Block)\nid: f8fbdc2e-b653-4b9c-b56d-2c004c202ea5\nstatus: experimental\ndescription: >-\n  Flags individual web requests whose URI stem contains /api/, /auth/, /payment/ or\n  /transaction/, the kind of endpoints touched in the stages of a machine-speed,\n  multi-stage API attack tied to LLM-orchestrated attack tooling. Case 8 documented a\n  6-stage payment API exploitation completed in under 60 seconds. The rule tests no\n  count, window or sequence: operationalizing the 60-second/4+-endpoint velocity\n  signature requires a SIEM correlation search across API access logs, not expressible\n  as a single Sigma detection rule. Hunting leads only.\nreferences:\n  - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/\nauthor: The Hunters Ledger\ndate: '2026-05-25'\ntags:\n  - attack.impact\n  - attack.t1657\n  - detection.emerging-threats\nlogsource:\n  category: webserver\n  product: linux\ndetection:\n  selection:\n    cs-uri-stem|contains:\n      - /api/\n      - /auth/\n      - /payment/\n      - /transaction/\n  condition: selection\nfalsepositives:\n  - >-\n    Legitimate payment processing automation, API health check systems, and load\n    balancer probe sequences. A 30-day API call velocity baseline per source IP is\n    recommended before operationalizing.\nlevel: low",
             "pattern_type": "sigma",
             "valid_from": "2026-06-04T00:00:00Z",
             "labels": [
@@ -2477,12 +2477,12 @@
             "id": "indicator--2a2fa624-ac01-5e6e-8520-f7efd71d11bd",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.668979Z",
-            "modified": "2026-10-01T19:54:11.668979Z",
+            "modified": "2026-10-11T14:08:19.477876Z",
             "name": "THL DETECT AI-Agent-Campaign Russian A2A C2 X-Agent-Id Header + API Endpoint (Case 1 C2 Protocol Indicator)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT AI-Agent-Campaign Russian A2A C2 X-Agent-Id Header + API Endpoint (Case 1 C2 Protocol Indicator)\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"/api/v1/\"; http.header_names; content:\"X-Agent-Id\"; nocase; reference:url,the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/; classtype:trojan-activity; threshold:type limit,track by_src,count 3,seconds 3600; sid:9200007; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-25;)",
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT AI-Agent-Campaign Russian A2A C2 X-Agent-Id Header + API Endpoint (Case 1 C2 Protocol Indicator)\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"/api/v1/\"; startswith; http.header_names; content:\"X-Agent-Id\"; nocase; reference:url,the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/; classtype:trojan-activity; threshold:type limit,track by_src,count 3,seconds 3600; sid:9200007; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-25;)",
             "pattern_type": "suricata",
             "valid_from": "2026-06-04T00:00:00Z",
             "labels": [
@@ -2516,15 +2516,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--87ae9c9f-894b-599c-a9fc-7e35a7cb2f68",
+            "id": "indicator--976865cf-9e27-5295-9704-9829b791b0e8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:11.669126Z",
-            "modified": "2026-10-01T19:54:11.669126Z",
-            "name": "THL HUNT AI-Agent-Campaign Kryptex Mining Pool DNS Query — GHOST Cryptojacker Kit Pool (cfx.kryptex.network / etc.kryptex.network)",
+            "created": "2026-10-11T14:08:19.478072Z",
+            "modified": "2026-10-11T14:08:19.478072Z",
+            "name": "THL HUNT AI-Agent-Campaign Kryptex Mining Pool DNS Query (Any kryptex.network Subdomain, Includes cfx. and etc. Pool Hosts)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert dns $HOME_NET any -> any any (msg:\"THL HUNT AI-Agent-Campaign Kryptex Mining Pool DNS Query — GHOST Cryptojacker Kit Pool (cfx.kryptex.network / etc.kryptex.network)\"; dns_query; content:\"kryptex.network\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/; classtype:trojan-activity; sid:9200001; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-25;)",
+            "pattern": "alert dns $HOME_NET any -> any any (msg:\"THL HUNT AI-Agent-Campaign Kryptex Mining Pool DNS Query (Any kryptex.network Subdomain, Includes cfx. and etc. Pool Hosts)\"; dns_query; content:\".kryptex.network\"; nocase; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/; classtype:trojan-activity; sid:9200001; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-25;)",
             "pattern_type": "suricata",
             "valid_from": "2026-06-04T00:00:00Z",
             "labels": [
@@ -2558,15 +2558,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--5a44f305-36e0-5f18-8628-a52513deedd5",
+            "id": "indicator--72c60aa9-6523-5012-9b77-283c15575249",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:11.669272Z",
-            "modified": "2026-10-01T19:54:11.669272Z",
-            "name": "THL HUNT AI-Agent-Campaign Hysteria v2 QUIC bing.com SNI Masquerade on GHOST Kit Operator Ports",
+            "created": "2026-10-11T14:08:19.478265Z",
+            "modified": "2026-10-11T14:08:19.478265Z",
+            "name": "THL HUNT AI-Agent-Campaign QUIC SNI Containing bing.com on GHOST Kit Operator Ports 14433 and 14444 (Hysteria v2 Masquerade Lead)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert quic $HOME_NET any -> any [14433,14444] (msg:\"THL HUNT AI-Agent-Campaign Hysteria v2 QUIC bing.com SNI Masquerade on GHOST Kit Operator Ports\"; flow:to_server; quic.sni; content:\"bing.com\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/; classtype:trojan-activity; sid:9200006; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-25, modified 2026-08-20;)",
+            "pattern": "alert quic $HOME_NET any -> any [14433,14444] (msg:\"THL HUNT AI-Agent-Campaign QUIC SNI Containing bing.com on GHOST Kit Operator Ports 14433 and 14444 (Hysteria v2 Masquerade Lead)\"; flow:to_server; quic.sni; content:\"bing.com\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/; classtype:trojan-activity; sid:9200006; rev:4; metadata:author The_Hunters_Ledger, date 2026-05-25, modified 2026-08-20;)",
             "pattern_type": "suricata",
             "valid_from": "2026-06-04T00:00:00Z",
             "labels": [
@@ -5647,12 +5647,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--7ddd2631-e533-5313-a8a6-14e20b1398d4",
+            "id": "relationship--5db6dd9b-62b0-5f41-8d18-95c7ab4c0b80",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:11.683912Z",
-            "modified": "2026-10-01T19:54:11.683912Z",
+            "created": "2026-10-11T14:08:19.499095Z",
+            "modified": "2026-10-11T14:08:19.499095Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--bc9f9255-e040-597f-b7c4-1e13d7e13eaf",
+            "source_ref": "indicator--b227de58-6574-50b0-9931-e2d1b9da2ba3",
             "target_ref": "malware--fa09bf02-7c87-50ba-9716-ff0954d1561f",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -5661,12 +5661,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--666efdef-0b89-5d2c-81d6-c6290bc6a2aa",
+            "id": "relationship--6835954f-44a1-53ae-b884-d2b0666a9399",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:11.683972Z",
-            "modified": "2026-10-01T19:54:11.683972Z",
+            "created": "2026-10-11T14:08:19.499187Z",
+            "modified": "2026-10-11T14:08:19.499187Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--dd156542-2481-552e-934a-bfa91199d482",
+            "source_ref": "indicator--e8d4ad90-3a7a-5eee-a30c-3fb379d64173",
             "target_ref": "malware--fa09bf02-7c87-50ba-9716-ff0954d1561f",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -5689,12 +5689,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--fd8753f7-1d73-519a-98c7-76eae23bec79",
+            "id": "relationship--f09949bc-29c5-5cdf-811a-c155a1f6a17d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:11.684094Z",
-            "modified": "2026-10-01T19:54:11.684094Z",
+            "created": "2026-10-11T14:08:19.499457Z",
+            "modified": "2026-10-11T14:08:19.499457Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--635f6bc1-9c61-551a-91bb-07ade09eecb5",
+            "source_ref": "indicator--2da67b8a-9a9e-5a63-a36f-4e0207dc041d",
             "target_ref": "malware--fa09bf02-7c87-50ba-9716-ff0954d1561f",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -5703,12 +5703,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--a2c475d9-24fd-594c-9564-e88b8c225d95",
+            "id": "relationship--fd548f31-e138-5b3f-8fb1-cafd8eb18c61",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:11.684153Z",
-            "modified": "2026-10-01T19:54:11.684153Z",
+            "created": "2026-10-11T14:08:19.499544Z",
+            "modified": "2026-10-11T14:08:19.499544Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--172779e8-c47e-5789-9a84-31ea36d60648",
+            "source_ref": "indicator--a0ec0b34-a060-5c31-8189-e49af5e8d393",
             "target_ref": "malware--fa09bf02-7c87-50ba-9716-ff0954d1561f",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -5745,12 +5745,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--fd8dc12b-82e0-52d6-b556-cd232d069b7d",
+            "id": "relationship--e0a59fde-222d-5fda-90f0-ba8eb7603035",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:11.684337Z",
-            "modified": "2026-10-01T19:54:11.684337Z",
+            "created": "2026-10-11T14:08:19.499802Z",
+            "modified": "2026-10-11T14:08:19.499802Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--87ae9c9f-894b-599c-a9fc-7e35a7cb2f68",
+            "source_ref": "indicator--976865cf-9e27-5295-9704-9829b791b0e8",
             "target_ref": "malware--fa09bf02-7c87-50ba-9716-ff0954d1561f",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -5773,12 +5773,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--1cc78b97-bd03-58f1-89ca-6da2f11d63b5",
+            "id": "relationship--a3263ff1-8388-5aaf-ba9a-5c07dc0bab1a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:11.684456Z",
-            "modified": "2026-10-01T19:54:11.684456Z",
+            "created": "2026-10-11T14:08:19.499992Z",
+            "modified": "2026-10-11T14:08:19.499992Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--5a44f305-36e0-5f18-8628-a52513deedd5",
+            "source_ref": "indicator--72c60aa9-6523-5012-9b77-283c15575249",
             "target_ref": "malware--fa09bf02-7c87-50ba-9716-ff0954d1561f",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -31284,7 +31284,7 @@
             "id": "report--b0d9cd2f-d73f-5e19-a193-66cc1aa0e090",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.796449Z",
-            "modified": "2026-10-11T03:42:48.76519Z",
+            "modified": "2026-10-11T14:08:19.668348Z",
             "name": "Multi-Actor AI-Agent Framework Abuse: 8 Operators Integrating AI CLIs into Offensive Workflows",
             "description": "Parent report covering 8 active operator cases + 5 novel TTPs + 2 demoted-with-rationale. IOCs grouped by case to preserve operator attribution. NO defanging in JSON per project convention (machine-readable for SIEM/EDR ingestion). Case 9 GHOST kit IOCs reflect Censys 2026-04-07 prior art + Hunters Ledger multi-customer / kit-author / supply-chain extensions.",
             "report_types": [
@@ -31449,16 +31449,16 @@
                 "indicator--a7b70bd8-6120-5e78-9e7c-f0502ff1b223",
                 "indicator--b6dae87c-39ad-5f31-b061-d9945f8735a1",
                 "indicator--c3c837bb-905d-5258-9783-2711cc6becde",
-                "indicator--bc9f9255-e040-597f-b7c4-1e13d7e13eaf",
-                "indicator--dd156542-2481-552e-934a-bfa91199d482",
+                "indicator--b227de58-6574-50b0-9931-e2d1b9da2ba3",
+                "indicator--e8d4ad90-3a7a-5eee-a30c-3fb379d64173",
                 "indicator--f17a7895-7b8d-51bb-a53b-4d5bb3006e60",
-                "indicator--635f6bc1-9c61-551a-91bb-07ade09eecb5",
-                "indicator--172779e8-c47e-5789-9a84-31ea36d60648",
+                "indicator--2da67b8a-9a9e-5a63-a36f-4e0207dc041d",
+                "indicator--a0ec0b34-a060-5c31-8189-e49af5e8d393",
                 "indicator--2a2fa624-ac01-5e6e-8520-f7efd71d11bd",
                 "indicator--d4b5bbf3-a8e2-56a4-8f00-fa4254222094",
-                "indicator--87ae9c9f-894b-599c-a9fc-7e35a7cb2f68",
+                "indicator--976865cf-9e27-5295-9704-9829b791b0e8",
                 "indicator--f64bdbb0-535c-53c1-86a4-4a90210883a1",
-                "indicator--5a44f305-36e0-5f18-8628-a52513deedd5",
+                "indicator--72c60aa9-6523-5012-9b77-283c15575249",
                 "malware--4a93789a-0679-5387-93b9-510fe1753473",
                 "malware--b937cd8c-f302-580b-930e-d6ea52039336",
                 "malware--06acec99-20cb-58f7-a8a3-29c76eee3763",
@@ -31647,16 +31647,16 @@
                 "relationship--21757a14-54f7-5f7b-a190-01266fd22dc9",
                 "relationship--187228b3-18b9-543a-ab44-fb3285c1cd89",
                 "relationship--084b3f93-bbb9-562e-9522-ca167168408d",
-                "relationship--7ddd2631-e533-5313-a8a6-14e20b1398d4",
-                "relationship--666efdef-0b89-5d2c-81d6-c6290bc6a2aa",
+                "relationship--5db6dd9b-62b0-5f41-8d18-95c7ab4c0b80",
+                "relationship--6835954f-44a1-53ae-b884-d2b0666a9399",
                 "relationship--28e77989-7ea6-5d2c-8f75-ceac4763333e",
-                "relationship--fd8753f7-1d73-519a-98c7-76eae23bec79",
-                "relationship--a2c475d9-24fd-594c-9564-e88b8c225d95",
+                "relationship--f09949bc-29c5-5cdf-811a-c155a1f6a17d",
+                "relationship--fd548f31-e138-5b3f-8fb1-cafd8eb18c61",
                 "relationship--bb3960c1-95cd-575d-9e60-2aa5de350aa8",
                 "relationship--632a5d8b-d219-5c7b-9163-b43b13f6afe0",
-                "relationship--fd8dc12b-82e0-52d6-b556-cd232d069b7d",
+                "relationship--e0a59fde-222d-5fda-90f0-ba8eb7603035",
                 "relationship--e4d4dd99-6ec9-58e4-bf0f-fc8650853510",
-                "relationship--1cc78b97-bd03-58f1-89ca-6da2f11d63b5",
+                "relationship--a3263ff1-8388-5aaf-ba9a-5c07dc0bab1a",
                 "relationship--ce8760f8-f672-51e0-8280-e2e74d351107",
                 "relationship--3578a7b2-411b-5786-8d02-12d39e8958fa",
                 "relationship--c7ba4cd5-3f50-5806-a815-1cfd19afd05f",

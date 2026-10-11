@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--0049b1c4-040a-4d5a-b0a4-44aa76805ea5",
+    "id": "bundle--4f890e74-e42c-4ecb-9a11-acfb75142a18",
     "objects": [
         {
             "type": "identity",
@@ -2767,27 +2767,6 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--75421632-4474-599f-b3b8-878f2007a0a9",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:20.719061Z",
-            "modified": "2026-10-01T19:54:20.719061Z",
-            "name": "Scheduled PowerShell Re-Pull Of Remote Script Via IEX WebClient DownloadString",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "title: Scheduled PowerShell Re-Pull Of Remote Script Via IEX WebClient DownloadString\nid: 2875053e-f1d1-429d-bf6a-49ee74d7c6dd\nstatus: experimental\ndescription: >-\n  Detects a PowerShell process launched with a command line that downloads and immediately\n  executes a remote script via IEX and Net.WebClient.DownloadString, the pattern used by a\n  weekly SYSTEM scheduled task to re-pull the full attack chain fresh from C2 rather than\n  running a static payload.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/\nauthor: The Hunters Ledger\ndate: '2026-09-06'\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1053.005\n    - stp.3\nlogsource:\n    category: process_creation\n    product: windows\n    definition: 'Requires process creation logging that populates CommandLine, for example Sysmon EID 1 or Security EID 4688 with command line auditing enabled.'\ndetection:\n    selection_image:\n        Image|endswith: '\\powershell.exe'\n    selection_cmd:\n        CommandLine|contains|all:\n            - 'IEX'\n            - 'DownloadString'\n    condition: selection_image and selection_cmd\nfalsepositives:\n    - Internal automation tooling that intentionally downloads and executes a remote update script on a schedule\nlevel: high",
-            "pattern_type": "sigma",
-            "valid_from": "2026-09-07T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "indicator",
-            "spec_version": "2.1",
             "id": "indicator--b31c70a6-b241-5c43-ad8e-40e7f09e17db",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.719137Z",
@@ -2830,15 +2809,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--6844a48c-af04-54dd-8535-90578b737d0e",
+            "id": "indicator--c5f5bfed-f3fe-569b-b5eb-4cd650e6ec5d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:20.719358Z",
-            "modified": "2026-10-01T19:54:20.719358Z",
-            "name": "Run Key Value Launching Headless Node.js Against A .bak File",
+            "created": "2026-10-11T14:08:46.191228Z",
+            "modified": "2026-10-11T14:08:46.191228Z",
+            "name": "Run Key Value Starting With A Headless Conhost Launcher And Containing node.exe And A .bak Path",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Run Key Value Launching Headless Node.js Against A .bak File\nid: 981da035-041b-434b-9db6-141c3c778534\nstatus: experimental\ndescription: >-\n  Detects a Run key registry value whose data begins conhost --headless and invokes\n  node.exe with a .bak-extension argument, the persistence mechanism used by an\n  EtherRAT-class Node.js bot that resolves its C2 address from an Ethereum smart contract.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/\nauthor: The Hunters Ledger\ndate: '2026-09-06'\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1547.001\nlogsource:\n    category: registry_set\n    product: windows\n    definition: 'Requires Sysmon Event ID 13 (RegistryEvent SetValue) with value auditing enabled for HKCU Run keys, or Security Event ID 4657.'\ndetection:\n    selection:\n        TargetObject|contains: '\\CurrentVersion\\Run\\'\n        Details|contains|all:\n            - 'conhost --headless'\n            - 'node.exe'\n    filter_extension:\n        Details|contains: '.bak'\n    condition: selection and filter_extension\nfalsepositives:\n    - Unknown. No legitimate Node.js packaging pattern matches this launcher-plus-extension combination.\nlevel: high",
+            "pattern": "title: Run Key Value Starting With A Headless Conhost Launcher And Containing node.exe And A .bak Path\nid: 981da035-041b-434b-9db6-141c3c778534\nstatus: experimental\ndescription: >-\n  Detects a Run key registry value whose data begins with the token conhost --headless\n  (followed by a space), contains node.exe, and contains a token ending in .bak (followed by a\n  space or a quote, or ending the data), the persistence mechanism used by an EtherRAT-class Node.js bot\n  that resolves its C2 address from an Ethereum smart contract.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/\nauthor: The Hunters Ledger\ndate: '2026-09-06'\nmodified: '2026-10-11'\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1547.001\n    - stp.3\nlogsource:\n    category: registry_set\n    product: windows\n    definition: 'Requires Sysmon Event ID 13 (RegistryEvent SetValue) with value auditing enabled for the Run keys, or Security Event ID 4657.'\ndetection:\n    selection_key:\n        TargetObject|contains: '\\CurrentVersion\\Run\\'\n    selection_start:\n        Details|startswith: 'conhost --headless '\n    selection_node:\n        Details|contains: 'node.exe'\n    selection_bak_mid:\n        Details|contains:\n            - '.bak '\n            - '.bak\"'\n            - \".bak'\"\n    selection_bak_end:\n        Details|endswith: '.bak'\n    condition: selection_key and selection_start and selection_node and 1 of selection_bak_*\nfalsepositives:\n    - Unknown. No legitimate Node.js packaging pattern matches this launcher-plus-extension combination.\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-09-07T00:00:00Z",
             "labels": [
@@ -2893,15 +2872,36 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--98656ab4-ba1b-5789-b294-9c0f03a432cb",
+            "id": "indicator--aa989e73-54f5-5341-8ec4-17ba7b2fa39e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:20.71958Z",
-            "modified": "2026-10-01T19:54:20.71958Z",
-            "name": "Certutil URLCache Download Or Remote WMIC-Invoked Certutil Download",
+            "created": "2026-10-11T14:08:46.191668Z",
+            "modified": "2026-10-11T14:08:46.191668Z",
+            "name": "Certutil URLCache Download Or WMIC Node-Targeted Certutil Download",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Certutil URLCache Download Or Remote WMIC-Invoked Certutil Download\nid: 934c780a-ed74-45d9-bbe8-c5540ed96f55\nstatus: experimental\ndescription: >-\n  Detects certutil invoked with -urlcache -split -f to fetch a remote file, either directly\n  or via a remote wmic process-call-create, the LOLBin ingress-tool-transfer pattern used\n  to stage payloads onto internal hosts from the operator's staging ports.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/\nauthor: The Hunters Ledger\ndate: '2026-09-06'\ntags:\n    - attack.command-and-control\n    - attack.t1105\n    - attack.lateral-movement\n    - attack.t1570\n    - stp.3\nlogsource:\n    category: process_creation\n    product: windows\n    definition: 'Requires process creation logging that populates CommandLine, for example Sysmon EID 1 or Security EID 4688 with command line auditing enabled.'\ndetection:\n    selection_direct:\n        Image|endswith: '\\certutil.exe'\n        CommandLine|contains|all:\n            - '-urlcache'\n            - '-split'\n            - '-f'\n    selection_remote:\n        Image|endswith: '\\WMIC.exe'\n        CommandLine|contains|all:\n            - 'process call create'\n            - 'certutil'\n    condition: selection_direct or selection_remote\nfalsepositives:\n    - Unlikely. certutil -urlcache -split -f has no common legitimate administrative use outside certificate-cache management, which does not use this flag combination.\nlevel: high",
+            "pattern": "title: Certutil URLCache Download Or WMIC Node-Targeted Certutil Download\nid: 934c780a-ed74-45d9-bbe8-c5540ed96f55\nstatus: experimental\ndescription: >-\n  Detects certutil invoked with -urlcache -split -f to fetch a remote file, either directly\n  or via wmic process-call-create with a /node: argument that launches certutil with\n  -urlcache and -split, the LOLBin ingress-tool-transfer pattern used to stage payloads onto\n  internal hosts. /node: names a target and can name the local machine, so the wmic branch\n  does not prove a remote host. The download address and port are not tested.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/\nauthor: The Hunters Ledger\ndate: '2026-09-06'\nmodified: '2026-10-11'\ntags:\n    - attack.command-and-control\n    - attack.t1105\n    - attack.lateral-movement\n    - attack.t1570\n    - stp.3\nlogsource:\n    category: process_creation\n    product: windows\n    definition: 'Requires process creation logging that populates CommandLine, for example Sysmon EID 1 or Security EID 4688 with command line auditing enabled.'\ndetection:\n    selection_direct:\n        Image|endswith: '\\certutil.exe'\n        CommandLine|contains|all:\n            - '-urlcache'\n            - '-split'\n            - '-f'\n    selection_remote:\n        Image|endswith: '\\WMIC.exe'\n        CommandLine|contains|all:\n            - '/node:'\n            - 'process call create'\n            - 'certutil'\n            - '-urlcache'\n            - '-split'\n    condition: selection_direct or selection_remote\nfalsepositives:\n    - Unlikely. certutil -urlcache -split -f has no common legitimate administrative use outside certificate-cache management, which does not use this flag combination.\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-09-07T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--2a2411bb-56ad-5bfc-9f0b-cc2258213cf6",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-11T14:08:46.191889Z",
+            "modified": "2026-10-11T14:08:46.191889Z",
+            "name": "PowerShell Command Line Containing IEX And DownloadString",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: PowerShell Command Line Containing IEX And DownloadString\nid: 2875053e-f1d1-429d-bf6a-49ee74d7c6dd\nstatus: experimental\ndescription: >-\n  Detects a powershell.exe process whose command line contains both IEX and DownloadString,\n  the text of the download-and-execute cradle that this campaign's weekly SYSTEM scheduled task\n  uses to re-pull the full attack chain fresh from C2 rather than running a static payload. The\n  selection tests no scheduled-task parent, no SYSTEM account, no Net.WebClient and no\n  download URL, and it does not parse that anything is downloaded or executed, so it matches\n  the two strings wherever they appear, including legitimate installers and automation and a\n  command that only quotes them, and is a hunting lead rather than an alert.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/\nauthor: The Hunters Ledger\ndate: '2026-09-06'\nmodified: '2026-10-11'\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1053.005\n    - stp.2\nlogsource:\n    category: process_creation\n    product: windows\n    definition: 'Requires process creation logging that populates CommandLine, for example Sysmon EID 1 or Security EID 4688 with command line auditing enabled.'\ndetection:\n    selection_image:\n        Image|endswith: '\\powershell.exe'\n    selection_cmd:\n        CommandLine|contains|all:\n            - 'IEX'\n            - 'DownloadString'\n    condition: selection_image and selection_cmd\nfalsepositives:\n    - Internal automation tooling, installers and bootstrap scripts that intentionally download and execute a remote script with the same cradle\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-09-07T00:00:00Z",
             "labels": [
@@ -2935,15 +2935,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--3a202e26-7ff3-5189-89b1-47eda6dc6ea8",
+            "id": "indicator--2e97fb42-7f3b-50c2-8e8d-79f4d4d3451b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:20.719726Z",
-            "modified": "2026-10-01T19:54:20.719726Z",
-            "name": "Endpoint Protection Service Stopped Or Disabled",
+            "created": "2026-10-11T14:08:46.192182Z",
+            "modified": "2026-10-11T14:08:46.192182Z",
+            "name": "Named Endpoint Protection Service Start Type Set To Disabled",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Endpoint Protection Service Stopped Or Disabled\nid: 657adc6d-37b1-481d-8ff5-c13278c9c359\nstatus: experimental\ndescription: >-\n  Detects a Windows service-control-manager event stopping or disabling one of a set of\n  endpoint-protection service names. Individually common during legitimate maintenance;\n  several such events on one host within a short window is the actual campaign signature\n  and needs analyst correlation this single-event rule cannot perform.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/\nauthor: The Hunters Ledger\ndate: '2026-09-06'\ntags:\n    - attack.defense-impairment\n    - attack.t1685\nlogsource:\n    product: windows\n    service: system\n    definition: 'Requires the Windows System event log (Service Control Manager source), EventID 7036 (service entered stopped state) or 7040 (service start type changed).'\ndetection:\n    selection:\n        EventID:\n            - 7036\n            - 7040\n        Provider_Name: 'Service Control Manager'\n    condition: selection\nfalsepositives:\n    - Scheduled, change-controlled endpoint-agent maintenance, upgrade, or uninstall\nlevel: medium",
+            "pattern": "title: Named Endpoint Protection Service Start Type Set To Disabled\nid: 657adc6d-37b1-481d-8ff5-c13278c9c359\nstatus: experimental\ndescription: >-\n  Detects the Start value of one of eight named endpoint-protection services being set to 4\n  (disabled) under HKLM\\System\\<ControlSet>\\Services, the service names that this campaign's\n  task_39.ps1 stops and disables. Individually common during legitimate maintenance; several\n  of the eight on one host within a short window is the actual campaign signature and needs\n  analyst correlation this single-event rule cannot perform.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/\nauthor: The Hunters Ledger\ndate: '2026-09-06'\nmodified: '2026-10-11'\ntags:\n    - attack.defense-impairment\n    - attack.t1685\n    - stp.2\nlogsource:\n    category: registry_set\n    product: windows\n    definition: 'Requires Sysmon Event ID 13 (RegistryEvent SetValue) with registry monitoring that covers HKLM\\System\\CurrentControlSet\\Services. The rule reads the Sysmon fields TargetObject and Details (DWORD rendered as DWORD (0x00000004)); other registry sources such as Security Event ID 4657 name their fields differently and this page declares no mapping for them.'\ndetection:\n    selection_service:\n        TargetObject|startswith: 'HKLM\\System\\'\n        TargetObject|endswith:\n            - '\\Services\\ekrn\\Start'\n            - '\\Services\\EraAgentSvc\\Start'\n            - '\\Services\\EhttpSrv\\Start'\n            - '\\Services\\EESvc\\Start'\n            - '\\Services\\eguiSvc\\Start'\n            - '\\Services\\epfw\\Start'\n            - '\\Services\\epfwwfp\\Start'\n            - '\\Services\\eamonm\\Start'\n    selection_disabled:\n        Details:\n            - 'DWORD (0x00000004)'\n            - 4\n    condition: selection_service and selection_disabled\nfalsepositives:\n    - The endpoint product's own installer, upgrade or uninstall setting its services to disabled\n    - An administrator deliberately disabling the product's services during maintenance\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-09-07T00:00:00Z",
             "labels": [
@@ -2956,15 +2956,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--9184694e-a0a7-5e5a-b78e-bf636d8de547",
+            "id": "indicator--17561d7f-8e23-55fd-ade7-f009fd7c9150",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:20.719802Z",
-            "modified": "2026-10-01T19:54:20.719802Z",
-            "name": "Curl Download Of Node.js Runtime Followed By Tar Extraction Into LOCALAPPDATA",
+            "created": "2026-10-11T14:08:46.192308Z",
+            "modified": "2026-10-11T14:08:46.192308Z",
+            "name": "Curl Fetch Of A Node.js Zip Or tar.exe Command Line Under LOCALAPPDATA",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Curl Download Of Node.js Runtime Followed By Tar Extraction Into LOCALAPPDATA\nid: 32c19bc3-e8a6-430c-bb8b-b75943b93488\nstatus: experimental\ndescription: >-\n  Detects curl.exe fetching a Node.js distribution archive from nodejs.org followed by\n  tar.exe extracting it into %LOCALAPPDATA%, the bring-your-own-runtime bootstrap this\n  campaign's Node.js bot uses to obtain a signed, legitimate node.exe on a host with no\n  development toolchain.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/\nauthor: The Hunters Ledger\ndate: '2026-09-06'\ntags:\n    - attack.command-and-control\n    - attack.t1105\nlogsource:\n    category: process_creation\n    product: windows\n    definition: 'Requires process creation logging that populates CommandLine, for example Sysmon EID 1 or Security EID 4688 with command line auditing enabled.'\ndetection:\n    selection_curl:\n        Image|endswith: '\\curl.exe'\n        CommandLine|contains|all:\n            - 'nodejs.org/dist'\n            - '.zip'\n    selection_tar:\n        Image|endswith: '\\tar.exe'\n        CommandLine|contains: '\\AppData\\Local\\'\n    condition: selection_curl or selection_tar\nfalsepositives:\n    - A developer workstation or build server legitimately provisioning Node.js this same way\nlevel: low",
+            "pattern": "title: Curl Fetch Of A Node.js Zip Or tar.exe Command Line Under LOCALAPPDATA\nid: 32c19bc3-e8a6-430c-bb8b-b75943b93488\nstatus: experimental\ndescription: >-\n  Detects either of two independent events: curl.exe whose command line contains both\n  nodejs.org/dist and .zip (the substrings are not bound to the URL host), or tar.exe run\n  with a command line containing \\AppData\\Local\\. Together\n  they are the bring-your-own-runtime bootstrap this campaign's Node.js bot uses to obtain a\n  signed, legitimate node.exe, but the two selections are ORed: no order, same-host or time\n  relationship is tested, the tar branch has no reference to Node.js, and nothing tests\n  whether the host has a development toolchain.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/\nauthor: The Hunters Ledger\ndate: '2026-09-06'\ntags:\n    - attack.command-and-control\n    - attack.t1105\nlogsource:\n    category: process_creation\n    product: windows\n    definition: 'Requires process creation logging that populates CommandLine, for example Sysmon EID 1 or Security EID 4688 with command line auditing enabled.'\ndetection:\n    selection_curl:\n        Image|endswith: '\\curl.exe'\n        CommandLine|contains|all:\n            - 'nodejs.org/dist'\n            - '.zip'\n    selection_tar:\n        Image|endswith: '\\tar.exe'\n        CommandLine|contains: '\\AppData\\Local\\'\n    condition: selection_curl or selection_tar\nfalsepositives:\n    - A developer workstation or build server legitimately provisioning Node.js this same way\nlevel: low",
             "pattern_type": "sigma",
             "valid_from": "2026-09-07T00:00:00Z",
             "labels": [
@@ -2977,15 +2977,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--d7acb038-4308-577a-9adb-e4eb3c0a7fd8",
+            "id": "indicator--b57ccb57-9d80-53f6-a9e3-70e27d37a9ba",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:20.719877Z",
-            "modified": "2026-10-01T19:54:20.719877Z",
-            "name": "PowerShell Reflective Assembly Load From Base64-Decoded String",
+            "created": "2026-10-11T14:08:46.192418Z",
+            "modified": "2026-10-11T14:08:46.192418Z",
+            "name": "PowerShell Script Block Containing Reflection.Assembly Load And FromBase64String",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: PowerShell Reflective Assembly Load From Base64-Decoded String\nid: 5024b26b-169d-4ef8-8016-ca502a557d1b\nstatus: experimental\ndescription: >-\n  Detects a PowerShell script block combining Reflection.Assembly Load with a\n  Base64-decoded byte array, a common reflective in-memory execution pattern this\n  campaign uses for shellcode injection staging. Broadly used by legitimate tooling as\n  well, so this is a scoping signal rather than a high-confidence alert.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/\nauthor: The Hunters Ledger\ndate: '2026-09-06'\ntags:\n    - attack.stealth\n    - attack.t1620\n    - attack.t1027\nlogsource:\n    category: ps_script\n    product: windows\n    definition: 'Requires PowerShell Script Block Logging (Event ID 4104) enabled.'\ndetection:\n    selection:\n        ScriptBlockText|contains|all:\n            - '[System.Reflection.Assembly]::Load('\n            - 'FromBase64String'\n    condition: selection\nfalsepositives:\n    - Legitimate PowerShell modules and administrative tooling that reflectively load .NET assemblies from an embedded Base64 payload\nlevel: low",
+            "pattern": "title: PowerShell Script Block Containing Reflection.Assembly Load And FromBase64String\nid: 5024b26b-169d-4ef8-8016-ca502a557d1b\nstatus: experimental\ndescription: >-\n  Detects a PowerShell script block that contains both [System.Reflection.Assembly]::Load(\n  and FromBase64String, the combination of a reflective in-memory load with a Base64-decoded\n  byte array that this campaign uses for shellcode injection staging. The two strings are\n  tested independently within the script block; the rule does not test that the decoded\n  bytes are the argument to Load. Broadly used by legitimate tooling as well, so this is a\n  scoping signal rather than a high-confidence alert.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/\nauthor: The Hunters Ledger\ndate: '2026-09-06'\ntags:\n    - attack.stealth\n    - attack.t1620\n    - attack.t1027\nlogsource:\n    category: ps_script\n    product: windows\n    definition: 'Requires PowerShell Script Block Logging (Event ID 4104) enabled.'\ndetection:\n    selection:\n        ScriptBlockText|contains|all:\n            - '[System.Reflection.Assembly]::Load('\n            - 'FromBase64String'\n    condition: selection\nfalsepositives:\n    - Legitimate PowerShell modules and administrative tooling that reflectively load .NET assemblies from an embedded Base64 payload\nlevel: low",
             "pattern_type": "sigma",
             "valid_from": "2026-09-07T00:00:00Z",
             "labels": [
@@ -6883,20 +6883,6 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--b98ad956-c774-5fc7-a9e0-6055fa5f1373",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:20.738476Z",
-            "modified": "2026-10-01T19:54:20.738476Z",
-            "relationship_type": "indicates",
-            "source_ref": "indicator--75421632-4474-599f-b3b8-878f2007a0a9",
-            "target_ref": "malware--fdf596cd-1388-59dd-9919-24612a9ed7e2",
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "relationship",
-            "spec_version": "2.1",
             "id": "relationship--c9cb8adf-3ded-5af3-9d58-24efdee7b237",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.738537Z",
@@ -6925,12 +6911,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--cd74cf04-57bc-5e84-a4c9-623524658f01",
+            "id": "relationship--ebefc6a7-2615-5418-a5b7-4f7166bb1c77",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:20.738717Z",
-            "modified": "2026-10-01T19:54:20.738717Z",
+            "created": "2026-10-11T14:08:46.224624Z",
+            "modified": "2026-10-11T14:08:46.224624Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--6844a48c-af04-54dd-8535-90578b737d0e",
+            "source_ref": "indicator--c5f5bfed-f3fe-569b-b5eb-4cd650e6ec5d",
             "target_ref": "malware--fdf596cd-1388-59dd-9919-24612a9ed7e2",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -6967,12 +6953,26 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--610ac81f-17d2-585b-a163-b7ab14a2129d",
+            "id": "relationship--def9796c-8560-5a0b-8966-b76f1f60c21e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:20.738903Z",
-            "modified": "2026-10-01T19:54:20.738903Z",
+            "created": "2026-10-11T14:08:46.224921Z",
+            "modified": "2026-10-11T14:08:46.224921Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--98656ab4-ba1b-5789-b294-9c0f03a432cb",
+            "source_ref": "indicator--aa989e73-54f5-5341-8ec4-17ba7b2fa39e",
+            "target_ref": "malware--fdf596cd-1388-59dd-9919-24612a9ed7e2",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--fc5407e0-30bb-58d8-9213-1ff52ede19c4",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-11T14:08:46.225028Z",
+            "modified": "2026-10-11T14:08:46.225028Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--2a2411bb-56ad-5bfc-9f0b-cc2258213cf6",
             "target_ref": "malware--fdf596cd-1388-59dd-9919-24612a9ed7e2",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -6995,12 +6995,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--7a4c3a0e-2089-504c-a43f-8e46305d2a94",
+            "id": "relationship--a02e47af-8e20-5f4b-8b47-290413b0bb43",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:20.739023Z",
-            "modified": "2026-10-01T19:54:20.739023Z",
+            "created": "2026-10-11T14:08:46.225224Z",
+            "modified": "2026-10-11T14:08:46.225224Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--3a202e26-7ff3-5189-89b1-47eda6dc6ea8",
+            "source_ref": "indicator--2e97fb42-7f3b-50c2-8e8d-79f4d4d3451b",
             "target_ref": "malware--fdf596cd-1388-59dd-9919-24612a9ed7e2",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -7009,12 +7009,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--08057c3f-bcf6-51bb-9d65-84d4cccc7f3d",
+            "id": "relationship--1d500158-efa2-5b86-8d61-10277622a634",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:20.739083Z",
-            "modified": "2026-10-01T19:54:20.739083Z",
+            "created": "2026-10-11T14:08:46.225352Z",
+            "modified": "2026-10-11T14:08:46.225352Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--9184694e-a0a7-5e5a-b78e-bf636d8de547",
+            "source_ref": "indicator--17561d7f-8e23-55fd-ade7-f009fd7c9150",
             "target_ref": "malware--fdf596cd-1388-59dd-9919-24612a9ed7e2",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -7023,12 +7023,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--7762bb13-a25b-5f17-b833-2e1aad374f16",
+            "id": "relationship--b89ac666-4f5a-5d25-bc7a-3caeb67b3c78",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:20.739145Z",
-            "modified": "2026-10-01T19:54:20.739145Z",
+            "created": "2026-10-11T14:08:46.225467Z",
+            "modified": "2026-10-11T14:08:46.225467Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--d7acb038-4308-577a-9adb-e4eb3c0a7fd8",
+            "source_ref": "indicator--b57ccb57-9d80-53f6-a9e3-70e27d37a9ba",
             "target_ref": "malware--fdf596cd-1388-59dd-9919-24612a9ed7e2",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -69452,7 +69452,7 @@
             "id": "report--9f175132-e498-5e02-9c9c-b1ab5dff72db",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:21.026096Z",
-            "modified": "2026-10-11T07:42:19.765222Z",
+            "modified": "2026-10-11T14:08:46.722342Z",
             "name": "Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17",
             "description": "Derived from 81 files captured from an open directory, 77 static triage reports, one contained behavioural analysis and one statically decrypted installer chain. This infrastructure was previously published by Hunt.io on 2026-08-04 and the primary address was flagged by Huntress on 2026-05-21; the file hashes below are not first observations. Victim-side data is deliberately absent: no victim domain, hostname, account, credential or internal address appears anywhere in this feed. `metadata.victim_names` above is a vault-only annotation for the check_victim_naming.py gate and must never be copied into the site copy of this feed.",
             "report_types": [
@@ -69656,17 +69656,17 @@
                 "indicator--e6748937-2c04-54d1-a2be-b0c4e6c9bbcf",
                 "indicator--53da4f5a-bd11-5652-814f-8d75b782b648",
                 "indicator--426fe2f2-f9c5-5ea8-a63c-d7ffac2f49cc",
-                "indicator--75421632-4474-599f-b3b8-878f2007a0a9",
                 "indicator--b31c70a6-b241-5c43-ad8e-40e7f09e17db",
                 "indicator--c55d8ee8-6044-549f-8cea-d476d612a573",
-                "indicator--6844a48c-af04-54dd-8535-90578b737d0e",
+                "indicator--c5f5bfed-f3fe-569b-b5eb-4cd650e6ec5d",
                 "indicator--c2f2c664-4e68-572d-8a60-617626cfcef5",
                 "indicator--951571be-ae75-5058-952e-6df214093a5f",
-                "indicator--98656ab4-ba1b-5789-b294-9c0f03a432cb",
+                "indicator--aa989e73-54f5-5341-8ec4-17ba7b2fa39e",
+                "indicator--2a2411bb-56ad-5bfc-9f0b-cc2258213cf6",
                 "indicator--5ab26fbe-d134-5f03-be83-b32317883c0b",
-                "indicator--3a202e26-7ff3-5189-89b1-47eda6dc6ea8",
-                "indicator--9184694e-a0a7-5e5a-b78e-bf636d8de547",
-                "indicator--d7acb038-4308-577a-9adb-e4eb3c0a7fd8",
+                "indicator--2e97fb42-7f3b-50c2-8e8d-79f4d4d3451b",
+                "indicator--17561d7f-8e23-55fd-ade7-f009fd7c9150",
+                "indicator--b57ccb57-9d80-53f6-a9e3-70e27d37a9ba",
                 "indicator--7e927cf7-fb65-5747-9772-07445326933b",
                 "indicator--b7fe78d5-865d-5be9-b52f-899f406a05a6",
                 "indicator--f6eefd40-6e26-5f06-8ac1-e7f4f1da8b87",
@@ -69906,17 +69906,17 @@
                 "relationship--c37165f9-9d6c-5269-9546-092c39409869",
                 "relationship--69e2f492-e1c5-56a8-8d2c-e493753403d8",
                 "relationship--4539cf53-4592-5874-a034-10f2fd135b37",
-                "relationship--b98ad956-c774-5fc7-a9e0-6055fa5f1373",
                 "relationship--c9cb8adf-3ded-5af3-9d58-24efdee7b237",
                 "relationship--85036633-58e7-5eec-90d3-31dcaf16316e",
-                "relationship--cd74cf04-57bc-5e84-a4c9-623524658f01",
+                "relationship--ebefc6a7-2615-5418-a5b7-4f7166bb1c77",
                 "relationship--5a6a44f7-52a7-56cd-a39b-2ab5d1ad7a58",
                 "relationship--58eab879-4242-5ade-9f4b-e761269d603f",
-                "relationship--610ac81f-17d2-585b-a163-b7ab14a2129d",
+                "relationship--def9796c-8560-5a0b-8966-b76f1f60c21e",
+                "relationship--fc5407e0-30bb-58d8-9213-1ff52ede19c4",
                 "relationship--a98df23e-047a-537d-9b4c-b5d74c177661",
-                "relationship--7a4c3a0e-2089-504c-a43f-8e46305d2a94",
-                "relationship--08057c3f-bcf6-51bb-9d65-84d4cccc7f3d",
-                "relationship--7762bb13-a25b-5f17-b833-2e1aad374f16",
+                "relationship--a02e47af-8e20-5f4b-8b47-290413b0bb43",
+                "relationship--1d500158-efa2-5b86-8d61-10277622a634",
+                "relationship--b89ac666-4f5a-5d25-bc7a-3caeb67b3c78",
                 "relationship--417de6f5-4eb9-55f3-a36d-f3e12fb5258c",
                 "relationship--369b7dd3-b781-57de-b76c-11334baa75a0",
                 "relationship--054e051d-72af-5a54-ab33-8f1c6dfb0e2e",

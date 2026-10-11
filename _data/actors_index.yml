@@ -3847,21 +3847,7 @@ actors:
         link: /hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections
         reports:
           - /hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections
-      - id: T1584.004
-        name: Server
-        tactic: Resource Development
-        source: detections
-        link: /hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections
-        reports:
-          - /hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections
       - id: T1587.001
-        name: Malware
-        tactic: Resource Development
-        source: detections
-        link: /hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections
-        reports:
-          - /hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections
-      - id: T1588.001
         name: Malware
         tactic: Resource Development
         source: detections
@@ -3909,15 +3895,15 @@ actors:
         link: /hunting-detections/korean-claude-openclaw-221.150.15.104-detections
         reports:
           - /hunting-detections/korean-claude-openclaw-221.150.15.104-detections
-      - id: T1059.007
-        name: JavaScript
-        tactic: Execution
+      - id: T1090.001
+        name: Internal Proxy
+        tactic: Command and Control
         source: detections
         link: /hunting-detections/korean-claude-openclaw-221.150.15.104-detections
         reports:
           - /hunting-detections/korean-claude-openclaw-221.150.15.104-detections
-      - id: T1090.001
-        name: Internal Proxy
+      - id: T1105
+        name: Ingress Tool Transfer
         tactic: Command and Control
         source: detections
         link: /hunting-detections/korean-claude-openclaw-221.150.15.104-detections

@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--f380ebe0-d422-4798-a573-839608dc2e93",
+    "id": "bundle--caa5d358-7ff0-409a-8c85-0b5e34bea815",
     "objects": [
         {
             "type": "identity",
@@ -372,15 +372,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--1d1e7db6-307d-5838-ab0b-48cda954f1cc",
+            "id": "indicator--a42c70cf-356a-57c3-88ce-e952f5e9fb66",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:15.008129Z",
-            "modified": "2026-10-01T19:54:15.008129Z",
-            "name": "Unauthenticated External Access to an Alibaba Druid Monitoring Console",
+            "created": "2026-10-11T14:08:27.695116Z",
+            "modified": "2026-10-11T14:08:27.695116Z",
+            "name": "Successful Request From a Non-Private Client Address to an Alibaba Druid Console Path",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Unauthenticated External Access to an Alibaba Druid Monitoring Console\nid: b2857306-3872-446e-a6cf-f093e48e3252\nstatus: experimental\ndescription: >-\n    Detects a successful external request to an Alibaba Druid StatViewServlet\n    monitoring path. An unauthenticated Druid console exposes the production\n    JDBC connection string, full database schema and executed SQL statement\n    history to anyone who can reach it; a single request returning 200 on\n    these paths from outside the management network is a real\n    information-disclosure event regardless of who sent it. Frequently served\n    on a non-standard port, so this rule does not restrict to 80 or 443.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-21'\ntags:\n    - attack.reconnaissance\n    - attack.t1596.005\n    - stp.3\nlogsource:\n    category: webserver\ndetection:\n    selection_path:\n        cs-uri-stem|contains:\n            - '/druid/index.html'\n            - '/druid/basic.json'\n            - '/druid/sql.json'\n            - '/druid/weburi.json'\n            - '/druid/datasource.json'\n    selection_success:\n        sc-status: 200\n    condition: selection_path and selection_success\nfalsepositives:\n    - >-\n        Authorized internal monitoring dashboards or an approved\n        attack-surface-management scan intentionally checking for this\n        exposure. Any external hit on these paths still warrants confirming\n        the console is properly restricted.\nlevel: high",
+            "pattern": "title: Successful Request From a Non-Private Client Address to an Alibaba Druid Console Path\nid: b2857306-3872-446e-a6cf-f093e48e3252\nstatus: experimental\ndescription: >-\n    Detects a request that returned 200 on an Alibaba Druid StatViewServlet\n    monitoring path from a client address outside the private, loopback and\n    link-local ranges. An unauthenticated Druid console exposes the production\n    JDBC connection string, full database schema and executed SQL statement\n    history to anyone who can reach it; a 200 on these paths for a public\n    client address means the console served that client, and the rule does not\n    test whether the client authenticated. Frequently served on a non-standard\n    port, so this rule does not restrict to 80 or 443.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-21'\ntags:\n    - attack.collection\n    - attack.t1213\n    - stp.3\nlogsource:\n    category: webserver\n    definition: >-\n        Requires a web-server or reverse-proxy access log that records the client address\n        in c-ip. Behind a proxy or load balancer that logs its own private address, every\n        request looks private and the rule cannot fire.\ndetection:\n    selection_path:\n        cs-uri-stem|contains:\n            - '/druid/index.html'\n            - '/druid/basic.json'\n            - '/druid/sql.json'\n            - '/druid/weburi.json'\n            - '/druid/datasource.json'\n    selection_success:\n        sc-status: 200\n    filter_private_client:\n        # sourced: documented platform default (RFC 1918, loopback, link-local and unique-local address ranges; the exclusion is not from the report)\n        c-ip|cidr:\n            - '10.0.0.0/8'\n            - '172.16.0.0/12'\n            - '192.168.0.0/16'\n            - '127.0.0.0/8'\n            - '169.254.0.0/16'\n            - '::1/128'\n            - 'fc00::/7'\n            - 'fe80::/10'\n    condition: selection_path and selection_success and not filter_private_client\nfalsepositives:\n    - >-\n        Authorized internal monitoring dashboards reached through a public\n        address, a logged-in administrator on a console meant to be reachable,\n        or an approved attack-surface-management scan intentionally checking\n        for this exposure. Any hit on these paths still warrants confirming\n        the console is properly restricted.\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-07-21T00:00:00Z",
             "labels": [
@@ -648,12 +648,12 @@
             "id": "indicator--9a79af54-9680-506d-9693-c2a35c86bc5a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.009107Z",
-            "modified": "2026-10-01T19:54:15.009107Z",
+            "modified": "2026-10-11T14:08:27.696443Z",
             "name": "THL DETECT MultiVector-192.3.1.116 Alibaba Druid Console Path Request (Flowbits Setter -- pairs with sid:1000011)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 Alibaba Druid Console Path Request (Flowbits Setter -- pairs with sid:1000011)\"; flow:established,to_server; http.uri; content:\"/druid/\"; flowbits:set,thl.mvec.druid.uri; flowbits:noalert; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-recon; sid:1000010; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)\nalert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 Unauthenticated External Access to Alibaba Druid Monitoring Console (requires flowbits setter sid:1000010)\"; flow:established,to_client; flowbits:isset,thl.mvec.druid.uri; http.stat_code; content:\"200\"; http.response_body; content:\"JavaClassPath\"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-recon; sid:1000011; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)",
+            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 Alibaba Druid Console Path Request (Flowbits Setter -- pairs with sid:1000011)\"; flow:established,to_server; http.uri; content:\"/druid/\"; flowbits:set,thl.mvec.druid.uri; flowbits:noalert; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-recon; sid:1000010; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)\nalert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 Alibaba Druid Monitoring Console Served to an External Client (requires flowbits setter sid:1000010)\"; flow:established,to_client; flowbits:isset,thl.mvec.druid.uri; http.stat_code; content:\"200\"; http.response_body; content:\"JavaClassPath\"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-recon; sid:1000011; rev:3; metadata:author The_Hunters_Ledger, date 2026-07-21;)",
             "pattern_type": "suricata",
             "valid_from": "2026-07-21T00:00:00Z",
             "labels": [
@@ -1373,7 +1373,7 @@
             "id": "report--d2cbc7b4-0c74-5743-bbb9-91e98e6c514c",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.012674Z",
-            "modified": "2026-10-11T07:05:20.363574Z",
+            "modified": "2026-10-11T14:08:27.701333Z",
             "name": "Enough to Be Dangerous: The Mechanics of an LLM-Assisted Intrusion Campaign",
             "description": "Exposed operator open directory holding a multi-vector offensive toolkit. There is no malware sample, no implant and no malware family, so this feed carries no file_hashes. Four categories are deliberately excluded: believed-real victim credentials, the operator's live reconnaissance-API subscription key, all raw JWTs, and all victim personal data. Post-discovery crawler and scanner addresses are listed under non_indicators.",
             "report_types": [
@@ -1404,7 +1404,7 @@
                 "indicator--ad3e7db8-c7d3-5139-9439-d8a7483d40ae",
                 "indicator--a8ff77ad-5847-5fb0-8b5e-bca5765b43b7",
                 "indicator--2a674b82-34df-57d8-b6f0-8ddc50b274b7",
-                "indicator--1d1e7db6-307d-5838-ab0b-48cda954f1cc",
+                "indicator--a42c70cf-356a-57c3-88ce-e952f5e9fb66",
                 "indicator--5e09e39f-eb56-5377-bb1f-168c096511cb",
                 "indicator--7e7b9e6a-3a9f-5dcf-9c50-3b50c0b4ef02",
                 "indicator--b3aec269-52f3-5ee8-942d-e4b192b09d13",

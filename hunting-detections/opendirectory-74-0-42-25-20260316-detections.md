@@ -29,7 +29,7 @@ This open-directory exposure carried a seven-component multi-family MaaS toolkit
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
 
 **Highest-confidence anchors:**
-- The XWorm V5.6 mutex `5tK099W0Z6AMZVxQ` (which doubles as the AES key-derivation seed for the C2 protocol) paired with the panel's "New Clinet : " / "Groub : " typo strings: near-zero FP, survives most rebuilds short of a combined protocol-and-panel rewrite (YARA Detection).
+- The XWorm V5.6 mutex `5tK099W0Z6AMZVxQ` (which doubles as the AES key-derivation seed for the C2 protocol) paired with one of the panel's "New Clinet : " / "Groub : " typo strings (every match path needs a typo string, so a rebuild that changes both typos evades whatever the mutex is): near-zero FP, survives a change of the mutex alone (YARA Detection).
 - The PureRAT v4.1.9 `04 00 00 00` protocol preamble on ports 56001-56003, salvaged from a single-IP-pinned rule to scope on `$EXTERNAL_NET`, the only network signature in this campaign that survives infrastructure rotation (Suricata Detection).
 
 **Atomics routed to the IOC feed:** four of the original file's rules, the XWorm/PureHVNC/PureRAT multi-port C2-IP Sigma rule, the ScreenConnect relay domain+port Sigma rule, the XWorm C2 Suricata rule (pure IP:port, no payload content), and the ScreenConnect relay domain-content Suricata rule, each keyed solely on the hardcoded IP `185.49.126.140` or the domain `adminxyzhosting.com`. Both are already carried in [`opendirectory-74-0-42-25-20260316-iocs.json`](/ioc-feeds/opendirectory-74-0-42-25-20260316-iocs.json) with the exact ports/context documented; no new feed entries were required. Block them via the feed.
@@ -68,16 +68,16 @@ The same type → tier → family nesting is applied within the Sigma and Surica
 
 **XWorm V5.6**
 
-#### XWorm V5.6 VB.NET Victim Stub
+#### XWorm V5.6 Victim Stub (Mutex or Version Strings, Plus a Panel Typo)
 
 **Tier:** Detection
-**Robustness:** 3
+**Robustness:** 2
 **ATT&CK Coverage:** T1219 (Remote Access Software)
 **Confidence:** HIGH
-**Rationale:** The anti-double-execution mutex `5tK099W0Z6AMZVxQ` doubles as the AES key-derivation seed for this build's C2 protocol, making it costly for the operator to change without breaking the malware's own encryption; paired with the deliberate typo strings `New Clinet : ` and `Groub : ` from the panel's client-list protocol, no single literal alone carries the rule and an operator would need to touch both the crypto seed and the panel-facing typos to evade.
+**Rationale:** The anti-double-execution mutex `5tK099W0Z6AMZVxQ` doubles as the AES key-derivation seed for this build's C2 protocol, making it costly for the operator to change without breaking the malware's own encryption. The condition is `($s1 or ($s2 and $s3)) and 1 of ($s4, $s5)`: either the mutex or the pair `<Xwormmm>` and `XWorm V5.6`, in every case together with at least one of the deliberate typo strings `New Clinet : ` and `Groub : ` from the panel's client-list protocol. No single literal alone carries the rule, but the typo strings are required on every path, so changing both typos is enough to evade whatever the mutex or version strings are, while changing the mutex alone is not (the version path remains). The typo strings are a builder default and not a technique invariant, which is why the Robustness score is 2.
 **False Positives:** None known — the mutex string, version tag, and panel typo strings are distinctive compiled/hardcoded values not present in legitimate software.
-**Blind Spots:** A rebuild that changes the mutex/AES-seed value AND both typo strings (a full protocol-and-panel rewrite) would evade; the rule targets the on-disk VB.NET stub, not memory-only injection variants.
-**Validation:** Scan the analyzed XWorm V5.6 stub (`hash1` below) — the mutex or the version+typo combination must match; an unrelated VB.NET application must NOT fire.
+**Blind Spots:** A rebuild that changes both typo strings evades, whatever the mutex or version strings are. A rebuild that changes only the mutex/AES-seed value still matches through the `<Xwormmm>` plus `XWorm V5.6` path, and one that keeps the mutex but changes the typos does not match. The rule tests the MZ header, a 150KB size bound and strings, not the VB.NET language, and targets the on-disk stub, not memory-only injection variants.
+**Validation:** Scan the analyzed XWorm V5.6 stub (`hash1` below) — the mutex plus a typo string, or `<Xwormmm>` plus `XWorm V5.6` plus a typo string, must match (the mutex alone does not, and neither does the version pair without a typo); an unrelated VB.NET application must NOT fire.
 **Deployment:** Endpoint AV/EDR file scan, email-gateway attachment scanning, download-quarantine scanning.
 
 ```yara
@@ -91,11 +91,12 @@ The same type → tier → family nesting is applied within the Sigma and Surica
 
 rule RAT_XWorm_V56_Stub {
    meta:
-      description = "Detects XWorm V5.6 VB.NET victim stub by plaintext mutex string, protocol packet delimiter, and distinctive Telegram notification typo strings characteristic of this builder version"
+      description = "Detects an XWorm V5.6 victim stub (a PE under 150 KB) by its plaintext mutex string, or by the strings <Xwormmm> and XWorm V5.6 together, in every case with at least one of the panel typo strings 'New Clinet : ' and 'Groub : '; the rule does not test the language or any protocol framing"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/"
       date = "2026-03-17"
+      modified = "2026-10-11"
       hash1 = "427f818131c9beb7f8a487cb28fe13e2699db844ac3c9e9ae613fd35113fe77f"
       hash2 = "257b07c4b9eb72403769a12604e9ddb2bf5545fa"
       hash3 = "f4b00fbc6a3ce80b474334a3ccaadcf0"

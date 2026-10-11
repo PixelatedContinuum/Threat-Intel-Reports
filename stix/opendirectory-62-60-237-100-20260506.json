@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--d25dd480-5114-490a-89ba-963b6fc87750",
+    "id": "bundle--9d924417-0e3a-4006-ab87-e6ed926b87dd",
     "objects": [
         {
             "type": "identity",
@@ -1317,12 +1317,12 @@
             "id": "indicator--70dc9732-3d50-503e-8e77-b81896962762",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.397097Z",
-            "modified": "2026-10-01T19:54:18.397097Z",
+            "modified": "2026-10-11T14:08:33.065442Z",
             "name": "MALW_HijackLoader_InnoSetup_AntiTriage_Wrapper",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule MALW_HijackLoader_InnoSetup_AntiTriage_Wrapper {\n   meta:\n      description = \"Detects this build wave of the HijackLoader Inno Setup 6.5+ wrapper using the Pascal Script InitializeSetup->WinExec->return False anti-triage pattern, identified by the operator codenames Apophyge (AppName), Veteran (DefaultDirName), the campaign AppId GUID, and the renamed loader filename CrystSupervisor32.exe\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\"\n      date = \"2026-05-06\"\n      hash1 = \"1afbe5d960af45832539b11e92a09b808f0c3868ab437a7ef1b5d1bd5e16d0c3\"\n      family = \"HijackLoader\"\n      malware_type = \"Loader\"\n      campaign = \"OpenDirectory-MultiFamily-MaaS-62.60.237.100\"\n      id = \"2bfaff71-9aa6-5e70-a180-cce9faaa32f2\"\n   strings:\n      $inno_magic = { 49 6E 6E 6F 53 65 74 75 70 20 53 65 74 75 70 20 44 61 74 61 }\n      $appid      = \"{1F2952E4-FC07-4482-B9E6-E795507DA7D2}\" ascii wide\n      $appname    = \"Apophyge\" ascii wide\n      $dirname    = \"Veteran\" ascii wide\n      $loader     = \"CrystSupervisor32.exe\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 20MB and\n      $inno_magic and\n      (($appid) or ($appname and $dirname) or ($loader and ($appid or $appname)))\n}",
+            "pattern": "rule MALW_HijackLoader_InnoSetup_AntiTriage_Wrapper {\n   meta:\n      description = \"Detects this build wave of the HijackLoader Inno Setup wrapper, identified by the Inno Setup Setup Data magic (which carries no version, so 6.5+ is not tested) together with the operator codenames Apophyge (AppName), Veteran (DefaultDirName), the campaign AppId GUID, or the renamed loader filename CrystSupervisor32.exe. The Pascal Script InitializeSetup->WinExec->return False anti-triage pattern the report describes is not tested; the rule matches these build-script values only\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\"\n      date = \"2026-05-06\"\n      hash1 = \"1afbe5d960af45832539b11e92a09b808f0c3868ab437a7ef1b5d1bd5e16d0c3\"\n      family = \"HijackLoader\"\n      malware_type = \"Loader\"\n      campaign = \"OpenDirectory-MultiFamily-MaaS-62.60.237.100\"\n      id = \"2bfaff71-9aa6-5e70-a180-cce9faaa32f2\"\n   strings:\n      $inno_magic = { 49 6E 6E 6F 53 65 74 75 70 20 53 65 74 75 70 20 44 61 74 61 }\n      $appid      = \"{1F2952E4-FC07-4482-B9E6-E795507DA7D2}\" ascii wide\n      $appname    = \"Apophyge\" ascii wide\n      $dirname    = \"Veteran\" ascii wide\n      $loader     = \"CrystSupervisor32.exe\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 20MB and\n      $inno_magic and\n      (($appid) or ($appname and $dirname) or ($loader and ($appid or $appname)))\n}",
             "pattern_type": "yara",
             "valid_from": "2026-05-06T00:00:00Z",
             "labels": [
@@ -1356,15 +1356,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--16466b02-e8ca-5045-8b38-6a4659660328",
+            "id": "indicator--2716ff65-1e7a-5095-b11d-5e631d9212a1",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:18.397171Z",
-            "modified": "2026-10-01T19:54:18.397171Z",
-            "name": "HijackLoader GrimResource MMC Spawning Mshta or Rundll32 for Payload Execution",
+            "created": "2026-10-11T14:08:33.065671Z",
+            "modified": "2026-10-11T14:08:33.065671Z",
+            "name": "MMC Spawning Mshta, Rundll32 or a Script or Command Interpreter (GrimResource Pattern Seen in HijackLoader)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: HijackLoader GrimResource MMC Spawning Mshta or Rundll32 for Payload Execution\nid: b81e4c29-53a7-4d02-8f9e-2a7d6c4b1e35\nstatus: experimental\ndescription: >-\n  Detects MMC (Microsoft Management Console) spawning mshta.exe, rundll32.exe,\n  or a generic script/command interpreter as part of the GrimResource MSC file\n  weaponization technique used by the HijackLoader campaign. The observed MSC\n  files (1.msc, Price2.pdf.msc, MSCFile.msc) use the res://apds.dll/redirect.html\n  XSL redirect to execute javascript:eval(), which launches an interpreter from\n  mmc.exe as a parent. This parent-child relationship is abnormal — legitimate\n  MMC snap-ins do not spawn these interpreters.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-06\ntags:\n    - attack.execution\n    - attack.stealth\n    - attack.t1218.014\n    - attack.t1059\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        ParentImage|endswith: '\\mmc.exe'\n        Image|endswith:\n            - '\\mshta.exe'\n            - '\\rundll32.exe'\n            - '\\wscript.exe'\n            - '\\cscript.exe'\n            - '\\cmd.exe'\n            - '\\powershell.exe'\n            - '\\pwsh.exe'\n    filter_legitimate_mmc:\n        CommandLine|contains:\n            - 'eventvwr.msc'\n            - 'compmgmt.msc'\n            - 'devmgmt.msc'\n            - 'diskmgmt.msc'\n    condition: selection and not filter_legitimate_mmc\nfalsepositives:\n    - >-\n      Custom enterprise MMC snap-ins that legitimately spawn PowerShell or\n      cmd.exe for administrative actions (rare — verify the specific MSC\n      file source and the spawned command line for administrative context)\n    - Security monitoring tools that invoke MMC snap-ins programmatically\nlevel: high",
+            "pattern": "title: MMC Spawning Mshta, Rundll32 or a Script or Command Interpreter (GrimResource Pattern Seen in HijackLoader)\nid: b81e4c29-53a7-4d02-8f9e-2a7d6c4b1e35\nstatus: experimental\ndescription: >-\n  Detects MMC (Microsoft Management Console) spawning mshta.exe, rundll32.exe,\n  or a generic script/command interpreter as part of the GrimResource MSC file\n  weaponization technique used by the HijackLoader campaign. The observed MSC\n  files (1.msc, Price2.pdf.msc, MSCFile.msc) use the res://apds.dll/redirect.html\n  XSL redirect to execute javascript:eval(), which launches an interpreter from\n  mmc.exe as a parent. This parent-child relationship is abnormal — legitimate\n  MMC snap-ins do not spawn these interpreters.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-06\ntags:\n    - attack.execution\n    - attack.stealth\n    - attack.t1218.014\n    - attack.t1059\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\n    definition: 'Requires process-creation events that carry ParentCommandLine, for example Sysmon EID 1. Security EID 4688 has no parent command line.'\ndetection:\n    selection:\n        ParentImage|endswith: '\\mmc.exe'\n        Image|endswith:\n            - '\\mshta.exe'\n            - '\\rundll32.exe'\n            - '\\wscript.exe'\n            - '\\cscript.exe'\n            - '\\cmd.exe'\n            - '\\powershell.exe'\n            - '\\pwsh.exe'\n    filter_legitimate_mmc:  # sourced: documented platform default, Windows ships these four snap-ins in System32 and opens them as mmc.exe <path>.msc\n        ParentCommandLine|contains:\n            - '\\System32\\eventvwr.msc'\n            - '\\System32\\compmgmt.msc'\n            - '\\System32\\devmgmt.msc'\n            - '\\System32\\diskmgmt.msc'\n    condition: selection and not filter_legitimate_mmc\nfalsepositives:\n    - >-\n      Custom enterprise MMC snap-ins that legitimately spawn PowerShell or\n      cmd.exe for administrative actions (rare — verify the specific MSC\n      file source and the spawned command line for administrative context)\n    - Security monitoring tools that invoke MMC snap-ins programmatically\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-05-06T00:00:00Z",
             "labels": [
@@ -1506,12 +1506,12 @@
             "id": "indicator--830e08f1-449a-57a0-b6e4-04f31fa01f79",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.397678Z",
-            "modified": "2026-10-01T19:54:18.397678Z",
+            "modified": "2026-10-11T14:08:33.066372Z",
             "name": "HijackLoader WVault.exe Hollow-Host Launched Directly from Inno Setup Temp Directory",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: HijackLoader WVault.exe Hollow-Host Launched Directly from Inno Setup Temp Directory\nid: c45f9d2e-8b16-4c53-a97b-7e3f1d9c6b42\nstatus: experimental\ndescription: >-\n  Detects WVault.exe (renamed, signed Qihoo 360 PromoUtil.exe used as a\n  hollow host for an injected .NET AsyncRAT-class RAT) launched with a\n  parent process image path containing the Inno Setup temp-extraction\n  marker \"is-\", indicating a direct launch from an is-*.tmp\\ directory\n  rather than the campaign's persistent C:\\ProgramData\\adv_ctrl\\ location.\n  This is a distinct chain link from — not a duplicate of — the broader\n  Inno Setup process-tree rule, which also covers WVault.exe as a direct\n  child of CrystSupervisor32.exe.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-06\ntags:\n    - attack.stealth\n    - attack.privilege-escalation\n    - attack.t1055.012\n    - attack.t1036.005\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        Image|endswith: '\\WVault.exe'\n        ParentImage|contains: 'is-'\n    condition: selection\nfalsepositives:\n    - >-\n      Legitimate Wondershare software chains where a similarly-launched\n      process runs from an Inno Setup temp directory in genuine DVD\n      Creator workflows (verify the file hashes and install path: the\n      legitimate chain runs from Program Files, not is-*.tmp or\n      C:\\ProgramData\\adv_ctrl\\)\nlevel: medium",
+            "pattern": "title: HijackLoader WVault.exe Hollow-Host Launched Directly from Inno Setup Temp Directory\nid: c45f9d2e-8b16-4c53-a97b-7e3f1d9c6b42\nstatus: experimental\ndescription: >-\n  Detects WVault.exe (renamed, signed Qihoo 360 PromoUtil.exe used as a\n  hollow host for an injected .NET AsyncRAT-class RAT) launched with a\n  parent process image sitting directly in an Inno Setup temp-extraction directory\n  (a path component is-<letters or digits>.tmp, then a file name), indicating a direct\n  launch from an is-*.tmp\\ directory\n  rather than the campaign's persistent C:\\ProgramData\\adv_ctrl\\ location.\n  This is a distinct chain link from — not a duplicate of — the broader\n  Inno Setup process-tree rule, which also covers WVault.exe as a direct\n  child of CrystSupervisor32.exe.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-06\ntags:\n    - attack.stealth\n    - attack.privilege-escalation\n    - attack.t1055.012\n    - attack.t1036.005\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        Image|endswith: '\\WVault.exe'\n        ParentImage|re: '.*\\\\is-[0-9A-Za-z]+\\.tmp\\\\[^\\\\]+'\n    condition: selection\nfalsepositives:\n    - >-\n      Legitimate Wondershare software chains where a similarly-launched\n      process runs from an Inno Setup temp directory in genuine DVD\n      Creator workflows (verify the file hashes and install path: the\n      legitimate chain runs from Program Files, not is-*.tmp or\n      C:\\ProgramData\\adv_ctrl\\)\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-05-06T00:00:00Z",
             "labels": [
@@ -3460,12 +3460,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--198fefd6-3df3-53f8-acc9-54aba17fd9ee",
+            "id": "relationship--a57f97b2-c9fe-53b8-bd92-8626b2c59330",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:18.407939Z",
-            "modified": "2026-10-01T19:54:18.407939Z",
+            "created": "2026-10-11T14:08:33.083589Z",
+            "modified": "2026-10-11T14:08:33.083589Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--16466b02-e8ca-5045-8b38-6a4659660328",
+            "source_ref": "indicator--2716ff65-1e7a-5095-b11d-5e631d9212a1",
             "target_ref": "malware--f849e2b2-dd59-5cb6-9031-52bb5e4edecc",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -10715,7 +10715,7 @@
             "id": "report--aeece79f-37fb-57b6-9eac-f7fa0ff37e78",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.439627Z",
-            "modified": "2026-10-11T06:31:44.803065Z",
+            "modified": "2026-10-11T14:08:33.133377Z",
             "name": "HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campaign",
             "report_types": [
                 "threat-report"
@@ -10831,7 +10831,7 @@
                 "indicator--40d31f26-e15d-5e32-9818-16a1732d4ce2",
                 "indicator--70dc9732-3d50-503e-8e77-b81896962762",
                 "indicator--445ff094-6f4b-57ef-bd58-3fcbf9f94822",
-                "indicator--16466b02-e8ca-5045-8b38-6a4659660328",
+                "indicator--2716ff65-1e7a-5095-b11d-5e631d9212a1",
                 "indicator--974131f9-b3f8-598a-88b0-9e72ea246b05",
                 "indicator--b941c09b-19ac-5ce9-9e35-3cafe0934e37",
                 "indicator--1119d3a8-1e89-56a1-97e4-cfbe5a9c7d90",
@@ -10967,7 +10967,7 @@
                 "relationship--ccd1d057-09f5-5951-b256-8aebfb4bf743",
                 "relationship--7aec9f74-d78d-5882-936f-da08a60bd484",
                 "relationship--a204c914-9712-5b2d-94d4-5596b449385a",
-                "relationship--198fefd6-3df3-53f8-acc9-54aba17fd9ee",
+                "relationship--a57f97b2-c9fe-53b8-bd92-8626b2c59330",
                 "relationship--e5a58048-9de5-5dbb-8aaa-dcf765511016",
                 "relationship--9295b3b5-ad54-5126-8bcc-3f82f047e631",
                 "relationship--1ca9a975-2eb2-54a9-9a93-ebd7a0310217",

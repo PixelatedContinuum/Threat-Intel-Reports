@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--2a163e17-455a-49d2-8121-a5910abd255f",
+    "id": "bundle--cf3587fe-4646-4262-a6c7-7baae5315729",
     "objects": [
         {
             "type": "identity",
@@ -307,12 +307,12 @@
             "id": "indicator--aeabb830-a1e2-528b-b89f-74313aefd995",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-09-19T20:27:57.172989Z",
-            "modified": "2026-09-19T20:27:57.172989Z",
+            "modified": "2026-10-11T14:08:27.180421Z",
             "name": "NPM Registry Fetch for OpenClaw Package",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: NPM Registry Fetch for OpenClaw Package\nid: d3a240e8-79a9-44d7-8b51-199389276d28\nstatus: experimental\ndescription: >-\n  Detects HTTP requests to the npm registry (registry.npmjs.org) for the openclaw package\n  name — the alternative installation path for the OpenClaw AI-agent framework documented\n  in the Korean-ClaudeCode-Allowlist-OpenClaw-221.150.15.104 operator campaign. Cannot\n  distinguish attacker-driven installation from legitimate developer evaluation of the\n  same dual-use package, so hits require review on developer-class hosts.\nreferences:\n    - https://the-hunters-ledger.com/reports/korean-claude-openclaw-221.150.15.104/\n    - https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-27'\ntags:\n    - attack.execution\n    - attack.t1059.007\n    - attack.stealth\n    - attack.defense-impairment\n    - attack.t1685\n    - detection.emerging-threats\nlogsource:\n    category: proxy\ndetection:\n    selection:\n        cs-host|contains: 'registry.npmjs.org'\n        cs-uri-stem|contains: 'openclaw'\n    condition: selection\nfalsepositives:\n    - >-\n      Legitimate developers evaluating or installing OpenClaw on sanctioned developer\n      workstations.\nlevel: medium",
+            "pattern": "title: NPM Registry Fetch for OpenClaw Package\nid: d3a240e8-79a9-44d7-8b51-199389276d28\nstatus: experimental\ndescription: >-\n  Detects HTTP requests to the npm registry (registry.npmjs.org) for the openclaw package\n  name — the alternative installation path for the OpenClaw AI-agent framework documented\n  in the Korean-ClaudeCode-Allowlist-OpenClaw-221.150.15.104 operator campaign. Cannot\n  distinguish attacker-driven installation from legitimate developer evaluation of the\n  same dual-use package, so hits require review on developer-class hosts.\nreferences:\n    - https://the-hunters-ledger.com/reports/korean-claude-openclaw-221.150.15.104/\n    - https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-27'\ntags:\n    - attack.command-and-control\n    - attack.t1105\n    - detection.emerging-threats\nlogsource:\n    category: proxy\ndetection:\n    selection:\n        cs-host: 'registry.npmjs.org'\n        cs-uri-stem|contains: 'openclaw'\n    condition: selection\nfalsepositives:\n    - >-\n      Legitimate developers evaluating or installing OpenClaw on sanctioned developer\n      workstations.\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-05-27T00:00:00Z",
             "labels": [

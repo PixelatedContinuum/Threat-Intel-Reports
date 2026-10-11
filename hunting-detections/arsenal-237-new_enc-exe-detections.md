@@ -90,9 +90,9 @@ rule TOOLKIT_Arsenal237_VSS_Shadow_Copy_Deletion_Command {
 **Deployment:** Endpoint AV/EDR file scanning, email gateway attachment scanning, retroactive scan of file shares, IR artifact triage, with analyst triage on every hit
 
 ```yara
-rule TOOLKIT_Arsenal237_Veritas_BackupExec_Multi_Service_Targeting {
+rule TOOLKIT_Arsenal237_Commvault_Backup_Service_Targeting {
    meta:
-      description = "Detects Arsenal-237 ransomware's targeting of a backup product's agent services via co-occurrence of at least 3 of 5 distinct internal service short-names (GxVss, GxBlr, GxFWD, GxCVD, GxCIMgr), referenced ahead of service termination to disable enterprise backup and recovery capability before encryption. Corrected 2026-09-13: these are Commvault's own product-internal service names (confirmed against Commvault's own documentation), not Veritas's as originally published; the rule name is kept for now to avoid breaking existing references, but the vendor named in the rule's own identifier is wrong."
+      description = "Detects Arsenal-237 ransomware's targeting of a backup product's agent services via co-occurrence of at least 3 of 5 distinct internal service short-names (GxVss, GxBlr, GxFWD, GxCVD, GxCIMgr), referenced ahead of service termination to disable enterprise backup and recovery capability before encryption. Corrected 2026-09-13: these are Commvault's own product-internal service names (confirmed against Commvault's own documentation), not Veritas's as originally published; the rule was renamed on 2026-10-11 from TOOLKIT_Arsenal237_Veritas_BackupExec_Multi_Service_Targeting, whose identifier named the wrong vendor, and given a new deterministic id."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/arsenal-237-new_enc-exe-detections/"
@@ -100,7 +100,7 @@ rule TOOLKIT_Arsenal237_Veritas_BackupExec_Multi_Service_Targeting {
       family = "Arsenal-237"
       malware_type = "Ransomware"
       campaign = "Arsenal-237-Backup-Targeting-Ransomware"
-      id = "a3f81c2e-4b6d-4a91-8c73-1e5f8a2b6c90"
+      id = "77efcac4-8c35-5104-a1fe-925c6e7e1d90"
       hash1 = "90d223b70448d68f7f48397df6a9e57de3a6b389d5d8dc0896be633ca95720f2"
    strings:
       $gx1 = "GxVss" ascii wide
@@ -192,7 +192,7 @@ rule TOOLKIT_Arsenal237_RustRansomNoteTask_Persistence_Marker {
 ```yara
 rule TOOLKIT_Arsenal237_AntiAnalysis_Sandbox_Combination {
    meta:
-      description = "Detects a combination of anti-analysis indicators: 3 of 5 hypervisor/VM vendor name strings, both sandbox-context keywords together, the BIOS-registry check paired with a VM-vendor string or the IsDebuggerPresent API, or the debugger-presence check paired with a VM-vendor or sandbox-context string. Restructured from a source rule that let the BIOS-registry path and the IsDebuggerPresent API string each trigger the whole rule alone -- both are individually common in legitimate hardware-detection and anti-tamper/licensing code."
+      description = "Detects a combination of anti-analysis indicators: 3 of 5 hypervisor/VM vendor name strings, both sandbox-context keywords together, the BIOS-registry check paired with a VM-vendor string or the IsDebuggerPresent API, or the debugger-presence check paired with at least one VM-vendor string or with both sandbox-context strings. Restructured from a source rule that let the BIOS-registry path and the IsDebuggerPresent API string each trigger the whole rule alone -- both are individually common in legitimate hardware-detection and anti-tamper/licensing code."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/arsenal-237-new_enc-exe-detections/"
@@ -415,6 +415,7 @@ level: medium
 **Confidence:** MODERATE
 **Rationale:** The source rule's own description stated an unrealizable intent — "3+ distinct backup services to stop within 5 minutes" — that a single-event Sigma selection cannot express, and had been silently downgraded to fire on any single matching service stop. Rebuilt here as a genuine Sigma `value_count` correlation: a base rule (not alerting alone) matching any backup-related service-stop event, paired with a correlation counting distinct `param1` service names per host within a 5-minute window, restoring the originally intended multi-service threshold instead of the silent single-event downgrade. Capped at Hunting rather than Detection: a single product's own coordinated restart (a Backup Exec agent update or reinstall cycling several of its own Gx-prefixed sub-services together) can plausibly satisfy this threshold without any malicious action, and this false-positive rate has not been characterized against real telemetry.
 **False Positives:** A legitimate, coordinated backup-infrastructure maintenance window that restarts 3 or more backup-related services within 5 minutes (e.g. a scheduled patch or reinstall cycle touching multiple Commvault agent sub-services, or a Veeam/VSS component update).
+**Blind Spots:** The correlation is a Sigma `value_count` over `param1`. Converted to EQL with the sysmon pipeline it becomes `sequence by host.name with maxspan=5m [...] by param1 with runs=3`, which counts three stop events for one and the same service name, not three distinct services, so the EQL form does not implement the distinct-service claim. The Lucene backend cannot convert correlation rules, so the rule needs a backend that implements `value_count` natively.
 **Deployment:** SIEM correlation engine with Windows System-log Service Control Manager telemetry (EventID 7036) ingested (5-minute temporal join on `host.name`).
 
 ```yaml
@@ -506,6 +507,7 @@ level: medium
 **Confidence:** LOW
 **Rationale:** Same restructuring as the backup-service correlation above: the source rule's own description stated an unrealizable "2+ distinct database services within 10 minutes" intent that a single-event selection cannot express. Rebuilt as a `value_count` correlation. Held at Hunting with LOWER confidence than the backup-service correlation: "sql" and "oracle" are generic substrings that can each match multiple distinct service display names belonging to a single legitimate product installation (for example, a SQL Server engine service and its companion Agent service both contain "sql" in their display names), so a routine Windows Update or patch cycle touching one database product can plausibly satisfy the 2-distinct-value threshold on its own. *Fix applied during retiering:* the redundant `sqlservr` entry was dropped from the source's service-name list — it is already a substring of `sql` and added no new matching capability.
 **False Positives:** Coordinated, legitimate database maintenance (e.g. a Windows Update or SQL Server patch cycle that restarts the database engine and agent services together) within the same 10-minute window.
+**Blind Spots:** The correlation is a Sigma `value_count` over `param1`. Converted to EQL with the sysmon pipeline it becomes `sequence by host.name with maxspan=10m [...] by param1 with runs=2`, which counts two stop events for one and the same service name, not two distinct services, so the EQL form does not implement the distinct-service claim. The Lucene backend cannot convert correlation rules, so the rule needs a backend that implements `value_count` natively.
 **Deployment:** SIEM correlation engine with Windows System-log Service Control Manager telemetry (EventID 7036) ingested (10-minute temporal join on `host.name`).
 
 ```yaml

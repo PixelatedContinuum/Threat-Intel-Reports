@@ -124,8 +124,8 @@ rule MALW_AdaptixC2_Windows_Beacon_Stock
 **Robustness:** 2
 **ATT&CK Coverage:** T1090.001 (Internal Proxy), T1572 (Protocol Tunneling)
 **Confidence:** HIGH
-**Rationale:** `nicocha30/ligolo-ng/pkg/` is the tool's Go module import path, compiled into every build of the binary — durable at the tool level and unfakeable without forking and renaming the upstream project. Paired with either the release version or the specific build commit, this anchors any current or near-future Ligolo-ng v0.8.x deployment, not only this operator's build.
-**False Positives:** None known — Ligolo-ng has no legitimate end-user or enterprise presence; the only expected match is authorized penetration-testing use of the same tool.
+**Rationale:** `nicocha30/ligolo-ng/pkg/` is the tool's Go module import path, compiled into every build of the binary — durable at the tool level and unfakeable without forking and renaming the upstream project. Paired with either the string `0.8.3` or the one specific build commit, this anchors Ligolo-ng builds that carry that version string or that commit, which is wider than this operator's single binary and narrower than every v0.8.x release: a 0.8.x build with a different version string and a different commit does not match.
+**False Positives:** None known — Ligolo-ng has no legitimate end-user or enterprise presence; the only expected match is authorized penetration-testing use of the same tool. `0.8.3` is matched as a bare substring beside the module import path, so a Ligolo-ng build of another release whose binary contains that character sequence (a longer version-like string, for example) also satisfies `$s2`; the commit hash `$s3` is the exact anchor.
 **Blind Spots:** A renamed/recompiled fork built under a different Go module path would evade entirely; a future Ligolo-ng release built from a different commit and version string falls outside this rule's `$s2 or $s3` scoping (the import-path anchor `$s1` alone is intentionally not sufficient, to avoid over-broad matching on any tool sharing a similar package layout).
 **Validation:** Scan the analyzed `agent.exe` (hash1 below) — must match; an unrelated Go binary must NOT fire.
 **Deployment:** Endpoint AV/EDR file scan, static triage of unknown Go binaries staged for lateral movement.
@@ -134,7 +134,7 @@ rule MALW_AdaptixC2_Windows_Beacon_Stock
 rule MALW_Ligolo_ng_v083_Agent
 {
     meta:
-        description = "Detects Ligolo-ng v0.8.3 stock reverse-tunnel agent by embedded version string, Go package namespace, and upstream commit hash — operator bundled this for internal-network pivot"
+        description = "Detects Ligolo-ng v0.8.3 stock reverse-tunnel agent by its Go package namespace together with either the version string 0.8.3 or one upstream commit hash — operator bundled this for internal-network pivot"
         license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
         author = "The Hunters Ledger"
         reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/"

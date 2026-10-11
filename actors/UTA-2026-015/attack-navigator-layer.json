@@ -16,17 +16,17 @@
       "enabled": true
     },
     {
-      "techniqueID": "T1059.007",
-      "tactic": "execution",
-      "score": 1,
-      "comment": "JavaScript. 1 report(s) about UTA-2026-015, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections. https://the-hunters-ledger.com/actors/UTA-2026-015/",
-      "enabled": true
-    },
-    {
       "techniqueID": "T1090.001",
       "tactic": "command-and-control",
       "score": 1,
       "comment": "Internal Proxy. 1 report(s) about UTA-2026-015, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections. https://the-hunters-ledger.com/actors/UTA-2026-015/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1105",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Ingress Tool Transfer. 1 report(s) about UTA-2026-015, mapped on the detection page https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections. https://the-hunters-ledger.com/actors/UTA-2026-015/",
       "enabled": true
     },
     {

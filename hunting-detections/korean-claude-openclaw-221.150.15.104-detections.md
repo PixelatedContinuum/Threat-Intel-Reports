@@ -23,7 +23,7 @@ No malware binary exists in this campaign. The primary evidence is the operator'
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 0 | 2 | T1685, T1059.004 | 0 |
-| Sigma | 0 | 4 | T1685, T1059.004, T1059.007, T1090.001 | 1 |
+| Sigma | 0 | 4 | T1685, T1059.004, T1090.001, T1105 | 1 |
 | Suricata | 0 | 0 | — | 3 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
@@ -306,11 +306,13 @@ level: medium
 
 **Tier:** Hunting
 **Robustness:** 2
-**ATT&CK Coverage:** T1059.007 (JavaScript), T1685 (Disable or Modify Tools)
+**ATT&CK Coverage:** T1105 (Ingress Tool Transfer)
+**ATT&CK Note:** T1059.007 (JavaScript) and T1685 (Disable or Modify Tools) are withdrawn. The rule sees a proxy-logged request for a package name; it observes no script execution and no tampering with any tool. T1105 describes what the request is, a tool being pulled onto a host, at MODERATE because a developer fetching the same package produces the identical request.
 **Confidence:** MODERATE
 **Rationale:** Detects HTTP requests to the npm registry for the `openclaw` package name — the alternative installation path documented in the operator's allowlist (`npm i -g openclaw`). Requiring both the registry host and the package-name substring together is a reasonable combination, but it still cannot distinguish an attacker-driven install from a developer intentionally evaluating the framework, and npm proxy/HTTP-inspection telemetry is not universally available. Deployed as a Hunting lead on hosts with no expected reason to fetch AI-agent tooling.
 **False Positives:** Legitimate developers evaluating or installing OpenClaw on sanctioned developer workstations.
-**Deployment:** Web proxy logs, DNS-based npm monitoring. Highest value on server-class and CI/CD agent hosts with no legitimate reason to fetch this package.
+**Blind Spots:** The host is matched exactly (`registry.npmjs.org`), so a proxy that logs the host with a port suffix, an npm mirror or a private registry proxy does not match. A package fetched from a cache the proxy never sees is not logged at all.
+**Deployment:** Web proxy logs that record the requested host and URI path (`cs-host`, `cs-uri-stem`); DNS logs hold only hostnames and cannot show the package name. Highest value on server-class and CI/CD agent hosts with no legitimate reason to fetch this package.
 
 ```yaml
 title: NPM Registry Fetch for OpenClaw Package
@@ -328,17 +330,14 @@ references:
 author: The Hunters Ledger
 date: '2026-05-27'
 tags:
-    - attack.execution
-    - attack.t1059.007
-    - attack.stealth
-    - attack.defense-impairment
-    - attack.t1685
+    - attack.command-and-control
+    - attack.t1105
     - detection.emerging-threats
 logsource:
     category: proxy
 detection:
     selection:
-        cs-host|contains: 'registry.npmjs.org'
+        cs-host: 'registry.npmjs.org'
         cs-uri-stem|contains: 'openclaw'
     condition: selection
 falsepositives:

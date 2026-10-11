@@ -221,7 +221,7 @@ rule Arsenal237_LPE_Named_Pipe_Token_Theft {
 ```yara
 rule Arsenal237_LPE_Named_Pipe_PS_Connector {
    meta:
-      description = "Detects a PowerShell named-pipe client connector pattern (powershell.exe references co-occurring with the .NET NamedPipeClientStream class name), an alternate path to lpe.exe's native named-pipe token-impersonation API sequence. Broader and noisier than the native API sequence; treat as a triage lead, not an alert."
+      description = "Detects a PowerShell named-pipe client connector pattern (the word powershell in any case, not the executable name, co-occurring with the .NET NamedPipeClientStream class name), an alternate path to lpe.exe's native named-pipe token-impersonation API sequence. Broader and noisier than the native API sequence; treat as a triage lead, not an alert."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/arsenal-237-lpe-exe-detections/"

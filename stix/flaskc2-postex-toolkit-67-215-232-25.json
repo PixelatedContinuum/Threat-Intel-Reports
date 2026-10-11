@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--da14ff8a-eade-4707-9cb8-48e0d88aef61",
+    "id": "bundle--22c28fe9-8064-43f4-879d-809e6b817847",
     "objects": [
         {
             "type": "identity",
@@ -519,15 +519,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--7457c594-cb79-5bdd-b42a-5864f0fd905d",
+            "id": "indicator--baa40da1-81c6-5d9d-b23e-efee0b689e1f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:13.473482Z",
-            "modified": "2026-10-01T19:54:13.473482Z",
-            "name": "MSSQL CLR Backdoor Installation via CREATE ASSEMBLY and Reverse Shell Procedure",
+            "created": "2026-10-11T14:08:23.252539Z",
+            "modified": "2026-10-11T14:08:23.252539Z",
+            "name": "MSSQL CLR Enablement or a reverse_shell Name in an Application Log Message",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: MSSQL CLR Backdoor Installation via CREATE ASSEMBLY and Reverse Shell Procedure\nid: 68e96847-afed-4fbd-843f-952e22e89f97\nstatus: experimental\ndescription: >-\n  Detects SQL Server CLR backdoor installation indicators: enabling CLR\n  execution via sp_configure, or registering a stored procedure named\n  reverse_shell via EXTERNAL NAME. The reverse_shell procedure name has\n  no legitimate use and is a direct indicator of cmd_exec.dll\n  installation; CLR enablement alone is rare in production and disabled\n  by default.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/\n    - https://www.netspi.com/blog/technical/network-penetration-testing/attacking-sql-server-clr-assemblies/\nauthor: The Hunters Ledger\ndate: '2026-06-12'\ntags:\n    - attack.persistence\n    - attack.t1505.001\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    product: windows\n    service: application\ndetection:\n    selection_clr:\n        Provider_Name|contains: 'MSSQL'\n        EventID: 15457\n        Message|contains: 'clr enabled'\n    selection_reverse_shell:\n        Provider_Name|contains: 'MSSQL'\n        Message|contains: 'reverse_shell'\n    condition: selection_clr or selection_reverse_shell\nfalsepositives:\n    - Authorized .NET CLR assembly deployment by DBAs — correlate with change management tickets\n    - Development environments where CLR assemblies are used legitimately\nlevel: high",
+            "pattern": "title: MSSQL CLR Enablement or a reverse_shell Name in an Application Log Message\nid: 68e96847-afed-4fbd-843f-952e22e89f97\nstatus: experimental\ndescription: >-\n  Detects two SQL Server CLR backdoor indicators in the Windows Application\n  log: a configuration-change message (EventID 15457) that mentions\n  clr enabled, which is how enabling CLR execution via sp_configure is\n  logged, or any MSSQL message that contains the string reverse_shell. The\n  second selector does not parse EXTERNAL NAME or test for a procedure\n  registration; it fires on any MSSQL Application-log message that names\n  reverse_shell. That name has no legitimate use and ties a message to\n  cmd_exec.dll installation; CLR enablement alone is rare in production and\n  disabled by default.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/\n    - https://www.netspi.com/blog/technical/network-penetration-testing/attacking-sql-server-clr-assemblies/\nauthor: The Hunters Ledger\ndate: '2026-06-12'\ntags:\n    - attack.persistence\n    - attack.t1505.001\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    product: windows\n    service: application\n    definition: 'Requires the Windows Application log from the SQL Server host with MSSQL provider events ingested. EventID 15457 is the configuration-change message. A message naming reverse_shell reaches this log only if some source writes it there, for example SQL Server Audit routed to the Application log; which MSSQL events carry that string was not observed.'\ndetection:\n    selection_clr:\n        Provider_Name|contains: 'MSSQL'\n        EventID: 15457\n        Message|contains: 'clr enabled'\n    selection_reverse_shell:\n        Provider_Name|contains: 'MSSQL'\n        Message|contains: 'reverse_shell'\n    condition: selection_clr or selection_reverse_shell\nfalsepositives:\n    - Authorized .NET CLR assembly deployment by DBAs — correlate with change management tickets\n    - Development environments where CLR assemblies are used legitimately\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-06-12T00:00:00Z",
             "labels": [
@@ -543,12 +543,12 @@
             "id": "indicator--6fe164cd-cb34-5587-b580-c117d19895aa",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.473566Z",
-            "modified": "2026-10-01T19:54:13.473566Z",
+            "modified": "2026-10-11T14:08:23.252638Z",
             "name": "IIS Webshell Execution via w3wp.exe Spawning Shell Process",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: IIS Webshell Execution via w3wp.exe Spawning Shell Process\nid: bb2d9a6a-be5b-47e2-9902-ebbdc4831aa6\nstatus: experimental\ndescription: >-\n  Detects IIS worker process (w3wp.exe) spawning cmd.exe or wscript.exe, which\n  indicates webshell-based command execution. In the FlaskC2-PostEx-Toolkit\n  campaign, both miss.asp (Ghost xiao-zu ASP webshell via WScript.Shell) and\n  NPCInfoList1.aspx (Godzilla-style .NET loader) run under w3wp.exe and can\n  spawn shell processes when executing operator commands.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/\nauthor: The Hunters Ledger\ndate: '2026-06-12'\ntags:\n    - attack.persistence\n    - attack.t1505.003\n    - attack.execution\n    - attack.t1059.003\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        ParentImage|endswith: '\\w3wp.exe'\n        Image|endswith:\n            - '\\cmd.exe'\n            - '\\wscript.exe'\n            - '\\cscript.exe'\n            - '\\powershell.exe'\n    condition: selection\nfalsepositives:\n    - Legacy web applications that intentionally invoke shell processes — baseline expected patterns\n    - Authorized IIS management scripts running under the application pool identity\nlevel: high",
+            "pattern": "title: IIS Webshell Execution via w3wp.exe Spawning Shell Process\nid: bb2d9a6a-be5b-47e2-9902-ebbdc4831aa6\nstatus: experimental\ndescription: >-\n  Detects IIS worker process (w3wp.exe) spawning cmd.exe, wscript.exe, cscript.exe or\n  powershell.exe, which indicates webshell-based command execution. In the FlaskC2-PostEx-Toolkit\n  campaign, both miss.asp (Ghost xiao-zu ASP webshell via WScript.Shell) and\n  NPCInfoList1.aspx (Godzilla-style .NET loader) run under w3wp.exe and can\n  spawn shell processes when executing operator commands.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/\nauthor: The Hunters Ledger\ndate: '2026-06-12'\ntags:\n    - attack.persistence\n    - attack.t1505.003\n    - attack.execution\n    - attack.t1059.003\n    - attack.t1059.005\n    - attack.t1059.001\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        ParentImage|endswith: '\\w3wp.exe'\n        Image|endswith:\n            - '\\cmd.exe'\n            - '\\wscript.exe'\n            - '\\cscript.exe'\n            - '\\powershell.exe'\n    condition: selection\nfalsepositives:\n    - Legacy web applications that intentionally invoke shell processes — baseline expected patterns\n    - Authorized IIS management scripts running under the application pool identity\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-06-12T00:00:00Z",
             "labels": [
@@ -582,15 +582,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--faf535a2-72a7-5b71-ae18-4c445b091c33",
+            "id": "indicator--7523c1d5-dc26-5ced-bfae-68f5f4430bc2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:13.473732Z",
-            "modified": "2026-10-01T19:54:13.473732Z",
-            "name": "Ghost Webshell Aatrox Eval Gadget Parameter in IIS Request",
+            "created": "2026-10-11T14:08:23.252877Z",
+            "modified": "2026-10-11T14:08:23.252877Z",
+            "name": "Ghost Webshell Aatrox Eval Gadget String in the Query of an IIS .asp Request",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Ghost Webshell Aatrox Eval Gadget Parameter in IIS Request\nid: f2509a7c-9505-4b23-a2b4-b7619999f327\nstatus: experimental\ndescription: >-\n  Detects the Aatrox eval gadget parameter in the query string of IIS\n  web requests to .asp files, indicating interaction with the Ghost\n  xiao-zu ASP webshell (miss.asp) as staged in the FlaskC2-PostEx-Toolkit\n  campaign. The webshell stores and executes arbitrary VBScript via\n  Execute Session(\"Aatrox\") when the Aatrox parameter is present.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/\nauthor: The Hunters Ledger\ndate: '2026-06-12'\ntags:\n    - attack.persistence\n    - attack.t1505.003\n    - attack.stealth\n    - attack.t1027.010\n    - detection.emerging-threats\nlogsource:\n    category: webserver\n    product: iis\ndetection:\n    selection:\n        cs-uri-stem|endswith: '.asp'\n        cs-uri-query|contains: 'Aatrox'\n    condition: selection\nfalsepositives:\n    - >-\n      Aatrox is a League of Legends champion name and could theoretically\n      appear in legitimate gaming-related web content; highly anomalous\n      as a query parameter against a corporate IIS .asp endpoint\nlevel: medium",
+            "pattern": "title: Ghost Webshell Aatrox Eval Gadget String in the Query of an IIS .asp Request\nid: f2509a7c-9505-4b23-a2b4-b7619999f327\nstatus: experimental\ndescription: >-\n  Detects the string Aatrox anywhere in the query string of IIS web requests to\n  .asp files (parameter name or value; no name or equals-sign binding is tested), indicating interaction with the Ghost\n  xiao-zu ASP webshell (miss.asp) as staged in the FlaskC2-PostEx-Toolkit\n  campaign. The webshell stores and executes arbitrary VBScript via\n  Execute Session(\"Aatrox\") when the Aatrox parameter is present.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/\nauthor: The Hunters Ledger\ndate: '2026-06-12'\ntags:\n    - attack.persistence\n    - attack.t1505.003\n    - attack.stealth\n    - attack.t1027.010\n    - detection.emerging-threats\nlogsource:\n    category: webserver\n    product: iis\ndetection:\n    selection:\n        cs-uri-stem|endswith: '.asp'\n        cs-uri-query|contains: 'Aatrox'\n    condition: selection\nfalsepositives:\n    - >-\n      Aatrox is a League of Legends champion name and could theoretically\n      appear in legitimate gaming-related web content; highly anomalous\n      as a query parameter against a corporate IIS .asp endpoint\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-06-12T00:00:00Z",
             "labels": [
@@ -627,12 +627,12 @@
             "id": "indicator--5a9ae069-d8e3-5588-ad55-8ef76aa5ebe4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.473908Z",
-            "modified": "2026-10-09T13:20:04.805286Z",
+            "modified": "2026-10-11T14:08:23.253078Z",
             "name": "THL DETECT FlaskC2-PostEx C2 Health Endpoint Response - Bespoke Flask C2 Active",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT FlaskC2-PostEx C2 Health Endpoint Response - Bespoke Flask C2 Active\"; flow:established,to_client; file_data; content:\"active_servers\"; nocase; content:\"pending_commands\"; nocase; distance:0; content:\"completed_commands\"; nocase; distance:0; content:\"status\"; nocase; distance:0; content:\"timestamp\"; nocase; distance:0; reference:url,the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/; classtype:trojan-activity; sid:9300701; rev:3; metadata:author The_Hunters_Ledger, date 2026-06-12;)",
+            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT FlaskC2-PostEx C2 Health Endpoint Response - Bespoke Flask C2 Active\"; flow:established,to_client; file_data; content:\"active_servers\"; nocase; content:\"completed_commands\"; nocase; content:\"pending_commands\"; nocase; content:\"status\"; nocase; content:\"timestamp\"; nocase; reference:url,the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/; classtype:trojan-activity; sid:9300701; rev:4; metadata:author The_Hunters_Ledger, date 2026-06-12;)",
             "pattern_type": "suricata",
             "valid_from": "2026-06-12T00:00:00Z",
             "labels": [
@@ -648,12 +648,12 @@
             "id": "indicator--56b7f149-3cf7-5198-ac5f-33842470f3a4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.473992Z",
-            "modified": "2026-10-09T13:20:04.805407Z",
+            "modified": "2026-10-11T14:08:23.253175Z",
             "name": "THL HUNT FlaskC2-PostEx C2 Beacon POST to /api/report",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> any any (msg:\"THL HUNT FlaskC2-PostEx C2 Beacon POST to /api/report\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"/api/report\"; nocase; reference:url,the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/; classtype:trojan-activity; sid:9300702; rev:3; metadata:author The_Hunters_Ledger, date 2026-06-12;)",
+            "pattern": "alert http $HOME_NET any -> any any (msg:\"THL HUNT FlaskC2-PostEx C2 Beacon POST to /api/report\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"/api/report\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/; classtype:trojan-activity; sid:9300702; rev:4; metadata:author The_Hunters_Ledger, date 2026-06-12;)",
             "pattern_type": "suricata",
             "valid_from": "2026-06-12T00:00:00Z",
             "labels": [
@@ -669,12 +669,12 @@
             "id": "indicator--8b4bb049-573f-5c5f-b529-632689acb39b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.474075Z",
-            "modified": "2026-10-09T13:20:04.805522Z",
+            "modified": "2026-10-11T14:08:23.253276Z",
             "name": "THL HUNT FlaskC2-PostEx C2 Beacon POST to /api/heartbeat",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> any any (msg:\"THL HUNT FlaskC2-PostEx C2 Beacon POST to /api/heartbeat\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"/api/heartbeat\"; nocase; reference:url,the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/; classtype:trojan-activity; sid:9300703; rev:3; metadata:author The_Hunters_Ledger, date 2026-06-12;)",
+            "pattern": "alert http $HOME_NET any -> any any (msg:\"THL HUNT FlaskC2-PostEx C2 Beacon POST to /api/heartbeat\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"/api/heartbeat\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/; classtype:trojan-activity; sid:9300703; rev:4; metadata:author The_Hunters_Ledger, date 2026-06-12;)",
             "pattern_type": "suricata",
             "valid_from": "2026-06-12T00:00:00Z",
             "labels": [
@@ -1560,12 +1560,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--60b40f4c-366e-51c6-b152-5bdf0e025d5f",
+            "id": "relationship--c3d7cec1-e4d2-53b0-9c80-7482cdbfdc8b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:13.479476Z",
-            "modified": "2026-10-01T19:54:13.479476Z",
+            "created": "2026-10-11T14:08:23.259959Z",
+            "modified": "2026-10-11T14:08:23.259959Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--7457c594-cb79-5bdd-b42a-5864f0fd905d",
+            "source_ref": "indicator--baa40da1-81c6-5d9d-b23e-efee0b689e1f",
             "target_ref": "malware--08ffdc45-11cc-5c58-a706-cdf2bcc18fae",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -1602,12 +1602,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--628d0fc7-8a63-5142-b15a-e5d82e550aeb",
+            "id": "relationship--fada1f6f-9ecf-52fe-b9e8-7e6d64231438",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:13.479685Z",
-            "modified": "2026-10-01T19:54:13.479685Z",
+            "created": "2026-10-11T14:08:23.260208Z",
+            "modified": "2026-10-11T14:08:23.260208Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--faf535a2-72a7-5b71-ae18-4c445b091c33",
+            "source_ref": "indicator--7523c1d5-dc26-5ced-bfae-68f5f4430bc2",
             "target_ref": "malware--08ffdc45-11cc-5c58-a706-cdf2bcc18fae",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -4643,7 +4643,7 @@
             "id": "report--d334d776-c26a-566a-89b7-e513db9b7882",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.494835Z",
-            "modified": "2026-10-11T04:24:15.148294Z",
+            "modified": "2026-10-11T14:08:23.279905Z",
             "name": "Flask C2 & MSSQL CLR Backdoor on a Windows Post-Exploitation Staging Host",
             "description": "Most samples are PUBLIC tooling. The five operator-recompiled .NET tools (EfsPotato, GodPotato, SweetPotato, Rubeus, SharpSuccessor) are identified as their public counterparts via YARA HKTL-GUID + VT detection + capa signature, NOT byte-for-byte public-release hash identity. Only bespoke compiled code = cmd_exec.dll (custom BUILD of a known MSSQL CLR technique, not novel). CVE-2026-20817_PoC.exe is a non-weaponized demo PoC of a Jan-2026-patched CVE. EXCLUDED per analyst guardrails: proxy-era ports 5222-5455 (different-tenant/reallocation risk), benign VT downloaded_files (autodiscover.xml, :1337 dir-index page), inostage.ru/panel.inostage.ru (public-tool co-host noise), and generic .NET runtime imphashes f34d5f2d.../dae02f32... (non-discriminating stubs).\nFalse-positive notes:\n- 67.215.232.25 is on shared hosting (HostPapa/ColoCrossing, AS36352), IP block covers the known infra but confirm port/service context before broad blocking of the /21.\n- The native-tool and operator-recompiled .NET hashes are widely-shared public hacktools; presence indicates hacktool staging but not necessarily this specific operator. The bespoke cmd_exec.dll SHA256 (a7029ef2...) and the [*] Connected to SQL Server CLR backdoor banner are the operator-specific anchors.\n- Werkzeug/3.1.6 and Python 3.12.3 are common. The /health JSON field-combo (active_servers+pending_commands+completed_commands+status+timestamp) is the discriminating C2 signature, not the server banner alone.\n- Aatrox is a League-of-Legends champion name in common use; treat as a commodity webshell password/eval-param, not an operator identity artifact.",
             "report_types": [
@@ -4690,10 +4690,10 @@
                 "indicator--c39710ab-b86b-5f24-9825-eb6fcfd0a1f0",
                 "indicator--dcab50b8-aada-5814-a04b-83ef5cd256c9",
                 "indicator--f3439843-180a-5c92-8902-025b8a45129b",
-                "indicator--7457c594-cb79-5bdd-b42a-5864f0fd905d",
+                "indicator--baa40da1-81c6-5d9d-b23e-efee0b689e1f",
                 "indicator--6fe164cd-cb34-5587-b580-c117d19895aa",
                 "indicator--c6241708-06a2-54cd-9b31-97a172dd1fdc",
-                "indicator--faf535a2-72a7-5b71-ae18-4c445b091c33",
+                "indicator--7523c1d5-dc26-5ced-bfae-68f5f4430bc2",
                 "indicator--03b8433a-7360-5241-8a2d-871f497f7652",
                 "indicator--5a9ae069-d8e3-5588-ad55-8ef76aa5ebe4",
                 "indicator--56b7f149-3cf7-5198-ac5f-33842470f3a4",
@@ -4755,10 +4755,10 @@
                 "relationship--0b3d7cdf-c824-564d-afa3-60acd7b40214",
                 "relationship--af05ef00-4dde-5ab8-bfc9-3a6fdf0972dc",
                 "relationship--dd47b930-7d22-51ed-becf-eb04cb4cabc6",
-                "relationship--60b40f4c-366e-51c6-b152-5bdf0e025d5f",
+                "relationship--c3d7cec1-e4d2-53b0-9c80-7482cdbfdc8b",
                 "relationship--72503b72-d067-58bc-865d-871d0082d939",
                 "relationship--05633a2e-a12e-5986-888d-51b92935ee22",
-                "relationship--628d0fc7-8a63-5142-b15a-e5d82e550aeb",
+                "relationship--fada1f6f-9ecf-52fe-b9e8-7e6d64231438",
                 "relationship--af2406c0-3ffc-5bf8-96bd-1507b47cd1da",
                 "relationship--1e1d2fed-588d-5e97-bc05-55b75a8a724d",
                 "relationship--a9f1c6b0-c04e-54d1-ba6b-d397d2fa5c5a",

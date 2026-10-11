@@ -123,10 +123,11 @@ level: medium
 **Robustness:** 1
 **ATT&CK Coverage:** T1136.001 (Create Account: Local Account)
 **Confidence:** HIGH
-**Rationale:** Keys on a single operator-chosen username (`zeroday`) passed as the first argument to `useradd`. The underlying technique — local account creation via `useradd` — is far too common to alert on by itself; the `zeroday` literal is what makes this rule actionable today, but it is trivially renamed on the next deployment. Durability governs over today's clean precision, so this stays a Hunting anchor rather than Detection despite the near-zero current false-positive rate.
+**Rationale:** Keys on a single operator-chosen username (`zeroday`) appearing in the arguments of a `useradd` invocation. *Logic fix 2026-10-11:* the rule used to test `a0: 'zeroday'` on a `type=SYSCALL` record, but in raw auditd `a0` of a SYSCALL record is the first raw syscall argument (for `execve`, a pointer to the filename), never a command-line argument, so the rule could not match a real `useradd zeroday`. The command-line arguments are in the `type=EXECVE` record, where `a0` is the command (`useradd` or its path) and `a1` onward are its arguments, so the rule now tests an EXECVE record with `a0` ending in `useradd` and the username as an exact value of one of `a1` to `a8`. A first draft that matched the username as a keyword converted to an EQL query with a bare string constant as a boolean operand, which Elasticsearch EQL does not accept, so exact-field tests were used instead. The username's position varies with options (`useradd zeroday`, `useradd -m zeroday`, `useradd -m -s /bin/bash zeroday`), which is why it is tested at positions `a1` to `a8` rather than one. Before this fix the claim of detection rested on a field that raw auditd does not populate that way, and no `useradd zeroday` event was replayed here. The underlying technique — local account creation via `useradd` — is far too common to alert on by itself; the `zeroday` literal is what makes this rule actionable today, but it is trivially renamed on the next deployment. Durability governs over today's clean precision, so this stays a Hunting anchor rather than Detection despite the near-zero current false-positive rate.
 **False Positives:**
 - Legitimate administrator provisioning a local account that happens to share this name (verify against IT asset management).
-**Deployment:** Linux host auditd-fed SIEM; cross-reference hits against the account credential pair already carried in the IOC feed.
+**Blind Spots:** Needs an auditd `execve` audit rule so the invocation is logged as an EXECVE record; without it nothing is logged. The username must be exactly one of the first eight arguments, so `zerodayx` does not fire, a `useradd` call with more than eight arguments puts it out of reach, and an option joined to the value (`--comment=zeroday`) is not matched. A different username, or an account created without invoking `useradd` (editing `/etc/passwd`, or an `adduser` variant that does not call it), is missed. The rule was not replayed against a real auditd log of `useradd zeroday` (NOT CHECKED).
+**Deployment:** Linux host auditd-fed SIEM with an `execve` audit rule installed; cross-reference hits against the account credential pair already carried in the IOC feed.
 
 ```yaml
 title: Suspicious User Creation
@@ -137,19 +138,30 @@ references:
     - https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/
 author: The Hunters Ledger
 date: '2025-10-20'
+modified: '2026-10-11'
 tags:
     - attack.persistence
     - attack.t1136.001
     - detection.emerging-threats
+    - stp.2
 logsource:
     product: linux
     service: auditd
+    definition: 'Requires auditd with an execve audit rule installed so useradd invocations are logged as type=EXECVE records. Raw EXECVE records carry each argument in its own aN field (a0 is the command, a1 onward its arguments); this rule tests a0 with a0|endswith and the username as an exact value of one of a1 to a8, so a pipeline that replaces the argument fields with one joined string and drops them does not match. Whether the SOC pipeline keeps the aN fields is NOT CHECKED.'
 detection:
-    selection:
-        type: 'SYSCALL'
-        exe|endswith: '/useradd'
-        a0: 'zeroday'
-    condition: selection
+    selection_cmd:
+        type: 'EXECVE'
+        a0|endswith: 'useradd'
+    selection_user:
+        - a1: 'zeroday'
+        - a2: 'zeroday'
+        - a3: 'zeroday'
+        - a4: 'zeroday'
+        - a5: 'zeroday'
+        - a6: 'zeroday'
+        - a7: 'zeroday'
+        - a8: 'zeroday'
+    condition: selection_cmd and selection_user
 falsepositives:
     - Legitimate administrator provisioning a local account that happens to share this name (verify against IT asset management)
 level: medium
@@ -276,8 +288,8 @@ level: medium
 
 **Tier:** Hunting
 **Robustness:** 2
-**ATT&CK Coverage:** T1505.003 (Server Software Component: Web Shell)
-**ATT&CK Note:** Mapped as originally authored; more precisely this describes the operator standing up new attacker-controlled web application infrastructure on already-compromised hosting rather than a webshell backdoor specifically (see Coverage Gaps).
+**ATT&CK Coverage:** None
+**ATT&CK Note:** T1505.003 (Server Software Component: Web Shell) was listed here and is withdrawn: a POST to the WordPress installer is not a webshell, and the rule observes no web shell behavior. It describes the operator standing up a new web application on already-compromised hosting (see Coverage Gaps); no technique is mapped because the evidence does not show whether the installed site is attacker infrastructure or an administrator's.
 **Confidence:** MODERATE
 **Rationale:** `/wp-admin/install.php` is a fixed WordPress core path — durable, since the operator cannot rename WordPress's own installer script — but whether a POST to it is rare enough to alert on depends entirely on whether the monitored hosting environment routinely provisions fresh WordPress sites (shared hosting does; a narrowly-scoped application server should not). Without that environment context, "rare FP" cannot be confidently claimed, so this stays Hunting.
 **False Positives:**
@@ -294,9 +306,8 @@ references:
 author: The Hunters Ledger
 date: '2025-10-20'
 tags:
-    - attack.persistence
-    - attack.t1505.003
     - detection.emerging-threats
+    - stp.3
 logsource:
     category: webserver
 detection:
@@ -317,12 +328,11 @@ level: medium
 **Robustness:** 2
 **ATT&CK Coverage:** T1090 (Proxy)
 **Confidence:** MODERATE
-**Rationale:** The rule's own description already frames this as a hunting lead requiring a manual content diff, since file-event telemetry cannot inspect the `proxy_pass` directive that would confirm malicious reverse-proxy intent. `/etc/nginx/` is nginx's own fixed configuration directory (durable, not attacker-renameable), but any write under it — certificate renewals, configuration-management pushes, routine admin edits — matches, so this is explicitly a triage starting point, not an alerting-grade signal. `level: medium` was already correctly calibrated.
+**Rationale:** The rule's own description already frames this as a hunting lead requiring a manual content diff, since file-event telemetry cannot inspect the `proxy_pass` directive that would confirm malicious reverse-proxy intent. `/etc/nginx/` is nginx's own fixed configuration directory (durable, not attacker-renameable), but any write under it by a process whose image path contains `nginx`, `php`, `httpd` or `apache2` matches, so this is explicitly a triage starting point, not an alerting-grade signal. Certificate renewals, configuration-management pushes and routine admin edits run outside those processes and do not match (the FP remediation note below records 36 alerts falling to 0 after the process filter). `level: medium` was already correctly calibrated.
 **False Positives:**
-- Legitimate infrastructure changes adding a proxy upstream to an external, authorized destination.
-- Certbot/TLS certificate renewals.
-- Configuration-management pushes.
-- Legitimate administrator edits to nginx config.
+- Legitimate infrastructure changes adding a proxy upstream to an external, authorized destination, when the writing process is nginx, php or a web server.
+- Web-hosting control-panel software whose PHP backend writes nginx vhost configuration in response to an administrator action (CloudPanel and similar nginx plus PHP-FPM panels), and an nginx module or embedded scripting engine such as njs configured to rewrite its own configuration.
+- Not expected to match, because the writing image is outside the web-server family: certbot and TLS certificate renewals, configuration-management pushes, package upgrades and `sed -i` admin edits. A process whose image path merely contains one of the four strings (for example a binary under a directory named `php`) does match, because the test is a substring on the image path.
 **Deployment:** Linux file-integrity monitoring; pair every hit with a manual diff of the changed configuration file.
 
 **FP remediation note (2026-08-20):** the rule shipped with no process filter and no exclusions at all, so every write under `/etc/nginx/` matched, package upgrades, configuration-management pushes, certbot renewals and ordinary admin edits alike. The false positives listed above were written down at authoring time and never implemented in the detection logic. Production confirmed the consequence: 36 alerts, 100 percent of them `/usr/bin/sed` performing a routine `sed -i` in-place edit burst.
@@ -407,7 +417,7 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT Webshells-To-Cloud-
 
 **Banner/response strings documented in the IOC feed but not expressed as network signatures.** The feed's banner-string list carries two values not covered by any rule in this file: `CloudPanel 0day Version : 2.0.0 >= 2.3.0` (a version-fingerprint string, likely returned during the operator's own vulnerability-check probe rather than by legitimate CloudPanel traffic) and a Chinese-language string translating to "Target WebShell Upload Successful" (a webshell-upload confirmation banner consistent with a Chinese-language exploitation toolkit). Both are plausible candidates for a future Suricata `http.response_body` content signature, but no HTTP response/transaction context (which endpoint returns them, over what protocol, at what stage of the chain) is documented in this investigation to scope such a rule with confidence.
 
-**MITRE mapping note (Suspicious WordPress Install).** The original T1505.003 (Server Software Component: Web Shell) mapping is carried forward from the original analysis, but a fresh WordPress installation is not itself a webshell. It more precisely describes the operator staging new attacker-controlled web application infrastructure on already-compromised hosting. No stronger evidence is available in this file to justify remapping to a Resource Development technique (which would also require reframing the finding as attacker-owned infrastructure rather than a compromised victim asset), so the original mapping is retained with this caveat rather than changed without supporting evidence.
+**MITRE mapping note (Suspicious WordPress Install).** The original T1505.003 (Server Software Component: Web Shell) mapping was withdrawn on 2026-10-11: a fresh WordPress installation is not itself a webshell. It more precisely describes the operator staging new attacker-controlled web application infrastructure on already-compromised hosting. No stronger evidence is available in this file to justify remapping to a Resource Development technique (which would also require reframing the finding as attacker-owned infrastructure rather than a compromised victim asset), so the rule carries no ATT&CK technique rather than a wrong one.
 
 ---
 

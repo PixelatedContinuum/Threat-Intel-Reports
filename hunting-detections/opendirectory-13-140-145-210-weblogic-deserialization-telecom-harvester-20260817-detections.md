@@ -23,13 +23,13 @@ This campaign is a single operator's bespoke intrusion toolkit, not a commodity 
 |---|---|---|---|---|
 | YARA | 5 | 3 | T1190, T1048.003, T1132.001, T1554, T1014, T1505.003, T1068, T1588.005 | 2 |
 | Sigma | 7 | 4 | T1059.001, T1059.004, T1003.002, T1021.002, T1021.006, T1014, T1543, T1098, T1136.001, T1222.002, T1572, T1105 | 2 |
-| Suricata | 6 | 6 | T1190, T1048.003, T1041, T1210, T1572, T1505.003, T1555 | 1 |
+| Suricata | 6 | 6 | T1190, T1048.003, T1041, T1210, T1572, T1505.003, T1555, T1018 | 1 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, built for scoping and threat-hunting. Expect to review the hits.
 
 **The single highest-priority rule in this file** is the Suricata signature for an outbound HTTP `PUT` carrying `User-Agent: cisco-IOS` to a non-management destination (Cisco IOS-XE WSMA Exfiltration cluster, Suricata Detection). It is the highest-fidelity signal in the entire case: a network device generates this traffic itself as it uploads its own firmware, core dumps and configs, so the operator cannot suppress or clean it after the fact the way they can a victim-side log or file.
 
-**Two rules in the Cisco IOS-XE cluster are deliberately broader than this operator.** The generic-CVE-2023-20198 URI (`/webui/logoutconfirm.html?logon_hash=1`) and the bare-hex forged-token shape (`^[a-f0-9]{18}$`, no auth scheme) both cover the public exploit class used by at least five other, unrelated intruders observed hitting the same victim router. They are labeled `GENERIC-CVE-2023-20198` in their rule names and `msg` fields throughout this file to keep them clearly distinct from the two operator-specific signatures (the double-encoded WSMA path `%2577eb%2575i_%2577sma_Http`, and the WSMA `fileCopy` exfiltration primitive), which are this operator's fingerprint and will not fire on the other five.
+**Two rules in the Cisco IOS-XE cluster are deliberately broader than this operator.** The generic-CVE-2023-20198 URI (`/webui/logoutconfirm.html?logon_hash=1`) and the bare-hex forged-token shape (18 hex characters in either case, no auth scheme) both cover the public exploit class used by at least five other, unrelated intruders observed hitting the same victim router. They are labeled `GENERIC-CVE-2023-20198` in their rule names and `msg` fields throughout this file to keep them clearly distinct from the two operator-specific signatures (the double-encoded WSMA path `%2577eb%2575i_%2577sma_Http`, and the WSMA `fileCopy` exfiltration primitive), which are this operator's fingerprint and will not fire on the other five.
 
 **Atomic indicators were deliberately routed to the IOC feed instead of being authored as rules.** Per the routing test in `detection-rule-tiering` (if removing the single hard-coded literal makes the rule detect nothing, it belongs in the feed), the following were excluded from this file and are already present in `threat-intel-vault/ioc-feeds/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-iocs.json`: the operator VPS IP and port combination (`13.140.145.210:4445`) hard-coded into the reverse-shell one-liner; the two Go compiler build IDs that distinguish the two builds of the CVE-2023-21839 exploit; the domain `radius-sync.com` (a single-domain DNS-query match is a pure-IOC selector by definition); and the four captured chisel server key fingerprints (useful as pivot material, not as rule content). See Coverage Gaps for the full accounting.
 
@@ -101,7 +101,7 @@ rule WSMA_CVE_2023_20198_DoubleEncode_Exfil {
 **Robustness:** 3
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application)
 **Confidence:** HIGH
-**False Positives:** None known outside WebLogic/JNDI internals. The three class-name strings co-occurring is specific to the CVE-2024-21182 OpaqueReference exploitation chain, not general WebLogic administration code
+**False Positives:** Any file that names all three classes matches, not only operator tooling: WebLogic's own internals, advisories and write-ups about CVE-2024-21182 (see Blind Spots). The rule tests the three class names alone, so a hit shows that a file mentions the OpaqueReference primitive and not that it exploits it; read the reflection and lookup code in the file to tell the two apart
 **Blind Spots:** The three class names are tested as strings only, so WebLogic internals, advisories and write-ups that name all three also match. Misses variants that reach the same primitive through different class names, or that exploit the underlying JNDI weakness purely over the T3/IIOP wire protocol without ever appearing as Java source or bytecode
 **Validation:** Scan the operator's Java source (any of the seven byte-identical copies of the reflection block); a legitimate WebLogic JNDI administration utility must NOT fire
 **Deployment:** Source-code and bytecode scanning of recovered operator tooling, static-analysis pipelines ingesting suspected exploit code
@@ -1052,7 +1052,7 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT GENERIC-CVE-2023-
 **Robustness:** 2
 **ATT&CK Coverage:** T1190
 **Confidence:** HIGH
-**False Positives:** None known for a well-formed HTTP Authorization header. Legitimate clients always send a recognized auth scheme (Basic, Bearer, Digest, and similar) as a prefix; a bare 18-character lowercase-hex string with nothing else is not a real credential format used by any standard client
+**False Positives:** None known for a well-formed HTTP Authorization header. Legitimate clients always send a recognized auth scheme (Basic, Bearer, Digest, and similar) as a prefix; a bare 18-character hex string with nothing else (upper or lower case, because the PCRE is case-insensitive) is not a real credential format used by any standard client
 **Blind Spots:** Generic CVE-class signature. Will fire on any of the other observed intruders or future unrelated actors using a forged bare-hex token of the same length. Misses a forged token of a different length or one wrapped in a scheme prefix to evade this exact-length check
 **Validation:** Send a test HTTP request with `Authorization: 0123456789abcdefab` (no scheme) against a lab web server and confirm the alert fires; a request with a genuine `Authorization: Basic <base64>` header must NOT fire
 **Deployment:** Perimeter sensor in front of any IOS-XE WebUI management interface
@@ -1121,7 +1121,8 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT WebLogicTelecomHarv
 
 **Tier:** Hunting
 **Robustness:** 1
-**ATT&CK Coverage:** T1555 (contextual, the reconnaissance step that precedes credential extraction)
+**ATT&CK Coverage:** T1018 (Remote System Discovery)
+**ATT&CK Note:** T1555 was listed here as contextual and is withdrawn. The rule matches a `table.json?content=devices&count=500` request, which enumerates up to 500 monitored devices with their hosts and groups (the fleet-enumeration step in the operator's script); it observes no password-store access. The credential-extraction rule below carries T1555.
 **Confidence:** LOW
 **False Positives:** Legitimate bulk device-inventory queries are a normal part of PRTG dashboard usage, monitoring integrations, and reporting tools; this specific query shape is not inherently malicious on its own
 **Blind Spots:** Cannot distinguish an operator's reconnaissance pull from a legitimate administrator's or integration's bulk query without additional context (source IP reputation, time of day, or correlation with the credential-extraction rule above)

@@ -47,11 +47,11 @@ Pulsar RAT (analyzed here as `server.exe`) is an actively maintained, rebranded 
 **Robustness:** 3
 **ATT&CK Coverage:** T1219 (Remote Access Software)
 **Confidence:** HIGH
-**Rationale:** The rule requires all six family-specific compiled strings (`$pulsar`, `$hvnc`, `$keylog`, `$msgpack`, `$bcrypt`, `$winre`) — anchored on the `Pulsar.Common` namespace root, the actual class-library identifier of the open-source Pulsar RAT codebase — plus 2 of the 2 surveillance-module strings. No single string is a renameable campaign-specific literal; the combination identifies the codebase itself, which survives typical recompilation (a new C2 config or build date does not change the namespace or module names) and file renaming. The PE32 + 1-2MB filesize gate further constrains matches to builds consistent with the analyzed sample.
+**Rationale:** The rule requires all six family-specific compiled strings (`$pulsar`, `$hvnc`, `$keylog`, `$msgpack`, `$bcrypt`, `$winre`) — anchored on the `Pulsar.Common` namespace root, the actual class-library identifier of the open-source Pulsar RAT codebase — plus 2 of the 2 surveillance-module strings. No single string is a renameable campaign-specific literal; the combination identifies the codebase itself, which survives typical recompilation (a new C2 config or build date does not change the namespace or module names) and file renaming. The condition checks the MZ header, the `PE\0\0` signature and a 1-2MB file size; it does not test the optional-header magic, so a 64-bit (PE32+) file of that size also matches. These checks constrain matches to builds consistent with the analyzed sample.
 **False Positives:** None known — no legitimate .NET application combines the `Pulsar.Common` namespace, an HVNC module, a keylogger, MessagePack serialization, BCryptEncrypt, and a WinRE `Recovery\OEM\` path string; the all-of-six requirement makes incidental collision effectively impossible.
-**Blind Spots:** A build that renames the `Pulsar.Common` namespace and re-implements the HVNC/keylogger/credential modules under new names would evade all string anchors; the 1-2MB filesize gate excludes Pulsar builds packed or bundled outside this size range.
+**Blind Spots:** A build that renames the `Pulsar.Common` namespace and re-implements the HVNC/keylogger/credential modules under new names would evade all string anchors; the 1-2MB filesize gate excludes Pulsar builds packed or bundled outside this size range. The `filesize` test is undefined in a live process-memory scan, so the rule does not match a running process; it applies to files and to saved dumps.
 **Validation:** Scan the analyzed Pulsar RAT sample (`hash1` below) — all six core strings plus at least 2 of the two surveillance-module strings must match; a benign .NET application that uses MessagePack serialization and calls BCrypt APIs, without the `Pulsar.Common` namespace or the WinRE path string, must NOT fire.
-**Deployment:** Endpoint AV/EDR file scan, memory scanning, static triage of unknown MSIL/.NET binaries retrieved from open directories or download links.
+**Deployment:** Endpoint AV/EDR file scan, scanning of saved memory dumps, static triage of unknown MSIL/.NET binaries retrieved from open directories or download links. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
 /*
@@ -64,7 +64,7 @@ Pulsar RAT (analyzed here as `server.exe`) is an actively maintained, rebranded 
 
 rule RAT_Pulsar_Critical_Variant {
    meta:
-      description = "Detects the Pulsar RAT .NET remote access trojan (server.exe) via a six-string combination anchored on its Pulsar.Common namespace root, HVNC/keylogger/credential modules, and WinRE Recovery\\OEM persistence path reference, combined with a PE32 filesize constraint calibrated to the analyzed 1.5MB build"
+      description = "Detects the Pulsar RAT .NET remote access trojan (server.exe) via a six-string combination anchored on its Pulsar.Common namespace root, HVNC/keylogger/credential modules, and WinRE Recovery\\OEM persistence path reference, combined with a 1-2MB file-size constraint on a PE file (the optional-header magic is not tested) calibrated to the analyzed 1.5MB build"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/PULSAR-RAT-detections/"
@@ -324,7 +324,7 @@ level: medium
 **Robustness:** 2
 **ATT&CK Coverage:** T1102.001 (Web Service: Dead Drop Resolver)
 **Confidence:** MODERATE
-**Rationale:** Public paste-hosting services used as a dead-drop resolver for dynamic C2 configuration is a durable technique-level signal — the operator can swap which paste service or paste ID they use without evading the rule's domain list, and the technique doesn't depend on infrastructure the operator owns. The companion IOC feed explicitly rates the false-positive risk for this behavior "High," since these are widely used legitimate developer services; the original SPL query's `count > 5` volume threshold is not reproduced here as a formal Sigma correlation (a single-event selection keeps the rule simple for what is already an explicitly broad Hunting lead), but should be applied during triage.
+**Rationale:** Public paste-hosting services used as a dead-drop resolver for dynamic C2 configuration is a durable technique-level signal — the operator can swap which paste service or paste ID they use without evading the rule's domain list, and the technique doesn't depend on infrastructure the operator owns. The companion IOC feed explicitly rates the false-positive risk for this behavior "High," since these are widely used legitimate developer services; the original SPL query's `count > 5` volume threshold is not reproduced here as a formal Sigma correlation (a single-event selection keeps the rule simple for what is already an explicitly broad Hunting lead), but should be applied during triage. The host test is the exact name or a subdomain of it (`.pastebin.com`), so a look-alike such as `notpastebin.com` or `pastebin.com.example.net` does not match.
 **False Positives:** Legitimate developer or administrative use of public paste services to share code, logs, or configuration snippets.
 **Deployment:** Proxy/DNS/network monitoring; analyst review with a volume/frequency threshold applied during triage (the original analysis used more than five connections in a lookback window as an informal cutoff) and correlation against the campaign's other indicators before any action.
 
@@ -352,13 +352,21 @@ tags:
 logsource:
     category: network_connection
     product: windows
+    definition: >-
+        Requires network-connection events (Sysmon Event ID 3 or equivalent) whose
+        DestinationHostname field is populated; where it is empty the rule cannot match.
 detection:
-    selection:
-        DestinationHostname|contains:
+    selection_exact:
+        DestinationHostname:
             - 'pastebin.com'
             - 'paste.ee'
             - 'hastebin.com'
-    condition: selection
+    selection_subdomain:
+        DestinationHostname|endswith:
+            - '.pastebin.com'
+            - '.paste.ee'
+            - '.hastebin.com'
+    condition: selection_exact or selection_subdomain
 falsepositives:
     - >-
       Legitimate developer or administrative use of public paste

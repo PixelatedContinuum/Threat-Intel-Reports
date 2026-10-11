@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--c66800ff-665a-4672-870e-ebef2dfdd049",
+    "id": "bundle--5b9fc9bc-39fd-475e-a697-d181b3f89e41",
     "objects": [
         {
             "type": "identity",
@@ -125,27 +125,6 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--9d7c72ef-c9f1-5fec-a74c-8a34f76d17b0",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:12.951742Z",
-            "modified": "2026-10-01T19:54:12.951742Z",
-            "name": "Quasar RAT Remote Thread Creation Into System Processes",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "title: Quasar RAT Remote Thread Creation Into System Processes\nid: 6e1ad431-a53d-49ab-b6b0-0f6fb647d3a1\nstatus: experimental\ndescription: >-\n  Detects Client.exe (the Quasar RAT sample analyzed in this campaign)\n  creating a remote thread in explorer.exe, svchost.exe, or dllhost.exe\n  for process-injection-based defense evasion. Corrected from the\n  original rule, which selected on the process_creation category with\n  a CommandLine \"inject\" filter - a combination that does not\n  correspond to how thread-injection APIs actually generate telemetry;\n  re-anchored on the create_remote_thread category (Sysmon Event ID 8),\n  which is what genuinely captures this technique.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/\nauthor: The Hunters Ledger\ndate: '2025-12-06'\ntags:\n    - attack.stealth\n    - attack.privilege-escalation\n    - attack.t1055.003\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: create_remote_thread\n    product: windows\ndetection:\n    selection:\n        SourceImage|endswith: '\\Client.exe'\n        TargetImage|endswith:\n            - '\\explorer.exe'\n            - '\\svchost.exe'\n            - '\\dllhost.exe'\n    condition: selection\nfalsepositives:\n    - >-\n      Legitimate software coincidentally named Client.exe that\n      legitimately injects into explorer.exe, svchost.exe, or\n      dllhost.exe (not observed, but architecturally possible)\nlevel: high",
-            "pattern_type": "sigma",
-            "valid_from": "2025-12-06T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "indicator",
-            "spec_version": "2.1",
             "id": "indicator--ae6086da-0c55-53e2-816c-d282684d1da8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.951827Z",
@@ -230,6 +209,27 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
+            "id": "indicator--9d7c72ef-c9f1-5fec-a74c-8a34f76d17b0",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-01T19:54:12.951742Z",
+            "modified": "2026-10-11T14:08:22.608536Z",
+            "name": "Quasar RAT Remote Thread Creation Into System Processes",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Quasar RAT Remote Thread Creation Into System Processes\nid: 6e1ad431-a53d-49ab-b6b0-0f6fb647d3a1\nstatus: experimental\ndescription: >-\n  Detects Client.exe (the Quasar RAT sample analyzed in this campaign)\n  creating a remote thread in explorer.exe, svchost.exe, or dllhost.exe\n  for process-injection-based defense evasion. Corrected from the\n  original rule, which selected on the process_creation category with\n  a CommandLine \"inject\" filter - a combination that does not\n  correspond to how thread-injection APIs actually generate telemetry;\n  re-anchored on the create_remote_thread category (Sysmon Event ID 8),\n  which is what genuinely captures this technique.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/\nauthor: The Hunters Ledger\ndate: '2025-12-06'\nmodified: '2026-10-11'\ntags:\n    - attack.stealth\n    - attack.privilege-escalation\n    - attack.t1055\n    - detection.emerging-threats\n    - stp.2\nlogsource:\n    category: create_remote_thread\n    product: windows\ndetection:\n    selection:\n        SourceImage|endswith: '\\Client.exe'\n        TargetImage|endswith:\n            - '\\explorer.exe'\n            - '\\svchost.exe'\n            - '\\dllhost.exe'\n    condition: selection\nfalsepositives:\n    - >-\n      Legitimate software coincidentally named Client.exe that\n      legitimately injects into explorer.exe, svchost.exe, or\n      dllhost.exe (not observed, but architecturally possible)\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2025-12-06T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
             "id": "indicator--c932922c-b9f8-5841-b17a-fe1852217002",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.952143Z",
@@ -254,12 +254,12 @@
             "id": "indicator--b307f73c-c810-50b1-a785-0879c634231c",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.95222Z",
-            "modified": "2026-10-01T19:54:12.95222Z",
+            "modified": "2026-10-11T14:08:22.608743Z",
             "name": "Remote Thread Created by a Process Resident in AppData Roaming or Temp",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Remote Thread Created by a Process Resident in AppData Roaming or Temp\nid: a1ea23fd-ff54-4115-bb49-89b7fa7b9cd4\nstatus: experimental\ndescription: >-\n  Detects a process running from a user's AppData Roaming or Local Temp\n  directory creating a remote thread in another process, a generic\n  process-injection step observed as part of the malware's\n  surveillance/persistence chain in this campaign. Two prior corrections\n  are folded in. The original rule declared a non-existent \"api_call\"\n  logsource category with a CallTrace field searched for the literal string\n  CreateRemoteThread; standard Windows telemetry does not expose API calls\n  that way, so it was re-anchored on the create_remote_thread category\n  (Sysmon Event ID 8). The selector was then narrowed from the whole\n  AppData tree to Roaming and Local Temp only, because AppData\\Local\\Programs\n  is the canonical per-user install root for a large population of ordinary\n  signed applications whose updaters legitimately inject remote threads;\n  matching all of AppData produced overwhelming false-positive volume in\n  any environment that allows per-user application installs.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/\nauthor: The Hunters Ledger\ndate: '2025-12-06'\nmodified: '2026-07-30'\ntags:\n    - attack.stealth\n    - attack.privilege-escalation\n    - attack.t1055.003\n    - detection.emerging-threats\nlogsource:\n    category: create_remote_thread\n    product: windows\ndetection:\n    selection:\n        SourceImage|contains:\n            - '\\AppData\\Roaming\\'\n            - '\\AppData\\Local\\Temp\\'\n    condition: selection\nfalsepositives:\n    - >-\n      Legitimate AppData-installed software (auto-updaters, some\n      games, hardware-control utilities) that performs remote thread\n      injection for benign reasons\nlevel: medium",
+            "pattern": "title: Remote Thread Created by a Process Resident in AppData Roaming or Temp\nid: a1ea23fd-ff54-4115-bb49-89b7fa7b9cd4\nstatus: experimental\ndescription: >-\n  Detects a process running from a user's AppData Roaming or Local Temp\n  directory creating a remote thread in another process, a generic\n  process-injection step observed as part of the malware's\n  surveillance/persistence chain in this campaign. Two prior corrections\n  are folded in. The original rule declared a non-existent \"api_call\"\n  logsource category with a CallTrace field searched for the literal string\n  CreateRemoteThread; standard Windows telemetry does not expose API calls\n  that way, so it was re-anchored on the create_remote_thread category\n  (Sysmon Event ID 8). The selector was then narrowed from the whole\n  AppData tree to Roaming and Local Temp only, because AppData\\Local\\Programs\n  is the canonical per-user install root for a large population of ordinary\n  signed applications whose updaters legitimately inject remote threads;\n  matching all of AppData produced overwhelming false-positive volume in\n  any environment that allows per-user application installs.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/\nauthor: The Hunters Ledger\ndate: '2025-12-06'\nmodified: '2026-07-30'\ntags:\n    - attack.stealth\n    - attack.privilege-escalation\n    - attack.t1055\n    - detection.emerging-threats\nlogsource:\n    category: create_remote_thread\n    product: windows\ndetection:\n    selection:\n        SourceImage|contains:\n            - '\\AppData\\Roaming\\'\n            - '\\AppData\\Local\\Temp\\'\n    condition: selection\nfalsepositives:\n    - >-\n      Legitimate AppData-installed software (auto-updaters, some\n      games, hardware-control utilities) that performs remote thread\n      injection for benign reasons\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2025-12-06T00:00:00Z",
             "labels": [
@@ -272,15 +272,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--130a0d8f-a2ce-52cf-8879-7c3d7d80480b",
+            "id": "indicator--56aa103e-3e08-5b4d-b03d-447e3079a5f9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:12.952296Z",
-            "modified": "2026-10-01T19:54:12.952296Z",
-            "name": "THL HUNT Dual-RAT-Quasar-NjRAT Quasar Binary Protocol C2 on TCP 4782 (RAT C2 Channel)",
+            "created": "2026-10-11T14:08:22.608853Z",
+            "modified": "2026-10-11T14:08:22.608853Z",
+            "name": "THL HUNT Dual-RAT-Quasar-NjRAT Outbound TCP Payload to Port 4782 (Quasar Default Port, Port-Only Lead)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:\"THL HUNT Dual-RAT-Quasar-NjRAT Quasar Binary Protocol C2 on TCP 4782 (RAT C2 Channel)\"; flow:established,to_server; dsize:>0; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/; classtype:trojan-activity; sid:2100001; rev:3; metadata:author The_Hunters_Ledger, date 2025-12-06;)",
+            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:\"THL HUNT Dual-RAT-Quasar-NjRAT Outbound TCP Payload to Port 4782 (Quasar Default Port, Port-Only Lead)\"; flow:established,to_server; dsize:>0; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/; classtype:trojan-activity; sid:2100001; rev:4; metadata:author The_Hunters_Ledger, date 2025-12-06;)",
             "pattern_type": "suricata",
             "valid_from": "2025-12-06T00:00:00Z",
             "labels": [
@@ -293,15 +293,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--69042fde-9e20-5282-aea8-5c39fe036dd3",
+            "id": "indicator--a7b7fddf-cdcd-549d-9f12-26726b9663e4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:12.952371Z",
-            "modified": "2026-10-01T19:54:12.952371Z",
-            "name": "THL HUNT Dual-RAT-Quasar-NjRAT NjRAT-XWorm Spoofed Mobile Safari User-Agent (Dead-Drop C2 Resolution Indicator)",
+            "created": "2026-10-11T14:08:22.608971Z",
+            "modified": "2026-10-11T14:08:22.608971Z",
+            "name": "THL HUNT Dual-RAT-Quasar-NjRAT HTTP User-Agent Containing iPhone OS 11_4_1 (Value Reported in NjRAT-XWorm Traffic, Not Family-Specific)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT Dual-RAT-Quasar-NjRAT NjRAT-XWorm Spoofed Mobile Safari User-Agent (Dead-Drop C2 Resolution Indicator)\"; flow:established,to_server; http.user_agent; content:\"iPhone OS 11_4_1 like Mac OS X\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/; classtype:trojan-activity; sid:2100004; rev:3; metadata:author The_Hunters_Ledger, date 2025-12-06;)",
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT Dual-RAT-Quasar-NjRAT HTTP User-Agent Containing iPhone OS 11_4_1 (Value Reported in NjRAT-XWorm Traffic, Not Family-Specific)\"; flow:established,to_server; http.user_agent; content:\"iPhone OS 11_4_1 like Mac OS X\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/; classtype:trojan-activity; sid:2100004; rev:4; metadata:author The_Hunters_Ledger, date 2025-12-06;)",
             "pattern_type": "suricata",
             "valid_from": "2025-12-06T00:00:00Z",
             "labels": [
@@ -341,7 +341,7 @@
             "id": "report--5d4d9a1b-5e15-5ad5-9783-ae7ec6901915",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.95275Z",
-            "modified": "2026-10-11T04:24:13.967049Z",
+            "modified": "2026-10-11T14:08:22.609515Z",
             "name": "Quasar RAT vs. NjRAT/XWorm — Technical Deep-Dive",
             "report_types": [
                 "threat-report"
@@ -354,15 +354,15 @@
                 "indicator--d01b1b48-4ed2-57a0-ab35-db909ac83e96",
                 "indicator--141ae941-1766-5d02-91e1-2935af10abb0",
                 "indicator--ed0a0fbb-467d-567e-af09-59fa7bac51d1",
-                "indicator--9d7c72ef-c9f1-5fec-a74c-8a34f76d17b0",
                 "indicator--ae6086da-0c55-53e2-816c-d282684d1da8",
                 "indicator--1b6c7586-d46c-508f-a896-9793b391a0b4",
                 "indicator--48ebbe76-3452-5c05-be8b-5455c38a4077",
                 "indicator--5d202fff-0854-5b04-9617-a2df6b9e675b",
+                "indicator--9d7c72ef-c9f1-5fec-a74c-8a34f76d17b0",
                 "indicator--c932922c-b9f8-5841-b17a-fe1852217002",
                 "indicator--b307f73c-c810-50b1-a785-0879c634231c",
-                "indicator--130a0d8f-a2ce-52cf-8879-7c3d7d80480b",
-                "indicator--69042fde-9e20-5282-aea8-5c39fe036dd3",
+                "indicator--56aa103e-3e08-5b4d-b03d-447e3079a5f9",
+                "indicator--a7b7fddf-cdcd-549d-9f12-26726b9663e4",
                 "tool--4634c541-7106-53c9-b6f3-c0bdd766cdea",
                 "tool--553392d6-b994-5723-b71b-c97f7431e5ff"
             ],

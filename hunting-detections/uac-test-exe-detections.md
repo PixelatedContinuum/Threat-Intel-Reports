@@ -45,10 +45,10 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 **Robustness:** 3
 **ATT&CK Coverage:** T1548.002 (Abuse Elevation Control Mechanism: Bypass User Account Control)
 **Confidence:** HIGH
-**Rationale:** Anchors on the OS-level constants the two bypass techniques cannot avoid touching: the ICMLuaUtil/CMSTPLUA interface CLSID (`{6EDD6D74-C007-4E75-B76A-E5740995E24C}`), the CMLUAUTIL and ColorDataProxy elevation CLSIDs, and the Fodhelper `ms-settings\shell\open\command` registry path, each combined with generic supporting COM/registry API or filename strings that widen scope without weakening the anchor. None of these strings are the operator's to choose; abandoning them means abandoning the technique itself, so the rule survives a full recompile or rename of the tool. It is deliberately technique-level rather than sample-specific and is expected to also match other tools implementing the same two bypass methods.
-**False Positives:** None known for unrelated software: these GUIDs and the Fodhelper registry path are not expected to appear in benign applications. The rule fires on any tool implementing the same two bypass techniques (other proof-of-concept tools, red-team frameworks, or malware), which is the intended technique-level behavior, not a false positive. Goodware-corpus validation has not been run against this rule; treat as a manual-review precondition before enabling automated blocking.
+**Rationale:** Anchors on the OS-level constants the two bypass techniques cannot avoid touching: the ICMLuaUtil/CMSTPLUA interface CLSID (`{6EDD6D74-C007-4E75-B76A-E5740995E24C}`), the CMLUAUTIL and ColorDataProxy elevation CLSIDs, and the Fodhelper registry location, each combined with generic supporting COM/registry API or filename strings that widen scope without weakening the anchor. The Fodhelper location is accepted in two forms: the full `ms-settings\shell\open\command` path plus one registry API name, or the shorter `Software\Classes\ms-settings` parent key, which counts only together with the `fodhelper.exe` name and a registry API name (the parent key plus a registry API name alone does not match). None of these strings are the operator's to choose; abandoning them means abandoning the technique itself, so the rule survives a full recompile or rename of the tool. It is deliberately technique-level rather than sample-specific and is expected to also match other tools implementing the same two bypass methods.
+**False Positives:** No benign hit in a benign-file corpus run (6,035 files from this workstation: Linux system binaries, .NET framework DLLs, scripts, Sigma and YARA rule files; 0 hits, with a known-positive self-test passing). That corpus holds no Windows system binaries or Windows goodware, so a Windows-goodware result is NOT CHECKED and the rule is not shown clean there. The CLSIDs and the Fodhelper path are not expected in ordinary applications, but a Windows default-app or settings-management utility that handles `ms-settings` could carry the full path plus a registry API name, which the first Fodhelper branch accepts. The rule fires on any tool implementing the same two bypass techniques (other proof-of-concept tools, red-team frameworks, or malware), which is the intended technique-level behavior, not a false positive. Treat a Windows-goodware scan as a manual-review precondition before enabling automated blocking.
 **Blind Spots:** A bypass implementation using a different, less-documented technique (neither CMSTPLUA nor Fodhelper) evades entirely. The rule inspects on-disk/in-memory strings, not obfuscated or packed variants that encrypt these constants.
-**Validation:** Scan a binary embedding the CMSTPLUA CLSID or the Fodhelper registry path alongside the matching COM/registry API calls, must match; an unrelated application that merely references Windows Settings or makes registry API calls without the bypass-specific CLSID/path must NOT fire.
+**Validation:** Scan a binary embedding the CMSTPLUA CLSID with a COM API name, or the full Fodhelper path with a registry API name, or the `Software\Classes\ms-settings` parent key with `fodhelper.exe` and a registry API name, must match; an unrelated application that merely references Windows Settings or makes registry API calls without the bypass-specific CLSID/path must NOT fire, and neither must a binary holding only the `ms-settings` parent key and a registry API name (checked with a constructed fixture: the old condition fired on it, this one does not).
 **Deployment:** Endpoint AV/EDR file scanning, email gateway attachment scanning, retroactive scan of file shares, IR artifact triage on hosts that resolved 109.230.231.37.
 
 ```yara
@@ -95,7 +95,8 @@ rule HKTOOL_UAC_Bypass_CMSTPLUA_Fodhelper_Generic {
       uint16(0) == 0x5A4D and
       (
          ($cmstplua_clsid and (1 of ($com_api*))) or
-         (($fodhelper_reg1 or $fodhelper_reg2) and (1 of ($reg_api*))) or
+         ($fodhelper_reg1 and (1 of ($reg_api*))) or
+         ($fodhelper_reg2 and $exe_fodhelper and (1 of ($reg_api*))) or
          ((1 of ($bypass_clsid*)) and (1 of ($exe_*)) and (1 of ($reg_api*)))
       )
 }
@@ -109,11 +110,13 @@ rule HKTOOL_UAC_Bypass_CMSTPLUA_Fodhelper_Generic {
 **Robustness:** 2
 **ATT&CK Coverage:** T1548.002 (Abuse Elevation Control Mechanism: Bypass User Account Control)
 **Confidence:** MODERATE
-**Rationale:** Every non-hash branch pairs a genuine technique anchor (the CMSTPLUA CLSID, the Fodhelper registry path, or the CMSTPLUA elevation moniker) with two or more of this build's own console/status strings (`$msg_*`, `$com_*`): the transparent, human-readable narration this tool prints at each step ("[+] COM bypass executed!", "[*] Calling CoGetObject with elevation moniker..."). That narration is a hallmark of a demonstration/test build, not of a weaponized tool, and it is exactly the kind of literal an operator drops when hardening a build for real use. Strip the print statements and every behavioral branch here stops firing, leaving only the exact-hash fast path. The Rust compiler-artifact strings (`$rust_lib*`) add no bypass-specific signal of their own; they only confirm the binary is Rust-compiled. Kept at Hunting rather than Cut because the multi-signal combination remains a real, low-noise lead for recurrence of this exact tool or a close derivative that retains its console output.
-**False Positives:** None known for the hash-match branch (exact-file equality). The behavioral branches require a technique-specific CLSID/registry-path literal to co-occur with this build's own status-message text, which is not expected in unrelated software; residual risk is limited to a close rebuild of this same PoC that keeps its console output.
+**Rationale:** The hash branch compares the file's SHA-256 with `hash1` (`hash.sha256`). Of the four behavioral branches, three pair a technique anchor (the CMSTPLUA CLSID, the Fodhelper registry path, or the CMSTPLUA elevation moniker) with two or more of this build's own console/status strings (`$msg_*`, `$com_*`): the transparent, human-readable narration this tool prints at each step ("[+] COM bypass executed!", "[*] Calling CoGetObject with elevation moniker..."). The fourth branch carries no technique anchor at all: four of the `$msg_*` status messages, two Rust library paths and one token API name. That narration is a hallmark of a demonstration/test build, not of a weaponized tool, and it is exactly the kind of literal an operator drops when hardening a build for real use. Strip the print statements and every behavioral branch here stops firing, leaving only the exact-hash path. The Rust compiler-artifact strings (`$rust_lib*`) add no bypass-specific signal of their own; they only confirm the binary is Rust-compiled. Kept at Hunting rather than Cut because the multi-signal combination remains a real, low-noise lead for recurrence of this exact tool or a close derivative that retains its console output.
+**False Positives:** None known for the hash-match branch (exact SHA-256 comparison). Three behavioral branches require a technique-specific CLSID, registry-path or moniker literal to co-occur with this build's own status-message text, which is not expected in unrelated software. The fourth behavioral branch has no technique literal behind it: it fires on four of this build's status messages, two Rust library paths and a token API name, so it is bounded only by how distinctive that narration text is. Residual risk is limited to a close rebuild of this same PoC that keeps its console output. No benign hit in the 6,035-file workstation corpus run (Linux-leaning, no Windows system binaries; a Windows-goodware result is NOT CHECKED).
 **Deployment:** Endpoint AV/EDR file scanning, retroactive scan of file shares, IR artifact triage on hosts that resolved 109.230.231.37.
 
 ```yara
+import "hash"
+
 rule HKTOOL_UAC_Test_PoC_Comprehensive {
    meta:
       description = "Detects uac_test.exe and close derivatives via exact hash match or a multi-signal combination of CMSTPLUA/Fodhelper bypass technique anchors, this build's own console/status-message strings, and Rust compilation artifacts. The status-message dependency means a rebuild with console output stripped defeats every behavioral branch; see Coverage Gaps."
@@ -127,8 +130,6 @@ rule HKTOOL_UAC_Test_PoC_Comprehensive {
       id = "b20d328c-f9af-47fa-acb3-e3ad6d28b130"
       hash1 = "18da271868c434494a68937fa12cb302d37b14849c4c0fc1db4007ac13c5b760"
    strings:
-      $hash = "18da271868c434494a68937fa12cb302d37b14849c4c0fc1db4007ac13c5b760" nocase
-
       $clsid_cmstplua = "{6EDD6D74-C007-4E75-B76A-E5740995E24C}" nocase
       $elevation_moniker = "Elevation:Administrator!new:{3E5FC7F9-9A51-4367-9063-A120244FBEC7}" ascii wide nocase
 
@@ -163,7 +164,7 @@ rule HKTOOL_UAC_Test_PoC_Comprehensive {
       uint16(0) == 0x5A4D and
       filesize < 500KB and
       (
-         $hash or
+         hash.sha256(0, filesize) == "18da271868c434494a68937fa12cb302d37b14849c4c0fc1db4007ac13c5b760" or
          (
             ($clsid_cmstplua and ($elevation_moniker or $com_init or $com_moniker)) and
             (2 of ($msg_*)) and
@@ -253,43 +254,60 @@ rule HKTOOL_Rust_Compiled_UAC_Bypass {
 **Robustness:** 3
 **ATT&CK Coverage:** T1548.002 (Abuse Elevation Control Mechanism: Bypass User Account Control)
 **Confidence:** HIGH
-**Rationale:** `HKCU\Software\Classes\ms-settings\shell\open\command` is the exact registry key the Fodhelper hijack technique depends on: fodhelper.exe checks this key on launch and executes whatever `DelegateExecute`/default value it finds there without a UAC prompt. An attacker cannot rename or relocate this key and still be exploiting the Fodhelper technique, so the selector survives any rebuild of the tool creating it. The filter excludes the two legitimate writers of this key (fodhelper.exe itself, and the Settings app), leaving only third-party writers as a strong, low-noise indicator.
+**Rationale:** The per-user `Software\Classes\ms-settings\shell\open\command` key (HKCU) is the exact registry key the Fodhelper hijack technique depends on: fodhelper.exe checks this key on launch and executes whatever `DelegateExecute`/default value it finds there without a UAC prompt. An attacker cannot rename or relocate this key and still be exploiting the Fodhelper technique, so the selector survives any rebuild of the tool creating it. The selection matches the key itself or its `(Default)` or `DelegateExecute` value, on a create or set event, under a user hive (`HKU\`) only; a subkey or a longer key name that merely starts with the path does not match, and a machine-hive (HKLM) write does not match. Sysmon reports a per-user write to `HKCU\Software\Classes` with the `HKU\<SID>` prefix, as either `HKU\<SID>\Software\Classes\...` or `HKU\<SID>_Classes\...`; the selection accepts both spellings. Which spelling a given Sysmon build emits was not checked against a live event. The filter excludes the two legitimate writers of this key (fodhelper.exe itself, and the Settings app), leaving only third-party writers as a strong, low-noise indicator.
 **False Positives:** Legitimate system administration or registry-cleanup tooling that touches this exact key (extremely rare); legitimate Windows Settings application activity is excluded by the filter.
-**Blind Spots:** Misses UAC bypass techniques that don't use this specific registry key (for example CMSTPLUA, sdclt, eventvwr, or other UACME-catalogued methods). Requires registry-event telemetry (Sysmon Event ID 13 or equivalent).
-**Validation:** Trigger creation of a `DelegateExecute` or default value under this exact key from a non-fodhelper/non-SystemSettings process, must match; a Windows Settings application writing its own legitimate configuration under this key must NOT fire.
-**Deployment:** Windows registry auditing, Sysmon Event ID 13, EDR registry-event telemetry.
+**Blind Spots:** Misses UAC bypass techniques that don't use this specific registry key (for example CMSTPLUA, sdclt, eventvwr, or other UACME-catalogued methods). Requires registry-event telemetry (Sysmon Event ID 12 for key creation and 13 for value writes, with monitoring that covers the per-user Classes hive). A write made through a different hive path that is not rendered under `HKU\` is not matched.
+**Validation:** Trigger creation of the key, or of a `DelegateExecute` or default value under it, from a non-fodhelper/non-SystemSettings process, must match; a Windows Settings application writing its own legitimate configuration under this key must NOT fire, and neither must an HKLM write, a write to a subkey below `command`, or a delete event for the key. The hive-spelling forms were checked with constructed field values only; a live Sysmon event replay is NOT CHECKED.
+**Deployment:** Windows registry auditing, Sysmon Event ID 12 and 13, EDR registry-event telemetry.
 
 ```yaml
 title: UAC Bypass via Fodhelper Registry Hijacking
 id: 9a2c5b8f-3d1e-4f5a-8c9b-1a2d3e4f5a6b
 status: experimental
 description: >-
-    Detects creation of registry keys under HKCU\Software\Classes\ms-settings\shell\open\command,
-    the exact key the Fodhelper UAC bypass technique hijacks. fodhelper.exe reads this key on
-    launch and executes its DelegateExecute/default value at the caller's already-elevated
-    integrity level, without a UAC prompt. A write to this key from any process other than
-    fodhelper.exe or the Settings app itself is a strong indicator of this technique in use.
+    Detects creation of the ms-settings\shell\open\command key, or a write to its (Default) or
+    DelegateExecute value, in a user's Classes hive. Sysmon reports a per-user write to
+    HKCU\Software\Classes as HKU\<SID>\Software\Classes or HKU\<SID>_Classes, and the selection
+    accepts both; machine-hive (HKLM) writes are not matched. This is the key the Fodhelper UAC
+    bypass technique hijacks: the key is written by an ordinary user-level process (no
+    administrator rights are needed), and fodhelper.exe, which auto-elevates, then reads it on
+    launch and executes its DelegateExecute/default value at high integrity without a UAC
+    prompt. A write to this key from any process other than fodhelper.exe or the Settings
+    app itself is a strong indicator of this technique in use.
 references:
     - https://the-hunters-ledger.com/hunting-detections/uac-test-exe-detections/
 author: The Hunters Ledger
 date: '2026-01-12'
+modified: '2026-10-11'
 tags:
     - attack.privilege-escalation
     - attack.stealth
     - attack.t1548.002
     - detection.emerging-threats
+    - stp.4
 logsource:
     category: registry_event
     product: windows
-    definition: 'Sysmon Event ID 13 (Registry Value Set)'
+    definition: 'Requires Sysmon Event ID 12 (RegistryEvent create or delete key) and Event ID 13 (RegistryEvent value set), with registry monitoring that covers the per-user Classes hive.'
 detection:
-    selection:
-        TargetObject|contains: '\Software\Classes\ms-settings\shell\open\command'
+    selection_hive:
+        TargetObject|startswith: 'HKU\'
+    selection_key:
+        EventType:
+            - 'CreateKey'
+            - 'SetValue'
+        TargetObject|endswith:
+            - '\Software\Classes\ms-settings\shell\open\command'
+            - '\Software\Classes\ms-settings\shell\open\command\(Default)'
+            - '\Software\Classes\ms-settings\shell\open\command\DelegateExecute'
+            - '_Classes\ms-settings\shell\open\command'
+            - '_Classes\ms-settings\shell\open\command\(Default)'
+            - '_Classes\ms-settings\shell\open\command\DelegateExecute'
     filter_legitimate:
         Image|endswith:
             - '\fodhelper.exe'
             - '\SystemSettings.exe'
-    condition: selection and not filter_legitimate
+    condition: selection_hive and selection_key and not filter_legitimate
 falsepositives:
     - Legitimate system administration or registry cleanup tools (extremely rare)
     - Windows Settings application legitimate use

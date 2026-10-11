@@ -2,7 +2,7 @@
 # ATT&CK tables, _data/detection_attack.yml, _data/actors_index.yml and the
 # catalog. Do NOT edit by hand; re-run the generator. Published sources only.
 attack_version: '19.2'
-max_score: 111
+max_score: 109
 tactics:
   - name: Reconnaissance
     slug: reconnaissance
@@ -20,7 +20,7 @@ tactics:
       - T1596.005
     technique_count: 11
     report_count: 19
-    rule_count: 7
+    rule_count: 5
   - name: Resource Development
     slug: resource-development
     techniques:
@@ -30,7 +30,6 @@ tactics:
       - T1583.006
       - T1583.008
       - T1584.001
-      - T1584.004
       - T1585
       - T1585.001
       - T1585.002
@@ -47,9 +46,9 @@ tactics:
       - T1608.001
       - T1608.003
       - T1608.005
-    technique_count: 23
+    technique_count: 22
     report_count: 65
-    rule_count: 45
+    rule_count: 35
   - name: Initial Access
     slug: initial-access
     techniques:
@@ -71,7 +70,7 @@ tactics:
       - T1566.004
     technique_count: 16
     report_count: 43
-    rule_count: 62
+    rule_count: 59
   - name: Execution
     slug: execution
     techniques:
@@ -98,7 +97,7 @@ tactics:
       - T1574.006
     technique_count: 21
     report_count: 100
-    rule_count: 137
+    rule_count: 138
   - name: Persistence
     slug: persistence
     techniques:
@@ -134,7 +133,7 @@ tactics:
       - T1653
     technique_count: 30
     report_count: 82
-    rule_count: 144
+    rule_count: 139
   - name: Privilege Escalation
     slug: privilege-escalation
     techniques:
@@ -175,7 +174,7 @@ tactics:
       - T1611
     technique_count: 35
     report_count: 116
-    rule_count: 130
+    rule_count: 123
   - name: Stealth
     slug: stealth
     techniques:
@@ -241,7 +240,7 @@ tactics:
       - T1684.001
     technique_count: 60
     report_count: 217
-    rule_count: 224
+    rule_count: 215
   - name: Defense Impairment
     slug: defense-impairment
     techniques:
@@ -255,7 +254,7 @@ tactics:
       - T1686.003
     technique_count: 8
     report_count: 25
-    rule_count: 42
+    rule_count: 41
   - name: Credential Access
     slug: credential-access
     techniques:
@@ -292,7 +291,7 @@ tactics:
       - T1649
     technique_count: 31
     report_count: 76
-    rule_count: 56
+    rule_count: 54
   - name: Discovery
     slug: discovery
     techniques:
@@ -323,7 +322,7 @@ tactics:
       - T1622
     technique_count: 25
     report_count: 119
-    rule_count: 24
+    rule_count: 23
   - name: Lateral Movement
     slug: lateral-movement
     techniques:
@@ -341,7 +340,7 @@ tactics:
       - T1570
     technique_count: 12
     report_count: 24
-    rule_count: 21
+    rule_count: 19
   - name: Collection
     slug: collection
     techniques:
@@ -365,7 +364,7 @@ tactics:
       - T1602.002
     technique_count: 18
     report_count: 68
-    rule_count: 35
+    rule_count: 36
   - name: Command and Control
     slug: command-and-control
     techniques:
@@ -401,7 +400,7 @@ tactics:
       - T1665
     technique_count: 30
     report_count: 144
-    rule_count: 226
+    rule_count: 216
   - name: Exfiltration
     slug: exfiltration
     techniques:
@@ -412,7 +411,7 @@ tactics:
       - T1567.002
     technique_count: 5
     report_count: 24
-    rule_count: 19
+    rule_count: 20
   - name: Impact
     slug: impact
     techniques:
@@ -714,9 +713,7 @@ techniques:
         title: Russian Gemini CLI Credential Mill (213.165.51.115)
         date: '2026-05-25'
         report_url: /reports/russian-gemini-credential-mill-213.165.51.115/
-        rules: >-
-          1Password Vault Export File Created or Accessed by Non-1Password Process (SIGMA,
-          Detection)
+        rules: 1Password Vault Export File Written by a Non-1Password Process (SIGMA, Detection)
         count: 1
       - url: /hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections
         title: Turkish ARPA AI-Augmented Observability Compromise (209.38.205.158)
@@ -983,6 +980,13 @@ techniques:
         tactic: Discovery
         confidence: HIGH
     detections:
+      - url: >-
+          /hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections
+        title: Carrier Credential Harvesting Through a Customer's Router
+        date: '2026-08-18'
+        report_url: /reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/
+        rules: PRTG Bulk Device Inventory Query via table.json (SURICATA, Hunting)
+        count: 1
       - url: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
         title: GHOST Cryptojacker Kit — Vova75Rus Supply Chain (77.110.96.200)
         date: '2026-05-25'
@@ -999,9 +1003,9 @@ techniques:
     url: /techniques/T1018/
     mitre_url: https://attack.mitre.org/techniques/T1018/
     report_count: 3
-    rule_count: 1
+    rule_count: 2
     actor_count: 6
-    score: 4
+    score: 5
   - id: T1020
     name: Automated Exfiltration
     tactic: Exfiltration
@@ -1141,8 +1145,8 @@ techniques:
         rules: >-
           GOCLOUD_Windows_Deploy_Worm_Lingkai (YARA, Detection); GOCLOUD_LAN_Probe_Attack_Banner
           (YARA, Detection); Net Use Mapping Administrative Share With Explicit Credential (SIGMA,
-          Hunting); GOCLOUD LAN Lateral-Movement Report Banner (SURICATA, Detection)
-        count: 4
+          Hunting)
+        count: 3
     actors:
       - UTA-2026-020
       - UTA-2026-021
@@ -1151,9 +1155,9 @@ techniques:
     url: /techniques/T1021.002/
     mitre_url: https://attack.mitre.org/techniques/T1021/002/
     report_count: 4
-    rule_count: 5
+    rule_count: 4
     actor_count: 4
-    score: 9
+    score: 8
   - id: T1021.004
     name: SSH
     tactic: Lateral Movement
@@ -1184,11 +1188,11 @@ techniques:
         report_url: /reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/
         rules: >-
           Rule 3: Insider Tunnel-Setup Turkish-Language Operator Document (YARA, Detection); Sigma
-          Rule 4: Reverse SSH Tunnel Registration from Windows AD User Host to Operator IP (SIGMA,
-          Detection); Sigma Rule 5: PuTTY Saved Session Created with Tunnel or ARPA Name (SIGMA,
-          Detection); Sigma Rule 10: Non-Splunk Process Connecting to Localhost Port 8089 (SIGMA,
-          Hunting); Sigma Rule 12: Insider Deploying Outbound SSH Tunnel from Enterprise AD-Joined
-          Workstation (SIGMA, Hunting)
+          Rule 4: SSH-Family Process Command Line Containing An ARPA Operator Marker (SIGMA,
+          Hunting); Sigma Rule 5: PuTTY Saved Session Registry Value Write Under A Path Containing
+          ARPA_Tunnel (SIGMA, Hunting); Sigma Rule 10: Non-Splunk Process Connecting to Localhost
+          Port 8089 (SIGMA, Hunting); Sigma Rule 12: SSH, PuTTY Or Plink Process With A -R
+          Reverse-Forward Flag, Excluding Private-Range Substrings (SIGMA, Hunting)
         count: 5
     actors:
       - UTA-2026-012
@@ -1364,7 +1368,9 @@ techniques:
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
         report_url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
-        rules: Reflective .NET Assembly Load From A Base64-Encoded PowerShell String (SIGMA, Hunting)
+        rules: >-
+          PowerShell Script Block Containing Reflection.Assembly Load And FromBase64String (SIGMA,
+          Hunting)
         count: 1
       - url: /hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections
         title: 'CloudSync: An Assembler''s Intrusion Toolkit'
@@ -1384,19 +1390,16 @@ techniques:
         title: Multi-Actor AI-Agent Framework Abuse (8 Operators)
         date: '2026-06-16'
         report_url: /reports/ai-agent-frameworks-2026-05-23/
-        rules: >-
-          libpam_cache LD_PRELOAD Rootkit Family Signature (YARA, Detection); Cryptojacker
-          libpam_cache Drop to /lib/security (SIGMA, Detection)
-        count: 2
+        rules: libpam_cache LD_PRELOAD Rootkit Family Signature (YARA, Detection)
+        count: 1
       - url: /hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections
         title: Rovodev AI-Co-Authored Mirai Variant + Matrix C2 (87.106.143.220)
         date: '2026-05-26'
         report_url: /reports/rovodev-mirai-matrix-c2-87.106.143.220/
         rules: >-
-          MAL_ELF_Naku_Pandora_Mirai_Family (YARA, Detection); Naku/Pandora-Mirai Operator-Bespoke
-          22-Char Charset String: Family Tracking Signature (SIGMA, Hunting); Naku-Pandora Mirai
-          Operator-Bespoke CNC Protocol (Length-Prefixed String Option Keys) (SURICATA, Hunting)
-        count: 3
+          MAL_ELF_Naku_Pandora_Mirai_Family (YARA, Detection); Naku-Pandora Mirai Operator-Bespoke
+          CNC Protocol (Length-Prefixed String Option Keys) (SURICATA, Hunting)
+        count: 2
       - url: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
         title: GHOST Cryptojacker Kit — Vova75Rus Supply Chain (77.110.96.200)
         date: '2026-05-25'
@@ -1434,8 +1437,8 @@ techniques:
         report_url: /reports/shadow-xworm-opendirectory/
         rules: >-
           Shadow RAT AMSI Patch Shellcode or Asterisk-Padded AMSI and ETW String Fragments (YARA,
-          Detection); XWorm 3.0-5.0: Config and Builder Markers (YARA, Detection); XWorm 3.0-5.0:
-          Rijndael-256-ECB Config Crypto Pattern (YARA, Hunting)
+          Detection); XWorm 3.0-5.0: Config and Builder Markers (YARA, Detection); .NET Rijndael,
+          ECB, MD5 and Anti-Analysis String Combination (XWorm Config Crypto Lead) (YARA, Hunting)
         count: 3
       - url: /hunting-detections/open-directory-193-56-255-154-xiebroc2-detections
         title: Open Directory at 193.56.255.154 — XiebroC2 v3.1 & Covenant C2
@@ -1466,9 +1469,9 @@ techniques:
     url: /techniques/T1027/
     mitre_url: https://attack.mitre.org/techniques/T1027/
     report_count: 19
-    rule_count: 22
+    rule_count: 20
     actor_count: 19
-    score: 41
+    score: 39
   - id: T1027.001
     name: Binary Padding
     tactic: Stealth
@@ -1535,10 +1538,8 @@ techniques:
         title: Rhadamanthys MaaS Customer Deep-Dive (79.137.192.3)
         date: '2026-05-15'
         report_url: /reports/opendirectory-79-137-192-3-20260515/
-        rules: >-
-          Rhadamanthys Stage-2 Minimal Import Surface (YARA, Hunting); Rhadamanthys
-          Customer-Specific Loader RC4 Key (YARA, Hunting)
-        count: 2
+        rules: Rhadamanthys Customer-Specific Loader RC4 Key (YARA, Hunting)
+        count: 1
       - url: /hunting-detections/shadow-xworm-opendirectory-detections
         title: Shadow RAT & XWorm Open Directory Campaign
         date: '2026-04-05'
@@ -1556,8 +1557,8 @@ techniques:
         date: '2026-03-10'
         report_url: /reports/sliver-open-directory/
         rules: >-
-          ScareCrow Go Loader (OneDriveSync.exe) (YARA, Detection); UPX-Packed Sliver Beacon Variant
-          (compressed.exe) (YARA, Hunting)
+          ScareCrow Go Loader (OneDriveSync.exe) (YARA, Hunting); UPX-Packed Go Binary in the
+          13-18MB Band (Shape of the Sliver compressed.exe) (YARA, Hunting)
         count: 2
     actors:
       - UTA-2026-001
@@ -1570,9 +1571,9 @@ techniques:
     url: /techniques/T1027.002/
     mitre_url: https://attack.mitre.org/techniques/T1027/002/
     report_count: 7
-    rule_count: 6
+    rule_count: 5
     actor_count: 7
-    score: 13
+    score: 12
   - id: T1027.007
     name: Dynamic API Resolution
     tactic: Stealth
@@ -1648,8 +1649,8 @@ techniques:
         date: '2026-05-06'
         report_url: /reports/opendirectory-62-60-237-100-20260506/
         rules: >-
-          networkspec17.log PNG-IDAT Carrier (YARA, Detection); Inno Setup Pascal Anti-Triage
-          Wrapper (YARA, Hunting)
+          networkspec17.log PNG-IDAT Carrier (YARA, Detection); Inno Setup Wrapper Build Wave
+          (Operator Codenames, AppId and Loader Filename) (YARA, Hunting)
         count: 2
     actors:
       - UTA-2026-004
@@ -1683,7 +1684,7 @@ techniques:
         report_url: /reports/flaskc2-postex-toolkit-67-215-232-25/
         rules: >-
           miss.asp: Ghost小组 ASP Webshell (Aatrox Eval Gadget) (YARA, Hunting); Webshell Eval Gadget:
-          Aatrox Query Parameter (SIGMA, Hunting)
+          Aatrox String in the Query of an .asp Request (SIGMA, Hunting)
         count: 2
     actors:
       - UTA-2026-020
@@ -1784,7 +1785,7 @@ techniques:
         date: '2026-03-10'
         report_url: /reports/sliver-open-directory/
         rules: >-
-          ScareCrow Go Loader (OneDriveSync.exe) (YARA, Detection); ScareCrow Build Pipeline Source
+          ScareCrow Go Loader (OneDriveSync.exe) (YARA, Hunting); ScareCrow Build Pipeline Source
           Code Artifacts (YARA, Hunting)
         count: 2
     actors:
@@ -2115,10 +2116,10 @@ techniques:
         date: '2026-08-03'
         report_url: /reports/cloudsync-assembler-toolkit-91-197-98-188/
         rules: >-
-          CloudSync Public-Profile Working Directory Artifacts (YARA, Hunting); CloudSync Tor Hidden
-          Service Staging Under Public Profile (SIGMA, Detection); Photo Studio Masquerade Loader
-          Files Under LocalAppData (SIGMA, Detection); Tilde Prefixed Executable Written To User
-          Startup Folder (SIGMA, Hunting)
+          CloudSync Working-Directory, Dropped-Tor-Binary and Mutex String Artifacts (Any Three of
+          Seven) (YARA, Hunting); CloudSync Tor Hidden Service Staging Under Public Profile (SIGMA,
+          Detection); Photo Studio Masquerade Loader Files Under LocalAppData (SIGMA, Detection);
+          Tilde Prefixed Executable Written To User Startup Folder (SIGMA, Hunting)
         count: 4
       - url: /hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections
         title: GOCLOUD Multi-Service Cryptojacking
@@ -2133,13 +2134,23 @@ techniques:
         title: 'KAIDO: A Brazilian Quasar-Fork RAT with Hidden-Desktop Session Hijacking'
         date: '2026-07-03'
         report_url: /reports/kaido-quasar-rat-144-172-109-203/
-        rules: KAIDO Install as svchost.exe by Non-System Parent Process (SIGMA, Hunting)
+        rules: >-
+          Process Named svchost.exe Running From an AppData Path With a Parent Outside System32 and
+          SysWOW64 (SIGMA, Hunting)
+        count: 1
+      - url: /hunting-detections/ai-agent-frameworks-2026-05-23-detections
+        title: Multi-Actor AI-Agent Framework Abuse (8 Operators)
+        date: '2026-06-16'
+        report_url: /reports/ai-agent-frameworks-2026-05-23/
+        rules: Cryptojacker libpam_cache Drop to /lib/security (SIGMA, Detection)
         count: 1
       - url: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
         title: GHOST Cryptojacker Kit — Vova75Rus Supply Chain (77.110.96.200)
         date: '2026-05-25'
         report_url: /reports/ghost-cryptojacker-vova75rus-77.110.96.200/
-        rules: GHOST Kit Systemd Camouflage Service Unit Creation (SIGMA, Detection)
+        rules: >-
+          GHOST Kit Camouflage Name in a Created File Path (Systemd Unit Names and inotify_guard)
+          (SIGMA, Detection)
         count: 1
       - url: /hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections
         title: Inkognito Russian VPN/Phishing Operator (INK VPN / INK Lens)
@@ -2155,12 +2166,13 @@ techniques:
         date: '2026-05-06'
         report_url: /reports/opendirectory-62-60-237-100-20260506/
         rules: >-
-          Inno Setup Pascal Anti-Triage Wrapper (YARA, Hunting); HijackLoader CrystSupervisor32 or
-          WVault Renamed Vendor Binary Process Creation (SIGMA, Hunting); HijackLoader Covert IPC
-          Named Pipe WondershareCrashServices Created (SIGMA, Hunting); HijackLoader Operator
-          Persistence Directory Codename File Written Under ProgramData or Users (SIGMA, Hunting);
-          HijackLoader WVault.exe Hollow-Host Launched Directly from Inno Setup Temp Directory
-          (SIGMA, Hunting); WVault.exe Process Executing From a ProgramData Path (SIGMA, Hunting)
+          Inno Setup Wrapper Build Wave (Operator Codenames, AppId and Loader Filename) (YARA,
+          Hunting); HijackLoader CrystSupervisor32 or WVault Renamed Vendor Binary Process Creation
+          (SIGMA, Hunting); HijackLoader Covert IPC Named Pipe WondershareCrashServices Created
+          (SIGMA, Hunting); HijackLoader Operator Persistence Directory Codename File Written Under
+          ProgramData or Users (SIGMA, Hunting); HijackLoader WVault.exe Hollow-Host Launched
+          Directly from Inno Setup Temp Directory (SIGMA, Hunting); WVault.exe Process Executing
+          From a ProgramData Path (SIGMA, Hunting)
         count: 6
       - url: /hunting-detections/open-directory-94-103-1-13-20260423-detections
         title: Chaos Ransomware (TorBrowserTor) Multi-Stage Loader (94.103.1.13)
@@ -2220,9 +2232,9 @@ techniques:
     url: /techniques/T1036.005/
     mitre_url: https://attack.mitre.org/techniques/T1036/005/
     report_count: 14
-    rule_count: 32
+    rule_count: 33
     actor_count: 15
-    score: 46
+    score: 47
   - id: T1036.007
     name: Double File Extension
     tactic: Stealth
@@ -2404,6 +2416,12 @@ techniques:
           Network-Device Self-Exfiltration via Outbound PUT with User-Agent cisco-IOS (SURICATA,
           Detection)
         count: 1
+      - url: /hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections
+        title: GOCLOUD Multi-Service Cryptojacking
+        date: '2026-07-26'
+        report_url: /reports/gocloud-multiservice-cryptojacking-149-28-112-221/
+        rules: GOCLOUD LAN Lateral-Movement Report Banner (SURICATA, Detection)
+        count: 1
       - url: /hunting-detections/evilsoul-engine-stealer-maas-detections
         title: 'EvilSoul-Engine: A Brazilian Stealer-Builder Malware-as-a-Service'
         date: '2026-07-03'
@@ -2461,9 +2479,9 @@ techniques:
     url: /techniques/T1041/
     mitre_url: https://attack.mitre.org/techniques/T1041/
     report_count: 17
-    rule_count: 12
+    rule_count: 13
     actor_count: 14
-    score: 29
+    score: 30
   - id: T1046
     name: Network Service Discovery
     tactic: Discovery
@@ -2530,11 +2548,10 @@ techniques:
         date: '2026-05-25'
         report_url: /reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/
         rules: >-
-          Rule 4: Multi-Source Observability Polling Python Script (YARA, Detection); Sigma Rule 7:
-          Observability Platform Authentication Event (Cross-Source Burst Indicator) (SIGMA,
-          Hunting); Sigma Rule 8: Rapid Instana Topology API Enumeration from Single Source (SIGMA,
-          Hunting)
-        count: 3
+          Rule 4: Victim Instana Tenant String With Stolen-JWT, Multi-Platform Or Cadence Markers
+          (Operator Polling Script) (YARA, Hunting); Sigma Rule 8: Instana Topology, Event Or
+          Application API Request (Building Block For Rate Correlation) (SIGMA, Hunting)
+        count: 2
     actors:
       - UTA-2026-005
       - UTA-2026-013
@@ -2547,9 +2564,9 @@ techniques:
     url: /techniques/T1046/
     mitre_url: https://attack.mitre.org/techniques/T1046/
     report_count: 8
-    rule_count: 5
+    rule_count: 4
     actor_count: 8
-    score: 13
+    score: 12
   - id: T1047
     name: Windows Management Instrumentation
     tactic: Execution
@@ -2761,9 +2778,7 @@ techniques:
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
         report_url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
-        rules: >-
-          Weekly Scheduled Task Re-Pulling Attack Chain Via IEX WebClient DownloadString As SYSTEM
-          (SIGMA, Detection)
+        rules: PowerShell Command Line Containing IEX And DownloadString (SIGMA, Hunting)
         count: 1
       - url: /hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections
         title: 'CloudSync: An Assembler''s Intrusion Toolkit'
@@ -2927,6 +2942,14 @@ techniques:
           (Generic API Cluster) (YARA, Hunting); Suspicious Process Access from AppData to Browser
           or Explorer Process (SIGMA, Hunting)
         count: 3
+      - url: /hunting-detections/dual-rat-analysis-detections
+        title: 'Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm'
+        date: '2025-12-20'
+        report_url: /reports/dual-rat-analysis/
+        rules: >-
+          Quasar RAT Remote Thread Creation Into System Processes (SIGMA, Hunting); Remote Thread
+          Created by a Process Resident in AppData Roaming or Temp (SIGMA, Hunting)
+        count: 2
     actors:
       - UTA-2026-002
       - UTA-2026-004
@@ -2938,9 +2961,9 @@ techniques:
     url: /techniques/T1055/
     mitre_url: https://attack.mitre.org/techniques/T1055/
     report_count: 10
-    rule_count: 9
+    rule_count: 11
     actor_count: 7
-    score: 19
+    score: 21
   - id: T1055.001
     name: Dynamic-link Library Injection
     tactic: Stealth
@@ -3028,24 +3051,15 @@ techniques:
         report_url: /reports/new-files-found-20260408/
         rules: >-
           Cobalt Strike Artifact Kit EAX-Redirect Service Variant (YARA, Detection); Artifact Kit
-          EAX-Redirect Process Hollowing via Rundll32 No Arguments (SIGMA, Detection); Cobalt Strike
-          Artifact Kit MSSE Named Pipe Creation (SIGMA, Detection)
-        count: 3
-      - url: /hunting-detections/dual-rat-analysis-detections
-        title: 'Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm'
-        date: '2025-12-20'
-        report_url: /reports/dual-rat-analysis/
-        rules: >-
-          Quasar RAT Remote Thread Creation Into System Processes (SIGMA, Detection); Remote Thread
-          Created by a Process Resident in AppData Roaming or Temp (SIGMA, Hunting)
+          EAX-Redirect Process Hollowing via Rundll32 No Arguments (SIGMA, Detection)
         count: 2
     actors: []
     url: /techniques/T1055.003/
     mitre_url: https://attack.mitre.org/techniques/T1055/003/
     report_count: 1
-    rule_count: 5
+    rule_count: 2
     actor_count: 0
-    score: 6
+    score: 3
   - id: T1055.008
     name: Ptrace System Calls
     tactic: Stealth
@@ -3121,12 +3135,6 @@ techniques:
         report_url: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
         rules: 'xaitax ChromElevator ABE-Bypass Tool: @breakingupslow Fork (YARA, Detection)'
         count: 1
-      - url: /hunting-detections/opendirectory-79-137-192-3-20260515-detections
-        title: Rhadamanthys MaaS Customer Deep-Dive (79.137.192.3)
-        date: '2026-05-15'
-        report_url: /reports/opendirectory-79-137-192-3-20260515/
-        rules: Rhadamanthys EAX-Redirect Process Hollowing Into InstallUtil.exe (SIGMA, Detection)
-        count: 1
       - url: /hunting-detections/opendirectory-62-60-237-100-20260506-detections
         title: HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campaign
         date: '2026-05-06'
@@ -3147,7 +3155,7 @@ techniques:
         date: '2026-03-10'
         report_url: /reports/sliver-open-directory/
         rules: >-
-          ScareCrow Go Loader (OneDriveSync.exe) (YARA, Detection); sihost.exe Initiating Anomalous
+          ScareCrow Go Loader (OneDriveSync.exe) (YARA, Hunting); sihost.exe Initiating Anomalous
           Outbound Network Connection (SIGMA, Detection)
         count: 2
     actors:
@@ -3163,9 +3171,9 @@ techniques:
     url: /techniques/T1055.012/
     mitre_url: https://attack.mitre.org/techniques/T1055/012/
     report_count: 8
-    rule_count: 8
+    rule_count: 7
     actor_count: 9
-    score: 16
+    score: 15
   - id: T1055.015
     name: ListPlanting
     tactic: Stealth
@@ -3471,8 +3479,8 @@ techniques:
         date: '2026-05-06'
         report_url: /reports/opendirectory-62-60-237-100-20260506/
         rules: >-
-          HijackLoader GrimResource MMC Spawning Mshta or Rundll32 for Payload Execution (SIGMA,
-          Detection)
+          MMC Spawning Mshta, Rundll32 or a Script or Command Interpreter (GrimResource Pattern Seen
+          in HijackLoader) (SIGMA, Detection)
         count: 1
     actors: []
     url: /techniques/T1059/
@@ -3576,6 +3584,12 @@ techniques:
           Dialog Shape) (SIGMA, Hunting); PowerShell Writing a Script Into a Roaming Profile
           Subfolder (SIGMA, Hunting)
         count: 2
+      - url: /hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections
+        title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
+        date: '2026-09-07'
+        report_url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
+        rules: PowerShell Command Line Containing IEX And DownloadString (SIGMA, Hunting)
+        count: 1
       - url: >-
           /hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections
         title: Carrier Credential Harvesting Through a Customer's Router
@@ -3595,6 +3609,14 @@ techniques:
         report_url: /reports/gocloud-multiservice-cryptojacking-149-28-112-221/
         rules: PowerShell IEX Download Cradle From Remote Host (SIGMA, Hunting)
         count: 1
+      - url: /hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections
+        title: Flask C2 & MSSQL CLR Backdoor on a Windows Post-Exploitation Staging Host
+        date: '2026-06-12'
+        report_url: /reports/flaskc2-postex-toolkit-67-215-232-25/
+        rules: >-
+          IIS Webshell Execution: w3wp.exe Spawning cmd.exe, wscript.exe, cscript.exe or
+          powershell.exe (SIGMA, Detection)
+        count: 1
       - url: /hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections
         title: Russian Gemini CLI Credential Mill (213.165.51.115)
         date: '2026-05-25'
@@ -3607,7 +3629,7 @@ techniques:
         report_url: /reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/
         rules: >-
           Rule 1: PowerShell Instana Local Collector (YARA, Detection); Sigma Rule 1: PowerShell
-          Process Invoking Instana API with Stored JWT Bearer Token (SIGMA, Detection)
+          Command Line Containing An Instana Endpoint Name And SkipCertificateCheck (SIGMA, Hunting)
         count: 2
       - url: /hunting-detections/opendirectory-62-60-237-100-20260506-detections
         title: HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campaign
@@ -3655,7 +3677,7 @@ techniques:
         date: '2026-03-10'
         report_url: /reports/sliver-open-directory/
         rules: >-
-          Sliver Stager PowerShell AMSI Bypass via Reflection (SIGMA, Detection); PowerShell
+          PowerShell AMSI Bypass via amsiInitFailed Reflection (SIGMA, Detection); PowerShell
           WebClient DownloadFile Execution (Sliver Stager Download Pattern) (SIGMA, Hunting);
           PowerShell Drops Executable to TEMP Directory (SIGMA, Hunting)
         count: 3
@@ -3682,9 +3704,9 @@ techniques:
     url: /techniques/T1059.001/
     mitre_url: https://attack.mitre.org/techniques/T1059/001/
     report_count: 15
-    rule_count: 21
+    rule_count: 23
     actor_count: 13
-    score: 36
+    score: 38
   - id: T1059.003
     name: Windows Command Shell
     tactic: Execution
@@ -3781,7 +3803,7 @@ techniques:
         rules: >-
           cmd_exec.dll: MSSQL CLR Backdoor (Assembly Structure) (YARA, Hunting); MSSQL CLR Backdoor:
           sqlservr.exe Spawning cmd.exe Child (SIGMA, Detection); IIS Webshell Execution: w3wp.exe
-          Spawning cmd.exe or WScript (SIGMA, Detection)
+          Spawning cmd.exe, wscript.exe, cscript.exe or powershell.exe (SIGMA, Detection)
         count: 3
       - url: /hunting-detections/open-directory-94-103-1-13-20260423-detections
         title: Chaos Ransomware (TorBrowserTor) Multi-Stage Loader (94.103.1.13)
@@ -3984,7 +4006,8 @@ techniques:
         report_url: /reports/flaskc2-postex-toolkit-67-215-232-25/
         rules: >-
           miss.asp: Ghost小组 ASP Webshell (Aatrox Eval Gadget) (YARA, Hunting); IIS Webshell
-          Execution: w3wp.exe Spawning cmd.exe or WScript (SIGMA, Detection)
+          Execution: w3wp.exe Spawning cmd.exe, wscript.exe, cscript.exe or powershell.exe (SIGMA,
+          Detection)
         count: 2
       - url: /hunting-detections/opendirectory-62-60-237-100-20260506-detections
         title: HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campaign
@@ -4051,7 +4074,7 @@ techniques:
         report_url: /reports/gocloud-multiservice-cryptojacking-149-28-112-221/
         rules: >-
           GOCLOUD_BatchExploit_Dispatcher (YARA, Detection); GOCLOUD_Listener2_Control_Plane (YARA,
-          Detection)
+          Hunting)
         count: 2
       - url: /hunting-detections/ai-agent-frameworks-2026-05-23-detections
         title: Multi-Actor AI-Agent Framework Abuse (8 Operators)
@@ -4097,18 +4120,19 @@ techniques:
         date: '2026-05-25'
         report_url: /reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/
         rules: >-
-          Rule 2: ARPA Observability Harvester Platform (YARA, Detection); Rule 4: Multi-Source
-          Observability Polling Python Script (YARA, Detection); Rule 6: ARPA Cross-Source
-          Correlation ETL Engine (YARA, Detection); Rule 5: ARPA AI Service Natural-Language Query
-          Interface (YARA, Hunting)
+          Rule 2: ARPA Observability Harvester Platform (YARA, Detection); Rule 6: ARPA Cross-Source
+          Correlation ETL Engine (YARA, Detection); Rule 4: Victim Instana Tenant String With
+          Stolen-JWT, Multi-Platform Or Cadence Markers (Operator Polling Script) (YARA, Hunting);
+          Rule 5: ARPA AI Service Natural-Language Query Interface (YARA, Hunting)
         count: 4
       - url: /hunting-detections/open-directory-172-105-0-126-20260406-detections
         title: OpenStrike Beacon Toolkit (172.105.0.126)
         date: '2026-04-06'
         report_url: /reports/open-directory-172-105-0-126-20260406/
         rules: >-
-          OpenStrike Python Universal Beacon Self-Identification Banner (YARA, Detection);
-          OpenStrike Python Beacon Ctypes VirtualAlloc Shellcode Injection (SIGMA, Hunting)
+          OpenStrike Python Universal Beacon Self-Identification Banner (YARA, Detection); Python
+          Interpreter With Ctypes and VirtualAlloc on the Command Line (OpenStrike Beacon Technique)
+          (SIGMA, Hunting)
         count: 2
     actors:
       - UTA-2026-004
@@ -4160,12 +4184,6 @@ techniques:
         tactic: Execution
         confidence: HIGH
     detections:
-      - url: /hunting-detections/korean-claude-openclaw-221.150.15.104-detections
-        title: Korean Claude Code + OpenClaw Operator (221.150.15.104)
-        date: '2026-05-27'
-        report_url: /reports/korean-claude-openclaw-221.150.15.104/
-        rules: NPM Registry Fetch for OpenClaw Package (SIGMA, Hunting)
-        count: 1
       - url: /hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections
         title: Rovodev AI-Co-Authored Mirai Variant + Matrix C2 (87.106.143.220)
         date: '2026-05-26'
@@ -4187,16 +4205,15 @@ techniques:
       - UTA-2026-004
       - UTA-2026-007
       - UTA-2026-014
-      - UTA-2026-015
       - UTA-2026-021
       - UTA-2026-024
       - n-3-xl
     url: /techniques/T1059.007/
     mitre_url: https://attack.mitre.org/techniques/T1059/007/
     report_count: 5
-    rule_count: 5
-    actor_count: 7
-    score: 10
+    rule_count: 4
+    actor_count: 6
+    score: 9
   - id: T1068
     name: Exploitation for Privilege Escalation
     tactic: Privilege Escalation
@@ -4746,12 +4763,11 @@ techniques:
         report_url: /reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/
         rules: >-
           Rule 1: PowerShell Instana Local Collector (YARA, Detection); Rule 2: ARPA Observability
-          Harvester Platform (YARA, Detection); Sigma Rule 1: PowerShell Process Invoking Instana
-          API with Stored JWT Bearer Token (SIGMA, Detection); Sigma Rule 2: Outbound HTTPS to the
-          Victim Organization Instana Tenant (SIGMA, Hunting); HTTP POST to ARPA Instana Ingestion
-          Endpoint (IP-Agnostic) (SURICATA, Detection); DNS Query Egress to the Victim Organization
-          Instana Tenant (SURICATA, Hunting)
-        count: 6
+          Harvester Platform (YARA, Detection); Sigma Rule 1: PowerShell Command Line Containing An
+          Instana Endpoint Name And SkipCertificateCheck (SIGMA, Hunting); Sigma Rule 2: Outbound
+          HTTPS to the Victim Organization Instana Tenant (SIGMA, Hunting); HTTP POST to ARPA
+          Instana Ingestion Endpoint (IP-Agnostic) (SURICATA, Detection)
+        count: 5
       - url: >-
           /hunting-detections/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections
         title: CVE-2026-41940 cPanel Harvester Toolkit (216.126.227.49)
@@ -4774,10 +4790,9 @@ techniques:
         date: '2026-05-15'
         report_url: /reports/opendirectory-79-137-192-3-20260515/
         rules: >-
-          BellaMain PhaaS Panel PHP Source (YARA, Detection); BellaMain PhaaS Panel HTTP Request
-          Patterns (SIGMA, Detection); Rhadamanthys Customer Panel-ID URL Pattern (SURICATA,
-          Detection)
-        count: 3
+          BellaMain PhaaS Panel HTTP Request Patterns (SIGMA, Detection); Rhadamanthys Customer
+          Panel-ID URL Pattern (SURICATA, Detection)
+        count: 2
       - url: /hunting-detections/opendirectory-62-60-237-100-20260506-detections
         title: HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campaign
         date: '2026-05-06'
@@ -4865,8 +4880,8 @@ techniques:
         report_url: /reports/dual-rat-analysis/
         rules: >-
           Quasar RAT C2 Connection on TCP 4782 (SIGMA, Detection); NjRAT/XWorm Pastebin Dead-Drop C2
-          Resolution (SIGMA, Detection); NjRAT/XWorm Spoofed Mobile Safari User-Agent (SURICATA,
-          Hunting)
+          Resolution (SIGMA, Detection); HTTP User-Agent Containing iPhone OS 11_4_1 (Value Reported
+          in NjRAT/XWorm Traffic) (SURICATA, Hunting)
         count: 3
       - url: /hunting-detections/Hybrid-Loader-Stealer-Sogou-detections
         title: Hybrid Loader/Stealer Ecosystem Masquerading as Sogou
@@ -4905,9 +4920,9 @@ techniques:
     url: /techniques/T1071.001/
     mitre_url: https://attack.mitre.org/techniques/T1071/001/
     report_count: 28
-    rule_count: 83
+    rule_count: 81
     actor_count: 19
-    score: 111
+    score: 109
   - id: T1071.002
     name: File Transfer Protocols
     tactic: Command and Control
@@ -4951,21 +4966,15 @@ techniques:
         date: '2026-02-20'
         tactic: Command and Control
         confidence: HIGH
-    detections:
-      - url: /hunting-detections/webserver-compromise-kit-91-236-230-250-detections
-        title: Webserver Compromise Kit (91.236.230.250)
-        date: '2026-02-20'
-        report_url: /reports/webserver-compromise-kit-91-236-230-250/
-        rules: revsocks Reverse SOCKS5 Proxy (Go Binary) (YARA, Detection)
-        count: 1
+    detections: []
     actors:
       - n-3-xl
     url: /techniques/T1071.004/
     mitre_url: https://attack.mitre.org/techniques/T1071/004/
     report_count: 2
-    rule_count: 1
+    rule_count: 0
     actor_count: 1
-    score: 3
+    score: 2
   - id: T1074.001
     name: Local Data Staging
     tactic: Collection
@@ -5046,13 +5055,13 @@ techniques:
         date: '2026-05-25'
         report_url: /reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/
         rules: >-
-          Rule 4: Multi-Source Observability Polling Python Script (YARA, Detection); Sigma Rule 6:
-          Long-Lived Instana JWT Detected in Audit Logs (Governance Baseline) (SIGMA, Detection);
-          Sigma Rule 2: Outbound HTTPS to the Victim Organization Instana Tenant (SIGMA, Hunting);
-          Sigma Rule 7: Observability Platform Authentication Event (Cross-Source Burst Indicator)
-          (SIGMA, Hunting); DNS Query Egress to the Victim Organization Instana Tenant (SURICATA,
-          Hunting)
-        count: 5
+          Rule 4: Victim Instana Tenant String With Stolen-JWT, Multi-Platform Or Cadence Markers
+          (Operator Polling Script) (YARA, Hunting); Sigma Rule 6: Instana Audit Log Event With The
+          Stolen JWT Or External-Source Access To The Victim Tenant (SIGMA, Hunting); Sigma Rule 2:
+          Outbound HTTPS to the Victim Organization Instana Tenant (SIGMA, Hunting); Sigma Rule 7:
+          Observability Platform Authentication Event (Single-Event Building Block For Cross-Source
+          Burst Correlation) (SIGMA, Hunting)
+        count: 4
     actors:
       - UTA-2026-011
       - UTA-2026-012
@@ -5063,9 +5072,9 @@ techniques:
     url: /techniques/T1078/
     mitre_url: https://attack.mitre.org/techniques/T1078/
     report_count: 5
-    rule_count: 7
+    rule_count: 6
     actor_count: 6
-    score: 12
+    score: 11
   - id: T1078.001
     name: Default Accounts
     tactic: Stealth
@@ -5655,8 +5664,9 @@ techniques:
         date: '2026-08-03'
         report_url: /reports/cloudsync-assembler-toolkit-91-197-98-188/
         rules: >-
-          CloudSync Public-Profile Working Directory Artifacts (YARA, Hunting); CloudSync Tor Hidden
-          Service Staging Under Public Profile (SIGMA, Detection)
+          CloudSync Working-Directory, Dropped-Tor-Binary and Mutex String Artifacts (Any Three of
+          Seven) (YARA, Hunting); CloudSync Tor Hidden Service Staging Under Public Profile (SIGMA,
+          Detection)
         count: 2
       - url: /hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections
         title: ShinyHunters Data Leak Site (91.215.85.22)
@@ -5688,7 +5698,8 @@ techniques:
         rules: >-
           Cloudflared Access TCP Tunnel Registration (SIGMA, Detection); Trycloudflare.com
           Quick-Tunnel DNS Query (SIGMA, Hunting); trycloudflare.com DNS Query Egress (SURICATA,
-          Hunting); Hysteria v2 QUIC bing.com SNI Masquerade Detection (Case 9) (SURICATA, Hunting)
+          Hunting); QUIC SNI Containing bing.com on UDP 14433/14444 (Hysteria v2 Masquerade Lead,
+          Case 9) (SURICATA, Hunting)
         count: 4
       - url: /hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections
         title: Russian Gemini CLI Credential Mill (213.165.51.115)
@@ -5794,29 +5805,24 @@ techniques:
         rules: >-
           cmd_exec.dll: MSSQL CLR Backdoor (Banner Anchor) (YARA, Detection); cmd_exec.dll: MSSQL
           CLR Backdoor (Assembly Structure) (YARA, Hunting); MSSQL CLR Backdoor: Outbound TCP
-          Connection from sqlservr.exe (SIGMA, Hunting); Flask C2 Beacon Endpoint: POST to
-          /api/report (SURICATA, Hunting); Flask C2 Beacon Endpoint: POST to /api/heartbeat
-          (SURICATA, Hunting)
-        count: 5
+          Connection from sqlservr.exe (SIGMA, Hunting)
+        count: 3
       - url: /hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections
         title: Rovodev AI-Co-Authored Mirai Variant + Matrix C2 (87.106.143.220)
         date: '2026-05-26'
         report_url: /reports/rovodev-mirai-matrix-c2-87.106.143.220/
         rules: >-
-          MAL_ELF_Naku_Pandora_Mirai_Family (YARA, Detection); BusyBox SORA Marker Execution:
-          Sora-Derivative Mirai-Fork Active on Host (SIGMA, Detection); PandoraNet Botnet ID in
-          Process Command Line: Active Pandora-Mirai Infection (SIGMA, Hunting); Naku/Pandora-Mirai
-          Operator-Bespoke 22-Char Charset String: Family Tracking Signature (SIGMA, Hunting);
-          Naku-Pandora Mirai Operator-Bespoke CNC Protocol (Length-Prefixed String Option Keys)
-          (SURICATA, Hunting)
-        count: 5
+          MAL_ELF_Naku_Pandora_Mirai_Family (YARA, Detection); PandoraNet Botnet ID in Process
+          Command Line: Active Pandora-Mirai Infection (SIGMA, Hunting); Naku-Pandora Mirai
+          Operator-Bespoke CNC Protocol (Length-Prefixed String Option Keys) (SURICATA, Hunting)
+        count: 3
       - url: /hunting-detections/new-files-found-20260408-detections
         title: OpenStrike Expanded Toolkit — 106 New Files (2026-04-08)
         date: '2026-04-08'
         report_url: /reports/new-files-found-20260408/
         rules: >-
           CovertVPN Layer 2 Bridge Module (YARA, Detection); CovertVPN ICMP Tunnel Oversized Payload
-          with Data or Keepalive Marker (SURICATA, Hunting)
+          with Data-Frame Marker (0xDD) (SURICATA, Hunting)
         count: 2
       - url: /hunting-detections/webserver-compromise-kit-91-236-230-250-detections
         title: Webserver Compromise Kit (91.236.230.250)
@@ -5828,7 +5834,9 @@ techniques:
         title: 'Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm'
         date: '2025-12-20'
         report_url: /reports/dual-rat-analysis/
-        rules: Quasar RAT Binary Protocol on TCP 4782 (SURICATA, Hunting)
+        rules: >-
+          Outbound TCP Payload to Port 4782 (Quasar Default Port, Port-Only Lead) (SURICATA,
+          Hunting)
         count: 1
     actors:
       - UTA-2026-004
@@ -5837,9 +5845,9 @@ techniques:
     url: /techniques/T1095/
     mitre_url: https://attack.mitre.org/techniques/T1095/
     report_count: 4
-    rule_count: 15
+    rule_count: 11
     actor_count: 3
-    score: 19
+    score: 15
   - id: T1098
     name: Account Manipulation
     tactic: Persistence
@@ -5869,7 +5877,7 @@ techniques:
         report_url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         rules: >-
           Operator AD Deployment Script Success Markers, The Gentlemen-Linked Toolkit (YARA,
-          Hunting); Rapid Addition Of An Account To The Domain Admins Group (SIGMA, Detection)
+          Hunting); Account Added To The Domain Admins Group (SIGMA, Detection)
         count: 2
       - url: >-
           /hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections
@@ -5935,10 +5943,9 @@ techniques:
         report_url: /reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/
         rules: >-
           Rule 3: Insider Tunnel-Setup Turkish-Language Operator Document (YARA, Detection); Sigma
-          Rule 4: Reverse SSH Tunnel Registration from Windows AD User Host to Operator IP (SIGMA,
-          Detection); Sigma Rule 9: Operator-Supplied SSH Key File in User `.ssh` Directory (SIGMA,
-          Detection)
-        count: 3
+          Rule 4: SSH-Family Process Command Line Containing An ARPA Operator Marker (SIGMA,
+          Hunting)
+        count: 2
       - url: >-
           /hunting-detections/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections
         title: CVE-2026-41940 cPanel Harvester Toolkit (216.126.227.49)
@@ -5955,9 +5962,9 @@ techniques:
     url: /techniques/T1098.004/
     mitre_url: https://attack.mitre.org/techniques/T1098/004/
     report_count: 2
-    rule_count: 6
+    rule_count: 5
     actor_count: 3
-    score: 8
+    score: 7
   - id: T1098.005
     name: Device Registration
     tactic: Persistence
@@ -6047,12 +6054,6 @@ techniques:
           Linux Process Connecting to discord.com on Port 443 Outside node_modules or discord.js
           Paths (Matrix C2 Bot Pattern) (SIGMA, Hunting)
         count: 1
-      - url: /hunting-detections/opendirectory-79-137-192-3-20260515-detections
-        title: Rhadamanthys MaaS Customer Deep-Dive (79.137.192.3)
-        date: '2026-05-15'
-        report_url: /reports/opendirectory-79-137-192-3-20260515/
-        rules: BellaMain PhaaS Panel PHP Source (YARA, Detection)
-        count: 1
     actors:
       - UTA-2026-008
       - UTA-2026-009
@@ -6063,9 +6064,9 @@ techniques:
     url: /techniques/T1102/
     mitre_url: https://attack.mitre.org/techniques/T1102/
     report_count: 4
-    rule_count: 6
+    rule_count: 5
     actor_count: 6
-    score: 10
+    score: 9
   - id: T1102.001
     name: Dead Drop Resolver
     tactic: Command and Control
@@ -6302,9 +6303,8 @@ techniques:
         date: '2026-09-07'
         report_url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         rules: >-
-          certutil Or WMIC-Invoked certutil Downloading From A Bare IP High Port (SIGMA, Detection);
-          Node.js Runtime Fetched And Extracted On A Host With No Development Toolchain (SIGMA,
-          Hunting)
+          Certutil URLCache Download Or WMIC Node-Targeted Certutil Download (SIGMA, Detection);
+          Curl Fetch Of A Node.js Zip Or tar.exe Command Line Under LOCALAPPDATA (SIGMA, Hunting)
         count: 2
       - url: >-
           /hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections
@@ -6331,10 +6331,10 @@ techniques:
         report_url: /reports/gocloud-multiservice-cryptojacking-149-28-112-221/
         rules: >-
           GOCLOUD_BatchExploit_Dispatcher (YARA, Detection); GOCLOUD_Listener2_Control_Plane (YARA,
-          Detection); Certutil Download Cradle Fetching Remote Payload (SIGMA, Detection);
-          PowerShell IEX Download Cradle From Remote Host (SIGMA, Hunting); GOCLOUD Windows Worm
-          Component Retrieval (SURICATA, Detection); GOCLOUD Linux Miner Delivery One-Liner
-          (SURICATA, Hunting)
+          Hunting); Certutil Download Cradle Fetching Remote Payload (SIGMA, Detection); PowerShell
+          IEX Download Cradle From Remote Host (SIGMA, Hunting); GOCLOUD Windows Worm Component
+          Retrieval (SURICATA, Detection); GOCLOUD Linux Miner Delivery One-Liner (SURICATA,
+          Hunting)
         count: 6
       - url: /hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections
         title: 'Enough to Be Dangerous: The Mechanics of an LLM-Assisted Intrusion Campaign'
@@ -6352,11 +6352,11 @@ techniques:
           EvilSoul-Engine 299a2e7f Socket.IO WebPanel Build (YARA, Detection); ChromElevator
           ABE-Bypass Tool Dropped to TEMP Executor Directory (SIGMA, Hunting)
         count: 2
-      - url: /hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections
-        title: Flask C2 & MSSQL CLR Backdoor on a Windows Post-Exploitation Staging Host
-        date: '2026-06-12'
-        report_url: /reports/flaskc2-postex-toolkit-67-215-232-25/
-        rules: 'Flask C2 Health Endpoint: Distinctive JSON Field-Combo (SURICATA, Detection)'
+      - url: /hunting-detections/korean-claude-openclaw-221.150.15.104-detections
+        title: Korean Claude Code + OpenClaw Operator (221.150.15.104)
+        date: '2026-05-27'
+        report_url: /reports/korean-claude-openclaw-221.150.15.104/
+        rules: NPM Registry Fetch for OpenClaw Package (SIGMA, Hunting)
         count: 1
       - url: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
         title: GHOST Cryptojacker Kit — Vova75Rus Supply Chain (77.110.96.200)
@@ -6417,6 +6417,7 @@ techniques:
       - UTA-2026-006
       - UTA-2026-007
       - UTA-2026-012
+      - UTA-2026-015
       - UTA-2026-016
       - UTA-2026-017
       - UTA-2026-018
@@ -6431,7 +6432,7 @@ techniques:
     mitre_url: https://attack.mitre.org/techniques/T1105/
     report_count: 17
     rule_count: 26
-    actor_count: 16
+    actor_count: 17
     score: 43
   - id: T1106
     name: Native API
@@ -6490,7 +6491,7 @@ techniques:
         date: '2026-03-10'
         report_url: /reports/sliver-open-directory/
         rules: >-
-          ScareCrow Go Loader (OneDriveSync.exe) (YARA, Detection); ScareCrow Build Pipeline Source
+          ScareCrow Go Loader (OneDriveSync.exe) (YARA, Hunting); ScareCrow Build Pipeline Source
           Code Artifacts (YARA, Hunting)
         count: 2
     actors:
@@ -6952,12 +6953,12 @@ techniques:
         date: '2026-05-25'
         report_url: /reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/
         rules: >-
-          Rule 2: ARPA Observability Harvester Platform (YARA, Detection); Rule 4: Multi-Source
-          Observability Polling Python Script (YARA, Detection); Rule 6: ARPA Cross-Source
-          Correlation ETL Engine (YARA, Detection); Sigma Rule 7: Observability Platform
-          Authentication Event (Cross-Source Burst Indicator) (SIGMA, Hunting); Sigma Rule 8: Rapid
-          Instana Topology API Enumeration from Single Source (SIGMA, Hunting)
-        count: 5
+          Rule 2: ARPA Observability Harvester Platform (YARA, Detection); Rule 6: ARPA Cross-Source
+          Correlation ETL Engine (YARA, Detection); Rule 4: Victim Instana Tenant String With
+          Stolen-JWT, Multi-Platform Or Cadence Markers (Operator Polling Script) (YARA, Hunting);
+          Sigma Rule 8: Instana Topology, Event Or Application API Request (Building Block For Rate
+          Correlation) (SIGMA, Hunting)
+        count: 4
       - url: /hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections
         title: BellaMain Turkish PhaaS Panel (79.137.192.3)
         date: '2026-05-16'
@@ -6972,9 +6973,9 @@ techniques:
     url: /techniques/T1119/
     mitre_url: https://attack.mitre.org/techniques/T1119/
     report_count: 3
-    rule_count: 8
+    rule_count: 7
     actor_count: 4
-    score: 11
+    score: 10
   - id: T1123
     name: Audio Capture
     tactic: Collection
@@ -7455,21 +7456,15 @@ techniques:
           Stage-5b UAC Bypass PE (Cross-Build Invariant) (YARA, Hunting); Stage-5b UAC Bypass via
           PPID Spoof: Conhost Child of Taskmgr (SIGMA, Detection)
         count: 2
-      - url: /hunting-detections/sliver-open-directory-detections
-        title: Sliver C2 Toolchain with ScareCrow Loader (45.94.31.220)
-        date: '2026-03-10'
-        report_url: /reports/sliver-open-directory/
-        rules: sihost.exe Initiating Anomalous Outbound Network Connection (SIGMA, Detection)
-        count: 1
     actors:
       - UTA-2026-001
       - UTA-2026-005
     url: /techniques/T1134.004/
     mitre_url: https://attack.mitre.org/techniques/T1134/004/
     report_count: 2
-    rule_count: 3
+    rule_count: 2
     actor_count: 2
-    score: 5
+    score: 4
   - id: T1135
     name: Network Share Discovery
     tactic: Discovery
@@ -7543,7 +7538,9 @@ techniques:
         title: CVE-2026-41940 cPanel Harvester Toolkit (216.126.227.49)
         date: '2026-05-17'
         report_url: /reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/
-        rules: Post-Exploitation New cPanel Account Creation (SIGMA, Hunting)
+        rules: >-
+          Post-Exploitation File Event Under /var/cpanel/users/ From a Process Outside cPanel's Own
+          Directories (SIGMA, Hunting)
         count: 1
       - url: /hunting-detections/open-directory-94-103-1-13-20260423-detections
         title: Chaos Ransomware (TorBrowserTor) Multi-Stage Loader (94.103.1.13)
@@ -7590,7 +7587,7 @@ techniques:
         report_url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         rules: >-
           Operator AD Deployment Script Success Markers, The Gentlemen-Linked Toolkit (YARA,
-          Hunting); Rapid Addition Of An Account To The Domain Admins Group (SIGMA, Detection)
+          Hunting); Account Added To The Domain Admins Group (SIGMA, Detection)
         count: 2
       - url: /hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections
         title: 'CloudSync: An Assembler''s Intrusion Toolkit'
@@ -7717,10 +7714,10 @@ techniques:
         date: '2026-05-15'
         report_url: /reports/opendirectory-79-137-192-3-20260515/
         rules: >-
-          Rhadamanthys .frontb Stage-2 Section Marker (YARA, Detection); Rhadamanthys Stage-2
-          Minimal Import Surface (YARA, Hunting); Rhadamanthys Customer-Specific Stage-2 CBC-XOR IV
-          (YARA, Hunting); Rhadamanthys Customer-Specific Loader RC4 Key (YARA, Hunting)
-        count: 4
+          Rhadamanthys .frontb Stage-2 Section Marker (YARA, Detection); Rhadamanthys
+          Customer-Specific Stage-2 CBC-XOR IV (YARA, Hunting); Rhadamanthys Customer-Specific
+          Loader RC4 Key (YARA, Hunting)
+        count: 3
       - url: /hunting-detections/open-directory-94-103-1-13-20260423-detections
         title: Chaos Ransomware (TorBrowserTor) Multi-Stage Loader (94.103.1.13)
         date: '2026-04-23'
@@ -7754,9 +7751,9 @@ techniques:
     url: /techniques/T1140/
     mitre_url: https://attack.mitre.org/techniques/T1140/
     report_count: 14
-    rule_count: 13
+    rule_count: 12
     actor_count: 13
-    score: 27
+    score: 26
   - id: T1185
     name: Browser Session Hijacking
     tactic: Collection
@@ -7953,10 +7950,8 @@ techniques:
         report_url: /reports/rovodev-mirai-matrix-c2-87.106.143.220/
         rules: >-
           Naku or Pandora Mirai Arch-Tagged Binary Name or Pandora-Mirai Command-Line Token on Linux
-          (SIGMA, Hunting); Naku Binary Fetch URI Pattern: Historical Aruba Distribution Convention
-          (SURICATA, Hunting); Naku Binary Fetch URI Pattern: Historical Aruba Backup Distribution
-          Convention (SURICATA, Hunting)
-        count: 3
+          (SIGMA, Hunting)
+        count: 1
       - url: >-
           /hunting-detections/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections
         title: CVE-2026-41940 cPanel Harvester Toolkit (216.126.227.49)
@@ -7992,9 +7987,9 @@ techniques:
     url: /techniques/T1190/
     mitre_url: https://attack.mitre.org/techniques/T1190/
     report_count: 11
-    rule_count: 48
+    rule_count: 46
     actor_count: 7
-    score: 59
+    score: 57
   - id: T1195.002
     name: Compromise Software Supply Chain
     tactic: Initial Access
@@ -8121,8 +8116,9 @@ techniques:
         date: '2026-05-06'
         report_url: /reports/opendirectory-62-60-237-100-20260506/
         rules: >-
-          Inno Setup Pascal Anti-Triage Wrapper (YARA, Hunting); Office VBA Macro Security Disabled
-          via Registry VBAWarnings Set to 1 (SIGMA, Hunting)
+          Inno Setup Wrapper Build Wave (Operator Codenames, AppId and Loader Filename) (YARA,
+          Hunting); Office VBA Macro Security Disabled via Registry VBAWarnings Set to 1 (SIGMA,
+          Hunting)
         count: 2
     actors:
       - UTA-2026-001
@@ -8254,15 +8250,19 @@ techniques:
         report_url: /reports/multivector-ecommerce-rce-toolkit-192-3-1-116/
         rules: >-
           Manufactured Log-Data Harvesting via Jolokia Logger Manipulation Then Actuator Logfile
-          Read (Correlation) (SIGMA, Detection)
-        count: 1
+          Read (Correlation) (SIGMA, Detection); Successful Request From a Non-Private Client
+          Address to an Alibaba Druid Monitoring Console Path (SIGMA, Detection); Alibaba Druid
+          Monitoring Console Served to an External Client (Network Layer, Flowbits Pair) (SURICATA,
+          Detection)
+        count: 3
       - url: /hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections
         title: Turkish ARPA AI-Augmented Observability Compromise (209.38.205.158)
         date: '2026-05-25'
         report_url: /reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/
         rules: >-
           Rule 5: ARPA AI Service Natural-Language Query Interface (YARA, Hunting); Sigma Rule 8:
-          Rapid Instana Topology API Enumeration from Single Source (SIGMA, Hunting)
+          Instana Topology, Event Or Application API Request (Building Block For Rate Correlation)
+          (SIGMA, Hunting)
         count: 2
       - url: /hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections
         title: ShinyHunters Data Leak Site (91.215.85.22)
@@ -8278,9 +8278,9 @@ techniques:
     url: /techniques/T1213/
     mitre_url: https://attack.mitre.org/techniques/T1213/
     report_count: 3
-    rule_count: 4
+    rule_count: 6
     actor_count: 4
-    score: 7
+    score: 9
   - id: T1213.002
     name: Sharepoint
     tactic: Collection
@@ -8330,7 +8330,9 @@ techniques:
         title: Rhadamanthys MaaS Customer Deep-Dive (79.137.192.3)
         date: '2026-05-15'
         report_url: /reports/opendirectory-79-137-192-3-20260515/
-        rules: Rhadamanthys EAX-Redirect Process Hollowing Into InstallUtil.exe (SIGMA, Detection)
+        rules: >-
+          InstallUtil.exe Spawned by a Process in a User-Writable Path (Rhadamanthys Hollowing
+          Precursor) (SIGMA, Hunting)
         count: 1
     actors: []
     url: /techniques/T1218.004/
@@ -8465,9 +8467,9 @@ techniques:
         report_url: /reports/opendirectory-62-60-237-100-20260506/
         rules: >-
           Multi-Vector Lure: GrimResource Redirect String or Mega.io Bucket Path With a Corroborator
-          (YARA, Hunting); HijackLoader GrimResource MMC Spawning Mshta or Rundll32 for Payload
-          Execution (SIGMA, Detection); HijackLoader GrimResource MMC Spawning PowerShell Adding
-          Defender Exclusion (SIGMA, Detection)
+          (YARA, Hunting); MMC Spawning Mshta, Rundll32 or a Script or Command Interpreter
+          (GrimResource Pattern Seen in HijackLoader) (SIGMA, Detection); HijackLoader GrimResource
+          MMC Spawning PowerShell Adding Defender Exclusion (SIGMA, Detection)
         count: 3
     actors:
       - UTA-2026-007
@@ -8532,9 +8534,9 @@ techniques:
         date: '2026-03-16'
         report_url: /reports/zerotrace-74-0-42-25-20260316/
         rules: >-
-          XWorm V5.6 VB.NET Victim Stub (YARA, Detection); XWorm V5.6 Builder and C2 Panel (YARA,
-          Detection); PureRAT v4.1.9 .NET Reactor Payload (YARA, Detection); Raven RAT Delphi Victim
-          Stub (YARA, Detection)
+          XWorm V5.6 Victim Stub (Mutex or Version Strings, Plus a Panel Typo) (YARA, Detection);
+          XWorm V5.6 Builder and C2 Panel (YARA, Detection); PureRAT v4.1.9 .NET Reactor Payload
+          (YARA, Detection); Raven RAT Delphi Victim Stub (YARA, Detection)
         count: 4
       - url: /hunting-detections/remcos-opendirectory-detections
         title: Remcos RAT OpenDirectory Campaign
@@ -8951,7 +8953,7 @@ techniques:
         report_url: /reports/ai-agent-frameworks-2026-05-23/
         rules: >-
           GHOST Kit ComfyUI Fake Custom Node PerformanceMonitor Registration (Case 9) (SIGMA,
-          Detection); Kryptex Mining Pool DNS Query Egress (GHOST Kit Operator-A Pool) (SURICATA,
+          Detection); Kryptex Mining Pool DNS Query (Any kryptex.network Subdomain) (SURICATA,
           Hunting); Generic Cryptojacker Mining Pool DNS Pattern (c3pool / nanopool / moneroocean /
           hashvault) (SURICATA, Hunting)
         count: 3
@@ -9121,11 +9123,11 @@ techniques:
         date: '2026-04-05'
         report_url: /reports/shadow-xworm-opendirectory/
         rules: >-
-          XWorm 3.0-5.0: Config and Builder Markers (YARA, Detection); XWorm 3.0-5.0:
-          Rijndael-256-ECB Config Crypto Pattern (YARA, Hunting); Non-Browser Process DNS Query to
-          ip-api.com (Host Name Used by XWorm's Hosting Check) (SIGMA, Hunting); WMI
-          Win32_ComputerSystem Query from User-Writable Directory (SIGMA, Hunting); XWorm
-          Anti-Analysis Hosting Detection via ip-api.com (SURICATA, Hunting)
+          XWorm 3.0-5.0: Config and Builder Markers (YARA, Detection); .NET Rijndael, ECB, MD5 and
+          Anti-Analysis String Combination (XWorm Config Crypto Lead) (YARA, Hunting); Non-Browser
+          Process DNS Query to ip-api.com (Host Name Used by XWorm's Hosting Check) (SIGMA,
+          Hunting); WMI Win32_ComputerSystem Query from User-Writable Directory (SIGMA, Hunting);
+          XWorm Anti-Analysis Hosting Detection via ip-api.com (SURICATA, Hunting)
         count: 5
       - url: /hunting-detections/malware-analysis-houselet-detections
         title: Houselet.exe — The Go-Based Loader Masquerading as PlayStation Remote Play
@@ -9304,8 +9306,8 @@ techniques:
         rules: >-
           cmd_exec.dll: MSSQL CLR Backdoor (Banner Anchor) (YARA, Detection); cmd_exec.dll: MSSQL
           CLR Backdoor (Assembly Structure) (YARA, Hunting); MSSQL CLR Backdoor: sqlservr.exe
-          Spawning cmd.exe Child (SIGMA, Detection); MSSQL CLR Assembly Enablement and Reverse-Shell
-          Procedure Registration (SIGMA, Detection); MSSQL CLR Backdoor: Outbound TCP Connection
+          Spawning cmd.exe Child (SIGMA, Detection); MSSQL CLR Enablement or a reverse_shell Name in
+          an Application Log Message (SIGMA, Detection); MSSQL CLR Backdoor: Outbound TCP Connection
           from sqlservr.exe (SIGMA, Hunting)
         count: 5
     actors: []
@@ -9405,8 +9407,8 @@ techniques:
         rules: >-
           NPCInfoList1.aspx: AES .NET Loader Webshell (Godzilla-Style) (YARA, Detection); miss.asp:
           Ghost小组 ASP Webshell (Aatrox Eval Gadget) (YARA, Hunting); IIS Webshell Execution:
-          w3wp.exe Spawning cmd.exe or WScript (SIGMA, Detection); Webshell Eval Gadget: Aatrox
-          Query Parameter (SIGMA, Hunting)
+          w3wp.exe Spawning cmd.exe, wscript.exe, cscript.exe or powershell.exe (SIGMA, Detection);
+          Webshell Eval Gadget: Aatrox String in the Query of an .asp Request (SIGMA, Hunting)
         count: 4
       - url: /hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections
         title: BellaMain Turkish PhaaS Panel (79.137.192.3)
@@ -9421,8 +9423,8 @@ techniques:
         date: '2026-02-20'
         report_url: /reports/webserver-compromise-kit-91-236-230-250/
         rules: >-
-          ASP.NET Reverse Shell (InsomniaShell P/Invoke Pattern) (YARA, Detection); IIS Worker
-          Process Spawns Interactive Shell (SIGMA, Detection)
+          ASP.NET Reverse Shell (InsomniaShell P/Invoke or Spawn Shell Banner Pattern) (YARA,
+          Detection); IIS Worker Process Spawns Interactive Shell (SIGMA, Detection)
         count: 2
       - url: /hunting-detections/webshells-to-the-cloud-detections
         title: From Webshells to The Cloud
@@ -9430,9 +9432,8 @@ techniques:
         report_url: /reports/webshells-to-the-cloud/
         rules: >-
           Suspicious Clp-Fm Cookie (SIGMA, Hunting); Webshell File Creation (SIGMA, Hunting);
-          Suspicious WordPress Install (SIGMA, Hunting); Suspicious POST Parameter mxx (SURICATA,
-          Hunting)
-        count: 4
+          Suspicious POST Parameter mxx (SURICATA, Hunting)
+        count: 3
     actors:
       - UTA-2026-008
       - UTA-2026-011
@@ -9443,9 +9444,9 @@ techniques:
     url: /techniques/T1505.003/
     mitre_url: https://attack.mitre.org/techniques/T1505/003/
     report_count: 7
-    rule_count: 23
+    rule_count: 22
     actor_count: 6
-    score: 30
+    score: 29
   - id: T1518
     name: Software Discovery
     tactic: Discovery
@@ -9874,8 +9875,8 @@ techniques:
         date: '2026-05-25'
         report_url: /reports/ghost-cryptojacker-vova75rus-77.110.96.200/
         rules: >-
-          MAL_Linux_GHOST_Hysteria_Operator_Wrapper (YARA, Hunting); GHOST Kit Systemd Camouflage
-          Service Unit Creation (SIGMA, Detection)
+          MAL_Linux_GHOST_Hysteria_Operator_Wrapper (YARA, Hunting); GHOST Kit Camouflage Name in a
+          Created File Path (Systemd Unit Names and inotify_guard) (SIGMA, Detection)
         count: 2
       - url: /hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections
         title: Turkish ARPA AI-Augmented Observability Compromise (209.38.205.158)
@@ -9884,7 +9885,7 @@ techniques:
         rules: >-
           Rule 2: ARPA Observability Harvester Platform (YARA, Detection); Rule 8: ARPA Platform
           Systemd Service Units (YARA, Detection); Sigma Rule 3: Systemd Unit Creation Matching
-          `arpa-*` Naming Pattern (SIGMA, Detection)
+          `arpa-*` Naming Pattern (SIGMA, Hunting)
         count: 3
     actors:
       - UTA-2026-013
@@ -10078,19 +10079,15 @@ techniques:
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
         report_url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
-        rules: EtherRAT Bot Run Key Launching node.exe Headless With A .bak Argument (SIGMA, Detection)
+        rules: >-
+          Run Key Value Starting With A Headless Conhost Launcher And Containing node.exe And A .bak
+          Path (SIGMA, Detection)
         count: 1
       - url: /hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections
         title: 'CloudSync: An Assembler''s Intrusion Toolkit'
         date: '2026-08-03'
         report_url: /reports/cloudsync-assembler-toolkit-91-197-98-188/
         rules: Run Key SystemUpdate Value Pointing To Startup Folder Tilde Executable (SIGMA, Detection)
-        count: 1
-      - url: /hunting-detections/kaido-quasar-rat-detections
-        title: 'KAIDO: A Brazilian Quasar-Fork RAT with Hidden-Desktop Session Hijacking'
-        date: '2026-07-03'
-        report_url: /reports/kaido-quasar-rat-144-172-109-203/
-        rules: KAIDO Install as svchost.exe by Non-System Parent Process (SIGMA, Hunting)
         count: 1
       - url: /hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections
         title: Russian Gemini CLI Credential Mill (213.165.51.115)
@@ -10130,12 +10127,6 @@ techniques:
         report_url: /reports/remcos-opendirectory/
         rules: Remcos UAC Bypass and Persistence (YARA, Detection)
         count: 1
-      - url: /hunting-detections/nsminer-cryptojacker-detections
-        title: 'NsMiner: Multi-Stage Cryptojacking Operation'
-        date: '2026-02-05'
-        report_url: /reports/nsminer-cryptojacker/
-        rules: NsMiner Persistence Directory Creation (SIGMA, Hunting)
-        count: 1
       - url: /hunting-detections/dual-rat-analysis-detections
         title: 'Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm'
         date: '2025-12-20'
@@ -10168,9 +10159,9 @@ techniques:
     url: /techniques/T1547.001/
     mitre_url: https://attack.mitre.org/techniques/T1547/001/
     report_count: 15
-    rule_count: 17
+    rule_count: 15
     actor_count: 7
-    score: 32
+    score: 30
   - id: T1547.004
     name: Winlogon Helper DLL
     tactic: Persistence
@@ -10416,10 +10407,8 @@ techniques:
         title: Multi-Actor AI-Agent Framework Abuse (8 Operators)
         date: '2026-06-16'
         report_url: /reports/ai-agent-frameworks-2026-05-23/
-        rules: >-
-          LLM-Personalized Credential Mutation Script (YARA, Detection); Outbound Gemini API Traffic
-          from Non-AI-Workload Server Host (Stolen Key Validation) (SIGMA, Hunting)
-        count: 2
+        rules: LLM-Personalized Credential Mutation Script (YARA, Detection)
+        count: 1
       - url: /hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections
         title: Russian Gemini CLI Credential Mill (213.165.51.115)
         date: '2026-05-25'
@@ -10432,9 +10421,10 @@ techniques:
         report_url: /reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/
         rules: >-
           Rule 1: PowerShell Instana Local Collector (YARA, Detection); Rule 7: ARPA Operator Ops
-          Notes Markdown Family (YARA, Detection); Sigma Rule 1: PowerShell Process Invoking Instana
-          API with Stored JWT Bearer Token (SIGMA, Detection); Sigma Rule 6: Long-Lived Instana JWT
-          Detected in Audit Logs (Governance Baseline) (SIGMA, Detection)
+          Notes Markdown Family (YARA, Detection); Sigma Rule 1: PowerShell Command Line Containing
+          An Instana Endpoint Name And SkipCertificateCheck (SIGMA, Hunting); Sigma Rule 6: Instana
+          Audit Log Event With The Stolen JWT Or External-Source Access To The Victim Tenant (SIGMA,
+          Hunting)
         count: 4
     actors:
       - UTA-2026-012
@@ -10445,9 +10435,9 @@ techniques:
     url: /techniques/T1552.001/
     mitre_url: https://attack.mitre.org/techniques/T1552/001/
     report_count: 4
-    rule_count: 8
+    rule_count: 7
     actor_count: 5
-    score: 12
+    score: 11
   - id: T1552.004
     name: Private Keys
     tactic: Credential Access
@@ -10684,19 +10674,17 @@ techniques:
         title: Carrier Credential Harvesting Through a Customer's Router
         date: '2026-08-18'
         report_url: /reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/
-        rules: >-
-          PRTG Bulk Device Inventory Query via table.json (SURICATA, Hunting); PRTG
-          getobjectproperty.htm Request With passhash Authentication (SURICATA, Hunting)
-        count: 2
+        rules: PRTG getobjectproperty.htm Request With passhash Authentication (SURICATA, Hunting)
+        count: 1
     actors:
       - UTA-2026-006
       - UTA-2026-023
     url: /techniques/T1555/
     mitre_url: https://attack.mitre.org/techniques/T1555/
     report_count: 2
-    rule_count: 2
+    rule_count: 1
     actor_count: 2
-    score: 4
+    score: 3
   - id: T1555.003
     name: Credentials from Web Browsers
     tactic: Credential Access
@@ -10834,9 +10822,7 @@ techniques:
         title: Russian Gemini CLI Credential Mill (213.165.51.115)
         date: '2026-05-25'
         report_url: /reports/russian-gemini-credential-mill-213.165.51.115/
-        rules: >-
-          1Password Vault Export File Created or Accessed by Non-1Password Process (SIGMA,
-          Detection)
+        rules: 1Password Vault Export File Written by a Non-1Password Process (SIGMA, Detection)
         count: 1
     actors:
       - UTA-2026-008
@@ -11450,7 +11436,7 @@ techniques:
         report_url: /reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/
         rules: >-
           Rule 8: ARPA Platform Systemd Service Units (YARA, Detection); Sigma Rule 3: Systemd Unit
-          Creation Matching `arpa-*` Naming Pattern (SIGMA, Detection)
+          Creation Matching `arpa-*` Naming Pattern (SIGMA, Hunting)
         count: 2
     actors:
       - UTA-2026-004
@@ -11487,16 +11473,14 @@ techniques:
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
         report_url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
-        rules: certutil Or WMIC-Invoked certutil Downloading From A Bare IP High Port (SIGMA, Detection)
+        rules: Certutil URLCache Download Or WMIC Node-Targeted Certutil Download (SIGMA, Detection)
         count: 1
       - url: /hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections
         title: GOCLOUD Multi-Service Cryptojacking
         date: '2026-07-26'
         report_url: /reports/gocloud-multiservice-cryptojacking-149-28-112-221/
-        rules: >-
-          GOCLOUD_LAN_Probe_Attack_Banner (YARA, Detection); GOCLOUD LAN Lateral-Movement Report
-          Banner (SURICATA, Detection)
-        count: 2
+        rules: GOCLOUD_LAN_Probe_Attack_Banner (YARA, Detection)
+        count: 1
     actors:
       - UTA-2026-020
       - UTA-2026-021
@@ -11504,9 +11488,9 @@ techniques:
     url: /techniques/T1570/
     mitre_url: https://attack.mitre.org/techniques/T1570/
     report_count: 3
-    rule_count: 3
+    rule_count: 2
     actor_count: 3
-    score: 6
+    score: 5
   - id: T1571
     name: Non-Standard Port
     tactic: Command and Control
@@ -11577,16 +11561,17 @@ techniques:
         title: GOCLOUD Multi-Service Cryptojacking
         date: '2026-07-26'
         report_url: /reports/gocloud-multiservice-cryptojacking-149-28-112-221/
-        rules: GOCLOUD_Listener2_Control_Plane (YARA, Detection)
+        rules: GOCLOUD_Listener2_Control_Plane (YARA, Hunting)
         count: 1
       - url: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
         title: GHOST Cryptojacker Kit — Vova75Rus Supply Chain (77.110.96.200)
         date: '2026-05-25'
         report_url: /reports/ghost-cryptojacker-vova75rus-77.110.96.200/
         rules: >-
-          Ncat Listener Creation on Linux Host (SIGMA, Hunting); GHOST Cryptojacker Kit Hysteria v2
-          QUIC Backdoor Egress: Known Operator Ports (SURICATA, Hunting); GHOST Cryptojacker Kit
-          Hysteria v2 QUIC Backdoor Inbound: Victim-Hosted Listener Ports (SURICATA, Hunting)
+          Ncat Listener Creation on Linux Host (SIGMA, Hunting); GHOST Cryptojacker Kit QUIC v1
+          Initial Egress to Candidate Hysteria Operator Ports 14433 to 14444 (SURICATA, Hunting);
+          GHOST Cryptojacker Kit QUIC v1 Initial Inbound to Candidate Hysteria Listener Ports 14433
+          to 14444 (SURICATA, Hunting)
         count: 3
     actors:
       - UTA-2026-002
@@ -11689,9 +11674,10 @@ techniques:
         report_url: /reports/ghost-cryptojacker-vova75rus-77.110.96.200/
         rules: >-
           MAL_Linux_GHOST_Hysteria_Operator_Wrapper (YARA, Hunting); Hysteria Proxy Process
-          Execution on Linux Server (SIGMA, Hunting); GHOST Cryptojacker Kit Hysteria v2 QUIC
-          Backdoor Egress: Known Operator Ports (SURICATA, Hunting); GHOST Cryptojacker Kit Hysteria
-          v2 QUIC Backdoor Inbound: Victim-Hosted Listener Ports (SURICATA, Hunting)
+          Execution on Linux Server (SIGMA, Hunting); GHOST Cryptojacker Kit QUIC v1 Initial Egress
+          to Candidate Hysteria Operator Ports 14433 to 14444 (SURICATA, Hunting); GHOST
+          Cryptojacker Kit QUIC v1 Initial Inbound to Candidate Hysteria Listener Ports 14433 to
+          14444 (SURICATA, Hunting)
         count: 4
       - url: /hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections
         title: Russian Gemini CLI Credential Mill (213.165.51.115)
@@ -11707,13 +11693,12 @@ techniques:
         report_url: /reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/
         rules: >-
           Rule 3: Insider Tunnel-Setup Turkish-Language Operator Document (YARA, Detection); Sigma
-          Rule 4: Reverse SSH Tunnel Registration from Windows AD User Host to Operator IP (SIGMA,
-          Detection); Sigma Rule 5: PuTTY Saved Session Created with Tunnel or ARPA Name (SIGMA,
-          Detection); Sigma Rule 9: Operator-Supplied SSH Key File in User `.ssh` Directory (SIGMA,
-          Detection); Sigma Rule 10: Non-Splunk Process Connecting to Localhost Port 8089 (SIGMA,
-          Hunting); Sigma Rule 12: Insider Deploying Outbound SSH Tunnel from Enterprise AD-Joined
-          Workstation (SIGMA, Hunting)
-        count: 6
+          Rule 4: SSH-Family Process Command Line Containing An ARPA Operator Marker (SIGMA,
+          Hunting); Sigma Rule 5: PuTTY Saved Session Registry Value Write Under A Path Containing
+          ARPA_Tunnel (SIGMA, Hunting); Sigma Rule 10: Non-Splunk Process Connecting to Localhost
+          Port 8089 (SIGMA, Hunting); Sigma Rule 12: SSH, PuTTY Or Plink Process With A -R
+          Reverse-Forward Flag, Excluding Private-Range Substrings (SIGMA, Hunting)
+        count: 5
       - url: /hunting-detections/opendirectory-45-130-148-125-20260430-detections
         title: AdaptixC2 Open Directory Exposure (45.130.148.125)
         date: '2026-04-30'
@@ -11728,8 +11713,8 @@ techniques:
         report_url: /reports/new-files-found-20260408/
         rules: >-
           CovertVPN Layer 2 Bridge Module (YARA, Detection); CovertVPN HTTP Data Channel GET
-          /receive Endpoint (SURICATA, Hunting); CovertVPN ICMP Tunnel Oversized Payload with Data
-          or Keepalive Marker (SURICATA, Hunting)
+          /receive Endpoint (SURICATA, Hunting); CovertVPN ICMP Tunnel Oversized Payload with
+          Data-Frame Marker (0xDD) (SURICATA, Hunting)
         count: 3
     actors:
       - UTA-2026-002
@@ -11750,9 +11735,9 @@ techniques:
     url: /techniques/T1572/
     mitre_url: https://attack.mitre.org/techniques/T1572/
     report_count: 10
-    rule_count: 22
+    rule_count: 21
     actor_count: 15
-    score: 32
+    score: 31
   - id: T1573
     name: Encrypted Channel
     tactic: Command and Control
@@ -11785,18 +11770,16 @@ techniques:
         title: 'Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm'
         date: '2025-12-20'
         report_url: /reports/dual-rat-analysis/
-        rules: >-
-          Quasar RAT C2 Connection on TCP 4782 (SIGMA, Detection); Quasar RAT Binary Protocol on TCP
-          4782 (SURICATA, Hunting)
-        count: 2
+        rules: Quasar RAT C2 Connection on TCP 4782 (SIGMA, Detection)
+        count: 1
     actors:
       - UTA-2026-005
     url: /techniques/T1573/
     mitre_url: https://attack.mitre.org/techniques/T1573/
     report_count: 3
-    rule_count: 3
+    rule_count: 2
     actor_count: 1
-    score: 6
+    score: 5
   - id: T1573.001
     name: Symmetric Cryptography
     tactic: Command and Control
@@ -12169,7 +12152,7 @@ techniques:
         title: Multi-Actor AI-Agent Framework Abuse (8 Operators)
         date: '2026-06-16'
         report_url: /reports/ai-agent-frameworks-2026-05-23/
-        rules: Egress to Operator-Hosting ASNs from Production Server (Baseline Pivot) (SIGMA, Hunting)
+        rules: Egress to Operator-Hosting ASN Ranges from a Linux Host (Baseline Pivot) (SIGMA, Hunting)
         count: 1
       - url: /hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections
         title: ShinyHunters Data Leak Site (91.215.85.22)
@@ -12209,24 +12192,16 @@ techniques:
         date: '2026-05-16'
         tactic: Resource Development
         confidence: HIGH
-    detections:
-      - url: /hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections
-        title: Inkognito Russian VPN/Phishing Operator (INK VPN / INK Lens)
-        date: '2026-05-16'
-        report_url: /reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/
-        rules: >-
-          Inkognito Custom X-Admin-Token Header in HTTP Request (SURICATA, Hunting); Inkognito
-          X-Admin-Token in CORS Allow-Headers Response (SURICATA, Hunting)
-        count: 2
+    detections: []
     actors:
       - UTA-2026-009
       - UTA-2026-011
     url: /techniques/T1583.004/
     mitre_url: https://attack.mitre.org/techniques/T1583/004/
     report_count: 2
-    rule_count: 2
+    rule_count: 0
     actor_count: 2
-    score: 4
+    score: 2
   - id: T1583.006
     name: Web Services
     tactic: Resource Development
@@ -12324,29 +12299,6 @@ techniques:
     rule_count: 0
     actor_count: 1
     score: 1
-  - id: T1584.004
-    name: Server
-    tactic: Resource Development
-    tactics:
-      - Resource Development
-    reports: []
-    detections:
-      - url: /hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections
-        title: Rovodev AI-Co-Authored Mirai Variant + Matrix C2 (87.106.143.220)
-        date: '2026-05-26'
-        report_url: /reports/rovodev-mirai-matrix-c2-87.106.143.220/
-        rules: >-
-          MAL_Discord_OperatorID_Snowflake_PandoraNet (YARA, Hunting); keyosbuff C2-Leak Repository
-          Reference in HTTP URI (SURICATA, Hunting)
-        count: 2
-    actors:
-      - UTA-2026-014
-    url: /techniques/T1584.004/
-    mitre_url: https://attack.mitre.org/techniques/T1584/004/
-    report_count: 0
-    rule_count: 2
-    actor_count: 1
-    score: 2
   - id: T1585
     name: Establish Accounts
     tactic: Resource Development
@@ -12466,9 +12418,8 @@ techniques:
         rules: >-
           AI-Generated Offensive Code Structural Signature (YARA, Hunting); AI Operator Handoff
           Document (YARA, Hunting); AI Coding-Agent Tooling Co-Located with Offensive Tooling on the
-          Same Host (SIGMA, Detection); Rovodev AI Agent Directory Creation on Server Infrastructure
-          Host (SIGMA, Hunting)
-        count: 4
+          Same Host (SIGMA, Detection)
+        count: 3
       - url: /hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections
         title: Russian Gemini CLI Credential Mill (213.165.51.115)
         date: '2026-05-25'
@@ -12493,9 +12444,9 @@ techniques:
     url: /techniques/T1587/
     mitre_url: https://attack.mitre.org/techniques/T1587/
     report_count: 0
-    rule_count: 12
+    rule_count: 11
     actor_count: 2
-    score: 12
+    score: 11
   - id: T1587.001
     name: Malware
     tactic: Resource Development
@@ -12546,11 +12497,8 @@ techniques:
           MAL_Markdown_Rovodev_WhatINeed_OperatorPrompt (YARA, Hunting); Rovodev AI Agent Sessions
           Directory or Session Context File Created on a Linux Host (SIGMA, Hunting); Rovodev
           Runtime Log rovodev.log Created on a Linux Host (Scoping Lead for AI-Augmented Offensive
-          Operations) (SIGMA, Hunting); Pandora-Mirai Naku Binary Distribution URI Path (SURICATA,
-          Detection); Pandora-Mirai Pandoras-Box Binary Distribution URI Path (SURICATA, Detection);
-          Pandora-Mirai bot.sh Reseed Download URI Pattern (SURICATA, Hunting); Naku Binary
-          Reference in HTTP URI (Bare Substring) (SURICATA, Hunting)
-        count: 12
+          Operations) (SIGMA, Hunting)
+        count: 8
       - url: >-
           /hunting-detections/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections
         title: CVE-2026-41940 cPanel Harvester Toolkit (216.126.227.49)
@@ -12569,9 +12517,9 @@ techniques:
     url: /techniques/T1587.001/
     mitre_url: https://attack.mitre.org/techniques/T1587/001/
     report_count: 6
-    rule_count: 13
+    rule_count: 9
     actor_count: 7
-    score: 19
+    score: 15
   - id: T1587.002
     name: Code Signing Certificates
     tactic: Resource Development
@@ -12654,24 +12602,17 @@ techniques:
         date: '2026-03-16'
         tactic: Resource Development
         confidence: HIGH
-    detections:
-      - url: /hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections
-        title: Rovodev AI-Co-Authored Mirai Variant + Matrix C2 (87.106.143.220)
-        date: '2026-05-26'
-        report_url: /reports/rovodev-mirai-matrix-c2-87.106.143.220/
-        rules: keyosbuff C2-Leak Repository Reference in HTTP URI (SURICATA, Hunting)
-        count: 1
+    detections: []
     actors:
       - UTA-2026-008
       - UTA-2026-009
       - UTA-2026-010
-      - UTA-2026-014
     url: /techniques/T1588.001/
     mitre_url: https://attack.mitre.org/techniques/T1588/001/
     report_count: 2
-    rule_count: 1
-    actor_count: 4
-    score: 3
+    rule_count: 0
+    actor_count: 3
+    score: 2
   - id: T1588.002
     name: Tool
     tactic: Resource Development
@@ -13097,15 +13038,6 @@ techniques:
           GOCLOUD_BatchExploit_Dispatcher (YARA, Detection); GOCLOUD_OmniHunter_v4_Orchestrator
           (YARA, Detection)
         count: 2
-      - url: /hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections
-        title: 'Enough to Be Dangerous: The Mechanics of an LLM-Assisted Intrusion Campaign'
-        date: '2026-07-21'
-        report_url: /reports/multivector-ecommerce-rce-toolkit-192-3-1-116/
-        rules: >-
-          Unauthenticated External Access to an Alibaba Druid Monitoring Console (SIGMA, Detection);
-          Unauthenticated External Access to Alibaba Druid Monitoring Console (Network Layer,
-          Flowbits Pair) (SURICATA, Detection)
-        count: 2
     actors:
       - UTA-2026-019
       - UTA-2026-020
@@ -13113,9 +13045,9 @@ techniques:
     url: /techniques/T1596.005/
     mitre_url: https://attack.mitre.org/techniques/T1596/005/
     report_count: 3
-    rule_count: 4
+    rule_count: 2
     actor_count: 3
-    score: 7
+    score: 5
   - id: T1602.002
     name: Network Device Configuration Dump
     tactic: Collection
@@ -13410,7 +13342,9 @@ techniques:
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
         report_url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
-        rules: Reflective .NET Assembly Load From A Base64-Encoded PowerShell String (SIGMA, Hunting)
+        rules: >-
+          PowerShell Script Block Containing Reflection.Assembly Load And FromBase64String (SIGMA,
+          Hunting)
         count: 1
       - url: /hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections
         title: 'CloudSync: An Assembler''s Intrusion Toolkit'
@@ -13468,8 +13402,8 @@ techniques:
         report_url: /reports/open-directory-172-105-0-126-20260406/
         rules: >-
           OpenStrike Shellcode Loader Chain Debug Strings (YARA, Detection); Cobalt Strike 3.x MALC
-          Malleable Profile Beacon (YARA, Detection); OpenStrike Python Beacon Ctypes VirtualAlloc
-          Shellcode Injection (SIGMA, Hunting)
+          Malleable Profile Beacon (YARA, Detection); Python Interpreter With Ctypes and
+          VirtualAlloc on the Command Line (OpenStrike Beacon Technique) (SIGMA, Hunting)
         count: 3
       - url: /hunting-detections/open-directory-193-56-255-154-xiebroc2-detections
         title: Open Directory at 193.56.255.154 — XiebroC2 v3.1 & Covenant C2
@@ -13487,12 +13421,6 @@ techniques:
         report_url: /reports/zerotrace-74-0-42-25-20260316/
         rules: XwormLoader Native Reflective PE Loader (YARA, Detection)
         count: 1
-      - url: /hunting-detections/sliver-open-directory-detections
-        title: Sliver C2 Toolchain with ScareCrow Loader (45.94.31.220)
-        date: '2026-03-10'
-        report_url: /reports/sliver-open-directory/
-        rules: sihost.exe Initiating Anomalous Outbound Network Connection (SIGMA, Detection)
-        count: 1
     actors:
       - UTA-2026-001
       - UTA-2026-002
@@ -13509,9 +13437,9 @@ techniques:
     url: /techniques/T1620/
     mitre_url: https://attack.mitre.org/techniques/T1620/
     report_count: 13
-    rule_count: 20
+    rule_count: 19
     actor_count: 12
-    score: 33
+    score: 32
   - id: T1622
     name: Debugger Evasion
     tactic: Stealth
@@ -13544,13 +13472,7 @@ techniques:
         date: '2025-11-20'
         tactic: Stealth
         confidence: HIGH
-    detections:
-      - url: /hunting-detections/Hybrid-Loader-Stealer-Sogou-detections
-        title: Hybrid Loader/Stealer Ecosystem Masquerading as Sogou
-        date: '2025-11-20'
-        report_url: /reports/Hybrid-Loader-Stealer-Sogou/
-        rules: SogouStealer Loader/Downloader Components (YARA, Hunting)
-        count: 1
+    detections: []
     actors:
       - UTA-2026-004
       - UTA-2026-008
@@ -13559,9 +13481,9 @@ techniques:
     url: /techniques/T1622/
     mitre_url: https://attack.mitre.org/techniques/T1622/
     report_count: 5
-    rule_count: 1
+    rule_count: 0
     actor_count: 4
-    score: 6
+    score: 5
   - id: T1649
     name: Steal or Forge Authentication Certificates
     tactic: Credential Access
@@ -13641,8 +13563,8 @@ techniques:
         date: '2026-06-16'
         report_url: /reports/ai-agent-frameworks-2026-05-23/
         rules: >-
-          Suspected AI-Orchestrated Multi-Stage API Attack Sequence (Machine-Speed Window) (SIGMA,
-          Hunting)
+          Web Request to API, Auth, Payment or Transaction URI Path (Machine-Speed Sequence Building
+          Block) (SIGMA, Hunting)
         count: 1
       - url: /hunting-detections/open-directory-94-103-1-13-20260423-detections
         title: Chaos Ransomware (TorBrowserTor) Multi-Stage Loader (94.103.1.13)
@@ -13684,7 +13606,9 @@ techniques:
         title: Multi-Actor AI-Agent Framework Abuse (8 Operators)
         date: '2026-06-16'
         report_url: /reports/ai-agent-frameworks-2026-05-23/
-        rules: Hysteria v2 QUIC bing.com SNI Masquerade Detection (Case 9) (SURICATA, Hunting)
+        rules: >-
+          QUIC SNI Containing bing.com on UDP 14433/14444 (Hysteria v2 Masquerade Lead, Case 9)
+          (SURICATA, Hunting)
         count: 1
     actors: []
     url: /techniques/T1665/
@@ -13813,7 +13737,7 @@ techniques:
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
         report_url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
-        rules: Multiple Endpoint Protection Services Stopped In A Short Window (SIGMA, Hunting)
+        rules: Named Endpoint Protection Service Start Type Set To Disabled (SIGMA, Hunting)
         count: 1
       - url: /hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections
         title: 'CloudSync: An Assembler''s Intrusion Toolkit'
@@ -13821,7 +13745,8 @@ techniques:
         report_url: /reports/cloudsync-assembler-toolkit-91-197-98-188/
         rules: >-
           Windows Defender Tampering Via Set-MpPreference Disable Switches (SIGMA, Detection); AMSI
-          Bypass Via AmsiUtils AmsiInitFailed Field SetValue (SIGMA, Detection)
+          Bypass Command Line With amsiInitFailed, SetValue and NonPublic Reflection Strings (SIGMA,
+          Detection)
         count: 2
       - url: /hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections
         title: GOCLOUD Multi-Service Cryptojacking
@@ -13854,8 +13779,8 @@ techniques:
           Claude Code Allowlist (YARA, Hunting); Claude Code settings.local.json Written or Modified
           (SIGMA, Hunting); Command Line With Curl, openclaw.ai and a Pipe-to-Shell Fragment
           (OpenClaw Installer Shape) (SIGMA, Hunting); OpenClaw Gateway Service Started (SIGMA,
-          Hunting); NPM Registry Fetch for OpenClaw Package (SIGMA, Hunting)
-        count: 6
+          Hunting)
+        count: 5
       - url: /hunting-detections/opendirectory-62-60-237-100-20260506-detections
         title: HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campaign
         date: '2026-05-06'
@@ -13895,8 +13820,8 @@ techniques:
         date: '2026-03-10'
         report_url: /reports/sliver-open-directory/
         rules: >-
-          Sliver Stager PowerShell AMSI Bypass via Reflection (SIGMA, Detection); Windows Defender
-          Real-Time Protection Disabled (SIGMA, Detection)
+          PowerShell AMSI Bypass via amsiInitFailed Reflection (SIGMA, Detection); Windows Defender
+          Real-Time Protection Disabled (SIGMA, Hunting)
         count: 2
       - url: /hunting-detections/quasar-xworm-powershell-detections
         title: Quasar + XWorm + PowerShell
@@ -13918,9 +13843,9 @@ techniques:
     url: /techniques/T1685/
     mitre_url: https://attack.mitre.org/techniques/T1685/
     report_count: 13
-    rule_count: 25
+    rule_count: 24
     actor_count: 10
-    score: 38
+    score: 37
   - id: T1686
     name: Disable or Modify System Firewall
     tactic: Defense Impairment

@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--1872425e-6118-4c35-b085-d19654938380",
+    "id": "bundle--43b5cf31-e05e-4835-9e01-d55c90331057",
     "objects": [
         {
             "type": "identity",
@@ -80,12 +80,12 @@
             "id": "indicator--e215c6ab-8a89-589c-8392-df91bb08557b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.416959Z",
-            "modified": "2026-10-01T19:54:15.416959Z",
+            "modified": "2026-10-11T14:08:28.198025Z",
             "name": "Newdouble_ClickFix_SteamCDP_Loader_Strings",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule Newdouble_ClickFix_SteamCDP_Loader_Strings {\n   meta:\n      description = \"Detects the Steam-focused x64 executable delivered by the newdouble ClickFix chain by its mutex-style name, its log banner, its panel upload path and header name, and the Steam CEF debugging marker file name\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/\"\n      date = \"2026-09-28\"\n      hash1 = \"1366b8ca7f315142ba9989241402758cf2a86e5568a28da0942e1810fe12c324\"\n      hash2 = \"f9d075fc57b6b27a6066734a9a9ba25d666ba9db\"\n      hash3 = \"405186a1740ede3e8c56bbf81c043e7e\"\n      family = \"newdouble ClickFix Steam-focused loader chain\"\n      id = \"bffecf94-dc62-549b-9111-8f6add7c93b9\"\n   strings:\n      $x1 = \"Global\\\\SteamCDP\" ascii wide\n      $x2 = \"=== BerserkCDP started ===\" ascii wide\n      $s1 = \"X-Vac-Secret\" ascii wide\n      $s2 = \"/api/mafile/import\" ascii wide\n      $s3 = \".cef-enable-remote-debugging\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      uint32(uint32(0x3C)) == 0x00004550 and\n      filesize < 8MB and\n      ( $x2 or ( $x1 and 1 of ($s*) ) or 3 of ($s*) )\n}",
+            "pattern": "rule Newdouble_ClickFix_SteamCDP_Loader_Strings {\n   meta:\n      description = \"Detects the Steam-focused executable delivered by the newdouble ClickFix chain (the analysed sample is 64-bit; the rule tests only the MZ and PE signatures, not the machine type) by its mutex-style name, its log banner, its panel upload path and header name, and the Steam CEF debugging marker file name\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/\"\n      date = \"2026-09-28\"\n      hash1 = \"1366b8ca7f315142ba9989241402758cf2a86e5568a28da0942e1810fe12c324\"\n      hash2 = \"f9d075fc57b6b27a6066734a9a9ba25d666ba9db\"\n      hash3 = \"405186a1740ede3e8c56bbf81c043e7e\"\n      family = \"newdouble ClickFix Steam-focused loader chain\"\n      id = \"bffecf94-dc62-549b-9111-8f6add7c93b9\"\n   strings:\n      $x1 = \"Global\\\\SteamCDP\" ascii wide\n      $x2 = \"=== BerserkCDP started ===\" ascii wide\n      $s1 = \"X-Vac-Secret\" ascii wide\n      $s2 = \"/api/mafile/import\" ascii wide\n      $s3 = \".cef-enable-remote-debugging\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      uint32(uint32(0x3C)) == 0x00004550 and\n      filesize < 8MB and\n      ( $x2 or ( $x1 and 1 of ($s*) ) or 3 of ($s*) )\n}",
             "pattern_type": "yara",
             "valid_from": "2026-09-28T00:00:00Z",
             "labels": [

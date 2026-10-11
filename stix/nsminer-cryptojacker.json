@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--3843a358-4a66-4cfa-9c08-7baea8aaf822",
+    "id": "bundle--15cbe356-3b0d-4294-9fb0-38c72c005bdf",
     "objects": [
         {
             "type": "identity",
@@ -207,15 +207,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--c7c5b82e-bda5-577c-b902-503115857c5d",
+            "id": "indicator--6d9c9ce3-e89e-59db-b0ab-35817d7c8917",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:27:57.515963Z",
-            "modified": "2026-09-19T20:27:57.515963Z",
-            "name": "NsMiner Persistence Directory Creation",
+            "created": "2026-10-11T14:08:29.327872Z",
+            "modified": "2026-10-11T14:08:29.327872Z",
+            "name": "File Event Under the NsMiner AppData Roaming Directory",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: NsMiner Persistence Directory Creation\nid: 4ecdd6e1-c381-4c53-a92f-a1e688accdfb\nstatus: experimental\ndescription: >-\n  Detects creation of a file within the NsMiner cryptojacker's persistence\n  directory in %AppData%\\Roaming. The directory name is derived from the\n  malware family's own branding and is not a location used by legitimate\n  software.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/nsminer-cryptojacker-detections/\nauthor: The Hunters Ledger\ndate: 2026-02-02\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1547.001\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: file_event\ndetection:\n    selection:\n        TargetFilename|contains: '\\AppData\\Roaming\\NsMiner\\'\n    condition: selection\nfalsepositives:\n    - >-\n      Unlikely — no legitimate software has been observed creating a\n      directory literally named NsMiner under %AppData%\\Roaming\nlevel: medium",
+            "pattern": "title: File Event Under the NsMiner AppData Roaming Directory\nid: 4ecdd6e1-c381-4c53-a92f-a1e688accdfb\nstatus: experimental\ndescription: >-\n  Detects a file event (file creation or overwrite) within the NsMiner\n  cryptojacker's staging directory in %AppData%\\Roaming. The directory name is derived from the\n  malware family's own branding and is not a location used by legitimate\n  software.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/nsminer-cryptojacker-detections/\nauthor: The Hunters Ledger\ndate: 2026-02-02\ntags:\n    - attack.persistence\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: file_event\ndetection:\n    selection:\n        TargetFilename|contains: '\\AppData\\Roaming\\NsMiner\\'\n    condition: selection\nfalsepositives:\n    - >-\n      Unlikely — no legitimate software has been observed writing a file\n      under a directory literally named NsMiner in %AppData%\\Roaming\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-02-02T00:00:00Z",
             "labels": [
@@ -352,7 +352,7 @@
             "id": "report--f5cf2d3d-4ab7-5767-8849-d0cbf388e3c2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-09-19T20:27:57.517409Z",
-            "modified": "2026-10-10T13:40:57.046519Z",
+            "modified": "2026-10-11T14:08:29.329013Z",
             "name": "NsMiner: Multi-Stage Operation",
             "report_types": [
                 "threat-report"
@@ -374,7 +374,7 @@
                 "file--f199c9b3-65ac-5f6a-bc0c-018928fe7dce",
                 "indicator--0d90fcbd-64f5-5bf7-98dc-a5d220dcece8",
                 "indicator--9f8f5298-1b3e-5592-8917-f152639ae10d",
-                "indicator--c7c5b82e-bda5-577c-b902-503115857c5d",
+                "indicator--6d9c9ce3-e89e-59db-b0ab-35817d7c8917",
                 "indicator--8d303952-9238-52e1-8b6d-7da8b941d291",
                 "tool--1f42c527-18cf-50bd-9821-b753e1ff3707",
                 "tool--87b20cd8-dff5-59fd-ba83-2a42c50c5140",

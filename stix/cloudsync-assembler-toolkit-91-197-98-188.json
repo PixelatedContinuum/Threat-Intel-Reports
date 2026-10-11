@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--9b86ff4c-5c13-4f73-b983-87d18c266a85",
+    "id": "bundle--e2168bac-a355-47f1-b59f-4ebc67ddf76f",
     "objects": [
         {
             "type": "identity",
@@ -356,12 +356,12 @@
             "id": "indicator--57ed259c-002b-5786-96ce-12fd1fb8d493",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.722777Z",
-            "modified": "2026-10-11T07:05:19.196475Z",
+            "modified": "2026-10-11T14:08:22.040524Z",
             "name": "Loader_ABExe_DeploymentOrchestrator_Banners",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule Loader_ABExe_DeploymentOrchestrator_Banners {\n   meta:\n      description = \"Detects the ab.exe post-compromise deployment orchestrator via its fixed-sequence console banner strings and the German-localized Active Directory privileged-group names it targets when creating a hidden backdoor account\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\"\n      date = \"2026-08-03\"\n      hash1 = \"d25a3a858e28faa68ca6c624d7d19350c11ac798c346be3067307463e40aaff1\"\n      family = \"CloudSync\"\n      malware_type = \"Orchestrator\"\n      campaign = \"CloudSync-Assembler-Toolkit-91.197.98.188\"\n      id = \"bcfebc4f-1273-566e-8121-19cd9dc91272\"\n   strings:\n      $b1 = \"Starting deployment - WebShell First\" ascii wide\n      $b2 = \"=== WEB SHELL ===\" ascii wide\n      $b3 = \"=== USER ===\" ascii wide\n      $b4 = \"=== ANYDESK ===\" ascii wide\n      $b5 = \"All tasks completed successfully!\" ascii wide\n      $grp1 = \"Organisations-Admins\" ascii wide\n      $grp2 = \"Schema-Admins\" ascii wide\n      $grp3 = \"Administratoren\" ascii wide fullword\n      $adu = \"New-ADUser\" ascii wide\n      $guest = \"Guest$\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 2MB and\n      3 of them\n}",
+            "pattern": "rule Loader_ABExe_DeploymentOrchestrator_Banners {\n   meta:\n      description = \"Detects the ab.exe post-compromise deployment orchestrator via at least one of its five console banner strings (the sequence is not enforced) together with two more strings drawn from the banners, the German-localized Active Directory privileged-group names it targets, New-ADUser and Guest$ when it creates a hidden backdoor account\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\"\n      date = \"2026-08-03\"\n      hash1 = \"d25a3a858e28faa68ca6c624d7d19350c11ac798c346be3067307463e40aaff1\"\n      family = \"CloudSync\"\n      malware_type = \"Orchestrator\"\n      campaign = \"CloudSync-Assembler-Toolkit-91.197.98.188\"\n      id = \"bcfebc4f-1273-566e-8121-19cd9dc91272\"\n   strings:\n      $b1 = \"Starting deployment - WebShell First\" ascii wide\n      $b2 = \"=== WEB SHELL ===\" ascii wide\n      $b3 = \"=== USER ===\" ascii wide\n      $b4 = \"=== ANYDESK ===\" ascii wide\n      $b5 = \"All tasks completed successfully!\" ascii wide\n      $grp1 = \"Organisations-Admins\" ascii wide\n      $grp2 = \"Schema-Admins\" ascii wide\n      $grp3 = \"Administratoren\" ascii wide fullword\n      $adu = \"New-ADUser\" ascii wide\n      $guest = \"Guest$\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 2MB and\n      1 of ($b*) and\n      3 of them\n}",
             "pattern_type": "yara",
             "valid_from": "2026-08-03T00:00:00Z",
             "labels": [
@@ -377,12 +377,12 @@
             "id": "indicator--4d5b2dde-07e9-5752-89df-4d26f63d2131",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.722904Z",
-            "modified": "2026-10-11T07:05:19.196573Z",
+            "modified": "2026-10-11T14:08:22.040635Z",
             "name": "Loader_CtBat_ProxyAwareUSBWormStub",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule Loader_CtBat_ProxyAwareUSBWormStub {\n   meta:\n      description = \"Detects the ct.bat infection stub via a combination of its distinctive command fragments: proxy-credential-inheriting WebClient download, USB drive enumeration for its worm loop, autorun.inf propagation, and its AMSI-bypass field name\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\"\n      date = \"2026-08-03\"\n      hash1 = \"0ff0cee1fbf1050fbe3ab91918e56334a93269265e5614717ec0441baa8c42df\"\n      family = \"CloudSync\"\n      malware_type = \"Loader\"\n      campaign = \"CloudSync-Assembler-Toolkit-91.197.98.188\"\n      id = \"21d45221-9c71-50e5-89fa-a7b3d0ea4e76\"\n   strings:\n      $proxy = \"DefaultCredentials\" ascii\n      $wmic = \"wmic logicaldisk where\" ascii\n      $autorun = \"autorun.inf\" ascii\n      $amsi = \"amsiInitFailed\" ascii\n      $sysupd = \"SystemUpdate\" ascii\n   condition:\n      filesize < 5KB and\n      2 of them\n}",
+            "pattern": "rule Loader_CtBat_ProxyAwareUSBWormStub {\n   meta:\n      description = \"Detects the ct.bat infection stub when any two of five of its distinctive command fragments co-occur in a file under 5 KB: proxy-credential-inheriting WebClient download (DefaultCredentials), USB drive enumeration for its worm loop (wmic logicaldisk where), autorun.inf propagation, its AMSI-bypass field name (amsiInitFailed) and the SystemUpdate value name\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\"\n      date = \"2026-08-03\"\n      hash1 = \"0ff0cee1fbf1050fbe3ab91918e56334a93269265e5614717ec0441baa8c42df\"\n      family = \"CloudSync\"\n      malware_type = \"Loader\"\n      campaign = \"CloudSync-Assembler-Toolkit-91.197.98.188\"\n      id = \"21d45221-9c71-50e5-89fa-a7b3d0ea4e76\"\n   strings:\n      $proxy = \"DefaultCredentials\" ascii\n      $wmic = \"wmic logicaldisk where\" ascii\n      $autorun = \"autorun.inf\" ascii\n      $amsi = \"amsiInitFailed\" ascii\n      $sysupd = \"SystemUpdate\" ascii\n   condition:\n      filesize < 5KB and\n      2 of them\n}",
             "pattern_type": "yara",
             "valid_from": "2026-08-03T00:00:00Z",
             "labels": [
@@ -524,12 +524,12 @@
             "id": "indicator--e68dec58-880d-5780-8266-e9143fb2e90a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.723599Z",
-            "modified": "2026-10-01T19:54:12.723599Z",
+            "modified": "2026-10-11T14:08:22.041337Z",
             "name": "MSBuild Process Making a Direct Outbound Network Connection",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: MSBuild Process Making a Direct Outbound Network Connection\nid: 9629ebb5-35e9-4e2c-b209-c66eee51f0ea\nstatus: experimental\ndescription: >-\n    Detects MSBuild.exe itself initiating an outbound TCP connection. MSBuild does\n    not make direct network connections as part of normal build activity (NuGet\n    restore and package operations run through separate client processes); an\n    outbound connection from MSBuild.exe is consistent with a RAT running inside an\n    injected MSBuild process beaconing to its command-and-control server.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\nauthor: The Hunters Ledger\ndate: 2026-08-03\ntags:\n    - attack.stealth\n    - attack.execution\n    - attack.t1127.001\nlogsource:\n    category: network_connection\n    product: windows\ndetection:\n    selection:\n        Image|endswith: '\\MSBuild.exe'\n        Initiated: 'true'\n    condition: selection\nfalsepositives:\n    - Unknown, MSBuild network activity is rare in normal build environments but has not been exhaustively surveyed across all CI configurations\nlevel: high",
+            "pattern": "title: MSBuild Process Making a Direct Outbound Network Connection\nid: 9629ebb5-35e9-4e2c-b209-c66eee51f0ea\nstatus: experimental\ndescription: >-\n    Detects MSBuild.exe itself initiating an outbound network connection (no protocol test is made, so a UDP connection also matches). MSBuild does\n    not make direct network connections as part of normal build activity (NuGet\n    restore and package operations run through separate client processes); an\n    outbound connection from MSBuild.exe is consistent with a RAT running inside an\n    injected MSBuild process beaconing to its command-and-control server.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\nauthor: The Hunters Ledger\ndate: 2026-08-03\ntags:\n    - attack.stealth\n    - attack.execution\n    - attack.t1127.001\nlogsource:\n    category: network_connection\n    product: windows\ndetection:\n    selection:\n        Image|endswith: '\\MSBuild.exe'\n        Initiated: 'true'\n    condition: selection\nfalsepositives:\n    - Unknown, MSBuild network activity is rare in normal build environments but has not been exhaustively surveyed across all CI configurations\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-08-03T00:00:00Z",
             "labels": [
@@ -752,15 +752,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--f2584825-2b0f-587f-ae97-c23631841b49",
+            "id": "indicator--82659855-2ef5-5195-a8e9-63503e631c16",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:12.724826Z",
-            "modified": "2026-10-01T19:54:12.724826Z",
-            "name": "AMSI Bypass Via AmsiUtils AmsiInitFailed Field SetValue",
+            "created": "2026-10-11T14:08:22.04245Z",
+            "modified": "2026-10-11T14:08:22.04245Z",
+            "name": "AMSI Bypass Command Line With amsiInitFailed, SetValue and NonPublic Reflection Strings",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: AMSI Bypass Via AmsiUtils AmsiInitFailed Field SetValue\nid: f539cc09-bd50-4675-9119-08c09fb2ac24\nstatus: experimental\ndescription: >-\n    Detects a PowerShell command that reflects into the AmsiUtils type and calls\n    SetValue against a non-public static field to blind in-process AMSI scanning.\n    Matched on the amsiInitFailed field name and the SetValue/NonPublic reflection\n    call shape rather than the AmsiUtils type-name string, since the deployment stub\n    observed in this campaign constructs that type name from a reversed string\n    literal specifically to evade signature matching on the literal \"AmsiUtils\"\n    substring.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\n    - https://s3cur3th1ssh1t.github.io/Bypass_AMSI_by_manual_modification/\nauthor: The Hunters Ledger\ndate: 2026-08-03\ntags:\n    - attack.defense-impairment\n    - attack.t1685\n    - stp.3\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        CommandLine|contains|all:\n            - 'amsiInitFailed'\n            - 'SetValue'\n            - 'NonPublic'\n    condition: selection\nfalsepositives:\n    - Unlikely, legitimate scripts do not reflectively clear the AMSI initialization-failed field\nlevel: high",
+            "pattern": "title: AMSI Bypass Command Line With amsiInitFailed, SetValue and NonPublic Reflection Strings\nid: f539cc09-bd50-4675-9119-08c09fb2ac24\nstatus: experimental\ndescription: >-\n    Detects a process command line that contains the amsiInitFailed field name together\n    with the SetValue and NonPublic reflection strings, the shape of the reflective\n    AMSI-initialization-failed bypass that blinds in-process AMSI scanning. The rule\n    tests those three substrings only: neither the AmsiUtils type name nor a static\n    binding flag is tested, and no PowerShell Image is required. The AmsiUtils type-name\n    string is deliberately not matched, since the deployment stub\n    observed in this campaign constructs that type name from a reversed string\n    literal specifically to evade signature matching on the literal \"AmsiUtils\"\n    substring.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\n    - https://s3cur3th1ssh1t.github.io/Bypass_AMSI_by_manual_modification/\nauthor: The Hunters Ledger\ndate: 2026-08-03\ntags:\n    - attack.defense-impairment\n    - attack.t1685\n    - stp.3\nlogsource:\n    category: process_creation\n    product: windows\n    definition: 'Requires process-creation events with CommandLine populated, for example Sysmon EID 1 or Security EID 4688 with command-line auditing enabled.'\ndetection:\n    selection:\n        CommandLine|contains|all:\n            - 'amsiInitFailed'\n            - 'SetValue'\n            - 'NonPublic'\n    condition: selection\nfalsepositives:\n    - Unlikely, legitimate scripts do not reflectively clear the AMSI initialization-failed field\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-08-03T00:00:00Z",
             "labels": [
@@ -3095,7 +3095,7 @@
             "id": "report--9e9a2d1e-2840-51a5-af43-b5ef11a64213",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.739212Z",
-            "modified": "2026-10-11T07:42:04.007596Z",
+            "modified": "2026-10-11T14:08:22.061659Z",
             "name": "CloudSync: An Assembler's Intrusion Toolkit",
             "description": "Assembled 22-sample intrusion toolkit staged on a live open directory. Operator estate and the sourced commodity-stealer service are kept in SEPARATE tiers so they are never read as one infrastructure. Credentials are defanged to first-8+last-4 (disclosure hazard); the Telegram chat id 8116056430 is retained whole as the attribution artifact. Network IOCs are NOT defanged. The 22-file set is a snapshot of what was staged, not the operator's complete toolkit (one panel port, 91.92.43.221:5003, is live with no matching build in hand).",
             "report_types": [
@@ -3151,7 +3151,7 @@
                 "indicator--e35ee702-efcc-5ec7-85a7-b4e79e865e4c",
                 "indicator--1be6d5a4-ce26-5238-aeb3-a258754c420a",
                 "indicator--b15a4925-ca77-5046-b7ae-8a0ff2de58f0",
-                "indicator--f2584825-2b0f-587f-ae97-c23631841b49",
+                "indicator--82659855-2ef5-5195-a8e9-63503e631c16",
                 "indicator--b09a55a5-afd6-52f5-9093-a460ef8b50ae",
                 "indicator--f105f13e-d81e-5347-9b09-6f97765323c3",
                 "indicator--a5f74ec1-1480-5775-959e-2407b285f67a",

@@ -129,7 +129,7 @@ rule TOOLKIT_BellaMain_AdminPanel {
 **ATT&CK Coverage:** T1497 (Virtualization/Sandbox Evasion — anti-researcher variant)
 **Confidence:** HIGH
 **Rationale:** The Turkish-language troll-response strings are hardcoded response text chosen once by the developer and shared across every kit's `girislog.php` — they persist across redeployment the same way the Wadanz functions do. Requiring 2 of 4 distinctive canary strings, plus one of two secondary markers, keeps the FP floor low even though one secondary marker (`?lg=`) is a common-looking parameter name on its own.
-**False Positives:** None known against legitimate software — Turkish profanity/troll strings with this specific combination are not expected in unrelated PHP; a hit on a stored (non-actively-deployed) copy of a BellaMain kit sample is still a true positive for kit provenance, not a false positive.
+**False Positives:** None known against legitimate software — Turkish profanity/troll strings with this specific combination are not expected in unrelated files (the rule has no PHP marker or file-name test, so a report or analysis note that quotes the strings also matches); a hit on a stored (non-actively-deployed) copy of a BellaMain kit sample is still a true positive for kit provenance, not a false positive.
 **Blind Spots:** A fork that rewrites the troll-response text evades; scanning finds the code artifact regardless of whether the kit is actively deployed, so a hit does not by itself confirm live phishing activity.
 **Validation:** Scan a recovered kit archive's `girislog.php` — 2 of 4 canary strings plus one secondary marker must match; unrelated PHP session-handling code must NOT fire.
 **Deployment:** PHP web-root scanner, threat intel file corpus triage, malware archive scanning; apply analyst triage before treating a hit as an active-deployment indicator.
@@ -137,7 +137,7 @@ rule TOOLKIT_BellaMain_AdminPanel {
 ```yara
 rule TOOLKIT_BellaMain_AntiResearcherCanary {
    meta:
-      description = "Detects BellaMain Turkish PhaaS kit girislog.php files containing the anti-researcher canary string cluster. The ?lg= GET parameter triggers these strings, causing the kit to fire a Telegram alert with the researcher's IP and user-agent and return a Turkish-language troll response. Presence in a PHP file confirms BellaMain kit provenance regardless of active-deployment status."
+      description = "Detects files under 512 KB that contain the BellaMain Turkish PhaaS kit's anti-researcher canary string cluster (the strings come from the kit's girislog.php, but the rule tests no file name and no PHP marker). The ?lg= GET parameter triggers these strings, causing the kit to fire a Telegram alert with the researcher's IP and user-agent and return a Turkish-language troll response. Presence of the strings in a file indicates BellaMain kit provenance regardless of active-deployment status."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/"
@@ -173,10 +173,10 @@ rule TOOLKIT_BellaMain_AntiResearcherCanary {
 **Robustness:** 3
 **ATT&CK Coverage:** T1560 (Archive Collected Data — mysqldump output piped to Telegram), T1070 (Indicator Removal — evidence-destruction command context)
 **Confidence:** HIGH
-**Rationale:** Unchanged from the original rule, which is already technique-anchored: `mysqldump` invoked by a PHP/web-server parent process with a plaintext `-p` password argument is a chokepoint behavior with no single renameable literal — a web application should never legitimately spawn a database-dump utility with credentials on the command line, regardless of how BellaMain itself is renamed or redeployed.
+**Rationale:** Unchanged from the original rule, which is already technique-anchored: `mysqldump` invoked by a PHP/web-server parent process with a plaintext password on its command line (a `-p<password>` option with the value attached, the form the panel's `backup.php` uses, or a `--password=` option) is a chokepoint behavior with no single renameable literal — a web application should never legitimately spawn a database-dump utility with credentials on the command line, regardless of how BellaMain itself is renamed or redeployed.
 **False Positives:** Legitimate PHP-based database management tools (phpMyAdmin export function) invoked by an administrator; automated backup scripts incorrectly launched from web process context during provisioning or testing.
-**Blind Spots:** A rebuild that pipes credentials via a file or environment variable instead of a `-p` command-line flag evades; a bespoke backup wrapper running under a web-server account could coincidentally match.
-**Validation:** Trigger the malware's backup/evidence-destruction command — the mysqldump child-process event must match; a scheduled backup job running under a dedicated backup service account (not php/apache2/nginx/httpd) must NOT fire.
+**Blind Spots:** A rebuild that pipes credentials via a file or environment variable instead of a command-line password option evades; `-p` followed by a space (the password prompt form) is not matched, and `-P` (port) followed by a space is not matched. Sigma's `|re` is case-sensitive, but `sigma convert -t eql` renders it as `regex~`, which is case-insensitive, so on that backend an attached port option (`-P3306`) also matches; on the Lucene rendering it does not. a bespoke backup wrapper running under a web-server account could coincidentally match.
+**Validation:** Trigger the malware's backup/evidence-destruction command — the mysqldump child-process event must match (`mysqldump -u root -pSecret db`, `-p'Secret'` and `--password=Secret` fire; `mysqldump -u root -p db`, `--port=3307`, `--protocol=tcp` and `-P 3306` do not); a scheduled backup job running under a dedicated backup service account (not php/apache2/nginx/httpd) must NOT fire.
 **Deployment:** Endpoint EDR / Sysmon-for-Linux process-creation telemetry on PHP web servers.
 
 ```yaml
@@ -184,19 +184,20 @@ title: BellaMain PhaaS Mysqldump Invocation by PHP Web Process
 id: c914e7a2-5b36-4f87-b3d8-2a1e9c047f83
 status: experimental
 description: >-
-  Detects mysqldump invoked with a plaintext -p password argument by a PHP or
-  web server parent process. BellaMain's /yedek Telegram command executes
+  Detects mysqldump invoked with a plaintext password on its command line (a -p option with the
+  value attached, or --password=) by a PHP or web server parent process. BellaMain's /yedek Telegram command executes
   mysqldump via PHP shell_exec() to produce a SQL backup that is then sent to
   the operator's Telegram channel via sendDocument. Legitimate database backup
   jobs run under dedicated service accounts with credential files rather than
-  plaintext -p arguments spawned from a web-server process. This combination
+  plaintext password arguments spawned from a web-server process. This combination
   of parent process (php/php-fpm/apache2/nginx) and mysqldump child with a
-  -p flag is a strong behavioral indicator that does not depend on any single
+  plaintext password option is a strong behavioral indicator that does not depend on any single
   renameable literal.
 references:
     - https://the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/
 author: The Hunters Ledger
 date: '2026-05-16'
+modified: '2026-10-11'
 tags:
     - attack.collection
     - attack.t1560
@@ -215,7 +216,9 @@ detection:
             - 'httpd'
     selection_child:
         Image|endswith: 'mysqldump'
-        CommandLine|contains: '-p'
+        CommandLine|re:
+            - '.* -p[^ -].*'
+            - '.* --password=.*'
     condition: selection_parent and selection_child
 falsepositives:
     - >-

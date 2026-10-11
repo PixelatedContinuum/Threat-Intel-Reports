@@ -42,7 +42,7 @@ All three rules key on strings and structure that are already in the executable 
 **ATT&CK Coverage:** T1185 (Browser Session Hijacking), T1041 (Exfiltration Over C2 Channel)
 **ATT&CK Note:** Both techniques come from strings and located functions in the executable, not from an observed run. The executable's path from local Steam data to the panel upload was not traced end to end, so T1041 is a capability mapping.
 **Confidence:** HIGH
-**False Positives:** None known. The rule requires a PE file and the log banner, or the Steam mutex-style name plus one panel string, or three of the panel and marker strings together. A document or analyst note that quotes these strings is not a PE and does not match.
+**False Positives:** None known. The rule requires a PE file and the log banner, or the Steam mutex-style name plus any one of the other three strings (the panel header, the panel upload path or the CEF marker file name), or three of those three panel and marker strings together. A document or analyst note that quotes these strings is not a PE and does not match.
 **Blind Spots:** Misses a rebuild that changes the string constants, and misses a copy whose strings are encoded or encrypted at rest. A scan of a running process only sees them once the process has decoded them, and a live process-memory scan cannot satisfy the `filesize` test at all; only a saved dump can be scanned.
 **Validation:** Scan the executable (SHA-256 `1366b8ca...`) and confirm a hit. Scan an ordinary Steam installation and Windows system directory and confirm no hit.
 **Deployment:** File scan, scan of saved dumps and retro-hunt over collected executables; review hits, do not alert or block on them. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
@@ -50,7 +50,7 @@ All three rules key on strings and structure that are already in the executable 
 ```yara
 rule Newdouble_ClickFix_SteamCDP_Loader_Strings {
    meta:
-      description = "Detects the Steam-focused x64 executable delivered by the newdouble ClickFix chain by its mutex-style name, its log banner, its panel upload path and header name, and the Steam CEF debugging marker file name"
+      description = "Detects the Steam-focused executable delivered by the newdouble ClickFix chain (the analysed sample is 64-bit; the rule tests only the MZ and PE signatures, not the machine type) by its mutex-style name, its log banner, its panel upload path and header name, and the Steam CEF debugging marker file name"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/"

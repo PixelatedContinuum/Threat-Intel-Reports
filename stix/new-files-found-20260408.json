@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--16fefb06-908c-4981-acd2-572a74cd4cad",
+    "id": "bundle--85e6ce3e-cc1f-4045-b341-8572b7b3d1b5",
     "objects": [
         {
             "type": "identity",
@@ -525,12 +525,12 @@
             "id": "indicator--71a24fb1-5cb8-51ab-94d4-9ca439d8a824",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.197422Z",
-            "modified": "2026-10-01T19:54:15.197422Z",
+            "modified": "2026-10-11T14:08:28.783998Z",
             "name": "Cobalt Strike Artifact Kit MSSE Named Pipe Creation",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Cobalt Strike Artifact Kit MSSE Named Pipe Creation\nid: b7c91d3e-5a20-4f88-b2d4-8e1c9a4f6b52\nstatus: experimental\ndescription: >-\n  Detects creation of the Cobalt Strike Artifact Kit default named pipe\n  pattern MSSE-[number]-server. The Artifact Kit service variant\n  (artifact32svc/artifact64svc) creates this pipe to transfer XOR-encoded\n  shellcode to the hollowing target via kernel pipe indirection as an AV\n  evasion technique. The pipe ID is derived from GetTickCount() modulo\n  9898, producing values in the range 0 to 9897. No legitimate Windows\n  component creates pipes with this naming pattern.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-08\ntags:\n    - attack.privilege-escalation\n    - attack.t1055.003\n    - attack.stealth\n    - detection.emerging-threats\nlogsource:\n    category: pipe_created\n    product: windows\ndetection:\n    selection:\n        PipeName|startswith: '\\MSSE-'\n        PipeName|endswith: '-server'\n    condition: selection\nfalsepositives:\n    - >-\n      Unlikely — MSSE-[0-9]+-server pipe naming is specific to the Cobalt\n      Strike Artifact Kit default configuration; no legitimate Windows\n      component uses this pattern\nlevel: high",
+            "pattern": "title: Cobalt Strike Artifact Kit MSSE Named Pipe Creation\nid: b7c91d3e-5a20-4f88-b2d4-8e1c9a4f6b52\nstatus: experimental\ndescription: >-\n  Detects creation of the Cobalt Strike Artifact Kit default named pipe\n  pattern MSSE-[number]-server. The Artifact Kit service variant\n  (artifact32svc/artifact64svc) creates this pipe to transfer XOR-encoded\n  shellcode to the hollowing target via kernel pipe indirection as an AV\n  evasion technique. The pipe ID is derived from GetTickCount() modulo\n  9898, producing values in the range 0 to 9897. No legitimate Windows\n  component creates pipes with this naming pattern.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-08\ntags:\n    - detection.emerging-threats\nlogsource:\n    category: pipe_created\n    product: windows\ndetection:\n    selection:\n        PipeName|startswith: '\\MSSE-'\n        PipeName|endswith: '-server'\n        PipeName|re: '\\\\MSSE-[0-9]{1,4}-server'\n    condition: selection\nfalsepositives:\n    - >-\n      Unlikely — MSSE-[0-9]{1,4}-server pipe naming is specific to the Cobalt\n      Strike Artifact Kit default configuration; no legitimate Windows\n      component is known to use this pattern\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-04-08T00:00:00Z",
             "labels": [
@@ -753,15 +753,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--b56daac7-6a01-5532-85f3-e59d4e907f45",
+            "id": "indicator--0ba7c4b4-59ee-5754-b043-23bf7091eb35",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:15.198235Z",
-            "modified": "2026-10-01T19:54:15.198235Z",
-            "name": "THL HUNT CovertVPN ICMP Tunnel Oversized Payload with Data or Keepalive Marker",
+            "created": "2026-10-11T14:08:28.78513Z",
+            "modified": "2026-10-11T14:08:28.78513Z",
+            "name": "THL HUNT CovertVPN ICMP Tunnel Oversized Payload with Data-Frame Marker 0xDD",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert icmp $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT CovertVPN ICMP Tunnel Oversized Payload with Data or Keepalive Marker\"; itype:8; dsize:>128; byte_test:1,=,0xDD,4; threshold:type limit,track by_src,count 5,seconds 60; reference:url,the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/; classtype:trojan-activity; sid:9002006; rev:2; metadata:author The_Hunters_Ledger, date 2026-04-08;)",
+            "pattern": "alert icmp $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT CovertVPN ICMP Tunnel Oversized Payload with Data-Frame Marker 0xDD\"; itype:8; dsize:>128; byte_test:1,=,0xDD,4; threshold:type limit,track by_src,count 5,seconds 60; reference:url,the-hunters-ledger.com/hunting-detections/new-files-found-20260408-detections/; classtype:trojan-activity; sid:9002006; rev:3; metadata:author The_Hunters_Ledger, date 2026-04-08;)",
             "pattern_type": "suricata",
             "valid_from": "2026-04-08T00:00:00Z",
             "labels": [
@@ -3403,7 +3403,7 @@
             "id": "report--4515275f-b9be-56f7-a189-401e48c3836e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.210613Z",
-            "modified": "2026-10-01T19:54:15.210613Z",
+            "modified": "2026-10-11T14:08:28.8023Z",
             "name": "OpenStrike Expanded Toolkit — 106 New Files, Complete CS Arsenal Exposed",
             "report_types": [
                 "threat-report"
@@ -3462,7 +3462,7 @@
                 "indicator--84c9fa54-1d3b-5eb5-9d39-0511b679d0d3",
                 "indicator--a477d9d0-4bb3-5ae3-ba95-2ce0c0c0141c",
                 "indicator--321c82de-95cb-57d0-a181-d01f36066fd9",
-                "indicator--b56daac7-6a01-5532-85f3-e59d4e907f45",
+                "indicator--0ba7c4b4-59ee-5754-b043-23bf7091eb35",
                 "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
                 "malware--674a1750-44b2-5dde-935d-e94c7b049d4f",
                 "malware--b6fccdf4-898b-5e71-8137-47206543630b",

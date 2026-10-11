@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--ca7f739d-7940-4dde-97a1-4de27a41c7d6",
+    "id": "bundle--36a0eaa6-163a-440c-b6d3-b8cdd0be60dc",
     "objects": [
         {
             "type": "identity",
@@ -1679,12 +1679,12 @@
             "id": "indicator--05c19499-5b9e-5192-ab4b-ce6a81e1a6e1",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.78789Z",
-            "modified": "2026-10-01T19:54:18.78789Z",
+            "modified": "2026-10-11T14:08:34.73021Z",
             "name": "MALW_BellaMain_PHPPanel",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule MALW_BellaMain_PHPPanel\n{\n    meta:\n        description = \"Detects BellaMain Turkish PhaaS panel PHP source files by the Wadanz developer pseudonym function names (sifreleWadanz / sifrecozWadanz session encryption helpers) and the obfuscated admin directory name. Operator alias @AresRS34 alone is NOT sufficient to trigger — it's paired with a BellaMain-specific anchor to prevent false positives on threat intelligence reports about this actor.\"\n        license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/\"\n        date = \"2026-05-15\"\n        hash1 = \"f791fae41cdd3f141221d1783ed4779c839de7fc834ff4fc80a5d7f74b11ff88\"\n        family = \"BellaMain\"\n        cluster = \"A\"\n        threat_class = \"phaas,panel\"\n        id = \"1f58eaf6-b4d6-5e5d-b4a2-f481987b0684\"\n\n    strings:\n        $s_admindir = \"V5VgjLU0jsDe\" ascii\n        $s_aliasaresrs = \"@AresRS34\" ascii\n        $s_wadanz_enc = \"sifreleWadanz\" ascii\n        $s_wadanz_dec = \"sifrecozWadanz\" ascii\n        $s_dbname = \"jakartaxdw\" ascii\n\n    condition:\n        filesize < 500KB\n        and (\n            $s_admindir\n            or any of ($s_wadanz_enc, $s_wadanz_dec)\n            or ($s_aliasaresrs and any of ($s_wadanz_enc, $s_wadanz_dec, $s_dbname))\n        )\n}",
+            "pattern": "rule MALW_BellaMain_PHPPanel\n{\n    meta:\n        description = \"Detects files under 500 KB holding BellaMain Turkish PhaaS panel strings (the panel source is PHP, but the rule has no PHP marker or extension test): the Wadanz developer pseudonym function names (sifreleWadanz / sifrecozWadanz session encryption helpers) and the obfuscated admin directory name. Operator alias @AresRS34 alone is NOT sufficient to trigger — it's paired with a BellaMain-specific anchor to prevent false positives on threat intelligence reports about this actor.\"\n        license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/\"\n        date = \"2026-05-15\"\n        hash1 = \"f791fae41cdd3f141221d1783ed4779c839de7fc834ff4fc80a5d7f74b11ff88\"\n        family = \"BellaMain\"\n        cluster = \"A\"\n        threat_class = \"phaas,panel\"\n        id = \"1f58eaf6-b4d6-5e5d-b4a2-f481987b0684\"\n\n    strings:\n        $s_admindir = \"V5VgjLU0jsDe\" ascii\n        $s_aliasaresrs = \"@AresRS34\" ascii\n        $s_wadanz_enc = \"sifreleWadanz\" ascii\n        $s_wadanz_dec = \"sifrecozWadanz\" ascii\n        $s_dbname = \"jakartaxdw\" ascii\n\n    condition:\n        filesize < 500KB\n        and (\n            $s_admindir\n            or any of ($s_wadanz_enc, $s_wadanz_dec)\n            or ($s_aliasaresrs and any of ($s_wadanz_enc, $s_wadanz_dec, $s_dbname))\n        )\n}",
             "pattern_type": "yara",
             "valid_from": "2026-05-15T00:00:00Z",
             "labels": [
@@ -1700,12 +1700,12 @@
             "id": "indicator--dbbbe99e-5983-5070-b809-decd162eddd7",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.787972Z",
-            "modified": "2026-10-01T19:54:18.787972Z",
+            "modified": "2026-10-11T14:08:34.730319Z",
             "name": "MALW_Rhadamanthys_Stage2_ImportSurface",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "import \"pe\"\n\nrule MALW_Rhadamanthys_Stage2_ImportSurface\n{\n    meta:\n        description = \"Detects Rhadamanthys Stage-2 binaries by the distinctive minimal-import surface: USER32 GetDC/ReleaseDC/GetSystemMetrics + ADVAPI32 RegQueryValueExW combined with several distinctive GDI32 decoy imports. Stage-2 payloads avoid common crypto/network library imports — the absence of WS2_32 and CRYPT32 raises specificity.\"\n        license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/\"\n        date = \"2026-05-15\"\n        hash1 = \"804f45487c1cda5b69c743f9eb691a12fe0fdcf0d3a9f32003898f1e3836af50\"\n        family = \"Rhadamanthys\"\n        cluster = \"C\"\n        threat_class = \"infostealer,maas\"\n        fp_risk = \"MEDIUM — minimal-import surface alone could match unrelated GDI-heavy applications; pair with other Rhadamanthys rules for high-confidence verdict.\"\n        id = \"65d56771-90a6-5465-9bfd-8b247839e1e6\"\n\n    condition:\n        uint16(0) == 0x5A4D\n        and filesize < 2MB\n        and pe.imports(\"USER32.dll\", \"GetDC\")\n        and pe.imports(\"USER32.dll\", \"ReleaseDC\")\n        and pe.imports(\"USER32.dll\", \"GetSystemMetrics\")\n        and pe.imports(\"ADVAPI32.dll\", \"RegQueryValueExW\")\n        and pe.imports(\"GDI32.dll\", \"Ellipse\")\n        and pe.imports(\"GDI32.dll\", \"GetAspectRatioFilterEx\")\n        and not pe.imports(\"WS2_32.dll\")\n        and not pe.imports(\"CRYPT32.dll\")\n}",
+            "pattern": "import \"pe\"\n\nrule MALW_Rhadamanthys_Stage2_ImportSurface\n{\n    meta:\n        description = \"Detects Rhadamanthys Stage-2 binaries by an import combination: USER32 GetDC/ReleaseDC/GetSystemMetrics + ADVAPI32 RegQueryValueExW combined with two GDI32 imports (Ellipse and GetAspectRatioFilterEx), and no WS2_32 or CRYPT32 import. The rule does not cap the total number of imports. Stage-2 payloads avoid common crypto/network library imports — the absence of WS2_32 and CRYPT32 raises specificity.\"\n        license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/\"\n        date = \"2026-05-15\"\n        hash1 = \"804f45487c1cda5b69c743f9eb691a12fe0fdcf0d3a9f32003898f1e3836af50\"\n        family = \"Rhadamanthys\"\n        cluster = \"C\"\n        threat_class = \"infostealer,maas\"\n        fp_risk = \"MEDIUM — minimal-import surface alone could match unrelated GDI-heavy applications; pair with other Rhadamanthys rules for high-confidence verdict.\"\n        id = \"65d56771-90a6-5465-9bfd-8b247839e1e6\"\n\n    condition:\n        uint16(0) == 0x5A4D\n        and filesize < 2MB\n        and pe.imports(\"USER32.dll\", \"GetDC\")\n        and pe.imports(\"USER32.dll\", \"ReleaseDC\")\n        and pe.imports(\"USER32.dll\", \"GetSystemMetrics\")\n        and pe.imports(\"ADVAPI32.dll\", \"RegQueryValueExW\")\n        and pe.imports(\"GDI32.dll\", \"Ellipse\")\n        and pe.imports(\"GDI32.dll\", \"GetAspectRatioFilterEx\")\n        and not pe.imports(\"WS2_32.dll\")\n        and not pe.imports(\"CRYPT32.dll\")\n}",
             "pattern_type": "yara",
             "valid_from": "2026-05-15T00:00:00Z",
             "labels": [
@@ -1781,15 +1781,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--e4d406c5-b7e4-5b72-9422-e4bf412b674f",
+            "id": "indicator--65ac2665-af16-5b66-9e9c-c146faeb1c37",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:18.78836Z",
-            "modified": "2026-10-01T19:54:18.78836Z",
-            "name": "Rhadamanthys EAX-Redirect Process Hollowing Into InstallUtil.exe",
+            "created": "2026-10-01T19:54:18.788438Z",
+            "modified": "2026-10-01T19:54:18.788438Z",
+            "name": "BellaMain PhaaS Panel HTTP Request Patterns",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Rhadamanthys EAX-Redirect Process Hollowing Into InstallUtil.exe\nid: b5e2f3d9-4e8c-5a0b-ad3f-3d6f8a9b0c12\nstatus: experimental\ndescription: >-\n  Detects suspicious creation of InstallUtil.exe child process from a non-typical parent (loader binary\n  in user-writable location), a precursor to the EAX-redirect process hollowing technique used by this\n  Rhadamanthys customer's loader. EAX-redirect uses W^X memory transitions (RW then RX, never RWX) and\n  rewrites the entry point pointer in EAX rather than the classic SetThreadContext approach. Pair with\n  network telemetry to InstallUtil.exe outbound connections for high-confidence verdict.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-15\ntags:\n    - attack.stealth\n    - attack.privilege-escalation\n    - attack.t1218.008\n    - attack.t1055.012\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection_image:\n        Image|endswith: '\\InstallUtil.exe'\n        Image|contains: '\\Microsoft.NET\\Framework'\n    selection_parent_suspicious:\n        ParentImage|contains:\n            - '\\AppData\\Local\\Temp\\'\n            - '\\AppData\\Roaming\\'\n            - '\\Users\\Public\\'\n            - '\\ProgramData\\'\n    filter_legit_parent:\n        ParentImage|endswith:\n            - '\\msiexec.exe'\n            - '\\devenv.exe'\n            - '\\MSBuild.exe'\n    condition: selection_image and selection_parent_suspicious and not filter_legit_parent\nfalsepositives:\n    - >-\n      Legitimate developer or installer workflows that invoke InstallUtil.exe from temp\n      directories.\nlevel: high",
+            "pattern": "title: BellaMain PhaaS Panel HTTP Request Patterns\nid: c7d4f0e1-5fab-6c1d-be4f-4e7fab0c1d23\nstatus: experimental\ndescription: >-\n  Detects HTTP requests to BellaMain panel administrative endpoints. The panel exposes a small fixed\n  set of PHP entry points (signin.php, dashboard.php, post.php, manager.php, cookie.php) that should\n  not appear on legitimate web traffic from internal endpoints. This selector is host-independent and\n  survives the panel being redeployed on new infrastructure. Pair with the IOC feed's blocklist for\n  79.137.192.3 and cryptone.bot for additional coverage of this specific deployment.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-15\ntags:\n    - attack.command-and-control\n    - attack.t1071.001\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: proxy\ndetection:\n    selection_uri:\n        cs-uri-stem|contains:\n            - '/BellaMain/signin.php'\n            - '/BellaMain/dashboard.php'\n            - '/BellaMain/database/post.php'\n            - '/BellaMain/manager.php'\n            - '/BellaMain/database/cookie.php'\n    condition: selection_uri\nfalsepositives:\n    - >-\n      Unlikely — the BellaMain panel PHP entry-point paths are bespoke and unlikely to\n      collide with legitimate proxy/web traffic.\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-05-15T00:00:00Z",
             "labels": [
@@ -1802,15 +1802,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--65ac2665-af16-5b66-9e9c-c146faeb1c37",
+            "id": "indicator--e89e2b6c-4631-5e3d-ab4d-ba637a4fee8d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:18.788438Z",
-            "modified": "2026-10-01T19:54:18.788438Z",
-            "name": "BellaMain PhaaS Panel HTTP Request Patterns",
+            "created": "2026-10-11T14:08:34.730904Z",
+            "modified": "2026-10-11T14:08:34.730904Z",
+            "name": "InstallUtil.exe Spawned by a Process in a User-Writable Path (Rhadamanthys Hollowing Precursor)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: BellaMain PhaaS Panel HTTP Request Patterns\nid: c7d4f0e1-5fab-6c1d-be4f-4e7fab0c1d23\nstatus: experimental\ndescription: >-\n  Detects HTTP requests to BellaMain panel administrative endpoints. The panel exposes a small fixed\n  set of PHP entry points (signin.php, dashboard.php, post.php, manager.php, cookie.php) that should\n  not appear on legitimate web traffic from internal endpoints. This selector is host-independent and\n  survives the panel being redeployed on new infrastructure. Pair with the IOC feed's blocklist for\n  79.137.192.3 and cryptone.bot for additional coverage of this specific deployment.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-15\ntags:\n    - attack.command-and-control\n    - attack.t1071.001\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: proxy\ndetection:\n    selection_uri:\n        cs-uri-stem|contains:\n            - '/BellaMain/signin.php'\n            - '/BellaMain/dashboard.php'\n            - '/BellaMain/database/post.php'\n            - '/BellaMain/manager.php'\n            - '/BellaMain/database/cookie.php'\n    condition: selection_uri\nfalsepositives:\n    - >-\n      Unlikely — the BellaMain panel PHP entry-point paths are bespoke and unlikely to\n      collide with legitimate proxy/web traffic.\nlevel: high",
+            "pattern": "title: InstallUtil.exe Spawned by a Process in a User-Writable Path (Rhadamanthys Hollowing Precursor)\nid: b5e2f3d9-4e8c-5a0b-ad3f-3d6f8a9b0c12\nstatus: experimental\ndescription: >-\n  Detects creation of an InstallUtil.exe process from the .NET Framework directory whose parent runs from\n  AppData\\Local\\Temp, AppData\\Roaming, Users\\Public or ProgramData, unless the parent is msiexec, devenv\n  or MSBuild. This Rhadamanthys customer's loader creates InstallUtil.exe suspended and then hollows it\n  with an EAX-redirect (W^X memory transitions, entry point set in EAX); the hollowing happens after\n  process creation and this rule does not observe it, so a match is the precursor only. Installers and\n  developer tooling that run from those paths can spawn InstallUtil.exe too. Pair with network telemetry\n  for InstallUtil.exe outbound connections for a higher-confidence verdict.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-79-137-192-3-20260515-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-15\ntags:\n    - attack.stealth\n    - attack.t1218.004\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection_image:\n        Image|endswith: '\\InstallUtil.exe'\n        Image|contains: '\\Microsoft.NET\\Framework'\n    selection_parent_suspicious:\n        ParentImage|contains:\n            - '\\AppData\\Local\\Temp\\'\n            - '\\AppData\\Roaming\\'\n            - '\\Users\\Public\\'\n            - '\\ProgramData\\'\n    filter_legit_parent:\n        ParentImage|endswith:\n            - '\\msiexec.exe'\n            - '\\devenv.exe'\n            - '\\MSBuild.exe'\n    condition: selection_image and selection_parent_suspicious and not filter_legit_parent\nfalsepositives:\n    - >-\n      Legitimate developer or installer workflows that invoke InstallUtil.exe from temp\n      directories, and installers or updaters that run from the listed paths.\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-05-15T00:00:00Z",
             "labels": [
@@ -3702,12 +3702,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--cb5b91ec-d5b0-59dc-b5c9-34d91715d61b",
+            "id": "relationship--d5189bcb-b486-5417-8641-c28d68ddcf2f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:18.800535Z",
-            "modified": "2026-10-01T19:54:18.800535Z",
+            "created": "2026-10-01T19:54:18.800604Z",
+            "modified": "2026-10-01T19:54:18.800604Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--e4d406c5-b7e4-5b72-9422-e4bf412b674f",
+            "source_ref": "indicator--65ac2665-af16-5b66-9e9c-c146faeb1c37",
             "target_ref": "malware--eddf9215-1ace-5eed-ad46-bba0f13b9bdf",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -3716,12 +3716,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--d5189bcb-b486-5417-8641-c28d68ddcf2f",
+            "id": "relationship--aa09a1cd-3bb3-5619-81d0-bf3fa3083e11",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:18.800604Z",
-            "modified": "2026-10-01T19:54:18.800604Z",
+            "created": "2026-10-11T14:08:34.749081Z",
+            "modified": "2026-10-11T14:08:34.749081Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--65ac2665-af16-5b66-9e9c-c146faeb1c37",
+            "source_ref": "indicator--e89e2b6c-4631-5e3d-ab4d-ba637a4fee8d",
             "target_ref": "malware--eddf9215-1ace-5eed-ad46-bba0f13b9bdf",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -11657,7 +11657,7 @@
             "id": "report--11bf7544-c216-50a4-bf64-e2aa27a28014",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.840576Z",
-            "modified": "2026-10-11T08:16:38.284584Z",
+            "modified": "2026-10-11T14:08:34.804059Z",
             "name": "Multi-Cluster Open-Directory Tenancy on 79.137.192.3 — Rhadamanthys MaaS Customer Loader, BellaMain Turkish PhaaS, and Inkognito VPN/Phishing",
             "report_types": [
                 "threat-report"
@@ -11782,8 +11782,8 @@
                 "indicator--8109a28d-a1d6-5d7d-9e9f-9bb8578592bb",
                 "indicator--393be2c6-eac7-5dbe-a163-ef7a759863d2",
                 "indicator--d7f658f8-9a24-51c7-8f79-cf000e21e932",
-                "indicator--e4d406c5-b7e4-5b72-9422-e4bf412b674f",
                 "indicator--65ac2665-af16-5b66-9e9c-c146faeb1c37",
+                "indicator--e89e2b6c-4631-5e3d-ab4d-ba637a4fee8d",
                 "indicator--0256338d-196e-533b-9faa-09d7d47cc2af",
                 "indicator--295cf947-463c-55e5-a83f-487396eee11e",
                 "malware--91ba3c3b-736b-57de-a453-6960c6e35a35",
@@ -11902,8 +11902,8 @@
                 "relationship--c3695f39-45ec-5c5a-bead-5c77d36b1fb7",
                 "relationship--d248252c-0569-5412-a4c0-5c54ea4b21cb",
                 "relationship--0ff45a44-f53d-5f4d-be5e-af1fb09910a0",
-                "relationship--cb5b91ec-d5b0-59dc-b5c9-34d91715d61b",
                 "relationship--d5189bcb-b486-5417-8641-c28d68ddcf2f",
+                "relationship--aa09a1cd-3bb3-5619-81d0-bf3fa3083e11",
                 "relationship--a2a16573-638d-52c2-8a34-0e0263956ec5",
                 "relationship--5f037223-038c-5d04-bace-a69d1f44b77e",
                 "relationship--597664a5-b24d-5e2a-8f97-9d2b1fa46f18",

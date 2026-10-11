@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--75091b81-3eb7-4f28-b733-0ef6688695be",
+    "id": "bundle--821e2a8d-3406-4db0-b731-c0b094bbb94d",
     "objects": [
         {
             "type": "identity",
@@ -134,12 +134,12 @@
             "id": "indicator--7450b221-9394-5c63-95c2-efc4d3a2103e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.585561Z",
-            "modified": "2026-10-01T19:54:22.585561Z",
+            "modified": "2026-10-11T14:08:52.003965Z",
             "name": "Suspicious User Creation",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Suspicious User Creation\nid: 3dd2ccc6-76a3-4983-ae38-e76e4ef9922f\nstatus: experimental\ndescription: Detects creation of the operator-distinctive local account 'zeroday' via useradd, used as a persistence mechanism in the Webshells-to-the-Cloud campaign after initial webshell access.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/\nauthor: The Hunters Ledger\ndate: '2025-10-20'\ntags:\n    - attack.persistence\n    - attack.t1136.001\n    - detection.emerging-threats\nlogsource:\n    product: linux\n    service: auditd\ndetection:\n    selection:\n        type: 'SYSCALL'\n        exe|endswith: '/useradd'\n        a0: 'zeroday'\n    condition: selection\nfalsepositives:\n    - Legitimate administrator provisioning a local account that happens to share this name (verify against IT asset management)\nlevel: medium",
+            "pattern": "title: Suspicious User Creation\nid: 3dd2ccc6-76a3-4983-ae38-e76e4ef9922f\nstatus: experimental\ndescription: Detects creation of the operator-distinctive local account 'zeroday' via useradd, used as a persistence mechanism in the Webshells-to-the-Cloud campaign after initial webshell access.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/\nauthor: The Hunters Ledger\ndate: '2025-10-20'\nmodified: '2026-10-11'\ntags:\n    - attack.persistence\n    - attack.t1136.001\n    - detection.emerging-threats\n    - stp.2\nlogsource:\n    product: linux\n    service: auditd\n    definition: 'Requires auditd with an execve audit rule installed so useradd invocations are logged as type=EXECVE records. Raw EXECVE records carry each argument in its own aN field (a0 is the command, a1 onward its arguments); this rule tests a0 with a0|endswith and the username as an exact value of one of a1 to a8, so a pipeline that replaces the argument fields with one joined string and drops them does not match. Whether the SOC pipeline keeps the aN fields is NOT CHECKED.'\ndetection:\n    selection_cmd:\n        type: 'EXECVE'\n        a0|endswith: 'useradd'\n    selection_user:\n        - a1: 'zeroday'\n        - a2: 'zeroday'\n        - a3: 'zeroday'\n        - a4: 'zeroday'\n        - a5: 'zeroday'\n        - a6: 'zeroday'\n        - a7: 'zeroday'\n        - a8: 'zeroday'\n    condition: selection_cmd and selection_user\nfalsepositives:\n    - Legitimate administrator provisioning a local account that happens to share this name (verify against IT asset management)\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2025-10-20T00:00:00Z",
             "labels": [
@@ -218,12 +218,12 @@
             "id": "indicator--5e808de1-0cc7-5b98-b1fb-a25c9d7ff191",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.585898Z",
-            "modified": "2026-10-01T19:54:22.585898Z",
+            "modified": "2026-10-11T14:08:52.004456Z",
             "name": "Suspicious WordPress Install",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Suspicious WordPress Install\nid: 02dc195f-4f04-4fd9-9fe0-224e63e90560\nstatus: experimental\ndescription: Detects a POST request to the WordPress installer endpoint, consistent with the Webshells-to-the-Cloud campaign operator standing up a new WordPress instance on compromised infrastructure as part of automated infrastructure buildout.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/\nauthor: The Hunters Ledger\ndate: '2025-10-20'\ntags:\n    - attack.persistence\n    - attack.t1505.003\n    - detection.emerging-threats\nlogsource:\n    category: webserver\ndetection:\n    selection:\n        cs-uri-stem: '/wp-admin/install.php'\n        cs-method: 'POST'\n    condition: selection\nfalsepositives:\n    - Legitimate first-time setup of a new WordPress installation by an administrator\nlevel: medium",
+            "pattern": "title: Suspicious WordPress Install\nid: 02dc195f-4f04-4fd9-9fe0-224e63e90560\nstatus: experimental\ndescription: Detects a POST request to the WordPress installer endpoint, consistent with the Webshells-to-the-Cloud campaign operator standing up a new WordPress instance on compromised infrastructure as part of automated infrastructure buildout.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/\nauthor: The Hunters Ledger\ndate: '2025-10-20'\ntags:\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: webserver\ndetection:\n    selection:\n        cs-uri-stem: '/wp-admin/install.php'\n        cs-method: 'POST'\n    condition: selection\nfalsepositives:\n    - Legitimate first-time setup of a new WordPress installation by an administrator\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2025-10-20T00:00:00Z",
             "labels": [

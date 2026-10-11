@@ -176,15 +176,15 @@ rule RANSOM_ChaosBuilder_TorBrowserTor_Stage5a {
 **ATT&CK Coverage:** T1486 (Data Encrypted for Impact), T1491.001 (Internal Defacement)
 **Confidence:** HIGH
 **Rationale:** The `.torbrowsertor` extension is the defining marker of this Chaos-builder configuration and is shared across the family, not just this operator's two builds — durable against this operator's own key rotation. The two BTC wallets are confirmed builder defaults (reused across unrelated Chaos/TorBrowserTor campaigns per wallet-cluster analysis), which similarly makes them stable detection anchors even though they carry low attribution value for this specific operator.
-**False Positives:** None known — `.torbrowsertor` is not a legitimate file extension; `READ ME PLEASE.txt` combined with this extension, or either wallet address, has no benign context.
-**Blind Spots:** A builder release that changes the configured extension, note filename, or default wallets would evade the rule; scans filenames/content, not the live encryption process itself.
-**Validation:** Scan a directory tree containing `.torbrowsertor`-suffixed files or the ransom note — must match; an unrelated `.torbrowsertor`-free directory must NOT fire.
+**False Positives:** None known — `.torbrowsertor` is not a legitimate file extension, and the rule needs that string together with the note name, the Telegram handle or a default wallet; a wallet address alone does not fire, because the extension string is mandatory. Any file that quotes the extension with one of those strings, such as an analyst's write-up of this campaign, also matches.
+**Blind Spots:** A builder release that changes the configured extension, note filename, or default wallets would evade the rule; scans file contents only, never file names or extensions (an encrypted victim file named `*.torbrowsertor` does not fire on its name), and not the live encryption process itself.
+**Validation:** Scan a file whose body contains `.torbrowsertor` together with `READ ME PLEASE.txt`, `@TorBrowserTor` or a default wallet (for example a copy of the Stage-5a payload) — must match; a directory of files that are merely named `*.torbrowsertor` with none of those strings in their bytes must NOT fire, and neither must a file holding a wallet or the handle without the extension string.
 **Deployment:** File-system scanner, EDR file-creation monitoring.
 
 ```yara
 rule RANSOM_ChaosBuilder_TorBrowserTor_FilesystemArtefacts {
    meta:
-      description = "Detects filesystem artefacts of Chaos/TorBrowserTor ransomware: the .torbrowsertor encrypted file extension, the READ ME PLEASE.txt ransom note, the @TorBrowserTor Telegram contact handle, and the two Chaos-builder default BTC wallets used by the clipboard hijacker. Useful for post-compromise triage when a decrypted PE is unavailable"
+      description = "Detects files whose bytes hold the .torbrowsertor extension string together with the READ ME PLEASE.txt ransom-note name, the @TorBrowserTor Telegram contact handle, or either of the two Chaos-builder default BTC wallets used by the clipboard hijacker. The strings are matched in file content: a file name or extension is never examined, and the extension string is required in every combination. Useful for post-compromise triage when a decrypted PE is unavailable"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/"
@@ -256,7 +256,7 @@ rule RAT_OrcusRAT_v7_WardowCrack {
 **Robustness:** 2
 **ATT&CK Coverage:** T1548.002 (Bypass UAC), T1134.004 (Parent PID Spoofing)
 **Confidence:** MODERATE (downgraded from DEFINITE 2026-09-13)
-**Rationale:** The AppInfo RPC interface GUID and `AiEnableDesktopRpcInterface` name are the fixed Windows chokepoint UACME technique #41 must call, an attacker cannot rename them without abandoning the technique. The rule additionally requires 2 of 3 corroborating strings ($ppid_anchor, $conhost_arg, $ntapi) tied to this specific loader's implementation choices (the NtApiDotNet library, the `--headless` conhost invocation, and the `IColorDataProxy` interface name), which is why this sits at Robustness 2 rather than 3: the technique-level anchor is durable, but the required corroboration is implementation-specific. This exact PE is byte-identical across both observed builds (mymain and myfile) with only 8/77 VT detections. **Re-tiering note, 2026-09-13:** every one of this rule's four mandatory-or-corroborating strings is a publicly documented Windows interface or a public open-source library, not something coined by this operator. Confirmed by primary and near-primary sources: the AppInfo interface GUID and `AiEnableDesktopRpcInterface` name are documented in Google Project Zero's "Calling Local Windows RPC Servers from .NET" and in independent security research (Tyranid's Lair) as the real, standard Windows AppInfo/UAC service RPC interface, version 1.0. `NtApiDotNet` is James Forshaw's widely used, actively maintained open-source .NET library for exactly this kind of Windows RPC and NT API research. UACME technique #41 itself is a public, named technique in the widely used `hfiref0x/UACME` open-source catalog. This is the same shape as the PublicTool_DirtyFrag_LinuxKernel_LPE and PublicTool_CVE_2023_21839_WebLogic_GoExploit rules elsewhere in this campaign's WebLogic detection file, both correctly tiered Hunting because they detect a public tool or technique broadly rather than an operator-specific artifact. The rule's own original False Positives field already said as much ("legitimate red-team or research tooling built on NtApiDotNet that implements the same UACME #41 technique... would also match") but that assessment was rated Low with Confidence DEFINITE regardless; the corrected tier and confidence reflect that acknowledgment being taken seriously rather than overridden by it
+**Rationale:** The AppInfo RPC interface GUID and `AiEnableDesktopRpcInterface` name are the fixed Windows chokepoint UACME technique #41 must call, an attacker cannot rename them without abandoning the technique. The rule additionally requires 2 of 3 corroborating strings ($ppid_anchor, $conhost_arg, $ntapi) tied to this specific loader's implementation choices (the NtApiDotNet library, the `--headless` conhost invocation, and the `IColorDataProxy` interface name), which is why this sits at Robustness 2 rather than 3: the technique-level anchor is durable, but the required corroboration is implementation-specific. This exact PE is byte-identical across both observed builds (mymain and myfile) with only 8/77 VT detections. **Re-tiering note, 2026-09-13:** every one of this rule's five mandatory-or-corroborating strings (two mandatory, three corroborating) is a publicly documented Windows interface or a public open-source library, not something coined by this operator. Confirmed by primary and near-primary sources: the AppInfo interface GUID and `AiEnableDesktopRpcInterface` name are documented in Google Project Zero's "Calling Local Windows RPC Servers from .NET" and in independent security research (Tyranid's Lair) as the real, standard Windows AppInfo/UAC service RPC interface, version 1.0. `NtApiDotNet` is James Forshaw's widely used, actively maintained open-source .NET library for exactly this kind of Windows RPC and NT API research. UACME technique #41 itself is a public, named technique in the widely used `hfiref0x/UACME` open-source catalog. This is the same shape as the PublicTool_DirtyFrag_LinuxKernel_LPE and PublicTool_CVE_2023_21839_WebLogic_GoExploit rules elsewhere in this campaign's WebLogic detection file, both correctly tiered Hunting because they detect a public tool or technique broadly rather than an operator-specific artifact. The rule's own original False Positives field already said as much ("legitimate red-team or research tooling built on NtApiDotNet that implements the same UACME #41 technique... would also match") but that assessment was rated Low with Confidence DEFINITE regardless; the corrected tier and confidence reflect that acknowledgment being taken seriously rather than overridden by it
 **False Positives:** Real, not merely Low. Any research or red-team tool combining NtApiDotNet with the AppInfo RPC interface to exercise UACME technique #41, a public, actively studied technique, would satisfy this rule's mandatory anchors regardless of authorship. Not empirically fixture-tested against an actual NtApiDotNet-based tool (none was built here; doing so would require compiling a working .NET RPC client against the real AppInfo interface), so this is a corrected, evidence-backed judgment call rather than a demonstrated hit
 **Blind Spots:** A rebuild that drops NtApiDotNet in favor of raw RPC calls, or renames the `IColorDataProxy` interface and changes the conhost launch flag, would evade the corroborating-string requirement even though the core AppInfo GUID/RPC-name anchor remains
 **Validation:** Scan the Stage-5b PE (`hash1` below) or a saved memory dump written out as a file and containing it, it fires (a live process-memory scan cannot satisfy the `filesize` test). Untested: an actual NtApiDotNet-based research tool exercising the same public interface, which is the carrier that would confirm the false-positive risk empirically
@@ -295,7 +295,7 @@ rule MALW_ChaosLoader_Stage5b_UACBypass_CrossBuildInvariant {
 **ATT&CK Coverage:** T1027 (Obfuscation), T1140 (Deobfuscate/Decode), T1620 (Reflective Code Loading)
 **Confidence:** DEFINITE (behavior) / build-specific (durability)
 **Rationale:** All four strings are randomized key material generated for the mymain build specifically (AES passphrase, XOR key, magic marker, and Stage-4 assembly name) — unlike the Stage-4 mutex GUID and Stage-5b PE hash, there is no cross-build evidence these are hardcoded builder constants rather than per-campaign key material. A future build would plausibly regenerate all four together, so durability governs over today's clean precision: this stays Hunting rather than Detection despite zero known false positives.
-**False Positives:** None known — all three strings are random-looking private keys unique to this build with no collision against any known legitimate software.
+**False Positives:** None known — all four strings are random-looking private keys unique to this build with no collision against any known legitimate software.
 **Deployment:** Memory scanner (primary — strings appear only in decrypted runtime stages, not in the on-disk `.bat`).
 
 ```yara
@@ -326,13 +326,13 @@ rule MALW_ChaosLoader_mymain_InMemory_CrypterKeys {
 **ATT&CK Coverage:** T1027 (Obfuscation), T1140 (Deobfuscate/Decode), T1620 (Reflective Code Loading)
 **Confidence:** DEFINITE (behavior) / build-specific (durability)
 **Rationale:** Equivalent to the mymain rule above, targeting the myfile build's unique key material and its USB-spread self-copy typo filename `Recieve please.exe`. Same durability caveat: these are per-build literals, not confirmed cross-build invariants.
-**False Positives:** None known — unique per-build private keys and filename with zero public occurrence.
+**False Positives:** None known — every string is build-specific with zero public occurrence, but any two of the five fire, including the short assembly name `fudkk` with the typo filename, which together need no key material.
 **Deployment:** Memory scanner (primary).
 
 ```yara
 rule MALW_ChaosLoader_myfile_InMemory_CrypterKeys {
    meta:
-      description = "Detects in-memory presence of the myfile build of the Chaos/TorBrowserTor private crypter via its AES passphrase (jttZjrlmkrBAtCBAMjkbThHsSjVNMjLLyONafxIj), XOR key (cjJaThUwfQKxnHBm), and PS1 magic marker (HPGDxAzpymskcRJvELNmhQkWaTXguERQ). The assembly name 'fudkk' and USB-spread typo filename 'Recieve please.exe' are secondary anchors exclusive to this build. Strings are in-memory only — not present in the on-disk .bat dropper"
+      description = "Detects in-memory presence of the myfile build of the Chaos/TorBrowserTor private crypter via any two of five build-specific strings: its AES passphrase (jttZjrlmkrBAtCBAMjkbThHsSjVNMjLLyONafxIj), XOR key (cjJaThUwfQKxnHBm), PS1 magic marker (HPGDxAzpymskcRJvELNmhQkWaTXguERQ), the assembly name 'fudkk', and the USB-spread typo filename 'Recieve please.exe'. The five count equally, so 'fudkk' with 'Recieve please.exe' fires without any key material. Strings are in-memory only — not present in the on-disk .bat dropper"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/"
@@ -609,8 +609,8 @@ title: Chaos Loader Stage-4 Fileless Payload Written to Masquerade Registry Key
 id: 2d8b4e7f-a3c9-4f6b-b5d2-1e9a7c3f8b04
 status: experimental
 description: >-
-  Detects a registry write to HKLM\Software\Microsoft Defender\Payload,
-  which is the Stage-4 fileless storage location used by the
+  Detects a registry write to HKLM\Software\Microsoft Defender\Payload (or the
+  WOW6432Node view of the same key, where a 32-bit process is redirected), which is the Stage-4 fileless storage location used by the
   Chaos/TorBrowserTor private crypter. The legitimate Windows Defender
   registry path is HKLM\Software\Microsoft\Windows Defender (note the
   extra \Windows\ path level). Stage-4 writes approximately 1.4 MB of
@@ -634,7 +634,9 @@ logsource:
     product: windows
 detection:
     selection:
-        TargetObject|contains: '\Software\Microsoft Defender\Payload'
+        TargetObject|startswith:
+            - 'HKLM\SOFTWARE\Microsoft Defender\Payload'
+            - 'HKLM\SOFTWARE\WOW6432Node\Microsoft Defender\Payload'
     filter_legitimate:
         TargetObject|contains: '\Software\Microsoft\Windows Defender\'
     condition: selection and not filter_legitimate
@@ -723,7 +725,8 @@ status: experimental
 description: >-
   Detects Stage-5a Chaos/TorBrowserTor ransomware persistence via a Run
   key value named 'Microsoft Store' under
-  HKCU\Software\Microsoft\Windows\CurrentVersion\Run, pointing to
+  HKCU\Software\Microsoft\Windows\CurrentVersion\Run (Sysmon records a per-user
+  key as HKU\<SID>\Software\..., so the rule tests the HKU hive), pointing to
   svchost.exe or projectxx.exe in %APPDATA%. The mymain build copies
   itself to %APPDATA%\svchost.exe and the myfile build to
   %APPDATA%\projectxx.exe. Both the value name and the self-copy
@@ -744,8 +747,8 @@ logsource:
     product: windows
 detection:
     selection:
-        TargetObject|contains:
-            - '\Software\Microsoft\Windows\CurrentVersion\Run\Microsoft Store'
+        TargetObject|startswith: 'HKU\'
+        TargetObject|contains: '\Software\Microsoft\Windows\CurrentVersion\Run\Microsoft Store'
         Details|contains:
             - '\AppData\Roaming\svchost.exe'
             - '\AppData\Roaming\projectxx.exe'

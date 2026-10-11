@@ -167,8 +167,10 @@ id: ccf14e14-5328-4d1b-98b9-27088663076e
 status: experimental
 description: >-
   Detects creation of a Registry Run-key value whose data references Microsoft,
-  .NET, and Runtime branding together while pointing at an executable in
-  AppData — a location legitimate Microsoft .NET Runtime components never use.
+  .NET, and Runtime branding together while the value data also contains an
+  AppData path — a location legitimate Microsoft .NET Runtime components never
+  use. The rule does not test that the path ends in an executable or that the
+  file exists.
   Hunting-tier: the masquerade branding is attacker-chosen and renameable, and
   the AppData-location half of the check is common among legitimate consumer
   auto-start software on its own.

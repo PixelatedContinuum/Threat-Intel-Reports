@@ -23,7 +23,7 @@ SogouStealer is a hybrid loader/stealer ecosystem distributed as a fake, cracked
 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
-| YARA | 2 | 1 | T1036.005, T1622, T1071.001 | 0 |
+| YARA | 2 | 1 | T1036.005, T1071.001 | 0 |
 | Sigma | 2 | 1 | T1036.005, T1547.001, T1105 | 2 |
 | Suricata | 0 | 1 | T1071.001 | 16 |
 
@@ -126,9 +126,9 @@ rule SogouStealer_Ecosystem_Indicators {
 **Robustness:** 2
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
 **Confidence:** HIGH
-**Rationale:** Corrected from the original: a YARA operator-precedence bug (`(A and B) or C or D`) let the signature-database or CGI-marker string alone fire the rule with no PE-header gate, matching any file type — not just Windows executables. Reparenthesized so the MZ check gates the full OR-set, and tightened from "1 of 4" to "2 of 4" so a single component rename or one incidental string collision cannot trigger it; an attacker must simultaneously rename or drop two of the four distinctive C2/scheduler artifacts to evade.
+**Rationale:** Corrected from the original: a YARA operator-precedence bug (`(A and B) or C or D`) let the signature-database or CGI-marker string alone fire the rule with no PE-header gate, matching any file type — not just Windows executables. Reparenthesized so the MZ check gates the full OR-set, and tightened from "1 of 4" to "2 of 4" so a single component rename or one incidental string collision cannot trigger it; an attacker must rename or drop at least three of the four distinctive C2/scheduler artifacts to evade, since any two that remain still satisfy the 2-of-4 condition.
 **False Positives:** None known — three of the four anchors (`userNetSchedule.exe`, `SGCurlHelper.dll`, `UrlSignatureV.dat`) are bespoke filenames with no plausible legitimate collision; the fourth (`/cgi1`) is weaker alone but the 2-of-4 requirement means it never carries a match by itself.
-**Blind Spots:** A rebuild that renames two or more of the four anchors evades; the rule targets on-disk artifacts, not the live network protocol.
+**Blind Spots:** A rebuild must rename or drop at least three of the four anchors to evade (two remaining anchors still match); the rule targets on-disk artifacts, not the live network protocol.
 **Validation:** Scan the analyzed sample or a dropped scheduler/curl-helper component — must satisfy 2 of the 4 anchors; a benign file containing only one incidental match (e.g. an unrelated file with `/cgi1` in a URL string) must NOT fire.
 **Deployment:** Endpoint AV/EDR file scan, static triage of dropped components.
 
@@ -165,7 +165,8 @@ rule SogouStealer_C2_Scheduler_SignatureDB {
 
 **Tier:** Hunting
 **Robustness:** 1
-**ATT&CK Coverage:** T1622 (Debugger Evasion)
+**ATT&CK Coverage:** None
+**ATT&CK Note:** T1622 (Debugger Evasion) was listed here and is withdrawn: the anti-analysis bucket is `1 of` three strings, so the bare word `overlay` or `QueryPerformanceCounter` alone satisfies it, and neither is a debugger check. A hit therefore does not show debugger evasion; the rule's discriminating part is the `beacon_sdk.dll` or `SGDownload.exe` filename string.
 **Confidence:** MODERATE
 **Rationale:** The rule's real discriminating power rests on a single distinctive literal (`beacon_sdk.dll` or `SGDownload.exe`) — both bespoke and unlikely to collide with legitimate software today, but a rename in a future build fully evades the rule. The paired anti-debug/overlay condition (`IsDebuggerPresent`, `QueryPerformanceCounter`, `overlay`) is near-ubiquitous in native Windows binaries and adds negligible discriminating value on its own. (Corrected from the original: the `overlay` string was declared but never referenced in the condition — a YARA hard compile error — and has been wired into the anti-analysis bucket.)
 **False Positives:** Low but not zero — a future build that renames both `beacon_sdk.dll` and `SGDownload.exe` evades entirely; conversely, the filenames alone have no known legitimate collision.

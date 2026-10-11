@@ -321,16 +321,16 @@ rule Arsenal237_Rust_Compiled_Malware
 **Robustness:** 3
 **ATT&CK Coverage:** T1068 (Exploitation for Privilege Escalation)
 **Confidence:** HIGH
-**Rationale:** Matches a real driver-load event against the vulnerable driver's own filename or its file-hash triad. Both anchors are baked into a legitimately-signed third-party binary — the operator cannot change the hash without recompiling a different (unsigned, non-functional-for-this-exploit) driver, and the filename is the driver's own native identity. This is a known LOLDriver; loading it by its true name or hash is the technique's actual chokepoint, not an attacker-chosen artifact.
-**False Positives:** Legitimate Baidu software installations (rare in enterprise environments).
-**Blind Spots:** Requires driver-load telemetry (Sysmon Event ID 6 or equivalent EDR driver-load logging) to be enabled. Does not fire if the operator substitutes a different vulnerable driver.
+**Rationale:** Matches a real driver-load event against the vulnerable driver's own filename or its file-hash triad. Both anchors are baked into a legitimately-signed third-party binary — the operator cannot change the hash without recompiling a different (unsigned, non-functional-for-this-exploit) driver, and the filename branch accepts the driver's own name `BdApiUtil64.sys` or the sibling name `BdApiUtil.sys` as the end of the loaded path. This is a known LOLDriver; loading it by its true name or hash is the technique's actual chokepoint, not an attacker-chosen artifact. The two anchors differ in strength: the hash is the signed binary's content, while the filename is only a name, so a renamed copy is caught by the hash branch alone and an unrelated driver that merely carries one of the two file names matches the name branch. The level is `high` and not `critical`, because Baidu software legitimately loads this same signed driver, so the match cannot be never-FP.
+**False Positives:** Legitimate Baidu software installations, which load this same signed driver under its own name and hash (rare in enterprise environments). The match proves that the vulnerable driver was loaded, not that it was loaded by this toolkit.
+**Blind Spots:** Requires driver-load telemetry (Sysmon Event ID 6 or equivalent EDR driver-load logging) to be enabled, with the `Hashes` field populated for the hash branch. Does not fire if the operator substitutes a different vulnerable driver; a renamed copy matches only through the hash branch.
 **Validation:** Passes `sigma check` against the SigmaHQ validators; hash values verified against the corrected BdApiUtil64.sys hash triad.
 
 ```yaml
 title: Arsenal-237 BdApiUtil64.sys BYOVD Driver Loading
 id: a8c9d4e1-2f3b-4c5d-8e9f-1a2b3c4d5e6f
 status: experimental
-description: Detects loading of the BdApiUtil64.sys vulnerable driver used for BYOVD privilege escalation, matched on the driver's own filename or its file-hash triad.
+description: Detects loading of the BdApiUtil64.sys vulnerable driver used for BYOVD privilege escalation, matched on a loaded path ending in the driver's own filename (BdApiUtil64.sys or BdApiUtil.sys) or on its file-hash triad.
 references:
     - https://the-hunters-ledger.com/hunting-detections/arsenal-237-rootkit-dll-detections/
 author: The Hunters Ledger
@@ -344,9 +344,9 @@ logsource:
     category: driver_load
 detection:
     selection_driver_name:
-        ImageLoaded|contains:
-            - 'BdApiUtil64.sys'
-            - 'BdApiUtil.sys'
+        ImageLoaded|endswith:
+            - '\BdApiUtil64.sys'
+            - '\BdApiUtil.sys'
     selection_driver_hash:
         Hashes|contains:
             - 'MD5=ced47b89212f3260ebeb41682a4b95ec'
@@ -355,7 +355,7 @@ detection:
     condition: selection_driver_name or selection_driver_hash
 falsepositives:
     - Legitimate Baidu software installations (rare in enterprise environments)
-level: critical
+level: high
 ```
 
 #### High-Privilege Process Access to Security Product Processes
