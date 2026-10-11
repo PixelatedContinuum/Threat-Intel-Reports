@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--a36dc265-9d00-4b7c-ad5d-4d481fb18dde",
+    "id": "bundle--f44155bb-1d85-4c4b-86ed-79dfe0e052ed",
     "objects": [
         {
             "type": "identity",
@@ -295,12 +295,12 @@
             "id": "indicator--5da887a0-ef61-52cd-b2d1-178369b86c5b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.819397Z",
-            "modified": "2026-10-01T19:54:14.819397Z",
+            "modified": "2026-10-11T04:24:18.541008Z",
             "name": "RAT_KAIDO_Quasar_Fork_Namespace",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "/*\n   Yara Rule Set\n   Identifier: KAIDO Quasar-Fork RAT\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule RAT_KAIDO_Quasar_Fork_Namespace {\n   meta:\n      description = \"Detects the KAIDO Quasar-fork RAT via its rebranded namespace root Kaido.Common.Messages and Costura-embedded costura.kaido.common.dll asset, both of which survive the sample's obfuscation pass\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/\"\n      date = \"2026-07-03\"\n      hash1 = \"c7542e8265f70d6c1dbf2e3cf6e81a90198cd157d3d6693c6d2a8a49d99a5b8d\"\n      hash2 = \"928f2ffa7fc84b74941fb714455d7bc14847b3af\"\n      hash3 = \"20989b06f7c670ab973da6609855bcf9\"\n      family = \"KAIDO\"\n      malware_type = \"RAT\"\n      campaign = \"KAIDO-EvilSoul-Engine-MaaS-144.172.103.98\"\n      id = \"3c4d70e9-aaaf-50e7-b58b-a4b3595386e9\"\n   strings:\n      $ns1  = \"Kaido.Common.Messages\" ascii wide fullword\n      $ns2  = \"Kaido.Client.Helper.HVNC.ProcessController\" ascii wide\n      $cost = \"costura.kaido.common.dll\" ascii wide nocase\n      $desk = \"Default_runhost\" ascii wide fullword\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      2 of ($ns1, $ns2, $cost, $desk)\n}",
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: KAIDO Quasar-Fork RAT\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule RAT_KAIDO_Quasar_Fork_Namespace {\n   meta:\n      description = \"Detects the KAIDO Quasar-fork RAT via its rebranded namespace root Kaido.Common.Messages and Costura-embedded costura.kaido.common.dll asset, both of which survive the sample's obfuscation pass\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/\"\n      date = \"2026-07-03\"\n      modified = \"2026-10-11\"\n      hash1 = \"c7542e8265f70d6c1dbf2e3cf6e81a90198cd157d3d6693c6d2a8a49d99a5b8d\"\n      hash2 = \"928f2ffa7fc84b74941fb714455d7bc14847b3af\"\n      hash3 = \"20989b06f7c670ab973da6609855bcf9\"\n      family = \"KAIDO\"\n      malware_type = \"RAT\"\n      campaign = \"KAIDO-EvilSoul-Engine-MaaS-144.172.103.98\"\n      id = \"3c4d70e9-aaaf-50e7-b58b-a4b3595386e9\"\n   strings:\n      $ns1  = \"Kaido.Common.Messages\" ascii wide fullword\n      $ns2  = \"Kaido.Client.Helper.HVNC.ProcessController\" ascii wide\n      $cost = \"costura.kaido.common.dll\" ascii wide nocase\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      $cost and 1 of ($ns1, $ns2)\n}",
             "pattern_type": "yara",
             "valid_from": "2026-07-03T00:00:00Z",
             "labels": [

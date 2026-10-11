@@ -467,7 +467,7 @@ families:
         report_url: /reports/dual-rat-analysis/
         label: Quasar RAT
         rules:
-          - Quasar_RAT_MarkOfWeb_Removal
+          - SUSP_PE_ZoneIdentifier_DeleteFile_Strings
       - url: /hunting-detections/quasar-xworm-powershell-detections
         title: Quasar + XWorm + PowerShell
         date: '2025-10-10'
@@ -1202,7 +1202,7 @@ families:
           - MAL_Linux_GHOST_libpam_cache_Source
           - MAL_Linux_GHOST_Kit_Shell_Installer
           - MAL_Linux_GHOST_ComfyUI_Python_Kit
-          - MAL_Linux_GHOST_ComfyUI_Fake_PerformanceMonitor_Node
+          - SUSP_Linux_ComfyUI_PerformanceMonitor_Node_Registration
           - MAL_Linux_GHOST_Hysteria_Operator_Wrapper
           - MAL_Linux_GHOST_min1_DualTelegram_Wrapper
           - MAL_Linux_GHOST_check_comfyui_Scanner

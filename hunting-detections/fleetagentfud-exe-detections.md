@@ -234,7 +234,7 @@ rule FleetAgentFUD_FUD_RAT_Behavioral_Pattern {
 **Robustness:** 1
 **ATT&CK Coverage:** T1036.005 (Match Legitimate Resource Name or Location), T1129 (Shared Modules)
 **Confidence:** LOW
-**Rationale:** The primary branch (`any of $name*`) keys on the malware's own developer-chosen family/namespace name — a coined term with no plausible reason to appear in unrelated software, but (unlike a live C2 protocol field the operator must keep to stay functional) a .NET namespace or assembly name is trivially renamed on the next build compile, which caps this at Robustness 1 rather than 2. The second branch (`2 of $cfg* and any of $ver*`) is meaningfully weaker: `"3.0.0"` is a bare semver string that appears in a large number of unrelated .NET assemblies, and pairing it with generic config-field names (`hostname`, `agent_ver`) does not meaningfully narrow the match. The third branch (masquerade string + 2 generic WinAPI strings) is the most defensible but still relies on common APIs (`VirtualProtect`, `GetProcAddress`) shared by countless legitimate applications.
+**Rationale:** *Logic fix 2026-10-11:* the primary branch was `any of ($name*)`, which includes `$name4` (`Microsoft.NET.Runtime`), so that common masquerade string alone satisfied the branch this Rationale describes as keyed on the coined family name. It is now `any of ($name1, $name2, $name3)`; `$name4` still counts in the third branch. A fixture holding only `Microsoft.NET.Runtime` matched the old rule and does not match the new one. The primary branch (`any of ($name1, $name2, $name3)`) keys on the malware's own developer-chosen family/namespace name — a coined term with no plausible reason to appear in unrelated software, but (unlike a live C2 protocol field the operator must keep to stay functional) a .NET namespace or assembly name is trivially renamed on the next build compile, which caps this at Robustness 1 rather than 2. The second branch (`2 of $cfg* and any of $ver*`) is meaningfully weaker: `"3.0.0"` is a bare semver string that appears in a large number of unrelated .NET assemblies, and pairing it with generic config-field names (`hostname`, `agent_ver`) does not meaningfully narrow the match. The third branch (masquerade string + 2 generic WinAPI strings) is the most defensible but still relies on common APIs (`VirtualProtect`, `GetProcAddress`) shared by countless legitimate applications.
 **False Positives:** The `"3.0.0"` + generic config-field branch risks matching unrelated .NET software using that version string; the masquerade-name branches are lower-risk but evade entirely on a rebrand.
 **Deployment:** Broad endpoint/EDR scanning sweep, retroactive hunt across file shares, cross-reference against the other FleetAgent-family payloads from the same distribution infrastructure.
 
@@ -246,6 +246,7 @@ rule FleetAgent_Family_General {
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/"
       date = "2026-01-12"
+      modified = "2026-10-11"
       family = "FleetAgent"
       malware_type = "RAT"
       campaign = "Arsenal-237-109.230.231.37-Malware-Repository"
@@ -276,8 +277,8 @@ rule FleetAgent_Family_General {
       uint16(0) == 0x5A4D and
       filesize < 500KB and
       (
-         // Direct family name match
-         any of ($name*) or
+         // Direct family name match (the three coined names, not the Microsoft.NET.Runtime masquerade string)
+         any of ($name1, $name2, $name3) or
 
          // Configuration + Version pattern (broad — see Rationale)
          (2 of ($cfg*) and any of ($ver*)) or
@@ -294,13 +295,13 @@ rule FleetAgent_Family_General {
 
 ### Detection Rules
 
-#### FleetAgentFUD PowerShell Execution Policy Bypass from AppData
+#### PowerShell Execution Policy Bypass with Hidden Window from an AppData Parent
 
 **Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1059.001 (PowerShell), T1685 (Disable or Modify Tools)
 **Confidence:** LOW
-**Rationale:** Requires four conditions together — `powershell.exe` process creation, a parent rooted in `\AppData\`, an execution-policy bypass flag, and a hidden-window flag. The original assessment held that legitimate AppData-rooted software rarely combines a bypass flag with a deliberately hidden window, and scored the rule Detection tier at HIGH confidence on that basis.
+**Rationale:** *Wording fix 2026-10-11:* the title named FleetAgentFUD although the selection has no family indicator, as the paragraphs below already record; the title and description now say what is tested. Requires four conditions together — `powershell.exe` process creation, a parent rooted in `\AppData\`, an execution-policy bypass flag, and a hidden-window flag. The original assessment held that legitimate AppData-rooted software rarely combines a bypass flag with a deliberately hidden window, and scored the rule Detection tier at HIGH confidence on that basis.
 
 Production falsified it. All 10 matches in a measured 14-day window traced to the Visual Studio Code installer. The four conditions are narrow as a conjunction but not narrow in population, because all four are also the default fingerprint of Squirrel- and Electron-style auto-updaters (VS Code, Slack, Discord, GitHub Desktop), which install per-user under `%LocalAppData%` precisely to avoid needing admin rights, and self-update with a hidden window and a policy bypass because their update scripts are unsigned by policy and should not flash a console. The hidden-window flag does not separate malicious from benign here; it describes both.
 
@@ -321,15 +322,19 @@ The durable fix is a parent code-signature discriminator, which the 2026-08-07 r
 What this fix costs: `Add-AppxPackage` is itself a real initial-access primitive through malicious MSIX sideloading, so an operator who appends a decoy AppX cmdlet to an otherwise-malicious hidden bypass command line slips past this filter. That is a narrower exposure than a parent-path or signature exclusion would create, and a command line mixing real payload content with a decoy cmdlet is a distinguishable shape, but it is not zero.
 
 ```yaml
-title: FleetAgentFUD PowerShell Execution Policy Bypass from AppData
+title: PowerShell Execution Policy Bypass with Hidden Window from an AppData Parent
 id: 662e65e5-b424-40e0-9630-af1d2ccf3b3f
 status: experimental
-description: Detects PowerShell execution with Execution Policy bypass from suspicious AppData locations (FleetAgentFUD RAT pattern)
+description: >-
+    Detects powershell.exe launched with an execution-policy bypass and a hidden window
+    by a parent process under AppData. The command-line shape is the one the FleetAgentFUD
+    report records, but nothing in the rule ties a hit to that family, and per-user
+    auto-updaters produce the same shape (see the false positives).
 references:
     - https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/
 author: The Hunters Ledger
 date: '2026-01-12'
-modified: '2026-08-07'
+modified: '2026-10-11'
 logsource:
     product: windows
     category: process_creation
@@ -456,25 +461,30 @@ level: high
 
 ### Hunting Rules
 
-#### FleetAgentFUD File Download to Suspicious Locations
+#### Executable File Created in Public or Windows Temp Folders by an AppData Process
 
 **Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1105 (Ingress Tool Transfer), T1204.002 (Malicious File)
 **Confidence:** MODERATE
-**Rationale:** The combination (executable file creation in Public/Temp, from a process rooted in AppData) is a real, durable technique pairing — but AppData is also where a large share of legitimate consumer software (Chrome, Discord, Slack, and most other per-user auto-updating desktop applications) installs and self-updates without admin rights, and many of those updaters legitimately drop new executables/DLLs to Temp during a self-update cycle. This is a common, not rare, false-positive category in real enterprise environments.
+**Rationale:** *Wording fix 2026-10-11:* the title and description said a FleetAgentFUD file download; the selection is file creation by an AppData-rooted image, with no network, download-method or family test. The combination (executable file creation in Public/Temp, from a process rooted in AppData) is a real, durable technique pairing — but AppData is also where a large share of legitimate consumer software (Chrome, Discord, Slack, and most other per-user auto-updating desktop applications) installs and self-updates without admin rights, and many of those updaters legitimately drop new executables/DLLs to Temp during a self-update cycle. This is a common, not rare, false-positive category in real enterprise environments.
 **False Positives:** Legitimate AppData-rooted application auto-updaters extracting or staging executables in Temp/Public during a self-update — a common occurrence, not an edge case.
 **Deployment:** Sysmon/EDR file-creation telemetry (Event ID 11) correlated with the originating process path; recommended as a scoping lead requiring analyst review of the specific application, not an automated block.
 
 ```yaml
-title: FleetAgentFUD File Download to Suspicious Locations
+title: Executable File Created in Public or Windows Temp Folders by an AppData Process
 id: 85477610-82e0-4256-8906-3fe3109937eb
 status: experimental
-description: Detects executable file creation in Public/Temp folders from AppData processes (FleetAgentFUD payload download)
+description: >-
+    Detects creation of an .exe, .dll or .scr file under C:\Users\Public\ or C:\Windows\Temp\
+    by a process running from AppData. This is the staging pattern in the FleetAgentFUD report,
+    but the rule tests no download, no network activity and no family indicator, so any
+    AppData application that drops an executable there matches.
 references:
     - https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/
 author: The Hunters Ledger
 date: '2026-01-12'
+modified: '2026-10-11'
 logsource:
     product: windows
     category: file_event
@@ -502,28 +512,34 @@ tags:
     - detection.emerging-threats
 ```
 
-#### FleetAgentFUD RWX Memory Allocation from .NET Executable
+#### VirtualProtect Call Setting RWX Named in a Call Trace, from an AppData Process (EDR API-Call Telemetry)
 
 **Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1055 (Process Injection)
 **Confidence:** LOW
-**Rationale:** RWX memory allocation is a genuine technique-level primitive for shellcode execution, and the rule correctly filters out `Program Files`/`Windows`-rooted processes. However, the rule's own documented false-positive — .NET Just-In-Time (JIT) compilation — is not a narrow edge case: JIT is a normal, continuous part of CLR operation for every .NET application, and the rule has no discriminator (call-stack provenance, memory-region ownership) to separate CLR-internal JIT activity from attacker-injected shellcode execution.
+**Rationale:** *Wording fix 2026-10-11:* the title said a .NET executable and FleetAgentFUD; the selection tests a call trace string, the protection value and an AppData image path, with no .NET or family test. It also reads an API-call event that only EDR or enriched telemetry provides (see `logsource.definition`). RWX memory allocation is a genuine technique-level primitive for shellcode execution, and the rule correctly filters out `Program Files`/`Windows`-rooted processes. However, the rule's own documented false-positive — .NET Just-In-Time (JIT) compilation — is not a narrow edge case: JIT is a normal, continuous part of CLR operation for every .NET application, and the rule has no discriminator (call-stack provenance, memory-region ownership) to separate CLR-internal JIT activity from attacker-injected shellcode execution.
 **False Positives:** .NET JIT compilation is a normal, frequent behavior for any .NET application running outside `Program Files`/`Windows` — a near-universal overlap for AppData-rooted .NET software, not a rare exception.
 **Deployment:** EDR API-call/behavioral telemetry with CallTrace visibility; treat hits as a scoping lead requiring correlation with other suspicious signals, not a standalone alert.
 
 ```yaml
-title: FleetAgentFUD RWX Memory Allocation from .NET Executable
+title: VirtualProtect Call Setting RWX Protection from an AppData Process
 id: 1e04bbc1-1f12-41c7-a11d-0cc31e963f60
 status: experimental
-description: Detects VirtualProtect API calls with RWX permissions from .NET executables (shellcode execution indicator)
+description: >-
+    Detects an API-call event whose call trace names VirtualProtect and whose protection is
+    PAGE_EXECUTE_READWRITE, from a process image under AppData and not under Program Files or
+    Windows. The rule has no .NET test and no family indicator, and .NET JIT compilation also
+    matches. It reads an API-call event that stock Sysmon does not record.
 references:
     - https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/
 author: The Hunters Ledger
 date: '2026-01-12'
+modified: '2026-10-11'
 logsource:
     product: windows
     category: api_call
+    definition: 'Requires EDR or enriched API-call telemetry that records the called function, its protection argument and a call trace with function names. Stock Sysmon has no API-call event.'
 detection:
     selection:
         CallTrace|contains: 'VirtualProtect'
@@ -545,31 +561,33 @@ tags:
     - detection.emerging-threats
 ```
 
-#### FleetAgentFUD PowerShell Bypass from AppData Parent (Broad Variant)
+#### PowerShell Execution Policy Bypass from an AppData Parent (Broad Variant)
 
 **Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1059.001 (PowerShell)
 **Confidence:** LOW
-**Rationale:** *Retiering finding:* despite its "Multi-Stage Attack Pattern Correlation" title, this rule is not a `correlation:`-type Sigma rule at all — it is a plain two-condition `process_creation` selector, and its two conditions (`powershell.exe` + `-Exec Bypass` command line, parent rooted in AppData) are a strict subset of the Detection-tier PowerShell Execution Policy Bypass rule above, minus that rule's hidden-window requirement. Removing the hidden-window corroborator broadens the match population without adding any new signal, so this rule fires on strictly more (and less-corroborated) activity than its Detection-tier sibling. Tiered Hunting as the broader, lower-confidence companion to that rule rather than published as an independent high-confidence signature.
+**Rationale:** *Wording fix 2026-10-11:* the YAML title still read "Multi-Stage Attack Pattern Correlation" although the rule is a single selector; it now matches the heading and says what is tested. *Retiering finding:* despite its "Multi-Stage Attack Pattern Correlation" title, this rule is not a `correlation:`-type Sigma rule at all — it is a plain two-condition `process_creation` selector, and its two conditions (`powershell.exe` + `-Exec Bypass` command line, parent rooted in AppData) are a strict subset of the Detection-tier PowerShell Execution Policy Bypass rule above, minus that rule's hidden-window requirement. Removing the hidden-window corroborator broadens the match population without adding any new signal, so this rule fires on strictly more (and less-corroborated) activity than its Detection-tier sibling. Tiered Hunting as the broader, lower-confidence companion to that rule rather than published as an independent high-confidence signature.
 **False Positives:** The same AppData-rooted PowerShell bypass population as the Detection-tier sibling rule, minus the narrowing effect of the hidden-window requirement — a meaningfully larger population.
 **Deployment:** Sysmon/EDR process-creation telemetry; use as a lower-bar scoping companion to the Detection-tier PowerShell bypass rule, not as an independent alert.
 
 ```yaml
-title: FleetAgentFUD Multi-Stage Attack Pattern Correlation
+title: PowerShell Execution Policy Bypass from an AppData Parent (Broad Variant)
 id: cfe3cad4-9134-4d9e-8681-3199404e6170
 status: experimental
 description: >-
   Detects PowerShell launched with an execution-policy bypass from a parent process
-  running under AppData. Functionally a broader subset of the Detection-tier
-  PowerShell Execution Policy Bypass from AppData rule (minus its hidden-window
-  requirement) — not an actual multi-source correlation, since Sigma's single-event-source
-  model cannot express the original three-stage (process + network + PowerShell)
-  design across separate log sources.
+  running under AppData. Functionally a broader subset of the PowerShell Execution
+  Policy Bypass with Hidden Window from an AppData Parent rule (minus its hidden-window
+  requirement). It is a single process-creation selector and not a correlation: the
+  rule used to be titled a multi-stage attack pattern correlation, and Sigma's
+  single-event-source model cannot express the original three-stage (process, network
+  and PowerShell) design across separate log sources.
 references:
     - https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/
 author: The Hunters Ledger
 date: '2026-01-12'
+modified: '2026-10-11'
 logsource:
     product: windows
     category: process_creation
@@ -596,7 +614,7 @@ tags:
 **Robustness:** 2 (correlation) / 1 (base rule individually)
 **ATT&CK Coverage:** T1082 (System Information Discovery), T1033 (System Owner/User Discovery)
 **Confidence:** LOW
-**Rationale:** Each individual reconnaissance command (`Get-Process`, `ipconfig /all`, `Get-LocalUser`, WMI queries) is a routine, widely-used administrative command — far more common in legitimate IT tooling than the clipboard correlation's `Get-Clipboard` base signal. The parent-path narrowing (AppData/Temp/Public) and the 3-distinct-commands-in-5-minutes threshold add real scoping value, but legitimate deployment/inventory tooling staged in Temp during installation can plausibly batch a comparable command sequence, so this does not clear the Detection precision bar the way the clipboard correlation does.
+**Rationale:** *Wording fix 2026-10-11:* the descriptions said 3 or more distinct commands, but an `event_count` correlation counts base-rule events per host, so repeats of one command also reach 3. They now say events. Each individual reconnaissance command (`Get-Process`, `ipconfig /all`, `Get-LocalUser`, WMI queries) is a routine, widely-used administrative command — far more common in legitimate IT tooling than the clipboard correlation's `Get-Clipboard` base signal. The parent-path narrowing (AppData/Temp/Public) and the 3-events-in-5-minutes threshold (a count of events, not of distinct commands) add real scoping value, but legitimate deployment/inventory tooling staged in Temp during installation can plausibly batch a comparable command sequence, so this does not clear the Detection precision bar the way the clipboard correlation does.
 **False Positives:** System administration scripts and IT inventory tools launched from AppData/Temp/Public during deployment — a real, documented population per the source rule's own false-positives list.
 **Deployment:** SIEM correlation engine with process-creation telemetry ingested (5-minute event-count correlation by ComputerName); treat hits as scoping leads.
 
@@ -611,7 +629,7 @@ description: >-
   profiling, launched from a parent process rooted in AppData, Temp, or
   Users\Public — the FleetAgentFUD staging locations. Paired with the companion
   Rapid System Reconnaissance Pattern correlation rule below, which flags 3 or
-  more distinct recon commands from the same host in a short window.
+  more of these events from the same host in a short window.
 references:
     - https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/
 author: The Hunters Ledger
@@ -651,14 +669,18 @@ title: FleetAgentFUD Rapid System Reconnaissance Pattern
 id: a7b8c9d0-a1b2-4c3d-9e4f-56a7b8c9d0e7
 status: experimental
 description: >-
-  Correlates 3 or more distinct system reconnaissance commands (sysinfo, processes,
+  Correlates 3 or more system reconnaissance command events (sysinfo, processes,
   network, users, disk) from the same host within a short window, typical of
-  FleetAgentFUD automated profiling. Individual commands are routine IT-administration
+  FleetAgentFUD automated profiling. The count is of events, not of distinct commands,
+  so one command run three times also fires; a Sigma value_count correlation would
+  express distinctness, but its Elastic EQL conversion joins on the same value, which
+  is the opposite, so event_count is kept. Individual commands are routine IT-administration
   commands; the correlation adds real but limited scoping value.
 references:
     - https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/
 author: The Hunters Ledger
 date: '2026-01-12'
+modified: '2026-10-11'
 correlation:
     type: event_count
     rules:
@@ -711,12 +733,12 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT FleetAgentFUD X-A
 **Robustness:** 2
 **ATT&CK Coverage:** T1071.001 (Application Layer Protocol: Web Protocols)
 **Confidence:** MODERATE
-**Rationale:** Each individual signal is common in a different context — the legacy default .NET `WebClient`/`HttpWebRequest` User-Agent string is widely reused by simple, un-customized .NET HTTP tools, and a WebSocket upgrade handshake is common for real-time web applications — but the two together are a genuinely unusual combination: legitimate .NET WebSocket usage typically goes through `ClientWebSocket`, a distinct class that does not carry this legacy default UA. An application manually constructing a raw HTTP upgrade request while still carrying the legacy `WebClient`-family default UA is consistent with a custom-rolled WebSocket implementation built on lower-level networking primitives (matching this family's own `TcpClient`/`NetworkStream` YARA evidence), but this reasoning has not been validated against a goodware corpus, so it is scored as a genuinely close call rather than high confidence.
+**Rationale:** *Logic fix 2026-10-11 (rev 3):* the title and this paragraph say a WebSocket upgrade, but the rule tested only `Connection: Upgrade` in the header block, which HTTP/1.1 upgrades to protocols other than WebSocket (h2c, for one) also carry. It now also requires `Upgrade: websocket` (case-insensitive). Each individual signal is common in a different context — the legacy default .NET `WebClient`/`HttpWebRequest` User-Agent string is widely reused by simple, un-customized .NET HTTP tools, and a WebSocket upgrade handshake is common for real-time web applications — but the two together are a genuinely unusual combination: legitimate .NET WebSocket usage typically goes through `ClientWebSocket`, a distinct class that does not carry this legacy default UA. An application manually constructing a raw HTTP upgrade request while still carrying the legacy `WebClient`-family default UA is consistent with a custom-rolled WebSocket implementation built on lower-level networking primitives (matching this family's own `TcpClient`/`NetworkStream` YARA evidence), but this reasoning has not been validated against a goodware corpus, so it is scored as a genuinely close call rather than high confidence.
 **False Positives:** A legitimate .NET application that manually constructs a WebSocket upgrade over `HttpWebRequest`/`WebClient` without adopting a modern WebSocket library would also match — a low-probability but unverified edge case.
 **Deployment:** Network IDS/IPS on egress with HTTP inspection enabled; treat hits as a scoping lead pending goodware-corpus validation.
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT FleetAgentFUD Default .NET WebClient User-Agent + WebSocket Upgrade (Custom C2 Client Indicator)"; flow:established,to_server; http.user_agent; content:"Mozilla/4.0 (compatible|3b| MSIE 6.0|3b| Windows NT 5.2|3b| .NET CLR"; http.header; content:"Connection|3a 20|Upgrade"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/; classtype:trojan-activity; sid:2100023; rev:2; metadata:author The_Hunters_Ledger, date 2026-01-12;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT FleetAgentFUD Default .NET WebClient User-Agent + WebSocket Upgrade (Custom C2 Client Indicator)"; flow:established,to_server; http.user_agent; content:"Mozilla/4.0 (compatible|3b| MSIE 6.0|3b| Windows NT 5.2|3b| .NET CLR"; http.header; content:"Connection|3a 20|Upgrade"; content:"Upgrade|3a 20|websocket"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/; classtype:trojan-activity; sid:2100023; rev:3; metadata:author The_Hunters_Ledger, date 2026-01-12;)
 ```
 
 ---
@@ -728,7 +750,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT FleetAgentFUD Defau
 - **YARA compile errors fixed (2 rules).** The PowerShell Execution Policy Bypass Strings rule declared `$ps4 = "Get-Clipboard"` but never referenced it in the condition; the FUD RAT Behavioral Pattern rule declared `$net1 = "System.Net"` and `$net2 = "v4.0.30319"` but never referenced either in the condition. Compile-tested with the real `yarac`: both rules failed with `unreferenced string` errors and never loaded. Since neither string was reachable from any condition branch, removing the dead declarations changes no matching behavior; the corrected rules now compile cleanly and match identically to what the published (broken) originals would have matched had they compiled at all.
 - **Sigma correlation level demotions (2 rules).** The Repeated Clipboard Monitoring correlation's original `level: critical` overstated confidence given the documented legitimate clipboard-tooling FP population; demoted to `high`. The Rapid System Reconnaissance Pattern correlation's original `level: high` similarly overstated confidence given how common the underlying individual commands (`Get-Process`, `ipconfig /all`, etc.) are in legitimate IT tooling; demoted to `medium`, consistent with the rule's Hunting tier.
 - **Sigma "Multi-Stage Attack Pattern Correlation" re-scoped (source Sigma rule, id `cfe3cad4-9134-4d9e-8681-3199404e6170`).** Despite its title, this rule was never an actual `correlation:`-type Sigma rule; it is a two-condition `process_creation` selector that is a strict subset of the Detection-tier PowerShell Execution Policy Bypass from AppData rule, minus that rule's hidden-window requirement. Scored on the logic as written (Tie-breaker 1), it fires on a broader, less-corroborated population than its Detection-tier sibling. Retiered to Hunting with `level: medium` (from `critical`) rather than published as an independent high-confidence signature; the rule text and `id` are otherwise unchanged.
-- **Sigma/YARA level and tier recalibration on documented-FP rules.** The File Download to Suspicious Locations Sigma rule (`level: high` → `medium`) and the RWX Memory Allocation Sigma rule (`level: high` → `medium`) were both retiered from Detection-leaning to Hunting: both carry a source-documented false-positive category (AppData-rooted application auto-updaters; .NET JIT compilation, respectively) that is common rather than rare, which fails the Gate 2 precision bar for Detection and the Gate 4 "rare FP after baselining" criterion for `high`.
+- **Sigma/YARA level and tier recalibration on documented-FP rules.** The Executable File Created in Public or Windows Temp Folders by an AppData Process Sigma rule (formerly titled File Download to Suspicious Locations; `level: high` → `medium`) and the VirtualProtect RWX Sigma rule (formerly titled RWX Memory Allocation; `level: high` → `medium`) were both retiered from Detection-leaning to Hunting: both carry a source-documented false-positive category (AppData-rooted application auto-updaters; .NET JIT compilation, respectively) that is common rather than rare, which fails the Gate 2 precision bar for Detection and the Gate 4 "rare FP after baselining" criterion for `high`.
 - **Sigma base rules restructured as explicit non-alerting building blocks.** The `Get-Clipboard` and system-reconnaissance base rules (feeding the two correlation rules) now carry `name:` fields and are referenced by name from their correlation rules (replacing UUID-only references), matching the project's established correlation-authoring convention. Both base rules' `level` was set to `informational` (from `low`/`medium`) to reflect that they are not intended to alert independently.
 - **Suricata pure IP-match rule cut (source sid `2100020`).** `alert tcp $HOME_NET any -> 109.230.231.37 any` carries no content/protocol anchor, textbook Suricata Cut per the project checklist. The IP is already present in `fleetagentfud-exe.json` under `network_indicators.distribution_infrastructure`.
 - **Suricata generic WebSocket-handshake rule cut (source sid `2100021`).** The rule anchored solely on three RFC 6455-mandated WebSocket handshake headers (`Connection: Upgrade`, `Sec-WebSocket-Key`, `Sec-WebSocket-Version: 13`) with no distinguishing content beyond the protocol's own required fields. Every legitimate WebSocket application, chat, collaboration, and real-time-dashboard tools alike, sends the identical handshake strings; the source file's own Implementation Guidance section already flagged this as needing a User-Agent or certificate whitelist to be usable, confirming it fires on ubiquitous benign traffic with no distinguishing structure. No salvage was possible: the one genuinely distinctive C2 header (`X-Agent-Secret`) is already covered by its own Detection-tier signature, so this rule added no value beyond that existing coverage. Not IOC-routable (no single atomic value to route; the match is a set of RFC-mandated protocol strings, not an indicator).

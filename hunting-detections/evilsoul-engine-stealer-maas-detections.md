@@ -201,13 +201,13 @@ rule EvilSoul_Engine_299a2e7f_SocketIO_WebPanel {
 #### xaitax ChromElevator ABE-Bypass Tool: @breakingupslow Fork
 
 **Tier:** Detection
-**Robustness:** 3
+**Robustness:** 2
 **ATT&CK Coverage:** T1555.003 (Credentials from Web Browsers), T1539 (Steal Web Session Cookie), T1055.012 (Process Hollowing), T1620 (Reflective Code Loading)
 **Confidence:** HIGH
-**Rationale:** The `chromelevator.exe` + `chrome_decrypt.dll` pair is a public red-team tool (xaitax "Chrome-App-Bound-Encryption-Decryption") adopted by the EvilSoul-Engine operator as a supply-chain component rather than authored in-house. The rule anchors on the operator-fork banner and copyright strings unique to the `@breakingupslow`-attributed build — not the tool's stock upstream strings — so it stays precise to this fork's redistributions (by this operator or any other actor redistributing the same fork) without over-matching every public xaitax fork in the wild.
+**Rationale:** *Logic fix 2026-10-11:* the condition used to carry a third branch, 2 of 5 strings taken from the stock upstream tool (`Direct Syscall-Based Reflective Hollowing`, the completion-pipe name, the key JSON field, `ChainingModeGCM`, `PAYLOAD_DLL`), so an unmodified xaitax build matched while this block said stock upstream must NOT fire. The branch and its strings were removed, so the rule now needs the fork banner or the fork copyright line. A fixture holding only 2 of the stock strings matched the old rule and does not match the new one. The remaining anchors are two operator-chosen text strings, so Robustness is lowered from 3 to 2. The `chromelevator.exe` + `chrome_decrypt.dll` pair is a public red-team tool (xaitax "Chrome-App-Bound-Encryption-Decryption") adopted by the EvilSoul-Engine operator as a supply-chain component rather than authored in-house. The rule anchors on the operator-fork banner and copyright strings unique to the `@breakingupslow`-attributed build — not the tool's stock upstream strings — so it stays precise to this fork's redistributions (by this operator or any other actor redistributing the same fork) without over-matching every public xaitax fork in the wild.
 **False Positives:** LOW — the co-credit banner and copyright-notice strings are specific to this fork; generic ABE-tool detection is intentionally avoided by anchoring on the fork attribution text rather than the underlying decryption logic (public prior art that would over-match on every xaitax fork).
 **Blind Spots:** A rebuild that strips the banner/copyright strings (reverting to stock xaitax or a differently-attributed fork) evades this specific rule; targets the on-disk EXE/DLL pair, not memory-only injection artifacts beyond what the combination strings capture.
-**Validation:** Scan the analyzed `chromelevator.exe`/`chrome_decrypt.dll` pair — the banner or copyright string, or 2 of the hollowing/pipe/key/GCM/resource combination, must match; the stock upstream xaitax build without fork attribution must NOT fire.
+**Validation:** Scan the analyzed `chromelevator.exe`/`chrome_decrypt.dll` pair — the banner or the copyright string must match; the stock upstream xaitax build without fork attribution must NOT fire.
 **Deployment:** Endpoint AV/EDR scan on `%TEMP%\executor\`, memory scanning during detonation.
 
 ```yara
@@ -226,6 +226,7 @@ rule Tool_xaitax_ChromElevator_EvilSoul_Fork {
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/"
       date = "2026-07-03"
+      modified = "2026-10-11"
       hash1 = "dd97278cc64d0a8fbdb66f177367c29d2557dd445b306e922e9ad5660ea233e2"
       hash2 = "928f2ffa7fc84b74941fb714455d7bc14847b3af"
       hash3 = "a567eab759a390a00b4605ea7d161b26"
@@ -235,16 +236,11 @@ rule Tool_xaitax_ChromElevator_EvilSoul_Fork {
       id = "69fc6b2f-9058-5fb8-802a-5e0559c9d881"
    strings:
       $banner = " by @xaitax / @breakingupslow" ascii wide
-      $hollow_str = " Direct Syscall-Based Reflective Hollowing" ascii wide
-      $pipe = "__DLL_PIPE_COMPLETION_SIGNAL__" ascii wide fullword
-      $key_str = "\"app_bound_encrypted_key\":\"" ascii
-      $gcm = "ChainingModeGCM" ascii wide fullword
       $copyright = "# Copyright (https://t.me/evilsoulstealer/)" ascii wide
-      $resource = "PAYLOAD_DLL" ascii fullword
    condition:
       uint16(0) == 0x5A4D and
       filesize < 5MB and
-      ($banner or $copyright or 2 of ($hollow_str, $pipe, $key_str, $gcm, $resource))
+      ($banner or $copyright)
 }
 ```
 
@@ -308,9 +304,9 @@ rule EvilSoul_Engine_SplitDomain_AntiGrep {
 **Robustness:** 3
 **ATT&CK Coverage:** T1185 (Browser Session Hijacking), T1539 (Steal Web Session Cookie)
 **Confidence:** HIGH
-**Rationale:** Both the EvilSoul-Engine stealer payload and the xaitax ABE-bypass tools relaunch the victim's own installed browser headless with Chrome DevTools Protocol debugging enabled, then pull already-decrypted cookies via `Network.getAllCookies` — defeating Chrome's App-Bound Encryption without administrator rights. Requiring all three flags (`--remote-debugging-port`, `--headless`, `--user-data-dir`) together, while excluding both browser-self-relaunch and known dev-tooling parents, is a technique-level chokepoint: the capability cannot be achieved via CDP without this flag combination, regardless of the specific EvilSoul-Engine build variant.
+**Rationale:** *Logic fix 2026-10-11:* the title and description say a browser process was relaunched, but the selection used to be the three command-line flags alone, so any process carrying them (a wrapper script, a helper) matched. It now also requires a Chrome, Edge or Brave image. Both the EvilSoul-Engine stealer payload and the xaitax ABE-bypass tools relaunch the victim's own installed browser headless with Chrome DevTools Protocol debugging enabled, then pull already-decrypted cookies via `Network.getAllCookies` — defeating Chrome's App-Bound Encryption without administrator rights. Requiring all three flags (`--remote-debugging-port`, `--headless`, `--user-data-dir`) together, while excluding both browser-self-relaunch and known dev-tooling parents, is a technique-level chokepoint: the capability cannot be achieved via CDP without this flag combination, regardless of the specific EvilSoul-Engine build variant.
 **False Positives:** Legitimate browser automation frameworks (Selenium, Puppeteer, Playwright) launched from an unlisted parent process; QA/CI pipelines that headlessly drive a browser for testing from a non-standard automation harness.
-**Blind Spots:** Misses CDP-based cookie theft that omits `--user-data-dir` (uses the default profile instead), or that spawns from an allow-listed parent process name the attacker has spoofed.
+**Blind Spots:** Misses a relaunch of any other Chromium browser (Opera, Vivaldi and others are not in the image list), CDP-based cookie theft that omits `--user-data-dir` (uses the default profile instead), or that spawns from an allow-listed parent process name the attacker has spoofed.
 **Validation:** Launch a browser with all three flags from an unrelated parent (e.g. a script host) — must alert; the same flags launched by `node.exe` running a known test harness must NOT fire (filtered).
 **Deployment:** EDR process-creation monitoring, SIEM correlation on Sysmon Event ID 1 / Event ID 3.
 
@@ -319,9 +315,10 @@ title: Browser Relaunched with Remote Debugging and Headless Flags by Non-Browse
 id: b788a75b-a966-47d5-b91b-5fb92b2e9571
 status: experimental
 description: >-
-  Detects a Chromium-based browser process launched with --remote-debugging-port,
-  --headless, and --user-data-dir simultaneously by a parent process that is not a
-  known browser or developer-automation binary. This flag combination is used by the
+  Detects a Chrome, Edge or Brave browser process (by image name) launched with
+  --remote-debugging-port, --headless, and --user-data-dir simultaneously by a
+  parent process that is not one of those browsers, explorer.exe, or a node or
+  python developer-automation binary. This flag combination is used by the
   EvilSoul-Engine stealer-builder MaaS and its bundled xaitax ChromElevator tool to
   relaunch the victim's own browser under CDP control and pull already-decrypted
   cookies via Network.getAllCookies, bypassing Chrome App-Bound Encryption without
@@ -331,6 +328,7 @@ references:
     - https://github.com/xaitax/Chrome-App-Bound-Encryption-Decryption
 author: The Hunters Ledger
 date: '2026-07-03'
+modified: '2026-10-11'
 tags:
     - attack.credential-access
     - attack.t1539
@@ -341,6 +339,11 @@ logsource:
     category: process_creation
     product: windows
 detection:
+    selection_img:
+        Image|endswith:
+            - '\chrome.exe'
+            - '\msedge.exe'
+            - '\brave.exe'
     selection_flags:
         CommandLine|contains|all:
             - '--remote-debugging-port'
@@ -357,7 +360,7 @@ detection:
             - '\node.exe'
             - '\python.exe'
             - '\pythonw.exe'
-    condition: selection_flags and not 1 of filter_*
+    condition: all of selection_* and not 1 of filter_*
 falsepositives:
     - Legitimate browser automation frameworks (Selenium, Puppeteer, Playwright) launched from a known developer-tooling parent process
     - QA/CI pipelines that headlessly drive a browser for testing
@@ -428,7 +431,7 @@ level: high
 **Robustness:** 3
 **ATT&CK Coverage:** T1685 (Disable or Modify Tools)
 **Confidence:** HIGH
-**Rationale:** The `299a2e7f` build's `DisableProtections` function whole-drive-excludes `C:\` from Windows Defender and disables real-time monitoring via PowerShell cmdlets in the same script block. A whole-drive exclusion path (`C:\` specifically) combined with a real-time-monitoring disable in the same execution context is a strong, technique-level chokepoint — legitimate software almost never excludes an entire drive letter, and an attacker achieving the same suppression via PowerShell has no alternate cmdlet pairing that avoids both signals simultaneously. **Corrected during this review:** the originally-published markdown metadata cited the legacy technique ID `T1685 (Disable or Modify Tools)`, but the ATT&CK data used by `sigma check` has this technique renumbered to `T1685 (Disable or Modify Tools)`; the YAML tag `attack.t1685` was already correct, so the markdown label has been updated to match rather than the tag — a live-validator lesson in not hand-correcting a tag against a hardcoded assumption.
+**Rationale:** *Logic fix 2026-10-11:* the second selection used to accept either `-DisableRealtimeMonitoring` or `-DisableBehaviorMonitoring`, so a script that excluded `C:\` and disabled only behavior monitoring fired although the title requires real-time monitoring to be disabled. It now requires `Set-MpPreference -DisableRealtimeMonitoring $true`, the cmdlet the report documents. The `299a2e7f` build's `DisableProtections` function whole-drive-excludes `C:\` from Windows Defender and disables real-time monitoring via PowerShell cmdlets in the same script block. A whole-drive exclusion path (`C:\` specifically) combined with a real-time-monitoring disable in the same execution context is a strong, technique-level chokepoint — legitimate software almost never excludes an entire drive letter, and an attacker achieving the same suppression via PowerShell has no alternate cmdlet pairing that avoids both signals simultaneously. **Corrected during this review:** the originally-published markdown metadata cited the legacy technique ID `T1685 (Disable or Modify Tools)`, but the ATT&CK data used by `sigma check` has this technique renumbered to `T1685 (Disable or Modify Tools)`; the YAML tag `attack.t1685` was already correct, so the markdown label has been updated to match rather than the tag — a live-validator lesson in not hand-correcting a tag against a hardcoded assumption.
 **False Positives:** IT-administration deployment scripts that legitimately exclude `C:\` during imaging or migration (uncommon but not impossible).
 **Blind Spots:** Misses the same suppression achieved via the Windows Security Center API, a registry policy write, or a compiled binary rather than a PowerShell script block; requires Script Block Logging (Event ID 4104) to be enabled.
 **Validation:** Run a PowerShell script block containing both cmdlet patterns — must alert; a script excluding only a narrow application directory must NOT fire.
@@ -443,12 +446,13 @@ description: >-
   (C:\) Windows Defender exclusion path and disables real-time monitoring in
   the same execution context. This is the AV/Defender-suppression chain used
   by the EvilSoul-Engine 299a2e7f Socket.IO WebPanel build's DisableProtections
-  function, which also disables behavior monitoring and the Windows Firewall
-  before running noisy credential-theft operations.
+  function, which also disables the Windows Firewall before running noisy
+  credential-theft operations.
 references:
     - https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/
 author: The Hunters Ledger
 date: '2026-07-03'
+modified: '2026-10-11'
 tags:
     - attack.stealth
     - attack.t1685
@@ -463,9 +467,7 @@ detection:
             - "Add-MpPreference -ExclusionPath 'C:\\'"
             - 'Add-MpPreference -ExclusionPath "C:\\"'
     selection_disable:
-        ScriptBlockText|contains:
-            - 'Set-MpPreference -DisableRealtimeMonitoring $true'
-            - 'Set-MpPreference -DisableBehaviorMonitoring $true'
+        ScriptBlockText|contains: 'Set-MpPreference -DisableRealtimeMonitoring $true'
     condition: selection_exclusion and selection_disable
 falsepositives:
     - IT-administration deployment scripts that legitimately exclude C:\ during imaging or migration (uncommon but not impossible)
@@ -482,7 +484,7 @@ level: high
 **Robustness:** 3
 **ATT&CK Coverage:** T1053.005 (Scheduled Task), T1036.004 (Masquerade Task or Service)
 **Confidence:** HIGH
-**Rationale:** The `stealer.js` build's persistence mechanism registers a scheduled task with Task XML `Author` set to the literal string `Microsoft Corporation` while also setting the hidden flag — a masquerade pattern designed to blend into Task Scheduler listings alongside genuine Microsoft-authored tasks. Genuine Microsoft tasks are installed by the OS image or Windows Update, not created ad hoc at runtime by a user-context process, which is what makes any Event ID 4698 registration carrying this exact Author string a near-certain fake regardless of the specific payload delivered.
+**Rationale:** *Logic fix 2026-10-11:* the `TaskContent` test listed the Author string and the hidden flag as alternatives (a `contains` list is OR), so a task with either alone fired although the title requires both. It is now `contains|all`. The `stealer.js` build's persistence mechanism registers a scheduled task with Task XML `Author` set to the literal string `Microsoft Corporation` while also setting the hidden flag — a masquerade pattern designed to blend into Task Scheduler listings alongside genuine Microsoft-authored tasks. Genuine Microsoft tasks are installed by the OS image or Windows Update, not created ad hoc at runtime by a user-context process, which is what makes any Event ID 4698 registration carrying this exact Author string a near-certain fake regardless of the specific payload delivered.
 **False Positives:** Unlikely — genuine Microsoft Corporation-authored tasks are pre-installed by the OS, not created via runtime Event ID 4698 registration by a user-context process.
 **Blind Spots:** Misses persistence that spoofs a different vendor's authorship string, or that skips the hidden flag; requires Task Scheduler/Security auditing of object creation (Event ID 4698) with TaskContent captured.
 **Validation:** Register a scheduled task with `<Author>Microsoft Corporation</Author>` and `<Hidden>true</Hidden>` — must alert; a genuine OS-installed Microsoft task (which is not created via this runtime event) must NOT fire.
@@ -503,6 +505,7 @@ references:
     - https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/
 author: The Hunters Ledger
 date: '2026-07-03'
+modified: '2026-10-11'
 tags:
     - attack.persistence
     - attack.execution
@@ -518,7 +521,7 @@ logsource:
 detection:
     selection:
         EventID: 4698
-        TaskContent|contains:
+        TaskContent|contains|all:
             - '<Author>Microsoft Corporation</Author>'
             - '<Hidden>true</Hidden>'
     condition: selection
@@ -537,7 +540,7 @@ level: high
 **Robustness:** 1
 **ATT&CK Coverage:** T1105 (Ingress Tool Transfer), T1555.003 (Credentials from Web Browsers)
 **Confidence:** HIGH (string match) / durability LOW (renameable filenames + directory)
-**Rationale:** The `299a2e7f` build downloads the xaitax ChromElevator ABE-bypass tool pair from a GitHub-hosted supply-chain mirror to a consistent staging path, `%TEMP%\executor\`. Both the filenames and the staging directory are download-script conventions the operator (or any other actor redistributing the same public tool) could trivially rename — durability, not today's low FP rate, governs the tier. **Corrected during this review:** demoted from the originally-published `level: high` to `medium` to match the Hunting tier.
+**Rationale:** *Logic fix 2026-10-11:* the path test was `\executor\` under any directory, so the title's TEMP was not enforced. It now requires `\Temp\executor\` (the report gives `%TEMP%\executor\`). The `299a2e7f` build downloads the xaitax ChromElevator ABE-bypass tool pair from a GitHub-hosted supply-chain mirror to a consistent staging path, `%TEMP%\executor\`. Both the filenames and the staging directory are download-script conventions the operator (or any other actor redistributing the same public tool) could trivially rename — durability, not today's low FP rate, governs the tier. **Corrected during this review:** demoted from the originally-published `level: high` to `medium` to match the Hunting tier.
 **False Positives:** Extremely unlikely against current samples — `chromelevator.exe` and `chrome_decrypt.dll` are not legitimate Windows or common third-party software filenames; the `%TEMP%\executor\` directory name is also distinctive. Any operator or actor who renames the download destination evades entirely.
 **Deployment:** EDR file-creation monitoring, SIEM correlation on Sysmon Event ID 11; use as a scoping lead for the broader ABE-bypass supply-chain pattern rather than a standalone alert.
 
@@ -556,6 +559,7 @@ references:
     - https://github.com/xaitax/Chrome-App-Bound-Encryption-Decryption
 author: The Hunters Ledger
 date: '2026-07-03'
+modified: '2026-10-11'
 tags:
     - attack.command-and-control
     - attack.t1105
@@ -567,7 +571,7 @@ logsource:
     product: windows
 detection:
     selection:
-        TargetFilename|contains: '\executor\'
+        TargetFilename|contains: '\Temp\executor\'
         TargetFilename|endswith:
             - '\chromelevator.exe'
             - '\chrome_decrypt.dll'
@@ -581,30 +585,32 @@ level: medium
 
 ---
 
-#### EvilSoul-Engine Watchdog Persistence Files Created in TEMP or Startup
+#### EvilSoul-Engine Watchdog Persistence Files Created in User TEMP or the Startup Folder
 
 **Tier:** Hunting
 **Robustness:** 1
 **ATT&CK Coverage:** T1564.001 (Hidden Files and Directories), T1053.005 (Scheduled Task)
 **Confidence:** MODERATE
-**Rationale:** The `299a2e7f` build layers redundant "persistence-of-persistence": a `update.bat` in the Startup folder plus a hidden random-named `.lnk`, a hidden `updatesystem.cmd`, and a `watcher.vbs` watchdog in `%TEMP%`, subsequently attribute-flagged hidden. These are plausible-sounding, genuinely generic filenames (unlike the bespoke component names elsewhere in this campaign) that a legitimate update script could coincidentally share — moderate FP risk was already acknowledged at publication and the tier reflects that.
-**False Positives:** Legitimate software update scripts that happen to share these generic filenames outside protected system directories; custom internal IT automation using similarly named watchdog scripts.
+**Rationale:** *Logic fix 2026-10-11:* the selection was the three filenames in any directory with only System32 and Program Files excluded, so a hit in any other folder (a Downloads folder, a project tree) fired although the title says TEMP or Startup. Each name is now tied to the location the report gives: `updatesystem.cmd` and `watcher.vbs` under `AppData\Local\Temp`, `update.bat` in the per-user Startup folder. The System32 and Program Files exclusion no longer applies and was dropped. The `299a2e7f` build layers redundant "persistence-of-persistence": a `update.bat` in the Startup folder plus a hidden random-named `.lnk`, a hidden `updatesystem.cmd`, and a `watcher.vbs` watchdog in `%TEMP%`, subsequently attribute-flagged hidden. These are plausible-sounding, genuinely generic filenames (unlike the bespoke component names elsewhere in this campaign) that a legitimate update script could coincidentally share — moderate FP risk was already acknowledged at publication and the tier reflects that.
+**False Positives:** Legitimate software update scripts that happen to share these generic filenames in the user Temp or Startup folders; custom internal IT automation using similarly named watchdog scripts.
 **Deployment:** SIEM correlation on Sysmon Event ID 11 (FileCreate) filtered to the named artifacts; correlate with the Defender-suppression or CDP-cookie-theft Detection rules above for higher-confidence triage.
 
 ```yaml
-title: EvilSoul-Engine Watchdog Persistence Files Created in TEMP or Startup
+title: EvilSoul-Engine Watchdog Persistence Files Created in User TEMP or the Startup Folder
 id: 5f925688-77fd-410a-9c8a-83ca801a5013
 status: experimental
 description: >-
   Detects file creation of the specific watchdog and persistence-chain
   filenames used by the EvilSoul-Engine 299a2e7f build's redundant
-  persistence-of-persistence mechanism, including updatesystem.cmd,
-  watcher.vbs, and update.bat, which are subsequently attribute-flagged
+  persistence-of-persistence mechanism: updatesystem.cmd and watcher.vbs
+  under the user's Temp folder, and update.bat in the user's Startup
+  folder. The report says these files are subsequently attribute-flagged
   hidden to survive casual folder inspection.
 references:
     - https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/
 author: The Hunters Ledger
 date: '2026-07-03'
+modified: '2026-10-11'
 tags:
     - attack.stealth
     - attack.t1564.001
@@ -617,18 +623,17 @@ logsource:
     category: file_event
     product: windows
 detection:
-    selection:
+    selection_temp:
+        TargetFilename|contains: '\AppData\Local\Temp\'
         TargetFilename|endswith:
             - '\updatesystem.cmd'
             - '\watcher.vbs'
-            - '\update.bat'
-    filter_common_update_paths:
-        TargetFilename|contains:
-            - '\Windows\System32\'
-            - '\Program Files\'
-    condition: selection and not filter_common_update_paths
+    selection_startup:
+        TargetFilename|contains: '\Start Menu\Programs\Startup\'
+        TargetFilename|endswith: '\update.bat'
+    condition: 1 of selection_*
 falsepositives:
-    - Legitimate software update scripts that happen to share these generic filenames outside protected system directories
+    - Legitimate software update scripts that happen to share these generic filenames in the user Temp or Startup folders
     - Custom internal IT automation using similarly named watchdog scripts
 level: medium
 ```

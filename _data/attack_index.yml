@@ -891,8 +891,8 @@ techniques:
         rules: >-
           MAL_Linux_GHOST_libpam_cache_Rootkit_Family (YARA, Detection);
           MAL_Linux_GHOST_libpam_cache_Source (YARA, Detection); Suspicious Shared Library Created
-          in PAM Security Directory (SIGMA, Detection); Auditd - PAM Security Library Directory
-          Write by Non-Package-Manager (SIGMA, Detection)
+          in PAM Security Directory (SIGMA, Detection); Auditd - PAM Security Library Directory File
+          Creation by Non-Package-Manager (SIGMA, Detection)
         count: 4
     actors:
       - UTA-2026-014
@@ -2830,8 +2830,8 @@ techniques:
         report_url: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
         rules: >-
           Scheduled Task Created with Microsoft Corporation Author and Hidden Flag (SIGMA,
-          Detection); EvilSoul-Engine Watchdog Persistence Files Created in TEMP or Startup (SIGMA,
-          Hunting)
+          Detection); EvilSoul-Engine Watchdog Persistence Files Created in User TEMP or the Startup
+          Folder (SIGMA, Hunting)
         count: 2
       - url: /hunting-detections/opendirectory-62-60-237-100-20260506-detections
         title: HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campaign
@@ -2864,7 +2864,7 @@ techniques:
         rules: >-
           NjRAT/XWorm Triple-Redundant Persistence (Combined Static Signature) (YARA, Detection);
           Quasar RAT Scheduled Task Persistence via schtasks.exe (SIGMA, Detection); NjRAT/XWorm
-          Triple-Redundant Persistence: Base Rules + 2-of-3 Correlation (SIGMA, Hunting)
+          Triple-Redundant Persistence: Base Rules + All-Three Correlation (SIGMA, Hunting)
         count: 3
     actors:
       - UTA-2026-003
@@ -2943,8 +2943,8 @@ techniques:
         date: '2026-08-03'
         report_url: /reports/cloudsync-assembler-toolkit-91-197-98-188/
         rules: >-
-          Paralell Injector and SvchostPayload Type Names (YARA, Detection); Wscript To PowerShell
-          To MSBuild Execution Chain Without Project File (SIGMA, Detection)
+          Paralell Injector and SvchostPayload Type Names (YARA, Detection); MSBuild Launched
+          Without a Project File by a Hidden or Bypass-Policy PowerShell Parent (SIGMA, Detection)
         count: 2
       - url: /hunting-detections/opendirectory-45-130-148-125-20260430-detections
         title: AdaptixC2 Open Directory Exposure (45.130.148.125)
@@ -3906,8 +3906,8 @@ techniques:
         report_url: /reports/gotenberg-rce-cryptomining-107-175-69-137/
         rules: >-
           ExifTool Invoked With Condition Option Executing Shell Commands (SIGMA, Detection); Pkill
-          Kill Sweep Against Rival Cryptominer Process Names (SIGMA, Hunting); Base64 Decoded Script
-          Written to Tmp and Executed by Bash (SIGMA, Hunting)
+          Kill Sweep Against Rival Cryptominer Process Names (SIGMA, Hunting); Base64 Decode
+          Redirected to Tmp Followed by Bash Run of a Tmp Path in One Command Line (SIGMA, Hunting)
         count: 3
       - url: >-
           /hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections
@@ -3952,9 +3952,9 @@ techniques:
           MAL_Linux_GHOST_min1_DualTelegram_Wrapper (YARA, Hunting);
           MAL_Linux_GHOST_check_comfyui_Scanner (YARA, Hunting);
           MAL_Linux_GHOST_get_all_ranges_CloudEnumerator (YARA, Hunting); Suspicious LD_PRELOAD Set
-          to Non-Standard Library Path (SIGMA, Hunting); High-Frequency Ncat Listener Creation on
-          Linux Host (SIGMA, Hunting); GHOST Kit Distribution File Download from AEZA Hosting Range
-          (SURICATA, Detection)
+          to Non-Standard Library Path (SIGMA, Hunting); Ncat Listener Creation on Linux Host
+          (SIGMA, Hunting); GHOST Kit Distribution File Download from AEZA Hosting Range (SURICATA,
+          Detection)
         count: 8
     actors:
       - UTA-2026-008
@@ -4118,7 +4118,7 @@ techniques:
         report_url: /reports/ghost-cryptojacker-vova75rus-77.110.96.200/
         rules: >-
           MAL_Linux_GHOST_ComfyUI_Python_Kit (YARA, Detection);
-          MAL_Linux_GHOST_ComfyUI_Fake_PerformanceMonitor_Node (YARA, Hunting)
+          SUSP_Linux_ComfyUI_PerformanceMonitor_Node_Registration (YARA, Hunting)
         count: 2
       - url: /hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections
         title: Russian Gemini CLI Credential Mill (213.165.51.115)
@@ -4294,7 +4294,9 @@ techniques:
         title: Flask C2 & MSSQL CLR Backdoor on a Windows Post-Exploitation Staging Host
         date: '2026-06-12'
         report_url: /reports/flaskc2-postex-toolkit-67-215-232-25/
-        rules: 'CVE-2026-20817 WER LPE PoC: Anomalous WerFault.exe Token Inspection (SIGMA, Hunting)'
+        rules: >-
+          CVE-2026-20817 WER LPE PoC: Process Handle Opened to WerFault.exe by an Unlisted Source
+          (SIGMA, Hunting)
         count: 1
     actors:
       - UTA-2026-005
@@ -4461,8 +4463,8 @@ techniques:
         date: '2025-12-20'
         report_url: /reports/dual-rat-analysis/
         rules: >-
-          Quasar RAT Mark-of-the-Web Removal (YARA, Hunting); Quasar RAT Mark of the Web Removal
-          (SIGMA, Detection)
+          Zone.Identifier and DeleteFile Strings in a PE (Mark-of-the-Web Removal Capability Lead)
+          (YARA, Hunting); Quasar RAT Mark of the Web Removal (SIGMA, Detection)
         count: 2
     actors:
       - UTA-2026-002
@@ -5521,7 +5523,7 @@ techniques:
         title: 'CloudSync: An Assembler''s Intrusion Toolkit'
         date: '2026-08-03'
         report_url: /reports/cloudsync-assembler-toolkit-91-197-98-188/
-        rules: PowerShell WebClient Download Inheriting Default Proxy Credentials (SIGMA, Detection)
+        rules: PowerShell Net.WebClient Proxy Set to Default Credentials (SIGMA, Detection)
         count: 1
       - url: /hunting-detections/webshells-to-the-cloud-detections
         title: From Webshells to The Cloud
@@ -6213,8 +6215,9 @@ techniques:
         date: '2026-05-25'
         report_url: /reports/ghost-cryptojacker-vova75rus-77.110.96.200/
         rules: >-
-          MAL_Linux_GHOST_min1_DualTelegram_Wrapper (YARA, Hunting); GHOST Cryptojacker Kit Telegram
-          API Egress from Production Server: Covert Mining Report (SURICATA, Hunting)
+          MAL_Linux_GHOST_min1_DualTelegram_Wrapper (YARA, Hunting); Telegram API TLS SNI Egress
+          from an Internal Host (Reporting Channel Used by the GHOST Kit, Not Specific to It)
+          (SURICATA, Hunting)
         count: 2
       - url: /hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections
         title: BellaMain Turkish PhaaS Panel (79.137.192.3)
@@ -7152,8 +7155,9 @@ techniques:
         date: '2026-08-03'
         report_url: /reports/cloudsync-assembler-toolkit-91-197-98-188/
         rules: >-
-          Wscript To PowerShell To MSBuild Execution Chain Without Project File (SIGMA, Detection);
-          MSBuild Process Making a Direct Outbound Network Connection (SIGMA, Detection)
+          MSBuild Launched Without a Project File by a Hidden or Bypass-Policy PowerShell Parent
+          (SIGMA, Detection); MSBuild Process Making a Direct Outbound Network Connection (SIGMA,
+          Detection)
         count: 2
     actors:
       - UTA-2026-021
@@ -7746,7 +7750,9 @@ techniques:
         title: Gotenberg CVE-2026-42589 Mass Exploitation and Cryptomining
         date: '2026-09-16'
         report_url: /reports/gotenberg-rce-cryptomining-107-175-69-137/
-        rules: Base64 Decoded Script Written to Tmp and Executed by Bash (SIGMA, Hunting)
+        rules: >-
+          Base64 Decode Redirected to Tmp Followed by Bash Run of a Tmp Path in One Command Line
+          (SIGMA, Hunting)
         count: 1
       - url: /hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections
         title: 'CloudSync: An Assembler''s Intrusion Toolkit'
@@ -8621,7 +8627,7 @@ techniques:
         title: 'CloudSync: An Assembler''s Intrusion Toolkit'
         date: '2026-08-03'
         report_url: /reports/cloudsync-assembler-toolkit-91-197-98-188/
-        rules: AnyDesk Unattended Password Piped Over Stdin By Non-AnyDesk Process (SIGMA, Detection)
+        rules: AnyDesk Unattended Password Piped Over Stdin (SIGMA, Detection)
         count: 1
     actors: []
     url: /techniques/T1219.002/
@@ -9010,9 +9016,10 @@ techniques:
         date: '2026-05-25'
         report_url: /reports/ghost-cryptojacker-vova75rus-77.110.96.200/
         rules: >-
-          MAL_Linux_GHOST_min1_DualTelegram_Wrapper (YARA, Hunting); High-Frequency memfd_create
-          Syscall from Non-JVM Process on Linux Server (SIGMA, Hunting); GHOST Cryptojacker Kit
-          Telegram API Egress from Production Server: Covert Mining Report (SURICATA, Hunting)
+          MAL_Linux_GHOST_min1_DualTelegram_Wrapper (YARA, Hunting); memfd_create Syscall Outside a
+          Java, Browser and Node Filter on Linux Server (SIGMA, Hunting); Telegram API TLS SNI
+          Egress from an Internal Host (Reporting Channel Used by the GHOST Kit, Not Specific to It)
+          (SURICATA, Hunting)
         count: 3
     actors:
       - UTA-2026-016
@@ -10224,7 +10231,8 @@ techniques:
         report_url: /reports/dual-rat-analysis/
         rules: >-
           NjRAT/XWorm Triple-Redundant Persistence (Combined Static Signature) (YARA, Detection);
-          NjRAT/XWorm Triple-Redundant Persistence: Base Rules + 2-of-3 Correlation (SIGMA, Hunting)
+          NjRAT/XWorm Triple-Redundant Persistence: Base Rules + All-Three Correlation (SIGMA,
+          Hunting)
         count: 2
       - url: /hunting-detections/PULSAR-RAT-detections
         title: PULSAR RAT (server.exe) — Technical Analysis & Business Risk Assessment
@@ -10338,7 +10346,8 @@ techniques:
         report_url: /reports/dual-rat-analysis/
         rules: >-
           NjRAT/XWorm Triple-Redundant Persistence (Combined Static Signature) (YARA, Detection);
-          NjRAT/XWorm Triple-Redundant Persistence: Base Rules + 2-of-3 Correlation (SIGMA, Hunting)
+          NjRAT/XWorm Triple-Redundant Persistence: Base Rules + All-Three Correlation (SIGMA,
+          Hunting)
         count: 2
     actors:
       - UTA-2026-003
@@ -10722,8 +10731,8 @@ techniques:
         report_url: /reports/ghost-cryptojacker-vova75rus-77.110.96.200/
         rules: >-
           MAL_Linux_GHOST_ComfyUI_Python_Kit (YARA, Detection);
-          MAL_Linux_GHOST_ComfyUI_Fake_PerformanceMonitor_Node (YARA, Hunting); GHOST ComfyUI Fake
-          PerformanceMonitor Custom Node Planted (SIGMA, Detection)
+          SUSP_Linux_ComfyUI_PerformanceMonitor_Node_Registration (YARA, Hunting); GHOST ComfyUI
+          Fake PerformanceMonitor Custom Node Planted (SIGMA, Detection)
         count: 3
     actors:
       - UTA-2026-016
@@ -11127,7 +11136,9 @@ techniques:
         title: 'EvilSoul-Engine: A Brazilian Stealer-Builder Malware-as-a-Service'
         date: '2026-07-03'
         report_url: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
-        rules: EvilSoul-Engine Watchdog Persistence Files Created in TEMP or Startup (SIGMA, Hunting)
+        rules: >-
+          EvilSoul-Engine Watchdog Persistence Files Created in User TEMP or the Startup Folder
+          (SIGMA, Hunting)
         count: 1
       - url: /hunting-detections/ai-agent-frameworks-2026-05-23-detections
         title: Multi-Actor AI-Agent Framework Abuse (8 Operators)
@@ -11656,10 +11667,9 @@ techniques:
         date: '2026-05-25'
         report_url: /reports/ghost-cryptojacker-vova75rus-77.110.96.200/
         rules: >-
-          High-Frequency Ncat Listener Creation on Linux Host (SIGMA, Hunting); GHOST Cryptojacker
-          Kit Hysteria v2 QUIC Backdoor Egress: Known Operator Ports (SURICATA, Hunting); GHOST
-          Cryptojacker Kit Hysteria v2 QUIC Backdoor Inbound: Victim-Hosted Listener Ports
-          (SURICATA, Hunting)
+          Ncat Listener Creation on Linux Host (SIGMA, Hunting); GHOST Cryptojacker Kit Hysteria v2
+          QUIC Backdoor Egress: Known Operator Ports (SURICATA, Hunting); GHOST Cryptojacker Kit
+          Hysteria v2 QUIC Backdoor Inbound: Victim-Hosted Listener Ports (SURICATA, Hunting)
         count: 3
       - url: /hunting-detections/open-directory-193-56-255-154-xiebroc2-detections
         title: Open Directory at 193.56.255.154 — XiebroC2 v3.1 & Covenant C2
@@ -11769,7 +11779,7 @@ techniques:
         date: '2026-05-25'
         report_url: /reports/ghost-cryptojacker-vova75rus-77.110.96.200/
         rules: >-
-          MAL_Linux_GHOST_Hysteria_Operator_Wrapper (YARA, Hunting); Hysteria V2 QUIC Proxy Process
+          MAL_Linux_GHOST_Hysteria_Operator_Wrapper (YARA, Hunting); Hysteria Proxy Process
           Execution on Linux Server (SIGMA, Hunting); GHOST Cryptojacker Kit Hysteria v2 QUIC
           Backdoor Egress: Known Operator Ports (SURICATA, Hunting); GHOST Cryptojacker Kit Hysteria
           v2 QUIC Backdoor Inbound: Victim-Hosted Listener Ports (SURICATA, Hunting)
@@ -12124,13 +12134,13 @@ techniques:
         rules: >-
           MAL_Linux_GHOST_libpam_cache_Rootkit_Family (YARA, Detection);
           MAL_Linux_GHOST_libpam_cache_Source (YARA, Detection); MAL_Linux_GHOST_Kit_Shell_Installer
-          (YARA, Detection); MAL_Linux_GHOST_ComfyUI_Fake_PerformanceMonitor_Node (YARA, Hunting);
-          Linux LD_PRELOAD Persistence File Modification (SIGMA, Detection); Suspicious Shared
-          Library Created in PAM Security Directory (SIGMA, Detection); Auditd - PAM Security
-          Library Directory Write by Non-Package-Manager (SIGMA, Detection); Chattr Immutable Bit
-          Set on Linux Persistence Target Paths (SIGMA, Detection); Suspicious LD_PRELOAD Set to
-          Non-Standard Library Path (SIGMA, Hunting); GHOST Kit Distribution File Download from AEZA
-          Hosting Range (SURICATA, Detection)
+          (YARA, Detection); SUSP_Linux_ComfyUI_PerformanceMonitor_Node_Registration (YARA,
+          Hunting); Linux LD_PRELOAD Persistence File Modification (SIGMA, Detection); Suspicious
+          Shared Library Created in PAM Security Directory (SIGMA, Detection); Auditd - PAM Security
+          Library Directory File Creation by Non-Package-Manager (SIGMA, Detection); Chattr
+          Immutable Bit Set on Linux Persistence Target Paths (SIGMA, Detection); Suspicious
+          LD_PRELOAD Set to Non-Standard Library Path (SIGMA, Hunting); GHOST Kit Distribution File
+          Download from AEZA Hosting Range (SURICATA, Detection)
         count: 10
     actors:
       - UTA-2026-016
@@ -13525,7 +13535,9 @@ techniques:
         title: GHOST Cryptojacker Kit — Vova75Rus Supply Chain (77.110.96.200)
         date: '2026-05-25'
         report_url: /reports/ghost-cryptojacker-vova75rus-77.110.96.200/
-        rules: High-Frequency memfd_create Syscall from Non-JVM Process on Linux Server (SIGMA, Hunting)
+        rules: >-
+          memfd_create Syscall Outside a Java, Browser and Node Filter on Linux Server (SIGMA,
+          Hunting)
         count: 1
       - url: /hunting-detections/opendirectory-62-60-237-100-20260506-detections
         title: HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campaign

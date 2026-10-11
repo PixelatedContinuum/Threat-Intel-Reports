@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--82fb9351-671b-430e-a3f2-b1af481fa69b",
+    "id": "bundle--639f341b-f57a-4ae0-aabe-42f02513cb2f",
     "objects": [
         {
             "type": "identity",
@@ -1644,12 +1644,12 @@
             "id": "indicator--81cd332b-a43d-5852-8677-84b3f310148a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.556803Z",
-            "modified": "2026-10-01T19:54:14.556803Z",
+            "modified": "2026-10-11T04:24:17.906697Z",
             "name": "THL HUNT Inkognito X-Admin-Token in CORS Allow-Headers Response (Admin API Auth Primitive)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL HUNT Inkognito X-Admin-Token in CORS Allow-Headers Response (Admin API Auth Primitive)\"; flow:established,to_client; http.header; content:\"Access-Control-Allow-Headers\"; nocase; content:\"X-Admin-Token\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/; classtype:trojan-activity; sid:9001004; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-16;)",
+            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL HUNT Inkognito X-Admin-Token in CORS Allow-Headers Response (Admin API Auth Primitive)\"; flow:established,to_client; http.header; content:\"Access-Control-Allow-Headers\"; nocase; content:\"X-Admin-Token\"; nocase; distance:0; pcre:\"/Access-Control-Allow-Headers\\x3a[^\\r\\n]*X-Admin-Token/i\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/; classtype:trojan-activity; sid:9001004; rev:4; metadata:author The_Hunters_Ledger, date 2026-05-16;)",
             "pattern_type": "suricata",
             "valid_from": "2026-05-16T00:00:00Z",
             "labels": [

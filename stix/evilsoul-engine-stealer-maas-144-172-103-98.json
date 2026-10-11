@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--8d84f2c8-dbb9-4387-a069-80180cddf209",
+    "id": "bundle--ea994830-79fa-45cb-ba4f-628356c4406c",
     "objects": [
         {
             "type": "identity",
@@ -1195,12 +1195,12 @@
             "id": "indicator--d4900748-7a4d-5bb6-b797-bcba720f22d9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.176027Z",
-            "modified": "2026-10-01T19:54:13.176027Z",
+            "modified": "2026-10-11T04:24:14.427825Z",
             "name": "Tool_xaitax_ChromElevator_EvilSoul_Fork",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "/*\n   Yara Rule Set\n   Identifier: EvilSoul-Engine Supply Chain - xaitax ChromElevator ABE-Bypass Fork\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule Tool_xaitax_ChromElevator_EvilSoul_Fork {\n   meta:\n      description = \"Detects the @breakingupslow-forked build of the public xaitax Chrome-App-Bound-Encryption-Decryption (ChromElevator) tool pair, adopted by the EvilSoul-Engine operator as a runtime-fetched ABE-bypass supply-chain component; anchors on fork-specific attribution strings rather than the stock upstream tool's generic decryption logic\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/\"\n      date = \"2026-07-03\"\n      hash1 = \"dd97278cc64d0a8fbdb66f177367c29d2557dd445b306e922e9ad5660ea233e2\"\n      hash2 = \"928f2ffa7fc84b74941fb714455d7bc14847b3af\"\n      hash3 = \"a567eab759a390a00b4605ea7d161b26\"\n      family = \"EvilSoul-Engine (xaitax ChromElevator fork)\"\n      malware_type = \"HackTool (ABE Bypass)\"\n      campaign = \"EvilSoul-Engine-Stealer-MaaS-144.172.103.98\"\n      id = \"69fc6b2f-9058-5fb8-802a-5e0559c9d881\"\n   strings:\n      $banner = \" by @xaitax / @breakingupslow\" ascii wide\n      $hollow_str = \" Direct Syscall-Based Reflective Hollowing\" ascii wide\n      $pipe = \"__DLL_PIPE_COMPLETION_SIGNAL__\" ascii wide fullword\n      $key_str = \"\\\"app_bound_encrypted_key\\\":\\\"\" ascii\n      $gcm = \"ChainingModeGCM\" ascii wide fullword\n      $copyright = \"# Copyright (https://t.me/evilsoulstealer/)\" ascii wide\n      $resource = \"PAYLOAD_DLL\" ascii fullword\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      ($banner or $copyright or 2 of ($hollow_str, $pipe, $key_str, $gcm, $resource))\n}",
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: EvilSoul-Engine Supply Chain - xaitax ChromElevator ABE-Bypass Fork\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule Tool_xaitax_ChromElevator_EvilSoul_Fork {\n   meta:\n      description = \"Detects the @breakingupslow-forked build of the public xaitax Chrome-App-Bound-Encryption-Decryption (ChromElevator) tool pair, adopted by the EvilSoul-Engine operator as a runtime-fetched ABE-bypass supply-chain component; anchors on fork-specific attribution strings rather than the stock upstream tool's generic decryption logic\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/\"\n      date = \"2026-07-03\"\n      modified = \"2026-10-11\"\n      hash1 = \"dd97278cc64d0a8fbdb66f177367c29d2557dd445b306e922e9ad5660ea233e2\"\n      hash2 = \"928f2ffa7fc84b74941fb714455d7bc14847b3af\"\n      hash3 = \"a567eab759a390a00b4605ea7d161b26\"\n      family = \"EvilSoul-Engine (xaitax ChromElevator fork)\"\n      malware_type = \"HackTool (ABE Bypass)\"\n      campaign = \"EvilSoul-Engine-Stealer-MaaS-144.172.103.98\"\n      id = \"69fc6b2f-9058-5fb8-802a-5e0559c9d881\"\n   strings:\n      $banner = \" by @xaitax / @breakingupslow\" ascii wide\n      $copyright = \"# Copyright (https://t.me/evilsoulstealer/)\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      ($banner or $copyright)\n}",
             "pattern_type": "yara",
             "valid_from": "2026-07-03T00:00:00Z",
             "labels": [
@@ -1237,12 +1237,12 @@
             "id": "indicator--b08cecb2-9f3d-5b76-9936-d78d4b75942d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.176187Z",
-            "modified": "2026-10-01T19:54:13.176187Z",
+            "modified": "2026-10-11T04:24:14.428174Z",
             "name": "Browser Relaunched with Remote Debugging and Headless Flags by Non-Browser Parent",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Browser Relaunched with Remote Debugging and Headless Flags by Non-Browser Parent\nid: b788a75b-a966-47d5-b91b-5fb92b2e9571\nstatus: experimental\ndescription: >-\n  Detects a Chromium-based browser process launched with --remote-debugging-port,\n  --headless, and --user-data-dir simultaneously by a parent process that is not a\n  known browser or developer-automation binary. This flag combination is used by the\n  EvilSoul-Engine stealer-builder MaaS and its bundled xaitax ChromElevator tool to\n  relaunch the victim's own browser under CDP control and pull already-decrypted\n  cookies via Network.getAllCookies, bypassing Chrome App-Bound Encryption without\n  administrator rights.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/\n    - https://github.com/xaitax/Chrome-App-Bound-Encryption-Decryption\nauthor: The Hunters Ledger\ndate: '2026-07-03'\ntags:\n    - attack.credential-access\n    - attack.t1539\n    - attack.collection\n    - attack.t1185\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_flags:\n        CommandLine|contains|all:\n            - '--remote-debugging-port'\n            - '--headless'\n            - '--user-data-dir'\n    filter_main_browser_parent:\n        ParentImage|endswith:\n            - '\\chrome.exe'\n            - '\\msedge.exe'\n            - '\\brave.exe'\n            - '\\explorer.exe'\n    filter_dev_tooling_parent:\n        ParentImage|endswith:\n            - '\\node.exe'\n            - '\\python.exe'\n            - '\\pythonw.exe'\n    condition: selection_flags and not 1 of filter_*\nfalsepositives:\n    - Legitimate browser automation frameworks (Selenium, Puppeteer, Playwright) launched from a known developer-tooling parent process\n    - QA/CI pipelines that headlessly drive a browser for testing\nlevel: high",
+            "pattern": "title: Browser Relaunched with Remote Debugging and Headless Flags by Non-Browser Parent\nid: b788a75b-a966-47d5-b91b-5fb92b2e9571\nstatus: experimental\ndescription: >-\n  Detects a Chrome, Edge or Brave browser process (by image name) launched with\n  --remote-debugging-port, --headless, and --user-data-dir simultaneously by a\n  parent process that is not one of those browsers, explorer.exe, or a node or\n  python developer-automation binary. This flag combination is used by the\n  EvilSoul-Engine stealer-builder MaaS and its bundled xaitax ChromElevator tool to\n  relaunch the victim's own browser under CDP control and pull already-decrypted\n  cookies via Network.getAllCookies, bypassing Chrome App-Bound Encryption without\n  administrator rights.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/\n    - https://github.com/xaitax/Chrome-App-Bound-Encryption-Decryption\nauthor: The Hunters Ledger\ndate: '2026-07-03'\nmodified: '2026-10-11'\ntags:\n    - attack.credential-access\n    - attack.t1539\n    - attack.collection\n    - attack.t1185\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_img:\n        Image|endswith:\n            - '\\chrome.exe'\n            - '\\msedge.exe'\n            - '\\brave.exe'\n    selection_flags:\n        CommandLine|contains|all:\n            - '--remote-debugging-port'\n            - '--headless'\n            - '--user-data-dir'\n    filter_main_browser_parent:\n        ParentImage|endswith:\n            - '\\chrome.exe'\n            - '\\msedge.exe'\n            - '\\brave.exe'\n            - '\\explorer.exe'\n    filter_dev_tooling_parent:\n        ParentImage|endswith:\n            - '\\node.exe'\n            - '\\python.exe'\n            - '\\pythonw.exe'\n    condition: all of selection_* and not 1 of filter_*\nfalsepositives:\n    - Legitimate browser automation frameworks (Selenium, Puppeteer, Playwright) launched from a known developer-tooling parent process\n    - QA/CI pipelines that headlessly drive a browser for testing\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-07-03T00:00:00Z",
             "labels": [
@@ -1279,12 +1279,12 @@
             "id": "indicator--84faab27-93c6-5e86-a657-8b522a23e976",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.176333Z",
-            "modified": "2026-10-01T19:54:13.176333Z",
+            "modified": "2026-10-11T04:24:14.428412Z",
             "name": "Whole-Drive Windows Defender Exclusion Combined with Real-Time Monitoring Disable",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Whole-Drive Windows Defender Exclusion Combined with Real-Time Monitoring Disable\nid: fde077ad-0afc-4158-bff6-f4c80604d461\nstatus: experimental\ndescription: >-\n  Detects PowerShell script block content that both adds a whole-drive\n  (C:\\) Windows Defender exclusion path and disables real-time monitoring in\n  the same execution context. This is the AV/Defender-suppression chain used\n  by the EvilSoul-Engine 299a2e7f Socket.IO WebPanel build's DisableProtections\n  function, which also disables behavior monitoring and the Windows Firewall\n  before running noisy credential-theft operations.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-03'\ntags:\n    - attack.stealth\n    - attack.t1685\n    - attack.defense-impairment\n    - detection.emerging-threats\nlogsource:\n    category: ps_script\n    product: windows\ndetection:\n    selection_exclusion:\n        ScriptBlockText|contains:\n            - \"Add-MpPreference -ExclusionPath 'C:\\\\'\"\n            - 'Add-MpPreference -ExclusionPath \"C:\\\\\"'\n    selection_disable:\n        ScriptBlockText|contains:\n            - 'Set-MpPreference -DisableRealtimeMonitoring $true'\n            - 'Set-MpPreference -DisableBehaviorMonitoring $true'\n    condition: selection_exclusion and selection_disable\nfalsepositives:\n    - IT-administration deployment scripts that legitimately exclude C:\\ during imaging or migration (uncommon but not impossible)\nlevel: high",
+            "pattern": "title: Whole-Drive Windows Defender Exclusion Combined with Real-Time Monitoring Disable\nid: fde077ad-0afc-4158-bff6-f4c80604d461\nstatus: experimental\ndescription: >-\n  Detects PowerShell script block content that both adds a whole-drive\n  (C:\\) Windows Defender exclusion path and disables real-time monitoring in\n  the same execution context. This is the AV/Defender-suppression chain used\n  by the EvilSoul-Engine 299a2e7f Socket.IO WebPanel build's DisableProtections\n  function, which also disables the Windows Firewall before running noisy\n  credential-theft operations.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-03'\nmodified: '2026-10-11'\ntags:\n    - attack.stealth\n    - attack.t1685\n    - attack.defense-impairment\n    - detection.emerging-threats\nlogsource:\n    category: ps_script\n    product: windows\ndetection:\n    selection_exclusion:\n        ScriptBlockText|contains:\n            - \"Add-MpPreference -ExclusionPath 'C:\\\\'\"\n            - 'Add-MpPreference -ExclusionPath \"C:\\\\\"'\n    selection_disable:\n        ScriptBlockText|contains: 'Set-MpPreference -DisableRealtimeMonitoring $true'\n    condition: selection_exclusion and selection_disable\nfalsepositives:\n    - IT-administration deployment scripts that legitimately exclude C:\\ during imaging or migration (uncommon but not impossible)\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-07-03T00:00:00Z",
             "labels": [
@@ -1300,12 +1300,12 @@
             "id": "indicator--1560c96b-28fd-5b01-927a-e1ba59ed568a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.176406Z",
-            "modified": "2026-10-01T19:54:13.176406Z",
+            "modified": "2026-10-11T04:24:14.428526Z",
             "name": "Scheduled Task Created with Microsoft Corporation Author and Hidden Flag",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Scheduled Task Created with Microsoft Corporation Author and Hidden Flag\nid: c69291c1-70a6-4aa1-835f-bc26d4afcc2f\nstatus: experimental\ndescription: >-\n  Detects creation of a new scheduled task whose Task XML Author field is set\n  to the literal string \"Microsoft Corporation\" combined with the hidden\n  flag enabled. This is the EvilSoul-Engine stealer.js build's persistence\n  masquerade, designed to blend into Task Scheduler listings next to genuine\n  Microsoft-authored tasks; legitimate Microsoft tasks are installed by the\n  OS image or Windows Update rather than created at runtime.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-03'\ntags:\n    - attack.persistence\n    - attack.execution\n    - attack.privilege-escalation\n    - attack.t1053.005\n    - attack.stealth\n    - attack.t1036.004\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    service: security\n    definition: 'Requires Task Scheduler operational logging or Security auditing of Task Scheduler object creation (Event ID 4698) with TaskContent captured'\ndetection:\n    selection:\n        EventID: 4698\n        TaskContent|contains:\n            - '<Author>Microsoft Corporation</Author>'\n            - '<Hidden>true</Hidden>'\n    condition: selection\nfalsepositives:\n    - Unlikely — genuine Microsoft Corporation-authored tasks are pre-installed by the OS, not created via runtime Event ID 4698 registration by a user-context process\nlevel: high",
+            "pattern": "title: Scheduled Task Created with Microsoft Corporation Author and Hidden Flag\nid: c69291c1-70a6-4aa1-835f-bc26d4afcc2f\nstatus: experimental\ndescription: >-\n  Detects creation of a new scheduled task whose Task XML Author field is set\n  to the literal string \"Microsoft Corporation\" combined with the hidden\n  flag enabled. This is the EvilSoul-Engine stealer.js build's persistence\n  masquerade, designed to blend into Task Scheduler listings next to genuine\n  Microsoft-authored tasks; legitimate Microsoft tasks are installed by the\n  OS image or Windows Update rather than created at runtime.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-03'\nmodified: '2026-10-11'\ntags:\n    - attack.persistence\n    - attack.execution\n    - attack.privilege-escalation\n    - attack.t1053.005\n    - attack.stealth\n    - attack.t1036.004\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    service: security\n    definition: 'Requires Task Scheduler operational logging or Security auditing of Task Scheduler object creation (Event ID 4698) with TaskContent captured'\ndetection:\n    selection:\n        EventID: 4698\n        TaskContent|contains|all:\n            - '<Author>Microsoft Corporation</Author>'\n            - '<Hidden>true</Hidden>'\n    condition: selection\nfalsepositives:\n    - Unlikely — genuine Microsoft Corporation-authored tasks are pre-installed by the OS, not created via runtime Event ID 4698 registration by a user-context process\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-07-03T00:00:00Z",
             "labels": [
@@ -1321,12 +1321,12 @@
             "id": "indicator--8fc5d48b-d42b-5667-bed2-a11d9fba74de",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.176478Z",
-            "modified": "2026-10-01T19:54:13.176478Z",
+            "modified": "2026-10-11T04:24:14.42864Z",
             "name": "ChromElevator ABE-Bypass Tool Dropped to TEMP Executor Directory",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: ChromElevator ABE-Bypass Tool Dropped to TEMP Executor Directory\nid: 2d54e3fa-a90b-4709-9521-b7a4ab95e76a\nstatus: experimental\ndescription: >-\n  Detects file creation of chromelevator.exe or chrome_decrypt.dll under a\n  TEMP\\executor\\ path, matching the staging location used by the EvilSoul-Engine\n  299a2e7f Socket.IO WebPanel build when it downloads the xaitax\n  Chrome-App-Bound-Encryption-Decryption tool pair from a GitHub supply-chain\n  mirror at runtime.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/\n    - https://github.com/xaitax/Chrome-App-Bound-Encryption-Decryption\nauthor: The Hunters Ledger\ndate: '2026-07-03'\ntags:\n    - attack.command-and-control\n    - attack.t1105\n    - attack.credential-access\n    - attack.t1555.003\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: windows\ndetection:\n    selection:\n        TargetFilename|contains: '\\executor\\'\n        TargetFilename|endswith:\n            - '\\chromelevator.exe'\n            - '\\chrome_decrypt.dll'\n    condition: selection\nfalsepositives:\n    - Extremely unlikely — these are operator-chosen filenames with no legitimate software collision\nlevel: medium",
+            "pattern": "title: ChromElevator ABE-Bypass Tool Dropped to TEMP Executor Directory\nid: 2d54e3fa-a90b-4709-9521-b7a4ab95e76a\nstatus: experimental\ndescription: >-\n  Detects file creation of chromelevator.exe or chrome_decrypt.dll under a\n  TEMP\\executor\\ path, matching the staging location used by the EvilSoul-Engine\n  299a2e7f Socket.IO WebPanel build when it downloads the xaitax\n  Chrome-App-Bound-Encryption-Decryption tool pair from a GitHub supply-chain\n  mirror at runtime.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/\n    - https://github.com/xaitax/Chrome-App-Bound-Encryption-Decryption\nauthor: The Hunters Ledger\ndate: '2026-07-03'\nmodified: '2026-10-11'\ntags:\n    - attack.command-and-control\n    - attack.t1105\n    - attack.credential-access\n    - attack.t1555.003\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: windows\ndetection:\n    selection:\n        TargetFilename|contains: '\\Temp\\executor\\'\n        TargetFilename|endswith:\n            - '\\chromelevator.exe'\n            - '\\chrome_decrypt.dll'\n    condition: selection\nfalsepositives:\n    - Extremely unlikely — these are operator-chosen filenames with no legitimate software collision\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-07-03T00:00:00Z",
             "labels": [
@@ -1339,15 +1339,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--5ea43a2a-c278-5f95-9406-c5748b5c3029",
+            "id": "indicator--f295a45f-a4cb-55dd-855a-4a0608f2fb04",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:13.17655Z",
-            "modified": "2026-10-01T19:54:13.17655Z",
-            "name": "EvilSoul-Engine Watchdog Persistence Files Created in TEMP or Startup",
+            "created": "2026-10-11T04:24:14.428749Z",
+            "modified": "2026-10-11T04:24:14.428749Z",
+            "name": "EvilSoul-Engine Watchdog Persistence Files Created in User TEMP or the Startup Folder",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: EvilSoul-Engine Watchdog Persistence Files Created in TEMP or Startup\nid: 5f925688-77fd-410a-9c8a-83ca801a5013\nstatus: experimental\ndescription: >-\n  Detects file creation of the specific watchdog and persistence-chain\n  filenames used by the EvilSoul-Engine 299a2e7f build's redundant\n  persistence-of-persistence mechanism, including updatesystem.cmd,\n  watcher.vbs, and update.bat, which are subsequently attribute-flagged\n  hidden to survive casual folder inspection.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-03'\ntags:\n    - attack.stealth\n    - attack.t1564.001\n    - attack.persistence\n    - attack.execution\n    - attack.privilege-escalation\n    - attack.t1053.005\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: windows\ndetection:\n    selection:\n        TargetFilename|endswith:\n            - '\\updatesystem.cmd'\n            - '\\watcher.vbs'\n            - '\\update.bat'\n    filter_common_update_paths:\n        TargetFilename|contains:\n            - '\\Windows\\System32\\'\n            - '\\Program Files\\'\n    condition: selection and not filter_common_update_paths\nfalsepositives:\n    - Legitimate software update scripts that happen to share these generic filenames outside protected system directories\n    - Custom internal IT automation using similarly named watchdog scripts\nlevel: medium",
+            "pattern": "title: EvilSoul-Engine Watchdog Persistence Files Created in User TEMP or the Startup Folder\nid: 5f925688-77fd-410a-9c8a-83ca801a5013\nstatus: experimental\ndescription: >-\n  Detects file creation of the specific watchdog and persistence-chain\n  filenames used by the EvilSoul-Engine 299a2e7f build's redundant\n  persistence-of-persistence mechanism: updatesystem.cmd and watcher.vbs\n  under the user's Temp folder, and update.bat in the user's Startup\n  folder. The report says these files are subsequently attribute-flagged\n  hidden to survive casual folder inspection.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-03'\nmodified: '2026-10-11'\ntags:\n    - attack.stealth\n    - attack.t1564.001\n    - attack.persistence\n    - attack.execution\n    - attack.privilege-escalation\n    - attack.t1053.005\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: windows\ndetection:\n    selection_temp:\n        TargetFilename|contains: '\\AppData\\Local\\Temp\\'\n        TargetFilename|endswith:\n            - '\\updatesystem.cmd'\n            - '\\watcher.vbs'\n    selection_startup:\n        TargetFilename|contains: '\\Start Menu\\Programs\\Startup\\'\n        TargetFilename|endswith: '\\update.bat'\n    condition: 1 of selection_*\nfalsepositives:\n    - Legitimate software update scripts that happen to share these generic filenames in the user Temp or Startup folders\n    - Custom internal IT automation using similarly named watchdog scripts\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-07-03T00:00:00Z",
             "labels": [
@@ -2761,12 +2761,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--e92f1e2f-e623-51b7-9dd5-946ee55e8353",
+            "id": "relationship--7267005d-1795-53d3-a77d-4835e51e7d8e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:13.183914Z",
-            "modified": "2026-10-01T19:54:13.183914Z",
+            "created": "2026-10-11T04:24:14.443233Z",
+            "modified": "2026-10-11T04:24:14.443233Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--5ea43a2a-c278-5f95-9406-c5748b5c3029",
+            "source_ref": "indicator--f295a45f-a4cb-55dd-855a-4a0608f2fb04",
             "target_ref": "malware--e8bff3d9-fa83-5317-b71e-2b990607e37c",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -6782,7 +6782,7 @@
             "id": "report--a9f4eae3-2bc4-5503-9477-2a7eaafb1dbf",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.201415Z",
-            "modified": "2026-10-01T19:54:13.201415Z",
+            "modified": "2026-10-11T04:24:14.475329Z",
             "name": "EvilSoul-Engine: A Brazilian Stealer-Builder Malware-as-a-Service",
             "report_types": [
                 "threat-report"
@@ -6879,7 +6879,7 @@
                 "indicator--84faab27-93c6-5e86-a657-8b522a23e976",
                 "indicator--1560c96b-28fd-5b01-927a-e1ba59ed568a",
                 "indicator--8fc5d48b-d42b-5667-bed2-a11d9fba74de",
-                "indicator--5ea43a2a-c278-5f95-9406-c5748b5c3029",
+                "indicator--f295a45f-a4cb-55dd-855a-4a0608f2fb04",
                 "indicator--34511101-f43a-5cdd-bc3b-c08b02813517",
                 "malware--281ac773-d08e-5cee-89f5-9a11e1fd1233",
                 "malware--4f57ff13-4fbb-5d8b-8d11-f8880547f577",
@@ -6971,7 +6971,7 @@
                 "relationship--b3b7e851-e537-5138-83c7-d4c69b048c3e",
                 "relationship--7c90ec33-5126-5015-902a-472859328307",
                 "relationship--becbdacf-1201-525b-8d70-81ae58b5ef76",
-                "relationship--e92f1e2f-e623-51b7-9dd5-946ee55e8353",
+                "relationship--7267005d-1795-53d3-a77d-4835e51e7d8e",
                 "relationship--f7eb2953-515c-5385-8841-82055055d0b6",
                 "relationship--06bb6bea-bc3b-5049-9d63-a59af68b8523",
                 "relationship--c573fe45-8daa-5ff3-9688-9cdd5e8c2308",

@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--6b1c615c-0f55-4e7c-87f0-7adc533d1c66",
+    "id": "bundle--0c0880aa-26f5-4266-8814-ebd85facb421",
     "objects": [
         {
             "type": "identity",
@@ -1052,12 +1052,12 @@
             "id": "indicator--346e9bdf-0129-5bc8-9ecc-27f99e556375",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.74466Z",
-            "modified": "2026-10-01T19:54:13.74466Z",
+            "modified": "2026-10-11T04:24:15.787606Z",
             "name": "MAL_Linux_GHOST_libpam_cache_Source",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule MAL_Linux_GHOST_libpam_cache_Source {\n   meta:\n      description = \"Detects GHOST cryptojacker kit LD_PRELOAD rootkit C source file libpam_cache.c — 98-line dense hand-written C with single-char identifiers, RTLD_NEXT hook resolution, unsetenv LD_PRELOAD constructor, and GHOST-specific hide-list contents; shipped alongside compiled .so on kit-author distribution server\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/\"\n      date = \"2026-05-25\"\n      hash1 = \"edafde0d33ff1a169c0c4eeaeec12d1759818c7cf4950fcee91c687e811e6cff\"\n      family = \"GHOST-cryptojacker-kit\"\n      malware_type = \"LD_PRELOAD Rootkit Source\"\n      campaign = \"OpenDirectory-GHOST-Cryptojacker-Vova75Rus-77.110.96.200\"\n      id = \"9f7d2a2c-c893-5f7f-a3c0-ab6fac644947\"\n   strings:\n      // GNU source define enabling RTLD_NEXT\n      $gnu_source        = \"#define _GNU_SOURCE\" ascii\n      // RTLD_NEXT hook resolution pattern\n      $rtld_next         = \"RTLD_NEXT\" ascii fullword\n      // Constructor pattern — unsetenv called with LD_PRELOAD at constructor time\n      $constructor_attr  = \"__attribute__((constructor))\" ascii\n      $unsetenv_call     = \"unsetenv(\\\"LD_PRELOAD\\\")\" ascii\n      // Hook function identifiers (dense single-char style from this author's code)\n      $helper_sh         = \"static int _sh(\" ascii\n      $helper_ph         = \"static int _ph(\" ascii\n      $helper_fn         = \"static FILE *_fn(\" ascii\n      // GHOST-specific hide-list entries in the H[] array\n      $hide_inotify      = \"inotify_guard\" ascii fullword\n      $hide_khugepaged   = \"khugepaged_\" ascii\n      $hide_ghost        = \"ghost.sh\" ascii fullword\n      // Port filter format string\n      $port_fmt          = \":%04X\" ascii\n   condition:\n      // No ELF magic — this is C source text\n      filesize < 10KB and\n      $gnu_source and\n      $rtld_next and\n      $constructor_attr and\n      $unsetenv_call and\n      $port_fmt and\n      2 of ($helper_*) and\n      2 of ($hide_*)\n}",
+            "pattern": "rule MAL_Linux_GHOST_libpam_cache_Source {\n   meta:\n      description = \"Detects GHOST cryptojacker kit LD_PRELOAD rootkit C source file libpam_cache.c — dense hand-written C with single-char helper declarations, an RTLD_NEXT resolver, an unsetenv LD_PRELOAD constructor, a port-format string and GHOST-specific hide-list contents (it does not test for the hooked libc function names); shipped alongside compiled .so on kit-author distribution server\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/\"\n      date = \"2026-05-25\"\n      modified = \"2026-10-11\"\n      hash1 = \"edafde0d33ff1a169c0c4eeaeec12d1759818c7cf4950fcee91c687e811e6cff\"\n      family = \"GHOST-cryptojacker-kit\"\n      malware_type = \"LD_PRELOAD Rootkit Source\"\n      campaign = \"OpenDirectory-GHOST-Cryptojacker-Vova75Rus-77.110.96.200\"\n      id = \"9f7d2a2c-c893-5f7f-a3c0-ab6fac644947\"\n   strings:\n      // GNU source define enabling RTLD_NEXT\n      $gnu_source        = \"#define _GNU_SOURCE\" ascii\n      // RTLD_NEXT hook resolution pattern\n      $rtld_next         = \"RTLD_NEXT\" ascii fullword\n      // Constructor pattern — unsetenv called with LD_PRELOAD at constructor time\n      $constructor_attr  = \"__attribute__((constructor))\" ascii\n      $unsetenv_call     = \"unsetenv(\\\"LD_PRELOAD\\\")\" ascii\n      // Hook function identifiers (dense single-char style from this author's code)\n      $helper_sh         = \"static int _sh(\" ascii\n      $helper_ph         = \"static int _ph(\" ascii\n      $helper_fn         = \"static FILE *_fn(\" ascii\n      // GHOST-specific hide-list entries in the H[] array\n      $hide_inotify      = \"inotify_guard\" ascii fullword\n      $hide_khugepaged   = \"khugepaged_\" ascii\n      $hide_ghost        = \"ghost.sh\" ascii fullword\n      // Port filter format string\n      $port_fmt          = \":%04X\" ascii\n   condition:\n      // No ELF magic — this is C source text\n      filesize < 10KB and\n      $gnu_source and\n      $rtld_next and\n      $constructor_attr and\n      $unsetenv_call and\n      $port_fmt and\n      2 of ($helper_*) and\n      2 of ($hide_*)\n}",
             "pattern_type": "yara",
             "valid_from": "2026-05-25T00:00:00Z",
             "labels": [
@@ -1112,15 +1112,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--b0714b6a-4db0-5a45-9c49-15f15226df6b",
+            "id": "indicator--4182bc44-6b37-5f10-bbd3-b827e15835a5",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:13.744912Z",
-            "modified": "2026-10-01T19:54:13.744912Z",
-            "name": "MAL_Linux_GHOST_ComfyUI_Fake_PerformanceMonitor_Node",
+            "created": "2026-10-11T04:24:15.788014Z",
+            "modified": "2026-10-11T04:24:15.788014Z",
+            "name": "SUSP_Linux_ComfyUI_PerformanceMonitor_Node_Registration",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule MAL_Linux_GHOST_ComfyUI_Fake_PerformanceMonitor_Node {\n   meta:\n      description = \"Detects GHOST cryptojacker kit post-compromise persistence via malicious ComfyUI custom node — Python file registering class PerformanceMonitor into NODE_CLASS_MAPPINGS; catches the installed persistence artifact regardless of delivery mechanism; hunt rule for ComfyUI custom-node integrity audits\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/\"\n      date = \"2026-05-25\"\n      family = \"GHOST-cryptojacker-kit\"\n      malware_type = \"ComfyUI Custom Node Persistence Artifact\"\n      campaign = \"OpenDirectory-GHOST-Cryptojacker-Vova75Rus-77.110.96.200\"\n      id = \"17a43202-fdd1-5051-8085-9456351ca024\"\n   strings:\n      // Malicious custom-node class registration — both dict assignments required\n      $class_def         = \"class PerformanceMonitor\" ascii\n      $node_class_reg    = \"NODE_CLASS_MAPPINGS\" ascii fullword\n      $node_display_reg  = \"NODE_DISPLAY_NAME_MAPPINGS\" ascii fullword\n      // Ghost kit function that installs the node\n      $fn_plant          = \"plant_backdoor_node\" ascii fullword\n   condition:\n      filesize < 500KB and\n      $class_def and\n      $node_class_reg and\n      ($node_display_reg or $fn_plant)\n}",
+            "pattern": "rule SUSP_Linux_ComfyUI_PerformanceMonitor_Node_Registration {\n   meta:\n      description = \"Detects a Python file that defines class PerformanceMonitor and registers it in ComfyUI NODE_CLASS_MAPPINGS. This is the registration pattern the GHOST cryptojacker kit uses for its planted persistence node, but the rule tests no malicious content, so a benign ComfyUI extension of that name also matches (confirmed by test on 2026-09-13); use it as a hunt rule for ComfyUI custom-node integrity audits\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/\"\n      date = \"2026-05-25\"\n      modified = \"2026-10-11\"\n      family = \"GHOST-cryptojacker-kit\"\n      malware_type = \"ComfyUI Custom Node Persistence Artifact\"\n      campaign = \"OpenDirectory-GHOST-Cryptojacker-Vova75Rus-77.110.96.200\"\n      id = \"83b41b80-0cff-51a5-b77c-20831c55d118\"\n   strings:\n      // Malicious custom-node class registration — both dict assignments required\n      $class_def         = \"class PerformanceMonitor\" ascii\n      $node_class_reg    = \"NODE_CLASS_MAPPINGS\" ascii fullword\n      $node_display_reg  = \"NODE_DISPLAY_NAME_MAPPINGS\" ascii fullword\n      // Ghost kit function that installs the node\n      $fn_plant          = \"plant_backdoor_node\" ascii fullword\n   condition:\n      filesize < 500KB and\n      $class_def and\n      $node_class_reg and\n      ($node_display_reg or $fn_plant)\n}",
             "pattern_type": "yara",
             "valid_from": "2026-05-25T00:00:00Z",
             "labels": [
@@ -1136,12 +1136,12 @@
             "id": "indicator--f4470d02-406f-5e86-8aad-0afb255bc3ad",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.744985Z",
-            "modified": "2026-10-01T19:54:13.744985Z",
+            "modified": "2026-10-11T04:24:15.788136Z",
             "name": "MAL_Linux_GHOST_Hysteria_Operator_Wrapper",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule MAL_Linux_GHOST_Hysteria_Operator_Wrapper {\n   meta:\n      description = \"Detects GHOST cryptojacker kit Hysteria v2 operator wrapper hyst.sh — Russian-language Bash script installing Hysteria v2 QUIC/UDP backdoor with bing.com SNI masquerade, per-victim TLS cert generation, /tmp/.hy2_* credential cache, and HTTP admin panel callback to :3301; operator-authored component of GHOST kit; broad hunting rule as bing.com SNI masquerade and .hy2_* cache filenames are shared with legitimate Hysteria v2 deployments\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/\"\n      date = \"2026-05-25\"\n      hash1 = \"822afb1fb29f22df8c951726d492021df2940223ed719881dafb40cda3894c5c\"\n      family = \"GHOST-cryptojacker-kit\"\n      malware_type = \"Hysteria v2 Installer Wrapper\"\n      campaign = \"OpenDirectory-GHOST-Cryptojacker-Vova75Rus-77.110.96.200\"\n      id = \"13a9762c-4653-5feb-8227-fc15eea54a4a\"\n   strings:\n      // Hysteria v2 bing.com SNI masquerade — common domain-fronting convention, not GHOST-exclusive\n      $sni_masquerade    = \"bing.com\" ascii fullword\n      // Hysteria credential cache file pattern in /tmp\n      $hy2_password      = \".hy2_password\" ascii\n      $hy2_port          = \".hy2_port\" ascii\n      $hy2_uri           = \".hy2_uri\" ascii\n      // Admin panel port reference (3301 = Hysteria panel)\n      $panel_port        = \"3301\" ascii\n      // Hysteria installer download source\n      $hy2_installer     = \"get.hy2.sh\" ascii\n      // Russian operator comments (Cyrillic — confirming operator-authored)\n      $ru_installs       = \"\\xD0\\x9D\\xD0\\x90\\xD0\\xA1\\xD0\\xA2\\xD0\\xA0\\xD0\\x99\\xD0\\x9A\\xD0\\x98\" ascii  // НАСТРОЙКИ\n      // Operator panel API callback function name\n      $api_vpn_report    = \"api_vpn_report\" ascii fullword\n   condition:\n      filesize < 30KB and\n      $sni_masquerade and\n      2 of ($hy2_*) and\n      ($panel_port or $hy2_installer or $api_vpn_report or $ru_installs)\n}",
+            "pattern": "rule MAL_Linux_GHOST_Hysteria_Operator_Wrapper {\n   meta:\n      description = \"Detects GHOST cryptojacker kit Hysteria v2 operator wrapper hyst.sh — Russian-language Bash script installing Hysteria v2 QUIC/UDP backdoor with bing.com SNI masquerade, per-victim TLS cert generation, /tmp/.hy2_* credential cache, and HTTP admin panel callback to :3301; operator-authored component of GHOST kit; broad hunting rule as bing.com SNI masquerade and .hy2_* cache filenames are shared with legitimate Hysteria v2 deployments\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/\"\n      date = \"2026-05-25\"\n      modified = \"2026-10-11\"\n      hash1 = \"822afb1fb29f22df8c951726d492021df2940223ed719881dafb40cda3894c5c\"\n      family = \"GHOST-cryptojacker-kit\"\n      malware_type = \"Hysteria v2 Installer Wrapper\"\n      campaign = \"OpenDirectory-GHOST-Cryptojacker-Vova75Rus-77.110.96.200\"\n      id = \"13a9762c-4653-5feb-8227-fc15eea54a4a\"\n   strings:\n      // Hysteria v2 bing.com SNI masquerade — common domain-fronting convention, not GHOST-exclusive\n      $sni_masquerade    = \"bing.com\" ascii fullword\n      // Hysteria credential cache file pattern in /tmp\n      $hy2_password      = \".hy2_password\" ascii\n      $hy2_port          = \".hy2_port\" ascii\n      $hy2_uri           = \".hy2_uri\" ascii\n      // Admin panel port reference (3301 = Hysteria panel)\n      $panel_port        = \"3301\" ascii\n      // Hysteria installer download source\n      $installer_hy2     = \"get.hy2.sh\" ascii\n      // Russian operator comments (Cyrillic — confirming operator-authored)\n      $ru_installs       = \"\\xD0\\x9D\\xD0\\x90\\xD0\\xA1\\xD0\\xA2\\xD0\\xA0\\xD0\\x99\\xD0\\x9A\\xD0\\x98\" ascii  // НАСТРОЙКИ\n      // Operator panel API callback function name\n      $api_vpn_report    = \"api_vpn_report\" ascii fullword\n   condition:\n      filesize < 30KB and\n      $sni_masquerade and\n      2 of ($hy2_*) and\n      ($panel_port or $installer_hy2 or $api_vpn_report or $ru_installs)\n}",
             "pattern_type": "yara",
             "valid_from": "2026-05-25T00:00:00Z",
             "labels": [
@@ -1259,15 +1259,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--87f75465-3a16-5572-a24e-f3145678e55e",
+            "id": "indicator--483c47cf-2e33-5a9b-b8cf-3959e100d49e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:13.745419Z",
-            "modified": "2026-10-01T19:54:13.745419Z",
-            "name": "Auditd - PAM Security Library Directory Write by Non-Package-Manager",
+            "created": "2026-10-11T04:24:15.788818Z",
+            "modified": "2026-10-11T04:24:15.788818Z",
+            "name": "Auditd - PAM Security Library Directory File Creation by Non-Package-Manager",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Auditd - PAM Security Library Directory Write by Non-Package-Manager\nid: f26bb12b-dca1-4b62-adf1-9186d5d31560\nstatus: experimental\ndescription: >-\n    Detects auditd file write events (PATH record type with OPEN_W flag or CREATE)\n    on the /lib/security/ directory. Requires auditd rule \"-w /lib/security -p wa\n    -k pam_module_write\" to be active. The GHOST cryptojacker kit writes\n    libpam_cache.so to this directory using PAM-style filename camouflage; any\n    write from a non-package-manager process is a high-confidence rootkit drop.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-25\ntags:\n    - attack.stealth\n    - attack.persistence\n    - attack.execution\n    - attack.t1574.006\n    - attack.t1014\n    - detection.emerging-threats\nlogsource:\n    product: linux\n    service: auditd\ndetection:\n    selection_key:\n        type: 'PATH'\n        key: 'pam_module_write'\n        nametype:\n            - 'CREATE'\n            - 'DELETE'\n    filter_pkg_mgr:\n        exe|endswith:\n            - '/dpkg'\n            - '/rpm'\n            - '/ldconfig'\n            - '/update-alternatives'\n    condition: selection_key and not filter_pkg_mgr\nfalsepositives:\n    - Package manager post-install hooks installing legitimate PAM modules (filtered above)\n    - System administrator manually copying a verified PAM module during maintenance\nlevel: high",
+            "pattern": "title: Auditd - PAM Security Library Directory File Creation by Non-Package-Manager\nid: f26bb12b-dca1-4b62-adf1-9186d5d31560\nstatus: experimental\ndescription: >-\n    Detects an auditd PATH record with nametype CREATE (a new file created) under\n    /lib/security/. Requires auditd rule \"-w /lib/security -p wa -k pam_module_write\"\n    to be active. The GHOST cryptojacker kit writes libpam_cache.so to this directory\n    using PAM-style filename camouflage; a new file there from a non-package-manager\n    process is a high-confidence rootkit drop. The rule does not test an open-for-write\n    flag (a PATH record carries no such flag), and an overwrite of an existing file,\n    which carries another nametype, is not matched.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-25\nmodified: 2026-10-11\ntags:\n    - attack.stealth\n    - attack.persistence\n    - attack.execution\n    - attack.t1574.006\n    - attack.t1014\n    - detection.emerging-threats\nlogsource:\n    product: linux\n    service: auditd\ndetection:\n    selection_key:\n        type: 'PATH'\n        key: 'pam_module_write'\n        nametype: 'CREATE'\n    filter_pkg_mgr:\n        exe|endswith:\n            - '/dpkg'\n            - '/rpm'\n            - '/ldconfig'\n            - '/update-alternatives'\n    condition: selection_key and not filter_pkg_mgr\nfalsepositives:\n    - Package manager post-install hooks installing legitimate PAM modules (filtered above)\n    - System administrator manually copying a verified PAM module during maintenance\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-05-25T00:00:00Z",
             "labels": [
@@ -1364,15 +1364,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--c070dda2-5e2e-57f4-85a6-0dd8a0b98948",
+            "id": "indicator--56a586e2-920f-5244-878c-6685f27aebd5",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:13.745776Z",
-            "modified": "2026-10-01T19:54:13.745776Z",
-            "name": "High-Frequency Ncat Listener Creation on Linux Host",
+            "created": "2026-10-11T04:24:15.78937Z",
+            "modified": "2026-10-11T04:24:15.78937Z",
+            "name": "Ncat Listener Creation on Linux Host",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: High-Frequency Ncat Listener Creation on Linux Host\nid: 4639e400-9a7d-495f-b7a3-a06de5f3c7db\nstatus: experimental\ndescription: >-\n    Detects ncat -l listener creation on a Linux host. The GHOST cryptojacker\n    Operator-A showed 83 ncat invocations in bash history — the highest\n    command frequency — indicating chronic use of ncat for port testing, makeshift\n    backdoor channels, and lateral-movement probing. As written this rule matches\n    any single ncat -l invocation; more than 20 invocations per hour on a single\n    production server is the anomaly threshold observed in this campaign and\n    requires SIEM-side aggregation logic beyond this rule's single-event scope.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-25\ntags:\n    - attack.command-and-control\n    - attack.execution\n    - attack.t1059.004\n    - attack.t1571\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: linux\ndetection:\n    selection_ncat_listener:\n        Image|endswith:\n            - '/ncat'\n            - '/nc'\n            - '/netcat'\n        CommandLine|contains: ' -l'\n    condition: selection_ncat_listener\nfalsepositives:\n    - Authorized network testing activities using ncat in controlled environments\n    - Security engineers running port testing scripts on network infrastructure hosts\nlevel: medium",
+            "pattern": "title: Ncat Listener Creation on Linux Host\nid: 4639e400-9a7d-495f-b7a3-a06de5f3c7db\nstatus: experimental\ndescription: >-\n    Detects ncat -l listener creation on a Linux host. The GHOST cryptojacker\n    Operator-A showed 83 ncat invocations in bash history — the highest\n    command frequency — indicating chronic use of ncat for port testing, makeshift\n    backdoor channels, and lateral-movement probing. As written this rule matches\n    any single ncat -l invocation; more than 20 invocations per hour on a single\n    production server is the anomaly threshold observed in this campaign and\n    requires SIEM-side aggregation logic beyond this rule's single-event scope.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-25\nmodified: 2026-10-11\ntags:\n    - attack.command-and-control\n    - attack.execution\n    - attack.t1059.004\n    - attack.t1571\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: linux\ndetection:\n    selection_ncat_listener:\n        Image|endswith:\n            - '/ncat'\n            - '/nc'\n            - '/netcat'\n        CommandLine|contains: ' -l'\n    condition: selection_ncat_listener\nfalsepositives:\n    - Authorized network testing activities using ncat in controlled environments\n    - Security engineers running port testing scripts on network infrastructure hosts\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-05-25T00:00:00Z",
             "labels": [
@@ -1385,15 +1385,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--9da0ed16-5c7c-5646-a541-bf1feb091424",
+            "id": "indicator--145d5f2f-e312-59ac-85eb-7144c65069e6",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:13.745854Z",
-            "modified": "2026-10-01T19:54:13.745854Z",
-            "name": "Hysteria V2 QUIC Proxy Process Execution on Linux Server",
+            "created": "2026-10-11T04:24:15.789482Z",
+            "modified": "2026-10-11T04:24:15.789482Z",
+            "name": "Hysteria Proxy Process Execution on Linux Server",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Hysteria V2 QUIC Proxy Process Execution on Linux Server\nid: e01c6689-1d47-4f6c-bf23-a71b32d88375\nstatus: experimental\ndescription: >-\n    Detects execution of Hysteria v2 process on a Linux host. The GHOST cryptojacker\n    kit installs Hysteria v2 as a covert QUIC/UDP backdoor with bing.com SNI masquerade\n    (ports 14433/14444 UDP) using hyst.sh installer. Hysteria v2 is legitimate dual-use\n    software; execution on a production GPU server or ML workload host with no expected\n    business purpose is a scoping lead for GHOST kit compromise, not a malware-specific\n    signature on its own. The process is installed as systemd service\n    hysteria-server.service with binaries in /usr/local/bin/hysteria.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/\n    - https://censys.com/ghost-cryptojacker-targeting-ai\nauthor: The Hunters Ledger\ndate: 2026-05-25\ntags:\n    - attack.command-and-control\n    - attack.t1572\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: linux\ndetection:\n    selection_hysteria:\n        Image|endswith: '/hysteria'\n    selection_hysteria_service:\n        CommandLine|contains: 'hysteria-server'\n    condition: selection_hysteria or selection_hysteria_service\nfalsepositives:\n    - >-\n      Legitimate Hysteria v2 usage for censorship circumvention by employees\n      in restrictive-internet regions (rare in corporate GPU environments;\n      verify with owner)\n    - Authorized network testing using Hysteria for VPN / proxy research purposes\nlevel: medium",
+            "pattern": "title: Hysteria Proxy Process Execution on Linux Server\nid: e01c6689-1d47-4f6c-bf23-a71b32d88375\nstatus: experimental\ndescription: >-\n    Detects execution of a process whose image ends in /hysteria or whose command line\n    contains hysteria-server on a Linux host. The rule has no version or QUIC test, so\n    Hysteria 1 and Hysteria 2 both match. The GHOST cryptojacker\n    kit installs Hysteria v2 as a covert QUIC/UDP backdoor with bing.com SNI masquerade\n    (ports 14433/14444 UDP) using hyst.sh installer. Hysteria v2 is legitimate dual-use\n    software; execution on a production GPU server or ML workload host with no expected\n    business purpose is a scoping lead for GHOST kit compromise, not a malware-specific\n    signature on its own. The process is installed as systemd service\n    hysteria-server.service with binaries in /usr/local/bin/hysteria.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/\n    - https://censys.com/ghost-cryptojacker-targeting-ai\nauthor: The Hunters Ledger\ndate: 2026-05-25\nmodified: 2026-10-11\ntags:\n    - attack.command-and-control\n    - attack.t1572\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: linux\ndetection:\n    selection_hysteria:\n        Image|endswith: '/hysteria'\n    selection_hysteria_service:\n        CommandLine|contains: 'hysteria-server'\n    condition: selection_hysteria or selection_hysteria_service\nfalsepositives:\n    - >-\n      Legitimate Hysteria v2 usage for censorship circumvention by employees\n      in restrictive-internet regions (rare in corporate GPU environments;\n      verify with owner)\n    - Authorized network testing using Hysteria for VPN / proxy research purposes\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-05-25T00:00:00Z",
             "labels": [
@@ -1406,15 +1406,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--4f3e4bf3-7a28-5d99-bca9-15d12ce77be1",
+            "id": "indicator--390b3d5a-0fee-5f7b-9a4e-87e083b0e3ab",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:13.745928Z",
-            "modified": "2026-10-01T19:54:13.745928Z",
-            "name": "High-Frequency memfd_create Syscall from Non-JVM Process on Linux Server",
+            "created": "2026-10-11T04:24:15.789594Z",
+            "modified": "2026-10-11T04:24:15.789594Z",
+            "name": "memfd_create Syscall Outside a Java, Browser and Node Filter on Linux Server",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: High-Frequency memfd_create Syscall from Non-JVM Process on Linux Server\nid: 3d5c184d-4937-4ab0-93d6-778760e59b9c\nstatus: experimental\ndescription: >-\n    Detects memfd_create() syscall invocations from a single non-JVM process on a\n    Linux server. The GHOST cryptojacker kit's _memfd_exec function uses\n    memfd_create to create anonymous in-memory file descriptors for fileless xmrig and\n    lolMiner execution via execveat(), bypassing on-disk file scanning. Requires\n    auditd syscall monitoring with \"-a always,exit -F arch=b64 -S memfd_create -k\n    fileless_exec\" rule active. memfd_create is also used by a broad legitimate\n    ecosystem (systemd, container runtimes, sandboxing tools, FFI libraries) beyond\n    the JVM/browser/Node filter below, so this is a scoping lead requiring\n    process-ancestry tuning rather than an auto-alert.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-25\ntags:\n    - attack.stealth\n    - attack.t1620\n    - detection.emerging-threats\nlogsource:\n    product: linux\n    service: auditd\ndetection:\n    selection_memfd:\n        type: 'SYSCALL'\n        syscall: 'memfd_create'\n    filter_expected:\n        exe|contains:\n            - 'java'\n            - 'chrome'\n            - 'chromium'\n            - 'firefox'\n            - 'node'\n    condition: selection_memfd and not filter_expected\nfalsepositives:\n    - >-\n      JVM-based applications (Java, Kotlin, Groovy) using memfd_create for\n      native library loading — excluded by filter above\n    - >-\n      Python FFI libraries (ctypes, cffi) using memfd_create for anonymous\n      shared memory\n    - Legitimate fileless deployment tools used by authorized DevOps processes\nlevel: medium",
+            "pattern": "title: memfd_create Syscall Outside a Java, Browser and Node Filter on Linux Server\nid: 3d5c184d-4937-4ab0-93d6-778760e59b9c\nstatus: experimental\ndescription: >-\n    Detects a memfd_create() syscall record on a Linux server whose exe does not\n    contain java, chrome, chromium, firefox or node. The rule matches a single\n    event and has no frequency threshold. The GHOST cryptojacker kit's _memfd_exec function uses\n    memfd_create to create anonymous in-memory file descriptors for fileless xmrig and\n    lolMiner execution via execveat(), bypassing on-disk file scanning. Requires\n    auditd syscall monitoring with \"-a always,exit -F arch=b64 -S memfd_create -k\n    fileless_exec\" rule active. memfd_create is also used by a broad legitimate\n    ecosystem (systemd, container runtimes, sandboxing tools, FFI libraries) beyond\n    the JVM/browser/Node filter below, so this is a scoping lead requiring\n    process-ancestry tuning rather than an auto-alert.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-25\nmodified: 2026-10-11\ntags:\n    - attack.stealth\n    - attack.t1620\n    - detection.emerging-threats\nlogsource:\n    product: linux\n    service: auditd\ndetection:\n    selection_memfd:\n        type: 'SYSCALL'\n        syscall: 'memfd_create'\n    filter_expected:\n        exe|contains:\n            - 'java'\n            - 'chrome'\n            - 'chromium'\n            - 'firefox'\n            - 'node'\n    condition: selection_memfd and not filter_expected\nfalsepositives:\n    - >-\n      JVM-based applications (Java, Kotlin, Groovy) using memfd_create for\n      native library loading — excluded by filter above\n    - >-\n      Python FFI libraries (ctypes, cffi) using memfd_create for anonymous\n      shared memory\n    - Legitimate fileless deployment tools used by authorized DevOps processes\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-05-25T00:00:00Z",
             "labels": [
@@ -1490,15 +1490,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--6c2a495e-e307-520b-ac6a-33e45e85e9cd",
+            "id": "indicator--2beb4dc7-06d9-5c7f-8570-934e77fc5a4a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:13.746215Z",
-            "modified": "2026-10-01T19:54:13.746215Z",
-            "name": "THL HUNT GHOST Cryptojacker Kit Telegram API Egress from Production Server - Covert Mining Report",
+            "created": "2026-10-11T04:24:15.790131Z",
+            "modified": "2026-10-11T04:24:15.790131Z",
+            "name": "THL HUNT Telegram API TLS SNI Egress from an Internal Host (Reporting Channel Used by the GHOST Kit, Not Specific to It)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert tls $HOME_NET any -> any any (msg:\"THL HUNT GHOST Cryptojacker Kit Telegram API Egress from Production Server - Covert Mining Report\"; tls.sni; content:\"api.telegram.org\"; endswith; nocase; threshold:type threshold,track by_src,count 5,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/; classtype:policy-violation; sid:9100108; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-25, tag GHOST_kit, tag Telegram_reporting;)",
+            "pattern": "alert tls $HOME_NET any -> any any (msg:\"THL HUNT Telegram API TLS SNI Egress from an Internal Host (Reporting Channel Used by the GHOST Kit, Not Specific to It)\"; tls.sni; content:\"api.telegram.org\"; endswith; nocase; threshold:type threshold,track by_src,count 5,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/; classtype:policy-violation; sid:9100108; rev:4; metadata:author The_Hunters_Ledger, date 2026-05-25, tag GHOST_kit, tag Telegram_reporting;)",
             "pattern_type": "suricata",
             "valid_from": "2026-05-25T00:00:00Z",
             "labels": [
@@ -2996,12 +2996,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--e1bcdb81-3a90-5653-a03b-842636f23f56",
+            "id": "relationship--83a7cfba-4c6f-5b37-9221-07ce8dbef3fd",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:13.753714Z",
-            "modified": "2026-10-01T19:54:13.753714Z",
+            "created": "2026-10-11T04:24:15.804495Z",
+            "modified": "2026-10-11T04:24:15.804495Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--b0714b6a-4db0-5a45-9c49-15f15226df6b",
+            "source_ref": "indicator--4182bc44-6b37-5f10-bbd3-b827e15835a5",
             "target_ref": "malware--e50e9e2e-408e-52fd-ad9a-7871c902a999",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -3094,12 +3094,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--61ab484b-96d9-516a-bde8-e1a19a64f758",
+            "id": "relationship--323a8fed-8301-541b-8e57-cca65dcbe680",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:13.754134Z",
-            "modified": "2026-10-01T19:54:13.754134Z",
+            "created": "2026-10-11T04:24:15.8054Z",
+            "modified": "2026-10-11T04:24:15.8054Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--87f75465-3a16-5572-a24e-f3145678e55e",
+            "source_ref": "indicator--483c47cf-2e33-5a9b-b8cf-3959e100d49e",
             "target_ref": "malware--e50e9e2e-408e-52fd-ad9a-7871c902a999",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -3164,12 +3164,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--a4df467a-0a1c-57c5-8fc2-1894d0a3e9db",
+            "id": "relationship--5e70bae7-6700-5e7a-8ef1-9b62953cc0bb",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:13.754428Z",
-            "modified": "2026-10-01T19:54:13.754428Z",
+            "created": "2026-10-11T04:24:15.805926Z",
+            "modified": "2026-10-11T04:24:15.805926Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--c070dda2-5e2e-57f4-85a6-0dd8a0b98948",
+            "source_ref": "indicator--56a586e2-920f-5244-878c-6685f27aebd5",
             "target_ref": "malware--e50e9e2e-408e-52fd-ad9a-7871c902a999",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -3178,12 +3178,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--50c9ba8b-e155-5a92-be2a-49b6ea851cea",
+            "id": "relationship--a7e58667-5b19-58a5-808a-3272ab9aa4a8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:13.754487Z",
-            "modified": "2026-10-01T19:54:13.754487Z",
+            "created": "2026-10-11T04:24:15.806028Z",
+            "modified": "2026-10-11T04:24:15.806028Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--9da0ed16-5c7c-5646-a541-bf1feb091424",
+            "source_ref": "indicator--145d5f2f-e312-59ac-85eb-7144c65069e6",
             "target_ref": "malware--e50e9e2e-408e-52fd-ad9a-7871c902a999",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -3192,12 +3192,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--aee42d72-3af4-5d4c-8ca9-9e07712a8050",
+            "id": "relationship--b1136b0e-f692-501c-8ee8-8655ee19d8e5",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:13.754545Z",
-            "modified": "2026-10-01T19:54:13.754545Z",
+            "created": "2026-10-11T04:24:15.806129Z",
+            "modified": "2026-10-11T04:24:15.806129Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--4f3e4bf3-7a28-5d99-bca9-15d12ce77be1",
+            "source_ref": "indicator--390b3d5a-0fee-5f7b-9a4e-87e083b0e3ab",
             "target_ref": "malware--e50e9e2e-408e-52fd-ad9a-7871c902a999",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -3248,12 +3248,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--d6d00933-e6eb-5ce4-b4eb-21f34ac04332",
+            "id": "relationship--3203b5ce-7f1f-5acc-8989-31dbc3f069c5",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:13.754783Z",
-            "modified": "2026-10-01T19:54:13.754783Z",
+            "created": "2026-10-11T04:24:15.806514Z",
+            "modified": "2026-10-11T04:24:15.806514Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--6c2a495e-e307-520b-ac6a-33e45e85e9cd",
+            "source_ref": "indicator--2beb4dc7-06d9-5c7f-8570-934e77fc5a4a",
             "target_ref": "malware--e50e9e2e-408e-52fd-ad9a-7871c902a999",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -10923,7 +10923,7 @@
             "id": "report--9aa555ca-d9d6-51c3-8af0-af351596d438",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.787945Z",
-            "modified": "2026-10-10T13:40:55.72586Z",
+            "modified": "2026-10-11T04:24:15.880707Z",
             "name": "GHOST Cryptojacker Kit Family — Vova75Rus Kit-Author Supply Chain",
             "report_types": [
                 "threat-report"
@@ -11005,25 +11005,25 @@
                 "indicator--346e9bdf-0129-5bc8-9ecc-27f99e556375",
                 "indicator--cca2fb59-54ea-5f41-b885-b4da230895bd",
                 "indicator--20314fe5-2964-5a0b-9286-1ed16f20a4e1",
-                "indicator--b0714b6a-4db0-5a45-9c49-15f15226df6b",
+                "indicator--4182bc44-6b37-5f10-bbd3-b827e15835a5",
                 "indicator--f4470d02-406f-5e86-8aad-0afb255bc3ad",
                 "indicator--4d021958-4d7d-5ffe-8031-6ebb99e5279e",
                 "indicator--07bfb3d0-8f9f-5216-8a80-1a52264e3174",
                 "indicator--dce86bf3-3e8c-506b-ae70-83f378e532d6",
                 "indicator--a484fc2f-55e0-5e06-9140-470c6da5d93f",
                 "indicator--a1f7f480-7372-5967-950f-f5d9b8c4728c",
-                "indicator--87f75465-3a16-5572-a24e-f3145678e55e",
+                "indicator--483c47cf-2e33-5a9b-b8cf-3959e100d49e",
                 "indicator--4830f397-c0dd-50a8-b90e-01e4db884669",
                 "indicator--787f82f6-889c-5924-9474-a2e3926991d6",
                 "indicator--9fae4a61-8e3a-5de2-9212-f438f5be456f",
                 "indicator--5956f922-e13f-5a7e-962b-b6d0f2d499b8",
-                "indicator--c070dda2-5e2e-57f4-85a6-0dd8a0b98948",
-                "indicator--9da0ed16-5c7c-5646-a541-bf1feb091424",
-                "indicator--4f3e4bf3-7a28-5d99-bca9-15d12ce77be1",
+                "indicator--56a586e2-920f-5244-878c-6685f27aebd5",
+                "indicator--145d5f2f-e312-59ac-85eb-7144c65069e6",
+                "indicator--390b3d5a-0fee-5f7b-9a4e-87e083b0e3ab",
                 "indicator--1bfe229f-9656-57a6-bf96-7c53c78d776d",
                 "indicator--4004ac82-6f13-5504-8b3f-0805cc63a58d",
                 "indicator--5e5923ce-0e72-5ce6-8203-5e543d07a12b",
-                "indicator--6c2a495e-e307-520b-ac6a-33e45e85e9cd",
+                "indicator--2beb4dc7-06d9-5c7f-8570-934e77fc5a4a",
                 "malware--8eebd6d2-26d2-53fd-98c4-6e2b47107a7b",
                 "malware--2ae744cc-d429-562c-b3ff-20af345c49c8",
                 "malware--f6ee4546-0403-5c89-8671-44b5f506e112",
@@ -11115,25 +11115,25 @@
                 "relationship--cc8b302e-2f23-5196-800e-572a0ca40310",
                 "relationship--5cc2e8f8-ae53-5861-8351-6f0a18260994",
                 "relationship--f7068553-e521-519a-9fed-24cc3b6d2d98",
-                "relationship--e1bcdb81-3a90-5653-a03b-842636f23f56",
+                "relationship--83a7cfba-4c6f-5b37-9221-07ce8dbef3fd",
                 "relationship--e3482394-0531-5cf8-b6ba-19b035676820",
                 "relationship--cd1b0ee5-e67d-5204-8369-563ba15157fb",
                 "relationship--f75c494e-c1fb-5774-aa02-0465d2d94dab",
                 "relationship--4b43eb00-7033-5719-be45-097407cb420e",
                 "relationship--a1c8538d-49df-5647-8463-fdea84ad28bb",
                 "relationship--1682d665-6069-5278-86cd-fd33ec29f33f",
-                "relationship--61ab484b-96d9-516a-bde8-e1a19a64f758",
+                "relationship--323a8fed-8301-541b-8e57-cca65dcbe680",
                 "relationship--d0cf1df7-df3a-5d5f-8564-825fdde1853f",
                 "relationship--e5207b02-3a0d-5804-a999-22ad1cec0edf",
                 "relationship--697c58a5-b5f5-5b89-b658-73cb6d00e490",
                 "relationship--633c1fe1-bbad-55b4-8d3f-5442b5d4fbdb",
-                "relationship--a4df467a-0a1c-57c5-8fc2-1894d0a3e9db",
-                "relationship--50c9ba8b-e155-5a92-be2a-49b6ea851cea",
-                "relationship--aee42d72-3af4-5d4c-8ca9-9e07712a8050",
+                "relationship--5e70bae7-6700-5e7a-8ef1-9b62953cc0bb",
+                "relationship--a7e58667-5b19-58a5-808a-3272ab9aa4a8",
+                "relationship--b1136b0e-f692-501c-8ee8-8655ee19d8e5",
                 "relationship--41040516-e978-5967-a5b6-0d0d930b4ea4",
                 "relationship--000e6520-a77b-5fdf-9fc0-38889e70d83b",
                 "relationship--ac9980d1-5eae-5704-8be5-625cd92fb7ef",
-                "relationship--d6d00933-e6eb-5ce4-b4eb-21f34ac04332",
+                "relationship--3203b5ce-7f1f-5acc-8989-31dbc3f069c5",
                 "relationship--9d19763e-e274-5fd1-9ec2-cd112b87dc26",
                 "relationship--63edcfdb-1ec3-5016-887d-6e99c7e7a4a9",
                 "relationship--7a70f6cd-3665-5399-8fc6-cea0ac06bbfa",

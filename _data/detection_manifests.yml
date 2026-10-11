@@ -1038,7 +1038,7 @@ arsenal-237-nethost-dll-detections:
     engine: yara
     tier: Hunting
     fence: 1
-    hash: "7c283c87"
+    hash: "e3a7618a"
     head: "rule SUSP_Arsenal237_NetHost_Rust_C2_String_Comb"
     robustness: 1
     confidence: "MODERATE"
@@ -1161,11 +1161,11 @@ arsenal-237-rootkit-dll-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1068]
-  - name: "Multi-Vendor Security Product Kill-List"
+  - name: "Security Product Process-Name Kill-List (Multi-Vendor Spread or Single-Vendor Depth)"
     engine: yara
     tier: Detection
     fence: 1
-    hash: "6380496a"
+    hash: "ae2cf537"
     head: "rule Arsenal237_Security_Product_Killer { meta: "
     robustness: 2
     confidence: "HIGH"
@@ -1201,7 +1201,7 @@ arsenal-237-rootkit-dll-detections:
     engine: sigma
     tier: Detection
     fence: 5
-    hash: "094554bb"
+    hash: "7a3d46ff"
     head: "title: High-Privilege Process Access to Security"
     robustness: 3
     confidence: "HIGH"
@@ -1256,8 +1256,8 @@ bellamain-turkish-phaas-79-137-192-3-20260516-detections:
     engine: sigma
     tier: Hunting
     fence: 4
-    hash: "6f515f49"
-    head: "title: BellaMain PhaaS USOM Blocklist Poll from "
+    hash: "bb43de39"
+    head: "title: BellaMain PhaaS USOM Blocklist Poll id: 7"
     robustness: 1
     confidence: "MODERATE"
     attack: [T1518.001, T1102.002, T1041, T1119]
@@ -1275,7 +1275,7 @@ cloudsync-assembler-toolkit-91-197-98-188-detections:
     engine: yara
     tier: Detection
     fence: 0
-    hash: "acd7b468"
+    hash: "5daf00af"
     head: "/* Yara Rule Set Identifier: CloudSync Assembler"
     robustness: 3
     confidence: "HIGH"
@@ -1302,9 +1302,9 @@ cloudsync-assembler-toolkit-91-197-98-188-detections:
     engine: yara
     tier: Detection
     fence: 3
-    hash: "736d97bb"
+    hash: "6883b277"
     head: "rule Loader_SvchostJS_CustomAlphabet { meta: des"
-    robustness: 3
+    robustness: 2
     confidence: "HIGH"
     attack: [T1027, T1140]
   - name: "Deployment Orchestrator Console Banners"
@@ -1361,12 +1361,12 @@ cloudsync-assembler-toolkit-91-197-98-188-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1090.003, T1036.005]
-  - name: "Wscript To PowerShell To MSBuild Execution Chain Without Project File"
+  - name: "MSBuild Launched Without a Project File by a Hidden or Bypass-Policy PowerShell Parent"
     engine: sigma
     tier: Detection
     fence: 10
-    hash: "d3834400"
-    head: "title: Wscript To PowerShell To MSBuild Executio"
+    hash: "a0f1d456"
+    head: "title: MSBuild Launched Without a Project File b"
     robustness: 3
     confidence: "HIGH"
     attack: [T1127.001, T1055]
@@ -1392,7 +1392,7 @@ cloudsync-assembler-toolkit-91-197-98-188-detections:
     engine: sigma
     tier: Detection
     fence: 13
-    hash: "84c08001"
+    hash: "4c62a341"
     head: "title: Photo Studio Masquerade Loader Files Unde"
     robustness: 3
     confidence: "HIGH"
@@ -1410,7 +1410,7 @@ cloudsync-assembler-toolkit-91-197-98-188-detections:
     engine: sigma
     tier: Detection
     fence: 15
-    hash: "48629296"
+    hash: "b5f06b20"
     head: "title: Temp Log File Deleted Matching Fileless L"
     robustness: 3
     confidence: "HIGH"
@@ -1419,7 +1419,7 @@ cloudsync-assembler-toolkit-91-197-98-188-detections:
     engine: sigma
     tier: Detection
     fence: 16
-    hash: "4f5ffa8e"
+    hash: "379146fb"
     head: "title: Active Directory Tier-0 Backdoor Account "
     robustness: 3
     confidence: "HIGH"
@@ -1451,21 +1451,21 @@ cloudsync-assembler-toolkit-91-197-98-188-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1505.003, T1059.001]
-  - name: "AnyDesk Unattended Password Piped Over Stdin By Non-AnyDesk Process"
+  - name: "AnyDesk Unattended Password Piped Over Stdin"
     engine: sigma
     tier: Detection
     fence: 20
-    hash: "f7ffc91c"
+    hash: "4430126d"
     head: "title: AnyDesk Unattended Password Piped Over St"
     robustness: 2
     confidence: "HIGH"
     attack: [T1219.002]
-  - name: "PowerShell WebClient Download Inheriting Default Proxy Credentials"
+  - name: "PowerShell Net.WebClient Proxy Set to Default Credentials"
     engine: sigma
     tier: Detection
     fence: 21
-    hash: "40e74516"
-    head: "title: PowerShell WebClient Download Inheriting "
+    hash: "a1eb65f3"
+    head: "title: PowerShell Net.WebClient Proxy Set to Def"
     robustness: 3
     confidence: "HIGH"
     attack: [T1090]
@@ -1482,7 +1482,7 @@ cloudsync-assembler-toolkit-91-197-98-188-detections:
     engine: sigma
     tier: Detection
     fence: 23
-    hash: "8cf37ea0"
+    hash: "c5e0a95d"
     head: "title: Run Key SystemUpdate Value Pointing To St"
     robustness: 3
     confidence: "HIGH"
@@ -1542,12 +1542,12 @@ dual-rat-analysis-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1053.005, T1547.001, T1547.009]
-  - name: "Quasar RAT Mark-of-the-Web Removal"
+  - name: "Zone.Identifier and DeleteFile Strings in a PE (Mark-of-the-Web Removal Capability Lead)"
     engine: yara
     tier: Hunting
     fence: 1
-    hash: "c0b63c37"
-    head: "rule Quasar_RAT_MarkOfWeb_Removal { meta: descri"
+    hash: "cd2343aa"
+    head: "rule SUSP_PE_ZoneIdentifier_DeleteFile_Strings {"
     robustness: 2
     confidence: "MODERATE"
     attack: [T1070.004]
@@ -1605,11 +1605,11 @@ dual-rat-analysis-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1102.001, T1071.001]
-  - name: "NjRAT/XWorm Triple-Redundant Persistence: Base Rules + 2-of-3 Correlation"
+  - name: "NjRAT/XWorm Triple-Redundant Persistence: Base Rules + All-Three Correlation"
     engine: sigma
     tier: Hunting
     fence: 8
-    hash: "2eb3e9e2"
+    hash: "433ac414"
     head: "title: NjRAT/XWorm Persistence - Scheduled Task "
     confidence: "HIGH for the correlation; MODERATE for each base rule individually."
     attack: [T1053.005, T1547.001, T1547.009]
@@ -1718,9 +1718,9 @@ evilsoul-engine-stealer-maas-detections:
     engine: yara
     tier: Detection
     fence: 3
-    hash: "45128954"
+    hash: "1ca4927a"
     head: "/* Yara Rule Set Identifier: EvilSoul-Engine Sup"
-    robustness: 3
+    robustness: 2
     confidence: "HIGH"
     attack: [T1555.003, T1539, T1055.012, T1620]
   - name: "EvilSoul-Engine Split-Domain Anti-Grep Pattern"
@@ -1736,7 +1736,7 @@ evilsoul-engine-stealer-maas-detections:
     engine: sigma
     tier: Detection
     fence: 5
-    hash: "2e08a84b"
+    hash: "1146b643"
     head: "title: Browser Relaunched with Remote Debugging "
     robustness: 3
     confidence: "HIGH"
@@ -1754,7 +1754,7 @@ evilsoul-engine-stealer-maas-detections:
     engine: sigma
     tier: Detection
     fence: 7
-    hash: "8ac158f7"
+    hash: "3a129c70"
     head: "title: Whole-Drive Windows Defender Exclusion Co"
     robustness: 3
     confidence: "HIGH"
@@ -1763,7 +1763,7 @@ evilsoul-engine-stealer-maas-detections:
     engine: sigma
     tier: Detection
     fence: 8
-    hash: "0a4a50e2"
+    hash: "e2c0a0df"
     head: "title: Scheduled Task Created with Microsoft Cor"
     robustness: 3
     confidence: "HIGH"
@@ -1772,16 +1772,16 @@ evilsoul-engine-stealer-maas-detections:
     engine: sigma
     tier: Hunting
     fence: 9
-    hash: "8ba3d1e8"
+    hash: "22be8a88"
     head: "title: ChromElevator ABE-Bypass Tool Dropped to "
     robustness: 1
     confidence: "HIGH (string match) / durability LOW (renameable filenames + directory)"
     attack: [T1105, T1555.003]
-  - name: "EvilSoul-Engine Watchdog Persistence Files Created in TEMP or Startup"
+  - name: "EvilSoul-Engine Watchdog Persistence Files Created in User TEMP or the Startup Folder"
     engine: sigma
     tier: Hunting
     fence: 10
-    hash: "014b2156"
+    hash: "734cb4dc"
     head: "title: EvilSoul-Engine Watchdog Persistence File"
     robustness: 1
     confidence: "MODERATE"
@@ -1818,7 +1818,7 @@ flaskc2-postex-toolkit-67-215-232-25-detections:
     engine: yara
     tier: Hunting
     fence: 2
-    hash: "e9a68269"
+    hash: "e7fbfeea"
     head: "rule MSSQL_CLR_Backdoor_CmdExec_Assembly_Strings"
     robustness: 2
     confidence: "MODERATE"
@@ -1863,7 +1863,7 @@ flaskc2-postex-toolkit-67-215-232-25-detections:
     engine: sigma
     tier: Hunting
     fence: 7
-    hash: "4397d8fc"
+    hash: "0ca2e695"
     head: "title: MSSQL sqlservr.exe Initiating Outbound TC"
     robustness: 2
     confidence: "MODERATE"
@@ -1877,12 +1877,12 @@ flaskc2-postex-toolkit-67-215-232-25-detections:
     robustness: 1
     confidence: "MODERATE"
     attack: [T1505.003, T1027.010]
-  - name: "CVE-2026-20817 WER LPE PoC: Anomalous WerFault.exe Token Inspection"
+  - name: "CVE-2026-20817 WER LPE PoC: Process Handle Opened to WerFault.exe by an Unlisted Source"
     engine: sigma
     tier: Hunting
     fence: 9
-    hash: "ddcc4dd9"
-    head: "title: CVE-2026-20817 WER LPE PoC Token Inspecti"
+    hash: "5168956c"
+    head: "title: CVE-2026-20817 WER LPE PoC Process Handle"
     robustness: 2
     confidence: "MODERATE"
     attack: [T1068]
@@ -1927,24 +1927,15 @@ fleetagentadvanced-exe-detections:
     engine: yara
     tier: Hunting
     fence: 1
-    hash: "5857b4dc"
+    hash: "ec973ae9"
     head: "rule SUSP_FleetAgentAdvanced_NET_Masquerade_Comb"
     robustness: 1
     confidence: "LOW"
     attack: [T1036.005, T1055]
-  - name: "FleetAgentAdvanced Process Injection from .NET Executable"
-    engine: sigma
-    tier: Detection
-    fence: 2
-    hash: "772b4bba"
-    head: "title: FleetAgentAdvanced Process Injection from"
-    robustness: 3
-    confidence: "HIGH"
-    attack: [T1055]
   - name: "FleetAgentAdvanced Persistence with Microsoft .NET Masquerading"
     engine: sigma
     tier: Hunting
-    fence: 3
+    fence: 2
     hash: "a6c38367"
     head: "title: FleetAgentAdvanced Persistence with Micro"
     robustness: 1
@@ -1953,21 +1944,30 @@ fleetagentadvanced-exe-detections:
   - name: "FleetAgentAdvanced Scheduled-Task Masquerade Creation and task.xml Deletion (Correlation)"
     engine: sigma
     tier: Hunting
-    fence: 4
-    hash: "08f39845"
+    fence: 3
+    hash: "38a49f0d"
     head: "title: FleetAgentAdvanced-Style .NET Runtime Opt"
     robustness: 2
     confidence: "LOW — both base signals are individually brittle, masquerade-literal-dependent selectors; the correlation adds real but limited value"
     attack: [T1053.005, T1070.004]
-  - name: ".NET Dropper with Base64 Embedded Payload Execution"
+  - name: ".NET Base64 Decode and File Write in a Process-Access Call Trace (EDR Telemetry Only)"
+    engine: sigma
+    tier: Hunting
+    fence: 4
+    hash: "03c149f7"
+    head: "title: .NET Base64 Decode and Byte-Array File Wr"
+    robustness: 2
+    confidence: "LOW"
+    attack: [T1027]
+  - name: "Remote Thread Created by a FleetAgentAdvanced Binary or an AppData Process"
     engine: sigma
     tier: Hunting
     fence: 5
-    hash: "341be545"
-    head: "title: .NET Dropper with Base64 Embedded Payload"
+    hash: "24e908ec"
+    head: "title: Remote Thread Created by a FleetAgentAdva"
     robustness: 2
-    confidence: "MODERATE"
-    attack: [T1027]
+    confidence: "LOW"
+    attack: [T1055]
 fleetagentfud-exe-detections:
   - name: "FleetAgentFUD WebSocket C2 Signatures"
     engine: yara
@@ -2000,17 +2000,17 @@ fleetagentfud-exe-detections:
     engine: yara
     tier: Hunting
     fence: 3
-    hash: "6f40ee11"
+    hash: "49920016"
     head: "rule FleetAgent_Family_General { meta: descripti"
     robustness: 1
     confidence: "LOW"
     attack: [T1036.005, T1129]
-  - name: "FleetAgentFUD PowerShell Execution Policy Bypass from AppData"
+  - name: "PowerShell Execution Policy Bypass with Hidden Window from an AppData Parent"
     engine: sigma
     tier: Hunting
     fence: 4
-    hash: "5e68f602"
-    head: "title: FleetAgentFUD PowerShell Execution Policy"
+    hash: "2341e6ad"
+    head: "title: PowerShell Execution Policy Bypass with H"
     robustness: 2
     confidence: "LOW"
     attack: [T1059.001, T1685]
@@ -2023,30 +2023,30 @@ fleetagentfud-exe-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1115]
-  - name: "FleetAgentFUD File Download to Suspicious Locations"
+  - name: "Executable File Created in Public or Windows Temp Folders by an AppData Process"
     engine: sigma
     tier: Hunting
     fence: 6
-    hash: "4ddb6514"
-    head: "title: FleetAgentFUD File Download to Suspicious"
+    hash: "a5adb72b"
+    head: "title: Executable File Created in Public or Wind"
     robustness: 2
     confidence: "MODERATE"
     attack: [T1105, T1204.002]
-  - name: "FleetAgentFUD RWX Memory Allocation from .NET Executable"
+  - name: "VirtualProtect Call Setting RWX Named in a Call Trace, from an AppData Process (EDR API-Call Telemetry)"
     engine: sigma
     tier: Hunting
     fence: 7
-    hash: "b72c26b9"
-    head: "title: FleetAgentFUD RWX Memory Allocation from "
+    hash: "a8a3c06b"
+    head: "title: VirtualProtect Call Setting RWX Protectio"
     robustness: 2
     confidence: "LOW"
     attack: [T1055]
-  - name: "FleetAgentFUD PowerShell Bypass from AppData Parent (Broad Variant)"
+  - name: "PowerShell Execution Policy Bypass from an AppData Parent (Broad Variant)"
     engine: sigma
     tier: Hunting
     fence: 8
-    hash: "f10f4fc1"
-    head: "title: FleetAgentFUD Multi-Stage Attack Pattern "
+    hash: "f17046b4"
+    head: "title: PowerShell Execution Policy Bypass from a"
     robustness: 2
     confidence: "LOW"
     attack: [T1059.001]
@@ -2054,7 +2054,7 @@ fleetagentfud-exe-detections:
     engine: sigma
     tier: Hunting
     fence: 9
-    hash: "0ceece95"
+    hash: "94b67ebc"
     head: "title: FleetAgentFUD Rapid System Reconnaissance"
     robustness: 2
     confidence: "LOW"
@@ -2072,7 +2072,7 @@ fleetagentfud-exe-detections:
     engine: suricata
     tier: Hunting
     fence: 11
-    hash: "ad65c90f"
+    hash: "4ec2d9d7"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 2
     confidence: "MODERATE"
@@ -2091,7 +2091,7 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
     engine: yara
     tier: Detection
     fence: 2
-    hash: "35f1411d"
+    hash: "8ba7221d"
     head: "rule MAL_Linux_GHOST_libpam_cache_Source { meta:"
     robustness: 3
     confidence: "HIGH"
@@ -2114,12 +2114,12 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1059.006, T1595.002, T1554]
-  - name: "MAL_Linux_GHOST_ComfyUI_Fake_PerformanceMonitor_Node"
+  - name: "SUSP_Linux_ComfyUI_PerformanceMonitor_Node_Registration"
     engine: yara
     tier: Hunting
     fence: 5
-    hash: "84cce691"
-    head: "rule MAL_Linux_GHOST_ComfyUI_Fake_PerformanceMon"
+    hash: "f0068167"
+    head: "rule SUSP_Linux_ComfyUI_PerformanceMonitor_Node_"
     robustness: 2
     confidence: "MODERATE (downgraded from HIGH 2026-09-13)"
     attack: [T1554, T1059.006, T1574.006]
@@ -2127,7 +2127,7 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
     engine: yara
     tier: Hunting
     fence: 6
-    hash: "af5f2d23"
+    hash: "87932e7a"
     head: "rule MAL_Linux_GHOST_Hysteria_Operator_Wrapper {"
     robustness: 2
     confidence: "MODERATE"
@@ -2177,12 +2177,12 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1574.006, T1027, T1014]
-  - name: "Auditd - PAM Security Library Directory Write by Non-Package-Manager"
+  - name: "Auditd - PAM Security Library Directory File Creation by Non-Package-Manager"
     engine: sigma
     tier: Detection
     fence: 12
-    hash: "505c4ae6"
-    head: "title: Auditd - PAM Security Library Directory W"
+    hash: "0343ae90"
+    head: "title: Auditd - PAM Security Library Directory F"
     robustness: 3
     confidence: "HIGH"
     attack: [T1574.006, T1014]
@@ -2222,30 +2222,30 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
     robustness: 2
     confidence: "MODERATE"
     attack: [T1574.006, T1059.004]
-  - name: "High-Frequency Ncat Listener Creation on Linux Host"
+  - name: "Ncat Listener Creation on Linux Host"
     engine: sigma
     tier: Hunting
     fence: 17
-    hash: "da592002"
-    head: "title: High-Frequency Ncat Listener Creation on "
+    hash: "5a995051"
+    head: "title: Ncat Listener Creation on Linux Host id: "
     robustness: 1
     confidence: "MODERATE"
     attack: [T1059.004, T1571]
-  - name: "Hysteria V2 QUIC Proxy Process Execution on Linux Server"
+  - name: "Hysteria Proxy Process Execution on Linux Server"
     engine: sigma
     tier: Hunting
     fence: 18
-    hash: "f34d6e54"
-    head: "title: Hysteria V2 QUIC Proxy Process Execution "
+    hash: "f1160c21"
+    head: "title: Hysteria Proxy Process Execution on Linux"
     robustness: 2
     confidence: "MODERATE"
     attack: [T1572]
-  - name: "High-Frequency memfd_create Syscall from Non-JVM Process on Linux Server"
+  - name: "memfd_create Syscall Outside a Java, Browser and Node Filter on Linux Server"
     engine: sigma
     tier: Hunting
     fence: 19
-    hash: "2d42a1ab"
-    head: "title: High-Frequency memfd_create Syscall from "
+    hash: "c972accb"
+    head: "title: memfd_create Syscall Outside a Java, Brow"
     robustness: 2
     confidence: "MODERATE"
     attack: [T1620, T1496.001]
@@ -2276,11 +2276,11 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
     robustness: 2
     confidence: "LOW"
     attack: [T1572, T1571]
-  - name: "GHOST Cryptojacker Kit Telegram API Egress from Production Server: Covert Mining Report"
+  - name: "Telegram API TLS SNI Egress from an Internal Host (Reporting Channel Used by the GHOST Kit, Not Specific to It)"
     engine: suricata
     tier: Hunting
     fence: 23
-    hash: "bb7ed493"
+    hash: "4d02a06e"
     head: "alert tls $HOME_NET any -> any any (msg:\"THL HUN"
     robustness: 1
     confidence: "LOW–MODERATE"
@@ -2290,7 +2290,7 @@ gocloud-multiservice-cryptojacking-149-28-112-221-detections:
     engine: yara
     tier: Detection
     fence: 0
-    hash: "7c3acf7e"
+    hash: "5a7af8ed"
     head: "rule GOCLOUD_Windows_Deploy_Worm_Lingkai { meta:"
     robustness: 2
     confidence: "HIGH"
@@ -2299,7 +2299,7 @@ gocloud-multiservice-cryptojacking-149-28-112-221-detections:
     engine: yara
     tier: Detection
     fence: 1
-    hash: "22198790"
+    hash: "09faa04a"
     head: "rule GOCLOUD_Windows_Miner_WinJenkins { meta: de"
     robustness: 2
     confidence: "HIGH"
@@ -2308,7 +2308,7 @@ gocloud-multiservice-cryptojacking-149-28-112-221-detections:
     engine: yara
     tier: Detection
     fence: 2
-    hash: "a93edce0"
+    hash: "cef1e572"
     head: "rule GOCLOUD_Linux_Miner_v7 { meta: description "
     robustness: 2
     confidence: "HIGH"
@@ -2452,7 +2452,7 @@ gocloud-multiservice-cryptojacking-149-28-112-221-detections:
     engine: suricata
     tier: Detection
     fence: 18
-    hash: "49160973"
+    hash: "811e618b"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 2
     confidence: "HIGH"
@@ -2548,12 +2548,12 @@ gotenberg-rce-cryptomining-107-175-69-137-detections:
     robustness: 1
     confidence: "HIGH that the behavior is real and miner-related, LOW that any single hit is this operator"
     attack: [T1059.004]
-  - name: "Base64 Decoded Script Written to Tmp and Executed by Bash"
+  - name: "Base64 Decode Redirected to Tmp Followed by Bash Run of a Tmp Path in One Command Line"
     engine: sigma
     tier: Hunting
     fence: 6
-    hash: "9075c1fa"
-    head: "title: Base64 Decoded Script Written to Tmp and "
+    hash: "7ce79ff7"
+    head: "title: Base64 Decode Redirected to Tmp Followed "
     robustness: 1
     confidence: "HIGH that the shape matches the campaign's staging step; the anchor itself is generic staging behavior"
     attack: [T1059.004, T1140]
@@ -2634,7 +2634,7 @@ inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections:
     engine: suricata
     tier: Hunting
     fence: 4
-    hash: "9b30f497"
+    hash: "31072dc9"
     head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
     robustness: 2
     confidence: "MODERATE"
@@ -2644,7 +2644,7 @@ kaido-quasar-rat-detections:
     engine: yara
     tier: Detection
     fence: 0
-    hash: "65dbdb82"
+    hash: "229479f4"
     head: "/* Yara Rule Set Identifier: KAIDO Quasar-Fork R"
     robustness: 3
     confidence: "HIGH"

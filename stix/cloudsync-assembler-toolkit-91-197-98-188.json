@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--81870c22-4934-49e0-9cb0-8f529eceeec0",
+    "id": "bundle--7dcb9eb4-e041-4187-9e5a-2f82a0879f24",
     "objects": [
         {
             "type": "identity",
@@ -293,12 +293,12 @@
             "id": "indicator--78b34948-9a84-548e-b370-cd602bfd3367",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.722219Z",
-            "modified": "2026-10-01T19:54:12.722219Z",
+            "modified": "2026-10-11T04:24:13.509454Z",
             "name": "RAT_CloudSync_TorPanel_NetscanBuild",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "/*\n   Yara Rule Set\n   Identifier: CloudSync Assembler Toolkit - 91.197.98.188\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule RAT_CloudSync_TorPanel_NetscanBuild {\n   meta:\n      description = \"Detects the later-build CloudSync Tor-panel RAT (client.exe/q.exe/s.exe) via embedded HTML/JS markup for its CIDR+port network scanner panel tab, unique to the later of two known CloudSync build generations\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188/\"\n      date = \"2026-08-03\"\n      hash1 = \"62aa8e470e60aa9fa77df6e6e63b7c253657e95d6018240b1752a9ca9fe389fa\"\n      family = \"CloudSync\"\n      malware_type = \"RAT\"\n      campaign = \"CloudSync-Assembler-Toolkit-91.197.98.188\"\n      id = \"b14306ec-cdfb-5107-bf6f-156ea821ae75\"\n   strings:\n      $api1 = \"/api/netscan\" ascii\n      $html1 = \"id='scan-cidr'\" ascii\n      $html2 = \"placeholder='Target CIDR (e.g. 192.168.1.0/24)'\" ascii\n      $html3 = \"id='netscan-output'\" ascii\n      $html4 = \"showTab('netscan'\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 60MB and\n      3 of them\n}",
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: CloudSync Assembler Toolkit - 91.197.98.188\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule RAT_CloudSync_TorPanel_NetscanBuild {\n   meta:\n      description = \"Detects the later-build CloudSync Tor-panel RAT (client.exe/q.exe/s.exe) via embedded HTML/JS markup for its CIDR+port network scanner panel tab, unique to the later of two known CloudSync build generations\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188/\"\n      date = \"2026-08-03\"\n      modified = \"2026-10-11\"\n      hash1 = \"62aa8e470e60aa9fa77df6e6e63b7c253657e95d6018240b1752a9ca9fe389fa\"\n      family = \"CloudSync\"\n      malware_type = \"RAT\"\n      campaign = \"CloudSync-Assembler-Toolkit-91.197.98.188\"\n      id = \"b14306ec-cdfb-5107-bf6f-156ea821ae75\"\n   strings:\n      $api1 = \"/api/netscan\" ascii\n      $html1 = \"id='scan-cidr'\" ascii\n      $html2 = \"placeholder='Target CIDR (e.g. 192.168.1.0/24)'\" ascii\n      $html3 = \"id='netscan-output'\" ascii\n      $html4 = \"showTab('netscan'\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 60MB and\n      3 of them\n}",
             "pattern_type": "yara",
             "valid_from": "2026-08-03T00:00:00Z",
             "labels": [
@@ -356,12 +356,12 @@
             "id": "indicator--905535be-fa82-5642-80b4-d05d43708b7e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.722652Z",
-            "modified": "2026-10-01T19:54:12.722652Z",
+            "modified": "2026-10-11T04:24:13.509957Z",
             "name": "Loader_SvchostJS_CustomAlphabet",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule Loader_SvchostJS_CustomAlphabet {\n   meta:\n      description = \"Detects the svhost.js WSH JScript fileless loader via its custom 16-character substitution alphabet used in a layered base16-XOR plus AES/ChaCha/permutation decoder, and the loader's distinctive function-constructor string-decode shape\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188/\"\n      date = \"2026-08-03\"\n      hash1 = \"4b115a9f745219e3f3abdea275da89f35e4ec5f3d43286e5efc58eaf8049f3f7\"\n      family = \"SvchostPayload\"\n      malware_type = \"Loader\"\n      campaign = \"CloudSync-Assembler-Toolkit-91.197.98.188\"\n      id = \"2b39854f-a2dc-535f-824f-b28af4328b35\"\n   strings:\n      $alpha = \"5v_qoKAku06M^ZW1\" ascii\n      $shape1 = \"(function(){})[\\\"constructor\\\"]\" ascii\n      $shape2 = \"String.fromCharCode\" ascii\n   condition:\n      filesize < 1MB and\n      ($alpha or all of ($shape*))\n}",
+            "pattern": "rule Loader_SvchostJS_CustomAlphabet {\n   meta:\n      description = \"Detects the svhost.js WSH JScript fileless loader via its custom 16-character substitution alphabet used in a layered base16-XOR plus AES/ChaCha/permutation decoder. The alphabet string is the only anchor: the generic function-constructor and String.fromCharCode strings this rule once accepted on their own appear in ordinary JavaScript and were removed\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188/\"\n      date = \"2026-08-03\"\n      modified = \"2026-10-11\"\n      hash1 = \"4b115a9f745219e3f3abdea275da89f35e4ec5f3d43286e5efc58eaf8049f3f7\"\n      family = \"SvchostPayload\"\n      malware_type = \"Loader\"\n      campaign = \"CloudSync-Assembler-Toolkit-91.197.98.188\"\n      id = \"2b39854f-a2dc-535f-824f-b28af4328b35\"\n   strings:\n      $alpha = \"5v_qoKAku06M^ZW1\" ascii\n   condition:\n      filesize < 1MB and\n      $alpha\n}",
             "pattern_type": "yara",
             "valid_from": "2026-08-03T00:00:00Z",
             "labels": [
@@ -500,15 +500,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--03ca9929-1c95-56df-88c4-5b035e89bdfd",
+            "id": "indicator--2271e5c6-14ae-51c3-8fd4-64003f9e0352",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:12.723479Z",
-            "modified": "2026-10-01T19:54:12.723479Z",
-            "name": "Wscript To PowerShell To MSBuild Execution Chain Without Project File",
+            "created": "2026-10-11T04:24:13.510757Z",
+            "modified": "2026-10-11T04:24:13.510757Z",
+            "name": "MSBuild Launched Without a Project File by a Hidden or Bypass-Policy PowerShell Parent",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Wscript To PowerShell To MSBuild Execution Chain Without Project File\nid: 4f593a7e-a980-452a-bc36-25db2acf2c7c\nstatus: experimental\ndescription: >-\n    Detects MSBuild.exe launched directly by a hidden, execution-policy-bypassed\n    PowerShell process with no build-project argument (no .csproj/.vbproj/.sln/.xml/\n    .proj/.targets path on the command line). Legitimate MSBuild invocations, even\n    from a shell, almost always pass a project or target path; a bare invocation is\n    consistent with using MSBuild as a hollow injection target rather than as a\n    build tool. Observed as the final stage of a wscript-launched fileless loader\n    chain that injects a custom .NET RAT into the resulting process.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\nauthor: The Hunters Ledger\ndate: 2026-08-03\ntags:\n    - attack.stealth\n    - attack.privilege-escalation\n    - attack.execution\n    - attack.t1127.001\n    - attack.t1055\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_img:\n        - Image|endswith: '\\MSBuild.exe'\n        - OriginalFileName: 'MSBuild.exe'\n    selection_parent:\n        ParentImage|endswith: '\\powershell.exe'\n        ParentCommandLine|contains:\n            - '-w hidden'\n            - '-windowstyle hidden'\n            - '-ep bypass'\n            - '-ExecutionPolicy Bypass'\n    filter_project_file:\n        CommandLine|contains:\n            - '.csproj'\n            - '.vbproj'\n            - '.sln'\n            - '.proj'\n            - '.targets'\n            - '.xml'\n    condition: all of selection_* and not filter_project_file\nfalsepositives:\n    - Developer or CI tooling that launches MSBuild from a hidden PowerShell wrapper without a visible project path on the command line\nlevel: high",
+            "pattern": "title: MSBuild Launched Without a Project File by a Hidden or Bypass-Policy PowerShell Parent\nid: 4f593a7e-a980-452a-bc36-25db2acf2c7c\nstatus: experimental\ndescription: >-\n    Detects MSBuild.exe launched directly by a PowerShell process whose own command\n    line carries a hidden-window or an execution-policy-bypass flag (either one is\n    enough), with no build-project argument (no .csproj/.vbproj/.sln/.xml/.proj/\n    .targets text on the MSBuild command line). Legitimate MSBuild invocations, even\n    from a shell, almost always pass a project or target path; a bare invocation is\n    consistent with using MSBuild as a hollow injection target rather than as a\n    build tool. Observed as the final stage of a wscript-launched fileless loader\n    chain that injects a custom .NET RAT into the resulting process. The rule sees\n    only the PowerShell-to-MSBuild step: process-creation events carry the parent\n    and not the grandparent, so the wscript start of the chain is not tested.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\nauthor: The Hunters Ledger\ndate: 2026-08-03\nmodified: 2026-10-11\ntags:\n    - attack.stealth\n    - attack.privilege-escalation\n    - attack.execution\n    - attack.t1127.001\n    - attack.t1055\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_img:\n        - Image|endswith: '\\MSBuild.exe'\n        - OriginalFileName: 'MSBuild.exe'\n    selection_parent:\n        ParentImage|endswith: '\\powershell.exe'\n        ParentCommandLine|contains:\n            - '-w hidden'\n            - '-windowstyle hidden'\n            - '-ep bypass'\n            - '-ExecutionPolicy Bypass'\n    filter_project_file:\n        CommandLine|contains:\n            - '.csproj'\n            - '.vbproj'\n            - '.sln'\n            - '.proj'\n            - '.targets'\n            - '.xml'\n    condition: all of selection_* and not filter_project_file\nfalsepositives:\n    - Developer or CI tooling that launches MSBuild from a hidden PowerShell wrapper without a visible project path on the command line\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-08-03T00:00:00Z",
             "labels": [
@@ -566,12 +566,12 @@
             "id": "indicator--47fcbba0-311e-567f-8c06-bf382699acc6",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.723827Z",
-            "modified": "2026-10-01T19:54:12.723827Z",
+            "modified": "2026-10-11T04:24:13.51113Z",
             "name": "Photo Studio Masquerade Loader Files Under LocalAppData",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Photo Studio Masquerade Loader Files Under LocalAppData\nid: d570d892-64b5-4eb9-ad99-2b615230bbdf\nstatus: experimental\ndescription: >-\n    Detects creation of a JScript or VBScript file inside a \"Photo Studio\" directory\n    under the user's LocalAppData folder. This is the on-disk persistence copy and\n    windowless relaunch wrapper for a fileless .NET RAT loader; no legitimate \"Photo\n    Studio\" application is installed by this path convention.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\nauthor: The Hunters Ledger\ndate: 2026-08-03\ntags:\n    - attack.persistence\n    - attack.stealth\n    - attack.t1036.005\nlogsource:\n    category: file_event\n    product: windows\ndetection:\n    selection:\n        TargetFilename|contains: '\\Photo Studio\\'\n        TargetFilename|endswith:\n            - '.js'\n            - '.vbs'\n    condition: selection\nfalsepositives:\n    - Unlikely, no common legitimate application installs script files under a \"Photo Studio\" LocalAppData folder\nlevel: high",
+            "pattern": "title: Photo Studio Masquerade Loader Files Under LocalAppData\nid: d570d892-64b5-4eb9-ad99-2b615230bbdf\nstatus: experimental\ndescription: >-\n    Detects creation of a JScript or VBScript file inside a \"Photo Studio\" directory\n    under the user's LocalAppData folder. This is the on-disk persistence copy and\n    windowless relaunch wrapper for a fileless .NET RAT loader; no legitimate \"Photo\n    Studio\" application is installed by this path convention.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\nauthor: The Hunters Ledger\ndate: 2026-08-03\nmodified: 2026-10-11\ntags:\n    - attack.persistence\n    - attack.stealth\n    - attack.t1036.005\nlogsource:\n    category: file_event\n    product: windows\ndetection:\n    selection:\n        TargetFilename|contains: '\\AppData\\Local\\Photo Studio\\'\n        TargetFilename|endswith:\n            - '.js'\n            - '.vbs'\n    condition: selection\nfalsepositives:\n    - Unlikely, no common legitimate application installs script files under a \"Photo Studio\" LocalAppData folder\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-08-03T00:00:00Z",
             "labels": [
@@ -608,12 +608,12 @@
             "id": "indicator--585cb40e-8e43-5777-a39f-7a421328fc07",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.724052Z",
-            "modified": "2026-10-01T19:54:12.724052Z",
+            "modified": "2026-10-11T04:24:13.511375Z",
             "name": "Temp Log File Deleted Matching Fileless Loader Staging Pattern",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Temp Log File Deleted Matching Fileless Loader Staging Pattern\nid: b237faa4-ae89-4f42-b5c7-d6c2d8b7f15b\nstatus: experimental\ndescription: >-\n    Detects deletion of a temp file named \"log_<digits>_<digits>\" from the user's\n    Temp folder. The fileless .NET RAT loader decrypts its staged payload into a\n    file of this name, reads it back into memory with PowerShell, then deletes it as\n    anti-forensic cleanup, a temp file of this exact naming shape is not a pattern\n    used by common legitimate logging utilities.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\nauthor: The Hunters Ledger\ndate: 2026-08-03\ntags:\n    - attack.stealth\n    - attack.t1070.004\nlogsource:\n    category: file_delete\n    product: windows\ndetection:\n    selection:\n        TargetFilename|contains: '\\Temp\\log_'\n        TargetFilename|re: '_[0-9]+_[0-9]+$'\n    condition: selection\nfalsepositives:\n    - Unknown, a coincidental temp filename matching the log_<digits>_<digits> shape from unrelated software has not been surveyed\nlevel: high",
+            "pattern": "title: Temp Log File Deleted Matching Fileless Loader Staging Pattern\nid: b237faa4-ae89-4f42-b5c7-d6c2d8b7f15b\nstatus: experimental\ndescription: >-\n    Detects deletion of a temp file named \"log_<digits>_<digits>\" from the user's\n    Temp folder. The fileless .NET RAT loader decrypts its staged payload into a\n    file of this name, reads it back into memory with PowerShell, then deletes it as\n    anti-forensic cleanup, a temp file of this exact naming shape is not a pattern\n    used by common legitimate logging utilities.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\nauthor: The Hunters Ledger\ndate: 2026-08-03\nmodified: 2026-10-11\ntags:\n    - attack.stealth\n    - attack.t1070.004\nlogsource:\n    category: file_delete\n    product: windows\ndetection:\n    selection:\n        TargetFilename|re: '.*\\\\AppData\\\\Local\\\\Temp\\\\log_[0-9]+_[0-9]+'\n    condition: selection\nfalsepositives:\n    - Unknown, a coincidental temp filename matching the log_<digits>_<digits> shape from unrelated software has not been surveyed\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-08-03T00:00:00Z",
             "labels": [
@@ -629,12 +629,12 @@
             "id": "indicator--194afb52-30db-5d60-abef-216cc0fd9603",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.724156Z",
-            "modified": "2026-10-01T19:54:12.724156Z",
+            "modified": "2026-10-11T04:24:13.511508Z",
             "name": "Active Directory Tier-0 Backdoor Account Creation Or Privileged Group Addition",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Active Directory Tier-0 Backdoor Account Creation Or Privileged Group Addition\nid: b66c823b-08d3-4e03-8259-78257e98439c\nstatus: experimental\ndescription: >-\n    Detects either the creation of a user account (not a computer account) whose\n    sAMAccountName ends in a literal dollar sign, or the addition of any account to\n    a Tier-0 privileged group (local Administrators, or the well-known Domain\n    Admins/Enterprise Admins/Schema Admins relative IDs, matched by SID suffix so\n    the rule is independent of OS locale and does not require the victim's domain\n    name). Windows logs true computer-account creation under a separate event ID,\n    so a dollar-suffixed name arriving via the user-account-creation event is itself\n    the discriminator for a machine-account masquerade. Observed as an orchestrator\n    tool's one-shot creation of a hidden \"Guest$\" account escalated into all four\n    groups to build a forest-level backdoor.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\nauthor: The Hunters Ledger\ndate: 2026-08-03\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1136.002\n    - attack.t1098.007\nlogsource:\n    product: windows\n    service: security\ndetection:\n    selection_create:\n        EventID: 4720\n        SamAccountName|contains: '$'\n    selection_privgroup_domain:\n        EventID:\n            - 4728\n            - 4756\n        TargetSid|endswith:\n            - '-512'\n            - '-518'\n            - '-519'\n    selection_privgroup_local:\n        EventID: 4732\n        TargetSid: 'S-1-5-32-544'\n    filter_main_homegroup:\n        EventID: 4720\n        TargetUserName: 'HomeGroupUser$'\n    condition: 1 of selection_* and not 1 of filter_main_*\nfalsepositives:\n    - Legitimate onboarding of a new privileged administrator, or a genuine computer/service account naming collision with the dollar-sign check\nlevel: high",
+            "pattern": "title: Active Directory Tier-0 Backdoor Account Creation Or Privileged Group Addition\nid: b66c823b-08d3-4e03-8259-78257e98439c\nstatus: experimental\ndescription: >-\n    Detects either the creation of a user account (not a computer account) whose\n    sAMAccountName ends in a literal dollar sign, or the addition of any account to\n    a Tier-0 privileged group (local Administrators, or the well-known Domain\n    Admins/Enterprise Admins/Schema Admins relative IDs, matched by SID suffix so\n    the rule is independent of OS locale and does not require the victim's domain\n    name). Windows logs true computer-account creation under a separate event ID,\n    so a dollar-suffixed name arriving via the user-account-creation event is itself\n    the discriminator for a machine-account masquerade. Observed as an orchestrator\n    tool's one-shot creation of a hidden \"Guest$\" account escalated into all four\n    groups to build a forest-level backdoor.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\nauthor: The Hunters Ledger\ndate: 2026-08-03\nmodified: 2026-10-11\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1136.002\n    - attack.t1098.007\nlogsource:\n    product: windows\n    service: security\ndetection:\n    selection_create:\n        EventID: 4720\n        SamAccountName|endswith: '$'\n    selection_privgroup_domain:\n        EventID:\n            - 4728\n            - 4756\n        TargetSid|endswith:\n            - '-512'\n            - '-518'\n            - '-519'\n    selection_privgroup_local:\n        EventID: 4732\n        TargetSid: 'S-1-5-32-544'\n    filter_main_homegroup:\n        EventID: 4720\n        TargetUserName: 'HomeGroupUser$'\n    condition: 1 of selection_* and not 1 of filter_main_*\nfalsepositives:\n    - Legitimate onboarding of a new privileged administrator, or a genuine computer/service account naming collision with the dollar-sign check\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-08-03T00:00:00Z",
             "labels": [
@@ -710,15 +710,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--67bfccbe-bf69-50fe-ae74-1f52ed9cc1f3",
+            "id": "indicator--1be6d5a4-ce26-5238-aeb3-a258754c420a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:12.724601Z",
-            "modified": "2026-10-01T19:54:12.724601Z",
-            "name": "AnyDesk Unattended Password Piped Over Stdin By Non-AnyDesk Process",
+            "created": "2026-10-11T04:24:13.512068Z",
+            "modified": "2026-10-11T04:24:13.512068Z",
+            "name": "AnyDesk Unattended Password Piped Over Stdin",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: AnyDesk Unattended Password Piped Over Stdin By Non-AnyDesk Process\nid: 944c365c-8565-4097-8d18-4e9a5f74aafe\nstatus: experimental\ndescription: >-\n    Detects a command piping text into AnyDesk.exe with the --set-password flag\n    the password value itself never appears on the command line, so the pipeline\n    shape is the anchor. Observed issued by an orchestrator tool immediately after a\n    silent, unattended AnyDesk install, to set a remote-access password without\n    leaving the credential in process-creation logs.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\n    - https://redcanary.com/blog/misbehaving-rats/\nauthor: The Hunters Ledger\ndate: 2026-08-03\ntags:\n    - attack.command-and-control\n    - attack.t1219.002\n    - stp.3\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        CommandLine|contains|all:\n            - 'echo'\n            - 'AnyDesk.exe'\n            - '--set-password'\n    condition: selection\nfalsepositives:\n    - Legitimate IT automation that pipes a password to AnyDesk during scripted unattended deployment\nlevel: medium",
+            "pattern": "title: AnyDesk Unattended Password Piped Over Stdin\nid: 944c365c-8565-4097-8d18-4e9a5f74aafe\nstatus: experimental\ndescription: >-\n    Detects a command line in which an echo is piped into AnyDesk.exe with the\n    --set-password flag, in that order (the shell process that runs the pipeline\n    carries the whole text). The password value itself never appears on the\n    AnyDesk command line, so the pipeline shape is the anchor. Observed issued by an orchestrator tool immediately after a\n    silent, unattended AnyDesk install, to set a remote-access password without\n    leaving the credential in process-creation logs.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\n    - https://redcanary.com/blog/misbehaving-rats/\nauthor: The Hunters Ledger\ndate: 2026-08-03\nmodified: 2026-10-11\ntags:\n    - attack.command-and-control\n    - attack.t1219.002\n    - stp.3\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        CommandLine|contains: 'echo*|*AnyDesk.exe*--set-password'\n    condition: selection\nfalsepositives:\n    - Legitimate IT automation that pipes a password to AnyDesk during scripted unattended deployment\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-08-03T00:00:00Z",
             "labels": [
@@ -731,15 +731,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--ea7ca0d0-0270-5679-8e18-58363adea101",
+            "id": "indicator--b15a4925-ca77-5046-b7ae-8a0ff2de58f0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:12.724705Z",
-            "modified": "2026-10-01T19:54:12.724705Z",
-            "name": "PowerShell WebClient Download Inheriting Default Proxy Credentials",
+            "created": "2026-10-11T04:24:13.51221Z",
+            "modified": "2026-10-11T04:24:13.51221Z",
+            "name": "PowerShell Net.WebClient Proxy Set to Default Credentials",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: PowerShell WebClient Download Inheriting Default Proxy Credentials\nid: 80dee74f-6c3d-4947-81bc-4fe1bb14f919\nstatus: experimental\ndescription: >-\n    Detects a PowerShell Net.WebClient object configured with Proxy.Credentials set\n    to DefaultCredentials, which inherits the logged-on user's authenticated proxy\n    session so a payload download succeeds from inside an authenticated enterprise\n    proxy. This is the deployment stub's always-present download stage, it fires\n    even on runs where the subsequent payload write fails, since the stub gates its\n    later stages on a successful save rather than a successful connection.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\nauthor: The Hunters Ledger\ndate: 2026-08-03\ntags:\n    - attack.command-and-control\n    - attack.t1090\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        CommandLine|contains|all:\n            - 'Net.WebClient'\n            - 'Proxy.Credentials'\n            - 'DefaultCredentials'\n    condition: selection\nfalsepositives:\n    - Unlikely, legitimate proxy-aware download scripts rarely combine WebClient with explicit DefaultCredentials proxy inheritance in this exact form\nlevel: high",
+            "pattern": "title: PowerShell Net.WebClient Proxy Set to Default Credentials\nid: 80dee74f-6c3d-4947-81bc-4fe1bb14f919\nstatus: experimental\ndescription: >-\n    Detects a PowerShell process whose command line builds a Net.WebClient and sets\n    Proxy.Credentials to DefaultCredentials (the rule tests the three command-line\n    strings, not an actual download), which inherits the logged-on user's authenticated proxy\n    session so a payload download succeeds from inside an authenticated enterprise\n    proxy. This is the deployment stub's always-present download stage, it fires\n    even on runs where the subsequent payload write fails, since the stub gates its\n    later stages on a successful save rather than a successful connection.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\nauthor: The Hunters Ledger\ndate: 2026-08-03\nmodified: 2026-10-11\ntags:\n    - attack.command-and-control\n    - attack.t1090\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_img:\n        - Image|endswith:\n              - '\\powershell.exe'\n              - '\\pwsh.exe'\n        - OriginalFileName:\n              - 'PowerShell.EXE'\n              - 'pwsh.dll'\n    selection_cmd:\n        CommandLine|contains|all:\n            - 'Net.WebClient'\n            - 'Proxy.Credentials'\n            - 'DefaultCredentials'\n    condition: all of selection_*\nfalsepositives:\n    - Unlikely, legitimate proxy-aware download scripts rarely combine WebClient with explicit DefaultCredentials proxy inheritance in this exact form\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-08-03T00:00:00Z",
             "labels": [
@@ -776,12 +776,12 @@
             "id": "indicator--b09a55a5-afd6-52f5-9093-a460ef8b50ae",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.72493Z",
-            "modified": "2026-10-01T19:54:12.72493Z",
+            "modified": "2026-10-11T04:24:13.512427Z",
             "name": "Run Key SystemUpdate Value Pointing To Startup Folder Tilde Executable",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Run Key SystemUpdate Value Pointing To Startup Folder Tilde Executable\nid: 3598bf78-f702-4ab3-b8ba-9d38f62eab80\nstatus: experimental\ndescription: >-\n    Detects an HKCU Run value named \"SystemUpdate\" whose data points at a\n    tilde-prefixed executable inside the user's Startup folder. This is the\n    deployment stub's persistence step, added immediately after it copies its\n    downloaded payload into Startup under a randomized ~<digits>.exe name.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\nauthor: The Hunters Ledger\ndate: 2026-08-03\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1547.001\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection:\n        TargetObject|endswith: '\\CurrentVersion\\Run\\SystemUpdate'\n        Details|contains: '\\Startup\\~'\n    condition: selection\nfalsepositives:\n    - Unlikely, the combination of the SystemUpdate value name and a Startup-folder tilde-prefixed target is not a known legitimate pattern\nlevel: high",
+            "pattern": "title: Run Key SystemUpdate Value Pointing To Startup Folder Tilde Executable\nid: 3598bf78-f702-4ab3-b8ba-9d38f62eab80\nstatus: experimental\ndescription: >-\n    Detects an HKCU Run value named \"SystemUpdate\" whose data points at a\n    tilde-prefixed executable inside the user's Startup folder. This is the\n    deployment stub's persistence step, added immediately after it copies its\n    downloaded payload into Startup under a randomized ~<digits>.exe name.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\nauthor: The Hunters Ledger\ndate: 2026-08-03\nmodified: 2026-10-11\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1547.001\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection:\n        TargetObject|startswith: 'HKU\\'\n        TargetObject|endswith: '\\CurrentVersion\\Run\\SystemUpdate'\n        Details|contains: '\\Startup\\~'\n    condition: selection\nfalsepositives:\n    - Unlikely, the combination of the SystemUpdate value name and a Startup-folder tilde-prefixed target is not a known legitimate pattern\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-08-03T00:00:00Z",
             "labels": [
@@ -3095,7 +3095,7 @@
             "id": "report--9e9a2d1e-2840-51a5-af43-b5ef11a64213",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.739212Z",
-            "modified": "2026-10-10T13:40:55.359569Z",
+            "modified": "2026-10-11T04:24:13.531469Z",
             "name": "CloudSync: An Assembler's Intrusion Toolkit",
             "description": "Assembled 22-sample intrusion toolkit staged on a live open directory. Operator estate and the sourced commodity-stealer service are kept in SEPARATE tiers so they are never read as one infrastructure. Credentials are defanged to first-8+last-4 (disclosure hazard); the Telegram chat id 8116056430 is retained whole as the attribution artifact. Network IOCs are NOT defanged. The 22-file set is a snapshot of what was staged, not the operator's complete toolkit (one panel port, 91.92.43.221:5003, is live with no matching build in hand).",
             "report_types": [
@@ -3139,7 +3139,7 @@
                 "indicator--a235c665-2aab-5d95-a724-38e6eca63144",
                 "indicator--59ba7a73-34c5-5942-a725-fa753d9071b4",
                 "indicator--fb98c2b6-0f68-55d1-990e-1e4241aafd43",
-                "indicator--03ca9929-1c95-56df-88c4-5b035e89bdfd",
+                "indicator--2271e5c6-14ae-51c3-8fd4-64003f9e0352",
                 "indicator--e68dec58-880d-5780-8266-e9143fb2e90a",
                 "indicator--edd8bea6-b5de-5b46-acdd-0d6168e94e1f",
                 "indicator--47fcbba0-311e-567f-8c06-bf382699acc6",
@@ -3149,8 +3149,8 @@
                 "indicator--68c9aa45-457a-5b9e-a410-cb586e754f93",
                 "indicator--5b02d60e-6510-5d3d-b18b-fc609eae79e9",
                 "indicator--e35ee702-efcc-5ec7-85a7-b4e79e865e4c",
-                "indicator--67bfccbe-bf69-50fe-ae74-1f52ed9cc1f3",
-                "indicator--ea7ca0d0-0270-5679-8e18-58363adea101",
+                "indicator--1be6d5a4-ce26-5238-aeb3-a258754c420a",
+                "indicator--b15a4925-ca77-5046-b7ae-8a0ff2de58f0",
                 "indicator--f2584825-2b0f-587f-ae97-c23631841b49",
                 "indicator--b09a55a5-afd6-52f5-9093-a460ef8b50ae",
                 "indicator--f105f13e-d81e-5347-9b09-6f97765323c3",

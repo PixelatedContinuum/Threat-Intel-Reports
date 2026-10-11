@@ -60,7 +60,7 @@ Rules covering behavior common to more than one component are labeled at the cam
 **Confidence:** HIGH
 **False Positives:** None known, this exact combination of panel API route and CIDR-scanner placeholder text is unique to the later CloudSync build generation
 **Blind Spots:** Misses the earlier CloudSync build generation entirely (`bk.exe`/`svhost4.exe`), which does not carry a network-scanner panel tab at all, see the companion C2-protocol rule below for coverage of that generation
-**Validation:** Scan the binary directly; a genuine hit requires 3 of the 5 embedded panel strings to be present in the file's resource section. A clean Windows or third-party remote-access tool installer must not fire.
+**Validation:** Scan the binary directly; a genuine hit requires 3 of the 5 embedded panel strings to be present anywhere in the PE; the rule reads the whole file and does not test that they sit in the resource section. A clean Windows or third-party remote-access tool installer must not fire.
 **Deployment:** Endpoint AV/EDR file scan, memory scanning of the implant process, scanning of any recovered staging directory
 
 ```yara
@@ -79,6 +79,7 @@ rule RAT_CloudSync_TorPanel_NetscanBuild {
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188/"
       date = "2026-08-03"
+      modified = "2026-10-11"
       hash1 = "62aa8e470e60aa9fa77df6e6e63b7c253657e95d6018240b1752a9ca9fe389fa"
       family = "CloudSync"
       malware_type = "RAT"
@@ -181,22 +182,24 @@ rule RAT_SvchostPayload_ParalellInjector_TypeNames {
 #### svhost.js Fileless Loader: Custom Alphabet
 
 **Tier:** Detection
-**Robustness:** 3
+**Robustness:** 2
+**Logic fix 2026-10-11:** the condition used to be `$alpha or all of ($shape*)`, where the shape strings were `(function(){})["constructor"]` and `String.fromCharCode`. Both idioms appear together in ordinary minified JavaScript (a benign fixture holding just those two strings matched the old rule and does not match the new one), so the second branch fired on unrelated scripts, against this block's own Validation line. It was removed, which leaves one operator-chosen literal, and Robustness is lowered from 3 to 2 to say so.
 **ATT&CK Coverage:** T1027 (Obfuscated Files or Information), T1140 (Deobfuscate/Decode Files or Information)
 **Confidence:** HIGH
 **False Positives:** None known, the 16-character custom substitution alphabet is operator-chosen and not a published or reused encoding scheme
-**Blind Spots:** A recompiled loader using a different substitution alphabet and different decoder-shape strings would evade this rule; it detects the on-disk loader file only, not the payloads it decrypts in memory
-**Validation:** Confirm the rule fires on `svhost.js`. A benign WSH script or an unrelated obfuscated JavaScript sample must not fire, since the alphabet string alone is the primary anchor and is not expected to appear by chance.
+**Blind Spots:** A recompiled loader using a different substitution alphabet would evade this rule, because the alphabet is the only anchor; it detects the on-disk loader file only, not the payloads it decrypts in memory
+**Validation:** Confirm the rule fires on `svhost.js`. A benign WSH script or an unrelated obfuscated JavaScript sample must not fire, since the alphabet string is the only anchor and is not expected to appear by chance. A script that merely contains the function-constructor idiom and String.fromCharCode must also not fire.
 **Deployment:** Endpoint AV/EDR file scan, email/web gateway script scanning, scheduled-task and Startup-folder script sweeps
 
 ```yara
 rule Loader_SvchostJS_CustomAlphabet {
    meta:
-      description = "Detects the svhost.js WSH JScript fileless loader via its custom 16-character substitution alphabet used in a layered base16-XOR plus AES/ChaCha/permutation decoder, and the loader's distinctive function-constructor string-decode shape"
+      description = "Detects the svhost.js WSH JScript fileless loader via its custom 16-character substitution alphabet used in a layered base16-XOR plus AES/ChaCha/permutation decoder. The alphabet string is the only anchor: the generic function-constructor and String.fromCharCode strings this rule once accepted on their own appear in ordinary JavaScript and were removed"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188/"
       date = "2026-08-03"
+      modified = "2026-10-11"
       hash1 = "4b115a9f745219e3f3abdea275da89f35e4ec5f3d43286e5efc58eaf8049f3f7"
       family = "SvchostPayload"
       malware_type = "Loader"
@@ -204,11 +207,9 @@ rule Loader_SvchostJS_CustomAlphabet {
       id = "2b39854f-a2dc-535f-824f-b28af4328b35"
    strings:
       $alpha = "5v_qoKAku06M^ZW1" ascii
-      $shape1 = "(function(){})[\"constructor\"]" ascii
-      $shape2 = "String.fromCharCode" ascii
    condition:
       filesize < 1MB and
-      ($alpha or all of ($shape*))
+      $alpha
 }
 ```
 
@@ -481,33 +482,38 @@ level: high
 
 **SvchostPayload / .NET RAT Chain**
 
-#### Wscript To PowerShell To MSBuild Execution Chain Without Project File
+#### MSBuild Launched Without a Project File by a Hidden or Bypass-Policy PowerShell Parent
 
 **Tier:** Detection
 **Robustness:** 3
 **ATT&CK Coverage:** T1127.001 (Trusted Developer Utilities: MSBuild), T1055 (Process Injection)
 **Confidence:** HIGH
+**Wording fix 2026-10-11:** the title and description named a wscript, PowerShell, MSBuild chain and a hidden, bypassed PowerShell. The selection tests the PowerShell parent flags with OR (a hidden window or a policy bypass, not both) and never looks at wscript, which a process-creation event cannot show beyond the direct parent. The title now names what is tested.
 **False Positives:** Developer or CI tooling that launches MSBuild from a hidden PowerShell wrapper without a visible project path on the command line, rare, but review any hit from a build server before escalating
 **Blind Spots:** An attacker who passes any string containing one of the filtered project-file extensions (even a decoy) would evade the filter; the rule also depends on the parent process being `powershell.exe` directly, an intermediate `cmd.exe` hop would need a chained/correlated rule
 **Validation:** Launch `powershell -w hidden -ep bypass -c "Start-Process MSBuild.exe"` with no project argument on a test host and confirm the alert fires. Launching MSBuild against a real `.csproj` file from the same PowerShell invocation must NOT fire.
 **Deployment:** Endpoint process-creation telemetry (Sysmon Event ID 1 or equivalent), prioritized for triage given this is the hardest-to-detect chain in the case
 
 ```yaml
-title: Wscript To PowerShell To MSBuild Execution Chain Without Project File
+title: MSBuild Launched Without a Project File by a Hidden or Bypass-Policy PowerShell Parent
 id: 4f593a7e-a980-452a-bc36-25db2acf2c7c
 status: experimental
 description: >-
-    Detects MSBuild.exe launched directly by a hidden, execution-policy-bypassed
-    PowerShell process with no build-project argument (no .csproj/.vbproj/.sln/.xml/
-    .proj/.targets path on the command line). Legitimate MSBuild invocations, even
+    Detects MSBuild.exe launched directly by a PowerShell process whose own command
+    line carries a hidden-window or an execution-policy-bypass flag (either one is
+    enough), with no build-project argument (no .csproj/.vbproj/.sln/.xml/.proj/
+    .targets text on the MSBuild command line). Legitimate MSBuild invocations, even
     from a shell, almost always pass a project or target path; a bare invocation is
     consistent with using MSBuild as a hollow injection target rather than as a
     build tool. Observed as the final stage of a wscript-launched fileless loader
-    chain that injects a custom .NET RAT into the resulting process.
+    chain that injects a custom .NET RAT into the resulting process. The rule sees
+    only the PowerShell-to-MSBuild step: process-creation events carry the parent
+    and not the grandparent, so the wscript start of the chain is not tested.
 references:
     - https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/
 author: The Hunters Ledger
 date: 2026-08-03
+modified: 2026-10-11
 tags:
     - attack.stealth
     - attack.privilege-escalation
@@ -637,6 +643,7 @@ level: high
 **Robustness:** 3
 **ATT&CK Coverage:** T1036.005 (Match Legitimate Name or Location)
 **Confidence:** HIGH
+**Logic fix 2026-10-11:** the selection used to match a `\Photo Studio\` segment under any root, so the title's LocalAppData was not enforced. It now requires `\AppData\Local\Photo Studio\` (the loader writes to `%LOCALAPPDATA%\Photo Studio\`, report section on the svhost.js loader). A profile with a redirected LocalAppData would not match.
 **False Positives:** Unlikely, no common legitimate application installs script files under a "Photo Studio" LocalAppData folder
 **Blind Spots:** A rebuild that changes the masquerade folder name would evade this rule entirely; pair with the wscript-to-MSBuild chain rule for coverage of a renamed variant
 **Validation:** Create a `.js` or `.vbs` file inside `%LOCALAPPDATA%\Photo Studio\` on a test host and confirm the alert fires. Script files created under an unrelated, genuinely-installed application's LocalAppData folder must NOT fire.
@@ -655,6 +662,7 @@ references:
     - https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/
 author: The Hunters Ledger
 date: 2026-08-03
+modified: 2026-10-11
 tags:
     - attack.persistence
     - attack.stealth
@@ -664,7 +672,7 @@ logsource:
     product: windows
 detection:
     selection:
-        TargetFilename|contains: '\Photo Studio\'
+        TargetFilename|contains: '\AppData\Local\Photo Studio\'
         TargetFilename|endswith:
             - '.js'
             - '.vbs'
@@ -727,6 +735,7 @@ level: high
 **Robustness:** 3
 **ATT&CK Coverage:** T1070.004 (File Deletion)
 **Confidence:** HIGH
+**Logic fix 2026-10-11:** the selection used to be a `\Temp\log_` substring plus a trailing `_<digits>_<digits>` test, so `log_setup_1_2` or a file in a Temp subfolder also matched. It is now one expression: the file `log_<digits>_<digits>` directly in the user's `AppData\Local\Temp`. The pattern carries no `$` end anchor on purpose: Elastic regular expressions match the whole field and treat `^` and `$` as literal characters, so an anchored pattern would never match there (the previous `$`-anchored test could not match in Elastic either). The cost is that in anchor-free Sigma semantics a name with extra text after the second number also matches.
 **False Positives:** A coincidental temp filename matching the `log_<digits>_<digits>` shape from unrelated software has not been surveyed, though the pattern is distinctive
 **Blind Spots:** This detects the deletion, not the earlier read, pair with the Photo Studio and wscript-chain rules above to catch the loader earlier in its lifecycle
 **Validation:** Create and delete a file named `log_12345_67890` inside `%TEMP%` on a test host and confirm the alert fires. Deletion of an unrelated temp file with a different naming shape must NOT fire.
@@ -746,6 +755,7 @@ references:
     - https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/
 author: The Hunters Ledger
 date: 2026-08-03
+modified: 2026-10-11
 tags:
     - attack.stealth
     - attack.t1070.004
@@ -754,8 +764,7 @@ logsource:
     product: windows
 detection:
     selection:
-        TargetFilename|contains: '\Temp\log_'
-        TargetFilename|re: '_[0-9]+_[0-9]+$'
+        TargetFilename|re: '.*\\AppData\\Local\\Temp\\log_[0-9]+_[0-9]+'
     condition: selection
 falsepositives:
     - Unknown, a coincidental temp filename matching the log_<digits>_<digits> shape from unrelated software has not been surveyed
@@ -770,6 +779,7 @@ level: high
 **Robustness:** 3
 **ATT&CK Coverage:** T1136.002 (Create Account: Domain Account), T1098.007 (Additional Local or Domain Groups)
 **Confidence:** HIGH
+**Logic fix 2026-10-11:** the account-creation branch used `SamAccountName|contains: '$'`, so a dollar sign anywhere in the name fired, while the description says the name ends in one. It is now `endswith`.
 **False Positives:** Legitimate onboarding of a new privileged administrator, or a genuine computer/service account naming collision with the dollar-sign check
 **Blind Spots:** Windows security auditing must be enabled for account-management and group-management events; a host without domain-controller audit logging in place will not generate the source events this rule depends on
 **Validation:** Create a test user account with a name ending in `$` (Event ID 4720) or add a test account to the local Administrators group (Event ID 4732) and confirm the alert fires. Creating a genuine computer account (which logs under a different event ID, not 4720) must NOT fire this rule.
@@ -794,6 +804,7 @@ references:
     - https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/
 author: The Hunters Ledger
 date: 2026-08-03
+modified: 2026-10-11
 tags:
     - attack.persistence
     - attack.privilege-escalation
@@ -805,7 +816,7 @@ logsource:
 detection:
     selection_create:
         EventID: 4720
-        SamAccountName|contains: '$'
+        SamAccountName|endswith: '$'
     selection_privgroup_domain:
         EventID:
             - 4728
@@ -957,25 +968,27 @@ falsepositives:
 level: high
 ```
 
-#### AnyDesk Unattended Password Piped Over Stdin By Non-AnyDesk Process
+#### AnyDesk Unattended Password Piped Over Stdin
 
 **Tier:** Detection
 **Robustness:** 2
 **ATT&CK Coverage:** T1219.002 (Remote Desktop Software)
 **Confidence:** HIGH
+**Logic fix 2026-10-11:** the selection was three unordered substrings (`echo`, `AnyDesk.exe`, `--set-password`) with no pipe, so a command line merely naming all three in any order matched, and the title's "By Non-AnyDesk Process" was not tested. It now requires `echo`, then a pipe, then `AnyDesk.exe`, then `--set-password`, in order. The "non-AnyDesk" qualifier is dropped from the title because the process that carries the pipe text is always a shell, never AnyDesk itself; the report shows the form `echo <token> | AnyDesk.exe --set-password`.
 **False Positives:** Legitimate IT automation that pipes a password to AnyDesk during scripted unattended deployment
 **Blind Spots:** A deployment script that reads the password from a file or environment variable rather than an inline `echo` pipe would evade this rule
 **Validation:** Run `echo testpassword | AnyDesk.exe --set-password` on a test host and confirm the alert fires. A manual, interactive AnyDesk password change through the GUI must NOT fire, since it never appears as a process-creation command line.
 **Deployment:** Endpoint process-creation telemetry (Sysmon Event ID 1 or equivalent), the password value itself never touches the command line, so this rule detects the pipeline shape, not the credential
 
 ```yaml
-title: AnyDesk Unattended Password Piped Over Stdin By Non-AnyDesk Process
+title: AnyDesk Unattended Password Piped Over Stdin
 id: 944c365c-8565-4097-8d18-4e9a5f74aafe
 status: experimental
 description: >-
-    Detects a command piping text into AnyDesk.exe with the --set-password flag
-    the password value itself never appears on the command line, so the pipeline
-    shape is the anchor. Observed issued by an orchestrator tool immediately after a
+    Detects a command line in which an echo is piped into AnyDesk.exe with the
+    --set-password flag, in that order (the shell process that runs the pipeline
+    carries the whole text). The password value itself never appears on the
+    AnyDesk command line, so the pipeline shape is the anchor. Observed issued by an orchestrator tool immediately after a
     silent, unattended AnyDesk install, to set a remote-access password without
     leaving the credential in process-creation logs.
 references:
@@ -983,6 +996,7 @@ references:
     - https://redcanary.com/blog/misbehaving-rats/
 author: The Hunters Ledger
 date: 2026-08-03
+modified: 2026-10-11
 tags:
     - attack.command-and-control
     - attack.t1219.002
@@ -992,10 +1006,7 @@ logsource:
     product: windows
 detection:
     selection:
-        CommandLine|contains|all:
-            - 'echo'
-            - 'AnyDesk.exe'
-            - '--set-password'
+        CommandLine|contains: 'echo*|*AnyDesk.exe*--set-password'
     condition: selection
 falsepositives:
     - Legitimate IT automation that pipes a password to AnyDesk during scripted unattended deployment
@@ -1004,24 +1015,26 @@ level: medium
 
 **Deployment Stub (ct.bat)**
 
-#### PowerShell WebClient Download Inheriting Default Proxy Credentials
+#### PowerShell Net.WebClient Proxy Set to Default Credentials
 
 **Tier:** Detection
 **Robustness:** 3
 **ATT&CK Coverage:** T1090 (Proxy)
 **Confidence:** HIGH
+**Logic fix 2026-10-11:** the title said a PowerShell download, but the selection was three command-line substrings with no process test and no download method, so the parent `cmd.exe` line that carries the same text also matched. The selection now requires a PowerShell image (`powershell.exe` or `pwsh.exe`, or the matching original file name) and the title says what the command line configures. A download is not tested; the report describes the stub fetching the payload with this WebClient.
 **False Positives:** Unlikely, legitimate proxy-aware download scripts rarely combine WebClient with explicit DefaultCredentials proxy inheritance in this exact form
 **Blind Spots:** The download URL itself is not required by this rule (deliberately, since the staging IP is perishable); a script using `Invoke-WebRequest` instead of `Net.WebClient` with the same proxy-inheritance intent would evade this specific pattern
 **Validation:** Run a PowerShell one-liner constructing `New-Object Net.WebClient` with `.Proxy.Credentials = [System.Net.CredentialCache]::DefaultCredentials` on a test host and confirm the alert fires. A WebClient download with no explicit proxy-credential configuration must NOT fire.
 **Deployment:** Endpoint process-creation telemetry (Sysmon Event ID 1 or equivalent), this is the stub's always-present stage, firing even on runs where the subsequent payload write fails, so it is the highest-yield single anchor for this component
 
 ```yaml
-title: PowerShell WebClient Download Inheriting Default Proxy Credentials
+title: PowerShell Net.WebClient Proxy Set to Default Credentials
 id: 80dee74f-6c3d-4947-81bc-4fe1bb14f919
 status: experimental
 description: >-
-    Detects a PowerShell Net.WebClient object configured with Proxy.Credentials set
-    to DefaultCredentials, which inherits the logged-on user's authenticated proxy
+    Detects a PowerShell process whose command line builds a Net.WebClient and sets
+    Proxy.Credentials to DefaultCredentials (the rule tests the three command-line
+    strings, not an actual download), which inherits the logged-on user's authenticated proxy
     session so a payload download succeeds from inside an authenticated enterprise
     proxy. This is the deployment stub's always-present download stage, it fires
     even on runs where the subsequent payload write fails, since the stub gates its
@@ -1030,6 +1043,7 @@ references:
     - https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/
 author: The Hunters Ledger
 date: 2026-08-03
+modified: 2026-10-11
 tags:
     - attack.command-and-control
     - attack.t1090
@@ -1037,12 +1051,19 @@ logsource:
     category: process_creation
     product: windows
 detection:
-    selection:
+    selection_img:
+        - Image|endswith:
+              - '\powershell.exe'
+              - '\pwsh.exe'
+        - OriginalFileName:
+              - 'PowerShell.EXE'
+              - 'pwsh.dll'
+    selection_cmd:
         CommandLine|contains|all:
             - 'Net.WebClient'
             - 'Proxy.Credentials'
             - 'DefaultCredentials'
-    condition: selection
+    condition: all of selection_*
 falsepositives:
     - Unlikely, legitimate proxy-aware download scripts rarely combine WebClient with explicit DefaultCredentials proxy inheritance in this exact form
 level: high
@@ -1101,9 +1122,10 @@ level: high
 **Robustness:** 3
 **ATT&CK Coverage:** T1547.001 (Registry Run Keys / Startup Folder)
 **Confidence:** HIGH
+**Logic fix 2026-10-11:** the description says an HKCU Run value, but the selection only tested the key-path suffix, so an HKLM `Run\SystemUpdate` value also matched. Sysmon records a per-user key under `HKU\<SID>\...` (never as `HKCU`), so the hive is now tested as `TargetObject` starting with `HKU\`. The stub runs in the logged-on user's context (report: it writes `HKCU\...\Run\SystemUpdate`).
 **False Positives:** Unlikely, the combination of the SystemUpdate value name and a Startup-folder tilde-prefixed target is not a known legitimate pattern
 **Blind Spots:** This rule fires only once the stub's download and drop stages have already succeeded, the proxy-WebClient rule above is the anchor that fires even on incomplete runs
-**Validation:** Set an `HKCU\Software\Microsoft\Windows\CurrentVersion\Run\SystemUpdate` value pointing to a test file inside the Startup folder named `~12345.exe` and confirm the alert fires. A Run value named SystemUpdate pointing anywhere outside the Startup folder must NOT fire.
+**Validation:** Set an `HKCU\Software\Microsoft\Windows\CurrentVersion\Run\SystemUpdate` value pointing to a test file inside the Startup folder named `~12345.exe` and confirm the alert fires. A Run value named SystemUpdate pointing anywhere outside the Startup folder must NOT fire, and neither must an `HKLM\...\Run\SystemUpdate` value that points at a Startup tilde file.
 **Deployment:** Endpoint registry telemetry (Sysmon Event ID 13 or equivalent)
 
 ```yaml
@@ -1119,6 +1141,7 @@ references:
     - https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/
 author: The Hunters Ledger
 date: 2026-08-03
+modified: 2026-10-11
 tags:
     - attack.persistence
     - attack.privilege-escalation
@@ -1128,6 +1151,7 @@ logsource:
     product: windows
 detection:
     selection:
+        TargetObject|startswith: 'HKU\'
         TargetObject|endswith: '\CurrentVersion\Run\SystemUpdate'
         Details|contains: '\Startup\~'
     condition: selection

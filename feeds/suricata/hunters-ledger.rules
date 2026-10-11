@@ -140,7 +140,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT FleetAgentFUD X-A
 #   TIER: Hunting  |  robustness 2  |  confidence MODERATE  |  BROAD - triage before alerting
 #   rate-limited
 #   FP: A legitimate .NET application that manually constructs a WebSocket upgrade over HttpWebRequest/WebClient without adopting a modern WebSocket library...
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT FleetAgentFUD Default .NET WebClient User-Agent + WebSocket Upgrade (Custom C2 Client Indicator)"; flow:established,to_server; http.user_agent; content:"Mozilla/4.0 (compatible|3b| MSIE 6.0|3b| Windows NT 5.2|3b| .NET CLR"; http.header; content:"Connection|3a 20|Upgrade"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/; classtype:trojan-activity; sid:3500155; rev:2; metadata:author The_Hunters_Ledger, date 2026-01-12;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT FleetAgentFUD Default .NET WebClient User-Agent + WebSocket Upgrade (Custom C2 Client Indicator)"; flow:established,to_server; http.user_agent; content:"Mozilla/4.0 (compatible|3b| MSIE 6.0|3b| Windows NT 5.2|3b| .NET CLR"; http.header; content:"Connection|3a 20|Upgrade"; content:"Upgrade|3a 20|websocket"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/; classtype:trojan-activity; sid:3500155; rev:3; metadata:author The_Hunters_Ledger, date 2026-01-12;)
 # ghost-cryptojacker-vova75rus-77.110.96.200 (orig sid:9100104)
 #   TIER: Detection  |  robustness 2  |  confidence HIGH
 #   FP: None known — these specific URI paths have no legitimate usage on AEZA hosting infrastructure.
@@ -159,12 +159,12 @@ alert udp $EXTERNAL_NET any -> $HOME_NET 14433:14444 (msg:"THL HUNT GHOST Crypto
 #   TIER: Hunting  |  robustness 1  |  confidence LOW–MODERATE  |  BROAD - triage before alerting
 #   rate-limited
 #   FP: Any legitimate monitoring, alerting, or chatbot integration on the same host that uses the Telegram Bot API for unrelated purposes.
-alert tls $HOME_NET any -> any any (msg:"THL HUNT GHOST Cryptojacker Kit Telegram API Egress from Production Server - Covert Mining Report"; tls.sni; content:"api.telegram.org"; endswith; nocase; threshold:type threshold,track by_src,count 5,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/; classtype:policy-violation; sid:3500027; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-25, tag GHOST_kit, tag Telegram_reporting;)
+alert tls $HOME_NET any -> any any (msg:"THL HUNT Telegram API TLS SNI Egress from an Internal Host (Reporting Channel Used by the GHOST Kit, Not Specific to It)"; tls.sni; content:"api.telegram.org"; endswith; nocase; threshold:type threshold,track by_src,count 5,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/; classtype:policy-violation; sid:3500027; rev:4; metadata:author The_Hunters_Ledger, date 2026-05-25, tag GHOST_kit, tag Telegram_reporting;)
 # gocloud-multiservice-cryptojacking-149-28-112-221 (orig sid:9301501)
 #   TIER: Detection  |  robustness 2  |  confidence HIGH
 #   rate-limited
 #   FP: None known. The /r?host= prefix followed by the &status=OK&ts= tail in one URI is a distinctive parameter order.
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT GOCLOUD-Cryptojacking XMRig Deployment Heartbeat GET (Fixed Parameter Order to Payload Host)"; flow:established,to_server; http.uri; content:"/r?host="; startswith; nocase; content:"&status=OK&ts="; distance:0; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:3500176; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-26;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT GOCLOUD-Cryptojacking XMRig Deployment Heartbeat GET (Fixed Parameter Order)"; flow:established,to_server; http.uri; content:"/r?host="; startswith; nocase; content:"&status=OK&ts="; distance:0; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:3500176; rev:3; metadata:author The_Hunters_Ledger, date 2026-07-26;)
 # gocloud-multiservice-cryptojacking-149-28-112-221 (orig sid:9301502)
 #   TIER: Detection  |  robustness 2  |  confidence HIGH
 #   rate-limited
@@ -212,7 +212,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT Inkognito Custom X-
 #   TIER: Hunting  |  robustness 2  |  confidence MODERATE  |  BROAD - triage before alerting
 #   rate-limited
 #   FP: Internally-developed web applications that independently expose X-Admin-Token in their own CORS configuration; security research or authorized...
-alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT Inkognito X-Admin-Token in CORS Allow-Headers Response (Admin API Auth Primitive)"; flow:established,to_client; http.header; content:"Access-Control-Allow-Headers"; nocase; content:"X-Admin-Token"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/; classtype:trojan-activity; sid:3500031; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-16;)
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT Inkognito X-Admin-Token in CORS Allow-Headers Response (Admin API Auth Primitive)"; flow:established,to_client; http.header; content:"Access-Control-Allow-Headers"; nocase; content:"X-Admin-Token"; nocase; distance:0; pcre:"/Access-Control-Allow-Headers\x3a[^\r\n]*X-Admin-Token/i"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/; classtype:trojan-activity; sid:3500031; rev:4; metadata:author The_Hunters_Ledger, date 2026-05-16;)
 # kaido-quasar-rat (orig sid:9300802)
 #   TIER: Detection  |  robustness 2  |  confidence HIGH
 #   rate-limited

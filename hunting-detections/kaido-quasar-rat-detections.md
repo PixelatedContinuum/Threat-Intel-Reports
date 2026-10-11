@@ -50,7 +50,7 @@ KAIDO is a rebranded 64-bit fork of the open-source Quasar RAT carrying an HVNC 
 **Robustness:** 3
 **ATT&CK Coverage:** T1219 (Remote Access Software)
 **Confidence:** HIGH
-**Rationale:** `Kaido.Common.Messages` is the namespace root of the rebranded Quasar fork and survives the sample's obfuscation pass intact (no literal `Quasar` string remains); paired with the Costura-embedded asset name and the HVNC hidden-desktop literal, this combination is unique to this build lineage and to something the operator cannot rename without re-architecting the codebase.
+**Rationale:** *Logic fix 2026-10-11:* the heading and description require a namespace and a Costura asset, but the condition was `2 of ($ns1, $ns2, $cost, $desk)`, so the second namespace string and the `Default_runhost` literal satisfied it with no Costura asset. It is now the Costura asset name plus one of the two namespace strings; the HVNC hidden-desktop literal was dropped from the rule. A fixture with `$ns2` and `Default_runhost` only matched the old rule and does not match the new one. `Kaido.Common.Messages` is the namespace root of the rebranded Quasar fork and survives the sample's obfuscation pass intact (no literal `Quasar` string remains); paired with the Costura-embedded asset name, this combination is unique to this build lineage and to something the operator cannot rename without re-architecting the codebase.
 **False Positives:** None known — `Kaido.Common.Messages` and `costura.kaido.common.dll` are distinctive compiled identifiers not present in legitimate .NET software; `fullword` further reduces substring-collision risk.
 **Blind Spots:** A full rebrand that renames the `Kaido.*` namespace root would evade this rule; a memory-only variant that never lands on disk needs the memory-scan deployment path.
 **Validation:** Scan a KAIDO sample (e.g. `hash1` below) — the namespace + Costura asset must match; a benign Costura-packed .NET application must NOT fire.
@@ -72,6 +72,7 @@ rule RAT_KAIDO_Quasar_Fork_Namespace {
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/"
       date = "2026-07-03"
+      modified = "2026-10-11"
       hash1 = "c7542e8265f70d6c1dbf2e3cf6e81a90198cd157d3d6693c6d2a8a49d99a5b8d"
       hash2 = "928f2ffa7fc84b74941fb714455d7bc14847b3af"
       hash3 = "20989b06f7c670ab973da6609855bcf9"
@@ -83,11 +84,10 @@ rule RAT_KAIDO_Quasar_Fork_Namespace {
       $ns1  = "Kaido.Common.Messages" ascii wide fullword
       $ns2  = "Kaido.Client.Helper.HVNC.ProcessController" ascii wide
       $cost = "costura.kaido.common.dll" ascii wide nocase
-      $desk = "Default_runhost" ascii wide fullword
    condition:
       uint16(0) == 0x5A4D and
       filesize < 5MB and
-      2 of ($ns1, $ns2, $cost, $desk)
+      $cost and 1 of ($ns1, $ns2)
 }
 ```
 

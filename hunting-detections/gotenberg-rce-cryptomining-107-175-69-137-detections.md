@@ -373,32 +373,36 @@ falsepositives:
 level: medium
 ```
 
-#### Base64 Decoded Script Written to Tmp and Executed by Bash
+#### Base64 Decode Redirected to Tmp Followed by Bash Run of a Tmp Path in One Command Line
 
 **Tier:** Hunting
 **Robustness:** 1
 **ATT&CK Coverage:** T1059.004 (Unix Shell), T1140 (Deobfuscate/Decode Files or Information)
 **Confidence:** HIGH that the shape matches the campaign's staging step; the anchor itself is generic staging behavior
+**Logic fix 2026-10-11:** the selection was four unordered substrings in two groups (`base64 -d`, `>/tmp/`, `bash `, `/tmp/`), so a command line carrying them in any order matched, and the written path was never tied to the executed path. It is now one ordered pattern, `base64 -d` then `>/tmp/` then `bash /tmp/`. The two paths are still not compared, because Sigma and the Elastic query languages have no back-reference; a command that decodes into one /tmp file and runs a different /tmp file also matches, and the title says so.
 **False Positives:** Provisioning, cloud-init or installer scripts that decode payloads to tmp and run them; authorized security tooling staging encoded scripts
 **Blind Spots:** Only catches the decode-and-execute pairing inside one command line; a dropper that decodes in one invocation and executes in a later one produces two innocuous-looking events. The `>/tmp/` and `bash ` literals break on variants using other staging directories or interpreters.
 **Validation:** Run echo YmFzaCAtYyAiaWQK | base64 -d>/tmp/t.sh; bash /tmp/t.sh on a test host and confirm a hit; a decode of a data file with no execution of it must NOT fire.
 **Deployment:** Host telemetry (auditd execve rules, Sysmon for Linux, or an EDR agent). Not for alerting; correlate hits with deployment or provisioning context.
 
 ```yaml
-title: Base64 Decoded Script Written to Tmp and Executed by Bash
+title: Base64 Decode Redirected to Tmp Followed by Bash Run of a Tmp Path in One Command Line
 id: a3dcd1d3-0c9f-4cd2-a6e7-bed5dd6bd3c1
 status: experimental
 description: >-
-    Detects a single shell command line that decodes a base64 payload into a script file
-    under /tmp and immediately executes it with bash, the staging shape this campaign's
-    deploy driver uses to carry its miner install script through shell quoting constraints
-    (echo of encoded script piped to base64 -d into /tmp/d.sh, then bash of that file).
+    Detects a single shell command line in which a base64 -d redirect into /tmp comes
+    before a bash run of a /tmp path, the staging shape this campaign's deploy driver uses
+    to carry its miner install script through shell quoting constraints (echo of encoded
+    script piped to base64 -d into /tmp/d.sh, then bash of that file). The rule checks the
+    order of the two fragments and does not check that the file bash runs is the file the
+    decode wrote.
     Cloud provisioning and installer tooling legitimately uses decode-then-execute patterns,
     so this is a hunting anchor and triage hits against deployment context.
 references:
     - https://the-hunters-ledger.com/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/
 author: The Hunters Ledger
 date: 2026-09-16
+modified: 2026-10-11
 tags:
     - attack.execution
     - attack.stealth
@@ -412,15 +416,9 @@ logsource:
         Requires process-creation telemetry that captures full command lines on the victim
         host: auditd execve rules, Sysmon for Linux, or an EDR agent.
 detection:
-    selection_decode:
-        CommandLine|contains|all:
-            - 'base64 -d'
-            - '>/tmp/'
-    selection_exec:
-        CommandLine|contains|all:
-            - 'bash '
-            - '/tmp/'
-    condition: selection_decode and selection_exec
+    selection:
+        CommandLine|contains: 'base64 -d*>/tmp/*bash /tmp/'
+    condition: selection
 falsepositives:
     - Provisioning, cloud-init or installer scripts that decode payloads to tmp and run them
     - Authorized security tooling staging encoded scripts

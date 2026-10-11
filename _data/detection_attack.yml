@@ -661,7 +661,7 @@
     - tactic: "Defense Impairment"
       id: "T1685"
       name: "Disable or Modify Tools"
-      rules: "Multi-Vendor Security Product Kill-List (YARA, Detection); Comprehensive Multi-Branch Combination (YARA, Hunting); Rust Runtime Plus Process-Manipulation APIs (YARA, Hunting)"
+      rules: "Security Product Process-Name Kill-List (Multi-Vendor Spread or Single-Vendor Depth) (YARA, Detection); Comprehensive Multi-Branch Combination (YARA, Hunting); Rust Runtime Plus Process-Manipulation APIs (YARA, Hunting)"
       count: 3
 "bellamain-turkish-phaas-79-137-192-3-20260516-detections":
   total: 9
@@ -776,7 +776,7 @@
     - tactic: "Stealth"
       id: "T1055"
       name: "Process Injection"
-      rules: "Paralell Injector and SvchostPayload Type Names (YARA, Detection); Wscript To PowerShell To MSBuild Execution Chain Without Project File (SIGMA, Detection)"
+      rules: "Paralell Injector and SvchostPayload Type Names (YARA, Detection); MSBuild Launched Without a Project File by a Hidden or Bypass-Policy PowerShell Parent (SIGMA, Detection)"
       count: 2
     - tactic: "Stealth"
       id: "T1070.004"
@@ -786,7 +786,7 @@
     - tactic: "Stealth"
       id: "T1127.001"
       name: "MSBuild"
-      rules: "Wscript To PowerShell To MSBuild Execution Chain Without Project File (SIGMA, Detection); MSBuild Process Making a Direct Outbound Network Connection (SIGMA, Detection)"
+      rules: "MSBuild Launched Without a Project File by a Hidden or Bypass-Policy PowerShell Parent (SIGMA, Detection); MSBuild Process Making a Direct Outbound Network Connection (SIGMA, Detection)"
       count: 2
     - tactic: "Stealth"
       id: "T1140"
@@ -831,7 +831,7 @@
     - tactic: "Command and Control"
       id: "T1090"
       name: "Proxy"
-      rules: "PowerShell WebClient Download Inheriting Default Proxy Credentials (SIGMA, Detection)"
+      rules: "PowerShell Net.WebClient Proxy Set to Default Credentials (SIGMA, Detection)"
       count: 1
     - tactic: "Command and Control"
       id: "T1090.003"
@@ -846,7 +846,7 @@
     - tactic: "Command and Control"
       id: "T1219.002"
       name: "Remote Desktop Software"
-      rules: "AnyDesk Unattended Password Piped Over Stdin By Non-AnyDesk Process (SIGMA, Detection)"
+      rules: "AnyDesk Unattended Password Piped Over Stdin (SIGMA, Detection)"
       count: 1
     - tactic: "Command and Control"
       id: "T1571"
@@ -861,17 +861,17 @@
     - tactic: "Execution"
       id: "T1053.005"
       name: "Scheduled Task"
-      rules: "NjRAT/XWorm Triple-Redundant Persistence (Combined Static Signature) (YARA, Detection); Quasar RAT Scheduled Task Persistence via schtasks.exe (SIGMA, Detection); NjRAT/XWorm Triple-Redundant Persistence: Base Rules + 2-of-3 Correlation (SIGMA, Hunting)"
+      rules: "NjRAT/XWorm Triple-Redundant Persistence (Combined Static Signature) (YARA, Detection); Quasar RAT Scheduled Task Persistence via schtasks.exe (SIGMA, Detection); NjRAT/XWorm Triple-Redundant Persistence: Base Rules + All-Three Correlation (SIGMA, Hunting)"
       count: 3
     - tactic: "Persistence"
       id: "T1547.001"
       name: "Registry Run Keys / Startup Folder"
-      rules: "NjRAT/XWorm Triple-Redundant Persistence (Combined Static Signature) (YARA, Detection); NjRAT/XWorm Triple-Redundant Persistence: Base Rules + 2-of-3 Correlation (SIGMA, Hunting)"
+      rules: "NjRAT/XWorm Triple-Redundant Persistence (Combined Static Signature) (YARA, Detection); NjRAT/XWorm Triple-Redundant Persistence: Base Rules + All-Three Correlation (SIGMA, Hunting)"
       count: 2
     - tactic: "Persistence"
       id: "T1547.009"
       name: "Shortcut Modification"
-      rules: "NjRAT/XWorm Triple-Redundant Persistence (Combined Static Signature) (YARA, Detection); NjRAT/XWorm Triple-Redundant Persistence: Base Rules + 2-of-3 Correlation (SIGMA, Hunting)"
+      rules: "NjRAT/XWorm Triple-Redundant Persistence (Combined Static Signature) (YARA, Detection); NjRAT/XWorm Triple-Redundant Persistence: Base Rules + All-Three Correlation (SIGMA, Hunting)"
       count: 2
     - tactic: "Persistence"
       id: "T1653"
@@ -886,7 +886,7 @@
     - tactic: "Stealth"
       id: "T1070.004"
       name: "File Deletion"
-      rules: "Quasar RAT Mark-of-the-Web Removal (YARA, Hunting); Quasar RAT Mark of the Web Removal (SIGMA, Detection)"
+      rules: "Zone.Identifier and DeleteFile Strings in a PE (Mark-of-the-Web Removal Capability Lead) (YARA, Hunting); Quasar RAT Mark of the Web Removal (SIGMA, Detection)"
       count: 2
     - tactic: "Collection"
       id: "T1125"
@@ -941,7 +941,7 @@
     - tactic: "Execution"
       id: "T1053.005"
       name: "Scheduled Task"
-      rules: "Scheduled Task Created with Microsoft Corporation Author and Hidden Flag (SIGMA, Detection); EvilSoul-Engine Watchdog Persistence Files Created in TEMP or Startup (SIGMA, Hunting)"
+      rules: "Scheduled Task Created with Microsoft Corporation Author and Hidden Flag (SIGMA, Detection); EvilSoul-Engine Watchdog Persistence Files Created in User TEMP or the Startup Folder (SIGMA, Hunting)"
       count: 2
     - tactic: "Stealth"
       id: "T1027"
@@ -961,7 +961,7 @@
     - tactic: "Stealth"
       id: "T1564.001"
       name: "Hidden Files and Directories"
-      rules: "EvilSoul-Engine Watchdog Persistence Files Created in TEMP or Startup (SIGMA, Hunting)"
+      rules: "EvilSoul-Engine Watchdog Persistence Files Created in User TEMP or the Startup Folder (SIGMA, Hunting)"
       count: 1
     - tactic: "Stealth"
       id: "T1620"
@@ -1036,7 +1036,7 @@
     - tactic: "Privilege Escalation"
       id: "T1068"
       name: "Exploitation for Privilege Escalation"
-      rules: "CVE-2026-20817 WER LPE PoC: Anomalous WerFault.exe Token Inspection (SIGMA, Hunting)"
+      rules: "CVE-2026-20817 WER LPE PoC: Process Handle Opened to WerFault.exe by an Unlisted Source (SIGMA, Hunting)"
       count: 1
     - tactic: "Stealth"
       id: "T1027.010"
@@ -1086,7 +1086,7 @@
     - tactic: "Stealth"
       id: "T1027"
       name: "Obfuscated Files or Information"
-      rules: "FleetAgentAdvanced Dropper Hash and Coined Function-Name Combination (YARA, Detection); .NET Dropper with Base64 Embedded Payload Execution (SIGMA, Hunting)"
+      rules: "FleetAgentAdvanced Dropper Hash and Coined Function-Name Combination (YARA, Detection); .NET Base64 Decode and File Write in a Process-Access Call Trace (EDR Telemetry Only) (SIGMA, Hunting)"
       count: 2
     - tactic: "Stealth"
       id: "T1036.005"
@@ -1096,7 +1096,7 @@
     - tactic: "Stealth"
       id: "T1055"
       name: "Process Injection"
-      rules: "FleetAgentAdvanced Dropper Hash and Coined Function-Name Combination (YARA, Detection); FleetAgentAdvanced .NET Masquerade Configuration and API Combination (YARA, Hunting); FleetAgentAdvanced Process Injection from .NET Executable (SIGMA, Detection)"
+      rules: "FleetAgentAdvanced Dropper Hash and Coined Function-Name Combination (YARA, Detection); FleetAgentAdvanced .NET Masquerade Configuration and API Combination (YARA, Hunting); Remote Thread Created by a FleetAgentAdvanced Binary or an AppData Process (SIGMA, Hunting)"
       count: 3
     - tactic: "Stealth"
       id: "T1070.004"
@@ -1111,7 +1111,7 @@
     - tactic: "Execution"
       id: "T1059.001"
       name: "PowerShell"
-      rules: "FleetAgentFUD PowerShell Execution Policy Bypass Strings (YARA, Hunting); FleetAgentFUD FUD RAT Behavioral Pattern (YARA, Hunting); FleetAgentFUD PowerShell Execution Policy Bypass from AppData (SIGMA, Hunting); FleetAgentFUD PowerShell Bypass from AppData Parent (Broad Variant) (SIGMA, Hunting)"
+      rules: "FleetAgentFUD PowerShell Execution Policy Bypass Strings (YARA, Hunting); FleetAgentFUD FUD RAT Behavioral Pattern (YARA, Hunting); PowerShell Execution Policy Bypass with Hidden Window from an AppData Parent (SIGMA, Hunting); PowerShell Execution Policy Bypass from an AppData Parent (Broad Variant) (SIGMA, Hunting)"
       count: 4
     - tactic: "Execution"
       id: "T1129"
@@ -1121,7 +1121,7 @@
     - tactic: "Execution"
       id: "T1204.002"
       name: "Malicious File"
-      rules: "FleetAgentFUD File Download to Suspicious Locations (SIGMA, Hunting)"
+      rules: "Executable File Created in Public or Windows Temp Folders by an AppData Process (SIGMA, Hunting)"
       count: 1
     - tactic: "Stealth"
       id: "T1036.005"
@@ -1131,12 +1131,12 @@
     - tactic: "Stealth"
       id: "T1055"
       name: "Process Injection"
-      rules: "FleetAgentFUD RWX Memory Allocation from .NET Executable (SIGMA, Hunting)"
+      rules: "VirtualProtect Call Setting RWX Named in a Call Trace, from an AppData Process (EDR API-Call Telemetry) (SIGMA, Hunting)"
       count: 1
     - tactic: "Defense Impairment"
       id: "T1685"
       name: "Disable or Modify Tools"
-      rules: "FleetAgentFUD PowerShell Execution Policy Bypass Strings (YARA, Hunting); FleetAgentFUD PowerShell Execution Policy Bypass from AppData (SIGMA, Hunting)"
+      rules: "FleetAgentFUD PowerShell Execution Policy Bypass Strings (YARA, Hunting); PowerShell Execution Policy Bypass with Hidden Window from an AppData Parent (SIGMA, Hunting)"
       count: 2
     - tactic: "Discovery"
       id: "T1033"
@@ -1161,7 +1161,7 @@
     - tactic: "Command and Control"
       id: "T1105"
       name: "Ingress Tool Transfer"
-      rules: "FleetAgentFUD FUD RAT Behavioral Pattern (YARA, Hunting); FleetAgentFUD File Download to Suspicious Locations (SIGMA, Hunting)"
+      rules: "FleetAgentFUD FUD RAT Behavioral Pattern (YARA, Hunting); Executable File Created in Public or Windows Temp Folders by an AppData Process (SIGMA, Hunting)"
       count: 2
 "ghost-cryptojacker-vova75rus-77.110.96.200-detections":
   total: 20
@@ -1176,12 +1176,12 @@
     - tactic: "Execution"
       id: "T1059.004"
       name: "Unix Shell"
-      rules: "MAL_Linux_GHOST_Kit_Shell_Installer (YARA, Detection); MAL_Linux_GHOST_Hysteria_Operator_Wrapper (YARA, Hunting); MAL_Linux_GHOST_min1_DualTelegram_Wrapper (YARA, Hunting); MAL_Linux_GHOST_check_comfyui_Scanner (YARA, Hunting); MAL_Linux_GHOST_get_all_ranges_CloudEnumerator (YARA, Hunting); Suspicious LD_PRELOAD Set to Non-Standard Library Path (SIGMA, Hunting); High-Frequency Ncat Listener Creation on Linux Host (SIGMA, Hunting); GHOST Kit Distribution File Download from AEZA Hosting Range (SURICATA, Detection)"
+      rules: "MAL_Linux_GHOST_Kit_Shell_Installer (YARA, Detection); MAL_Linux_GHOST_Hysteria_Operator_Wrapper (YARA, Hunting); MAL_Linux_GHOST_min1_DualTelegram_Wrapper (YARA, Hunting); MAL_Linux_GHOST_check_comfyui_Scanner (YARA, Hunting); MAL_Linux_GHOST_get_all_ranges_CloudEnumerator (YARA, Hunting); Suspicious LD_PRELOAD Set to Non-Standard Library Path (SIGMA, Hunting); Ncat Listener Creation on Linux Host (SIGMA, Hunting); GHOST Kit Distribution File Download from AEZA Hosting Range (SURICATA, Detection)"
       count: 8
     - tactic: "Execution"
       id: "T1059.006"
       name: "Python"
-      rules: "MAL_Linux_GHOST_ComfyUI_Python_Kit (YARA, Detection); MAL_Linux_GHOST_ComfyUI_Fake_PerformanceMonitor_Node (YARA, Hunting)"
+      rules: "MAL_Linux_GHOST_ComfyUI_Python_Kit (YARA, Detection); SUSP_Linux_ComfyUI_PerformanceMonitor_Node_Registration (YARA, Hunting)"
       count: 2
     - tactic: "Persistence"
       id: "T1543.002"
@@ -1191,7 +1191,7 @@
     - tactic: "Persistence"
       id: "T1554"
       name: "Compromise Host Software Binary"
-      rules: "MAL_Linux_GHOST_ComfyUI_Python_Kit (YARA, Detection); MAL_Linux_GHOST_ComfyUI_Fake_PerformanceMonitor_Node (YARA, Hunting); GHOST ComfyUI Fake PerformanceMonitor Custom Node Planted (SIGMA, Detection)"
+      rules: "MAL_Linux_GHOST_ComfyUI_Python_Kit (YARA, Detection); SUSP_Linux_ComfyUI_PerformanceMonitor_Node_Registration (YARA, Hunting); GHOST ComfyUI Fake PerformanceMonitor Custom Node Planted (SIGMA, Detection)"
       count: 3
     - tactic: "Privilege Escalation"
       id: "T1611"
@@ -1201,7 +1201,7 @@
     - tactic: "Stealth"
       id: "T1014"
       name: "Rootkit"
-      rules: "MAL_Linux_GHOST_libpam_cache_Rootkit_Family (YARA, Detection); MAL_Linux_GHOST_libpam_cache_Source (YARA, Detection); Suspicious Shared Library Created in PAM Security Directory (SIGMA, Detection); Auditd - PAM Security Library Directory Write by Non-Package-Manager (SIGMA, Detection)"
+      rules: "MAL_Linux_GHOST_libpam_cache_Rootkit_Family (YARA, Detection); MAL_Linux_GHOST_libpam_cache_Source (YARA, Detection); Suspicious Shared Library Created in PAM Security Directory (SIGMA, Detection); Auditd - PAM Security Library Directory File Creation by Non-Package-Manager (SIGMA, Detection)"
       count: 4
     - tactic: "Stealth"
       id: "T1027"
@@ -1226,12 +1226,12 @@
     - tactic: "Stealth"
       id: "T1574.006"
       name: "Dynamic Linker Hijacking"
-      rules: "MAL_Linux_GHOST_libpam_cache_Rootkit_Family (YARA, Detection); MAL_Linux_GHOST_libpam_cache_Source (YARA, Detection); MAL_Linux_GHOST_Kit_Shell_Installer (YARA, Detection); MAL_Linux_GHOST_ComfyUI_Fake_PerformanceMonitor_Node (YARA, Hunting); Linux LD_PRELOAD Persistence File Modification (SIGMA, Detection); Suspicious Shared Library Created in PAM Security Directory (SIGMA, Detection); Auditd - PAM Security Library Directory Write by Non-Package-Manager (SIGMA, Detection); Chattr Immutable Bit Set on Linux Persistence Target Paths (SIGMA, Detection); Suspicious LD_PRELOAD Set to Non-Standard Library Path (SIGMA, Hunting); GHOST Kit Distribution File Download from AEZA Hosting Range (SURICATA, Detection)"
+      rules: "MAL_Linux_GHOST_libpam_cache_Rootkit_Family (YARA, Detection); MAL_Linux_GHOST_libpam_cache_Source (YARA, Detection); MAL_Linux_GHOST_Kit_Shell_Installer (YARA, Detection); SUSP_Linux_ComfyUI_PerformanceMonitor_Node_Registration (YARA, Hunting); Linux LD_PRELOAD Persistence File Modification (SIGMA, Detection); Suspicious Shared Library Created in PAM Security Directory (SIGMA, Detection); Auditd - PAM Security Library Directory File Creation by Non-Package-Manager (SIGMA, Detection); Chattr Immutable Bit Set on Linux Persistence Target Paths (SIGMA, Detection); Suspicious LD_PRELOAD Set to Non-Standard Library Path (SIGMA, Hunting); GHOST Kit Distribution File Download from AEZA Hosting Range (SURICATA, Detection)"
       count: 10
     - tactic: "Stealth"
       id: "T1620"
       name: "Reflective Code Loading"
-      rules: "High-Frequency memfd_create Syscall from Non-JVM Process on Linux Server (SIGMA, Hunting)"
+      rules: "memfd_create Syscall Outside a Java, Browser and Node Filter on Linux Server (SIGMA, Hunting)"
       count: 1
     - tactic: "Defense Impairment"
       id: "T1222.002"
@@ -1246,7 +1246,7 @@
     - tactic: "Command and Control"
       id: "T1102.002"
       name: "Bidirectional Communication"
-      rules: "MAL_Linux_GHOST_min1_DualTelegram_Wrapper (YARA, Hunting); GHOST Cryptojacker Kit Telegram API Egress from Production Server: Covert Mining Report (SURICATA, Hunting)"
+      rules: "MAL_Linux_GHOST_min1_DualTelegram_Wrapper (YARA, Hunting); Telegram API TLS SNI Egress from an Internal Host (Reporting Channel Used by the GHOST Kit, Not Specific to It) (SURICATA, Hunting)"
       count: 2
     - tactic: "Command and Control"
       id: "T1105"
@@ -1256,17 +1256,17 @@
     - tactic: "Command and Control"
       id: "T1571"
       name: "Non-Standard Port"
-      rules: "High-Frequency Ncat Listener Creation on Linux Host (SIGMA, Hunting); GHOST Cryptojacker Kit Hysteria v2 QUIC Backdoor Egress: Known Operator Ports (SURICATA, Hunting); GHOST Cryptojacker Kit Hysteria v2 QUIC Backdoor Inbound: Victim-Hosted Listener Ports (SURICATA, Hunting)"
+      rules: "Ncat Listener Creation on Linux Host (SIGMA, Hunting); GHOST Cryptojacker Kit Hysteria v2 QUIC Backdoor Egress: Known Operator Ports (SURICATA, Hunting); GHOST Cryptojacker Kit Hysteria v2 QUIC Backdoor Inbound: Victim-Hosted Listener Ports (SURICATA, Hunting)"
       count: 3
     - tactic: "Command and Control"
       id: "T1572"
       name: "Protocol Tunneling"
-      rules: "MAL_Linux_GHOST_Hysteria_Operator_Wrapper (YARA, Hunting); Hysteria V2 QUIC Proxy Process Execution on Linux Server (SIGMA, Hunting); GHOST Cryptojacker Kit Hysteria v2 QUIC Backdoor Egress: Known Operator Ports (SURICATA, Hunting); GHOST Cryptojacker Kit Hysteria v2 QUIC Backdoor Inbound: Victim-Hosted Listener Ports (SURICATA, Hunting)"
+      rules: "MAL_Linux_GHOST_Hysteria_Operator_Wrapper (YARA, Hunting); Hysteria Proxy Process Execution on Linux Server (SIGMA, Hunting); GHOST Cryptojacker Kit Hysteria v2 QUIC Backdoor Egress: Known Operator Ports (SURICATA, Hunting); GHOST Cryptojacker Kit Hysteria v2 QUIC Backdoor Inbound: Victim-Hosted Listener Ports (SURICATA, Hunting)"
       count: 4
     - tactic: "Impact"
       id: "T1496.001"
       name: "Compute Hijacking"
-      rules: "MAL_Linux_GHOST_min1_DualTelegram_Wrapper (YARA, Hunting); High-Frequency memfd_create Syscall from Non-JVM Process on Linux Server (SIGMA, Hunting); GHOST Cryptojacker Kit Telegram API Egress from Production Server: Covert Mining Report (SURICATA, Hunting)"
+      rules: "MAL_Linux_GHOST_min1_DualTelegram_Wrapper (YARA, Hunting); memfd_create Syscall Outside a Java, Browser and Node Filter on Linux Server (SIGMA, Hunting); Telegram API TLS SNI Egress from an Internal Host (Reporting Channel Used by the GHOST Kit, Not Specific to It) (SURICATA, Hunting)"
       count: 3
 "gocloud-multiservice-cryptojacking-149-28-112-221-detections":
   total: 18
@@ -1376,7 +1376,7 @@
     - tactic: "Execution"
       id: "T1059.004"
       name: "Unix Shell"
-      rules: "ExifTool Invoked With Condition Option Executing Shell Commands (SIGMA, Detection); Pkill Kill Sweep Against Rival Cryptominer Process Names (SIGMA, Hunting); Base64 Decoded Script Written to Tmp and Executed by Bash (SIGMA, Hunting)"
+      rules: "ExifTool Invoked With Condition Option Executing Shell Commands (SIGMA, Detection); Pkill Kill Sweep Against Rival Cryptominer Process Names (SIGMA, Hunting); Base64 Decode Redirected to Tmp Followed by Bash Run of a Tmp Path in One Command Line (SIGMA, Hunting)"
       count: 3
     - tactic: "Persistence"
       id: "T1543.002"
@@ -1391,7 +1391,7 @@
     - tactic: "Stealth"
       id: "T1140"
       name: "Deobfuscate/Decode Files or Information"
-      rules: "Base64 Decoded Script Written to Tmp and Executed by Bash (SIGMA, Hunting)"
+      rules: "Base64 Decode Redirected to Tmp Followed by Bash Run of a Tmp Path in One Command Line (SIGMA, Hunting)"
       count: 1
     - tactic: "Command and Control"
       id: "T1071.001"

@@ -86,14 +86,14 @@ rule Arsenal237_BYOVD_Baidu_Driver
 }
 ```
 
-#### Multi-Vendor Security Product Kill-List
+#### Security Product Process-Name Kill-List (Multi-Vendor Spread or Single-Vendor Depth)
 
 **Tier:** Detection
 **Robustness:** 2
 **ATT&CK Coverage:** T1685 (Disable or Modify Tools)
 **Confidence:** HIGH
-**Rationale:** Each branch requires a broad, multi-vendor spread of real security-product process names — for example 5+ Defender names AND 3+ CrowdStrike names AND 3+ third-party AV names together in one file. These are the actual vendor executable names, not attacker-chosen literals — the operator cannot rename them without losing the ability to target the real processes, so the artifact is durable even though each individual string is a plain filename. Legitimate software has no reason to embed this many distinct security-vendor process names together.
-**False Positives:** Legitimate security product updates or uninstallations; system administrator maintenance activities. The single-vendor-deep branch (8+ of one vendor's own process family plus a termination API) has a narrow plausible overlap with that vendor's own repair/update tooling, which is why this sits at `high` rather than `critical`.
+**Rationale:** Two of the three branches require a broad, multi-vendor spread of real security-product process names — the first needs 5+ Defender names AND 3+ CrowdStrike names AND 3+ third-party AV names together in one file, the third needs 3+ Defender, 2+ CrowdStrike and 4+ third-party names plus a termination API string. The middle branch is single-vendor: 8+ Defender names or 4+ CrowdStrike names, plus one termination API string, with no second vendor required. *Wording fix 2026-10-11:* the rule was titled and described as multi-vendor throughout, which only two of its three branches are. These are the actual vendor executable names, not attacker-chosen literals — the operator cannot rename them without losing the ability to target the real processes, so the artifact is durable even though each individual string is a plain filename. Legitimate software has little reason to embed this many distinct security-vendor process names together; the single-vendor branch is the exception, see False Positives.
+**False Positives:** Legitimate security product updates or uninstallations; system administrator maintenance activities. The single-vendor-deep branch (8+ Defender names or 4+ CrowdStrike names plus a termination API string, with no second vendor required) can also fire on that vendor's own repair, update or uninstall tooling, and that branch has not been run against a goodware corpus, which is why this sits at `high` rather than `critical`.
 **Blind Spots:** Does not fire against a narrowly-targeted killer that terminates fewer than the required breadth/depth thresholds, or one that resolves target processes dynamically rather than embedding their names as strings.
 **Validation:** Compiles clean with yarac; all string anchors are ≥4-byte vendor process names. No goodware-corpus sweep performed.
 
@@ -101,9 +101,10 @@ rule Arsenal237_BYOVD_Baidu_Driver
 rule Arsenal237_Security_Product_Killer
 {
     meta:
-        description = "Detects mass security product termination behavior"
+        description = "Detects a PE that embeds a kill-list of security-product process names (a multi-vendor spread across Defender, CrowdStrike and third-party AV names, or 8+ Defender or 4+ CrowdStrike names alone) together with a process-termination API name. It reads strings only and does not observe any termination."
         author = "The Hunters Ledger"
         date = "2026-01-26"
+        modified = "2026-10-11"
         reference = "https://the-hunters-ledger.com/hunting-detections/arsenal-237-rootkit-dll-detections/"
         severity = "high"
         mitre_attack = "T1685"
@@ -150,7 +151,7 @@ rule Arsenal237_Security_Product_Killer
             // High confidence: Multiple vendor targets
             (5 of ($def_*) and 3 of ($cs_*) and 3 of ($av_*)) or
 
-            // Medium confidence: One vendor complete + APIs
+            // Single vendor in depth (8+ Defender or 4+ CrowdStrike names) + one termination API; no second vendor required
             ((8 of ($def_*) or 4 of ($cs_*)) and 1 of ($api_*)) or
 
             // Broad targeting across vendors
@@ -363,20 +364,21 @@ level: critical
 **Robustness:** 3
 **ATT&CK Coverage:** T1055.001 (DLL Injection)
 **Confidence:** HIGH
-**Rationale:** Salvaged from the source "API Hooking from DLL Context" rule. The original also required `SourceImage|endswith: '\rootkit.dll'` — but a DLL is never its own process image in Sysmon/EDR telemetry (a loaded DLL shows up as the *hosting* EXE's image, never its own filename), so that clause could never match real telemetry and made the whole rule unfireable. Removing it and keeping the two genuinely durable clauses — a named security-product target plus a full-access or memory-write `GrantedAccess` mask — recovers a rule that is broader (not tied to one build's filename) and more durable (keyed on the actual technique chokepoint) than the original.
+**Rationale:** *Logic fix 2026-10-11:* the rule used to list a third mask, 0x1010, which is PROCESS_QUERY_LIMITED_INFORMATION plus PROCESS_VM_READ. That is read-only access, so it fired on any monitor reading these processes and did not match the "full or memory-write" access the description claimed; it has been removed. The report gives no access mask for rootkit.dll, so the full-access masks are the technique-class choice, not a value taken from the sample. Salvaged from the source "API Hooking from DLL Context" rule. The original also required `SourceImage|endswith: '\rootkit.dll'` — but a DLL is never its own process image in Sysmon/EDR telemetry (a loaded DLL shows up as the *hosting* EXE's image, never its own filename), so that clause could never match real telemetry and made the whole rule unfireable. Removing it and keeping the two genuinely durable clauses — a named security-product target plus a full-access `GrantedAccess` mask (0x1F0FFF or 0x1FFFFF) — recovers a rule that is broader (not tied to one build's filename) and more durable (keyed on the actual technique chokepoint) than the original.
 **False Positives:** Security software performing legitimate cross-process monitoring of other installed security products; interactive debugging of a security-product process by an analyst or developer.
-**Blind Spots:** Requires process-access telemetry (Sysmon Event ID 10 or equivalent). Does not fire against access-rights masks outside the three listed values, or against injection techniques that avoid OpenProcess entirely (e.g., APC-only or thread-hijack primitives that request narrower access).
+**Blind Spots:** Requires process-access telemetry (Sysmon Event ID 10 or equivalent). Does not fire against access-rights masks outside the two listed full-access values (including write-capable masks that are not full access, and read-only masks), or against injection techniques that avoid OpenProcess entirely (e.g., APC-only or thread-hijack primitives that request narrower access).
 **Validation:** Passes `sigma check` against the SigmaHQ validators.
 
 ```yaml
 title: High-Privilege Process Access to Security Product Processes
 id: d2e3f4a5-6b7c-8d9e-0f1a-2b3c4d5e6f7a
 status: experimental
-description: Detects a process opening a handle to a named security-product process (Defender, CrowdStrike Falcon, ESET, Kaspersky) with full or memory-write access rights -- the access pattern that precedes API hooking or code injection into endpoint security software.
+description: Detects a process opening a handle to a named security-product process (Defender, CrowdStrike Falcon, ESET, Kaspersky) with full access rights (GrantedAccess 0x1F0FFF or 0x1FFFFF) -- the access pattern that precedes API hooking or code injection into endpoint security software.
 references:
     - https://the-hunters-ledger.com/hunting-detections/arsenal-237-rootkit-dll-detections/
 author: The Hunters Ledger
 date: 2026-01-26
+modified: 2026-10-11
 tags:
     - attack.stealth
     - attack.privilege-escalation
@@ -396,7 +398,6 @@ detection:
         GrantedAccess:
             - '0x1F0FFF'
             - '0x1FFFFF'
-            - '0x1010'
     condition: selection_target_security and selection_access
 falsepositives:
     - Security software performing legitimate cross-process monitoring of other installed security products

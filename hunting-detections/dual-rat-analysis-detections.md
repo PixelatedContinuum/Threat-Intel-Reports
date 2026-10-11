@@ -29,7 +29,7 @@ This campaign covers two distinct .NET RAT families recovered from the same infr
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
 
 **Highest-confidence anchors:**
-- The NjRAT/XWorm triple-persistence YARA signature (all five literal artifacts, `conhost`, `minute /mo 1`, the Run-key path, `Startup\conhost.lnk`, and `schtasks /create`, co-present) and its Sigma correlation counterpart (2-of-3 mechanisms on the same host within a 10-minute window) are the strongest static and behavioral leads in the campaign.
+- The NjRAT/XWorm triple-persistence YARA signature (all five literal artifacts, `conhost`, `minute /mo 1`, the Run-key path, `Startup\conhost.lnk`, and `schtasks /create`, co-present) and its Sigma correlation counterpart (all three mechanisms on the same host within a 10-minute window) are the strongest static and behavioral leads in the campaign.
 - On the Quasar RAT side, `Client.exe` reliably anchors four separate Detection-tier Sigma rules (scheduled-task creation, remote thread creation into system processes, Zone.Identifier deletion, and C2 connection on TCP 4782). This filename is the stock output of the public Quasar builder and is retained by unsophisticated operators more often than not.
 
 **Atomics already in the feed:** the C2 IP `185.208.159.182`, port `4782`, the reconnaissance domains (`ipwho.is`, `api.ipify.org`), and the Pastebin dead-drop URL (`https://pastebin.com/raw/bzg5zj8n`) were already present in [`dual-rat-analysis-iocs.json`](/ioc-feeds/dual-rat-analysis-iocs.json) prior to this pass. Two Suricata rules that matched solely on the generic recon domains / the bare Pastebin host (see Coverage Gaps) are counted as atomics routed to that existing feed coverage rather than published as standalone signatures; no new feed entries were required.
@@ -100,31 +100,32 @@ rule NjRAT_XWorm_Triple_Persistence {
 
 **Quasar RAT**
 
-#### Quasar RAT Mark-of-the-Web Removal
+#### Zone.Identifier and DeleteFile Strings in a PE (Mark-of-the-Web Removal Capability Lead)
 
 **Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1070.004 (Indicator Removal: File Deletion)
 **Confidence:** MODERATE
-**Rationale:** Requires both a `:Zone.Identifier` alternate-data-stream reference and a `DeleteFile` API reference to be present together — a durable technique-level combination (Zone.Identifier is an OS-defined artifact name, not something the operator chooses), but neither string alone is family-specific, and legitimate MOTW-management utilities (unblock-file tools, some self-extracting installers) can plausibly contain both. Corrected from the original rule, which gated this condition behind `pe.imphash() == "8a3b1d8c…"` — a 66-character literal (not a valid 32-character MD5 imphash) evaluated with no `import "pe"` in the file, a compile-breaking defect; the broken gate has been removed.
+**Rationale:** *Wording fix 2026-10-11:* the rule was titled and described as a Quasar RAT detection, but its strings (`:Zone.Identifier`, `DeleteFile`) are not family-specific, as the next sentences say. The heading, the rule name (`SUSP_PE_ZoneIdentifier_DeleteFile_Strings`, was `Quasar_RAT_MarkOfWeb_Removal`), its UUIDv5 id and the description now say what the strings test. Requires both a `:Zone.Identifier` alternate-data-stream reference and a `DeleteFile` API reference to be present together — a durable technique-level combination (Zone.Identifier is an OS-defined artifact name, not something the operator chooses), but neither string alone is family-specific, and legitimate MOTW-management utilities (unblock-file tools, some self-extracting installers) can plausibly contain both. Corrected from the original rule, which gated this condition behind `pe.imphash() == "8a3b1d8c…"` — a 66-character literal (not a valid 32-character MD5 imphash) evaluated with no `import "pe"` in the file, a compile-breaking defect; the broken gate has been removed.
 **False Positives:** Self-extracting installers or "unblock file" utilities that read and delete Zone.Identifier streams as part of legitimate first-run handling.
 **Deployment:** Endpoint AV/EDR file scan, static triage of unknown .NET binaries.
 
 ```yara
-rule Quasar_RAT_MarkOfWeb_Removal {
+rule SUSP_PE_ZoneIdentifier_DeleteFile_Strings {
    meta:
-      description = "Detects a process deleting the Zone.Identifier alternate data stream from a file, characteristic of the Quasar RAT sample's Mark-of-the-Web suppression behavior observed in this campaign"
+      description = "Detects a PE under 5 MB that carries both the :Zone.Identifier stream string and the DeleteFile API name, a static lead for Mark-of-the-Web removal capability. The rule has no Quasar-specific string, so any PE with both strings matches; the Quasar RAT sample that deletes this stream in the campaign is one of the files it would match. It reads strings only and does not observe a deletion"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/"
       date = "2025-12-06"
+      modified = "2026-10-11"
       hash1 = "2c4387ce18be279ea735ec4f0092698534921030aaa69949ae880e41a5c73766"
       hash2 = "dc795961c8e63782fc0f53c08e7ca2e593df99fa"
       hash3 = "b5491b58348600c2766f86a5af2b867f"
       family = "Quasar RAT"
       malware_type = "RAT"
       campaign = "Dual-RAT-185.208.159.182-Quasar-NjRAT"
-      id = "a2e913d8-0983-5d36-8bba-d9ddde38b68f"
+      id = "a827b192-9f37-505a-a4c9-d32708430d6e"
    strings:
       $zone_stream = ":Zone.Identifier" ascii wide
       $delete_api = "DeleteFile" ascii
@@ -453,17 +454,17 @@ falsepositives:
 level: high
 ```
 
-#### NjRAT/XWorm Triple-Redundant Persistence: Base Rules + 2-of-3 Correlation
+#### NjRAT/XWorm Triple-Redundant Persistence: Base Rules + All-Three Correlation
 
 **Tier:** Hunting (3 base rules) / Detection (correlation) — co-located in one fence because SigmaHQ correlation syntax requires the referenced base rules to be evaluated alongside the correlation; see Multi-Family Organization.
-**Robustness:** Base rules 1 each (single mechanism, keyed on the renameable "conhost" artifact name in isolation); correlation 2 (2-of-3 independently-renameable mechanisms co-occurring on the same host within a short window is a materially stronger signal than any one alone).
+**Robustness:** Base rules 1 each (single mechanism, keyed on the renameable "conhost" artifact name in isolation); correlation 2 (all three independently-renameable mechanisms co-occurring on the same host within a short window is a materially stronger signal than any one alone).
 **ATT&CK Coverage:** T1053.005 (Scheduled Task), T1547.001 (Registry Run Keys), T1547.009 (Shortcut Modification)
 **Confidence:** HIGH for the correlation; MODERATE for each base rule individually.
-**Rationale:** Decomposed from the original rule, which mixed three different Sysmon event types (Task Scheduler EventID 106, registry EventID 13, file-creation EventID 11) under a single invalid `service: security` logsource with a `condition: 1 of selection*` — a structure Sigma does not support (one rule, one logsource) and that, even read charitably, only required any ONE of the three mechanisms to fire. Rebuilt as three independent base rules on their correct logsource categories (`process_creation` for the schtasks.exe invocation, `registry_set`, `file_event`), each individually a Hunting-tier single-mechanism lead, plus a `type: event_count` correlation that elevates to Detection when 2-or-more of the three co-occur on the same host within 10 minutes — directly reflecting the "triple-redundant, self-healing" persistence behavior documented for this campaign.
+**Rationale:** *Logic fix 2026-10-11:* the correlation was titled "2-of-3" but was an `event_count` with `gte: 2` over the three base rules, which counts events and not distinct rules, so two hits of one mechanism on a host also fired it. A Sigma correlation cannot count distinct rules (that would take three pairwise correlations, not added), so it is now a `temporal` correlation over all three, matching the report's account that the sample sets up all three in one run. Decomposed from the original rule, which mixed three different Sysmon event types (Task Scheduler EventID 106, registry EventID 13, file-creation EventID 11) under a single invalid `service: security` logsource with a `condition: 1 of selection*` — a structure Sigma does not support (one rule, one logsource) and that, even read charitably, only required any ONE of the three mechanisms to fire. Rebuilt as three independent base rules on their correct logsource categories (`process_creation` for the schtasks.exe invocation, `registry_set`, `file_event`), each individually a Hunting-tier single-mechanism lead, plus a `type: temporal` correlation that elevates to Detection when all three co-occur on the same host within 10 minutes — directly reflecting the "triple-redundant, self-healing" persistence behavior documented for this campaign.
 **False Positives (base rules, individually):** A scheduled task, registry Run-key value, or Startup-folder shortcut literally named/valued "conhost" from an unrelated source (implausible per-mechanism, but each is a single renameable literal in isolation).
-**False Positives (correlation):** Very unlikely, would require 2 of 3 independently-implausible conhost-named artifacts to appear on the same host within the same 10-minute window for an unrelated reason.
-**Blind Spots (correlation):** A rebuild that renames the shared "conhost" artifact across all three mechanisms evades the whole cluster; a deployment that only establishes one persistence mechanism (not observed in this campaign) triggers only the Hunting-tier base rule, not the correlation.
-**Validation:** Trigger the malware's install routine — 2 of the 3 base events must fire within 10 minutes and the correlation must alert; an environment with one coincidental "conhost"-named artifact but no others must NOT trigger the correlation.
+**False Positives (correlation):** Very unlikely, would require all 3 independently-implausible conhost-named artifacts to appear on the same host within the same 10-minute window for an unrelated reason.
+**Blind Spots (correlation):** A rebuild that renames the shared "conhost" artifact across all three mechanisms evades the whole cluster; a deployment that establishes only one or two of the three persistence mechanisms (not observed in this campaign) triggers only the Hunting-tier base rules, not the correlation. The Elastic EQL conversion of a temporal correlation is a `sample by` over the host with no time bound, so the 10-minute window holds in Sigma semantics only, and Lucene has no form for it.
+**Validation:** Trigger the malware's install routine — all 3 base events must fire within 10 minutes and the correlation must alert; an environment with one or two coincidental "conhost"-named artifacts but not all three must NOT trigger the correlation.
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM with correlation-rule support (process-creation, registry, and file-creation telemetry).
 
 ```yaml
@@ -567,22 +568,25 @@ falsepositives:
       Startup folder has not been observed
 level: medium
 ---
-title: NjRAT/XWorm Triple-Redundant Persistence - 2-of-3 Correlation
+title: NjRAT/XWorm Triple-Redundant Persistence - All-Three Correlation
 id: ca1fba48-5756-40d7-ab90-9fad61dd00b8
 status: experimental
 description: >-
-  Raises confidence to Detection-grade when 2 or more of the three
-  NjRAT/XWorm persistence base rules (scheduled task, registry Run
-  key, startup-folder shortcut - all referencing the conhost artifact
+  Raises confidence to Detection-grade when all three NjRAT/XWorm
+  persistence base rules (scheduled task, registry Run key,
+  startup-folder shortcut - all referencing the conhost artifact
   name) fire on the same host within a 10-minute window, consistent
   with the triple-redundant persistence routine documented for this
-  campaign.
+  campaign. A Sigma temporal correlation requires every listed rule
+  to match, so a variant that sets up only two of the three
+  mechanisms does not trigger it.
 references:
     - https://the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/
 author: The Hunters Ledger
 date: '2025-12-06'
+modified: '2026-10-11'
 correlation:
-    type: event_count
+    type: temporal
     rules:
         - njrat_persist_schtask
         - njrat_persist_runkey
@@ -590,11 +594,9 @@ correlation:
     group-by:
         - ComputerName
     timespan: 10m
-    condition:
-        gte: 2
 falsepositives:
     - >-
-      Very unlikely; would require 2 of 3 independently-implausible
+      Very unlikely; would require all 3 independently-implausible
       conhost-named artifacts to appear on the same host within the
       same 10-minute window for an unrelated reason
 level: high

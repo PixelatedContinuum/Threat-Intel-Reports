@@ -137,7 +137,7 @@ rule MAL_Linux_GHOST_libpam_cache_Rootkit_Family {
 **Robustness:** 3
 **ATT&CK Coverage:** T1014 (Rootkit), T1574.006 (Dynamic Linker Hijacking)
 **Confidence:** HIGH
-**Rationale:** The 98-line C source `libpam_cache.c` is shipped alongside the compiled binary on the kit-author's distribution server. The combination of `_GNU_SOURCE` plus libc hook function names plus the `unsetenv("LD_PRELOAD")` constructor pattern plus GHOST-specific hide-list contents is unique and requires the same recompile-level effort to evade as Rule 1.
+**Rationale:** The 98-line C source `libpam_cache.c` is shipped alongside the compiled binary on the kit-author's distribution server. *Wording fix 2026-10-11:* the Rationale used to list libc hook function names (`readdir`, `fopen` and the 64-bit forms) among the matched strings; the rule contains none, so they are removed from this sentence. The report says the source hooks those four functions, but the rule does not test for them. The combination matched is `_GNU_SOURCE` plus the `RTLD_NEXT` resolver plus the `__attribute__((constructor))` and `unsetenv("LD_PRELOAD")` pattern plus the `:%04X` port format plus two of the three single-character helper declarations plus two of the three GHOST hide-list strings, which is unique and requires the same recompile-level effort to evade as Rule 1.
 **False Positives:** None known — the specific combination of abbreviated single-char helper names (`_sh`, `_ph`, `_fn`) plus `RTLD_NEXT` resolver plus GHOST hide-list strings does not appear in legitimate PAM development.
 **Blind Spots:** A rewritten source using different helper-function naming conventions and a fully rotated hide-list would evade; this rule only matches the source text, not the compiled binary (Rule 1 covers that).
 **Validation:** Scan the analyzed sample (`hash1` below) — all clauses must match; unrelated C source implementing `RTLD_NEXT` hooking (e.g., a legitimate LD_PRELOAD shim) without the GHOST hide-list strings must NOT fire.
@@ -146,11 +146,12 @@ rule MAL_Linux_GHOST_libpam_cache_Rootkit_Family {
 ```yara
 rule MAL_Linux_GHOST_libpam_cache_Source {
    meta:
-      description = "Detects GHOST cryptojacker kit LD_PRELOAD rootkit C source file libpam_cache.c — 98-line dense hand-written C with single-char identifiers, RTLD_NEXT hook resolution, unsetenv LD_PRELOAD constructor, and GHOST-specific hide-list contents; shipped alongside compiled .so on kit-author distribution server"
+      description = "Detects GHOST cryptojacker kit LD_PRELOAD rootkit C source file libpam_cache.c — dense hand-written C with single-char helper declarations, an RTLD_NEXT resolver, an unsetenv LD_PRELOAD constructor, a port-format string and GHOST-specific hide-list contents (it does not test for the hooked libc function names); shipped alongside compiled .so on kit-author distribution server"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/"
       date = "2026-05-25"
+      modified = "2026-10-11"
       hash1 = "edafde0d33ff1a169c0c4eeaeec12d1759818c7cf4950fcee91c687e811e6cff"
       family = "GHOST-cryptojacker-kit"
       malware_type = "LD_PRELOAD Rootkit Source"
@@ -294,30 +295,31 @@ rule MAL_Linux_GHOST_ComfyUI_Python_Kit {
 
 ### Hunting Rules
 
-#### MAL_Linux_GHOST_ComfyUI_Fake_PerformanceMonitor_Node
+#### SUSP_Linux_ComfyUI_PerformanceMonitor_Node_Registration
 
 **Tier:** Hunting (re-tiered from Detection 2026-09-13, see note below)
 **Robustness:** 2
 **ATT&CK Coverage:** T1554 (Compromise Host Software Binary), T1059.006 (Python), T1574.006 (Dynamic Linker Hijacking analog for Python runtime)
 **Confidence:** MODERATE (downgraded from HIGH 2026-09-13)
-**Rationale:** Narrow detection on the malicious "PerformanceMonitor" custom node registered into ComfyUI's `NODE_CLASS_MAPPINGS`. This fires on post-compromise persistence regardless of delivery mechanism, it catches the installed artifact, not just the dropper. The mandatory combination of an actual class *definition* (`class PerformanceMonitor`) plus the registration-dict literal is more specific than a bare filename or import match. **Re-tiering note, 2026-09-13:** confirmed by direct testing, not just reasoning, that a genuinely benign ComfyUI custom node (a real profiling extension named PerformanceMonitor, using the exact NODE_CLASS_MAPPINGS/NODE_DISPLAY_NAME_MAPPINGS boilerplate every legitimate ComfyUI extension must use) fires this rule with zero malicious content present. `NODE_CLASS_MAPPINGS` and `NODE_DISPLAY_NAME_MAPPINGS` are mandatory ComfyUI registration boilerplate, not something specific to this malware
+**Rationale:** *Wording fix 2026-10-11:* the rule, its name (`SUSP_Linux_ComfyUI_PerformanceMonitor_Node_Registration`, was `MAL_Linux_GHOST_ComfyUI_Fake_PerformanceMonitor_Node`, with its UUIDv5 id) and its description called the match a fake or GHOST node, but the strings are the registration boilerplate that every ComfyUI extension uses, as the re-tiering note below says; it now names a PerformanceMonitor node registration. Narrow detection on the malicious "PerformanceMonitor" custom node registered into ComfyUI's `NODE_CLASS_MAPPINGS`. This fires on post-compromise persistence regardless of delivery mechanism, it catches the installed artifact, not just the dropper. The mandatory combination of an actual class *definition* (`class PerformanceMonitor`) plus the registration-dict literal is more specific than a bare filename or import match. **Re-tiering note, 2026-09-13:** confirmed by direct testing, not just reasoning, that a genuinely benign ComfyUI custom node (a real profiling extension named PerformanceMonitor, using the exact NODE_CLASS_MAPPINGS/NODE_DISPLAY_NAME_MAPPINGS boilerplate every legitimate ComfyUI extension must use) fires this rule with zero malicious content present. `NODE_CLASS_MAPPINGS` and `NODE_DISPLAY_NAME_MAPPINGS` are mandatory ComfyUI registration boilerplate, not something specific to this malware
 **False Positives:** Confirmed, not merely Low. A synthetic benign ComfyUI custom node built specifically to test this (a real profiling class named PerformanceMonitor with no backdoor content) fires the rule. The rule's own prior Blind Spots field already predicted this exact scenario; the tier and confidence now match that prediction instead of overriding it
 **Blind Spots:** A legitimately-named "PerformanceMonitor" custom node from an unrelated, unvetted developer would still fire, treat a hit as a compromise indicator requiring publisher/source verification, not an automatic block
 **Validation:** Scan a ComfyUI installation with the planted node present — must match; a stock ComfyUI installation with only official custom nodes must NOT fire.
 **Deployment:** ComfyUI `custom_nodes` directory file scan (scheduled or on-write), Linux endpoint EDR.
 
 ```yara
-rule MAL_Linux_GHOST_ComfyUI_Fake_PerformanceMonitor_Node {
+rule SUSP_Linux_ComfyUI_PerformanceMonitor_Node_Registration {
    meta:
-      description = "Detects GHOST cryptojacker kit post-compromise persistence via malicious ComfyUI custom node — Python file registering class PerformanceMonitor into NODE_CLASS_MAPPINGS; catches the installed persistence artifact regardless of delivery mechanism; hunt rule for ComfyUI custom-node integrity audits"
+      description = "Detects a Python file that defines class PerformanceMonitor and registers it in ComfyUI NODE_CLASS_MAPPINGS. This is the registration pattern the GHOST cryptojacker kit uses for its planted persistence node, but the rule tests no malicious content, so a benign ComfyUI extension of that name also matches (confirmed by test on 2026-09-13); use it as a hunt rule for ComfyUI custom-node integrity audits"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/"
       date = "2026-05-25"
+      modified = "2026-10-11"
       family = "GHOST-cryptojacker-kit"
       malware_type = "ComfyUI Custom Node Persistence Artifact"
       campaign = "OpenDirectory-GHOST-Cryptojacker-Vova75Rus-77.110.96.200"
-      id = "17a43202-fdd1-5051-8085-9456351ca024"
+      id = "83b41b80-0cff-51a5-b77c-20831c55d118"
    strings:
       // Malicious custom-node class registration — both dict assignments required
       $class_def         = "class PerformanceMonitor" ascii
@@ -339,7 +341,7 @@ rule MAL_Linux_GHOST_ComfyUI_Fake_PerformanceMonitor_Node {
 **Robustness:** 2
 **ATT&CK Coverage:** T1572 (Protocol Tunneling), T1059.004 (Unix Shell), T1543.002 (Create or Modify System Process: Systemd Service)
 **Confidence:** MODERATE
-**Rationale:** Hysteria v2 is legitimate open-source software, and "bing.com" as an SNI-masquerade choice is a common domain-fronting convention used broadly across the censorship-circumvention tooling ecosystem — not unique to this operator. The rule's real distinguishing power comes from requiring the mandatory `bing.com` string alongside two of the `.hy2_password`/`.hy2_port`/`.hy2_uri` credential-cache file references, but those cache filenames may originate from the upstream `get.hy2.sh` Hysteria installer itself rather than being GHOST-kit-bespoke, so a host that ran the vanilla Hysteria v2 installer for any legitimate tunneling purpose could plausibly satisfy this combination. Durable enough to hunt on, not tight enough to alert on.
+**Rationale:** *Logic fix 2026-10-11:* the installer string was named `$hy2_installer`, so the `2 of ($hy2_*)` credential-cache clause also counted it, and one cache reference plus `get.hy2.sh` satisfied a clause this Rationale describes as two cache-file references. It is now `$installer_hy2`, outside that wildcard, and still counts in the last clause. A fixture with `bing.com`, one `.hy2_` cache reference and `get.hy2.sh` matched the old rule and does not match the new one. Hysteria v2 is legitimate open-source software, and "bing.com" as an SNI-masquerade choice is a common domain-fronting convention used broadly across the censorship-circumvention tooling ecosystem — not unique to this operator. The rule's real distinguishing power comes from requiring the mandatory `bing.com` string alongside two of the `.hy2_password`/`.hy2_port`/`.hy2_uri` credential-cache file references, but those cache filenames may originate from the upstream `get.hy2.sh` Hysteria installer itself rather than being GHOST-kit-bespoke, so a host that ran the vanilla Hysteria v2 installer for any legitimate tunneling purpose could plausibly satisfy this combination. Durable enough to hunt on, not tight enough to alert on.
 **False Positives:** Legitimate Hysteria v2 deployments (VPN/censorship-circumvention use) that happen to use a `bing.com`-style SNI masquerade and are scanned alongside their own installer cache files; any host running the stock `get.hy2.sh` installer for non-malicious tunneling.
 **Deployment:** Linux endpoint file scanning, download directory scanning; treat hits as a hunting lead requiring correlation with the operator wrapper's Russian-language comments and the `:3301` panel/`api_vpn_report` markers before escalation.
 
@@ -351,6 +353,7 @@ rule MAL_Linux_GHOST_Hysteria_Operator_Wrapper {
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/"
       date = "2026-05-25"
+      modified = "2026-10-11"
       hash1 = "822afb1fb29f22df8c951726d492021df2940223ed719881dafb40cda3894c5c"
       family = "GHOST-cryptojacker-kit"
       malware_type = "Hysteria v2 Installer Wrapper"
@@ -366,7 +369,7 @@ rule MAL_Linux_GHOST_Hysteria_Operator_Wrapper {
       // Admin panel port reference (3301 = Hysteria panel)
       $panel_port        = "3301" ascii
       // Hysteria installer download source
-      $hy2_installer     = "get.hy2.sh" ascii
+      $installer_hy2     = "get.hy2.sh" ascii
       // Russian operator comments (Cyrillic — confirming operator-authored)
       $ru_installs       = "\xD0\x9D\xD0\x90\xD0\xA1\xD0\xA2\xD0\xA0\xD0\x99\xD0\x9A\xD0\x98" ascii  // НАСТРОЙКИ
       // Operator panel API callback function name
@@ -375,7 +378,7 @@ rule MAL_Linux_GHOST_Hysteria_Operator_Wrapper {
       filesize < 30KB and
       $sni_masquerade and
       2 of ($hy2_*) and
-      ($panel_port or $hy2_installer or $api_vpn_report or $ru_installs)
+      ($panel_port or $installer_hy2 or $api_vpn_report or $ru_installs)
 }
 ```
 
@@ -639,32 +642,35 @@ falsepositives:
 level: high
 ```
 
-#### Auditd - PAM Security Library Directory Write by Non-Package-Manager
+#### Auditd - PAM Security Library Directory File Creation by Non-Package-Manager
 
 **Tier:** Detection
 **Robustness:** 3
 **ATT&CK Coverage:** T1574.006 (Dynamic Linker Hijacking), T1014 (Rootkit)
 **Confidence:** HIGH
-**Rationale:** Auditd PATH-record equivalent of the Sysmon file-event rule above, for environments running auditd without Sysmon for Linux. Same precision rationale — legitimate PAM module writes to this directory only occur through package managers, which are excluded.
+**Rationale:** *Logic fix 2026-10-11:* the description said PATH records with an open-for-write flag or CREATE, but the selection matched nametype CREATE or DELETE, so a file removal also fired. It is now CREATE only, which is what a new rootkit drop produces; an overwrite of an existing PAM module (a different nametype) is not covered. Auditd PATH-record equivalent of the Sysmon file-event rule above, for environments running auditd without Sysmon for Linux. Same precision rationale — legitimate PAM module writes to this directory only occur through package managers, which are excluded.
 **False Positives:** Package manager post-install hooks installing legitimate PAM modules (filtered above); a system administrator manually copying a verified PAM module during maintenance.
 **Blind Spots:** Requires the `-w /lib/security -p wa -k pam_module_write` auditd rule to be active; without it, this rule produces no events at all (a silent gap, not a false negative on a specific evasion).
 **Validation:** Confirm the auditd watch rule is active, then trigger the rootkit's install routine — the PATH record must match; a package-manager-driven PAM install must NOT fire.
 **Deployment:** auditd (PATH record type).
 
 ```yaml
-title: Auditd - PAM Security Library Directory Write by Non-Package-Manager
+title: Auditd - PAM Security Library Directory File Creation by Non-Package-Manager
 id: f26bb12b-dca1-4b62-adf1-9186d5d31560
 status: experimental
 description: >-
-    Detects auditd file write events (PATH record type with OPEN_W flag or CREATE)
-    on the /lib/security/ directory. Requires auditd rule "-w /lib/security -p wa
-    -k pam_module_write" to be active. The GHOST cryptojacker kit writes
-    libpam_cache.so to this directory using PAM-style filename camouflage; any
-    write from a non-package-manager process is a high-confidence rootkit drop.
+    Detects an auditd PATH record with nametype CREATE (a new file created) under
+    /lib/security/. Requires auditd rule "-w /lib/security -p wa -k pam_module_write"
+    to be active. The GHOST cryptojacker kit writes libpam_cache.so to this directory
+    using PAM-style filename camouflage; a new file there from a non-package-manager
+    process is a high-confidence rootkit drop. The rule does not test an open-for-write
+    flag (a PATH record carries no such flag), and an overwrite of an existing file,
+    which carries another nametype, is not matched.
 references:
     - https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/
 author: The Hunters Ledger
 date: 2026-05-25
+modified: 2026-10-11
 tags:
     - attack.stealth
     - attack.persistence
@@ -679,9 +685,7 @@ detection:
     selection_key:
         type: 'PATH'
         key: 'pam_module_write'
-        nametype:
-            - 'CREATE'
-            - 'DELETE'
+        nametype: 'CREATE'
     filter_pkg_mgr:
         exe|endswith:
             - '/dpkg'
@@ -923,18 +927,18 @@ falsepositives:
 level: medium
 ```
 
-#### High-Frequency Ncat Listener Creation on Linux Host
+#### Ncat Listener Creation on Linux Host
 
 **Tier:** Hunting
 **Robustness:** 1
 **ATT&CK Coverage:** T1059.004 (Unix Shell), T1571 (Non-Standard Port)
 **Confidence:** MODERATE
-**Rationale:** `ncat`/`nc`/`netcat` are legitimate, widely-used administration tools, and the "high-frequency" qualifier described in the original analysis (>20 invocations/hour) is not implemented as a Sigma correlation/threshold in the detection logic below — as written, this fires on any single `ncat -l` invocation. It is a genuine scoping lead (chronic listener creation is real operator tradecraft observed in this campaign's bash history) but requires SIEM-side aggregation to realize the "high-frequency" framing, and single-hit review by an analyst in the meantime.
+**Rationale:** *Wording fix 2026-10-11:* the title said high-frequency, but the rule is a single-event match and the threshold in the next sentence is not implemented here; it was dropped from the title. The report gives 83 ncat invocations in the operator's bash history and no per-hour threshold, so none is added. `ncat`/`nc`/`netcat` are legitimate, widely-used administration tools, and the "high-frequency" qualifier described in an earlier analysis (>20 invocations/hour, not found in the report) is not implemented as a Sigma correlation/threshold in the detection logic below — as written, this fires on any single `ncat -l` invocation. It is a genuine scoping lead (chronic listener creation is real operator tradecraft observed in this campaign's bash history) but requires SIEM-side aggregation to realize the "high-frequency" framing, and single-hit review by an analyst in the meantime.
 **False Positives:** Authorized network testing activities using `ncat` in controlled environments; security engineers running port-testing scripts on network infrastructure hosts.
 **Deployment:** Linux `process_creation` monitoring (auditd EXECVE or Sysmon for Linux Event ID 1); pair with SIEM-side frequency aggregation to realize the intended "high-frequency" framing.
 
 ```yaml
-title: High-Frequency Ncat Listener Creation on Linux Host
+title: Ncat Listener Creation on Linux Host
 id: 4639e400-9a7d-495f-b7a3-a06de5f3c7db
 status: experimental
 description: >-
@@ -949,6 +953,7 @@ references:
     - https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/
 author: The Hunters Ledger
 date: 2026-05-25
+modified: 2026-10-11
 tags:
     - attack.command-and-control
     - attack.execution
@@ -972,22 +977,24 @@ falsepositives:
 level: medium
 ```
 
-#### Hysteria V2 QUIC Proxy Process Execution on Linux Server
+#### Hysteria Proxy Process Execution on Linux Server
 
 **Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1572 (Protocol Tunneling)
 **Confidence:** MODERATE
-**Rationale:** Hysteria v2 is legitimate dual-use software with real censorship-circumvention and VPN use cases; this rule fires on mere presence/execution of the Hysteria binary with no GHOST-specific qualifier (no SNI check, no specific port, no installation-path anchor). Demoted from the original `level: high` — an inflated level on a generic dual-use-tool selector — to `medium`/Hunting, reflecting that this is a "any Hysteria usage on a host type where it's unexpected" lead, not a malware-specific detection.
+**Rationale:** *Wording fix 2026-10-11:* the title and description scoped the rule to Hysteria v2 over QUIC, but the selections test only the image name and the `hysteria-server` command-line text, so any Hysteria version matches. Hysteria v2 is legitimate dual-use software with real censorship-circumvention and VPN use cases; this rule fires on mere presence/execution of the Hysteria binary with no GHOST-specific qualifier (no SNI check, no specific port, no installation-path anchor). Demoted from the original `level: high` — an inflated level on a generic dual-use-tool selector — to `medium`/Hunting, reflecting that this is a "any Hysteria usage on a host type where it's unexpected" lead, not a malware-specific detection.
 **False Positives:** Legitimate Hysteria v2 usage for censorship circumvention by employees in restrictive-internet regions (rare in corporate GPU environments; verify with owner); authorized network testing using Hysteria for VPN/proxy research purposes.
 **Deployment:** Linux `process_creation` monitoring (auditd EXECVE or Sysmon for Linux Event ID 1); scope to production GPU/ML hosts where Hysteria has no expected business purpose.
 
 ```yaml
-title: Hysteria V2 QUIC Proxy Process Execution on Linux Server
+title: Hysteria Proxy Process Execution on Linux Server
 id: e01c6689-1d47-4f6c-bf23-a71b32d88375
 status: experimental
 description: >-
-    Detects execution of Hysteria v2 process on a Linux host. The GHOST cryptojacker
+    Detects execution of a process whose image ends in /hysteria or whose command line
+    contains hysteria-server on a Linux host. The rule has no version or QUIC test, so
+    Hysteria 1 and Hysteria 2 both match. The GHOST cryptojacker
     kit installs Hysteria v2 as a covert QUIC/UDP backdoor with bing.com SNI masquerade
     (ports 14433/14444 UDP) using hyst.sh installer. Hysteria v2 is legitimate dual-use
     software; execution on a production GPU server or ML workload host with no expected
@@ -999,6 +1006,7 @@ references:
     - https://censys.com/ghost-cryptojacker-targeting-ai
 author: The Hunters Ledger
 date: 2026-05-25
+modified: 2026-10-11
 tags:
     - attack.command-and-control
     - attack.t1572
@@ -1021,23 +1029,24 @@ falsepositives:
 level: medium
 ```
 
-#### High-Frequency memfd_create Syscall from Non-JVM Process on Linux Server
+#### memfd_create Syscall Outside a Java, Browser and Node Filter on Linux Server
 
 **Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1620 (Reflective Code Loading), T1496.001 (Resource Hijacking: Compute Hijacking)
 **Confidence:** MODERATE
-**Rationale:** `memfd_create` is used by a broad legitimate ecosystem beyond the JVM/browser/Node filter in this rule — systemd, container runtimes, sandboxing tools (`bubblewrap`, `firejail`), and various self-updating or FFI-based tooling all use it for anonymous memory regions. Like the ncat rule above, the "high-frequency" framing is described in prose but not implemented as a correlation/threshold in the detection logic — as written, this fires on any single non-JVM/browser `memfd_create` call.
+**Rationale:** *Wording fix 2026-10-11:* the title said high-frequency, which the next sentences already say the rule does not implement; it also said non-JVM while the filter excludes browsers and Node as well. The title now describes the filter. `memfd_create` is used by a broad legitimate ecosystem beyond the JVM/browser/Node filter in this rule — systemd, container runtimes, sandboxing tools (`bubblewrap`, `firejail`), and various self-updating or FFI-based tooling all use it for anonymous memory regions. Like the ncat rule above, the "high-frequency" framing is described in prose but not implemented as a correlation/threshold in the detection logic — as written, this fires on any single non-JVM/browser `memfd_create` call.
 **False Positives:** JVM-based applications (Java, Kotlin, Groovy) using `memfd_create` for native library loading not captured by the filter's exact substrings; Python FFI libraries (`ctypes`, `cffi`) using `memfd_create` for anonymous shared memory; container runtimes, sandboxing tools, and other legitimate fileless-deployment tooling not covered by the filter.
 **Deployment:** auditd syscall monitoring (requires `-a always,exit -F arch=b64 -S memfd_create -k fileless_exec`) or Sysmon for Linux; tune with process-ancestry filters for the expected parent-process chain on your GPU servers before treating hits as actionable.
 
 ```yaml
-title: High-Frequency memfd_create Syscall from Non-JVM Process on Linux Server
+title: memfd_create Syscall Outside a Java, Browser and Node Filter on Linux Server
 id: 3d5c184d-4937-4ab0-93d6-778760e59b9c
 status: experimental
 description: >-
-    Detects memfd_create() syscall invocations from a single non-JVM process on a
-    Linux server. The GHOST cryptojacker kit's _memfd_exec function uses
+    Detects a memfd_create() syscall record on a Linux server whose exe does not
+    contain java, chrome, chromium, firefox or node. The rule matches a single
+    event and has no frequency threshold. The GHOST cryptojacker kit's _memfd_exec function uses
     memfd_create to create anonymous in-memory file descriptors for fileless xmrig and
     lolMiner execution via execveat(), bypassing on-disk file scanning. Requires
     auditd syscall monitoring with "-a always,exit -F arch=b64 -S memfd_create -k
@@ -1049,6 +1058,7 @@ references:
     - https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/
 author: The Hunters Ledger
 date: 2026-05-25
+modified: 2026-10-11
 tags:
     - attack.stealth
     - attack.t1620
@@ -1163,18 +1173,18 @@ alert udp $HOME_NET any -> $EXTERNAL_NET 14433:14444 (msg:"THL HUNT GHOST Crypto
 alert udp $EXTERNAL_NET any -> $HOME_NET 14433:14444 (msg:"THL HUNT GHOST Cryptojacker Kit Hysteria v2 QUIC Initial Inbound to Victim-Hosted Listener Ports (Hunt Lead, Corroborate Before Escalating)"; dsize:>=1200; byte_test:1,=,0xC,0,bitmask 0xF0; content:"|00 00 00 01|"; offset:1; depth:4; threshold:type limit,track by_dst,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/; classtype:policy-violation; sid:9100109; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-30, signature_severity Minor, tag Backdoor, tag GHOST_kit, tag Hysteria_v2;)
 ```
 
-#### GHOST Cryptojacker Kit Telegram API Egress from Production Server: Covert Mining Report
+#### Telegram API TLS SNI Egress from an Internal Host (Reporting Channel Used by the GHOST Kit, Not Specific to It)
 
 **Tier:** Hunting
 **Robustness:** 1
 **ATT&CK Coverage:** T1102.002 (Web Service: Bidirectional Communication), T1496.001 (Resource Hijacking: Compute Hijacking)
 **Confidence:** LOW–MODERATE
-**Rationale:** **Consolidated from two near-duplicate rules.** The original file carried two `tls.sni` rules matching `api.telegram.org` — one (sid 9100107) labeled "Critical" and titled as an "OWNER Telegram Bot Token" indicator despite its own inline comment admitting the bot-token specificity is unachievable over TLS SNI and the logic only matches generic Telegram API contact; the other (sid 9100108, kept here) carried the same logic with an honest title and a noise-reducing threshold. TLS SNI to `api.telegram.org` is a weak indicator on its own — legitimate applications also use the Telegram Bot API — so this is a scoping lead for production/GPU-server hosts with no expected Telegram business use, not an alerting-grade signature.
+**Rationale:** *Wording fix 2026-10-11 (rev 4):* the title and `msg` named the GHOST kit, a production server and a covert mining report, but the rule matches TLS SNI `api.telegram.org` from any `$HOME_NET` host, five or more times in 300 seconds. They now say that. **Consolidated from two near-duplicate rules.** The original file carried two `tls.sni` rules matching `api.telegram.org` — one (sid 9100107) labeled "Critical" and titled as an "OWNER Telegram Bot Token" indicator despite its own inline comment admitting the bot-token specificity is unachievable over TLS SNI and the logic only matches generic Telegram API contact; the other (sid 9100108, kept here) carried the same logic with an honest title and a noise-reducing threshold. TLS SNI to `api.telegram.org` is a weak indicator on its own — legitimate applications also use the Telegram Bot API — so this is a scoping lead for production/GPU-server hosts with no expected Telegram business use, not an alerting-grade signature.
 **False Positives:** Any legitimate monitoring, alerting, or chatbot integration on the same host that uses the Telegram Bot API for unrelated purposes.
 **Deployment:** TLS-decryption-capable inline IDS/IPS or proxy with DLP inspection for genuine bot-token-level specificity; this SNI-only fallback should be scoped to production server IP ranges with no expected Telegram use and treated as a hunting lead, not an alert.
 
 ```suricata
-alert tls $HOME_NET any -> any any (msg:"THL HUNT GHOST Cryptojacker Kit Telegram API Egress from Production Server - Covert Mining Report"; tls.sni; content:"api.telegram.org"; endswith; nocase; threshold:type threshold,track by_src,count 5,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/; classtype:policy-violation; sid:9100108; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-25, tag GHOST_kit, tag Telegram_reporting;)
+alert tls $HOME_NET any -> any any (msg:"THL HUNT Telegram API TLS SNI Egress from an Internal Host (Reporting Channel Used by the GHOST Kit, Not Specific to It)"; tls.sni; content:"api.telegram.org"; endswith; nocase; threshold:type threshold,track by_src,count 5,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/; classtype:policy-violation; sid:9100108; rev:4; metadata:author The_Hunters_Ledger, date 2026-05-25, tag GHOST_kit, tag Telegram_reporting;)
 ```
 
 ---

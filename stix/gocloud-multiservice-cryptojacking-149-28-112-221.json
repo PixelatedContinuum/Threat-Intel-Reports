@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--06a808d3-7a06-4c65-82a3-cddb83c650f5",
+    "id": "bundle--aaeb9a7e-4bee-4ccc-962a-9c30fa6fefa4",
     "objects": [
         {
             "type": "identity",
@@ -799,12 +799,12 @@
             "id": "indicator--fd2f5b58-8411-5874-a9a3-fe8d5f1271a5",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.130514Z",
-            "modified": "2026-10-01T19:54:14.130514Z",
+            "modified": "2026-10-11T04:24:16.843299Z",
             "name": "GOCLOUD_Windows_Deploy_Worm_Lingkai",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule GOCLOUD_Windows_Deploy_Worm_Lingkai {\n   meta:\n      description = \"Detects the GOCLOUD Windows internet-cafe miner deployment and LAN-propagation scripts (deploy.ps1 / allinone.ps1 / setup.bat, self-branded 凌凯矿机 v3.0) by the combination of the operator's mining-estate brand, its svchost/TimeService masquerade triad, and the checksum-invalid typo Monero wallet live in the runtime config\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/\"\n      date = \"2026-07-26\"\n      hash1 = \"f4c5ab27bceb6ab6c6ec8f48b3b84701a0ba6966e30042bf5765a5d97018b5d2\"\n      hash2 = \"f42af99f65f1edeb5ed13b3f68643e7d8abacfceb878ba7e79581caedbd7f09f\"\n      hash3 = \"6780e9cc6cad66975bb7d895cd0944b72c5a843b80f6c4fef3cc4ebeb1ce628a\"\n      family = \"GOCLOUD\"\n      malware_type = \"Cryptojacking deployer / LAN worm\"\n      id = \"5fec8734-b59b-5046-9a52-36e8061fb674\"\n   strings:\n      $brand    = \"凌凯矿机\" ascii wide\n      $netbar   = \"网吧\" ascii wide\n      $task1    = \"WindowsTimeSync\" ascii wide fullword\n      $task2    = \"WindowsWatchdog\" ascii wide fullword\n      $path     = \"Microsoft\\\\Windows\\\\TimeService\" ascii wide nocase\n      $wallettp = \"42CThVKA9SxeeQDT8EcBK7UHNFFREDw3q7W5ZyyoGvGufDVPbKzYb3Bap9z9qor7jwAU23r3jKHyoZCSYH8eK4a9BUyTRrE\" ascii wide\n      $pool     = \"pool.supportxmr.com:443\" ascii wide nocase\n      $attr     = \"attrib +H +S\" ascii wide nocase\n   condition:\n      filesize < 80KB and\n      ( $wallettp or 3 of them )\n}",
+            "pattern": "rule GOCLOUD_Windows_Deploy_Worm_Lingkai {\n   meta:\n      description = \"Detects the GOCLOUD Windows internet-cafe miner deployment and LAN-propagation scripts (deploy.ps1 / allinone.ps1 / setup.bat, self-branded 凌凯矿机 v3.0) by any one of three alternatives: the checksum-invalid typo Monero wallet live in the runtime config; the full TimeService masquerade triad (WindowsTimeSync and WindowsWatchdog task names plus the Microsoft\\\\Windows\\\\TimeService path); or the mining-estate brand with two of those three masquerade strings\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/\"\n      date = \"2026-07-26\"\n      modified = \"2026-10-11\"\n      hash1 = \"f4c5ab27bceb6ab6c6ec8f48b3b84701a0ba6966e30042bf5765a5d97018b5d2\"\n      hash2 = \"f42af99f65f1edeb5ed13b3f68643e7d8abacfceb878ba7e79581caedbd7f09f\"\n      hash3 = \"6780e9cc6cad66975bb7d895cd0944b72c5a843b80f6c4fef3cc4ebeb1ce628a\"\n      family = \"GOCLOUD\"\n      malware_type = \"Cryptojacking deployer / LAN worm\"\n      id = \"5fec8734-b59b-5046-9a52-36e8061fb674\"\n   strings:\n      $brand    = \"凌凯矿机\" ascii wide\n      $task1    = \"WindowsTimeSync\" ascii wide fullword\n      $task2    = \"WindowsWatchdog\" ascii wide fullword\n      $path     = \"Microsoft\\\\Windows\\\\TimeService\" ascii wide nocase\n      $wallettp = \"42CThVKA9SxeeQDT8EcBK7UHNFFREDw3q7W5ZyyoGvGufDVPbKzYb3Bap9z9qor7jwAU23r3jKHyoZCSYH8eK4a9BUyTRrE\" ascii wide\n   condition:\n      filesize < 80KB and\n      ( $wallettp or\n        all of ($task1, $task2, $path) or\n        ( $brand and 2 of ($task1, $task2, $path) ) )\n}",
             "pattern_type": "yara",
             "valid_from": "2026-07-26T00:00:00Z",
             "labels": [
@@ -820,12 +820,12 @@
             "id": "indicator--168dc883-1d93-5ba9-bad9-937122a62137",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.13063Z",
-            "modified": "2026-10-01T19:54:14.13063Z",
+            "modified": "2026-10-11T04:24:16.843786Z",
             "name": "GOCLOUD_Windows_Miner_WinJenkins",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule GOCLOUD_Windows_Miner_WinJenkins {\n   meta:\n      description = \"Detects the GOCLOUD winminer.ps1 Windows XMRig deployer by its WinJenkinsHeartbeat scheduled-task persistence, the per-host win_jenkins_ pool-password convention, pre-download Defender real-time-monitoring disable, and the fixed-order /r?host= mining heartbeat\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/\"\n      date = \"2026-07-26\"\n      hash1 = \"004315d53cc4e68b16f0a1acb1f09d9501ea26e6fde1686b2018cd677a346c5c\"\n      hash2 = \"446fedd99169500bbd34de06bc5890de445d7280\"\n      hash3 = \"dbfc0b53520ad8ef434b38f322a91388\"\n      family = \"GOCLOUD\"\n      malware_type = \"Cryptojacking deployer\"\n      id = \"2bf3f5bb-c1e9-5399-836e-8d4ed6b0bf60\"\n   strings:\n      $task   = \"WinJenkinsHeartbeat\" ascii wide fullword\n      $pass   = \"win_jenkins_\" ascii wide\n      $defoff = \"Set-MpPreference -DisableRealtimeMonitoring\" ascii wide nocase\n      $hb     = \"/r?host=\" ascii wide\n      $worker = \"winjenkins_\" ascii wide\n      $donate = \"\\\"donate-level\\\": 0\" ascii wide\n   condition:\n      filesize < 40KB and\n      3 of them\n}",
+            "pattern": "rule GOCLOUD_Windows_Miner_WinJenkins {\n   meta:\n      description = \"Detects the GOCLOUD winminer.ps1 Windows XMRig deployer by its WinJenkinsHeartbeat scheduled-task persistence, the per-host win_jenkins_ pool-password convention, pre-download Defender real-time-monitoring disable, and the fixed-order /r?host= mining heartbeat\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/\"\n      date = \"2026-07-26\"\n      modified = \"2026-10-11\"\n      hash1 = \"004315d53cc4e68b16f0a1acb1f09d9501ea26e6fde1686b2018cd677a346c5c\"\n      hash2 = \"446fedd99169500bbd34de06bc5890de445d7280\"\n      hash3 = \"dbfc0b53520ad8ef434b38f322a91388\"\n      family = \"GOCLOUD\"\n      malware_type = \"Cryptojacking deployer\"\n      id = \"2bf3f5bb-c1e9-5399-836e-8d4ed6b0bf60\"\n   strings:\n      $task   = \"WinJenkinsHeartbeat\" ascii wide fullword\n      $pass   = \"win_jenkins_\" ascii wide\n      $defoff = \"Set-MpPreference -DisableRealtimeMonitoring\" ascii wide nocase\n      $hb     = \"/r?host=\" ascii wide\n      $worker = \"winjenkins_\" ascii wide\n      $donate = \"\\\"donate-level\\\": 0\" ascii wide\n   condition:\n      filesize < 40KB and\n      $task and $pass and $defoff and\n      1 of ($hb, $worker, $donate)\n}",
             "pattern_type": "yara",
             "valid_from": "2026-07-26T00:00:00Z",
             "labels": [
@@ -841,12 +841,12 @@
             "id": "indicator--2499b0e1-3893-5e8d-a19c-fb3791f619bb",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.13072Z",
-            "modified": "2026-10-01T19:54:14.13072Z",
+            "modified": "2026-10-11T04:24:16.84405Z",
             "name": "GOCLOUD_Linux_Miner_v7",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule GOCLOUD_Linux_Miner_v7 {\n   meta:\n      description = \"Detects the GOCLOUD miner.sh Linux XMRig deployer (GOCLOUD miner v7) by its self-branded banner, the /tmp/.X11-unix. dot-suffixed X11-socket-lookalike hiding directory, the c3pool_miner.service persistence unit, the gocloud_ worker-label convention, and the fixed-order /r?host= heartbeat\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/\"\n      date = \"2026-07-26\"\n      hash1 = \"5194aa67974a69549f1f839c973ca17cc0ce8c6ca41ab199d74599befba08db7\"\n      hash2 = \"5fe34b31fe3e3c741456ae6d3c55677cd1aff608\"\n      hash3 = \"6177ab813f6bfeba9c3ec6aeeeb5780a\"\n      family = \"GOCLOUD\"\n      malware_type = \"Cryptojacking deployer\"\n      id = \"fd42d64a-f3ac-51b4-b450-523467161f37\"\n   strings:\n      $banner = \"GOCLOUD miner v7\" ascii nocase\n      $x11    = \"/tmp/.X11-unix.\" ascii\n      $svc    = \"c3pool_miner.service\" ascii\n      $worker = \"gocloud_\" ascii\n      $hb     = \"/r?host=\" ascii\n      $pool   = \"auto.c3pool.org:19999\" ascii nocase\n   condition:\n      filesize < 40KB and\n      ( ( $x11 and 2 of them ) or ( 4 of them ) )\n}",
+            "pattern": "rule GOCLOUD_Linux_Miner_v7 {\n   meta:\n      description = \"Detects the GOCLOUD miner.sh Linux XMRig deployer (GOCLOUD miner v7) from six strings: the self-branded banner, the /tmp/.X11-unix. dot-suffixed X11-socket-lookalike hiding directory, the c3pool_miner.service persistence unit, the gocloud_ worker-label convention, the /r?host= heartbeat and the c3pool pool address. It matches the dot-suffixed directory string plus two of the other five, or any four of the six; no single string, including the banner and the heartbeat, is required\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/\"\n      date = \"2026-07-26\"\n      modified = \"2026-10-11\"\n      hash1 = \"5194aa67974a69549f1f839c973ca17cc0ce8c6ca41ab199d74599befba08db7\"\n      hash2 = \"5fe34b31fe3e3c741456ae6d3c55677cd1aff608\"\n      hash3 = \"6177ab813f6bfeba9c3ec6aeeeb5780a\"\n      family = \"GOCLOUD\"\n      malware_type = \"Cryptojacking deployer\"\n      id = \"fd42d64a-f3ac-51b4-b450-523467161f37\"\n   strings:\n      $banner = \"GOCLOUD miner v7\" ascii nocase\n      $x11    = \"/tmp/.X11-unix.\" ascii\n      $svc    = \"c3pool_miner.service\" ascii\n      $worker = \"gocloud_\" ascii\n      $hb     = \"/r?host=\" ascii\n      $pool   = \"auto.c3pool.org:19999\" ascii nocase\n   condition:\n      filesize < 40KB and\n      ( ( $x11 and 2 of ($banner, $svc, $worker, $hb, $pool) ) or ( 4 of them ) )\n}",
             "pattern_type": "yara",
             "valid_from": "2026-07-26T00:00:00Z",
             "labels": [
@@ -1174,15 +1174,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--cff350da-2e87-55d3-91cb-14537c72085e",
+            "id": "indicator--f0953486-65b1-57d2-b686-0d9d0c6573cf",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:14.131985Z",
-            "modified": "2026-10-09T13:20:05.511323Z",
-            "name": "THL DETECT GOCLOUD-Cryptojacking XMRig Deployment Heartbeat GET (Fixed Parameter Order to Payload Host)",
+            "created": "2026-10-11T04:24:16.846876Z",
+            "modified": "2026-10-11T04:24:16.846876Z",
+            "name": "THL DETECT GOCLOUD-Cryptojacking XMRig Deployment Heartbeat GET (Fixed Parameter Order)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT GOCLOUD-Cryptojacking XMRig Deployment Heartbeat GET (Fixed Parameter Order to Payload Host)\"; flow:established,to_server; http.uri; content:\"/r?host=\"; startswith; nocase; content:\"&status=OK&ts=\"; distance:0; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:9301501; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-26;)",
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT GOCLOUD-Cryptojacking XMRig Deployment Heartbeat GET (Fixed Parameter Order)\"; flow:established,to_server; http.uri; content:\"/r?host=\"; startswith; nocase; content:\"&status=OK&ts=\"; distance:0; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:9301501; rev:3; metadata:author The_Hunters_Ledger, date 2026-07-26;)",
             "pattern_type": "suricata",
             "valid_from": "2026-07-26T00:00:00Z",
             "labels": [
@@ -3286,7 +3286,7 @@
             "id": "report--f600aa39-9356-5b94-8a65-4b8d27c6ba2e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.142347Z",
-            "modified": "2026-10-10T13:40:56.262416Z",
+            "modified": "2026-10-11T04:24:16.870116Z",
             "name": "GOCLOUD: A Commodity Cryptojacking Operation, Captured Whole",
             "description": "Two-node commodity cryptojacking operation bound by a shared FOFA API key and Monero wallet. THIRD-PARTY VICTIM INDICATORS ARE DELIBERATELY WITHHELD from this published feed (heartbeat-confirmed mining hosts, the Redis-verified host, and the hardcoded Jenkins re-attack targets are routed to a CERT-disclosure track, not the public feed). An operator account-identifier string paired with the FOFA key is also withheld: it traces to an unrelated third party's published tooling and is assessed as copied residue, not operator identity, so the finding is published without naming the person. The FOFA key VALUE is retained as an operator IOC. Excluded as non-operator: experimentaldumain.com and all historical domain resolutions on node 1 (prior-tenant recycled-IP artifacts; this is a pure raw-IP operation). The node-2 /xmrig ELF is the stock XMRig Linux binary; ignore any Mirai tag as a loose-signature false positive.",
             "report_types": [
@@ -3384,7 +3384,7 @@
                 "indicator--a555180b-c1db-56b3-b785-b87da35394fa",
                 "indicator--b64fcb2d-57d7-5392-b7c7-49e11bc0216d",
                 "indicator--d91192d9-30ee-5c28-b008-42e9f56f223f",
-                "indicator--cff350da-2e87-55d3-91cb-14537c72085e",
+                "indicator--f0953486-65b1-57d2-b686-0d9d0c6573cf",
                 "indicator--df7cef82-1f93-57c2-ae30-79fb54a6d2a0",
                 "indicator--20e9dae7-70ff-5fc8-af19-3922ba151127",
                 "indicator--f8282de0-deda-56e6-9362-c6cf73047c8d",

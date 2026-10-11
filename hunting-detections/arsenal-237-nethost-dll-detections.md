@@ -90,18 +90,19 @@ rule TOOLKIT_Arsenal237_NetHost_PowerShell_C2_Templates {
 **Robustness:** 1
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1090 (Proxy), T1082 (System Information Discovery)
 **Confidence:** MODERATE
-**Rationale:** The primary anchor (`$c2_targets`) is a Rust string-literal-packing artifact — the compiled binary's hardcoded proxy targets `8.8.8.8:53` and `127.0.0.1:53` laid out contiguously with a `ntdll.dll` reference, with no delimiter between them, a byte sequence unlikely to occur outside this exact build. That is also its weakness: per the durability tie-breaker, a literal this specific to the malware's own hardcoded C2 configuration breaks the moment the operator rotates infrastructure in a future compile, so it is scored as build-specific rather than family-durable. The alternate `$env_discovery` branch (COMPUTERNAME/USERNAME queried as adjacent literals) is weaker and more generic on its own. No goodware-corpus validation has been performed for either branch, and the mandatory `$rust_panic`/`$winsock_init` strings are individually common Winsock/Rust-runtime terms — kept as a Hunting lead for this build family, not promoted to Detection.
+**Rationale:** The primary anchor (`$c2_targets`) is a Rust string-literal-packing artifact — the compiled binary's hardcoded proxy targets `8.8.8.8:53` and `127.0.0.1:53` laid out contiguously with a `ntdll.dll` reference, with no delimiter between them, a byte sequence unlikely to occur outside this exact build. That is also its weakness: per the durability tie-breaker, a literal this specific to the malware's own hardcoded C2 configuration breaks the moment the operator rotates infrastructure in a future compile, so it is scored as build-specific rather than family-durable. The alternate `$env_discovery` branch (COMPUTERNAME/USERNAME queried as adjacent literals) is weaker and more generic on its own. No goodware-corpus validation has been performed for either branch, and the mandatory clause is `$rust_panic or $winsock_init` (either one is enough, not both) and those strings are individually common Winsock/Rust-runtime terms — kept as a Hunting lead for this build family, not promoted to Detection.
 **False Positives:** Low for the `$c2_targets` branch alone (the concatenated literal is highly specific); higher for the `$env_discovery` branch, since COMPUTERNAME/USERNAME environment-variable enumeration combined with Winsock initialization is not unique to this malware.
 **Deployment:** Endpoint AV/EDR file scanning, retroactive scan of file shares, IR artifact triage on hosts with anomalous outbound TCP/53 activity.
 
 ```yara
 rule SUSP_Arsenal237_NetHost_Rust_C2_String_Combination {
    meta:
-      description = "Detects the Arsenal-237 nethost.dll C2 module by its embedded, build-specific hardcoded C2-target string (or an environment-discovery string) combined with Rust-runtime error handling and Winsock-initialization evidence. The c2_targets literal reflects this exact build's compiled hardcoded proxy configuration and breaks if the operator rotates infrastructure in a future compile — treat as a scoping lead for this build family, not a durable signature."
+      description = "Detects the Arsenal-237 nethost.dll C2 module by its embedded, build-specific hardcoded C2-target string (or an environment-discovery string) combined with either a Rust-runtime error string (runtime error) or the Winsock-initialization API name (WSAStartup). The condition accepts either one of those two, so a file that carries only one of them still matches. The c2_targets literal reflects this exact build's compiled hardcoded proxy configuration and breaks if the operator rotates infrastructure in a future compile — treat as a scoping lead for this build family, not a durable signature."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/arsenal-237-nethost-dll-detections/"
       date = "2026-01-27"
+      modified = "2026-10-11"
       family = "Arsenal-237"
       malware_type = "C2-Communication-Module"
       campaign = "Arsenal-237-New-Files-109.230.231.37"

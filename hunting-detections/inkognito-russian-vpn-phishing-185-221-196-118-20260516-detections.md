@@ -287,12 +287,12 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT Inkognito Custom X-
 **Robustness:** 2
 **ATT&CK Coverage:** T1071.001 (Application Layer Protocol: Web Protocols), T1583.004 (Server)
 **Confidence:** MODERATE
-**Rationale:** Same underlying artifact as the request-header rule, observed instead in the CORS `Access-Control-Allow-Headers` response context — slightly more deliberate (server-controlled CORS configuration rather than any client request) but the header-name collision risk is identical, so it carries the same tier and robustness.
+**Rationale:** *Logic fix 2026-10-11 (rev 4):* the rule used to match `Access-Control-Allow-Headers` and `X-Admin-Token` as two independent strings anywhere in the response headers, so the token in any later header also fired, although the title puts it inside the Allow-Headers value. A PCRE gated behind both content matches now requires the token on the same header line, after the header name. It still tests no Inkognito-specific indicator: any server that lists this header name in its CORS configuration matches, as the false positives below say. Same underlying artifact as the request-header rule, observed instead in the CORS `Access-Control-Allow-Headers` response context — slightly more deliberate (server-controlled CORS configuration rather than any client request) but the header-name collision risk is identical, so it carries the same tier and robustness.
 **False Positives:** Internally-developed web applications that independently expose X-Admin-Token in their own CORS configuration; security research or authorized assessment of Inkognito-controlled domains.
 **Deployment:** Suricata IDS/IPS at perimeter; requires inline traffic inspection for HTTPS (TLS inspection or plain HTTP).
 
 ```suricata
-alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT Inkognito X-Admin-Token in CORS Allow-Headers Response (Admin API Auth Primitive)"; flow:established,to_client; http.header; content:"Access-Control-Allow-Headers"; nocase; content:"X-Admin-Token"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/; classtype:trojan-activity; sid:9001004; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-16;)
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT Inkognito X-Admin-Token in CORS Allow-Headers Response (Admin API Auth Primitive)"; flow:established,to_client; http.header; content:"Access-Control-Allow-Headers"; nocase; content:"X-Admin-Token"; nocase; distance:0; pcre:"/Access-Control-Allow-Headers\x3a[^\r\n]*X-Admin-Token/i"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/; classtype:trojan-activity; sid:9001004; rev:4; metadata:author The_Hunters_Ledger, date 2026-05-16;)
 ```
 
 ---

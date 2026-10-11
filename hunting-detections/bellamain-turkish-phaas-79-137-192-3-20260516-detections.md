@@ -236,17 +236,19 @@ level: high
 **Robustness:** 1 (both base rules) / 2 (both correlations)
 **ATT&CK Coverage:** T1518.001 (Software Discovery: Security Software), T1102.002 (Web Service: Bidirectional Communication), T1041 (Exfiltration Over C2 Channel), T1119 (Automated Collection)
 **Confidence:** MODERATE
-**Rationale:** Four linked rules published together in one fence because the USOM+Telegram correlation cross-references both base rules below (mirrors the AdaptixC2 beacon-cadence base+correlation co-location pattern already published in `opendirectory-45-130-148-125-20260430-detections.md`, extended here to a 4-rule cluster since one correlation depends on two independent base rules rather than one). The USOM-poll base rule flags a bare HTTP request to the USOM blocklist endpoint — common, legitimate CERT/security-tool behavior with high acknowledged FP risk on its own. The Telegram-bot base rule flags a single HTTP request to `api.telegram.org/bot*` — an unanchored, extremely common event any legitimate Telegram bot integration produces. `level` on both base rules is `low`; neither is intended as a standalone alert. The USOM+Telegram correlation replaces the original single-event rule, whose `selection_usom and selection_telegram` condition required one field (`cs-host`) to simultaneously equal two mutually exclusive values on the same log line — a condition that could never match any event — and is now a proper Sigma temporal correlation across both base rules, grouped by source IP within a 5-minute window matching the paired Suricata signature's 300-second threshold. The burst correlation adds a genuine volumetric anomaly (5+ Telegram Bot API requests in 60 seconds from one host), but its base selector does not verify the calls use distinct bot tokens — a single high-volume legitimate notification bot can trigger it identically to BellaMain's four-bot simultaneous-fire pattern, so `level` is recalibrated from the original `high` to `medium` and the pair moved from Detection to Hunting.
+**Rationale:** *Wording fix 2026-10-11:* the first base rule was titled "from Web Server", but its selection tests only the destination host and URI path and has no source-host role, so the title and the description now say any source host in the proxy log. Four linked rules published together in one fence because the USOM+Telegram correlation cross-references both base rules below (mirrors the AdaptixC2 beacon-cadence base+correlation co-location pattern already published in `opendirectory-45-130-148-125-20260430-detections.md`, extended here to a 4-rule cluster since one correlation depends on two independent base rules rather than one). The USOM-poll base rule flags a bare HTTP request to the USOM blocklist endpoint — common, legitimate CERT/security-tool behavior with high acknowledged FP risk on its own. The Telegram-bot base rule flags a single HTTP request to `api.telegram.org/bot*` — an unanchored, extremely common event any legitimate Telegram bot integration produces. `level` on both base rules is `low`; neither is intended as a standalone alert. The USOM+Telegram correlation replaces the original single-event rule, whose `selection_usom and selection_telegram` condition required one field (`cs-host`) to simultaneously equal two mutually exclusive values on the same log line — a condition that could never match any event — and is now a proper Sigma temporal correlation across both base rules, grouped by source IP within a 5-minute window matching the paired Suricata signature's 300-second threshold. The burst correlation adds a genuine volumetric anomaly (5+ Telegram Bot API requests in 60 seconds from one host), but its base selector does not verify the calls use distinct bot tokens — a single high-volume legitimate notification bot can trigger it identically to BellaMain's four-bot simultaneous-fire pattern, so `level` is recalibrated from the original `high` to `medium` and the pair moved from Detection to Hunting.
 **False Positives:** Turkish CERT partner organizations, security researchers, or security products that legitimately poll the USOM blocklist; any web application with a legitimate Telegram bot integration (order notifications, monitoring alerts, CI/CD pipelines); a host that legitimately both monitors the USOM blocklist and operates an unrelated Telegram notification bot within the same time window; web application platforms with legitimate high-frequency Telegram notification integrations (e.g., e-commerce order-notification bots) firing on concurrent order events — tune by excluding known-legitimate source IPs.
 **Deployment:** Egress proxy SIEM with time-window correlation; neither base rule is intended as a standalone alert — hunt-tune both correlations before alerting.
 
 ```yaml
-title: BellaMain PhaaS USOM Blocklist Poll from Web Server
+title: BellaMain PhaaS USOM Blocklist Poll
 id: 7c1bb0ba-7d15-4969-a8dd-529d3b6294b9
 status: experimental
 description: >-
   Detects an HTTP request to the Turkish CERT USOM URL blocklist endpoint
-  (www.usom.gov.tr/url-list.txt) originating from a web-server host.
+  (www.usom.gov.tr/url-list.txt) from any source host in the proxy log. The
+  rule has no host-role field, so it cannot tell a web server from any other
+  client; scope the log source to web-server segments if that matters.
   BellaMain's usmcheck.php polls this list to detect when its own phishing
   kit domains have been blocklisted, then triggers a Telegram kill-switch
   notification. Polling USOM alone is common, legitimate behavior performed
@@ -260,6 +262,7 @@ references:
     - https://www.usom.gov.tr/
 author: The Hunters Ledger
 date: '2026-05-16'
+modified: '2026-10-11'
 tags:
     - attack.discovery
     - attack.t1518.001
@@ -332,7 +335,7 @@ description: >-
   same source host within a 5-minute window. Neither event alone is a
   reliable indicator — USOM polling is legitimate CERT/security-tool
   behavior, and a single Telegram Bot API call is common on hosts running
-  legitimate notification integrations — but a web server exhibiting both
+  legitimate notification integrations — but a host exhibiting both
   behaviors together is the operational fingerprint of BellaMain's
   usmcheck.php blocklist monitor and its Telegram kill-switch notification
   chain.

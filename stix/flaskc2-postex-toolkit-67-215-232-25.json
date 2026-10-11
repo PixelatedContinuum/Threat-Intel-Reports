@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--557e219a-8f40-4d1a-8397-01c08ef9df10",
+    "id": "bundle--da14ff8a-eade-4707-9cb8-48e0d88aef61",
     "objects": [
         {
             "type": "identity",
@@ -459,12 +459,12 @@
             "id": "indicator--c39710ab-b86b-5f24-9825-eb6fcfd0a1f0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.47321Z",
-            "modified": "2026-10-01T19:54:13.47321Z",
+            "modified": "2026-10-11T04:24:15.112417Z",
             "name": "MSSQL_CLR_Backdoor_CmdExec_Assembly_Strings",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule MSSQL_CLR_Backdoor_CmdExec_Assembly_Strings {\n   meta:\n      description = \"Detects MSSQL SQL-CLR reverse-shell assemblies using the stored-procedure-exposed cmd-execution pattern, covering cmd_exec.dll variants where the banner string may be changed\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/\"\n      date = \"2026-06-12\"\n      hash1 = \"a7029ef2b6a541ef2b7508e1316d3c2efd3493108975ee457bcdb73043a25262\"\n      family = \"MSSQL CLR Backdoor\"\n      malware_type = \"Backdoor\"\n      campaign = \"FlaskC2-PostEx-Toolkit-67.215.232.25\"\n      id = \"ad2ab99c-79cd-5cd1-9592-a91cd00c8334\"\n   strings:\n      $sqlclr1  = \"Microsoft.SqlServer.Server\" ascii wide\n      $sqlclr2  = \"SqlProcedureAttribute\" ascii wide\n      $method1  = \"reverse_shell\" ascii wide\n      $method2  = \"cmd_exec\" ascii wide\n      $method3  = \"ExecuteCommand\" ascii wide\n      $tcpcli   = \"TcpClient\" ascii wide\n      $netstr   = \"NetworkStream\" ascii wide\n      $procsi   = \"ProcessStartInfo\" ascii wide\n      $redir    = \"RedirectStandardOutput\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 256KB and\n      ($sqlclr1 or $sqlclr2) and\n      ($method1 or $method2 or $method3) and\n      ($tcpcli or $netstr) and\n      ($procsi or $redir)\n}",
+            "pattern": "rule MSSQL_CLR_Backdoor_CmdExec_Assembly_Strings {\n   meta:\n      description = \"Detects MSSQL SQL-CLR reverse-shell assemblies using the stored-procedure-exposed cmd-execution pattern, covering cmd_exec.dll variants where the banner string may be changed\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/\"\n      date = \"2026-06-12\"\n      modified = \"2026-10-11\"\n      hash1 = \"a7029ef2b6a541ef2b7508e1316d3c2efd3493108975ee457bcdb73043a25262\"\n      family = \"MSSQL CLR Backdoor\"\n      malware_type = \"Backdoor\"\n      campaign = \"FlaskC2-PostEx-Toolkit-67.215.232.25\"\n      id = \"ad2ab99c-79cd-5cd1-9592-a91cd00c8334\"\n   strings:\n      $sqlclr1  = \"Microsoft.SqlServer.Server\" ascii wide\n      $sqlclr2  = \"SqlProcedureAttribute\" ascii wide\n      $method1  = \"reverse_shell\" ascii wide\n      $method2  = \"cmd_exec\" ascii wide\n      $method3  = \"ExecuteCommand\" ascii wide\n      $tcpcli   = \"TcpClient\" ascii wide\n      $netstr   = \"NetworkStream\" ascii wide\n      $procsi   = \"ProcessStartInfo\" ascii wide\n      $redir    = \"RedirectStandardOutput\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 256KB and\n      ($sqlclr1 or $sqlclr2) and\n      ($method1 or $method2 or $method3) and\n      ($tcpcli or $netstr) and\n      ($procsi and $redir)\n}",
             "pattern_type": "yara",
             "valid_from": "2026-06-12T00:00:00Z",
             "labels": [
@@ -564,12 +564,12 @@
             "id": "indicator--c6241708-06a2-54cd-9b31-97a172dd1fdc",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.473649Z",
-            "modified": "2026-10-01T19:54:13.473649Z",
+            "modified": "2026-10-11T04:24:15.113303Z",
             "name": "MSSQL sqlservr.exe Initiating Outbound TCP Connection to External Host",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: MSSQL sqlservr.exe Initiating Outbound TCP Connection to External Host\nid: d04749cf-8423-4bbb-9fdc-cc5035787772\nstatus: experimental\ndescription: >-\n  Detects SQL Server process (sqlservr.exe) initiating outbound TCP connections\n  to external hosts. In the FlaskC2-PostEx-Toolkit campaign, cmd_exec.dll opens\n  a raw reverse-TCP shell from within sqlservr.exe to operator-supplied IP and\n  port parameters. Legitimate outbound connections from sqlservr.exe should be\n  baselined and filtered.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/\nauthor: The Hunters Ledger\ndate: '2026-06-12'\ntags:\n    - attack.persistence\n    - attack.t1505.001\n    - attack.command-and-control\n    - attack.t1095\n    - detection.emerging-threats\nlogsource:\n    category: network_connection\n    product: windows\ndetection:\n    selection:\n        Image|endswith: '\\sqlservr.exe'\n        Initiated: 'true'\n    filter_loopback:\n        DestinationIp|startswith:\n            - '127.'\n            - '::1'\n            - '10.'\n            - '172.16.'\n            - '172.17.'\n            - '172.18.'\n            - '172.19.'\n            - '172.20.'\n            - '172.21.'\n            - '172.22.'\n            - '172.23.'\n            - '172.24.'\n            - '172.25.'\n            - '172.26.'\n            - '172.27.'\n            - '172.28.'\n            - '172.29.'\n            - '172.30.'\n            - '172.31.'\n            - '192.168.'\n    condition: selection and not filter_loopback\nfalsepositives:\n    - SQL Server linked servers pointing to external databases\n    - Database Mail (SMTP outbound) — filter by port 25/587\n    - SQL Server replication to external publishers — baseline expected destination IPs\nlevel: medium",
+            "pattern": "title: MSSQL sqlservr.exe Initiating Outbound TCP Connection to External Host\nid: d04749cf-8423-4bbb-9fdc-cc5035787772\nstatus: experimental\ndescription: >-\n  Detects SQL Server process (sqlservr.exe) initiating outbound TCP connections\n  to external hosts. In the FlaskC2-PostEx-Toolkit campaign, cmd_exec.dll opens\n  a raw reverse-TCP shell from within sqlservr.exe to operator-supplied IP and\n  port parameters. Legitimate outbound connections from sqlservr.exe should be\n  baselined and filtered.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/\nauthor: The Hunters Ledger\ndate: '2026-06-12'\nmodified: '2026-10-11'\ntags:\n    - attack.persistence\n    - attack.t1505.001\n    - attack.command-and-control\n    - attack.t1095\n    - detection.emerging-threats\nlogsource:\n    category: network_connection\n    product: windows\ndetection:\n    selection:\n        Image|endswith: '\\sqlservr.exe'\n        Initiated: 'true'\n        Protocol: 'tcp'\n    filter_loopback:\n        DestinationIp|startswith:\n            - '127.'\n            - '::1'\n            - '10.'\n            - '172.16.'\n            - '172.17.'\n            - '172.18.'\n            - '172.19.'\n            - '172.20.'\n            - '172.21.'\n            - '172.22.'\n            - '172.23.'\n            - '172.24.'\n            - '172.25.'\n            - '172.26.'\n            - '172.27.'\n            - '172.28.'\n            - '172.29.'\n            - '172.30.'\n            - '172.31.'\n            - '192.168.'\n    condition: selection and not filter_loopback\nfalsepositives:\n    - SQL Server linked servers pointing to external databases\n    - Database Mail (SMTP outbound) — filter by port 25/587\n    - SQL Server replication to external publishers — baseline expected destination IPs\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-06-12T00:00:00Z",
             "labels": [
@@ -603,15 +603,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--e3da29db-1e46-5fe2-a522-8694ce61c7d2",
+            "id": "indicator--03b8433a-7360-5241-8a2d-871f497f7652",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:13.473824Z",
-            "modified": "2026-10-01T19:54:13.473824Z",
-            "name": "CVE-2026-20817 WER LPE PoC Token Inspection of WerFault.exe",
+            "created": "2026-10-11T04:24:15.113652Z",
+            "modified": "2026-10-11T04:24:15.113652Z",
+            "name": "CVE-2026-20817 WER LPE PoC Process Handle Opened to WerFault.exe by an Unlisted Source",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: CVE-2026-20817 WER LPE PoC Token Inspection of WerFault.exe\nid: ff8ee6c2-d705-4ebf-98bd-6ead3d775ae0\nstatus: experimental\ndescription: >-\n  Detects process access events targeting WerFault.exe with token query rights,\n  consistent with the CVE-2026-20817 WER ALPC local-privilege-escalation PoC\n  present in the FlaskC2-PostEx-Toolkit campaign. The PoC enumerates processes\n  looking for WerFault.exe and inspects its token privileges. This rule is\n  relevant only on hosts missing the January 2026 Windows cumulative update;\n  the sample analyzed is non-weaponized and does not achieve elevation.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/\n    - https://github.com/oxfemale/CVE-2026-20817\n    - https://itm4n.github.io/cve-2026-20817-wersvc-eop/\nauthor: The Hunters Ledger\ndate: '2026-06-12'\ntags:\n    - attack.privilege-escalation\n    - attack.t1068\n    - detection.emerging-threats\nlogsource:\n    category: process_access\n    product: windows\ndetection:\n    selection:\n        TargetImage|endswith: '\\WerFault.exe'\n        GrantedAccess|contains: '0x20'\n    filter_system:\n        SourceImage|endswith:\n            - '\\WerMgr.exe'\n            - '\\svchost.exe'\n            - '\\MsMpEng.exe'\n    condition: selection and not filter_system\nfalsepositives:\n    - EDR and security tooling that monitors WerFault.exe token state\n    - Crash reporting integrations that inspect WerFault process state\n    - Only deploy on unpatched hosts (pre-January 2026 Windows cumulative update)\nlevel: low",
+            "pattern": "title: CVE-2026-20817 WER LPE PoC Process Handle Opened to WerFault.exe by an Unlisted Source\nid: ff8ee6c2-d705-4ebf-98bd-6ead3d775ae0\nstatus: experimental\ndescription: >-\n  Detects a process opening a handle to WerFault.exe (Sysmon process access,\n  any access mask) from a source other than WerMgr.exe, svchost.exe or\n  MsMpEng.exe, consistent with the CVE-2026-20817 WER ALPC\n  local-privilege-escalation PoC present in the FlaskC2-PostEx-Toolkit\n  campaign. The PoC enumerates processes looking for WerFault.exe, opens it and\n  reads its token privileges; the token query itself (OpenProcessToken with\n  TOKEN_QUERY) is not a process-access event and is not visible to this rule. This rule is\n  relevant only on hosts missing the January 2026 Windows cumulative update;\n  the sample analyzed is non-weaponized and does not achieve elevation.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/\n    - https://github.com/oxfemale/CVE-2026-20817\n    - https://itm4n.github.io/cve-2026-20817-wersvc-eop/\nauthor: The Hunters Ledger\ndate: '2026-06-12'\nmodified: '2026-10-11'\ntags:\n    - attack.privilege-escalation\n    - attack.t1068\n    - detection.emerging-threats\nlogsource:\n    category: process_access\n    product: windows\ndetection:\n    selection:\n        TargetImage|endswith: '\\WerFault.exe'\n    filter_system:\n        SourceImage|endswith:\n            - '\\WerMgr.exe'\n            - '\\svchost.exe'\n            - '\\MsMpEng.exe'\n    condition: selection and not filter_system\nfalsepositives:\n    - EDR and security tooling that monitors WerFault.exe token state\n    - Crash reporting integrations that inspect WerFault process state\n    - Only deploy on unpatched hosts (pre-January 2026 Windows cumulative update)\nlevel: low",
             "pattern_type": "sigma",
             "valid_from": "2026-06-12T00:00:00Z",
             "labels": [
@@ -1616,12 +1616,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--5e5e9628-2d8b-55c1-8d55-393a3a3a4796",
+            "id": "relationship--af2406c0-3ffc-5bf8-96bd-1507b47cd1da",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:13.479754Z",
-            "modified": "2026-10-01T19:54:13.479754Z",
+            "created": "2026-10-11T04:24:15.12253Z",
+            "modified": "2026-10-11T04:24:15.12253Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--e3da29db-1e46-5fe2-a522-8694ce61c7d2",
+            "source_ref": "indicator--03b8433a-7360-5241-8a2d-871f497f7652",
             "target_ref": "malware--08ffdc45-11cc-5c58-a706-cdf2bcc18fae",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -4643,7 +4643,7 @@
             "id": "report--d334d776-c26a-566a-89b7-e513db9b7882",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.494835Z",
-            "modified": "2026-10-01T19:54:13.494835Z",
+            "modified": "2026-10-11T04:24:15.148294Z",
             "name": "Flask C2 & MSSQL CLR Backdoor on a Windows Post-Exploitation Staging Host",
             "description": "Most samples are PUBLIC tooling. The five operator-recompiled .NET tools (EfsPotato, GodPotato, SweetPotato, Rubeus, SharpSuccessor) are identified as their public counterparts via YARA HKTL-GUID + VT detection + capa signature, NOT byte-for-byte public-release hash identity. Only bespoke compiled code = cmd_exec.dll (custom BUILD of a known MSSQL CLR technique, not novel). CVE-2026-20817_PoC.exe is a non-weaponized demo PoC of a Jan-2026-patched CVE. EXCLUDED per analyst guardrails: proxy-era ports 5222-5455 (different-tenant/reallocation risk), benign VT downloaded_files (autodiscover.xml, :1337 dir-index page), inostage.ru/panel.inostage.ru (public-tool co-host noise), and generic .NET runtime imphashes f34d5f2d.../dae02f32... (non-discriminating stubs).\nFalse-positive notes:\n- 67.215.232.25 is on shared hosting (HostPapa/ColoCrossing, AS36352), IP block covers the known infra but confirm port/service context before broad blocking of the /21.\n- The native-tool and operator-recompiled .NET hashes are widely-shared public hacktools; presence indicates hacktool staging but not necessarily this specific operator. The bespoke cmd_exec.dll SHA256 (a7029ef2...) and the [*] Connected to SQL Server CLR backdoor banner are the operator-specific anchors.\n- Werkzeug/3.1.6 and Python 3.12.3 are common. The /health JSON field-combo (active_servers+pending_commands+completed_commands+status+timestamp) is the discriminating C2 signature, not the server banner alone.\n- Aatrox is a League-of-Legends champion name in common use; treat as a commodity webshell password/eval-param, not an operator identity artifact.",
             "report_types": [
@@ -4694,7 +4694,7 @@
                 "indicator--6fe164cd-cb34-5587-b580-c117d19895aa",
                 "indicator--c6241708-06a2-54cd-9b31-97a172dd1fdc",
                 "indicator--faf535a2-72a7-5b71-ae18-4c445b091c33",
-                "indicator--e3da29db-1e46-5fe2-a522-8694ce61c7d2",
+                "indicator--03b8433a-7360-5241-8a2d-871f497f7652",
                 "indicator--5a9ae069-d8e3-5588-ad55-8ef76aa5ebe4",
                 "indicator--56b7f149-3cf7-5198-ac5f-33842470f3a4",
                 "indicator--8b4bb049-573f-5c5f-b529-632689acb39b",
@@ -4759,7 +4759,7 @@
                 "relationship--72503b72-d067-58bc-865d-871d0082d939",
                 "relationship--05633a2e-a12e-5986-888d-51b92935ee22",
                 "relationship--628d0fc7-8a63-5142-b15a-e5d82e550aeb",
-                "relationship--5e5e9628-2d8b-55c1-8d55-393a3a3a4796",
+                "relationship--af2406c0-3ffc-5bf8-96bd-1507b47cd1da",
                 "relationship--1e1d2fed-588d-5e97-bc05-55b75a8a724d",
                 "relationship--a9f1c6b0-c04e-54d1-ba6b-d397d2fa5c5a",
                 "relationship--f6d6091a-cd58-5cf1-8882-b2d234a82972",

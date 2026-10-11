@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--48421ee1-1482-453a-94ec-426b4c8e40b2",
+    "id": "bundle--86629828-1c05-4eef-8f93-e6ee7f75437b",
     "objects": [
         {
             "type": "identity",
@@ -195,15 +195,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--e59b934f-3a35-5d4f-8583-3b8cf7ee2f5f",
+            "id": "indicator--8ca7dcc1-69c6-5f81-bd9e-244f1d3af3b4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:14.354639Z",
-            "modified": "2026-10-01T19:54:14.354639Z",
-            "name": "Base64 Decoded Script Written to Tmp and Executed by Bash",
+            "created": "2026-10-11T04:24:17.452183Z",
+            "modified": "2026-10-11T04:24:17.452183Z",
+            "name": "Base64 Decode Redirected to Tmp Followed by Bash Run of a Tmp Path in One Command Line",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Base64 Decoded Script Written to Tmp and Executed by Bash\nid: a3dcd1d3-0c9f-4cd2-a6e7-bed5dd6bd3c1\nstatus: experimental\ndescription: >-\n    Detects a single shell command line that decodes a base64 payload into a script file\n    under /tmp and immediately executes it with bash, the staging shape this campaign's\n    deploy driver uses to carry its miner install script through shell quoting constraints\n    (echo of encoded script piped to base64 -d into /tmp/d.sh, then bash of that file).\n    Cloud provisioning and installer tooling legitimately uses decode-then-execute patterns,\n    so this is a hunting anchor and triage hits against deployment context.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/\nauthor: The Hunters Ledger\ndate: 2026-09-16\ntags:\n    - attack.execution\n    - attack.stealth\n    - attack.t1059.004\n    - attack.t1140\n    - stp.2\nlogsource:\n    category: process_creation\n    product: linux\n    definition: >-\n        Requires process-creation telemetry that captures full command lines on the victim\n        host: auditd execve rules, Sysmon for Linux, or an EDR agent.\ndetection:\n    selection_decode:\n        CommandLine|contains|all:\n            - 'base64 -d'\n            - '>/tmp/'\n    selection_exec:\n        CommandLine|contains|all:\n            - 'bash '\n            - '/tmp/'\n    condition: selection_decode and selection_exec\nfalsepositives:\n    - Provisioning, cloud-init or installer scripts that decode payloads to tmp and run them\n    - Authorized security tooling staging encoded scripts\nlevel: medium",
+            "pattern": "title: Base64 Decode Redirected to Tmp Followed by Bash Run of a Tmp Path in One Command Line\nid: a3dcd1d3-0c9f-4cd2-a6e7-bed5dd6bd3c1\nstatus: experimental\ndescription: >-\n    Detects a single shell command line in which a base64 -d redirect into /tmp comes\n    before a bash run of a /tmp path, the staging shape this campaign's deploy driver uses\n    to carry its miner install script through shell quoting constraints (echo of encoded\n    script piped to base64 -d into /tmp/d.sh, then bash of that file). The rule checks the\n    order of the two fragments and does not check that the file bash runs is the file the\n    decode wrote.\n    Cloud provisioning and installer tooling legitimately uses decode-then-execute patterns,\n    so this is a hunting anchor and triage hits against deployment context.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections/\nauthor: The Hunters Ledger\ndate: 2026-09-16\nmodified: 2026-10-11\ntags:\n    - attack.execution\n    - attack.stealth\n    - attack.t1059.004\n    - attack.t1140\n    - stp.2\nlogsource:\n    category: process_creation\n    product: linux\n    definition: >-\n        Requires process-creation telemetry that captures full command lines on the victim\n        host: auditd execve rules, Sysmon for Linux, or an EDR agent.\ndetection:\n    selection:\n        CommandLine|contains: 'base64 -d*>/tmp/*bash /tmp/'\n    condition: selection\nfalsepositives:\n    - Provisioning, cloud-init or installer scripts that decode payloads to tmp and run them\n    - Authorized security tooling staging encoded scripts\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-09-16T00:00:00Z",
             "labels": [
@@ -341,7 +341,7 @@
             "id": "report--7963499f-e9ec-5e0b-848a-8473bdffa3d2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.355435Z",
-            "modified": "2026-10-10T13:40:56.565138Z",
+            "modified": "2026-10-11T04:24:17.453879Z",
             "name": "Gotenberg CVE-2026-42589 Mass Exploitation and Cryptomining",
             "report_types": [
                 "threat-report"
@@ -360,7 +360,7 @@
                 "indicator--97433269-12d2-51f3-8cf1-f02a8f674645",
                 "indicator--9d3ad059-a4b3-556b-af7d-a9ef43d0daa2",
                 "indicator--6a84f31c-0425-55ed-9fbe-5f4b1fae9dc8",
-                "indicator--e59b934f-3a35-5d4f-8583-3b8cf7ee2f5f",
+                "indicator--8ca7dcc1-69c6-5f81-bd9e-244f1d3af3b4",
                 "indicator--7a1a6e25-5b45-5586-8dc7-39fa68b23ee9",
                 "indicator--8a2af963-ddc8-57d1-88ba-1ae28ab4809f",
                 "indicator--5d2d1e23-9a0e-58e7-94ad-fe7ea6323b5b",

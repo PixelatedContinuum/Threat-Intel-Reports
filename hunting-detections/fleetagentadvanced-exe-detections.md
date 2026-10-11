@@ -21,12 +21,12 @@ thumbnail: /assets/images/cards/109.230.231.37-Executive-Overview.png
 
 FleetAgentAdvanced.exe is a .NET-compiled dropper/trojan recovered from an open directory at `109.230.231.37`, alongside several other malware families staged on the same distribution infrastructure (agent.exe/PoetRAT, agent_xworm.exe and agent_xworm_v2.exe/NjRAT-XWorm). The codebase does not match any known family (HIGH confidence, 90%) and carries no named threat-actor attribution. The dropper establishes four redundant persistence mechanisms (a Registry Run key, a scheduled task, and two Startup-folder shortcuts), all branded to impersonate a Microsoft .NET Runtime Optimization component, then deploys a secondary payload (RuntimeOptimization.exe) from an embedded, Base64-decoded resource. Its command-and-control channel stays dormant despite confirmed networking and cryptographic capability built into the binary, so no protocol structure is available to anchor a network signature.
 
-Coverage below is retiered from the original draft: every rule was re-scored for durability (does it survive infrastructure rotation and renaming?), precision (documented false-positive profile), and level discipline, per the project's Detection/Hunting split. Coverage here is scoped to the artifacts that retain analyst value after retiering: the dropper's internal function-naming convention and a fixed Windows API injection sequence anchor the Detection-tier rules, while the "Microsoft .NET Runtime Optimization" masquerade branding (renameable at will by the operator, and itself an impersonation of a real, common product name rather than a bespoke marker) anchors the Hunting-tier rules instead. The campaign's atomic indicators (the distribution IP and the payload's install path) are carried in the IOC feed rather than as standalone signatures.
+Coverage below is retiered from the original draft: every rule was re-scored for durability (does it survive infrastructure rotation and renaming?), precision (documented false-positive profile), and level discipline, per the project's Detection/Hunting split. Coverage here is scoped to the artifacts that retain analyst value after retiering: the dropper's internal function-naming convention anchors the Detection-tier rule (the Windows API injection-sequence Sigma rule was rebuilt on remote-thread events and moved to Hunting, because the report never saw the injection fire), while the "Microsoft .NET Runtime Optimization" masquerade branding (renameable at will by the operator, and itself an impersonation of a real, common product name rather than a bespoke marker) anchors the Hunting-tier rules instead. The campaign's atomic indicators (the distribution IP and the payload's install path) are carried in the IOC feed rather than as standalone signatures.
 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 1 | 1 | T1027, T1547.001, T1053.005, T1055, T1036.005 | 0 |
-| Sigma | 1 | 5 documents (1 bundle) | T1055, T1547.001, T1036.005, T1053.005, T1070.004, T1027 | 2 |
+| Sigma | 0 | 6 documents (1 bundle) | T1055, T1547.001, T1036.005, T1053.005, T1070.004, T1027 | 2 |
 | Suricata | 0 | 0 | — | 1 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
@@ -98,18 +98,19 @@ rule MAL_FleetAgentAdvanced_Dropper_Hash_Function_Combo {
 **Robustness:** 1
 **ATT&CK Coverage:** T1036.005 (Match Legitimate Resource Name or Location), T1055 (Process Injection)
 **Confidence:** LOW
-**Rationale:** Fires when 2 of 7 operator-coined configuration-variable names (`EMBEDDED_AGENT`, `INSTALL_NAME`, `STARTUP_NAME`, `WATCHDOG_MUTEX`, `MUTEX_NAME`, `SERVER_HOST`, `AGENT_SECRET`) co-occur with any of the "Microsoft .NET Runtime Optimization" masquerade strings, or when any generic process-injection API string co-occurs with the same masquerade family. Both branches depend entirely on that masquerade-string family for their false-positive control — a naming-convention rebrand defeats both. "Microsoft .NET Runtime Optimization" impersonates a real, common product/vendor name rather than coining a bespoke marker, which is the rubric's own disqualifying case for Detection regardless of what else the branch requires alongside it. *Retiering note:* this is the source rule's two weaker OR-branches, split out from the hash/function-name branches above (which do not depend on this masquerade family and are Detection-eligible on their own).
+**Rationale:** *Wording fix 2026-10-11:* the description called the matches .NET executables, but the condition tests only the MZ header, a size bound and strings, with no CLR header check, so any PE carrying the strings matches. The ".NET" in the heading refers to the masquerade phrase, not to a tested file type. Fires when 2 of 7 operator-coined configuration-variable names (`EMBEDDED_AGENT`, `INSTALL_NAME`, `STARTUP_NAME`, `WATCHDOG_MUTEX`, `MUTEX_NAME`, `SERVER_HOST`, `AGENT_SECRET`) co-occur with any of the "Microsoft .NET Runtime Optimization" masquerade strings, or when any generic process-injection API string co-occurs with the same masquerade family. Both branches depend entirely on that masquerade-string family for their false-positive control — a naming-convention rebrand defeats both. "Microsoft .NET Runtime Optimization" impersonates a real, common product/vendor name rather than coining a bespoke marker, which is the rubric's own disqualifying case for Detection regardless of what else the branch requires alongside it. *Retiering note:* this is the source rule's two weaker OR-branches, split out from the hash/function-name branches above (which do not depend on this masquerade family and are Detection-eligible on their own).
 **False Positives:** Unlikely for the exact two-literal pairing, but not zero — the API-string branch in particular reduces almost entirely to "any of 5 common Windows API names," which is close to universal among binaries that touch process memory; the masquerade-string requirement is doing essentially all of the real filtering in both branches.
 **Deployment:** Endpoint AV/EDR file scanning, retroactive scan of file shares; treat hits as scoping leads for this build family, not alerts.
 
 ```yara
 rule SUSP_FleetAgentAdvanced_NET_Masquerade_Combination {
    meta:
-      description = "Detects .NET executables combining FleetAgentAdvanced-style configuration variable names (WATCHDOG_MUTEX, AGENT_SECRET, EMBEDDED_AGENT, etc.) or generic process-injection API references with the Microsoft .NET Runtime Optimization masquerade strings. Brittle to a masquerade-naming rebrand — treat as a scoping lead, not an alert."
+      description = "Detects PE files (the rule does not test for a .NET or CLR header) combining FleetAgentAdvanced-style configuration variable names (WATCHDOG_MUTEX, AGENT_SECRET, EMBEDDED_AGENT, etc.) or generic process-injection API references with the Microsoft .NET Runtime Optimization masquerade strings. Brittle to a masquerade-naming rebrand — treat as a scoping lead, not an alert."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/fleetagentadvanced-exe-detections/"
       date = "2026-01-12"
+      modified = "2026-10-11"
       family = "FleetAgentAdvanced"
       malware_type = "Dropper-Trojan-Masquerade-Component"
       campaign = "Arsenal-237-109.230.231.37-Malware-Repository"
@@ -147,55 +148,6 @@ rule SUSP_FleetAgentAdvanced_NET_Masquerade_Combination {
 ## Sigma Rules
 
 ### Detection Rules
-
-#### FleetAgentAdvanced Process Injection from .NET Executable
-
-**Tier:** Detection
-**Robustness:** 3
-**ATT&CK Coverage:** T1055 (Process Injection)
-**Confidence:** HIGH
-**Rationale:** Requires the classic `VirtualAllocEx` → `WriteProcessMemory` → `CreateRemoteThread` remote-thread-injection API triad to appear together in a process-access call trace, with the source image running from AppData rather than Program Files. All three API names are fixed Windows API entry points the malware must call to perform this exact injection technique — not an attacker-chosen literal — so the rule survives any rebrand of the dropper's masquerade branding or internal naming. An attacker can only evade it by switching to a materially different injection technique (e.g., `NtMapViewOfSection`-based mapping injection, APC queuing) rather than by renaming anything.
-**False Positives:** Legitimate development tools and debuggers from AppData.
-**Blind Spots:** Misses injection techniques other than the classic triad (process hollowing via `NtUnmapViewOfSection`, APC-based injection); requires `CallTrace` telemetry (Sysmon Event ID 10 with appropriate configuration).
-**Validation:** Trigger the classic injection triad from a process running out of `%AppData%` — must match; the same triad from a process under `\Program Files\` must NOT fire.
-**Deployment:** Sysmon process-access monitoring (Event ID 10), EDR API-hooking telemetry.
-
-```yaml
-title: FleetAgentAdvanced Process Injection from .NET Executable
-id: 1ca5cfa6-f7af-4dde-80b1-87edbf3c637b
-status: experimental
-description: >-
-    Detects the VirtualAllocEx, WriteProcessMemory, CreateRemoteThread process
-    injection API sequence in a process-access call trace where the source image
-    runs from AppData rather than Program Files.
-references:
-    - https://the-hunters-ledger.com/hunting-detections/fleetagentadvanced-exe-detections/
-author: The Hunters Ledger
-date: '2026-01-12'
-tags:
-    - attack.privilege-escalation
-    - attack.stealth
-    - attack.t1055
-    - detection.emerging-threats
-logsource:
-    category: process_access
-    product: windows
-detection:
-    selection:
-        SourceImage|contains: '\AppData\'
-        CallTrace|contains|all:
-            - 'VirtualAllocEx'
-            - 'WriteProcessMemory'
-            - 'CreateRemoteThread'
-    filter_legitimate:
-        SourceImage|contains:
-            - '\Program Files\'
-            - '\Program Files (x86)\'
-    condition: selection and not filter_legitimate
-falsepositives:
-    - Legitimate development tools and debuggers from AppData
-level: high
-```
 
 ### Hunting Rules
 
@@ -254,9 +206,9 @@ level: medium
 **Robustness:** 2 (correlation) / 1 (each base rule individually)
 **ATT&CK Coverage:** T1053.005 (Scheduled Task), T1070.004 (Indicator Removal: File Deletion)
 **Confidence:** LOW — both base signals are individually brittle, masquerade-literal-dependent selectors; the correlation adds real but limited value
-**Rationale:** Neither base selector survives a rename on its own — `schtasks.exe /create` alone is routine benign administrative activity, and a bare deletion of a file named `task.xml` has no inherent malicious meaning. But this dropper family creates the masquerade-branded scheduled task and deletes its exported `task.xml` within roughly 120 milliseconds as a deliberate anti-forensics step; a coincidental unrelated program is not expected to reproduce that create-then-delete sequence in a short window. This operationalizes the source draft's two standalone rules as an actual temporal correlation instead of two independently-alerting selectors. *Retiering note:* the source draft published "Quad-Persistence Establishment" (schtasks + masquerade phrase) at `level: high` and "Task.xml Deletion Anti-Forensics" at `level: medium`, each alerting independently. Restructured here into two non-alerting base rules feeding the correlation below, consistent with the durability concern that both selectors' precision derives from the same renameable "Microsoft .NET Runtime Optimization"-family masquerade branding (see "A Genuinely Close Call" in Coverage Gaps).
+**Rationale:** *Logic fix 2026-10-11:* the correlation was `type: temporal`, which fires on both base events in any order, while the title and description say a create-then-delete sequence. It is now `temporal_ordered` over the creation rule, then the deletion rule. Neither base selector survives a rename on its own — `schtasks.exe /create` alone is routine benign administrative activity, and a bare deletion of a file named `task.xml` has no inherent malicious meaning. But this dropper family creates the masquerade-branded scheduled task and deletes its exported `task.xml` within roughly 120 milliseconds as a deliberate anti-forensics step; a coincidental unrelated program is not expected to reproduce that create-then-delete sequence in a short window. This operationalizes the source draft's two standalone rules as an actual temporal correlation instead of two independently-alerting selectors. *Retiering note:* the source draft published "Quad-Persistence Establishment" (schtasks + masquerade phrase) at `level: high` and "Task.xml Deletion Anti-Forensics" at `level: medium`, each alerting independently. Restructured here into two non-alerting base rules feeding the correlation below, consistent with the durability concern that both selectors' precision derives from the same renameable "Microsoft .NET Runtime Optimization"-family masquerade branding (see "A Genuinely Close Call" in Coverage Gaps).
 **False Positives:** A future build renaming both the masquerade phrase and the exported XML filename evades the correlation entirely — both remain the same attacker-chosen naming decision, so this is a scoping lead for this specific build family, not a durable technique-level detector. The base rules inherit their own narrow FP profiles rather than adding new risk.
-**Deployment:** SIEM correlation engine with Sysmon process-creation and file-delete telemetry ingested (5-minute temporal join on `host.name`).
+**Deployment:** SIEM correlation engine with Sysmon process-creation and file-delete telemetry ingested (5-minute ordered temporal join on `host.name`; the Elastic EQL conversion is `sequence by host.name with maxspan=5m`, and there is no Lucene form for a correlation).
 
 ```yaml
 title: FleetAgentAdvanced-Style .NET Runtime Optimization Scheduled Task Creation (Base Rule)
@@ -337,9 +289,9 @@ title: FleetAgentAdvanced-Class Scheduled Task Create-Then-Delete Anti-Forensics
 id: 049f9083-fc9c-4c12-94d0-13538a2cc3cc
 status: experimental
 description: >-
-  Fires when both the ".NET Runtime Optimization" masquerade scheduled-task
-  creation and a task.xml deletion by a non-system process are observed on the
-  same host within a short window. Neither base signal alone is reliable — the
+  Fires when the ".NET Runtime Optimization" masquerade scheduled-task
+  creation is followed by a task.xml deletion by a non-system process on the
+  same host within a short window (creation first, then deletion). Neither base signal alone is reliable — the
   masquerade phrase is attacker-chosen and renameable, and a bare task.xml
   deletion has no inherent malicious meaning — but this dropper family creates
   the scheduled task and deletes its exported task.xml within roughly 120
@@ -349,6 +301,7 @@ references:
   - https://the-hunters-ledger.com/hunting-detections/fleetagentadvanced-exe-detections/
 author: The Hunters Ledger
 date: '2026-01-12'
+modified: '2026-10-11'
 tags:
   - attack.persistence
   - attack.privilege-escalation
@@ -358,7 +311,7 @@ tags:
   - attack.t1070.004
   - detection.emerging-threats
 correlation:
-  type: temporal
+  type: temporal_ordered
   rules:
     - fleetagentadvanced_schtasks_masquerade_create
     - fleetagentadvanced_taskxml_deletion
@@ -374,29 +327,33 @@ falsepositives:
 level: medium
 ```
 
-#### .NET Dropper with Base64 Embedded Payload Execution
+#### .NET Base64 Decode and File Write in a Process-Access Call Trace (EDR Telemetry Only)
 
 **Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1027 (Obfuscated Files or Information)
-**Confidence:** MODERATE
-**Rationale:** Requires `Convert.FromBase64String` and `File.WriteAllBytes` to co-occur in a process-access call trace — both fixed .NET Base Class Library method names the malware must call to decode and drop its embedded payload, so the rule is durable against any rebrand of masquerade strings or internal naming. It stays at Hunting rather than Detection because the combination itself (decode a Base64 blob, write bytes to disk) is a routine pattern in legitimate installers that unpack bundled or compressed resources at runtime, not a marker unique to malicious payload-dropping.
+**Confidence:** LOW
+**Rationale:** *Wording fix 2026-10-11:* the title claimed payload execution and the rule tests no execution, only the two method names in a call trace; and the call trace carries method names only in EDR or enriched telemetry, not stock Sysmon (see the `logsource.definition`). It is kept as an EDR-telemetry corroboration lead, not removed. Requires `Convert.FromBase64String` and `File.WriteAllBytes` to co-occur in a process-access call trace — both fixed .NET Base Class Library method names the malware must call to decode and drop its embedded payload, so the rule is durable against any rebrand of masquerade strings or internal naming. It stays at Hunting rather than Detection because the combination itself (decode a Base64 blob, write bytes to disk) is a routine pattern in legitimate installers that unpack bundled or compressed resources at runtime, not a marker unique to malicious payload-dropping.
 **False Positives:** Legitimate installers using Base64-encoded resources.
-**Deployment:** Sysmon process-access monitoring (Event ID 10), EDR API-hooking telemetry; treat hits as scoping leads requiring analyst review of the specific binary.
+**Deployment:** EDR API-hooking telemetry or an enriched process-access profile (not stock Sysmon Event ID 10); treat hits as scoping leads requiring analyst review of the specific binary.
 
 ```yaml
-title: .NET Dropper with Base64 Embedded Payload Execution
+title: .NET Base64 Decode and Byte-Array File Write Named in a Process-Access Call Trace
 id: d45cafee-0934-456d-9471-1cefbe03602a
 status: experimental
 description: >-
-  Detects .NET executables decoding Base64 payloads and writing the decoded
-  bytes to disk within the same process-access call trace — a common pattern
-  for dropping an embedded secondary payload, also used by legitimate
-  installers unpacking bundled resources.
+  Detects a process-access event whose call trace names both FromBase64String
+  and WriteAllBytes, from a source image ending in .exe, a pattern for decoding
+  an embedded Base64 payload and writing it to disk that legitimate installers
+  unpacking bundled resources also use. Nothing here tests that the written file
+  is executed. The CallTrace field carries resolved method names only in some EDR
+  or enriched telemetry; stock Sysmon records module and offset frames, so the rule
+  cannot match on a default Sysmon profile.
 references:
   - https://the-hunters-ledger.com/hunting-detections/fleetagentadvanced-exe-detections/
 author: The Hunters Ledger
 date: '2026-01-12'
+modified: '2026-10-11'
 tags:
   - attack.stealth
   - attack.t1027
@@ -404,6 +361,7 @@ tags:
 logsource:
   category: process_access
   product: windows
+  definition: 'Requires an EDR or enriched Sysmon profile whose process-access CallTrace carries resolved .NET or API method names. Stock Sysmon CallTrace holds module and offset frames, so this rule cannot match there.'
 detection:
   selection:
     CallTrace|contains|all:
@@ -417,6 +375,62 @@ detection:
   condition: selection and not filter_legitimate
 falsepositives:
   - Legitimate installers using Base64-encoded resources
+level: medium
+```
+
+#### Remote Thread Created by a FleetAgentAdvanced Binary or an AppData Process
+
+**Tier:** Hunting
+**Robustness:** 2
+**ATT&CK Coverage:** T1055 (Process Injection)
+**Confidence:** LOW
+**Rationale:** *Logic fix and re-tier 2026-10-11 (Detection to Hunting):* the earlier selector required the `VirtualAllocEx`, `WriteProcessMemory` and `CreateRemoteThread` names inside the Sysmon process-access `CallTrace`, which holds module+offset frames, so it could not match stock Sysmon, and the report records the injection capability as present in the binary but never seen firing (`CreateRemoteThread` is only "implied"). It is rebuilt on the Sysmon create-remote-thread event, which the report's own detection query uses, with that report's two process names plus a generic AppData source. The generic branch means any AppData application that injects a thread fires, so the rule is a Hunting lead at level medium. The earlier text follows for the record. Requires the classic `VirtualAllocEx` → `WriteProcessMemory` → `CreateRemoteThread` remote-thread-injection API triad to appear together in a process-access call trace, with the source image running from AppData rather than Program Files. All three API names are fixed Windows API entry points the malware must call to perform this exact injection technique — not an attacker-chosen literal — so the rule survives any rebrand of the dropper's masquerade branding or internal naming. An attacker can only evade it by switching to a materially different injection technique (e.g., `NtMapViewOfSection`-based mapping injection, APC queuing) rather than by renaming anything.
+**False Positives:** Legitimate development tools, debuggers, game launchers and updaters that create remote threads from an AppData path; the generic AppData branch is not scoped to this family.
+**Blind Spots:** Misses injection techniques other than the classic triad (process hollowing via `NtUnmapViewOfSection`, APC-based injection); requires Sysmon Event ID 8 (create remote thread) telemetry, which Sysmon does not record by default; it does not see injection that does not create a remote thread.
+**Validation:** Create a remote thread in another process from a test binary running out of `%AppData%` — must match; the same call from a process under `\Program Files\` must NOT fire.
+**Deployment:** Sysmon create-remote-thread monitoring (Event ID 8) or EDR remote-thread telemetry.
+
+```yaml
+title: Remote Thread Created by a FleetAgentAdvanced Binary or an AppData Process
+id: 1ca5cfa6-f7af-4dde-80b1-87edbf3c637b
+status: experimental
+description: >-
+    Detects a remote thread created in another process (Sysmon create-remote-thread
+    event) by a process image named RuntimeOptimization.exe or FleetAgentAdvanced.exe,
+    or by any process image running from AppData and not from Program Files. The
+    FleetAgentAdvanced report records the remote-injection APIs as present in the
+    binary and never seen firing, so this is a lead for that capability and not a
+    detection of an observed injection. It replaces an earlier selector that looked
+    for the API names VirtualAllocEx, WriteProcessMemory and CreateRemoteThread in
+    the process-access CallTrace field; Sysmon records module and offset frames
+    there and not function names, so that selector could not match stock Sysmon.
+references:
+    - https://the-hunters-ledger.com/hunting-detections/fleetagentadvanced-exe-detections/
+author: The Hunters Ledger
+date: '2026-01-12'
+modified: '2026-10-11'
+tags:
+    - attack.privilege-escalation
+    - attack.stealth
+    - attack.t1055
+    - detection.emerging-threats
+logsource:
+    category: create_remote_thread
+    product: windows
+detection:
+    selection_family:
+        SourceImage|endswith:
+            - '\RuntimeOptimization.exe'
+            - '\FleetAgentAdvanced.exe'
+    selection_appdata:
+        SourceImage|contains: '\AppData\'
+    filter_legitimate:
+        SourceImage|contains:
+            - '\Program Files\'
+            - '\Program Files (x86)\'
+    condition: 1 of selection_* and not filter_legitimate
+falsepositives:
+    - Legitimate development tools and debuggers from AppData
 level: medium
 ```
 

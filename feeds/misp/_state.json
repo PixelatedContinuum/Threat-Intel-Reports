@@ -13,8 +13,8 @@
     },
     "063ce33f-b7aa-5660-a9ff-f188850a7d87": {
       "slug": "gotenberg-rce-cryptomining-107-175-69-137",
-      "hash": "cfe8b498f87546b652ce0a757cc20bbca33e220d32f5b5311b9cdd2f60b7b36a",
-      "timestamp": 1791592912,
+      "hash": "20f9109d9ebf70e1695fc200322de5154c560708669b7cde13b2f6940ee48763",
+      "timestamp": 1791692758,
       "first_published": "2026-10-09"
     },
     "656f5eb2-7add-5b5e-a771-c4310b4be6c9": {
@@ -31,14 +31,14 @@
     },
     "7bd73cce-a068-5c73-a8f4-0e7b5d3e847e": {
       "slug": "cloudsync-assembler-toolkit-91-197-98-188",
-      "hash": "2aa58fc48a561c740e36526be5563c50a42c07bc029ad99324318d4e0f074a10",
-      "timestamp": 1791690198,
+      "hash": "c0ccff1c17c784a8e7d24870c05ac05a261714cb874fb5d6f8bcd82b66840f51",
+      "timestamp": 1791692750,
       "first_published": "2026-10-09"
     },
     "7caf24f7-aaae-5cd6-8026-90cb081d8075": {
       "slug": "gocloud-multiservice-cryptojacking-149-28-112-221",
-      "hash": "387880b5853eee007cf86d9ca359e60077fe9fdad9d71da8c3a0ab79992a50ee",
-      "timestamp": 1791592911,
+      "hash": "4b834e1e786d64d3734870cd50dfcc8db8b2d41d082e47b283997f2a4eac7797",
+      "timestamp": 1791692757,
       "first_published": "2026-10-09"
     },
     "7a1fc79b-257b-587d-9691-da866766d383": {
@@ -55,20 +55,20 @@
     },
     "4eed77fa-9767-536f-8fef-728b06ae1cb3": {
       "slug": "kaido-quasar-rat-144-172-109-203",
-      "hash": "4f424f699ae208c535630c217563aa34e2628ce99b5ecbc19e1103254893f6aa",
-      "timestamp": 1791592914,
+      "hash": "63ba30e27827704a449c523633082ae050513a741583953496c795b9cfef720e",
+      "timestamp": 1791692760,
       "first_published": "2026-10-09"
     },
     "eb873bde-1e1d-5a29-8b4c-dc02cedd1584": {
       "slug": "evilsoul-engine-stealer-maas-144-172-103-98",
-      "hash": "64a7e8b4c773c36b3f1868a77c6ae55cc972bd8108d122fb5e0a83be5c65684c",
-      "timestamp": 1791592906,
+      "hash": "bcbce1f382344b45c5d6077b637af5c7bb59707090e06f60d80bf4f5c7a70653",
+      "timestamp": 1791692752,
       "first_published": "2026-10-09"
     },
     "611d3d52-2660-5a18-a27e-866a92ee221e": {
       "slug": "flaskc2-postex-toolkit-67-215-232-25",
-      "hash": "044338cdf97c1362d995d8e4edaecb90b774155cef75587ec03ef000a51fe7d9",
-      "timestamp": 1791592907,
+      "hash": "0776e19f00deb7bfc6807fd256cd11906e699bcf9b9b8b2b253947d954d94123",
+      "timestamp": 1791692753,
       "first_published": "2026-10-09"
     },
     "207c913d-e57f-534b-ac8a-08e8ebf9933d": {
@@ -91,8 +91,8 @@
     },
     "d368b117-5414-5c50-b434-c21cfb5f6797": {
       "slug": "ghost-cryptojacker-vova75rus-77.110.96.200",
-      "hash": "c361c0c89493cb04e80e444a9d9beebb1278cde7d01ff46500df3eeadf875028",
-      "timestamp": 1791592910,
+      "hash": "6e1306169bfa3410a1caeccae6d1c41cbe960cb0758505f317adb3c7ee1f0c30",
+      "timestamp": 1791692756,
       "first_published": "2026-10-09"
     },
     "43b09f34-283d-5b09-84eb-a93df291c4c4": {
@@ -115,14 +115,14 @@
     },
     "82cbc83b-05d1-5a93-bb60-69c8c5f9aa04": {
       "slug": "bellamain-turkish-phaas-79-137-192-3-20260516",
-      "hash": "49c76b87f136b52a1cce6f16c42007c6384219f40d196c022015090ba5e4d363",
-      "timestamp": 1791592902,
+      "hash": "cd91f29f9abedd2a498686b40ff9a893916b4b18416beee0a21e1a765622f46c",
+      "timestamp": 1791692749,
       "first_published": "2026-10-09"
     },
     "93d0b666-26a5-57ab-a3dc-45f197c65e10": {
       "slug": "inkognito-russian-vpn-phishing-185-221-196-118-20260516",
-      "hash": "735db11a41bcef8d9b5e377c105f0b6a19d87af9dca70d3ce8c501d3523ce349",
-      "timestamp": 1791592913,
+      "hash": "c17523693395669048b320b51ede3644e7bdbb1e2eff45f66be57a47f6ab4bb9",
+      "timestamp": 1791692759,
       "first_published": "2026-10-09"
     },
     "3d46b2a8-dcd5-56e3-80f3-cc19a7369651": {
@@ -211,8 +211,8 @@
     },
     "6b2ddd6b-2861-5626-b59e-9cf736ff2568": {
       "slug": "dual-rat-analysis",
-      "hash": "e793da5839b46900d0b183fc556b6a087a2276016d3e0d284505d7ddb4aa3fc5",
-      "timestamp": 1791592904,
+      "hash": "c405d39f5de86f6206ff0585fe4b59b98d44a3c6acae64a38a63922cffa9ed60",
+      "timestamp": 1791692751,
       "first_published": "2026-10-09"
     },
     "628d1b77-562f-5511-aa4b-e858e3c8527f": {
@@ -283,14 +283,14 @@
     },
     "bbb50559-558b-53f6-8a3a-19961ddf05ef": {
       "slug": "arsenal-237-nethost-dll",
-      "hash": "947fbf81b2aa7c003f9172eb4e007fae7a313bceda35ccbbe3e530ac39013f91",
-      "timestamp": 1791592899,
+      "hash": "0ec73e48a42130f689f7869851b5c319e38a8e5d210a62618196b1709666f75a",
+      "timestamp": 1791692747,
       "first_published": "2026-10-09"
     },
     "e501fdef-3d5e-5128-b862-ad46cf063906": {
       "slug": "arsenal-237-rootkit-dll",
-      "hash": "92857e8dc0be425e8d888c14fb5eaa296ac9ac96d9415755f996db8cdd78e3cf",
-      "timestamp": 1791592901,
+      "hash": "88871244334a83ce9b0e644452eee931e8c09bd5e8d19cfda80f0896981df718",
+      "timestamp": 1791692748,
       "first_published": "2026-10-09"
     },
     "bf15ec86-d80c-5067-8f63-4c2f4186cda3": {
@@ -331,14 +331,14 @@
     },
     "f5f6f585-f601-5e0c-a7bc-b9e973ed73f0": {
       "slug": "fleetagentfud-exe",
-      "hash": "d777e6550b720e12da289f311cf51cc2269f881c9db2731761a62f616e698008",
-      "timestamp": 1791592909,
+      "hash": "484ac61c6866b79f8d68e1850fa8e45cbdbde6d43e74ba97637b76314b05f7ef",
+      "timestamp": 1791692755,
       "first_published": "2026-10-09"
     },
     "b64d8288-b76d-5380-af9b-4cbfa23ffe6b": {
       "slug": "fleetagentadvanced-exe",
-      "hash": "f817e7dd027c0d01abc32a535a4762310cfa0e7b3c52c442bcaceed70d12eae2",
-      "timestamp": 1791592908,
+      "hash": "1550bafe957e9f28ca2beaaca2d9457dabe491df50dd3ae416fb4307105e119d",
+      "timestamp": 1791692754,
       "first_published": "2026-10-09"
     },
     "aab2ba34-9ec2-5c61-948e-6a10c7b18488": {

@@ -59,19 +59,21 @@ All node-1 samples are plain-text scripts, so these rules carry no PE or ELF mag
 **Robustness:** 2
 **ATT&CK Coverage:** T1036.005 (Match Legitimate Resource Name or Location), T1053.005 (Scheduled Task), T1021.002 (SMB Admin Shares), T1496.001 (Compute Hijacking)
 **Confidence:** HIGH
-**False Positives:** None known. The combination of the operator's mining-estate brand, the TimeService masquerade path, and the checksum-invalid typo wallet is unique to this toolkit.
-**Blind Spots:** Misses variants that rebrand the estate name and change all three scheduled-task names; a fully rewritten deployer with a different wallet would not match.
+**Logic fix 2026-10-11:** the description said the rule detects by the combination of the brand, the masquerade triad and the wallet, but the condition was `$wallettp or 3 of them` over eight strings, and the generic ones (`pool.supportxmr.com:443`, `attrib +H +S`, 网吧) could make up the three. Those three strings were removed from the rule and the condition now names the three alternatives in the description. A fixture holding only the pool address, `attrib +H +S` and the TimeService path matched the old rule and does not match the new one.
+**False Positives:** None known. The checksum-invalid typo wallet, or the TimeService masquerade triad, or the operator brand with two of the three masquerade strings, is unique to this toolkit.
+**Blind Spots:** Misses a variant that changes the wallet and also changes the task names or the TimeService path enough that neither the full triad nor brand plus two of the three still match.
 **Validation:** Fire it against `deploy.ps1` / `allinone.ps1` / `setup.bat`; a benign PowerShell installer or a legitimate XMRig config must NOT fire.
 **Deployment:** Endpoint file scan, script-drop monitoring on `%APPDATA%` and `%TEMP%`, mail and web gateway.
 
 ```yara
 rule GOCLOUD_Windows_Deploy_Worm_Lingkai {
    meta:
-      description = "Detects the GOCLOUD Windows internet-cafe miner deployment and LAN-propagation scripts (deploy.ps1 / allinone.ps1 / setup.bat, self-branded 凌凯矿机 v3.0) by the combination of the operator's mining-estate brand, its svchost/TimeService masquerade triad, and the checksum-invalid typo Monero wallet live in the runtime config"
+      description = "Detects the GOCLOUD Windows internet-cafe miner deployment and LAN-propagation scripts (deploy.ps1 / allinone.ps1 / setup.bat, self-branded 凌凯矿机 v3.0) by any one of three alternatives: the checksum-invalid typo Monero wallet live in the runtime config; the full TimeService masquerade triad (WindowsTimeSync and WindowsWatchdog task names plus the Microsoft\\Windows\\TimeService path); or the mining-estate brand with two of those three masquerade strings"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/"
       date = "2026-07-26"
+      modified = "2026-10-11"
       hash1 = "f4c5ab27bceb6ab6c6ec8f48b3b84701a0ba6966e30042bf5765a5d97018b5d2"
       hash2 = "f42af99f65f1edeb5ed13b3f68643e7d8abacfceb878ba7e79581caedbd7f09f"
       hash3 = "6780e9cc6cad66975bb7d895cd0944b72c5a843b80f6c4fef3cc4ebeb1ce628a"
@@ -80,16 +82,15 @@ rule GOCLOUD_Windows_Deploy_Worm_Lingkai {
       id = "5fec8734-b59b-5046-9a52-36e8061fb674"
    strings:
       $brand    = "凌凯矿机" ascii wide
-      $netbar   = "网吧" ascii wide
       $task1    = "WindowsTimeSync" ascii wide fullword
       $task2    = "WindowsWatchdog" ascii wide fullword
       $path     = "Microsoft\\Windows\\TimeService" ascii wide nocase
       $wallettp = "42CThVKA9SxeeQDT8EcBK7UHNFFREDw3q7W5ZyyoGvGufDVPbKzYb3Bap9z9qor7jwAU23r3jKHyoZCSYH8eK4a9BUyTRrE" ascii wide
-      $pool     = "pool.supportxmr.com:443" ascii wide nocase
-      $attr     = "attrib +H +S" ascii wide nocase
    condition:
       filesize < 80KB and
-      ( $wallettp or 3 of them )
+      ( $wallettp or
+        all of ($task1, $task2, $path) or
+        ( $brand and 2 of ($task1, $task2, $path) ) )
 }
 ```
 
@@ -99,6 +100,7 @@ rule GOCLOUD_Windows_Deploy_Worm_Lingkai {
 **Robustness:** 2
 **ATT&CK Coverage:** T1053.005 (Scheduled Task), T1685 (Disable or Modify Tools), T1071.001 (Web Protocols), T1496.001 (Compute Hijacking)
 **Confidence:** HIGH
+**Logic fix 2026-10-11:** the condition was `3 of them` over six strings, so the three generic ones (`/r?host=`, `"donate-level": 0` and the Defender disable) satisfied it without the task name or the pool-password convention that this paragraph rests on. It now requires `$task`, `$pass` and `$defoff` together plus at least one of the heartbeat, worker-label and donate strings. A fixture holding only the heartbeat path, the donate-level line and the Defender disable matched the old rule and does not match the new one.
 **False Positives:** None known. The WinJenkinsHeartbeat task name paired with the `win_jenkins_` pool-password convention and the pre-download Defender disable is specific to this deployer.
 **Blind Spots:** Misses a rebuilt deployer that renames the heartbeat task and abandons the `win_jenkins_` worker convention.
 **Validation:** Fire it against `winminer.ps1`; a benign miner-management script must NOT fire.
@@ -112,6 +114,7 @@ rule GOCLOUD_Windows_Miner_WinJenkins {
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/"
       date = "2026-07-26"
+      modified = "2026-10-11"
       hash1 = "004315d53cc4e68b16f0a1acb1f09d9501ea26e6fde1686b2018cd677a346c5c"
       hash2 = "446fedd99169500bbd34de06bc5890de445d7280"
       hash3 = "dbfc0b53520ad8ef434b38f322a91388"
@@ -127,7 +130,8 @@ rule GOCLOUD_Windows_Miner_WinJenkins {
       $donate = "\"donate-level\": 0" ascii wide
    condition:
       filesize < 40KB and
-      3 of them
+      $task and $pass and $defoff and
+      1 of ($hb, $worker, $donate)
 }
 ```
 
@@ -139,6 +143,7 @@ rule GOCLOUD_Windows_Miner_WinJenkins {
 **Robustness:** 2
 **ATT&CK Coverage:** T1543.002 (Systemd Service), T1564.001 (Hidden Files and Directories), T1071.001 (Web Protocols), T1496.001 (Compute Hijacking)
 **Confidence:** HIGH
+**Logic fix 2026-10-11 (Luna review):** the description lists the banner and the heartbeat among the fingerprint, and the first clause was `$x11 and 2 of them`, where `2 of them` counts `$x11` itself, so the directory string plus one other string matched. It is now the directory string plus two of the other five. Neither the banner nor the heartbeat is required by either clause, as the description now says. A fixture with the directory string and `c3pool_miner.service` only matched the old rule and does not match the new one.
 **False Positives:** None known. The dot-suffixed X11-socket-lookalike directory string and the GOCLOUD miner v7 banner do not appear in the legitimate c3pool installer.
 **Blind Spots:** Misses a rebuilt deployer that drops the banner and changes the hiding-directory naming; the served static `config.json` fast path carries a `WORKER` placeholder and will not match the worker-label string.
 **Validation:** Fire it against `miner.sh`; a stock c3pool `setup_c3pool_miner.sh` must NOT fire.
@@ -147,11 +152,12 @@ rule GOCLOUD_Windows_Miner_WinJenkins {
 ```yara
 rule GOCLOUD_Linux_Miner_v7 {
    meta:
-      description = "Detects the GOCLOUD miner.sh Linux XMRig deployer (GOCLOUD miner v7) by its self-branded banner, the /tmp/.X11-unix. dot-suffixed X11-socket-lookalike hiding directory, the c3pool_miner.service persistence unit, the gocloud_ worker-label convention, and the fixed-order /r?host= heartbeat"
+      description = "Detects the GOCLOUD miner.sh Linux XMRig deployer (GOCLOUD miner v7) from six strings: the self-branded banner, the /tmp/.X11-unix. dot-suffixed X11-socket-lookalike hiding directory, the c3pool_miner.service persistence unit, the gocloud_ worker-label convention, the /r?host= heartbeat and the c3pool pool address. It matches the dot-suffixed directory string plus two of the other five, or any four of the six; no single string, including the banner and the heartbeat, is required"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/"
       date = "2026-07-26"
+      modified = "2026-10-11"
       hash1 = "5194aa67974a69549f1f839c973ca17cc0ce8c6ca41ab199d74599befba08db7"
       hash2 = "5fe34b31fe3e3c741456ae6d3c55677cd1aff608"
       hash3 = "6177ab813f6bfeba9c3ec6aeeeb5780a"
@@ -167,7 +173,7 @@ rule GOCLOUD_Linux_Miner_v7 {
       $pool   = "auto.c3pool.org:19999" ascii nocase
    condition:
       filesize < 40KB and
-      ( ( $x11 and 2 of them ) or ( 4 of them ) )
+      ( ( $x11 and 2 of ($banner, $svc, $worker, $hb, $pool) ) or ( 4 of them ) )
 }
 ```
 
@@ -856,13 +862,14 @@ Each signature is one physical line and was accepted by the real `suricata -T` e
 **Robustness:** 2
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
 **Confidence:** HIGH
+**Wording fix 2026-10-11 (rev 3):** the `msg` said the heartbeat goes to the payload host, but the header is `$HOME_NET any -> $EXTERNAL_NET any` and the rule tests no destination, on purpose (an address would not survive rotation of the payload host), so any external server receiving this URI shape fires. The `msg` no longer says "to Payload Host".
 **False Positives:** None known. The `/r?host=` prefix followed by the `&status=OK&ts=` tail in one URI is a distinctive parameter order.
 **Blind Spots:** Fires only on the plaintext HTTP heartbeat; a TLS-wrapped or parameter-reordered beacon evades the URI match.
 **Validation:** Replay a captured heartbeat GET and confirm it fires; ordinary web browsing must NOT fire.
 **Deployment:** IDS / IPS at the network egress.
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT GOCLOUD-Cryptojacking XMRig Deployment Heartbeat GET (Fixed Parameter Order to Payload Host)"; flow:established,to_server; http.uri; content:"/r?host="; startswith; nocase; content:"&status=OK&ts="; distance:0; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:9301501; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-26;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT GOCLOUD-Cryptojacking XMRig Deployment Heartbeat GET (Fixed Parameter Order)"; flow:established,to_server; http.uri; content:"/r?host="; startswith; nocase; content:"&status=OK&ts="; distance:0; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:9301501; rev:3; metadata:author The_Hunters_Ledger, date 2026-07-26;)
 ```
 
 #### GOCLOUD XMRig Worker-Label Heartbeat

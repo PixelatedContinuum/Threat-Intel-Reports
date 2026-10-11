@@ -134,7 +134,7 @@ rule Webshell_NPCInfoList1_AES_Loader {
 **Robustness:** 2
 **ATT&CK Coverage:** T1505.001 (SQL Stored Procedures), T1059.003 (Windows Command Shell), T1095 (Non-Application Layer Protocol)
 **Confidence:** MODERATE
-**Rationale:** Requires four independent clauses (SQLCLR marker, exec-method name, network class, process-output-redirect API) to all hold — a genuine combination, not a single renameable literal. Kept at Hunting rather than Detection because the original assessment flagged real ambiguity: legitimate MSSQL CLR assemblies can use `TcpClient`, and the exec-method clause can be satisfied by the generic `ExecuteCommand` name alone rather than the more distinctive `reverse_shell`/`cmd_exec` names.
+**Rationale:** *Logic fix 2026-10-11:* the fourth clause was `($procsi or $redir)`, so `ProcessStartInfo` alone satisfied the "process-output-redirect" clause and no `RedirectStandardOutput` string was needed. It is now `($procsi and $redir)`; the report lists `ProcessStartInfo` and `set_RedirectStandardOutput` together among the assembly's strings. Requires four independent clauses (SQLCLR marker, exec-method name, network class, process-output-redirect API) to all hold — a genuine combination, not a single renameable literal. Kept at Hunting rather than Detection because the original assessment flagged real ambiguity: legitimate MSSQL CLR assemblies can use `TcpClient`, and the exec-method clause can be satisfied by the generic `ExecuteCommand` name alone rather than the more distinctive `reverse_shell`/`cmd_exec` names.
 **False Positives:** A legitimate MSSQL CLR assembly that combines TCP networking, process spawning with output capture, and a method named `ExecuteCommand` (a common DB-access-layer naming convention) could satisfy all four clauses without being malicious.
 **Deployment:** Endpoint AV/EDR, MSSQL assembly inspection, memory scanner — use as a broader corpus sweep alongside the Banner Anchor Detection rule above, not as a standalone alerting rule.
 
@@ -146,6 +146,7 @@ rule MSSQL_CLR_Backdoor_CmdExec_Assembly_Strings {
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/"
       date = "2026-06-12"
+      modified = "2026-10-11"
       hash1 = "a7029ef2b6a541ef2b7508e1316d3c2efd3493108975ee457bcdb73043a25262"
       family = "MSSQL CLR Backdoor"
       malware_type = "Backdoor"
@@ -167,7 +168,7 @@ rule MSSQL_CLR_Backdoor_CmdExec_Assembly_Strings {
       ($sqlclr1 or $sqlclr2) and
       ($method1 or $method2 or $method3) and
       ($tcpcli or $netstr) and
-      ($procsi or $redir)
+      ($procsi and $redir)
 }
 ```
 
@@ -368,7 +369,7 @@ level: high
 **Robustness:** 2
 **ATT&CK Coverage:** T1505.001 (SQL Stored Procedures), T1095 (Non-Application Layer Protocol)
 **Confidence:** MODERATE
-**Rationale:** Behaviorally durable (no renameable literal — pure process-plus-destination-class logic), but the rule fires on any external connection from `sqlservr.exe`, and three common, legitimate enterprise patterns (replication, linked servers, Database Mail) require environment-specific baselining before this stops being meaningfully noisy. Demoted from the original `high` level to a Hunting scoping lead.
+**Rationale:** *Logic fix 2026-10-11:* the title and description say TCP, but the selection tested only the image and `Initiated`, so an external UDP connection from `sqlservr.exe` (for example SQL Browser or DNS) also fired. It now requires `Protocol: tcp`, the field Sysmon network events carry. Behaviorally durable (no renameable literal — pure process-plus-destination-class logic), but the rule fires on any external connection from `sqlservr.exe`, and three common, legitimate enterprise patterns (replication, linked servers, Database Mail) require environment-specific baselining before this stops being meaningfully noisy. Demoted from the original `high` level to a Hunting scoping lead.
 **False Positives:** SQL Server linked servers pointing to external databases. Database Mail (SMTP outbound) — filter by port 25/587. SQL Server replication to external publishers — baseline expected destination IPs.
 **Deployment:** Sysmon (Event ID 3), network flow telemetry, EDR network telemetry — baseline per environment before considering promotion to Detection.
 
@@ -386,6 +387,7 @@ references:
     - https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/
 author: The Hunters Ledger
 date: '2026-06-12'
+modified: '2026-10-11'
 tags:
     - attack.persistence
     - attack.t1505.001
@@ -399,6 +401,7 @@ detection:
     selection:
         Image|endswith: '\sqlservr.exe'
         Initiated: 'true'
+        Protocol: 'tcp'
     filter_loopback:
         DestinationIp|startswith:
             - '127.'
@@ -475,25 +478,28 @@ falsepositives:
 level: medium
 ```
 
-#### CVE-2026-20817 WER LPE PoC: Anomalous WerFault.exe Token Inspection
+#### CVE-2026-20817 WER LPE PoC: Process Handle Opened to WerFault.exe by an Unlisted Source
 
 **Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1068 (Exploitation for Privilege Escalation)
 **Confidence:** MODERATE
-**Rationale:** The process-access pattern (a non-WER process opening `WerFault.exe`'s token) is a genuine, durable technique signal, but the original assessment's own FP Risk of HIGH and narrow applicability window (only relevant on hosts missing the January 2026 cumulative update, and the analyzed sample is a non-weaponized PoC that never achieves elevation) keep this at Hunting rather than Detection.
-**False Positives:** EDR and security tooling that monitors WerFault.exe token state. Crash reporting integrations that inspect WerFault process state. Only deploy on unpatched hosts (pre-January 2026 Windows cumulative update) — patched hosts render this moot.
+**Rationale:** *Logic fix 2026-10-11:* the rule claimed token query rights but tested `GrantedAccess|contains '0x20'`, a substring of the rendered mask (it matches only masks that begin 0x20..., such as 0x20, which is the VM_WRITE bit and not a token right), so it did not test the claim and would miss a read-only process handle. Sysmon process access logs the process handle only; `OpenProcessToken` with `TOKEN_QUERY` is a later call that no Sysmon event records, and the report gives no process access mask for the PoC. The mask test was removed, so the rule now fires on any handle opened to `WerFault.exe` by a source outside the exclusions, which is broader and noisier; it stays a Hunting lead at level low. The process-access pattern (a non-WER process opening `WerFault.exe`'s handle) is a genuine, durable technique signal, but the original assessment's own FP Risk of HIGH and narrow applicability window (only relevant on hosts missing the January 2026 cumulative update, and the analyzed sample is a non-weaponized PoC that never achieves elevation) keep this at Hunting rather than Detection.
+**False Positives:** Any EDR, security, monitoring or crash-handling tool that opens a handle to WerFault.exe, whatever the access mask, since the mask is no longer tested. Crash reporting integrations that inspect WerFault process state. Only deploy on unpatched hosts (pre-January 2026 Windows cumulative update) — patched hosts render this moot.
 **Deployment:** Sysmon (Event ID 10 — ProcessAccess), EDR process-access telemetry. Deploy only on hosts running Windows 10/11 or Server 2019/2022 without the January 2026 cumulative update, or for retrospective hunting.
 
 ```yaml
-title: CVE-2026-20817 WER LPE PoC Token Inspection of WerFault.exe
+title: CVE-2026-20817 WER LPE PoC Process Handle Opened to WerFault.exe by an Unlisted Source
 id: ff8ee6c2-d705-4ebf-98bd-6ead3d775ae0
 status: experimental
 description: >-
-  Detects process access events targeting WerFault.exe with token query rights,
-  consistent with the CVE-2026-20817 WER ALPC local-privilege-escalation PoC
-  present in the FlaskC2-PostEx-Toolkit campaign. The PoC enumerates processes
-  looking for WerFault.exe and inspects its token privileges. This rule is
+  Detects a process opening a handle to WerFault.exe (Sysmon process access,
+  any access mask) from a source other than WerMgr.exe, svchost.exe or
+  MsMpEng.exe, consistent with the CVE-2026-20817 WER ALPC
+  local-privilege-escalation PoC present in the FlaskC2-PostEx-Toolkit
+  campaign. The PoC enumerates processes looking for WerFault.exe, opens it and
+  reads its token privileges; the token query itself (OpenProcessToken with
+  TOKEN_QUERY) is not a process-access event and is not visible to this rule. This rule is
   relevant only on hosts missing the January 2026 Windows cumulative update;
   the sample analyzed is non-weaponized and does not achieve elevation.
 references:
@@ -502,6 +508,7 @@ references:
     - https://itm4n.github.io/cve-2026-20817-wersvc-eop/
 author: The Hunters Ledger
 date: '2026-06-12'
+modified: '2026-10-11'
 tags:
     - attack.privilege-escalation
     - attack.t1068
@@ -512,7 +519,6 @@ logsource:
 detection:
     selection:
         TargetImage|endswith: '\WerFault.exe'
-        GrantedAccess|contains: '0x20'
     filter_system:
         SourceImage|endswith:
             - '\WerMgr.exe'
