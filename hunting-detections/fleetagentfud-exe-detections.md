@@ -567,19 +567,20 @@ tags:
 **Robustness:** 2
 **ATT&CK Coverage:** T1059.001 (PowerShell)
 **Confidence:** LOW
-**Rationale:** *Wording fix 2026-10-11:* the YAML title still read "Multi-Stage Attack Pattern Correlation" although the rule is a single selector; it now matches the heading and says what is tested. *Retiering finding:* despite its "Multi-Stage Attack Pattern Correlation" title, this rule is not a `correlation:`-type Sigma rule at all — it is a plain two-condition `process_creation` selector, and its two conditions (`powershell.exe` + `-Exec Bypass` command line, parent rooted in AppData) are a strict subset of the Detection-tier PowerShell Execution Policy Bypass rule above, minus that rule's hidden-window requirement. Removing the hidden-window corroborator broadens the match population without adding any new signal, so this rule fires on strictly more (and less-corroborated) activity than its Detection-tier sibling. Tiered Hunting as the broader, lower-confidence companion to that rule rather than published as an independent high-confidence signature.
-**False Positives:** The same AppData-rooted PowerShell bypass population as the Detection-tier sibling rule, minus the narrowing effect of the hidden-window requirement — a meaningfully larger population.
-**Deployment:** Sysmon/EDR process-creation telemetry; use as a lower-bar scoping companion to the Detection-tier PowerShell bypass rule, not as an independent alert.
+**Rationale:** *Wording fix 2026-10-11:* the YAML title still read "Multi-Stage Attack Pattern Correlation" although the rule is a single selector; it now matches the heading and says what is tested. *Retiering finding:* despite its "Multi-Stage Attack Pattern Correlation" title, this rule is not a `correlation:`-type Sigma rule at all — it is a plain two-condition `process_creation` selector, and its two conditions (`powershell.exe` + the contiguous text `-Exec Bypass`, parent rooted in AppData) overlap the Hunting-tier PowerShell Execution Policy Bypass with Hidden Window rule above without being a strict subset of it. This rule drops that rule's hidden-window requirement, which broadens the population, but it also requires the two words contiguous (`-Exec Bypass`) where the sibling accepts `-Exec` and `Bypass` anywhere in the command line, and it carries none of the sibling's AppX-cmdlet exclusion, so each rule matches events the other does not. Tiered Hunting as a lower-bar companion rather than published as an independent high-confidence signature. Round 2 (2026-10-11): the earlier text called the sibling Detection-tier and this rule a strict subset; neither holds.
+**False Positives:** The AppData-rooted PowerShell bypass population of the sibling Hunting rule, without the hidden-window requirement and without the AppX-cmdlet exclusion, so Squirrel- and Electron-style auto-updaters (including their AppX cleanup commands) are all expected hits.
+**Deployment:** Sysmon/EDR process-creation telemetry; use as a lower-bar scoping companion to the PowerShell Execution Policy Bypass with Hidden Window rule (also Hunting), not as an independent alert.
 
 ```yaml
 title: PowerShell Execution Policy Bypass from an AppData Parent (Broad Variant)
 id: cfe3cad4-9134-4d9e-8681-3199404e6170
 status: experimental
 description: >-
-  Detects PowerShell launched with an execution-policy bypass from a parent process
-  running under AppData. Functionally a broader subset of the PowerShell Execution
-  Policy Bypass with Hidden Window from an AppData Parent rule (minus its hidden-window
-  requirement). It is a single process-creation selector and not a correlation: the
+  Detects PowerShell launched with the contiguous text -Exec Bypass from a parent
+  process running under AppData. It overlaps the PowerShell Execution Policy Bypass
+  with Hidden Window from an AppData Parent rule without being a subset of it: it has no
+  hidden-window requirement and no AppX-cmdlet exclusion, and it requires the two words
+  contiguous. It is a single process-creation selector and not a correlation: the
   rule used to be titled a multi-stage attack pattern correlation, and Sigma's
   single-event-source model cannot express the original three-stage (process, network
   and PowerShell) design across separate log sources.
@@ -600,7 +601,7 @@ detection:
     condition: selection_powershell and selection_parent
 falsepositives:
     - Complex legitimate software launching PowerShell from user directories
-    - Broader population than the Detection-tier sibling rule (no hidden-window corroborator)
+    - Broader population than the hidden-window sibling rule in one respect (no hidden-window requirement, no AppX-cmdlet exclusion) and narrower in another (the words must be contiguous)
 level: medium
 tags:
     - attack.execution

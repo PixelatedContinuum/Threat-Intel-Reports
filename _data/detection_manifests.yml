@@ -919,7 +919,7 @@ arsenal-237-killer-dll-detections:
     engine: sigma
     tier: Hunting
     fence: 8
-    hash: "cc63b88d"
+    hash: "34279cf1"
     head: "title: Kernel Driver Service Creation by Rundll3"
     robustness: 2
     confidence: "LOW"
@@ -1165,7 +1165,7 @@ arsenal-237-rootkit-dll-detections:
     engine: yara
     tier: Detection
     fence: 1
-    hash: "ae2cf537"
+    hash: "316bf49b"
     head: "rule Arsenal237_Security_Product_Killer { meta: "
     robustness: 2
     confidence: "HIGH"
@@ -1256,7 +1256,7 @@ bellamain-turkish-phaas-79-137-192-3-20260516-detections:
     engine: sigma
     tier: Hunting
     fence: 4
-    hash: "bb43de39"
+    hash: "6dad5973"
     head: "title: BellaMain PhaaS USOM Blocklist Poll id: 7"
     robustness: 1
     confidence: "MODERATE"
@@ -1455,7 +1455,7 @@ cloudsync-assembler-toolkit-91-197-98-188-detections:
     engine: sigma
     tier: Detection
     fence: 20
-    hash: "4430126d"
+    hash: "0f2a4831"
     head: "title: AnyDesk Unattended Password Piped Over St"
     robustness: 2
     confidence: "HIGH"
@@ -1482,7 +1482,7 @@ cloudsync-assembler-toolkit-91-197-98-188-detections:
     engine: sigma
     tier: Detection
     fence: 23
-    hash: "c5e0a95d"
+    hash: "354d05f3"
     head: "title: Run Key SystemUpdate Value Pointing To St"
     robustness: 3
     confidence: "HIGH"
@@ -1738,7 +1738,7 @@ evilsoul-engine-stealer-maas-detections:
     fence: 5
     hash: "1146b643"
     head: "title: Browser Relaunched with Remote Debugging "
-    robustness: 3
+    robustness: 2
     confidence: "HIGH"
     attack: [T1185, T1539]
   - name: "Python Process Opens LSASS Handle (ABE Decryptor Pattern)"
@@ -1763,7 +1763,7 @@ evilsoul-engine-stealer-maas-detections:
     engine: sigma
     tier: Detection
     fence: 8
-    hash: "e2c0a0df"
+    hash: "6c51dc50"
     head: "title: Scheduled Task Created with Microsoft Cor"
     robustness: 3
     confidence: "HIGH"
@@ -1950,14 +1950,14 @@ fleetagentadvanced-exe-detections:
     robustness: 2
     confidence: "LOW — both base signals are individually brittle, masquerade-literal-dependent selectors; the correlation adds real but limited value"
     attack: [T1053.005, T1070.004]
-  - name: ".NET Base64 Decode and File Write in a Process-Access Call Trace (EDR Telemetry Only)"
+  - name: ".NET Base64 Decode and File Write in a Process-Access Call Trace (No Telemetry Source Demonstrated)"
     engine: sigma
     tier: Hunting
     fence: 4
-    hash: "03c149f7"
+    hash: "7694819d"
     head: "title: .NET Base64 Decode and Byte-Array File Wr"
     robustness: 2
-    confidence: "LOW"
+    confidence: "INSUFFICIENT"
     attack: [T1027]
   - name: "Remote Thread Created by a FleetAgentAdvanced Binary or an AppData Process"
     engine: sigma
@@ -2045,7 +2045,7 @@ fleetagentfud-exe-detections:
     engine: sigma
     tier: Hunting
     fence: 8
-    hash: "f17046b4"
+    hash: "390ea6cb"
     head: "title: PowerShell Execution Policy Bypass from a"
     robustness: 2
     confidence: "LOW"
@@ -2118,7 +2118,7 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
     engine: yara
     tier: Hunting
     fence: 5
-    hash: "f0068167"
+    hash: "921c8983"
     head: "rule SUSP_Linux_ComfyUI_PerformanceMonitor_Node_"
     robustness: 2
     confidence: "MODERATE (downgraded from HIGH 2026-09-13)"
@@ -2127,7 +2127,7 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
     engine: yara
     tier: Hunting
     fence: 6
-    hash: "87932e7a"
+    hash: "80681b1a"
     head: "rule MAL_Linux_GHOST_Hysteria_Operator_Wrapper {"
     robustness: 2
     confidence: "MODERATE"
@@ -2177,19 +2177,10 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1574.006, T1027, T1014]
-  - name: "Auditd - PAM Security Library Directory File Creation by Non-Package-Manager"
-    engine: sigma
-    tier: Detection
-    fence: 12
-    hash: "0343ae90"
-    head: "title: Auditd - PAM Security Library Directory F"
-    robustness: 3
-    confidence: "HIGH"
-    attack: [T1574.006, T1014]
   - name: "GHOST ComfyUI Fake PerformanceMonitor Custom Node Planted"
     engine: sigma
     tier: Detection
-    fence: 13
+    fence: 12
     hash: "9b8a5be0"
     head: "title: GHOST ComfyUI Fake PerformanceMonitor Cus"
     robustness: 2
@@ -2198,7 +2189,7 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
   - name: "GHOST Kit Systemd Camouflage Service Unit Creation"
     engine: sigma
     tier: Detection
-    fence: 14
+    fence: 13
     hash: "d7446929"
     head: "title: GHOST Kit Systemd Camouflage Service Unit"
     robustness: 2
@@ -2207,7 +2198,7 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
   - name: "Chattr Immutable Bit Set on Linux Persistence Target Paths"
     engine: sigma
     tier: Detection
-    fence: 15
+    fence: 14
     hash: "14821169"
     head: "title: Chattr Immutable Bit Set on Linux Persist"
     robustness: 3
@@ -2216,7 +2207,7 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
   - name: "Suspicious LD_PRELOAD Set to Non-Standard Library Path"
     engine: sigma
     tier: Hunting
-    fence: 16
+    fence: 15
     hash: "3c6829fe"
     head: "title: Suspicious LD_PRELOAD Set to Non-Standard"
     robustness: 2
@@ -2225,8 +2216,8 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
   - name: "Ncat Listener Creation on Linux Host"
     engine: sigma
     tier: Hunting
-    fence: 17
-    hash: "5a995051"
+    fence: 16
+    hash: "0485f07f"
     head: "title: Ncat Listener Creation on Linux Host id: "
     robustness: 1
     confidence: "MODERATE"
@@ -2234,7 +2225,7 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
   - name: "Hysteria Proxy Process Execution on Linux Server"
     engine: sigma
     tier: Hunting
-    fence: 18
+    fence: 17
     hash: "f1160c21"
     head: "title: Hysteria Proxy Process Execution on Linux"
     robustness: 2
@@ -2243,12 +2234,21 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
   - name: "memfd_create Syscall Outside a Java, Browser and Node Filter on Linux Server"
     engine: sigma
     tier: Hunting
-    fence: 19
-    hash: "c972accb"
+    fence: 18
+    hash: "82f42527"
     head: "title: memfd_create Syscall Outside a Java, Brow"
     robustness: 2
     confidence: "MODERATE"
     attack: [T1620, T1496.001]
+  - name: "Auditd - PAM Security Library Directory File Creation by Non-Package-Manager"
+    engine: sigma
+    tier: Hunting
+    fence: 19
+    hash: "4f0f3fae"
+    head: "title: Auditd - PAM Security Library Directory F"
+    robustness: 2
+    confidence: "LOW"
+    attack: [T1574.006, T1014]
   - name: "GHOST Kit Distribution File Download from AEZA Hosting Range"
     engine: suricata
     tier: Detection
@@ -2280,7 +2280,7 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
     engine: suricata
     tier: Hunting
     fence: 23
-    hash: "4d02a06e"
+    hash: "bdfbbbeb"
     head: "alert tls $HOME_NET any -> any any (msg:\"THL HUN"
     robustness: 1
     confidence: "LOW–MODERATE"
@@ -2299,7 +2299,7 @@ gocloud-multiservice-cryptojacking-149-28-112-221-detections:
     engine: yara
     tier: Detection
     fence: 1
-    hash: "09faa04a"
+    hash: "149a72df"
     head: "rule GOCLOUD_Windows_Miner_WinJenkins { meta: de"
     robustness: 2
     confidence: "HIGH"
@@ -2452,7 +2452,7 @@ gocloud-multiservice-cryptojacking-149-28-112-221-detections:
     engine: suricata
     tier: Detection
     fence: 18
-    hash: "811e618b"
+    hash: "e3634a41"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 2
     confidence: "HIGH"
@@ -2644,9 +2644,9 @@ kaido-quasar-rat-detections:
     engine: yara
     tier: Detection
     fence: 0
-    hash: "229479f4"
+    hash: "6fee48c2"
     head: "/* Yara Rule Set Identifier: KAIDO Quasar-Fork R"
-    robustness: 3
+    robustness: 2
     confidence: "HIGH"
     attack: [T1219]
   - name: "KAIDO HVNC DXGI Named-Pipe Transport"
@@ -2781,7 +2781,7 @@ malware-analysis-houselet-detections:
     engine: sigma
     tier: Hunting
     fence: 1
-    hash: "c59323e7"
+    hash: "4dfa07ad"
     head: "title: Internet Explorer ZoneMap Registry Modifi"
     robustness: 2
     confidence: "MODERATE"
@@ -2790,7 +2790,7 @@ malware-analysis-houselet-detections:
     engine: sigma
     tier: Hunting
     fence: 2
-    hash: "5e7c2129"
+    hash: "b109bb91"
     head: "title: Internet Settings Proxy Registry Modifica"
     robustness: 2
     confidence: "MODERATE"
@@ -4472,7 +4472,7 @@ opendirectory-62-60-237-100-20260506-detections:
     engine: sigma
     tier: Hunting
     fence: 11
-    hash: "a9ab0465"
+    hash: "893dc161"
     head: "title: Office VBA Macro Security Disabled via Re"
     robustness: 2
     confidence: "HIGH"
@@ -4563,7 +4563,7 @@ opendirectory-74-0-42-25-20260316-detections:
     engine: sigma
     tier: Detection
     fence: 7
-    hash: "5f7c5582"
+    hash: "c1dda0cc"
     head: "title: XWorm V5.6 Operator Configuration Registr"
     robustness: 2
     confidence: "HIGH"
@@ -4827,7 +4827,7 @@ remcos-opendirectory-detections:
     engine: sigma
     tier: Detection
     fence: 9
-    hash: "7e266a0d"
+    hash: "ee8ab0f5"
     head: "title: EnableLUA Registry Value Set to Disable U"
     robustness: 3
     confidence: "HIGH"
@@ -5949,7 +5949,7 @@ sliver-c2-windows-postex-staging-193-233-202-17-detections:
     engine: sigma
     tier: Hunting
     fence: 11
-    hash: "1d4d6027"
+    hash: "ea3d9a2a"
     head: "title: RDP, UAC Or Token-Filter Registry Value W"
     robustness: 1
     confidence: "MODERATE"

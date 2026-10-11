@@ -327,22 +327,23 @@ falsepositives:
 level: medium
 ```
 
-#### .NET Base64 Decode and File Write in a Process-Access Call Trace (EDR Telemetry Only)
+#### .NET Base64 Decode and File Write in a Process-Access Call Trace (No Telemetry Source Demonstrated)
 
 **Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1027 (Obfuscated Files or Information)
-**Confidence:** LOW
-**Rationale:** *Wording fix 2026-10-11:* the title claimed payload execution and the rule tests no execution, only the two method names in a call trace; and the call trace carries method names only in EDR or enriched telemetry, not stock Sysmon (see the `logsource.definition`). It is kept as an EDR-telemetry corroboration lead, not removed. Requires `Convert.FromBase64String` and `File.WriteAllBytes` to co-occur in a process-access call trace — both fixed .NET Base Class Library method names the malware must call to decode and drop its embedded payload, so the rule is durable against any rebrand of masquerade strings or internal naming. It stays at Hunting rather than Detection because the combination itself (decode a Base64 blob, write bytes to disk) is a routine pattern in legitimate installers that unpack bundled or compressed resources at runtime, not a marker unique to malicious payload-dropping.
+**Confidence:** INSUFFICIENT
+**Rationale:** *Round 2 (2026-10-11), coverage claim withdrawn:* no event source is demonstrated that puts both a Base64-decode method name and a file-write method name into one process-access call trace, no EDR or Sysmon profile and no example event is named, and the FleetAgentAdvanced report documents Base64 encoding capability (the Base64 passage near line 561) without naming `FromBase64String` or `WriteAllBytes`. The rule is therefore kept only as a record of the intended hunt: level low, confidence INSUFFICIENT, the logsource definition says no telemetry source is demonstrated, and Deployment says do not deploy it until a real event with that field is shown. (The Sigma status `unsupported` was tried and SigmaHQ's validator rejects it outside its own folder, so the status stays `experimental`.) Its source-image test also now matches the stated suffix (`endswith .exe`, was `contains .exe`). *Wording fix 2026-10-11:* the title claimed payload execution and the rule tests no execution, only the two method names in a call trace; and the call trace carries method names only in EDR or enriched telemetry, not stock Sysmon (see the `logsource.definition`).  Requires `Convert.FromBase64String` and `File.WriteAllBytes` to co-occur in a process-access call trace; both are .NET Base Class Library method names, but whether this malware calls them is not documented in the report. It stays at Hunting rather than Detection because the combination itself (decode a Base64 blob, write bytes to disk) is a routine pattern in legitimate installers that unpack bundled or compressed resources at runtime, not a marker unique to malicious payload-dropping.
 **False Positives:** Legitimate installers using Base64-encoded resources.
-**Deployment:** EDR API-hooking telemetry or an enriched process-access profile (not stock Sysmon Event ID 10); treat hits as scoping leads requiring analyst review of the specific binary.
+**Deployment:** Do not deploy. No telemetry source is demonstrated; this entry records the intended hunt only. If an EDR or enriched profile that produces such a call-trace event is shown later, validate against a real event before changing the status.
 
 ```yaml
 title: .NET Base64 Decode and Byte-Array File Write Named in a Process-Access Call Trace
 id: d45cafee-0934-456d-9471-1cefbe03602a
 status: experimental
 description: >-
-  Detects a process-access event whose call trace names both FromBase64String
+  Retained as a record of an intended hunt, with no demonstrated telemetry source (see
+  the definition). Detects a process-access event whose call trace names both FromBase64String
   and WriteAllBytes, from a source image ending in .exe, a pattern for decoding
   an embedded Base64 payload and writing it to disk that legitimate installers
   unpacking bundled resources also use. Nothing here tests that the written file
@@ -361,13 +362,13 @@ tags:
 logsource:
   category: process_access
   product: windows
-  definition: 'Requires an EDR or enriched Sysmon profile whose process-access CallTrace carries resolved .NET or API method names. Stock Sysmon CallTrace holds module and offset frames, so this rule cannot match there.'
+  definition: 'No telemetry source is demonstrated for this rule. It would need a process-access event whose CallTrace carries resolved .NET method names for both a decode and a file write; stock Sysmon CallTrace holds module and offset frames, so it cannot match there, and no EDR or enriched profile providing such an event has been named or shown.'
 detection:
   selection:
     CallTrace|contains|all:
       - 'FromBase64String'
       - 'WriteAllBytes'
-    SourceImage|contains: '.exe'
+    SourceImage|endswith: '.exe'
   filter_legitimate:
     SourceImage|startswith:
       - 'C:\Program Files\'
@@ -375,7 +376,7 @@ detection:
   condition: selection and not filter_legitimate
 falsepositives:
   - Legitimate installers using Base64-encoded resources
-level: medium
+level: low
 ```
 
 #### Remote Thread Created by a FleetAgentAdvanced Binary or an AppData Process
@@ -384,9 +385,9 @@ level: medium
 **Robustness:** 2
 **ATT&CK Coverage:** T1055 (Process Injection)
 **Confidence:** LOW
-**Rationale:** *Logic fix and re-tier 2026-10-11 (Detection to Hunting):* the earlier selector required the `VirtualAllocEx`, `WriteProcessMemory` and `CreateRemoteThread` names inside the Sysmon process-access `CallTrace`, which holds module+offset frames, so it could not match stock Sysmon, and the report records the injection capability as present in the binary but never seen firing (`CreateRemoteThread` is only "implied"). It is rebuilt on the Sysmon create-remote-thread event, which the report's own detection query uses, with that report's two process names plus a generic AppData source. The generic branch means any AppData application that injects a thread fires, so the rule is a Hunting lead at level medium. The earlier text follows for the record. Requires the classic `VirtualAllocEx` → `WriteProcessMemory` → `CreateRemoteThread` remote-thread-injection API triad to appear together in a process-access call trace, with the source image running from AppData rather than Program Files. All three API names are fixed Windows API entry points the malware must call to perform this exact injection technique — not an attacker-chosen literal — so the rule survives any rebrand of the dropper's masquerade branding or internal naming. An attacker can only evade it by switching to a materially different injection technique (e.g., `NtMapViewOfSection`-based mapping injection, APC queuing) rather than by renaming anything.
+**Rationale:** *Logic fix and re-tier 2026-10-11 (Detection to Hunting):* the earlier selector required the `VirtualAllocEx`, `WriteProcessMemory` and `CreateRemoteThread` names inside the Sysmon process-access `CallTrace`, which holds module+offset frames, so it could not match stock Sysmon, and the report records the injection capability as present in the binary but never seen firing (`CreateRemoteThread` is only "implied"). It is rebuilt on the Sysmon create-remote-thread event, which the report's own detection query uses, with that report's two process names plus a generic AppData source. The generic branch means any AppData application that injects a thread fires, so the rule is a Hunting lead at level medium. The earlier API-triad rationale (VirtualAllocEx, WriteProcessMemory and CreateRemoteThread in a process-access call trace, durable against everything but a different injection technique) was withdrawn in round 2: it described a selector that no longer exists. The current selector keys on a source image name or path, so renaming or relocating the binary evades the family branch and running it from outside AppData evades the generic branch; Robustness 2 reflects that.
 **False Positives:** Legitimate development tools, debuggers, game launchers and updaters that create remote threads from an AppData path; the generic AppData branch is not scoped to this family.
-**Blind Spots:** Misses injection techniques other than the classic triad (process hollowing via `NtUnmapViewOfSection`, APC-based injection); requires Sysmon Event ID 8 (create remote thread) telemetry, which Sysmon does not record by default; it does not see injection that does not create a remote thread.
+**Blind Spots:** Misses injection that does not create a remote thread (process hollowing via `NtUnmapViewOfSection`, APC-based injection), a binary renamed away from RuntimeOptimization.exe and FleetAgentAdvanced.exe, and a generic injector running from outside AppData; requires Sysmon Event ID 8 (create remote thread) telemetry, which Sysmon does not record by default; it does not see injection that does not create a remote thread.
 **Validation:** Create a remote thread in another process from a test binary running out of `%AppData%` — must match; the same call from a process under `\Program Files\` must NOT fire.
 **Deployment:** Sysmon create-remote-thread monitoring (Event ID 8) or EDR remote-thread telemetry.
 

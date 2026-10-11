@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--f166a5e4-e39e-426c-a156-66ee7b25a2ba",
+    "id": "bundle--2cf6d574-9d11-468f-943f-afefdf3ea30e",
     "objects": [
         {
             "type": "identity",
@@ -1131,12 +1131,12 @@
             "id": "indicator--214dab3b-a6a8-5097-9c5d-9398b59eef78",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.816345Z",
-            "modified": "2026-10-01T19:54:22.816345Z",
+            "modified": "2026-10-11T05:08:08.185346Z",
             "name": "XWorm V5.6 Operator Configuration Registry Key Write",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: XWorm V5.6 Operator Configuration Registry Key Write\nid: 2f4dafdd-6eb9-46f5-9ca6-ea704008f8da\nstatus: experimental\ndescription: >-\n    Detects registry write events targeting HKCU\\SOFTWARE\\XWorm, the key used by XWorm V5.6\n    to store operator-configured values including Telegram bot token, bot ID, and cryptocurrency\n    clipper wallet addresses (BTC, ETH, TRC20). Presence of this key indicates an active or\n    recently active XWorm V5.6 infection on the host.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/\nauthor: The Hunters Ledger\ndate: 2026-03-17\ntags:\n    - attack.defense-impairment\n    - attack.persistence\n    - attack.t1112\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection:\n        TargetObject|startswith: 'HKCU\\SOFTWARE\\XWorm'\n    condition: selection\nfalsepositives:\n    - Unlikely — no known legitimate software uses the HKCU\\SOFTWARE\\XWorm registry key path\nlevel: high",
+            "pattern": "title: XWorm V5.6 Operator Configuration Registry Key Write\nid: 2f4dafdd-6eb9-46f5-9ca6-ea704008f8da\nstatus: experimental\ndescription: >-\n    Detects registry write events targeting HKCU\\SOFTWARE\\XWorm, the key used by XWorm V5.6\n    to store operator-configured values including Telegram bot token, bot ID, and cryptocurrency\n    clipper wallet addresses (BTC, ETH, TRC20). Presence of this key indicates an active or\n    recently active XWorm V5.6 infection on the host.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/\nauthor: The Hunters Ledger\ndate: 2026-03-17\nmodified: 2026-10-11\ntags:\n    - attack.defense-impairment\n    - attack.persistence\n    - attack.t1112\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection:\n        TargetObject|startswith: 'HKU\\'\n        TargetObject|contains: '\\SOFTWARE\\XWorm'\n    condition: selection\nfalsepositives:\n    - Unlikely — no known legitimate software uses the HKCU\\SOFTWARE\\XWorm registry key path\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-03-16T00:00:00Z",
             "labels": [

@@ -236,9 +236,9 @@ level: high
 **Robustness:** 1 (both base rules) / 2 (both correlations)
 **ATT&CK Coverage:** T1518.001 (Software Discovery: Security Software), T1102.002 (Web Service: Bidirectional Communication), T1041 (Exfiltration Over C2 Channel), T1119 (Automated Collection)
 **Confidence:** MODERATE
-**Rationale:** *Wording fix 2026-10-11:* the first base rule was titled "from Web Server", but its selection tests only the destination host and URI path and has no source-host role, so the title and the description now say any source host in the proxy log. Four linked rules published together in one fence because the USOM+Telegram correlation cross-references both base rules below (mirrors the AdaptixC2 beacon-cadence base+correlation co-location pattern already published in `opendirectory-45-130-148-125-20260430-detections.md`, extended here to a 4-rule cluster since one correlation depends on two independent base rules rather than one). The USOM-poll base rule flags a bare HTTP request to the USOM blocklist endpoint — common, legitimate CERT/security-tool behavior with high acknowledged FP risk on its own. The Telegram-bot base rule flags a single HTTP request to `api.telegram.org/bot*` — an unanchored, extremely common event any legitimate Telegram bot integration produces. `level` on both base rules is `low`; neither is intended as a standalone alert. The USOM+Telegram correlation replaces the original single-event rule, whose `selection_usom and selection_telegram` condition required one field (`cs-host`) to simultaneously equal two mutually exclusive values on the same log line — a condition that could never match any event — and is now a proper Sigma temporal correlation across both base rules, grouped by source IP within a 5-minute window matching the paired Suricata signature's 300-second threshold. The burst correlation adds a genuine volumetric anomaly (5+ Telegram Bot API requests in 60 seconds from one host), but its base selector does not verify the calls use distinct bot tokens — a single high-volume legitimate notification bot can trigger it identically to BellaMain's four-bot simultaneous-fire pattern, so `level` is recalibrated from the original `high` to `medium` and the pair moved from Detection to Hunting.
+**Rationale:** *Round 2 (2026-10-11):* the second base rule and the burst correlation were titled "High-Frequency Multi-Bot", although the base rule matches one request and nothing tests distinct bots; they are now titled for what they match. The USOM and Telegram correlation was an unordered `temporal` correlation, so a Telegram request before the poll also fired it and the Elastic conversion had no five-minute bound; it is now `temporal_ordered` (poll, then Telegram), which the report supports (the kit polls USOM and then sends the notification) and which converts with a `maxspan` bound. *Wording fix 2026-10-11:* the first base rule was titled "from Web Server", but its selection tests only the destination host and URI path and has no source-host role, so the title and the description now say any source host in the proxy log. Four linked rules published together in one fence because the USOM+Telegram correlation cross-references both base rules below (mirrors the AdaptixC2 beacon-cadence base+correlation co-location pattern already published in `opendirectory-45-130-148-125-20260430-detections.md`, extended here to a 4-rule cluster since one correlation depends on two independent base rules rather than one). The USOM-poll base rule flags a bare HTTP request to the USOM blocklist endpoint — common, legitimate CERT/security-tool behavior with high acknowledged FP risk on its own. The Telegram-bot base rule flags a single HTTP request to `api.telegram.org/bot*` — an unanchored, extremely common event any legitimate Telegram bot integration produces. `level` on both base rules is `low`; neither is intended as a standalone alert. The USOM+Telegram correlation replaces the original single-event rule, whose `selection_usom and selection_telegram` condition required one field (`cs-host`) to simultaneously equal two mutually exclusive values on the same log line — a condition that could never match any event — and is now a proper Sigma temporal correlation across both base rules, grouped by source IP within a 5-minute window matching the paired Suricata signature's 300-second threshold. The burst correlation adds a genuine volumetric anomaly (5+ Telegram Bot API requests in 60 seconds from one host), but its base selector does not verify the calls use distinct bot tokens — a single high-volume legitimate notification bot can trigger it identically to BellaMain's four-bot simultaneous-fire pattern, so `level` is recalibrated from the original `high` to `medium` and the pair moved from Detection to Hunting.
 **False Positives:** Turkish CERT partner organizations, security researchers, or security products that legitimately poll the USOM blocklist; any web application with a legitimate Telegram bot integration (order notifications, monitoring alerts, CI/CD pipelines); a host that legitimately both monitors the USOM blocklist and operates an unrelated Telegram notification bot within the same time window; web application platforms with legitimate high-frequency Telegram notification integrations (e.g., e-commerce order-notification bots) firing on concurrent order events — tune by excluding known-legitimate source IPs.
-**Deployment:** Egress proxy SIEM with time-window correlation; neither base rule is intended as a standalone alert — hunt-tune both correlations before alerting.
+**Deployment:** Egress proxy SIEM with time-window correlation (Elastic EQL conversion: the ordered correlation becomes `sequence by src_ip with maxspan=5m` and the burst correlation a 60-second `runs=5` sequence; neither has a Lucene form); neither base rule is intended as a standalone alert — hunt-tune both correlations before alerting.
 
 ```yaml
 title: BellaMain PhaaS USOM Blocklist Poll
@@ -283,7 +283,7 @@ falsepositives:
       raise confidence
 level: low
 ---
-title: BellaMain PhaaS High-Frequency Multi-Bot Telegram Outbound
+title: BellaMain PhaaS Telegram Bot API Outbound Request
 id: e5f2b847-3a1c-4d96-8e04-7c9d3f2a1b56
 status: experimental
 description: >-
@@ -300,6 +300,7 @@ references:
     - https://the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/
 author: The Hunters Ledger
 date: '2026-05-16'
+modified: '2026-10-11'
 tags:
     - attack.command-and-control
     - attack.t1102.002
@@ -323,7 +324,7 @@ title: BellaMain PhaaS USOM Poll and Telegram Bot Outbound Correlation
 id: 5a705984-73aa-47db-b19e-5b0f45b14d0c
 status: experimental
 correlation:
-    type: temporal
+    type: temporal_ordered
     rules:
         - 7c1bb0ba-7d15-4969-a8dd-529d3b6294b9
         - e5f2b847-3a1c-4d96-8e04-7c9d3f2a1b56
@@ -331,8 +332,8 @@ correlation:
         - src_ip
     timespan: 5m
 description: >-
-  Correlates a USOM blocklist poll with a Telegram Bot API request from the
-  same source host within a 5-minute window. Neither event alone is a
+  Correlates a USOM blocklist poll followed by a Telegram Bot API request from
+  the same source host within a 5-minute window (poll first, then Telegram). Neither event alone is a
   reliable indicator — USOM polling is legitimate CERT/security-tool
   behavior, and a single Telegram Bot API call is common on hosts running
   legitimate notification integrations — but a host exhibiting both
@@ -356,7 +357,7 @@ falsepositives:
       tune by excluding known-legitimate source IPs
 level: medium
 ---
-title: BellaMain PhaaS High-Frequency Multi-Bot Telegram Outbound — Burst Correlation
+title: BellaMain PhaaS Telegram Bot API Outbound Burst Correlation
 id: f4c1a936-2d7e-4b58-9a03-6e1f8c52d7ab
 status: experimental
 correlation:
@@ -369,8 +370,8 @@ correlation:
   condition:
     gte: 5
 description: >-
-  Correlates the base rule BellaMain PhaaS High-Frequency Multi-Bot Telegram
-  Outbound to fire when a single source host generates five or more matching
+  Correlates the base rule BellaMain PhaaS Telegram Bot API Outbound Request
+  to fire when a single source host generates five or more matching
   outbound requests to api.telegram.org/bot* within a 60-second window — a
   volumetric anomaly consistent with BellaMain's automated four-bot exfil
   burst, though the underlying count does not distinguish distinct bot
@@ -380,6 +381,7 @@ references:
     - https://the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/
 author: The Hunters Ledger
 date: '2026-05-16'
+modified: '2026-10-11'
 tags:
     - attack.command-and-control
     - attack.t1102.002

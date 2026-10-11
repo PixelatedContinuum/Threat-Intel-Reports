@@ -382,7 +382,7 @@ level: medium
 **Logic fix 2026-10-11:** the selection was four unordered substrings in two groups (`base64 -d`, `>/tmp/`, `bash `, `/tmp/`), so a command line carrying them in any order matched, and the written path was never tied to the executed path. It is now one ordered pattern, `base64 -d` then `>/tmp/` then `bash /tmp/`. The two paths are still not compared, because Sigma and the Elastic query languages have no back-reference; a command that decodes into one /tmp file and runs a different /tmp file also matches, and the title says so.
 **False Positives:** Provisioning, cloud-init or installer scripts that decode payloads to tmp and run them; authorized security tooling staging encoded scripts
 **Blind Spots:** Only catches the decode-and-execute pairing inside one command line; a dropper that decodes in one invocation and executes in a later one produces two innocuous-looking events. The `>/tmp/` and `bash ` literals break on variants using other staging directories or interpreters.
-**Validation:** Run echo YmFzaCAtYyAiaWQK | base64 -d>/tmp/t.sh; bash /tmp/t.sh on a test host and confirm a hit; a decode of a data file with no execution of it must NOT fire.
+**Validation:** Run echo YmFzaCAtYyAiaWQK | base64 -d>/tmp/t.sh; bash /tmp/t.sh on a test host and confirm a hit; a command line that decodes to /tmp but contains no later `bash /tmp/` run must NOT fire. A command that decodes into one tmp file and runs a different tmp file does fire, because the two paths are not compared.
 **Deployment:** Host telemetry (auditd execve rules, Sysmon for Linux, or an EDR agent). Not for alerting; correlate hits with deployment or provisioning context.
 
 ```yaml

@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--7dcb9eb4-e041-4187-9e5a-2f82a0879f24",
+    "id": "bundle--f9f27408-0a82-45c7-8361-0b148c21553a",
     "objects": [
         {
             "type": "identity",
@@ -713,12 +713,12 @@
             "id": "indicator--1be6d5a4-ce26-5238-aeb3-a258754c420a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-11T04:24:13.512068Z",
-            "modified": "2026-10-11T04:24:13.512068Z",
+            "modified": "2026-10-11T05:07:56.833635Z",
             "name": "AnyDesk Unattended Password Piped Over Stdin",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: AnyDesk Unattended Password Piped Over Stdin\nid: 944c365c-8565-4097-8d18-4e9a5f74aafe\nstatus: experimental\ndescription: >-\n    Detects a command line in which an echo is piped into AnyDesk.exe with the\n    --set-password flag, in that order (the shell process that runs the pipeline\n    carries the whole text). The password value itself never appears on the\n    AnyDesk command line, so the pipeline shape is the anchor. Observed issued by an orchestrator tool immediately after a\n    silent, unattended AnyDesk install, to set a remote-access password without\n    leaving the credential in process-creation logs.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\n    - https://redcanary.com/blog/misbehaving-rats/\nauthor: The Hunters Ledger\ndate: 2026-08-03\nmodified: 2026-10-11\ntags:\n    - attack.command-and-control\n    - attack.t1219.002\n    - stp.3\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        CommandLine|contains: 'echo*|*AnyDesk.exe*--set-password'\n    condition: selection\nfalsepositives:\n    - Legitimate IT automation that pipes a password to AnyDesk during scripted unattended deployment\nlevel: medium",
+            "pattern": "title: AnyDesk Unattended Password Piped Over Stdin\nid: 944c365c-8565-4097-8d18-4e9a5f74aafe\nstatus: experimental\ndescription: >-\n    Detects a command line in which an echo is piped into AnyDesk.exe with the\n    --set-password flag, in that order (the shell process that runs the pipeline\n    carries the whole text). The password does not appear on AnyDesk's own\n    command line, since AnyDesk.exe reads it from stdin, but it can appear in the\n    command line of the shell that runs the echo, which is the command line this\n    rule selects, so a matching event can carry the password in clear. The\n    pipeline shape is the anchor. Observed issued by an orchestrator tool\n    immediately after a silent, unattended AnyDesk install.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\n    - https://redcanary.com/blog/misbehaving-rats/\nauthor: The Hunters Ledger\ndate: 2026-08-03\nmodified: 2026-10-11\ntags:\n    - attack.command-and-control\n    - attack.t1219.002\n    - stp.3\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        CommandLine|contains: 'echo*|*AnyDesk.exe*--set-password'\n    condition: selection\nfalsepositives:\n    - Legitimate IT automation that pipes a password to AnyDesk during scripted unattended deployment\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-08-03T00:00:00Z",
             "labels": [
@@ -776,12 +776,12 @@
             "id": "indicator--b09a55a5-afd6-52f5-9093-a460ef8b50ae",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.72493Z",
-            "modified": "2026-10-11T04:24:13.512427Z",
+            "modified": "2026-10-11T05:07:56.833929Z",
             "name": "Run Key SystemUpdate Value Pointing To Startup Folder Tilde Executable",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Run Key SystemUpdate Value Pointing To Startup Folder Tilde Executable\nid: 3598bf78-f702-4ab3-b8ba-9d38f62eab80\nstatus: experimental\ndescription: >-\n    Detects an HKCU Run value named \"SystemUpdate\" whose data points at a\n    tilde-prefixed executable inside the user's Startup folder. This is the\n    deployment stub's persistence step, added immediately after it copies its\n    downloaded payload into Startup under a randomized ~<digits>.exe name.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\nauthor: The Hunters Ledger\ndate: 2026-08-03\nmodified: 2026-10-11\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1547.001\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection:\n        TargetObject|startswith: 'HKU\\'\n        TargetObject|endswith: '\\CurrentVersion\\Run\\SystemUpdate'\n        Details|contains: '\\Startup\\~'\n    condition: selection\nfalsepositives:\n    - Unlikely, the combination of the SystemUpdate value name and a Startup-folder tilde-prefixed target is not a known legitimate pattern\nlevel: high",
+            "pattern": "title: Run Key SystemUpdate Value Pointing To Startup Folder Tilde Executable\nid: 3598bf78-f702-4ab3-b8ba-9d38f62eab80\nstatus: experimental\ndescription: >-\n    Detects an HKCU Run value named \"SystemUpdate\" whose data points at a\n    tilde-prefixed executable inside the user's Startup folder. This is the\n    deployment stub's persistence step, added immediately after it copies its\n    downloaded payload into Startup under a randomized ~<digits>.exe name.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\nauthor: The Hunters Ledger\ndate: 2026-08-03\nmodified: 2026-10-11\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1547.001\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection:\n        TargetObject|startswith: 'HKU\\'\n        TargetObject|endswith: '\\CurrentVersion\\Run\\SystemUpdate'\n        Details|contains: '\\Start Menu\\Programs\\Startup\\~*.exe'\n    condition: selection\nfalsepositives:\n    - Unlikely, the combination of the SystemUpdate value name and a Startup-folder tilde-prefixed target is not a known legitimate pattern\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-08-03T00:00:00Z",
             "labels": [

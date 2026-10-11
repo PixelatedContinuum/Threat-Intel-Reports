@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--fad3f326-1237-4c73-aa5b-dd2e5d501614",
+    "id": "bundle--e389d3ab-6e68-4ce4-ba60-950fb8de3232",
     "objects": [
         {
             "type": "identity",
@@ -277,12 +277,12 @@
             "id": "indicator--2772273f-81ac-5f2f-857d-1c6306d4dadf",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-09-19T20:28:01.353472Z",
-            "modified": "2026-09-19T20:28:01.353472Z",
+            "modified": "2026-10-11T05:08:02.513783Z",
             "name": "EnableLUA Registry Value Set to Disable User Account Control",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: EnableLUA Registry Value Set to Disable User Account Control\nid: 0ce7475a-f0d5-48fe-bd80-629f9df689aa\nstatus: experimental\ndescription: >-\n  Detects the EnableLUA registry value under the system UAC policy key\n  being set to 0 (disabled), regardless of which process performs the\n  write. Complements the reg.exe process-creation detection for the\n  same Remcos RAT UAC-bypass technique by catching the resulting\n  registry state change if a different mechanism (e.g. PowerShell\n  Set-ItemProperty) performs the write.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/remcos-opendirectory-detections/\nauthor: The Hunters Ledger\ndate: '2026-02-04'\ntags:\n    - attack.privilege-escalation\n    - attack.t1548.002\n    - detection.emerging-threats\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection:\n        TargetObject|endswith: '\\Policies\\System\\EnableLUA'\n        Details: 'DWORD (0x00000000)'\n    condition: selection\nfalsepositives:\n    - Legitimate system administration (rare)\n    - Enterprise management tools (SCCM, Intune, Group Policy) disabling UAC for legacy application compatibility\nlevel: high",
+            "pattern": "title: EnableLUA Registry Value Set to Disable User Account Control\nid: 0ce7475a-f0d5-48fe-bd80-629f9df689aa\nstatus: experimental\ndescription: >-\n  Detects the EnableLUA registry value under the system UAC policy key\n  being set to 0 (disabled), regardless of which process performs the\n  write. Complements the reg.exe process-creation detection for the\n  same Remcos RAT UAC-bypass technique by catching the resulting\n  registry state change if a different mechanism (e.g. PowerShell\n  Set-ItemProperty) performs the write.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/remcos-opendirectory-detections/\nauthor: The Hunters Ledger\ndate: '2026-02-04'\nmodified: '2026-10-11'\ntags:\n    - attack.privilege-escalation\n    - attack.t1548.002\n    - detection.emerging-threats\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection:\n        TargetObject|endswith: '\\Policies\\System\\EnableLUA'\n        Details:\n            - 'DWORD (0x00000000)'\n            - 0\n    condition: selection\nfalsepositives:\n    - Legitimate system administration (rare)\n    - Enterprise management tools (SCCM, Intune, Group Policy) disabling UAC for legacy application compatibility\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-02-04T00:00:00Z",
             "labels": [

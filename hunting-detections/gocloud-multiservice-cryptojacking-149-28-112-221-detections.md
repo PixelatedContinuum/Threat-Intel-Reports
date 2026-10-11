@@ -100,7 +100,7 @@ rule GOCLOUD_Windows_Deploy_Worm_Lingkai {
 **Robustness:** 2
 **ATT&CK Coverage:** T1053.005 (Scheduled Task), T1685 (Disable or Modify Tools), T1071.001 (Web Protocols), T1496.001 (Compute Hijacking)
 **Confidence:** HIGH
-**Logic fix 2026-10-11:** the condition was `3 of them` over six strings, so the three generic ones (`/r?host=`, `"donate-level": 0` and the Defender disable) satisfied it without the task name or the pool-password convention that this paragraph rests on. It now requires `$task`, `$pass` and `$defoff` together plus at least one of the heartbeat, worker-label and donate strings. A fixture holding only the heartbeat path, the donate-level line and the Defender disable matched the old rule and does not match the new one.
+**Round 2 (2026-10-11):** the meta description listed the fixed-order heartbeat as part of every match; the heartbeat is only one of three optional supporting strings and only its `/r?host=` prefix is tested, so the description now says that. **Logic fix 2026-10-11:** the condition was `3 of them` over six strings, so the three generic ones (`/r?host=`, `"donate-level": 0` and the Defender disable) satisfied it without the task name or the pool-password convention that this paragraph rests on. It now requires `$task`, `$pass` and `$defoff` together plus at least one of the heartbeat, worker-label and donate strings. A fixture holding only the heartbeat path, the donate-level line and the Defender disable matched the old rule and does not match the new one.
 **False Positives:** None known. The WinJenkinsHeartbeat task name paired with the `win_jenkins_` pool-password convention and the pre-download Defender disable is specific to this deployer.
 **Blind Spots:** Misses a rebuilt deployer that renames the heartbeat task and abandons the `win_jenkins_` worker convention.
 **Validation:** Fire it against `winminer.ps1`; a benign miner-management script must NOT fire.
@@ -109,7 +109,7 @@ rule GOCLOUD_Windows_Deploy_Worm_Lingkai {
 ```yara
 rule GOCLOUD_Windows_Miner_WinJenkins {
    meta:
-      description = "Detects the GOCLOUD winminer.ps1 Windows XMRig deployer by its WinJenkinsHeartbeat scheduled-task persistence, the per-host win_jenkins_ pool-password convention, pre-download Defender real-time-monitoring disable, and the fixed-order /r?host= mining heartbeat"
+      description = "Detects the GOCLOUD winminer.ps1 Windows XMRig deployer in a file under 40 KB that contains the WinJenkinsHeartbeat scheduled-task name, the win_jenkins_ pool-password convention and the Defender real-time-monitoring disable, plus at least one of the /r?host= heartbeat prefix, the winjenkins_ worker label and the donate-level 0 line. The heartbeat is optional and only its /r?host= prefix is tested, not the fixed parameter order"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/"
@@ -144,8 +144,8 @@ rule GOCLOUD_Windows_Miner_WinJenkins {
 **ATT&CK Coverage:** T1543.002 (Systemd Service), T1564.001 (Hidden Files and Directories), T1071.001 (Web Protocols), T1496.001 (Compute Hijacking)
 **Confidence:** HIGH
 **Logic fix 2026-10-11 (Luna review):** the description lists the banner and the heartbeat among the fingerprint, and the first clause was `$x11 and 2 of them`, where `2 of them` counts `$x11` itself, so the directory string plus one other string matched. It is now the directory string plus two of the other five. Neither the banner nor the heartbeat is required by either clause, as the description now says. A fixture with the directory string and `c3pool_miner.service` only matched the old rule and does not match the new one.
-**False Positives:** None known. The dot-suffixed X11-socket-lookalike directory string and the GOCLOUD miner v7 banner do not appear in the legitimate c3pool installer.
-**Blind Spots:** Misses a rebuilt deployer that drops the banner and changes the hiding-directory naming; the served static `config.json` fast path carries a `WORKER` placeholder and will not match the worker-label string.
+**False Positives:** Not measured against a goodware corpus. The stock c3pool installer carries the service unit and the pool address (2 of the 6 strings) and reaches neither branch. The directory string and the banner do not appear in it, but neither is required: the four-of-six branch can be met without both (a fixture of the service unit, the worker label, the heartbeat prefix and the pool address fires), so on that branch the specificity comes from the `gocloud_` worker label and the other four strings together, and only the directory branch rests on the dot-suffixed X11 string.
+**Blind Spots:** A rebuild that drops the banner and renames the hiding directory still matches the four-of-six branch while four of the six strings remain; it evades only when fewer than four remain and the directory branch is gone too. The served static `config.json` fast path carries a `WORKER` placeholder and will not match the worker-label string.
 **Validation:** Fire it against `miner.sh`; a stock c3pool `setup_c3pool_miner.sh` must NOT fire.
 **Deployment:** Linux endpoint file scan, `/tmp` write monitoring.
 
@@ -862,14 +862,14 @@ Each signature is one physical line and was accepted by the real `suricata -T` e
 **Robustness:** 2
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
 **Confidence:** HIGH
-**Wording fix 2026-10-11 (rev 3):** the `msg` said the heartbeat goes to the payload host, but the header is `$HOME_NET any -> $EXTERNAL_NET any` and the rule tests no destination, on purpose (an address would not survive rotation of the payload host), so any external server receiving this URI shape fires. The `msg` no longer says "to Payload Host".
+**Round 2 (2026-10-11, rev 4):** the `msg` and Validation said GET, but the rule tests only `http.uri`, and the report does not give the heartbeat's HTTP method, so the method is no longer claimed. **Wording fix 2026-10-11 (rev 3):** the `msg` said the heartbeat goes to the payload host, but the header is `$HOME_NET any -> $EXTERNAL_NET any` and the rule tests no destination, on purpose (an address would not survive rotation of the payload host), so any external server receiving this URI shape fires. The `msg` no longer says "to Payload Host".
 **False Positives:** None known. The `/r?host=` prefix followed by the `&status=OK&ts=` tail in one URI is a distinctive parameter order.
 **Blind Spots:** Fires only on the plaintext HTTP heartbeat; a TLS-wrapped or parameter-reordered beacon evades the URI match.
-**Validation:** Replay a captured heartbeat GET and confirm it fires; ordinary web browsing must NOT fire.
+**Validation:** Replay a captured heartbeat request and confirm it fires (any HTTP method with this URI shape fires, since only the URI is tested); ordinary web browsing must NOT fire.
 **Deployment:** IDS / IPS at the network egress.
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT GOCLOUD-Cryptojacking XMRig Deployment Heartbeat GET (Fixed Parameter Order)"; flow:established,to_server; http.uri; content:"/r?host="; startswith; nocase; content:"&status=OK&ts="; distance:0; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:9301501; rev:3; metadata:author The_Hunters_Ledger, date 2026-07-26;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT GOCLOUD-Cryptojacking XMRig Deployment Heartbeat Request (Fixed Parameter Order)"; flow:established,to_server; http.uri; content:"/r?host="; startswith; nocase; content:"&status=OK&ts="; distance:0; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:9301501; rev:4; metadata:author The_Hunters_Ledger, date 2026-07-26;)
 ```
 
 #### GOCLOUD XMRig Worker-Label Heartbeat

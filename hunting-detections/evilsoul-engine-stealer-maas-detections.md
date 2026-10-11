@@ -301,14 +301,14 @@ rule EvilSoul_Engine_SplitDomain_AntiGrep {
 #### Browser Relaunched with CDP Debugging by Non-Browser Parent
 
 **Tier:** Detection
-**Robustness:** 3
+**Robustness:** 2
 **ATT&CK Coverage:** T1185 (Browser Session Hijacking), T1539 (Steal Web Session Cookie)
 **Confidence:** HIGH
-**Rationale:** *Logic fix 2026-10-11:* the title and description say a browser process was relaunched, but the selection used to be the three command-line flags alone, so any process carrying them (a wrapper script, a helper) matched. It now also requires a Chrome, Edge or Brave image. Both the EvilSoul-Engine stealer payload and the xaitax ABE-bypass tools relaunch the victim's own installed browser headless with Chrome DevTools Protocol debugging enabled, then pull already-decrypted cookies via `Network.getAllCookies` — defeating Chrome's App-Bound Encryption without administrator rights. Requiring all three flags (`--remote-debugging-port`, `--headless`, `--user-data-dir`) together, while excluding both browser-self-relaunch and known dev-tooling parents, is a technique-level chokepoint: the capability cannot be achieved via CDP without this flag combination, regardless of the specific EvilSoul-Engine build variant.
+**Rationale:** *Round 2 (2026-10-11):* the invariant-technique claim and the Event ID 3 deployment promise were withdrawn, and Robustness lowered from 3 to 2. *Logic fix 2026-10-11:* the title and description say a browser process was relaunched, but the selection used to be the three command-line flags alone, so any process carrying them (a wrapper script, a helper) matched. It now also requires a Chrome, Edge or Brave image. Both the EvilSoul-Engine stealer payload and the xaitax ABE-bypass tools relaunch the victim's own installed browser headless with Chrome DevTools Protocol debugging enabled, then pull already-decrypted cookies via `Network.getAllCookies` — defeating Chrome's App-Bound Encryption without administrator rights. The rule requires all three flags (`--remote-debugging-port`, `--headless`, `--user-data-dir`) together and a Chrome, Edge or Brave image, and excludes browser-self-relaunch, explorer.exe and node or python parents. That is the command-line pattern the report records, not a chokepoint of the technique: a CDP session can be started without `--user-data-dir` or from another Chromium build, which the Blind Spots below record, so this is a tool-behaviour pattern (Robustness 2) and not an invariant of cookie theft over CDP.
 **False Positives:** Legitimate browser automation frameworks (Selenium, Puppeteer, Playwright) launched from an unlisted parent process; QA/CI pipelines that headlessly drive a browser for testing from a non-standard automation harness.
 **Blind Spots:** Misses a relaunch of any other Chromium browser (Opera, Vivaldi and others are not in the image list), CDP-based cookie theft that omits `--user-data-dir` (uses the default profile instead), or that spawns from an allow-listed parent process name the attacker has spoofed.
 **Validation:** Launch a browser with all three flags from an unrelated parent (e.g. a script host) — must alert; the same flags launched by `node.exe` running a known test harness must NOT fire (filtered).
-**Deployment:** EDR process-creation monitoring, SIEM correlation on Sysmon Event ID 1 / Event ID 3.
+**Deployment:** EDR process-creation monitoring or Sysmon Event ID 1. The rule reads only process-creation fields; it has no network-connection (Event ID 3) component.
 
 ```yaml
 title: Browser Relaunched with Remote Debugging and Headless Flags by Non-Browser Parent
@@ -484,10 +484,10 @@ level: high
 **Robustness:** 3
 **ATT&CK Coverage:** T1053.005 (Scheduled Task), T1036.004 (Masquerade Task or Service)
 **Confidence:** HIGH
-**Rationale:** *Logic fix 2026-10-11:* the `TaskContent` test listed the Author string and the hidden flag as alternatives (a `contains` list is OR), so a task with either alone fired although the title requires both. It is now `contains|all`. The `stealer.js` build's persistence mechanism registers a scheduled task with Task XML `Author` set to the literal string `Microsoft Corporation` while also setting the hidden flag — a masquerade pattern designed to blend into Task Scheduler listings alongside genuine Microsoft-authored tasks. Genuine Microsoft tasks are installed by the OS image or Windows Update, not created ad hoc at runtime by a user-context process, which is what makes any Event ID 4698 registration carrying this exact Author string a near-certain fake regardless of the specific payload delivered.
-**False Positives:** Unlikely — genuine Microsoft Corporation-authored tasks are pre-installed by the OS, not created via runtime Event ID 4698 registration by a user-context process.
+**Rationale:** *Logic fix 2026-10-11:* the `TaskContent` test listed the Author string and the hidden flag as alternatives (a `contains` list is OR), so a task with either alone fired although the title requires both. It is now `contains|all`. The `stealer.js` build's persistence mechanism registers a scheduled task with Task XML `Author` set to the literal string `Microsoft Corporation` while also setting the hidden flag — a masquerade pattern designed to blend into Task Scheduler listings alongside genuine Microsoft-authored tasks. Genuine Microsoft tasks are installed by the OS image or Windows Update, not created ad hoc at runtime by a user-context process, which is why a registration by a non-SYSTEM account carrying this exact Author string and the hidden flag is the hunt the report describes. Round 2 (2026-10-11): the rule used to claim any registration with the string is a near-certain fake; it now excludes the SYSTEM creator the report excludes and makes no claim of certainty.
+**False Positives:** Not measured. Tasks created by the SYSTEM account are excluded by the filter, which removes the OS and Windows Update installs. A non-SYSTEM installer, administrator script or Microsoft component that registers a hidden task with this author string would still fire.
 **Blind Spots:** Misses persistence that spoofs a different vendor's authorship string, or that skips the hidden flag; requires Task Scheduler/Security auditing of object creation (Event ID 4698) with TaskContent captured.
-**Validation:** Register a scheduled task with `<Author>Microsoft Corporation</Author>` and `<Hidden>true</Hidden>` — must alert; a genuine OS-installed Microsoft task (which is not created via this runtime event) must NOT fire.
+**Validation:** Register a scheduled task with `<Author>Microsoft Corporation</Author>` and `<Hidden>true</Hidden>` — must alert; the same task registered by the SYSTEM account must NOT fire.
 **Deployment:** SIEM correlation on Windows Event ID 4698 (Scheduled Task Created).
 
 ```yaml
@@ -500,7 +500,10 @@ description: >-
   flag enabled. This is the EvilSoul-Engine stealer.js build's persistence
   masquerade, designed to blend into Task Scheduler listings next to genuine
   Microsoft-authored tasks; legitimate Microsoft tasks are installed by the
-  OS image or Windows Update rather than created at runtime.
+  OS image or Windows Update rather than created at runtime. Tasks created by
+  the SYSTEM account (SID S-1-5-18) are excluded, since that is how the OS and
+  Windows Update install their own tasks; the report qualifies this as a hunt
+  on tasks written by a non-system process.
 references:
     - https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/
 author: The Hunters Ledger
@@ -524,9 +527,13 @@ detection:
         TaskContent|contains|all:
             - '<Author>Microsoft Corporation</Author>'
             - '<Hidden>true</Hidden>'
-    condition: selection
+    filter_main_system_creator:
+        # sourced: report 5.5 qualifies the hunt as a task written by a non-system process; S-1-5-18 is the SYSTEM account SID
+        SubjectUserSid: 'S-1-5-18'
+    condition: selection and not filter_main_system_creator
 falsepositives:
-    - Unlikely — genuine Microsoft Corporation-authored tasks are pre-installed by the OS, not created via runtime Event ID 4698 registration by a user-context process
+    - A non-SYSTEM installer or administrator script that registers a hidden task and copies the Microsoft Corporation author string into its own task XML (not measured)
+    - A Microsoft component that registers its task from a non-SYSTEM context at runtime (not measured)
 level: high
 ```
 

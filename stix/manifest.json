@@ -5,8 +5,8 @@
   "zip": {
     "file": "hunters-ledger-stix-bundles.zip",
     "url": "https://the-hunters-ledger.com/stix/hunters-ledger-stix-bundles.zip",
-    "sha256": "55129e0d678d5d7cdaf682e6cf794646d8e19b96d23c5b886b61e6b0507a7a14",
-    "bytes": 1898122
+    "sha256": "8b3049e74fea9d0bd003714d9dff944f4477d5927d98d903811c1646bf22e84f",
+    "bytes": 1899320
   },
   "bundles": [
     {
@@ -46,13 +46,13 @@
       "file": "sliver-c2-windows-postex-staging-193-233-202-17.json",
       "url": "https://the-hunters-ledger.com/stix/sliver-c2-windows-postex-staging-193-233-202-17.json",
       "report_url": "https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/",
-      "bundle_id": "bundle--2d298d2a-79f9-4234-a796-dc5372f9de4c",
+      "bundle_id": "bundle--f525fd93-f5d5-4efb-abae-d0366ce8e01c",
       "report_id": "report--9f175132-e498-5e02-9c9c-b1ab5dff72db",
-      "sha256": "fc5b2efda97f60253eab0b38a9c4e02c91af317a822e24ba48c6084e27651d79",
-      "bytes": 3682031,
+      "sha256": "ac1b73d6c9f00bf3b087b27d78aee1e5c0a092483ccff65d91cb0e8f13441180",
+      "bytes": 3682183,
       "objects": 4918,
       "indicators": 101,
-      "modified": "2026-10-11T03:43:02.190676Z"
+      "modified": "2026-10-11T05:08:03.035322Z"
     },
     {
       "slug": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
@@ -91,13 +91,13 @@
       "file": "cloudsync-assembler-toolkit-91-197-98-188.json",
       "url": "https://the-hunters-ledger.com/stix/cloudsync-assembler-toolkit-91-197-98-188.json",
       "report_url": "https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/",
-      "bundle_id": "bundle--7dcb9eb4-e041-4187-9e5a-2f82a0879f24",
+      "bundle_id": "bundle--f9f27408-0a82-45c7-8361-0b148c21553a",
       "report_id": "report--9e9a2d1e-2840-51a5-af43-b5ef11a64213",
-      "sha256": "2570ea001b920e95a613532f675aa33e5ecb41dc7d622af5b22aa3061c5b7ed8",
-      "bytes": 186912,
+      "sha256": "124c990bc989c7d2ac2fad674b07863c865fed17aeb535aa7137483da7fe5b47",
+      "bytes": 187056,
       "objects": 205,
       "indicators": 34,
-      "modified": "2026-10-11T04:24:13.531469Z"
+      "modified": "2026-10-11T05:07:56.833929Z"
     },
     {
       "slug": "gocloud-multiservice-cryptojacking-149-28-112-221",
@@ -106,13 +106,13 @@
       "file": "gocloud-multiservice-cryptojacking-149-28-112-221.json",
       "url": "https://the-hunters-ledger.com/stix/gocloud-multiservice-cryptojacking-149-28-112-221.json",
       "report_url": "https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/",
-      "bundle_id": "bundle--aaeb9a7e-4bee-4ccc-962a-9c30fa6fefa4",
+      "bundle_id": "bundle--1b6394a4-fd9b-4cba-bb64-9b4c1325b5fb",
       "report_id": "report--f600aa39-9356-5b94-8a65-4b8d27c6ba2e",
-      "sha256": "4c8290dee7ec495b49601b53daf4f9532036c3365f93312dd775af9d22fdcf47",
-      "bytes": 183123,
+      "sha256": "94b30265a39381840451b5b8d17bf4434eedee8a0670f6e6ea719013280ee39e",
+      "bytes": 183300,
       "objects": 239,
       "indicators": 38,
-      "modified": "2026-10-11T04:24:16.870116Z"
+      "modified": "2026-10-11T05:07:59.680259Z"
     },
     {
       "slug": "multivector-ecommerce-rce-toolkit-192-3-1-116",
@@ -136,13 +136,13 @@
       "file": "evilsoul-engine-stealer-maas-144-172-103-98.json",
       "url": "https://the-hunters-ledger.com/stix/evilsoul-engine-stealer-maas-144-172-103-98.json",
       "report_url": "https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/",
-      "bundle_id": "bundle--ea994830-79fa-45cb-ba4f-628356c4406c",
+      "bundle_id": "bundle--e13f9f9c-6928-46f0-b059-36c877356318",
       "report_id": "report--a9f4eae3-2bc4-5503-9477-2a7eaafb1dbf",
-      "sha256": "b84b75186b21f4fd8897311b41bbd4fa559a03f6592726ffff6dd55e01c8ff0a",
-      "bytes": 365338,
+      "sha256": "c673ef8c270182ae92ca52993e820c11bc262985bf2ee90399b7b3bfcb3f7f63",
+      "bytes": 365896,
       "objects": 472,
       "indicators": 46,
-      "modified": "2026-10-11T04:24:14.475329Z"
+      "modified": "2026-10-11T05:07:57.529776Z"
     },
     {
       "slug": "kaido-quasar-rat-144-172-109-203",
@@ -151,13 +151,13 @@
       "file": "kaido-quasar-rat-144-172-109-203.json",
       "url": "https://the-hunters-ledger.com/stix/kaido-quasar-rat-144-172-109-203.json",
       "report_url": "https://the-hunters-ledger.com/reports/kaido-quasar-rat-144-172-109-203/",
-      "bundle_id": "bundle--f44155bb-1d85-4c4b-86ed-79dfe0e052ed",
+      "bundle_id": "bundle--03f1322b-bf20-41cd-bdee-c5c654cd6cad",
       "report_id": "report--caeb4af1-7cfb-51f1-9401-c7268353f962",
-      "sha256": "7e63e1f24ec44d95cd02caf93557564eef339fca33b55153be3ce8400637ecb8",
-      "bytes": 48479,
+      "sha256": "933e686a194045e74fedf73809e3b297c84c8533df0727ca545406be85d7ece7",
+      "bytes": 48680,
       "objects": 53,
       "indicators": 17,
-      "modified": "2026-10-11T04:24:18.541008Z"
+      "modified": "2026-10-11T05:08:00.357942Z"
     },
     {
       "slug": "ai-agent-frameworks-2026-05-23",
@@ -226,13 +226,13 @@
       "file": "ghost-cryptojacker-vova75rus-77.110.96.200.json",
       "url": "https://the-hunters-ledger.com/stix/ghost-cryptojacker-vova75rus-77.110.96.200.json",
       "report_url": "https://the-hunters-ledger.com/reports/ghost-cryptojacker-vova75rus-77.110.96.200/",
-      "bundle_id": "bundle--0c0880aa-26f5-4266-8814-ebd85facb421",
+      "bundle_id": "bundle--4d638b4d-7b69-4f8e-90bc-32b71d64cbf6",
       "report_id": "report--9aa555ca-d9d6-51c3-8af0-af351596d438",
-      "sha256": "7d7ae63b6e592f99c109c903808e71a993e736f78df561e14936268dc489feb4",
-      "bytes": 606754,
+      "sha256": "7a557ecea823e5e5727d30a57901ba5efcf7041e1398979f4454c11920b1246b",
+      "bytes": 607958,
       "objects": 754,
       "indicators": 56,
-      "modified": "2026-10-11T04:24:15.880707Z"
+      "modified": "2026-10-11T05:07:58.572479Z"
     },
     {
       "slug": "russian-gemini-credential-mill-213.165.51.115",
@@ -286,13 +286,13 @@
       "file": "bellamain-turkish-phaas-79-137-192-3-20260516.json",
       "url": "https://the-hunters-ledger.com/stix/bellamain-turkish-phaas-79-137-192-3-20260516.json",
       "report_url": "https://the-hunters-ledger.com/reports/bellamain-turkish-phaas-79-137-192-3-20260516/",
-      "bundle_id": "bundle--ea754c2b-2072-41bd-9b1e-9bdc9c8f24e2",
+      "bundle_id": "bundle--4d80a4ec-2b9c-4f4a-8bfd-0ffbaaa8a99e",
       "report_id": "report--ffb8d174-a8c9-5fc5-b94f-9462fdff65b3",
-      "sha256": "50acf8885a34438f674dd7fa7b8bb7d4f37c53aa4c62c72fddebcb44425f03dd",
-      "bytes": 306996,
+      "sha256": "456be6d4d8e65d8ebb75d8527c7238a3baf0f672be3e39c58454161479f8124f",
+      "bytes": 307048,
       "objects": 388,
       "indicators": 24,
-      "modified": "2026-10-11T04:24:12.883178Z"
+      "modified": "2026-10-11T05:07:55.982521Z"
     },
     {
       "slug": "inkognito-russian-vpn-phishing-185-221-196-118-20260516",
@@ -331,13 +331,13 @@
       "file": "opendirectory-62-60-237-100-20260506.json",
       "url": "https://the-hunters-ledger.com/stix/opendirectory-62-60-237-100-20260506.json",
       "report_url": "https://the-hunters-ledger.com/reports/opendirectory-62-60-237-100-20260506/",
-      "bundle_id": "bundle--1cdf2377-ecbd-40ee-be02-50f6c6c24a33",
+      "bundle_id": "bundle--72f41cf1-9adc-4417-822e-8999a4275eb7",
       "report_id": "report--aeece79f-37fb-57b6-9eac-f7fa0ff37e78",
-      "sha256": "36471c37acec0005437ac8bd8da9e9e7d3ab34fbb7a7803e8f1a34186c545d66",
-      "bytes": 577058,
+      "sha256": "9a5e0cfdefa7146ef2ca0447ccc95df366ab25fac55cd5fa86ccc6c098b5430f",
+      "bytes": 577232,
       "objects": 766,
       "indicators": 45,
-      "modified": "2026-10-09T13:20:10.195968Z"
+      "modified": "2026-10-11T05:08:01.313587Z"
     },
     {
       "slug": "opendirectory-45-130-148-125-20260430",
@@ -451,13 +451,13 @@
       "file": "zerotrace-74-0-42-25-20260316.json",
       "url": "https://the-hunters-ledger.com/stix/zerotrace-74-0-42-25-20260316.json",
       "report_url": "https://the-hunters-ledger.com/reports/zerotrace-74-0-42-25-20260316/",
-      "bundle_id": "bundle--f166a5e4-e39e-426c-a156-66ee7b25a2ba",
+      "bundle_id": "bundle--2cf6d574-9d11-468f-943f-afefdf3ea30e",
       "report_id": "report--6a5d5aeb-1950-5205-a90e-967908691438",
-      "sha256": "4f9ec5ac79db168220fba52b62e0bda747718722a39586f4efc8349645074441",
-      "bytes": 164905,
+      "sha256": "c070e9e886d0395cb52d111612840163bfc58428e59bd9f3d57f22feda01c12a",
+      "bytes": 164963,
       "objects": 213,
       "indicators": 39,
-      "modified": "2026-10-01T19:54:22.827099Z"
+      "modified": "2026-10-11T05:08:08.185346Z"
     },
     {
       "slug": "sliver-open-directory",
@@ -496,13 +496,13 @@
       "file": "remcos-opendirectory.json",
       "url": "https://the-hunters-ledger.com/stix/remcos-opendirectory.json",
       "report_url": "https://the-hunters-ledger.com/reports/remcos-opendirectory/",
-      "bundle_id": "bundle--fad3f326-1237-4c73-aa5b-dd2e5d501614",
+      "bundle_id": "bundle--e389d3ab-6e68-4ce4-ba60-950fb8de3232",
       "report_id": "report--cfe4d76a-a030-5b5a-874a-5f584b6c436b",
-      "sha256": "3291e8e93d71c5c0646b0d0bf2ea24d0a5850f2f6b3a264d9af2deb380315446",
-      "bytes": 54852,
+      "sha256": "92f23258269b44a2097a67a171a932b14e768368cda0f643af8d374ad26d500c",
+      "bytes": 54908,
       "objects": 41,
       "indicators": 17,
-      "modified": "2026-10-09T13:20:11.21281Z"
+      "modified": "2026-10-11T05:08:02.513783Z"
     },
     {
       "slug": "nsminer-cryptojacker",
@@ -601,13 +601,13 @@
       "file": "malware-analysis-houselet.json",
       "url": "https://the-hunters-ledger.com/stix/malware-analysis-houselet.json",
       "report_url": "https://the-hunters-ledger.com/reports/malware-analysis-houselet/",
-      "bundle_id": "bundle--e4716154-ac5b-4837-8ad6-6adb737d5cd2",
+      "bundle_id": "bundle--3d77d49f-7a7c-4dfc-a149-0db2282908b4",
       "report_id": "report--66cfa6ea-e048-5321-893d-ff84b9a53c13",
-      "sha256": "c3b49ab9d1849e987d62c388641db70902aabd830b16c78e15855105338725cb",
-      "bytes": 16324,
+      "sha256": "608bf62a9688aa01f9b1747623f6f42c213ed19f4a9e3419ebd763c72681eb48",
+      "bytes": 16447,
       "objects": 10,
       "indicators": 5,
-      "modified": "2026-09-30T03:16:41.485138Z"
+      "modified": "2026-10-11T05:08:00.87136Z"
     },
     {
       "slug": "AdvancedRouterScanner",

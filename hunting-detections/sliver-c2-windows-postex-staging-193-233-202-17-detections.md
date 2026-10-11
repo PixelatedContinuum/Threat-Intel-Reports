@@ -564,6 +564,7 @@ level: high
 **False Positives:** A system administrator deliberately enabling RDP or adjusting UAC policy through legitimate registry edits or Group Policy on a server being provisioned. Each of the four values is individually common enough during legitimate hardening or provisioning that a single hit is not high-confidence on its own. Tiered Hunting for that reason: this fires on any one match, and the real corroborating signal is two or more of these on the same host within a short window, which needs analyst correlation rather than a single-event match.
 **Blind Spots:** Misses an operator who makes these changes exclusively through Group Policy Object edits at the domain level rather than direct registry writes on the host.
 **Validation:** Trigger by setting any one of `fDenyTSConnections` to `0`, `UserAuthentication` to `0`, `LocalAccountTokenFilterPolicy` to `1`, or `EnableLUA` to `0`. A benign case that must NOT fire: none of these four exact value writes occurring.
+**Registry value rendering (round 2, 2026-10-11):** raw Sysmon Event 13 renders a DWORD in `Details` as `DWORD (0x........)`, but the Elastic Sysmon pipeline (`logs-windows.sysmon_operational` 3.8.3, script "Set registry fields") writes `registry.data.strings` as the decimal value with type `SZ_DWORD`, per the T-0222 registry telemetry proposal (`Docs/2026-10-10-anthropic-api-credit/fixes/registry-telemetry-proposal.md`). The selection therefore accepts both forms. The decimal form was read from the pipeline script, not from a live event: no Windows endpoint reports to the stack, so neither form has been seen arriving.
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM with registry value auditing enabled. Analyst should check for two or more of these on the same host within a short window before escalating.
 
 ```yaml
@@ -579,6 +580,7 @@ references:
     - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/
 author: The Hunters Ledger
 date: '2026-09-06'
+modified: '2026-10-11'
 tags:
     - attack.stealth
     - attack.defense-impairment
@@ -593,16 +595,24 @@ logsource:
 detection:
     sel_rdp_enable:
         TargetObject|endswith: '\Terminal Server\fDenyTSConnections'
-        Details: 'DWORD (0x00000000)'
+        Details:
+            - 'DWORD (0x00000000)'
+            - 0
     sel_nla_disable:
         TargetObject|endswith: '\WinStations\RDP-Tcp\UserAuthentication'
-        Details: 'DWORD (0x00000000)'
+        Details:
+            - 'DWORD (0x00000000)'
+            - 0
     sel_tokenfilter:
         TargetObject|endswith: '\Policies\System\LocalAccountTokenFilterPolicy'
-        Details: 'DWORD (0x00000001)'
+        Details:
+            - 'DWORD (0x00000001)'
+            - 1
     sel_uac_disable:
         TargetObject|endswith: '\Policies\System\EnableLUA'
-        Details: 'DWORD (0x00000000)'
+        Details:
+            - 'DWORD (0x00000000)'
+            - 0
     condition: 1 of sel_*
 falsepositives:
     - Deliberate server provisioning or hardening review touching one or more of these values

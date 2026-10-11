@@ -345,6 +345,7 @@ rule RAT_RavenRAT_Stub {
 **False Positives:** Unlikely — no known legitimate software uses the HKCU\SOFTWARE\XWorm registry key path.
 **Blind Spots:** A build that renames the registry key namespace evades; the rule requires the write to actually occur, so a variant that stores this configuration elsewhere (environment variable, file) is not covered.
 **Validation:** Trigger the malware's config-write routine — the registry key must match; unrelated software's registry activity must NOT fire.
+**Hive rendering (round 2, 2026-10-11):** the selection used the literal `HKCU\` path, but Sysmon records a per-user key as `HKU\<SID>\...` and never as `HKCU`, so it could not match Sysmon events (the T-0222 registry telemetry proposal flags this; what Defend renders was not read). The selection now tests `HKU\` at the start and the key path after it, as rule 0163 does.
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (registry telemetry).
 
 ```yaml
@@ -360,6 +361,7 @@ references:
     - https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/
 author: The Hunters Ledger
 date: 2026-03-17
+modified: 2026-10-11
 tags:
     - attack.defense-impairment
     - attack.persistence
@@ -371,7 +373,8 @@ logsource:
     product: windows
 detection:
     selection:
-        TargetObject|startswith: 'HKCU\SOFTWARE\XWorm'
+        TargetObject|startswith: 'HKU\'
+        TargetObject|contains: '\SOFTWARE\XWorm'
     condition: selection
 falsepositives:
     - Unlikely — no known legitimate software uses the HKCU\SOFTWARE\XWorm registry key path

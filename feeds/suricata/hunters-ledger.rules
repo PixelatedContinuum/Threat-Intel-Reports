@@ -159,12 +159,12 @@ alert udp $EXTERNAL_NET any -> $HOME_NET 14433:14444 (msg:"THL HUNT GHOST Crypto
 #   TIER: Hunting  |  robustness 1  |  confidence LOW–MODERATE  |  BROAD - triage before alerting
 #   rate-limited
 #   FP: Any legitimate monitoring, alerting, or chatbot integration on the same host that uses the Telegram Bot API for unrelated purposes.
-alert tls $HOME_NET any -> any any (msg:"THL HUNT Telegram API TLS SNI Egress from an Internal Host (Reporting Channel Used by the GHOST Kit, Not Specific to It)"; tls.sni; content:"api.telegram.org"; endswith; nocase; threshold:type threshold,track by_src,count 5,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/; classtype:policy-violation; sid:3500027; rev:4; metadata:author The_Hunters_Ledger, date 2026-05-25, tag GHOST_kit, tag Telegram_reporting;)
+alert tls $HOME_NET any -> any any (msg:"THL HUNT Telegram API TLS SNI Egress from an Internal Host (Reporting Channel Used by the GHOST Kit, Not Specific to It)"; tls.sni; content:"api.telegram.org"; startswith; endswith; nocase; threshold:type threshold,track by_src,count 5,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/; classtype:policy-violation; sid:3500027; rev:5; metadata:author The_Hunters_Ledger, date 2026-05-25, tag GHOST_kit, tag Telegram_reporting;)
 # gocloud-multiservice-cryptojacking-149-28-112-221 (orig sid:9301501)
 #   TIER: Detection  |  robustness 2  |  confidence HIGH
 #   rate-limited
 #   FP: None known. The /r?host= prefix followed by the &status=OK&ts= tail in one URI is a distinctive parameter order.
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT GOCLOUD-Cryptojacking XMRig Deployment Heartbeat GET (Fixed Parameter Order)"; flow:established,to_server; http.uri; content:"/r?host="; startswith; nocase; content:"&status=OK&ts="; distance:0; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:3500176; rev:3; metadata:author The_Hunters_Ledger, date 2026-07-26;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT GOCLOUD-Cryptojacking XMRig Deployment Heartbeat Request (Fixed Parameter Order)"; flow:established,to_server; http.uri; content:"/r?host="; startswith; nocase; content:"&status=OK&ts="; distance:0; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/; classtype:trojan-activity; sid:3500176; rev:4; metadata:author The_Hunters_Ledger, date 2026-07-26;)
 # gocloud-multiservice-cryptojacking-149-28-112-221 (orig sid:9301502)
 #   TIER: Detection  |  robustness 2  |  confidence HIGH
 #   rate-limited

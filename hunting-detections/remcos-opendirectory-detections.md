@@ -504,6 +504,7 @@ level: critical
 **False Positives:** Legitimate system administration (rare); enterprise management tools (SCCM, Intune, Group Policy) disabling UAC for legacy application compatibility.
 **Blind Spots:** Cannot distinguish which process performed the write; pair with the process-creation rule above for attribution.
 **Validation:** Trigger the malware's UAC-bypass routine — the registry value write must match; a system where `EnableLUA` remains at its default value of 1 must NOT fire.
+**Registry value rendering (round 2, 2026-10-11):** raw Sysmon Event 13 renders a DWORD in `Details` as `DWORD (0x........)`, but the Elastic Sysmon pipeline (`logs-windows.sysmon_operational` 3.8.3, script "Set registry fields") writes `registry.data.strings` as the decimal value with type `SZ_DWORD`, per the T-0222 registry telemetry proposal (`Docs/2026-10-10-anthropic-api-credit/fixes/registry-telemetry-proposal.md`). The selection therefore accepts both forms. The decimal form was read from the pipeline script, not from a live event: no Windows endpoint reports to the stack, so neither form has been seen arriving.
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (registry telemetry).
 
 ```yaml
@@ -521,6 +522,7 @@ references:
     - https://the-hunters-ledger.com/hunting-detections/remcos-opendirectory-detections/
 author: The Hunters Ledger
 date: '2026-02-04'
+modified: '2026-10-11'
 tags:
     - attack.privilege-escalation
     - attack.t1548.002
@@ -531,7 +533,9 @@ logsource:
 detection:
     selection:
         TargetObject|endswith: '\Policies\System\EnableLUA'
-        Details: 'DWORD (0x00000000)'
+        Details:
+            - 'DWORD (0x00000000)'
+            - 0
     condition: selection
 falsepositives:
     - Legitimate system administration (rare)

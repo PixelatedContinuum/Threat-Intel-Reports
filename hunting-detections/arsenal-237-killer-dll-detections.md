@@ -530,6 +530,7 @@ level: medium
 **False Positives:** Legitimate software installation via rundll32 (extremely rare for kernel drivers); administrative scripts using rundll32 for driver deployment (should be reviewed).
 **Blind Spots:** *Round 2, 2026-10-10:* the Image test is unverified. The report names the `CreateServiceW` API call (killer-dll report lines 237 to 246), and a service created through the Service Control Manager can have its registry values written by `services.exe` rather than by the calling process, in which case `Image` is not `rundll32.exe` and the rule never fires; this was not checked against a `killer.dll` run. The rule cannot see the driver file path, because a service's `ImagePath` is written as a separate registry value from the type value this selector reads, so it makes no distinction between a driver staged under `System32\Drivers` and one staged elsewhere; a rebuild avoiding `rundll32.exe` as the registering process evades. Round 2: the earlier selector matched the symbolic text `SERVICE_KERNEL_DRIVER`, which is the API constant from the report, not what Sysmon Event 13 records; it records the DWORD as `DWORD (0x00000001)` (the SigmaHQ regression event for `registry_set_creation_service_susp_folder` shows that form for a `Services\npcap\Start` write), so the rule now tests the `\Type` value name and that rendered value. A `Type` of 1 is the only kernel-driver value matched; file-system and other driver types are not.
 **Validation:** Trigger the killer.dll service-creation step (or a synthetic equivalent — rundll32.exe registering a kernel-driver-type service) — must match; a signed installer registering a driver from its own Program Files path must NOT fire.
+**Registry value rendering (round 2, 2026-10-11):** raw Sysmon Event 13 renders a DWORD in `Details` as `DWORD (0x........)`, but the Elastic Sysmon pipeline (`logs-windows.sysmon_operational` 3.8.3, script "Set registry fields") writes `registry.data.strings` as the decimal value with type `SZ_DWORD`, per the T-0222 registry telemetry proposal (`Docs/2026-10-10-anthropic-api-credit/fixes/registry-telemetry-proposal.md`). The selection therefore accepts both forms. The decimal form was read from the pipeline script, not from a live event: no Windows endpoint reports to the stack, so neither form has been seen arriving.
 **Deployment:** Sysmon/EDR registry-event monitoring (Sysmon Event ID 13), Windows Event Log auditing on the Services registry hive.
 
 ```yaml
@@ -549,7 +550,7 @@ references:
     - https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-dll-detections/
 author: The Hunters Ledger
 date: '2026-01-25'
-modified: '2026-10-10'
+modified: '2026-10-11'
 tags:
     - attack.defense-impairment
     - attack.t1685
@@ -562,7 +563,9 @@ detection:
     selection_service_create:
         TargetObject|contains: '\System\CurrentControlSet\Services\'
         TargetObject|endswith: '\Type'
-        Details: 'DWORD (0x00000001)'
+        Details:
+            - 'DWORD (0x00000001)'
+            - 1
     selection_parent:
         Image|endswith: '\rundll32.exe'
     condition: selection_service_create and selection_parent

@@ -974,11 +974,11 @@ level: high
 **Robustness:** 2
 **ATT&CK Coverage:** T1219.002 (Remote Desktop Software)
 **Confidence:** HIGH
-**Logic fix 2026-10-11:** the selection was three unordered substrings (`echo`, `AnyDesk.exe`, `--set-password`) with no pipe, so a command line merely naming all three in any order matched, and the title's "By Non-AnyDesk Process" was not tested. It now requires `echo`, then a pipe, then `AnyDesk.exe`, then `--set-password`, in order. The "non-AnyDesk" qualifier is dropped from the title because the process that carries the pipe text is always a shell, never AnyDesk itself; the report shows the form `echo <token> | AnyDesk.exe --set-password`.
+**Logic fix 2026-10-11 (privacy wording corrected in round 2):** the description and deployment line said the credential never reaches process-creation logs; that holds only for the AnyDesk child, not for the shell command line the rule selects. The selection was three unordered substrings (`echo`, `AnyDesk.exe`, `--set-password`) with no pipe, so a command line merely naming all three in any order matched, and the title's "By Non-AnyDesk Process" was not tested. It now requires `echo`, then a pipe, then `AnyDesk.exe`, then `--set-password`, in order. The "non-AnyDesk" qualifier is dropped from the title because the process that carries the pipe text is always a shell, never AnyDesk itself; the report shows the form `echo <token> | AnyDesk.exe --set-password`.
 **False Positives:** Legitimate IT automation that pipes a password to AnyDesk during scripted unattended deployment
 **Blind Spots:** A deployment script that reads the password from a file or environment variable rather than an inline `echo` pipe would evade this rule
 **Validation:** Run `echo testpassword | AnyDesk.exe --set-password` on a test host and confirm the alert fires. A manual, interactive AnyDesk password change through the GUI must NOT fire, since it never appears as a process-creation command line.
-**Deployment:** Endpoint process-creation telemetry (Sysmon Event ID 1 or equivalent), the password value itself never touches the command line, so this rule detects the pipeline shape, not the credential
+**Deployment:** Endpoint process-creation telemetry (Sysmon Event ID 1 or equivalent). AnyDesk.exe's own command line does not carry the password, but the shell command line this rule matches can, so handle a matching event and its stored copy as containing a credential and redact that field before sharing an alert.
 
 ```yaml
 title: AnyDesk Unattended Password Piped Over Stdin
@@ -987,10 +987,12 @@ status: experimental
 description: >-
     Detects a command line in which an echo is piped into AnyDesk.exe with the
     --set-password flag, in that order (the shell process that runs the pipeline
-    carries the whole text). The password value itself never appears on the
-    AnyDesk command line, so the pipeline shape is the anchor. Observed issued by an orchestrator tool immediately after a
-    silent, unattended AnyDesk install, to set a remote-access password without
-    leaving the credential in process-creation logs.
+    carries the whole text). The password does not appear on AnyDesk's own
+    command line, since AnyDesk.exe reads it from stdin, but it can appear in the
+    command line of the shell that runs the echo, which is the command line this
+    rule selects, so a matching event can carry the password in clear. The
+    pipeline shape is the anchor. Observed issued by an orchestrator tool
+    immediately after a silent, unattended AnyDesk install.
 references:
     - https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/
     - https://redcanary.com/blog/misbehaving-rats/
@@ -1122,10 +1124,10 @@ level: high
 **Robustness:** 3
 **ATT&CK Coverage:** T1547.001 (Registry Run Keys / Startup Folder)
 **Confidence:** HIGH
-**Logic fix 2026-10-11:** the description says an HKCU Run value, but the selection only tested the key-path suffix, so an HKLM `Run\SystemUpdate` value also matched. Sysmon records a per-user key under `HKU\<SID>\...` (never as `HKCU`), so the hive is now tested as `TargetObject` starting with `HKU\`. The stub runs in the logged-on user's context (report: it writes `HKCU\...\Run\SystemUpdate`).
+**Logic fix 2026-10-11 (data test tightened in round 2):** the data test used to be `\Startup\~` alone, so a tilde-prefixed text file, or a directory named Startup anywhere, also matched although the title and description say a tilde executable in the user's Startup folder. It is now the per-user Startup path followed by a tilde name ending `.exe`, as the report describes (`~<RANDOM>.exe` in the user's Startup folder, index.md:567). The description says an HKCU Run value, but the selection only tested the key-path suffix, so an HKLM `Run\SystemUpdate` value also matched. Sysmon records a per-user key under `HKU\<SID>\...` (never as `HKCU`), so the hive is now tested as `TargetObject` starting with `HKU\`. The stub runs in the logged-on user's context (report: it writes `HKCU\...\Run\SystemUpdate`).
 **False Positives:** Unlikely, the combination of the SystemUpdate value name and a Startup-folder tilde-prefixed target is not a known legitimate pattern
 **Blind Spots:** This rule fires only once the stub's download and drop stages have already succeeded, the proxy-WebClient rule above is the anchor that fires even on incomplete runs
-**Validation:** Set an `HKCU\Software\Microsoft\Windows\CurrentVersion\Run\SystemUpdate` value pointing to a test file inside the Startup folder named `~12345.exe` and confirm the alert fires. A Run value named SystemUpdate pointing anywhere outside the Startup folder must NOT fire, and neither must an `HKLM\...\Run\SystemUpdate` value that points at a Startup tilde file.
+**Validation:** Set an `HKCU\Software\Microsoft\Windows\CurrentVersion\Run\SystemUpdate` value pointing to a test file inside the per-user Startup folder (`...\Start Menu\Programs\Startup\`) named `~12345.exe` and confirm the alert fires. The same value pointing at `~12345.txt` in that folder must NOT fire. A Run value named SystemUpdate pointing anywhere outside the Startup folder must NOT fire, and neither must an `HKLM\...\Run\SystemUpdate` value that points at a Startup tilde file.
 **Deployment:** Endpoint registry telemetry (Sysmon Event ID 13 or equivalent)
 
 ```yaml
@@ -1153,7 +1155,7 @@ detection:
     selection:
         TargetObject|startswith: 'HKU\'
         TargetObject|endswith: '\CurrentVersion\Run\SystemUpdate'
-        Details|contains: '\Startup\~'
+        Details|contains: '\Start Menu\Programs\Startup\~*.exe'
     condition: selection
 falsepositives:
     - Unlikely, the combination of the SystemUpdate value name and a Startup-folder tilde-prefixed target is not a known legitimate pattern

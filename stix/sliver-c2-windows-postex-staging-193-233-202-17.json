@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--2d298d2a-79f9-4234-a796-dc5372f9de4c",
+    "id": "bundle--f525fd93-f5d5-4efb-abae-d0366ce8e01c",
     "objects": [
         {
             "type": "identity",
@@ -2917,12 +2917,12 @@
             "id": "indicator--5ab26fbe-d134-5f03-be83-b32317883c0b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.719653Z",
-            "modified": "2026-10-01T19:54:20.719653Z",
+            "modified": "2026-10-11T05:08:03.035322Z",
             "name": "RDP, UAC Or Token-Filter Registry Value Weakened",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: RDP, UAC Or Token-Filter Registry Value Weakened\nid: b3cdcf57-b8dc-4f30-8420-1cbd8d0548f7\nstatus: experimental\ndescription: >-\n  Detects one of the registry value changes used to enable RDP without Network Level\n  Authentication or to weaken UAC and remote local-account token filtering. Two or more of\n  these on the same host in a short window is the actual campaign signature and needs\n  analyst correlation this single-event rule cannot perform.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/\nauthor: The Hunters Ledger\ndate: '2026-09-06'\ntags:\n    - attack.stealth\n    - attack.defense-impairment\n    - attack.persistence\n    - attack.t1112\n    - attack.privilege-escalation\n    - attack.t1548.002\nlogsource:\n    category: registry_set\n    product: windows\n    definition: 'Requires Sysmon Event ID 13 (RegistryEvent SetValue) or Security Event ID 4657 with value auditing enabled for the listed keys.'\ndetection:\n    sel_rdp_enable:\n        TargetObject|endswith: '\\Terminal Server\\fDenyTSConnections'\n        Details: 'DWORD (0x00000000)'\n    sel_nla_disable:\n        TargetObject|endswith: '\\WinStations\\RDP-Tcp\\UserAuthentication'\n        Details: 'DWORD (0x00000000)'\n    sel_tokenfilter:\n        TargetObject|endswith: '\\Policies\\System\\LocalAccountTokenFilterPolicy'\n        Details: 'DWORD (0x00000001)'\n    sel_uac_disable:\n        TargetObject|endswith: '\\Policies\\System\\EnableLUA'\n        Details: 'DWORD (0x00000000)'\n    condition: 1 of sel_*\nfalsepositives:\n    - Deliberate server provisioning or hardening review touching one or more of these values\nlevel: medium",
+            "pattern": "title: RDP, UAC Or Token-Filter Registry Value Weakened\nid: b3cdcf57-b8dc-4f30-8420-1cbd8d0548f7\nstatus: experimental\ndescription: >-\n  Detects one of the registry value changes used to enable RDP without Network Level\n  Authentication or to weaken UAC and remote local-account token filtering. Two or more of\n  these on the same host in a short window is the actual campaign signature and needs\n  analyst correlation this single-event rule cannot perform.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/\nauthor: The Hunters Ledger\ndate: '2026-09-06'\nmodified: '2026-10-11'\ntags:\n    - attack.stealth\n    - attack.defense-impairment\n    - attack.persistence\n    - attack.t1112\n    - attack.privilege-escalation\n    - attack.t1548.002\nlogsource:\n    category: registry_set\n    product: windows\n    definition: 'Requires Sysmon Event ID 13 (RegistryEvent SetValue) or Security Event ID 4657 with value auditing enabled for the listed keys.'\ndetection:\n    sel_rdp_enable:\n        TargetObject|endswith: '\\Terminal Server\\fDenyTSConnections'\n        Details:\n            - 'DWORD (0x00000000)'\n            - 0\n    sel_nla_disable:\n        TargetObject|endswith: '\\WinStations\\RDP-Tcp\\UserAuthentication'\n        Details:\n            - 'DWORD (0x00000000)'\n            - 0\n    sel_tokenfilter:\n        TargetObject|endswith: '\\Policies\\System\\LocalAccountTokenFilterPolicy'\n        Details:\n            - 'DWORD (0x00000001)'\n            - 1\n    sel_uac_disable:\n        TargetObject|endswith: '\\Policies\\System\\EnableLUA'\n        Details:\n            - 'DWORD (0x00000000)'\n            - 0\n    condition: 1 of sel_*\nfalsepositives:\n    - Deliberate server provisioning or hardening review touching one or more of these values\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-09-07T00:00:00Z",
             "labels": [

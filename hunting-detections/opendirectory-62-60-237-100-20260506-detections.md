@@ -619,6 +619,7 @@ level: medium
 **Confidence:** HIGH
 **Rationale:** A genuinely durable, family-agnostic technique signal — `VBAWarnings=1` pre-conditioning is not tied to any HijackLoader-specific filename, GUID, or codename, and is used broadly by macro-malware campaigns generally. Kept at Hunting because legitimate IT administrators do set this value via registry or GPO, a real and non-trivial false-positive scenario the original rule already correctly acknowledged with `level: medium`. Trimmed ATT&CK Coverage from the original, which also cited T1685 (Disable or Modify Tools) — a valid technique ID, but not reflected in the rule's own `tags:` and a poor fit on the merits (T1685 covers disabling security tooling such as AV/EDR/logging, not an Office application security prompt); scoped to T1112 + T1204.002, which the selection logic and tags already reflect.
 **False Positives:** Legitimate IT administrators deploying macro-enabled Office solutions who intentionally set `VBAWarnings=1` via GPO or management scripts (correlate with change-management records and the deploying user account); software developers testing Office VBA macros in a development environment; enterprise Office deployments that centrally manage macro trust settings (these should be deployed via GPO, not a per-user registry write from cmd.exe/PowerShell).
+**Registry value rendering (round 2, 2026-10-11):** raw Sysmon Event 13 renders a DWORD in `Details` as `DWORD (0x........)`, but the Elastic Sysmon pipeline (`logs-windows.sysmon_operational` 3.8.3, script "Set registry fields") writes `registry.data.strings` as the decimal value with type `SZ_DWORD`, per the T-0222 registry telemetry proposal (`Docs/2026-10-10-anthropic-api-credit/fixes/registry-telemetry-proposal.md`). The selection therefore accepts both forms. The decimal form was read from the pipeline script, not from a live event: no Windows endpoint reports to the stack, so neither form has been seen arriving. **Also fixed in the same pass:** the selection carried two `TargetObject|contains` keys in one mapping, so YAML kept only the second and the `\Security\VBAWarnings` test was silently dropped (the rule matched any Office 16/19 write of the data value 1); the tests are now separate selections. The description says an HKCU write, and Sysmon renders a per-user key as `HKU\<SID>\...`, so the hive is now tested as `HKU\`; a machine-policy key under HKLM no longer matches.
 **Deployment:** SIEM Sysmon EID 13, EDR registry monitoring.
 
 ```yaml
@@ -639,6 +640,7 @@ references:
     - https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/
 author: The Hunters Ledger
 date: 2026-05-06
+modified: 2026-10-11
 tags:
     - attack.defense-impairment
     - attack.persistence
@@ -650,13 +652,19 @@ logsource:
     category: registry_set
     product: windows
 detection:
-    selection:
+    selection_hive:
+        TargetObject|startswith: 'HKU\'
+    selection_key:
         TargetObject|contains: '\Security\VBAWarnings'
+    selection_office:
         TargetObject|contains:
             - '\Microsoft\Office\16.'
             - '\Microsoft\Office\19.'
-        Details: 'DWORD (0x00000001)'
-    condition: selection
+    selection_data:
+        Details:
+            - 'DWORD (0x00000001)'
+            - 1
+    condition: all of selection_*
 falsepositives:
     - >-
       Legitimate IT administrators deploying macro-enabled Office solutions
