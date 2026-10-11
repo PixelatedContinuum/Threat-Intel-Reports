@@ -118,15 +118,15 @@ rule EXPL_SnakeYAML_ScriptEngineManager_Gadget_CVE_2022_1471_Family {
 }
 ```
 
-#### Generic JSP Web Shell (Bash-Exec via HTTP Parameter)
+#### Generic JSP Web Shell Strings (Request Parameter and Bash -c Exec)
 
 **Tier:** Detection
 **Robustness:** 2
 **ATT&CK Coverage:** T1505.003 (Web Shell)
 **Confidence:** HIGH
-**Rationale:** The report records `cmd.jsp` as a minimal JSP that reads a single HTTP parameter and runs it through the shell. This rule matches four strings anywhere in a JSP-sized file of under 30 KB: a `request.getParameter(...)` call, `Runtime.getRuntime().exec`, `/bin/bash` and a quoted `"-c"`. It tests no order and no distance between them, so it shows that the pieces of such a shell are present and does not show that the parameter reaches the exec call.
+**Rationale:** The report records `cmd.jsp` as a minimal JSP that reads a single HTTP parameter and runs it through the shell. This rule matches four strings anywhere in a JSP-sized file of under 30 KB: a `request.getParameter(...)` call, `Runtime.getRuntime().exec`, `/bin/bash` and a quoted `"-c"`. It tests no order and no distance between them, and no JSP marker (`<%`, a `.jsp` name or a page directive), so a Java source file or a document holding the four strings also matches. It shows that the pieces of such a shell are present and does not show that the parameter reaches the exec call.
 **False Positives:** Low but not zero: a small number of legitimate diagnostic or internal-tooling JSP pages in development environments do shell out to `/bin/bash -c` using a request parameter; these are themselves poor practice and worth flagging even when not attacker-authored.
-**Blind Spots:** Misses web shells built on a different execution primitive (`ProcessBuilder`, reflection-based invocation), a different shell (`/bin/sh`, `cmd.exe`), or that separate the parameter read from the exec call across multiple lines/methods beyond what the proximity-free string set here tolerates.
+**Blind Spots:** Misses web shells built on a different execution primitive (`ProcessBuilder`, reflection-based invocation), a different shell (`/bin/sh`, `cmd.exe`), a quoted `-c` written another way, or a file of 30 KB or more. The four strings are matched anywhere in the file with no order, distance, line or method test, so splitting the parameter read from the exec call does not evade the rule; for the same reason the rule shows no data flow.
 **Validation:** Scan the `cmd.jsp`-style payload (`request.getParameter` combined with `Runtime.getRuntime().exec` and a `/bin/bash -c` invocation) and confirm a match; a normal JSP page that reads a parameter for display purposes only, with no exec call, must NOT fire.
 **Deployment:** Web-root/upload-directory scanning, incident-response triage, webshell-hunting sweeps of Java application servers.
 
@@ -166,10 +166,10 @@ rule WEBSHELL_Generic_JSP_Bash_Exec_Parameter {
 **Robustness:** 3
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application), T1552.005 (Cloud Instance Metadata API)
 **Confidence:** HIGH
-**Rationale:** The report describes an SVG that probes four internal targets and calls an external-entity declaration referencing the cloud metadata address a high-precision signal. The rule matches one `<!ENTITY ... SYSTEM ...>` declaration (no `>` between the entity keyword and the target) whose `SYSTEM` identifier names `169.254.169.254`, `127.0.0.1:6379`, `127.0.0.1:3306` or a `:8080/actuator` path. The target has to sit inside the same declaration as `SYSTEM`; the strings appearing separately in a document do not match.
+**Rationale:** The report describes an SVG that probes four internal targets and calls an external-entity declaration referencing the cloud metadata address a high-precision signal. The rule matches one external-entity declaration written as `<!ENTITY`, an optional `%`, the entity name, the keyword `SYSTEM`, and a quoted literal whose text reaches `169.254.169.254`, `127.0.0.1:6379`, `127.0.0.1:3306` or a `:8080/actuator` path before the closing quote or a `>`. `SYSTEM` has to be the declaration's identifier keyword directly after the name, so an internal entity whose quoted value merely contains the text `SYSTEM http://169.254.169.254/` does not match, and the strings appearing separately in a document do not match. The name and the quoted literal have no length limit.
 **False Positives:** None known. An XML external-entity declaration whose `SYSTEM` identifier is the cloud instance-metadata address, a loopback Redis or MySQL port, or an actuator path has no legitimate purpose in a document a server is expected to parse. The `:8080/actuator` branch does not test the host, so a declaration pointing at any host's `:8080/actuator` path matches.
-**Blind Spots:** Misses XXE payloads targeting a different internal address/port than the four covered here, misses parameter-entity or out-of-band (blind) XXE variants that reference an external DTD instead of embedding the target directly, and misses the plain local-file-read XXE variant (e.g. `file:///etc/passwd`) which is a much older, already broadly-signatured technique not re-covered here.
-**Validation:** Scan the `internal_scan.svg`-style payload (an `<!ENTITY ... SYSTEM "http://169.254.169.254/...">` declaration, or the Redis/MySQL/Actuator internal-service variants) and confirm a match; an ordinary SVG or XML document with no external entity declarations must NOT fire.
+**Blind Spots:** Misses a declaration that identifies its resource with `PUBLIC`, an entity name that starts with a non-ASCII character, and a document of 20 KB or more. Misses XXE payloads targeting a different internal address/port than the four covered here, misses parameter-entity or out-of-band (blind) XXE variants that reference an external DTD instead of embedding the target directly, and misses the plain local-file-read XXE variant (e.g. `file:///etc/passwd`) which is a much older, already broadly-signatured technique not re-covered here.
+**Validation:** Scan the `internal_scan.svg`-style payload (an `<!ENTITY ... SYSTEM "http://169.254.169.254/...">` declaration, or the Redis/MySQL/Actuator internal-service variants) and confirm a match, including one whose entity name is hundreds of characters long; an ordinary SVG or XML document with no external entity declarations, and an internal entity such as `<!ENTITY note "SYSTEM http://169.254.169.254/">` (a quoted value, no identifier keyword), must NOT fire.
 **Deployment:** File-upload scanning (especially SVG/XML upload features), incident-response triage of recovered documents.
 
 ```yara
@@ -192,7 +192,7 @@ rule EXPL_XXE_SSRF_Cloud_Metadata_Internal_Service_Probe {
       malware_type = "Exploitation payload -- XML External Entity SSRF"
       id = "c643375b-9567-5b36-abf2-8db9880f4f5b"
    strings:
-      $xxe = /<!ENTITY[^>]{1,300}SYSTEM[^>]{0,200}(169\.254\.169\.254|127\.0\.0\.1:6379|127\.0\.0\.1:3306|:8080\/actuator)/ ascii
+      $xxe = /<!ENTITY[ \t\r\n]+(%[ \t\r\n]+)?[A-Za-z_:][A-Za-z0-9_.:\-]*[ \t\r\n]+SYSTEM[ \t\r\n]+[\x22\x27][^\x22\x27>]*(169\.254\.169\.254|127\.0\.0\.1:6379|127\.0\.0\.1:3306|:8080\/actuator)/ ascii
    condition:
       filesize < 20KB and
       $xxe
@@ -252,8 +252,8 @@ Web-access-log telemetry (`logsource.category: webserver`) covers most of this c
 **ATT&CK Coverage:** T1213 (Data from Information Repositories), T1190 (Exploit Public-Facing Application)
 **Confidence:** HIGH (correlation) / LOW (either base rule alone)
 **False Positives:** A single operations engineer legitimately using Jolokia to raise logging for live debugging from the same source IP as their own log review, within the same short window, uncommon outside a genuine incident-response or troubleshooting session, and should be corroborated against known management-network IP ranges.
-**Blind Spots:** The base rule reads the URL only. The report describes the write as a POST to the Jolokia path using a `setProperty` operation, whose operation name and values sit in the request body and not in the access log, so the documented traffic shape may not match; only the `/jolokia/write/<mbean>/<attribute>/<value>` URL form is seen, and the level value is never tested. Neither base rule filters the source, so internal management traffic matches too. An operator who manipulates logging and reads the log file from two different source IPs (e.g. via a proxy chain) evades the `c-ip` grouping; an operator who waits longer than 15 minutes between the write and the read also evades this specific window.
-**Validation:** Replay a Jolokia logger/logging-level write request followed by an actuator logfile GET from the same source IP within 15 minutes: the correlation must fire; either event alone, or the same two events from two different source IPs, must NOT trigger the correlation.
+**Blind Spots:** The base rule reads the URL only. The report describes the write as a POST to the Jolokia path using a `setProperty` operation, whose operation name and values sit in the request body and not in the access log, so the documented traffic shape may not match; only the `/jolokia/write/<mbean>/<attribute>/<value>` URL form is seen, and the level value is never tested. Neither base rule filters the source, so internal management traffic matches too. The correlation groups by source address only (`c-ip`) and carries no target identity: a Jolokia write to one application followed by a logfile read of a different application from the same source address (a shared proxy or NAT address, or a scanner sweeping hosts) also fires. An operator who manipulates logging and reads the log file from two different source IPs (e.g. via a proxy chain) evades the `c-ip` grouping; an operator who waits longer than 15 minutes between the write and the read also evades this specific window.
+**Validation:** Replay a request whose path has the form `/jolokia/write/<mbean>/<attribute>/<value>` and whose URI contains `Logger` or `logging.level`, followed by an actuator logfile GET that returns 200, from the same source IP within 15 minutes: the correlation must fire. A write sent as a POST to the Jolokia root path with the operation in the body is not covered by the base rule and does not start the sequence. Either event alone, or the same two events from two different source IPs, must NOT trigger the correlation; the same two events against two different servers from one source IP WILL trigger it.
 **Deployment:** SIEM correlation engine ingesting web/proxy access-log telemetry (`cs-uri-stem`, `cs-uri`, `sc-status`, `c-ip`).
 
 ```yaml
@@ -346,7 +346,8 @@ description: >-
     the sequence is the shape of an operator manufacturing sensitive data in
     application logs and then reading it back out, rather than a routine
     operations workflow. Internal management traffic from one address
-    produces the same sequence.
+    produces the same sequence, and the grouping is by source address only,
+    so the write and the read need not be against the same application.
 references:
     - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/
 author: The Hunters Ledger
@@ -426,7 +427,7 @@ falsepositives:
 level: high
 ```
 
-#### Successful Large Response From a Spring Boot Actuator Heap Dump Endpoint
+#### Large HTTP 200 Response to a Spring Boot Actuator Heap Dump or Jolokia HotSpotDiagnostic URI
 
 **Tier:** Detection
 **Robustness:** 2
@@ -434,22 +435,24 @@ level: high
 **Confidence:** HIGH
 **False Positives:** Requests from internal addresses match as well, because the source is not tested. Authorized developer or support engineer pulling a heap dump for legitimate memory-leak diagnosis from an approved internal source.
 **Blind Spots:** The 1,000,000-byte response-size threshold is a reasonable default, not a universal one: a small heap or an aggressively-compressed response could fall under it; tune `sc-bytes` against the target environment's own actuator response sizes.
-**Validation:** Replay an external GET to `/actuator/heapdump` that returns 200 with a response body over 1MB: the rule must fire; the same request blocked with a 401/403, or returning a small error body, must NOT fire.
+**Validation:** Replay an external GET to `/actuator/heapdump` that returns 200 with a response body over 1MB: the rule must fire; the same request blocked with a 401/403, or returning a small error body, must NOT fire. Any 200 response of 1,000,000 bytes or more to a URI containing `HotSpotDiagnostic` WILL fire whatever its content. Whether the returned bytes are a heap dump holding credentials is not tested.
 **Deployment:** Web/proxy access-log ingestion.
 
 ```yaml
-title: Successful Large Response From a Spring Boot Actuator Heap Dump Endpoint
+title: Large HTTP 200 Response to a Spring Boot Actuator Heap Dump or Jolokia HotSpotDiagnostic URI
 id: f872347d-00cd-463e-9817-96d4ef96f205
 status: experimental
 description: >-
     Detects a successful (status 200), large-bodied (1,000,000 bytes or more)
     response for a request to the Spring Boot Actuator heapdump endpoint, or
-    for a request whose URI names the Jolokia HotSpotDiagnostic MBean, from
+    for a request whose URI contains the text HotSpotDiagnostic anywhere (any
+    Jolokia operation on that MBean, not only a heap dump), from
     any source (the source address is not tested). A heap dump commonly
     contains in-memory credentials, session
-    tokens and business data; this rule keys on confirmed success, a 200
-    status with a large response body, rather than the request alone, since
-    the request is trivially made and often blocked by an auth filter.
+    tokens and business data. A 200 status with a large response body is
+    consistent with a dump having been returned, which a blocked or small
+    response is not, but the rule does not inspect the body: it does not show
+    that a heap dump or any credential was returned.
 references:
     - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/
 author: The Hunters Ledger
@@ -728,9 +731,11 @@ description: >-
     Connections the firewall rejected are excluded: an internet-facing
     address is scanned continuously as a background condition, so counting
     dropped packets makes the paired correlation fire indefinitely on traffic
-    that never reached a service. Restricting to connections the firewall
-    permitted changes the signal from "someone scanned us" to "someone
-    scanned us and something answered", which is the actionable form.
+    that never reached a service. The filter removes records whose action is a
+    rejection token and keeps everything else, including records with no
+    action value at all; a permitted or unlabelled record does not show that
+    a service answered, so the rule counts non-rejected connection attempts
+    and not responses.
 references:
     - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/
 author: The Hunters Ledger
@@ -896,21 +901,21 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3
 alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3.1.116 Gopher-Scheme SSRF Protocol Smuggling in HTTP Request Body"; flow:established,to_server; http.request_body; content:"gopher://"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:9301405; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)
 ```
 
-#### SSRF-to-Redis CONFIG/BGSAVE Command Sequence via HTTP
+#### HTTP Request Body With Redis CONFIG SET dir Followed by BGSAVE
 
 **Tier:** Detection
 **Robustness:** 3
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application)
 **ATT&CK Note:** The report maps the attempted key write to T1098.004 (SSH Authorized Keys). This rule matches the Redis `CONFIG SET dir` and `BGSAVE` verbs in an HTTP body and tests no `authorized_keys` or `.ssh` string, so it does not cover that technique; the same two verbs also write a cron file or a web shell.
-**Confidence:** HIGH
-**Rationale:** The report describes the operator's script injecting CRLF-separated Redis commands (`CONFIG SET dir`, `CONFIG SET dbfilename`, `SET`, `BGSAVE`) through an SSRF vector to write an SSH public key, and names Redis verbs arriving over a non-Redis transport as the network discriminator. The rule matches the first and last verbs in an HTTP request body, whichever file the commands go on to write.
-**False Positives:** None known. Raw Redis protocol verbs (`CONFIG SET dir`, `BGSAVE`) embedded inside an HTTP request body are not organic web traffic under any legitimate use this rule is aware of.
+**Confidence:** MODERATE
+**Rationale:** The report describes the operator's script injecting CRLF-separated Redis commands (`CONFIG SET dir`, `CONFIG SET dbfilename`, `SET`, `BGSAVE`) through an SSRF vector to write an SSH public key, and names Redis verbs arriving over a non-Redis transport as the network discriminator. The rule matches two contents in an HTTP request body, in order: `CONFIG SET dir`, then `BGSAVE` after it (`distance:0`). It tests no Redis protocol framing and no CRLF separation and does not parse the commands, so it shows that the two verbs appear in that order in a body and not that Redis executed them, whichever file the commands go on to write.
+**False Positives:** Rare but not zero, and unmeasured. Any inbound POST whose body carries both strings in order matches: a Redis web administration console that sends commands over HTTP, or a ticket, wiki or paste submission that quotes a Redis persistence procedure. The `$EXTERNAL_NET` to `$HOME_NET` direction limits this to inbound requests.
 **Blind Spots:** Misses the technique if the operator uses a different Redis command sequence to the same effect (e.g. `MODULE LOAD` in newer Redis versions), or CRLF-encodes the commands in a way that splits them across the matched substrings.
-**Validation:** Replay an HTTP POST body containing both `CONFIG SET dir` and `BGSAVE`: the rule must fire; an ordinary POST body must NOT fire.
+**Validation:** Replay an HTTP POST body containing `CONFIG SET dir` followed later by `BGSAVE`: the rule must fire. A body containing `BGSAVE` before `CONFIG SET dir`, a body containing only one of them, and an ordinary POST body must NOT fire. A body that quotes both verbs in order as documentation WILL fire.
 **Deployment:** Network IDS in front of any application feature with a known or suspected SSRF vector (URL fetchers, OCR/image services, webhook validators).
 
 ```
-alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3.1.116 SSRF-to-Redis CONFIG/BGSAVE Command Sequence via HTTP (Redis File-Write Chain)"; flow:established,to_server; http.request_body; content:"CONFIG SET dir"; content:"BGSAVE"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:9301406; rev:3; metadata:author The_Hunters_Ledger, date 2026-07-21;)
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3.1.116 HTTP Body With Redis CONFIG SET dir Followed by BGSAVE (Redis File-Write Verbs)"; flow:established,to_server; http.request_body; content:"CONFIG SET dir"; content:"BGSAVE"; distance:0; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:9301406; rev:4; metadata:author The_Hunters_Ledger, date 2026-07-21;)
 ```
 
 #### Eureka Apps-Delta Response Containing XStream Gadget Markers (Flowbits Pair)

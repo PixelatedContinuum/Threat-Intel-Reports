@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--e1afa1d4-b96f-495c-872b-908f5f563f03",
+    "id": "bundle--1872425e-6118-4c35-b085-d19654938380",
     "objects": [
         {
             "type": "identity",
@@ -206,12 +206,12 @@
             "id": "indicator--f74d7379-50b9-51f4-b837-0ea0667a9d96",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.417853Z",
-            "modified": "2026-10-11T05:44:22.223561Z",
+            "modified": "2026-10-11T07:05:20.974385Z",
             "name": "Per-User Proxy or PAC Setting Changed by a Process Running From AppData",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Per-User Proxy or PAC Setting Changed by a Process Running From AppData\nid: a46ddda1-468c-4417-a38f-38ade5e69da6\nstatus: experimental\ndescription: >-\n    Detects a process running from a user AppData folder writing the ProxyServer,\n    ProxyEnable or AutoConfigURL value under the per-user Internet Settings key.\n    A Steam-focused executable delivered by a ClickFix chain changes these values\n    as part of a traffic-interception setup. The values it writes were not\n    recovered, so the rule keys on the writer and the setting, not the data.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/\nauthor: The Hunters Ledger\ndate: 2026-09-28\ntags:\n    - attack.credential-access\n    - attack.collection\n    - attack.t1557\n    - detection.emerging-threats\n    - stp.2\nlogsource:\n    category: registry_set\n    product: windows\n    definition: 'Requires Sysmon EID 13 (RegistryEvent value set) with the Internet Settings key path included in the registry monitoring config.'\ndetection:\n    selection:\n        TargetObject|startswith: 'HKU\\'\n        TargetObject|contains: '\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\'\n        TargetObject|endswith:\n            - '\\ProxyServer'\n            - '\\ProxyEnable'\n            - '\\AutoConfigURL'\n        Image|contains: '\\AppData\\'\n    condition: selection\nfalsepositives:\n    - VPN, proxy and filtering clients installed under the user profile that manage the system proxy\n    - Developer proxy tools started from a user profile folder\nlevel: medium",
+            "pattern": "title: Per-User Proxy or PAC Setting Changed by a Process Running From AppData\nid: a46ddda1-468c-4417-a38f-38ade5e69da6\nstatus: experimental\ndescription: >-\n    Detects a process running from a user AppData folder writing the ProxyServer,\n    ProxyEnable or AutoConfigURL value under the per-user Internet Settings key.\n    Static analysis of a Steam-focused executable delivered by a ClickFix chain\n    found code that can change these values as part of a traffic-interception\n    setup; the report does not record a completed change. The values it would\n    write were not recovered, so the rule keys on the writer and the setting, not the data.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/\nauthor: The Hunters Ledger\ndate: 2026-09-28\ntags:\n    - attack.credential-access\n    - attack.collection\n    - attack.t1557\n    - detection.emerging-threats\n    - stp.2\nlogsource:\n    category: registry_set\n    product: windows\n    definition: 'Requires Sysmon EID 13 (RegistryEvent value set) with the Internet Settings key path included in the registry monitoring config.'\ndetection:\n    selection:\n        TargetObject|startswith: 'HKU\\'\n        TargetObject|contains: '\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\'\n        TargetObject|endswith:\n            - '\\ProxyServer'\n            - '\\ProxyEnable'\n            - '\\AutoConfigURL'\n        Image|contains: '\\AppData\\'\n    condition: selection\nfalsepositives:\n    - VPN, proxy and filtering clients installed under the user profile that manage the system proxy\n    - Developer proxy tools started from a user profile folder\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-09-28T00:00:00Z",
             "labels": [

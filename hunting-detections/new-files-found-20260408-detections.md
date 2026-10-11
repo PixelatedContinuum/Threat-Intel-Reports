@@ -425,7 +425,7 @@ level: medium
 **Robustness:** 2
 **ATT&CK Coverage:** T1543.003 (Windows Service — kernel driver)
 **Confidence:** MODERATE
-**Rationale:** The rule requires a driver-load event for a file named `npf.sys` whose path contains `\Temp\` (the report records the dropper writing `%TEMP%\npf.sys` and loading it from there). A copy in `System32\drivers` or any other non-Temp path does not match; an earlier version tested only for the absence of those two driver directories, so any other location matched. `npf.sys` is the genuine, unmodified WinPcap kernel driver filename — durable in the sense that it can't be renamed without breaking WinPcap functionality, and not specific to CovertVPN (any tool embedding WinPcap for raw capture would trip it). Retiered from Detection on precision, not durability: the rule's own original false-positive assessment rated this MEDIUM ("legitimate WinPcap/Npcap installers occasionally stage npf.sys in %TEMP% during initial setup before moving to System32\drivers"), which does not clear the "reliably fires on malice, rare FP" bar for Detection. Corrected from the original: the technique tag was T1547.006 (Kernel Modules and Extensions, a Linux/macOS-scoped sub-technique) and carried an orphaned `attack.command-and-control` tactic tag with no paired C2 technique — realigned to T1543.003 (Windows Service), matching the rule's own prose ATT&CK Coverage line and MITRE's Windows-service scoping for kernel-driver services; the T1095 (Non-Application Layer Protocol) claim in the original prose describes the CovertVPN ICMP/raw-capture *capability* the driver enables, not this file-load event itself, so it is not re-added as a tag here.
+**Rationale:** The rule requires a driver-load event for a file named `npf.sys` whose path contains `\Temp\` (the report records the dropper writing `%TEMP%\npf.sys` and loading it from there). The test is a path-component test, not a user-directory test: `C:\Windows\Temp\npf.sys` and `C:\Temp\npf.sys` match as well. The service mapping is context for what this driver does in the report; the rule observes a driver load, not a service creation. A copy in `System32\drivers` or any other non-Temp path does not match; an earlier version tested only for the absence of those two driver directories, so any other location matched. `npf.sys` is the genuine, unmodified WinPcap kernel driver filename — durable in the sense that it can't be renamed without breaking WinPcap functionality, and not specific to CovertVPN (any tool embedding WinPcap for raw capture would trip it). Retiered from Detection on precision, not durability: the rule's own original false-positive assessment rated this MEDIUM ("legitimate WinPcap/Npcap installers occasionally stage npf.sys in %TEMP% during initial setup before moving to System32\drivers"), which does not clear the "reliably fires on malice, rare FP" bar for Detection. Corrected from the original: the technique tag was T1547.006 (Kernel Modules and Extensions, a Linux/macOS-scoped sub-technique) and carried an orphaned `attack.command-and-control` tactic tag with no paired C2 technique — realigned to T1543.003 (Windows Service), matching the rule's own prose ATT&CK Coverage line and MITRE's Windows-service scoping for kernel-driver services; the T1095 (Non-Application Layer Protocol) claim in the original prose describes the CovertVPN ICMP/raw-capture *capability* the driver enables, not this file-load event itself, so it is not re-added as a tag here.
 **False Positives:**
 - Legitimate WinPcap or Npcap installers that stage npf.sys in a temporary directory before moving it to System32\drivers (uncommon; verify by checking for a subsequent persistent driver installation in System32\drivers).
 **Deployment:** Endpoint EDR (Sysmon Event ID 6), SIEM.
@@ -435,8 +435,9 @@ title: CovertVPN WinPcap npf.sys Kernel Driver Loaded from Temp Directory
 id: d9e05a82-6c34-4b77-a1f5-3e8d2c7b4f01
 status: experimental
 description: >-
-  Detects loading of the npf.sys WinPcap kernel driver from a user
-  temporary directory. The Cobalt Strike CovertVPN Layer 2 bridge module
+  Detects loading of the npf.sys WinPcap kernel driver from any path
+  containing a Temp directory component (a user %TEMP% as well as
+  C:\Windows\Temp or C:\Temp). The Cobalt Strike CovertVPN Layer 2 bridge module
   embeds WinPcap 4.1.3 components (npf.sys x86 and amd64, wpcap.dll,
   Packet.dll) in its .data section and installs npf.sys as a kernel
   driver service from %TEMP% to enable raw packet capture for its ICMP
@@ -572,7 +573,7 @@ level: medium
 **Robustness:** 2
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
 **Confidence:** MODERATE
-**Rationale:** Retiered from Detection. The 8-hex-digit deterministic ID format (a djb2 hash variant of ComputerName XOR PID) is a genuine protocol-design element, more durable than a simple config string — but the original rule's own false-positive assessment ("LOW-MEDIUM ... web applications may legitimately use /updates?id= endpoints ... correlate with ~5-second beaconing interval and POST to /submit?id= for high confidence") states plainly that the rule as written does not reach high confidence standalone. A `threshold` clause controls alert *volume*, not per-match precision, so it does not change this assessment.
+**Rationale:** Retiered from Detection. The 8-hex-digit beacon ID format (the report describes a djb2 hash variant of ComputerName XOR PID; the rule tests only the eight-hex-digit shape, not the derivation) is a genuine protocol-design element, more durable than a simple config string — but the original rule's own false-positive assessment ("LOW-MEDIUM ... web applications may legitimately use /updates?id= endpoints ... correlate with ~5-second beaconing interval and POST to /submit?id= for high confidence") states plainly that the rule as written does not reach high confidence standalone. A `threshold` clause controls alert *volume*, not per-match precision, so it does not change this assessment.
 **Regex note:** the earlier regex was written with `^` and `$`, which Elastic's regex engine reads as literal characters, so it could not match there. The path is now pinned with `startswith` and the regex covers the whole field without anchors; on Elastic the field must be exactly `/updates?id=` plus 8 lowercase hex characters, while a backend that searches inside the string would also accept trailing characters after the ID.
 **False Positives:** Web applications using `/updates` as an API endpoint with an `id` parameter of exactly 8 lowercase hex characters (uncommon in enterprise environments; verify against known application inventory and require a correlated POST to `/submit?id=` with the same ID before treating as high confidence).
 **Deployment:** Proxy logs, SIEM; correlate with the companion `/submit?id=` rule and beaconing-interval analysis before escalating.
@@ -585,9 +586,10 @@ description: >-
   Detects the OpenStrike Generation 4 beacon (beacon_windows_x64.exe)
   task polling pattern — HTTP GET requests to /updates with an
   8-character lowercase hex beacon ID query parameter. The beacon ID is
-  a djb2 hash variant (multiplier 0x1f) of ComputerName XOR'd with PID,
-  making it deterministic per host across process restarts. The
-  beaconing interval is approximately 5 seconds with 10 percent jitter
+  a djb2 hash variant (multiplier 0x1f) of ComputerName XOR'd with PID.
+  Because the formula includes the PID, the ID changes when the process
+  ID changes; the rule tests only the eight-hex-digit shape of the
+  value. The beaconing interval is approximately 5 seconds with 10 percent jitter
   (4500-5500ms base). This rule alone has LOW-MEDIUM precision;
   correlate with a corresponding POST to /submit?id=[same ID] and the
   beaconing interval for high-confidence identification.

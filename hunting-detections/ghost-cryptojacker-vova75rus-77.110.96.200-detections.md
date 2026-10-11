@@ -1043,27 +1043,28 @@ falsepositives:
 level: medium
 ```
 
-#### ComfyUI Custom Node Python File Named PerformanceMonitor Created
+#### ComfyUI Custom Node Python File With a PerformanceMonitor Path Prefix Created
 
 **Tier:** Hunting
 **Robustness:** 1
 **ATT&CK Coverage:** T1554 (Compromise Host Software Binary)
 **Confidence:** LOW
-**Rationale:** *Wording and tier fix 2026-10-11:* the rule matches a created `.py` file whose path contains `/custom_nodes/PerformanceMonitor`, nothing more. Its YARA sibling above (`SUSP_Linux_ComfyUI_PerformanceMonitor_Node_Registration`) was confirmed by direct testing to fire on a genuine, benign ComfyUI extension named PerformanceMonitor, and this path test has the same property: a legitimately named extension matches, and the kit's node can be renamed. It keys on one filename, so it is Robustness 1 and Hunting tier, level medium, and the earlier title ("Fake ... Planted") and the claim that it detects the kit's persistence were withdrawn. **Tightened from the original selector.** The prior version matched `TargetFilename|contains` against EITHER the specific `/custom_nodes/PerformanceMonitor` substring OR the generic `/ComfyUI/custom_nodes/` directory path — the second branch would fire on the creation of ANY `.py` file anywhere under a ComfyUI custom-node directory, which is exactly what happens every time a user installs any legitimate custom node. That branch has been removed; the rule now requires the distinctive `PerformanceMonitor` filename component specifically.
+**Rationale:** *Wording and tier fix 2026-10-11:* the rule matches a created `.py` file whose path contains `/custom_nodes/PerformanceMonitor`, nothing more. That is a path-prefix test, not a filename test: `.../custom_nodes/PerformanceMonitor.py`, `.../custom_nodes/PerformanceMonitorOther.py` and `.../custom_nodes/PerformanceMonitor/pkg.py` all match. The report names the `PerformanceMonitor` class and the `plant_backdoor_node` routine but not the planted file's name, so the prefix is a lead, not the kit's file. Its YARA sibling above (`SUSP_Linux_ComfyUI_PerformanceMonitor_Node_Registration`) was confirmed by direct testing to fire on a genuine, benign ComfyUI extension named PerformanceMonitor, and this path test has the same property: a legitimately named extension matches, and the kit's node can be renamed. It keys on one path prefix, so it is Robustness 1 and Hunting tier, level medium, and the earlier title ("Fake ... Planted") and the claim that it detects the kit's persistence were withdrawn. **Tightened from the original selector.** The prior version matched `TargetFilename|contains` against EITHER the specific `/custom_nodes/PerformanceMonitor` substring OR the generic `/ComfyUI/custom_nodes/` directory path — the second branch would fire on the creation of ANY `.py` file anywhere under a ComfyUI custom-node directory, which is exactly what happens every time a user installs any legitimate custom node. That branch has been removed; the rule now requires the distinctive `/custom_nodes/PerformanceMonitor` path component specifically.
 **False Positives:** Confirmed for the sibling content rule and true by construction here: a legitimately-named custom node literally called "PerformanceMonitor" installed by an authorized user (verify publisher and source repository before dismissing); development environments where a test node happens to share this name.
-**Blind Spots:** A rebuild that renames the planted node file would evade; this rule inspects the file path only, not the file's content (the YARA rule above inspects content — the class definition — for a stronger anchor).
-**Validation:** Trigger the kit's `plant_backdoor_node()` routine — the file-creation event must match; installation of an unrelated, differently-named legitimate custom node must NOT fire. A benign custom node that is itself named PerformanceMonitor WILL fire.
-**Deployment:** Linux `file_event` monitoring (auditd or Sysmon for Linux) on ComfyUI `custom_nodes` directory.
+**Blind Spots:** A rebuild that renames the planted node file would evade, and so would a planted file whose path does not begin `PerformanceMonitor`; this rule inspects the file path only, not the file's content (the YARA rule above inspects content — the class definition — for a stronger anchor).
+**Validation:** A created `.py` file under `custom_nodes/` whose path begins `PerformanceMonitor` must match (`PerformanceMonitor.py`, `PerformanceMonitorOther.py` and a file inside a `PerformanceMonitor` directory all do); a `.py` file whose path under `custom_nodes/` does not contain `/custom_nodes/PerformanceMonitor` must NOT fire. A benign custom node that is itself named PerformanceMonitor WILL fire. Whether the file written by `plant_backdoor_node()` has a name beginning `PerformanceMonitor` is NOT CHECKED: the report does not give it.
+**Deployment:** Linux `file_event` telemetry that carries the created file's full path as `TargetFilename` (Sysmon for Linux file-create events, or an EDR file feed). Raw auditd records put the path in a separate PATH record, so auditd needs a pipeline that joins it into `TargetFilename` before this rule can match.
 
 ```yaml
-title: ComfyUI Custom Node Python File Named PerformanceMonitor Created
+title: ComfyUI Custom Node Python File With a PerformanceMonitor Path Prefix Created
 id: df247923-595c-4760-9a97-f0722dbf664d
 status: experimental
 description: >-
     Detects creation of a Python file whose path contains
-    /custom_nodes/PerformanceMonitor. The GHOST Python kit's plant_backdoor_node()
-    function creates a file with that name in the victim's ComfyUI custom_nodes/
-    directory, but a legitimate extension with the same name creates the same
+    /custom_nodes/PerformanceMonitor, a path-prefix match that also accepts
+    PerformanceMonitorOther.py and files inside a PerformanceMonitor directory. The GHOST Python kit's plant_backdoor_node()
+    function registers a PerformanceMonitor class in the victim's ComfyUI custom_nodes/
+    directory (the report does not give the planted file's name), and a legitimate extension with the same name prefix creates the same
     event, so a hit needs publisher and source verification. Tightened from an earlier selector that also matched
     any .py file under a ComfyUI custom_nodes/ path regardless of filename, which
     would have fired on every legitimate custom-node installation.
@@ -1076,7 +1077,7 @@ tags:
     - attack.persistence
     - attack.t1554
     - detection.emerging-threats
-    - stp.3
+    - stp.2
 logsource:
     category: file_event
     product: linux

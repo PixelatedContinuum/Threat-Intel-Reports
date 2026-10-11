@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--51becfad-d2e2-4f25-9895-6731ce368f79",
+    "id": "bundle--117f3708-9dd4-4bb4-be25-4cb7a3a6936f",
     "objects": [
         {
             "type": "identity",
@@ -596,12 +596,12 @@
             "id": "indicator--c986f057-a5da-5c09-b7ef-247ac4569edb",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.113699Z",
-            "modified": "2026-10-01T19:54:18.113699Z",
+            "modified": "2026-10-11T07:05:25.01944Z",
             "name": "Potential AMSI Bypass via Reflection Over Assembly Types and Private Field Zeroing",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Potential AMSI Bypass via Reflection Over Assembly Types and Private Field Zeroing\nid: 35c3f793-f035-4331-a6e0-53a4b0000421\nstatus: experimental\ndescription: >-\n    Detects the structural shape of an in-memory AMSI bypass in which a script enumerates the types of a loaded assembly, filters them with a wildcard rather than a literal name, then writes a zero into a NonPublic Static field. The AdaptixC2 operator loader observed at 45.130.148.125 uses exactly this form and deliberately emits neither AmsiUtils nor amsiInitFailed, assembling the field name from concatenated fragments and locating the type by a wildcard match on iUtils, so the two most widely deployed AMSI signatures do not fire on it. Matching the reflection shape instead of the strings survives both a rename of the target field and a re-split of the concatenation. This is a hunting rule because legitimate tooling also uses reflection to set private static fields.\nreferences:\n    - https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/\nauthor: The Hunters Ledger\ndate: 2026-08-12\ntags:\n    - attack.execution\n    - attack.stealth\n    - attack.defense-impairment\n    - attack.t1059.001\n    - attack.t1685\n    - detection.emerging-threats\nlogsource:\n    category: ps_script\n    product: windows\n    definition: Requires PowerShell Script Block Logging, Windows Event ID 4104\ndetection:\n    selection_reflection:\n        ScriptBlockText|contains: 'GetTypes()'\n    selection_private_field:\n        ScriptBlockText|contains:\n            - 'NonPublic,Static'\n            - \"NonPublic','Static\"\n            - 'NonPublic, Static'\n    selection_write:\n        ScriptBlockText|contains: 'SetValue'\n    condition: all of selection_*\nfalsepositives:\n    - Development, debugging and unit-test tooling that reflects over private static members of loaded assemblies\n    - Some administrative modules and application shims legitimately patch private static fields at runtime - baseline the calling script path and its signer before alerting\nlevel: medium",
+            "pattern": "title: Potential AMSI Bypass via Reflection Over Assembly Types and Private Field Zeroing\nid: 35c3f793-f035-4331-a6e0-53a4b0000421\nstatus: experimental\ndescription: >-\n    Detects the structural shape of an in-memory AMSI bypass in which a script enumerates the types of a loaded assembly, filters them with a wildcard rather than a literal name, then writes a zero into a NonPublic Static field, tested as a SetValue call with a null target and the value 0. The rule does not test the wildcard filter itself, only that GetTypes() and the NonPublic Static text are present in the same script block. The AdaptixC2 operator loader observed at 45.130.148.125 uses exactly this form and deliberately emits neither AmsiUtils nor amsiInitFailed, assembling the field name from concatenated fragments and locating the type by a wildcard match on iUtils, so the two most widely deployed AMSI signatures do not fire on it. Matching the reflection shape instead of the strings survives both a rename of the target field and a re-split of the concatenation. This is a hunting rule because legitimate tooling also uses reflection to set private static fields.\nreferences:\n    - https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/\nauthor: The Hunters Ledger\ndate: 2026-08-12\ntags:\n    - attack.execution\n    - attack.stealth\n    - attack.defense-impairment\n    - attack.t1059.001\n    - attack.t1685\n    - detection.emerging-threats\nlogsource:\n    category: ps_script\n    product: windows\n    definition: Requires PowerShell Script Block Logging, Windows Event ID 4104\ndetection:\n    selection_reflection:\n        ScriptBlockText|contains: 'GetTypes()'\n    selection_private_field:\n        ScriptBlockText|contains:\n            - 'NonPublic,Static'\n            - \"NonPublic','Static\"\n            - 'NonPublic, Static'\n    selection_write:\n        ScriptBlockText|contains:\n            - 'SetValue($null,0)'\n            - 'SetValue($null, 0)'\n    condition: all of selection_*\nfalsepositives:\n    - Development, debugging and unit-test tooling that reflects over private static members of loaded assemblies\n    - Some administrative modules and application shims legitimately patch private static fields at runtime - baseline the calling script path and its signer before alerting\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-04-30T00:00:00Z",
             "labels": [
@@ -614,15 +614,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--29ee4afb-5cba-509e-a459-07bbbffd3f0f",
+            "id": "indicator--8483ecde-37ec-555d-8616-16594fae3ca7",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:18.113774Z",
-            "modified": "2026-10-01T19:54:18.113774Z",
-            "name": "AdaptixC2 Default Listener - Anomalous Firefox 20 User-Agent with X-Beacon-Id Header",
+            "created": "2026-10-11T07:05:25.01954Z",
+            "modified": "2026-10-11T07:05:25.01954Z",
+            "name": "AdaptixC2 Default Listener - Anomalous Firefox 20 User-Agent",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: AdaptixC2 Default Listener - Anomalous Firefox 20 User-Agent with X-Beacon-Id Header\nid: 7c9d4b81-3e62-4f08-a517-2d8e5a6c0b93\nstatus: experimental\ndescription: Detects outbound HTTP traffic matching the AdaptixC2 stock listener default profile. The Firefox 20 User-Agent (released February 2013) is anomalous in 2026 traffic and is the AdaptixC2 default listener UA string. The X-Beacon-Id header is the AdaptixC2 stock per-agent heartbeat header not used by any known legitimate browser or application, but standard proxy logsource fields do not expose arbitrary request headers, so this rule anchors on the User-Agent string alone; combine with the X-Beacon-Id header at the WAF or full-packet-capture layer for the highest-confidence match. The UA string is a listener-profile field the operator can change at will, so this is a hunting-grade lead rather than an alerting-grade signature on its own.\nreferences:\n    - https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/\nauthor: The Hunters Ledger\ndate: 2026-04-30\ntags:\n    - attack.command-and-control\n    - attack.t1071.001\n    - detection.emerging-threats\nlogsource:\n    category: proxy\ndetection:\n    selection:\n        cs-user-agent|contains: 'Firefox/20.0'\n    condition: selection\nfalsepositives:\n    - Legacy embedded systems or industrial control software using a hardcoded Firefox 20 UA string - cross-reference against known asset inventory to exclude\nlevel: medium",
+            "pattern": "title: AdaptixC2 Default Listener - Anomalous Firefox 20 User-Agent\nid: 7c9d4b81-3e62-4f08-a517-2d8e5a6c0b93\nstatus: experimental\ndescription: Detects outbound HTTP traffic whose User-Agent contains Firefox/20.0, the AdaptixC2 stock listener default. The Firefox 20 User-Agent (released February 2013) is anomalous in 2026 traffic and is the AdaptixC2 default listener UA string. The X-Beacon-Id header is the AdaptixC2 stock per-agent heartbeat header not used by any known legitimate browser or application, but standard proxy logsource fields do not expose arbitrary request headers, so this rule anchors on the User-Agent string alone; combine with the X-Beacon-Id header at the WAF or full-packet-capture layer for the highest-confidence match. The UA string is a listener-profile field the operator can change at will, so this is a hunting-grade lead rather than an alerting-grade signature on its own.\nreferences:\n    - https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/\nauthor: The Hunters Ledger\ndate: 2026-04-30\ntags:\n    - attack.command-and-control\n    - attack.t1071.001\n    - detection.emerging-threats\nlogsource:\n    category: proxy\ndetection:\n    selection:\n        cs-user-agent|contains: 'Firefox/20.0'\n    condition: selection\nfalsepositives:\n    - Legacy embedded systems or industrial control software using a hardcoded Firefox 20 UA string - cross-reference against known asset inventory to exclude\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-04-30T00:00:00Z",
             "labels": [
@@ -656,15 +656,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--d76b55fc-949f-5b1c-862b-bb6a03cff661",
+            "id": "indicator--53125768-f022-50cb-a428-8e6df2ac6bfe",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:18.113928Z",
-            "modified": "2026-10-01T19:54:18.113928Z",
-            "name": "Suspicious .NET Assembly Image Load with Operator si_build Build Fingerprint",
+            "created": "2026-10-11T07:05:25.019736Z",
+            "modified": "2026-10-11T07:05:25.019736Z",
+            "name": "PowerShell Image Load of a Module Whose Description Contains the si_build Build String",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Suspicious .NET Assembly Image Load with Operator si_build Build Fingerprint\nid: 5b8e2d47-1c93-4a76-f018-9b4d7e3c6f85\nstatus: experimental\ndescription: Detects PowerShell loading a .NET DLL image whose PE version metadata contains the operator build-placeholder string si_build. This string appears in CompanyName, FileDescription, InternalName, and OriginalFilename fields of the operator-written injector.dll found in this AdaptixC2 deployment. The string is a Linux-build artifact from /tmp/si_build/ left unredacted in the PE version resource and is not present in any known legitimate software, but it is a renameable literal the operator controls - a future build that changes the project name evades this rule.\nreferences:\n    - https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/\nauthor: The Hunters Ledger\ndate: 2026-04-30\ntags:\n    - attack.stealth\n    - attack.privilege-escalation\n    - attack.t1055\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: image_load\ndetection:\n    selection:\n        Image|endswith: '\\powershell.exe'\n        Description|contains: 'si_build'\n    filter_legitimate:\n        Signed: 'true'\n    condition: selection and not filter_legitimate\nfalsepositives:\n    - Internal developer tooling where a developer has named a build artifact si_build and loaded it via PowerShell - cross-reference against software asset inventory\nlevel: medium",
+            "pattern": "title: PowerShell Image Load of a Module Whose Description Contains the si_build Build String\nid: 5b8e2d47-1c93-4a76-f018-9b4d7e3c6f85\nstatus: experimental\ndescription: Detects PowerShell loading an unsigned image whose Description field contains the operator build-placeholder string si_build. The string appears in the CompanyName, FileDescription, InternalName and OriginalFilename fields of the operator-written injector.dll found in this AdaptixC2 deployment; the rule tests the Description field only and does not test that the image is a .NET assembly. The string is a Linux-build artifact from /tmp/si_build/ left unredacted in the PE version resource and is not present in any known legitimate software, but it is a renameable literal the operator controls - a future build that changes the project name evades this rule.\nreferences:\n    - https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/\nauthor: The Hunters Ledger\ndate: 2026-04-30\ntags:\n    - attack.stealth\n    - attack.privilege-escalation\n    - attack.t1055\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: image_load\ndetection:\n    selection:\n        Image|endswith: '\\powershell.exe'\n        Description|contains: 'si_build'\n    filter_legitimate:\n        Signed: 'true'\n    condition: selection and not filter_legitimate\nfalsepositives:\n    - Internal developer tooling where a developer has named a build artifact si_build and loaded it via PowerShell - cross-reference against software asset inventory\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-04-30T00:00:00Z",
             "labels": [
@@ -5361,7 +5361,7 @@
             "id": "report--fc7cbb43-66c7-5373-b2ac-b5eb14fb24fd",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.135845Z",
-            "modified": "2026-10-01T19:54:18.135845Z",
+            "modified": "2026-10-11T07:05:25.050392Z",
             "name": "AdaptixC2 Open Directory Exposure — 45.130.148.125 Operator Toolkit",
             "report_types": [
                 "threat-report"
@@ -5419,9 +5419,9 @@
                 "indicator--ece089ca-d08f-5991-9b54-b002cc2e09cb",
                 "indicator--094fbbc6-536d-50a0-8f71-461cd28ab1b2",
                 "indicator--c986f057-a5da-5c09-b7ef-247ac4569edb",
-                "indicator--29ee4afb-5cba-509e-a459-07bbbffd3f0f",
+                "indicator--8483ecde-37ec-555d-8616-16594fae3ca7",
                 "indicator--290995e6-4a65-5d09-a582-502502556ba4",
-                "indicator--d76b55fc-949f-5b1c-862b-bb6a03cff661",
+                "indicator--53125768-f022-50cb-a428-8e6df2ac6bfe",
                 "indicator--a5f38ce6-890d-51b2-8480-756827ab7a71",
                 "indicator--19c908cd-b225-5156-b1e6-2ff1bb567af0",
                 "indicator--29285074-42d4-5abb-8366-01cfb42a8485",

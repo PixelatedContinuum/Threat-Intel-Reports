@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--f9f27408-0a82-45c7-8361-0b148c21553a",
+    "id": "bundle--59a73364-d533-4e12-b315-ffc5239a0d71",
     "objects": [
         {
             "type": "identity",
@@ -293,12 +293,12 @@
             "id": "indicator--78b34948-9a84-548e-b370-cd602bfd3367",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.722219Z",
-            "modified": "2026-10-11T04:24:13.509454Z",
+            "modified": "2026-10-11T07:05:19.195958Z",
             "name": "RAT_CloudSync_TorPanel_NetscanBuild",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "/*\n   Yara Rule Set\n   Identifier: CloudSync Assembler Toolkit - 91.197.98.188\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule RAT_CloudSync_TorPanel_NetscanBuild {\n   meta:\n      description = \"Detects the later-build CloudSync Tor-panel RAT (client.exe/q.exe/s.exe) via embedded HTML/JS markup for its CIDR+port network scanner panel tab, unique to the later of two known CloudSync build generations\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188/\"\n      date = \"2026-08-03\"\n      modified = \"2026-10-11\"\n      hash1 = \"62aa8e470e60aa9fa77df6e6e63b7c253657e95d6018240b1752a9ca9fe389fa\"\n      family = \"CloudSync\"\n      malware_type = \"RAT\"\n      campaign = \"CloudSync-Assembler-Toolkit-91.197.98.188\"\n      id = \"b14306ec-cdfb-5107-bf6f-156ea821ae75\"\n   strings:\n      $api1 = \"/api/netscan\" ascii\n      $html1 = \"id='scan-cidr'\" ascii\n      $html2 = \"placeholder='Target CIDR (e.g. 192.168.1.0/24)'\" ascii\n      $html3 = \"id='netscan-output'\" ascii\n      $html4 = \"showTab('netscan'\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 60MB and\n      3 of them\n}",
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: CloudSync Assembler Toolkit - 91.197.98.188\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule RAT_CloudSync_TorPanel_NetscanBuild {\n   meta:\n      description = \"Detects the later-build CloudSync Tor-panel RAT (client.exe/q.exe/s.exe) via embedded HTML/JS markup for its CIDR+port network scanner panel tab, unique to the later of two known CloudSync build generations\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\"\n      date = \"2026-08-03\"\n      modified = \"2026-10-11\"\n      hash1 = \"62aa8e470e60aa9fa77df6e6e63b7c253657e95d6018240b1752a9ca9fe389fa\"\n      family = \"CloudSync\"\n      malware_type = \"RAT\"\n      campaign = \"CloudSync-Assembler-Toolkit-91.197.98.188\"\n      id = \"b14306ec-cdfb-5107-bf6f-156ea821ae75\"\n   strings:\n      $api1 = \"/api/netscan\" ascii\n      $html1 = \"id='scan-cidr'\" ascii\n      $html2 = \"placeholder='Target CIDR (e.g. 192.168.1.0/24)'\" ascii\n      $html3 = \"id='netscan-output'\" ascii\n      $html4 = \"showTab('netscan'\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 60MB and\n      3 of them\n}",
             "pattern_type": "yara",
             "valid_from": "2026-08-03T00:00:00Z",
             "labels": [
@@ -314,12 +314,12 @@
             "id": "indicator--3832238b-e9ff-5b1b-9c62-6315c3bd64e2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.722385Z",
-            "modified": "2026-10-01T19:54:12.722385Z",
+            "modified": "2026-10-11T07:05:19.196155Z",
             "name": "RAT_CloudSync_C2Protocol_DualBuild",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule RAT_CloudSync_C2Protocol_DualBuild {\n   meta:\n      description = \"Detects CloudSync's cleartext TCP C2 registration/heartbeat protocol strings across both observed build generations, which differ in message terminator ([C2_END] vs [END]) and registration field names\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188/\"\n      date = \"2026-08-03\"\n      hash1 = \"9744c12a06b4562e175d4aeb7b8fd5c1e1877ac30222af8243eeaae16df324b0\"\n      family = \"CloudSync\"\n      malware_type = \"RAT\"\n      campaign = \"CloudSync-Assembler-Toolkit-91.197.98.188\"\n      id = \"df292c17-07ad-5292-9f33-206ab7582bdd\"\n   strings:\n      $autoupd = \"=== AUTO UPDATE ===\" ascii\n      $heartbeat = \"[Shares]\" ascii\n      $term1 = \"[C2_END]\" ascii\n      $term2 = \"[END]\" ascii\n      $field1 = \"AnyDesk Pass:\" ascii\n      $field2 = \"AD Pwd:\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 60MB and\n      2 of them\n}",
+            "pattern": "rule RAT_CloudSync_C2Protocol_DualBuild {\n   meta:\n      description = \"Detects CloudSync's cleartext TCP C2 registration/heartbeat protocol strings across both observed build generations, which differ in message terminator ([C2_END] vs [END]) and registration field names\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\"\n      date = \"2026-08-03\"\n      hash1 = \"9744c12a06b4562e175d4aeb7b8fd5c1e1877ac30222af8243eeaae16df324b0\"\n      family = \"CloudSync\"\n      malware_type = \"RAT\"\n      campaign = \"CloudSync-Assembler-Toolkit-91.197.98.188\"\n      id = \"df292c17-07ad-5292-9f33-206ab7582bdd\"\n   strings:\n      $autoupd = \"=== AUTO UPDATE ===\" ascii\n      $heartbeat = \"[Shares]\" ascii\n      $term1 = \"[C2_END]\" ascii\n      $term2 = \"[END]\" ascii\n      $field1 = \"AnyDesk Pass:\" ascii\n      $field2 = \"AD Pwd:\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 60MB and\n      2 of them\n}",
             "pattern_type": "yara",
             "valid_from": "2026-08-03T00:00:00Z",
             "labels": [
@@ -335,12 +335,12 @@
             "id": "indicator--f482c958-8d70-57c2-9dad-cd0c7c24061b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.722538Z",
-            "modified": "2026-10-01T19:54:12.722538Z",
+            "modified": "2026-10-11T07:05:19.196271Z",
             "name": "RAT_SvchostPayload_ParalellInjector_TypeNames",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule RAT_SvchostPayload_ParalellInjector_TypeNames {\n   meta:\n      description = \"Detects the sourced Paralell (Blind Eagle-associated) reflective injector and the custom SvchostPayload .NET RAT via debug PDB path fragment and distinctive obfuscated/cleartext type and member names; matches the on-disk cls.exe sibling build and, when captured, in-memory dumps of Crystal-Monk.dll and SvchostPayload\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188/\"\n      date = \"2026-08-03\"\n      hash1 = \"79b6f2eb6583a83aabe590264de08c0ad1eb7e960ae9a4bdbc6ed84142ce95a9\"\n      hash3 = \"135877ecc663ee47340a4726078234f0\"\n      family = \"SvchostPayload\"\n      malware_type = \"RAT\"\n      campaign = \"CloudSync-Assembler-Toolkit-91.197.98.188\"\n      id = \"5d097282-dcf6-58bf-a8e8-17d97cff3ec2\"\n   strings:\n      $pdb = \"Paralell\\\\Paralell\\\\bin\\\\x64\\\\Debug\\\\CryptoObfuscator_Output\\\\Crystal-Monk.pdb\" ascii\n      $t1 = \"SvchostPayload\" ascii wide fullword\n      $t2 = \"BrowserCredentialRecovery\" ascii fullword\n      $t3 = \"Crystal-Monk\" ascii wide\n      $t4 = \"VoidNexus\" ascii fullword\n      $t5 = \"ShadowWeave\" ascii fullword\n      $t6 = \"CrystalCore\" ascii fullword\n      $t7 = \"UmbraGate\" ascii fullword\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      ($pdb or 2 of ($t*))\n}",
+            "pattern": "rule RAT_SvchostPayload_ParalellInjector_TypeNames {\n   meta:\n      description = \"Detects the sourced Paralell (Blind Eagle-associated) reflective injector and the custom SvchostPayload .NET RAT via debug PDB path fragment and distinctive obfuscated/cleartext type and member names; matches the on-disk cls.exe sibling build and, when captured, in-memory dumps of Crystal-Monk.dll and SvchostPayload\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\"\n      date = \"2026-08-03\"\n      hash1 = \"79b6f2eb6583a83aabe590264de08c0ad1eb7e960ae9a4bdbc6ed84142ce95a9\"\n      hash3 = \"135877ecc663ee47340a4726078234f0\"\n      family = \"SvchostPayload\"\n      malware_type = \"RAT\"\n      campaign = \"CloudSync-Assembler-Toolkit-91.197.98.188\"\n      id = \"5d097282-dcf6-58bf-a8e8-17d97cff3ec2\"\n   strings:\n      $pdb = \"Paralell\\\\Paralell\\\\bin\\\\x64\\\\Debug\\\\CryptoObfuscator_Output\\\\Crystal-Monk.pdb\" ascii\n      $t1 = \"SvchostPayload\" ascii wide fullword\n      $t2 = \"BrowserCredentialRecovery\" ascii fullword\n      $t3 = \"Crystal-Monk\" ascii wide\n      $t4 = \"VoidNexus\" ascii fullword\n      $t5 = \"ShadowWeave\" ascii fullword\n      $t6 = \"CrystalCore\" ascii fullword\n      $t7 = \"UmbraGate\" ascii fullword\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      ($pdb or 2 of ($t*))\n}",
             "pattern_type": "yara",
             "valid_from": "2026-08-03T00:00:00Z",
             "labels": [
@@ -356,12 +356,12 @@
             "id": "indicator--905535be-fa82-5642-80b4-d05d43708b7e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.722652Z",
-            "modified": "2026-10-11T04:24:13.509957Z",
+            "modified": "2026-10-11T07:05:19.196377Z",
             "name": "Loader_SvchostJS_CustomAlphabet",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule Loader_SvchostJS_CustomAlphabet {\n   meta:\n      description = \"Detects the svhost.js WSH JScript fileless loader via its custom 16-character substitution alphabet used in a layered base16-XOR plus AES/ChaCha/permutation decoder. The alphabet string is the only anchor: the generic function-constructor and String.fromCharCode strings this rule once accepted on their own appear in ordinary JavaScript and were removed\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188/\"\n      date = \"2026-08-03\"\n      modified = \"2026-10-11\"\n      hash1 = \"4b115a9f745219e3f3abdea275da89f35e4ec5f3d43286e5efc58eaf8049f3f7\"\n      family = \"SvchostPayload\"\n      malware_type = \"Loader\"\n      campaign = \"CloudSync-Assembler-Toolkit-91.197.98.188\"\n      id = \"2b39854f-a2dc-535f-824f-b28af4328b35\"\n   strings:\n      $alpha = \"5v_qoKAku06M^ZW1\" ascii\n   condition:\n      filesize < 1MB and\n      $alpha\n}",
+            "pattern": "rule Loader_SvchostJS_CustomAlphabet {\n   meta:\n      description = \"Detects the svhost.js WSH JScript fileless loader via its custom 16-character substitution alphabet used in a layered base16-XOR plus AES/ChaCha/permutation decoder. The alphabet string is the only anchor: the generic function-constructor and String.fromCharCode strings this rule once accepted on their own appear in ordinary JavaScript and were removed\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\"\n      date = \"2026-08-03\"\n      modified = \"2026-10-11\"\n      hash1 = \"4b115a9f745219e3f3abdea275da89f35e4ec5f3d43286e5efc58eaf8049f3f7\"\n      family = \"SvchostPayload\"\n      malware_type = \"Loader\"\n      campaign = \"CloudSync-Assembler-Toolkit-91.197.98.188\"\n      id = \"2b39854f-a2dc-535f-824f-b28af4328b35\"\n   strings:\n      $alpha = \"5v_qoKAku06M^ZW1\" ascii\n   condition:\n      filesize < 1MB and\n      $alpha\n}",
             "pattern_type": "yara",
             "valid_from": "2026-08-03T00:00:00Z",
             "labels": [
@@ -377,12 +377,12 @@
             "id": "indicator--57ed259c-002b-5786-96ce-12fd1fb8d493",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.722777Z",
-            "modified": "2026-10-01T19:54:12.722777Z",
+            "modified": "2026-10-11T07:05:19.196475Z",
             "name": "Loader_ABExe_DeploymentOrchestrator_Banners",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule Loader_ABExe_DeploymentOrchestrator_Banners {\n   meta:\n      description = \"Detects the ab.exe post-compromise deployment orchestrator via its fixed-sequence console banner strings and the German-localized Active Directory privileged-group names it targets when creating a hidden backdoor account\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188/\"\n      date = \"2026-08-03\"\n      hash1 = \"d25a3a858e28faa68ca6c624d7d19350c11ac798c346be3067307463e40aaff1\"\n      family = \"CloudSync\"\n      malware_type = \"Orchestrator\"\n      campaign = \"CloudSync-Assembler-Toolkit-91.197.98.188\"\n      id = \"bcfebc4f-1273-566e-8121-19cd9dc91272\"\n   strings:\n      $b1 = \"Starting deployment - WebShell First\" ascii wide\n      $b2 = \"=== WEB SHELL ===\" ascii wide\n      $b3 = \"=== USER ===\" ascii wide\n      $b4 = \"=== ANYDESK ===\" ascii wide\n      $b5 = \"All tasks completed successfully!\" ascii wide\n      $grp1 = \"Organisations-Admins\" ascii wide\n      $grp2 = \"Schema-Admins\" ascii wide\n      $grp3 = \"Administratoren\" ascii wide fullword\n      $adu = \"New-ADUser\" ascii wide\n      $guest = \"Guest$\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 2MB and\n      3 of them\n}",
+            "pattern": "rule Loader_ABExe_DeploymentOrchestrator_Banners {\n   meta:\n      description = \"Detects the ab.exe post-compromise deployment orchestrator via its fixed-sequence console banner strings and the German-localized Active Directory privileged-group names it targets when creating a hidden backdoor account\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\"\n      date = \"2026-08-03\"\n      hash1 = \"d25a3a858e28faa68ca6c624d7d19350c11ac798c346be3067307463e40aaff1\"\n      family = \"CloudSync\"\n      malware_type = \"Orchestrator\"\n      campaign = \"CloudSync-Assembler-Toolkit-91.197.98.188\"\n      id = \"bcfebc4f-1273-566e-8121-19cd9dc91272\"\n   strings:\n      $b1 = \"Starting deployment - WebShell First\" ascii wide\n      $b2 = \"=== WEB SHELL ===\" ascii wide\n      $b3 = \"=== USER ===\" ascii wide\n      $b4 = \"=== ANYDESK ===\" ascii wide\n      $b5 = \"All tasks completed successfully!\" ascii wide\n      $grp1 = \"Organisations-Admins\" ascii wide\n      $grp2 = \"Schema-Admins\" ascii wide\n      $grp3 = \"Administratoren\" ascii wide fullword\n      $adu = \"New-ADUser\" ascii wide\n      $guest = \"Guest$\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 2MB and\n      3 of them\n}",
             "pattern_type": "yara",
             "valid_from": "2026-08-03T00:00:00Z",
             "labels": [
@@ -398,12 +398,12 @@
             "id": "indicator--4d5b2dde-07e9-5752-89df-4d26f63d2131",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.722904Z",
-            "modified": "2026-10-01T19:54:12.722904Z",
+            "modified": "2026-10-11T07:05:19.196573Z",
             "name": "Loader_CtBat_ProxyAwareUSBWormStub",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule Loader_CtBat_ProxyAwareUSBWormStub {\n   meta:\n      description = \"Detects the ct.bat infection stub via a combination of its distinctive command fragments: proxy-credential-inheriting WebClient download, USB drive enumeration for its worm loop, autorun.inf propagation, and its AMSI-bypass field name\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188/\"\n      date = \"2026-08-03\"\n      hash1 = \"0ff0cee1fbf1050fbe3ab91918e56334a93269265e5614717ec0441baa8c42df\"\n      family = \"CloudSync\"\n      malware_type = \"Loader\"\n      campaign = \"CloudSync-Assembler-Toolkit-91.197.98.188\"\n      id = \"21d45221-9c71-50e5-89fa-a7b3d0ea4e76\"\n   strings:\n      $proxy = \"DefaultCredentials\" ascii\n      $wmic = \"wmic logicaldisk where\" ascii\n      $autorun = \"autorun.inf\" ascii\n      $amsi = \"amsiInitFailed\" ascii\n      $sysupd = \"SystemUpdate\" ascii\n   condition:\n      filesize < 5KB and\n      2 of them\n}",
+            "pattern": "rule Loader_CtBat_ProxyAwareUSBWormStub {\n   meta:\n      description = \"Detects the ct.bat infection stub via a combination of its distinctive command fragments: proxy-credential-inheriting WebClient download, USB drive enumeration for its worm loop, autorun.inf propagation, and its AMSI-bypass field name\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\"\n      date = \"2026-08-03\"\n      hash1 = \"0ff0cee1fbf1050fbe3ab91918e56334a93269265e5614717ec0441baa8c42df\"\n      family = \"CloudSync\"\n      malware_type = \"Loader\"\n      campaign = \"CloudSync-Assembler-Toolkit-91.197.98.188\"\n      id = \"21d45221-9c71-50e5-89fa-a7b3d0ea4e76\"\n   strings:\n      $proxy = \"DefaultCredentials\" ascii\n      $wmic = \"wmic logicaldisk where\" ascii\n      $autorun = \"autorun.inf\" ascii\n      $amsi = \"amsiInitFailed\" ascii\n      $sysupd = \"SystemUpdate\" ascii\n   condition:\n      filesize < 5KB and\n      2 of them\n}",
             "pattern_type": "yara",
             "valid_from": "2026-08-03T00:00:00Z",
             "labels": [
@@ -419,12 +419,12 @@
             "id": "indicator--1432aab7-b938-55b1-82d9-f5f25a0114ca",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.72301Z",
-            "modified": "2026-10-01T19:54:12.72301Z",
+            "modified": "2026-10-11T07:05:19.196668Z",
             "name": "RAT_CloudSync_PublicWorkdir_Artifacts",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule RAT_CloudSync_PublicWorkdir_Artifacts {\n   meta:\n      description = \"Detects CloudSync working-directory, dropped-Tor-binary, and mutex string artifacts common to droppers and implants across both build generations; broader and lower-precision than the dedicated panel and protocol rules, intended for hunting\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188/\"\n      date = \"2026-08-03\"\n      hash1 = \"6bd0366372b7d765e76c5a888d68a4991ad04ee614bdb589a20ffbe433db58fc\"\n      family = \"CloudSync\"\n      malware_type = \"RAT\"\n      campaign = \"CloudSync-Assembler-Toolkit-91.197.98.188\"\n      id = \"d226bb58-e0bc-5f2e-8846-d8b3cb415bc2\"\n   strings:\n      $wd1 = \"C:\\\\Users\\\\Public\\\\fs\\\\\" ascii\n      $wd2 = \"C:\\\\Users\\\\Public\\\\filesystem\" ascii\n      $hs = \"hidden_service\" ascii\n      $thw = \"taskhostw.exe\" ascii\n      $frf = \"first_run.flag\" ascii\n      $mtx1 = \"Global\\\\WUDFHost\" ascii wide\n      $mtx2 = \"Global\\\\WinUpdateSvcMutex\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 60MB and\n      3 of them\n}",
+            "pattern": "rule RAT_CloudSync_PublicWorkdir_Artifacts {\n   meta:\n      description = \"Detects CloudSync working-directory, dropped-Tor-binary, and mutex string artifacts common to droppers and implants across both build generations; broader and lower-precision than the dedicated panel and protocol rules, intended for hunting\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\"\n      date = \"2026-08-03\"\n      hash1 = \"6bd0366372b7d765e76c5a888d68a4991ad04ee614bdb589a20ffbe433db58fc\"\n      family = \"CloudSync\"\n      malware_type = \"RAT\"\n      campaign = \"CloudSync-Assembler-Toolkit-91.197.98.188\"\n      id = \"d226bb58-e0bc-5f2e-8846-d8b3cb415bc2\"\n   strings:\n      $wd1 = \"C:\\\\Users\\\\Public\\\\fs\\\\\" ascii\n      $wd2 = \"C:\\\\Users\\\\Public\\\\filesystem\" ascii\n      $hs = \"hidden_service\" ascii\n      $thw = \"taskhostw.exe\" ascii\n      $frf = \"first_run.flag\" ascii\n      $mtx1 = \"Global\\\\WUDFHost\" ascii wide\n      $mtx2 = \"Global\\\\WinUpdateSvcMutex\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 60MB and\n      3 of them\n}",
             "pattern_type": "yara",
             "valid_from": "2026-08-03T00:00:00Z",
             "labels": [
@@ -860,12 +860,12 @@
             "id": "indicator--0a0add0c-c85a-55ca-b499-522b5769129a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.725373Z",
-            "modified": "2026-10-09T13:20:04.180273Z",
+            "modified": "2026-10-11T07:05:19.198742Z",
             "name": "THL HUNT CloudSync-Assembler-Toolkit SentinelStealer c3lestial.fun TLS SNI (Sourced Commodity Stealer C2)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT CloudSync-Assembler-Toolkit SentinelStealer c3lestial.fun TLS SNI (Sourced Commodity Stealer C2)\"; flow:established,to_server; tls.sni; content:\"c3lestial.fun\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/; classtype:trojan-activity; sid:9301603; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-03;)",
+            "pattern": "alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT CloudSync-Assembler-Toolkit SentinelStealer c3lestial.fun TLS SNI (Sourced Commodity Stealer C2)\"; flow:established,to_server; tls.sni; dotprefix; content:\".c3lestial.fun\"; nocase; endswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/; classtype:trojan-activity; sid:9301603; rev:3; metadata:author The_Hunters_Ledger, date 2026-08-03;)",
             "pattern_type": "suricata",
             "valid_from": "2026-08-03T00:00:00Z",
             "labels": [
@@ -881,12 +881,12 @@
             "id": "indicator--d39d8a3d-469a-57b4-b940-8691dd49457b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.725477Z",
-            "modified": "2026-10-09T13:20:04.180375Z",
+            "modified": "2026-10-11T07:05:19.198841Z",
             "name": "THL HUNT CloudSync-Assembler-Toolkit SentinelStealer c3lestial.fun DNS Query (Sourced Commodity Stealer C2)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert dns $HOME_NET any -> any any (msg:\"THL HUNT CloudSync-Assembler-Toolkit SentinelStealer c3lestial.fun DNS Query (Sourced Commodity Stealer C2)\"; dns_query; content:\"c3lestial.fun\"; nocase; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/; classtype:trojan-activity; sid:9301604; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-03;)",
+            "pattern": "alert dns $HOME_NET any -> any any (msg:\"THL HUNT CloudSync-Assembler-Toolkit SentinelStealer c3lestial.fun DNS Query (Sourced Commodity Stealer C2)\"; dns.query; dotprefix; content:\".c3lestial.fun\"; nocase; endswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/; classtype:trojan-activity; sid:9301604; rev:3; metadata:author The_Hunters_Ledger, date 2026-08-03;)",
             "pattern_type": "suricata",
             "valid_from": "2026-08-03T00:00:00Z",
             "labels": [

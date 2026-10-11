@@ -48,16 +48,17 @@ This campaign recovered two distinct code families sharing operator infrastructu
 
 **OpenStrike**
 
-#### OpenStrike C Beacon Debug Strings + AES/HMAC Crypto Constants
+#### OpenStrike C Beacon Debug Strings Plus One Secondary Marker
 
 **Tier:** Detection
 **Robustness:** 2
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1573.001 (Symmetric Cryptography)
 **Confidence:** HIGH
-**False Positives:** None known — the primary anchor requires either the `OpenStrike Beacon starting...` startup banner or the `Registration successful` + `beacon ready` status-message pairing, both distinctive branded strings; the secondary group (`aes_cbc_encrypt`, `hmac_sha256`, the shared AES IV, and the GCC compiler banner) is generic in isolation and never sufficient on its own, but any one of the four satisfies the second clause once the primary clause matches.
+**ATT&CK Note:** T1573.001 is carried only by the secondary strings `abcdefghijklmnop` (the shared AES IV), `aes_cbc_encrypt` and `hmac_sha256`; a match whose secondary clause is satisfied by the GCC compiler banner alone carries no encryption string, and a match through the status-message pair carries no branded string.
+**False Positives:** Low for the branch that uses the `[*] OpenStrike Beacon starting...` startup banner, which is a branded string. The alternate primary branch, the `[+] Registration successful` and `beacon ready` pair, is generic status text and not branded: with the `GCC: (GNU) 15-win32` build banner as the only secondary string, any MinGW GCC 15 build of a program that prints both phrases matches. The secondary group (`aes_cbc_encrypt`, `hmac_sha256`, the shared AES IV, and the GCC compiler banner) is generic in isolation and never sufficient on its own, but any one of the four satisfies the second clause once the primary clause matches, so the rule does not require AES or HMAC strings.
 **Blind Spots:** A stripped-logging release build that removes every banner/status print string evades this rule; the generic crypto-function names and compiler banner carry no weight alone.
 **Validation:** Scan `beacon.exe` (hash1 below) — must match; a benign C application linking a stock AES/HMAC library must NOT fire (its banner and status strings differ).
-**Deployment:** Endpoint AV/EDR file scan, memory scanning of process images matching the beacon's execution pattern.
+**Deployment:** Endpoint AV/EDR file scan. The condition tests `filesize`, which is undefined in a process-memory scan, so the rule does not match there; a memory-scan form would need the `filesize` test removed and is not written or tested here.
 
 ```yara
 /*
@@ -104,10 +105,10 @@ rule RAT_OpenStrike_C_Beacon {
 **Robustness:** 2
 **ATT&CK Coverage:** T1620 (Reflective Code Loading)
 **Confidence:** HIGH
-**False Positives:** None known — the crash-handler and entry-point-discovery debug strings (SEH/VEH exception format strings, INT3-offset messages) are distinctive to this loader family's error-handling code; no legitimate software combination matches these exact format strings together.
+**False Positives:** None known for the four crash-handler and entry-point branches, which need an SEH/VEH exception format string or the INT3-offset message together with `[*] Loading %s`; those format strings are distinctive to this loader family's error-handling code. The `run.exe` branch is different: it needs only `[+] %lu @ %p exec` and the `GCC: (GNU) 15-win32` build banner, no crash-handler string and no Loading string, so any MinGW GCC 15 build that prints that format string matches, and its benign prevalence was not measured.
 **Blind Spots:** A release build that strips debug/crash-handler print statements evades this rule; covers `run.exe` via the `$run` + `$compiler` pairing specifically, since it lacks the SEH/VEH/INT3 strings used by the other four binaries.
 **Validation:** Scan `run.exe` (hash1 below), or any of `sc_loader.exe`/`veh_loader.exe`/`dbg_loader.exe`/`stager.exe` — must match; a benign C/C++ application with its own exception-handling debug output must NOT fire (the specific format-string combinations differ).
-**Deployment:** Endpoint AV/EDR file scan, memory scanning.
+**Deployment:** Endpoint AV/EDR file scan. The condition tests `filesize`, which is undefined in a process-memory scan, so the rule does not match there; a memory-scan form would need the `filesize` test removed and is not written or tested here.
 
 ```yara
 rule TOOLKIT_OpenStrike_Loader_Chain {
@@ -141,10 +142,11 @@ rule TOOLKIT_OpenStrike_Loader_Chain {
 #### OpenStrike Python Universal Beacon Self-Identification Banner
 
 **Tier:** Detection
-**Robustness:** 3
+**Robustness:** 2
 **ATT&CK Coverage:** T1059.006 (Python), T1071.001 (Web Protocols)
 **Confidence:** HIGH
 **False Positives:** None known — `OpenStrike Universal Beacon` is a self-identifying branded string with no plausible legitimate collision; the RSA-2048 modulus prefix and `/qz99` staging path are hardcoded operator constants.
+**Rationale:** The rule keys on the operator's own banner string plus one corroborating constant, a combination specific to this build of the tool family. It scores Robustness 2, not 3: a mandatory self-identification banner is not a technique invariant, and a rebrand or a regenerated key defeats it, as the Blind Spots line states.
 **Blind Spots:** A rebrand that removes the self-identification banner from the Python source evades this rule; a build using a regenerated RSA keypair changes the modulus prefix, and the rule then needs the `/qz99` URI or the `bof_executor` plus shared IV pair alongside the banner. The banner alone does not match: the rule requires the banner and one of the three corroborating branches.
 **Validation:** Scan `beacon_universal.py` — must match; a benign Python script coincidentally using ctypes and a hardcoded IV must NOT fire (it lacks the OpenStrike banner and campaign-specific constants).
 **Deployment:** Endpoint AV/EDR file scan, static triage of unknown Python scripts.
@@ -187,7 +189,7 @@ rule TOOLKIT_OpenStrike_Python_Beacon {
 **False Positives:** None known — the MALC User-Agent suffix is a distinctive Malleable C2 profile artifact absent from legitimate software; requiring 2 corroborating strings from the original DLL name, ReflectiveLoader export, spawn-to path, shared custom AES IV, or entry-point tripwire bytes further reduces coincidental collision risk.
 **Blind Spots:** A rebuilt beacon using a different Malleable C2 profile (no MALC UA) evades this rule entirely; a release build with a default rundll32 spawn-to and unmodified reflective loader would also evade if it additionally used a different profile UA.
 **Validation:** Scan `beacon_patched.x64.dll` (hash1 below) — must match; a stock/default Cobalt Strike 3.x beacon DLL with the default Malleable C2 profile must NOT fire (its User-Agent lacks the MALC suffix).
-**Deployment:** Endpoint AV/EDR file scan, memory scanning of rundll32.exe-hosted or reflectively-loaded modules.
+**Deployment:** Endpoint AV/EDR file scan. The condition tests `filesize`, which is undefined in a process-memory scan, so the rule does not match there; a memory-scan form would need the `filesize` test removed and is not written or tested here.
 
 ```yara
 rule MALW_CobaltStrike3x_MALC_Malleable_Profile_Beacon {

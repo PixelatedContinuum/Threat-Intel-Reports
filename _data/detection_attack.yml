@@ -826,8 +826,8 @@
     - tactic: "Command and Control"
       id: "T1071.001"
       name: "Web Protocols"
-      rules: "SentinelStealer c3lestial.fun TLS SNI (SURICATA, Hunting); SentinelStealer c3lestial.fun DNS Query (SURICATA, Hunting)"
-      count: 2
+      rules: "SentinelStealer c3lestial.fun TLS SNI (SURICATA, Hunting)"
+      count: 1
     - tactic: "Command and Control"
       id: "T1090"
       name: "Proxy"
@@ -1191,7 +1191,7 @@
     - tactic: "Persistence"
       id: "T1554"
       name: "Compromise Host Software Binary"
-      rules: "MAL_Linux_GHOST_ComfyUI_Python_Kit (YARA, Detection); SUSP_Linux_ComfyUI_PerformanceMonitor_Node_Registration (YARA, Hunting); ComfyUI Custom Node Python File Named PerformanceMonitor Created (SIGMA, Hunting)"
+      rules: "MAL_Linux_GHOST_ComfyUI_Python_Kit (YARA, Detection); SUSP_Linux_ComfyUI_PerformanceMonitor_Node_Registration (YARA, Hunting); ComfyUI Custom Node Python File With a PerformanceMonitor Path Prefix Created (SIGMA, Hunting)"
       count: 3
     - tactic: "Privilege Escalation"
       id: "T1611"
@@ -1496,7 +1496,7 @@
     - tactic: "Execution"
       id: "T1059.004"
       name: "Unix Shell"
-      rules: "Generic Curl-Pipe-Bash Pattern in Claude Code Allowlist (YARA, Hunting); OpenClaw-Specific Claude Code Allowlist (YARA, Hunting); OpenClaw Curl-Pipe-Bash Installer Execution (SIGMA, Hunting)"
+      rules: "Generic Curl-Pipe-Bash Pattern in Claude Code Allowlist (YARA, Hunting); OpenClaw-Specific Claude Code Allowlist (YARA, Hunting); Command Line With Curl, openclaw.ai and a Pipe-to-Shell Fragment (OpenClaw Installer Shape) (SIGMA, Hunting)"
       count: 3
     - tactic: "Execution"
       id: "T1059.007"
@@ -1506,7 +1506,7 @@
     - tactic: "Defense Impairment"
       id: "T1685"
       name: "Disable or Modify Tools"
-      rules: "Generic Curl-Pipe-Bash Pattern in Claude Code Allowlist (YARA, Hunting); OpenClaw-Specific Claude Code Allowlist (YARA, Hunting); Claude Code settings.local.json Written or Modified (SIGMA, Hunting); OpenClaw Curl-Pipe-Bash Installer Execution (SIGMA, Hunting); OpenClaw Gateway Service Started (SIGMA, Hunting); NPM Registry Fetch for OpenClaw Package (SIGMA, Hunting)"
+      rules: "Generic Curl-Pipe-Bash Pattern in Claude Code Allowlist (YARA, Hunting); OpenClaw-Specific Claude Code Allowlist (YARA, Hunting); Claude Code settings.local.json Written or Modified (SIGMA, Hunting); Command Line With Curl, openclaw.ai and a Pipe-to-Shell Fragment (OpenClaw Installer Shape) (SIGMA, Hunting); OpenClaw Gateway Service Started (SIGMA, Hunting); NPM Registry Fetch for OpenClaw Package (SIGMA, Hunting)"
       count: 6
     - tactic: "Command and Control"
       id: "T1090.001"
@@ -1556,12 +1556,12 @@
     - tactic: "Initial Access"
       id: "T1190"
       name: "Exploit Public-Facing Application"
-      rules: "Logback FileAppender Arbitrary File Write to JSP (YARA, Detection); SnakeYAML Deserialization Gadget (CVE-2022-1471 Family) (YARA, Detection); XXE-to-SSRF Internal/Cloud-Metadata Probe (YARA, Detection); Logback insertFromJNDI RCE (CVE-2021-42550) (YARA, Hunting); Manufactured Log-Data Harvesting via Jolokia Logger Manipulation Then Actuator Logfile Read (Correlation) (SIGMA, Detection); LDAP Anonymous BindRequest to a Non-Standard Directory Port (SURICATA, Detection); SnakeYAML Gadget Chain in HTTP Request Body (SURICATA, Detection); XXE Entity Declaration Targeting Cloud Metadata in Upload (SURICATA, Detection); Gopher-Scheme SSRF Protocol Smuggling in HTTP URI (SURICATA, Detection); Gopher-Scheme SSRF Protocol Smuggling in HTTP Request Body (SURICATA, Detection); SSRF-to-Redis CONFIG/BGSAVE Command Sequence via HTTP (SURICATA, Detection); Eureka Apps-Delta Response Containing XStream Gadget Markers (Flowbits Pair) (SURICATA, Detection)"
+      rules: "Logback FileAppender Arbitrary File Write to JSP (YARA, Detection); SnakeYAML Deserialization Gadget (CVE-2022-1471 Family) (YARA, Detection); XXE-to-SSRF Internal/Cloud-Metadata Probe (YARA, Detection); Logback insertFromJNDI RCE (CVE-2021-42550) (YARA, Hunting); Manufactured Log-Data Harvesting via Jolokia Logger Manipulation Then Actuator Logfile Read (Correlation) (SIGMA, Detection); LDAP Anonymous BindRequest to a Non-Standard Directory Port (SURICATA, Detection); SnakeYAML Gadget Chain in HTTP Request Body (SURICATA, Detection); XXE Entity Declaration Targeting Cloud Metadata in Upload (SURICATA, Detection); Gopher-Scheme SSRF Protocol Smuggling in HTTP URI (SURICATA, Detection); Gopher-Scheme SSRF Protocol Smuggling in HTTP Request Body (SURICATA, Detection); HTTP Request Body With Redis CONFIG SET dir Followed by BGSAVE (SURICATA, Detection); Eureka Apps-Delta Response Containing XStream Gadget Markers (Flowbits Pair) (SURICATA, Detection)"
       count: 12
     - tactic: "Persistence"
       id: "T1505.003"
       name: "Web Shell"
-      rules: "Logback FileAppender Arbitrary File Write to JSP (YARA, Detection); Generic JSP Web Shell (Bash-Exec via HTTP Parameter) (YARA, Detection)"
+      rules: "Logback FileAppender Arbitrary File Write to JSP (YARA, Detection); Generic JSP Web Shell Strings (Request Parameter and Bash -c Exec) (YARA, Detection)"
       count: 2
     - tactic: "Stealth"
       id: "T1078"
@@ -1576,7 +1576,7 @@
     - tactic: "Credential Access"
       id: "T1552.001"
       name: "Credentials In Files"
-      rules: "Successful Large Response From a Spring Boot Actuator Heap Dump Endpoint (SIGMA, Detection)"
+      rules: "Large HTTP 200 Response to a Spring Boot Actuator Heap Dump or Jolokia HotSpotDiagnostic URI (SIGMA, Detection)"
       count: 1
     - tactic: "Credential Access"
       id: "T1552.005"
@@ -1596,7 +1596,7 @@
     - tactic: "Collection"
       id: "T1005"
       name: "Data from Local System"
-      rules: "Successful Large Response From a Spring Boot Actuator Heap Dump Endpoint (SIGMA, Detection)"
+      rules: "Large HTTP 200 Response to a Spring Boot Actuator Heap Dump or Jolokia HotSpotDiagnostic URI (SIGMA, Detection)"
       count: 1
     - tactic: "Collection"
       id: "T1213"
@@ -1761,12 +1761,12 @@
     - tactic: "Command and Control"
       id: "T1071.001"
       name: "Web Protocols"
-      rules: "OpenStrike C Beacon Debug Strings + AES/HMAC Crypto Constants (YARA, Detection); OpenStrike Python Universal Beacon Self-Identification Banner (YARA, Detection); Cobalt Strike 3.x MALC Malleable Profile Beacon (YARA, Detection); Cobalt Strike Malleable C2 Profile MALC User-Agent in Proxy Traffic (SIGMA, Detection); Cobalt Strike Malleable C2 MALC User-Agent Detected (SURICATA, Detection)"
+      rules: "OpenStrike C Beacon Debug Strings Plus One Secondary Marker (YARA, Detection); OpenStrike Python Universal Beacon Self-Identification Banner (YARA, Detection); Cobalt Strike 3.x MALC Malleable Profile Beacon (YARA, Detection); Cobalt Strike Malleable C2 Profile MALC User-Agent in Proxy Traffic (SIGMA, Detection); Cobalt Strike Malleable C2 MALC User-Agent Detected (SURICATA, Detection)"
       count: 5
     - tactic: "Command and Control"
       id: "T1573.001"
       name: "Symmetric Cryptography"
-      rules: "OpenStrike C Beacon Debug Strings + AES/HMAC Crypto Constants (YARA, Detection)"
+      rules: "OpenStrike C Beacon Debug Strings Plus One Secondary Marker (YARA, Detection)"
       count: 1
 "open-directory-193-56-255-154-xiebroc2-detections":
   total: 12
@@ -1834,7 +1834,7 @@
       rules: "Covenant C2 GruntStager Combined Build Detection (YARA, Detection)"
       count: 1
 "open-directory-94-103-1-13-20260423-detections":
-  total: 27
+  total: 26
   tactics: 8
   unresolved: []
   rows:
@@ -1878,11 +1878,6 @@
       name: "Fileless Storage"
       rules: "Stage-4 Mutex GUID (Cross-Build Invariant) (YARA, Detection); Stage-4 Fileless Payload Written to Masquerade Registry Key (SIGMA, Hunting)"
       count: 2
-    - tactic: "Stealth"
-      id: "T1036"
-      name: "Masquerading"
-      rules: "Admin Account Creating a VBE Directory File or mapping.csv in Temp (Anti-Sandbox Gate Artefacts) (SIGMA, Hunting)"
-      count: 1
     - tactic: "Stealth"
       id: "T1036.005"
       name: "Match Legitimate Resource Name or Location"
@@ -1936,8 +1931,8 @@
     - tactic: "Command and Control"
       id: "T1071.001"
       name: "Web Protocols"
-      rules: "Orcus RAT v7 Wardow Crack (YARA, Detection); Loopback Connection on Port 20268 by a Process Outside System32 (Orcus Wardow Crack Tunnel Port) (SIGMA, Hunting); XOR-Encoded Payload Staging Download (.xor URI Suffix) (SURICATA, Hunting)"
-      count: 3
+      rules: "Orcus RAT v7 Wardow Crack (YARA, Detection); XOR-Encoded Payload Staging Download (.xor URI Suffix) (SURICATA, Hunting)"
+      count: 2
     - tactic: "Command and Control"
       id: "T1090.001"
       name: "Internal Proxy"
@@ -2091,7 +2086,7 @@
     - tactic: "Exfiltration"
       id: "T1048.003"
       name: "Exfiltration Over Unencrypted Non-C2 Protocol"
-      rules: "WSMA_CVE_2023_20198_DoubleEncode_Exfil (YARA, Detection); Network-Device Self-Exfiltration via Outbound PUT with User-Agent cisco-IOS (SURICATA, Detection); Cisco WSMA fileCopy Request With a dstURL Parameter (SURICATA, Detection)"
+      rules: "WSMA_CVE_2023_20198_DoubleEncode_Exfil (YARA, Detection); Network-Device Self-Exfiltration via Outbound PUT with User-Agent cisco-IOS (SURICATA, Detection); Cisco WSMA fileCopy Request With a dstURL Parameter (SURICATA, Hunting)"
       count: 3
 "opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections":
   total: 12
@@ -2181,7 +2176,7 @@
     - tactic: "Initial Access"
       id: "T1190"
       name: "Exploit Public-Facing Application"
-      rules: "CVE-2026-41940 cPanel WHM Proxy-Subdomain Admin Path Request (SIGMA, Hunting); CVE-2026-41940 Expired Session Marker in Query String (SIGMA, Hunting); CVE-2026-41940 cPanel WHM Proxy-Subdomain Admin Path Request With HTTP 200 Response (SIGMA, Hunting); CVE-2026-41940 Null-Byte or Encoded CR/LF Injection in Authorization Header (SURICATA, Detection)"
+      rules: "CVE-2026-41940 cPanel WHM Proxy-Subdomain Admin Path Request (SIGMA, Hunting); CVE-2026-41940 Expired Session Marker in Query String (SIGMA, Hunting); CVE-2026-41940 cPanel WHM Proxy-Subdomain Admin Path Request With HTTP 200 Response (SIGMA, Hunting); Null Byte or Encoded CR/LF After the Base64 Run in an Authorization Basic Header (CVE-2026-41940 Candidate) (SURICATA, Detection)"
       count: 4
     - tactic: "Persistence"
       id: "T1098.004"
@@ -2196,12 +2191,12 @@
     - tactic: "Credential Access"
       id: "T1212"
       name: "Exploitation for Credential Access"
-      rules: "CVE-2026-41940 cPanel WHM Proxy-Subdomain Admin Path Request (SIGMA, Hunting); CVE-2026-41940 Expired Session Marker in Query String (SIGMA, Hunting); CVE-2026-41940 cPanel WHM Proxy-Subdomain Admin Path Request With HTTP 200 Response (SIGMA, Hunting); CVE-2026-41940 Null-Byte or Encoded CR/LF Injection in Authorization Header (SURICATA, Detection)"
+      rules: "CVE-2026-41940 cPanel WHM Proxy-Subdomain Admin Path Request (SIGMA, Hunting); CVE-2026-41940 Expired Session Marker in Query String (SIGMA, Hunting); CVE-2026-41940 cPanel WHM Proxy-Subdomain Admin Path Request With HTTP 200 Response (SIGMA, Hunting); Null Byte or Encoded CR/LF After the Base64 Run in an Authorization Basic Header (CVE-2026-41940 Candidate) (SURICATA, Detection)"
       count: 4
     - tactic: "Command and Control"
       id: "T1071.001"
       name: "Web Protocols"
-      rules: "Operator Flask C2 Dashboard Request Path /login-2fa (SIGMA, Hunting); Operator Flask C2 Dashboard Banner Hunt: Werkzeug/3.1.8 + /login-2fa (SURICATA, Hunting)"
+      rules: "Operator Flask C2 Dashboard Request URI Containing /login-2fa (SIGMA, Hunting); Operator Flask C2 Dashboard Banner Hunt: Werkzeug/3.1.8 + /login-2fa (SURICATA, Hunting)"
       count: 2
 "opendirectory-45-130-148-125-20260430-detections":
   total: 12
@@ -2216,17 +2211,17 @@
     - tactic: "Stealth"
       id: "T1055"
       name: "Process Injection"
-      rules: "AdaptixC2 Operator .NET Injector: si_build Build Fingerprint (YARA, Hunting); PowerShell Creating a Remote Thread in a Long-Lived Windows Host Process (SIGMA, Detection); Suspicious .NET Assembly Image Load with Operator si_build Build Fingerprint (SIGMA, Hunting)"
+      rules: "AdaptixC2 Operator .NET Injector: si_build Build Fingerprint (YARA, Hunting); PowerShell Creating a Remote Thread in a Long-Lived Windows Host Process (SIGMA, Detection); PowerShell Image Load of a Module Whose Description Contains the si_build Build String (SIGMA, Hunting)"
       count: 3
     - tactic: "Stealth"
       id: "T1055.002"
       name: "Portable Executable Injection"
-      rules: "AdaptixC2 Operator .NET Injector: si_build Build Fingerprint (YARA, Hunting); PowerShell Creating a Remote Thread in a Long-Lived Windows Host Process (SIGMA, Detection); Suspicious .NET Assembly Image Load with Operator si_build Build Fingerprint (SIGMA, Hunting)"
+      rules: "AdaptixC2 Operator .NET Injector: si_build Build Fingerprint (YARA, Hunting); PowerShell Creating a Remote Thread in a Long-Lived Windows Host Process (SIGMA, Detection); PowerShell Image Load of a Module Whose Description Contains the si_build Build String (SIGMA, Hunting)"
       count: 3
     - tactic: "Stealth"
       id: "T1620"
       name: "Reflective Code Loading"
-      rules: "AdaptixC2 PowerShell Loader: AMSI Bypass and SI Injector Invocation (YARA, Hunting); AdaptixC2 PowerShell Loader: AMSI Bypass and SI Injector Invocation (SIGMA, Hunting); Suspicious .NET Assembly Image Load with Operator si_build Build Fingerprint (SIGMA, Hunting)"
+      rules: "AdaptixC2 PowerShell Loader: AMSI Bypass and SI Injector Invocation (YARA, Hunting); AdaptixC2 PowerShell Loader: AMSI Bypass and SI Injector Invocation (SIGMA, Hunting); PowerShell Image Load of a Module Whose Description Contains the si_build Build String (SIGMA, Hunting)"
       count: 3
     - tactic: "Defense Impairment"
       id: "T1685"
@@ -2251,7 +2246,7 @@
     - tactic: "Command and Control"
       id: "T1071.001"
       name: "Web Protocols"
-      rules: "AdaptixC2 Windows Beacon: Stock Framework Fingerprint (YARA, Detection); AdaptixC2 Default Listener: Anomalous Firefox 20 User-Agent with X-Beacon-Id Header (SIGMA, Hunting); AdaptixC2 Beacon: High-Frequency Deterministic HTTP POST Cadence to Stock URIs (SIGMA, Hunting); AdaptixC2 Default Listener X-Beacon-Id Heartbeat Header (Broad, Any IP) (SURICATA, Detection); AdaptixC2 Beacon Empty-Body POST Carrying the X-Beacon-Id Header (SURICATA, Detection); AdaptixC2 Stock Listener URI /api/v1/status with Firefox 20 UA (SURICATA, Hunting); AdaptixC2 Operator-Added jQuery URI with Firefox 20 UA (SURICATA, Hunting); AdaptixC2 Stock Listener Response Envelope (Server-Side) (SURICATA, Hunting)"
+      rules: "AdaptixC2 Windows Beacon: Stock Framework Fingerprint (YARA, Detection); AdaptixC2 Default Listener: Anomalous Firefox 20 User-Agent (SIGMA, Hunting); AdaptixC2 Beacon: High-Frequency Deterministic HTTP POST Cadence to Stock URIs (SIGMA, Hunting); AdaptixC2 Default Listener X-Beacon-Id Heartbeat Header (Broad, Any IP) (SURICATA, Detection); AdaptixC2 Beacon Empty-Body POST Carrying the X-Beacon-Id Header (SURICATA, Detection); AdaptixC2 Stock Listener URI /api/v1/status with Firefox 20 UA (SURICATA, Hunting); AdaptixC2 Operator-Added jQuery URI with Firefox 20 UA (SURICATA, Hunting); AdaptixC2 Stock Listener Response Envelope (Server-Side) (SURICATA, Hunting)"
       count: 8
     - tactic: "Command and Control"
       id: "T1090.001"
@@ -2266,8 +2261,8 @@
     - tactic: "Command and Control"
       id: "T1573.001"
       name: "Symmetric Cryptography"
-      rules: "AdaptixC2 Default Listener: Anomalous Firefox 20 User-Agent with X-Beacon-Id Header (SIGMA, Hunting); AdaptixC2 Beacon Empty-Body POST Carrying the X-Beacon-Id Header (SURICATA, Detection)"
-      count: 2
+      rules: "AdaptixC2 Beacon Empty-Body POST Carrying the X-Beacon-Id Header (SURICATA, Detection)"
+      count: 1
 "opendirectory-62-60-237-100-20260506-detections":
   total: 21
   tactics: 4
@@ -2841,7 +2836,7 @@
     - tactic: "Execution"
       id: "T1053.003"
       name: "Cron"
-      rules: "GSocket/THC Backdoor Installer Script: cat.sh (mal_gsocket_catsh_installer_script) (YARA, Hunting); Cron-Triggered Base64-Indirected Shell Execution With Output Suppression (SIGMA, Detection)"
+      rules: "GSocket/THC Backdoor Installer Script: cat.sh (mal_gsocket_catsh_installer_script) (YARA, Hunting); Cron-Triggered Base64-Decode-to-Shell With Output Suppression or Curl-Pipe-to-Shell (SIGMA, Detection)"
       count: 2
     - tactic: "Persistence"
       id: "T1098.004"
@@ -2896,7 +2891,7 @@
     - tactic: "Command and Control"
       id: "T1572"
       name: "Protocol Tunneling"
-      rules: "Custom Go Tunnel-Proxy Module (gen_go_tunnel_proxy_mux_elf) (YARA, Detection); Chisel Operator Host-Key Fingerprints (susp_chisel_operator_key_fingerprint) (YARA, Detection); Chisel Reverse Tunnel Client or Server Execution (SIGMA, Hunting)"
+      rules: "Custom Go Tunnel-Proxy Module (gen_go_tunnel_proxy_mux_elf) (YARA, Detection); Chisel Operator Host-Key Fingerprints (susp_chisel_operator_key_fingerprint) (YARA, Detection); Chisel Tunneling Tool Client or Server Execution (SIGMA, Hunting)"
       count: 3
 "shadow-xworm-opendirectory-detections":
   total: 15

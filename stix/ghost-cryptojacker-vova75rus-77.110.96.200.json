@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--72c9b0e7-86eb-4318-97af-8d7ea954a809",
+    "id": "bundle--7984aed4-da7a-43f6-a7c6-5c27194a952b",
     "objects": [
         {
             "type": "identity",
@@ -1406,15 +1406,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--0ad272bb-19e4-59a1-9284-76376d8f8ce4",
+            "id": "indicator--8489f391-5119-54e4-b79a-1c4fad695970",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-11T05:44:20.507219Z",
-            "modified": "2026-10-11T05:44:20.507219Z",
-            "name": "ComfyUI Custom Node Python File Named PerformanceMonitor Created",
+            "created": "2026-10-11T07:05:19.534335Z",
+            "modified": "2026-10-11T07:05:19.534335Z",
+            "name": "ComfyUI Custom Node Python File With a PerformanceMonitor Path Prefix Created",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: ComfyUI Custom Node Python File Named PerformanceMonitor Created\nid: df247923-595c-4760-9a97-f0722dbf664d\nstatus: experimental\ndescription: >-\n    Detects creation of a Python file whose path contains\n    /custom_nodes/PerformanceMonitor. The GHOST Python kit's plant_backdoor_node()\n    function creates a file with that name in the victim's ComfyUI custom_nodes/\n    directory, but a legitimate extension with the same name creates the same\n    event, so a hit needs publisher and source verification. Tightened from an earlier selector that also matched\n    any .py file under a ComfyUI custom_nodes/ path regardless of filename, which\n    would have fired on every legitimate custom-node installation.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/\n    - https://censys.com/ghost-cryptojacker-targeting-ai\nauthor: The Hunters Ledger\ndate: 2026-05-25\ntags:\n    - attack.persistence\n    - attack.t1554\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: file_event\n    product: linux\ndetection:\n    selection_comfyui_node:\n        TargetFilename|contains: '/custom_nodes/PerformanceMonitor'\n        TargetFilename|endswith: '.py'\n    condition: selection_comfyui_node\nfalsepositives:\n    - >-\n      Legitimate custom ComfyUI node named PerformanceMonitor installed by\n      authorized user (verify publisher and source repository before dismissing)\n    - >-\n      Development environments where a test custom node happens to share this\n      name (scope exclusion for known dev hosts recommended)\nlevel: medium",
+            "pattern": "title: ComfyUI Custom Node Python File With a PerformanceMonitor Path Prefix Created\nid: df247923-595c-4760-9a97-f0722dbf664d\nstatus: experimental\ndescription: >-\n    Detects creation of a Python file whose path contains\n    /custom_nodes/PerformanceMonitor, a path-prefix match that also accepts\n    PerformanceMonitorOther.py and files inside a PerformanceMonitor directory. The GHOST Python kit's plant_backdoor_node()\n    function registers a PerformanceMonitor class in the victim's ComfyUI custom_nodes/\n    directory (the report does not give the planted file's name), and a legitimate extension with the same name prefix creates the same\n    event, so a hit needs publisher and source verification. Tightened from an earlier selector that also matched\n    any .py file under a ComfyUI custom_nodes/ path regardless of filename, which\n    would have fired on every legitimate custom-node installation.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/\n    - https://censys.com/ghost-cryptojacker-targeting-ai\nauthor: The Hunters Ledger\ndate: 2026-05-25\ntags:\n    - attack.persistence\n    - attack.t1554\n    - detection.emerging-threats\n    - stp.2\nlogsource:\n    category: file_event\n    product: linux\ndetection:\n    selection_comfyui_node:\n        TargetFilename|contains: '/custom_nodes/PerformanceMonitor'\n        TargetFilename|endswith: '.py'\n    condition: selection_comfyui_node\nfalsepositives:\n    - >-\n      Legitimate custom ComfyUI node named PerformanceMonitor installed by\n      authorized user (verify publisher and source repository before dismissing)\n    - >-\n      Development environments where a test custom node happens to share this\n      name (scope exclusion for known dev hosts recommended)\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-05-25T00:00:00Z",
             "labels": [
@@ -3192,12 +3192,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--59d28ba2-91e2-5229-ac09-9e8f8a5ea9b4",
+            "id": "relationship--7e3d060a-6dd7-5dbc-a933-be9cd44d1bd3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-11T05:44:20.519499Z",
-            "modified": "2026-10-11T05:44:20.519499Z",
+            "created": "2026-10-11T07:05:19.546493Z",
+            "modified": "2026-10-11T07:05:19.546493Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--0ad272bb-19e4-59a1-9284-76376d8f8ce4",
+            "source_ref": "indicator--8489f391-5119-54e4-b79a-1c4fad695970",
             "target_ref": "malware--e50e9e2e-408e-52fd-ad9a-7871c902a999",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -10923,7 +10923,7 @@
             "id": "report--9aa555ca-d9d6-51c3-8af0-af351596d438",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.787945Z",
-            "modified": "2026-10-11T05:44:20.565317Z",
+            "modified": "2026-10-11T07:05:19.593524Z",
             "name": "GHOST Cryptojacker Kit Family — Vova75Rus Kit-Author Supply Chain",
             "report_types": [
                 "threat-report"
@@ -11019,7 +11019,7 @@
                 "indicator--145d5f2f-e312-59ac-85eb-7144c65069e6",
                 "indicator--390b3d5a-0fee-5f7b-9a4e-87e083b0e3ab",
                 "indicator--483c47cf-2e33-5a9b-b8cf-3959e100d49e",
-                "indicator--0ad272bb-19e4-59a1-9284-76376d8f8ce4",
+                "indicator--8489f391-5119-54e4-b79a-1c4fad695970",
                 "indicator--1bfe229f-9656-57a6-bf96-7c53c78d776d",
                 "indicator--4004ac82-6f13-5504-8b3f-0805cc63a58d",
                 "indicator--5e5923ce-0e72-5ce6-8203-5e543d07a12b",
@@ -11129,7 +11129,7 @@
                 "relationship--a7e58667-5b19-58a5-808a-3272ab9aa4a8",
                 "relationship--b1136b0e-f692-501c-8ee8-8655ee19d8e5",
                 "relationship--323a8fed-8301-541b-8e57-cca65dcbe680",
-                "relationship--59d28ba2-91e2-5229-ac09-9e8f8a5ea9b4",
+                "relationship--7e3d060a-6dd7-5dbc-a933-be9cd44d1bd3",
                 "relationship--41040516-e978-5967-a5b6-0d0d930b4ea4",
                 "relationship--000e6520-a77b-5fdf-9fc0-38889e70d83b",
                 "relationship--ac9980d1-5eae-5704-8be5-625cd92fb7ef",

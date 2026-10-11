@@ -98,14 +98,14 @@ rule MALW_ChaosLoader_Stage4_MutexGUID_CrossBuildInvariant {
 **Confidence:** HIGH
 **Rationale:** The forced SysWOW64 PowerShell launch line and the `.Replace('@','A').Replace('#','/')` alphabet-substitution trick are both flagged as builder-wide structural anchors present in both observed builds — these are decode-pipeline mechanics baked into the crypter's own code, not per-victim literals, so they survive a rebuild that only rotates keys and filenames.
 **False Positives:** Low — the forced 32-bit PowerShell launch string, the specific alphabet-substitution string, and one of two decode-pipeline branches (the `$host.UI.RawUI.WindowTitle` self-read, or the `StartsWith(` plus `Substring(32)` marker-strip pair) are required together in a file between 1 MB and 5 MB; individual components appear in legitimate scripts but not in this combination at this file size.
-**Blind Spots:** A builder revision that changes the decode alphabet or drops the forced-SysWOW64 launch (e.g., moving to native 64-bit PowerShell) would evade this rule; targets on-disk `.bat` files only, not the loader once it has fully decoded into memory.
+**Blind Spots:** A builder revision that changes the decode alphabet or drops the forced-SysWOW64 launch (e.g., moving to native 64-bit PowerShell) would evade this rule; the rule reads the bytes of a file between 1 MB and 5 MB and tests no `.bat` extension and no batch syntax, so a PowerShell script or any other file of that size holding the strings also matches; it does not cover the loader once it has decoded into memory.
 **Validation:** Scan `mymain.bat` / `myfile.bat` (hashes below) or a future build sharing the same decode pipeline — must match; a legitimate oversized PowerShell deployment script must NOT fire.
 **Deployment:** Endpoint file-system scanner, gateway content inspection, AV on-access scan.
 
 ```yara
 rule MALW_ChaosLoader_BatchDropper_StructuralAnchors {
    meta:
-      description = "Detects on-disk DOSfuscated batch droppers from the Chaos/TorBrowserTor private crypter family (mymain.bat / myfile.bat and future builds sharing the same decode pipeline). Requires the forced 32-bit SysWOW64 PowerShell silent launch, the alphabet-substitution string, and either the Console.Title-based self-read (the WindowTitle read) or the magic-marker StartsWith plus Substring(32) pair, in a file between 1 MB and 5 MB (the size of these oversized encoded-payload carriers)"
+      description = "Detects files from the Chaos/TorBrowserTor private crypter family's DOSfuscated batch droppers (mymain.bat / myfile.bat and future builds sharing the same decode pipeline); the rule tests no file extension or batch marker. Requires the forced 32-bit SysWOW64 PowerShell silent launch, the alphabet-substitution string, and either the $host.UI.RawUI.WindowTitle self-read or the magic-marker StartsWith plus Substring(32) pair, in a file between 1 MB and 5 MB (the size of these oversized encoded-payload carriers)"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/"
@@ -209,14 +209,14 @@ rule RANSOM_ChaosBuilder_TorBrowserTor_FilesystemArtefacts {
 #### Orcus RAT v7 Wardow Crack
 
 **Tier:** Detection
-**Robustness:** 3
+**Robustness:** 2
 **ATT&CK Coverage:** T1573 (Encrypted Channel), T1056.001 (Keylogging), T1113 (Screen Capture), T1071.001 (Web Protocols)
 **Confidence:** DEFINITE
-**Rationale:** `CrackedByWardow`, the fixed IV, and the keyleak magic filename are hardcoded by the crack tool itself, not by any individual operator — the report records all three as family-wide in this crack. The rule does not require all three: it requires the AES key, either the fixed IV or the keyleak filename, and one Orcus structure string (`Orcus.Service` or `IServicePipe`), so a build missing either the IV or the filename still matches. This is as durable as a static-string anchor gets: renaming the payload or rotating C2 infrastructure has no effect on it.
+**Rationale:** `CrackedByWardow`, the fixed IV, and the keyleak magic filename are hardcoded by the crack tool itself, not by any individual operator — the report records all three as family-wide in this crack. The rule does not require all three: it requires the AES key, either the fixed IV or the keyleak filename, and one Orcus structure string (`Orcus.Service` or `IServicePipe`), so a build missing either the IV or the filename still matches. This is as durable as a static-string anchor gets: renaming the payload or rotating C2 infrastructure has no effect on it. It scores Robustness 2, not 3: the key, IV and filename are constants of one crack tool, a specific tool-family combination, and a future crack revision that changes them defeats it.
 **False Positives:** None known — `CrackedByWardow` is not used by any legitimate software; the required combination is unambiguous.
 **Blind Spots:** Evaded by an un-cracked or differently-cracked Orcus v7 build, or a future crack revision that changes these constants; does not cover the underlying Orcus RAT family broadly, only this specific crack.
 **Validation:** Scan `myfile.exe` (hash below) or any other Wardow-cracked Orcus sample — must match; a stock (non-cracked) Orcus v7 build must NOT fire.
-**Deployment:** Endpoint AV/EDR, memory scanner, `%APPDATA%\Microsoft\Speech\` directory monitoring.
+**Deployment:** Endpoint AV/EDR file scan and `%APPDATA%\Microsoft\Speech\` directory monitoring. The condition tests `filesize`, which is undefined in a process-memory scan, so the rule does not match there; a memory-scan form would need the `filesize` test removed and is not written or tested here.
 
 ```yara
 rule RAT_OrcusRAT_v7_WardowCrack {
@@ -421,7 +421,7 @@ level: high
 **ATT&CK Coverage:** T1486 (Data Encrypted for Impact), T1490 (Inhibit System Recovery)
 **Confidence:** HIGH
 **Rationale:** Corrected from the original: the published rule's title and description described a correlation between `.torbrowsertor` file creation and anti-recovery command execution, but the `detection:` block never implemented the extension-creation half — the condition matched only the generic anti-recovery commands (`selection_antirecovery`) alone, which is common to legitimate backup-cleanup activity as well as most ransomware families. This is now two base rules plus a genuine Sigma correlation: the `.torbrowsertor` extension is a durable, family-wide anchor (Chaos-builder invariant, not this operator's own choice — see the YARA filesystem-artefacts rule), and requiring it alongside an anti-recovery command on the same host within a 10-minute window is a materially higher-fidelity signal than either alone.
-**False Positives:** None known — `.torbrowsertor` is not a legitimate extension, and the co-occurrence of a distinctive extension-creation burst with shadow-copy/backup destruction on the same host within minutes has no benign explanation.
+**False Positives:** None known — `.torbrowsertor` is not a legitimate extension, and the co-occurrence of that extension with shadow-copy/backup destruction on the same host within minutes has no benign explanation. The correlation has no count requirement: one `.torbrowsertor` file creation and one anti-recovery command suffice, so a hit shows co-occurrence and not an extension-creation burst or ongoing encryption.
 **Blind Spots:** Converted to EQL with the sysmon pipeline, the temporal correlation becomes `sample by Computer` with no time limit, so the 10-minute window is not enforced there; the Lucene backend cannot convert correlation rules. The anti-recovery base rule matches a `bcdedit` command only when `recoveryenabled no` is also in the command line. Requires both base rules' logsources (`file_event` and `process_creation`) to be collected and correlatable by `Computer`; a host with only one telemetry source enabled will not produce the correlation match (though the extension-creation base rule alone still fires as Detection-tier).
 **Validation:** Trigger Stage-5a end-to-end — both the extension-creation and anti-recovery-command base rules must fire within the window and the correlation must match; a legitimate backup job deleting shadow copies with no `.torbrowsertor` files present anywhere on the host must NOT trigger the correlation.
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (file-creation + process-creation telemetry, correlated).
@@ -503,14 +503,15 @@ falsepositives:
     - System administrators running manual shadow copy management
 level: medium
 ---
-title: Chaos TorBrowserTor Ransomware Active Encryption — Extension and Anti-Recovery Command Correlation
+title: Chaos TorBrowserTor Ransomware Extension Creation and Anti-Recovery Command Correlation
 id: ba89a60f-33f2-45aa-8a49-3beacdc24917
 status: experimental
 description: >-
   Correlates creation of .torbrowsertor-extension files with execution of
   shadow-copy or backup-catalog deletion commands on the same host within
-  a 10-minute window, indicating active Chaos/TorBrowserTor ransomware
-  encryption combined with anti-recovery measures. The anti-recovery
+  a 10-minute window, the co-occurrence expected during Chaos/TorBrowserTor
+  ransomware encryption with anti-recovery measures. The correlation sets no
+  count threshold, so one such file and one such command are enough. The anti-recovery
   commands alone are a Hunting-tier lead (see the standalone base rule); the
   extension marker alone is already specific (see its base rule above); the
   combination is Detection-grade.
@@ -649,7 +650,8 @@ level: medium
 
 **Tier:** Hunting
 **Robustness:** 1
-**ATT&CK Coverage:** T1497 (Virtualization/Sandbox Evasion), T1036 (Masquerading)
+**ATT&CK Coverage:** T1497 (Virtualization/Sandbox Evasion)
+**ATT&CK Note:** The malware's gate is the sandbox-evasion check (T1497). T1036 (Masquerading) is not claimed: no selection tests a rename or a masquerade, only the account name and the VBE or mapping.csv paths in Temp.
 **Confidence:** HIGH
 **Rationale:** The malware's gate checks for the admin account, the VBE directory and the mapping.csv file together and exits when all three are present, so the three together identify the operator's own development or staging host and not a victim. This rule tests less than that: one file-creation event by an account whose name contains `admin` is enough, and a default `Administrator` account matches the name test. Value is narrow and hunting-specific: spotting file creations that resemble the gate's artefacts in telemetry, or validating a suspected staging host.
 **False Positives:** Legitimate VBScript Editor (VBE) installations on administrator accounts may create `%TEMP%\VBE\` directories; administrative accounts using tools that generate `mapping.csv` files in `%TEMP%`. Tune by excluding known-good admin workstations and software deployment systems.
@@ -787,12 +789,16 @@ description: >-
   Detects DisableTaskMgr set to 1 under a per-user
   Software\Microsoft\Windows\CurrentVersion\Policies\System key (Sysmon
   renders the per-user hive as HKU\<SID>) by a process whose image path
-  does not contain the svchost.exe or GroupPolicy paths. The report records
+  does not contain the svchost.exe or GroupPolicy paths; the value
+  name must be exactly DisableTaskMgr, so a value such as DisableTaskMgrBackup
+  does not match. The report records
   Stage-5a Chaos/TorBrowserTor ransomware writing this value to stop the
   victim using Task Manager to end the ransomware process. Nothing in the
   rule identifies that family, and the value is also set legitimately by
-  Group Policy and management tools. The rule does not test the writer's
-  path; narrowing to a process running from %APPDATA% is a tuning step.
+  Group Policy and management tools. The only writer-path test is the
+  exclusion of the two image paths above; the rule does not require the
+  writer to run from a user-writable path, and narrowing to a process
+  running from %APPDATA% is a tuning step.
 references:
     - https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/
 author: The Hunters Ledger
@@ -807,7 +813,7 @@ logsource:
 detection:
     selection:
         TargetObject|startswith: 'HKU\'
-        TargetObject|contains: '\Software\Microsoft\Windows\CurrentVersion\Policies\System\DisableTaskMgr'
+        TargetObject|endswith: '\Software\Microsoft\Windows\CurrentVersion\Policies\System\DisableTaskMgr'
         Details:
             - 'DWORD (0x00000001)'
             - 1
@@ -832,10 +838,11 @@ level: medium
 
 **Tier:** Hunting
 **Robustness:** 1
-**ATT&CK Coverage:** T1090.001 (Internal Proxy), T1071.001 (Web Protocols)
+**ATT&CK Coverage:** T1090.001 (Internal Proxy)
+**ATT&CK Note:** Web Protocols (T1071.001) is not claimed. The report supports a loopback endpoint with an unrecovered upstream tunnel, not HTTP on this local connection, so the protocol carried over the port is not known.
 **Confidence:** HIGH (for this campaign) / port is campaign-configured, not crack-tool-hardcoded
 **Rationale:** Unlike the family-wide `CrackedByWardow` crack constants (which the YARA rule above anchors on), port 20268 is an Orcus builder configuration value the operator set for this campaign specifically — it is not confirmed to be a crack-tool default. A future campaign from the same operator, or any other Wardow-crack user, could configure a different port. Removing the specific port would leave only "loopback connection from a non-system process," which is far too broad to be useful even as a Hunting signal (many legitimate applications use arbitrary localhost ports), so the port anchor is retained as the best available balance.
-**False Positives:** Local development services or automated testing frameworks using port 20268 in developer environments. Tune by restricting to process images outside `System32`/`SysWOW64`, and treat as a lead requiring corroboration, not a standalone alert.
+**False Positives:** Local development services or automated testing frameworks using port 20268 in developer environments. The rule already excludes process images under `System32` and `SysWOW64`; treat a hit as a lead requiring corroboration, not a standalone alert.
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (network-connection telemetry).
 
 ```yaml
@@ -859,7 +866,6 @@ date: 2026-04-23
 tags:
     - attack.command-and-control
     - attack.t1090.001
-    - attack.t1071.001
     - detection.emerging-threats
 logsource:
     category: network_connection
@@ -868,6 +874,7 @@ detection:
     selection:
         DestinationIp: '127.0.0.1'
         DestinationPort: 20268
+        Protocol: 'tcp'
         Initiated: 'true'
     filter_system:
         Image|contains:
@@ -878,8 +885,8 @@ falsepositives:
     - Local development services on port 20268 in developer environments
     - Automated testing frameworks using this loopback port
     - >-
-      Tune by restricting to process images outside System32/SysWOW64;
-      the port is operator-configured and may differ in other campaigns
+      The port is operator-configured and may differ in other campaigns,
+      so a hit is a lead and not an identification
 level: medium
 ```
 

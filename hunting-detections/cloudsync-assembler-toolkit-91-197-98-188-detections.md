@@ -77,7 +77,7 @@ rule RAT_CloudSync_TorPanel_NetscanBuild {
       description = "Detects the later-build CloudSync Tor-panel RAT (client.exe/q.exe/s.exe) via embedded HTML/JS markup for its CIDR+port network scanner panel tab, unique to the later of two known CloudSync build generations"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188/"
+      reference = "https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/"
       date = "2026-08-03"
       modified = "2026-10-11"
       hash1 = "62aa8e470e60aa9fa77df6e6e63b7c253657e95d6018240b1752a9ca9fe389fa"
@@ -115,7 +115,7 @@ rule RAT_CloudSync_C2Protocol_DualBuild {
       description = "Detects CloudSync's cleartext TCP C2 registration/heartbeat protocol strings across both observed build generations, which differ in message terminator ([C2_END] vs [END]) and registration field names"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188/"
+      reference = "https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/"
       date = "2026-08-03"
       hash1 = "9744c12a06b4562e175d4aeb7b8fd5c1e1877ac30222af8243eeaae16df324b0"
       family = "CloudSync"
@@ -155,7 +155,7 @@ rule RAT_SvchostPayload_ParalellInjector_TypeNames {
       description = "Detects the sourced Paralell (Blind Eagle-associated) reflective injector and the custom SvchostPayload .NET RAT via debug PDB path fragment and distinctive obfuscated/cleartext type and member names; matches the on-disk cls.exe sibling build and, when captured, in-memory dumps of Crystal-Monk.dll and SvchostPayload"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188/"
+      reference = "https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/"
       date = "2026-08-03"
       hash1 = "79b6f2eb6583a83aabe590264de08c0ad1eb7e960ae9a4bdbc6ed84142ce95a9"
       hash3 = "135877ecc663ee47340a4726078234f0"
@@ -197,7 +197,7 @@ rule Loader_SvchostJS_CustomAlphabet {
       description = "Detects the svhost.js WSH JScript fileless loader via its custom 16-character substitution alphabet used in a layered base16-XOR plus AES/ChaCha/permutation decoder. The alphabet string is the only anchor: the generic function-constructor and String.fromCharCode strings this rule once accepted on their own appear in ordinary JavaScript and were removed"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188/"
+      reference = "https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/"
       date = "2026-08-03"
       modified = "2026-10-11"
       hash1 = "4b115a9f745219e3f3abdea275da89f35e4ec5f3d43286e5efc58eaf8049f3f7"
@@ -232,7 +232,7 @@ rule Loader_ABExe_DeploymentOrchestrator_Banners {
       description = "Detects the ab.exe post-compromise deployment orchestrator via its fixed-sequence console banner strings and the German-localized Active Directory privileged-group names it targets when creating a hidden backdoor account"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188/"
+      reference = "https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/"
       date = "2026-08-03"
       hash1 = "d25a3a858e28faa68ca6c624d7d19350c11ac798c346be3067307463e40aaff1"
       family = "CloudSync"
@@ -276,7 +276,7 @@ rule Loader_CtBat_ProxyAwareUSBWormStub {
       description = "Detects the ct.bat infection stub via a combination of its distinctive command fragments: proxy-credential-inheriting WebClient download, USB drive enumeration for its worm loop, autorun.inf propagation, and its AMSI-bypass field name"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188/"
+      reference = "https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/"
       date = "2026-08-03"
       hash1 = "0ff0cee1fbf1050fbe3ab91918e56334a93269265e5614717ec0441baa8c42df"
       family = "CloudSync"
@@ -316,7 +316,7 @@ rule RAT_CloudSync_PublicWorkdir_Artifacts {
       description = "Detects CloudSync working-directory, dropped-Tor-binary, and mutex string artifacts common to droppers and implants across both build generations; broader and lower-precision than the dedicated panel and protocol rules, intended for hunting"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188/"
+      reference = "https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/"
       date = "2026-08-03"
       hash1 = "6bd0366372b7d765e76c5a888d68a4991ad04ee614bdb589a20ffbe433db58fc"
       family = "CloudSync"
@@ -1254,31 +1254,34 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT CloudSync-Assemble
 #### SentinelStealer c3lestial.fun TLS SNI
 
 **Tier:** Hunting
-**Robustness:** 2
+**Robustness:** 0
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
 **Confidence:** MODERATE
+**Rationale:** A single domain is the only discriminator, so Gate 1 scores it Robustness 0: the same indicator is already in the campaign IOC feed (`threat-intel-vault/ioc-feeds/cloudsync-assembler-toolkit-91-197-98-188-iocs.json`) and the rule is kept only as a Hunting standing signature for a sourced commodity-stealer domain. The SNI test is a domain-boundary test (`.c3lestial.fun` with `dotprefix` and `endswith`): it accepts `c3lestial.fun` and its subdomains, and rejects `c3lestial.fun.example.invalid` and `evilc3lestial.fun`. It tests no stealer behaviour, only the name a client presents.
 **False Positives:** The domain sits on shared/Hostinger hosting with 20+ unrelated communicating files observed, so a hit may indicate a different malware family sharing the same hosting rather than SentinelStealer specifically, a "something malicious" signal even when the specific family attribution is uncertain
 **Blind Spots:** This domain is not operator-owned, so it could stop resolving to SentinelStealer's infrastructure at any time without notice; it belongs to a separately-tracked, sourced commodity component and must never be presented alongside the operator's own CloudSync/.NET-chain infrastructure
-**Validation:** Confirmed via the real rule-parsing engine against a session presenting the domain in the TLS ClientHello SNI extension. An unrelated TLS session to a different domain must not fire.
+**Validation:** The rule loads under `suricata -T` on the sensor (syntax acceptance only; no packet replay was run, so a TLS session presenting the name was not exercised). Expected to fire on an SNI of `c3lestial.fun` or `x.c3lestial.fun`; must not fire on `c3lestial.fun.example.invalid`, `evilc3lestial.fun` or an unrelated domain (by the documented semantics of `dotprefix` with `endswith`, not exercised on traffic).
 **Deployment:** Network IDS/IPS at the perimeter; survives IP rotation since it matches on the TLS SNI rather than a destination address
 
 ```
-alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT CloudSync-Assembler-Toolkit SentinelStealer c3lestial.fun TLS SNI (Sourced Commodity Stealer C2)"; flow:established,to_server; tls.sni; content:"c3lestial.fun"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/; classtype:trojan-activity; sid:9301603; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-03;)
+alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT CloudSync-Assembler-Toolkit SentinelStealer c3lestial.fun TLS SNI (Sourced Commodity Stealer C2)"; flow:established,to_server; tls.sni; dotprefix; content:".c3lestial.fun"; nocase; endswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/; classtype:trojan-activity; sid:9301603; rev:3; metadata:author The_Hunters_Ledger, date 2026-08-03;)
 ```
 
 #### SentinelStealer c3lestial.fun DNS Query
 
 **Tier:** Hunting
-**Robustness:** 2
-**ATT&CK Coverage:** T1071.001 (Web Protocols)
+**Robustness:** 0
+**ATT&CK Coverage:** None
+**ATT&CK Note:** The report places the DNS resolution before the TLS connection to the same name. Web Protocols (T1071.001) describes that following TLS connection and is carried by the TLS SNI rule above, not by this DNS rule, which sees only a name lookup.
 **Confidence:** MODERATE
+**Rationale:** A single domain is the only discriminator, so Gate 1 scores it Robustness 0: the same indicator is already in the campaign IOC feed and the rule is kept only as a Hunting standing signature. The name test is a domain-boundary test (`.c3lestial.fun` with `dotprefix` and `endswith`): it accepts `c3lestial.fun` and its subdomains, and rejects `evilc3lestial.fun` and `c3lestial.fun.example.invalid`.
 **False Positives:** Same shared-hosting caveat as the TLS SNI rule above; DNS resolution alone is a slightly weaker signal than a completed TLS session since it does not confirm subsequent communication
 **Blind Spots:** Useful in environments where TLS inspection is unavailable but DNS logging is; pair with the TLS SNI rule above where both log sources are available
-**Validation:** Confirmed via the real rule-parsing engine against a DNS query for the domain. A query for an unrelated domain must not fire.
+**Validation:** The rule loads under `suricata -T` on the sensor (syntax acceptance only; no DNS replay was run). Expected to fire on a query for `c3lestial.fun` or `x.c3lestial.fun`; must not fire on `evilc3lestial.fun`, `c3lestial.fun.example.invalid` or an unrelated domain (by the documented semantics of `dotprefix` with `endswith`, not exercised on traffic).
 **Deployment:** Network IDS/IPS or DNS sinkhole/monitoring at the perimeter
 
 ```
-alert dns $HOME_NET any -> any any (msg:"THL HUNT CloudSync-Assembler-Toolkit SentinelStealer c3lestial.fun DNS Query (Sourced Commodity Stealer C2)"; dns_query; content:"c3lestial.fun"; nocase; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/; classtype:trojan-activity; sid:9301604; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-03;)
+alert dns $HOME_NET any -> any any (msg:"THL HUNT CloudSync-Assembler-Toolkit SentinelStealer c3lestial.fun DNS Query (Sourced Commodity Stealer C2)"; dns.query; dotprefix; content:".c3lestial.fun"; nocase; endswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/; classtype:trojan-activity; sid:9301604; rev:3; metadata:author The_Hunters_Ledger, date 2026-08-03;)
 ```
 
 ---

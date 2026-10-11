@@ -357,11 +357,11 @@ alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT KAIDO-EvilSoul-Maa
 #### Outbound TCP Payload to Port 4782 (Quasar Default Port, KAIDO C2 Port)
 
 **Tier:** Hunting
-**Robustness:** 2
+**Robustness:** 1
 **ATT&CK Coverage:** T1095 (Non-Application Layer Protocol)
 **ATT&CK Note:** The report records the Quasar binary protocol over raw TCP on port 4782 (T1095). The rule tests only an established TCP flow with payload to port 4782 and does not parse the protocol, so the mapping is the technique the port is a lead for and not something the rule confirms.
 **Confidence:** HIGH for the port/protocol pairing; the rule itself is a port-anchored lead
-**Rationale:** The RAT's primary C2 channel is a raw Quasar binary protocol over TCP/4782 with no HTTP layer. TCP/4782 is the Quasar-family default port — a tool-family artifact — but the rule carries no content anchor (the protocol is non-standard and unparseable by Suricata's app-layer engine), so it is a port-based hunting lead rather than an alerting-grade signature: anything else on 4782 will also fire.
+**Rationale:** The RAT's primary C2 channel is a raw Quasar binary protocol over TCP/4782 with no HTTP layer. TCP/4782 is the Quasar-family default port, but a port is configurable and the port number is the rule's only discriminator, so it scores Robustness 1 and makes no claim of a protocol fingerprint. The rule carries no content anchor (the protocol is non-standard and unparseable by Suricata's app-layer engine), so it is a port-based hunting lead rather than an alerting-grade signature: anything else on 4782 will also fire, and Quasar packets themselves are not parsed, so coverage of actual Quasar traffic is NOT CHECKED.
 **False Positives:** Any legitimate or unrelated service that happens to use TCP/4782 (uncommon but not impossible); the `threshold` limits alert volume per source.
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points; hunt-tune before alerting.
 

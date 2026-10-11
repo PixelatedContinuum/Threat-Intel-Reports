@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--6f545537-c09c-4fba-b0b1-d4bac63e8ee1",
+    "id": "bundle--2a163e17-455a-49d2-8121-a5910abd255f",
     "objects": [
         {
             "type": "identity",
@@ -202,12 +202,12 @@
             "id": "indicator--524f45d5-1eac-5d5f-97d7-7f397c6ed3a8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-09-19T20:27:57.172488Z",
-            "modified": "2026-10-11T05:44:21.385927Z",
+            "modified": "2026-10-11T07:05:20.121606Z",
             "name": "TOOL_ClaudeCode_CurlBash_Allowlist_Generic",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule TOOL_ClaudeCode_CurlBash_Allowlist_Generic {\n   meta:\n      description = \"Detects a small file (10 KB or less) with the permissions and allow keys and a single allowlist entry of the form Bash(curl ... | bash) or Bash(curl ... | sh), a heuristic lead for attacker-customized AI-agent allowlists regardless of which tooling is being installed. Developers who pre-approve an internal installer produce the same entry\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections/\"\n      date = \"2026-05-27\"\n      family = \"AI-Agent Allowlist Abuse\"\n      malware_type = \"Operator Tradecraft / AI-Agent Permission Bypass\"\n      campaign = \"Korean-ClaudeCode-Allowlist-OpenClaw-221.150.15.104\"\n      id = \"ae126881-077c-513d-bd87-bd8b56944fcc\"\n   strings:\n      $permissions_block = \"\\\"permissions\\\"\" ascii\n      $allow_block       = \"\\\"allow\\\"\" ascii\n      $curl_pipe         = /Bash\\(curl[^\\x22\\n]{0,300}\\| ?(ba)?sh\\)/ ascii\n   condition:\n      filesize < 10KB and\n      $permissions_block and\n      $allow_block and\n      $curl_pipe\n}",
+            "pattern": "rule TOOL_ClaudeCode_CurlBash_Allowlist_Generic {\n   meta:\n      description = \"Detects a small file (under 10 KB) with the permissions and allow keys and a single allowlist entry of the form Bash(curl ... | bash) or Bash(curl ... | sh), a heuristic lead for attacker-customized AI-agent allowlists regardless of which tooling is being installed. Developers who pre-approve an internal installer produce the same entry\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections/\"\n      date = \"2026-05-27\"\n      family = \"AI-Agent Allowlist Abuse\"\n      malware_type = \"Operator Tradecraft / AI-Agent Permission Bypass\"\n      campaign = \"Korean-ClaudeCode-Allowlist-OpenClaw-221.150.15.104\"\n      id = \"ae126881-077c-513d-bd87-bd8b56944fcc\"\n   strings:\n      $permissions_block = \"\\\"permissions\\\"\" ascii\n      $allow_block       = \"\\\"allow\\\"\" ascii\n      $curl_pipe         = /Bash\\(curl[^\\x22\\r\\n]*\\| ?(ba)?sh\\)/ ascii\n   condition:\n      filesize < 10KB and\n      $permissions_block and\n      $allow_block and\n      $curl_pipe\n}",
             "pattern_type": "yara",
             "valid_from": "2026-05-27T00:00:00Z",
             "labels": [
@@ -223,12 +223,12 @@
             "id": "indicator--3b0ec8af-225c-594e-9ffc-f169fdb3608a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-09-19T20:27:57.172191Z",
-            "modified": "2026-10-11T05:44:21.386098Z",
+            "modified": "2026-10-11T07:05:20.121791Z",
             "name": "TOOL_ClaudeCode_OpenClaw_Allowlist_Specific",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "/*\n   Yara Rule Set\n   Identifier: Claude Code Attacker-Customized Allowlist — OpenClaw Operator (Korean-ClaudeCode-Allowlist-OpenClaw-221.150.15.104)\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule TOOL_ClaudeCode_OpenClaw_Allowlist_Specific {\n   meta:\n      description = \"Detects a small file (10 KB or less) that carries at least three of six distinct OpenClaw permission-allowlist entries as found in the operator's Claude Code settings.local.json: the curl|bash installer, npm global install, onboarding, docs fetch, gateway start, and UI launch. A legitimate OpenClaw adopter who allowlists the same documented steps produces the same file\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections/\"\n      date = \"2026-05-27\"\n      family = \"AI-Agent Allowlist Abuse\"\n      malware_type = \"Operator Tradecraft / AI-Agent Permission Bypass\"\n      campaign = \"Korean-ClaudeCode-Allowlist-OpenClaw-221.150.15.104\"\n      id = \"98965454-3e39-59be-8b73-d9e5451d3a11\"\n   strings:\n      $oc_install    = \"Bash(curl -fsSL https://openclaw.ai/install.sh | bash)\" ascii fullword\n      $oc_npm        = \"Bash(npm i -g openclaw)\" ascii fullword\n      $oc_onboard    = \"Bash(openclaw onboard)\" ascii fullword\n      $oc_webfetch   = \"WebFetch(domain:docs.openclaw.ai)\" ascii fullword\n      $oc_gateway    = \"Bash(openclaw gateway --port\" ascii\n      $oc_openui     = \"Bash(open http://127.0.0.1:18789/)\" ascii fullword\n   condition:\n      filesize < 10KB and\n      3 of ($oc_install, $oc_npm, $oc_onboard, $oc_webfetch, $oc_gateway, $oc_openui)\n}",
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: Claude Code Attacker-Customized Allowlist — OpenClaw Operator (Korean-ClaudeCode-Allowlist-OpenClaw-221.150.15.104)\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule TOOL_ClaudeCode_OpenClaw_Allowlist_Specific {\n   meta:\n      description = \"Detects a small file (under 10 KB) that carries at least three of six distinct OpenClaw permission-allowlist entries as found in the operator's Claude Code settings.local.json: the curl|bash installer, npm global install, onboarding, docs fetch, gateway start, and UI launch. A legitimate OpenClaw adopter who allowlists the same documented steps produces the same file\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections/\"\n      date = \"2026-05-27\"\n      family = \"AI-Agent Allowlist Abuse\"\n      malware_type = \"Operator Tradecraft / AI-Agent Permission Bypass\"\n      campaign = \"Korean-ClaudeCode-Allowlist-OpenClaw-221.150.15.104\"\n      id = \"98965454-3e39-59be-8b73-d9e5451d3a11\"\n   strings:\n      $oc_install    = \"Bash(curl -fsSL https://openclaw.ai/install.sh | bash)\" ascii fullword\n      $oc_npm        = \"Bash(npm i -g openclaw)\" ascii fullword\n      $oc_onboard    = \"Bash(openclaw onboard)\" ascii fullword\n      $oc_webfetch   = \"WebFetch(domain:docs.openclaw.ai)\" ascii fullword\n      $oc_gateway    = \"Bash(openclaw gateway --port\" ascii\n      $oc_openui     = \"Bash(open http://127.0.0.1:18789/)\" ascii fullword\n   condition:\n      filesize < 10KB and\n      3 of ($oc_install, $oc_npm, $oc_onboard, $oc_webfetch, $oc_gateway, $oc_openui)\n}",
             "pattern_type": "yara",
             "valid_from": "2026-05-27T00:00:00Z",
             "labels": [
@@ -262,15 +262,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--63d62b73-65ce-508a-a0ae-78632739df0e",
+            "id": "indicator--c44d9596-827b-5675-bc95-53b2336ef858",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-09-19T20:27:57.17276Z",
-            "modified": "2026-10-11T05:44:21.386358Z",
-            "name": "OpenClaw AI-Agent Framework Curl-Pipe-Bash Installer Execution",
+            "created": "2026-10-11T07:05:20.122035Z",
+            "modified": "2026-10-11T07:05:20.122035Z",
+            "name": "Command Line With Curl, openclaw.ai and a Pipe-to-Shell Fragment (OpenClaw Installer Shape)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: OpenClaw AI-Agent Framework Curl-Pipe-Bash Installer Execution\nid: e02ddbf4-0a77-4c13-85ac-cd1ed9d8e66d\nstatus: experimental\ndescription: >-\n  Detects a command line that carries the OpenClaw AI-agent framework curl-pipe-bash\n  installer pipeline (curl, openclaw.ai and a pipe into bash or sh in one command line).\n  The command-line pattern (curl fetching from openclaw.ai piped to bash) is the primary\n  distribution mechanism documented in the Korean-ClaudeCode-Allowlist-OpenClaw-221.150.15.104\n  operator campaign. This rule cannot distinguish execution under an attacker-customized\n  Claude Code allowlist from a legitimate developer manually installing OpenClaw — both\n  produce the identical command line — so hits require review rather than automatic alerting.\nreferences:\n    - https://the-hunters-ledger.com/reports/korean-claude-openclaw-221.150.15.104/\n    - https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-27'\ntags:\n    - attack.execution\n    - attack.stealth\n    - attack.defense-impairment\n    - attack.t1059.004\n    - attack.t1685\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: linux\ndetection:\n    selection:\n        CommandLine|contains|all:\n            - 'curl'\n            - 'openclaw.ai'\n        CommandLine|contains:\n            - '| bash'\n            - '|bash'\n            - '| sh'\n            - '|sh'\n    condition: selection\nfalsepositives:\n    - >-\n      Legitimate OpenClaw evaluation or installation on developer-class workstations, run\n      manually and independent of any Claude Code allowlist.\nlevel: medium",
+            "pattern": "title: Command Line With Curl, openclaw.ai and a Pipe-to-Shell Fragment (OpenClaw Installer Shape)\nid: e02ddbf4-0a77-4c13-85ac-cd1ed9d8e66d\nstatus: experimental\ndescription: >-\n  Detects a command line that holds the substrings curl and openclaw.ai together with a\n  pipe-to-shell fragment (| bash, |bash, | sh or |sh), in any order and without token\n  boundaries. The pattern curl fetching from openclaw.ai piped to bash is the primary\n  distribution mechanism documented in the Korean-ClaudeCode-Allowlist-OpenClaw-221.150.15.104\n  operator campaign. This rule cannot distinguish execution under an attacker-customized\n  Claude Code allowlist from a legitimate developer manually installing OpenClaw — both\n  produce the identical command line — so hits require review rather than automatic alerting.\nreferences:\n    - https://the-hunters-ledger.com/reports/korean-claude-openclaw-221.150.15.104/\n    - https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-27'\ntags:\n    - attack.execution\n    - attack.stealth\n    - attack.defense-impairment\n    - attack.t1059.004\n    - attack.t1685\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: linux\ndetection:\n    selection:\n        CommandLine|contains|all:\n            - 'curl'\n            - 'openclaw.ai'\n        CommandLine|contains:\n            - '| bash'\n            - '|bash'\n            - '| sh'\n            - '|sh'\n    condition: selection\nfalsepositives:\n    - >-\n      Legitimate OpenClaw evaluation or installation on developer-class workstations, run\n      manually and independent of any Claude Code allowlist.\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-05-27T00:00:00Z",
             "labels": [
@@ -344,7 +344,7 @@
             "id": "report--076f15c9-d73d-5228-95a2-ee80898c22b8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-09-19T20:27:57.1734Z",
-            "modified": "2026-10-11T05:44:21.386966Z",
+            "modified": "2026-10-11T07:05:20.122627Z",
             "name": "Korean Claude Code + OpenClaw Operator (221.150.15.104) - Attacker-Customized AI-Agent Permission Allowlist",
             "description": "Case 4 capsule sub-report. Smoking-gun artifact: operator's customized ~/.claude/settings.local.json allowlist pre-approving the OpenClaw installation chain. NO defanging in JSON per project convention (machine-readable for SIEM/EDR ingestion). No confirmed victims; threat-level MEDIUM reflects tradecraft observation only.",
             "report_types": [
@@ -367,7 +367,7 @@
                 "indicator--524f45d5-1eac-5d5f-97d7-7f397c6ed3a8",
                 "indicator--3b0ec8af-225c-594e-9ffc-f169fdb3608a",
                 "indicator--5b0c7b94-3d38-5773-bcac-0ba78f85752d",
-                "indicator--63d62b73-65ce-508a-a0ae-78632739df0e",
+                "indicator--c44d9596-827b-5675-bc95-53b2336ef858",
                 "indicator--b5ac95c8-9d6a-5abf-a4c3-8f2391c338cd",
                 "indicator--aeabb830-a1e2-528b-b89f-74313aefd995",
                 "infrastructure--070668c1-a16d-50a3-ad4a-b66be8f8f6d9"

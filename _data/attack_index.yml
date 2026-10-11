@@ -2,7 +2,7 @@
 # ATT&CK tables, _data/detection_attack.yml, _data/actors_index.yml and the
 # catalog. Do NOT edit by hand; re-run the generator. Published sources only.
 attack_version: '19.2'
-max_score: 114
+max_score: 112
 tactics:
   - name: Reconnaissance
     slug: reconnaissance
@@ -244,7 +244,7 @@ tactics:
       - T1684.001
     technique_count: 61
     report_count: 217
-    rule_count: 229
+    rule_count: 228
   - name: Defense Impairment
     slug: defense-impairment
     techniques:
@@ -405,7 +405,7 @@ tactics:
       - T1665
     technique_count: 31
     report_count: 144
-    rule_count: 234
+    rule_count: 231
   - name: Exfiltration
     slug: exfiltration
     techniques:
@@ -720,8 +720,8 @@ techniques:
         date: '2026-07-21'
         report_url: /reports/multivector-ecommerce-rce-toolkit-192-3-1-116/
         rules: >-
-          Successful Large Response From a Spring Boot Actuator Heap Dump Endpoint (SIGMA,
-          Detection)
+          Large HTTP 200 Response to a Spring Boot Actuator Heap Dump or Jolokia HotSpotDiagnostic
+          URI (SIGMA, Detection)
         count: 1
       - url: /hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections
         title: Russian Gemini CLI Credential Mill (213.165.51.115)
@@ -1928,14 +1928,6 @@ techniques:
           PowerShell WindowsUpdateManager Stealer Loader (YARA, Detection); WindowsUpdateManager
           PowerShell Beacon Registry Run Key Persistence (SIGMA, Hunting)
         count: 2
-      - url: /hunting-detections/open-directory-94-103-1-13-20260423-detections
-        title: Chaos Ransomware (TorBrowserTor) Multi-Stage Loader (94.103.1.13)
-        date: '2026-04-23'
-        report_url: /reports/open-directory-94-103-1-13-20260423/
-        rules: >-
-          Admin Account Creating a VBE Directory File or mapping.csv in Temp (Anti-Sandbox Gate
-          Artefacts) (SIGMA, Hunting)
-        count: 1
       - url: /hunting-detections/open-directory-193-56-255-154-xiebroc2-detections
         title: Open Directory at 193.56.255.154 — XiebroC2 v3.1 & Covenant C2
         date: '2026-04-03'
@@ -1964,9 +1956,9 @@ techniques:
     url: /techniques/T1036/
     mitre_url: https://attack.mitre.org/techniques/T1036/
     report_count: 5
-    rule_count: 7
+    rule_count: 6
     actor_count: 4
-    score: 12
+    score: 11
   - id: T1036.001
     name: Invalid Code Signature
     tactic: Stealth
@@ -2656,7 +2648,7 @@ techniques:
         rules: >-
           WSMA_CVE_2023_20198_DoubleEncode_Exfil (YARA, Detection); Network-Device Self-Exfiltration
           via Outbound PUT with User-Agent cisco-IOS (SURICATA, Detection); Cisco WSMA fileCopy
-          Request With a dstURL Parameter (SURICATA, Detection)
+          Request With a dstURL Parameter (SURICATA, Hunting)
         count: 3
     actors:
       - UTA-2026-023
@@ -2717,8 +2709,8 @@ techniques:
         report_url: /reports/seasia-gov-exploitation-toolkit-144-172-106-236/
         rules: >-
           GSocket/THC Backdoor Installer Script: cat.sh (mal_gsocket_catsh_installer_script) (YARA,
-          Hunting); Cron-Triggered Base64-Indirected Shell Execution With Output Suppression (SIGMA,
-          Detection)
+          Hunting); Cron-Triggered Base64-Decode-to-Shell With Output Suppression or
+          Curl-Pipe-to-Shell (SIGMA, Detection)
         count: 2
       - url: /hunting-detections/ai-agent-frameworks-2026-05-23-detections
         title: Multi-Actor AI-Agent Framework Abuse (8 Operators)
@@ -2958,8 +2950,8 @@ techniques:
         rules: >-
           AdaptixC2 Operator .NET Injector: si_build Build Fingerprint (YARA, Hunting); PowerShell
           Creating a Remote Thread in a Long-Lived Windows Host Process (SIGMA, Detection);
-          Suspicious .NET Assembly Image Load with Operator si_build Build Fingerprint (SIGMA,
-          Hunting)
+          PowerShell Image Load of a Module Whose Description Contains the si_build Build String
+          (SIGMA, Hunting)
         count: 3
       - url: /hunting-detections/open-directory-193-56-255-154-xiebroc2-detections
         title: Open Directory at 193.56.255.154 — XiebroC2 v3.1 & Covenant C2
@@ -3045,8 +3037,8 @@ techniques:
         rules: >-
           AdaptixC2 Operator .NET Injector: si_build Build Fingerprint (YARA, Hunting); PowerShell
           Creating a Remote Thread in a Long-Lived Windows Host Process (SIGMA, Detection);
-          Suspicious .NET Assembly Image Load with Operator si_build Build Fingerprint (SIGMA,
-          Hunting)
+          PowerShell Image Load of a Module Whose Description Contains the si_build Build String
+          (SIGMA, Hunting)
         count: 3
     actors:
       - UTA-2026-004
@@ -3933,8 +3925,8 @@ techniques:
         report_url: /reports/korean-claude-openclaw-221.150.15.104/
         rules: >-
           Generic Curl-Pipe-Bash Pattern in Claude Code Allowlist (YARA, Hunting); OpenClaw-Specific
-          Claude Code Allowlist (YARA, Hunting); OpenClaw Curl-Pipe-Bash Installer Execution (SIGMA,
-          Hunting)
+          Claude Code Allowlist (YARA, Hunting); Command Line With Curl, openclaw.ai and a
+          Pipe-to-Shell Fragment (OpenClaw Installer Shape) (SIGMA, Hunting)
         count: 3
       - url: /hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections
         title: Rovodev AI-Co-Authored Mirai Variant + Matrix C2 (87.106.143.220)
@@ -4721,10 +4713,8 @@ techniques:
         title: 'CloudSync: An Assembler''s Intrusion Toolkit'
         date: '2026-08-03'
         report_url: /reports/cloudsync-assembler-toolkit-91-197-98-188/
-        rules: >-
-          SentinelStealer c3lestial.fun TLS SNI (SURICATA, Hunting); SentinelStealer c3lestial.fun
-          DNS Query (SURICATA, Hunting)
-        count: 2
+        rules: SentinelStealer c3lestial.fun TLS SNI (SURICATA, Hunting)
+        count: 1
       - url: /hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections
         title: GOCLOUD Multi-Service Cryptojacking
         date: '2026-07-26'
@@ -4808,8 +4798,8 @@ techniques:
         date: '2026-05-17'
         report_url: /reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/
         rules: >-
-          Operator Flask C2 Dashboard Request Path /login-2fa (SIGMA, Hunting); Operator Flask C2
-          Dashboard Banner Hunt: Werkzeug/3.1.8 + /login-2fa (SURICATA, Hunting)
+          Operator Flask C2 Dashboard Request URI Containing /login-2fa (SIGMA, Hunting); Operator
+          Flask C2 Dashboard Banner Hunt: Werkzeug/3.1.8 + /login-2fa (SURICATA, Hunting)
         count: 2
       - url: /hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections
         title: Inkognito Russian VPN/Phishing Operator (INK VPN / INK Lens)
@@ -4840,23 +4830,22 @@ techniques:
         report_url: /reports/opendirectory-45-130-148-125-20260430/
         rules: >-
           AdaptixC2 Windows Beacon: Stock Framework Fingerprint (YARA, Detection); AdaptixC2 Default
-          Listener: Anomalous Firefox 20 User-Agent with X-Beacon-Id Header (SIGMA, Hunting);
-          AdaptixC2 Beacon: High-Frequency Deterministic HTTP POST Cadence to Stock URIs (SIGMA,
-          Hunting); AdaptixC2 Default Listener X-Beacon-Id Heartbeat Header (Broad, Any IP)
-          (SURICATA, Detection); AdaptixC2 Beacon Empty-Body POST Carrying the X-Beacon-Id Header
-          (SURICATA, Detection); AdaptixC2 Stock Listener URI /api/v1/status with Firefox 20 UA
-          (SURICATA, Hunting); AdaptixC2 Operator-Added jQuery URI with Firefox 20 UA (SURICATA,
-          Hunting); AdaptixC2 Stock Listener Response Envelope (Server-Side) (SURICATA, Hunting)
+          Listener: Anomalous Firefox 20 User-Agent (SIGMA, Hunting); AdaptixC2 Beacon:
+          High-Frequency Deterministic HTTP POST Cadence to Stock URIs (SIGMA, Hunting); AdaptixC2
+          Default Listener X-Beacon-Id Heartbeat Header (Broad, Any IP) (SURICATA, Detection);
+          AdaptixC2 Beacon Empty-Body POST Carrying the X-Beacon-Id Header (SURICATA, Detection);
+          AdaptixC2 Stock Listener URI /api/v1/status with Firefox 20 UA (SURICATA, Hunting);
+          AdaptixC2 Operator-Added jQuery URI with Firefox 20 UA (SURICATA, Hunting); AdaptixC2
+          Stock Listener Response Envelope (Server-Side) (SURICATA, Hunting)
         count: 8
       - url: /hunting-detections/open-directory-94-103-1-13-20260423-detections
         title: Chaos Ransomware (TorBrowserTor) Multi-Stage Loader (94.103.1.13)
         date: '2026-04-23'
         report_url: /reports/open-directory-94-103-1-13-20260423/
         rules: >-
-          Orcus RAT v7 Wardow Crack (YARA, Detection); Loopback Connection on Port 20268 by a
-          Process Outside System32 (Orcus Wardow Crack Tunnel Port) (SIGMA, Hunting); XOR-Encoded
-          Payload Staging Download (.xor URI Suffix) (SURICATA, Hunting)
-        count: 3
+          Orcus RAT v7 Wardow Crack (YARA, Detection); XOR-Encoded Payload Staging Download (.xor
+          URI Suffix) (SURICATA, Hunting)
+        count: 2
       - url: /hunting-detections/new-files-found-20260408-detections
         title: OpenStrike Expanded Toolkit — 106 New Files (2026-04-08)
         date: '2026-04-08'
@@ -4876,11 +4865,11 @@ techniques:
         date: '2026-04-06'
         report_url: /reports/open-directory-172-105-0-126-20260406/
         rules: >-
-          OpenStrike C Beacon Debug Strings + AES/HMAC Crypto Constants (YARA, Detection);
-          OpenStrike Python Universal Beacon Self-Identification Banner (YARA, Detection); Cobalt
-          Strike 3.x MALC Malleable Profile Beacon (YARA, Detection); Cobalt Strike Malleable C2
-          Profile MALC User-Agent in Proxy Traffic (SIGMA, Detection); Cobalt Strike Malleable C2
-          MALC User-Agent Detected (SURICATA, Detection)
+          OpenStrike C Beacon Debug Strings Plus One Secondary Marker (YARA, Detection); OpenStrike
+          Python Universal Beacon Self-Identification Banner (YARA, Detection); Cobalt Strike 3.x
+          MALC Malleable Profile Beacon (YARA, Detection); Cobalt Strike Malleable C2 Profile MALC
+          User-Agent in Proxy Traffic (SIGMA, Detection); Cobalt Strike Malleable C2 MALC User-Agent
+          Detected (SURICATA, Detection)
         count: 5
       - url: /hunting-detections/open-directory-193-56-255-154-xiebroc2-detections
         title: Open Directory at 193.56.255.154 — XiebroC2 v3.1 & Covenant C2
@@ -4956,9 +4945,9 @@ techniques:
     url: /techniques/T1071.001/
     mitre_url: https://attack.mitre.org/techniques/T1071/001/
     report_count: 28
-    rule_count: 86
+    rule_count: 84
     actor_count: 19
-    score: 114
+    score: 112
   - id: T1071.002
     name: File Transfer Protocols
     tactic: Command and Control
@@ -8011,9 +8000,9 @@ techniques:
           in HTTP Request Body (SURICATA, Detection); XXE Entity Declaration Targeting Cloud
           Metadata in Upload (SURICATA, Detection); Gopher-Scheme SSRF Protocol Smuggling in HTTP
           URI (SURICATA, Detection); Gopher-Scheme SSRF Protocol Smuggling in HTTP Request Body
-          (SURICATA, Detection); SSRF-to-Redis CONFIG/BGSAVE Command Sequence via HTTP (SURICATA,
-          Detection); Eureka Apps-Delta Response Containing XStream Gadget Markers (Flowbits Pair)
-          (SURICATA, Detection)
+          (SURICATA, Detection); HTTP Request Body With Redis CONFIG SET dir Followed by BGSAVE
+          (SURICATA, Detection); Eureka Apps-Delta Response Containing XStream Gadget Markers
+          (Flowbits Pair) (SURICATA, Detection)
         count: 12
       - url: /hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections
         title: Rovodev AI-Co-Authored Mirai Variant + Matrix C2 (87.106.143.220)
@@ -8034,8 +8023,8 @@ techniques:
           CVE-2026-41940 cPanel WHM Proxy-Subdomain Admin Path Request (SIGMA, Hunting);
           CVE-2026-41940 Expired Session Marker in Query String (SIGMA, Hunting); CVE-2026-41940
           cPanel WHM Proxy-Subdomain Admin Path Request With HTTP 200 Response (SIGMA, Hunting);
-          CVE-2026-41940 Null-Byte or Encoded CR/LF Injection in Authorization Header (SURICATA,
-          Detection)
+          Null Byte or Encoded CR/LF After the Base64 Run in an Authorization Basic Header
+          (CVE-2026-41940 Candidate) (SURICATA, Detection)
         count: 4
       - url: /hunting-detections/AdvancedRouterScanner-detections
         title: AdvancedRouterScanner
@@ -8282,8 +8271,8 @@ techniques:
           CVE-2026-41940 cPanel WHM Proxy-Subdomain Admin Path Request (SIGMA, Hunting);
           CVE-2026-41940 Expired Session Marker in Query String (SIGMA, Hunting); CVE-2026-41940
           cPanel WHM Proxy-Subdomain Admin Path Request With HTTP 200 Response (SIGMA, Hunting);
-          CVE-2026-41940 Null-Byte or Encoded CR/LF Injection in Authorization Header (SURICATA,
-          Detection)
+          Null Byte or Encoded CR/LF After the Base64 Run in an Authorization Basic Header
+          (CVE-2026-41940 Candidate) (SURICATA, Detection)
         count: 4
     actors:
       - UTA-2026-011
@@ -9471,7 +9460,7 @@ techniques:
         report_url: /reports/multivector-ecommerce-rce-toolkit-192-3-1-116/
         rules: >-
           Logback FileAppender Arbitrary File Write to JSP (YARA, Detection); Generic JSP Web Shell
-          (Bash-Exec via HTTP Parameter) (YARA, Detection)
+          Strings (Request Parameter and Bash -c Exec) (YARA, Detection)
         count: 2
       - url: /hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections
         title: Flask C2 & MSSQL CLR Backdoor on a Windows Post-Exploitation Staging Host
@@ -10514,8 +10503,8 @@ techniques:
         date: '2026-07-21'
         report_url: /reports/multivector-ecommerce-rce-toolkit-192-3-1-116/
         rules: >-
-          Successful Large Response From a Spring Boot Actuator Heap Dump Endpoint (SIGMA,
-          Detection)
+          Large HTTP 200 Response to a Spring Boot Actuator Heap Dump or Jolokia HotSpotDiagnostic
+          URI (SIGMA, Detection)
         count: 1
       - url: /hunting-detections/ai-agent-frameworks-2026-05-23-detections
         title: Multi-Actor AI-Agent Framework Abuse (8 Operators)
@@ -10754,7 +10743,7 @@ techniques:
         rules: >-
           MAL_Linux_GHOST_ComfyUI_Python_Kit (YARA, Detection);
           SUSP_Linux_ComfyUI_PerformanceMonitor_Node_Registration (YARA, Hunting); ComfyUI Custom
-          Node Python File Named PerformanceMonitor Created (SIGMA, Hunting)
+          Node Python File With a PerformanceMonitor Path Prefix Created (SIGMA, Hunting)
         count: 3
     actors:
       - UTA-2026-016
@@ -11792,7 +11781,7 @@ techniques:
         rules: >-
           Custom Go Tunnel-Proxy Module (gen_go_tunnel_proxy_mux_elf) (YARA, Detection); Chisel
           Operator Host-Key Fingerprints (susp_chisel_operator_key_fingerprint) (YARA, Detection);
-          Chisel Reverse Tunnel Client or Server Execution (SIGMA, Hunting)
+          Chisel Tunneling Tool Client or Server Execution (SIGMA, Hunting)
         count: 3
       - url: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
         title: GHOST Cryptojacker Kit — Vova75Rus Supply Chain (77.110.96.200)
@@ -11976,11 +11965,8 @@ techniques:
         title: AdaptixC2 Open Directory Exposure (45.130.148.125)
         date: '2026-04-30'
         report_url: /reports/opendirectory-45-130-148-125-20260430/
-        rules: >-
-          AdaptixC2 Default Listener: Anomalous Firefox 20 User-Agent with X-Beacon-Id Header
-          (SIGMA, Hunting); AdaptixC2 Beacon Empty-Body POST Carrying the X-Beacon-Id Header
-          (SURICATA, Detection)
-        count: 2
+        rules: AdaptixC2 Beacon Empty-Body POST Carrying the X-Beacon-Id Header (SURICATA, Detection)
+        count: 1
       - url: /hunting-detections/new-files-found-20260408-detections
         title: OpenStrike Expanded Toolkit — 106 New Files (2026-04-08)
         date: '2026-04-08'
@@ -11991,7 +11977,7 @@ techniques:
         title: OpenStrike Beacon Toolkit (172.105.0.126)
         date: '2026-04-06'
         report_url: /reports/open-directory-172-105-0-126-20260406/
-        rules: OpenStrike C Beacon Debug Strings + AES/HMAC Crypto Constants (YARA, Detection)
+        rules: OpenStrike C Beacon Debug Strings Plus One Secondary Marker (YARA, Detection)
         count: 1
       - url: /hunting-detections/shadow-xworm-opendirectory-detections
         title: Shadow RAT & XWorm Open Directory Campaign
@@ -12020,9 +12006,9 @@ techniques:
     url: /techniques/T1573.001/
     mitre_url: https://attack.mitre.org/techniques/T1573/001/
     report_count: 9
-    rule_count: 9
+    rule_count: 8
     actor_count: 9
-    score: 18
+    score: 17
   - id: T1573.002
     name: Asymmetric Cryptography
     tactic: Command and Control
@@ -13570,8 +13556,8 @@ techniques:
         rules: >-
           AdaptixC2 PowerShell Loader: AMSI Bypass and SI Injector Invocation (YARA, Hunting);
           AdaptixC2 PowerShell Loader: AMSI Bypass and SI Injector Invocation (SIGMA, Hunting);
-          Suspicious .NET Assembly Image Load with Operator si_build Build Fingerprint (SIGMA,
-          Hunting)
+          PowerShell Image Load of a Module Whose Description Contains the si_build Build String
+          (SIGMA, Hunting)
         count: 3
       - url: /hunting-detections/open-directory-94-103-1-13-20260423-detections
         title: Chaos Ransomware (TorBrowserTor) Multi-Stage Loader (94.103.1.13)
@@ -13971,9 +13957,9 @@ techniques:
         rules: >-
           Generic Curl-Pipe-Bash Pattern in Claude Code Allowlist (YARA, Hunting); OpenClaw-Specific
           Claude Code Allowlist (YARA, Hunting); Claude Code settings.local.json Written or Modified
-          (SIGMA, Hunting); OpenClaw Curl-Pipe-Bash Installer Execution (SIGMA, Hunting); OpenClaw
-          Gateway Service Started (SIGMA, Hunting); NPM Registry Fetch for OpenClaw Package (SIGMA,
-          Hunting)
+          (SIGMA, Hunting); Command Line With Curl, openclaw.ai and a Pipe-to-Shell Fragment
+          (OpenClaw Installer Shape) (SIGMA, Hunting); OpenClaw Gateway Service Started (SIGMA,
+          Hunting); NPM Registry Fetch for OpenClaw Package (SIGMA, Hunting)
         count: 6
       - url: /hunting-detections/opendirectory-62-60-237-100-20260506-detections
         title: HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campaign

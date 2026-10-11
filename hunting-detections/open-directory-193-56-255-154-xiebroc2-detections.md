@@ -66,13 +66,15 @@ Rules are grouped by family within each tier subsection (Detection Rules / Hunti
 #### XiebroC2 v3.1 Go TCP Implant: Source-Code Artifact Combination
 
 **Tier:** Detection
-**Robustness:** 3
+**Robustness:** 2
 **ATT&CK Coverage:** T1573.001 (Symmetric Cryptography — AES-128-ECB key), T1620 (Reflective Code Loading — go-clr CLR hosting import), T1055.012 / T1055 (RunPE injection error strings)
+**ATT&CK Note:** The rule needs any three of seven strings and requires none of them. T1573.001 is carried by the AES key (`$s1`), T1620 by the go-clr import (`$s3`), and T1055.012 / T1055 by the RunPE error strings (`$s4`, `$s5`); a match through other strings, for example `$s2`, `$s6` and `$s7`, carries none of those three techniques.
+**Rationale:** Any three of seven static strings from the XiebroC2 3.1 source, a specific combination for one version of one tool family, scores Robustness 2, not 3: it is a source-code artifact set, not a procedure invariant, and the version-specific typo does not generalise to other builds.
 **Confidence:** HIGH
-**False Positives:** None known — the hand-typed AES key literal, the pclntab typo (`WindosVersion`), the `go-clr` offensive-tool import path, and the custom RunPE parser error strings are all compile-time artifacts embedded only in binaries built from XiebroC2 3.1 source; no legitimate Go binary carries any of them.
-**Blind Spots:** A rebuild that simultaneously rotates the AES key, fixes the source typo, and drops the go-clr dependency would evade; the rule targets on-disk/in-memory Go binaries, not a decrypted-traffic-only variant.
+**False Positives:** The hand-typed AES key literal (`$s1`), the pclntab typo (`WindosVersion`, `$s2`) and the custom RunPE parser error strings (`$s4`, `$s5`) are compile-time artifacts of XiebroC2 3.1 builds. The `go-clr` import path (`$s3`) is a public library path that any Go program importing `github.com/Ne0nd0g/go-clr` carries, including other red team frameworks, as the sibling Sigma rule on this page lists. Whether `ClientUnstaller` (`$s6`) and the `NtQueryInformationProcess returned NTSTATUS:` string (`$s7`) are unique to XiebroC2 was not established. Because any three of the seven strings suffice, a binary that carries go-clr and two of the weaker strings could match; goodware prevalence was not measured.
+**Blind Spots:** A rebuild must leave fewer than three of the seven strings to evade: rotating the AES key, fixing the source typo and dropping the go-clr dependency removes only `$s1`, `$s2` and `$s3`, and the four remaining strings (`$s4` to `$s7`) still satisfy the three-of-seven count, so a build also has to change at least two of those four; the rule targets on-disk Go binaries (it is a file-scan rule; see Deployment), not a decrypted-traffic-only variant.
 **Validation:** Scan a XiebroC2 3.1-lineage sample — 3 of the 7 distinct strings must match; a file holding the AES key literal plus a single other string must NOT fire; a benign Go binary (including one that legitimately embeds .NET interop) must NOT fire.
-**Deployment:** Endpoint AV/EDR disk scan, memory scanner targeting live Go processes.
+**Deployment:** Endpoint AV/EDR disk scan. The condition tests `filesize`, which is undefined in a process-memory scan, so the rule does not match there; a memory-scan form would need the `filesize` test removed and is not written or tested here.
 
 ```yara
 rule RAT_XiebroC2_v31_Go_TCP_Implant {
@@ -80,7 +82,7 @@ rule RAT_XiebroC2_v31_Go_TCP_Implant {
       description = "Detects XiebroC2 v3.1 Go TCP implant via a combination of hardcoded AES-128-ECB key, source-code typo in its pclntab symbol table (WindosVersion), vendored offensive go-clr CLR hosting library import, and unique RunPE PE-parser error strings. All seven distinct indicators are static compile-time artifacts embedded in any binary built from XiebroC2 3.1 source; the rule requires any 3 of the seven to avoid dependence on any single renameable or rotatable literal. The AES key counts once; an earlier version also declared its hex bytes as a second string, so one occurrence of the key counted twice."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/"
+      reference = "https://the-hunters-ledger.com/hunting-detections/open-directory-193-56-255-154-xiebroc2-detections/"
       date = "2026-04-03"
       family = "XiebroC2"
       malware_type = "RAT"
@@ -120,7 +122,7 @@ rule RAT_Covenant_GruntStager_OpenDirectory {
       description = "Detects both Covenant C2 GruntStager builds (the standalone GruntHTTP.exe PE stager and the PE extracted from the GruntHTTP.ps1 PowerShell wrapper) via a shared listener-level session token and build ID, combined with a Covenant framework identifier. Both builds share a single Covenant listener and produce identical values for the token and build ID fields."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/"
+      reference = "https://the-hunters-ledger.com/hunting-detections/open-directory-193-56-255-154-xiebroc2-detections/"
       date = "2026-04-03"
       hash1 = "3aa45ceff7070ae6d183c5aa5f0d771a79c7cf37fe21a3906df976bee497bf20"
       hash2 = "f0f4715a6d7063e7811502e9591f8265af0a2af6"
@@ -161,7 +163,7 @@ rule MALW_Covenant_PSFilelessLoader_GruntHTTP {
       description = "Detects the GruntHTTP.ps1 PowerShell fileless loader that delivers Covenant GruntStager Build 2 via Base64+Deflate decoding and Reflection.Assembly::Load(). Anchored on the hardcoded Covenant session token alongside the decompression and reflective-loading pattern — a combination unique to this loader and not found in legitimate PowerShell scripts."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/"
+      reference = "https://the-hunters-ledger.com/hunting-detections/open-directory-193-56-255-154-xiebroc2-detections/"
       date = "2026-04-03"
       hash1 = "cff2d990f0988e9c90f77d0a62c72ca8e9bf567f0c143fdc3a914dce65edec98"
       hash2 = "a79cd499c68482e73852db2c70d4e06251a29d95"
@@ -203,7 +205,7 @@ rule RAT_XiebroC2_v31_PaddedConfig_Structural {
       description = "Detects XiebroC2 v3.1's binary-patchable configuration format — a space-padded fixed-width IPv4 literal (20+ trailing spaces) paired with a family-specific source artifact. XiebroC2 stores its C2 address as a fixed-width field so operators can binary-patch a new IP into a compiled build without recompilation; this structural pattern is independent of any single C2 IP value and survives infrastructure rotation, unlike a rule anchored on 193.56.255.154 alone."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/"
+      reference = "https://the-hunters-ledger.com/hunting-detections/open-directory-193-56-255-154-xiebroc2-detections/"
       date = "2026-04-03"
       family = "XiebroC2"
       malware_type = "RAT"
@@ -256,7 +258,7 @@ description: >-
   token in the same traffic is additional corroborating context, not a
   required condition for this rule.
 references:
-    - https://the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/
+    - https://the-hunters-ledger.com/hunting-detections/open-directory-193-56-255-154-xiebroc2-detections/
     - https://github.com/cobbr/Covenant
 author: The Hunters Ledger
 date: 2026-04-03
@@ -308,7 +310,7 @@ description: >-
   by legitimate Go/Rust/C build tooling, so this is a Hunting-tier lead
   requiring analyst triage, not a high-confidence alert.
 references:
-    - https://the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/
+    - https://the-hunters-ledger.com/hunting-detections/open-directory-193-56-255-154-xiebroc2-detections/
 author: The Hunters Ledger
 date: 2026-04-03
 tags:
@@ -364,7 +366,7 @@ description: >-
   a Hunting-tier lead requiring analyst triage rather than a high-confidence
   alert.
 references:
-    - https://the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/
+    - https://the-hunters-ledger.com/hunting-detections/open-directory-193-56-255-154-xiebroc2-detections/
     - https://github.com/cobbr/Covenant
 author: The Hunters Ledger
 date: 2026-04-03
@@ -424,7 +426,7 @@ description: >-
   XiebroC2, so it is a scoping lead, not an alert. The event fires whether
   or not the .NET assembly payload was written to disk.
 references:
-    - https://the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/
+    - https://the-hunters-ledger.com/hunting-detections/open-directory-193-56-255-154-xiebroc2-detections/
     - https://github.com/Ne0nd0g/go-clr
 author: The Hunters Ledger
 date: 2026-04-03
@@ -491,7 +493,7 @@ level: low
 Corrected from the original: the `http` app-layer rule pinned destination port `443`. Suricata selects the HTTP parser by protocol recognition, not port, so pinning blind-spots any future port migration by the operator; changed to `any`. The old `reference:url,pixelatedcontinuum.github.io/...` line and the non-standard `metadata` schema (`affected_product`, `attack_target`, `created_at`, ...) are replaced with the required `metadata:author The_Hunters_Ledger, date, reference` schema pointing at the current site domain. A `threshold` was added for beacon noise control. `sid` is preserved unchanged from the original publication; `rev` bumped to reflect the logic/metadata change.
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT OpenDirectory-XiebroC2-Covenant Covenant GruntStager HTTP C2 Beacon (Campaign Session Token in POST Body)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/en-us/"; startswith; http.request_body; content:"session=75db-99b1-25fe4e9afbe58696-320bea73"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/; classtype:trojan-activity; sid:9000101; rev:3; metadata:author The_Hunters_Ledger, date 2026-04-03;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT OpenDirectory-XiebroC2-Covenant Covenant GruntStager HTTP C2 Beacon (Campaign Session Token in POST Body)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/en-us/"; startswith; http.request_body; content:"session=75db-99b1-25fe4e9afbe58696-320bea73"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/open-directory-193-56-255-154-xiebroc2-detections/; classtype:trojan-activity; sid:9000101; rev:4; metadata:author The_Hunters_Ledger, date 2026-04-03;)
 ```
 
 #### Covenant GruntStager Masquerade: Chrome 41 Windows 7 UA With /en-us/ URI
@@ -509,7 +511,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT OpenDirectory-Xie
 Same port and metadata-schema corrections as the rule above.
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT OpenDirectory-XiebroC2-Covenant Covenant GruntStager Chrome-41-Windows-7 UA Masquerade With /en-us/ URI (Cleartext HTTP C2 Indicator)"; flow:established,to_server; http.user_agent; content:"Windows NT 6.1"; nocase; content:"Chrome/41.0.2228.0"; nocase; http.uri; content:"/en-us/"; startswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/; classtype:trojan-activity; sid:9000102; rev:4; metadata:author The_Hunters_Ledger, date 2026-04-03;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT OpenDirectory-XiebroC2-Covenant Covenant GruntStager Chrome-41-Windows-7 UA Masquerade With /en-us/ URI (Cleartext HTTP C2 Indicator)"; flow:established,to_server; http.user_agent; content:"Windows NT 6.1"; nocase; content:"Chrome/41.0.2228.0"; nocase; http.uri; content:"/en-us/"; startswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/open-directory-193-56-255-154-xiebroc2-detections/; classtype:trojan-activity; sid:9000102; rev:5; metadata:author The_Hunters_Ledger, date 2026-04-03;)
 ```
 
 ---

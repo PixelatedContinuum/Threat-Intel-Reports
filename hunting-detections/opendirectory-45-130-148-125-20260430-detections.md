@@ -68,14 +68,14 @@ Two YARA false-positive clusters were identified during analysis and must be fil
 #### AdaptixC2 Windows Beacon: Stock Framework Fingerprint
 
 **Tier:** Detection
-**Robustness:** 3
+**Robustness:** 2
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
 **Confidence:** HIGH
-**Rationale:** `9Connector` and `13ConnectorHTTP` are Itanium-ABI RTTI typeinfo names for AdaptixC2's stock `Connector`/`ConnectorHTTP` transport-plugin classes, and `GetVersions` is the framework's unrenamed RDI loader export — none of these are attacker-configurable; an operator would need to fork and rebuild the AdaptixC2 source itself to remove them. The rule requires both RTTI names and the `X-Beacon-Id` heartbeat-header string (also framework source-level), plus either `GetVersions` or the `Mingw-w64 runtime failure:` string. The second string lets an EXE build, which may carry no `GetVersions` export, and any other MinGW-built file satisfy that clause, so `GetVersions` is not required. The combination survives infrastructure rotation and any listener-profile customization.
+**Rationale:** `9Connector` and `13ConnectorHTTP` are Itanium-ABI RTTI typeinfo names for AdaptixC2's stock `Connector`/`ConnectorHTTP` transport-plugin classes, and `GetVersions` is the framework's unrenamed RDI loader export — none of these are attacker-configurable; an operator would need to fork and rebuild the AdaptixC2 source itself to remove them. The rule requires both RTTI names and the `X-Beacon-Id` heartbeat-header string (also framework source-level), plus either `GetVersions` or the `Mingw-w64 runtime failure:` string. The second string lets an EXE build, which may carry no `GetVersions` export, and any other MinGW-built file satisfy that clause, so `GetVersions` is not required. The combination survives infrastructure rotation and any listener-profile customization. It scores Robustness 2, not 3: it is a combination of stock-framework artifacts of one tool family, not a technique chokepoint, and a fork or rebuild that changes them defeats it (see Blind Spots).
 **False Positives:** None known — the RTTI typeinfo strings and the `X-Beacon-Id` literal are not present in any known legitimate software; `filesize < 300KB` further scopes the match to the beacon's actual size class.
-**Blind Spots:** A forked/patched AdaptixC2 build that strips or renames the RTTI class names and the `X-Beacon-Id` header would evade; memory-only variants that never touch disk need the memory-scan deployment path.
+**Blind Spots:** A forked/patched AdaptixC2 build that strips or renames the RTTI class names and the `X-Beacon-Id` header would evade; memory-only variants that never touch disk are not covered, because this rule is not a memory-scan rule (see Deployment).
 **Validation:** Scan `agent.x64.dll`/`agent.x64.exe`/`msupdate.dll` (hash1 below and its sideload sibling) — must match; an unrelated Windows PE must NOT fire.
-**Deployment:** Endpoint AV/EDR file scan, memory scanning, static triage of unknown MinGW-built PE binaries.
+**Deployment:** Endpoint AV/EDR file scan, static triage of unknown MinGW-built PE binaries. The condition tests `filesize`, which is undefined in a process-memory scan, so the rule does not match there; a memory-scan form would need the `filesize` test removed and is not written or tested here.
 
 ```yara
 /*
@@ -391,10 +391,10 @@ level: medium
 **Robustness:** 2
 **ATT&CK Coverage:** T1059.001 (PowerShell), T1685 (Disable or Modify Tools)
 **Confidence:** MODERATE for the shape; HIGH that the shape is present in this loader
-**Rationale:** The companion rule above matches this loader's AMSI bypass by its literal concatenation `amsi'+'Con'+'text`, which the operator controls in their own source — a rebuild that re-splits the string as `'am'+'siCon'+'text'` evades it entirely. This rule instead matches the structural shape: enumerate assembly types, filter with a wildcard, write into a NonPublic Static field. That survives both a rename of the target field and a re-split of the concatenation. It also covers the wider family of AMSI bypasses built the same way, which is why it earns a place despite the noisier profile.
+**Rationale:** The companion rule above matches this loader's AMSI bypass by its literal concatenation `amsi'+'Con'+'text`, which the operator controls in their own source — a rebuild that re-splits the string as `'am'+'siCon'+'text'` evades it entirely. This rule instead matches the structural shape: enumerate assembly types (`GetTypes()`), name a NonPublic Static field, and call `SetValue($null,0)` or `SetValue($null, 0)` (the zero write the report records). The wildcard type filter is not tested, and the three strings need only occur in the same script block, in any order. That survives both a rename of the target field and a re-split of the concatenation. It also covers the wider family of AMSI bypasses built the same way, which is why it earns a place despite the noisier profile.
 **False Positives:** Development, debugging and unit-test tooling that reflects over private static members. Some administrative modules and application shims legitimately patch private static fields at runtime. Baseline the calling script path and its signer before promoting a hit.
 **Blind Spots:** An operator who reaches AMSI through a different primitive — patching `AmsiScanBuffer` in memory, hardware breakpoints, or loading a patched `amsi.dll` — produces no script-block artefact at all and is invisible here. This rule covers the reflection family only.
-**Validation:** This loader emits **neither** `AmsiUtils` nor `amsiInitFailed` as literals, so any rule keyed on either string returns zero hits against it even with full script-block logging enabled. That is the specific failure this rule exists to cover.
+**Validation:** A script block holding `GetTypes()`, `NonPublic,Static` and `SetValue($null,0)` must fire; one that calls `SetValue` on a private static field with another value or a non-null target (for example `SetValue($obj,'x')`) must NOT fire. This loader emits **neither** `AmsiUtils` nor `amsiInitFailed` as literals, so any rule keyed on either string returns zero hits against it even with full script-block logging enabled. That is the specific failure this rule exists to cover.
 **Deployment:** SIEM with PowerShell Script Block Logging (Windows Event ID 4104) ingested. Expect to tune against your own developer and admin tooling before this is alertable.
 
 ```yaml
@@ -402,7 +402,7 @@ title: Potential AMSI Bypass via Reflection Over Assembly Types and Private Fiel
 id: 35c3f793-f035-4331-a6e0-53a4b0000421
 status: experimental
 description: >-
-    Detects the structural shape of an in-memory AMSI bypass in which a script enumerates the types of a loaded assembly, filters them with a wildcard rather than a literal name, then writes a zero into a NonPublic Static field. The AdaptixC2 operator loader observed at 45.130.148.125 uses exactly this form and deliberately emits neither AmsiUtils nor amsiInitFailed, assembling the field name from concatenated fragments and locating the type by a wildcard match on iUtils, so the two most widely deployed AMSI signatures do not fire on it. Matching the reflection shape instead of the strings survives both a rename of the target field and a re-split of the concatenation. This is a hunting rule because legitimate tooling also uses reflection to set private static fields.
+    Detects the structural shape of an in-memory AMSI bypass in which a script enumerates the types of a loaded assembly, filters them with a wildcard rather than a literal name, then writes a zero into a NonPublic Static field, tested as a SetValue call with a null target and the value 0. The rule does not test the wildcard filter itself, only that GetTypes() and the NonPublic Static text are present in the same script block. The AdaptixC2 operator loader observed at 45.130.148.125 uses exactly this form and deliberately emits neither AmsiUtils nor amsiInitFailed, assembling the field name from concatenated fragments and locating the type by a wildcard match on iUtils, so the two most widely deployed AMSI signatures do not fire on it. Matching the reflection shape instead of the strings survives both a rename of the target field and a re-split of the concatenation. This is a hunting rule because legitimate tooling also uses reflection to set private static fields.
 references:
     - https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/
 author: The Hunters Ledger
@@ -427,7 +427,9 @@ detection:
             - "NonPublic','Static"
             - 'NonPublic, Static'
     selection_write:
-        ScriptBlockText|contains: 'SetValue'
+        ScriptBlockText|contains:
+            - 'SetValue($null,0)'
+            - 'SetValue($null, 0)'
     condition: all of selection_*
 falsepositives:
     - Development, debugging and unit-test tooling that reflects over private static members of loaded assemblies
@@ -435,21 +437,22 @@ falsepositives:
 level: medium
 ```
 
-#### AdaptixC2 Default Listener: Anomalous Firefox 20 User-Agent with X-Beacon-Id Header
+#### AdaptixC2 Default Listener: Anomalous Firefox 20 User-Agent
 
 **Tier:** Hunting
 **Robustness:** 1
-**ATT&CK Coverage:** T1071.001 (Web Protocols), T1573.001 (Symmetric Encryption — RC4)
+**ATT&CK Coverage:** T1071.001 (Web Protocols)
+**ATT&CK Note:** The RC4 payload encryption the report records (T1573.001) is not tested by a User-Agent match and is not claimed.
 **Confidence:** HIGH for the anomaly signal; catches any operator running the framework default, not this operator specifically
 **Rationale:** Firefox 20 (February 2013) is anomalous in any 2026 traffic and is the AdaptixC2 default listener UA — but the UA is a listener-profile field the operator can change at will, and the file's own Coverage Gaps documented this exact risk. Standard proxy logsources also don't expose the corroborating `X-Beacon-Id` header, so this rule anchors on the UA alone. Durability and single-field precision cap this at Hunting.
 **False Positives:** Legacy embedded systems or industrial control software using a hardcoded Firefox 20 UA string — cross-reference against known asset inventory to exclude.
 **Deployment:** Web proxy log pipeline (Squid, Zscaler, Palo Alto URL filtering); Zeek HTTP log ingestion.
 
 ```yaml
-title: AdaptixC2 Default Listener - Anomalous Firefox 20 User-Agent with X-Beacon-Id Header
+title: AdaptixC2 Default Listener - Anomalous Firefox 20 User-Agent
 id: 7c9d4b81-3e62-4f08-a517-2d8e5a6c0b93
 status: experimental
-description: Detects outbound HTTP traffic matching the AdaptixC2 stock listener default profile. The Firefox 20 User-Agent (released February 2013) is anomalous in 2026 traffic and is the AdaptixC2 default listener UA string. The X-Beacon-Id header is the AdaptixC2 stock per-agent heartbeat header not used by any known legitimate browser or application, but standard proxy logsource fields do not expose arbitrary request headers, so this rule anchors on the User-Agent string alone; combine with the X-Beacon-Id header at the WAF or full-packet-capture layer for the highest-confidence match. The UA string is a listener-profile field the operator can change at will, so this is a hunting-grade lead rather than an alerting-grade signature on its own.
+description: Detects outbound HTTP traffic whose User-Agent contains Firefox/20.0, the AdaptixC2 stock listener default. The Firefox 20 User-Agent (released February 2013) is anomalous in 2026 traffic and is the AdaptixC2 default listener UA string. The X-Beacon-Id header is the AdaptixC2 stock per-agent heartbeat header not used by any known legitimate browser or application, but standard proxy logsource fields do not expose arbitrary request headers, so this rule anchors on the User-Agent string alone; combine with the X-Beacon-Id header at the WAF or full-packet-capture layer for the highest-confidence match. The UA string is a listener-profile field the operator can change at will, so this is a hunting-grade lead rather than an alerting-grade signature on its own.
 references:
     - https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/
 author: The Hunters Ledger
@@ -526,21 +529,22 @@ correlation:
 level: medium
 ```
 
-#### Suspicious .NET Assembly Image Load with Operator si_build Build Fingerprint
+#### PowerShell Image Load of a Module Whose Description Contains the si_build Build String
 
 **Tier:** Hunting
 **Robustness:** 1
 **ATT&CK Coverage:** T1055 (Process Injection), T1055.002 (PE Injection), T1620 (Reflective Code Loading)
+**ATT&CK Note:** The injection and reflective-loading techniques describe what the loaded injector.dll does in the report. The rule observes only a PowerShell image load with a matching Description, not the injection or the reflective load.
 **Confidence:** HIGH
-**Rationale:** Sigma sibling of the YARA `si_build` rule above — the `si_build` build-placeholder string is a distinctive operator fingerprint, but it is a renameable literal (the operator's own project/build-directory name); a future build that changes the project name evades this rule entirely. Retains the same forward cross-sample hunting value as its YARA counterpart.
+**Rationale:** Sigma sibling of the YARA `si_build` rule above (it tests an image-load Description string and no .NET property) — the `si_build` build-placeholder string is a distinctive operator fingerprint, but it is a renameable literal (the operator's own project/build-directory name); a future build that changes the project name evades this rule entirely. Retains the same forward cross-sample hunting value as its YARA counterpart.
 **False Positives:** Internal developer tooling where a developer has named a build artifact `si_build` and loaded it via PowerShell — cross-reference against software asset inventory.
 **Deployment:** Endpoint EDR with Sysmon Event ID 7 (Image Load) telemetry; endpoint DLL inspection pipeline.
 
 ```yaml
-title: Suspicious .NET Assembly Image Load with Operator si_build Build Fingerprint
+title: PowerShell Image Load of a Module Whose Description Contains the si_build Build String
 id: 5b8e2d47-1c93-4a76-f018-9b4d7e3c6f85
 status: experimental
-description: Detects PowerShell loading a .NET DLL image whose PE version metadata contains the operator build-placeholder string si_build. This string appears in CompanyName, FileDescription, InternalName, and OriginalFilename fields of the operator-written injector.dll found in this AdaptixC2 deployment. The string is a Linux-build artifact from /tmp/si_build/ left unredacted in the PE version resource and is not present in any known legitimate software, but it is a renameable literal the operator controls - a future build that changes the project name evades this rule.
+description: Detects PowerShell loading an unsigned image whose Description field contains the operator build-placeholder string si_build. The string appears in the CompanyName, FileDescription, InternalName and OriginalFilename fields of the operator-written injector.dll found in this AdaptixC2 deployment; the rule tests the Description field only and does not test that the image is a .NET assembly. The string is a Linux-build artifact from /tmp/si_build/ left unredacted in the PE version resource and is not present in any known legitimate software, but it is a renameable literal the operator controls - a future build that changes the project name evades this rule.
 references:
     - https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/
 author: The Hunters Ledger
