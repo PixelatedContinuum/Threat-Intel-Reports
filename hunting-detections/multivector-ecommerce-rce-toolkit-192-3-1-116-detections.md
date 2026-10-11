@@ -124,6 +124,7 @@ rule EXPL_SnakeYAML_ScriptEngineManager_Gadget_CVE_2022_1471_Family {
 **Robustness:** 2
 **ATT&CK Coverage:** T1505.003 (Web Shell)
 **Confidence:** HIGH
+**Rationale:** The report records `cmd.jsp` as a minimal JSP that reads a single HTTP parameter and runs it through the shell. This rule matches four strings anywhere in a JSP-sized file of under 30 KB: a `request.getParameter(...)` call, `Runtime.getRuntime().exec`, `/bin/bash` and a quoted `"-c"`. It tests no order and no distance between them, so it shows that the pieces of such a shell are present and does not show that the parameter reaches the exec call.
 **False Positives:** Low but not zero: a small number of legitimate diagnostic or internal-tooling JSP pages in development environments do shell out to `/bin/bash -c` using a request parameter; these are themselves poor practice and worth flagging even when not attacker-authored.
 **Blind Spots:** Misses web shells built on a different execution primitive (`ProcessBuilder`, reflection-based invocation), a different shell (`/bin/sh`, `cmd.exe`), or that separate the parameter read from the exec call across multiple lines/methods beyond what the proximity-free string set here tolerates.
 **Validation:** Scan the `cmd.jsp`-style payload (`request.getParameter` combined with `Runtime.getRuntime().exec` and a `/bin/bash -c` invocation) and confirm a match; a normal JSP page that reads a parameter for display purposes only, with no exec call, must NOT fire.
@@ -140,7 +141,7 @@ rule EXPL_SnakeYAML_ScriptEngineManager_Gadget_CVE_2022_1471_Family {
 
 rule WEBSHELL_Generic_JSP_Bash_Exec_Parameter {
    meta:
-      description = "Detects a minimal JSP web shell that reads a single HTTP request parameter and passes it directly to /bin/bash -c via Runtime.getRuntime().exec. The parameter name is kept generic since it varies by deployment; the proximity of getParameter to a bash -c exec call is the durable indicator of a functioning command-execution shell rather than legitimate application code."
+      description = "Detects a small JSP (under 30 KB) that contains a request.getParameter call, Runtime.getRuntime().exec, /bin/bash and a quoted -c, the pieces of a minimal command-execution shell such as cmd.jsp. The parameter name is kept generic since it varies by deployment. The rule tests no order or distance between the strings, so it does not show that the parameter reaches the exec call."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/"
@@ -165,7 +166,8 @@ rule WEBSHELL_Generic_JSP_Bash_Exec_Parameter {
 **Robustness:** 3
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application), T1552.005 (Cloud Instance Metadata API)
 **Confidence:** HIGH
-**False Positives:** None known. An XML external-entity declaration whose `SYSTEM` target is the cloud instance-metadata address or a well-known internal service port has no legitimate purpose in a document a server is expected to parse.
+**Rationale:** The report describes an SVG that probes four internal targets and calls an external-entity declaration referencing the cloud metadata address a high-precision signal. The rule matches one `<!ENTITY ... SYSTEM ...>` declaration (no `>` between the entity keyword and the target) whose `SYSTEM` identifier names `169.254.169.254`, `127.0.0.1:6379`, `127.0.0.1:3306` or a `:8080/actuator` path. The target has to sit inside the same declaration as `SYSTEM`; the strings appearing separately in a document do not match.
+**False Positives:** None known. An XML external-entity declaration whose `SYSTEM` identifier is the cloud instance-metadata address, a loopback Redis or MySQL port, or an actuator path has no legitimate purpose in a document a server is expected to parse. The `:8080/actuator` branch does not test the host, so a declaration pointing at any host's `:8080/actuator` path matches.
 **Blind Spots:** Misses XXE payloads targeting a different internal address/port than the four covered here, misses parameter-entity or out-of-band (blind) XXE variants that reference an external DTD instead of embedding the target directly, and misses the plain local-file-read XXE variant (e.g. `file:///etc/passwd`) which is a much older, already broadly-signatured technique not re-covered here.
 **Validation:** Scan the `internal_scan.svg`-style payload (an `<!ENTITY ... SYSTEM "http://169.254.169.254/...">` declaration, or the Redis/MySQL/Actuator internal-service variants) and confirm a match; an ordinary SVG or XML document with no external entity declarations must NOT fire.
 **Deployment:** File-upload scanning (especially SVG/XML upload features), incident-response triage of recovered documents.
@@ -181,7 +183,7 @@ rule WEBSHELL_Generic_JSP_Bash_Exec_Parameter {
 
 rule EXPL_XXE_SSRF_Cloud_Metadata_Internal_Service_Probe {
    meta:
-      description = "Detects an XML or SVG document declaring an external entity (XXE) that resolves to the cloud instance metadata service or a well-known internal service port, a server-side request forgery technique used to pivot from a file-upload or XML-parsing feature into internal-network and cloud-credential reconnaissance."
+      description = "Detects an XML or SVG document (under 20 KB) with an external-entity declaration (XXE) whose SYSTEM identifier names the cloud instance metadata address 169.254.169.254, loopback Redis (127.0.0.1:6379) or MySQL (127.0.0.1:3306), or a :8080/actuator path, a server-side request forgery technique used to pivot from a file-upload or XML-parsing feature into internal-network and cloud-credential reconnaissance."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/"
@@ -190,16 +192,10 @@ rule EXPL_XXE_SSRF_Cloud_Metadata_Internal_Service_Probe {
       malware_type = "Exploitation payload -- XML External Entity SSRF"
       id = "c643375b-9567-5b36-abf2-8db9880f4f5b"
    strings:
-      $entity = "<!ENTITY" ascii
-      $system = "SYSTEM" ascii
-      $meta = "169.254.169.254" ascii
-      $redis = "127.0.0.1:6379" ascii
-      $mysql = "127.0.0.1:3306" ascii
-      $actuator = ":8080/actuator" ascii
+      $xxe = /<!ENTITY[^>]{1,300}SYSTEM[^>]{0,200}(169\.254\.169\.254|127\.0\.0\.1:6379|127\.0\.0\.1:3306|:8080\/actuator)/ ascii
    condition:
       filesize < 20KB and
-      $entity and $system and
-      1 of ($meta, $redis, $mysql, $actuator)
+      $xxe
 }
 ```
 
@@ -256,23 +252,28 @@ Web-access-log telemetry (`logsource.category: webserver`) covers most of this c
 **ATT&CK Coverage:** T1213 (Data from Information Repositories), T1190 (Exploit Public-Facing Application)
 **Confidence:** HIGH (correlation) / LOW (either base rule alone)
 **False Positives:** A single operations engineer legitimately using Jolokia to raise logging for live debugging from the same source IP as their own log review, within the same short window, uncommon outside a genuine incident-response or troubleshooting session, and should be corroborated against known management-network IP ranges.
-**Blind Spots:** An operator who manipulates logging and reads the log file from two different source IPs (e.g. via a proxy chain) evades the `c-ip` grouping; an operator who waits longer than 15 minutes between the write and the read also evades this specific window.
+**Blind Spots:** The base rule reads the URL only. The report describes the write as a POST to the Jolokia path using a `setProperty` operation, whose operation name and values sit in the request body and not in the access log, so the documented traffic shape may not match; only the `/jolokia/write/<mbean>/<attribute>/<value>` URL form is seen, and the level value is never tested. Neither base rule filters the source, so internal management traffic matches too. An operator who manipulates logging and reads the log file from two different source IPs (e.g. via a proxy chain) evades the `c-ip` grouping; an operator who waits longer than 15 minutes between the write and the read also evades this specific window.
 **Validation:** Replay a Jolokia logger/logging-level write request followed by an actuator logfile GET from the same source IP within 15 minutes: the correlation must fire; either event alone, or the same two events from two different source IPs, must NOT trigger the correlation.
 **Deployment:** SIEM correlation engine ingesting web/proxy access-log telemetry (`cs-uri-stem`, `cs-uri`, `sc-status`, `c-ip`).
 
 ```yaml
-title: External HTTP Request to Jolokia JMX Write Endpoint Targeting Logging Configuration
+title: HTTP Request to Jolokia JMX Write Endpoint Targeting Logging Configuration
 id: 00a7fbb6-7f52-4153-96cd-41042f0090eb
 name: jolokia_logger_write_base
 status: experimental
 description: >-
-    Base rule (not alerting on its own): an external HTTP request to a Jolokia
-    (JMX-over-HTTP) write endpoint targeting a Logger or logging-level
-    attribute. Jolokia exposes JMX management operations over plain HTTP, and a
-    write operation against logging configuration lets a remote caller raise a
-    target application's log verbosity to manufacture sensitive data in the
-    log file for later retrieval. Paired below with a rule for the follow-on
-    actuator logfile read.
+    Base rule (not alerting on its own): an HTTP request whose path contains
+    /jolokia/write/ and whose URI contains Logger or logging.level, from any
+    source (no source filter is applied). Jolokia exposes JMX management
+    operations over plain HTTP, and a write operation against logging
+    configuration lets a remote caller raise a target application's log
+    verbosity to manufacture sensitive data in the log file for later
+    retrieval. The report records the operator setting loggers to DEBUG and
+    Feign HTTP logging to FULL through a POST with a setProperty operation;
+    the operation of a POST sits in the request body, which access logs do not
+    carry, so this rule sees the URL-encoded write form only. The level value
+    is not tested. Paired below with a rule for the follow-on actuator
+    logfile read.
 references:
     - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/
 author: The Hunters Ledger
@@ -298,13 +299,14 @@ falsepositives:
         correlation below.
 level: medium
 ---
-title: External HTTP GET of the Spring Boot Actuator Log File Endpoint
+title: Successful HTTP Request for the Spring Boot Actuator Log File Endpoint
 id: 9e4e2540-95c5-44a6-a433-add2bcba903f
 name: actuator_logfile_read_base
 status: experimental
 description: >-
-    Base rule (not alerting on its own): an external HTTP GET of the Spring
-    Boot Actuator logfile endpoint. Reading the live application log is
+    Base rule (not alerting on its own): a request for the Spring Boot
+    Actuator logfile endpoint that returned status 200, from any source
+    (the request method and the source are not tested). Reading the live application log is
     unremarkable in isolation, since operations teams do this routinely, but
     paired with a preceding Jolokia logger-level write it is the retrieval
     step of a log-manufacturing technique that turns verbose request and
@@ -336,12 +338,15 @@ title: Manufactured Log-Data Harvesting via Jolokia Logger Manipulation Then Act
 id: 9df4b43e-0124-4eff-b32c-b6cfbaddf527
 status: experimental
 description: >-
-    Fires when the same external source both writes a Jolokia logger or
-    logging-level attribute, raising verbosity to DEBUG or FULL, and retrieves
-    the actuator logfile within a short window. Neither event alone is
-    unusual; the sequence is the signature of an operator manufacturing
-    sensitive data in application logs and then reading it back out, rather
-    than a routine operations workflow.
+    Fires when the same source address first sends a Jolokia write to a
+    logger or logging-level attribute and then requests the actuator logfile
+    within 15 minutes, in that order. The level value is not tested, so any
+    logging-level write qualifies; the operator in the report raised loggers
+    to DEBUG and Feign HTTP logging to FULL. Neither event alone is unusual;
+    the sequence is the shape of an operator manufacturing sensitive data in
+    application logs and then reading it back out, rather than a routine
+    operations workflow. Internal management traffic from one address
+    produces the same sequence.
 references:
     - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/
 author: The Hunters Ledger
@@ -421,25 +426,27 @@ falsepositives:
 level: high
 ```
 
-#### Successful External Retrieval of a Spring Boot Actuator Heap Dump
+#### Successful Large Response From a Spring Boot Actuator Heap Dump Endpoint
 
 **Tier:** Detection
 **Robustness:** 2
 **ATT&CK Coverage:** T1005 (Data from Local System), T1552.001 (Credentials In Files)
 **Confidence:** HIGH
-**False Positives:** Authorized developer or support engineer pulling a heap dump for legitimate memory-leak diagnosis from an approved internal source.
+**False Positives:** Requests from internal addresses match as well, because the source is not tested. Authorized developer or support engineer pulling a heap dump for legitimate memory-leak diagnosis from an approved internal source.
 **Blind Spots:** The 1,000,000-byte response-size threshold is a reasonable default, not a universal one: a small heap or an aggressively-compressed response could fall under it; tune `sc-bytes` against the target environment's own actuator response sizes.
 **Validation:** Replay an external GET to `/actuator/heapdump` that returns 200 with a response body over 1MB: the rule must fire; the same request blocked with a 401/403, or returning a small error body, must NOT fire.
 **Deployment:** Web/proxy access-log ingestion.
 
 ```yaml
-title: Successful External Retrieval of a Spring Boot Actuator Heap Dump
+title: Successful Large Response From a Spring Boot Actuator Heap Dump Endpoint
 id: f872347d-00cd-463e-9817-96d4ef96f205
 status: experimental
 description: >-
-    Detects a successful, large-bodied external response from the Spring Boot
-    Actuator heapdump endpoint, or a Jolokia HotSpotDiagnostic dumpHeap
-    invocation. A heap dump commonly contains in-memory credentials, session
+    Detects a successful (status 200), large-bodied (1,000,000 bytes or more)
+    response for a request to the Spring Boot Actuator heapdump endpoint, or
+    for a request whose URI names the Jolokia HotSpotDiagnostic MBean, from
+    any source (the source address is not tested). A heap dump commonly
+    contains in-memory credentials, session
     tokens and business data; this rule keys on confirmed success, a 200
     status with a large response body, rather than the request alone, since
     the request is trivially made and often blocked by an auth filter.
@@ -471,6 +478,8 @@ falsepositives:
     - >-
         Authorized developer or support engineer pulling a heap dump for
         legitimate memory-leak diagnosis from an approved internal source.
+    - >-
+        Any internal client, since no source filter is applied.
 level: high
 ```
 
@@ -696,19 +705,21 @@ level: high
 **ATT&CK Coverage:** T1046 (Network Service Discovery)
 **Confidence:** MODERATE
 **False Positives:** Routine internal vulnerability scanning or asset-discovery tooling covering the same common service ports; the underlying ports are also touched individually by ordinary traffic and legitimate scanning. Confirm against known scanner IP ranges before treating as hostile.
+**Blind Spots:** The correlation is a Sigma `value_count` over `dst_port`. Converted to EQL with the sysmon pipeline it becomes `sequence by src_ip with maxspan=5m [...] by dst_port with runs=8`, which counts eight matching events that share one destination port, not eight distinct ports, so the EQL form does not implement the distinct-port claim. The Lucene backend cannot convert correlation rules. Neither base-rule selector tests the source or direction of a connection.
 **Deployment:** Firewall/flow-log correlation engine; useful as an early tripwire for a low-sophistication, unstealthy sweep rather than a standalone high-confidence alert.
 **Retiering note (2026-07-30):** the base rule now excludes connections the firewall rejected, via a `filter_rejected` selector on the `action` field. Deployed against perimeter firewall telemetry without that filter, the rule counts dropped packets, and because unsolicited internet scanning of any public address is a permanent background condition the paired correlation fires indefinitely on traffic that never reached a service. Observed in production across a 14-day window: four separate commodity-cloud sources (two AWS, one DigitalOcean, one Huawei Cloud) triggered the correlation while the firewall blocked all 5,175 associated packets, so every alert described activity that had already been stopped. Note that `action` values are not standardised across firewall vendors; verify the token your platform emits for a rejected connection and extend the filter list if it differs.
 
 **Check your feed before applying the filter.** Many pfSense and OPNsense deployments ship *only* blocked traffic to the SIEM, because the logging is driven by the default deny rule rather than by per-rule pass logging. On such a feed every document carries the rejected disposition, so `filter_rejected` excludes the entire dataset and the rule silently matches nothing, worse than the noise it was meant to remove, because it looks deployed and reports clean. Verify first with a terms aggregation on the disposition field over your firewall index: if the only value returned is a block/deny token, do **not** apply this filter. Either enable pass logging so the disposition becomes meaningful, or scope the base rule's source to internal ranges instead, which retains the rule's real value of catching lateral service discovery from a compromised internal host and does not depend on disposition at all. This is measured behaviour rather than a hypothetical, seen on a real OPNsense deployment where every firewall document across a 14-day window carried a single `block` action and no pass events existed at all.
 
 ```yaml
-title: External Connection Attempt to a Service-Discovery-Profile Port
+title: Non-Rejected Connection to a Service-Discovery-Profile Port
 id: a3f1f3b3-98a1-402a-a979-bce509a2bfb1
 name: firewall_scan_target_port_base
 status: experimental
 description: >-
-    Base rule (not alerting on its own): an inbound connection attempt on one
-    of a fixed 14-port profile this operator scans across multiple targets:
+    Base rule (not alerting on its own): a firewall connection record, from
+    any source and in either direction (no source or direction field is
+    tested), whose destination port is one of a fixed 14-port profile this operator scans across multiple targets:
     22, 80, 443, 3306, 6379, 8080, 8443, 8888, 9000, 9001, 9002, 9090, 8848
     and 8157, a mix of standard admin, database and cache ports plus the
     Nacos and Druid management consoles this operator specifically exploits
@@ -889,15 +900,17 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3
 
 **Tier:** Detection
 **Robustness:** 3
-**ATT&CK Coverage:** T1190 (Exploit Public-Facing Application), T1098.004 (SSH Authorized Keys)
+**ATT&CK Coverage:** T1190 (Exploit Public-Facing Application)
+**ATT&CK Note:** The report maps the attempted key write to T1098.004 (SSH Authorized Keys). This rule matches the Redis `CONFIG SET dir` and `BGSAVE` verbs in an HTTP body and tests no `authorized_keys` or `.ssh` string, so it does not cover that technique; the same two verbs also write a cron file or a web shell.
 **Confidence:** HIGH
+**Rationale:** The report describes the operator's script injecting CRLF-separated Redis commands (`CONFIG SET dir`, `CONFIG SET dbfilename`, `SET`, `BGSAVE`) through an SSRF vector to write an SSH public key, and names Redis verbs arriving over a non-Redis transport as the network discriminator. The rule matches the first and last verbs in an HTTP request body, whichever file the commands go on to write.
 **False Positives:** None known. Raw Redis protocol verbs (`CONFIG SET dir`, `BGSAVE`) embedded inside an HTTP request body are not organic web traffic under any legitimate use this rule is aware of.
 **Blind Spots:** Misses the technique if the operator uses a different Redis command sequence to the same effect (e.g. `MODULE LOAD` in newer Redis versions), or CRLF-encodes the commands in a way that splits them across the matched substrings.
 **Validation:** Replay an HTTP POST body containing both `CONFIG SET dir` and `BGSAVE`: the rule must fire; an ordinary POST body must NOT fire.
 **Deployment:** Network IDS in front of any application feature with a known or suspected SSRF vector (URL fetchers, OCR/image services, webhook validators).
 
 ```
-alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3.1.116 SSRF-to-Redis CONFIG/BGSAVE Command Sequence via HTTP (SSH Key Write Chain)"; flow:established,to_server; http.request_body; content:"CONFIG SET dir"; content:"BGSAVE"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:9301406; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3.1.116 SSRF-to-Redis CONFIG/BGSAVE Command Sequence via HTTP (Redis File-Write Chain)"; flow:established,to_server; http.request_body; content:"CONFIG SET dir"; content:"BGSAVE"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:9301406; rev:3; metadata:author The_Hunters_Ledger, date 2026-07-21;)
 ```
 
 #### Eureka Apps-Delta Response Containing XStream Gadget Markers (Flowbits Pair)

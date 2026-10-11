@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--9a4759a5-365c-4e34-9468-3722108c1492",
+    "id": "bundle--cab4a821-2860-4fd4-8f0f-56be432fb148",
     "objects": [
         {
             "type": "identity",
@@ -306,12 +306,12 @@
             "id": "indicator--28ec31c3-407c-5b53-b1e4-c7e0cb6ae4ef",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.59355Z",
-            "modified": "2026-10-01T19:54:15.59355Z",
+            "modified": "2026-10-11T05:44:22.684258Z",
             "name": "RAT_OpenStrike_C_Beacon",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "/*\n   Yara Rule Set\n   Identifier: OpenStrike Beacon Toolkit + Cobalt Strike 3.x Tripwired Loader\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule RAT_OpenStrike_C_Beacon {\n   meta:\n      description = \"Detects the OpenStrike custom C C2 beacon (beacon.exe) via its operator-written startup/status debug strings, paired with AES-CBC/HMAC-SHA256 crypto function references and the shared MinGW GCC 15 build banner\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/open-directory-172-105-0-126-20260406-detections/\"\n      date = \"2026-04-06\"\n      hash1 = \"7d6a17754f086b53ee294f5ccd60b0127f921520ce7b64fea0aebb47114fb5d2\"\n      hash2 = \"5ee00147140b084f93d2144c2ee5c0d4d125ff1c\"\n      hash3 = \"96f9adb7ee00c44bc5f523d1f1dc8715\"\n      family = \"OpenStrike\"\n      malware_type = \"C2 Beacon\"\n      campaign = \"OpenStrike-CSBeacon-Toolkit-172.105.0.126\"\n      id = \"c5b35b66-2737-5545-a27e-b67969ef4f36\"\n   strings:\n      $s1 = \"[*] OpenStrike Beacon starting...\" ascii\n      $s2 = \"[+] Registration successful\" ascii\n      $s3 = \"beacon ready\" ascii\n      $s4 = \"abcdefghijklmnop\" ascii\n      $s5 = \"aes_cbc_encrypt\" ascii\n      $s6 = \"hmac_sha256\" ascii\n      $compiler = \"GCC: (GNU) 15-win32\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 409600 and\n      ($s1 or ($s2 and $s3)) and\n      ($s4 or $s5 or $s6 or $compiler)\n}",
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: OpenStrike Beacon Toolkit + Cobalt Strike 3.x Tripwired Loader\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule RAT_OpenStrike_C_Beacon {\n   meta:\n      description = \"Detects the OpenStrike custom C C2 beacon (beacon.exe) via its operator-written startup/status debug strings (the startup banner, or the registration-successful and beacon-ready pair), paired with at least one of four secondary strings: the shared AES IV, the aes_cbc_encrypt name, the hmac_sha256 name or the MinGW GCC 15 build banner. One secondary string suffices\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/open-directory-172-105-0-126-20260406-detections/\"\n      date = \"2026-04-06\"\n      hash1 = \"7d6a17754f086b53ee294f5ccd60b0127f921520ce7b64fea0aebb47114fb5d2\"\n      hash2 = \"5ee00147140b084f93d2144c2ee5c0d4d125ff1c\"\n      hash3 = \"96f9adb7ee00c44bc5f523d1f1dc8715\"\n      family = \"OpenStrike\"\n      malware_type = \"C2 Beacon\"\n      campaign = \"OpenStrike-CSBeacon-Toolkit-172.105.0.126\"\n      id = \"c5b35b66-2737-5545-a27e-b67969ef4f36\"\n   strings:\n      $s1 = \"[*] OpenStrike Beacon starting...\" ascii\n      $s2 = \"[+] Registration successful\" ascii\n      $s3 = \"beacon ready\" ascii\n      $s4 = \"abcdefghijklmnop\" ascii\n      $s5 = \"aes_cbc_encrypt\" ascii\n      $s6 = \"hmac_sha256\" ascii\n      $compiler = \"GCC: (GNU) 15-win32\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 409600 and\n      ($s1 or ($s2 and $s3)) and\n      ($s4 or $s5 or $s6 or $compiler)\n}",
             "pattern_type": "yara",
             "valid_from": "2026-04-06T00:00:00Z",
             "labels": [
@@ -327,12 +327,12 @@
             "id": "indicator--de77065d-1422-50cc-9ac1-e9559067cd32",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.593671Z",
-            "modified": "2026-10-01T19:54:15.593671Z",
+            "modified": "2026-10-11T05:44:22.684406Z",
             "name": "TOOLKIT_OpenStrike_Loader_Chain",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule TOOLKIT_OpenStrike_Loader_Chain {\n   meta:\n      description = \"Detects OpenStrike's standalone shellcode loader chain (run.exe, sc_loader.exe, veh_loader.exe, dbg_loader.exe, stager.exe) via operator-written crash-handler and entry-point-discovery debug strings shared across the progressive SEH/VEH/INT3 capability chain, paired with the shared MinGW GCC 15 build banner\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/open-directory-172-105-0-126-20260406-detections/\"\n      date = \"2026-04-06\"\n      hash1 = \"821f815fab92fee03e2be44ad5370a953db085cd359a99519a2ddb7316b0d273\"\n      hash2 = \"720ea472060e080145927d33e18dca9b8b1eafa5\"\n      hash3 = \"d677794618461b3bf7d405a8297d5df4\"\n      family = \"OpenStrike\"\n      malware_type = \"Shellcode Loader\"\n      campaign = \"OpenStrike-CSBeacon-Toolkit-172.105.0.126\"\n      id = \"1c8e4dfb-3f93-5a20-ba24-9896e2c32761\"\n   strings:\n      $veh = \"[CRASH] code=0x%08lX RIP=0x%llX\" ascii\n      $seh = \"[!] EXCEPTION code=0x%08lX addr=%p (base+0x%llX)\" ascii\n      $dbg = \"[*] INT3 set at offset %lu (RVA 0x%llX)\" ascii\n      $run = \"[+] %lu @ %p exec\" ascii\n      $load = \"[*] Loading %s\" ascii\n      $compiler = \"GCC: (GNU) 15-win32\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 409600 and\n      (($veh and $load) or ($seh and $load) or ($dbg and $load) or ($run and $compiler))\n}",
+            "pattern": "rule TOOLKIT_OpenStrike_Loader_Chain {\n   meta:\n      description = \"Detects OpenStrike's standalone shellcode loader chain (run.exe, sc_loader.exe, veh_loader.exe, dbg_loader.exe, stager.exe) via operator-written crash-handler and entry-point-discovery debug strings shared across the progressive SEH/VEH/INT3 capability chain. Each crash-handler or INT3 string is paired with the [*] Loading %s string; only the [+] %lu @ %p exec string is paired with the MinGW GCC 15 build banner\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/open-directory-172-105-0-126-20260406-detections/\"\n      date = \"2026-04-06\"\n      hash1 = \"821f815fab92fee03e2be44ad5370a953db085cd359a99519a2ddb7316b0d273\"\n      hash2 = \"720ea472060e080145927d33e18dca9b8b1eafa5\"\n      hash3 = \"d677794618461b3bf7d405a8297d5df4\"\n      family = \"OpenStrike\"\n      malware_type = \"Shellcode Loader\"\n      campaign = \"OpenStrike-CSBeacon-Toolkit-172.105.0.126\"\n      id = \"1c8e4dfb-3f93-5a20-ba24-9896e2c32761\"\n   strings:\n      $veh = \"[CRASH] code=0x%08lX RIP=0x%llX\" ascii\n      $seh = \"[!] EXCEPTION code=0x%08lX addr=%p (base+0x%llX)\" ascii\n      $dbg = \"[*] INT3 set at offset %lu (RVA 0x%llX)\" ascii\n      $run = \"[+] %lu @ %p exec\" ascii\n      $load = \"[*] Loading %s\" ascii\n      $compiler = \"GCC: (GNU) 15-win32\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 409600 and\n      (($veh and $load) or ($seh and $load) or ($dbg and $load) or ($run and $compiler))\n}",
             "pattern_type": "yara",
             "valid_from": "2026-04-06T00:00:00Z",
             "labels": [
@@ -366,15 +366,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--496377e5-3ab2-5dad-b36f-e847d2e38638",
+            "id": "indicator--bf8476f9-048b-55b3-91a6-8d3c92e66ca5",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:15.593861Z",
-            "modified": "2026-10-01T19:54:15.593861Z",
-            "name": "MALW_CobaltStrike3x_TripwiredReflectiveLoader",
+            "created": "2026-10-11T05:44:22.684625Z",
+            "modified": "2026-10-11T05:44:22.684625Z",
+            "name": "MALW_CobaltStrike3x_MALC_Malleable_Profile_Beacon",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule MALW_CobaltStrike3x_TripwiredReflectiveLoader {\n   meta:\n      description = \"Detects the operator-modified Cobalt Strike 3.x DLL beacon (beacon_patched.x64.dll) sharing this campaign's Malleable C2 profile via its distinctive MALC User-Agent suffix, corroborated by the original DLL name, ReflectiveLoader export, sysnative rundll32 spawn-to path, the shared custom AES IV, or the entry-point tripwire bytes (66 90 CC / xchg ax,ax; int3) that redirect the ReflectiveLoader export RVA to crash standard reflective-injection tooling\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/open-directory-172-105-0-126-20260406-detections/\"\n      date = \"2026-04-06\"\n      hash1 = \"7a1a7659ec4201ecbca782bcedf9d4079265137279a490368309df3bd39297a4\"\n      hash2 = \"add3893c3652947ff821a6da5fad774cc041bb73\"\n      hash3 = \"2a6a3d499bb3c666f3b4bc5905a866f3\"\n      family = \"CobaltStrike\"\n      malware_type = \"C2 Beacon\"\n      campaign = \"OpenStrike-CSBeacon-Toolkit-172.105.0.126\"\n      id = \"23095eb8-e1a4-565d-a5c9-9c1f45ad4eaf\"\n   strings:\n      $reflective_export = \"ReflectiveLoader\" ascii\n      $original_name = \"beacon.x64.dll\" ascii\n      $tripwire = { 66 90 CC }\n      $ua = \"Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; MALC)\" ascii\n      $spawn = \"%windir%\\\\sysnative\\\\rundll32.exe\" ascii\n      $aes_iv = \"abcdefghijklmnop\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 409600 and\n      $ua and\n      2 of ($original_name, $reflective_export, $spawn, $aes_iv, $tripwire)\n}",
+            "pattern": "rule MALW_CobaltStrike3x_MALC_Malleable_Profile_Beacon {\n   meta:\n      description = \"Detects the operator-modified Cobalt Strike 3.x DLL beacon (beacon_patched.x64.dll) sharing this campaign's Malleable C2 profile via its distinctive MALC User-Agent suffix, corroborated by any two of five strings: the original DLL name, the ReflectiveLoader export name, the sysnative rundll32 spawn-to path, the shared custom AES IV, or the byte pattern 66 90 CC (xchg ax,ax; int3), which the report ties to the sample's entry-point tripwire. The bytes are matched anywhere in the file and the entry point is not checked\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/open-directory-172-105-0-126-20260406-detections/\"\n      date = \"2026-04-06\"\n      hash1 = \"7a1a7659ec4201ecbca782bcedf9d4079265137279a490368309df3bd39297a4\"\n      hash2 = \"add3893c3652947ff821a6da5fad774cc041bb73\"\n      hash3 = \"2a6a3d499bb3c666f3b4bc5905a866f3\"\n      family = \"CobaltStrike\"\n      malware_type = \"C2 Beacon\"\n      campaign = \"OpenStrike-CSBeacon-Toolkit-172.105.0.126\"\n      id = \"0f1b88a7-00a7-56e5-8503-6bbcf89432b7\"\n   strings:\n      $reflective_export = \"ReflectiveLoader\" ascii\n      $original_name = \"beacon.x64.dll\" ascii\n      $tripwire = { 66 90 CC }\n      $ua = \"Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; MALC)\" ascii\n      $spawn = \"%windir%\\\\sysnative\\\\rundll32.exe\" ascii\n      $aes_iv = \"abcdefghijklmnop\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 409600 and\n      $ua and\n      2 of ($original_name, $reflective_export, $spawn, $aes_iv, $tripwire)\n}",
             "pattern_type": "yara",
             "valid_from": "2026-04-06T00:00:00Z",
             "labels": [
@@ -1713,7 +1713,7 @@
             "id": "report--275b389e-e02e-5042-8cc9-f20b55d10b10",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.600274Z",
-            "modified": "2026-10-01T19:54:15.600274Z",
+            "modified": "2026-10-11T05:44:22.693506Z",
             "name": "OpenStrike Beacon Toolkit — Open Directory 172.105.0.126",
             "report_types": [
                 "threat-report"
@@ -1748,7 +1748,7 @@
                 "indicator--28ec31c3-407c-5b53-b1e4-c7e0cb6ae4ef",
                 "indicator--de77065d-1422-50cc-9ac1-e9559067cd32",
                 "indicator--c82deec6-386a-575b-81ce-c05c915ecc68",
-                "indicator--496377e5-3ab2-5dad-b36f-e847d2e38638",
+                "indicator--bf8476f9-048b-55b3-91a6-8d3c92e66ca5",
                 "indicator--0f6627e9-c513-5f19-bbb8-382993ac7595",
                 "indicator--1109f2e3-cbe7-54d3-bae0-c4a0e379f657",
                 "indicator--fc9bd18a-3438-5bff-9528-974ac25dd306",

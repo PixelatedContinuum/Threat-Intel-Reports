@@ -24,7 +24,7 @@ KAIDO is a rebranded 64-bit fork of the open-source Quasar RAT carrying an HVNC 
 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
-| YARA | 3 | 0 | T1219, T1113, T1497, T1573.001 | 0 |
+| YARA | 3 | 0 | T1219, T1113, T1497 | 0 |
 | Sigma | 0 | 3 | T1553.005, T1219, T1113, T1036.005, T1547.001 | 0 |
 | Suricata | 1 | 1 | T1071.001, T1573.001, T1095 | 1 |
 
@@ -132,16 +132,17 @@ rule RAT_KAIDO_HVNC_DXGI_Pipe {
 }
 ```
 
-#### KAIDO Anti-Analysis Sleep Obfuscation + Config Crypto Framing
+#### KAIDO Anti-Analysis Sleep Obfuscation Debug String With Family Namespace
 
 **Tier:** Detection
 **Robustness:** 2
-**ATT&CK Coverage:** T1497 (Virtualization/Sandbox Evasion), T1573.001 (Symmetric Cryptography — MODERATE)
+**ATT&CK Coverage:** T1497 (Virtualization/Sandbox Evasion)
+**ATT&CK Note:** The report maps the build's AES-256-GCM configuration and wire encryption to T1573.001. This rule tests no cryptographic string or framing pattern (only the `[ANTI]` debug string and the family namespace), so it does not cover that technique.
 **Confidence:** MODERATE
 **Rationale:** The developer-left anti-analysis debug string is distinctive but stands alone as a single string; the rule pairs it with the family namespace so both must be present. A secondary/corroborating anchor — the debug string could be stripped from a cleaned build, hence Robustness 2 rather than 3.
-**False Positives:** None known — the debug string is family-specific; the rule requires it *and* the namespace, and the AES-GCM framing pattern (12-byte nonce + 16-byte tag) is never a sole anchor.
-**Blind Spots:** A release build that removes the developer debug string evades this rule (the namespace rule above still fires); the crypto-framing pattern is common to many AES-GCM implementations and carries no weight alone.
-**Validation:** Scan a KAIDO sample carrying the `[ANTI]` debug string — must match; a benign binary embedding a stock AES-GCM library must NOT fire.
+**False Positives:** None known — the debug string is family-specific and the rule requires it *and* the `Kaido.Common.Messages` namespace string.
+**Blind Spots:** A release build that removes the developer debug string evades this rule (the namespace rule above still fires). The rule contains no cryptography test of any kind; an earlier heading named a config crypto framing that the condition never implemented.
+**Validation:** Scan a KAIDO sample carrying the `[ANTI]` debug string — must match; a benign .NET binary without the `[ANTI]` string or the `Kaido.Common.Messages` namespace must NOT fire.
 **Deployment:** Endpoint AV/EDR file scan; secondary/corroborating rule, not primary detection.
 
 ```yara
@@ -175,28 +176,32 @@ rule RAT_KAIDO_AntiAnalysis_SleepObfuscation {
 
 ### Hunting Rules
 
-#### KAIDO Zone.Identifier ADS Self-Deletion (MOTW Bypass)
+#### Zone.Identifier ADS Deletion by a Process Outside System32 and Defender Paths (MOTW Bypass)
 
 **Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1553.005 (Mark-of-the-Web Bypass)
 **Confidence:** HIGH (behavior) / triage required (attribution)
-**Rationale:** The malware reads then deletes its own `Zone.Identifier` alternate data stream shortly after launch, a MOTW bypass. Anchored on the **deletion** event (`category: file_delete`) rather than file creation — a plain `:Zone.Identifier` file-event selector would match every downloaded file (the ADS is created on every download) and is pure baseline noise. Scoping to deletion turns it into a genuine Hunting lead for MOTW-clearing behavior, but self-updating software also clears its own MOTW, so an analyst triages the hits.
+**Rationale:** The malware reads then deletes its own `Zone.Identifier` alternate data stream shortly after launch (the report records this at T+2.4s in a behavioral run), a MOTW bypass. The rule matches the deletion of any such stream by any process outside the two filter paths; it has no test for the deleting process being the deleted file's own image and no KAIDO indicator, so a hit is a MOTW-clearing lead and not an attribution. Anchored on the **deletion** event (`category: file_delete`) rather than file creation — a plain `:Zone.Identifier` file-event selector would match every downloaded file (the ADS is created on every download) and is pure baseline noise. Scoping to deletion turns it into a genuine Hunting lead for MOTW-clearing behavior, but self-updating software also clears its own MOTW, so an analyst triages the hits.
 **False Positives:**
 - Self-updating legitimate software (browsers, some installers) that clears its own Zone.Identifier stream after a user-consented first run.
 - Administrative scripts that bulk-clear MOTW on downloaded files.
+**Blind Spots:** Needs file-delete telemetry that reports alternate data streams; where the sensor does not, the rule never fires. A process that clears the stream from inside System32 or the Defender folder is excluded.
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (FileDelete telemetry), correlated with process creation for the same image.
 
 ```yaml
-title: KAIDO RAT Self-Deletion of Zone.Identifier Alternate Data Stream
+title: Zone.Identifier Alternate Data Stream Deletion by a Process Outside System32 and Defender Paths
 id: d428415f-5926-466a-abcb-5cb91be4d187
 status: experimental
 description: >-
-  Detects a process deleting its own Zone.Identifier alternate data
-  stream shortly after launch, a Mark-of-the-Web bypass technique used
-  by the KAIDO Quasar-fork RAT to suppress SmartScreen re-checks on
-  subsequent executions. Anchored on the file-delete event rather than
-  file creation to avoid matching every downloaded file.
+  Detects a file-delete event for a Zone.Identifier alternate data
+  stream by a process whose image path is outside System32 and the
+  Defender program folder. The KAIDO Quasar-fork RAT does this to its own
+  stream shortly after launch, a Mark-of-the-Web bypass that suppresses
+  SmartScreen re-checks on later executions. The rule does not test that
+  the deleting process is the file the stream belonged to, and nothing in
+  it identifies KAIDO. Anchored on the file-delete event rather than file
+  creation to avoid matching every downloaded file.
 references:
     - https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/
 author: The Hunters Ledger
@@ -208,10 +213,11 @@ tags:
 logsource:
     category: file_delete
     product: windows
+    definition: 'Requires Sysmon file-delete events (EID 23 FileDelete or EID 26 FileDeleteDetected). Whether a deleted alternate data stream is reported as a TargetFilename ending in :Zone.Identifier depends on the Sysmon build and configuration and was not tested here.'
 detection:
     selection:
         TargetFilename|endswith: ':Zone.Identifier'
-    filter_legit_installer:
+    filter_legit_installer:  # sourced: Windows and Defender platform components, assumed to be the legitimate Zone.Identifier handlers; not confirmed against a captured event
         Image|contains:
             - '\Windows\System32\'
             - '\Program Files\Windows Defender\'
@@ -348,18 +354,19 @@ alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT KAIDO-EvilSoul-Maa
 
 ### Hunting Rules
 
-#### KAIDO Quasar Binary Protocol on TCP 4782
+#### Outbound TCP Payload to Port 4782 (Quasar Default Port, KAIDO C2 Port)
 
 **Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1095 (Non-Application Layer Protocol)
+**ATT&CK Note:** The report records the Quasar binary protocol over raw TCP on port 4782 (T1095). The rule tests only an established TCP flow with payload to port 4782 and does not parse the protocol, so the mapping is the technique the port is a lead for and not something the rule confirms.
 **Confidence:** HIGH for the port/protocol pairing; the rule itself is a port-anchored lead
 **Rationale:** The RAT's primary C2 channel is a raw Quasar binary protocol over TCP/4782 with no HTTP layer. TCP/4782 is the Quasar-family default port — a tool-family artifact — but the rule carries no content anchor (the protocol is non-standard and unparseable by Suricata's app-layer engine), so it is a port-based hunting lead rather than an alerting-grade signature: anything else on 4782 will also fire.
 **False Positives:** Any legitimate or unrelated service that happens to use TCP/4782 (uncommon but not impossible); the `threshold` limits alert volume per source.
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points; hunt-tune before alerting.
 
 ```suricata
-alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:"THL HUNT KAIDO-EvilSoul-MaaS Quasar Binary Protocol C2 on TCP 4782 (RAT C2 Channel)"; flow:established,to_server; dsize:>0; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/; classtype:trojan-activity; sid:9300801; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-03;)
+alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:"THL HUNT KAIDO-EvilSoul-MaaS Outbound TCP Payload to Port 4782 (Quasar Default Port, Port-Only Lead)"; flow:established,to_server; dsize:>0; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/; classtype:trojan-activity; sid:9300801; rev:3; metadata:author The_Hunters_Ledger, date 2026-07-03;)
 ```
 
 ---

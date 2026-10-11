@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--4d638b4d-7b69-4f8e-90bc-32b71d64cbf6",
+    "id": "bundle--72c9b0e7-86eb-4318-97af-8d7ea954a809",
     "objects": [
         {
             "type": "identity",
@@ -1259,27 +1259,6 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--4830f397-c0dd-50a8-b90e-01e4db884669",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:13.74549Z",
-            "modified": "2026-10-01T19:54:13.74549Z",
-            "name": "GHOST ComfyUI Fake PerformanceMonitor Custom Node Planted",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "title: GHOST ComfyUI Fake PerformanceMonitor Custom Node Planted\nid: df247923-595c-4760-9a97-f0722dbf664d\nstatus: experimental\ndescription: >-\n    Detects GHOST cryptojacker kit persistence via malicious ComfyUI custom node\n    installation. The GHOST Python kit's plant_backdoor_node() function creates a\n    Python file with \"PerformanceMonitor\" in its path within the victim's ComfyUI\n    custom_nodes/ directory. Tightened from an earlier selector that also matched\n    any .py file under a ComfyUI custom_nodes/ path regardless of filename, which\n    would have fired on every legitimate custom-node installation.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/\n    - https://censys.com/ghost-cryptojacker-targeting-ai\nauthor: The Hunters Ledger\ndate: 2026-05-25\ntags:\n    - attack.persistence\n    - attack.t1554\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: file_event\n    product: linux\ndetection:\n    selection_comfyui_node:\n        TargetFilename|contains: '/custom_nodes/PerformanceMonitor'\n        TargetFilename|endswith: '.py'\n    condition: selection_comfyui_node\nfalsepositives:\n    - >-\n      Legitimate custom ComfyUI node named PerformanceMonitor installed by\n      authorized user (verify publisher and source repository before dismissing)\n    - >-\n      Development environments where a test custom node happens to share this\n      name (scope exclusion for known dev hosts recommended)\nlevel: high",
-            "pattern_type": "sigma",
-            "valid_from": "2026-05-25T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "indicator",
-            "spec_version": "2.1",
             "id": "indicator--787f82f6-889c-5924-9474-a2e3926991d6",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.745561Z",
@@ -1415,6 +1394,27 @@
                 "malicious-activity"
             ],
             "pattern": "title: Auditd - PAM Security Library Directory File Creation by Non-Package-Manager\nid: f26bb12b-dca1-4b62-adf1-9186d5d31560\nstatus: experimental\ndescription: >-\n    Detects an auditd PATH record with nametype CREATE (a new file created) under\n    /lib/security/. Requires auditd rule \"-w /lib/security -p wa -k pam_module_write\"\n    to be active, and joined PATH and SYSCALL record fields (see the definition). The\n    GHOST cryptojacker kit writes libpam_cache.so to this directory using PAM-style\n    filename camouflage; a new file there from a non-package-manager process is a\n    strong lead for a rootkit drop. The rule does not test an open-for-write\n    flag (a PATH record carries no such flag), and an overwrite of an existing file,\n    which carries another nametype, is not matched.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/\nauthor: The Hunters Ledger\ndate: 2026-05-25\nmodified: 2026-10-11\ntags:\n    - attack.stealth\n    - attack.persistence\n    - attack.execution\n    - attack.t1574.006\n    - attack.t1014\n    - detection.emerging-threats\nlogsource:\n    product: linux\n    service: auditd\n    definition: 'Requires auditd events in which the PATH record fields (name, nametype) and the SYSCALL record fields (key, exe) of one event are joined into one document, for example by ausearch -i output keyed on the event serial or an ingestion that merges records. Raw auditd keeps them in separate records: PATH carries name and nametype, SYSCALL carries the watch key and exe. No joined profile has been demonstrated for this rule.'\ndetection:\n    selection_key:\n        key: 'pam_module_write'\n        name|contains: '/lib/security/'\n        nametype: 'CREATE'\n    filter_pkg_mgr:\n        exe|endswith:\n            - '/dpkg'\n            - '/rpm'\n            - '/ldconfig'\n            - '/update-alternatives'\n    condition: selection_key and not filter_pkg_mgr\nfalsepositives:\n    - Package manager post-install hooks installing legitimate PAM modules (filtered above)\n    - System administrator manually copying a verified PAM module during maintenance\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-05-25T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--0ad272bb-19e4-59a1-9284-76376d8f8ce4",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-11T05:44:20.507219Z",
+            "modified": "2026-10-11T05:44:20.507219Z",
+            "name": "ComfyUI Custom Node Python File Named PerformanceMonitor Created",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: ComfyUI Custom Node Python File Named PerformanceMonitor Created\nid: df247923-595c-4760-9a97-f0722dbf664d\nstatus: experimental\ndescription: >-\n    Detects creation of a Python file whose path contains\n    /custom_nodes/PerformanceMonitor. The GHOST Python kit's plant_backdoor_node()\n    function creates a file with that name in the victim's ComfyUI custom_nodes/\n    directory, but a legitimate extension with the same name creates the same\n    event, so a hit needs publisher and source verification. Tightened from an earlier selector that also matched\n    any .py file under a ComfyUI custom_nodes/ path regardless of filename, which\n    would have fired on every legitimate custom-node installation.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/\n    - https://censys.com/ghost-cryptojacker-targeting-ai\nauthor: The Hunters Ledger\ndate: 2026-05-25\ntags:\n    - attack.persistence\n    - attack.t1554\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: file_event\n    product: linux\ndetection:\n    selection_comfyui_node:\n        TargetFilename|contains: '/custom_nodes/PerformanceMonitor'\n        TargetFilename|endswith: '.py'\n    condition: selection_comfyui_node\nfalsepositives:\n    - >-\n      Legitimate custom ComfyUI node named PerformanceMonitor installed by\n      authorized user (verify publisher and source repository before dismissing)\n    - >-\n      Development environments where a test custom node happens to share this\n      name (scope exclusion for known dev hosts recommended)\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-05-25T00:00:00Z",
             "labels": [
@@ -3094,20 +3094,6 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--d0cf1df7-df3a-5d5f-8564-825fdde1853f",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:13.754194Z",
-            "modified": "2026-10-01T19:54:13.754194Z",
-            "relationship_type": "indicates",
-            "source_ref": "indicator--4830f397-c0dd-50a8-b90e-01e4db884669",
-            "target_ref": "malware--e50e9e2e-408e-52fd-ad9a-7871c902a999",
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "relationship",
-            "spec_version": "2.1",
             "id": "relationship--e5207b02-3a0d-5804-a999-22ad1cec0edf",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.754252Z",
@@ -3198,6 +3184,20 @@
             "modified": "2026-10-11T04:24:15.8054Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--483c47cf-2e33-5a9b-b8cf-3959e100d49e",
+            "target_ref": "malware--e50e9e2e-408e-52fd-ad9a-7871c902a999",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--59d28ba2-91e2-5229-ac09-9e8f8a5ea9b4",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-11T05:44:20.519499Z",
+            "modified": "2026-10-11T05:44:20.519499Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--0ad272bb-19e4-59a1-9284-76376d8f8ce4",
             "target_ref": "malware--e50e9e2e-408e-52fd-ad9a-7871c902a999",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -10923,7 +10923,7 @@
             "id": "report--9aa555ca-d9d6-51c3-8af0-af351596d438",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.787945Z",
-            "modified": "2026-10-11T05:07:58.572479Z",
+            "modified": "2026-10-11T05:44:20.565317Z",
             "name": "GHOST Cryptojacker Kit Family — Vova75Rus Kit-Author Supply Chain",
             "report_types": [
                 "threat-report"
@@ -11012,7 +11012,6 @@
                 "indicator--dce86bf3-3e8c-506b-ae70-83f378e532d6",
                 "indicator--a484fc2f-55e0-5e06-9140-470c6da5d93f",
                 "indicator--a1f7f480-7372-5967-950f-f5d9b8c4728c",
-                "indicator--4830f397-c0dd-50a8-b90e-01e4db884669",
                 "indicator--787f82f6-889c-5924-9474-a2e3926991d6",
                 "indicator--9fae4a61-8e3a-5de2-9212-f438f5be456f",
                 "indicator--5956f922-e13f-5a7e-962b-b6d0f2d499b8",
@@ -11020,6 +11019,7 @@
                 "indicator--145d5f2f-e312-59ac-85eb-7144c65069e6",
                 "indicator--390b3d5a-0fee-5f7b-9a4e-87e083b0e3ab",
                 "indicator--483c47cf-2e33-5a9b-b8cf-3959e100d49e",
+                "indicator--0ad272bb-19e4-59a1-9284-76376d8f8ce4",
                 "indicator--1bfe229f-9656-57a6-bf96-7c53c78d776d",
                 "indicator--4004ac82-6f13-5504-8b3f-0805cc63a58d",
                 "indicator--5e5923ce-0e72-5ce6-8203-5e543d07a12b",
@@ -11122,7 +11122,6 @@
                 "relationship--4b43eb00-7033-5719-be45-097407cb420e",
                 "relationship--a1c8538d-49df-5647-8463-fdea84ad28bb",
                 "relationship--1682d665-6069-5278-86cd-fd33ec29f33f",
-                "relationship--d0cf1df7-df3a-5d5f-8564-825fdde1853f",
                 "relationship--e5207b02-3a0d-5804-a999-22ad1cec0edf",
                 "relationship--697c58a5-b5f5-5b89-b658-73cb6d00e490",
                 "relationship--633c1fe1-bbad-55b4-8d3f-5442b5d4fbdb",
@@ -11130,6 +11129,7 @@
                 "relationship--a7e58667-5b19-58a5-808a-3272ab9aa4a8",
                 "relationship--b1136b0e-f692-501c-8ee8-8655ee19d8e5",
                 "relationship--323a8fed-8301-541b-8e57-cca65dcbe680",
+                "relationship--59d28ba2-91e2-5229-ac09-9e8f8a5ea9b4",
                 "relationship--41040516-e978-5967-a5b6-0d0d930b4ea4",
                 "relationship--000e6520-a77b-5fdf-9fc0-38889e70d83b",
                 "relationship--ac9980d1-5eae-5704-8be5-625cd92fb7ef",

@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--4d80a4ec-2b9c-4f4a-8bfd-0ffbaaa8a99e",
+    "id": "bundle--3355494f-b59b-4073-aee8-64fe7035555b",
     "objects": [
         {
             "type": "identity",
@@ -668,15 +668,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--6f3ba147-b1b3-5e53-bdea-4db20dbc1355",
+            "id": "indicator--535af95a-3115-5ac0-adce-60ca4079e0e0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:12.423925Z",
-            "modified": "2026-10-09T13:20:03.909348Z",
-            "name": "THL HUNT BellaMain-PhaaS USOM Blocklist Poll from Web Server (Security Tool Discovery Indicator)",
+            "created": "2026-10-11T05:44:20.086725Z",
+            "modified": "2026-10-11T05:44:20.086725Z",
+            "name": "THL HUNT BellaMain-PhaaS USOM Blocklist Poll From an Internal Host (Security Tool Discovery Indicator)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> any any (msg:\"THL HUNT BellaMain-PhaaS USOM Blocklist Poll from Web Server (Security Tool Discovery Indicator)\"; flow:established,to_server; http.host; content:\"usom.gov.tr\"; endswith; http.uri; content:\"url-list.txt\"; nocase; threshold:type limit,track by_src,count 1,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/; classtype:policy-violation; sid:9300404; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-16;)",
+            "pattern": "alert http $HOME_NET any -> any any (msg:\"THL HUNT BellaMain-PhaaS USOM Blocklist Poll From an Internal Host (Security Tool Discovery Indicator)\"; flow:established,to_server; http.host; content:\"usom.gov.tr\"; endswith; http.uri; content:\"url-list.txt\"; nocase; threshold:type limit,track by_src,count 1,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/; classtype:policy-violation; sid:9300404; rev:4; metadata:author The_Hunters_Ledger, date 2026-05-16;)",
             "pattern_type": "suricata",
             "valid_from": "2026-05-16T00:00:00Z",
             "labels": [
@@ -1754,12 +1754,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--ff60c439-ec15-5016-909b-eff34ad257a4",
+            "id": "relationship--83349f25-7de0-5496-ad04-f95b3cbb17b9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:12.429234Z",
-            "modified": "2026-10-01T19:54:12.429234Z",
+            "created": "2026-10-11T05:44:20.093782Z",
+            "modified": "2026-10-11T05:44:20.093782Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--6f3ba147-b1b3-5e53-bdea-4db20dbc1355",
+            "source_ref": "indicator--535af95a-3115-5ac0-adce-60ca4079e0e0",
             "target_ref": "malware--f34677ff-e5fe-55ba-9ecb-c0075eec3f85",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -5677,7 +5677,7 @@
             "id": "report--ffb8d174-a8c9-5fc5-b94f-9462fdff65b3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.446145Z",
-            "modified": "2026-10-11T04:24:12.883178Z",
+            "modified": "2026-10-11T05:44:20.116Z",
             "name": "BellaMain — Turkish Phishing-as-a-Service Panel with USOM Self-Monitor, Four-Bot Telegram C2, On-Demand TRUNCATE Anti-Forensics, and Wadanz Code-Author Signature",
             "description": "Full PHP source code recovered from open-directory at 79.137.192.3 (Aeza Group, Moscow, AS216246).; BellaMain.zip (panel) was novel to VirusTotal at time of analysis (first public disclosure).; Hardcoded canary Telegram bot token 6797512084:AAGbJVoC* is REVOKED (Telegram returned 401 Unauthorized on getMe prior to publication). Token value retained as historical IOC for hunting on stored copies of older kit RARs.; All operator domains are 0/92 detection on VirusTotal as of 2026-05-07, defenders should not rely on AV verdicts for this campaign.",
             "report_types": [
@@ -5726,7 +5726,7 @@
                 "indicator--61ea88ab-de01-5937-b2a8-98c1e7a5065f",
                 "indicator--fca5e07f-f827-54c7-bf67-8822e186e9da",
                 "indicator--6c1b062b-4044-5292-9943-f86b1f7b659f",
-                "indicator--6f3ba147-b1b3-5e53-bdea-4db20dbc1355",
+                "indicator--535af95a-3115-5ac0-adce-60ca4079e0e0",
                 "malware--ed8ffe3c-19d2-584e-b8e6-b61bc951fb4d",
                 "malware--02c0674a-16cb-5bc8-844c-dfccfc3f0d45",
                 "malware--bfe859c2-fe74-5e6c-84e3-1ca2742fe9fe",
@@ -5790,7 +5790,7 @@
                 "relationship--ef7466aa-8390-5906-9d29-c1cc9155d20a",
                 "relationship--cca3abbc-ae83-5db0-82a3-1761fffc47b1",
                 "relationship--973a1760-ae14-574d-842e-af1bc980ec01",
-                "relationship--ff60c439-ec15-5016-909b-eff34ad257a4",
+                "relationship--83349f25-7de0-5496-ad04-f95b3cbb17b9",
                 "relationship--f82c10a5-a0f6-5b06-8d4b-c96d5f7849db",
                 "relationship--fde00f73-d632-528b-aea5-9d6cbd5c0220",
                 "relationship--666009b0-19f1-5d42-a1e2-e510fb664dcb",

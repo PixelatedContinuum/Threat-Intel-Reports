@@ -425,7 +425,7 @@ level: medium
 **Robustness:** 2
 **ATT&CK Coverage:** T1543.003 (Windows Service — kernel driver)
 **Confidence:** MODERATE
-**Rationale:** `npf.sys` is the genuine, unmodified WinPcap kernel driver filename — durable in the sense that it can't be renamed without breaking WinPcap functionality, and not specific to CovertVPN (any tool embedding WinPcap for raw capture would trip it). Retiered from Detection on precision, not durability: the rule's own original false-positive assessment rated this MEDIUM ("legitimate WinPcap/Npcap installers occasionally stage npf.sys in %TEMP% during initial setup before moving to System32\drivers"), which does not clear the "reliably fires on malice, rare FP" bar for Detection. Corrected from the original: the technique tag was T1547.006 (Kernel Modules and Extensions, a Linux/macOS-scoped sub-technique) and carried an orphaned `attack.command-and-control` tactic tag with no paired C2 technique — realigned to T1543.003 (Windows Service), matching the rule's own prose ATT&CK Coverage line and MITRE's Windows-service scoping for kernel-driver services; the T1095 (Non-Application Layer Protocol) claim in the original prose describes the CovertVPN ICMP/raw-capture *capability* the driver enables, not this file-load event itself, so it is not re-added as a tag here.
+**Rationale:** The rule requires a driver-load event for a file named `npf.sys` whose path contains `\Temp\` (the report records the dropper writing `%TEMP%\npf.sys` and loading it from there). A copy in `System32\drivers` or any other non-Temp path does not match; an earlier version tested only for the absence of those two driver directories, so any other location matched. `npf.sys` is the genuine, unmodified WinPcap kernel driver filename — durable in the sense that it can't be renamed without breaking WinPcap functionality, and not specific to CovertVPN (any tool embedding WinPcap for raw capture would trip it). Retiered from Detection on precision, not durability: the rule's own original false-positive assessment rated this MEDIUM ("legitimate WinPcap/Npcap installers occasionally stage npf.sys in %TEMP% during initial setup before moving to System32\drivers"), which does not clear the "reliably fires on malice, rare FP" bar for Detection. Corrected from the original: the technique tag was T1547.006 (Kernel Modules and Extensions, a Linux/macOS-scoped sub-technique) and carried an orphaned `attack.command-and-control` tactic tag with no paired C2 technique — realigned to T1543.003 (Windows Service), matching the rule's own prose ATT&CK Coverage line and MITRE's Windows-service scoping for kernel-driver services; the T1095 (Non-Application Layer Protocol) claim in the original prose describes the CovertVPN ICMP/raw-capture *capability* the driver enables, not this file-load event itself, so it is not re-added as a tag here.
 **False Positives:**
 - Legitimate WinPcap or Npcap installers that stage npf.sys in a temporary directory before moving it to System32\drivers (uncommon; verify by checking for a subsequent persistent driver installation in System32\drivers).
 **Deployment:** Endpoint EDR (Sysmon Event ID 6), SIEM.
@@ -457,12 +457,9 @@ logsource:
     product: windows
 detection:
     selection:
+        ImageLoaded|contains: '\Temp\'
         ImageLoaded|endswith: '\npf.sys'
-    filter_legitimate:
-        ImageLoaded|contains:
-            - '\System32\drivers\'
-            - '\SysWOW64\drivers\'
-    condition: selection and not filter_legitimate
+    condition: selection
 falsepositives:
     - >-
       Legitimate WinPcap or Npcap installers that stage npf.sys in a
@@ -576,6 +573,7 @@ level: medium
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
 **Confidence:** MODERATE
 **Rationale:** Retiered from Detection. The 8-hex-digit deterministic ID format (a djb2 hash variant of ComputerName XOR PID) is a genuine protocol-design element, more durable than a simple config string — but the original rule's own false-positive assessment ("LOW-MEDIUM ... web applications may legitimately use /updates?id= endpoints ... correlate with ~5-second beaconing interval and POST to /submit?id= for high confidence") states plainly that the rule as written does not reach high confidence standalone. A `threshold` clause controls alert *volume*, not per-match precision, so it does not change this assessment.
+**Regex note:** the earlier regex was written with `^` and `$`, which Elastic's regex engine reads as literal characters, so it could not match there. The path is now pinned with `startswith` and the regex covers the whole field without anchors; on Elastic the field must be exactly `/updates?id=` plus 8 lowercase hex characters, while a backend that searches inside the string would also accept trailing characters after the ID.
 **False Positives:** Web applications using `/updates` as an API endpoint with an `id` parameter of exactly 8 lowercase hex characters (uncommon in enterprise environments; verify against known application inventory and require a correlated POST to `/submit?id=` with the same ID before treating as high confidence).
 **Deployment:** Proxy logs, SIEM; correlate with the companion `/submit?id=` rule and beaconing-interval analysis before escalating.
 
@@ -606,7 +604,8 @@ logsource:
 detection:
     selection:
         cs-method: 'GET'
-        c-uri|re: '^/updates\?id=[0-9a-f]{8}$'
+        c-uri|startswith: '/updates'
+        c-uri|re: '/updates\?id=[0-9a-f]{8}'
     condition: selection
 falsepositives:
     - >-
@@ -624,6 +623,7 @@ level: medium
 **ATT&CK Coverage:** T1041 (Exfiltration Over C2 Channel), T1071.001 (Web Protocols)
 **Confidence:** MODERATE
 **Rationale:** Retiered from Detection, mirroring the companion `/updates` polling rule — same URI-scheme durability profile and the same self-admitted LOW-MEDIUM standalone precision requiring correlation with the matched GET for high confidence. Added the T1071.001 tag to match the rule's own prose ATT&CK Coverage line, which the original YAML omitted.
+**Regex note:** the earlier regex was written with `^` and `$`, which Elastic's regex engine reads as literal characters, so it could not match there. The path is now pinned with `startswith` and the regex covers the whole field without anchors; on Elastic the field must be exactly `/submit?id=` plus 8 lowercase hex characters, while a backend that searches inside the string would also accept trailing characters after the ID.
 **False Positives:** API endpoints using `/submit` with an `id` parameter of exactly 8 hex characters accepting POST data (uncommon in enterprise environments; correlate with a matched GET to `/updates?id=` for the same ID before treating as high confidence).
 **Deployment:** Proxy logs, SIEM; correlate with the companion `/updates?id=` rule.
 
@@ -656,7 +656,8 @@ logsource:
 detection:
     selection:
         cs-method: 'POST'
-        c-uri|re: '^/submit\?id=[0-9a-f]{8}$'
+        c-uri|startswith: '/submit'
+        c-uri|re: '/submit\?id=[0-9a-f]{8}'
     condition: selection
 falsepositives:
     - >-

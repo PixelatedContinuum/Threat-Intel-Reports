@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--080292e0-21f4-46b1-bf29-2e884de0f9ec",
+    "id": "bundle--e1afa1d4-b96f-495c-872b-908f5f563f03",
     "objects": [
         {
             "type": "identity",
@@ -101,12 +101,12 @@
             "id": "indicator--55a48c1f-b093-5b7c-a1ee-3b5b8caaea01",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.417329Z",
-            "modified": "2026-10-01T19:54:15.417329Z",
+            "modified": "2026-10-11T05:44:22.222992Z",
             "name": "Newdouble_ClickFix_Berserk_Embedded_DLL_PDB_Hooks",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule Newdouble_ClickFix_Berserk_Embedded_DLL_PDB_Hooks {\n   meta:\n      description = \"Detects the Counter-Strike 2 overlay DLL carried inside the newdouble ClickFix executable, by its build PDB path together with its four hook-name strings and the matchmaking-penalty localisation token\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/\"\n      date = \"2026-09-28\"\n      hash1 = \"f6afe770a78d3655c367819b0c5e8afb623cf56b9922c179efbc89fea1a9ea86\"\n      hash2 = \"17602aa32d21a7bba16e1c657b4a818463fc560a\"\n      hash3 = \"83cb3b733cad23c702777baa42efaca3\"\n      family = \"newdouble ClickFix Steam-focused loader chain\"\n      id = \"c94f292f-ef23-5d7d-aee8-79aabc82bc7f\"\n   strings:\n      $x1 = \"D:\\\\PROJECTVS\\\\berserk_gamebaker\\\\x64\\\\Release\\\\berserkv2.pdb\" ascii wide\n      $s1 = \"hkantitamper\" ascii wide\n      $s2 = \"hkIsVacBanned\" ascii wide\n      $s3 = \"hkMMUpdate\" ascii wide\n      $s4 = \"hkStartMatchmaking\" ascii wide\n      $s5 = \"#SFUI_QMM_ERROR_1_PenaltySeconds\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      uint32(uint32(0x3C)) == 0x00004550 and\n      filesize < 8MB and\n      ( $x1 or 3 of ($s*) )\n}",
+            "pattern": "rule Newdouble_ClickFix_Berserk_Embedded_DLL_PDB_Hooks {\n   meta:\n      description = \"Detects the Counter-Strike 2 overlay DLL carried inside the newdouble ClickFix executable, by either its build PDB path alone or any three of its four hook-name strings and the matchmaking-penalty localisation token\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/\"\n      date = \"2026-09-28\"\n      hash1 = \"f6afe770a78d3655c367819b0c5e8afb623cf56b9922c179efbc89fea1a9ea86\"\n      hash2 = \"17602aa32d21a7bba16e1c657b4a818463fc560a\"\n      hash3 = \"83cb3b733cad23c702777baa42efaca3\"\n      family = \"newdouble ClickFix Steam-focused loader chain\"\n      id = \"c94f292f-ef23-5d7d-aee8-79aabc82bc7f\"\n   strings:\n      $x1 = \"D:\\\\PROJECTVS\\\\berserk_gamebaker\\\\x64\\\\Release\\\\berserkv2.pdb\" ascii wide\n      $s1 = \"hkantitamper\" ascii wide\n      $s2 = \"hkIsVacBanned\" ascii wide\n      $s3 = \"hkMMUpdate\" ascii wide\n      $s4 = \"hkStartMatchmaking\" ascii wide\n      $s5 = \"#SFUI_QMM_ERROR_1_PenaltySeconds\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      uint32(uint32(0x3C)) == 0x00004550 and\n      filesize < 8MB and\n      ( $x1 or 3 of ($s*) )\n}",
             "pattern_type": "yara",
             "valid_from": "2026-09-28T00:00:00Z",
             "labels": [
@@ -140,15 +140,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--1f6946d9-5289-5691-9498-0d678a8881e8",
+            "id": "indicator--26050564-c6fa-5e69-be4b-237c8db0c406",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:15.417586Z",
-            "modified": "2026-10-01T19:54:15.417586Z",
-            "name": "ClickFix PowerShell Stager Pasted Into Run Dialog Downloading a Script Then Running It",
+            "created": "2026-10-11T05:44:22.223241Z",
+            "modified": "2026-10-11T05:44:22.223241Z",
+            "name": "PowerShell Launched From Explorer With Download-and-Run Script Arguments (ClickFix Run Dialog Shape)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: ClickFix PowerShell Stager Pasted Into Run Dialog Downloading a Script Then Running It\nid: a952ed07-5481-4776-aa2e-22187bb98c4a\nstatus: experimental\ndescription: >-\n    Detects a PowerShell command line launched by explorer.exe that downloads a\n    script with Invoke-WebRequest, saves it with -OutFile as a .ps1 file, and\n    runs it with -File in the same command. This is the shape of the command\n    a ClickFix fake-verification page places on the clipboard for the victim to\n    paste into the Windows Run dialog.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/\nauthor: The Hunters Ledger\ndate: 2026-09-28\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - attack.t1204.004\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: process_creation\n    product: windows\n    definition: 'Requires process creation logging that populates CommandLine and ParentImage, for example Sysmon EID 1 or Security EID 4688 with command line auditing enabled.'\ndetection:\n    selection_parent:\n        ParentImage|endswith: '\\explorer.exe'\n    selection_image:\n        Image|endswith:\n            - '\\powershell.exe'\n            - '\\pwsh.exe'\n    selection_download:\n        CommandLine|contains:\n            - 'iwr '\n            - 'Invoke-WebRequest'\n    selection_flow:\n        CommandLine|contains|all:\n            - '-OutFile'\n            - '.ps1'\n            - '-File'\n    condition: all of selection_*\nfalsepositives:\n    - An administrator pasting a download-and-run one-liner into the Run dialog\n    - Internal onboarding instructions that tell users to paste a script bootstrap command\nlevel: medium",
+            "pattern": "title: PowerShell Launched From Explorer With Download-and-Run Script Arguments (ClickFix Run Dialog Shape)\nid: a952ed07-5481-4776-aa2e-22187bb98c4a\nstatus: experimental\ndescription: >-\n    Detects a PowerShell command line launched by explorer.exe that contains\n    iwr or Invoke-WebRequest together with the substrings -OutFile, .ps1 and\n    -File, in any order. The substrings are tested independently, so the rule\n    does not tie the saved path to the path that is run and does not require\n    the download to come first. The observed command shape, which a ClickFix\n    fake-verification page places on the clipboard for the victim to paste\n    into the Windows Run dialog, downloads a script with Invoke-WebRequest,\n    saves it with -OutFile as a .ps1 file and runs it with -File in the same\n    command. Explorer is also the parent for shortcuts and double-clicks, so\n    the Run dialog is the likeliest source and not the only one.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/\nauthor: The Hunters Ledger\ndate: 2026-09-28\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - attack.t1204.004\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: process_creation\n    product: windows\n    definition: 'Requires process creation logging that populates CommandLine and ParentImage, for example Sysmon EID 1 or Security EID 4688 with command line auditing enabled.'\ndetection:\n    selection_parent:\n        ParentImage|endswith: '\\explorer.exe'\n    selection_image:\n        Image|endswith:\n            - '\\powershell.exe'\n            - '\\pwsh.exe'\n    selection_download:\n        CommandLine|contains:\n            - 'iwr '\n            - 'Invoke-WebRequest'\n    selection_flow:\n        CommandLine|contains|all:\n            - '-OutFile'\n            - '.ps1'\n            - '-File'\n    condition: all of selection_*\nfalsepositives:\n    - An administrator pasting a download-and-run one-liner into the Run dialog\n    - Internal onboarding instructions that tell users to paste a script bootstrap command\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-09-28T00:00:00Z",
             "labels": [
@@ -185,12 +185,12 @@
             "id": "indicator--ae5fa070-a09e-5525-9a05-2d6bfab4fc53",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.417752Z",
-            "modified": "2026-10-01T19:54:15.417752Z",
+            "modified": "2026-10-11T05:44:22.223457Z",
             "name": "PowerShell Writing a Script Into a Roaming Profile Subfolder",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: PowerShell Writing a Script Into a Roaming Profile Subfolder\nid: 00e6aae1-d69f-473d-a5c9-c3520d170a31\nstatus: experimental\ndescription: >-\n    Detects powershell.exe creating a .ps1 file in a subfolder of the roaming\n    AppData directory. A ClickFix first-stage script copies itself to\n    %APPDATA%\\MyApp\\y.ps1 and relaunches from that copy. The folder name is\n    attacker-chosen, so the rule keys on the write pattern rather than the name.\n    This is a hunting lead, not an alert.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/\nauthor: The Hunters Ledger\ndate: 2026-09-28\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - detection.emerging-threats\n    - stp.2\nlogsource:\n    category: file_event\n    product: windows\n    definition: 'Requires Sysmon EID 11 (FileCreate) logging with Image populated.'\ndetection:\n    selection:\n        Image|endswith:\n            - '\\powershell.exe'\n            - '\\pwsh.exe'\n        TargetFilename|contains: '\\AppData\\Roaming\\'\n        TargetFilename|endswith: '.ps1'\n    condition: selection\nfalsepositives:\n    - PowerShell modules or profile scripts saved to the roaming profile by administrators\n    - Developer tooling that writes helper scripts under the roaming profile\nlevel: low",
+            "pattern": "title: PowerShell Writing a Script Into a Roaming Profile Subfolder\nid: 00e6aae1-d69f-473d-a5c9-c3520d170a31\nstatus: experimental\ndescription: >-\n    Detects powershell.exe creating a .ps1 file in a subfolder of the roaming\n    AppData directory. A ClickFix first-stage script copies itself to\n    %APPDATA%\\MyApp\\y.ps1 and relaunches from that copy. The folder name is\n    attacker-chosen, so the rule keys on the write pattern rather than the name.\n    This is a hunting lead, not an alert.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/\nauthor: The Hunters Ledger\ndate: 2026-09-28\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - detection.emerging-threats\n    - stp.2\nlogsource:\n    category: file_event\n    product: windows\n    definition: 'Requires Sysmon EID 11 (FileCreate) logging with Image populated.'\ndetection:\n    selection:\n        Image|endswith:\n            - '\\powershell.exe'\n            - '\\pwsh.exe'\n        TargetFilename|contains: '\\AppData\\Roaming\\'\n        TargetFilename|endswith: '.ps1'\n        TargetFilename|re: '.*\\\\AppData\\\\Roaming\\\\[^\\\\]+\\\\.*\\.ps1'\n    condition: selection\nfalsepositives:\n    - PowerShell modules or profile scripts saved to the roaming profile by administrators\n    - Developer tooling that writes helper scripts under the roaming profile\nlevel: low",
             "pattern_type": "sigma",
             "valid_from": "2026-09-28T00:00:00Z",
             "labels": [
@@ -206,12 +206,12 @@
             "id": "indicator--f74d7379-50b9-51f4-b837-0ea0667a9d96",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.417853Z",
-            "modified": "2026-10-01T19:54:15.417853Z",
+            "modified": "2026-10-11T05:44:22.223561Z",
             "name": "Per-User Proxy or PAC Setting Changed by a Process Running From AppData",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Per-User Proxy or PAC Setting Changed by a Process Running From AppData\nid: a46ddda1-468c-4417-a38f-38ade5e69da6\nstatus: experimental\ndescription: >-\n    Detects a process running from a user AppData folder writing the ProxyServer,\n    ProxyEnable or AutoConfigURL value under the per-user Internet Settings key.\n    A Steam-focused executable delivered by a ClickFix chain changes these values\n    as part of a traffic-interception setup. The values it writes were not\n    recovered, so the rule keys on the writer and the setting, not the data.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/\nauthor: The Hunters Ledger\ndate: 2026-09-28\ntags:\n    - attack.credential-access\n    - attack.collection\n    - attack.t1557\n    - detection.emerging-threats\n    - stp.2\nlogsource:\n    category: registry_set\n    product: windows\n    definition: 'Requires Sysmon EID 13 (RegistryEvent value set) with the Internet Settings key path included in the registry monitoring config.'\ndetection:\n    selection:\n        TargetObject|contains: '\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\'\n        TargetObject|endswith:\n            - '\\ProxyServer'\n            - '\\ProxyEnable'\n            - '\\AutoConfigURL'\n        Image|contains: '\\AppData\\'\n    condition: selection\nfalsepositives:\n    - VPN, proxy and filtering clients installed under the user profile that manage the system proxy\n    - Developer proxy tools started from a user profile folder\nlevel: medium",
+            "pattern": "title: Per-User Proxy or PAC Setting Changed by a Process Running From AppData\nid: a46ddda1-468c-4417-a38f-38ade5e69da6\nstatus: experimental\ndescription: >-\n    Detects a process running from a user AppData folder writing the ProxyServer,\n    ProxyEnable or AutoConfigURL value under the per-user Internet Settings key.\n    A Steam-focused executable delivered by a ClickFix chain changes these values\n    as part of a traffic-interception setup. The values it writes were not\n    recovered, so the rule keys on the writer and the setting, not the data.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/newdouble-clickfix-detections/\nauthor: The Hunters Ledger\ndate: 2026-09-28\ntags:\n    - attack.credential-access\n    - attack.collection\n    - attack.t1557\n    - detection.emerging-threats\n    - stp.2\nlogsource:\n    category: registry_set\n    product: windows\n    definition: 'Requires Sysmon EID 13 (RegistryEvent value set) with the Internet Settings key path included in the registry monitoring config.'\ndetection:\n    selection:\n        TargetObject|startswith: 'HKU\\'\n        TargetObject|contains: '\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\'\n        TargetObject|endswith:\n            - '\\ProxyServer'\n            - '\\ProxyEnable'\n            - '\\AutoConfigURL'\n        Image|contains: '\\AppData\\'\n    condition: selection\nfalsepositives:\n    - VPN, proxy and filtering clients installed under the user profile that manage the system proxy\n    - Developer proxy tools started from a user profile folder\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-09-28T00:00:00Z",
             "labels": [
@@ -398,7 +398,7 @@
             "id": "report--851e8bde-d374-5746-9390-ba1a54c91f64",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.41885Z",
-            "modified": "2026-10-01T19:54:15.41885Z",
+            "modified": "2026-10-11T05:44:22.224828Z",
             "name": "FACEIT ClickFix Pages Point CS2 Players to a Script URL That VirusTotal Ties to a Steam-Focused Executable",
             "report_types": [
                 "threat-report"
@@ -416,7 +416,7 @@
                 "indicator--e215c6ab-8a89-589c-8392-df91bb08557b",
                 "indicator--55a48c1f-b093-5b7c-a1ee-3b5b8caaea01",
                 "indicator--24e9b4a5-1256-52ce-8516-0a887229bd26",
-                "indicator--1f6946d9-5289-5691-9498-0d678a8881e8",
+                "indicator--26050564-c6fa-5e69-be4b-237c8db0c406",
                 "indicator--7f68f55d-57d8-5dd7-98ee-b24be22f816a",
                 "indicator--ae5fa070-a09e-5525-9a05-2d6bfab4fc53",
                 "indicator--f74d7379-50b9-51f4-b837-0ea0667a9d96",

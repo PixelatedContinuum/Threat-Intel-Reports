@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--03f1322b-bf20-41cd-bdee-c5c654cd6cad",
+    "id": "bundle--7179665f-793f-4688-9c4d-3a79ee68970b",
     "objects": [
         {
             "type": "identity",
@@ -355,15 +355,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--9a1d8d47-7a03-54ed-8e57-0e3e3216fe8d",
+            "id": "indicator--72d3a245-ec01-5f23-8ea2-939d6980bb40",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:14.819741Z",
-            "modified": "2026-10-01T19:54:14.819741Z",
-            "name": "KAIDO RAT Self-Deletion of Zone.Identifier Alternate Data Stream",
+            "created": "2026-10-11T05:44:21.139101Z",
+            "modified": "2026-10-11T05:44:21.139101Z",
+            "name": "Zone.Identifier Alternate Data Stream Deletion by a Process Outside System32 and Defender Paths",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: KAIDO RAT Self-Deletion of Zone.Identifier Alternate Data Stream\nid: d428415f-5926-466a-abcb-5cb91be4d187\nstatus: experimental\ndescription: >-\n  Detects a process deleting its own Zone.Identifier alternate data\n  stream shortly after launch, a Mark-of-the-Web bypass technique used\n  by the KAIDO Quasar-fork RAT to suppress SmartScreen re-checks on\n  subsequent executions. Anchored on the file-delete event rather than\n  file creation to avoid matching every downloaded file.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/\nauthor: The Hunters Ledger\ndate: 2026-07-03\ntags:\n    - attack.defense-impairment\n    - attack.t1553.005\n    - detection.emerging-threats\nlogsource:\n    category: file_delete\n    product: windows\ndetection:\n    selection:\n        TargetFilename|endswith: ':Zone.Identifier'\n    filter_legit_installer:\n        Image|contains:\n            - '\\Windows\\System32\\'\n            - '\\Program Files\\Windows Defender\\'\n    condition: selection and not filter_legit_installer\nfalsepositives:\n    - >-\n      Self-updating legitimate software (browsers, some installers) that\n      clears its own Zone.Identifier stream after a user-consented first run\n    - Administrative scripts that bulk-clear MOTW on downloaded files\nlevel: medium",
+            "pattern": "title: Zone.Identifier Alternate Data Stream Deletion by a Process Outside System32 and Defender Paths\nid: d428415f-5926-466a-abcb-5cb91be4d187\nstatus: experimental\ndescription: >-\n  Detects a file-delete event for a Zone.Identifier alternate data\n  stream by a process whose image path is outside System32 and the\n  Defender program folder. The KAIDO Quasar-fork RAT does this to its own\n  stream shortly after launch, a Mark-of-the-Web bypass that suppresses\n  SmartScreen re-checks on later executions. The rule does not test that\n  the deleting process is the file the stream belonged to, and nothing in\n  it identifies KAIDO. Anchored on the file-delete event rather than file\n  creation to avoid matching every downloaded file.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/\nauthor: The Hunters Ledger\ndate: 2026-07-03\ntags:\n    - attack.defense-impairment\n    - attack.t1553.005\n    - detection.emerging-threats\nlogsource:\n    category: file_delete\n    product: windows\n    definition: 'Requires Sysmon file-delete events (EID 23 FileDelete or EID 26 FileDeleteDetected). Whether a deleted alternate data stream is reported as a TargetFilename ending in :Zone.Identifier depends on the Sysmon build and configuration and was not tested here.'\ndetection:\n    selection:\n        TargetFilename|endswith: ':Zone.Identifier'\n    filter_legit_installer:  # sourced: Windows and Defender platform components, assumed to be the legitimate Zone.Identifier handlers; not confirmed against a captured event\n        Image|contains:\n            - '\\Windows\\System32\\'\n            - '\\Program Files\\Windows Defender\\'\n    condition: selection and not filter_legit_installer\nfalsepositives:\n    - >-\n      Self-updating legitimate software (browsers, some installers) that\n      clears its own Zone.Identifier stream after a user-consented first run\n    - Administrative scripts that bulk-clear MOTW on downloaded files\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-07-03T00:00:00Z",
             "labels": [
@@ -439,15 +439,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--538ac15a-1f90-52bf-a7a1-3631d0255714",
+            "id": "indicator--8e0136af-f341-5b4c-acdf-9aa87672111d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:14.820102Z",
-            "modified": "2026-10-09T13:20:05.981711Z",
-            "name": "THL HUNT KAIDO-EvilSoul-MaaS Quasar Binary Protocol C2 on TCP 4782 (RAT C2 Channel)",
+            "created": "2026-10-11T05:44:21.139517Z",
+            "modified": "2026-10-11T05:44:21.139517Z",
+            "name": "THL HUNT KAIDO-EvilSoul-MaaS Outbound TCP Payload to Port 4782 (Quasar Default Port, Port-Only Lead)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:\"THL HUNT KAIDO-EvilSoul-MaaS Quasar Binary Protocol C2 on TCP 4782 (RAT C2 Channel)\"; flow:established,to_server; dsize:>0; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/; classtype:trojan-activity; sid:9300801; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-03;)",
+            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:\"THL HUNT KAIDO-EvilSoul-MaaS Outbound TCP Payload to Port 4782 (Quasar Default Port, Port-Only Lead)\"; flow:established,to_server; dsize:>0; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/; classtype:trojan-activity; sid:9300801; rev:3; metadata:author The_Hunters_Ledger, date 2026-07-03;)",
             "pattern_type": "suricata",
             "valid_from": "2026-07-03T00:00:00Z",
             "labels": [
@@ -698,12 +698,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--33fa35ff-84e4-544a-9606-c68767d13f6f",
+            "id": "relationship--80e85931-745f-57b6-9c33-c2b5162e1870",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:14.821821Z",
-            "modified": "2026-10-01T19:54:14.821821Z",
+            "created": "2026-10-11T05:44:21.14163Z",
+            "modified": "2026-10-11T05:44:21.14163Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--9a1d8d47-7a03-54ed-8e57-0e3e3216fe8d",
+            "source_ref": "indicator--72d3a245-ec01-5f23-8ea2-939d6980bb40",
             "target_ref": "malware--f49d0ce1-123b-5a5a-afbe-b89c0eb81f35",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -754,12 +754,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--a05e218c-e602-5b47-ae4d-8a40f7ad77cc",
+            "id": "relationship--a3213f2b-d7b9-5be4-a6af-782cea7c78ed",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:14.822095Z",
-            "modified": "2026-10-01T19:54:14.822095Z",
+            "created": "2026-10-11T05:44:21.141984Z",
+            "modified": "2026-10-11T05:44:21.141984Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--538ac15a-1f90-52bf-a7a1-3631d0255714",
+            "source_ref": "indicator--8e0136af-f341-5b4c-acdf-9aa87672111d",
             "target_ref": "malware--f49d0ce1-123b-5a5a-afbe-b89c0eb81f35",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -813,7 +813,7 @@
             "id": "report--caeb4af1-7cfb-51f1-9401-c7268353f962",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.822386Z",
-            "modified": "2026-10-01T19:54:14.822386Z",
+            "modified": "2026-10-11T05:44:21.142317Z",
             "name": "KAIDO: A Brazilian Quasar-Fork RAT with Hidden-Desktop Session Hijacking",
             "report_types": [
                 "threat-report"
@@ -841,11 +841,11 @@
                 "indicator--5da887a0-ef61-52cd-b2d1-178369b86c5b",
                 "indicator--19f77272-bf46-5fed-8166-a49356cfb2c0",
                 "indicator--099e8f08-d95e-5cc5-8799-42d098252728",
-                "indicator--9a1d8d47-7a03-54ed-8e57-0e3e3216fe8d",
+                "indicator--72d3a245-ec01-5f23-8ea2-939d6980bb40",
                 "indicator--24dda273-27e3-5b34-8fa4-b52243069c74",
                 "indicator--a3121d92-1965-5c21-a5f6-cc523d810126",
                 "indicator--ef6ac06d-558b-5657-b8b6-dbd1faa59ddf",
-                "indicator--538ac15a-1f90-52bf-a7a1-3631d0255714",
+                "indicator--8e0136af-f341-5b4c-acdf-9aa87672111d",
                 "malware--0032795a-b22b-51b0-91d5-3006db3f60bc",
                 "malware--f49d0ce1-123b-5a5a-afbe-b89c0eb81f35",
                 "malware--3156d1ad-2fed-57a8-8931-a9e5308f7e37",
@@ -862,11 +862,11 @@
                 "relationship--99b12644-b23e-5fda-8eda-d2c2f19e274a",
                 "relationship--b6e9dd7b-5171-59c3-b46a-973eee41404e",
                 "relationship--af0eb688-92a0-5a81-b1a9-cfa98dca9b0f",
-                "relationship--33fa35ff-84e4-544a-9606-c68767d13f6f",
+                "relationship--80e85931-745f-57b6-9c33-c2b5162e1870",
                 "relationship--c125d694-ce1e-528a-a918-539096900003",
                 "relationship--2a9ddea7-2275-5beb-87bc-b3ac0c368551",
                 "relationship--d76d62f1-535e-5161-8e6d-7bc2161b12d2",
-                "relationship--a05e218c-e602-5b47-ae4d-8a40f7ad77cc",
+                "relationship--a3213f2b-d7b9-5be4-a6af-782cea7c78ed",
                 "relationship--ef07a61c-e0a4-5e41-93e4-ec34ac6cebcc",
                 "relationship--d90d6818-7cef-59a8-9abb-8e1f0716cc4c",
                 "relationship--1ae6acad-9404-5029-a914-41693e03e99e"

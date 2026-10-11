@@ -71,7 +71,7 @@ Two YARA false-positive clusters were identified during analysis and must be fil
 **Robustness:** 3
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
 **Confidence:** HIGH
-**Rationale:** `9Connector` and `13ConnectorHTTP` are Itanium-ABI RTTI typeinfo names for AdaptixC2's stock `Connector`/`ConnectorHTTP` transport-plugin classes, and `GetVersions` is the framework's unrenamed RDI loader export — none of these are attacker-configurable; an operator would need to fork and rebuild the AdaptixC2 source itself to remove them. Paired with the `X-Beacon-Id` heartbeat-header string (also framework source-level), this combination survives infrastructure rotation and any listener-profile customization.
+**Rationale:** `9Connector` and `13ConnectorHTTP` are Itanium-ABI RTTI typeinfo names for AdaptixC2's stock `Connector`/`ConnectorHTTP` transport-plugin classes, and `GetVersions` is the framework's unrenamed RDI loader export — none of these are attacker-configurable; an operator would need to fork and rebuild the AdaptixC2 source itself to remove them. The rule requires both RTTI names and the `X-Beacon-Id` heartbeat-header string (also framework source-level), plus either `GetVersions` or the `Mingw-w64 runtime failure:` string. The second string lets an EXE build, which may carry no `GetVersions` export, and any other MinGW-built file satisfy that clause, so `GetVersions` is not required. The combination survives infrastructure rotation and any listener-profile customization.
 **False Positives:** None known — the RTTI typeinfo strings and the `X-Beacon-Id` literal are not present in any known legitimate software; `filesize < 300KB` further scopes the match to the beacon's actual size class.
 **Blind Spots:** A forked/patched AdaptixC2 build that strips or renames the RTTI class names and the `X-Beacon-Id` header would evade; memory-only variants that never touch disk need the memory-scan deployment path.
 **Validation:** Scan `agent.x64.dll`/`agent.x64.exe`/`msupdate.dll` (hash1 below and its sideload sibling) — must match; an unrelated Windows PE must NOT fire.
@@ -89,7 +89,7 @@ Two YARA false-positive clusters were identified during analysis and must be fil
 rule MALW_AdaptixC2_Windows_Beacon_Stock
 {
     meta:
-        description = "Detects AdaptixC2 Windows beacon (DLL/EXE) by stock Itanium-ABI RTTI typeinfo strings, RDI loader export, and heartbeat header — catches any operator running stock AdaptixC2 with default connector names"
+        description = "Detects AdaptixC2 Windows beacon (DLL/EXE) by stock Itanium-ABI RTTI typeinfo strings, the X-Beacon-Id heartbeat header, and either the GetVersions RDI loader export name or the MinGW-w64 runtime-failure string — catches any operator running stock AdaptixC2 with default connector names"
         license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
         author = "The Hunters Ledger"
         reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/"

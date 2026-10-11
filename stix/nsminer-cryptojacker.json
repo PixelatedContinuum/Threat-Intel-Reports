@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--eb7a7b8b-1d75-4077-8823-d78ded0d0027",
+    "id": "bundle--3843a358-4a66-4cfa-9c08-7baea8aaf822",
     "objects": [
         {
             "type": "identity",
@@ -168,12 +168,12 @@
             "id": "indicator--0d90fcbd-64f5-5bf7-98dc-a5d220dcece8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-09-19T20:27:57.515509Z",
-            "modified": "2026-09-19T20:27:57.515509Z",
+            "modified": "2026-10-11T05:44:22.446775Z",
             "name": "NsMiner_Dropper_Downloader",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "/*\n   Yara Rule Set\n   Identifier: NsMiner Cryptojacker\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule NsMiner_Dropper_Downloader {\n   meta:\n      description = \"Detects the NsMiner NSIS dropper (IMG001.exe) via its Nullsoft installer marker paired with the NsMiner branding string, and/or the FTP downloader component (tftp.exe) via its FTP/WinINet API usage combined with the hardcoded C2 URL and FTP credential strings\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/nsminer-cryptojacker-detections/\"\n      date = \"2026-02-02\"\n      hash1 = \"e06aa8ce984b22dd80a60c1f818b781b05d1c07facc91fec8637b312a728c145\"\n      hash2 = \"40fe74d3a1116ed8ca64c62feb694327a414059eeaef62c28bc5917e2e991b3d\"\n      family = \"NsMiner\"\n      malware_type = \"Cryptojacker\"\n      campaign = \"NsMiner-125.19.150.122-Cryptojacking\"\n      id = \"2c885404-1e39-5625-8669-655511ea27a5\"\n   strings:\n      // From IMG001.exe (NSIS Dropper)\n      $nsis1 = \"Nullsoft Scriptable Install System\" fullword ascii\n      $nsis2 = \"NsMiner\" fullword wide\n\n      // From tftp.exe (Downloader)\n      $ftp1 = \"FtpGetFileA\" fullword ascii\n      $ftp2 = \"InternetConnectA\" fullword ascii\n      $c2_http = \"http://hrtests.ru/S.php\" fullword ascii\n      $c2_ftp_user = \"DIOSESFIEL\" fullword ascii\n      $c2_ftp_pass = \"BLUEAIRWOLF\" fullword ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      (\n         (all of ($nsis*)) or\n         (2 of ($ftp*) and 2 of ($c2*))\n      )\n}",
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: NsMiner Cryptojacker\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule NsMiner_Dropper_Downloader {\n   meta:\n      description = \"Detects the NsMiner NSIS dropper (IMG001.exe) via its Nullsoft installer marker paired with the NsMiner branding string, and/or the FTP downloader component (tftp.exe) via two FTP/WinINet API names combined with any two of the hardcoded C2 URL, FTP user name and FTP password strings\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/nsminer-cryptojacker-detections/\"\n      date = \"2026-02-02\"\n      hash1 = \"e06aa8ce984b22dd80a60c1f818b781b05d1c07facc91fec8637b312a728c145\"\n      hash2 = \"40fe74d3a1116ed8ca64c62feb694327a414059eeaef62c28bc5917e2e991b3d\"\n      family = \"NsMiner\"\n      malware_type = \"Cryptojacker\"\n      campaign = \"NsMiner-125.19.150.122-Cryptojacking\"\n      id = \"2c885404-1e39-5625-8669-655511ea27a5\"\n   strings:\n      // From IMG001.exe (NSIS Dropper)\n      $nsis1 = \"Nullsoft Scriptable Install System\" fullword ascii\n      $nsis2 = \"NsMiner\" fullword wide\n\n      // From tftp.exe (Downloader)\n      $ftp1 = \"FtpGetFileA\" fullword ascii\n      $ftp2 = \"InternetConnectA\" fullword ascii\n      $c2_http = \"http://hrtests.ru/S.php\" fullword ascii\n      $c2_ftp_user = \"DIOSESFIEL\" fullword ascii\n      $c2_ftp_pass = \"BLUEAIRWOLF\" fullword ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      (\n         (all of ($nsis*)) or\n         (2 of ($ftp*) and 2 of ($c2*))\n      )\n}",
             "pattern_type": "yara",
             "valid_from": "2026-02-02T00:00:00Z",
             "labels": [

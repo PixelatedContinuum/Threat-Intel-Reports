@@ -1247,6 +1247,8 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT CloudSync-Assemble
 alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT CloudSync-Assembler-Toolkit Shares Heartbeat Terminator Marker (C2 Heartbeat)"; flow:established,to_server; content:"[Shares]"; pcre:"/\[(C2_END|END)\]/"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/; classtype:trojan-activity; sid:9301602; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-03;)
 ```
 
+### Hunting Rules
+
 **SentinelStealer (Sourced, Separate Tier)**
 
 #### SentinelStealer c3lestial.fun TLS SNI

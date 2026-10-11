@@ -406,18 +406,18 @@ level: medium
 
 ### Hunting Rules
 
-#### BellaMain USOM Blocklist Poll from Web Server (Network Layer)
+#### BellaMain USOM Blocklist Poll From an Internal Host (Network Layer)
 
 **Tier:** Hunting
 **Robustness:** 1
 **ATT&CK Coverage:** T1518.001 (Software Discovery: Security Software)
 **Confidence:** MODERATE
-**Rationale:** Corrected from the original, which was titled and rationalized as "USOM Egress Combined with Telegram Outbound" but whose condition only ever implemented the USOM-poll half — Suricata cannot natively express the cross-flow, cross-host-scoped AND-correlation with Telegram traffic that the paired Sigma correlation rule above now implements at the log layer. As a standalone network signal, USOM blocklist polling from a non-CERT-affiliated host has real overlap with legitimate Turkish security tooling (the IOC feed itself flags this URL as HIGH false-positive risk on its own), so this is Hunting, not Detection. `rev` bumped to 2 for the corrected `msg` and reframed rationale.
+**Rationale:** Corrected from the original, which was titled and rationalized as "USOM Egress Combined with Telegram Outbound" but whose condition only ever implemented the USOM-poll half — Suricata cannot natively express the cross-flow, cross-host-scoped AND-correlation with Telegram traffic that the paired Sigma correlation rule above now implements at the log layer. The rule matches an HTTP request from any `$HOME_NET` host to a host ending `usom.gov.tr` for a URI containing `url-list.txt`; it has no web-server or host-role test (an earlier title said "from Web Server"). As a standalone network signal, USOM blocklist polling has real overlap with legitimate Turkish security tooling (the IOC feed itself flags this URL as HIGH false-positive risk on its own), so this is Hunting, not Detection. `rev` bumped to 2 for the corrected `msg` and reframed rationale.
 **False Positives:** Turkish security tools, CERT-affiliated platforms, and threat-intelligence products that legitimately poll the USOM blocklist from any network segment.
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points; correlate hits with Telegram Bot API traffic from the same source within roughly 5 minutes (see the paired Sigma correlation rule) before treating as a high-confidence lead.
 
 ```suricata
-alert http $HOME_NET any -> any any (msg:"THL HUNT BellaMain-PhaaS USOM Blocklist Poll from Web Server (Security Tool Discovery Indicator)"; flow:established,to_server; http.host; content:"usom.gov.tr"; endswith; http.uri; content:"url-list.txt"; nocase; threshold:type limit,track by_src,count 1,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/; classtype:policy-violation; sid:9300404; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-16;)
+alert http $HOME_NET any -> any any (msg:"THL HUNT BellaMain-PhaaS USOM Blocklist Poll From an Internal Host (Security Tool Discovery Indicator)"; flow:established,to_server; http.host; content:"usom.gov.tr"; endswith; http.uri; content:"url-list.txt"; nocase; threshold:type limit,track by_src,count 1,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/; classtype:policy-violation; sid:9300404; rev:4; metadata:author The_Hunters_Ledger, date 2026-05-16;)
 ```
 
 ---

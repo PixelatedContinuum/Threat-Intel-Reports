@@ -54,7 +54,7 @@ This campaign recovered two distinct code families sharing operator infrastructu
 **Robustness:** 2
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1573.001 (Symmetric Cryptography)
 **Confidence:** HIGH
-**False Positives:** None known — the primary anchor requires either the `OpenStrike Beacon starting...` startup banner or the `Registration successful` + `beacon ready` status-message pairing, both distinctive branded strings; the secondary anchor group (`aes_cbc_encrypt`, `hmac_sha256`, the shared AES IV, and the GCC compiler banner) is generic in isolation but never sufficient on its own without the primary clause.
+**False Positives:** None known — the primary anchor requires either the `OpenStrike Beacon starting...` startup banner or the `Registration successful` + `beacon ready` status-message pairing, both distinctive branded strings; the secondary group (`aes_cbc_encrypt`, `hmac_sha256`, the shared AES IV, and the GCC compiler banner) is generic in isolation and never sufficient on its own, but any one of the four satisfies the second clause once the primary clause matches.
 **Blind Spots:** A stripped-logging release build that removes every banner/status print string evades this rule; the generic crypto-function names and compiler banner carry no weight alone.
 **Validation:** Scan `beacon.exe` (hash1 below) — must match; a benign C application linking a stock AES/HMAC library must NOT fire (its banner and status strings differ).
 **Deployment:** Endpoint AV/EDR file scan, memory scanning of process images matching the beacon's execution pattern.
@@ -70,7 +70,7 @@ This campaign recovered two distinct code families sharing operator infrastructu
 
 rule RAT_OpenStrike_C_Beacon {
    meta:
-      description = "Detects the OpenStrike custom C C2 beacon (beacon.exe) via its operator-written startup/status debug strings, paired with AES-CBC/HMAC-SHA256 crypto function references and the shared MinGW GCC 15 build banner"
+      description = "Detects the OpenStrike custom C C2 beacon (beacon.exe) via its operator-written startup/status debug strings (the startup banner, or the registration-successful and beacon-ready pair), paired with at least one of four secondary strings: the shared AES IV, the aes_cbc_encrypt name, the hmac_sha256 name or the MinGW GCC 15 build banner. One secondary string suffices"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/open-directory-172-105-0-126-20260406-detections/"
@@ -112,7 +112,7 @@ rule RAT_OpenStrike_C_Beacon {
 ```yara
 rule TOOLKIT_OpenStrike_Loader_Chain {
    meta:
-      description = "Detects OpenStrike's standalone shellcode loader chain (run.exe, sc_loader.exe, veh_loader.exe, dbg_loader.exe, stager.exe) via operator-written crash-handler and entry-point-discovery debug strings shared across the progressive SEH/VEH/INT3 capability chain, paired with the shared MinGW GCC 15 build banner"
+      description = "Detects OpenStrike's standalone shellcode loader chain (run.exe, sc_loader.exe, veh_loader.exe, dbg_loader.exe, stager.exe) via operator-written crash-handler and entry-point-discovery debug strings shared across the progressive SEH/VEH/INT3 capability chain. Each crash-handler or INT3 string is paired with the [*] Loading %s string; only the [+] %lu @ %p exec string is paired with the MinGW GCC 15 build banner"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/open-directory-172-105-0-126-20260406-detections/"
@@ -145,7 +145,7 @@ rule TOOLKIT_OpenStrike_Loader_Chain {
 **ATT&CK Coverage:** T1059.006 (Python), T1071.001 (Web Protocols)
 **Confidence:** HIGH
 **False Positives:** None known — `OpenStrike Universal Beacon` is a self-identifying branded string with no plausible legitimate collision; the RSA-2048 modulus prefix and `/qz99` staging path are hardcoded operator constants.
-**Blind Spots:** A rebrand that removes the self-identification banner from the Python source evades this rule; a build using a regenerated RSA keypair changes the modulus prefix (the banner string alone still carries the rule).
+**Blind Spots:** A rebrand that removes the self-identification banner from the Python source evades this rule; a build using a regenerated RSA keypair changes the modulus prefix, and the rule then needs the `/qz99` URI or the `bof_executor` plus shared IV pair alongside the banner. The banner alone does not match: the rule requires the banner and one of the three corroborating branches.
 **Validation:** Scan `beacon_universal.py` — must match; a benign Python script coincidentally using ctypes and a hardcoded IV must NOT fire (it lacks the OpenStrike banner and campaign-specific constants).
 **Deployment:** Endpoint AV/EDR file scan, static triage of unknown Python scripts.
 
@@ -176,22 +176,23 @@ rule TOOLKIT_OpenStrike_Python_Beacon {
 
 **Cobalt Strike 3.x**
 
-#### Cobalt Strike 3.x Tripwired ReflectiveLoader + MALC Malleable Profile
+#### Cobalt Strike 3.x MALC Malleable Profile Beacon
 
 **Tier:** Detection
 **Robustness:** 2
-**ATT&CK Coverage:** T1071.001 (Web Protocols — MALC Malleable C2 profile), T1620 (Reflective Code Loading — tripwired entry point)
+**ATT&CK Coverage:** T1071.001 (Web Protocols), T1620 (Reflective Code Loading)
+**ATT&CK Note:** The MALC User-Agent string maps to T1071.001. T1620 applies only when the `ReflectiveLoader` string or the `66 90 CC` bytes are among the two corroborating strings; the rule does not require either one, and it does not test where the bytes sit in the file.
 **Confidence:** HIGH
-**Rationale:** The MALC User-Agent string (`$ua`) is the mandatory anchor — a distinctive, multi-byte Malleable C2 profile artifact with no legitimate collision. The entry-point tripwire bytes (`66 90 CC`) are retained as one option within a 2-of-5 corroborating group backed by four solid string alternatives, since a 3-byte pattern alone is too short to anchor a rule reliably; no match path is carried by the tripwire bytes alone.
+**Rationale:** The rule was renamed from "Tripwired ReflectiveLoader" because the condition never required the tripwire: it tests the three bytes `66 90 CC` only as one of five optional corroborators, anywhere in the file, and does not locate the ReflectiveLoader entry point. The MALC User-Agent string (`$ua`) is the mandatory anchor — a distinctive, multi-byte Malleable C2 profile artifact with no legitimate collision. The entry-point tripwire bytes (`66 90 CC`) are retained as one option within a 2-of-5 corroborating group backed by four solid string alternatives, since a 3-byte pattern alone is too short to anchor a rule reliably; no match path is carried by the tripwire bytes alone.
 **False Positives:** None known — the MALC User-Agent suffix is a distinctive Malleable C2 profile artifact absent from legitimate software; requiring 2 corroborating strings from the original DLL name, ReflectiveLoader export, spawn-to path, shared custom AES IV, or entry-point tripwire bytes further reduces coincidental collision risk.
 **Blind Spots:** A rebuilt beacon using a different Malleable C2 profile (no MALC UA) evades this rule entirely; a release build with a default rundll32 spawn-to and unmodified reflective loader would also evade if it additionally used a different profile UA.
 **Validation:** Scan `beacon_patched.x64.dll` (hash1 below) — must match; a stock/default Cobalt Strike 3.x beacon DLL with the default Malleable C2 profile must NOT fire (its User-Agent lacks the MALC suffix).
 **Deployment:** Endpoint AV/EDR file scan, memory scanning of rundll32.exe-hosted or reflectively-loaded modules.
 
 ```yara
-rule MALW_CobaltStrike3x_TripwiredReflectiveLoader {
+rule MALW_CobaltStrike3x_MALC_Malleable_Profile_Beacon {
    meta:
-      description = "Detects the operator-modified Cobalt Strike 3.x DLL beacon (beacon_patched.x64.dll) sharing this campaign's Malleable C2 profile via its distinctive MALC User-Agent suffix, corroborated by the original DLL name, ReflectiveLoader export, sysnative rundll32 spawn-to path, the shared custom AES IV, or the entry-point tripwire bytes (66 90 CC / xchg ax,ax; int3) that redirect the ReflectiveLoader export RVA to crash standard reflective-injection tooling"
+      description = "Detects the operator-modified Cobalt Strike 3.x DLL beacon (beacon_patched.x64.dll) sharing this campaign's Malleable C2 profile via its distinctive MALC User-Agent suffix, corroborated by any two of five strings: the original DLL name, the ReflectiveLoader export name, the sysnative rundll32 spawn-to path, the shared custom AES IV, or the byte pattern 66 90 CC (xchg ax,ax; int3), which the report ties to the sample's entry-point tripwire. The bytes are matched anywhere in the file and the entry point is not checked"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/open-directory-172-105-0-126-20260406-detections/"
@@ -202,7 +203,7 @@ rule MALW_CobaltStrike3x_TripwiredReflectiveLoader {
       family = "CobaltStrike"
       malware_type = "C2 Beacon"
       campaign = "OpenStrike-CSBeacon-Toolkit-172.105.0.126"
-      id = "23095eb8-e1a4-565d-a5c9-9c1f45ad4eaf"
+      id = "0f1b88a7-00a7-56e5-8503-6bbcf89432b7"
    strings:
       $reflective_export = "ReflectiveLoader" ascii
       $original_name = "beacon.x64.dll" ascii

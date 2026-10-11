@@ -23,14 +23,14 @@ This open directory hosted three malicious payloads from a single staging server
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 3 | 1 | T1027, T1036, T1055, T1055.012, T1059.001, T1071.001, T1140, T1571, T1573.001, T1573.002, T1620 | 0 |
-| Sigma | 2 | 2 | T1059.001, T1059.003, T1071.001, T1140, T1620 | 1 |
+| Sigma | 1 | 3 | T1059.001, T1059.003, T1071.001, T1140, T1620 | 1 |
 | Suricata | 2 | 0 | T1036, T1071.001, T1571 | 1 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
 
 **Highest-confidence anchors:**
 - The `github.com/Ne0nd0g/go-clr` import path, the `WindosVersion` pclntab typo, and the custom RunPE parser error strings are compile-time artifacts baked into any binary built from XiebroC2 3.1 source. They survive AES-key rotation and are the strongest family anchors in the set (YARA Detection).
-- The Sigma CLR-load rule (image_load of `mscoree.dll`/`clr.dll` from a non-.NET-host process) requires no filename or campaign-specific literal at all. It detects the underlying reflective-CLR-hosting technique itself and is the most durable rule in this file (Sigma Detection, Robustness 3).
+- The Sigma CLR-load rule (image_load of `mscoree.dll`/`clr.dll` from a process outside a short .NET host list) needs no filename or campaign-specific literal and keys on the reflective CLR-hosting technique, so it is durable. It matches every managed application not on the list, so it is Hunting tier (Robustness 2, level low), and nothing in it identifies Go or XiebroC2.
 
 **Atomics routed to the IOC feed:** the XiebroC2 C2 endpoint (`193.56.255.154:4444/TCP`) and the implant filename `main.exe` are transient/host-correlation indicators already present in [`opendirectory-193-56-255-154-20260403-iocs.json`](/ioc-feeds/opendirectory-193-56-255-154-20260403-iocs.json). No new feed entries were required. One original Suricata rule (bare IP:port match, no content anchor) and one original Sigma rule (bare `ParentImage: main.exe` match, no injection-specific logic) keyed solely on these values with nothing behavioral surviving their removal; see Coverage Gaps for the full reasoning.
 
@@ -71,13 +71,13 @@ Rules are grouped by family within each tier subsection (Detection Rules / Hunti
 **Confidence:** HIGH
 **False Positives:** None known — the hand-typed AES key literal, the pclntab typo (`WindosVersion`), the `go-clr` offensive-tool import path, and the custom RunPE parser error strings are all compile-time artifacts embedded only in binaries built from XiebroC2 3.1 source; no legitimate Go binary carries any of them.
 **Blind Spots:** A rebuild that simultaneously rotates the AES key, fixes the source typo, and drops the go-clr dependency would evade; the rule targets on-disk/in-memory Go binaries, not a decrypted-traffic-only variant.
-**Validation:** Scan a XiebroC2 3.1-lineage sample — 3 of the 8 listed strings must match; a benign Go binary (including one that legitimately embeds .NET interop) must NOT fire.
+**Validation:** Scan a XiebroC2 3.1-lineage sample — 3 of the 7 distinct strings must match; a file holding the AES key literal plus a single other string must NOT fire; a benign Go binary (including one that legitimately embeds .NET interop) must NOT fire.
 **Deployment:** Endpoint AV/EDR disk scan, memory scanner targeting live Go processes.
 
 ```yara
 rule RAT_XiebroC2_v31_Go_TCP_Implant {
    meta:
-      description = "Detects XiebroC2 v3.1 Go TCP implant via a combination of hardcoded AES-128-ECB key, source-code typo in its pclntab symbol table (WindosVersion), vendored offensive go-clr CLR hosting library import, and unique RunPE PE-parser error strings. All eight indicators are static compile-time artifacts embedded in any binary built from XiebroC2 3.1 source; the rule requires any 3 to avoid dependence on any single renameable or rotatable literal."
+      description = "Detects XiebroC2 v3.1 Go TCP implant via a combination of hardcoded AES-128-ECB key, source-code typo in its pclntab symbol table (WindosVersion), vendored offensive go-clr CLR hosting library import, and unique RunPE PE-parser error strings. All seven distinct indicators are static compile-time artifacts embedded in any binary built from XiebroC2 3.1 source; the rule requires any 3 of the seven to avoid dependence on any single renameable or rotatable literal. The AES key counts once; an earlier version also declared its hex bytes as a second string, so one occurrence of the key counted twice."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/"
@@ -88,7 +88,6 @@ rule RAT_XiebroC2_v31_Go_TCP_Implant {
       id = "90df8d57-e457-57d1-b7c5-2b318c32508e"
    strings:
       $s1 = "QWERt_CSDMAHUATW" ascii
-      $b1 = { 51 57 45 52 74 5F 43 53 44 4D 41 48 55 41 54 57 }
       $s2 = "main/Helper/sysinfo.WindosVersion" ascii
       $s3 = "github.com/Ne0nd0g/go-clr" ascii
       $s4 = "DOS image header magic string was not MZ" ascii
@@ -98,7 +97,7 @@ rule RAT_XiebroC2_v31_Go_TCP_Implant {
    condition:
       uint16(0) == 0x5A4D and
       filesize < 25MB and
-      3 of ($s1, $b1, $s2, $s3, $s4, $s5, $s6, $s7)
+      3 of ($s1, $s2, $s3, $s4, $s5, $s6, $s7)
 }
 ```
 
@@ -228,79 +227,6 @@ rule RAT_XiebroC2_v31_PaddedConfig_Structural {
 ### Detection Rules
 
 **XiebroC2 v3.1**
-
-#### XiebroC2 Go Implant Loading Windows CLR at Runtime via Go-Clr
-
-**Tier:** Detection
-**Robustness:** 3
-**ATT&CK Coverage:** T1620 (Reflective Code Loading — in-process CLR hosting via go-clr)
-**Confidence:** HIGH
-**False Positives:**
-- Legitimate applications built with Go that embed .NET interop via documented COM interop mechanisms (rare but possible in enterprise software)
-- Custom in-house Go tooling that intentionally hosts the CLR for legitimate automation purposes
-- Security research tools or red team frameworks other than XiebroC2 that use go-clr
-**Blind Spots:** Misses XiebroC2 builds that never exercise the go-clr inline-assembly command (pure TCP-shell operation without CLR hosting); an incomplete filter list could mask an unlisted legitimate .NET host process.
-**Validation:** Trigger the go-clr inline-assembly command on a XiebroC2 sample — must fire; launching any process in the filter list (`dotnet.exe`, `powershell.exe`, etc.) must NOT fire.
-**Deployment:** Sysmon Event ID 7 (ImageLoad); requires Sysmon with ImageLoad enabled.
-
-Corrected from the original: the YAML `tags` block listed `attack.t1055.012` (Process Hollowing) despite the rule's own description and detection logic describing an image-load event of `mscoree.dll`/`clr.dll`. That is T1620 (Reflective Code Loading), not process hollowing (which requires suspended-process creation and entry-point patching, an entirely different Sysmon event covered separately). The tag is corrected below and the unsupported `attack.privilege-escalation` tactic tag (this rule detects in-process CLR hosting, not escalation into a higher-privileged process) is dropped. This is the most durable rule in the file. It does not depend on any filename, IP, or campaign-specific literal.
-
-```yaml
-title: XiebroC2 Go Implant Loading Windows CLR at Runtime via Go-Clr
-id: a3f7c821-5e4b-4d09-bc21-7f3a9e5c8d04
-status: experimental
-description: >-
-  Detects a Go binary (main.exe) loading mscoree.dll or clr.dll at runtime,
-  the behavioral signature of the XiebroC2 v3.1 inline-assembly command
-  executing via the vendored go-clr library to host the Windows CLR
-  in-process. Legitimate Go binaries do not host the CLR. This event fires
-  regardless of whether the .NET assembly payload was written to disk,
-  making it effective against fully fileless .NET delivery chains.
-references:
-    - https://the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/
-    - https://github.com/Ne0nd0g/go-clr
-author: The Hunters Ledger
-date: 2026-04-03
-tags:
-    - attack.stealth
-    - attack.execution
-    - attack.t1620
-    - detection.emerging-threats
-logsource:
-    category: image_load
-    product: windows
-detection:
-    selection:
-        ImageLoaded|endswith:
-            - '\mscoree.dll'
-            - '\clr.dll'
-    filter_legitimate_dotnet_hosts:
-        Image|endswith:
-            - '\dotnet.exe'
-            - '\msbuild.exe'
-            - '\powershell.exe'
-            - '\pwsh.exe'
-            - '\csc.exe'
-            - '\vbc.exe'
-            - '\cmstp.exe'
-            - '\installutil.exe'
-            - '\regsvcs.exe'
-            - '\regasm.exe'
-            - '\mscorsvw.exe'
-            - '\ngen.exe'
-            - '\clrjit.dll'
-            - '\dfsvc.exe'
-            - '\ieinstal.exe'
-            - '\PresentationHost.exe'
-    condition: selection and not filter_legitimate_dotnet_hosts
-falsepositives:
-    - Legitimate applications built with Go that embed .NET interop via documented COM interop mechanisms (rare but possible in enterprise software)
-    - Custom in-house Go tooling that intentionally hosts the CLR for legitimate automation purposes
-    - Security research tools or red team frameworks other than XiebroC2 that use go-clr
-level: high
-```
-
-**Covenant C2 GruntStager**
 
 #### Covenant C2 GruntStager HTTP Beacon: Campaign Session Token Detected
 
@@ -467,6 +393,82 @@ falsepositives:
 level: medium
 ```
 
+#### Process Outside a .NET Host List Loading the Windows CLR at Runtime
+
+**Tier:** Hunting
+**Robustness:** 2
+**ATT&CK Coverage:** T1620 (Reflective Code Loading — in-process CLR hosting via go-clr)
+**Confidence:** HIGH
+**Rationale:** The rule keys on the technique (a process loading the CLR that is not a known .NET host) and not on any filename or campaign literal, which is why the durability is good. Precision is poor: `mscoree.dll` and `clr.dll` load into every .NET Framework application, and only 15 toolchain host names are excluded, so nearly every managed desktop application not on that list matches. Nothing in the selection identifies a Go binary or XiebroC2. It was re-tiered from Detection to Hunting for that reason, and its level lowered from high to low.
+**False Positives:**
+- Any managed (.NET Framework) application whose image is not in the filter list, which is most managed desktop and service software
+- Legitimate applications built with Go that embed .NET interop via documented COM interop mechanisms (rare but possible in enterprise software)
+- Custom in-house Go tooling that intentionally hosts the CLR for legitimate automation purposes
+- Security research tools or red team frameworks other than XiebroC2 that use go-clr
+**Blind Spots:** The load is not tied to Go or to go-clr, so the volume of unrelated managed software decides the usefulness of the rule. Misses XiebroC2 builds that never exercise the go-clr inline-assembly command (pure TCP-shell operation without CLR hosting); an incomplete filter list could mask an unlisted legitimate .NET host process.
+**Validation:** Trigger the go-clr inline-assembly command on a XiebroC2 sample and confirm the load event fires. Launching any process in the filter list (`dotnet.exe`, `powershell.exe`, etc.) must NOT fire. An ordinary managed application that is not in the filter list WILL fire; that is the false-positive population.
+**Deployment:** Sysmon Event ID 7 (ImageLoad); requires Sysmon with ImageLoad enabled.
+
+Corrected from the original: the YAML `tags` block listed `attack.t1055.012` (Process Hollowing) despite the rule's own description and detection logic describing an image-load event of `mscoree.dll`/`clr.dll`. That is T1620 (Reflective Code Loading), not process hollowing (which requires suspended-process creation and entry-point patching, an entirely different Sysmon event covered separately). The tag is corrected below and the unsupported `attack.privilege-escalation` tactic tag (this rule detects in-process CLR hosting, not escalation into a higher-privileged process) is dropped. The selection does not depend on any filename, IP, or campaign-specific literal, which makes it durable but also non-specific.
+
+```yaml
+title: Process Outside a .NET Host List Loading the Windows CLR at Runtime
+id: a3f7c821-5e4b-4d09-bc21-7f3a9e5c8d04
+status: experimental
+description: >-
+  Detects any process whose image is not on a short list of .NET toolchain
+  hosts loading mscoree.dll or clr.dll. The XiebroC2 v3.1 inline-assembly
+  command hosts the CLR in-process through the vendored go-clr library, and
+  that load would match; so would every other managed application that is
+  not on the list. The rule tests nothing that identifies a Go binary or
+  XiebroC2, so it is a scoping lead, not an alert. The event fires whether
+  or not the .NET assembly payload was written to disk.
+references:
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/
+    - https://github.com/Ne0nd0g/go-clr
+author: The Hunters Ledger
+date: 2026-04-03
+tags:
+    - attack.stealth
+    - attack.execution
+    - attack.t1620
+    - detection.emerging-threats
+    - stp.3
+logsource:
+    category: image_load
+    product: windows
+detection:
+    selection:
+        ImageLoaded|endswith:
+            - '\mscoree.dll'
+            - '\clr.dll'
+    filter_legitimate_dotnet_hosts:  # sourced: Microsoft-shipped .NET toolchain host executables (documented platform defaults)
+        Image|endswith:
+            - '\dotnet.exe'
+            - '\msbuild.exe'
+            - '\powershell.exe'
+            - '\pwsh.exe'
+            - '\csc.exe'
+            - '\vbc.exe'
+            - '\cmstp.exe'
+            - '\installutil.exe'
+            - '\regsvcs.exe'
+            - '\regasm.exe'
+            - '\mscorsvw.exe'
+            - '\ngen.exe'
+            - '\dfsvc.exe'
+            - '\ieinstal.exe'
+            - '\PresentationHost.exe'
+    condition: selection and not filter_legitimate_dotnet_hosts
+falsepositives:
+    - Legitimate applications built with Go that embed .NET interop via documented COM interop mechanisms (rare but possible in enterprise software)
+    - Custom in-house Go tooling that intentionally hosts the CLR for legitimate automation purposes
+    - Security research tools or red team frameworks other than XiebroC2 that use go-clr
+level: low
+```
+
+**Covenant C2 GruntStager**
+
 ---
 
 ## Suricata Signatures
@@ -492,21 +494,22 @@ Corrected from the original: the `http` app-layer rule pinned destination port `
 alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT OpenDirectory-XiebroC2-Covenant Covenant GruntStager HTTP C2 Beacon (Campaign Session Token in POST Body)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/en-us/"; startswith; http.request_body; content:"session=75db-99b1-25fe4e9afbe58696-320bea73"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/; classtype:trojan-activity; sid:9000101; rev:3; metadata:author The_Hunters_Ledger, date 2026-04-03;)
 ```
 
-#### Covenant GruntStager Masquerade: Chrome 41 Windows 7 UA on Port 443
+#### Covenant GruntStager Masquerade: Chrome 41 Windows 7 UA With /en-us/ URI
 
 **Tier:** Detection
 **Robustness:** 2
-**ATT&CK Coverage:** T1071.001 (Web Protocols), T1036 (Masquerading), T1571 (Non-Standard Port — plaintext HTTP on port 443)
+**ATT&CK Coverage:** T1071.001 (Web Protocols), T1036 (Masquerading)
+**ATT&CK Note:** The report records the Covenant listener running cleartext HTTP on port 443 (T1571). The rule header leaves the destination port as `any`, as the sticky-buffer convention requires, and tests the user agent and URI path only, so it does not cover T1571 and fires on this user agent and path on any port.
 **Confidence:** HIGH
 **False Positives:** The Chrome 41 UA alone may appear on legacy enterprise endpoints with genuinely outdated browsers; the mandatory combination with the `/en-us/` masquerade URI path (both content matches are ANDed in Suricata by default) substantially narrows this.
-**Blind Spots:** A rebuild using a different masquerade UA or URI convention evades this rule; requires the sensor to parse plaintext HTTP on port 443 rather than assuming all port-443 traffic is TLS.
+**Blind Spots:** A rebuild using a different masquerade UA or URI convention evades this rule; requires the sensor to parse plaintext HTTP on port 443 rather than assuming all port-443 traffic is TLS. The user agent is matched on `Windows NT 6.1` and `Chrome/41.0.2228.0` as two separate substrings in either order.
 **Validation:** Replay a captured GruntStager probe/beacon request — must alert; modern-browser HTTPS traffic to port 443 must NOT.
-**Deployment:** Network IDS/IPS; HTTP inspection on port 443; effective only if the sensor parses plaintext HTTP on port 443 rather than assuming TLS.
+**Deployment:** Network IDS/IPS with HTTP inspection. To see the campaign's traffic the sensor must parse plaintext HTTP on port 443 (the report's listener) and not assume all port-443 traffic is TLS; the rule itself does not test the port.
 
 Same port and metadata-schema corrections as the rule above.
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT OpenDirectory-XiebroC2-Covenant Covenant GruntStager Chrome-41-Windows-7 UA Masquerade on Port 443 (Cleartext HTTP C2 Indicator)"; flow:established,to_server; http.user_agent; content:"Chrome/41.0.2228.0"; nocase; http.uri; content:"/en-us/"; startswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/; classtype:trojan-activity; sid:9000102; rev:3; metadata:author The_Hunters_Ledger, date 2026-04-03;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT OpenDirectory-XiebroC2-Covenant Covenant GruntStager Chrome-41-Windows-7 UA Masquerade With /en-us/ URI (Cleartext HTTP C2 Indicator)"; flow:established,to_server; http.user_agent; content:"Windows NT 6.1"; nocase; content:"Chrome/41.0.2228.0"; nocase; http.uri; content:"/en-us/"; startswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/; classtype:trojan-activity; sid:9000102; rev:4; metadata:author The_Hunters_Ledger, date 2026-04-03;)
 ```
 
 ---

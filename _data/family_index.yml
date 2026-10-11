@@ -89,7 +89,7 @@ families:
         report_url: /reports/open-directory-172-105-0-126-20260406/
         label: CobaltStrike
         rules:
-          - MALW_CobaltStrike3x_TripwiredReflectiveLoader
+          - MALW_CobaltStrike3x_MALC_Malleable_Profile_Beacon
     feeds: []
     actors:
       - UTA-2026-004

@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--285db8b2-3c0b-448f-a834-b0ca45cb30a5",
+    "id": "bundle--51becfad-d2e2-4f25-9895-6731ce368f79",
     "objects": [
         {
             "type": "identity",
@@ -449,12 +449,12 @@
             "id": "indicator--21b9ee10-0c0b-5c2f-8b47-d1229c5798d0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.113102Z",
-            "modified": "2026-10-01T19:54:18.113102Z",
+            "modified": "2026-10-11T05:44:26.620018Z",
             "name": "MALW_AdaptixC2_Windows_Beacon_Stock",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "/*\n   Yara Rule Set\n   Identifier: AdaptixC2 Operator Toolkit — 45.130.148.125\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule MALW_AdaptixC2_Windows_Beacon_Stock\n{\n    meta:\n        description = \"Detects AdaptixC2 Windows beacon (DLL/EXE) by stock Itanium-ABI RTTI typeinfo strings, RDI loader export, and heartbeat header — catches any operator running stock AdaptixC2 with default connector names\"\n        license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/\"\n        date = \"2026-04-30\"\n        hash1 = \"358edb5d7e3e38c2da0a2ef323a281283aa96d47a8649014d114923b06866c12\"\n        hash2 = \"\"\n        hash3 = \"\"\n        family = \"AdaptixC2\"\n        malware_type = \"C2 Framework Beacon\"\n        campaign = \"AdaptixC2-OpenDirectory-Toolkit-45.130.148.125\"\n        id = \"952a09e1-dbbd-5758-ab76-bb9f215d96b5\"\n\n    strings:\n        $s1 = \"9Connector\" ascii\n        $s2 = \"13ConnectorHTTP\" ascii\n        $s3 = \"GetVersions\" ascii\n        $s4 = \"Mingw-w64 runtime failure:\" ascii\n        $s5 = \"X-Beacon-Id\" ascii\n\n    condition:\n        uint16(0) == 0x5A4D and\n        filesize < 300KB and\n        ($s1 and $s2) and\n        ($s3 or $s4) and\n        $s5\n}",
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: AdaptixC2 Operator Toolkit — 45.130.148.125\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule MALW_AdaptixC2_Windows_Beacon_Stock\n{\n    meta:\n        description = \"Detects AdaptixC2 Windows beacon (DLL/EXE) by stock Itanium-ABI RTTI typeinfo strings, the X-Beacon-Id heartbeat header, and either the GetVersions RDI loader export name or the MinGW-w64 runtime-failure string — catches any operator running stock AdaptixC2 with default connector names\"\n        license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n        author = \"The Hunters Ledger\"\n        reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/\"\n        date = \"2026-04-30\"\n        hash1 = \"358edb5d7e3e38c2da0a2ef323a281283aa96d47a8649014d114923b06866c12\"\n        hash2 = \"\"\n        hash3 = \"\"\n        family = \"AdaptixC2\"\n        malware_type = \"C2 Framework Beacon\"\n        campaign = \"AdaptixC2-OpenDirectory-Toolkit-45.130.148.125\"\n        id = \"952a09e1-dbbd-5758-ab76-bb9f215d96b5\"\n\n    strings:\n        $s1 = \"9Connector\" ascii\n        $s2 = \"13ConnectorHTTP\" ascii\n        $s3 = \"GetVersions\" ascii\n        $s4 = \"Mingw-w64 runtime failure:\" ascii\n        $s5 = \"X-Beacon-Id\" ascii\n\n    condition:\n        uint16(0) == 0x5A4D and\n        filesize < 300KB and\n        ($s1 and $s2) and\n        ($s3 or $s4) and\n        $s5\n}",
             "pattern_type": "yara",
             "valid_from": "2026-04-30T00:00:00Z",
             "labels": [

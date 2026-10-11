@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--7acd534b-9126-4701-b248-33ba20c895b5",
+    "id": "bundle--ad6cf38a-636c-4198-887f-77acb0a7b6d8",
     "objects": [
         {
             "type": "identity",
@@ -952,12 +952,12 @@
             "id": "indicator--bb388b3e-6567-5ad6-82e8-32a9c12b5151",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.997604Z",
-            "modified": "2026-10-01T19:54:15.997604Z",
+            "modified": "2026-10-11T05:44:23.225596Z",
             "name": "MALW_ChaosLoader_BatchDropper_StructuralAnchors",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule MALW_ChaosLoader_BatchDropper_StructuralAnchors {\n   meta:\n      description = \"Detects on-disk DOSfuscated batch droppers from the Chaos/TorBrowserTor private crypter family (mymain.bat / myfile.bat and future builds sharing the same decode pipeline). Anchors on the forced 32-bit SysWOW64 PowerShell silent launch, the Console.Title-based self-read dropper technique, the magic-marker StartsWith/Substring(32) sentinel, and a filesize above 1 MB characteristic of these oversized encoded-payload carriers\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\"\n      date = \"2026-04-23\"\n      hash1 = \"3b5d30e35f8e4f31a3e70d3754d02d0f045e39b6e0cfde22b1754667b7eb60a4\"\n      family = \"Chaos-TorBrowserTor-Crypter\"\n      id = \"d5623640-8394-5151-881a-f3c38ac12bcb\"\n   strings:\n      $ps32_launch  = \"SysWOW64\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe -WindowStyle Hidden -NoProfile\" ascii wide\n      $title_read   = \"$host.UI.RawUI.WindowTitle\" ascii wide\n      $marker_strip = \"StartsWith(\" ascii wide\n      $substr32     = \"Substring(32)\" ascii wide\n      $alpha_sub    = \".Replace('@','A').Replace('#','/')\" ascii wide\n   condition:\n      filesize > 1MB and\n      filesize < 5MB and\n      $ps32_launch and\n      ($title_read or ($marker_strip and $substr32)) and\n      $alpha_sub\n}",
+            "pattern": "rule MALW_ChaosLoader_BatchDropper_StructuralAnchors {\n   meta:\n      description = \"Detects on-disk DOSfuscated batch droppers from the Chaos/TorBrowserTor private crypter family (mymain.bat / myfile.bat and future builds sharing the same decode pipeline). Requires the forced 32-bit SysWOW64 PowerShell silent launch, the alphabet-substitution string, and either the Console.Title-based self-read (the WindowTitle read) or the magic-marker StartsWith plus Substring(32) pair, in a file between 1 MB and 5 MB (the size of these oversized encoded-payload carriers)\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\"\n      date = \"2026-04-23\"\n      hash1 = \"3b5d30e35f8e4f31a3e70d3754d02d0f045e39b6e0cfde22b1754667b7eb60a4\"\n      family = \"Chaos-TorBrowserTor-Crypter\"\n      id = \"d5623640-8394-5151-881a-f3c38ac12bcb\"\n   strings:\n      $ps32_launch  = \"SysWOW64\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe -WindowStyle Hidden -NoProfile\" ascii wide\n      $title_read   = \"$host.UI.RawUI.WindowTitle\" ascii wide\n      $marker_strip = \"StartsWith(\" ascii wide\n      $substr32     = \"Substring(32)\" ascii wide\n      $alpha_sub    = \".Replace('@','A').Replace('#','/')\" ascii wide\n   condition:\n      filesize > 1MB and\n      filesize < 5MB and\n      $ps32_launch and\n      ($title_read or ($marker_strip and $substr32)) and\n      $alpha_sub\n}",
             "pattern_type": "yara",
             "valid_from": "2026-04-23T00:00:00Z",
             "labels": [
@@ -1015,12 +1015,12 @@
             "id": "indicator--e5c749fd-82c4-5a3e-a03e-8989a41193b9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.997866Z",
-            "modified": "2026-10-01T19:54:15.997866Z",
+            "modified": "2026-10-11T05:44:23.225936Z",
             "name": "RAT_OrcusRAT_v7_WardowCrack",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule RAT_OrcusRAT_v7_WardowCrack {\n   meta:\n      description = \"Detects Orcus RAT v7 cracked by 'Wardow' via three hardcoded crack-tool-wide secrets: AES key 'CrackedByWardow', fixed Rijndael-256 CBC IV '0sjufcjbsoyzube6', and keyleak backdoor magic filename 'e3c6cefd462d48f0b30a5ebcd238b5b1'. All three strings are present in every Wardow-cracked Orcus v7 instance regardless of operator configuration. The keyleak filename represents a supply-chain backdoor — the operator using this crack may themselves be compromised\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\"\n      date = \"2026-04-23\"\n      hash1 = \"f7a4fe18d838e9d87db2db6378ffb21b90c3881d28d70871b8c2a661c6a78a6a\"\n      hash2 = \"1e68314f5a42897cea61456add6ffdd6048a9c99\"\n      hash3 = \"76007508b8317dd76e31996c6adc875a\"\n      family = \"OrcusRAT-WardowCrack\"\n      id = \"df88eae9-5f1a-5a5a-a162-643f53ce2ab8\"\n   strings:\n      $crack_key    = \"CrackedByWardow\" ascii wide\n      $fixed_iv     = \"0sjufcjbsoyzube6\" ascii wide\n      $keyleak_file = \"e3c6cefd462d48f0b30a5ebcd238b5b1\" ascii wide\n      $namespace    = \"Orcus.Service\" ascii wide\n      $interface    = \"IServicePipe\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 2MB and\n      $crack_key and\n      ($fixed_iv or $keyleak_file) and\n      1 of ($namespace, $interface)\n}",
+            "pattern": "rule RAT_OrcusRAT_v7_WardowCrack {\n   meta:\n      description = \"Detects Orcus RAT v7 cracked by 'Wardow' via hardcoded crack-tool-wide secrets: the AES key 'CrackedByWardow' together with either the fixed Rijndael-256 CBC IV '0sjufcjbsoyzube6' or the keyleak backdoor magic filename 'e3c6cefd462d48f0b30a5ebcd238b5b1', and an Orcus.Service or IServicePipe structure string. The report records all three secrets as present in every Wardow-cracked Orcus v7 instance; the rule needs the key plus one of the other two. The keyleak filename represents a supply-chain backdoor — the operator using this crack may themselves be compromised\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\"\n      date = \"2026-04-23\"\n      hash1 = \"f7a4fe18d838e9d87db2db6378ffb21b90c3881d28d70871b8c2a661c6a78a6a\"\n      hash2 = \"1e68314f5a42897cea61456add6ffdd6048a9c99\"\n      hash3 = \"76007508b8317dd76e31996c6adc875a\"\n      family = \"OrcusRAT-WardowCrack\"\n      id = \"df88eae9-5f1a-5a5a-a162-643f53ce2ab8\"\n   strings:\n      $crack_key    = \"CrackedByWardow\" ascii wide\n      $fixed_iv     = \"0sjufcjbsoyzube6\" ascii wide\n      $keyleak_file = \"e3c6cefd462d48f0b30a5ebcd238b5b1\" ascii wide\n      $namespace    = \"Orcus.Service\" ascii wide\n      $interface    = \"IServicePipe\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 2MB and\n      $crack_key and\n      ($fixed_iv or $keyleak_file) and\n      1 of ($namespace, $interface)\n}",
             "pattern_type": "yara",
             "valid_from": "2026-04-23T00:00:00Z",
             "labels": [
@@ -1120,12 +1120,12 @@
             "id": "indicator--5219f6e2-69fc-56fd-8797-3a1da8bf8a99",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.998244Z",
-            "modified": "2026-10-01T19:54:15.998244Z",
+            "modified": "2026-10-11T05:44:23.226411Z",
             "name": "Chaos TorBrowserTor Ransomware Encrypted File Extension Created",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Chaos TorBrowserTor Ransomware Encrypted File Extension Created\nname: chaos_torbrowsertor_extension_created\nid: 3faf111a-bcf8-479e-9e7c-7e0ae94e0483\nstatus: experimental\ndescription: >-\n  Detects creation of a file with the .torbrowsertor extension, the\n  encrypted-file marker appended by Chaos/TorBrowserTor ransomware during\n  its encryption routine. This extension is a Chaos-builder-configuration\n  invariant confirmed on a public sibling sample, not specific to this\n  operator, and has no legitimate use.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-23\ntags:\n    - attack.impact\n    - attack.t1486\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: windows\ndetection:\n    selection:\n        TargetFilename|endswith: '.torbrowsertor'\n    condition: selection\nfalsepositives:\n    - Unlikely — .torbrowsertor is not a legitimate file extension\nlevel: high\n---\ntitle: Chaos TorBrowserTor Anti-Recovery / Shadow Copy Deletion Commands Executed\nname: chaos_antirecovery_commands\nid: 3b7e9f4a-c2d8-4b5e-e7a1-6c4f9b2e8d37\nstatus: experimental\ndescription: >-\n  Detects execution of shadow-copy or backup-catalog deletion commands\n  (vssadmin delete shadows, wmic shadowcopy delete, wbadmin delete\n  catalog, bcdedit recoveryenabled no) associated with Stage-5a\n  Chaos/TorBrowserTor ransomware anti-recovery behavior. Tier: Hunting\n  standalone (see the Hunting Rules subsection below for the full\n  Rationale/False Positives writeup) — a generic command pattern shared\n  with legitimate backup tooling and most other ransomware families.\n  Co-located in this YAML block, rather than presented only in the\n  Hunting section, because the correlation rule that follows must\n  resolve this rule by name within the same Sigma document.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-23\ntags:\n    - attack.impact\n    - attack.t1490\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_antirecovery:\n        CommandLine|contains:\n            - 'vssadmin delete shadows'\n            - 'wmic shadowcopy delete'\n            - 'wbadmin delete catalog'\n            - 'bcdedit /set'\n            - 'recoveryenabled no'\n    condition: selection_antirecovery\nfalsepositives:\n    - >-\n      Legitimate backup software cleanup operations (vssadmin, wbadmin)\n      — correlate with concurrent .torbrowsertor file creation events for\n      confirmation\n    - System administrators running manual shadow copy management\nlevel: medium\n---\ntitle: Chaos TorBrowserTor Ransomware Active Encryption — Extension and Anti-Recovery Command Correlation\nid: ba89a60f-33f2-45aa-8a49-3beacdc24917\nstatus: experimental\ndescription: >-\n  Correlates creation of .torbrowsertor-extension files with execution of\n  shadow-copy or backup-catalog deletion commands on the same host within\n  a 10-minute window, indicating active Chaos/TorBrowserTor ransomware\n  encryption combined with anti-recovery measures. Either signal alone is\n  a Hunting-tier lead (see the standalone base rules); the combination is\n  Detection-grade.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-23\ntags:\n    - attack.impact\n    - attack.t1486\n    - attack.t1490\n    - detection.emerging-threats\ncorrelation:\n    type: temporal\n    rules:\n        - chaos_torbrowsertor_extension_created\n        - chaos_antirecovery_commands\n    group-by:\n        - Computer\n    timespan: 10m\nlevel: high",
+            "pattern": "title: Chaos TorBrowserTor Ransomware Encrypted File Extension Created\nname: chaos_torbrowsertor_extension_created\nid: 3faf111a-bcf8-479e-9e7c-7e0ae94e0483\nstatus: experimental\ndescription: >-\n  Detects creation of a file with the .torbrowsertor extension, the\n  encrypted-file marker appended by Chaos/TorBrowserTor ransomware during\n  its encryption routine. This extension is a Chaos-builder-configuration\n  invariant confirmed on a public sibling sample, not specific to this\n  operator, and has no legitimate use.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-23\ntags:\n    - attack.impact\n    - attack.t1486\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: windows\ndetection:\n    selection:\n        TargetFilename|endswith: '.torbrowsertor'\n    condition: selection\nfalsepositives:\n    - Unlikely — .torbrowsertor is not a legitimate file extension\nlevel: high\n---\ntitle: Chaos TorBrowserTor Anti-Recovery / Shadow Copy Deletion Commands Executed\nname: chaos_antirecovery_commands\nid: 3b7e9f4a-c2d8-4b5e-e7a1-6c4f9b2e8d37\nstatus: experimental\ndescription: >-\n  Detects execution of shadow-copy or backup-catalog deletion commands\n  (vssadmin delete shadows, wmic shadowcopy delete, wbadmin delete\n  catalog, or a command line holding both bcdedit and recoveryenabled\n  no; a bcdedit command without recoveryenabled no does not match)\n  associated with Stage-5a\n  Chaos/TorBrowserTor ransomware anti-recovery behavior. Tier: Hunting\n  standalone (see the Hunting Rules subsection below for the full\n  Rationale/False Positives writeup) — a generic command pattern shared\n  with legitimate backup tooling and most other ransomware families.\n  Co-located in this YAML block, rather than presented only in the\n  Hunting section, because the correlation rule that follows must\n  resolve this rule by name within the same Sigma document.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-23\ntags:\n    - attack.impact\n    - attack.t1490\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_antirecovery:\n        CommandLine|contains:\n            - 'vssadmin delete shadows'\n            - 'wmic shadowcopy delete'\n            - 'wbadmin delete catalog'\n    selection_bcdedit:\n        CommandLine|contains|all:\n            - 'bcdedit'\n            - 'recoveryenabled no'\n    condition: selection_antirecovery or selection_bcdedit\nfalsepositives:\n    - >-\n      Legitimate backup software cleanup operations (vssadmin, wbadmin)\n      — correlate with concurrent .torbrowsertor file creation events for\n      confirmation\n    - System administrators running manual shadow copy management\nlevel: medium\n---\ntitle: Chaos TorBrowserTor Ransomware Active Encryption — Extension and Anti-Recovery Command Correlation\nid: ba89a60f-33f2-45aa-8a49-3beacdc24917\nstatus: experimental\ndescription: >-\n  Correlates creation of .torbrowsertor-extension files with execution of\n  shadow-copy or backup-catalog deletion commands on the same host within\n  a 10-minute window, indicating active Chaos/TorBrowserTor ransomware\n  encryption combined with anti-recovery measures. The anti-recovery\n  commands alone are a Hunting-tier lead (see the standalone base rule); the\n  extension marker alone is already specific (see its base rule above); the\n  combination is Detection-grade.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-23\ntags:\n    - attack.impact\n    - attack.t1486\n    - attack.t1490\n    - detection.emerging-threats\ncorrelation:\n    type: temporal\n    rules:\n        - chaos_torbrowsertor_extension_created\n        - chaos_antirecovery_commands\n    group-by:\n        - Computer\n    timespan: 10m\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-04-23T00:00:00Z",
             "labels": [
@@ -1180,15 +1180,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--995d5f36-95c7-52a9-8e97-2f908701030d",
+            "id": "indicator--667acb8b-5e9b-5e09-989d-4debc8f2efca",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:15.998471Z",
-            "modified": "2026-10-01T19:54:15.998471Z",
-            "name": "Chaos Loader Operator Tri-Artifact Anti-Sandbox Gate Artefacts Present",
+            "created": "2026-10-11T05:44:23.226694Z",
+            "modified": "2026-10-11T05:44:23.226694Z",
+            "name": "Admin Account Creating a VBE Directory File or mapping.csv in Temp (Anti-Sandbox Gate Artefacts)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Chaos Loader Operator Tri-Artifact Anti-Sandbox Gate Artefacts Present\nid: c4f7b2a9-6d3e-4c8f-d1a5-7b9e4f2c6a18\nstatus: experimental\ndescription: >-\n  Detects simultaneous presence of the three artefacts checked by the\n  Chaos/TorBrowserTor crypter's inverted anti-sandbox gate — a process\n  running as 'admin' combined with creation of %TEMP%\\VBE\\ or\n  %TEMP%\\mapping.csv. The gate exits the dropper silently when all three\n  match, suggesting this is the operator's own development host\n  signature rather than a victim-side artefact. Alert on the combination,\n  not individual artefacts.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-23\ntags:\n    - attack.stealth\n    - attack.discovery\n    - attack.execution\n    - attack.t1497\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: windows\ndetection:\n    selection_mapping_csv:\n        User|contains: 'admin'\n        TargetFilename|endswith: '\\mapping.csv'\n        TargetFilename|contains: '\\AppData\\Local\\Temp\\'\n    selection_vbe_dir:\n        User|contains: 'admin'\n        TargetFilename|contains:\n            - '\\AppData\\Local\\Temp\\VBE\\'\n    condition: selection_mapping_csv or selection_vbe_dir\nfalsepositives:\n    - >-\n      Legitimate VBScript Editor (VBE) installations on administrator\n      accounts may create %TEMP%\\VBE\\ directories\n    - Administrative accounts using tools that generate mapping.csv files in TEMP\n    - Tune by excluding known-good admin workstations and software deployment systems\nlevel: medium",
+            "pattern": "title: Admin Account Creating a VBE Directory File or mapping.csv in Temp (Anti-Sandbox Gate Artefacts)\nid: c4f7b2a9-6d3e-4c8f-d1a5-7b9e4f2c6a18\nstatus: experimental\ndescription: >-\n  Detects a file-creation event by an account whose name contains 'admin'\n  in either of two places the Chaos/TorBrowserTor crypter's inverted\n  anti-sandbox gate checks: a file under %TEMP%\\VBE\\ or a file named\n  mapping.csv in %TEMP%. The gate exits the dropper silently when all\n  three artefacts (the admin account, the VBE directory and the\n  mapping.csv file) are present, which suggests the operator's own\n  development host. The rule fires on either file event alone and does\n  not test that both artefacts exist, so it is a lead and not a test of\n  the gate; the combination would need a correlation across the two\n  events.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-23\ntags:\n    - attack.stealth\n    - attack.discovery\n    - attack.execution\n    - attack.t1497\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: windows\ndetection:\n    selection_mapping_csv:\n        User|contains: 'admin'\n        TargetFilename|endswith: '\\mapping.csv'\n        TargetFilename|contains: '\\AppData\\Local\\Temp\\'\n    selection_vbe_dir:\n        User|contains: 'admin'\n        TargetFilename|contains:\n            - '\\AppData\\Local\\Temp\\VBE\\'\n    condition: selection_mapping_csv or selection_vbe_dir\nfalsepositives:\n    - >-\n      Legitimate VBScript Editor (VBE) installations on administrator\n      accounts may create %TEMP%\\VBE\\ directories\n    - Administrative accounts using tools that generate mapping.csv files in TEMP\n    - Tune by excluding known-good admin workstations and software deployment systems\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-04-23T00:00:00Z",
             "labels": [
@@ -1222,15 +1222,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--f0741cf8-f719-55af-a7b2-42d05a93981d",
+            "id": "indicator--60ec8bea-8000-5055-ac2e-dc148896f7d2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:15.998618Z",
-            "modified": "2026-10-01T19:54:15.998618Z",
-            "name": "Chaos TorBrowserTor Stage-5a Disables Task Manager via Registry Policy",
+            "created": "2026-10-11T05:44:23.226892Z",
+            "modified": "2026-10-11T05:44:23.226892Z",
+            "name": "Task Manager Disabled via User Registry Policy Outside Group Policy Hosts",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Chaos TorBrowserTor Stage-5a Disables Task Manager via Registry Policy\nid: f1d4a8c3-7e2b-4f9a-b8d6-4a3c7f1e9b52\nstatus: experimental\ndescription: >-\n  Detects Stage-5a Chaos/TorBrowserTor ransomware writing DisableTaskMgr=1\n  to HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System to\n  prevent the victim from using Task Manager to terminate the ransomware\n  process. This value can be set legitimately by Group Policy; however,\n  when written by a process running from %APPDATA% outside of a GPO\n  context, it indicates active ransomware defense impairment. Correlate\n  the writing process image path with %APPDATA% to confirm malicious\n  origin.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-23\ntags:\n    - attack.defense-impairment\n    - attack.t1685\n    - detection.emerging-threats\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection:\n        TargetObject|contains: '\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\DisableTaskMgr'\n        Details: 1\n    filter_gpo:\n        Image|contains:\n            - '\\Windows\\System32\\svchost.exe'\n            - '\\Windows\\System32\\GroupPolicy'\n    condition: selection and not filter_gpo\nfalsepositives:\n    - >-\n      Group Policy enforcing kiosk or restricted desktop configurations\n      that disable Task Manager\n    - >-\n      Enterprise endpoint management software applying policy-based\n      restrictions through a deployment path not covered by filter_gpo\nlevel: medium",
+            "pattern": "title: Task Manager Disabled via User Registry Policy Outside Group Policy Hosts\nid: f1d4a8c3-7e2b-4f9a-b8d6-4a3c7f1e9b52\nstatus: experimental\ndescription: >-\n  Detects DisableTaskMgr set to 1 under a per-user\n  Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System key (Sysmon\n  renders the per-user hive as HKU\\<SID>) by a process whose image path\n  does not contain the svchost.exe or GroupPolicy paths. The report records\n  Stage-5a Chaos/TorBrowserTor ransomware writing this value to stop the\n  victim using Task Manager to end the ransomware process. Nothing in the\n  rule identifies that family, and the value is also set legitimately by\n  Group Policy and management tools. The rule does not test the writer's\n  path; narrowing to a process running from %APPDATA% is a tuning step.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-23\ntags:\n    - attack.defense-impairment\n    - attack.t1685\n    - detection.emerging-threats\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection:\n        TargetObject|startswith: 'HKU\\'\n        TargetObject|contains: '\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\DisableTaskMgr'\n        Details:\n            - 'DWORD (0x00000001)'\n            - 1\n    filter_gpo:  # sourced: Group Policy client activity runs in svchost.exe (Windows platform default); the GroupPolicy path entry is unverified\n        Image|contains:\n            - '\\Windows\\System32\\svchost.exe'\n            - '\\Windows\\System32\\GroupPolicy'\n    condition: selection and not filter_gpo\nfalsepositives:\n    - >-\n      Group Policy enforcing kiosk or restricted desktop configurations\n      that disable Task Manager\n    - >-\n      Enterprise endpoint management software applying policy-based\n      restrictions through a deployment path not covered by filter_gpo\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-04-23T00:00:00Z",
             "labels": [
@@ -1243,15 +1243,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--76a1a58f-efa3-535c-bc7a-b60e15536fc9",
+            "id": "indicator--2f5bb7cd-3efd-5ba5-95b6-42eeae4aa08a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:15.998691Z",
-            "modified": "2026-10-01T19:54:15.998691Z",
-            "name": "Orcus RAT Wardow Crack Loopback C2 Connection on Port 20268",
+            "created": "2026-10-11T05:44:23.226983Z",
+            "modified": "2026-10-11T05:44:23.226983Z",
+            "name": "Loopback Connection on Port 20268 by a Process Outside System32 (Orcus Wardow Crack Tunnel Port)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Orcus RAT Wardow Crack Loopback C2 Connection on Port 20268\nid: a9c6e3f8-b1d4-4a7c-c5e9-8f3b2d7a6c41\nstatus: experimental\ndescription: >-\n  Detects Orcus RAT v7 Wardow crack initiating a loopback TCP connection\n  to 127.0.0.1:20268, the tunneled C2 configuration observed in this\n  campaign at 94.103.1.13. The real upstream C2 is hidden behind a\n  chisel/plink SSH or HTTP tunnel; the Orcus client connects to the\n  loopback listener which relays traffic externally. The port number is\n  an operator-configured value for this campaign, not a crack-tool-wide\n  constant, and may differ in another deployment.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-23\ntags:\n    - attack.command-and-control\n    - attack.t1090.001\n    - attack.t1071.001\n    - detection.emerging-threats\nlogsource:\n    category: network_connection\n    product: windows\ndetection:\n    selection:\n        DestinationIp: '127.0.0.1'\n        DestinationPort: 20268\n        Initiated: 'true'\n    filter_system:\n        Image|contains:\n            - '\\Windows\\System32\\'\n            - '\\Windows\\SysWOW64\\'\n    condition: selection and not filter_system\nfalsepositives:\n    - Local development services on port 20268 in developer environments\n    - Automated testing frameworks using this loopback port\n    - >-\n      Tune by restricting to process images outside System32/SysWOW64;\n      the port is operator-configured and may differ in other campaigns\nlevel: medium",
+            "pattern": "title: Loopback Connection on Port 20268 by a Process Outside System32 (Orcus Wardow Crack Tunnel Port)\nid: a9c6e3f8-b1d4-4a7c-c5e9-8f3b2d7a6c41\nstatus: experimental\ndescription: >-\n  Detects any process outside System32 and SysWOW64 initiating a TCP\n  connection to 127.0.0.1:20268, the loopback port the Orcus RAT v7 Wardow\n  crack used for its tunneled C2 configuration in this campaign at\n  94.103.1.13. Nothing in the rule identifies Orcus; the port is the only\n  campaign-specific value. The real upstream C2 is hidden behind a\n  chisel/plink SSH or HTTP tunnel; the Orcus client connects to the\n  loopback listener which relays traffic externally. The port number is\n  an operator-configured value for this campaign, not a crack-tool-wide\n  constant, and may differ in another deployment.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/\nauthor: The Hunters Ledger\ndate: 2026-04-23\ntags:\n    - attack.command-and-control\n    - attack.t1090.001\n    - attack.t1071.001\n    - detection.emerging-threats\nlogsource:\n    category: network_connection\n    product: windows\ndetection:\n    selection:\n        DestinationIp: '127.0.0.1'\n        DestinationPort: 20268\n        Initiated: 'true'\n    filter_system:\n        Image|contains:\n            - '\\Windows\\System32\\'\n            - '\\Windows\\SysWOW64\\'\n    condition: selection and not filter_system\nfalsepositives:\n    - Local development services on port 20268 in developer environments\n    - Automated testing frameworks using this loopback port\n    - >-\n      Tune by restricting to process images outside System32/SysWOW64;\n      the port is operator-configured and may differ in other campaigns\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-04-23T00:00:00Z",
             "labels": [
@@ -3092,12 +3092,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--9d01e333-4579-56b4-8eee-626220254a15",
+            "id": "relationship--c26961ff-f575-581c-a38a-2c62830b6fe8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:16.008429Z",
-            "modified": "2026-10-01T19:54:16.008429Z",
+            "created": "2026-10-11T05:44:23.239699Z",
+            "modified": "2026-10-11T05:44:23.239699Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--995d5f36-95c7-52a9-8e97-2f908701030d",
+            "source_ref": "indicator--667acb8b-5e9b-5e09-989d-4debc8f2efca",
             "target_ref": "malware--dcc4ca66-005e-5d40-90e9-7ee81d897ce6",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -3120,12 +3120,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--ef1bf94c-a94d-522a-b0b6-08d3e7be09e2",
+            "id": "relationship--c349538a-d771-5495-97bf-96fe892a3126",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:16.008548Z",
-            "modified": "2026-10-01T19:54:16.008548Z",
+            "created": "2026-10-11T05:44:23.239872Z",
+            "modified": "2026-10-11T05:44:23.239872Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--f0741cf8-f719-55af-a7b2-42d05a93981d",
+            "source_ref": "indicator--60ec8bea-8000-5055-ac2e-dc148896f7d2",
             "target_ref": "malware--dcc4ca66-005e-5d40-90e9-7ee81d897ce6",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -3134,12 +3134,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--efc9b023-21d9-53f4-9a24-581370f6c63f",
+            "id": "relationship--58597914-9427-51a8-9196-ba00afc84ade",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:16.008607Z",
-            "modified": "2026-10-01T19:54:16.008607Z",
+            "created": "2026-10-11T05:44:23.239952Z",
+            "modified": "2026-10-11T05:44:23.239952Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--76a1a58f-efa3-535c-bc7a-b60e15536fc9",
+            "source_ref": "indicator--2f5bb7cd-3efd-5ba5-95b6-42eeae4aa08a",
             "target_ref": "malware--dcc4ca66-005e-5d40-90e9-7ee81d897ce6",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -14855,7 +14855,7 @@
             "id": "report--184081d9-0822-53f5-8dbb-36e94e7e2bf1",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:16.060739Z",
-            "modified": "2026-10-01T19:54:16.060739Z",
+            "modified": "2026-10-11T05:44:23.309696Z",
             "name": "Chaos Ransomware (TorBrowserTor) — Multi-Stage Batch Loader at 94.103.1.13",
             "description": "2026-04-23 pDNS update: 7 co-tenant domains added + dhost.su ASN self-domain. | 2026-04-23 VT refresh: 94.103.1.13 5/94 confirmed; all 8 co-tenant domains 0/94 or NOT FOUND (Cloudflare fronting effective). | 2026-05-02 follow-up: staging server at 94.103.1.13:7777 globally offline since ~16:44 UTC (8-country external probe confirms TCP refused). interact.py SHA256 added to file_indicators (VT 18/63, Microsoft Trojan:Python/Multiverze!rfn). gp.xor URL context expanded with XOR-key 0x42 detail. Backdoor host-account credential pair pentest:Qwerty12345 added under host_artifacts.",
             "report_types": [
@@ -14949,10 +14949,10 @@
                 "indicator--5219f6e2-69fc-56fd-8797-3a1da8bf8a99",
                 "indicator--0bd4acdb-144b-5559-80a4-489c13924905",
                 "indicator--9cda09cd-2b90-5768-ac65-e53e845ef0f2",
-                "indicator--995d5f36-95c7-52a9-8e97-2f908701030d",
+                "indicator--667acb8b-5e9b-5e09-989d-4debc8f2efca",
                 "indicator--605a2f4f-e5fc-59d4-b521-3981ddd6c2ba",
-                "indicator--f0741cf8-f719-55af-a7b2-42d05a93981d",
-                "indicator--76a1a58f-efa3-535c-bc7a-b60e15536fc9",
+                "indicator--60ec8bea-8000-5055-ac2e-dc148896f7d2",
+                "indicator--2f5bb7cd-3efd-5ba5-95b6-42eeae4aa08a",
                 "indicator--c04952ad-1a0e-56d9-933b-277f9c5defc0",
                 "indicator--40cd5a54-e3a9-5dd5-a175-081a84ad8005",
                 "malware--6863be5a-a715-51f7-b90c-85b3bcbd0ea9",
@@ -15069,10 +15069,10 @@
                 "relationship--9a757bb1-e567-5ab6-8c8d-741d1c7e0557",
                 "relationship--71c31064-73d5-5bb2-b5a5-a2781214ffa7",
                 "relationship--4c76d6bc-14ba-52e1-82f6-2f9b797239dd",
-                "relationship--9d01e333-4579-56b4-8eee-626220254a15",
+                "relationship--c26961ff-f575-581c-a38a-2c62830b6fe8",
                 "relationship--a5321bdb-b5f6-5084-88d9-c4dd2d979b85",
-                "relationship--ef1bf94c-a94d-522a-b0b6-08d3e7be09e2",
-                "relationship--efc9b023-21d9-53f4-9a24-581370f6c63f",
+                "relationship--c349538a-d771-5495-97bf-96fe892a3126",
+                "relationship--58597914-9427-51a8-9196-ba00afc84ade",
                 "relationship--cd3baeff-2c72-5a2c-b473-fff15a2107ef",
                 "relationship--e2e7b641-beff-5289-9d8a-f11490745ce2",
                 "relationship--aec5b3e9-2da7-5d21-8ea7-5cf9b5170621",

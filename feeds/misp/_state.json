@@ -7,8 +7,8 @@
   "events": {
     "1f43fcef-df62-50b8-8069-16415d068ed7": {
       "slug": "newdouble-clickfix",
-      "hash": "58cfab9b080e84baadcbbba8a8eacdb604550b11e5148fd6cd2b90130a709154",
-      "timestamp": 1791592919,
+      "hash": "3d1adc9d6c6397992bb779a916dbb83084900b2a34a7549c4fc74d9be63d2b28",
+      "timestamp": 1791697523,
       "first_published": "2026-10-09"
     },
     "063ce33f-b7aa-5660-a9ff-f188850a7d87": {
@@ -25,8 +25,8 @@
     },
     "61bf8b6f-e11d-50ac-8cae-d6e6afd6f5d5": {
       "slug": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
-      "hash": "7f331890387845a1097cf24afab5a68e285ae7f265c418ec5536ee8ed1676824",
-      "timestamp": 1791690199,
+      "hash": "d06f1e0adefbb2ebd51653c0021054f6ff48e49fb06da3c99571590ba5777723",
+      "timestamp": 1791697528,
       "first_published": "2026-10-09"
     },
     "7bd73cce-a068-5c73-a8f4-0e7b5d3e847e": {
@@ -43,20 +43,20 @@
     },
     "7a1fc79b-257b-587d-9691-da866766d383": {
       "slug": "multivector-ecommerce-rce-toolkit-192-3-1-116",
-      "hash": "7667f7d53f85a566b05fb1f3153b581ed5effdef5bcd9cb2a55d45b1a0b6fd9f",
-      "timestamp": 1791592917,
+      "hash": "a15b8d2d248d87642313a0f2b3b535f4a8b0da2214fa9cf2da1a83e8244f180b",
+      "timestamp": 1791697521,
       "first_published": "2026-10-09"
     },
     "cd18797e-ccb1-5b3e-b32f-2b2aabf67d28": {
       "slug": "seasia-gov-exploitation-toolkit-144-172-106-236",
-      "hash": "e38f8aad1b717758959e19232a9648c0b35f812a3f9de5916fc663dae9539e11",
-      "timestamp": 1791592933,
+      "hash": "3d9ad6c67746e0393f817b528eb639adba7f86c7f505267f8de2c4969324b231",
+      "timestamp": 1791697531,
       "first_published": "2026-10-09"
     },
     "4eed77fa-9767-536f-8fef-728b06ae1cb3": {
       "slug": "kaido-quasar-rat-144-172-109-203",
-      "hash": "28f478015bd652da3b7d391ac57ca34104ee082740a9019296eaea383e2b69bc",
-      "timestamp": 1791695335,
+      "hash": "4f63fbd7f35742953506933184569a877ada978c30de43d1bb2ddd8624da9a01",
+      "timestamp": 1791697519,
       "first_published": "2026-10-09"
     },
     "eb873bde-1e1d-5a29-8b4c-dc02cedd1584": {
@@ -91,8 +91,8 @@
     },
     "d368b117-5414-5c50-b434-c21cfb5f6797": {
       "slug": "ghost-cryptojacker-vova75rus-77.110.96.200",
-      "hash": "f78f50c347e7585276ddaa5fab2d9306ec3e1d0dbbec109854e3e394c82794d6",
-      "timestamp": 1791695333,
+      "hash": "2c48af7e0bba9c52c4fa0b692169f8a61c72ce043eee29330adb2534aa1d3376",
+      "timestamp": 1791697518,
       "first_published": "2026-10-09"
     },
     "43b09f34-283d-5b09-84eb-a93df291c4c4": {
@@ -103,20 +103,20 @@
     },
     "875094b8-c444-56b7-9af6-4524d0de89cc": {
       "slug": "korean-claude-openclaw-221.150.15.104",
-      "hash": "62c73a1b4a2fc5d51f2027bea0a911cb14c22cbc0871ab34777318be15f0a698",
-      "timestamp": 1791592915,
+      "hash": "d8294318d84f3e273d157484e45363f5365e4b6776ae0f199af2219de17053ab",
+      "timestamp": 1791697520,
       "first_published": "2026-10-09"
     },
     "9cf6de91-da84-5074-bfca-e1f3961ed07c": {
       "slug": "opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517",
-      "hash": "d55b5ac3ded270fa85f34bb6042647bb46fbad569c858148ea675b9c5e36677b",
-      "timestamp": 1791592925,
+      "hash": "b154ad8209e7fd8b6345a01ee22f26f92d5fa4cf89ef6d5ea5c24e9a96d4d467",
+      "timestamp": 1791697529,
       "first_published": "2026-10-09"
     },
     "82cbc83b-05d1-5a93-bb60-69c8c5f9aa04": {
       "slug": "bellamain-turkish-phaas-79-137-192-3-20260516",
-      "hash": "fddc44e2f93addabeb0f85343574324f28d4f3eeffe3c31f74a561db38ef782f",
-      "timestamp": 1791695328,
+      "hash": "718b994233510ee4160169a83ffb6d24eb46f886d9d0980a450575ff0615b788",
+      "timestamp": 1791697517,
       "first_published": "2026-10-09"
     },
     "93d0b666-26a5-57ab-a3dc-45f197c65e10": {
@@ -139,14 +139,14 @@
     },
     "5b9f3c7a-ce4f-5fde-afc7-221cd3f69ada": {
       "slug": "opendirectory-45-130-148-125-20260430",
-      "hash": "f4c14f920f6a26191a638d1dfc21e42e6a4ade90f2ca6be6d215b3a982e7dceb",
-      "timestamp": 1791592926,
+      "hash": "0b4b8325e7231a866bdd6178de179c7e755a579801c594449a6ce69979a8f962",
+      "timestamp": 1791697530,
       "first_published": "2026-10-09"
     },
     "ebc92dc3-8983-54dd-9caa-c6f17abe0517": {
       "slug": "open-directory-94-103-1-13-20260423",
-      "hash": "9d3afed3c566d091d1c08a677fd60c914564362e77bfeb8523e8c72ef2447945",
-      "timestamp": 1791592923,
+      "hash": "ee1b3a28f3b8b363163052f6ce1a1e696af8dd8e99da858f2c64898e4162e4c8",
+      "timestamp": 1791697527,
       "first_published": "2026-10-09"
     },
     "6f667981-4451-5004-a851-e42a3420ab88": {
@@ -157,14 +157,14 @@
     },
     "8e859eb6-419c-5ddc-9d3c-dff1eafce995": {
       "slug": "new-files-found-20260408",
-      "hash": "f86f002de3e1f814a11314176949e00132b2aa486007c309cd2385369e775530",
-      "timestamp": 1791592918,
+      "hash": "e13ed396dd38b4e7888e70e7b5eaa850c184d88375dbdbc06be8f9c497f479c4",
+      "timestamp": 1791697522,
       "first_published": "2026-10-09"
     },
     "94be8f0c-229d-5120-8ec3-4a4b2eb759d2": {
       "slug": "open-directory-172-105-0-126-20260406",
-      "hash": "beba8257c3e7049cc6f0c86a8561167edd671b597f98fb96f1b7f8128fae259a",
-      "timestamp": 1791592921,
+      "hash": "3d4fc32ef253700ab236084e9be4314e71ce5b02591d2db54e8498d9b35a2f99",
+      "timestamp": 1791697525,
       "first_published": "2026-10-09"
     },
     "940014f4-065e-5b01-9fbe-d4c28f766dae": {
@@ -175,8 +175,8 @@
     },
     "125e14b3-c05b-5d46-a15d-e4b86f112070": {
       "slug": "open-directory-193-56-255-154-xiebroc2",
-      "hash": "898a2fd2ab2d2ca5da7bd179bd12da6a563c0ac0599f86fb4cecf66e5b2e5705",
-      "timestamp": 1791592922,
+      "hash": "02f8e9b4378f8a3b2a000067caa43b3da87cffb12b8560eeda6a0222f18acf81",
+      "timestamp": 1791697526,
       "first_published": "2026-10-09"
     },
     "48a52860-1656-5303-ad23-7aa117354f8b": {
@@ -205,8 +205,8 @@
     },
     "cf5676b3-13f1-5946-9f45-c9aa21c9bdba": {
       "slug": "nsminer-cryptojacker",
-      "hash": "37425a488c4fa4ce5c14fd4d21a3ec8acac7d6075030caa774dce2ded20a016f",
-      "timestamp": 1791592920,
+      "hash": "9ae63788b023e3042060eff26acef5690867a018acc26d3d6cbbeae49fc47a35",
+      "timestamp": 1791697524,
       "first_published": "2026-10-09"
     },
     "6b2ddd6b-2861-5626-b59e-9cf736ff2568": {

@@ -914,15 +914,15 @@
     {
       "techniqueID": "T1098.004",
       "tactic": "persistence",
-      "score": 9,
-      "comment": "2 report(s), 7 rule(s), actors UTA-2026-013 UTA-2026-018 UTA-2026-019. https://the-hunters-ledger.com/techniques/T1098.004/",
+      "score": 8,
+      "comment": "2 report(s), 6 rule(s), actors UTA-2026-013 UTA-2026-018 UTA-2026-019. https://the-hunters-ledger.com/techniques/T1098.004/",
       "enabled": true
     },
     {
       "techniqueID": "T1098.004",
       "tactic": "privilege-escalation",
-      "score": 9,
-      "comment": "2 report(s), 7 rule(s), actors UTA-2026-013 UTA-2026-018 UTA-2026-019. https://the-hunters-ledger.com/techniques/T1098.004/",
+      "score": 8,
+      "comment": "2 report(s), 6 rule(s), actors UTA-2026-013 UTA-2026-018 UTA-2026-019. https://the-hunters-ledger.com/techniques/T1098.004/",
       "enabled": true
     },
     {
@@ -2006,8 +2006,8 @@
     {
       "techniqueID": "T1571",
       "tactic": "command-and-control",
-      "score": 19,
-      "comment": "10 report(s), 9 rule(s), actors UTA-2026-002 UTA-2026-003 UTA-2026-004 UTA-2026-007 UTA-2026-016 UTA-2026-017 UTA-2026-018 UTA-2026-020 UTA-2026-021 UTA-2026-023 UTA-2026-024 n-3-xl vova75rus. https://the-hunters-ledger.com/techniques/T1571/",
+      "score": 18,
+      "comment": "10 report(s), 8 rule(s), actors UTA-2026-002 UTA-2026-003 UTA-2026-004 UTA-2026-007 UTA-2026-016 UTA-2026-017 UTA-2026-018 UTA-2026-020 UTA-2026-021 UTA-2026-023 UTA-2026-024 n-3-xl vova75rus. https://the-hunters-ledger.com/techniques/T1571/",
       "enabled": true
     },
     {
@@ -2027,8 +2027,8 @@
     {
       "techniqueID": "T1573.001",
       "tactic": "command-and-control",
-      "score": 19,
-      "comment": "9 report(s), 10 rule(s), actors UTA-2026-002 UTA-2026-003 UTA-2026-004 UTA-2026-006 UTA-2026-007 UTA-2026-008 UTA-2026-009 UTA-2026-010 n-3-xl. https://the-hunters-ledger.com/techniques/T1573.001/",
+      "score": 18,
+      "comment": "9 report(s), 9 rule(s), actors UTA-2026-002 UTA-2026-003 UTA-2026-004 UTA-2026-006 UTA-2026-007 UTA-2026-008 UTA-2026-009 UTA-2026-010 n-3-xl. https://the-hunters-ledger.com/techniques/T1573.001/",
       "enabled": true
     },
     {

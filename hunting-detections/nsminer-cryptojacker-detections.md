@@ -47,8 +47,8 @@ NsMiner is a multi-stage cryptojacking operation delivered via a trojanized NSIS
 **Robustness:** 2
 **ATT&CK Coverage:** T1105 (Ingress Tool Transfer), T1071.002 (File Transfer Protocols)
 **Confidence:** HIGH
-**False Positives:** None known — the fullword wide `NsMiner` branding string does not appear in legitimate NSIS installers, and the FTP-downloader branch requires the hardcoded C2 URL and credential strings alongside the generic FTP API names, not the API names alone.
-**Blind Spots:** The FTP-downloader branch (`FtpGetFileA`/`InternetConnectA` API strings + C2 URL/credential strings) stops matching once the operator rotates the `hrtests.ru` C2 domain and FTP credentials — a low-effort operator change. The NSIS-dropper branch (`Nullsoft Scriptable Install System` + `NsMiner` fullword wide) is durable to infrastructure rotation but would be evaded by a full rebrand that removes the `NsMiner` name from the dropper build.
+**False Positives:** None known — the fullword wide `NsMiner` branding string does not appear in legitimate NSIS installers, and the FTP-downloader branch requires both generic FTP API names plus at least two of the three hardcoded strings (the C2 URL, the FTP user name and the FTP password) alongside them, not the API names alone. Two of the three is enough, so the user name and password together, without the URL, also satisfy it.
+**Blind Spots:** The FTP-downloader branch (`FtpGetFileA`/`InternetConnectA` API strings + two of the three C2 URL, user and password strings) stops matching once the operator rotates the `hrtests.ru` C2 domain and FTP credentials — a low-effort operator change. The NSIS-dropper branch (`Nullsoft Scriptable Install System` + `NsMiner` fullword wide) is durable to infrastructure rotation but would be evaded by a full rebrand that removes the `NsMiner` name from the dropper build.
 **Validation:** Scan the analyzed dropper (hash1) and downloader (hash2) samples — both must match; a benign NSIS-packaged freeware installer must NOT fire.
 **Deployment:** Endpoint AV/EDR file scan, static triage of unknown NSIS-packed binaries.
 
@@ -63,7 +63,7 @@ NsMiner is a multi-stage cryptojacking operation delivered via a trojanized NSIS
 
 rule NsMiner_Dropper_Downloader {
    meta:
-      description = "Detects the NsMiner NSIS dropper (IMG001.exe) via its Nullsoft installer marker paired with the NsMiner branding string, and/or the FTP downloader component (tftp.exe) via its FTP/WinINet API usage combined with the hardcoded C2 URL and FTP credential strings"
+      description = "Detects the NsMiner NSIS dropper (IMG001.exe) via its Nullsoft installer marker paired with the NsMiner branding string, and/or the FTP downloader component (tftp.exe) via two FTP/WinINet API names combined with any two of the hardcoded C2 URL, FTP user name and FTP password strings"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/nsminer-cryptojacker-detections/"

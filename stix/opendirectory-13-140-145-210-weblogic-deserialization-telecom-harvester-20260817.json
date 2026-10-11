@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--92f0d48b-f990-4bc0-b52c-be8cb99562da",
+    "id": "bundle--28694d0a-3ef4-4f96-af9f-74eb32e1dcb8",
     "objects": [
         {
             "type": "identity",
@@ -2269,12 +2269,12 @@
             "id": "indicator--a2f6879b-42ef-53d6-ab19-128e1ff06c2f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:16.469332Z",
-            "modified": "2026-10-01T19:54:16.469332Z",
+            "modified": "2026-10-11T05:44:23.972927Z",
             "name": "WSMA_CVE_2023_20198_DoubleEncode_Exfil",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule WSMA_CVE_2023_20198_DoubleEncode_Exfil {\n   meta:\n      description = \"Detects a script or captured log carrying the double-encoded Cisco IOS-XE WSMA path bypass combined with the WSMA fileCopy exfiltration primitive, the operator-specific mechanism that reads a router's own NVRAM and PUTs it out over HTTP\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\"\n      date = \"2026-08-17\"\n      hash1 = \"72c6383477bbcb93811fd837a9e4721cfddea0cd238eebe3012acc0e6a31c40e\"\n      family = \"Unknown - bespoke single-operator WebLogic/telecom intrusion toolkit\"\n      campaign = \"WebLogicDeserialization-TelecomHarvester-13.140.145.210\"\n      id = \"94efd4fe-4813-55a4-9b9a-3e4cc64b0d24\"\n   strings:\n      $path = \"%2577eb%2575i_%2577sma_Http\" ascii\n      $wsma = \"urn:cisco:wsma-filesystem\" ascii\n      $copy = \"fileCopy\" ascii\n      $token = \"0123456789abcdefab\" ascii\n   condition:\n      filesize < 10MB and\n      $path and 2 of ($wsma, $copy, $token)\n}",
+            "pattern": "rule WSMA_CVE_2023_20198_DoubleEncode_Exfil {\n   meta:\n      description = \"Detects a script (under 10 MB) carrying the double-encoded Cisco IOS-XE WSMA path bypass together with the WSMA fileCopy operation name and either the WSMA filesystem namespace or the sequential-hex authorization token, the operator-specific mechanism that reads a router's own NVRAM and PUTs it out over HTTP. A captured access log holding only the encoded path does not satisfy the rule\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\"\n      date = \"2026-08-17\"\n      hash1 = \"72c6383477bbcb93811fd837a9e4721cfddea0cd238eebe3012acc0e6a31c40e\"\n      family = \"Unknown - bespoke single-operator WebLogic/telecom intrusion toolkit\"\n      campaign = \"WebLogicDeserialization-TelecomHarvester-13.140.145.210\"\n      id = \"94efd4fe-4813-55a4-9b9a-3e4cc64b0d24\"\n   strings:\n      $path = \"%2577eb%2575i_%2577sma_Http\" ascii\n      $wsma = \"urn:cisco:wsma-filesystem\" ascii\n      $copy = \"fileCopy\" ascii\n      $token = \"0123456789abcdefab\" ascii\n   condition:\n      filesize < 10MB and\n      $path and $copy and 1 of ($wsma, $token)\n}",
             "pattern_type": "yara",
             "valid_from": "2026-08-18T00:00:00Z",
             "labels": [
@@ -2311,12 +2311,12 @@
             "id": "indicator--3a6637b4-cbb7-545c-8d78-e325aa435d95",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:16.469539Z",
-            "modified": "2026-10-01T19:54:16.469539Z",
+            "modified": "2026-10-11T05:44:23.973243Z",
             "name": "WebLogic_JNDI_HelloFromLdap_CallbackMarker",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule WebLogic_JNDI_HelloFromLdap_CallbackMarker {\n   meta:\n      description = \"Detects the Java-serialized String hello_from_ldap used by this operator's hand-rolled 4-mode BER/LDAP exploitation server to validate a JNDI callback path before sending a live gadget chain\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\"\n      date = \"2026-08-17\"\n      hash1 = \"9251373f585c91b6bf7c407aa1a989e7cc596c4afc79a8573a18f858df9f014d\"\n      family = \"Unknown - bespoke single-operator WebLogic/telecom intrusion toolkit\"\n      campaign = \"WebLogicDeserialization-TelecomHarvester-13.140.145.210\"\n      id = \"15fe1607-d88a-51fa-82d1-f8153f3e94f3\"\n   strings:\n      $ser_hex = { AC ED 00 05 74 00 0F 68 65 6C 6C 6F 5F 66 72 6F 6D 5F 6C 64 61 70 }\n      $ser_ascii = \"hello_from_ldap\" ascii\n   condition:\n      filesize < 1MB and\n      1 of them\n}",
+            "pattern": "rule WebLogic_JNDI_HelloFromLdap_CallbackMarker {\n   meta:\n      description = \"Detects the Java-serialized String hello_from_ldap used by this operator's hand-rolled 4-mode BER/LDAP exploitation server to validate a JNDI callback path before sending a live gadget chain\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\"\n      date = \"2026-08-17\"\n      hash1 = \"9251373f585c91b6bf7c407aa1a989e7cc596c4afc79a8573a18f858df9f014d\"\n      family = \"Unknown - bespoke single-operator WebLogic/telecom intrusion toolkit\"\n      campaign = \"WebLogicDeserialization-TelecomHarvester-13.140.145.210\"\n      id = \"15fe1607-d88a-51fa-82d1-f8153f3e94f3\"\n   strings:\n      $ser_hex = { AC ED 00 05 74 00 0F 68 65 6C 6C 6F 5F 66 72 6F 6D 5F 6C 64 61 70 }\n   condition:\n      filesize < 1MB and\n      $ser_hex\n}",
             "pattern_type": "yara",
             "valid_from": "2026-08-18T00:00:00Z",
             "labels": [
@@ -2332,12 +2332,12 @@
             "id": "indicator--16b97649-0b9e-5c5a-90bb-6e1ad5bcbf8a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:16.469621Z",
-            "modified": "2026-10-01T19:54:16.469621Z",
+            "modified": "2026-10-11T05:44:23.973347Z",
             "name": "Webshell_PHP_XCMD_Header_Dispatcher",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule Webshell_PHP_XCMD_Header_Dispatcher {\n   meta:\n      description = \"Detects a PHP webshell that dispatches attacker commands by reading a non-standard X-CMD request header and passing its value directly to a shell-execution function, the pattern used by the persistent h.php dispatcher observed on a compromised WAMP host in this campaign\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\"\n      date = \"2026-08-17\"\n      family = \"Unknown - bespoke single-operator WebLogic/telecom intrusion toolkit\"\n      campaign = \"WebLogicDeserialization-TelecomHarvester-13.140.145.210\"\n      id = \"49e59582-4d7c-5675-ba0f-0de5de77183b\"\n   strings:\n      $php = \"<?php\" ascii\n      $hdr1 = \"X-CMD\" ascii nocase\n      $hdr2 = \"HTTP_X_CMD\" ascii\n      $exec1 = \"shell_exec\" ascii\n      $exec2 = \"system(\" ascii\n      $exec3 = \"passthru(\" ascii\n      $exec4 = \"exec(\" ascii\n   condition:\n      filesize < 200KB and\n      $php and\n      1 of ($hdr1, $hdr2) and\n      1 of ($exec1, $exec2, $exec3, $exec4)\n}",
+            "pattern": "rule Webshell_PHP_XCMD_Header_Dispatcher {\n   meta:\n      description = \"Detects a PHP file (under 200 KB) that contains an X-CMD header reference (X-CMD or HTTP_X_CMD) and a shell-execution function name. The report says the operator's script writes a persistent h.php dispatching on an X-CMD request header into a WAMP web root, with no captured outcome. The rule does not test that the header value reaches the execution call\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\"\n      date = \"2026-08-17\"\n      family = \"Unknown - bespoke single-operator WebLogic/telecom intrusion toolkit\"\n      campaign = \"WebLogicDeserialization-TelecomHarvester-13.140.145.210\"\n      id = \"49e59582-4d7c-5675-ba0f-0de5de77183b\"\n   strings:\n      $php = \"<?php\" ascii\n      $hdr1 = \"X-CMD\" ascii nocase\n      $hdr2 = \"HTTP_X_CMD\" ascii\n      $exec1 = \"shell_exec\" ascii\n      $exec2 = \"system(\" ascii\n      $exec3 = \"passthru(\" ascii\n      $exec4 = \"exec(\" ascii\n   condition:\n      filesize < 200KB and\n      $php and\n      1 of ($hdr1, $hdr2) and\n      1 of ($exec1, $exec2, $exec3, $exec4)\n}",
             "pattern_type": "yara",
             "valid_from": "2026-08-18T00:00:00Z",
             "labels": [
@@ -2374,12 +2374,12 @@
             "id": "indicator--f9030282-c978-55be-afd6-27a9358b8667",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:16.469776Z",
-            "modified": "2026-10-01T19:54:16.469776Z",
+            "modified": "2026-10-11T05:44:23.973566Z",
             "name": "Rootkit_Userland_OriginalsBackup_TarSet",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule Rootkit_Userland_OriginalsBackup_TarSet {\n   meta:\n      description = \"Detects a tar archive whose member manifest is exactly the canonical userland-rootkit target set (ps, top, pstree, netstat, lsof, find, rpm), consistent with an operator staging pristine originals before trojanizing a Linux host's process, network, filesystem and package-integrity inspection tools. Hunting-tier: this exact manifest also matches an ordinary sysadmin backup with no malware present, confirmed by direct testing, so every hit needs analyst review\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\"\n      date = \"2026-08-17\"\n      hash1 = \"daee2d57566c88374b5de65ecc04e1321da4d5dc35b84a0eb98893afad9e2664\"\n      family = \"Unknown - bespoke single-operator WebLogic/telecom intrusion toolkit\"\n      campaign = \"WebLogicDeserialization-TelecomHarvester-13.140.145.210\"\n      id = \"ba89babd-e197-5073-9656-9654215ab3a1\"\n   strings:\n      $ustar = \"ustar\" ascii\n      $m1 = \"bin/ps\" ascii\n      $m2 = \"usr/bin/top\" ascii\n      $m3 = \"usr/bin/pstree\" ascii\n      $m4 = \"bin/netstat\" ascii\n      $m5 = \"usr/sbin/lsof\" ascii\n      $m6 = \"usr/bin/find\" ascii\n      $m7 = \"bin/rpm\" ascii\n   condition:\n      filesize < 5MB and\n      $ustar and all of ($m1, $m2, $m3, $m4, $m5, $m6, $m7)\n}",
+            "pattern": "rule Rootkit_Userland_OriginalsBackup_TarSet {\n   meta:\n      description = \"Detects a file under 5 MB holding the ustar marker and all seven path strings of the canonical userland-rootkit target set (ps, top, pstree, netstat, lsof, find, rpm); an archive with more members also matches, and the strings are not checked to be tar member names, consistent with an operator staging pristine originals before trojanizing a Linux host's process, network, filesystem and package-integrity inspection tools. Hunting-tier: this exact manifest also matches an ordinary sysadmin backup with no malware present, confirmed by direct testing, so every hit needs analyst review\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\"\n      date = \"2026-08-17\"\n      hash1 = \"daee2d57566c88374b5de65ecc04e1321da4d5dc35b84a0eb98893afad9e2664\"\n      family = \"Unknown - bespoke single-operator WebLogic/telecom intrusion toolkit\"\n      campaign = \"WebLogicDeserialization-TelecomHarvester-13.140.145.210\"\n      id = \"ba89babd-e197-5073-9656-9654215ab3a1\"\n   strings:\n      $ustar = \"ustar\" ascii\n      $m1 = \"bin/ps\" ascii\n      $m2 = \"usr/bin/top\" ascii\n      $m3 = \"usr/bin/pstree\" ascii\n      $m4 = \"bin/netstat\" ascii\n      $m5 = \"usr/sbin/lsof\" ascii\n      $m6 = \"usr/bin/find\" ascii\n      $m7 = \"bin/rpm\" ascii\n   condition:\n      filesize < 5MB and\n      $ustar and all of ($m1, $m2, $m3, $m4, $m5, $m6, $m7)\n}",
             "pattern_type": "yara",
             "valid_from": "2026-08-18T00:00:00Z",
             "labels": [
@@ -2395,12 +2395,12 @@
             "id": "indicator--c5d87bd4-9c92-5be4-ac76-cd7d1ce098e9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:16.469857Z",
-            "modified": "2026-10-01T19:54:16.469857Z",
+            "modified": "2026-10-11T05:44:23.973666Z",
             "name": "PublicTool_DirtyFrag_LinuxKernel_LPE",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule PublicTool_DirtyFrag_LinuxKernel_LPE {\n   meta:\n      description = \"Detects the public Dirty Frag Linux kernel local-privilege-escalation exploit (CVE-2026-43284 and CVE-2026-43500), identified by its distinctive AF_ALG pcbc(fcrypt) cipher choice combined with its proof-of-concept environment-variable knobs. This detects the published open-source tool itself, not any operator-specific modification\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\"\n      date = \"2026-08-17\"\n      hash1 = \"a133809a768c7c6b958d72ff6857677b14ed6bf284b99dc81a121442dfe04f90\"\n      family = \"Public tool - Dirty Frag Linux kernel LPE (not this operator's own code)\"\n      campaign = \"WebLogicDeserialization-TelecomHarvester-13.140.145.210\"\n      id = \"de68b3f2-e38d-58ef-9878-2bd771b32462\"\n   strings:\n      $cipher = \"pcbc(fcrypt)\" ascii\n      $verbose = \"DIRTYFRAG_VERBOSE\" ascii\n      $seed = \"LPE_SEED\" ascii\n      $iters = \"LPE_MAX_ITERS\" ascii\n      $target = \"POC_TARGET_FILE\" ascii\n      $suoutput = \"/usr/bin/su page-cache patched (entry 0x%x = shellcode)\" ascii\n   condition:\n      filesize < 5MB and\n      3 of them\n}",
+            "pattern": "rule PublicTool_DirtyFrag_LinuxKernel_LPE {\n   meta:\n      description = \"Detects the public Dirty Frag Linux kernel local-privilege-escalation exploit (CVE-2026-43284 and CVE-2026-43500), identified by its pcbc(fcrypt) kernel-crypto cipher name (the report calls it the most distinctive artifact in the binary) together with at least two of its five proof-of-concept strings (four environment-variable names and the su page-cache patch message). The AF_ALG socket family is not tested. This detects the published open-source tool itself, not any operator-specific modification\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\"\n      date = \"2026-08-17\"\n      hash1 = \"a133809a768c7c6b958d72ff6857677b14ed6bf284b99dc81a121442dfe04f90\"\n      family = \"Public tool - Dirty Frag Linux kernel LPE (not this operator's own code)\"\n      campaign = \"WebLogicDeserialization-TelecomHarvester-13.140.145.210\"\n      id = \"de68b3f2-e38d-58ef-9878-2bd771b32462\"\n   strings:\n      $cipher = \"pcbc(fcrypt)\" ascii\n      $verbose = \"DIRTYFRAG_VERBOSE\" ascii\n      $seed = \"LPE_SEED\" ascii\n      $iters = \"LPE_MAX_ITERS\" ascii\n      $target = \"POC_TARGET_FILE\" ascii\n      $suoutput = \"/usr/bin/su page-cache patched (entry 0x%x = shellcode)\" ascii\n   condition:\n      filesize < 5MB and\n      $cipher and 2 of ($verbose, $seed, $iters, $target, $suoutput)\n}",
             "pattern_type": "yara",
             "valid_from": "2026-08-18T00:00:00Z",
             "labels": [
@@ -2434,27 +2434,6 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--ea5ee4f1-d7fd-5b4b-a4b3-e59ef17c3b8a",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:16.470005Z",
-            "modified": "2026-10-01T19:54:16.470005Z",
-            "name": "Java Process Spawns Unix Shell Following WebLogic JNDI Exploitation",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "title: Java Process Spawns Unix Shell Following WebLogic JNDI Exploitation\nid: a14ad5ee-c455-49ce-8c4d-92064c64b03b\nstatus: experimental\ndescription: >-\n    Detects a Java application-server process directly spawning a Unix shell\n    with an inline command argument, consistent with WebLogic T3/IIOP JNDI\n    deserialization exploitation (CVE-2023-21839, CVE-2024-21182) reaching a\n    reverse-shell or beacon payload such as bash -i redirected to /dev/tcp or\n    a curl proof-of-execution callback.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\n    - https://nvd.nist.gov/vuln/detail/CVE-2023-21839\n    - https://nvd.nist.gov/vuln/detail/CVE-2024-21182\nauthor: The Hunters Ledger\ndate: 2026-08-17\ntags:\n    - attack.execution\n    - attack.t1059.004\nlogsource:\n    category: process_creation\n    product: linux\ndetection:\n    selection_parent:\n        ParentImage|contains: 'java'\n    selection_shell:\n        Image|endswith:\n            - '/bin/bash'\n            - '/bin/sh'\n            - '/bin/dash'\n    selection_flag:\n        CommandLine|contains: ' -c '\n    condition: all of selection_*\nfalsepositives:\n    - Java-based build, backup or health-check tooling that intentionally shells out to run a maintenance command\n    - Application servers configured to invoke OS-level scripts as part of legitimate scheduled jobs\nlevel: high",
-            "pattern_type": "sigma",
-            "valid_from": "2026-08-18T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "indicator",
-            "spec_version": "2.1",
             "id": "indicator--232c7f00-d786-5dc7-9647-e877c2ba44ba",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:16.47008Z",
@@ -2476,15 +2455,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--692ed9ed-f68c-5ddc-8b39-7e2b6f6456ad",
+            "id": "indicator--7cb8457a-7f48-5094-9d62-0016cd3d2f72",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:16.470154Z",
-            "modified": "2026-10-01T19:54:16.470154Z",
-            "name": "Registry Hive Export of SAM or SYSTEM to a Non-Standard Location",
+            "created": "2026-10-11T05:44:23.974036Z",
+            "modified": "2026-10-11T05:44:23.974036Z",
+            "name": "Registry Hive Save of SAM or SYSTEM via reg.exe",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Registry Hive Export of SAM or SYSTEM to a Non-Standard Location\nid: 70038c48-829c-4a9c-bab4-540720e0a9b6\nstatus: experimental\ndescription: >-\n    Detects reg.exe exporting the SAM or SYSTEM registry hive, the\n    credential-theft precursor to offline extraction of local password\n    hashes. Observed in this campaign with the destination inside a web\n    server document root so the dump could be retrieved over HTTP.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\nauthor: The Hunters Ledger\ndate: 2026-08-17\ntags:\n    - attack.credential-access\n    - attack.t1003.002\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_image:\n        Image|endswith: '\\reg.exe'\n    selection_cmd:\n        CommandLine|contains: 'save'\n    selection_hive:\n        CommandLine|contains:\n            - 'HKLM\\SAM'\n            - 'HKLM\\SYSTEM'\n    condition: all of selection_*\nfalsepositives:\n    - Scheduled or scripted backup jobs that export the SAM or SYSTEM hive to a controlled backup location\nlevel: high",
+            "pattern": "title: Registry Hive Save of SAM or SYSTEM via reg.exe\nid: 70038c48-829c-4a9c-bab4-540720e0a9b6\nstatus: experimental\ndescription: >-\n    Detects reg.exe run with a save argument and HKLM\\SAM or HKLM\\SYSTEM in the\n    command line (the match also covers a subkey path under HKLM\\SYSTEM), the\n    credential-theft precursor to offline extraction of local password\n    hashes. The destination is not tested, so a save to any path matches. The\n    report says the operator's script is written to save both hives into a web\n    server document root under dot-prefixed filenames so they could be\n    retrieved over HTTP; no output of that script was captured.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\nauthor: The Hunters Ledger\ndate: 2026-08-17\ntags:\n    - attack.credential-access\n    - attack.t1003.002\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_image:\n        Image|endswith: '\\reg.exe'\n    selection_cmd:\n        CommandLine|contains: 'save'\n    selection_hive:\n        CommandLine|contains:\n            - 'HKLM\\SAM'\n            - 'HKLM\\SYSTEM'\n    condition: all of selection_*\nfalsepositives:\n    - Scheduled or scripted backup jobs that export the SAM or SYSTEM hive to a controlled backup location\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-08-18T00:00:00Z",
             "labels": [
@@ -2647,12 +2626,33 @@
             "id": "indicator--abebc283-3e99-5f15-912f-9865fc1ffede",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:16.470729Z",
-            "modified": "2026-10-01T19:54:16.470729Z",
+            "modified": "2026-10-11T05:44:23.974982Z",
             "name": "Creation or Modification of the safe_pollRadiusLog Watchdog Script",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Creation or Modification of the safe_pollRadiusLog Watchdog Script\nid: 2f9c1dfd-3d00-402b-81ff-86e441136d3e\nstatus: experimental\ndescription: >-\n    Detects a file-write event against safe_pollRadiusLog.sh under\n    /usr/local/bin. In this campaign the operator rewrote this exact path\n    into a self-healing watchdog for a RADIUS statistics daemon on a\n    carrier AAA host, then backdated the file's modification time to\n    2010-10-07 to blend it in with genuinely old system files.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\nauthor: The Hunters Ledger\ndate: 2026-08-17\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1543\nlogsource:\n    category: file_event\n    product: linux\ndetection:\n    selection:\n        TargetFilename|endswith: '/safe_pollRadiusLog.sh'\n    condition: selection\nfalsepositives:\n    - Unlikely; this is a campaign-specific filename, and any legitimate script sharing it should be independently verified rather than excluded outright\nlevel: medium",
+            "pattern": "title: Creation or Modification of the safe_pollRadiusLog Watchdog Script\nid: 2f9c1dfd-3d00-402b-81ff-86e441136d3e\nstatus: experimental\ndescription: >-\n    Detects a file-write event against safe_pollRadiusLog.sh under\n    /usr/local/bin. In this campaign the operator rewrote this exact path\n    into a self-healing watchdog for a RADIUS statistics daemon on a\n    carrier AAA host, then backdated the file's modification time to\n    2010-10-07 to blend it in with genuinely old system files.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\nauthor: The Hunters Ledger\ndate: 2026-08-17\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1543\nlogsource:\n    category: file_event\n    product: linux\ndetection:\n    selection:\n        TargetFilename: '/usr/local/bin/safe_pollRadiusLog.sh'\n    condition: selection\nfalsepositives:\n    - Unlikely; this is a campaign-specific filename, and any legitimate script sharing it should be independently verified rather than excluded outright\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-08-18T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--1d8153a8-ef43-5bbe-a28a-a0db72f9d8c5",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-11T05:44:23.975077Z",
+            "modified": "2026-10-11T05:44:23.975077Z",
+            "name": "Java Process Spawning a Unix Shell With an Inline Command",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Java Process Spawning a Unix Shell With an Inline Command\nid: a14ad5ee-c455-49ce-8c4d-92064c64b03b\nstatus: experimental\ndescription: >-\n    Detects a Java process (a parent image ending in /java) directly spawning\n    a Unix shell with an inline command argument. The test does not look for the\n    exploitation that preceded it. The pattern is consistent with WebLogic T3/IIOP JNDI\n    deserialization exploitation (CVE-2023-21839, CVE-2024-21182) reaching a\n    reverse-shell or beacon payload such as bash -i redirected to /dev/tcp or\n    a curl proof-of-execution callback.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/\n    - https://nvd.nist.gov/vuln/detail/CVE-2023-21839\n    - https://nvd.nist.gov/vuln/detail/CVE-2024-21182\nauthor: The Hunters Ledger\ndate: 2026-08-17\ntags:\n    - attack.execution\n    - attack.t1059.004\n    - stp.4\nlogsource:\n    category: process_creation\n    product: linux\ndetection:\n    selection_parent:\n        ParentImage|endswith: '/java'\n    selection_shell:\n        Image|endswith:\n            - '/bin/bash'\n            - '/bin/sh'\n            - '/bin/dash'\n    selection_flag:\n        CommandLine|contains: ' -c '\n    condition: all of selection_*\nfalsepositives:\n    - Java-based build, backup or health-check tooling that intentionally shells out to run a maintenance command\n    - Application servers configured to invoke OS-level scripts as part of legitimate scheduled jobs\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-08-18T00:00:00Z",
             "labels": [
@@ -2749,15 +2749,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--9838dc03-8802-5247-93a1-a3cb785b6727",
+            "id": "indicator--0a235c6a-27a7-5436-b2f1-25559dab1851",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:16.471094Z",
-            "modified": "2026-10-09T13:20:07.380379Z",
-            "name": "THL DETECT WebLogicTelecomHarvester Cisco WSMA fileCopy Exfiltration Primitive to External dstURL",
+            "created": "2026-10-11T05:44:23.975544Z",
+            "modified": "2026-10-11T05:44:23.975544Z",
+            "name": "THL DETECT WebLogicTelecomHarvester Cisco WSMA fileCopy Request With a dstURL Parameter (Self-Exfiltration Primitive)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT WebLogicTelecomHarvester Cisco WSMA fileCopy Exfiltration Primitive to External dstURL\"; flow:established,to_server; content:\"urn:cisco:wsma-filesystem\"; http_client_body; content:\"fileCopy\"; http_client_body; content:\"dstURL=\"; http_client_body; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:9301805; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
+            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT WebLogicTelecomHarvester Cisco WSMA fileCopy Request With a dstURL Parameter (Self-Exfiltration Primitive)\"; flow:established,to_server; content:\"urn:cisco:wsma-filesystem\"; http_client_body; content:\"fileCopy\"; http_client_body; content:\"dstURL=\"; http_client_body; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:9301805; rev:3; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
             "pattern_type": "suricata",
             "valid_from": "2026-08-18T00:00:00Z",
             "labels": [
@@ -2812,57 +2812,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--46da810f-923c-5b52-883e-a0a806eae8ee",
+            "id": "indicator--0f6b8de8-bf91-50cc-adda-4ad55c6182a9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:16.471382Z",
-            "modified": "2026-10-09T13:20:07.380775Z",
-            "name": "THL HUNT WebLogicTelecomHarvester Non-Standard X-CMD Webshell Dispatch Header",
+            "created": "2026-10-11T05:44:23.97585Z",
+            "modified": "2026-10-11T05:44:23.97585Z",
+            "name": "THL HUNT WebLogicTelecomHarvester WebSocket Upgrade Handshake to an External Host (Broad Tunnel Hunting Lead, Not Chisel-Specific)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL HUNT WebLogicTelecomHarvester Non-Standard X-CMD Webshell Dispatch Header\"; flow:established,to_server; content:\"X-CMD|3a|\"; http_header; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:9301810; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
-            "pattern_type": "suricata",
-            "valid_from": "2026-08-18T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "indicator",
-            "spec_version": "2.1",
-            "id": "indicator--808ca194-a866-5d41-8ba3-ea83d3f897b3",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:16.471454Z",
-            "modified": "2026-10-09T13:20:07.380881Z",
-            "name": "THL DETECT WebLogicTelecomHarvester PRTG Bulk Credential Extraction via getobjectproperty.htm",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT WebLogicTelecomHarvester PRTG Bulk Credential Extraction via getobjectproperty.htm\"; flow:established,to_server; content:\"getobjectproperty.htm\"; http_uri; content:\"passhash=\"; http_uri; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-recon; sid:9301811; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
-            "pattern_type": "suricata",
-            "valid_from": "2026-08-18T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "indicator",
-            "spec_version": "2.1",
-            "id": "indicator--14de4f25-c53e-564b-86f3-dfc6a45b55a4",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:16.471527Z",
-            "modified": "2026-10-09T13:20:07.380981Z",
-            "name": "THL HUNT WebLogicTelecomHarvester Chisel-Style Reverse-Tunnel WebSocket Upgrade Handshake (Broad, Chisel Has Legitimate Uses)",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT WebLogicTelecomHarvester Chisel-Style Reverse-Tunnel WebSocket Upgrade Handshake (Broad, Chisel Has Legitimate Uses)\"; flow:established,to_server; content:\"Upgrade|3a| websocket\"; http_header; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:9301808; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT WebLogicTelecomHarvester WebSocket Upgrade Handshake to an External Host (Broad Tunnel Hunting Lead, Not Chisel-Specific)\"; flow:established,to_server; content:\"Upgrade|3a| websocket\"; http_header; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:9301808; rev:3; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
             "pattern_type": "suricata",
             "valid_from": "2026-08-18T00:00:00Z",
             "labels": [
@@ -2905,6 +2863,48 @@
                 "malicious-activity"
             ],
             "pattern": "alert tcp $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL HUNT WebLogicTelecomHarvester Inbound TCP Response Carrying javaCodeBase (JNDI Reference Callback Lead)\"; flow:established,to_client; content:\"javaCodeBase\"; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-admin; sid:9301807; rev:4; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-08-18T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--0ffe1b09-b2e5-5ad5-861f-b888b172024a",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-11T05:44:23.976135Z",
+            "modified": "2026-10-11T05:44:23.976135Z",
+            "name": "THL HUNT WebLogicTelecomHarvester PRTG getobjectproperty.htm Request With passhash Authentication (Credential Read Primitive, No Count)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL HUNT WebLogicTelecomHarvester PRTG getobjectproperty.htm Request With passhash Authentication (Credential Read Primitive, No Count)\"; flow:established,to_server; content:\"getobjectproperty.htm\"; http_uri; content:\"passhash=\"; http_uri; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-recon; sid:9301811; rev:3; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-08-18T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--46da810f-923c-5b52-883e-a0a806eae8ee",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-01T19:54:16.471382Z",
+            "modified": "2026-10-09T13:20:07.380775Z",
+            "name": "THL HUNT WebLogicTelecomHarvester Non-Standard X-CMD Webshell Dispatch Header",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL HUNT WebLogicTelecomHarvester Non-Standard X-CMD Webshell Dispatch Header\"; flow:established,to_server; content:\"X-CMD|3a|\"; http_header; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:9301810; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
             "pattern_type": "suricata",
             "valid_from": "2026-08-18T00:00:00Z",
             "labels": [
@@ -6312,20 +6312,6 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--514dc649-719b-5fb9-b988-5a4057344fc9",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:16.488165Z",
-            "modified": "2026-10-01T19:54:16.488165Z",
-            "relationship_type": "indicates",
-            "source_ref": "indicator--ea5ee4f1-d7fd-5b4b-a4b3-e59ef17c3b8a",
-            "target_ref": "malware--faf43744-2767-5207-813f-8cb21f8bd4fa",
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "relationship",
-            "spec_version": "2.1",
             "id": "relationship--ff06cd2a-9f9f-598e-aa2d-e2d0e6046893",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:16.488225Z",
@@ -6340,12 +6326,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--ea377867-0a66-5ce6-9cbe-677119913c3d",
+            "id": "relationship--4c4ef944-c512-5b8f-8f4a-feade228b4cd",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:16.488285Z",
-            "modified": "2026-10-01T19:54:16.488285Z",
+            "created": "2026-10-11T05:44:23.998237Z",
+            "modified": "2026-10-11T05:44:23.998237Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--692ed9ed-f68c-5ddc-8b39-7e2b6f6456ad",
+            "source_ref": "indicator--7cb8457a-7f48-5094-9d62-0016cd3d2f72",
             "target_ref": "malware--faf43744-2767-5207-813f-8cb21f8bd4fa",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -6466,6 +6452,20 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
+            "id": "relationship--e96b4260-16ec-5a48-8126-165d612c236c",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-11T05:44:23.999111Z",
+            "modified": "2026-10-11T05:44:23.999111Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--1d8153a8-ef43-5bbe-a28a-a0db72f9d8c5",
+            "target_ref": "malware--faf43744-2767-5207-813f-8cb21f8bd4fa",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
             "id": "relationship--7c242feb-6232-56de-872b-89925393970e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:16.488825Z",
@@ -6522,12 +6522,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--53fc2442-fa5b-5bb1-8e76-8ab16ad5e431",
+            "id": "relationship--40205a12-f260-50af-bd78-1ed9c90bd780",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:16.489065Z",
-            "modified": "2026-10-01T19:54:16.489065Z",
+            "created": "2026-10-11T05:44:23.999561Z",
+            "modified": "2026-10-11T05:44:23.999561Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--9838dc03-8802-5247-93a1-a3cb785b6727",
+            "source_ref": "indicator--0a235c6a-27a7-5436-b2f1-25559dab1851",
             "target_ref": "malware--faf43744-2767-5207-813f-8cb21f8bd4fa",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -6564,40 +6564,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--33ef9caf-7805-51e1-9274-9d4f0c152922",
+            "id": "relationship--bdba45ea-aff3-5b73-9aa4-47a8fd3464cf",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:16.489305Z",
-            "modified": "2026-10-01T19:54:16.489305Z",
+            "created": "2026-10-11T05:44:23.999887Z",
+            "modified": "2026-10-11T05:44:23.999887Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--46da810f-923c-5b52-883e-a0a806eae8ee",
-            "target_ref": "malware--faf43744-2767-5207-813f-8cb21f8bd4fa",
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "relationship",
-            "spec_version": "2.1",
-            "id": "relationship--0ed8a6c5-1b7b-5ba9-b38e-6736749b4bd0",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:16.489364Z",
-            "modified": "2026-10-01T19:54:16.489364Z",
-            "relationship_type": "indicates",
-            "source_ref": "indicator--808ca194-a866-5d41-8ba3-ea83d3f897b3",
-            "target_ref": "malware--faf43744-2767-5207-813f-8cb21f8bd4fa",
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "relationship",
-            "spec_version": "2.1",
-            "id": "relationship--5e20ddf2-4f0d-5b53-b024-2d0056172394",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:16.489424Z",
-            "modified": "2026-10-01T19:54:16.489424Z",
-            "relationship_type": "indicates",
-            "source_ref": "indicator--14de4f25-c53e-564b-86f3-dfc6a45b55a4",
+            "source_ref": "indicator--0f6b8de8-bf91-50cc-adda-4ad55c6182a9",
             "target_ref": "malware--faf43744-2767-5207-813f-8cb21f8bd4fa",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -6626,6 +6598,34 @@
             "modified": "2026-10-11T03:42:53.226399Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--e74ff4d2-fa7f-54b6-8be1-4ddd527c4a23",
+            "target_ref": "malware--faf43744-2767-5207-813f-8cb21f8bd4fa",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--25f9d9e6-06a6-5b0e-836b-479423e68508",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-11T05:44:24.000191Z",
+            "modified": "2026-10-11T05:44:24.000191Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--0ffe1b09-b2e5-5ad5-861f-b888b172024a",
+            "target_ref": "malware--faf43744-2767-5207-813f-8cb21f8bd4fa",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--33ef9caf-7805-51e1-9274-9d4f0c152922",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-01T19:54:16.489305Z",
+            "modified": "2026-10-01T19:54:16.489305Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--46da810f-923c-5b52-883e-a0a806eae8ee",
             "target_ref": "malware--faf43744-2767-5207-813f-8cb21f8bd4fa",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -58045,7 +58045,7 @@
             "id": "report--2aa3b7a4-9d57-5059-94af-58ae5009f969",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:16.728288Z",
-            "modified": "2026-10-11T03:42:53.552425Z",
+            "modified": "2026-10-11T05:44:24.309305Z",
             "name": "Carrier Credential Harvesting Through a Customer's Router",
             "report_types": [
                 "threat-report"
@@ -58212,9 +58212,8 @@
                 "indicator--f9030282-c978-55be-afd6-27a9358b8667",
                 "indicator--c5d87bd4-9c92-5be4-ac76-cd7d1ce098e9",
                 "indicator--19e885e4-c57c-58ac-946d-74eac823ad29",
-                "indicator--ea5ee4f1-d7fd-5b4b-a4b3-e59ef17c3b8a",
                 "indicator--232c7f00-d786-5dc7-9647-e877c2ba44ba",
-                "indicator--692ed9ed-f68c-5ddc-8b39-7e2b6f6456ad",
+                "indicator--7cb8457a-7f48-5094-9d62-0016cd3d2f72",
                 "indicator--690de164-b24c-5218-bdab-a882598c6203",
                 "indicator--2d098228-f9ec-59f2-ae70-0249b1895f83",
                 "indicator--230fbd96-b0ab-5456-adc7-7ebcbfb7e4d3",
@@ -58223,18 +58222,19 @@
                 "indicator--d9f54204-3d3a-547b-bfe7-c76441501800",
                 "indicator--57b702e0-2202-5988-8121-09e5eeb73fe1",
                 "indicator--abebc283-3e99-5f15-912f-9865fc1ffede",
+                "indicator--1d8153a8-ef43-5bbe-a28a-a0db72f9d8c5",
                 "indicator--4d23d92b-18a3-55c3-a41c-4133e1c0ebb0",
                 "indicator--cb3d7204-91ac-5432-a245-183500d921bc",
                 "indicator--48a8641f-f1d2-5df6-b479-a6aab65210d5",
                 "indicator--4d269a3b-1d9b-5016-8b69-2c5afbc615ba",
-                "indicator--9838dc03-8802-5247-93a1-a3cb785b6727",
+                "indicator--0a235c6a-27a7-5436-b2f1-25559dab1851",
                 "indicator--dc4ae91b-0cde-5837-a9f2-70b960f15198",
                 "indicator--d7fcbbbd-1a8d-56e0-bda2-c508ae9a4403",
-                "indicator--46da810f-923c-5b52-883e-a0a806eae8ee",
-                "indicator--808ca194-a866-5d41-8ba3-ea83d3f897b3",
-                "indicator--14de4f25-c53e-564b-86f3-dfc6a45b55a4",
+                "indicator--0f6b8de8-bf91-50cc-adda-4ad55c6182a9",
                 "indicator--8276907e-9575-56dd-bc64-804901fa117e",
                 "indicator--e74ff4d2-fa7f-54b6-8be1-4ddd527c4a23",
+                "indicator--0ffe1b09-b2e5-5ad5-861f-b888b172024a",
+                "indicator--46da810f-923c-5b52-883e-a0a806eae8ee",
                 "malware--ca733365-6fab-5ce2-b101-e9f73b7ccadf",
                 "malware--54e4b1c3-b1a5-57b7-bf2b-a60851acb420",
                 "malware--faf43744-2767-5207-813f-8cb21f8bd4fa",
@@ -58440,9 +58440,8 @@
                 "relationship--e5d01dcf-d62d-5b16-abae-2202fe90bb0a",
                 "relationship--d1ce8d5a-a9c5-5bda-84f9-58281f38ddcd",
                 "relationship--edc7eb9c-05c7-515c-a9f5-8f65403301ba",
-                "relationship--514dc649-719b-5fb9-b988-5a4057344fc9",
                 "relationship--ff06cd2a-9f9f-598e-aa2d-e2d0e6046893",
-                "relationship--ea377867-0a66-5ce6-9cbe-677119913c3d",
+                "relationship--4c4ef944-c512-5b8f-8f4a-feade228b4cd",
                 "relationship--929dabbd-7165-5939-a47a-e7595b9a94a1",
                 "relationship--fb805d63-cd29-56a2-8da9-77a48d037cc7",
                 "relationship--332dedfe-f3c4-5d53-942b-195b9f2c2a0c",
@@ -58451,18 +58450,19 @@
                 "relationship--b7f048f3-a941-5790-a01c-0c2f8bcf7e78",
                 "relationship--eaf2a1d5-f6fe-53b9-b62e-a29bda6d1158",
                 "relationship--315a3631-11cc-5ad0-a8a0-d09cb1b7643b",
+                "relationship--e96b4260-16ec-5a48-8126-165d612c236c",
                 "relationship--7c242feb-6232-56de-872b-89925393970e",
                 "relationship--9c861d49-53ed-547b-97e0-3b6df21ef90c",
                 "relationship--647c7b79-03f4-50c3-939f-d522f728f2cf",
                 "relationship--b807a27c-e1ad-58f5-914e-069900b94bde",
-                "relationship--53fc2442-fa5b-5bb1-8e76-8ab16ad5e431",
+                "relationship--40205a12-f260-50af-bd78-1ed9c90bd780",
                 "relationship--73f8bcda-af78-5e79-a521-c8575d6304b3",
                 "relationship--155caf20-67ec-5699-9586-258311d0fff3",
-                "relationship--33ef9caf-7805-51e1-9274-9d4f0c152922",
-                "relationship--0ed8a6c5-1b7b-5ba9-b38e-6736749b4bd0",
-                "relationship--5e20ddf2-4f0d-5b53-b024-2d0056172394",
+                "relationship--bdba45ea-aff3-5b73-9aa4-47a8fd3464cf",
                 "relationship--086e6170-7688-5b98-961c-f0756cf095a4",
                 "relationship--59908d30-ce05-511d-8352-1357252f9815",
+                "relationship--25f9d9e6-06a6-5b0e-836b-479423e68508",
+                "relationship--33ef9caf-7805-51e1-9274-9d4f0c152922",
                 "relationship--c3f44f89-e518-5ded-a256-a600dc122047",
                 "relationship--db2f48a6-c3fd-5916-809b-2efc363e825d",
                 "relationship--7aa5d41f-647f-5029-a375-75d224214b73",

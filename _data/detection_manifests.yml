@@ -1261,11 +1261,11 @@ bellamain-turkish-phaas-79-137-192-3-20260516-detections:
     robustness: 1
     confidence: "MODERATE"
     attack: [T1518.001, T1102.002, T1041, T1119]
-  - name: "BellaMain USOM Blocklist Poll from Web Server (Network Layer)"
+  - name: "BellaMain USOM Blocklist Poll From an Internal Host (Network Layer)"
     engine: suricata
     tier: Hunting
     fence: 5
-    hash: "7a021f7d"
+    hash: "60e5a9dd"
     head: "alert http $HOME_NET any -> any any (msg:\"THL HU"
     robustness: 1
     confidence: "MODERATE"
@@ -2177,19 +2177,10 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1574.006, T1027, T1014]
-  - name: "GHOST ComfyUI Fake PerformanceMonitor Custom Node Planted"
-    engine: sigma
-    tier: Detection
-    fence: 12
-    hash: "9b8a5be0"
-    head: "title: GHOST ComfyUI Fake PerformanceMonitor Cus"
-    robustness: 2
-    confidence: "HIGH"
-    attack: [T1554]
   - name: "GHOST Kit Systemd Camouflage Service Unit Creation"
     engine: sigma
     tier: Detection
-    fence: 13
+    fence: 12
     hash: "d7446929"
     head: "title: GHOST Kit Systemd Camouflage Service Unit"
     robustness: 2
@@ -2198,7 +2189,7 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
   - name: "Chattr Immutable Bit Set on Linux Persistence Target Paths"
     engine: sigma
     tier: Detection
-    fence: 14
+    fence: 13
     hash: "14821169"
     head: "title: Chattr Immutable Bit Set on Linux Persist"
     robustness: 3
@@ -2207,7 +2198,7 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
   - name: "Suspicious LD_PRELOAD Set to Non-Standard Library Path"
     engine: sigma
     tier: Hunting
-    fence: 15
+    fence: 14
     hash: "3c6829fe"
     head: "title: Suspicious LD_PRELOAD Set to Non-Standard"
     robustness: 2
@@ -2216,7 +2207,7 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
   - name: "Ncat Listener Creation on Linux Host"
     engine: sigma
     tier: Hunting
-    fence: 16
+    fence: 15
     hash: "0485f07f"
     head: "title: Ncat Listener Creation on Linux Host id: "
     robustness: 1
@@ -2225,7 +2216,7 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
   - name: "Hysteria Proxy Process Execution on Linux Server"
     engine: sigma
     tier: Hunting
-    fence: 17
+    fence: 16
     hash: "f1160c21"
     head: "title: Hysteria Proxy Process Execution on Linux"
     robustness: 2
@@ -2234,7 +2225,7 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
   - name: "memfd_create Syscall Outside a Java, Browser and Node Filter on Linux Server"
     engine: sigma
     tier: Hunting
-    fence: 18
+    fence: 17
     hash: "82f42527"
     head: "title: memfd_create Syscall Outside a Java, Brow"
     robustness: 2
@@ -2243,12 +2234,21 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
   - name: "Auditd - PAM Security Library Directory File Creation by Non-Package-Manager"
     engine: sigma
     tier: Hunting
-    fence: 19
+    fence: 18
     hash: "4f0f3fae"
     head: "title: Auditd - PAM Security Library Directory F"
     robustness: 2
     confidence: "LOW"
     attack: [T1574.006, T1014]
+  - name: "ComfyUI Custom Node Python File Named PerformanceMonitor Created"
+    engine: sigma
+    tier: Hunting
+    fence: 19
+    hash: "4055cdbe"
+    head: "title: ComfyUI Custom Node Python File Named Per"
+    robustness: 1
+    confidence: "LOW"
+    attack: [T1554]
   - name: "GHOST Kit Distribution File Download from AEZA Hosting Range"
     engine: suricata
     tier: Detection
@@ -2658,7 +2658,7 @@ kaido-quasar-rat-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1219, T1113]
-  - name: "KAIDO Anti-Analysis Sleep Obfuscation + Config Crypto Framing"
+  - name: "KAIDO Anti-Analysis Sleep Obfuscation Debug String With Family Namespace"
     engine: yara
     tier: Detection
     fence: 2
@@ -2666,13 +2666,13 @@ kaido-quasar-rat-detections:
     head: "rule RAT_KAIDO_AntiAnalysis_SleepObfuscation { m"
     robustness: 2
     confidence: "MODERATE"
-    attack: [T1497, T1573.001]
-  - name: "KAIDO Zone.Identifier ADS Self-Deletion (MOTW Bypass)"
+    attack: [T1497]
+  - name: "Zone.Identifier ADS Deletion by a Process Outside System32 and Defender Paths (MOTW Bypass)"
     engine: sigma
     tier: Hunting
     fence: 3
-    hash: "bf7da171"
-    head: "title: KAIDO RAT Self-Deletion of Zone.Identifie"
+    hash: "18ab73ba"
+    head: "title: Zone.Identifier Alternate Data Stream Del"
     robustness: 2
     confidence: "HIGH (behavior) / triage required (attribution)"
     attack: [T1553.005]
@@ -2703,31 +2703,31 @@ kaido-quasar-rat-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1071.001, T1573.001]
-  - name: "KAIDO Quasar Binary Protocol on TCP 4782"
+  - name: "Outbound TCP Payload to Port 4782 (Quasar Default Port, KAIDO C2 Port)"
     engine: suricata
     tier: Hunting
     fence: 7
-    hash: "c51b980f"
+    hash: "f6c2aef4"
     head: "alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (m"
     robustness: 2
     confidence: "HIGH for the port/protocol pairing; the rule itself is a port-anchored lead"
     attack: [T1095]
 korean-claude-openclaw-221.150.15.104-detections:
-  - name: "OpenClaw-Specific Claude Code Allowlist"
-    engine: yara
-    tier: Detection
-    fence: 0
-    hash: "60da30fa"
-    head: "/* Yara Rule Set Identifier: Claude Code Attacke"
-    robustness: 3
-    confidence: "HIGH"
-    attack: [T1685, T1059.004]
   - name: "Generic Curl-Pipe-Bash Pattern in Claude Code Allowlist"
     engine: yara
     tier: Hunting
-    fence: 1
-    hash: "b6e81713"
+    fence: 0
+    hash: "ce77fe0b"
     head: "rule TOOL_ClaudeCode_CurlBash_Allowlist_Generic "
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1685, T1059.004]
+  - name: "OpenClaw-Specific Claude Code Allowlist"
+    engine: yara
+    tier: Hunting
+    fence: 1
+    hash: "59c541d1"
+    head: "/* Yara Rule Set Identifier: Claude Code Attacke"
     robustness: 2
     confidence: "MODERATE"
     attack: [T1685, T1059.004]
@@ -2735,8 +2735,8 @@ korean-claude-openclaw-221.150.15.104-detections:
     engine: sigma
     tier: Hunting
     fence: 2
-    hash: "38b7a407"
-    head: "title: Claude Code Permission Allowlist Modified"
+    hash: "f9fbeee8"
+    head: "title: Claude Code settings.local.json Written U"
     robustness: 2
     confidence: "MODERATE"
     attack: [T1685]
@@ -2744,7 +2744,7 @@ korean-claude-openclaw-221.150.15.104-detections:
     engine: sigma
     tier: Hunting
     fence: 3
-    hash: "e24889d9"
+    hash: "318ef6ef"
     head: "title: OpenClaw AI-Agent Framework Curl-Pipe-Bas"
     robustness: 2
     confidence: "MODERATE"
@@ -2836,7 +2836,7 @@ multivector-ecommerce-rce-toolkit-192-3-1-116-detections:
     engine: yara
     tier: Detection
     fence: 2
-    hash: "93a1918e"
+    hash: "74bb7686"
     head: "/* Yara Rule Set Identifier: Generic JSP Web She"
     robustness: 2
     confidence: "HIGH"
@@ -2845,7 +2845,7 @@ multivector-ecommerce-rce-toolkit-192-3-1-116-detections:
     engine: yara
     tier: Detection
     fence: 3
-    hash: "c4377df5"
+    hash: "7176cb97"
     head: "/* Yara Rule Set Identifier: XXE-to-SSRF Interna"
     robustness: 3
     confidence: "HIGH"
@@ -2863,8 +2863,8 @@ multivector-ecommerce-rce-toolkit-192-3-1-116-detections:
     engine: sigma
     tier: Detection
     fence: 5
-    hash: "39bbbc38"
-    head: "title: External HTTP Request to Jolokia JMX Writ"
+    hash: "fb3e8746"
+    head: "title: HTTP Request to Jolokia JMX Write Endpoin"
     robustness: 3
     confidence: "HIGH (correlation) / LOW (either base rule alone)"
     attack: [T1213, T1190]
@@ -2877,12 +2877,12 @@ multivector-ecommerce-rce-toolkit-192-3-1-116-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1596.005]
-  - name: "Successful External Retrieval of a Spring Boot Actuator Heap Dump"
+  - name: "Successful Large Response From a Spring Boot Actuator Heap Dump Endpoint"
     engine: sigma
     tier: Detection
     fence: 7
-    hash: "dd72df04"
-    head: "title: Successful External Retrieval of a Spring"
+    hash: "94e7ad19"
+    head: "title: Successful Large Response From a Spring B"
     robustness: 2
     confidence: "HIGH"
     attack: [T1005, T1552.001]
@@ -2908,8 +2908,8 @@ multivector-ecommerce-rce-toolkit-192-3-1-116-detections:
     engine: sigma
     tier: Hunting
     fence: 10
-    hash: "66471be9"
-    head: "title: External Connection Attempt to a Service-"
+    hash: "0d3e863b"
+    head: "title: Non-Rejected Connection to a Service-Disc"
     robustness: 2
     confidence: "MODERATE"
     attack: [T1046]
@@ -2962,11 +2962,11 @@ multivector-ecommerce-rce-toolkit-192-3-1-116-detections:
     engine: suricata
     tier: Detection
     fence: 16
-    hash: "c5e0553b"
+    hash: "236740bd"
     head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
     robustness: 3
     confidence: "HIGH"
-    attack: [T1190, T1098.004]
+    attack: [T1190]
   - name: "Eureka Apps-Delta Response Containing XStream Gadget Markers (Flowbits Pair)"
     engine: suricata
     tier: Detection
@@ -3089,7 +3089,7 @@ new-files-found-20260408-detections:
     engine: sigma
     tier: Hunting
     fence: 8
-    hash: "f926cc5f"
+    hash: "88d18809"
     head: "title: CovertVPN WinPcap npf.sys Kernel Driver L"
     robustness: 2
     confidence: "MODERATE"
@@ -3116,7 +3116,7 @@ new-files-found-20260408-detections:
     engine: sigma
     tier: Hunting
     fence: 11
-    hash: "ff729920"
+    hash: "e63d8a72"
     head: "title: OpenStrike Gen-4 Beacon Task Polling HTTP"
     robustness: 2
     confidence: "MODERATE"
@@ -3125,7 +3125,7 @@ new-files-found-20260408-detections:
     engine: sigma
     tier: Hunting
     fence: 12
-    hash: "d8a14017"
+    hash: "4f45d239"
     head: "title: OpenStrike Gen-4 Beacon Output Submission"
     robustness: 2
     confidence: "MODERATE"
@@ -3189,7 +3189,7 @@ newdouble-clickfix-detections:
     engine: yara
     tier: Hunting
     fence: 1
-    hash: "92aaf283"
+    hash: "c9f9113d"
     head: "rule Newdouble_ClickFix_Berserk_Embedded_DLL_PDB"
     robustness: 2
     confidence: "HIGH"
@@ -3201,12 +3201,12 @@ newdouble-clickfix-detections:
     head: "import \"pe\" rule Newdouble_ClickFix_Berserk_Load"
     robustness: 1
     confidence: "MODERATE"
-  - name: "ClickFix PowerShell Stager Pasted Into Run Dialog Downloading a Script Then Running It"
+  - name: "PowerShell Launched From Explorer With Download-and-Run Script Arguments (ClickFix Run Dialog Shape)"
     engine: sigma
     tier: Hunting
     fence: 3
-    hash: "b8585fef"
-    head: "title: ClickFix PowerShell Stager Pasted Into Ru"
+    hash: "46dfa905"
+    head: "title: PowerShell Launched From Explorer With Do"
     robustness: 2
     confidence: "MODERATE"
     attack: [T1059.001, T1204.004]
@@ -3223,7 +3223,7 @@ newdouble-clickfix-detections:
     engine: sigma
     tier: Hunting
     fence: 5
-    hash: "90ec9aa1"
+    hash: "6de9a763"
     head: "title: PowerShell Writing a Script Into a Roamin"
     robustness: 1
     confidence: "LOW"
@@ -3232,7 +3232,7 @@ newdouble-clickfix-detections:
     engine: sigma
     tier: Hunting
     fence: 6
-    hash: "eed728f0"
+    hash: "64c2f9d7"
     head: "title: Per-User Proxy or PAC Setting Changed by "
     robustness: 1
     confidence: "LOW"
@@ -3305,7 +3305,7 @@ nsminer-cryptojacker-detections:
     engine: yara
     tier: Detection
     fence: 0
-    hash: "1bb42458"
+    hash: "ce9e4192"
     head: "/* Yara Rule Set Identifier: NsMiner Cryptojacke"
     robustness: 2
     confidence: "HIGH"
@@ -3342,7 +3342,7 @@ open-directory-172-105-0-126-20260406-detections:
     engine: yara
     tier: Detection
     fence: 0
-    hash: "612b96af"
+    hash: "ba11392c"
     head: "/* Yara Rule Set Identifier: OpenStrike Beacon T"
     robustness: 2
     confidence: "HIGH"
@@ -3351,7 +3351,7 @@ open-directory-172-105-0-126-20260406-detections:
     engine: yara
     tier: Detection
     fence: 1
-    hash: "4a0abc33"
+    hash: "ef98fff4"
     head: "rule TOOLKIT_OpenStrike_Loader_Chain { meta: des"
     robustness: 2
     confidence: "HIGH"
@@ -3365,12 +3365,12 @@ open-directory-172-105-0-126-20260406-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1059.006, T1071.001]
-  - name: "Cobalt Strike 3.x Tripwired ReflectiveLoader + MALC Malleable Profile"
+  - name: "Cobalt Strike 3.x MALC Malleable Profile Beacon"
     engine: yara
     tier: Detection
     fence: 3
-    hash: "0d5fa5d2"
-    head: "rule MALW_CobaltStrike3x_TripwiredReflectiveLoad"
+    hash: "f6ce30a7"
+    head: "rule MALW_CobaltStrike3x_MALC_Malleable_Profile_"
     robustness: 2
     confidence: "HIGH"
     attack: [T1071.001, T1620]
@@ -3406,7 +3406,7 @@ open-directory-193-56-255-154-xiebroc2-detections:
     engine: yara
     tier: Detection
     fence: 1
-    hash: "da273c3e"
+    hash: "b243b6f7"
     head: "rule RAT_XiebroC2_v31_Go_TCP_Implant { meta: des"
     robustness: 3
     confidence: "HIGH"
@@ -3438,19 +3438,10 @@ open-directory-193-56-255-154-xiebroc2-detections:
     robustness: 2
     confidence: "MODERATE"
     attack: [T1571]
-  - name: "XiebroC2 Go Implant Loading Windows CLR at Runtime via Go-Clr"
-    engine: sigma
-    tier: Detection
-    fence: 5
-    hash: "96031772"
-    head: "title: XiebroC2 Go Implant Loading Windows CLR a"
-    robustness: 3
-    confidence: "HIGH"
-    attack: [T1620]
   - name: "Covenant C2 GruntStager HTTP Beacon: Campaign Session Token Detected"
     engine: sigma
     tier: Detection
-    fence: 6
+    fence: 5
     hash: "27fca674"
     head: "title: Covenant C2 GruntStager HTTP Beacon — Cam"
     robustness: 2
@@ -3459,7 +3450,7 @@ open-directory-193-56-255-154-xiebroc2-detections:
   - name: "Shell Process Spawned from main.exe (XiebroC2 Implant Parent-Child Pattern)"
     engine: sigma
     tier: Hunting
-    fence: 7
+    fence: 6
     hash: "6b650d69"
     head: "title: Shell Process Spawned from main.exe (Xieb"
     robustness: 1
@@ -3468,12 +3459,21 @@ open-directory-193-56-255-154-xiebroc2-detections:
   - name: "PowerShell Fileless Loader: Deflate Decode with Reflective Assembly Load"
     engine: sigma
     tier: Hunting
-    fence: 8
+    fence: 7
     hash: "3a1b3244"
     head: "title: PowerShell Fileless Loader — Deflate Deco"
     robustness: 2
     confidence: "MODERATE"
     attack: [T1059.001, T1140, T1620]
+  - name: "Process Outside a .NET Host List Loading the Windows CLR at Runtime"
+    engine: sigma
+    tier: Hunting
+    fence: 8
+    hash: "0b803c8a"
+    head: "title: Process Outside a .NET Host List Loading "
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1620]
   - name: "Covenant GruntStager C2 Beacon: Campaign Session Token in HTTP POST"
     engine: suricata
     tier: Detection
@@ -3483,15 +3483,15 @@ open-directory-193-56-255-154-xiebroc2-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1071.001]
-  - name: "Covenant GruntStager Masquerade: Chrome 41 Windows 7 UA on Port 443"
+  - name: "Covenant GruntStager Masquerade: Chrome 41 Windows 7 UA With /en-us/ URI"
     engine: suricata
     tier: Detection
     fence: 10
-    hash: "aeac2b78"
+    hash: "93ddc3c4"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 2
     confidence: "HIGH"
-    attack: [T1071.001, T1036, T1571]
+    attack: [T1071.001, T1036]
 open-directory-94-103-1-13-20260423-detections:
   - name: "Stage-4 Mutex GUID (Cross-Build Invariant)"
     engine: yara
@@ -3506,7 +3506,7 @@ open-directory-94-103-1-13-20260423-detections:
     engine: yara
     tier: Detection
     fence: 1
-    hash: "862d4eef"
+    hash: "99d8d0c2"
     head: "rule MALW_ChaosLoader_BatchDropper_StructuralAnc"
     robustness: 2
     confidence: "HIGH"
@@ -3533,7 +3533,7 @@ open-directory-94-103-1-13-20260423-detections:
     engine: yara
     tier: Detection
     fence: 4
-    hash: "4f57dd16"
+    hash: "820ae8e2"
     head: "rule RAT_OrcusRAT_v7_WardowCrack { meta: descrip"
     robustness: 3
     confidence: "DEFINITE"
@@ -3578,7 +3578,7 @@ open-directory-94-103-1-13-20260423-detections:
     engine: sigma
     tier: Detection
     fence: 9
-    hash: "7148d04b"
+    hash: "7580f0d1"
     head: "title: Chaos TorBrowserTor Ransomware Encrypted "
     robustness: 2
     confidence: "HIGH"
@@ -3601,12 +3601,12 @@ open-directory-94-103-1-13-20260423-detections:
     robustness: 1
     confidence: "DEFINITE (for this build) / build-specific (durability)"
     attack: [T1027.011, T1112, T1036.005]
-  - name: "Operator Tri-Artifact Anti-Sandbox Gate Artefacts Present"
+  - name: "Admin Account Creating a VBE Directory File or mapping.csv in Temp (Anti-Sandbox Gate Artefacts)"
     engine: sigma
     tier: Hunting
     fence: 12
-    hash: "bf7e1452"
-    head: "title: Chaos Loader Operator Tri-Artifact Anti-S"
+    hash: "e2f348a8"
+    head: "title: Admin Account Creating a VBE Directory Fi"
     robustness: 1
     confidence: "HIGH"
     attack: [T1497, T1036]
@@ -3626,21 +3626,21 @@ open-directory-94-103-1-13-20260423-detections:
     robustness: 1
     confidence: "MODERATE (standalone) / HIGH when correlated with `.torbrowsertor` extension creation (see the Detection-tier correlation rule above)"
     attack: [T1490]
-  - name: "Task Manager Disabled via Registry Policy"
+  - name: "Task Manager Disabled via User Registry Policy Outside Group Policy Hosts"
     engine: sigma
     tier: Hunting
     fence: 14
-    hash: "7b740cec"
-    head: "title: Chaos TorBrowserTor Stage-5a Disables Tas"
+    hash: "bf902fe4"
+    head: "title: Task Manager Disabled via User Registry P"
     robustness: 2
     confidence: "HIGH"
     attack: [T1685]
-  - name: "Loopback C2 Connection on Port 20268"
+  - name: "Loopback Connection on Port 20268 by a Process Outside System32 (Orcus Wardow Crack Tunnel Port)"
     engine: sigma
     tier: Hunting
     fence: 15
-    hash: "e98f661a"
-    head: "title: Orcus RAT Wardow Crack Loopback C2 Connec"
+    hash: "eaad4f56"
+    head: "title: Loopback Connection on Port 20268 by a Pr"
     robustness: 1
     confidence: "HIGH (for this campaign) / port is campaign-configured, not crack-tool-hardcoded"
     attack: [T1090.001, T1071.001]
@@ -3667,7 +3667,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
     engine: yara
     tier: Detection
     fence: 0
-    hash: "42a0bbb2"
+    hash: "71003e41"
     head: "rule WSMA_CVE_2023_20198_DoubleEncode_Exfil { me"
     robustness: 3
     confidence: "HIGH"
@@ -3685,7 +3685,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
     engine: yara
     tier: Detection
     fence: 2
-    hash: "a3295c40"
+    hash: "6b0b14e7"
     head: "rule WebLogic_JNDI_HelloFromLdap_CallbackMarker "
     robustness: 2
     confidence: "HIGH"
@@ -3694,7 +3694,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
     engine: yara
     tier: Detection
     fence: 3
-    hash: "0a9e60b8"
+    hash: "75f8d6d9"
     head: "rule Webshell_PHP_XCMD_Header_Dispatcher { meta:"
     robustness: 2
     confidence: "MODERATE"
@@ -3712,7 +3712,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
     engine: yara
     tier: Hunting
     fence: 5
-    hash: "633c9720"
+    hash: "b136197f"
     head: "rule Rootkit_Userland_OriginalsBackup_TarSet { m"
     robustness: 1
     confidence: "MODERATE"
@@ -3721,7 +3721,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
     engine: yara
     tier: Hunting
     fence: 6
-    hash: "61da8b9a"
+    hash: "64d17dfd"
     head: "rule PublicTool_DirtyFrag_LinuxKernel_LPE { meta"
     robustness: 2
     confidence: "MODERATE"
@@ -3735,37 +3735,28 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
     robustness: 2
     confidence: "MODERATE"
     attack: [T1190, T1588.005]
-  - name: "Java Process Spawns Unix Shell Following WebLogic JNDI Exploitation"
-    engine: sigma
-    tier: Detection
-    fence: 8
-    hash: "c145748b"
-    head: "title: Java Process Spawns Unix Shell Following "
-    robustness: 3
-    confidence: "HIGH"
-    attack: [T1059.004]
   - name: "Chisel Client Establishing a Reverse SOCKS Tunnel"
     engine: sigma
     tier: Detection
-    fence: 9
+    fence: 8
     hash: "56dbb2fc"
     head: "title: Chisel Client Establishing a Reverse SOCK"
     robustness: 2
     confidence: "HIGH"
     attack: [T1572]
-  - name: "Registry Hive Export of SAM or SYSTEM to a Non-Standard Location"
+  - name: "Registry Hive Save of SAM or SYSTEM via reg.exe"
     engine: sigma
     tier: Detection
-    fence: 10
-    hash: "01f2ec31"
-    head: "title: Registry Hive Export of SAM or SYSTEM to "
+    fence: 9
+    hash: "7ceb59c3"
+    head: "title: Registry Hive Save of SAM or SYSTEM via r"
     robustness: 3
     confidence: "HIGH"
     attack: [T1003.002]
   - name: "Command Shell Spawned by a Web Server or Application Server Process"
     engine: sigma
     tier: Detection
-    fence: 11
+    fence: 10
     hash: "eb1f3e97"
     head: "title: Command Shell Spawned by a Web Server or "
     robustness: 3
@@ -3774,7 +3765,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
   - name: "PowerShell Remoting Session Establishment Command"
     engine: sigma
     tier: Detection
-    fence: 12
+    fence: 11
     hash: "2807734d"
     head: "title: PowerShell Remoting Session Establishment"
     robustness: 2
@@ -3783,7 +3774,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
   - name: "Net Use Command Targeting an Administrative Share With Explicit Credentials"
     engine: sigma
     tier: Detection
-    fence: 13
+    fence: 12
     hash: "6ce3b432"
     head: "title: Net Use Command Targeting an Administrati"
     robustness: 2
@@ -3792,7 +3783,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
   - name: "Content Change to /etc/passwd or /usr/bin/su by a Non-Package Account Tool"
     engine: sigma
     tier: Detection
-    fence: 14
+    fence: 13
     hash: "dff7018f"
     head: "title: Content Change to /etc/passwd or /usr/bin"
     robustness: 3
@@ -3801,7 +3792,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
   - name: "Useradd or Usermod Setting a Root-Equivalent or Duplicate UID Outside a Known Package Manager"
     engine: sigma
     tier: Detection
-    fence: 15
+    fence: 14
     hash: "39f8d703"
     head: "title: Useradd or Usermod Setting a Root-Equival"
     robustness: 3
@@ -3810,7 +3801,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
   - name: "Chisel or PuTTY Plink Binary Written to Disk"
     engine: sigma
     tier: Hunting
-    fence: 16
+    fence: 15
     hash: "7e3c3198"
     head: "title: Chisel or PuTTY Plink Binary Written to D"
     robustness: 1
@@ -3819,7 +3810,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
   - name: "Content Change to a Core Process or Network Inspection Utility"
     engine: sigma
     tier: Hunting
-    fence: 17
+    fence: 16
     hash: "1479fb3b"
     head: "title: Content Change to a Core Process or Netwo"
     robustness: 1
@@ -3828,12 +3819,21 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
   - name: "Creation or Modification of the safe_pollRadiusLog Watchdog Script"
     engine: sigma
     tier: Hunting
-    fence: 18
-    hash: "be7775fc"
+    fence: 17
+    hash: "c3c49a89"
     head: "title: Creation or Modification of the safe_poll"
     robustness: 1
     confidence: "MODERATE"
     attack: [T1543, T1070.006]
+  - name: "Java Process Spawning a Unix Shell With an Inline Command"
+    engine: sigma
+    tier: Hunting
+    fence: 18
+    hash: "0369ac56"
+    head: "title: Java Process Spawning a Unix Shell With a"
+    robustness: 3
+    confidence: "HIGH"
+    attack: [T1059.004]
   - name: "Network-Device Self-Exfiltration via Outbound PUT with User-Agent cisco-IOS"
     engine: suricata
     tier: Detection
@@ -3870,11 +3870,11 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
     robustness: 2
     confidence: "HIGH"
     attack: [T1190]
-  - name: "Cisco WSMA fileCopy Exfiltration Primitive to External dstURL"
+  - name: "Cisco WSMA fileCopy Request With a dstURL Parameter"
     engine: suricata
     tier: Detection
     fence: 23
-    hash: "3745f706"
+    hash: "d50209e6"
     head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
     robustness: 3
     confidence: "HIGH"
@@ -3897,29 +3897,11 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
     robustness: 3
     confidence: "HIGH"
     attack: [T1190]
-  - name: "Non-Standard X-CMD Webshell Dispatch Header"
+  - name: "WebSocket Upgrade Handshake to an External Host (Tunnel Hunting Lead)"
     engine: suricata
     tier: Hunting
     fence: 26
-    hash: "42393d7f"
-    head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
-    robustness: 2
-    confidence: "MODERATE"
-    attack: [T1505.003]
-  - name: "PRTG Bulk Credential Extraction via getobjectproperty.htm"
-    engine: suricata
-    tier: Detection
-    fence: 27
-    hash: "05939354"
-    head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
-    robustness: 3
-    confidence: "HIGH"
-    attack: [T1555]
-  - name: "Chisel-Style Reverse-Tunnel WebSocket Upgrade Handshake"
-    engine: suricata
-    tier: Hunting
-    fence: 28
-    hash: "97a6db94"
+    hash: "fd622add"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 1
     confidence: "LOW"
@@ -3927,7 +3909,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
   - name: "PRTG Bulk Device Inventory Query via table.json"
     engine: suricata
     tier: Hunting
-    fence: 29
+    fence: 27
     hash: "48a605bc"
     head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
     robustness: 1
@@ -3936,12 +3918,30 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
   - name: "Malicious LDAP-JNDI Callback Response"
     engine: suricata
     tier: Hunting
-    fence: 30
+    fence: 28
     hash: "54e256bd"
     head: "alert tcp $EXTERNAL_NET any -> $HOME_NET any (ms"
     robustness: 2
     confidence: "MODERATE"
     attack: [T1190]
+  - name: "PRTG getobjectproperty.htm Request With passhash Authentication"
+    engine: suricata
+    tier: Hunting
+    fence: 29
+    hash: "39d811b8"
+    head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1555]
+  - name: "Non-Standard X-CMD Webshell Dispatch Header"
+    engine: suricata
+    tier: Hunting
+    fence: 30
+    hash: "42393d7f"
+    head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1505.003]
 opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections:
   - name: "MITM_Interceptor_SourceStrings"
     engine: yara
@@ -4133,39 +4133,39 @@ opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections
     robustness: 2
     confidence: "HIGH"
     attack: [T1587.001, T1588.005]
-  - name: "CVE-2026-41940 Proxy-Subdomain Admin Path Access Attempt"
+  - name: "CVE-2026-41940 cPanel WHM Proxy-Subdomain Admin Path Request"
     engine: sigma
     tier: Hunting
     fence: 1
-    hash: "c92ba651"
-    head: "title: CVE-2026-41940 cPanel WHM CRLF Auth Bypas"
+    hash: "f56bdfe8"
+    head: "title: CVE-2026-41940 cPanel WHM Proxy-Subdomain"
     robustness: 2
     confidence: "MODERATE"
     attack: [T1190, T1212]
-  - name: "CVE-2026-41940 Expired-Session Token Marker in Query String"
+  - name: "CVE-2026-41940 Expired Session Marker in Query String"
     engine: sigma
     tier: Hunting
     fence: 2
-    hash: "3a8f1686"
-    head: "title: CVE-2026-41940 cPanel WHM CRLF Auth Bypas"
+    hash: "d831d8b4"
+    head: "title: CVE-2026-41940 Expired Session Marker in "
     robustness: 2
     confidence: "MODERATE"
     attack: [T1190, T1212]
-  - name: "CVE-2026-41940 Successful Auth-Bypass Response Confirmation"
+  - name: "CVE-2026-41940 cPanel WHM Proxy-Subdomain Admin Path Request With HTTP 200 Response"
     engine: sigma
     tier: Hunting
     fence: 3
-    hash: "11479a3e"
-    head: "title: CVE-2026-41940 cPanel WHM CRLF Auth Bypas"
+    hash: "4e7ab5a5"
+    head: "title: CVE-2026-41940 cPanel WHM Proxy-Subdomain"
     robustness: 2
     confidence: "LOW"
     attack: [T1190, T1212]
-  - name: "Operator Flask C2 Dashboard /login-2fa Redirect Path"
+  - name: "Operator Flask C2 Dashboard Request Path /login-2fa"
     engine: sigma
     tier: Hunting
     fence: 4
-    hash: "8ff1b0c8"
-    head: "title: Operator Flask C2 Dashboard - Werkzeug 3."
+    hash: "82d0cbdf"
+    head: "title: Operator Flask C2 Dashboard Request Path "
     robustness: 2
     confidence: "MODERATE"
     attack: [T1071.001]
@@ -4173,17 +4173,17 @@ opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections
     engine: sigma
     tier: Hunting
     fence: 5
-    hash: "0b0f57d8"
+    hash: "2fb58aea"
     head: "title: Operator TDS Landing URL Pattern - Parklo"
     robustness: 2
     confidence: "HIGH"
     attack: [T1583.008]
-  - name: "Post-Exploitation SSH Authorized_Keys Modification on cPanel Host"
+  - name: "SSH Authorized Keys File Written Under Root or Home Directories by a Process Outside the OpenSSH Tools"
     engine: sigma
     tier: Hunting
     fence: 6
-    hash: "14470cde"
-    head: "title: Post-CVE-2026-41940 Exploitation - Unauth"
+    hash: "077c126d"
+    head: "title: SSH Authorized Keys File Written Under Ro"
     robustness: 2
     confidence: "MODERATE"
     attack: [T1098.004]
@@ -4196,7 +4196,7 @@ opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections
     robustness: 2
     confidence: "MODERATE"
     attack: [T1136.001]
-  - name: "CVE-2026-41940 Raw CRLF/Null-Byte Injection in Authorization Header"
+  - name: "CVE-2026-41940 Null-Byte or Encoded CR/LF Injection in Authorization Header"
     engine: suricata
     tier: Detection
     fence: 8
@@ -4219,7 +4219,7 @@ opendirectory-45-130-148-125-20260430-detections:
     engine: yara
     tier: Detection
     fence: 0
-    hash: "b59cdb7a"
+    hash: "a1359be6"
     head: "/* Yara Rule Set Identifier: AdaptixC2 Operator "
     robustness: 3
     confidence: "HIGH"
@@ -5505,7 +5505,7 @@ seasia-gov-exploitation-toolkit-144-172-106-236-detections:
     engine: sigma
     tier: Hunting
     fence: 20
-    hash: "bd379065"
+    hash: "f916b1cc"
     head: "title: Executable With System-Daemon-Style Name "
     robustness: 1
     confidence: "LOW"

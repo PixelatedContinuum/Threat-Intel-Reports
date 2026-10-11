@@ -37,7 +37,7 @@ GHOST is a commodity Linux cryptojacker kit distributed by kit-author Vova75Rus 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 4 | 5 | T1014, T1574.006, T1564.001, T1059.004, T1611, T1480.002, T1102.002, T1496.001, T1059.006, T1595.002, T1554, T1543.002 | 1 |
-| Sigma | 5 | 5 | T1574.006, T1027, T1014, T1554, T1571, T1059.004, T1543.002, T1036.005, T1222.002, T1620, T1572 | 1 |
+| Sigma | 4 | 6 | T1574.006, T1027, T1014, T1554, T1571, T1059.004, T1543.002, T1036.005, T1222.002, T1620, T1572 | 1 |
 | Suricata | 1 | 3 | T1059.004, T1574.006, T1105, T1572, T1571, T1102.002, T1496.001 | 3 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
@@ -49,7 +49,7 @@ GHOST is a commodity Linux cryptojacker kit distributed by kit-author Vova75Rus 
 
 **Atomics routed to the IOC feed:** the kit-author OWNER Telegram bot token prefix `8415540095` (and operator MIRROR bot `8315596543`), the Kryptex/c3pool/nanopool mining-pool domains, and the Hysteria admin-panel host `77.110.96.200` were each the sole discriminator of one or more rules below; all five are already present in [`ghost-cryptojacker-vova75rus-77.110.96.200-iocs.json`](/ioc-feeds/ghost-cryptojacker-vova75rus-77.110.96.200-iocs.json); no feed edits were required by this pass. Per the tiering rubric's cryptojacker-specific guidance, a mining-pool domain or a kit-wide callback token is an atomic: a distinctive config/loader constant (like the rootkit's hide-list array) is the durable anchor instead.
 
-**Retiering summary:** 3 rule objects were cut outright: a pre-existing withdrawn Suricata signature (already retired 2026-06-19 for overbreadth), a redundant/misleadingly-labeled Telegram-SNI Suricata duplicate, and a Sigma `inotify_add_watch` rule that cannot express its intended path filter in a single detection block and as literally written fires on all inotify usage system-wide. One YARA rule (the dual-Telegram `min1.sh` wrapper) was salvaged via capability-abstraction: its condition no longer mandatorily gates on the kit-wide bot token, so it survives bot rotation. One Sigma rule (the ComfyUI fake-node planter) was tightened to remove an overbroad selector branch that would have matched any legitimate custom-node installation.
+**Retiering summary:** 3 rule objects were cut outright: a pre-existing withdrawn Suricata signature (already retired 2026-06-19 for overbreadth), a redundant/misleadingly-labeled Telegram-SNI Suricata duplicate, and a Sigma `inotify_add_watch` rule that cannot express its intended path filter in a single detection block and as literally written fires on all inotify usage system-wide. One YARA rule (the dual-Telegram `min1.sh` wrapper) was salvaged via capability-abstraction: its condition no longer mandatorily gates on the kit-wide bot token, so it survives bot rotation. One Sigma rule (the ComfyUI PerformanceMonitor file-creation rule) was tightened to remove an overbroad selector branch that would have matched any legitimate custom-node installation, and was later re-tiered to Hunting because a benign extension of the same name still matches.
 
 ---
 
@@ -642,57 +642,6 @@ falsepositives:
 level: high
 ```
 
-#### GHOST ComfyUI Fake PerformanceMonitor Custom Node Planted
-
-**Tier:** Detection
-**Robustness:** 2
-**ATT&CK Coverage:** T1554 (Compromise Host Software Binary)
-**Confidence:** HIGH
-**Rationale:** **Tightened from the original selector.** The prior version matched `TargetFilename|contains` against EITHER the specific `/custom_nodes/PerformanceMonitor` substring OR the generic `/ComfyUI/custom_nodes/` directory path — the second branch would fire on the creation of ANY `.py` file anywhere under a ComfyUI custom-node directory, which is exactly what happens every time a user installs any legitimate custom node. That branch has been removed; the rule now requires the distinctive `PerformanceMonitor` filename component specifically.
-**False Positives:** A legitimately-named custom node literally called "PerformanceMonitor" installed by an authorized user (verify publisher and source repository before dismissing); development environments where a test node happens to share this name.
-**Blind Spots:** A rebuild that renames the planted node file would evade; this rule inspects the file path only, not the file's content (the YARA rule above inspects content — the class definition — for a stronger anchor).
-**Validation:** Trigger the kit's `plant_backdoor_node()` routine — the file-creation event must match; installation of an unrelated, differently-named legitimate custom node must NOT fire.
-**Deployment:** Linux `file_event` monitoring (auditd or Sysmon for Linux) on ComfyUI `custom_nodes` directory.
-
-```yaml
-title: GHOST ComfyUI Fake PerformanceMonitor Custom Node Planted
-id: df247923-595c-4760-9a97-f0722dbf664d
-status: experimental
-description: >-
-    Detects GHOST cryptojacker kit persistence via malicious ComfyUI custom node
-    installation. The GHOST Python kit's plant_backdoor_node() function creates a
-    Python file with "PerformanceMonitor" in its path within the victim's ComfyUI
-    custom_nodes/ directory. Tightened from an earlier selector that also matched
-    any .py file under a ComfyUI custom_nodes/ path regardless of filename, which
-    would have fired on every legitimate custom-node installation.
-references:
-    - https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/
-    - https://censys.com/ghost-cryptojacker-targeting-ai
-author: The Hunters Ledger
-date: 2026-05-25
-tags:
-    - attack.persistence
-    - attack.t1554
-    - detection.emerging-threats
-    - stp.3
-logsource:
-    category: file_event
-    product: linux
-detection:
-    selection_comfyui_node:
-        TargetFilename|contains: '/custom_nodes/PerformanceMonitor'
-        TargetFilename|endswith: '.py'
-    condition: selection_comfyui_node
-falsepositives:
-    - >-
-      Legitimate custom ComfyUI node named PerformanceMonitor installed by
-      authorized user (verify publisher and source repository before dismissing)
-    - >-
-      Development environments where a test custom node happens to share this
-      name (scope exclusion for known dev hosts recommended)
-level: high
-```
-
 #### GHOST Kit Systemd Camouflage Service Unit Creation
 
 **Tier:** Detection
@@ -1091,6 +1040,58 @@ detection:
 falsepositives:
     - Package manager post-install hooks installing legitimate PAM modules (filtered above)
     - System administrator manually copying a verified PAM module during maintenance
+level: medium
+```
+
+#### ComfyUI Custom Node Python File Named PerformanceMonitor Created
+
+**Tier:** Hunting
+**Robustness:** 1
+**ATT&CK Coverage:** T1554 (Compromise Host Software Binary)
+**Confidence:** LOW
+**Rationale:** *Wording and tier fix 2026-10-11:* the rule matches a created `.py` file whose path contains `/custom_nodes/PerformanceMonitor`, nothing more. Its YARA sibling above (`SUSP_Linux_ComfyUI_PerformanceMonitor_Node_Registration`) was confirmed by direct testing to fire on a genuine, benign ComfyUI extension named PerformanceMonitor, and this path test has the same property: a legitimately named extension matches, and the kit's node can be renamed. It keys on one filename, so it is Robustness 1 and Hunting tier, level medium, and the earlier title ("Fake ... Planted") and the claim that it detects the kit's persistence were withdrawn. **Tightened from the original selector.** The prior version matched `TargetFilename|contains` against EITHER the specific `/custom_nodes/PerformanceMonitor` substring OR the generic `/ComfyUI/custom_nodes/` directory path — the second branch would fire on the creation of ANY `.py` file anywhere under a ComfyUI custom-node directory, which is exactly what happens every time a user installs any legitimate custom node. That branch has been removed; the rule now requires the distinctive `PerformanceMonitor` filename component specifically.
+**False Positives:** Confirmed for the sibling content rule and true by construction here: a legitimately-named custom node literally called "PerformanceMonitor" installed by an authorized user (verify publisher and source repository before dismissing); development environments where a test node happens to share this name.
+**Blind Spots:** A rebuild that renames the planted node file would evade; this rule inspects the file path only, not the file's content (the YARA rule above inspects content — the class definition — for a stronger anchor).
+**Validation:** Trigger the kit's `plant_backdoor_node()` routine — the file-creation event must match; installation of an unrelated, differently-named legitimate custom node must NOT fire. A benign custom node that is itself named PerformanceMonitor WILL fire.
+**Deployment:** Linux `file_event` monitoring (auditd or Sysmon for Linux) on ComfyUI `custom_nodes` directory.
+
+```yaml
+title: ComfyUI Custom Node Python File Named PerformanceMonitor Created
+id: df247923-595c-4760-9a97-f0722dbf664d
+status: experimental
+description: >-
+    Detects creation of a Python file whose path contains
+    /custom_nodes/PerformanceMonitor. The GHOST Python kit's plant_backdoor_node()
+    function creates a file with that name in the victim's ComfyUI custom_nodes/
+    directory, but a legitimate extension with the same name creates the same
+    event, so a hit needs publisher and source verification. Tightened from an earlier selector that also matched
+    any .py file under a ComfyUI custom_nodes/ path regardless of filename, which
+    would have fired on every legitimate custom-node installation.
+references:
+    - https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/
+    - https://censys.com/ghost-cryptojacker-targeting-ai
+author: The Hunters Ledger
+date: 2026-05-25
+tags:
+    - attack.persistence
+    - attack.t1554
+    - detection.emerging-threats
+    - stp.3
+logsource:
+    category: file_event
+    product: linux
+detection:
+    selection_comfyui_node:
+        TargetFilename|contains: '/custom_nodes/PerformanceMonitor'
+        TargetFilename|endswith: '.py'
+    condition: selection_comfyui_node
+falsepositives:
+    - >-
+      Legitimate custom ComfyUI node named PerformanceMonitor installed by
+      authorized user (verify publisher and source repository before dismissing)
+    - >-
+      Development environments where a test custom node happens to share this
+      name (scope exclusion for known dev hosts recommended)
 level: medium
 ```
 

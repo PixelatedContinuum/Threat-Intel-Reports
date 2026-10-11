@@ -84,7 +84,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT RANSOMWARE enc_c2
 #   TIER: Hunting  |  robustness 1  |  confidence MODERATE  |  BROAD - triage before alerting
 #   rate-limited
 #   FP: Turkish security tools, CERT-affiliated platforms, and threat-intelligence products that legitimately poll the USOM blocklist from any network...
-alert http $HOME_NET any -> any any (msg:"THL HUNT BellaMain-PhaaS USOM Blocklist Poll from Web Server (Security Tool Discovery Indicator)"; flow:established,to_server; http.host; content:"usom.gov.tr"; endswith; http.uri; content:"url-list.txt"; nocase; threshold:type limit,track by_src,count 1,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/; classtype:policy-violation; sid:3500009; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-16;)
+alert http $HOME_NET any -> any any (msg:"THL HUNT BellaMain-PhaaS USOM Blocklist Poll From an Internal Host (Security Tool Discovery Indicator)"; flow:established,to_server; http.host; content:"usom.gov.tr"; endswith; http.uri; content:"url-list.txt"; nocase; threshold:type limit,track by_src,count 1,seconds 300; reference:url,the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/; classtype:policy-violation; sid:3500009; rev:4; metadata:author The_Hunters_Ledger, date 2026-05-16;)
 # cloudsync-assembler-toolkit-91-197-98-188 (orig sid:9301601)
 #   TIER: Detection  |  robustness 3  |  confidence HIGH
 #   rate-limited
@@ -222,7 +222,7 @@ alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT KAIDO-EvilSoul-Maa
 #   TIER: Hunting  |  robustness 2  |  confidence HIGH FOR THE PORT/PROTOCOL PAIRING; THE RULE ITSELF IS A PORT-ANCHORED LEAD  |  BROAD - triage before alerting
 #   rate-limited
 #   FP: Any legitimate or unrelated service that happens to use TCP/4782 (uncommon but not impossible); the threshold limits alert volume per source.
-alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:"THL HUNT KAIDO-EvilSoul-MaaS Quasar Binary Protocol C2 on TCP 4782 (RAT C2 Channel)"; flow:established,to_server; dsize:>0; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/; classtype:trojan-activity; sid:3500038; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-03;)
+alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:"THL HUNT KAIDO-EvilSoul-MaaS Outbound TCP Payload to Port 4782 (Quasar Default Port, Port-Only Lead)"; flow:established,to_server; dsize:>0; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/; classtype:trojan-activity; sid:3500038; rev:3; metadata:author The_Hunters_Ledger, date 2026-07-03;)
 # multivector-ecommerce-rce-toolkit-192-3-1-116 (orig sid:9301401)
 #   TIER: Detection  |  robustness 3  |  confidence HIGH
 #   FP: None known on ports 1389/1099 specifically: these are not standard LDAP/RMI-registry ports in most environments, so legitimate directory-service...
@@ -246,7 +246,7 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3
 # multivector-ecommerce-rce-toolkit-192-3-1-116 (orig sid:9301406)
 #   TIER: Detection  |  robustness 3  |  confidence HIGH
 #   FP: None known. Raw Redis protocol verbs (CONFIG SET dir, BGSAVE) embedded inside an HTTP request body are not organic web traffic under any legitimate...
-alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3.1.116 SSRF-to-Redis CONFIG/BGSAVE Command Sequence via HTTP (SSH Key Write Chain)"; flow:established,to_server; http.request_body; content:"CONFIG SET dir"; content:"BGSAVE"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:3500161; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21;)
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3.1.116 SSRF-to-Redis CONFIG/BGSAVE Command Sequence via HTTP (Redis File-Write Chain)"; flow:established,to_server; http.request_body; content:"CONFIG SET dir"; content:"BGSAVE"; reference:url,the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/; classtype:attempted-admin; sid:3500161; rev:3; metadata:author The_Hunters_Ledger, date 2026-07-21;)
 # multivector-ecommerce-rce-toolkit-192-3-1-116 (orig sid:9301407)
 #   TIER: Detection  |  robustness 3  |  confidence HIGH
 #   FP: None known. A legitimate Eureka service registry never returns java.lang.ProcessBuilder inside an /eureka/apps/delta response body; this string only...
@@ -340,7 +340,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT OpenDirectory-Xie
 #   TIER: Detection  |  robustness 2  |  confidence HIGH
 #   rate-limited
 #   FP: The Chrome 41 UA alone may appear on legacy enterprise endpoints with genuinely outdated browsers; the mandatory combination with the /en-us/...
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT OpenDirectory-XiebroC2-Covenant Covenant GruntStager Chrome-41-Windows-7 UA Masquerade on Port 443 (Cleartext HTTP C2 Indicator)"; flow:established,to_server; http.user_agent; content:"Chrome/41.0.2228.0"; nocase; http.uri; content:"/en-us/"; startswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/; classtype:trojan-activity; sid:3500054; rev:3; metadata:author The_Hunters_Ledger, date 2026-04-03;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT OpenDirectory-XiebroC2-Covenant Covenant GruntStager Chrome-41-Windows-7 UA Masquerade With /en-us/ URI (Cleartext HTTP C2 Indicator)"; flow:established,to_server; http.user_agent; content:"Windows NT 6.1"; nocase; content:"Chrome/41.0.2228.0"; nocase; http.uri; content:"/en-us/"; startswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/; classtype:trojan-activity; sid:3500054; rev:4; metadata:author The_Hunters_Ledger, date 2026-04-03;)
 # open-directory-94-103-1-13-20260423 (orig sid:9301001)
 #   TIER: Hunting  |  robustness 2  |  confidence MODERATE  |  BROAD - triage before alerting
 #   rate-limited
@@ -370,7 +370,7 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT GENERIC-CVE-2023-
 #   TIER: Detection  |  robustness 3  |  confidence HIGH
 #   rate-limited
 #   FP: None known. Legitimate WSMA fileCopy administrative usage targets a management host inside the operator's own infrastructure. This rule's combination...
-alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT WebLogicTelecomHarvester Cisco WSMA fileCopy Exfiltration Primitive to External dstURL"; flow:established,to_server; content:"urn:cisco:wsma-filesystem"; http_client_body; content:"fileCopy"; http_client_body; content:"dstURL="; http_client_body; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:3500191; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT WebLogicTelecomHarvester Cisco WSMA fileCopy Request With a dstURL Parameter (Self-Exfiltration Primitive)"; flow:established,to_server; content:"urn:cisco:wsma-filesystem"; http_client_body; content:"fileCopy"; http_client_body; content:"dstURL="; http_client_body; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:3500191; rev:3; metadata:author The_Hunters_Ledger, date 2026-08-17;)
 # opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817 (orig sid:9301806)
 #   TIER: Detection  |  robustness 3  |  confidence HIGH
 #   rate-limited
@@ -380,19 +380,11 @@ alert tcp $EXTERNAL_NET any -> $HOME_NET 7001 (msg:"THL DETECT WebLogicTelecomHa
 #   TIER: Detection  |  robustness 3  |  confidence HIGH
 #   FP: None known. Legitimate GeoServer OGC-filter requests do not construct a valueReference value that invokes exec(
 alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT WebLogicTelecomHarvester GeoServer OGC-Filter RCE via valueReference exec() (CVE-2024-36401)"; flow:established,to_server; content:"valueReference"; http_uri; content:"exec("; http_uri; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:web-application-attack; sid:3500194; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
-# opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817 (orig sid:9301810)
-#   TIER: Hunting  |  robustness 2  |  confidence MODERATE  |  BROAD - triage before alerting
-#   FP: An internal API or proxy that legitimately uses a custom X-CMD header for an unrelated purpose. Uncommon, but the header name alone is not unique...
-alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT WebLogicTelecomHarvester Non-Standard X-CMD Webshell Dispatch Header"; flow:established,to_server; content:"X-CMD|3a|"; http_header; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:3500195; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
-# opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817 (orig sid:9301811)
-#   TIER: Detection  |  robustness 3  |  confidence HIGH
-#   FP: None known. This combination (the getobjectproperty.htm endpoint, an authenticated passhash= credential, and a request naming a stored-credential...
-alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT WebLogicTelecomHarvester PRTG Bulk Credential Extraction via getobjectproperty.htm"; flow:established,to_server; content:"getobjectproperty.htm"; http_uri; content:"passhash="; http_uri; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-recon; sid:3500196; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
 # opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817 (orig sid:9301808)
 #   TIER: Hunting  |  robustness 1  |  confidence LOW  |  BROAD - triage before alerting
 #   rate-limited
 #   FP: Any legitimate application using WebSockets. Chat applications, live dashboards, monitoring tools, and many modern web apps use this same upgrade...
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT WebLogicTelecomHarvester Chisel-Style Reverse-Tunnel WebSocket Upgrade Handshake (Broad, Chisel Has Legitimate Uses)"; flow:established,to_server; content:"Upgrade|3a| websocket"; http_header; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:3500197; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT WebLogicTelecomHarvester WebSocket Upgrade Handshake to an External Host (Broad Tunnel Hunting Lead, Not Chisel-Specific)"; flow:established,to_server; content:"Upgrade|3a| websocket"; http_header; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:3500197; rev:3; metadata:author The_Hunters_Ledger, date 2026-08-17;)
 # opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817 (orig sid:9301812)
 #   TIER: Hunting  |  robustness 1  |  confidence LOW  |  BROAD - triage before alerting
 #   FP: Legitimate bulk device-inventory queries are a normal part of PRTG dashboard usage, monitoring integrations, and reporting tools; this specific query...
@@ -401,6 +393,14 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT WebLogicTelecomHarv
 #   TIER: Hunting  |  robustness 2  |  confidence MODERATE  |  BROAD - triage before alerting
 #   FP: Round 2, 2026-10-10: the rule matches the string javaCodeBase anywhere in the payload of any inbound TCP response to a $HOME_NET client. It does not...
 alert tcp $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT WebLogicTelecomHarvester Inbound TCP Response Carrying javaCodeBase (JNDI Reference Callback Lead)"; flow:established,to_client; content:"javaCodeBase"; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-admin; sid:3500193; rev:4; metadata:author The_Hunters_Ledger, date 2026-08-17;)
+# opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817 (orig sid:9301811)
+#   TIER: Hunting  |  robustness 2  |  confidence HIGH  |  BROAD - triage before alerting
+#   FP: PRTG API clients, integrations and administrator scripts that authenticate with passhash= and read object properties through getobjectproperty.htm;...
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT WebLogicTelecomHarvester PRTG getobjectproperty.htm Request With passhash Authentication (Credential Read Primitive, No Count)"; flow:established,to_server; content:"getobjectproperty.htm"; http_uri; content:"passhash="; http_uri; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-recon; sid:3500196; rev:3; metadata:author The_Hunters_Ledger, date 2026-08-17;)
+# opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817 (orig sid:9301810)
+#   TIER: Hunting  |  robustness 2  |  confidence MODERATE  |  BROAD - triage before alerting
+#   FP: An internal API or proxy that legitimately uses a custom X-CMD header for an unrelated purpose. Uncommon, but the header name alone is not unique...
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT WebLogicTelecomHarvester Non-Standard X-CMD Webshell Dispatch Header"; flow:established,to_server; content:"X-CMD|3a|"; http_header; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:trojan-activity; sid:3500195; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
 # opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517 (orig sid:9100101)
 #   TIER: Detection  |  robustness 3  |  confidence HIGH
 #   FP: Authorized penetration-test tooling (Burp Suite, Nuclei, Metasploit) replaying the public PoC against a cPanel/WHM host under an approved assessment.
