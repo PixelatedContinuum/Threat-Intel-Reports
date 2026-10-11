@@ -87,27 +87,28 @@ falsepositives:
 level: medium
 ```
 
-#### Authentication Attempt Using a Default-Style Credential Pair
+#### Authentication Attempt with Default-Style Username and Password Substrings
 
 **Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1110.001 (Password Guessing)
 **Confidence:** MODERATE
-**Rationale:** The rule requires both a default-style username AND a default-style password from small curated lists, a genuinely tight AND-based match — but it evaluates a single authentication event with no count or threshold aggregation, so it detects "an auth attempt used default-like credentials," not repeated brute-force attempts. The rule was retitled on 2026-10-10 from "Default Credential Brute Force" to say what the logic tests; a brute-force reading comes from counting hits per source in the SIEM. Default credentials remain in active legitimate use on unhardened router/IoT fleets — the exact device category this campaign targets — so this is a real, recurring benign-hit scenario rather than a one-time setup artifact. `level` demoted from `high` to `medium` and scoped to Hunting accordingly; the durable, technique-level signal (an attacker enumerating known default credentials against the auth surface) still makes it a valuable triage lead.
+**Rationale:** The rule requires both a default-style username AND a default-style password from small curated lists, a genuinely tight AND-based match — but it evaluates a single authentication event with no count or threshold aggregation, so it detects "an auth attempt used default-like credentials," not repeated brute-force attempts. The rule was retitled on 2026-10-10 from "Default Credential Brute Force" to say what the logic tests (round 2 of the same day: the username and password tests are substring matches, not exact default values); a brute-force reading comes from counting hits per source in the SIEM. Default credentials remain in active legitimate use on unhardened router/IoT fleets — the exact device category this campaign targets — so this is a real, recurring benign-hit scenario rather than a one-time setup artifact. `level` demoted from `high` to `medium` and scoped to Hunting accordingly; the durable, technique-level signal (an attacker enumerating known default credentials against the auth surface) still makes it a valuable triage lead.
 **False Positives:**
 - Legitimate administrators authenticating to routers/IoT devices that were never hardened off default credentials.
 - Automated asset-inventory or compliance-scanning tools that intentionally test for default-credential exposure.
 **Deployment:** Authentication log monitoring at the router/IoT fleet management plane; pair hits with a device-hardening audit rather than blind alerting.
 
 ```yaml
-title: Authentication Attempt Using a Default-Style Credential Pair
+title: Authentication Attempt with Default-Style Username and Password Substrings
 id: b88fd219-6352-4cdb-9406-be4acdc7dfe8
 status: experimental
 description: >-
-    Detects a single authentication event whose username and password both
-    match short lists of common default values (admin, root, guest, operator
-    and admin, password, 1234, changeme) against router and IoT management
-    interfaces. The rule counts nothing, so repeated attempts from one source,
+    Detects a single authentication event whose username contains one of
+    admin, root, guest or operator and whose password contains one of admin,
+    password, 1234 or changeme, against router and IoT management interfaces.
+    Both tests are substring matches, so "myadmin" with "notpassword9" also
+    fires; it is not an exact default-credential pair. The rule counts nothing, so repeated attempts from one source,
     which is what automated credential brute-forcing looks like, show up as
     many hits and need to be aggregated per source in the SIEM.
 references:

@@ -504,7 +504,7 @@ techniques:
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
         report_url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
-        rules: LSASS Memory Access With A Dump-Capable Access Mask (SIGMA, Detection)
+        rules: LSASS Memory Access With A Dump-Capable Access Mask (SIGMA, Hunting)
         count: 1
       - url: /hunting-detections/evilsoul-engine-stealer-maas-detections
         title: 'EvilSoul-Engine: A Brazilian Stealer-Builder Malware-as-a-Service'
@@ -4098,9 +4098,9 @@ techniques:
         date: '2026-06-16'
         report_url: /reports/ai-agent-frameworks-2026-05-23/
         rules: >-
-          AI Operator Handoff Document (YARA, Detection); LLM-Personalized Credential Mutation
-          Script (YARA, Detection); Russian A2A C2 Python-stdlib BaseHTTPServer (YARA, Detection);
-          AI-Generated Offensive Code Structural Signature (YARA, Hunting)
+          LLM-Personalized Credential Mutation Script (YARA, Detection); Russian A2A C2
+          Python-stdlib BaseHTTPServer (YARA, Detection); AI-Generated Offensive Code Structural
+          Signature (YARA, Hunting); AI Operator Handoff Document (YARA, Hunting)
         count: 4
       - url: /hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections
         title: Rovodev AI-Co-Authored Mirai Variant + Matrix C2 (87.106.143.220)
@@ -4125,8 +4125,8 @@ techniques:
         date: '2026-05-25'
         report_url: /reports/russian-gemini-credential-mill-213.165.51.115/
         rules: >-
-          LLM-Personalized Credential Mutator Family (YARA, Detection); Stolen LLM API Key Validator
-          (YARA, Detection); A2A C2 Client Console / Exec Tool (YARA, Detection); Mass WordPress
+          LLM-Personalized Credential Mutator Family (YARA, Detection); A2A C2 Client Console / Exec
+          Tool (YARA, Detection); Stolen LLM API Key Validator (YARA, Hunting); Mass WordPress
           wp-login.php Credential Validation Rate Exceeded (Correlation) (SIGMA, Detection);
           Executable Script or Skill File Created in Gemini CLI Config Directory (SIGMA, Hunting);
           Python HTTP Server on Non-Standard Port with UTF-16LE Encoding (A2A C2 Pattern) (SIGMA,
@@ -5098,7 +5098,7 @@ techniques:
         title: Russian Gemini CLI Credential Mill (213.165.51.115)
         date: '2026-05-25'
         report_url: /reports/russian-gemini-credential-mill-213.165.51.115/
-        rules: Stolen LLM API Key Validator (YARA, Detection)
+        rules: Stolen LLM API Key Validator (YARA, Hunting)
         count: 1
       - url: /hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections
         title: Turkish ARPA AI-Augmented Observability Compromise (209.38.205.158)
@@ -6633,7 +6633,9 @@ techniques:
         title: AdvancedRouterScanner
         date: '2025-10-20'
         report_url: /reports/AdvancedRouterScanner/
-        rules: Authentication Attempt Using a Default-Style Credential Pair (SIGMA, Hunting)
+        rules: >-
+          Authentication Attempt with Default-Style Username and Password Substrings (SIGMA,
+          Hunting)
         count: 1
     actors:
       - UTA-2026-018
@@ -7952,9 +7954,9 @@ techniques:
           WSMA Path Bypass (Operator Fingerprint) (SURICATA, Detection); GENERIC-CVE-2023-20198
           Cisco IOS-XE WebUI Auth-Bypass URI (SURICATA, Detection); GENERIC-CVE-2023-20198 Cisco
           IOS-XE Forged Bare-Hex Authorization Token (SURICATA, Detection); WebLogic T3/IIOP JNDI
-          OpaqueReference Injection (SURICATA, Detection); Malicious LDAP-JNDI Callback Response
-          (SURICATA, Detection); GeoServer OGC-Filter RCE via valueReference exec() (SURICATA,
-          Detection)
+          OpaqueReference Injection (SURICATA, Detection); GeoServer OGC-Filter RCE via
+          valueReference exec() (SURICATA, Detection); Malicious LDAP-JNDI Callback Response
+          (SURICATA, Hunting)
         count: 10
       - url: /hunting-detections/seasia-gov-exploitation-toolkit-144-172-106-236-detections
         title: 'The Middle Tier: A Non-APT Operator''s Reach Into Four Southeast Asian Governments'
@@ -10500,7 +10502,7 @@ techniques:
         title: Russian Gemini CLI Credential Mill (213.165.51.115)
         date: '2026-05-25'
         report_url: /reports/russian-gemini-credential-mill-213.165.51.115/
-        rules: Stolen LLM API Key Validator (YARA, Detection)
+        rules: Stolen LLM API Key Validator (YARA, Hunting)
         count: 1
       - url: /hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections
         title: Turkish ARPA AI-Augmented Observability Compromise (209.38.205.158)
@@ -12554,10 +12556,10 @@ techniques:
         date: '2026-06-16'
         report_url: /reports/ai-agent-frameworks-2026-05-23/
         rules: >-
-          AI Operator Handoff Document (YARA, Detection); AI-Generated Offensive Code Structural
-          Signature (YARA, Hunting); AI Coding-Agent Tooling Co-Located with Offensive Tooling on
-          the Same Host (SIGMA, Detection); Rovodev AI Agent Directory Creation on Server
-          Infrastructure Host (SIGMA, Hunting)
+          AI-Generated Offensive Code Structural Signature (YARA, Hunting); AI Operator Handoff
+          Document (YARA, Hunting); AI Coding-Agent Tooling Co-Located with Offensive Tooling on the
+          Same Host (SIGMA, Detection); Rovodev AI Agent Directory Creation on Server Infrastructure
+          Host (SIGMA, Hunting)
         count: 4
       - url: /hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections
         title: Russian Gemini CLI Credential Mill (213.165.51.115)

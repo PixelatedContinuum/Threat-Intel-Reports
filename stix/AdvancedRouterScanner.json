@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--fe1c06dc-0f1b-4a1d-a756-ee0d514278a6",
+    "id": "bundle--d20f5e31-8ed4-41b0-ae79-018e2f7cbe3c",
     "objects": [
         {
             "type": "identity",
@@ -62,15 +62,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--c6785ca8-571d-5205-b443-ca9afdbfe3c3",
+            "id": "indicator--16fdbaa0-d177-5101-9423-e3fbe7b707f2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-11T03:15:34.782474Z",
-            "modified": "2026-10-11T03:15:34.782474Z",
-            "name": "Authentication Attempt Using a Default-Style Credential Pair",
+            "created": "2026-10-11T03:42:45.792492Z",
+            "modified": "2026-10-11T03:42:45.792492Z",
+            "name": "Authentication Attempt with Default-Style Username and Password Substrings",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Authentication Attempt Using a Default-Style Credential Pair\nid: b88fd219-6352-4cdb-9406-be4acdc7dfe8\nstatus: experimental\ndescription: >-\n    Detects a single authentication event whose username and password both\n    match short lists of common default values (admin, root, guest, operator\n    and admin, password, 1234, changeme) against router and IoT management\n    interfaces. The rule counts nothing, so repeated attempts from one source,\n    which is what automated credential brute-forcing looks like, show up as\n    many hits and need to be aggregated per source in the SIEM.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/AdvancedRouterScanner-detections/\nauthor: The Hunters Ledger\ndate: '2025-10-25'\nmodified: '2026-10-10'\ntags:\n    - attack.credential-access\n    - attack.t1110.001\n    - detection.emerging-threats\nlogsource:\n    category: authentication\ndetection:\n    selection:\n        user|contains:\n            - \"admin\"\n            - \"root\"\n            - \"guest\"\n            - \"operator\"\n        password|contains:\n            - \"admin\"\n            - \"password\"\n            - \"1234\"\n            - \"changeme\"\n    condition: selection\nfalsepositives:\n    - Legitimate administrators using default credentials before hardening a new device\nlevel: medium",
+            "pattern": "title: Authentication Attempt with Default-Style Username and Password Substrings\nid: b88fd219-6352-4cdb-9406-be4acdc7dfe8\nstatus: experimental\ndescription: >-\n    Detects a single authentication event whose username contains one of\n    admin, root, guest or operator and whose password contains one of admin,\n    password, 1234 or changeme, against router and IoT management interfaces.\n    Both tests are substring matches, so \"myadmin\" with \"notpassword9\" also\n    fires; it is not an exact default-credential pair. The rule counts nothing, so repeated attempts from one source,\n    which is what automated credential brute-forcing looks like, show up as\n    many hits and need to be aggregated per source in the SIEM.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/AdvancedRouterScanner-detections/\nauthor: The Hunters Ledger\ndate: '2025-10-25'\nmodified: '2026-10-10'\ntags:\n    - attack.credential-access\n    - attack.t1110.001\n    - detection.emerging-threats\nlogsource:\n    category: authentication\ndetection:\n    selection:\n        user|contains:\n            - \"admin\"\n            - \"root\"\n            - \"guest\"\n            - \"operator\"\n        password|contains:\n            - \"admin\"\n            - \"password\"\n            - \"1234\"\n            - \"changeme\"\n    condition: selection\nfalsepositives:\n    - Legitimate administrators using default credentials before hardening a new device\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2025-10-25T00:00:00Z",
             "labels": [
@@ -110,7 +110,7 @@
             "id": "report--af611741-d070-5b5f-8109-0abf4ddf0afa",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-09-19T20:27:54.222979Z",
-            "modified": "2026-10-11T03:15:34.783026Z",
+            "modified": "2026-10-11T03:42:45.793016Z",
             "name": "AdvancedRouterScanner — Global Router Exploitation",
             "report_types": [
                 "threat-report"
@@ -120,7 +120,7 @@
                 "file--3cc289b9-526e-5366-9e0a-4152c3fa470d",
                 "file--f7c02363-61bd-5dae-a3cc-1981a79591b7",
                 "indicator--b26a6ccd-1b7e-5399-8a8d-6f8d3f8805d7",
-                "indicator--c6785ca8-571d-5205-b443-ca9afdbfe3c3",
+                "indicator--16fdbaa0-d177-5101-9423-e3fbe7b707f2",
                 "tool--f1e8c9a2-c2fa-53f9-a40d-4eb4152a348a",
                 "tool--5a41cdfd-9631-5acc-b551-372f2b39b5f4"
             ],

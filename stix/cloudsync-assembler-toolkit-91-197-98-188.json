@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--992c22f6-f756-4be1-840a-096f969d5d1d",
+    "id": "bundle--81870c22-4934-49e0-9cb0-8f529eceeec0",
     "objects": [
         {
             "type": "identity",
@@ -650,12 +650,12 @@
             "id": "indicator--68c9aa45-457a-5b9e-a410-cb586e754f93",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.724274Z",
-            "modified": "2026-10-11T03:15:37.198303Z",
+            "modified": "2026-10-11T03:42:50.31129Z",
             "name": "Winlogon SpecialAccounts UserList Registry Write",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Winlogon SpecialAccounts UserList Registry Write\nid: 2966dbb8-8da1-492d-aeea-9921679ed4b6\nstatus: experimental\ndescription: >-\n    Detects a write to the Winlogon SpecialAccounts\\UserList registry key, which\n    hides the named account from the Windows logon screen and User Manager tile.\n    This key is written almost exclusively to hide a newly created backdoor\n    account, legitimate use (hiding a genuine service account) is rare enough that\n    any write to this key merits review regardless of which account is targeted.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\nauthor: The Hunters Ledger\ndate: 2026-08-03\nmodified: 2026-10-10\ntags:\n    - attack.stealth\n    - attack.t1564.002\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection:\n        TargetObject|contains: '\\Winlogon\\SpecialAccounts\\UserList\\'\n    condition: selection\nfalsepositives:\n    - Deliberate administrative hiding of a legitimate local service account from the logon screen\nlevel: high",
+            "pattern": "title: Winlogon SpecialAccounts UserList Registry Write\nid: 2966dbb8-8da1-492d-aeea-9921679ed4b6\nstatus: experimental\ndescription: >-\n    Detects any registry value write under the Winlogon SpecialAccounts\\UserList\n    key. A value there named for an account, set to 0, hides that account from the\n    Windows logon screen and User Manager tile. The rule does not read the value\n    data, so a write that sets the value to 1 (which shows the account again) also\n    matches. This key is written almost exclusively to hide a newly created\n    backdoor account, and legitimate use (hiding a genuine service account) is\n    rare enough that any write under this key merits review regardless of which\n    account is targeted.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/\nauthor: The Hunters Ledger\ndate: 2026-08-03\nmodified: 2026-10-10\ntags:\n    - attack.stealth\n    - attack.t1564.002\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection:\n        TargetObject|contains: '\\Winlogon\\SpecialAccounts\\UserList\\'\n    condition: selection\nfalsepositives:\n    - Deliberate administrative hiding of a legitimate local service account from the logon screen\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-08-03T00:00:00Z",
             "labels": [

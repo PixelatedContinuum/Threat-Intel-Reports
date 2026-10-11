@@ -26,7 +26,7 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 4 | 2 | T1134.001, T1548.002, T1053.005, T1047 | 0 |
-| Sigma | 3 | 2 | T1134.001, T1548.002, T1053.005, T1047 | 0 |
+| Sigma | 2 | 3 | T1134.001, T1548.002, T1053.005, T1047 | 0 |
 | Suricata | 0 | 0 | — | 0 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
@@ -282,63 +282,6 @@ rule Arsenal237_LPE_WMIC {
 
 ### Detection Rules
 
-#### Privilege Escalation via Token Impersonation
-
-**Tier:** Detection
-**Robustness:** 3
-**ATT&CK Coverage:** T1134.001 (Token Impersonation/Theft)
-**Confidence:** HIGH
-**Rationale:** Requires a process-access event targeting one of four SYSTEM-privileged processes (`winlogon.exe`, `lsass.exe`, `services.exe`, `csrss.exe`) with a token-query/duplicate `GrantedAccess` mask, paired with a call trace that names at least one of `OpenProcessToken`, `DuplicateTokenEx` or `ImpersonateLoggedOnUser`. *Description fix 2026-10-10:* this line, the Validation and the YAML description said the three-API sequence, but the call-trace test is an OR over the three names, so one name is enough and neither co-occurrence nor order is tested. Both selectors target fixed OS artifacts (the SYSTEM-holding process set and the Win32 token API sequence), not renameable literals, and the pairing is the technique itself, not a coincidental combination. Retiering fix: level recalibrated from `critical` to `high`. Gate 4 reserves `critical` for near-certain, effectively FP-free detections; the rule's own false-positives entry documents rare legitimate administrative-tool overlap, which caps it at `high`.
-**False Positives:** Legitimate administrative or EDR tooling performing token operations against these processes (rare).
-**Blind Spots:** A rewrite performing token theft via direct syscalls, or targeting a SYSTEM-privileged process outside this four-item list, evades this rule.
-**Validation:** Replay the process-access plus API call-trace sequence against one of the four listed processes; must fire. A legitimate administrative tool accessing `services.exe` without any of the three API names in the call trace must NOT fire.
-**Deployment:** Sysmon Event ID 10 (Process Access) telemetry, EDR process-access monitoring.
-
-```yaml
-title: Privilege Escalation via Token Impersonation
-id: 41794664-1101-4fbf-a117-c8c1a1f7f473
-status: experimental
-description: >-
-  Detects a token-impersonation privilege-escalation sequence: process-access
-  events targeting a SYSTEM-privileged process (winlogon.exe, lsass.exe,
-  services.exe, csrss.exe) paired with a call trace naming at least one of
-  OpenProcessToken, DuplicateTokenEx or ImpersonateLoggedOnUser (OR-matched,
-  so neither the full three-API sequence nor its order is required),
-  characteristic of Arsenal-237 privilege-escalation wrappers.
-references:
-    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-lpe-exe-detections/
-author: The Hunters Ledger
-date: '2026-01-25'
-modified: '2026-10-10'
-tags:
-    - attack.privilege-escalation
-    - attack.stealth
-    - attack.t1134.001
-    - detection.emerging-threats
-logsource:
-    product: windows
-    category: process_access
-detection:
-    selection_process_access:
-        TargetImage|endswith:
-            - '\winlogon.exe'
-            - '\lsass.exe'
-            - '\services.exe'
-            - '\csrss.exe'
-        GrantedAccess:
-            - '0x1410'
-            - '0x1000'
-    selection_api:
-        CallTrace|contains:
-            - 'OpenProcessToken'
-            - 'DuplicateTokenEx'
-            - 'ImpersonateLoggedOnUser'
-    condition: selection_process_access and selection_api
-falsepositives:
-    - Legitimate administrative or EDR tooling performing token operations against these processes (rare)
-level: high
-```
-
 #### UAC Bypass via Ms-Settings Registry Hijack
 
 **Tier:** Detection
@@ -536,13 +479,66 @@ falsepositives:
 level: medium
 ```
 
+#### Process Access to SYSTEM Processes with Token-Duplication Access Rights
+
+**Tier:** Hunting
+**Robustness:** 2
+**ATT&CK Coverage:** T1134.001 (Token Impersonation/Theft)
+**Confidence:** LOW
+**Rationale:** *Round 2, 2026-10-10:* this rule was Detection and combined a process-access mask with a `CallTrace` that had to name `OpenProcessToken`, `DuplicateTokenEx` or `ImpersonateLoggedOnUser`. Sysmon Event 10 records `CallTrace` as module-and-offset frames, not function names, so on stock Sysmon the second selector had no event to match and the rule could not fire; the `0x1410` and `0x1000` masks it admitted were also not the rights the companion report shows `lpe.exe` requesting. The report's token-theft loop calls `OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_DUP_HANDLE)` (`0x0440`; with `PROCESS_QUERY_LIMITED_INFORMATION` added it is `0x1440`) against each process, then `OpenProcessToken`, `DuplicateTokenEx` and `ImpersonateLoggedOnUser`. The rule now keeps only the part Sysmon can see: a handle to `winlogon.exe`, `lsass.exe`, `services.exe` or `csrss.exe` granted exactly `0x0440` or `0x1440`. The API-name corroboration is dropped rather than kept as a selector that cannot match; it would need an EDR or enriched profile whose call trace carries resolved function names. Access rights to these four processes are requested by security and management software too, so this is a Hunting lead, not an alert.
+**False Positives:** Security products, process-monitoring and management tools that open these processes for token or handle duplication. Expect hits from any tool that duplicates handles to SYSTEM processes.
+**Blind Spots:** A token theft that requests different access rights, goes through direct syscalls, or targets a SYSTEM-privileged process outside this four-item list evades the rule. It cannot confirm that `OpenProcessToken`, `DuplicateTokenEx` or `ImpersonateLoggedOnUser` followed the open.
+**Validation:** Run `OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_DUP_HANDLE)` against `winlogon.exe` from a test process and confirm Sysmon reports `GrantedAccess` `0x0440` or `0x1440`; the rule must fire only on those values. Not replayed against `lpe.exe` (not on this workstation).
+**Deployment:** Sysmon Event ID 10 (Process Access) telemetry with the SYSTEM-process targets not filtered out, or EDR process-access monitoring.
+
+```yaml
+title: Process Access to SYSTEM Processes with Token-Duplication Access Rights
+id: 41794664-1101-4fbf-a117-c8c1a1f7f473
+status: experimental
+description: >-
+  Detects a process opening a handle to winlogon.exe, lsass.exe, services.exe
+  or csrss.exe with a granted access mask of 0x0440 or 0x1440, which is the
+  PROCESS_QUERY_INFORMATION | PROCESS_DUP_HANDLE request (with and without
+  PROCESS_QUERY_LIMITED_INFORMATION) the Arsenal-237 lpe.exe token-theft loop
+  makes before it duplicates a token. The rule does not see the later
+  OpenProcessToken, DuplicateTokenEx or ImpersonateLoggedOnUser calls:
+  Sysmon call traces hold module and offset frames, not function names.
+references:
+    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-lpe-exe-detections/
+author: The Hunters Ledger
+date: '2026-01-25'
+modified: '2026-10-10'
+tags:
+    - attack.privilege-escalation
+    - attack.stealth
+    - attack.t1134.001
+    - detection.emerging-threats
+logsource:
+    product: windows
+    category: process_access
+detection:
+    selection:
+        TargetImage|endswith:
+            - '\winlogon.exe'
+            - '\lsass.exe'
+            - '\services.exe'
+            - '\csrss.exe'
+        GrantedAccess:
+            - '0x0440'
+            - '0x1440'
+    condition: selection
+falsepositives:
+    - Security, monitoring and management software that opens these processes for token or handle duplication
+level: medium
+```
+
 ---
 
 ## Coverage Gaps
 
 ### Retiering Fixes Applied
 
-- **Sigma "Privilege Escalation via Token Impersonation" level recalibrated from `critical` to `high`.** Gate 4 reserves `critical` for near-certain, effectively FP-free detections; the rule's own false-positives entry documents rare legitimate admin-tool overlap, which caps it at `high`.
+- **Sigma "Privilege Escalation via Token Impersonation" (round 2, 2026-10-10: now "Process Access to SYSTEM Processes with Token-Duplication Access Rights", re-tiered Hunting at `medium`, because its call-trace selector cannot match Sysmon events) was recalibrated from `critical` to `high` earlier.** Gate 4 reserves `critical` for near-certain, effectively FP-free detections; the rule's own false-positives entry documents rare legitimate admin-tool overlap, which caps it at `high`.
 - **YARA "Named Pipe Impersonation Pattern" split into two rules.** The source rule's condition was `all of ($pipe*) or ($ps and $ps_pipe)`; the `$ps`/`$ps_pipe` branch (bare `powershell` plus the .NET class name `NamedPipeClientStream`) is far broader than the native API-sequence branch, and an OR condition inherits the weakest branch's precision. Split into `Arsenal237_LPE_Named_Pipe_Token_Theft` (Detection, the native API sequence) and `Arsenal237_LPE_Named_Pipe_PS_Connector` (Hunting, the PowerShell fallback) so the strong branch keeps Detection-grade confidence instead of both being dragged to Hunting.
 - **MITRE retag: T1055.001 → T1134.001 for named-pipe impersonation, applied to the YARA rule.** T1055.001 is Dynamic-link Library Injection, unrelated to named-pipe impersonation. The companion Sigma rule in the source file had already self-corrected this tag with an explanatory note; the YARA rule's meta `technique` field had not, and is now aligned to the same fix.
 - **Sigma "Named Pipe Impersonation Attack" selector tightened.** The source selector was `PipeName|contains: ['spoolss', 'pipe']`. The bare `pipe` branch matches almost any named pipe (the word "pipe" is common in legitimate pipe-naming conventions) and adds no discriminating value; removed, leaving `spoolss` (the real Print Spooler pipe name) as the sole, scalar selector.

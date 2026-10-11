@@ -24,7 +24,7 @@ This campaign spans 8 active operator cases plus 5 novel AI-abuse TTPs first doc
 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
-| YARA | 7 | 1 | T1574.006, T1014, T1587, T1059.006, T1543.002, T1498, T1071.001 | 0 |
+| YARA | 6 | 2 | T1574.006, T1014, T1587, T1059.006, T1543.002, T1498, T1071.001 | 0 |
 | Sigma | 6 documents (1 bundle) | 8 documents (1 bundle) | T1574.006, T1090.004, T1587, T1685, T1496.001, T1119, T1657 | 0 |
 | Suricata | 1 | 4 | T1090.004, T1496.001, T1071.001, T1665 | 1 |
 
@@ -50,67 +50,6 @@ This campaign spans 8 operator cases rather than distinct malware families, so r
 
 **Novel AI-Abuse TTPs**
 
-#### AI Operator Handoff Document
-
-**Tier:** Detection
-**Robustness:** 2
-**ATT&CK Coverage:** T1587 (Develop Capabilities), T1059.006 (Python)
-**ATT&CK Note:** Novel TTP; no dedicated MITRE sub-technique exists for this specific behavior.
-**Confidence:** HIGH
-**Rationale:** First-documented artifact class — operator-authored Markdown files written FOR AI agent consumption to re-prime new sessions (Case 1 Russian Gemini operator: `C2_MIGRATION_GUIDE.md`; Case 3 Rovodev operator: 22+ documents at `/root/matrix/`). *Fix applied during retiering:* the original condition let the bare domain string `tralalarkefe.com` ($i4) trigger the rule alone, an atomic-only path; it now requires the domain to co-occur with an AI-addressing header, session-priming directive, or infrastructure marker — the domain itself is already in the IOC feed. *Logic fix 2026-10-10:* `$h4` ("To: Claude") is a substring of `$h3` ("To: Claude Code"), so one "To: Claude Code" line satisfied the `2 of ($h*)` branch alone, which is the header-only match the Blind Spots below say is not covered. That branch now counts only distinct header forms (`$h1`, `$h2`, `$h3`, `$h5`, `$h6`); `$h4` still counts as a header in the branch that pairs a header with a directive.
-**False Positives:** None known — the combination of AI-tool-addressed headers ("To: Gemini CLI", "To: Claude Code") with session-priming directives is not present in legitimate documentation workflows.
-**Blind Spots:** An operator who stops using this exact heading/directive convention evades; single-criterion matches (header OR directive alone) are lower confidence and not covered here.
-**Validation:** Scan a captured operator handoff document (e.g. `C2_MIGRATION_GUIDE.md`) — must match; a legitimate project README or runbook must NOT fire.
-**Deployment:** Filesystem scan on compromised or suspicious server hosts, IR artifact triage, DLP scanning of server-accessible file shares.
-
-```yara
-/*
-   Yara Rule Set
-   Identifier: AI-Agent-Framework-Abuse-MultiActor-2026-05-23
-   Author: The Hunters Ledger
-   Source: https://the-hunters-ledger.com/
-   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/
-*/
-
-rule TOOLKIT_AI_Operator_Handoff_Document {
-   meta:
-      description = "Detects operator-authored Markdown handoff documents written for AI agent consumption — a novel artifact class where threat actors document their C2 infrastructure and session context for AI tool re-priming. Observed in Case 1 (Russian Gemini operator with explicit 'To: Gemini CLI' headers) and Case 3 (Rovodev operator with 22+ session-prime docs)."
-      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
-      author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/"
-      date = "2026-05-25"
-      modified = "2026-10-10"
-      family = "AI-Operator-Handoff-Document"
-      malware_type = "Operator-TTP-Artifact"
-      campaign = "AI-Agent-Framework-Abuse-MultiActor-2026-05-23"
-      id = "de0c2440-341f-5828-a60f-805ce499d95e"
-   strings:
-      $h1 = "To: Gemini CLI" ascii nocase
-      $h2 = "From: Gemini CLI" ascii nocase
-      $h3 = "To: Claude Code" ascii nocase
-      $h4 = "To: Claude" ascii nocase
-      $h5 = "From: Claude" ascii nocase
-      $h6 = "To: Rovodev" ascii nocase
-      $d1 = "refer to this file when starting a new session" ascii nocase
-      $d2 = "when starting a new session" ascii nocase
-      $d3 = "read this file first" ascii nocase
-      $d4 = "before beginning any task" ascii nocase
-      $d5 = "AI agent handoff" ascii nocase
-      $i1 = "C2_MIGRATION_GUIDE" ascii
-      $i2 = "C2_INFRA_TRANSFER" ascii
-      $i3 = "DEPLOYED_TOOLS" ascii
-      $i4 = "tralalarkefe.com" ascii nocase
-   condition:
-      filesize < 500KB and
-      (
-         (1 of ($h*) and 1 of ($d*)) or
-         (2 of ($h1, $h2, $h3, $h5, $h6)) or
-         (1 of ($i1, $i2, $i3) and 1 of ($d*)) or
-         ($i4 and (1 of ($h*) or 1 of ($d*) or 1 of ($i1, $i2, $i3)))
-      )
-}
-```
-
 #### LLM-Personalized Credential Mutation Script
 
 **Tier:** Detection
@@ -119,7 +58,7 @@ rule TOOLKIT_AI_Operator_Handoff_Document {
 **ATT&CK Note:** Novel TTP.
 **Confidence:** HIGH
 **Rationale:** First qualitative change in credential-mutation tradecraft since the hashcat-rules era (~2015). `russian-ai_sniper_brute.py` invokes Gemini 2.5 Flash with a red-team password analyst prompt to generate 20 per-target mutations from email+domain+last-known-password — the prompt fragments and operator output filenames are distinctive and require no single renameable literal alone.
-**False Positives:** None known. The rule fires on any two of the six prompt fragments, on one of the three operator output filenames together with a Gemini API string, or on one prompt fragment together with a Gemini API string and a WordPress login string; it does not require the LLM API call, the prompt and the "Output ONLY the 20 passwords" constraint together. These prompt fragments and filenames are not expected in legitimate penetration-testing frameworks.
+**False Positives:** None known. *Logic fix (round 2, 2026-10-10):* the generic labels `Target User:` and `Target Domain:` ($p5, $p6) alone satisfied the first branch, so a file with just those two lines fired. They now count only beside one of the four distinctive prompt fragments ($p1 to $p4). The rule fires on any two of the four prompt fragments, on one prompt fragment with both labels, on one of the three operator output filenames together with a Gemini API string, or on one prompt fragment together with a Gemini API string and a WordPress login string; it does not require the LLM API call, the prompt and the "Output ONLY the 20 passwords" constraint together. No benign-corpus run was made, so "none known" means none observed, not none measured.
 **Blind Spots:** A rebuild using different prompt wording or a different LLM SDK evades; the rule targets on-disk script artifacts, not in-memory-only execution.
 **Validation:** Scan the captured `russian-ai_sniper_brute.py`-class script — must match; a benign password-policy or generic LLM-integration script must NOT fire.
 **Deployment:** Filesystem scan on suspicious server hosts, DLP scanning for operator tool repositories, sandbox detonation of suspicious Python scripts.
@@ -155,9 +94,10 @@ rule TOOLKIT_LLM_Personalized_Credential_Mutator {
    condition:
       filesize < 1MB and
       (
-         (2 of ($p*)) or
+         (2 of ($p1, $p2, $p3, $p4)) or
+         (1 of ($p1, $p2, $p3, $p4) and $p5 and $p6) or
          (1 of ($f*) and 1 of ($a*)) or
-         (1 of ($p*) and 1 of ($a*) and 1 of ($w*))
+         (1 of ($p1, $p2, $p3, $p4) and 1 of ($a*) and 1 of ($w*))
       )
 }
 ```
@@ -419,14 +359,14 @@ rule MAL_Python_Russian_A2A_C2_BaseHTTPServer {
 **ATT&CK Coverage:** T1587 (Develop Capabilities), T1059.006 (Python)
 **ATT&CK Note:** Novel TTP: AI-generated code structural signature.
 **Confidence:** MODERATE (each criterion alone is low-confidence; the combination is higher)
-**Rationale:** Cross-operator validated across three independent operators' Python attack code (Case 1, Case 2, Case 3). The co-occurrence of verbose docstrings + bare-except or defensive try/except (the condition accepts either handler form, 2026-10-10 wording fix) + educational variable names + zero anti-analysis is common in benign, actively-developed Python, so this is explicitly not suitable for automated alerting alone.
+**Rationale:** Cross-operator validated across three independent operators' Python attack code (Case 1, Case 2, Case 3). The co-occurrence of verbose docstrings + bare-except or defensive try/except (the condition accepts either handler form, 2026-10-10 wording fix) + educational variable names + a rate-limiting marker (zero anti-analysis is observed in the cases but is not tested by the rule) is common in benign, actively-developed Python, so this is explicitly not suitable for automated alerting alone.
 **False Positives:** Legitimate Python developers routinely write verbose docstrings and defensive error handling; the FP rate increases meaningfully in active development environments.
 **Deployment:** Hunting/hypothesis generation on suspicious server hosts; combine with operator-adjacent artifact signals (credential files, C2 artifacts, scanning tools) before treating a hit as actionable.
 
 ```yara
 rule SUSP_AI_Generated_Offensive_Code_Python {
    meta:
-      description = "Detects Python offensive tools bearing the structural signature of AI-generated code: verbose docstrings co-occurring with a bare `except:` handler or a defensive `except Exception as e:` handler (either one satisfies the rule), educational variable names, and offensive-tool terms. Confirmed cross-operator across 3 independent actors (Case 1 Russian, Case 2 Turkish ARPA, Case 3 Rovodev)."
+      description = "Detects Python offensive tools bearing the structural signature of AI-generated code: verbose docstrings co-occurring with a bare `except:` handler or a defensive `except Exception as e:` handler (either one satisfies the rule), educational variable names, a rate-limiting marker (time.sleep or rate_limit), and offensive-tool terms. The rule does not test for the absence of anti-analysis. Confirmed cross-operator across 3 independent actors (Case 1 Russian, Case 2 Turkish ARPA, Case 3 Rovodev)."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/"
@@ -465,6 +405,69 @@ rule SUSP_AI_Generated_Offensive_Code_Python {
       2 of ($var*) and
       1 of ($rate*) and
       2 of ($off*)
+}
+```
+
+#### AI Operator Handoff Document
+
+**Tier:** Hunting
+**Robustness:** 1
+**ATT&CK Coverage:** T1587 (Develop Capabilities), T1059.006 (Python)
+**ATT&CK Note:** Novel TTP; no dedicated MITRE sub-technique exists for this specific behavior.
+**Confidence:** MODERATE
+**Rationale:** First-documented artifact class — operator-authored Markdown files written FOR AI agent consumption to re-prime new sessions (Case 1 Russian Gemini operator: `C2_MIGRATION_GUIDE.md`; Case 3 Rovodev operator: 22+ documents at `/root/matrix/`). *Fix applied during retiering:* the original condition let the bare domain string `tralalarkefe.com` ($i4) trigger the rule alone, an atomic-only path; it now requires the domain to co-occur with an AI-addressing header, session-priming directive, or infrastructure marker — the domain itself is already in the IOC feed. *Logic fix 2026-10-10:* `$h4` ("To: Claude") is a substring of `$h3` ("To: Claude Code"), so one "To: Claude Code" line satisfied the `2 of ($h*)` branch alone, which is the header-only match the Blind Spots below say is not covered. That branch now counts only distinct header forms (`$h1`, `$h2`, `$h3`, `$h5`, `$h6`, plus the Markdown-bold forms below); `$h4` still counts as a header in the branch that pairs a header with a directive. *Round 2 (2026-10-10):* the companion report quotes the exemplar header as `**To:** Gemini CLI` and `**From:** Gemini CLI` (Markdown bold, colon inside the bold), which the plain `To: Gemini CLI` strings do not match, so `$h1b` and `$h2b` were added for that form. The rule was re-tiered from Detection to Hunting: two header lines, or a header plus a directive, fire on benign AI-assisted documentation, and the report itself names operational content as the disambiguator.
+**False Positives:** Legitimate AI-assisted project documentation. A file with `To: Gemini CLI` and `From: Gemini CLI` lines, or an AI-addressed header with a session-priming directive such as "read this file first", fires without any C2 or credential content (confirmed on a synthetic benign fixture, round 2, 2026-10-10). The companion report rates this artifact class MEDIUM false-positive risk and names operational content (C2 endpoint patterns, credential tables) as the disambiguator, which the condition does not test. Triage a hit by that content.
+**Blind Spots:** An operator who stops using this exact heading/directive convention evades; single-criterion matches (header OR directive alone) are lower confidence and not covered here.
+**Validation:** Scan a captured operator handoff document (e.g. `C2_MIGRATION_GUIDE.md`) — must match. A legitimate project README or runbook that carries an AI-addressed header and a session directive also matches; telling them apart takes the operational-content review above. Not run against the captured exemplars (not on this workstation).
+**Deployment:** Filesystem scan on compromised or suspicious server hosts, IR artifact triage, DLP scanning of server-accessible file shares.
+
+```yara
+/*
+   Yara Rule Set
+   Identifier: AI-Agent-Framework-Abuse-MultiActor-2026-05-23
+   Author: The Hunters Ledger
+   Source: https://the-hunters-ledger.com/
+   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/
+*/
+
+rule TOOLKIT_AI_Operator_Handoff_Document {
+   meta:
+      description = "Detects operator-authored Markdown handoff documents written for AI agent consumption — a novel artifact class where threat actors document their C2 infrastructure and session context for AI tool re-priming. Observed in Case 1 (Russian Gemini operator with explicit 'To: Gemini CLI' headers) and Case 3 (Rovodev operator with 22+ session-prime docs)."
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
+      author = "The Hunters Ledger"
+      reference = "https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/"
+      date = "2026-05-25"
+      modified = "2026-10-10"
+      family = "AI-Operator-Handoff-Document"
+      malware_type = "Operator-TTP-Artifact"
+      campaign = "AI-Agent-Framework-Abuse-MultiActor-2026-05-23"
+      id = "de0c2440-341f-5828-a60f-805ce499d95e"
+   strings:
+      $h1 = "To: Gemini CLI" ascii nocase
+      $h2 = "From: Gemini CLI" ascii nocase
+      $h3 = "To: Claude Code" ascii nocase
+      $h4 = "To: Claude" ascii nocase
+      $h5 = "From: Claude" ascii nocase
+      $h6 = "To: Rovodev" ascii nocase
+      $h1b = "**To:** Gemini CLI" ascii nocase
+      $h2b = "**From:** Gemini CLI" ascii nocase
+      $d1 = "refer to this file when starting a new session" ascii nocase
+      $d2 = "when starting a new session" ascii nocase
+      $d3 = "read this file first" ascii nocase
+      $d4 = "before beginning any task" ascii nocase
+      $d5 = "AI agent handoff" ascii nocase
+      $i1 = "C2_MIGRATION_GUIDE" ascii
+      $i2 = "C2_INFRA_TRANSFER" ascii
+      $i3 = "DEPLOYED_TOOLS" ascii
+      $i4 = "tralalarkefe.com" ascii nocase
+   condition:
+      filesize < 500KB and
+      (
+         (1 of ($h*) and 1 of ($d*)) or
+         (2 of ($h1, $h2, $h3, $h5, $h6, $h1b, $h2b)) or
+         (1 of ($i1, $i2, $i3) and 1 of ($d*)) or
+         ($i4 and (1 of ($h*) or 1 of ($d*) or 1 of ($i1, $i2, $i3)))
+      )
 }
 ```
 
@@ -760,9 +763,9 @@ level: high
 **Confidence:** MODERATE — co-presence of AI tools and offensive tooling on a server host warrants investigation but is not conclusive by itself
 **Rationale:** Neither base selector is meaningful alone — AI coding-agent execution and generic scanning/tunneling tool execution are both common on legitimate developer and security-research hosts. The temporal correlation (both signals on the *same host* within 24 hours) is what discriminated the real Case 7 (Weevely+frp+Claude) operator from two demoted false positives (a legitimate SaaS-security consultant and a HuggingFace researcher) where only one signal type was present. *Title fix 2026-10-10:* the two base rules were titled "on Server Host", but no selection tests host role (Sigma has no such field), so they now say "on a Linux Host"; scoping to server-class hosts is done in the SIEM correlation engine, as the Deployment line says. *Tag fixes applied during retiering:* added the missing technique-ID tags to all three rules (`attack.t1587` on both the AI-tool base and the correlation; `attack.t1588.002` on both the offensive-tool base and the correlation).
 **False Positives:** The two base rules alone are extremely broad (any AI-coding-agent user; any admin running `nmap`/`masscan`). The correlation rule itself: "a host legitimately used both for AI-assisted development and authorized security testing" — narrower, but real in security-research environments.
-**Blind Spots:** An operator running AI-tool and offensive-tool sessions more than 24 hours apart, or split across separate hosts, evades the correlation.
-**Validation:** Replay both base selectors against the same `host.name` within the 24-hour window — the correlation must fire; a host showing only one signal type must NOT trigger the correlation.
-**Deployment:** Endpoint agent filesystem/process scanning with host-role classification feeding a SIEM correlation engine (24h temporal join on `host.name`).
+**Blind Spots:** In Sigma semantics, an operator running AI-tool and offensive-tool sessions more than 24 hours apart, or split across separate hosts, evades the correlation. The `temporal` type is unordered, and `sigma convert -t eql -p sysmon` renders it as `sample by host.name` with no time bound, so on an Elastic EQL deployment the 24-hour window is not enforced and the two signals correlate across whatever interval the query searches. Lucene cannot convert a correlation at all, so there is no Lucene form of this set.
+**Validation:** Replay both base selectors against the same `host.name` — the correlation must fire; a host showing only one signal type must NOT trigger the correlation. Whether events further apart than 24 hours also fire depends on the backend: a backend that implements `timespan` suppresses them, the EQL conversion does not.
+**Deployment:** Endpoint agent filesystem/process scanning with host-role classification feeding a SIEM correlation engine (temporal join on `host.name`; 24h in Sigma, unbounded in the EQL conversion).
 
 ```yaml
 title: AI Coding-Agent Binary Execution on a Linux Host
@@ -1020,7 +1023,7 @@ level: medium
 **Confidence:** MODERATE
 **Rationale:** The `*.trycloudflare.com` suffix keys on Cloudflare's ephemeral-tunnel *service* rather than a rotatable attacker-owned domain, so it survives subdomain rotation — but it is also Cloudflare's genuinely free, widely-used developer tunnel product, so a meaningful legitimate population exists. *Retiered from Detection to Hunting during this pass:* the original `level: high` overstated confidence — Sigma has no host-role field to restrict this selector to server-class hosts, so as written it fires identically on any developer or CI host using the same free service; demoted to `level: medium`. Tag fix: added the missing `attack.t1090.004` technique tag. *Title fix 2026-10-10:* the title still said "from Non-Developer Server Host" and the description claimed process-creation coverage; the logic is one `dns_query` selection, so both now say DNS query on any Linux host.
 **False Positives:** Developers and CI/CD pipelines using Cloudflare Tunnel for local development exposure (ngrok-alternative use case) — exempt known developer/CI hosts by hostname or subnet.
-**Deployment:** DNS query logs, network proxy/firewall egress, Sysmon process creation for `cloudflared` binary execution.
+**Deployment:** Linux DNS query telemetry (`dns_query`) only. The selector is `query|endswith: .trycloudflare.com`, so it matches queries for subdomains (the quick-tunnel names) and not a query for the bare apex name; it does not read proxy or firewall logs and does not inspect process creation or `cloudflared` execution.
 
 ```yaml
 title: Trycloudflare.com Quick-Tunnel DNS Query

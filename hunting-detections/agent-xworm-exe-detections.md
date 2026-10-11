@@ -192,18 +192,18 @@ rule MAL_Windows_XWorm_RAT_Capability_Combination {
 
 ### Hunting Rules
 
-#### PowerShell Execution from a Parent Process in a User-Writable Directory
+#### PowerShell -NoP -C Execution from a User-Writable-Directory Parent (XWorm Agent)
 
 **Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1059.001 (PowerShell)
 **Confidence:** LOW
-**Rationale:** Combines a PowerShell command-line flag pattern (`-NoP -C`) with a parent-process-location heuristic (AppData/Temp/Users) and a two-vendor exclusion filter. *Title fix 2026-10-10:* the rule was titled "from Suspicious .NET Process", but a process-creation event carries no .NET marker and no selection tests for one, so the title and description now describe the parent-path test that exists. *Retiering note:* the source draft carried this at `level: high` while its own falsepositives field already named "legitimate development tools, software installers" as expected hitters — an honest signal that this sits at Hunting, not Detection (Gate 4). The ParentImage path condition matches nearly any interactively-launched process on a modern Windows host, so the real narrowing comes almost entirely from the command-line flag pattern; the two-vendor filter (Microsoft, Visual Studio) does not cover the much larger population of legitimate installers and automation tools that also invoke PowerShell this way from a user-profile path.
+**Rationale:** Combines a PowerShell command-line flag pattern (`-NoP -C`) with a parent-process-location heuristic (AppData/Temp/Users) and a two-vendor exclusion filter. *Title fix 2026-10-10 (round 2: title made distinct from the XWorm v2 page's rule, which shared it and failed corpus-wide Sigma checking):* the rule was titled "from Suspicious .NET Process", but a process-creation event carries no .NET marker and no selection tests for one, so the title and description now describe the parent-path test that exists. *Retiering note:* the source draft carried this at `level: high` while its own falsepositives field already named "legitimate development tools, software installers" as expected hitters — an honest signal that this sits at Hunting, not Detection (Gate 4). The ParentImage path condition matches nearly any interactively-launched process on a modern Windows host, so the real narrowing comes almost entirely from the command-line flag pattern; the two-vendor filter (Microsoft, Visual Studio) does not cover the much larger population of legitimate installers and automation tools that also invoke PowerShell this way from a user-profile path.
 **False Positives:** Software installers, build scripts, and IT automation tooling that invoke PowerShell with abbreviated flags from AppData/Temp/user-profile locations — a common, not rare, pattern.
 **Deployment:** SIEM/EDR process-creation telemetry; review parent binary provenance (signer, install context) before treating a hit as malicious.
 
 ```yaml
-title: PowerShell Execution from a Parent Process in a User-Writable Directory
+title: PowerShell -NoP -C Execution from a User-Writable-Directory Parent (XWorm Agent)
 id: 01027829-5061-9820-bbcd-60efca256c90
 status: experimental
 description: >-
@@ -311,7 +311,7 @@ alert tcp $HOME_NET any -> any any (msg:"THL DETECT Arsenal-237 XWorm AgentSec A
 
 - **YARA "XWorm RAT Capability Combination" demoted from `severity = "HIGH"` to Hunting.** No compile defect was found (all wildcard string-group references in the condition correctly match their declared identifiers), but two of the rule's three OR'd branches lean heavily on .NET-framework and WinAPI strings (`System.Net.Sockets`, `ToBase64String`, `ShowWindow`, `TcpClient`) that are common across legitimate .NET networking and remote-access tooling. None of the three branches has been validated against a broad clean-software corpus, the documented precondition for Detection tier on a combination this broad.
 - **YARA "PowerShell Reconnaissance Commands" and "AgentSec Authentication Pattern" promoted to Detection.** Both anchor on multi-token or naming-convention matches distinctive enough, and durable enough across rebuilds and secret rotation, to clear the Detection bar; neither depends on the sample's C2 IP or filename.
-- **Sigma "PowerShell Execution from a Parent Process in a User-Writable Directory" (titled "from Suspicious .NET Process" until 2026-10-10) demoted from `level: high` to `level: medium` and retiered Hunting.** The source draft's own `falsepositives` field already named "legitimate development tools, software installers" as expected hitters, an honest signal the rule belongs in Hunting, not Detection (Gate 4 level discipline).
+- **Sigma "PowerShell -NoP -C Execution from a User-Writable-Directory Parent (XWorm Agent)" (titled "from Suspicious .NET Process" until 2026-10-10) demoted from `level: high` to `level: medium` and retiered Hunting.** The source draft's own `falsepositives` field already named "legitimate development tools, software installers" as expected hitters, an honest signal the rule belongs in Hunting, not Detection (Gate 4 level discipline).
 - **Sigma "File Creation with XWorm Naming Pattern" retagged.** The source draft carried `attack.persistence` / `attack.privilege-escalation` / `attack.t1547.001` (Registry Run Keys / Startup Folder), but the selector has no path restriction to a Startup folder or Run-key location. It is a bare filename-content match with no persistence-location evidence. Retagged to `attack.t1105` (Ingress Tool Transfer), which is what the logic as written actually evidences; retained at Hunting rather than Cut given the three-substring naming family still has scoping value beyond the single filename atomic already in the feed.
 - **Suricata "XWorm AgentSec Authentication Secret Pattern" (sid 1000013) carried forward unchanged, tier raised to Detection.** The rule was already structurally sound as authored (content-gated PCRE, `flow` set, no destination-IP dependency). A `threshold` clause was added for alert-volume hygiene, consistent with the project's other beaconing-adjacent Suricata signatures.
 

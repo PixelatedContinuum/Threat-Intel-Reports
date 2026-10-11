@@ -23,7 +23,7 @@ This campaign is a single operator's bespoke intrusion toolkit, not a commodity 
 |---|---|---|---|---|
 | YARA | 5 | 3 | T1190, T1048.003, T1132.001, T1554, T1014, T1505.003, T1068, T1588.005 | 2 |
 | Sigma | 8 | 3 | T1059.001, T1059.004, T1003.002, T1021.002, T1021.006, T1014, T1543, T1098, T1136.001, T1222.002, T1572, T1105 | 2 |
-| Suricata | 9 | 3 | T1190, T1048.003, T1041, T1210, T1572, T1505.003, T1555 | 1 |
+| Suricata | 8 | 4 | T1190, T1048.003, T1041, T1210, T1572, T1505.003, T1555 | 1 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, built for scoping and threat-hunting. Expect to review the hits.
 
@@ -1085,24 +1085,6 @@ alert tcp $EXTERNAL_NET any -> $HOME_NET 7001 (msg:"THL DETECT WebLogicTelecomHa
 ```
 **Design note:** This rule matches on `OpaqueReference` as a suffix common to both `AggregatableOpaqueReference` and `ForeignOpaqueReference`, the two class names that co-occur in every observed variant of this exploitation chain.
 
-#### Malicious LDAP-JNDI Callback Response
-
-**Tier:** Detection
-**Robustness:** 3
-**ATT&CK Coverage:** T1190
-**Confidence:** HIGH
-**False Positives:** None known. `javaCodeBase` as an LDAP-response attribute value is specific to the JNDI reference-injection technique; it does not appear in ordinary LDAP directory query responses (user lookups, group membership, authentication binds)
-**Blind Spots:** Misses the callback if it uses RMI instead of LDAP for the JNDI response. Port-agnostic by design (`any` dest port), trading a small amount of specificity for coverage across this operator's non-standard port 1389 and any future port choice
-**Validation:** Stand up a malicious JNDI/LDAP callback server serving a `javaCodeBase` reference and trigger a test JNDI lookup against it from a lab Java application; ordinary LDAP directory traffic (an Active Directory bind and search, for example) must NOT fire
-**Deployment:** Egress sensor, prioritized on any segment where a Java application server can reach the internet
-
-```
-alert tcp $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT WebLogicTelecomHarvester Malicious LDAP-JNDI Callback Response (javaCodeBase/javaSerializedData)"; flow:established,to_client; content:"javaCodeBase"; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-admin; sid:9301807; rev:3; metadata:author The_Hunters_Ledger, date 2026-08-17;)
-```
-**Direction fix 2026-10-10:** the header read `$HOME_NET any -> $EXTERNAL_NET any` with `flow:established,to_client`. `to_client` selects packets sent by the server of the flow, so that pairing matched an internal host answering an external client, not an external callback server answering the victim. The attacker-side LDAP server is the `$EXTERNAL_NET` source and the Java application server is the `$HOME_NET` destination, so the header is now `$EXTERNAL_NET any -> $HOME_NET any`; `rev` 2 to 3. This was not replayed against a capture in this pass.
-
-**Internal Windows Post-Exploitation**
-
 #### GeoServer OGC-Filter RCE via valueReference exec()
 
 **Tier:** Detection
@@ -1185,6 +1167,24 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT WebLogicTelecomHarv
 ```
 alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT WebLogicTelecomHarvester PRTG Bulk Device Inventory Query via table.json (Broad, Legitimate Bulk Queries Exist)"; flow:established,to_server; content:"table.json"; http_uri; content:"content=devices"; http_uri; content:"count=500"; http_uri; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-recon; sid:9301812; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
 ```
+
+#### Malicious LDAP-JNDI Callback Response
+
+**Tier:** Hunting
+**Robustness:** 2
+**ATT&CK Coverage:** T1190
+**Confidence:** MODERATE
+**False Positives:** *Round 2, 2026-10-10:* the rule matches the string `javaCodeBase` anywhere in the payload of any inbound TCP response to a `$HOME_NET` client. It does not establish that the traffic is LDAP or that the string is an attribute value, so a downloaded web page, source file or document that contains the text also fires. The string is uncommon in ordinary LDAP directory responses (user lookups, group membership, authentication binds), which is why it is still a useful lead; it is not proof of a JNDI callback. Re-tiered from Detection to Hunting
+**Blind Spots:** Covers only the reference mode (`javaCodeBase`); a serialized-object response (`javaSerializedData`, documented as a separate mode in the report at lines 653 to 655) is not tested, and the earlier `msg` that listed both was corrected. Misses the callback if it uses RMI instead of LDAP for the JNDI response. Port-agnostic by design (`any` dest port), trading a small amount of specificity for coverage across this operator's non-standard port 1389 and any future port choice
+**Validation:** Stand up a malicious JNDI/LDAP callback server serving a `javaCodeBase` reference and trigger a test JNDI lookup against it from a lab Java application; ordinary LDAP directory traffic (an Active Directory bind and search, for example) must NOT fire (an LDAP bind and search carries no `javaCodeBase`); a web page or file download containing that text will fire
+**Deployment:** Egress sensor, prioritized on any segment where a Java application server can reach the internet
+
+```
+alert tcp $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT WebLogicTelecomHarvester Inbound TCP Response Carrying javaCodeBase (JNDI Reference Callback Lead)"; flow:established,to_client; content:"javaCodeBase"; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-admin; sid:9301807; rev:4; metadata:author The_Hunters_Ledger, date 2026-08-17;)
+```
+**Direction fix 2026-10-10:** the header read `$HOME_NET any -> $EXTERNAL_NET any` with `flow:established,to_client`. `to_client` selects packets sent by the server of the flow, so that pairing matched an internal host answering an external client, not an external callback server answering the victim. The attacker-side LDAP server is the `$EXTERNAL_NET` source and the Java application server is the `$HOME_NET` destination, so the header is now `$EXTERNAL_NET any -> $HOME_NET any`; `rev` 2 to 3. *Round 2:* `msg` narrowed from a malicious-LDAP claim covering `javaCodeBase/javaSerializedData` to the one string the rule tests, tier token changed to `HUNT`, `rev` 3 to 4. Not replayed against a capture in this pass.
+
+**Internal Windows Post-Exploitation**
 
 ---
 

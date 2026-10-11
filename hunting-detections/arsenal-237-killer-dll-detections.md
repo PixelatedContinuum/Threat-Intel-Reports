@@ -25,7 +25,7 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 1 | 2 | T1027.009, T1068, T1685 | 0 |
-| Sigma | 3 documents (1 bundle) | 4 documents (1 bundle) | T1068, T1543.003, T1685 | 0 |
+| Sigma | 2 documents (1 bundle) | 5 documents (1 bundle) | T1068, T1543.003, T1685 | 0 |
 | Suricata | 0 | 0 | — | 3 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
@@ -196,54 +196,6 @@ rule SUSP_Windows_KillerDLL_SecurityProduct_Termination_IOCTL_Combo
 ## Sigma Rules
 
 ### Detection Rules
-
-#### Kernel Driver Service Creation by Rundll32 (Registry)
-
-**Tier:** Detection
-**Robustness:** 3
-**ATT&CK Coverage:** T1685 (Disable or Modify Tools), T1068 (Exploitation for Privilege Escalation)
-**Confidence:** HIGH
-**Rationale:** `rundll32.exe` registering a `SERVICE_KERNEL_DRIVER`-type service is a rare, technique-level chokepoint for the BYOVD install step — legitimate driver installation goes through Plug-and-Play/INF-based setup or a dedicated installer executable, essentially never through `rundll32.exe`. Durable: keys on the parent-process/service-type pairing, not on killer.dll's name or hash. *Retiering note:* demoted from the source's `level: critical` to `high` — the rule's own documented false positives ("administrative scripts using rundll32 for driver deployment") mean this isn't strictly never-FP, and the project convention caps most Detection-tier rules at `high`. *Logic fix 2026-10-10:* the rule carried a `filter_legitimate` clause testing `TargetObject` for `\System32\Drivers\`, which the Blind Spots said excluded drivers staged there; `TargetObject` is the `Services\<name>` registry key, which does not contain a driver file path, so the clause excluded nothing. It has been removed, and the Blind Spots and Validation text corrected to say the rule has no driver-path test.
-**False Positives:** Legitimate software installation via rundll32 (extremely rare for kernel drivers); administrative scripts using rundll32 for driver deployment (should be reviewed).
-**Blind Spots:** The rule cannot see the driver file path, because a service's `ImagePath` is written as a separate registry value from the type value this selector reads, so it makes no distinction between a driver staged under `System32\Drivers` and one staged elsewhere; a rebuild avoiding `rundll32.exe` as the registering process evades. The `Details|contains: 'SERVICE_KERNEL_DRIVER'` selector assumes the registry-value telemetry renders the service Type as this symbolic string rather than a raw DWORD — confirm this against your specific registry-event data source before relying on this rule for alerting (see Coverage Gaps).
-**Validation:** Trigger the killer.dll service-creation step (or a synthetic equivalent — rundll32.exe registering a kernel-driver-type service) — must match; a signed installer registering a driver from its own Program Files path must NOT fire.
-**Deployment:** Sysmon/EDR registry-event monitoring (Sysmon Event ID 13), Windows Event Log auditing on the Services registry hive.
-
-```yaml
-title: Kernel Driver Service Creation by Rundll32 (Registry)
-id: 10eb1fbb-2be3-a09e-efb3-d97112e42bb0
-status: experimental
-description: >-
-    Detects kernel driver service creation by rundll32.exe, the BYOVD install-step
-    pattern used by the killer.dll defense-evasion module. rundll32.exe registering
-    a SERVICE_KERNEL_DRIVER-type service is a rare event outside this specific
-    technique -- legitimate driver installation goes through Plug-and-Play/INF setup
-    or a dedicated installer, not rundll32.exe.
-references:
-    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-dll-detections/
-author: The Hunters Ledger
-date: '2026-01-25'
-modified: '2026-10-10'
-tags:
-    - attack.defense-impairment
-    - attack.t1685
-    - attack.privilege-escalation
-    - attack.t1068
-logsource:
-    product: windows
-    category: registry_set
-detection:
-    selection_service_create:
-        TargetObject|contains: '\System\CurrentControlSet\Services\'
-        Details|contains: 'SERVICE_KERNEL_DRIVER'
-    selection_parent:
-        Image|endswith: '\rundll32.exe'
-    condition: selection_service_create and selection_parent
-falsepositives:
-    - Legitimate software installation via rundll32 (extremely rare for kernel drivers)
-    - Administrative scripts using rundll32 for driver deployment (should be reviewed)
-level: high
-```
 
 #### Mass Security-Product Termination: 3+ Distinct Products Within 60 Seconds (Correlation)
 
@@ -568,6 +520,58 @@ falsepositives:
 level: medium
 ```
 
+#### Kernel Driver Service Creation by Rundll32 (Registry)
+
+**Tier:** Hunting
+**Robustness:** 2
+**ATT&CK Coverage:** T1685 (Disable or Modify Tools), T1068 (Exploitation for Privilege Escalation)
+**Confidence:** LOW
+**Rationale:** *Round 2, 2026-10-10: re-tiered from Detection to Hunting, because the rule's Image test is unverified (see Blind Spots) and its original selector could not match Sysmon's rendering.* `rundll32.exe` registering a kernel-driver-type service would be a rare, technique-level chokepoint for the BYOVD install step — legitimate driver installation goes through Plug-and-Play/INF-based setup or a dedicated installer executable, essentially never through `rundll32.exe`. Durable: keys on the parent-process/service-type pairing, not on killer.dll's name or hash. *Retiering note:* demoted from the source's `level: critical` to `high` — the rule's own documented false positives ("administrative scripts using rundll32 for driver deployment") mean this isn't strictly never-FP, and the project convention caps most Detection-tier rules at `high`. *Logic fix 2026-10-10:* the rule carried a `filter_legitimate` clause testing `TargetObject` for `\System32\Drivers\`, which the Blind Spots said excluded drivers staged there; `TargetObject` is the `Services\<name>` registry key, which does not contain a driver file path, so the clause excluded nothing. It has been removed, and the Blind Spots and Validation text corrected to say the rule has no driver-path test.
+**False Positives:** Legitimate software installation via rundll32 (extremely rare for kernel drivers); administrative scripts using rundll32 for driver deployment (should be reviewed).
+**Blind Spots:** *Round 2, 2026-10-10:* the Image test is unverified. The report names the `CreateServiceW` API call (killer-dll report lines 237 to 246), and a service created through the Service Control Manager can have its registry values written by `services.exe` rather than by the calling process, in which case `Image` is not `rundll32.exe` and the rule never fires; this was not checked against a `killer.dll` run. The rule cannot see the driver file path, because a service's `ImagePath` is written as a separate registry value from the type value this selector reads, so it makes no distinction between a driver staged under `System32\Drivers` and one staged elsewhere; a rebuild avoiding `rundll32.exe` as the registering process evades. Round 2: the earlier selector matched the symbolic text `SERVICE_KERNEL_DRIVER`, which is the API constant from the report, not what Sysmon Event 13 records; it records the DWORD as `DWORD (0x00000001)` (the SigmaHQ regression event for `registry_set_creation_service_susp_folder` shows that form for a `Services\npcap\Start` write), so the rule now tests the `\Type` value name and that rendered value. A `Type` of 1 is the only kernel-driver value matched; file-system and other driver types are not.
+**Validation:** Trigger the killer.dll service-creation step (or a synthetic equivalent — rundll32.exe registering a kernel-driver-type service) — must match; a signed installer registering a driver from its own Program Files path must NOT fire.
+**Deployment:** Sysmon/EDR registry-event monitoring (Sysmon Event ID 13), Windows Event Log auditing on the Services registry hive.
+
+```yaml
+title: Kernel Driver Service Creation by Rundll32 (Registry)
+id: 10eb1fbb-2be3-a09e-efb3-d97112e42bb0
+status: experimental
+description: >-
+    Detects a Services\<name>\Type value of 1 (kernel driver) written by a process
+    whose image is rundll32.exe, the BYOVD install-step pattern used by the killer.dll
+    defense-evasion module. If the Service Control Manager writes the value on the
+    caller's behalf the image is services.exe and this rule does not match. rundll32.exe registering
+    a kernel-driver-type service (service Type value 1, which Sysmon renders as
+    DWORD (0x00000001)) is a rare event outside this specific
+    technique -- legitimate driver installation goes through Plug-and-Play/INF setup
+    or a dedicated installer, not rundll32.exe.
+references:
+    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-dll-detections/
+author: The Hunters Ledger
+date: '2026-01-25'
+modified: '2026-10-10'
+tags:
+    - attack.defense-impairment
+    - attack.t1685
+    - attack.privilege-escalation
+    - attack.t1068
+logsource:
+    product: windows
+    category: registry_set
+detection:
+    selection_service_create:
+        TargetObject|contains: '\System\CurrentControlSet\Services\'
+        TargetObject|endswith: '\Type'
+        Details: 'DWORD (0x00000001)'
+    selection_parent:
+        Image|endswith: '\rundll32.exe'
+    condition: selection_service_create and selection_parent
+falsepositives:
+    - Legitimate software installation via rundll32 (extremely rare for kernel drivers)
+    - Administrative scripts using rundll32 for driver deployment (should be reviewed)
+level: medium
+```
+
 ---
 
 ## Coverage Gaps
@@ -612,7 +616,7 @@ Sysinternals Process Explorer occupies an unusual position in this file's tierin
 
 ### What Would Enable Stronger Coverage
 
-- **Confirmed registry telemetry format for the SERVICE_KERNEL_DRIVER value.** The rundll32 kernel-driver-service-creation Sigma rule assumes registry-event telemetry renders the service `Type` value as the symbolic string `SERVICE_KERNEL_DRIVER` rather than a raw DWORD. This should be validated against the specific registry-event data source before relying on it for alerting; see the rule's own Rationale.
+- **Confirmed registry telemetry format for the SERVICE_KERNEL_DRIVER value.** The rundll32 kernel-driver-service-creation Sigma rule (round 2, 2026-10-10) now matches the rendering Sysmon Event 13 uses, `DWORD (0x00000001)` on a `\Type` value, instead of the symbolic string `SERVICE_KERNEL_DRIVER`. What is still unconfirmed is which process writes that value when `killer.dll` calls `CreateServiceW`: if it is `services.exe`, the rule's `rundll32.exe` Image test never matches. Confirming that needs a `killer.dll` run with registry telemetry; see the rule's Blind Spots.
 - **A concrete, validated service/driver-deletion telemetry selector.** The source file's intended correlation for the short-lived kernel-driver-service pattern (install, then delete within ~20-30 seconds) could not be rebuilt here because no concrete deletion-side Sigma selector existed in the source material to correlate against, and Windows has no direct System-log analog to Event 7045 for service deletion. A validated selector (for example, Sysmon Event ID 12/14 registry-key-deletion under the service's own Services key) would enable a genuine temporal correlation mirroring the mass-termination rule's structure, promoting this signal toward Detection tier.
 - **Goodware corpus validation.** None of this file's YARA rules have been run against a broad clean-software corpus; a documented zero-FP result, particularly confirming whether a stock Sysinternals Process Explorer download trips the dual-driver Detection rule, is the explicit precondition the project's YARA checklist requires before any further tier changes.
 - **Anti-analysis and export-masquerade behavior remain undocumented at the rule level.** The IOC feed's `behavioral_indicators` documents TLS-based anti-debugging (crash-on-debugger-detection via `TlsAlloc`/`TlsGetValue`/SEH) and the `get_hostfxr_path` export-name masquerade used to launch the DLL via `rundll32.exe`. Neither has dedicated coverage in this file: the anti-debug behavior has no static string anchor distinctive enough to survive goodware validation, and `get_hostfxr_path` is itself a genuine Microsoft nethost API symbol name with its own false-positive exposure in legitimate .NET tooling, so neither was carried forward as a standalone rule.

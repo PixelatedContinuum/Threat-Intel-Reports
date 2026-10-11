@@ -16,7 +16,7 @@
     - tactic: "Credential Access"
       id: "T1110.001"
       name: "Password Guessing"
-      rules: "Authentication Attempt Using a Default-Style Credential Pair (SIGMA, Hunting)"
+      rules: "Authentication Attempt with Default-Style Username and Password Substrings (SIGMA, Hunting)"
       count: 1
 "Hybrid-Loader-Stealer-Sogou-detections":
   total: 5
@@ -136,7 +136,7 @@
     - tactic: "Execution"
       id: "T1059.001"
       name: "PowerShell"
-      rules: "XWorm Embedded PowerShell Reconnaissance Templates (YARA, Detection); PowerShell Execution from a Parent Process in a User-Writable Directory (SIGMA, Hunting)"
+      rules: "XWorm Embedded PowerShell Reconnaissance Templates (YARA, Detection); PowerShell -NoP -C Execution from a User-Writable-Directory Parent (XWorm Agent) (SIGMA, Hunting)"
       count: 2
     - tactic: "Stealth"
       id: "T1564.003"
@@ -166,7 +166,7 @@
     - tactic: "Execution"
       id: "T1059.001"
       name: "PowerShell"
-      rules: "XWorm v2.x Embedded PowerShell Reconnaissance Command Templates (YARA, Detection); XWorm v2.x Full PowerShell Reconnaissance Sequence on Same Host (SIGMA, Detection); PowerShell Execution from a Parent Process in a User-Writable Directory (SIGMA, Hunting)"
+      rules: "XWorm v2.x Embedded PowerShell Reconnaissance Command Templates (YARA, Detection); XWorm v2.x Full PowerShell Reconnaissance Sequence on Same Host (SIGMA, Detection); PowerShell -NoP -C Execution from a User-Writable-Directory Parent (XWorm V2) (SIGMA, Hunting)"
       count: 3
     - tactic: "Stealth"
       id: "T1564.003"
@@ -221,7 +221,7 @@
     - tactic: "Resource Development"
       id: "T1587"
       name: "Develop Capabilities"
-      rules: "AI Operator Handoff Document (YARA, Detection); AI-Generated Offensive Code Structural Signature (YARA, Hunting); AI Coding-Agent Tooling Co-Located with Offensive Tooling on the Same Host (SIGMA, Detection); Rovodev AI Agent Directory Creation on Server Infrastructure Host (SIGMA, Hunting)"
+      rules: "AI-Generated Offensive Code Structural Signature (YARA, Hunting); AI Operator Handoff Document (YARA, Hunting); AI Coding-Agent Tooling Co-Located with Offensive Tooling on the Same Host (SIGMA, Detection); Rovodev AI Agent Directory Creation on Server Infrastructure Host (SIGMA, Hunting)"
       count: 4
     - tactic: "Resource Development"
       id: "T1588.002"
@@ -241,7 +241,7 @@
     - tactic: "Execution"
       id: "T1059.006"
       name: "Python"
-      rules: "AI Operator Handoff Document (YARA, Detection); LLM-Personalized Credential Mutation Script (YARA, Detection); Russian A2A C2 Python-stdlib BaseHTTPServer (YARA, Detection); AI-Generated Offensive Code Structural Signature (YARA, Hunting)"
+      rules: "LLM-Personalized Credential Mutation Script (YARA, Detection); Russian A2A C2 Python-stdlib BaseHTTPServer (YARA, Detection); AI-Generated Offensive Code Structural Signature (YARA, Hunting); AI Operator Handoff Document (YARA, Hunting)"
       count: 4
     - tactic: "Persistence"
       id: "T1543.002"
@@ -506,7 +506,7 @@
     - tactic: "Privilege Escalation"
       id: "T1068"
       name: "Exploitation for Privilege Escalation"
-      rules: "BYOVD Dual Vulnerable-Driver Embedding (Baidu + Sysinternals ProcExp Combination) (YARA, Detection); Single Vulnerable-Driver Embedding (Baidu OR ProcExp Alone) (YARA, Hunting); Security-Product Termination + IOCTL Behavioral Combination (YARA, Hunting); Kernel Driver Service Creation by Rundll32 (Registry) (SIGMA, Detection); Baidu BdApiUtil Vulnerable Driver Load (SIGMA, Detection); Sysinternals ProcExp152 Vulnerable Driver Load (SIGMA, Hunting); Kernel-Mode Driver Service Installed (Event 7045) (SIGMA, Hunting); Driver File (.sys) Created in Temp Directory (SIGMA, Hunting)"
+      rules: "BYOVD Dual Vulnerable-Driver Embedding (Baidu + Sysinternals ProcExp Combination) (YARA, Detection); Single Vulnerable-Driver Embedding (Baidu OR ProcExp Alone) (YARA, Hunting); Security-Product Termination + IOCTL Behavioral Combination (YARA, Hunting); Baidu BdApiUtil Vulnerable Driver Load (SIGMA, Detection); Sysinternals ProcExp152 Vulnerable Driver Load (SIGMA, Hunting); Kernel-Mode Driver Service Installed (Event 7045) (SIGMA, Hunting); Driver File (.sys) Created in Temp Directory (SIGMA, Hunting); Kernel Driver Service Creation by Rundll32 (Registry) (SIGMA, Hunting)"
       count: 8
     - tactic: "Stealth"
       id: "T1027"
@@ -521,7 +521,7 @@
     - tactic: "Defense Impairment"
       id: "T1685"
       name: "Disable or Modify Tools"
-      rules: "Security-Product Termination + IOCTL Behavioral Combination (YARA, Hunting); Kernel Driver Service Creation by Rundll32 (Registry) (SIGMA, Detection); Mass Security-Product Termination: 3+ Distinct Products Within 60 Seconds (Correlation) (SIGMA, Detection)"
+      rules: "Security-Product Termination + IOCTL Behavioral Combination (YARA, Hunting); Mass Security-Product Termination: 3+ Distinct Products Within 60 Seconds (Correlation) (SIGMA, Detection); Kernel Driver Service Creation by Rundll32 (Registry) (SIGMA, Hunting)"
       count: 3
 "arsenal-237-lpe-exe-detections":
   total: 4
@@ -546,7 +546,7 @@
     - tactic: "Stealth"
       id: "T1134.001"
       name: "Token Impersonation/Theft"
-      rules: "Token Manipulation API Sequence (YARA, Detection); Named Pipe Token Impersonation API Sequence (YARA, Detection); PowerShell Named Pipe Client Connector (YARA, Hunting); Privilege Escalation via Token Impersonation (SIGMA, Detection); Print Spooler Named Pipe Creation (Possible Token-Impersonation Staging) (SIGMA, Hunting)"
+      rules: "Token Manipulation API Sequence (YARA, Detection); Named Pipe Token Impersonation API Sequence (YARA, Detection); PowerShell Named Pipe Client Connector (YARA, Hunting); Print Spooler Named Pipe Creation (Possible Token-Impersonation Staging) (SIGMA, Hunting); Process Access to SYSTEM Processes with Token-Duplication Access Rights (SIGMA, Hunting)"
       count: 5
 "arsenal-237-nethost-dll-detections":
   total: 7
@@ -1991,7 +1991,7 @@
     - tactic: "Initial Access"
       id: "T1190"
       name: "Exploit Public-Facing Application"
-      rules: "WSMA_CVE_2023_20198_DoubleEncode_Exfil (YARA, Detection); WebLogic_CVE_2024_21182_OpaqueReference_JNDI (YARA, Detection); GeoServer_CVE_2024_36401_ValueReference_Exec (YARA, Detection); PublicTool_CVE_2023_21839_WebLogic_GoExploit (YARA, Hunting); Cisco IOS-XE Double-Encoded WSMA Path Bypass (Operator Fingerprint) (SURICATA, Detection); GENERIC-CVE-2023-20198 Cisco IOS-XE WebUI Auth-Bypass URI (SURICATA, Detection); GENERIC-CVE-2023-20198 Cisco IOS-XE Forged Bare-Hex Authorization Token (SURICATA, Detection); WebLogic T3/IIOP JNDI OpaqueReference Injection (SURICATA, Detection); Malicious LDAP-JNDI Callback Response (SURICATA, Detection); GeoServer OGC-Filter RCE via valueReference exec() (SURICATA, Detection)"
+      rules: "WSMA_CVE_2023_20198_DoubleEncode_Exfil (YARA, Detection); WebLogic_CVE_2024_21182_OpaqueReference_JNDI (YARA, Detection); GeoServer_CVE_2024_36401_ValueReference_Exec (YARA, Detection); PublicTool_CVE_2023_21839_WebLogic_GoExploit (YARA, Hunting); Cisco IOS-XE Double-Encoded WSMA Path Bypass (Operator Fingerprint) (SURICATA, Detection); GENERIC-CVE-2023-20198 Cisco IOS-XE WebUI Auth-Bypass URI (SURICATA, Detection); GENERIC-CVE-2023-20198 Cisco IOS-XE Forged Bare-Hex Authorization Token (SURICATA, Detection); WebLogic T3/IIOP JNDI OpaqueReference Injection (SURICATA, Detection); GeoServer OGC-Filter RCE via valueReference exec() (SURICATA, Detection); Malicious LDAP-JNDI Callback Response (SURICATA, Hunting)"
       count: 10
     - tactic: "Execution"
       id: "T1059.001"
@@ -2741,7 +2741,7 @@
     - tactic: "Execution"
       id: "T1059.006"
       name: "Python"
-      rules: "LLM-Personalized Credential Mutator Family (YARA, Detection); Stolen LLM API Key Validator (YARA, Detection); A2A C2 Client Console / Exec Tool (YARA, Detection); Mass WordPress wp-login.php Credential Validation Rate Exceeded (Correlation) (SIGMA, Detection); Executable Script or Skill File Created in Gemini CLI Config Directory (SIGMA, Hunting); Python HTTP Server on Non-Standard Port with UTF-16LE Encoding (A2A C2 Pattern) (SIGMA, Hunting)"
+      rules: "LLM-Personalized Credential Mutator Family (YARA, Detection); A2A C2 Client Console / Exec Tool (YARA, Detection); Stolen LLM API Key Validator (YARA, Hunting); Mass WordPress wp-login.php Credential Validation Rate Exceeded (Correlation) (SIGMA, Detection); Executable Script or Skill File Created in Gemini CLI Config Directory (SIGMA, Hunting); Python HTTP Server on Non-Standard Port with UTF-16LE Encoding (A2A C2 Pattern) (SIGMA, Hunting)"
       count: 6
     - tactic: "Persistence"
       id: "T1547.001"
@@ -2756,7 +2756,7 @@
     - tactic: "Stealth"
       id: "T1078"
       name: "Valid Accounts"
-      rules: "Stolen LLM API Key Validator (YARA, Detection)"
+      rules: "Stolen LLM API Key Validator (YARA, Hunting)"
       count: 1
     - tactic: "Credential Access"
       id: "T1003.001"
@@ -2776,7 +2776,7 @@
     - tactic: "Credential Access"
       id: "T1552.001"
       name: "Credentials In Files"
-      rules: "Stolen LLM API Key Validator (YARA, Detection)"
+      rules: "Stolen LLM API Key Validator (YARA, Hunting)"
       count: 1
     - tactic: "Credential Access"
       id: "T1555.005"
@@ -3091,7 +3091,7 @@
     - tactic: "Credential Access"
       id: "T1003.001"
       name: "LSASS Memory"
-      rules: "LSASS Memory Access With A Dump-Capable Access Mask (SIGMA, Detection)"
+      rules: "LSASS Memory Access With A Dump-Capable Access Mask (SIGMA, Hunting)"
       count: 1
     - tactic: "Credential Access"
       id: "T1003.002"

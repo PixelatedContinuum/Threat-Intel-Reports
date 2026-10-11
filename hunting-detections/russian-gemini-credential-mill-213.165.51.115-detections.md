@@ -24,7 +24,7 @@ This operator runs a custom Python A2A ("agent-to-agent") C2 stack combined with
 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
-| YARA | 7 | 1 | T1110.003, T1059.006, T1587, T1078, T1552.001, T1071.001, T1132.001, T1087, T1547.001, T1036 | 0 |
+| YARA | 6 | 2 | T1110.003, T1059.006, T1587, T1078, T1552.001, T1071.001, T1132.001, T1087, T1547.001, T1036 | 0 |
 | Sigma | 4 documents (1 bundle) | 6 documents (1 bundle) | T1555.005, T1005, T1003.001, T1003.002, T1587, T1071.001, T1090.004, T1572, T1036.005, T1547.001, T1059.001, T1110.003 | 3 |
 | Suricata | 1 | 1 | T1071.001, T1132.001, T1041, T1090.004, T1572 | 4 |
 
@@ -135,49 +135,6 @@ rule MAL_Markdown_AI_Operator_Handoff_Document_Family {
          ($knowledge_xfer and ($migration_guide or $infra_transfer or $deployed_tools))
       ) and
       1 of ($api_v1_update, $api_v1_interact, $cf_tunnel_pattern, $agent_id_format)
-}
-```
-
-#### Stolen LLM API Key Validator
-
-**Tier:** Detection
-**Robustness:** 2
-**ATT&CK Coverage:** T1078 (Valid Accounts — stolen API keys), T1059.006 (Python), T1552.001 (Unsecured Credentials in Files)
-**Confidence:** HIGH
-**Rationale:** *Logic fix 2026-10-10:* the key test was the literal text `AIzaSy[0-9a-zA-Z_-]` (brackets included), which is regex source text and cannot match an actual `AIzaSy` key, although the description says the script holds the keys in a block string. The rule now accepts either that literal pattern text (a script that carries the key-prefix regex) or an actual key shape (`AIzaSy` followed by 33 key characters). The captured `check_keys.py` was not re-scanned in this pass, so it is not confirmed which form it contains. Requires the `AIzaSy` key-prefix pattern text or key shape AND a bulk-storage or search marker (`raw_keys`/`re.findall`) AND a validation-pipeline marker (the models endpoint, a valid-keys output, or a retest marker), with a 2-of-N reinforcement across all seven anchors. A single-key legitimate SDK usage cannot satisfy this combination — bulk-key validators are themselves malicious tooling regardless of family.
-**False Positives:** None known. The rule does not count keys: it fires on the `AIzaSy` pattern text or one key-shaped string, a bulk-storage or search marker, and a validation-pipeline marker together. A script holding 40+ Gemini API keys in a block string with a validation loop against Google's models endpoint, which is the documented tool, is not a legitimate development pattern.
-**Blind Spots:** A rewrite that stores keys in a different structure (e.g., one per line in an external file, loaded without the `raw_keys`/`findall` marker in-code) evades the second clause.
-**Validation:** Scan `check_keys.py` or a functional equivalent — all four condition clauses must be satisfied; a legitimate single-key SDK integration must NOT fire.
-**Deployment:** Endpoint AV/EDR file scan, SIEM file-creation monitoring, developer workstation endpoint protection, CI/CD secret scanning.
-
-```yara
-rule MAL_Python_Stolen_LLM_Key_Validator {
-   meta:
-      description = "Detects check_keys.py-class Python scripts: bulk Gemini API key inventory (AIzaSy-prefixed keys in block string) validated against generativelanguage.googleapis.com/v1beta/models — stolen-key validation pipeline from UTA-2026-012"
-      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
-      author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/"
-      date = "2026-05-25"
-      modified = "2026-10-10"
-      family = "Stolen-LLM-Key-Validator"
-      campaign = "OpenDirectory-RussianGeminiCredentialMill-213.165.51.115"
-      id = "37ec0969-e2c8-5e91-b5a1-40d75c43d590"
-   strings:
-      $key_prefix_re    = "AIzaSy[0-9a-zA-Z_-]" ascii
-      $key_shape        = /AIzaSy[0-9A-Za-z_-]{33}/ ascii
-      $raw_keys_block   = "raw_keys" ascii fullword
-      $validation_ep    = "generativelanguage.googleapis.com/v1beta/models" ascii
-      $findall_pattern  = "re.findall" ascii
-      $valid_keys_out   = "valid_gemini_keys" ascii
-      $openai_key       = "sk-proj-" ascii
-      $venice_key       = "VENICE_ADMIN_KEY" ascii
-      $retest_pattern   = "retest_keys" ascii
-   condition:
-      filesize < 500KB and
-      ($key_prefix_re or $key_shape) and
-      ($raw_keys_block or $findall_pattern) and
-      ($validation_ep or $valid_keys_out or $retest_pattern) and
-      2 of ($key_prefix_re, $key_shape, $raw_keys_block, $validation_ep, $valid_keys_out, $openai_key, $venice_key, $retest_pattern)
 }
 ```
 
@@ -382,6 +339,49 @@ rule MAL_Russian_Operator_Persona_Strings {
       filesize < 5MB and
       1 of ($bro_bratukh, $comp_doktora, $pognali) and
       1 of ($gemini_api_key, $api_endpoint, $cf_tunnel, $sniper_goods, $quantum_patriot)
+}
+```
+
+#### Stolen LLM API Key Validator
+
+**Tier:** Hunting
+**Robustness:** 1
+**ATT&CK Coverage:** T1078 (Valid Accounts — stolen API keys), T1059.006 (Python), T1552.001 (Unsecured Credentials in Files)
+**Confidence:** MODERATE
+**Rationale:** *Logic fix 2026-10-10:* the key test was the literal text `AIzaSy[0-9a-zA-Z_-]` (brackets included), which is regex source text and cannot match an actual `AIzaSy` key, although the description says the script holds the keys in a block string. The rule now accepts either that literal pattern text (a script that carries the key-prefix regex) or at least 3 actual key shapes (`AIzaSy` followed by 33 key characters). The captured `check_keys.py` was not re-scanned in this pass, so it is not confirmed which form it contains. Requires the `AIzaSy` key-prefix pattern text or at least 3 key shapes AND a bulk-storage or search marker (`raw_keys`/`re.findall`) AND a validation-pipeline marker (the models endpoint, a valid-keys output, or a retest marker), with a 2-of-N reinforcement across all seven anchors. A single-key SDK usage does not satisfy the key-shape branch; the claim in earlier versions that every bulk-key validator is malicious tooling is withdrawn, since a legitimate key-rotation or key-audit script has the same shape.
+**False Positives:** A legitimate developer script that validates API keys. *Round 2, 2026-10-10:* with a single key-shaped string, a `raw_keys` marker and the models endpoint, the previous round's condition fired on a synthetic benign single-key validator, so the claim that every such script is malicious was not supported and the rule was re-tiered from Detection to Hunting. The key-shape branch now needs at least 3 key-shaped strings (the documented inventory holds 40+ keys); the `AIzaSy[0-9a-zA-Z_-]` pattern-text branch is unchanged and still fires on any script that carries that regex source plus a bulk-storage or search marker and a validation-pipeline marker, which includes a benign key-checking script. A script holding 40+ Gemini API keys in a block string with a validation loop against Google's models endpoint, which is the documented tool, is not a legitimate development pattern.
+**Blind Spots:** A rewrite that stores keys in a different structure (e.g., one per line in an external file, loaded without the `raw_keys`/`findall` marker in-code) evades the second clause.
+**Validation:** Scan `check_keys.py` or a functional equivalent — all four condition clauses must be satisfied. A single-key SDK integration with one key-shaped string does not satisfy the key clause; a benign script that carries the `AIzaSy[0-9a-zA-Z_-]` pattern text with the other markers does fire and is separated from the operator's tool by reading what it validates.
+**Deployment:** Endpoint AV/EDR file scan, SIEM file-creation monitoring, developer workstation endpoint protection, CI/CD secret scanning.
+
+```yara
+rule MAL_Python_Stolen_LLM_Key_Validator {
+   meta:
+      description = "Detects check_keys.py-class Python scripts: bulk Gemini API key inventory (AIzaSy-prefixed keys in block string) validated against generativelanguage.googleapis.com/v1beta/models — stolen-key validation pipeline from UTA-2026-012"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
+      author = "The Hunters Ledger"
+      reference = "https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/"
+      date = "2026-05-25"
+      modified = "2026-10-10"
+      family = "Stolen-LLM-Key-Validator"
+      campaign = "OpenDirectory-RussianGeminiCredentialMill-213.165.51.115"
+      id = "37ec0969-e2c8-5e91-b5a1-40d75c43d590"
+   strings:
+      $key_prefix_re    = "AIzaSy[0-9a-zA-Z_-]" ascii
+      $key_shape        = /AIzaSy[0-9A-Za-z_-]{33}/ ascii
+      $raw_keys_block   = "raw_keys" ascii fullword
+      $validation_ep    = "generativelanguage.googleapis.com/v1beta/models" ascii
+      $findall_pattern  = "re.findall" ascii
+      $valid_keys_out   = "valid_gemini_keys" ascii
+      $openai_key       = "sk-proj-" ascii
+      $venice_key       = "VENICE_ADMIN_KEY" ascii
+      $retest_pattern   = "retest_keys" ascii
+   condition:
+      filesize < 500KB and
+      ($key_prefix_re or #key_shape >= 3) and
+      ($raw_keys_block or $findall_pattern) and
+      ($validation_ep or $valid_keys_out or $retest_pattern) and
+      2 of ($key_prefix_re, $key_shape, $raw_keys_block, $validation_ep, $valid_keys_out, $openai_key, $venice_key, $retest_pattern)
 }
 ```
 

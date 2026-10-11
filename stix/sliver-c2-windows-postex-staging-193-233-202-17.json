@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--a88a5868-c42b-4ddd-b1a0-ec152cabe3e7",
+    "id": "bundle--2d298d2a-79f9-4234-a796-dc5372f9de4c",
     "objects": [
         {
             "type": "identity",
@@ -2809,27 +2809,6 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--7e927cf7-fb65-5747-9772-07445326933b",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:20.719211Z",
-            "modified": "2026-10-11T03:15:41.874481Z",
-            "name": "Process Access To LSASS With A Dump-Capable Access Mask",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "title: Process Access To LSASS With A Dump-Capable Access Mask\nid: 504bf8d9-074c-497f-ac16-05da396b8637\nstatus: experimental\ndescription: >-\n  Detects a process opening a handle to lsass.exe with an access mask consistent with\n  memory dumping (read plus query information), the LSASS credential-access route used\n  alongside mimikatz and SAM/SYSTEM/SECURITY hive theft in this campaign.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/\nauthor: The Hunters Ledger\ndate: '2026-09-06'\nmodified: '2026-10-10'\ntags:\n    - attack.credential-access\n    - attack.t1003.001\n    - stp.3\nlogsource:\n    category: process_access\n    product: windows\n    definition: 'Requires Sysmon Event ID 10 (ProcessAccess) enabled and not filtered for lsass.exe as a target.'\ndetection:\n    selection:\n        TargetImage|endswith: '\\lsass.exe'\n        GrantedAccess:\n            - '0x1010'\n            - '0x1038'\n            - '0x1400'\n            - '0x1410'\n            - '0x1438'\n            - '0x143a'\n            - '0x1fffff'\n    condition: selection\nfalsepositives:\n    - Endpoint security or diagnostic tooling deliberately dumping LSASS for legitimate incident-response or troubleshooting purposes\nlevel: high",
-            "pattern_type": "sigma",
-            "valid_from": "2026-09-07T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "indicator",
-            "spec_version": "2.1",
             "id": "indicator--c55d8ee8-6044-549f-8cea-d476d612a573",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.719284Z",
@@ -3007,6 +2986,27 @@
                 "malicious-activity"
             ],
             "pattern": "title: PowerShell Reflective Assembly Load From Base64-Decoded String\nid: 5024b26b-169d-4ef8-8016-ca502a557d1b\nstatus: experimental\ndescription: >-\n  Detects a PowerShell script block combining Reflection.Assembly Load with a\n  Base64-decoded byte array, a common reflective in-memory execution pattern this\n  campaign uses for shellcode injection staging. Broadly used by legitimate tooling as\n  well, so this is a scoping signal rather than a high-confidence alert.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/\nauthor: The Hunters Ledger\ndate: '2026-09-06'\ntags:\n    - attack.stealth\n    - attack.t1620\n    - attack.t1027\nlogsource:\n    category: ps_script\n    product: windows\n    definition: 'Requires PowerShell Script Block Logging (Event ID 4104) enabled.'\ndetection:\n    selection:\n        ScriptBlockText|contains|all:\n            - '[System.Reflection.Assembly]::Load('\n            - 'FromBase64String'\n    condition: selection\nfalsepositives:\n    - Legitimate PowerShell modules and administrative tooling that reflectively load .NET assemblies from an embedded Base64 payload\nlevel: low",
+            "pattern_type": "sigma",
+            "valid_from": "2026-09-07T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--7e927cf7-fb65-5747-9772-07445326933b",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-01T19:54:20.719211Z",
+            "modified": "2026-10-11T03:43:01.745587Z",
+            "name": "Process Access To LSASS With A Dump-Capable Access Mask",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Process Access To LSASS With A Dump-Capable Access Mask\nid: 504bf8d9-074c-497f-ac16-05da396b8637\nstatus: experimental\ndescription: >-\n  Detects a process opening a handle to lsass.exe with an access mask consistent with\n  memory dumping (every listed mask includes PROCESS_VM_READ), the LSASS credential-access route used\n  alongside mimikatz and SAM/SYSTEM/SECURITY hive theft in this campaign.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/\nauthor: The Hunters Ledger\ndate: '2026-09-06'\nmodified: '2026-10-10'\ntags:\n    - attack.credential-access\n    - attack.t1003.001\n    - stp.3\nlogsource:\n    category: process_access\n    product: windows\n    definition: 'Requires Sysmon Event ID 10 (ProcessAccess) enabled and not filtered for lsass.exe as a target.'\ndetection:\n    selection:\n        TargetImage|endswith: '\\lsass.exe'\n        GrantedAccess:\n            - '0x1010'\n            - '0x1038'\n            - '0x1410'\n            - '0x1438'\n            - '0x143a'\n            - '0x1fffff'\n    condition: selection\nfalsepositives:\n    - Endpoint security or diagnostic tooling deliberately dumping LSASS for legitimate incident-response or troubleshooting purposes\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-09-07T00:00:00Z",
             "labels": [
@@ -6911,20 +6911,6 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--417de6f5-4eb9-55f3-a36d-f3e12fb5258c",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:20.738597Z",
-            "modified": "2026-10-01T19:54:20.738597Z",
-            "relationship_type": "indicates",
-            "source_ref": "indicator--7e927cf7-fb65-5747-9772-07445326933b",
-            "target_ref": "malware--fdf596cd-1388-59dd-9919-24612a9ed7e2",
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "relationship",
-            "spec_version": "2.1",
             "id": "relationship--85036633-58e7-5eec-90d3-31dcaf16316e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.738657Z",
@@ -7043,6 +7029,20 @@
             "modified": "2026-10-01T19:54:20.739145Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--d7acb038-4308-577a-9adb-e4eb3c0a7fd8",
+            "target_ref": "malware--fdf596cd-1388-59dd-9919-24612a9ed7e2",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--417de6f5-4eb9-55f3-a36d-f3e12fb5258c",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-01T19:54:20.738597Z",
+            "modified": "2026-10-01T19:54:20.738597Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--7e927cf7-fb65-5747-9772-07445326933b",
             "target_ref": "malware--fdf596cd-1388-59dd-9919-24612a9ed7e2",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -69452,7 +69452,7 @@
             "id": "report--9f175132-e498-5e02-9c9c-b1ab5dff72db",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:21.026096Z",
-            "modified": "2026-10-10T13:41:00.589039Z",
+            "modified": "2026-10-11T03:43:02.190676Z",
             "name": "Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17",
             "description": "Derived from 81 files captured from an open directory, 77 static triage reports, one contained behavioural analysis and one statically decrypted installer chain. This infrastructure was previously published by Hunt.io on 2026-08-04 and the primary address was flagged by Huntress on 2026-05-21; the file hashes below are not first observations. Victim-side data is deliberately absent: no victim domain, hostname, account, credential or internal address appears anywhere in this feed. `metadata.victim_names` above is a vault-only annotation for the check_victim_naming.py gate and must never be copied into the site copy of this feed.",
             "report_types": [
@@ -69658,7 +69658,6 @@
                 "indicator--426fe2f2-f9c5-5ea8-a63c-d7ffac2f49cc",
                 "indicator--75421632-4474-599f-b3b8-878f2007a0a9",
                 "indicator--b31c70a6-b241-5c43-ad8e-40e7f09e17db",
-                "indicator--7e927cf7-fb65-5747-9772-07445326933b",
                 "indicator--c55d8ee8-6044-549f-8cea-d476d612a573",
                 "indicator--6844a48c-af04-54dd-8535-90578b737d0e",
                 "indicator--c2f2c664-4e68-572d-8a60-617626cfcef5",
@@ -69668,6 +69667,7 @@
                 "indicator--3a202e26-7ff3-5189-89b1-47eda6dc6ea8",
                 "indicator--9184694e-a0a7-5e5a-b78e-bf636d8de547",
                 "indicator--d7acb038-4308-577a-9adb-e4eb3c0a7fd8",
+                "indicator--7e927cf7-fb65-5747-9772-07445326933b",
                 "indicator--b7fe78d5-865d-5be9-b52f-899f406a05a6",
                 "indicator--f6eefd40-6e26-5f06-8ac1-e7f4f1da8b87",
                 "malware--de2f5b29-1c69-5838-9334-c9bd7b7d1666",
@@ -69908,7 +69908,6 @@
                 "relationship--4539cf53-4592-5874-a034-10f2fd135b37",
                 "relationship--b98ad956-c774-5fc7-a9e0-6055fa5f1373",
                 "relationship--c9cb8adf-3ded-5af3-9d58-24efdee7b237",
-                "relationship--417de6f5-4eb9-55f3-a36d-f3e12fb5258c",
                 "relationship--85036633-58e7-5eec-90d3-31dcaf16316e",
                 "relationship--cd74cf04-57bc-5e84-a4c9-623524658f01",
                 "relationship--5a6a44f7-52a7-56cd-a39b-2ab5d1ad7a58",
@@ -69918,6 +69917,7 @@
                 "relationship--7a4c3a0e-2089-504c-a43f-8e46305d2a94",
                 "relationship--08057c3f-bcf6-51bb-9d65-84d4cccc7f3d",
                 "relationship--7762bb13-a25b-5f17-b833-2e1aad374f16",
+                "relationship--417de6f5-4eb9-55f3-a36d-f3e12fb5258c",
                 "relationship--369b7dd3-b781-57de-b76c-11334baa75a0",
                 "relationship--054e051d-72af-5a54-ab33-8f1c6dfb0e2e",
                 "relationship--850606eb-3c30-501a-b2f8-8e9a9d50fbbe",

@@ -153,16 +153,16 @@ rule enc_c2_ransomware_operations {
 #### TEB-Based Anti-Debug Stall Loop
 
 **Tier:** Hunting
-**Robustness:** 2
+**Robustness:** 1
 **ATT&CK Coverage:** T1622 (Debugger Evasion)
-**Confidence:** MODERATE
-**Rationale:** Keys on the `NtCurrentTeb` string together with at least one of the `StackBase` string or a Sleep call byte pattern (1000 ms or 5000 ms) — the TEB stack-base validation primitive and its Sleep-based stall, either of which alone satisfies the second half of the condition. *Description fix 2026-10-10:* this line and the meta description said the stack-base primitive PLUS a Sleep stall, but the condition is `$teb_api and ($sleep_loop or $sleep_1000 or $stack_base)`; the wording now matches. The strings were taken from the decompiled routine in the companion report and were not re-checked against the sample bytes in this pass. Durable to renaming and infrastructure rotation (Gate 1: Robustness 2). It caps at Hunting on precision grounds (Gate 2), not durability: TEB stack-base validation is a publicly documented, widely reused anti-debug technique also present in unrelated anti-cheat, DRM, and anti-tamper software, so a match indicates the technique, not this malware family specifically.
+**Confidence:** LOW
+**Rationale:** Keys on the `NtCurrentTeb` string together with at least one of the `StackBase` string or a Sleep call byte pattern (1000 ms or 5000 ms) — the TEB stack-base validation primitive and its Sleep-based stall, either of which alone satisfies the second half of the condition. *Description fix 2026-10-10:* this line and the meta description said the stack-base primitive PLUS a Sleep stall, but the condition is `$teb_api and ($sleep_loop or $sleep_1000 or $stack_base)`; the wording now matches. *Evidence status (round 2, 2026-10-10):* `NtCurrentTeb` and `StackBase` are identifiers from the decompiler pseudocode in the companion report (lines 513-545), which does not show that either string is present in the compiled binary, and the two Sleep byte patterns are 32-bit-style `push imm32` / indirect `call` shapes while the report describes an x64 build; none of the four was extracted from the sample. This rule is therefore a technique-class heuristic that has not been shown to match the sample it is named after, so Robustness is lowered from 2 to 1 and confidence to LOW. TEB stack-base validation is a publicly documented, widely reused anti-debug technique also present in unrelated anti-cheat, DRM, and anti-tamper software, so a match indicates the technique, not this malware family specifically.
 **False Positives:** Moderate; other legitimate software implementing the same public TEB anti-debug technique would also match.
 
 ```yara
 rule teb_anti_debug_detection {
     meta:
-        description = "Detects the NtCurrentTeb string together with at least one of the StackBase string or a Sleep call byte pattern (1000 ms or 5000 ms), the TEB (Thread Environment Block) stack-base anti-debugging check and Sleep-based stall loop described for the Arsenal-237 ransomware. Any one of the three qualifiers is enough, so the rule does not require both the stack-base string and a Sleep pattern. Also matches other software using the same publicly documented anti-debug technique"
+        description = "Technique-class heuristic, not shown to match the Arsenal-237 sample (the strings come from decompiler pseudocode, not from the binary). Detects the NtCurrentTeb string together with at least one of the StackBase string or a Sleep call byte pattern (1000 ms or 5000 ms), the TEB (Thread Environment Block) stack-base anti-debugging check and Sleep-based stall loop described for the Arsenal-237 ransomware. Any one of the three qualifiers is enough, so the rule does not require both the stack-base string and a Sleep pattern. Also matches other software using the same publicly documented anti-debug technique"
         author = "The Hunters Ledger"
         reference = "https://the-hunters-ledger.com/hunting-detections/arsenal-237-enc_c2-exe-detections/"
         date = "2026-01-26"
@@ -353,15 +353,15 @@ tags:
 **Tier:** Hunting
 **Robustness:** 1
 **ATT&CK Coverage:** T1622 (Debugger Evasion)
-**Confidence:** MODERATE
-**Rationale:** Anchored to the same renameable `enc_c2.exe` filename as the process-execution rule, and requires call-stack-capable `process_access` telemetry that is not enabled by default in most Sysmon configurations. Retained for its corroboration value alongside the TEB anti-debug YARA rule, not as an independent high-confidence signal. *Title fix 2026-10-10:* the rule was titled "TEB Anti-Debug Sleep Loop Detection", but the logic is the process image plus a Sleep-related call-trace substring, with no TEB test and no repetition; the title and description now say that.
+**Confidence:** LOW
+**Rationale:** Anchored to the same renameable `enc_c2.exe` filename as the process-execution rule, and requires call-stack-capable `process_access` telemetry that is not enabled by default in most Sysmon configurations. *Telemetry limit (round 2, 2026-10-10):* Sysmon Event 10 records `CallTrace` as module-and-offset frames (for example `ntdll.dll+16bcc4|...`), not function names or call arguments, and the report's stall loop calls `Sleep(1000)` inside the process, which does not itself open another process. On stock Sysmon this rule therefore has no event it can match. It is kept only for an EDR or enriched telemetry profile whose process-access `CallTrace` carries resolved function names, and is marked as needing that telemetry rather than as Sysmon coverage. Retained for its corroboration value alongside the TEB anti-debug YARA rule, not as an independent high-confidence signal. *Title fix 2026-10-10:* the rule was titled "TEB Anti-Debug Sleep Loop Detection", but the logic is the process image plus a Sleep-related call-trace substring, with no TEB test and no repetition; the title and description now say that.
 **False Positives:** Legitimate applications with sleep loops (rate limiting, polling) that happen to be named or renamed to enc_c2.exe.
 
 ```yaml
 title: Process - enc_c2.exe Process Access with Sleep in the Call Trace
 id: 72490224-3052-4aaf-adcb-38d4201e2d67
 status: experimental
-description: Detects process_access events whose source image is enc_c2.exe and whose call trace contains Sleep, SleepEx or 0x3E8, the kind of trace a TEB-based anti-debugging stall loop would leave. The rule does not test for TEB access and does not count repetition, so a single such event fires it. Filename-anchored and requires call-stack-capable process_access telemetry; corroborates the technique covered by the TEB anti-debug YARA rule.
+description: Detects process_access events whose source image is enc_c2.exe and whose call trace contains Sleep, SleepEx or 0x3E8, the kind of trace a TEB-based anti-debugging stall loop would leave. The rule does not test for TEB access and does not count repetition, so a single such event fires it. Filename-anchored. Needs EDR or enriched telemetry whose process_access call trace carries resolved function names; the stock Sysmon call trace holds module and offset frames only, so this rule does not match stock Sysmon events. It corroborates the technique covered by the TEB anti-debug YARA rule.
 references:
     - https://the-hunters-ledger.com/hunting-detections/arsenal-237-enc_c2-exe-detections/
 author: The Hunters Ledger
@@ -370,6 +370,7 @@ modified: 2026-10-10
 logsource:
     product: windows
     category: process_access
+    definition: 'Requires an EDR or enriched telemetry profile whose process-access CallTrace contains resolved function names or call arguments. Stock Sysmon Event ID 10 CallTrace holds module and offset frames only.'
 detection:
     selection:
         SourceImage|endswith: 'enc_c2.exe'

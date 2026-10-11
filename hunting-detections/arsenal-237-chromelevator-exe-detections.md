@@ -377,12 +377,16 @@ level: high
 **Confidence:** MODERATE
 **Rationale:** Both selectors, the filename and the three command-line flags, are choices the operator made for this specific build and can be changed on a rebuild without affecting functionality; the image name together with any one of the flags narrows false positives today but does not survive a rename.
 **False Positives:** Low today given the `chromelevator.exe` image name, but the command-line test is an OR over `--verbose`, `--fingerprint` and `--output-path`, so one of them alone is enough with that image name (the tool accepts each flag on its own, per the companion report); any renamed internal tool that reuses one of those flag names would also match.
+**Blind Spots:** The tool's default run with no command-line flags (documented in the companion report) matches neither flag selector, so a flagless execution is not detected by this rule.
 **Deployment:** Scoping and retroactive hunting for this specific build; not a durable signal for the campaign once the operator renames the binary.
 
 ```yaml
 title: Suspicious Process Creation - chromelevator.exe
 id: 5b6b41f8-1c8e-4a3e-9d3a-6c1f2b9e4a01
-description: Detects execution of chromelevator.exe browser credential extraction tool
+description: >-
+  Detects a chromelevator.exe browser credential extraction tool process that was started with at least one of
+  the --verbose, --fingerprint or --output-path flags. A run with no flags, which the companion report documents as
+  the default extraction mode, is not matched.
 references:
   - https://the-hunters-ledger.com/hunting-detections/arsenal-237-chromelevator-exe-detections/
 status: experimental

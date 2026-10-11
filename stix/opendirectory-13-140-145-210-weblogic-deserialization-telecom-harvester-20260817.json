@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--5e6d71a2-a438-4edd-82ba-46fce5669482",
+    "id": "bundle--92f0d48b-f990-4bc0-b52c-be8cb99562da",
     "objects": [
         {
             "type": "identity",
@@ -2791,27 +2791,6 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--cd5a6421-4335-5fe3-95d4-8877a47fa283",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:16.471238Z",
-            "modified": "2026-10-11T03:15:37.611405Z",
-            "name": "THL DETECT WebLogicTelecomHarvester Malicious LDAP-JNDI Callback Response (javaCodeBase/javaSerializedData)",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "alert tcp $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT WebLogicTelecomHarvester Malicious LDAP-JNDI Callback Response (javaCodeBase/javaSerializedData)\"; flow:established,to_client; content:\"javaCodeBase\"; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-admin; sid:9301807; rev:3; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
-            "pattern_type": "suricata",
-            "valid_from": "2026-08-18T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "indicator",
-            "spec_version": "2.1",
             "id": "indicator--d7fcbbbd-1a8d-56e0-bda2-c508ae9a4403",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:16.471309Z",
@@ -2905,6 +2884,27 @@
                 "malicious-activity"
             ],
             "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL HUNT WebLogicTelecomHarvester PRTG Bulk Device Inventory Query via table.json (Broad, Legitimate Bulk Queries Exist)\"; flow:established,to_server; content:\"table.json\"; http_uri; content:\"content=devices\"; http_uri; content:\"count=500\"; http_uri; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-recon; sid:9301812; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-08-18T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--e74ff4d2-fa7f-54b6-8be1-4ddd527c4a23",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-11T03:42:53.201848Z",
+            "modified": "2026-10-11T03:42:53.201848Z",
+            "name": "THL HUNT WebLogicTelecomHarvester Inbound TCP Response Carrying javaCodeBase (JNDI Reference Callback Lead)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert tcp $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL HUNT WebLogicTelecomHarvester Inbound TCP Response Carrying javaCodeBase (JNDI Reference Callback Lead)\"; flow:established,to_client; content:\"javaCodeBase\"; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-admin; sid:9301807; rev:4; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
             "pattern_type": "suricata",
             "valid_from": "2026-08-18T00:00:00Z",
             "labels": [
@@ -6550,20 +6550,6 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--b70e4b0e-e6b5-54ad-8d87-1236f731527e",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:16.489185Z",
-            "modified": "2026-10-01T19:54:16.489185Z",
-            "relationship_type": "indicates",
-            "source_ref": "indicator--cd5a6421-4335-5fe3-95d4-8877a47fa283",
-            "target_ref": "malware--faf43744-2767-5207-813f-8cb21f8bd4fa",
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "relationship",
-            "spec_version": "2.1",
             "id": "relationship--155caf20-67ec-5699-9586-258311d0fff3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:16.489244Z",
@@ -6626,6 +6612,20 @@
             "modified": "2026-10-01T19:54:16.489484Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--8276907e-9575-56dd-bc64-804901fa117e",
+            "target_ref": "malware--faf43744-2767-5207-813f-8cb21f8bd4fa",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--59908d30-ce05-511d-8352-1357252f9815",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-11T03:42:53.226399Z",
+            "modified": "2026-10-11T03:42:53.226399Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--e74ff4d2-fa7f-54b6-8be1-4ddd527c4a23",
             "target_ref": "malware--faf43744-2767-5207-813f-8cb21f8bd4fa",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -58045,7 +58045,7 @@
             "id": "report--2aa3b7a4-9d57-5059-94af-58ae5009f969",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:16.728288Z",
-            "modified": "2026-10-10T13:40:57.638049Z",
+            "modified": "2026-10-11T03:42:53.552425Z",
             "name": "Carrier Credential Harvesting Through a Customer's Router",
             "report_types": [
                 "threat-report"
@@ -58229,12 +58229,12 @@
                 "indicator--4d269a3b-1d9b-5016-8b69-2c5afbc615ba",
                 "indicator--9838dc03-8802-5247-93a1-a3cb785b6727",
                 "indicator--dc4ae91b-0cde-5837-a9f2-70b960f15198",
-                "indicator--cd5a6421-4335-5fe3-95d4-8877a47fa283",
                 "indicator--d7fcbbbd-1a8d-56e0-bda2-c508ae9a4403",
                 "indicator--46da810f-923c-5b52-883e-a0a806eae8ee",
                 "indicator--808ca194-a866-5d41-8ba3-ea83d3f897b3",
                 "indicator--14de4f25-c53e-564b-86f3-dfc6a45b55a4",
                 "indicator--8276907e-9575-56dd-bc64-804901fa117e",
+                "indicator--e74ff4d2-fa7f-54b6-8be1-4ddd527c4a23",
                 "malware--ca733365-6fab-5ce2-b101-e9f73b7ccadf",
                 "malware--54e4b1c3-b1a5-57b7-bf2b-a60851acb420",
                 "malware--faf43744-2767-5207-813f-8cb21f8bd4fa",
@@ -58457,12 +58457,12 @@
                 "relationship--b807a27c-e1ad-58f5-914e-069900b94bde",
                 "relationship--53fc2442-fa5b-5bb1-8e76-8ab16ad5e431",
                 "relationship--73f8bcda-af78-5e79-a521-c8575d6304b3",
-                "relationship--b70e4b0e-e6b5-54ad-8d87-1236f731527e",
                 "relationship--155caf20-67ec-5699-9586-258311d0fff3",
                 "relationship--33ef9caf-7805-51e1-9274-9d4f0c152922",
                 "relationship--0ed8a6c5-1b7b-5ba9-b38e-6736749b4bd0",
                 "relationship--5e20ddf2-4f0d-5b53-b024-2d0056172394",
                 "relationship--086e6170-7688-5b98-961c-f0756cf095a4",
+                "relationship--59908d30-ce05-511d-8352-1357252f9815",
                 "relationship--c3f44f89-e518-5ded-a256-a600dc122047",
                 "relationship--db2f48a6-c3fd-5916-809b-2efc363e825d",
                 "relationship--7aa5d41f-647f-5029-a375-75d224214b73",

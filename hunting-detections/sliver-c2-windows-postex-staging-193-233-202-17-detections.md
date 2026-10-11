@@ -21,7 +21,7 @@ hide: true
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 3 | 1 | T1071.001, T1102.001, T1547.001 | 0 (already in IOC feed) |
-| Sigma | 8 | 4 | T1053.005, T1003.001, T1003.002, T1003.004, T1112, T1021.001, T1548.002, T1098, T1136.002, T1547.001, T1036.005, T1105, T1685, T1059.007, T1620, T1027 | 0 (already in IOC feed) |
+| Sigma | 7 | 5 | T1053.005, T1003.001, T1003.002, T1003.004, T1112, T1021.001, T1548.002, T1098, T1136.002, T1547.001, T1036.005, T1105, T1685, T1059.007, T1620, T1027 | 0 (already in IOC feed) |
 | Suricata | 2 | 0 | T1071.001 | 0 (already in IOC feed) |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting; expect to review the hits.
@@ -312,55 +312,6 @@ detection:
     condition: selection_image and selection_verb and selection_hive and selection_dest
 falsepositives:
     - Authorized backup or disaster-recovery tooling that exports these hives, though the ProgramData destination is unusual for such tooling
-level: high
-```
-
-#### LSASS Memory Access With A Dump-Capable Access Mask
-
-**Tier:** Detection
-**Robustness:** 2
-**ATT&CK Coverage:** T1003.001 (LSASS Memory)
-**Confidence:** HIGH
-**False Positives:** Endpoint security products and some legitimate diagnostic tools (Task Manager's "Create dump file", ProcDump run deliberately by an administrator) open LSASS with a broad access mask; baselining against known-good process names in the environment is expected.
-**Blind Spots:** Misses a technique that reads LSASS memory through a driver or an indirect handle duplication from another process that already holds a handle, rather than opening it directly.
-**Validation:** Trigger by opening a handle to `lsass.exe` from an unsigned or unexpected process with an access mask that Sysmon reports as one of the exact `GrantedAccess` values in the selection (for example `0x1410`). The rule compares the granted mask for equality against that list, so a requested mask of `PROCESS_VM_READ | PROCESS_QUERY_INFORMATION` (`0x0410`) does not fire unless the granted value reported by Sysmon is in the list; confirm the reported mask before treating a miss as a rule failure. A benign case that must NOT fire: Windows Defender or an EDR agent's own routine LSASS protection scan.
-**Deployment:** Endpoint EDR with Sysmon Event ID 10 (process access) enabled.
-
-```yaml
-title: Process Access To LSASS With A Dump-Capable Access Mask
-id: 504bf8d9-074c-497f-ac16-05da396b8637
-status: experimental
-description: >-
-  Detects a process opening a handle to lsass.exe with an access mask consistent with
-  memory dumping (read plus query information), the LSASS credential-access route used
-  alongside mimikatz and SAM/SYSTEM/SECURITY hive theft in this campaign.
-references:
-    - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/
-author: The Hunters Ledger
-date: '2026-09-06'
-modified: '2026-10-10'
-tags:
-    - attack.credential-access
-    - attack.t1003.001
-    - stp.3
-logsource:
-    category: process_access
-    product: windows
-    definition: 'Requires Sysmon Event ID 10 (ProcessAccess) enabled and not filtered for lsass.exe as a target.'
-detection:
-    selection:
-        TargetImage|endswith: '\lsass.exe'
-        GrantedAccess:
-            - '0x1010'
-            - '0x1038'
-            - '0x1400'
-            - '0x1410'
-            - '0x1438'
-            - '0x143a'
-            - '0x1fffff'
-    condition: selection
-falsepositives:
-    - Endpoint security or diagnostic tooling deliberately dumping LSASS for legitimate incident-response or troubleshooting purposes
 level: high
 ```
 
@@ -789,6 +740,55 @@ detection:
 falsepositives:
     - Legitimate PowerShell modules and administrative tooling that reflectively load .NET assemblies from an embedded Base64 payload
 level: low
+```
+
+#### LSASS Memory Access With A Dump-Capable Access Mask
+
+**Tier:** Hunting
+**Robustness:** 2
+**ATT&CK Coverage:** T1003.001 (LSASS Memory)
+**Confidence:** MODERATE
+**Rationale:** *Round 2, 2026-10-10:* re-tiered from Detection to Hunting and the mask list corrected. The page's own false-positive line admits endpoint security products and diagnostic tools open LSASS with these masks, and the selection has no `SourceImage`, signer or vendor exclusion, so the rule cannot separate them from a dumper without local baselining. The list also held `0x1400` (`PROCESS_QUERY_INFORMATION` plus `PROCESS_QUERY_LIMITED_INFORMATION`, no `PROCESS_VM_READ`), which cannot read memory; it was removed so every remaining mask includes `PROCESS_VM_READ` (`0x0010`). The companion report establishes an `lsass` minidump capability (`MiniDumpWriteDump` to `C:\Windows\Temp\ls.dmp`, report line 245), not the specific mask the script's handle is granted, so the list is a set of common dump-capable masks, not an observed one.
+**False Positives:** Endpoint security products and some legitimate diagnostic tools (Task Manager's "Create dump file", ProcDump run deliberately by an administrator) open LSASS with a broad access mask; baselining against known-good process names in the environment is expected.
+**Blind Spots:** Misses a technique that reads LSASS memory through a driver or an indirect handle duplication from another process that already holds a handle, rather than opening it directly.
+**Validation:** Trigger by opening a handle to `lsass.exe` from an unsigned or unexpected process with an access mask that Sysmon reports as one of the exact `GrantedAccess` values in the selection (for example `0x1410`). The rule compares the granted mask for equality against that list, so a requested mask of `PROCESS_VM_READ | PROCESS_QUERY_INFORMATION` (`0x0410`) does not fire unless the granted value reported by Sysmon is in the list; confirm the reported mask before treating a miss as a rule failure. There is no benign negative in the rule: Windows Defender or an EDR agent's own LSASS scan with one of these masks also fires, and is handled by a local `SourceImage` exclusion or baseline, not by this rule.
+**Deployment:** Endpoint EDR with Sysmon Event ID 10 (process access) enabled.
+
+```yaml
+title: Process Access To LSASS With A Dump-Capable Access Mask
+id: 504bf8d9-074c-497f-ac16-05da396b8637
+status: experimental
+description: >-
+  Detects a process opening a handle to lsass.exe with an access mask consistent with
+  memory dumping (every listed mask includes PROCESS_VM_READ), the LSASS credential-access route used
+  alongside mimikatz and SAM/SYSTEM/SECURITY hive theft in this campaign.
+references:
+    - https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/
+author: The Hunters Ledger
+date: '2026-09-06'
+modified: '2026-10-10'
+tags:
+    - attack.credential-access
+    - attack.t1003.001
+    - stp.3
+logsource:
+    category: process_access
+    product: windows
+    definition: 'Requires Sysmon Event ID 10 (ProcessAccess) enabled and not filtered for lsass.exe as a target.'
+detection:
+    selection:
+        TargetImage|endswith: '\lsass.exe'
+        GrantedAccess:
+            - '0x1010'
+            - '0x1038'
+            - '0x1410'
+            - '0x1438'
+            - '0x143a'
+            - '0x1fffff'
+    condition: selection
+falsepositives:
+    - Endpoint security or diagnostic tooling deliberately dumping LSASS for legitimate incident-response or troubleshooting purposes
+level: medium
 ```
 
 ---

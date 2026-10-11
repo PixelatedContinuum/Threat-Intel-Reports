@@ -376,10 +376,6 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT WebLogicTelecomHa
 #   rate-limited
 #   FP: None known. Legitimate WebLogic T3/IIOP administrative traffic does not carry these specific JNDI reference class names; they are the...
 alert tcp $EXTERNAL_NET any -> $HOME_NET 7001 (msg:"THL DETECT WebLogicTelecomHarvester WebLogic T3-IIOP JNDI OpaqueReference Injection (CVE-2023-21839/CVE-2024-21182)"; flow:established,to_server; content:"OpaqueReference"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-admin; sid:3500192; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
-# opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817 (orig sid:9301807)
-#   TIER: Detection  |  robustness 3  |  confidence HIGH
-#   FP: None known. javaCodeBase as an LDAP-response attribute value is specific to the JNDI reference-injection technique; it does not appear in ordinary...
-alert tcp $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT WebLogicTelecomHarvester Malicious LDAP-JNDI Callback Response (javaCodeBase/javaSerializedData)"; flow:established,to_client; content:"javaCodeBase"; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-admin; sid:3500193; rev:3; metadata:author The_Hunters_Ledger, date 2026-08-17;)
 # opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817 (orig sid:9301809)
 #   TIER: Detection  |  robustness 3  |  confidence HIGH
 #   FP: None known. Legitimate GeoServer OGC-filter requests do not construct a valueReference value that invokes exec(
@@ -401,6 +397,10 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT WebLogicTelecomHarv
 #   TIER: Hunting  |  robustness 1  |  confidence LOW  |  BROAD - triage before alerting
 #   FP: Legitimate bulk device-inventory queries are a normal part of PRTG dashboard usage, monitoring integrations, and reporting tools; this specific query...
 alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT WebLogicTelecomHarvester PRTG Bulk Device Inventory Query via table.json (Broad, Legitimate Bulk Queries Exist)"; flow:established,to_server; content:"table.json"; http_uri; content:"content=devices"; http_uri; content:"count=500"; http_uri; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-recon; sid:3500198; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
+# opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817 (orig sid:9301807)
+#   TIER: Hunting  |  robustness 2  |  confidence MODERATE  |  BROAD - triage before alerting
+#   FP: Round 2, 2026-10-10: the rule matches the string javaCodeBase anywhere in the payload of any inbound TCP response to a $HOME_NET client. It does not...
+alert tcp $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT WebLogicTelecomHarvester Inbound TCP Response Carrying javaCodeBase (JNDI Reference Callback Lead)"; flow:established,to_client; content:"javaCodeBase"; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-admin; sid:3500193; rev:4; metadata:author The_Hunters_Ledger, date 2026-08-17;)
 # opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517 (orig sid:9100101)
 #   TIER: Detection  |  robustness 3  |  confidence HIGH
 #   FP: Authorized penetration-test tooling (Burp Suite, Nuclei, Metasploit) replaying the public PoC against a cPanel/WHM host under an approved assessment.

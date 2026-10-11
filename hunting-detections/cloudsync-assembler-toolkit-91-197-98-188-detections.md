@@ -835,7 +835,7 @@ level: high
 **Logic fix 2026-10-10:** the selector was `TargetObject|endswith: '\SpecialAccounts\UserList'`. A registry value write reports the key path followed by the value name (`...\SpecialAccounts\UserList\<account>`), so a path ending at `UserList` could never match the write that hides an account, which is the event the Validation line tells the reader to trigger. It now matches the `Winlogon\SpecialAccounts\UserList\` path segment.
 **False Positives:** Deliberate administrative hiding of a legitimate local service account from the logon screen
 **Blind Spots:** None significant, this key is written almost exclusively for account-hiding purposes; requires registry-value telemetry on the relevant Winlogon hive path
-**Validation:** Write any value under `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\UserList` on a test host and confirm the alert fires. Registry writes elsewhere under `Winlogon\` that do not touch `SpecialAccounts\UserList` must NOT fire.
+**Validation:** Write any value, whatever its data, under `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\UserList` on a test host and confirm the alert fires. Registry writes elsewhere under `Winlogon\` that do not touch `SpecialAccounts\UserList` must NOT fire.
 **Deployment:** Endpoint registry telemetry (Sysmon Event ID 12/13 or equivalent)
 
 ```yaml
@@ -843,11 +843,14 @@ title: Winlogon SpecialAccounts UserList Registry Write
 id: 2966dbb8-8da1-492d-aeea-9921679ed4b6
 status: experimental
 description: >-
-    Detects a write to the Winlogon SpecialAccounts\UserList registry key, which
-    hides the named account from the Windows logon screen and User Manager tile.
-    This key is written almost exclusively to hide a newly created backdoor
-    account, legitimate use (hiding a genuine service account) is rare enough that
-    any write to this key merits review regardless of which account is targeted.
+    Detects any registry value write under the Winlogon SpecialAccounts\UserList
+    key. A value there named for an account, set to 0, hides that account from the
+    Windows logon screen and User Manager tile. The rule does not read the value
+    data, so a write that sets the value to 1 (which shows the account again) also
+    matches. This key is written almost exclusively to hide a newly created
+    backdoor account, and legitimate use (hiding a genuine service account) is
+    rare enough that any write under this key merits review regardless of which
+    account is targeted.
 references:
     - https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/
 author: The Hunters Ledger

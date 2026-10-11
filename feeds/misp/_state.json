@@ -19,20 +19,20 @@
     },
     "656f5eb2-7add-5b5e-a771-c4310b4be6c9": {
       "slug": "sliver-c2-windows-postex-staging-193-233-202-17",
-      "hash": "f3cd646e7dd935157454bcf3207bbed50946e6fc616e1739756239a06e47b987",
-      "timestamp": 1791687677,
+      "hash": "ebcfad6498236a95f69803d93cac89ea3528dd1c0bdb9b908a1a0e0c68fce06d",
+      "timestamp": 1791690201,
       "first_published": "2026-10-09"
     },
     "61bf8b6f-e11d-50ac-8cae-d6e6afd6f5d5": {
       "slug": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
-      "hash": "4c4993586973d3ec32a31cdf5eede194da2f3e348d593480891af639335c5c8c",
-      "timestamp": 1791687674,
+      "hash": "7f331890387845a1097cf24afab5a68e285ae7f265c418ec5536ee8ed1676824",
+      "timestamp": 1791690199,
       "first_published": "2026-10-09"
     },
     "7bd73cce-a068-5c73-a8f4-0e7b5d3e847e": {
       "slug": "cloudsync-assembler-toolkit-91-197-98-188",
-      "hash": "ec305316dff5c323ebc78966fa89a126e290ed8bd2dbbada0dacd533501a50b1",
-      "timestamp": 1791687673,
+      "hash": "2aa58fc48a561c740e36526be5563c50a42c07bc029ad99324318d4e0f074a10",
+      "timestamp": 1791690198,
       "first_published": "2026-10-09"
     },
     "7caf24f7-aaae-5cd6-8026-90cb081d8075": {
@@ -73,14 +73,14 @@
     },
     "207c913d-e57f-534b-ac8a-08e8ebf9933d": {
       "slug": "ai-agent-frameworks-2026-05-23",
-      "hash": "f26b2e1822040cc7be33139021190aadf1110fffd3e13be2b271f116b270d335",
-      "timestamp": 1791688043,
+      "hash": "11d77a9a83e159b37430e167fbedf3a94636a8941a856bdd9b2fa6ed96a6fcc1",
+      "timestamp": 1791690193,
       "first_published": "2026-10-09"
     },
     "897c4651-021d-5b44-a032-900b5676e247": {
       "slug": "russian-gemini-credential-mill-213.165.51.115",
-      "hash": "cc71f1a472795cb900e55c86adae165bd90c7c9d1d7728c021be69a6352216d4",
-      "timestamp": 1791687676,
+      "hash": "d1fa9753c739dcb731c668079a220400a91247224c94c83d40f5a2f8387f7d6a",
+      "timestamp": 1791690200,
       "first_published": "2026-10-09"
     },
     "9efa73fb-800e-59f7-96f1-5a1b3e9216ef": {
@@ -235,8 +235,8 @@
     },
     "d9ad5815-06a6-5ce7-a342-cd0019412f73": {
       "slug": "AdvancedRouterScanner",
-      "hash": "b65bb2899c38733c712b85234b837f6f6d10a0054149c6d024ab0f835dd710fd",
-      "timestamp": 1791687658,
+      "hash": "c7a26e1f60b25d047800c7301efa707f09b210c2373bd0e58d17f97ccfeb5aac",
+      "timestamp": 1791690190,
       "first_published": "2026-10-09"
     },
     "4581acf9-a066-5fa8-aaf4-d6edf9a3a867": {
@@ -271,14 +271,14 @@
     },
     "b021c858-4e87-550d-adc4-b56553cc8004": {
       "slug": "arsenal-237-enc_c2-exe",
-      "hash": "fe8c396ae3a53add98eab1df6bbe46632d6ae4a32b6d4594e4e112fb303ebde2",
-      "timestamp": 1791687668,
+      "hash": "5aee5d83daf1beef825fc9a9e5c71ddc23b83746deb24d0e8ad0aa7a59176eee",
+      "timestamp": 1791690195,
       "first_published": "2026-10-09"
     },
     "59b99578-e9d7-5ba7-9a9c-5a6088427a92": {
       "slug": "arsenal-237-chromelevator-exe",
-      "hash": "1038747462b5a71eaa12d43ba127d096a99375d1a587103059bf3c798b9417f9",
-      "timestamp": 1791687666,
+      "hash": "cf0a75cd3c0d8b8d8f970b6039b068b5f7f6edc0e5857dbf0f456bbcba83ad4e",
+      "timestamp": 1791690194,
       "first_published": "2026-10-09"
     },
     "bbb50559-558b-53f6-8a3a-19961ddf05ef": {
@@ -301,8 +301,8 @@
     },
     "75ed19ed-9b89-5f63-a2ca-193a80458317": {
       "slug": "arsenal-237-lpe-exe",
-      "hash": "f3dd53aab4d87ddadac992f339a3493fa7238d4fe41d0762fa0bd7c1c491085e",
-      "timestamp": 1791687672,
+      "hash": "7daeb63997de0db0d0bfdb08373d1a33c4ed97ef51b6eb889c4699a440ae335f",
+      "timestamp": 1791690197,
       "first_published": "2026-10-09"
     },
     "3a2e305f-b524-5b35-8fa8-54a3a55c08b1": {
@@ -313,8 +313,8 @@
     },
     "8b4993d6-5ab8-5280-bfaa-f37bd2e53bd6": {
       "slug": "arsenal-237-killer-dll",
-      "hash": "c3acf03c82bca04948915967d581cb5532de00279498c48296a36de1b2474a1e",
-      "timestamp": 1791687671,
+      "hash": "c9acb63fa41cdf15de58ffa734a00ac9f55a87302eb084d067f79282ad85353f",
+      "timestamp": 1791690196,
       "first_published": "2026-10-09"
     },
     "1f7ee918-f66f-5770-90bf-ff912bd48050": {
@@ -343,14 +343,14 @@
     },
     "aab2ba34-9ec2-5c61-948e-6a10c7b18488": {
       "slug": "agent-xworm-v2-exe",
-      "hash": "26cff50ac6a0161bb98d820f6b1b00c497bad95a0eb7e52eea027d21a3621a62",
-      "timestamp": 1791687663,
+      "hash": "0f6b3173b7532eb6e20c471fa2358bab79415eb86262052127c828297052e7b1",
+      "timestamp": 1791690192,
       "first_published": "2026-10-09"
     },
     "a621bfc3-8efc-54bd-ace7-c4d50940fc7d": {
       "slug": "agent-xworm-exe",
-      "hash": "76835c97f1516a82a07f14600e09af9ea272d1bd47a0773e7d3a84e6fbe1216b",
-      "timestamp": 1791687662,
+      "hash": "a1632f99461dc5690882faab1edc8ae5f223934028e58fc8af1c209763a5a85f",
+      "timestamp": 1791690191,
       "first_published": "2026-10-09"
     },
     "94c995c7-3161-5b68-9185-60ec73870738": {
