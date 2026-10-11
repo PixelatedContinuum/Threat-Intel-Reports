@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--773b39fd-d451-4013-831d-4a2fd89ea37a",
+    "id": "bundle--7885226b-c41f-4b96-97e0-be31f05fbae3",
     "objects": [
         {
             "type": "identity",
@@ -96,15 +96,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--d8674b18-4fc4-5df6-8caa-5b3ed2301cec",
+            "id": "indicator--b0e56888-7ee2-518a-aaff-9d0ef2b20151",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:11.461374Z",
-            "modified": "2026-10-01T19:54:11.461374Z",
-            "name": "SogouStealer Persistence via Run Keys and LNK Modification",
+            "created": "2026-10-11T03:15:35.048488Z",
+            "modified": "2026-10-11T03:15:35.048488Z",
+            "name": "SogouStealer Persistence via Run Keys",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: SogouStealer Persistence via Run Keys and LNK Modification\nid: 190b57f6-a8c3-4f45-a39d-ed7340d66b9a\nstatus: experimental\ndescription: Detects registry Run key entries referencing the SogouStealer ecosystem's own component filenames (beacon_sdk.dll, SGDownload.exe, userNetSchedule.exe)\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/\nauthor: The Hunters Ledger\ndate: '2025-11-21'\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1547.001\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    product: windows\n    category: registry_set\ndetection:\n    selection_run:\n        TargetObject|contains:\n            - '\\Software\\Microsoft\\Windows\\CurrentVersion\\Run'\n            - '\\Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce'\n        Details|contains:\n            - 'beacon_sdk.dll'\n            - 'SGDownload.exe'\n            - 'userNetSchedule.exe'\n    condition: selection_run\nfalsepositives:\n    - Unlikely; these filenames are specific to this malware ecosystem\nlevel: high",
+            "pattern": "title: SogouStealer Persistence via Run Keys\nid: 190b57f6-a8c3-4f45-a39d-ed7340d66b9a\nstatus: experimental\ndescription: Detects registry Run key entries referencing the SogouStealer ecosystem's own component filenames (beacon_sdk.dll, SGDownload.exe, userNetSchedule.exe)\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/\nauthor: The Hunters Ledger\ndate: '2025-11-21'\nmodified: '2026-10-10'\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1547.001\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    product: windows\n    category: registry_set\ndetection:\n    selection_run:\n        TargetObject|contains:\n            - '\\Software\\Microsoft\\Windows\\CurrentVersion\\Run'\n            - '\\Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce'\n        Details|contains:\n            - 'beacon_sdk.dll'\n            - 'SGDownload.exe'\n            - 'userNetSchedule.exe'\n    condition: selection_run\nfalsepositives:\n    - Unlikely; these filenames are specific to this malware ecosystem\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2025-11-21T00:00:00Z",
             "labels": [
@@ -141,12 +141,12 @@
             "id": "indicator--c724046d-cdce-5ef1-80b7-ed844b92dd93",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.461603Z",
-            "modified": "2026-10-01T19:54:11.461603Z",
+            "modified": "2026-10-11T03:15:35.048711Z",
             "name": "SogouStealer Masquerading NSIS Installer Execution",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: SogouStealer Masquerading NSIS Installer Execution\nid: a078683b-110a-4973-86bb-1666dba668bf\nstatus: experimental\ndescription: Detects execution of suspected NSIS-based fake Sogou installers with cracked-build markers\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/\nauthor: The Hunters Ledger\ndate: '2025-11-21'\ntags:\n    - attack.stealth\n    - attack.t1036.005\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection_image:\n        Image|endswith:\n            - '\\installer.exe'\n            - '\\setup.exe'\n            - '\\install.exe'\n    selection_cmdline:\n        CommandLine|contains:\n            - 'NSIS'\n            - 'Nullsoft'\n            - 'Sogou'\n            - '拼音'\n            - '吾爱破解'\n            - 'v15.1.0.1570'\n    condition: selection_image and selection_cmdline\nfalsepositives:\n    - Legitimate NSIS-based installers whose command line coincidentally references the generic NSIS/Nullsoft build-tool strings\n    - Unlikely for the Chinese-language cracked-build markers or the specific version string, which are not generic NSIS artifacts\nlevel: medium",
+            "pattern": "title: SogouStealer Masquerading NSIS Installer Execution\nid: a078683b-110a-4973-86bb-1666dba668bf\nstatus: experimental\ndescription: >-\n    Detects execution of an installer-named process (setup.exe, install.exe or installer.exe) whose command line\n    carries NSIS, Nullsoft, Sogou, or one of the cracked-build markers (拼音, 吾爱破解, v15.1.0.1570). The command-line\n    terms are OR-matched, so the generic NSIS, Nullsoft and Sogou terms fire without a cracked-build marker; hits that\n    carry a marker are the high-value ones.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/\nauthor: The Hunters Ledger\ndate: '2025-11-21'\nmodified: '2026-10-10'\ntags:\n    - attack.stealth\n    - attack.t1036.005\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection_image:\n        Image|endswith:\n            - '\\installer.exe'\n            - '\\setup.exe'\n            - '\\install.exe'\n    selection_cmdline:\n        CommandLine|contains:\n            - 'NSIS'\n            - 'Nullsoft'\n            - 'Sogou'\n            - '拼音'\n            - '吾爱破解'\n            - 'v15.1.0.1570'\n    condition: selection_image and selection_cmdline\nfalsepositives:\n    - Legitimate NSIS-based installers whose command line coincidentally references the generic NSIS/Nullsoft build-tool strings\n    - Unlikely for the Chinese-language cracked-build markers or the specific version string, which are not generic NSIS artifacts\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2025-11-21T00:00:00Z",
             "labels": [
@@ -195,7 +195,7 @@
             "id": "report--60de42bf-6fb0-59f8-8f0b-67e8bf184aaf",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.462058Z",
-            "modified": "2026-10-01T19:54:11.462058Z",
+            "modified": "2026-10-11T03:15:35.049217Z",
             "name": "Hybrid Ecosystem Masquerading as Sogou",
             "report_types": [
                 "threat-report"
@@ -206,7 +206,7 @@
                 "indicator--ed0dac53-9969-5480-a878-8f56a11c5d05",
                 "indicator--f982d887-c5c8-574e-b7e0-d3f07e012866",
                 "indicator--9aa75bc9-fb08-5da9-a63f-922bed543b59",
-                "indicator--d8674b18-4fc4-5df6-8caa-5b3ed2301cec",
+                "indicator--b0e56888-7ee2-518a-aaff-9d0ef2b20151",
                 "indicator--6c41931f-ffdb-58f2-9549-9202740d2cf1",
                 "indicator--c724046d-cdce-5ef1-80b7-ed844b92dd93",
                 "indicator--b90594fd-c0c9-508a-9bc6-deac801bc21b",

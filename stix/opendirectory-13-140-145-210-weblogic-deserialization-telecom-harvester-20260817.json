@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--01653f89-bf62-4db9-9199-24bb47c928db",
+    "id": "bundle--5e6d71a2-a438-4edd-82ba-46fce5669482",
     "objects": [
         {
             "type": "identity",
@@ -2794,12 +2794,12 @@
             "id": "indicator--cd5a6421-4335-5fe3-95d4-8877a47fa283",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:16.471238Z",
-            "modified": "2026-10-09T13:20:07.380579Z",
+            "modified": "2026-10-11T03:15:37.611405Z",
             "name": "THL DETECT WebLogicTelecomHarvester Malicious LDAP-JNDI Callback Response (javaCodeBase/javaSerializedData)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT WebLogicTelecomHarvester Malicious LDAP-JNDI Callback Response (javaCodeBase/javaSerializedData)\"; flow:established,to_client; content:\"javaCodeBase\"; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-admin; sid:9301807; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
+            "pattern": "alert tcp $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT WebLogicTelecomHarvester Malicious LDAP-JNDI Callback Response (javaCodeBase/javaSerializedData)\"; flow:established,to_client; content:\"javaCodeBase\"; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-admin; sid:9301807; rev:3; metadata:author The_Hunters_Ledger, date 2026-08-17;)",
             "pattern_type": "suricata",
             "valid_from": "2026-08-18T00:00:00Z",
             "labels": [

@@ -45,7 +45,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT AI-Agent-Campaign
 #   TIER: Hunting  |  robustness 2  |  confidence MODERATE  |  BROAD - triage before alerting
 #   rate-limited
 #   FP: Developer and CI/CD hosts legitimately using trycloudflare.com for temporary exposure of local services.
-alert dns $HOME_NET any -> any any (msg:"THL HUNT AI-Agent-Campaign trycloudflare.com Quick-Tunnel DNS Query from Server Host (C2 Transport Indicator)"; dns_query; content:"trycloudflare.com"; nocase; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/; classtype:trojan-activity; sid:3500000; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-25;)
+alert dns $HOME_NET any -> any any (msg:"THL HUNT AI-Agent-Campaign trycloudflare.com Quick-Tunnel DNS Query (C2 Transport Indicator)"; dns_query; content:"trycloudflare.com"; nocase; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/; classtype:trojan-activity; sid:3500000; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-25;)
 # ai-agent-frameworks-2026-05-23 (orig sid:9200001)
 #   TIER: Hunting  |  robustness 2  |  confidence MODERATE  |  BROAD - triage before alerting
 #   rate-limited
@@ -379,7 +379,7 @@ alert tcp $EXTERNAL_NET any -> $HOME_NET 7001 (msg:"THL DETECT WebLogicTelecomHa
 # opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817 (orig sid:9301807)
 #   TIER: Detection  |  robustness 3  |  confidence HIGH
 #   FP: None known. javaCodeBase as an LDAP-response attribute value is specific to the JNDI reference-injection technique; it does not appear in ordinary...
-alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT WebLogicTelecomHarvester Malicious LDAP-JNDI Callback Response (javaCodeBase/javaSerializedData)"; flow:established,to_client; content:"javaCodeBase"; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-admin; sid:3500193; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
+alert tcp $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT WebLogicTelecomHarvester Malicious LDAP-JNDI Callback Response (javaCodeBase/javaSerializedData)"; flow:established,to_client; content:"javaCodeBase"; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-admin; sid:3500193; rev:3; metadata:author The_Hunters_Ledger, date 2026-08-17;)
 # opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817 (orig sid:9301809)
 #   TIER: Detection  |  robustness 3  |  confidence HIGH
 #   FP: None known. Legitimate GeoServer OGC-filter requests do not construct a valueReference value that invokes exec(

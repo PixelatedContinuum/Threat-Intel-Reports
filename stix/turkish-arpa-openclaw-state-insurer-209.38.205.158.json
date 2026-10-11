@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--4c1b912b-5178-4da9-a3a2-246e1a0ff47c",
+    "id": "bundle--cbbd5e3f-4652-472c-82d8-b929707cc4f7",
     "objects": [
         {
             "type": "identity",
@@ -759,12 +759,12 @@
             "id": "indicator--9c72e842-61e1-518e-86b6-52a2f1eae5d6",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.226708Z",
-            "modified": "2026-10-01T19:54:22.226708Z",
+            "modified": "2026-10-11T03:15:44.801977Z",
             "name": "MAL_Python_ARPA_CrossSource_Correlation_ETL",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule MAL_Python_ARPA_CrossSource_Correlation_ETL {\n   meta:\n      description = \"Detects the Turkish ARPA operator's cross-source correlation ETL engine (correlation_v3.py and variants). Operator self-branded docstring 'ARPA Korelasyon Motoru v3 - Temporal Focus', Turkish-language diagnostic output, and API endpoint dispatch patterns uniquely identify this component of the ARPA platform.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\"\n      date = \"2026-05-26\"\n      family = \"ARPA-observability-harvester\"\n      malware_type = \"observability-credential-harvester\"\n      campaign = \"Turkish-ARPA-State-Insurer-209.38.205.158\"\n      id = \"c6216184-81e7-5bf2-bd8b-4177ed18a036\"\n   strings:\n      $docstring = \"ARPA Korelasyon Motoru v3\" ascii wide\n      $turkish_diag = \"=== SON 5 KORELASYON ===\" ascii wide\n      $endpoint_dispatch = \"/api/correlations/\" ascii wide fullword\n      $temporal = \"Temporal Focus\" ascii wide fullword\n      $topology_fn = \"topology_mapper.py\" ascii wide fullword\n      $extract_fn = \"extract_host_from_label\" ascii wide fullword\n      $turkish_extract = \"Service label\" ascii wide\n   condition:\n      filesize < 2MB and\n      ($docstring or $turkish_diag) and\n      ($endpoint_dispatch or $topology_fn or ($extract_fn and $turkish_extract) or ($docstring and $temporal))\n}",
+            "pattern": "rule MAL_Python_ARPA_CrossSource_Correlation_ETL {\n   meta:\n      description = \"Detects the Turkish ARPA operator's cross-source correlation ETL engine (correlation_v3.py and variants). Operator self-branded docstring 'ARPA Korelasyon Motoru v3 - Temporal Focus', Turkish-language diagnostic output, and API endpoint dispatch patterns uniquely identify this component of the ARPA platform.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\"\n      date = \"2026-05-26\"\n      modified = \"2026-10-10\"\n      family = \"ARPA-observability-harvester\"\n      malware_type = \"observability-credential-harvester\"\n      campaign = \"Turkish-ARPA-State-Insurer-209.38.205.158\"\n      id = \"c6216184-81e7-5bf2-bd8b-4177ed18a036\"\n   strings:\n      $docstring = \"ARPA Korelasyon Motoru v3\" ascii wide\n      $turkish_diag = \"=== SON 5 KORELASYON ===\" ascii wide\n      $endpoint_dispatch = \"/api/correlations/\" ascii wide fullword\n      $temporal = \"Temporal Focus\" ascii wide fullword\n      $topology_fn = \"topology_mapper.py\" ascii wide fullword\n      $extract_fn = \"extract_host_from_label\" ascii wide fullword\n      $turkish_extract = \"Service label\" ascii wide\n   condition:\n      filesize < 2MB and\n      ($docstring or $turkish_diag) and\n      ($endpoint_dispatch or $topology_fn or ($extract_fn and $turkish_extract) or ($docstring and $temporal))\n}",
             "pattern_type": "yara",
             "valid_from": "2026-05-25T00:00:00Z",
             "labels": [

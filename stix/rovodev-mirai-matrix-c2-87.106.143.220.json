@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--b5f0f71d-f0bc-4f14-b2c7-ddf3a2f4f341",
+    "id": "bundle--6e556d6d-c53a-4f4a-8101-b8cfa57a3ae3",
     "objects": [
         {
             "type": "identity",
@@ -1195,12 +1195,12 @@
             "id": "indicator--11971737-7145-51a3-aa91-758c1786accc",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.203648Z",
-            "modified": "2026-10-01T19:54:19.203648Z",
+            "modified": "2026-10-11T03:15:40.184646Z",
             "name": "MAL_Python_AIGenerated_OffensiveCode_Universal_Subset",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule MAL_Python_AIGenerated_OffensiveCode_Universal_Subset {\n   meta:\n      description = \"Cross-operator detection for AI-generated offensive Python code using the 5-criteria universal subset confirmed across 3 independent operators (Russian Gemini, Turkish ARPA, English Rovodev). Detects co-occurrence of verbose docstrings, bare-except handlers, educational variable naming, emoji-in-output bleed, and version-numbered iteration chains. High FP risk in isolation; requires multi-criteria co-occurrence gate — analyst triage, not automated block.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/\"\n      date = \"2026-05-26\"\n      hash1 = \"64ca12cae6f5e520abb4158da3bbc14e909c2128748ae0c5806fa4206cc14260\"\n      family = \"AI-Generated Offensive Code\"\n      malware_type = \"Offensive Python (AI-authored)\"\n      campaign = \"ai-agent-frameworks-2026-05-23\"\n      id = \"38aeca8a-3dad-5b61-9787-a14edf92a250\"\n   strings:\n      $bare_except1 = \"except:\" ascii\n      $bare_except2 = \"except Exception:\" ascii\n      $bare_pass    = /except[^\\n]*:\\s*\\n\\s*pass/ ascii\n      $doc_attack   = /def \\w+_attack\\w*\\(.*\\):\\s*\\n\\s+\\\"\\\"\\\"/ ascii\n      $doc_flood    = /def \\w+_flood\\w*\\(.*\\):\\s*\\n\\s+\\\"\\\"\\\"/ ascii\n      $doc_scan     = /def \\w+_scan\\w*\\(.*\\):\\s*\\n\\s+\\\"\\\"\\\"/ ascii\n      $doc_infect   = /def \\w+_infect\\w*\\(.*\\):\\s*\\n\\s+\\\"\\\"\\\"/ ascii\n      $emoji_fire   = \"\\xf0\\x9f\\x94\\xa5\" ascii\n      $emoji_rocket = \"\\xf0\\x9f\\x9a\\x80\" ascii\n      $emoji_check  = \"\\xe2\\x9c\\x85\"     ascii\n      $ver_chain_v2 = \"_v2.\" ascii\n      $ver_chain_v3 = \"_v3.\" ascii\n      $ver_chain_v4 = \"_v4.\" ascii\n      $ctx_ddos  = \"ddos\" nocase ascii\n      $ctx_flood = \"flood\" nocase ascii\n      $ctx_brute = \"brute\" nocase ascii\n      $ctx_infect = \"infect\" nocase ascii\n      $ctx_cnc   = \"cnc\" nocase ascii\n   condition:\n      filesize < 500KB and\n      (uint16(0) == 0x2123 or $bare_except1 or $bare_except2) and\n      (1 of ($ctx_*)) and\n      (\n         ($bare_pass and 1 of ($doc_*)) or\n         (1 of ($emoji_*) and 1 of ($doc_*)) or\n         (2 of ($ver_chain_v2, $ver_chain_v3, $ver_chain_v4) and 1 of ($doc_*))\n      )\n}",
+            "pattern": "rule MAL_Python_AIGenerated_OffensiveCode_Universal_Subset {\n   meta:\n      description = \"Cross-operator detection for AI-generated offensive Python code using the 5-criteria universal subset confirmed across 3 independent operators (Russian Gemini, Turkish ARPA, English Rovodev). Detects co-occurrence of verbose docstrings, bare-except handlers, educational variable naming, emoji-in-output bleed, and version-numbered iteration chains. High FP risk in isolation; requires multi-criteria co-occurrence gate — analyst triage, not automated block.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/\"\n      date = \"2026-05-26\"\n      modified = \"2026-10-10\"\n      hash1 = \"64ca12cae6f5e520abb4158da3bbc14e909c2128748ae0c5806fa4206cc14260\"\n      family = \"AI-Generated Offensive Code\"\n      malware_type = \"Offensive Python (AI-authored)\"\n      campaign = \"ai-agent-frameworks-2026-05-23\"\n      id = \"38aeca8a-3dad-5b61-9787-a14edf92a250\"\n   strings:\n      $bare_except1 = \"except:\" ascii\n      $bare_except2 = \"except Exception:\" ascii\n      $bare_pass    = /except[^\\n]*:\\s*\\n\\s*pass/ ascii\n      $doc_attack   = /def \\w+_attack\\w*\\(.*\\):\\s*\\n\\s+\\x22\\x22\\x22/ ascii\n      $doc_flood    = /def \\w+_flood\\w*\\(.*\\):\\s*\\n\\s+\\x22\\x22\\x22/ ascii\n      $doc_scan     = /def \\w+_scan\\w*\\(.*\\):\\s*\\n\\s+\\x22\\x22\\x22/ ascii\n      $doc_infect   = /def \\w+_infect\\w*\\(.*\\):\\s*\\n\\s+\\x22\\x22\\x22/ ascii\n      $emoji_fire   = \"\\xf0\\x9f\\x94\\xa5\" ascii\n      $emoji_rocket = \"\\xf0\\x9f\\x9a\\x80\" ascii\n      $emoji_check  = \"\\xe2\\x9c\\x85\"     ascii\n      $ver_chain_v2 = \"_v2.\" ascii\n      $ver_chain_v3 = \"_v3.\" ascii\n      $ver_chain_v4 = \"_v4.\" ascii\n      $ctx_ddos  = \"ddos\" nocase ascii\n      $ctx_flood = \"flood\" nocase ascii\n      $ctx_brute = \"brute\" nocase ascii\n      $ctx_infect = \"infect\" nocase ascii\n      $ctx_cnc   = \"cnc\" nocase ascii\n   condition:\n      filesize < 500KB and\n      (uint16(0) == 0x2123 or $bare_except1 or $bare_except2) and\n      (1 of ($ctx_*)) and\n      (\n         ($bare_pass and 1 of ($doc_*)) or\n         (1 of ($emoji_*) and 1 of ($doc_*)) or\n         (2 of ($ver_chain_v2, $ver_chain_v3, $ver_chain_v4) and 1 of ($doc_*))\n      )\n}",
             "pattern_type": "yara",
             "valid_from": "2026-05-26T00:00:00Z",
             "labels": [
@@ -1318,15 +1318,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--c4d35626-90d8-53bb-a701-c826ca00139e",
+            "id": "indicator--348ba86b-de48-5691-b514-c955691988a9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:19.204097Z",
-            "modified": "2026-10-01T19:54:19.204097Z",
-            "name": "Pandora-Mirai Persistence Pattern — Multi-Mechanism Installer (Init.d, Systemd, Hidden Cron)",
+            "created": "2026-10-11T03:15:40.185269Z",
+            "modified": "2026-10-11T03:15:40.185269Z",
+            "name": "Pandora-Mirai Persistence - Masquerade Init.d Script Sysupdate (Base Rule)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Pandora-Mirai Persistence Pattern — Multi-Mechanism Installer (Init.d, Systemd, Hidden Cron)\nid: 311787eb-af20-4ec5-90b3-ef3cb6797771\nstatus: experimental\ndescription: >-\n  Detects 2-of-3 co-occurrence of the distinctive Linux persistence vectors used by the Pandora-Mirai (UTA-2026-014) persistent_bot.sh installer — masquerade-named init.d service (/etc/init.d/sysupdate), masquerade systemd unit (/etc/systemd/system/system-update.service), and a hidden dot-prefix cron entry under /etc/cron.d/. Corrected from the original: the ubiquitous /etc/rc.local vector was removed (routine target for many legitimate deployment tools with no discriminating value alone), and the rule no longer claims an un-implemented 60-second time-window correlation.\nreferences:\n    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.persistence\n    - attack.execution\n    - attack.privilege-escalation\n    - attack.t1037.004\n    - attack.t1053.003\n    - attack.t1543.002\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: file_event\n    product: linux\ndetection:\n    selection_sysupdate:\n        TargetFilename: '/etc/init.d/sysupdate'\n    selection_systemd:\n        TargetFilename: '/etc/systemd/system/system-update.service'\n    selection_cron_hidden:\n        TargetFilename|startswith: '/etc/cron.d/.'\n    condition: >-\n        (selection_sysupdate and selection_systemd) or\n        (selection_sysupdate and selection_cron_hidden) or\n        (selection_systemd and selection_cron_hidden)\nfalsepositives:\n    - Legitimate system update scripts that use similar naming — verify service content references known-good update infrastructure\n    - Security tooling (OSSEC, Wazuh agent) that creates init.d and systemd units at install time\nlevel: high",
+            "pattern": "title: Pandora-Mirai Persistence - Masquerade Init.d Script Sysupdate (Base Rule)\nid: d8addeca-63c4-4bed-a2d7-5b07f785f794\nname: pandora_persist_initd_sysupdate\nstatus: experimental\ndescription: >-\n  Base rule (hunting lead, informational on its own): creation of\n  /etc/init.d/sysupdate, the masquerade-named System V service written by the\n  Pandora-Mirai (UTA-2026-014) persistent_bot.sh installer. Evaluated together\n  with the systemd-unit and hidden-cron base rules by the correlation rule\n  below.\nreferences:\n    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\nmodified: '2026-10-10'\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1037.004\n    - detection.emerging-threats\n    - stp.2\nlogsource:\n    category: file_event\n    product: linux\ndetection:\n    selection:\n        TargetFilename: '/etc/init.d/sysupdate'\n    condition: selection\nfalsepositives:\n    - Legitimate system update scripts that use the same init.d name, verify the script content references known-good update infrastructure\n    - Security tooling (OSSEC, Wazuh agent) that creates init.d units at install time\nlevel: low\n---\ntitle: Pandora-Mirai Persistence - Masquerade Systemd Unit system-update.service (Base Rule)\nid: 30fd3414-b559-4cc2-a1fe-c6cbe8be5be4\nname: pandora_persist_systemd_system_update\nstatus: experimental\ndescription: >-\n  Base rule (hunting lead, informational on its own): creation of\n  /etc/systemd/system/system-update.service, the masquerade-named systemd unit\n  written by the Pandora-Mirai (UTA-2026-014) persistent_bot.sh installer.\n  Evaluated together with the init.d and hidden-cron base rules by the\n  correlation rule below.\nreferences:\n    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\nmodified: '2026-10-10'\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1543.002\n    - detection.emerging-threats\n    - stp.2\nlogsource:\n    category: file_event\n    product: linux\ndetection:\n    selection:\n        TargetFilename: '/etc/systemd/system/system-update.service'\n    condition: selection\nfalsepositives:\n    - Legitimate system update units that use the same unit name, verify the unit content references known-good update infrastructure\n    - Security tooling (OSSEC, Wazuh agent) that creates systemd units at install time\nlevel: low\n---\ntitle: Pandora-Mirai Persistence - Hidden Dot-Prefix Cron Entry in /etc/cron.d (Base Rule)\nid: 87ad8798-c538-412a-8c09-1284e13f64bf\nname: pandora_persist_cron_hidden\nstatus: experimental\ndescription: >-\n  Base rule (hunting lead, informational on its own): creation of a\n  dot-prefix (hidden) file under /etc/cron.d/, the form of the\n  /etc/cron.d/.cache_update entry written by the Pandora-Mirai (UTA-2026-014)\n  persistent_bot.sh installer. Evaluated together with the init.d and systemd\n  base rules by the correlation rule below.\nreferences:\n    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\nmodified: '2026-10-10'\ntags:\n    - attack.persistence\n    - attack.execution\n    - attack.privilege-escalation\n    - attack.t1053.003\n    - detection.emerging-threats\n    - stp.2\nlogsource:\n    category: file_event\n    product: linux\ndetection:\n    selection:\n        TargetFilename|startswith: '/etc/cron.d/.'\n    condition: selection\nfalsepositives:\n    - Configuration management tools (Puppet, Chef, Ansible) deploying hidden cron entries, verify against known CM policy\n    - Rare administration scripts that use dot-prefix cron files\nlevel: low\n---\ntitle: Pandora-Mirai Persistence Pattern - Multi-Mechanism Installer (Init.d, Systemd, Hidden Cron)\nid: 311787eb-af20-4ec5-90b3-ef3cb6797771\nstatus: experimental\ndescription: >-\n  Detects the init.d, systemd and hidden-cron persistence artifacts of the\n  Pandora-Mirai (UTA-2026-014) persistent_bot.sh installer all being created on\n  the same host within 10 minutes: the masquerade-named init.d service\n  (/etc/init.d/sysupdate), the masquerade systemd unit\n  (/etc/systemd/system/system-update.service) and a hidden dot-prefix cron entry\n  under /etc/cron.d/. All three base rules must match; a host showing only one\n  or two of them does not fire this correlation. The ubiquitous /etc/rc.local\n  vector is not part of the rule.\nreferences:\n    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\nmodified: '2026-10-10'\ntags:\n    - attack.persistence\n    - attack.execution\n    - attack.privilege-escalation\n    - attack.t1037.004\n    - attack.t1053.003\n    - attack.t1543.002\n    - detection.emerging-threats\n    - stp.3\ncorrelation:\n    type: temporal\n    rules:\n        - pandora_persist_initd_sysupdate\n        - pandora_persist_systemd_system_update\n        - pandora_persist_cron_hidden\n    group-by:\n        - host.name\n    timespan: 10m\nfalsepositives:\n    - A host where unrelated tooling creates all three artifacts within 10 minutes is not expected\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-05-26T00:00:00Z",
             "labels": [
@@ -1381,15 +1381,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--49dc64d0-0e5d-5340-9b00-7a7e87c4a816",
+            "id": "indicator--f27dbb2c-e66c-57d2-a898-88ec5c0d1e86",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:19.204315Z",
-            "modified": "2026-10-01T19:54:19.204315Z",
-            "name": "Non-Watchdog Process Opening /dev/watchdog — Mirai-Canonical Persistence Tactic",
+            "created": "2026-10-11T03:15:40.185572Z",
+            "modified": "2026-10-11T03:15:40.185572Z",
+            "name": "Process Launched with /dev/watchdog on the Command Line, Mirai-Canonical Persistence Tactic",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Non-Watchdog Process Opening /dev/watchdog — Mirai-Canonical Persistence Tactic\nid: 716bce61-4dcb-4479-b815-1391f5c7cd43\nstatus: experimental\ndescription: >-\n  Detects processes other than known watchdog daemons (watchdogd, systemd-watchdog) opening /dev/watchdog or /dev/misc/watchdog. This is a canonical Mirai botnet persistence mechanism — the bot opens the watchdog device and continuously pets it (ioctl WDIOC_KEEPALIVE) to prevent IoT device auto-reboot, keeping the infection persistent across watchdog-triggered reset cycles. Observed in Naku.arm (Pandora-Mirai family, UTA-2026-014) and generic to all Mirai/Sora derivative bots. FP profile varies by deployment context (low on servers, higher on IoT/embedded hosts) — deploy as a hunting lead.\nreferences:\n    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.stealth\n    - attack.t1014\n    - attack.persistence\n    - attack.execution\n    - attack.privilege-escalation\n    - attack.t1053.003\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: linux\ndetection:\n    selection:\n        CommandLine|contains:\n            - '/dev/watchdog'\n            - '/dev/misc/watchdog'\n    filter_legit:\n        Image|endswith:\n            - '/watchdogd'\n            - '/systemd'\n            - '/busybox'\n    condition: selection and not filter_legit\nfalsepositives:\n    - Embedded system watchdog management tools on IoT/embedded Linux — tune filter_legit for your environment\n    - Custom watchdog wrapper scripts in industrial control environments\n    - Hardware monitoring agents on servers with watchdog hardware support\nlevel: medium",
+            "pattern": "title: Process Launched with /dev/watchdog on the Command Line, Mirai-Canonical Persistence Tactic\nid: 716bce61-4dcb-4479-b815-1391f5c7cd43\nstatus: experimental\ndescription: >-\n  Detects process creation, other than by known watchdog daemons (watchdogd, systemd, busybox), whose command line references /dev/watchdog or /dev/misc/watchdog. The rule reads command lines and cannot see an open() call made from inside an already running process. The device is a canonical Mirai botnet persistence mechanism — the bot opens the watchdog device and continuously pets it (ioctl WDIOC_KEEPALIVE) to prevent IoT device auto-reboot, keeping the infection persistent across watchdog-triggered reset cycles. Observed in Naku.arm (Pandora-Mirai family, UTA-2026-014) and generic to all Mirai/Sora derivative bots. FP profile varies by deployment context (low on servers, higher on IoT/embedded hosts) — deploy as a hunting lead.\nreferences:\n    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\nmodified: '2026-10-10'\ntags:\n    - attack.stealth\n    - attack.t1014\n    - attack.persistence\n    - attack.execution\n    - attack.privilege-escalation\n    - attack.t1053.003\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: linux\ndetection:\n    selection:\n        CommandLine|contains:\n            - '/dev/watchdog'\n            - '/dev/misc/watchdog'\n    filter_legit:\n        Image|endswith:\n            - '/watchdogd'\n            - '/systemd'\n            - '/busybox'\n    condition: selection and not filter_legit\nfalsepositives:\n    - Embedded system watchdog management tools on IoT/embedded Linux — tune filter_legit for your environment\n    - Custom watchdog wrapper scripts in industrial control environments\n    - Hardware monitoring agents on servers with watchdog hardware support\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-05-26T00:00:00Z",
             "labels": [
@@ -3774,12 +3774,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--0d131bef-088f-5c78-97a1-fe2c4086da03",
+            "id": "relationship--f704ba2d-289c-52bc-99d8-3d930c7d16e3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:19.216636Z",
-            "modified": "2026-10-01T19:54:19.216636Z",
+            "created": "2026-10-11T03:15:40.204029Z",
+            "modified": "2026-10-11T03:15:40.204029Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--c4d35626-90d8-53bb-a701-c826ca00139e",
+            "source_ref": "indicator--348ba86b-de48-5691-b514-c955691988a9",
             "target_ref": "malware--e1ff3c5a-931c-52e6-af27-abf72a92bc1f",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -3816,12 +3816,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--9d279209-abfa-5943-9d28-5c2c3608c92f",
+            "id": "relationship--ff741318-7677-538a-8dda-f76f5b614e7b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-10-01T19:54:19.216816Z",
-            "modified": "2026-10-01T19:54:19.216816Z",
+            "created": "2026-10-11T03:15:40.204275Z",
+            "modified": "2026-10-11T03:15:40.204275Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--49dc64d0-0e5d-5340-9b00-7a7e87c4a816",
+            "source_ref": "indicator--f27dbb2c-e66c-57d2-a898-88ec5c0d1e86",
             "target_ref": "malware--e1ff3c5a-931c-52e6-af27-abf72a92bc1f",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -22173,7 +22173,7 @@
             "id": "report--d6a3df6a-be77-50bd-8c19-3b3a9455ec93",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.297515Z",
-            "modified": "2026-10-01T19:54:19.297515Z",
+            "modified": "2026-10-11T03:15:40.345124Z",
             "name": "Rovodev AI Co-Authored Mirai Variant + Matrix C2 Framework — UTA-2026-014 (Pandora 11-Arch IoT Botnet + DDoS-as-a-Service)",
             "report_types": [
                 "threat-report"
@@ -22266,10 +22266,10 @@
                 "indicator--316051bb-937d-5a1e-ab0d-0c575e5e14e6",
                 "indicator--7498262d-91f9-5ca3-8c7d-e863bc95573c",
                 "indicator--5f27cbd1-b0e1-5a47-8bbd-eeda913d66b6",
-                "indicator--c4d35626-90d8-53bb-a701-c826ca00139e",
+                "indicator--348ba86b-de48-5691-b514-c955691988a9",
                 "indicator--71cbcb9f-6aef-5935-972c-14c7144d2978",
                 "indicator--4da6c2a5-f0df-59b0-9856-94942d275229",
-                "indicator--49dc64d0-0e5d-5340-9b00-7a7e87c4a816",
+                "indicator--f27dbb2c-e66c-57d2-a898-88ec5c0d1e86",
                 "indicator--25ca63e0-4b15-5dea-aa67-bf46f23f0b62",
                 "indicator--434b0ca1-c98e-5c26-86f3-73d6788c4dfe",
                 "indicator--331713cc-10fb-543f-9cb7-45b805110306",
@@ -22412,10 +22412,10 @@
                 "relationship--7084e6bc-d53f-5d01-841f-dc55b94a40de",
                 "relationship--e4ed3727-f18d-59f3-be46-26c55704a8a0",
                 "relationship--d19f1477-1440-5225-8914-39b6105da936",
-                "relationship--0d131bef-088f-5c78-97a1-fe2c4086da03",
+                "relationship--f704ba2d-289c-52bc-99d8-3d930c7d16e3",
                 "relationship--9c9c6d56-7c31-542e-9ac3-0d93a90ee2b1",
                 "relationship--fda2f2cf-81ba-570b-b105-1d9026242eb3",
-                "relationship--9d279209-abfa-5943-9d28-5c2c3608c92f",
+                "relationship--ff741318-7677-538a-8dda-f76f5b614e7b",
                 "relationship--1d2028c1-3b38-5ae5-abea-c933b2614724",
                 "relationship--83253f6f-1dbe-5a6d-9efa-fb2468c71ac8",
                 "relationship--16372456-7817-5e7c-a3ef-2c8765b5f38d",
