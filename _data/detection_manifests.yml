@@ -1244,7 +1244,7 @@ bellamain-turkish-phaas-79-137-192-3-20260516-detections:
     engine: sigma
     tier: Detection
     fence: 3
-    hash: "0c11e8fa"
+    hash: "815d8550"
     head: "title: BellaMain PhaaS Mysqldump Invocation by P"
     robustness: 3
     confidence: "HIGH"

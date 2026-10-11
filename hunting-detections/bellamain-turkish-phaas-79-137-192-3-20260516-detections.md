@@ -217,7 +217,7 @@ detection:
     selection_child:
         Image|endswith: 'mysqldump'
         CommandLine|re:
-            - '.* -p[^ -].*'
+            - '.* -p[^- ].*'
             - '.* --password=.*'
     condition: selection_parent and selection_child
 falsepositives:

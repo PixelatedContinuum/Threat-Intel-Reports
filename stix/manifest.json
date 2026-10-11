@@ -5,8 +5,8 @@
   "zip": {
     "file": "hunters-ledger-stix-bundles.zip",
     "url": "https://the-hunters-ledger.com/stix/hunters-ledger-stix-bundles.zip",
-    "sha256": "1a64593bac94d54492e5c750a4ca54d18bd1b38eb2c7bcb374d5d67899521ae6",
-    "bytes": 1920471
+    "sha256": "6dff4741868fe4ae1150aaa405a357c2c02ef384e002c16395faeb8a0756d908",
+    "bytes": 1920481
   },
   "bundles": [
     {
@@ -286,13 +286,13 @@
       "file": "bellamain-turkish-phaas-79-137-192-3-20260516.json",
       "url": "https://the-hunters-ledger.com/stix/bellamain-turkish-phaas-79-137-192-3-20260516.json",
       "report_url": "https://the-hunters-ledger.com/reports/bellamain-turkish-phaas-79-137-192-3-20260516/",
-      "bundle_id": "bundle--a3855e1b-5095-486b-9c3c-86ecfcef4b48",
+      "bundle_id": "bundle--7a020025-e287-4f21-9081-54bbcd799d0f",
       "report_id": "report--ffb8d174-a8c9-5fc5-b94f-9462fdff65b3",
-      "sha256": "67332e2d237dcee77ffb0b7343665bb2160bae9f2268ad81e0afd22a314fb2d9",
+      "sha256": "938a5eddae1c19debc55e8c9673d474c6a8f49f5b389bdf0b382165237f89410",
       "bytes": 307334,
       "objects": 388,
       "indicators": 24,
-      "modified": "2026-10-11T14:08:21.246121Z"
+      "modified": "2026-10-11T15:06:17.166779Z"
     },
     {
       "slug": "inkognito-russian-vpn-phishing-185-221-196-118-20260516",
