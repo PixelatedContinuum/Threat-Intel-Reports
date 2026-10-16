@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--35aec711-2d5b-4d23-b87d-9a7f1c6e77ff",
+    "id": "bundle--09b3b7eb-70c6-4a8e-a69b-697ed7859d80",
     "objects": [
         {
             "type": "identity",
@@ -23,19 +23,1030 @@
             }
         },
         {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--385eb354-c423-59bb-a16a-22587ff6d446",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.237393Z",
+            "modified": "2026-10-16T14:33:30.237393Z",
+            "name": "MAL_EncDec_Rust_Ransomware_Artifacts",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: Arsenal-237-109.230.231.37-Malware-Repository\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule MAL_EncDec_Rust_Ransomware_Artifacts {\n   meta:\n      description = \"Detects enc/dec Rust ransomware variants via project-specific Rust source debug paths or the combination of an embedded RSA public key with the family's encryption-status and key-generation console messages. Corrects a missing-parentheses precedence bug in the original rule that left one branch without a PE-header gate.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/enc-dec-ransomware-family-detections/\"\n      date = \"2026-01-18\"\n      family = \"EncDec-Ransomware\"\n      malware_type = \"Ransomware\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"8413bc6f-1109-4e62-a26b-f4e535c1c6ad\"\n   strings:\n      $rust_debug1 = \"chacha20_pervictim.rs\" ascii wide\n      $rust_debug2 = \"netusesrc/modules/disks.rs\" ascii wide\n      $rust_debug3 = \"/aead-0.5.2/src/lib.rs\" ascii wide\n      $rsa_key_marker = \"-----BEGIN PUBLIC KEY-----\" ascii wide\n      $enc_message = \"[*] Using RSA+ChaCha20 encryption\" ascii wide\n      $key_gen = \"[*] Generating unique encryption key\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      (\n         2 of ($rust_debug*) or\n         ($rsa_key_marker and ($enc_message or $key_gen))\n      )\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--d4ad2aa9-1712-5762-aa71-514da3d81808",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.238086Z",
+            "modified": "2026-10-16T14:33:30.238086Z",
+            "name": "MAL_EncDec_ChaCha20_Constant",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule MAL_EncDec_ChaCha20_Constant {\n   meta:\n      description = \"Detects the RFC 8439 ChaCha20 initialization constant (expand 32-byte k) in a PE file, confirmed present in the enc/dec ransomware family's encryptor and decryptor variants. The same constant is required by any standard ChaCha20 implementation, including legitimate VPN and secure-messaging software, so treat a hit as a scoping lead rather than a standalone alert.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/enc-dec-ransomware-family-detections/\"\n      date = \"2026-01-18\"\n      family = \"EncDec-Ransomware\"\n      malware_type = \"Ransomware\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"d284edca-9974-4d43-8228-aa99da540697\"\n   strings:\n      $chacha20_constant = \"expand 32-byte k\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      $chacha20_constant\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--d2a4f953-58c5-5f1e-8d8d-022c8a7d6a57",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.238235Z",
+            "modified": "2026-10-16T14:33:30.238235Z",
+            "name": "MAL_EncDec_VSS_Deletion_Concatenated_String",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule MAL_EncDec_VSS_Deletion_Concatenated_String {\n   meta:\n      description = \"Detects the enc/dec ransomware family's distinctive concatenated Volume Shadow Copy deletion string, observed packed with no separators in this family's builds. Most plausibly a string-table adjacency artifact of this family's Rust build toolchain rather than a runtime-constructed string, so it is not guaranteed to survive a future recompile.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/enc-dec-ransomware-family-detections/\"\n      date = \"2026-01-18\"\n      family = \"EncDec-Ransomware\"\n      malware_type = \"Ransomware\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"31ef0486-276c-41b3-8de7-3bb8df7eaaf3\"\n   strings:\n      $vss_sig = \"vssadmindeleteshadows/all/quietwmicshadowcopy\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      $vss_sig\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--b596cf83-c20a-52e7-b6bc-7991dd3ae0da",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.238363Z",
+            "modified": "2026-10-16T14:33:30.238363Z",
+            "name": "Volume Shadow Copy Deletion via Vssadmin or Wmic (Generic Ransomware Precursor, Seen in the enc/dec Family)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Volume Shadow Copy Deletion via Vssadmin or Wmic (Generic Ransomware Precursor, Seen in the enc/dec Family)\nid: ad52d938-ac86-4587-86c9-008ad0534b68\nstatus: experimental\ndescription: Detects command lines that delete Volume Shadow Copies through vssadmin or wmic. The enc/dec ransomware family issues this pre-encryption recovery-inhibition step, but the rule has no family string, hash, path or parent-process test, so it matches the same command from any tool or administrator.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/enc-dec-ransomware-family-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-18'\ntags:\n    - attack.impact\n    - attack.t1490\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_vssadmin:\n        CommandLine|contains|all:\n            - 'vssadmin'\n            - 'delete'\n            - 'shadows'\n            - '/all'\n    selection_wmic:\n        CommandLine|contains|all:\n            - 'wmic'\n            - 'shadowcopy'\n            - 'delete'\n    condition: selection_vssadmin or selection_wmic\nfalsepositives:\n    - Legitimate system maintenance (rare)\n    - Backup software uninstallation\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--1e61e484-c5e8-5c94-a735-fe4b43e40fcc",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.238467Z",
+            "modified": "2026-10-16T14:33:30.238467Z",
+            "name": "HKTOOL_UAC_Bypass_CMSTPLUA_Fodhelper_Generic",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: Arsenal-237-109.230.231.37-Malware-Repository\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule HKTOOL_UAC_Bypass_CMSTPLUA_Fodhelper_Generic {\n   meta:\n      description = \"Detects generic CMSTPLUA COM interface abuse and Fodhelper registry hijacking UAC bypass techniques via the OS-level CLSIDs and registry path the techniques require, combined with supporting COM/registry API or filename strings. Technique-level: also matches other tools implementing the same two bypass methods, not only uac_test.exe.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/uac-test-exe-detections/\"\n      date = \"2026-01-12\"\n      family = \"UAC-Bypass-PoC\"\n      malware_type = \"UAC-Bypass-Tool\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"08c799ca-815c-441d-ae91-fe745f4bac6e\"\n   strings:\n      $cmstplua_clsid = \"{6EDD6D74-C007-4E75-B76A-E5740995E24C}\" nocase\n\n      $fodhelper_reg1 = \"ms-settings\\\\shell\\\\open\\\\command\" ascii wide nocase\n      $fodhelper_reg2 = \"Software\\\\Classes\\\\ms-settings\" ascii wide nocase\n\n      $bypass_clsid1 = \"{3E5FC7F9-9A51-4367-9063-A120244FBEC7}\" nocase\n      $bypass_clsid2 = \"{D2E7041B-2927-42FB-8E9F-7CE93B6DC937}\" nocase\n\n      $exe_fodhelper = \"fodhelper.exe\" ascii wide nocase\n      $exe_slui = \"slui.exe\" ascii wide nocase\n\n      $reg_api1 = \"RegCreateKeyEx\" ascii wide\n      $reg_api2 = \"RegSetValueEx\" ascii wide\n      $reg_api3 = \"RegOpenKeyEx\" ascii wide\n\n      $com_api1 = \"CoGetObject\" ascii wide\n      $com_api2 = \"CoCreateInstance\" ascii wide\n      $com_api3 = \"CoInitializeEx\" ascii wide\n\n   condition:\n      uint16(0) == 0x5A4D and\n      (\n         ($cmstplua_clsid and (1 of ($com_api*))) or\n         ($fodhelper_reg1 and (1 of ($reg_api*))) or\n         ($fodhelper_reg2 and $exe_fodhelper and (1 of ($reg_api*))) or\n         ((1 of ($bypass_clsid*)) and (1 of ($exe_*)) and (1 of ($reg_api*)))\n      )\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--f9d99f98-0b5a-5213-b835-1de3d9e79e13",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.238569Z",
+            "modified": "2026-10-16T14:33:30.238569Z",
+            "name": "HKTOOL_UAC_Test_PoC_Comprehensive",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "import \"hash\"\n\nrule HKTOOL_UAC_Test_PoC_Comprehensive {\n   meta:\n      description = \"Detects uac_test.exe and close derivatives via exact hash match or a multi-signal combination of CMSTPLUA/Fodhelper bypass technique anchors, this build's own console/status-message strings, and Rust compilation artifacts. The status-message dependency means a rebuild with console output stripped defeats every behavioral branch; see Coverage Gaps.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/uac-test-exe-detections/\"\n      date = \"2026-01-12\"\n      family = \"UAC-Bypass-PoC\"\n      malware_type = \"UAC-Bypass-Tool\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"b20d328c-f9af-47fa-acb3-e3ad6d28b130\"\n      hash1 = \"18da271868c434494a68937fa12cb302d37b14849c4c0fc1db4007ac13c5b760\"\n   strings:\n      $clsid_cmstplua = \"{6EDD6D74-C007-4E75-B76A-E5740995E24C}\" nocase\n      $elevation_moniker = \"Elevation:Administrator!new:{3E5FC7F9-9A51-4367-9063-A120244FBEC7}\" ascii wide nocase\n\n      $reg_fodhelper = \"Software\\\\Classes\\\\ms-settings\\\\shell\\\\open\\\\command\" ascii wide nocase\n\n      $msg_uac_test = \"UAC Bypass Test - Rust Implementation\" ascii\n      $msg_admin_already = \"[+] Already running as administrator!\" ascii\n      $msg_no_bypass = \"[+] No UAC bypass needed.\" ascii\n      $msg_com_bypass = \"[+] COM bypass executed!\" ascii\n      $msg_com_attempt = \"[1] Testing COM-based UAC Bypass (CMSTPLUA)\" ascii\n      $msg_reg_bypass = \"[+] Registry bypass triggered!\" ascii\n      $msg_reg_attempt = \"[2] Testing Registry-based UAC Bypass (fodhelper)\" ascii\n      $msg_com_success = \"[+] *** COM UAC BYPASS SUCCESS! ***\" ascii\n      $msg_reg_success = \"[+] *** REGISTRY UAC BYPASS SUCCESS! ***\" ascii\n\n      $com_init = \"[*] Initializing COM...\" ascii\n      $com_moniker = \"[*] Creating elevation moniker...\" ascii\n      $com_cogetobject = \"[*] Calling CoGetObject with elevation moniker...\" ascii\n      $com_interface = \"[+] Got ICMLuaUtil interface!\" ascii\n      $com_shellexec = \"[*] Calling ShellExec to run elevated command...\" ascii\n\n      $rust_lib1 = \"library\\\\alloc\\\\src\\\\string.rs\" ascii\n      $rust_lib2 = \"library\\\\core\\\\src\\\\slice\\\\memchr.rs\" ascii\n      $rust_lib3 = \"/rustc/\" ascii\n      $rust_lib4 = \"library\\\\std\\\\src\\\\panicking.rs\" ascii\n\n      $token1 = \"CheckTokenMembership\" ascii wide\n      $token2 = \"AllocateAndInitializeSid\" ascii wide\n      $token3 = \"FreeSid\" ascii wide\n\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 500KB and\n      (\n         hash.sha256(0, filesize) == \"18da271868c434494a68937fa12cb302d37b14849c4c0fc1db4007ac13c5b760\" or\n         (\n            ($clsid_cmstplua and ($elevation_moniker or $com_init or $com_moniker)) and\n            (2 of ($msg_*)) and\n            (1 of ($rust_lib*))\n         ) or\n         (\n            ($reg_fodhelper) and\n            (2 of ($msg_*)) and\n            (1 of ($rust_lib*))\n         ) or\n         (\n            (4 of ($msg_*)) and\n            (2 of ($rust_lib*)) and\n            (1 of ($token*))\n         ) or\n         (\n            ($clsid_cmstplua or $elevation_moniker) and\n            (3 of ($com_*)) and\n            (2 of ($msg_*))\n         )\n      )\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--6a94689f-7867-5ec3-be0b-05e26ec6ef7b",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.238669Z",
+            "modified": "2026-10-16T14:33:30.238669Z",
+            "name": "HKTOOL_Rust_Compiled_UAC_Bypass",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule HKTOOL_Rust_Compiled_UAC_Bypass {\n   meta:\n      description = \"Detects Rust-compiled UAC bypass tools via Rust runtime/compiler artifacts combined with either the CMSTPLUA/Fodhelper technique anchors or a broader combination of UAC/elevation/administrator/bypass terminology and privilege-check APIs. The generic-terminology branch is common in legitimate Rust admin tooling; expect co-fire with benign software. Not for alerting.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/uac-test-exe-detections/\"\n      date = \"2026-01-12\"\n      family = \"UAC-Bypass-PoC\"\n      malware_type = \"UAC-Bypass-Tool\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"999a63f6-e957-406a-8752-f44887e4d579\"\n   strings:\n      $rust1 = \"/rustc/\" ascii\n      $rust2 = \"library\\\\core\\\\src\" ascii\n      $rust3 = \"library\\\\alloc\\\\src\" ascii\n      $rust4 = \"library\\\\std\\\\src\" ascii\n      $rust5 = \"rust_panic\" ascii\n      $rust6 = \"std::panicking\" ascii\n\n      $uac1 = \"UAC\" nocase\n      $uac2 = \"elevation\" nocase\n      $uac3 = \"administrator\" nocase\n      $uac4 = \"bypass\" nocase\n\n      $bypass_clsid = \"{6EDD6D74-C007-4E75-B76A-E5740995E24C}\" nocase\n      $bypass_reg = \"ms-settings\\\\shell\\\\open\\\\command\" ascii wide nocase\n\n      $priv_api1 = \"CheckTokenMembership\" ascii wide\n      $priv_api2 = \"GetTokenInformation\" ascii wide\n      $priv_api3 = \"OpenProcessToken\" ascii wide\n\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 1MB and\n      (2 of ($rust*)) and\n      (\n         ($bypass_clsid or $bypass_reg) or\n         ((2 of ($uac*)) and (1 of ($priv_api*)))\n      )\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--635e274c-edb1-5aa9-b3ce-c1ea2a93e6e7",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.238767Z",
+            "modified": "2026-10-16T14:33:30.238767Z",
+            "name": "UAC Bypass via Fodhelper Registry Hijacking",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: UAC Bypass via Fodhelper Registry Hijacking\nid: 9a2c5b8f-3d1e-4f5a-8c9b-1a2d3e4f5a6b\nstatus: experimental\ndescription: >-\n    Detects creation of the ms-settings\\shell\\open\\command key, or a write to its (Default) or\n    DelegateExecute value, in a user's Classes hive. Sysmon reports a per-user write to\n    HKCU\\Software\\Classes as HKU\\<SID>\\Software\\Classes or HKU\\<SID>_Classes, and the selection\n    accepts both; machine-hive (HKLM) writes are not matched. This is the key the Fodhelper UAC\n    bypass technique hijacks: the key is written by an ordinary user-level process (no\n    administrator rights are needed), and fodhelper.exe, which auto-elevates, then reads it on\n    launch and executes its DelegateExecute/default value at high integrity without a UAC\n    prompt. A write to this key from any process other than fodhelper.exe or the Settings\n    app itself is a strong indicator of this technique in use.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/uac-test-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\nmodified: '2026-10-11'\ntags:\n    - attack.privilege-escalation\n    - attack.stealth\n    - attack.t1548.002\n    - detection.emerging-threats\n    - stp.4\nlogsource:\n    category: registry_event\n    product: windows\n    definition: 'Requires Sysmon Event ID 12 (RegistryEvent create or delete key) and Event ID 13 (RegistryEvent value set), with registry monitoring that covers the per-user Classes hive.'\ndetection:\n    selection_hive:\n        TargetObject|startswith: 'HKU\\'\n    selection_key:\n        EventType:\n            - 'CreateKey'\n            - 'SetValue'\n        TargetObject|endswith:\n            - '\\Software\\Classes\\ms-settings\\shell\\open\\command'\n            - '\\Software\\Classes\\ms-settings\\shell\\open\\command\\(Default)'\n            - '\\Software\\Classes\\ms-settings\\shell\\open\\command\\DelegateExecute'\n            - '_Classes\\ms-settings\\shell\\open\\command'\n            - '_Classes\\ms-settings\\shell\\open\\command\\(Default)'\n            - '_Classes\\ms-settings\\shell\\open\\command\\DelegateExecute'\n    filter_legitimate:\n        Image|endswith:\n            - '\\fodhelper.exe'\n            - '\\SystemSettings.exe'\n    condition: selection_hive and selection_key and not filter_legitimate\nfalsepositives:\n    - Legitimate system administration or registry cleanup tools (extremely rare)\n    - Windows Settings application legitimate use\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--2b9098d4-e759-5c6a-be74-7b8b9d3f830b",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.238869Z",
+            "modified": "2026-10-16T14:33:30.238869Z",
+            "name": "UAC Bypass via CMSTPLUA COM Interface CLSID in Process Command Line",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: UAC Bypass via CMSTPLUA COM Interface CLSID in Process Command Line\nid: 7b3c6d9e-4f2a-5e8b-9c1d-2a3e4f5a6b7c\nstatus: experimental\ndescription: >-\n    Detects the CMSTPLUA/ICMLuaUtil interface CLSID ({6EDD6D74-C007-4E75-B76A-E5740995E24C})\n    appearing literally in a process command line, characteristic of script- or one-liner-based\n    invocations of the CMSTPLUA UAC bypass technique. Split from the source rule's broader\n    DllHost.exe/IntegrityLevel selector, which is retiered separately as a Hunting rule; see\n    Coverage Gaps.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/uac-test-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n    - attack.privilege-escalation\n    - attack.stealth\n    - attack.t1548.002\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_clsid:\n        CommandLine|contains: '{6EDD6D74-C007-4E75-B76A-E5740995E24C}'\n    condition: selection_clsid\nfalsepositives:\n    - Legitimate COM-based elevation by trusted Windows components is not expected to pass this CLSID as literal command-line text (extremely rare).\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--8d0f9ae4-8724-5424-92a0-41faf1d8422a",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.23897Z",
+            "modified": "2026-10-16T14:33:30.23897Z",
+            "name": "Suspicious Child Process Spawned by fodhelper.exe",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Suspicious Child Process Spawned by fodhelper.exe\nid: 2a3b4c5d-6e7f-8a9b-0c1d-2e3f4a5b6c7d\nstatus: experimental\ndescription: >-\n    Detects fodhelper.exe spawning a child process other than the Settings host binaries it\n    normally launches. fodhelper.exe reads HKCU\\Software\\Classes\\ms-settings\\shell\\open\\command\n    and executes whatever it finds there at its own already-elevated integrity level; an\n    unexpected child process is the execution-time signature of the Fodhelper UAC bypass.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/uac-test-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n    - attack.privilege-escalation\n    - attack.stealth\n    - attack.t1548.002\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        ParentImage|endswith: '\\fodhelper.exe'\n    filter_legitimate:\n        Image|endswith:\n            - '\\SystemSettings.exe'\n            - '\\SettingsPageHost.exe'\n    condition: selection and not filter_legitimate\nfalsepositives:\n    - Windows Settings application launching legitimate components\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--d883fa60-519a-5365-bf9d-99c904210c0d",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.239067Z",
+            "modified": "2026-10-16T14:33:30.239067Z",
+            "name": "DllHost.exe Spawning Process at High Integrity Level (Potential COM Elevation Abuse)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: DllHost.exe Spawning Process at High Integrity Level (Potential COM Elevation Abuse)\nid: 09f06ca8-fc43-4c53-a868-3c65eaf85c11\nstatus: experimental\ndescription: >-\n  Hunting selector for DllHost.exe spawning a child process at High integrity level, with no\n  further discriminator. This is the broad half of the source rule's combined CMSTPLUA\n  selector; the narrow, CLSID-anchored half is retiered separately as a Detection rule (see\n  the Sigma Detection Rules above). DllHost.exe legitimately hosts numerous elevated COM\n  scenarios; expect co-fire with benign activity, including some Windows Update components.\nreferences:\n  - https://the-hunters-ledger.com/hunting-detections/uac-test-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n  - attack.privilege-escalation\n  - attack.stealth\n  - attack.t1548.002\n  - detection.emerging-threats\nlogsource:\n  category: process_creation\n  product: windows\ndetection:\n  selection:\n    ParentImage|endswith: '\\DllHost.exe'\n    IntegrityLevel: 'High'\n  condition: selection\nfalsepositives:\n  - Legitimate COM-based elevation by trusted Windows components\n  - Some Windows update processes\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--e0c9d13e-d80a-50a4-9571-c275830abf77",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.239168Z",
+            "modified": "2026-10-16T14:33:30.239168Z",
+            "name": "FleetAgentFUD_WebSocket_C2_Pattern",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: Arsenal-237-109.230.231.37-Malware-Repository\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule FleetAgentFUD_WebSocket_C2_Pattern {\n   meta:\n      description = \"Detects FleetAgentFUD.exe WebSocket C2 implementation via protocol strings, RAT-style JSON registration fields, and the bespoke X-Agent-Secret authentication header. RFC 6455 handshake strings alone are shared by legitimate WebSocket applications — the X-Agent-Secret branch is the only high-confidence path.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/\"\n      date = \"2026-01-12\"\n      family = \"FleetAgentFUD\"\n      malware_type = \"RAT\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"ec392648-d132-4110-b47b-9e53d28f481d\"\n      hash1 = \"072ce701ec0252eeddd6a0501555296bce512a7b90422addbb6d3619ae10f4ff\"\n   strings:\n      // WebSocket handshake headers\n      $ws1 = \"Connection: Upgrade\" ascii wide\n      $ws2 = \"Sec-WebSocket-Key: \" ascii wide\n      $ws3 = \"Sec-WebSocket-Version: 13\" ascii wide\n      $ws4 = \"X-Agent-Secret: \" ascii wide\n\n      // WebSocket message types\n      $msg1 = \"\\\"type\\\":\\\"register\\\"\" ascii wide nocase\n      $msg2 = \"\\\"type\\\":\\\"heartbeat\\\"\" ascii wide nocase\n      $msg3 = \"machine_id\" ascii wide\n      $msg4 = \"hostname\" ascii wide\n      $msg5 = \"os_version\" ascii wide\n      $msg6 = \"agent_ver\" ascii wide\n\n      // Command types\n      $cmd1 = \"cmd_type\" ascii wide\n      $cmd2 = \"command_id\" ascii wide\n      $cmd3 = \"powershell\" ascii wide\n      $cmd4 = \"sysinfo\" ascii wide\n      $cmd5 = \"clipboard\" ascii wide\n\n      // .NET networking APIs\n      $api1 = \"System.Net.Sockets\" ascii\n      $api2 = \"TcpClient\" ascii\n      $api3 = \"NetworkStream\" ascii\n\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 50KB and\n      (\n         // Moderate match: generic WebSocket headers + registration fields (broad — see Rationale)\n         (3 of ($ws*) and 3 of ($msg*)) or\n\n         // Moderate match: WebSocket + command types\n         (2 of ($ws*) and 3 of ($cmd*)) or\n\n         // Higher confidence: bespoke X-Agent-Secret header required (all of $ws*) + .NET networking\n         (all of ($ws*) and any of ($api*))\n      )\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--95559a0e-fc43-5cc5-a1b7-0470c77f4633",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.239267Z",
+            "modified": "2026-10-16T14:33:30.239267Z",
+            "name": "FleetAgentFUD_PowerShell_Bypass",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule FleetAgentFUD_PowerShell_Bypass {\n   meta:\n      description = \"Detects PowerShell Execution Policy bypass command-line strings of the kind embedded in FleetAgentFUD.exe, in any PE file under 100 KB (the rule has no .NET marker and no FleetAgentFUD string, so a native PE carrying the strings also matches). The two exact-literal branches are distinctive; the third (bare powershell + bypass flag + hidden-window flag) overlaps with legitimate silent-installer PowerShell invocations.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/\"\n      date = \"2026-01-12\"\n      family = \"FleetAgentFUD\"\n      malware_type = \"RAT\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"f2387fca-b7b5-47ea-a65e-cf2b1ccb420b\"\n   strings:\n      // PowerShell bypass command-line\n      $ps1 = \"-NoP -NonI -W Hidden -Exec Bypass -C \" ascii wide\n      $ps2 = \"-NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass\" ascii wide\n\n      // PowerShell command variations\n      $ps3 = \"powershell\" ascii wide nocase\n\n      // Suspicious PowerShell usage combinations\n      $ps5 = \"-Exec Bypass\" ascii wide\n      $ps6 = \"-ExecutionPolicy Bypass\" ascii wide\n      $ps7 = \"-W Hidden\" ascii wide\n\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 100KB and\n      (\n         // Exact bypass string match\n         $ps1 or\n         $ps2 or\n\n         // PowerShell + bypass flags (broader — see Rationale)\n         ($ps3 and ($ps5 or $ps6) and $ps7)\n      )\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--15df2c98-9753-5154-bbd2-10a796161232",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.239365Z",
+            "modified": "2026-10-16T14:33:30.239365Z",
+            "name": "FleetAgentFUD_FUD_RAT_Behavioral_Pattern",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule FleetAgentFUD_FUD_RAT_Behavioral_Pattern {\n   meta:\n      description = \"Detects FUD RAT behavioral characteristics via a three-category combination: clipboard access, WebSocket usage, PowerShell execution, system reconnaissance, and file download. Each individual string is a common single word or short API reference — the three-category combination provides broad triage value, not high-confidence detection.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/\"\n      date = \"2026-01-12\"\n      family = \"FleetAgentFUD\"\n      malware_type = \"RAT\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"e123e941-8ccf-4856-abcd-b0e4e58da577\"\n   strings:\n      // Clipboard monitoring\n      $clip1 = \"Get-Clipboard\" ascii wide\n      $clip2 = \"clipboard\" ascii wide nocase\n\n      // WebSocket indicators\n      $ws1 = \"Sec-WebSocket-Key\" ascii wide\n      $ws2 = \"Connection: Upgrade\" ascii wide\n\n      // PowerShell execution\n      $ps1 = \"powershell\" ascii wide nocase\n      $ps2 = \"-Exec Bypass\" ascii wide\n      $ps3 = \"-ExecutionPolicy Bypass\" ascii wide\n\n      // System reconnaissance\n      $recon1 = \"sysinfo\" ascii wide\n      $recon2 = \"processes\" ascii wide\n      $recon3 = \"network\" ascii wide\n      $recon4 = \"users\" ascii wide\n\n      // File download capability\n      $dl1 = \"DownloadFile\" ascii wide\n      $dl2 = \"WebClient\" ascii wide\n\n      // Hidden window execution\n      $hide1 = \"ShowWindow\" ascii\n      $hide2 = \"WindowStyle Hidden\" ascii wide\n\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 50KB and // FUD optimization: small file size\n      (\n         // Clipboard + WebSocket + PowerShell\n         (any of ($clip*) and any of ($ws*) and any of ($ps*)) or\n\n         // WebSocket + Reconnaissance + Download\n         (any of ($ws*) and 2 of ($recon*) and any of ($dl*)) or\n\n         // PowerShell + Clipboard + Hidden Window\n         (any of ($ps*) and any of ($clip*) and any of ($hide*))\n      )\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--1af94d21-9efa-526b-82c4-c57cdf15fac4",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.239462Z",
+            "modified": "2026-10-16T14:33:30.239462Z",
+            "name": "FleetAgent_Family_General",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule FleetAgent_Family_General {\n   meta:\n      description = \"Detects FleetAgent malware family characteristics (FUD and Advanced variants) via the family's own namespace/naming strings, configuration field + version pairing, and Microsoft.NET.Runtime masquerading combined with suspicious APIs. Every branch evades on a rebrand or namespace rename; the version-string branch also risks matching unrelated .NET software.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/\"\n      date = \"2026-01-12\"\n      modified = \"2026-10-11\"\n      family = \"FleetAgent\"\n      malware_type = \"RAT\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"dd7bcee3-74e4-407f-bfe5-fe12656ef66c\"\n      related_samples = \"FleetAgentAdvanced.exe, FleetAgentFUD.exe\"\n   strings:\n      // Family naming patterns\n      $name1 = \"FleetAgent\" ascii wide nocase\n      $name2 = \"FleetAgentFUD\" ascii wide\n      $name3 = \"FleetAgentAdvanced\" ascii wide\n      $name4 = \"Microsoft.NET.Runtime\" ascii wide // Common masquerading\n\n      // Agent version strings\n      $ver1 = \"agent_ver\" ascii wide\n      $ver2 = \"3.0.0\" ascii wide\n\n      // Configuration variables\n      $cfg1 = \"machine_id\" ascii wide\n      $cfg2 = \"hostname\" ascii wide\n      $cfg3 = \"agent_ver\" ascii wide\n\n      // Common APIs\n      $api1 = \"VirtualProtect\" ascii\n      $api2 = \"ToBase64String\" ascii\n      $api3 = \"GetProcAddress\" ascii\n\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 500KB and\n      (\n         // Direct family name match (the three coined names, not the Microsoft.NET.Runtime masquerade string)\n         any of ($name1, $name2, $name3) or\n\n         // Configuration + Version pattern (broad — see Rationale)\n         (2 of ($cfg*) and any of ($ver*)) or\n\n         // Microsoft.NET masquerading + suspicious APIs\n         ($name4 and 2 of ($api*))\n      )\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--d54383aa-1801-5b7e-aff4-f27acef8a9a5",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.23956Z",
+            "modified": "2026-10-16T14:33:30.23956Z",
+            "name": "PowerShell Execution Policy Bypass with Hidden Window from an AppData Parent",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: PowerShell Execution Policy Bypass with Hidden Window from an AppData Parent\nid: 662e65e5-b424-40e0-9630-af1d2ccf3b3f\nstatus: experimental\ndescription: >-\n    Detects powershell.exe launched with an execution-policy bypass and a hidden window\n    by a parent process under AppData. The command-line shape is the one the FleetAgentFUD\n    report records, but nothing in the rule ties a hit to that family, and per-user\n    auto-updaters produce the same shape (see the false positives).\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\nmodified: '2026-10-11'\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection_powershell:\n        Image|endswith: '\\powershell.exe'\n        CommandLine|contains|all:\n            - '-Exec'\n            - 'Bypass'\n    selection_parent:\n        ParentImage|contains: '\\AppData\\'\n    selection_hidden:\n        CommandLine|contains:\n            - '-W Hidden'\n            - '-WindowStyle Hidden'\n    filter_appx_management:\n        CommandLine|contains:\n            - 'Get-AppxPackage'\n            - 'Add-AppxPackage'\n            - 'Remove-AppxPackage'\n    condition: selection_powershell and selection_parent and selection_hidden and not filter_appx_management\nfalsepositives:\n    - Legitimate software installers using PowerShell from AppData (verify digital signature)\n    - Administrative scripts executed from user directories (review context)\n    - >-\n      AppX/MSIX package management invoked as a documented step inside a\n      self-updater's install flow, such as VS Code's\n      Get-AppxPackage/Add-AppxPackage/Remove-AppxPackage cleanup. Excluded at\n      source by filter_appx_management.\n    - >-\n      Squirrel- and Electron-style auto-updaters more generally (VS Code,\n      Discord, Slack, GitHub Desktop). These stage under %LocalAppData% and\n      launch a hidden bypass PowerShell as their normal update path, which is\n      the same four-condition shape this rule selects on. Only the AppX-cmdlet\n      subset is excluded at source; the rest still require local scoping.\nlevel: medium\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - attack.stealth\n    - attack.t1685\n    - attack.defense-impairment\n    - detection.emerging-threats",
+            "pattern_type": "sigma",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--1940b0ca-9bfe-5c2d-aac9-2f04ab049f99",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.239658Z",
+            "modified": "2026-10-16T14:33:30.239658Z",
+            "name": "PowerShell Get-Clipboard Script Block Execution (Base Rule)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: PowerShell Get-Clipboard Script Block Execution (Base Rule)\nid: b8eb1824-6711-4e88-ab71-46b63250b1a5\nstatus: experimental\ndescription: >-\n  Base rule (not alerting on its own): a single PowerShell Get-Clipboard script\n  block execution. Paired with the companion FleetAgentFUD Repeated Clipboard\n  Monitoring correlation rule below, which flags repeated executions indicating\n  clipboard data theft.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n    - attack.collection\n    - attack.t1115\n    - detection.emerging-threats\n\nlogsource:\n    product: windows\n    category: ps_script\ndetection:\n    selection:\n        ScriptBlockText|contains: 'Get-Clipboard'\n    condition: selection\nfalsepositives:\n    - >-\n      Legitimate clipboard management tools and user productivity automation scripts.\n      Not alerting on its own; reviewed only in combination with the correlation rule.\nlevel: informational\nname: powershell_get_clipboard_execution\n---\ntitle: FleetAgentFUD Repeated Clipboard Monitoring Correlation\nid: 75c96f1a-c463-4961-851e-a4ec93b4e5d1\nstatus: experimental\ndescription: >-\n  Correlates 10 or more PowerShell Get-Clipboard script block executions by the\n  same computer and user within one hour, indicating clipboard data theft\n  (FleetAgentFUD credential theft technique). Get-Clipboard is a legitimate,\n  non-renameable cmdlet name, giving this correlation real technique-level\n  durability beyond a simple literal match.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n    - attack.collection\n    - attack.t1115\n    - detection.emerging-threats\ncorrelation:\n    type: event_count\n    rules:\n        - powershell_get_clipboard_execution\n    group-by:\n        - ComputerName\n        - User\n    timespan: 1h\n    condition:\n        gte: 10\nfalsepositives:\n    - Legitimate clipboard management tools\n    - User productivity automation scripts (verify legitimacy)\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--a59a4150-8e5b-5e18-bf1a-7ee755197a7d",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.239753Z",
+            "modified": "2026-10-16T14:33:30.239753Z",
+            "name": "Executable File Created in Public or Windows Temp Folders by an AppData Process",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Executable File Created in Public or Windows Temp Folders by an AppData Process\nid: 85477610-82e0-4256-8906-3fe3109937eb\nstatus: experimental\ndescription: >-\n    Detects creation of an .exe, .dll or .scr file under C:\\Users\\Public\\ or C:\\Windows\\Temp\\\n    by a process running from AppData. This is the staging pattern in the FleetAgentFUD report,\n    but the rule tests no download, no network activity and no family indicator, so any\n    AppData application that drops an executable there matches.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\nmodified: '2026-10-11'\nlogsource:\n    product: windows\n    category: file_event\ndetection:\n    selection_file:\n        TargetFilename|contains:\n            - 'C:\\Users\\Public\\'\n            - 'C:\\Windows\\Temp\\'\n        TargetFilename|endswith:\n            - '.exe'\n            - '.dll'\n            - '.scr'\n    selection_process:\n        Image|contains: '\\AppData\\'\n    condition: selection_file and selection_process\nfalsepositives:\n    - Software installers extracting temporary files\n    - Update mechanisms using Public/Temp folders (common for AppData-rooted auto-updaters)\nlevel: medium\ntags:\n    - attack.execution\n    - attack.t1204.002\n    - attack.command-and-control\n    - attack.t1105\n    - detection.emerging-threats",
+            "pattern_type": "sigma",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--9128e355-0569-5f03-a9f9-5cf7d933dbf7",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.239852Z",
+            "modified": "2026-10-16T14:33:30.239852Z",
+            "name": "VirtualProtect Call Setting RWX Protection from an AppData Process",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: VirtualProtect Call Setting RWX Protection from an AppData Process\nid: 1e04bbc1-1f12-41c7-a11d-0cc31e963f60\nstatus: experimental\ndescription: >-\n    Detects an API-call event whose call trace names VirtualProtect and whose protection is\n    PAGE_EXECUTE_READWRITE, from a process image under AppData and not under Program Files or\n    Windows. The rule has no .NET test and no family indicator, and .NET JIT compilation also\n    matches. It reads an API-call event that stock Sysmon does not record.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\nmodified: '2026-10-11'\nlogsource:\n    product: windows\n    category: api_call\n    definition: 'Requires EDR or enriched API-call telemetry that records the called function, its protection argument and a call trace with function names. Stock Sysmon has no API-call event.'\ndetection:\n    selection:\n        CallTrace|contains: 'VirtualProtect'\n        Protection: 'PAGE_EXECUTE_READWRITE'\n        Image|contains: '\\AppData\\'\n    filter_legitimate:\n        Image|startswith:\n            - 'C:\\Program Files\\'\n            - 'C:\\Windows\\'\n    condition: selection and not filter_legitimate\nfalsepositives:\n    - .NET Just-In-Time (JIT) compilation (a normal, frequent part of CLR operation, not a rare exception)\n    - Legitimate .NET applications using dynamic code generation\nlevel: medium\ntags:\n    - attack.stealth\n    - attack.privilege-escalation\n    - attack.t1055\n    - detection.emerging-threats",
+            "pattern_type": "sigma",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--041656bd-24a0-505f-a5a9-08d07dedcc53",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.239956Z",
+            "modified": "2026-10-16T14:33:30.239956Z",
+            "name": "PowerShell Execution Policy Bypass from an AppData Parent (Broad Variant)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: PowerShell Execution Policy Bypass from an AppData Parent (Broad Variant)\nid: cfe3cad4-9134-4d9e-8681-3199404e6170\nstatus: experimental\ndescription: >-\n  Detects PowerShell launched with the contiguous text -Exec Bypass from a parent\n  process running under AppData. It overlaps the PowerShell Execution Policy Bypass\n  with Hidden Window from an AppData Parent rule without being a subset of it: it has no\n  hidden-window requirement and no AppX-cmdlet exclusion, and it requires the two words\n  contiguous. It is a single process-creation selector and not a correlation: the\n  rule used to be titled a multi-stage attack pattern correlation, and Sigma's\n  single-event-source model cannot express the original three-stage (process, network\n  and PowerShell) design across separate log sources.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\nmodified: '2026-10-11'\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection_powershell:\n        Image|endswith: '\\powershell.exe'\n        CommandLine|contains: '-Exec Bypass'\n    selection_parent:\n        ParentImage|contains: '\\AppData\\'\n    condition: selection_powershell and selection_parent\nfalsepositives:\n    - Complex legitimate software launching PowerShell from user directories\n    - Broader population than the hidden-window sibling rule in one respect (no hidden-window requirement, no AppX-cmdlet exclusion) and narrower in another (the words must be contiguous)\nlevel: medium\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - detection.emerging-threats",
+            "pattern_type": "sigma",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--e719d9b7-86ec-52d3-b65e-84596eda775f",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.240053Z",
+            "modified": "2026-10-16T14:33:30.240053Z",
+            "name": "FleetAgentFUD Rapid System Reconnaissance Command (Base Rule)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: FleetAgentFUD Rapid System Reconnaissance Command (Base Rule)\nid: 1316ab23-3a9b-40e7-a037-2ec3c4535404\nname: fleetagentfud_recon_command\nstatus: experimental\ndescription: >-\n  Base rule (not alerting on its own): a single system reconnaissance command\n  (sysinfo, processes, network, users, disk) typical of FleetAgentFUD automated\n  profiling, launched from a parent process rooted in AppData, Temp, or\n  Users\\Public — the FleetAgentFUD staging locations. Paired with the companion\n  Rapid System Reconnaissance Pattern correlation rule below, which flags 3 or\n  more of these events from the same host in a short window.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection_powershell:\n        Image|endswith: '\\powershell.exe'\n        CommandLine|contains:\n            - 'Get-WmiObject Win32_'\n            - 'Get-Process'\n            - 'Get-LocalUser'\n            - 'ipconfig /all'\n            - 'Win32_LogicalDisk'\n    selection_parent:\n        ParentImage|contains:\n            - '\\AppData\\'\n            - '\\Temp\\'\n            - '\\Users\\Public\\'\n    condition: selection_powershell and selection_parent\nfalsepositives:\n    - >-\n      System administration scripts launched from AppData/Temp (e.g. installer\n      post-run steps). Not alerting on its own; reviewed only in combination with\n      the correlation rule.\n    - IT inventory tools staged in Temp during deployment\nlevel: informational\ntags:\n    - attack.discovery\n    - attack.t1082\n    - attack.t1033\n    - detection.emerging-threats\n---\ntitle: FleetAgentFUD Rapid System Reconnaissance Pattern\nid: a7b8c9d0-a1b2-4c3d-9e4f-56a7b8c9d0e7\nstatus: experimental\ndescription: >-\n  Correlates 3 or more system reconnaissance command events (sysinfo, processes,\n  network, users, disk) from the same host within a short window, typical of\n  FleetAgentFUD automated profiling. The count is of events, not of distinct commands,\n  so one command run three times also fires; a Sigma value_count correlation would\n  express distinctness, but its Elastic EQL conversion joins on the same value, which\n  is the opposite, so event_count is kept. Individual commands are routine IT-administration\n  commands; the correlation adds real but limited scoping value.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\nmodified: '2026-10-11'\ncorrelation:\n    type: event_count\n    rules:\n        - fleetagentfud_recon_command\n    group-by:\n        - ComputerName\n    timespan: 5m\n    condition:\n        gte: 3\nfalsepositives:\n    - System administration scripts\n    - IT inventory tools\nlevel: medium\ntags:\n    - attack.discovery\n    - attack.t1082\n    - attack.t1033\n    - detection.emerging-threats",
+            "pattern_type": "sigma",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--e5a49974-68f8-5ce2-a655-3b2d41c6245b",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.240171Z",
+            "modified": "2026-10-16T14:33:30.240171Z",
+            "name": "THL DETECT FleetAgentFUD X-Agent-Secret WebSocket Authentication Header (Custom C2 Protocol Indicator)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT FleetAgentFUD X-Agent-Secret WebSocket Authentication Header (Custom C2 Protocol Indicator)\"; flow:established,to_server; http.header_names; content:\"X-Agent-Secret\"; reference:url,the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/; classtype:trojan-activity; sid:2100022; rev:2; metadata:author The_Hunters_Ledger, date 2026-01-12;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--3d1c3a67-31c8-5bbe-af16-58a6b116e699",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.240304Z",
+            "modified": "2026-10-16T14:33:30.240304Z",
+            "name": "THL HUNT FleetAgentFUD Default .NET WebClient User-Agent + WebSocket Upgrade (Custom C2 Client Indicator)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT FleetAgentFUD Default .NET WebClient User-Agent + WebSocket Upgrade (Custom C2 Client Indicator)\"; flow:established,to_server; http.user_agent; content:\"Mozilla/4.0 (compatible|3b| MSIE 6.0|3b| Windows NT 5.2|3b| .NET CLR\"; http.header; content:\"Connection|3a 20|Upgrade\"; content:\"Upgrade|3a 20|websocket\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/; classtype:trojan-activity; sid:2100023; rev:3; metadata:author The_Hunters_Ledger, date 2026-01-12;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--bfbf65ab-05a3-5fbd-aa0c-69c9a03defb4",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.240419Z",
+            "modified": "2026-10-16T14:33:30.240419Z",
+            "name": "MAL_FleetAgentAdvanced_Dropper_Hash_Function_Combo",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: Arsenal-237-109.230.231.37-Malware-Repository\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\nimport \"hash\"\n\nrule MAL_FleetAgentAdvanced_Dropper_Hash_Function_Combo {\n   meta:\n      description = \"Detects FleetAgentAdvanced.exe dropper via exact file hash, or via a combination of at least 3 of 6 distinctive, operator-coined internal .NET method names (DropEmbeddedAgent, SetPersistence, CreateShortcut, StartWatchdog, RunWatchdog, InjectIntoProcess) that survive a masquerade-branding rebrand.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/fleetagentadvanced-exe-detections/\"\n      date = \"2026-01-12\"\n      hash1 = \"172258e53b9506a7671deab25d2ad360cd833a4942609f1a4836d305ffe4578b\"\n      family = \"FleetAgentAdvanced\"\n      malware_type = \"Dropper-Trojan\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"bf7dbbc0-99af-557d-96a8-69a6247efa88\"\n   strings:\n      $func1 = \"DropEmbeddedAgent\" ascii wide\n      $func2 = \"SetPersistence\" ascii wide\n      $func3 = \"CreateShortcut\" ascii wide\n      $func4 = \"StartWatchdog\" ascii wide\n      $func5 = \"RunWatchdog\" ascii wide\n      $func6 = \"InjectIntoProcess\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 500KB and\n      (\n         hash.sha256(0, filesize) == \"172258e53b9506a7671deab25d2ad360cd833a4942609f1a4836d305ffe4578b\" or\n         3 of ($func*)\n      )\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--519db76c-e15a-527b-a0ff-731af24ccfdf",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.24054Z",
+            "modified": "2026-10-16T14:33:30.24054Z",
+            "name": "SUSP_FleetAgentAdvanced_NET_Masquerade_Combination",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule SUSP_FleetAgentAdvanced_NET_Masquerade_Combination {\n   meta:\n      description = \"Detects PE files (the rule does not test for a .NET or CLR header) combining FleetAgentAdvanced-style configuration variable names (WATCHDOG_MUTEX, AGENT_SECRET, EMBEDDED_AGENT, etc.) or generic process-injection API references with the Microsoft .NET Runtime Optimization masquerade strings. Brittle to a masquerade-naming rebrand — treat as a scoping lead, not an alert.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/fleetagentadvanced-exe-detections/\"\n      date = \"2026-01-12\"\n      modified = \"2026-10-11\"\n      family = \"FleetAgentAdvanced\"\n      malware_type = \"Dropper-Trojan-Masquerade-Component\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"4a8d104a-d581-5c8b-bd16-1c72215b0e87\"\n   strings:\n      $config1 = \"EMBEDDED_AGENT\" ascii wide\n      $config2 = \"INSTALL_NAME\" ascii wide\n      $config3 = \"STARTUP_NAME\" ascii wide\n      $config4 = \"WATCHDOG_MUTEX\" ascii wide\n      $config5 = \"MUTEX_NAME\" ascii wide\n      $config6 = \"SERVER_HOST\" ascii wide\n      $config7 = \"AGENT_SECRET\" ascii wide\n\n      $persist1 = \"RuntimeOptimization.exe\" ascii wide\n      $persist2 = \"Microsoft .NET Runtime Optimization\" ascii wide\n      $persist3 = \"Microsoft\\\\CLR\" ascii wide\n\n      $api1 = \"VirtualAllocEx\" ascii\n      $api2 = \"WriteProcessMemory\" ascii\n      $api3 = \"CreateRemoteThread\" ascii\n      $api4 = \"NtUnmapViewOfSection\" ascii\n      $api5 = \"PAGE_EXECUTE_READWRITE\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 500KB and\n      (\n         (2 of ($config*) and any of ($persist*)) or\n         (any of ($api*) and any of ($persist*))\n      )\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--caf972de-1fb4-5501-96f8-a8c02f2945a2",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.240681Z",
+            "modified": "2026-10-16T14:33:30.240681Z",
+            "name": "FleetAgentAdvanced Persistence with Microsoft .NET Masquerading",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: FleetAgentAdvanced Persistence with Microsoft .NET Masquerading\nid: ccf14e14-5328-4d1b-98b9-27088663076e\nstatus: experimental\ndescription: >-\n  Detects creation of a Registry Run-key value whose data references Microsoft,\n  .NET, and Runtime branding together while the value data also contains an\n  AppData path — a location legitimate Microsoft .NET Runtime components never\n  use. The rule does not test that the path ends in an executable or that the\n  file exists.\n  Hunting-tier: the masquerade branding is attacker-chosen and renameable, and\n  the AppData-location half of the check is common among legitimate consumer\n  auto-start software on its own.\nreferences:\n  - https://the-hunters-ledger.com/hunting-detections/fleetagentadvanced-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n  - attack.persistence\n  - attack.privilege-escalation\n  - attack.stealth\n  - attack.t1547.001\n  - attack.t1036.005\n  - detection.emerging-threats\nlogsource:\n  category: registry_set\n  product: windows\ndetection:\n  selection:\n    TargetObject|contains: '\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\'\n    Details|contains|all:\n      - 'Microsoft'\n      - '.NET'\n      - 'Runtime'\n    Details|contains: '\\AppData\\'\n  condition: selection\nfalsepositives:\n  - Unsigned .NET development tools using Microsoft/.NET/Runtime naming in AppData (verify legitimacy)\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--423a6868-c2dd-588b-97f4-a4eea0c63e99",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.240777Z",
+            "modified": "2026-10-16T14:33:30.240777Z",
+            "name": "FleetAgentAdvanced-Style .NET Runtime Optimization Scheduled Task Creation (Base Rule)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: FleetAgentAdvanced-Style .NET Runtime Optimization Scheduled Task Creation (Base Rule)\nid: 2e8398f6-7a6a-4a8d-8aa2-f0cbbb346af5\nname: fleetagentadvanced_schtasks_masquerade_create\nstatus: experimental\ndescription: >-\n  Base rule (not alerting on its own): schtasks.exe invoked with /create and a\n  command line referencing the \".NET Runtime Optimization\" masquerade phrase.\n  Paired with the task.xml-deletion base rule below via the correlation rule,\n  which flags the create-then-delete anti-forensics sequence characteristic of\n  this dropper family.\nreferences:\n  - https://the-hunters-ledger.com/hunting-detections/fleetagentadvanced-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n  - attack.persistence\n  - attack.privilege-escalation\n  - attack.execution\n  - attack.t1053.005\n  - detection.emerging-threats\nlogsource:\n  category: process_creation\n  product: windows\ndetection:\n  selection:\n    Image|endswith: '\\schtasks.exe'\n    CommandLine|contains|all:\n      - '/create'\n      - '.NET Runtime Optimization'\n  condition: selection\nfalsepositives:\n  - >-\n    Legitimate .NET Framework maintenance tasks using this exact phrase are not\n    expected — verify digital signature if reviewed in isolation. Not alerting\n    on its own; reviewed only in combination with the paired task.xml-deletion\n    base rule.\nlevel: informational\n---\ntitle: task.xml Deletion by Non-System Process (Base Rule)\nid: 047f19e5-e1a1-484c-b825-24fb822125a5\nname: fleetagentadvanced_taskxml_deletion\nstatus: experimental\ndescription: >-\n  Base rule (not alerting on its own): deletion of a file named exactly\n  task.xml by a process outside System32/SysWOW64. Paired with the\n  scheduled-task-creation base rule above via the correlation rule below.\nreferences:\n  - https://the-hunters-ledger.com/hunting-detections/fleetagentadvanced-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n  - attack.stealth\n  - attack.t1070.004\n  - detection.emerging-threats\nlogsource:\n  category: file_delete\n  product: windows\ndetection:\n  selection:\n    TargetFilename|endswith: '\\task.xml'\n    Image|contains: '.exe'\n  filter_legitimate:\n    Image|contains:\n      - '\\System32\\'\n      - '\\SysWOW64\\'\n  condition: selection and not filter_legitimate\nfalsepositives:\n  - >-\n    Legitimate installers or maintenance scripts that export and then delete a\n    scheduled-task XML file named task.xml (uncommon). Not alerting on its\n    own; reviewed only in combination with the paired scheduled-task-creation\n    base rule.\nlevel: informational\n---\ntitle: FleetAgentAdvanced-Class Scheduled Task Create-Then-Delete Anti-Forensics Sequence\nid: 049f9083-fc9c-4c12-94d0-13538a2cc3cc\nstatus: experimental\ndescription: >-\n  Fires when the \".NET Runtime Optimization\" masquerade scheduled-task\n  creation is followed by a task.xml deletion by a non-system process on the\n  same host within a short window (creation first, then deletion). Neither base signal alone is reliable — the\n  masquerade phrase is attacker-chosen and renameable, and a bare task.xml\n  deletion has no inherent malicious meaning — but this dropper family creates\n  the scheduled task and deletes its exported task.xml within roughly 120\n  milliseconds as a deliberate anti-forensics step, a sequence a coincidental\n  unrelated program is not expected to reproduce.\nreferences:\n  - https://the-hunters-ledger.com/hunting-detections/fleetagentadvanced-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\nmodified: '2026-10-11'\ntags:\n  - attack.persistence\n  - attack.privilege-escalation\n  - attack.execution\n  - attack.stealth\n  - attack.t1053.005\n  - attack.t1070.004\n  - detection.emerging-threats\ncorrelation:\n  type: temporal_ordered\n  rules:\n    - fleetagentadvanced_schtasks_masquerade_create\n    - fleetagentadvanced_taskxml_deletion\n  group-by:\n    - host.name\n  timespan: 5m\nfalsepositives:\n  - >-\n    A future build renaming both the masquerade phrase and the exported XML\n    filename evades this correlation entirely — both remain the same\n    attacker-chosen naming decision, so this is a scoping lead for this\n    specific build family, not a durable technique-level detector.\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--b7cad4df-270f-5753-a2a2-b14fb2c41f0a",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.240884Z",
+            "modified": "2026-10-16T14:33:30.240884Z",
+            "name": ".NET Base64 Decode and Byte-Array File Write Named in a Process-Access Call Trace",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: .NET Base64 Decode and Byte-Array File Write Named in a Process-Access Call Trace\nid: d45cafee-0934-456d-9471-1cefbe03602a\nstatus: experimental\ndescription: >-\n  Retained as a record of an intended hunt, with no demonstrated telemetry source (see\n  the definition). Detects a process-access event whose call trace names both FromBase64String\n  and WriteAllBytes, from a source image ending in .exe, a pattern for decoding\n  an embedded Base64 payload and writing it to disk that legitimate installers\n  unpacking bundled resources also use. Nothing here tests that the written file\n  is executed. The CallTrace field carries resolved method names only in some EDR\n  or enriched telemetry; stock Sysmon records module and offset frames, so the rule\n  cannot match on a default Sysmon profile.\nreferences:\n  - https://the-hunters-ledger.com/hunting-detections/fleetagentadvanced-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\nmodified: '2026-10-11'\ntags:\n  - attack.stealth\n  - attack.t1027\n  - detection.emerging-threats\nlogsource:\n  category: process_access\n  product: windows\n  definition: 'No telemetry source is demonstrated for this rule. It would need a process-access event whose CallTrace carries resolved .NET method names for both a decode and a file write; stock Sysmon CallTrace holds module and offset frames, so it cannot match there, and no EDR or enriched profile providing such an event has been named or shown.'\ndetection:\n  selection:\n    CallTrace|contains|all:\n      - 'FromBase64String'\n      - 'WriteAllBytes'\n    SourceImage|endswith: '.exe'\n  filter_legitimate:\n    SourceImage|startswith:\n      - 'C:\\Program Files\\'\n      - 'C:\\Windows\\'\n  condition: selection and not filter_legitimate\nfalsepositives:\n  - Legitimate installers using Base64-encoded resources\nlevel: low",
+            "pattern_type": "sigma",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--3af0d646-80fd-5161-9779-3fea2a1defa9",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.240987Z",
+            "modified": "2026-10-16T14:33:30.240987Z",
+            "name": "Remote Thread Created by a FleetAgentAdvanced Binary or an AppData Process",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Remote Thread Created by a FleetAgentAdvanced Binary or an AppData Process\nid: 1ca5cfa6-f7af-4dde-80b1-87edbf3c637b\nstatus: experimental\ndescription: >-\n    Detects a remote thread created in another process (Sysmon create-remote-thread\n    event) by a process image named RuntimeOptimization.exe or FleetAgentAdvanced.exe,\n    or by any process image running from AppData and not from Program Files. The\n    FleetAgentAdvanced report records the remote-injection APIs as present in the\n    binary and never seen firing, so this is a lead for that capability and not a\n    detection of an observed injection. It replaces an earlier selector that looked\n    for the API names VirtualAllocEx, WriteProcessMemory and CreateRemoteThread in\n    the process-access CallTrace field; Sysmon records module and offset frames\n    there and not function names, so that selector could not match stock Sysmon.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/fleetagentadvanced-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\nmodified: '2026-10-11'\ntags:\n    - attack.privilege-escalation\n    - attack.stealth\n    - attack.t1055\n    - detection.emerging-threats\nlogsource:\n    category: create_remote_thread\n    product: windows\ndetection:\n    selection_family:\n        SourceImage|endswith:\n            - '\\RuntimeOptimization.exe'\n            - '\\FleetAgentAdvanced.exe'\n    selection_appdata:\n        SourceImage|contains: '\\AppData\\'\n    filter_legitimate:\n        SourceImage|contains:\n            - '\\Program Files\\'\n            - '\\Program Files (x86)\\'\n    condition: 1 of selection_* and not filter_legitimate\nfalsepositives:\n    - Legitimate development tools and debuggers from AppData\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--fbf12cc5-49fc-5dfd-992e-29f747e9bee3",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.241079Z",
+            "modified": "2026-10-16T14:33:30.241079Z",
+            "name": "MAL_XWorm_V2_PowerShell_Recon_Templates",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: XWorm-RAT-v2.4.0-OpenDirectory-109.230.231.37\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule MAL_XWorm_V2_PowerShell_Recon_Templates {\n   meta:\n      description = \"Detects agent_xworm_v2.exe-class XWorm RAT v2.4.0 samples via embedded PowerShell reconnaissance command templates - literal, abbreviated-flag ('-NoP -C') one-liners for process, service, and domain-role enumeration baked into the binary as string constants.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/\"\n      date = \"2026-01-12\"\n      hash1 = \"f8e7e73bf2b26635800a042e7890a35f7376508f288a1ced3d3e12b173c5cb7e\"\n      hash2 = \"7c624e0b11c817d516f9411972191c4627fd2e53\"\n      hash3 = \"4164a1945d8373255a5cb7e42f05c259\"\n      family = \"XWorm\"\n      malware_type = \"RAT\"\n      campaign = \"XWorm-RAT-v2.4.0-OpenDirectory-109.230.231.37\"\n      id = \"1c927802-6eb2-5209-af09-3590a2c9cbf3\"\n   strings:\n      $ps1 = \"-NoP -C Get-Process|Sort CPU\" ascii wide\n      $ps2 = \"-NoP -C Get-Service|?{$_.Status -eq 'Running'}\" ascii wide\n      $ps3 = \"-NoP -C Get-WmiObject Win32_ComputerSystem\" ascii wide\n      $ps4 = \"PartOfDomain,Domain,DomainRole\" ascii wide\n      $ps5 = \"Select -First 20 Name,Id,CPU,WS\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 100KB and\n      3 of them\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--44c6d480-7070-557d-93b3-66a9e47e12e0",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.24117Z",
+            "modified": "2026-10-16T14:33:30.24117Z",
+            "name": "MAL_XWorm_V2_Family_Combination",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule MAL_XWorm_V2_Family_Combination {\n   meta:\n      description = \"Detects XWorm RAT v2.x variants via a combination of the operator's AgentSec_ authentication-secret naming convention, WebSocket C2 namespace usage, and a broader fallback combination of .NET framework markers, PowerShell reconnaissance API references, hidden-window stealth calls, and Base64 encoding. The fallback branches are individually common in unrelated .NET software - treat hits outside the AgentSec_/WebSocket branch as lower-confidence.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/\"\n      date = \"2026-01-12\"\n      hash1 = \"f8e7e73bf2b26635800a042e7890a35f7376508f288a1ced3d3e12b173c5cb7e\"\n      family = \"XWorm\"\n      malware_type = \"RAT\"\n      campaign = \"XWorm-RAT-v2.4.0-OpenDirectory-109.230.231.37\"\n      id = \"121d800f-9d9a-5289-9bc6-3884e2f89e9b\"\n   strings:\n      $dotnet1 = \"System.Net.WebSockets\" ascii wide\n      $dotnet2 = \"System.Diagnostics.Process\" ascii wide\n      $dotnet3 = \"System.Security.Cryptography\" ascii wide\n      $dotnet4 = \"mscorlib\" ascii wide\n\n      $version_pattern = /2\\.[0-9]\\.[0-9]/ ascii wide\n      $websocket = \"WebSocket\" ascii wide nocase\n      $agent_sec = \"AgentSec_\" ascii wide\n\n      $ps1 = \"Get-Process\" ascii wide nocase\n      $ps2 = \"Get-Service\" ascii wide nocase\n      $ps3 = \"Win32_ComputerSystem\" ascii wide\n\n      $stealth1 = \"ShowWindow\" ascii wide\n      $stealth2 = \"GetConsoleWindow\" ascii wide\n      $encode = \"ToBase64String\" ascii wide\n\n      $md5 = \"MD5\" ascii wide\n      $hash = \"ComputeHash\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 500KB and\n      (\n         ($dotnet1 and $websocket and $agent_sec and $version_pattern) or\n         (2 of ($dotnet*) and 2 of ($ps*) and 1 of ($stealth*) and $encode) or\n         ($md5 and $hash and $websocket and 1 of ($ps*))\n      )\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--9a8906ab-47f5-5bcc-98c4-1a42ae1c76bf",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.241261Z",
+            "modified": "2026-10-16T14:33:30.241261Z",
+            "name": "MAL_XWorm_AgentSec_Secret_Pattern",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule MAL_XWorm_AgentSec_Secret_Pattern {\n   meta:\n      description = \"Detects the XWorm AgentSec_ authentication-secret naming pattern - a 9-character literal prefix followed by a 40-50 character alphanumeric secret value, used as this operator's shared C2 authentication credential. Generalizes beyond the specific secret instance observed in agent_xworm_v2.exe to catch future builds sharing this naming convention.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/\"\n      date = \"2026-01-12\"\n      hash1 = \"f8e7e73bf2b26635800a042e7890a35f7376508f288a1ced3d3e12b173c5cb7e\"\n      family = \"XWorm\"\n      malware_type = \"RAT\"\n      campaign = \"XWorm-RAT-v2.4.0-OpenDirectory-109.230.231.37\"\n      id = \"9438bdfd-1af1-5dfa-b0ba-d7ed7ecacd58\"\n   strings:\n      $pattern1 = /AgentSec_[0-9A-Za-z]{40,50}/ ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      $pattern1\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--72455971-f4a9-5130-bf49-c682c0d48c80",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.241362Z",
+            "modified": "2026-10-16T14:33:30.241362Z",
+            "name": "SUSP_XWorm_V2_WebSocket_Generic_Combination",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule SUSP_XWorm_V2_WebSocket_Generic_Combination {\n   meta:\n      description = \"Detects .NET executables combining WebSocket client API usage with C2-adjacent terminology (Heartbeat/Reconnect/Frame) - a broad toolkit-family heuristic matching XWorm v2.x's WebSocket C2 implementation style. Not specific to XWorm; expect co-fire with legitimate .NET WebSocket applications.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/\"\n      date = \"2026-01-12\"\n      hash1 = \"f8e7e73bf2b26635800a042e7890a35f7376508f288a1ced3d3e12b173c5cb7e\"\n      family = \"XWorm\"\n      malware_type = \"RAT\"\n      campaign = \"XWorm-RAT-v2.4.0-OpenDirectory-109.230.231.37\"\n      id = \"95dd3d1d-0d7b-51c2-a09c-ebd45e04b1af\"\n   strings:\n      $ws1 = \"System.Net.WebSockets\" ascii wide\n      $ws2 = \"WebSocketState\" ascii wide\n      $ws3 = \"SendAsync\" ascii wide\n      $ws4 = \"ReceiveAsync\" ascii wide\n\n      $c2_1 = \"Heartbeat\" ascii wide nocase\n      $c2_2 = \"Reconnect\" ascii wide nocase\n      $c2_3 = \"Frame\" ascii wide\n\n      $dotnet = \"mscorlib\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 200KB and\n      $dotnet and\n      3 of ($ws*) and\n      2 of ($c2_*)\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--4a05ffb2-c407-57e0-8cfa-c524211310ea",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.241491Z",
+            "modified": "2026-10-16T14:33:30.241491Z",
+            "name": "XWorm RAT v2.x PowerShell Reconnaissance Process Launch - Get-Process Enumeration (Base Rule)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: XWorm RAT v2.x PowerShell Reconnaissance Process Launch - Get-Process Enumeration (Base Rule)\nid: 6fd742c2-b2cd-4c83-be66-06dd562e200d\nname: xworm_v2_recon_getprocess\nstatus: experimental\ndescription: >-\n    Base rule (not alerting on its own): PowerShell process launched with the\n    -NoP -C Get-Process|Sort CPU command-line fragment. Paired with two other\n    base rules via the correlation rule below, which flags all three of XWorm\n    RAT v2.x's embedded reconnaissance commands launching on the same host in\n    a short window.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - attack.discovery\n    - attack.t1057\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection:\n        Image|endswith: '\\powershell.exe'\n        CommandLine|contains: '-NoP -C Get-Process|Sort CPU'\n    condition: selection\nfalsepositives:\n    - >-\n        Legitimate inventory or RMM scripting using this exact literal command\n        fragment is uncommon but not impossible. Not alerting on its own; reviewed\n        only in combination with the two paired base rules.\nlevel: informational\n---\ntitle: XWorm RAT v2.x PowerShell Reconnaissance Process Launch - Get-Service Enumeration (Base Rule)\nid: 7632ad33-882e-4595-8bf6-42cfbeeef52c\nname: xworm_v2_recon_getservice\nstatus: experimental\ndescription: >-\n    Base rule (not alerting on its own): PowerShell process launched with the\n    -NoP -C Get-Service command-line fragment. Paired with two other base rules\n    via the correlation rule below.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - attack.discovery\n    - attack.t1007\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection:\n        Image|endswith: '\\powershell.exe'\n        CommandLine|contains: '-NoP -C Get-Service|?{$_.Status -eq'\n    condition: selection\nfalsepositives:\n    - >-\n        Legitimate inventory or RMM scripting using this exact literal command\n        fragment is uncommon but not impossible. Not alerting on its own; reviewed\n        only in combination with the two paired base rules.\nlevel: informational\n---\ntitle: XWorm RAT v2.x PowerShell Reconnaissance Process Launch - Domain Role Enumeration (Base Rule)\nid: 7540e848-d3a6-43de-90b7-f55c30b3ffc8\nname: xworm_v2_recon_domainrole\nstatus: experimental\ndescription: >-\n    Base rule (not alerting on its own): PowerShell process launched with the\n    -NoP -C Get-WmiObject Win32_ComputerSystem command-line fragment. Paired\n    with two other base rules via the correlation rule below.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - attack.discovery\n    - attack.t1482\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection:\n        Image|endswith: '\\powershell.exe'\n        CommandLine|contains: '-NoP -C Get-WmiObject Win32_ComputerSystem'\n    condition: selection\nfalsepositives:\n    - >-\n        Legitimate inventory or RMM scripting using this exact literal command\n        fragment is uncommon but not impossible. Not alerting on its own; reviewed\n        only in combination with the two paired base rules.\nlevel: informational\n---\ntitle: XWorm RAT v2.x Full PowerShell Reconnaissance Sequence on Same Host\nid: 4b27faae-f708-4555-930c-c2054c9f060b\nstatus: experimental\ndescription: >-\n    Fires when all three of XWorm RAT v2.x's embedded PowerShell reconnaissance\n    commands (process enumeration, service enumeration, and domain-role\n    discovery via WMI) launch as separate processes on the same host within a\n    short window. Each command is a distinct powershell.exe invocation using\n    the abbreviated -NoP -C flag combination, matching the malware's documented\n    embedded reconnaissance templates. No individual command is alerting-grade\n    alone, but a legitimate administrative workflow launching all three of\n    these exact literal one-liners together within 5 minutes is implausible.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - attack.discovery\n    - attack.t1082\n    - detection.emerging-threats\ncorrelation:\n    type: temporal\n    rules:\n        - xworm_v2_recon_getprocess\n        - xworm_v2_recon_getservice\n        - xworm_v2_recon_domainrole\n    group-by:\n        - host.name\n    timespan: 5m\nfalsepositives:\n    - >-\n        A coordinated administrative script deliberately running all three\n        literal one-liners together within 5 minutes is implausible outside\n        this malware's embedded reconnaissance routine.\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--cef3f0bf-5974-566b-b818-02ddea291804",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.241587Z",
+            "modified": "2026-10-16T14:33:30.241587Z",
+            "name": "PowerShell -NoP -C Execution from a User-Writable-Directory Parent (XWorm V2)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: PowerShell -NoP -C Execution from a User-Writable-Directory Parent (XWorm V2)\nid: caaeb533-e084-40bc-a870-81f8b6c5c4a7\nstatus: experimental\ndescription: >-\n  Detects PowerShell execution using the abbreviated -NoP -C flag combination\n  from a parent .exe running in a user-writable directory (AppData, Temp, or\n  Users), excluding parent paths that contain the text Microsoft or Visual\n  Studio (a path-text filter; no signature is checked). This process\n  ancestry pattern matches XWorm RAT v2.x's execution style but is not\n  XWorm-specific - legitimate Electron-based application updaters and RMM\n  tooling commonly spawn PowerShell the same way, so hits require analyst\n  review.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\nmodified: '2026-10-10'\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection_powershell:\n        Image|endswith: 'powershell.exe'\n        CommandLine|contains: '-NoP -C'\n    selection_parent:\n        ParentImage|contains:\n            - '\\AppData\\'\n            - '\\Temp\\'\n            - '\\Users\\'\n        ParentImage|endswith: '.exe'\n    filter:\n        ParentImage|contains:\n            - 'Microsoft'\n            - 'Visual Studio'\n    condition: selection_powershell and selection_parent and not filter\nfalsepositives:\n    - >-\n      Legitimate Electron-based application auto-updaters (Slack, Discord, Teams,\n      VS Code extensions), RMM tooling, and software installers routinely spawn\n      PowerShell with abbreviated flags from AppData or Temp.\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--b0915c47-8764-55d9-b831-441f57edfa6d",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.241683Z",
+            "modified": "2026-10-16T14:33:30.241683Z",
+            "name": "THL HUNT XWormV2-109.230.231.37 AgentSec Authentication Secret Pattern in TCP Payload (Unconfirmed Wire Encoding)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert tcp $HOME_NET any -> any any (msg:\"THL HUNT XWormV2-109.230.231.37 AgentSec Authentication Secret Pattern in TCP Payload (Unconfirmed Wire Encoding)\"; flow:established,to_server; content:\"AgentSec_\"; nocase; pcre:\"/AgentSec_[0-9A-Za-z]{40,50}/i\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/; classtype:trojan-activity; sid:1000023; rev:2; metadata:author The_Hunters_Ledger, date 2026-01-12;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--53c080e7-127a-5051-a7ec-4dcc5d6ac775",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.241779Z",
+            "modified": "2026-10-16T14:33:30.241779Z",
+            "name": "MAL_Windows_XWorm_PowerShell_Recon_Templates",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: Arsenal-237-109.230.231.37-Malware-Repository\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule MAL_Windows_XWorm_PowerShell_Recon_Templates {\n   meta:\n      description = \"Detects XWorm's embedded PowerShell reconnaissance one-liners: process/CPU enumeration, running-service enumeration, and domain-membership enumeration via WMI, all invoked with the abbreviated -NoP -C flag ordering.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/agent-xworm-exe-detections/\"\n      date = \"2026-01-12\"\n      family = \"XWorm\"\n      malware_type = \"RAT-Recon-Component\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"feb50486-2a18-4a49-94a1-17e2e6318018\"\n      hash1 = \"0ec3fca58ef8f0d9f098cd749dd209fccda7cbf68c1eecf836668e5dabd6f3bc\"\n   strings:\n      $ps1 = \"-NoP -C Get-Process|Sort CPU\" ascii wide\n      $ps2 = \"-NoP -C Get-Service|?{$_.Status -eq 'Running'}\" ascii wide\n      $ps3 = \"-NoP -C Get-WmiObject Win32_ComputerSystem\" ascii wide\n      $ps4 = \"PartOfDomain,Domain,DomainRole\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      2 of them\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--d332db27-3824-5930-8f36-2963a5b29300",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.241879Z",
+            "modified": "2026-10-16T14:33:30.241879Z",
+            "name": "MAL_Windows_XWorm_AgentSec_Authentication_Pattern",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule MAL_Windows_XWorm_AgentSec_Authentication_Pattern {\n   meta:\n      description = \"Detects the AgentSec_ authentication-secret naming convention used by this XWorm build family's C2 handshake. Matches the naming pattern rather than one build's literal secret value, so it survives secret rotation across rebuilds.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/agent-xworm-exe-detections/\"\n      date = \"2026-01-12\"\n      family = \"XWorm\"\n      malware_type = \"RAT-Authentication-Pattern\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"c228a7b7-15c9-4b26-ab4c-09569a1d5ea0\"\n      hash1 = \"0ec3fca58ef8f0d9f098cd749dd209fccda7cbf68c1eecf836668e5dabd6f3bc\"\n   strings:\n      $pattern1 = /AgentSec_[0-9A-Za-z]{40,50}/ ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      $pattern1\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--52d42988-5eb9-59b8-90e1-d1ca59dfe011",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.241976Z",
+            "modified": "2026-10-16T14:33:30.241976Z",
+            "name": "MAL_Windows_XWorm_RAT_Capability_Combination",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule MAL_Windows_XWorm_RAT_Capability_Combination {\n   meta:\n      description = \"Detects XWorm RAT variants via a combination of family-specific constant/method names (HEARTBEAT_MS, RECONNECT_MS, SERVER_HOST, AGENT_SECRET, HandleCmd, GetMachineId, GetSysInfo, BuildFrame) and generic .NET networking/encoding/console-hiding strings. The generic-string branches are broad by design — expect co-fire with legitimate .NET remote-access and automation tooling.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/agent-xworm-exe-detections/\"\n      date = \"2026-01-12\"\n      family = \"XWorm\"\n      malware_type = \"RAT\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"70dc0a6e-4ca6-4028-bb23-09fdd34169df\"\n   strings:\n      // .NET framework indicators\n      $dotnet1 = \"System.Net.Sockets\" ascii wide\n      $dotnet2 = \"System.Diagnostics.Process\" ascii wide\n      $dotnet3 = \"System.Security.Cryptography\" ascii wide\n      $dotnet4 = \"mscorlib\" ascii wide\n\n      // XWorm configuration constants\n      $config1 = \"HEARTBEAT_MS\" ascii wide\n      $config2 = \"RECONNECT_MS\" ascii wide\n      $config3 = \"SERVER_HOST\" ascii wide\n      $config4 = \"AGENT_SECRET\" ascii wide\n\n      // XWorm command handlers\n      $cmd1 = \"HandleCmd\" ascii wide\n      $cmd2 = \"GetMachineId\" ascii wide\n      $cmd3 = \"GetSysInfo\" ascii wide\n      $cmd4 = \"BuildFrame\" ascii wide\n\n      // Stealth and encoding\n      $stealth1 = \"ShowWindow\" ascii wide\n      $stealth2 = \"GetConsoleWindow\" ascii wide\n      $encode1 = \"ToBase64String\" ascii wide\n      $encode2 = \"FromBase64String\" ascii wide\n\n      // Network operations\n      $net1 = \"TcpClient\" ascii wide\n      $net2 = \"NetworkStream\" ascii wide\n      $net3 = \"GetStream\" ascii wide\n      $net4 = \"_heartbeatThread\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 500KB and\n      (\n         // Strong XWorm signature: config + command handlers + network\n         (2 of ($config*) and 2 of ($cmd*) and 2 of ($net*)) or\n\n         // Alternative: .NET + stealth + encoding + network\n         (2 of ($dotnet*) and 1 of ($stealth*) and 1 of ($encode*) and 2 of ($net*)) or\n\n         // Authentication secret pattern (common across XWorm variants)\n         (1 of ($config*) and 1 of ($encode*) and $net4)\n      )\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--6fbdf7c0-8e4e-569c-9465-ab4cc0dd8480",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.24207Z",
+            "modified": "2026-10-16T14:33:30.24207Z",
+            "name": "PowerShell -NoP -C Execution from a User-Writable-Directory Parent (XWorm Agent)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: PowerShell -NoP -C Execution from a User-Writable-Directory Parent (XWorm Agent)\nid: 01027829-5061-9820-bbcd-60efca256c90\nstatus: experimental\ndescription: >-\n    Detects powershell.exe launched with the abbreviated -NoP -C flags by a parent .exe running from a\n    user-writable directory (AppData, Temp or Users), a process pattern consistent with XWorm's embedded\n    reconnaissance command execution. The rule does not test whether the parent is a .NET binary.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/agent-xworm-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\nmodified: '2026-10-10'\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection_powershell:\n        Image|endswith: 'powershell.exe'\n        CommandLine|contains: '-NoP -C'\n    selection_parent:\n        ParentImage|contains:\n            - '\\AppData\\'\n            - '\\Temp\\'\n            - '\\Users\\'\n        ParentImage|endswith: '.exe'\n    filter:\n        ParentImage|contains:\n            - 'Microsoft'\n            - 'Visual Studio'\n    condition: selection_powershell and selection_parent and not filter\nfalsepositives:\n    - Legitimate development tools, software installers, and administrative scripts that invoke PowerShell with abbreviated flags from a user-profile path.\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--bb95dbcf-e8ac-52ef-a284-c773b7597e96",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.242167Z",
+            "modified": "2026-10-16T14:33:30.242167Z",
+            "name": "File Creation Matching XWorm Naming Convention",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: File Creation Matching XWorm Naming Convention\nid: 0ec3fca5-8ef8-f0d9-f098-cd749dd209aa\nstatus: experimental\ndescription: Detects creation of executable files matching XWorm's default/observed naming convention (xworm, xclient, agent_xworm). A single-literal naming pattern, trivially evaded by a custom builder output filename — retained as a scoping lead for unmodified or default-named deployments.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/agent-xworm-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n    - attack.command-and-control\n    - attack.t1105\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    category: file_event\ndetection:\n    selection:\n        TargetFilename|contains:\n            - 'xworm'\n            - 'xclient'\n            - 'agent_xworm'\n        TargetFilename|endswith: '.exe'\n    condition: selection\nfalsepositives:\n    - Security research and malware-analysis environments; a renamed build defeats this selector entirely.\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--730df533-c08c-5003-94fe-ffd98e6e22d5",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.242265Z",
+            "modified": "2026-10-16T14:33:30.242265Z",
+            "name": "THL DETECT Arsenal-237 XWorm AgentSec Authentication Secret Pattern (C2 Handshake Indicator)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert tcp $HOME_NET any -> any any (msg:\"THL DETECT Arsenal-237 XWorm AgentSec Authentication Secret Pattern (C2 Handshake Indicator)\"; flow:to_server,established; content:\"AgentSec_\"; nocase; pcre:\"/AgentSec_[0-9A-Za-z]{40,50}/i\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/agent-xworm-exe-detections/; classtype:trojan-activity; sid:1000013; rev:2; metadata:author The_Hunters_Ledger, date 2026-01-12;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--ca974c7d-65b2-59aa-b02d-509d0e85d58f",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.24236Z",
+            "modified": "2026-10-16T14:33:30.24236Z",
+            "name": "TOOLKIT_PoetRAT_Golang_Multi_Signal_Combination",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: Arsenal-237-109.230.231.37-Malware-Repository\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule TOOLKIT_PoetRAT_Golang_Multi_Signal_Combination {\n   meta:\n      description = \"Detects agent.exe-class PoetRAT-attributed Golang RAT samples via a multi-signal combination: Windows-Defender-masquerade persistence strings, Golang compilation artifacts, anti-debugging APIs, and cryptographic/network/surveillance capability imports. The two known sample hashes are in the meta fields as provenance and in the IOC feed for exact matching; the rule logic does not test them.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/agent-exe-detections/\"\n      date = \"2026-01-12\"\n      modified = \"2026-10-10\"\n      family = \"PoetRAT\"\n      malware_type = \"RAT\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"cf6db0bf-fc1e-482b-a028-3dd99d2219e9\"\n      hash1 = \"e7f9a29dde307afff4191dbc14a974405f287b10f359a39305dccdc0ee949385\"\n      hash2 = \"4e856041018242c62b3848d63b94c3763beda01648d3139060700c11e9334ad1\"\n   strings:\n      $str_windefendersvc = \"WinDefenderSvc.exe\" ascii wide nocase\n      $str_defender_update = \"WindowsDefenderUpdate\" ascii wide nocase\n      $str_marker = \".wd_installed\" ascii wide\n\n      $golang_runtime1 = \"runtime.main\" ascii\n      $golang_runtime2 = \"runtime.goexit\" ascii\n      $golang_runtime3 = \"go.buildid\" ascii\n      $golang_runtime4 = \"runtime.morestack\" ascii\n\n      $antidebug1 = \"NtQueryInformationProcess\" ascii wide\n      $antidebug2 = \"SetConsoleCtrlHandler\" ascii wide\n      $antidebug3 = \"IsDebuggerPresent\" ascii wide\n\n      $crypto1 = \"crypto/aes\" ascii\n      $crypto2 = \"crypto/rsa\" ascii\n      $crypto3 = \"crypto/sha\" ascii\n      $crypto4 = \"chacha20\" ascii nocase\n      $crypto5 = \"golang.org/x/crypto\" ascii\n\n      $net1 = \"net.Listen\" ascii\n      $net2 = \"net.Dial\" ascii\n      $net3 = \"TCPConn\" ascii\n      $net4 = \"net/http\" ascii\n\n      $surv1 = \"GetAsyncKeyState\" ascii wide\n      $surv2 = \"SetWindowsHookEx\" ascii wide\n      $surv3 = \"GetForegroundWindow\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      (\n         (\n            (2 of ($str_*)) and\n            (2 of ($golang_runtime*)) and\n            (1 of ($antidebug*)) and\n            (1 of ($crypto*))\n         ) or\n         (\n            (3 of ($golang_runtime*)) and\n            (2 of ($crypto*)) and\n            (1 of ($str_*)) and\n            (1 of ($net*)) and\n            (1 of ($surv*))\n         )\n      )\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--b3527896-aa32-5831-a62a-7c69a8dd6369",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.242455Z",
+            "modified": "2026-10-16T14:33:30.242455Z",
+            "name": "TOOLKIT_PoetRAT_WinDefender_Masquerade_Persistence_Pair",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule TOOLKIT_PoetRAT_WinDefender_Masquerade_Persistence_Pair {\n   meta:\n      description = \"Detects PoetRAT-class droppers embedding the paired Windows-Defender-masquerade persistence artifact strings (WinDefenderSvc.exe + WindowsDefenderUpdate registry value, WinDefenderSvc.exe + the Startup-folder path string, or the .wd_installed marker alongside Golang runtime strings). Brittle to a naming-convention rebrand — treat as a scoping lead, not an alert.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/agent-exe-detections/\"\n      date = \"2026-01-12\"\n      modified = \"2026-10-10\"\n      family = \"PoetRAT\"\n      malware_type = \"RAT-Persistence-Component\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"0c69a4b5-b6b2-44fd-baf2-36bddc32fe6f\"\n      hash1 = \"4e856041018242c62b3848d63b94c3763beda01648d3139060700c11e9334ad1\"\n   strings:\n      $defender_svc = \"WinDefenderSvc.exe\" ascii wide nocase\n      $defender_update = \"WindowsDefenderUpdate\" ascii wide nocase\n      $startup_path = \"Start Menu\\\\Programs\\\\Startup\" ascii wide nocase\n      $marker_file = \".wd_installed\" ascii wide\n\n      $go1 = \"Go build ID:\" ascii\n      $go2 = \"runtime.main\" ascii\n      $go3 = \"runtime.goexit\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      (\n         ($defender_svc and $defender_update) or\n         ($defender_svc and $startup_path) or\n         ($marker_file and any of ($go*))\n      )\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--9205b02d-0732-5c10-a991-b55ebfc18d9e",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.242549Z",
+            "modified": "2026-10-16T14:33:30.242549Z",
+            "name": "TOOLKIT_Golang_RAT_Generic_Capability_Combination",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule TOOLKIT_Golang_RAT_Generic_Capability_Combination {\n   meta:\n      description = \"Detects Golang-compiled executables combining input-capture/service-creation capability APIs with crypto and network stdlib imports — a broad toolkit-family heuristic for Golang RATs, not specific to any one campaign. Expect co-fire with legitimate Golang network/remote-access tooling.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/agent-exe-detections/\"\n      date = \"2026-01-12\"\n      family = \"Golang-RAT-Generic\"\n      malware_type = \"RAT\"\n      campaign = \"Arsenal-237-109.230.231.37-Malware-Repository\"\n      id = \"a65492ab-4dc6-481e-b4bf-29ca070acdae\"\n   strings:\n      $go_runtime1 = \"runtime.main\" ascii\n      $go_runtime2 = \"runtime.goexit\" ascii\n      $go_runtime3 = \"runtime.morestack\" ascii\n      $go_runtime4 = \"go.buildid\" ascii\n\n      $cap_keylog = \"GetAsyncKeyState\" ascii wide\n      $cap_keylog2 = \"SetWindowsHookEx\" ascii wide\n      $cap_rdp = \"TermService\" ascii wide nocase\n      $cap_ps = \"powershell\" ascii wide nocase\n      $cap_service = \"CreateService\" ascii wide\n\n      $crypto_aes = \"crypto/aes\" ascii\n      $crypto_tls = \"crypto/tls\" ascii\n      $crypto_modern = \"chacha20\" ascii nocase\n\n      $net_tcp = \"net.Dial\" ascii\n      $net_http = \"net/http\" ascii\n      $net_listen = \"net.Listen\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      (2 of ($go_runtime*)) and\n      (2 of ($cap_*)) and\n      (1 of ($crypto_*)) and\n      (1 of ($net_*))\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--92e44b81-be48-54ba-ad31-3cb6af37585c",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T14:33:30.242644Z",
+            "modified": "2026-10-16T14:33:30.242644Z",
+            "name": "WinDefenderSvc.exe Startup Folder Drop (Base Rule)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: WinDefenderSvc.exe Startup Folder Drop (Base Rule)\nid: ca0e1263-d7d0-4c19-bdce-a837dfda222b\nname: windefendersvc_startup_drop\nstatus: experimental\ndescription: >-\n  Base rule (not alerting on its own): creation of a file named exactly\n  WinDefenderSvc.exe in a user Startup folder. Paired with the registry-write\n  base rule below via the correlation rule, which flags co-occurrence of both\n  PoetRAT-class dual-persistence artifacts on the same host.\nreferences:\n  - https://the-hunters-ledger.com/hunting-detections/agent-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n  - attack.persistence\n  - attack.privilege-escalation\n  - attack.stealth\n  - attack.t1547.001\n  - attack.t1036.005\n  - detection.emerging-threats\nlogsource:\n  product: windows\n  category: file_event\ndetection:\n  selection:\n    TargetFilename|endswith: '\\Start Menu\\Programs\\Startup\\WinDefenderSvc.exe'\n  condition: selection\nfalsepositives:\n  - >-\n    Legitimate software using this exact filename is not expected — Microsoft-signed\n    Defender components do not install here. Not alerting on its own; reviewed only\n    in combination with the paired registry-write base rule.\nlevel: informational\n---\ntitle: WindowsDefenderUpdate Registry Run Key Write (Base Rule)\nid: f3c242f1-521f-448b-9d7c-a613c9975090\nname: windowsdefenderupdate_run_key_write\nstatus: experimental\ndescription: >-\n  Base rule (not alerting on its own): creation of a CurrentVersion\\Run value\n  named WindowsDefenderUpdate whose data does not point at the legitimate\n  Windows Defender install path. Paired with the Startup-folder-drop base rule\n  above via the correlation rule below.\nreferences:\n  - https://the-hunters-ledger.com/hunting-detections/agent-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n  - attack.persistence\n  - attack.privilege-escalation\n  - attack.stealth\n  - attack.t1547.001\n  - attack.t1036.005\n  - detection.emerging-threats\nlogsource:\n  product: windows\n  category: registry_set\ndetection:\n  selection:\n    TargetObject|endswith: '\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\WindowsDefenderUpdate'\n  filter:\n    Details|contains: 'C:\\Program Files\\Windows Defender\\'\n  condition: selection and not filter\nfalsepositives:\n  - >-\n    Legitimate Windows Defender update mechanisms are not expected to use this value\n    path (extremely rare). Not alerting on its own; reviewed only in combination with\n    the paired Startup-folder base rule.\nlevel: informational\n---\ntitle: PoetRAT-Class Dual Persistence — Startup Drop + Run Key Write on Same Host\nid: 9ac725e3-2b02-488d-aef0-4e2bdb843ff1\nstatus: experimental\ndescription: >-\n  Fires when both the WinDefenderSvc.exe Startup-folder drop and the\n  WindowsDefenderUpdate Run-key write are observed on the same host within a\n  short window. Neither base signal alone is reliable (both are single,\n  attacker-chosen literal names that a rebrand trivially evades), but the\n  malware's own dual-persistence design — redundant survival so removing one\n  mechanism does not eliminate the other — means a genuine infection produces\n  both artifacts together, close in time, which a coincidental unrelated\n  installer would not.\nreferences:\n  - https://the-hunters-ledger.com/hunting-detections/agent-exe-detections/\nauthor: The Hunters Ledger\ndate: '2026-01-12'\ntags:\n  - attack.persistence\n  - attack.privilege-escalation\n  - attack.stealth\n  - attack.t1547.001\n  - attack.t1036.005\n  - detection.emerging-threats\ncorrelation:\n  type: temporal\n  rules:\n    - windefendersvc_startup_drop\n    - windowsdefenderupdate_run_key_write\n  group-by:\n    - host.name\n  timespan: 10m\nfalsepositives:\n  - >-\n    A coordinated rebrand of both artifact names in a future build evades this\n    correlation entirely — both remain the same attacker-chosen naming\n    decision, so this is a scoping lead for this specific build family, not a\n    durable technique-level detector.\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-01-12T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
             "type": "report",
             "spec_version": "2.1",
             "id": "report--f7d6132b-1864-5856-bdc1-38468af72c7f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-09-19T20:27:54.185364Z",
-            "modified": "2026-09-19T20:27:54.185364Z",
+            "modified": "2026-10-16T14:33:30.242886Z",
             "name": "Arsenal-237 R&D Repository — Executive Overview",
             "report_types": [
                 "threat-report"
             ],
             "published": "2026-01-12T00:00:00Z",
             "object_refs": [
-                "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+                "indicator--385eb354-c423-59bb-a16a-22587ff6d446",
+                "indicator--d4ad2aa9-1712-5762-aa71-514da3d81808",
+                "indicator--d2a4f953-58c5-5f1e-8d8d-022c8a7d6a57",
+                "indicator--b596cf83-c20a-52e7-b6bc-7991dd3ae0da",
+                "indicator--1e61e484-c5e8-5c94-a735-fe4b43e40fcc",
+                "indicator--f9d99f98-0b5a-5213-b835-1de3d9e79e13",
+                "indicator--6a94689f-7867-5ec3-be0b-05e26ec6ef7b",
+                "indicator--635e274c-edb1-5aa9-b3ce-c1ea2a93e6e7",
+                "indicator--2b9098d4-e759-5c6a-be74-7b8b9d3f830b",
+                "indicator--8d0f9ae4-8724-5424-92a0-41faf1d8422a",
+                "indicator--d883fa60-519a-5365-bf9d-99c904210c0d",
+                "indicator--e0c9d13e-d80a-50a4-9571-c275830abf77",
+                "indicator--95559a0e-fc43-5cc5-a1b7-0470c77f4633",
+                "indicator--15df2c98-9753-5154-bbd2-10a796161232",
+                "indicator--1af94d21-9efa-526b-82c4-c57cdf15fac4",
+                "indicator--d54383aa-1801-5b7e-aff4-f27acef8a9a5",
+                "indicator--1940b0ca-9bfe-5c2d-aac9-2f04ab049f99",
+                "indicator--a59a4150-8e5b-5e18-bf1a-7ee755197a7d",
+                "indicator--9128e355-0569-5f03-a9f9-5cf7d933dbf7",
+                "indicator--041656bd-24a0-505f-a5a9-08d07dedcc53",
+                "indicator--e719d9b7-86ec-52d3-b65e-84596eda775f",
+                "indicator--e5a49974-68f8-5ce2-a655-3b2d41c6245b",
+                "indicator--3d1c3a67-31c8-5bbe-af16-58a6b116e699",
+                "indicator--bfbf65ab-05a3-5fbd-aa0c-69c9a03defb4",
+                "indicator--519db76c-e15a-527b-a0ff-731af24ccfdf",
+                "indicator--caf972de-1fb4-5501-96f8-a8c02f2945a2",
+                "indicator--423a6868-c2dd-588b-97f4-a4eea0c63e99",
+                "indicator--b7cad4df-270f-5753-a2a2-b14fb2c41f0a",
+                "indicator--3af0d646-80fd-5161-9779-3fea2a1defa9",
+                "indicator--fbf12cc5-49fc-5dfd-992e-29f747e9bee3",
+                "indicator--44c6d480-7070-557d-93b3-66a9e47e12e0",
+                "indicator--9a8906ab-47f5-5bcc-98c4-1a42ae1c76bf",
+                "indicator--72455971-f4a9-5130-bf49-c682c0d48c80",
+                "indicator--4a05ffb2-c407-57e0-8cfa-c524211310ea",
+                "indicator--cef3f0bf-5974-566b-b818-02ddea291804",
+                "indicator--b0915c47-8764-55d9-b831-441f57edfa6d",
+                "indicator--53c080e7-127a-5051-a7ec-4dcc5d6ac775",
+                "indicator--d332db27-3824-5930-8f36-2963a5b29300",
+                "indicator--52d42988-5eb9-59b8-90e1-d1ca59dfe011",
+                "indicator--6fbdf7c0-8e4e-569c-9465-ab4cc0dd8480",
+                "indicator--bb95dbcf-e8ac-52ef-a284-c773b7597e96",
+                "indicator--730df533-c08c-5003-94fe-ffd98e6e22d5",
+                "indicator--ca974c7d-65b2-59aa-b02d-509d0e85d58f",
+                "indicator--b3527896-aa32-5831-a62a-7c69a8dd6369",
+                "indicator--9205b02d-0732-5c10-a991-b55ebfc18d9e",
+                "indicator--92e44b81-be48-54ba-ad31-3cb6af37585c"
             ],
             "labels": [
                 "Toolkit",

@@ -526,13 +526,13 @@
       "file": "arsenal-237-new-files.json",
       "url": "https://the-hunters-ledger.com/stix/arsenal-237-new-files.json",
       "report_url": "https://the-hunters-ledger.com/reports/arsenal-237-new-files/",
-      "bundle_id": "bundle--b8d3110b-4139-4579-8f0c-89bd7ef922a8",
+      "bundle_id": "bundle--10d92ce0-b2ec-413d-9b99-dc704e87df51",
       "report_id": "report--8f9bc8c6-2c90-58f4-be2e-d7b64faec4ab",
-      "sha256": "0483b63c0417e58c9858cb6cc17c6ecc88a7e4425ee46e6444b6009fb0faa709",
-      "bytes": 5562,
-      "objects": 11,
-      "indicators": 0,
-      "modified": "2026-09-19T20:27:55.348312Z"
+      "sha256": "0347d499e0cf90f7a313477237c19bbe4d951aa9af954fdff8cd5b5d5e7ce7bb",
+      "bytes": 197583,
+      "objects": 87,
+      "indicators": 76,
+      "modified": "2026-10-16T14:33:29.969364Z"
     },
     {
       "slug": "109.230.231.37-Executive-Overview",
@@ -541,13 +541,13 @@
       "file": "109.230.231.37-Executive-Overview.json",
       "url": "https://the-hunters-ledger.com/stix/109.230.231.37-Executive-Overview.json",
       "report_url": "https://the-hunters-ledger.com/reports/109.230.231.37-Executive-Overview/",
-      "bundle_id": "bundle--35aec711-2d5b-4d23-b87d-9a7f1c6e77ff",
+      "bundle_id": "bundle--09b3b7eb-70c6-4a8e-a69b-697ed7859d80",
       "report_id": "report--f7d6132b-1864-5856-bdc1-38468af72c7f",
-      "sha256": "74102184b153c9f9333efb20dcd657704d66ef8846c54153e1f19b783ad75881",
-      "bytes": 2016,
-      "objects": 3,
-      "indicators": 0,
-      "modified": "2026-09-19T20:27:54.185364Z"
+      "sha256": "4125cd3c979343bc97b8ff656c0b64c9bc1287242faf778633152195f651d30c",
+      "bytes": 128632,
+      "objects": 49,
+      "indicators": 46,
+      "modified": "2026-10-16T14:33:30.242886Z"
     },
     {
       "slug": "dual-rat-analysis",
