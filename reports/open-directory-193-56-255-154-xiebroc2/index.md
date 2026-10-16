@@ -1150,7 +1150,7 @@ The following table shows HIGH confidence technique mappings drawn directly from
 
 Complete detection rules are available in the dedicated detection file:
 
-**[hunting-detections/open-directory-193-56-255-154-xiebroc2-detections.md](/hunting-detections/open-directory-193-56-255-154-xiebroc2-detections/)**
+**[/hunting-detections/open-directory-193-56-255-154-xiebroc2-detections/](/hunting-detections/open-directory-193-56-255-154-xiebroc2-detections/)**
 
 Detection coverage includes:
 - **4 YARA rules:** XiebroC2 v3.1 static detection (AES key, typo strings, RunPE error strings); Covenant GruntStager static detection; PowerShell fileless loader detection

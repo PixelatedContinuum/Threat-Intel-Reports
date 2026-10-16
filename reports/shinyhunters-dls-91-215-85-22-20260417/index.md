@@ -612,7 +612,7 @@ The most operationally valuable detections, in priority order:
 3. **Upstream chain detection.** This is more valuable than DLS-side detection but requires SaaS log access. Watch for: help-desk MFA reset for an account followed within minutes by a Salesforce or Okta SSO from anomalous geography; OAuth Connected App authorization in Salesforce (especially Data Loader clones) by a recently-MFA-reset account; Salesforce bulk export volumes that exceed user historical baseline.
 4. **Ransom-note string anchors.** `INFORMATION.txt` matches against the exact text in Section 3.1 are diagnostic. Useful for incident-response triage when an organization suspects DLS exposure but cannot yet confirm.
 
-Full YARA, Sigma, and Suricata rules are published separately in [`shinyhunters-dls-91-215-85-22-20260417-detections.md`](/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/) (source file: `shinyhunters-dls-91-215-85-22-20260417-detections.md`).
+Full YARA, Sigma, and Suricata rules are published separately in [`/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/`](/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/) (source file: `shinyhunters-dls-91-215-85-22-20260417-detections.md`).
 
 **Full validated IOC feed** (machine-readable JSON suitable for SIEM / EDR ingestion) is published at: [/ioc-feeds/shinyhunters-dls-91-215-85-22-20260417-iocs.json](/ioc-feeds/shinyhunters-dls-91-215-85-22-20260417-iocs.json).
 

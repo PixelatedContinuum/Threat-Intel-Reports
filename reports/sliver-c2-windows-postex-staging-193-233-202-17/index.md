@@ -739,7 +739,7 @@ The feed carries an explicit exclusions list and it is not padding. Twelve value
 ## 13. Detection and Response Guidance
 {: .hl-tier-2}
 
-The complete rule set is published separately at [`sliver-c2-windows-postex-staging-193-233-202-17-detections.md`](/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/), and it carries 18 rules: 4 YARA, 12 Sigma and 2 Suricata. Ten are alerting-grade Detection rules and eight are broader Hunting rules for scoping. Every one of them keys on a behaviour or a build artifact rather than an address, because this operator has already demonstrated five domain rotations, three addresses and twenty per-build ports.
+The complete rule set is published separately at [`/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/`](/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/), and it carries 18 rules: 4 YARA, 12 Sigma and 2 Suricata. Ten are alerting-grade Detection rules and eight are broader Hunting rules for scoping. Every one of them keys on a behaviour or a build artifact rather than an address, because this operator has already demonstrated five domain rotations, three addresses and twenty per-build ports.
 
 ### The three anchors that survive rotation
 

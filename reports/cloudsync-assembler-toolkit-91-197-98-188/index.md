@@ -849,7 +849,7 @@ Credentials are defanged throughout to first eight and last four characters, bec
 ## 13. Detection and Response Guidance
 {: .hl-tier-2}
 
-The full rule set is published separately at **[`cloudsync-assembler-toolkit-91-197-98-188-detections.md`](/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/)**, organized by component rather than by campaign, because each component needs to attribute correctly for the rules to stay useful when the operator swaps one out. Coverage is **7 YARA rules, 18 Sigma rules and 4 Suricata signatures**, split into Detection tier for the high-fidelity alerting-grade rules and Hunting tier for the broader ones that expect analyst review.
+The full rule set is published separately at **[`/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/`](/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/)**, organized by component rather than by campaign, because each component needs to attribute correctly for the rules to stay useful when the operator swaps one out. Coverage is **7 YARA rules, 18 Sigma rules and 4 Suricata signatures**, split into Detection tier for the high-fidelity alerting-grade rules and Hunting tier for the broader ones that expect analyst review.
 
 ### Where to start
 

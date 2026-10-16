@@ -1322,7 +1322,7 @@ This section provides a brief orientation for teams who have confirmed or suspec
 - Isolate affected endpoints to prevent further C2 communication and lateral movement via Ngrok tunneling
 - Rotate credentials for any accounts accessible from the compromised endpoint (browser-stored passwords, Steam, cryptocurrency wallets)
 - Review and revoke any ScreenConnect sessions originating from or managed by 151.245.112.70
-- Deploy detection signatures across endpoint and network monitoring platforms: 23 detection rules across 3 layers (7 YARA, 10 Sigma, 6 Suricata), see Section 13 and [/hunting-detections/shadow-xworm-opendirectory-detections.md](/hunting-detections/shadow-xworm-opendirectory-detections/)
+- Deploy detection signatures across endpoint and network monitoring platforms: 23 detection rules across 3 layers (7 YARA, 10 Sigma, 6 Suricata), see Section 13 and [/hunting-detections/shadow-xworm-opendirectory-detections/](/hunting-detections/shadow-xworm-opendirectory-detections/)
 
 ### Operational Impact Timeline
 
@@ -1418,7 +1418,7 @@ If an endpoint compromise is confirmed, the following response phases apply:
 
 ### Detection Coverage
 
-23 detection rules covering all three detection layers. Full rules: **[/hunting-detections/shadow-xworm-opendirectory-detections.md](/hunting-detections/shadow-xworm-opendirectory-detections/)**
+23 detection rules covering all three detection layers. Full rules: **[/hunting-detections/shadow-xworm-opendirectory-detections/](/hunting-detections/shadow-xworm-opendirectory-detections/)**
 
 | Rule Type | Count | Coverage |
 |---|---|---|

@@ -251,7 +251,7 @@ Beyond the 7 reports, **32 additional malware samples** from the same open direc
 
 **XWorm RAT Variants** (2 samples):
 - agent_xworm.exe, agent_xworm_v2.exe
-- **Analysis:** Covered in comprehensive reports (see [agent-xworm-exe.md](/reports/agent-xworm-exe/) and [agent-xworm-v2-exe.md](/reports/agent-xworm-v2-exe/))
+- **Analysis:** Covered in comprehensive reports (see [/reports/agent-xworm-exe/](/reports/agent-xworm-exe/) and [/reports/agent-xworm-v2-exe/](/reports/agent-xworm-v2-exe/))
 - **Threat Level:** HIGH, active C2 infrastructure, PowerShell execution, multi-malware deployment
 
 **Specialized Utilities** (4 samples):

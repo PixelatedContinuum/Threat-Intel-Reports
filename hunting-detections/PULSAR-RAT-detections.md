@@ -33,7 +33,7 @@ Pulsar RAT (analyzed here as `server.exe`) is an actively maintained, rebranded 
 - The six-string YARA combination anchored on the `Pulsar.Common` namespace root, near-zero FP, survives typical recompilation (YARA Detection).
 - File writes into `\Recovery\OEM\`, the Windows Recovery Environment persistence path documented as the campaign's most difficult-to-remediate technique, Very Low FP per the companion IOC feed (Sigma Detection).
 
-**Atomics routed to the IOC feed:** the original file's hash-lookup SIEM search keyed solely on the sample's SHA256/SHA1/MD5. All three are already carried in [`PULSAR-RAT-iocs.json`](/ioc-feeds/PULSAR-RAT.json) (`file_hashes`), so no feed edit was required. See Coverage Gaps for the disposition of the file's other original non-conforming content.
+**Atomics routed to the IOC feed:** the original file's hash-lookup SIEM search keyed solely on the sample's SHA256/SHA1/MD5. All three are already carried in [`/ioc-feeds/PULSAR-RAT.json`](/ioc-feeds/PULSAR-RAT.json) (`file_hashes`), so no feed edit was required. See Coverage Gaps for the disposition of the file's other original non-conforming content.
 
 ---
 
@@ -378,7 +378,7 @@ level: low
 
 ## Coverage Gaps
 
-**Hash-only SIEM search routed as an atomic, not a rule.** The original file's "Hunt for File Hashes" Splunk query matched only the sample's SHA256/SHA1/MD5 with no behavioral component, per the tiering rubric's routing test (removing the literal detects nothing), this is an IOC-feed entry, not a rule. All three hash values are already present in [`PULSAR-RAT-iocs.json`](/ioc-feeds/PULSAR-RAT.json) (`file_hashes`); no feed edit was required.
+**Hash-only SIEM search routed as an atomic, not a rule.** The original file's "Hunt for File Hashes" Splunk query matched only the sample's SHA256/SHA1/MD5 with no behavioral component, per the tiering rubric's routing test (removing the literal detects nothing), this is an IOC-feed entry, not a rule. All three hash values are already present in [`/ioc-feeds/PULSAR-RAT.json`](/ioc-feeds/PULSAR-RAT.json) (`file_hashes`); no feed edit was required.
 
 **PowerShell response/verification scripts removed, not detection rules.** The original file included three PowerShell scripts: a live SHA256 scan across the C: drive, a RunOnce registry check, and a WinRE partition verification tool that included incident-response guidance ("engage a security specialist," "do not mount without forensic guidance"). These are read-only operational tools an analyst runs on demand, not continuous detection logic, and the WinRE script's step-by-step response guidance does not belong in a published detection-rules file. Their detective value is already covered by rules in this file: the hash scan by the IOC feed's `file_hashes`, the RunOnce check by the Registry RunOnce Key Value Set Sigma rule (Hunting), and the WinRE check by the Windows Recovery Environment OEM Directory File Write Sigma rule (Detection).
 

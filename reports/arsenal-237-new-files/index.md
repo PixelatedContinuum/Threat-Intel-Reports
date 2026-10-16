@@ -192,7 +192,7 @@ It is a driver-level process terminator that loads BdApiUtil64.sys for kernel ac
 
 I hold this CONFIRMED, on static and behavioral analysis.
 
-The full report is at [./killer-dll.md](/reports/arsenal-237-new-files/killer-dll/).
+The full report is at [/reports/arsenal-237-new-files/killer-dll/](/reports/arsenal-237-new-files/killer-dll/).
 
 ---
 
@@ -208,7 +208,7 @@ It is a killer.dll variant with product-specific targeting of CSFalconService.ex
 
 I hold this CONFIRMED, on product-specific function names and driver interactions.
 
-The full report is at [./killer-crowdstrike-dll.md](/reports/arsenal-237-new-files/killer-crowdstrike-dll/).
+The full report is at [/reports/arsenal-237-new-files/killer-crowdstrike-dll/](/reports/arsenal-237-new-files/killer-crowdstrike-dll/).
 
 ---
 
@@ -224,7 +224,7 @@ It is a privilege escalation wrapper using five techniques, token impersonation 
 
 I hold this CONFIRMED, on API calls and capability testing.
 
-The full report is at [./lpe-exe.md](/reports/arsenal-237-lpe-exe/).
+The full report is at [/reports/arsenal-237-lpe-exe/](/reports/arsenal-237-lpe-exe/).
 
 ---
 
@@ -240,7 +240,7 @@ It is a signed Baidu antivirus driver carrying a known privilege escalation vuln
 
 I hold this CONFIRMED, on a known CVE and its exploitation pattern.
 
-The full report is at [./BdApiUtil64-sys.md](/reports/bdapiutil64-sys/).
+The full report is at [/reports/bdapiutil64-sys/](/reports/bdapiutil64-sys/).
 
 ---
 
@@ -256,7 +256,7 @@ It is a kernel-mode rootkit installed via BYOVD exploitation. It hides malware p
 
 I hold this CONFIRMED, on kernel driver analysis.
 
-The full report is at [./rootkit-dll.md](/reports/arsenal-237/rootkit-dll/).
+The full report is at [/reports/arsenal-237/rootkit-dll/](/reports/arsenal-237/rootkit-dll/).
 
 ---
 
@@ -274,7 +274,7 @@ It masquerades as the legitimate .NET runtime component nethost.dll. Loaded by l
 
 I hold this CONFIRMED, on file analysis and the hijacking patterns.
 
-The full report is at [./nethost-dll.md](/reports/arsenal-237/nethost-dll/).
+The full report is at [/reports/arsenal-237/nethost-dll/](/reports/arsenal-237/nethost-dll/).
 
 ---
 
@@ -290,7 +290,7 @@ It uses reflective DLL injection and direct syscalls to extract cookies, passwor
 
 I hold this CONFIRMED, on static analysis and behavioral observation.
 
-The full report is at [./chromelevator-exe.md](/reports/arsenal-237-new-files/chromelevator-exe/).
+The full report is at [/reports/arsenal-237-new-files/chromelevator-exe/](/reports/arsenal-237-new-files/chromelevator-exe/).
 
 ---
 
@@ -308,7 +308,7 @@ It is Rust ransomware with real-time Tor-based C2 control and ChaCha20 file encr
 
 I hold this CONFIRMED, on Rust code analysis and the C2 communication.
 
-The full report is at [./enc_c2-exe.md](/reports/arsenal-237-new-files/enc_c2-exe/).
+The full report is at [/reports/arsenal-237-new-files/enc_c2-exe/](/reports/arsenal-237-new-files/enc_c2-exe/).
 
 ---
 
@@ -324,7 +324,7 @@ It is Rust ransomware (v0.5-beta) targeting Commvault agents and VSS snapshots w
 
 I hold this CONFIRMED, because binary analysis confirms both the hardcoded key and the targeting logic.
 
-The full report is at [./new_enc-exe.md](/reports/new-enc-exe/).
+The full report is at [/reports/new-enc-exe/](/reports/new-enc-exe/).
 
 ---
 
@@ -340,7 +340,7 @@ It is a victim-specific decryptor carrying a key (1e0d8597...) distinct from eve
 
 I hold this CONFIRMED, on key analysis and decryption verification.
 
-The full report is at [./dec_fixed-exe.md](/reports/arsenal-237-new-files/dec_fixed-exe/).
+The full report is at [/reports/arsenal-237-new-files/dec_fixed-exe/](/reports/arsenal-237-new-files/dec_fixed-exe/).
 
 ---
 
@@ -356,7 +356,7 @@ It is the most capable Arsenal-237 variant recovered. It deploys multi-threaded 
 
 I hold this CONFIRMED, on cryptographic analysis and hybrid encryption verification.
 
-The full report is at [./full_test_enc-exe.md](/reports/arsenal-237-new-files/full_test_enc-exe/).
+The full report is at [/reports/arsenal-237-new-files/full_test_enc-exe/](/reports/arsenal-237-new-files/full_test_enc-exe/).
 
 ---
 
@@ -554,13 +554,13 @@ Individual component reports contain specific YARA signatures, Sigma rules, and 
 
 **Hunt Scenarios:**
 
-1. **BYOVD exploitation**: BdApiUtil64.sys loading from non-system paths; kernel callback registrations from unsigned or low-reputation drivers ([BdApiUtil64-sys.md](/reports/bdapiutil64-sys/))
+1. **BYOVD exploitation**: BdApiUtil64.sys loading from non-system paths; kernel callback registrations from unsigned or low-reputation drivers ([/reports/bdapiutil64-sys/](/reports/bdapiutil64-sys/))
 
-2. **Rootkit persistence**: process and thread enumeration gaps indicating hidden objects; kernel API hooking anomalies; driver installation from unexpected locations ([rootkit-dll.md](/reports/arsenal-237/rootkit-dll/))
+2. **Rootkit persistence**: process and thread enumeration gaps indicating hidden objects; kernel API hooking anomalies; driver installation from unexpected locations ([/reports/arsenal-237/rootkit-dll/](/reports/arsenal-237/rootkit-dll/))
 
-3. **DLL hijacking**: nethost.dll present outside system directories; .NET processes loading DLLs from user-writable paths; anomalous DLL version signatures ([nethost-dll.md](/reports/arsenal-237/nethost-dll/))
+3. **DLL hijacking**: nethost.dll present outside system directories; .NET processes loading DLLs from user-writable paths; anomalous DLL version signatures ([/reports/arsenal-237/nethost-dll/](/reports/arsenal-237/nethost-dll/))
 
-4. **Browser credential theft**: reflective DLL injection into browser processes; SQLite reads of Chrome/Edge credential stores via direct syscalls ([chromelevator-exe.md](/reports/arsenal-237-new-files/chromelevator-exe/))
+4. **Browser credential theft**: reflective DLL injection into browser processes; SQLite reads of Chrome/Edge credential stores via direct syscalls ([/reports/arsenal-237-new-files/chromelevator-exe/](/reports/arsenal-237-new-files/chromelevator-exe/))
 
 5. **Ransomware encryption**: bulk file access with high-entropy writes; file extension changes; backup system enumeration patterns (Phase 3 component reports)
 
