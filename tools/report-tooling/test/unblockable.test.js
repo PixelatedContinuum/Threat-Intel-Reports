@@ -162,3 +162,110 @@ test('every category label is a short human phrase, since it ships in the feed',
     assert.ok(c && c.length < 40 && c === c.toLowerCase(), 'bad category: ' + c);
   });
 });
+
+/* --- IPv4: addresses no organisation should ever block ------------------- */
+
+test('A NON-GLOBAL IPv4 ADDRESS IS FLAGGED AT BOTH EDGES OF ITS RANGE, AND NOT ONE OUTSIDE IT',
+  function () {
+    /* The whole point of a range rule is its edges. Testing only the middle of a
+       /8 would not catch an off-by-one in the size maths, and the failure mode of
+       an off-by-one here is silent: the address one past the edge is the operator's
+       own, and flagging it would strip a real indicator out of the feed. Each row is
+       [address, expected], where the odd-indexed rows are the first address of the
+       range, the last address, and the addresses immediately outside it. */
+    [['0.0.0.0', 'non-routable address (this network)'],
+     ['0.255.255.255', 'non-routable address (this network)'],
+     ['1.0.0.0', null],
+     ['9.255.255.255', null],
+     ['10.0.0.0', 'non-routable address (private)'],
+     ['10.255.255.255', 'non-routable address (private)'],
+     ['11.0.0.0', null],
+     ['100.63.255.255', null],
+     ['100.64.0.0', 'non-routable address (shared CGNAT)'],
+     ['100.127.255.255', 'non-routable address (shared CGNAT)'],
+     ['100.128.0.0', null],
+     ['126.255.255.255', null],
+     ['127.0.0.0', 'non-routable address (loopback)'],
+     ['127.255.255.255', 'non-routable address (loopback)'],
+     ['128.0.0.0', null],
+     ['169.253.255.255', null],
+     ['169.254.0.0', 'non-routable address (link-local)'],
+     ['169.254.169.254', 'non-routable address (link-local)'],
+     ['169.254.255.255', 'non-routable address (link-local)'],
+     ['169.255.0.0', null],
+     ['172.15.255.255', null],
+     ['172.16.0.0', 'non-routable address (private)'],
+     ['172.31.255.255', 'non-routable address (private)'],
+     ['172.32.0.0', null],
+     ['191.255.255.255', null],
+     ['192.0.0.0', 'non-routable address (IETF protocol assignments)'],
+     ['192.0.0.255', 'non-routable address (IETF protocol assignments)'],
+     ['192.0.1.0', null],
+     ['192.0.1.255', null],
+     ['192.0.2.0', 'non-routable address (documentation)'],
+     ['192.0.2.255', 'non-routable address (documentation)'],
+     ['192.0.3.0', null],
+     ['192.167.255.255', null],
+     ['192.168.0.0', 'non-routable address (private)'],
+     ['192.168.255.255', 'non-routable address (private)'],
+     ['192.169.0.0', null],
+     ['198.17.255.255', null],
+     ['198.18.0.0', 'non-routable address (benchmarking)'],
+     ['198.19.255.255', 'non-routable address (benchmarking)'],
+     ['198.20.0.0', null],
+     ['198.51.99.255', null],
+     ['198.51.100.0', 'non-routable address (documentation)'],
+     ['198.51.100.255', 'non-routable address (documentation)'],
+     ['198.51.101.0', null],
+     ['203.0.112.255', null],
+     ['203.0.113.0', 'non-routable address (documentation)'],
+     ['203.0.113.255', 'non-routable address (documentation)'],
+     ['203.0.114.0', null],
+     ['223.255.255.255', null],
+     ['224.0.0.0', 'non-routable address (multicast)'],
+     ['239.255.255.255', 'non-routable address (multicast)'],
+     ['240.0.0.0', 'non-routable address (reserved or broadcast)'],
+     ['255.255.255.255', 'non-routable address (reserved or broadcast)']].forEach(function (r) {
+      assert.equal(U.ipv4Of(r[0]), r[1], r[0] + ' => ' + r[1]);
+    });
+    assert.equal(U.unblockable('ipv4', '127.0.0.1'), 'non-routable address (loopback)');
+    assert.equal(U.unblockable('ipv4', '8.8.8.8'), 'public dns resolver');
+  });
+
+test('EVERY PUBLIC RECURSIVE RESOLVER IS FLAGGED, EXACTLY', function () {
+  /* Malware queries and proxies through these constantly, and every estate depends
+     on at least one of them. Called out exactly rather than by range: a resolver
+     operator's other addresses are not in scope, and a range rule over them would
+     one day take out an operator host that happens to sit nearby. */
+  ['8.8.8.8', '8.8.4.4', '1.1.1.1', '1.0.0.1', '9.9.9.9', '149.112.112.112',
+   '208.67.222.222', '208.67.220.220', '94.140.14.14', '94.140.15.15'
+  ].forEach(function (ip) {
+    assert.equal(U.ipv4Of(ip), 'public dns resolver', ip + ' is not flagged');
+  });
+  // A near neighbour of a resolver is NOT covered: exactness is the feature.
+  assert.equal(U.ipv4Of('8.8.8.9'), null);
+  assert.equal(U.ipv4Of('1.1.1.2'), null);
+});
+
+test('malformed or untyped IPv4 input is never flagged', function () {
+  /* The rule must fail closed on anything it cannot read as a plain dotted quad.
+     An octet over 255 or a three-octet string is not an address this rule can
+     reason about, so it stays null rather than guessing. */
+  ['256.0.0.1', '999.1.1.1', '1.2.3', '1.2.3.4.5', '', '   ', null, undefined,
+   'not-an-ip', '1.2.3.4:53', '1.2.3.4/24', '::1', '0x7f000001'
+  ].forEach(function (ip) {
+    assert.doesNotThrow(function () { U.ipv4Of(ip); });
+    assert.equal(U.ipv4Of(ip), null, String(ip) + ' must not be flagged');
+  });
+});
+
+test('A GLOBAL-UNICAST OPERATOR ADDRESS STAYS BLOCKABLE', function () {
+  /* The failure that matters more than the one this rule prevents: a rule broad
+     enough to silence a real operator host. Both addresses are real indicators
+     from published feeds (T-0318 measured the corpus), and neither is in a
+     non-global range or the resolver list, so both must survive as blockable. */
+  assert.equal(U.ipv4Of('185.208.159.182'), null);
+  assert.equal(U.ipv4Of('192.3.1.116'), null);
+  assert.equal(U.unblockable('ipv4', '185.208.159.182'), null);
+  assert.equal(U.unblockable('ipv4', '192.3.1.116'), null);
+});

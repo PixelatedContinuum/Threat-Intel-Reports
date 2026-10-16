@@ -444,3 +444,51 @@ test('the bare-string migration path (unrelated to author-marked objects) is unc
       { value: 'api.telegram.org', category: 'messaging platform',
         context: 'exfiltration channel' });
   });
+
+/* --- IPv4: scan() must not let a non-routable address or a resolver through ------ */
+
+test('A NON-ROUTABLE OR RESOLVER ADDRESS IN AN INDICATOR BUCKET IS FOUND, AN OPERATOR ADDRESS IS NOT',
+  function () {
+    /* 127.0.0.1:3306 and 10.0.0.5 are the two shapes the real corpus carried
+       (T-0318): a loopback SSRF target with a port the classifier types as ipv4,
+       and an RFC1918 victim-internal address. The operator address beside them is
+       real and must stay blockable, which is the failure this test is really
+       guarding against. */
+    var f = { network_indicators: { ips: ['127.0.0.1:3306', '10.0.0.5', '185.208.159.182'] } };
+    assert.deepEqual(H.scan(f).map(function (x) { return x.host; }),
+      ['127.0.0.1', '10.0.0.5']);
+    assert.deepEqual(H.scan(f).map(function (x) { return x.category; }),
+      ['non-routable address (loopback)', 'non-routable address (private)']);
+  });
+
+test('the same values inside the designated bucket are not findings', function () {
+  // hunt_only_never_block is where the migration puts them; scanning it would make
+  // the gate fail forever on the feed the fix had just cleaned.
+  var f = { network_indicators: { ips: ['185.208.159.182'] },
+            hunt_only_never_block: ['127.0.0.1:3306', '10.0.0.5'] };
+  assert.deepEqual(H.scan(f), []);
+});
+
+test('scan() over the arsenal-237 entries T-0318 removed reports both non-blockable addresses',
+  function () {
+    /* The regression case, inlined: the two entries exactly as the
+       arsenal-237-nethost-dll feed shipped them in network_indicators.ips before
+       T-0318 (8.8.8.8 marked "URGENT - Block", 127.0.0.1 "STANDARD - Block").
+       Inlined rather than read from the workflow repo, so the guard runs in a bare
+       clone of this repo instead of skipping, and a skip never reads as a pass. */
+    var f = { network_indicators: { ips: [
+      { ip_address: '8.8.8.8', port: 53, protocol: 'TCP',
+        purpose: 'Primary C2 Target (Proxy Endpoint)', confidence: 'CONFIRMED',
+        detection_method: 'Network egress monitoring, Firewall logs',
+        blocking_recommendation: 'URGENT - Block at perimeter firewall and endpoint level' },
+      { ip_address: '127.0.0.1', port: 53, protocol: 'TCP',
+        purpose: 'Secondary C2 Target (Localhost Proxy)', confidence: 'CONFIRMED',
+        detection_method: 'Process network monitoring, netstat output',
+        blocking_recommendation: 'STANDARD - Block at endpoint level (local proxy prevention)' }
+    ] } };
+    var hits = H.scan(f).map(function (x) { return x.host; });
+    assert.ok(hits.indexOf('127.0.0.1') > -1,
+      '127.0.0.1 must be reported, got: ' + hits.join(', '));
+    assert.ok(hits.indexOf('8.8.8.8') > -1,
+      '8.8.8.8 must be reported, got: ' + hits.join(', '));
+  });

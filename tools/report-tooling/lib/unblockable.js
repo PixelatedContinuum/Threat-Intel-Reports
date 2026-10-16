@@ -258,7 +258,99 @@ function pathOf(url) {
   return m ? m[1] : '';
 }
 
+/* IPv4 addresses no organisation should block, because doing so blocks itself or a
+   bystander rather than the operator.
+
+   Until 2026-10-16 this module had no IPv4 rule at all, so unblockable() returned null
+   for every address and the gate passed `8.8.8.8` and `127.0.0.1` sitting in the
+   arsenal-237-nethost-dll feed's `network_indicators.ips` marked "URGENT - Block"
+   (T-0318). Google DNS in a perimeter blocklist breaks resolution for the estate;
+   loopback in an endpoint blocklist breaks local services.
+
+   Two classes, both fixed sets rather than a judgement:
+
+   - Non-global ranges (RFC 6890 special-purpose space): loopback, private, link-local
+     (including the 169.254.169.254 cloud metadata address), shared CGNAT space,
+     documentation and benchmarking ranges, multicast, reserved and broadcast. None of
+     these can be the operator's address on the internet; in a feed they are the
+     victim's own estate, the malware's local plumbing, or an example value. Two
+     addresses inside 192.0.0.0/24 are globally reachable, 192.0.0.9 (Port Control
+     Protocol anycast) and 192.0.0.10 (TURN anycast): they are shared service
+     addresses that no one operator holds, so they stay flagged with the range.
+   - Public recursive resolvers, which malware queries or proxies through constantly
+     and which every network depends on. Exact addresses only: a resolver operator's
+     other addresses are not in scope here.
+
+   An operator's real VPS address is a global unicast address that is in neither
+   class, so it stays blockable, which is the whole point of the feed.
+
+   KNOWN COVERAGE GAP, NOT CHECKED BY THIS RULE AND NOT FIXED HERE: the shared
+   classifier (`assets/js/ioc-classify.js` `classify()`) returns null for an address
+   followed by a path, with or without a port, for example
+   `169.254.169.254/latest/meta-data/` and `127.0.0.1:8080/actuator/`. Because
+   `unblockable()` is only ever reached through `classify()`, this rule never sees
+   such strings anywhere in a feed, so it cannot flag them. Measured in the corpus
+   on 2026-10-16 (T-0322, from T-0318's per-value plan). Closing the gap means
+   typing those strings in the classifier, which touches the public lookup page and
+   the index generator and is deliberately out of scope for this rule. */
+var NON_GLOBAL_V4 = [
+  ['0.0.0.0', 8, 'non-routable address (this network)'],
+  ['10.0.0.0', 8, 'non-routable address (private)'],
+  ['100.64.0.0', 10, 'non-routable address (shared CGNAT)'],
+  ['127.0.0.0', 8, 'non-routable address (loopback)'],
+  ['169.254.0.0', 16, 'non-routable address (link-local)'],
+  ['172.16.0.0', 12, 'non-routable address (private)'],
+  ['192.0.0.0', 24, 'non-routable address (IETF protocol assignments)'],
+  ['192.0.2.0', 24, 'non-routable address (documentation)'],
+  ['192.168.0.0', 16, 'non-routable address (private)'],
+  ['198.18.0.0', 15, 'non-routable address (benchmarking)'],
+  ['198.51.100.0', 24, 'non-routable address (documentation)'],
+  ['203.0.113.0', 24, 'non-routable address (documentation)'],
+  ['224.0.0.0', 4, 'non-routable address (multicast)'],
+  ['240.0.0.0', 4, 'non-routable address (reserved or broadcast)']
+];
+
+var PUBLIC_RESOLVERS = {
+  '8.8.8.8': 'public dns resolver',
+  '8.8.4.4': 'public dns resolver',
+  '1.1.1.1': 'public dns resolver',
+  '1.0.0.1': 'public dns resolver',
+  '9.9.9.9': 'public dns resolver',
+  '149.112.112.112': 'public dns resolver',
+  '208.67.222.222': 'public dns resolver',
+  '208.67.220.220': 'public dns resolver',
+  '94.140.14.14': 'public dns resolver',
+  '94.140.15.15': 'public dns resolver'
+};
+
+function v4ToInt(ip) {
+  var m = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/.exec(String(ip).trim());
+  if (!m) return null;
+  var n = 0;
+  for (var i = 1; i <= 4; i++) {
+    var o = Number(m[i]);
+    if (o > 255) return null;
+    n = n * 256 + o;
+  }
+  return n;
+}
+
+/* Returns the category string when an IPv4 address must never be blocked, else null. */
+function ipv4Of(ip) {
+  var s = String(ip == null ? '' : ip).trim();
+  if (PUBLIC_RESOLVERS[s]) return PUBLIC_RESOLVERS[s];
+  var n = v4ToInt(s);
+  if (n === null) return null;
+  for (var i = 0; i < NON_GLOBAL_V4.length; i++) {
+    var base = v4ToInt(NON_GLOBAL_V4[i][0]);
+    var size = Math.pow(2, 32 - NON_GLOBAL_V4[i][1]);
+    if (n >= base && n < base + size) return NON_GLOBAL_V4[i][2];
+  }
+  return null;
+}
+
 function unblockable(type, value) {
+  if (type === 'ipv4') return ipv4Of(value);
   if (type === 'domain') return serviceOf(value);
   if (type === 'url') {
     var host = (/^[a-z]+:\/\/([^\/:?#]+)/i.exec(String(value)) || [])[1];
@@ -272,6 +364,7 @@ function unblockable(type, value) {
 
 module.exports = {
   serviceOf: serviceOf,
+  ipv4Of: ipv4Of,
   pathOf: pathOf,
   unblockable: unblockable,
   SERVICES: SERVICES,
