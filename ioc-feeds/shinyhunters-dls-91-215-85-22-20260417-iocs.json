@@ -611,39 +611,6 @@
       "confidence": "HIGH"
     }
   ],
-  "victim_inventory": {
-    "total_named_victims": 29,
-    "publicly_acknowledged": 28,
-    "unacknowledged_high_priority": [
-      "Alert360"
-    ],
-    "partial_disclosure_regulatory_followup": [
-      "Berkadia Commercial Mortgage",
-      "Ameriprise Financial",
-      "Woflow",
-      "Abrigo",
-      "CFGI Management",
-      "Kemper Corporation",
-      "Amtrak",
-      "ZenBusiness",
-      "CarMax",
-      "Edmunds"
-    ],
-    "special_archives": [
-      {
-        "filename": "europa.zip",
-        "attributed_victim": "European Commission / Europa.eu",
-        "attribution_confidence": "HIGH",
-        "notes": "Trivy supply-chain initial access attributed to TeamPCP; ShinyHunters responsible for AWS pivot and exfiltration (per CERT-EU)"
-      },
-      {
-        "filename": "bf_03_2026.sql.7z",
-        "attributed_victim": "BreachForums v5 user database (~340K records)",
-        "attribution_confidence": "HIGH",
-        "notes": "Actor-on-actor / cybercriminal-ecosystem content; exposes forum users including possible research/LE personas"
-      }
-    ]
-  },
   "hunt_only_never_block": [
     {
       "value": "ns1.ddos-guard.net",

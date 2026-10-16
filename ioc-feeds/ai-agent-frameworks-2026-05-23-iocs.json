@@ -1127,29 +1127,6 @@
         "confidence": "DEFINITE"
       }
     ],
-    "victim_indicators": [
-      {
-        "type": "ntlm_hash",
-        "value": "31d6cfe0d16ae931b73c59d7e0c089c0",
-        "case": "1_victim",
-        "confidence": "DEFINITE",
-        "context": "victim Administrator EMPTY-PASSWORD NTLM hash (well-known; initial-access vector)"
-      },
-      {
-        "type": "stolen_jwt_jti",
-        "value": "022a1b74-2332-4df5-a76b-60225ffa7ae3",
-        "case": "2_victim",
-        "confidence": "DEFINITE",
-        "context": "Stolen victim organization Instana API token (iat 2024-03-06, exp ~2034-02 - 10-year lifetime)"
-      },
-      {
-        "type": "stolen_1password_vault_id",
-        "value": "XRAOLK4ZIZHJPDWPVEMGPRDXBE",
-        "case": "1_victim",
-        "confidence": "DEFINITE",
-        "context": "Single victim's full password-manager export (1Password CSV; victim identity TBD via 1Password / AgileBits coordination)"
-      }
-    ],
     "asn_indicators": [
       {
         "value": "AS210644",

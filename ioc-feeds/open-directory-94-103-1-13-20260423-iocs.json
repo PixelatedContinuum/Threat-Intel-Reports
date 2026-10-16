@@ -472,17 +472,6 @@
         "encoding": "XOR-single-byte key=0x42",
         "host_status_2026_05_02": "OFFLINE, confirmed via 8-country external probe (check-host.net), TCP refused on port 80 and 7777"
       }
-    ],
-    "victim_infrastructure_do_not_block": [
-      {
-        "ip": "192.227.108.142",
-        "port": "4028",
-        "protocol": "TCP",
-        "confidence": "MODERATE",
-        "context": "Cloud South neighbor (same ASN, 5 /24s apart from 192.227.113.124), mining-demographic reconnaissance target. ASN AS13886 Cloud South [US]. VT 0/94.",
-        "false_positive_risk": true,
-        "false_positive_note": "Victim/target, not operator C2"
-      }
     ]
   },
   "host_indicators": {

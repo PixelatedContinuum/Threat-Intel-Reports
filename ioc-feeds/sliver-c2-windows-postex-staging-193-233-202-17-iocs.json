@@ -1927,6 +1927,13 @@
         "value": "https://nodejs.org/dist/v18.17.0/node-v18.17.0-win-x64.zip",
         "role": "LEGITIMATE VENDOR DOWNLOAD",
         "false_positive_note": "Do not block. This is the genuine signed Node.js runtime. The detectable behaviour is node.exe running from %LOCALAPPDATA% under a conhost --headless Run key, not the download"
+      },
+      {
+        "value": "http://localhost:3000",
+        "type": "url",
+        "reason": "A development leftover in the bot's fallback configuration, not reachable infrastructure",
+        "category": "investigated and excluded, not operator infrastructure",
+        "context": "NOT INDICATORS. Every value below was considered and REJECTED on a stated test. Nothing here may be blocked, alerted on, or ingested as campaign infrastructure. Several are third-party assets that a blocklist would harm. This container exists so the exclusion reasoning is auditable, not so the values can be consumed."
       }
     ],
     "domains": [
@@ -1969,6 +1976,27 @@
         "value": "eth.merkle.io",
         "role": "PUBLIC ETHEREUM RPC",
         "false_positive_note": "Never block"
+      },
+      {
+        "value": "dcdivas.com",
+        "type": "domain",
+        "reason": "One of 106 contacted domains on a single unrelated file. NOT CHECKED as a link, never LOW",
+        "category": "investigated and excluded, not operator infrastructure",
+        "context": "NOT INDICATORS. Every value below was considered and REJECTED on a stated test. Nothing here may be blocked, alerted on, or ingested as campaign infrastructure. Several are third-party assets that a blocklist would harm. This container exists so the exclusion reasoning is auditable, not so the values can be consumed."
+      },
+      {
+        "value": "gorus.space",
+        "type": "domain",
+        "reason": "Arrived on the secondary operator address in a later hosting window than the operator's April use. Shared registrar is thin evidence given that registrar's size. NOT CHECKED",
+        "category": "investigated and excluded, not operator infrastructure",
+        "context": "NOT INDICATORS. Every value below was considered and REJECTED on a stated test. Nothing here may be blocked, alerted on, or ingested as campaign infrastructure. Several are third-party assets that a blocklist would harm. This container exists so the exclusion reasoning is auditable, not so the values can be consumed."
+      },
+      {
+        "value": "n8n-nether.nafer.ru",
+        "type": "domain",
+        "reason": "Dropped. A later tenant on a recycled address, not implicated in this campaign",
+        "category": "investigated and excluded, not operator infrastructure",
+        "context": "NOT INDICATORS. Every value below was considered and REJECTED on a stated test. Nothing here may be blocked, alerted on, or ingested as campaign infrastructure. Several are third-party assets that a blocklist would harm. This container exists so the exclusion reasoning is auditable, not so the values can be consumed."
       }
     ],
     "ipv4": [
@@ -1996,55 +2024,45 @@
         "observed_state": "Hardcoded as third-tier fallback in four binaries. Self-signed certificate with subject and issuer both the bare address, valid to 2029-04-06. All probed ports closed as of 2026-09-05",
         "former_resident_domain": "git.zionministry.org, resident 2025-12-01 to 2026-06-17, since established as sinkholed and seized infrastructure rather than a legitimate third-party service. Do not cite it as evidence that this address belongs to a victim."
       }
+    ],
+    "hashes": [
+      {
+        "value": "2196848d251b217de8b2c037e356c11d",
+        "type": "ja3",
+        "reason": "MEASURED at 3,645 distinct hosts with a working control, and nothing in that corpus associates it with Sliver. Commodity Go TLS. Grade INSUFFICIENT. Do not author a detection rule on it",
+        "category": "investigated and excluded, not operator infrastructure",
+        "context": "NOT INDICATORS. Every value below was considered and REJECTED on a stated test. Nothing here may be blocked, alerted on, or ingested as campaign infrastructure. Several are third-party assets that a blocklist would harm. This container exists so the exclusion reasoning is auditable, not so the values can be consumed."
+      },
+      {
+        "value": "033729fe4f6aadc1ba38de00013f7b0e5e1bf5d540df00872931053488ed79bd",
+        "type": "sha256",
+        "reason": "destoryed.exe. Not in the served directory, first seen eleven days after capture, and its 106 contacted domains include google.com, github.com and dropbox.com. The whole adjacent-ecosystem reading built on it is retracted",
+        "category": "investigated and excluded, not operator infrastructure",
+        "context": "NOT INDICATORS. Every value below was considered and REJECTED on a stated test. Nothing here may be blocked, alerted on, or ingested as campaign infrastructure. Several are third-party assets that a blocklist would harm. This container exists so the exclusion reasoning is auditable, not so the values can be consumed."
+      },
+      {
+        "value": "a84f6fe166a238c48c5ccebe5312bb63311476fbf14cd81883f3329c36b1362d",
+        "type": "sha256",
+        "reason": "An unheld family member surfaced only by relationship data on the secondary address, with no second line of evidence. Recorded as a lead, kept out of the feed",
+        "category": "investigated and excluded, not operator infrastructure",
+        "context": "NOT INDICATORS. Every value below was considered and REJECTED on a stated test. Nothing here may be blocked, alerted on, or ingested as campaign infrastructure. Several are third-party assets that a blocklist would harm. This container exists so the exclusion reasoning is auditable, not so the values can be consumed."
+      },
+      {
+        "value": "0019dfc4b32d63c1392aa264aed2253c1e0c2fb09216f8e2cc269bbfb8bb49b5",
+        "type": "sha256",
+        "reason": "A 9-byte package-index cache file, 0 of 61 engines malicious, submitted 3,346 times from 1,540 sources since 2009. Relationship noise, not a campaign artifact",
+        "category": "investigated and excluded, not operator infrastructure",
+        "context": "NOT INDICATORS. Every value below was considered and REJECTED on a stated test. Nothing here may be blocked, alerted on, or ingested as campaign infrastructure. Several are third-party assets that a blocklist would harm. This container exists so the exclusion reasoning is auditable, not so the values can be consumed."
+      }
     ]
   },
   "excluded_indicators": {
     "note": "NOT INDICATORS. Every value below was considered and REJECTED on a stated test. Nothing here may be blocked, alerted on, or ingested as campaign infrastructure. Several are third-party assets that a blocklist would harm. This container exists so the exclusion reasoning is auditable, not so the values can be consumed.",
     "entries": [
       {
-        "value": "2196848d251b217de8b2c037e356c11d",
-        "type": "ja3",
-        "reason": "MEASURED at 3,645 distinct hosts with a working control, and nothing in that corpus associates it with Sliver. Commodity Go TLS. Grade INSUFFICIENT. Do not author a detection rule on it"
-      },
-      {
         "value": "t13i131000_f57a46bbacb6_e5728521abd4",
         "type": "ja4",
         "reason": "NOT CHECKED. No available service indexes a connecting client's JA4, so no base rate exists. Not offered as a JA3 substitute"
-      },
-      {
-        "value": "033729fe4f6aadc1ba38de00013f7b0e5e1bf5d540df00872931053488ed79bd",
-        "type": "sha256",
-        "reason": "destoryed.exe. Not in the served directory, first seen eleven days after capture, and its 106 contacted domains include google.com, github.com and dropbox.com. The whole adjacent-ecosystem reading built on it is retracted"
-      },
-      {
-        "value": "dcdivas.com",
-        "type": "domain",
-        "reason": "One of 106 contacted domains on a single unrelated file. NOT CHECKED as a link, never LOW"
-      },
-      {
-        "value": "gorus.space",
-        "type": "domain",
-        "reason": "Arrived on the secondary operator address in a later hosting window than the operator's April use. Shared registrar is thin evidence given that registrar's size. NOT CHECKED"
-      },
-      {
-        "value": "n8n-nether.nafer.ru",
-        "type": "domain",
-        "reason": "Dropped. A later tenant on a recycled address, not implicated in this campaign"
-      },
-      {
-        "value": "a84f6fe166a238c48c5ccebe5312bb63311476fbf14cd81883f3329c36b1362d",
-        "type": "sha256",
-        "reason": "An unheld family member surfaced only by relationship data on the secondary address, with no second line of evidence. Recorded as a lead, kept out of the feed"
-      },
-      {
-        "value": "0019dfc4b32d63c1392aa264aed2253c1e0c2fb09216f8e2cc269bbfb8bb49b5",
-        "type": "sha256",
-        "reason": "A 9-byte package-index cache file, 0 of 61 engines malicious, submitted 3,346 times from 1,540 sources since 2009. Relationship noise, not a campaign artifact"
-      },
-      {
-        "value": "http://localhost:3000",
-        "type": "url",
-        "reason": "A development leftover in the bot's fallback configuration, not reachable infrastructure"
       },
       {
         "value": "victim-side data",

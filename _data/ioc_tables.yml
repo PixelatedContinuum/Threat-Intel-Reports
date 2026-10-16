@@ -520,14 +520,14 @@
   feed_url: "/ioc-feeds/ai-agent-frameworks-2026-05-23-iocs.json"
   report_url: "/reports/ai-agent-frameworks-2026-05-23/"
   detection_url: "/hunting-detections/ai-agent-frameworks-2026-05-23-detections"
-  total: 100
-  untyped: 296
+  total: 99
+  untyped: 288
   counts:
     domain: 23
     email: 1
     filename: 7
     ipv4: 23
-    md5: 2
+    md5: 1
     path: 16
     sha256: 20
     url: 8
@@ -984,12 +984,6 @@
       context: null
       confidence: "DEFINITE"
       action: "BLOCK"
-      fp_risk: null
-    - type: "md5"
-      value: "31d6cfe0d16ae931b73c59d7e0c089c0"
-      context: "victim Administrator EMPTY-PASSWORD NTLM hash (well-known; initial-access vector)"
-      confidence: "DEFINITE"
-      action: null
       fp_risk: null
     - type: "email"
       value: "elyasbetter@gmail.com"
@@ -2516,12 +2510,12 @@
   feed_url: "/ioc-feeds/cloudsync-assembler-toolkit-91-197-98-188-iocs.json"
   report_url: "/reports/cloudsync-assembler-toolkit-91-197-98-188/"
   detection_url: "/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections"
-  total: 61
+  total: 55
   untyped: 39
   counts:
-    domain: 5
+    domain: 1
     filename: 12
-    ipv4: 5
+    ipv4: 3
     md5: 6
     path: 15
     registry: 3
@@ -2539,18 +2533,6 @@
       action: "BLOCK"
       fp_risk: null
     - type: "ipv4"
-      value: "46.36.217.3"
-      context: null
-      confidence: "LOW ASSOCIATION"
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "65.20.90.34"
-      context: null
-      confidence: "LOW"
-      action: null
-      fp_risk: null
-    - type: "ipv4"
       value: "91.197.98.188"
       context: "Also serves CloudSync C2 on :5555 (bk dropped implant) and :7777 (svhost4), both cleartext TCP, wait-then-speak, no banner | Cleartext TCP, [END] terminator; continuously open in passive scan history | Cleartext TCP, [C2_END] terminator; confirmed on the wire (Sysmon EID 3 + PCAP)"
       confidence: "HIGH"
@@ -2563,34 +2545,10 @@
       action: "BLOCK"
       fp_risk: null
     - type: "domain"
-      value: "aka1.hopto.org"
-      context: null
-      confidence: "EXCLUDED"
-      action: null
-      fp_risk: null
-    - type: "domain"
       value: "c3lestial.fun"
       context: null
       confidence: "MODERATE"
       action: "HUNT"
-      fp_risk: null
-    - type: "domain"
-      value: "johnathon-yerrow.sahs.ac.zw"
-      context: null
-      confidence: "EXCLUDED"
-      action: null
-      fp_risk: null
-    - type: "domain"
-      value: "stolotov.net"
-      context: null
-      confidence: "LOW ASSOCIATION"
-      action: null
-      fp_risk: null
-    - type: "domain"
-      value: "stolotov.org"
-      context: null
-      confidence: "LOW ASSOCIATION"
-      action: null
       fp_risk: null
     - type: "url"
       value: "http://91.197.98.188:8000/client.exe"
@@ -2898,8 +2856,17 @@
       confidence: null
       action: null
       fp_risk: null
-  never_block_total: 4
+  never_block_total: 9
   never_block_rows:
+    - type: "ipv4"
+      value: "46.36.217.3"
+      context: "Swept in on a shared panel title. A detailed host view severs it: different OS build, no SSH host-key overlap, and a simpler panel that is not the RAT panel. Suspicious infrastructure, but not demonstrably this operator."
+    - type: "ipv4"
+      value: "65.20.90.34"
+      context: "Reverse DNS shows a proxy/relay footprint unrelated to this operator, and its panel title differs from the one being tracked. Probable false positive."
+    - type: "domain"
+      value: "aka1.hopto.org"
+      context: "Prior-tenant passive-DNS residue on a recycled hosting IP. The provider recycles addresses; this predates the operator."
     - type: "domain"
       value: "api.telegram.org"
       context: "Legitimate Telegram API domain used by many benign apps. Only suspicious paired with a workstation running Tor / the CloudSync working directory. Do not block outright."
@@ -2912,6 +2879,12 @@
     - type: "domain"
       value: "ip-api.com"
       context: "Legitimate geolocation service, heavily used by benign software. Only a co-signal when paired with an unrelated TLS SNI within seconds."
+    - type: "domain"
+      value: "stolotov.net"
+      context: "Swept in on a shared panel title. A detailed host view severs it: different OS build, no SSH host-key overlap, and a simpler panel that is not the RAT panel. Suspicious infrastructure, but not demonstrably this operator."
+    - type: "domain"
+      value: "stolotov.org"
+      context: "Swept in on a shared panel title. A detailed host view severs it: different OS build, no SSH host-key overlap, and a simpler panel that is not the RAT panel. Suspicious infrastructure, but not demonstrably this operator."
 "dual-rat-analysis.json":
   slug: "dual-rat-analysis"
   page_url: "/ioc-feeds/dual-rat-analysis/"
@@ -6358,12 +6331,12 @@
   feed_url: "/ioc-feeds/multivector-ecommerce-rce-toolkit-192-3-1-116-iocs.json"
   report_url: "/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/"
   detection_url: "/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections"
-  total: 68
-  untyped: 47
+  total: 25
+  untyped: 45
   counts:
-    domain: 34
+    domain: 3
     filename: 4
-    ipv4: 19
+    ipv4: 7
     path: 6
     sha256: 1
     url: 4
@@ -6371,12 +6344,6 @@
   has_action: true
   has_fp_risk: false
   rows:
-    - type: "ipv4"
-      value: "1.13.253.113"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
     - type: "ipv4"
       value: "192.3.1.116"
       context: null
@@ -6414,129 +6381,9 @@
       action: null
       fp_risk: null
     - type: "ipv4"
-      value: "39.104.118.153"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "39.104.38.237"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "39.105.40.102"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "39.108.60.192"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "39.99.129.123"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "ipv4"
       value: "44.245.20.76"
       context: null
       confidence: null
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "47.110.134.211"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "47.111.160.102"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "47.94.128.49"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "8.141.61.61"
-      context: null
-      confidence: "DEFINITE (UNAUTHORIZED AUTHENTICATED ACCESS)"
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "8.155.170.217"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "82.157.119.235"
-      context: null
-      confidence: "DEFINITE (EXPOSURE AND RETENTION) / MODERATE (PII-LEAK RISK) / INSUFFICIENT (ANY ACTUAL DATA RETURN)"
-      action: null
-      fp_risk: null
-    - type: "domain"
-      value: "3czu.cn"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "domain"
-      value: "ai-ledger.sodaapp.com.cn"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "domain"
-      value: "api.renrendrc.com"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "domain"
-      value: "api.zujixiong.cn"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "domain"
-      value: "baby-api.coderqiang.com"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "domain"
-      value: "baby-cdn.coderqiang.com"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "domain"
-      value: "backend-mall.mengchida.com"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "domain"
-      value: "backend.mengchida.com"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "domain"
-      value: "cdn.footballteam.cn"
-      context: null
-      confidence: "DEFINITE (DATA RETURNED) / INSUFFICIENT (OWNERSHIP, AUTHENTICITY, ACCESS METHOD)"
       action: null
       fp_risk: null
     - type: "domain"
@@ -6546,105 +6393,9 @@
       action: null
       fp_risk: null
     - type: "domain"
-      value: "chengjiastore.cn"
-      context: null
-      confidence: "DEFINITE (UNAUTHORIZED AUTHENTICATED ACCESS)"
-      action: null
-      fp_risk: null
-    - type: "domain"
-      value: "h5.njmaixi.cn"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "domain"
-      value: "haimi-file.oss-cn-hangzhou.aliyuncs.com"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "domain"
-      value: "hfive.njmaixi.cn"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "domain"
-      value: "hiij.hxjyam.com"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "domain"
-      value: "hs.zcmzh.com"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "domain"
-      value: "jump.hs.zcmzh.com"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "domain"
-      value: "m.njmaixi.cn"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "domain"
-      value: "mall-api.mengchida.com"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "domain"
-      value: "mall.mengchida.com"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "domain"
-      value: "manage.zujixiong.cn"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "domain"
-      value: "mengchida.com"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "domain"
-      value: "merchant.zujixiong.cn"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "domain"
-      value: "njmaixi.cn"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "domain"
       value: "poc.yml"
       context: "Textbook gadget chain pointing at the operator's shared RCE-proof listener."
       confidence: "DEFINITE"
-      action: null
-      fp_risk: null
-    - type: "domain"
-      value: "riverbaybuy.com"
-      context: null
-      confidence: "DEFINITE (NAMES + ORDER RECORDS) / HIGH (FULLER FIELDS)"
-      action: null
-      fp_risk: null
-    - type: "domain"
-      value: "u.zujixiong.cn"
-      context: null
-      confidence: null
       action: null
       fp_risk: null
     - type: "domain"
@@ -6652,42 +6403,6 @@
       context: null
       confidence: "HIGH"
       action: "BLOCK"
-      fp_risk: null
-    - type: "domain"
-      value: "web.51qzp.com"
-      context: null
-      confidence: "DEFINITE (EXPOSURE AND RETENTION) / MODERATE (PII-LEAK RISK) / INSUFFICIENT (ANY ACTUAL DATA RETURN)"
-      action: null
-      fp_risk: null
-    - type: "domain"
-      value: "web.zujixiong.cn"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "domain"
-      value: "www.51qzp.com"
-      context: null
-      confidence: "DEFINITE (EXPOSURE AND RETENTION) / MODERATE (PII-LEAK RISK) / INSUFFICIENT (ANY ACTUAL DATA RETURN)"
-      action: null
-      fp_risk: null
-    - type: "domain"
-      value: "www.chengjiastore.cn"
-      context: null
-      confidence: "DEFINITE (UNAUTHORIZED AUTHENTICATED ACCESS)"
-      action: null
-      fp_risk: null
-    - type: "domain"
-      value: "zujixiong.cn"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "domain"
-      value: "zxq.3czu.cn"
-      context: null
-      confidence: null
-      action: null
       fp_risk: null
     - type: "url"
       value: "http://192.3.1.116:7777/cmd.jsp"
@@ -7346,11 +7061,10 @@
   feed_url: "/ioc-feeds/nsminer-cryptojacker.json"
   report_url: "/reports/nsminer-cryptojacker/"
   detection_url: "/hunting-detections/nsminer-cryptojacker-detections"
-  total: 28
+  total: 13
   untyped: 0
   counts:
     domain: 2
-    ipv4: 15
     path: 3
     sha256: 7
     url: 1
@@ -7358,96 +7072,6 @@
   has_action: false
   has_fp_risk: false
   rows:
-    - type: "ipv4"
-      value: "110.188.25.10"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "116.62.22.10"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "13.180.6.10"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "134.211.96.10"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "136.0.88.10"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "141.227.248.10"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "162.150.119.10"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "202.24.217.10"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "214.192.190.10"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "223.50.252.10"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "45.156.140.10"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "56.255.40.10"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "63.192.224.10"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "85.230.83.10"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "94.158.41.10"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
     - type: "domain"
       value: "hrtests.ru"
       context: null
@@ -7922,12 +7546,12 @@
   feed_url: "/ioc-feeds/open-directory-94-103-1-13-20260423-iocs.json"
   report_url: "/reports/open-directory-94-103-1-13-20260423/"
   detection_url: "/hunting-detections/open-directory-94-103-1-13-20260423-detections"
-  total: 91
-  untyped: 110
+  total: 90
+  untyped: 108
   counts:
     domain: 8
     filename: 23
-    ipv4: 2
+    ipv4: 1
     md5: 5
     path: 10
     registry: 7
@@ -7938,12 +7562,6 @@
   has_action: false
   has_fp_risk: false
   rows:
-    - type: "ipv4"
-      value: "192.227.108.142"
-      context: null
-      confidence: "MODERATE"
-      action: null
-      fp_risk: null
     - type: "ipv4"
       value: "94.103.1.13"
       context: null
@@ -8522,12 +8140,12 @@
   feed_url: "/ioc-feeds/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-iocs.json"
   report_url: "/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/"
   detection_url: "/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections"
-  total: 135
+  total: 129
   untyped: 88
   counts:
     domain: 13
     filename: 28
-    ipv4: 8
+    ipv4: 2
     path: 11
     sha1: 2
     sha256: 70
@@ -8541,42 +8159,6 @@
       context: "Operator VPS and collection point | VT 0/91. Shodan geolocation for this address is wrong (reports US/Dallas/SoftLayer from a stale legacy registration on the 13.x block); VT, Censys and rDNS agree on Contabo France"
       confidence: "DEFINITE"
       action: "BLOCK"
-      fp_risk: null
-    - type: "ipv4"
-      value: "140.99.223.46"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "146.70.52.222"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "147.124.203.51"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "2.57.91.91"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "47.130.108.237"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "62.133.46.18"
-      context: null
-      confidence: null
-      action: null
       fp_risk: null
     - type: "ipv4"
       value: "95.214.114.37"
@@ -9346,7 +8928,7 @@
       confidence: "DEFINITE"
       action: null
       fp_risk: null
-  never_block_total: 5
+  never_block_total: 11
   never_block_rows:
     - type: "ipv4"
       value: "104.21.41.159"
@@ -9355,8 +8937,26 @@
       value: "127.0.0.1"
       context: "Operator custom multi-session C2 console bound to localhost on the VPS. Verbs sessions and use <cid>. The server (console.py) was never archived"
     - type: "ipv4"
+      value: "140.99.223.46"
+      context: "Independent intruder on the same Cisco router, 2026-05-12, using the generic public CVE-2023-20198 URI POST /webui/logoutconfirm.html?logon_hash=1. Limestone Networks, US"
+    - type: "ipv4"
+      value: "146.70.52.222"
+      context: "Browsed the same router's WebUI three times on 2026-07-07 with AAA failures. M247, VT-tagged vpn"
+    - type: "ipv4"
+      value: "147.124.203.51"
+      context: "Independent intruder on the same router, 2026-07-07, same generic URI. Tier.Net Technologies, US"
+    - type: "ipv4"
       value: "172.67.148.55"
       context: "Cloudflare proxy A record for radius-sync.com"
+    - type: "ipv4"
+      value: "2.57.91.91"
+      context: "RETRACTED as an operator IP. radius-sync.com pointed here for approximately fifteen seconds at registration before being repointed. Hostinger shared parking infrastructure, AS47583, approximately 4.2 million domains. Its VT 9/91 is mass-hosting noise"
+    - type: "ipv4"
+      value: "47.130.108.237"
+      context: "Failed TLS handshake against the same router on 2026-07-07. AWS Singapore, probably scanner noise"
+    - type: "ipv4"
+      value: "62.133.46.18"
+      context: "Browsed the same router's WebUI 2026-07-07 and 07-24 with AAA failures. M247, VT-tagged vpn"
     - type: "domain"
       value: "paloma.ns.cloudflare.com"
       context: "Operator-owned domain"
@@ -10663,17 +10263,16 @@
   feed_url: "/ioc-feeds/opendirectory-62-60-237-100-20260506-iocs.json"
   report_url: "/reports/opendirectory-62-60-237-100-20260506/"
   detection_url: "/hunting-detections/opendirectory-62-60-237-100-20260506-detections"
-  total: 171
+  total: 144
   untyped: 83
   counts:
     domain: 6
-    filename: 43
+    filename: 34
     ipv4: 4
-    md5: 15
+    md5: 14
     path: 19
     registry: 5
-    sha1: 1
-    sha256: 61
+    sha256: 45
     url: 17
   has_confidence: true
   has_action: false
@@ -10890,21 +10489,9 @@
       action: null
       fp_risk: null
     - type: "sha256"
-      value: "30b9b877aa1112105069be6b4de794b7a7147a1d968e71fa63f2edc7397e126f"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "sha256"
       value: "3480d0478d35d8a12331b97769401e16e4956bdc24b9a7175ae08e2c9e9acf8f"
       context: null
       confidence: "MODERATE"
-      action: null
-      fp_risk: null
-    - type: "sha256"
-      value: "3594a835ed3dbf80ac460c0e852fa91baa3b17aadff9c3b40c03eff6b34658d2"
-      context: null
-      confidence: null
       action: null
       fp_risk: null
     - type: "sha256"
@@ -10914,27 +10501,9 @@
       action: null
       fp_risk: null
     - type: "sha256"
-      value: "41050f6f6919a4516d481f7c9b5fe6074c447afc6e9cc28d180982eea50ae165"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "sha256"
-      value: "44f009ca786bc541cda11c61bab7b272e96ce9e3d656c10bdac2e126f3a9cc35"
-      context: null
-      confidence: "HIGH"
-      action: null
-      fp_risk: null
-    - type: "sha256"
       value: "4b2595eee4a24d2caa885e9fe6bf06d5fed9aa3a40d94b75f766b4433bcddbc2"
       context: "Sibling zip variant"
       confidence: "HIGH"
-      action: null
-      fp_risk: null
-    - type: "sha256"
-      value: "4b33ee0e8a4153c0c8ccd945adb18d8f91b5b824746a15986bf6781f081f9968"
-      context: null
-      confidence: null
       action: null
       fp_risk: null
     - type: "sha256"
@@ -10962,12 +10531,6 @@
       action: null
       fp_risk: null
     - type: "sha256"
-      value: "58ef42507d9fc1e8a7b240ef5cddc9f600c3d9a61ee6a42a4045278bb332b86a"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "sha256"
       value: "6091a6e5ce9a8e0d7f896ebd3dfd798ac41a7c355a48e5643dfcf798437cf736"
       context: "Excel XLL add-in (3.4 MB DLL with init.dll,#1 rundll32 entry); macro-block bypass"
       confidence: "HIGH"
@@ -10989,24 +10552,6 @@
       value: "692ed97141059a1481fa2aacd5d48f037792f5bfddfa44f72078fc7256c764ad"
       context: null
       confidence: "HIGH"
-      action: null
-      fp_risk: null
-    - type: "sha256"
-      value: "718cfb5195d0e43e795627c781fb3f427856f1cf29f33eedbbc6059b6f214549"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "sha256"
-      value: "729e5965e43ff458f6da901536c9a43be52a3820718e2dd5456150e2d73bb97f"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "sha256"
-      value: "7cd5072111581133c5e28b56bef060b3d3b0d8acca3396ef23c6c384eb292d25"
-      context: null
-      confidence: null
       action: null
       fp_risk: null
     - type: "sha256"
@@ -11046,12 +10591,6 @@
       action: null
       fp_risk: null
     - type: "sha256"
-      value: "8fcae9719a3f831cb73ef50b587a6222ff73d6c1a6ae617636cb31c6e02d5e3a"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "sha256"
       value: "90193252040e222733522603e17be8c21e52cd04cd99897392aea189a78bb217"
       context: "MSC file (GrimResource Tier-2 with Defender exclusion + dual-source download)"
       confidence: "HIGH"
@@ -11088,12 +10627,6 @@
       action: null
       fp_risk: null
     - type: "sha256"
-      value: "b1038928a6da2a1b5064a27187403563f3ab7e8d4ec034dfa8d5d3f6be231191"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "sha256"
       value: "b4098f2bb99ce112fb27560237b84a52d9303fade048b8f83ac40f0d082ee2f7"
       context: "Sibling Embarcadero Delphi loader on staging server"
       confidence: "HIGH"
@@ -11118,12 +10651,6 @@
       action: null
       fp_risk: "Hash is legitimate Qihoo 360 product, only flag when dropped to non-standard paths (C:\\ProgramData\\WVault.exe)"
     - type: "sha256"
-      value: "c1275ddf04a0942b416c1a0b2d32003a4eda732c6f97c74181c236e35d12420f"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "sha256"
       value: "c2b7b67e9daafef4847d99b4014b7ba77369fb776bba333a585f16d736c192e4"
       context: null
       confidence: "MODERATE"
@@ -11133,18 +10660,6 @@
       value: "c2e62475768c9546efe1da92a55f3bb2a55350eed83241139917aabd1ad25f8a"
       context: null
       confidence: "HIGH"
-      action: null
-      fp_risk: null
-    - type: "sha256"
-      value: "c50bffbef786eb689358c63fc0585792d174c5e281499f12035afa1ce2ce19c8"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "sha256"
-      value: "ca9f859f01940c1d4cfe7465460485398e2de8606e3a4eea977a430555c3bcae"
-      context: null
-      confidence: null
       action: null
       fp_risk: null
     - type: "sha256"
@@ -11178,12 +10693,6 @@
       action: null
       fp_risk: null
     - type: "sha256"
-      value: "e841fe9fa09ddc4292f22db95cb2d348d8f37594513f5848d545db92e3b07c66"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "sha256"
       value: "f1ba9ec2ec964bb29c8999d88b0ca8496ab23e9f44fecf5cc819ed62e447dee5"
       context: null
       confidence: "HIGH"
@@ -11196,33 +10705,15 @@
       action: null
       fp_risk: null
     - type: "sha256"
-      value: "fcebe8bee86d02093380c7c2eb6dd083ec4d765ed1dae9a1d9fbc1a6328a7778"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "sha256"
       value: "fd89aea524a9c6b77efcf0d9d350f2fd625525887a1ef078017d8ceee0eaafee"
       context: "LNK shortcut targeting explorer.exe + UNC argument"
       confidence: "HIGH"
-      action: null
-      fp_risk: null
-    - type: "sha1"
-      value: "bc99a77a68f18005cac0c784a176d3199f735ecf"
-      context: null
-      confidence: null
       action: null
       fp_risk: null
     - type: "md5"
       value: "051ba42fa7a26bf65df9922daa07c458"
       context: "IMPHASH; matches genuine Wondershare SlideShowEditor.exe, only flag with context"
       confidence: "HIGH"
-      action: null
-      fp_risk: null
-    - type: "md5"
-      value: "059917fd7718808bc34be224e415216f"
-      context: null
-      confidence: null
       action: null
       fp_risk: null
     - type: "md5"
@@ -11472,12 +10963,6 @@
       action: null
       fp_risk: null
     - type: "filename"
-      value: "bugsplat.dll"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "filename"
       value: "carriers.exe"
       context: null
       confidence: "HIGH"
@@ -11496,12 +10981,6 @@
       action: null
       fp_risk: null
     - type: "filename"
-      value: "comsupport.dll"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "filename"
       value: "crisp.exe"
       context: null
       confidence: "HIGH"
@@ -11517,12 +10996,6 @@
       value: "cytotoxin.exe"
       context: "VT canonical filename for LDKPOIZD.exe (Penguish loader codename)"
       confidence: "HIGH"
-      action: null
-      fp_risk: null
-    - type: "filename"
-      value: "dvdsetting.dll"
-      context: null
-      confidence: null
       action: null
       fp_risk: null
     - type: "filename"
@@ -11586,21 +11059,9 @@
       action: null
       fp_risk: null
     - type: "filename"
-      value: "nleresource.dll"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "filename"
       value: "nleservice.dll"
       context: null
       confidence: "MODERATE"
-      action: null
-      fp_risk: null
-    - type: "filename"
-      value: "nletransitionmgr.dll"
-      context: null
-      confidence: null
       action: null
       fp_risk: null
     - type: "filename"
@@ -11676,36 +11137,12 @@
       action: null
       fp_risk: null
     - type: "filename"
-      value: "ws_imageproc.dll"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "filename"
-      value: "ws_log.dll"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "filename"
-      value: "wsburn.dll"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "filename"
-      value: "wsutilities.dll"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "filename"
       value: "xxx.lnk"
       context: "LNK shortcut targeting explorer.exe + UNC argument"
       confidence: "HIGH"
       action: null
       fp_risk: null
-  never_block_total: 4
+  never_block_total: 32
   never_block_rows:
     - type: "ipv4"
       value: "23.106.161.1"
@@ -11719,6 +11156,90 @@
     - type: "domain"
       value: "s3.g.s4.mega.io"
       context: "Mega.io abuse, operator bucket aileqac3yep7oqdhygjpberqqnk2zrnhck2lx; subdir 'busket' (typo); hosts putty.exe, putty2.exe, Bravo/vida/NGZTDICF.exe; VT 13/60 malicious"
+    - type: "sha256"
+      value: "30b9b877aa1112105069be6b4de794b7a7147a1d968e71fa63f2edc7397e126f"
+      context: "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    - type: "sha256"
+      value: "3594a835ed3dbf80ac460c0e852fa91baa3b17aadff9c3b40c03eff6b34658d2"
+      context: "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    - type: "sha256"
+      value: "41050f6f6919a4516d481f7c9b5fe6074c447afc6e9cc28d180982eea50ae165"
+      context: "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    - type: "sha256"
+      value: "44f009ca786bc541cda11c61bab7b272e96ce9e3d656c10bdac2e126f3a9cc35"
+      context: "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    - type: "sha256"
+      value: "4b33ee0e8a4153c0c8ccd945adb18d8f91b5b824746a15986bf6781f081f9968"
+      context: "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    - type: "sha256"
+      value: "58ef42507d9fc1e8a7b240ef5cddc9f600c3d9a61ee6a42a4045278bb332b86a"
+      context: "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    - type: "sha256"
+      value: "718cfb5195d0e43e795627c781fb3f427856f1cf29f33eedbbc6059b6f214549"
+      context: "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    - type: "sha256"
+      value: "729e5965e43ff458f6da901536c9a43be52a3820718e2dd5456150e2d73bb97f"
+      context: "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    - type: "sha256"
+      value: "7cd5072111581133c5e28b56bef060b3d3b0d8acca3396ef23c6c384eb292d25"
+      context: "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    - type: "sha256"
+      value: "8fcae9719a3f831cb73ef50b587a6222ff73d6c1a6ae617636cb31c6e02d5e3a"
+      context: "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    - type: "sha256"
+      value: "b1038928a6da2a1b5064a27187403563f3ab7e8d4ec034dfa8d5d3f6be231191"
+      context: "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    - type: "sha256"
+      value: "c1275ddf04a0942b416c1a0b2d32003a4eda732c6f97c74181c236e35d12420f"
+      context: "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    - type: "sha256"
+      value: "c50bffbef786eb689358c63fc0585792d174c5e281499f12035afa1ce2ce19c8"
+      context: "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    - type: "sha256"
+      value: "ca9f859f01940c1d4cfe7465460485398e2de8606e3a4eea977a430555c3bcae"
+      context: "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    - type: "sha256"
+      value: "e841fe9fa09ddc4292f22db95cb2d348d8f37594513f5848d545db92e3b07c66"
+      context: "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    - type: "sha256"
+      value: "fcebe8bee86d02093380c7c2eb6dd083ec4d765ed1dae9a1d9fbc1a6328a7778"
+      context: "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    - type: "sha1"
+      value: "bc99a77a68f18005cac0c784a176d3199f735ecf"
+      context: "GENUINE Wondershare cert; signs legitimate Wondershare DVD Creator and other products; adding to revocation feeds would block legit customers worldwide"
+    - type: "md5"
+      value: "059917fd7718808bc34be224e415216f"
+      context: "GENUINE Wondershare cert; signs legitimate Wondershare DVD Creator and other products; adding to revocation feeds would block legit customers worldwide"
+    - type: "filename"
+      value: "bugsplat.dll"
+      context: "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    - type: "filename"
+      value: "comsupport.dll"
+      context: "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    - type: "filename"
+      value: "dbghelp.dll"
+      context: "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    - type: "filename"
+      value: "dvdsetting.dll"
+      context: "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    - type: "filename"
+      value: "nleresource.dll"
+      context: "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    - type: "filename"
+      value: "nletransitionmgr.dll"
+      context: "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    - type: "filename"
+      value: "ws_imageproc.dll"
+      context: "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    - type: "filename"
+      value: "ws_log.dll"
+      context: "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    - type: "filename"
+      value: "wsburn.dll"
+      context: "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    - type: "filename"
+      value: "wsutilities.dll"
+      context: "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
 "opendirectory-74-0-42-25-20260316":
   slug: "opendirectory-74-0-42-25-20260316"
   page_url: "/ioc-feeds/opendirectory-74-0-42-25-20260316/"
@@ -12813,7 +12334,7 @@
       value: "http://79.137.192.3:1516/"
       context: null
       confidence: null
-      action: null
+      action: "BLOCK"
       fp_risk: null
     - type: "url"
       value: "https://79.133.180.168/forwarding/fwmjd8fs.mqi5u"
@@ -12879,7 +12400,7 @@
       value: "1a05bd169881128f86bbb27730c1b0c2077b08f6a6883332517fa5824c5572cf"
       context: null
       confidence: null
-      action: null
+      action: "BLOCK"
       fp_risk: null
     - type: "sha256"
       value: "219cd4f6177a2358ec7f06b230d611f47e1049fcb3e2b44d06ec410b336382b0"
@@ -12891,13 +12412,13 @@
       value: "241074924c7b51be32a2bd658a84deab2bcd30a4bc48d8a71e92123c941887ba"
       context: null
       confidence: null
-      action: null
+      action: "BLOCK"
       fp_risk: null
     - type: "sha256"
       value: "2910a52e0934c8f1cf247cf88d1fce010f2e52dfb1cf2f64ebf3dc53df4ef865"
       context: null
       confidence: null
-      action: null
+      action: "BLOCK"
       fp_risk: null
     - type: "sha256"
       value: "2c656360c4e58854dca35ff21b3fc62db41155ca76f8568ecc18fa52aa38fb31"
@@ -13005,7 +12526,7 @@
       value: "a41092e5e40602533850a4d1b2ecd182"
       context: null
       confidence: null
-      action: null
+      action: "BLOCK"
       fp_risk: null
     - type: "md5"
       value: "ae9991a02aa20ebbc2cc3c0f40924442"
@@ -13035,7 +12556,7 @@
       value: "C:\\sena\\tawateje_lenicetedev68.pdb"
       context: null
       confidence: null
-      action: null
+      action: "BLOCK"
       fp_risk: null
     - type: "registry"
       value: "HKU\\<SID>\\Software\\SibCode\\sn"
@@ -13047,7 +12568,7 @@
       value: "a52d0a1829a0ff_15m.exe"
       context: null
       confidence: null
-      action: null
+      action: "BLOCK"
       fp_risk: null
     - type: "filename"
       value: "dolap.rar"
@@ -13071,7 +12592,7 @@
       value: "incurious.exe"
       context: null
       confidence: null
-      action: null
+      action: "BLOCK"
       fp_risk: null
     - type: "filename"
       value: "index-coeww2zm.js"
@@ -13089,7 +12610,7 @@
       value: "kourimaobaku.exe"
       context: null
       confidence: null
-      action: null
+      action: "BLOCK"
       fp_risk: null
     - type: "filename"
       value: "letgo.rar"
@@ -13753,12 +13274,12 @@
   feed_url: "/ioc-feeds/russian-gemini-credential-mill-213.165.51.115-iocs.json"
   report_url: "/reports/russian-gemini-credential-mill-213.165.51.115/"
   detection_url: "/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections"
-  total: 35
-  untyped: 115
+  total: 34
+  untyped: 114
   counts:
     domain: 7
     email: 1
-    filename: 5
+    filename: 4
     ipv4: 6
     md5: 1
     path: 5
@@ -13950,12 +13471,6 @@
       action: null
       fp_risk: "low"
     - type: "filename"
-      value: "1passwordexport-xraolk4zizhjpdwpvemgprdxbe-20260320-060857.csv"
-      context: null
-      confidence: "DEFINITE"
-      action: null
-      fp_risk: "low"
-    - type: "filename"
       value: "ai_admin_mutants.txt"
       context: null
       confidence: "HIGH"
@@ -13993,80 +13508,32 @@
   feed_url: "/ioc-feeds/seasia-gov-exploitation-toolkit-144-172-106-236-iocs.json"
   report_url: "/reports/seasia-gov-exploitation-toolkit-144-172-106-236/"
   detection_url: "/hunting-detections/seasia-gov-exploitation-toolkit-144-172-106-236-detections"
-  total: 41
+  total: 32
   untyped: 39
   counts:
-    domain: 3
+    domain: 1
     email: 1
     filename: 1
-    ipv4: 7
+    ipv4: 1
     md5: 4
     path: 16
     sha1: 4
-    sha256: 5
+    sha256: 4
   has_confidence: true
   has_action: true
   has_fp_risk: false
   rows:
-    - type: "ipv4"
-      value: "103.146.204.15"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "119.59.99.87"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "128.199.246.46"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "140.99.255.48"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
     - type: "ipv4"
       value: "144.172.106.236"
       context: null
       confidence: "DEFINITE"
       action: "MONITOR"
       fp_risk: null
-    - type: "ipv4"
-      value: "146.56.180.42"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "ipv4"
-      value: "43.208.251.115"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "domain"
-      value: "bootyreader.com"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
     - type: "domain"
       value: "cat.sh"
       context: null
       confidence: "HIGH"
       action: "BLOCK"
-      fp_risk: null
-    - type: "domain"
-      value: "ulm.ac.id"
-      context: null
-      confidence: null
-      action: null
       fp_risk: null
     - type: "sha256"
       value: "23560e13d06d8153e0e7566d153ffe9eec79e08eb1ed18f8cd1417728e7dbdd6"
@@ -14085,12 +13552,6 @@
       context: null
       confidence: "HIGH"
       action: "HUNT"
-      fp_risk: null
-    - type: "sha256"
-      value: "c739f55d53b632bddc229a332a5165d006ae14cdabe6740a9048619394ac3b93"
-      context: null
-      confidence: null
-      action: null
       fp_risk: null
     - type: "sha256"
       value: "e788f829b1a0141a488afb5f82b94f13035623609ca3b83f0c6985919cd9e83b"
@@ -14254,14 +13715,29 @@
       confidence: "LOW"
       action: "HUNT"
       fp_risk: null
-  never_block_total: 15
+  never_block_total: 21
   never_block_rows:
+    - type: "ipv4"
+      value: "128.199.246.46"
+      context: "Public VPNJantit free-VPN exit node the operator connected THROUGH (usable only as a source IP, never operator-owned)"
+    - type: "ipv4"
+      value: "140.99.255.48"
+      context: "bootyreader.com's host"
+    - type: "ipv4"
+      value: "146.56.180.42"
+      context: "Shared Hysteria2 circumvention proxy the operator used upstream (not operator-owned)"
+    - type: "ipv4"
+      value: "43.208.251.115"
+      context: "AWS-Thailand SOCKS5 'Thai VPS' candidate, ownership INSUFFICIENT; operator could not even connect"
     - type: "ipv4"
       value: "87.106.101.131"
       context: "GSRN public relay node (gs18.thc.org), seen embedded in the second-actor cat.sh loader"
     - type: "domain"
       value: "api.telegram.org"
       context: "Shared public infrastructure with vast legitimate use. Presence of a GSocket relay connection FROM a server-class host with no interactive user is the signal. The domains themselves are not. NEVER place these on a block list or ship as campaign IOCs. Second-actor (GSocket/THC kit) context only."
+    - type: "domain"
+      value: "bootyreader.com"
+      context: "Unrelated Moroccan spam co-tenant of the recycled IP"
     - type: "domain"
       value: "cdn.gsocket.io"
       context: "Shared public infrastructure with vast legitimate use. Presence of a GSocket relay connection FROM a server-class host with no interactive user is the signal. The domains themselves are not. NEVER place these on a block list or ship as campaign IOCs. Second-actor (GSocket/THC kit) context only."
@@ -14301,6 +13777,9 @@
     - type: "domain"
       value: "z.gs.thc.org"
       context: "Shared public infrastructure with vast legitimate use. Presence of a GSocket relay connection FROM a server-class host with no interactive user is the signal. The domains themselves are not. NEVER place these on a block list or ship as campaign IOCs. Second-actor (GSocket/THC kit) context only."
+    - type: "sha256"
+      value: "c739f55d53b632bddc229a332a5165d006ae14cdabe6740a9048619394ac3b93"
+      context: "VPNJantit's PUBLIC VPN-node certificate would flag every VPNJantit user worldwide (Censys returns 1 host)"
 "shadow-xworm-opendirectory":
   slug: "shadow-xworm-opendirectory"
   page_url: "/ioc-feeds/shadow-xworm-opendirectory/"
@@ -14622,7 +14101,7 @@
   report_url: "/reports/shinyhunters-dls-91-215-85-22-20260417/"
   detection_url: "/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections"
   total: 25
-  untyped: 108
+  untyped: 97
   counts:
     domain: 6
     email: 2
@@ -14801,17 +14280,17 @@
   feed_url: "/ioc-feeds/sliver-c2-windows-postex-staging-193-233-202-17-iocs.json"
   report_url: "/reports/sliver-c2-windows-postex-staging-193-233-202-17/"
   detection_url: "/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections"
-  total: 376
-  untyped: 145
+  total: 369
+  untyped: 137
   counts:
-    domain: 10
+    domain: 7
     filename: 80
     ipv4: 3
-    md5: 80
+    md5: 79
     path: 22
     registry: 6
     sha1: 77
-    sha256: 84
+    sha256: 81
     url: 14
   has_confidence: true
   has_action: true
@@ -14842,28 +14321,10 @@
       action: null
       fp_risk: null
     - type: "domain"
-      value: "dcdivas.com"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "domain"
-      value: "gorus.space"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "domain"
       value: "itemrange.com"
       context: null
       confidence: "HIGH"
       action: "BLOCK"
-      fp_risk: null
-    - type: "domain"
-      value: "n8n-nether.nafer.ru"
-      context: null
-      confidence: null
-      action: null
       fp_risk: null
     - type: "domain"
       value: "publisherresolution.com"
@@ -14975,18 +14436,6 @@
       fp_risk: null
     - type: "url"
       value: "https://wiselystarting.com"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "sha256"
-      value: "0019dfc4b32d63c1392aa264aed2253c1e0c2fb09216f8e2cc269bbfb8bb49b5"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "sha256"
-      value: "033729fe4f6aadc1ba38de00013f7b0e5e1bf5d540df00872931053488ed79bd"
       context: null
       confidence: null
       action: null
@@ -15325,12 +14774,6 @@
       value: "a53150f1214665cf8122a3fa2f953c863be2f5c0f81a0d25f603a91689f713eb"
       context: "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
       confidence: "DEFINITE"
-      action: null
-      fp_risk: null
-    - type: "sha256"
-      value: "a84f6fe166a238c48c5ccebe5312bb63311476fbf14cd81883f3329c36b1362d"
-      context: null
-      confidence: null
       action: null
       fp_risk: null
     - type: "sha256"
@@ -16037,12 +15480,6 @@
       fp_risk: null
     - type: "md5"
       value: "2000c9cd74d0770a4cfd97282cdc9abd"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "md5"
-      value: "2196848d251b217de8b2c037e356c11d"
       context: null
       confidence: null
       action: null
@@ -17073,7 +16510,7 @@
       confidence: "HIGH"
       action: null
       fp_risk: null
-  never_block_total: 11
+  never_block_total: 19
   never_block_rows:
     - type: "ipv4"
       value: "147.135.84.14"
@@ -17081,6 +16518,9 @@
     - type: "ipv4"
       value: "77.110.126.46"
       context: "OPERATOR FALLBACK C2, UNDERLYING HOST OWNERSHIP NOT ESTABLISHED"
+    - type: "domain"
+      value: "dcdivas.com"
+      context: "One of 106 contacted domains on a single unrelated file. NOT CHECKED as a link, never LOW"
     - type: "domain"
       value: "eth-mainnet.public.blastapi.io"
       context: "PUBLIC ETHEREUM RPC"
@@ -17094,8 +16534,14 @@
       value: "ethereum-rpc.publicnode.com"
       context: "PUBLIC ETHEREUM RPC"
     - type: "domain"
+      value: "gorus.space"
+      context: "Arrived on the secondary operator address in a later hosting window than the operator's April use. Shared registrar is thin evidence given that registrar's size. NOT CHECKED"
+    - type: "domain"
       value: "mainnet.gateway.tenderly.co"
       context: "PUBLIC ETHEREUM RPC"
+    - type: "domain"
+      value: "n8n-nether.nafer.ru"
+      context: "Dropped. A later tenant on a recycled address, not implicated in this campaign"
     - type: "domain"
       value: "nodejs.org"
       context: "LEGITIMATE VENDOR"
@@ -17106,8 +16552,23 @@
       value: "rpc.mevblocker.io"
       context: "PUBLIC ETHEREUM RPC"
     - type: "url"
+      value: "http://localhost:3000"
+      context: "A development leftover in the bot's fallback configuration, not reachable infrastructure"
+    - type: "url"
       value: "https://nodejs.org/dist/v18.17.0/node-v18.17.0-win-x64.zip"
       context: "LEGITIMATE VENDOR DOWNLOAD"
+    - type: "sha256"
+      value: "0019dfc4b32d63c1392aa264aed2253c1e0c2fb09216f8e2cc269bbfb8bb49b5"
+      context: "A 9-byte package-index cache file, 0 of 61 engines malicious, submitted 3,346 times from 1,540 sources since 2009. Relationship noise, not a campaign artifact"
+    - type: "sha256"
+      value: "033729fe4f6aadc1ba38de00013f7b0e5e1bf5d540df00872931053488ed79bd"
+      context: "destoryed.exe. Not in the served directory, first seen eleven days after capture, and its 106 contacted domains include google.com, github.com and dropbox.com. The whole adjacent-ecosystem reading built on it is retracted"
+    - type: "sha256"
+      value: "a84f6fe166a238c48c5ccebe5312bb63311476fbf14cd81883f3329c36b1362d"
+      context: "An unheld family member surfaced only by relationship data on the secondary address, with no second line of evidence. Recorded as a lead, kept out of the feed"
+    - type: "md5"
+      value: "2196848d251b217de8b2c037e356c11d"
+      context: "MEASURED at 3,645 distinct hosts with a working control, and nothing in that corpus associates it with Sliver. Commodity Go TLS. Grade INSUFFICIENT. Do not author a detection rule on it"
 "sliver-open-directory":
   slug: "sliver-open-directory"
   page_url: "/ioc-feeds/sliver-open-directory/"
@@ -17255,7 +16716,7 @@
   report_url: "/reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/"
   detection_url: "/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections"
   total: 42
-  untyped: 137
+  untyped: 136
   counts:
     domain: 12
     filename: 1

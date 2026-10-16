@@ -572,7 +572,7 @@
   "behavioral_indicators": {
     "credential_artifacts": [
       {
-        "value": "022a1b74-2332-4df5-a76b-60225ffa7ae3",
+        "value": "[stolen token id withheld]",
         "type": "jwt_jti",
         "confidence": "DEFINITE",
         "context": "Stolen the victim organization Instana JWT jti; tenant [victim-tenant]; iat 2024-03-06 19:24:35 UTC; exp ~2034-02 (10-year lifetime); roles Team Member + API Token read; iss instana",

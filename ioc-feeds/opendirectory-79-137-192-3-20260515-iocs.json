@@ -819,6 +819,7 @@
     "tenants": [
       {
         "family": "RedLine Stealer",
+        "action": "BLOCK",
         "sha256": "1a05bd169881128f86bbb27730c1b0c2077b08f6a6883332517fa5824c5572cf",
         "filename": "Incurious.exe",
         "c2": "http://79.137.192.3:1516/",
@@ -826,6 +827,7 @@
       },
       {
         "family": "SmokeLoader/Heracles",
+        "action": "BLOCK",
         "sha256": "241074924c7b51be32a2bd658a84deab2bcd30a4bc48d8a71e92123c941887ba",
         "filename": "kourimaobaku.exe",
         "c2_chain": "http://45.12.253.74/pineapple.php?pub=mixtwo; http://85.217.144.143/files/setup2.exe; http://85.217.144.228/files/Amadey.exe; host-file-host6.com; galandskiyher2.com",
@@ -833,6 +835,7 @@
       },
       {
         "family": "Tofsee spam botnet (April 2023 build)",
+        "action": "BLOCK",
         "sha256": "2910a52e0934c8f1cf247cf88d1fce010f2e52dfb1cf2f64ebf3dc53df4ef865",
         "filename": "a52d0a1829a0ff_15M.exe",
         "imphash": "a41092e5e40602533850a4d1b2ecd182",

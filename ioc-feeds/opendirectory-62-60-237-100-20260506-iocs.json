@@ -998,85 +998,6 @@
       "context": "Operator IPC channel mimicking Wondershare crash-reporter naming"
     }
   ],
-  "known_legitimate_DO_NOT_BLOCKLIST": {
-    "context": "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations.",
-    "wondershare_dlls": [
-      {
-        "hash": "44f009ca786bc541cda11c61bab7b272e96ce9e3d656c10bdac2e126f3a9cc35",
-        "filename": "CrystSupervisor32.exe (= Wondershare SlideShowEditor.exe)"
-      },
-      {
-        "hash": "4b33ee0e8a4153c0c8ccd945adb18d8f91b5b824746a15986bf6781f081f9968",
-        "filename": "BugSplat.dll"
-      },
-      {
-        "hash": "b1038928a6da2a1b5064a27187403563f3ab7e8d4ec034dfa8d5d3f6be231191",
-        "filename": "COMSupport.dll"
-      },
-      {
-        "hash": "c1275ddf04a0942b416c1a0b2d32003a4eda732c6f97c74181c236e35d12420f",
-        "filename": "DBGHelp.dll"
-      },
-      {
-        "hash": "718cfb5195d0e43e795627c781fb3f427856f1cf29f33eedbbc6059b6f214549",
-        "filename": "DVDSetting.dll"
-      },
-      {
-        "hash": "7cd5072111581133c5e28b56bef060b3d3b0d8acca3396ef23c6c384eb292d25",
-        "filename": "NLEResource.dll"
-      },
-      {
-        "hash": "41050f6f6919a4516d481f7c9b5fe6074c447afc6e9cc28d180982eea50ae165",
-        "filename": "NLETransitionMgr.dll"
-      },
-      {
-        "hash": "30b9b877aa1112105069be6b4de794b7a7147a1d968e71fa63f2edc7397e126f",
-        "filename": "WSUtilities.dll"
-      },
-      {
-        "hash": "58ef42507d9fc1e8a7b240ef5cddc9f600c3d9a61ee6a42a4045278bb332b86a",
-        "filename": "WS_ImageProc.dll"
-      },
-      {
-        "hash": "e841fe9fa09ddc4292f22db95cb2d348d8f37594513f5848d545db92e3b07c66",
-        "filename": "WS_Log.dll"
-      },
-      {
-        "hash": "8fcae9719a3f831cb73ef50b587a6222ff73d6c1a6ae617636cb31c6e02d5e3a",
-        "filename": "WsBurn.dll"
-      }
-    ],
-    "stage3_bundle_legitimate": [
-      {
-        "hash": "fcebe8bee86d02093380c7c2eb6dd083ec4d765ed1dae9a1d9fbc1a6328a7778",
-        "filename": "pe_01 (Crisp Squirrel StubExecutable from paulb)"
-      },
-      {
-        "hash": "c50bffbef786eb689358c63fc0585792d174c5e281499f12035afa1ce2ce19c8",
-        "filename": "pe_02 (Info-ZIP zip.exe v3.0)"
-      },
-      {
-        "hash": "3594a835ed3dbf80ac460c0e852fa91baa3b17aadff9c3b40c03eff6b34658d2",
-        "filename": "pe_04 (Google Updater stub)"
-      },
-      {
-        "hash": "729e5965e43ff458f6da901536c9a43be52a3820718e2dd5456150e2d73bb97f",
-        "filename": "pe_05 (Google Updater component)"
-      },
-      {
-        "hash": "ca9f859f01940c1d4cfe7465460485398e2de8606e3a4eea977a430555c3bcae",
-        "filename": "pe_08 (Qihoo 360 PromoUtil.exe)"
-      }
-    ],
-    "wondershare_code_signing_cert_DO_NOT_REVOKE": {
-      "subject": "CN=\"Wondershare Technology Group Co.,Ltd\"",
-      "issuer": "CN=DigiCert Trusted G4 Code Signing RSA4096 SHA384 2021 CA1",
-      "thumbprint_sha1": "BC99A77A68F18005CAC0C784A176D3199F735ECF",
-      "serial": "059917FD7718808BC34BE224E415216F",
-      "validity": "2022-04-08 to 2025-04-05",
-      "context": "GENUINE Wondershare cert; signs legitimate Wondershare DVD Creator and other products; adding to revocation feeds would block legit customers worldwide"
-    }
-  },
   "hunt_only_never_block": [
     {
       "value": "s3.g.s4.mega.io",
@@ -1097,6 +1018,111 @@
       "value": "23.106.161.1",
       "category": "author-marked never-block",
       "context": "Appears only embedded in the CAB filename '1468_US_23.106.161.1_28-01-26.cab', which follows the kit's per-victim customization pattern, and resolves to a Synology QuickConnect / Leaseweb VPN address on AS7203. It is more likely the victim or an unrelated third party than operator infrastructure, held at LOW confidence, and the UNC5267 cluster overlap on it is incidental. Do not block it at the perimeter without independent verification; treat it as a host to investigate, not an address to deny."
+    },
+    {
+      "hash": "44f009ca786bc541cda11c61bab7b272e96ce9e3d656c10bdac2e126f3a9cc35",
+      "filename": "CrystSupervisor32.exe (= Wondershare SlideShowEditor.exe)",
+      "category": "legitimate vendor binary bundled as camouflage",
+      "context": "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    },
+    {
+      "hash": "4b33ee0e8a4153c0c8ccd945adb18d8f91b5b824746a15986bf6781f081f9968",
+      "filename": "BugSplat.dll",
+      "category": "legitimate vendor binary bundled as camouflage",
+      "context": "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    },
+    {
+      "hash": "b1038928a6da2a1b5064a27187403563f3ab7e8d4ec034dfa8d5d3f6be231191",
+      "filename": "COMSupport.dll",
+      "category": "legitimate vendor binary bundled as camouflage",
+      "context": "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    },
+    {
+      "hash": "c1275ddf04a0942b416c1a0b2d32003a4eda732c6f97c74181c236e35d12420f",
+      "filename": "DBGHelp.dll",
+      "category": "legitimate vendor binary bundled as camouflage",
+      "context": "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    },
+    {
+      "hash": "718cfb5195d0e43e795627c781fb3f427856f1cf29f33eedbbc6059b6f214549",
+      "filename": "DVDSetting.dll",
+      "category": "legitimate vendor binary bundled as camouflage",
+      "context": "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    },
+    {
+      "hash": "7cd5072111581133c5e28b56bef060b3d3b0d8acca3396ef23c6c384eb292d25",
+      "filename": "NLEResource.dll",
+      "category": "legitimate vendor binary bundled as camouflage",
+      "context": "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    },
+    {
+      "hash": "41050f6f6919a4516d481f7c9b5fe6074c447afc6e9cc28d180982eea50ae165",
+      "filename": "NLETransitionMgr.dll",
+      "category": "legitimate vendor binary bundled as camouflage",
+      "context": "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    },
+    {
+      "hash": "30b9b877aa1112105069be6b4de794b7a7147a1d968e71fa63f2edc7397e126f",
+      "filename": "WSUtilities.dll",
+      "category": "legitimate vendor binary bundled as camouflage",
+      "context": "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    },
+    {
+      "hash": "58ef42507d9fc1e8a7b240ef5cddc9f600c3d9a61ee6a42a4045278bb332b86a",
+      "filename": "WS_ImageProc.dll",
+      "category": "legitimate vendor binary bundled as camouflage",
+      "context": "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    },
+    {
+      "hash": "e841fe9fa09ddc4292f22db95cb2d348d8f37594513f5848d545db92e3b07c66",
+      "filename": "WS_Log.dll",
+      "category": "legitimate vendor binary bundled as camouflage",
+      "context": "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    },
+    {
+      "hash": "8fcae9719a3f831cb73ef50b587a6222ff73d6c1a6ae617636cb31c6e02d5e3a",
+      "filename": "WsBurn.dll",
+      "category": "legitimate vendor binary bundled as camouflage",
+      "context": "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    },
+    {
+      "hash": "fcebe8bee86d02093380c7c2eb6dd083ec4d765ed1dae9a1d9fbc1a6328a7778",
+      "filename": "pe_01 (Crisp Squirrel StubExecutable from paulb)",
+      "category": "legitimate vendor binary bundled as camouflage",
+      "context": "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    },
+    {
+      "hash": "c50bffbef786eb689358c63fc0585792d174c5e281499f12035afa1ce2ce19c8",
+      "filename": "pe_02 (Info-ZIP zip.exe v3.0)",
+      "category": "legitimate vendor binary bundled as camouflage",
+      "context": "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    },
+    {
+      "hash": "3594a835ed3dbf80ac460c0e852fa91baa3b17aadff9c3b40c03eff6b34658d2",
+      "filename": "pe_04 (Google Updater stub)",
+      "category": "legitimate vendor binary bundled as camouflage",
+      "context": "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    },
+    {
+      "hash": "729e5965e43ff458f6da901536c9a43be52a3820718e2dd5456150e2d73bb97f",
+      "filename": "pe_05 (Google Updater component)",
+      "category": "legitimate vendor binary bundled as camouflage",
+      "context": "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    },
+    {
+      "hash": "ca9f859f01940c1d4cfe7465460485398e2de8606e3a4eea977a430555c3bcae",
+      "filename": "pe_08 (Qihoo 360 PromoUtil.exe)",
+      "category": "legitimate vendor binary bundled as camouflage",
+      "context": "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    },
+    {
+      "subject": "CN=\"Wondershare Technology Group Co.,Ltd\"",
+      "issuer": "CN=DigiCert Trusted G4 Code Signing RSA4096 SHA384 2021 CA1",
+      "thumbprint_sha1": "BC99A77A68F18005CAC0C784A176D3199F735ECF",
+      "serial": "059917FD7718808BC34BE224E415216F",
+      "validity": "2022-04-08 to 2025-04-05",
+      "context": "GENUINE Wondershare cert; signs legitimate Wondershare DVD Creator and other products; adding to revocation feeds would block legit customers worldwide",
+      "category": "legitimate vendor code-signing certificate"
     }
   ]
 }

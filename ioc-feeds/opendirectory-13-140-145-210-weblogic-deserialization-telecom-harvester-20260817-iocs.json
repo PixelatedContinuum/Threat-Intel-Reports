@@ -160,14 +160,14 @@
         "filename": ".wr.py",
         "type": "Python script",
         "confidence": "DEFINITE",
-        "description": "WinRM New-PSSession primary and IPC$ fallback credential spray against 192.168.10.1, objective route print filtered for 172.x"
+        "description": "WinRM New-PSSession primary and IPC$ fallback credential spray against a victim-internal host, objective route print filtered for 172.x"
       },
       {
         "value": "fd628df5bf58c7abaebfca3ecfe504511080872bf1687ec2dd39d1d4cd3f0aab",
         "filename": ".en.py",
         "type": "Python script",
         "confidence": "DEFINITE",
-        "description": "Internal enumeration of 192.168.10.1 via the GeoServer RCE and an ephemeral x.php webshell"
+        "description": "Internal enumeration of a victim-internal host via the GeoServer RCE and an ephemeral x.php webshell"
       },
       {
         "value": "dcd739dfe08285c08200be926905155576bedc4e5633b5f02561ec7f80d512f1",
@@ -944,37 +944,6 @@
       "notes": "Feature-abuse RCE path that works on any PRTG version once admin is held"
     }
   ],
-  "exclusions": {
-    "note": "These indicators were considered and explicitly excluded. They are recorded so that downstream products do not reintroduce them.",
-    "not_this_operator": [
-      {
-        "value": "140.99.223.46",
-        "reason": "Independent intruder on the same Cisco router, 2026-05-12, using the generic public CVE-2023-20198 URI POST /webui/logoutconfirm.html?logon_hash=1. Limestone Networks, US"
-      },
-      {
-        "value": "147.124.203.51",
-        "reason": "Independent intruder on the same router, 2026-07-07, same generic URI. Tier.Net Technologies, US"
-      },
-      {
-        "value": "62.133.46.18",
-        "reason": "Browsed the same router's WebUI 2026-07-07 and 07-24 with AAA failures. M247, VT-tagged vpn"
-      },
-      {
-        "value": "146.70.52.222",
-        "reason": "Browsed the same router's WebUI three times on 2026-07-07 with AAA failures. M247, VT-tagged vpn"
-      },
-      {
-        "value": "47.130.108.237",
-        "reason": "Failed TLS handshake against the same router on 2026-07-07. AWS Singapore, probably scanner noise"
-      }
-    ],
-    "retracted": [
-      {
-        "value": "2.57.91.91",
-        "reason": "RETRACTED as an operator IP. radius-sync.com pointed here for approximately fifteen seconds at registration before being repointed. Hostinger shared parking infrastructure, AS47583, approximately 4.2 million domains. Its VT 9/91 is mass-hosting noise"
-      }
-    ]
-  },
   "notes": {
     "capability_versus_execution": "Only one CVE is confirmed to have succeeded against a victim: the Cisco IOS-XE chain (CVE-2023-20198 plus CVE-2023-20273). CVE-2024-36401 against GeoServer is weaponised with execution unconfirmed. CVE-2023-21839 and CVE-2024-21182 were weaponised and FAILED against a victim host. CVE-2020-14882, CVE-2020-2555 and the Dirty Frag LPE pair are staged only. CVE-2021-44228 is not exploited as Log4Shell at all; JNDIExploit.jar is reused as the callback server for the WebLogic JNDI injection, which is vulnerability-agnostic primitive reuse.",
     "timeline_precision": "The 424,946,514-byte exfiltration is a single day, 2026-07-24. The February-to-July span on the stolen core dumps is their age on the victim device, a pre-existing cache taken in one pass. This is not five months of operator dwell time.",
@@ -1013,6 +982,42 @@
       "confidence": "HIGH",
       "notes": "Local SOCKS listener created by the chisel reverse tunnel, referenced by both proxychains configs and by the SSH ProxyCommand",
       "category": "non-routable address (loopback)"
+    },
+    {
+      "value": "140.99.223.46",
+      "reason": "Independent intruder on the same Cisco router, 2026-05-12, using the generic public CVE-2023-20198 URI POST /webui/logoutconfirm.html?logon_hash=1. Limestone Networks, US",
+      "category": "not this operator (excluded)",
+      "context": "These indicators were considered and explicitly excluded. They are recorded so that downstream products do not reintroduce them."
+    },
+    {
+      "value": "147.124.203.51",
+      "reason": "Independent intruder on the same router, 2026-07-07, same generic URI. Tier.Net Technologies, US",
+      "category": "not this operator (excluded)",
+      "context": "These indicators were considered and explicitly excluded. They are recorded so that downstream products do not reintroduce them."
+    },
+    {
+      "value": "62.133.46.18",
+      "reason": "Browsed the same router's WebUI 2026-07-07 and 07-24 with AAA failures. M247, VT-tagged vpn",
+      "category": "not this operator (excluded)",
+      "context": "These indicators were considered and explicitly excluded. They are recorded so that downstream products do not reintroduce them."
+    },
+    {
+      "value": "146.70.52.222",
+      "reason": "Browsed the same router's WebUI three times on 2026-07-07 with AAA failures. M247, VT-tagged vpn",
+      "category": "not this operator (excluded)",
+      "context": "These indicators were considered and explicitly excluded. They are recorded so that downstream products do not reintroduce them."
+    },
+    {
+      "value": "47.130.108.237",
+      "reason": "Failed TLS handshake against the same router on 2026-07-07. AWS Singapore, probably scanner noise",
+      "category": "not this operator (excluded)",
+      "context": "These indicators were considered and explicitly excluded. They are recorded so that downstream products do not reintroduce them."
+    },
+    {
+      "value": "2.57.91.91",
+      "reason": "RETRACTED as an operator IP. radius-sync.com pointed here for approximately fifteen seconds at registration before being repointed. Hostinger shared parking infrastructure, AS47583, approximately 4.2 million domains. Its VT 9/91 is mass-hosting noise",
+      "category": "retracted operator address (shared parking)",
+      "context": "These indicators were considered and explicitly excluded. They are recorded so that downstream products do not reintroduce them."
     }
   ]
 }

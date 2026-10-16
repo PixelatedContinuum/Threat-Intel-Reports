@@ -222,39 +222,7 @@
         }
       ]
     },
-    "context_only_not_malicious": [],
-    "investigated_and_excluded": {
-      "note": "Candidate infrastructure assessed during this investigation and RULED OUT as operator-controlled. Published so other researchers do not re-chase the same dead ends. These are NOT indicators of compromise and must not be blocked or alerted on.",
-      "entries": [
-        {
-          "indicator": "46.36.217.3",
-          "also": [
-            "stolotov.org",
-            "stolotov.net"
-          ],
-          "reason": "Swept in on a shared panel title. A detailed host view severs it: different OS build, no SSH host-key overlap, and a simpler panel that is not the RAT panel. Suspicious infrastructure, but not demonstrably this operator.",
-          "confidence": "LOW association"
-        },
-        {
-          "indicator": "65.20.90.34",
-          "reason": "Reverse DNS shows a proxy/relay footprint unrelated to this operator, and its panel title differs from the one being tracked. Probable false positive.",
-          "confidence": "LOW"
-        },
-        {
-          "also": [
-            "aka1.hopto.org",
-            "johnathon-yerrow.sahs.ac.zw"
-          ],
-          "reason": "Prior-tenant passive-DNS residue on a recycled hosting IP. The provider recycles addresses; this predates the operator.",
-          "confidence": "excluded"
-        },
-        {
-          "indicator": "prior-tenant DGA and mail-spam pDNS on the CloudSync C2 address",
-          "reason": "Historic records from earlier tenants of a recycled IP. Not operator infrastructure.",
-          "confidence": "excluded"
-        }
-      ]
-    }
+    "context_only_not_malicious": []
   },
   "host_indicators": {
     "registry_keys": [
@@ -442,6 +410,40 @@
       "value": "hopto.org",
       "category": "dynamic dns provider",
       "context": "A shared dynamic-DNS apex used by many unrelated subscribers. It surfaces here only as prior-tenant passive-DNS residue (alongside aka1.hopto.org) on the recycled C2 IP, predating the operator's 2026-03-13 allocation of that address, and is excluded as unrelated noise rather than treated as operator infrastructure."
+    },
+    {
+      "indicator": "46.36.217.3",
+      "also": [
+        "stolotov.org",
+        "stolotov.net"
+      ],
+      "reason": "Swept in on a shared panel title. A detailed host view severs it: different OS build, no SSH host-key overlap, and a simpler panel that is not the RAT panel. Suspicious infrastructure, but not demonstrably this operator.",
+      "confidence": "LOW association",
+      "category": "investigated and excluded, not operator infrastructure",
+      "context": "Candidate infrastructure assessed during this investigation and RULED OUT as operator-controlled. Published so other researchers do not re-chase the same dead ends. These are NOT indicators of compromise and must not be blocked or alerted on."
+    },
+    {
+      "indicator": "65.20.90.34",
+      "reason": "Reverse DNS shows a proxy/relay footprint unrelated to this operator, and its panel title differs from the one being tracked. Probable false positive.",
+      "confidence": "LOW",
+      "category": "investigated and excluded, not operator infrastructure",
+      "context": "Candidate infrastructure assessed during this investigation and RULED OUT as operator-controlled. Published so other researchers do not re-chase the same dead ends. These are NOT indicators of compromise and must not be blocked or alerted on."
+    },
+    {
+      "also": [
+        "aka1.hopto.org"
+      ],
+      "reason": "Prior-tenant passive-DNS residue on a recycled hosting IP. The provider recycles addresses; this predates the operator.",
+      "confidence": "excluded",
+      "category": "investigated and excluded, not operator infrastructure",
+      "context": "Candidate infrastructure assessed during this investigation and RULED OUT as operator-controlled. Published so other researchers do not re-chase the same dead ends. These are NOT indicators of compromise and must not be blocked or alerted on."
+    },
+    {
+      "indicator": "prior-tenant DGA and mail-spam pDNS on the CloudSync C2 address",
+      "reason": "Historic records from earlier tenants of a recycled IP. Not operator infrastructure.",
+      "confidence": "excluded",
+      "category": "investigated and excluded, not operator infrastructure",
+      "context": "Candidate infrastructure assessed during this investigation and RULED OUT as operator-controlled. Published so other researchers do not re-chase the same dead ends. These are NOT indicators of compromise and must not be blocked or alerted on."
     }
   ]
 }
