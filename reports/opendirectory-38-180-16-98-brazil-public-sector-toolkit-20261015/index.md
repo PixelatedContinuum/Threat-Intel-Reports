@@ -30,6 +30,21 @@ ioc_highlights:
     note: "Operator payload staging host (MODERATE, co-tenanted)"
   - value: "986f697d2ef67a38e25c6a17cdecd7bb50148f2c2993864c748e3504d3d747f0"
     note: "Relay.java.new, the plaintext TCP 53 relay (SHA256)"
+figure_nav:
+  - image: brazil-toolkit-operator-hosts-contacts.svg
+    parts:
+      - label: "The three hosts"
+        anchor: "#6-infrastructure"
+      - label: "The agency's help desk"
+        anchor: "#8-the-social-security-agency-from-a-help-desk-test-page-to-the-internal-package-store"
+      - label: "The bank's tunnel"
+        anchor: "#9-the-development-bank-an-api-gateway-and-a-tunnel-out-through-the-banks-own-proxy"
+      - label: "The finance secretariat"
+        anchor: "#10-the-finance-secretariat-the-saved-page-victims-and-the-suppliers"
+      - label: "The Zabbix callback"
+        anchor: "#11-the-monitoring-server-as-a-command-plane"
+      - label: "The port 53 relay"
+        anchor: "#12-the-port-53-relay-and-the-weblogic-scripts-that-would-deliver-it"
 ---
 
 **Campaign Identifier:** OpenDirectory-38.180.16.98-BrazilPublicSectorToolkit-20261015<br>
@@ -192,7 +207,7 @@ Three hosted servers carry the operation, and they are joined by the operator's 
 | 209.99.185[.]148 | SKN Subnet & Telecom Ltd (AS402253) | The canary that catches callbacks from injection tests, the far end of the bank's tunnel, and a TLS listener whose certificate names "Update Service" | HIGH |
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/brazil-toolkit-operator-hosts-contacts.svg" | relative_url }}" alt="Three-column diagram of the operator's three hosts and the contacts around each. Column 1, deep red band, 38.180.16[.]98, operator control HIGH: open directory, relay controller on TCP 53, callback listener on 9090, SMB listener on 445 and an intended path-map listener on 9443; operator surface dates from 2026-09-26 and the address is recycled. Under it, three orange contact cards: a victim estate's egress address that calls home to port 53 over two relay lanes with 1,051 check-ins (pod announces READY, 648 check-ins to 71 destinations; wls announces READY2, 403 to 6); a Zabbix monitoring proxy of unestablished owner that calls back to port 9090, join of script to callback MODERATE; and the agency's help desk plus the finance secretariat's pages, which echo the address back as visitor or client. Column 2, yellow band, 38.180.196[.]193, control MODERATE: payload staging, a Python directory listing and a password-protected panel with the realm cadsus-panel on port 8899; ten third-party parked domains also resolve there. A dashed card says the report names no victim-side contact. Column 3, deep red band, 209.99.185[.]148, control HIGH: canary on port 8080, TLS listener presenting an Update Service certificate on 443 and 10443, and the target of the bank's tunnel client. Under it: a dashed card for the bank's WSO2 container with traffic NOT CHECKED; a card for callbacks from the operator's injection tests caught by the canary; and a dashed grey card for two bpupdate.exe builds on the same address, common controller MODERATE and campaign authorship NOT CHECKED. Footer anchors: a TCP 53 flow that does not parse as DNS, and the READY or READY2 announce line followed by DIAL host port.">
+  <img loading="lazy" src="{{ "/assets/images/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/brazil-toolkit-operator-hosts-contacts.svg" | relative_url }}" alt="Three-column diagram of the operator's three hosts and the contacts around each. Column 1, deep red band, 38.180.16[.]98, operator control HIGH: open directory, relay controller on TCP 53, callback listener on 9090, SMB listener on 445 and an intended path-map listener on 9443; operator surface from 2026-09-26, address recycled. Under it, three orange contact cards: a victim estate's egress address calling home to port 53 over two relay lanes with 1,051 check-ins (pod announces READY, 648 check-ins to 71 destinations; wls announces READY2, 403 to 6); a Zabbix monitoring proxy of unestablished owner calling back to port 9090, join of script to callback MODERATE; and the agency's help desk plus the finance secretariat's pages, echoing the address as visitor or client. Column 2, yellow band, 38.180.196[.]193, control MODERATE: payload staging, a Python directory listing and a password-protected panel with realm cadsus-panel on port 8899; ten third-party parked domains also resolve there. A dashed card: the report names no victim-side contact. Column 3, deep red band, 209.99.185[.]148, control HIGH: canary on 8080, TLS listener with an Update Service certificate on 443 and 10443, and the target of the bank's tunnel client. Under it, dashed cards for the bank's WSO2 container (traffic NOT CHECKED) and two bpupdate.exe builds on the same address (common controller MODERATE, campaign authorship NOT CHECKED), and a card for injection-test callbacks caught by the canary. Footer anchors: a TCP 53 flow not parsing as DNS, and the READY or READY2 line followed by DIAL host port.">
   <figcaption><em>Figure 1: Where each operator host meets a victim estate, and how firmly the report holds each contact. The hosts are joined only by the operator's own documents (MODERATE), so the figure draws contacts per host and no line between hosts, and it keeps the bpupdate.exe builds outside the campaign because their authorship is NOT CHECKED.</em></figcaption>
 </figure>
 
