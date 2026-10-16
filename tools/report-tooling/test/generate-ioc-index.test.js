@@ -302,3 +302,81 @@ test('FAIL-DIRECTION: a value the index cannot classify is carried, never droppe
   assert.equal(idx.indicators['ipv4:198.51.100.6'][0].role,
     'LOW: shared with three other tenants, treat with care');
 });
+
+/* --- bucket-level markings, 2026-10-16: the same fix family as hunt_only_never_block
+   above. A value under a container marked never-block or victim is not an ordinary
+   indicator either, and must not become a typed key a search can return. The predicate
+   is shared with the feed gate (lib/feed-hygiene.js `bucketMarking`), so the index
+   cannot disagree with the gate about what a bucket is. */
+
+test('a value under a victim-marked bucket never becomes an ordinary index key', function () {
+  var idx = build({ 'live-one-iocs.json': {
+    network_indicators: { domains: ['evil.test'] },
+    targeted_assets: { warning: 'CONTEXT ONLY - DO NOT BLOCK', hosts: ['bystander-host.test'] }
+  } });
+  assert.ok(idx.indicators['domain:evil.test'], 'the real indicator is kept');
+  assert.ok(!idx.indicators['domain:bystander-host.test'],
+    'a victim-marked bucket value must not become a searchable key');
+});
+
+test('a value under a loose (excluded) bucket is not indexed either', function () {
+  var idx = build({ 'live-one-iocs.json': {
+    network_indicators: { domains: ['evil.test'] },
+    excluded_indicators: { note: 'Ruled out.', items: ['ruledout-host.test'] }
+  } });
+  assert.ok(idx.indicators['domain:evil.test'], 'the real indicator is kept');
+  assert.ok(!idx.indicators['domain:ruledout-host.test']);
+});
+
+test('THE SAME VALUE under an ordinary bucket is still indexed', function () {
+  // The control for the two tests above: it is the bucket marking, not the value, that
+  // keeps a value out of the index.
+  var idx = build({ 'live-one-iocs.json': {
+    network_indicators: { domains: ['bystander-host.test'] }
+  } });
+  assert.ok(idx.indicators['domain:bystander-host.test']);
+});
+
+/* --- gate2, 2026-10-16: the index holds out ONLY what the gate would act on --------------- */
+
+test('AN action: BLOCK entry inside a loose bucket IS indexed as an ordinary key', function () {
+  /* Decision 2: the author restored this value to the blockable set, so the gate does not act
+     on it and it is an ordinary indicator again. The index used to skip the whole bucket. */
+  var idx = build({ 'live-one-iocs.json': {
+    network_indicators: { domains: ['evil.test'] },
+    co_tenant_exclusions_documented: { note: 'Ruled out as this operator.',
+      tenants: [{ c2: 'ruledout-c2.test', action: 'BLOCK' }] }
+  } });
+  assert.ok(idx.indicators['domain:evil.test'], 'the real indicator is kept');
+  assert.ok(idx.indicators['domain:ruledout-c2.test'],
+    'the value the author marked action: BLOCK is not held out');
+});
+
+test('A LOOSE BUCKET HOLDS OUT ITS HASHES BUT NOT THE FILENAME BESIDE THEM', function () {
+  /* Decision 1: the gate moves a hash under a loose bucket, so the index must not carry it as
+     a typed key; the filename is not something the gate acts on, so it stays ordinary. This is
+     the "skip only what the gate would act on" half: a whole-bucket skip would drop both. */
+  var digest = 'c'.repeat(64);
+  var idx = build({ 'live-one-iocs.json': {
+    network_indicators: { domains: ['evil.test'] },
+    known_legitimate_DO_NOT_BLOCKLIST: { context: 'GENUINE vendor binaries; do not block',
+      wondershare_dlls: [{ hash: digest, filename: 'SlideShowEditor.exe' }] }
+  } });
+  assert.ok(idx.indicators['domain:evil.test'], 'the real indicator is kept');
+  assert.ok(!idx.indicators['sha256:' + digest],
+    'the gate moves this hash out of the bucket, so it is not an ordinary key');
+  assert.ok(idx.indicators['filename:slideshoweditor.exe'],
+    'the gate does not act on the filename, so it is still indexed');
+});
+
+test('A role: VICTIM ENTRY WITH action: BLOCK inside a loose bucket stays out of the index', function () {
+  /* The gate reports this entry (a victim marking outranks action: BLOCK), so the index must not
+     carry it as an ordinary key either; the review of gate2 found the two disagreeing. */
+  var idx = build({ 'live-one-iocs.json': {
+    network_indicators: { domains: ['evil.test'] },
+    co_tenant_exclusions_documented: { note: 'Ruled out as this operator.',
+      tenants: [{ c2: 'victim-host.test', role: 'VICTIM web server', action: 'BLOCK' }] }
+  } });
+  assert.ok(idx.indicators['domain:evil.test'], 'the real indicator is kept');
+  assert.ok(!idx.indicators['domain:victim-host.test'], 'the victim-marked value is held out');
+});

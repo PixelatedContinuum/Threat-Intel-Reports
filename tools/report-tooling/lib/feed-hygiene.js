@@ -33,6 +33,182 @@ function isExemptPath(path) {
   return !!EXEMPT_TOP[String(path).split('.')[0]];
 }
 
+/* BUCKET-LEVEL MARKINGS. A marking can be written on a whole container and inherited by
+   everything beneath it, not only on a single entry.
+
+   WHY THIS EXISTS (T-0322). `ioc-feeds/multivector-ecommerce-rce-toolkit-192-3-1-116-iocs.json`
+   carries a top-level `targeted_assets` bucket whose own `warning` field reads
+   "CONTEXT ONLY - DO NOT BLOCK. These are victim-side and target-side assets ...". The
+   per-entry machinery above only ever looked at the marking fields OF AN ENTRY, so none of
+   the 43 typed values sitting under that bucket (31 domains, 12 IPv4) was seen: the bucket
+   was marked, the value was not, and the gate passed every one. The same blind spot covers a
+   whole-bucket `exclusions` / `investigated_and_excluded` / `victim_inventory` container.
+
+   The rule has two independent triggers, exactly as specified by this change's brief:
+
+   1. BY KEY NAME. The key the container sits under decides the tier. The victim tier is
+      `targeted_assets` exactly, or any key containing `victim` (case-insensitive): the corpus
+      carries `victim_inventory`, `victim_indicators`, `internal_victim_ipv4`,
+      `victim_infrastructure_do_not_block`, `host_indicators.victim_id_formats`. The loose tier
+      is any key containing `exclu`, `not_malicious`, `context_only`, `do_not_block`,
+      `never_block`, `do_not_blocklist`, `false_positives` or `benign`. Victim wins when both
+      match.
+
+      SHEER `target` IS NOT A VICTIM MARKING. `brand_impersonation_targets`,
+      `target_processes` and similar name the thing the operator attacks or impersonates, i.e.
+      an operator or malware fact, not a bystander; treating the substring `target` as a victim
+      marking would pull operator infrastructure out of the feeds. Only `targeted_assets` is on
+      the list, because it is the one key in the corpus whose own text says those values are
+      victim-side.
+
+   2. BY A MARKER STRING ON THE CONTAINER. A container that directly holds no classify()-typed
+      string, but does carry a never-block phrase under `warning`, `caution`, `note`, `notes`,
+      `description`, `context` or `reason`, is a loose bucket. The phrase list is the one
+      `authorMarkedHuntOnly` already matches, widened with the phrasings the T-0322 corpus uses:
+      `context only`, `must not be blocked`, `do not ingest`, `not indicators of compromise`,
+      `do not place in any block rule`.
+
+   WHY A BUCKET IS WIDER THAN AN ENTRY, 2026-10-16. Inside a loose bucket this module acts on
+   NETWORK_TYPES AND the hash types (`sha256`, `sha1`, `md5`), while a loose marking on a single
+   ENTRY still acts on NETWORK_TYPES only. The asymmetry is the author's intent, not ours: an
+   analyst who sets a value aside as "do not block" writes it on one value and is speaking to
+   the network consumer in front of them, but an analyst who fences off a WHOLE bucket is
+   speaking to every consumer of the feed, the hash blocklist included. The vendor-binary
+   hashes in `ioc-feeds/opendirectory-62-60-237-100-20260506-iocs.json`
+   `known_legitimate_DO_NOT_BLOCKLIST` are the worked case: 16 SHA-256 of genuine signed
+   vendor binaries (Wondershare, Google Updater, Info-ZIP, Qihoo) co-located in the operator
+   bundle as camouflage, whose own bucket text warns that generic hash blocking "would cause
+   massive false positives". A hash-ingesting consumer walking the file reads the same list the
+   gate does, so the bucket's marking has to cover it too. Filenames stay out of the loose tier
+   in both places: `excluded_directories` and `excluded_file_types` are ransomware behaviour
+   lists (the directories a locker skips), not indicators, and a filename is not a network or a
+   hash blocklist entry.
+
+   `action: BLOCK` OUTRANKS A LOOSE BUCKET, not a victim one. An entry object that directly
+   carries `action` starting with `BLOCK` is ordinary again for its own subtree inside a loose
+   bucket: the author decided that one value, and the precedence is the one
+   `authorMarkedHuntOnly` already gives the same field per entry. It never outranks a victim
+   bucket, because a victim marking is a disclosure question rather than a blocklist one, and
+   the author may have written `action: BLOCK` before realising what the value was.
+
+   NOT CHECKED, AND THIS RULE CANNOT CLOSE IT: a bucket whose key is innocuous AND which carries
+   no marker phrase is not seen, and neither is a marking written outside these seven key names
+   or phrased in words outside the list. The rule is name- and phrase-based, so it covers the
+   shapes the corpus actually uses and nothing else; a container like `assets_2026` holding a
+   warning in a field called `disclaimer` would still pass. The gate is a floor, not a proof.
+
+   THE ROOT IS NEVER A BUCKET. Bucketing is only ever triggered from a NAMED container (a string
+   key, or a string array index is not a name so arrays do not trigger it), so a feed whose
+   top-level `description` happened to say "do not block" cannot turn its entire body into a
+   bucket. This is a deliberate limit: the brief's rule 2 is written for a container, and the
+   root is not one. */
+var VICTIM_TIER = 'victim';
+var LOOSE_TIER = 'loose';
+var VICTIM_CATEGORY = 'bucket-marked target or victim';
+var LOOSE_CATEGORY = 'bucket-marked never-block';
+
+/* The types a LOOSE bucket covers: NETWORK_TYPES plus the hash types. The per-entry loose tier
+   still uses NETWORK_TYPES alone (see the header comment above and `authorMarkedHuntOnly`). */
+var HASH_TYPES = { sha256: true, sha1: true, md5: true };
+function looseTypeActedOn(type) { return !!NETWORK_TYPES[type] || !!HASH_TYPES[type]; }
+
+var BUCKET_LOOSE_KEY_RX =
+  /exclu|not_malicious|context_only|do_not_block|never_block|do_not_blocklist|false_positives|benign/i;
+
+var BUCKET_MARKER_KEYS = ['warning', 'caution', 'note', 'notes', 'description', 'context', 'reason'];
+
+/* The same never-block prose test `authorMarkedHuntOnly` applies to an entry's own fields,
+   widened for bucket containers. Kept as one regex so a phrase added here is not accidentally
+   left out of the container check. */
+var NEVER_BLOCK_RX =
+  /\bnever block\b|\bdo not block\b|\bdon't block\b|\bvictim-side\b|\bnot for blocking\b|\bdo not use for blocking\b|\bdo not blocklist\b|\bdo not preemptively block\b|\bnotify victim before blocking\b|\bnot a malicious destination\b|\bcontext only\b|\bmust not be blocked\b|\bdo not ingest\b|\bnot indicators of compromise\b|\bdo not place in any block rule\b/;
+
+/* Stricter of two tiers: a victim marking outranks a loose one, because disclosure outranks
+   blocklist hygiene (the same split scan() and migrate() already make between their tiers). */
+function stricter(a, b) {
+  if (a === VICTIM_TIER || b === VICTIM_TIER) return VICTIM_TIER;
+  if (a === LOOSE_TIER || b === LOOSE_TIER) return LOOSE_TIER;
+  return null;
+}
+
+/* The tier a KEY NAME alone assigns, or null. */
+function keyBucketTier(key) {
+  if (typeof key !== 'string') return null;
+  if (key === 'targeted_assets' || /victim/i.test(key)) return VICTIM_TIER;
+  if (BUCKET_LOOSE_KEY_RX.test(key)) return LOOSE_TIER;
+  return null;
+}
+
+/* True when the object directly holds a classify()-typed string, which makes it an entry
+   rather than a container. Rule 2 only ever fires for a container. */
+function holdsDirectTypedString(obj) {
+  var keys = Object.keys(obj);
+  for (var i = 0; i < keys.length; i++) {
+    if (typeof obj[keys[i]] === 'string' && C.classify(obj[keys[i]])) return true;
+  }
+  return false;
+}
+
+/* The tier a marker string on the container assigns, or null. */
+function markerMarking(node) {
+  if (!node || typeof node !== 'object' || Array.isArray(node)) return null;
+  if (holdsDirectTypedString(node)) return null;
+  for (var i = 0; i < BUCKET_MARKER_KEYS.length; i++) {
+    var v = node[BUCKET_MARKER_KEYS[i]];
+    if (typeof v === 'string' && NEVER_BLOCK_RX.test(v.toLowerCase())) return LOOSE_TIER;
+  }
+  return null;
+}
+
+/* The public predicate: the tier a container's key and/or its own marker string assigns, or
+   null. scan(), migrate() and generate-ioc-index.js all route through this one function so the
+   gate, the fix and the search index cannot disagree about what a bucket is. */
+function bucketMarking(key, node) {
+  var byKey = keyBucketTier(key);
+  if (byKey === VICTIM_TIER) return VICTIM_TIER;
+  // The marker string is only read off a NAMED container: the root (key null) is never a bucket.
+  var byMarker = (typeof key === 'string') ? markerMarking(node) : null;
+  return stricter(byKey, byMarker);
+}
+
+/* True when the object directly carries `action` starting with BLOCK. The one reading of the
+   field, shared by `authorMarkedHuntOnly` (which gives it precedence over an entry's prose) and
+   by scanBucket()/pruneBucket() (where it takes an entry back out of a LOOSE bucket's reach) and
+   by generate-ioc-index.js (which must index that entry's values as ordinary keys). */
+function actionIsBlock(obj) {
+  if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return false;
+  var action = typeof obj.action === 'string' ? obj.action.trim().toUpperCase() : '';
+  return /^BLOCK\b/.test(action);
+}
+
+/* Every directly-held value of `obj` that classifies and meets the tier: all types for a
+   victim bucket (a disclosure question), the network and hash types for a loose one (both a
+   blocklist question: an automated hash blocklist harms a bystander's vendor binary exactly as
+   a network blocklist harms a shared host). Used to treat an entry object as one unit rather
+   than descending into it. */
+function bucketValues(obj, tier) {
+  var out = [];
+  Object.keys(obj).forEach(function (k) {
+    var v = obj[k];
+    if (typeof v !== 'string') return;
+    var r = C.classify(v);
+    if (!r) return;
+    if (tier === VICTIM_TIER || looseTypeActedOn(r.type)) {
+      out.push({ raw: v, value: r.value, type: r.type });
+    }
+  });
+  return out;
+}
+
+/* Whether the gate acts on a value of `type` sitting under a bucket of `tier`. The single
+   place the loose tier's type set is written, so scan(), migrate() and the index cannot
+   disagree. `tier` null/undefined (no bucket) never acts. */
+function bucketActsOn(tier, type) {
+  if (tier === VICTIM_TIER) return true;
+  if (tier === LOOSE_TIER) return looseTypeActedOn(type);
+  return false;
+}
+
 /* Approved exceptions to the strict target-or-victim tier: specific values a human has
    reviewed, in a diff, and confirmed do not identify anyone, despite sitting under an
    entry the author marked `role: TARGET...` or `role: VICTIM...`.
@@ -43,8 +219,8 @@ function isExemptPath(path) {
    place to allow an override because it can never contain an IP, domain, URL, email or hash.
    staff1 tested that theory against the real module and the real corpus and broke it
    (`break-constraint-2.md`): the untyped space is exactly where stolen-credential identifiers
-   live. Two are published in this corpus today: `022a1b74-2332-4df5-a76b-60225ffa7ae3`, a
-   stolen victim JWT token id, and `XRAOLK4ZIZHJPDWPVEMGPRDXBE`, a stolen 1Password vault id
+   live. Two were published in this corpus until 2026-10-16 (withheld since, T-0323): a
+   stolen victim JWT token id (a UUID), and a stolen 1Password vault id (26 base32 characters)
    the feed's own text calls resolvable for victim identification. A per-entry marker would
    have let an analyst wave either of those through with the same one-line trust the cisco-IOS
    case deserves, and nothing in the design would have told them apart.
@@ -165,7 +341,7 @@ function authorMarkedHuntOnly(obj, exemptions, path) {
      realising what the value actually was; the strict tier fires regardless of
      action on purpose. */
   var action = typeof obj.action === 'string' ? obj.action.trim().toUpperCase() : '';
-  if (/^BLOCK\b/.test(action)) return null;
+  if (actionIsBlock(obj)) return null;
 
   /* The key list matters more than the phrase list, and it was the actual hole.
      Measured across the 57 published feeds on 2026-09-13: `false_positive_risk`
@@ -233,14 +409,93 @@ function firstIndicator(obj) {
 function scan(feed, exemptions) {
   var found = [];
 
+  function report(path, raw, host, category) {
+    found.push({ path: path, value: raw, host: host, category: category });
+  }
+
+  /* Values under a bucket marking, walked at the tier the bucket carries.
+
+     Inside a victim-tier bucket every classify()-typed value is reported, whatever its type,
+     because the victim tier is a disclosure question. Inside a loose-tier bucket the network
+     AND hash types are, because that tier is a blocklist question and an automated HASH
+     blocklist harms a bystander's vendor binary exactly as a network blocklist harms a shared
+     host (the 62-60-237-100 `known_legitimate_DO_NOT_BLOCKLIST` case). A filename, registry
+     path or ASN is still not, because no blocklist either kind of consumer walks holds one.
+
+     An OBJECT that directly holds a qualifying value is an entry and is the unit: its first
+     qualifying value is reported and the object is not descended into, matching the way
+     migrate() relocates the whole object. An object with no direct typed value is a container
+     and is descended into, which is what lets `investigated_and_excluded: { ips: [...],
+     hashes: [...] }` reach the values inside its arrays. */
+  function scanBucket(node, path, tier) {
+    if (node == null) return;
+    if (isExemptPath(path)) return;
+    if (typeof node === 'string') {
+      var r = C.classify(node);
+      if (!r) return;
+      if (bucketActsOn(tier, r.type)) {
+        report(path, node, r.value, tier === VICTIM_TIER ? VICTIM_CATEGORY : LOOSE_CATEGORY);
+      }
+      return;
+    }
+    if (Array.isArray(node)) {
+      node.forEach(function (x) { scanBucket(x, path, tier); });
+      return;
+    }
+    if (typeof node !== 'object') return;
+
+    /* A per-entry marking inside a bucket still applies, and the stricter of the two wins.
+       This is what keeps an UNTYPED victim identifier reachable: a stolen token id is only
+       ever reported through the per-entry firstIndicator() fallback, because it does not
+       classify as anything, and without this check a `victim_indicators` bucket would hide
+       the very value the allowlist design exists to remove. */
+    var marked = authorMarkedHuntOnly(node, exemptions, path);
+    if (marked) {
+      var mv = firstIndicator(node);
+      var mvIsVictim = marked === 'author-marked target or victim';
+      if (mv && (mvIsVictim || NETWORK_TYPES[mv.type])) {
+        report(path, mv.raw, mv.value, marked);
+        return;
+      }
+    }
+
+    /* `action: BLOCK` on the entry takes it back out of a LOOSE bucket's reach: the author
+       decided that value, and the whole subtree is ordinary again. Read AFTER the per-entry
+       marking above, so a `role: VICTIM` entry is still reported even beside an
+       `action: BLOCK` (victim outranks, per the header comment), and skipped for a victim
+       bucket because the tier check fails. See the 79.137.192.3 co-tenant C2 in the plan. */
+    if (tier !== VICTIM_TIER && actionIsBlock(node)) {
+      walk(node, path, null, null);
+      return;
+    }
+
+    var vals = bucketValues(node, tier);
+    if (vals.length) {
+      report(path, vals[0].raw, vals[0].value,
+             tier === VICTIM_TIER ? VICTIM_CATEGORY : LOOSE_CATEGORY);
+      return;
+    }
+    Object.keys(node).forEach(function (k) {
+      var childTier = stricter(tier, bucketMarking(k, node[k]));
+      scanBucket(node[k], path ? path + '.' + k : k, childTier);
+    });
+  }
+
   function walk(node, path, parent, key) {
     if (node == null) return;
+    if (isExemptPath(path)) return;
+
+    /* A bucket only ever starts at a NAMED container; the root (key null) never is one. */
+    if (typeof key === 'string') {
+      var tier = bucketMarking(key, node);
+      if (tier) { scanBucket(node, path, tier); return; }
+    }
+
     if (typeof node === 'string') {
-      if (isExemptPath(path)) return;
       var r = C.classify(node);
       if (!r) return;
       var cat = U.unblockable(r.type, r.value);
-      if (cat) found.push({ path: path, value: node, host: r.value, category: cat });
+      if (cat) report(path, node, r.value, cat);
       return;
     }
     if (Array.isArray(node)) {
@@ -265,7 +520,7 @@ function scan(feed, exemptions) {
       var v = firstIndicator(node);
       var isVictim = marked === 'author-marked target or victim';
       if (v && (isVictim || NETWORK_TYPES[v.type])) {
-        found.push({ path: path, value: v.raw, host: v.value, category: marked });
+        report(path, v.raw, v.value, marked);
         return;
       }
     }
@@ -312,8 +567,114 @@ function migrate(feed) {
     return null;
   }
 
-  function prune(node, path, ctx) {
+  /* The text a bucket carries as its own marker, for a relocated BARE STRING to keep the
+     reason it was set aside. Same length discipline as contextOf(): trimmed, and cut short of
+     200 characters so one long warning cannot bloat every value it covers. */
+  function bucketContext(node) {
+    if (!node || typeof node !== 'object' || Array.isArray(node)) return null;
+    for (var i = 0; i < BUCKET_MARKER_KEYS.length; i++) {
+      var v = node[BUCKET_MARKER_KEYS[i]];
+      if (typeof v === 'string' && v.trim() && !C.classify(v)) {
+        var t = v.trim();
+        return t.length < 200 ? t : t.slice(0, 199);
+      }
+    }
+    return null;
+  }
+
+  function bucketRecord(path, raw, value, tier, ctx, full) {
+    if (seen[value]) return;
+    seen[value] = true;
+    var rec = { value: raw, host: value,
+                category: tier === VICTIM_TIER ? VICTIM_CATEGORY : LOOSE_CATEGORY,
+                context: ctx || null, was: path };
+    if (full) rec.full = full;
+    if (tier === VICTIM_TIER) removed.push(rec);
+    else moved.push(rec);
+  }
+
+  /* The bucket counterpart of prune(), walked at the tier the bucket carries. The marking is
+     inherited by the whole subtree: a victim entry object is REMOVED whole, a loose one MOVED
+     whole with `category` added, and a bare string takes the {value, category, context} shape
+     with the bucket's own marker text as its context. The loose tier covers the network AND
+     hash types (`bucketValues`), so a vendor-binary SHA-256 under a
+     `known_legitimate_DO_NOT_BLOCKLIST` bucket is MOVED, not left for a hash blocklist. An
+     `action: BLOCK` entry inside a loose bucket is handed back to the ordinary prune() for its
+     own subtree, so the value the author decided on is neither moved nor removed. An emptied
+     container is dropped rather than left as a husk, so a bucket that lost every value goes
+     with them. */
+  function pruneBucket(node, path, tier, bucketCtx) {
     if (node == null) return node;
+    if (isExemptPath(path)) return node;
+    if (typeof node === 'string') {
+      var r = C.classify(node);
+      if (!r) return node;
+      if (!bucketActsOn(tier, r.type)) return node;
+      bucketRecord(path, node, r.value, tier, bucketCtx, null);
+      return undefined;
+    }
+    if (Array.isArray(node)) {
+      var out = [];
+      node.forEach(function (x) {
+        var v = pruneBucket(x, path, tier, bucketCtx);
+        if (v !== undefined) out.push(v);
+      });
+      if (!out.length && node.length) return undefined;
+      return out;
+    }
+    if (typeof node !== 'object') return node;
+
+    /* Per-entry marking first, same as scanBucket(): the stricter of the two wins, and the
+       untyped-victim-identifier case is only reachable here. */
+    var marked = authorMarkedHuntOnly(node);
+    if (marked) {
+      var mv = firstIndicator(node);
+      var mvIsVictim = marked === 'author-marked target or victim';
+      if (mv && (mvIsVictim || NETWORK_TYPES[mv.type])) {
+        bucketRecord(path, mv.raw, mv.value, mvIsVictim ? VICTIM_TIER : LOOSE_TIER,
+                     contextOf(node) || bucketCtx, node);
+        return undefined;
+      }
+    }
+
+    /* Same precedence as scanBucket(): `action: BLOCK` hands the entry back to the ordinary
+       prune() for its own subtree, but only inside a LOOSE bucket (a victim marking is a
+       disclosure question and still wins). */
+    if (tier !== VICTIM_TIER && actionIsBlock(node)) {
+      return prune(node, path, bucketCtx, null);
+    }
+
+    var vals = bucketValues(node, tier);
+    if (vals.length) {
+      bucketRecord(path, vals[0].raw, vals[0].value, tier,
+                   contextOf(node) || bucketCtx, node);
+      return undefined;
+    }
+
+    var obj = {}, dropped = 0;
+    Object.keys(node).forEach(function (key) {
+      var childTier = stricter(tier, bucketMarking(key, node[key]));
+      var childCtx = childTier !== tier ? (bucketContext(node[key]) || bucketCtx) : bucketCtx;
+      var v = pruneBucket(node[key], path ? path + '.' + key : key, childTier, childCtx);
+      if (v === undefined) { dropped++; return; }
+      obj[key] = v;
+    });
+    if (dropped && !hasValue(obj)) return undefined;
+    return obj;
+  }
+
+  function prune(node, path, ctx, key) {
+    if (node == null) return node;
+    if (isExemptPath(path)) return node;
+
+    /* A bucket container is handed to pruneBucket() before any per-entry handling: the
+       marking is about everything beneath the container, not about the container's own
+       fields. `key` is the name the node sits under, so an ARRAY reached by a bucket key is
+       diverted here too. */
+    if (typeof key === 'string') {
+      var bTier = bucketMarking(key, node);
+      if (bTier) return pruneBucket(node, path, bTier, bucketContext(node));
+    }
 
     if (typeof node === 'string') {
       if (isExemptPath(path)) return node;
@@ -333,7 +694,7 @@ function migrate(feed) {
     if (Array.isArray(node)) {
       var out = [];
       node.forEach(function (x) {
-        var v = prune(x, path, ctx);
+        var v = prune(x, path, ctx, null);
         if (v !== undefined) out.push(v);
       });
       return out;
@@ -387,7 +748,7 @@ function migrate(feed) {
     var myCtx = contextOf(node);
     var obj = {}, dropped = 0, kept = 0;
     Object.keys(node).forEach(function (key) {
-      var v = prune(node[key], path ? path + '.' + key : key, myCtx);
+      var v = prune(node[key], path ? path + '.' + key : key, myCtx, key);
       if (v === undefined) { dropped++; return; }
       obj[key] = v;
       kept++;
@@ -412,7 +773,7 @@ function migrate(feed) {
     return false;
   }
 
-  var out = prune(JSON.parse(JSON.stringify(feed)), '', null);
+  var out = prune(JSON.parse(JSON.stringify(feed)), '', null, null);
   if (out === undefined) out = {};
 
   if (moved.length) {
@@ -450,4 +811,7 @@ function migrate(feed) {
 // needs to add a throwaway entry to prove the secondary type guard actually holds.
 module.exports = { scan: scan, migrate: migrate, EXEMPT_TOP: EXEMPT_TOP,
                    authorMarkedHuntOnly: authorMarkedHuntOnly,
+                   bucketMarking: bucketMarking,
+                   stricter: stricter, bucketActsOn: bucketActsOn, actionIsBlock: actionIsBlock,
+                   VICTIM_TIER: VICTIM_TIER, LOOSE_TIER: LOOSE_TIER,
                    NON_IDENTIFYING: NON_IDENTIFYING };

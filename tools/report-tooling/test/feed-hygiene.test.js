@@ -279,21 +279,21 @@ test('the two real untyped victim identifiers that broke the marker design are s
     // api.telegram.org bare-match would otherwise add a second, unrelated hit and make
     // this assertion pass or fail for the wrong reason.
     var jwt = feed({ network_indicators: {}, host_indicators: { victim_indicators: [
-      { value: '022a1b74-2332-4df5-a76b-60225ffa7ae3', role: 'VICTIM organization API token',
+      { value: '00000000-1111-4222-8333-444444444444', role: 'VICTIM organization API token',
         type: 'stolen_jwt_jti', confidence: 'DEFINITE' }
     ] } });
     var jwtHits = H.scan(jwt);
     assert.equal(jwtHits.length, 1, 'the stolen JWT jti must still be found');
-    assert.equal(jwtHits[0].host, '022a1b74-2332-4df5-a76b-60225ffa7ae3');
+    assert.equal(jwtHits[0].host, '00000000-1111-4222-8333-444444444444');
     assert.equal(H.migrate(jwt).removed.length, 1, 'and still removed');
 
     var vault = feed({ network_indicators: {}, host_indicators: { victim_indicators: [
-      { value: 'XRAOLK4ZIZHJPDWPVEMGPRDXBE', role: 'VICTIM 1Password vault id',
+      { value: 'AAAABBBBCCCCDDDDEEEEFFFFGG', role: 'VICTIM 1Password vault id',
         type: 'stolen_1password_vault_id', confidence: 'DEFINITE' }
     ] } });
     var vaultHits = H.scan(vault);
     assert.equal(vaultHits.length, 1, 'the stolen 1Password vault id must still be found');
-    assert.equal(vaultHits[0].host, 'XRAOLK4ZIZHJPDWPVEMGPRDXBE');
+    assert.equal(vaultHits[0].host, 'AAAABBBBCCCCDDDDEEEEFFFFGG');
     assert.equal(H.migrate(vault).removed.length, 1, 'and still removed');
   });
 
@@ -491,4 +491,279 @@ test('scan() over the arsenal-237 entries T-0318 removed reports both non-blocka
       '127.0.0.1 must be reported, got: ' + hits.join(', '));
     assert.ok(hits.indexOf('8.8.8.8') > -1,
       '8.8.8.8 must be reported, got: ' + hits.join(', '));
+  });
+
+/* --- bucket-level markings: a marking on a whole container is inherited by its subtree ---
+
+   T-0322 found a `targeted_assets` bucket whose own `warning` says
+   "CONTEXT ONLY - DO NOT BLOCK" while the gate read only per-entry markings, so all 43
+   typed values beneath it passed as blockable. These tests pin the bucket rule: the key
+   name (victim or loose), a marker string on the container, inheritance down the subtree,
+   and the negatives that must NOT become buckets. */
+
+/* scan() and migrate() are one module because they must agree; every bucket fixture below is
+   checked through this helper so a future edit to one and not the other fails here. */
+function agrees(f) {
+  var seen = H.scan(f).map(function (x) { return x.host; }).sort();
+  var r = H.migrate(f);
+  var acted = r.moved.concat(r.removed).map(function (x) { return x.host; }).sort();
+  assert.deepEqual(acted, seen, 'scan() and migrate() must act on the same values');
+  assert.deepEqual(H.scan(r.feed), [], 'a scan of the migrated feed must be clean');
+  return r;
+}
+
+test('A WHOLE-BUCKET VICTIM MARKING IS READ: targeted_assets flags its whole subtree',
+  function () {
+    // 93.184.216.34 is a global-unicast address and victim-portal.example is no known
+    // service, so NOTHING here is flagged on its own: the finding can only come from the
+    // bucket marking, which is exactly what this change adds.
+    var f = feed({ network_indicators: {}, targeted_assets: {
+      warning: 'CONTEXT ONLY - DO NOT BLOCK. These are victim-side and target-side assets.',
+      confirmed: ['93.184.216.34'],
+      entries: [{ asset: 'victim-portal.example', sector: 'banking' }]
+    } });
+
+    var hits = H.scan(f);
+    assert.deepEqual(hits.map(function (x) { return x.host; }).sort(),
+      ['93.184.216.34', 'victim-portal.example']);
+    hits.forEach(function (h) {
+      assert.equal(h.category, 'bucket-marked target or victim', h.path);
+    });
+
+    var r = agrees(f);
+    assert.equal(r.removed.length, 2, 'both are victim values: REMOVED, never relocated');
+    assert.equal(r.moved.length, 0, 'a victim value must never land in hunt_only_never_block');
+    assert.equal(r.feed.targeted_assets, undefined, 'the emptied bucket goes with its values');
+  });
+
+test('a victim bucket whose key says victim but which carries no marker is still read',
+  function () {
+    // The key-name trigger alone. No warning string anywhere.
+    var f = feed({ network_indicators: {}, victim_inventory: ['victim-host.example'] });
+    var hits = H.scan(f);
+    assert.equal(hits.length, 1);
+    assert.equal(hits[0].host, 'victim-host.example');
+    assert.equal(hits[0].category, 'bucket-marked target or victim');
+    agrees(f);
+  });
+
+/* gate2 2026-10-16: a loose bucket covers hashes too. The bucket's own marking is the author
+   fencing the whole container off from blocking, and that speaks to every consumer of the feed,
+   the hash blocklist included; a hash-ingesting consumer walking the same file reads the same
+   list the gate does. So the digest beside the IP is relocated, not left in place. */
+test('A LOOSE BUCKET BY NAME relocates network values and hashes',
+  function () {
+    var digest = 'a'.repeat(64);
+    var f = feed({ network_indicators: {}, investigated_and_excluded: {
+      note: 'Ruled out as operator infrastructure.',
+      ips: ['93.184.216.34'],
+      hashes: [digest]
+    } });
+
+    var hits = H.scan(f);
+    assert.deepEqual(hits.map(function (x) { return x.host; }).sort(),
+      ['93.184.216.34', digest].sort(), 'both are blocklist questions under a loose bucket');
+    hits.forEach(function (h) { assert.equal(h.category, 'bucket-marked never-block', h.path); });
+
+    var r = agrees(f);
+    assert.equal(r.moved.length, 2);
+    assert.equal(r.removed.length, 0);
+    assert.equal(r.feed[U.BUCKET][0].value, '93.184.216.34');
+    assert.ok(r.feed[U.BUCKET][1].value === digest, 'the hash moves out of the bucket');
+  });
+
+test('A LOOSE BUCKET BY MARKER STRING alone is read even under an innocuous key',
+  function () {
+    // The key name matches nothing; only "must not be blocked" in the note does.
+    var f = feed({ network_indicators: {}, reviewed_dead_ends: {
+      note: 'Assessed and ruled out. These must not be blocked.',
+      hosts: ['stolotov.org']
+    } });
+
+    var hits = H.scan(f);
+    assert.equal(hits.length, 1);
+    assert.equal(hits[0].host, 'stolotov.org');
+    assert.equal(hits[0].path, 'reviewed_dead_ends.hosts');
+    assert.equal(hits[0].category, 'bucket-marked never-block');
+
+    var r = agrees(f);
+    assert.equal(r.moved.length, 1);
+    assert.equal(r.feed[U.BUCKET][0].value, 'stolotov.org');
+    assert.equal(r.feed[U.BUCKET][0].context, 'Assessed and ruled out. These must not be blocked.',
+      'a bare string carries the bucket\'s own marker text as its context');
+  });
+
+test('a loose bucket MOVES an entry object whole, keeping every field',
+  function () {
+    var f = feed({ network_indicators: {}, excluded_indicators: {
+      note: 'Ruled out; not this operator.',
+      entries: [{ indicator: 'shared-host.example', purpose: 'shared hosting', asn: 'AS63949',
+                  confidence: 'LOW' }]
+    } });
+    var r = agrees(f);
+    assert.equal(r.moved.length, 1);
+    var e = r.feed[U.BUCKET][0];
+    assert.equal(e.indicator, 'shared-host.example',
+      'the whole entry object is carried, key name and all');
+    assert.equal(e.purpose, 'shared hosting', 'purpose was dropped');
+    assert.equal(e.asn, 'AS63949', 'asn was dropped');
+    assert.equal(e.confidence, 'LOW', 'confidence was dropped');
+    assert.equal(e.category, 'bucket-marked never-block');
+  });
+
+test('BRAND_IMPERSONATION_TARGETS IS NOT A VICTIM MARKING: "targets" alone flags nothing',
+  function () {
+    // The operator's own pre-staged subdomains. "targets" in a key name names whom the
+    // operator impersonates, an operator fact, not a bystander; reading it as a victim
+    // marking would strip the operator's infrastructure out of the feed.
+    var f = feed({ network_indicators: {}, brand_impersonation_targets: {
+      context: '467+ pre-staged brand-impersonation subdomains under inklens.ru.',
+      us_banking_finance: ['wellsfargo.inklens.ru', 'adyen-no-stripe.inklens.ru']
+    } });
+    assert.deepEqual(H.scan(f), []);
+    var r = H.migrate(f);
+    assert.equal(r.moved.length + r.removed.length, 0);
+    assert.deepEqual(r.feed.brand_impersonation_targets.us_banking_finance,
+      ['wellsfargo.inklens.ru', 'adyen-no-stripe.inklens.ru']);
+  });
+
+test('a container whose prose carries no never-block phrase is not a bucket', function () {
+  var f = feed({ network_indicators: {}, operator_recon_notes: {
+    note: 'Passive DNS and certificate-transparency pivots on the operator.',
+    hosts: ['cdn.operator-c2.example']
+  } });
+  assert.deepEqual(H.scan(f), []);
+  assert.equal(H.migrate(f).moved.length, 0);
+});
+
+test('values under metadata stay unflagged however the feed is shaped', function () {
+  var f = feed({ network_indicators: {}, metadata: {
+    campaign: 'Demo',
+    reference: 'https://the-hunters-ledger.com/reports/demo/',
+    notes: 'must not be blocked',
+    hosts: ['api.telegram.org']
+  } });
+  assert.deepEqual(H.scan(f), [], 'metadata is exempt even when it looks like a bucket');
+});
+
+test('the strict victim tier outranks a loose bucket: a role:VICTIM entry is REMOVED',
+  function () {
+    var f = feed({ network_indicators: {}, excluded_indicators: {
+      note: 'Ruled out.',
+      entries: [{ value: '93.184.216.35', role: 'VICTIM internal host' }]
+    } });
+    var r = agrees(f);
+    assert.equal(r.removed.length, 1, 'the stricter tier wins, so it is removed not moved');
+    assert.equal(r.moved.length, 0);
+  });
+
+test('an empty-valued bucket is not conjured up by a value beside it', function () {
+  // Regression guard: the bucket walk must not leak into a neighbouring ordinary bucket.
+  var f = feed({ network_indicators: { ips: ['93.184.216.36'] },
+                 victim_inventory: [] });
+  assert.deepEqual(H.scan(f), [], 'an operator address beside an empty victim bucket is safe');
+});
+
+/* --- gate2, 2026-10-16: two decisions by Joseph (tasks/runs/T-0323/plan.md) ----------------
+
+   1. Inside a LOOSE (never-block) bucket, act on the network types AND the hash types: an
+      author who fenced a whole bucket off from blocking meant every consumer of the feed, the
+      hash blocklist included. Per-entry markings stay network-only.
+   2. An entry object that directly carries `action` starting with BLOCK, inside a loose bucket,
+      is ordinary again for its own subtree. It never outranks a victim bucket. */
+
+var VENDOR_SHA256 = 'c'.repeat(64);
+
+test('A LOOSE BUCKET COVERS HASHES TOO: a vendor-binary SHA-256 moves, the filename beside it stays',
+  function () {
+    /* The opendirectory-62-60-237-100 shape: `known_legitimate_DO_NOT_BLOCKLIST` holds one
+       object per genuine signed vendor binary, {hash, filename}, and its own text warns that
+       generic hash blocking "would cause massive false positives". The bucket key is loose by
+       name; the hash is a blocklist question and moves, the filename is not and stays put. */
+    var f = feed({ network_indicators: {}, known_legitimate_DO_NOT_BLOCKLIST: {
+      context: 'GENUINE legitimate vendor binaries; do not block',
+      wondershare_dlls: [{ hash: VENDOR_SHA256, filename: 'SlideShowEditor.exe' }]
+    } });
+
+    var hits = H.scan(f);
+    assert.deepEqual(hits.map(function (x) { return x.host; }), [VENDOR_SHA256],
+      'only the hash is a blocklist question under a loose bucket');
+    assert.equal(hits[0].category, 'bucket-marked never-block');
+
+    var r = agrees(f);
+    assert.equal(r.moved.length, 1);
+    assert.equal(r.removed.length, 0);
+    assert.equal(r.feed[U.BUCKET][0].hash, VENDOR_SHA256);
+    assert.equal(r.feed[U.BUCKET][0].filename, 'SlideShowEditor.exe',
+      'the whole entry object moves, filename and all');
+  });
+
+test('A RANSOMWARE BEHAVIOUR LIST IS NOT A BLOCKLIST: excluded_directories filenames stay',
+  function () {
+    /* arsenal-237-new_enc-exe.json: `excluded_directories` is the directories a locker skips,
+       under a key that matches the loose tier by name. Two of its 23 entries classify as
+       filenames (config.msi, windows.old). A filename is neither a network nor a hash blocklist
+       entry, so the loose tier must not widen to it. */
+    var dirs = ['config.msi', 'windows.old', 'windows', 'appdata', 'boot'];
+    var f = feed({ network_indicators: {}, behavioral_iocs: { file_system_behavior: [{
+      behavior: 'Directory exclusion from encryption',
+      excluded_directories: dirs
+    }] } });
+
+    assert.deepEqual(H.scan(f), [], 'a loose bucket of filenames must flag nothing');
+    var r = H.migrate(f);
+    assert.equal(r.moved.length + r.removed.length, 0);
+    assert.deepEqual(r.feed.behavioral_iocs.file_system_behavior[0].excluded_directories, dirs,
+      'nothing is relocated out of a behaviour list');
+  });
+
+test('AN entry action: BLOCK OUTRANKS A LOOSE BUCKET: the excluded co-tenant C2 stays blockable',
+  function () {
+    /* The 79.137.192.3 row in plan.md: the bucket name says excluded, the value is a live
+       RedLine C2 of an unrelated co-tenant the author decided is malicious and blockable, and
+       `action: BLOCK` is the author's per-value decision. It outranks the bucket's loose
+       marking for this entry's own subtree, exactly as it already outranks the entry's prose. */
+    var f = feed({ network_indicators: {}, co_tenant_exclusions_documented: {
+      note: 'Ruled out as this operator.',
+      tenants: [{ c2: 'http://79.137.192.3:1516/', action: 'BLOCK',
+                  role: 'RedLine C2 of an unrelated co-tenant' }]
+    } });
+
+    assert.deepEqual(H.scan(f), [],
+      'the author decided this value; a loose bucket must not override it');
+    var r = H.migrate(f);
+    assert.equal(r.moved.length + r.removed.length, 0);
+    assert.equal(r.feed.co_tenant_exclusions_documented.tenants[0].c2,
+      'http://79.137.192.3:1516/', 'the entry stays where it is');
+  });
+
+test('action: BLOCK DOES NOT OUTRANK A VICTIM BUCKET: a marked victim value is still removed',
+  function () {
+    /* Victim is a disclosure question, not a blocklist one. The author may have written
+       `action: BLOCK` before realising what the value was; the victim tier fires regardless. */
+    var f = feed({ network_indicators: {}, victim_inventory: {
+      note: 'Victim estate.',
+      hosts: [{ value: 'victim-host.example', action: 'BLOCK' }]
+    } });
+
+    var hits = H.scan(f);
+    assert.deepEqual(hits.map(function (x) { return x.host; }), ['victim-host.example']);
+    assert.equal(hits[0].category, 'bucket-marked target or victim');
+
+    var r = agrees(f);
+    assert.equal(r.removed.length, 1);
+    assert.equal(r.moved.length, 0, 'a victim value must never be relocated');
+  });
+
+test('a per-entry VICTIM marking still outranks an action: BLOCK inside a loose bucket',
+  function () {
+    // Both fields on one entry: the disclosure marking wins, as authorMarkedHuntOnly already
+    // encodes for the per-entry case.
+    var f = feed({ network_indicators: {}, excluded_indicators: {
+      note: 'Ruled out.',
+      entries: [{ value: '93.184.216.37', role: 'VICTIM endpoint', action: 'BLOCK' }]
+    } });
+    var hits = H.scan(f);
+    assert.deepEqual(hits.map(function (x) { return x.host; }), ['93.184.216.37']);
+    assert.equal(hits[0].category, 'author-marked target or victim');
   });

@@ -20,6 +20,7 @@ var path = require('node:path');
 var C = require('../../assets/js/ioc-classify.js');
 var CS = require('./lib/catalog-status.js');
 var B = require('./lib/benign.js');
+var H = require('./lib/feed-hygiene.js');
 
 var ROOT = path.join(__dirname, '..', '..');
 var FEED_DIR = path.join(ROOT, 'ioc-feeds');
@@ -108,20 +109,37 @@ function keep(r, suppressBenign) {
   return r && (!suppressBenign || !B.isBenign(r.type, r.value));
 }
 
-function collect(node, out, role, roleIsCaveat, exempt, suppressBenign) {
+/* `tier` is the bucket marking (lib/feed-hygiene.js `bucketMarking`) inherited from the nearest
+   marked container, or null. The public search index must not carry, as an ordinary typed key,
+   any value the feed gate would act on: `Object.keys(idx.indicators)` returns the value
+   regardless of any warning text beside it. So a typed string is dropped here when
+   `H.bucketActsOn(tier, type)` says the gate would act on it, and only then -- a value the gate
+   leaves alone (a filename under a loose bucket, the whole subtree of an `action: BLOCK` entry)
+   is ordinary and is still indexed. The predicate is shared with the gate, so the index cannot
+   disagree with it about what a bucket is or what it covers. */
+function collect(node, out, role, roleIsCaveat, exempt, suppressBenign, tier) {
   if (node == null) return;
   if (typeof node === 'string') {
     var r = C.classify(node);
+    if (r && H.bucketActsOn(tier, r.type)) return;
     if (keep(r, suppressBenign)) {
       out.push({ key: r.type + ':' + r.value, role: role || null, isCaveat: !!roleIsCaveat });
     } else if (r) out.suppressed = (out.suppressed || 0) + 1;
     return;
   }
   if (Array.isArray(node)) {
-    for (var i = 0; i < node.length; i++) collect(node[i], out, role, roleIsCaveat, exempt, suppressBenign);
+    for (var i = 0; i < node.length; i++) collect(node[i], out, role, roleIsCaveat, exempt, suppressBenign, tier);
     return;
   }
   if (typeof node !== 'object') return;
+
+  /* `action: BLOCK` on an entry inside a LOOSE bucket makes its whole subtree ordinary again
+     (the gate does not act on it either). A victim bucket is never cleared this way: a victim
+     marking is a disclosure question, not a blocklist one. Nor is an entry the author marked
+     `role: TARGET|VICTIM` itself: scan() reports it even beside `action: BLOCK` (victim
+     outranks), so the index keeps holding it out (T-0323 review, task_71138ea42fa340f8). */
+  if (tier === H.LOOSE_TIER && H.actionIsBlock(node) &&
+      H.authorMarkedHuntOnly(node) !== 'author-marked target or victim') tier = null;
 
   /* Plain label and BLOCK caveat found independently and combined, not one replacing
      the other -- matching the fix in lib/ioc-table-extract.js's runWalk and its comment
@@ -172,6 +190,9 @@ function collect(node, out, role, roleIsCaveat, exempt, suppressBenign) {
     var val = node[VALUE_KEYS[v]];
     if (typeof val === 'string') {
       var res = C.classify(val);
+      /* A value the gate would act on inside the bucket it sits in is not an ordinary
+         indicator: held out exactly as the value-level and bare-string cases are. */
+      if (res && H.bucketActsOn(tier, res.type)) { tookValue = true; continue; }
       if (keep(res, suppressBenign)) {
         out.push({ key: res.type + ':' + res.value, role: myRole || null, isCaveat: !!myRoleIsCaveat });
         tookValue = true;
@@ -181,7 +202,16 @@ function collect(node, out, role, roleIsCaveat, exempt, suppressBenign) {
   Object.keys(node).forEach(function (key) {
     if (tookValue && VALUE_KEYS.indexOf(key) > -1) return;
     if (exempt && exempt[key]) return;
-    collect(node[key], out, myRole, myRoleIsCaveat, exempt, suppressBenign);
+    /* A value under a bucket marked never-block or victim is not an ordinary indicator either.
+       Same reasoning as the hunt_only_never_block exemption above and as the 2026-09-13 fix in
+       lib/ioc-table-extract.js: a public search index must not carry the value as a typed key at
+       all, because a script reading Object.keys(idx.indicators) gets the value regardless of any
+       warning beside it. The predicate is shared with the feed gate and the migration
+       (lib/feed-hygiene.js `bucketMarking`/`bucketActsOn`) so the index cannot disagree with them
+       about what a bucket is or what it covers; the marking is inherited down the subtree, and
+       only the values the gate would act on inside it are held out. */
+    var childTier = H.stricter(tier, H.bucketMarking(key, node[key]));
+    collect(node[key], out, myRole, myRoleIsCaveat, exempt, suppressBenign, childTier);
   });
 }
 
