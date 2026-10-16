@@ -1,0 +1,197 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1850" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#cccccc"/>
+    </marker>
+    <filter id="cardShadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+    <filter id="treeShadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+  <rect width="1000" height="1850" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="1849" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="62" text-anchor="middle" font-size="40" font-weight="700" fill="#ffffff">Operator Hosts and Who Calls Them</text>
+  <text x="500" y="106" text-anchor="middle" font-size="24" fill="#f5f5f5">Three hosts joined by the operator's own documents (MODERATE)</text>
+  <text x="500" y="140" text-anchor="middle" font-size="18" fill="#cccccc">No shared technical fingerprint, and no operator-owned domain in the evidence</text>
+  <line x1="60" y1="166" x2="940" y2="166" stroke="#2a2a2a" stroke-width="1"/>
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="196" width="280" height="404" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="196" width="280" height="46" rx="8" fill="#7f1d1d"/>
+    <rect x="60" y="229" width="280" height="13" fill="#7f1d1d"/>
+    
+    <text x="80" y="227" font-size="22" font-weight="600" fill="#ffffff">38.180.16[.]98</text>
+    <text x="80" y="278" font-size="17" font-weight="700" fill="#fb923c">Operator control: HIGH</text>
+    <text x="80" y="307" font-size="17" fill="#e5e5e5">Open directory (port 80,</text>
+    <text x="80" y="331" font-size="17" fill="#e5e5e5">earlier 8899), relay</text>
+    <text x="80" y="354" font-size="17" fill="#e5e5e5">controller on TCP 53,</text>
+    <text x="80" y="378" font-size="17" fill="#e5e5e5">callback listener on 9090,</text>
+    <text x="80" y="401" font-size="17" fill="#e5e5e5">SMB listener on 445, an</text>
+    <text x="80" y="425" font-size="17" fill="#e5e5e5">intended path-map listener</text>
+    <text x="80" y="448" font-size="17" fill="#e5e5e5">on 9443.</text>
+    <text x="80" y="478" font-size="15" fill="#cccccc">Operator surface dates from</text>
+    <text x="80" y="498" font-size="15" fill="#cccccc">2026-09-26. The address is</text>
+    <text x="80" y="519" font-size="15" fill="#cccccc">recycled: its certificate, JARM</text>
+    <text x="80" y="540" font-size="15" fill="#cccccc">and SSH key belong to earlier</text>
+    <text x="80" y="560" font-size="15" fill="#cccccc">tenants.</text>
+  </g>
+  <g filter="url(#cardShadow)">
+    <rect x="360" y="196" width="280" height="404" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="360" y="196" width="280" height="46" rx="8" fill="#eab308"/>
+    <rect x="360" y="229" width="280" height="13" fill="#eab308"/>
+    
+    <text x="380" y="227" font-size="22" font-weight="600" fill="#111111">38.180.196[.]193</text>
+    <text x="380" y="278" font-size="17" font-weight="700" fill="#fb923c">Operator control:</text>
+    <text x="380" y="301" font-size="17" font-weight="700" fill="#fb923c">MODERATE</text>
+    <text x="380" y="331" font-size="17" fill="#e5e5e5">Payload staging (operator</text>
+    <text x="380" y="354" font-size="17" fill="#e5e5e5">label vpsbr), a Python</text>
+    <text x="380" y="378" font-size="17" fill="#e5e5e5">directory listing, and a</text>
+    <text x="380" y="401" font-size="17" fill="#e5e5e5">password-protected panel</text>
+    <text x="380" y="425" font-size="17" fill="#e5e5e5">with the realm cadsus-panel</text>
+    <text x="380" y="448" font-size="17" fill="#e5e5e5">on port 8899, visible</text>
+    <text x="380" y="472" font-size="17" fill="#e5e5e5">2026-09-04 to 2026-09-14.</text>
+    <text x="380" y="501" font-size="15" fill="#cccccc">Ten third-party parked domains</text>
+    <text x="380" y="522" font-size="15" fill="#cccccc">also resolve here: MONITOR the</text>
+    <text x="380" y="543" font-size="15" fill="#cccccc">host, BLOCK only the operator's</text>
+    <text x="380" y="563" font-size="15" fill="#cccccc">ports.</text>
+  </g>
+  <g filter="url(#cardShadow)">
+    <rect x="660" y="196" width="280" height="404" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="660" y="196" width="280" height="46" rx="8" fill="#7f1d1d"/>
+    <rect x="660" y="229" width="280" height="13" fill="#7f1d1d"/>
+    
+    <text x="680" y="227" font-size="22" font-weight="600" fill="#ffffff">209.99.185[.]148</text>
+    <text x="680" y="278" font-size="17" font-weight="700" fill="#fb923c">Operator control: HIGH</text>
+    <text x="680" y="307" font-size="17" fill="#e5e5e5">Canary on port 8080 (last</text>
+    <text x="680" y="331" font-size="17" fill="#e5e5e5">response 2026-10-07) and a</text>
+    <text x="680" y="354" font-size="17" fill="#e5e5e5">TLS listener presenting an</text>
+    <text x="680" y="378" font-size="17" fill="#e5e5e5">"Update Service"</text>
+    <text x="680" y="401" font-size="17" fill="#e5e5e5">certificate on 443 and</text>
+    <text x="680" y="425" font-size="17" fill="#e5e5e5">10443.</text>
+    <text x="680" y="454" font-size="17" fill="#e5e5e5">The operator's scripts also</text>
+    <text x="680" y="478" font-size="17" fill="#e5e5e5">point the bank's tunnel</text>
+    <text x="680" y="501" font-size="17" fill="#e5e5e5">client at this host.</text>
+  </g>
+  <line x1="60" y1="398" x2="44" y2="398" stroke="#666666" stroke-width="2"/>
+  <line x1="44" y1="398" x2="44" y2="1393" stroke="#666666" stroke-width="2"/>
+  <line x1="44" y1="805" x2="60" y2="805" stroke="#666666" stroke-width="2"/>
+  <line x1="44" y1="1122" x2="60" y2="1122" stroke="#666666" stroke-width="2"/>
+  <line x1="44" y1="1393" x2="60" y2="1393" stroke="#666666" stroke-width="2"/>
+  <g filter="url(#treeShadow)">
+    <rect x="60" y="634" width="280" height="342" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="634" width="6" height="342" rx="3" fill="#f97316"/>
+    <text x="82" y="666" font-size="19" font-weight="600" fill="#ffffff">A victim estate's</text>
+    <text x="82" y="691" font-size="19" font-weight="600" fill="#ffffff">egress address</text>
+    <text x="82" y="725" font-size="17" font-weight="700" fill="#fb923c">calls home to port 53</text>
+    <text x="82" y="755" font-size="17" fill="#e5e5e5">Two relay lanes, 1,051</text>
+    <text x="82" y="778" font-size="17" fill="#e5e5e5">check-ins in the</text>
+    <text x="82" y="802" font-size="17" fill="#e5e5e5">operator's log: "pod"</text>
+    <text x="82" y="825" font-size="17" fill="#e5e5e5">announces READY (648, to</text>
+    <text x="82" y="849" font-size="17" fill="#e5e5e5">71 destinations), "wls"</text>
+    <text x="82" y="872" font-size="17" fill="#e5e5e5">announces READY2 (403, to</text>
+    <text x="82" y="896" font-size="17" fill="#e5e5e5">6).</text>
+    <text x="82" y="925" font-size="15" fill="#cccccc">618 failed dials. The log has</text>
+    <text x="82" y="946" font-size="15" fill="#cccccc">no date or zone.</text>
+  </g>
+  <g filter="url(#treeShadow)">
+    <rect x="60" y="998" width="280" height="249" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="998" width="6" height="249" rx="3" fill="#f97316"/>
+    <text x="82" y="1030" font-size="19" font-weight="600" fill="#ffffff">A Zabbix monitoring</text>
+    <text x="82" y="1055" font-size="19" font-weight="600" fill="#ffffff">proxy, owner not</text>
+    <text x="82" y="1079" font-size="19" font-weight="600" fill="#ffffff">established</text>
+    <text x="82" y="1114" font-size="17" font-weight="700" fill="#fb923c">calls back to port 9090</text>
+    <text x="82" y="1144" font-size="17" fill="#e5e5e5">Root identity and a</text>
+    <text x="82" y="1167" font-size="17" fill="#e5e5e5">hostname returned to the</text>
+    <text x="82" y="1190" font-size="17" fill="#e5e5e5">operator. Join of script</text>
+    <text x="82" y="1214" font-size="17" fill="#e5e5e5">to callback: MODERATE.</text>
+  </g>
+  <g filter="url(#treeShadow)">
+    <rect x="60" y="1269" width="280" height="249" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="1269" width="6" height="249" rx="3" fill="#f97316"/>
+    <text x="82" y="1301" font-size="19" font-weight="600" fill="#ffffff">The agency's help desk</text>
+    <text x="82" y="1326" font-size="19" font-weight="600" fill="#ffffff">and the finance</text>
+    <text x="82" y="1350" font-size="19" font-weight="600" fill="#ffffff">secretariat's pages</text>
+    <text x="82" y="1385" font-size="17" font-weight="700" fill="#fb923c">echo this address back</text>
+    <text x="82" y="1415" font-size="17" fill="#e5e5e5">The help desk shows it as</text>
+    <text x="82" y="1438" font-size="17" fill="#e5e5e5">the visitor address and</text>
+    <text x="82" y="1461" font-size="17" fill="#e5e5e5">the secretariat's pages</text>
+    <text x="82" y="1485" font-size="17" fill="#e5e5e5">print it as the client.</text>
+  </g>
+  <line x1="360" y1="398" x2="344" y2="398" stroke="#666666" stroke-width="2"/>
+  <line x1="344" y1="398" x2="344" y2="754" stroke="#666666" stroke-width="2"/>
+  <line x1="344" y1="754" x2="360" y2="754" stroke="#666666" stroke-width="2"/>
+  <g filter="url(#treeShadow)">
+    <rect x="360" y="634" width="280" height="240" rx="8" fill="#1a1a1a" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="7 5"/>
+    <rect x="360" y="634" width="6" height="240" rx="3" fill="#eab308"/>
+    <text x="382" y="666" font-size="19" font-weight="600" fill="#ffffff">No victim-side contact</text>
+    <text x="382" y="691" font-size="19" font-weight="600" fill="#ffffff">described</text>
+    <text x="382" y="725" font-size="17" fill="#e5e5e5">The report names no</text>
+    <text x="382" y="749" font-size="17" fill="#e5e5e5">victim-side contact with</text>
+    <text x="382" y="772" font-size="17" fill="#e5e5e5">this host.</text>
+    <text x="382" y="802" font-size="15" fill="#cccccc">Its use as a payload host</text>
+    <text x="382" y="822" font-size="15" fill="#cccccc">rests on the operator's own</text>
+    <text x="382" y="843" font-size="15" fill="#cccccc">scripts.</text>
+  </g>
+  <line x1="660" y1="398" x2="644" y2="398" stroke="#666666" stroke-width="2"/>
+  <line x1="644" y1="398" x2="644" y2="1341" stroke="#666666" stroke-width="2"/>
+  <line x1="644" y1="758" x2="660" y2="758" stroke="#666666" stroke-width="2"/>
+  <line x1="644" y1="1028" x2="660" y2="1028" stroke="#666666" stroke-width="2"/>
+  <line x1="644" y1="1341" x2="660" y2="1341" stroke="#666666" stroke-width="2"/>
+  <g filter="url(#treeShadow)">
+    <rect x="660" y="634" width="280" height="248" rx="8" fill="#1a1a1a" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="7 5"/>
+    <rect x="660" y="634" width="6" height="248" rx="3" fill="#f97316"/>
+    <text x="682" y="666" font-size="19" font-weight="600" fill="#ffffff">The bank's WSO2</text>
+    <text x="682" y="691" font-size="19" font-weight="600" fill="#ffffff">container</text>
+    <text x="682" y="725" font-size="17" font-weight="700" fill="#fb923c">tunnel client aimed here</text>
+    <text x="682" y="755" font-size="17" fill="#e5e5e5">Through the bank's own</text>
+    <text x="682" y="778" font-size="17" fill="#e5e5e5">forward proxy. Whether the</text>
+    <text x="682" y="802" font-size="17" fill="#e5e5e5">server accepted the</text>
+    <text x="682" y="825" font-size="17" fill="#e5e5e5">connection or any traffic</text>
+    <text x="682" y="849" font-size="17" fill="#e5e5e5">crossed is NOT CHECKED.</text>
+  </g>
+  <g filter="url(#treeShadow)">
+    <rect x="660" y="904" width="280" height="249" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="660" y="904" width="6" height="249" rx="3" fill="#f97316"/>
+    <text x="682" y="936" font-size="19" font-weight="600" fill="#ffffff">Callbacks from the</text>
+    <text x="682" y="961" font-size="19" font-weight="600" fill="#ffffff">operator's injection</text>
+    <text x="682" y="985" font-size="19" font-weight="600" fill="#ffffff">tests</text>
+    <text x="682" y="1020" font-size="17" font-weight="700" fill="#fb923c">caught by the canary on</text>
+    <text x="682" y="1044" font-size="17" font-weight="700" fill="#fb923c">port 8080</text>
+    <text x="682" y="1073" font-size="17" fill="#e5e5e5">The operator's own scripts</text>
+    <text x="682" y="1096" font-size="17" fill="#e5e5e5">label this host "nosso</text>
+    <text x="682" y="1120" font-size="17" fill="#e5e5e5">canary" ("our canary").</text>
+  </g>
+  <g filter="url(#treeShadow)">
+    <rect x="660" y="1175" width="280" height="332" rx="8" fill="#1a1a1a" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="7 5"/>
+    <rect x="660" y="1175" width="6" height="332" rx="3" fill="#6b7280"/>
+    <text x="682" y="1207" font-size="19" font-weight="600" fill="#ffffff">Two bpupdate.exe</text>
+    <text x="682" y="1232" font-size="19" font-weight="600" fill="#ffffff">builds on the same</text>
+    <text x="682" y="1256" font-size="19" font-weight="600" fill="#ffffff">address</text>
+    <text x="682" y="1291" font-size="17" fill="#e5e5e5">They fetch from this host</text>
+    <text x="682" y="1315" font-size="17" fill="#e5e5e5">on port 8146 and launch</text>
+    <text x="682" y="1338" font-size="17" fill="#e5e5e5">Chrome Canary headlessly</text>
+    <text x="682" y="1361" font-size="17" fill="#e5e5e5">as "BluePeak AppUpdater</text>
+    <text x="682" y="1385" font-size="17" fill="#e5e5e5">2.4".</text>
+    <text x="682" y="1414" font-size="15" fill="#cccccc">Common controller: MODERATE.</text>
+    <text x="682" y="1435" font-size="15" fill="#cccccc">Campaign authorship: NOT</text>
+    <text x="682" y="1456" font-size="15" fill="#cccccc">CHECKED. No campaign behaviour</text>
+    <text x="682" y="1477" font-size="15" fill="#cccccc">is mapped from them.</text>
+  </g>
+  <line x1="60" y1="1560" x2="940" y2="1560" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="1594" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">Detection anchors:  a TCP 53 flow whose payload does not parse as DNS</text>
+  <text x="500" y="1624" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">relay announce line READY or READY2, then DIAL host port</text>
+  <text x="500" y="1658" text-anchor="middle" font-size="15" fill="#cccccc">Block as the indicator table bounds it: 38.180.16[.]98 on its listed ports from 2026-09-26, 209.99.185[.]148,</text>
+  <text x="500" y="1684" text-anchor="middle" font-size="15" fill="#cccccc">and on 38.180.196[.]193 only port 8899, with the host itself monitored</text>
+  <rect x="60" y="1711" width="16" height="16" fill="#7f1d1d"/>
+  <text x="84" y="1724" font-size="14" fill="#cccccc">listener, relay, tunnel end</text>
+  <rect x="317" y="1711" width="16" height="16" fill="#eab308"/>
+  <text x="341" y="1724" font-size="14" fill="#cccccc">payload staging</text>
+  <rect x="482" y="1711" width="16" height="16" fill="#f97316"/>
+  <text x="506" y="1724" font-size="14" fill="#cccccc">victim-side contact</text>
+  <rect x="678" y="1711" width="16" height="16" fill="#6b7280"/>
+  <text x="702" y="1724" font-size="14" fill="#cccccc">not tied to the campaign</text>
+  <rect x="60" y="1737" width="16" height="16" fill="none" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="84" y="1750" font-size="14" fill="#cccccc">unproven or NOT CHECKED</text>
+  <text x="500" y="1784" text-anchor="middle" font-size="14" fill="#888888">The Amazon egress address that sent the 1,051 check-ins is a victim estate, not a fourth operator host, and is not in the feed.</text>
+</svg>

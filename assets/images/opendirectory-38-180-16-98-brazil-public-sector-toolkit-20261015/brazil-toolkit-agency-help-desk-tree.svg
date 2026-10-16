@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1600" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#cccccc"/>
+    </marker>
+    <filter id="cardShadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+    <filter id="treeShadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+  <rect width="1000" height="1600" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="1599" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="62" text-anchor="middle" font-size="40" font-weight="700" fill="#ffffff">Agency Help Desk: What It Gave Up</text>
+  <text x="500" y="106" text-anchor="middle" font-size="24" fill="#f5f5f5">Host-side command output, graded ACCESS SHOWN</text>
+  <text x="500" y="140" text-anchor="middle" font-size="18" fill="#cccccc">Tickets gave the operator hostnames, software and the security stack without a scan</text>
+  <line x1="60" y1="166" x2="940" y2="166" stroke="#2a2a2a" stroke-width="1"/>
+  <g filter="url(#treeShadow)">
+    <rect x="190" y="196" width="620" height="182" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="190" y="196" width="6" height="182" rx="3" fill="#f97316"/>
+    <text x="212" y="228" font-size="21" font-weight="600" fill="#ffffff">Agency help desk (GLPI)</text>
+    <text x="212" y="265" font-size="17" fill="#e5e5e5">Entry: a renamed copy of GLPI's htmLawed test page</text>
+    <text x="212" y="289" font-size="17" fill="#e5e5e5">(CVE-2022-35914) on the agency's public help desk.</text>
+    <text x="212" y="318" font-size="17" fill="#e5e5e5">Unauthenticated: a dummy session cookie and no credential.</text>
+    <text x="212" y="348" font-size="15" fill="#cccccc">Who renamed the page, and when the commands ran, is not established.</text>
+  </g>
+  <line x1="500" y1="378" x2="500" y2="406" stroke="#666666" stroke-width="2"/>
+  <line x1="275" y1="406" x2="725" y2="406" stroke="#666666" stroke-width="2"/>
+  <line x1="275" y1="406" x2="275" y2="432" stroke="#666666" stroke-width="2"/>
+  <line x1="725" y1="406" x2="725" y2="432" stroke="#666666" stroke-width="2"/>
+  <g filter="url(#treeShadow)">
+    <rect x="60" y="432" width="430" height="176" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="432" width="6" height="176" rx="3" fill="#dc2626"/>
+    <text x="82" y="464" font-size="21" font-weight="600" fill="#ffffff">Command channel</text>
+    <text x="82" y="501" font-size="17" fill="#e5e5e5">svc.py and pull.py send base64-wrapped</text>
+    <text x="82" y="525" font-size="17" fill="#e5e5e5">commands to the page and read the output</text>
+    <text x="82" y="548" font-size="17" fill="#e5e5e5">from the HTTP response body.</text>
+    <text x="82" y="578" font-size="15" fill="#cccccc">Date of the commands: unknown.</text>
+  </g>
+  <g filter="url(#treeShadow)">
+    <rect x="60" y="634" width="430" height="330" rx="8" fill="#1a1a1a" stroke="#eab308" stroke-width="2"/>
+    <rect x="60" y="634" width="6" height="330" rx="3" fill="#eab308"/>
+    <text x="82" y="666" font-size="21" font-weight="600" fill="#ffffff">Package pulled from an internal</text>
+    <text x="82" y="693" font-size="21" font-weight="600" fill="#ffffff">file server</text>
+    <text x="82" y="731" font-size="17" fill="#e5e5e5">14 slices of 64 KiB, each fetched by one</text>
+    <text x="82" y="754" font-size="17" fill="#e5e5e5">command from an internal SFTP file server.</text>
+    <text x="82" y="784" font-size="17" fill="#e5e5e5">Decoded: 905,374 bytes, byte-identical to an</text>
+    <text x="82" y="807" font-size="17" fill="#e5e5e5">agency deployment package and equal to its</text>
+    <text x="82" y="830" font-size="17" fill="#e5e5e5">manifest MD5.</text>
+    <text x="82" y="860" font-size="17" font-weight="700" fill="#fb923c">This decode carries the ACCESS SHOWN</text>
+    <text x="82" y="883" font-size="17" font-weight="700" fill="#fb923c">grade.</text>
+    <text x="82" y="913" font-size="15" fill="#cccccc">Manifest and package share a server, so the match</text>
+    <text x="82" y="934" font-size="15" fill="#cccccc">is not independent authentication.</text>
+  </g>
+  <g filter="url(#treeShadow)">
+    <rect x="60" y="990" width="430" height="256" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="990" width="6" height="256" rx="3" fill="#eab308"/>
+    <text x="82" y="1022" font-size="21" font-weight="600" fill="#ffffff">Bulk help-desk document pull</text>
+    <text x="82" y="1059" font-size="17" fill="#e5e5e5">pull_mass.py runs through the same command</text>
+    <text x="82" y="1083" font-size="17" fill="#e5e5e5">channel.</text>
+    <text x="82" y="1112" font-size="17" fill="#e5e5e5">4,675 distinct document paths queued; 4,997</text>
+    <text x="82" y="1136" font-size="17" fill="#e5e5e5">download events, which is not a count of</text>
+    <text x="82" y="1159" font-size="17" fill="#e5e5e5">distinct documents.</text>
+    <text x="82" y="1189" font-size="17" font-weight="700" fill="#fb923c">Documents that left the agency: NOT</text>
+    <text x="82" y="1212" font-size="17" font-weight="700" fill="#fb923c">MEASURED.</text>
+  </g>
+  <line x1="34" y1="520" x2="34" y2="1118" stroke="#666666" stroke-width="2"/>
+  <line x1="34" y1="520" x2="60" y2="520" stroke="#666666" stroke-width="2"/>
+  <line x1="34" y1="799" x2="60" y2="799" stroke="#666666" stroke-width="2"/>
+  <line x1="34" y1="1118" x2="60" y2="1118" stroke="#666666" stroke-width="2"/>
+  <g filter="url(#treeShadow)">
+    <rect x="510" y="432" width="430" height="283" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="510" y="432" width="6" height="283" rx="3" fill="#dc2626"/>
+    <text x="532" y="464" font-size="21" font-weight="600" fill="#ffffff">Help desk as a reconnaissance</text>
+    <text x="532" y="491" font-size="21" font-weight="600" fill="#ffffff">source</text>
+    <text x="532" y="529" font-size="17" fill="#e5e5e5">Ticket searches for SentinelOne, Intune,</text>
+    <text x="532" y="552" font-size="17" fill="#e5e5e5">Entra, GlobalProtect and remote-shell terms.</text>
+    <text x="532" y="582" font-size="17" fill="#e5e5e5">Deployment tickets naming internal hosts and</text>
+    <text x="532" y="605" font-size="17" fill="#e5e5e5">repositories.</text>
+    <text x="532" y="634" font-size="17" fill="#e5e5e5">A live SentinelOne API token, read from the</text>
+    <text x="532" y="658" font-size="17" fill="#e5e5e5">settings of the help desk's remote-support</text>
+    <text x="532" y="681" font-size="17" fill="#e5e5e5">application (HIGH).</text>
+  </g>
+  <line x1="725" y1="715" x2="725" y2="741" stroke="#666666" stroke-width="2"/>
+  <g filter="url(#treeShadow)">
+    <rect x="510" y="741" width="430" height="275" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="510" y="741" width="6" height="275" rx="3" fill="#dc2626"/>
+    <text x="532" y="773" font-size="21" font-weight="600" fill="#ffffff">EDR console queried with that</text>
+    <text x="532" y="800" font-size="21" font-weight="600" fill="#ffffff">token</text>
+    <text x="532" y="838" font-size="17" fill="#e5e5e5">12 service users, 44 human users, an agent</text>
+    <text x="532" y="861" font-size="17" fill="#e5e5e5">page stating 6,823 agents, two rogue-device</text>
+    <text x="532" y="885" font-size="17" fill="#e5e5e5">lists (4,663 and 8,817).</text>
+    <text x="532" y="914" font-size="17" fill="#e5e5e5">Uninstall-password request: refused.</text>
+    <text x="532" y="943" font-size="15" fill="#cccccc">Remote shell enabled on all 372 agent records</text>
+    <text x="532" y="964" font-size="15" fill="#cccccc">analysed: a capability, no session shown. Replies</text>
+    <text x="532" y="985" font-size="15" fill="#cccccc">at or after 2026-10-02.</text>
+  </g>
+  <g filter="url(#treeShadow)">
+    <rect x="510" y="1060" width="430" height="257" rx="8" fill="#1a1a1a" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="7 5"/>
+    <rect x="510" y="1060" width="6" height="257" rx="3" fill="#f97316"/>
+    <text x="532" y="1092" font-size="21" font-weight="600" fill="#ffffff">Held separately: temporary AWS</text>
+    <text x="532" y="1119" font-size="21" font-weight="600" fill="#ffffff">credentials</text>
+    <text x="532" y="1157" font-size="17" fill="#e5e5e5">Returned by an instance metadata service on</text>
+    <text x="532" y="1180" font-size="17" fill="#e5e5e5">2026-10-02; the account matches the agency's</text>
+    <text x="532" y="1204" font-size="17" fill="#e5e5e5">cloud account (HIGH).</text>
+    <text x="532" y="1233" font-size="17" fill="#e5e5e5">Instance and role not identified. Expired</text>
+    <text x="532" y="1256" font-size="17" fill="#e5e5e5">2026-10-03; no use shown.</text>
+    <text x="532" y="1286" font-size="15" fill="#cccccc">Not tied to any route above.</text>
+  </g>
+  <line x1="60" y1="1357" x2="940" y2="1357" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="1391" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">Detection anchors:  POSTs to GLPI's htmLawed test page under any name</text>
+  <text x="500" y="1421" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">SentinelOne audit: an API user asking for agent uninstall passwords</text>
+  <text x="500" y="1455" text-anchor="middle" font-size="15" fill="#cccccc">Not shown: command dates · documents that left · whether the GLPI credential hook was installed · current access</text>
+  <rect x="60" y="1482" width="16" height="16" fill="#f97316"/>
+  <text x="84" y="1495" font-size="14" fill="#cccccc">entry / held credentials</text>
+  <rect x="294" y="1482" width="16" height="16" fill="#dc2626"/>
+  <text x="318" y="1495" font-size="14" fill="#cccccc">operator code, console use</text>
+  <rect x="544" y="1482" width="16" height="16" fill="#eab308"/>
+  <text x="568" y="1495" font-size="14" fill="#cccccc">staging, collection</text>
+  <rect x="740" y="1482" width="16" height="16" fill="none" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="764" y="1495" font-size="14" fill="#cccccc">held, no route shown</text>
+  <text x="500" y="1529" text-anchor="middle" font-size="14" fill="#888888">Graded ACCESS SHOWN; latest dated evidence is console replies at or after 2026-10-02.</text>
+</svg>
