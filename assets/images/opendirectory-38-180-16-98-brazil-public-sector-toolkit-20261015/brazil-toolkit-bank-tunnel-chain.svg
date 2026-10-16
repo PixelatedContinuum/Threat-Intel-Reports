@@ -37,8 +37,8 @@
     <rect x="60" y="526" width="880" height="13" fill="#dc2626"/>
     <text x="80" y="524" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">STEP 2</text>
     <text x="175" y="524" font-size="23" font-weight="600" fill="#ffffff">Command output inside the container: HIGH</text>
-    <text x="80" y="575" font-size="19" fill="#ffffff">Identity, host and date output run as the WSO2 service account, stamped 2026-09-15</text>
-    <text x="80" y="601" font-size="19" fill="#ffffff">17:06:41 UTC.</text>
+    <text x="80" y="575" font-size="19" fill="#ffffff">Identity, host and date output run as the WSO2 service account, stamped 2026-09-15 at</text>
+    <text x="80" y="601" font-size="19" fill="#ffffff">17:06 UTC.</text>
     <text x="80" y="633" font-size="17" fill="#e5e5e5">The same process appears in three process tables (16:25, 16:26, 17:06); a compiled /tmp/Q.class</text>
     <text x="80" y="657" font-size="17" fill="#e5e5e5">owned by the service account.</text>
     <text x="80" y="686" font-size="17" font-weight="700" fill="#fb923c">This host-side evidence is what grades the bank ACCESS SHOWN.</text>
