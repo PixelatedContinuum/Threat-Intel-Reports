@@ -5,7 +5,7 @@
   "confidence_note": "Confidence levels: DEFINITE (direct evidence, no ambiguity), HIGH (strong evidence, minor gaps), MODERATE (reasonable evidence, notable gaps), LOW (weak/circumstantial). No SHA256 hashes for archive payloads. The investigation deliberately did not download stolen-victim-PII archives. IOCs focus on infrastructure, URLs, filename patterns, PGP fingerprints, and actor-identity artifacts.",
   "analyst_notes": [
     "This is a Data Leak Site / extortion infrastructure investigation, not a malware-binary investigation.",
-    "28 of 29 named victims on this DLS are publicly reported as ShinyHunters victims; Alert360 is the sole unacknowledged victim.",
+    "28 of 29 named victims on this DLS are publicly reported as ShinyHunters victims; one victim, a US home and small-business alarm-monitoring provider (name withheld), is the sole unacknowledged victim.",
     "Ledger typosquat (ledger-lives.io) discovered on co-tenant PROSPERO IP is a SEPARATE investigation and not included here.",
     "PGP fingerprints are reproduced without spacing as required for machine ingestion; human-readable spaced form is in the full analysis narrative."
   ],
@@ -177,12 +177,6 @@
         "confidence": "DEFINITE",
         "context": "Ransom note path",
         "value": "/pay_or_leak/INFORMATION.txt"
-      },
-      {
-        "path": "/pay_or_leak/alert360/",
-        "confidence": "HIGH",
-        "context": "Victim subdirectory (INFORMATION.txt only, no archive, extortion-negotiation stage)",
-        "value": "/pay_or_leak/alert360/"
       },
       {
         "path": "/pay_or_leak/ameriprise/",

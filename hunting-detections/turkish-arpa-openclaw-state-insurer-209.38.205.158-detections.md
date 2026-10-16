@@ -50,7 +50,7 @@ This backfill re-tiers the original 29-rule set (8 YARA, 12 Sigma, 9 Suricata) i
 **Calibration notes carried forward from original analysis:**
 - **Observability-Tool Reverse Pipeline TTP novelty:** maintained at high-MODERATE (top of MODERATE band) novelty confidence after full prior-art review. Closest adjacent documented case (UNC6395 OAuth-based CRM breach) is structurally distinct: one-time CRM exfiltration vs. sustained 4-source observability ETL. The Sigma rule targeting the multi-source cross-platform authentication pattern (Sigma Rule 7, corrected below) is Hunting-tier: it surfaces the qualifying per-event signal but still requires SIEM-side correlation to realize the full novel-TTP detection value.
 - **AI-Augmented Infrastructure Reconnaissance Using Stolen APM Credentials** (`ai_service.py` + `ai_assistant.db` pattern): CANDIDATE novel TTP at N=1. YARA Rule 5 targets this pattern specifically and is Hunting-tier pending N≥2 cross-operator validation.
-- **10-year Instana JWT governance defect:** the stolen JWT (`jti: 022a1b74-2332-4df5-a76b-60225ffa7ae3`, exp ~2034-02) is a victim-side credential management defect; this is NOT an IBM Instana CVE. Sigma Rule 6 (the stolen JWT's `jti`, plus external-source access to the victim tenant) is a Hunting-tier rule, because its external-source branch also matches authorized orchestration; it reads no token-lifetime field, so it does not identify long-lived tokens in general. IBM PSIRT coordination is a product-hardening recommendation, not a CVE-disclosure path.
+- **10-year Instana JWT governance defect:** the stolen JWT (`jti: [withheld]`, exp ~2034-02) is a victim-side credential management defect; this is NOT an IBM Instana CVE. Sigma Rule 6 (the stolen JWT's `jti`, plus external-source access to the victim tenant) is a Hunting-tier rule, because its external-source branch also matches authorized orchestration; it reads no token-lifetime field, so it does not identify long-lived tokens in general. IBM PSIRT coordination is a product-hardening recommendation, not a CVE-disclosure path.
 
 ---
 
@@ -341,7 +341,7 @@ rule MAL_Python_Instana_SolarWinds_Zabbix_VMwareAria_Polling {
       $solarwinds_ref = "solarwinds" ascii wide nocase fullword
       $vmware_aria = "vmware" ascii wide nocase fullword
       $cadence = "5min" ascii wide fullword
-      $jwt_jti = "022a1b74-2332-4df5-a76b-60225ffa7ae3" ascii wide
+      $jwt_jti = "[stolen-token-jti]" ascii wide
       $last_fetch = "get_last_fetch_time" ascii wide fullword
    condition:
       filesize < 500KB and
@@ -597,7 +597,7 @@ title: Instana Audit Log Event With The Stolen JWT Or External-Source Access To 
 id: d4398d0e-e7ea-4b8d-a838-8b2a760fc468
 status: experimental
 description: >-
-  Detects use of the specific stolen the victim organization Instana JWT (jti 022a1b74) in API
+  Detects use of the specific stolen the victim organization Instana JWT (jti withheld) in API
   calls, or any audit-log event for the victim tenant whose source_ip is not within the
   RFC1918 ranges, which includes an event with no source_ip value. The second branch matches
   whatever the event is, including authorized external orchestration. The rule reads no token-lifetime or expiry field and does not identify
@@ -624,7 +624,7 @@ logsource:
     service: audit_log
 detection:
     selection_stolen_jti:
-        jwt_jti: '022a1b74-2332-4df5-a76b-60225ffa7ae3'
+        jwt_jti: '[stolen-token-jti]'
     selection_stolen_tenant:
         tenant: '[victim-tenant]'
     filter_internal_source:

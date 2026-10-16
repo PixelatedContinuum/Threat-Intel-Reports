@@ -1,6 +1,10 @@
 ---
 title: "Multi-Actor AI-Agent Framework Abuse: 8 Operators Integrating AI CLIs into Offensive Workflows"
 date: '2026-06-04'
+last_updated: '2026-10-16'
+revisions:
+  - date: '2026-10-16'
+    note: "Withheld the stolen token's id in two places; findings unchanged."
 layout: post
 permalink: /reports/ai-agent-frameworks-2026-05-23/
 thumbnail: /assets/images/cards/ai-agent-frameworks-2026-05-23.png
@@ -506,7 +510,7 @@ Cross-operator validation across three different AI tools (Gemini CLI, OpenClaw,
 Each case's chronological operator-side workflow is documented step-by-step in its linked sub-report (§14.2): Case 1 (Gemini credential-mutation → C2 → healthcare-victim RDP/SSH → disinformation pivot), Case 2 (insider tunnel setup → stolen-JWT ingestion → 4-source correlation → live dashboard), Case 3 (Rovodev prompt → AI `file_write` → 11-arch build → dual-channel distribution → 5-vector persistence → C2 registration), and Case 9 (kit pull → per-customer customization → `/etc/ld.so.preload` write → libc-hook activation → hidden-miner + Hysteria v2 deployment → Telegram callbacks → container escape). Two belong to the parent's synthesis:
 
 - **Case 3 Rovodev session JSONs** (`session_cron_a46703f0a3c4.json`, `session_interactive_b9d424.json`) capture AI authoring offensive code at primary-source level: the operator's verbatim natural-language prompts and the AI's `file_write` tool calls building the framework, file-by-file. This is the campaign's most direct evidence of AI-on-offense.
-- **Case 2 multi-source observability ingestion timing** on the ARPA platform shows the stolen 10-year Instana JWT (`jti 022a1b74-2332-4df5-a76b-60225ffa7ae3`, iat 2024-03-06) driving a daily ingestion cycle running through 2026-05-23 with the dashboard live 2026-05-24: confirming an active, sustained operation rather than a one-off pull.
+- **Case 2 multi-source observability ingestion timing** on the ARPA platform shows the stolen 10-year Instana JWT (token id withheld, iat 2024-03-06) driving a daily ingestion cycle running through 2026-05-23 with the dashboard live 2026-05-24: confirming an active, sustained operation rather than a one-off pull.
 
 ---
 
@@ -721,7 +725,7 @@ Reassess the campaign threat level (HIGH) under any of these conditions:
 - **Cloudflare PSIRT does not action `tralalarkefe.com`**: Case 1 Cloudflare Tunnel C2 remains active against the healthcare victim and any future victims using the operator's custom-domain model. Reassess to consider upgrading from HIGH.
 - **AEZA Group does not respond to the prepared disclosure package**: bulletproof status held at SUSPECTED pending AEZA response. If AEZA does not act, Cases 1 and 9 hosting remains available to operators.
 - **Vova75Rus re-hosts post-GitHub-T&S suspension**: track for new Vova75Rus-pattern accounts and re-hosted GHOST kit repositories. Defenders should monitor `Vova75Rus/*`, `UID 73169104` recreations, and similar naming patterns.
-- **the victim organization does not rotate stolen JWTs**: the 10-year IBM Instana JWT (iat 2024-03-06, jti 022a1b74-2332-4df5-a76b-60225ffa7ae3) remains valid until token rotation. If rotation does not occur, the operator retains read access to the victim organization observability.
+- **the victim organization does not rotate stolen JWTs**: the 10-year IBM Instana JWT (iat 2024-03-06, token id withheld) remains valid until token rotation. If rotation does not occur, the operator retains read access to the victim organization observability.
 - **New customer operators of the GHOST kit are observed**: the 4-tier supply chain expands by one tier per confirmed new customer if Vova75Rus's distribution channel is reconstituted. Re-assess the supply-chain depth score when new customer operators are confirmed.
 
 ### 10.2 Detection Coverage Summary

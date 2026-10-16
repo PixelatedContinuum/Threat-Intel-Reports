@@ -5,8 +5,8 @@
   "zip": {
     "file": "hunters-ledger-stix-bundles.zip",
     "url": "https://the-hunters-ledger.com/stix/hunters-ledger-stix-bundles.zip",
-    "sha256": "6dff4741868fe4ae1150aaa405a357c2c02ef384e002c16395faeb8a0756d908",
-    "bytes": 1920481
+    "sha256": "8089eb759540600f2457f8c6438e6e8c7186fc962535a264503be4ae0f40a51d",
+    "bytes": 1979555
   },
   "bundles": [
     {
@@ -256,13 +256,13 @@
       "file": "turkish-arpa-openclaw-state-insurer-209.38.205.158.json",
       "url": "https://the-hunters-ledger.com/stix/turkish-arpa-openclaw-state-insurer-209.38.205.158.json",
       "report_url": "https://the-hunters-ledger.com/reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/",
-      "bundle_id": "bundle--c83f587a-c7cc-40bf-947c-47191e0b66ad",
+      "bundle_id": "bundle--00f9e321-efb2-4bad-9dfc-2df4066559d7",
       "report_id": "report--aed547b6-648b-561d-b984-464d52e75bcc",
-      "sha256": "f3b1fdb196b80b10aac0402a78f0ee7ca81c72c72a80397d81cb2493eaa8fb2a",
-      "bytes": 143577,
+      "sha256": "9abd71d412c2637ea9db99e7cafbf7fb4e5df9d0ed963f6f5d73f8cc6bc90f56",
+      "bytes": 143541,
       "objects": 137,
       "indicators": 42,
-      "modified": "2026-10-11T14:08:50.648184Z"
+      "modified": "2026-10-16T19:47:24.961523Z"
     },
     {
       "slug": "opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517",

@@ -1,12 +1,14 @@
 ---
 title: "ShinyHunters Data Leak Site at 91.215.85.22 — Infrastructure, Victims, and Attribution"
 date: '2026-04-17'
-last_updated: '2026-04-24'
+last_updated: '2026-10-16'
 revisions:
   - date: '2026-04-20'
     note: "Outreach window closed; the disclosure status table in section 4.2 updated to the state as of 20 April."
   - date: '2026-04-24'
     note: "Re-scan of the DLS: seven additional named victims and one add-then-remove event recorded in a new section 4.7 (post-publication additions, 21 to 24 April), the executive summary carries an update note, and one row of the roster table in section 4.1 corrected."
+  - date: '2026-10-16'
+    note: "Withheld the name of the one unacknowledged victim throughout, including the section 4.3 heading; the finding and its disclosure record are unchanged."
 detection_page: /hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/
 ioc_feed: /ioc-feeds/shinyhunters-dls-91-215-85-22-20260417/
 ioc_highlights:
@@ -64,14 +66,14 @@ stix_bundle: /stix/shinyhunters-dls-91-215-85-22-20260417.json
 
 ### BLUF
 
-`91.215.85.22` is an active ShinyHunters Data Leak Site publishing 1.1 TB of stolen data from **29 named victim organizations**, attribution **DEFINITE (96%)**, supported by two Tier-1 government advisories, six years of PGP key continuity, and 28 of 29 victims independently corroborated in mainstream press. One victim, **Alert360**, had no prior public reporting at analysis cutoff and was documented here first; responsible disclosure was filed across four channels before publication. The DLS runs on Russian bulletproof hosting (PROSPERO AS200593) with the actor identity page segmented onto DDoS-Guard (AS57724), making single-provider takedown ineffective. Detection leverage lies upstream in the vishing-to-Salesforce/Okta chain (§5), not at the DLS itself.
+`91.215.85.22` is an active ShinyHunters Data Leak Site publishing 1.1 TB of stolen data from **29 named victim organizations**, attribution **DEFINITE (96%)**, supported by two Tier-1 government advisories, six years of PGP key continuity, and 28 of 29 victims independently corroborated in mainstream press. One victim, **a US home and small-business alarm-monitoring provider**, had no prior public reporting at analysis cutoff and was documented here first; responsible disclosure was filed across four channels before publication. The DLS runs on Russian bulletproof hosting (PROSPERO AS200593) with the actor identity page segmented onto DDoS-Guard (AS57724), making single-provider takedown ineffective. Detection leverage lies upstream in the vishing-to-Salesforce/Okta chain (§5), not at the DLS itself.
 
 ### Key Risk Factors
 
 | Risk Dimension | Score (/10) | Notes |
 |---|---:|---|
 | Data-disclosure scale | 10 | 1.1 TB across 29 named victims; 821 GB ZenBusiness dump is the largest single archive |
-| Downstream victim harm | 9 | HNW/UHNW PII (Beacon Pointe, Pathstone, Ameriprise, Mercer); national-scale telecom (Odido 6.2M Dutch subscribers); kinetic harm via Alert360 alarm data |
+| Downstream victim harm | 9 | HNW/UHNW PII (Beacon Pointe, Pathstone, Ameriprise, Mercer); national-scale telecom (Odido 6.2M Dutch subscribers); kinetic harm via the alarm-monitoring victim's data |
 | Operational tempo | 8 | Fresh uploads within 24 h of discovery; weekly-to-biweekly cadence sustained for 6+ weeks |
 | Takedown resistance | 8 | Russian bulletproof + DDoS-Guard fronting + 3-mirror Tor architecture; abuse contacts historically unresponsive |
 | Attribution defensibility | 10 | DEFINITE (96%) with two Tier-1 government advisories + cryptographic 6-year key lineage |
@@ -87,14 +89,14 @@ stix_bundle: /stix/shinyhunters-dls-91-215-85-22-20260417.json
 - **Block at perimeter:** `91.215.85.22`, `91.215.43.200`, `shinyhunte.rs`, the three `.onion` mirrors. Full IOC list, see Section 9 and the linked IOC feed.
 - **Hunt for the taunt-filename pattern** `(?i)should(ve|a).*paid.*ransom.*shinyhunters` across enterprise file shares, cloud-sync staging directories, and proxy logs (Section 3.2; full detection rules linked in Section 9).
 - **Detect the upstream chain.** This is not a malware infection. DLS appearance is the *terminal* event. The detectable upstream is help-desk vishing → MFA reset → anomalous Okta/Salesforce OAuth Connected App → bulk Data Loader export. See Section 5 (TTP Chain) and the linked detection file.
-- **Alert360 notification priority.** Alert360 had not acknowledged a breach as of report cutoff. Partners and customers should treat this as priority-one notification intelligence.
+- **Alarm-monitoring victim notification priority.** The provider had not acknowledged a breach as of report cutoff. Partners and customers should treat this as priority-one notification intelligence.
 - **Do not over-attribute OTX co-tenant correlations.** PLAY, Qilin, RansomHub, and various RATs that AlienVault OTX associates with this IP are shared-bulletproof-hosting artifacts, not ShinyHunters capabilities.
 
 ### Key Takeaways
 
 - **The site is live and actively maintained.** Four fresh victim archives were uploaded on 2026-04-15, one day before the investigation cutoff. This is not an abandoned dump server. It is a working part of an ongoing extortion operation.
 - **Attribution is as strong as open-source intelligence allows.** Two Tier-1 government sources (IC3, CERT-EU) name the actor and TTP cluster, two Tier-2 vendors (Google GTIG, Resecurity) corroborate, six years of unbroken cryptographic continuity runs through a dual-key cross-signed PGP rotation, and 28 of 29 victims map to independently-reported ShinyHunters operations. The 4% confidence gap to 100% reflects only the absence of a law-enforcement advisory naming the specific IP.
-- **One victim (Alert360) is publicly identified here for the first time.** A US home and small-business alarm-monitoring provider with no prior coverage in any breach press, government bulletin, or crowdsourced tracker. The data class implied by its business model (home addresses, alarm configurations, disarm PINs) carries kinetic-harm risk that other victims on this DLS do not.
+- **One victim, withheld here by name, had no prior public reporting.** A US home and small-business alarm-monitoring provider with no prior coverage in any breach press, government bulletin, or crowdsourced tracker. The data class implied by its business model (home addresses, alarm configurations, disarm PINs) carries kinetic-harm risk that other victims on this DLS do not.
 - **Takedown is unusually difficult.** The operator deliberately splits the leak site across two Russian providers (PROSPERO for data, DDoS-Guard for identity) and maintains three Tor mirrors. No single takedown action (civil, criminal, or technical) collapses the operation; all five publication paths must be addressed.
 - **The leak site is the wrong place to look for detection leverage.** By the time an organization appears on the DLS, the breach is months old. The detectable upstream is help-desk vishing → MFA reset → anomalous Okta or Salesforce OAuth Connected App authorization → bulk Salesforce Data Loader exports. Defenders with SaaS log access should focus there.
 - **The campaign is expanding, not contracting.** Since the August 2025 merger, vendor tracking has identified new sub-clusters (UNC6671 Okta-direct vishing, Salesforce Aura misconfiguration exploitation, active female vishing-caller recruitment). Defenders should plan for continued TTP variation through 2026.
@@ -126,7 +128,7 @@ The canonical content path is `GET /pay_or_leak/`, which returns an nginx autoin
 
 Real subdirectories under `/pay_or_leak/`:
 
-- `/pay_or_leak/alert360/`: contains only `INFORMATION.txt`; **no archive present** (extortion-negotiation stage)
+- `/pay_or_leak/[victim]/` (the alarm-monitoring provider, name withheld): contains only `INFORMATION.txt`; **no archive present** (extortion-negotiation stage)
 - `/pay_or_leak/ameriprise/`: `INFORMATION.txt` only (extortion-negotiation stage)
 - `/pay_or_leak/odido/`: empty (archive withdrawn after victim refused ransom per public statement)
 - `/pay_or_leak/woflow/`: empty
@@ -241,7 +243,7 @@ The two 2020 keys cross-signed the rotation handoff to the current key on 2026-0
 ## 4. Victim Inventory and Disclosure Status
 {: .hl-tier-2}
 
-> **Analyst note:** This section is the consolidated 29-victim roster derived from the DLS file inventory and subdirectory structure, cross-checked against public press, breach trackers (HIBP, ransomware.live), and class-action court filings. The single-most-important finding here is that twenty-eight of twenty-nine named victims have prior public reporting; one (Alert360) does not.
+> **Analyst note:** This section is the consolidated 29-victim roster derived from the DLS file inventory and subdirectory structure, cross-checked against public press, breach trackers (HIBP, ransomware.live), and class-action court filings. The single-most-important finding here is that twenty-eight of twenty-nine named victims have prior public reporting; one (the alarm-monitoring provider, name withheld) does not.
 
 ### 4.1 Full roster
 
@@ -275,7 +277,7 @@ The two 2020 keys cross-signed the rotation handoff to the current key on 2026-0
 | 26 | Abrigo | AML / BSA fintech | 61 MB | 2026-04-15 | PARTIAL |
 | 27 | CarMax (KMX) | Used-car retail | 61 MB | 2026-03-04 | PARTIAL |
 | 28 | Ameriprise Financial (AMP) | Wealth / insurance | (subfolder only) | 2026-03-22 (claim) | PARTIAL |
-| 29 | **Alert360** | Home / SMB alarm monitoring | (subfolder only) | — | **UNKNOWN, no public reporting** |
+| 29 | **Name withheld** | Home / SMB alarm monitoring | (subfolder only) | — | **UNKNOWN, no public reporting** |
 | — | Odido | Dutch telecom | (subfolder empty) | — | YES (ransom refused; archive withdrawn) |
 | — | Woflow | Merchant-data B2B | (subfolder empty) | — | PARTIAL |
 | — | `europa.zip` | European Commission (HIGH confidence) | 94 GB | 2026-03-28 | YES |
@@ -287,33 +289,33 @@ As of **2026-04-20** (post-outreach window close):
 
 - **22 victims fully publicly reported** (named in mainstream security press with company acknowledgment)
 - **9 victims partially disclosed** (actor-claimed without formal company acknowledgment): Berkadia, Ameriprise, Woflow, Abrigo, CFGI, Kemper, Amtrak, ZenBusiness, CarMax, Edmunds
-- **Alert360**: added to ransomware.live on **2026-04-19** (three days after The Hunters Ledger's pre-publication disclosure outreach). No mainstream security-press coverage as of this report's release, and no statement from Alert360 itself.
+- **The alarm-monitoring provider**: added to ransomware.live on **2026-04-19** (three days after The Hunters Ledger's pre-publication disclosure outreach). No mainstream security-press coverage as of this report's release, and no statement from the company itself.
 
-At the time of analysis (2026-04-16), ransomware.live tracked 28 of 29 victims on this DLS, leaving Alert360 as the sole novel entry. ransomware.live's subsequent 2026-04-19 listing of Alert360 closes that public-reporting gap.
+At the time of analysis (2026-04-16), ransomware.live tracked 28 of 29 victims on this DLS, leaving the alarm-monitoring provider as the sole novel entry. ransomware.live's subsequent 2026-04-19 listing of it closes that public-reporting gap.
 
-### 4.3 Alert360: the previously-unacknowledged victim (key finding)
+### 4.3 The previously-unacknowledged victim (key finding)
 
-**What is Alert360?** A US home and small-business alarm-monitoring provider. The data class implied by its business model, home addresses, alarm-system configurations, disarm PINs, account-holder identity, and (potentially) absence patterns inferable from arming history, is among the most operationally dangerous on the DLS. Unlike the financial-services victims, the harm vector here is not identity theft or wire fraud; it is **direct kinetic enablement** (burglary, stalking, targeted physical entry). When overlaid with travel-window data inferable from the Amtrak archive (also on this DLS), the cross-victim aggregation risk is unusually high.
+**What is this victim?** A US home and small-business alarm-monitoring provider. The data class implied by its business model, home addresses, alarm-system configurations, disarm PINs, account-holder identity, and (potentially) absence patterns inferable from arming history, is among the most operationally dangerous on the DLS. Unlike the financial-services victims, the harm vector here is not identity theft or wire fraud; it is **direct kinetic enablement** (burglary, stalking, targeted physical entry). When overlaid with travel-window data inferable from the Amtrak archive (also on this DLS), the cross-victim aggregation risk is unusually high.
 
-This matters for intelligence consumers. At the time of analysis, 2026-04-16, Alert360 was in the extortion-negotiation stage on this DLS, with its subdirectory holding only the `INFORMATION.txt` ransom note and no archive, and no breach press, vendor advisory, government bulletin or breach tracker had covered Alert360 as a ShinyHunters victim. This report is the first substantive public documentation of Alert360's presence on the DLS.
+This matters for intelligence consumers. At the time of analysis, 2026-04-16, the provider was in the extortion-negotiation stage on this DLS, with its subdirectory holding only the `INFORMATION.txt` ransom note and no archive, and no breach press, vendor advisory, government bulletin or breach tracker had covered it as a ShinyHunters victim. This report is the first substantive public documentation of this victim's presence on the DLS.
 
-**Subsequent public corroboration (ransomware.live, 2026-04-19).** Three days after The Hunters Ledger's responsible-disclosure outreach, the independent extortion-operations tracker ransomware.live listed Alert360 as a ShinyHunters victim. This closes the public-reporting gap and independently corroborates the finding.
+**Subsequent public corroboration (ransomware.live, 2026-04-19).** Three days after The Hunters Ledger's responsible-disclosure outreach, the independent extortion-operations tracker ransomware.live listed the provider as a ShinyHunters victim. This closes the public-reporting gap and independently corroborates the finding.
 
-One factual correction worth noting: ransomware.live's Alert360 entry assigns an **estimated attack date of 2026-04-18**. That date is not consistent with the DLS evidence, the Alert360 subdirectory (and the `INFORMATION.txt` ransom note served from it) was directly observed during this investigation's crawl on **2026-04-16**. The actor-side listing therefore pre-dates the ransomware.live estimate by at least two days. Defenders and investigators using ransomware.live data for scope-of-impact or breach-timeline decisions should treat the 2026-04-18 estimate as a lower bound only. The actual compromise timeline is almost certainly earlier, and the DLS listing was active by 2026-04-16 at the latest.
+One factual correction worth noting: ransomware.live's entry for this victim assigns an **estimated attack date of 2026-04-18**. That date is not consistent with the DLS evidence, the victim's subdirectory (and the `INFORMATION.txt` ransom note served from it) was directly observed during this investigation's crawl on **2026-04-16**. The actor-side listing therefore pre-dates the ransomware.live estimate by at least two days. Defenders and investigators using ransomware.live data for scope-of-impact or breach-timeline decisions should treat the 2026-04-18 estimate as a lower bound only. The actual compromise timeline is almost certainly earlier, and the DLS listing was active by 2026-04-16 at the latest.
 
-Some caveats apply. Presence on the DLS does not by itself prove the breach is real, since the actor could have published a subdirectory speculatively, as a negotiation tactic, or against a related third party. That said, every other empty or pre-archive subdirectory on this DLS, Ameriprise, Odido and Woflow, has subsequently been corroborated as a real victim. With ransomware.live now also listing Alert360, the base rate plus the second-source corroboration make a real Alert360 compromise highly probable. Alert360 itself has issued no public statement as of this report's publication.
+Some caveats apply. Presence on the DLS does not by itself prove the breach is real, since the actor could have published a subdirectory speculatively, as a negotiation tactic, or against a related third party. That said, every other empty or pre-archive subdirectory on this DLS, Ameriprise, Odido and Woflow, has subsequently been corroborated as a real victim. With ransomware.live now also listing the provider, the base rate plus the second-source corroboration make a real compromise highly probable. The company itself has issued no public statement as of this report's publication.
 
-**Responsible-disclosure timeline (prior to publication).** Because no public reporting existed naming Alert360 as a ShinyHunters victim at the time of analysis, The Hunters Ledger performed pre-publication responsible disclosure across four independent channels before including Alert360 in this report. None of the four channels produced an acknowledgment during the outreach window; a fifth-row entry records the subsequent third-party public disclosure.
+**Responsible-disclosure timeline (prior to publication).** Because no public reporting existed naming the provider as a ShinyHunters victim at the time of analysis, The Hunters Ledger performed pre-publication responsible disclosure across four independent channels before including it in this report. None of the four channels produced an acknowledgment during the outreach window; a fifth-row entry records the subsequent third-party public disclosure.
 
 | # | Channel | Recipient / route | Date | Outcome |
 |---|---|---|---|---|
 | 1 | FBI IC3 filing | https://www.ic3.gov/, cyber-incident complaint filed with victim-organization context and DLS artefact references | 2026-04-16 | Filed. Confirmation receipt retained. No acknowledgment or routing confirmation received. |
 | 2 | databreaches.net tip | Emailed to Dissent Doe (independent breach-journalism outlet with established track record of contacting under-reported victims) | 2026-04-16 | Delivered. No response or public coverage as of publication. |
-| 3 | LinkedIn outreach | Connection requests to Alert360 CEO and General Counsel accompanied by notification message | 2026-04-16 | Requests pending; neither account accepted the connection or replied. |
-| 4 | Corporate privacy email | `privacy@alert360.com` | 2026-04-16 | Email was rejected / blocked at the receiving mail gateway; message did not deliver. |
-| 5 | ransomware.live (third-party disclosure, not a Hunters Ledger action) | Public listing on https://www.ransomware.live/group/shinyhunters | 2026-04-19 | Alert360 added to tracker with estimated attack date 2026-04-18. Estimate is inconsistent with this report's direct DLS observation on 2026-04-16 (see above). |
+| 3 | LinkedIn outreach | Connection requests to the company's CEO and General Counsel accompanied by notification message | 2026-04-16 | Requests pending; neither account accepted the connection or replied. |
+| 4 | Corporate privacy email | The company's published privacy address | 2026-04-16 | Email was rejected / blocked at the receiving mail gateway; message did not deliver. |
+| 5 | ransomware.live (third-party disclosure, not a Hunters Ledger action) | Public listing on https://www.ransomware.live/group/shinyhunters | 2026-04-19 | The provider added to tracker with estimated attack date 2026-04-18. Estimate is inconsistent with this report's direct DLS observation on 2026-04-16 (see above). |
 
-No private channel produced a reply, and the corporate privacy address actively rejected mail. The FBI IC3 route remains the authoritative channel of record. With ransomware.live publicly listing Alert360 on 2026-04-19, the disclosure gap that drove the original publication hold is closed; this report is released with the pre-publication outreach record preserved in full for transparency. Any future Alert360 response will be appended to this report as an update.
+No private channel produced a reply, and the corporate privacy address actively rejected mail. The FBI IC3 route remains the authoritative channel of record. With ransomware.live publicly listing the provider on 2026-04-19, the disclosure gap that drove the original publication hold is closed; this report is released with the pre-publication outreach record preserved in full for transparency. Any future response from the company will be appended to this report as an update.
 
 ### 4.4 Special-case archives
 
@@ -325,7 +327,7 @@ No private channel produced a reply, and the corporate privacy address actively 
 
 | Rank | Victim | Primary risk driver |
 |---|---|---|
-| 1 | **Alert360** | Home addresses + alarm configs + PINs → direct burglary / stalking enablement; unique kinetic-harm profile |
+| 1 | **Alarm-monitoring provider (name withheld)** | Home addresses + alarm configs + PINs → direct burglary / stalking enablement; unique kinetic-harm profile |
 | 2 | **ZenBusiness** | SSN-on-EIN + LLC formation docs at scale → synthetic-identity / shell-company factory fuel |
 | 3 | **Ameriprise** | HNW/UHNW CRM + SharePoint (200 GB claimed) → best-in-class spear-phishing base |
 | 4 | **Pathstone** | UHNW family-office dossiers, highest per-record value; minor-children estate data |
@@ -443,7 +445,7 @@ In the fourth stage they authorize an OAuth Connected App. With a valid SSO sess
 
 In the fifth stage they bulk-export the CRM. The operator runs bulk Salesforce queries and Data Loader exports against the entire customer record base. In larger intrusions, ZenBusiness at 821 GB and Ameriprise at a claimed 200 GB, they escalate to multi-system exfiltration covering SharePoint, document stores and third-party data warehouses, such as Snowflake via Anodot in the Rockstar Games breach per Mitiga.
 
-In the sixth stage they make extortion contact. The operator reaches the victim with proof of theft and a ransom demand. Refusal or non-cooperation produces a subdirectory on the DLS holding `INFORMATION.txt` only, the negotiation phase observed for Alert360 and Ameriprise, and continued refusal produces an archive upload with the taunt-filename branding.
+In the sixth stage they make extortion contact. The operator reaches the victim with proof of theft and a ransom demand. Refusal or non-cooperation produces a subdirectory on the DLS holding `INFORMATION.txt` only, the negotiation phase observed for the alarm-monitoring provider and Ameriprise, and continued refusal produces an archive upload with the taunt-filename branding.
 
 For detection priority, the most efficient upstream point for defenders is **stage 4**, an anomalous OAuth Connected App authorization in Salesforce or Okta following a help-desk MFA reset for the same user account. Pure DLS-based detection (Section 9) is the *terminal* indicator.
 
@@ -642,7 +644,7 @@ This is a brief orientation for readers who need to know *what to address*, not 
 - Revoke and rotate credentials for accounts implicated in vishing-induced MFA resets
 - Block ShinyHunters infrastructure at network egress
 - Assess regulatory notification obligations applicable to the affected data classes and jurisdictions
-- Alert360 partners and customers with a notification relationship should treat this as a priority-one outreach item
+- The alarm-monitoring provider's partners and customers with a notification relationship should treat this as a priority-one outreach item
 
 ---
 
@@ -653,11 +655,11 @@ This is a brief orientation for readers who need to know *what to address*, not 
 |---|---|---|
 | DLS operated by ShinyHunters / Scattered LAPSUS$ Hunters | **DEFINITE (96%)** | IC3 Tier-1, CERT-EU Tier-1, two Tier-2 vendor groups, 28/29 victim corroboration, 6-year PGP lineage, 7 infrastructure elements |
 | 28 of 29 named victims publicly corroborated | **DEFINITE** | Mainstream security press + ransomware.live convergence |
-| Alert360 is the sole unacknowledged victim | **HIGH** | True null-result across all source tiers; orthogonal confirmation from ransomware.live |
+| The alarm-monitoring provider is the sole unacknowledged victim | **HIGH** | True null-result across all source tiers; orthogonal confirmation from ransomware.live |
 | `europa.zip` = European Commission breach | **HIGH** | Upload timing + size alignment + CERT-EU public attribution of underlying chain |
 | `bf_03_2026.sql.7z` = BreachForums v5 user database | **HIGH** | HIBP ingestion of 339,778 records; filename + month alignment |
 | TeamPCP supplied initial access for the EC chain | **HIGH** | CERT-EU Tier-1 attribution |
-| Active extortion pipeline (Alert360, Ameriprise pre-archive) | **HIGH** | Subdirectories with `INFORMATION.txt` only; consistent with documented actor negotiation behavior |
+| Active extortion pipeline (the alarm-monitoring provider, Ameriprise pre-archive) | **HIGH** | Subdirectories with `INFORMATION.txt` only; consistent with documented actor negotiation behavior |
 | PROSPERO (AS200593) = bulletproof hosting | **HIGH** | 5 of 6 BPH indicators; named in Krebs, Intrinsec, Resecurity |
 | DDoS-Guard (AS57724) = structurally-abused commercial service | **MODERATE** | 2 of 6 BPH indicators; legitimate product structurally enabling abuse |
 | Handle-level identities (Yuro / Trihash / James) | **LOW** | Actor-on-actor doxx; no LE corroboration; self-serving motives |
@@ -675,7 +677,7 @@ ShinyHunters operates `91.215.85.22` under the Scattered LAPSUS$ Hunters collect
 
 **Q2. How many victims are on this DLS, and are they all already publicly known?**
 
-Twenty-nine named victim organizations are present on the DLS (plus two unlabelled archives, a 94 GB European Commission dump and a 43 MB BreachForums v5 user database). Twenty-two victims are fully publicly reported with company acknowledgment. Nine victims are partially disclosed, actor-claimed but without formal company acknowledgment yet. **One victim (Alert360, a US home and small-business alarm-monitoring provider) has no prior public reporting in any tier** (mainstream press, government bulletins, or crowdsourced trackers including ransomware.live). This report is the first public documentation of Alert360's presence on the DLS. The Alert360 subdirectory currently contains only `INFORMATION.txt` (no archive yet), indicating an extortion-negotiation stage, historically consistent with negotiation behavior observed for Ameriprise, Odido, and Woflow on this same DLS.
+Twenty-nine named victim organizations are present on the DLS (plus two unlabelled archives, a 94 GB European Commission dump and a 43 MB BreachForums v5 user database). Twenty-two victims are fully publicly reported with company acknowledgment. Nine victims are partially disclosed, actor-claimed but without formal company acknowledgment yet. **One victim (a US home and small-business alarm-monitoring provider) has no prior public reporting in any tier** (mainstream press, government bulletins, or crowdsourced trackers including ransomware.live). This report is the first public documentation of this victim's presence on the DLS. Its subdirectory currently contains only `INFORMATION.txt` (no archive yet), indicating an extortion-negotiation stage, historically consistent with negotiation behavior observed for Ameriprise, Odido, and Woflow on this same DLS.
 
 **Q3. What is the relationship between ShinyHunters, Scattered Spider, and LAPSUS$?**
 

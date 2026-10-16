@@ -59,7 +59,7 @@
 ## Data points surfaced by the new IOC columns (author's call, not a bug in the viewer)
 
 - `cloudsync-assembler-toolkit-91-197-98-188`: two domains carry confidence `EXCLUDED` yet sit
-  in the exportable table (`aka1.hopto.org`, `johnathon-yerrow.sahs.ac.zw`).
+  in the exportable table (`aka1.hopto.org`, a prior-tenant school hostname (withheld)).
 - `arsenal-237-enc_c2-exe`: a registry row with confidence `NOT OBSERVED - SINGLE-RUN MODEL`.
 - Nine objects corpus-wide have boolean `false_positive_risk`; they render as no value.
 

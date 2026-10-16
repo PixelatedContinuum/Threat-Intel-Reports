@@ -1,7 +1,7 @@
 {
- "generated_at": "2026-10-16T18:08:26Z",
+ "generated_at": "2026-10-16T19:47:40Z",
  "counts": {
-  "indicators": 2041,
+  "indicators": 2040,
   "reports": 59,
   "multi_report": 146,
   "suppressed_benign": 113,
@@ -9852,12 +9852,6 @@
   "url:https://the-hunters-ledger.com/reports/russian-gemini-credential-mill-213.165.51.115/": [
    {
     "report": "russian-gemini-credential-mill-213.165.51.115"
-   }
-  ],
-  "md5:31d6cfe0d16ae931b73c59d7e0c089c0": [
-   {
-    "report": "russian-gemini-credential-mill-213.165.51.115",
-    "role": "ntlm"
    }
   ],
   "filename:all_wp_30k_logins.txt": [

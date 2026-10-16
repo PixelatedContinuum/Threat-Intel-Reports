@@ -6273,7 +6273,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     engine: yara
     tier: Hunting
     fence: 6
-    hash: "6dd0324b"
+    hash: "0059e7f4"
     head: "rule MAL_Python_Instana_SolarWinds_Zabbix_VMware"
     robustness: 1
     confidence: "MODERATE"
@@ -6318,7 +6318,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     engine: sigma
     tier: Hunting
     fence: 11
-    hash: "6a58f45c"
+    hash: "524b0711"
     head: "title: Instana Audit Log Event With The Stolen J"
     robustness: 2
     confidence: "HIGH (for the specific stolen JWT); MODERATE (for the external-source tenant-access branch)"

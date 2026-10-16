@@ -29,7 +29,7 @@
     <text x="100" y="230" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">SOURCE 1 — IBM INSTANA (APM)</text>
     <text x="100" y="282" font-size="20" font-weight="700" fill="#ffffff">10-year JWT (governance defect)</text>
     <text x="100" y="310" font-size="16" fill="#e5e5e5">JWT issued 2024-03-06 · expires ~2034-02</text>
-    <text x="100" y="332" font-size="14" fill="#cccccc" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">jti: 022a1b74-2332-4df5-a76b-60225ffa7ae3</text>
+    <text x="100" y="332" font-size="14" fill="#cccccc" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">jti: [withheld]</text>
     <text x="100" y="354" font-size="14" fill="#cccccc" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">tenant: turkiyesigorta</text>
     <text x="100" y="376" font-size="14" fill="#cccccc" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">endpoint: ocpinstana.turkiyesigorta.com.tr</text>
     <text x="100" y="398" font-size="15" fill="#fb923c" font-weight="600">Operator usage: 73+ days continuous polling</text>

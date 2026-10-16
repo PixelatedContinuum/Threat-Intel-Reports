@@ -47,7 +47,7 @@ test('THE BARE PROVIDER DOMAIN IS FLAGGED, THE TENANT UNDER IT IS NOT', function
 
   ['dns4up.duckdns.org', 'mailmassange.duckdns.org', 'aka1.hopto.org',
    'acf02ac96211.ngrok-free.app', 'tenant-upcoming-great-descending.trycloudflare.com',
-   'haimi-file.oss-cn-hangzhou.aliyuncs.com',
+   'operator-bucket.oss-cn-hangzhou.aliyuncs.com',
    'skillhub-1388575217.cos.ap-guangzhou.myqcloud.com',
    'cs-pgcwufmiws.cn-hangzhou.fcapp.run'].forEach(function (h) {
     assert.equal(U.serviceOf(h), null,
@@ -74,9 +74,9 @@ test('ACTUAL ATTACKER INFRASTRUCTURE IS NEVER SWEPT UP', function () {
   // The failure that would matter more than the one this module prevents: a rule
   // broad enough to silence real indicators.
   ['inklens.ru', 'api.inklens.co.uk', 'evilsoul.cc', 'tralalarkefe.com',
-   'kaidoo.com.br', 'stolotov.net', 'bikaf.ru', 'zujixiong.cn', 'unloki.ru',
+   'kaidoo.com.br', 'stolotov.net', 'bikaf.ru', 'operator-kit.cn', 'unloki.ru',
    'c3lestial.fun', 'shinyhunte.rs', 'epgoldsecurity.com', 'bigass.monster',
-   'mengchida.com', 'njmaixi.cn'].forEach(function (h) {
+   'operator-panel.com', 'loader-drop.cn'].forEach(function (h) {
     assert.equal(U.serviceOf(h), null, h + ' was wrongly marked unblockable');
   });
 });

@@ -1,6 +1,10 @@
 ---
 title: "NsMiner: Multi-Stage Operation"
 date: '2026-02-02'
+last_updated: '2026-10-16'
+revisions:
+  - date: '2026-10-16'
+    note: "Withheld the 18 credential-stuffing target addresses in the indicator list; they are prospective victims, not operator infrastructure."
 detection_page: /hunting-detections/nsminer-cryptojacker-detections/
 ioc_feed: /ioc-feeds/nsminer-cryptojacker/
 detection_sections:
@@ -232,24 +236,7 @@ url="*hrtests.ru/S.php*"
 *   `http://hrtests.ru/S.php` (C2 Beacon Endpoint)
 
 **FTP Target Server IPs (Credential Stuffing Targets):**
-*   `162.150.119.10`
-*   `136.0.88.10`
-*   `45.156.140.10`
-*   `214.192.190.10`
-*   `235.31.147.10`
-*   `56.255.40.10`
-*   `85.230.83.10`
-*   `251.46.111.10`
-*   `63.192.224.10`
-*   `202.24.217.10`
-*   `134.211.96.10`
-*   `223.50.252.10`
-*   `13.180.6.10`
-*   `116.62.22.10`
-*   `94.158.41.10`
-*   `252.158.2.10`
-*   `110.188.25.10`
-*   `141.227.248.10`
+*   18 addresses, withheld. The operator's configuration lists them as FTP credential-stuffing targets, so they are prospective victims rather than operator infrastructure and are not indicators to block; three of them are not routable addresses at all.
 
 ---
 

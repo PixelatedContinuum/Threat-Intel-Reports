@@ -1,6 +1,10 @@
 ---
 title: "Carrier Credential Harvesting Through a Customer's Router"
 date: '2026-08-18'
+last_updated: '2026-10-16'
+revisions:
+  - date: '2026-10-16'
+    note: "Withheld a victim-internal address in the section 4 diagram and the lateral-movement paragraph; findings unchanged."
 layout: post
 permalink: /reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/
 thumbnail: /assets/images/cards/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817.png
@@ -425,7 +429,7 @@ operator VPS
         webshells written to the web root:                               (no captured outcome)
             h.php  (persistent, dispatches on an X-CMD request header)
             x.php  (written per command, fetched once, then deleted)
-        lateral -> 192.168.10.1 (remote-management primary, admin-share fallback)
+        lateral -> <internal host> (remote-management primary, admin-share fallback)
           objective: route print filtered for the carrier's 172.x supernet  (no captured outcome)
 ```
 
@@ -443,7 +447,7 @@ Through the persistent webshell, the script is written to export the SAM and SYS
 
 #### The credential spray
 
-The lateral-movement script sprays remote-management sessions against `192.168.10[.]1` with six credential pairs, crossing two usernames against four passwords, and falls back to an administrative-share connection over five passwords when that fails. Two of those passwords, withheld from publication as in Section 4, name an Ecuadorian municipal government and a biometrics system outright, which is targeting knowledge rather than a generic list. Success is matched on both the Spanish and the English form of the confirmation string, which is one of the small tells that the operator's working language is Spanish.
+The lateral-movement script sprays remote-management sessions against an internal host on the victim's network (address withheld) with six credential pairs, crossing two usernames against four passwords, and falls back to an administrative-share connection over five passwords when that fails. Two of those passwords, withheld from publication as in Section 4, name an Ecuadorian municipal government and a biometrics system outright, which is targeting knowledge rather than a generic list. Success is matched on both the Spanish and the English form of the confirmation string, which is one of the small tells that the operator's working language is Spanish.
 
 On success the script runs host identification, a full network configuration dump, and `route print` filtered for `172`, which is the carrier's internal supernet. The objective of the whole Windows chain is stated right there in a filter argument.
 

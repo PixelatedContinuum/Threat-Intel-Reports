@@ -1,6 +1,10 @@
 ---
 title: "Enough to Be Dangerous: The Mechanics of an LLM-Assisted Intrusion Campaign"
 date: '2026-07-21'
+last_updated: '2026-10-16'
+revisions:
+  - date: '2026-10-16'
+    note: "Withheld the three victim platforms' domains and the one company name from the prose, two headings, a table row and a figure filename; findings unchanged."
 layout: post
 permalink: /reports/multivector-ecommerce-rce-toolkit-192-3-1-116/
 thumbnail: /assets/images/cards/multivector-ecommerce-rce-toolkit-192-3-1-116.png
@@ -35,7 +39,7 @@ figure_nav:
         anchor: "#42-what-the-ecosystem-context-adds"
       - label: "Content provider"
         anchor: "#43-the-content-provider-filing-signal-hedged-and-single-source"
-  - image: multivector-riverbaybuy-kill-chain.svg
+  - image: multivector-rent-to-own-kill-chain.svg
     parts:
       - label: "The target"
         anchor: "#61-the-target"
@@ -146,9 +150,9 @@ Turn it around, though, and it is uncomfortable. This operation is cheap, repeat
 
 ### What was confirmed
 
-Real customer names plus order and financial records for at least five named individuals were harvested from `riverbaybuy[.]com`, a rent-to-own and installment commerce platform, through four independent sourcing channels running in parallel. The operator's own scripts retain the extracted names alongside their platform identifiers, printed under a summary header in clear text. That is a record of a completed extraction, not a plan for one. Fuller identity fields that the pipeline is written to pull, including national identity numbers, email addresses and emergency contacts, are highly likely but are not confirmed by any captured response.
+Real customer names plus order and financial records for at least five named individuals were harvested from a rent-to-own and installment commerce platform (domain withheld), through four independent sourcing channels running in parallel. The operator's own scripts retain the extracted names alongside their platform identifiers, printed under a summary header in clear text. That is a record of a completed extraction, not a plan for one. Fuller identity fields that the pipeline is written to pull, including national identity numbers, email addresses and emergency contacts, are highly likely but are not confirmed by any captured response.
 
-An unauthenticated Alibaba Druid monitoring console belonging to `web.51qzp[.]com` (Quanzipin) exposed, at time of capture, a production database connection string, the schema name, the fact that the application connects as `root`, a 93-table schema, 427 API endpoints and 830 real SQL statements. The database password was not disclosed. A read-only re-check on 2026-07-20 found the host resolving NXDOMAIN and the port closed, so the exposure appears remediated.
+An unauthenticated Alibaba Druid monitoring console belonging to a gig-work platform (domain withheld) exposed, at time of capture, a production database connection string, the schema name, the fact that the application connects as `root`, a 93-table schema, 427 API endpoints and 830 real SQL statements. The database password was not disclosed. A read-only re-check on 2026-07-20 found the host resolving NXDOMAIN and the port closed, so the exposure appears remediated.
 
 A complete, pre-staged account-takeover weapon sits armed against a real staff account: 10,000 individually pre-built requests covering the entire four-digit verification-code space, all tied to a single real password-reset code that was actually sent, all carrying the same operator-chosen replacement password. Whether it was fired is unconfirmed, and that is the gap in this case I most wanted to close (Section 6.5).
 
@@ -406,14 +410,14 @@ And none of this is novel to this operator. Commodity agentic-AI adoption as a h
 
 ---
 
-## 6. Anchor 1: riverbaybuy.com, Confirmed Multi-Victim Data Theft
+## 6. Anchor 1: A Rent-to-Own Platform, Confirmed Multi-Victim Data Theft
 {: .hl-tier-3}
 
 Four independent data-sourcing channels converged on one platform, and the operator's own scripts retain the results of a completed extraction. That combination, planning plus a preserved outcome, is what separates this target from every other thread in the campaign. It is also the one target where the harm is real and named, not hypothetical.
 
 ### 6.1 The target
 
-`riverbaybuy[.]com` is a rent-to-own and installment commerce platform. Its internal handle is `hzsx`, visible in both the API path prefix `/hzsx/` and the Java package namespace `com.hzsx.rent.*`. It runs a Spring Cloud microservice stack behind a Eureka service registry with Feign HTTP clients (`OrderClient`, `UserCenterClient`, `ProductClient`), uses Ant Group's AntChain service for contract signing, and includes a distributed identifier-generation component. It shares an internal address with a separate Eureka-engaged target elsewhere in the campaign, a HIGH-confidence inference and not a DEFINITE link.
+The first anchor (domain withheld) is a rent-to-own and installment commerce platform. Its internal handle is `hzsx`, visible in both the API path prefix `/hzsx/` and the Java package namespace `com.hzsx.rent.*`. It runs a Spring Cloud microservice stack behind a Eureka service registry with Feign HTTP clients (`OrderClient`, `UserCenterClient`, `ProductClient`), uses Ant Group's AntChain service for contract signing, and includes a distributed identifier-generation component. It shares an internal address with a separate Eureka-engaged target elsewhere in the campaign, a HIGH-confidence inference and not a DEFINITE link.
 
 What is confirmed here is real customer names plus order and financial records for at least five named individuals, an armed account-takeover weapon aimed at a staff account, and live-used database and cache credentials.
 
@@ -422,7 +426,7 @@ What is confirmed here is real customer names plus order and financial records f
 The operator never needed an exploit against this platform. A diagnostic interface left reachable from the internet handed over memory and logs, and everything that followed was a matter of reading what was already available.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/multivector-ecommerce-rce-toolkit-192-3-1-116/multivector-riverbaybuy-kill-chain.svg" | relative_url }}" alt="Vertical five-step infographic titled Confirmed Multi-Victim Harvest, showing how an exposed management interface became real customer records. Step one, orange band, Unrestricted management interface: Jolokia and Actuator were reachable externally with no access restrictor, quoting the captured string no access restrictor, access to any MBean is allowed; assessed as the likely master access vector; detection guidance is to alert on external Jolokia or JMX reachability. Step two, red band, Memory and log capture: Java heap dumps retrieved alongside application request and response logs via the heapdump and logfile endpoints, three heap snapshots captured; detection guidance is to alert on heap-dump retrieval success, meaning a 200 response with a large body. Step three, yellow band, Real order identifiers extracted: live order IDs mined from captured memory rather than guessed, fed by four independent sourcing channels; detection guidance is to watch sequential record-ID enumeration on detail endpoints. Step four, red band, Identifier resolved to user: each order ID resolved to a distinct platform user, built to iterate across up to thirty users in one pass. Step five, deep red band, Customer records harvested: real names tied to real order records for at least five named individuals, confirmed by an operator-authored identifier-to-name mapping and corroborated by live order IDs in captured memory, with the caveat that fuller identity fields are highly likely but not confirmed by any captured output.">
+  <img loading="lazy" src="{{ "/assets/images/multivector-ecommerce-rce-toolkit-192-3-1-116/multivector-rent-to-own-kill-chain.svg" | relative_url }}" alt="Vertical five-step infographic titled Confirmed Multi-Victim Harvest, showing how an exposed management interface became real customer records. Step one, orange band, Unrestricted management interface: Jolokia and Actuator were reachable externally with no access restrictor, quoting the captured string no access restrictor, access to any MBean is allowed; assessed as the likely master access vector; detection guidance is to alert on external Jolokia or JMX reachability. Step two, red band, Memory and log capture: Java heap dumps retrieved alongside application request and response logs via the heapdump and logfile endpoints, three heap snapshots captured; detection guidance is to alert on heap-dump retrieval success, meaning a 200 response with a large body. Step three, yellow band, Real order identifiers extracted: live order IDs mined from captured memory rather than guessed, fed by four independent sourcing channels; detection guidance is to watch sequential record-ID enumeration on detail endpoints. Step four, red band, Identifier resolved to user: each order ID resolved to a distinct platform user, built to iterate across up to thirty users in one pass. Step five, deep red band, Customer records harvested: real names tied to real order records for at least five named individuals, confirmed by an operator-authored identifier-to-name mapping and corroborated by live order IDs in captured memory, with the caveat that fuller identity fields are highly likely but not confirmed by any captured output.">
   <figcaption><em>Figure 2: The anchor finding end to end. The chain begins with a configuration failure, not a software vulnerability, which is why none of the operator's remote-code-execution tooling appears anywhere in it.</em></figcaption>
 </figure>
 
@@ -520,7 +524,7 @@ One consequence of that field set stands on its own. The emergency-contact entri
 
 This is the finding I could not close. A complete, ready-to-fire account-takeover weapon sits in the directory aimed at a real staff account, and nothing anywhere in the corpus records whether it was ever fired. I kept looking for the outcome and there is not one. The honest position is that a weapon this finished and this specific, left unused, is itself a finding, but I would rather have known.
 
-The file is 3.27 MB and it is not a loop. It is 10,000 individually pre-built `curl` commands, one per possible four-digit verification code from `0000` to `9999`, all targeting the same password-reset endpoint on `riverbaybuy[.]com`. Every command carries an identical verification-context pair, `codeKey` and `codeTime`, which means a single real SMS verification was triggered against one real phone number and this file is the complete, ready-to-execute brute force of the code space that could match it. The account type in the request is a staff or operator type, not a customer, and the intended replacement password is a fixed operator-chosen string.
+The file is 3.27 MB and it is not a loop. It is 10,000 individually pre-built `curl` commands, one per possible four-digit verification code from `0000` to `9999`, all targeting the same password-reset endpoint on the rent-to-own platform. Every command carries an identical verification-context pair, `codeKey` and `codeTime`, which means a single real SMS verification was triggered against one real phone number and this file is the complete, ready-to-execute brute force of the code space that could match it. The account type in the request is a staff or operator type, not a customer, and the intended replacement password is a fixed operator-chosen string.
 
 What distinguishes it from the operator's exploratory work is that it is complete, pre-staged and immediately executable against a specific real staff account, requiring no further development. A parallel weapon exists against a different platform's supplier backend, brute-forcing a four-digit code on a password-recovery endpoint and chaining into a reset. That one targets a well-known placeholder phone number, so it reads as development work and not as an armed weapon. The distinction is worth preserving, because one of these two is a test and one is not.
 
@@ -553,14 +557,14 @@ This is a finding and not a caveat. Where so little of this campaign converted i
 
 ---
 
-## 7. Anchor 2: Quanzipin, the Clean and Fixable Exposure
+## 7. Anchor 2: A Gig-Work Platform, the Clean and Fixable Exposure
 {: .hl-tier-3}
 
 An unauthenticated database-monitoring console handed a threat actor the full data model of a live production platform, and the platform has since closed it. This is the most actionable finding in the investigation. It is concrete, the fix is unambiguous, and the boundary of the harm is knowable. It is also the only target here with a registered legal entity behind it, which made it the one exposure that could actually be reported to someone. It is also the clearest teaching case here, because the harm from an exposed monitoring console is what an attacker learns, and that knowledge does not expire when the console is closed.
 
 ### 7.1 The target
 
-`web.51qzp[.]com` belongs to 全咨聘（雄安）科技有限公司, Quanzipin (Xiong'an) Technology Co., Ltd., a construction and engineering cost-consulting gig-work platform. It is the only target in this investigation with a confirmed registered legal entity, itself notable given Section 4.3.
+The exposed host (domain withheld) belongs to a Chinese construction and engineering cost-consulting gig-work platform. It is the only target in this investigation with a confirmed registered legal entity, itself notable given Section 4.3.
 
 The platform is built on RuoYi (若依), a widely used open-source Spring Boot and MyBatis application framework, deployed as a single fat JAR under a BT/aaPanel hosting convention. That stack combination is common across Chinese small and medium enterprise hosting, and its default component set is exactly what this operator's port profile hunts.
 
@@ -594,7 +598,7 @@ And the database password was never disclosed at all. The console gave up the co
 
 ### 7.4 Current status
 
-The console appears remediated. A read-only re-check on 2026-07-20 found `web.51qzp[.]com` resolving NXDOMAIN and port 8157 closed. This exposure is described throughout as live at time of capture, never as currently live. The remediation is independent of this investigation's disclosure timing.
+The console appears remediated. A read-only re-check on 2026-07-20 found the host resolving NXDOMAIN and port 8157 closed. This exposure is described throughout as live at time of capture, never as currently live. The remediation is independent of this investigation's disclosure timing.
 
 ### 7.5 What else was directed at this platform
 
@@ -733,7 +737,7 @@ Real, working exploitation payloads coexist here with a download and tooling pip
 
 Six confirmed failed fetches plus three duplicate generic responses, all saved anyway under names implying real content, and most of the promising filenames dissolved into error pages once opened. One of the byte-identical files is worth a specific correction, because its filename matches a production application JAR that genuinely exists on a target platform, which is why the operator tried to fetch it. The fetch was blocked. It is not a JAR and it is not a backdoor.
 
-Also present are brute-force input wordlists, which are frequently misread as harvested credentials. A 28-line list mixes generic weak passwords with brand-customized guesses derived from the target's own name. Brand-specific lists exist for two further target clusters, including a 248-entry list for Quanzipin. A filename ending in `_pass.txt` is a shape heuristic, not a content verdict, and treating a guess list as stolen data is a known failure mode in this kind of analysis.
+Also present are brute-force input wordlists, which are frequently misread as harvested credentials. A 28-line list mixes generic weak passwords with brand-customized guesses derived from the target's own name. Brand-specific lists exist for two further target clusters, including a 248-entry list for the gig-work platform. A filename ending in `_pass.txt` is a shape heuristic, not a content verdict, and treating a guess list as stolen data is a known failure mode in this kind of analysis.
 
 ---
 
@@ -802,7 +806,7 @@ Mixed success against hardened management endpoints is the norm across this oper
 
 ### 9.5 A second platform: authenticated access through a self-registered account, no confirmed theft
 
-On `chengjiastore[.]cn`, the operator registered a real account. Registration and login both succeeded, and the returned token decodes to a real created account. A follow-on script then used that bearer token to enumerate administrative and system routes covering users, administration, orders, billing, configuration, system information and debug endpoints.
+On this second platform (domain withheld), the operator registered a real account. Registration and login both succeeded, and the returned token decodes to a real created account. A follow-on script then used that bearer token to enumerate administrative and system routes covering users, administration, orders, billing, configuration, system information and debug endpoints.
 
 The register-then-authenticate-then-enumerate pattern is confirmed reused across at least two separate target platforms, which makes it a standing technique for this operator and not a one-off. Four throwaway accounts are identified across the campaign, with tokens shared between scripts through a file on disk instead of each script re-authenticating.
 
@@ -826,7 +830,7 @@ Values are withheld from this report and from the IOC feed, because publishing a
 | HTTP Basic Auth for an API documentation endpoint | Believed working, based on the operator's own annotation on a related endpoint. Not confirmed by any captured authenticated response. If genuine, it gives authenticated visibility into the complete administrative API surface. |
 | An API request-signing key on a different target group | Confirmed cracked. Used directly and without further testing after a systematic seven-variant algorithm test, which implies the earlier signature-forgery effort succeeded. |
 | An administrative password candidate | Used as a direct high-confidence login attempt. No confirmed success. The script is written to distinguish a definitive failure from a service-unavailable response, meaning the operator was waiting out a target outage instead of concluding the password was wrong. |
-| The Quanzipin database `root` account | **Username only.** See Section 7.3. The password was not disclosed and there is no evidence the operator obtained it. |
+| The gig-work platform's database `root` account | **Username only.** See Section 7.3. The password was not disclosed and there is no evidence the operator obtained it. |
 | Six session tokens | Real-format tokens. Three decode to the operator's own throwaway accounts. One belongs to a system not otherwise mapped in this investigation, carrying a subject identifier that matches nothing else in the corpus and a validity window of roughly 208 days. |
 
 </details>
