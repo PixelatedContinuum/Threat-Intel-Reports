@@ -2178,6 +2178,51 @@
       name: "Web Protocols"
       rules: "Operator Flask C2 Dashboard Request URI Containing /login-2fa (SIGMA, Hunting); Operator Flask C2 Dashboard Banner Hunt: Werkzeug/3.1.8 + /login-2fa (SURICATA, Hunting)"
       count: 2
+"opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections":
+  total: 8
+  tactics: 6
+  unresolved: []
+  rows:
+    - tactic: "Initial Access"
+      id: "T1190"
+      name: "Exploit Public-Facing Application"
+      rules: "GLPI htmLawed Test Page POST Request (CVE-2022-35914, Renamed Copy Included) (SIGMA, Detection); GLPI htmLawed Test Page POST with hhook Parameter (SURICATA, Detection)"
+      count: 2
+    - tactic: "Execution"
+      id: "T1059.004"
+      name: "Unix Shell"
+      rules: "WebLogic Java Process Spawns Shell Writing a JSP Into a WebLogic Internal Directory (SIGMA, Detection)"
+      count: 1
+    - tactic: "Execution"
+      id: "T1072"
+      name: "Software Deployment Tools"
+      rules: "Zabbix Daemon Child Process Touching Credential Files or Instance Metadata (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Persistence"
+      id: "T1505.003"
+      name: "Web Shell"
+      rules: "WebLogic Java Process Spawns Shell Writing a JSP Into a WebLogic Internal Directory (SIGMA, Detection); Shell Process Creates a JSP File Under a WebLogic _WL_internal Directory (SIGMA, Detection)"
+      count: 2
+    - tactic: "Stealth"
+      id: "T1070"
+      name: "Indicator Removal"
+      rules: "Java Process Spawns Shell to Rewrite Log Files (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Credential Access"
+      id: "T1552"
+      name: "Unsecured Credentials"
+      rules: "Zabbix Daemon Child Process Touching Credential Files or Instance Metadata (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Command and Control"
+      id: "T1090.001"
+      name: "Internal Proxy"
+      rules: "Reverse Relay READY2 Announce on TCP 53 (SURICATA, Detection); Reverse Relay Controller DIAL Tasking Line from TCP 53 (SURICATA, Detection); Reverse Relay READY2 Announce on a Non-DNS Port (SURICATA, Hunting); Reverse Relay PING Keepalive After READY2 Announce (SURICATA, Hunting); Reverse Relay OK Reply After DIAL (SURICATA, Hunting); Reverse Relay FAIL Reply After DIAL (SURICATA, Hunting)"
+      count: 6
+    - tactic: "Command and Control"
+      id: "T1095"
+      name: "Non-Application Layer Protocol"
+      rules: "Reverse Relay READY2 Announce on TCP 53 (SURICATA, Detection); Reverse Relay Controller DIAL Tasking Line from TCP 53 (SURICATA, Detection); Reverse Relay READY2 Announce on a Non-DNS Port (SURICATA, Hunting); Short Printable ASCII Line as Client Payload on TCP 53 (SURICATA, Hunting)"
+      count: 4
 "opendirectory-45-130-148-125-20260430-detections":
   total: 12
   tactics: 5

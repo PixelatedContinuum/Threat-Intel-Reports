@@ -1,0 +1,511 @@
+{
+  "metadata": {
+    "malware_name": "Brazil Public-Sector Operator Toolkit (38.180.16.98)",
+    "family": "Operator toolkit (no malware family; server-side shell, Python, PHP and Java tooling)",
+    "campaign_id": "OpenDirectory-38.180.16.98-BrazilPublicSectorToolkit-20261015",
+    "campaign_slug": "opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015",
+    "investigation": "INV-2026-067",
+    "report_date": "2026-10-15",
+    "analyst": "The Hunter's Ledger",
+    "confidence": "HIGH",
+    "tlp": "CLEAR",
+    "version": "1.0",
+    "description": "Operator-side indicators for an unnamed operator running a toolkit out of an open directory on 38.180.16.98 (:80 and, earlier, :8899) and associated infrastructure on 38.180.196.193 and 209.99.185.148. Built so defenders can block and hunt the operator's own infrastructure and artifacts. Operator-side values only: no victim-owned address, domain or host appears anywhere in this feed.",
+    "evidence_sources": "The Hunter's Ledger investigation INV-2026-067; the published report carries the evidence for each indicator.",
+    "handling_notes": [
+      "Victim-side values are deliberately absent from this feed and are not relocated into any context block. Excluded as values: the AWS sa-east-1 NAT/egress address of a victim estate, disputed and carried as victim-side egress; a victim-side external LDAP address; the unresolved-ownership peer of one Zabbix callback; a victim MapServer/WMS host; and every victim-internal range (10.x and 172.x). Blocking a victim address harms the victim; those findings belong to the notification track.",
+      "One RFC1918 lab gateway address used only to detonate the relay on the isolated lab is deliberately absent.",
+      "No operator domain exists anywhere in the evidence. A host-local VPS name (`v487918523.local`) is carried under operator_fingerprints as a pivot candidate, not as a blockable domain.",
+      "File hashes appear only where the source gave the full SHA-256. Five operator tooling hash sets known to the case only as truncated SHA-256 prefixes (12, 12, 8-to-12 and 8 characters) and their sample identities are absent from this feed by that rule.",
+      "bpupdate caveat: the two bpupdate.exe builds and the :8146 paths sit on the operator-controlled host 209.99.185.148, but the builds are tied to that service by IP only and their authorship is NOT CHECKED (a developer or vendor pipeline is not excluded). The :8146 paths are carried at MODERATE.",
+      "Co-tenancy: 38.180.196.193 also carries ten third-party parked domains, so the host-level entry is MONITOR and only the operator's service ports are BLOCK.",
+      "No credential, token, key, victim CPF, victim personal name or victim e-mail address appears in this feed in any form.",
+      "The 38.180.16.98 surface on :22 and :443 belongs to earlier tenants of a recycled provider address, not to this operator, and is deliberately not listed."
+    ]
+  },
+  "file_hashes": {
+    "sha256": [
+      {
+        "value": "986f697d2ef67a38e25c6a17cdecd7bb50148f2c2993864c748e3504d3d747f0",
+        "filename": "Relay.java.new",
+        "type": "Java source, 3,219 bytes, 83 lines",
+        "confidence": "DEFINITE",
+        "description": "The operator's plain-ASCII reverse relay. Hard-codes the literal IP 38.180.16.98 on TCP 53 with no DNS lookup, announces READY2 on connect and executes DIAL <host> <port> instructions from the controller. Captured from the operator's :80 directory and detonated on the isolated lab on 2026-10-09.",
+        "false_positive_note": "No legitimate use of this relay, found in the operator's directory (authorship not established), is known. The filename is generic, so match the hash or the wire behaviour, never the name."
+      },
+      {
+        "value": "86c0fa7d4fe1740e02a845fe18f85de91b234321b21d7804944f3248395968bc",
+        "filename": "dump2.sh",
+        "type": "Shell script, 440 bytes",
+        "confidence": "DEFINITE",
+        "description": "Held in the operator's directory on 2026-09-30 and gone from the live listing by 2026-10-01. Its function is not stated in the lane draft, so it is carried as an operator-hosted artifact only.",
+        "false_positive_note": "A small shell script name that other users also choose. Match the hash, not the filename, and treat a hit as an operator-hosting artifact only."
+      }
+    ]
+  },
+  "network_indicators": {
+    "ipv4": [
+      {
+        "value": "38.180.16.98",
+        "role": "Operator host: open directory and relay/listener infrastructure",
+        "asn": "AS9009 (M247 Europe SRL as the BGP origin of the /24)",
+        "registry": "ARIN 38.180.0.0/16, NetName 3NT-CGNT-NET-1, 3NT SOLUTIONS LLP (London, GB)",
+        "ports": [
+          53,
+          80,
+          111,
+          445,
+          4000,
+          8899,
+          9090,
+          9443
+        ],
+        "port_notes": "Operator-attributable surface from 2026-09-26: :80 a Python SimpleHTTP directory listing of the operator's /tmp (names only, no sizes or dates); :8899 the same open directory earlier, closed since; :53 the reverse-relay controller; :9090 the Zabbix callback listener; :9443 a path-map listener; :445 a scripted SMB listener that is not Windows; :445 is tied to the operator by its own pcap. :4000 (an HTTP JSON 404 API, body and purpose unknown) and :111 (rpcbind, contradicted by a 2026-10-14 refusal) were observed on the address in the window, but no operator file names either, so their role is unestablished: do not treat them as operator services. :22 and :443 are earlier tenants' and are NOT part of this indicator.",
+        "first_seen": "2026-09-26",
+        "last_seen": "2026-10-08 (directory listing up 19:45Z). 2026-10-14: :22, :443 and :4000 answered, :80 and :53 connect timeout",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "false_positive_risk": true,
+        "false_positive_note": "Do not block this address outside the operator window or on the ports not listed here. The address carried a mail/web tenant in 2024 and a Windows tenant from 2024-12 to 2025-07; its :443 certificate, its JARM and every SSH host key row belong to those earlier tenants. The operator surface is :53, :80, :111, :445, :4000, :8899, :9090 and :9443 from 2026-09-26.",
+        "notes": "Reported as an open directory to Hunt.io (two automated warnings, 2026-09-27 and 2026-09-30); VirusTotal shows 0 malicious engines. The last positive directory listing is 2026-10-08 19:45Z (9,917 files). Silence onset is undated and the 2026-10-09 zero-response window came from one egress only: whether the host is down or that egress is blocked is NOT CHECKED. The directory was serving 1,649 root files by 2026-10-01 against the 362 captured on 2026-09-30, so the served tree is far larger than the capture."
+      },
+      {
+        "value": "38.180.16.98",
+        "port": 53,
+        "protocol": "TCP",
+        "role": "Operator reverse-relay controller endpoint (the control indicator for this feed)",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "false_positive_note": "A legitimate DNS server on TCP/53 speaks DNS framing; this service speaks plain ASCII and answers nothing until the relay announces itself. Match the TCP/53 flow whose first payload is the line READY2 (hex 52 45 41 44 59 32 0a). A TCP/53 flow with no DNS message parsed is the generic hunt.",
+        "notes": "Hard-coded literal IP in Relay.java.new with no DNS lookup and a 15 s connect timeout. The relay opens the connection and writes READY2 first (7 bytes), sends PING every 15 s while idle, accepts one controller line of the form DIAL <host> <port>, replies OK or FAIL, then splices the two sockets byte for byte with no encryption or framing. Confirmed on the wire in a contained lab run on 2026-10-09 (22 of 22 sessions opened with READY2 alone) and in the operator's own listener log (1,051 relay check-ins: 648 labelled READY(pod) and 403 READY2(wls)). Relay times are undated. The listener was never observed by any scanner, which is a coverage gap, not evidence that it did not exist. Confidence: the endpoint role is HIGH, a historical role covering both relay lanes (pod and wls); DEFINITE applies only to the READY2 protocol bytes of the wls-variant file in the contained 2026-10-09 run, and which file was deployed is not established."
+      },
+      {
+        "value": "38.180.16.98",
+        "port": 9090,
+        "protocol": "TCP",
+        "role": "Listener that received Zabbix global-script command output (id;hostname)",
+        "confidence": "MODERATE",
+        "action": "BLOCK",
+        "false_positive_note": "Port 9090 is common. The discriminating artifact is the callback itself: a Zabbix global script on a proxy or agent connecting outward to this address and returning root identity and hostname. Alert on the outbound conjunction from a monitored host, not on the port alone.",
+        "notes": "The listener log reads 'listening on 0.0.0.0 port 9090'; the decoded operator script creates a global script z-revtest that connects here and sends id;hostname. The join of script to log is rated MODERATE by the lane (no run log, timestamp or Zabbix audit row) and the callback has no timestamp; the owner of the calling host is unattributed (victim-estate association only)."
+      },
+      {
+        "value": "38.180.16.98",
+        "port": 9443,
+        "protocol": "TCP",
+        "role": "Listener to which a path map of a victim Zabbix proxy host was pushed",
+        "confidence": "MODERATE",
+        "action": "BLOCK",
+        "false_positive_note": "A held 26-byte startup line only; no arrival of any path map is shown. Do not treat a hit on this port as proof of collection.",
+        "notes": "Part of the same Zabbix join as the :9090 callback; the byte-level script-to-listing relationship was not independently proved and the reader left the listener's role unidentified."
+      },
+      {
+        "value": "38.180.196.193",
+        "role": "Second operator VPS: payload-staging host and basic-auth panel (operator label 'our IP (vpsbr)')",
+        "asn": "AS9009 (M247 Europe SRL)",
+        "registry": "ARIN 38.180.0.0/16 (3NT SOLUTIONS LLP). Censys NetName CLOUD-NETWORK-BR, reassignment created 2024-06-28",
+        "ports": [
+          8888,
+          8899
+        ],
+        "port_notes": ":8899 a Werkzeug basic-auth service with realm 'cadsus-panel' (2026-09-04 to 2026-09-14), referenced by the operator's WebLogic RCE scripts as the payload server for pwn.xml; :8888 a Python SimpleHTTP directory listing (SimpleHTTP/0.6 Python/3.13.5) recorded in a Hunt.io AttackCapture on 2026-08-29. A Windows-shaped service cluster (:135, :139, :445, :1433, :1883, :5985, :5986) first seen 2026-09-09 and 2026-09-10 is emulated or NATed and its purpose is NOT ESTABLISHED.",
+        "first_seen": "2026-08-20 (configuration change, not tenancy proof); panel first seen 2026-09-04; operator-script reference 2026-09-30",
+        "last_seen": "2026-09-14 (all .193 service history); non-answering at the 2026-10-14 single-egress rescan",
+        "confidence": "MODERATE",
+        "action": "MONITOR",
+        "false_positive_risk": true,
+        "false_positive_note": "Co-tenanted host. Ten third-party parked domains (gaspowered, gastromono, gastronomiaboliviana, gastronomiaperuana, gateandfences, gatelights, gavickmagazine, garagedoorrepairtulsa, gayathens, gaybrussels) still resolved to this address through 2026-10-03, and that parked-DNS traffic is not this operator's. Prefer blocking the service ports in the operator window (2026-08-20 to 2026-09-14) over the address alone. A blanket block of the address would take unrelated tenants with it.",
+        "notes": "Operator use HIGH, operator control MODERATE: the operator's own batch84.sh calls it 'our IP (vpsbr)' and a payload is staged there. A later grade superseded a 2026-10-03 LOW on control. JARM, SSH host key and certificate fingerprints for this host were excluded from this feed rather than carried at an upgraded confidence."
+      },
+      {
+        "value": "38.180.196.193",
+        "port": 8899,
+        "protocol": "TCP",
+        "role": "Operator payload-staging HTTP service, later a Werkzeug basic-auth panel",
+        "confidence": "MODERATE",
+        "action": "BLOCK",
+        "false_positive_note": "Block this host-and-port pair rather than the address: the address is co-tenanted. The discriminating response is HTTP 401 with WWW-Authenticate: Basic realm=\"cadsus-panel\".",
+        "notes": "Referenced by wls_rce.sh and wls_rce2.sh as the payload server; a session on 2026-09-30 stages pwn.xml there. 'cadsus' appears in 0 of the 973 files of the :8899 archive, so the realm label does not describe the panel's content."
+      },
+      {
+        "value": "209.99.185.148",
+        "role": "Operator host: canary and callback catcher, remote end of a reverse-SOCKS tunnel planted inside a victim's application container, and an 'Update Service' TLS listener",
+        "asn": "AS402253 (SKN Subnet & Telecom Ltd; sole upstream AS30823 aurologic GmbH)",
+        "registry": "ARIN 209.99.184.0/21, NetName SSTL-49, country KN, RegDate 2026-04-07; prefix announced by AS402253 since 2026-04-01",
+        "ports": [
+          443,
+          8080,
+          8146,
+          8443,
+          10443
+        ],
+        "port_notes": ":8080 Python BaseHTTP/0.6 Python/3.8.10 answering 'ok' as application/xml (the canary); :443 and :10443 the 'Update Service' TLS listener presenting one certificate; :8146 the cloudedge-edge/1.4 page that both bpupdate.exe builds fetch; :8443 open (role NOT ESTABLISHED, a sweep positive from an instrument that missed known-live ports, and the 2026-10-14 rescan found it silent).",
+        "first_seen": "2026-09-14 (operator tunnel client start, year inferred); 2026-09-09 earliest content tied to the address",
+        "last_seen": "2026-10-14 11:46Z (:443 presented the Update Service certificate and :10443 returned HTTPS 200; :8080 and :8146 did not answer)",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "false_positive_risk": true,
+        "false_positive_note": "This address is a dedicated single-tenant network with no shared hosting, so the host-level block is safe in the operator window. Two limits travel with it: the address held unrelated services before the 2026-04-01 announcement of the prefix (do not match pre-April history on it), and the bpupdate.exe and exp.html surface here is tied to the address by IP only, authorship NOT CHECKED.",
+        "notes": "Host control HIGH from the operator's own label 'nosso canary' in five or more files. The victim-side tunnel client /tmp/upd, running as an application service account inside a WSO2 container, points at https://209.99.185.148; a process-table line is shown, an established tunnel is not. Base rate of the 'Update Service' organisation string and of the cloudedge-edge/1.4 banner is NOT CHECKED."
+      },
+      {
+        "value": "209.99.185.148",
+        "port": 8080,
+        "protocol": "TCP",
+        "role": "Operator canary and callback catcher for SSRF, XXE and database-callback tests",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "false_positive_note": "The response body is the two bytes 'ok' as application/xml from Python BaseHTTP. That pair alone is generic, so match the destination address-and-port against a callback shape, not the body.",
+        "notes": "Named as the callback target in S1.class and S1.java, asp_fuzz.py, ssrf_canary.py (comment 'nosso canary'), batch2.sh and batch57.sh; 16 SSRF-related hashes name the collector. Answered 'ok' on 2026-10-03 04:06Z, 2026-10-05 and 2026-10-07; connect timeout on 2026-10-14."
+      },
+      {
+        "value": "209.99.185.148",
+        "port": 8146,
+        "protocol": "TCP",
+        "role": "HTTP service the bpupdate.exe builds fetch, with the paths /e/a38243f90dc30f99/ and /p/a38243f90dc30f99",
+        "confidence": "MODERATE",
+        "action": "BLOCK",
+        "false_positive_note": "The service sits on a host that is HIGH-confidence operator infrastructure, but the two builds that request it are tied to it by IP only and their authorship is NOT CHECKED (a developer or vendor pipeline is not excluded). Prefer the two paths as the indicator; the cloudedge-edge/1.4 banner has no measured base rate.",
+        "notes": "Both builds launch a headless Chrome at the /e/ path and request /p/ in VirusTotal sandbox output. :8146 is absent from all 15 Hunt.io port-history rows and all 14 protocol rows, so its presence, closure or continued service is NOT CHECKED; the 2026-10-14 rescan probed the root path rather than the historical /e/ path."
+      }
+    ],
+    "ipv6": [],
+    "domains": [],
+    "urls": [
+      {
+        "value": "http://38.180.16.98/",
+        "role": "Operator open directory (Python SimpleHTTP, names only, no sizes or dates)",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "false_positive_note": "The bare address plus a directory listing is the operator's own served tree; the served content is the discriminator, not the banner. Do not widen this to the address on other ports.",
+        "notes": "Served the operator's /tmp: directories massa1, massa2, massa3, grandes, manuais, dbg, django-loot, netrecon, share, glpwnme, dpgh and js, and the tarballs massa1.tar.gz (3,371 entries) and massa2.tar.gz (1,311 entries, 390.8 MiB). Some of those directory names are clones of public upstream repositories (glpwnme and the dpgh set) and are carried as host context only. The victim-document directories stopped being exposed under those names between 2026-10-01 and 2026-10-03."
+      },
+      {
+        "value": "http://38.180.16.98:80/Relay.java.new",
+        "role": "Operator relay source, served from the open directory",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "false_positive_note": "Match the whole path or the file hash; the filename alone is generic. That this exact lab sample was the file deployed on a victim host is NOT ESTABLISHED, so do not read a hit as proof of deployment.",
+        "notes": "Appeared in the listing between 2026-10-01 and 2026-10-03."
+      },
+      {
+        "value": "http://209.99.185.148:8146/e/a38243f90dc30f99/",
+        "role": "Page fetched by both bpupdate.exe builds (headless Chrome launcher surface)",
+        "confidence": "MODERATE",
+        "action": "BLOCK",
+        "false_positive_note": "A random-looking path token on the operator-controlled host. The operator link of the builds is same-IP only; treat the path as the indicator and the address as operator infrastructure, and see the :8146 entry caveat.",
+        "notes": "Confirmed in VirusTotal sandbox behaviour for both builds; the requesting builds' authorship is NOT CHECKED."
+      },
+      {
+        "value": "http://209.99.185.148:8146/p/a38243f90dc30f99",
+        "role": "Second path requested by both bpupdate.exe builds",
+        "confidence": "MODERATE",
+        "action": "BLOCK",
+        "false_positive_note": "Same caveat as the /e/ path: the path is the indicator, and the operator link of the builds is same-IP only.",
+        "notes": "What the operator or the service does with the /p/ response is NOT CHECKED."
+      }
+    ],
+    "email_addresses": [],
+    "user_agents": []
+  },
+  "host_indicators": {
+    "file_paths": [
+      {
+        "path": "/tmp/oraq.py",
+        "platform": "Linux (operator host)",
+        "role": "Local Oracle query helper wrapped by 48 batch*.sh scripts in the operator's toolkit",
+        "confidence": "HIGH",
+        "action": "HUNT",
+        "notes": "Named as a working path in the operator's own scripts; the helper was not read unless captured elsewhere, so its content is NOT CHECKED.",
+        "false_positive_note": "/tmp is world-writable and the name is ordinary. The path alone will match unrelated hosts; pair it with the batch wrapper pattern or the file content."
+      },
+      {
+        "path": "/tmp/svc.py",
+        "platform": "Linux (operator host)",
+        "role": "Remote-command helper: the htmLawed CVE-2022-35914 command channel that returns output in the response body",
+        "confidence": "HIGH",
+        "action": "HUNT",
+        "notes": "Hard-codes exactly one target URL naming CVE-2022-35914 and carries a dummy session cookie. A truncated SHA-256 prefix is known for the file but the full hash is not, so it is absent from file_hashes by the full-hash rule.",
+        "false_positive_note": "Generic filename. Hunt on the outbound htmLawed test-page request or the wrapper scripts, not on the path alone."
+      },
+      {
+        "path": "/tmp/glpwnme",
+        "platform": "Linux (operator host)",
+        "role": "Working directory of the public glpwnme tool invoked by toglpwnme.sh (unmodified upstream clone)",
+        "confidence": "HIGH",
+        "action": "HUNT",
+        "notes": "The tool itself is public upstream content and the operator updated it between 2026-09-27 and 2026-09-30. Its value here is as a working-path artifact of the operator's GLPI campaign.",
+        "false_positive_note": "A public tool's name and a world-writable directory. Legitimate security teams also run glpwnme from /tmp; on its own this is not evidence of this operator."
+      },
+      {
+        "path": "/tmp/glpi107.tgz",
+        "platform": "Linux (operator host)",
+        "role": "Download destination for the public GLPI 10.0.7 release, extracted to /tmp/glpi107 for local diff study",
+        "confidence": "HIGH",
+        "action": "HUNT",
+        "notes": "The archive is the public vendor release (SHA-256 0d51de96..., byte-identical to the 10.0.7 release by relative path), so it is not an indicator and not listed as a hash.",
+        "false_positive_note": "A public release archive under a predictable name. Every GLPI administrator who downloaded 10.0.7 has this filename; never treat it as an indicator on its own."
+      },
+      {
+        "path": "/tmp/glpi107",
+        "platform": "Linux (operator host)",
+        "role": "Extraction directory for the public GLPI 10.0.7 release",
+        "confidence": "HIGH",
+        "action": "HUNT",
+        "notes": "The operator's extracted copy held 302 of the 6,500 release files in the Hunt.io capture, all identical to upstream.",
+        "false_positive_note": "An extraction directory named after a public release. Common on any host that has unpacked GLPI; not an indicator alone."
+      },
+      {
+        "path": "/tmp/upd",
+        "platform": "Linux (planted on a victim host inside the application container)",
+        "role": "Operator reverse-SOCKS client (chisel-style) running as the application service account",
+        "confidence": "MODERATE",
+        "action": "HUNT",
+        "notes": "Observed in a process table captured inside the victim's WSO2 container: PID 7519, user wso2carbon, started 'Sep14' (no year or zone), pointed at 209.99.185.148 over HTTPS through the host's own forward proxy with a proxy credential on the command line (value withheld). The same line appears in three files across both containers. Client invocation shown; an established tunnel is not shown.",
+        "false_positive_note": "An update-shaped filename in a temporary directory. The discriminating facts are the process running as the web/application service account with an outbound tunnel to an external address through the host's own proxy."
+      },
+      {
+        "path": "/tmp/Q.class",
+        "platform": "Linux (planted on a victim host inside the application container)",
+        "role": "Operator-planted compiled Java class owned by the WSO2 service account",
+        "confidence": "MODERATE",
+        "action": "HUNT",
+        "notes": "Held in the same container capture as the planted JSP pages. Its content was never seen.",
+        "false_positive_note": "A single-letter class name in /tmp owned by a service account is unusual but not unique; pair it with the planted JSP paths and the relay artifacts."
+      },
+      {
+        "path": "/bea_wls_internal/health.jsp",
+        "platform": "Any WebLogic host",
+        "role": "Helper page written by the relay delivery script through an existing command channel",
+        "confidence": "LOW",
+        "action": "HUNT",
+        "notes": "Script-only: q_uprelay.php writes Relay.java in chunks via health.jsp and launches three background Java relays. No write, compile or process output is held, so delivery by this script is INFERRED. The path appears in the operator's scripts and in the WebLogic findings held for the disclosure round (a health.jsp was planted in every _WL_internal and stage directory, script-only).",
+        "false_positive_note": "/bea_wls_internal/ is a stock WebLogic path; health.jsp inside it is not. A stock WebLogic host without the relay artifacts should not alert on the path alone."
+      },
+      {
+        "path": "decrypt*.jsp",
+        "platform": "Any WebLogic host",
+        "role": "Operator-placed WebLogic helper pages (pattern, script only)",
+        "confidence": "LOW",
+        "action": "HUNT",
+        "notes": "Names appear in the script-only WebLogic lane; page content was never seen and installation is NOT SHOWN.",
+        "false_positive_note": "A wildcard on a common verb. Deployments do ship decrypt pages; require the WebLogic context and the operator's other artifacts."
+      },
+      {
+        "path": "Relay.java",
+        "platform": "Any WebLogic host",
+        "role": "Relay source written and compiled on a victim host by the delivery script",
+        "confidence": "LOW",
+        "action": "HUNT",
+        "notes": "Script-only (q_uprelay.php writes it in chunks, removes older relay files and processes, then compiles and launches three background Java relays). That relays ran is OBSERVED from the operator's own listener log; that this script delivered them is not. Compare with the held sample Relay.java.new (see file_hashes).",
+        "false_positive_note": "A generic Java filename in a web-application directory. Hunt on the process and the :53 check-in, not on the filename."
+      },
+      {
+        "path": "/tmp/dbg2.txt",
+        "platform": "Linux (staged path, script only)",
+        "role": "Staged output path named in the operator's scripts",
+        "confidence": "LOW",
+        "action": "HUNT",
+        "notes": "Script-only; no file output is held.",
+        "false_positive_note": "A debug-named text file in /tmp; extremely common. Not an indicator alone."
+      },
+      {
+        "path": "/tmp/pg42.b64",
+        "platform": "Linux (staged path, script only)",
+        "role": "Staged base64 transit path named in the operator's scripts",
+        "confidence": "LOW",
+        "action": "HUNT",
+        "notes": "Script-only; no file output is held.",
+        "false_positive_note": "A staged base64 filename in /tmp; not an indicator alone."
+      }
+    ],
+    "mutex_names": [
+      {
+        "value": "BluePeakUpdater-2.4-instance",
+        "confidence": "LOW",
+        "action": "HUNT",
+        "notes": "Present as a string in both bpupdate.exe builds and seen in the shared mutex of the VirusTotal sandbox output. The builds tie to the operator-controlled host 209.99.185.148:8146 by IP only, so the operator link of this string is NOT ESTABLISHED.",
+        "false_positive_note": "An updater-shaped mutex in the BluePeak.AppUpdater namespace. Mutexes are hunting indicators for EDR, never blocklist entries, and this one must be paired with the :8146 paths or the builds before it means anything about this campaign."
+      }
+    ]
+  },
+  "tls_certificates": [
+    {
+      "host": "209.99.185.148",
+      "ports": [
+        443,
+        10443
+      ],
+      "subject": "CN=209.99.185.148",
+      "issuer": "CN=209.99.185.148",
+      "self_signed": true,
+      "organization": "O=Update Service",
+      "key": "RSA 2048",
+      "serial": "3b6e9d04e14fcb1d5ad1642fc990b6afdccdf5bc",
+      "sha256": "0ce2e8a961c564e9d76c2f59662c1107b33e2c32922e39a4c0d900e79722e7bc",
+      "valid_from": "2026-09-21T21:57:52Z",
+      "valid_to": "2036-09-18",
+      "earlier_serial": "4693349e740f3ef6a03444a735d5c73745ec8836",
+      "observed_by": "Hunt.io, Censys and the 2026-10-14 rescan; the same serial and SHA-256 were presented on :443 and :10443",
+      "confidence": "HIGH",
+      "action": "HUNT",
+      "false_positive_note": "The subject is only the IP, and the organisation string 'Update Service' has no measured base rate. The same certificate on the same address does not measure who holds its key now, so use the fingerprint to find reissues and successors of this listener rather than to attribute an unrelated host.",
+      "notes": "Operator-host TLS listener. A chisel-style fingerprint pinned by the victim's tunnel client was deliberately not compared with this certificate."
+    }
+  ],
+  "service_fingerprints": [
+    {
+      "host": "38.180.16.98",
+      "port": 80,
+      "fingerprint": "Server: SimpleHTTP/0.6 Python/3.10.12 serving a directory listing of the operator's /tmp (names only, no sizes and no dates)",
+      "confidence": "HIGH",
+      "action": "HUNT",
+      "false_positive_note": "Python's http.server is ubiquitous. The discriminator is the listing content (the operator's own filenames), never the banner alone.",
+      "notes": "The same banner served the :8899 tree earlier (Hunt.io, 2026-09-27 to 2026-09-29); whether the :80 and :8899 trees are the same tree is unreconciled (name-level overlap only, no hash comparison)."
+    },
+    {
+      "host": "209.99.185.148",
+      "port": 8080,
+      "fingerprint": "HTTP 200 with Content-Type: application/xml, body 'ok' (2 bytes), Server: BaseHTTP/0.6 Python/3.8.10",
+      "confidence": "HIGH",
+      "action": "HUNT",
+      "false_positive_note": "A two-byte body from a stock Python BaseHTTP server is generic. Match the address-and-port with a callback-shaped outbound request from a monitored host.",
+      "notes": "The canary response, answered 2026-10-03, 2026-10-05 and 2026-10-07. On 2026-10-14 the port timed out."
+    },
+    {
+      "host": "38.180.196.193",
+      "port": 8899,
+      "fingerprint": "HTTP/1.1 401 UNAUTHORIZED, WWW-Authenticate: Basic realm=\"cadsus-panel\", Server: Werkzeug/3.1.8 Python/3.13.5",
+      "confidence": "MODERATE",
+      "action": "HUNT",
+      "false_positive_note": "Werkzeug basic auth with a custom realm is not itself malicious, and the address is co-tenanted. The realm string 'cadsus-panel' was chosen by whoever ran the service in the 2026-09-04 to 2026-09-14 window; require the date window and the host's other operator artifacts.",
+      "notes": "The operator-pattern service window on the second VPS; 'cadsus' appears in 0 of the 973 files of the :8899 archive."
+    }
+  ],
+  "network_signatures": [
+    {
+      "pattern": "A TCP/53 flow whose first payload, sent by the connecting side, is the ASCII line READY2 followed by a newline (hex 52 45 41 44 59 32 0a, 7 bytes)",
+      "protocol": "TCP/53 (not DNS)",
+      "direction": "outbound from an internal host to 38.180.16.98:53",
+      "confidence": "DEFINITE",
+      "action": "HUNT",
+      "false_positive_note": "A legitimate DNS server on TCP/53 answers with DNS framing; this endpoint answers nothing until the client announces itself. Anchoring on the announce string alone is weak because TCP/53 flows from a resolver also open without a server-first byte, so pair the announce with the destination and the absence of any parsed DNS record.",
+      "notes": "The operator relay speaks first, so this is the only reliable server-first artifact in the protocol. Confirmed on 22 of 22 sessions in the contained lab run (2026-10-09) and matching the operator's own listener log label READY2(wls) (403 check-ins)."
+    },
+    {
+      "pattern": "A TCP/53 flow whose first payload is READY followed by a newline (hex 52 45 41 44 59 0a, 6 bytes)",
+      "protocol": "TCP/53 (not DNS)",
+      "direction": "outbound from an internal host to 38.180.16.98:53",
+      "confidence": "LOW",
+      "action": "HUNT",
+      "false_positive_note": "Short generic ASCII word with no source read and no wire observation. Anchor on it only inside a TCP/53 flow that carries no DNS message and only alongside the other relay strings; expect incidental matches.",
+      "notes": "The pod-lane variant, inferred from the operator's own log label READY(pod) (648 check-ins). No source file was read for this variant and the six-byte string was never observed on the wire. Carried so defenders hunting the pod lane have the label the operator itself uses."
+    },
+    {
+      "pattern": "A TCP/53 flow to 38.180.16.98 carrying the 5-byte line PING (hex 50 49 4e 47 0a) at roughly a 15-second cadence",
+      "protocol": "TCP/53 (not DNS)",
+      "direction": "outbound, keepalive",
+      "confidence": "DEFINITE",
+      "action": "HUNT",
+      "false_positive_note": "A fixed 15-second keepalive with no DNS payload is the signature; the byte string alone is generic.",
+      "notes": "Sent while the relay waits for a controller line. 11 keepalives on the wire in the contained run, matching an idle 15 s read timeout."
+    },
+    {
+      "pattern": "A controller line of the form DIAL <host> <port> followed by a newline (starts 44 49 41 4c 20, ends 0a), read by the relay byte by byte and capped near 200 characters",
+      "protocol": "TCP/53 (not DNS)",
+      "direction": "inbound to the relay on a victim host",
+      "confidence": "DEFINITE",
+      "action": "HUNT",
+      "false_positive_note": "The instruction line is only meaningful inside an established relay session opened with READY2; a bare DIAL string in unrelated traffic is not evidence.",
+      "notes": "The controller names the onward destination, so the relay itself contains no target list. Read from the full unobfuscated source and observed with a stand-in controller; the operator's real controller behaviour (timings, destinations, anything before DIAL) is NOT CHECKED."
+    },
+    {
+      "pattern": "Relay replies OK (4f 4b 0a) or FAIL (46 41 49 4c 0a) after the onward connection attempt, immediately followed by a raw byte-for-byte splice of the two sockets with no framing or length prefix",
+      "protocol": "TCP/53 (not DNS)",
+      "direction": "relay to controller, then bidirectional",
+      "confidence": "DEFINITE",
+      "action": "HUNT",
+      "false_positive_note": "A 3-byte or 5-byte ASCII token is generic; the value is the sequence READY2, DIAL, OK, then an unframed splice on one TCP/53 flow.",
+      "notes": "Anchored stream matching cannot see a mid-stream line, so a single-regex signature on the reply is unreliable; reference the session shape instead."
+    },
+    {
+      "pattern": "Operator relay log labels READY(pod), READY2(wls), TUNNEL[pod] up, TUNNEL[wls] up and DIAL fail in a text log (the operator's own files are r53.log and l53.log)",
+      "protocol": "log artifact",
+      "direction": "n/a",
+      "confidence": "HIGH",
+      "action": "HUNT",
+      "false_positive_note": "These strings are the operator's own log vocabulary, so on a defender's host they appear only if a relay process is logging locally; hunting the network signature is the higher-fidelity route.",
+      "notes": "1,051 check-ins in the operator's log (READY(pod) 648 and READY2(wls) 403), 272 TUNNEL[pod] up events across 71 destinations and 143 TUNNEL[wls] up events across 6 destinations, plus 618 DIAL fail lines, all from one victim-estate egress address with clock times only and no date or zone."
+    }
+  ],
+  "behavioral_indicators": [
+    {
+      "type": "behavioral",
+      "pattern": "Temporary Zabbix objects created and deleted by one API session: global scripts named z-revtest, z-dbcred, z-srvrec4 and z-satsudo, object name prefixes z-, wv3_ and poc, and item identifiers 96795 and 96797 through 96802",
+      "log_source": "Zabbix audit log; global-script inventory; item list",
+      "confidence": "MODERATE",
+      "action": "HUNT",
+      "false_positive_note": "These names were authored by the operator inside one victim's Zabbix deployment, where it labelled them NOSSO and 'red team'. They live inside a victim estate, not on operator infrastructure, so hunt them in that audit log and never treat them as blocklist entries. The prefix evidence is per-name: the z- prefix was opened, while wv3_ and poc come from a batch note.",
+      "notes": "The technique (global scripts on a proxy or agent via zabbix_get system.run) is documented public tradecraft since 2013, so it is defender guidance rather than an actor fingerprint; the operator's own object names and identifiers are the campaign-specific part and the owner test the victim can run."
+    },
+    {
+      "type": "behavioral",
+      "pattern": "A process named /tmp/upd running as the web or application service account, holding outbound HTTPS to a hard-coded external address through the host's own forward proxy, with a proxy credential on its command line",
+      "log_source": "Endpoint process table; forward-proxy CONNECT logs",
+      "confidence": "MODERATE",
+      "action": "HUNT",
+      "false_positive_note": "A maintainer running a tunnel client through the corporate proxy can look similar; the discriminating facts are that the process runs as the application service account and that the destination is a hard-coded operator address.",
+      "notes": "Read from a process table captured inside a victim's application container (PID 7519, user wso2carbon, started 'Sep14'). The client invocation is shown; an established tunnel is not shown, and the process existing is not proof the tunnel was up."
+    }
+  ],
+  "operator_fingerprints": [
+    {
+      "type": "host-local VPS name",
+      "value": "v487918523.local",
+      "role": "Git clone identity on the operator host, carried in the commit identity of the clone entries in the operator's .git/logs/HEAD",
+      "confidence": "LOW",
+      "action": "HUNT",
+      "false_positive_note": "A host-local name, not a resolvable domain: it cannot be blocked, and a substring match will hit unrelated files. Use it as a pivot candidate only, and note that the candidate state itself is NOT CHECKED.",
+      "notes": "Provider-style VPS hostname; the account is root with this host-local name. The clone reflogs are on the operator's host clock (+0000) and the VPS clock accuracy is NOT CHECKED. Carried as an identity artifact, per the candidate row."
+    }
+  ],
+  "explicitly_excluded": {
+    "victim_side_values": "Deliberately absent from this feed as values, and not relocated into any context block. Includes the AWS sa-east-1 NAT/egress address of a victim estate, disputed and carried as victim-side egress; a victim-side external LDAP address; the unresolved-ownership peer of one Zabbix callback; a victim MapServer/WMS host; and every victim-internal range (10.x and 172.x). Blocking any of them would harm the victim or a third party; the findings belong to the notification track.",
+    "lab_addresses": "One RFC1918 lab gateway address used only to detonate the relay on the isolated lab is deliberately absent from this feed by rule.",
+    "operator_hashes_known_only_as_prefixes": "Five operator hash sets are known to the case only as truncated SHA-256 prefixes, so they are absent under the full-hash rule: svc.py, pull.py, an exfiltration driver script, pull_mass.py and filas_seq.sh (12-character prefixes); q_uprelay.php (12-character prefix); dblink_exploit.py, Fonetica.class and S1.class (8 to 12 characters); and the two bpupdate.exe builds (8-character prefixes, 117,760 and 139,264 bytes). Full hashes for the two bpupdate builds exist in case evidence but were not carried into this feed.",
+    "bpupdate_version_resources": "BluePeak.AppUpdater 2.4.1.0 (en-US) and the hard-coded Chrome SxS version 128.0.6613.138 from the two bpupdate.exe builds. The Chrome version is a stock Google Chrome build number that would match legitimate Chrome installations, and the builds' operator link is same-IP only. The mutex string from the same builds is carried separately under host_indicators.mutex_names at LOW confidence.",
+    "jarm_fingerprints": "Three JARM values, one per operator-associated host. The lane assigned them NOT CHECKED (no corpus-wide count obtained) and identified the 38.180.16.98 value as an earlier tenant's, so they are excluded rather than carried at an upgraded confidence. A JARM fingerprint of an earlier tenant on a recycled address would match unrelated infrastructure.",
+    "ssh_host_key_fingerprints": "Two SSH host-key fingerprints. The 38.180.16.98 key is held only as a truncated prefix; for the 209.99.185.148 key the base rate is NOT CHECKED and a search for other hosts carrying it was never run. Both are excluded rather than carried at an upgraded confidence, and the .193 key has no comparable digest (NOT CHECKED).",
+    "trycloudflare_hostnames": "Two Cloudflare Quick Tunnel hostnames on which a file of the same SHA-256 as exp.html was analysed in April 2026 (mandatory-drinks-legend-sandy.trycloudflare.com and theorem-involvement-laugh-tomorrow.trycloudflare.com). Their relation to the operator is INSUFFICIENT and Quick Tunnels are a shared, short-lived service. A distinctive operator subdomain under a shared provider would stay an ordinary indicator; these do not qualify.",
+    "provider_abuse_contacts": "The two provider abuse contacts the lane collected for the 38.180.0.0/16 allocations and the 209.99.184.0/21 allocation. Notification routing aids, not indicators, and their literals are withheld from this feed for that reason; responsiveness is NOT CHECKED. A disclosure track item, not a blocklist entry.",
+    "opendirectory_crawler_and_visitor_addresses": "Addresses that fetched the operator's directory after it was discovered (a WARP-egressed crawl address and assorted scanner and visitor addresses) are post-discovery observer noise, not attacker or victim indicators. The real gap is that one of them was not reconciled with the archive egress address, which is NOT CHECKED."
+  },
+  "non_indicators": [
+    {
+      "warning": "CONTEXT ONLY - DO NOT INGEST AS INDICATORS, DO NOT BLOCK, DO NOT ALERT ON THESE VALUES. They are legitimate files of the target's own software, recorded so a reader does not mistake them for operator artifacts: matching them will fire on every unaffected installation of the same product."
+    },
+    {
+      "values": [
+        "inc/auth.class.php",
+        "files/_log/event.log"
+      ],
+      "reason": "An authentication source file and a log directory path of a stock GLPI installation. Operator helper scripts were written to modify the first and read the second as a credential-logging hook, but these are the product's own files and installation of the hook is NOT SHOWN (the stock release carries the hook target at src/Auth.php in the 10.0.x layout, so the helpers target a different layout or version). Hunt the hook artifacts and the operator's scripts, not these paths.",
+      "original_entries": [
+        {
+          "path": "inc/auth.class.php",
+          "role": "GLPI authentication source file targeted by the operator's logging hook (q_hook3.php)",
+          "confidence": "MODERATE",
+          "action": "HUNT",
+          "false_positive_note": "Stock GLPI content. Never block or alert on this path itself; hunt the hook artifacts."
+        },
+        {
+          "path": "files/_log/event.log",
+          "role": "GLPI log file into which the hook appends time and submitted credentials",
+          "confidence": "MODERATE",
+          "action": "HUNT",
+          "false_positive_note": "A log directory of stock GLPI. Never block or alert on this path itself; read it for hook output if the hook is found."
+        }
+      ]
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-29T18:24:35Z",
+ "generated_at": "2026-10-16T02:06:08Z",
  "counts": {
   "indicators": 2157,
   "reports": 59,
@@ -69,7 +69,9 @@
    "webserver-compromise-kit-91-236-230-250-iocs.json",
    "webshells-to-the-cloud.json"
   ],
-  "embargoed": [],
+  "embargoed": [
+   "opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-iocs.json"
+  ],
   "unknown": [],
   "empty": []
  },

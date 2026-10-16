@@ -4207,6 +4207,124 @@ opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections
     robustness: 2
     confidence: "HIGH for the banner match today; durability is limited (see Rationale)"
     attack: [T1071.001]
+opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections:
+  - name: "WebLogic Java Process Spawns Shell Writing a JSP Into a WebLogic Internal Directory"
+    engine: sigma
+    tier: Detection
+    fence: 0
+    hash: "0c078a76"
+    head: "title: WebLogic Java Process Spawns Shell Writin"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1505.003, T1059.004]
+  - name: "Shell Process Creates a JSP File Under a WebLogic _WL_internal Directory"
+    engine: sigma
+    tier: Detection
+    fence: 1
+    hash: "cd8d91d2"
+    head: "title: Shell Process Creates a JSP File Under a "
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1505.003]
+  - name: "GLPI htmLawed Test Page POST Request (CVE-2022-35914, Renamed Copy Included)"
+    engine: sigma
+    tier: Detection
+    fence: 2
+    hash: "c02e3191"
+    head: "title: GLPI htmLawed Test Page POST Request (CVE"
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1190]
+  - name: "Java Process Spawns Shell to Rewrite Log Files"
+    engine: sigma
+    tier: Hunting
+    fence: 3
+    hash: "2fb8711d"
+    head: "title: Java Process Spawns Shell to Rewrite Log "
+    robustness: 2
+    confidence: "LOW"
+    attack: [T1070]
+  - name: "Zabbix Daemon Child Process Touching Credential Files or Instance Metadata"
+    engine: sigma
+    tier: Hunting
+    fence: 4
+    hash: "d15d1a71"
+    head: "title: Zabbix Daemon Child Process Touching Cred"
+    robustness: 2
+    confidence: "LOW"
+    attack: [T1072, T1552]
+  - name: "Reverse Relay READY2 Announce on TCP 53"
+    engine: suricata
+    tier: Detection
+    fence: 5
+    hash: "7a843bb5"
+    head: "alert tcp $HOME_NET any -> $EXTERNAL_NET 53 (msg"
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1090.001, T1095]
+  - name: "Reverse Relay Controller DIAL Tasking Line from TCP 53"
+    engine: suricata
+    tier: Detection
+    fence: 6
+    hash: "b2244ed3"
+    head: "alert tcp $EXTERNAL_NET 53 -> $HOME_NET any (msg"
+    robustness: 2
+    confidence: "MODERATE, because the line format comes from the relay's parsing code and my stand-in controller exercised it; no real controller line was seen. The operator's relay log records tunnel-up events, which fits the format without proving the bytes."
+    attack: [T1090.001, T1095]
+  - name: "GLPI htmLawed Test Page POST with hhook Parameter"
+    engine: suricata
+    tier: Detection
+    fence: 7
+    hash: "2b529428"
+    head: "alert http $EXTERNAL_NET any -> $HTTP_SERVERS an"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1190]
+  - name: "Reverse Relay READY2 Announce on a Non-DNS Port"
+    engine: suricata
+    tier: Hunting
+    fence: 8
+    hash: "5643da42"
+    head: "alert tcp $HOME_NET any -> $EXTERNAL_NET !53 (ms"
+    robustness: 1
+    confidence: "LOW"
+    attack: [T1090.001, T1095]
+  - name: "Short Printable ASCII Line as Client Payload on TCP 53"
+    engine: suricata
+    tier: Hunting
+    fence: 9
+    hash: "0a70f93a"
+    head: "alert tcp $HOME_NET any -> $EXTERNAL_NET 53 (msg"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1095]
+  - name: "Reverse Relay PING Keepalive After READY2 Announce"
+    engine: suricata
+    tier: Hunting
+    fence: 10
+    hash: "ea094b23"
+    head: "alert tcp $HOME_NET any -> $EXTERNAL_NET any (ms"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1090.001]
+  - name: "Reverse Relay OK Reply After DIAL"
+    engine: suricata
+    tier: Hunting
+    fence: 11
+    hash: "23c84b49"
+    head: "alert tcp $HOME_NET any -> $EXTERNAL_NET any (ms"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1090.001]
+  - name: "Reverse Relay FAIL Reply After DIAL"
+    engine: suricata
+    tier: Hunting
+    fence: 12
+    hash: "8aabb502"
+    head: "alert tcp $HOME_NET any -> $EXTERNAL_NET any (ms"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1090.001]
 opendirectory-45-130-148-125-20260430-detections:
   - name: "AdaptixC2 Windows Beacon: Stock Framework Fingerprint"
     engine: yara
