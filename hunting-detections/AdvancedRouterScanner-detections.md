@@ -29,7 +29,7 @@ AdvancedRouterScanner is a purpose-built exploitation framework targeting embedd
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
 
-**Atomics routed to the IOC feed:** the reverse-shell C2 destination `107.189.4.201:3778`, the payload-drop filename `/tmp/bn`, and the payload-download host `bot.gribostress.pro` (resolving to `107.189.4.201`) are transient indicators already carried in [`AdvancedRouterScanner-iocs.json`](/ioc-feeds/AdvancedRouterScanner-iocs.json). Each of the three original rules keyed solely on one of these hardcoded values, and removing the literal leaves no behavior to detect. Block them via the feed.
+**Atomics routed to the IOC feed:** the reverse-shell C2 destination `107.189.4.201:3778`, the payload-drop filename `/tmp/bn`, and the payload-download host `bot.gribostress.pro` (resolving to `107.189.4.201`) are transient indicators already carried in [`AdvancedRouterScanner-iocs.json`](/ioc-feeds/AdvancedRouterScanner.json). Each of the three original rules keyed solely on one of these hardcoded values, and removing the literal leaves no behavior to detect. Block them via the feed.
 
 ---
 
@@ -146,7 +146,7 @@ level: medium
 
 **Atomics routed to the IOC feed (3 of 5 original rules).** Three of the file's five original rules keyed solely on one hardcoded literal each, with no behavioral signal surviving the literal's removal, per the tiering rubric's routing test, these are IOC-feed entries, not rules:
 
-- **Reverse Shell Establishment**, originally a freeform, non-conforming Suricata-style block (`alert tcp any any -> 107.189.4.201 3778 (msg:"Reverse Shell to C2"; sid:200001; rev:1;)`) with no content anchor and no `flow`/`classtype`/`metadata`, matching only the destination IP and port. A pure atomic. `107.189.4.201:3778` is already carried in [`AdvancedRouterScanner-iocs.json`](/ioc-feeds/AdvancedRouterScanner-iocs.json) (`IOCs.Infrastructure`).
+- **Reverse Shell Establishment**, originally a freeform, non-conforming Suricata-style block (`alert tcp any any -> 107.189.4.201 3778 (msg:"Reverse Shell to C2"; sid:200001; rev:1;)`) with no content anchor and no `flow`/`classtype`/`metadata`, matching only the destination IP and port. A pure atomic. `107.189.4.201:3778` is already carried in [`AdvancedRouterScanner-iocs.json`](/ioc-feeds/AdvancedRouterScanner.json) (`IOCs.Infrastructure`).
 - **Suspicious Dropped Files in Temp Directory** matched only the `/tmp/bn` staging filename. Already carried in the feed (`IOCs.Payloads`).
 - **Payload Download from Known Hosts** matched only the exact hostname `bot.gribostress.pro` and IP `107.189.4.201`. Both already carried in the feed (`IOCs.Infrastructure`).
 

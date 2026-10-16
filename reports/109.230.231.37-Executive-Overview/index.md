@@ -151,11 +151,11 @@ Each malware sample analyzed in this investigation has three companion resources
 
 ### CRITICAL Risk - Immediate Analysis Recommended
 
-**[enc/dec Ransomware Family (10 variants)](enc-dec-ransomware-family.md)** | Comprehensive Report
+**[enc/dec Ransomware Family (10 variants)](/reports/enc-dec-ransomware-family/)** | Comprehensive Report
 **Risk:** CRITICAL | **Capabilities:** Custom ChaCha20+RSA-2048 encryption, AVX-512 hardware optimization, Volume Shadow Copy deletion, per-victim key generation
 The key finding is a professional R&D environment with versioned builds, testing utilities, mathematically unrecoverable encryption, and a dual espionage-plus-destruction operational capability.
 
-**[agent.exe - PoetRAT Malware](agent-exe.md)** | 34 KB Report
+**[agent.exe - PoetRAT Malware](/reports/agent-exe/)** | 34 KB Report
 **Risk:** CRITICAL | **Capabilities:** Process injection, dual persistence, extensive cryptography, credential theft potential
 The key finding is a Golang-compiled RAT with a dormant C2, masquerading as a Windows Defender service through `WinDefenderSvc.exe`.
 
@@ -163,19 +163,19 @@ The key finding is a Golang-compiled RAT with a dormant C2, masquerading as a Wi
 
 ### HIGH Risk - Active C2 & Persistence Capabilities
 
-**[agent_xworm.exe - Xworm RAT v1](agent-xworm-exe.md)** | 21 KB Report
+**[agent_xworm.exe - Xworm RAT v1](/reports/agent-xworm-exe/)** | 21 KB Report
 **Risk:** HIGH | **C2 Server:** 109.230.231.37 | **Capabilities:** PowerShell execution, system reconnaissance
 The key finding is a hardcoded C2 authentication token that reveals centralized threat infrastructure.
 
-**[agent_xworm_v2.exe - Xworm RAT v2.4.0](agent-xworm-v2-exe.md)** | 27 KB Report
+**[agent_xworm_v2.exe - Xworm RAT v2.4.0](/reports/agent-xworm-v2-exe/)** | 27 KB Report
 **Risk:** HIGH | **C2 Server:** 109.230.231.37 | **Protocol:** WebSocket-based C2
 The key finding is an enhanced version carrying a WebSocket protocol upgrade from its TCP-based predecessor.
 
-**[FleetAgentAdvanced.exe - Multi-Persistence Dropper](fleetagentadvanced-exe.md)** | 68 KB Report
+**[FleetAgentAdvanced.exe - Multi-Persistence Dropper](/reports/fleetagentadvanced-exe/)** | 68 KB Report
 **Risk:** HIGH | **Persistence Layers:** 4 mechanisms | **Dropped Payload:** RuntimeOptimization.exe (27 KB)
 The key finding is quadruple-redundant persistence, a Registry Run key plus a scheduled task plus two Startup LNKs, all deployed in 1.3 seconds.
 
-**[FleetAgentFUD.exe - WebSocket RAT](fleetagentfud-exe.md)** | 53 KB Report
+**[FleetAgentFUD.exe - WebSocket RAT](/reports/fleetagentfud-exe/)** | 53 KB Report
 **Risk:** HIGH | **Size:** 17.5 KB | **Protocol:** WebSocket with X-Agent-Secret header
 The key finding is a lightweight fully-undetectable design with PowerShell-based post-exploitation capabilities.
 
@@ -183,7 +183,7 @@ The key finding is a lightweight fully-undetectable design with PowerShell-based
 
 ### LOW Risk - Proof-of-Concept / Research Tool
 
-**[uac_test.exe - UAC Bypass PoC](uac-test-exe.md)** | 46 KB Report
+**[uac_test.exe - UAC Bypass PoC](/reports/uac-test-exe/)** | 46 KB Report
 **Risk:** LOW (2.1/10) | **Type:** Security research tool
 The key finding is CMSTPLUA COM and Fodhelper UAC bypass techniques, where the sample detected admin privileges and self-terminated without executing.
 
@@ -251,7 +251,7 @@ Beyond the 7 reports, **32 additional malware samples** from the same open direc
 
 **XWorm RAT Variants** (2 samples):
 - agent_xworm.exe, agent_xworm_v2.exe
-- **Analysis:** Covered in comprehensive reports (see [agent-xworm-exe.md](agent-xworm-exe.md) and [agent-xworm-v2-exe.md](agent-xworm-v2-exe.md))
+- **Analysis:** Covered in comprehensive reports (see [agent-xworm-exe.md](/reports/agent-xworm-exe/) and [agent-xworm-v2-exe.md](/reports/agent-xworm-v2-exe/))
 - **Threat Level:** HIGH, active C2 infrastructure, PowerShell execution, multi-malware deployment
 
 **Specialized Utilities** (4 samples):

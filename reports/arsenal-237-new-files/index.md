@@ -180,7 +180,7 @@ All 11 components have individual detailed reports with full technical analysis,
 
 ### PHASE 1: DEFENSE EVASION & PRIVILEGE ESCALATION
 
-#### 1. [killer.dll - Basic BYOVD Process Termination](./killer-dll.md)
+#### 1. [killer.dll - Basic BYOVD Process Termination](/reports/arsenal-237-new-files/killer-dll/)
 
 This component is a security product disabler working through a vulnerable driver.
 
@@ -192,11 +192,11 @@ It is a driver-level process terminator that loads BdApiUtil64.sys for kernel ac
 
 I hold this CONFIRMED, on static and behavioral analysis.
 
-The full report is at [./killer-dll.md](./killer-dll.md).
+The full report is at [./killer-dll.md](/reports/arsenal-237-new-files/killer-dll/).
 
 ---
 
-#### 2. [killer_crowdstrike.dll - CrowdStrike-Specific Process Termination](./killer-crowdstrike-dll.md)
+#### 2. [killer_crowdstrike.dll - CrowdStrike-Specific Process Termination](/reports/arsenal-237-new-files/killer-crowdstrike-dll/)
 
 This component is an EDR-specific defense disabler.
 
@@ -208,11 +208,11 @@ It is a killer.dll variant with product-specific targeting of CSFalconService.ex
 
 I hold this CONFIRMED, on product-specific function names and driver interactions.
 
-The full report is at [./killer-crowdstrike-dll.md](./killer-crowdstrike-dll.md).
+The full report is at [./killer-crowdstrike-dll.md](/reports/arsenal-237-new-files/killer-crowdstrike-dll/).
 
 ---
 
-#### 3. [lpe.exe - Privilege Escalation Wrapper](./lpe-exe.md)
+#### 3. [lpe.exe - Privilege Escalation Wrapper](/reports/arsenal-237-lpe-exe/)
 
 This component is a privilege escalation tool.
 
@@ -224,11 +224,11 @@ It is a privilege escalation wrapper using five techniques, token impersonation 
 
 I hold this CONFIRMED, on API calls and capability testing.
 
-The full report is at [./lpe-exe.md](./lpe-exe.md).
+The full report is at [./lpe-exe.md](/reports/arsenal-237-lpe-exe/).
 
 ---
 
-#### 4. [BdApiUtil64.sys - Vulnerable Baidu Driver (BYOVD)](./BdApiUtil64-sys.md)
+#### 4. [BdApiUtil64.sys - Vulnerable Baidu Driver (BYOVD)](/reports/bdapiutil64-sys/)
 
 This component is a vulnerable driver used to reach kernel access.
 
@@ -240,11 +240,11 @@ It is a signed Baidu antivirus driver carrying a known privilege escalation vuln
 
 I hold this CONFIRMED, on a known CVE and its exploitation pattern.
 
-The full report is at [./BdApiUtil64-sys.md](./BdApiUtil64-sys.md).
+The full report is at [./BdApiUtil64-sys.md](/reports/bdapiutil64-sys/).
 
 ---
 
-#### 5. [rootkit.dll - Kernel-Mode Rootkit](./rootkit-dll.md)
+#### 5. [rootkit.dll - Kernel-Mode Rootkit](/reports/arsenal-237/rootkit-dll/)
 
 This component is a kernel-mode rootkit providing persistence and hiding.
 
@@ -256,13 +256,13 @@ It is a kernel-mode rootkit installed via BYOVD exploitation. It hides malware p
 
 I hold this CONFIRMED, on kernel driver analysis.
 
-The full report is at [./rootkit-dll.md](./rootkit-dll.md).
+The full report is at [./rootkit-dll.md](/reports/arsenal-237/rootkit-dll/).
 
 ---
 
 ### PHASE 2: PERSISTENCE & CREDENTIAL ACCESS
 
-#### 6. [nethost.dll - Masquerading .NET Loader (DLL Hijacking)](./nethost-dll.md)
+#### 6. [nethost.dll - Masquerading .NET Loader (DLL Hijacking)](/reports/arsenal-237/nethost-dll/)
 
 This component is a persistence mechanism working through DLL hijacking.
 
@@ -274,11 +274,11 @@ It masquerades as the legitimate .NET runtime component nethost.dll. Loaded by l
 
 I hold this CONFIRMED, on file analysis and the hijacking patterns.
 
-The full report is at [./nethost-dll.md](./nethost-dll.md).
+The full report is at [./nethost-dll.md](/reports/arsenal-237/nethost-dll/).
 
 ---
 
-#### 7. [chromelevator.exe - Browser Credential Theft](./chromelevator-exe.md)
+#### 7. [chromelevator.exe - Browser Credential Theft](/reports/arsenal-237-new-files/chromelevator-exe/)
 
 This component is a credential harvesting tool.
 
@@ -290,13 +290,13 @@ It uses reflective DLL injection and direct syscalls to extract cookies, passwor
 
 I hold this CONFIRMED, on static analysis and behavioral observation.
 
-The full report is at [./chromelevator-exe.md](./chromelevator-exe.md).
+The full report is at [./chromelevator-exe.md](/reports/arsenal-237-new-files/chromelevator-exe/).
 
 ---
 
 ### PHASE 3: IMPACT - RANSOMWARE DEPLOYMENT
 
-#### 8. [enc_c2.exe - Rust Ransomware with Tor C2](./enc_c2-exe.md)
+#### 8. [enc_c2.exe - Rust Ransomware with Tor C2](/reports/arsenal-237-new-files/enc_c2-exe/)
 
 This component is a ransomware encryptor, the remote-controlled variant.
 
@@ -308,11 +308,11 @@ It is Rust ransomware with real-time Tor-based C2 control and ChaCha20 file encr
 
 I hold this CONFIRMED, on Rust code analysis and the C2 communication.
 
-The full report is at [./enc_c2-exe.md](./enc_c2-exe.md).
+The full report is at [./enc_c2-exe.md](/reports/arsenal-237-new-files/enc_c2-exe/).
 
 ---
 
-#### 9. [new_enc.exe - Human-Operated Rust Ransomware (v0.5-beta)](./new_enc-exe.md)
+#### 9. [new_enc.exe - Human-Operated Rust Ransomware (v0.5-beta)](/reports/new-enc-exe/)
 
 This component is an advanced ransomware encryptor.
 
@@ -324,11 +324,11 @@ It is Rust ransomware (v0.5-beta) targeting Commvault agents and VSS snapshots w
 
 I hold this CONFIRMED, because binary analysis confirms both the hardcoded key and the targeting logic.
 
-The full report is at [./new_enc-exe.md](./new_enc-exe.md).
+The full report is at [./new_enc-exe.md](/reports/new-enc-exe/).
 
 ---
 
-#### 10. [dec_fixed.exe - Ransomware Decryptor](./dec_fixed-exe.md)
+#### 10. [dec_fixed.exe - Ransomware Decryptor](/reports/arsenal-237-new-files/dec_fixed-exe/)
 
 This component is a victim-specific decryption tool.
 
@@ -340,11 +340,11 @@ It is a victim-specific decryptor carrying a key (1e0d8597...) distinct from eve
 
 I hold this CONFIRMED, on key analysis and decryption verification.
 
-The full report is at [./dec_fixed-exe.md](./dec_fixed-exe.md).
+The full report is at [./dec_fixed-exe.md](/reports/arsenal-237-new-files/dec_fixed-exe/).
 
 ---
 
-#### 11. [full_test_enc.exe - Advanced Rust Ransomware (RSA+ChaCha20)](./full_test_enc-exe.md)
+#### 11. [full_test_enc.exe - Advanced Rust Ransomware (RSA+ChaCha20)](/reports/arsenal-237-new-files/full_test_enc-exe/)
 
 This component is an enterprise-grade ransomware encryptor.
 
@@ -356,7 +356,7 @@ It is the most capable Arsenal-237 variant recovered. It deploys multi-threaded 
 
 I hold this CONFIRMED, on cryptographic analysis and hybrid encryption verification.
 
-The full report is at [./full_test_enc-exe.md](./full_test_enc-exe.md).
+The full report is at [./full_test_enc-exe.md](/reports/arsenal-237-new-files/full_test_enc-exe/).
 
 ---
 
@@ -554,13 +554,13 @@ Individual component reports contain specific YARA signatures, Sigma rules, and 
 
 **Hunt Scenarios:**
 
-1. **BYOVD exploitation**: BdApiUtil64.sys loading from non-system paths; kernel callback registrations from unsigned or low-reputation drivers ([BdApiUtil64-sys.md](./BdApiUtil64-sys.md))
+1. **BYOVD exploitation**: BdApiUtil64.sys loading from non-system paths; kernel callback registrations from unsigned or low-reputation drivers ([BdApiUtil64-sys.md](/reports/bdapiutil64-sys/))
 
-2. **Rootkit persistence**: process and thread enumeration gaps indicating hidden objects; kernel API hooking anomalies; driver installation from unexpected locations ([rootkit-dll.md](./rootkit-dll.md))
+2. **Rootkit persistence**: process and thread enumeration gaps indicating hidden objects; kernel API hooking anomalies; driver installation from unexpected locations ([rootkit-dll.md](/reports/arsenal-237/rootkit-dll/))
 
-3. **DLL hijacking**: nethost.dll present outside system directories; .NET processes loading DLLs from user-writable paths; anomalous DLL version signatures ([nethost-dll.md](./nethost-dll.md))
+3. **DLL hijacking**: nethost.dll present outside system directories; .NET processes loading DLLs from user-writable paths; anomalous DLL version signatures ([nethost-dll.md](/reports/arsenal-237/nethost-dll/))
 
-4. **Browser credential theft**: reflective DLL injection into browser processes; SQLite reads of Chrome/Edge credential stores via direct syscalls ([chromelevator-exe.md](./chromelevator-exe.md))
+4. **Browser credential theft**: reflective DLL injection into browser processes; SQLite reads of Chrome/Edge credential stores via direct syscalls ([chromelevator-exe.md](/reports/arsenal-237-new-files/chromelevator-exe/))
 
 5. **Ransomware encryption**: bulk file access with high-entropy writes; file extension changes; backup system enumeration patterns (Phase 3 component reports)
 
@@ -778,21 +778,21 @@ BYOVD techniques abuse legitimately signed drivers that bypass signature-based d
 Access detailed technical analysis for each toolkit component:
 
 1. **Phase 1 - Defense Evasion Components:**
-   - [killer.dll - Basic BYOVD Process Termination](./killer-dll.md)
-   - [killer_crowdstrike.dll - CrowdStrike-Specific Termination](./killer-crowdstrike-dll.md)
-   - [lpe.exe - Privilege Escalation Wrapper](./lpe-exe.md)
-   - [BdApiUtil64.sys - Vulnerable Baidu Driver](./BdApiUtil64-sys.md)
-   - [rootkit.dll - Kernel-Mode Rootkit](./rootkit-dll.md)
+   - [killer.dll - Basic BYOVD Process Termination](/reports/arsenal-237-new-files/killer-dll/)
+   - [killer_crowdstrike.dll - CrowdStrike-Specific Termination](/reports/arsenal-237-new-files/killer-crowdstrike-dll/)
+   - [lpe.exe - Privilege Escalation Wrapper](/reports/arsenal-237-lpe-exe/)
+   - [BdApiUtil64.sys - Vulnerable Baidu Driver](/reports/bdapiutil64-sys/)
+   - [rootkit.dll - Kernel-Mode Rootkit](/reports/arsenal-237/rootkit-dll/)
 
 2. **Phase 2 - Persistence & Credential Access Components:**
-   - [nethost.dll - DLL Hijacking Persistence](./nethost-dll.md)
-   - [chromelevator.exe - Browser Credential Theft](./chromelevator-exe.md)
+   - [nethost.dll - DLL Hijacking Persistence](/reports/arsenal-237/nethost-dll/)
+   - [chromelevator.exe - Browser Credential Theft](/reports/arsenal-237-new-files/chromelevator-exe/)
 
 3. **Phase 3 - Ransomware Components:**
-   - [enc_c2.exe - Tor C2 Ransomware](./enc_c2-exe.md)
-   - [new_enc.exe - Rust Ransomware v0.5-beta](./new_enc-exe.md)
-   - [dec_fixed.exe - Ransomware Decryptor](./dec_fixed-exe.md)
-   - [full_test_enc.exe - Advanced RSA+ChaCha20 Ransomware](./full_test_enc-exe.md)
+   - [enc_c2.exe - Tor C2 Ransomware](/reports/arsenal-237-new-files/enc_c2-exe/)
+   - [new_enc.exe - Rust Ransomware v0.5-beta](/reports/new-enc-exe/)
+   - [dec_fixed.exe - Ransomware Decryptor](/reports/arsenal-237-new-files/dec_fixed-exe/)
+   - [full_test_enc.exe - Advanced RSA+ChaCha20 Ransomware](/reports/arsenal-237-new-files/full_test_enc-exe/)
 
 ### Detection & Hunting Resources
 
