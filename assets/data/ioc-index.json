@@ -1,11 +1,11 @@
 {
- "generated_at": "2026-10-16T15:58:28Z",
+ "generated_at": "2026-10-16T16:23:49Z",
  "counts": {
-  "indicators": 2157,
+  "indicators": 2156,
   "reports": 59,
   "multi_report": 147,
-  "suppressed_benign": 127,
-  "never_block": 80
+  "suppressed_benign": 115,
+  "never_block": 81
  },
  "coverage": {
   "indexed": [
@@ -4902,11 +4902,6 @@
    }
   ],
   "filename:cmd.jsp": [
-   {
-    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
-   }
-  ],
-  "filename:internal_scan.svg": [
    {
     "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
    }
@@ -13217,6 +13212,15 @@
   "ipv4:127.0.0.1": [
    {
     "report": "arsenal-237-nethost-dll.json"
+   },
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   },
+   {
+    "report": "open-directory-94-103-1-13-20260423"
+   },
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817"
    }
   ],
   "domain:api.telegram.org": [
@@ -13300,6 +13304,11 @@
    {
     "report": "multivector-ecommerce-rce-toolkit-192-3-1-116",
     "role": "Attack-traffic relay"
+   }
+  ],
+  "filename:internal_scan.svg": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
    }
   ],
   "ipv4:202.71.14.31": [

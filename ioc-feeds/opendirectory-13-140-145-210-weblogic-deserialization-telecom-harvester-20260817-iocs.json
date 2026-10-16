@@ -671,18 +671,6 @@
         "confidence": "DEFINITE",
         "notes": "The IOS-XE WebUI Lua auth handler whose crash at line 336 generates the core dumps the operator harvests"
       }
-    ],
-    "process_artifacts": [
-      {
-        "value": "127.0.0.1:19999",
-        "confidence": "HIGH",
-        "notes": "Operator custom multi-session C2 console bound to localhost on the VPS. Verbs sessions and use <cid>. The server (console.py) was never archived"
-      },
-      {
-        "value": "127.0.0.1:1080",
-        "confidence": "HIGH",
-        "notes": "Local SOCKS listener created by the chisel reverse tunnel, referenced by both proxychains configs and by the SSH ProxyCommand"
-      }
     ]
   },
   "tls_certificates": [
@@ -740,7 +728,7 @@
     },
     {
       "type": "spray_credentials_attempted",
-      "target": "192.168.10.1",
+      "target": "an internal RFC1918 host on the victim municipality's network (address withheld)",
       "confidence": "DEFINITE (attempted); success unknown",
       "notes": "The password strings name an Ecuadorian municipal government and a biometrics system, which indicates prior knowledge of the environment",
       "value_redacted": "Administrador and admin crossed with a municipality-derived password, a biometrics-system-derived password, Admin123, admin, sa. The two environment-specific strings are withheld.",
@@ -1013,6 +1001,18 @@
       "value": "172.67.148.55",
       "category": "author-marked never-block",
       "context": "Cloudflare proxy A record for radius-sync.com"
+    },
+    {
+      "value": "127.0.0.1:19999",
+      "confidence": "HIGH",
+      "notes": "Operator custom multi-session C2 console bound to localhost on the VPS. Verbs sessions and use <cid>. The server (console.py) was never archived",
+      "category": "non-routable address (loopback)"
+    },
+    {
+      "value": "127.0.0.1:1080",
+      "confidence": "HIGH",
+      "notes": "Local SOCKS listener created by the chisel reverse tunnel, referenced by both proxychains configs and by the SSH ProxyCommand",
+      "category": "non-routable address (loopback)"
     }
   ]
 }

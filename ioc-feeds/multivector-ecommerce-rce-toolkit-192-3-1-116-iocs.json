@@ -303,18 +303,6 @@
       "context": "Two exploitation techniques are armed to deliver this single payload: Logback FileAppender direct write, and Eureka XStream RCE via remote curl download. No captured artifact shows the file present on any victim host."
     },
     {
-      "name": "internal_scan.svg",
-      "technique": "Multi-target XXE-to-SSRF including cloud instance metadata",
-      "confidence": "DEFINITE (payload) / UNCONFIRMED (outcome)",
-      "signature_strings": [
-        "169.254.169.254/latest/meta-data/",
-        "localhost:6379",
-        "127.0.0.1:3306",
-        "127.0.0.1:8080/actuator/"
-      ],
-      "context": "The cloud-metadata entity is the standout - it targets cloud IAM credential theft rather than internal service discovery."
-    },
-    {
       "name": "xxe_payload.xml / xxe2.xml",
       "technique": "XXE local file and environment read",
       "confidence": "DEFINITE",
@@ -421,16 +409,6 @@
       "39.104.38.237",
       "39.104.118.153",
       "47.110.134.211"
-    ],
-    "internal_addresses_referenced": [
-      {
-        "value": "10.206.0.16",
-        "context": "Internal address registered as a ZUUL Eureka service; links the Eureka-engaged target to the confirmed-theft platform (a HIGH inference, not DEFINITE)."
-      },
-      {
-        "value": "172.21.0.17",
-        "context": "Internal address targeted by a raw gopher:// MySQL authentication handshake. RFC1918 - not routable, context only."
-      }
     ]
   },
   "framework_exposure_fingerprints": {
@@ -516,6 +494,19 @@
       "value": "cs-pgcwufmiws.cn-hangzhou.fcapp.run",
       "category": "author-marked never-block",
       "context": "Attack-traffic relay"
+    },
+    {
+      "name": "internal_scan.svg",
+      "technique": "Multi-target XXE-to-SSRF including cloud instance metadata",
+      "confidence": "DEFINITE (payload) / UNCONFIRMED (outcome)",
+      "signature_strings": [
+        "169.254.169.254/latest/meta-data/",
+        "localhost:6379",
+        "127.0.0.1:3306",
+        "127.0.0.1:8080/actuator/"
+      ],
+      "context": "The cloud-metadata entity is the standout - it targets cloud IAM credential theft rather than internal service discovery.",
+      "category": "non-routable address (loopback and link-local SSRF targets)"
     }
   ]
 }

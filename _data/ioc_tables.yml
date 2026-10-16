@@ -6358,11 +6358,11 @@
   feed_url: "/ioc-feeds/multivector-ecommerce-rce-toolkit-192-3-1-116-iocs.json"
   report_url: "/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/"
   detection_url: "/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections"
-  total: 69
-  untyped: 50
+  total: 68
+  untyped: 47
   counts:
     domain: 34
-    filename: 5
+    filename: 4
     ipv4: 19
     path: 6
     sha256: 1
@@ -6762,12 +6762,6 @@
       action: null
       fp_risk: null
     - type: "filename"
-      value: "internal_scan.svg"
-      context: null
-      confidence: "DEFINITE (PAYLOAD) / UNCONFIRMED (OUTCOME)"
-      action: null
-      fp_risk: null
-    - type: "filename"
       value: "logback-evil.xml"
       context: "A logging-framework route to a web shell, independent of the JNDI vector."
       confidence: "DEFINITE"
@@ -6785,8 +6779,11 @@
       confidence: "MODERATE"
       action: null
       fp_risk: null
-  never_block_total: 3
+  never_block_total: 5
   never_block_rows:
+    - type: "ipv4"
+      value: "127.0.0.1"
+      context: "The cloud-metadata entity is the standout - it targets cloud IAM credential theft rather than internal service discovery."
     - type: "ipv4"
       value: "31.22.111.190"
       context: "Operator control-source address"
@@ -6796,6 +6793,9 @@
     - type: "domain"
       value: "open.oppomobile.com"
       context: "A major smartphone OEM's legitimate developer platform, targeted by the toolkit's own oppo_om_fuzz.py script (31x31 service/method API fuzzing plus JavaScript secret-hunting against its downloaded bundles). The malicious activity is the outbound fuzzing traffic, not the destination; blocking this domain would cut off legitimate OPPO developers and devices worldwide rather than the operator."
+    - type: "filename"
+      value: "internal_scan.svg"
+      context: "The cloud-metadata entity is the standout - it targets cloud IAM credential theft rather than internal service discovery."
 "new-files-found-20260408":
   slug: "new-files-found-20260408"
   page_url: "/ioc-feeds/new-files-found-20260408/"
@@ -7923,7 +7923,7 @@
   report_url: "/reports/open-directory-94-103-1-13-20260423/"
   detection_url: "/hunting-detections/open-directory-94-103-1-13-20260423-detections"
   total: 91
-  untyped: 111
+  untyped: 110
   counts:
     domain: 8
     filename: 23
@@ -8484,8 +8484,11 @@
       confidence: "MODERATE"
       action: null
       fp_risk: null
-  never_block_total: 8
+  never_block_total: 9
   never_block_rows:
+    - type: "ipv4"
+      value: "127.0.0.1"
+      context: "Loopback bound by the Orcus RAT as its local C2 listener on TCP/20268. The real upstream is hidden behind a chisel/plink tunnel, so the loopback address is an artifact of the tunnel architecture rather than an endpoint anyone can block; static analysis cannot reveal the true upstream and dynamic detonation is required to enumerate the tunnel peer. Confidence DEFINITE that the listener exists, but the value itself is not a matchable indicator. Originally carried in network_indicators.loopback_c2."
     - type: "ipv4"
       value: "172.86.76.198"
       context: "Hit by the OTP brute-force scripts (otp2.py / otp_brute.py) on AS14956 RouterHosting LLC (UAE), but the direction of that traffic could not be resolved from static analysis: it is LOW confidence operator-controlled, and could equally be the targeted application itself. Blocking it risks blocking the victim, not the operator."
@@ -9343,11 +9346,14 @@
       confidence: "DEFINITE"
       action: null
       fp_risk: null
-  never_block_total: 4
+  never_block_total: 5
   never_block_rows:
     - type: "ipv4"
       value: "104.21.41.159"
       context: "Cloudflare proxy A record for radius-sync.com"
+    - type: "ipv4"
+      value: "127.0.0.1"
+      context: "Operator custom multi-session C2 console bound to localhost on the VPS. Verbs sessions and use <cid>. The server (console.py) was never archived"
     - type: "ipv4"
       value: "172.67.148.55"
       context: "Cloudflare proxy A record for radius-sync.com"

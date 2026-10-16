@@ -48,10 +48,8 @@
         "136.0.88.10",
         "45.156.140.10",
         "214.192.190.10",
-        "235.31.147.10",
         "56.255.40.10",
         "85.230.83.10",
-        "251.46.111.10",
         "63.192.224.10",
         "202.24.217.10",
         "134.211.96.10",
@@ -59,11 +57,10 @@
         "13.180.6.10",
         "116.62.22.10",
         "94.158.41.10",
-        "252.158.2.10",
         "110.188.25.10",
         "141.227.248.10"
       ],
-      "reason": "Credential-stuffing TARGETS, not adversary infrastructure. The report identifies these as FTP servers the NsMiner spreader attempted to authenticate against, which makes them victim-side or prospective-victim addresses. They were carried in network_indicators.ips, an indicator bucket, so any consumer auto-ingesting this feed would alert on, or block, the targets of the attack rather than the attacker. Three of the values are additionally unroutable and could never be a real host: 235.31.147.10 is multicast (224.0.0.0/4), and 251.46.111.10 and 252.158.2.10 are reserved class-E space (240.0.0.0/4). One further value, 214.192.190.10, falls in a US Department of Defense block. CAVEAT ON THE LIST ITSELF: all 18 values end in .10, which is not a plausible distribution for real infrastructure and suggests an extraction artifact in the original analysis. The values are preserved here rather than deleted because the underlying finding (an FTP credential-stuffing target list) is real, but they should be re-derived from the sample before anyone relies on the specific addresses."
+      "reason": "Credential-stuffing TARGETS, not adversary infrastructure. The report identifies these as FTP servers the NsMiner spreader attempted to authenticate against, which makes them victim-side or prospective-victim addresses. They were carried in network_indicators.ips, an indicator bucket, so any consumer auto-ingesting this feed would alert on, or block, the targets of the attack rather than the attacker. Three of the values are additionally unroutable and could never be a real host: 235.31.147.10 is multicast (224.0.0.0/4), and 251.46.111.10 and 252.158.2.10 are reserved class-E space (240.0.0.0/4). One further value, 214.192.190.10, falls in a US Department of Defense block. CAVEAT ON THE LIST ITSELF: all 18 values as originally extracted end in .10, which is not a plausible distribution for real infrastructure and suggests an extraction artifact in the original analysis. The values are preserved here rather than deleted because the underlying finding (an FTP credential-stuffing target list) is real, but they should be re-derived from the sample before anyone relies on the specific addresses. The three unroutable values were removed from this list on 2026-10-16: no host can hold a multicast or reserved address, so they are neither targets nor anything to hunt."
     }
   }
 }
