@@ -1,11 +1,11 @@
 {
- "generated_at": "2026-10-16T02:06:08Z",
+ "generated_at": "2026-10-16T15:58:28Z",
  "counts": {
   "indicators": 2157,
   "reports": 59,
   "multi_report": 147,
-  "suppressed_benign": 129,
-  "never_block": 78
+  "suppressed_benign": 127,
+  "never_block": 80
  },
  "coverage": {
   "indexed": [
@@ -13207,6 +13207,16 @@
    },
    {
     "report": "turkish-arpa-openclaw-state-insurer-209.38.205.158"
+   }
+  ],
+  "ipv4:8.8.8.8": [
+   {
+    "report": "arsenal-237-nethost-dll.json"
+   }
+  ],
+  "ipv4:127.0.0.1": [
+   {
+    "report": "arsenal-237-nethost-dll.json"
    }
   ],
   "domain:api.telegram.org": [

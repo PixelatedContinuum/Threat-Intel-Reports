@@ -2054,8 +2054,14 @@
       confidence: "CONFIRMED"
       action: null
       fp_risk: null
-  never_block_total: 0
+  never_block_total: 2
   never_block_rows:
+    - type: "ipv4"
+      value: "127.0.0.1"
+      context: "Secondary C2 Target (Localhost Proxy)"
+    - type: "ipv4"
+      value: "8.8.8.8"
+      context: "Primary C2 Target (Proxy Endpoint)"
 "arsenal-237-new_enc-exe.json":
   slug: "arsenal-237-new_enc-exe"
   page_url: "/ioc-feeds/arsenal-237-new_enc-exe/"

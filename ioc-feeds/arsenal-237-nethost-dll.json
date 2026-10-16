@@ -33,26 +33,7 @@
     ]
   },
   "network_indicators": {
-    "ips": [
-      {
-        "ip_address": "8.8.8.8",
-        "port": 53,
-        "protocol": "TCP",
-        "purpose": "Primary C2 Target (Proxy Endpoint)",
-        "confidence": "CONFIRMED",
-        "detection_method": "Network egress monitoring, Firewall logs",
-        "blocking_recommendation": "URGENT - Block at perimeter firewall and endpoint level"
-      },
-      {
-        "ip_address": "127.0.0.1",
-        "port": 53,
-        "protocol": "TCP",
-        "purpose": "Secondary C2 Target (Localhost Proxy)",
-        "confidence": "CONFIRMED",
-        "detection_method": "Process network monitoring, netstat output",
-        "blocking_recommendation": "STANDARD - Block at endpoint level (local proxy prevention)"
-      }
-    ],
+    "ips": [],
     "domains": [],
     "urls": [],
     "dns_queries": [
@@ -559,5 +540,27 @@
       "Test/honeypot evasion capability (50%)",
       "UEFI/firmware persistence (40%)"
     ]
-  }
+  },
+  "hunt_only_never_block": [
+    {
+      "ip_address": "8.8.8.8",
+      "port": 53,
+      "protocol": "TCP",
+      "purpose": "Primary C2 Target (Proxy Endpoint)",
+      "confidence": "CONFIRMED",
+      "detection_method": "Network egress monitoring, Firewall logs",
+      "category": "public dns resolver",
+      "blocking_recommendation": "NEVER BLOCK - Google public DNS resolver; blocking it breaks name resolution. Hunt with the detection_method above."
+    },
+    {
+      "ip_address": "127.0.0.1",
+      "port": 53,
+      "protocol": "TCP",
+      "purpose": "Secondary C2 Target (Localhost Proxy)",
+      "confidence": "CONFIRMED",
+      "detection_method": "Process network monitoring, netstat output",
+      "category": "non-routable address (loopback)",
+      "blocking_recommendation": "NEVER BLOCK - loopback address; blocking it breaks local services. Hunt with the detection_method above."
+    }
+  ]
 }
