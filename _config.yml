@@ -109,3 +109,12 @@ defaults:
       path: "hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections.md"
     values:
       sitemap: false
+  # INV-2026-067 preview (T-0298.8): remove both blocks at go-live.
+  - scope:
+      path: "reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015"
+    values:
+      sitemap: false
+  - scope:
+      path: "hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections.md"
+    values:
+      sitemap: false
