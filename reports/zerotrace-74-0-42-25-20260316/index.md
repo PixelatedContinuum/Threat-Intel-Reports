@@ -1,7 +1,10 @@
 ---
 title: "ZeroTrace — Open Directory Exposure at 74.0.42.25"
 date: '2026-03-17'
-last_updated: '2026-03-19'
+last_updated: '2026-10-17'
+revisions:
+  - date: '2026-10-17'
+    note: "I corrected the XWorm detection anchors in sections 14 and 15. The mutex is set per build and shows up in the triage strings of only one of the seven stubs, so it is not a family anchor, and the stub rule I published, which depended on the panel typo strings, matched none of them. The detection page now carries a rule built on four plaintext status messages that all seven stubs contain. The other findings are unchanged."
 detection_page: /hunting-detections/opendirectory-74-0-42-25-20260316-detections/
 ioc_feed: /ioc-feeds/opendirectory-74-0-42-25-20260316/
 ioc_highlights:
@@ -47,7 +50,7 @@ ZeroTrace, a named threat actor corroborated by multiple independent security ve
   <figcaption><em>Figure 1: <a href="https://hunt.io/">Hunt.io</a> view of the open directory at 74.0.42.25, 4,750 files totalling 4GB hosted on Layer7 Technologies (AS40662). The indexed file tree exposes the operator's complete staging environment: malware toolkit, credential databases, and operator tooling left accessible without authentication.</em></figcaption>
 </figure>
 
-Overall the campaign scores 8.8 out of 10, which is HIGH. Full technical capabilities are dissected in §5, the risk table and business impact scenarios sit in §3, and attribution and the operator profile are in §8. The detection anchors, the XWorm mutex `5tK099W0Z6AMZVxQ` and the PureRAT TCP preamble `\x04\x00\x00\x00`, plus the full IOC feed, are in §14-15.
+Overall the campaign scores 8.8 out of 10, which is HIGH. Full technical capabilities are dissected in §5, the risk table and business impact scenarios sit in §3, and attribution and the operator profile are in §8. The detection anchors, the XWorm stub's plaintext status messages and the PureRAT TCP preamble `\x04\x00\x00\x00`, plus the full IOC feed, are in §14-15.
 
 The threat vector is email phishing. `Attachment.vbs` delivers ScreenConnect, which the operator uses for persistent remote access behind a Social Security Administration PDF decoy. From that foothold they can deploy XWorm for keylogging and ransomware, PureRAT for encrypted C2, or PureHVNC for hidden desktop sessions that make financial account takeover invisible. The BAK3R credential cracker tests the 9.1 million combo list against Office 365. All four C2 services converge on `185.49.126.140`, so blocking that single IP disrupts all four families at once.
 
@@ -1039,7 +1042,8 @@ The complete machine-readable IOC feed is available in the structured JSON forma
 
 **High-Reliability Detection Anchors:**
 
-- `**5tK099W0Z6AMZVxQ`**: XWorm V5.6 mutex; plaintext in binary; also the AES key derivation seed; not user-configurable in V5.6
+- `**Plugins Removed!`**, `**Modified successfully!`**, `**Plugin Error! `** and `**Content-length: 5235`**: four status messages in the XWorm client stub's own code, stored as plaintext UTF-16 and present in the triage strings of all seven stubs from this directory; they are not part of the encrypted settings, so a change of C2, key or mutex does not remove them
+- `**5tK099W0Z6AMZVxQ`**: the mutex of `XClient.exe`, plaintext in that stub; also its AES key derivation seed; it is set per build, and I found it in the triage strings of only that one of the seven stubs, so it identifies that build and is not a family anchor
 - `**\x04\x00\x00\x00`**: PureRAT TCP preamble; appears before TLS handshake on ports 56001-56003; network-detectable before encryption
 - `**Faidowra.IO.ModelConfiguration`**: PureRAT v4.1.9 namespace; specific to this build's deobfuscation
 - `**Ayzyqztcoa`**: PureRAT TLS certificate CN; auto-generated per build; unique to this campaign instance
@@ -1054,7 +1058,7 @@ The complete machine-readable IOC feed is available in the structured JSON forma
 
 **Detection coverage includes:**
 
-- **YARA rules:** File-based detection for XWorm V5.6 stubs, XwormLoader, PureRAT v4.1.9 (Faidowra.dll), Aspdkzb loader cluster, Raven RAT (vicTest.exe and RavenOriginalStub.exe), CVE-2025-30406 exploit kit
+- **YARA rules:** File-based detection for XWorm client stubs, the XWorm V5.6 builder, XwormLoader, PureRAT v4.1.9 (Faidowra.dll), Aspdkzb loader cluster, Raven RAT (vicTest.exe and RavenOriginalStub.exe), CVE-2025-30406 exploit kit
 - **Sigma rules:** Log-based behavioral detection for XWorm Registry writes, vlc_boxed.exe persistence, ScreenConnect silent install via wscript, PureRAT TCP preamble pattern, XwormLoader reflective load behaviors
 - **Suricata signatures:** Network detection for XWorm C2 traffic (port 5000, `<Xwormmm>` separator), PureRAT C2 (TCP preamble + TLS pattern on 56001-56003), ScreenConnect relay to `adminxyzhosting[.]com`
 - **EDR queries:** Behavioral queries for registry-based persistence, wscript spawning msiexec, PowerShell fileless execution patterns, VirtualAlloc+CreateThread sequences

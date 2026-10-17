@@ -4616,14 +4616,14 @@ opendirectory-62-60-237-100-20260506-detections:
     confidence: "MODERATE (HIGH that the analysed sample produced this JA3; MODERATE that other TLS clients do not share it, which was not measured)"
     attack: [T1071.001, T1573.001]
 opendirectory-74-0-42-25-20260316-detections:
-  - name: "XWorm V5.6 Victim Stub (Mutex or Version Strings, Plus a Panel Typo)"
+  - name: "XWorm Client Stub (Four Plaintext Status Messages)"
     engine: yara
     tier: Detection
     fence: 1
-    hash: "c8571205"
+    hash: "369ef470"
     head: "/* Yara Rule Set Identifier: OpenDirectory 74.0."
     robustness: 2
-    confidence: "HIGH"
+    confidence: "MODERATE"
     attack: [T1219]
   - name: "XWorm V5.6 Builder and C2 Panel"
     engine: yara

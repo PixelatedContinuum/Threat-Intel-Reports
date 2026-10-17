@@ -29,7 +29,7 @@ This open-directory exposure carried a seven-component multi-family MaaS toolkit
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
 
 **Highest-confidence anchors:**
-- The XWorm V5.6 mutex `5tK099W0Z6AMZVxQ` (which doubles as the AES key-derivation seed for the C2 protocol) paired with one of the panel's "New Clinet : " / "Groub : " typo strings (every match path needs a typo string, so a rebuild that changes both typos evades whatever the mutex is): near-zero FP, survives a change of the mutex alone (YARA Detection).
+- The XWorm client stub's four plaintext status messages (`Plugins Removed!`, `Modified successfully!`, `Plugin Error! ` and `Content-length: 5235`), all required: they are code in the stub, not builder configuration, so they survive a change of C2, key or mutex (YARA Detection). This replaces an earlier mutex-and-typo rule that matched none of our stubs; see the correction under that rule.
 - The PureRAT v4.1.9 `04 00 00 00` protocol preamble on ports 56001-56003, salvaged from a single-IP-pinned rule to scope on `$EXTERNAL_NET`, the only network signature in this campaign that survives infrastructure rotation (Suricata Detection).
 
 **Atomics routed to the IOC feed:** four of the original file's rules, the XWorm/PureHVNC/PureRAT multi-port C2-IP Sigma rule, the ScreenConnect relay domain+port Sigma rule, the XWorm C2 Suricata rule (pure IP:port, no payload content), and the ScreenConnect relay domain-content Suricata rule, each keyed solely on the hardcoded IP `185.49.126.140` or the domain `adminxyzhosting.com`. Both are already carried in [`opendirectory-74-0-42-25-20260316-iocs.json`](/ioc-feeds/opendirectory-74-0-42-25-20260316-iocs.json) with the exact ports/context documented; no new feed entries were required. Block them via the feed.
@@ -68,53 +68,52 @@ The same type → tier → family nesting is applied within the Sigma and Surica
 
 **XWorm V5.6**
 
-#### XWorm V5.6 Victim Stub (Mutex or Version Strings, Plus a Panel Typo)
+#### XWorm Client Stub (Four Plaintext Status Messages)
 
 **Tier:** Detection
 **Robustness:** 2
 **ATT&CK Coverage:** T1219 (Remote Access Software)
-**Confidence:** HIGH
-**Rationale:** The anti-double-execution mutex `5tK099W0Z6AMZVxQ` doubles as the AES key-derivation seed for this build's C2 protocol, making it costly for the operator to change without breaking the malware's own encryption. The condition is `($s1 or ($s2 and $s3)) and 1 of ($s4, $s5)`: either the mutex or the pair `<Xwormmm>` and `XWorm V5.6`, in every case together with at least one of the deliberate typo strings `New Clinet : ` and `Groub : ` from the panel's client-list protocol. No single literal alone carries the rule, but the typo strings are required on every path, so changing both typos is enough to evade whatever the mutex or version strings are, while changing the mutex alone is not (the version path remains). The typo strings are a builder default and not a technique invariant, which is why the Robustness score is 2.
-**False Positives:** None known — the mutex string, version tag, and panel typo strings are distinctive compiled/hardcoded values not present in legitimate software.
-**Blind Spots:** A rebuild that changes both typo strings evades, whatever the mutex or version strings are. A rebuild that changes only the mutex/AES-seed value still matches through the `<Xwormmm>` plus `XWorm V5.6` path, and one that keeps the mutex but changes the typos does not match. The rule tests the MZ header, a 150KB size bound and strings, not the VB.NET language, and targets the on-disk stub, not memory-only injection variants.
-**Validation:** Scan the analyzed XWorm V5.6 stub (`hash1` below) — the mutex plus a typo string, or `<Xwormmm>` plus `XWorm V5.6` plus a typo string, must match (the mutex alone does not, and neither does the version pair without a typo); an unrelated VB.NET application must NOT fire.
+**Confidence:** MODERATE
+**Rationale:** The stub encrypts its configuration (C2 host, port, key, separator, version tag, USB file name), so none of those values can be matched in the file. This rule keys on four messages that the stub's own code carries in the clear, stored as UTF-16 strings: `Plugins Removed!`, `Modified successfully!`, `Plugin Error! ` (with its trailing space) and the header value `Content-length: 5235`. All four are required. They are text from the stub's own code and not one of its encrypted settings, so changing the C2, the key or the mutex in the builder does not change them. I rate Robustness 2 because they are properties of this code base and not of the technique: a fork that rewrites those messages evades. In the triage string output all four are present in all seven stubs from this open directory (33,280 to 40,960 bytes). That is a string-level check, not a run of the compiled rule on the sample bytes, and it is why I hold the rule at MODERATE.
+**False Positives:** None known. I have not scanned a Windows goodware set with this rule, and I have not checked whether another family carries these four messages together.
+**Blind Spots:** A rebuild that edits any one of the four messages evades, because all four are required. A stub passed through a string-encrypting obfuscator evades, since these are plain literals; I have not tested such a build. The rule tests the MZ header, a 150KB size bound and the strings, not the .NET language or the XWorm version, and it targets the on-disk stub, not memory-only injection variants. The stub's configuration values (C2, key, mutex, version) are not matched at all, so this rule cannot tell one operator's build from another's.
+**Validation:** Scan the analyzed stub (`hash1` below); it must match. Remove any one of the four strings from a copy and the match must stop. An unrelated .NET application must NOT fire. I could not run these on the sample bytes for this revision, because no lab snapshot holds these samples.
 **Deployment:** Endpoint AV/EDR file scan, email-gateway attachment scanning, download-quarantine scanning.
+
+> **Correction, 2026-10-17:** This rule replaces `RAT_XWorm_V56_Stub`, which I withdrew. That rule required one of the panel's typo strings (`New Clinet : `, `Groub : `) on every path. Checked against the triage string output of the seven stubs from this directory, it matches none of them: six do not contain either typo string, and the seventh (`new_20vzzzzzz_202828.exe`) has the typos but neither the mutex nor `<Xwormmm>`. The mutex appears in the triage strings of only one stub, `XClient.exe`. I did not catch this before publishing because I tested the rule against synthetic fixtures built from its own strings and never against the sample bytes. If you deployed `RAT_XWorm_V56_Stub`, remove it and deploy this rule. The builder rule below is not affected: the builder holds those strings in the clear.
 
 ```yara
 /*
    Yara Rule Set
-   Identifier: OpenDirectory 74.0.42.25 — Multi-Family MaaS Toolkit
+   Identifier: OpenDirectory 74.0.42.25 - Multi-Family MaaS Toolkit
    Author: The Hunters Ledger
    Source: https://the-hunters-ledger.com/
    License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/
 */
 
-rule RAT_XWorm_V56_Stub {
+rule RAT_XWorm_Client_Stub {
    meta:
-      description = "Detects an XWorm V5.6 victim stub (a PE under 150 KB) by its plaintext mutex string, or by the strings <Xwormmm> and XWorm V5.6 together, in every case with at least one of the panel typo strings 'New Clinet : ' and 'Groub : '; the rule does not test the language or any protocol framing"
+      description = "Detects the XWorm RAT client stub (a PE under 150 KB) by four plaintext UTF-16 messages from its own code, Plugins Removed!, Modified successfully!, 'Plugin Error! ' with its trailing space, and the header value Content-length: 5235, all four required; the rule does not test the language, the version or any configuration value"
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/"
-      date = "2026-03-17"
-      modified = "2026-10-11"
+      date = "2026-10-17"
       hash1 = "427f818131c9beb7f8a487cb28fe13e2699db844ac3c9e9ae613fd35113fe77f"
       hash2 = "257b07c4b9eb72403769a12604e9ddb2bf5545fa"
       hash3 = "f4b00fbc6a3ce80b474334a3ccaadcf0"
       family = "XWorm"
       malware_type = "RAT"
       campaign = "ZeroTrace-MultiFamily-MaaS-74.0.42.25"
-      id = "75780e95-7bd7-5a15-9ed1-008b56fb6c44"
+      id = "a89c60b7-2d07-5901-bc76-ff8e302043d8"
    strings:
-      $s1 = "5tK099W0Z6AMZVxQ" ascii wide
-      $s2 = "<Xwormmm>" ascii wide
-      $s3 = "XWorm V5.6" ascii wide
-      $s4 = "New Clinet : " ascii wide
-      $s5 = "Groub : " ascii wide
+      $s1 = "Plugins Removed!" wide
+      $s2 = "Modified successfully!" wide
+      $s3 = "Plugin Error! " wide
+      $s4 = "Content-length: 5235" wide
    condition:
       uint16(0) == 0x5A4D and
       filesize < 150KB and
-      ($s1 or ($s2 and $s3)) and
-      1 of ($s4, $s5)
+      all of them
 }
 ```
 

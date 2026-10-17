@@ -5,8 +5,8 @@
   "zip": {
     "file": "hunters-ledger-stix-bundles.zip",
     "url": "https://the-hunters-ledger.com/stix/hunters-ledger-stix-bundles.zip",
-    "sha256": "3f3e551bdee634e66df9909a76aa35094b6ccfc50e7e739620a25bf59605b85f",
-    "bytes": 1983821
+    "sha256": "9d152c88f599841901b86e9bacdebd827100e4481e2a4ff14f9d44b20557a6d7",
+    "bytes": 1983863
   },
   "bundles": [
     {
@@ -451,13 +451,13 @@
       "file": "zerotrace-74-0-42-25-20260316.json",
       "url": "https://the-hunters-ledger.com/stix/zerotrace-74-0-42-25-20260316.json",
       "report_url": "https://the-hunters-ledger.com/reports/zerotrace-74-0-42-25-20260316/",
-      "bundle_id": "bundle--5d2c35dc-1f37-4e57-8486-ea8a3d4710db",
+      "bundle_id": "bundle--80f91156-7e37-49ee-86f6-e5ef0d1e0a3f",
       "report_id": "report--6a5d5aeb-1950-5205-a90e-967908691438",
-      "sha256": "b7139ac2efdbbd0e9e419becc9d2b4500f24b3822fa449073d884e9058e22f0d",
-      "bytes": 167562,
+      "sha256": "8ab689c9a9f0d4f5491ed492da17c64c37d330de22ff08698485cd593aa0bfe3",
+      "bytes": 167497,
       "objects": 213,
       "indicators": 39,
-      "modified": "2026-10-17T16:28:40.562437Z"
+      "modified": "2026-10-17T20:58:00.294068Z"
     },
     {
       "slug": "sliver-open-directory",
