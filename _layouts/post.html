@@ -246,8 +246,15 @@ the coverage above is narrower than the rule set.</em></p>
 </div>
 {% endif %}
 
+{%- comment -%} The MISP event for this page, from the generated _data/misp_events.yml (generate-misp-feed.js). No row, no link. {%- endcomment -%}
+{%- assign _misp_ev = nil -%}
+{%- if page.path contains "hunting-detections" -%}
+  {%- assign _misp_ev = site.data.misp_events.events | where: "detection_url", page.url | first -%}
+{%- else -%}
+  {%- assign _misp_ev = site.data.misp_events.events | where: "report_url", page.url | first -%}
+{%- endif -%}
 {% unless page.path contains "hunting-detections" %}
-{% if page.detection_page or page.ioc_feed or page.stix_bundle %}
+{% if page.detection_page or page.ioc_feed or page.stix_bundle or _misp_ev %}
 <div class="hl-quicklinks" data-pagefind-ignore>
   {% if page.detection_page %}
   {% if page.detection_sections %}
@@ -280,6 +287,12 @@ the coverage above is narrower than the rule set.</em></p>
     <span class="hl-quicklink__icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></span>
     <span class="hl-quicklink__label">STIX</span>
   </button>
+  {% endif %}
+  {% if _misp_ev %}
+  <a class="hl-quicklink" href="{{ _misp_ev.event_url }}" target="_blank" rel="noopener noreferrer" aria-label="MISP event for this report (JSON, from the MISP feed)">
+    <span class="hl-quicklink__icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 4v16"/></svg></span>
+    <span class="hl-quicklink__label">MISP</span>
+  </a>
   {% endif %}
 </div>
 {% if page.detection_sections %}
@@ -329,6 +342,14 @@ the coverage above is narrower than the rule set.</em></p>
 {% endif %}
 {% endif %}
 {% endunless %}
+{% if page.path contains "hunting-detections" and _misp_ev %}
+<div class="hl-quicklinks" data-pagefind-ignore>
+  <a class="hl-quicklink" href="{{ _misp_ev.event_url }}" target="_blank" rel="noopener noreferrer" aria-label="MISP event carrying these rules (JSON, from the MISP feed)">
+    <span class="hl-quicklink__icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 4v16"/></svg></span>
+    <span class="hl-quicklink__label">MISP</span>
+  </a>
+</div>
+{% endif %}
 
 </div>
 

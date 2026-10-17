@@ -30,6 +30,9 @@ try {
   process.exit(2);
 }
 
+/* The page-to-event join the layouts read, written beside the feed but outside it. */
+var DATA_KEY = '_data/misp_events.yml';
+
 var KEEP = { 'index.md': 1, 'changelog.md': 1, '_state.json': 1, 'manifest.json': 1, 'hashes.csv': 1 };
 
 function readState() {
@@ -69,7 +72,7 @@ function run(opts) {
   var reportByUrl = {};
   reports.forEach(function (r) { reportByUrl[r.url] = r; });
 
-  var events = [], notes = [], problems = [], skipped = [];
+  var events = [], notes = [], problems = [], skipped = [], entryBySlug = {};
   catalog.forEach(function (e) {
     var slug = M.slugOf(e);
     if (!slug) { problems.push('a catalog entry ("' + e.title + '") has no report, detection or feed url to name it by'); return; }
@@ -97,6 +100,7 @@ function run(opts) {
       }
       rules = parsed.rules;
     }
+    entryBySlug[slug] = e;
     var ev = M.buildEvent({ entry: e, slug: slug, bundle: bundle, rules: rules, attackNames: attackNames, galaxyNames: galaxyNames });
     if (!ev.attributes.some(function (a) { return a.type !== 'link'; })) {
       notes.push(slug + ': no indicator or rule to carry, so no event');
@@ -130,6 +134,8 @@ function run(opts) {
   files['hashes.csv'] = M.hashesCsv(st.events);
   st.events.forEach(function (ev) { files[ev.uuid + '.json'] = JSON.stringify(M.eventJson(ev), null, 2) + '\n'; });
   var stateText = JSON.stringify(st.state, null, 2) + '\n';
+  var dataText = M.eventsYaml(st.events, entryBySlug, yaml);
+  files[DATA_KEY] = dataText;
 
   var have = existingEventFiles();
   var removed = [], orphans = [];
@@ -141,7 +147,9 @@ function run(opts) {
 
   if (!opts.dryRun) {
     fs.mkdirSync(M.FEED_DIR, { recursive: true });
-    Object.keys(files).forEach(function (f) { fs.writeFileSync(path.join(M.FEED_DIR, f), files[f], 'utf8'); });
+    Object.keys(files).forEach(function (f) {
+      fs.writeFileSync(f === DATA_KEY ? M.EVENTS_DATA_FILE : path.join(M.FEED_DIR, f), files[f], 'utf8');
+    });
     fs.writeFileSync(M.STATE_FILE, stateText, 'utf8');
     Object.keys(have).forEach(function (u) { if (!files[u + '.json']) fs.rmSync(have[u], { force: true }); });
   }
@@ -154,7 +162,7 @@ function run(opts) {
   };
 }
 
-module.exports = { run: run, KEEP: KEEP, existingEventFiles: existingEventFiles };
+module.exports = { run: run, KEEP: KEEP, DATA_KEY: DATA_KEY, existingEventFiles: existingEventFiles };
 
 if (require.main === module) {
   var dry = process.argv.indexOf('--dry-run') !== -1;

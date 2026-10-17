@@ -227,3 +227,21 @@ test('stamp gives events changed in one run distinct timestamps above the feed m
   assert.equal(fixed.restamped, 3);
   assert.deepEqual(fixed.duplicateTimestamps, []);
 });
+
+test('eventsYaml joins each event to its report and detection page, keyed by the URLs the layouts hold', function () {
+  const yaml = require('js-yaml');
+  const events = [
+    { slug: 'b-report', uuid: M.eventUuid('b-report') },
+    { slug: 'a-det-only', uuid: M.eventUuid('a-det-only') }
+  ];
+  const entries = {
+    'b-report': { report_url: '/reports/b-report/', detection_url: '/hunting-detections/b-report-detections' },
+    'a-det-only': { detection_url: '/hunting-detections/a-det-only-detections' }
+  };
+  const doc = yaml.load(M.eventsYaml(events, entries, yaml));
+  assert.deepEqual(doc.events.map(e => e.slug), ['a-det-only', 'b-report'], 'sorted by slug so the file is stable');
+  assert.equal(doc.events[0].report_url, undefined, 'a detection-only campaign has no report_url row');
+  assert.equal(doc.events[0].detection_url, '/hunting-detections/a-det-only-detections/', 'trailing slash added: page.url always has one');
+  assert.equal(doc.events[1].event_url, '/feeds/misp/' + M.eventUuid('b-report') + '.json');
+  assert.equal(doc.events[1].report_url, '/reports/b-report/');
+});

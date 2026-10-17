@@ -50,9 +50,11 @@ if (gen.status !== 'FAIL') {
   }
   Object.keys(gen.files).forEach(function (f) {
     var cur = null;
-    try { cur = fs.readFileSync(path.join(M.FEED_DIR, f), 'utf8'); } catch (e) { cur = null; }
-    if (cur === null) problems.push('feeds/misp/' + f + ' is missing. Run `node generate-misp-feed.js`.');
-    else if (cur !== gen.files[f]) problems.push('feeds/misp/' + f + ' is stale. Run `node generate-misp-feed.js`.');
+    var onDisk = f === GEN.DATA_KEY ? M.EVENTS_DATA_FILE : path.join(M.FEED_DIR, f);
+    var shown = f === GEN.DATA_KEY ? f : 'feeds/misp/' + f;
+    try { cur = fs.readFileSync(onDisk, 'utf8'); } catch (e) { cur = null; }
+    if (cur === null) problems.push(shown + ' is missing. Run `node generate-misp-feed.js`.');
+    else if (cur !== gen.files[f]) problems.push(shown + ' is stale. Run `node generate-misp-feed.js`.');
   });
   gen.orphans.forEach(function (u) {
     problems.push('feeds/misp/' + u + '.json is on disk but nothing generates it and the state does not record it as withdrawn.');
