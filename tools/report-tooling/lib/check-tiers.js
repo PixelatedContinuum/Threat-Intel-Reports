@@ -67,6 +67,12 @@ function verdict(status, reason, problems, marked, byTier, unmarked, sequence, a
    "byte-level exploitation teardown third, ahead of campaign scale and the payload" the note
    describes. Measured against that sequence in the tests. */
 function shapeAdvisories(sequence) {
+  return shapeAdvisoryList(sequence).map(function (a) { return a.message; });
+}
+
+/* The same advisories with the section each one is about, so an accepted exception can be
+   matched to it by section text. */
+function shapeAdvisoryList(sequence) {
   var advisories = [];
   var first3 = -1;
   var first2 = -1;
@@ -77,18 +83,58 @@ function shapeAdvisories(sequence) {
   if (first3 === -1) return advisories;
 
   if (first2 === -1 || first3 < first2) {
-    advisories.push('Tier 3 section "' + sequence[first3].text + '" appears before any Tier 2 ' +
+    advisories.push({ section: sequence[first3].text,
+      message: 'Tier 3 section "' + sequence[first3].text + '" appears before any Tier 2 ' +
       'section. Deep teardown material placed early puts the densest register in front of a ' +
-      'reader before the tradecraft it builds on. Not a failure: check the reading order.');
+      'reader before the tradecraft it builds on. Not a failure: check the reading order.' });
     return advisories;
   }
 
   if (sequence.length >= 6 && first3 < Math.ceil(sequence.length / 3)) {
-    advisories.push('Tier 3 section "' + sequence[first3].text + '" appears at position ' +
+    advisories.push({ section: sequence[first3].text,
+      message: 'Tier 3 section "' + sequence[first3].text + '" appears at position ' +
       (first3 + 1) + ' of ' + sequence.length + ', in the first third of the report, ahead of ' +
-      'most of the Tier 2 tradecraft. Not a failure: check the reading order.');
+      'most of the Tier 2 tradecraft. Not a failure: check the reading order.' });
   }
   return advisories;
+}
+
+/* Accepted advisories. An advisory is either applied to the report or recorded here as
+   intentional, so the printed list is empty or every line in it is explained. The entry is
+   keyed by the report's folder name and pinned to the section the advisory names, so a
+   renamed or reordered teardown section stops matching and its advisory prints again. */
+var EXCEPTIONS_FILE = path.join(__dirname, '..', 'data', 'tier-advisory-exceptions.json');
+
+function loadExceptions() {
+  try { return JSON.parse(fs.readFileSync(EXCEPTIONS_FILE, 'utf8')); }
+  catch (e) { return {}; }
+}
+
+function reportKey(label) {
+  var m = String(label || '').replace(/\\/g, '/').match(/([^/]+)\/index\.md$/);
+  return m ? m[1] : null;
+}
+
+/* Splits the advisories for one report into the unexplained ones (kept in `advisories`, the
+   field every caller already prints) and the accepted ones, each with its recorded reason. */
+function applyExceptions(sequence, label) {
+  var key = reportKey(label);
+  var ex = key ? (loadExceptions()[key] || null) : null;
+  var open = [];
+  var accepted = [];
+  shapeAdvisoryList(sequence).forEach(function (a) {
+    if (ex && ex.section === a.section && ex.reason) {
+      accepted.push({ advisory: a.message, reason: ex.reason });
+    } else {
+      open.push(a.message);
+    }
+  });
+  if (ex && !accepted.length) {
+    open.push('The recorded exception for "' + ex.section + '" in data/tier-advisory-exceptions.json ' +
+      'no longer matches an advisory (the section was renamed, moved or no longer raises one). ' +
+      'Remove or update the entry.');
+  }
+  return { advisories: open, accepted: accepted };
 }
 
 /* Every h2 in source order with the tier its following line declares, plus any
@@ -206,8 +252,12 @@ function checkMarkdown(src, label) {
       String(e.message).split('\n')[0]);
   }
   var r = validate(scan.headings);
-  return verdict(r.status, r.reason, r.problems, r.marked, r.byTier, r.unmarked,
-                 r.sequence, r.advisories);
+  var v = verdict(r.status, r.reason, r.problems, r.marked, r.byTier, r.unmarked,
+                  r.sequence, r.advisories);
+  var applied = applyExceptions(r.sequence, label);
+  v.advisories = applied.advisories;
+  v.accepted = applied.accepted;
+  return v;
 }
 
 function checkDom(doc, label) {
@@ -234,6 +284,8 @@ module.exports = {
   scanMarkdown: scanMarkdown,
   validate: validate,
   shapeAdvisories: shapeAdvisories,
+  shapeAdvisoryList: shapeAdvisoryList,
+  applyExceptions: applyExceptions,
   checkMarkdown: checkMarkdown,
   checkDom: checkDom,
   TIER_RE: TIER_RE
@@ -308,6 +360,7 @@ if (require.main === module) {
       }).join(' | '));
     }
     (r.advisories || []).forEach(function (a) { console.log('  ADVISORY: ' + a); });
+    (r.accepted || []).forEach(function (a) { console.log('  ACCEPTED: ' + a.reason); });
     process.exit(r.status === 'PASS' ? 0 : r.status === 'FAIL' ? 1 : 2);
   })();
 }

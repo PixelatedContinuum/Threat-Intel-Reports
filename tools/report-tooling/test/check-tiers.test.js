@@ -144,3 +144,31 @@ test('an unmarked report carries an empty sequence and no advisory', function ()
   assert.deepStrictEqual(r.sequence, []);
   assert.deepStrictEqual(r.advisories, []);
 });
+
+// An advisory is either applied to the report or recorded in data/tier-advisory-exceptions.json,
+// so the printed list is empty or every line is explained (T-0213).
+test('a recorded exception moves the advisory from advisories to accepted, with its reason', function () {
+  var seq = [{ tier: '1', text: 'BLUF' }, { tier: '3', text: 'Teardown' }, { tier: '2', text: 'Reference' }];
+  var fs = require('node:fs');
+  var orig = fs.readFileSync;
+  fs.readFileSync = function (p) {
+    if (String(p).indexOf('tier-advisory-exceptions.json') !== -1) {
+      return JSON.stringify({ 'demo-report': { section: 'Teardown', reason: 'intentional for the test' } });
+    }
+    return orig.apply(this, arguments);
+  };
+  try {
+    var hit = CT.applyExceptions(seq, 'reports/demo-report/index.md');
+    assert.deepStrictEqual(hit.advisories, []);
+    assert.strictEqual(hit.accepted.length, 1);
+    assert.strictEqual(hit.accepted[0].reason, 'intentional for the test');
+    var other = CT.applyExceptions(seq, 'reports/another-report/index.md');
+    assert.strictEqual(other.advisories.length, 1);
+    assert.deepStrictEqual(other.accepted, []);
+    var renamed = CT.applyExceptions([{ tier: '1', text: 'BLUF' }, { tier: '3', text: 'Renamed' }, { tier: '2', text: 'Reference' }],
+      'reports/demo-report/index.md');
+    assert.strictEqual(renamed.accepted.length, 0);
+    assert.strictEqual(renamed.advisories.length, 2, 'the new advisory and the stale-exception note both print');
+    assert.match(renamed.advisories.join(' '), /no longer matches/);
+  } finally { fs.readFileSync = orig; }
+});

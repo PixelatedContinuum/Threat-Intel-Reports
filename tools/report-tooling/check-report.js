@@ -474,6 +474,7 @@ if (require.main === module) {
         }).join(' | '));
       }
       (tiers.advisories || []).forEach(function (a) { console.log('    ADVISORY: ' + a); });
+      (tiers.accepted || []).forEach(function (a) { console.log('    ACCEPTED: ' + a.reason); });
     }
     process.exit(r.status === 'PASS' ? 0 : r.status === 'FAIL' ? 1 : 2);
   })();

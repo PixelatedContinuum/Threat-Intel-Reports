@@ -1,0 +1,130 @@
+{
+  "AdvancedRouterScanner": {
+    "section": "2. Tool Overview (poc.py)",
+    "reason": "Reviewed 2026-10-17 (T-0213), not reordered. The report's body is the teardown straight after the Tier 1 brief, with the Tier 2 reference sections after it (tier sequence 1132222222122222). Moving sections of a published report is an editorial revision, left for the report's next revision."
+  },
+  "Hybrid-Loader-Stealer-Sogou": {
+    "section": "Comprehensive Malware Analysis",
+    "reason": "Reviewed 2026-10-17 (T-0213), not reordered. The report's body is the teardown straight after the Tier 1 brief, with the Tier 2 reference sections after it (tier sequence 113333333233232321222). Moving sections of a published report is an editorial revision, left for the report's next revision."
+  },
+  "ai-agent-frameworks-2026-05-23": {
+    "section": "4. Technical Capabilities Deep-Dive: Per Case",
+    "reason": "Reviewed 2026-10-17 (T-0213), not reordered. Canonical report order (report-structure-template: executive framing and scope, then the technical descent, then the reference apparatus): the Tier 2 sections after the teardown carry the findings and reference sections, so the teardown sits in the first third by design (tier sequence 121233322222222)."
+  },
+  "arsenal-237-new-files": {
+    "section": "Component Analysis Index",
+    "reason": "Reviewed 2026-10-17 (T-0213), not reordered. Canonical report order (report-structure-template: executive framing and scope, then the technical descent, then the reference apparatus): the Tier 2 sections after the teardown carry the findings and reference sections, so the teardown sits in the first third by design (tier sequence 1122232222212222)."
+  },
+  "bellamain-turkish-phaas-79-137-192-3-20260516": {
+    "section": "5. Technical Capabilities Deep-Dive",
+    "reason": "Reviewed 2026-10-17 (T-0213), not reordered. Canonical report order (report-structure-template: executive framing and scope, then the technical descent, then the reference apparatus): the Tier 2 sections after the teardown carry the findings and reference sections, so the teardown sits in the first third by design (tier sequence 12123332222222)."
+  },
+  "dual-rat-analysis": {
+    "section": "Sample 1: Quasar RAT Analysis",
+    "reason": "Reviewed 2026-10-17 (T-0213), not reordered. The report's body is the teardown straight after the Tier 1 brief, with the Tier 2 reference sections after it (tier sequence 1332232222). Moving sections of a published report is an editorial revision, left for the report's next revision."
+  },
+  "evilsoul-engine-stealer-maas-144-172-103-98": {
+    "section": "5. Technical Capabilities: The Built Stealer Payload",
+    "reason": "Reviewed 2026-10-17 (T-0213), not reordered. Canonical report order (report-structure-template: executive framing and scope, then the technical descent, then the reference apparatus): the Tier 2 sections after the teardown carry the findings and reference sections, so the teardown sits in the first third by design (tier sequence 11223333322222222)."
+  },
+  "flaskc2-postex-toolkit-67-215-232-25": {
+    "section": "4. The MSSQL CLR Reverse-Shell Backdoor (cmd_exec.dll)",
+    "reason": "Reviewed 2026-10-17 (T-0213), not reordered. Canonical report order (report-structure-template: executive framing and scope, then the technical descent, then the reference apparatus): the Tier 2 sections after the teardown carry the findings and reference sections, so the teardown sits in the first third by design (tier sequence 12233332221222)."
+  },
+  "ghost-cryptojacker-vova75rus-77.110.96.200": {
+    "section": "4. Technical Capabilities Deep-Dive",
+    "reason": "Reviewed 2026-10-17 (T-0213), not reordered. Canonical report order (report-structure-template: executive framing and scope, then the technical descent, then the reference apparatus): the Tier 2 sections after the teardown carry the findings and reference sections, so the teardown sits in the first third by design (tier sequence 1123332222222)."
+  },
+  "inkognito-russian-vpn-phishing-185-221-196-118-20260516": {
+    "section": "4. Capabilities Deep-Dive",
+    "reason": "Reviewed 2026-10-17 (T-0213), not reordered. Canonical report order (report-structure-template: executive framing and scope, then the technical descent, then the reference apparatus): the Tier 2 sections after the teardown carry the findings and reference sections, so the teardown sits in the first third by design (tier sequence 1223332222222)."
+  },
+  "kaido-quasar-rat-144-172-109-203": {
+    "section": "4. Technical Capabilities Deep-Dive",
+    "reason": "Reviewed 2026-10-17 (T-0213), not reordered. Canonical report order (report-structure-template: executive framing and scope, then the technical descent, then the reference apparatus): the Tier 2 sections after the teardown carry the findings and reference sections, so the teardown sits in the first third by design (tier sequence 1123332222222)."
+  },
+  "malware-analysis-houselet": {
+    "section": "2. File & Build Characteristics",
+    "reason": "Reviewed 2026-10-17 (T-0213), not reordered. The report's body is the teardown straight after the Tier 1 brief, with the Tier 2 reference sections after it (tier sequence 1113333322222212). Moving sections of a published report is an editorial revision, left for the report's next revision."
+  },
+  "multivector-ecommerce-rce-toolkit-192-3-1-116": {
+    "section": "6. Anchor 1: A Rent-to-Own Platform, Confirmed Multi-Victim Data Theft",
+    "reason": "Reviewed 2026-10-17 (T-0213), not reordered. Canonical report order (report-structure-template: executive framing and scope, then the technical descent, then the reference apparatus): the Tier 2 sections after the teardown carry the findings and reference sections, so the teardown sits in the first third by design (tier sequence 1212233322222222)."
+  },
+  "new-files-found-20260408": {
+    "section": "4. Technical Analysis",
+    "reason": "Reviewed 2026-10-17 (T-0213), not reordered. Canonical report order (report-structure-template: executive framing and scope, then the technical descent, then the reference apparatus): the Tier 2 sections after the teardown carry the findings and reference sections, so the teardown sits in the first third by design (tier sequence 122322222222222)."
+  },
+  "open-directory-172-105-0-126-20260406": {
+    "section": "2. Sample Inventory & Static Analysis",
+    "reason": "Reviewed 2026-10-17 (T-0213), not reordered. The report's body is the teardown straight after the Tier 1 brief, with the Tier 2 reference sections after it (tier sequence 113322222221222). Moving sections of a published report is an editorial revision, left for the report's next revision."
+  },
+  "open-directory-193-56-255-154-xiebroc2": {
+    "section": "4. Technical Capabilities: XiebroC2 v3.1 Deep-Dive",
+    "reason": "Reviewed 2026-10-17 (T-0213), not reordered. Canonical report order (report-structure-template: executive framing and scope, then the technical descent, then the reference apparatus): the Tier 2 sections after the teardown carry the findings and reference sections, so the teardown sits in the first third by design (tier sequence 111222333333333333333332222222222222222222222222)."
+  },
+  "opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812": {
+    "section": "5. The Interception Mechanism",
+    "reason": "Reviewed 2026-10-17 (T-0213), not reordered. Canonical report order (report-structure-template: executive framing and scope, then the technical descent, then the reference apparatus): the Tier 2 sections after the teardown carry the findings and reference sections, so the teardown sits in the first third by design (tier sequence 1122333222222222)."
+  },
+  "opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517": {
+    "section": "4. Technical Capabilities Deep-Dive",
+    "reason": "Reviewed 2026-10-17 (T-0213), not reordered. Canonical report order (report-structure-template: executive framing and scope, then the technical descent, then the reference apparatus): the Tier 2 sections after the teardown carry the findings and reference sections, so the teardown sits in the first third by design (tier sequence 1223232222222)."
+  },
+  "opendirectory-45-130-148-125-20260430": {
+    "section": "4. Technical Analysis: Static Findings",
+    "reason": "Reviewed 2026-10-17 (T-0213), not reordered. Canonical report order (report-structure-template: executive framing and scope, then the technical descent, then the reference apparatus): the Tier 2 sections after the teardown carry the findings and reference sections, so the teardown sits in the first third by design (tier sequence 11223322222222222)."
+  },
+  "opendirectory-62-60-237-100-20260506": {
+    "section": "4. Static Analysis: Distribution Layer",
+    "reason": "Reviewed 2026-10-17 (T-0213), not reordered. Canonical report order (report-structure-template: executive framing and scope, then the technical descent, then the reference apparatus): the Tier 2 sections after the teardown carry the findings and reference sections, so the teardown sits in the first third by design (tier sequence 1122333222222222)."
+  },
+  "opendirectory-79-137-192-3-20260515": {
+    "section": "4. Capabilities Deep-Dive",
+    "reason": "Reviewed 2026-10-17 (T-0213), not reordered. Canonical report order (report-structure-template: executive framing and scope, then the technical descent, then the reference apparatus): the Tier 2 sections after the teardown carry the findings and reference sections, so the teardown sits in the first third by design (tier sequence 1223332222222)."
+  },
+  "quasar-xworm-powershell": {
+    "section": "Technical Analysis",
+    "reason": "Reviewed 2026-10-17 (T-0213), not reordered. The report's body is the teardown straight after the Tier 1 brief, with the Tier 2 reference sections after it (tier sequence 1322222). Moving sections of a published report is an editorial revision, left for the report's next revision."
+  },
+  "remcos-opendirectory": {
+    "section": "3. PERSISTENCE MECHANISMS",
+    "reason": "Reviewed 2026-10-17 (T-0213), not reordered. Canonical report order (report-structure-template: executive framing and scope, then the technical descent, then the reference apparatus): the Tier 2 sections after the teardown carry the findings and reference sections, so the teardown sits in the first third by design (tier sequence 1123332222222)."
+  },
+  "rovodev-mirai-matrix-c2-87.106.143.220": {
+    "section": "4. Capabilities Deep-Dive",
+    "reason": "Reviewed 2026-10-17 (T-0213), not reordered. Canonical report order (report-structure-template: executive framing and scope, then the technical descent, then the reference apparatus): the Tier 2 sections after the teardown carry the findings and reference sections, so the teardown sits in the first third by design (tier sequence 11233322222222)."
+  },
+  "russian-gemini-credential-mill-213.165.51.115": {
+    "section": "4. Capabilities Deep-Dive",
+    "reason": "Reviewed 2026-10-17 (T-0213), not reordered. Canonical report order (report-structure-template: executive framing and scope, then the technical descent, then the reference apparatus): the Tier 2 sections after the teardown carry the findings and reference sections, so the teardown sits in the first third by design (tier sequence 11233322222222)."
+  },
+  "seasia-gov-exploitation-toolkit-144-172-106-236": {
+    "section": "4. Technical Analysis: The Exploitation Toolkit",
+    "reason": "Reviewed 2026-10-17 (T-0213), not reordered. Canonical report order (report-structure-template: executive framing and scope, then the technical descent, then the reference apparatus): the Tier 2 sections after the teardown carry the findings and reference sections, so the teardown sits in the first third by design (tier sequence 1123222222222222)."
+  },
+  "shadow-xworm-opendirectory": {
+    "section": "5. Technical Analysis: Shadow RAT v2.6.4.0",
+    "reason": "Reviewed 2026-10-17 (T-0213), not reordered. Canonical report order (report-structure-template: executive framing and scope, then the technical descent, then the reference apparatus): the Tier 2 sections after the teardown carry the findings and reference sections, so the teardown sits in the first third by design (tier sequence 1111233222222222)."
+  },
+  "sliver-open-directory": {
+    "section": "3. Kill Chain Analysis",
+    "reason": "Reviewed 2026-10-17 (T-0213), not reordered. Canonical report order (report-structure-template: executive framing and scope, then the technical descent, then the reference apparatus): the Tier 2 sections after the teardown carry the findings and reference sections, so the teardown sits in the first third by design (tier sequence 112332222222222)."
+  },
+  "turkish-arpa-openclaw-state-insurer-209.38.205.158": {
+    "section": "4. Capabilities Deep-Dive",
+    "reason": "Reviewed 2026-10-17 (T-0213), not reordered. Canonical report order (report-structure-template: executive framing and scope, then the technical descent, then the reference apparatus): the Tier 2 sections after the teardown carry the findings and reference sections, so the teardown sits in the first third by design (tier sequence 11233322222222)."
+  },
+  "webserver-compromise-kit-91-236-230-250": {
+    "section": "Technical Analysis",
+    "reason": "Reviewed 2026-10-17 (T-0213), not reordered. Canonical report order (report-structure-template: executive framing and scope, then the technical descent, then the reference apparatus): the Tier 2 sections after the teardown carry the findings and reference sections, so the teardown sits in the first third by design (tier sequence 1123222222222)."
+  },
+  "webshells-to-the-cloud": {
+    "section": "Technical Analysis",
+    "reason": "Reviewed 2026-10-17 (T-0213), not reordered. The report's body is the teardown straight after the Tier 1 brief, with the Tier 2 reference sections after it (tier sequence 13322). Moving sections of a published report is an editorial revision, left for the report's next revision."
+  },
+  "zerotrace-74-0-42-25-20260316": {
+    "section": "5. Technical Capabilities Deep-Dive",
+    "reason": "Reviewed 2026-10-17 (T-0213), not reordered. Canonical report order (report-structure-template: executive framing and scope, then the technical descent, then the reference apparatus): the Tier 2 sections after the teardown carry the findings and reference sections, so the teardown sits in the first third by design (tier sequence 111232222222222222)."
+  }
+}
