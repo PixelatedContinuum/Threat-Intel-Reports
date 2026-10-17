@@ -1,0 +1,43 @@
+---
+layout: none
+permalink: /changes/feed.xml
+sitemap: false
+---
+<?xml version="1.0" encoding="UTF-8"?>
+{%- comment -%}
+  Report revisions as an Atom feed, one entry per revision, newest first. Same
+  shape as /hunting-detections/feed.xml; the entries come from the shared
+  _includes/changes-items.liquid, so this and /changes/ always agree. The entry
+  id carries the revision's date and its position in the report's list, so a
+  new revision is a new entry and an old one never changes id.
+{%- endcomment -%}
+{%- include changes-items.liquid -%}
+{%- assign _latest = changes_items | first | split: "~~" -%}
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>{{ site.title | xml_escape }}: Report Changes</title>
+  <subtitle>What changed in a published report after it went out, one entry per revision.</subtitle>
+  <link href="{{ site.url }}/changes/feed.xml" rel="self" type="application/atom+xml"/>
+  <link href="{{ site.url }}/changes/" rel="alternate" type="text/html"/>
+  <link href="{{ site.url }}/feed.xml" rel="related" type="application/atom+xml" title="{{ site.title | xml_escape }}: reports"/>
+  <updated>{% if _latest[0] %}{{ _latest[0] | date_to_xmlschema }}{% else %}{{ site.time | date_to_xmlschema }}{% endif %}</updated>
+  <id>{{ site.url }}/changes/</id>
+  <author>
+    <name>{{ site.title | xml_escape }}</name>
+    <uri>{{ site.url }}</uri>
+  </author>
+  {%- for rec in changes_items limit: 50 %}
+  {%- assign f = rec | split: "~~" %}
+  <entry>
+    <title>{{ f[3] | xml_escape }}: revised {{ f[0] | date: "%-d %B %Y" }}</title>
+    <link href="{{ site.url }}{{ f[1] }}#revisions" rel="alternate" type="text/html"/>
+    <published>{{ f[0] | date_to_xmlschema }}</published>
+    <updated>{{ f[0] | date_to_xmlschema }}</updated>
+    <id>{{ site.url }}{{ f[1] }}#revision-{{ f[0] }}-{{ f[2] }}</id>
+    <author>
+      <name>{{ site.title | xml_escape }}</name>
+      <uri>{{ site.url }}</uri>
+    </author>
+    <summary type="text">{{ f[4] | xml_escape }}</summary>
+  </entry>
+  {%- endfor %}
+</feed>

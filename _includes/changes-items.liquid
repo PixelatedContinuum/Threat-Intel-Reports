@@ -1,0 +1,32 @@
+{%- comment -%}
+  Every published report revision, newest first, as sortable records in
+  `changes_items`: "DATE~~URL~~N~~TITLE~~NOTE", N being the 1-based position of
+  the entry in that report's own `revisions:` list (stable, since entries are
+  only ever appended). Source: the `revisions:` lists in report front matter
+  (T-0202), nothing generated or copied. A page marked `unlisted: true` is
+  never read, so a preview's revisions stay as private as the preview.
+  Also sets `changes_unitemised`: reports that carry `last_updated` but no
+  `revisions:` list, which were revised before lists were kept and so have a
+  date and nothing more to say.
+  Used by /changes/, /changes/feed.xml and /changes/feed.json, so the three
+  can never disagree on what counts.
+{%- endcomment -%}
+{%- assign changes_items = "" | split: "" -%}
+{%- assign changes_unitemised = "" | split: "" -%}
+{%- assign _reports = site.pages
+   | where_exp: "p", "p.url contains '/reports/'"
+   | where_exp: "p", "p.title != nil"
+   | where_exp: "p", "p.unlisted != true" -%}
+{%- for p in _reports -%}
+  {%- if p.revisions and p.revisions.size > 0 -%}
+    {%- for r in p.revisions -%}
+      {%- assign _rec = r.date | date: "%Y-%m-%d" | append: "~~" | append: p.url | append: "~~" | append: forloop.index | append: "~~" | append: p.title | append: "~~" | append: r.note -%}
+      {%- assign changes_items = changes_items | push: _rec -%}
+    {%- endfor -%}
+  {%- elsif p.last_updated -%}
+    {%- assign _rec = p.last_updated | date: "%Y-%m-%d" | append: "~~" | append: p.url | append: "~~0~~" | append: p.title | append: "~~" -%}
+    {%- assign changes_unitemised = changes_unitemised | push: _rec -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- assign changes_items = changes_items | sort | reverse -%}
+{%- assign changes_unitemised = changes_unitemised | sort | reverse -%}

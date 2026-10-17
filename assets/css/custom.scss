@@ -1472,6 +1472,29 @@ main.content {
 }
 .hl-revisions__note { color: var(--hl-text-primary); }
 .hl-revisions:target > summary { color: var(--hl-text-primary); }
+
+/* /changes/: every report revision, newest first. Same look as the per-report
+   revision list, with the report title as the link. */
+.hl-changes {
+  margin: 1.2em 0;
+  padding-left: 0;
+  list-style: none;
+  max-width: 78ch;
+}
+.hl-changes__item {
+  margin: 0 0 0.7em;
+  line-height: 1.55;
+  padding-left: 0.9em;
+  border-left: 2px solid var(--hl-border-card);
+}
+.hl-changes__item time {
+  display: inline-block;
+  min-width: 8.5em;
+  color: var(--hl-accent-blue);
+  font-variant-numeric: tabular-nums;
+}
+.hl-changes__note { display: block; color: var(--hl-text-primary); }
+.hl-changes--bare .hl-changes__item { margin-bottom: 0.35em; }
 a.hl-last-updated { text-decoration: none; border-bottom: 1px dotted currentColor; }
 a.hl-last-updated:hover { opacity: 1; }
 

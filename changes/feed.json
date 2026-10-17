@@ -1,0 +1,36 @@
+---
+layout: none
+permalink: /changes/feed.json
+sitemap: false
+---
+{%- comment -%}
+  JSON Feed 1.1 of report revisions: the same entries, in the same order, as
+  /changes/feed.xml, from the shared _includes/changes-items.liquid. Every
+  string goes through jsonify so a quote or backslash in a note stays valid.
+{%- endcomment -%}
+{%- include changes-items.liquid -%}
+{
+  "version": "https://jsonfeed.org/version/1.1",
+  "title": {{ "The Hunter's Ledger: Report Changes" | jsonify }},
+  "home_page_url": "{{ site.url }}/changes/",
+  "feed_url": "{{ site.url }}/changes/feed.json",
+  "description": {{ "What changed in a published report after it went out, one entry per revision." | jsonify }},
+  "icon": "{{ '/assets/images/apple-touch-icon.png' | absolute_url }}",
+  "favicon": "{{ '/assets/images/favicon.svg' | absolute_url }}",
+  "language": "en",
+  "authors": [{ "name": "The Hunter's Ledger", "url": "{{ site.url }}" }],
+  "items": [
+    {%- for rec in changes_items limit: 50 %}
+    {%- assign f = rec | split: "~~" %}
+    {
+      "id": "{{ site.url }}{{ f[1] }}#revision-{{ f[0] }}-{{ f[2] }}",
+      "url": "{{ site.url }}{{ f[1] }}#revisions",
+      "title": {{ f[3] | append: ": revised " | append: f[0] | jsonify }},
+      "content_text": {{ f[4] | jsonify }},
+      "date_published": {{ f[0] | date_to_xmlschema | jsonify }},
+      "date_modified": {{ f[0] | date_to_xmlschema | jsonify }},
+      "authors": [{ "name": "Joseph Harrison", "url": "{{ '/about-me/' | absolute_url }}" }]
+    }{% unless forloop.last %},{% endunless %}
+    {%- endfor %}
+  ]
+}

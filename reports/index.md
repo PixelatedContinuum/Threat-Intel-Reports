@@ -10,7 +10,7 @@ position: 2
 <div class="hl-page-header" style="--ph-accent: #a371f7;">
   <div class="hl-page-header__label">Reports</div>
   <div class="hl-page-header__title">Threat Intelligence Reports</div>
-  <div class="hl-page-header__desc">Original malware analysis and reverse engineering. Each report ships with detection rules and machine-readable indicators. Filter by tag or search by name.</div>
+  <div class="hl-page-header__desc">Original malware analysis and reverse engineering. Each report ships with detection rules and machine-readable indicators. Filter by tag or search by name. Reports that were revised after publication are tracked on <a href="/changes/">Changes</a>.</div>
 </div>
 
 {% assign report_entries = site.data.catalog.entries | where_exp: "e", "e.report_url" | sort: "date" | reverse %}

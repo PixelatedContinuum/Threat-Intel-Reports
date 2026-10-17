@@ -96,6 +96,10 @@
     {%- if page.url == '/wire/' %}
     <link rel="alternate" type="application/atom+xml" title="{{ site.title | default: 'Title' }}: The Wire" href="{{ 'wire/feed.xml' | absolute_url }}"/>
     {%- endif %}
+    {%- if page.url == '/changes/' %}
+    <link rel="alternate" type="application/atom+xml" title="{{ site.title | default: 'Title' }}: Report Changes" href="{{ 'changes/feed.xml' | absolute_url }}"/>
+    <link rel="alternate" type="application/feed+json" title="{{ site.title | default: 'Title' }}: Report Changes" href="{{ 'changes/feed.json' | absolute_url }}"/>
+    {%- endif %}
     {%- if page.url contains '/hunting-detections/' %}
     <link rel="alternate" type="application/atom+xml" title="{{ site.title | default: 'Title' }}: Detection Rules" href="{{ 'hunting-detections/feed.xml' | absolute_url }}"/>
     <link rel="alternate" type="application/feed+json" title="{{ site.title | default: 'Title' }}: Detection Rules" href="{{ 'hunting-detections/feed.json' | absolute_url }}"/>
