@@ -177,10 +177,10 @@
       "enabled": true
     },
     {
-      "techniqueID": "T1218.008",
+      "techniqueID": "T1218.004",
       "tactic": "execution",
       "score": 1,
-      "comment": "Odbcconf. 1 report(s) about UTA-2026-009, mapped in https://the-hunters-ledger.com/reports/opendirectory-79-137-192-3-20260515/. https://the-hunters-ledger.com/actors/UTA-2026-009/",
+      "comment": "InstallUtil. 1 report(s) about UTA-2026-009, mapped in https://the-hunters-ledger.com/reports/opendirectory-79-137-192-3-20260515/. https://the-hunters-ledger.com/actors/UTA-2026-009/",
       "enabled": true
     },
     {

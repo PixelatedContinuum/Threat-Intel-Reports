@@ -80,6 +80,10 @@ figure_nav:
         anchor: "#93-uta-2026-010-rhadamanthys-maas-customer-cluster-c-primary"
       - label: "Are they linked?"
         anchor: "#94-cross-cluster-linkage-assessment"
+last_updated: '2026-10-17'
+revisions:
+  - date: '2026-10-17'
+    note: "Corrected the ATT&CK id for InstallUtil from T1218.008 (Odbcconf) to T1218.004 (InstallUtil)."
 ---
 
 **Campaign Identifier:** OpenDirectory-MultiCluster-Rhadamanthys-BellaMain-Inkognito-79.137.192.3<br>
@@ -298,7 +302,7 @@ This has a detection implication. EDR rules keyed on RWX allocation in a freshly
   <figcaption><em>Figure 2: Decompiled loader code showing the two halves of the EAX-redirect process hollowing technique in one frame. The bottom highlight is the operator's hardcoded target, `InstallUtil.exe`, the Microsoft .NET Framework signed-binary LOLBin. The top highlight is the EAX-register write into the suspended thread's context (offset `0xb0` in the CONTEXT structure) that redirects entry-point execution to the injected payload, without modifying `EIP`/`RIP` and without ever allocating RWX memory. The visible `Ellipse(...)` and `GetAspectRatioFilterEx(...)` calls between the highlights are the GDI32 decoy imports the loader uses to camouflage its true behavior as graphics processing.</em></figcaption>
 </figure>
 
-`InstallUtil.exe` was chosen for good reasons. It is a signed Microsoft binary shipping with the .NET Framework at `C:\Windows\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe`, it sits on most application allowlists, and most EDR tooling presumes it trusted. It is also a known LOLBin, LOLBAS T1218.008, for malicious code execution. The Check Point Rhadamanthys v0.9.x customer-target enumerations I reviewed (`dllhost.exe`, `taskhostw.exe`, `TsWpfWrp.exe`, `spoolsv.exe`, `wuauclt.exe`) do not include `InstallUtil.exe`, so this is a per-customer tradecraft choice rather than a vendor default. It fits a customer who has read LOLBAS and is picking a target less monitored than the vendor's documented defaults.
+`InstallUtil.exe` was chosen for good reasons. It is a signed Microsoft binary shipping with the .NET Framework at `C:\Windows\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe`, it sits on most application allowlists, and most EDR tooling presumes it trusted. It is also a known LOLBin (ATT&CK T1218.004) for malicious code execution. The Check Point Rhadamanthys v0.9.x customer-target enumerations I reviewed (`dllhost.exe`, `taskhostw.exe`, `TsWpfWrp.exe`, `spoolsv.exe`, `wuauclt.exe`) do not include `InstallUtil.exe`, so this is a per-customer tradecraft choice rather than a vendor default. It fits a customer who has read LOLBAS and is picking a target less monitored than the vendor's documented defaults.
 
 #### 4.2.3 14-second cumulative anti-analysis sleep with denormal-sentinel checks
 
@@ -762,7 +766,7 @@ The mapping below covers all three clusters. Cluster C (Rhadamanthys MaaS-custom
 | Initial Access / T1566.002 | Spearphishing Link | Cluster A Turkish marketplace credential-harvest pages; Cluster B INK Lens brand-impersonation subdomains |
 | Initial Access / T1189 | Drive-by Compromise | Cluster C `staticlittlesource.exe` delivered via cracked-software / game-cheat lure (inferred from filename pattern + LLM-amateur tradecraft profile) (MODERATE) |
 | Execution / T1204.002 | Malicious File | User executes `staticlittlesource.exe` |
-| Execution / T1218.008 | InstallUtil | Cluster C loader hollows `C:\Windows\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe` for Stage-2 execution |
+| Execution / T1218.004 | InstallUtil | Cluster C loader hollows `C:\Windows\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe` for Stage-2 execution |
 | Persistence / T1112 | Modify Registry | Stage-2 writes Unix timestamp to `HKU\<SID>\Software\SibCode\sn` (pre-v0.9.1 family marker) |
 | Privilege Escalation / T1055.012 | Process Hollowing | EAX-redirect variant: `CreateProcess(InstallUtil, SUSPENDED)` → `NtUnmapViewOfSection` → W^X memory write (NOT RWX) → `SetThreadContext(Eax=stage2_entry)` → `ResumeThread`; **`Eax`-only modification, NOT `Eip`** |
 | Defense Evasion / T1027 | Obfuscated Files or Information | Stage-2 3-layer encrypted-blob synthesis (byte-emitters + fake-GUIDs + bit-packed stream) |

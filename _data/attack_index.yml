@@ -220,7 +220,6 @@ tactics:
       - T1218.004
       - T1218.005
       - T1218.007
-      - T1218.008
       - T1218.011
       - T1218.014
       - T1480
@@ -238,7 +237,7 @@ tactics:
       - T1620
       - T1622
       - T1684.001
-    technique_count: 60
+    technique_count: 59
     report_count: 217
     rule_count: 215
   - name: Defense Impairment
@@ -8324,7 +8323,12 @@ techniques:
     tactic: Stealth
     tactics:
       - Stealth
-    reports: []
+    reports:
+      - url: /reports/opendirectory-79-137-192-3-20260515/
+        title: Rhadamanthys MaaS Customer Deep-Dive (79.137.192.3)
+        date: '2026-05-15'
+        tactic: Execution
+        confidence: HIGH
     detections:
       - url: /hunting-detections/opendirectory-79-137-192-3-20260515-detections
         title: Rhadamanthys MaaS Customer Deep-Dive (79.137.192.3)
@@ -8334,13 +8338,16 @@ techniques:
           InstallUtil.exe Spawned by a Process in a User-Writable Path (Rhadamanthys Hollowing
           Precursor) (SIGMA, Hunting)
         count: 1
-    actors: []
+    actors:
+      - UTA-2026-008
+      - UTA-2026-009
+      - UTA-2026-010
     url: /techniques/T1218.004/
     mitre_url: https://attack.mitre.org/techniques/T1218/004/
-    report_count: 0
+    report_count: 1
     rule_count: 1
-    actor_count: 0
-    score: 1
+    actor_count: 3
+    score: 2
   - id: T1218.005
     name: Mshta
     tactic: Stealth
@@ -8394,28 +8401,6 @@ techniques:
     rule_count: 1
     actor_count: 1
     score: 3
-  - id: T1218.008
-    name: Odbcconf
-    tactic: Stealth
-    tactics:
-      - Stealth
-    reports:
-      - url: /reports/opendirectory-79-137-192-3-20260515/
-        title: Rhadamanthys MaaS Customer Deep-Dive (79.137.192.3)
-        date: '2026-05-15'
-        tactic: Execution
-        confidence: HIGH
-    detections: []
-    actors:
-      - UTA-2026-008
-      - UTA-2026-009
-      - UTA-2026-010
-    url: /techniques/T1218.008/
-    mitre_url: https://attack.mitre.org/techniques/T1218/008/
-    report_count: 1
-    rule_count: 0
-    actor_count: 3
-    score: 1
   - id: T1218.011
     name: Rundll32
     tactic: Stealth

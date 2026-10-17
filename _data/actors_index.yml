@@ -2089,8 +2089,8 @@ actors:
         link: /reports/opendirectory-79-137-192-3-20260515/
         reports:
           - /reports/opendirectory-79-137-192-3-20260515/
-      - id: T1218.008
-        name: Odbcconf
+      - id: T1218.004
+        name: InstallUtil
         tactic: Execution
         source: report
         link: /reports/opendirectory-79-137-192-3-20260515/
@@ -2531,8 +2531,8 @@ actors:
         link: /reports/opendirectory-79-137-192-3-20260515/
         reports:
           - /reports/opendirectory-79-137-192-3-20260515/
-      - id: T1218.008
-        name: Odbcconf
+      - id: T1218.004
+        name: InstallUtil
         tactic: Execution
         source: report
         link: /reports/opendirectory-79-137-192-3-20260515/
@@ -2950,8 +2950,8 @@ actors:
         link: /reports/opendirectory-79-137-192-3-20260515/
         reports:
           - /reports/opendirectory-79-137-192-3-20260515/
-      - id: T1218.008
-        name: Odbcconf
+      - id: T1218.004
+        name: InstallUtil
         tactic: Execution
         source: report
         link: /reports/opendirectory-79-137-192-3-20260515/

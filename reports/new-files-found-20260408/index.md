@@ -26,6 +26,10 @@ ioc_highlights:
   - value: "af688b120db0a3b324e2cd468cfead71b7895a3c815f4026d51ac7fca0cb8ab4"
     note: "CovertVPN L2 tunneling module (SHA256)"
 stix_bundle: /stix/new-files-found-20260408.json
+last_updated: '2026-10-17'
+revisions:
+  - date: '2026-10-17'
+    note: "Corrected the gen-4 beacon ID description: the ID mixes in the process ID, so it changes on every restart and is not a stable per-host identifier."
 ---
 
 **Campaign Identifier:** OpenStrike-CSBeacon-Toolkit-172.105.0.126<br>
@@ -349,7 +353,7 @@ If a gen-5 implementation resolves the missing key exchange mechanism, it would 
 
 **Beacon ID Generation:**
 
-The beacon generates a deterministic host identifier using a djb2 hash variant (multiplier 0x1f = 31) of the host's ComputerName, XOR'd with the current process ID. Unlike gen-1's random PID-based ID, this is consistent across restarts. The same host will report the same beacon ID, enabling the operator to track reconstituted implants after host reboots.
+The beacon builds its host identifier from a djb2 hash variant (multiplier 0x1f = 31) of the host's ComputerName, XOR'd with the current process ID. The ComputerName half is fixed per host, but the process ID half changes every time the implant starts, so the same host reports a new beacon ID after each restart or reboot. The identifier is not stable enough for the operator to recognise a reconstituted implant by its ID alone.
 
 ```
 beacon_id = djb2(ComputerName, multiplier=31) XOR PID
@@ -357,7 +361,7 @@ beacon_id = djb2(ComputerName, multiplier=31) XOR PID
 
 <figure style="text-align: center; margin: 2em 0;">
  <img loading="lazy" src="{{ "/assets/images/new-files-found-20260408/openstrike-gen4-beacon-id-generation.png" | relative_url }}" alt="Decompiler output showing the beacon ID generation routine using GetCurrentProcessId XOR'd with a djb2 hash of the computer name, followed by User-Agent string construction with the resulting hex-formatted beacon identifier">
-  <figcaption><em>Figure 3: Beacon ID generation routine showing GetCurrentProcessId XOR'd with the djb2 hash of the host's ComputerName. The resulting deterministic identifier is embedded in the User-Agent string and all subsequent HTTP requests, enabling the operator to track reconstituted implants across host reboots.</em></figcaption>
+  <figcaption><em>Figure 3: Beacon ID generation routine showing GetCurrentProcessId XOR'd with the djb2 hash of the host's ComputerName. The resulting identifier is embedded in the User-Agent string and all subsequent HTTP requests; because it includes the process ID, it changes whenever the implant restarts.</em></figcaption>
 </figure>
 
 **C2 Protocol Wire Format:**

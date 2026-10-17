@@ -1299,8 +1299,8 @@
     {
       "techniqueID": "T1218.004",
       "tactic": "stealth",
-      "score": 1,
-      "comment": "0 report(s), 1 rule(s). https://the-hunters-ledger.com/techniques/T1218.004/",
+      "score": 2,
+      "comment": "1 report(s), 1 rule(s), actors UTA-2026-008 UTA-2026-009 UTA-2026-010. https://the-hunters-ledger.com/techniques/T1218.004/",
       "enabled": true
     },
     {
@@ -1315,13 +1315,6 @@
       "tactic": "stealth",
       "score": 3,
       "comment": "2 report(s), 1 rule(s), actors UTA-2026-024. https://the-hunters-ledger.com/techniques/T1218.007/",
-      "enabled": true
-    },
-    {
-      "techniqueID": "T1218.008",
-      "tactic": "stealth",
-      "score": 1,
-      "comment": "1 report(s), 0 rule(s), actors UTA-2026-008 UTA-2026-009 UTA-2026-010. https://the-hunters-ledger.com/techniques/T1218.008/",
       "enabled": true
     },
     {
