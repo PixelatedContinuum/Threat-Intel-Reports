@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--caa5d358-7ff0-409a-8c85-0b5e34bea815",
+    "id": "bundle--4732100d-e642-4131-b028-dd1af8f7e39d",
     "objects": [
         {
             "type": "identity",
@@ -34,7 +34,7 @@
             "id": "indicator--82b5c9d2-fdd7-58a9-836c-e5018dc631a0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.995319Z",
-            "modified": "2026-10-01T19:54:14.995319Z",
+            "modified": "2026-10-17T16:28:31.723545Z",
             "name": "ipv4: 192.3.1.116",
             "description": "Primary operator infrastructure. Port 7777 is a plain Python static HTTP server serving the working directory; it does NOT execute the JSP web shell it hosts. Still live and growing as of 2026-07-21. A hosting-provider takedown request has been filed.",
             "indicator_types": [
@@ -49,6 +49,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 95
         },
         {
@@ -63,7 +64,7 @@
             "id": "indicator--06d5107f-750d-5ce8-8cd0-4e5d5d8416dc",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.998076Z",
-            "modified": "2026-10-01T19:54:14.998076Z",
+            "modified": "2026-10-17T16:28:31.724215Z",
             "name": "url: http://192.3.1.116:7777/cmd.jsp",
             "description": "A functional generic bash-exec JSP web shell (reads a 'c' HTTP parameter, runs it via /bin/bash -c). DEFINITE that the file exists in the operator's own directory and is downloadable. UNCONFIRMED that it was ever deployed to any victim host. Port 7777 serves this file's source and does not execute it.",
             "indicator_types": [
@@ -78,6 +79,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -92,7 +94,7 @@
             "id": "indicator--56414e6a-3317-5fcc-b961-973e3dabdf2f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.998776Z",
-            "modified": "2026-10-01T19:54:14.998776Z",
+            "modified": "2026-10-17T16:28:31.724658Z",
             "name": "url: http://192.3.1.116:7777/xstream_rce_success",
             "description": "Never observed hit across approximately 17,000 lines of the operator's own port-7777 access log. MODERATE confidence the callback did not fire; the log window begins roughly 68-76 minutes after the engagement concluded, so an earlier hit cannot be ruled out.",
             "indicator_types": [
@@ -107,6 +109,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -121,7 +124,7 @@
             "id": "indicator--2e5b54f3-d71f-5fbf-a04b-8fe7045049ed",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.999237Z",
-            "modified": "2026-10-01T19:54:14.999237Z",
+            "modified": "2026-10-17T16:28:31.725086Z",
             "name": "url: http://192.3.1.116:9876/rce_confirmed",
             "description": "No comprehensive port-9876 access log exists in the reviewed corpus, so this callback's outcome is fully open. Both logged LDAP engagements stalled at BindResponse without a SearchRequest.",
             "indicator_types": [
@@ -136,6 +139,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -150,7 +154,7 @@
             "id": "indicator--46efe1f1-e9f8-5c7b-ad24-8a7c707dff63",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.99965Z",
-            "modified": "2026-10-01T19:54:14.99965Z",
+            "modified": "2026-10-17T16:28:31.725491Z",
             "name": "url: http://192.3.1.116:9876/yaml_rce_proof",
             "description": "Embedded in poc.yml, a textbook ScriptEngineManager + URLClassLoader gadget chain of the CVE-2022-1471 family.",
             "indicator_types": [
@@ -165,6 +169,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -179,7 +184,7 @@
             "id": "indicator--62043009-8e87-55d8-8f03-789ef22953e2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.000049Z",
-            "modified": "2026-10-01T19:54:15.000049Z",
+            "modified": "2026-10-17T16:28:31.725911Z",
             "name": "url: ldap://192.3.1.116:1389/cn=exploit",
             "description": "The callback target of the crafted Logback insertFromJNDI payload (CVE-2021-42550). Backed by ldap_server.py, ldap_server_v2.py and setup_jndi.sh in the operator's directory.",
             "indicator_types": [
@@ -194,6 +199,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -208,7 +214,7 @@
             "id": "indicator--a649bf3e-3a5a-581a-afae-d6dfa51eba87",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.000451Z",
-            "modified": "2026-10-01T19:54:15.000451Z",
+            "modified": "2026-10-17T16:28:31.726317Z",
             "name": "domain: vpn932081317.softether.net",
             "description": "SoftEther DDNS name for a VPN the operator self-hosts on 192.3.1.116; still resolves to that address. Operator OPSEC infrastructure. Note the parent domain softether.net is a legitimate DDNS service - only this specific hostname is the indicator.",
             "indicator_types": [
@@ -223,6 +229,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {

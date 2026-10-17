@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--ad008a50-9108-4da3-9608-ec802d772d27",
+    "id": "bundle--cbc98c73-c106-4262-b341-8d4a5ec582f7",
     "objects": [
         {
             "type": "identity",
@@ -34,7 +34,7 @@
             "id": "indicator--a71685c2-ac13-5854-8cba-5304e9560926",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.627603Z",
-            "modified": "2026-10-01T19:54:11.627603Z",
+            "modified": "2026-10-17T16:28:28.481543Z",
             "name": "ipv4: 139.59.239.112",
             "description": "Weevely + Claude AI compromised DigitalOcean VPS",
             "indicator_types": [
@@ -49,6 +49,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 80
         },
         {
@@ -63,7 +64,7 @@
             "id": "indicator--2a7b9a4d-52c5-5617-8540-6ba425b7b139",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.630375Z",
-            "modified": "2026-10-01T19:54:11.630375Z",
+            "modified": "2026-10-17T16:28:28.482597Z",
             "name": "ipv4: 158.178.214.94",
             "description": "DEMOTED - Hunt-labeled 'Dual-AI Attacker Infrastructure' but actually French entrepreneur running wikiprepa.fr alumni platform; surfaced only for false-positive disambiguation | Confirmed legitimate developer (elyasbetter@gmail.com owns alumni platform); NOT a threat actor",
             "indicator_types": [
@@ -78,6 +79,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 40
         },
         {
@@ -92,7 +94,7 @@
             "id": "indicator--cdf8c0d6-6aa3-532e-8abf-bb23054c5f1d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.630875Z",
-            "modified": "2026-10-01T19:54:11.630875Z",
+            "modified": "2026-10-17T16:28:28.483063Z",
             "name": "ipv4: 165.227.175.161",
             "description": "Naku.arm CNC - parasitic listener on compromised GetYourGroup tourism VPS (DigitalOcean); port 23 disguises CNC as innocuous Telnet traffic | Underlying VPS host belongs to GetYourGroup GmbH legitimate tourism platform - notify victim before blocking",
             "indicator_types": [
@@ -107,6 +109,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 95
         },
         {
@@ -121,7 +124,7 @@
             "id": "indicator--b6b038a5-a01e-595d-9b4a-d9f52867d9ce",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.631276Z",
-            "modified": "2026-10-01T19:54:11.631276Z",
+            "modified": "2026-10-17T16:28:28.483498Z",
             "name": "ipv4: 173.249.2.23",
             "description": "DEMOTED Phase 11 - Hunt-labeled 'Cloud-Credentialed AI Attacker' but actually defensive SaaS-security consultant; Contabo France; surfaced only for false-positive disambiguation | Confirmed false positive per Phase 11 review (979 source files, 226 grep hits all FP); NOT a threat actor - notify Anthropic on exposed credentials only",
             "indicator_types": [
@@ -136,6 +139,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 40
         },
         {
@@ -150,7 +154,7 @@
             "id": "indicator--5722181f-9fb4-51ae-8ba4-a415b9f0e834",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.631616Z",
-            "modified": "2026-10-01T19:54:11.631616Z",
+            "modified": "2026-10-17T16:28:28.483948Z",
             "name": "ipv4: 188.166.194.243",
             "description": "Sibling of GetYourGroup CNC (28 GetYourGroup tourism domains hosted); RunCloud SaaS snapshot-deploy artifact",
             "indicator_types": [
@@ -165,6 +169,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 80
         },
         {
@@ -179,7 +184,7 @@
             "id": "indicator--b2ab1ebe-0d71-599c-bd69-654e47b8bb43",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.631972Z",
-            "modified": "2026-10-01T19:54:11.631972Z",
+            "modified": "2026-10-17T16:28:28.484346Z",
             "name": "ipv4: 209.38.205.158",
             "description": "Turkish ARPA / OpenClaw operator C2 ingestion endpoint (state-insurer victim observability harvest); DigitalOcean LLC",
             "indicator_types": [
@@ -194,6 +199,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 95
         },
         {
@@ -208,7 +214,7 @@
             "id": "indicator--11d50efc-cb1c-5cf4-af18-2f5df7a38c17",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.63253Z",
-            "modified": "2026-10-01T19:54:11.63253Z",
+            "modified": "2026-10-17T16:28:28.484755Z",
             "name": "ipv4: 213.165.51.115",
             "description": "Russian Gemini operator credential mill C2 / open-directory host; AEZA GROUP LLC (Russian bulletproof hosting, US-registered)",
             "indicator_types": [
@@ -223,6 +229,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 95
         },
         {
@@ -237,7 +244,7 @@
             "id": "indicator--e3c11a2a-efa6-5c35-8948-3d0499fed5f7",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.632885Z",
-            "modified": "2026-10-01T19:54:11.632885Z",
+            "modified": "2026-10-17T16:28:28.485172Z",
             "name": "ipv4: 221.150.15.104",
             "description": "Korean Claude Code + OpenClaw operator; Korea Telecom; open-directory exposes attacker-customized settings.local.json",
             "indicator_types": [
@@ -252,6 +259,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 95
         },
         {
@@ -266,7 +274,7 @@
             "id": "indicator--b2fcb4cb-f29a-5759-9923-78513a47903e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.633214Z",
-            "modified": "2026-10-01T19:54:11.633214Z",
+            "modified": "2026-10-17T16:28:28.485563Z",
             "name": "ipv4: 34.34.57.141",
             "description": "Russian operator's GCP ghost-proxy-nl Dante SOCKS5",
             "indicator_types": [
@@ -281,6 +289,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 80
         },
         {
@@ -295,7 +304,7 @@
             "id": "indicator--e997f472-d781-5a03-b3d8-b9eb4bd27bc8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.633587Z",
-            "modified": "2026-10-01T19:54:11.633587Z",
+            "modified": "2026-10-17T16:28:28.486013Z",
             "name": "ipv4: 34.34.81.129",
             "description": "Russian operator Windows C2 (Phase 4)",
             "indicator_types": [
@@ -310,6 +319,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 60
         },
         {
@@ -324,7 +334,7 @@
             "id": "indicator--493eda1e-1c5c-56ed-a70f-c1ad92612008",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.633921Z",
-            "modified": "2026-10-01T19:54:11.633921Z",
+            "modified": "2026-10-17T16:28:28.486423Z",
             "name": "ipv4: 35.192.41.201",
             "description": "Russian operator's GCP temp-mail-srv Mailpit catch-all",
             "indicator_types": [
@@ -339,6 +349,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 80
         },
         {
@@ -353,7 +364,7 @@
             "id": "indicator--e1648ca7-6302-54a7-91c5-e2b8d0cb905d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.634254Z",
-            "modified": "2026-10-01T19:54:11.634254Z",
+            "modified": "2026-10-17T16:28:28.486835Z",
             "name": "ipv4: 47.110.83.41",
             "description": "DEMOTED - Hunt-labeled 'Sophisticated Chinese-speaking Threat Actor' but actually Chinese AI/multimedia developer using dmxapi-claude-code for ai-comic-video project; surfaced only for false-positive disambiguation | Confirmed legitimate Chinese AI developer; port 666 is symbolic choice, not malicious; NOT a threat actor",
             "indicator_types": [
@@ -368,6 +379,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 40
         },
         {
@@ -382,7 +394,7 @@
             "id": "indicator--215711cc-f340-5ebb-9104-905e26c66de9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.634605Z",
-            "modified": "2026-10-01T19:54:11.634605Z",
+            "modified": "2026-10-17T16:28:28.487273Z",
             "name": "ipv4: 5.230.201.54",
             "description": "Sliver-derivative C2 platform; Netherlands (RIPE NCC), AS200051 'Rizki Abdul Azis'; v30-v39 loader iterations in 1 day; staging/learning phase (empty Sliver DB)",
             "indicator_types": [
@@ -397,6 +409,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 95
         },
         {
@@ -411,7 +424,7 @@
             "id": "indicator--ff209f5e-f617-523d-8b11-2151e4a129ae",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.634987Z",
-            "modified": "2026-10-01T19:54:11.634987Z",
+            "modified": "2026-10-17T16:28:28.487707Z",
             "name": "ipv4: 66.94.120.32",
             "description": "DEMOTED Phase 11 - Hunt-labeled 'Multi-AI Offensive Workstation' but actually HuggingFace researcher mtr7x doing Sarvam-30B quantization; Contabo US; surfaced only for false-positive disambiguation | Confirmed false positive per Phase 11 review (213 triage reports, 0 real offensive hits); NOT a threat actor - notify HF + Anthropic + OpenAI + Google T&S on exposed credentials only",
             "indicator_types": [
@@ -426,6 +439,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 40
         },
         {
@@ -440,7 +454,7 @@
             "id": "indicator--ab8820bd-98c1-51b6-8505-00923c74a69e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.635347Z",
-            "modified": "2026-10-01T19:54:11.635347Z",
+            "modified": "2026-10-17T16:28:28.488229Z",
             "name": "ipv4: 68.183.92.28",
             "description": "60-second AI-orchestrated payment API attack origin (6 timestamped stages)",
             "indicator_types": [
@@ -455,6 +469,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 80
         },
         {
@@ -469,7 +484,7 @@
             "id": "indicator--25c06a59-d267-5c27-92e7-73c12559f225",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.635673Z",
-            "modified": "2026-10-01T19:54:11.635673Z",
+            "modified": "2026-10-17T16:28:28.488659Z",
             "name": "ipv4: 77.110.125.145",
             "description": "GHOST kit sibling customer (operator-B); abandoned 40+ days as of investigation; unreachable since 2026-05-24",
             "indicator_types": [
@@ -484,6 +499,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 95
         },
         {
@@ -498,7 +514,7 @@
             "id": "indicator--31de5704-b9f1-5a38-af29-a1d3c16f093c",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.636054Z",
-            "modified": "2026-10-01T19:54:11.636054Z",
+            "modified": "2026-10-17T16:28:28.489276Z",
             "name": "ipv4: 77.110.96.200",
             "description": "AEZA Germany GPU cryptojacking platform (operator-A); GHOST kit customer; self-hosted XMR pool proxy on :3333; CFX pool proxy on :4444; Hysteria v2 panel on :3301; libpam_cache.so + ghost.sh + hyst.sh + min1.sh deployed",
             "indicator_types": [
@@ -513,6 +529,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 95
         },
         {
@@ -527,7 +544,7 @@
             "id": "indicator--8737e33a-5b28-547f-baaf-be90b91aa2f8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.636377Z",
-            "modified": "2026-10-01T19:54:11.636377Z",
+            "modified": "2026-10-17T16:28:28.489693Z",
             "name": "ipv4: 80.211.111.10",
             "description": "Aruba S.p.A. Italy sibling distribution server embedded in all 11 Naku binaries; dark to Hunt 365-day index",
             "indicator_types": [
@@ -542,6 +559,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 95
         },
         {
@@ -556,7 +574,7 @@
             "id": "indicator--b4313750-aee2-5fc7-92a7-1a89e3d1dd2f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.63674Z",
-            "modified": "2026-10-01T19:54:11.63674Z",
+            "modified": "2026-10-17T16:28:28.490199Z",
             "name": "ipv4: 80.211.94.16",
             "description": "Aruba S.p.A. Italy distribution server embedded in all 11 Naku binaries; dark to Hunt 365-day index (burning-fuse indicator)",
             "indicator_types": [
@@ -571,6 +589,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 95
         },
         {
@@ -585,7 +604,7 @@
             "id": "indicator--aaf64d7c-ce22-5ad9-b088-7601aadf2ba7",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.637083Z",
-            "modified": "2026-10-01T19:54:11.637083Z",
+            "modified": "2026-10-17T16:28:28.491005Z",
             "name": "ipv4: 85.17.70.56",
             "description": "Russian operator's ai_sniper_brute.py Dutch datacenter proxy",
             "indicator_types": [
@@ -600,6 +619,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 80
         },
         {
@@ -614,7 +634,7 @@
             "id": "indicator--32bf839a-9a7a-5a3f-816e-5d26483fa081",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.637438Z",
-            "modified": "2026-10-01T19:54:11.637438Z",
+            "modified": "2026-10-17T16:28:28.491428Z",
             "name": "ipv4: 87.106.143.220",
             "description": "Rovodev/Pandora Mirai botnet C2 (Matrix C2 + standalone Mirai-clone); 1&1 IONOS Germany",
             "indicator_types": [
@@ -629,6 +649,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 95
         },
         {
@@ -643,7 +664,7 @@
             "id": "indicator--768f0cb9-19e4-5bda-9830-8d87db5c607d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.637759Z",
-            "modified": "2026-10-01T19:54:11.637759Z",
+            "modified": "2026-10-17T16:28:28.491822Z",
             "name": "ipv4: 87.106.54.213",
             "description": "Rovodev/Pandora backup VPS",
             "indicator_types": [
@@ -658,6 +679,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 80
         },
         {
@@ -672,7 +694,7 @@
             "id": "indicator--5e6ebcfe-39e4-5b5b-9419-72fc3833733d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.63808Z",
-            "modified": "2026-10-01T19:54:11.63808Z",
+            "modified": "2026-10-17T16:28:28.492298Z",
             "name": "ipv4: 95.211.175.167",
             "description": "Russian operator's ai_sniper_brute.py Dutch datacenter proxy",
             "indicator_types": [
@@ -687,6 +709,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 80
         },
         {
@@ -701,7 +724,7 @@
             "id": "indicator--b2ad1b6c-4dad-571a-a473-6b92b1bf4960",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.638449Z",
-            "modified": "2026-10-01T19:54:11.638449Z",
+            "modified": "2026-10-17T16:28:28.492767Z",
             "name": "domain: antipublic.one",
             "description": "Russian credential-database paid subscription service - operator is paying customer for breach-data lookups during mass-WP-credential validation",
             "indicator_types": [
@@ -716,6 +739,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -730,7 +754,7 @@
             "id": "indicator--4ba05cb5-2063-59d1-8c76-2a9f0848f359",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.639096Z",
-            "modified": "2026-10-01T19:54:11.639096Z",
+            "modified": "2026-10-17T16:28:28.493588Z",
             "name": "domain: auto.c3pool.org",
             "description": "Operator-B (sibling) public XMR pool destination",
             "indicator_types": [
@@ -745,6 +769,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -759,7 +784,7 @@
             "id": "indicator--aa372337-a20b-5a40-9b35-93830b2774b4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.639465Z",
-            "modified": "2026-10-01T19:54:11.639465Z",
+            "modified": "2026-10-17T16:28:28.494096Z",
             "name": "domain: c2.tralalarkefe.com",
             "description": "Russian operator C2 command channel (Cloudflare Tunnel-fronted; mandatory Mozilla/5.0 UA)",
             "indicator_types": [
@@ -774,6 +799,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -788,7 +814,7 @@
             "id": "indicator--024cbc44-3ec4-5250-a829-64aa477463cc",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.640122Z",
-            "modified": "2026-10-01T19:54:11.640122Z",
+            "modified": "2026-10-17T16:28:28.494572Z",
             "name": "domain: catchall1.tralalarkefe.com",
             "description": "Russian operator Mailpit catch-all (Phase 8)",
             "indicator_types": [
@@ -803,6 +829,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -817,7 +844,7 @@
             "id": "indicator--c15d88ec-6a0d-5f85-bd50-d10c77034938",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.640486Z",
-            "modified": "2026-10-01T19:54:11.640486Z",
+            "modified": "2026-10-17T16:28:28.495063Z",
             "name": "domain: cfx-asia1.nanopool.org",
             "description": "Operator-B (sibling) public Conflux pool destination",
             "indicator_types": [
@@ -832,6 +859,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -846,7 +874,7 @@
             "id": "indicator--ed1a4e8c-f8a4-5f4b-9385-23fe8ac3cf03",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.640887Z",
-            "modified": "2026-10-01T19:54:11.640887Z",
+            "modified": "2026-10-17T16:28:28.495556Z",
             "name": "domain: cfx.kryptex.network",
             "description": "Operator-A Conflux mining pool destination",
             "indicator_types": [
@@ -861,6 +889,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -875,7 +904,7 @@
             "id": "indicator--9d991296-0e5b-5941-8271-2d9926393c06",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.641308Z",
-            "modified": "2026-10-01T19:54:11.641308Z",
+            "modified": "2026-10-17T16:28:28.496065Z",
             "name": "domain: docs.openclaw.ai",
             "description": "OpenClaw documentation (pre-whitelisted for Claude Code WebFetch in Korean operator allowlist)",
             "indicator_types": [
@@ -890,6 +919,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -904,7 +934,7 @@
             "id": "indicator--43b9fa83-7eeb-500a-b89f-081f47fd0ea1",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.641675Z",
-            "modified": "2026-10-01T19:54:11.641675Z",
+            "modified": "2026-10-17T16:28:28.496528Z",
             "name": "domain: duty-free.cc",
             "description": "Russian carding forum where operator is forum-active (saved MHTML thread in operator archive)",
             "indicator_types": [
@@ -919,6 +949,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -933,7 +964,7 @@
             "id": "indicator--f45acd05-fede-5fa5-94ac-1cd78a421f2f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.642057Z",
-            "modified": "2026-10-01T19:54:11.642057Z",
+            "modified": "2026-10-17T16:28:28.496957Z",
             "name": "domain: etc.kryptex.network",
             "description": "Operator-A Ethereum Classic mining pool destination",
             "indicator_types": [
@@ -948,6 +979,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -962,7 +994,7 @@
             "id": "indicator--dc94057f-1999-5346-b564-d34deecac245",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.642468Z",
-            "modified": "2026-10-01T19:54:11.642468Z",
+            "modified": "2026-10-17T16:28:28.497365Z",
             "name": "domain: gil_dr1.tralalarkefe.com",
             "description": "victim Linux/mgmt host SSH tunnel (Phase 8)",
             "indicator_types": [
@@ -977,6 +1009,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -991,7 +1024,7 @@
             "id": "indicator--b498df45-9a97-5911-bb8a-9f0ec49e5235",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.642995Z",
-            "modified": "2026-10-01T19:54:11.642995Z",
+            "modified": "2026-10-17T16:28:28.497844Z",
             "name": "domain: hermes-agent.nousresearch.com",
             "description": "NousResearch Hermes Agent model catalog | Legitimate NousResearch endpoint; presence alone is not malicious",
             "indicator_types": [
@@ -1006,6 +1039,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 60
         },
         {
@@ -1020,7 +1054,7 @@
             "id": "indicator--f42ed891-2b65-55c8-8d53-ce40827e8227",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.643442Z",
-            "modified": "2026-10-01T19:54:11.643442Z",
+            "modified": "2026-10-17T16:28:28.498318Z",
             "name": "url: http://209.38.205.158:8096/api/ingest/instana",
             "description": "Turkish ARPA operator C2 ingestion endpoint",
             "indicator_types": [
@@ -1035,6 +1069,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -1049,7 +1084,7 @@
             "id": "indicator--f63bea30-484c-5222-afa1-30f5c30392aa",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.643999Z",
-            "modified": "2026-10-01T19:54:11.643999Z",
+            "modified": "2026-10-17T16:28:28.498873Z",
             "name": "url: http://5.230.201.54/api/v/keylog",
             "description": "Sliver keylogger HTTP POST endpoint",
             "indicator_types": [
@@ -1064,6 +1099,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -1078,7 +1114,7 @@
             "id": "indicator--2c8e0de4-f99d-5d7e-bd8f-0772e147f3da",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.644387Z",
-            "modified": "2026-10-01T19:54:11.644387Z",
+            "modified": "2026-10-17T16:28:28.499304Z",
             "name": "url: http://5.230.201.54:8080/decryption_key.txt",
             "description": "Sliver implant Fernet key (44-char base64)",
             "indicator_types": [
@@ -1093,6 +1129,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -1107,7 +1144,7 @@
             "id": "indicator--16b04a83-ede4-5f84-bd14-50dc898a36b6",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.644811Z",
-            "modified": "2026-10-01T19:54:11.644811Z",
+            "modified": "2026-10-17T16:28:28.499689Z",
             "name": "url: http://5.230.201.54:8080/encrypted_v2.b64",
             "description": "Sliver implant Fernet+zlib+b64 ciphertext",
             "indicator_types": [
@@ -1122,6 +1159,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -1136,7 +1174,7 @@
             "id": "indicator--5f5b0e7e-a2e8-55be-b77c-86662db1b49e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.645153Z",
-            "modified": "2026-10-01T19:54:11.645153Z",
+            "modified": "2026-10-17T16:28:28.500105Z",
             "name": "url: http://77.110.96.200/libpam_cache.c",
             "description": "GHOST kit LD_PRELOAD rootkit source distribution",
             "indicator_types": [
@@ -1151,6 +1189,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -1165,7 +1204,7 @@
             "id": "indicator--da981557-2e76-5cd5-8b5d-2bd5321fa1cc",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.645474Z",
-            "modified": "2026-10-01T19:54:11.645474Z",
+            "modified": "2026-10-17T16:28:28.500685Z",
             "name": "url: http://77.110.96.200/libpam_cache.so",
             "description": "GHOST kit LD_PRELOAD rootkit binary distribution",
             "indicator_types": [
@@ -1180,6 +1219,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -1194,7 +1234,7 @@
             "id": "indicator--4014945a-1884-5f9c-8d0a-7b7000b41987",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.645804Z",
-            "modified": "2026-10-01T19:54:11.645804Z",
+            "modified": "2026-10-17T16:28:28.501117Z",
             "name": "url: http://77.110.96.200:3301",
             "description": "Hysteria v2 operator admin panel",
             "indicator_types": [
@@ -1209,6 +1249,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -1229,7 +1270,7 @@
             "id": "indicator--945c4ea1-5c16-55c9-a98c-dee7d2dfb993",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.646206Z",
-            "modified": "2026-10-01T19:54:11.646206Z",
+            "modified": "2026-10-17T16:28:28.501607Z",
             "name": "url: https://github.com/Vova75Rus/ComfyUI-Shell-Executor",
             "description": "Operator-A's GHOST kit PIP_PAYLOAD_REPO - account SUSPENDED by GitHub T&S 2026-05-25 (returns HTTP 404)",
             "indicator_types": [
@@ -1244,6 +1285,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -1258,7 +1300,7 @@
             "id": "indicator--3465630b-25cc-50fa-a9a4-bb1e2b64aa0a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.646657Z",
-            "modified": "2026-10-01T19:54:11.646657Z",
+            "modified": "2026-10-17T16:28:28.502234Z",
             "name": "url: https://github.com/jamestechdev-oss/ComfyUI-Shell-Plugin",
             "description": "Operator-B's GHOST kit PIP_PAYLOAD_REPO - DELETED + entire account scrubbed",
             "indicator_types": [
@@ -1273,6 +1315,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -1287,7 +1330,7 @@
             "id": "indicator--743ce031-91fe-544e-9da6-e946769558d4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.647041Z",
-            "modified": "2026-10-01T19:54:11.647041Z",
+            "modified": "2026-10-17T16:28:28.502683Z",
             "name": "url: https://github.com/keyosbuff/C2-Leak",
             "description": "Rovodev operator's upstream C2 source - currently HTTP 404 (deleted/private as of 2026-05-24 verification)",
             "indicator_types": [
@@ -1302,6 +1345,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -1316,7 +1360,7 @@
             "id": "indicator--596e5aad-4719-579f-b20a-cd696eedf295",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.647385Z",
-            "modified": "2026-10-01T19:54:11.647385Z",
+            "modified": "2026-10-17T16:28:28.503116Z",
             "name": "url: https://openclaw.ai/install.sh",
             "description": "OpenClaw curl-bash installer (pre-whitelisted in Korean operator's Claude Code allowlist)",
             "indicator_types": [
@@ -1331,6 +1375,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -1345,7 +1390,7 @@
             "id": "indicator--99fb9224-781d-531e-93eb-1d66f8d5f043",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.647922Z",
-            "modified": "2026-10-01T19:54:11.647922Z",
+            "modified": "2026-10-17T16:28:28.503488Z",
             "name": "domain: lightmake.site",
             "description": "OpenClaw developer brand domain",
             "indicator_types": [
@@ -1360,6 +1405,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -1374,7 +1420,7 @@
             "id": "indicator--151d4657-7b52-534f-a1ea-24747312481a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.648281Z",
-            "modified": "2026-10-01T19:54:11.648281Z",
+            "modified": "2026-10-17T16:28:28.50393Z",
             "name": "domain: openclaw.ai",
             "description": "OpenClaw distribution domain (curl install + npm i -g)",
             "indicator_types": [
@@ -1389,6 +1435,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -1403,7 +1450,7 @@
             "id": "indicator--f0e88473-df99-5f90-8177-9260859a6663",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.648632Z",
-            "modified": "2026-10-01T19:54:11.648632Z",
+            "modified": "2026-10-17T16:28:28.504346Z",
             "name": "domain: payloads.tralalarkefe.com",
             "description": "Russian operator payload distribution channel",
             "indicator_types": [
@@ -1418,6 +1465,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -1432,7 +1480,7 @@
             "id": "indicator--be9afef6-22e4-5fe6-b6d2-b53acb5d58b1",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.648991Z",
-            "modified": "2026-10-01T19:54:11.648991Z",
+            "modified": "2026-10-17T16:28:28.504737Z",
             "name": "domain: skillhub-1388575217.cos.ap-guangzhou.myqcloud.com",
             "description": "OpenClaw shared skill bucket (Tencent Cloud Object Storage)",
             "indicator_types": [
@@ -1447,6 +1495,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -1461,7 +1510,7 @@
             "id": "indicator--2fa76ed6-d2e0-51de-bf8c-dac264b62015",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.649377Z",
-            "modified": "2026-10-01T19:54:11.649377Z",
+            "modified": "2026-10-17T16:28:28.505232Z",
             "name": "domain: tenant-upcoming-great-descending.trycloudflare.com",
             "description": "One-time C2-bundle bootstrap tunnel (Phase 8)",
             "indicator_types": [
@@ -1476,6 +1525,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -1490,7 +1540,7 @@
             "id": "indicator--45a4b5ea-45b9-588b-8eb1-45014348ec40",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.649779Z",
-            "modified": "2026-10-01T19:54:11.649779Z",
+            "modified": "2026-10-17T16:28:28.50566Z",
             "name": "domain: tralalarkefe.com",
             "description": "Operator-bespoke domain root for Cloudflare Tunnel-fronted C2",
             "indicator_types": [
@@ -1505,6 +1555,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 95
         },
         {
@@ -1519,7 +1570,7 @@
             "id": "indicator--6ed54d8a-283c-573a-99b6-642156a7bc6e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.650102Z",
-            "modified": "2026-10-01T19:54:11.650102Z",
+            "modified": "2026-10-17T16:28:28.506069Z",
             "name": "domain: windows_server.tralalarkefe.com",
             "description": "victim Windows RDP/WinRM tunnel (Phase 8)",
             "indicator_types": [
@@ -1534,6 +1585,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -1550,7 +1602,7 @@
             "id": "indicator--da02371d-579c-5815-8509-2865ee559f81",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.65056Z",
-            "modified": "2026-10-01T19:54:11.65056Z",
+            "modified": "2026-10-17T16:28:28.506508Z",
             "name": "sha256: 0c748b9e8bc6b5b4fe989df67655f3301d28ef81617b9cbe8e0f6a19d4f9b657",
             "description": "XMrig miner disguised as dbus-session-monitor (Vova75Rus/miner GitHub repo); VT 39/65 with 5 YARA-rule hits confirming family",
             "indicator_types": [
@@ -1565,6 +1617,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1581,7 +1634,7 @@
             "id": "indicator--4db4f36d-f191-5ecd-a824-f7dd44719fb5",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.651731Z",
-            "modified": "2026-10-01T19:54:11.651731Z",
+            "modified": "2026-10-17T16:28:28.507036Z",
             "name": "sha256: 23c3719c7f949d6074fd3505928116df52de0e95e18a0a9e8c966b276b08e4ee",
             "description": "lolMiner GPU miner disguised as gnome-shell-ext-updater (Vova75Rus/miner GitHub repo); VT 23/64; sandbox classifies as XMrig",
             "indicator_types": [
@@ -1596,6 +1649,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1612,7 +1666,7 @@
             "id": "indicator--e54904e4-be5c-5082-b1b2-4d1eeee989d8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.652153Z",
-            "modified": "2026-10-01T19:54:11.652153Z",
+            "modified": "2026-10-17T16:28:28.507512Z",
             "name": "sha256: 2e07f091d401c1f2267537a2f7c2cb5f68a1c1d994abfc87270dcdf38e8f84bb",
             "description": "Sliver-derivative obfuscated single-line loader; 13328 bytes",
             "indicator_types": [
@@ -1627,6 +1681,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1643,7 +1698,7 @@
             "id": "indicator--f2d5cc04-1171-5673-805e-919cb864397a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.652553Z",
-            "modified": "2026-10-01T19:54:11.652553Z",
+            "modified": "2026-10-17T16:28:28.508034Z",
             "name": "sha256: 2fd960f0ce8b9eb86b37d7389599df080bc831b397f3aaaf212b85278039c2ec",
             "description": "Sliver-derivative Start-Job orchestrator for screencap + keylogger",
             "indicator_types": [
@@ -1658,6 +1713,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1682,7 +1738,7 @@
             "id": "indicator--7a770936-b6f6-5eda-8f94-d8983e851347",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.653029Z",
-            "modified": "2026-10-01T19:54:11.653029Z",
+            "modified": "2026-10-17T16:28:28.508658Z",
             "name": "sha256: 518e957c198aceb3b99e8863e311f48aa52a552c195a71822bd601810f337068",
             "description": "PyInstaller-stub crypter; class SliverCrypter; Fernet+zlib+b64; drops decrypted PE to %TEMP%\\svchost_upd.exe via CREATE_NO_WINDOW",
             "indicator_types": [
@@ -1697,6 +1753,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1713,7 +1770,7 @@
             "id": "indicator--ff24886c-5f83-5491-8522-f249e7d5916c",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.653406Z",
-            "modified": "2026-10-01T19:54:11.653406Z",
+            "modified": "2026-10-17T16:28:28.509164Z",
             "name": "sha256: 5305c7fc5dbae5c7630984ea0a00568594e4fbb84eca68ab6a05aef97c2e9e03",
             "description": "Sliver-derivative C2 loader; VT 16/62; Microsoft Trojan:Script/Wacatac.B!ml; Kaspersky UDS:Trojan-Downloader.VBS.Agent; Symantec ISB.Downloader!gen412; process hollowing + AMSI/ETW bypass",
             "indicator_types": [
@@ -1728,6 +1785,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1744,7 +1802,7 @@
             "id": "indicator--c1e3f7fa-fa46-5dab-89ef-de1b6c1ceca4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.653793Z",
-            "modified": "2026-10-01T19:54:11.653793Z",
+            "modified": "2026-10-17T16:28:28.509692Z",
             "name": "sha256: 58ef3f244dab408fac7117606843a3dbcfb0754b2032a5950e977bc1811c0313",
             "description": "Rovodev/Pandora Mirai bot deployment script",
             "indicator_types": [
@@ -1759,6 +1817,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1775,7 +1834,7 @@
             "id": "indicator--bb7253bb-a6d6-529d-8ce9-c01085c12bd0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.654184Z",
-            "modified": "2026-10-01T19:54:11.654184Z",
+            "modified": "2026-10-17T16:28:28.510444Z",
             "name": "sha256: 5de806617a6d7949a547076d4eb304e6f695cfcac3860bf4c1d5838026ac871f",
             "description": "Sliver-derivative round-trip CI verifier; operator-side software engineering discipline indicator",
             "indicator_types": [
@@ -1790,6 +1849,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1814,7 +1874,7 @@
             "id": "indicator--c9841d1d-a30d-5be4-9195-82f0ce971c6f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.654635Z",
-            "modified": "2026-10-01T19:54:11.654635Z",
+            "modified": "2026-10-17T16:28:28.51102Z",
             "name": "sha256: 7033c45472d358e48e333839e680509ee42d9349bc389d747a424ba74315939e",
             "description": "Sliver-derivative primary implant encryptor; freshly generated Fernet key per run",
             "indicator_types": [
@@ -1829,6 +1889,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1845,7 +1906,7 @@
             "id": "indicator--92498000-ec38-5c41-8ac5-cb3bddcf2281",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.655019Z",
-            "modified": "2026-10-01T19:54:11.655019Z",
+            "modified": "2026-10-17T16:28:28.511484Z",
             "name": "sha256: 7112cd222d1c90fa18fc4f5520800a44891ad5770bdda71772d471377d66b1ee",
             "description": "Sliver-derivative keylogger; GetAsyncKeyState polling, batches POST to http://5.230.201.54/api/v/keylog",
             "indicator_types": [
@@ -1860,6 +1921,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1884,7 +1946,7 @@
             "id": "indicator--752fd330-6706-51cd-9388-18f058ef0f74",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.655697Z",
-            "modified": "2026-10-01T19:54:11.655697Z",
+            "modified": "2026-10-17T16:28:28.512054Z",
             "name": "sha256: d3fd9994b16dc9b14c29f7faf7b5f6c84f44b06fccf82f0031a0871ce5e20e17",
             "description": "Pandora.sh HTTP:80 dropper - Mirai/Xbash family, VT 12/63; execution_parent for Naku.spc per VT",
             "indicator_types": [
@@ -1899,6 +1961,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1915,7 +1978,7 @@
             "id": "indicator--919f1005-1451-5953-9874-5c765feea230",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.65613Z",
-            "modified": "2026-10-01T19:54:11.65613Z",
+            "modified": "2026-10-17T16:28:28.512509Z",
             "name": "sha256: d55e488cb7af11ab252cfacbfeb2c9d30289d371d9b54af85466e8814f25ca02",
             "description": "Sliver loader iteration v29; 6671 bytes, 164 lines",
             "indicator_types": [
@@ -1930,6 +1993,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1946,7 +2010,7 @@
             "id": "indicator--be07cd65-95b6-5ca4-8279-d70ba1dd7dad",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.656513Z",
-            "modified": "2026-10-01T19:54:11.656513Z",
+            "modified": "2026-10-17T16:28:28.513025Z",
             "name": "sha256: eaaa10c840de23335abae1a9ead0a6a7fb7be5187cd19ad05137feab12bb7301",
             "description": "GHOST kit LD_PRELOAD libc-hook rootkit (ELF64); byte-identical across operator-A and operator-B deployments; VT 0/0 NEVER SCANNED by any AV; 27 hide-strings + 9 hide-ports; hooks readdir/readdir64/fopen/fopen64",
             "indicator_types": [
@@ -1961,6 +2025,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1977,7 +2042,7 @@
             "id": "indicator--6d1bc44e-fe7e-5313-9aae-cffcd26c0997",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.656911Z",
-            "modified": "2026-10-01T19:54:11.656911Z",
+            "modified": "2026-10-17T16:28:28.513481Z",
             "name": "sha256: edafde0d33ff1a169c0c4eeaeec12d1759818c7cf4950fcee91c687e811e6cff",
             "description": "GHOST kit LD_PRELOAD rootkit C source (98 lines); dense single-character-identifier hand-written style",
             "indicator_types": [
@@ -1992,6 +2057,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -2016,7 +2082,7 @@
             "id": "indicator--c30f0706-5e7a-561b-96bd-4b492d4b9942",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:11.657367Z",
-            "modified": "2026-10-01T19:54:11.657367Z",
+            "modified": "2026-10-17T16:28:28.514103Z",
             "name": "sha256: f3c7cde94261f6664891357b399198a73b9741a7a435527807dca5b3bb86e5f0",
             "description": "Sliver-derivative screencap client; streams to operator backend on TCP/9093",
             "indicator_types": [
@@ -2031,6 +2097,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {

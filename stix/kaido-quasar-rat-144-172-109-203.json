@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--93e97f33-2303-4de3-8169-5c6aa09815db",
+    "id": "bundle--101806c8-69f3-4387-8c4d-4dd8386e882e",
     "objects": [
         {
             "type": "identity",
@@ -34,7 +34,7 @@
             "id": "indicator--bb14b624-d5e8-5f37-bd0e-c6226f7c9cf4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.808096Z",
-            "modified": "2026-10-01T19:54:14.808096Z",
+            "modified": "2026-10-17T16:28:31.549335Z",
             "name": "ipv4: 144.172.109.203",
             "description": "Live KAIDO Quasar RAT C2, AS14956 RouterHosting US; :8443 TeamKAIDO cert; :4782 Quasar protocol",
             "indicator_types": [
@@ -49,6 +49,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 95
         },
         {
@@ -63,7 +64,7 @@
             "id": "indicator--98fc5b94-ab86-5d56-8310-f18fce62bda3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.811292Z",
-            "modified": "2026-10-01T19:54:14.811292Z",
+            "modified": "2026-10-17T16:28:31.549857Z",
             "name": "ipv4: 179.43.150.50",
             "description": "Current kaidoo.com.br A-record, AS51852 Private Layer CH; passive only. Do not probe",
             "indicator_types": [
@@ -78,6 +79,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 60
         },
         {
@@ -92,7 +94,7 @@
             "id": "indicator--e7cc84a5-aa27-5a54-a7cf-38dc1dfa5d40",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.811829Z",
-            "modified": "2026-10-01T19:54:14.811829Z",
+            "modified": "2026-10-17T16:28:31.550301Z",
             "name": "domain: c2.kaidoo.com.br",
             "description": "KAIDO Quasar RAT secondary C2 (port 443)",
             "indicator_types": [
@@ -107,6 +109,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 95
         },
         {
@@ -121,7 +124,7 @@
             "id": "indicator--06a03fd5-b55a-56cd-b60f-8355d15ecbd5",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.81258Z",
-            "modified": "2026-10-01T19:54:14.81258Z",
+            "modified": "2026-10-17T16:28:31.550727Z",
             "name": "domain: choix-relay.com",
             "description": "French 'choix' domain co-resident on the Swiss KAIDO host (179.43.150.50); possible parallel phishing line, MODERATE-LOW",
             "indicator_types": [
@@ -136,6 +139,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 40
         },
         {
@@ -150,7 +154,7 @@
             "id": "indicator--f728748b-968a-5d9d-998e-e1967686ca2e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.813068Z",
-            "modified": "2026-10-01T19:54:14.813068Z",
+            "modified": "2026-10-17T16:28:31.551195Z",
             "name": "domain: kaidoo.com.br",
             "description": "KAIDO Quasar RAT primary C2 (port 4782); DNS confirmed in contained detonation",
             "indicator_types": [
@@ -165,6 +169,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 95
         },
         {
@@ -179,7 +184,7 @@
             "id": "indicator--6907b9eb-f4b5-5b94-83a6-6543590c8b03",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.813483Z",
-            "modified": "2026-10-01T19:54:14.813483Z",
+            "modified": "2026-10-17T16:28:31.551819Z",
             "name": "domain: www.kaidoo.com.br",
             "description": "KAIDO brand domain",
             "indicator_types": [
@@ -194,6 +199,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -210,7 +216,7 @@
             "id": "indicator--d487abaa-2f25-5cb8-99d3-61c096417f12",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.814025Z",
-            "modified": "2026-10-01T19:54:14.814025Z",
+            "modified": "2026-10-17T16:28:31.552364Z",
             "name": "sha256: 022944768c4326d611fa3edb100eb8277228717a220580e7ffce143341aa39fa",
             "description": "KAIDO Quasar RAT, low-detection sibling",
             "indicator_types": [
@@ -225,6 +231,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -241,7 +248,7 @@
             "id": "indicator--595e7e26-9368-5b2b-8adf-87b418b18f01",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.815589Z",
-            "modified": "2026-10-01T19:54:14.815589Z",
+            "modified": "2026-10-17T16:28:31.552892Z",
             "name": "sha256: 385d20ca574976e3ba3f4f3079420f8a1c3935c0ab4a3f87063beea27d41e254",
             "description": "KAIDO Quasar RAT, live-C2 sibling, c2.kaidoo.com.br:443",
             "indicator_types": [
@@ -256,6 +263,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -272,7 +280,7 @@
             "id": "indicator--f6a4ebb0-f9e8-5832-8f9f-cb0159f65675",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.816108Z",
-            "modified": "2026-10-01T19:54:14.816108Z",
+            "modified": "2026-10-17T16:28:31.553377Z",
             "name": "sha256: c7542e8265f70d6c1dbf2e3cf6e81a90198cd157d3d6693c6d2a8a49d99a5b8d",
             "description": "KAIDO Quasar RAT, tag 'breach', C2 kaidoo.com.br:4782 (richest sample, 14 Costura deps)",
             "indicator_types": [
@@ -287,6 +295,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {

@@ -5,8 +5,8 @@
   "zip": {
     "file": "hunters-ledger-stix-bundles.zip",
     "url": "https://the-hunters-ledger.com/stix/hunters-ledger-stix-bundles.zip",
-    "sha256": "8089eb759540600f2457f8c6438e6e8c7186fc962535a264503be4ae0f40a51d",
-    "bytes": 1979555
+    "sha256": "3f3e551bdee634e66df9909a76aa35094b6ccfc50e7e739620a25bf59605b85f",
+    "bytes": 1983821
   },
   "bundles": [
     {
@@ -46,13 +46,13 @@
       "file": "sliver-c2-windows-postex-staging-193-233-202-17.json",
       "url": "https://the-hunters-ledger.com/stix/sliver-c2-windows-postex-staging-193-233-202-17.json",
       "report_url": "https://the-hunters-ledger.com/reports/sliver-c2-windows-postex-staging-193-233-202-17/",
-      "bundle_id": "bundle--4f890e74-e42c-4ecb-9a11-acfb75142a18",
+      "bundle_id": "bundle--dd2d7e98-bc17-47d1-b0ba-2d17f9e80cc3",
       "report_id": "report--9f175132-e498-5e02-9c9c-b1ab5dff72db",
-      "sha256": "532af24619c5ee4d362449651b8eac0df6ba862d13c87ed38a2aed34aff9cb77",
-      "bytes": 3685047,
+      "sha256": "6c73a1ff757ebc114dc22269c10bf8f971c84d3badd8c3497224bee414571c5d",
+      "bytes": 3689832,
       "objects": 4918,
       "indicators": 101,
-      "modified": "2026-10-11T14:08:46.722342Z"
+      "modified": "2026-10-17T16:28:37.812527Z"
     },
     {
       "slug": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
@@ -61,13 +61,13 @@
       "file": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817.json",
       "url": "https://the-hunters-ledger.com/stix/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817.json",
       "report_url": "https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/",
-      "bundle_id": "bundle--09736ecc-e800-4ba7-b135-33dcc8498b0d",
+      "bundle_id": "bundle--eba0bd19-6d3f-4551-b139-bcb88f078a8e",
       "report_id": "report--2aa3b7a4-9d57-5059-94af-58ae5009f969",
-      "sha256": "3d7e4efe81307bcfcec356795f8fa9922816b155ccdc48393e058e9b64942397",
-      "bytes": 3092095,
+      "sha256": "9576db3019901f01068dffc09a31bb82406baa110604614baa040bf2273a312b",
+      "bytes": 3096379,
       "objects": 4085,
       "indicators": 105,
-      "modified": "2026-10-11T07:42:07.442912Z"
+      "modified": "2026-10-17T16:28:32.863642Z"
     },
     {
       "slug": "seasia-gov-exploitation-toolkit-144-172-106-236",
@@ -76,13 +76,13 @@
       "file": "seasia-gov-exploitation-toolkit-144-172-106-236.json",
       "url": "https://the-hunters-ledger.com/stix/seasia-gov-exploitation-toolkit-144-172-106-236.json",
       "report_url": "https://the-hunters-ledger.com/reports/seasia-gov-exploitation-toolkit-144-172-106-236/",
-      "bundle_id": "bundle--9a8a0178-53ea-43a8-b609-43b84aa72470",
+      "bundle_id": "bundle--6527f734-24bd-4a35-a264-49aef25510ec",
       "report_id": "report--24bb536a-5f81-59ee-b0a6-69371772c782",
-      "sha256": "0ba3b60fbf13db7b904b6cbed15c378f011a44668a1a0ca7a2c6d134018a02f9",
-      "bytes": 176005,
+      "sha256": "2dec24880ddec5500221d53e320ff8c015bf0d98b81644fb3498d1cccb459b8f",
+      "bytes": 176063,
       "objects": 191,
       "indicators": 30,
-      "modified": "2026-10-11T07:42:15.490379Z"
+      "modified": "2026-10-17T16:28:37.46978Z"
     },
     {
       "slug": "cloudsync-assembler-toolkit-91-197-98-188",
@@ -91,13 +91,13 @@
       "file": "cloudsync-assembler-toolkit-91-197-98-188.json",
       "url": "https://the-hunters-ledger.com/stix/cloudsync-assembler-toolkit-91-197-98-188.json",
       "report_url": "https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/",
-      "bundle_id": "bundle--e2168bac-a355-47f1-b59f-4ebc67ddf76f",
+      "bundle_id": "bundle--7e2afc71-b700-4fd4-9e51-53ae5bdb8340",
       "report_id": "report--9e9a2d1e-2840-51a5-af43-b5ef11a64213",
-      "sha256": "9299c95eccf9133c59585cafbd902aafcdbd8021645fce5a7dd4f8cb44be7ae3",
-      "bytes": 187871,
+      "sha256": "2c26ddd9991ee9e0ccf6f06e55bfeece3e6ef53794f5cd3a2fd0b76fee2d4665",
+      "bytes": 188162,
       "objects": 205,
       "indicators": 34,
-      "modified": "2026-10-11T14:08:22.061659Z"
+      "modified": "2026-10-17T16:28:29.921448Z"
     },
     {
       "slug": "gocloud-multiservice-cryptojacking-149-28-112-221",
@@ -106,13 +106,13 @@
       "file": "gocloud-multiservice-cryptojacking-149-28-112-221.json",
       "url": "https://the-hunters-ledger.com/stix/gocloud-multiservice-cryptojacking-149-28-112-221.json",
       "report_url": "https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/",
-      "bundle_id": "bundle--b00e5913-e79d-4380-8eea-75246fdfaf3b",
+      "bundle_id": "bundle--ad2be2c3-832d-45df-833e-e8a74513b231",
       "report_id": "report--f600aa39-9356-5b94-8a65-4b8d27c6ba2e",
-      "sha256": "48c0fea95ba01239e4f61854d89e95686017c673a713dad4fe45a5d083c9dd16",
-      "bytes": 183753,
+      "sha256": "e0c0064978cfc3a3d29b6d149ae965275182ad3a10118ced8296067a45f7303b",
+      "bytes": 184591,
       "objects": 239,
       "indicators": 38,
-      "modified": "2026-10-11T14:08:25.285121Z"
+      "modified": "2026-10-17T16:28:31.10477Z"
     },
     {
       "slug": "multivector-ecommerce-rce-toolkit-192-3-1-116",
@@ -121,13 +121,13 @@
       "file": "multivector-ecommerce-rce-toolkit-192-3-1-116.json",
       "url": "https://the-hunters-ledger.com/stix/multivector-ecommerce-rce-toolkit-192-3-1-116.json",
       "report_url": "https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/",
-      "bundle_id": "bundle--caa5d358-7ff0-409a-8c85-0b5e34bea815",
+      "bundle_id": "bundle--4732100d-e642-4131-b028-dd1af8f7e39d",
       "report_id": "report--d2cbc7b4-0c74-5743-bbb9-91e98e6c514c",
-      "sha256": "ab2ae46726ccdaeb02a798078d1b5153f958fc6a7b0f322e072425a82e41d789",
-      "bytes": 97805,
+      "sha256": "c221834ee3e18a41a8f0a747c285772a71d09a441bcf1cba8620b1779d85fb97",
+      "bytes": 98191,
       "objects": 77,
       "indicators": 29,
-      "modified": "2026-10-11T14:08:27.701333Z"
+      "modified": "2026-10-17T16:28:31.726317Z"
     },
     {
       "slug": "evilsoul-engine-stealer-maas-144-172-103-98",
@@ -136,13 +136,13 @@
       "file": "evilsoul-engine-stealer-maas-144-172-103-98.json",
       "url": "https://the-hunters-ledger.com/stix/evilsoul-engine-stealer-maas-144-172-103-98.json",
       "report_url": "https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/",
-      "bundle_id": "bundle--e13f9f9c-6928-46f0-b059-36c877356318",
+      "bundle_id": "bundle--38ffd941-7c23-4211-b961-1e1942f11ea2",
       "report_id": "report--a9f4eae3-2bc4-5503-9477-2a7eaafb1dbf",
-      "sha256": "c673ef8c270182ae92ca52993e820c11bc262985bf2ee90399b7b3bfcb3f7f63",
-      "bytes": 365896,
+      "sha256": "81d40bf689e1733110abbca38a77efa5bb323435fc4d350f9ef0b8014077d741",
+      "bytes": 367872,
       "objects": 472,
       "indicators": 46,
-      "modified": "2026-10-11T05:07:57.529776Z"
+      "modified": "2026-10-17T16:28:30.201592Z"
     },
     {
       "slug": "kaido-quasar-rat-144-172-109-203",
@@ -151,13 +151,13 @@
       "file": "kaido-quasar-rat-144-172-109-203.json",
       "url": "https://the-hunters-ledger.com/stix/kaido-quasar-rat-144-172-109-203.json",
       "report_url": "https://the-hunters-ledger.com/reports/kaido-quasar-rat-144-172-109-203/",
-      "bundle_id": "bundle--93e97f33-2303-4de3-8169-5c6aa09815db",
+      "bundle_id": "bundle--101806c8-69f3-4387-8c4d-4dd8386e882e",
       "report_id": "report--caeb4af1-7cfb-51f1-9401-c7268353f962",
-      "sha256": "bd43865c4956e5e3aff9f34eb4c058e50dbc229238af6ec1866f61c1d4fd7563",
-      "bytes": 49588,
+      "sha256": "0fe882ead31f76b1a85220a0c1d9872d04b27a0db88f9b790666f74cd4a2900e",
+      "bytes": 50125,
       "objects": 53,
       "indicators": 17,
-      "modified": "2026-10-11T14:08:26.709793Z"
+      "modified": "2026-10-17T16:28:31.553377Z"
     },
     {
       "slug": "ai-agent-frameworks-2026-05-23",
@@ -166,13 +166,13 @@
       "file": "ai-agent-frameworks-2026-05-23.json",
       "url": "https://the-hunters-ledger.com/stix/ai-agent-frameworks-2026-05-23.json",
       "report_url": "https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/",
-      "bundle_id": "bundle--ad008a50-9108-4da3-9608-ec802d772d27",
+      "bundle_id": "bundle--cbc98c73-c106-4262-b341-8d4a5ec582f7",
       "report_id": "report--b0d9cd2f-d73f-5e19-a193-66cc1aa0e090",
-      "sha256": "af45508a58ce6e72f9fdb6e84cfe65d5b24f7d2ea934983df03cdd8e30ee72c1",
-      "bytes": 1677753,
+      "sha256": "414a2cced3abf0c7e00da9759f42815c2b7ee633d5afda0096771f5b8d09c68b",
+      "bytes": 1681663,
       "objects": 2189,
       "indicators": 92,
-      "modified": "2026-10-11T14:08:19.668348Z"
+      "modified": "2026-10-17T16:28:28.514103Z"
     },
     {
       "slug": "flaskc2-postex-toolkit-67-215-232-25",
@@ -181,13 +181,13 @@
       "file": "flaskc2-postex-toolkit-67-215-232-25.json",
       "url": "https://the-hunters-ledger.com/stix/flaskc2-postex-toolkit-67-215-232-25.json",
       "report_url": "https://the-hunters-ledger.com/reports/flaskc2-postex-toolkit-67-215-232-25/",
-      "bundle_id": "bundle--22c28fe9-8064-43f4-879d-809e6b817847",
+      "bundle_id": "bundle--3ffc42c6-9dae-4a2e-ae59-0e984be5ba88",
       "report_id": "report--d334d776-c26a-566a-89b7-e513db9b7882",
-      "sha256": "e46da0b7dcc2b28b409e102b221215ac3886b1ea4b7de87e1393958068bfd881",
-      "bytes": 255384,
+      "sha256": "29ba5d46f67264e4ebf5d027f64938b26e0b33461a62caa6ee64d44ec7b29a5d",
+      "bytes": 255765,
       "objects": 327,
       "indicators": 20,
-      "modified": "2026-10-11T14:08:23.279905Z"
+      "modified": "2026-10-17T16:28:30.491406Z"
     },
     {
       "slug": "korean-claude-openclaw-221.150.15.104",
@@ -196,13 +196,13 @@
       "file": "korean-claude-openclaw-221.150.15.104.json",
       "url": "https://the-hunters-ledger.com/stix/korean-claude-openclaw-221.150.15.104.json",
       "report_url": "https://the-hunters-ledger.com/reports/korean-claude-openclaw-221.150.15.104/",
-      "bundle_id": "bundle--cf3587fe-4646-4262-a6c7-7baae5315729",
+      "bundle_id": "bundle--303eb2ae-5172-426f-9bef-10f7841fe515",
       "report_id": "report--076f15c9-d73d-5228-95a2-ee80898c22b8",
-      "sha256": "275538d2b79a2ab993a000ba768745cd982f53d9715c60481c6a5cd6a4a157ac",
-      "bytes": 26702,
+      "sha256": "b6bf0ed43d6e5ed4e32317f1264d5b25efbda908853fd64db8e23590c0c3fca7",
+      "bytes": 27051,
       "objects": 22,
       "indicators": 12,
-      "modified": "2026-10-11T14:08:27.180421Z"
+      "modified": "2026-10-17T16:28:31.628993Z"
     },
     {
       "slug": "rovodev-mirai-matrix-c2-87.106.143.220",
@@ -211,13 +211,13 @@
       "file": "rovodev-mirai-matrix-c2-87.106.143.220.json",
       "url": "https://the-hunters-ledger.com/stix/rovodev-mirai-matrix-c2-87.106.143.220.json",
       "report_url": "https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/",
-      "bundle_id": "bundle--1b09f678-022b-4fcf-982c-ad9fcb5e1ca3",
+      "bundle_id": "bundle--f50973e4-5536-4a6a-bc42-ac574cc21f22",
       "report_id": "report--d6a3df6a-be77-50bd-8c19-3b3a9455ec93",
-      "sha256": "1048fc387fe5abde6837df8e46e32637249ea8c46ebeda3e80dd8048a83b0dbe",
-      "bytes": 1212332,
+      "sha256": "e0b9284482c498124c0aa5715715a12a8748c049659a9121011800863ef26a52",
+      "bytes": 1214124,
       "objects": 1549,
       "indicators": 61,
-      "modified": "2026-10-11T14:08:39.683597Z"
+      "modified": "2026-10-17T16:28:36.430964Z"
     },
     {
       "slug": "ghost-cryptojacker-vova75rus-77.110.96.200",
@@ -226,13 +226,13 @@
       "file": "ghost-cryptojacker-vova75rus-77.110.96.200.json",
       "url": "https://the-hunters-ledger.com/stix/ghost-cryptojacker-vova75rus-77.110.96.200.json",
       "report_url": "https://the-hunters-ledger.com/reports/ghost-cryptojacker-vova75rus-77.110.96.200/",
-      "bundle_id": "bundle--cd870918-f0f8-4cf6-a463-a51d3468e3d5",
+      "bundle_id": "bundle--b0acbb6b-7f2f-4f77-8c7b-0557f2be5b36",
       "report_id": "report--9aa555ca-d9d6-51c3-8af0-af351596d438",
-      "sha256": "08d8fa49eaf4806ed5ca08b1360e2d4ff8faef286079b8d508ad23f5ab44ee39",
-      "bytes": 608960,
+      "sha256": "0452cab5bab0209596767f8825119d41003725578d203d246b96250e0688998c",
+      "bytes": 610800,
       "objects": 754,
       "indicators": 56,
-      "modified": "2026-10-11T14:08:24.334038Z"
+      "modified": "2026-10-17T16:28:30.695979Z"
     },
     {
       "slug": "russian-gemini-credential-mill-213.165.51.115",
@@ -241,13 +241,13 @@
       "file": "russian-gemini-credential-mill-213.165.51.115.json",
       "url": "https://the-hunters-ledger.com/stix/russian-gemini-credential-mill-213.165.51.115.json",
       "report_url": "https://the-hunters-ledger.com/reports/russian-gemini-credential-mill-213.165.51.115/",
-      "bundle_id": "bundle--e0f6671e-c190-488a-9c98-087b67406733",
+      "bundle_id": "bundle--9e519c09-9107-4c22-ae3d-e77bf868e684",
       "report_id": "report--a827f1aa-9f5c-538f-89b0-fe00bfc685e7",
-      "sha256": "83be56cd2ad0a22260c2569a5dfcb81ae7ba7f66a82a68504d7b175e57e05159",
-      "bytes": 367928,
+      "sha256": "d492f06aef28997938f12c82f399ce09036e4b3e9d51d8629e5618c11379b018",
+      "bytes": 369203,
       "objects": 442,
       "indicators": 41,
-      "modified": "2026-10-11T14:08:41.437323Z"
+      "modified": "2026-10-17T16:28:37.215536Z"
     },
     {
       "slug": "turkish-arpa-openclaw-state-insurer-209.38.205.158",
@@ -256,13 +256,13 @@
       "file": "turkish-arpa-openclaw-state-insurer-209.38.205.158.json",
       "url": "https://the-hunters-ledger.com/stix/turkish-arpa-openclaw-state-insurer-209.38.205.158.json",
       "report_url": "https://the-hunters-ledger.com/reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/",
-      "bundle_id": "bundle--00f9e321-efb2-4bad-9dfc-2df4066559d7",
+      "bundle_id": "bundle--cf7dcad9-efb6-478b-8823-0cc6fcf2ce69",
       "report_id": "report--aed547b6-648b-561d-b984-464d52e75bcc",
-      "sha256": "9abd71d412c2637ea9db99e7cafbf7fb4e5df9d0ed963f6f5d73f8cc6bc90f56",
-      "bytes": 143541,
+      "sha256": "57479f46815f1953262e625641db73e3bf870e1c5c805748ecb826e469fcad41",
+      "bytes": 144754,
       "objects": 137,
       "indicators": 42,
-      "modified": "2026-10-16T19:47:24.961523Z"
+      "modified": "2026-10-17T16:28:40.253823Z"
     },
     {
       "slug": "opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517",
@@ -271,13 +271,13 @@
       "file": "opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517.json",
       "url": "https://the-hunters-ledger.com/stix/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517.json",
       "report_url": "https://the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/",
-      "bundle_id": "bundle--c90125df-ccb4-43d8-951c-63458afb5e33",
+      "bundle_id": "bundle--822735c0-1aa0-478a-a274-73bd00c635ea",
       "report_id": "report--5270d6b2-a916-5d6d-a909-1e8f4252dc72",
-      "sha256": "108004bb90a89601f76cd59e845645b36de8d776ca1409651165fdf2f7177960",
-      "bytes": 328645,
+      "sha256": "27565829c8031794258458752bdf1fc380febd79ca3b34ffeb9b81f4609a3b68",
+      "bytes": 331439,
       "objects": 455,
       "indicators": 57,
-      "modified": "2026-10-11T14:08:30.709512Z"
+      "modified": "2026-10-17T16:28:34.908595Z"
     },
     {
       "slug": "bellamain-turkish-phaas-79-137-192-3-20260516",
@@ -286,13 +286,13 @@
       "file": "bellamain-turkish-phaas-79-137-192-3-20260516.json",
       "url": "https://the-hunters-ledger.com/stix/bellamain-turkish-phaas-79-137-192-3-20260516.json",
       "report_url": "https://the-hunters-ledger.com/reports/bellamain-turkish-phaas-79-137-192-3-20260516/",
-      "bundle_id": "bundle--7a020025-e287-4f21-9081-54bbcd799d0f",
+      "bundle_id": "bundle--3c909889-3cf9-40e4-a969-f2c00772e9b9",
       "report_id": "report--ffb8d174-a8c9-5fc5-b94f-9462fdff65b3",
-      "sha256": "938a5eddae1c19debc55e8c9673d474c6a8f49f5b389bdf0b382165237f89410",
-      "bytes": 307334,
+      "sha256": "d4212d741ddd4c6099d735859a1ca8243408c609ed02dbd69be231279e96907d",
+      "bytes": 308349,
       "objects": 388,
       "indicators": 24,
-      "modified": "2026-10-11T15:06:17.166779Z"
+      "modified": "2026-10-17T16:28:29.701252Z"
     },
     {
       "slug": "inkognito-russian-vpn-phishing-185-221-196-118-20260516",
@@ -301,13 +301,13 @@
       "file": "inkognito-russian-vpn-phishing-185-221-196-118-20260516.json",
       "url": "https://the-hunters-ledger.com/stix/inkognito-russian-vpn-phishing-185-221-196-118-20260516.json",
       "report_url": "https://the-hunters-ledger.com/reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/",
-      "bundle_id": "bundle--9cedfce6-f430-46dd-b795-319220934bb6",
+      "bundle_id": "bundle--4d00b55f-8099-4f67-b2fd-e2475293f532",
       "report_id": "report--65f0c20d-2226-5d96-a2ae-82136af527b6",
-      "sha256": "839160a9b7c3b574005604994c37052956278c7f820ce83654326fdaecf2b15f",
-      "bytes": 131429,
+      "sha256": "4c681b4553628f2d87455942d4bd52b9e71ae4cb38fc3f04eab77763c3ae4e4e",
+      "bytes": 134524,
       "objects": 171,
       "indicators": 57,
-      "modified": "2026-10-11T14:08:25.981559Z"
+      "modified": "2026-10-17T16:28:31.349182Z"
     },
     {
       "slug": "opendirectory-79-137-192-3-20260515",
@@ -316,13 +316,13 @@
       "file": "opendirectory-79-137-192-3-20260515.json",
       "url": "https://the-hunters-ledger.com/stix/opendirectory-79-137-192-3-20260515.json",
       "report_url": "https://the-hunters-ledger.com/reports/opendirectory-79-137-192-3-20260515/",
-      "bundle_id": "bundle--36a0eaa6-163a-440c-b6d3-b8cdd0be60dc",
+      "bundle_id": "bundle--797127a6-e33b-4fa7-aba5-654035b9d182",
       "report_id": "report--11bf7544-c216-50a4-bf64-e2aa27a28014",
-      "sha256": "91bb313a09f279090bb3722a170b6399e2c8df22fa57d030bfa1c4773293553a",
-      "bytes": 619035,
+      "sha256": "85c20e54dd99a2cb0fb8579a0b4597790b121c1ac4ed50ac326b6a7611367bec",
+      "bytes": 622143,
       "objects": 809,
       "indicators": 65,
-      "modified": "2026-10-11T14:08:34.804059Z"
+      "modified": "2026-10-17T16:28:35.852912Z"
     },
     {
       "slug": "opendirectory-62-60-237-100-20260506",
@@ -331,13 +331,13 @@
       "file": "opendirectory-62-60-237-100-20260506.json",
       "url": "https://the-hunters-ledger.com/stix/opendirectory-62-60-237-100-20260506.json",
       "report_url": "https://the-hunters-ledger.com/reports/opendirectory-62-60-237-100-20260506/",
-      "bundle_id": "bundle--9d924417-0e3a-4006-ab87-e6ed926b87dd",
+      "bundle_id": "bundle--cc80fc60-52f6-4234-a587-23011e03ae4b",
       "report_id": "report--aeece79f-37fb-57b6-9eac-f7fa0ff37e78",
-      "sha256": "e9e183d6799af3961ad5d6cec1688bf679f9ec14e423b2f7153c486a39a9be9a",
-      "bytes": 578731,
+      "sha256": "d4adfeefc4c975bcaea67b88948f8d524b8545adf2a41b8041ca4843b7caec5e",
+      "bytes": 580400,
       "objects": 766,
       "indicators": 45,
-      "modified": "2026-10-11T14:08:33.133377Z"
+      "modified": "2026-10-17T16:28:35.432463Z"
     },
     {
       "slug": "opendirectory-45-130-148-125-20260430",
@@ -346,13 +346,13 @@
       "file": "opendirectory-45-130-148-125-20260430.json",
       "url": "https://the-hunters-ledger.com/stix/opendirectory-45-130-148-125-20260430.json",
       "report_url": "https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/",
-      "bundle_id": "bundle--1a9713af-77c0-4958-ae4d-c149163182d3",
+      "bundle_id": "bundle--d052afe8-6ef5-42eb-afb6-449bfad0c515",
       "report_id": "report--fc7cbb43-66c7-5373-b2ac-b5eb14fb24fd",
-      "sha256": "cc89e531c63fd5fb8f46701f0a96549c8f425c975c5b54f343c611aa404f2370",
-      "bytes": 294963,
+      "sha256": "24e9e97707bda40fee7f41540d0b6b3b437abb5be167fc7e4bcd03ad37395049",
+      "bytes": 295235,
       "objects": 379,
       "indicators": 22,
-      "modified": "2026-10-11T14:08:31.74403Z"
+      "modified": "2026-10-17T16:28:35.187341Z"
     },
     {
       "slug": "open-directory-94-103-1-13-20260423",
@@ -361,13 +361,13 @@
       "file": "open-directory-94-103-1-13-20260423.json",
       "url": "https://the-hunters-ledger.com/stix/open-directory-94-103-1-13-20260423.json",
       "report_url": "https://the-hunters-ledger.com/reports/open-directory-94-103-1-13-20260423/",
-      "bundle_id": "bundle--e432292d-7e18-43f1-93f1-4e25fff74e54",
+      "bundle_id": "bundle--1692a3cf-8c51-48b8-9298-0e51e78aa34a",
       "report_id": "report--184081d9-0822-53f5-8dbb-36e94e7e2bf1",
-      "sha256": "a1010fa64df6cfb3c14d4e3d9ef8a5cf7e032af96d8409c5e19aeac96c488e32",
-      "bytes": 812879,
+      "sha256": "04c318262967da63ea25ea1e2bf7cde041bb560dc56313ac88d5e1af2f5ac257",
+      "bytes": 814228,
       "objects": 1049,
       "indicators": 41,
-      "modified": "2026-10-11T14:08:36.672496Z"
+      "modified": "2026-10-17T16:28:32.296511Z"
     },
     {
       "slug": "shinyhunters-dls-91-215-85-22-20260417",
@@ -376,13 +376,13 @@
       "file": "shinyhunters-dls-91-215-85-22-20260417.json",
       "url": "https://the-hunters-ledger.com/stix/shinyhunters-dls-91-215-85-22-20260417.json",
       "report_url": "https://the-hunters-ledger.com/reports/shinyhunters-dls-91-215-85-22-20260417/",
-      "bundle_id": "bundle--434e53b6-e2cc-4f00-b93b-1c94bf02b005",
+      "bundle_id": "bundle--1a892975-d22b-4fb7-8976-d7e69eadd325",
       "report_id": "report--5ff1b5a0-5d02-5631-a253-1a04ccb6db3a",
-      "sha256": "877e748926ae12271aac175eff0e8bc6c88be2eb59b3c67d2870e2658a1a3875",
-      "bytes": 69549,
+      "sha256": "25ac347721071e3b5b7032fa4a5ffabb110da9ca0d62e2e19e0df3497839fca0",
+      "bytes": 70055,
       "objects": 75,
       "indicators": 20,
-      "modified": "2026-10-11T07:42:16.529569Z"
+      "modified": "2026-10-17T16:28:37.690842Z"
     },
     {
       "slug": "new-files-found-20260408",
@@ -391,13 +391,13 @@
       "file": "new-files-found-20260408.json",
       "url": "https://the-hunters-ledger.com/stix/new-files-found-20260408.json",
       "report_url": "https://the-hunters-ledger.com/reports/new-files-found-20260408/",
-      "bundle_id": "bundle--85e6ce3e-cc1f-4045-b341-8572b7b3d1b5",
+      "bundle_id": "bundle--eecece5e-a9bb-4dec-b18a-8e80e6408f75",
       "report_id": "report--4515275f-b9be-56f7-a189-401e48c3836e",
-      "sha256": "fe093a0cbfad46ffc8c5d1c0fab959fcbb0a5acab06f60c8d68383d6b21a2592",
-      "bytes": 190166,
+      "sha256": "ad04db52eeee90630d5b3f63428cc4616c964ea1a345f5680f4ee6251a29c1b7",
+      "bytes": 190543,
       "objects": 236,
       "indicators": 25,
-      "modified": "2026-10-11T14:08:28.8023Z"
+      "modified": "2026-10-17T16:28:31.835911Z"
     },
     {
       "slug": "open-directory-172-105-0-126-20260406",
@@ -406,13 +406,13 @@
       "file": "open-directory-172-105-0-126-20260406.json",
       "url": "https://the-hunters-ledger.com/stix/open-directory-172-105-0-126-20260406.json",
       "report_url": "https://the-hunters-ledger.com/reports/open-directory-172-105-0-126-20260406/",
-      "bundle_id": "bundle--75e31b0a-b3ce-434f-9efd-2ba2b605b253",
+      "bundle_id": "bundle--76abca0f-a4ca-4311-9d78-2feb9ebf51fe",
       "report_id": "report--275b389e-e02e-5042-8cc9-f20b55d10b10",
-      "sha256": "9f044088e1b028dea15c02096f677e2da5afa9119a46c6121c9c7509dcf27c34",
-      "bytes": 93497,
+      "sha256": "f3a7e85fdf091afbfd24e551931bdc8e427c24e9b949451ea3fb7f20022d61ac",
+      "bytes": 93821,
       "objects": 119,
       "indicators": 13,
-      "modified": "2026-10-11T14:08:29.834217Z"
+      "modified": "2026-10-17T16:28:32.104448Z"
     },
     {
       "slug": "shadow-xworm-opendirectory",
@@ -421,13 +421,13 @@
       "file": "shadow-xworm-opendirectory.json",
       "url": "https://the-hunters-ledger.com/stix/shadow-xworm-opendirectory.json",
       "report_url": "https://the-hunters-ledger.com/reports/shadow-xworm-opendirectory/",
-      "bundle_id": "bundle--01f104cd-cd1c-4980-bce5-a23b2c549742",
+      "bundle_id": "bundle--370e0dab-4703-4525-b338-d66e459088c9",
       "report_id": "report--d362fb2d-05fc-5938-936e-670754d7a6d8",
-      "sha256": "e9fa3c0ba327092c6ded3d26d92f8edc8c7dd61a79fe696f0096d1306a9fa577",
-      "bytes": 67752,
+      "sha256": "a9890eda3b5169c32878d2f576df95f7c93e494392cb8915100f30f11fd27986",
+      "bytes": 68294,
       "objects": 51,
       "indicators": 27,
-      "modified": "2026-10-11T14:08:42.42321Z"
+      "modified": "2026-10-17T16:28:37.613822Z"
     },
     {
       "slug": "open-directory-193-56-255-154-xiebroc2",
@@ -436,13 +436,13 @@
       "file": "open-directory-193-56-255-154-xiebroc2.json",
       "url": "https://the-hunters-ledger.com/stix/open-directory-193-56-255-154-xiebroc2.json",
       "report_url": "https://the-hunters-ledger.com/reports/open-directory-193-56-255-154-xiebroc2/",
-      "bundle_id": "bundle--5dde86c6-2880-476f-9313-ba557b0a6c28",
+      "bundle_id": "bundle--8ae1dada-f524-48f4-bd7c-4dc5f775ea65",
       "report_id": "report--0fe65056-4183-5b20-83a0-a9d992fbe09d",
-      "sha256": "32353da3b754a0d24ac49283cdcfcaf1523c16be0515096ea919bcec3ba0db62",
-      "bytes": 36064,
+      "sha256": "bd18849ecdba7c79ad76f686a0ebafe344ac6a8b03f0edad69e8ca880a17600f",
+      "bytes": 36283,
       "objects": 30,
       "indicators": 14,
-      "modified": "2026-10-11T07:42:05.096753Z"
+      "modified": "2026-10-17T16:28:32.225204Z"
     },
     {
       "slug": "zerotrace-74-0-42-25-20260316",
@@ -451,13 +451,13 @@
       "file": "zerotrace-74-0-42-25-20260316.json",
       "url": "https://the-hunters-ledger.com/stix/zerotrace-74-0-42-25-20260316.json",
       "report_url": "https://the-hunters-ledger.com/reports/zerotrace-74-0-42-25-20260316/",
-      "bundle_id": "bundle--f8f0c6bb-335f-4cb3-a2e2-8d9aa73de00e",
+      "bundle_id": "bundle--5d2c35dc-1f37-4e57-8486-ea8a3d4710db",
       "report_id": "report--6a5d5aeb-1950-5205-a90e-967908691438",
-      "sha256": "6d981ff0af6d62f39527fbfd4b6de6717917b1be00f0dbbde26441c7a1506790",
-      "bytes": 165986,
+      "sha256": "b7139ac2efdbbd0e9e419becc9d2b4500f24b3822fa449073d884e9058e22f0d",
+      "bytes": 167562,
       "objects": 213,
       "indicators": 39,
-      "modified": "2026-10-11T14:08:53.084802Z"
+      "modified": "2026-10-17T16:28:40.562437Z"
     },
     {
       "slug": "sliver-open-directory",
@@ -466,13 +466,13 @@
       "file": "sliver-open-directory.json",
       "url": "https://the-hunters-ledger.com/stix/sliver-open-directory.json",
       "report_url": "https://the-hunters-ledger.com/reports/sliver-open-directory/",
-      "bundle_id": "bundle--ffcbe6f6-629e-4583-b9df-5f496da1f88c",
+      "bundle_id": "bundle--ae3e3b53-509a-4029-bbaf-fa0abcc1276b",
       "report_id": "report--ca5a5217-efd5-53a5-921f-c00641d56de7",
-      "sha256": "43642980681c57cd9f6446dbfc1b2f7d53b34c035d29f1d6b321c6f86331d892",
-      "bytes": 60032,
+      "sha256": "824aae2b5de3dedf9dfaaa6fd8e7fd2bdf9dc4d56562140a139611a6be61ca0e",
+      "bytes": 60434,
       "objects": 52,
       "indicators": 18,
-      "modified": "2026-10-11T14:08:49.860632Z"
+      "modified": "2026-10-17T16:28:40.168047Z"
     },
     {
       "slug": "webserver-compromise-kit-91-236-230-250",
@@ -481,13 +481,13 @@
       "file": "webserver-compromise-kit-91-236-230-250.json",
       "url": "https://the-hunters-ledger.com/stix/webserver-compromise-kit-91-236-230-250.json",
       "report_url": "https://the-hunters-ledger.com/reports/webserver-compromise-kit-91-236-230-250/",
-      "bundle_id": "bundle--84f1d36a-c0e2-447a-9f1d-6b8bf11dfd25",
+      "bundle_id": "bundle--f6e4a68d-17d8-440c-9d73-321ab4cef0bb",
       "report_id": "report--174f1d73-3bf5-57a8-be0f-c94576ac3b35",
-      "sha256": "bfc5f90aa2e5d0abbcca026942f5172660e37b50eb749380e8427b09803668de",
-      "bytes": 28396,
+      "sha256": "d669e1998d9dd463c9064c53208dd05b48b3243d6f9aa7101bd93727eaf84efe",
+      "bytes": 28508,
       "objects": 22,
       "indicators": 10,
-      "modified": "2026-10-11T14:08:51.347748Z"
+      "modified": "2026-10-17T16:28:40.389695Z"
     },
     {
       "slug": "remcos-opendirectory",
@@ -496,13 +496,13 @@
       "file": "remcos-opendirectory.json",
       "url": "https://the-hunters-ledger.com/stix/remcos-opendirectory.json",
       "report_url": "https://the-hunters-ledger.com/reports/remcos-opendirectory/",
-      "bundle_id": "bundle--d9c81902-2192-4a8d-89d9-d592bf39f82a",
+      "bundle_id": "bundle--f291462f-e2f2-493f-9673-5ee53bdd3e6c",
       "report_id": "report--cfe4d76a-a030-5b5a-874a-5f584b6c436b",
-      "sha256": "800ae186c756017230a9b0064b96b9d57c8c038192bb39870592c027300e4707",
-      "bytes": 56993,
+      "sha256": "5bc0eda4c3324d6d3935b1e0c7618917b4065871e416e73fb1078c1123e6fdd6",
+      "bytes": 57109,
       "objects": 41,
       "indicators": 17,
-      "modified": "2026-10-11T08:16:39.058291Z"
+      "modified": "2026-10-17T16:28:36.354219Z"
     },
     {
       "slug": "nsminer-cryptojacker",
@@ -511,13 +511,13 @@
       "file": "nsminer-cryptojacker.json",
       "url": "https://the-hunters-ledger.com/stix/nsminer-cryptojacker.json",
       "report_url": "https://the-hunters-ledger.com/reports/nsminer-cryptojacker/",
-      "bundle_id": "bundle--15cbe356-3b0d-4294-9fb0-38c72c005bdf",
+      "bundle_id": "bundle--d3a4a65e-2d5d-44dc-95ce-31fcc39ebfd3",
       "report_id": "report--f5cf2d3d-4ab7-5767-8849-d0cbf388e3c2",
-      "sha256": "e79093bd31215a91ce1292e28e479b65fb3a9cf5deb4236a3beebef8759f1f3f",
-      "bytes": 21580,
+      "sha256": "8c38cc1215c57a5be08b9472ca0b515c96568ab122562d4267e4c6dd0ce0904e",
+      "bytes": 21755,
       "objects": 28,
       "indicators": 7,
-      "modified": "2026-10-11T14:08:29.329013Z"
+      "modified": "2026-10-17T16:28:32.048617Z"
     },
     {
       "slug": "arsenal-237-new-files",
@@ -571,13 +571,13 @@
       "file": "PULSAR-RAT.json",
       "url": "https://the-hunters-ledger.com/stix/PULSAR-RAT.json",
       "report_url": "https://the-hunters-ledger.com/reports/PULSAR-RAT/",
-      "bundle_id": "bundle--f1346c1b-75df-457d-87bc-0db6e148dd85",
+      "bundle_id": "bundle--90528884-7cda-4f34-98b4-66f8c7935167",
       "report_id": "report--63c70a80-72cc-5e25-b84d-647b47fa5196",
-      "sha256": "c04536be6976c9ba5812a2793a113195f668f572968ceb9a1b9d05532aa7f87c",
-      "bytes": 24113,
+      "sha256": "0fc593c2e9ff39fcd670e36c5b1f5da9f41ad005325f4c9e81e7a2a43fc7c914",
+      "bytes": 24171,
       "objects": 19,
       "indicators": 7,
-      "modified": "2026-10-11T14:08:37.953297Z"
+      "modified": "2026-10-17T16:28:28.430493Z"
     },
     {
       "slug": "Hybrid-Loader-Stealer-Sogou",

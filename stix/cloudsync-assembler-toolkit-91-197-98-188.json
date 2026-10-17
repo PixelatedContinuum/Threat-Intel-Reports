@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--e2168bac-a355-47f1-b59f-4ebc67ddf76f",
+    "id": "bundle--7e2afc71-b700-4fd4-9e51-53ae5bdb8340",
     "objects": [
         {
             "type": "identity",
@@ -34,7 +34,7 @@
             "id": "indicator--cc0fd9f4-b13c-5253-bd85-adb3d6784e68",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.692061Z",
-            "modified": "2026-10-01T19:54:12.692061Z",
+            "modified": "2026-10-17T16:28:29.919482Z",
             "name": "ipv4: 2.27.248.138",
             "description": "[operator_estate] Raw-IP TCP, no domain. :8443 = Express/socket.io operator panel (cert CN=localhost); :1337 = operator RDP (cert CN=DESKTOP-KHCG4S8)",
             "indicator_types": [
@@ -49,6 +49,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 80
         },
         {
@@ -63,7 +64,7 @@
             "id": "indicator--8283b415-7124-5749-baaf-6fdc09a16ecf",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.694814Z",
-            "modified": "2026-10-01T19:54:12.694814Z",
+            "modified": "2026-10-17T16:28:29.920101Z",
             "name": "ipv4: 91.197.98.188",
             "description": "[operator_estate] Also serves CloudSync C2 on :5555 (bk dropped implant) and :7777 (svhost4), both cleartext TCP, wait-then-speak, no banner | [operator_estate] Cleartext TCP, [C2_END] terminator; confirmed on the wire (Sysmon EID 3 + PCAP) | [operator_estate] Cleartext TCP, [END] terminator; continuously open in passive scan history",
             "indicator_types": [
@@ -78,6 +79,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 80
         },
         {
@@ -92,7 +94,7 @@
             "id": "indicator--27ebf16a-7afb-514f-8c0c-460fa72a4dc6",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.695277Z",
-            "modified": "2026-10-01T19:54:12.695277Z",
+            "modified": "2026-10-17T16:28:29.920598Z",
             "name": "ipv4: 91.92.43.221",
             "description": "[operator_estate] Ports 5000-5003 serve identical CloudSync-Dashboard panel; client->5000, s->5001, q->5002; 5003 live with no build in hand. Aeza OFAC-designated 2025; DEDIK-inside-designation unproven.",
             "indicator_types": [
@@ -107,6 +109,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 80
         },
         {
@@ -121,7 +124,7 @@
             "id": "indicator--21158ea7-c877-53d7-ad58-e7c05f9ceb0b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.695621Z",
-            "modified": "2026-10-01T19:54:12.695621Z",
+            "modified": "2026-10-17T16:28:29.921041Z",
             "name": "domain: c3lestial.fun",
             "description": "[sourced_commodity_stealer_indicators] NOT operator-owned. Shared Hostinger hosting. Detect via TLS SNI; do NOT author a POST/method-bound rule on /receive.php - it would not fire on real traffic.",
             "indicator_types": [
@@ -136,6 +139,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 60
         },
         {
@@ -150,7 +154,7 @@
             "id": "indicator--20a11a24-904c-52a1-af61-880d4ba64c2a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.696275Z",
-            "modified": "2026-10-01T19:54:12.696275Z",
+            "modified": "2026-10-17T16:28:29.921448Z",
             "name": "url: http://91.197.98.188:8000/client.exe",
             "description": "[operator_estate] Fetched with a spoofed browser User-Agent and proxy-credential inheritance",
             "indicator_types": [
@@ -165,6 +169,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {

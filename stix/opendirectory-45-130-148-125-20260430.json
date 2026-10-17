@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--1a9713af-77c0-4958-ae4d-c149163182d3",
+    "id": "bundle--d052afe8-6ef5-42eb-afb6-449bfad0c515",
     "objects": [
         {
             "type": "identity",
@@ -34,7 +34,7 @@
             "id": "indicator--b88583ed-5f96-51aa-a903-3c4cc6b4487e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.09737Z",
-            "modified": "2026-10-01T19:54:18.09737Z",
+            "modified": "2026-10-17T16:28:35.185389Z",
             "name": "ipv4: 45.130.148.125",
             "description": "AdaptixC2 beacon C2 endpoint (HTTP plaintext, no TLS). Combined with open-directory staging on TCP/8888, same IP, two services. ASN AS35682 BEST INTERNET SOLUTION XK (Uzbekistan). | Open-directory staging endpoint (HTTP). Static-since-discovery for 80+ hours. Source of the entire toolkit.",
             "indicator_types": [
@@ -49,6 +49,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 80
         },
         {
@@ -63,7 +64,7 @@
             "id": "indicator--ab87d42d-b67d-5448-98d1-696dff808c69",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.100179Z",
-            "modified": "2026-10-01T19:54:18.100179Z",
+            "modified": "2026-10-17T16:28:35.186047Z",
             "name": "url: http://45.130.148.125:80/api/v1/status",
             "description": "AdaptixC2 beacon C2 URL (POST). STOCK AdaptixC2 listener default URI.",
             "indicator_types": [
@@ -78,6 +79,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -92,7 +94,7 @@
             "id": "indicator--33ca0dc9-26b9-5e29-99e9-f5e45f68de72",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.100872Z",
-            "modified": "2026-10-01T19:54:18.100872Z",
+            "modified": "2026-10-17T16:28:35.186499Z",
             "name": "url: http://45.130.148.125:80/content.html",
             "description": "AdaptixC2 beacon C2 URL (POST). STOCK AdaptixC2 listener default URI.",
             "indicator_types": [
@@ -107,6 +109,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -121,7 +124,7 @@
             "id": "indicator--d5da48a8-19df-5f0c-8628-81de1cce9bff",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.101403Z",
-            "modified": "2026-10-01T19:54:18.101403Z",
+            "modified": "2026-10-17T16:28:35.186935Z",
             "name": "url: http://45.130.148.125:80/jquery-3.3.1.min.js",
             "description": "AdaptixC2 beacon C2 URL (POST). OPERATOR-ADDED beyond stock 3-URI default, extends the JS-asset masquerade theme. Detection rule must combine with destination IP to avoid FP on legitimate jQuery 3.3.1 traffic. | MODERATE, match in combination with destination IP 45.130.148.125 and either X-Beacon-Id header or Firefox 20 stock UA, NOT alone",
             "indicator_types": [
@@ -136,6 +139,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -150,7 +154,7 @@
             "id": "indicator--fa6a1922-fa93-5ba1-bd6a-5e0a917162dc",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.101855Z",
-            "modified": "2026-10-01T19:54:18.101855Z",
+            "modified": "2026-10-17T16:28:35.187341Z",
             "name": "url: http://45.130.148.125:80/updates/check.php",
             "description": "AdaptixC2 beacon C2 URL (POST). STOCK AdaptixC2 listener default URI.",
             "indicator_types": [
@@ -165,6 +169,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {

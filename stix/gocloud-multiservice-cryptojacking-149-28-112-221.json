@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--b00e5913-e79d-4380-8eea-75246fdfaf3b",
+    "id": "bundle--ad2be2c3-832d-45df-833e-e8a74513b231",
     "objects": [
         {
             "type": "identity",
@@ -34,7 +34,7 @@
             "id": "indicator--ebacba11-f06a-5b8e-a4f4-86a52ea8796e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.109448Z",
-            "modified": "2026-10-01T19:54:14.109448Z",
+            "modified": "2026-10-17T16:28:31.098726Z",
             "name": "ipv4: 122.51.91.77",
             "description": "AS45090 Tencent Cloud (Shenzhen, CN). Ports :9998 payload/open-dir, :4444 C2 callback, :9997 unauthenticated control plane, :8081 xmrig dir. Fully unreachable since mid-June.",
             "indicator_types": [
@@ -49,6 +49,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 95
         },
         {
@@ -63,7 +64,7 @@
             "id": "indicator--062fdbcf-73ce-56c8-abb2-1031444f5507",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.112182Z",
-            "modified": "2026-10-01T19:54:14.112182Z",
+            "modified": "2026-10-17T16:28:31.099354Z",
             "name": "ipv4: 149.28.112.221",
             "description": "AS20473 Vultr, US. Ports :80 bootstrap payloads, :1389 LDAP/JNDI, :8080 miner hosting + heartbeat, :8081 telemetry, :8888 C2 dashboard, :9999 Log4Shell stub. Mature-generation ports unreachable since mid-June.",
             "indicator_types": [
@@ -78,6 +79,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 95
         },
         {
@@ -92,7 +94,7 @@
             "id": "indicator--4ba05cb5-2063-59d1-8c76-2a9f0848f359",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.112644Z",
-            "modified": "2026-10-01T19:54:14.112644Z",
+            "modified": "2026-10-17T16:28:31.099808Z",
             "name": "domain: auto.c3pool.org",
             "description": "Third-party public Monero mining pool (c3pool). Mining destination, not operator-owned; hunt/monitor rather than block outright.",
             "indicator_types": [
@@ -107,6 +109,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -121,7 +124,7 @@
             "id": "indicator--e36f27e6-ae4b-5f74-8405-1d929be77cc6",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.113311Z",
-            "modified": "2026-10-01T19:54:14.113311Z",
+            "modified": "2026-10-17T16:28:31.100257Z",
             "name": "domain: download.c3pool.org",
             "description": "c3pool official installer host (setup_c3pool_miner.sh/.bat) abused by allinone.ps1 and omnihunter.py. Legitimate service; monitor context only.",
             "indicator_types": [
@@ -136,6 +139,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 60
         },
         {
@@ -150,7 +154,7 @@
             "id": "indicator--bfdfee33-a0c0-5ab9-8dae-fb2fb3e6dda0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.113739Z",
-            "modified": "2026-10-01T19:54:14.113739Z",
+            "modified": "2026-10-17T16:28:31.100656Z",
             "name": "url: http://149.28.112.221:8080/allinone.ps1",
             "description": "One-click Windows deploy (iex cradle)",
             "indicator_types": [
@@ -165,6 +169,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -179,7 +184,7 @@
             "id": "indicator--d745861e-9414-5de2-a87b-9d213438492b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.114303Z",
-            "modified": "2026-10-01T19:54:14.114303Z",
+            "modified": "2026-10-17T16:28:31.101062Z",
             "name": "url: http://149.28.112.221:8080/config.json",
             "description": "Served XMRig config (pass=WORKER placeholder)",
             "indicator_types": [
@@ -194,6 +199,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -208,7 +214,7 @@
             "id": "indicator--8b13c7e4-d123-54b8-a378-c42be0ea2487",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.114683Z",
-            "modified": "2026-10-01T19:54:14.114683Z",
+            "modified": "2026-10-17T16:28:31.101435Z",
             "name": "url: http://149.28.112.221:8080/deploy.bat",
             "description": "Windows worm entry dropper (certutil-fetched)",
             "indicator_types": [
@@ -223,6 +229,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -237,7 +244,7 @@
             "id": "indicator--f0625c74-2d57-5795-a2bf-6dbc60dd3711",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.115252Z",
-            "modified": "2026-10-01T19:54:14.115252Z",
+            "modified": "2026-10-17T16:28:31.101819Z",
             "name": "url: http://149.28.112.221:8080/deploy.ps1",
             "description": "Windows worm main deploy + LAN spread",
             "indicator_types": [
@@ -252,6 +259,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -266,7 +274,7 @@
             "id": "indicator--416d8066-9af3-5e3a-873b-1ffeeec7e4f8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.115587Z",
-            "modified": "2026-10-01T19:54:14.115587Z",
+            "modified": "2026-10-17T16:28:31.102276Z",
             "name": "url: http://149.28.112.221:8080/infect.ps1",
             "description": "Windows per-target infection engine",
             "indicator_types": [
@@ -281,6 +289,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -295,7 +304,7 @@
             "id": "indicator--6d6c54df-04a6-5c52-8ad3-736345eef715",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.11593Z",
-            "modified": "2026-10-01T19:54:14.11593Z",
+            "modified": "2026-10-17T16:28:31.102676Z",
             "name": "url: http://149.28.112.221:8080/miner.sh",
             "description": "Linux miner delivery",
             "indicator_types": [
@@ -310,6 +319,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -324,7 +334,7 @@
             "id": "indicator--01a00eee-856e-59b9-a983-d58010a28943",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.116305Z",
-            "modified": "2026-10-01T19:54:14.116305Z",
+            "modified": "2026-10-17T16:28:31.103076Z",
             "name": "url: http://149.28.112.221:8080/worm.vbs",
             "description": "Windows worm propagation core",
             "indicator_types": [
@@ -339,6 +349,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -353,7 +364,7 @@
             "id": "indicator--da672148-f496-50d3-bf8e-cb66fab40052",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.116649Z",
-            "modified": "2026-10-01T19:54:14.116649Z",
+            "modified": "2026-10-17T16:28:31.103472Z",
             "name": "url: http://149.28.112.221:8080/xmrig-win64.zip",
             "description": "Windows miner binary",
             "indicator_types": [
@@ -368,6 +379,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -382,7 +394,7 @@
             "id": "indicator--789e9b4c-8105-5f2d-a1c4-ae7750a15876",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.117094Z",
-            "modified": "2026-10-01T19:54:14.117094Z",
+            "modified": "2026-10-17T16:28:31.10389Z",
             "name": "url: http://149.28.112.221:8080/xmrig.zip",
             "description": "Windows XMRig fallback download",
             "indicator_types": [
@@ -397,6 +409,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -411,7 +424,7 @@
             "id": "indicator--5f26c492-8724-512d-a7ad-44db108d7668",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.117464Z",
-            "modified": "2026-10-01T19:54:14.117464Z",
+            "modified": "2026-10-17T16:28:31.104323Z",
             "name": "domain: pool.supportxmr.com",
             "description": "Third-party public Monero pool; used by the Windows worm branch. Not operator-owned.",
             "indicator_types": [
@@ -426,6 +439,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -440,7 +454,7 @@
             "id": "indicator--d4d07e30-7e3f-5666-9f5e-6e5c935ddc7d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:14.117817Z",
-            "modified": "2026-10-01T19:54:14.117817Z",
+            "modified": "2026-10-17T16:28:31.10477Z",
             "name": "domain: xmrpool.eu",
             "description": "Third-party public Monero pool; used by the Windows worm branch. Not operator-owned.",
             "indicator_types": [
@@ -455,6 +469,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {

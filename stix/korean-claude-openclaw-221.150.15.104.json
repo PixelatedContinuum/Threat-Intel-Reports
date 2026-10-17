@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--cf3587fe-4646-4262-a6c7-7baae5315729",
+    "id": "bundle--303eb2ae-5172-426f-9bef-10f7841fe515",
     "objects": [
         {
             "type": "identity",
@@ -34,7 +34,7 @@
             "id": "indicator--e3c11a2a-efa6-5c35-8948-3d0499fed5f7",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-09-19T20:27:57.16419Z",
-            "modified": "2026-09-19T20:27:57.16419Z",
+            "modified": "2026-10-17T16:28:31.626777Z",
             "name": "ipv4: 221.150.15.104",
             "description": "Operator residential exposure (Korea Telecom AS4766); open directory on port 8080 leaked ~/.claude/ and ~/.openclaw/ contents",
             "indicator_types": [
@@ -49,6 +49,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 95
         },
         {
@@ -63,7 +64,7 @@
             "id": "indicator--9d991296-0e5b-5941-8271-2d9926393c06",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-09-19T20:27:57.164785Z",
-            "modified": "2026-09-19T20:27:57.164785Z",
+            "modified": "2026-10-17T16:28:31.627341Z",
             "name": "domain: docs.openclaw.ai",
             "description": "OpenClaw documentation host; referenced in operator's pre-approved Claude Code WebFetch allowlist entry, Same dual-use status as openclaw.ai parent domain",
             "indicator_types": [
@@ -78,6 +79,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 95
         },
         {
@@ -92,7 +94,7 @@
             "id": "indicator--43db6551-7b2f-527b-84e9-52e350a149da",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-09-19T20:27:57.165305Z",
-            "modified": "2026-09-19T20:27:57.165305Z",
+            "modified": "2026-10-17T16:28:31.627777Z",
             "name": "url: http://221.150.15.104:8080/",
             "description": "Operator-exposed open directory leaking ~/.claude/ and ~/.openclaw/ home-directory contents",
             "indicator_types": [
@@ -107,6 +109,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -121,7 +124,7 @@
             "id": "indicator--596e5aad-4719-579f-b20a-cd696eedf295",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-09-19T20:27:57.166055Z",
-            "modified": "2026-09-19T20:27:57.166055Z",
+            "modified": "2026-10-17T16:28:31.628205Z",
             "name": "url: https://openclaw.ai/install.sh",
             "description": "OpenClaw shell installer fetched via curl|bash pattern; operator pre-authorized this exact URL in Claude Code allowlist",
             "indicator_types": [
@@ -136,6 +139,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -150,7 +154,7 @@
             "id": "indicator--99fb9224-781d-531e-93eb-1d66f8d5f043",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-09-19T20:27:57.166563Z",
-            "modified": "2026-09-19T20:27:57.166563Z",
+            "modified": "2026-10-17T16:28:31.628599Z",
             "name": "domain: lightmake.site",
             "description": "OpenClaw-adjacent infrastructure component referenced in parent-investigation hosting-and-egress signature list, Not directly observed in Case 4 artifact; promoted to this feed from parent investigation umbrella's OpenClaw ecosystem documentation",
             "indicator_types": [
@@ -165,6 +169,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 60
         },
         {
@@ -179,7 +184,7 @@
             "id": "indicator--151d4657-7b52-534f-a1ea-24747312481a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-09-19T20:27:57.166984Z",
-            "modified": "2026-09-19T20:27:57.166984Z",
+            "modified": "2026-10-17T16:28:31.628993Z",
             "name": "domain: openclaw.ai",
             "description": "OpenClaw product / installer hosting domain; referenced in operator's pre-approved Claude Code allowlist as the curl|bash installer source, Dual-use: publicly distributed AI-agent framework with both legitimate-purpose adopters and confirmed-malicious operators (this case + Case 2 Turkish ARPA + Case 7 Korean operator)",
             "indicator_types": [
@@ -194,6 +199,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 95
         },
         {

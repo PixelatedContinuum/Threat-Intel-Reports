@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--00f9e321-efb2-4bad-9dfc-2df4066559d7",
+    "id": "bundle--cf7dcad9-efb6-478b-8823-0cc6fcf2ce69",
     "objects": [
         {
             "type": "identity",
@@ -34,7 +34,7 @@
             "id": "indicator--b2ab1ebe-0d71-599c-bd69-654e47b8bb43",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.20277Z",
-            "modified": "2026-10-01T19:54:22.20277Z",
+            "modified": "2026-10-17T16:28:40.243588Z",
             "name": "ipv4: 209.38.205.158",
             "description": "Operator C2 host (DigitalOcean); ARPA platform; ports 8090 dashboard, 8095 degraded topology, 8096 ingestion endpoint, 8098 closed since 2026-03-14",
             "indicator_types": [
@@ -49,6 +49,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 95
         },
         {
@@ -63,7 +64,7 @@
             "id": "indicator--9d991296-0e5b-5941-8271-2d9926393c06",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.205494Z",
-            "modified": "2026-10-01T19:54:22.205494Z",
+            "modified": "2026-10-17T16:28:40.24416Z",
             "name": "domain: docs.openclaw.ai",
             "description": "OpenClaw documentation domain",
             "indicator_types": [
@@ -78,6 +79,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -92,7 +94,7 @@
             "id": "indicator--97d54b60-1e1b-55cd-81dc-20775a2d5336",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.206245Z",
-            "modified": "2026-10-01T19:54:22.206245Z",
+            "modified": "2026-10-17T16:28:40.244657Z",
             "name": "url: http://209.38.205.158:8090/",
             "description": "Operator ARPA v2.1.0 dashboard; publicly reachable; serves /data/ directory listing with 780 entries of exfiltrated the victim organization data + /logs/ directory listing",
             "indicator_types": [
@@ -107,6 +109,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -121,7 +124,7 @@
             "id": "indicator--21cc8ceb-0872-5374-9601-eeceb36b0d25",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.206765Z",
-            "modified": "2026-10-01T19:54:22.206765Z",
+            "modified": "2026-10-17T16:28:40.245114Z",
             "name": "url: http://209.38.205.158:8095/api/topology/unified",
             "description": "Operator unified topology endpoint; degraded to 404 on all paths as of 2026-05-24 but port still TCP-accepting",
             "indicator_types": [
@@ -136,6 +139,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -150,7 +154,7 @@
             "id": "indicator--f42ed891-2b65-55c8-8d53-ce40827e8227",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.207212Z",
-            "modified": "2026-10-01T19:54:22.207212Z",
+            "modified": "2026-10-17T16:28:40.245591Z",
             "name": "url: http://209.38.205.158:8096/api/ingest/instana",
             "description": "Operator ARPA C2 ingestion endpoint; HTTP cleartext; accepts Instana event payloads in operator normalized schema; no authentication",
             "indicator_types": [
@@ -165,6 +169,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -179,7 +184,7 @@
             "id": "indicator--258052cd-a175-550e-baf4-c13b3a36d5f2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.207581Z",
-            "modified": "2026-10-01T19:54:22.207581Z",
+            "modified": "2026-10-17T16:28:40.246004Z",
             "name": "url: https://github.com/MehmetARPA/ARPA",
             "description": "Operator public GitHub repository; same project codename as embedded in operator code; identity artifact. Account suspended by GitHub T&S 2026-05-25, URL now returns HTTP 404; preserve as evidence IOC",
             "indicator_types": [
@@ -194,6 +199,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -208,7 +214,7 @@
             "id": "indicator--99fb9224-781d-531e-93eb-1d66f8d5f043",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.208037Z",
-            "modified": "2026-10-01T19:54:22.208037Z",
+            "modified": "2026-10-17T16:28:40.246443Z",
             "name": "domain: lightmake.site",
             "description": "OpenClaw developer brand domain (vendor identifier)",
             "indicator_types": [
@@ -223,6 +229,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -237,7 +244,7 @@
             "id": "indicator--151d4657-7b52-534f-a1ea-24747312481a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.208589Z",
-            "modified": "2026-10-01T19:54:22.208589Z",
+            "modified": "2026-10-17T16:28:40.246844Z",
             "name": "domain: openclaw.ai",
             "description": "OpenClaw distribution domain, operator framework provider; ecosystem watch for related operators using same framework | OpenClaw is also used legitimately by developers, so this domain carries a MEDIUM false-positive risk.",
             "indicator_types": [
@@ -252,6 +259,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -266,7 +274,7 @@
             "id": "indicator--be9afef6-22e4-5fe6-b6d2-b53acb5d58b1",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.208969Z",
-            "modified": "2026-10-01T19:54:22.208969Z",
+            "modified": "2026-10-17T16:28:40.247264Z",
             "name": "domain: skillhub-1388575217.cos.ap-guangzhou.myqcloud.com",
             "description": "Tencent COS bucket, OpenClaw shared skill marketplace; egress from non-developer environments is OpenClaw-presence signal | MEDIUM, legitimate Tencent Cloud Object Storage bucket; also used by OpenClaw developers",
             "indicator_types": [
@@ -281,6 +289,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -297,7 +306,7 @@
             "id": "indicator--1e7da7d2-1ca6-558e-8228-d57db196cef5",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.209491Z",
-            "modified": "2026-10-01T19:54:22.209491Z",
+            "modified": "2026-10-17T16:28:40.247734Z",
             "name": "sha256: 2736b72ed047fb4d593d2e919c58b25db1a669faa51e630360c2825409bf4011",
             "description": "Operator-authored Python topology DB analysis script; flagged IndentationError-prone (AI Copy-Paste Indentation Decay sub-signature)",
             "indicator_types": [
@@ -312,6 +321,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -328,7 +338,7 @@
             "id": "indicator--6bcd235c-8d2c-5482-84d3-6586da8b6546",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.210565Z",
-            "modified": "2026-10-01T19:54:22.210565Z",
+            "modified": "2026-10-17T16:28:40.248244Z",
             "name": "sha256: 29d1221c9e305374a78d17c01ea20a211d59427f789ed01e653341db51bf4c06",
             "description": "Operator-authored Python API patch script (Hunt classifier flagged MALICIOUS; Turkish comments)",
             "indicator_types": [
@@ -343,6 +353,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -359,7 +370,7 @@
             "id": "indicator--836bb762-dd95-598e-880c-d2d799ced5ba",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.210996Z",
-            "modified": "2026-10-01T19:54:22.210996Z",
+            "modified": "2026-10-17T16:28:40.248716Z",
             "name": "sha256: 2dca67a8be5cd89863ab60a2351a553954afd641c8e6f6219785707276f0e8e3",
             "description": "Operator-authored Python underlying correlations API implementation",
             "indicator_types": [
@@ -374,6 +385,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -398,7 +410,7 @@
             "id": "indicator--ddd32a98-59bf-5fd0-909d-655393ad2e58",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.211532Z",
-            "modified": "2026-10-01T19:54:22.211532Z",
+            "modified": "2026-10-17T16:28:40.249331Z",
             "name": "sha256: 402422a918dc037e00aea323e2ab1ca3e758459d4cd5e620a4433e3c346c52f8",
             "description": "Operator-authored Python DB schema patch; only file in cluster with try/except defensive pattern",
             "indicator_types": [
@@ -413,6 +425,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -429,7 +442,7 @@
             "id": "indicator--7b5b193a-b8dc-599e-9009-f66f3179a45f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.211959Z",
-            "modified": "2026-10-01T19:54:22.211959Z",
+            "modified": "2026-10-17T16:28:40.249875Z",
             "name": "sha256: 5a58c88c64e3e54c874645fc5b32f12163e1901fe1b3fb7a3bc1d52c434b1c62",
             "description": "Operator-authored Python API patch script (re.replace variant)",
             "indicator_types": [
@@ -444,6 +457,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -460,7 +474,7 @@
             "id": "indicator--9dce4a3a-3d7b-56d4-9831-db9591363356",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.21239Z",
-            "modified": "2026-10-01T19:54:22.21239Z",
+            "modified": "2026-10-17T16:28:40.25046Z",
             "name": "sha256: 65d2eb26067c3df4b139b02145bdba2065be5a403f38ad096f886230b41fda9b",
             "description": "Operator-authored Python cross-source correlation engine v3; opens with operator self-branding docstring ARPA Korelasyon Motoru v3 - Temporal Focus",
             "indicator_types": [
@@ -475,6 +489,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -491,7 +506,7 @@
             "id": "indicator--91064aa9-6364-59dc-832a-279877d2ddd9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.212809Z",
-            "modified": "2026-10-01T19:54:22.212809Z",
+            "modified": "2026-10-17T16:28:40.251026Z",
             "name": "sha256: 6d4eb14e08e742ce6adabc355855c5e80c6b84e6969b0a3cc58367e0f4babfd0",
             "description": "Operator-authored Python API patch script (variant 1); emits emoji-in-output bleed",
             "indicator_types": [
@@ -506,6 +521,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -522,7 +538,7 @@
             "id": "indicator--b44e6631-8144-5538-adc5-f03b86b9a10d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.213188Z",
-            "modified": "2026-10-01T19:54:22.213188Z",
+            "modified": "2026-10-17T16:28:40.251555Z",
             "name": "sha256: 9928277dbbfbdf95a5f4e98ef99e55b7d87093982dbdd298be16b232bfc39c77",
             "description": "Operator-authored Python event collector v4 (iteration marker); same the victim organization JWT",
             "indicator_types": [
@@ -537,6 +553,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -553,7 +570,7 @@
             "id": "indicator--e2402970-d781-5e11-8ffe-dfa673ed1b95",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.21362Z",
-            "modified": "2026-10-01T19:54:22.21362Z",
+            "modified": "2026-10-17T16:28:40.252019Z",
             "name": "sha256: a05b40ceb17e6277ca39f99433910c359764be0e0a42377686abb7fb1e7da410",
             "description": "Operator-authored Python correlation DB query script; Turkish output SON 5 KORELASYON",
             "indicator_types": [
@@ -568,6 +585,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -584,7 +602,7 @@
             "id": "indicator--c3066110-58ae-5997-904a-74605c6b8266",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.21404Z",
-            "modified": "2026-10-01T19:54:22.21404Z",
+            "modified": "2026-10-17T16:28:40.252508Z",
             "name": "sha256: a4b39f13d17ae3ff7a0adb2cf1df459a72425513f392a1d8fc469f8f2e123de5",
             "description": "Operator-authored Python Flask API routes for correlations/events; Turkish comments throughout",
             "indicator_types": [
@@ -599,6 +617,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -615,7 +634,7 @@
             "id": "indicator--e373ea54-f50f-5c24-a837-867395968430",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.214429Z",
-            "modified": "2026-10-01T19:54:22.214429Z",
+            "modified": "2026-10-17T16:28:40.253325Z",
             "name": "sha256: c66a2561fdacb5997c4fa0501da8ef1639d429d22668bfba7cb2f5f9e97a2a6e",
             "description": "Operator-authored Python API patch script (minimal variant)",
             "indicator_types": [
@@ -630,6 +649,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -646,7 +666,7 @@
             "id": "indicator--b4e6c1cf-b63d-5a08-bb11-a510faeb00e7",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.214854Z",
-            "modified": "2026-10-01T19:54:22.214854Z",
+            "modified": "2026-10-17T16:28:40.253823Z",
             "name": "sha256: ee5428e9b47fd102d27d3dcc804b10512100acd21399969efe39e201e61cbf79",
             "description": "Operator-authored Python Instana topology collector; hardcoded the victim organization JWT + production URL; Turkish docstring",
             "indicator_types": [
@@ -661,6 +681,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {

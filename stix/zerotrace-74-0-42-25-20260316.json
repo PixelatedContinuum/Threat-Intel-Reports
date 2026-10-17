@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--f8f0c6bb-335f-4cb3-a2e2-8d9aa73de00e",
+    "id": "bundle--5d2c35dc-1f37-4e57-8486-ea8a3d4710db",
     "objects": [
         {
             "type": "identity",
@@ -34,7 +34,7 @@
             "id": "indicator--459556bd-2997-5960-8b1c-ccb670c6676b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.789399Z",
-            "modified": "2026-10-01T19:54:22.789399Z",
+            "modified": "2026-10-17T16:28:40.547424Z",
             "name": "ipv4: 185.49.126.140",
             "description": "PureHVNC C2, hardcoded in xh.exe (PHVNC.Stub.Program.Main()) | PureRAT v4.1.9 C2 port 1, varint-decoded from Faidowra.dll config blob ManageCombinedSystem field | PureRAT v4.1.9 C2 port 2, sequential fallback | PureRAT v4.1.9 C2 port 3, sequential fallback | ScreenConnect admin panel HTTPS, adminxyzhosting.com hosting IP | ScreenConnect relay port, victim ScreenConnect clients connect here | XWorm V5.6 C2, decrypted from XClient.exe Settings.Hosts; AES-encrypted comms; 10-15s beacon",
             "indicator_types": [
@@ -49,6 +49,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 95
         },
         {
@@ -63,7 +64,7 @@
             "id": "indicator--23e1d1a1-4eca-5e46-82f6-60309e4431d2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.793578Z",
-            "modified": "2026-10-01T19:54:22.793578Z",
+            "modified": "2026-10-17T16:28:40.548162Z",
             "name": "ipv4: 185.49.126.97",
             "description": "adminxyzhosting.com historical IP (2024-10-23 to 2025-01-09), ASN 199654 NL",
             "indicator_types": [
@@ -78,6 +79,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 80
         },
         {
@@ -92,7 +94,7 @@
             "id": "indicator--e2acbf02-1351-5f61-8059-aca1af683fd0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.794216Z",
-            "modified": "2026-10-01T19:54:22.794216Z",
+            "modified": "2026-10-17T16:28:40.548667Z",
             "name": "ipv4: 74.0.42.162",
             "description": "chainconnects.net current hosting IP, same /24 as 74.0.42.25; ASN 40662",
             "indicator_types": [
@@ -107,6 +109,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 95
         },
         {
@@ -121,7 +124,7 @@
             "id": "indicator--f53dfac3-daba-59da-a3b5-f0e6627b8652",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.79468Z",
-            "modified": "2026-10-01T19:54:22.79468Z",
+            "modified": "2026-10-17T16:28:40.549123Z",
             "name": "ipv4: 74.0.42.25",
             "description": "Open directory / malware staging server, ASN 40662 Layer7 Technologies NL; IPXO lease",
             "indicator_types": [
@@ -136,6 +139,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 95
         },
         {
@@ -150,7 +154,7 @@
             "id": "indicator--3d404db3-d063-53a0-857c-c1184294c7e7",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.795071Z",
-            "modified": "2026-10-01T19:54:22.795071Z",
+            "modified": "2026-10-17T16:28:40.549558Z",
             "name": "ipv4: 74.0.42.44",
             "description": "chainconnects.net prior hosting IP (2026-01-29 to 2026-02-10), ASN 40662",
             "indicator_types": [
@@ -165,6 +169,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 80
         },
         {
@@ -179,7 +184,7 @@
             "id": "indicator--71d8b45b-aed3-58d2-a5d6-f49cc5347e48",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.795439Z",
-            "modified": "2026-10-01T19:54:22.795439Z",
+            "modified": "2026-10-17T16:28:40.549989Z",
             "name": "domain: adminxyzhosting.com",
             "description": "ScreenConnect relay server, attacker-registered; Hostinger/PrivacyProtect.org; active since 2024-10-23",
             "indicator_types": [
@@ -194,6 +199,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 95
         },
         {
@@ -208,7 +214,7 @@
             "id": "indicator--ef8201dd-f6b7-54e0-8f3c-e5c1bfcd8727",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.796477Z",
-            "modified": "2026-10-01T19:54:22.796477Z",
+            "modified": "2026-10-17T16:28:40.55041Z",
             "name": "domain: chainconnects.net",
             "description": "ScreenConnect MSI distribution server, attacker-registered (re-registered 2025-02-16); same registrar/WHOIS/NS as adminxyzhosting.com",
             "indicator_types": [
@@ -223,6 +229,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 95
         },
         {
@@ -237,7 +244,7 @@
             "id": "indicator--5774cfc9-cbe2-5d0a-9d2c-b0643bd3c1c9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.796959Z",
-            "modified": "2026-10-01T19:54:22.796959Z",
+            "modified": "2026-10-17T16:28:40.550816Z",
             "name": "url: http://adminxyzhosting.com/Bin/Update.Client.exe",
             "description": "ScreenConnect session delivery URL base, 500 unique links in final_links.txt with s=[UUID] parameter",
             "indicator_types": [
@@ -252,6 +259,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -266,7 +274,7 @@
             "id": "indicator--e2a0bac0-3057-5089-9d8a-8ba646c5a3db",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.797606Z",
-            "modified": "2026-10-01T19:54:22.797606Z",
+            "modified": "2026-10-17T16:28:40.551243Z",
             "name": "url: https://chainconnects.net/Bin/support.ClientSetup.msi?e=Access&y=Guest",
             "description": "ScreenConnect client MSI download URL, hardcoded in Attachment.vbs",
             "indicator_types": [
@@ -281,6 +289,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -295,7 +304,7 @@
             "id": "indicator--db5ca4ac-aa66-53c0-9175-0a1476f831b3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.798196Z",
-            "modified": "2026-10-01T19:54:22.798196Z",
+            "modified": "2026-10-17T16:28:40.55171Z",
             "name": "domain: ledno.net",
             "description": "Resolves to 74.0.42.25 open directory IP; appeared 2026-03-02 (10 days before discovery)",
             "indicator_types": [
@@ -310,6 +319,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 60
         },
         {
@@ -324,7 +334,7 @@
             "id": "indicator--635f81bb-a877-5dbc-b5c9-37e9c0cc5c27",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.798596Z",
-            "modified": "2026-10-01T19:54:22.798596Z",
+            "modified": "2026-10-17T16:28:40.55217Z",
             "name": "domain: wireon.work.gd",
             "description": "Free subdomain resolving to 185.49.126.140; appeared 2025-09-03; MODERATE confidence PureRAT C2 fallback during adminxyzhosting.com downtime gap",
             "indicator_types": [
@@ -339,6 +349,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 60
         },
         {
@@ -353,7 +364,7 @@
             "id": "indicator--2a9c4a49-49fd-50b5-a39a-f371c7bf277e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.799022Z",
-            "modified": "2026-10-01T19:54:22.799022Z",
+            "modified": "2026-10-17T16:28:40.552586Z",
             "name": "domain: ziadverisontwo.com",
             "description": "Co-hosted on 74.0.42.162 since 2026-02-08; 2573 passive DNS queries; possible Verizon typosquat; active at discovery",
             "indicator_types": [
@@ -368,6 +379,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 60
         },
         {
@@ -382,7 +394,7 @@
             "id": "indicator--49d39b6f-7bf1-5eb1-ab09-2f296a70fb5b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.799433Z",
-            "modified": "2026-10-01T19:54:22.799433Z",
+            "modified": "2026-10-17T16:28:40.553108Z",
             "name": "domain: ziadxyzhosting.com",
             "description": "Co-hosted on 74.0.42.162 since 2026-02-08; identical xyz+hosting naming pattern as adminxyzhosting.com",
             "indicator_types": [
@@ -397,6 +409,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 60
         },
         {
@@ -421,7 +434,7 @@
             "id": "indicator--b3921a82-279f-52c4-a4e7-d7a4c1376b25",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.800101Z",
-            "modified": "2026-10-01T19:54:22.800101Z",
+            "modified": "2026-10-17T16:28:40.553681Z",
             "name": "sha256: 102eedd5355f9aca9b3f4714a3b106b00e6defd097a2e711f878d9633d1ae4fc",
             "description": "XWorm V5.6 client stub, VB.NET, 40960 bytes",
             "indicator_types": [
@@ -436,6 +449,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -452,7 +466,7 @@
             "id": "indicator--37478157-1634-56a5-b11f-9fbcdc08cdfb",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.801626Z",
-            "modified": "2026-10-01T19:54:22.801626Z",
+            "modified": "2026-10-17T16:28:40.554229Z",
             "name": "sha256: 205bffe1f49e256a8ec879667da1babbcf38b6e4d6600823012a68a8dda3c82d",
             "description": "XWorm V5.6 client stub, VB.NET, 36864 bytes",
             "indicator_types": [
@@ -467,6 +481,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -491,7 +506,7 @@
             "id": "indicator--3c7fcd56-d3a8-5d27-ab21-a3d1f8d73907",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.802318Z",
-            "modified": "2026-10-01T19:54:22.802318Z",
+            "modified": "2026-10-17T16:28:40.554868Z",
             "name": "sha256: 239858491f2a7c4cb5dd44967e364f57fcbefd850da987bb62f06bd58a1f78f9",
             "description": "XWorm V5.6 client stub, VB.NET, 33280 bytes",
             "indicator_types": [
@@ -506,6 +521,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -530,7 +546,7 @@
             "id": "indicator--dcfb0da4-ea7c-5750-8e0c-6990e1207986",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.802939Z",
-            "modified": "2026-10-01T19:54:22.802939Z",
+            "modified": "2026-10-17T16:28:40.555492Z",
             "name": "sha256: 427f818131c9beb7f8a487cb28fe13e2699db844ac3c9e9ae613fd35113fe77f",
             "description": "XWorm V5.6 client stub, primary analysis sample; C2 config fully decrypted",
             "indicator_types": [
@@ -545,6 +561,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -585,7 +602,7 @@
             "id": "indicator--e0ab0535-44db-5d9b-8554-89bfa6d3b9cc",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.803781Z",
-            "modified": "2026-10-01T19:54:22.803781Z",
+            "modified": "2026-10-17T16:28:40.556327Z",
             "name": "sha256: 59e43c18ee26c1056efc9628de025e3026db63c9536f6cbd39de847762d2048e",
             "description": "XWorm V5.6 client stub, VB.NET, 36864 bytes",
             "indicator_types": [
@@ -600,6 +617,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -616,7 +634,7 @@
             "id": "indicator--9cb662c0-2cbd-5b37-8019-953d2948761d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.804287Z",
-            "modified": "2026-10-01T19:54:22.804287Z",
+            "modified": "2026-10-17T16:28:40.557156Z",
             "name": "sha256: 61cc1fad658dd5f21e239a3767636da9038c4c08079596c6ab59d70506938b41",
             "description": "XWorm V5.6 client stub, VB.NET, 36864 bytes",
             "indicator_types": [
@@ -631,6 +649,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -703,7 +722,7 @@
             "id": "indicator--7591f837-f134-521d-bc7d-0dc0d919cbcf",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.80536Z",
-            "modified": "2026-10-01T19:54:22.80536Z",
+            "modified": "2026-10-17T16:28:40.558287Z",
             "name": "sha256: 90f58865f265722ab007abb25074b3fc4916e927402552c6be17ef9afac96405",
             "description": "XWorm V5.6 builder/server panel, 14.8MB VB.NET; ransomware module embedded; compile date 2024-03-08",
             "indicator_types": [
@@ -718,6 +737,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -734,7 +754,7 @@
             "id": "indicator--b443c5c5-84ed-5cda-8fb8-fa9a311d8b09",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.806188Z",
-            "modified": "2026-10-01T19:54:22.806188Z",
+            "modified": "2026-10-17T16:28:40.55878Z",
             "name": "sha256: 973d9f9faab19e9d9b9cc942bf48859166556eaa8e3cccbf491832e130a65392",
             "description": "PureHVNC GUI, PureBasic + BoxedApp SDK + DNGuard (modified); internal name PureHVNC_GUI; 82892288 bytes",
             "indicator_types": [
@@ -749,6 +769,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -781,7 +802,7 @@
             "id": "indicator--157fe134-0591-5761-a4d2-b779d9882b9f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.806854Z",
-            "modified": "2026-10-01T19:54:22.806854Z",
+            "modified": "2026-10-17T16:28:40.55958Z",
             "name": "sha256: a11703fd47d16020fa099a95bb4e46247d32cf8821dc1826e77a971cdd3c4c55",
             "description": "XWorm operator support script, title 'XWorm - Fixer'; confirms active XWorm deployment; lodctr /r",
             "indicator_types": [
@@ -796,6 +817,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -820,7 +842,7 @@
             "id": "indicator--755da253-b8e6-545f-9f8b-0e29f96ec394",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.807396Z",
-            "modified": "2026-10-01T19:54:22.807396Z",
+            "modified": "2026-10-17T16:28:40.560171Z",
             "name": "sha256: a616c5fd9cee76d2df4d2cfec8d8519e6fd2ad605c1942e1e1cbb99aa09a278d",
             "description": "Raven RAT client stub template, Delphi 12.0 Athens Enterprise; 3603968 bytes; C2 host placeholder",
             "indicator_types": [
@@ -835,6 +857,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -859,7 +882,7 @@
             "id": "indicator--040e09f6-c20d-51a6-84ba-05aa0df33333",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.807938Z",
-            "modified": "2026-10-01T19:54:22.807938Z",
+            "modified": "2026-10-17T16:28:40.560721Z",
             "name": "sha256: b34a0bb0c0ba24dae59b748f1e9dc70fc739c5d4300fe96e8ff66cf6166d3dd8",
             "description": "Raven RAT C2 server panel (operator console accidentally uploaded), Delphi; port 8777; operator handle Steffz",
             "indicator_types": [
@@ -874,6 +897,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -914,7 +938,7 @@
             "id": "indicator--39f8534c-1f4b-5f4b-858e-ace8e1dc9c7e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.808675Z",
-            "modified": "2026-10-01T19:54:22.808675Z",
+            "modified": "2026-10-17T16:28:40.561491Z",
             "name": "sha256: f57c6dbff5270b02651c2886771a8dd8cc40fcd23fa5e2902d26bb10be741bf2",
             "description": "XWorm V5.6 client stub, deceptive filename mimics Windows Calculator",
             "indicator_types": [
@@ -929,6 +953,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -945,7 +970,7 @@
             "id": "indicator--d8c2764a-9e0a-5419-8d71-4fac256ee08e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.809172Z",
-            "modified": "2026-10-01T19:54:22.809172Z",
+            "modified": "2026-10-17T16:28:40.561978Z",
             "name": "sha256: f5f14b9073f86da926a8ed319b3289b893442414d1511e45177f6915fb4e5478",
             "description": "Native C++ 11-stage reflective PE loader for XWorm; PEB-patching, LDR spoof; cipher NOT(byte)-0x3E",
             "indicator_types": [
@@ -960,6 +985,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -976,7 +1002,7 @@
             "id": "indicator--9c1aaefb-abd2-5def-a333-9379ca2aee27",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:22.809609Z",
-            "modified": "2026-10-01T19:54:22.809609Z",
+            "modified": "2026-10-17T16:28:40.562437Z",
             "name": "sha256: fdca9ee6e64d67795cd48c5740fa54f509b00bff3e2e94d5f7863e21b23da7f6",
             "description": "Phishing VBScript dropper, downloads ScreenConnect MSI from chainconnects.net; UAC elevation; SSA PDF decoy",
             "indicator_types": [
@@ -991,6 +1017,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {

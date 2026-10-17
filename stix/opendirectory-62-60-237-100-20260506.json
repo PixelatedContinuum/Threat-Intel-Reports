@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--9d924417-0e3a-4006-ab87-e6ed926b87dd",
+    "id": "bundle--cc80fc60-52f6-4234-a587-23011e03ae4b",
     "objects": [
         {
             "type": "identity",
@@ -34,7 +34,7 @@
             "id": "indicator--4a9ac17c-a9e0-5418-b9eb-58afcd625fe3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.369402Z",
-            "modified": "2026-10-01T19:54:18.369402Z",
+            "modified": "2026-10-17T16:28:35.417369Z",
             "name": "ipv4: 109.120.137.6",
             "description": "Second-stage payload server; H2nexus Ltd Germany; hosts PUTTY.exe, RDP.exe, RMS.exe, Glovo.exe; Russian-language URL 'mozhno-li-vyvesti-dengi-s-krakena.html' historically observed; VT 6/91 malicious",
             "indicator_types": [
@@ -49,6 +49,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 80
         },
         {
@@ -63,7 +64,7 @@
             "id": "indicator--3efac4e6-4ec7-5f46-9a84-ef793b492bac",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.372179Z",
-            "modified": "2026-10-01T19:54:18.372179Z",
+            "modified": "2026-10-17T16:28:35.417925Z",
             "name": "ipv4: 185.241.208.129",
             "description": "C2 server confirmed via Suricata flow + Noriben + netstat (PID 2596 WVault.exe); AS210558 1337 Services GmbH (Poland); Spamhaus DROP listed; ET DROP rule 2400036 fired; VT confirms Carriers.exe as known communicating file",
             "indicator_types": [
@@ -78,6 +79,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 95
         },
         {
@@ -98,7 +100,7 @@
             "id": "indicator--ada63073-53dd-58e7-8aac-8d2162e0c215",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.372749Z",
-            "modified": "2026-10-01T19:54:18.372749Z",
+            "modified": "2026-10-17T16:28:35.418474Z",
             "name": "ipv4: 62.60.237.100",
             "description": "Primary staging server; AEZA Finland; Apache/2.4.58 (Ubuntu); /Documents/ and /download/Documents/ open directories with 32+ phishing artifacts; VT 5/91 malicious",
             "indicator_types": [
@@ -113,6 +115,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 95
         },
         {
@@ -127,7 +130,7 @@
             "id": "indicator--4c39c42d-4782-514c-a6cd-416c4860a6e0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.373146Z",
-            "modified": "2026-10-01T19:54:18.373146Z",
+            "modified": "2026-10-17T16:28:35.418888Z",
             "name": "ipv4: 80.253.249.186",
             "description": "Shared malware-staging infrastructure; serves the legit Wondershare DLL pack (BugSplat.dll, COMSupport.dll, etc.); QWINS LTD Germany; VT 11/47 malicious; useful pivot for tracking other operators using the same side-loading template",
             "indicator_types": [
@@ -142,6 +145,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 80
         },
         {
@@ -156,7 +160,7 @@
             "id": "indicator--10151b3d-a335-52a4-9614-647446697baa",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.373522Z",
-            "modified": "2026-10-01T19:54:18.373522Z",
+            "modified": "2026-10-17T16:28:35.419323Z",
             "name": "url: http://109.120.137.6/PUTTY.exe",
             "description": "Second-stage payload, invoked by embedded shell-redirect commands containing post-fetch -OutFile and ren/del operations",
             "indicator_types": [
@@ -171,6 +175,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -185,7 +190,7 @@
             "id": "indicator--2b185e17-0cee-53e0-b47b-0d33b404d51f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.374143Z",
-            "modified": "2026-10-01T19:54:18.374143Z",
+            "modified": "2026-10-17T16:28:35.419723Z",
             "name": "url: http://62.60.237.100:80/Documents/",
             "description": "Primary staging open directory",
             "indicator_types": [
@@ -200,6 +205,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -214,7 +220,7 @@
             "id": "indicator--ce56e2e5-7d86-5b15-ae44-ea8019fba1ec",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.374773Z",
-            "modified": "2026-10-01T19:54:18.374773Z",
+            "modified": "2026-10-17T16:28:35.420131Z",
             "name": "url: http://62.60.237.100:80/Documents/Carriers.exe",
             "description": "Direct payload URL",
             "indicator_types": [
@@ -229,6 +235,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -243,7 +250,7 @@
             "id": "indicator--0d881fd0-dcd1-5de9-b9b2-5d16be7289f5",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.375191Z",
-            "modified": "2026-10-01T19:54:18.375191Z",
+            "modified": "2026-10-17T16:28:35.420524Z",
             "name": "url: http://62.60.237.100:80/download/Documents/",
             "description": "Mirror staging open directory",
             "indicator_types": [
@@ -258,6 +265,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -272,7 +280,7 @@
             "id": "indicator--e8c6cc6f-328b-537c-928a-a82e9c2dc6ba",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.375576Z",
-            "modified": "2026-10-01T19:54:18.375576Z",
+            "modified": "2026-10-17T16:28:35.420947Z",
             "name": "url: http://80.253.249.186:5504/BugSplat.dll",
             "description": "Shared-staging Wondershare DLL pack download URL pattern",
             "indicator_types": [
@@ -287,6 +295,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -301,7 +310,7 @@
             "id": "indicator--07b5a0db-d87d-50e7-954f-f3a2521360a2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.37598Z",
-            "modified": "2026-10-01T19:54:18.37598Z",
+            "modified": "2026-10-17T16:28:35.421326Z",
             "name": "url: http://80.253.249.186:5504/COMSupport.dll",
             "description": "Shared-staging download",
             "indicator_types": [
@@ -316,6 +325,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -330,7 +340,7 @@
             "id": "indicator--70cdc688-3a20-549c-9470-47d996c3e9c3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.376353Z",
-            "modified": "2026-10-01T19:54:18.376353Z",
+            "modified": "2026-10-17T16:28:35.421787Z",
             "name": "url: http://80.253.249.186:5504/DBGHelp.dll",
             "description": "Shared-staging download",
             "indicator_types": [
@@ -345,6 +355,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -359,7 +370,7 @@
             "id": "indicator--dcec17fe-144b-5031-8487-e4198949b9f7",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.376712Z",
-            "modified": "2026-10-01T19:54:18.376712Z",
+            "modified": "2026-10-17T16:28:35.422336Z",
             "name": "url: http://80.253.249.186:5504/DVDSetting.dll",
             "description": "Shared-staging download",
             "indicator_types": [
@@ -374,6 +385,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -388,7 +400,7 @@
             "id": "indicator--39fa2fe7-f4cb-557d-a9e0-94558ee48015",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.377085Z",
-            "modified": "2026-10-01T19:54:18.377085Z",
+            "modified": "2026-10-17T16:28:35.422758Z",
             "name": "url: http://80.253.249.186:5504/NLEResource.dll",
             "description": "Shared-staging download",
             "indicator_types": [
@@ -403,6 +415,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -417,7 +430,7 @@
             "id": "indicator--f73edc66-315a-5466-99c1-18bc15e29856",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.377484Z",
-            "modified": "2026-10-01T19:54:18.377484Z",
+            "modified": "2026-10-17T16:28:35.423271Z",
             "name": "url: http://80.253.249.186:5504/NLETransitionMgr.dll",
             "description": "Shared-staging download",
             "indicator_types": [
@@ -432,6 +445,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -446,7 +460,7 @@
             "id": "indicator--b6accd4b-a575-57d2-ba1c-9fd0c8930803",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.377807Z",
-            "modified": "2026-10-01T19:54:18.377807Z",
+            "modified": "2026-10-17T16:28:35.423793Z",
             "name": "url: http://80.253.249.186:5504/WSUtilities.dll",
             "description": "Shared-staging download",
             "indicator_types": [
@@ -461,6 +475,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -475,7 +490,7 @@
             "id": "indicator--c3ba20da-0e6e-53a1-a09d-987272d8cd37",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.378173Z",
-            "modified": "2026-10-01T19:54:18.378173Z",
+            "modified": "2026-10-17T16:28:35.424214Z",
             "name": "url: http://80.253.249.186:5504/WS_ImageProc.dll",
             "description": "Shared-staging download",
             "indicator_types": [
@@ -490,6 +505,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -504,7 +520,7 @@
             "id": "indicator--57253bbe-2ee3-5f38-b08c-5500d0177d88",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.378539Z",
-            "modified": "2026-10-01T19:54:18.378539Z",
+            "modified": "2026-10-17T16:28:35.424602Z",
             "name": "url: http://80.253.249.186:5504/WS_Log.dll",
             "description": "Shared-staging download",
             "indicator_types": [
@@ -519,6 +535,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -533,7 +550,7 @@
             "id": "indicator--676aeae3-8eeb-5774-a4b7-f2e2de2eadba",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.378858Z",
-            "modified": "2026-10-01T19:54:18.378858Z",
+            "modified": "2026-10-17T16:28:35.424993Z",
             "name": "url: http://80.253.249.186:5504/WsBurn.dll",
             "description": "Shared-staging download",
             "indicator_types": [
@@ -548,6 +565,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -562,7 +580,7 @@
             "id": "indicator--23ba3962-b18a-5d37-b699-0b5631bc34e6",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.379175Z",
-            "modified": "2026-10-01T19:54:18.379175Z",
+            "modified": "2026-10-17T16:28:35.425398Z",
             "name": "url: https://s3.g.s4.mega.io/aileqac3yep7oqdhygjpberqqnk2zrnhck2lx/busket/Bravo/vida/NGZTDICF.exe",
             "description": "Mega.io payload, NDA-themed (NDA.doc); 'Bravo/vida' is operator NDA campaign codename",
             "indicator_types": [
@@ -577,6 +595,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -591,7 +610,7 @@
             "id": "indicator--0a42742c-013c-58f3-b9ea-9ea26e94d743",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.379691Z",
-            "modified": "2026-10-01T19:54:18.379691Z",
+            "modified": "2026-10-17T16:28:35.425875Z",
             "name": "url: https://s3.g.s4.mega.io/aileqac3yep7oqdhygjpberqqnk2zrnhck2lx/busket/putty.exe",
             "description": "Mega.io payload, Tier-1 MSC chain",
             "indicator_types": [
@@ -606,6 +625,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -620,7 +640,7 @@
             "id": "indicator--c5eae32c-f068-5cad-a676-7ffe504bb0ba",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.380039Z",
-            "modified": "2026-10-01T19:54:18.380039Z",
+            "modified": "2026-10-17T16:28:35.426574Z",
             "name": "url: https://s3.g.s4.mega.io/aileqac3yep7oqdhygjpberqqnk2zrnhck2lx/busket/putty2.exe",
             "description": "Mega.io payload, Price-themed (Price5.docm, Price6.doc, Price4.xls)",
             "indicator_types": [
@@ -635,6 +655,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -649,7 +670,7 @@
             "id": "indicator--1522c893-8805-5e9e-b965-209b37f8c5aa",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.380387Z",
-            "modified": "2026-10-01T19:54:18.380387Z",
+            "modified": "2026-10-17T16:28:35.427017Z",
             "name": "domain: microsoft.com-app.cc",
             "description": "Subdomain typosquat (apex app.cc); resolves to 62.60.237.100; hosts WebDAV path /download/6f14/ (the '6f14' likely a campaign/victim ID)",
             "indicator_types": [
@@ -664,6 +685,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -678,7 +700,7 @@
             "id": "indicator--e15b7bc9-c8d2-5b8e-a173-9b9123ab0587",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.380928Z",
-            "modified": "2026-10-01T19:54:18.380928Z",
+            "modified": "2026-10-17T16:28:35.427411Z",
             "name": "domain: onedrive.to",
             "description": "Microsoft typosquat created 2025-12-20; Spaceship registrar; Cloudflare-fronted; resolves to 62.60.237.100; hosts WebDAV paths /DavWWWRoot/Carriers/ and /download/Documents/",
             "indicator_types": [
@@ -693,6 +715,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 95
         },
         {
@@ -707,7 +730,7 @@
             "id": "indicator--f22231c6-6b3c-51d7-89eb-c54adc7f9642",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.381279Z",
-            "modified": "2026-10-01T19:54:18.381279Z",
+            "modified": "2026-10-17T16:28:35.427814Z",
             "name": "domain: www-microsoft.live",
             "description": "Typosquat; historical resolution to 62.60.237.100 (2025-10-03); discovered via VT historical pDNS; same operator as the other two typosquats",
             "indicator_types": [
@@ -722,6 +745,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -786,7 +810,7 @@
             "id": "indicator--c8fb6af8-bf9e-5d9e-bcf7-730b82359ca6",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.382463Z",
-            "modified": "2026-10-01T19:54:18.382463Z",
+            "modified": "2026-10-17T16:28:35.428922Z",
             "name": "sha256: 2d8728f0f371107ff124a39b3c9f624cae115f8b6cc6ec87fbeb96fc8c2b51e6",
             "description": "Operator-bespoke bundle-cleanup helper; NOT on VT (campaign-unique); same _tiny_erase_ export name as pe_06; manifest with filenames",
             "indicator_types": [
@@ -801,6 +825,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 80
         },
         {
@@ -825,7 +850,7 @@
             "id": "indicator--fa538941-2c98-56e7-aa6b-b1c981cf07e7",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.383631Z",
-            "modified": "2026-10-01T19:54:18.383631Z",
+            "modified": "2026-10-17T16:28:35.429561Z",
             "name": "sha256: 3480d0478d35d8a12331b97769401e16e4956bdc24b9a7175ae08e2c9e9acf8f",
             "description": "Operator-rebuilt Wondershare AudioClip service; campaign-bespoke hash but no operator code modifications observed; pure decoy",
             "indicator_types": [
@@ -840,6 +865,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 60
         },
         {
@@ -904,7 +930,7 @@
             "id": "indicator--98390840-bd9b-5443-bb59-59e5520f9876",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.384542Z",
-            "modified": "2026-10-01T19:54:18.384542Z",
+            "modified": "2026-10-17T16:28:35.430634Z",
             "name": "sha256: 585f41db259ff0150f717e0862dcc4c6df91b1b5624439037420736d1d35c80b",
             "description": "Operator config blob (27 KB, mixed entropy 5.48); never on VT; contains relocation header + tapisrv.dll string + 5808-byte stage-2 shellcode",
             "indicator_types": [
@@ -919,6 +945,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -943,7 +970,7 @@
             "id": "indicator--d6482164-e07d-57aa-9b18-587db666a1b3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.385057Z",
-            "modified": "2026-10-01T19:54:18.385057Z",
+            "modified": "2026-10-17T16:28:35.431254Z",
             "name": "sha256: 68bee500e0080f21c003126e73b6d07804d23ac98b2376a8b76c26297d467abe",
             "description": "GoProxy CA cert installer; Microsoft Trojan:Win32/Rugmi.HP!MTB; VT 50/71; export _tiny_erase_ via rundll32",
             "indicator_types": [
@@ -958,6 +985,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -974,7 +1002,7 @@
             "id": "indicator--1b44ea6a-460b-53cb-a9fc-e54a80ea7e2c",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.385453Z",
-            "modified": "2026-10-01T19:54:18.385453Z",
+            "modified": "2026-10-17T16:28:35.431765Z",
             "name": "sha256: 68fb61225b457172368d43af7ec2afe48f59404089d095584944edbfd0171feb",
             "description": "HijackLoader/Penguish/Rugmi/GhostPulse proper; Microsoft TrojanDownloader:Win64/Rugmi.HNL!MTB; VT 52/70; uses ntdll!RtlHashUnicodeString as API hash function (rare TTP)",
             "indicator_types": [
@@ -989,6 +1017,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1021,7 +1050,7 @@
             "id": "indicator--43e432f9-b11e-572a-9e10-c7a9c6a58d0d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:18.386001Z",
-            "modified": "2026-10-01T19:54:18.386001Z",
+            "modified": "2026-10-17T16:28:35.432463Z",
             "name": "sha256: 7e2000ceb89574fe95e819f5f47da346119b666b7f64e8b5b01e5152e37d76cf",
             "description": "Operator encrypted Stage-3 LZNT1 carrier (2.6 MB, entropy 7.88); never on VT before this investigation; PNG-IDAT framed + 4-byte XOR 0xE1D5B4A2 + LZNT1 chunked",
             "indicator_types": [
@@ -1036,6 +1065,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {

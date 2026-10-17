@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--15cbe356-3b0d-4294-9fb0-38c72c005bdf",
+    "id": "bundle--d3a4a65e-2d5d-44dc-95ce-31fcc39ebfd3",
     "objects": [
         {
             "type": "identity",
@@ -34,7 +34,7 @@
             "id": "indicator--372252b6-c79c-570f-aa94-dd698fd7fed3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-09-19T20:27:57.511085Z",
-            "modified": "2026-09-19T20:27:57.511085Z",
+            "modified": "2026-10-17T16:28:32.047635Z",
             "name": "domain: hrtests.ru",
             "indicator_types": [
                 "malicious-activity"
@@ -48,6 +48,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 60
         },
         {
@@ -62,7 +63,7 @@
             "id": "indicator--c0a3c761-1047-54a2-997e-ed2bc05378c4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-09-19T20:27:57.511706Z",
-            "modified": "2026-09-19T20:27:57.511706Z",
+            "modified": "2026-10-17T16:28:32.048183Z",
             "name": "url: http://hrtests.ru/S.php",
             "indicator_types": [
                 "malicious-activity"
@@ -76,6 +77,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 60
         },
         {
@@ -90,7 +92,7 @@
             "id": "indicator--74bb5087-b725-5b31-8ab8-3341c5410653",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-09-19T20:27:57.512336Z",
-            "modified": "2026-09-19T20:27:57.512336Z",
+            "modified": "2026-10-17T16:28:32.048617Z",
             "name": "domain: testswork.ru",
             "indicator_types": [
                 "malicious-activity"
@@ -104,6 +106,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 60
         },
         {

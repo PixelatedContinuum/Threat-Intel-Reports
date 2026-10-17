@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--cd870918-f0f8-4cf6-a463-a51d3468e3d5",
+    "id": "bundle--b0acbb6b-7f2f-4f77-8c7b-0557f2be5b36",
     "objects": [
         {
             "type": "identity",
@@ -34,7 +34,7 @@
             "id": "indicator--25c06a59-d267-5c27-92e7-73c12559f225",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.718755Z",
-            "modified": "2026-10-01T19:54:13.718755Z",
+            "modified": "2026-10-17T16:28:30.68217Z",
             "name": "ipv4: 77.110.125.145",
             "description": "Lower-OPSEC operator using public mining pools (auto.c3pool.org:443 + cfx-asia1.nanopool.org:10543); no Hysteria backdoor deployed; abandoned 40+ days (last on-chain activity 2026-04-12); same /16 as Operator-A",
             "indicator_types": [
@@ -49,6 +49,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 95
         },
         {
@@ -63,7 +64,7 @@
             "id": "indicator--31de5704-b9f1-5a38-af29-a1d3c16f093c",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.721484Z",
-            "modified": "2026-10-01T19:54:13.721484Z",
+            "modified": "2026-10-17T16:28:30.682725Z",
             "name": "ipv4: 77.110.96.200",
             "description": "Higher-OPSEC operator with self-hosted XMR pool proxy (:3333) and CFX pool proxy (:4444) - masks wallet attribution at pool layer; Hysteria v2 backdoor on UDP :14433/:14444; admin panel HTTP :3301; campaign LIVE as of 2026-05-25",
             "indicator_types": [
@@ -78,6 +79,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 95
         },
         {
@@ -92,7 +94,7 @@
             "id": "indicator--4ba05cb5-2063-59d1-8c76-2a9f0848f359",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.721963Z",
-            "modified": "2026-10-01T19:54:13.721963Z",
+            "modified": "2026-10-17T16:28:30.683177Z",
             "name": "domain: auto.c3pool.org",
             "description": "Public c3pool - Operator-B uses public pool with no proxy concealment | c3pool is a legitimate public mining pool used by many non-malicious miners; detection requires correlation with operator deployment patterns",
             "indicator_types": [
@@ -107,6 +109,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -127,7 +130,7 @@
             "id": "indicator--c15d88ec-6a0d-5f85-bd50-d10c77034938",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.722705Z",
-            "modified": "2026-10-01T19:54:13.722705Z",
+            "modified": "2026-10-17T16:28:30.683653Z",
             "name": "domain: cfx-asia1.nanopool.org",
             "description": "Public nanopool Asia-1 region; chosen for latency NOT operator geography (operator confirmed Russian-speaking via New_scanner.py Cyrillic content) | nanopool is a legitimate public mining pool; same FP rationale as c3pool",
             "indicator_types": [
@@ -142,6 +145,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -156,7 +160,7 @@
             "id": "indicator--ed1a4e8c-f8a4-5f4b-9385-23fe8ac3cf03",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.723179Z",
-            "modified": "2026-10-01T19:54:13.723179Z",
+            "modified": "2026-10-17T16:28:30.684057Z",
             "name": "domain: cfx.kryptex.network",
             "description": "Same Kryptex service - Conflux variant",
             "indicator_types": [
@@ -171,6 +175,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -185,7 +190,7 @@
             "id": "indicator--f45acd05-fede-5fa5-94ac-1cd78a421f2f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.723581Z",
-            "modified": "2026-10-01T19:54:13.723581Z",
+            "modified": "2026-10-17T16:28:30.684451Z",
             "name": "domain: etc.kryptex.network",
             "description": "Same Kryptex service",
             "indicator_types": [
@@ -200,6 +205,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -214,7 +220,7 @@
             "id": "indicator--e1ed5be4-63e1-5abe-bc83-1c52bc8772dc",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.724153Z",
-            "modified": "2026-10-01T19:54:13.724153Z",
+            "modified": "2026-10-17T16:28:30.684866Z",
             "name": "domain: get.hy2.sh",
             "description": "Used by hyst.sh to download Hysteria binary; Hysteria itself is dual-use software (censorship circumvention + backdoor); detection requires operator deployment correlation | Hysteria is dual-use; correlate with operator listening on :14433/:14444 + admin panel on :3301 before blocking",
             "indicator_types": [
@@ -229,6 +235,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 60
         },
         {
@@ -243,7 +250,7 @@
             "id": "indicator--e2ad61c2-820a-5176-9fe0-7dfe67f6b6e8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.724546Z",
-            "modified": "2026-10-01T19:54:13.724546Z",
+            "modified": "2026-10-17T16:28:30.685258Z",
             "name": "url: http://77.110.125.145/ghost.sh",
             "description": "Operator-B self-hosted kit URL - 17-byte per-customer config delta vs Operator-A's copy",
             "indicator_types": [
@@ -258,6 +265,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -272,7 +280,7 @@
             "id": "indicator--f53751be-9c3c-5867-82e8-1940fb262b2e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.725045Z",
-            "modified": "2026-10-01T19:54:13.725045Z",
+            "modified": "2026-10-17T16:28:30.685623Z",
             "name": "url: http://77.110.125.145/libpam_cache.so",
             "description": "Operator-B self-hosted payload URL - same binary as Operator-A's",
             "indicator_types": [
@@ -287,6 +295,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -301,7 +310,7 @@
             "id": "indicator--b821c58f-d17a-584d-ab7c-9660f78c3c73",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.725444Z",
-            "modified": "2026-10-01T19:54:13.725444Z",
+            "modified": "2026-10-17T16:28:30.686011Z",
             "name": "url: http://77.110.96.200/ghost.sh",
             "description": "Operator-A self-hosted kit orchestrator URL",
             "indicator_types": [
@@ -316,6 +325,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -330,7 +340,7 @@
             "id": "indicator--535731ea-77f8-59b0-b15c-63019ff12479",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.725759Z",
-            "modified": "2026-10-01T19:54:13.725759Z",
+            "modified": "2026-10-17T16:28:30.686396Z",
             "name": "url: http://77.110.96.200/hyst.sh",
             "description": "Operator-A self-hosted Hysteria wrapper URL",
             "indicator_types": [
@@ -345,6 +355,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -359,7 +370,7 @@
             "id": "indicator--5f5b0e7e-a2e8-55be-b77c-86662db1b49e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.726084Z",
-            "modified": "2026-10-01T19:54:13.726084Z",
+            "modified": "2026-10-17T16:28:30.686774Z",
             "name": "url: http://77.110.96.200/libpam_cache.c",
             "description": "Operator-A self-hosted source URL for rootkit C source",
             "indicator_types": [
@@ -374,6 +385,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -388,7 +400,7 @@
             "id": "indicator--da981557-2e76-5cd5-8b5d-2bd5321fa1cc",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.726419Z",
-            "modified": "2026-10-01T19:54:13.726419Z",
+            "modified": "2026-10-17T16:28:30.687175Z",
             "name": "url: http://77.110.96.200/libpam_cache.so",
             "description": "Operator-A self-hosted payload URL for rootkit binary",
             "indicator_types": [
@@ -403,6 +415,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -417,7 +430,7 @@
             "id": "indicator--2942f30a-88a9-5385-8e95-065c37786c43",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.726735Z",
-            "modified": "2026-10-01T19:54:13.726735Z",
+            "modified": "2026-10-17T16:28:30.687546Z",
             "name": "url: http://77.110.96.200/lmm.gz",
             "description": "Operator-A self-hosted miner binary archive",
             "indicator_types": [
@@ -432,6 +445,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -446,7 +460,7 @@
             "id": "indicator--0a40092b-291d-5d74-9d5c-c9b9e23e083e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.727081Z",
-            "modified": "2026-10-01T19:54:13.727081Z",
+            "modified": "2026-10-17T16:28:30.687948Z",
             "name": "url: http://77.110.96.200/min1.sh",
             "description": "Operator-A self-hosted miner wrapper URL with DUAL-TELEGRAM",
             "indicator_types": [
@@ -461,6 +475,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -475,7 +490,7 @@
             "id": "indicator--3924a79f-39ad-51dd-b8e2-43ac4f8ee54c",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.727409Z",
-            "modified": "2026-10-01T19:54:13.727409Z",
+            "modified": "2026-10-17T16:28:30.688318Z",
             "name": "url: http://77.110.96.200/xmr.gz",
             "description": "Operator-A self-hosted miner binary archive",
             "indicator_types": [
@@ -490,6 +505,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -504,7 +520,7 @@
             "id": "indicator--63081f19-a1d6-5053-a4b2-c426db9e40fb",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.727725Z",
-            "modified": "2026-10-01T19:54:13.727725Z",
+            "modified": "2026-10-17T16:28:30.688677Z",
             "name": "url: http://77.110.96.200:3301/api/login",
             "description": "Operator-A Hysteria admin panel API",
             "indicator_types": [
@@ -519,6 +535,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -533,7 +550,7 @@
             "id": "indicator--a75c5beb-93b4-504f-b0cb-ba40949b8932",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.728041Z",
-            "modified": "2026-10-01T19:54:13.728041Z",
+            "modified": "2026-10-17T16:28:30.689064Z",
             "name": "url: http://77.110.96.200:3301/api/stats",
             "description": "Operator-A Hysteria admin panel API",
             "indicator_types": [
@@ -548,6 +565,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -562,7 +580,7 @@
             "id": "indicator--e24d7444-2d05-5cd9-b339-d3c1e963dcef",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.728373Z",
-            "modified": "2026-10-01T19:54:13.728373Z",
+            "modified": "2026-10-17T16:28:30.689445Z",
             "name": "url: http://77.110.96.200:3301/api/vpn_report",
             "description": "Operator-A Hysteria admin panel API",
             "indicator_types": [
@@ -577,6 +595,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -591,7 +610,7 @@
             "id": "indicator--945c4ea1-5c16-55c9-a98c-dee7d2dfb993",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.728721Z",
-            "modified": "2026-10-01T19:54:13.728721Z",
+            "modified": "2026-10-17T16:28:30.689816Z",
             "name": "url: https://github.com/Vova75Rus/ComfyUI-Shell-Executor",
             "description": "DELETED post-Censys disclosure (April 2026); Vova75Rus account suspended by GitHub T&S 2026-05-25",
             "indicator_types": [
@@ -606,6 +625,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -620,7 +640,7 @@
             "id": "indicator--861ba2a9-51e3-5eaa-b24c-6466bdc41ba9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.729182Z",
-            "modified": "2026-10-01T19:54:13.729182Z",
+            "modified": "2026-10-17T16:28:30.690452Z",
             "name": "url: https://github.com/Vova75Rus/Dim",
             "description": "UnamWebPanel-derived PHP admin panel (/* Made by Unam Sanctam */ attribution) + pliny_miner.py + 123.py; admin password hardcoded 'miner'; suspended by GitHub T&S 2026-05-25",
             "indicator_types": [
@@ -635,6 +655,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -649,7 +670,7 @@
             "id": "indicator--44cedbec-2e5d-5a2b-9083-7412f44334e6",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.729538Z",
-            "modified": "2026-10-01T19:54:13.729538Z",
+            "modified": "2026-10-17T16:28:30.6909Z",
             "name": "url: https://github.com/Vova75Rus/Notes.github.io",
             "description": "Opens with 'Для Арины 💖 С 8 Марта' (For Arina 💖 March 8th); personal-attribution leak; suspended by GitHub T&S 2026-05-25",
             "indicator_types": [
@@ -664,6 +685,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -678,7 +700,7 @@
             "id": "indicator--fd9b3cb2-de6e-5d1c-aec2-f8bd892dda95",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.72989Z",
-            "modified": "2026-10-01T19:54:13.72989Z",
+            "modified": "2026-10-17T16:28:30.691333Z",
             "name": "url: https://github.com/Vova75Rus/legendary-carnival",
             "description": "GHOST kit staging directory - xmrigggggsteal, lmmiineeer disguised binaries + 5 Russian-language scripts; suspended by GitHub T&S 2026-05-25",
             "indicator_types": [
@@ -693,6 +715,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -707,7 +730,7 @@
             "id": "indicator--5e0a3104-cc85-5091-9437-f5795d2171b1",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.730235Z",
-            "modified": "2026-10-01T19:54:13.730235Z",
+            "modified": "2026-10-17T16:28:30.691724Z",
             "name": "url: https://github.com/Vova75Rus/miner",
             "description": "Contained config.json + kill_list.patterns + disguised xmrig (13MB git-SHA 9482a637...) + disguised lolMiner (8MB git-SHA 19ced92c...); suspended by GitHub T&S 2026-05-25",
             "indicator_types": [
@@ -722,6 +745,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -736,7 +760,7 @@
             "id": "indicator--3465630b-25cc-50fa-a9a4-bb1e2b64aa0a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.730561Z",
-            "modified": "2026-10-01T19:54:13.730561Z",
+            "modified": "2026-10-17T16:28:30.692124Z",
             "name": "url: https://github.com/jamestechdev-oss/ComfyUI-Shell-Plugin",
             "description": "DELETED post-Censys; entire jamestechdev-oss account scrubbed - cannot verify identity vs Operator-B",
             "indicator_types": [
@@ -751,6 +775,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -765,7 +790,7 @@
             "id": "indicator--3b717480-1786-5beb-ab11-5c180da3de1d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.730947Z",
-            "modified": "2026-10-01T19:54:13.730947Z",
+            "modified": "2026-10-17T16:28:30.692526Z",
             "name": "domain: xmr.kryptex.network",
             "description": "Kryptex pool (Russian mining service)",
             "indicator_types": [
@@ -780,6 +805,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -796,7 +822,7 @@
             "id": "indicator--f1cd66d6-553a-5791-a654-204dd2e3a85b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.731623Z",
-            "modified": "2026-10-01T19:54:13.731623Z",
+            "modified": "2026-10-17T16:28:30.693015Z",
             "name": "sha256: 008bc5ab73e75bb76131f91d68a3792d9e4393137c14afe8c44d44be2a2c46f6",
             "description": "Operator-A miner-only installer with DUAL-TELEGRAM (OWNER bot 8415540095 kit-author baked + MIRROR bot 8315596543 operator-set); 0/53 VT (UNDETECTED); Last Modified 2026-05-24T17:10:29Z (operator actively iterating)",
             "indicator_types": [
@@ -811,6 +837,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -835,7 +862,7 @@
             "id": "indicator--876ea16b-5804-5690-85ee-684bad2f221e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.732834Z",
-            "modified": "2026-10-01T19:54:13.732834Z",
+            "modified": "2026-10-17T16:28:30.693604Z",
             "name": "sha256: 822afb1fb29f22df8c951726d492021df2940223ed719881dafb40cda3894c5c",
             "description": "Operator-A Hysteria v2 backdoor installer; Russian-language operator wrapper (10 Cyrillic words); admin panel callback http://77.110.96.200:3301; bing.com SNI masquerade; NOT IN VT",
             "indicator_types": [
@@ -850,6 +877,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -866,7 +894,7 @@
             "id": "indicator--616d755d-07d1-53b4-9af7-ceff7dff37e7",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.733286Z",
-            "modified": "2026-10-01T19:54:13.733286Z",
+            "modified": "2026-10-17T16:28:30.6941Z",
             "name": "sha256: 9023734a70ee6a05d4ecd5466d0c5803f293601836deb00cc417a3add04bd93e",
             "description": "Operator-A cloud IP-range scraper; Russian-language (4 Cyrillic words); 12 bgpview.io ASN queries + Oracle + Google official ranges; feeds ComfyUI scanner pipeline",
             "indicator_types": [
@@ -881,6 +909,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -897,7 +926,7 @@
             "id": "indicator--6e1517d0-ebed-56bf-ab6a-dbb1dc8a8021",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.73371Z",
-            "modified": "2026-10-01T19:54:13.73371Z",
+            "modified": "2026-10-17T16:28:30.69456Z",
             "name": "sha256: dc232b55329d95fe2a47a8d637b7bffea06f18e3d8332ba94b042b1862213a1d",
             "description": "Operator-A ComfyUI target verification script; Russian-language (4 Cyrillic words including ИТОГО, Найдено); GETs /system_stats and /queue endpoints on port 8188",
             "indicator_types": [
@@ -912,6 +941,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -928,7 +958,7 @@
             "id": "indicator--3dfaa4d5-4638-5546-9b78-e5e5a0f551b4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.734133Z",
-            "modified": "2026-10-01T19:54:13.734133Z",
+            "modified": "2026-10-17T16:28:30.695041Z",
             "name": "sha256: e943b58112f58517b95424dba9334bf97c5dc2dd2f069dca04b9e75b9fec56ba",
             "description": "Operator-A copy (77.110.96.200) - 1338-line Bash installer GHOST v5.1; 43 functions including 4 container-escape variants; VT 13/63 with only generic signatures (Symantec PUA.Gen.2, Kaspersky HEUR:Downloader.Shell.Miner.a, Microsoft Trojan:Script/Wacatac.B!ml)",
             "indicator_types": [
@@ -943,6 +973,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -959,7 +990,7 @@
             "id": "indicator--be07cd65-95b6-5ca4-8279-d70ba1dd7dad",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.734532Z",
-            "modified": "2026-10-01T19:54:13.734532Z",
+            "modified": "2026-10-17T16:28:30.695498Z",
             "name": "sha256: eaaa10c840de23335abae1a9ead0a6a7fb7be5187cd19ad05137feab12bb7301",
             "description": "LD_PRELOAD userland rootkit ELF64 - BYTE-IDENTICAL across both customer hosts 77.110.96.200 and 77.110.125.145; refutes per-victim compilation; GCC 13.3.0 Ubuntu 24.04 GLIBC 2.34+; 0/0 VT detections (never scanned)",
             "indicator_types": [
@@ -974,6 +1005,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -990,7 +1022,7 @@
             "id": "indicator--6d1bc44e-fe7e-5313-9aae-cffcd26c0997",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.734924Z",
-            "modified": "2026-10-01T19:54:13.734924Z",
+            "modified": "2026-10-17T16:28:30.695979Z",
             "name": "sha256: edafde0d33ff1a169c0c4eeaeec12d1759818c7cf4950fcee91c687e811e6cff",
             "description": "98-line C source for the rootkit - shipped alongside binary for victim-side recompile (kit-author practice); NOT IN VT",
             "indicator_types": [
@@ -1005,6 +1037,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {

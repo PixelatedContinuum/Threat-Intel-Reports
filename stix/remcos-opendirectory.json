@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--d9c81902-2192-4a8d-89d9-d592bf39f82a",
+    "id": "bundle--f291462f-e2f2-493f-9673-5ee53bdd3e6c",
     "objects": [
         {
             "type": "identity",
@@ -36,7 +36,7 @@
             "id": "indicator--3105cfe5-849c-5817-a819-d52fc2a81a14",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-09-19T20:28:01.340271Z",
-            "modified": "2026-09-19T20:28:01.340271Z",
+            "modified": "2026-10-17T16:28:36.353629Z",
             "name": "sha256: db218dd5f53fbcf39a6db043c8455667c3dbef44abe14865e8b962b4c676372e",
             "indicator_types": [
                 "malicious-activity"
@@ -50,6 +50,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -66,7 +67,7 @@
             "id": "indicator--bf8bc5d8-fb4d-5261-880f-e458d891c547",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-09-19T20:28:01.341221Z",
-            "modified": "2026-09-19T20:28:01.341221Z",
+            "modified": "2026-10-17T16:28:36.354219Z",
             "name": "sha256: ebdd31a7622288b15439396a5758ffb0133d28b4bb11e9386187661a4b7d5f82",
             "indicator_types": [
                 "malicious-activity"
@@ -80,6 +81,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {

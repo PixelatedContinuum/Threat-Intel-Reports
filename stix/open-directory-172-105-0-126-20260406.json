@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--75e31b0a-b3ce-434f-9efd-2ba2b605b253",
+    "id": "bundle--76abca0f-a4ca-4311-9d78-2feb9ebf51fe",
     "objects": [
         {
             "type": "identity",
@@ -34,7 +34,7 @@
             "id": "indicator--9427c028-4d29-5459-8d42-9d771bbc8bd1",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.585649Z",
-            "modified": "2026-10-01T19:54:15.585649Z",
+            "modified": "2026-10-17T16:28:32.10236Z",
             "name": "ipv4: 172.105.0.126",
             "description": "Primary C2 server - hardcoded in beacon.exe, beacon_patched.x64.dll config, and stager.exe. Linode/Akamai hosted VPS. | MODERATE - Linode shared hosting IP; block only in context of associated behavioral indicators",
             "indicator_types": [
@@ -49,6 +49,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 80
         },
         {
@@ -63,7 +64,7 @@
             "id": "indicator--ae68ae51-a087-5162-9a0b-1d5aa6d808a2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.588355Z",
-            "modified": "2026-10-01T19:54:15.588355Z",
+            "modified": "2026-10-17T16:28:32.102834Z",
             "name": "url: https://172.105.0.126:8443/qz99",
             "description": "Stage 1 shellcode download endpoint used by stager.exe - distinctive URI path",
             "indicator_types": [
@@ -78,6 +79,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -92,7 +94,7 @@
             "id": "indicator--600f0a6d-5076-5b30-9bef-18bf21175253",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.589076Z",
-            "modified": "2026-10-01T19:54:15.589076Z",
+            "modified": "2026-10-17T16:28:32.103269Z",
             "name": "url: https://172.105.0.126:8443/register",
             "description": "RSA-2048 registration handshake endpoint (beacon.exe, beacon_universal.py)",
             "indicator_types": [
@@ -107,6 +109,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -121,7 +124,7 @@
             "id": "indicator--9096b844-2259-5f22-ad82-ea8bf0c22dfc",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.589497Z",
-            "modified": "2026-10-01T19:54:15.589497Z",
+            "modified": "2026-10-17T16:28:32.103656Z",
             "name": "url: https://172.105.0.126:8443/submit",
             "description": "Output submission endpoint - POST with ?id=<beacon_id_hex8> query parameter",
             "indicator_types": [
@@ -136,6 +139,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -150,7 +154,7 @@
             "id": "indicator--45d3b14f-1c2d-511a-9858-3d8ceed46319",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.58992Z",
-            "modified": "2026-10-01T19:54:15.58992Z",
+            "modified": "2026-10-17T16:28:32.104088Z",
             "name": "url: https://172.105.0.126:8443/submit.php",
             "description": "Beacon output submission endpoint referenced via HTTP GET in network-layer detection content (Sigma/Suricata rules in open-directory-172-105-0-126-20260406-detections). Distinct from /submit (POST), the C beacon's documented output-submission path recorded above; attributed to the co-hosted Cobalt Strike DLL beacon's GET-based output-accumulator behavior against its Malleable C2 get_uri, and retained as a separate MODERATE-confidence indicator.",
             "indicator_types": [
@@ -165,6 +169,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 60
         },
         {
@@ -179,7 +184,7 @@
             "id": "indicator--11d351db-d751-5512-a1f4-270bd25c082c",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.590278Z",
-            "modified": "2026-10-01T19:54:15.590278Z",
+            "modified": "2026-10-17T16:28:32.104448Z",
             "name": "url: https://172.105.0.126:8443/updates",
             "description": "Task polling endpoint - GET with ?id=<beacon_id_hex8> query parameter",
             "indicator_types": [
@@ -194,6 +199,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {

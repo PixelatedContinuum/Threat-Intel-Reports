@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--22c28fe9-8064-43f4-879d-809e6b817847",
+    "id": "bundle--3ffc42c6-9dae-4a2e-ae59-0e984be5ba88",
     "objects": [
         {
             "type": "identity",
@@ -34,7 +34,7 @@
             "id": "indicator--3877e5cf-fb53-54e7-880c-5c91e2f8a645",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.456114Z",
-            "modified": "2026-10-01T19:54:13.456114Z",
+            "modified": "2026-10-17T16:28:30.488026Z",
             "name": "ipv4: 67.215.232.25",
             "description": "VT 15/91 malicious, reputation -1. communicating_files=0 (beacon implant unrecovered). IP-only (no domain), fully blockable at the IP. No sibling C2 found (5 convergent negative pivots).",
             "indicator_types": [
@@ -49,6 +49,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 80
         },
         {
@@ -63,7 +64,7 @@
             "id": "indicator--eae13405-8811-57c2-a2d1-604d21047010",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.458812Z",
-            "modified": "2026-10-01T19:54:13.458812Z",
+            "modified": "2026-10-17T16:28:30.48851Z",
             "name": "url: http://67.215.232.25:1337/",
             "description": "Stages the 17-file post-exploitation toolkit for retrieval onto victims (T1105).",
             "indicator_types": [
@@ -78,6 +79,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -92,7 +94,7 @@
             "id": "indicator--2a6f0488-c4d7-55a7-8a5d-7369c77dbbe9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.459438Z",
-            "modified": "2026-10-01T19:54:13.459438Z",
+            "modified": "2026-10-17T16:28:30.488915Z",
             "name": "url: http://67.215.232.25:5000/",
             "description": "Same Werkzeug stack as :8080; all 38 probed routes 404 (non-guessable routing). Role undetermined.",
             "indicator_types": [
@@ -107,6 +109,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 60
         },
         {
@@ -121,7 +124,7 @@
             "id": "indicator--355cbdf6-8f2e-5a31-b8ce-cc60270d59c9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.459895Z",
-            "modified": "2026-10-01T19:54:13.459895Z",
+            "modified": "2026-10-17T16:28:30.489298Z",
             "name": "url: http://67.215.232.25:8080/api/heartbeat",
             "description": "One of only 3 routes on the C2.",
             "indicator_types": [
@@ -136,6 +139,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -150,7 +154,7 @@
             "id": "indicator--67638387-0cfa-533d-81ce-6bfb746fc7fe",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.460454Z",
-            "modified": "2026-10-01T19:54:13.460454Z",
+            "modified": "2026-10-17T16:28:30.489685Z",
             "name": "url: http://67.215.232.25:8080/api/report",
             "description": "One of only 3 routes on the C2. Beacons termed 'servers'.",
             "indicator_types": [
@@ -165,6 +169,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -179,7 +184,7 @@
             "id": "indicator--a886d819-6220-516c-9dde-6b3d9513fd9e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.460999Z",
-            "modified": "2026-10-01T19:54:13.460999Z",
+            "modified": "2026-10-17T16:28:30.490071Z",
             "name": "url: http://67.215.232.25:8080/health",
             "description": "Returns JSON field-combo active_servers/pending_commands/completed_commands/status/timestamp on Werkzeug/3.1.6 Python/3.12.3. Idle: all counters 0.",
             "indicator_types": [
@@ -194,6 +199,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -290,7 +296,7 @@
             "id": "indicator--16ca4f73-efbe-5345-8008-6b510ea585e2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:13.463415Z",
-            "modified": "2026-10-01T19:54:13.463415Z",
+            "modified": "2026-10-17T16:28:30.491406Z",
             "name": "sha256: a7029ef2b6a541ef2b7508e1316d3c2efd3493108975ee457bcdb73043a25262",
             "description": "BESPOKE MSSQL SQL-CLR reverse-shell backdoor; [SqlProcedure] reverse_shell(ip,port) -> cmd.exe /c. Specific operator build (compile 2026-03-21). VT 32 malicious; Zenbox harmless 98% (sandbox-resistant), Microsoft+Kaspersky clean.",
             "indicator_types": [
@@ -305,6 +311,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {

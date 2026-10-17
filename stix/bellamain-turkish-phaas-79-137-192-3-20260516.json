@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--7a020025-e287-4f21-9081-54bbcd799d0f",
+    "id": "bundle--3c909889-3cf9-40e4-a969-f2c00772e9b9",
     "objects": [
         {
             "type": "identity",
@@ -34,7 +34,7 @@
             "id": "indicator--7687fd58-e250-5606-b2b3-2f3f8e5c319a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.410421Z",
-            "modified": "2026-10-01T19:54:12.410421Z",
+            "modified": "2026-10-17T16:28:29.693584Z",
             "name": "ipv4: 79.137.192.3",
             "description": "BellaMain panel + 7 phishing kits + CryptOne staging path. Apache/2.4.58 (Win64) OpenSSL/3.1.3 PHP/8.2.12 with self-signed TLS | Newly active in 2026-05-07 re-triage (previously HTTPS-only). Exposes /upload/ (stale 2022 marketplace JPGs) and /assets/css/, /assets/js/ (modified 2026-03-19)",
             "indicator_types": [
@@ -49,6 +49,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 95
         },
         {
@@ -63,7 +64,7 @@
             "id": "indicator--0893edb6-299b-5a34-b8f0-968d93022caf",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.413184Z",
-            "modified": "2026-10-01T19:54:12.413184Z",
+            "modified": "2026-10-17T16:28:29.694174Z",
             "name": "domain: cryptone.bot",
             "description": "CryptOne fake crypto exchange production domain (Cloudflare-fronted, origin hidden)",
             "indicator_types": [
@@ -78,6 +79,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -92,7 +94,7 @@
             "id": "indicator--ad7126bf-a3d8-52cc-bef2-ebd1f25912ae",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.413929Z",
-            "modified": "2026-10-01T19:54:12.413929Z",
+            "modified": "2026-10-17T16:28:29.694596Z",
             "name": "domain: evotoptan.com",
             "description": "Listed as evotoptan/ subdirectory on BellaMain server. Briefly resolved to 79.137.192.3 on 2026-03-31 (22-minute window). Now Namecheap shared (68.65.121.242) | MEDIUM (Namecheap shared hosting hosts many unrelated sites, combine with kit landing-page URL pattern)",
             "indicator_types": [
@@ -107,6 +109,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 60
         },
         {
@@ -121,7 +124,7 @@
             "id": "indicator--8482362e-4a99-5a1f-afff-bbef1d84ad86",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.414378Z",
-            "modified": "2026-10-01T19:54:12.414378Z",
+            "modified": "2026-10-17T16:28:29.695021Z",
             "name": "url: https://79.137.192.3/",
             "description": "Open-directory root listing",
             "indicator_types": [
@@ -136,6 +139,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -150,7 +154,7 @@
             "id": "indicator--cdbc6d22-5f04-5e08-816c-7d866d05d23e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.414897Z",
-            "modified": "2026-10-01T19:54:12.414897Z",
+            "modified": "2026-10-17T16:28:29.695393Z",
             "name": "url: https://79.137.192.3/BellaMain/",
             "description": "BellaMain panel directory",
             "indicator_types": [
@@ -165,6 +169,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -179,7 +184,7 @@
             "id": "indicator--ac2e78ac-a9b0-5ee4-af5c-a50261a7c5fd",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.415309Z",
-            "modified": "2026-10-01T19:54:12.415309Z",
+            "modified": "2026-10-17T16:28:29.695849Z",
             "name": "url: https://79.137.192.3/cryptone/",
             "description": "CryptOne fake-exchange staging path (LIVE)",
             "indicator_types": [
@@ -194,6 +199,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -208,7 +214,7 @@
             "id": "indicator--5ab6d935-38b3-5d7a-9935-a1511db09cce",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.415638Z",
-            "modified": "2026-10-01T19:54:12.415638Z",
+            "modified": "2026-10-17T16:28:29.696251Z",
             "name": "url: https://79.137.192.3/no/",
             "description": "Card phishing SPA lure (LIVE), hash routes #kart, #avantajlar, #sss",
             "indicator_types": [
@@ -223,6 +229,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -237,7 +244,7 @@
             "id": "indicator--85e3e5ed-23b4-5a03-8549-49ed50b2b3ad",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.416158Z",
-            "modified": "2026-10-01T19:54:12.416158Z",
+            "modified": "2026-10-17T16:28:29.696631Z",
             "name": "url: https://api.binance.com/api/v3/ticker/price?symbol=TRXTRY",
             "description": "Live TRX/TRY rate query in BellaMain cekimbot.php for payout calculation | HIGH, legitimate crypto applications also query Binance API. Detection value is operator-side context.",
             "indicator_types": [
@@ -252,6 +259,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -266,7 +274,7 @@
             "id": "indicator--e5a1586a-793d-5af6-be39-26bd588397e2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.416634Z",
-            "modified": "2026-10-01T19:54:12.416634Z",
+            "modified": "2026-10-17T16:28:29.6972Z",
             "name": "url: https://cryptone.bot/",
             "description": "CryptOne production fake-exchange (Cloudflare-fronted)",
             "indicator_types": [
@@ -281,6 +289,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -295,7 +304,7 @@
             "id": "indicator--2d0dde9d-b206-53b3-970f-cabb56a56798",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.416984Z",
-            "modified": "2026-10-01T19:54:12.416984Z",
+            "modified": "2026-10-17T16:28:29.697611Z",
             "name": "url: https://www.usom.gov.tr/url-list.txt",
             "description": "USOM blocklist endpoint polled by panel usmcheck.php, operator-side outbound call | HIGH. This is a legitimate Turkish CERT URL; legitimate security tools also fetch it. Detection value is in seeing this fetch FROM a non-Turkish-CERT-affiliated PHP host.",
             "indicator_types": [
@@ -310,6 +319,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -326,7 +336,7 @@
             "id": "indicator--835e7fcb-cb7b-5047-8f2f-d850274c7d89",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.417489Z",
-            "modified": "2026-10-01T19:54:12.417489Z",
+            "modified": "2026-10-17T16:28:29.698083Z",
             "name": "sha256: 219cd4f6177a2358ec7f06b230d611f47e1049fcb3e2b44d06ec410b336382b0",
             "description": "Turkcell (telecommunications) phishing kit",
             "indicator_types": [
@@ -341,6 +351,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -357,7 +368,7 @@
             "id": "indicator--a91be888-c519-535f-9ffc-5fce3143a387",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.418711Z",
-            "modified": "2026-10-01T19:54:12.418711Z",
+            "modified": "2026-10-17T16:28:29.698516Z",
             "name": "sha256: 2c656360c4e58854dca35ff21b3fc62db41155ca76f8568ecc18fa52aa38fb31",
             "description": "Dolap (Turkish secondhand marketplace) phishing kit",
             "indicator_types": [
@@ -372,6 +383,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -388,7 +400,7 @@
             "id": "indicator--4652c8d4-2fc6-505a-8a87-f4ebc56946fc",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.41913Z",
-            "modified": "2026-10-01T19:54:12.41913Z",
+            "modified": "2026-10-17T16:28:29.698961Z",
             "name": "sha256: 504b1a30ce7060eafa7b2a3f6249c954a0be6ce1d2930e03b030434cb232600a",
             "description": "Shopier (e-commerce) phishing kit",
             "indicator_types": [
@@ -403,6 +415,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -419,7 +432,7 @@
             "id": "indicator--0bdd4f90-17e2-5af9-a648-4ae6bd76f23a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.419589Z",
-            "modified": "2026-10-01T19:54:12.419589Z",
+            "modified": "2026-10-17T16:28:29.699421Z",
             "name": "sha256: 705793c011fdfe17941700a3bf42eee0ba2ebdc04870ce19779ea528b3565fac",
             "description": "Yurtici Kargo (cargo tracking) phishing kit",
             "indicator_types": [
@@ -434,6 +447,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -450,7 +464,7 @@
             "id": "indicator--6a921d96-534d-59fd-a6a7-1423dfe3c1f4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.419986Z",
-            "modified": "2026-10-01T19:54:12.419986Z",
+            "modified": "2026-10-17T16:28:29.699875Z",
             "name": "sha256: b2f4f1617577d14612b30a54a733b15af809c399f325717b4329c13aaa4c915c",
             "description": "Sahibinden (classifieds / real estate) phishing kit",
             "indicator_types": [
@@ -465,6 +479,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -481,7 +496,7 @@
             "id": "indicator--f93c9e10-f908-557b-a878-a64dc1b8f2ed",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.420426Z",
-            "modified": "2026-10-01T19:54:12.420426Z",
+            "modified": "2026-10-17T16:28:29.700352Z",
             "name": "sha256: e21fb63a3b4d65a3d48dec1bf17a84a414482f819b93cb8d77a81852dc34c95f",
             "description": "Letgo (classifieds) phishing kit",
             "indicator_types": [
@@ -496,6 +511,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -512,7 +528,7 @@
             "id": "indicator--cb1ced5e-8ce2-5a01-bcd8-c67bfa2749db",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.420819Z",
-            "modified": "2026-10-01T19:54:12.420819Z",
+            "modified": "2026-10-17T16:28:29.700776Z",
             "name": "sha256: ee9d4fccebbf73fb33980da15142bc71e5d9661d1bc583c2b09b77490065efd9",
             "description": "PTT AVM (postal e-commerce) phishing kit",
             "indicator_types": [
@@ -527,6 +543,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -543,7 +560,7 @@
             "id": "indicator--6ea87d8f-b64a-5056-bedb-8a4cb23b4eaa",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:12.421194Z",
-            "modified": "2026-10-01T19:54:12.421194Z",
+            "modified": "2026-10-17T16:28:29.701252Z",
             "name": "sha256: f791fae41cdd3f141221d1783ed4779c839de7fc834ff4fc80a5d7f74b11ff88",
             "description": "PhaaS panel backend, 65 PHP files + 14 directories; first public disclosure",
             "indicator_types": [
@@ -558,6 +575,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {

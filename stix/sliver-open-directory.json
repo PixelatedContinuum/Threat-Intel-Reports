@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--ffcbe6f6-629e-4583-b9df-5f496da1f88c",
+    "id": "bundle--ae3e3b53-509a-4029-bbaf-fa0abcc1276b",
     "objects": [
         {
             "type": "identity",
@@ -34,7 +34,7 @@
             "id": "indicator--f0d906fd-c2d0-5c67-becb-f48377b0a012",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-09-19T20:28:04.69948Z",
-            "modified": "2026-09-19T20:28:04.69948Z",
+            "modified": "2026-10-17T16:28:40.165164Z",
             "name": "ipv4: 45.94.31.220",
             "description": "Open directory indexed at 21:45 UTC on 2026-02-14 (6.75 hours post-build). Infrastructure may have been re-established with new IOCs if operator became aware of exposure. Monitor for similar hosting patterns.",
             "indicator_types": [
@@ -49,6 +49,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 80
         },
         {
@@ -63,7 +64,7 @@
             "id": "indicator--cbcf22a2-8de8-55a5-b24e-ff0e8ac1eef0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-09-19T20:28:04.700495Z",
-            "modified": "2026-09-19T20:28:04.700495Z",
+            "modified": "2026-10-17T16:28:40.1657Z",
             "name": "url: http://45.94.31.220:8000/",
             "description": "Directory exposure is the event that enabled recovery of full attacker toolkit. Third-party scanner at port 8080 had already applied malware/exploit tags to multiple artifacts before our analysis.",
             "indicator_types": [
@@ -78,6 +79,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -92,7 +94,7 @@
             "id": "indicator--8b6efd7b-c37c-59a1-bd8c-2f66ca147b27",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-09-19T20:28:04.701126Z",
-            "modified": "2026-09-19T20:28:04.701126Z",
+            "modified": "2026-10-17T16:28:40.166149Z",
             "name": "url: http://45.94.31.220:8000/OneDriveSync.exe",
             "description": "HTTP (not HTTPS) indicates payload delivery prioritizes availability over encryption. Wireshark/network sensors will capture full payload during download.",
             "indicator_types": [
@@ -107,6 +109,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -121,7 +124,7 @@
             "id": "indicator--65a57841-bd46-566e-8bc1-6e004a89ca94",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-09-19T20:28:04.701662Z",
-            "modified": "2026-09-19T20:28:04.701662Z",
+            "modified": "2026-10-17T16:28:40.166583Z",
             "name": "domain: mailmassange.duckdns.org",
             "description": "DuckDNS subdomains can be rapidly re-assigned to new attacker infrastructure. Detect by behavioral pattern (Sliver beacon heartbeat) rather than domain alone.",
             "indicator_types": [
@@ -136,6 +139,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -150,7 +154,7 @@
             "id": "indicator--7b313cb4-961c-54b0-9d04-6af34ceb7cd8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-09-19T20:28:04.702208Z",
-            "modified": "2026-09-19T20:28:04.702208Z",
+            "modified": "2026-10-17T16:28:40.167044Z",
             "name": "domain: mailuxe.net",
             "description": "If domain is sinkholed by defensive parties, check for fallback to mailmassange.duckdns.org",
             "indicator_types": [
@@ -165,6 +169,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -181,7 +186,7 @@
             "id": "indicator--25c4bb20-6142-5af8-beaf-643b9f7918c3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-09-19T20:28:04.702784Z",
-            "modified": "2026-09-19T20:28:04.702784Z",
+            "modified": "2026-10-17T16:28:40.167516Z",
             "name": "sha256: d94c74a6cd6629be66898eaab03ce0446f655689e28e08f0c166eaf4af9d04ea",
             "description": "Same C2 configuration as OneDriveSync.exe. Compression ratio indicates 50% size reduction; use for bandwidth-constrained delivery scenarios.",
             "indicator_types": [
@@ -196,6 +201,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -212,7 +218,7 @@
             "id": "indicator--3c1e1859-a04a-5217-be9a-df5e8cd36145",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-09-19T20:28:04.703384Z",
-            "modified": "2026-09-19T20:28:04.703384Z",
+            "modified": "2026-10-17T16:28:40.168047Z",
             "name": "sha256: e2ad6f8202994058cc987cc971698238c2dc63a951dd1e43063cc9b8b138713b",
             "description": "Polymorphic builds may produce different hashes; use certificate serial (659EEB5AA4A489FB238993AF259D23F057F6D6D6) as more durable indicator. File can be executed to trigger full kill chain but requires elevated privileges for some evasion techniques.",
             "indicator_types": [
@@ -227,6 +233,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {

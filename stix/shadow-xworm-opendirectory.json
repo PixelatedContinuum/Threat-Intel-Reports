@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--01f104cd-cd1c-4980-bce5-a23b2c549742",
+    "id": "bundle--370e0dab-4703-4525-b338-d66e459088c9",
     "objects": [
         {
             "type": "identity",
@@ -34,7 +34,7 @@
             "id": "indicator--3fee3b45-35a9-59d4-8549-5c770d1a7765",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.296353Z",
-            "modified": "2026-10-01T19:54:20.296353Z",
+            "modified": "2026-10-17T16:28:37.610467Z",
             "name": "ipv4: 151.245.112.70",
             "description": "Shadow RAT C2 listener, extracted from AES-256 encrypted config in both ShadoClient.exe and ShadowClient.exe | XWorm C2 listener, extracted from Rijndael-256-ECB encrypted config in both XWormClient.exe and XWormClient2.exe | Shadow RAT cleartext port field, may be default/fallback or reconnection port, not confirmed active | Suspected ScreenConnect relay port (from Shodan InternetDB)",
             "indicator_types": [
@@ -49,6 +49,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 80
         },
         {
@@ -63,7 +64,7 @@
             "id": "indicator--c3deb49e-aa27-5677-9370-c0e1c110835f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.299095Z",
-            "modified": "2026-10-01T19:54:20.299095Z",
+            "modified": "2026-10-17T16:28:37.611021Z",
             "name": "ipv4: 185.11.145.145",
             "description": "Historical IP for epgoldsecurity.com, BlazingFast, AS47674, Netherlands. Active until 2026-03-26 migration",
             "indicator_types": [
@@ -78,6 +79,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 60
         },
         {
@@ -92,7 +94,7 @@
             "id": "indicator--50b7f29d-dc44-5138-a447-6aa1bdb265a2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.299541Z",
-            "modified": "2026-10-01T19:54:20.299541Z",
+            "modified": "2026-10-17T16:28:37.611431Z",
             "name": "ipv4: 185.11.145.254",
             "description": "Secondary historical BlazingFast IP for epgoldsecurity.com, same ASN/provider",
             "indicator_types": [
@@ -107,6 +109,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 60
         },
         {
@@ -121,7 +124,7 @@
             "id": "indicator--eb340713-edd6-5722-a7dd-db563b8dc218",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.29991Z",
-            "modified": "2026-10-01T19:54:20.29991Z",
+            "modified": "2026-10-17T16:28:37.611832Z",
             "name": "ipv4: 187.124.244.54",
             "description": "Current IP for epgoldsecurity.com, payload delivery server (Hostinger, AS47583)",
             "indicator_types": [
@@ -136,6 +139,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 80
         },
         {
@@ -150,7 +154,7 @@
             "id": "indicator--68d996c6-38c0-5cba-adb4-7ad15ef7e97f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.300245Z",
-            "modified": "2026-10-01T19:54:20.300245Z",
+            "modified": "2026-10-17T16:28:37.612223Z",
             "name": "domain: bluewiin.com",
             "description": "Brief single-day resolution to C2 IP (Jan 16, 2026). Likely testing or staging. Minimal passive DNS footprint.",
             "indicator_types": [
@@ -165,6 +169,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 60
         },
         {
@@ -179,7 +184,7 @@
             "id": "indicator--fc29e995-7600-566d-b2fc-e10928d0f688",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.300916Z",
-            "modified": "2026-10-01T19:54:20.300916Z",
+            "modified": "2026-10-17T16:28:37.612598Z",
             "name": "domain: breakingsecurity.online",
             "description": "Resolved to C2 IP for ~3 days (Jan 13-16, 2026). Impersonates BreakingSecurity (Remcos RAT developer). The legitimate site is breakingsecurity.net.",
             "indicator_types": [
@@ -194,6 +199,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -208,7 +214,7 @@
             "id": "indicator--885d35bb-c36b-56a0-8c81-de2588cbe0e4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.301383Z",
-            "modified": "2026-10-01T19:54:20.301383Z",
+            "modified": "2026-10-17T16:28:37.612991Z",
             "name": "domain: epgoldsecurity.com",
             "description": "Payload delivery server hosting open directory where all 4 malware samples were found. Registered 2026-02-20 (Registrar.eu). Migrated BlazingFast to Hostinger on March 26. DomainTools risk: 100/100.",
             "indicator_types": [
@@ -223,6 +229,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -237,7 +244,7 @@
             "id": "indicator--80946398-8430-566d-9101-be4e017231e5",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.301987Z",
-            "modified": "2026-10-01T19:54:20.301987Z",
+            "modified": "2026-10-17T16:28:37.613371Z",
             "name": "domain: harrismanlieb.ink",
             "description": "Active primary domain on C2 IP 151.245.112.70. Registered 2026-02-12 (NameCheap). Self-hosted NS (ns2) pointing to C2 IP. DomainTools risk: 100/100. ScreenConnect deployed from March 1.",
             "indicator_types": [
@@ -252,6 +259,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -272,7 +280,7 @@
             "id": "indicator--7ad1cbf7-849a-5361-8566-b0fc424679bc",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.302455Z",
-            "modified": "2026-10-01T19:54:20.302455Z",
+            "modified": "2026-10-17T16:28:37.613822Z",
             "name": "domain: latssko.com",
             "description": "Previous operational domain on C2 IP. Active 2026-01-16 to 2026-02-20 (~35 days). Self-hosted NS (ns2), wildcard DNS. Rotated out when harrismanlieb.ink came online.",
             "indicator_types": [
@@ -287,6 +295,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {

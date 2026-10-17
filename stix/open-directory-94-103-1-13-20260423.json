@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--e432292d-7e18-43f1-93f1-4e25fff74e54",
+    "id": "bundle--1692a3cf-8c51-48b8-9298-0e51e78aa34a",
     "objects": [
         {
             "type": "identity",
@@ -34,7 +34,7 @@
             "id": "indicator--28255f34-e7ed-5e23-8074-ae28fdf8d0dd",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.972859Z",
-            "modified": "2026-10-01T19:54:15.972859Z",
+            "modified": "2026-10-17T16:28:32.283206Z",
             "name": "ipv4: 94.103.1.13",
             "description": "Operator staging / open-directory payload host. ASN209207 Digital Hosting Provider LLC (NL-routed, RU-registered), single upstream AS48014 AlbaHost. ASN assigned 2026-01-19. VT 5/94 malicious + 1 suspicious (Criminal IP, BitDefender phishing, CRDF, CyRadar phishing, ESET suspicious). All samples in this investigation pulled from here via t.ps1/t2.ps1/potato.ps1/interact.py. | Staging host used as hostname in download cradles (treated as literal string in t.ps1/t2.ps1)",
             "indicator_types": [
@@ -49,6 +49,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 95
         },
         {
@@ -63,7 +64,7 @@
             "id": "indicator--ddac4315-132d-5376-aa09-7b836043ec70",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.976095Z",
-            "modified": "2026-10-01T19:54:15.976095Z",
+            "modified": "2026-10-17T16:28:32.28374Z",
             "name": "domain: bulgainme.pro",
             "description": "Co-tenant domain on 94.103.1.13, unknown purpose, short-lived .pro TLD registered 2026-02-23, activated with mail server pointing at 94.103.1.13 on 2026-04-11 18:42:23Z. Cloudflare DNS (dana+ethan, rotated to amber). SSL churn on 2026-04-10 17:57-17:59 (3 certs in 2 minutes) indicates rapid operator setup burst. 32 pDNS resolutions over 13 days. Not a direct Chaos IOC; treat as operator-controlled parallel campaign. Source: DomainTools Iris pDNS + domain-history 2026-04-23.",
             "indicator_types": [
@@ -78,6 +79,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -92,7 +94,7 @@
             "id": "indicator--ef1a24a5-f1f2-58b0-9f14-3ec440d4e084",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.976992Z",
-            "modified": "2026-10-01T19:54:15.976992Z",
+            "modified": "2026-10-17T16:28:32.284248Z",
             "name": "domain: forumrutor24.com",
             "description": "Co-tenant domain on 94.103.1.13, Russian forum theme (rutor = RuTor torrent family reference). Registered 2025-07-27 via Mat Bao (Vietnam), Cloudflare DNS (fay+quinton). Resolved to 94.103.1.13 from 2026-03-20 to 2026-04-23 (34 days, 183 pDNS resolutions). Not a direct Chaos IOC, represents parallel operator campaign sharing the same staging host. Treat as operator-controlled infrastructure indicator, not as C2. Source: DomainTools Iris pDNS export 2026-04-23.",
             "indicator_types": [
@@ -107,6 +109,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -121,7 +124,7 @@
             "id": "indicator--4ccec05d-bea7-5d5a-844c-340eee3b1051",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.977479Z",
-            "modified": "2026-10-01T19:54:15.977479Z",
+            "modified": "2026-10-17T16:28:32.284679Z",
             "name": "domain: gtanuncios.com",
             "description": "Co-tenant domain on 94.103.1.13, Portuguese/Spanish classifieds theme (anuncios = advertisements). Aged domain (created 2015-05-16, acquired by CN broker identity xiang xiang fan on 2025-06-28, held dormant 10 months). Pivoted from Cloudflare 104.21.56.197 to 94.103.1.13 on 2026-04-11 15:09:21Z, classic aged-domain-purchase operator tradecraft. Resolved to 94.103.1.13 from 2026-04-10 to 2026-04-23 (13 days, 114 pDNS resolutions). Not a direct Chaos IOC. WHOIS privacy-masked 2026-04-24 00:39:01Z. Source: DomainTools Iris pDNS + domain-history 2026-04-23.",
             "indicator_types": [
@@ -136,6 +139,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -150,7 +154,7 @@
             "id": "indicator--63c3c30a-47bc-5230-bbf2-65b8c9c79f3b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.977935Z",
-            "modified": "2026-10-01T19:54:15.977935Z",
+            "modified": "2026-10-17T16:28:32.285226Z",
             "name": "url: http://94.103.1.13/gp.xor",
             "description": "XOR-encoded GodPotato payload hosted on staging server (port 80, distinct from the 7777 open-directory port). Single-byte XOR with key 0x42; pulled by interact.py (see file_indicators sha256 f90fd97e...) via DownloadData → in-memory bxor 0x42 decode → [Reflection.Assembly]::Load → EntryPoint.Invoke. As of 2026-05-02 the host is offline globally; URL retained for derivative-loader hunting (any script performing DownloadData against an HTTP target named *.xor followed by Reflection.Assembly.Load is a high-fidelity hunt for this loader pattern regardless of operator infrastructure rotation).",
             "indicator_types": [
@@ -165,6 +169,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -179,7 +184,7 @@
             "id": "indicator--5e7897ce-4a03-5888-acd0-71c809f5d90f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.978503Z",
-            "modified": "2026-10-01T19:54:15.978503Z",
+            "modified": "2026-10-17T16:28:32.285752Z",
             "name": "domain: mail.bulgainme.pro",
             "description": "Mail subdomain of bulgainme.pro co-tenant, operator webmail. 25 pDNS resolutions over ~13 days. Paired with mail.gtanuncios.com suggests operator is running webmail for multiple concurrent campaigns on this host.",
             "indicator_types": [
@@ -194,6 +199,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -208,7 +214,7 @@
             "id": "indicator--6fd93dae-502e-5f77-88ee-1a460118b8a3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.97897Z",
-            "modified": "2026-10-01T19:54:15.97897Z",
+            "modified": "2026-10-17T16:28:32.286238Z",
             "name": "domain: mail.gtanuncios.com",
             "description": "Mail subdomain of gtanuncios.com co-tenant, operator running webmail infrastructure on 94.103.1.13. 14 pDNS resolutions over 8 days. Monitor for outbound SMTP originating from hosts that resolved this FQDN.",
             "indicator_types": [
@@ -223,6 +229,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -237,7 +244,7 @@
             "id": "indicator--0d12cb33-3e29-5a9b-bfee-8993661097b3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.979531Z",
-            "modified": "2026-10-01T19:54:15.979531Z",
+            "modified": "2026-10-17T16:28:32.28671Z",
             "name": "domain: slayer.ktx.ro",
             "description": "Historical co-tenant on 94.103.1.13, brief burst 2025-12-18 to 2025-12-19 (8 pDNS resolutions over 36 minutes). Romanian .ro TLD. Indicates the IP was in operator rotation approximately 4 months before the current Chaos campaign. Likely a prior throwaway campaign; insufficient duration/volume for confident operator attribution alone but consistent with the multi-tenant pattern. Source: DomainTools Iris pDNS export 2026-04-23. | Brief burst only; could also be a reseller test or unrelated one-off use. Use for threat-hunting context rather than blocking.",
             "indicator_types": [
@@ -252,6 +259,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 40
         },
         {
@@ -266,7 +274,7 @@
             "id": "indicator--857043af-07d2-533a-83b7-5aaf7961ce5f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.979947Z",
-            "modified": "2026-10-01T19:54:15.979947Z",
+            "modified": "2026-10-17T16:28:32.287126Z",
             "name": "domain: www.forumrutor24.com",
             "description": "WWW subdomain of forumrutor24.com co-tenant (see parent entry).",
             "indicator_types": [
@@ -281,6 +289,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -313,7 +322,7 @@
             "id": "indicator--af1543b6-df9a-58c5-87ff-11a336e9241f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.980676Z",
-            "modified": "2026-10-01T19:54:15.980676Z",
+            "modified": "2026-10-17T16:28:32.287769Z",
             "name": "sha256: 06f6df0f5e37620beb9e3e24a8d0f7742e7d5db7d0f8c1bd4fc10a869443e4e4",
             "description": "FINAL RANSOMWARE PAYLOAD (mymain build). 25,088 bytes .NET x86, ConsoleApplication7 assembly. Rijndael-256 CFB + RSA-2048 OAEP, .torbrowsertor extension. VT 57/77 ransomware.msil. Public sibling d0c78ca7... confirms Chaos/TorBrowserTor identity (multi-vendor signature match). VT known-name indf.exe.",
             "indicator_types": [
@@ -328,6 +337,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -344,7 +354,7 @@
             "id": "indicator--d77e7be0-54a6-540c-8d89-7d90675ed0d5",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.981884Z",
-            "modified": "2026-10-01T19:54:15.981884Z",
+            "modified": "2026-10-17T16:28:32.288289Z",
             "name": "sha256: 13665bd2b75f8ff7d51e6e7d1d5213f4e1143aedf995258117d3e603e5c69d1c",
             "description": "REBUILT PER-CAMPAIGN. 25,088 bytes .NET x86 (same size as mymain Stage-5a, different hash). Assembly name fudkk. Rotated config: spreadName='Recieve please.exe' (typo), processName='projectxx.exe', new RSA-2048 keypair. Unchanged: BTC wallets, Telegram, file extension, namespace. Source-code-level structural identity confirmed via grep-based dnSpy diff (session 12), same exact source tree, only config field values rotate.",
             "indicator_types": [
@@ -359,6 +369,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -399,7 +410,7 @@
             "id": "indicator--87437a25-9a66-5103-a5a2-6d07e31d2eff",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.982585Z",
-            "modified": "2026-10-01T19:54:15.982585Z",
+            "modified": "2026-10-17T16:28:32.289046Z",
             "name": "sha256: 36dc72542530ff9707e4c2dcd935edac71129fcb9b7122502a8295264e86a504",
             "description": "Persistence installer + Stage-5 loader, .NET x86, 1.08 MB, assembly HQpmBSUELAUUTkvFfUDMffBkXlu. VT 47/77. Installs \\Microsoft Defender scheduled task + HKLM\\Software\\Microsoft Defender\\Payload registry blob.",
             "indicator_types": [
@@ -414,6 +425,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -438,7 +450,7 @@
             "id": "indicator--67ae5456-a042-58a1-a2bf-6aa8224fc3be",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.983106Z",
-            "modified": "2026-10-01T19:54:15.983106Z",
+            "modified": "2026-10-17T16:28:32.289638Z",
             "name": "sha256: 3b5d30e35f8e4f31a3e70d3754d02d0f045e39b6e0cfde22b1754667b7eb60a4",
             "description": "2.6 MB DOSfuscated multi-stage loader, Stage 1 dropper for Chaos/TorBrowserTor delivery chain. VT 0/76 at time of submission.",
             "indicator_types": [
@@ -453,6 +465,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -469,7 +482,7 @@
             "id": "indicator--be7accd6-397a-5bcc-b3c7-6c012e91dc06",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.983497Z",
-            "modified": "2026-10-01T19:54:15.983497Z",
+            "modified": "2026-10-17T16:28:32.290114Z",
             "name": "sha256: 4430a828f2b19bc729b2eea0405b27d19c568a769b12f0731c720a0ed888de1b",
             "description": "AMSI/ETW bypass + ntdll unhook stub (Perun's Fart), .NET x86, 33 KB, assembly ZuJkzPEbpOBiWdtBk, compiled 2026-03-31 19:59:02 UTC. VT 40/77.",
             "indicator_types": [
@@ -484,6 +497,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -500,7 +514,7 @@
             "id": "indicator--68fa8308-40e5-50cb-835e-d5799d8ef868",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.983947Z",
-            "modified": "2026-10-01T19:54:15.983947Z",
+            "modified": "2026-10-17T16:28:32.290686Z",
             "name": "sha256: 4b4418928f1b445d555ded02a34ff3f378809d5aeb9da10649cc3562eaa2e5c0",
             "description": "Nested crypter shell (myfile build), .NET x86, 1,045,504 bytes. Executes inner AES-ECB → XOR → GZip pipeline to Assembly.Load Stage-4.",
             "indicator_types": [
@@ -515,6 +529,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -531,7 +546,7 @@
             "id": "indicator--defc8f08-7006-5050-b2aa-27af6ba727b9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.984343Z",
-            "modified": "2026-10-01T19:54:15.984343Z",
+            "modified": "2026-10-17T16:28:32.291221Z",
             "name": "sha256: 58592e4b16f28cbcca420ab96f9303f71ba0062260a6eb71ebf0b1e34f3ca3d7",
             "description": "Perun's Fart ntdll unhook stub (myfile build), .NET x86, 32,768 bytes. Same builder template as mymain chunk 0, different build artifact.",
             "indicator_types": [
@@ -546,6 +561,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -562,7 +578,7 @@
             "id": "indicator--865bc9ab-9113-5d39-be8e-a038603c4f51",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.984772Z",
-            "modified": "2026-10-01T19:54:15.984772Z",
+            "modified": "2026-10-17T16:28:32.291769Z",
             "name": "sha256: 5b0f529d2834ddb678a309954476a113b1d77ea19bd2b30d299ceee6b06d55b9",
             "description": "Persistence installer + Stage-5 loader (myfile build). .NET x86, 1,082,880 bytes, assembly mmZsNTboIPHyckaNPhEDqCUpPiUHq. Functionally equivalent to mymain Stage-4. Same cross-build mutex GUID.",
             "indicator_types": [
@@ -577,6 +593,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -625,7 +642,7 @@
             "id": "indicator--2ef4c06e-69f7-54f8-a133-444b9836bdcd",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.985462Z",
-            "modified": "2026-10-01T19:54:15.985462Z",
+            "modified": "2026-10-17T16:28:32.293051Z",
             "name": "sha256: 8c3ef59cbc6f44ee96d6e5746fafb2288df3868c5fffa87dc7af24b302a45430",
             "description": "Nested crypter Stage 3, .NET x86, 1.04 MB, assembly KevRPkjGQnsrQuDEGVu, compiled 2026-03-31 19:59:17 UTC. VT 49/77 (Lionic XWorm flag is generic shared-crypter-DNA, not actual XWorm).",
             "indicator_types": [
@@ -640,6 +657,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -688,7 +706,7 @@
             "id": "indicator--a535e70a-04e7-5ba5-a3f0-c00f3540912e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.986178Z",
-            "modified": "2026-10-01T19:54:15.986178Z",
+            "modified": "2026-10-17T16:28:32.293955Z",
             "name": "sha256: b9ffbeed12325c450ba0f3c55cdcd243cdb704115aa3aee784bbdee3243f84e5",
             "description": "Custom PrintSpoofer-class .NET x64 SpoolSS coercion + named-pipe impersonation (6.6 KB, compiled 2026-03-31 17:00:09 UTC)",
             "indicator_types": [
@@ -703,6 +721,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -751,7 +770,7 @@
             "id": "indicator--e4294920-de59-5751-b2bc-7ef0c642c95b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.987106Z",
-            "modified": "2026-10-01T19:54:15.987106Z",
+            "modified": "2026-10-17T16:28:32.294827Z",
             "name": "sha256: da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8",
             "description": "BYTE-IDENTICAL across mymain AND myfile builds. 1,009,664 bytes .NET x86 'UACbypass'. AppInfo RPC AiEnableDesktopRpcInterface GUID 201ef99a-7fa0-444c-9399-19ba84f12a1a via NtApiDotNet + PPID spoof via elevated taskmgr. UACME #41 family. VT 8/77. The detection-gap hero of this investigation. Kaspersky HEUR:Exploit.MSIL.Inpat.gen is the most specific signature. Any host with this hash = this builder.",
             "indicator_types": [
@@ -766,6 +785,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -798,7 +818,7 @@
             "id": "indicator--4c1baedb-9f4b-5433-b10a-d4a125e495a5",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.987698Z",
-            "modified": "2026-10-01T19:54:15.987698Z",
+            "modified": "2026-10-17T16:28:32.295528Z",
             "name": "sha256: f7a4fe18d838e9d87db2db6378ffb21b90c3881d28d70871b8c2a661c6a78a6a",
             "description": "Orcus RAT v7 Wardow crack, primary sample, 865 KB .NET",
             "indicator_types": [
@@ -813,6 +833,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -829,7 +850,7 @@
             "id": "indicator--7dd1e199-8e0b-5a84-bb17-f0744fc62900",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.988104Z",
-            "modified": "2026-10-01T19:54:15.988104Z",
+            "modified": "2026-10-17T16:28:32.29604Z",
             "name": "sha256: f90fd97e5cdc1dd6262df9f56068b6ccb753268eaea5a06178856c35f57eeaad",
             "description": "Stage-2 operator controller (951 bytes Python). Connects to local listener 127.0.0.1:4444, performs canonical PowerShell AMSI bypass (amsiInitFailed flip), then downloads http://94.103.1.13/gp.xor, single-byte XOR-decodes with key 0x42, reflectively loads as .NET assembly via [Reflection.Assembly]::Load, and invokes EntryPoint with -cmd \"net user pentest Qwerty12345 /add\" to create a hardcoded backdoor Administrator account. VT 18/63, Microsoft Trojan:Python/Multiverze!rfn, Kaspersky HEUR:Trojan-Downloader.PowerShell.Agent.gen, Symantec Trojan.Gen.NPE. First seen on VT 2026-04-21. Added in 2026-05-02 follow-up; see report §12.2.",
             "indicator_types": [
@@ -844,6 +865,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -860,7 +882,7 @@
             "id": "indicator--c08bb37b-feb6-5f90-a03c-e084c6a25300",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.988485Z",
-            "modified": "2026-10-01T19:54:15.988485Z",
+            "modified": "2026-10-17T16:28:32.296511Z",
             "name": "sha256: fb39fa0dd70a8c7bee8c3b68d8ee2d93aa7ed34f358dd5174c8492bc0d3af316",
             "description": "2.65 MB DOSfuscated multi-stage loader, sibling build of mymain.bat (same builder, per-campaign key rotation)",
             "indicator_types": [
@@ -875,6 +897,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {

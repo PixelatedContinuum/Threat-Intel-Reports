@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--434e53b6-e2cc-4f00-b93b-1c94bf02b005",
+    "id": "bundle--1a892975-d22b-4fb7-8976-d7e69eadd325",
     "objects": [
         {
             "type": "identity",
@@ -34,7 +34,7 @@
             "id": "indicator--1e96dc3e-a201-586c-a57b-2d344b893ce3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.47739Z",
-            "modified": "2026-10-01T19:54:20.47739Z",
+            "modified": "2026-10-17T16:28:37.687383Z",
             "name": "ipv4: 91.215.43.200",
             "description": "shinyhunte.rs identity-page origin; AS57724 DDoS-Guard (Russia)",
             "indicator_types": [
@@ -49,6 +49,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 95
         },
         {
@@ -63,7 +64,7 @@
             "id": "indicator--57e9b5ea-6509-56d5-8a98-ba6b3f553142",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.480131Z",
-            "modified": "2026-10-01T19:54:20.480131Z",
+            "modified": "2026-10-17T16:28:37.687919Z",
             "name": "ipv4: 91.215.85.22",
             "description": "ShinyHunters DLS clearnet host; nginx/1.22.1; AS200593 PROSPERO OOO (Russia bulletproof hosting)",
             "indicator_types": [
@@ -78,6 +79,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 95
         },
         {
@@ -92,7 +94,7 @@
             "id": "indicator--334aa285-19b3-5633-87ae-20cb154dec1e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.480568Z",
-            "modified": "2026-10-01T19:54:20.480568Z",
+            "modified": "2026-10-17T16:28:37.688335Z",
             "name": "url: http://91.215.85.22/pay_or_leak/",
             "description": "Primary victim-dump directory (nginx autoindex)",
             "indicator_types": [
@@ -107,6 +109,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -121,7 +124,7 @@
             "id": "indicator--4af72e9c-223c-502e-aefe-662a0ee3aff8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.481242Z",
-            "modified": "2026-10-01T19:54:20.481242Z",
+            "modified": "2026-10-17T16:28:37.688792Z",
             "name": "url: http://91.215.85.22/pay_or_leak/INFORMATION.txt",
             "description": "Ransom-note URL",
             "indicator_types": [
@@ -136,6 +139,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -150,7 +154,7 @@
             "id": "indicator--d848fd1c-47f9-5b7a-8277-2cc71c636c4e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.481741Z",
-            "modified": "2026-10-01T19:54:20.481741Z",
+            "modified": "2026-10-17T16:28:37.689235Z",
             "name": "url: https://pastebin.com/raw/sb7aB9eU",
             "description": "PGP-key mirror referenced in signed rotation messages | pastebin.com is a shared-service domain; block only this specific raw-paste URL, not pastebin.com wholesale",
             "indicator_types": [
@@ -165,6 +169,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -179,7 +184,7 @@
             "id": "indicator--031c3154-8923-5ae5-ac36-a04a5793041a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.482241Z",
-            "modified": "2026-10-01T19:54:20.482241Z",
+            "modified": "2026-10-17T16:28:37.689653Z",
             "name": "url: https://shinyhunte.rs/",
             "description": "ShinyHunters identity page (current: PGP rotation announcement)",
             "indicator_types": [
@@ -194,6 +199,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -208,7 +214,7 @@
             "id": "indicator--d7a63bf4-db56-5e57-b166-ab7e323698cb",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.482602Z",
-            "modified": "2026-10-01T19:54:20.482602Z",
+            "modified": "2026-10-17T16:28:37.690056Z",
             "name": "url: https://shinyhunte.rs/newpgp",
             "description": "Published location of current PGP key (currently 404 at origin; archive.org preserves)",
             "indicator_types": [
@@ -223,6 +229,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -237,7 +244,7 @@
             "id": "indicator--88e9262a-21c5-5858-8697-d9bd060ca835",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.483146Z",
-            "modified": "2026-10-01T19:54:20.483146Z",
+            "modified": "2026-10-17T16:28:37.690441Z",
             "name": "domain: pro-spero.ru",
             "description": "PROSPERO OOO operator domain; RIPE abuse-contact root",
             "indicator_types": [
@@ -252,6 +259,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 95
         },
         {
@@ -266,7 +274,7 @@
             "id": "indicator--31d0fe4a-98c8-5e9a-b93b-b42731d8bc14",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.483667Z",
-            "modified": "2026-10-01T19:54:20.483667Z",
+            "modified": "2026-10-17T16:28:37.690842Z",
             "name": "domain: shinyhunte.rs",
             "description": "ShinyHunters identity / PGP-key rotation landing page; DDoS-Guard-fronted",
             "indicator_types": [
@@ -281,6 +289,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 95
         },
         {

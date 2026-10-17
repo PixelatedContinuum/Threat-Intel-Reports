@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--5dde86c6-2880-476f-9313-ba557b0a6c28",
+    "id": "bundle--8ae1dada-f524-48f4-bd7c-4dc5f775ea65",
     "objects": [
         {
             "type": "identity",
@@ -34,7 +34,7 @@
             "id": "indicator--03b1fbbc-f652-5aa5-b38b-8020392aa89a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.79793Z",
-            "modified": "2026-10-01T19:54:15.79793Z",
+            "modified": "2026-10-17T16:28:32.223794Z",
             "name": "ipv4: 193.56.255.154",
             "description": "Covenant C2 HTTP listener, cleartext HTTP on port 443 (not HTTPS); both GruntStager builds connect here for three-phase key exchange and Grunt payload delivery | Open directory staging server. All four malicious samples hosted here; HTTP file serving | XiebroC2 v3.1 TCP C2, hardcoded in main.exe binary; AES-128-ECB encrypted binary protocol; 4-byte LE length prefix framing; jittered 0-5 second reconnect beacon",
             "indicator_types": [
@@ -49,6 +49,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 80
         },
         {
@@ -63,7 +64,7 @@
             "id": "indicator--920f163c-d250-5875-a436-284ef39079b0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.800669Z",
-            "modified": "2026-10-01T19:54:15.800669Z",
+            "modified": "2026-10-17T16:28:32.224337Z",
             "name": "url: http://193.56.255.154:443/en-us/docs.html",
             "description": "Covenant stager C2 POST path, random path selected from pool",
             "indicator_types": [
@@ -78,6 +79,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -92,7 +94,7 @@
             "id": "indicator--ebd475b1-8642-5d59-a7af-578e5b30e2bc",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.801447Z",
-            "modified": "2026-10-01T19:54:15.801447Z",
+            "modified": "2026-10-17T16:28:32.224769Z",
             "name": "url: http://193.56.255.154:443/en-us/index.html",
             "description": "Covenant stager probe GET, random path selected from pool; masquerades as Microsoft Docs URL",
             "indicator_types": [
@@ -107,6 +109,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -121,7 +124,7 @@
             "id": "indicator--65e3dbee-e1a4-538d-ae42-2de13d5050d6",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.801843Z",
-            "modified": "2026-10-01T19:54:15.801843Z",
+            "modified": "2026-10-17T16:28:32.225204Z",
             "name": "url: http://193.56.255.154:443/en-us/test.html",
             "description": "Covenant stager C2 POST path, random path selected from pool",
             "indicator_types": [
@@ -136,6 +139,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {

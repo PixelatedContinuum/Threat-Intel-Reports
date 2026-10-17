@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--85e6ce3e-cc1f-4045-b341-8572b7b3d1b5",
+    "id": "bundle--eecece5e-a9bb-4dec-b18a-8e80e6408f75",
     "objects": [
         {
             "type": "identity",
@@ -34,7 +34,7 @@
             "id": "indicator--9427c028-4d29-5459-8d42-9d771bbc8bd1",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.183495Z",
-            "modified": "2026-10-01T19:54:15.183495Z",
+            "modified": "2026-10-17T16:28:31.833275Z",
             "name": "ipv4: 172.105.0.126",
             "description": "Additional C2 listener, debug and sniffer beacon configs (/ga.js) | C2 listener, stagers (/au2U, /msI4) and multiple beacon configs. NOTE: port 8443 C2 already in April 6 feed. | CS team server management port, if externally accessible, additional exposure vector | MODERATE - Linode shared hosting IP; block only in context of associated behavioral indicators",
             "indicator_types": [
@@ -49,6 +49,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 80
         },
         {
@@ -63,7 +64,7 @@
             "id": "indicator--428a11c7-2bcb-540b-8df9-962641058d5a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.186208Z",
-            "modified": "2026-10-01T19:54:15.186208Z",
+            "modified": "2026-10-17T16:28:31.833805Z",
             "name": "url: http://172.105.0.126/au2U",
             "description": "Stager shellcode download URI (EXE stager, port 80)",
             "indicator_types": [
@@ -78,6 +79,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -92,7 +94,7 @@
             "id": "indicator--2e361716-0124-58f9-8613-022b36caec8f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.186864Z",
-            "modified": "2026-10-01T19:54:15.186864Z",
+            "modified": "2026-10-17T16:28:31.834254Z",
             "name": "url: http://172.105.0.126/en_US/all.js",
             "description": "beacon80.dll Malleable C2 GET URI (task polling)",
             "indicator_types": [
@@ -107,6 +109,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -121,7 +124,7 @@
             "id": "indicator--b79cec8e-751f-5739-9bb2-451b58f50516",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.187328Z",
-            "modified": "2026-10-01T19:54:15.187328Z",
+            "modified": "2026-10-17T16:28:31.834654Z",
             "name": "url: http://172.105.0.126/ga.js",
             "description": "Profile B Malleable C2 GET URI, Google Analytics masquerade (3 beacons)",
             "indicator_types": [
@@ -136,6 +139,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -150,7 +154,7 @@
             "id": "indicator--7c1667ac-7b21-5a78-9ded-03b9f0ab6691",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.18768Z",
-            "modified": "2026-10-01T19:54:15.18768Z",
+            "modified": "2026-10-17T16:28:31.835052Z",
             "name": "url: http://172.105.0.126/msI4",
             "description": "Stager shellcode download URI (PS1 stager, port 80)",
             "indicator_types": [
@@ -165,6 +169,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -179,7 +184,7 @@
             "id": "indicator--383e524d-b826-5cf1-86e6-8b44f975f8fb",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.188085Z",
-            "modified": "2026-10-01T19:54:15.188085Z",
+            "modified": "2026-10-17T16:28:31.83547Z",
             "name": "url: http://172.105.0.126/submit.php",
             "description": "beacon80.dll and Profile B Malleable C2 POST URI (output submission)",
             "indicator_types": [
@@ -194,6 +199,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {
@@ -208,7 +214,7 @@
             "id": "indicator--d1c94d24-f95d-5089-ad5a-0395357ce5e4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:15.188497Z",
-            "modified": "2026-10-01T19:54:15.188497Z",
+            "modified": "2026-10-17T16:28:31.835911Z",
             "name": "url: http://172.105.0.126:809/ga.js",
             "description": "Profile B on port 809, debug/sniffer beacon configs",
             "indicator_types": [
@@ -223,6 +229,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 80
         },
         {

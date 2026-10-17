@@ -1,6 +1,6 @@
 {
     "type": "bundle",
-    "id": "bundle--4f890e74-e42c-4ecb-9a11-acfb75142a18",
+    "id": "bundle--dd2d7e98-bc17-47d1-b0ba-2d17f9e80cc3",
     "objects": [
         {
             "type": "identity",
@@ -34,7 +34,7 @@
             "id": "indicator--9c375a76-555d-5c19-97b7-228505860cd0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.669904Z",
-            "modified": "2026-10-01T19:54:20.669904Z",
+            "modified": "2026-10-17T16:28:37.770668Z",
             "name": "ipv4: 146.103.127.44",
             "description": "Hardcoded as second-tier fallback in six binaries and independently corroborated by relationship data on two of them | The address was reassigned after the operator used it and the current occupant is unrelated. Treat as a historical indicator; blocking it today may affect a bystander tenant",
             "indicator_types": [
@@ -49,6 +49,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 60
         },
         {
@@ -63,7 +64,7 @@
             "id": "indicator--90abda04-920c-5c9e-a5a8-5d6d0d2c07f6",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.672633Z",
-            "modified": "2026-10-01T19:54:20.672633Z",
+            "modified": "2026-10-17T16:28:37.771247Z",
             "name": "ipv4: 193.233.202.17",
             "description": "Confirmed dynamically as the beacon destination on both 80 and 443, and hardcoded in 22 recovered binaries. 15 of 90 engines malicious, reputation -12 as of 2026-09-06",
             "indicator_types": [
@@ -78,6 +79,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 95
         },
         {
@@ -92,7 +94,7 @@
             "id": "indicator--0f93d61a-9818-588a-8184-dfc9b5c78384",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.673085Z",
-            "modified": "2026-10-01T19:54:20.673085Z",
+            "modified": "2026-10-17T16:28:37.771697Z",
             "name": "ipv4: 38.110.228.125",
             "description": "Resolved destination of the blockchain-resolved C2 domain | The certificate presented on this address is for an unrelated domain, so co-tenancy is possible and was not measured",
             "indicator_types": [
@@ -107,6 +109,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "IPv4-Addr",
             "x_opencti_score": 60
         },
         {
@@ -121,7 +124,7 @@
             "id": "indicator--5eeb7df0-f1dd-5cf5-adb6-0e7c58a5e577",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.673497Z",
-            "modified": "2026-10-01T19:54:20.673497Z",
+            "modified": "2026-10-17T16:28:37.772096Z",
             "name": "url: http://193.233.202.17:39287/cons_c1.0.1.msi",
             "description": "MSI staging for silent msiexec deployment",
             "indicator_types": [
@@ -136,6 +139,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -150,7 +154,7 @@
             "id": "indicator--3394f050-bab6-5f89-9851-7c4809374bd7",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.674146Z",
-            "modified": "2026-10-01T19:54:20.674146Z",
+            "modified": "2026-10-17T16:28:37.772509Z",
             "name": "url: http://193.233.202.17:42099/ws_new31847.exe",
             "description": "Implant staging for certutil-based mass deployment",
             "indicator_types": [
@@ -165,6 +169,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -179,7 +184,7 @@
             "id": "indicator--205f4d00-67f4-5717-9cec-b31165f8774b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.674552Z",
-            "modified": "2026-10-01T19:54:20.674552Z",
+            "modified": "2026-10-17T16:28:37.772911Z",
             "name": "url: http://193.233.202.17:42718/add_dns_from_37.ps1",
             "description": "Script staging on the same operator port",
             "indicator_types": [
@@ -194,6 +199,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -208,7 +214,7 @@
             "id": "indicator--62552304-5383-5531-8194-911bb78bcdd1",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.675121Z",
-            "modified": "2026-10-01T19:54:20.675121Z",
+            "modified": "2026-10-17T16:28:37.773332Z",
             "name": "url: http://193.233.202.17:42718/gp.b64",
             "description": "Base64 .NET assembly fetched for reflective in-memory loading",
             "indicator_types": [
@@ -223,6 +229,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -237,7 +244,7 @@
             "id": "indicator--74ac0a2a-b772-5fc1-906f-567331e2aad2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.675526Z",
-            "modified": "2026-10-01T19:54:20.675526Z",
+            "modified": "2026-10-17T16:28:37.773782Z",
             "name": "url: http://193.233.202.17:42718/task_39.ps1",
             "description": "Fileless weekly re-pull target of the capstone SYSTEM scheduled task",
             "indicator_types": [
@@ -252,6 +259,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -266,7 +274,7 @@
             "id": "indicator--bf274ffc-643d-5532-8fde-980c46fedee5",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.675889Z",
-            "modified": "2026-10-01T19:54:20.675889Z",
+            "modified": "2026-10-17T16:28:37.77424Z",
             "name": "url: http://193.233.202.17:44321/cons_c1.0.1.msi",
             "description": "The same MSI served on a second port, redundancy or rotation",
             "indicator_types": [
@@ -281,6 +289,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -295,7 +304,7 @@
             "id": "indicator--c58f5a1a-775b-569b-a5ea-6a8de12e7168",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.67623Z",
-            "modified": "2026-10-01T19:54:20.67623Z",
+            "modified": "2026-10-17T16:28:37.774669Z",
             "name": "url: http://193.233.202.17:8080/",
             "description": "The open directory that served the 81-file toolkit",
             "indicator_types": [
@@ -310,6 +319,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -324,7 +334,7 @@
             "id": "indicator--09686067-ce08-5076-8688-98f2ff9bfff2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.676556Z",
-            "modified": "2026-10-01T19:54:20.676556Z",
+            "modified": "2026-10-17T16:28:37.775139Z",
             "name": "url: http://193.233.202.17:8088/",
             "description": "The same directory served identically on a second port",
             "indicator_types": [
@@ -339,6 +349,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -353,7 +364,7 @@
             "id": "indicator--bd564887-e4dd-568f-afd6-13437c7a8a5d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.676878Z",
-            "modified": "2026-10-01T19:54:20.676878Z",
+            "modified": "2026-10-17T16:28:37.775547Z",
             "name": "url: http://193.233.202.17:8088/slv_beacon_sc.bin",
             "description": "Raw Sliver beacon shellcode fetched for in-memory injection, with the configured proxy explicitly bypassed",
             "indicator_types": [
@@ -368,6 +379,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
             "x_opencti_score": 95
         },
         {
@@ -382,7 +394,7 @@
             "id": "indicator--f139bc3e-acbb-5ef0-911a-5837e960d0bd",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.67727Z",
-            "modified": "2026-10-01T19:54:20.67727Z",
+            "modified": "2026-10-17T16:28:37.776005Z",
             "name": "domain: itemrange.com",
             "description": "Current contract C2 value, set at block 25437624. Registered 2026-07-01 with a machine-generated registrant organisation 8fc09420615ed80d. 21 of 90 malicious, reputation -11",
             "indicator_types": [
@@ -397,6 +409,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -411,7 +424,7 @@
             "id": "indicator--eaa878ea-db63-595b-9445-3db013568a3c",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.677782Z",
-            "modified": "2026-10-01T19:54:20.677782Z",
+            "modified": "2026-10-17T16:28:37.776399Z",
             "name": "domain: publisherresolution.com",
             "description": "First value written to the Ethereum resolver contract at block 24783833. Also the domain the operator whitelisted through the victim's DNS filter and planted in internal DNS, which is what links the two campaign strands. 18 of 90 malicious",
             "indicator_types": [
@@ -426,6 +439,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 95
         },
         {
@@ -440,7 +454,7 @@
             "id": "indicator--e0f393a8-f82b-5a26-ab53-28dda452e9d5",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.678172Z",
-            "modified": "2026-10-01T19:54:20.678172Z",
+            "modified": "2026-10-17T16:28:37.776809Z",
             "name": "domain: resumeacceptable.com",
             "description": "Contract C2 value set at block 24980089. 17 of 90 malicious",
             "indicator_types": [
@@ -455,6 +469,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -469,7 +484,7 @@
             "id": "indicator--1b77f473-f8fe-5074-bce0-4e98b851217d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.678525Z",
-            "modified": "2026-10-01T19:54:20.678525Z",
+            "modified": "2026-10-17T16:28:37.77724Z",
             "name": "domain: simultaneouslypower.com",
             "description": "Contract C2 value set at block 25302771. 18 of 90 malicious, reputation -11",
             "indicator_types": [
@@ -484,6 +499,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -498,7 +514,7 @@
             "id": "indicator--dbb85681-ee63-5d73-bee8-c28b6b2006ac",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.678896Z",
-            "modified": "2026-10-01T19:54:20.678896Z",
+            "modified": "2026-10-17T16:28:37.777626Z",
             "name": "domain: wiselystarting.com",
             "description": "Contract C2 value set at block 25345369. 20 of 90 malicious, reputation -11",
             "indicator_types": [
@@ -513,6 +529,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 80
         },
         {
@@ -527,7 +544,7 @@
             "id": "indicator--917efb12-c401-5c95-9a0c-afc9fe018155",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.679235Z",
-            "modified": "2026-10-01T19:54:20.679235Z",
+            "modified": "2026-10-17T16:28:37.778009Z",
             "name": "domain: www.itemrange.com",
             "description": "Subdomain of the current C2 domain",
             "indicator_types": [
@@ -542,6 +559,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Domain-Name",
             "x_opencti_score": 60
         },
         {
@@ -558,7 +576,7 @@
             "id": "indicator--a2812148-7315-5e57-9656-287aafafaf5a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.679662Z",
-            "modified": "2026-10-01T19:54:20.679662Z",
+            "modified": "2026-10-17T16:28:37.778489Z",
             "name": "sha256: 06e29cf9ac468976f04208ea5e5563ce57f67ba42093750e967c87a14dad0978",
             "indicator_types": [
                 "malicious-activity"
@@ -572,6 +590,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -596,7 +615,7 @@
             "id": "indicator--3cc74cb9-0081-53d1-8826-859f379cd7e9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.680869Z",
-            "modified": "2026-10-01T19:54:20.680869Z",
+            "modified": "2026-10-17T16:28:37.779084Z",
             "name": "sha256: 0f56ff5ce9d6732eaa67688af2c94a8f320fb85bf4cb04ba372b735858b9d49c",
             "indicator_types": [
                 "malicious-activity"
@@ -610,6 +629,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -626,7 +646,7 @@
             "id": "indicator--1fa308ba-1beb-513e-97ad-87604aa0a8e7",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.681289Z",
-            "modified": "2026-10-01T19:54:20.681289Z",
+            "modified": "2026-10-17T16:28:37.779919Z",
             "name": "sha256: 136dd810f217c0dd70f8352328c2ea6c43865f8ef79713d77d68c1d9bdbf822d",
             "indicator_types": [
                 "malicious-activity"
@@ -640,6 +660,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -664,7 +685,7 @@
             "id": "indicator--ea8b6a58-8be6-51b7-bb8b-0b5e4e70c6c7",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.681757Z",
-            "modified": "2026-10-01T19:54:20.681757Z",
+            "modified": "2026-10-17T16:28:37.780507Z",
             "name": "sha256: 15f69ef1918db303ca2f92eec7f99768adf1195e6f6fe56492fae37cc735216a",
             "indicator_types": [
                 "malicious-activity"
@@ -678,6 +699,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -702,7 +724,7 @@
             "id": "indicator--c7bc0cb9-987a-50cd-913b-848c87510611",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.682237Z",
-            "modified": "2026-10-01T19:54:20.682237Z",
+            "modified": "2026-10-17T16:28:37.78113Z",
             "name": "sha256: 173994299ea7cdf873fbbe1ec42953b8b45995f519f14bc702d0a7b9338efc32",
             "indicator_types": [
                 "malicious-activity"
@@ -716,6 +738,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -732,7 +755,7 @@
             "id": "indicator--563e1f4e-7746-5bbe-b0fe-e37819d8221a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.682835Z",
-            "modified": "2026-10-01T19:54:20.682835Z",
+            "modified": "2026-10-17T16:28:37.781619Z",
             "name": "sha256: 201bcb3d98923856227ed102b5f92c5ebd268e715a9bfc2e62ba1fe7faa0bc5f",
             "indicator_types": [
                 "malicious-activity"
@@ -746,6 +769,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -762,7 +786,7 @@
             "id": "indicator--b4578026-1c50-582c-b5d6-37ec348bfc12",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.683283Z",
-            "modified": "2026-10-01T19:54:20.683283Z",
+            "modified": "2026-10-17T16:28:37.782094Z",
             "name": "sha256: 204affae86fda4fea1ceb24f3e95cd7ab457169d36e9df0f05775f123de2b31e",
             "indicator_types": [
                 "malicious-activity"
@@ -776,6 +800,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -792,7 +817,7 @@
             "id": "indicator--f4fc1b00-7028-58ae-926e-f5984d5029cc",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.683674Z",
-            "modified": "2026-10-01T19:54:20.683674Z",
+            "modified": "2026-10-17T16:28:37.782547Z",
             "name": "sha256: 28fad4e208ca97ba16180157bf7a565e1f6a40ebcb5900c0bda5a8947bafe66d",
             "indicator_types": [
                 "malicious-activity"
@@ -806,6 +831,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -822,7 +848,7 @@
             "id": "indicator--34646346-67d1-5b84-ba3d-581e911936cc",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.684075Z",
-            "modified": "2026-10-01T19:54:20.684075Z",
+            "modified": "2026-10-17T16:28:37.783031Z",
             "name": "sha256: 294043345ec46527acf4c56635de6f781036aff1a1dbdc3925ba4525372633ee",
             "indicator_types": [
                 "malicious-activity"
@@ -836,6 +862,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -852,7 +879,7 @@
             "id": "indicator--364adfa1-089d-58f5-8dcb-a7440a660b21",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.684454Z",
-            "modified": "2026-10-01T19:54:20.684454Z",
+            "modified": "2026-10-17T16:28:37.783487Z",
             "name": "sha256: 2c8df3fdb19ea1884d32457a10049cb6ca80498e0e162b3b34977ad2b82fe6ed",
             "indicator_types": [
                 "malicious-activity"
@@ -866,6 +893,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -882,7 +910,7 @@
             "id": "indicator--f4164690-2c53-5e40-b200-33fc177e395a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.684831Z",
-            "modified": "2026-10-01T19:54:20.684831Z",
+            "modified": "2026-10-17T16:28:37.783969Z",
             "name": "sha256: 2fc083274c15d5c87b3d769e797498f36e43dede21f48a21b53422c90d960f21",
             "indicator_types": [
                 "malicious-activity"
@@ -896,6 +924,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -912,7 +941,7 @@
             "id": "indicator--0ef548c4-2f77-5e4b-a863-bdff214ef626",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.685287Z",
-            "modified": "2026-10-01T19:54:20.685287Z",
+            "modified": "2026-10-17T16:28:37.784436Z",
             "name": "sha256: 31332d7417c777e7e52bd4d9c491cb6213c97ab16e051bf29eaf8b2a18c06ef4",
             "indicator_types": [
                 "malicious-activity"
@@ -926,6 +955,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -942,7 +972,7 @@
             "id": "indicator--22478a3d-b5a8-5941-ad26-d2972cd6ede6",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.685661Z",
-            "modified": "2026-10-01T19:54:20.685661Z",
+            "modified": "2026-10-17T16:28:37.784876Z",
             "name": "sha256: 318bb406f9cf61cf310c84706f090bdaad29d481a783a37be185bf709a791b4c",
             "indicator_types": [
                 "malicious-activity"
@@ -956,6 +986,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -972,7 +1003,7 @@
             "id": "indicator--8ff7f641-a668-5283-8647-ce8c11b41837",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.686048Z",
-            "modified": "2026-10-01T19:54:20.686048Z",
+            "modified": "2026-10-17T16:28:37.785397Z",
             "name": "sha256: 3467dd1d846b46ab41dfc1111960f1a7ec54cf75d4a6339929d8448c477b0d35",
             "indicator_types": [
                 "malicious-activity"
@@ -986,6 +1017,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1002,7 +1034,7 @@
             "id": "indicator--ca994909-2cd8-5dcf-b454-e9a9c009b446",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.686434Z",
-            "modified": "2026-10-01T19:54:20.686434Z",
+            "modified": "2026-10-17T16:28:37.785934Z",
             "name": "sha256: 35c419760696d9013b31dafc5b05682e38ffa5190f631d3a3c5f1c3a1ad85b61",
             "indicator_types": [
                 "malicious-activity"
@@ -1016,6 +1048,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1032,7 +1065,7 @@
             "id": "indicator--a14bd8b3-9875-5de6-94a2-ae74bb283cdc",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.686813Z",
-            "modified": "2026-10-01T19:54:20.686813Z",
+            "modified": "2026-10-17T16:28:37.786439Z",
             "name": "sha256: 37a28e5532cf7de88af570cdcbf6dc0db96b14c37ff84d285d89e6635ad91c05",
             "indicator_types": [
                 "malicious-activity"
@@ -1046,6 +1079,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1062,7 +1096,7 @@
             "id": "indicator--42e416ac-a89c-5539-83c9-76615bbe6483",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.687182Z",
-            "modified": "2026-10-01T19:54:20.687182Z",
+            "modified": "2026-10-17T16:28:37.786931Z",
             "name": "sha256: 3953b770e1da9816e876e8df6b11e1e020e2f5cdad016da1d191e095ea628d80",
             "indicator_types": [
                 "malicious-activity"
@@ -1076,6 +1110,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1092,7 +1127,7 @@
             "id": "indicator--d20797f9-dcd5-5a0d-9029-84fc3f4b0915",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.687561Z",
-            "modified": "2026-10-01T19:54:20.687561Z",
+            "modified": "2026-10-17T16:28:37.787411Z",
             "name": "sha256: 39be3938eb198ab57802edcf67554dad007f01dd9148dadee39279bfd09cfee2",
             "indicator_types": [
                 "malicious-activity"
@@ -1106,6 +1141,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1122,7 +1158,7 @@
             "id": "indicator--5a389e0d-e0eb-5265-a754-0556245fb9d3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.687957Z",
-            "modified": "2026-10-01T19:54:20.687957Z",
+            "modified": "2026-10-17T16:28:37.787878Z",
             "name": "sha256: 3d531def7ecef3f29b4542eb28db21e7ebae4da29c77cd762147135f5a014f87",
             "indicator_types": [
                 "malicious-activity"
@@ -1136,6 +1172,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1152,7 +1189,7 @@
             "id": "indicator--5391d95e-0ac0-56ce-8a80-94ca456c77cb",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.688337Z",
-            "modified": "2026-10-01T19:54:20.688337Z",
+            "modified": "2026-10-17T16:28:37.788325Z",
             "name": "sha256: 4104ed9fe73c3b582f8366751ad7c496c2b0f7a4a6b3f069802b5af9b5bd44ba",
             "indicator_types": [
                 "malicious-activity"
@@ -1166,6 +1203,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1182,7 +1220,7 @@
             "id": "indicator--2c32a6fa-5eca-5614-9f1d-7e8a08344b05",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.688756Z",
-            "modified": "2026-10-01T19:54:20.688756Z",
+            "modified": "2026-10-17T16:28:37.789102Z",
             "name": "sha256: 42d5fc0c36977e0a4ad40ba0771b3cdc9bdd9c73c89d68844bc8e510c0657226",
             "indicator_types": [
                 "malicious-activity"
@@ -1196,6 +1234,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1212,7 +1251,7 @@
             "id": "indicator--1e999ff1-4a11-5d23-a291-f3a23173ced3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.689146Z",
-            "modified": "2026-10-01T19:54:20.689146Z",
+            "modified": "2026-10-17T16:28:37.789559Z",
             "name": "sha256: 4352ad707e262d4913d690bc95eb3d38c72ff43100c9a7a96ce4cefa6705dabd",
             "indicator_types": [
                 "malicious-activity"
@@ -1226,6 +1265,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1242,7 +1282,7 @@
             "id": "indicator--fe099d7b-c09c-5df5-b529-30dd8c7a8749",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.68952Z",
-            "modified": "2026-10-01T19:54:20.68952Z",
+            "modified": "2026-10-17T16:28:37.79005Z",
             "name": "sha256: 467cb247fc8545a5b6be227853252b46984f94a54e8c4260932573304d61f6ce",
             "indicator_types": [
                 "malicious-activity"
@@ -1256,6 +1296,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1272,7 +1313,7 @@
             "id": "indicator--133cc060-1b77-5a79-9eb5-9068a528aa5f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.689893Z",
-            "modified": "2026-10-01T19:54:20.689893Z",
+            "modified": "2026-10-17T16:28:37.790513Z",
             "name": "sha256: 6016d1a56674d621dc8206c7162e3e30959f9bec930f30db2accf3601779bc9a",
             "indicator_types": [
                 "malicious-activity"
@@ -1286,6 +1327,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1302,7 +1344,7 @@
             "id": "indicator--821b13fd-f9af-53ae-a66f-8916b05bd179",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.690522Z",
-            "modified": "2026-10-01T19:54:20.690522Z",
+            "modified": "2026-10-17T16:28:37.790987Z",
             "name": "sha256: 607e0456e7022e5f9f4829b0a2c658f0834fb642be3ab7ce68ed009b01e06f97",
             "indicator_types": [
                 "malicious-activity"
@@ -1316,6 +1358,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1348,7 +1391,7 @@
             "id": "indicator--e523a166-4d67-52f6-9a00-022f4a6dfcf9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.691075Z",
-            "modified": "2026-10-01T19:54:20.691075Z",
+            "modified": "2026-10-17T16:28:37.791626Z",
             "name": "sha256: 61c0810a23580cf492a6ba4f7654566108331e7a4134c968c2d6a05261b2d8a1",
             "indicator_types": [
                 "malicious-activity"
@@ -1362,6 +1405,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1378,7 +1422,7 @@
             "id": "indicator--1c9029d4-4294-55c8-8a4e-dfe6da215410",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.691453Z",
-            "modified": "2026-10-01T19:54:20.691453Z",
+            "modified": "2026-10-17T16:28:37.792136Z",
             "name": "sha256: 68675be7d0b110878c4fd7682e2e72911c66a9c2b43df91266a0e647067d4954",
             "indicator_types": [
                 "malicious-activity"
@@ -1392,6 +1436,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1408,7 +1453,7 @@
             "id": "indicator--ef34b6d1-7158-516c-9a81-7090f294e41f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.691828Z",
-            "modified": "2026-10-01T19:54:20.691828Z",
+            "modified": "2026-10-17T16:28:37.792645Z",
             "name": "sha256: 689036d2dc675b3d95a4139b8097685f6e2e5c8520e7a5a615801aba00a8b85a",
             "indicator_types": [
                 "malicious-activity"
@@ -1422,6 +1467,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1438,7 +1484,7 @@
             "id": "indicator--1af87874-4965-5a77-b528-6099a9fe1748",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.69221Z",
-            "modified": "2026-10-01T19:54:20.69221Z",
+            "modified": "2026-10-17T16:28:37.79312Z",
             "name": "sha256: 69cd12d92acf261c7f738c92d09e39dbcf60ec6ad66b261924b3dc93178b5ed3",
             "indicator_types": [
                 "malicious-activity"
@@ -1452,6 +1498,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1476,7 +1523,7 @@
             "id": "indicator--84f7cc4c-c316-57ff-aa84-739a5256b3ea",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.692658Z",
-            "modified": "2026-10-01T19:54:20.692658Z",
+            "modified": "2026-10-17T16:28:37.79367Z",
             "name": "sha256: 728c38979cdda97d5e82ece602698bf5132725f9f28b8cc0bc5fbd2316c9a044",
             "indicator_types": [
                 "malicious-activity"
@@ -1490,6 +1537,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1506,7 +1554,7 @@
             "id": "indicator--1a6752b7-3c96-5262-859f-aa34c3dd60ee",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.693086Z",
-            "modified": "2026-10-01T19:54:20.693086Z",
+            "modified": "2026-10-17T16:28:37.79412Z",
             "name": "sha256: 731c9bfeb6816b6acb79cabf7edfeee3b7177c5f3dc76803c5907d7bf8cee808",
             "indicator_types": [
                 "malicious-activity"
@@ -1520,6 +1568,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1536,7 +1585,7 @@
             "id": "indicator--e431e0ab-4eca-5270-9dc0-9debd6241874",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.693462Z",
-            "modified": "2026-10-01T19:54:20.693462Z",
+            "modified": "2026-10-17T16:28:37.794598Z",
             "name": "sha256: 756c2096f54c5497110c9d854625c3ed592873e566d532077cd7adb4d10d4add",
             "indicator_types": [
                 "malicious-activity"
@@ -1550,6 +1599,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1574,7 +1624,7 @@
             "id": "indicator--187abe6a-bd45-5948-a03b-009cb69bdd60",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.693914Z",
-            "modified": "2026-10-01T19:54:20.693914Z",
+            "modified": "2026-10-17T16:28:37.795159Z",
             "name": "sha256: 7a1b0508afe806ce7f0ace0894cf46d159466f6874d5271a39e2c149c6ec4b9f",
             "indicator_types": [
                 "malicious-activity"
@@ -1588,6 +1638,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1604,7 +1655,7 @@
             "id": "indicator--23a50ff1-a4ab-5a44-a5ec-703e0748bbf1",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.694297Z",
-            "modified": "2026-10-01T19:54:20.694297Z",
+            "modified": "2026-10-17T16:28:37.795619Z",
             "name": "sha256: 7f91141bba37457b09088b039e21d82abe420bdc3b585970dba71dfe5cbeb25d",
             "indicator_types": [
                 "malicious-activity"
@@ -1618,6 +1669,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1634,7 +1686,7 @@
             "id": "indicator--267f3b6d-6de0-5b89-ab01-f37477ab10b6",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.694666Z",
-            "modified": "2026-10-01T19:54:20.694666Z",
+            "modified": "2026-10-17T16:28:37.796127Z",
             "name": "sha256: 81d5debff647121e47913098757214ddd163710a240224fa92a03af9623ecf81",
             "indicator_types": [
                 "malicious-activity"
@@ -1648,6 +1700,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1680,7 +1733,7 @@
             "id": "indicator--d27e4612-9f96-5d63-994e-913d472ac1eb",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.695233Z",
-            "modified": "2026-10-01T19:54:20.695233Z",
+            "modified": "2026-10-17T16:28:37.796794Z",
             "name": "sha256: 8823f98a6774b1dc812687476e0866f31b1601f4c42b880bd9a7f57a309d27b4",
             "indicator_types": [
                 "malicious-activity"
@@ -1694,6 +1747,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1710,7 +1764,7 @@
             "id": "indicator--a3a3d0c5-995c-59bd-864c-a2933f0d179b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.695623Z",
-            "modified": "2026-10-01T19:54:20.695623Z",
+            "modified": "2026-10-17T16:28:37.797274Z",
             "name": "sha256: 88ad6a37051cbaef75de8c6e3fe22351df40ba064677a6a3f53d4cc156ad1eb6",
             "indicator_types": [
                 "malicious-activity"
@@ -1724,6 +1778,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1740,7 +1795,7 @@
             "id": "indicator--9709aa92-41ad-5dec-8488-1891255220a4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.69602Z",
-            "modified": "2026-10-01T19:54:20.69602Z",
+            "modified": "2026-10-17T16:28:37.79774Z",
             "name": "sha256: 921376cf81f2a5eca3d9b44cdb6ff2df0a1a685bf47518d5f86e45576c997b60",
             "indicator_types": [
                 "malicious-activity"
@@ -1754,6 +1809,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1770,7 +1826,7 @@
             "id": "indicator--2123c15c-b8ca-52ca-8e9e-a2ace64b7d0c",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.696438Z",
-            "modified": "2026-10-01T19:54:20.696438Z",
+            "modified": "2026-10-17T16:28:37.798641Z",
             "name": "sha256: 978c9818e766f1df9c3e7b4ad3a3f2df4ef204524b9ad8e45154311148b057db",
             "indicator_types": [
                 "malicious-activity"
@@ -1784,6 +1840,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1808,7 +1865,7 @@
             "id": "indicator--bde9d7cd-e4aa-50ee-9e18-48a7bfbd9950",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.696949Z",
-            "modified": "2026-10-01T19:54:20.696949Z",
+            "modified": "2026-10-17T16:28:37.799261Z",
             "name": "sha256: 9a8e9d587b570d4074f1c8317b163aa8d0c566efd88f294d9d85bc7776352a28",
             "indicator_types": [
                 "malicious-activity"
@@ -1822,6 +1879,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1838,7 +1896,7 @@
             "id": "indicator--8fec984d-91a0-5ae2-a2a3-e9e57ad343e9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.697326Z",
-            "modified": "2026-10-01T19:54:20.697326Z",
+            "modified": "2026-10-17T16:28:37.799803Z",
             "name": "sha256: 9bc742d339a08ff88ae26363bd9b73cf027762f1856e0e7f30d86feccfb5c3ef",
             "indicator_types": [
                 "malicious-activity"
@@ -1852,6 +1910,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1868,7 +1927,7 @@
             "id": "indicator--68294d90-0475-5ab2-8628-23dbff316a60",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.69792Z",
-            "modified": "2026-10-01T19:54:20.69792Z",
+            "modified": "2026-10-17T16:28:37.80028Z",
             "name": "sha256: 9e5f7294234e21b3be083bb875d27f51514cf158e507ae11594459d9cc879f58",
             "indicator_types": [
                 "malicious-activity"
@@ -1882,6 +1941,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1898,7 +1958,7 @@
             "id": "indicator--b2b89011-8a6a-5ffe-b299-5d12471f2a6a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.69831Z",
-            "modified": "2026-10-01T19:54:20.69831Z",
+            "modified": "2026-10-17T16:28:37.800773Z",
             "name": "sha256: a2363e2f464694cb4bb8f487d33ea378764790a1c742bce98a03db5f52f4cd06",
             "indicator_types": [
                 "malicious-activity"
@@ -1912,6 +1972,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1936,7 +1997,7 @@
             "id": "indicator--813423ec-6e98-5310-ab8a-c160108a3aaf",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.698822Z",
-            "modified": "2026-10-01T19:54:20.698822Z",
+            "modified": "2026-10-17T16:28:37.801315Z",
             "name": "sha256: a53150f1214665cf8122a3fa2f953c863be2f5c0f81a0d25f603a91689f713eb",
             "indicator_types": [
                 "malicious-activity"
@@ -1950,6 +2011,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1966,7 +2028,7 @@
             "id": "indicator--b3169c3c-7de8-5032-a3be-d3afefba4d61",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.699203Z",
-            "modified": "2026-10-01T19:54:20.699203Z",
+            "modified": "2026-10-17T16:28:37.801792Z",
             "name": "sha256: a95da28fd2c077f7bbafe536b3821efd55f7d73ade8a8b5337327f11c5ef44ca",
             "indicator_types": [
                 "malicious-activity"
@@ -1980,6 +2042,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -1996,7 +2059,7 @@
             "id": "indicator--4635638f-ac1c-58ba-bda9-a42743d4b46e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.699574Z",
-            "modified": "2026-10-01T19:54:20.699574Z",
+            "modified": "2026-10-17T16:28:37.802249Z",
             "name": "sha256: aaec49b549aecf2119e1d20bf6dd7efbd74cd2ed2f6aaefed39e780e0815b5d4",
             "indicator_types": [
                 "malicious-activity"
@@ -2010,6 +2073,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -2026,7 +2090,7 @@
             "id": "indicator--0846bd95-46a0-5306-957f-b6d7ca102b05",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.699955Z",
-            "modified": "2026-10-01T19:54:20.699955Z",
+            "modified": "2026-10-17T16:28:37.802724Z",
             "name": "sha256: acfe23f94e5b98a217a93bf414c8f1a99d0463b1d143fff7a3ab5dae436fe19c",
             "indicator_types": [
                 "malicious-activity"
@@ -2040,6 +2104,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -2056,7 +2121,7 @@
             "id": "indicator--2ae078f6-48d1-5383-b2cb-9b52d3d33f51",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.700335Z",
-            "modified": "2026-10-01T19:54:20.700335Z",
+            "modified": "2026-10-17T16:28:37.803249Z",
             "name": "sha256: b0e31e430faecdb65f1df82502506f4b155e11c2f2bf53e5014ffb5ce1ed8f75",
             "indicator_types": [
                 "malicious-activity"
@@ -2070,6 +2135,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -2086,7 +2152,7 @@
             "id": "indicator--880e5cd4-b410-55e1-af2e-3d5d8ec6cdeb",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.700738Z",
-            "modified": "2026-10-01T19:54:20.700738Z",
+            "modified": "2026-10-17T16:28:37.803719Z",
             "name": "sha256: b5c056a04d77c781b06dd3f2c8cbc13fadcdd9d78644755d82f322d3b7806f70",
             "indicator_types": [
                 "malicious-activity"
@@ -2100,6 +2166,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -2124,7 +2191,7 @@
             "id": "indicator--26ca219b-3689-5aff-866c-29fb15a47e69",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.701209Z",
-            "modified": "2026-10-01T19:54:20.701209Z",
+            "modified": "2026-10-17T16:28:37.80435Z",
             "name": "sha256: bd61c2880920bbfb86c12df439dd1ca0258a10e532433698fd029aef2a5b33f2",
             "indicator_types": [
                 "malicious-activity"
@@ -2138,6 +2205,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -2162,7 +2230,7 @@
             "id": "indicator--4446e716-5698-5a6b-a87f-c271fa54cea4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.701656Z",
-            "modified": "2026-10-01T19:54:20.701656Z",
+            "modified": "2026-10-17T16:28:37.804995Z",
             "name": "sha256: c1761a1b640f2bb1a0140923e255f26ad9b79a9005475ff1551e9a297a48811c",
             "indicator_types": [
                 "malicious-activity"
@@ -2176,6 +2244,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -2192,7 +2261,7 @@
             "id": "indicator--35deb4ca-c9a5-5f1f-8796-4626aac6fef8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.702075Z",
-            "modified": "2026-10-01T19:54:20.702075Z",
+            "modified": "2026-10-17T16:28:37.805442Z",
             "name": "sha256: cef3e10ae4735a7017b3fe982d7385e3c3ce0cde286fb7572dbf885df73f8041",
             "indicator_types": [
                 "malicious-activity"
@@ -2206,6 +2275,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -2222,7 +2292,7 @@
             "id": "indicator--4736e5bd-4312-5698-b165-999efbdb64ba",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.702463Z",
-            "modified": "2026-10-01T19:54:20.702463Z",
+            "modified": "2026-10-17T16:28:37.805903Z",
             "name": "sha256: d13c5f858a8add3ff968a382a85f2dbe8e9fb0283086163d27b69178e4d5ee36",
             "indicator_types": [
                 "malicious-activity"
@@ -2236,6 +2306,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -2252,7 +2323,7 @@
             "id": "indicator--cad98706-200a-5832-a703-17cf581a4612",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.702873Z",
-            "modified": "2026-10-01T19:54:20.702873Z",
+            "modified": "2026-10-17T16:28:37.80636Z",
             "name": "sha256: d546e500ef662b2c0def984b233e37c4b11de28bf5280df24d1d3300a7fa7b84",
             "indicator_types": [
                 "malicious-activity"
@@ -2266,6 +2337,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -2282,7 +2354,7 @@
             "id": "indicator--4e300367-c654-557a-8d12-763915721837",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.703246Z",
-            "modified": "2026-10-01T19:54:20.703246Z",
+            "modified": "2026-10-17T16:28:37.806833Z",
             "name": "sha256: d7028280e815612b893c6f0620a4fa2ae63aa5c5bba9988b5223b81b7bf21798",
             "indicator_types": [
                 "malicious-activity"
@@ -2296,6 +2368,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -2312,7 +2385,7 @@
             "id": "indicator--eed2f00a-4fdd-5790-b70d-60b31d902f76",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.703633Z",
-            "modified": "2026-10-01T19:54:20.703633Z",
+            "modified": "2026-10-17T16:28:37.807316Z",
             "name": "sha256: e122fb629f5f09789d83ef1b8b41238d329f7d8efd84d38080d01bef2bad5d8b",
             "indicator_types": [
                 "malicious-activity"
@@ -2326,6 +2399,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -2342,7 +2416,7 @@
             "id": "indicator--8bab0c12-ef5d-5b0a-b9c4-ecd6162c9393",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.704046Z",
-            "modified": "2026-10-01T19:54:20.704046Z",
+            "modified": "2026-10-17T16:28:37.808424Z",
             "name": "sha256: e788f829b1a0141a488afb5f82b94f13035623609ca3b83f0c6985919cd9e83b",
             "indicator_types": [
                 "malicious-activity"
@@ -2356,6 +2430,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -2372,7 +2447,7 @@
             "id": "indicator--bd43ae71-72f7-50c2-b67f-f957818a111b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.704413Z",
-            "modified": "2026-10-01T19:54:20.704413Z",
+            "modified": "2026-10-17T16:28:37.80895Z",
             "name": "sha256: eaec6a177523f2effbabbba6159fe886d284e246e7b1464eb137ae9481ed65ca",
             "indicator_types": [
                 "malicious-activity"
@@ -2386,6 +2461,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -2402,7 +2478,7 @@
             "id": "indicator--785de8f3-db6a-5d02-8041-223ba36bbb95",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.704801Z",
-            "modified": "2026-10-01T19:54:20.704801Z",
+            "modified": "2026-10-17T16:28:37.809465Z",
             "name": "sha256: ee6807a8abfabced22ee026e178a28da64d13cc3408e224394ff6e5782fb9e1d",
             "indicator_types": [
                 "malicious-activity"
@@ -2416,6 +2492,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -2432,7 +2509,7 @@
             "id": "indicator--ca36fc23-e17a-57ce-a97c-7d3017412e66",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.705398Z",
-            "modified": "2026-10-01T19:54:20.705398Z",
+            "modified": "2026-10-17T16:28:37.809965Z",
             "name": "sha256: eee674bd0bcd2416367ad692e72122de31b710f13f35e2ceb8a52317920d00ca",
             "indicator_types": [
                 "malicious-activity"
@@ -2446,6 +2523,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -2462,7 +2540,7 @@
             "id": "indicator--6b9d0e53-c1ed-566e-a66c-cb888bad7c32",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.705776Z",
-            "modified": "2026-10-01T19:54:20.705776Z",
+            "modified": "2026-10-17T16:28:37.810458Z",
             "name": "sha256: f03e1d0951f4d0744939a0cc7da7730ab367ec9420c1a77cc7f97dc0932de652",
             "indicator_types": [
                 "malicious-activity"
@@ -2476,6 +2554,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -2492,7 +2571,7 @@
             "id": "indicator--4f9ecb3a-14af-5fb8-9877-3c1fd66a0121",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.706185Z",
-            "modified": "2026-10-01T19:54:20.706185Z",
+            "modified": "2026-10-17T16:28:37.810955Z",
             "name": "sha256: f4c87a1df04274b7497cbf9a4619b946c915cf5210b6e2eaa2fee1629f4ff196",
             "indicator_types": [
                 "malicious-activity"
@@ -2506,6 +2585,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -2522,7 +2602,7 @@
             "id": "indicator--c1286c22-3e65-501f-b29e-6717aee2822b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.706568Z",
-            "modified": "2026-10-01T19:54:20.706568Z",
+            "modified": "2026-10-17T16:28:37.811445Z",
             "name": "sha256: f609621698eaad8c4683750fe8bd0e242349be3eea408da593151ff877ed8ab6",
             "indicator_types": [
                 "malicious-activity"
@@ -2536,6 +2616,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -2552,7 +2633,7 @@
             "id": "indicator--34029706-16ba-59bd-b5b8-015e805408eb",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.706953Z",
-            "modified": "2026-10-01T19:54:20.706953Z",
+            "modified": "2026-10-17T16:28:37.811946Z",
             "name": "sha256: fa046adb30d00c56d640419a12deef8395ff5d40d6e083c1c8388ebd7b435ef4",
             "indicator_types": [
                 "malicious-activity"
@@ -2566,6 +2647,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
@@ -2590,7 +2672,7 @@
             "id": "indicator--94179ea2-c061-5ea0-871b-e99098a48374",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
             "created": "2026-10-01T19:54:20.707399Z",
-            "modified": "2026-10-01T19:54:20.707399Z",
+            "modified": "2026-10-17T16:28:37.812527Z",
             "name": "sha256: fdf0fae99d3b8ddd21aac288c2b38b6ac8a0e0eff99706b82ed5e921db9ddb0e",
             "indicator_types": [
                 "malicious-activity"
@@ -2604,6 +2686,7 @@
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ],
             "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
             "x_opencti_score": 95
         },
         {
