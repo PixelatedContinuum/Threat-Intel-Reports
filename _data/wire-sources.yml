@@ -236,6 +236,9 @@ tag_rules:
     - lumma
     - redline
     - vidar
+    - remusstealer
+    - pamstealer
+    - purelogs
   nation-state:
     - nation-state*
     - state-sponsored
@@ -267,6 +270,37 @@ tag_rules:
     - chinese hackers
     - russian hackers
     - iranian hackers
+    - chinese hacker
+    - russian hacker
+    - iranian hacker
+    - north korean hacker*
+    - chinese hacking
+    - prc
+    - hafnium
+    - chollima
+    - famous chollima
+    - government-linked
+    - state-linked
+    - state-nexus
+    - chinese-linked
+    - russian-linked
+    - iranian-linked
+    - iran-nexus
+    - belarus-linked
+    - belarus-nexus
+    - kazakhstan-linked
+    - kazakhstan-nexus
+    - pakistan-linked
+    - pakistan-nexus
+    - india-linked
+    - india-nexus
+    - dprk
+    - dprk-linked
+    - fsb-linked
+    - gru-linked
+    - svr-linked
+    - mss-linked
+    - pla-linked
   supply chain:
     - supply chain
     - supply-chain
@@ -275,6 +309,7 @@ tag_rules:
     - malicious package*
     - malicious extension*
     - typosquat*
+    - glassworm
   ddos:
     - ddos
     - denial of service
@@ -288,6 +323,19 @@ tag_rules:
     - data exposure
     - exposed database*
     - exfiltrat*
+    - stolen records
+    - stole records
+    - stole info*
+    - stolen info*
+    - personal data
+    - personal information
+    - personnel records
+    - data stolen
+    - stole data
+    - stole personal
+    - credentials exposed
+    - credentials left exposed
+    - exposed credentials
   phishing:
     - phish*
     - smishing
@@ -314,6 +362,14 @@ tag_rules:
     - pleaded guilty
     - charged with
     - convicted
+    - prison
+    - sentence
+    - charged
+    - detained
+    - raided
+    - government disrupts
+    - us disrupts
+    - u.s. disrupts
   mobile:
     - android
     - ios
@@ -386,3 +442,35 @@ tag_rules:
     - rats
     - malicious
     - mirai
+    - implant
+    - implants
+    - loaders
+    - cryptominer*
+    - coinminer*
+    - cryptojack*
+    - cryptomining
+    - crypto mining
+    - cryptocurrency mining
+    - asyncrat
+    - njrat
+    - remcos*
+    - xworm
+    - dcrat
+    - quasarrat
+    - quasar rat
+    - purerat
+    - sectoprat
+    - venomrat
+    - valleyrat
+    - nanocore
+    - plugx
+    - shadowpad
+    - gh0st*
+    - labubarat
+    - vulcanrat*
+    - glassworm
+    - beavertail
+    - ottercookie
+    - remusstealer
+    - pamstealer
+    - purelogs
