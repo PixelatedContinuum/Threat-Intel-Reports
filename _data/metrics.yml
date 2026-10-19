@@ -5,4 +5,4 @@ detection_rules: 741
 yara: 245
 sigma: 374
 suricata: 122
-iocs: 2758
+iocs: 2763
