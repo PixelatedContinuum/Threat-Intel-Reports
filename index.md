@@ -91,8 +91,8 @@ position: 1
 {% include section-header.html label="Stay Current" accent="#22d3ee" %}
 
 <div class="hl-nav-grid">
-  <a href="{{ '/changes/' | relative_url }}" class="hl-nav-tile" style="--acc: #34d399;"><div class="hl-nav-tile__title">Changes</div><div class="hl-nav-tile__desc">Revisions to published reports, newest first</div></a>
   <a href="{{ '/wire/' | relative_url }}" class="hl-nav-tile" style="--acc: #38bdf8;"><div class="hl-nav-tile__title">The Wire</div><div class="hl-nav-tile__desc">Hourly headlines from public threat research</div></a>
+  <a href="{{ '/changes/' | relative_url }}" class="hl-nav-tile" style="--acc: #34d399;"><div class="hl-nav-tile__title">Changes</div><div class="hl-nav-tile__desc">Revisions to published reports, newest first</div></a>
 </div>
 
 {% include section-header.html label="About & Connect" accent="#f97316" %}
@@ -104,11 +104,3 @@ position: 1
   <a href="{{ '/support/' | relative_url }}" class="hl-nav-tile" style="--acc: #f472b6;"><div class="hl-nav-tile__title">Support</div><div class="hl-nav-tile__desc">Help keep the research free</div></a>
 </div>
 <div class="hl-contribute">Have original research, detections, or IOCs to share? Reach out at <a href="mailto:intel@the-hunters-ledger.com">intel@the-hunters-ledger.com</a>. Findings can be posted on your behalf as a co-author, or attributed however you prefer.</div>
-
-{% include section-header.html label="Resources" accent="#888888" %}
-
-<div class="hl-resources">
-  <a href="https://attack.mitre.org/">MITRE ATT&CK</a> &nbsp;·&nbsp;
-  <a href="https://github.com/SigmaHQ/sigma">Sigma Rules</a> &nbsp;·&nbsp;
-  <a href="https://virustotal.github.io/yara/">YARA</a>
-</div>
