@@ -208,6 +208,9 @@ drop:
 # in the workflows repo. Re-measured 2026-10-19 after the T-0339 additions on a
 # fresh 60-pair sample: 54/60 strict (below the 57/60 bar; both wrong pairs from
 # terms older than T-0339), 58/60 lenient; tasks/runs/T-0339/results.md there.
+# T-0349 (2026-10-19) narrowed breach*, leaked, exploitation, ios, copilot,
+# agentic, prc, sentence and charged to phrases; result and re-measurement in
+# tasks/runs/T-0349/results.md there.
 tag_rules:
   zero-day:
     - zero-day*
@@ -216,8 +219,15 @@ tag_rules:
   exploited:
     - exploited
     - exploiting
-    - exploitation
     - in the wild
+    # Not bare "exploitation" (T-0349): it fired on "post-exploitation",
+    # "exploitation techniques" and "exploitation is imminent".
+    - exploitation of
+    - active exploitation
+    - mass exploitation
+    - exploitation campaign*
+    - zero-day exploitation
+    - 0-day exploitation
   ransomware:
     - ransom*
     - lockbit
@@ -277,7 +287,17 @@ tag_rules:
     - iranian hacker
     - north korean hacker*
     - chinese hacking
-    - prc
+    # Not bare "prc" (T-0349): it is also a company or regulator acronym.
+    - prc-linked
+    - prc-nexus
+    - prc-backed
+    - prc-sponsored
+    - prc state*
+    - prc spies
+    - prc spy
+    - prc hacker*
+    - prc cyber*
+    - prc threat actor*
     - hafnium
     - chollima
     - famous chollima
@@ -317,9 +337,34 @@ tag_rules:
     - denial of service
     - denial-of-service
   data breaches:
-    - breach*
+    # Not bare "breach*" (T-0349): the verb is the intrusion sense ("Hackers
+    # breach TrueConf", "Gemini breached three firms"), which is not a data
+    # breach under the rubric. These phrases keep the record-exposure sense.
+    - data breach*
+    - database breach*
+    - breach expos*
+    - breach affect*
+    - breach impact*
+    - breach hits
+    - breach tally
+    - breach victims
+    - breach notification*
+    - affected by breach
+    - confirms breach
+    - confirmed breach
+    - discloses breach
+    - disclosed breach
+    - reports breach
+    - claims breach
+    - claim breach
     - data leak*
-    - leaked
+    # Not bare "leaked": "Leaked Source Code" of a RAT, "Leaked chats".
+    - data leaked
+    - leaked data
+    - records leaked
+    - leaked records
+    - leaked after
+    - leaked online
     - data theft
     - stolen data
     - data exposure
@@ -365,15 +410,41 @@ tag_rules:
     - charged with
     - convicted
     - prison
-    - sentence
-    - charged
+    # Not bare "sentence" or "charged" (T-0349): "single-sentence prompt",
+    # "battery charged", "charged customers fees".
+    - prison sentence
+    - jail sentence
+    - year sentence
+    - month sentence
+    - life sentence
+    - reduced sentence
+    - sentence of
+    - charged in
+    - charged over
+    - charged for
+    - police charged
+    - prosecutors charged
+    - jury charged
     - detained
     - government disrupts
     - us disrupts
     - u.s. disrupts
   mobile:
     - android
-    - ios
+    # Not bare "ios": Cisco's "IOS XE" is not a phone (T-0349).
+    - apple ios
+    - ios 1*
+    - ios 2*
+    - ios app*
+    - ios device*
+    - ios user*
+    - ios security*
+    - ios malware
+    - ios spyware
+    - ios zero-day*
+    - macos, ios
+    - ios and macos
+    - in ios,
     - iphone
     - ipados
     - mobile malware
@@ -400,12 +471,23 @@ tag_rules:
     - llms
     - chatgpt
     - openai
-    - copilot
+    - copilot flaw*
+    - copilot vulnerab*
+    - copilot bug*
+    - copilot zero-click
+    - copilot exploit*
+    - copilot attack*
+    - copilot jailbreak*
     - machine learning
     - generative ai
     - deepfake*
     - prompt injection
-    - agentic
+    # Not bare "copilot" or "agentic" (T-0349): both fired only on vendor
+    # product launches in the measured pools; launches take no tag.
+    - agentic ai
+    - agentic attack*
+    - agentic-driven
+    - agentic malware
   vulnerabilities:
     - cve-*
     - vulnerab*
