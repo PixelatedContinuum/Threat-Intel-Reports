@@ -64,7 +64,7 @@ Rules are grouped by family within each Detection/Hunting subsection (this repla
 **False Positives:** None known — the GUID has zero public prior hits and is not present in any known legitimate software.
 **Blind Spots:** A future builder revision that regenerates this GUID per build would evade the rule; the non-PE branch of the condition matches on the mutex string alone, which is intentional (Stage-4 runs fileless and may only exist as a raw memory region).
 **Validation:** Scan a memory region or extracted Stage-4 module — the mutex GUID must match; a benign .NET binary with an unrelated GUID mutex must NOT fire.
-**Deployment:** Memory scanner (primary — Stage-4 runs fileless), EDR in-memory scan.
+**Deployment:** Scan dumped memory regions or an extracted Stage-4 module (primary, since Stage-4 runs fileless): the non-PE branch matches a raw region on the mutex GUID alone and does not test `filesize`. Endpoint file scanning covers the PE branch. A live process scan cannot satisfy the PE branch, because `filesize` is undefined there, and I have not tested whether the non-PE branch fires in that mode.
 
 ```yara
 rule MALW_ChaosLoader_Stage4_MutexGUID_CrossBuildInvariant {

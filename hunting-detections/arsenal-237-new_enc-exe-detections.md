@@ -364,7 +364,7 @@ level: high
 **Confidence:** LOW
 **Rationale:** A single, attacker-chosen literal specific to this build; a naming-convention rebrand evades it entirely (Gate 1: durability outranks as-written precision). *Fix applied during retiering:* `level: high` was inflated for a fully renameable single-artifact selector; demoted to `level: medium`, the Hunting-appropriate level for a suspicious-but-brittle lead.
 **False Positives:** A legitimate scheduled task using similar naming is not expected but cannot be fully ruled out.
-**Deployment:** Linux/Windows file integrity monitoring, Sysmon file-event telemetry, scheduled-task audit logging.
+**Deployment:** Windows file-event telemetry (Sysmon Event ID 11 or file integrity monitoring), with scheduled-task audit logging as a companion source.
 
 **FP remediation, 2026-08-13.** The selector was a bare `contains` on `RustRansomNoteTask` with no path constraint, so it matched the string anywhere on disk, including inside this rule's own YAML. Checking the rule into git reproduced the marker in a worktree and the detection detected itself, 24 events across two separate git operations, all of them `git.exe` writing copies under `rule-submissions/sigma/`. That is not a local habit: storing detection content in a versioned repo on a monitored host is close to standard detection-as-code practice, so this fires for any SOC that works the way SigmaHQ contributors do.
 

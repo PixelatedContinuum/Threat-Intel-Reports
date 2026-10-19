@@ -257,7 +257,7 @@ level: medium
 **Confidence:** MODERATE
 **Rationale:** Detects invocation of the OpenClaw local-gateway service. The original selection OR-combined an image-name match with a bare `CommandLine` match on `gateway` + `--port` — the command-line branch alone is a generic pattern that would fire on any unrelated service using those two common tokens together, such as VPN gateways, API gateways, and countless other internal tools. Tightened here to require the `openclaw` binary image **and** the `gateway`/`--port` arguments together, removing the standalone false-positive-prone branch. Even tightened, legitimate OpenClaw adopters running the gateway locally trigger this identically to attacker-driven use, so it remains Hunting.
 **False Positives:** Legitimate OpenClaw adopters on developer-class workstations running the gateway for sanctioned evaluation or use.
-**Deployment:** Linux and macOS endpoints with process-creation telemetry. Cross-correlate with port-18789 listener inventory for confirmation; scope alerting priority to server-class, jump-host, and non-developer endpoints for highest signal-to-noise ratio.
+**Deployment:** Linux endpoints with process-creation telemetry; the logsource is `product: linux`, so macOS endpoints are not covered by this rule as written. Cross-correlate with port-18789 listener inventory for confirmation; scope alerting priority to server-class, jump-host, and non-developer endpoints for highest signal-to-noise ratio.
 
 ```yaml
 title: OpenClaw AI-Agent Gateway Service Started
