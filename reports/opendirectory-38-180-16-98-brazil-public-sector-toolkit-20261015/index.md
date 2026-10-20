@@ -757,5 +757,12 @@ Of the hypotheses I could not kill, three matter most for a reader. The saved-pa
 
 ---
 
+## Acknowledgements
+{: .hl-tier-2}
+
+I thank [Adverserial AI](https://adverserial.ai) for access to its CyberKimi and CyberGLM models during this investigation. A good part of the operator's tooling and the stolen data in this case is material that general-purpose AI models declined to read. Those two models read it for me, and some of the findings in this report rest in part on those reads.
+
+---
+
 © 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
 
